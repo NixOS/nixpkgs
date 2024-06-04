@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pubnub
-, pycryptodomex
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pubnub,
+  pycryptodomex,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pubnubsub-handler";
   version = "1.0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

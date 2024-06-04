@@ -4,10 +4,7 @@
 , lib
 , emptyDirectory
 , linkFarm
-, symlinkJoin
 , jam
-, libcxx
-, libcxxabi
 , openssl
 , xcbuild
 , CoreServices
@@ -33,19 +30,15 @@ let
       # cone-based Git sparse checkout, either.)
       { name = "contrib"; path = "${src}/contrib"; }
     ];
-  libcxxUnified = symlinkJoin {
-    inherit (libcxx) name;
-    paths = [ libcxx libcxxabi ];
-  };
 in
 stdenv.mkDerivation rec {
   pname = "p4";
-  version = "2022.1.2305383";
+  version = "2022.2.2407422";
 
   src = fetchurl {
     # Upstream replaces minor versions, so use archived URL.
-    url = "https://web.archive.org/web/20220901184735id_/https://ftp.perforce.com/perforce/r22.1/bin.tools/p4source.tgz";
-    sha256 = "27ab3ddd7b178b05cf0b710e941650dac0688d294110ebafda9027732c0944c6";
+    url = "https://web.archive.org/web/20230512173806id_/https://ftp.perforce.com/perforce/r22.2/bin.tools/p4source.tgz";
+    sha256 = "4355375def3f3d2256d4a92ac1b9960173e7aa97404346c0c74caf23a0905e1b";
   };
 
   nativeBuildInputs = [ jam ];
@@ -70,7 +63,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [
       "-sOSVER=1013"
       "-sMACOSX_SDK=${emptyDirectory}"
-      "-sLIBC++DIR=${libcxxUnified}/lib"
+      "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
     ];
 
   CCFLAGS =

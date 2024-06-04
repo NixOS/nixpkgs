@@ -66,21 +66,21 @@ let
 in {
   options = {
     services.zoneminder = with lib; {
-      enable = lib.mkEnableOption (lib.mdDoc ''
-        ZoneMinder
+      enable = lib.mkEnableOption ''
+        ZoneMinder.
 
         If you intend to run the database locally, you should set
         `config.services.zoneminder.database.createLocally` to true. Otherwise,
         when set to `false` (the default), you will have to create the database
         and database user as well as populate the database yourself.
         Additionally, you will need to run `zmupdate.pl` yourself when
-        upgrading to a newer version.
-      '');
+        upgrading to a newer version
+      '';
 
       webserver = mkOption {
         type = types.enum [ "nginx" "none" ];
         default = "nginx";
-        description = lib.mdDoc ''
+        description = ''
           The webserver to configure for the PHP frontend.
 
           Set it to `none` if you want to configure it yourself. PRs are welcome
@@ -91,7 +91,7 @@ in {
       hostname = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           The hostname on which to listen.
         '';
       };
@@ -99,7 +99,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 8095;
-        description = lib.mdDoc ''
+        description = ''
           The port on which to listen.
         '';
       };
@@ -107,7 +107,7 @@ in {
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open the firewall port(s).
         '';
       };
@@ -116,7 +116,7 @@ in {
         createLocally = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Create the database and database user locally.
           '';
         };
@@ -124,7 +124,7 @@ in {
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = lib.mdDoc ''
+          description = ''
             Hostname hosting the database.
           '';
         };
@@ -132,7 +132,7 @@ in {
         name = mkOption {
           type = types.str;
           default = "zm";
-          description = lib.mdDoc ''
+          description = ''
             Name of database.
           '';
         };
@@ -140,7 +140,7 @@ in {
         username = mkOption {
           type = types.str;
           default = "zmuser";
-          description = lib.mdDoc ''
+          description = ''
             Username for accessing the database.
           '';
         };
@@ -148,7 +148,7 @@ in {
         password = mkOption {
           type = types.str;
           default = "zmpass";
-          description = lib.mdDoc ''
+          description = ''
             Username for accessing the database.
             Not used if `createLocally` is set.
           '';
@@ -158,7 +158,7 @@ in {
       cameras = mkOption {
         type = types.int;
         default = 1;
-        description = lib.mdDoc ''
+        description = ''
           Set this to the number of cameras you expect to support.
         '';
       };
@@ -167,7 +167,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         example = "/storage/tank";
-        description = lib.mdDoc ''
+        description = ''
           ZoneMinder can generate quite a lot of data, so in case you don't want
           to use the default ${defaultDir}, you can override the path here.
         '';
@@ -176,7 +176,7 @@ in {
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Additional configuration added verbatim to the configuration file.
         '';
       };
@@ -283,7 +283,8 @@ in {
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
           inherit user group;
-          phpPackage = pkgs.php.withExtensions ({ enabled, all }: enabled ++ [ all.apcu ]);
+          phpPackage = pkgs.php.withExtensions (
+            { enabled, all }: enabled ++ [ all.apcu all.sysvsem ]);
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
           '';
@@ -326,6 +327,15 @@ in {
           fi
 
           ${zoneminder}/bin/zmupdate.pl -nointeractive
+          ${zoneminder}/bin/zmupdate.pl --nointeractive -f
+
+          # Update ZM's Nix store path in the configuration table. Do nothing if the config doesn't
+          # contain ZM's Nix store path.
+          ${config.services.mysql.package}/bin/mysql -u zoneminder zm << EOF
+            UPDATE Config
+              SET Value = REGEXP_REPLACE(Value, "^/nix/store/[^-/]+-zoneminder-[^/]+", "${pkgs.zoneminder}")
+              WHERE Name = "ZM_FONT_FILE_LOCATION";
+          EOF
         '';
         serviceConfig = {
           User = user;
@@ -340,8 +350,8 @@ in {
           RestartSec = "10s";
           CacheDirectory = dirs cacheDirs;
           RuntimeDirectory = dirName;
-          ReadWriteDirectories = lib.mkIf useCustomDir [ cfg.storageDir ];
-          StateDirectory = dirs (if useCustomDir then [] else libDirs);
+          ReadWritePaths = lib.mkIf useCustomDir [ cfg.storageDir ];
+          StateDirectory = dirs (lib.optionals (!useCustomDir) libDirs);
           LogsDirectory = dirName;
           PrivateTmp = true;
           ProtectSystem = "strict";

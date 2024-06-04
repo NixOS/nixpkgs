@@ -5,19 +5,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnstwist";
-  version = "20221213";
-  format = "setuptools";
+  version = "20240116";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elceef";
-    repo = pname;
+    repo = "dnstwist";
     rev = "refs/tags/${version}";
-    hash = "sha256-xYZGrlrEdot2l1SkXcT2IbeRWouaN6C+WwbBSHXhAtw=";
+    hash = "sha256-areFRDi728SedArhUy/rbPzhoFabNoT/WdyyN+6OQK0=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     dnspython
-    GeoIP
+    geoip
     ppdeep
     requests
     tld
@@ -33,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Domain name permutation engine for detecting homograph phishing attacks";
+    mainProgram = "dnstwist";
     homepage = "https://github.com/elceef/dnstwist";
     changelog = "https://github.com/elceef/dnstwist/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];

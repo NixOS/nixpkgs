@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config gobject-introspection ];
 
   buildInputs = [
-    cairo glib gobject-introspection
+    cairo glib
     gnome.gnome-common gtk3 gnome.libsoup
   ];
 

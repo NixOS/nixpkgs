@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.tazjin ];
     platforms = platforms.linux;
+    mainProgram = "journaldriver";
   };
 }

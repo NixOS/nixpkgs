@@ -16,17 +16,18 @@
 , geocode-glib_2
 , vala
 , gnome
+, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "4.2.0";
+  version = "4.4.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "r4qBLaDYl2oADh1iVywlYIaoFzI/vzWwZtv92NLKYgM=";
+    hash = "sha256-puQntHcK2kiUXzqpBq9xD8gzz/DULfkfGCgwJ0DXlOw=";
   };
 
   patches = [
@@ -45,10 +46,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    vala
+    glib
+    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
+  ] ++ lib.optionals withIntrospection [
     gi-docgen
     gobject-introspection
-    (python3.pythonForBuild.withPackages (ps: [ ps.pygobject3 ]))
+    vala
   ];
 
   buildInputs = [
@@ -61,8 +64,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
-    "-Denable_vala=true"
-    "-Dgtk_doc=true"
+    (lib.mesonBool "introspection" withIntrospection)
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Dc_args=-D_DARWIN_C_SOURCE"
   ];
 
   postPatch = ''
@@ -97,7 +101,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A library to access weather information from online services for numerous locations";
-    homepage = "https://wiki.gnome.org/Projects/LibGWeather";
+    homepage = "https://gitlab.gnome.org/GNOME/libgweather";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

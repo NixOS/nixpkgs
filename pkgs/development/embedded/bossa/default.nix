@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, wxGTK, libX11, readline }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, wxGTK32
+, libX11
+, readline
+, darwin
+, fetchpatch
+}:
 
 let
   # BOSSA needs a "bin2c" program to embed images.
@@ -24,12 +32,37 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8M3MU/+Y1L6SaQ1yoC9Z27A/gGruZdopLnL1z7h7YJw=";
   };
 
-  nativeBuildInputs = [ bin2c ];
-  buildInputs = [ wxGTK libX11 readline ];
+  patches = [
+    (fetchpatch {
+      # Required for building on Darwin with clang >=15.
+      name = "pr-172-fix.patch";
+      url = "https://github.com/shumatech/BOSSA/commit/6e54973c3c758674c3d04b5e2cf12e097006f6a3.patch";
+      hash = "sha256-2lp6Ej3IfofztC1n/yHLjabn0MH4BA/CM3dsnAw8klA=";
+    })
+  ];
 
-  # Explicitly specify targets so they don't get stripped.
-  makeFlags = [ "bin/bossac" "bin/bossash" "bin/bossa" ];
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "-arch x86_64" ""
+  '';
+
+  nativeBuildInputs = [ bin2c ];
+  buildInputs = [
+    wxGTK32
+    libX11
+    readline
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+  ];
+
+  makeFlags = [
+    "WXVERSION=3.2"
+    # Explicitly specify targets so they don't get stripped.
+    "bin/bossac"
+    "bin/bossash"
+    "bin/bossa"
+  ];
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -47,6 +80,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.shumatech.com/web/products/bossa";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

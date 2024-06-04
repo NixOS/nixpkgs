@@ -6,19 +6,19 @@
 
 buildGoModule rec {
   pname = "coreth";
-  version = "0.11.6";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Me+kmEfvSJs8EPU4D7MwkEyHQuvDmQCSIATxygXws5o=";
+    hash = "sha256-jksJgWh2FyP2iYOgA9XiRKUpKvINfIv8ini3X36Zy9U=";
   };
 
   # go mod vendor has a bug, see: golang/go#57529
   proxyVendor = true;
 
-  vendorHash = "sha256-jI01tdAVdJOj/ocpwCiaANdyYKSLw00bV7ZtU7HvslA=";
+  vendorHash = "sha256-2shBVIn/qJQlY+f0xsS9NTZkzcWEnhJpEezNYT6+8F4=";
 
   ldflags = [
     "-s"
@@ -41,9 +41,5 @@ buildGoModule rec {
     changelog = "https://github.com/ava-labs/coreth/releases/tag/v${version}";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ urandom ];
-    # In file included from ../go/pkg/mod/github.com/zondax/hid@v0.9.1-0.20220302062450-5552068d2266/hid_enabled.go:38:
-    # ./hidapi/mac/hid.c:693:34: error: use of undeclared identifier 'kIOMainPortDefault'
-    #     entry = IORegistryEntryFromPath(kIOMainPortDefault, path);
-    broken = stdenv.isDarwin;
   };
 }

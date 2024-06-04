@@ -1,26 +1,33 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, beautifulsoup4
-, lxml
-, cssutils
-, pytest-lazy-fixture
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  beautifulsoup4,
+  lxml,
+  cssutils,
+  nltk,
+  pytest-lazy-fixture,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pycaption";
-  version = "2.1.0";
+  version = "2.2.10";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mV//EYdP7wKYD3Vc49z6LQVQeOuhzNKFZLf28RYdABk=";
+  src = fetchFromGitHub {
+    owner = "pbs";
+    repo = "pycaption";
+    rev = "refs/tags/${version}";
+    hash = "sha256-U4ooAKs0vy6jQdUake2R0RKs9lz+DNvS1f3/c2Mck5k=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -28,7 +35,11 @@ buildPythonPackage rec {
     cssutils
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    transcript = [ nltk ];
+  };
+
+  nativeCheckInputs = [
     pytest-lazy-fixture
     pytestCheckHook
   ];

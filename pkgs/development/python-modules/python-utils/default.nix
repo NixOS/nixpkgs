@@ -1,50 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, loguru
-, pytest-asyncio
-, pytest-mypy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  loguru,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "3.4.5";
+  version = "3.8.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-O/+jvdzzxUFaQdAfUM9p40fPPDNN+stTauCD993HH6Y=";
+    hash = "sha256-2scWyj0Fz39Thu0T0+UirT+he6tPYKGsvmYzzpD+/ls=";
   };
 
   postPatch = ''
-    sed -i '/--cov/d' pytest.ini
-    sed -i '/--mypy/d' pytest.ini
+    sed -i pytest.ini \
+      -e '/--cov/d' \
+      -e '/--mypy/d'
   '';
 
+  propagatedBuildInputs = [ typing-extensions ];
+
   passthru.optional-dependencies = {
-    loguru = [
-      loguru
-    ];
+    loguru = [ loguru ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
-    pytest-mypy
     pytestCheckHook
   ] ++ passthru.optional-dependencies.loguru;
 
-  pythonImportsCheck = [
-    "python_utils"
-  ];
+  pythonImportsCheck = [ "python_utils" ];
 
-  pytestFlagsArray = [
-    "_python_utils_tests"
+  pytestFlagsArray = [ "_python_utils_tests" ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Flaky tests on darwin
+    "test_timeout_generator"
   ];
 
   meta = with lib; {

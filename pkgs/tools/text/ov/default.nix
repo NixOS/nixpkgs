@@ -4,24 +4,28 @@
 , installShellFiles
 , pandoc
 , makeWrapper
+, testers
+, ov
 }:
 
 buildGoModule rec {
   pname = "ov";
-  version = "0.14.0";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "ov";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8xurv4RldKVeakYSkY4rxx9kCeXxKc7ou7bN1+uoY50=";
+    hash = "sha256-1IFjnBIa/xCX2nY0RHhj/7OCYErY9QB/OBMaf3wDvrc=";
   };
 
-  vendorHash = "sha256-hyvWyUJyDZgxlOJI5NhLNC6kf2e1SvH/msg2WMKTW4Y=";
+  vendorHash = "sha256-USMDIgB4LhI4kzSg2kkCXfbN9t49WEg0fUtAcZkngac=";
 
   ldflags = [
-    "-X main.Version=v${version}"
-    "-X main.Revision=${src.rev}"
+    "-s"
+    "-w"
+    "-X=main.Version=v${version}"
+    "-X=main.Revision=${src.rev}"
   ];
 
   subPackages = [ "." ];
@@ -50,11 +54,18 @@ buildGoModule rec {
     cp $src/ov.yaml $doc/share/$name/sample-config.yaml
   '';
 
+  passthru.tests = {
+    version = testers.testVersion {
+      package = ov;
+      version = "v${version}";
+    };
+  };
+
   meta = with lib; {
     description = "Feature-rich terminal-based text viewer";
     homepage = "https://noborus.github.io/ov";
+    changelog = "https://github.com/noborus/ov/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ farcaller ];
+    maintainers = with maintainers; [ farcaller figsoda ];
   };
 }

@@ -1,29 +1,41 @@
-{ lib, fetchFromGitHub, buildGoModule }:
-
-buildGoModule rec {
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
+let
+  version = "1.11.0";
+in
+buildGoModule {
   pname = "gotestsum";
-  version = "1.8.2";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "gotestyourself";
     repo = "gotestsum";
     rev = "v${version}";
-    sha256 = "sha256-BpT5FxqDOLnlWtOHMqwruR/CkD46xEgU7D8sAzsVO14=";
+    hash = "sha256-Sq0ejnX7AJoPf3deBge8PMOq1NlMbw+Ljn145C5MQ+s=";
   };
 
-  vendorSha256 = "sha256-zUqa6xlDV12ZV4N6+EZ7fLPsL8U+GB7boQ0qG9egvm0=";
+  vendorHash = "sha256-zUqa6xlDV12ZV4N6+EZ7fLPsL8U+GB7boQ0qG9egvm0=";
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X gotest.tools/gotestsum/cmd.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X gotest.tools/gotestsum/cmd.version=${version}"
+  ];
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gotestyourself/gotestsum";
+    changelog = "https://github.com/gotestyourself/gotestsum/releases/tag/v${version}";
     description = "A human friendly `go test` runner";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ endocrimes ];
+    mainProgram = "gotestsum";
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ isabelroses ];
   };
 }

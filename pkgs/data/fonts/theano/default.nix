@@ -1,15 +1,25 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "theano";
   version = "2.0";
-  name = "theano-${version}";
-in (fetchzip rec {
-  inherit name;
 
-  url = "https://github.com/akryukov/theano/releases/download/v${version}/theano-${version}.otf.zip";
+  src = fetchzip {
+    url = "https://github.com/akryukov/theano/releases/download/v${version}/theano-${version}.otf.zip";
+    stripRoot = false;
+    hash = "sha256-9wnwHcRHB+AToOvGwZSXvHkQ8hqMd7Sdl26Ty/IwbPw=";
+  };
 
-  sha256 = "1my1symb7k80ys33iphsxvmf6432wx6vjdnxhzhkgrang1rhx1h8";
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/opentype
+    mkdir -p $out/share/doc/${pname}-${version}
+    cp *.otf $out/share/fonts/opentype
+    cp *.txt $out/share/doc/${pname}-${version}
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/akryukov/theano";
@@ -18,11 +28,4 @@ in (fetchzip rec {
     license = licenses.ofl;
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.txt -d "$out/share/doc/${name}"
-  '';
-})
+}

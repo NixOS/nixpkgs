@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0khrxp43bi5kisr8j4lp9fl4r5marzf7b4inys62ac108sfb28lp";
   };
 
+  postPatch = ''
+    sed -i "1i #include <map>" include/iSpike/YarpConnection.hpp
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ];
 
@@ -16,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Spiking neural interface between iCub and a spiking neural simulator";
     homepage = "https://sourceforge.net/projects/ispike/";
     license = lib.licenses.lgpl3;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.nico202 ];
   };
 }

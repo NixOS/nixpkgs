@@ -1,52 +1,46 @@
-{ lib
-, babel
-, buildPythonPackage
-, django
-, djangorestframework
-, fetchFromGitHub
-, phonenumbers
-, python
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  django,
+  djangorestframework,
+  fetchPypi,
+  phonenumbers,
+  python,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "django-phonenumber-field";
-  version = "6.4.0";
+  version = "7.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "stefanfoulis";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-rrJTCWn1mFV4QQu8wyLDxheHkZQ/FIE7mRC/9nXNSaM=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-+c2z3ghfmcJJMoKTo7k9Tl+kQMDI47mesND1R0hil5c=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  propagatedBuildInputs = [ django ] ++ passthru.optional-dependencies.phonenumbers;
 
-  propagatedBuildInputs = [
-    django
-    phonenumbers
+  nativeCheckInputs = [
     babel
-  ];
-
-  checkInputs = [
     djangorestframework
   ];
 
-  pythonImportsCheck = [
-    "phonenumber_field"
-  ];
+  pythonImportsCheck = [ "phonenumber_field" ];
 
   checkPhase = ''
     ${python.interpreter} -m django test --settings tests.settings
   '';
+
+  passthru.optional-dependencies = {
+    phonenumbers = [ phonenumbers ];
+  };
 
   meta = with lib; {
     description = "A django model and form field for normalised phone numbers using python-phonenumbers";

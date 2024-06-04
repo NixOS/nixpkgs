@@ -1,39 +1,51 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
+, fetchpatch
+, coreutils
+
 , perl
-, lvm2
+, pkg-config
+
+, json_c
 , libaio
+, liburcu
+, linuxHeaders
+, lvm2
 , readline
 , systemd
-, liburcu
-, json_c
-, kmod
+, util-linuxMinimal
+
 , cmocka
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
-  version = "0.9.3";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "opensvc";
     repo = "multipath-tools";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-pIGeZ+jB+6GqkfVN83axHIuY/BobQ+zs+tH+MkLIln0=";
+    sha256 = "sha256-4cby19BjgnmWf7klK1sBgtZnyvo7q3L1uyVPlVoS+uk=";
   };
 
-  postPatch = ''
-    substituteInPlace libmultipath/Makefile \
-      --replace /usr/include/libdevmapper.h ${lib.getDev lvm2}/include/libdevmapper.h
+  patches = [
+    # Backport build fix for musl libc 1.2.5
+    (fetchpatch {
+      url = "https://github.com/openSUSE/multipath-tools/commit/e5004de8296cd596aeeac0a61b901e98cf7a69d2.patch";
+      hash = "sha256-ZvNFVphB9f+S/XMxktR6P/YYSTLeJXEsj4XrAnw6GUI=";
+      excludes = ["tests/util.c"];
+    })
+  ];
 
-    # systemd-udev-settle.service is deprecated.
-    substituteInPlace multipathd/multipathd.service \
-      --replace /sbin/modprobe ${lib.getBin kmod}/sbin/modprobe \
-      --replace /sbin/multipathd "$out/bin/multipathd" \
-      --replace " systemd-udev-settle.service" ""
+  postPatch = ''
+    substituteInPlace create-config.mk \
+      --replace-fail /bin/echo ${coreutils}/bin/echo
+
+    substituteInPlace multipathd/multipathd.service.in \
+      --replace-fail /sbin/multipathd "$out/bin/multipathd"
 
     sed -i -re '
       s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
@@ -42,26 +54,41 @@ stdenv.mkDerivation rec {
       kpartx/Makefile libmpathpersist/Makefile
     sed -i -e "s,GZIP,GZ," \
       $(find * -name Makefile\*)
+
+    sed '1i#include <assert.h>' -i tests/{util,vpd}.c
   '';
 
-  nativeBuildInputs = [ pkg-config perl ];
-  buildInputs = [ systemd lvm2 libaio readline liburcu json_c ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
+  buildInputs = [
+    json_c
+    libaio
+    liburcu
+    linuxHeaders
+    lvm2
+    readline
+    systemd
+    util-linuxMinimal # for libmount
+  ];
 
   makeFlags = [
     "LIB=lib"
     "prefix=$(out)"
+    "systemd_prefix=$(out)"
+    "kernel_incdir=${linuxHeaders}/include/"
     "man8dir=$(out)/share/man/man8"
     "man5dir=$(out)/share/man/man5"
     "man3dir=$(out)/share/man/man3"
-    "SYSTEMDPATH=lib"
   ];
 
   doCheck = true;
   preCheck = ''
     # skip test attempting to access /sys/dev/block
-    substituteInPlace tests/Makefile --replace ' devt ' ' '
+    substituteInPlace tests/Makefile --replace-fail ' devt ' ' '
   '';
-  checkInputs = [ cmocka ];
+  nativeCheckInputs = [ cmocka ];
 
   passthru.tests = { inherit (nixosTests) iscsi-multipath-root; };
 

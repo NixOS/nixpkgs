@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "octosql";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner  = "cube2222";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-UXHNA53ipGybYYAu+Ml8tI+9YZPW18BLsVjkW/UNQag=";
+    sha256 = "sha256-kzbIts5d2KmFfaAnOdpIXI1fiqBYXe5t981g4Uyk/cc=";
   };
 
-  vendorSha256 = "sha256-as8vJmUH0mDPQ8K6D5yRybPV5ibvHEtyQjArXjimGpo=";
+  vendorHash = "sha256-p/2UsvxxywQKtk/9wDa5fjS0z6xLLzDONuQ5AtnUonk=";
 
   ldflags = [ "-s" "-w" "-X github.com/cube2222/octosql/cmd.VERSION=${version}" ];
 
@@ -27,5 +27,6 @@ buildGoModule rec {
     homepage = "https://github.com/cube2222/octosql";
     license = licenses.mpl20;
     maintainers = with maintainers; [ arikgrahl ];
+    mainProgram = "octosql";
   };
 }

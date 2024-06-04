@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, xcffib, pillow }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  xcffib,
+  pillow,
+}:
 
 buildPythonPackage rec {
   pname = "xpybutil";
   version = "0.0.6";
+  format = "setuptools";
 
   # Pypi only offers a wheel
   src = fetchFromGitHub {
@@ -13,16 +20,17 @@ buildPythonPackage rec {
   };
 
   # pillow is a dependency in image.py which is not listed in setup.py
-  propagatedBuildInputs = [ pillow xcffib ];
+  propagatedBuildInputs = [
+    pillow
+    xcffib
+  ];
 
   propagatedNativeBuildInputs = [ xcffib ];
 
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "xpybutil"
-  ];
+  pythonImportsCheck = [ "xpybutil" ];
 
   meta = with lib; {
     homepage = "https://github.com/BurntSushi/xpybutil";

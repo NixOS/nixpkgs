@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, perl
-, stdenv
-, gcc10
-, CoreFoundation
-, Security
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cmake,
+  perl,
+  stdenv,
+  gcc10,
+  CoreFoundation,
+  Security,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.16.3";
+  version = "0.20.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w39Qt046dWDzbt41t9LVMCJNM2uGOv9VTZf3yfWUlNM=";
+    hash = "sha256-vGmN6MU61KLqsWRrkhlqWE6tFwplxltZyIOFWt6lly8=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -27,25 +28,17 @@ buildPythonPackage rec {
     Security
   ];
 
-  # Required to suppress -Werror
-  # https://github.com/NixOS/nixpkgs/issues/39687
-  hardeningDisable = lib.optionals stdenv.cc.isClang [
-    "strictoverflow"
-  ];
-
   # gcc <10 is not supported, LLVM on darwin is just fine
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [
-    gcc10
-    perl
-  ];
+  nativeBuildInputs =
+    [ cmake ]
+    ++ lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [
+      gcc10
+      perl
+    ];
 
   dontUseCmakeConfigure = true;
 
-  pythonImportsCheck = [
-    "awscrt"
-  ];
+  pythonImportsCheck = [ "awscrt" ];
 
   # Unable to import test module
   # https://github.com/awslabs/aws-crt-python/issues/281

@@ -1,23 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "ets";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "zmwangx";
-    repo = pname;
+    owner = "gdubicki";
+    repo = "ets";
     rev = "v${version}";
-    sha256 = "sha256-XWIDo5msTMTLr60x1R9cwsiZIDG6G+uHWx8idt4F2iA=";
+    hash = "sha256-PowJ3ig8TfGx9P/PJPVBL8GsMh+gGZVt9l4Rf7Mqk00=";
   };
 
-  # https://github.com/zmwangx/ets/pull/18/
-  patches = [ (fetchpatch {
-    url = "https://github.com/zmwangx/ets/commit/600ec17a9c86ca63cd022d00439cdc4978e2afa9.patch";
-    sha256 = "sha256-SGCISHkWNFubgKkQYx8Vf5/fknNDfPNYkSuw1mMhZaE=";
-  }) ];
-
-  vendorSha256 = "sha256-+8dXfqOu8XTw2uEx3GAynQSHtzifejZtddr1CdxrupA=";
+  vendorHash = "sha256-XHgdiXdp9aNEAc/Apvb64ExnpywjddWOw1scNKy+ico=";
 
   ldflags = [ "-s" "-w" "-X main.version=v${version}-nixpkgs" ];
 
@@ -35,8 +29,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Command output timestamper";
-    homepage = "https://github.com/zmwangx/ets/";
+    homepage = "https://github.com/gdubicki/ets/";
     license = licenses.mit;
     maintainers = with maintainers; [ cameronfyfe ];
+    mainProgram = "ets";
   };
 }

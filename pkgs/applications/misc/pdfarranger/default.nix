@@ -1,27 +1,34 @@
-{ fetchFromGitHub, lib
-, wrapGAppsHook, intltool
-, python3Packages, gtk3, poppler_gi
+{ fetchFromGitHub
+, lib
+, wrapGAppsHook3
+, python3Packages
+, gtk3
+, poppler_gi
+, libhandy
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.9.2";
+  version = "1.10.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pdfarranger";
+    repo = "pdfarranger";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-nZSP9JBbUPG9xk/ATXUYkjyP344m+e7RQS3BiFVzQf4=";
+    hash = "sha256-l//DeaIqUl6FdGFxM8yTKcTjVNvYMllorcoXoK33Iy4=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool
+    wrapGAppsHook3
   ] ++ (with python3Packages; [
-    setuptools distutils_extra
+    setuptools
   ]);
 
   buildInputs = [
-    gtk3 poppler_gi
+    gtk3
+    poppler_gi
+    libhandy
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -32,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     python-dateutil
   ];
 
-  # incompatible with wrapGAppsHook
+  # incompatible with wrapGAppsHook3
   strictDeps = false;
   dontWrapGApps = true;
   preFixup = ''
@@ -44,8 +51,10 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Merge or split pdf documents and rotate, crop and rearrange their pages using an interactive and intuitive graphical interface";
+    mainProgram = "pdfarranger";
     platforms = platforms.linux;
     maintainers = with maintainers; [ symphorien ];
     license = licenses.gpl3Plus;
+    changelog = "https://github.com/pdfarranger/pdfarranger/releases/tag/${version}";
   };
 }

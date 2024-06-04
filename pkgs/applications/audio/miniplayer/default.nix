@@ -1,5 +1,6 @@
 { lib
 , python3Packages
+, fetchPypi
 }:
 
 with python3Packages;
@@ -14,7 +15,11 @@ buildPythonApplication rec {
     hash = "sha256-iUUsVIDLQAiaMomfA2LvvJZ2ePhgADtC6GCwIpRC1MA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     colorthief
     ffmpeg-python
     mpd2
@@ -23,6 +28,8 @@ buildPythonApplication rec {
     requests
     ueberzug
   ];
+
+  doCheck = false; # no tests
 
   # pythonImportsCheck is disabled because this package doesn't expose any modules.
 

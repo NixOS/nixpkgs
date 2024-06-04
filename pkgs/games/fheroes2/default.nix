@@ -1,21 +1,25 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub, imagemagick
 , gettext, glibcLocalesUtf8, libpng, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, zlib
+, libiconv
 
 , gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
-    sha256 = "sha256-86+4rFSvJ3xIVx+qDXZ65TSqIrPkbyoLNo1A+mFPdy8=";
+    hash = "sha256-a4IZX0aq2iXLPKTVRWxkr50vhCEqAMUA0z50rOpEIjU=";
   };
 
-  buildInputs = [ gettext glibcLocalesUtf8 libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ];
+  nativeBuildInputs = [ imagemagick ];
+
+  buildInputs = [ gettext glibcLocalesUtf8 libpng SDL2 SDL2_image SDL2_mixer SDL2_ttf zlib ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   makeFlags = [
     "FHEROES2_STRICT_COMPILATION=1"
@@ -38,6 +42,13 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/fheroes2/files/lang $PWD/files/lang/*.mo
     install -Dm644 -t $out/share/fheroes2/files/data $PWD/files/data/resurrection.h2d
 
+    install -Dm644 -t $out/share/applications $PWD/script/packaging/common/fheroes2.desktop
+
+    for size in 16 24 32 48 64 128; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      convert -resize "$size"x"$size" $PWD/src/resources/fheroes2.png $out/share/icons/hicolor/"$size"x"$size"/apps/fheroes2.png
+    done;
+
     runHook postInstall
   '';
 
@@ -50,6 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ihhub/fheroes2";
     description = "Free implementation of Heroes of Might and Magic II game engine";
+    mainProgram = "fheroes2";
     longDescription = ''
         In order to play this game, an original game data is required.
         Please refer to README of the project for instructions.
@@ -57,6 +69,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.karolchmist ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

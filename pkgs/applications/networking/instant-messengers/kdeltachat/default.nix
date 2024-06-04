@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "kdeltachat";
-  version = "unstable-2022-03-20";
+  version = "unstable-2024-01-14";
 
   src = fetchFromSourcehut {
     owner = "~link2xt";
     repo = "kdeltachat";
-    rev = "8cce6d20b49e917929521a13caed30e81037c868";
-    hash = "sha256-1L45KodOmvy6pBbBzJwGWMAY7y3+lfxjeXtsH1SdipU=";
+    rev = "d61a01c2d6d5bdcc9ca500b466ed42689b2bd5c6";
+    hash = "sha256-KmL3ODXPi1c8C5z2ySHg0vA5Vg/dZumDZTbpxkzf7A4=";
   };
 
   nativeBuildInputs = [
@@ -45,6 +45,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Delta Chat client using Kirigami framework";
+    mainProgram = "kdeltachat";
     homepage = "https://git.sr.ht/~link2xt/kdeltachat";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

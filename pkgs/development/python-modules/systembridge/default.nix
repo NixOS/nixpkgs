@@ -1,19 +1,21 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, websockets
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "systembridge";
   version = "2.3.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "system-bridge-connector-py";
     rev = "v${version}";
-    sha256 = "sha256-Ts8zPRK6S5iLnl19Y/Uz0YAh6hDeVRNBY6HsvLwdUFw=";
+    hash = "sha256-Ts8zPRK6S5iLnl19Y/Uz0YAh6hDeVRNBY6HsvLwdUFw=";
   };
 
   propagatedBuildInputs = [

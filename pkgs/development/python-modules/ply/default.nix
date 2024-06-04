@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "ply";
   version = "3.11";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

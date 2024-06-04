@@ -7,7 +7,8 @@ in {
       type = types.str;
     };
     email = lib.mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
     };
     matrix = lib.mkOption {
       type = types.nullOr types.str;

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jpexs";
-  version = "15.0.0";
+  version = "18.4.1";
 
   src = fetchzip {
-    url = "${meta.homepage}/releases/download/version${version}/ffdec_${version}.zip";
-    sha256 = "1w8sh0dzln6mxcbibyw6r9f9c8g0cbwxq4qbm5kawq00yydvwfza";
+    url = "https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version${version}/ffdec_${version}.zip";
+    sha256 = "sha256-aaEL3xJZkFw78zo3IyauWJM9kOo0rJTUSKmWsv9xQZ8=";
     stripRoot = false;
   };
 
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Flash SWF decompiler and editor";
+    mainProgram = "ffdec";
     longDescription = ''
       Open-source Flash SWF decompiler and editor. Extract resources,
       convert SWF to FLA, edit ActionScript, replace images, sounds,

@@ -1,24 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, inflection
-, ruamel-yaml
-, setuptools-scm
-, six
-, coreapi
-, djangorestframework
-, pytestCheckHook
-, pytest-django
-, datadiff
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  inflection,
+  ruamel-yaml,
+  setuptools-scm,
+  six,
+  coreapi,
+  djangorestframework,
+  pytestCheckHook,
+  pytest-django,
+  datadiff,
 }:
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.21.4";
+  version = "1.21.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-iHyfeeZPRqpIl0I05hApsb6msS6mKKj8ijaXWJrdHT4=";
+    hash = "sha256-TDuTBos9/KaWmrERFV5N1vey1oC5h3jej9Rgt4N72w0=";
   };
 
   postPatch = ''
@@ -26,9 +28,7 @@ buildPythonPackage rec {
     sed -i "/packaging/d" requirements/base.txt
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     six
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     djangorestframework
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-django
     datadiff

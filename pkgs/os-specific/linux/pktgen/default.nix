@@ -1,17 +1,29 @@
-{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config
-, dpdk, libbsd, libpcap, lua5_3, numactl, util-linux
-, gtk2, which, withGtk ? false
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, dpdk
+, libbsd
+, libpcap
+, lua5_3
+, numactl
+, util-linux
+, gtk2
+, which
+, withGtk ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "pktgen";
-  version = "22.04.1";
+  version = "23.10.0";
 
   src = fetchFromGitHub {
     owner = "pktgen";
     repo = "Pktgen-DPDK";
     rev = "pktgen-${version}";
-    sha256 = "0gbag98i2jq0p2hpvfgc3fiqy2sark1dm72hla4sxmn3gljy3p70";
+    sha256 = "sha256-eujVEU+XkxF1kIGQJoBW3oXXNSqBEzx6mwR2XYoHinM=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
@@ -24,6 +36,10 @@ stdenv.mkDerivation rec {
 
   RTE_SDK = dpdk;
   GUI = lib.optionalString withGtk "true";
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=sign-compare"
+  ];
 
   # requires symbols from this file
   NIX_LDFLAGS = "-lrte_net_bond";

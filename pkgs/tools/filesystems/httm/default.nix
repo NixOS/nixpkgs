@@ -6,24 +6,37 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "httm";
-  version = "0.19.2";
+  version = "0.38.1";
 
   src = fetchFromGitHub {
     owner = "kimono-koans";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0diHZFD4+glTdGWWJk/5amr0mDsvKV5OibKGQNtitIk=";
+    hash = "sha256-aCWhjMXLNx5/wV1HFDtyUuUfpRAxDZhI/Bk7roqZkJ8=";
   };
 
-  cargoSha256 = "sha256-Rg1wmDLmkDC25meZIe94WZ3Wp8a93VAqRJXjmaE6k18=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   nativeBuildInputs = [ installShellFiles ];
+
+  postPatch = ''
+    chmod +x scripts/*.bash
+    patchShebangs scripts/*.bash
+  '';
 
   postInstall = ''
     installManPage httm.1
 
     installShellCompletion --cmd httm \
       --zsh scripts/httm-key-bindings.zsh
+
+    for script in scripts/*.bash; do
+      install -Dm755 "$script" "$out/bin/$(basename "$script" .bash)"
+    done
+
+    install -Dm644 README.md $out/share/doc/README.md
   '';
 
   meta = with lib; {
@@ -32,5 +45,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/kimono-koans/httm/releases/tag/${version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ wyndon ];
+    mainProgram = "httm";
   };
 }

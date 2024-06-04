@@ -63,7 +63,7 @@ index afa11a6b..5b12055f 100755
  flatpak build-finish ${DIR} >&2
  mkdir -p repos
 diff --git a/tests/make-test-runtime.sh b/tests/make-test-runtime.sh
-index 4ba950df..fd50fab3 100755
+index 6345ff58..fd50fab3 100755
 --- a/tests/make-test-runtime.sh
 +++ b/tests/make-test-runtime.sh
 @@ -28,9 +28,10 @@ EOF
@@ -78,7 +78,7 @@ index 4ba950df..fd50fab3 100755
  mkdir -p ${DIR}/usr/bin
  mkdir -p ${DIR}/usr/lib
  ln -s ../lib ${DIR}/usr/lib64
-@@ -40,40 +41,17 @@ if test -f /sbin/ldconfig.real; then
+@@ -40,46 +41,17 @@ if test -f /sbin/ldconfig.real; then
  else
      cp "$(type -P ldconfig)" "${DIR}/usr/bin"
  fi
@@ -88,6 +88,12 @@ index 4ba950df..fd50fab3 100755
 -add_bin() {
 -    local f=$1
 -    shift
+-
+-    # Check if the program is installed
+-    if ! command -v "${f}" &> /dev/null; then
+-        echo "${f} not found"
+-        exit 1
+-    fi
 -
 -    if grep -qFe "${f}" $BINS; then
 -        # Already handled
@@ -129,7 +135,7 @@ index 4ba950df..fd50fab3 100755
  done
  ln -s bash ${DIR}/usr/bin/sh
  
-@@ -84,11 +62,13 @@ echo "Hello world, from a runtime$EXTRA"
+@@ -90,11 +62,13 @@ echo "Hello world, from a runtime$EXTRA"
  EOF
  chmod a+x ${DIR}/usr/bin/runtime_hello.sh
  
@@ -180,14 +186,16 @@ index d9fc8251..d8ddb96e 100755
 @@ -1,10 +1,10 @@
  #!/bin/sh
  
- if command -v gtk-update-icon-cache >/dev/null && test -d "$1/exports/share/icons/hicolor"; then
+-if command -v gtk-update-icon-cache >/dev/null && test -d "$1/exports/share/icons/hicolor"; then
 -    cp /usr/share/icons/hicolor/index.theme "$1/exports/share/icons/hicolor/"
-+    cp @hicolorIconTheme@/share/icons/hicolor/index.theme "$1/exports/share/icons/hicolor/"
++if test -d "$1/exports/share/icons/hicolor"; then
++    @coreutils@/bin/cp -f @hicolorIconTheme@/share/icons/hicolor/index.theme "$1/exports/share/icons/hicolor/"
      for dir in "$1"/exports/share/icons/*; do
          if test -f "$dir/index.theme"; then
 -            if ! gtk-update-icon-cache --quiet "$dir"; then
+-                echo "Failed to run gtk-update-icon-cache for $dir"
 +            if ! @gtk3@/bin/gtk-update-icon-cache --quiet "$dir"; then
-                 echo "Failed to run gtk-update-icon-cache for $dir"
++                @coreutils@/bin/echo "Failed to run gtk-update-icon-cache for $dir"
                  exit 1
              fi
 diff --git a/triggers/mime-database.trigger b/triggers/mime-database.trigger

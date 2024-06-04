@@ -1,21 +1,25 @@
-{ lib, fetchFromGitLab }:
+{ lib, stdenvNoCC, fetchFromGitLab }:
 
-let
+stdenvNoCC.mkDerivation {
   pname = "open-sans";
   version = "1.11";
-in fetchFromGitLab {
-  name = "${pname}-${version}";
 
-  domain = "salsa.debian.org";
-  owner = "fonts-team";
-  repo = "fonts-open-sans";
-  rev = "debian/1.11-1";
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "fonts-team";
+    repo = "fonts-open-sans";
+    rev = "debian/1.11-1";
+    hash = "sha256-gkq5RPa83dND91q1hiA9Qokq1iA8gLQ8XvCNWe+e8Bw=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp *.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
-  sha256 = "146ginwx18z624z582lrnhil8jvi9bjg6843265bgxxrfmf75vhp";
 
   meta = with lib; {
     description = "Open Sans fonts";

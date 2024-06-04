@@ -7,7 +7,9 @@
   akonadi-calendar, akonadi-contacts, akonadi-notes, akonadi-search,
   calendarsupport, eventviews, incidenceeditor, kcalutils,
   kholidays, kidentitymanagement, kldap, kmailtransport, kontactinterface,
-  kparts, kpimtextedit, pimcommon,
+  kparts, kpimtextedit,
+  kuserfeedback,
+  pimcommon,
 }:
 
 mkDerivation {
@@ -15,6 +17,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/korganizer/";
     description = "Personal organizer";
+    mainProgram = "korganizer";
     license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
@@ -26,6 +29,8 @@ mkDerivation {
     akonadi-calendar akonadi-contacts akonadi-notes akonadi-search
     calendarsupport eventviews incidenceeditor kcalutils
     kholidays kidentitymanagement kldap kmailtransport kontactinterface
-    kparts kpimtextedit pimcommon
+    kparts kpimtextedit
+    kuserfeedback
+    pimcommon
   ];
 }

@@ -1,34 +1,33 @@
-{ lib
-, aiosmtpd
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, trustme
+{
+  lib,
+  aiosmtpd,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  trustme,
 }:
 
 buildPythonPackage rec {
   pname = "aiosmtplib";
-  version = "2.0.1";
+  version = "3.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "cole";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Py/44J9J8FdrsSpEM2/DR2DQH8x8Ub7y0FPIN2gcmmA=";
+    repo = "aiosmtplib";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-67Z+k+PBIGP2oGb/52dMtsapUsHufvFcX+wWiMj5Jsg=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiosmtpd
     hypothesis
     pytest-asyncio
@@ -36,13 +35,12 @@ buildPythonPackage rec {
     trustme
   ];
 
-  pythonImportsCheck = [
-    "aiosmtplib"
-  ];
+  pythonImportsCheck = [ "aiosmtplib" ];
 
   meta = with lib; {
     description = "Module which provides a SMTP client";
     homepage = "https://github.com/cole/aiosmtplib";
+    changelog = "https://github.com/cole/aiosmtplib/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

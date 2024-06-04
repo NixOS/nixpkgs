@@ -1,10 +1,8 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-with lib;
-
 {
   name = "komga";
-  meta.maintainers = with maintainers; [ govanify ];
+  meta.maintainers = with lib.maintainers; [ govanify ];
 
   nodes.machine =
     { pkgs, ... }:

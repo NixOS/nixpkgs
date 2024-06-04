@@ -18,7 +18,8 @@ let
 
   haskellPackages = pkgs.callPackage makePackageSet {
     package-set = initialPackages;
-    inherit stdenv haskellLib ghc buildHaskellPackages extensible-self all-cabal-hashes;
+    inherit stdenv haskellLib ghc extensible-self all-cabal-hashes;
+    buildHaskellPackages = buildHaskellPackages // { __attrsFailEvaluation = true; };
   };
 
   platformConfigurations = lib.optionals stdenv.hostPlatform.isAarch [
@@ -28,7 +29,7 @@ let
   ];
 
   extensions = lib.composeManyExtensions ([
-    nonHackagePackages
+    (nonHackagePackages { inherit pkgs haskellLib; })
     (configurationNix { inherit pkgs haskellLib; })
     (configurationCommon { inherit pkgs haskellLib; })
   ] ++ platformConfigurations ++ [

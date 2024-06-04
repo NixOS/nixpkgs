@@ -6,19 +6,19 @@
 
 stdenv.mkDerivation rec {
   pname = "zim-tools";
-  version = "3.1.1";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "zim-tools";
     rev = version;
-    sha256 = "sha256-xZae1o4L9AdGDqBnFDZniWNM/dLsYRcS0OLWw9+Wecs=";
+    sha256 = "sha256-A1A0Ri2OwPyqpx0f5CPJL3zAwo2I/AiRKpmk3r4DeTc=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ docopt_cpp file gumbo mustache-hpp zimlib zlib ];
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
   doCheck = true;
 
   meta = {

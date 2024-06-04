@@ -42,6 +42,10 @@ ecmPostHook() {
     cmakeFlags+=" -DKDE_INSTALL_CONFDIR=${!outputBin}/etc/xdg"
     cmakeFlags+=" -DKDE_INSTALL_AUTOSTARTDIR=${!outputBin}/etc/xdg/autostart"
 
+    if [ "$(uname)" = "Darwin" ]; then
+        cmakeFlags+=" -DKDE_INSTALL_BUNDLEDIR=${!outputBin}/Applications/KDE"
+    fi
+
     if [ -n "${qtPluginPrefix-}" ]; then
         cmakeFlags+=" -DKDE_INSTALL_QTPLUGINDIR=${!outputBin}/$qtPluginPrefix"
         cmakeFlags+=" -DKDE_INSTALL_PLUGINDIR=${!outputBin}/$qtPluginPrefix"

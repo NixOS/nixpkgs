@@ -5,12 +5,12 @@
 , llvm
 , pkg-config
 , makeWrapper
+, elfutils
 , file
 , hyperscan
 , jansson
 , libbpf
 , libcap_ng
-, libelf
 , libevent
 , libmaxminddb
 , libnet
@@ -22,8 +22,7 @@
 , luajit
 , lz4
 , nspr
-, nss
-, pcre
+, pcre2
 , python
 , zlib
 , redisSupport ? true, redis, hiredis
@@ -34,11 +33,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "6.0.8";
+  version = "7.0.5";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-JTzjzA35Z62TcdbqjU7tkexZPfPtBOCCKcfPhXgMkaM=";
+    hash = "sha256-H/tWgVjyZcCFVEZL+4VOZWjvaDvwMxKSO1HyjFB5Ck4=";
   };
 
   nativeBuildInputs = [
@@ -50,11 +49,15 @@ stdenv.mkDerivation rec {
   ++ lib.optionals rustSupport [ rustc cargo ]
   ;
 
+  propagatedBuildInputs = with python.pkgs; [
+    pyyaml
+  ];
+
   buildInputs = [
+    elfutils
     jansson
     libbpf
     libcap_ng
-    libelf
     libevent
     libmagic
     libmaxminddb
@@ -67,8 +70,7 @@ stdenv.mkDerivation rec {
     luajit
     lz4
     nspr
-    nss
-    pcre
+    pcre2
     python
     zlib
   ]
@@ -101,7 +103,6 @@ stdenv.mkDerivation rec {
     "--enable-nflog"
     "--enable-nfqueue"
     "--enable-pie"
-    "--disable-prelude"
     "--enable-python"
     "--enable-unix-socket"
     "--localstatedir=/var"
@@ -121,12 +122,13 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     # Avoid unintended clousure growth.
-    sed -i 's|/nix/store/\(.\{8\}\)[^-]*-|/nix/store/\1...-|g' ./src/build-info.h
+    sed -i 's|${builtins.storeDir}/\(.\{8\}\)[^-]*-|${builtins.storeDir}/\1...-|g' ./src/build-info.h
   '';
 
   hardeningDisable = [ "stackprotector" ];
 
   installFlags = [
+    "e_datadir=\${TMPDIR}"
     "e_localstatedir=\${TMPDIR}"
     "e_logdir=\${TMPDIR}"
     "e_logcertsdir=\${TMPDIR}"
@@ -150,7 +152,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A free and open source, mature, fast and robust network threat detection engine";
-    homepage = "https://suricata-ids.org";
+    homepage = "https://suricata.io";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ magenbluten ];

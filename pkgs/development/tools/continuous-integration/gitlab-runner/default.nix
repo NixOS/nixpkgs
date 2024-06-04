@@ -1,7 +1,7 @@
-{ lib, buildGoModule, fetchFromGitLab, fetchurl, bash }:
+{ lib, buildGoModule, fetchFromGitLab, bash }:
 
 let
-  version = "15.8.0";
+  version = "16.11.1";
 in
 buildGoModule rec {
   inherit version;
@@ -17,13 +17,13 @@ buildGoModule rec {
   # For patchShebangs
   buildInputs = [ bash ];
 
-  vendorSha256 = "sha256-YHBp6Grm+atGne/5Ia/1H2xQRODmfWsMGCqHAIE9P4k=";
+  vendorHash = "sha256-ms93Ea2Un/F9TDmNttSxi/CtZGsOnmptCf/hjtgCMB0=";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "sha256-U7yVlnEzwqcgTX8WjXe2i4SQ0KyW7PgSM3UyuGkjm9g=";
+    sha256 = "sha256-ISL11AvKIy/tW/3MhVZ2/XT5RcaYj+x9rHKWAB/9TdU=";
   };
 
   patches = [
@@ -40,6 +40,7 @@ buildGoModule rec {
 
     # No writable developer environment
     rm common/build_test.go
+    rm common/build_settings_test.go
     rm executors/custom/custom_test.go
 
     # No docker during build
@@ -48,6 +49,12 @@ buildGoModule rec {
     rm helpers/docker/auth/auth_test.go
     rm executors/docker/services_test.go
   '';
+
+  excludedPackages = [
+    # CI helper script for pushing images to Docker and ECR registries
+    # https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/4139
+    "./scripts/sync-docker-images"
+  ];
 
   postInstall = ''
     install packaging/root/usr/share/gitlab-runner/clear-docker-cache $out/bin
@@ -61,8 +68,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "GitLab Runner the continuous integration executor of GitLab";
     license = licenses.mit;
-    homepage = "https://about.gitlab.com/gitlab-ci/";
+    homepage = "https://docs.gitlab.com/runner/";
     platforms = platforms.unix ++ platforms.darwin;
-    maintainers = with maintainers; [ bachp zimbatm globin yayayayaka ];
+    maintainers = with maintainers; [ bachp zimbatm ] ++ teams.gitlab.members;
   };
 }

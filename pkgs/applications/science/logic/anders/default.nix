@@ -4,12 +4,12 @@ ocamlPackages.buildDunePackage rec {
   pname = "anders";
   version = "1.1.1";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "groupoid";
     repo = "anders";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-JUiZoo2rNLfgs94TlJqUNzul/7ODisCjSFAzhgSp1z4=";
   };
 
@@ -20,6 +20,7 @@ ocamlPackages.buildDunePackage rec {
 
   meta = with lib; {
     description = "Modal Homotopy Type System";
+    mainProgram = "anders";
     homepage = "https://homotopy.dev/";
     license = licenses.isc;
     maintainers = [ maintainers.suhr ];

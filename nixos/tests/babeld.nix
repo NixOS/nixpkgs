@@ -120,10 +120,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     ''
       start_all()
 
-      client.wait_for_unit("network-online.target")
-      local_router.wait_for_unit("network-online.target")
-      remote_router.wait_for_unit("network-online.target")
-
       local_router.wait_for_unit("babeld.service")
       remote_router.wait_for_unit("babeld.service")
 

@@ -34,28 +34,33 @@ sub getList {
 }
 
 sub readFile {
-    my ($fn) = @_; local $/ = undef;
-    open FILE, "<$fn" or return undef; my $s = <FILE>; close FILE;
-    local $/ = "\n"; chomp $s; return $s;
+    my ($fn) = @_;
+    # enable slurp mode: read entire file in one go
+    local $/ = undef;
+    open my $fh, "<$fn" or return undef;
+    my $s = <$fh>;
+    close $fh;
+    # disable slurp mode
+    local $/ = "\n";
+    chomp $s;
+    return $s;
 }
 
 sub writeFile {
     my ($fn, $s) = @_;
-    open FILE, ">$fn" or die "cannot create $fn: $!\n";
-    print FILE $s or die;
-    close FILE or die;
+    open my $fh, ">$fn" or die "cannot create $fn: $!\n";
+    print $fh $s or die "cannot write to $fn: $!\n";
+    close $fh or die "cannot close $fn: $!\n";
 }
 
 sub runCommand {
-    my ($cmd) = @_;
-    open FILE, "$cmd 2>/dev/null |" or die "Failed to execute: $cmd\n";
-    my @ret = <FILE>;
-    close FILE;
+    open(my $fh, "-|", @_) or die "Failed to execute: $@_\n";
+    my @ret = $fh->getlines();
+    close $fh;
     return ($?, @ret);
 }
 
 my $grub = get("grub");
-my $grubVersion = int(get("version"));
 my $grubTarget = get("grubTarget");
 my $extraConfig = get("extraConfig");
 my $extraPrepareConfig = get("extraPrepareConfig");
@@ -70,6 +75,7 @@ my $backgroundColor = get("backgroundColor");
 my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
+my $timeoutStyle = get("timeoutStyle");
 my $defaultEntry = get("default");
 my $fsIdentifier = get("fsIdentifier");
 my $grubEfi = get("grubEfi");
@@ -90,9 +96,7 @@ my $theme = get("theme");
 my $saveDefault = $defaultEntry eq "saved";
 $ENV{'PATH'} = get("path");
 
-die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
-
-print STDERR "updating GRUB $grubVersion menu...\n";
+print STDERR "updating GRUB 2 menu...\n";
 
 mkpath("$bootPath/grub", 0, 0700);
 
@@ -132,7 +136,6 @@ sub GetFs {
         chomp $fs;
         my @fields = split / /, $fs;
         my $mountPoint = $fields[4];
-        next unless -d $mountPoint;
         my @mountOptions = split /,/, $fields[5];
 
         # Skip the optional fields.
@@ -151,6 +154,11 @@ sub GetFs {
 
         # Is it better than our current match?
         if (length($mountPoint) > length($bestFs->mount)) {
+
+            # -d performs a stat, which can hang forever on network file systems,
+            # so we only make this call last, when it's likely that this is the mount point we need.
+            next unless -d $mountPoint;
+
             $bestFs = Fs->new(device => $device, type => $fsType, mount => $mountPoint);
         }
     }
@@ -170,76 +178,74 @@ sub GrubFs {
     }
     my $search = "";
 
-    if ($grubVersion > 1) {
-        # ZFS is completely separate logic as zpools are always identified by a label
-        # or custom UUID
-        if ($fs->type eq 'zfs') {
-            my $sid = index($fs->device, '/');
+    # ZFS is completely separate logic as zpools are always identified by a label
+    # or custom UUID
+    if ($fs->type eq 'zfs') {
+        my $sid = index($fs->device, '/');
 
-            if ($sid < 0) {
-                $search = '--label ' . $fs->device;
-                $path = '/@' . $path;
-            } else {
-                $search = '--label ' . substr($fs->device, 0, $sid);
-                $path = '/' . substr($fs->device, $sid) . '/@' . $path;
+        if ($sid < 0) {
+            $search = '--label ' . $fs->device;
+            $path = '/@' . $path;
+        } else {
+            $search = '--label ' . substr($fs->device, 0, $sid);
+            $path = '/' . substr($fs->device, $sid) . '/@' . $path;
+        }
+    } else {
+        my %types = ('uuid' => '--fs-uuid', 'label' => '--label');
+
+        if ($fsIdentifier eq 'provided') {
+            # If the provided dev is identifying the partition using a label or uuid,
+            # we should get the label / uuid and do a proper search
+            my @matches = $fs->device =~ m/\/dev\/disk\/by-(label|uuid)\/(.*)/;
+            if ($#matches > 1) {
+                die "Too many matched devices"
+            } elsif ($#matches == 1) {
+                $search = "$types{$matches[0]} $matches[1]"
             }
         } else {
-            my %types = ('uuid' => '--fs-uuid', 'label' => '--label');
+            # Determine the identifying type
+            $search = $types{$fsIdentifier} . ' ';
 
-            if ($fsIdentifier eq 'provided') {
-                # If the provided dev is identifying the partition using a label or uuid,
-                # we should get the label / uuid and do a proper search
-                my @matches = $fs->device =~ m/\/dev\/disk\/by-(label|uuid)\/(.*)/;
-                if ($#matches > 1) {
-                    die "Too many matched devices"
-                } elsif ($#matches == 1) {
-                    $search = "$types{$matches[0]} $matches[1]"
-                }
-            } else {
-                # Determine the identifying type
-                $search = $types{$fsIdentifier} . ' ';
-
-                # Based on the type pull in the identifier from the system
-                my ($status, @devInfo) = runCommand("@utillinux@/bin/blkid -o export @{[$fs->device]}");
-                if ($status != 0) {
-                    die "Failed to get blkid info (returned $status) for @{[$fs->mount]} on @{[$fs->device]}";
-                }
-                my @matches = join("", @devInfo) =~ m/@{[uc $fsIdentifier]}=([^\n]*)/;
-                if ($#matches != 0) {
-                    die "Couldn't find a $types{$fsIdentifier} for @{[$fs->device]}\n"
-                }
-                $search .= $matches[0];
+            # Based on the type pull in the identifier from the system
+            my ($status, @devInfo) = runCommand("@utillinux@/bin/blkid", "-o", "export", @{[$fs->device]});
+            if ($status != 0) {
+                die "Failed to get blkid info (returned $status) for @{[$fs->mount]} on @{[$fs->device]}";
             }
+            my @matches = join("", @devInfo) =~ m/@{[uc $fsIdentifier]}=([^\n]*)/;
+            if ($#matches != 0) {
+                die "Couldn't find a $types{$fsIdentifier} for @{[$fs->device]}\n"
+            }
+            $search .= $matches[0];
+        }
 
-            # BTRFS is a special case in that we need to fix the referrenced path based on subvolumes
-            if ($fs->type eq 'btrfs') {
-                my ($status, @id_info) = runCommand("@btrfsprogs@/bin/btrfs subvol show @{[$fs->mount]}");
+        # BTRFS is a special case in that we need to fix the referenced path based on subvolumes
+        if ($fs->type eq 'btrfs') {
+            my ($status, @id_info) = runCommand("@btrfsprogs@/bin/btrfs", "subvol", "show", @{[$fs->mount]});
+            if ($status != 0) {
+                die "Failed to retrieve subvolume info for @{[$fs->mount]}\n";
+            }
+            my @ids = join("\n", @id_info) =~ m/^(?!\/\n).*Subvolume ID:[ \t\n]*([0-9]+)/s;
+            if ($#ids > 0) {
+                die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
+            } elsif ($#ids == 0) {
+                my ($status, @path_info) = runCommand("@btrfsprogs@/bin/btrfs", "subvol", "list", @{[$fs->mount]});
                 if ($status != 0) {
-                    die "Failed to retrieve subvolume info for @{[$fs->mount]}\n";
+                    die "Failed to find @{[$fs->mount]} subvolume id from btrfs\n";
                 }
-                my @ids = join("\n", @id_info) =~ m/^(?!\/\n).*Subvolume ID:[ \t\n]*([0-9]+)/s;
-                if ($#ids > 0) {
-                    die "Btrfs subvol name for @{[$fs->device]} listed multiple times in mount\n"
-                } elsif ($#ids == 0) {
-                    my ($status, @path_info) = runCommand("@btrfsprogs@/bin/btrfs subvol list @{[$fs->mount]}");
-                    if ($status != 0) {
-                        die "Failed to find @{[$fs->mount]} subvolume id from btrfs\n";
-                    }
-                    my @paths = join("", @path_info) =~ m/ID $ids[0] [^\n]* path ([^\n]*)/;
-                    if ($#paths > 0) {
-                        die "Btrfs returned multiple paths for a single subvolume id, mountpoint @{[$fs->mount]}\n";
-                    } elsif ($#paths != 0) {
-                        die "Btrfs did not return a path for the subvolume at @{[$fs->mount]}\n";
-                    }
-                    $path = "/$paths[0]$path";
+                my @paths = join("", @path_info) =~ m/ID $ids[0] [^\n]* path ([^\n]*)/;
+                if ($#paths > 0) {
+                    die "Btrfs returned multiple paths for a single subvolume id, mountpoint @{[$fs->mount]}\n";
+                } elsif ($#paths != 0) {
+                    die "Btrfs did not return a path for the subvolume at @{[$fs->mount]}\n";
                 }
+                $path = "/$paths[0]$path";
             }
         }
-        if (not $search eq "") {
-            $search = "search --set=drive$driveid " . $search;
-            $path = "(\$drive$driveid)$path";
-            $driveid += 1;
-        }
+    }
+    if (not $search eq "") {
+        $search = "search --set=drive$driveid " . $search;
+        $path = "(\$drive$driveid)$path";
+        $driveid += 1;
     }
     return Grub->new(path => $path, search => $search);
 }
@@ -252,166 +258,177 @@ if ($copyKernels == 0) {
 # Generate the header.
 my $conf .= "# Automatically generated.  DO NOT EDIT THIS FILE!\n";
 
-if ($grubVersion == 1) {
-    # $defaultEntry might be "saved", indicating that we want to use the last selected configuration as default.
-    # Incidentally this is already the correct value for the grub 1 config to achieve this behaviour.
-    $conf .= "
-        default $defaultEntry
-        timeout $timeout
-    ";
-    if ($splashImage) {
-        copy $splashImage, "$bootPath/background.xpm.gz" or die "cannot copy $splashImage to $bootPath: $!\n";
-        $conf .= "splashimage " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/background.xpm.gz\n";
+my @users = ();
+foreach my $user ($dom->findnodes('/expr/attrs/attr[@name = "users"]/attrs/attr')) {
+    my $name = $user->findvalue('@name') or die;
+    my $hashedPassword = $user->findvalue('./attrs/attr[@name = "hashedPassword"]/string/@value');
+    my $hashedPasswordFile = $user->findvalue('./attrs/attr[@name = "hashedPasswordFile"]/string/@value');
+    my $password = $user->findvalue('./attrs/attr[@name = "password"]/string/@value');
+    my $passwordFile = $user->findvalue('./attrs/attr[@name = "passwordFile"]/string/@value');
+
+    if ($hashedPasswordFile) {
+        open(my $f, '<', $hashedPasswordFile) or die "Can't read file '$hashedPasswordFile'!";
+        $hashedPassword = <$f>;
+        chomp $hashedPassword;
     }
-}
+    if ($passwordFile) {
+        open(my $f, '<', $passwordFile) or die "Can't read file '$passwordFile'!";
+        $password = <$f>;
+        chomp $password;
+    }
 
-else {
-    my @users = ();
-    foreach my $user ($dom->findnodes('/expr/attrs/attr[@name = "users"]/attrs/attr')) {
-        my $name = $user->findvalue('@name') or die;
-        my $hashedPassword = $user->findvalue('./attrs/attr[@name = "hashedPassword"]/string/@value');
-        my $hashedPasswordFile = $user->findvalue('./attrs/attr[@name = "hashedPasswordFile"]/string/@value');
-        my $password = $user->findvalue('./attrs/attr[@name = "password"]/string/@value');
-        my $passwordFile = $user->findvalue('./attrs/attr[@name = "passwordFile"]/string/@value');
-
-        if ($hashedPasswordFile) {
-            open(my $f, '<', $hashedPasswordFile) or die "Can't read file '$hashedPasswordFile'!";
-            $hashedPassword = <$f>;
-            chomp $hashedPassword;
-        }
-        if ($passwordFile) {
-            open(my $f, '<', $passwordFile) or die "Can't read file '$passwordFile'!";
-            $password = <$f>;
-            chomp $password;
-        }
-
-        if ($hashedPassword) {
-            if (index($hashedPassword, "grub.pbkdf2.") == 0) {
-                $conf .= "\npassword_pbkdf2 $name $hashedPassword";
-            }
-            else {
-                die "Password hash for GRUB user '$name' is not valid!";
-            }
-        }
-        elsif ($password) {
-            $conf .= "\npassword $name $password";
+    if ($hashedPassword) {
+        if (index($hashedPassword, "grub.pbkdf2.") == 0) {
+            $conf .= "\npassword_pbkdf2 $name $hashedPassword";
         }
         else {
-            die "GRUB user '$name' has no password!";
+            die "Password hash for GRUB user '$name' is not valid!";
         }
-        push(@users, $name);
     }
-    if (@users) {
-        $conf .= "\nset superusers=\"" . join(' ',@users) . "\"\n";
+    elsif ($password) {
+        $conf .= "\npassword $name $password";
     }
+    else {
+        die "GRUB user '$name' has no password!";
+    }
+    push(@users, $name);
+}
+if (@users) {
+    $conf .= "\nset superusers=\"" . join(' ',@users) . "\"\n";
+}
 
-    if ($copyKernels == 0) {
-        $conf .= "
-            " . $grubStore->search;
-    }
-    # FIXME: should use grub-mkconfig.
-    my $defaultEntryText = $defaultEntry;
-    if ($saveDefault) {
-        $defaultEntryText = "\"\${saved_entry}\"";
-    }
+if ($copyKernels == 0) {
     $conf .= "
-        " . $grubBoot->search . "
-        if [ -s \$prefix/grubenv ]; then
-          load_env
+        " . $grubStore->search;
+}
+# FIXME: should use grub-mkconfig.
+my $defaultEntryText = $defaultEntry;
+if ($saveDefault) {
+    $defaultEntryText = "\"\${saved_entry}\"";
+}
+$conf .= "
+    " . $grubBoot->search . "
+    if [ -s \$prefix/grubenv ]; then
+      load_env
+    fi
+
+    # ‘grub-reboot’ sets a one-time saved entry, which we process here and
+    # then delete.
+    if [ \"\${next_entry}\" ]; then
+      set default=\"\${next_entry}\"
+      set next_entry=
+      save_env next_entry
+      set timeout=1
+      set boot_once=true
+    else
+      set default=$defaultEntryText
+      set timeout=$timeout
+    fi
+    set timeout_style=$timeoutStyle
+
+    function savedefault {
+        if [ -z \"\${boot_once}\"]; then
+        saved_entry=\"\${chosen}\"
+        save_env saved_entry
         fi
+    }
 
-        # ‘grub-reboot’ sets a one-time saved entry, which we process here and
-        # then delete.
-        if [ \"\${next_entry}\" ]; then
-          set default=\"\${next_entry}\"
-          set next_entry=
-          save_env next_entry
-          set timeout=1
-          set boot_once=true
-        else
-          set default=$defaultEntryText
-          set timeout=$timeout
-        fi
+    # Setup the graphics stack for bios and efi systems
+    if [ \"\${grub_platform}\" = \"efi\" ]; then
+      insmod efi_gop
+      insmod efi_uga
+    else
+      insmod vbe
+    fi
+";
 
-        function savedefault {
-            if [ -z \"\${boot_once}\"]; then
-            saved_entry=\"\${chosen}\"
-            save_env saved_entry
-            fi
-        }
-
-        # Setup the graphics stack for bios and efi systems
-        if [ \"\${grub_platform}\" = \"efi\" ]; then
-          insmod efi_gop
-          insmod efi_uga
-        else
-          insmod vbe
+if ($font) {
+    copy $font, "$bootPath/converted-font.pf2" or die "cannot copy $font to $bootPath: $!\n";
+    $conf .= "
+        insmod font
+        if loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/converted-font.pf2; then
+          insmod gfxterm
+          if [ \"\${grub_platform}\" = \"efi\" ]; then
+            set gfxmode=$gfxmodeEfi
+            set gfxpayload=$gfxpayloadEfi
+          else
+            set gfxmode=$gfxmodeBios
+            set gfxpayload=$gfxpayloadBios
+          fi
+          terminal_output gfxterm
         fi
     ";
-
-    if ($font) {
-        copy $font, "$bootPath/converted-font.pf2" or die "cannot copy $font to $bootPath: $!\n";
+}
+if ($splashImage) {
+    # Keeps the image's extension.
+    my ($filename, $dirs, $suffix) = fileparse($splashImage, qr"\..[^.]*$");
+    # The module for jpg is jpeg.
+    if ($suffix eq ".jpg") {
+        $suffix = ".jpeg";
+    }
+    if ($backgroundColor) {
         $conf .= "
-            insmod font
-            if loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/converted-font.pf2; then
-              insmod gfxterm
-              if [ \"\${grub_platform}\" = \"efi\" ]; then
-                set gfxmode=$gfxmodeEfi
-                set gfxpayload=$gfxpayloadEfi
-              else
-                set gfxmode=$gfxmodeBios
-                set gfxpayload=$gfxpayloadBios
-              fi
-              terminal_output gfxterm
-            fi
+        background_color '$backgroundColor'
         ";
     }
-    if ($splashImage) {
-        # Keeps the image's extension.
-        my ($filename, $dirs, $suffix) = fileparse($splashImage, qr"\..[^.]*$");
-        # The module for jpg is jpeg.
-        if ($suffix eq ".jpg") {
-            $suffix = ".jpeg";
-        }
-        if ($backgroundColor) {
+    copy $splashImage, "$bootPath/background$suffix" or die "cannot copy $splashImage to $bootPath: $!\n";
+    $conf .= "
+        insmod " . substr($suffix, 1) . "
+        if background_image --mode '$splashMode' " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/background$suffix; then
+          set color_normal=white/black
+          set color_highlight=black/white
+        else
+          set menu_color_normal=cyan/blue
+          set menu_color_highlight=white/blue
+        fi
+    ";
+}
+
+rmtree("$bootPath/theme") or die "cannot clean up theme folder in $bootPath\n" if -e "$bootPath/theme";
+
+if ($theme) {
+    # Copy theme
+    rcopy($theme, "$bootPath/theme") or die "cannot copy $theme to $bootPath\n";
+
+    # Detect which modules will need to be loaded
+    my $with_png = 0;
+    my $with_jpeg = 0;
+
+    find({ wanted => sub {
+            if ($_ =~ /\.png$/i) {
+                $with_png = 1;
+            }
+            elsif ($_ =~ /\.jpe?g$/i) {
+                $with_jpeg = 1;
+            }
+    }, no_chdir => 1 }, $theme);
+
+    if ($with_png) {
+        $conf .= "
+            insmod png
+        "
+    }
+    if ($with_jpeg) {
+        $conf .= "
+            insmod jpeg
+        "
+    }
+
+    $conf .= "
+        # Sets theme.
+        set theme=" . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/theme.txt
+        export theme
+        # Load theme fonts, if any
+    ";
+
+    find( { wanted => sub {
+        if ($_ =~ /\.pf2$/i) {
+            $font = File::Spec->abs2rel($File::Find::name, $theme);
             $conf .= "
-            background_color '$backgroundColor'
+                loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/$font
             ";
         }
-        copy $splashImage, "$bootPath/background$suffix" or die "cannot copy $splashImage to $bootPath: $!\n";
-        $conf .= "
-            insmod " . substr($suffix, 1) . "
-            if background_image --mode '$splashMode' " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/background$suffix; then
-              set color_normal=white/black
-              set color_highlight=black/white
-            else
-              set menu_color_normal=cyan/blue
-              set menu_color_highlight=white/blue
-            fi
-        ";
-    }
-
-    rmtree("$bootPath/theme") or die "cannot clean up theme folder in $bootPath\n" if -e "$bootPath/theme";
-
-    if ($theme) {
-        # Copy theme
-        rcopy($theme, "$bootPath/theme") or die "cannot copy $theme to $bootPath\n";
-        $conf .= "
-            # Sets theme.
-            set theme=" . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/theme.txt
-            export theme
-            # Load theme fonts, if any
-        ";
-
-        find( { wanted => sub {
-            if ($_ =~ /\.pf2$/i) {
-                $font = File::Spec->abs2rel($File::Find::name, $theme);
-                $conf .= "
-                    loadfont " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/$font
-                ";
-            }
-        }, no_chdir => 1 }, $theme );
-    }
+    }, no_chdir => 1 }, $theme );
 }
 
 $conf .= "$extraConfig\n";
@@ -450,8 +467,9 @@ sub addEntry {
 
     # Include second initrd with secrets
     if (-e -x "$path/append-initrd-secrets") {
-        my $initrdName = basename($initrd);
-        my $initrdSecretsPath = "$bootPath/kernels/$initrdName-secrets";
+        # Name the initrd secrets after the system from which they're derived.
+        my $systemName = basename(Cwd::abs_path("$path"));
+        my $initrdSecretsPath = "$bootPath/kernels/$systemName-secrets";
 
         mkpath(dirname($initrdSecretsPath), 0, 0755);
         my $oldUmask = umask;
@@ -470,7 +488,7 @@ sub addEntry {
         if (-e $initrdSecretsPathTemp && ! -z _) {
             rename $initrdSecretsPathTemp, $initrdSecretsPath or die "failed to move initrd secrets into place: $!\n";
             $copied{$initrdSecretsPath} = 1;
-            $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$initrdName-secrets";
+            $initrd .= " " . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/kernels/$systemName-secrets";
         } else {
             unlink $initrdSecretsPathTemp;
             rmdir dirname($initrdSecretsPathTemp);
@@ -487,64 +505,67 @@ sub addEntry {
         readFile("$path/kernel-params");
     my $xenParams = $xen && -e "$path/xen-params" ? readFile("$path/xen-params") : "";
 
-    if ($grubVersion == 1) {
-        $conf .= "title $name\n";
-        $conf .= "  $extraPerEntryConfig\n" if $extraPerEntryConfig;
-        $conf .= "  kernel $xen $xenParams\n" if $xen;
-        $conf .= "  " . ($xen ? "module" : "kernel") . " $kernel $kernelParams\n";
-        $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n";
-        if ($saveDefault) {
-            $conf .= "  savedefault\n";
-        }
-        $conf .= "\n";
-    } else {
-        $conf .= "menuentry \"$name\" " . $options . " {\n";
-        if ($saveDefault) {
-            $conf .= "  savedefault\n";
-        }
-        $conf .= $grubBoot->search . "\n";
-        if ($copyKernels == 0) {
-            $conf .= $grubStore->search . "\n";
-        }
-        $conf .= "  $extraPerEntryConfig\n" if $extraPerEntryConfig;
-        $conf .= "  multiboot $xen $xenParams\n" if $xen;
-        $conf .= "  " . ($xen ? "module" : "linux") . " $kernel $kernelParams\n";
-        $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n";
-        $conf .= "}\n\n";
+    $conf .= "menuentry \"$name\" " . $options . " {\n";
+    if ($saveDefault) {
+        $conf .= "  savedefault\n";
     }
+    $conf .= $grubBoot->search . "\n";
+    if ($copyKernels == 0) {
+        $conf .= $grubStore->search . "\n";
+    }
+    $conf .= "  $extraPerEntryConfig\n" if $extraPerEntryConfig;
+    $conf .= "  multiboot $xen $xenParams\n" if $xen;
+    $conf .= "  " . ($xen ? "module" : "linux") . " $kernel $kernelParams\n";
+    $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n";
+    $conf .= "}\n\n";
 }
 
+sub addGeneration {
+    my ($name, $nameSuffix, $path, $options, $current) = @_;
+
+    # Do not search for grand children
+    my @links = sort (glob "$path/specialisation/*");
+
+    if ($current != 1 && scalar(@links) != 0) {
+        $conf .= "submenu \"> $name$nameSuffix\" --class submenu {\n";
+    }
+
+    addEntry("$name" . (scalar(@links) == 0 ? "" : " - Default") . $nameSuffix, $path, $options, $current);
+
+    # Find all the children of the current default configuration
+    # Do not search for grand children
+    foreach my $link (@links) {
+
+        my $entryName = "";
+
+        my $cfgName = readFile("$link/configuration-name");
+
+        my $date = strftime("%F", localtime(lstat($link)->mtime));
+        my $version =
+            -e "$link/nixos-version"
+            ? readFile("$link/nixos-version")
+            : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
+
+        if ($cfgName) {
+            $entryName = $cfgName;
+        } else {
+            my $linkname = basename($link);
+            $entryName = "($linkname - $date - $version)";
+        }
+        addEntry("$name - $entryName", $link, "", 1);
+    }
+
+    if ($current != 1 && scalar(@links) != 0) {
+        $conf .= "}\n";
+    }
+}
 
 # Add default entries.
 $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
 
-addEntry("@distroName@ - Default", $defaultConfig, $entryOptions, 1);
+addGeneration("@distroName@", "", $defaultConfig, $entryOptions, 1);
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
-
-# Find all the children of the current default configuration
-# Do not search for grand children
-my @links = sort (glob "$defaultConfig/specialisation/*");
-foreach my $link (@links) {
-
-    my $entryName = "";
-
-    my $cfgName = readFile("$link/configuration-name");
-
-    my $date = strftime("%F", localtime(lstat($link)->mtime));
-    my $version =
-        -e "$link/nixos-version"
-        ? readFile("$link/nixos-version")
-        : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-
-    if ($cfgName) {
-        $entryName = $cfgName;
-    } else {
-        my $linkname = basename($link);
-        $entryName = "($linkname - $date - $version)";
-    }
-    addEntry("@distroName@ - $entryName", $link, "", 1);
-}
 
 my $grubBootPath = $grubBoot->path;
 # extraEntries could refer to @bootRoot@, which we have to substitute
@@ -555,7 +576,7 @@ sub addProfile {
     my ($profile, $description) = @_;
 
     # Add entries for all generations of this profile.
-    $conf .= "submenu \"$description\" --class submenu {\n" if $grubVersion == 2;
+    $conf .= "submenu \"$description\" --class submenu {\n";
 
     sub nrFromGen { my ($x) = @_; $x =~ /\/\w+-(\d+)-link/; return $1; }
 
@@ -575,20 +596,18 @@ sub addProfile {
             -e "$link/nixos-version"
             ? readFile("$link/nixos-version")
             : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
-        addEntry("@distroName@ - Configuration " . nrFromGen($link) . " ($date - $version)", $link, $subEntryOptions, 0);
+        addGeneration("@distroName@ - Configuration " . nrFromGen($link), " ($date - $version)", $link, $subEntryOptions, 0);
     }
 
-    $conf .= "}\n" if $grubVersion == 2;
+    $conf .= "}\n";
 }
 
 addProfile "/nix/var/nix/profiles/system", "@distroName@ - All configurations";
 
-if ($grubVersion == 2) {
-    for my $profile (glob "/nix/var/nix/profiles/system-profiles/*") {
-        my $name = basename($profile);
-        next unless $name =~ /^\w+$/;
-        addProfile $profile, "@distroName@ - Profile '$name'";
-    }
+for my $profile (glob "/nix/var/nix/profiles/system-profiles/*") {
+    my $name = basename($profile);
+    next unless $name =~ /^\w+$/;
+    addProfile $profile, "@distroName@ - Profile '$name'";
 }
 
 # extraPrepareConfig could refer to @bootPath@, which we have to substitute
@@ -600,22 +619,20 @@ if ($extraPrepareConfig ne "") {
 }
 
 # write the GRUB config.
-my $confFile = $grubVersion == 1 ? "$bootPath/grub/menu.lst" : "$bootPath/grub/grub.cfg";
+my $confFile = "$bootPath/grub/grub.cfg";
 my $tmpFile = $confFile . ".tmp";
 writeFile($tmpFile, $conf);
 
 
 # check whether to install GRUB EFI or not
 sub getEfiTarget {
-    if ($grubVersion == 1) {
-        return "no"
-    } elsif (($grub ne "") && ($grubEfi ne "")) {
+    if (($grub ne "") && ($grubEfi ne "")) {
         # EFI can only be installed when target is set;
         # A target is also required then for non-EFI grub
         if (($grubTarget eq "") || ($grubTargetEfi eq "")) { die }
         else { return "both" }
     } elsif (($grub ne "") && ($grubEfi eq "")) {
-        # TODO: It would be safer to disallow non-EFI grub installation if no taget is given.
+        # TODO: It would be safer to disallow non-EFI grub installation if no target is given.
         #       If no target is given, then grub auto-detects the target which can lead to errors.
         #       E.g. it seems as if grub would auto-detect a EFI target based on the availability
         #       of a EFI partition.
@@ -734,7 +751,7 @@ symlink "$bootPath", "$tmpDir/boot" or die "Failed to symlink $tmpDir/boot: $!";
 if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
     foreach my $dev (@deviceTargets) {
         next if $dev eq "nodev";
-        print STDERR "installing the GRUB $grubVersion boot loader on $dev...\n";
+        print STDERR "installing the GRUB 2 boot loader on $dev...\n";
         my @command = ("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", Cwd::abs_path($dev), @extraGrubInstallArgs);
         if ($forceInstall eq "true") {
             push @command, "--force";
@@ -749,14 +766,13 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
 
 # install EFI GRUB
 if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both")) {
-    print STDERR "installing the GRUB $grubVersion EFI boot loader into $efiSysMountPoint...\n";
+    print STDERR "installing the GRUB 2 boot loader into $efiSysMountPoint...\n";
     my @command = ("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint", @extraGrubInstallArgs);
     if ($forceInstall eq "true") {
         push @command, "--force";
     }
-    if ($canTouchEfiVariables eq "true") {
-        push @command, "--bootloader-id=$bootloaderId";
-    } else {
+    push @command, "--bootloader-id=$bootloaderId";
+    if ($canTouchEfiVariables ne "true") {
         push @command, "--no-nvram";
         push @command, "--removable" if $efiInstallAsRemovable eq "true";
     }

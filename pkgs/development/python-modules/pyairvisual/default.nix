@@ -1,47 +1,52 @@
-{ lib
-, aiohttp
-, aresponses
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, poetry-core
-, pysmb
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  numpy,
+  poetry-core,
+  pygments,
+  pysmb,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyairvisual";
-  version = "2022.12.1";
-  format = "pyproject";
+  version = "2023.12.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = version;
-    hash = "sha256-xzTho4HsIU2YLURz9DfFfaRL3tsrtVi8n5IA2bRkyzw=";
+    repo = "pyairvisual";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uN31LeHYmg4V6Ln3EQp765nOsN5v56TxjYSS/g6TUCY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     numpy
+    pygments
     pysmb
   ];
 
-  checkInputs = [
+  # this lets tests bind to localhost in sandbox mode on macOS
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-aiohttp
     pytest-asyncio
+    pytestCheckHook
     pytestCheckHook
   ];
 
@@ -50,9 +55,7 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "pyairvisual"
-  ];
+  pythonImportsCheck = [ "pyairvisual" ];
 
   meta = with lib; {
     description = "Python library for interacting with AirVisual";

@@ -2,7 +2,9 @@
 , stdenv
 , fetchurl
 , ncurses5
-, python38
+, python39
+, libxcrypt-legacy
+, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
@@ -38,8 +40,19 @@ stdenv.mkDerivation rec {
     find $out -type f | while read f; do
       patchelf "$f" > /dev/null 2>&1 || continue
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
-      patchelf --set-rpath ${lib.makeLibraryPath [ "$out" stdenv.cc.cc ncurses5 python38 ]} "$f" || true
+      patchelf --set-rpath ${lib.makeLibraryPath [ "$out" stdenv.cc.cc ncurses5 python39 libxcrypt-legacy ]} "$f" || true
     done
+  '';
+
+  postFixup = ''
+    mv $out/bin/arm-none-eabi-gdb $out/bin/arm-none-eabi-gdb-unwrapped
+    cat <<EOF > $out/bin/arm-none-eabi-gdb
+    #!${runtimeShell}
+    export PYTHONPATH=${python39}/lib/python3.9
+    export PYTHONHOME=${python39.interpreter}
+    exec $out/bin/arm-none-eabi-gdb-unwrapped "\$@"
+    EOF
+    chmod +x $out/bin/arm-none-eabi-gdb
   '';
 
   meta = with lib; {
@@ -48,5 +61,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd2 gpl2 gpl3 lgpl21 lgpl3 mit ];
     maintainers = with maintainers; [ prusnak ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

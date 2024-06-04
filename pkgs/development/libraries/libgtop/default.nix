@@ -10,15 +10,15 @@
 , deterministic-uname
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgtop";
-  version = "2.40.0";
+  version = "2.41.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1m6jbqk8maa52gxrf223442fr5bvvxgb7ham6v039i3r1i62gwvq";
+    url = "mirror://gnome/sources/libgtop/${lib.versions.majorMinor finalAttrs.version}/libgtop-${finalAttrs.version}.tar.xz";
+    hash = "sha256-d1Z235WOLqJFL3Vo8osupYEGPTEnc91cC3Ykwbmy2ow=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libgtop";
       versionPolicy = "odd-unstable";
     };
   };
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

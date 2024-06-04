@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "distribution";
-  version = "2.8.1";
+  version = "2.8.3";
   rev = "v${version}";
 
   goPackagePath = "github.com/docker/distribution";
@@ -11,13 +11,13 @@ buildGoPackage rec {
     owner = "docker";
     repo = "distribution";
     inherit rev;
-    sha256 = "sha256-M8XVeIvD7LtWa9l+6ovwWu5IwFGYt0xDfcIwcU/KH/E=";
+    sha256 = "sha256-6/clOTkI1JnDjb+crcHmjbQlaqffP/sntGqUB2ftajU=";
   };
 
   meta = with lib; {
     description = "The Docker toolset to pack, ship, store, and deliver content";
     license = licenses.asl20;
-    maintainers = [ maintainers.globin ];
+    maintainers = [];
     platforms = platforms.unix;
   };
 }

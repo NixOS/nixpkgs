@@ -1,13 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, pythonAtLeast }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+}:
 
 buildPythonPackage rec {
   pname = "crashtest";
   version = "0.4.1";
+  format = "setuptools";
   disabled = !(pythonAtLeast "3.6");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-gNex8xbr+9Qp9kgHbWJ1yHe6MLpIl53kGRcUp1Jm8M4=";
+    hash = "sha256-gNex8xbr+9Qp9kgHbWJ1yHe6MLpIl53kGRcUp1Jm8M4=";
   };
 
   # has tests, but only on GitHub, however the pyproject build fails for me

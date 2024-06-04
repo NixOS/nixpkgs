@@ -2,9 +2,8 @@
 , stdenv
 , fetchzip
 , fetchFromGitHub
-, fetchpatch
 , SDL2
-, buildFHSUserEnv
+, buildFHSEnv
 , cmake
 , copyDesktopItems
 , curl
@@ -33,15 +32,15 @@
 }:
 
 let
-  version = "0.53.2";
-  binary-deps-version = "6";
+  version = "0.54.1";
+  binary-deps-version = "10";
 
   src = fetchFromGitHub {
     owner = "Unvanquished";
     repo = "Unvanquished";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-VqMhA6GEYh/m+dzOgXS+5Jqo4x7RrQf4qIwstdTTU+E=";
+    sha256 = "sha256-F8U9UBFCe0PcFYZ2DThQwhouO22jKyWb0/ABhprHXCU=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -50,8 +49,8 @@ let
     version = binary-deps-version;
 
     src = fetchzip {
-      url = "https://dl.unvanquished.net/deps/linux64-${version}.tar.bz2";
-      sha256 = "sha256-ERfg89oTf9JTtv/qRnTRIzFP+zMpHT8W4WAIxqogy9E=";
+      url = "https://dl.unvanquished.net/deps/linux-amd64-default_${version}.tar.xz ";
+      sha256 = "sha256-5n8gRvTuke4e7EaZ/5G+dtCG6qmnawhtA1IXIFQPkzA=";
     };
 
     dontPatchELF = true;
@@ -95,7 +94,7 @@ let
     '';
   };
 
-  fhsEnv = buildFHSUserEnv {
+  fhsEnv = buildFHSEnv {
     name = "unvanquished-fhs-wrapper";
 
     targetPkgs = pkgs: [ libstdcpp-preload-for-unvanquished-nacl ];
@@ -119,7 +118,7 @@ let
     pname = "unvanquished-assets";
     inherit version src;
 
-    outputHash = "sha256-MPqyqcZGc5KlkftGCspWhISBJ/h+Os29g7ZK6yWz0cQ=";
+    outputHash = "sha256-xb8gKQHSyscWM29r0BWK0YsALull9uYjX7e+l1DHFPg=";
     outputHashMode = "recursive";
 
     nativeBuildInputs = [ aria2 cacert ];
@@ -135,9 +134,10 @@ in stdenv.mkDerivation rec {
   inherit version src binary-deps-version;
 
   preConfigure = ''
-    mkdir daemon/external_deps/linux64-${binary-deps-version}/
-    cp -r ${unvanquished-binary-deps}/* daemon/external_deps/linux64-${binary-deps-version}/
-    chmod +w -R daemon/external_deps/linux64-${binary-deps-version}/
+    TARGET="linux-amd64-default_${binary-deps-version}"
+    mkdir daemon/external_deps/"$TARGET"
+    cp -r ${unvanquished-binary-deps}/* daemon/external_deps/"$TARGET"/
+    chmod +w -R daemon/external_deps/"$TARGET"/
   '';
 
   nativeBuildInputs = [
@@ -202,7 +202,7 @@ in stdenv.mkDerivation rec {
     for f in daemon daemon-tty daemonded nacl_loader nacl_helper_bootstrap; do
       install -Dm0755 -t $out/lib/ $f
     done
-    install -Dm0644 -t $out/lib/ irt_core-x86_64.nexe
+    install -Dm0644 -t $out/lib/ irt_core-amd64.nexe
 
     mkdir $out/bin/
     ${wrapBinary "daemon"     "unvanquished"}

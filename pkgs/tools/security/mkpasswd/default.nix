@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "mkpasswd";
-  inherit (whois) version src;
+  inherit (whois) version src patches;
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs = [ libxcrypt ];
@@ -14,8 +14,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://packages.qa.debian.org/w/whois.html";
     description = "Overfeatured front-end to crypt, from the Debian whois package";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ cstrahan fpletz ];
+    mainProgram = "mkpasswd";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
   };
 }

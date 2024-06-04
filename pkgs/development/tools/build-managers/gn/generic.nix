@@ -38,6 +38,8 @@ in stdenv.mkDerivation {
     AppKit
   ]);
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
   buildPhase = ''
     python build/gen.py --no-last-commit-position
     ln -s ${lastCommitPosition} out/last_commit_position.h
@@ -52,6 +54,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A meta-build system that generates build files for Ninja";
+    mainProgram = "gn";
     homepage = "https://gn.googlesource.com/gn";
     license = licenses.bsd3;
     platforms = platforms.unix;

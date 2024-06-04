@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "linuxfd";
   version = "1.5";
-
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,29 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, django
-, six
-, pytest-django
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  django,
+  six,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-annoying";
   version = "0.10.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "skorokithakis";
     repo = "django-annoying";
     rev = "v${version}";
-    sha256 = "sha256-M1zOLr1Vjf2U0xlW66Mpno+S+b4IKLklN+kYxRaj6cA=";
+    hash = "sha256-M1zOLr1Vjf2U0xlW66Mpno+S+b4IKLklN+kYxRaj6cA=";
   };
 
   patches = [
     (fetchpatch {
       name = "django-4-compatibility.patch";
       url = "https://github.com/skorokithakis/django-annoying/pull/101/commits/51b5bd7bc8bb7a410400667e00d0813603df32bd.patch";
-      sha256 = "sha256-gLRlAtIHHJ85I88af3C3y+ZT+nXrj2KrV7QgOuEqspk=";
+      hash = "sha256-gLRlAtIHHJ85I88af3C3y+ZT+nXrj2KrV7QgOuEqspk=";
     })
   ];
 
@@ -34,7 +36,7 @@ buildPythonPackage rec {
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];

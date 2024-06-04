@@ -6,14 +6,16 @@ hasn't been declared in any module. An option declaration generally
 looks like this:
 
 ```nix
-options = {
-  name = mkOption {
-    type = type specification;
-    default = default value;
-    example = example value;
-    description = lib.mdDoc "Description for use in the NixOS manual.";
+{
+  options = {
+    name = mkOption {
+      type = type specification;
+      default = default value;
+      example = example value;
+      description = "Description for use in the NixOS manual.";
+    };
   };
-};
+}
 ```
 
 The attribute names within the `name` attribute path must be camel
@@ -56,12 +58,9 @@ The function `mkOption` accepts the following arguments.
 
 `description`
 
-:   A textual description of the option, in [Nixpkgs-flavored Markdown](
-    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format, that will be
-    included in the NixOS manual. During the migration process from DocBook
-    it is necessary to mark descriptions written in CommonMark with `lib.mdDoc`.
-    The description may still be written in DocBook (without any marker), but this
-    is discouraged and will be deprecated in the future.
+:   A textual description of the option in [Nixpkgs-flavored Markdown](
+    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format that will be
+    included in the NixOS manual.
 
 ## Utility functions for common option patterns {#sec-option-declarations-util}
 
@@ -77,6 +76,7 @@ The option's description is "Whether to enable \<name\>.".
 For example:
 
 ::: {#ex-options-declarations-util-mkEnableOption-magic .example}
+### `mkEnableOption` usage
 ```nix
 lib.mkEnableOption "magic"
 # is like
@@ -84,11 +84,12 @@ lib.mkOption {
   type = lib.types.bool;
   default = false;
   example = true;
-  description = lib.mdDoc "Whether to enable magic.";
+  description = "Whether to enable magic.";
 }
 ```
+:::
 
-### `mkPackageOption`, `mkPackageOptionMD` {#sec-option-declarations-util-mkPackageOption}
+### `mkPackageOption` {#sec-option-declarations-util-mkPackageOption}
 
 Usage:
 
@@ -100,18 +101,30 @@ Creates an Option attribute set for an option that specifies the package a modul
 
 **Note**: You shouldn’t necessarily make package options for all of your modules. You can always overwrite a specific package throughout nixpkgs by using [nixpkgs overlays](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
 
-The default package is specified as a list of strings representing its attribute path in nixpkgs. Because of this, you need to pass nixpkgs itself as the first argument.
+The package is specified in the third argument under `default` as a list of strings
+representing its attribute path in nixpkgs (or another package set).
+Because of this, you need to pass nixpkgs itself (or a subset) as the first argument.
 
-The second argument is the name of the option, used in the description "The \<name\> package to use.". You can also pass an example value, either a literal string or a package's attribute path.
+The second argument may be either a string or a list of strings.
+It provides the display name of the package in the description of the generated option
+(using only the last element if the passed value is a list)
+and serves as the fallback value for the `default` argument.
 
-You can omit the default path if the name of the option is also attribute path in nixpkgs.
+To include extra information in the description, pass `extraDescription` to
+append arbitrary text to the generated description.
+You can also pass an `example` value, either a literal string or an attribute path.
 
-During the transition to CommonMark documentation `mkPackageOption` creates an option with a DocBook description attribute, once the transition is completed it will create a CommonMark description instead. `mkPackageOptionMD` always creates an option with a CommonMark description attribute and will be removed some time after the transition is completed.
+The default argument can be omitted if the provided name is
+an attribute of pkgs (if name is a string) or a
+valid attribute path in pkgs (if name is a list).
 
-::: {#ex-options-declarations-util-mkPackageOption .title}
+If you wish to explicitly provide no default, pass `null` as `default`.
+
+[]{#ex-options-declarations-util-mkPackageOption}
 Examples:
 
 ::: {#ex-options-declarations-util-mkPackageOption-hello .example}
+### Simple `mkPackageOption` usage
 ```nix
 lib.mkPackageOption pkgs "hello" { }
 # is like
@@ -119,11 +132,13 @@ lib.mkOption {
   type = lib.types.package;
   default = pkgs.hello;
   defaultText = lib.literalExpression "pkgs.hello";
-  description = lib.mdDoc "The hello package to use.";
+  description = "The hello package to use.";
 }
 ```
+:::
 
 ::: {#ex-options-declarations-util-mkPackageOption-ghc .example}
+### `mkPackageOption` with explicit default and example
 ```nix
 lib.mkPackageOption pkgs "GHC" {
   default = [ "ghc" ];
@@ -135,13 +150,30 @@ lib.mkOption {
   default = pkgs.ghc;
   defaultText = lib.literalExpression "pkgs.ghc";
   example = lib.literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
-  description = lib.mdDoc "The GHC package to use.";
+  description = "The GHC package to use.";
 }
 ```
+:::
+
+::: {#ex-options-declarations-util-mkPackageOption-extraDescription .example}
+### `mkPackageOption` with additional description text
+```nix
+mkPackageOption pkgs [ "python39Packages" "pytorch" ] {
+  extraDescription = "This is an example and doesn't actually do anything.";
+}
+# is like
+lib.mkOption {
+  type = lib.types.package;
+  default = pkgs.python39Packages.pytorch;
+  defaultText = lib.literalExpression "pkgs.python39Packages.pytorch";
+  description = "The pytorch package to use. This is an example and doesn't actually do anything.";
+}
+```
+:::
 
 ## Extensible Option Types {#sec-option-declarations-eot}
 
-Extensible option types is a feature that allow to extend certain types
+Extensible option types is a feature that allows to extend certain types
 declaration through multiple module files. This feature only work with a
 restricted set of types, namely `enum` and `submodules` and any composed
 forms of them.
@@ -186,36 +218,36 @@ changing the main service module file and the type system automatically
 enforces that there can only be a single display manager enabled.
 
 ::: {#ex-option-declaration-eot-service .example}
-::: {.title}
-**Example: Extensible type placeholder in the service module**
-:::
+### Extensible type placeholder in the service module
 ```nix
-services.xserver.displayManager.enable = mkOption {
-  description = "Display manager to use";
-  type = with types; nullOr (enum [ ]);
-};
+{
+  services.xserver.displayManager.enable = mkOption {
+    description = "Display manager to use";
+    type = with types; nullOr (enum [ ]);
+  };
+}
 ```
 :::
 
 ::: {#ex-option-declaration-eot-backend-gdm .example}
-::: {.title}
-**Example: Extending `services.xserver.displayManager.enable` in the `gdm` module**
-:::
+### Extending `services.xserver.displayManager.enable` in the `gdm` module
 ```nix
-services.xserver.displayManager.enable = mkOption {
-  type = with types; nullOr (enum [ "gdm" ]);
-};
+{
+  services.xserver.displayManager.enable = mkOption {
+    type = with types; nullOr (enum [ "gdm" ]);
+  };
+}
 ```
 :::
 
 ::: {#ex-option-declaration-eot-backend-sddm .example}
-::: {.title}
-**Example: Extending `services.xserver.displayManager.enable` in the `sddm` module**
-:::
+### Extending `services.xserver.displayManager.enable` in the `sddm` module
 ```nix
-services.xserver.displayManager.enable = mkOption {
-  type = with types; nullOr (enum [ "sddm" ]);
-};
+{
+  services.xserver.displayManager.enable = mkOption {
+    type = with types; nullOr (enum [ "sddm" ]);
+  };
+}
 ```
 :::
 

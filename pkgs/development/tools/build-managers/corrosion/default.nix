@@ -1,40 +1,50 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, cargo
 , cmake
-, rustPlatform
+, rustc
 , libiconv
 }:
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
-  version = "0.3.0";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "corrosion-rs";
     repo = "corrosion";
     rev = "v${version}";
-    hash = "sha256-HZdKnS0M8q4C42b7J93LZBXJycxYVahy2ywT6rISOzo=";
-  };
-
-  cargoRoot = "generator";
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sourceRoot = "${src.name}/${cargoRoot}";
-    name = "${pname}-${version}";
-    hash = "sha256-vrAK5BrMSC8FMLvtP0rxw4sHRU9ySbnrZM50oXMJV1Q=";
+    hash = "sha256-ChoeN7qQRR1YmYYvPdJVJ2SVGTDGlM7PsN9jzFjQEyU=";
   };
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   nativeBuildInputs = [
     cmake
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    cargo
+    rustc
+  ];
+
+  doCheck = true;
+
+  checkPhase = let
+    excludedTests = [
+      "cbindgen_rust2cpp_build"
+      "cbindgen_rust2cpp_run_cpp-exe"
+      "hostbuild_build"
+      "hostbuild_run_rust-host-program"
+      "parse_target_triple_build"
+      "rustup_proxy_build"
+    ];
+    excludedTestsRegex = lib.concatStringsSep "|" excludedTests;
+  in ''
+    runHook preCheck
+
+    ctest -E "${excludedTestsRegex}"
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Tool for integrating Rust into an existing CMake project";

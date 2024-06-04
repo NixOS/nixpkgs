@@ -1,33 +1,44 @@
 { lib, stdenv, fetchFromGitHub
 , cmake
-, libev, nghttp3, quictls
-, cunit, ncurses
+, brotli, libev, nghttp3, quictls
+, CoreServices
 , withJemalloc ? false, jemalloc
+, curlHTTP3
 }:
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "0.12.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OnGzAUfIop/3/0qAAm5rgTlpCdZ/1fwWPJ/KLfGUy8U=";
+    hash = "sha256-Ez97uFzXvI7cE2TIk4/RCAwbAf+vXG1PlPaSvdSrcnE=";
+    fetchSubmodules = true;
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
-  checkInputs = [ cunit ncurses ];
+  buildInputs = [
+    brotli
+    libev
+    nghttp3
+    quictls
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+  ] ++ lib.optional withJemalloc jemalloc;
 
   cmakeFlags = [
-    "-DENABLE_STATIC_LIB=OFF"
+    (lib.cmakeBool "ENABLE_STATIC_LIB" false)
   ];
 
   doCheck = true;
-  enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit curlHTTP3;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/ngtcp2";

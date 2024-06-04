@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-argparse";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "sphinx_argparse";
     inherit version;
-    sha256 = "sha256-4PNBhOtW8S+s53T7yHuICr25AXoJmNHsVZsmfpaX5Ek=";
+    hash = "sha256-4PNBhOtW8S+s53T7yHuICr25AXoJmNHsVZsmfpaX5Ek=";
   };
 
   postPatch = ''
@@ -23,13 +25,9 @@ buildPythonPackage rec {
       --replace "if action_group.title == 'optional arguments':" "if action_group.title == 'optional arguments' or action_group.title == 'options':"
   '';
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sphinxarg" ];
 

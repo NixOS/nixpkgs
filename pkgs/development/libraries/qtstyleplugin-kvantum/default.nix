@@ -2,30 +2,37 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
+, cmake
 , qmake
 , qtbase
 , qtsvg
-, qtx11extras
-, kwindowsystem
+, qtx11extras ? null
+, kwindowsystem ? null
+, qtwayland
 , libX11
 , libXext
 , qttools
 , wrapQtAppsHook
 , gitUpdater
-}:
 
-stdenv.mkDerivation rec {
-  pname = "qtstyleplugin-kvantum";
-  version = "1.0.7";
+, qt6Kvantum ? null
+}:
+let
+  isQt5 = lib.versionOlder qtbase.version "6";
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "qtstyleplugin-kvantum${lib.optionalString isQt5 "5"}";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
-    rev = "V${version}";
-    sha256 = "Ys77z5BoeQEOYe1h5ITEuVtVn6Uug9zQjrCBxLQOrSs=";
+    rev = "V${finalAttrs.version}";
+    hash = "sha256-1aeXcN9DwPE8CoaxCqCNL9UEcRHJdaKxS7Ivjp3YNN8=";
   };
 
   nativeBuildInputs = [
+    cmake
     qmake
     qttools
     wrapQtAppsHook
@@ -34,13 +41,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtsvg
-    qtx11extras
-    kwindowsystem
     libX11
     libXext
-  ];
+    kwindowsystem
+  ] ++ lib.optionals isQt5 [ qtx11extras ]
+    ++ lib.optionals (!isQt5) [ qtwayland ];
 
-  sourceRoot = "source/Kvantum";
+  sourceRoot = "${finalAttrs.src.name}/Kvantum";
 
   patches = [
     (fetchpatch {
@@ -52,9 +59,19 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Fix plugin dir
-    substituteInPlace style/style.pro \
-      --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
+    substituteInPlace style/CMakeLists.txt \
+      --replace-fail '"''${_Qt6_PLUGIN_INSTALL_DIR}/' "\"$out/$qtPluginPrefix/" \
+      --replace-fail '"''${_Qt5_PLUGIN_INSTALL_DIR}/' "\"$out/$qtPluginPrefix/"
+  '';
+
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT5" isQt5)
+  ];
+
+  postInstall = lib.optionalString isQt5 ''
+    # make default Kvantum themes available for Qt 5 apps
+    mkdir -p "$out/share"
+    ln -s "${qt6Kvantum}/share/Kvantum" "$out/share/Kvantum"
   '';
 
   passthru.updateScript = gitUpdater {
@@ -66,7 +83,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    broken = lib.versionOlder qtbase.version "5.14";
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ romildo Scrumplex ];
   };
-}
+})

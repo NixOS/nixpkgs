@@ -10,20 +10,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fnm";
-  version = "1.33.1";
+  version = "1.37.0";
 
   src = fetchFromGitHub {
     owner = "Schniz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dwnPFbgfrc+1qF3u5Nm1KQu84UWK6H6VerSUaQacbRs=";
+    sha256 = "sha256-ruEv46jzO79l2Nvs3UjWHal2lBmhjdIKC99va/2cGio=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation Security ];
 
-  cargoSha256 = "sha256-T88C5oYyVfepUw0cdNRhEwrvEI0t1gw/5qZL1E46pkY=";
+  cargoHash = "sha256-ez6rzmVa/eRcd4bdCM4JEaNILpavub34kaonX4BRjW8=";
 
   doCheck = false;
 
@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Fast and simple Node.js version manager";
+    mainProgram = "fnm";
     homepage = "https://github.com/Schniz/fnm";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kidonng ];

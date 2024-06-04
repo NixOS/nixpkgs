@@ -3,6 +3,7 @@
 , rustPlatform
 , stdenv
 , installShellFiles
+, perl
 , pkg-config
 , libiconv
 , openssl
@@ -15,20 +16,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.34.4";
+  version = "0.40.1";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     rev = "v${version}";
-    sha256 = "sha256-ILjORslelnMTXfuVHS9UPa5qkXuYup/+wT/s1rTSpIY=";
+    hash = "sha256-n8cwsCeKWzTw/psvLL3chBr8EcwGoeKB8JeiLSLna1k=";
   };
 
-  cargoSha256 = "sha256-HzuCzqpq99dJnTStOc0LxZ7bLuqmvPZerX69arNU6HU=";
+  cargoHash = "sha256-TyIQaovmpiu7USURA//+IQWNT95rrVk0x9TRspXYUNk=";
 
   nativeBuildInputs = [
     mandown
     installShellFiles
+    perl
     pkg-config
   ];
 
@@ -61,6 +63,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://zellij.dev/";
     changelog = "https://github.com/zellij-org/zellij/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ therealansh _0x4A6F abbe thehedgeh0g ];
+    maintainers = with maintainers; [ therealansh _0x4A6F abbe pyrox0 ];
+    mainProgram = "zellij";
   };
 }

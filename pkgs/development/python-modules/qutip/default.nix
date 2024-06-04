@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cvxopt
-, cvxpy
-, cython
-, doCheck ? true
-, fetchFromGitHub
-, ipython
-, matplotlib
-, numpy
-, packaging
-, pytest-rerunfailures
-, pytestCheckHook
-, python
-, pythonOlder
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  cvxopt,
+  cvxpy,
+  cython_0,
+  fetchFromGitHub,
+  ipython,
+  matplotlib,
+  numpy,
+  oldest-supported-numpy,
+  packaging,
+  pytest-rerunfailures,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "4.7.1";
-  format = "setuptools";
+  version = "5.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,11 +29,13 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-W5iqRWAB6D1Dnxz0Iyl7ZmP3yrXvLyV7BdBdIgFCiQY=";
+    hash = "sha256-lMPzgmUaoEQB5TzmqEJFiFTuS3AGpyMMjPHlPUKTLvk=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_0
+    setuptools
+    oldest-supported-numpy
   ];
 
   propagatedBuildInputs = [
@@ -41,15 +44,10 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-
-  # Disabling OpenMP support on Darwin.
-  setupPyGlobalFlags = lib.optionals (!stdenv.isDarwin) [
-    "--with-openmp"
-  ];
 
   # QuTiP tries to access the home directory to create an rc file for us.
   # We need to go to another directory to run the tests from there.
@@ -68,17 +66,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "qutip"
-  ];
+  pythonImportsCheck = [ "qutip" ];
 
   passthru.optional-dependencies = {
-    graphics = [
-      matplotlib
-    ];
-    ipython = [
-      ipython
-    ];
+    graphics = [ matplotlib ];
+    ipython = [ ipython ];
     semidefinite = [
       cvxpy
       cvxopt
@@ -86,9 +78,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Open-source software for simulating the dynamics of closed and open quantum systems";
     homepage = "https://qutip.org/";
+    changelog = "https://github.com/qutip/qutip/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fabiangd ];
   };

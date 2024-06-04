@@ -1,26 +1,29 @@
 { clang
 , cmake
+, CoreFoundation
 , fetchFromGitHub
 , fetchurl
 , lib
 , lighthouse
-, llvmPackages
+, nix-update-script
 , nodePackages
 , perl
+, pkg-config
+, postgresql
 , protobuf
 , rustPlatform
+, rust-jemalloc-sys
 , Security
-, CoreFoundation
+, sqlite
 , stdenv
+, SystemConfiguration
 , testers
 , unzip
-, nix-update-script
-, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "3.4.0";
+  version = "4.6.0";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -30,19 +33,47 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-4auiM5+kj/HjZKu2YP7JEnwDNxHuL39XCfmV/dc5jLE=";
+    hash = "sha256-uMrVnVvYXcY2Axn3ycsf+Pwur3HYGoOYjjUkGS5c3l4=";
   };
 
-  cargoHash = "sha256-ihfGwdxL7Ttw86dhaVBp5meb0caXjzgbbP27Io8zv/c=";
+  patches = [
+    ./use-system-sqlite.patch
+    ./use-c-kzg-from-crates-io.patch
+  ];
+
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  '';
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "amcl-0.3.0" = "sha256-kc8k/ls4W0TwFBsRcyyotyz8ZBEjsZXHeJnJtsnW/LM=";
+      "discv5-0.4.0" = "sha256-GKAk9Du6fy0ldeBEwPueDbVPhyNxdKNROKpMJvR/OTc=";
+      "futures-bounded-0.2.3" = "sha256-/LbD+je9P1lPnXMJVDqRQHJziQPXPvSDmQadTfsQ5I8=";
+      "libmdbx-0.1.4" = "sha256-NMsR/Wl1JIj+YFPyeMMkrJFfoS07iEAKEQawO89a+/Q=";
+      "lmdb-rkv-0.14.0" = "sha256-sxmguwqqcyOlfXOZogVz1OLxfJPo+Q0+UjkROkbbOCk=";
+      "warp-0.3.6" = "sha256-knDt2aw/PJ0iabhKg+okwwnEzCY+vQVhE7HKCTM6QbE=";
+    };
+  };
 
   buildFeatures = [ "modern" "gnosis" ];
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook cmake perl protobuf ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    cmake
+    perl
+    pkg-config
+    protobuf
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    rust-jemalloc-sys
+    sqlite
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreFoundation
     Security
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    CoreFoundation SystemConfiguration
+    SystemConfiguration
   ];
 
   depositContractSpec = fetchurl {
@@ -66,29 +97,44 @@ rustPlatform.buildRustPackage rec {
 
   checkFeatures = [ ];
 
-  # All of these tests require network access
+  # All of these tests require network access and/or docker
   cargoTestFlags = [
     "--workspace"
+    "--exclude beacon_chain"
     "--exclude beacon_node"
     "--exclude http_api"
-    "--exclude beacon_chain"
     "--exclude lighthouse"
     "--exclude lighthouse_network"
+    "--exclude network"
     "--exclude slashing_protection"
+    "--exclude watch"
     "--exclude web3signer_tests"
   ];
 
   # All of these tests require network access
   checkFlags = [
+    "--skip basic"
+    "--skip deposit_tree::cache_consistency"
+    "--skip deposit_tree::double_update"
+    "--skip deposit_tree::updating"
+    "--skip eth1_cache::big_skip"
+    "--skip eth1_cache::double_update"
+    "--skip eth1_cache::pruning"
+    "--skip eth1_cache::simple_scenario"
+    "--skip fast::deposit_cache_query"
+    "--skip http::incrementing_deposits"
+    "--skip persist::test_persist_caches"
     "--skip service::tests::tests::test_dht_persistence"
     "--skip time::test::test_reinsertion_updates_timeout"
   ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [
+    "--skip subnet_service::tests::attestation_service::test_subscribe_same_subnet_several_slots_apart"
     "--skip subnet_service::tests::sync_committee_service::same_subscription_with_lower_until_epoch"
     "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nodePackages.ganache
+    postgresql
   ];
 
   passthru = {
@@ -100,10 +146,17 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
+  enableParallelBuilding = true;
+
+  # This is needed by the unit tests.
+  FORK_NAME = "capella";
+
   meta = with lib; {
     description = "Ethereum consensus client in Rust";
     homepage = "https://lighthouse.sigmaprime.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ centromere pmw ];
+    mainProgram = "lighthouse";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

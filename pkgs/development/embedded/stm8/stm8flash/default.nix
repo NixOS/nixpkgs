@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # NOTE: _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = "-O";
+  env.NIX_CFLAGS_COMPILE = "-O";
 
   preBuild = ''
     export DESTDIR=$out;
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/vdudouyt/stm8flash";
     description = "A tool for flashing STM8 MCUs via ST-LINK (V1 and V2)";
+    mainProgram = "stm8flash";
     maintainers = with maintainers; [ pkharvey ];
     license = licenses.gpl2;
     platforms = platforms.all;

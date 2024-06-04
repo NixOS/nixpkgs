@@ -1,23 +1,24 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, Security, webfs }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin, git }:
 
 rustPlatform.buildRustPackage rec {
   pname = "srvc";
-  version = "0.10.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "insilica";
     repo = "rs-srvc";
     rev = "v${version}";
-    sha256 = "sha256-yeyAorVMHFl9wm57gmK6ZAI1w5daN2xl29Gqq0DsTtc=";
+    hash = "sha256-pnlbMU/uoP9ZK8kzTRYTMY9+X9VIKJHwW2qMXXD8Udg=";
   };
 
-  cargoHash = "sha256-/1TL0lWb4I9h6nGV7exx7U6ACrieN0EULTWg7Weexeg=";
+  cargoHash = "sha256-+m8WJMn1aq3FBDO5c/ZwbcK2G+UE5pSwHTgOl2s6pDw=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    Security
+    darwin.apple_sdk.frameworks.CoreServices
+    darwin.apple_sdk.frameworks.Security
   ];
 
-  checkInputs = [ webfs ];
+  nativeCheckInputs = [ git ];
 
   # remove timeouts in tests to make them less flaky
   TEST_SRVC_DISABLE_TIMEOUT = 1;

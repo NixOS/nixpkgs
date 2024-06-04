@@ -1,25 +1,34 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  poetry-core,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "hydrus-api";
-  version = "4.0.0";
-  format = "setuptools";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-4by2TlZJIKElGgaof1w555ik2hUNbg16YekSWwICGmg=";
-  };
+  version = "5.0.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  src = fetchPypi {
+    pname = "hydrus_api";
+    inherit version;
+    hash = "sha256-3Roeab9/woGF/aZYm9nbqrcyYN8CKA1k66cTRxx6jM4=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace \
+      "poetry.masonry.api" \
+      "poetry.core.masonry.api"
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [ requests ];
 
   pythonImportsCheck = [ "hydrus_api" ];
 

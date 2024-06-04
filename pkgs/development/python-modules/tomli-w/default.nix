@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  flit-core,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
     owner = "hukkin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wZSC5uOi1JUeKXIli1I8/Vo0wGsv9Q1I84dAMQQP95w=";
+    hash = "sha256-wZSC5uOi1JUeKXIli1I8/Vo0wGsv9Q1I84dAMQQP95w=";
   };
 
   nativeBuildInputs = [ flit-core ];

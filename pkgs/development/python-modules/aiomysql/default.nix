@@ -1,46 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pymysql
-, pythonOlder
-, setuptools-scm
-, setuptools-scm-git-archive
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pymysql,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "aiomysql";
-  version = "0.1.1";
-  format = "pyproject";
+  version = "0.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-rYEos2RuE2xI59httYlN21smBH4/fU4uT48FWwrI6Qg=";
+    repo = "aiomysql";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-m/EgoBU3e+s3soXyYtACMDSjJfMLBOk/00qPtgawwQ8=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-    setuptools-scm-git-archive
+  patches = [
+    # https://github.com/aio-libs/aiomysql/pull/955
+    (fetchpatch {
+      name = "remove-setuptools-scm-git-archive-dependency.patch";
+      url = "https://github.com/aio-libs/aiomysql/commit/fee997d2e848b634a84ce0c4e9025e3b3e761640.patch";
+      hash = "sha256-qKcOfdDaA9DLS2fdHOEUW37aCCdtZjN0zsFV9dK/umQ=";
+      includes = [ "pyproject.toml" ];
+    })
   ];
 
-  propagatedBuildInputs = [
-    pymysql
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
   ];
+
+  propagatedBuildInputs = [ pymysql ];
 
   # Tests require MySQL database
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiomysql"
-  ];
+  pythonImportsCheck = [ "aiomysql" ];
 
   meta = with lib; {
     description = "MySQL driver for asyncio";
     homepage = "https://github.com/aio-libs/aiomysql";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

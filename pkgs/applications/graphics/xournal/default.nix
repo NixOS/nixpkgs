@@ -54,10 +54,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://xournal.sourceforge.net/";
+    homepage = "https://xournal.sourceforge.net/";
     description = "Note-taking application (supposes stylus)";
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
+    mainProgram = "xournal";
   };
 }

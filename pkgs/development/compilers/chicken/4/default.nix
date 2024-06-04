@@ -3,7 +3,7 @@ let
   callPackage = newScope self;
 
   self = {
-    pkgs = self;
+    pkgs = self // { recurseForDerivations = false; };
 
     fetchegg = callPackage ./fetchegg { };
 
@@ -18,4 +18,4 @@ let
     egg2nix = callPackage ./egg2nix.nix { };
   };
 
-in lib.recurseIntoAttrs self
+in self

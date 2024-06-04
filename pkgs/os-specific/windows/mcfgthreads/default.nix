@@ -1,24 +1,31 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+}:
 
-stdenv.mkDerivation {
-  pname = "mcfgthreads";
-  version = "git";
+stdenv.mkDerivation rec {
+  pname = "mcfgthread";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "lhmouse";
     repo = "mcfgthread";
-    rev = "c446cf4fcdc262fc899a188a4bb7136284c34222";
-    sha256 = "1ib90lrd4dz8irq4yvzwhxqa86i5vxl2q2z3z04sf1i8hw427p2f";
+    rev = "v${lib.versions.majorMinor version}-ga.${lib.versions.patch version}";
+    hash = "sha256-FrmeaQhwLrNewS0HDlbWgCvVQ5U1l0jrw0YVuQdt9Ck=";
   };
 
   outputs = [ "out" "dev" ];
 
-  # Don't want prebuilt binaries sneaking in.
-  postUnpack = ''
-    rm -r "$sourceRoot/debug" "$sourceRoot/release"
-  '';
-
   nativeBuildInputs = [
     autoreconfHook
   ];
+
+  meta = {
+    description = "A threading support library for Windows 7 and above";
+    homepage = "https://github.com/lhmouse/mcfgthread/wiki";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.windows;
+  };
 }

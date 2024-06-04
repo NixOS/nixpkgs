@@ -2,25 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "astyle";
-  version = "3.1";
+  version = "3.4.16";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}_${version}_linux.tar.gz";
-    sha256 = "1ms54wcs7hg1bsywqwf2lhdfizgbk7qxc9ghasxk8i99jvwlrk6b";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    hash = "sha256-y3YENPfkYk1e6yd2rDNOeeARGb6kGfyYbt0sJNk4A2Q=";
   };
-
-  # lots of hardcoded references to /usr
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace ' /usr/' " $out/"
-  '';
 
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "Source code indenter, formatter, and beautifier for C, C++, C# and Java";
-    homepage = "http://astyle.sourceforge.net/";
+    mainProgram = "astyle";
+    homepage = "https://astyle.sourceforge.net/";
     license = licenses.lgpl3;
+    maintainers = with maintainers; [ carlossless ];
     platforms = platforms.unix;
   };
 }

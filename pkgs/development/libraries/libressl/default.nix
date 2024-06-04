@@ -12,7 +12,13 @@ let
     then "DYLD_LIBRARY_PATH"
     else "LD_LIBRARY_PATH";
 
-  generic = { version, hash, patches ? [] }: stdenv.mkDerivation rec {
+  generic =
+    { version
+    , hash
+    , patches ? []
+    , knownVulnerabilities ? []
+    }: stdenv.mkDerivation rec
+  {
     pname = "libressl";
     inherit version;
 
@@ -56,7 +62,7 @@ let
       ''}
     '';
 
-    doCheck = true;
+    doCheck = !(stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isRiscV);
     preCheck = ''
       export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
       export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
@@ -80,31 +86,51 @@ let
       license = with licenses; [ publicDomain bsdOriginal bsd0 bsd3 gpl3 isc openssl ];
       platforms   = platforms.all;
       maintainers = with maintainers; [ thoughtpolice fpletz ];
+      inherit knownVulnerabilities;
+
+      # OpenBSD believes that PowerPC should be always-big-endian;
+      # this assumption seems to have propagated into recent
+      # releases of libressl.  Since libressl is aliased to many
+      # other packages (e.g. netcat) it's important to fail early
+      # here, otherwise it's very difficult to figure out why
+      # libressl is getting dragged into a failing build.
+      badPlatforms = with lib.systems.inspect.patterns;
+        [ (lib.recursiveUpdate isPower64 isLittleEndian) ];
     };
   };
 
 in {
-  libressl_3_4 = generic {
-    version = "3.4.3";
-    hash = "sha256-/4i//jVIGLPM9UXjyv5FTFAxx6dyFwdPUzJx1jw38I0=";
-  };
-
-  libressl_3_5 = generic {
-    version = "3.5.3";
-    hash = "sha256-OrXl6u9pziDGsXDuZNeFtCI19I8uYrCV/KXXtmcriyg=";
-
+  libressl_3_6 = generic {
+    version = "3.6.3";
+    hash = "sha256-h7G7426e7I0K5fBMg9NrLFsOWBeEx+sIFwJe0p6t6jc=";
     patches = [
-      # Fix endianness detection on aarch64-darwin, issue #181187
       (fetchpatch {
-        name = "fix-endian-header-detection.patch";
-        url = "https://patch-diff.githubusercontent.com/raw/libressl-portable/portable/pull/771.patch";
-        sha256 = "sha256-in5U6+sl0HB9qMAtUL6Py4X2rlv0HsqRMIQhhM1oThE=";
+        url = "https://github.com/libressl/portable/commit/86e4965d7f20c3a6afc41d95590c9f6abb4fe788.patch";
+        includes = [ "tests/tlstest.sh" ];
+        hash = "sha256-XmmKTvP6+QaWxyGFCX6/gDfME9GqBWSx4X8RH8QbDXA=";
       })
     ];
   };
 
-  libressl_3_6 = generic {
-    version = "3.6.1";
-    hash = "sha256-rPrGExbpO5GcKNYtUwN8pzTehcRrTXA/Gf2Dlc8AZ3Q=";
+  libressl_3_7 = generic {
+    version = "3.7.3";
+    hash = "sha256-eUjIVqkMglvXJotvhWdKjc0lS65C4iF4GyTj+NwzXbM=";
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/libressl/portable/commit/86e4965d7f20c3a6afc41d95590c9f6abb4fe788.patch";
+        includes = [ "tests/tlstest.sh" ];
+        hash = "sha256-XmmKTvP6+QaWxyGFCX6/gDfME9GqBWSx4X8RH8QbDXA=";
+      })
+    ];
+  };
+
+  libressl_3_8 = generic {
+    version = "3.8.4";
+    hash = "sha256-wM75z+F0rDZs5IL1Qv3bB3Ief6DK+s40tJqHIPo3/n0=";
+  };
+
+  libressl_3_9 = generic {
+    version = "3.9.2";
+    hash = "sha256-ewMdrGSlnrbuMwT3/7ddrTOrjJ0nnIR/ksifuEYGj5c=";
   };
 }

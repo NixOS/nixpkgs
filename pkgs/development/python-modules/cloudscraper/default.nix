@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, requests
-, requests-toolbelt
-, pyparsing
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  requests,
+  requests-toolbelt,
+  pyparsing,
 }:
 
 buildPythonPackage rec {
   pname = "cloudscraper";
-  version = "1.2.68";
+  version = "1.2.71";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TQKs7/qQq9TavHW3m6+jFjYwm6p8Dy7mZeLTRarbiGM=";
+    hash = "sha256-QpxuiqaRbVutXIperFDz6lPJrCJhb2yyGxjcxxUX0NM=";
   };
 
   propagatedBuildInputs = [
@@ -29,9 +30,7 @@ buildPythonPackage rec {
   # nixpkgs yet, and also aren't included in the PyPI bundle.  TODO.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "cloudscraper"
-  ];
+  pythonImportsCheck = [ "cloudscraper" ];
 
   meta = with lib; {
     description = "Python module to bypass Cloudflare's anti-bot page";

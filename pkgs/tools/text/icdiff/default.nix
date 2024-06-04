@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "080v8h09pv8qwplin4kwfm0kmqjwdqjfxbpcdrv16sv4hwfwl5qd";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     bash
     git
     less

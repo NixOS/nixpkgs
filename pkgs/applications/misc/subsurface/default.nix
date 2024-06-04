@@ -9,8 +9,10 @@
 , qmake
 , curl
 , grantlee
+, hidapi
 , libgit2
 , libssh2
+, libusb1
 , libxml2
 , libxslt
 , libzip
@@ -42,11 +44,11 @@ let
 
     src = subsurfaceSrc;
 
-    sourceRoot = "source/libdivecomputer";
+    sourceRoot = "${subsurfaceSrc.name}/libdivecomputer";
 
-    nativeBuildInputs = [ autoreconfHook ];
+    nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-    buildInputs = [ zlib ];
+    buildInputs = [ zlib libusb1 bluez hidapi ];
 
     enableParallelBuilding = true;
 
@@ -138,6 +140,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A divelog program";
+    mainProgram = "subsurface";
     longDescription = ''
       Subsurface can track single- and multi-tank dives using air, Nitrox or TriMix.
       It allows tracking of dive locations including GPS coordinates (which can also

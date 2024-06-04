@@ -1,33 +1,34 @@
-{ lib
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, pythonOlder
-, importlib-metadata
-, jbig2dec
-, deprecation
-, lxml
-, mupdf
-, packaging
-, pillow
-, psutil
-, pybind11
-, pytest-xdist
-, pytestCheckHook
-, python-dateutil
-, python-xmp-toolkit
-, qpdf
-, setuptools-scm
-, substituteAll
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  pythonOlder,
+  jbig2dec,
+  deprecated,
+  lxml,
+  mupdf-headless,
+  numpy,
+  packaging,
+  pillow,
+  psutil,
+  pybind11,
+  pytest-xdist,
+  pytestCheckHook,
+  python-dateutil,
+  python-xmp-toolkit,
+  qpdf,
+  setuptools,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "6.2.8";
-  format = "setuptools";
+  version = "8.14.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pikepdf";
@@ -39,14 +40,14 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-0E+kkvxT1jLfoBg3C9BfbSqfIX3K/Z5kK1kCdOks2Hk=";
+    hash = "sha256-3ORvbhO3eLu/NIE0Lwdf93QtUHUmyMf7LmdMBJpkYIg=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      jbig2dec = "${lib.getBin jbig2dec}/bin/jbig2dec";
-      mudraw = "${lib.getBin mupdf}/bin/mudraw";
+      jbig2dec = lib.getExe' jbig2dec "jbig2dec";
+      mutool = lib.getExe' mupdf-headless "mutool";
     })
   ];
 
@@ -55,20 +56,17 @@ buildPythonPackage rec {
       --replace "shims_enabled = not cflags_defined" "shims_enabled = False"
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  buildInputs = [
-    pybind11
-    qpdf
-  ];
+  buildInputs = [ qpdf ];
 
   nativeBuildInputs = [
-    setuptools-scm
+    pybind11
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     attrs
     hypothesis
+    numpy
     pytest-xdist
     psutil
     pytestCheckHook
@@ -77,12 +75,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    deprecation
+    deprecated
     lxml
     packaging
     pillow
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
   pythonImportsCheck = [ "pikepdf" ];
@@ -91,7 +87,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ kiwi dotlambda ];
+    maintainers = with maintainers; [
+      kiwi
+      dotlambda
+    ];
     changelog = "https://github.com/pikepdf/pikepdf/blob/${src.rev}/docs/releasenotes/version${lib.versions.major version}.rst";
   };
 }

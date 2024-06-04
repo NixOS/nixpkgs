@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, wcwidth
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "pyte";
   version = "0.8.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "selectel";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gLvsW4ou6bGq9CxT6XdX+r2ViMk7z+aejemrdLwJb3M=";
+    hash = "sha256-gLvsW4ou6bGq9CxT6XdX+r2ViMk7z+aejemrdLwJb3M=";
   };
 
   postPatch = ''
@@ -24,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ wcwidth ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyte" ];
 

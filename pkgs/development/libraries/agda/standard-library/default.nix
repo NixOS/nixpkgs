@@ -2,18 +2,18 @@
 
 mkDerivation rec {
   pname = "standard-library";
-  version = "1.7.1";
+  version = "2.0";
 
   src = fetchFromGitHub {
     repo = "agda-stdlib";
     owner = "agda";
     rev = "v${version}";
-    sha256 = "0khl12jvknsvjsq3l5cbp2b5qlw983qbymi1dcgfz9z0b92si3r0";
+    hash = "sha256-TjGvY3eqpF+DDwatT7A78flyPcTkcLHQ1xcg+MKgCoE=";
   };
 
   nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];
   preConfigure = ''
-    runhaskell GenerateEverything.hs
+    runhaskell GenerateEverything.hs --include-deprecated
     # We will only build/consider Everything.agda, in particular we don't want Everything*.agda
     # do be copied to the store.
     rm EverythingSafe.agda

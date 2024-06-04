@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-user-guide";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1h620ngryqc4m8ybvc92ba8404djnm0l65f34mlw38g9ad8d9085";
+    sha256 = "U+8IFPUGVEYU7WGre+UiHMjTqfFPfvlpjJD+fkYBS54=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace mate-user-guide.desktop.in.in \
-      --replace "Exec=yelp" "Exec=${yelp}/bin/yelp"
+      --replace-fail "Exec=yelp" "Exec=${yelp}/bin/yelp"
   '';
 
   enableParallelBuilding = true;

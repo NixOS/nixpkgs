@@ -6,12 +6,19 @@
 
 { config, lib, ... }:
 
-with lib;
+let
+  inherit (lib)
+    mkAliasOptionModule
+    mkDefault
+    mkOption
+    types
+    ;
+in
 
 {
   options = {
     # A simple boolean option that can be enabled or disabled.
-    enable = lib.mkOption {
+    enable = mkOption {
       type = types.nullOr types.bool;
       default = null;
       example = true;
@@ -41,7 +48,7 @@ with lib;
     # should be able to be overridden by the next import.
     ( { config, lib, ... }:
       {
-        enableAlias = lib.mkDefault false;
+        enableAlias = mkDefault false;
       }
     )
 

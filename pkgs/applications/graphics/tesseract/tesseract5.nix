@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive, pkg-config
-, leptonica, libpng, libtiff, icu, pango, opencl-headers, fetchpatch
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
+, curl, leptonica, libarchive, libpng, libtiff, icu, pango, opencl-headers
 , Accelerate, CoreGraphics, CoreVideo
 }:
 
 stdenv.mkDerivation rec {
   pname = "tesseract";
-  version = "5.3.0";
+  version = "5.3.4";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
     rev = version;
-    sha256 = "sha256-Y+RZOnBCjS8XrWeFA4ExUxwsuWA0DndNtpIWjtRi1G8=";
+    sha256 = "sha256-IKxzDhSM+BPsKyQP3mADAkpRSGHs4OmdFIA+Txt084M=";
   };
 
   enableParallelBuilding = true;
@@ -19,11 +19,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
-    autoconf-archive
   ];
 
   buildInputs = [
+    curl
     leptonica
+    libarchive
     libpng
     libtiff
     icu
@@ -41,5 +42,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anselmschueler ];
     platforms = lib.platforms.unix;
+    mainProgram = "tesseract";
   };
 }

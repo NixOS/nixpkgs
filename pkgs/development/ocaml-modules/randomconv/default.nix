@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "randomconv";
   version = "0.1.3";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/hannesm/randomconv/releases/download/v${version}/randomconv-v${version}.tbz";

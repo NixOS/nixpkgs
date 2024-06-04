@@ -1,51 +1,64 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, aplpy
-, joblib
-, astropy
-, casa-formats-io
-, radio_beam
-, six
-, dask
-, pytestCheckHook
-, pytest-astropy
-, astropy-helpers
-, setuptools-scm
+{
+  lib,
+  stdenv,
+  aplpy,
+  astropy,
+  buildPythonPackage,
+  casa-formats-io,
+  dask,
+  fetchPypi,
+  joblib,
+  pytest-astropy,
+  pytestCheckHook,
+  pythonOlder,
+  radio-beam,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "spectral-cube";
-  version = "0.6.0";
+  version = "0.6.5";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c0pp82wgl680w2vcwlrrz46sy83z1qs74w5bd691wg0512hv2jx";
+    hash = "sha256-gJzrr3+/FsQN/HHDERxf/NECArwOaTqFwmI/Q2Z9HTM=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
+  propagatedBuildInputs = [
+    astropy
+    casa-formats-io
+    radio-beam
+    joblib
+    dask
   ];
 
-  propagatedBuildInputs = [ astropy casa-formats-io radio_beam joblib six dask ];
-  checkInputs = [ pytestCheckHook aplpy pytest-astropy ];
+  nativeCheckInputs = [
+    aplpy
+    pytest-astropy
+    pytestCheckHook
+  ];
+
+  # Tests must be run in the build directory.
+  preCheck = ''
+    cd build/lib
+  '';
 
   # On x86_darwin, this test fails with "Fatal Python error: Aborted"
   # when sandbox = true.
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
-    "spectral_cube/tests/test_visualization.py"
-  ];
+  disabledTestPaths = lib.optionals stdenv.isDarwin [ "spectral_cube/tests/test_visualization.py" ];
 
-  meta = {
+  pythonImportsCheck = [ "spectral_cube" ];
+
+  meta = with lib; {
     description = "Library for reading and analyzing astrophysical spectral data cubes";
-    homepage = "http://radio-astro-tools.github.io";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ smaret ];
+    homepage = "https://spectral-cube.readthedocs.io";
+    changelog = "https://github.com/radio-astro-tools/spectral-cube/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ smaret ];
   };
 }
-

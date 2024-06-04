@@ -5,37 +5,40 @@
 , ninja
 , pkg-config
 , glib
+, glib-networking
 , gtk3
 , libsoup
 , keybinder3
 , gst_all_1
-, wrapGAppsHook
+, wrapGAppsHook3
 , appstream-glib
 , desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "goodvibes";
-  version = "0.7.5";
+  version = "0.7.9";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-CE9f0GnXr7wSpp8jyW0ZxGKx16r6tOaObzQXKcy5nPY=";
+    hash = "sha256-yXrCE3nsdZP4JHKVslzQafjZ380zC8sZv5TJf8dJqJw=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     appstream-glib
     desktop-file-utils
   ];
 
   buildInputs = [
     glib
+    # for libsoup TLS support
+    glib-networking
     gtk3
     libsoup
     keybinder3

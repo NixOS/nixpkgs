@@ -1,36 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, async-timeout
-, lxml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  lxml,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytrafikverket";
-  version = "0.2.2";
-  format = "setuptools";
+  version = "0.3.10";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NWQHrdTKb3RQ7ZjXpHyQ5qPPXuZUU7G+FvBx1VQEbss=";
+    hash = "sha256-B3K9wDFj7uSgs6BsJUnD6r2JVcH7u7UrbVXUTMGqmQE=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
-    async-timeout
     lxml
   ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytrafikverket"
-  ];
+  pythonImportsCheck = [ "pytrafikverket" ];
 
   meta = with lib; {
     description = "Library to get data from the Swedish Transport Administration (Trafikverket) API";

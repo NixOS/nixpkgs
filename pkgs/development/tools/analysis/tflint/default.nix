@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "tflint";
-  version = "0.44.1";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-O758CU70NqRFlbtiy5cmfIHiHdQLxH88BHNZLQVvZ+M=";
+    hash = "sha256-f2U/DK2yaJI0t125k0N4SHjNvSUYPtqTjR91EJnimGQ=";
   };
 
-  vendorSha256 = "sha256-4ODf6Er7V5KsVUdWjqjv+dfH84PPR+5T29V1AJluoJA=";
+  vendorHash = "sha256-xx/WF/yR++oB+7az9i/JkhYuOZsPoCBgYITqBR1Gv5c=";
 
   doCheck = false;
 
@@ -45,9 +45,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Terraform linter focused on possible errors, best practices, and so on";
+    mainProgram = "tflint";
     homepage = "https://github.com/terraform-linters/tflint";
-    changelog = "https://github.com/terraform-linters/tflint/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/terraform-linters/tflint/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

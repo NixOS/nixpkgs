@@ -1,78 +1,75 @@
-{ lib
-, fetchPypi
-, rustPlatform
-, stdenv
-, Security
-, writeShellScriptBin
-, buildPythonPackage
-, setuptools-scm
-, appdirs
-, milksnake
-, pyyaml
-, hypothesis
-, jinja2
-, mock
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  cffi,
+  libiconv,
+  stdenv,
+  darwin,
+  buildPythonPackage,
+  appdirs,
+  pyyaml,
+  hypothesis,
+  jinja2,
+  pytestCheckHook,
+  unzip,
 }:
-let
-  pname = "cmsis-pack-manager";
-  version = "0.5.1";
 
-  src = fetchPypi {
-    pname = "cmsis_pack_manager";
-    inherit version;
-    sha256 = "sha256-2pKGJlPubR+C4UhdCuMDR9GG2wQOaP6YkMXxeAcaRkk=";
-  };
-
-  native = rustPlatform.buildRustPackage {
-    name = "${pname}-${version}-native";
-
-    inherit src;
-
-    buildInputs = lib.optionals stdenv.isDarwin [
-      Security
-    ];
-
-    sourceRoot = "${pname}-${version}/rust";
-    cargoLock.lockFile = ./Cargo.lock;
-
-    postPatch = ''
-      cp ${./Cargo.lock} Cargo.lock
-    '';
-
-    cargoBuildFlags = [ "--lib" ];
-  };
-in
 buildPythonPackage rec {
-  inherit pname version src;
+  pname = "cmsis-pack-manager";
+  version = "0.5.2";
+  format = "pyproject";
 
-  # The cargo build is already run in a separate derivation
-  postPatch = ''
-    substituteInPlace setup.py \
-        --replace "'cargo', 'build'," "'true',"
-  '';
+  src = fetchFromGitHub {
+    owner = "pyocd";
+    repo = "cmsis-pack-manager";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PeyJf3TGUxv8/MKIQUgWrenrK4Hb+4cvtDA2h3r6kGg=";
+  };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ appdirs milksnake pyyaml ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    hash = "sha256-dO4qw5Jx0exwb4RuOhu6qvGxQZ+LayHtXDHZKADLTEI=";
+  };
 
-  checkInputs = [ hypothesis jinja2 mock pytestCheckHook ];
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
+  propagatedNativeBuildInputs = [ cffi ];
+  buildInputs = [ libiconv ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  propagatedBuildInputs = [
+    appdirs
+    pyyaml
+  ];
+  nativeCheckInputs = [
+    hypothesis
+    jinja2
+    pytestCheckHook
+    unzip
+  ];
 
-  preBuild = ''
-    mkdir -p rust/target/release/deps
-    ln -s ${native}/lib/libcmsis_cffi${stdenv.hostPlatform.extensions.sharedLibrary} rust/target/release/deps/
-  '';
-
+  # remove cmsis_pack_manager source directory so that binaries can be imported
+  # from the installed wheel instead
   preCheck = ''
-    # Otherwise the test uses a dummy library (missing all symbols)
-    ln -sf ../build/lib/cmsis_pack_manager/_native__lib${stdenv.hostPlatform.extensions.sharedLibrary} cmsis_pack_manager/_native__lib${stdenv.hostPlatform.extensions.sharedLibrary}
+    rm -r cmsis_pack_manager
   '';
 
-  pythonImportsCheck = [ "cmsis_pack_manager" ];
+  disabledTests = [
+    # All require DNS.
+    "test_pull_pdscs"
+    "test_install_pack"
+    "test_pull_pdscs_cli"
+    "test_dump_parts_cli"
+  ];
 
   meta = with lib; {
     description = "A Rust and Python module for handling CMSIS Pack files";
     homepage = "https://github.com/pyocd/cmsis-pack-manager";
     license = licenses.asl20;
-    maintainers = with maintainers; [ frogamic sbruder ];
+    maintainers = with maintainers; [
+      frogamic
+      sbruder
+    ];
   };
 }

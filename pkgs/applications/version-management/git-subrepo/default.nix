@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-subrepo";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "ingydotnet";
     repo = "git-subrepo";
     rev = version;
-    sha256 = "sha256-ZU5yYaiear5AjlBqtzabmMJNUa2ypeJKW3sQPIcyskM=";
+    sha256 = "sha256-83N0Ek6DawUrOc6s2Utzi8776bX4UTGS/a/OffkV44Y=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ingydotnet/git-subrepo";
     description = "Git submodule alternative";
+    mainProgram = "git-subrepo";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ryantrinkle ];

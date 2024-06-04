@@ -4,7 +4,7 @@
 , autoreconfHook
 , gdk-pixbuf-xlib
 , gettext
-, gtk2
+, gtk2-x11
 , libICE
 , libSM
 , libxcrypt
@@ -20,13 +20,13 @@
 , which
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sawfish";
   version = "1.13.0";
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/sawfish/${pname}_${version}.tar.xz";
-    sha256 = "sha256-gWs8W/pMtQjbH8FEifzNAj3siZzxPd6xm8PmXXhyr10=";
+    url = "https://download.tuxfamily.org/sawfish/sawfish_${finalAttrs.version}.tar.xz";
+    hash = "sha256-gWs8W/pMtQjbH8FEifzNAj3siZzxPd6xm8PmXXhyr10=";
   };
 
   nativeBuildInputs = [
@@ -38,9 +38,10 @@ stdenv.mkDerivation rec {
     texinfo
     which
   ];
+
   buildInputs = [
     gdk-pixbuf-xlib
-    gtk2
+    gtk2-x11
     libICE
     libSM
     libxcrypt
@@ -60,18 +61,18 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   postInstall = ''
-    for i in $out/lib/sawfish/sawfish-menu \
+    for file in $out/lib/sawfish/sawfish-menu \
              $out/bin/sawfish-about \
              $out/bin/sawfish-client \
              $out/bin/sawfish-config \
              $out/bin/sawfish; do
-      wrapProgram $i \
+      wrapProgram $file \
         --prefix REP_DL_LOAD_PATH : "$out/lib/rep" \
         --set REP_LOAD_PATH "$out/share/sawfish/lisp"
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://sawfish.tuxfamily.org/";
     description = "An extensible, Lisp-based window manager";
     longDescription = ''
@@ -81,8 +82,8 @@ stdenv.mkDerivation rec {
       possible. All high-level WM functions are implemented in Lisp for future
       extensibility or redefinition.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})

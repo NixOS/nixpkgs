@@ -6,33 +6,37 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "stratis-cli";
-  version = "3.4.1";
+  version = "3.6.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-S0daUi0rhelip2pwcAP3WGey8BbeMa/7AgSrFfuB+cM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-f2Bjv7Z7+FZejS5plUGKTlGUixgF2pGN1SeszTDh4Ko=";
   };
 
+  nativeBuildInputs = with python3Packages; [
+    setuptools
+  ];
+
   propagatedBuildInputs = with python3Packages; [
+    dbus-client-gen
+    dbus-python-client-gen
+    justbytes
+    packaging
     psutil
     python-dateutil
     wcwidth
-    justbytes
-    dbus-client-gen
-    dbus-python-client-gen
-    packaging
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
   disabledTestPaths = [
     # tests below require dbus daemon
     "tests/whitebox/integration"
-    "tests/whitebox/monkey_patching"
   ];
 
   pythonImportsCheck = [ "stratis_cli" ];
@@ -44,5 +48,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://stratis-storage.github.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];
+    mainProgram = "stratis";
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "forkstat";
-  version = "0.02.17";
+  version = "0.03.02";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
-    hash = "sha256-Rw1Xwst0+seksTLL+v3IUEojGjwCERwF89xkk70npUU=";
+    hash = "sha256-lwJIs5knNzkwgIkSdMSVVtrzqnxGy6uOTKsBDkS3xy4=";
   };
 
   installFlags = [
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Process fork/exec/exit monitoring tool";
+    mainProgram = "forkstat";
     homepage = "https://github.com/ColinIanKing/forkstat";
     license = licenses.gpl2;
     platforms = platforms.linux;

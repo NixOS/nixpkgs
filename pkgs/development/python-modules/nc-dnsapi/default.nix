@@ -1,17 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "nc-dnsapi";
-  version = "0.1.5";
+  version = "0.1.6";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "nc_dnsapi";
-    hash = "sha256-1fvzr3e0ZAbSDOovhLz5GHJCS6l+K89fbYHoaWxO9cA=";
+  src = fetchFromGitHub {
+    owner = "nbuchwitz";
+    repo = "nc_dnsapi";
+    rev = "v${version}";
+    hash = "sha256-OE4+wJbJbUZ+YB5J5OyvytLFCcrnXCeZEqmphHKKprQ=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -25,6 +28,9 @@ buildPythonPackage rec {
     description = "API wrapper for the netcup DNS api";
     homepage = "https://github.com/nbuchwitz/nc_dnsapi";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ veehaitch trundle ];
+    maintainers = with maintainers; [
+      veehaitch
+      trundle
+    ];
   };
 }

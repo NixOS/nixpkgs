@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, m2r
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  m2r,
 }:
 
 buildPythonPackage rec {
   pname = "chromaprint";
   version = "0.5";
+  format = "setuptools";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d4M+ieNQpIXcnEH1WyIWnTYZe3P+Y58W0uz1uYPwLQE=";
+    hash = "sha256-d4M+ieNQpIXcnEH1WyIWnTYZe3P+Y58W0uz1uYPwLQE=";
   };
 
   buildInputs = [ m2r ];
@@ -27,6 +29,9 @@ buildPythonPackage rec {
     description = "Facilitate effortless color terminal output";
     homepage = "https://pypi.org/project/${pname}/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dschrempf peterhoeg ];
+    maintainers = with maintainers; [
+      dschrempf
+      peterhoeg
+    ];
   };
 }

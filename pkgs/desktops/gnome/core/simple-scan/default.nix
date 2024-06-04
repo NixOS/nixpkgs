@@ -6,15 +6,15 @@
 , gettext
 , itstool
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , cairo
 , gdk-pixbuf
 , colord
 , glib
-, gtk3
+, libadwaita
+, gtk4
 , gusb
 , packagekit
-, libhandy
 , libwebp
 , libxml2
 , sane-backends
@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "42.5";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-BfXfpOniBu+p1ATJhh3XxEIJF5PnNMQXGXOZFyUOQFA=";
+    hash = "sha256-wW5lkBQv5WO+UUMSKzu7U/awCn2p2VL2HEf6Jve08Kk=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
     libxml2
     gobject-introspection # For setup hook
     vala
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
     colord
     glib
     gusb
-    gtk3
-    libhandy
+    libadwaita
+    gtk4
     libwebp
     packagekit
     sane-backends
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple scanning utility";
+    mainProgram = "simple-scan";
     longDescription = ''
       A really easy way to scan both documents and photos. You can crop out the
       bad parts of a photo and rotate it if it is the wrong way round. You can

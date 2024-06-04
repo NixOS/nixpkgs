@@ -1,7 +1,6 @@
 { lib, stdenv
 , autoreconfHook
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , lua
 , fpc
@@ -14,7 +13,7 @@
 , SDL2_gfx
 , SDL2_mixer
 , SDL2_net, SDL2_ttf
-, ffmpeg
+, ffmpeg_4
 , sqlite
 , zlib
 , libX11
@@ -26,17 +25,18 @@ let
   sharedLibs = [
     pcre portaudio freetype
     SDL2 SDL2_image SDL2_gfx SDL2_mixer SDL2_net SDL2_ttf
-    sqlite lua zlib libX11 libGLU libGL ffmpeg
+    sqlite lua zlib libX11 libGLU libGL ffmpeg_4
   ];
 
 in stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "2021-04-03";
+  version = "2024.5.1";
+
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    rev = "d49e916705092f3d765d85d276b283b9e7e232a6";
-    sha256 = "0sdcz2vc8i2z50nj7zbkdpxx2mvx0m0927lfsj7d7qr0p8vkm0wa";
+    rev = "v${version}";
+    hash = "sha256-HtvKy3uQwIO2BiLUqIcv9crf9Ngq0dmYOm6E8Gm2EHs=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -48,9 +48,8 @@ in stdenv.mkDerivation rec {
 
     # ultrastardx binds to libffmpeg (and sublibs), specifying a very restrictive
     # upper bounds on the minor versions of .so files.
-    # We can assume ffmpeg won’t break any major ABI compatibility, since their
-    # patch version seems to always stay at 100,
-    # and their minor version changes quite frequently.
+    # We can assume ffmpeg_4 won’t break any major ABI compatibility, since it's
+    # effectively EOL
     sed \
       -e 's/^  LIBAVCODEC_MAX_VERSION_MINOR.*$/  LIBAVCODEC_MAX_VERSION_MINOR = 1000;/' \
       -i src/lib/ffmpeg-4.0/avcodec.pas
@@ -78,9 +77,11 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    homepage = "http://ultrastardx.sourceforge.net/";
+    homepage = "https://usdx.eu/";
     description = "Free and open source karaoke game";
+    mainProgram = "ultrastardx";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch ];
+    platforms = platforms.linux;
   };
 }

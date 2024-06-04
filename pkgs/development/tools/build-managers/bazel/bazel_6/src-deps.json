@@ -7,6 +7,13 @@
             "https://github.com/bazelbuild/rules_sass/archive/1.25.0.zip"
         ]
     },
+    "1.3.3.zip": {
+        "name": "1.3.3.zip",
+        "sha256": "bb529ba133c0256df49139bd403c17835edbf60d2ecd6463549c6a5fe279364d",
+        "urls": [
+            "https://github.com/BLAKE3-team/BLAKE3/archive/refs/tags/1.3.3.zip"
+        ]
+    },
     "1ef781ced3b1443dca3ed05dec1989eca1a4e1cd.tar.gz": {
         "name": "1ef781ced3b1443dca3ed05dec1989eca1a4e1cd.tar.gz",
         "sha256": "5a725b777976b77aa122b707d1b6f0f39b6020f66cd427bb111a585599c857b1",
@@ -15,12 +22,11 @@
             "https://github.com/bazelbuild/stardoc/archive/1ef781ced3b1443dca3ed05dec1989eca1a4e1cd.tar.gz"
         ]
     },
-    "20211102.0.tar.gz": {
-        "name": "20211102.0.tar.gz",
-        "sha256": "dcf71b9cba8dc0ca9940c4b316a0c796be8fab42b070bb6b7cab62b48f0e66c4",
+    "20230802.0.tar.gz": {
+        "name": "20230802.0.tar.gz",
+        "sha256": "59d2976af9d6ecf001a81a35749a6e551a335b949d34918cfade07737b9d93c5",
         "urls": [
-            "https://mirror.bazel.build/github.com/abseil/abseil-cpp/archive/refs/tags/20211102.0.tar.gz",
-            "https://github.com/abseil/abseil-cpp/archive/refs/tags/20211102.0.tar.gz"
+            "https://github.com/abseil/abseil-cpp/archive/refs/tags/20230802.0.tar.gz"
         ]
     },
     "2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz": {
@@ -55,14 +61,6 @@
             "https://github.com/c-ares/c-ares/archive/6654436a307a5a686b008c1d4c93b0085da6e6d8.tar.gz"
         ]
     },
-    "7cf3cefd652008d0a64a419c34c13bdca6c8f178.zip": {
-        "name": "7cf3cefd652008d0a64a419c34c13bdca6c8f178.zip",
-        "sha256": "bc81f1ba47ef5cc68ad32225c3d0e70b8c6f6077663835438da8d5733f917598",
-        "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_java/archive/7cf3cefd652008d0a64a419c34c13bdca6c8f178.zip",
-            "https://github.com/bazelbuild/rules_java/archive/7cf3cefd652008d0a64a419c34c13bdca6c8f178.zip"
-        ]
-    },
     "7e4afce6fe62dbff0a4a03450143146f9f2d7488.tar.gz": {
         "name": "7e4afce6fe62dbff0a4a03450143146f9f2d7488.tar.gz",
         "sha256": "8e7d59a5b12b233be5652e3d29f42fba01c7cbab09f6b3a8d0a57ed6d1e9a0da",
@@ -88,9 +86,11 @@
         ]
     },
     "android_tools": {
+        "generator_function": "maybe",
+        "generator_name": "android_tools",
         "name": "android_tools",
-        "sha256": "ed5290594244c2eeab41f0104519bcef51e27c699ff4b379fcbd25215270513e",
-        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.23.0.tar.gz"
+        "sha256": "5d0f140125afba82603ccd5050c78dd2e2863ca992a17f43f6df9a9119ffcb9b",
+        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.27.2.tar"
     },
     "android_tools_for_testing": {
         "name": "android_tools_for_testing",
@@ -102,14 +102,14 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "1afa4b7e13c82523c8b69e87f8d598c891ec7e2baa41d9e24e08becd723edb4d",
-        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.27.0.tar.gz"
+        "sha256": "5d0f140125afba82603ccd5050c78dd2e2863ca992a17f43f6df9a9119ffcb9b",
+        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.27.2.tar"
     },
-    "android_tools_pkg-0.27.0.tar.gz": {
-        "name": "android_tools_pkg-0.27.0.tar.gz",
-        "sha256": "1afa4b7e13c82523c8b69e87f8d598c891ec7e2baa41d9e24e08becd723edb4d",
+    "android_tools_pkg-0.27.2.tar": {
+        "name": "android_tools_pkg-0.27.2.tar",
+        "sha256": "5d0f140125afba82603ccd5050c78dd2e2863ca992a17f43f6df9a9119ffcb9b",
         "urls": [
-            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.27.0.tar.gz"
+            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.27.2.tar"
         ]
     },
     "bazel-gazelle-v0.24.0.tar.gz": {
@@ -203,6 +203,25 @@
         "urls": [
             "https://mirror.bazel.build/github.com/bazelbuild/continuous-integration/releases/download/rules-1.0.0/bazelci_rules-1.0.0.tar.gz",
             "https://github.com/bazelbuild/continuous-integration/releases/download/rules-1.0.0/bazelci_rules-1.0.0.tar.gz"
+        ]
+    },
+    "blake3": {
+        "build_file": "//third_party:blake3/blake3.BUILD",
+        "generator_function": "dist_http_archive",
+        "generator_name": "blake3",
+        "name": "blake3",
+        "patch_cmds": [
+            "test -f BUILD.bazel && chmod u+w BUILD.bazel || true",
+            "echo >> BUILD.bazel",
+            "echo 'exports_files([\"WORKSPACE\"], visibility = [\"//visibility:public\"])' >> BUILD.bazel"
+        ],
+        "patch_cmds_win": [
+            "Add-Content -Path BUILD.bazel -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
+        ],
+        "sha256": "bb529ba133c0256df49139bd403c17835edbf60d2ecd6463549c6a5fe279364d",
+        "strip_prefix": "BLAKE3-1.3.3",
+        "urls": [
+            "https://github.com/BLAKE3-team/BLAKE3/archive/refs/tags/1.3.3.zip"
         ]
     },
     "boringssl": {
@@ -345,11 +364,10 @@
         "generator_function": "dist_http_archive",
         "generator_name": "com_google_absl",
         "name": "com_google_absl",
-        "sha256": "dcf71b9cba8dc0ca9940c4b316a0c796be8fab42b070bb6b7cab62b48f0e66c4",
-        "strip_prefix": "abseil-cpp-20211102.0",
+        "sha256": "59d2976af9d6ecf001a81a35749a6e551a335b949d34918cfade07737b9d93c5",
+        "strip_prefix": "abseil-cpp-20230802.0",
         "urls": [
-            "https://mirror.bazel.build/github.com/abseil/abseil-cpp/archive/refs/tags/20211102.0.tar.gz",
-            "https://github.com/abseil/abseil-cpp/archive/refs/tags/20211102.0.tar.gz"
+            "https://github.com/abseil/abseil-cpp/archive/refs/tags/20230802.0.tar.gz"
         ]
     },
     "com_google_googleapis": {
@@ -536,36 +554,44 @@
             "https://github.com/census-instrumentation/opencensus-cpp/archive/c9a4da319bc669a772928ffc55af4a61be1a1176.tar.gz"
         ]
     },
-    "java_tools-v11.9.zip": {
-        "name": "java_tools-v11.9.zip",
-        "sha256": "5cd59ea6bf938a1efc1e11ea562d37b39c82f76781211b7cd941a2346ea8484d",
+    "java_tools-v12.7.zip": {
+        "name": "java_tools-v12.7.zip",
+        "sha256": "aa11ecd5fc0af2769f0f2bdd25e2f4de7c1291ed24326fb23fa69bdd5dcae2b5",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools-v11.9.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools-v12.7.zip"
         ]
     },
-    "java_tools_darwin-v11.9.zip": {
-        "name": "java_tools_darwin-v11.9.zip",
-        "sha256": "b9e962c6a836ba1d7573f2473fab3a897c6370d4c2724bde4017b40932ff4fe4",
+    "java_tools_darwin_arm64-v12.7.zip": {
+        "name": "java_tools_darwin_arm64-v12.7.zip",
+        "sha256": "ecedf6305768dfd51751d0ad732898af092bd7710d497c6c6c3214af7e49395f",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_darwin-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_darwin-v11.9.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_darwin_arm64-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_darwin_arm64-v12.7.zip"
         ]
     },
-    "java_tools_linux-v11.9.zip": {
-        "name": "java_tools_linux-v11.9.zip",
-        "sha256": "512582cac5b7ea7974a77b0da4581b21f546c9478f206eedf54687eeac035989",
+    "java_tools_darwin_x86_64-v12.7.zip": {
+        "name": "java_tools_darwin_x86_64-v12.7.zip",
+        "sha256": "e116c649c0355ab57ffcc870ce1139e5e1528cabac458bd50263d2b84ea4ffb2",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_linux-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_linux-v11.9.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_darwin_x86_64-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_darwin_x86_64-v12.7.zip"
         ]
     },
-    "java_tools_windows-v11.9.zip": {
-        "name": "java_tools_windows-v11.9.zip",
-        "sha256": "677ab910046205020fd715489147c2bcfad8a35d9f5d94fdc998d217545bd87a",
+    "java_tools_linux-v12.7.zip": {
+        "name": "java_tools_linux-v12.7.zip",
+        "sha256": "a346b9a291b6db1bb06f7955f267e47522d99963fe14e337da1d75d125a8599f",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_windows-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_windows-v11.9.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_linux-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_linux-v12.7.zip"
+        ]
+    },
+    "java_tools_windows-v12.7.zip": {
+        "name": "java_tools_windows-v12.7.zip",
+        "sha256": "bae6a03b5aeead5804ba7bcdcc8b14ec3ed05b37f3db5519f788ab060bc53b05",
+        "urls": [
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_windows-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_windows-v12.7.zip"
         ]
     },
     "microsoft-jdk-11.0.13.8.1-windows-aarch64.zip": {
@@ -770,11 +796,11 @@
         "generator_function": "dist_http_archive",
         "generator_name": "openjdk17_darwin_aarch64_archive",
         "name": "openjdk17_darwin_aarch64_archive",
-        "sha256": "54247dde248ffbcd3c048675504b1c503b81daf2dc0d64a79e353c48d383c977",
-        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-macosx_aarch64",
+        "sha256": "515dd56ec99bb5ae8966621a2088aadfbe72631818ffbba6e4387b7ee292ab09",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-macosx_aarch64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_aarch64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_aarch64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_aarch64.tar.gz"
         ]
     },
     "openjdk17_darwin_archive": {
@@ -782,11 +808,11 @@
         "generator_function": "dist_http_archive",
         "generator_name": "openjdk17_darwin_archive",
         "name": "openjdk17_darwin_archive",
-        "sha256": "89d04b2d99b05dcb25114178e65f6a1c5ca742e125cab0a63d87e7e42f3fcb80",
-        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-macosx_x64",
+        "sha256": "e6317cee4d40995f0da5b702af3f04a6af2bbd55febf67927696987d11113b53",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-macosx_x64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_x64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_x64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_x64.tar.gz"
         ]
     },
     "openjdk17_linux_archive": {
@@ -794,11 +820,11 @@
         "generator_function": "dist_http_archive",
         "generator_name": "openjdk17_linux_archive",
         "name": "openjdk17_linux_archive",
-        "sha256": "73d5c4bae20325ca41b606f7eae64669db3aac638c5b3ead4a975055846ad6de",
-        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-linux_x64",
+        "sha256": "20c91a922eec795f3181eaa70def8b99d8eac56047c9a14bfb257c85b991df1b",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-linux_x64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_x64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_x64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-linux_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-linux_x64.tar.gz"
         ]
     },
     "openjdk17_windows_archive": {
@@ -806,11 +832,11 @@
         "generator_function": "dist_http_archive",
         "generator_name": "openjdk17_windows_archive",
         "name": "openjdk17_windows_archive",
-        "sha256": "e965aa0ea7a0661a3446cf8f10ee00684b851f883b803315289f26b4aa907fdb",
-        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-win_x64",
+        "sha256": "9972c5b62a61b45785d3d956c559e079d9e91f144ec46225f5deeda214d48f27",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-win_x64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-win_x64.zip",
-            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-win_x64.zip"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_x64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_x64.zip"
         ]
     },
     "openjdk17_windows_arm64_archive": {
@@ -818,11 +844,11 @@
         "generator_function": "dist_http_archive",
         "generator_name": "openjdk17_windows_arm64_archive",
         "name": "openjdk17_windows_arm64_archive",
-        "sha256": "811d7e7591bac4f081dfb00ba6bd15b6fc5969e1f89f0f327ef75147027c3877",
-        "strip_prefix": "zulu17.30.15-ca-jdk17.0.1-win_aarch64",
+        "sha256": "bc3476f2161bf99bc9a243ff535b8fc033b34ce9a2fa4b62fb8d79b6bfdc427f",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-win_aarch64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip",
-            "https://cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip"
         ]
     },
     "openjdk18_darwin_aarch64_archive": {
@@ -1028,10 +1054,10 @@
         "generator_function": "dist_http_file",
         "generator_name": "openjdk_win_arm64_vanilla",
         "name": "openjdk_win_arm64_vanilla",
-        "sha256": "811d7e7591bac4f081dfb00ba6bd15b6fc5969e1f89f0f327ef75147027c3877",
+        "sha256": "bc3476f2161bf99bc9a243ff535b8fc033b34ce9a2fa4b62fb8d79b6bfdc427f",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip",
-            "https://cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip"
         ]
     },
     "openjdk_win_minimal": {
@@ -1066,18 +1092,18 @@
         "generator_function": "dist_http_archive",
         "generator_name": "platforms",
         "name": "platforms",
-        "sha256": "379113459b0feaf6bfbb584a91874c065078aa673222846ac765f86661c27407",
+        "sha256": "3a561c99e7bdbe9173aa653fd579fe849f1d8d67395780ab4770b1f381431d51",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/0.0.5/platforms-0.0.5.tar.gz",
-            "https://github.com/bazelbuild/platforms/releases/download/0.0.5/platforms-0.0.5.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/0.0.7/platforms-0.0.7.tar.gz",
+            "https://github.com/bazelbuild/platforms/releases/download/0.0.7/platforms-0.0.7.tar.gz"
         ]
     },
-    "platforms-0.0.5.tar.gz": {
-        "name": "platforms-0.0.5.tar.gz",
-        "sha256": "379113459b0feaf6bfbb584a91874c065078aa673222846ac765f86661c27407",
+    "platforms-0.0.7.tar.gz": {
+        "name": "platforms-0.0.7.tar.gz",
+        "sha256": "3a561c99e7bdbe9173aa653fd579fe849f1d8d67395780ab4770b1f381431d51",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/0.0.5/platforms-0.0.5.tar.gz",
-            "https://github.com/bazelbuild/platforms/releases/download/0.0.5/platforms-0.0.5.tar.gz"
+            "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/0.0.7/platforms-0.0.7.tar.gz",
+            "https://github.com/bazelbuild/platforms/releases/download/0.0.7/platforms-0.0.7.tar.gz"
         ]
     },
     "python-3.7.0": {
@@ -1093,34 +1119,17 @@
             "https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz"
         ]
     },
-    "r8-3.3.28.jar": {
-        "name": "r8-3.3.28.jar",
-        "sha256": "8626ca32fb47aba7fddd2c897615e2e8ffcdb4d4b213572a2aefb3f838f01972",
+    "r8-8.0.40.jar": {
+        "name": "r8-8.0.40.jar",
+        "sha256": "ab1379835c7d3e5f21f80347c3c81e2f762e0b9b02748ae5232c3afa14adf702",
         "urls": [
-            "https://maven.google.com/com/android/tools/r8/3.3.28/r8-3.3.28.jar"
+            "https://maven.google.com/com/android/tools/r8/8.0.40/r8-8.0.40.jar"
         ]
     },
     "remote_coverage_tools": {
-        "name": "remote_coverage_tools",
-        "sha256": "cd14f1cb4559e4723e63b7e7b06d09fcc3bd7ba58d03f354cdff1439bd936a7d",
-        "urls": [
-            "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v2.5.zip"
-        ]
-    },
-    "remote_java_tools_darwin": {
-        "generator_function": "maybe",
-        "generator_name": "remote_java_tools_darwin",
-        "name": "remote_java_tools_darwin",
-        "sha256": "d15b05d2061382748f779dc566537ea567a46bcba6fa34b56d7cb6e6d668adab",
-        "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_darwin-v10.6.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_darwin-v10.6.zip"
-        ]
-    },
-    "remote_java_tools_darwin_for_testing": {
         "generator_function": "dist_http_archive",
-        "generator_name": "remote_java_tools_darwin_for_testing",
-        "name": "remote_java_tools_darwin_for_testing",
+        "generator_name": "remote_coverage_tools",
+        "name": "remote_coverage_tools",
         "patch_cmds": [
             "test -f BUILD && chmod u+w BUILD || true",
             "echo >> BUILD",
@@ -1129,10 +1138,75 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "b9e962c6a836ba1d7573f2473fab3a897c6370d4c2724bde4017b40932ff4fe4",
+        "sha256": "7006375f6756819b7013ca875eab70a541cf7d89142d9c511ed78ea4fefa38af",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_darwin-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_darwin-v11.9.zip"
+            "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v2.6.zip"
+        ]
+    },
+    "remote_java_tools": {
+        "generator_function": "maybe",
+        "generator_name": "remote_java_tools",
+        "name": "remote_java_tools",
+        "sha256": "aa11ecd5fc0af2769f0f2bdd25e2f4de7c1291ed24326fb23fa69bdd5dcae2b5",
+        "urls": [
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools-v12.7.zip"
+        ]
+    },
+    "remote_java_tools_darwin_arm64": {
+        "generator_function": "maybe",
+        "generator_name": "remote_java_tools_darwin_arm64",
+        "name": "remote_java_tools_darwin_arm64",
+        "sha256": "ecedf6305768dfd51751d0ad732898af092bd7710d497c6c6c3214af7e49395f",
+        "urls": [
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_darwin_arm64-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_darwin_arm64-v12.7.zip"
+        ]
+    },
+    "remote_java_tools_darwin_arm64_for_testing": {
+        "generator_function": "dist_http_archive",
+        "generator_name": "remote_java_tools_darwin_arm64_for_testing",
+        "name": "remote_java_tools_darwin_arm64_for_testing",
+        "patch_cmds": [
+            "test -f BUILD && chmod u+w BUILD || true",
+            "echo >> BUILD",
+            "echo 'exports_files([\"WORKSPACE\"], visibility = [\"//visibility:public\"])' >> BUILD"
+        ],
+        "patch_cmds_win": [
+            "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
+        ],
+        "sha256": "ecedf6305768dfd51751d0ad732898af092bd7710d497c6c6c3214af7e49395f",
+        "urls": [
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_darwin_arm64-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_darwin_arm64-v12.7.zip"
+        ]
+    },
+    "remote_java_tools_darwin_x86_64": {
+        "generator_function": "maybe",
+        "generator_name": "remote_java_tools_darwin_x86_64",
+        "name": "remote_java_tools_darwin_x86_64",
+        "sha256": "e116c649c0355ab57ffcc870ce1139e5e1528cabac458bd50263d2b84ea4ffb2",
+        "urls": [
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_darwin_x86_64-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_darwin_x86_64-v12.7.zip"
+        ]
+    },
+    "remote_java_tools_darwin_x86_64_for_testing": {
+        "generator_function": "dist_http_archive",
+        "generator_name": "remote_java_tools_darwin_x86_64_for_testing",
+        "name": "remote_java_tools_darwin_x86_64_for_testing",
+        "patch_cmds": [
+            "test -f BUILD && chmod u+w BUILD || true",
+            "echo >> BUILD",
+            "echo 'exports_files([\"WORKSPACE\"], visibility = [\"//visibility:public\"])' >> BUILD"
+        ],
+        "patch_cmds_win": [
+            "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
+        ],
+        "sha256": "e116c649c0355ab57ffcc870ce1139e5e1528cabac458bd50263d2b84ea4ffb2",
+        "urls": [
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_darwin_x86_64-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_darwin_x86_64-v12.7.zip"
         ]
     },
     "remote_java_tools_for_testing": {
@@ -1147,20 +1221,20 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "5cd59ea6bf938a1efc1e11ea562d37b39c82f76781211b7cd941a2346ea8484d",
+        "sha256": "aa11ecd5fc0af2769f0f2bdd25e2f4de7c1291ed24326fb23fa69bdd5dcae2b5",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools-v11.9.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools-v12.7.zip"
         ]
     },
     "remote_java_tools_linux": {
         "generator_function": "maybe",
         "generator_name": "remote_java_tools_linux",
         "name": "remote_java_tools_linux",
-        "sha256": "085c0ba53ba764e81d4c195524f3c596085cbf9cdc01dd8e6d2ae677e726af35",
+        "sha256": "a346b9a291b6db1bb06f7955f267e47522d99963fe14e337da1d75d125a8599f",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_linux-v10.6.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_linux-v10.6.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_linux-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_linux-v12.7.zip"
         ]
     },
     "remote_java_tools_linux_for_testing": {
@@ -1175,10 +1249,10 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "512582cac5b7ea7974a77b0da4581b21f546c9478f206eedf54687eeac035989",
+        "sha256": "a346b9a291b6db1bb06f7955f267e47522d99963fe14e337da1d75d125a8599f",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_linux-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_linux-v11.9.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_linux-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_linux-v12.7.zip"
         ]
     },
     "remote_java_tools_test": {
@@ -1193,16 +1267,16 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "5cd59ea6bf938a1efc1e11ea562d37b39c82f76781211b7cd941a2346ea8484d",
+        "sha256": "aa11ecd5fc0af2769f0f2bdd25e2f4de7c1291ed24326fb23fa69bdd5dcae2b5",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools-v11.9.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools-v12.7.zip"
         ]
     },
-    "remote_java_tools_test_darwin": {
+    "remote_java_tools_test_darwin_arm64": {
         "generator_function": "dist_http_archive",
-        "generator_name": "remote_java_tools_test_darwin",
-        "name": "remote_java_tools_test_darwin",
+        "generator_name": "remote_java_tools_test_darwin_arm64",
+        "name": "remote_java_tools_test_darwin_arm64",
         "patch_cmds": [
             "test -f BUILD && chmod u+w BUILD || true",
             "echo >> BUILD",
@@ -1211,10 +1285,28 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "b9e962c6a836ba1d7573f2473fab3a897c6370d4c2724bde4017b40932ff4fe4",
+        "sha256": "ecedf6305768dfd51751d0ad732898af092bd7710d497c6c6c3214af7e49395f",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_darwin-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_darwin-v11.9.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_darwin_arm64-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_darwin_arm64-v12.7.zip"
+        ]
+    },
+    "remote_java_tools_test_darwin_x86_64": {
+        "generator_function": "dist_http_archive",
+        "generator_name": "remote_java_tools_test_darwin_x86_64",
+        "name": "remote_java_tools_test_darwin_x86_64",
+        "patch_cmds": [
+            "test -f BUILD && chmod u+w BUILD || true",
+            "echo >> BUILD",
+            "echo 'exports_files([\"WORKSPACE\"], visibility = [\"//visibility:public\"])' >> BUILD"
+        ],
+        "patch_cmds_win": [
+            "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
+        ],
+        "sha256": "e116c649c0355ab57ffcc870ce1139e5e1528cabac458bd50263d2b84ea4ffb2",
+        "urls": [
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_darwin_x86_64-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_darwin_x86_64-v12.7.zip"
         ]
     },
     "remote_java_tools_test_linux": {
@@ -1229,10 +1321,10 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "512582cac5b7ea7974a77b0da4581b21f546c9478f206eedf54687eeac035989",
+        "sha256": "a346b9a291b6db1bb06f7955f267e47522d99963fe14e337da1d75d125a8599f",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_linux-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_linux-v11.9.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_linux-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_linux-v12.7.zip"
         ]
     },
     "remote_java_tools_test_windows": {
@@ -1247,20 +1339,20 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "677ab910046205020fd715489147c2bcfad8a35d9f5d94fdc998d217545bd87a",
+        "sha256": "bae6a03b5aeead5804ba7bcdcc8b14ec3ed05b37f3db5519f788ab060bc53b05",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_windows-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_windows-v11.9.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_windows-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_windows-v12.7.zip"
         ]
     },
     "remote_java_tools_windows": {
         "generator_function": "maybe",
         "generator_name": "remote_java_tools_windows",
         "name": "remote_java_tools_windows",
-        "sha256": "873f1e53d1fa9c8e46b717673816cd822bb7acc474a194a18ff849fd8fa6ff00",
+        "sha256": "bae6a03b5aeead5804ba7bcdcc8b14ec3ed05b37f3db5519f788ab060bc53b05",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.6/java_tools_javac11_windows-v10.6.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.6/java_tools_javac11_windows-v10.6.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_windows-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_windows-v12.7.zip"
         ]
     },
     "remote_java_tools_windows_for_testing": {
@@ -1275,32 +1367,34 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "677ab910046205020fd715489147c2bcfad8a35d9f5d94fdc998d217545bd87a",
+        "sha256": "bae6a03b5aeead5804ba7bcdcc8b14ec3ed05b37f3db5519f788ab060bc53b05",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/java/v11.9/java_tools_windows-v11.9.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/java_v11.9/java_tools_windows-v11.9.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/java/v12.7/java_tools_windows-v12.7.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/java_v12.7/java_tools_windows-v12.7.zip"
         ]
     },
     "remotejdk11_linux": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 11,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_linux",
         "name": "remotejdk11_linux",
-        "sha256": "360626cc19063bc411bfed2914301b908a8f77a7919aaea007a977fa8fb3cde1",
-        "strip_prefix": "zulu11.37.17-ca-jdk11.0.6-linux_x64",
+        "sha256": "e064b61d93304012351242bf0823c6a2e41d9e28add7ea7f05378b7243d34247",
+        "strip_prefix": "zulu11.56.19-ca-jdk11.0.15-linux_x64",
         "urls": [
-            "https://mirror.bazel.build/openjdk/azul-zulu11.37.17-ca-jdk11.0.6/zulu11.37.17-ca-jdk11.0.6-linux_x64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-linux_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-linux_x64.tar.gz"
         ]
     },
     "remotejdk11_linux_aarch64": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 11,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_linux_aarch64",
         "name": "remotejdk11_linux_aarch64",
-        "sha256": "a452f1b9682d9f83c1c14e54d1446e1c51b5173a3a05dcb013d380f9508562e4",
-        "strip_prefix": "zulu11.37.48-ca-jdk11.0.6-linux_aarch64",
+        "sha256": "fc7c41a0005180d4ca471c90d01e049469e0614cf774566d4cf383caa29d1a97",
+        "strip_prefix": "zulu11.56.19-ca-jdk11.0.15-linux_aarch64",
         "urls": [
-            "https://mirror.bazel.build/openjdk/azul-zulu11.37.48-ca-jdk11.0.6/zulu11.37.48-ca-jdk11.0.6-linux_aarch64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu-embedded/bin/zulu11.56.19-ca-jdk11.0.15-linux_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu-embedded/bin/zulu11.56.19-ca-jdk11.0.15-linux_aarch64.tar.gz"
         ]
     },
     "remotejdk11_linux_aarch64_for_testing": {
@@ -1344,15 +1438,15 @@
         ]
     },
     "remotejdk11_linux_ppc64le": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 11,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_linux_ppc64le",
         "name": "remotejdk11_linux_ppc64le",
-        "sha256": "a417db0295b1f4b538ecbaf7c774f3a177fab9657a665940170936c0eca4e71a",
-        "strip_prefix": "jdk-11.0.7+10",
+        "sha256": "a8fba686f6eb8ae1d1a9566821dbd5a85a1108b96ad857fdbac5c1e4649fc56f",
+        "strip_prefix": "jdk-11.0.15+10",
         "urls": [
-            "https://mirror.bazel.build/openjdk/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.7_10.tar.gz",
-            "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.7_10.tar.gz"
+            "https://mirror.bazel.build/github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.15+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.15_10.tar.gz",
+            "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.15+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.15_10.tar.gz"
         ]
     },
     "remotejdk11_linux_ppc64le_for_testing": {
@@ -1376,15 +1470,15 @@
         ]
     },
     "remotejdk11_linux_s390x": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 11,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_linux_s390x",
         "name": "remotejdk11_linux_s390x",
-        "sha256": "d9b72e87a1d3ebc0c9552f72ae5eb150fffc0298a7cb841f1ce7bfc70dcd1059",
-        "strip_prefix": "jdk-11.0.7+10",
+        "sha256": "a58fc0361966af0a5d5a31a2d8a208e3c9bb0f54f345596fd80b99ea9a39788b",
+        "strip_prefix": "jdk-11.0.15+10",
         "urls": [
-            "https://mirror.bazel.build/github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_s390x_linux_hotspot_11.0.7_10.tar.gz",
-            "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_s390x_linux_hotspot_11.0.7_10.tar.gz"
+            "https://mirror.bazel.build/github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.15+10/OpenJDK11U-jdk_s390x_linux_hotspot_11.0.15_10.tar.gz",
+            "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.15+10/OpenJDK11U-jdk_s390x_linux_hotspot_11.0.15_10.tar.gz"
         ]
     },
     "remotejdk11_linux_s390x_for_testing": {
@@ -1408,26 +1502,27 @@
         ]
     },
     "remotejdk11_macos": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 11,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_macos",
         "name": "remotejdk11_macos",
-        "sha256": "e1fe56769f32e2aaac95e0a8f86b5a323da5af3a3b4bba73f3086391a6cc056f",
-        "strip_prefix": "zulu11.37.17-ca-jdk11.0.6-macosx_x64",
+        "sha256": "2614e5c5de8e989d4d81759de4c333aa5b867b17ab9ee78754309ba65c7f6f55",
+        "strip_prefix": "zulu11.56.19-ca-jdk11.0.15-macosx_x64",
         "urls": [
-            "https://mirror.bazel.build/openjdk/azul-zulu11.37.17-ca-jdk11.0.6/zulu11.37.17-ca-jdk11.0.6-macosx_x64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-macosx_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-macosx_x64.tar.gz"
         ]
     },
     "remotejdk11_macos_aarch64": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 11,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_macos_aarch64",
         "name": "remotejdk11_macos_aarch64",
-        "sha256": "3dcc636e64ae58b922269c2dc9f20f6f967bee90e3f6847d643c4a566f1e8d8a",
-        "strip_prefix": "zulu11.45.27-ca-jdk11.0.10-macosx_aarch64",
+        "sha256": "6bb0d2c6e8a29dcd9c577bbb2986352ba12481a9549ac2c0bcfd00ed60e538d2",
+        "strip_prefix": "zulu11.56.19-ca-jdk11.0.15-macosx_aarch64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.45.27-ca-jdk11.0.10-macosx_aarch64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu11.45.27-ca-jdk11.0.10-macosx_aarch64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-macosx_aarch64.tar.gz"
         ]
     },
     "remotejdk11_macos_aarch64_for_testing": {
@@ -1471,14 +1566,26 @@
         ]
     },
     "remotejdk11_win": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 11,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_win",
         "name": "remotejdk11_win",
-        "sha256": "a9695617b8374bfa171f166951214965b1d1d08f43218db9a2a780b71c665c18",
-        "strip_prefix": "zulu11.37.17-ca-jdk11.0.6-win_x64",
+        "sha256": "a106c77389a63b6bd963a087d5f01171bd32aa3ee7377ecef87531390dcb9050",
+        "strip_prefix": "zulu11.56.19-ca-jdk11.0.15-win_x64",
         "urls": [
-            "https://mirror.bazel.build/openjdk/azul-zulu11.37.17-ca-jdk11.0.6/zulu11.37.17-ca-jdk11.0.6-win_x64.zip"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-win_x64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-win_x64.zip"
+        ]
+    },
+    "remotejdk11_win_arm64": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 11,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk11_win_arm64",
+        "name": "remotejdk11_win_arm64",
+        "sha256": "b8a28e6e767d90acf793ea6f5bed0bb595ba0ba5ebdf8b99f395266161e53ec2",
+        "strip_prefix": "jdk-11.0.13+8",
+        "urls": [
+            "https://mirror.bazel.build/aka.ms/download-jdk/microsoft-jdk-11.0.13.8.1-windows-aarch64.zip"
         ]
     },
     "remotejdk11_win_arm64_for_testing": {
@@ -1520,85 +1627,28 @@
             "https://cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-win_x64.zip"
         ]
     },
-    "remotejdk14_linux": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+    "remotejdk17_linux": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 17,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
         "generator_function": "maybe",
-        "generator_name": "remotejdk14_linux",
-        "name": "remotejdk14_linux",
-        "sha256": "48bb8947034cd079ad1ef83335e7634db4b12a26743a0dc314b6b861480777aa",
-        "strip_prefix": "zulu14.28.21-ca-jdk14.0.1-linux_x64",
+        "generator_name": "remotejdk17_linux",
+        "name": "remotejdk17_linux",
+        "sha256": "20c91a922eec795f3181eaa70def8b99d8eac56047c9a14bfb257c85b991df1b",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-linux_x64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu14.28.21-ca-jdk14.0.1-linux_x64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-linux_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-linux_x64.tar.gz"
         ]
     },
-    "remotejdk14_macos": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+    "remotejdk17_linux_aarch64": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 17,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
         "generator_function": "maybe",
-        "generator_name": "remotejdk14_macos",
-        "name": "remotejdk14_macos",
-        "sha256": "088bd4d0890acc9f032b738283bf0f26b2a55c50b02d1c8a12c451d8ddf080dd",
-        "strip_prefix": "zulu14.28.21-ca-jdk14.0.1-macosx_x64",
+        "generator_name": "remotejdk17_linux_aarch64",
+        "name": "remotejdk17_linux_aarch64",
+        "sha256": "dbc6ae9163e7ff469a9ab1f342cd1bc1f4c1fb78afc3c4f2228ee3b32c4f3e43",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-linux_aarch64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu14.28.21-ca-jdk14.0.1-macosx_x64.tar.gz"
-        ]
-    },
-    "remotejdk14_win": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
-        "generator_function": "maybe",
-        "generator_name": "remotejdk14_win",
-        "name": "remotejdk14_win",
-        "sha256": "9cb078b5026a900d61239c866161f0d9558ec759aa15c5b4c7e905370e868284",
-        "strip_prefix": "zulu14.28.21-ca-jdk14.0.1-win_x64",
-        "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu14.28.21-ca-jdk14.0.1-win_x64.zip"
-        ]
-    },
-    "remotejdk15_linux": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
-        "generator_function": "maybe",
-        "generator_name": "remotejdk15_linux",
-        "name": "remotejdk15_linux",
-        "sha256": "0a38f1138c15a4f243b75eb82f8ef40855afcc402e3c2a6de97ce8235011b1ad",
-        "strip_prefix": "zulu15.27.17-ca-jdk15.0.0-linux_x64",
-        "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-linux_x64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-linux_x64.tar.gz"
-        ]
-    },
-    "remotejdk15_macos": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
-        "generator_function": "maybe",
-        "generator_name": "remotejdk15_macos",
-        "name": "remotejdk15_macos",
-        "sha256": "f80b2e0512d9d8a92be24497334c974bfecc8c898fc215ce0e76594f00437482",
-        "strip_prefix": "zulu15.27.17-ca-jdk15.0.0-macosx_x64",
-        "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-macosx_x64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-macosx_x64.tar.gz"
-        ]
-    },
-    "remotejdk15_macos_aarch64": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
-        "generator_function": "maybe",
-        "generator_name": "remotejdk15_macos_aarch64",
-        "name": "remotejdk15_macos_aarch64",
-        "sha256": "2613c3f15eef6b6ecd0fd102da92282b985e4573905dc902f1783d8059c1efc5",
-        "strip_prefix": "zulu15.29.15-ca-jdk15.0.2-macosx_aarch64",
-        "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu15.29.15-ca-jdk15.0.2-macosx_aarch64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu15.29.15-ca-jdk15.0.2-macosx_aarch64.tar.gz"
-        ]
-    },
-    "remotejdk15_win": {
-        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
-        "generator_function": "maybe",
-        "generator_name": "remotejdk15_win",
-        "name": "remotejdk15_win",
-        "sha256": "f535a530151e6c20de8a3078057e332b08887cb3ba1a4735717357e72765cad6",
-        "strip_prefix": "zulu15.27.17-ca-jdk15.0.0-win_x64",
-        "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-win_x64.zip",
-            "https://cdn.azul.com/zulu/bin/zulu15.27.17-ca-jdk15.0.0-win_x64.zip"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-linux_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-linux_aarch64.tar.gz"
         ]
     },
     "remotejdk17_linux_for_testing": {
@@ -1614,11 +1664,35 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD.bazel -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "73d5c4bae20325ca41b606f7eae64669db3aac638c5b3ead4a975055846ad6de",
-        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-linux_x64",
+        "sha256": "20c91a922eec795f3181eaa70def8b99d8eac56047c9a14bfb257c85b991df1b",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-linux_x64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_x64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_x64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-linux_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-linux_x64.tar.gz"
+        ]
+    },
+    "remotejdk17_macos": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 17,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk17_macos",
+        "name": "remotejdk17_macos",
+        "sha256": "e6317cee4d40995f0da5b702af3f04a6af2bbd55febf67927696987d11113b53",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-macosx_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_x64.tar.gz"
+        ]
+    },
+    "remotejdk17_macos_aarch64": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 17,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk17_macos_aarch64",
+        "name": "remotejdk17_macos_aarch64",
+        "sha256": "515dd56ec99bb5ae8966621a2088aadfbe72631818ffbba6e4387b7ee292ab09",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-macosx_aarch64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_aarch64.tar.gz"
         ]
     },
     "remotejdk17_macos_aarch64_for_testing": {
@@ -1634,11 +1708,11 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD.bazel -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "54247dde248ffbcd3c048675504b1c503b81daf2dc0d64a79e353c48d383c977",
-        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-macosx_aarch64",
+        "sha256": "515dd56ec99bb5ae8966621a2088aadfbe72631818ffbba6e4387b7ee292ab09",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-macosx_aarch64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_aarch64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_aarch64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_aarch64.tar.gz"
         ]
     },
     "remotejdk17_macos_for_testing": {
@@ -1654,11 +1728,35 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD.bazel -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "89d04b2d99b05dcb25114178e65f6a1c5ca742e125cab0a63d87e7e42f3fcb80",
-        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-macosx_x64",
+        "sha256": "e6317cee4d40995f0da5b702af3f04a6af2bbd55febf67927696987d11113b53",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-macosx_x64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_x64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-macosx_x64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-macosx_x64.tar.gz"
+        ]
+    },
+    "remotejdk17_win": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 17,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk17_win",
+        "name": "remotejdk17_win",
+        "sha256": "9972c5b62a61b45785d3d956c559e079d9e91f144ec46225f5deeda214d48f27",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-win_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_x64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_x64.zip"
+        ]
+    },
+    "remotejdk17_win_arm64": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 17,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk17_win_arm64",
+        "name": "remotejdk17_win_arm64",
+        "sha256": "bc3476f2161bf99bc9a243ff535b8fc033b34ce9a2fa4b62fb8d79b6bfdc427f",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-win_aarch64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip"
         ]
     },
     "remotejdk17_win_arm64_for_testing": {
@@ -1674,11 +1772,11 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD.bazel -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "811d7e7591bac4f081dfb00ba6bd15b6fc5969e1f89f0f327ef75147027c3877",
-        "strip_prefix": "zulu17.30.15-ca-jdk17.0.1-win_aarch64",
+        "sha256": "bc3476f2161bf99bc9a243ff535b8fc033b34ce9a2fa4b62fb8d79b6bfdc427f",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-win_aarch64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip",
-            "https://cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip"
         ]
     },
     "remotejdk17_win_for_testing": {
@@ -1694,11 +1792,35 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD.bazel -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "e965aa0ea7a0661a3446cf8f10ee00684b851f883b803315289f26b4aa907fdb",
-        "strip_prefix": "zulu17.32.13-ca-jdk17.0.2-win_x64",
+        "sha256": "9972c5b62a61b45785d3d956c559e079d9e91f144ec46225f5deeda214d48f27",
+        "strip_prefix": "zulu17.38.21-ca-jdk17.0.5-win_x64",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-win_x64.zip",
-            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-win_x64.zip"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_x64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_x64.zip"
+        ]
+    },
+    "remotejdk18_linux": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 18,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_linux",
+        "name": "remotejdk18_linux",
+        "sha256": "959a94ca4097dcaabc7886784cec10dfdf2b0a3bff890ea8943cc09c5fff29cb",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-linux_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_x64.tar.gz"
+        ]
+    },
+    "remotejdk18_linux_aarch64": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 18,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_linux_aarch64",
+        "name": "remotejdk18_linux_aarch64",
+        "sha256": "a1d5f78172f32f819d08e9043b0f82fa7af738b37c55c6ca8d6092c61d204d53",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-linux_aarch64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_aarch64.tar.gz"
         ]
     },
     "remotejdk18_linux_for_testing": {
@@ -1719,6 +1841,30 @@
         "urls": [
             "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_x64.tar.gz",
             "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-linux_x64.tar.gz"
+        ]
+    },
+    "remotejdk18_macos": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 18,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_macos",
+        "name": "remotejdk18_macos",
+        "sha256": "780a9aa4bda95a6793bf41d13f837c59ef915e9bfd0e0c5fd4c70e4cdaa88541",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-macosx_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_x64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_x64.tar.gz"
+        ]
+    },
+    "remotejdk18_macos_aarch64": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 18,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_macos_aarch64",
+        "name": "remotejdk18_macos_aarch64",
+        "sha256": "9595e001451e201fdf33c1952777968a3ac18fe37273bdeaea5b5ed2c4950432",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-macosx_aarch64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_aarch64.tar.gz"
         ]
     },
     "remotejdk18_macos_aarch64_for_testing": {
@@ -1759,6 +1905,30 @@
         "urls": [
             "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_x64.tar.gz",
             "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-macosx_x64.tar.gz"
+        ]
+    },
+    "remotejdk18_win": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 18,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_win",
+        "name": "remotejdk18_win",
+        "sha256": "6c75498163b047595386fdb909cb6d4e04282c3a81799743c5e1f9316391fe16",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-win_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-win_x64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-win_x64.zip"
+        ]
+    },
+    "remotejdk18_win_arm64": {
+        "build_file_content": "load(\"@rules_java//java:defs.bzl\", \"java_import\", \"java_runtime\")\n\npackage(default_visibility = [\"//visibility:public\"])\n\nexports_files([\"BUILD.bazel\"])\n\nDEPRECATION_MESSAGE = (\"Don't depend on targets in the JDK workspace;\" +\n                       \" use @bazel_tools//tools/jdk:current_java_runtime instead\" +\n                       \" (see https://github.com/bazelbuild/bazel/issues/5594)\")\n\nfilegroup(\n    name = \"jni_header\",\n    srcs = [\"include/jni.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-darwin\",\n    srcs = [\"include/darwin/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-linux\",\n    srcs = [\"include/linux/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-freebsd\",\n    srcs = [\"include/freebsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-openbsd\",\n    srcs = [\"include/openbsd/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jni_md_header-windows\",\n    srcs = [\"include/win32/jni_md.h\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"java\",\n    srcs = select({\n        \":windows\": [\"bin/java.exe\"],\n        \"//conditions:default\": [\"bin/java\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jar\",\n    srcs = select({\n        \":windows\": [\"bin/jar.exe\"],\n        \"//conditions:default\": [\"bin/jar\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javac\",\n    srcs = select({\n        \":windows\": [\"bin/javac.exe\"],\n        \"//conditions:default\": [\"bin/javac\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"javadoc\",\n    srcs = select({\n        \":windows\": [\"bin/javadoc.exe\"],\n        \"//conditions:default\": [\"bin/javadoc\"],\n    }),\n    data = [\":jdk\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"xjc\",\n    srcs = [\"bin/xjc\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"wsimport\",\n    srcs = [\"bin/wsimport\"],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nBOOTCLASS_JARS = [\n    \"rt.jar\",\n    \"resources.jar\",\n    \"jsse.jar\",\n    \"jce.jar\",\n    \"charsets.jar\",\n]\n\n# TODO(cushon): this isn't compatible with JDK 9\nfilegroup(\n    name = \"bootclasspath\",\n    srcs = [\"jre/lib/%s\" % jar for jar in BOOTCLASS_JARS],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-bin\",\n    srcs = select({\n        # In some configurations, Java browser plugin is considered harmful and\n        # common antivirus software blocks access to npjp2.dll interfering with Bazel,\n        # so do not include it in JRE on Windows.\n        \":windows\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n            exclude = [\"jre/bin/plugin2/**\"],\n        ),\n        \"//conditions:default\": glob(\n            [\"jre/bin/**\"],\n            allow_empty = True,\n        ),\n    }),\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jre-lib\",\n    srcs = glob(\n        [\"jre/lib/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jre\",\n    srcs = [\":jre-default\"],\n)\n\nfilegroup(\n    name = \"jre-default\",\n    srcs = [\n        \":jre-bin\",\n        \":jre-lib\",\n    ],\n    deprecation = DEPRECATION_MESSAGE,\n)\n\nfilegroup(\n    name = \"jdk-bin\",\n    srcs = glob(\n        [\"bin/**\"],\n        # The JDK on Windows sometimes contains a directory called\n        # \"%systemroot%\", which is not a valid label.\n        exclude = [\"**/*%*/**\"],\n    ),\n)\n\n#This folder holds security policies\nfilegroup(\n    name = \"jdk-conf\",\n    srcs = glob(\n        [\"conf/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-include\",\n    srcs = glob(\n        [\"include/**\"],\n        allow_empty = True,\n    ),\n)\n\nfilegroup(\n    name = \"jdk-lib\",\n    srcs = glob(\n        [\"lib/**\"],\n        allow_empty = True,\n        exclude = [\n            \"lib/missioncontrol/**\",\n            \"lib/visualvm/**\",\n        ],\n    ),\n)\n\njava_runtime(\n    name = \"jdk\",\n    srcs = [\n        \":jdk-bin\",\n        \":jdk-conf\",\n        \":jdk-include\",\n        \":jdk-lib\",\n        \":jre-default\",\n    ],\n    version = 18,\n)\n\nconfig_setting(\n    name = \"windows\",\n    constraint_values = [\"@platforms//os:windows\"],\n    visibility = [\"//visibility:private\"],\n)\n",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk18_win_arm64",
+        "name": "remotejdk18_win_arm64",
+        "sha256": "9b52b259516e4140ee56b91f77750667bffbc543e78ad8c39082449d4c377b54",
+        "strip_prefix": "zulu18.28.13-ca-jdk18.0.0-win_aarch64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-win_aarch64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu18.28.13-ca-jdk18.0.0-win_aarch64.zip"
         ]
     },
     "remotejdk18_win_arm64_for_testing": {
@@ -1837,11 +2007,17 @@
         "patch_cmds_win": [
             "Add-Content -Path BUILD -Value \"`nexports_files([`\"WORKSPACE`\"], visibility = [`\"//visibility:public`\"])`n\" -Force"
         ],
-        "sha256": "bc81f1ba47ef5cc68ad32225c3d0e70b8c6f6077663835438da8d5733f917598",
-        "strip_prefix": "rules_java-7cf3cefd652008d0a64a419c34c13bdca6c8f178",
+        "sha256": "73b88f34dc251bce7bc6c472eb386a6c2b312ed5b473c81fe46855c248f792e0",
+        "strip_prefix": "",
         "urls": [
-            "https://mirror.bazel.build/github.com/bazelbuild/rules_java/archive/7cf3cefd652008d0a64a419c34c13bdca6c8f178.zip",
-            "https://github.com/bazelbuild/rules_java/archive/7cf3cefd652008d0a64a419c34c13bdca6c8f178.zip"
+            "https://github.com/bazelbuild/rules_java/releases/download/5.5.1/rules_java-5.5.1.tar.gz"
+        ]
+    },
+    "rules_java-5.5.1.tar.gz": {
+        "name": "rules_java-5.5.1.tar.gz",
+        "sha256": "73b88f34dc251bce7bc6c472eb386a6c2b312ed5b473c81fe46855c248f792e0",
+        "urls": [
+            "https://github.com/bazelbuild/rules_java/releases/download/5.5.1/rules_java-5.5.1.tar.gz"
         ]
     },
     "rules_jvm_external": {
@@ -2058,20 +2234,20 @@
             "https://cdn.azul.com/zulu/bin/zulu11.56.19-ca-jdk11.0.15-win_x64.zip"
         ]
     },
-    "zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip": {
-        "name": "zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip",
-        "sha256": "811d7e7591bac4f081dfb00ba6bd15b6fc5969e1f89f0f327ef75147027c3877",
+    "zulu17.38.21-ca-jdk17.0.5-linux_aarch64.tar.gz": {
+        "name": "zulu17.38.21-ca-jdk17.0.5-linux_aarch64.tar.gz",
+        "sha256": "dbc6ae9163e7ff469a9ab1f342cd1bc1f4c1fb78afc3c4f2228ee3b32c4f3e43",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip",
-            "https://cdn.azul.com/zulu/bin/zulu17.30.15-ca-jdk17.0.1-win_aarch64.zip"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-linux_aarch64.tar.gz",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-linux_aarch64.tar.gz"
         ]
     },
-    "zulu17.32.13-ca-jdk17.0.2-linux_aarch64.tar.gz": {
-        "name": "zulu17.32.13-ca-jdk17.0.2-linux_aarch64.tar.gz",
-        "sha256": "2b8066bbdbc5cff422bb6b6db1b8f8d362b576340cce8492f1255502af632b06",
+    "zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip": {
+        "name": "zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip",
+        "sha256": "bc3476f2161bf99bc9a243ff535b8fc033b34ce9a2fa4b62fb8d79b6bfdc427f",
         "urls": [
-            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_aarch64.tar.gz",
-            "https://cdn.azul.com/zulu/bin/zulu17.32.13-ca-jdk17.0.2-linux_aarch64.tar.gz"
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip",
+            "https://cdn.azul.com/zulu/bin/zulu17.38.21-ca-jdk17.0.5-win_aarch64.zip"
         ]
     },
     "zulu18.28.13-ca-jdk18.0.0-linux_aarch64.tar.gz": {

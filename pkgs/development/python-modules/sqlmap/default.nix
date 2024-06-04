@@ -1,17 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, file
-, stdenv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  file,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sqlmap";
-  version = "1.7";
+  version = "1.8.5";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EQ7kdX14WkmH4b40W2sXplZdJw9SICYBpy6lPbMx8WY=";
+    hash = "sha256-ADs0Tfd8iR1OSGkV7pFdRw0RDHbxk6Ztje1AvSIdWqI=";
   };
 
   postPatch = ''
@@ -22,6 +28,8 @@ buildPythonPackage rec {
     # since the timestamp of the all files in the nix store is reset to the unix epoch
     echo 'LAST_UPDATE_NAGGING_DAYS = float("inf")' >> sqlmap/lib/core/settings.py
   '';
+
+  build-system = [ setuptools ];
 
   # No tests in archive
   doCheck = false;
@@ -34,5 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/sqlmapproject/sqlmap/releases/tag/${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ bennofs ];
+    mainProgram = "sqlmap";
   };
 }

@@ -11,6 +11,7 @@
 , freetype
 , alsa-lib
 , libjack2
+, Accelerate
 , Cocoa
 , WebKit
 , MetalKit
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libjack2
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Accelerate
     Cocoa
     WebKit
     MetalKit

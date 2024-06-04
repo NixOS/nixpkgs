@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "pmacct";
     repo = "pmacct";
     rev = "v${version}";
-    sha256 = "sha256-AcgZ5/8d1U/zGs4QeOkgkZS7ttCW6gtUv/Xuf4O4VE0=";
+    hash = "sha256-AcgZ5/8d1U/zGs4QeOkgkZS7ttCW6gtUv/Xuf4O4VE0=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.pmacct.net/";
     changelog = "https://github.com/pmacct/pmacct/blob/v${version}/ChangeLog";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.unix;
   };

@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mmlgui";
-  version = "unstable-2022-10-13";
+  version = "210420-preview-unstable-2024-04-15";
 
   src = fetchFromGitHub {
     owner = "superctr";
     repo = "mmlgui";
-    rev = "6b2687504644b481db403f032f463e38bbbb1dca";
+    rev = "e49f225ac2b2d46056b2c45a5d31c544227c4968";
     fetchSubmodules = true;
-    sha256 = "OkYVjdvi8ls01DaIiDEPFXFCUh6g9AEeSlbDFfdPKeo=";
+    hash = "sha256-hj2k1BrE8AA2HTBEO03RammlZV2U4KW0gLJmFNiaSvI=";
   };
 
   postPatch = ''
@@ -31,9 +31,21 @@ stdenv.mkDerivation rec {
     # Removing a pkgconf-specific option makes it work with pkg-config
     substituteInPlace libvgm.mak \
       --replace '--with-path=/usr/local/lib/pkgconfig' ""
+
+    # Use correct pkg-config
+    substituteInPlace {imgui,libvgm}.mak \
+      --replace 'pkg-config' "\''$(PKG_CONFIG)"
+
+    # Don't force building tests
     substituteInPlace Makefile \
       --replace 'all: $(MMLGUI_BIN) test' 'all: $(MMLGUI_BIN)'
+
+    # Breaking change in libvgm
+    substituteInPlace src/emu_player.cpp \
+      --replace 'Resmpl_SetVals(&resmpl, 0xff' 'Resmpl_SetVals(&resmpl, RSMODE_LINEAR'
   '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -61,7 +73,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   installPhase = ''
     runHook preInstall
@@ -83,5 +95,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
+    mainProgram = "mmlgui";
   };
 }

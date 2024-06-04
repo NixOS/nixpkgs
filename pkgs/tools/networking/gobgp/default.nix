@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gobgp";
-  version = "3.10.0";
+  version = "3.26.0";
 
   src = fetchFromGitHub {
     owner = "osrg";
     repo = "gobgp";
     rev = "v${version}";
-    sha256 = "sha256-aVvzbWMh/r1k3AKDHipWkwEevYPj8Xfix8PfIMYXiTM=";
+    sha256 = "sha256-bFxKFAw02M8RmMCFFT3nu3urmvh7Wzi0rryuTi8Hw9k=";
   };
 
-  vendorHash = "sha256-9Vi8qrcFC2SazcGVgAf1vbKvxd8rTMgye63wSCaFonk=";
+  vendorHash = "sha256-wrgRQwisOHAhvRbvGXMW5VWkQuEifCwCo3usuxLie4A=";
 
   postConfigure = ''
     export CGO_ENABLED=0
@@ -28,5 +28,6 @@ buildGoModule rec {
     homepage = "https://osrg.github.io/gobgp/";
     license = licenses.asl20;
     maintainers = with maintainers; [ higebu ];
+    mainProgram = "gobgp";
   };
 }

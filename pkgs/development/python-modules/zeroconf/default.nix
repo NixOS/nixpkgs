@@ -1,45 +1,48 @@
-{ lib
-, stdenv
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, ifaddr
-, poetry-core
-, pytest-asyncio
-, pythonOlder
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  cython,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ifaddr,
+  poetry-core,
+  pytest-asyncio,
+  pytest-timeout,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.47.1";
-  format = "pyproject";
+  version = "0.132.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
     rev = "refs/tags/${version}";
-    hash = "sha256-vY4n0QIEzumtUayRbGGqycR3z7kpbOH4XKxSMcnTVrA=";
+    hash = "sha256-Jmz9zs//EVdBbEElq6OEfGZiOiMvjV5CJxZOM/lHvok=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.0.8" "Cython"
+  '';
+
+  build-system = [
+    cython
     poetry-core
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    async-timeout
-    ifaddr
-  ];
+  dependencies = [ ifaddr ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  # OSError: [Errno 48] Address already in use
-  doCheck = !stdenv.isDarwin;
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
+    pytest-timeout
     pytestCheckHook
   ];
 
@@ -48,17 +51,12 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # tests that require network interaction
+    # OSError: [Errno 19] No such device
     "test_close_multiple_times"
+    "test_integration_with_listener_ipv6"
     "test_launch_and_close"
     "test_launch_and_close_context_manager"
     "test_launch_and_close_v4_v6"
-    "test_launch_and_close_v6_only"
-    "test_integration_with_listener_ipv6"
-    # Starting with 0.39.0: AssertionError: assert [('add', '_ht..._tcp.local.')]
-    "test_service_browser_expire_callbacks"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_lots_of_names"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -69,9 +67,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
     description = "Python implementation of multicast DNS service discovery";
-    homepage = "https://github.com/jstasiak/python-zeroconf";
+    homepage = "https://github.com/python-zeroconf/python-zeroconf";
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ abbradar ];
   };

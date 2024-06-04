@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, deprecation
-, hatchling
-, pythonOlder
-, packaging
-, pytestCheckHook
-, pytest-timeout
-, setuptools
-, tomlkit
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  deprecation,
+  hatchling,
+  pythonOlder,
+  packaging,
+  pytestCheckHook,
+  pytest-timeout,
+  setuptools,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
@@ -20,12 +22,18 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyter_packaging";
     inherit version;
-    sha256 = "sha256-nZsrY7l//WeovFORwypCG8QVsmSjLJnk2NjdMdqunPQ=";
+    hash = "sha256-nZsrY7l//WeovFORwypCG8QVsmSjLJnk2NjdMdqunPQ=";
   };
 
-  nativeBuildInputs = [
-    hatchling
+  patches = [
+    (fetchpatch {
+      name = "setuptools-68-test-compatibility.patch";
+      url = "https://github.com/jupyter/jupyter-packaging/commit/e963fb27aa3b58cd70c5ca61ebe68c222d803b7e.patch";
+      hash = "sha256-NlO07wBCutAJ1DgoT+rQFkuC9Y+DyF1YFlTwWpwsJzo=";
+    })
   ];
+
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     deprecation
@@ -34,7 +42,7 @@ buildPythonPackage rec {
     tomlkit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
   ];

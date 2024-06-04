@@ -5,13 +5,19 @@
 , qtdeclarative
 , bluez
 , pkg-config
+, IOBluetooth
 , PCSC
 }:
 
 qtModule {
   pname = "qtconnectivity";
-  qtInputs = [ qtbase qtdeclarative ];
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isLinux [ bluez ];
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ PCSC ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    IOBluetooth
+    PCSC
+  ];
 }

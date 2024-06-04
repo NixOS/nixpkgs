@@ -1,5 +1,4 @@
 { mkDerivation
-, stdenv
 , lib
 , extra-cmake-modules
 , kdoctools
@@ -56,7 +55,6 @@
 , kxmlgui
 , plasma-framework
 , libqaccessibilityclient
-, python3
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -142,12 +140,12 @@ mkDerivation {
       url = "https://invent.kde.org/plasma/kwin/-/commit/9a008b223ad696db3bf5692750f2b74e578e08b8.diff";
       sha256 = "sha256-f35G+g2MVABLDbAkCed3ZmtDWrzYn1rdD08mEx35j4k=";
     })
-  ] ++ lib.optionals stdenv.isAarch64 [
-    ./0001-Revert-x11-Refactor-output-updates.patch
   ];
+
   CXXFLAGS = [
-    ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
+    ''-DNIXPKGS_XWAYLAND=\"${lib.getExe xwayland}\"''
   ];
+
   postInstall = ''
     # Some package(s) refer to these service types by the wrong name.
     # I would prefer to patch those packages, but I cannot find them!

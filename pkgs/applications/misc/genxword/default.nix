@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , gettext
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , pango
 , gtksourceview3
 }:
@@ -22,11 +22,10 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    gobject-introspection
     pango
     gtksourceview3
   ];

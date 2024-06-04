@@ -1,17 +1,18 @@
-{ lib
-, async-timeout
-, bleak
-, bleak-retry-connector
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  bleak,
+  bleak-retry-connector,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ld2410-ble";
-  version = "0.1.1";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,12 +21,15 @@ buildPythonPackage rec {
     owner = "930913";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-D8Z3OXlXWsaN0Ck9gx//J9TCaQmirYDbaXK7aTpI7ns=";
+    hash = "sha256-wQnE2hNT0UOnPJbHq1eayIO8g0XRZvEH6V19DL6RqoA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=ld2410_ble --cov-report=term-missing:skip-covered" ""
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     async-timeout
@@ -33,18 +37,9 @@ buildPythonPackage rec {
     bleak-retry-connector
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=ld2410_ble --cov-report=term-missing:skip-covered" ""
-  '';
-
-  pythonImportsCheck = [
-    "ld2410_ble"
-  ];
+  pythonImportsCheck = [ "ld2410_ble" ];
 
   meta = with lib; {
     description = "Library for the LD2410B modules from HiLinks";

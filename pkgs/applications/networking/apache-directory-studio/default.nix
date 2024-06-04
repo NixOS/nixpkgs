@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     # Upstream supports macOS and Windows too.
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "ApacheDirectoryStudio";
   };
 }

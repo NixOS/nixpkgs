@@ -27,9 +27,10 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://sites.google.com/site/tstyblo/wmctrl";
     description = "CLI tool to interact with EWMH/NetWM compatible X Window Managers";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; all;
     maintainers = [ lib.maintainers.Anton-Latukha ];
+    mainProgram = "wmctrl";
   };
 
 }

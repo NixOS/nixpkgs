@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, bleak
-, pyyaml
-, voluptuous
-, pytestCheckHook
-, pytest-asyncio
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  bleak,
+  pyyaml,
+  voluptuous,
+  pytestCheckHook,
+  pytest-asyncio,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "idasen";
-  version = "0.9.4";
+  version = "0.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,13 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "newAM";
     repo = "idasen";
-    rev = "v${version}";
-    hash = "sha256-GYQj7hiwyrCQDK19tZ7gN/pS1mFDSHgRfz7eCsKise4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TQ+DBFpG+IeZ4/dN+YKMw3AM4Dl1rpqA1kRcb3Tb3jA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     bleak
@@ -34,17 +33,16 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "idasen"
-  ];
+  pythonImportsCheck = [ "idasen" ];
 
   meta = with lib; {
     description = "Python API and CLI for the ikea IDÅSEN desk";
+    mainProgram = "idasen";
     homepage = "https://github.com/newAM/idasen";
     changelog = "https://github.com/newAM/idasen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

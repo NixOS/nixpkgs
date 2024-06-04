@@ -1,44 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, build
-, git
-, importlib-metadata
-, pep517
-, pytest-mock
-, pytestCheckHook
-, setuptools
-, tomlkit
-, virtualenv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  build,
+  git,
+  pytest-mock,
+  pytestCheckHook,
+  setuptools,
+  tomli-w,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.4.0";
+  version = "1.9.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    hash = "sha256-SCzs2v0LIgx3vBYTavPqc7uwAQdWsdmkbDyHgIjOxrk=";
+    hash = "sha256-vvwKbzGlvv2LTbXfJxQVM3nUXFGntgJxsku6cbRxCzw=";
   };
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     build
     git
-    pep517
     pytest-mock
     pytestCheckHook
     setuptools
-    tomlkit
+    tomli-w
     virtualenv
   ];
 
@@ -48,14 +43,12 @@ buildPythonPackage rec {
     "default_src_with_excluded_data"
   ];
 
-  pythonImportsCheck = [
-    "poetry.core"
-  ];
+  pythonImportsCheck = [ "poetry.core" ];
 
   # Allow for package to use pep420's native namespaces
-  pythonNamespaces = [
-    "poetry"
-  ];
+  pythonNamespaces = [ "poetry" ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
 
   meta = with lib; {
     changelog = "https://github.com/python-poetry/poetry-core/blob/${src.rev}/CHANGELOG.md";

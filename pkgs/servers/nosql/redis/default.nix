@@ -1,42 +1,65 @@
-{ lib, stdenv, fetchurl, lua, pkg-config, nixosTests
+{ lib, stdenv, fetchurl, fetchpatch, lua, jemalloc, pkg-config, nixosTests
 , tcl, which, ps, getconf
-, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 # dependency ordering is broken at the moment when building with openssl
 , tlsSupport ? !stdenv.hostPlatform.isStatic, openssl
+
+# Using system jemalloc fixes cross-compilation and various setups.
+# However the experimental 'active defragmentation' feature of redis requires
+# their custom patched version of jemalloc.
+, useSystemJemalloc ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "7.0.7";
+  version = "7.2.4";
 
   src = fetchurl {
-    url = "https://download.redis.io/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-jTJ9foh9G7MI/Deq9xegv3n1gSnjc5Bpqu6uiJVaxYY=";
+    url = "https://download.redis.io/releases/redis-${finalAttrs.version}.tar.gz";
+    hash = "sha256-jRBMJqFUsp/WfWVotPN1ISISrUHgwsqj1mSA5429O1k=";
   };
+
+  patches = [
+    # fixes: make test [exception]: Executing test client: permission denied
+    # https://github.com/redis/redis/issues/12792
+    (fetchpatch {
+      url = "https://github.com/redis/redis/pull/12887.diff";
+      hash = "sha256-VZEMShW7Ckn5hLJHffQvE94Uly41WZW1bwvxny+Y3W8=";
+    })
+  ] ++ lib.optionals useSystemJemalloc [
+    # use system jemalloc
+    (fetchurl {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/redis/-/raw/102cc861713c796756abd541bf341a4512eb06e6/redis-5.0-use-system-jemalloc.patch";
+      hash = "sha256-VPRfoSnctkkkzLrXEWQX3Lh5HmZaCXoJafyOG007KzM=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ lua ]
+    ++ lib.optional useSystemJemalloc jemalloc
     ++ lib.optional withSystemd systemd
     ++ lib.optionals tlsSupport [ openssl ];
+
+  preBuild = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/Makefile --replace "-flto" ""
+  '';
+
   # More cross-compiling fixes.
-  # Note: this enables libc malloc as a temporary fix for cross-compiling.
-  # Due to hardcoded configure flags in jemalloc, we can't cross-compile vendored jemalloc properly, and so we're forced to use libc allocator.
-  # It's weird that the build isn't failing because of failure to compile dependencies, it's from failure to link them!
   makeFlags = [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" "MALLOC=libc" ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" ]
     ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
     ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-std=c11" ];
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
 
   # darwin currently lacks a pure `pgrep` which is extensively used here
   doCheck = !stdenv.isDarwin;
-  checkInputs = [ which tcl ps ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
+  nativeCheckInputs = [ which tcl ps ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
   checkPhase = ''
     runHook preCheck
 
@@ -62,14 +85,15 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests.redis = nixosTests.redis;
+  passthru.serverBin = "redis-server";
 
   meta = with lib; {
     homepage = "https://redis.io";
     description = "An open source, advanced key-value store";
     license = licenses.bsd3;
     platforms = platforms.all;
-    changelog = "https://github.com/redis/redis/raw/${version}/00-RELEASENOTES";
-    maintainers = with maintainers; [ berdario globin marsam ];
+    changelog = "https://github.com/redis/redis/raw/${finalAttrs.version}/00-RELEASENOTES";
+    maintainers = with maintainers; [ berdario globin ];
     mainProgram = "redis-cli";
   };
-}
+})

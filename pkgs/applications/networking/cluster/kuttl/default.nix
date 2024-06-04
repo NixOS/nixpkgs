@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "kuttl";
-  version = "0.14.0";
+  version = "0.16.0";
   cli = "kubectl-kuttl";
 
   src = fetchFromGitHub {
     owner = "kudobuilder";
     repo = "kuttl";
     rev = "v${version}";
-    sha256 = "sha256-xQS7qCUTM3X4SpUZfxKHb08poJ2W52R7+TNe4BFL5sY=";
+    sha256 = "sha256-Kz8+RsLpKwXk4f3k/kBqSFGB9AvA/D6kYBtPEl6aSH8=";
   };
 
-  vendorSha256 = "sha256-u8Ezk78CrAhSeeMVXj09/Hiegtx+ZNKlr/Fg0O7+iOY=";
+  vendorHash = "sha256-IgfPXT4BhfZZVOa7eO1wKUKiDVMcN8vmH11qdWfvFww=";
 
   subPackages = [ "cmd/kubectl-kuttl" ];
 

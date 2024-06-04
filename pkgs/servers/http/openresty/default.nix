@@ -11,11 +11,11 @@
 callPackage ../nginx/generic.nix args rec {
   pname = "openresty";
   nginxVersion = "1.21.4";
-  version = "${nginxVersion}.1";
+  version = "${nginxVersion}.3";
 
   src = fetchurl {
     url = "https://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "sha256-DFCTtk94IehQZcmeXU5swxggz9fze5oN7IQgnYeir5k=";
+    sha256 = "sha256-M6hMY8/Z5GsOXGLrLdx7gGi9ouFoYxQ0O4n8P/0kzdM=";
   };
 
   # generic.nix applies fixPatch on top of every patch defined there.
@@ -41,7 +41,7 @@ callPackage ../nginx/generic.nix args rec {
 
   postInstall = ''
     ln -s $out/luajit/bin/luajit-2.1.0-beta3 $out/bin/luajit-openresty
-    ln -s $out/nginx/sbin/nginx $out/bin/nginx
+    ln -s $out/nginx/bin/nginx $out/bin/nginx
     ln -s $out/nginx/conf $out/conf
     ln -s $out/nginx/html $out/html
   '';

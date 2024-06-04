@@ -1,6 +1,4 @@
 { lib
-, autoconf
-, automake
 , autoreconfHook
 , fetchFromGitHub
 , fetchpatch

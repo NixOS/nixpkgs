@@ -1,22 +1,21 @@
 { lib, buildDunePackage, fetchFromGitHub, ocaml
-, dune-configurator
 , seq
 , qcheck, ounit2
 }:
 
 buildDunePackage rec {
-  version = "1.0";
+  version = "1.1";
   pname = "gen";
   minimalOCamlVersion = "4.03";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "gen";
     rev = "v${version}";
-    hash = "sha256-YWoVcl2TQoMIgU1LoKL16ia31zJjwAMwuphtSXnhtvw=";
+    hash = "sha256-ZytPPGhmt/uANaSgkgsUBOwyQ9ka5H4J+5CnJpEdrNk=";
   };
 
-  buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ seq ];
   checkInputs = [ qcheck ounit2 ];
 

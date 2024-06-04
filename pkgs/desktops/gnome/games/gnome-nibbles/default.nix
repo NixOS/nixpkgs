@@ -1,70 +1,50 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , gnome
-, gtk3
-, wrapGAppsHook
+, gtk4
+, wrapGAppsHook4
 , librsvg
 , gsound
-, clutter-gtk
 , gettext
 , itstool
 , vala
-, python3
 , libxml2
 , libgee
-, libgnome-games-support
+, libgnome-games-support_2_0
 , meson
 , ninja
 , desktop-file-utils
-, hicolor-icon-theme
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-nibbles";
-  version = "3.38.2";
+  version = "4.0.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-nibbles/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1naknfbciydbym79a0jq039xf0033z8gyln48c0qsbcfr2qn8yj5";
+    url = "mirror://gnome/sources/gnome-nibbles/${lib.versions.majorMinor finalAttrs.version}/gnome-nibbles-${finalAttrs.version}.tar.xz";
+    hash = "sha256-1xKkxpQ78ylWrfuSIvHxQ2mRHlTs67DNYffCWr16Wdo=";
   };
-
-  patches = [
-    # Fix build with recent Vala.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-nibbles/-/commit/62964e9256fcac616109af874dbb2bd8342a9853.patch";
-      sha256 = "4VijELRxycS8rwi1HU9U3h9K/VtdQjJntfdtMN9Uz34=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-nibbles/-/commit/1b48446068608aff9b5edf1fdbd4b8c0d9f0be94.patch";
-      sha256 = "X0+Go5ae4F06WTPDYc2HIIax8X4RDgUGO6A6Qp8UifQ=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
     ninja
     vala
-    python3
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     gettext
     itstool
     libxml2
     desktop-file-utils
-    hicolor-icon-theme
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     librsvg
     gsound
-    clutter-gtk
-    gnome.adwaita-icon-theme
     libgee
-    libgnome-games-support
+    libgnome-games-support_2_0
   ];
 
   passthru = {
@@ -76,9 +56,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Guide a worm around a maze";
-    homepage = "https://wiki.gnome.org/Apps/Nibbles";
-    license = licenses.gpl2;
+    mainProgram = "gnome-nibbles";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-nibbles";
+    license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

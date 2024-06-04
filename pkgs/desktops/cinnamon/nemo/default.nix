@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, fetchpatch
 , glib
 , gobject-introspection
 , meson
@@ -7,7 +6,7 @@
 , pkg-config
 , lib
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gtk3
 , gvfs
@@ -23,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.6.3";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CuG0s2gtuYwuIvti5xGiGJa5C5IcruFtNhv6s1vcuUA=";
+    sha256 = "sha256-vSLFp0sgqGsZtcXdv82PVH0HcBbmcxrMySLFCBrLJpA=";
   };
 
   patches = [
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
     libexif
     exempi
     gvfs
-    gobject-introspection
     libgsf
   ];
 
@@ -57,15 +55,30 @@ stdenv.mkDerivation rec {
     meson
     pkg-config
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     shared-mime-info
+    gobject-introspection
   ];
 
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
+
+  postInstall = ''
+    # This fixes open as root and handles nemo-with-extensions well.
+    # https://github.com/NixOS/nixpkgs/issues/297570
+    substituteInPlace $out/share/polkit-1/actions/org.nemo.root.policy \
+      --replace-fail "$out/bin/nemo" "/run/current-system/sw/bin/nemo"
+  '';
+
+  preFixup = ''
+    # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${xapp}/share"
+    )
+  '';
 
   # Taken from libnemo-extension.pc.
   passthru.extensiondir = "lib/nemo/extensions-3.0";

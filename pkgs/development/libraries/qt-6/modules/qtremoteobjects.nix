@@ -5,5 +5,5 @@
 
 qtModule {
   pname = "qtremoteobjects";
-  qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ];
 }

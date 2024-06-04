@@ -1,51 +1,47 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-ffs";
-  version = "3.2";
-  format = "pyproject";
+  version = "3.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ffs";
-    rev = version;
-    hash = "sha256-kcYSoY3a8ljY9LWzOUekLBzokE+wJrG1KEr0p5CCj0U=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-L2LL+Er5nSYpRBW5CO9EBkYY85vnDkuvaOP0kbkH2T4=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.ffs"
-  ];
+  pythonImportsCheck = [ "dissect.ffs" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the FFS file system";
     homepage = "https://github.com/fox-it/dissect.ffs";
+    changelog = "https://github.com/fox-it/dissect.ffs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

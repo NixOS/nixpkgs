@@ -1,9 +1,10 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, stdenv
 , makeWrapper
 , pkg-config
+, zstd
+, stdenv
 , alsa-lib
 , libxkbcommon
 , udev
@@ -15,26 +16,32 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jumpy";
-  version = "0.5.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "fishfolk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5hgd4t9ZKHmv8wzED7Tn+ykzUM0EbQqRX15HBHzXtJY=";
+    sha256 = "sha256-ggePJH2kKJ17aOWRKUnLyolIdSzlc6Axf5Iw74iFfek=";
   };
 
-  cargoSha256 = "sha256-cK5n75T+Kkd6F4q4MFZNn0R6W6Nk2/H23AGhIe2FCig=";
-
-  auditable = true; # TODO: remove when this is the default
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "bevy_egui-0.21.0" = "sha256-hu55tZQppw1NajwqIsYsw6de0IAwQwgra3D9OFzSSLc=";
+      "bones_asset-0.3.0" = "sha256-1UeOXW6O/gMQBBUnHxRreJgmiUTPC5SJB+uLn9V8aa4=";
+      "kira-0.8.5" = "sha256-z4R5aIaoRQQprL6JsVrFI69rwTOsW5OH01+jORS+hBQ=";
+    };
+  };
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = [
+    zstd
+  ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     libxkbcommon
     udev
@@ -45,19 +52,22 @@ rustPlatform.buildRustPackage rec {
     xorg.libXi
     xorg.libXrandr
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
+    darwin.apple_sdk_11_0.frameworks.Cocoa
     rustPlatform.bindgenHook
   ];
 
-  postPatch = ''
-    touch ../$(stripHash $cargoDeps)/taffy/README.md
-  '';
+  cargoBuildFlags = [ "--bin" "jumpy" ];
 
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
+
+  # jumpy only loads assets from the current directory
+  # https://github.com/fishfolk/bones/blob/f84d07c2f2847d9acd5c07098fe1575abc496400/framework_crates/bones_asset/src/io.rs#L50
   postInstall = ''
     mkdir $out/share
     cp -r assets $out/share
-    wrapProgram $out/bin/jumpy \
-      --set-default JUMPY_ASSET_DIR $out/share/assets
+    wrapProgram $out/bin/jumpy --chdir $out/share
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
@@ -67,6 +77,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A tactical 2D shooter played by up to 4 players online or on a shared screen";
+    mainProgram = "jumpy";
     homepage = "https://fishfight.org/";
     changelog = "https://github.com/fishfolk/jumpy/releases/tag/v${version}";
     license = with licenses; [ mit /* or */ asl20 ];

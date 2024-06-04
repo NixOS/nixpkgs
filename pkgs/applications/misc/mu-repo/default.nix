@@ -13,7 +13,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ git ];
 
-  checkInputs = [ pytestCheckHook git ];
+  nativeCheckInputs = [ pytestCheckHook git ];
 
   passthru.tests.version = testers.testVersion {
     package = mu-repo;

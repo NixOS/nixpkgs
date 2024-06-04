@@ -25,7 +25,6 @@
 , SDL
 , gsl
 , cppzmq
-, zeromq
 # Needed only if qt-gui is disabled, from some reason
 , icu
 # GUI related
@@ -41,11 +40,7 @@
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
-, versionAttr ? {
-  major = "3.8";
-  minor = "5";
-  patch = "0";
-}
+, version ? "3.8.5.0"
 }:
 
 let
@@ -67,7 +62,7 @@ let
         # building with boost 1.7x fails
         ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
-        Mako
+        mako
         six
       ];
     };
@@ -118,7 +113,7 @@ let
     gnuradio-companion = {
       pythonRuntime = with python.pkgs; [
         pyyaml
-        Mako
+        mako
         numpy
         pygobject3
       ];
@@ -203,8 +198,13 @@ let
       runtime = [ gsl ];
     };
     gr-zeromq = {
-      runtime = [ cppzmq zeromq ];
+      runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
+      pythonRuntime = [
+        # Will compile without this, but it is required by tests, and by some
+        # gr blocks.
+        python.pkgs.pyzmq
+      ];
     };
   };
   shared = (import ./shared.nix {
@@ -215,7 +215,7 @@ let
       removeReferencesTo
       featuresInfo
       features
-      versionAttr
+      version
       sourceSha256
       overrideSrc
       fetchFromGitHub
@@ -223,23 +223,30 @@ let
     qt = qt5;
     gtk = gtk3;
   });
-  inherit (shared) hasFeature; # function
+  inherit (shared.passthru) hasFeature; # function
 in
 
-stdenv.mkDerivation rec {
-  inherit pname;
-  inherit (shared)
-    version
-    src
-    nativeBuildInputs
-    buildInputs
-    disallowedReferences
-    stripDebugList
-    doCheck
-    dontWrapPythonPrograms
-    dontWrapQtApps
-    meta
-  ;
+stdenv.mkDerivation (finalAttrs: (shared // {
+  inherit pname version;
+  # Will still evaluate correctly if not used here. It only helps nix-update
+  # find the right file in which version is defined.
+  inherit (shared) src;
+  # Remove failing tests
+  preConfigure = (shared.preConfigure or "") + ''
+    # https://github.com/gnuradio/gnuradio/issues/3801
+    rm gr-blocks/python/blocks/qa_cpp_py_binding.py
+    rm gr-blocks/python/blocks/qa_cpp_py_binding_set.py
+    rm gr-blocks/python/blocks/qa_ctrlport_probes.py
+    # Tests that fail due to numpy deprecations upstream hasn't accomodated to yet.
+    rm gr-fec/python/fec/qa_polar_decoder_sc.py
+    rm gr-fec/python/fec/qa_polar_decoder_sc_list.py
+    rm gr-fec/python/fec/qa_polar_decoder_sc_systematic.py
+    rm gr-fec/python/fec/qa_polar_encoder.py
+    rm gr-fec/python/fec/qa_polar_encoder_systematic.py
+    rm gr-filter/python/filter/qa_freq_xlating_fft_filter.py
+    # Failed with libstdc++ from GCC 13
+    rm gr-filter/python/filter/qa_filterbank.py
+  '';
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.3_8.patch
@@ -254,8 +261,10 @@ stdenv.mkDerivation rec {
     inherit
       boost
       volk
-      log4cpp
     ;
+    # Used by many gnuradio modules, the same attribute is present in
+    # gnuradio3.10 where there it's spdlog.
+    logLib = log4cpp;
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {
@@ -290,4 +299,4 @@ stdenv.mkDerivation rec {
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
     ''
   ;
-}
+}))

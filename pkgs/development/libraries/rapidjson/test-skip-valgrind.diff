@@ -1,0 +1,7 @@
+--- a/test/unittest/CMakeLists.txt
++++ b/test/unittest/CMakeLists.txt
+@@ -82,3 +81,0 @@
+-    add_test(NAME valgrind_unittest
+-        COMMAND valgrind --leak-check=full --error-exitcode=1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/unittest --gtest_filter=-SIMD.*
+-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+

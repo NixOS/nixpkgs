@@ -1,11 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, jinja2
-, msrest
-, vsts
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  msrest,
+  vsts,
 }:
 
 buildPythonPackage rec {
   version = "0.0.22";
+  format = "setuptools";
   pname = "azure-functions-devops-build";
 
   src = fetchFromGitHub {
@@ -16,7 +20,11 @@ buildPythonPackage rec {
     sha256 = "1slc7jd92v9q1qg1yacnrpi2a7hi7iw61wzbzfd6wx9q63pw9yqi";
   };
 
-  propagatedBuildInputs = [ jinja2 msrest vsts ];
+  propagatedBuildInputs = [
+    jinja2
+    msrest
+    vsts
+  ];
 
   # circular dependency with azure-cli-core
   doCheck = false;

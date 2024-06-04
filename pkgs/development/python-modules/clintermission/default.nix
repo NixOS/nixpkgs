@@ -1,38 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, prompt-toolkit }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  prompt-toolkit,
+}:
 
 buildPythonPackage rec {
   pname = "clintermission";
-  version = "0.2.0";
+  version = "0.3.1";
   format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sebageek";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "09wl0rpw6c9hab51rs957z64b0v9j4fcbqbn726wnapf4z5w6yxv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-e7C9IDr+mhVSfU8lMywjX1BYwFo/qegPNzabak7UPcY=";
   };
 
-  propagatedBuildInputs = [
-    prompt-toolkit
-  ];
+  propagatedBuildInputs = [ prompt-toolkit ];
 
   # repo contains no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "clintermission"
-  ];
+  pythonImportsCheck = [ "clintermission" ];
 
   meta = with lib; {
     description = "Non-fullscreen command-line selection menu";
     homepage = "https://github.com/sebageek/clintermission";
+    changelog = "https://github.com/sebageek/clintermission/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

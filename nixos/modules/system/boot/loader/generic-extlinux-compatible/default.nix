@@ -20,12 +20,12 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to generate an extlinux-compatible configuration file
           under `/boot/extlinux.conf`.  For instance,
           U-Boot's generic distro boot support uses this file format.
 
-          See [U-boot's documentation](http://git.denx.de/?p=u-boot.git;a=blob;f=doc/README.distro;hb=refs/heads/master)
+          See [U-boot's documentation](https://u-boot.readthedocs.io/en/latest/develop/distro.html)
           for more information.
         '';
       };
@@ -33,7 +33,7 @@ in
       useGenerationDeviceTree = mkOption {
         default = true;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to generate Device Tree-related directives in the
           extlinux configuration.
 
@@ -49,7 +49,7 @@ in
         default = 20;
         example = 10;
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of configurations in the boot menu.
         '';
       };
@@ -57,7 +57,7 @@ in
       populateCmd = mkOption {
         type = types.str;
         readOnly = true;
-        description = lib.mdDoc ''
+        description = ''
           Contains the builder command used to populate an image,
           honoring all options except the `-c <path-to-default-configuration>`
           argument.

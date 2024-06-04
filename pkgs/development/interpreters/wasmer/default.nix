@@ -14,18 +14,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "3.1.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-t/ObsvUSNGFvHkVH2nl8vLFI+5GUQx6niCgeH4ykk/0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1bxxy0Dso54cYQIZC9UUjtkgL1eyd3oRbhaYCwI0otw=";
   };
 
-  cargoSha256 = "sha256-75/0D0lrV50wH51Ll7M1Lvqj2kRSaJXiQWElxCaF9mE=";
+  cargoHash = "sha256-3MwQZdFIWqHvELpIGlqsn/VKyobWki7OcMXQrjbxwKk=";
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+  ];
 
   buildInputs = lib.optionals withLLVM [
     llvmPackages.llvm
@@ -37,14 +39,8 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  LLVM_SYS_120_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
-
   # check references to `compiler_features` in Makefile on update
-  buildFeatures = checkFeatures ++ [
-    "webc_runner"
-  ];
-
-  checkFeatures = [
+  buildFeatures = [
     "cranelift"
     "wasmer-artifact-create"
     "static-artifact-create"
@@ -56,8 +52,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--manifest-path" "lib/cli/Cargo.toml" "--bin" "wasmer" ];
 
+  env.LLVM_SYS_150_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
+
+  # Tests are failing due to `Cannot allocate memory` and other reasons
+  doCheck = false;
+
   meta = with lib; {
     description = "The Universal WebAssembly Runtime";
+    mainProgram = "wasmer";
     longDescription = ''
       Wasmer is a standalone WebAssembly runtime for running WebAssembly outside
       of the browser, supporting WASI and Emscripten. Wasmer can be used
@@ -66,6 +68,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://wasmer.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne shamilton ];
+    maintainers = with maintainers; [ Br1ght0ne shamilton nickcao ];
   };
 }

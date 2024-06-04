@@ -15,8 +15,6 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ react ];
 
-  strictDeps = true;
-
   meta = with lib; {
     description = "An OCaml module for functional reactive programming (FRP) based on React";
     homepage = "https://github.com/ocsigen/reactiveData";

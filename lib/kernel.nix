@@ -1,6 +1,8 @@
 { lib }:
 
-with lib;
+let
+  inherit (lib) mkIf versionAtLeast versionOlder;
+in
 {
 
 
@@ -8,14 +10,14 @@ with lib;
   option = x:
       x // { optional = true; };
 
-  yes      = { tristate    = "y"; optional = false; };
-  no       = { tristate    = "n"; optional = false; };
-  module   = { tristate    = "m"; optional = false; };
+  yes      = { tristate    = "y";  optional = false; };
+  no       = { tristate    = "n";  optional = false; };
+  module   = { tristate    = "m";  optional = false; };
+  unset    = { tristate    = null; optional = false; };
   freeform = x: { freeform = x; optional = false; };
 
-  /*
-    Common patterns/legacy used in common-config/hardened/config.nix
-   */
+
+  #  Common patterns/legacy used in common-config/hardened/config.nix
   whenHelpers = version: {
     whenAtLeast = ver: mkIf (versionAtLeast version ver);
     whenOlder   = ver: mkIf (versionOlder version ver);

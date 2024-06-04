@@ -7,7 +7,7 @@
 
 let
   name = "liblc3";
-  version = "1.0.1";
+  version = "1.1.1";
 in
 stdenv.mkDerivation {
   pname = name;
@@ -17,19 +17,24 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "liblc3";
     rev = "v${version}";
-    sha256 = "sha256-W0pCfFmM+6N6+HdGdQ/GBNHjBspkwtlxZC2m2noKGx0=";
+    sha256 = "sha256-h9qy04FqlHXp0bOUoP4+WqI0yrM78e56S+DEn3HztYo=";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     meson
     ninja
   ];
 
+  # LTO does not work on Darwin: https://github.com/NixOS/nixpkgs/issues/19098
+  mesonFlags = lib.optionals stdenv.isDarwin [ "-Db_lto=false" ];
+
   meta = with lib; {
     description = "LC3 (Low Complexity Communication Codec) is an efficient low latency audio codec";
     homepage = "https://github.com/google/liblc3";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ jansol ];
   };
 }

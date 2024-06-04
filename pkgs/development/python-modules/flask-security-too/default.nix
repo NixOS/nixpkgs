@@ -1,67 +1,75 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 
-# extras: babel
-, babel
-, flask-babel
+  # extras: babel
+  babel,
+  flask-babel,
 
-# extras: common
-, bcrypt
-, bleach
-, flask-mailman
-, qrcode
+  # extras: common
+  bcrypt,
+  bleach,
+  flask-mailman,
 
-# extras: fsqla
-, flask-sqlalchemy
-, sqlalchemy
-, sqlalchemy-utils
+  # extras: fsqla
+  flask-sqlalchemy,
+  sqlalchemy,
+  sqlalchemy-utils,
 
-# extras: mfa
-, cryptography
-, phonenumbers
+  # extras: mfa
+  cryptography,
+  phonenumbers,
+  webauthn,
+  qrcode,
 
-# propagates
-, blinker
-, email-validator
-, flask
-, flask-login
-, flask_principal
-, flask-wtf
-, itsdangerous
-, passlib
+  # propagates
+  email-validator,
+  flask,
+  flask-login,
+  flask-principal,
+  flask-wtf,
+  passlib,
+  importlib-resources,
+  wtforms,
 
-# tests
-, argon2-cffi
-, flask-mongoengine
-, mongoengine
-, mongomock
-, peewee
-, pony
-, pytestCheckHook
-, python-dateutil
-, zxcvbn
+  # tests
+  argon2-cffi,
+  freezegun,
+  mongoengine,
+  mongomock,
+  peewee,
+  pony,
+  pytestCheckHook,
+  zxcvbn,
 }:
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "5.0.2";
+  version = "5.4.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    sha256 = "sha256-Nv7g2l0bPSEcrydFU7d1NHjCCJl8Ykq7hOu6QmHeZcI=";
+    hash = "sha256-YrGTl+jXGo1MuNwNRAnMehSXmCVJAwOWlgruUYdV5YM=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
-    blinker
     email-validator
     flask
     flask-login
-    flask_principal
+    flask-principal
     flask-wtf
-    itsdangerous
     passlib
+    importlib-resources
+    wtforms
   ];
 
   passthru.optional-dependencies = {
@@ -73,7 +81,6 @@ buildPythonPackage rec {
       bcrypt
       bleach
       flask-mailman
-      qrcode
     ];
     fsqla = [
       flask-sqlalchemy
@@ -83,30 +90,38 @@ buildPythonPackage rec {
     mfa = [
       cryptography
       phonenumbers
+      webauthn
+      qrcode
     ];
   };
 
-  checkInputs = [
-    argon2-cffi
-    flask-mongoengine
-    mongoengine
-    mongomock
-    peewee
-    pony
-    pytestCheckHook
-    python-dateutil
-    zxcvbn
-  ]
-  ++ passthru.optional-dependencies.babel
-  ++ passthru.optional-dependencies.common
-  ++ passthru.optional-dependencies.fsqla
-  ++ passthru.optional-dependencies.mfa;
+  nativeCheckInputs =
+    [
+      argon2-cffi
+      freezegun
+      mongoengine
+      mongomock
+      peewee
+      pony
+      pytestCheckHook
+      zxcvbn
+      freezegun
+    ]
+    ++ passthru.optional-dependencies.babel
+    ++ passthru.optional-dependencies.common
+    ++ passthru.optional-dependencies.fsqla
+    ++ passthru.optional-dependencies.mfa;
 
+  disabledTests = [
+    # needs /etc/resolv.conf
+    "test_login_email_whatever"
+  ];
 
   pythonImportsCheck = [ "flask_security" ];
 
   meta = with lib; {
-    homepage = "https://pypi.org/project/Flask-Security-Too/";
+    changelog = "https://github.com/Flask-Middleware/flask-security/blob/${version}/CHANGES.rst";
+    homepage = "https://github.com/Flask-Middleware/flask-security";
     description = "Simple security for Flask apps (fork)";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];

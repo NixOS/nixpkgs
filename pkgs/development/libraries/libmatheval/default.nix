@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, guile, autoconf, flex, fetchpatch }:
+{ lib, stdenv, fetchurl, pkg-config, guile, flex, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "1.1.11";
   pname = "libmatheval";
 
-  nativeBuildInputs = [ pkg-config autoconf flex ];
+  nativeBuildInputs = [ pkg-config flex ];
   buildInputs = [ guile ];
 
   src = fetchurl {
@@ -14,19 +14,23 @@ stdenv.mkDerivation rec {
 
   # Patches coming from debian package
   # https://packages.debian.org/source/sid/libs/libmatheval
-  patches = [ (fetchpatch {
-                url = "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/002-skip-docs.patch";
-                sha256 = "1nnkk9aw4jj6nql46zhwq6vx74zrmr1xq5ix0xyvpawhabhgjg62";
-              } )
-              (fetchpatch {
-                url = "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/003-guile2.0.patch";
-                sha256 = "1xgfw4finfvr20kjbpr4yl2djxmyr4lmvfa11pxirfvhrdi602qj";
-               } )
-              (fetchpatch {
-                url = "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/disable_coth_test.patch";
-                sha256 = "0bai8jrd5azfz5afmjixlvifk34liq58qb7p9kb45k6kc1fqqxzm";
-               } )
-            ];
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/libm/libmatheval/1.1.11%2Bdfsg-5/debian/patches/002-skip-docs.patch";
+      hash = "sha256-wjz54FKQq7t9Bz0W3EOu+ZPTt8EcfkMotkZKwlWa09o=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/libm/libmatheval/1.1.11%2Bdfsg-5/debian/patches/003-guile3.0.patch";
+      hash = "sha256-H3E/2m4MfQAbjpXbVFyNhikVifi3spVThzaVU5srmjI=";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/libm/libmatheval/1.1.11%2Bdfsg-5/debian/patches/disable_coth_test.patch";
+      hash = "sha256-9XeMXWDTzELWTPcsjAqOlIzp4qY9yupU+e6r0rJEUS0=";
+    })
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev guile}/include/guile/${guile.effectiveVersion}";
+  env.NIX_LDFLAGS = "-L${guile}/lib -lguile-${guile.effectiveVersion}";
 
   meta = {
     description = "A library to parse and evaluate symbolic expressions input as text";
@@ -40,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/libmatheval/";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.bzizou ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
 

@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "selene";
-  version = "0.24.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "kampfkarren";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tw9OLdXhqxgqROub0P/+nd4LQGNw3QDxlCyyf8ogRQM=";
+    sha256 = "sha256-NbVSFYv3nyEjSf0bFajcMaoWP2bS0EfJT8tDddjS7jg=";
   };
 
-  cargoSha256 = "sha256-5/xAX8BhB81cB7x2Pe/MKCV0Fi76ZcO6XHFQxTVIuLA=";
+  cargoHash = "sha256-e3oQUFtgdjqPiB2YpmqnFUG2scmYJhLSpUaw0W6RxIk=";
 
   nativeBuildInputs = lib.optionals robloxSupport [
     pkg-config
@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A blazing-fast modern Lua linter written in Rust";
+    mainProgram = "selene";
     homepage = "https://github.com/kampfkarren/selene";
     changelog = "https://github.com/kampfkarren/selene/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;

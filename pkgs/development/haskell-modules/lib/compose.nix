@@ -108,6 +108,11 @@ rec {
      of test suites listed in the package description file.
    */
   dontCheck = overrideCabal (drv: { doCheck = false; });
+  /* The dontCheckIf variant sets doCheck = false if the condition
+     applies. In any other case the previously set/default value is used.
+     This prevents accidentally re-enabling tests in a later override.
+     */
+  dontCheckIf = condition: if condition then dontCheck else lib.id;
 
   /* doBenchmark enables dependency checking and compilation
      for benchmarks listed in the package description file.
@@ -354,7 +359,12 @@ rec {
   /* Add a dummy command to trigger a build despite an equivalent
      earlier build that is present in the store or cache.
    */
-  triggerRebuild = i: overrideCabal (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
+  triggerRebuild = i: overrideCabal (drv: {
+    postUnpack = drv.postUnpack or "" + ''
+
+      # trigger rebuild ${toString i}
+    '';
+  });
 
   /* Override the sources for the package and optionally the version.
      This also takes of removing editedCabalFile.
@@ -393,7 +403,7 @@ rec {
 
   # Some information about which phases should be run.
   controlPhases = ghc: let inherit (ghcInfo ghc) isCross; in
-                  { doCheck ? !isCross && (lib.versionOlder "7.4" ghc.version)
+                  { doCheck ? !isCross
                   , doBenchmark ? false
                   , ...
                   }: { inherit doCheck doBenchmark; };
@@ -407,7 +417,9 @@ rec {
 
     self: super:
       let
-        haskellPaths = builtins.attrNames (builtins.readDir directory);
+        haskellPaths =
+          lib.filter (lib.hasSuffix ".nix")
+            (builtins.attrNames (builtins.readDir directory));
 
         toKeyVal = file: {
           name  = builtins.replaceStrings [ ".nix" ] [ "" ] file;
@@ -464,4 +476,44 @@ rec {
   allowInconsistentDependencies = overrideCabal (drv: {
     allowInconsistentDependencies = true;
   });
+
+  # Work around a Cabal bug requiring pkg-config --static --libs to work even
+  # when linking dynamically, affecting Cabal 3.8 and 3.9.
+  # https://github.com/haskell/cabal/issues/8455
+  #
+  # For this, we treat the runtime system/pkg-config dependencies of a Haskell
+  # derivation as if they were propagated from their dependencies which allows
+  # pkg-config --static to work in most cases.
+  #
+  # Warning: This function may change or be removed at any time, e.g. if we find
+  # a different workaround, upstream fixes the bug or we patch Cabal.
+  __CabalEagerPkgConfigWorkaround =
+    let
+      # Take list of derivations and return list of the transitive dependency
+      # closure, only taking into account buildInputs. Loosely based on
+      # closePropagationFast.
+      propagatedPlainBuildInputs = drvs:
+        builtins.map (i: i.val) (
+          builtins.genericClosure {
+            startSet = builtins.map (drv:
+              { key = drv.outPath; val = drv; }
+            ) drvs;
+            operator = { val, ... }:
+              if !lib.isDerivation val
+              then [ ]
+              else
+                builtins.concatMap (drv:
+                  if !lib.isDerivation drv
+                  then [ ]
+                  else [ { key = drv.outPath; val = drv; } ]
+                ) (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
+          }
+        );
+    in
+    overrideCabal (old: {
+      benchmarkPkgconfigDepends = propagatedPlainBuildInputs old.benchmarkPkgconfigDepends or [ ];
+      executablePkgconfigDepends = propagatedPlainBuildInputs old.executablePkgconfigDepends or [ ];
+      libraryPkgconfigDepends = propagatedPlainBuildInputs old.libraryPkgconfigDepends or [ ];
+      testPkgconfigDepends = propagatedPlainBuildInputs old.testPkgconfigDepends or [ ];
+    });
 }

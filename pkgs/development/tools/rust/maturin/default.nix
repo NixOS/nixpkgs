@@ -3,29 +3,24 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkg-config
-, dbus
 , libiconv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
-  version = "0.14.5";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    hash = "sha256-3TEEmraQ9KGx29ok7IUdVzTW0ilaAci1dOZUlKvQYJE=";
+    hash = "sha256-3rID2epV1pCwpofFf9Wuafs1SlBWH7e7/4HPaSUAriQ=";
   };
 
-  cargoHash = "sha256-/biWBTNIysg6HDozyF8UdKoxlgkHl9tnyean8+333hI=";
+  cargoHash = "sha256-hPyPMQm/Oege0PPjYIrd1fEDOGqoQ1ffS2l6o8je4t4=";
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = lib.optionals stdenv.isLinux [ dbus ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   # Requires network access, fails in sandbox.
   doCheck = false;
@@ -34,6 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Build and publish Rust crates Python packages";
+    mainProgram = "maturin";
     longDescription = ''
       Build and publish Rust crates with PyO3, rust-cpython, and
       cffi bindings as well as Rust binaries as Python packages.
@@ -43,7 +39,8 @@ rustPlatform.buildRustPackage rec {
       Python and can upload them to PyPI.
     '';
     homepage = "https://github.com/PyO3/maturin";
-    license = licenses.asl20;
+    changelog = "https://github.com/PyO3/maturin/blob/v${version}/Changelog.md";
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ ];
   };
 }

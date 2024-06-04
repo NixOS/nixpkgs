@@ -7,19 +7,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "conmon-rs";
-  version = "0.4.0";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VwVJWf9tKZ5rVF8tXDf35zsS2PipqC8FPbXUpOzsw/Y=";
+    hash = "sha256-+RKjJtI01Y56+cFDdOSAL4BodI7R/rM3B3ht3p6+xzs=";
   };
 
   nativeBuildInputs = [ capnproto protobuf ];
   doCheck = false;
 
-  cargoSha256 = "sha256-zY9fsZK1C3HnCxeNA5dCbQQHYx3IVDMHCHYwFh5ev2k=";
+  cargoHash = "sha256-4VOse+y0EO9IORyeAO/j1t6ssQARJp7lK21TUJVuH78=";
 
   meta = with lib; {
     description = "An OCI container runtime monitor written in Rust";

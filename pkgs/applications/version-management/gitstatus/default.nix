@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gitstatus";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "gitstatus";
     rev = "v${version}";
-    sha256 = "sha256-mVfB3HWjvk4X8bmLEC/U8SKBRytTh/gjjuReqzN5qTk=";
+    sha256 = "sha256-b+9bwJ87VV6rbOPobkwMkDXGH34STjYPlt8wCRR5tEc=";
   };
 
   buildInputs = [ (callPackage ./romkatv_libgit2.nix { }) ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   # that the script was sourced successfully and that the "gitstatus_query"
   # command ran successfully. This tests the binary itself and the zsh
   # integration.
-  installCheckInputs = [ git zsh ];
+  nativeInstallCheckInputs = [ git zsh ];
   doInstallCheck = true;
   installCheckPhase = ''
     TEMP=$(mktemp -d)
@@ -87,5 +87,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mmlb hexa SuperSandro2000 ];
     platforms = platforms.all;
+    mainProgram = "gitstatusd";
   };
 }

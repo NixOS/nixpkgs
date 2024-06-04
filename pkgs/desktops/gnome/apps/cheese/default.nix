@@ -2,7 +2,7 @@
 , stdenv
 , gettext
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , gnome-video-effects
 , libcanberra-gtk3
 , pkg-config
@@ -28,19 +28,18 @@
 , meson
 , ninja
 , dbus
-, python3
 , pipewire
 }:
 
 stdenv.mkDerivation rec {
   pname = "cheese";
-  version = "43.0";
+  version = "44.1";
 
   outputs = [ "out" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "dFdMSjwycyfxotbQs/k3vir7B6YVm21425wZLeZmfws=";
+    sha256 = "XyGFxMmeVN3yuLr2DIKBmVDlSVLhMuhjmHXz7cv49o4=";
   };
 
   nativeBuildInputs = [
@@ -55,9 +54,8 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     glib # for glib-compile-schemas
   ];
 
@@ -80,11 +78,6 @@ stdenv.mkDerivation rec {
     pipewire # PipeWire provides a gstreamer plugin for using PipeWire for video
   ];
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
-
   preFixup = ''
     gappsWrapperArgs+=(
       # Effects
@@ -105,8 +98,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Cheese";
+    homepage = "https://gitlab.gnome.org/GNOME/cheese";
     description = "Take photos and videos with your webcam, with fun graphical effects";
+    mainProgram = "cheese";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

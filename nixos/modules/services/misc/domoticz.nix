@@ -12,18 +12,18 @@ in {
   options = {
 
     services.domoticz = {
-      enable = mkEnableOption (lib.mdDoc pkgDesc);
+      enable = mkEnableOption pkgDesc;
 
       bind = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = lib.mdDoc "IP address to bind to.";
+        description = "IP address to bind to.";
       };
 
       port = mkOption {
         type = types.port;
         default = 8080;
-        description = lib.mdDoc "Port to bind to for HTTP, set to 0 to disable HTTP.";
+        description = "Port to bind to for HTTP, set to 0 to disable HTTP.";
       };
 
     };
@@ -35,6 +35,7 @@ in {
     systemd.services."domoticz" = {
       description = pkgDesc;
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         DynamicUser = true;

@@ -4,15 +4,15 @@ with lib;
 
 let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtl8192eu";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "rtl8192eu";
-  version = "${kernel.version}-4.4.1.20220614";
+  version = "${kernel.version}-4.4.1.20240507";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = "rtl8192eu-linux-driver";
-    rev = "6ba1f320963376f15ea216238c0b62ff3e71fa82";
-    sha256 = "sha256-c5swRxSjWT1tCcR7tfFKdAdVVmAEYgMZuOwUxGYYESI=";
+    rev = "27410641da6926eb1ac565068ff89d35f7496328";
+    sha256 = "sha256-/BztTE3yKw35Oo7KkzHMtD+8qpJNXWiSwR3YjrotR0I=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/Mange/rtl8192eu-linux-driver";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = stdenv.hostPlatform.isAarch64 || kernel.kernelAtLeast "5.18";
+    broken = stdenv.hostPlatform.isAarch64;
     maintainers = with maintainers; [ troydm ];
   };
 }

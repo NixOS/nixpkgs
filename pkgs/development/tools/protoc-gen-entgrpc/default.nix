@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "protoc-gen-entgrpc";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "ent";
     repo = "contrib";
     rev = "v${version}";
-    sha256 = "sha256-hK4I2LVvw7hkbUKRuDoaRuNX3nwlwipYucnXwzOCcXs=";
+    sha256 = "sha256-fXvpPH4b1JG++z0KEm9BNu5pGkneefNVvi9R5R3FqB4=";
   };
 
-  vendorSha256 = "sha256-bAM+NxD7mNd2fFxRDHCAzJTD7PVfT/9XHF88v9RHKwE=";
+  vendorHash = "sha256-SdUs2alcc4rA6CGIrnaLO7KCseP4a0v6WE58JcRGr0k=";
 
   subPackages = [ "entproto/cmd/protoc-gen-entgrpc" ];
 
@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Generator of an implementation of the service interface for ent protobuff";
+    mainProgram = "protoc-gen-entgrpc";
     downloadPage = "https://github.com/ent/contrib/";
     license = licenses.asl20;
     homepage = "https://entgo.io/";

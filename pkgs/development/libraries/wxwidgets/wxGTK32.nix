@@ -2,9 +2,6 @@
 , stdenv
 , expat
 , fetchFromGitHub
-, fetchpatch
-, fetchurl
-, gnome2
 , gst_all_1
 , gtk3
 , libGL
@@ -23,8 +20,8 @@
 , compat28 ? false
 , compat30 ? true
 , unicode ? true
-, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, withWebKit ? stdenv.isDarwin
+, withMesa ? !stdenv.isDarwin
+, withWebKit ? true
 , webkitgtk
 , setfile
 , AGL
@@ -35,6 +32,7 @@
 , AVFoundation
 , AVKit
 , WebKit
+, fetchpatch
 }:
 let
   catch = fetchFromGitHub {
@@ -53,22 +51,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  version = "3.2.1";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-k6td/8pF7ad7+gVm7L0jX79fHKwR7/qrOBpSFggyaI0=";
+    hash = "sha256-YkV150sDsfBEHvHne0GF6i8Y5881NrByPkLtPAmb24E=";
   };
 
-  # Workaround for pkgsMusl.wxGTK32 failing as:
-  #   "./src/unix/uilocale.cpp:650:37: error: ‘_NL_IDENTIFICATION_TERRITORY’ was not declared in this scope"
-  # On upgrade, please test building wxwidgets for pkgsMusl, and remove this patch if unnecessary.
-  patches = lib.optional stdenv.hostPlatform.isMusl [
+  patches = [
     (fetchpatch {
-      url = "https://github.com/wxWidgets/wxWidgets/commit/1faf1796b23b2503296d9b1e9ad39047d633f8c9.patch";
-      sha256 = "sha256-0FbfzGzzkriLD2iDcRcBXgYqjHtxFsmSlhGE5d18/bo=";
+      name = "avoid_gtk3_crash.patch";
+      url = "https://github.com/wxWidgets/wxWidgets/commit/8ea22b5e92bf46add0b20059f6e39a938858ff97.patch";
+      hash = "sha256-zAyqVTdej4F3R7vVMLiKkXqJTAHDtGYJnyjaRyDmMOM=";
     })
   ];
 
@@ -113,6 +109,8 @@ stdenv.mkDerivation rec {
     "--disable-monolithic"
     "--enable-mediactrl"
     "--with-nanosvg"
+    "--disable-rpath"
+    "--enable-repro-build"
     (if compat28 then "--enable-compat28" else "--disable-compat28")
     (if compat30 then "--enable-compat30" else "--disable-compat30")
   ] ++ lib.optional unicode "--enable-unicode"
@@ -125,7 +123,7 @@ stdenv.mkDerivation rec {
     "--enable-webviewwebkit"
   ];
 
-  SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib";
+  SEARCH_LIB = lib.optionalString (!stdenv.isDarwin) "${libGLU.out}/lib ${libGL.out}/lib";
 
   preConfigure = ''
     cp -r ${catch}/* 3rdparty/catch/

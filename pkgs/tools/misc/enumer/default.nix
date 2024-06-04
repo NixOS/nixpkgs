@@ -1,26 +1,26 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , buildGoModule
+, fetchFromGitHub
 }:
 
 buildGoModule rec {
   pname = "enumer";
-  version = "1.5.7";
+  version = "1.5.9";
 
   src = fetchFromGitHub {
     owner = "dmarkham";
     repo = "enumer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2fVWrrWOiCtg7I3Lul2PgQ2u/qDEDioPSB61Tp0rfEo=";
+    hash = "sha256-NYL36GBogFM48IgIWhFa1OLZNUeEi0ppS6KXybnPQks=";
   };
 
-  vendorSha256 = "sha256-BmFv0ytRnjaB7z7Gb+38Fw2ObagnaFMnMhlejhaGxsk=";
+  vendorHash = "sha256-CJCay24FlzDmLjfZ1VBxih0f+bgBNu+Xn57QgWT13TA=";
 
   meta = with lib; {
     description = "Go tool to auto generate methods for enums";
     homepage = "https://github.com/dmarkham/enumer";
     license = licenses.bsd2;
     maintainers = with maintainers; [ hexa ];
+    mainProgram = "enumer";
   };
 }

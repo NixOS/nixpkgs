@@ -7,23 +7,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
-  version = "2.4.0";
+  version = "2.18.2";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-k87EgsH7EdnqYBoXHpPu7hB/goEXuZsz8mNsrvM+Hgw=";
+    hash = "sha256-hW37pz7iLkBspnQ0ckfVdZUKppXUPrgjHgwmlhsanlI=";
   };
 
-  cargoHash = "sha256-ujc3tH9I2WqwxmqBaUdE8lJQtj7XS56IVaxfZWhmvF8=";
+  cargoHash = "sha256-5o7TtqJh2CRwTrBU2Xbdh7qae5iWVlUfg4ddzxYepmU=";
 
-  buildInputs = lib.optional stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices
   ];
 
   meta = with lib; {
     description = "Background rust code checker";
+    mainProgram = "bacon";
     homepage = "https://github.com/Canop/bacon";
     changelog = "https://github.com/Canop/bacon/blob/v${version}/CHANGELOG.md";
     license = licenses.agpl3Only;

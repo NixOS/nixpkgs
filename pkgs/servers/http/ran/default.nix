@@ -16,7 +16,7 @@ buildGoModule rec {
     hash = "sha256-iMvUvzr/jaTNdgHQFuoJNJnnkx2XHIUUlrPWyTlreEw=";
   };
 
-  vendorSha256 = "sha256-ObroruWWNilHIclqNvbEaa7vwk+1zMzDKbjlVs7Fito=";
+  vendorHash = "sha256-ObroruWWNilHIclqNvbEaa7vwk+1zMzDKbjlVs7Fito=";
 
   CGO_ENABLED = 0;
 
@@ -40,6 +40,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/m3ng9i/ran";
     description = "Ran is a simple web server for serving static files";
+    mainProgram = "ran";
     license = licenses.mit;
     maintainers = with maintainers; [ tomberek ];
   };

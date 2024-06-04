@@ -20,7 +20,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the Name Service Cache Daemon.
           Disabling this is strongly discouraged, as this effectively disables NSS Lookups
           from all non-glibc NSS modules, including the ones provided by systemd.
@@ -29,17 +29,18 @@ in
 
       enableNsncd = mkOption {
         type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to use nsncd instead of nscd.
+        default = true;
+        description = ''
+          Whether to use nsncd instead of nscd from glibc.
           This is a nscd-compatible daemon, that proxies lookups, without any caching.
+          Using nscd from glibc is discouraged.
         '';
       };
 
       user = mkOption {
         type = types.str;
         default = "nscd";
-        description = lib.mdDoc ''
+        description = ''
           User account under which nscd runs.
         '';
       };
@@ -47,7 +48,7 @@ in
       group = mkOption {
         type = types.str;
         default = "nscd";
-        description = lib.mdDoc ''
+        description = ''
           User group under which nscd runs.
         '';
       };
@@ -55,7 +56,10 @@ in
       config = mkOption {
         type = types.lines;
         default = builtins.readFile ./nscd.conf;
-        description = lib.mdDoc "Configuration to use for Name Service Cache Daemon.";
+        description = ''
+          Configuration to use for Name Service Cache Daemon.
+          Only used in case glibc-nscd is used.
+        '';
       };
 
       package = mkOption {
@@ -69,7 +73,7 @@ in
             then pkgs.stdenv.cc.libc.bin
             else pkgs.glibc.bin;
         '';
-        description = lib.mdDoc ''
+        description = ''
           package containing the nscd binary to be used by the service.
           Ignored when enableNsncd is set to true.
         '';

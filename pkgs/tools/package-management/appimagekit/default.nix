@@ -17,7 +17,7 @@ let
   };
 
   # squashfuse adapted to nix from cmake experession in "${appimagekit_src}/lib/libappimage/cmake/dependencies.cmake"
-  appimagekit_squashfuse = squashfuse.overrideAttrs (attrs: rec {
+  appimagekit_squashfuse = squashfuse.overrideAttrs rec {
     pname = "squashfuse";
     version = "unstable-2016-10-09";
 
@@ -40,7 +40,7 @@ let
     # Workaround build failure on -fno-common toolchains:
     #   ld: libsquashfuse_ll.a(libfuseprivate_la-fuseprivate.o):(.bss+0x8):
     #     multiple definition of `have_libloaded'; runtime.4.o:(.bss.have_libloaded+0x0): first defined here
-    NIX_CFLAGS_COMPILE = "-fcommon";
+    env.NIX_CFLAGS_COMPILE = "-fcommon";
 
     preConfigure = ''
       sed -i "/PKG_CHECK_MODULES.*/,/,:./d" configure
@@ -61,7 +61,7 @@ let
       cp -v ./.libs/*.a $out/lib
       cp -v ./*.h $out/include
     '';
-  });
+  };
 
 in stdenv.mkDerivation rec {
   pname = "appimagekit";
@@ -109,7 +109,7 @@ in stdenv.mkDerivation rec {
       --unset SOURCE_DATE_EPOCH
   '';
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   # for debugging
   passthru = {

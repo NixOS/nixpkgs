@@ -1,47 +1,57 @@
-{ lib
-, amqtt
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  amqtt,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  paho-mqtt,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "roombapy";
-  version = "1.6.5";
-  format = "pyproject";
+  version = "1.8.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pschmitt";
     repo = "roombapy";
-    rev = version;
-    sha256 = "sha256-Xjeh29U+FCzI5n/i5s6wC0B88Ktmb8pnNDdOzCiKWi4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1yfmaTzZ7cZW2+Yb3Zbo8+5TfD+H1sA0+SzC1c9MdsQ=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
+  pythonRelaxDeps = [ "orjson" ];
+
   propagatedBuildInputs = [
+    mashumaro
+    orjson
     paho-mqtt
   ];
 
-  checkInputs = [
+  optional-dependencies.cli = [
+    click
+    tabulate
+  ];
+
+  nativeCheckInputs = [
     amqtt
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # hbmqtt was replaced by amqtt
-    substituteInPlace tests/test_roomba_integration.py \
-      --replace "from hbmqtt.broker import Broker" "from amqtt.broker import Broker"
-  '';
 
   disabledTestPaths = [
     # Requires network access
@@ -53,13 +63,13 @@ buildPythonPackage rec {
     "test_roomba_connect"
   ];
 
-  pythonImportsCheck = [
-    "roombapy"
-  ];
+  pythonImportsCheck = [ "roombapy" ];
 
   meta = with lib; {
     description = "Python program and library to control Wi-Fi enabled iRobot Roombas";
+    mainProgram = "roombapy";
     homepage = "https://github.com/pschmitt/roombapy";
+    changelog = "https://github.com/pschmitt/roombapy/releases/tag/${version}";
     license = licenses.mit;
     maintainers = [ ];
   };

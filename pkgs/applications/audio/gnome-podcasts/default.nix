@@ -2,71 +2,58 @@
 , lib
 , rustPlatform
 , fetchFromGitLab
-, fetchpatch
+, cargo
 , meson
 , ninja
 , gettext
-, python3
 , pkg-config
+, rustc
 , glib
-, libhandy
-, gtk3
+, gtk4
+, libadwaita
 , appstream-glib
 , desktop-file-utils
 , dbus
 , openssl
 , sqlite
 , gst_all_1
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-podcasts";
-  version = "0.5.1";
+  version = "0.6.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "podcasts";
     rev = version;
-    sha256 = "00vy1qkkpn76jdpybsq9qp8s6fh1ih10j73p2x43sl97m5g8944h";
+    hash = "sha256-LPwCYgAFgUMFQZ0i4ldiuGYGMMWcMqYct3/o7eTIhmU=";
   };
 
-  patches = [
-    # Fix build with meson 0.61, can be removed on next release.
-    # podcasts-gtk/resources/meson.build:5:0: ERROR: Function does not take positional arguments.
-    # podcasts-gtk/resources/meson.build:30:0: ERROR: Function does not take positional arguments.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/World/podcasts/-/commit/6614bb62ecbec7c3b18ea7fe44beb50fe7942b27.patch";
-      sha256 = "3TVKFV9V6Ofdajgkdc+j+yxsU21C4JWSc6GjLExSM00=";
-    })
-  ];
-
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    sha256 = "0y34b5rnr75h7dxbx93mafrmwsh187wq5js7fmkb1m1yyybj1v1x";
+    inherit pname version src;
+    hash = "sha256-n3ZcUhqn1rvvgkBKSKvH0b8wbOCqcBGwpb2OqMe8h0s=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    gettext
-    python3
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
-    wrapGAppsHook
-    glib
+    rustc
+    wrapGAppsHook4
+    appstream-glib
+    desktop-file-utils
   ];
 
   buildInputs = [
-    appstream-glib
-    desktop-file-utils
     glib
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
+    gettext
     dbus
     openssl
     sqlite
@@ -79,14 +66,10 @@ stdenv.mkDerivation rec {
   # tests require network
   doCheck = false;
 
-  postPatch = ''
-    chmod +x scripts/compile-gschema.py # patchShebangs requires executable file
-    patchShebangs scripts/compile-gschema.py scripts/cargo.sh scripts/test.sh
-  '';
-
   meta = with lib; {
     description = "Listen to your favorite podcasts";
-    homepage = "https://wiki.gnome.org/Apps/Podcasts";
+    mainProgram = "gnome-podcasts";
+    homepage = "https://apps.gnome.org/Podcasts/";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

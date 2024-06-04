@@ -5,7 +5,6 @@ with lib;
 let
   dataDir = "/var/lib/matrix-appservice-discord";
   registrationFile = "${dataDir}/discord-registration.yaml";
-  appDir = "${pkgs.matrix-appservice-discord}/${pkgs.matrix-appservice-discord.passthru.nodeAppDir}";
   cfg = config.services.matrix-appservice-discord;
   opt = options.services.matrix-appservice-discord;
   # TODO: switch to configGen.json once RFC42 is implemented
@@ -14,7 +13,9 @@ let
 in {
   options = {
     services.matrix-appservice-discord = {
-      enable = mkEnableOption (lib.mdDoc "a bridge between Matrix and Discord");
+      enable = mkEnableOption "a bridge between Matrix and Discord";
+
+      package = mkPackageOption pkgs "matrix-appservice-discord" { };
 
       settings = mkOption rec {
         # TODO: switch to types.config.json as prescribed by RFC42 once it's implemented
@@ -40,7 +41,7 @@ in {
             };
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           {file}`config.yaml` configuration as a Nix attribute set.
 
           Configuration options should match those described in
@@ -57,7 +58,7 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           File containing environment variables to be passed to the matrix-appservice-discord service,
           in which secret tokens can be specified securely by defining values for
           `APPSERVICE_DISCORD_AUTH_CLIENT_I_D` and
@@ -69,7 +70,7 @@ in {
         type = types.str;
         default = "http://localhost:${toString cfg.port}";
         defaultText = literalExpression ''"http://localhost:''${toString config.${opt.port}}"'';
-        description = lib.mdDoc ''
+        description = ''
           The URL where the application service is listening for HS requests.
         '';
       };
@@ -77,7 +78,7 @@ in {
       port = mkOption {
         type = types.port;
         default = 9005; # from https://github.com/Half-Shot/matrix-appservice-discord/blob/master/package.json#L11
-        description = lib.mdDoc ''
+        description = ''
           Port number on which the bridge should listen for internal communication with the Matrix homeserver.
         '';
       };
@@ -85,18 +86,18 @@ in {
       localpart = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The user_id localpart to assign to the AS.
         '';
       };
 
       serviceDependencies = mkOption {
         type = with types; listOf str;
-        default = optional config.services.matrix-synapse.enable "matrix-synapse.service";
+        default = optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
         defaultText = literalExpression ''
-          optional config.services.matrix-synapse.enable "matrix-synapse.service"
+          optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
         '';
-        description = lib.mdDoc ''
+        description = ''
           List of Systemd services to require and wait for when starting the application service,
           such as the Matrix homeserver if it's running on the same host.
         '';
@@ -114,7 +115,7 @@ in {
 
       preStart = ''
         if [ ! -f '${registrationFile}' ]; then
-          ${pkgs.matrix-appservice-discord}/bin/matrix-appservice-discord \
+          ${cfg.package}/bin/matrix-appservice-discord \
             --generate-registration \
             --url=${escapeShellArg cfg.url} \
             ${optionalString (cfg.localpart != null) "--localpart=${escapeShellArg cfg.localpart}"} \
@@ -135,13 +136,13 @@ in {
 
         DynamicUser = true;
         PrivateTmp = true;
-        WorkingDirectory = appDir;
+        WorkingDirectory = "${cfg.package}/${cfg.package.passthru.nodeAppDir}";
         StateDirectory = baseNameOf dataDir;
         UMask = "0027";
         EnvironmentFile = cfg.environmentFile;
 
         ExecStart = ''
-          ${pkgs.matrix-appservice-discord}/bin/matrix-appservice-discord \
+          ${cfg.package}/bin/matrix-appservice-discord \
             --file='${registrationFile}' \
             --config='${settingsFile}' \
             --port='${toString cfg.port}'

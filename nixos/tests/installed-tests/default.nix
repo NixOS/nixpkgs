@@ -1,5 +1,5 @@
 # NixOS tests for gnome-desktop-testing-runner using software
-# See https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests
+# See https://github.com/NixOS/nixpkgs/issues/34987
 
 { system ? builtins.currentSystem,
   config ? {},
@@ -107,5 +107,6 @@ in
   malcontent = callInstalledTest ./malcontent.nix {};
   ostree = callInstalledTest ./ostree.nix {};
   pipewire = callInstalledTest ./pipewire.nix {};
+  upower = callInstalledTest ./upower.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }

@@ -3,7 +3,7 @@
 let
 
   inherit (lib) concatMapStringsSep concatStringsSep isInt isList literalExpression;
-  inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption optional types;
+  inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption mkRenamedOptionModule optional types;
 
   cfg = config.services.automysqlbackup;
   pkg = pkgs.automysqlbackup;
@@ -26,24 +26,28 @@ let
 
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "automysqlbackup" "config" ] [ "services" "automysqlbackup" "settings" ])
+  ];
+
   # interface
   options = {
     services.automysqlbackup = {
 
-      enable = mkEnableOption (lib.mdDoc "AutoMySQLBackup");
+      enable = mkEnableOption "AutoMySQLBackup";
 
       calendar = mkOption {
         type = types.str;
         default = "01:15:00";
-        description = lib.mdDoc ''
+        description = ''
           Configured when to run the backup service systemd unit (DayOfWeek Year-Month-Day Hour:Minute:Second).
         '';
       };
 
-      config = mkOption {
+      settings = mkOption {
         type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           automysqlbackup configuration. Refer to
           {file}`''${pkgs.automysqlbackup}/etc/automysqlbackup.conf`
           for details on supported values.
@@ -112,7 +116,18 @@ in
 
     services.mysql.ensureUsers = optional (config.services.mysql.enable && cfg.config.mysql_dump_host == "localhost") {
       name = user;
-      ensurePermissions = { "*.*" = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES, EVENT"; };
+      ensurePermissions = {
+        "*.*" = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES, EVENT";
+
+        # https://forums.mysql.com/read.php?10,668311,668315#msg-668315
+        "function sys.extract_table_from_file_name" = "execute";
+        "function sys.format_path" = "execute";
+        "function sys.format_statement" = "execute";
+        "function sys.extract_schema_from_file_name" = "execute";
+        "function sys.ps_thread_account" = "execute";
+        "function sys.format_time" = "execute";
+        "function sys.format_bytes" = "execute";
+      };
     };
 
   };

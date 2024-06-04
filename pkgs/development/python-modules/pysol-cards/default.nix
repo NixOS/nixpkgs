@@ -1,19 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi, six, random2 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  random2,
+}:
 
 buildPythonPackage rec {
   pname = "pysol-cards";
-  version = "0.14.2";
+  version = "0.16.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "pysol_cards";
-    sha256 = "sha256-wI3oV1d7w+7JcMOt08RbNlMWzChErNYIO7Vuox1A6vA=";
+    hash = "sha256-C4fKez+ZFVzM08/XOfc593RNb4GYIixtSToDSj1FcMM=";
   };
 
-  propagatedBuildInputs = [ six random2 ];
+  propagatedBuildInputs = [
+    six
+    random2
+  ];
 
   meta = with lib; {
     description = "Generates Solitaire deals";
+    mainProgram = "pysol_cards";
     homepage = "https://github.com/shlomif/pysol_cards";
     license = licenses.mit;
     maintainers = with maintainers; [ mwolfe ];

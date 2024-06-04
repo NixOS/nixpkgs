@@ -8,12 +8,13 @@
 , doxygen
 , swig
 , python
-, log4cpp
+, logLib
 , mpir
 , boost
 , gmp
 , icu
 , limesuite
+, gnuradioAtLeast
 }:
 
 let
@@ -33,7 +34,7 @@ let
 in mkDerivation {
   pname = "gr-limesdr";
   inherit version src;
-  disabledForGRafter = "3.9";
+  disabled = gnuradioAtLeast "3.9";
 
   nativeBuildInputs = [
     cmake
@@ -42,7 +43,7 @@ in mkDerivation {
     python
   ];
   buildInputs = [
-    log4cpp
+    logLib
     mpir
     boost
     gmp

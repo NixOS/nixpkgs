@@ -1,39 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, typing-inspect
-, marshmallow-enum
-, hypothesis
-, mypy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  marshmallow,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytestCheckHook,
+  pythonOlder,
+  typing-inspect,
 }:
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.5.7";
+  version = "0.6.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lidatong";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1xv9br6mm5pcwfy10ykbc1c0n83fqyj1pa81z272kqww7wpkkp6j";
+    repo = "dataclasses-json";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JpZwRln7QC0SO/+8xFxc6xrC+ZBFSHVQ9NJscAO+Lf8=";
   };
 
-  propagatedBuildInputs = [
-    typing-inspect
-    marshmallow-enum
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
   ];
 
-  checkInputs = [
+  dependencies = [
+    typing-inspect
+    marshmallow
+  ];
+
+  nativeCheckInputs = [
     hypothesis
-    mypy
     pytestCheckHook
   ];
 
-  disabledTests = [
+  disabledTestPaths = [
+    # fails with the following error and avoid dependency on mypy
     # mypy_main(None, text_io, text_io, [__file__], clean_exit=True)
     # TypeError: main() takes at most 4 arguments (5 given)
-    "test_type_hints"
+    "tests/test_annotations.py"
   ];
 
   pythonImportsCheck = [ "dataclasses_json" ];
@@ -41,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple API for encoding and decoding dataclasses to and from JSON";
     homepage = "https://github.com/lidatong/dataclasses-json";
+    changelog = "https://github.com/lidatong/dataclasses-json/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ albakham ];
   };

@@ -6,16 +6,7 @@ let
   cfg = config.services.jitsi-videobridge;
   attrsToArgs = a: concatStringsSep " " (mapAttrsToList (k: v: "${k}=${toString v}") a);
 
-  # HOCON is a JSON superset that videobridge2 uses for configuration.
-  # It can substitute environment variables which we use for passwords here.
-  # https://github.com/lightbend/config/blob/master/README.md
-  #
-  # Substitution for environment variable FOO is represented as attribute set
-  # { __hocon_envvar = "FOO"; }
-  toHOCON = x: if isAttrs x && x ? __hocon_envvar then ("\${" + x.__hocon_envvar + "}")
-    else if isAttrs x then "{${ concatStringsSep "," (mapAttrsToList (k: v: ''"${k}":${toHOCON v}'') x) }}"
-    else if isList x then "[${ concatMapStringsSep "," toHOCON x }]"
-    else builtins.toJSON x;
+  format = pkgs.formats.hocon { };
 
   # We're passing passwords in environment variables that have names generated
   # from an attribute name, which may not be a valid bash identifier.
@@ -38,11 +29,12 @@ let
         hostname = xmppConfig.hostName;
         domain = xmppConfig.domain;
         username = xmppConfig.userName;
-        password = { __hocon_envvar = toVarName name; };
+        password = format.lib.mkSubstitution (toVarName name);
         muc_jids = xmppConfig.mucJids;
         muc_nickname = xmppConfig.mucNickname;
         disable_certificate_verification = xmppConfig.disableCertificateVerification;
       });
+      apis.rest.enabled = cfg.colibriRestApi;
     };
   };
 
@@ -50,8 +42,13 @@ let
   jvbConfig = recursiveUpdate defaultJvbConfig cfg.config;
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "jitsi-videobridge" "apis" ]
+      "services.jitsi-videobridge.apis was broken and has been migrated into the boolean option services.jitsi-videobridge.colibriRestApi. It is set to false by default, setting it to true will correctly enable the private /colibri rest API."
+    )
+  ];
   options.services.jitsi-videobridge = with types; {
-    enable = mkEnableOption (lib.mdDoc "Jitsi Videobridge, a WebRTC compatible video router");
+    enable = mkEnableOption "Jitsi Videobridge, a WebRTC compatible video router";
 
     config = mkOption {
       type = attrs;
@@ -67,7 +64,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Videobridge configuration.
 
         See <https://github.com/jitsi/jitsi-videobridge/blob/master/jvb/src/main/resources/reference.conf>
@@ -76,7 +73,7 @@ in
     };
 
     xmppConfigs = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         XMPP servers to connect to.
 
         See <https://github.com/jitsi/jitsi-videobridge/blob/master/doc/muc.md> for more information.
@@ -98,7 +95,7 @@ in
           hostName = mkOption {
             type = str;
             example = "xmpp.example.org";
-            description = lib.mdDoc ''
+            description = ''
               Hostname of the XMPP server to connect to. Name of the attribute set is used by default.
             '';
           };
@@ -106,35 +103,35 @@ in
             type = nullOr str;
             default = null;
             example = "auth.xmpp.example.org";
-            description = lib.mdDoc ''
+            description = ''
               Domain part of JID of the XMPP user, if it is different from hostName.
             '';
           };
           userName = mkOption {
             type = str;
             default = "jvb";
-            description = lib.mdDoc ''
+            description = ''
               User part of the JID.
             '';
           };
           passwordFile = mkOption {
             type = str;
             example = "/run/keys/jitsi-videobridge-xmpp1";
-            description = lib.mdDoc ''
+            description = ''
               File containing the password for the user.
             '';
           };
           mucJids = mkOption {
             type = str;
             example = "jvbbrewery@internal.xmpp.example.org";
-            description = lib.mdDoc ''
+            description = ''
               JID of the MUC to join. JiCoFo needs to be configured to join the same MUC.
             '';
           };
           mucNickname = mkOption {
             # Upstream DEBs use UUID, let's use hostname instead.
             type = str;
-            description = lib.mdDoc ''
+            description = ''
               Videobridges use the same XMPP account and need to be distinguished by the
               nickname (aka resource part of the JID). By default, system hostname is used.
             '';
@@ -142,7 +139,7 @@ in
           disableCertificateVerification = mkOption {
             type = bool;
             default = false;
-            description = lib.mdDoc ''
+            description = ''
               Whether to skip validation of the server's certificate.
             '';
           };
@@ -161,7 +158,7 @@ in
         type = nullOr str;
         default = null;
         example = "192.168.1.42";
-        description = lib.mdDoc ''
+        description = ''
           Local address when running behind NAT.
         '';
       };
@@ -170,7 +167,7 @@ in
         type = nullOr str;
         default = null;
         example = "1.2.3.4";
-        description = lib.mdDoc ''
+        description = ''
           Public address when running behind NAT.
         '';
       };
@@ -179,7 +176,7 @@ in
     extraProperties = mkOption {
       type = attrsOf str;
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Additional Java properties passed to jitsi-videobridge.
       '';
     };
@@ -187,19 +184,18 @@ in
     openFirewall = mkOption {
       type = bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to open ports in the firewall for the videobridge.
       '';
     };
 
-    apis = mkOption {
-      type = with types; listOf str;
-      description = lib.mdDoc ''
-        What is passed as --apis= parameter. If this is empty, "none" is passed.
-        Needed for monitoring jitsi.
+    colibriRestApi = mkOption {
+      type = bool;
+      description = ''
+        Whether to enable the private rest API for the COLIBRI control interface.
+        Needed for monitoring jitsi, enabling scraping of the /colibri/stats endpoint.
       '';
-      default = [];
-      example = literalExpression "[ \"colibri\" \"rest\" ]";
+      default = false;
     };
   };
 
@@ -216,7 +212,7 @@ in
         "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
         "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "videobridge";
         "-Djava.util.logging.config.file" = "/etc/jitsi/videobridge/logging.properties";
-        "-Dconfig.file" = pkgs.writeText "jvb.conf" (toHOCON jvbConfig);
+        "-Dconfig.file" = format.generate "jvb.conf" jvbConfig;
         # Mitigate CVE-2021-44228
         "-Dlog4j2.formatMsgNoLookups" = true;
       } // (mapAttrs' (k: v: nameValuePair "-D${k}" v) cfg.extraProperties);
@@ -233,7 +229,7 @@ in
         "export ${toVarName name}=$(cat ${xmppConfig.passwordFile})\n"
       ) cfg.xmppConfigs))
       + ''
-        ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge --apis=${if (cfg.apis == []) then "none" else concatStringsSep "," cfg.apis}
+        ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge
       '';
 
       serviceConfig = {

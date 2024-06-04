@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.digitemp.com";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ zseri ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

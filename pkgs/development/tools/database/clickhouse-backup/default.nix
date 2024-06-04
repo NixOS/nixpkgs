@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "clickhouse-backup";
-  version = "2.1.3";
+  version = "2.5.11";
 
   src = fetchFromGitHub {
     owner = "AlexAkulov";
-    repo = pname;
+    repo = "clickhouse-backup";
     rev = "v${version}";
-    sha256 = "sha256-RaThNBTRBECSeSeJOQ2UsrkBHjSjrS91vIRF/4MGek4=";
+    hash = "sha256-MqtlrAn4FRjZEocGRLRbbTJePvWPZbhE+7MaFZQgyeY=";
   };
 
-  vendorSha256 = "sha256-sSN+HAUC9rJc9XMTG8H+Zg7mzZSVxn6Z7dixJ10mOuM=";
+  vendorHash = "sha256-vwcItklYe6ljFdGTxef19plaI5OMoOtQohY0xZLBUos=";
 
   ldflags = [
     "-X main.version=${version}"
@@ -32,9 +32,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for easy ClickHouse backup and restore with cloud storages support";
+    mainProgram = "clickhouse-backup";
     homepage = "https://github.com/AlexAkulov/clickhouse-backup";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

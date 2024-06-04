@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, aiohttp
-, async-timeout
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  aiohttp,
+  async-timeout,
+  yarl,
+  aresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "here-routing";
-  version = "0.2.0";
+  version = "1.0.0";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   format = "pyproject";
 
@@ -23,16 +24,14 @@ buildPythonPackage rec {
     owner = "eifinger";
     repo = "here_routing";
     rev = "v${version}";
-    hash = "sha256-IXiYLDrPXc6YT8u0QT6f2GAjBNYhWwzkFxGhmAyiq5s=";
+    hash = "sha256-wdjPbM9J+2q3NisdlOHIddSWHHIfwQY/83v6IBAXSq0=";
   };
 
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -40,7 +39,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

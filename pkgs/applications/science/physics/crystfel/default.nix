@@ -2,22 +2,23 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
+, fetchzip
 , cmake
 , lz4
-, bzip2
 , gfortran
-, m4
+, bzip2
 , hdf5
 , gsl
-, slurm
 , unzip
 , makeWrapper
+, zlib
 , meson
-, git
 , ninja
+, pandoc
 , eigen
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , flex
 , bison
 , doxygen
@@ -38,14 +39,12 @@
 let
   libccp4 = stdenv.mkDerivation rec {
     pname = "libccp4";
-    version = "6.5.1";
+    version = "8.0.0";
     src = fetchurl {
-      # Original mirror, now times out
-      # url = "ftp://ftp.ccp4.ac.uk/opensource/${pname}-${version}.tar.gz";
-      url = "https://deb.debian.org/debian/pool/main/libc/${pname}/${pname}_${version}.orig.tar.gz";
-      sha256 = "1rfvjliny29vy5bdi6rrjaw9hhhhh72pw536xwvqipqcjlylf2r8";
+      url = "https://ftp.ccp4.ac.uk/opensource/libccp4-${version}.tar.gz";
+      hash = "sha256-y4E66GYSoIZjKd6rfO6W6sVz2BvlskA0HUD5rVMi/y0=";
     };
-    nativeBuildInputs = [ gfortran m4 ];
+    nativeBuildInputs = [ meson ninja ];
     buildInputs = [ hdf5 gsl ];
 
     configureFlags = [ "FFLAGS=-fallow-argument-mismatch" ];
@@ -53,16 +52,22 @@ let
     # libccp4 tries to read syminfo.lib by looking at an environment variable, which hinders reproducibility.
     # We hard-code this by providing a little patch and then passing the absolute path to syminfo.lib as a
     # preprocessor flag.
-    preBuild = ''
-      makeFlagsArray+=(CFLAGS='-DNIX_PROVIDED_SYMOP_FILE=\"${placeholder "out"}/share/syminfo.lib\"')
-      export NIX_LDFLAGS="-L${gfortran.cc}/lib64 -L${gfortran.cc}/lib $NIX_LDFLAGS";
-    '';
-    makeFlags = [ "CFLAGS='-DNIX_PROVIDED_SYMOP_FILE=\"${placeholder "out"}/share/syminfo.lib\"" ];
+    env.NIX_CFLAGS_COMPILE = "-DNIX_PROVIDED_SYMOP_FILE=\"${placeholder "out"}/share/ccp4/syminfo.lib\"";
 
     patches = [
       ./libccp4-use-hardcoded-syminfo-lib.patch
-      ./0002-fix-ftbfs-with-gcc-10.patch
     ];
+
+    postPatch =
+      let
+        mesonPatch = fetchzip {
+          url = "https://wrapdb.mesonbuild.com/v2/libccp4c_8.0.0-1/get_patch#somefile.zip";
+          hash = "sha256-ohskfKh+972Pl56KtwAeWwHtAaAFNpCzz5vZBAI/vdU=";
+        };
+      in
+      ''
+        cp ${mesonPatch}/meson.build .
+      '';
   };
   # This is the statically-linked, pre-built binary of mosflm. Compiling it ourselves turns out to be very difficult
   # since the build process is very hard-coded for a specific machine, architecture, and libraries.
@@ -79,11 +84,11 @@ let
         else
           fetchurl {
             url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${builtins.replaceStrings [ "." ] [ "" ] version}/pre-built/mosflm-linux-64-noX11.zip";
-            sha256 = "1rqh3nprxfmnyihllw31nb8i3wfhybmsic6y7z6wn4rafyv3w4fk";
+            hash = "sha256:1f2qins5kaz5v6mkaclncqpirx3mlz177ywm13py9p6s9mk99g32";
           };
       mosflmBinary = if stdenv.isDarwin then "bin/mosflm" else "mosflm-linux-64-noX11";
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "mosflm";
 
       inherit version src;
@@ -105,10 +110,10 @@ let
 
   xgandalf = stdenv.mkDerivation rec {
     pname = "xgandalf";
-    version = "c15afa2381d5f87d4aefcc8181a15b4a6fd3a955";
+    version = "c6c5003ff1086e8c0fb5313660b4f02f3a3aab7b";
     src = fetchurl {
-      url = "https://gitlab.desy.de/thomas.white/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-      sha256 = "11i1w57a3rpnb4x5y4n8d3iffn5m9w1zydl69syzljdk3aqg2pv8";
+      url = "https://gitlab.desy.de/thomas.white/xgandalf/-/archive/${version}/xgandalf-${version}.tar.gz";
+      hash = "sha256-/uZlBwAINSoYqgLQFTMz8rS1Rpadu79JkO6Bu/+Nx9E=";
     };
 
     nativeBuildInputs = [ meson pkg-config ninja ];
@@ -117,10 +122,10 @@ let
 
   pinkIndexer = stdenv.mkDerivation rec {
     pname = "pinkindexer";
-    version = "8a828788f8272a89d484b00afbd2500c2c1ff974";
+    version = "15caa21191e27e989b750b29566e4379bc5cd21a";
     src = fetchurl {
       url = "https://gitlab.desy.de/thomas.white/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-      sha256 = "1mkgf1xd91ay0z0632kzxm0z3wcxf0cayjvs6a3znds72dkhfsyh";
+      hash = "sha256-v/SCJiHAV05Lc905y/dE8uBXlW+lLX9wau4XORYdbQg=";
     };
 
     nativeBuildInputs = [ meson pkg-config ninja ];
@@ -129,10 +134,10 @@ let
 
   fdip = stdenv.mkDerivation rec {
     pname = "fdip";
-    version = "29da626f17f66d5c0780fc59b1eafb7c85b81dd6";
+    version = "5628fedddd79323b4b26df9b85e9543d83286d4c";
     src = fetchurl {
-      url = "https://gitlab.desy.de/philipp.middendorf/fdip/-/archive/${version}/fdip-${version}.tar.gz";
-      sha256 = "184l76r4fgznq54rnhgjk7dg41kqdl0d1da02vr5y4cs2fyqppky";
+      url = "https://gitlab.desy.de/thomas.white/fdip/-/archive/${version}/fdip-${version}.tar.gz";
+      hash = "sha256-EaihnW7p//ecgMn+KKlfmBeXrnAqs+HdhN+ovuSrtiQ=";
     };
 
     nativeBuildInputs = [ meson ninja pkg-config ];
@@ -145,9 +150,16 @@ let
     src = fetchFromGitHub {
       owner = "nexusformat";
       repo = pname;
-      rev = "d469f175e5273c1d488e71a6134f84088f57d39c";
-      sha256 = "1jrzzh75i68ad1yrim7s1nx9wy0s49ghkziahs71mm5azprm6gh9";
+      rev = "49e3b65eca772bca77af13ba047d8b577673afba";
+      hash = "sha256-bEzfWdZuHmb0PDzCqy8Dey4tLtq+4coO0sT0GzqrTYI=";
     };
+
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/spanezz/HDF5-External-Filter-Plugins/commit/6b337fe36da97a3ef72354393687ce3386c0709d.patch";
+        hash = "sha256-wnBEdL/MjEyRHPwaVtuhzY+DW1AFeaUQUmIXh+JaRHo=";
+      })
+    ];
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [ hdf5 lz4 bzip2 ];
@@ -158,16 +170,30 @@ let
       "-DENABLE_BZIP2_PLUGIN=yes"
     ];
   };
+
+  millepede-ii = stdenv.mkDerivation rec {
+    pname = "millepede-ii";
+    version = "04-13-06";
+    src = fetchurl {
+      url = "https://gitlab.desy.de/claus.kleinwort/millepede-ii/-/archive/V${version}/millepede-ii-V${version}.tar.gz";
+      hash = "sha256-aFoo8AGBsUEN2u3AmnSpTqJ6JeNV6j9vkAFTZ34I+sI=";
+    };
+
+    nativeBuildInputs = [ gfortran ];
+    buildInputs = [ zlib ];
+
+    makeFlags = [ "PREFIX=$(out)" ];
+  };
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "0.10.1";
+  version = "0.11.0";
   src = fetchurl {
-    url = "https://www.desy.de/~twhite/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0i9d5ggalic7alj97dxjdys7010kxhm2cb4lwakvigl023j8ms79";
+    url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
+    sha256 = "sha256-ogNHWYfbxRmB5TdK8K0JpcCnYOOyXapQGSPh8mfp+Tc=";
   };
   nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers makeWrapper ]
-    ++ lib.optionals withGui [ wrapGAppsHook ];
+    ++ lib.optionals withGui [ wrapGAppsHook3 ];
   buildInputs = [
     hdf5
     gsl
@@ -181,17 +207,23 @@ stdenv.mkDerivation rec {
     mosflm
     pinkIndexer
     xgandalf
+    pandoc
   ] ++ lib.optionals withGui [ gtk3 gdk-pixbuf ]
   ++ lib.optionals stdenv.isDarwin [
     argp-standalone
+  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     memorymappingHook
   ]
-  # slurm is not available for Darwin; when it is, remove the condition
-  ++ lib.optionals (!stdenv.isDarwin) [ slurm ]
-  # hdf5-external-filter-plugins doesn't link on Darwin
-  ++ lib.optionals (withBitshuffle && !stdenv.isDarwin) [ hdf5-external-filter-plugins ];
+  ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
 
-  patches = [ ./link-to-argp-standalone-if-needed.patch ];
+  patches = [
+    # on darwin at least, we need to link to a separate argp library;
+    # this patch adds a test for this and the necessary linker options
+    ./link-to-argp-standalone-if-needed.patch
+    # hotfix for an issue that occurs (at least) on NixOS:
+    # if the temporary path is too long, we get a segfault
+    ./gui-path-issue.patch
+  ];
 
   # CrystFEL calls mosflm by searching PATH for it. We could've create a wrapper script that sets the PATH, but
   # we'd have to do that for every CrystFEL executable (indexamajig, crystfel, partialator). Better to just
@@ -200,9 +232,11 @@ stdenv.mkDerivation rec {
     sed -i -e 's#execlp("mosflm"#execl("${mosflm}/bin/mosflm"#' libcrystfel/src/indexers/mosflm.c;
   '';
 
-  postInstall = lib.optionalString (withBitshuffle && !stdenv.isDarwin) ''
+  postInstall = lib.optionalString withBitshuffle ''
     for file in $out/bin/*; do
-      wrapProgram $file --set HDF5_PLUGIN_PATH ${hdf5-external-filter-plugins}/lib/plugins
+      wrapProgram $file \
+        --set HDF5_PLUGIN_PATH ${hdf5-external-filter-plugins}/lib/plugins \
+        --prefix PATH ":" ${lib.makeBinPath [ millepede-ii ]}
     done
   '';
 
@@ -220,7 +254,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://www.desy.de/~twhite/crystfel/download.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pmiddend ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.unix;
   };
 
 }

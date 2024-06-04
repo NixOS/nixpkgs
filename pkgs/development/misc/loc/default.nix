@@ -1,8 +1,6 @@
 { lib, fetchFromGitHub, rustPlatform }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   version = "0.4.1";
   pname = "loc";
 
@@ -18,8 +16,9 @@ buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/cgag/loc";
     description = "Count lines of code quickly";
+    mainProgram = "loc";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = platforms.unix;
   };
 }

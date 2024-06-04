@@ -1,9 +1,10 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pythonOlder
+{
+  lib,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "domwillcode";
     repo = "yale-smart-alarm-client";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Zpj1lLaxiTaYpcj1R/ktuVldl/r19r7fzNKvnSIDq80=";
+    hash = "sha256-Zpj1lLaxiTaYpcj1R/ktuVldl/r19r7fzNKvnSIDq80=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "yalesmartalarmclient"
-  ];
+  pythonImportsCheck = [ "yalesmartalarmclient" ];
 
   meta = with lib; {
     description = "Python module to interface with Yale Smart Alarm Systems";

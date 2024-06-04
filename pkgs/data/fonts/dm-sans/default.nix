@@ -1,15 +1,22 @@
-{ lib, fetchzip }:
-let version = "1.002"; in
-fetchzip {
-  inherit version;
-  pname = "dm-sans";
-  url = "https://github.com/googlefonts/dm-fonts/releases/download/v${version}/DeepMindSans_v${version}.zip";
-  stripRoot = false;
-  hash = "sha256-zyS0gz7CGn39HCiyeN5cAP63v9nG6jffGSsI1vr84EQ=";
+{ lib, stdenvNoCC, fetchzip }:
 
-  postFetch = ''
+stdenvNoCC.mkDerivation rec {
+  pname = "dm-sans";
+  version = "1.002";
+
+  src = fetchzip {
+    url = "https://github.com/googlefonts/dm-fonts/releases/download/v${version}/DeepMindSans_v${version}.zip";
+    stripRoot = false;
+    hash = "sha256-RSHHxiCac18qqF+hW5M3BbBcra4AQpNLLlUmhiWj9f8=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
-    mv $out/*.ttf $out/share/fonts/truetype
+    mv *.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = {

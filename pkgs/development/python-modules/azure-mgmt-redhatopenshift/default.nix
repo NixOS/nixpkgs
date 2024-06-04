@@ -1,34 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, isPy27
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
-  version = "1.2.0";
   pname = "azure-mgmt-redhatopenshift";
-  disabled = isPy27; # don't feel like fixing namespace issues on python2
+  version = "1.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "sha256-ZU4mKTzny9tsKDrFSU+lll5v6oDivYJlXDriWJLAYec=";
+    hash = "sha256-BL2a2L2AwJWvs0V+VpSGaS8//AWMy5m6rdAPDJPbrEo=";
   };
 
   propagatedBuildInputs = [
-    msrest
-    msrestazure
+    isodate
     azure-common
     azure-mgmt-core
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   pythonNamespaces = "azure.mgmt";
 
-  # no included
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "azure.mgmt.redhatopenshift" ];

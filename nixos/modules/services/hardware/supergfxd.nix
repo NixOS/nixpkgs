@@ -7,12 +7,12 @@ in
 {
   options = {
     services.supergfxd = {
-      enable = lib.mkEnableOption (lib.mdDoc "Enable the supergfxd service");
+      enable = lib.mkEnableOption "the supergfxd service";
 
       settings = lib.mkOption {
         type = lib.types.nullOr json.type;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The content of /etc/supergfxd.conf.
           See https://gitlab.com/asus-linux/supergfxctl/#config-options-etcsupergfxdconf.
         '';
@@ -32,6 +32,7 @@ in
 
     systemd.packages = [ pkgs.supergfxctl ];
     systemd.services.supergfxd.wantedBy = [ "multi-user.target" ];
+    systemd.services.supergfxd.path = [ pkgs.kmod pkgs.pciutils ];
 
     services.dbus.packages = [ pkgs.supergfxctl ];
     services.udev.packages = [ pkgs.supergfxctl ];

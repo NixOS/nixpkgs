@@ -2,25 +2,26 @@
 , stdenv
 , fetchFromGitHub
 , glib
+, json-glib
 , meson
 , ninja
 , pantheon
 , pkg-config
 , vala
 , gettext
-, wrapGAppsHook
+, wrapGAppsHook3
 , unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "vala-lint";
-  version = "unstable-2022-09-15";
+  version = "0-unstable-2023-12-05";
 
   src = fetchFromGitHub {
     owner = "vala-lang";
     repo = "vala-lint";
-    rev = "923adb5d3983ed654566304284607e3367998e22";
-    sha256 = "sha256-AHyc6jJyEPfUON7yf/6O2jfcnRD3fW2R9UfIsx2Zmdc=";
+    rev = "8ae2bb65fe66458263d94711ae4ddd978faece00";
+    sha256 = "sha256-FZV726ZeNEX4ulEh+IIzwZqpnVRr7IeZb47FV1C7YjU=";
   };
 
   nativeBuildInputs = [
@@ -29,12 +30,19 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     glib
+    json-glib
   ];
+
+  postPatch = ''
+    # https://github.com/vala-lang/vala-lint/issues/181
+    substituteInPlace test/meson.build \
+      --replace "test('auto-fix', auto_fix_test, env: test_envars)" ""
+  '';
 
   doCheck = true;
 

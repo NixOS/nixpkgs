@@ -1,17 +1,24 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, darwin }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "diswall";
-  version = "0.2.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "dis-works";
     repo = "diswall-rs";
     rev = "v${version}";
-    sha256 = "sha256-zT8RRg+Ver7dYtJL9htrZ8nXoD0V7IvdIqHTKDmbZ7c=";
+    sha256 = "sha256-HoIkozwRV0xz14mOTM4BXDzPShRAp8a3quhvtWwnQ2I=";
   };
 
-  cargoSha256 = "sha256-N+w1OiCy3scahFdYI49GpL301t1qNd/X4fdLMoQE/2s=";
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+  ];
+
+  cargoHash = "sha256-KA2hwaEhY2G+H4+xVgin6xhmRfnGcJBBWj9xWtD0h9I=";
 
   doCheck = false;
 
@@ -29,5 +36,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.diswall.stream";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ izorkin ];
+    mainProgram = "diswall";
   };
 }

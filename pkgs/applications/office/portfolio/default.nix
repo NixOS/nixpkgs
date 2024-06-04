@@ -10,7 +10,7 @@
 , libsecret
 , makeDesktopItem
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , writeScript
 }:
 let
@@ -27,16 +27,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "PortfolioPerformance";
-  version = "0.60.2";
+  version = "0.68.4";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-jSRZZufGi1wmdT7LeNutkO74bqln8uJ5TSEDCJyfPB4=";
+    hash = "sha256-E4uVI2MJ2tD2wuAxxzCZSmNRbKTTzhi44c4ip7uEhCk=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.portfolio-performance.info/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.epl10;
-    maintainers = with maintainers; [ elohmeier oyren shawn8901 ];
+    maintainers = with maintainers; [ elohmeier kilianar oyren shawn8901 ];
     mainProgram = "portfolio";
     platforms = [ "x86_64-linux" ];
   };

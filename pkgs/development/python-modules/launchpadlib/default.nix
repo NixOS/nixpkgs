@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, httplib2
-, keyring
-, lazr-restfulclient
-, lazr-uri
-, setuptools
-, six
-, testresources
-, wadllib
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  httplib2,
+  keyring,
+  lazr-restfulclient,
+  lazr-uri,
+  setuptools,
+  six,
+  testresources,
+  wadllib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AYmMk3R3sMZKdTOK2wl3Ao1zRqigGesCPPaP7ZmFAUY=";
+    hash = "sha256-AYmMk3R3sMZKdTOK2wl3Ao1zRqigGesCPPaP7ZmFAUY=";
   };
 
   propagatedBuildInputs = [
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     wadllib
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -54,6 +53,6 @@ buildPythonPackage rec {
     description = "Script Launchpad through its web services interfaces. Officially supported";
     homepage = "https://help.launchpad.net/API/launchpadlib";
     license = licenses.lgpl3Only;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

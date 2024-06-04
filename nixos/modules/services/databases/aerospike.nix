@@ -39,19 +39,14 @@ in
   options = {
 
     services.aerospike = {
-      enable = mkEnableOption (lib.mdDoc "Aerospike server");
+      enable = mkEnableOption "Aerospike server";
 
-      package = mkOption {
-        default = pkgs.aerospike;
-        defaultText = literalExpression "pkgs.aerospike";
-        type = types.package;
-        description = lib.mdDoc "Which Aerospike derivation to use";
-      };
+      package = mkPackageOption pkgs "aerospike" { };
 
       workDir = mkOption {
         type = types.str;
         default = "/var/lib/aerospike";
-        description = lib.mdDoc "Location where Aerospike stores its files";
+        description = "Location where Aerospike stores its files";
       };
 
       networkConfig = mkOption {
@@ -80,7 +75,7 @@ in
             port 3003
           }
         '';
-        description = lib.mdDoc "network section of configuration file";
+        description = "network section of configuration file";
       };
 
       extraConfig = mkOption {
@@ -94,7 +89,7 @@ in
             storage-engine memory
           }
         '';
-        description = lib.mdDoc "Extra configuration";
+        description = "Extra configuration";
       };
     };
 
@@ -112,6 +107,11 @@ in
       description = "Aerospike server user";
     };
     users.groups.aerospike.gid = config.ids.gids.aerospike;
+
+    boot.kernel.sysctl = {
+      "net.core.rmem_max" = mkDefault 15728640;
+      "net.core.wmem_max" = mkDefault 5242880;
+    };
 
     systemd.services.aerospike = rec {
       description = "Aerospike server";
@@ -135,14 +135,6 @@ in
         if [ $(echo "$(${pkgs.procps}/bin/sysctl -n kernel.shmmax) < 1073741824" | ${pkgs.bc}/bin/bc) == "1"  ]; then
           echo "kernel.shmmax too low, setting to 1GB"
           ${pkgs.procps}/bin/sysctl -w kernel.shmmax=1073741824
-        fi
-        if [ $(echo "$(cat /proc/sys/net/core/rmem_max) < 15728640" | ${pkgs.bc}/bin/bc) == "1" ]; then
-          echo "increasing socket buffer limit (/proc/sys/net/core/rmem_max): $(cat /proc/sys/net/core/rmem_max) -> 15728640"
-          echo 15728640 > /proc/sys/net/core/rmem_max
-        fi
-        if [ $(echo "$(cat /proc/sys/net/core/wmem_max) <  5242880" | ${pkgs.bc}/bin/bc) == "1"  ]; then
-          echo "increasing socket buffer limit (/proc/sys/net/core/wmem_max): $(cat /proc/sys/net/core/wmem_max) -> 5242880"
-          echo  5242880 > /proc/sys/net/core/wmem_max
         fi
         install -d -m0700 -o ${serviceConfig.User} -g ${serviceConfig.Group} "${cfg.workDir}"
         install -d -m0700 -o ${serviceConfig.User} -g ${serviceConfig.Group} "${cfg.workDir}/smd"

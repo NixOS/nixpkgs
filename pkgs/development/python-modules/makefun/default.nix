@@ -1,17 +1,24 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "makefun";
-  version = "1.15.0";
+  version = "1.15.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WxEOcz2U96SdisJ7Hi1A8rsFAemMHYJeDZMtJpIN1d8=";
+    hash = "sha256-FvKis02e4MK1eMlgoYCMl04oIs959um5xFWqzhCILUU=";
   };
 
   postPatch = ''
@@ -20,12 +27,11 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "makefun" ];
 

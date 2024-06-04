@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
 let
   cfg = config.services.xserver.desktopManager.xfce;
+  excludePackages = config.environment.xfce.excludePackages;
 
 in
 {
@@ -48,31 +49,38 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the Xfce desktop environment.";
+        description = "Enable the Xfce desktop environment.";
       };
 
       noDesktop = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Don't install XFCE desktop components (xfdesktop and panel).";
+        description = "Don't install XFCE desktop components (xfdesktop and panel).";
       };
 
       enableXfwm = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Enable the XFWM (default) window manager.";
+        description = "Enable the XFWM (default) window manager.";
       };
 
       enableScreensaver = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Enable the XFCE screensaver.";
+        description = "Enable the XFCE screensaver.";
       };
+    };
+
+    environment.xfce.excludePackages = mkOption {
+      default = [];
+      example = literalExpression "[ pkgs.xfce.xfce4-volumed-pulse ]";
+      type = types.listOf types.package;
+      description = "Which packages XFCE should exclude from the default environment";
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs.xfce // pkgs; [
+    environment.systemPackages = utils.removePackagesByName (with pkgs.xfce // pkgs; [
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
@@ -121,8 +129,9 @@ in
       ] ++ optionals (!cfg.noDesktop) [
         xfce4-panel
         xfdesktop
-      ] ++ optional cfg.enableScreensaver xfce4-screensaver;
+      ] ++ optional cfg.enableScreensaver xfce4-screensaver) excludePackages;
 
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
     programs.xfconf.enable = true;
     programs.thunar.enable = true;
 
@@ -136,7 +145,7 @@ in
     services.xserver.desktopManager.session = [{
       name = "xfce";
       desktopNames = [ "XFCE" ];
-      bgSupport = true;
+      bgSupport = !cfg.noDesktop;
       start = ''
         ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
         waitPID=$!
@@ -155,7 +164,7 @@ in
     services.gvfs.enable = true;
     services.tumbler.enable = true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-    services.xserver.libinput.enable = mkDefault true; # used in xfce4-settings-manager
+    services.libinput.enable = mkDefault true; # used in xfce4-settings-manager
 
     # Enable default programs
     programs.dconf.enable = true;
@@ -165,10 +174,12 @@ in
     programs.zsh.vteIntegration = mkDefault true;
 
     # Systemd services
-    systemd.packages = with pkgs.xfce; [
+    systemd.packages = utils.removePackagesByName (with pkgs.xfce; [
       xfce4-notifyd
-    ];
+    ]) excludePackages;
 
     security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
+
+    xdg.portal.configPackages = mkDefault [ pkgs.xfce.xfce4-session ];
   };
 }

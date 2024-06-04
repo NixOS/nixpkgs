@@ -1,31 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, six
-, pytestCheckHook
-, django-debug-toolbar
-, django-extensions
-, django-taggit
-, django_tagging
-, mock
-, pytest-django
-, selenium
-, splinter
-, sqlparse
-, tenacity
-, whitenoise
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  six,
+  pytestCheckHook,
+  django-debug-toolbar,
+  django-extensions,
+  django-taggit,
+  django-tagging,
+  mock,
+  pytest-django,
+  selenium,
+  splinter,
+  sqlparse,
+  tenacity,
+  whitenoise,
 }:
 
 buildPythonPackage rec {
   pname = "django-autocomplete-light";
   version = "3.9.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "yourlabs";
     repo = "django-autocomplete-light";
     rev = version;
-    sha256 = "sha256-YUiGN6q7ARM/rg7d+ykeDEYZDYjB+DHxMCmdme6QccU=";
+    hash = "sha256-YUiGN6q7ARM/rg7d+ykeDEYZDYjB+DHxMCmdme6QccU=";
   };
 
   propagatedBuildInputs = [
@@ -36,12 +38,12 @@ buildPythonPackage rec {
   # Too many un-packaged dependencies
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     django-debug-toolbar
     django-extensions
     django-taggit
-    django_tagging
+    django-tagging
     mock
     pytest-django
     selenium

@@ -1,39 +1,30 @@
 { qtModule
 , qtbase
+, qtlanguageserver
 , qtshadertools
 , openssl
+, stdenv
 , python3
+, lib
+, pkgsBuildBuild
 }:
 
 qtModule {
   pname = "qtdeclarative";
-  qtInputs = [ qtbase qtshadertools ];
-  propagatedBuildInputs = [ openssl python3 ];
-  preConfigure = ''
-    export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-  '';
-  cmakeFlags = [
-    "-DQT6_INSTALL_PREFIX=${placeholder "out"}"
-    "-DQT_INSTALL_PREFIX=${placeholder "out"}"
-  ];
+  strictDeps = !stdenv.isDarwin; # fails to detect python3 otherwise
+  propagatedBuildInputs = [ qtbase qtlanguageserver qtshadertools openssl ];
+  nativeBuildInputs = [ python3 ];
   patches = [
     # prevent headaches from stale qmlcache data
-    ../patches/qtdeclarative-default-disable-qmlcache.patch
+    ../patches/0001-qtdeclarative-disable-qml-disk-cache.patch
+    # add version specific QML import path
+    ../patches/0002-qtdeclarative-also-use-versioned-qml-paths.patch
   ];
-  postInstall = ''
-    substituteInPlace "$out/lib/cmake/Qt6Qml/Qt6QmlMacros.cmake" \
-      --replace ''\'''${QT6_INSTALL_PREFIX}' "$dev"
-  '';
-  devTools = [
-    "bin/qml"
-    "bin/qmlcachegen"
-    "bin/qmleasing"
-    "bin/qmlimportscanner"
-    "bin/qmllint"
-    "bin/qmlmin"
-    "bin/qmlplugindump"
-    "bin/qmlprofiler"
-    "bin/qmlscene"
-    "bin/qmltestrunner"
+  cmakeFlags = [
+    "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderTools"
+  ]
+  # Conditional is required to prevent infinite recursion during a cross build
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-DQt6QmlTools_DIR=${pkgsBuildBuild.qt6.qtdeclarative}/lib/cmake/Qt6QmlTools"
   ];
 }

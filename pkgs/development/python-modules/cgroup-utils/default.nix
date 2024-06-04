@@ -1,10 +1,20 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pep8, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pep8,
+  nose,
+}:
 
 buildPythonPackage rec {
   version = "0.8";
+  format = "setuptools";
   pname = "cgroup-utils";
 
-  buildInputs = [ pep8 nose ];
+  buildInputs = [
+    pep8
+    nose
+  ];
   # Pep8 tests fail...
   doCheck = false;
 
@@ -21,6 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Utility tools for control groups of Linux";
+    mainProgram = "cgutil";
     maintainers = with maintainers; [ layus ];
     platforms = platforms.linux;
     license = licenses.gpl2;

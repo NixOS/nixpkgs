@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   version = "1.17.4"; # note: `conan` package may require a hardcoded one
+  format = "setuptools";
   pname = "patch-ng";
 
   src = fetchPypi {
@@ -18,5 +20,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ HaoZeke ];
   };
-
 }

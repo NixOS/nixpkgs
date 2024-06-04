@@ -11,6 +11,7 @@ let
     "bin-x86_64-efi/ipxe.efi" = null;
     "bin-x86_64-efi/ipxe.efirom" = null;
     "bin-x86_64-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-x86_64-efi/snp.efi" = null;
   } // lib.optionalAttrs stdenv.hostPlatform.isx86 {
     "bin/ipxe.dsk" = null;
     "bin/ipxe.usb" = null;
@@ -21,16 +22,18 @@ let
     "bin-arm32-efi/ipxe.efi" = null;
     "bin-arm32-efi/ipxe.efirom" = null;
     "bin-arm32-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-arm32-efi/snp.efi" = null;
   } // lib.optionalAttrs stdenv.isAarch64 {
     "bin-arm64-efi/ipxe.efi" = null;
     "bin-arm64-efi/ipxe.efirom" = null;
     "bin-arm64-efi/ipxe.usb" = "ipxe-efi.usb";
+    "bin-arm64-efi/snp.efi" = null;
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "ipxe";
-  version = "unstable-2022-04-06";
+  version = "1.21.1-unstable-2024-05-31";
 
   nativeBuildInputs = [ gnu-efi mtools openssl perl xorriso xz ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -40,8 +43,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "70995397e5bdfd3431e12971aa40630c7014785f";
-    sha256 = "SrTNEYk13JXAcJuogm9fZ7CrzJIDRc0aziGdjRNv96I=";
+    rev = "e965f179e1654103eca33feed7a9cc4c51d91be6";
+    hash = "sha256-32LYNF+5z5rS4y2iGKA2BnQntXg9Ec9709m6pL5hBdo=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
@@ -51,7 +54,7 @@ stdenv.mkDerivation rec {
   # not possible due to assembler code
   hardeningDisable = [ "pic" "stackprotector" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
@@ -98,13 +101,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib;
     { description = "Network boot firmware";
       homepage = "https://ipxe.org/";
       license = licenses.gpl2Only;
-      maintainers = with maintainers; [ ehmry ];
       platforms = platforms.linux;
     };
 }

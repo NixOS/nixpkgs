@@ -7,33 +7,38 @@
 # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
 # which should be fixable, this is a no-rebuild workaround for GHC.
 , headless ? stdenv.targetPlatform.isGhcjs
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
 let
   version = {
     feature = "19";
-    interim = ".0.1";
-    build = "10";
+    interim = "-ga";
+    build = "";
   };
+
+  # when building a headless jdk, also bootstrap it with a headless jdk
+  openjdk-bootstrap = openjdk19-bootstrap.override { gtkSupport = !headless; };
 
   openjdk = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${version.feature}${version.interim}+${version.build}";
+    version = "${version.feature}${version.interim}";
+    # version = "${version.feature}${version.interim}+${version.build}";
 
     src = fetchFromGitHub {
       owner = "openjdk";
       repo = "jdk${version.feature}u";
-      rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      hash = "sha256-IS6ABnVdW1qJ4gu4YSgMVFXBTNdtWFdbNNz+kMaiyk8=";
+      rev = "jdk-${version.feature}${version.interim}";
+      # rev = "jdk-${version.feature}${version.interim}+${version.build}";
+      hash = "sha256-XbYTku/nWF+maBvYz2rJYIUBEgOmqICKjk9wufHqyj0=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ensureNewerSourcesForZipFilesHook ];
     buildInputs = [
       cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk19-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -57,8 +62,16 @@ let
       # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
       # This is applied anywhere to prevent patchrot.
       (fetchpatch {
-        url = "https://git.alpinelinux.org/aports/plain/testing/openjdk19/FixNullPtrCast.patch?id=b93d1fc37fcf106144958d957bb97c7db67bd41f";
-        hash = "sha256-cnpeYcVoRYjuDgrl2x27frv6KUAnu1+1MVPehPZy/Cg=";
+        url = "https://git.alpinelinux.org/aports/plain/testing/openjdk19/FixNullPtrCast.patch?id=93dc07f97ff716b647c5f57c6224901ea06da560";
+        hash = "sha256-H4X3Yip5bCpXMH7MSu9BgXIOYRVUBMZPZW8EvZSWI5k=";
+      })
+
+      # Fix build for gnumake-4.4.1:
+      #   https://github.com/openjdk/jdk/pull/12992
+      (fetchpatch {
+        name = "gnumake-4.4.1";
+        url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
+        hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk13.patch
@@ -69,8 +82,13 @@ let
       patchShebangs --build configure
     '';
 
+    # JDK's build system attempts to specifically detect
+    # and special-case WSL, and we don't want it to do that,
+    # so pass the correct platform names explicitly
+    configurePlatforms = ["build" "host"];
+
     configureFlags = [
-      "--with-boot-jdk=${openjdk19-bootstrap.home}"
+      "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-version-build=${version.build}"
       "--with-version-opt=nixos"
       "--with-version-pre="
@@ -82,13 +100,12 @@ let
       "--with-zlib=system"
       "--with-lcms=system"
       "--with-stdc++lib=dynamic"
-    ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
-      ++ lib.optional headless "--enable-headless-only"
+    ] ++ lib.optional headless "--enable-headless-only"
       ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = "-Wno-error";
+    env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
@@ -165,8 +182,9 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk19-bootstrap ];
+    disallowedReferences = [ openjdk-bootstrap ];
 
+    pos = builtins.unsafeGetAttrPos "feature" version;
     meta = import ./meta.nix lib version.feature;
 
     passthru = {

@@ -1,5 +1,5 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub, substituteAll
-, qmake, qttools, qttranslations
+{ stdenv, mkDerivation, lib, fetchFromGitHub
+, qmake, qttools
 }:
 
 mkDerivation rec {
@@ -12,12 +12,6 @@ mkDerivation rec {
     rev = "v${version}";
     sha256 = "080vnwcciqblfrbfyz9gjhl2lqw1hkdpbgr5qfrlyglkd4ynjd84";
   };
-
-  patches = (substituteAll {
-    # See https://github.com/NixOS/nixpkgs/issues/86054
-    src = ./fix-qttranslations-path.patch;
-    inherit qttranslations;
-  });
 
   nativeBuildInputs = [ qmake qttools ];
 
@@ -33,6 +27,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/BourgeoisLab/GPXLab";
     description = "Program to show and manipulate GPS tracks";
+    mainProgram = "gpxlab";
     longDescription = ''
       GPXLab is an application to display and manage GPS tracks
       previously recorded with a GPS tracker.

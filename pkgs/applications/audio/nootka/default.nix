@@ -28,13 +28,14 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INCLUDE_PATH=${libjack2}/include/jack;${libpulseaudio.dev}/include/pulse"
+    "-DCMAKE_INCLUDE_PATH=${lib.getDev libjack2}/include/jack;${lib.getDev libpulseaudio}/include/pulse"
     "-DENABLE_JACK=ON"
     "-DENABLE_PULSEAUDIO=ON"
   ];
 
   meta = with lib; {
     description = "Application for practicing playing musical scores and ear training";
+    mainProgram = "nootka";
     homepage = "https://nootka.sourceforge.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mmlb orivej ];

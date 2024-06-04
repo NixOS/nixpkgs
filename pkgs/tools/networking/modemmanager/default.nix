@@ -1,53 +1,109 @@
-{ lib, stdenv, fetchurl
-, glib, udev, libgudev, polkit, ppp, gettext, pkg-config, python3
-, libmbim, libqmi, systemd, vala, gobject-introspection, dbus
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, glib
+, libgudev
+, polkit
+, ppp
+, gettext
+, pkg-config
+, libxslt
+, python3
+, libmbim
+, libqmi
+, systemd
+, bash-completion
+, meson
+, ninja
+, vala
+, gobject-introspection
+, dbus
+, bash
 }:
 
 stdenv.mkDerivation rec {
   pname = "modemmanager";
-  version = "1.18.12";
+  version = "1.22.0";
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/ModemManager/ModemManager-${version}.tar.xz";
-    sha256 = "sha256-tGTkkl2VWmyobdCGFudjsmrkbX/Tfb4oFnjjQGWx5DA=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "mobile-broadband";
+    repo = "ModemManager";
+    rev = version;
+    hash = "sha256-/D9b2rCCUhpDCUfSNAWR65+3EyUywzFdH1R17eSKRDo=";
   };
 
-  nativeBuildInputs = [ vala gobject-introspection gettext pkg-config ];
+  patches = [
+    # Since /etc is the domain of NixOS, not Nix, we cannot install files there.
+    # But these are just placeholders so we do not need to install them at all.
+    ./no-dummy-dirs-in-sysconfdir.patch
 
-  buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
-
-  installCheckInputs = [
-    python3 python3.pkgs.dbus-python python3.pkgs.pygobject3
+    (fetchpatch {
+      name = "GI_TYPELIB_PATH.patch";
+      url = "https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/commit/daa829287894273879799a383ed4dc373c6111b0.patch";
+      hash = "sha256-tPQokiZO2SpTlX8xMlkWjP1AIXgoLHW3rJwnmG33z/k=";
+    })
   ];
 
-  configureFlags = [
-    "--with-polkit"
-    "--with-udev-base-dir=${placeholder "out"}/lib/udev"
-    "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
-    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    vala
+    gobject-introspection
+    gettext
+    pkg-config
+    libxslt
+    python3
+  ];
+
+  buildInputs = [
+    glib
+    libgudev
+    polkit
+    ppp
+    libmbim
+    libqmi
+    systemd
+    bash-completion
+    dbus
+    bash # shebangs in share/ModemManager/fcc-unlock.available.d/
+  ];
+
+  nativeInstallCheckInputs = [
+    python3
+    python3.pkgs.dbus-python
+    python3.pkgs.pygobject3
+  ];
+
+  mesonFlags = [
+    "-Dudevdir=${placeholder "out"}/lib/udev"
+    "-Ddbus_policy_dir=${placeholder "out"}/share/dbus-1/system.d"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-systemd-suspend-resume"
-    "--with-systemd-journal"
+    "-Dvapi=true"
   ];
 
   postPatch = ''
-    patchShebangs tools/test-modemmanager-service.py
+    patchShebangs \
+      tools/test-modemmanager-service.py
   '';
 
   # In Nixpkgs g-ir-scanner is patched to produce absolute paths, and
   # that interferes with ModemManager's tests, causing them to try to
   # load libraries from the install path, which doesn't usually exist
-  # when `make check' is run.  So to work around that, we run it as an
+  # when `meson test' is run.  So to work around that, we run it as an
   # install check instead, when those paths will have been created.
   doInstallCheck = true;
-  preInstallCheck = ''
+  installCheckPhase = ''
+    runHook preInstallCheck
     export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
     patchShebangs tools/tests/test-wrapper.sh
+    mesonCheckPhase
+    runHook postInstallCheck
   '';
-  installCheckTarget = "check";
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "WWAN modem manager, part of NetworkManager";

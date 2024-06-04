@@ -1,8 +1,16 @@
-{ lib, fetchFromGitHub, buildPythonPackage, requests, pytest, flask, isPy27
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  requests,
+  pytest,
+  flask,
+  isPy27,
 }:
 
 buildPythonPackage rec {
   version = "4.1";
+  format = "setuptools";
   pname = "roku";
   disabled = isPy27;
 
@@ -15,7 +23,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [ pytest flask ];
+  nativeCheckInputs = [
+    pytest
+    flask
+  ];
   pythonImportsCheck = [ "roku" ];
 
   meta = with lib; {

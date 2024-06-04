@@ -1,14 +1,11 @@
 { lib
 , stdenv
 , fetchurl
-, autoconf
-, automake
 , autoreconfHook
 , gettext
 , libftdi1
 , libtool
 , libusb-compat-0_1
-, makeWrapper
 , pkg-config
 , readline
 , which

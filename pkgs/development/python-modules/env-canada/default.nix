@@ -1,22 +1,24 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, geopy
-, imageio
-, lxml
-, pandas
-, pillow
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, voluptuous
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geopy,
+  imageio,
+  lxml,
+  pandas,
+  pillow,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.5.25";
-  format = "setuptools";
+  version = "0.6.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -24,10 +26,12 @@ buildPythonPackage rec {
     owner = "michaeldavie";
     repo = "env_canada";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-UF04TAhgeb76bYisNYOAraw59K54WkX9a8QOtHywMTQ=";
+    hash = "sha256-2lrZpjOdijE/udGRzUXT63xI+f9yI+04arfWdt6fMSA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     geopy
     imageio
@@ -38,9 +42,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Tests require network access
@@ -55,13 +57,12 @@ buildPythonPackage rec {
     "test_ecradar"
   ];
 
-  pythonImportsCheck = [
-    "env_canada"
-  ];
+  pythonImportsCheck = [ "env_canada" ];
 
   meta = with lib; {
     description = "Python library to get Environment Canada weather data";
     homepage = "https://github.com/michaeldavie/env_canada";
+    changelog = "https://github.com/michaeldavie/env_canada/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

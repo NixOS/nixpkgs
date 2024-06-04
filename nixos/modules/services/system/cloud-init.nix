@@ -2,17 +2,24 @@
 
 with lib;
 
-let cfg = config.services.cloud-init;
-    path = with pkgs; [
-      cloud-init
-      iproute2
-      nettools
-      openssh
-      shadow
-      util-linux
-    ] ++ optional cfg.btrfs.enable btrfs-progs
-      ++ optional cfg.ext4.enable e2fsprogs
-    ;
+let
+  cfg = config.services.cloud-init;
+  path = with pkgs; [
+    cloud-init
+    iproute2
+    nettools
+    openssh
+    shadow
+    util-linux
+    busybox
+  ]
+  ++ optional cfg.btrfs.enable btrfs-progs
+  ++ optional cfg.ext4.enable e2fsprogs
+  ++ optional cfg.xfs.enable xfsprogs
+  ;
+  hasFs = fsName: lib.any (fs: fs.fsType == fsName) (lib.attrValues config.fileSystems);
+  settingsFormat = pkgs.formats.yaml { };
+  cfgfile = settingsFormat.generate "cloud.cfg" cfg.settings;
 in
 {
   options = {
@@ -20,7 +27,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable the cloud-init service. This services reads
           configuration metadata in a cloud environment and configures
           the machine according to this metadata.
@@ -38,79 +45,58 @@ in
 
       btrfs.enable = mkOption {
         type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
+        default = hasFs "btrfs";
+        defaultText = literalExpression ''hasFs "btrfs"'';
+        description = ''
           Allow the cloud-init service to operate `btrfs` filesystem.
         '';
       };
 
       ext4.enable = mkOption {
         type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
+        default = hasFs "ext4";
+        defaultText = literalExpression ''hasFs "ext4"'';
+        description = ''
           Allow the cloud-init service to operate `ext4` filesystem.
+        '';
+      };
+
+      xfs.enable = mkOption {
+        type = types.bool;
+        default = hasFs "xfs";
+        defaultText = literalExpression ''hasFs "xfs"'';
+        description = ''
+          Allow the cloud-init service to operate `xfs` filesystem.
         '';
       };
 
       network.enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Allow the cloud-init service to configure network interfaces
           through systemd-networkd.
         '';
       };
 
+      settings = mkOption {
+        description = ''
+          Structured cloud-init configuration.
+        '';
+        type = types.submodule {
+          freeformType = settingsFormat.type;
+        };
+        default = { };
+      };
+
       config = mkOption {
         type = types.str;
-        default = ''
-          system_info:
-            distro: nixos
-            network:
-              renderers: [ 'networkd' ]
-          users:
-             - root
+        default = "";
+        description = ''
+          raw cloud-init configuration.
 
-          disable_root: false
-          preserve_hostname: false
-
-          cloud_init_modules:
-           - migrator
-           - seed_random
-           - bootcmd
-           - write-files
-           - growpart
-           - resizefs
-           - update_hostname
-           - resolv_conf
-           - ca-certs
-           - rsyslog
-           - users-groups
-
-          cloud_config_modules:
-           - disk_setup
-           - mounts
-           - ssh-import-id
-           - set-passwords
-           - timezone
-           - disable-ec2-metadata
-           - runcmd
-           - ssh
-
-          cloud_final_modules:
-           - rightscale_userdata
-           - scripts-vendor
-           - scripts-per-once
-           - scripts-per-boot
-           - scripts-per-instance
-           - scripts-user
-           - ssh-authkey-fingerprints
-           - keys-to-console
-           - phone-home
-           - final-message
-           - power-state-change
-          '';
-        description = lib.mdDoc "cloud-init configuration.";
+          Takes precedence over the `settings` option if set.
+        '';
       };
 
     };
@@ -118,78 +104,143 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.cloud-init.settings = {
+      system_info = mkDefault {
+        distro = "nixos";
+        network = {
+          renderers = [ "networkd" ];
+        };
+      };
 
-    environment.etc."cloud/cloud.cfg".text = cfg.config;
+      users = mkDefault [ "root" ];
+      disable_root = mkDefault false;
+      preserve_hostname = mkDefault false;
+
+      cloud_init_modules = mkDefault [
+        "migrator"
+        "seed_random"
+        "bootcmd"
+        "write-files"
+        "growpart"
+        "resizefs"
+        "update_hostname"
+        "resolv_conf"
+        "ca-certs"
+        "rsyslog"
+        "users-groups"
+      ];
+
+      cloud_config_modules = mkDefault [
+        "disk_setup"
+        "mounts"
+        "ssh-import-id"
+        "set-passwords"
+        "timezone"
+        "disable-ec2-metadata"
+        "runcmd"
+        "ssh"
+      ];
+
+      cloud_final_modules = mkDefault [
+        "rightscale_userdata"
+        "scripts-vendor"
+        "scripts-per-once"
+        "scripts-per-boot"
+        "scripts-per-instance"
+        "scripts-user"
+        "ssh-authkey-fingerprints"
+        "keys-to-console"
+        "phone-home"
+        "final-message"
+        "power-state-change"
+      ];
+    };
+
+    environment.etc."cloud/cloud.cfg" =
+      if cfg.config == "" then
+        { source = cfgfile; }
+      else
+        { text = cfg.config; }
+    ;
 
     systemd.network.enable = cfg.network.enable;
 
-    systemd.services.cloud-init-local =
-      { description = "Initial cloud-init job (pre-networking)";
-        wantedBy = [ "multi-user.target" ];
-        before = ["systemd-networkd.service"];
-        path = path;
-        serviceConfig =
-          { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init init --local";
-            RemainAfterExit = "yes";
-            TimeoutSec = "infinity";
-            StandardOutput = "journal+console";
-          };
+    systemd.services.cloud-init-local = {
+      description = "Initial cloud-init job (pre-networking)";
+      wantedBy = [ "multi-user.target" ];
+      # In certain environments (AWS for example), cloud-init-local will
+      # first configure an IP through DHCP, and later delete it.
+      # This can cause race conditions with anything else trying to set IP through DHCP.
+      before = [ "systemd-networkd.service" "dhcpcd.service" ];
+      path = path;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.cloud-init}/bin/cloud-init init --local";
+        RemainAfterExit = "yes";
+        TimeoutSec = "infinity";
+        StandardOutput = "journal+console";
       };
+    };
 
-    systemd.services.cloud-init =
-      { description = "Initial cloud-init job (metadata service crawler)";
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "network-online.target" "cloud-init-local.service"
-                  "sshd.service" "sshd-keygen.service" ];
-        after = [ "network-online.target" "cloud-init-local.service" ];
-        before = [ "sshd.service" "sshd-keygen.service" ];
-        requires = [ "network.target"];
-        path = path;
-        serviceConfig =
-          { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init init";
-            RemainAfterExit = "yes";
-            TimeoutSec = "infinity";
-            StandardOutput = "journal+console";
-          };
+    systemd.services.cloud-init = {
+      description = "Initial cloud-init job (metadata service crawler)";
+      wantedBy = [ "multi-user.target" ];
+      wants = [
+        "network-online.target"
+        "cloud-init-local.service"
+        "sshd.service"
+        "sshd-keygen.service"
+      ];
+      after = [ "network-online.target" "cloud-init-local.service" ];
+      before = [ "sshd.service" "sshd-keygen.service" ];
+      requires = [ "network.target" ];
+      path = path;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.cloud-init}/bin/cloud-init init";
+        RemainAfterExit = "yes";
+        TimeoutSec = "infinity";
+        StandardOutput = "journal+console";
       };
+    };
 
-    systemd.services.cloud-config =
-      { description = "Apply the settings specified in cloud-config";
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" "syslog.target" "cloud-config.target" ];
+    systemd.services.cloud-config = {
+      description = "Apply the settings specified in cloud-config";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" "cloud-config.target" ];
 
-        path = path;
-        serviceConfig =
-          { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=config";
-            RemainAfterExit = "yes";
-            TimeoutSec = "infinity";
-            StandardOutput = "journal+console";
-          };
+      path = path;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=config";
+        RemainAfterExit = "yes";
+        TimeoutSec = "infinity";
+        StandardOutput = "journal+console";
       };
+    };
 
-    systemd.services.cloud-final =
-      { description = "Execute cloud user/final scripts";
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" "syslog.target" "cloud-config.service" "rc-local.service" ];
-        requires = [ "cloud-config.target" ];
-        path = path;
-        serviceConfig =
-          { Type = "oneshot";
-            ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=final";
-            RemainAfterExit = "yes";
-            TimeoutSec = "infinity";
-            StandardOutput = "journal+console";
-          };
+    systemd.services.cloud-final = {
+      description = "Execute cloud user/final scripts";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" "cloud-config.service" "rc-local.service" ];
+      requires = [ "cloud-config.target" ];
+      path = path;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.cloud-init}/bin/cloud-init modules --mode=final";
+        RemainAfterExit = "yes";
+        TimeoutSec = "infinity";
+        StandardOutput = "journal+console";
       };
+    };
 
-    systemd.targets.cloud-config =
-      { description = "Cloud-config availability";
-        requires = [ "cloud-init-local.service" "cloud-init.service" ];
-      };
+    systemd.targets.cloud-config = {
+      description = "Cloud-config availability";
+      requires = [ "cloud-init-local.service" "cloud-init.service" ];
+    };
   };
+
+  meta.maintainers = [ maintainers.zimbatm ];
 }

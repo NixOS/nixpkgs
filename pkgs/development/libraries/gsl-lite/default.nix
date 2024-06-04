@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , ninja
 , installCompatHeader ? false
@@ -9,14 +10,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gsl-lite";
-  version = "0.40.0";
+  version = "0.41.0";
 
   src = fetchFromGitHub {
     owner = "gsl-lite";
     repo = "gsl-lite";
     rev = "v${version}";
-    hash = "sha256-80ksT8XFn2LLMr63gKGZD/0+FDLnAtFyMpuuSjtoBlk=";
+    hash = "sha256-cuuix302bVA7dWa7EJoxJ+otf1rSzjWQK8DHJsVkQio=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "type-limits-cast-fix.patch";
+      url = "https://github.com/gsl-lite/gsl-lite/commit/13475be0e5bf5f464c398f4a07ef5c7684bc57c5.patch";
+      hash = "sha256-rSz7OBmgQ3KcQ971tS3Z3QNC+U4XmrPjgmuOyG7J6Bo=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ninja ];
 

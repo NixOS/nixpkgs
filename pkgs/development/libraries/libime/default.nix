@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchFromGitHub
 , cmake
@@ -6,33 +7,35 @@
 , boost
 , python3
 , fcitx5
+, zstd
 }:
 
 let
+  tableVer = "20240108";
   table = fetchurl {
-    url = "https://download.fcitx-im.org/data/table.tar.gz";
-    sha256 = "1dw7mgbaidv3vqy0sh8dbfv8631d2zwv5mlb7npf69a1f8y0b5k1";
+    url = "https://download.fcitx-im.org/data/table-${tableVer}.tar.gz";
+    hash = "sha256-cpxZbYaQfecnx00Pw/0kHEBsXevStMt07v4CI4funa4=";
   };
-  arpaVer = "20220810";
+  arpaVer = "20230712";
   arpa = fetchurl {
     url = "https://download.fcitx-im.org/data/lm_sc.arpa-${arpaVer}.tar.xz";
-    sha256 = "sha256-oRvJfSda2vGV+brIVDaK4GzbSg/h7s9Z21rlgGFdtPo=";
+    hash = "sha256-ut1iwWxjc3h6D9qPCc1FLRL2DVhohW9lHO7PGge6ujI=";
   };
-  dictVer = "20220810";
+  dictVer = "20240416";
   dict = fetchurl {
-    url = "https://download.fcitx-im.org/data/dict-${dictVer}.tar.xz";
-    sha256 = "sha256-lxdS9BMYgAfo0ZFYwRuFyVXiXXsyHsInXEs69tioXSY=";
+    url = "https://download.fcitx-im.org/data/dict-${dictVer}.tar.zst";
+    hash = "sha256-nCYsv6MGy0w7BVmRt+IrRT4PJn8gzrXZ2eX4++Ty02c=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "libime";
-  version = "1.0.15";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     rev = version;
-    sha256 = "sha256-QZxXhrrSkxe7bDY7V7Ns5YZaaYJiEnGmHgGLstGMBzc=";
+    hash = "sha256-uT0V1CXPaF2FctsndxVszS7Qske6vObbOA4aOnmbdQY=";
     fetchSubmodules = true;
   };
 
@@ -49,6 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    zstd
     boost
     fcitx5
   ];

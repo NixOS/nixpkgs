@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, rustPlatform, pkg-config, openssl
+{ lib, stdenv, fetchFromGitLab, fetchpatch, rustPlatform, pkg-config, openssl
 , installShellFiles
 , Security, AppKit
 
@@ -13,9 +13,7 @@ in
 
 assert (x11Support && usesX11) -> xclip != null || xsel != null;
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "ffsend";
   version = "0.2.76";
 
@@ -26,7 +24,38 @@ buildRustPackage rec {
     sha256 = "sha256-L1j1lXPxy9nWMeED9uzQHV5y7XTE6+DB57rDnXa4kMo=";
   };
 
-  cargoSha256 = "sha256-zNLU9QnBGna5qb+iu2imOUvCIw3ZWRFsQlpFo5ECtKo=";
+  cargoHash = "sha256-r1yIPV2sW/EpHJpdaJyi6pzE+rtNkBIxSUJF+XA8kbA=";
+
+  cargoPatches = [
+
+    # Update dependencies (needed for the below patch to merge cleanly)
+    (fetchpatch {
+      name = "Update-dependencies-1";
+      url = "https://github.com/timvisee/ffsend/commit/afb004680b9ed672c7e87ff23f16bb2c51fea06e.patch";
+      hash = "sha256-eDcbyi05aOq+muVWdLmlLzLXUKcrv/9Y0R+0aHgL4+s=";
+    })
+
+    # Disable unused features in prettytable-rs crate (needed for the below patch to merge cleanly)
+    (fetchpatch {
+      name = "Disable-unused-features";
+      url = "https://github.com/timvisee/ffsend/commit/9b8dee12ea839f911ed207ff9602d929cab5d34b.patch";
+      hash = "sha256-6LK1Fqov+zEbPZ4+B6JCLXtXmgSad9vr9YO2oYodBSM=";
+    })
+
+    # Update dependencies (needed for the below patch to merge cleanly)
+    (fetchpatch {
+      name = "Update-dependencies-2";
+      url = "https://github.com/timvisee/ffsend/commit/fd5b38f9ab9cbc5f962d1024f4809eb36ba8986c.patch";
+      hash = "sha256-BDZKrVtQHpOewmB2Lb6kUfy02swcNK+CYZ3lj3kwFV4=";
+    })
+
+    # Fix seg fault
+    (fetchpatch {
+      name = "Fix-segfault";
+      url = "https://github.com/timvisee/ffsend/commit/3c1c2dc28ca1d88c45f87496a7a96052f5c37858.patch";
+      hash = "sha256-2hWlFXDopNy26Df74nJoB1J8qzPEOpf61wEOEtxOVx8=";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optionals stdenv.isLinux [ pkg-config ];
@@ -57,7 +86,8 @@ buildRustPackage rec {
     '';
     homepage = "https://gitlab.com/timvisee/ffsend";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lilyball equirosa marsam ];
+    maintainers = with maintainers; [ lilyball equirosa ];
     platforms = platforms.unix;
+    mainProgram = "ffsend";
   };
 }

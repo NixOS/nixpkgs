@@ -1,42 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-testutils
-, mock
-, proto-plus
-, pandas
-, pytestCheckHook
-, pytest-asyncio
-, protobuf
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-testutils,
+  mock,
+  pandas,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.14.0";
-  format = "setuptools";
+  version = "2.21.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fn21kQVBPjZk9pvsLO2W0vLalbXk3mSOKKn/uieudaY=";
+    hash = "sha256-57HIdY/DVj/7mjR7xRcuJ4L0TBIbyA/BUoPiic/2db8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
   passthru.optional-dependencies = {
-    pandas = [
-      pandas
-    ];
+    pandas = [ pandas ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytestCheckHook
@@ -44,8 +46,10 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.pandas;
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_list_monitored_resource_descriptors"
+    # Test requires PRROJECT_ID
+    "test_list_alert_policies"
   ];
 
   pythonImportsCheck = [
@@ -55,9 +59,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Stackdriver Monitoring API client library";
-    homepage = "https://github.com/googleapis/python-monitoring";
-    changelog = "https://github.com/googleapis/python-monitoring/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-monitoring";
+    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-monitoring-v${version}/packages/google-cloud-monitoring";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

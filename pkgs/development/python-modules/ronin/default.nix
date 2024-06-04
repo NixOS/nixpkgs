@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, blessings
-, colorama
-, glob2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  blessings,
+  colorama,
+  glob2,
 }:
 
 buildPythonPackage rec {
   pname = "ronin";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version pname;
@@ -21,9 +23,7 @@ buildPythonPackage rec {
     glob2
   ];
 
-  pythonImportsCheck = [
-    "ronin"
-  ];
+  pythonImportsCheck = [ "ronin" ];
 
   meta = with lib; {
     homepage = "https://github.com/tliron/ronin/";

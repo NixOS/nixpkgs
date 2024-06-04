@@ -1,35 +1,118 @@
-{ lib, fetchFromGitHub, buildGoModule, testers, temporal-cli }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles, symlinkJoin, stdenv }:
 
-buildGoModule rec {
-  pname = "temporal-cli";
-  version = "1.17.2";
-
-  src = fetchFromGitHub {
-    owner = "temporalio";
-    repo = "tctl";
-    rev = "v${version}";
-    hash = "sha256-QID0VtARbJiTIQm2JeaejQ5VpJsAIHfZtws7i2UN8dM=";
-  };
-
-  vendorHash = "sha256-9bgovXVj+qddfDSI4DTaNYH4H8Uc4DZqeVYG5TWXTNw=";
-
-  ldflags = [ "-s" "-w" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  passthru.tests.version = testers.testVersion {
-    package = temporal-cli;
-    # the app writes a default config file at startup
-    command = "HOME=$(mktemp -d) ${meta.mainProgram} --version";
-  };
-
-  meta = with lib; {
-    description = "Temporal CLI";
-    homepage = "https://temporal.io";
+let
+  metaCommon = with lib; {
+    description = "Command-line interface for running Temporal Server and interacting with Workflows, Activities, Namespaces, and other parts of Temporal";
+    homepage = "https://docs.temporal.io/cli";
     license = licenses.mit;
     maintainers = with maintainers; [ aaronjheng ];
-    mainProgram = "tctl";
+  };
+
+  overrideModAttrs = old: {
+    # https://gitlab.com/cznic/libc/-/merge_requests/10
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
+
+  tctl-next = buildGoModule rec {
+    pname = "tctl-next";
+    version = "0.12.0";
+
+    src = fetchFromGitHub {
+      owner = "temporalio";
+      repo = "cli";
+      rev = "v${version}";
+      hash = "sha256-rqwDubKNBvtJ4rTQheCoSIcbfQZQN3iD99PcZewmx5c=";
+    };
+
+    vendorHash = "sha256-bnmlh11gtNdgcrI20gjNqxWB+OQTv0b9lgETucoBaXc=";
+
+    inherit overrideModAttrs;
+
+    nativeBuildInputs = [ installShellFiles ];
+
+    excludedPackages = [ "./cmd/docgen" "./tests" ];
+
+    ldflags = [
+      "-s"
+      "-w"
+      "-X github.com/temporalio/cli/headers.Version=${version}"
+    ];
+
+    # Tests fail with x86 on macOS Rosetta 2
+    doCheck = !(stdenv.isDarwin && stdenv.hostPlatform.isx86_64);
+
+    preCheck = ''
+      export HOME="$(mktemp -d)"
+    '';
+
+    postInstall = ''
+      installShellCompletion --cmd temporal \
+        --bash <($out/bin/temporal completion bash) \
+        --fish <($out/bin/temporal completion fish) \
+        --zsh <($out/bin/temporal completion zsh)
+    '';
+
+    __darwinAllowLocalNetworking = true;
+
+    meta = metaCommon // {
+      mainProgram = "temporal";
+    };
+  };
+
+  tctl = buildGoModule rec {
+    pname = "tctl";
+    version = "1.18.1";
+
+    src = fetchFromGitHub {
+      owner = "temporalio";
+      repo = "tctl";
+      rev = "v${version}";
+      hash = "sha256-LX4hyPme+mkNmPvrTHIT5Ow3QM8BTAB7MXSY1fa8tSk=";
+    };
+
+    vendorHash = "sha256-294lnUKnXNrN6fJ+98ub7LwsJ9aT+FzWCB3nryfAlCI=";
+
+    inherit overrideModAttrs;
+
+    nativeBuildInputs = [ installShellFiles ];
+
+    excludedPackages = [ "./cmd/copyright" ];
+
+    ldflags = [ "-s" "-w" ];
+
+    preCheck = ''
+      export HOME="$(mktemp -d)"
+    '';
+
+    postInstall = ''
+      installShellCompletion --cmd tctl \
+        --bash <($out/bin/tctl completion bash) \
+        --zsh <($out/bin/tctl completion zsh)
+    '';
+
+    __darwinAllowLocalNetworking = true;
+
+    meta = metaCommon // {
+      mainProgram = "tctl";
+    };
+  };
+in
+symlinkJoin rec {
+  pname = "temporal-cli";
+  inherit (tctl) version;
+  name = "${pname}-${version}";
+
+  paths = [
+    tctl-next
+    tctl
+  ];
+
+  passthru = { inherit tctl tctl-next; };
+
+  meta = metaCommon // {
+    mainProgram = "temporal";
+    platforms = lib.unique (lib.concatMap (drv: drv.meta.platforms) paths);
   };
 }

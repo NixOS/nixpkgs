@@ -6,7 +6,7 @@ let
   cfg = config.services.dex;
   fixClient = client: if client ? secretFile then ((builtins.removeAttrs client [ "secretFile" ]) // { secret = client.secretFile; }) else client;
   filteredSettings = mapAttrs (n: v: if n == "staticClients" then (builtins.map fixClient v) else v) cfg.settings;
-  secretFiles = flatten (builtins.map (c: if c ? secretFile then [ c.secretFile ] else []) (cfg.settings.staticClients or []));
+  secretFiles = flatten (builtins.map (c: optional (c ? secretFile) c.secretFile) (cfg.settings.staticClients or []));
 
   settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "config.yaml" filteredSettings;
@@ -19,12 +19,12 @@ let
 in
 {
   options.services.dex = {
-    enable = mkEnableOption (lib.mdDoc "the OpenID Connect and OAuth2 identity provider");
+    enable = mkEnableOption "the OpenID Connect and OAuth2 identity provider";
 
     environmentFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Environment file (see `systemd.exec(5)`
         "EnvironmentFile=" section for the syntax) to define variables for dex.
         This option can be used to safely include secret keys into the dex configuration.
@@ -56,7 +56,7 @@ in
           ];
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         The available options can be found in
         [the example configuration](https://github.com/dexidp/dex/blob/v${pkgs.dex-oidc.version}/config.yaml.dist).
 
@@ -108,8 +108,7 @@ in
         ProtectClock = true;
         ProtectHome = true;
         ProtectHostname = true;
-        # Would re-mount paths ignored by temporary root
-        #ProtectSystem = "strict";
+        ProtectSystem = "strict";
         ProtectControlGroups = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
@@ -121,9 +120,7 @@ in
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
-        TemporaryFileSystem = "/:ro";
-        # Does not work well with the temporary root
-        #UMask = "0066";
+        UMask = "0066";
       } // optionalAttrs (cfg.environmentFile != null) {
         EnvironmentFile = cfg.environmentFile;
       };

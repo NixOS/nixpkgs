@@ -2,14 +2,14 @@
 , version
 , src
 , extraNativeBuildInputs ? [ ]
-, extraMeta ? {}
+, extraBuildInputs ? [ ]
+, extraMeta ? { }
 , compileFlags ? [ ]
 , postInstall ? ""
 , region ? "us"
 
 , lib
 , stdenv
-, fetchFromGitHub
 , python3
 , pkg-config
 , audiofile
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     audiofile
     SDL2
-  ];
+  ] ++ extraBuildInputs;
 
   enableParallelBuilding = true;
 

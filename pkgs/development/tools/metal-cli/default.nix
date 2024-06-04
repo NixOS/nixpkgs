@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "metal-cli";
-  version = "0.12.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "equinix";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-oPMojw6CGncBJ8PZOTrzvQu2gRs1cw1Jwi38eOZggI8=";
+    hash = "sha256-6bdDxxY5HwYXer8R1C5b7UIXy0wdBVDYYNtTR6eHv10=";
   };
 
-  vendorHash = "sha256-drsNZXLNUWICLI8D+IvJE4X8GmWrP9U3dmpf9HnKCWw=";
+  vendorHash = "sha256-fNpfcBHxjPdWpfM9/OVdZ+ng13+Z/qdZE/MITTCjeC0=";
 
   ldflags = [
     "-s"
@@ -47,7 +47,7 @@ buildGoModule rec {
     homepage = "https://github.com/equinix/metal-cli/";
     changelog = "https://github.com/equinix/metal-cli/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne nshalman ];
+    maintainers = with maintainers; [ Br1ght0ne nshalman teutat3s ];
     mainProgram = "metal";
   };
 }

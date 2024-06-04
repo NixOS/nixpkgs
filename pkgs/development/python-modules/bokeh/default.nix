@@ -1,46 +1,67 @@
-{ buildPythonPackage
-, fetchPypi
-, futures ? null
-, isPy27
-, isPyPy
-, jinja2
-, lib
-, mock
-, numpy
-, nodejs
-, packaging
-, pillow
-#, pytestCheckHook#
-, pytest
-, python-dateutil
-, pyyaml
-, selenium
-, six
-, substituteAll
-, tornado
-, typing-extensions
-, pytz
-, flaky
-, networkx
-, beautifulsoup4
-, requests
-, nbconvert
-, icalendar
-, pandas
-, pythonImportsCheckHook
-, contourpy
-, xyzservices
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchFromGitHub,
+  pythonOlder,
+  substituteAll,
+  colorama,
+  contourpy,
+  jinja2,
+  numpy,
+  nodejs,
+  packaging,
+  pandas,
+  pillow,
+  tornado,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
+  setuptools-git-versioning,
+  xyzservices,
+  beautifulsoup4,
+  channels,
+  click,
+  colorcet,
+  coverage,
+  firefox,
+  geckodriver,
+  isort,
+  json5,
+  nbconvert,
+  networkx,
+  psutil,
+  pygments,
+  pygraphviz,
+  pytest,
+  pytest-asyncio,
+  pytest-xdist,
+  pytest-timeout,
+  requests,
+  scipy,
+  selenium,
+  toml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "3.0.3";
-  format = "setuptools";
+  version = "3.4.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash= "sha256-HChHHvXmEQulvtUTE3/SYFTrxEVLx2hlDq7vxTuJioo=";
+    hash = "sha256-2CSWHkJlNnsHUM5YsH5WStC4PKZLM1UhzTQh6bnxDYk=";
+  };
+
+  src_test = fetchFromGitHub {
+    owner = "bokeh";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-PK9iLOCcivr4oF9Riq73dzxGfxzWRk3bdrCCpRrTv5g=";
   };
 
   patches = [
@@ -51,53 +72,62 @@ buildPythonPackage rec {
     })
   ];
 
-  disabled = isPyPy || isPy27;
-
   nativeBuildInputs = [
-    pythonImportsCheckHook
+    colorama
+    nodejs
+    setuptools
+    setuptools-git-versioning
   ];
 
-  pythonImportsCheck = [
-    "bokeh"
-  ];
-
-  checkInputs = [
-    mock
-    pytest
-    pillow
-    selenium
-    pytz
-    flaky
-    networkx
+  nativeCheckInputs = [
+    pytestCheckHook
     beautifulsoup4
-    requests
+    channels
+    click
+    colorcet
+    coverage
+    firefox
+    geckodriver
+    isort
+    json5
     nbconvert
-    icalendar
+    networkx
+    psutil
+    pygments
+    pygraphviz
+    pytest
+    pytest-asyncio
+    pytest-xdist
+    pytest-timeout
+    requests
+    scipy
+    selenium
+    toml
+    typing-extensions
   ];
 
   propagatedBuildInputs = [
-    contourpy
-    pillow
     jinja2
-    python-dateutil
-    six
+    contourpy
+    numpy
+    packaging
+    pandas
+    pillow
     pyyaml
     tornado
-    numpy
-    pandas
-    packaging
-    typing-extensions
     xyzservices
-  ]
-  ++ lib.optionals ( isPy27 ) [
-    futures
   ];
 
-  # This test suite is a complete pain. Somehow it can't find its fixtures.
-  doCheck = false;
+  doCheck = false; # need more work
+  pytestFlagsArray = "tests/test_defaults.py";
+  pythonImportsCheck = [ "bokeh" ];
+  preCheck = ''
+    cp -rv ''${src_test}/tests/* ./tests/
+  '';
 
   meta = {
     description = "Statistical and novel interactive HTML plots for Python";
+    mainProgram = "bokeh";
     homepage = "https://github.com/bokeh/bokeh";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ orivej ];

@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, celery
-, humanize
-, pytz
-, tornado
-, prometheus-client
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  celery,
+  humanize,
+  pytz,
+  tornado,
+  prometheus-client,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flower";
-  version = "1.2.0";
+  version = "2.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "46493c7e8d9ca2167e8a46eb97ae8d280997cb40a81993230124d74f0fe40bac";
+    sha256 = "sha256-WrcXuXlTB3DBavtItQ0qmNI8Pp/jmFHc9rxNAYRaAqA=";
   };
 
   postPatch = ''
@@ -33,13 +34,11 @@ buildPythonPackage rec {
     tornado
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "flower"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "flower" ];
 
   meta = with lib; {
     description = "Real-time monitor and web admin for Celery distributed task queue";

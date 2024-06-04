@@ -10,10 +10,7 @@ let
     check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
   };
 
-  impanel =
-    if cfg.panel != null
-    then "--panel=${cfg.panel}"
-    else "";
+  impanel = optionalString (cfg.panel != null) "--panel=${cfg.panel}";
 
   ibusAutostart = pkgs.writeTextFile {
     name = "autostart-ibus-daemon";
@@ -44,14 +41,13 @@ in
             enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
             engines = concatStringsSep ", "
               (map (name: "`${name}`") (attrNames enginesDrv));
-          in
-            lib.mdDoc "Enabled IBus engines. Available engines are: ${engines}.";
+          in "Enabled IBus engines. Available engines are: ${engines}.";
       };
       panel = mkOption {
         type = with types; nullOr path;
         default = null;
-        example = literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/lib/libexec/kimpanel-ibus-panel"'';
-        description = lib.mdDoc "Replace the IBus panel with another panel.";
+        example = literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
+        description = "Replace the IBus panel with another panel.";
       };
     };
   };

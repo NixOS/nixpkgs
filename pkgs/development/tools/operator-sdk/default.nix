@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "operator-sdk";
-  version = "1.26.0";
+  version = "1.34.2";
 
   src = fetchFromGitHub {
     owner = "operator-framework";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hIJTdTZ24+VwF1M/RvKcnQRzZga0nsjlTTUFYxZn0lo=";
+    hash = "sha256-vVa1ljPRSHSo7bVqPkRt/jbuSlzLmnVaLnyreskwOrM=";
   };
 
-  vendorHash = "sha256-1Vz+SIrNULajDqzZt53+o9wv1zLPBvKrO28BTqS4VbM=";
+  vendorHash = "sha256-YspUrnSS6d8Ta8dmUjx9A5D/V5Bqm08DQJrRBaIGyQg=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -29,6 +29,7 @@ buildGoModule rec {
   doCheck = false;
 
   subPackages = [
+    "cmd/helm-operator"
     "cmd/operator-sdk"
   ];
 

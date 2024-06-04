@@ -1,7 +1,6 @@
-args @ {
+{
   lib,
   stdenv,
-  llvmPackages_12, # Anything newer than 11
   fetchzip,
   which,
   attr,
@@ -18,22 +17,17 @@ args @ {
   lzo,
   xz,
   zlib,
+  zstd,
   CoreFoundation,
 }:
 
-let
-  # Fails to build with clang-11 on Darwin:
-  # error: exception specification of overriding function is more lax than base version
-  stdenv = if args.stdenv.isDarwin then llvmPackages_12.stdenv else args.stdenv;
-in
-
 stdenv.mkDerivation rec {
-  version = "2.7.8";
+  version = "2.7.14";
   pname = "dar";
 
   src = fetchzip {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-W/6kSkIaeHumE2yGGbU4Z2lk1d2toQ1AM012TUI1EZw=";
+    sha256 = "sha256-qesq+Rqo/llvQ7JPqYwLhObwZw2GlhXpYyc6NEA9c4M=";
   };
 
   outputs = [ "out" "dev" ];
@@ -53,6 +47,7 @@ stdenv.mkDerivation rec {
     lzo
     xz
     zlib
+    zstd
   ] ++ lib.optionals stdenv.isLinux [
     attr
     e2fsprogs

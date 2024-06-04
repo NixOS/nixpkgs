@@ -1,19 +1,20 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, mock
-, geopy
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  mock,
+  geopy,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyipma";
-  version = "3.0.5";
+  version = "3.0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "dgomes";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-KyXHNkP/XJlTdVFdP91x3udMquQju8G2VUHLPvZymtk=";
+    hash = "sha256-a6UXc8XLZhSyUb8AxnXoPgiyP004GQfuapRmVeOaFQU=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     geopy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     freezegun
     mock
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyipma"
-  ];
+  pythonImportsCheck = [ "pyipma" ];
 
   disabledTestPaths = [
     # Tests require network access
@@ -52,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to retrieve information from Instituto Português do Mar e Atmosfera";
     homepage = "https://github.com/dgomes/pyipma";
+    changelog = "https://github.com/dgomes/pyipma/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

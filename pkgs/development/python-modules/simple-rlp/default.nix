@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "simple-rlp";
   version = "0.1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LfHSt2nwoBd9JiMauL4W5l41RrF7sKmkkO/TUXwIKHY=";
+    hash = "sha256-LfHSt2nwoBd9JiMauL4W5l41RrF7sKmkkO/TUXwIKHY=";
   };
 
   pythonImportsCheck = [ "rlp" ];

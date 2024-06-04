@@ -2,6 +2,7 @@
 , stdenv
 , acl
 , e2fsprogs
+, fetchFromGitHub
 , libb2
 , lz4
 , openssh
@@ -11,42 +12,39 @@
 , zstd
 , installShellFiles
 , nixosTests
-, fetchpatch
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3;
+in
+python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.3";
-  format = "pyproject";
+  version = "1.2.8";
+  pyproject = true;
 
-  src = python3.pkgs.fetchPypi {
-    inherit pname version;
-    hash = "sha256-4yQY+GM8lvqWgTUqVutjuY4pQgNHLBFKUkJwnTaWZ4U=";
+  src = fetchFromGitHub {
+    owner = "borgbackup";
+    repo = "borg";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+FHqOVuHlY9QUjCrYVnrMBZPMFH9Z2U7eZ6eUSINSrw=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix HashIndexSizeTestCase.test_size_on_disk_accurate problems on ZFS,
-      # see https://github.com/borgbackup/borg/issues/7250
-      url = "https://github.com/borgbackup/borg/pull/7252/commits/fe3775cf8078c18d8fe39a7f42e52e96d3ecd054.patch";
-      hash = "sha256-gdssHfhdkmRfSAOeXsq9Afg7xqGM3NLIq4QnzmPBhw4=";
-    })
-  ];
 
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits
     substituteInPlace src/borg/testsuite/archiver.py \
-      --replace "0o4755" "0o0755"
+      --replace-fail "0o4755" "0o0755"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python.pkgs; [
     cython
     setuptools-scm
     pkgconfig
+  ];
 
+  nativeBuildInputs = with python.pkgs; [
     # docs
     sphinxHook
-    guzzle_sphinx_theme
+    guzzle-sphinx-theme
 
     # shell completions
     installShellFiles
@@ -64,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
     acl
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python.pkgs; [
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
@@ -81,7 +79,7 @@ python3.pkgs.buildPythonApplication rec {
       --zsh scripts/shell_completions/zsh/_borg
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     e2fsprogs
     py
     python-dateutil
@@ -124,6 +122,7 @@ python3.pkgs.buildPythonApplication rec {
   outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
+    changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;

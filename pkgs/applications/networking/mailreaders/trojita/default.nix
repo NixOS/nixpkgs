@@ -16,8 +16,6 @@
 , qtkeychain
 , qttools
 , qtwebkit
-, qttranslations
-, substituteAll
 , withI18n ? false
 }:
 
@@ -38,12 +36,6 @@ in mkDerivation rec {
     rev = "91087933c5e7a03a8097c0ffe5f7289abcfc123b";
     sha256 = "sha256-15G9YjT3qBKbeOKfb/IgXOO+DaJaTULP9NJn/MFYZS8=";
   };
-
-  patches = (substituteAll {
-    # See https://github.com/NixOS/nixpkgs/issues/86054
-    src = ./fix-qttranslations-path.patch;
-    inherit qttranslations;
-  });
 
   buildInputs = [
     akonadi-contacts

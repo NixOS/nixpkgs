@@ -1,25 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, geojson
-, lxml
-, matplotlib
-, numpy
-, pandas
-, ujson
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  geojson,
+  lxml,
+  matplotlib,
+  numpy,
+  pandas,
+  ujson,
+  xarray,
 }:
 
 buildPythonPackage rec {
   pname = "osmpythontools";
   version = "0.3.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mocnik-science";
     repo = "osm-python-tools";
     rev = "v${version}";
-    sha256 = "sha256-lTDA1Rad9aYI/ymU/0xzdJHmebUGcpVJ0GW7D0Ujdko=";
+    hash = "sha256-lTDA1Rad9aYI/ymU/0xzdJHmebUGcpVJ0GW7D0Ujdko=";
   };
 
   propagatedBuildInputs = [
@@ -55,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mocnik-science/osm-python-tools";
     license = licenses.gpl3Only;
     changelog = "https://raw.githubusercontent.com/mocnik-science/osm-python-tools/v${version}/version-history.md";
-    maintainers = with maintainers; [ das-g erictapen ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
   };
 }

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,23 +31,17 @@ buildPythonPackage rec {
       --replace " --cov-report=html:htmlcov --cov-report=xml:coverage.xml --cov-report=term-missing --cov=motioneye_client --cov-fail-under=100" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytest-timeout
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "motioneye_client"
-  ];
+  pythonImportsCheck = [ "motioneye_client" ];
 
   meta = with lib; {
     description = "Python library for motionEye";

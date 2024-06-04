@@ -13,24 +13,17 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to protect HP/Dell laptop hard drives (not SSDs) in free fall.
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.freefall;
-      defaultText = literalExpression "pkgs.freefall";
-      description = lib.mdDoc ''
-        freefall derivation to use.
-      '';
-    };
+    package = mkPackageOption pkgs "freefall" { };
 
     devices = mkOption {
       type = types.listOf types.str;
       default = [ "/dev/sda" ];
-      description = lib.mdDoc ''
+      description = ''
         Device paths to all internal spinning hard drives.
       '';
     };

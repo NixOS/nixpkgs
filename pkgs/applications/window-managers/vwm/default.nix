@@ -39,10 +39,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses glib libviper libpseudo gpm libvterm ];
 
   meta = with lib; {
-    homepage = "http://vwm.sourceforge.net/";
+    homepage = "https://vwm.sourceforge.net/";
     description = "Dynamic window manager for the console";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "vwm";
   };
 }

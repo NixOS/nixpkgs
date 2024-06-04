@@ -1,53 +1,58 @@
-{ lib
-, aiohttp
-, aresponses
-, awesomeversion
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "1.3.1";
-  format = "pyproject";
+  version = "5.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "DCSBL";
-    repo = pname;
+    repo = "python-homewizard-energy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rj3WTDj2ey8unOxXkD4zbqwd0FDcyHPzsDrjtX7myj4=";
+    hash = "sha256-z9JJHS7w/lugV23xJjWHBWVQp38J3CKtj4IuDvpPQJw=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
-    awesomeversion
     aiohttp
+    async-timeout
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
+    syrupy
   ];
 
-  pythonImportsCheck = [
-    "homewizard_energy"
-  ];
+  pythonImportsCheck = [ "homewizard_energy" ];
 
   meta = with lib; {
     description = "Library to communicate with HomeWizard Energy devices";
-    homepage = "https://github.com/DCSBL/python-homewizard-energy";
-    changelog = "https://github.com/DCSBL/python-homewizard-energy/releases/tag/v${version}";
+    homepage = "https://github.com/homewizard/python-homewizard-energy";
+    changelog = "https://github.com/homewizard/python-homewizard-energy/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

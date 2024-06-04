@@ -1,50 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pbr
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  flit-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ssdp";
-  version = "1.1.1";
+  version = "1.3.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-D2mww3sEc2SvufWNmT450a2CW+ogROn3RHypljkebuY=";
+    hash = "sha256-mORjMEg7Q/2CKZBLICSGF8dcdl98S6mBgJ4jujPGs6M=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--cov" ""
+  '';
 
   nativeBuildInputs = [
-    setuptools-scm
+    flit-core
+    flit-scm
   ];
 
-  buildInputs = [
-    pbr
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" "" \
-      --replace "--cov=ssdp" ""
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ssdp" ];
 
   meta = with lib; {
     description = "Python asyncio library for Simple Service Discovery Protocol (SSDP)";
+    mainProgram = "ssdp";
     homepage = "https://github.com/codingjoe/ssdp";
+    changelog = "https://github.com/codingjoe/ssdp/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

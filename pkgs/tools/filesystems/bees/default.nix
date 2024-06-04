@@ -5,7 +5,6 @@
 , bash
 , btrfs-progs
 , coreutils
-, linuxHeaders_5_19
 , python3Packages
 , util-linux
 , nixosTests
@@ -15,13 +14,13 @@ let
 
   bees = stdenv.mkDerivation rec {
     pname = "bees";
-    version = "0.8";
+    version = "0.10";
 
     src = fetchFromGitHub {
       owner = "Zygo";
       repo = "bees";
       rev = "v${version}";
-      sha256 = "sha256-xBejyi/W8DLQmcicTqEQb5c4uZKu7jsLGjmWmW74t88=";
+      hash = "sha256-f3P3BEd8uO6QOZ1/2hBzdcuOSggYvHxW3g9pGftKO8g=";
     };
 
     buildInputs = [
@@ -76,8 +75,8 @@ in
   substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
   chmod +x "$out"/bin/bees-service-wrapper
   ln -s ${bees}/bin/beesd "$out"/bin/beesd
-'').overrideAttrs (old: {
+'').overrideAttrs {
   passthru.tests = {
     smoke-test = nixosTests.bees;
   };
-})
+}

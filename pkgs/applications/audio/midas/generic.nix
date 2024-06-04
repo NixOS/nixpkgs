@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ${pname} $out/bin
+    cp ${type}-Edit $out/bin/${pname}
   '';
   preFixup = let
     # we prepare our library path in the let clause to avoid it become part of the input of mkDerivation

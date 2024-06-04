@@ -1,6 +1,6 @@
 { lib
 , rustPlatform
-, fetchFromGitHub
+, fetchCrate
 , installShellFiles
 , stdenv
 , nix-update-script
@@ -8,17 +8,15 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "cargo-asm";
-  version = "0.2.0";
+  pname = "cargo-show-asm";
+  version = "0.2.35";
 
-  src = fetchFromGitHub {
-    owner = "pacak";
-    repo = "cargo-show-asm";
-    rev = version;
-    hash = "sha256-qsr28zuvu+i7P/MpwhDKQFFXTyFFo+vWrjBrpD1V8PY=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-23G4Re10ksoJSWRmzRjTpSGRLk3LLnkuzTjPOgf4oOk=";
   };
 
-  cargoHash = "sha256-IL+BB08uZr5fm05ITxpm66jTb+pYYlLKOwQ8uf5rKSs=";
+  cargoHash = "sha256-OcGmlGA0relDY1Tn/edE1pX+vOhKFXJ8YeCdQ5b7ZnQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -41,7 +39,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Cargo subcommand showing the assembly, LLVM-IR and MIR generated for Rust code";
     homepage = "https://github.com/pacak/cargo-show-asm";
+    changelog = "https://github.com/pacak/cargo-show-asm/blob/${version}/Changelog.md";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda oxalica ];
+    maintainers = with maintainers; [ figsoda oxalica matthiasbeyer ];
+    mainProgram = "cargo-asm";
   };
 }

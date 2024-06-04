@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "interactsh";
-  version = "1.0.7";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-egM3ZlY/xjUu/Bxg58d7YET2PT3prf6ooZY+s/9faWQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IpKsKfu2mVLyrR0wnbraV/0aaX7uRleGbl3q4bv90Eg=";
   };
 
-  vendorSha256 = "sha256-Y6ErkDHnXJtdzEykD5EZYHRfHDPicE0sAzT2UXUNTGY=";
+  vendorHash = "sha256-xUMEmeoE3Th37kgz5LJg3F27RlKBoIhRf0VfRzkgV2A=";
 
   modRoot = ".";
   subPackages = [
@@ -33,6 +33,7 @@ buildGoModule rec {
       For example - Blind SQLi, Blind CMDi, SSRF, etc.
     '';
     homepage = "https://github.com/projectdiscovery/interactsh";
+    changelog = "https://github.com/projectdiscovery/interactsh/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hanemile ];
   };

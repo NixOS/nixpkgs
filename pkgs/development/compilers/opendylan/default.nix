@@ -39,5 +39,6 @@ stdenv.mkDerivation {
     description = "A multi-paradigm functional and object-oriented programming language";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    broken = true; # last successful build 2020-12-11
   };
 }

@@ -1,44 +1,49 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchurl
-, isPy3k
-, python
-, apr
-, aprutil
-, bash
-, e2fsprogs
-, expat
-, gcc
-, glibcLocales
-, neon
-, openssl
-, pycxx
-, subversion
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  isPy3k,
+  python,
+  apr,
+  aprutil,
+  bash,
+  e2fsprogs,
+  expat,
+  gcc,
+  glibcLocales,
+  neon,
+  openssl,
+  pycxx,
+  subversion,
 }:
 
 buildPythonPackage rec {
   pname = "pysvn";
-  version = "1.9.18";
+  version = "1.9.20";
   format = "other";
 
   src = fetchurl {
-    url = "https://pysvn.barrys-emacs.org/source_kits/${pname}-${version}.tar.gz";
-    hash = "sha256-lUPsNumMYwZoiR1Gt/hqdLLoHOZybRxwvu9+eU1CY78=";
+    url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
+    hash = "sha256-LbAz+KjEY3nkSJAzJNwlnSRYoWr4i1ITRUPV3ZBH7cc=";
   };
 
-  patches = [
-    ./replace-python-first.patch
-  ];
+  patches = [ ./replace-python-first.patch ];
 
-  buildInputs = [ bash subversion apr aprutil expat neon openssl ]
-    ++ lib.optionals stdenv.isLinux [ e2fsprogs ]
-    ++ lib.optionals stdenv.isDarwin [ gcc ];
+  buildInputs = [
+    bash
+    subversion
+    apr
+    aprutil
+    expat
+    neon
+    openssl
+  ] ++ lib.optionals stdenv.isLinux [ e2fsprogs ] ++ lib.optionals stdenv.isDarwin [ gcc ];
 
   preConfigure = ''
     cd Source
-    ${python.interpreter} setup.py backport
-    ${python.interpreter} setup.py configure \
+    ${python.pythonOnBuildForHost.interpreter} setup.py backport
+    ${python.pythonOnBuildForHost.interpreter} setup.py configure \
       --apr-inc-dir=${apr.dev}/include \
       --apu-inc-dir=${aprutil.dev}/include \
       --pycxx-dir=${pycxx.dev}/include \
@@ -49,7 +54,7 @@ buildPythonPackage rec {
       --svn-bin-dir=${subversion.out}/bin
   '';
 
-  checkInputs = [ glibcLocales ];
+  nativeCheckInputs = [ glibcLocales ];
 
   checkPhase = ''
     runHook preCheck
@@ -62,8 +67,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  # FIXME https://github.com/NixOS/nixpkgs/issues/175227
-  # pythonImportsCheck = [ "pysvn" ];
+  pythonImportsCheck = [ "pysvn" ];
 
   installPhase = ''
     dest=$(toPythonPath $out)/pysvn

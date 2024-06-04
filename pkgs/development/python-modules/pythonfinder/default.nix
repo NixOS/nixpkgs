@@ -1,58 +1,55 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
-, attrs
-, cached-property
-, click
-, packaging
-, pytest-cov
-, pytest-timeout
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cached-property,
+  click,
+  fetchFromGitHub,
+  packaging,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "1.3.1";
-  format = "pyproject";
+  version = "2.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-N/q9zi2SX38ivSpnjrx+bEzdR9cS2ivSgy42SR8cl+Q=";
+    repo = "pythonfinder";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CbaKXD7Sde8euRqvc/IHoXoSMF+dNd7vT9LkLWq4/IU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov" ""
+  '';
 
-  propagatedBuildInputs = [
-    attrs
-    cached-property
-    click
-    packaging
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-cov
+  propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+
+  passthru.optional-dependencies = {
+    cli = [ click ];
+  };
+
+  nativeCheckInputs = [
     pytest-timeout
-  ];
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pytestFlagsArray = [ "--no-cov" ];
-
-  # these tests invoke git in a subprocess and
-  # for some reason git can't be found even if included in checkInputs
-  disabledTests = [
-    "test_shims_are_kept"
-    "test_shims_are_removed"
-  ];
+  pythonImportsCheck = [ "pythonfinder" ];
 
   meta = with lib; {
+    description = "Cross platform search tool for finding Python";
+    mainProgram = "pyfinder";
     homepage = "https://github.com/sarugaku/pythonfinder";
-    description = "Cross Platform Search Tool for Finding Pythons";
+    changelog = "https://github.com/sarugaku/pythonfinder/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

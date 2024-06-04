@@ -1,29 +1,27 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, alsa-lib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
+, alsa-lib, asio, avahi, boost179, flac, libogg, libvorbis, libopus, soxr
 , IOKit, AudioToolbox
 , aixlog, popl
 , pulseaudioSupport ? false, libpulseaudio
 , nixosTests }:
 
-assert pulseaudioSupport -> libpulseaudio != null;
-
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.26.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "sha256-CCifn9OEFM//Hk1PJj8T3MXIV8pXCTdBBXPsHuZwLyQ=";
+    sha256 = "sha256-XxpiLojs1TI3qM7yXS+OPcHKo6pLcfJ+Eop7GjQ4HQw=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
   buildInputs = [
-    boost17x
-    asio avahi flac libogg libvorbis
+    boost179
+    asio avahi flac libogg libvorbis libopus
     aixlog popl soxr
   ] ++ lib.optional pulseaudioSupport libpulseaudio
   ++ lib.optional stdenv.isLinux alsa-lib

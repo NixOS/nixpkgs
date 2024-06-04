@@ -1,13 +1,13 @@
 { config, lib, ...}:
 
 let
-  inherit (lib) concatStringsSep mkOption types;
+  inherit (lib) concatStringsSep mkOption types optionalString;
 
 in {
 
   mkCellServDB = cellName: db: ''
     >${cellName}
-  '' + (concatStringsSep "\n" (map (dbm: if (dbm.ip != "" && dbm.dnsname != "") then dbm.ip + " #" + dbm.dnsname else "")
+  '' + (concatStringsSep "\n" (map (dbm: optionalString (dbm.ip != "" && dbm.dnsname != "") "${dbm.ip} #${dbm.dnsname}")
                                    db))
      + "\n";
 
@@ -17,13 +17,13 @@ in {
       type = types.str;
       default = "";
       example = "1.2.3.4";
-      description = lib.mdDoc "IP Address of a database server";
+      description = "IP Address of a database server";
     };
     dnsname = mkOption {
       type = types.str;
       default = "";
       example = "afs.example.org";
-      description = lib.mdDoc "DNS full-qualified domain name of a database server";
+      description = "DNS full-qualified domain name of a database server";
     };
   };
 

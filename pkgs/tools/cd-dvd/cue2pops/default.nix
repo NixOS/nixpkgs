@@ -28,5 +28,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/makefu/cue2pops-linux";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
+    mainProgram = "cue2pops";
   };
 }

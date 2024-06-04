@@ -1,44 +1,43 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 , buildPackages, bison, flex, pkg-config
-, db, iptables, libelf, libmnl
+, db, iptables, elfutils, libmnl
 , gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.1.0";
+  version = "6.8.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-XOEqD+xrIScl7yGHNZQbLat2JE235yZGp2AhsFN7Q6s=";
+    hash = "sha256-A6bMo9cakI0fFfe0lb4rj+hR+UFFjcRmSQDX9F/PaM4=";
   };
 
-  patches = [
-    # To avoid ./configure failing due to invalid arguments:
-    (fetchpatch { # configure: restore backward compatibility
-      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/patch/?id=a3272b93725a406bc98b67373da67a4bdf6fcdb0";
-      sha256 = "0hyagh2lf6rrfss4z7ca8q3ydya6gg7vfhh25slhpgcn6lnk0xbv";
-    })
-
-    # fix build on musl. applied anywhere to prevent patchrot.
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/main/iproute2/min.patch?id=4b78dbe29d18151402052c56af43cc12d04b1a69";
-      sha256 = "sha256-0ROZQAN3mUPPgggictr23jyA4JDG7m9vmBUhgRp4ExY=";
-    })
-  ];
-
-  preConfigure = ''
+  postPatch = ''
     # Don't try to create /var/lib/arpd:
     sed -e '/ARPDDIR/d' -i Makefile
+
+    substituteInPlace Makefile \
+      --replace "CC := gcc" "CC ?= $CC"
   '';
 
   outputs = [ "out" "dev" ];
+
+  configureFlags = [
+    "--color" "auto"
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
     "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "SHARED_LIBS=n"
+    # all build .so plugins:
+    "TC_CONFIG_NO_XT=y"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "HOSTCC=$(CC_FOR_BUILD)"
   ];
 
   buildFlags = [
@@ -51,7 +50,9 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ db iptables libelf libmnl ];
+  buildInputs = [ db iptables libmnl ]
+    # needed to uploaded bpf programs
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ elfutils ];
 
   enableParallelBuilding = true;
 

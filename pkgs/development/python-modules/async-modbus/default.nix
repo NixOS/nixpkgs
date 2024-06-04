@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, connio
-, fetchFromGitHub
-, fetchpatch
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, umodbus
+{
+  lib,
+  buildPythonPackage,
+  connio,
+  fetchFromGitHub,
+  fetchpatch,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  umodbus,
 }:
 
 buildPythonPackage rec {
@@ -39,23 +40,19 @@ buildPythonPackage rec {
       --replace '"--durations=2", "--verbose"' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     connio
     umodbus
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "async_modbus"
-  ];
+  pythonImportsCheck = [ "async_modbus" ];
 
   meta = with lib; {
     description = "Library for Modbus communication";

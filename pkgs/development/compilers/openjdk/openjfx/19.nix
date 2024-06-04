@@ -1,16 +1,29 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, writeText, openjdk17_headless
 , openjdk19_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst
-, libXxf86vm, glib, alsa-lib, ffmpeg_4, python3, ruby, icu68 }:
+, libXxf86vm, glib, alsa-lib, ffmpeg_4, python3, ruby, fetchurl, runCommand
+, withMedia ? true
+, withWebKit ? false
+}:
 
 let
   major = "19";
-  update = "";
-  build = "+11";
+  update = ".0.2.1";
+  build = "+1";
   repover = "${major}${update}${build}";
   gradle_ = (gradle_7.override {
     # note: gradle does not yet support running on 19
     java = openjdk17_headless;
   });
+
+  icuVersionWithSep = s: "68${s}2";
+  icuPath = "download/release-${icuVersionWithSep "-"}/icu4c-${icuVersionWithSep "."}-data-bin-l.zip";
+  icuData = fetchurl {
+    url = "https://github.com/unicode-org/icu/releases/${icuPath}";
+    hash = "sha256-ieQCLBTNrskuf8j3IUQS3QLIAQzLom/O58muMP363Lw=";
+  };
+  icuFakeRepository = runCommand "icu-data-repository" {} ''
+    install -Dm644 ${icuData} $out/${icuPath}
+  '';
 
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}${build}";
@@ -19,7 +32,7 @@ let
       owner = "openjdk";
       repo = "jfx";
       rev = repover;
-      hash = "sha256-UXTaXtJ8py83V7IQK9wACIEWDAMRUaYNgH9e/Aeyuzc=";
+      hash = "sha256-A08GhCGpzWlUG1+f6mcjvkJmMNaOReacQKPEmNpUvLs=";
     };
 
     patches = [
@@ -35,7 +48,14 @@ let
       })
     ];
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 icu68 ];
+    postPatch = ''
+      # Add missing includes for gcc-13 for webkit build:
+      sed -e '1i #include <cstdio>' \
+        -i modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/Heap.cpp \
+           modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
+    '';
+
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 ];
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -48,10 +68,11 @@ let
     buildPhase = ''
       runHook preBuild
 
+      export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
       export GRADLE_USER_HOME=$(mktemp -d)
       ln -s $config gradle.properties
       export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
-      gradle --no-daemon $gradleFlags sdk
+      gradle --no-daemon --console=plain $gradleFlags sdk
 
       runHook postBuild
     '';
@@ -83,8 +104,9 @@ in makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''
-    COMPILE_MEDIA = true
-    COMPILE_WEBKIT = false
+    COMPILE_MEDIA = ${lib.boolToString withMedia}
+    COMPILE_WEBKIT = ${lib.boolToString withWebKit}
+    ${lib.optionalString withWebKit "icuRepositoryURL = file://${icuFakeRepository}"}
   '';
 
   preBuild = ''
@@ -119,5 +141,8 @@ in makePackage {
     description = "The next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
+    knownVulnerabilities = [
+      "This OpenJFX version has reached its end of life."
+    ];
   };
 }

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt6-sip";
-  version = "13.4.0";
+  version = "13.6.0";
 
   src = fetchPypi {
     pname = "PyQt6_sip";
     inherit version;
-    sha256 = "sha256-bYej7lhy11EbdpV9aKMhCTUsrzt6QqAdnuIAMrNQ2Xk=";
+    hash = "sha256-JIbhWIBxlD1PZle6CQltyf/9IyKtLDAEHnjqPwN7V3g=";
   };
 
   # There is no test code and the check phase fails with:

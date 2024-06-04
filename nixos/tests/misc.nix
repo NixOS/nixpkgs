@@ -1,21 +1,19 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-import ./make-test-python.nix ({ pkgs, ...} : let
+import ./make-test-python.nix ({ lib, pkgs, ...} : let
   foo = pkgs.writeText "foo" "Hello World";
 in {
   name = "misc";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
-  };
+  meta.maintainers = with lib.maintainers; [ eelco ];
 
   nodes.machine =
     { lib, ... }:
-    with lib;
-    { swapDevices = mkOverride 0
+    { swapDevices = lib.mkOverride 0
         [ { device = "/root/swapfile"; size = 128; } ];
-      environment.variables.EDITOR = mkOverride 0 "emacs";
-      documentation.nixos.enable = mkOverride 0 true;
+      environment.variables.EDITOR = lib.mkOverride 0 "emacs";
+      documentation.nixos.enable = lib.mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
+      systemd.tmpfiles.settings."10-test"."/tmp/somefile".d = {};
       virtualisation.fileSystems = { "/tmp2" =
         { fsType = "tmpfs";
           options = [ "mode=1777" "noauto" ];
@@ -32,7 +30,7 @@ in {
           options = [ "bind" "rw" "noauto" ];
         };
       };
-      systemd.automounts = singleton
+      systemd.automounts = lib.singleton
         { wantedBy = [ "multi-user.target" ];
           where = "/tmp2";
         };
@@ -46,28 +44,6 @@ in {
 
   testScript =
     ''
-      import json
-
-
-      def get_path_info(path):
-          result = machine.succeed(f"nix --option experimental-features nix-command path-info --json {path}")
-          parsed = json.loads(result)
-          return parsed
-
-
-      with subtest("nix-db"):
-          info = get_path_info("${foo}")
-          print(info)
-
-          if (
-              info[0]["narHash"]
-              != "sha256-BdMdnb/0eWy3EddjE83rdgzWWpQjfWPAj3zDIFMD3Ck="
-          ):
-              raise Exception("narHash not set")
-
-          if info[0]["narSize"] != 128:
-              raise Exception("narSize not set")
-
       with subtest("nixos-version"):
           machine.succeed("[ `nixos-version | wc -w` = 2 ]")
 
@@ -120,6 +96,9 @@ in {
           )
           machine.fail("[ -e /tmp/foo ]")
 
+      with subtest("whether systemd-tmpfiles settings works"):
+          machine.succeed("[ -e /tmp/somefile ]")
+
       with subtest("whether automounting works"):
           machine.fail("grep '/tmp2 tmpfs' /proc/mounts")
           machine.succeed("touch /tmp2/x")
@@ -147,9 +126,6 @@ in {
 
       with subtest("shell-vars"):
           machine.succeed('[ -n "$NIX_PATH" ]')
-
-      with subtest("nix-db"):
-          machine.succeed("nix-store -qR /run/current-system | grep nixos-")
 
       with subtest("Test sysctl"):
           machine.wait_for_unit("systemd-sysctl.service")

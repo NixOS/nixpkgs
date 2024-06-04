@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ WhiteBlackGoose ];
     platforms = platforms.linux;
+    mainProgram = "litemdview";
   };
 }

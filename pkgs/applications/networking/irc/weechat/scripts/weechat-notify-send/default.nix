@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "weechat-notify-send";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "s3rvac";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1693b7axm9ls5p7hm6kq6avddsisi491khr5irvswr5lpizvys6a";
+    sha256 = "sha256-7uw0IdRSxhPrLqdgECKB9eOrtFj+2HTILBhakKiRuNQ=";
   };
 
   passthru.scripts = [ "notify_send.py" ];

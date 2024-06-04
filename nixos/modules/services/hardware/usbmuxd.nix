@@ -17,7 +17,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable the usbmuxd ("USB multiplexing daemon") service. This daemon is
         in charge of multiplexing connections over USB to an iOS device. This is
         needed for transferring data from and to iOS devices (see ifuse). Also
@@ -28,7 +28,7 @@ in
     user = mkOption {
       type = types.str;
       default = defaultUserGroup;
-      description = lib.mdDoc ''
+      description = ''
         The user usbmuxd should use to run after startup.
       '';
     };
@@ -36,7 +36,7 @@ in
     group = mkOption {
       type = types.str;
       default = defaultUserGroup;
-      description = lib.mdDoc ''
+      description = ''
         The group usbmuxd should use to run after startup.
       '';
     };
@@ -45,7 +45,7 @@ in
       type = types.package;
       default = pkgs.usbmuxd;
       defaultText = literalExpression "pkgs.usbmuxd";
-      description = lib.mdDoc "Which package to use for the usbmuxd daemon.";
+      description = "Which package to use for the usbmuxd daemon.";
       relatedPackages = [ "usbmuxd" "usbmuxd2" ];
     };
 
@@ -77,7 +77,7 @@ in
       serviceConfig = {
         # Trigger the udev rule manually. This doesn't require replugging the
         # device when first enabling the option to get it to work
-        ExecStartPre = "${pkgs.udev}/bin/udevadm trigger -s usb -a idVendor=${apple}";
+        ExecStartPre = "${config.systemd.package}/bin/udevadm trigger -s usb -a idVendor=${apple}";
         ExecStart = "${cfg.package}/bin/usbmuxd -U ${cfg.user} -v";
       };
     };

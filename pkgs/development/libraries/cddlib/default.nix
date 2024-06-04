@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , gmp
 , autoreconfHook
-, texlive
+, texliveSmall
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [gmp];
   nativeBuildInputs = [
     autoreconfHook
-    texlive.combined.scheme-small # for building the documentation
+    texliveSmall # for building the documentation
   ];
   # No actual checks yet (2018-05-05), but maybe one day.
   # Requested here: https://github.com/cddlib/cddlib/issues/25

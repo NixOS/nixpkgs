@@ -1,38 +1,40 @@
-{ lib
-, stdenv
-, fetchurl
-, buildPythonPackage
-, pkg-config
-, glib
-, gobject-introspection
-, pycairo
-, cairo
-, ncurses
-, meson
-, ninja
-, isPy3k
-, gnome
-, python
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPythonPackage,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  pycairo,
+  cairo,
+  ncurses,
+  meson,
+  ninja,
+  pythonOlder,
+  gnome,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.42.2";
+  version = "3.48.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "rehpXipwc4Sd0DFtMdhyjhXh4Lxx2f9tHAnoa+UryVc=";
+    hash = "sha256-B5SutKm+MaCSrCBiG19U7CgPkYWUPTKLEFza5imK0ac=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     pkg-config
@@ -42,23 +44,20 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    # # .so files link to these
-    gobject-introspection
+    cairo
     glib
-  ] ++ lib.optionals stdenv.isDarwin [
-    ncurses
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ ncurses ];
 
   propagatedBuildInputs = [
     pycairo
-    cairo
+    gobject-introspection # e.g. try building: python3Packages.urwid python3Packages.pydbus
   ];
 
   mesonFlags = [
     # This is only used for figuring out what version of Python is in
     # use, and related stuff like figuring out what the install prefix
     # should be, but it does need to be able to execute Python code.
-    "-Dpython=${python.pythonForBuild.interpreter}"
+    "-Dpython=${python.pythonOnBuildForHost.interpreter}"
   ];
 
   passthru = {

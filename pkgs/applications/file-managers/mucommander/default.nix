@@ -10,13 +10,13 @@
 }:
 
 let
-  version = "1.1.0-1";
+  version = "1.3.0-1";
 
   src = fetchFromGitHub {
     owner = "mucommander";
     repo = "mucommander";
     rev = version;
-    sha256 = "sha256-sCBbY3aBSuJmyOuy36pg8X2jX6hXwW8SW2UzYyp/isM=";
+    sha256 = "sha256-rSHHv96L2EHQuKBSAdpfi1XGP2u9o2y4g1+65FHWFMw=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-15ThPkvcmOfa5m/HMJzjrOOUi/BYbd57p5bBfj5/3n4=";
+    outputHash = "sha256-9tCcUg7hDNbkZiQEWtVRsUUfms73aU+vt5tQsfknM+E=";
   };
 
 in
@@ -105,5 +105,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ jiegec ];
     platforms = platforms.all;
+    mainProgram = "mucommander";
   };
 }

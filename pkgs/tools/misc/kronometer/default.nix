@@ -1,6 +1,6 @@
 {
   mkDerivation, fetchurl, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
+  extra-cmake-modules, kdoctools,
   kconfig, kcrash, kinit
 }:
 
@@ -16,8 +16,9 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://kde.org/applications/utilities/kronometer/";
     description = "A stopwatch application";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "kronometer";
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ kconfig kcrash kinit ];

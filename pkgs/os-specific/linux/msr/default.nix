@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.etallen.com/msr.html";
     description = "Linux tool to display or modify x86 model-specific registers (MSRs)";
+    mainProgram = "msr";
     license = licenses.bsd0;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];

@@ -1,38 +1,38 @@
-{ buildPythonPackage
-, addOpenGLRunpath
-, fetchPypi
-, fetchFromGitHub
-, Mako
-, boost
-, numpy
-, pytools
-, pytest
-, decorator
-, appdirs
-, six
-, cudaPackages
-, python
-, mkDerivation
-, lib
+{
+  buildPythonPackage,
+  addOpenGLRunpath,
+  fetchPypi,
+  fetchFromGitHub,
+  mako,
+  boost,
+  numpy,
+  pytools,
+  pytest,
+  decorator,
+  appdirs,
+  six,
+  cudaPackages,
+  python,
+  mkDerivation,
+  lib,
 }:
 let
-  compyte = import ./compyte.nix {
-    inherit mkDerivation fetchFromGitHub;
-  };
+  compyte = import ./compyte.nix { inherit mkDerivation fetchFromGitHub; };
 
   inherit (cudaPackages) cudatoolkit;
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2022.2.2";
+  version = "2024.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zZLnJGu0WsNFKVWhEHFBEmdM3ztKni9P8lpBWcaE5rs=";
+    hash = "sha256-1Q0j/2NxSCz/fUuVPvQKuByd8DjsthRIT5/VNHMnMn4=";
   };
 
   preConfigure = with lib.versions; ''
-    ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
+    ${python.pythonOnBuildForHost.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \
                           --boost-python-libname=boost_python${major python.version}${minor python.version} \
@@ -57,9 +57,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  nativeBuildInputs = [
-    addOpenGLRunpath
-  ];
+  nativeBuildInputs = [ addOpenGLRunpath ];
 
   propagatedBuildInputs = [
     numpy
@@ -71,7 +69,7 @@ buildPythonPackage rec {
     cudatoolkit
     compyte
     python
-    Mako
+    mako
   ];
 
   meta = with lib; {
@@ -80,5 +78,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ artuuge ];
   };
-
 }

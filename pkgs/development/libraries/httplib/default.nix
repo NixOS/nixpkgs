@@ -1,26 +1,23 @@
 { lib
-, stdenvNoCC
+, stdenv
 , fetchFromGitHub
+, cmake
+, openssl
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "httplib";
-  version = "0.11.4";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "yhirose";
     repo = "cpp-httplib";
     rev = "v${version}";
-    hash = "sha256-RTC2Q8T5tvi27BuZuH++wmKZ3bvIHL09S4F8YeO5Fbg=";
+    hash = "sha256-+YAjmsZvBkOk5bsjE07weTNUmevHd1ZXP0bv5QbkZMs=";
   };
 
-  # Header-only library.
-  dontBuild = true;
-
-  installPhase = ''
-    mkdir -p "$out/include"
-    cp -r httplib.h "$out/include"
-  '';
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     description = "A C++ header-only HTTP/HTTPS server and client library";
@@ -28,5 +25,6 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/yhirose/cpp-httplib/releases/tag/v${version}";
     maintainers = with maintainers; [ aidalgol ];
     license = licenses.mit;
+    platforms = platforms.all;
   };
 }

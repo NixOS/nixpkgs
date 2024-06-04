@@ -5,19 +5,24 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "time-decode";
-  version = "4.2.0";
-  format = "setuptools";
+  version = "7.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalsleuth";
     repo = "time_decode";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6OSa8tOTAzQbi5aYPDJotWApeh8E3wi4V7RN16Go/E4=";
+    hash = "sha256-K60xIQ6TWPYlsR6YjIquey5Ioaw4oAId59CPlQNK4yk=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     colorama
     python-dateutil
+    pyqt6
   ];
 
   # Project has no tests
@@ -33,5 +38,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/digitalsleuth/time_decode/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "time-decode";
   };
 }

@@ -28,13 +28,14 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "--std=gnu99"
     "-Wno-error"
   ];
 
   meta = with lib; {
     description = "Library for generating, refining and rendering 2-Dimensional Constrained Delaunay Triangulations";
+    mainProgram = "p2tc";
     homepage = "https://code.google.com/archive/p/poly2tri-c/";
     license = licenses.bsd3;
     maintainers = with lib.maintainers; [ jtojnar ];

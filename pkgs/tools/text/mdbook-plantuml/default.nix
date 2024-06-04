@@ -3,10 +3,8 @@
 , fetchpatch
 , stdenv
 , rustPlatform
-, darwin
 , pkg-config
 , openssl
-, libiconv
 , CoreServices
 }:
 
@@ -39,8 +37,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "mdBook preprocessor to render PlantUML diagrams to png images in the book output directory";
+    mainProgram = "mdbook-plantuml";
     homepage = "https://github.com/sytsereitsma/mdbook-plantuml";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ jcouyang ];
+    maintainers = with maintainers; [ jcouyang matthiasbeyer ];
   };
 }

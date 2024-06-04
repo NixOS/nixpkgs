@@ -1,81 +1,76 @@
-{ lib
+{ fetchFromGitHub
+, lib
 , stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
+, cmake
+, pkg-config
 , apacheHttpd
 , apr
-, cairo
-, iniparser
-, mapnik
+, aprutil
 , boost
-, icu
+, cairo
+, curl
+, glib
 , harfbuzz
-, libjpeg
-, libtiff
-, libwebp
-, proj
-, sqlite
+, icu
+, iniparser
+, libmemcached
+, mapnik
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "mod_tile";
-  version = "unstable-2017-01-08";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
-    rev = "e25bfdba1c1f2103c69529f1a30b22a14ce311f1";
-    sha256 = "12c96avka1dfb9wxqmjd57j30w9h8yx4y4w34kyq6xnf6lwnkcxp";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zXUwTG8cqAkY5MC1jAc2TtMgNMQPLc5nc22okVYP4ME=";
   };
 
-  patches = [
-    # Pull upstream fix for -fno-common toolchains:
-    #  https://github.com/openstreetmap/mod_tile/pull/202
-    (fetchpatch {
-      name = "fno-common";
-      url = "https://github.com/openstreetmap/mod_tile/commit/a22065b8ae3c018820a5ca9bf8e2b2bb0a0bfeb4.patch";
-      sha256 = "1ywfa14xn9aa96vx1adn1ndi29qpflca06x986bx9c5pqk761yz3";
-    })
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
 
-  # test is broken and I couldn't figure out a better way to disable it.
-  postPatch = ''
-    echo "int main(){return 0;}" > src/gen_tile_test.cpp
-  '';
-
-  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     apacheHttpd
     apr
-    cairo
-    iniparser
-    mapnik
+    aprutil
     boost
-    icu
+    cairo
+    curl
+    glib
     harfbuzz
-    libjpeg
-    libtiff
-    libwebp
-    proj
-    sqlite
+    icu
+    iniparser
+    libmemcached
+    mapnik
   ];
 
-  configureFlags = [
-    "--with-apxs=${apacheHttpd.dev}/bin/apxs"
+  enableParallelBuilding = true;
+
+  # Explicitly specify directory paths
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_MANDIR" "share/man")
+    (lib.cmakeFeature "CMAKE_INSTALL_MODULESDIR" "modules")
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "")
+    (lib.cmakeBool "ENABLE_TESTS" doCheck)
   ];
 
-  installPhase = ''
-    mkdir -p $out/modules
-    make install-mod_tile DESTDIR=$out
-    mv $out${apacheHttpd}/* $out
-    rm -rf $out/nix
-  '';
+  # And use DESTDIR to define the install destination
+  installFlags = [ "DESTDIR=$(out)" ];
+
+  doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/openstreetmap/mod_tile";
     description = "Efficiently render and serve OpenStreetMap tiles using Apache and Mapnik";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jglukasik ];
     platforms = platforms.linux;
   };

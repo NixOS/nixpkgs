@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ sqlite libmysqlclient postgresql unixODBC ];
 
   cmakeFlags = [ "--no-warn-unused-cli" ];
-  NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
+  env.NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
 
   meta = with lib; {
     homepage = "http://cppcms.com/sql/cppdb/";

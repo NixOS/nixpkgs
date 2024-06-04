@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Telnet BBS browser with GTK interface";
     maintainers = [ maintainers.sifmelcara ];
     platforms = platforms.linux;
+    mainProgram = "pcmanx";
   };
 }

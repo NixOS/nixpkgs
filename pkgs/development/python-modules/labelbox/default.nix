@@ -1,74 +1,76 @@
-{ lib
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, geojson
-, google-api-core
-, imagesize
-, ndjson
-, numpy
-, opencv
-  # , opencv-python
-, packaging
-, pillow
-, pydantic
-  # , pygeotile
-, pyproj
-, pytest-cases
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, rasterio
-, requests
-, shapely
-, tqdm
-, typeguard
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geojson,
+  google-api-core,
+  imagesize,
+  nbconvert,
+  nbformat,
+  numpy,
+  opencv4,
+  packaging,
+  pillow,
+  pydantic,
+  pyproj,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  setuptools,
+  shapely,
+  strenum,
+  tqdm,
+  typeguard,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.34.0";
-  format = "setuptools";
+  version = "3.67.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-x/XvcGiFS//f/le3JAd2n/tuUy9MBrCsISpkIkCCNis=";
+    hash = "sha256-JQTjmYxPBS8JC4HQTtbQ7hb80LPLYE4OEj1lFA6cZ1Y=";
   };
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "-s -vv -x --reruns 5 --reruns-delay 10 --durations=20" "-s -vv -x --durations=20"
+      --replace-fail "--reruns 2 --reruns-delay 10 --durations=20 -n 10" ""
+
+    # disable pytest_plugins which requires `pygeotile`
+    substituteInPlace tests/conftest.py \
+      --replace-fail "pytest_plugins" "_pytest_plugins"
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  pythonRelaxDeps = [
-    "backoff"
-  ];
+  pythonRelaxDeps = [ "python-dateutil" ];
 
-  propagatedBuildInputs = [
-    backoff
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
-    ndjson
     pydantic
+    python-dateutil
     requests
+    strenum
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     data = [
       shapely
       geojson
       numpy
       pillow
-      # opencv-python
+      opencv4
       typeguard
       imagesize
       pyproj
@@ -78,10 +80,11 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
-    pytest-cases
+  nativeCheckInputs = [
+    nbconvert
+    nbformat
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.data;
+  ] ++ optional-dependencies.data;
 
   disabledTestPaths = [
     # Requires network access
@@ -90,9 +93,7 @@ buildPythonPackage rec {
     "tests/data"
   ];
 
-  pythonImportsCheck = [
-    "labelbox"
-  ];
+  pythonImportsCheck = [ "labelbox" ];
 
   meta = with lib; {
     description = "Platform API for LabelBox";

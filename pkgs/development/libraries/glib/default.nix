@@ -2,40 +2,35 @@
 , lib
 , stdenv
 , fetchurl
-, fetchpatch
 , gettext
 , meson
 , ninja
 , pkg-config
 , perl
 , python3
-, libiconv, zlib, libffi, pcre2, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
+, python3Packages
+, libiconv, zlib, libffi, pcre2, elfutils, gnome, libselinux, bash, gnum4, libxslt
+, docutils, gi-docgen
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
-, coreutils, dbus, libxml2, tzdata
+, coreutils, dbus, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch
+, testers
+, gobject-introspection
+, mesonEmulatorHook
+, withIntrospection ?
+  stdenv.hostPlatform.emulatorAvailable buildPackages &&
+  lib.meta.availableOn stdenv.hostPlatform gobject-introspection &&
+  stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian
 }:
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
 
-# TODO:
-# * Make it build without python
-#     Problem: an example (test?) program needs it.
-#     Possible solution: disable compilation of this example somehow
-#     Reminder: add 'sed -e 's@python2\.[0-9]@python@' -i
-#       $out/bin/gtester-report' to postInstall if this is solved
-/*
-  * Use --enable-installed-tests for GNOME-related packages,
-      and use them as a separately installed tests run by Hydra
-      (they should test an already installed package)
-      https://wiki.gnome.org/GnomeGoals/InstalledTests
-  * Support org.freedesktop.Application, including D-Bus activation from desktop files
-*/
 let
   # Some packages don't get "Cflags" from pkg-config correctly
   # and then fail to build when directly including like <glib/...>.
@@ -50,16 +45,26 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
-  buildDocs = stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isStatic;
+  gobject-introspection' = buildPackages.gobject-introspection.override {
+    propagateFullGlib = false;
+    # Avoid introducing cairo, which enables gobjectSupport by default.
+    x11Support = false;
+  };
+
+  librarySuffix = if (stdenv.hostPlatform.extensions.library == ".so") then "2.0.so.0"
+                  else if (stdenv.hostPlatform.extensions.library == ".dylib") then "2.0.0.dylib"
+                  else if (stdenv.hostPlatform.extensions.library == ".a") then "2.0.a"
+                  else if (stdenv.hostPlatform.extensions.library == ".dll") then "2.0-0.dll"
+                  else "2.0-0.lib";
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.74.3";
+  version = "2.80.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "6bxB7NlpDZvGqXDMc4ARm4KOW2pLFsOTxjiz3CuHy8s=";
+    hash = "sha256-uc+296W9WzEjj9XVbfImst2l6jdhFHW/ifag+UAP6L0=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -67,27 +72,23 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
-
-    # Fix error about missing sentinel in glib/tests/cxx.cpp
-    # These two commits are part of already merged glib MRs 3033 and 3031:
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3033
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/0ca5254c5d92aec675b76b4bfa72a6885cde6066.patch";
-      sha256 = "OfD5zO/7JIgOMLc0FAgHV9smWugFJuVPHCn9jTsMQJg=";
-    })
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3031
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/7dc19632f3115e3f517c6bc80436fe72c1dcdeb4.patch";
-      sha256 = "v28Yk+R0kN9ssIcvJudRZ4vi30rzQEE8Lsd1kWp5hbM=";
-    })
   ] ++ [
+    # This patch lets GLib's GDesktopAppInfo API watch and notice changes
+    # to the Nix user and system profiles.  That way, the list of available
+    # applications shown by the desktop environment is immediately updated
+    # when the user installs or removes any
+    # (see <https://issues.guix.gnu.org/35594>).
+
+    # It does so by monitoring /nix/var/nix/profiles (for changes to the system
+    # profile) and /nix/var/nix/profiles/per-user/USER (for changes to the user
+    # profile) as well as /etc/profiles/per-user (for chanes to the user
+    # environment profile) and crawling their share/applications sub-directory when
+    # changes happen.
     ./glib-appinfo-watch.patch
+
     ./schema-override-variable.patch
 
-    # Add support for the GNOME’s default terminal emulator.
-    # https://gitlab.gnome.org/GNOME/glib/-/issues/2618
-    ./gnome-console-support.patch
-    # Do the same for Pantheon’s terminal emulator.
+    # Add support for Pantheon’s terminal emulator.
     ./elementary-terminal-support.patch
 
     # GLib contains many binaries used for different purposes;
@@ -113,24 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
     #    * gio-launch-desktop
     ./split-dev-programs.patch
-
-    # Disable flaky test.
-    # https://gitlab.gnome.org/GNOME/glib/-/issues/820
-    ./skip-timer-test.patch
-
-    # GVariant security fixes
-    # https://discourse.gnome.org/t/multiple-fixes-for-gvariant-normalisation-issues-in-glib/12835
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3126.patch";
-      sha256 = "CNCxouYy8xNHt4eJtPZ2eOi9b0SxzI2DkklNfQMk3d8=";
-    })
-
-    # Menu model security fix
-    # https://discourse.gnome.org/t/fixes-for-gdbusmenumodel-crashes-in-glib/12846
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/4f4d770a1e40f719d5a310cffdac29cbb4e20c11.patch";
-      sha256 = "+S44AnC86HfbMwkRe1ll54IK9pLxaFD3LqiVhPelnXI=";
-    })
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -138,59 +121,61 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [
-    libelf
     finalAttrs.setupHook
     pcre2
   ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ] ++ lib.optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
-  ]) ++ lib.optionals buildDocs [
-    # Note: this needs to be both in buildInputs and nativeBuildInputs. The
-    # Meson gtkdoc module uses find_program to look it up (-> build dep), but
-    # glib's own Meson configuration uses the host pkg-config to find its
-    # version (-> host dep). We could technically go and fix this in glib, add
-    # pkg-config to depsBuildBuild, but this would be a futile exercise since
-    # Meson's gtkdoc integration does not support cross compilation[1] anyway
-    # and this derivation disables the docs build when cross compiling.
-    #
-    # [1] https://github.com/mesonbuild/meson/issues/2003
-    gtk-doc
-  ];
+  ]);
 
   strictDeps = true;
 
+  depsBuildBuild = [
+    pkg-config # required to find native gi-docgen
+  ];
+
   nativeBuildInputs = [
+    docutils # for rst2man, rst2html5
     meson
     ninja
     pkg-config
     perl
     python3
+    python3Packages.packaging # mostly used to make meson happy
+    python3Packages.wrapPython # for patchPythonScript
     gettext
     libxslt
-    docbook_xsl
-  ] ++ lib.optionals buildDocs [
-    gtk-doc
-    docbook_xml_dtd_45
-    libxml2
+  ] ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection'
+  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
 
   mesonFlags = [
-    # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.
-    # Instead we just copy them over from the native output.
-    "-Dgtk_doc=${lib.boolToString buildDocs}"
+    "-Ddocumentation=true" # gvariant specification can be built without gi-docgen
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    "-Dman=true"                # broken on Darwin
+    (lib.mesonEnable "introspection" withIntrospection)
+    # FIXME: Fails when linking target glib/tests/libconstructor-helper.so
+    # relocation R_X86_64_32 against hidden symbol `__TMC_END__' can not be used when making a shared object
+    "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
+  ] ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    "-Dlibelf=disabled"
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    "-Db_lundef=false"
+    "-Dxattr=false"
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=nonnull"
     # Default for release buildtype but passed manually because
     # we're using plain
@@ -198,13 +183,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    chmod +x gio/tests/gengiotypefuncs.py
-    patchShebangs gio/tests/gengiotypefuncs.py
-    chmod +x docs/reference/gio/concat-files-helper.py
-    patchShebangs docs/reference/gio/concat-files-helper.py
     patchShebangs glib/gen-unicode-tables.pl
     patchShebangs glib/tests/gen-casefold-txt.py
     patchShebangs glib/tests/gen-casemap-txt.py
+    patchShebangs tools/gen-visibility-macros.py
+    patchShebangs tests
 
     # Needs machine-id, comment the test
     sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
@@ -240,8 +223,11 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/bash-completion/completions/''${i##*/}" "$dev"
     done
-  '' + lib.optionalString (!buildDocs) ''
-    cp -r ${buildPackages.glib.devdoc} $devdoc
+  '';
+
+  preFixup = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+    buildPythonPath ${python3Packages.packaging}
+    patchPythonScript "$dev/share/glib-2.0/codegen/utils.py"
   '';
 
   # Move man pages to the same output as their binaries (needs to be
@@ -251,11 +237,15 @@ stdenv.mkDerivation (finalAttrs: {
     for i in $dev/bin/*; do
       moveToOutput "share/man/man1/''${i##*/}.1.*" "$dev"
     done
+
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
-  checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
+  nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
 
-  preCheck = lib.optionalString finalAttrs.doCheck or config.doCheckByDefault or false ''
+  # Conditional necessary to break infinite recursion with passthru.tests
+  preCheck = lib.optionalString finalAttrs.finalPackage.doCheck or config.doCheckByDefault or false ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/glib-${finalAttrs.version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
@@ -263,8 +253,34 @@ stdenv.mkDerivation (finalAttrs: {
     export HOME="$TMP"
     export XDG_DATA_DIRS="${desktop-file-utils}/share:${shared-mime-info}/share"
     export G_TEST_DBUS_DAEMON="${dbus}/bin/dbus-daemon"
-    export PATH="$PATH:$(pwd)/gobject"
+
+    # pkg_config_tests expects a PKG_CONFIG_PATH that points to meson-private, wrapped pkg-config
+    # tries to be clever and picks up the wrong glib at the end.
+    export PATH="${buildPackages.pkg-config-unwrapped}/bin:$PATH:$(pwd)/gobject"
     echo "PATH=$PATH"
+
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that we will delete before installation.
+    mkdir -p $out/lib
+    ln -s $PWD/gobject/libgobject-${librarySuffix} $out/lib/libgobject-${librarySuffix}
+    ln -s $PWD/gio/libgio-${librarySuffix} $out/lib/libgio-${librarySuffix}
+    ln -s $PWD/glib/libglib-${librarySuffix} $out/lib/libglib-${librarySuffix}
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    meson test --print-errorlogs
+
+    runHook postCheck
+  '';
+
+  postCheck = ''
+    rm $out/lib/libgobject-${librarySuffix}
+    rm $out/lib/libgio-${librarySuffix}
+    rm $out/lib/libglib-${librarySuffix}
   '';
 
   separateDebugInfo = stdenv.isLinux;
@@ -277,7 +293,10 @@ stdenv.mkDerivation (finalAttrs: {
     getSchemaPath = pkg: makeSchemaPath pkg pkg.name;
     getSchemaDataDirPath = pkg: makeSchemaDataDirPath pkg pkg.name;
 
-    tests.withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+    tests = {
+      withChecks = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
 
     inherit flattenInclude;
     updateScript = gnome.updateScript {
@@ -300,10 +319,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "C library of programming buildings blocks";
-    homepage    = "https://www.gtk.org/";
+    homepage    = "https://gitlab.gnome.org/GNOME/glib";
     license     = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 raskin ]);
-    platforms   = platforms.unix;
+    pkgConfigModules = [
+      "gio-2.0"
+      "gobject-2.0"
+      "gthread-2.0"
+    ];
+    platforms   = platforms.unix ++ platforms.windows;
 
     longDescription = ''
       GLib provides the core application building blocks for libraries

@@ -1,17 +1,17 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "txtpbfmt";
-  version = "unstable-2022-06-08";
+  version = "0-unstable-2024-04-16";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "txtpbfmt";
-    rev = "fc78c767cd6a4e6e3953f5d72f1e0e4c5811990b";
-    sha256 = "sha256-5Pj2REFrzWCzrqdplNlyfX+sJqPjXEld6MFNy0S3MFM=";
+    rev = "1e18ef0a7fdc4d28b9223d2d50b4b2be7024519e";
+    hash = "sha256-L96aEAlPvdBXxAbH8IszQK0r7ouICmFrkHtTJe/dD+E=";
   };
 
-  vendorSha256 = "sha256-shjcQ3DJQYeAW0bX3OuF/esgIvrQ4yuLEa677iFV82g=";
+  vendorHash = "sha256-IdD+R8plU4/e9fQaGSM5hJxyMECb6hED0Qg8afwHKbY=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/protocolbuffers/txtpbfmt";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "txtpbfmt";
   };
 }

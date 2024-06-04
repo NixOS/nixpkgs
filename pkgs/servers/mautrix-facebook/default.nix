@@ -1,26 +1,26 @@
-{ enableSystemd ? stdenv.isLinux
-, fetchFromGitHub
-, fetchpatch
-, lib
-, python3
+{ lib
 , stdenv
+, fetchFromGitHub
+, python3
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform python3.pkgs.systemd
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-facebook";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "facebook";
     rev = "v${version}";
-    hash = "sha256-MlT8jNUpJMgaUO9ZIYjpv8l3evdFjfEOSvdAdSlOUvg=";
+    hash = "sha256-8uleN7L3fgNqqRjva3kJU7fLPJZpO6b0J4z0RxZ9B64=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
-    CommonMark
+    commonmark
     aiohttp
     asyncpg
+    commonmark
     mautrix
     paho-mqtt
     pillow
@@ -59,5 +59,6 @@ python3.pkgs.buildPythonPackage rec {
     description = "A Matrix-Facebook Messenger puppeting bridge";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ kevincox ];
+    mainProgram = "mautrix-facebook";
   };
 }

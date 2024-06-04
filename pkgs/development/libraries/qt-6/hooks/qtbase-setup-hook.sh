@@ -1,13 +1,13 @@
 if [[ -n "${__nix_qtbase-}" ]]; then
     # Throw an error if a different version of Qt was already set up.
-    if [[ "$__nix_qtbase" != "@dev@" ]]; then
+    if [[ "$__nix_qtbase" != "@out@" ]]; then
         echo >&2 "Error: detected mismatched Qt dependencies:"
-        echo >&2 "    @dev@"
+        echo >&2 "    @out@"
         echo >&2 "    $__nix_qtbase"
         exit 1
     fi
 else # Only set up Qt once.
-    __nix_qtbase="@dev@"
+    __nix_qtbase="@out@"
 
     qtPluginPrefix=@qtPluginPrefix@
     qtQmlPrefix=@qtQmlPrefix@
@@ -15,22 +15,8 @@ else # Only set up Qt once.
     . @fix_qt_builtin_paths@
     . @fix_qt_module_paths@
 
-    # Disable debug symbols if qtbase was built without debugging.
-    # This stops -dev paths from leaking into other outputs.
-    if [ -z "@debug@" ]; then
-        NIX_CFLAGS_COMPILE="${NIX_CFLAGS_COMPILE-}${NIX_CFLAGS_COMPILE:+ }-DQT_NO_DEBUG"
-    fi
-
-    # Integration with CMake:
-    # Set the CMake build type corresponding to how qtbase was built.
-    if [ -n "@debug@" ]; then
-        cmakeBuildType="Debug"
-    else
-        cmakeBuildType="Release"
-    fi
-
     # Build tools are often confused if QMAKE is unset.
-    export QMAKE=@dev@/bin/qmake
+    export QMAKE=@out@/bin/qmake
 
     export QMAKEPATH=
 
@@ -49,27 +35,39 @@ else # Only set up Qt once.
     }
     envBuildHostHooks+=(qmakePathHook)
 
+    export QTTOOLSPATH=
+
+    declare -Ag qttoolsPathSeen=()
+    qtToolsHook() {
+        # Skip this path if we have seen it before.
+        # MUST use 'if' because 'qttoolsPathSeen[$]' may be unset.
+        if [ -n "${qttoolsPathSeen[$1]-}" ]; then return; fi
+        qttoolsPathSeen[$1]=1
+        if [ -d "$1/libexec" ]; then
+            QTTOOLSPATH="${QTTOOLSPATH}${QTTOOLSPATH:+:}$1/libexec"
+        fi
+    }
+    addEnvHooks "$hostOffset" qtToolsHook
+
     postPatchMkspecs() {
         # Prevent this hook from running multiple times
         dontPatchMkspecs=1
 
-        local bin="${!outputBin}"
-        local dev="${!outputDev}"
-        local doc="${!outputDoc}"
         local lib="${!outputLib}"
+        local dev="${!outputDev}"
 
-        moveToOutput "mkspecs" "$dev"
+        moveToOutput "mkspecs/modules" "$dev"
 
         if [ -d "$dev/mkspecs/modules" ]; then
             fixQtModulePaths "$dev/mkspecs/modules"
         fi
 
-        if [ -d "$dev/mkspecs" ]; then
-            fixQtBuiltinPaths "$dev/mkspecs" '*.pr?'
+        if [ -d "$lib/mkspecs" ]; then
+            fixQtBuiltinPaths "$lib/mkspecs" '*.pr?'
         fi
 
-        if [ -d "$lib" ]; then
-            fixQtBuiltinPaths "$lib" '*.pr?'
+        if [ -d "$lib/lib" ]; then
+            fixQtBuiltinPaths "$lib/lib" '*.pr?'
         fi
     }
     if [ -z "${dontPatchMkspecs-}" ]; then

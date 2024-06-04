@@ -1,38 +1,35 @@
-{ lib
-, aiodns
-, buildPythonPackage
-, c-ares
-, cffi
-, fetchPypi
-, idna
-, pythonOlder
-, tornado
+{
+  lib,
+  aiodns,
+  buildPythonPackage,
+  c-ares,
+  cffi,
+  fetchPypi,
+  idna,
+  pythonOlder,
+  tornado,
 }:
 
 buildPythonPackage rec {
   pname = "pycares";
-  version = "4.3.0";
+  version = "4.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xUJpb22sl46dmRkjhHRaZfgKfZRQUBFR5KdWPgYBDUU=";
+    hash = "sha256-9HV51Qjy9W7d0WznIEV4KtOxs7Z4CYaZ4rahswcz4cI=";
   };
 
-  buildInputs = [
-    c-ares
-  ];
+  buildInputs = [ c-ares ];
 
   propagatedBuildInputs = [
     cffi
     idna
   ];
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
 
   # Requires network access
   doCheck = false;
@@ -41,9 +38,7 @@ buildPythonPackage rec {
     inherit aiodns tornado;
   };
 
-  pythonImportsCheck = [
-    "pycares"
-  ];
+  pythonImportsCheck = [ "pycares" ];
 
   meta = with lib; {
     description = "Python interface for c-ares";

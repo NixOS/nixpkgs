@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ilx5mhh91ks7dwvykfyynh53l6vkkignjpwkkss8ss6b2k8gdbj";
   };
 
-  NIX_CFLAGS_COMPILE = "-O3";
+  env.NIX_CFLAGS_COMPILE = "-O3";
 
   patches = [ (fetchpatch {
     name = "fix-libmicrohttpd-0-9-71.patch";
@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    # Does not build against gcc-13. No development activity upstream
+    # for past few years.
+    broken = true;
     description = "Unified All-in-one Monero miner";
     homepage = "https://github.com/fireice-uk/xmr-stak";
     license = licenses.gpl3Plus;

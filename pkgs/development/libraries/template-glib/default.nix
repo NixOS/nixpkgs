@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "template-glib";
-  version = "3.36.0";
+  version = "3.36.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "HBKVJa5kQDpmL3Zm9jWDhqgVZohyrPEctWirObuh9CE=";
+    hash = "sha256-ACDzpAGIjOdjs6F1CML1jpGXKkg6DFR6/bfMviVhmUg=";
   };
 
   nativeBuildInputs = [

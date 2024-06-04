@@ -1,48 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromBitbucket
-, pythonOlder
-, certifi
-, chardet
-, idna
-, nose
-, requests
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "youless-api";
-  version = "1.0";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromBitbucket {
-    owner = "jongsoftdev";
+  src = fetchFromGitHub {
+    owner = "gjong";
     repo = "youless-python-bridge";
-    rev = version;
-    hash = "sha256-yh4ZmMn5z6aTZrhj9ZmvpmsDOF4MeDcPtSgr4fimjGM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-FnbfwjrzorLDUi9GJLY+pt5zSn4VpVC3Umc/FH46Pzo=";
   };
 
-  propagatedBuildInputs = [
-    certifi
-    chardet
-    idna
-    requests
-    urllib3
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    nose
-  ];
+  dependencies = [ requests ];
 
-  pythonImportsCheck = [
-    "youless_api"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "youless_api" ];
 
   meta = with lib; {
     description = "Python library for YouLess sensors";
-    homepage = "https://pypi.org/project/youless-api/";
+    homepage = "https://github.com/gjong/youless-python-bridge";
+    changelog = "https://github.com/gjong/youless-python-bridge/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

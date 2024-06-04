@@ -1,55 +1,51 @@
 { lib
-, fetchFromGitHub
 , fetchpatch
 , rustPlatform
-, tree-sitter
-, difftastic
+, fetchFromGitHub
 , testers
+, difftastic
 }:
 
+let
+  mimallocPatch = fetchpatch {
+    # fixes compilation error on x86_64-darwin
+    # remove after update to libmimalloc-sys >= 0.1.29
+    # (fixed in mimalloc >= 1.7.6 which is included with libmimalloc-sys >= 0.1.29)
+    url = "https://github.com/microsoft/mimalloc/commit/40e0507a5959ee218f308d33aec212c3ebeef3bb.patch";
+    hash = "sha256-DK0LqsVXXiEVQSQCxZ5jyZMg0UJJx9a/WxzCroYSHZc=";
+  };
+in
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
-  version = "0.42.0";
+  version = "0.58.0";
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9ooVXGZ7MEB4D0awciJJio3ttqxEQ8EUBbIQ6xxrXh0=";
+    hash = "sha256-PTc8/NhWsLcKJj+9ebV/YaWEmyOWKJCYUjmVbr4z2SY=";
   };
 
-  depsExtraArgs = {
-    postBuild = let
-      mimallocPatch = fetchpatch {
-        name = "mimalloc-older-macos-fixes.patch";
-        url = "https://github.com/microsoft/mimalloc/commit/40e0507a5959ee218f308d33aec212c3ebeef3bb.patch";
-        stripLen = 1;
-        extraPrefix = "libmimalloc-sys/c_src/mimalloc/";
-        sha256 = "1cqgay6ayzxsj8v1dy8405kwd8av34m4bjc84iyg9r52amlijbg4";
-      };
-    in ''
-      pushd $name
-      patch -p1 < ${mimallocPatch}
-      substituteInPlace libmimalloc-sys/.cargo-checksum.json \
-        --replace \
-          '6a2e9f0db0d3de160f9f15ddc8a870dbc42bba724f19f1e69b8c4952cb36821a' \
-          '201ab8874d9ba863406e084888e492b785a7edae00a222f395c079028d21a89a' \
-        --replace \
-          'a87a27e8432a63e5de25703ff5025588afd458e3a573e51b3c3dee2281bff0d4' \
-          'ab98a2da81d2145003a9cba7b7025efbd2c7b37c7a23c058c150705a3ec39298'
-      popd
-    '';
-  };
-  cargoSha256 = "sha256-Zbnk5tcCRoaEH3A1mbsfpEhLe1EMcZqPQ4vzWxi0oG0=";
+  cargoLock.lockFile = ./Cargo.lock;
+
+  # skip flaky tests
+  checkFlags = [
+    "--skip=options::tests::test_detect_display_width"
+  ];
+
+  postPatch = ''
+    patch -d $cargoDepsCopy/libmimalloc-sys-0.1.24/c_src/mimalloc \
+      -p1 < ${mimallocPatch}
+  '';
 
   passthru.tests.version = testers.testVersion { package = difftastic; };
 
   meta = with lib; {
     description = "A syntax-aware diff";
     homepage = "https://github.com/Wilfred/difftastic";
-    changelog = "https://github.com/Wilfred/difftastic/raw/${version}/CHANGELOG.md";
+    changelog = "https://github.com/Wilfred/difftastic/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ethancedwards8 figsoda ];
+    maintainers = with maintainers; [ ethancedwards8 figsoda matthiasbeyer ];
     mainProgram = "difft";
   };
 }

@@ -5,7 +5,6 @@
 , desktop-file-utils
 , editorconfig-core-c
 , fetchurl
-, fetchpatch
 , flatpak
 , gnome
 , libgit2-glib
@@ -18,9 +17,11 @@
 , json-glib
 , jsonrpc-glib
 , libadwaita
+, libdex
 , libpanel
-, libpeas
+, libpeas2
 , libportal-gtk4
+, libsysprof-capture
 , libxml2
 , meson
 , ninja
@@ -33,21 +34,21 @@
 , template-glib
 , vala
 , vte-gtk4
-, webkitgtk_5_0
+, webkitgtk_6_0
 , wrapGAppsHook4
 , dbus
 , xvfb-run
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-builder";
-  version = "43.4";
+  version = "46.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Hg1tZ4RcGb7J463VlpX5pTHXKg5UKyA6zJD7OBInwrw=";
+    url = "mirror://gnome/sources/gnome-builder/${lib.versions.major finalAttrs.version}/gnome-builder-${finalAttrs.version}.tar.xz";
+    hash = "sha256-DIV7iQA7JHh/Kx0qrhLSdaB0xmhLSIA7SMACdtk3GWM=";
   };
 
   patches = [
@@ -72,7 +73,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    python3.pkgs.wrapPython
     wrapGAppsHook4
   ];
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     editorconfig-core-c
     flatpak
     libgit2-glib
-    libpeas
+    libpeas2
     libportal-gtk4
     vte-gtk4
     enchant
@@ -92,19 +92,20 @@ stdenv.mkDerivation rec {
     json-glib
     jsonrpc-glib
     libadwaita
+    libdex
     libpanel
+    libsysprof-capture
     libxml2
     ostree
     d-spy
     pcre2
     python3
-    sysprof
     template-glib
     vala
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
@@ -135,12 +136,10 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];
-
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$program_PYTHONPATH"
+      # For sysprof-agent
+      --prefix PATH : "${sysprof}/bin"
     )
 
     # Ensure that all plugins get their interpreter paths fixed up.
@@ -155,7 +154,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gnome.updateScript {
-    packageName = pname;
+    packageName = "gnome-builder";
   };
 
   meta = with lib; {
@@ -170,9 +169,10 @@ stdenv.mkDerivation rec {
       currently recommend running gnome-builder inside a nix-shell with
       appropriate dependencies loaded.
     '';
-    homepage = "https://wiki.gnome.org/Apps/Builder";
+    homepage = "https://apps.gnome.org/Builder/";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
+    mainProgram = "gnome-builder";
   };
-}
+})

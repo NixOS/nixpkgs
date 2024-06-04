@@ -1,15 +1,16 @@
 { lib
 , stdenv
 , fetchurl
-, substituteAll
 , meson
 , pkg-config
 , ninja
 , wayland-scanner
 , expat
 , libxml2
-, withLibraries ? stdenv.isLinux
+, withLibraries ? stdenv.isLinux || stdenv.isDarwin
+, withTests ? stdenv.isLinux
 , libffi
+, epoll-shim
 , withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
 , graphviz-nox
 , doxygen
@@ -19,22 +20,30 @@
 , docbook_xsl
 , docbook_xml_dtd_45
 , docbook_xml_dtd_42
+, testers
 }:
 
 # Documentation is only built when building libraries.
 assert withDocumentation -> withLibraries;
 
+# Tests are only built when building libraries.
+assert withTests -> withLibraries;
+
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayland";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    sha256 = "1b0ixya9bfw5c9jx8mzlr7yqnlyvd3jv5z8wln9scdv8q5zlvikd";
+    url = with finalAttrs; "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
+    hash = "sha256-FUCvHqaYpHHC2OnSiDMsfg/TYMjx0Sk267fny8JCWEI=";
   };
+
+  patches = [
+    ./darwin.patch
+  ];
 
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
@@ -50,7 +59,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddocumentation=${lib.boolToString withDocumentation}"
     "-Dlibraries=${lib.boolToString withLibraries}"
-    "-Dtests=${lib.boolToString withLibraries}"
+    "-Dtests=${lib.boolToString withTests}"
   ];
 
   depsBuildBuild = [
@@ -78,6 +87,8 @@ stdenv.mkDerivation rec {
     libxml2
   ] ++ lib.optionals withLibraries [
     libffi
+  ] ++ lib.optionals (withLibraries && !stdenv.hostPlatform.isLinux) [
+    epoll-shim
   ] ++ lib.optionals withDocumentation [
     docbook_xsl
     docbook_xml_dtd_45
@@ -92,14 +103,20 @@ stdenv.mkDerivation rec {
 
     Name: Wayland Scanner
     Description: Wayland scanner
-    Version: ${version}
+    Version: ${finalAttrs.version}
     EOF
   '';
 
-  passthru = { inherit withLibraries; };
+  passthru = {
+    inherit withLibraries;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     description = "Core Wayland window system code and protocol";
+    mainProgram = "wayland-scanner";
     longDescription = ''
       Wayland is a project to define a protocol for a compositor to talk to its
       clients as well as a library implementation of the protocol.
@@ -110,9 +127,16 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wayland.freedesktop.org/";
     license = licenses.mit; # Expat version
-    platforms = if withLibraries then platforms.linux else platforms.unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
+    pkgConfigModules = [
+      "wayland-scanner"
+    ] ++ lib.optionals withLibraries [
+      "wayland-client"
+      "wayland-cursor"
+      "wayland-egl"
+      "wayland-egl-backend"
+      "wayland-server"
+    ];
   };
-
-  passthru.version = version;
-}
+})

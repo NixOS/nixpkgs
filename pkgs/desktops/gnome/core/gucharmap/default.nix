@@ -3,6 +3,7 @@
 , intltool
 , fetchFromGitLab
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , python3
@@ -11,14 +12,13 @@
 , glib
 , desktop-file-utils
 , gtk-doc
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , libxml2
 , yelp-tools
 , docbook_xsl
 , docbook_xml_dtd_412
 , gsettings-desktop-schemas
-, callPackage
 , unzip
 , unicode-character-database
 , unihan-database
@@ -43,9 +43,9 @@ let
       unicode-character-database
     ];
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "gucharmap";
-  version = "15.0.2";
+  version = "15.1.5";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
@@ -53,16 +53,17 @@ in stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gucharmap";
-    rev = version;
-    sha256 = "sha256-QoHLMq3U/BvpCFKttxLo0qs2xmZ/pCqPjsgq/MMWNbo=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-PG86D8QvqHdmo3aJseCerngmuWUqtSMdWzbixWE2HOQ=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     unzip
     intltool
     itstool
@@ -73,6 +74,8 @@ in stdenv.mkDerivation rec {
     libxml2
     desktop-file-utils
     gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -102,9 +105,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME Character Map, based on the Unicode Character Database";
-    homepage = "https://wiki.gnome.org/Apps/Gucharmap";
-    license = licenses.gpl3;
+    mainProgram = "gucharmap";
+    homepage = "https://gitlab.gnome.org/GNOME/gucharmap";
+    license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

@@ -1,25 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, oauthlib
-, pytestCheckHook
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  oauthlib,
+  pytestCheckHook,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "requests-oauthlib";
   version = "1.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-db6sSkeIHuuU1epdatMe+IhWr/4jMrmq+1LGRSzPDXo=";
+    hash = "sha256-db6sSkeIHuuU1epdatMe+IhWr/4jMrmq+1LGRSzPDXo=";
   };
 
-  propagatedBuildInputs = [ oauthlib requests ];
+  propagatedBuildInputs = [
+    oauthlib
+    requests
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     requests-mock

@@ -1,32 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, installShellFiles
-, openstackdocstheme
-, osc-lib
-, pbr
-, python-cinderclient
-, python-keystoneclient
-, python-novaclient
-, requests-mock
-, sphinx
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  installShellFiles,
+  openstackdocstheme,
+  osc-lib,
+  pbr,
+  python-cinderclient,
+  python-keystoneclient,
+  python-novaclient,
+  requests-mock,
+  sphinx,
+  sphinxcontrib-apidoc,
+  stestr,
 }:
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "6.0.0";
+  version = "6.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kcOsEtpLQjwWs5F2FvhKI+KWHnUPzlkNQJ7MUO4EMc4=";
+    hash = "sha256-u+8e00gpxBBSsuyiZIDinKH3K+BY0UMNpTQexExPKVw=";
   };
 
   nativeBuildInputs = [
     installShellFiles
     openstackdocstheme
     sphinx
+    sphinxcontrib-apidoc
   ];
 
   propagatedBuildInputs = [
@@ -42,7 +46,7 @@ buildPythonPackage rec {
     installManPage doc/build/man/openstack.1
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     stestr
     requests-mock
@@ -56,6 +60,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "OpenStack Command-line Client";
+    mainProgram = "openstack";
     homepage = "https://github.com/openstack/python-openstackclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

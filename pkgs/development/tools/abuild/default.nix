@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, gitUpdater
 , makeWrapper
 , pkg-config
 , file
@@ -14,14 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "abuild";
-  version = "3.10.0";
+  version = "3.13.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pCimOI3pxlpd+yqKIRq6frbaX0s9bjZZf/eaDA4fd2M=";
+    sha256 = "sha256-xVxgcBchGfeVo1cgP9iVsWjZ6SHVN6R8zWaE1k3DcXQ=";
   };
 
   buildInputs = [
@@ -76,6 +77,8 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${placeholder "out"}/bin"
     done
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Alpine Linux build tools";

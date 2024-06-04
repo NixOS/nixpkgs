@@ -1,27 +1,45 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, jq, wofi, wtype, wl-clipboard }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  jq,
+  wofi,
+  wtype,
+  wl-clipboard,
+}:
 
-let emojiJSON = fetchurl {
-  url = "https://raw.githubusercontent.com/muan/emojilib/v3.0.6/dist/emoji-en-US.json";
-  sha256 = "sha256-wf7zsIEbX/diLwmVvnN2Goxh2V5D3Z6nbEMSb5pSGt0=";
-};
+let
+  emojiJSON = fetchurl {
+    url = "https://raw.githubusercontent.com/muan/emojilib/v3.0.11/dist/emoji-en-US.json";
+    hash = "sha256-WHqCSNgDzc6ZASdVrwPvsU4MtBcYLKDp2D2Hykrq1sI=";
+  };
 in
 stdenv.mkDerivation rec {
   pname = "wofi-emoji";
-  version = "unstable-2022-08-19";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "dln";
-    repo = pname;
-    rev = "c5ecb4f0f164aedb046f52b5eacac889609c8522";
-    sha256 = "1wq276bhf9x24ds13b2dwa69cjnr207p6977hr4bsnczryg609rh";
+    owner = "Zeioth";
+    repo = "wofi-emoji";
+    rev = "v${version}";
+    hash = "sha256-wLZK7RcDxxlYuu27WNj+SoRoBiCqk9whp4Fyg0SOoPA=";
   };
 
   nativeBuildInputs = [ jq ];
-  buildInputs = [ wofi wtype wl-clipboard ];
+  buildInputs = [
+    wofi
+    wtype
+    wl-clipboard
+  ];
 
   postPatch = ''
     substituteInPlace build.sh \
       --replace 'curl ${emojiJSON.url}' 'cat ${emojiJSON}'
+    substituteInPlace wofi-emoji \
+      --replace 'wofi' '${wofi}/bin/wofi' \
+      --replace 'wtype' '${wtype}/bin/wtype' \
+      --replace 'wl-copy' '${wl-clipboard}/bin/wl-copy'
   '';
 
   buildPhase = ''
@@ -41,11 +59,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple emoji selector for Wayland using wofi and wl-clipboard";
-    homepage = "https://github.com/dln/wofi-emoji";
-    license = licenses.mit;
-    maintainers = [ maintainers.ymarkus ];
-    platforms = platforms.all;
+    homepage = "https://github.com/Zeioth/wofi-emoji";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ johnrtitor ymarkus ];
+    platforms = lib.platforms.all;
+    mainProgram = "wofi-emoji";
   };
 }

@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "ptest";
-  version =  "1.7.4";
+  version = "1.7.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "KarlGong";
@@ -19,5 +21,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/ptest";
     license = licenses.asl20;
   };
-
 }

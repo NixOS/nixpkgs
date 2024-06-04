@@ -1,10 +1,11 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "nickmaccarthy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WVWGhyBguE1+KEMQu0N5QxO7IC4rPEJ/2L3VWUCQNi4=";
+    hash = "sha256-WVWGhyBguE1+KEMQu0N5QxO7IC4rPEJ/2L3VWUCQNi4=";
   };
 
   patches = [
@@ -29,21 +30,13 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    arrow
-  ];
+  propagatedBuildInputs = [ arrow ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "datemath"
-  ];
+  pythonImportsCheck = [ "datemath" ];
 
   meta = with lib; {
     description = "Python module to emulate the date math used in SOLR and Elasticsearch";

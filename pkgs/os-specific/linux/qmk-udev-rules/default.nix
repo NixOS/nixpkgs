@@ -1,18 +1,17 @@
 { lib, stdenv, fetchFromGitHub }:
 
 ## Usage
-# In NixOS, simply add this package to services.udev.packages:
-#   services.udev.packages = [ pkgs.qmk-udev-rules ];
+# In NixOS, set hardware.keyboard.qmk.enable = true;
 
 stdenv.mkDerivation rec {
   pname = "qmk-udev-rules";
-  version = "0.15.25";
+  version = "0.23.3";
 
   src = fetchFromGitHub {
     owner = "qmk";
     repo = "qmk_firmware";
     rev = version;
-    sha256 = "4U1/9DgoKZ1Al76lZ2P8x4LIvtqaJPLq81cCSCy+9iE=";
+    hash = "sha256-dFc6S9x7sBYZAQn0coZJpmGz66Fx0l4rrexjyB4k0zA=";
   };
 
   dontBuild = true;

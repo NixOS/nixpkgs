@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pokemon-colorscripts-mac";
-  version = "stable=2021-08-10";
+  version = "stable-2021-08-10";
 
   src = fetchFromGitHub {
     owner = "nuke-dash";
@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.wesleyjrz ];
     platforms = platforms.unix;
+    mainProgram = "pokemon-colorscripts";
   };
 }

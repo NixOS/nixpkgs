@@ -1,20 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, beartype
-, invoke
-, mypy
-, numpy
-, pandas
-, feedparser
-, typeguard
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  beartype,
+  invoke,
+  numpy,
+  pandas,
+  feedparser,
 }:
 
 buildPythonPackage rec {
   pname = "nptyping";
-  version = "2.4.1";
+  version = "2.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,21 +22,17 @@ buildPythonPackage rec {
     owner = "ramonhagenaars";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jV2MVMP/tlYN3djoViemGaJyzREoOJJamwG97WFhIvc=";
+    hash = "sha256-hz4YrcvARCAA7TXapmneIwle/F4pzcIYLPSmiFHC0VQ=";
   };
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     beartype
     feedparser
     invoke
-    mypy
     pandas
     pytestCheckHook
-    typeguard
   ];
 
   disabledTests = [
@@ -51,13 +46,15 @@ buildPythonPackage rec {
     # can't find mypy stubs for pandas:
     "tests/test_mypy.py"
     "tests/pandas_/test_mypy_dataframe.py"
+    # typeguard release broke nptyping compatibility:
+    "tests/test_typeguard.py"
     # tries to build wheel of package, broken/unnecessary under Nix:
     "tests/test_wheel.py"
+    # beartype fails a type check
+    "tests/test_beartype.py"
   ];
 
-  pythonImportsCheck = [
-    "nptyping"
-  ];
+  pythonImportsCheck = [ "nptyping" ];
 
   meta = with lib; {
     description = "Type hints for numpy";

@@ -37,8 +37,11 @@ stdenv.mkDerivation rec {
     "--with-libpcap=yes"
   ];
 
-  PCAPLIB="-lpcap";
-  LUA_LIB="-llua";
+  env = {
+    CXXFLAGS = "-std=c++14";
+    LUA_LIB = "-llua";
+    PCAPLIB = "-lpcap";
+  };
 
   enableParallelBuilding = true;
 
@@ -50,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.tracebox.org/";
     description = "A middlebox detection tool";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ ck3d ];
     platforms = platforms.linux;
   };

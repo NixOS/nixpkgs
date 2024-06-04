@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, intltool, gettext, coreutils, gnused, gnome
+{ lib, stdenv, fetchurl, gettext, coreutils, gnused, gnome
 , gnugrep, parted, glib, libuuid, pkg-config, gtkmm3, libxml2
-, gpart, hdparm, procps, util-linux, polkit, wrapGAppsHook, substituteAll
+, gpart, hdparm, procps, util-linux, polkit, wrapGAppsHook3, substituteAll
 , mtools, dosfstools
 }:
 
 stdenv.mkDerivation rec {
   pname = "gparted";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gparted/${pname}-${version}.tar.gz";
-    sha256 = "sha256-5Sk6eS5T/b66KcSoNBE82WA9DWOTMNqTGkaL82h4h74=";
+    sha256 = "sha256-m59Rs85JTdy1mlXhrmZ5wJQ2YE4zHb9aU21g3tbG6ls=";
   };
 
   # Tries to run `pkexec --version` to get version.
@@ -28,7 +28,12 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-doc" ];
 
   buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin gnome.adwaita-icon-theme  ];
-  nativeBuildInputs = [ intltool gettext pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ gettext pkg-config wrapGAppsHook3 ];
+
+  preConfigure = ''
+    # For ITS rules
+    addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -52,5 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gparted.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "gparted";
   };
 }

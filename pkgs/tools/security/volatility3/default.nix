@@ -5,16 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "volatility3";
-  version = "2.4.0";
+  version = "2.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "volatilityfoundation";
-    repo = pname;
+    repo = "volatility3";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tbnyNxC4qyiHEeLzMgMJj9/uGLQTxDzNr1x22oSTM6k=";
+    hash = "sha256-elTUAvSe91TqpsTXg08SPKaVr6iM7FKcBaVNunv+HfU=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     capstone
     jsonschema
     pefile

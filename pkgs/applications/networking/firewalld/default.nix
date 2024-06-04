@@ -26,18 +26,18 @@ let
     pygobject3
   ] ++ lib.optionals withGui [
     pyqt5
-    pyqt5_sip
+    pyqt5-sip
   ]);
 in
 stdenv.mkDerivation rec {
   pname = "firewalld";
-  version = "1.3.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
     rev = "v${version}";
-    sha256 = "sha256-UQ61do0f0bT3VNyZAx2ZuwQ+6SGvKUS6V5Y1B6EpJ5Q=";
+    sha256 = "sha256-bCLMTWtgEay3fLKOFWUoWpOL1iGDHRR5hu+v06bLxLs=";
   };
 
   patches = [
@@ -99,6 +99,6 @@ stdenv.mkDerivation rec {
     description = "Firewall daemon with D-Bus interface";
     homepage = "https://github.com/firewalld/firewalld";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

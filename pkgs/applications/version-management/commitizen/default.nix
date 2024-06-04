@@ -1,77 +1,66 @@
-{ buildPythonApplication
-, colorama
+{ lib
 , commitizen
-, decli
 , fetchFromGitHub
 , git
-, jinja2
-, lib
-, packaging
-, poetry-core
-, py
-, pytest-freezer
-, pytest-mock
-, pytest-regressions
-, pytestCheckHook
-, pyyaml
-, questionary
-, termcolor
-, testers
-, tomlkit
-, typing-extensions
-, argcomplete
+, python3
+, stdenv
+, installShellFiles
 , nix-update-script
-, pre-commit
+, testers
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.39.1";
+  version = "3.27.0";
+  format = "pyproject";
+
+  disabled = python3.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-QQIYyg2zwV7cfFxGHVsLiTRBgTGs3O7OJcmURvfY3LQ=";
-    deepClone = true;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Bfz9MBpFsbAcsyQ7CYyObE14q7UE9ZyeY1GVFb9maKk=";
   };
 
-  format = "pyproject";
+  pythonRelaxDeps = [
+    "decli"
+  ];
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
+    installShellFiles
+  ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'charset-normalizer = "^2.1.0"' 'charset-normalizer = "*"'
-  '';
-
-  propagatedBuildInputs = [
-    termcolor
-    questionary
+  propagatedBuildInputs = with python3.pkgs; [
+    argcomplete
+    charset-normalizer
     colorama
     decli
-    tomlkit
+    importlib-metadata
     jinja2
-    pyyaml
-    argcomplete
-    typing-extensions
     packaging
+    pyyaml
+    questionary
+    termcolor
+    tomlkit
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    argcomplete
+    deprecated
+    git
+    py
+    pytest-freezer
+    pytest-mock
+    pytest-regressions
+    pytest7CheckHook
   ];
 
   doCheck = true;
 
-  checkInputs = [
-    pre-commit
-    py
-    pytestCheckHook
-    pytest-freezer
-    pytest-mock
-    pytest-regressions
-    argcomplete
-    git
-  ];
-
-  # the tests require a functional git installation
+  # The tests require a functional git installation
   # which requires a valid HOME directory.
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -94,12 +83,24 @@ buildPythonApplication rec {
     "test_commitizen_debug_excepthook"
   ];
 
+  postInstall =
+    let
+      argcomplete = lib.getExe' python3.pkgs.argcomplete "register-python-argcomplete";
+    in
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      ''
+        installShellCompletion --cmd cz \
+          --bash <(${argcomplete} --shell bash $out/bin/cz) \
+          --zsh <(${argcomplete} --shell zsh $out/bin/cz) \
+          --fish <(${argcomplete} --shell fish $out/bin/cz)
+      '';
+
   passthru = {
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = commitizen;
       command = "cz version";
     };
-    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -107,6 +108,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/commitizen-tools/commitizen";
     changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
+    mainProgram = "cz";
     maintainers = with maintainers; [ lovesegfault anthonyroussel ];
   };
 }

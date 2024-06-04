@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "tewisay";
-  version = "unstable-2022-11-04";
+  version = "0-unstable-2022-11-04";
 
   # lucy deleted the old repo, this is a fork/mirror
   src = fetchFromGitHub {
@@ -36,5 +36,6 @@ buildGoModule rec {
     description = "Cowsay replacement with unicode and partial ansi escape support";
     license = with licenses; [ cc0 ];
     maintainers = with maintainers; [ Madouura ];
+    mainProgram = "tewisay";
   };
 }

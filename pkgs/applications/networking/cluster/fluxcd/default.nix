@@ -1,9 +1,15 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles, stdenv }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, fetchzip
+, installShellFiles
+}:
 
 let
-  version = "0.38.3";
-  sha256 = "15sx743gbmlmww7jmi56r5nlajg33xmzacyd69hmp46jjxqdckmh";
-  manifestsSha256 = "1dmp7gdnwbg4jjc3dq1wp2jn3z3g6lm296b1nf24ndcfmjja58cz";
+  version = "2.3.0";
+  sha256 = "sha256-ZQs1rWI31qDo/BgjrmiNnEdR2OL8bUHVz+j5VceEp2k=";
+  manifestsSha256 = "sha256-PdhR+UDquIJWtpSymtT6V7qO5fVJOkFz6RGzAx7xeb4=";
 
   manifests = fetchzip {
     url =
@@ -23,13 +29,14 @@ in buildGoModule rec {
     inherit sha256;
   };
 
-  vendorSha256 = "sha256-IuOivH9K7e5vNpK44NKegzIEVHS+ihkX89++4DJC+8Q=";
+  vendorHash = "sha256-0YH3pgFrsnh5jIsZpj/sIgfiOCTtIlPltMS5mdGz1eM=";
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
-  '';
 
-  patches = [ ./patches/disable-tests-ssh_key.patch ];
+    # disable tests that require network access
+    rm source/cmd/flux/create_secret_git_test.go
+  '';
 
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
@@ -64,6 +71,7 @@ in buildGoModule rec {
       updates to configuration when there is new code to deploy.
     '';
     homepage = "https://fluxcd.io";
+    downloadPage = "https://github.com/fluxcd/flux2/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bryanasdev000 jlesquembre ];
     mainProgram = "flux";

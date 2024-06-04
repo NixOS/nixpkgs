@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "rtl8814au";
-  version = "${kernel.version}-unstable-2022-08-18";
+  version = "${kernel.version}-unstable-2024-03-19";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8814au";
-    rev = "752d8ea365b2affc5d356e35659600995508849d";
-    hash = "sha256-m79IVoD3xFigmax13qELx5e3v0NfJSwmmC0PatA91HI=";
+    rev = "d7945c1e0244c83cbbad4da331648246f12eaee9";
+    hash = "sha256-idjHlvyFpQgLGfNAPpZKRnLdXnAogUW3qGHC1WzGVmA=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -16,12 +16,11 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';

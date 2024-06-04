@@ -10,21 +10,29 @@ let
     categories = [ "Audio" "AudioVideo" ];
     icon = "psst";
     terminal = false;
+    startupWMClass = "psst-gui";
   };
 
 in
 rustPlatform.buildRustPackage rec {
   pname = "psst";
-  version = "unstable-2022-10-13";
+  version = "unstable-2024-05-26";
 
   src = fetchFromGitHub {
     owner = "jpochyla";
     repo = pname;
-    rev = "d70ed8104533dc15bc36b989ba8428872c9b578f";
-    hash = "sha256-ZKhHN0ruLb6ZVKkrKv/YawRsVop6SP1QF/nrtkmA8P8=";
+    rev = "6c9cd3f91653764b832ea5136cda04c9e0f8fe50";
+    hash = "sha256-bttF+yX1BT4t1TUmJBs0OZuPD+6uPxHlb8YzRIVNKTQ=";
   };
 
-  cargoSha256 = "sha256-TDxoRWQAzrgPElEEDNYkk3XX2i+LnNLMuY/J3pb3Xlk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "cubeb-0.10.3" = "sha256-gV1KHOhq678E/Rj+u8jX9Fw+TepPwuZdV5y/D+Iby+o=";
+      "druid-0.8.3" = "sha256-hTB9PQf2TAhcLr64VjjQIr18mczwcNogDSRSN5dQULA=";
+      "druid-enums-0.1.0" = "sha256-KJvAgKxicx/g+4QRZq3iHt6MGVQbfOpyN+EhS6CyDZk=";
+    };
+  };
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";
 
@@ -41,15 +49,25 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
+  patches = [
+    # Use a fixed build time, hard-code upstream URL instead of trying to read `.git`
+    ./make-build-reproducible.patch
+  ];
+
   postInstall = ''
     install -Dm444 psst-gui/assets/logo_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
     install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
   '';
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Fast and multi-platform Spotify client with native GUI";
     homepage = "https://github.com/jpochyla/psst";
     license = licenses.mit;
     maintainers = with maintainers; [ vbrandl peterhoeg ];
+    mainProgram = "psst-gui";
   };
 }

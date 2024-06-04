@@ -1,12 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, makeWrapper
+{ stdenv, lib, fetchFromGitHub, fetchzip
+, autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
 , gettext, pcre-cpp, yajl, fribidi, which
-, openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
+, openssl, gperf, tinyxml2, tinyxml-2, taglib, libssh, swig, jre_headless
 , gtest, ncurses, spdlog
 , libxml2, systemd
-, alsa-lib, libGLU, libGL, fontconfig, freetype, ftgl
+, alsa-lib, libGLU, libGL, ffmpeg, fontconfig, freetype, ftgl
 , libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
@@ -15,7 +16,7 @@
 , curl, bzip2, zip, unzip, glxinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
-, bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1
+, bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn2, libpthreadstubs, libtasn1
 , libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
 , lirc
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
@@ -23,14 +24,16 @@
 , joystickSupport ? true, cwiid
 , nfsSupport ? true, libnfs
 , pulseSupport ? true, libpulseaudio
+, pipewireSupport ? true, pipewire
 , rtmpSupport ? true, rtmpdump
 , sambaSupport ? true, samba
 , udevSupport ? true, udev
+, opticalSupport ? true
 , usbSupport  ? false, libusb-compat-0_1
 , vdpauSupport ? true, libvdpau
 , waylandSupport ? false, wayland, wayland-protocols
 , waylandpp ?  null, libxkbcommon
-, gbmSupport ? false, mesa, libinput
+, gbmSupport ? false, mesa, libinput, libdisplay-info
 , buildPackages
 }:
 
@@ -38,97 +41,73 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20221204";
-  kodiVersion = "19.5";
-  rel = "Matrix";
-
-  kodi_src = fetchFromGitHub {
-    owner  = "xbmc";
-    repo   = "xbmc";
-    rev    = "${kodiVersion}-${rel}";
-    sha256 = "sha256-vprhEPxYpY3/AsUgvPNnhBlh0Dl73ekALAblHaUKzd0=";
-  };
-
-  ffmpeg = stdenv.mkDerivation rec {
-    pname = "kodi-ffmpeg";
-    version = "4.3.2"; # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ffmpeg/FFMPEG-VERSION
-    src = fetchFromGitHub {
-      owner   = "xbmc";
-      repo    = "FFmpeg";
-      rev     = "${version}-${rel}-19.2";
-      sha256  = "14s215sgc93ds1mrdbkgb7fvy94lpgv2ldricyxzis0gbzqfgs4f";
-    };
-    preConfigure = ''
-      cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
-      sed -i 's/ --cpu=''${CPU}//' CMakeLists.txt
-      sed -i 's/--strip=''${CMAKE_STRIP}/--strip=''${CMAKE_STRIP} --ranlib=''${CMAKE_RANLIB}/' CMakeLists.txt
-    '';
-    cmakeFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "-DCROSSCOMPILING=ON"
-      "-DCPU=${stdenv.hostPlatform.parsed.cpu.name}"
-      "-DOS=${stdenv.hostPlatform.parsed.kernel.name}"
-      "-DPKG_CONFIG_EXECUTABLE=pkg-config"
-    ];
-    buildInputs = [ libidn libtasn1 p11-kit zlib libva ]
-      ++ lib.optional vdpauSupport libvdpau;
-    nativeBuildInputs = [ cmake nasm pkg-config gnutls ];
-  };
+  # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ to get suggested versions for all dependencies
 
   # We can build these externally but FindLibDvd.cmake forces us to build it
   # them, so we currently just use them for the src.
   libdvdcss = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdcss";
-    rev = "1.4.2-Leia-Beta-5";
-    sha256 = "0j41ydzx0imaix069s3z07xqw9q95k7llh06fc27dcn6f7b8ydyl";
+    rev = "1.4.3-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-CJMGH50mNAkovccNcol5ArF3zUnZKfbVB9EXyQgu5k4=";
   };
 
   libdvdnav = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdnav";
-    rev = "6.0.0-Leia-Alpha-3";
-    sha256 = "0qwlf4lgahxqxk1r2pzl866mi03pbp7l1fc0rk522sc0ak2s9jhb";
+    rev = "6.1.1-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-m8SCjOokVbwJ7eVfYKHap1pQjVbI+BXaoxhGZQIg0+k=";
   };
 
   libdvdread = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdread";
-    rev = "6.0.0-Leia-Alpha-3";
-    sha256 = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
+    rev = "6.1.3-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-AphBQhXud+a6wm52zjzC5biz53NnqWdgpL2QDt2ZuXc=";
+  };
+
+  groovy = fetchzip {
+    url = "mirror://apache/groovy/4.0.16/distribution/apache-groovy-binary-4.0.16.zip";
+    sha256 = "sha256-OfZBiMVrhw6VqHRHCSC7ZV3FiZ26n4+F8hsskk+L6yU=";
+  };
+
+  apache_commons_lang = fetchzip {
+    url = "mirror://apache/commons/lang/binaries/commons-lang3-3.14.0-bin.zip";
+    sha512 = "sha512-eKF1IQ6PDtifb4pMHWQ2SYHIh0HbMi3qpc92lfbOo3uSsFJVR3n7JD0AdzrG17tLJQA4z5PGDhwyYw0rLeLsXw==";
+  };
+
+  apache_commons_text = fetchzip {
+    url = "mirror://apache/commons/text/binaries/commons-text-1.11.0-bin.zip";
+    sha512 = "sha512-P2IvnrHSYRF70LllTMI8aev43h2oe8lq6rrMYw450PEhEa7OuuCjh1Krnc/A4OqENUcidVAAX5dK1RAsZHh8Dg==";
   };
 
   kodi_platforms = lib.optional gbmSupport "gbm"
     ++ lib.optional waylandSupport "wayland"
     ++ lib.optional x11Support "x11";
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation (finalAttrs: {
     pname = "kodi";
-    version = kodiVersion;
+    version = "21.0";
+    kodiReleaseName = "Omega";
 
-    src = kodi_src;
+    src = fetchFromGitHub {
+      owner = "xbmc";
+      repo  = "xbmc";
+      rev   = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
+      hash  = "sha256-xrFWqgwTkurEwt3/+/e4SCM6Uk9nxuW62SrCFWWqZO0=";
+    };
 
-    patches = [
-      # This is a backport of
-      # https://github.com/xbmc/xbmc/commit/a6dedce7ba1f03bdd83b019941d1e369a06f7888
-      # to Kodi 19.4 Matrix.
-      # This can be removed once a new major release of Kodi comes out and we upgrade
-      # to it.
-      ./add-KODI_WEBSERVER_EXTRA_WHITELIST.patch
-
-      # A patch to fix build until the next major release of Kodi comes out and we upgrade
-      # https://github.com/xbmc/xbmc/pull/22291
-      (fetchpatch {
-        url = "https://github.com/xbmc/xbmc/commit/5449652abf0bb9dddd0d796de4120e60f19f89a5.patch";
-        sha256 = "sha256-vqX08dTSPhIur4aVu2BzXEpAxMOjaadwRNI43GSV9Og=";
-      })
-    ];
+    # make  derivations declared in the let binding available here, so
+    # they can be overridden
+    inherit libdvdcss libdvdnav libdvdread groovy
+            apache_commons_lang apache_commons_text;
 
     buildInputs = [
-      gnutls libidn libtasn1 nasm p11-kit
+      gnutls libidn2 libtasn1 nasm p11-kit
       libxml2 python3Packages.python
       boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva libdrm
-      openssl gperf tinyxml2 taglib libssh
+      openssl gperf tinyxml2 tinyxml-2 taglib libssh
       gtest ncurses spdlog
       alsa-lib libGL libGLU fontconfig freetype ftgl
       libjpeg libpng libtiff
@@ -153,6 +132,7 @@ in stdenv.mkDerivation {
     ++ lib.optional  joystickSupport cwiid
     ++ lib.optional  nfsSupport      libnfs
     ++ lib.optional  pulseSupport    libpulseaudio
+    ++ lib.optional  pipewireSupport pipewire
     ++ lib.optional  rtmpSupport     rtmpdump
     ++ lib.optional  sambaSupport    samba
     ++ lib.optional  udevSupport     udev
@@ -169,6 +149,7 @@ in stdenv.mkDerivation {
       libxkbcommon.dev
       mesa.dev
       libinput.dev
+      libdisplay-info
     ];
 
     nativeBuildInputs = [
@@ -190,13 +171,20 @@ in stdenv.mkDerivation {
 
     cmakeFlags = [
       "-DAPP_RENDER_SYSTEM=${if gbmSupport then "gles" else "gl"}"
-      "-Dlibdvdcss_URL=${libdvdcss}"
-      "-Dlibdvdnav_URL=${libdvdnav}"
-      "-Dlibdvdread_URL=${libdvdread}"
-      "-DGIT_VERSION=${kodiReleaseDate}"
+      "-Dlibdvdcss_URL=${finalAttrs.libdvdcss}"
+      "-Dlibdvdnav_URL=${finalAttrs.libdvdnav}"
+      "-Dlibdvdread_URL=${finalAttrs.libdvdread}"
+      "-Dgroovy_SOURCE_DIR=${finalAttrs.groovy}"
+      "-Dapache-commons-lang_SOURCE_DIR=${finalAttrs.apache_commons_lang}"
+      "-Dapache-commons-text_SOURCE_DIR=${finalAttrs.apache_commons_text}"
+      # Upstream derives this from the git HEADs hash and date.
+      # LibreElec (minimal distro for kodi) uses the equivalent to this.
+      "-DGIT_VERSION=${finalAttrs.version}-${finalAttrs.kodiReleaseName}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
-      "-DENABLE_OPTICAL=ON"
+      "-DENABLE_INTERNAL_RapidJSON=OFF"
+      "-DENABLE_OPTICAL=${if opticalSupport then "ON" else "OFF"}"
+      "-DENABLE_VDPAU=${if vdpauSupport then "ON" else "OFF"}"
       "-DLIRC_DEVICE=/run/lirc/lircd"
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
@@ -239,7 +227,8 @@ in stdenv.mkDerivation {
           --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ]
             ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
-              ([ curl systemd libmad libvdpau libcec libcec_platform libass ]
+              ([ curl systemd libmad libcec libcec_platform libass ]
+                 ++ lib.optional vdpauSupport libvdpau
                  ++ lib.optional nfsSupport libnfs
                  ++ lib.optional rtmpSupport rtmpdump)}"
       done
@@ -258,6 +247,7 @@ in stdenv.mkDerivation {
     passthru = {
       pythonPackages = python3Packages;
       ffmpeg = ffmpeg;
+      kodi = finalAttrs.finalPackage;
     };
 
     meta = with lib; {
@@ -267,4 +257,4 @@ in stdenv.mkDerivation {
       platforms   = platforms.linux;
       maintainers = teams.kodi.members;
     };
-}
+})

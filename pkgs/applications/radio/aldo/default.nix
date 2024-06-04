@@ -22,5 +22,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "aldo";
   };
 }

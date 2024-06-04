@@ -1,39 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, contexttimer
-, versioneer
-, cython
-, numpy
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  contexttimer,
+  setuptools,
+  versioneer,
+  cython_0,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyrevolve";
-  version = "2.2";
+  version = "2.2.4";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devitocodes";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-5a4zvyf2vfz8aI6vFMI2vxekYrcUi/YuPFvZnUOx+Zs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fcIq/zuKO3W7K9N2E4f2Q6ZVcssZwN/n8o9cCOYmr3E=";
   };
 
-  nativeBuildInputs = [ versioneer cython ];
-  propagatedBuildInputs = [ contexttimer numpy ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace ', "flake8"' ""
+  '';
 
-  checkInputs = [ pytest ];
-  # Using approach bellow bcs the tests fail with the pytestCheckHook, throwing the following error
-  # ImportError: cannot import name 'crevolve' from partially initialized module 'pyrevolve'
-  # (most likely due to a circular import)
-  checkPhase = ''
-    pytest
+  nativeBuildInputs = [
+    cython_0
+    setuptools
+    versioneer
+  ];
+
+  propagatedBuildInputs = [
+    contexttimer
+    numpy
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    rm -rf pyrevolve
   '';
 
   pythonImportsCheck = [ "pyrevolve" ];
 
   meta = with lib; {
     homepage = "https://github.com/devitocodes/pyrevolve";
+    changelog = "https://github.com/devitocodes/pyrevolve/releases/tag/v${version}";
     description = "Python library to manage checkpointing for adjoints";
     license = licenses.epl10;
     maintainers = with maintainers; [ atila ];

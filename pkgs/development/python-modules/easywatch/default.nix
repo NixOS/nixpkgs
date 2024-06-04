@@ -1,12 +1,14 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, watchdog
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "easywatch";
   version = "0.0.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,4 +28,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ fgaz ];
   };
 }
-

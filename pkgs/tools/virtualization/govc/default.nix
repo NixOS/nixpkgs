@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "govc";
-  version = "0.30.0";
+  version = "0.37.2";
 
   subPackages = [ "govc" ];
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "vmware";
     repo = "govmomi";
-    sha256 = "sha256-BMkty2H42fAILw/zRiAWE5cOX9WCZIs0503QODLHqxo=";
+    sha256 = "sha256-9gsakFUmeOgWJGmhYtBcdjaEsF5oE3ytoHgwASOciq0=";
   };
 
-  vendorSha256 = "sha256-jbGqQITAhyBLoDa3cKU5gK+4WGgoGSCyFtzeoXx8e7k=";
+  vendorHash = "sha256-1EAQMYaTEtfAiu7+UTkC7QZwSWC1Ihwj9leTd90T0ZU=";
 
   ldflags = [
     "-s"
@@ -26,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/vmware/govmomi/tree/master/govc";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nicknovitski ];
+    mainProgram = "govc";
   };
 }

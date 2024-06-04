@@ -1,56 +1,53 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, dacite
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  dacite,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-error-for-skips,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "gios";
-  version = "2.3.0";
-  format = "setuptools";
+  version = "4.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bieniu";
-    repo = pname;
-    rev = version;
-    hash = "sha256-/lAENP9wKZ+h2Iq2e9S7s7Naa0CTl/I2cwCxBEAwsrA=";
+    repo = "gios";
+    rev = "refs/tags/${version}";
+    hash = "sha256-rjC4zWWtaPxuBcjiO9dVsXD4dTa47iwkKuSFx+QXeXw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     dacite
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
+    syrupy
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov --cov-report term-missing " ""
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
 
   disabledTests = [
     # Test requires network access
     "test_invalid_station_id"
   ];
 
-  pythonImportsCheck = [
-    "gios"
-  ];
+  pythonImportsCheck = [ "gios" ];
 
   meta = with lib; {
     description = "Python client for getting air quality data from GIOS";

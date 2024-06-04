@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, setuptools
-, sqlparse
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  setuptools,
+  sqlparse,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "yoyo-migrations";
   version = "8.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ggYGoD4mLPHNT1niVsKPpEZCUiTVuCo9EnX9eBeFI+Q=";
+    hash = "sha256-ggYGoD4mLPHNT1niVsKPpEZCUiTVuCo9EnX9eBeFI+Q=";
   };
 
   propagatedBuildInputs = [

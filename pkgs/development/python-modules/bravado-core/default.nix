@@ -1,36 +1,29 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fqdn
-, idna
-, isoduration
-, jsonpointer
-, jsonref
-, jsonschema
-, mock
-, msgpack
-, mypy-extensions
-, pytest-benchmark
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, pyyaml
-, rfc3987
-, rfc3339-validator
-, simplejson
-, six
-, strict-rfc3339
-, swagger-spec-validator
-, uri-template
-, webcolors
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  # build inputs
+  jsonref,
+  jsonschema,
+  python-dateutil,
+  pyyaml,
+  requests,
+  simplejson,
+  six,
+  swagger-spec-validator,
+  pytz,
+  msgpack,
+  # check inputs
+  pytestCheckHook,
+  mock,
 }:
 
 buildPythonPackage rec {
   pname = "bravado-core";
-  version = "5.17.0";
-  format = "setuptools";
+  version = "6.6.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -38,76 +31,45 @@ buildPythonPackage rec {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-okQA4YJq0lyVJuDzD8mMRlOS/K3gf1qRUpw/5M0LlZE=";
+    hash = "sha256-kyHmZNPl5lLKmm5i3TSi8Tfi96mQHqaiyBfceBJcOdw=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     jsonref
-    jsonschema
-    msgpack
+    jsonschema # jsonschema[format-nongpl]
     python-dateutil
-    pytz
     pyyaml
+    requests
     simplejson
     six
     swagger-spec-validator
+    pytz
+    msgpack
+  ] ++ jsonschema.optional-dependencies.format-nongpl;
 
-    # the following packages are included when jsonschema (3.2) is installed
-    # as jsonschema[format], which reflects what happens in setup.py
-    fqdn
-    idna
-    isoduration
-    jsonpointer
-    rfc3987
-    rfc3339-validator
-    strict-rfc3339
-    uri-template
-    webcolors
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    mypy-extensions
-    pytestCheckHook
-    mock
-    pytest-benchmark
-  ];
+  checkInputs = [ mock ];
 
-  pythonImportsCheck = [
-    "bravado_core"
-  ];
-
-  pytestFlagsArray = [
-    "--benchmark-skip"
-  ];
+  pythonImportsCheck = [ "bravado_core" ];
 
   disabledTestPaths = [
-    # Tests are out-dated (not supporting later modules releases, e.g., jsonschema)
-    "tests/_decorators_test.py"
-    "tests/formatter"
-    "tests/marshal"
-    "tests/model"
-    "tests/operation"
-    "tests/param"
-    "tests/request"
-    "tests/resource"
-    "tests/response"
-    "tests/schema"
-    "tests/security_test.py"
-    "tests/spec"
-    "tests/swagger20_validator"
-    "tests/unmarshal"
-    "tests/validate"
-  ];
-
-  disabledTests = [
-    "test_petstore_spec"
+    # skip benchmarks
+    "tests/profiling"
+    # take too long to run
+    "tests/spec/Spec"
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Library for adding Swagger support to clients and servers";
     homepage = "https://github.com/Yelp/bravado-core";
+    changelog = "https://github.com/Yelp/bravado-core/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [
+      vanschelven
+      nickcao
+    ];
   };
 }

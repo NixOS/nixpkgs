@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -8,16 +8,16 @@ in
 
 {
   options.hardware.i2c = {
-    enable = mkEnableOption (lib.mdDoc ''
+    enable = mkEnableOption ''
       i2c devices support. By default access is granted to users in the "i2c"
       group (will be created if non-existent) and any user with a seat, meaning
-      logged on the computer locally.
-    '');
+      logged on the computer locally
+    '';
 
     group = mkOption {
       type = types.str;
       default = "i2c";
-      description = lib.mdDoc ''
+      description = ''
         Grant access to i2c devices (/dev/i2c-*) to users in this group.
       '';
     };
@@ -31,10 +31,14 @@ in
       i2c = { };
     };
 
-    services.udev.extraRules = ''
-      # allow group ${cfg.group} and users with a seat use of i2c devices
-      ACTION=="add", KERNEL=="i2c-[0-9]*", TAG+="uaccess", GROUP="${cfg.group}", MODE="660"
-    '';
+    services.udev.packages = lib.singleton (pkgs.writeTextFile
+      { name = "i2c-udev-rules";
+        text = ''
+          # allow group ${cfg.group} and users with a seat use of i2c devices
+          ACTION=="add", KERNEL=="i2c-[0-9]*", TAG+="uaccess", GROUP="${cfg.group}", MODE="660"
+        '';
+        destination = "/etc/udev/rules.d/70-i2c.rules";
+      });
 
   };
 

@@ -1,20 +1,31 @@
 # This expression returns a list of all fetchurl calls used by ‘expr’.
 
-with import ../.. { };
-with lib;
-
-{ expr }:
+{ expr, lib ? import ../../lib }:
 
 let
+  inherit (lib)
+    addErrorContext
+    attrNames
+    concatLists
+    const
+    filter
+    genericClosure
+    isAttrs
+    isDerivation
+    isList
+    mapAttrsToList
+    optional
+    optionals
+    ;
 
   root = expr;
 
-  uniqueUrls = map (x: x.file) (genericClosure {
-    startSet = map (file: { key = file.url; inherit file; }) urls;
+  uniqueFiles = map (x: x.file) (genericClosure {
+    startSet = map (file: { key = with file; (if type == null then "" else type + "+") + hash; inherit file; }) files;
     operator = const [ ];
   });
 
-  urls = map (drv: { url = head (drv.urls or [ drv.url ]); hash = drv.outputHash; isPatch = (drv?postFetch && drv.postFetch != ""); type = drv.outputHashAlgo; name = drv.name; }) fetchurlDependencies;
+  files = map (drv: { urls = drv.urls or [ drv.url ]; hash = drv.outputHash; isPatch = (drv?postFetch && drv.postFetch != ""); type = drv.outputHashAlgo; name = drv.name; }) fetchurlDependencies;
 
   fetchurlDependencies =
     filter
@@ -47,4 +58,4 @@ let
 
   canEval = val: (builtins.tryEval val).success;
 
-in uniqueUrls
+in uniqueFiles

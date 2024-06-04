@@ -27,6 +27,8 @@ with urlopen('https://chromiumdash.appspot.com/cros/download_serving_builds_csv?
     platform_version = []
 
     for line in reader:
+        if line[cr_stable_index] == "no update":
+            continue
         this_chrome_version = list(map(int, line[cr_stable_index].split('.')))
         this_platform_version = list(map(int, line[cros_stable_index].split('.')))
         chrome_version = max(chrome_version, this_chrome_version)

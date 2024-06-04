@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-regf";
-  version = "3.2";
-  format = "pyproject";
+  version = "3.10";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.regf";
-    rev = version;
-    hash = "sha256-hSMdgGkSmFDAiO6C1xTJDmKClHwrGc887wqO3/5NZn4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uMC5av4NAzDF5JRUz4L8/jTLrBv9blNMYtM6dOuHe5s=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -35,17 +34,14 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.regf"
-  ];
+  pythonImportsCheck = [ "dissect.regf" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for Windows registry file format";
     homepage = "https://github.com/fox-it/dissect.regf";
+    changelog = "https://github.com/fox-it/dissect.regf/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,8 +1,8 @@
 { lib
 , stdenv
 , python3
+, fetchPypi
 , openssl
-, fetchpatch
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
 , extraInputs ? []
@@ -10,25 +10,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3005.1";
+  version = "3007.1";
+  format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+hTF2HP4Y7UJUBIdfiOiRJUCdFSQx8SMDPBFQGz+V8E=";
+    hash = "sha256-uTOsTLPksRGLRtraVcnMa9xvD5S0ySh3rsRLJcaijJo=";
   };
-
-  propagatedBuildInputs = with python3.pkgs; [
-    distro
-    jinja2
-    jmespath
-    markupsafe
-    msgpack
-    psutil
-    pycryptodomex
-    pyyaml
-    pyzmq
-    requests
-  ] ++ extraInputs;
 
   patches = [
     ./fix-libcrypto-loading.patch
@@ -44,15 +32,26 @@ python3.pkgs.buildPythonApplication rec {
     # `extraInputs` like on any other platform
     echo -n > "requirements/darwin.txt"
 
-    # 3004.1: requirement of pyzmq was restricted to <22.0.0; looks like that req was incorrect
-    # https://github.com/saltstack/salt/commit/070597e525bb7d56ffadede1aede325dfb1b73a4
-    # https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=259279
-    # https://github.com/saltstack/salt/pull/61163
+    # Remove windows-only requirement
     substituteInPlace "requirements/zeromq.txt" \
-      --replace 'pyzmq<=20.0.0 ; python_version < "3.6"' "" \
-      --replace 'pyzmq>=17.0.0,<22.0.0 ; python_version < "3.9"' 'pyzmq>=17.0.0 ; python_version < "3.9"' \
-      --replace 'pyzmq>19.0.2,<22.0.0 ; python_version >= "3.9"' 'pyzmq>19.0.2 ; python_version >= "3.9"'
+      --replace 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
   '';
+
+  propagatedBuildInputs = with python3.pkgs; [
+    distro
+    jinja2
+    jmespath
+    looseversion
+    markupsafe
+    msgpack
+    packaging
+    psutil
+    pycryptodomex
+    pyyaml
+    pyzmq
+    requests
+    tornado
+  ] ++ extraInputs;
 
   # Don't use fixed dependencies on Darwin
   USE_STATIC_REQUIREMENTS = "0";

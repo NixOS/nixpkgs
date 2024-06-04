@@ -1,25 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, debtcollector
-, netaddr
-, oslo-i18n
-, pbr
-, pyyaml
-, requests
-, rfc3986
-, stevedore
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  debtcollector,
+  netaddr,
+  oslo-i18n,
+  pbr,
+  pyyaml,
+  requests,
+  rfc3986,
+  stevedore,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-config";
-  version = "9.0.0";
+  version = "9.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "oslo.config";
     inherit version;
-    sha256 = "sha256-O2tjxDzx4JNEuoULyxHW8rkgEIb76wqXqJUOfqw/JkU=";
+    hash = "sha256-NbEaZhtgjttQMF2tkeTjCBnZDveUt9fbpb2LLvLrjA0=";
   };
 
   postPatch = ''
@@ -43,7 +45,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    tests = callPackage ./tests.nix {};
+    tests = callPackage ./tests.nix { };
   };
 
   pythonImportsCheck = [ "oslo_config" ];

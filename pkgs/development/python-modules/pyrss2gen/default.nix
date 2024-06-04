@@ -1,14 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
-  pname = "PyRSS2Gen";
+  pname = "pyrss2gen";
   version = "1.1";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PyRSS2Gen";
+    inherit version;
     sha256 = "1rvf5jw9hknqz02rp1vg8abgb1lpa0bc65l7ylmlillqx7bswq3r";
   };
 
@@ -21,5 +24,4 @@ buildPythonPackage rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

@@ -1,17 +1,18 @@
-{ lib
-, bluetooth-data-tools
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, sensor-state-data
+{
+  lib,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "sensorpro-ble";
-  version = "0.5.1";
+  version = "0.5.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,13 +20,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-D0xHNPsGlNBoHR3LqR6TbVhqXWapzwYsG+uN3kSF1oE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Zqa6qa0Jw79Iu4VEw6KN0GsZcC1X7OpiYUiyT4zwKyY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=sensorpro_ble --cov-report=term-missing:skip-covered" ""
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     bluetooth-data-tools
@@ -33,18 +37,9 @@ buildPythonPackage rec {
     sensor-state-data
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=sensorpro_ble --cov-report=term-missing:skip-covered" ""
-  '';
-
-  pythonImportsCheck = [
-    "sensorpro_ble"
-  ];
+  pythonImportsCheck = [ "sensorpro_ble" ];
 
   meta = with lib; {
     description = "Library for Sensorpro BLE devices";

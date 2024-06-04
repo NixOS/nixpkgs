@@ -1,9 +1,12 @@
 { lib, stdenv, substituteAll, fetchurl
-, zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
+, zlibSupport ? true, zlib
+, bzip2, pkg-config, libffi, libunwind, Security
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, libX11
-, self, gdbm, db, xz
-, python-setup-hook
+, gdbm, db, xz, python-setup-hook
+, optimizationLevel ? "jit", boehmgc
 # For the Python package set
+, hash
+, self
 , packageOverrides ? (self: super: {})
 , pkgsBuildBuild
 , pkgsBuildHost
@@ -12,7 +15,6 @@
 , pkgsTargetTarget
 , sourceVersion
 , pythonVersion
-, sha256
 , passthruFun
 , pythonAttr ? "pypy${lib.substring 0 1 pythonVersion}${lib.substring 2 3 pythonVersion}"
 }:
@@ -21,13 +23,14 @@ assert zlibSupport -> zlib != null;
 
 let
   isPy3k = (lib.versions.major pythonVersion) == "3";
+  isPy38OrNewer = lib.versionAtLeast pythonVersion "3.8";
   isPy39OrNewer = lib.versionAtLeast pythonVersion "3.9";
-  passthru = passthruFun {
+  passthru = passthruFun rec {
     inherit self sourceVersion pythonVersion packageOverrides;
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
-    executable = "pypy${if isPy39OrNewer then lib.versions.majorMinor pythonVersion else if isPy3k then "3" else ""}";
-    sitePackages = "site-packages";
+    executable = "pypy${if isPy39OrNewer then lib.versions.majorMinor pythonVersion else lib.optionalString isPy3k "3"}";
+    sitePackages = "${lib.optionalString isPy38OrNewer "lib/${libPrefix}/"}site-packages";
     hasDistutilsCxxPatch = false;
     inherit pythonAttr;
 
@@ -39,14 +42,14 @@ let
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";
-  pythonForPypy = python.withPackages (ppkgs: [ ppkgs.pycparser ]);
+  pythonForPypy = python.withPackages (ppkgs: [ ]);
 
 in with passthru; stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
     url = "https://downloads.python.org/pypy/pypy${pythonVersion}-v${version}-src.tar.bz2";
-    inherit sha256;
+    inherit hash;
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -58,6 +61,8 @@ in with passthru; stdenv.mkDerivation rec {
     stdenv.cc.libc
   ] ++ lib.optionals zlibSupport [
     zlib
+  ] ++ lib.optionals (lib.any (l: l == optimizationLevel) [ "0" "1" "2" "3"]) [
+    boehmgc
   ] ++ lib.optionals stdenv.isDarwin [
     libunwind Security
   ];
@@ -101,7 +106,7 @@ in with passthru; stdenv.mkDerivation rec {
 
     ${pythonForPypy.interpreter} rpython/bin/rpython \
       --make-jobs="$NIX_BUILD_CORES" \
-      -Ojit \
+      -O${optimizationLevel} \
       --batch pypy/goal/targetpypystandalone.py
 
     runHook postBuild
@@ -122,7 +127,7 @@ in with passthru; stdenv.mkDerivation rec {
     ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
 
     # Include a sitecustomize.py file
-    cp ${../sitecustomize.py} $out/lib/${libPrefix}/${sitePackages}/sitecustomize.py
+    cp ${../sitecustomize.py} $out/${if isPy38OrNewer then sitePackages else "lib/${libPrefix}/${sitePackages}"}/sitecustomize.py
 
     runHook postInstall
   '';
@@ -194,10 +199,12 @@ in with passthru; stdenv.mkDerivation rec {
   enableParallelBuilding = true;  # almost no parallelization without STM
 
   meta = with lib; {
-    homepage = "http://pypy.org/";
+    homepage = "https://www.pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
+    mainProgram = "pypy";
     license = licenses.mit;
     platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
+    broken = optimizationLevel == "0"; # generates invalid code
     maintainers = with maintainers; [ andersk ];
   };
 }

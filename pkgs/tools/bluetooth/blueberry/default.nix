@@ -5,11 +5,11 @@
 , cinnamon
 , gnome
 , gobject-introspection
-, intltool
+, libnotify
 , pavucontrol
 , python3Packages
 , util-linux
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -26,13 +26,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gobject-introspection
     python3Packages.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     bluez-tools
     cinnamon.xapp
     gnome.gnome-bluetooth_1_0
+    libnotify
     python3Packages.python
     util-linux
   ];

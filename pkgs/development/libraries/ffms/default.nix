@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3bPxt911T0bGpAIS2RxBjo+VV84xW06eKcCj3ZAcmvw=";
   };
 
-  NIX_CFLAGS_COMPILE = "-fPIC";
+  env.NIX_CFLAGS_COMPILE = "-fPIC";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/FFMS/ffms2/";
     description = "FFmpeg based source library for easy frame accurate access";
+    mainProgram = "ffmsindex";
     license = licenses.mit;
     maintainers = with maintainers; [ tadeokondrak ];
     platforms = platforms.unix;

@@ -7,6 +7,7 @@
 , gettext
 , libxml2
 , appstream
+, desktop-file-utils
 , glib
 , gtk3
 , pango
@@ -22,12 +23,11 @@
 , libarchive
 , libhandy
 , libsecret
-, wrapGAppsHook
+, wrapGAppsHook3
 , librsvg
 , gobject-introspection
 , yelp-tools
 , gspell
-, adwaita-icon-theme
 , gsettings-desktop-schemas
 , gnome-desktop
 , dbus
@@ -40,19 +40,24 @@
 , withLibsecret ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evince";
-  version = "43.1";
+  version = "46.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "bXXKYrc7+7YA9xigmBA9xrgT+QULlZS+kp4ptFidIzU=";
+    url = "mirror://gnome/sources/evince/${lib.versions.major finalAttrs.version}/evince-${finalAttrs.version}.tar.xz";
+    hash = "sha256-vA0dQbnX/8di6Z0qv6+sv3RRgvCzHYbbXuyMZ/XzAGs=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     appstream
+    desktop-file-utils
     gettext
     gobject-introspection
     gi-docgen
@@ -60,12 +65,11 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     yelp-tools
   ];
 
   buildInputs = [
-    adwaita-icon-theme
     atk
     dbus # only needed to find the service directory
     djvulibre
@@ -106,8 +110,6 @@ stdenv.mkDerivation rec {
     "-Dmultimedia=disabled"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
@@ -119,12 +121,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "evince";
     };
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Evince";
+    homepage = "https://apps.gnome.org/Evince/";
     description = "GNOME's document viewer";
 
     longDescription = ''
@@ -135,7 +137,8 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "evince";
     maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
-}
+})

@@ -1,26 +1,26 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, behave
-, allure-python-commons
-, setuptools-scm
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  behave,
+  allure-python-commons,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "allure-behave";
-  version = "2.12.0";
+  version = "2.13.5";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CxdB1gliajS6dUUhnD+yRMVj0zglGEwZC6RDmirH+pg=";
+    hash = "sha256-M4yizHOV0e491y9dfZLYkg8a3g4H3evGN7OOYeBtyNw=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   pythonImportsCheck = [ "allure_behave" ];
 

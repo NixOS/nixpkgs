@@ -10,7 +10,7 @@
 , upower
 , python3
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 , gnome
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
 
     # needed by meson_post_install.sh
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-power-manager";
     description = "View battery and power statistics provided by UPower";
+    mainProgram = "gnome-power-statistics";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

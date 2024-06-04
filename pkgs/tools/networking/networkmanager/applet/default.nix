@@ -6,7 +6,6 @@
 , pkg-config
 , networkmanager
 , gnome
-, libnotify
 , libsecret
 , polkit
 , modemmanager
@@ -15,21 +14,21 @@
 , gsettings-desktop-schemas
 , libgudev
 , jansson
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , python3
 , gtk3
-, libappindicator-gtk3
+, libayatana-appindicator
 , glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "network-manager-applet";
-  version = "1.30.0";
+  version = "1.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-lRa4Tp2fEA24mgxny/5XztsFYjENRcqvtjMuJ7vrXNM=";
+    sha256 = "sha256-qEcESH6jr+FIXEf7KrWYuPd59UCuDcvwocX4XmSn4lM=";
   };
 
   mesonFlags = [
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
     jansson
     glib
     glib-networking
-    libappindicator-gtk3
+    libayatana-appindicator
     gnome.adwaita-icon-theme
   ];
 
@@ -60,7 +59,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     python3
   ];
@@ -83,6 +82,7 @@ stdenv.mkDerivation rec {
     description = "NetworkManager control applet for GNOME";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
+    mainProgram = "nm-applet";
     platforms = platforms.linux;
   };
 }

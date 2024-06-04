@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/gnu-efi/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-kxole5xcG6Zf9Rnxg3PEOKJoJfLbeGaxY+ltGxaPIOo=";
+    hash = "sha256-kxole5xcG6Zf9Rnxg3PEOKJoJfLbeGaxY+ltGxaPIOo=";
   };
 
   buildInputs = [ pciutils ];
@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     "HOSTCC=${buildPackages.stdenv.cc.targetPrefix}cc"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
+
+  postPatch = ''
+    substituteInPlace Make.defaults \
+      --replace "-Werror" ""
+  '';
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.

@@ -1,55 +1,53 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, libkrb5
-, git
+, gpgme
 , installShellFiles
+, pkg-config
 , testers
 , openshift
 }:
-
 buildGoModule rec {
   pname = "openshift";
-  version = "4.11.0";
-  gitCommit = "20dd77d5";
+  version = "4.14.0";
+  gitCommit = "0c63f9d";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "oc";
-    rev = "20dd77d5c889f86b05e2bdd182853ae702852c63";
-    sha256 = "wqLo/CKGzeMDJUoI9PUEjJER5hSPu+FmUCJLPZ9PJuw=";
+    rev = "0c63f9da2694c080257111616c60005f32a5bf47";
+    hash = "sha256-viNSRwGNB0TGgw501cQuj4ajmAgvqk4vj2RmW8/DCB8=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
-  buildInputs = [ libkrb5 ];
+  buildInputs = [ gpgme ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  patchPhase = ''
-    patchShebangs ./hack
-  '';
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/openshift/oc/pkg/version.commitFromGit=${gitCommit}"
+    "-X github.com/openshift/oc/pkg/version.versionFromGit=v${version}"
+  ];
 
-  buildPhase = ''
-    # Openshift build require this variables to be set
-    # unless there is a .git folder which is not the case with fetchFromGitHub
-    export SOURCE_GIT_COMMIT=${gitCommit}
-    export SOURCE_GIT_TAG=v${version}
-    export SOURCE_GIT_TREE_STATE=clean
+  doCheck = false;
 
-    make all
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp oc $out/bin
-
+  postInstall = ''
+    # Install man pages.
     mkdir -p man
-    ./genman man oc
+    $out/bin/genman man oc
     installManPage man/*.1
 
-    installShellCompletion --bash contrib/completions/bash/*
-    installShellCompletion --zsh contrib/completions/zsh/*
+    # Remove unwanted tooling.
+    rm $out/bin/clicheck $out/bin/gendocs $out/bin/genman
+
+    # Install shell completions.
+    installShellCompletion --cmd oc \
+      --bash <($out/bin/oc completion bash) \
+      --fish <($out/bin/oc completion fish) \
+      --zsh <($out/bin/oc completion zsh)
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -64,6 +62,5 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ offline bachp moretea stehessel ];
     mainProgram = "oc";
-    platforms = platforms.unix;
   };
 }

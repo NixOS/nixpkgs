@@ -4,6 +4,7 @@
 , v8
 , perl
 , postgresql
+, jitSupport
 # For test
 , runCommand
 , coreutils
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plv8";
-  version = "3.1.4";
+  version = "3.1.10";
 
   src = fetchFromGitHub {
     owner = "plv8";
     repo = "plv8";
     rev = "v${finalAttrs.version}";
-    sha256 = "GoPP2nAeDItBt3Lug49s+brD0gIy3iDlJpbyHRuMcZ4=";
+    hash = "sha256-g1A/XPC0dX2360Gzvmo9/FSQnM6Wt2K4eR0pH0p9fz4=";
   };
 
   patches = [
@@ -135,8 +136,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
-    maintainers = with maintainers; [ marsam ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.postgresql;
+    broken = jitSupport;
   };
 })

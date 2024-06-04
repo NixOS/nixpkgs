@@ -1,23 +1,25 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, scipy
-, numba
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  scipy,
+  numba,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "numba-scipy";
-  version = "0.3.1";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cApTGH5GJZH/RbkRjKhL3injvixD5kvfaS49FjrPA2U=";
+    hash = "sha256-RDZF1mNcZnrcOzjQpjbZq8yXHnjeLAeAjYmvzXvFhEQ=";
   };
 
   propagatedBuildInputs = [
@@ -25,19 +27,16 @@ buildPythonPackage rec {
     numba
   ];
 
-  postPatch = ''
-    # https://github.com/numba/numba-scipy/pull/76
-    substituteInPlace setup.py \
-      --replace "scipy>=0.16,<=1.7.3" "scipy>=0.16"
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pythonRelaxDepsHook
+  ];
+  pythonRelaxDeps = [
+    "scipy"
+    "numba"
   ];
 
-  pythonImportsCheck = [
-    "numba_scipy"
-  ];
+  pythonImportsCheck = [ "numba_scipy" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

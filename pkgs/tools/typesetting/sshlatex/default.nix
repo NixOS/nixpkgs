@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;  # actually dual-licensed gpl3Plus | lppl13cplus
     platforms = lib.platforms.all;
     maintainers = [ maintainers.iblech ];
+    mainProgram = "sshlatex";
   };
 }

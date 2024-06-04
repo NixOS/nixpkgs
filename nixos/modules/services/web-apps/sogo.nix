@@ -18,34 +18,34 @@
 
 in {
   options.services.sogo = with types; {
-    enable = mkEnableOption (lib.mdDoc "SOGo groupware");
+    enable = mkEnableOption "SOGo groupware";
 
     vhostName = mkOption {
-      description = lib.mdDoc "Name of the nginx vhost";
+      description = "Name of the nginx vhost";
       type = str;
       default = "sogo";
     };
 
     timezone = mkOption {
-      description = lib.mdDoc "Timezone of your SOGo instance";
+      description = "Timezone of your SOGo instance";
       type = str;
       example = "America/Montreal";
     };
 
     language = mkOption {
-      description = lib.mdDoc "Language of SOGo";
+      description = "Language of SOGo";
       type = str;
       default = "English";
     };
 
     ealarmsCredFile = mkOption {
-      description = lib.mdDoc "Optional path to a credentials file for email alarms";
+      description = "Optional path to a credentials file for email alarms";
       type = nullOr str;
       default = null;
     };
 
     configReplaces = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Replacement-filepath mapping for sogo.conf.
         Every key is replaced with the contents of the file specified as value.
 
@@ -60,7 +60,7 @@ in {
     };
 
     extraConfig = mkOption {
-      description = lib.mdDoc "Extra sogo.conf configuration lines";
+      description = "Extra sogo.conf configuration lines";
       type = lines;
       default = "";
     };
@@ -232,8 +232,8 @@ in {
         proxy_connect_timeout 90;
         proxy_send_timeout 90;
         proxy_read_timeout 90;
-        proxy_buffer_size 4k;
-        proxy_buffers 4 32k;
+        proxy_buffer_size 64k;
+        proxy_buffers 8 64k;
         proxy_busy_buffers_size 64k;
         proxy_temp_file_write_size 64k;
         client_max_body_size 50m;

@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
 
 buildPythonPackage rec {
   version = "0.7.0";
+  format = "setuptools";
   pname = "iptools";
 
   src = fetchPypi {
@@ -20,5 +22,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/iptools";
     license = licenses.bsd0;
   };
-
 }

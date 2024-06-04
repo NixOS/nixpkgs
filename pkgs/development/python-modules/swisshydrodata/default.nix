@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "swisshydrodata";
   version = "0.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Bouni";
@@ -17,11 +19,9 @@ buildPythonPackage rec {
     sha256 = "1rdgfc6zg5j3fvrpbqs9vc3n5m66r5yljawyl7nmrqd5lwq1lqak";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
   ];

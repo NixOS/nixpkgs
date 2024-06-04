@@ -1,87 +1,107 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  flit-core,
 
   # tests
-, chex
-, jaxlib
-, pytest-subtests
-, pytest-xdist
-, pytestCheckHook
-, yapf
+  chex,
+  jaxlib,
+  pytest-subtests,
+  pytest-xdist,
+  pytestCheckHook,
+  yapf,
 
   # optional
-, jupyter
-, mediapy
-, numpy
-, importlib-resources
-, typing-extensions
-, zipp
-, absl-py
-, tqdm
-, dm-tree
-, jax
-, tensorflow
+  jupyter,
+  mediapy,
+  numpy,
+  importlib-resources,
+  typing-extensions,
+  zipp,
+  absl-py,
+  tqdm,
+  dm-tree,
+  jax,
+  tensorflow,
 }:
 
 buildPythonPackage rec {
   pname = "etils";
-  version = "0.9.0";
-  format = "pyproject";
+  version = "1.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SJED6eSZpWZ2XGBFjuFdGFzwBl8gYKTRamj49Gli7Q0=";
+    hash = "sha256-XQ+N2qjg5kDGhe16f+H8XIFiUz+hL7lF8J7MU5sLNmw=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   passthru.optional-dependencies = rec {
     array-types = enp;
-    ecolab = [ jupyter numpy mediapy ] ++ enp ++ epy;
+    eapp = [
+      absl-py # FIXME package simple-parsing
+    ] ++ epy;
+    ecolab = [
+      jupyter
+      numpy
+      mediapy
+    ] ++ enp ++ epy;
     edc = epy;
     enp = [ numpy ] ++ epy;
-    epath = [ importlib-resources typing-extensions zipp ] ++ epy;
+    epath = [
+      importlib-resources
+      typing-extensions
+      zipp
+    ] ++ epy;
     epy = [ typing-extensions ];
-    etqdm = [ absl-py tqdm ] ++ epy;
+    etqdm = [
+      absl-py
+      tqdm
+    ] ++ epy;
     etree = array-types ++ epy ++ enp ++ etqdm;
     etree-dm = [ dm-tree ] ++ etree;
     etree-jax = [ jax ] ++ etree;
-    etree-tf = [ tensorflow etree ] ++ etree;
-    all = array-types ++ ecolab ++ edc ++ enp ++ epath ++ epy ++ etqdm
-      ++ etree ++ etree-dm ++ etree-jax ++ etree-tf;
+    etree-tf = [ tensorflow ] ++ etree;
+    all =
+      array-types
+      ++ eapp
+      ++ ecolab
+      ++ edc
+      ++ enp
+      ++ epath
+      ++ epy
+      ++ etqdm
+      ++ etree
+      ++ etree-dm
+      ++ etree-jax
+      ++ etree-tf;
   };
 
-  pythonImportsCheck = [
-    "etils"
-  ];
+  pythonImportsCheck = [ "etils" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     chex
     jaxlib
     pytest-subtests
     pytest-xdist
     pytestCheckHook
     yapf
-  ]
-  ++ passthru.optional-dependencies.all;
+  ] ++ passthru.optional-dependencies.all;
 
   disabledTests = [
-    "test_repr" # known to fail on Python 3.10, see https://github.com/google/etils/issues/143
     "test_public_access" # requires network access
-    "test_resource_path" # known to fail on Python 3.10, see https://github.com/google/etils/issues/143
   ];
 
   doCheck = false; # error: infinite recursion encountered
 
   meta = with lib; {
-    description = "Collection of eclectic utils for python";
+    changelog = "https://github.com/google/etils/blob/v${version}/CHANGELOG.md";
+    description = "Collection of eclectic utils";
     homepage = "https://github.com/google/etils";
     license = licenses.asl20;
     maintainers = with maintainers; [ mcwitt ];

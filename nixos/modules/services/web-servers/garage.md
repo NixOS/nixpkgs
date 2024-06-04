@@ -77,10 +77,10 @@ updated to make sure that the
 on fresh setups.
 
 If major-releases will be abandoned by upstream, we should check first if those are needed
-in NixOS for a safe upgrade-path before removing those. In that case we shold keep those
+in NixOS for a safe upgrade-path before removing those. In that case we should keep those
 packages, but mark them as insecure in an expression like this (in
 `<nixpkgs/pkgs/tools/filesystem/garage/default.nix>`):
-```
+```nix
 /* ... */
 {
   garage_0_7_3 = generic {

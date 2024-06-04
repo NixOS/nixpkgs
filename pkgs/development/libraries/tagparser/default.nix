@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tagparser";
-  version = "11.5.1";
+  version = "12.1.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "tagparser";
     rev = "v${version}";
-    hash = "sha256-6HvPbbDsHIYyTs0M5M8TkgqyAz0QtgRjuNJhYWFjNG4=";
+    hash = "sha256-83Xxj1CQsghbAsQ/3GKIYCz9lBNEBvLlx1iOKbszn8A=";
   };
 
   nativeBuildInputs = [ cmake ];

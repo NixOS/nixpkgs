@@ -2,16 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "spirv-tools";
-  version = "1.3.236.0";
+  version = "1.3.283.0";
 
-  src = (assert version == spirv-headers.version;
-    fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "SPIRV-Tools";
-      rev = "sdk-${version}";
-      hash = "sha256-BV7V/jS782zdvtuw/wNY5fyAdx8Z2niWSocNaW0Atho=";
-    }
-  );
+  src = fetchFromGitHub {
+    owner = "KhronosGroup";
+    repo = "SPIRV-Tools";
+    rev = "vulkan-sdk-${version}";
+    hash = "sha256-at3krE0torhjg7G+NkX0/ewc26Sg/1t2xW7wghAAuZo=";
+  };
+
+  # The cmake options are sufficient for turning on static building, but not
+  # for disabling shared building, just trim the shared lib from the CMake
+  # description
+  patches = lib.optional stdenv.hostPlatform.isStatic ./no-shared-libs.patch;
 
   nativeBuildInputs = [ cmake python3 ];
 
@@ -41,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "The SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
     homepage = "https://github.com/KhronosGroup/SPIRV-Tools";
     license = licenses.asl20;
-    platforms = platforms.unix;
+    platforms = with platforms; unix ++ windows;
     maintainers = [ maintainers.ralith ];
   };
 }

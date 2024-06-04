@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "chkrootkit";
-  version = "0.55";
+  version = "0.58b";
 
   src = fetchurl {
-    url = "ftp://ftp.pangeia.com.br/pub/seg/pac/${pname}-${version}.tar.gz";
-    sha256 = "sha256-qBwChuxEkxP5U3ASAqAOgbIE/Cz0PieFhaEcEqXgJYs=";
+    url = "ftp://ftp.chkrootkit.org/pub/seg/pac/${pname}-${version}.tar.gz";
+    sha256 = "sha256-de0qzoHw+j6cP7ZNqw6IV+1ZJH6nVfWJhBb+ssZoB7k=";
   };
 
   # TODO: a lazy work-around for linux build failure ...
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Locally checks for signs of a rootkit";
-    homepage = "http://www.chkrootkit.org/";
+    homepage = "https://www.chkrootkit.org/";
     license = licenses.bsd2;
     platforms = with platforms; linux;
   };

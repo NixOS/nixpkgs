@@ -1,29 +1,29 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchPypi
-, flit-core
-, jinja2
-, markdown-it-py
-, mdit-py-plugins
-, pythonOlder
-, pyyaml
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchPypi,
+  flit-core,
+  jinja2,
+  markdown-it-py,
+  mdit-py-plugins,
+  pythonOlder,
+  pyyaml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "myst-docutils";
-  version = "0.18.1";
+  version = "3.0.1";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Dxg5TtQaK4plvRmXZa7AqPFIv/jvUOpV8M/BJohiXj0=";
+    pname = "myst_docutils";
+    inherit version;
+    hash = "sha256-alQvF0OWNjDck022ORJ1Nl4t1jgzMZKEbJxPHsrmBcI=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     docutils

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , intltool
 , meson
 , mesonEmulatorHook
@@ -12,14 +11,14 @@
 , docbook_xml_dtd_412
 , glib
 , json-glib
-, libsoup
+, libsoup_3
 , libnotify
 , gdk-pixbuf
 , modemmanager
 , avahi
 , glib-networking
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , vala
 , withDemoAgent ? false
@@ -27,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "geoclue";
-  version = "2.6.0";
+  version = "2.7.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "geoclue";
     repo = "geoclue";
     rev = version;
-    hash = "sha256-TbuO9wpyjtvyvqaCryaTOunR0hVVlJuqENWQQpcMcz4=";
+    hash = "sha256-vzarUg4lBEXYkH+n9SY8SYr0gHUX94PSTDmKd957gyc=";
   };
 
   patches = [
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
     intltool
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
     vala
     gobject-introspection
@@ -63,9 +62,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     json-glib
-    libsoup
+    libsoup_3
     avahi
-    gobject-introspection
   ] ++ lib.optionals withDemoAgent [
     libnotify gdk-pixbuf
   ] ++ lib.optionals (!stdenv.isDarwin) [
@@ -101,7 +99,7 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin && withDemoAgent;
     description = "Geolocation framework and some data providers";
     homepage = "https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin mimame ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl2Plus;
   };

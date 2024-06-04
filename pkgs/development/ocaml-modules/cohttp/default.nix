@@ -6,15 +6,18 @@
 
 buildDunePackage rec {
   pname = "cohttp";
-  version = "5.0.0";
+  version = "5.3.1";
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-${version}.tbz";
-    sha256 = "sha256-/W/0uGyBg1XWGzoIYoWW2/UX1qfabo7exIG7BlPKWgU=";
+    hash = "sha256-9eJz08Lyn/R71+Ftsj4fPWzQGkC+ACCJhbxDTIjUV2s=";
   };
+
+  postPatch = ''
+    substituteInPlace cohttp/src/dune --replace 'bytes base64' 'base64'
+  '';
 
   buildInputs = [ jsonm ppx_sexp_conv ];
 

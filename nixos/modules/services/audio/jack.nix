@@ -16,20 +16,15 @@ in {
   options = {
     services.jack = {
       jackd = {
-        enable = mkEnableOption (lib.mdDoc ''
+        enable = mkEnableOption ''
           JACK Audio Connection Kit. You need to add yourself to the "jackaudio" group
-        '');
+        '';
 
-        package = mkOption {
+        package = mkPackageOption pkgs "jack2" {
+          example = "jack1";
+        } // {
           # until jack1 promiscuous mode is fixed
           internal = true;
-          type = types.package;
-          default = pkgs.jack2;
-          defaultText = literalExpression "pkgs.jack2";
-          example = literalExpression "pkgs.jack1";
-          description = lib.mdDoc ''
-            The JACK package to use.
-          '';
         };
 
         extraOptions = mkOption {
@@ -40,14 +35,14 @@ in {
           example = literalExpression ''
             [ "-dalsa" "--device" "hw:1" ];
           '';
-          description = lib.mdDoc ''
+          description = ''
             Specifies startup command line arguments to pass to JACK server.
           '';
         };
 
         session = mkOption {
           type = types.lines;
-          description = lib.mdDoc ''
+          description = ''
             Commands to run after JACK is started.
           '';
         };
@@ -58,7 +53,7 @@ in {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc ''
+          description = ''
             Route audio to/from generic ALSA-using applications using ALSA JACK PCM plugin.
           '';
         };
@@ -66,7 +61,7 @@ in {
         support32Bit = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to support sound for 32-bit ALSA applications on 64-bit system.
           '';
         };
@@ -76,7 +71,7 @@ in {
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Create ALSA loopback device, instead of using PCM plugin. Has broader
             application support (things like Steam will work), but may need fine-tuning
             for concrete hardware.
@@ -86,14 +81,14 @@ in {
         index = mkOption {
           type = types.int;
           default = 10;
-          description = lib.mdDoc ''
+          description = ''
             Index of an ALSA loopback device.
           '';
         };
 
         config = mkOption {
           type = types.lines;
-          description = lib.mdDoc ''
+          description = ''
             ALSA config for loopback device.
           '';
         };
@@ -105,7 +100,7 @@ in {
             period_size 2048
             periods 2
           '';
-          description = lib.mdDoc ''
+          description = ''
             For music production software that still doesn't support JACK natively you
             would like to put buffer/period adjustments here
             to decrease dmix device latency.
@@ -114,7 +109,7 @@ in {
 
         session = mkOption {
           type = types.lines;
-          description = lib.mdDoc ''
+          description = ''
             Additional commands to run to setup loopback device.
           '';
         };
@@ -225,7 +220,7 @@ in {
         description = "JACK Audio system service user";
         isSystemUser = true;
       };
-      # http://jackaudio.org/faq/linux_rt_config.html
+      # https://jackaudio.org/faq/linux_rt_config.html
       security.pam.loginLimits = [
         { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = "99"; }
         { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }

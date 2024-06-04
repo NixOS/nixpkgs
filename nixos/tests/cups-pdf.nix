@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   nodes.machine = { pkgs, ... }: {
     imports = [ ./common/user-account.nix ];
     environment.systemPackages = [ pkgs.poppler_utils ];
-    fonts.fonts = [ pkgs.dejavu_fonts ];  # yields more OCR-able pdf
+    fonts.packages = [ pkgs.dejavu_fonts ];  # yields more OCR-able pdf
     services.printing.cups-pdf.enable = true;
     services.printing.cups-pdf.instances = {
       opt = {};
@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
   testScript = ''
     from subprocess import run
-    machine.wait_for_unit("cups.service")
+    machine.wait_for_unit("multi-user.target")
     for name in ("opt", "noopt"):
         text = f"test text {name}".upper()
         machine.wait_until_succeeds(f"lpstat -v {name}")

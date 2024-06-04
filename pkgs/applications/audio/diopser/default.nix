@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config
 , libjack2, alsa-lib, freetype, libX11, libXrandr, libXinerama, libXext, libXcursor
 }:
 
@@ -37,6 +37,14 @@ in  stdenv.mkDerivation rec {
     rev = "d5fdc92f1caf5a828e071dac99e106e58f06d84d";
     sha256 = "06y1h895yxh44gp4vxzrna59lf7nlfw7aacd3kk4l1g56jhy9pdx";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-gcc-11-build.patch";
+      url = "https://github.com/robbert-vdh/diopser/commit/a7284439bd4e23455132e7806a214f9db12efae9.patch";
+      hash = "sha256-r3yxhnhPUQ47srhfAKeurpe2xyEBdSvqIbgqs9/6gD4=";
+    })
+  ];
 
   postUnpack = ''
     (

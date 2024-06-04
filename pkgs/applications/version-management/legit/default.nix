@@ -1,14 +1,15 @@
 { lib
 , python3Packages
+, fetchPypi
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "legit";
-  version = "1.2.0";
+  version = "1.2.0.post0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "0ngh3ar6v15516f52j21k6qz7hykmxfjadhb2rakvl27b5xvjy1c";
+    sha256 = "sha256-lJOWtoApqK9AWrIMkBkCNB72vVXH/sbatxFB1j1AaxE=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -27,5 +28,6 @@ python3Packages.buildPythonApplication rec {
     description = "Git for Humans, Inspired by GitHub for Mac";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ryneeverett ];
+    mainProgram = "legit";
   };
 }

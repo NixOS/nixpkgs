@@ -4,6 +4,7 @@
   "date": "2021-08-16T15:50:03+02:00",
   "path": "/nix/store/vvgvb1jcv0qrn3xj0jbf83qwi1lh2m68-tree-sitter-sparql",
   "sha256": "012c1pi4vc6hkvllymvl2yah3ix8k4pi7997iydy949fc33aa5i8",
+  "hash": "sha256-KBalxmAukeSbjyelEy+ZqMcBlRd0V0/pntCwTeINTAQ=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

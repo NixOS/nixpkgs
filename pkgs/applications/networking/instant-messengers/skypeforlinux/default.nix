@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, dpkg
 , alsa-lib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome
-, gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
+, gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook3, xorg
 , at-spi2-atk, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon, libxshmfence }:
 
 let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.87.0.406";
+  version = "8.110.76.107";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -68,7 +68,7 @@ let
           "https://mirror.cs.uchicago.edu/skype/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
           "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
         ];
-        sha256 = "sha256-lWnQIdMmfz90h3tOWkQv0vo3HnRi3z6W27vK28+Ksjo=";
+        sha256 = "sha256-ocXhISwEtwzPd1dOPjgIj5UQ/8sqq2gUtmZ8KZBAxKM=";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
@@ -82,7 +82,7 @@ in stdenv.mkDerivation {
   inherit src;
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     glib # For setup hook populating GSETTINGS_SCHEMA_PATH
   ];
 
@@ -124,5 +124,6 @@ in stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = with maintainers; [ panaeon jraygauthier ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "skypeforlinux";
   };
 }

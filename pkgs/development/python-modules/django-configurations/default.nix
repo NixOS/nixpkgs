@@ -1,40 +1,35 @@
-{ lib
-, buildPythonPackage
-, dj-database-url
-, dj-email-url
-, dj-search-url
-, django
-, django-cache-url
-, fetchPypi
-, importlib-metadata
-, mock
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  dj-database-url,
+  dj-email-url,
+  dj-search-url,
+  django,
+  django-cache-url,
+  fetchPypi,
+  importlib-metadata,
+  mock,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "django-configurations";
-  version = "2.4";
+  version = "2.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-IrmWTmtlfa/Ho1QQoRXSDxRRFJqCc3rcbDMew2WIgZY=";
+    hash = "sha256-blCDdX4rvfm7eFBWdTa5apNRX2sXUD10ko/2KNsuDpQ=";
   };
 
-  buildInputs = [
-    setuptools-scm
-  ];
+  buildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    django
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ django ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     dj-database-url
     dj-email-url
@@ -52,14 +47,13 @@ buildPythonPackage rec {
   # django.core.exceptions.ImproperlyConfigured: django-configurations settings importer wasn't correctly installed
   doCheck = false;
 
-  pythonImportsCheck = [
-    "configurations"
-  ];
+  pythonImportsCheck = [ "configurations" ];
 
   meta = with lib; {
     description = "A helper for organizing Django settings";
+    mainProgram = "django-cadmin";
     homepage = "https://django-configurations.readthedocs.io/";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

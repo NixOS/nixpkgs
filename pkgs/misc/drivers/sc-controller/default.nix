@@ -1,6 +1,5 @@
-{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
+{ lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook3
 , pytestCheckHook
-, fetchpatch
 , gtk3, gobject-introspection, libappindicator-gtk3, librsvg
 , evdev, pygobject3, pylibacl, bluez, vdf
 , linuxHeaders
@@ -9,33 +8,22 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.8.9";
+  version = "0.4.8.13";
 
   src = fetchFromGitHub {
     owner  = "Ryochan7";
     repo   = pname;
-    rev    = "v${version}";
-    sha256 = "sha256-ym5fkOTRhibBaUqT0+p/jyqqKOVsyMz5INgfkoz0IJA=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-vK/5S+GyqVfKTqn5PaPmOV/tXE9PIW57gqYxvhGaJSg=";
   };
 
-  # see https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
-
-  buildInputs = [ gtk3 gobject-introspection libappindicator-gtk3 librsvg ];
+  buildInputs = [ gtk3 libappindicator-gtk3 librsvg ];
 
   propagatedBuildInputs = [ evdev pygobject3 pylibacl vdf ];
 
-  checkInputs = [ pytestCheckHook ];
-
-  patches = [
-    # Fix a broken test
-    (fetchpatch {
-      url = "https://github.com/Ryochan7/sc-controller/pull/73.patch";
-      sha256 = "sha256-qU8hIReZE3cEPCMOFc4RCUCIhiS0gJ3PushMkfDlPns=";
-     })
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"

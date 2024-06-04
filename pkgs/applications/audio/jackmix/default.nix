@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, sconsPackages, qtbase, lash, libjack2, jack ? libjack2, alsa-lib
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, scons, qtbase, lash, libjack2, jack ? libjack2, alsa-lib
 , fetchpatch
 }:
 
@@ -22,7 +22,7 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ sconsPackages.scons_latest pkg-config ];
+  nativeBuildInputs = [ scons pkg-config ];
   buildInputs = [
     qtbase
     lash
@@ -36,6 +36,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Matrix-Mixer for the Jack-Audio-connection-Kit";
+    mainProgram = "jackmix";
     homepage = "https://github.com/kampfschlaefer/jackmix";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ kampfschlaefer ];

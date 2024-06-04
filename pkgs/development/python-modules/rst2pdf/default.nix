@@ -1,36 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, docutils
-, importlib-metadata
-, jinja2
-, packaging
-, pygments
-, pyyaml
-, reportlab
-, smartypants
-, pillow
-, pytestCheckHook
-, pymupdf
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  installShellFiles,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  docutils,
+  importlib-metadata,
+  jinja2,
+  packaging,
+  pygments,
+  pyyaml,
+  reportlab,
+  smartypants,
+  pillow,
+  pytestCheckHook,
+  pymupdf,
+  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "rst2pdf";
-  version = "0.99";
-
+  version = "0.101";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fa23fa93bddd1f52d058ceaeab6582c145546d80f2f8a95974f3703bd6c8152";
+    hash = "sha256-AF8FssEIFHmeY2oVrAPNe85pbmgKWO52yD6ycNNzTSg=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
+    installShellFiles
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -45,11 +54,9 @@ buildPythonPackage rec {
     pillow
   ];
 
-  pythonImportsCheck = [
-    "rst2pdf"
-  ];
+  pythonImportsCheck = [ "rst2pdf" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pymupdf
     sphinx
@@ -59,14 +66,16 @@ buildPythonPackage rec {
   doCheck = false;
 
   postInstall = ''
-    mkdir -p $man/share/man/man1/
-    ${docutils}/bin/rst2man.py doc/rst2pdf.rst $man/share/man/man1/rst2pdf.1
+    ${lib.getExe' docutils "rst2man"} doc/rst2pdf.rst rst2pdf.1
+    installManPage rst2pdf.1
   '';
 
   meta = with lib; {
     description = "Convert reStructured Text to PDF via ReportLab";
+    mainProgram = "rst2pdf";
     homepage = "https://rst2pdf.org/";
+    changelog = "https://github.com/rst2pdf/rst2pdf/blob/${version}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ pyrox0 ];
   };
 }

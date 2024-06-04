@@ -1,4 +1,5 @@
 { buildDunePackage
+, ocaml
 , lib
 , ppxlib
 , fetchFromGitHub
@@ -9,21 +10,20 @@
 
 buildDunePackage rec {
   pname = "gen_js_api";
-  version = "1.1.1";
-  duneVersion = "3";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "LexiFi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0FKKYPbSBza/Q6oZniq/UHi5zBjD/i7j5ds3ZDWkBTs=";
+    sha256 = "sha256-tplbnQ/1dzZq8m/ibMAkGqY8RHQRmBPHOwh0dGuZCJM=";
   };
 
   minimalOCamlVersion = "4.11";
 
   propagatedBuildInputs = [ ojs ppxlib ];
-  checkInputs = [ js_of_ocaml-compiler nodejs ];
-  doCheck = true;
+  nativeCheckInputs = [ js_of_ocaml-compiler nodejs ];
+  doCheck = lib.versionAtLeast ocaml.version "4.13";
 
   meta = {
     homepage = "https://github.com/LexiFi/gen_js_api";

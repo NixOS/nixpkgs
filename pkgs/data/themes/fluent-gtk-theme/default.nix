@@ -21,15 +21,15 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] col
 lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
 lib.checkListOfEnum "${pname}: tweaks" [ "solid" "float" "round" "blur" "noborder" "square" ] tweaks
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2022-12-15";
+  version = "2024-04-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
-    rev = version;
-    hash = "sha256-lGT6MIpc7cdAznZlbSJJ7aBzZPHucyfR8ZNMdJI0LP8=";
+    repo = "fluent-gtk-theme";
+    rev = finalAttrs.version;
+    hash = "sha256-0zf3fHtWcrbT26jgwgsPEDDhBWErOkgXyvGwSWV8rGs=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,7 @@ stdenvNoCC.mkDerivation rec {
       ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
       ${lib.optionalString (sizeVariants != []) "--size " + builtins.toString sizeVariants} \
       ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
+      --icon nixos \
       --dest $out/share/themes
 
     jdupes --quiet --link-soft --recurse $out/share
@@ -66,11 +67,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Fluent design gtk theme";
     homepage = "https://github.com/vinceliuice/Fluent-gtk-theme";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

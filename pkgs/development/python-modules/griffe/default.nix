@@ -1,60 +1,45 @@
-{ lib
-, aiofiles
-, buildPythonPackage
-, cached-property
-, colorama
-, fetchFromGitHub
-, git
-, pdm-pep517
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiofiles,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  git,
+  jsonschema,
+  pdm-backend,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "griffe";
-  version = "0.25.3";
-  format = "pyproject";
+  version = "0.45.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
-    repo = pname;
+    repo = "griffe";
     rev = "refs/tags/${version}";
-    hash = "sha256-t36uWIREn01/+dIYP5HYlkSPPjgoZoYbJYnFo3Y6qSw=";
+    hash = "sha256-mWJNEZPZgpqJ15HuptpjD9e14CYh4TNFbE38zI42wRk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"' \
-      --replace 'license = "ISC"' 'license = {file = "LICENSE"}' \
-      --replace 'version = {source = "scm"}' 'license-expression = "ISC"'
-  '';
+  build-system = [ pdm-backend ];
 
-  nativeBuildInputs = [
-    pdm-pep517
-  ];
+  dependencies = [ colorama ];
 
-  propagatedBuildInputs = [
-    colorama
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     git
+    jsonschema
     pytestCheckHook
   ];
 
   passthru.optional-dependencies = {
-    async = [
-      aiofiles
-    ];
+    async = [ aiofiles ];
   };
 
-  pythonImportsCheck = [
-    "griffe"
-  ];
+  pythonImportsCheck = [ "griffe" ];
 
   meta = with lib; {
     description = "Signatures for entire Python programs";
@@ -62,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mkdocstrings/griffe/blob/${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "griffe";
   };
 }

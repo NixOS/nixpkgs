@@ -1,4 +1,4 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, libretro, mgba }:
+{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, mgba }:
 
 buildKodiBinaryAddon rec {
   pname = "kodi-libretro-mgba";
@@ -8,7 +8,7 @@ buildKodiBinaryAddon rec {
   src = fetchFromGitHub {
     owner = "kodi-game";
     repo = "game.libretro.mgba";
-    rev = "${version}-${rel}";
+    rev = "${version}-Matrix";
     sha256 = "sha256-lxpj6Y34apYcE22q4W3Anhigp79r4RgiJ36DbES1kzU=";
   };
 

@@ -15,22 +15,22 @@ let
       nodes.machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
-        services.xserver.displayManager.sddm.enable = true;
-        services.xserver.displayManager.defaultSession = "none+icewm";
+        services.displayManager.sddm.enable = true;
+        services.displayManager.defaultSession = "none+icewm";
         services.xserver.windowManager.icewm.enable = true;
       };
 
       enableOCR = true;
 
       testScript = { nodes, ... }: let
-        user = nodes.machine.config.users.users.alice;
+        user = nodes.machine.users.users.alice;
       in ''
         start_all()
         machine.wait_for_text("(?i)select your user")
         machine.screenshot("sddm")
         machine.send_chars("${user.password}\n")
-        machine.wait_for_file("${user.home}/.Xauthority")
-        machine.succeed("xauth merge ${user.home}/.Xauthority")
+        machine.wait_for_file("/tmp/xauth_*")
+        machine.succeed("xauth merge /tmp/xauth_*")
         machine.wait_for_window("^IceWM ")
       '';
     };
@@ -44,23 +44,21 @@ let
       nodes.machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
-        services.xserver.displayManager = {
+        services.displayManager = {
           sddm.enable = true;
           autoLogin = {
             enable = true;
             user = "alice";
           };
         };
-        services.xserver.displayManager.defaultSession = "none+icewm";
+        services.displayManager.defaultSession = "none+icewm";
         services.xserver.windowManager.icewm.enable = true;
       };
 
-      testScript = { nodes, ... }: let
-        user = nodes.machine.config.users.users.alice;
-      in ''
+      testScript = { nodes, ... }: ''
         start_all()
-        machine.wait_for_file("${user.home}/.Xauthority")
-        machine.succeed("xauth merge ${user.home}/.Xauthority")
+        machine.wait_for_file("/tmp/xauth_*")
+        machine.succeed("xauth merge /tmp/xauth_*")
         machine.wait_for_window("^IceWM ")
       '';
     };

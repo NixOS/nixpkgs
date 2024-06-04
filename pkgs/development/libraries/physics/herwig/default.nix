@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "herwig";
-  version = "7.2.3";
+  version = "7.3.0";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    hash = "sha256-VZmJk3mwGwnjMaJCbXjTm39uwSbbJUPp00Cu/mqlD4Q=";
+    hash = "sha256-JiSBnS3/EFupUuobXPEutvSSbUlRd0pBkHaZ4vVnaGw=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool gfortran ];

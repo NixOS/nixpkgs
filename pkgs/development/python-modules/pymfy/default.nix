@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpretty
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-oauthlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpretty,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
 }:
 
 buildPythonPackage rec {
@@ -23,23 +24,19 @@ buildPythonPackage rec {
     sha256 = "0wpjwjmywfyqgwvfa5kwcjpaljc32qa088kk88nl9nqdvc31mzhv";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     requests
     requests-oauthlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     httpretty
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pymfy"
-  ];
+  pythonImportsCheck = [ "pymfy" ];
 
   meta = with lib; {
     description = "Python client for the Somfy Open API";

@@ -1,50 +1,55 @@
-{ lib
-, fetchFromGitHub
-, pkgs
-, stdenv
-, nodejs
+{
+  lib,
+  stdenv,
+  overrideSDK,
+  fetchFromGitHub,
+  buildNpmPackage,
+  jellyfin,
+  nix-update-script,
+  pkg-config,
+  xcbuild,
+  pango,
+  giflib,
+  darwin,
 }:
-
-stdenv.mkDerivation rec {
+let
+  # node-canvas builds code that requires aligned_alloc,
+  # which on Darwin requires at least the 10.15 SDK
+  stdenv' =
+    if stdenv.isDarwin then
+      overrideSDK stdenv {
+        darwinMinVersion = "10.15";
+        darwinSdkVersion = "11.0";
+      }
+    else
+      stdenv;
+  buildNpmPackage' = buildNpmPackage.override { stdenv = stdenv'; };
+in
+buildNpmPackage' rec {
   pname = "jellyfin-web";
-  version = "10.8.8";
+  version = "10.9.3";
 
-  src = fetchFromGitHub {
-    owner = "jellyfin";
-    repo = "jellyfin-web";
-    rev = "v${version}";
-    sha256 = "pIoMpNxRtIvs6bhFEoSlFU8aHZ2CBbHnZaA/FVAkGOI=";
-  };
+  src =
+    assert version == jellyfin.version;
+    fetchFromGitHub {
+      owner = "jellyfin";
+      repo = "jellyfin-web";
+      rev = "v${version}";
+      hash = "sha256-duq2tilUDEzj7o3Nq3Ku5qVJm4XDqVmqkQQIK/dlTpE=";
+    };
 
-  nativeBuildInputs = [
-    nodejs
-  ];
+  npmDepsHash = "sha256-nKA/mR1ug1yq4+jJGhWGtAL9Zsx3KjDPqt5rkCE4LFU=";
 
-  buildPhase =
-    let
-      nodeDependencies = ((import ./node-composition.nix {
-        inherit pkgs nodejs;
-        inherit (stdenv.hostPlatform) system;
-      }).nodeDependencies.override (old: {
-        # access to path '/nix/store/...-source' is forbidden in restricted mode
-        src = src;
+  npmBuildScript = [ "build:production" ];
 
-        # dont run the prepare script:
-        # Error: Cannot find module '/nix/store/...-node-dependencies-jellyfin-web-.../jellyfin-web/scripts/prepare.js
-        # npm run build:production runs the same command
-        dontNpmInstall = true;
-      }));
-    in
-    ''
-      runHook preBuild
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-      ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-      export PATH="${nodeDependencies}/bin:$PATH"
-
-      npm run build:production
-
-      runHook postBuild
-    '';
+  buildInputs =
+    [ pango ]
+    ++ lib.optionals stdenv.isDarwin [
+      giflib
+      darwin.apple_sdk.frameworks.CoreText
+    ];
 
   installPhase = ''
     runHook preInstall
@@ -55,13 +60,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./web-update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Web Client for Jellyfin";
     homepage = "https://jellyfin.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nyanloutre minijackson purcell jojosch ];
-    platforms = nodejs.meta.platforms;
+    maintainers = with maintainers; [
+      nyanloutre
+      minijackson
+      purcell
+      jojosch
+    ];
   };
 }

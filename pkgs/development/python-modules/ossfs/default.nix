@@ -1,26 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fsspec
-, oss2
-, pythonOlder
+{
+  lib,
+  aiooss2,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fsspec,
+  oss2,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "ossfs";
-  version = "2021.8.0";
-  format = "setuptools";
+  version = "2023.12.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = pname;
-    rev = version;
-    hash = "sha256-bORiE3sIDNESjEizdzsJYZTSMbcqpbjostXo+0NQDfA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-N1NkpI8inGJCf0xuc+FFmVX85CS7vqzoNddxZ9kqEk0=";
   };
 
+  pythonRelaxDeps = [
+    "aiooss2"
+    "fsspec"
+    "oss2"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
+    aiooss2
     fsspec
     oss2
   ];
@@ -28,13 +44,12 @@ buildPythonPackage rec {
   # Most tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ossfs"
-  ];
+  pythonImportsCheck = [ "ossfs" ];
 
   meta = with lib; {
     description = "Filesystem for Alibaba Cloud (Aliyun) Object Storage System (OSS)";
     homepage = "https://github.com/fsspec/ossfs";
+    changelog = "https://github.com/fsspec/ossfs/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

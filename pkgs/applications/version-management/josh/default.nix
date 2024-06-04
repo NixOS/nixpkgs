@@ -10,18 +10,24 @@
 , darwin
 }:
 
+let
+  # josh-ui requires javascript dependencies, haven't tried to figure it out yet
+  cargoFlags = [ "--workspace" "--exclude" "josh-ui" ];
+in
+
 rustPlatform.buildRustPackage rec {
   pname = "josh";
-  version = "22.06.22";
+  version = "23.12.04";
+  JOSH_VERSION = "r${version}";
 
   src = fetchFromGitHub {
     owner = "esrlabs";
     repo = "josh";
-    rev = "r" + version;
-    sha256 = "0511qv9zyjvv4zfz6zyi69ssbkrwa24n0ah5w9mb4gzd547as8pq";
+    rev = JOSH_VERSION;
+    sha256 = "10fspcafqnv6if5c1h8z9pf9140jvvlrch88w62wsg4w2vhaii0v";
   };
 
-  cargoSha256 = "0zfjjyyz4pxar1mfkkj9aij4dnwqy3asdrmay1iy6ijjn1qd97n4";
+  cargoSha256 = "1j0vl3h6f65ldg80bgryh1mz423lcrcdkn8rmajya1850pfxk3w3";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,11 +41,8 @@ rustPlatform.buildRustPackage rec {
     darwin.Security
   ];
 
-  cargoBuildFlags = [
-    "-p" "josh"
-    "-p" "josh-proxy"
-    # TODO: josh-ui
-  ];
+  cargoBuildFlags = cargoFlags;
+  cargoTestFlags = cargoFlags;
 
   postInstall = ''
     wrapProgram "$out/bin/josh-proxy" --prefix PATH : "${git}/bin"

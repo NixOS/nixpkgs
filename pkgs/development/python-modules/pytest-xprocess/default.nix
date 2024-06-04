@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, psutil
-, py
-, pytest
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  psutil,
+  py,
+  pytest,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xprocess";
-  version = "0.21.0";
+  version = "0.23.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+UcL/PiE9ymetrgqQ9KYwxi45T7DFO5iTJh+DofBtEk=";
+    hash = "sha256-+NQEGiChwe8ZQwVOSj33rHtD5/KR9kD0PDTp3MSzTfo=";
   };
 
   postPatch = ''
@@ -23,13 +24,9 @@ buildPythonPackage rec {
       --replace "'pytest-cache', " ""
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     psutil

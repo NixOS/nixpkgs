@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     # NOTE: Could also work on 'unix'.
     platforms = platforms.linux;
     maintainers = with maintainers; [ wishfort36 ];
+    mainProgram = "herbe";
   };
 }

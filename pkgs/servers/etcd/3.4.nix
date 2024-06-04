@@ -2,24 +2,24 @@
 
 buildGoModule rec {
   pname = "etcd";
-  version = "3.4.23";
-
-  vendorSha256 = "sha256-kq9KYe4wnPbOLHra5DHZH1N3w2R+dNF7ouF2c26e/cU=";
-
-  doCheck = false;
+  version = "3.4.28";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    sha256 = "sha256-7HAA3MHDlsnTYDu5AmzpFfiWaarUGO09QHrPGLHolyM=";
+    hash = "sha256-M0iD05Wk3pC56kGKeIb0bfMUpy9idMKin0+DYhBo/cw=";
   };
+
+  vendorHash = "sha256-DbDIz/cbXqYHaGqNqP+wYpuiaFiZYElRXmQwBXnCbMk=";
 
   buildPhase = ''
     patchShebangs .
     ./build
     ./functional/build
   '';
+
+  doCheck = false;
 
   installPhase = ''
     install -Dm755 bin/* bin/functional/cmd/* -t $out/bin
@@ -29,6 +29,6 @@ buildGoModule rec {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [ offline zowoq ];
+    maintainers = with maintainers; [ offline ];
   };
 }

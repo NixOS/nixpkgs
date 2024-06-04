@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3, dict, glibcLocales }:
+{ lib, stdenv, fetchurl, python3, dict, glibcLocales, libfaketime }:
 
 stdenv.mkDerivation rec {
   pname = "dict-db-wiktionary";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "qsha26LL2513SDtriE/0zdPX1zlnpzk1KKk+R9dSdew=";
   };
 
-  nativeBuildInputs = [ python3 dict glibcLocales ];
+  nativeBuildInputs = [ python3 dict glibcLocales libfaketime ];
 
   dontUnpack = true;
 
@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/dictd/
     cd $out/share/dictd
 
-    ${python3.interpreter} -O ${./wiktionary2dict.py} "${src}"
-    dictzip wiktionary-en.dict
+    source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
+    faketime -f "$source_date" ${python3.interpreter} -O ${./wiktionary2dict.py} "${src}"
+    faketime -f "$source_date" dictzip wiktionary-en.dict
     echo en_US.UTF-8 > locale
   '';
 

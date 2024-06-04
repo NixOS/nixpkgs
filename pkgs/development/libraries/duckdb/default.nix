@@ -1,66 +1,63 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , ninja
 , openssl
 , openjdk11
+, python3
 , unixODBC
-, withHttpFs ? true
 , withJdbc ? false
 , withOdbc ? false
 }:
 
 let
   enableFeature = yes: if yes then "ON" else "OFF";
+  versions = lib.importJSON ./versions.json;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duckdb";
-  version = "0.6.1";
+  inherit (versions) rev version;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-no4fcukEpzKmh2i41sdXGDljGhEDkzk3rYBATqlq6Gw=";
+    # to update run:
+    # nix-shell maintainers/scripts/update.nix --argstr path duckdb
+    inherit (versions) hash;
+    owner = "duckdb";
+    repo = "duckdb";
+    rev = "refs/tags/v${finalAttrs.version}";
   };
 
-  patches = [ ./version.patch ];
+  outputs = [ "out" "lib" "dev" ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
-  '';
+  nativeBuildInputs = [ cmake ninja python3 ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals withJdbc [ openjdk11 ]
+    ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags = [
-    "-DBUILD_EXCEL_EXTENSION=ON"
-    "-DBUILD_FTS_EXTENSION=ON"
-    "-DBUILD_HTTPFS_EXTENSION=${enableFeature withHttpFs}"
-    "-DBUILD_ICU_EXTENSION=ON"
-    "-DBUILD_JSON_EXTENSION=ON"
+    "-DDUCKDB_EXTENSION_CONFIGS=${finalAttrs.src}/.github/config/in_tree_extensions.cmake"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
-    "-DBUILD_PARQUET_EXTENSION=ON"
-    "-DBUILD_TPCDS_EXTENSION=ON"
-    "-DBUILD_TPCE=ON"
-    "-DBUILD_TPCH_EXTENSION=ON"
-    "-DBUILD_VISUALIZER_EXTENSION=ON"
-    "-DBUILD_INET_EXTENSION=ON"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
+    "-DOVERRIDE_GIT_DESCRIBE=v${finalAttrs.version}-0-g${finalAttrs.rev}"
+  ] ++ lib.optionals finalAttrs.doInstallCheck [
+    # development settings
+    "-DBUILD_UNITTESTS=ON"
   ];
+
+  postInstall = ''
+    mkdir -p $lib
+    mv $out/lib $lib
+  '';
 
   doInstallCheck = true;
 
-  preInstallCheck = ''
-    export HOME="$(mktemp -d)"
-  '' + lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH="$out/lib''${DYLD_LIBRARY_PATH:+:}''${DYLD_LIBRARY_PATH}"
-  '';
-
   installCheckPhase =
     let
-      excludes = map (pattern: "exclude:'${pattern}'") [
+      excludes = map (pattern: "exclude:'${pattern}'") ([
         "[s3]"
         "Test closing database during long running query"
+        "Test using a remote optimizer pass in case thats important to someone"
         "test/common/test_cast_hugeint.test"
         "test/sql/copy/csv/test_csv_remote.test"
         "test/sql/copy/parquet/test_parquet_remote.test"
@@ -69,34 +66,63 @@ stdenv.mkDerivation rec {
         "test/sql/storage/compression/chimp/chimp_read_float.test"
         "test/sql/storage/compression/patas/patas_compression_ratio.test_coverage"
         "test/sql/storage/compression/patas/patas_read.test"
+        "test/sql/json/read_json_objects.test"
+        "test/sql/json/read_json.test"
+        "test/sql/json/table/read_json_objects.test"
+        "test/sql/json/table/read_json.test"
+        "test/sql/copy/parquet/parquet_5968.test"
+        "test/fuzzer/pedro/buffer_manager_out_of_memory.test"
+        "test/sql/storage/compression/bitpacking/bitpacking_size_calculation.test"
+        "test/sql/copy/parquet/delta_byte_array_length_mismatch.test"
+        "test/sql/function/timestamp/test_icu_strptime.test"
+        "test/sql/timezone/test_icu_timezone.test"
+        "test/sql/copy/parquet/snowflake_lineitem.test"
+        "test/sql/copy/parquet/test_parquet_force_download.test"
+        "test/sql/copy/parquet/delta_byte_array_multiple_pages.test"
+        "test/sql/copy/csv/test_csv_httpfs_prepared.test"
+        "test/sql/copy/csv/test_csv_httpfs.test"
+        "test/sql/settings/test_disabled_file_system_httpfs.test"
+        "test/sql/copy/csv/parallel/test_parallel_csv.test"
+        "test/sql/copy/csv/parallel/csv_parallel_httpfs.test"
+        "test/common/test_cast_struct.test"
+        # test is order sensitive
+        "test/sql/copy/parquet/parquet_glob.test"
         # these are only hidden if no filters are passed in
         "[!hide]"
         # this test apparently never terminates
         "test/sql/copy/csv/auto/test_csv_auto.test"
+        # test expects installed file timestamp to be > 2024
+        "test/sql/table_function/read_text_and_blob.test"
+        # fails with Out of Memory Error
+        "test/sql/copy/parquet/batched_write/batch_memory_usage.test"
+        # wants http connection
+        "test/sql/copy/csv/recursive_query_csv.test"
+        "test/sql/copy/csv/test_mixed_lines.test"
       ] ++ lib.optionals stdenv.isAarch64 [
         "test/sql/aggregate/aggregates/test_kurtosis.test"
         "test/sql/aggregate/aggregates/test_skewness.test"
         "test/sql/function/list/aggregates/skewness.test"
-      ];
+      ]);
+      LD_LIBRARY_PATH = lib.optionalString stdenv.isDarwin "DY" + "LD_LIBRARY_PATH";
     in
     ''
       runHook preInstallCheck
+      (($(ulimit -n) < 1024)) && ulimit -n 1024
 
-      $PWD/test/unittest ${lib.concatStringsSep " " excludes}
+      HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}
 
       runHook postInstallCheck
     '';
 
-  nativeBuildInputs = [ cmake ninja ];
-  buildInputs = lib.optionals withHttpFs [ openssl ]
-    ++ lib.optionals withJdbc [ openjdk11 ]
-    ++ lib.optionals withOdbc [ unixODBC ];
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    homepage = "https://github.com/duckdb/duckdb";
+    changelog = "https://github.com/duckdb/duckdb/releases/tag/v${finalAttrs.version}";
     description = "Embeddable SQL OLAP Database Management System";
+    homepage = "https://duckdb.org/";
     license = licenses.mit;
-    platforms = platforms.all;
+    mainProgram = "duckdb";
     maintainers = with maintainers; [ costrouc cpcloud ];
+    platforms = platforms.all;
   };
-}
+})

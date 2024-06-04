@@ -16,7 +16,7 @@
 , makeWrapper
 , pipewire
 , pulseaudio
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , xorg
 , zlib
@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
-  version = "4.4.6";
+  version = "4.4.10";
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-VcK74JrVH81sgNeh1FDvCO1jtgkVeLpx5IqlXuzH27A=";
+    sha256 = "sha256-gtQ1mhXk0AqGidZk5TCzSR58pD1JJoELMBmELtqyb4U=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
 
   unpackCmd = ''
     mkdir -p root

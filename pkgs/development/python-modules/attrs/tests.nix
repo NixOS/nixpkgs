@@ -1,7 +1,8 @@
-{ buildPythonPackage
-, pytestCheckHook
-, attrs
-, hypothesis
+{
+  buildPythonPackage,
+  pytestCheckHook,
+  attrs,
+  hypothesis,
 }:
 
 buildPythonPackage {
@@ -14,7 +15,7 @@ buildPythonPackage {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     attrs
     hypothesis
     pytestCheckHook

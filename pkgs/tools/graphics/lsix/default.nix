@@ -1,14 +1,14 @@
 { lib, stdenvNoCC, fetchFromGitHub, makeWrapper, imagemagick }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lsix";
-  version = "1.8";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "hackerb9";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-Qx6/PFm1XBmEI6iI+Ref9jNe6sXIhsVL4VQ1CX+caZE=";
+    repo = "lsix";
+    rev = finalAttrs.version;
+    sha256 = "sha256-xlOlAfZonSo/RERt5WxPqMvppVrY5/Yhh7SgCCsYDQE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/lsix \
-      --prefix PATH : ${lib.makeBinPath [ imagemagick ]}
+      --prefix PATH : ${lib.makeBinPath [ (imagemagick.override { ghostscriptSupport = true;}) ]}
   '';
 
   meta = with lib; {
@@ -31,6 +31,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/hackerb9/lsix";
     license = licenses.gpl3Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ kidonng ];
+    maintainers = with maintainers; [ justinlime kidonng ];
+    mainProgram = "lsix";
   };
-}
+})

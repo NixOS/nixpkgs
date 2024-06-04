@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,15 +14,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AgDBsPoi0aQ6uglc7Zl4gxVmeyDCysoef5vZpxgwE/Q=";
+    hash = "sha256-AgDBsPoi0aQ6uglc7Zl4gxVmeyDCysoef5vZpxgwE/Q=";
   };
 
   # Tests are not shipped
   doCheck = false;
 
-  pythonImportsCheck = [
-    "oocsi"
-  ];
+  pythonImportsCheck = [ "oocsi" ];
 
   meta = with lib; {
     description = "OOCSI library for Python";

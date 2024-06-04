@@ -2,31 +2,45 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, fetchurl
-
 , buildPackages
-, iproute2
+, cargo
 , lzo
 , openssl
 , pkg-config
 , ronn
+, rustc
 , zlib
 }:
 
 let
   pname = "zerotierone";
-  version = "1.10.2";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-p900bw+BGzyMwH91W9NRfYS1ZUW74YaALwr1Gv9BlvQ=";
+    sha256 = "sha256-YWcqALUB3ZEukL4er2FKcyNdEbuaf//QU5hRbKAfxDA=";
   };
+
 in stdenv.mkDerivation {
   inherit pname version src;
 
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "jwt-0.16.0" = "sha256-P5aJnNlcLe9sBtXZzfqHdRvxNfm6DPBcfcKOVeLZxcM=";
+      "rustfsm-0.1.0" = "sha256-q7J9QgN67iuoNhQC8SDVzUkjCNRXGiNCkE8OsQc5+oI=";
+    };
+  };
+  postPatch = "cp ${./Cargo.lock} Cargo.lock";
+
   preConfigure = ''
+    cmp ./Cargo.lock ./rustybits/Cargo.lock || {
+      echo 1>&2 "Please make sure that the derivation's Cargo.lock is identical to ./rustybits/Cargo.lock!"
+      exit 1
+    }
+
     patchShebangs ./doc/build.sh
     substituteInPlace ./doc/build.sh \
       --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
@@ -34,28 +48,35 @@ in stdenv.mkDerivation {
     substituteInPlace ./make-linux.mk \
       --replace '-march=armv6zk' "" \
       --replace '-mcpu=arm1176jzf-s' ""
-
-    # Upstream does not define the cargo settings necessary to use the vendorized rust-jwt version, so it has to be added manually.
-    # Can be removed once ZeroTierOne's zeroidc no longer uses a git url in Cargo.toml for jwt
-    echo '[source."https://github.com/glimberg/rust-jwt"]
-git = "https://github.com/glimberg/rust-jwt"
-replace-with = "vendored-sources"' >> ./zeroidc/.cargo/config.toml
   '';
 
   nativeBuildInputs = [
     pkg-config
     ronn
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
   ];
   buildInputs = [
-    iproute2
     lzo
     openssl
     zlib
   ];
 
   enableParallelBuilding = true;
+
+  # Ensure Rust compiles for the right target
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTarget;
+
+  # Cargo won't compile to target/release but to target/<RUST_TARGET>/release when a target is
+  # explicitly defined. The build-system however expects target/release. Hence we just symlink from
+  # the latter to the former.
+  preBuild = ''
+    mkdir -p rustybits/target/release
+    ln -rs \
+      ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
+      ./rustybits/target/release/
+  '';
 
   buildFlags = [ "all" "selftest" ];
 
@@ -79,14 +100,13 @@ replace-with = "vendored-sources"' >> ./zeroidc/.cargo/config.toml
 
   outputs = [ "out" "man" ];
 
-  # https://github.com/NixOS/nixpkgs/issues/201254
-  NIX_LDFLAGS = lib.optionalString (stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU) "-lgcc";
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = "https://www.zerotier.com";
     license = licenses.bsl11;
     maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

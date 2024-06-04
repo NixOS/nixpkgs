@@ -4,32 +4,36 @@
 , libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk18-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
 let
   version = {
     feature = "18";
-    build = "36";
+    interim = ".0.2.1";
+    build = "1";
   };
+
+  # when building a headless jdk, also bootstrap it with a headless jdk
+  openjdk-bootstrap = openjdk18-bootstrap.override { gtkSupport = !headless; };
 
   openjdk = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${version.feature}+${version.build}";
+    version = "${version.feature}${version.interim}+${version.build}";
 
     src = fetchFromGitHub {
       owner = "openjdk";
       repo = "jdk${version.feature}u";
-      rev = "jdk-${version.feature}+${version.build}";
-      sha256 = "sha256-yGPC8VA983Ml6Fv/oiEgRrcVe4oe+Q4oCHbzOmFbZq8=";
+      rev = "jdk-${version.feature}${version.interim}+${version.build}";
+      sha256 = "sha256-L6dsN0kqWcfemM8LBg62qtHQdymwRQoV1ndc8r+0qn8=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
       cpio file which zip perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk18-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -65,8 +69,13 @@ let
       patchShebangs --build configure
     '';
 
+    # JDK's build system attempts to specifically detect
+    # and special-case WSL, and we don't want it to do that,
+    # so pass the correct platform names explicitly
+    configurePlatforms = ["build" "host"];
+
     configureFlags = [
-      "--with-boot-jdk=${openjdk18-bootstrap.home}"
+      "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-version-build=${version.build}"
       "--with-version-opt=nixos"
       "--with-version-pre="
@@ -80,13 +89,12 @@ let
       "--with-zlib=system"
       "--with-lcms=system"
       "--with-stdc++lib=dynamic"
-    ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
-      ++ lib.optional headless "--enable-headless-only"
+    ] ++ lib.optional headless "--enable-headless-only"
       ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = "-Wno-error";
+    env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
@@ -101,6 +109,12 @@ let
     enableParallelBuilding = false;
 
     buildFlags = [ "images" ];
+
+    postBuild = ''
+      cd build/linux*
+      make images
+      cd -
+    '';
 
     installPhase = ''
       mkdir -p $out/lib
@@ -163,8 +177,9 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk18-bootstrap ];
+    disallowedReferences = [ openjdk-bootstrap ];
 
+    pos = builtins.unsafeGetAttrPos "feature" version;
     meta = import ./meta.nix lib version.feature;
 
     passthru = {

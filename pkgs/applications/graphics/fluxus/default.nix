@@ -1,50 +1,26 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
 , alsa-lib
-, bzip2
 , fftw
 , freeglut
 , freetype
 , glew
 , libjack2
-, libGL
-, libGLU
 , libjpeg
 , liblo
-, libpng
 , libsndfile
 , libtiff
 , ode
 , openal
 , openssl
 , racket_7_9
-, sconsPackages
-, zlib
+, scons
 }:
 let
-  libs = [
-    alsa-lib
-    bzip2
-    fftw
-    freeglut
-    freetype
-    glew
-    libjack2
-    libGL
-    libGLU
-    libjpeg
-    liblo
-    libpng
-    libsndfile
-    libtiff
-    ode
-    openal
-    openssl
-    zlib
-  ];
   racket = racket_7_9;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fluxus";
   version = "0.19";
   src = fetchFromGitLab {
@@ -70,14 +46,17 @@ stdenv.mkDerivation rec {
     openssl.dev
     racket_7_9
   ];
-  nativeBuildInputs = [ sconsPackages.scons_latest ];
+  nativeBuildInputs = [ scons ];
 
   patches = [ ./fix-build.patch ];
+  postPatch = ''
+    substituteInPlace src/Unicode.cpp \
+      --replace "(byte)" "(unsigned char)"
+  '';
   sconsFlags = [
     "RacketPrefix=${racket}"
     "RacketInclude=${racket}/include/racket"
     "RacketLib=${racket}/lib/racket"
-    "LIBPATH=${lib.makeLibraryPath libs}"
     "DESTDIR=build"
   ];
   configurePhase = ''
@@ -93,5 +72,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = "http://www.pawfal.org/fluxus/";
     maintainers = [ maintainers.brainrape ];
+    platforms = platforms.linux;
   };
 }

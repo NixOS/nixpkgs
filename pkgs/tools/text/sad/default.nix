@@ -1,20 +1,24 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  python3,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sad";
-  version = "0.4.22";
+  version = "0.4.29";
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-v1fXEC+bV561cewH17x+1anhfXstGBOHG5rHvhYIvLo=";
+    repo = "sad";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TLVUvz/phAy+ljIsdv4GVSFHTAZ5ywQs32WHsu9g9Fc=";
   };
 
-  cargoSha256 = "sha256-krQTa9R3hmMVKLoBgnbCw+aSQu9HUXfA3XflB8AZv6w=";
+  cargoHash = "sha256-4XmTxeKbdC4HRownFlEc4GrSVimKkQg/yNI0us7gzQI=";
+
+  nativeBuildInputs = [ python3 ];
 
   # fix for compilation on aarch64
   # see https://github.com/NixOS/nixpkgs/issues/145726
@@ -25,7 +29,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "CLI tool to search and replace";
     homepage = "https://github.com/ms-jpq/sad";
+    changelog = "https://github.com/ms-jpq/sad/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sad";
   };
 }

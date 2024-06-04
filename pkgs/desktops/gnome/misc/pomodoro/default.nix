@@ -5,7 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , libcanberra
 , gst_all_1
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-pomodoro";
-  version = "0.22.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-VsrguYU1rfYWse7FuA4uYASfqET0Q3RBeU7i+HOWFBw=";
+    hash = "sha256-Ml3znMz1Q9593rMgfAST8k9QglxMG9ocFD7W8kaFWCw=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libxml2
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gnomepomodoro.org/";
     description = "Time management utility for GNOME based on the pomodoro technique";
+    mainProgram = "gnome-pomodoro";
     longDescription = ''
       This GNOME utility helps to manage time according to Pomodoro Technique.
       It intends to improve productivity and focus by taking short breaks.

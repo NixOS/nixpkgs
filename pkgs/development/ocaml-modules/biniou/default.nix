@@ -11,8 +11,6 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ camlp-streams easy-format ];
 
-  strictDeps = true;
-
   meta = {
     description = "Binary data format designed for speed, safety, ease of use and backward compatibility as protocols evolve";
     homepage = "https://github.com/ocaml-community/biniou";

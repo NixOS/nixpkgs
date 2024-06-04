@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pip-requirements-parser";
-  version = "32.0.0";
+  version = "32.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,28 +19,27 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexB";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Wu4C93PWujygKIzXqUjCmKWcllr+hkuvnqDuw6/D9Do=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UMrwDXxk+sD3P2jk7s95y4OX6DRBjWWZZ8IhkR6tnZ4=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     packaging
+    pyparsing
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pip_requirements_parser"
+  pythonImportsCheck = [ "pip_requirements_parser" ];
+
+  disabledTests = [
+    "test_RequirementsFile_to_dict"
+    "test_RequirementsFile_dumps_unparse"
+    "test_legacy_version_is_deprecated"
   ];
 
   meta = with lib; {

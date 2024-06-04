@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ matthiasbeyer vrthra ];
     license = licenses.gpl3;
     platforms = with platforms; unix;
+    mainProgram = "mdp";
   };
 }

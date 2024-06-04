@@ -1,8 +1,13 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "rfc7464";
   version = "17.7.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

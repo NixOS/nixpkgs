@@ -6,18 +6,19 @@
 , zlib
 , features ? [ "default" ]
 , llvmPackages_12
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "frawk";
-  version = "0.4.7";
+  version = "0.4.8";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-fqOFFkw+mV9QLTH3K6Drk3kDqU4wrQTj7OQrtgYuD7M=";
+    sha256 = "sha256-wPnMJDx3aF1Slx5pjLfii366pgNU3FJBdznQLuUboYA=";
   };
 
-  cargoSha256 = "sha256-G39/CESjMouwPQJBdsmd+MBusGNQmyNjw3PJSFBCdSk=";
+  cargoSha256 = "sha256-Xk+iH90Nb2koCdGmVSiRl8Nq26LlFdJBuKmvcbgnkgs=";
 
   buildInputs = [ libxml2 ncurses zlib ];
 
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A small programming language for writing short programs processing textual data";
+    mainProgram = "frawk";
     homepage = "https://github.com/ezrosent/frawk";
     changelog = "https://github.com/ezrosent/frawk/releases/tag/v${version}";
     license = with licenses; [ mit /* or */ asl20 ];

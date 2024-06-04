@@ -1,19 +1,23 @@
 { stdenv, lib, fetchFromGitHub
-, imagemagick, pkg-config, wayland, wayland-protocols
+, imagemagick, pkg-config, wayland-scanner, wayland, wayland-protocols
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
-  pname = "hello-wayland-unstable";
-  version = "2020-07-27";
+  pname = "hello-wayland";
+  version = "0-unstable-2024-03-04";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "hello-wayland";
-    rev = "501d0851cfa7f21c780c0eb52f0a6b23f02918c5";
-    sha256 = "0dz6przqp57kw8ycja3gw6jp9x12217nwbwdpgmvw7jf0lzhk4xr";
+    rev = "5f3a35def81116f0a74fcaf5a421d66c6700482d";
+    hash = "sha256-gcLR8gosQlPPgFrxqmRQ6/59RjAfJNX6CcsYP+L+A58=";
   };
 
-  nativeBuildInputs = [ imagemagick pkg-config ];
+  separateDebugInfo = true;
+
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ imagemagick pkg-config wayland-scanner ];
   buildInputs = [ wayland wayland-protocols ];
 
   installPhase = ''
@@ -23,11 +27,14 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
     description = "Hello world Wayland client";
     homepage = "https://github.com/emersion/hello-wayland";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "hello-wayland";
   };
 }

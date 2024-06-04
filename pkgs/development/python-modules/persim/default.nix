@@ -1,29 +1,30 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, deprecated
-, hopcroftkarp
-, joblib
-, matplotlib
-, numpy
-, scikit-learn
-, scipy
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  deprecated,
+  hopcroftkarp,
+  joblib,
+  matplotlib,
+  numpy,
+  scikit-learn,
+  scipy,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "persim";
-  version = "0.3.1";
+  version = "0.3.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7w8KJHrc9hBOysFBF9sLJFgXEOqKjZZIFoBTlXALSXU=";
+    hash = "sha256-qyly3kIx9HQ7zDT0SfUlsqZGqibdXsfW1dL9HNpQZJg=";
   };
 
   propagatedBuildInputs = [
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # specifically needed for darwin
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
-  pythonImportsCheck = [
-    "persim"
-  ];
+  pythonImportsCheck = [ "persim" ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.10") [
     # AttributeError: module 'collections' has no attribute 'Iterable'
@@ -61,13 +58,18 @@ buildPythonPackage rec {
     "test_mixed_pairs"
     "test_multiple_diagrams"
     "test_n_pixels"
+    # https://github.com/scikit-tda/persim/issues/67
+    "test_persistenceimager"
+    # ValueError: setting an array element with a sequence
+    "test_exact_critical_pairs"
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Distances and representations of persistence diagrams";
     homepage = "https://persim.scikit-tda.org";
+    changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
+    broken = stdenv.isDarwin;
   };
 }

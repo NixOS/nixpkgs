@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "iay";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "aaqaishtyaq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0r2yp34gxkh32amrysfj1jg543dh0kyqxzcx0zyi6a8y9232d8ky";
+    sha256 = "sha256-vk+1RbAmzRf2bbvbSpO+upVW4VrtYWM+5iiH73N+dsc=";
   };
 
-  cargoHash = "sha256-SMqiwM6LrXXjV4Mb2BY9WbeKKPkxiYxPyZ4aepVIAqU=";
+  cargoHash = "sha256-+PpmxVPyRx/xF7jQGy/07xqALmdNp2uL3HZVOeRicqY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -42,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/aaqaishtyaq/iay";
     license = licenses.mit;
     maintainers = with maintainers; [ aaqaishtyaq omasanori ];
+    mainProgram = "iay";
   };
 }

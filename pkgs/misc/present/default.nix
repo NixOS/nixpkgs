@@ -1,10 +1,10 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonPackage rec {
   pname = "present";
   version = "0.6.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-l9W5L4LD9qRo3rLBkgd2I/aDaj+ucib5UYg+X4RYg6c=";
   };
@@ -27,5 +27,6 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://github.com/vinayak-mehta/present";
     license = licenses.asl20;
     maintainers = with maintainers; [ lom ];
+    mainProgram = "present";
   };
 }

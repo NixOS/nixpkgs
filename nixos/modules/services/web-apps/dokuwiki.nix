@@ -3,6 +3,8 @@
 with lib;
 
 let
+  inherit (lib.options) showOption showFiles;
+
   cfg = config.services.dokuwiki;
   eachSite = cfg.sites;
   user = "dokuwiki";
@@ -63,7 +65,6 @@ let
     conf_gen = c: map (v: "$conf${v}") (mkPhpAttrVals c);
   in writePhpFile "local-${hostName}.php" ''
     ${concatStringsSep "\n" (conf_gen cfg.mergedConfig)}
-    ${toString cfg.extraConfig}
   '';
 
   dokuwikiPluginsLocalConfig = hostName: cfg: let
@@ -82,7 +83,7 @@ let
     basePackage = cfg.package;
     localConfig = dokuwikiLocalConfig hostName cfg;
     pluginsConfig = dokuwikiPluginsLocalConfig hostName cfg;
-    aclConfig = if cfg.aclUse && cfg.acl != null then dokuwikiAclAuthConfig hostName cfg else null;
+    aclConfig = if cfg.settings.useacl && cfg.acl != null then dokuwikiAclAuthConfig hostName cfg else null;
   };
 
   aclOpts = { ... }: {
@@ -118,53 +119,25 @@ let
         '';
         example = "read";
       };
-
     };
   };
 
-  siteOpts = { config, lib, name, ... }:
+  siteOpts = { options, config, lib, name, ... }:
     {
-      imports = [
-        # NOTE: These will sadly not print the absolute argument path but only the name. Related to #96006
-        (mkRenamedOptionModule [ "aclUse" ] [ "settings" "useacl" ] )
-        (mkRenamedOptionModule [ "superUser" ] [ "settings" "superuser" ] )
-        (mkRenamedOptionModule [ "disableActions" ] [ "settings" "disableactions" ] )
-        ({ config, options, name, ...}: {
-          config.warnings =
-            (optional (isString config.pluginsConfig) ''
-              Passing plain strings to services.dokuwiki.sites.${name}.pluginsConfig has been deprecated and will not be continue to be supported in the future.
-              Please pass structured settings instead.
-            '')
-            ++ (optional (isString config.acl) ''
-              Passing a plain string to services.dokuwiki.sites.${name}.acl has been deprecated and will not continue to be supported in the future.
-              Please pass structured settings instead.
-            '')
-            ++ (optional (config.extraConfig != null) ''
-              services.dokuwiki.sites.${name}.extraConfig is deprecated and will be removed in the future.
-              Please pass structured settings to services.dokuwiki.sites.${name}.settings instead.
-            '')
-          ;
-        })
-      ];
 
       options = {
-        enable = mkEnableOption (lib.mdDoc "DokuWiki web application.");
+        enable = mkEnableOption "DokuWiki web application";
 
-        package = mkOption {
-          type = types.package;
-          default = pkgs.dokuwiki;
-          defaultText = literalExpression "pkgs.dokuwiki";
-          description = lib.mdDoc "Which DokuWiki package to use.";
-        };
+        package = mkPackageOption pkgs "dokuwiki" { };
 
         stateDir = mkOption {
           type = types.path;
           default = "/var/lib/dokuwiki/${name}/data";
-          description = lib.mdDoc "Location of the DokuWiki state directory.";
+          description = "Location of the DokuWiki state directory.";
         };
 
         acl = mkOption {
-          type = with types; nullOr (oneOf [ lines (listOf (submodule aclOpts)) ]);
+          type = with types; nullOr (listOf (submodule aclOpts));
           default = null;
           example = literalExpression ''
             [
@@ -180,7 +153,7 @@ let
               }
             ]
           '';
-          description = lib.mdDoc ''
+          description = ''
             Access Control Lists: see <https://www.dokuwiki.org/acl>
             Mutually exclusive with services.dokuwiki.aclFile
             Set this to a value other than null to take precedence over aclFile option.
@@ -193,7 +166,7 @@ let
         aclFile = mkOption {
           type = with types; nullOr str;
           default = if (config.mergedConfig.useacl && config.acl == null) then "/var/lib/dokuwiki/${name}/acl.auth.php" else null;
-          description = lib.mdDoc ''
+          description = ''
             Location of the dokuwiki acl rules. Mutually exclusive with services.dokuwiki.acl
             Mutually exclusive with services.dokuwiki.acl which is preferred.
             Consult documentation <https://www.dokuwiki.org/acl> for further instructions.
@@ -203,14 +176,14 @@ let
         };
 
         pluginsConfig = mkOption {
-          type = with types; oneOf [lines (attrsOf bool)];
+          type = with types; attrsOf bool;
           default = {
             authad = false;
             authldap = false;
             authmysql = false;
             authpgsql = false;
           };
-          description = lib.mdDoc ''
+          description = ''
             List of the dokuwiki (un)loaded plugins.
           '';
         };
@@ -218,7 +191,7 @@ let
         usersFile = mkOption {
           type = with types; nullOr str;
           default = if config.mergedConfig.useacl then "/var/lib/dokuwiki/${name}/users.auth.php" else null;
-          description = lib.mdDoc ''
+          description = ''
             Location of the dokuwiki users file. List of users. Format:
 
                 login:passwordhash:Real Name:email:groups,comma,separated
@@ -235,7 +208,7 @@ let
         plugins = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = lib.mdDoc ''
+          description = ''
                 List of path(s) to respective plugin(s) which are copied from the 'plugin' directory.
 
                 ::: {.note}
@@ -262,7 +235,7 @@ let
         templates = mkOption {
           type = types.listOf types.path;
           default = [];
-          description = lib.mdDoc ''
+          description = ''
                 List of path(s) to respective template(s) which are copied from the 'tpl' directory.
 
                 ::: {.note}
@@ -297,26 +270,21 @@ let
             "pm.max_spare_servers" = 4;
             "pm.max_requests" = 500;
           };
-          description = lib.mdDoc ''
+          description = ''
             Options for the DokuWiki PHP pool. See the documentation on `php-fpm.conf`
             for details on configuration directives.
           '';
         };
 
-        phpPackage = mkOption {
-          type = types.package;
-          relatedPackages = [ "php80" "php81" ];
-          default = pkgs.php81;
-          defaultText = "pkgs.php81";
-          description = lib.mdDoc ''
-            PHP package to use for this dokuwiki site.
-          '';
+        phpPackage = mkPackageOption pkgs "php" {
+          default = "php81";
+          example = "php82";
         };
 
         phpOptions = mkOption {
           type = types.attrsOf types.str;
           default = {};
-          description = lib.mdDoc ''
+          description = ''
             Options for PHP's php.ini file for this dokuwiki site.
           '';
           example = literalExpression ''
@@ -336,7 +304,7 @@ let
             useacl = true;
             superuser = "admin";
           };
-          description = lib.mdDoc ''
+          description = ''
             Structural DokuWiki configuration.
             Refer to <https://www.dokuwiki.org/config>
             for details and supported values.
@@ -365,40 +333,10 @@ let
               useacl = true;
             }
           '';
-          description = lib.mdDoc ''
+          description = ''
             Read only representation of the final configuration.
           '';
         };
-
-        extraConfig = mkOption {
-          # This Option is deprecated and only kept until sometime before 23.05 for compatibility reasons
-          # FIXME (@e1mo): Actually remember removing this before 23.05.
-          visible = false;
-          type = types.nullOr types.lines;
-          default = null;
-          example = ''
-            $conf['title'] = 'My Wiki';
-            $conf['userewrite'] = 1;
-          '';
-          description = lib.mdDoc ''
-            DokuWiki configuration. Refer to
-            <https://www.dokuwiki.org/config>
-            for details on supported values.
-
-            **Note**: Please pass Structured settings via
-            `services.dokuwiki.sites.${name}.settings` instead.
-          '';
-        };
-
-      # Required for the mkRenamedOptionModule
-      # TODO: Remove me once https://github.com/NixOS/nixpkgs/issues/96006 is fixed
-      # or the aclUse, ... options are removed.
-      warnings = mkOption {
-        type = types.listOf types.unspecified;
-        default = [ ];
-        visible = false;
-        internal = true;
-      };
 
     };
   };
@@ -410,13 +348,13 @@ in
       sites = mkOption {
         type = types.attrsOf (types.submodule siteOpts);
         default = {};
-        description = lib.mdDoc "Specification of one or more DokuWiki sites to serve";
+        description = "Specification of one or more DokuWiki sites to serve";
       };
 
       webserver = mkOption {
         type = types.enum [ "nginx" "caddy" ];
         default = "nginx";
-        description = lib.mdDoc ''
+        description = ''
           Whether to use nginx or caddy for virtual host management.
 
           Further nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
@@ -432,19 +370,6 @@ in
 
   # implementation
   config = mkIf (eachSite != {}) (mkMerge [{
-
-    warnings = flatten (mapAttrsToList (_: cfg: cfg.warnings) eachSite);
-
-    assertions = flatten (mapAttrsToList (hostName: cfg:
-    [{
-      assertion = cfg.mergedConfig.useacl -> (cfg.acl != null || cfg.aclFile != null);
-      message = "Either services.dokuwiki.sites.${hostName}.acl or services.dokuwiki.sites.${hostName}.aclFile is mandatory if settings.useacl is true";
-    }
-    {
-      assertion = cfg.usersFile != null -> cfg.mergedConfig.useacl != false;
-      message = "services.dokuwiki.sites.${hostName}.settings.useacl must must be true if usersFile is not null";
-    }
-    ]) eachSite);
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "dokuwiki-${hostName}" {

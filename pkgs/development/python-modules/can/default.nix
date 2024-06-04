@@ -1,24 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, hypothesis
-, packaging
-, parameterized
-, msgpack
-, pyserial
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
-, wrapt
-, uptime
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  hypothesis,
+  packaging,
+  parameterized,
+  msgpack,
+  pyserial,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
+  wrapt,
+  uptime,
 }:
 
 buildPythonPackage rec {
   pname = "can";
-  version = "4.1.0";
-  format = "setuptools";
+  version = "4.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,13 +29,15 @@ buildPythonPackage rec {
     owner = "hardbyte";
     repo = "python-can";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jNy47SapujTF3ReJtIbwUY53IftIH4cXZjkzHrnZMFQ=";
+    hash = "sha256-t2zt54nPOYcEE0RPb4fbW7sN4HzFXlDIHvHudstBwrM=";
   };
 
   postPatch = ''
     substituteInPlace tox.ini \
       --replace " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
   '';
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     msgpack
@@ -42,18 +47,12 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    serial = [
-      pyserial
-    ];
-    seeedstudio = [
-      pyserial
-    ];
-    pcan = [
-      uptime
-    ];
+    serial = [ pyserial ];
+    seeedstudio = [ pyserial ];
+    pcan = [ uptime ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     future
     hypothesis
     parameterized
@@ -66,28 +65,37 @@ buildPythonPackage rec {
     "test/test_interface_canalystii.py"
   ];
 
-  disabledTests = [
-    # Tests require access socket
-    "BasicTestUdpMulticastBusIPv4"
-    "BasicTestUdpMulticastBusIPv6"
-    # pytest.approx is not supported in a boolean context (since pytest7)
-    "test_pack_unpack"
-    "test_receive"
-  ];
+  disabledTests =
+    [
+      # Tests require access socket
+      "BasicTestUdpMulticastBusIPv4"
+      "BasicTestUdpMulticastBusIPv6"
+      # pytest.approx is not supported in a boolean context (since pytest7)
+      "test_pack_unpack"
+      "test_receive"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # timing sensitive
+      "test_general"
+      "test_gap"
+    ];
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
+    # skips timing senstive tests
+    export CI=1
   '';
 
-  pythonImportsCheck = [
-    "can"
-  ];
+  pythonImportsCheck = [ "can" ];
 
   meta = with lib; {
     description = "CAN support for Python";
     homepage = "https://python-can.readthedocs.io";
     changelog = "https://github.com/hardbyte/python-can/releases/tag/v${version}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ fab sorki ];
+    maintainers = with maintainers; [
+      fab
+      sorki
+    ];
   };
 }

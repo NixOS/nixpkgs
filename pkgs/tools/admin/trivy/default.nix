@@ -1,41 +1,65 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildPackages,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  trivy,
 }:
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.36.1";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-V6x7xILG2/mg95S3qv8pM6ZVXWmh1iHMvDVEfidHau4=";
+    repo = "trivy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lsUqzbHv+/P5RAOc774GhFMaY21+T7NnPKK9v/uLP8M=";
   };
-  # hash missmatch on across linux and darwin
-  proxyVendor = true;
-  vendorSha256 = "sha256-qTtx8+D288RT3wOdmvUXVeHx4GwIyCyCnO/sQW0blIU=";
 
-  excludedPackages = "misc";
+  # Hash mismatch on across Linux and Darwin
+  proxyVendor = true;
+
+  vendorHash = "sha256-MsHlJ56MT+UqF+Psj+hKKpwPnRTcQ3RvWoHbmI93A5E=";
+
+  subPackages = [ "cmd/trivy" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X=github.com/aquasecurity/trivy/pkg/version.ver=v${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # Tests require network access
   doCheck = false;
 
+  postInstall =
+    let
+      trivy =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.trivy;
+    in
+    ''
+      installShellCompletion --cmd trivy \
+        --bash <(${trivy}/bin/trivy completion bash) \
+        --fish <(${trivy}/bin/trivy completion fish) \
+        --zsh <(${trivy}/bin/trivy completion zsh)
+    '';
+
   doInstallCheck = true;
 
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/trivy --help
-    $out/bin/trivy --version | grep "v${version}"
-    runHook postInstallCheck
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = trivy;
+    command = "trivy --version";
+    version = "Version: v${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/aquasecurity/trivy";
@@ -48,7 +72,11 @@ buildGoModule rec {
       vulnerabilities of OS packages (Alpine, RHEL, CentOS, etc.) and
       application dependencies (Bundler, Composer, npm, yarn, etc.).
     '';
+    mainProgram = "trivy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [
+      fab
+      jk
+    ];
   };
 }

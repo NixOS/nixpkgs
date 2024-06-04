@@ -16,19 +16,21 @@
 , ninja
 , glib
 , python3
-, gobject-introspection
 , x11Support? !stdenv.isDarwin, libXft
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages, gobject-introspection
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.50.12";
+  version = "1.52.2";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "yu+W0nu+eSpr6ScnxzRo2DKxPaV8gHHvebnfae4Fj+M=";
+    url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-0Adq/gEIKBS4U97smfk0ns5fLOg5CLjlj/c2tB94qWs=";
   };
 
   depsBuildBuild = [
@@ -39,15 +41,15 @@ stdenv.mkDerivation rec {
     meson ninja
     glib # for glib-mkenum
     pkg-config
-    gobject-introspection
-    gi-docgen
     python3
+  ] ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
   ];
 
   buildInputs = [
     fribidi
     libthai
-    gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon
@@ -65,9 +67,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
-  ] ++ lib.optionals (!x11Support) [
-    "-Dxft=disabled" # only works with x11
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "xft" x11Support)
   ];
 
   # Fontconfig error: Cannot load default config file
@@ -79,9 +81,6 @@ stdenv.mkDerivation rec {
   # it should be a build-time dep for build
   # TODO: send upstream
   postPatch = ''
-    substituteInPlace meson.build \
-      --replace "dependency('gi-docgen', ver" "dependency('gi-docgen', native:true, ver"
-
     substituteInPlace docs/meson.build \
       --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
   '';
@@ -95,10 +94,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "odd-unstable";
+      packageName = finalAttrs.pname;
       # 1.90 is alpha for API 2.
-      freeze = true;
+      freeze = "1.90.0";
+    };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
@@ -117,6 +120,15 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
 
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
+
+    pkgConfigModules = [
+      "pango"
+      "pangocairo"
+      "pangofc"
+      "pangoft2"
+      "pangoot"
+      "pangoxft"
+    ];
   };
-}
+})

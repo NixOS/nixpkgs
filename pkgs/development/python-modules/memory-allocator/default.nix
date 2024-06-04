@@ -1,22 +1,31 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, cython
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  cython,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
   pname = "memory-allocator";
-  version = "0.1.3";
+  version = "0.1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "memory_allocator";
-    sha256 = "sha256-E4BcKuHAG3SJ+rXo6sk2FmK08sAkEuNlLuzkj/aVMWI=";
+    hash = "sha256-1gkhawMDGWfitFqASxL/kClXj07AGf3kLPau1soJ7+Q=";
   };
 
   propagatedBuildInputs = [ cython ];
 
   pythonImportsCheck = [ "memory_allocator" ];
+
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     description = "An extension class to allocate memory easily with cython";

@@ -13,12 +13,24 @@ merging is handled.
 `types.bool`
 
 :   A boolean, its values can be `true` or `false`.
+    All definitions must have the same value, after priorities. An error is thrown in case of a conflict.
+
+`types.boolByOr`
+
+:   A boolean, its values can be `true` or `false`.
+    The result is `true` if _any_ of multiple definitions is `true`.
+    In other words, definitions are merged with the logical _OR_ operator.
 
 `types.path`
 
 :   A filesystem path is anything that starts with a slash when
     coerced to a string. Even if derivations can be considered as
     paths, the more specific `types.package` should be preferred.
+
+`types.pathInStore`
+
+:   A path that is contained in the Nix store. This can be a top-level store
+    path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
 
 `types.package`
 
@@ -30,15 +42,17 @@ merging is handled.
 :   One element of the list *`l`*, e.g. `types.enum [ "left" "right" ]`.
     Multiple definitions cannot be merged.
 
+    If you want to pair these values with more information, possibly of
+    distinct types, consider using a [sum type](#sec-option-types-sums).
+
 `types.anything`
 
 :   A type that accepts any value and recursively merges attribute sets
     together. This type is recommended when the option type is unknown.
 
     ::: {#ex-types-anything .example}
-    ::: {.title}
-    **Example: `types.anything` Example**
-    :::
+    ### `types.anything`
+
     Two definitions of this type like
 
     ```nix
@@ -99,6 +113,10 @@ merging is handled.
     `types.attrsOf types.anything` instead which doesn't have these
     problems.
     :::
+
+`types.pkgs`
+
+:   A type for the top level Nixpkgs package set.
 
 ### Numeric types {#sec-option-types-numeric}
 
@@ -264,6 +282,84 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
     more convenient and discoverable than expecting the module user to
     type-merge with the `attrsOf submodule` option.
 
+## Union types {#sec-option-types-unions}
+
+A union of types is a type such that a value is valid when it is valid for at least one of those types.
+
+If some values are instances of more than one of the types, it is not possible to distinguish which type they are meant to be instances of. If that's needed, consider using a [sum type](#sec-option-types-sums).
+
+`types.either` *`t1 t2`*
+
+:   Type *`t1`* or type *`t2`*, e.g. `with types; either int str`.
+    Multiple definitions cannot be merged.
+
+`types.oneOf` \[ *`t1 t2`* ... \]
+
+:   Type *`t1`* or type *`t2`* and so forth, e.g.
+    `with types; oneOf [ int str bool ]`. Multiple definitions cannot be
+    merged.
+
+`types.nullOr` *`t`*
+
+:   `null` or type *`t`*. Multiple definitions are merged according to
+    type *`t`*.
+
+
+## Sum types {#sec-option-types-sums}
+
+A sum type can be thought of, conceptually, as a *`types.enum`* where each valid item is paired with at least a type, through some value syntax.
+Nix does not have a built-in syntax for this pairing of a label and a type or value, so sum types may be represented in multiple ways.
+
+If the you're interested in can be distinguished without a label, you may simplify your value syntax with a [union type](#sec-option-types-unions) instead.
+
+`types.attrTag` *`{ attr1 = option1; attr2 = option2; ... }`*
+
+:   An attribute set containing one attribute, whose name must be picked from
+    the attribute set (`attr1`, etc) and whose value consists of definitions that are valid for the corresponding option (`option1`, etc).
+
+    This type appears in the documentation as _attribute-tagged union_.
+
+    Example:
+
+    ```nix
+    { lib, ... }:
+    let inherit (lib) type mkOption;
+    in {
+      options.toyRouter.rules = mkOption {
+        description = ''
+          Rules for a fictional packet routing service.
+        '';
+        type = types.attrsOf (
+          types.attrTag {
+            bounce = mkOption {
+              description = "Send back a packet explaining why it wasn't forwarded.";
+              type = types.submodule {
+                options.errorMessage = mkOption { … };
+              };
+            };
+            forward = mkOption {
+              description = "Forward the packet.";
+              type = types.submodule {
+                options.destination = mkOption { … };
+              };
+            };
+            ignore = types.mkOption {
+              description = "Drop the packet without sending anything back.";
+              type = types.submodule {};
+            };
+          });
+      };
+      config.toyRouter.rules = {
+        http = {
+          bounce = {
+            errorMessage = "Unencrypted HTTP is banned. You must always use https://.";
+          };
+        };
+        ssh = { drop = {}; };
+      };
+    }
+    ```
+
 ## Composed types {#sec-option-types-composed}
 
 Composed types are types that take a type as parameter. `listOf
@@ -303,32 +399,16 @@ Composed types are types that take a type as parameter. `listOf
     returned instead for the same `mkIf false` definition.
     :::
 
-`types.nullOr` *`t`*
-
-:   `null` or type *`t`*. Multiple definitions are merged according to
-    type *`t`*.
-
 `types.uniq` *`t`*
 
 :   Ensures that type *`t`* cannot be merged. It is used to ensure option
-    definitions are declared only once.
+    definitions are provided only once.
 
 `types.unique` `{ message = m }` *`t`*
 
 :   Ensures that type *`t`* cannot be merged. Prints the message *`m`*, after
     the line `The option <option path> is defined multiple times.` and before
     a list of definition locations.
-
-`types.either` *`t1 t2`*
-
-:   Type *`t1`* or type *`t2`*, e.g. `with types; either int str`.
-    Multiple definitions cannot be merged.
-
-`types.oneOf` \[ *`t1 t2`* ... \]
-
-:   Type *`t1`* or type *`t2`* and so forth, e.g.
-    `with types; oneOf [ int str bool ]`. Multiple definitions cannot be
-    merged.
 
 `types.coercedTo` *`from f to`*
 
@@ -357,30 +437,28 @@ you will still need to provide a default value (e.g. an empty attribute set)
 if you want to allow users to leave it undefined.
 
 ::: {#ex-submodule-direct .example}
-::: {.title}
-**Example: Directly defined submodule**
-:::
+### Directly defined submodule
 ```nix
-options.mod = mkOption {
-  description = "submodule example";
-  type = with types; submodule {
-    options = {
-      foo = mkOption {
-        type = int;
-      };
-      bar = mkOption {
-        type = str;
+{
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; submodule {
+      options = {
+        foo = mkOption {
+          type = int;
+        };
+        bar = mkOption {
+          type = str;
+        };
       };
     };
   };
-};
+}
 ```
 :::
 
 ::: {#ex-submodule-reference .example}
-::: {.title}
-**Example: Submodule defined as a reference**
-:::
+### Submodule defined as a reference
 ```nix
 let
   modOptions = {
@@ -394,10 +472,12 @@ let
     };
   };
 in
-options.mod = mkOption {
-  description = "submodule example";
-  type = with types; submodule modOptions;
-};
+{
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; submodule modOptions;
+  };
+}
 ```
 :::
 
@@ -408,35 +488,35 @@ multiple definitions of the submodule option set
 ([Example: Definition of a list of submodules](#ex-submodule-listof-definition)).
 
 ::: {#ex-submodule-listof-declaration .example}
-::: {.title}
-**Example: Declaration of a list of submodules**
-:::
+### Declaration of a list of submodules
 ```nix
-options.mod = mkOption {
-  description = "submodule example";
-  type = with types; listOf (submodule {
-    options = {
-      foo = mkOption {
-        type = int;
+{
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; listOf (submodule {
+      options = {
+        foo = mkOption {
+          type = int;
+        };
+        bar = mkOption {
+          type = str;
+        };
       };
-      bar = mkOption {
-        type = str;
-      };
-    };
-  });
-};
+    });
+  };
+}
 ```
 :::
 
 ::: {#ex-submodule-listof-definition .example}
-::: {.title}
-**Example: Definition of a list of submodules**
-:::
+### Definition of a list of submodules
 ```nix
-config.mod = [
-  { foo = 1; bar = "one"; }
-  { foo = 2; bar = "two"; }
-];
+{
+  config.mod = [
+    { foo = 1; bar = "one"; }
+    { foo = 2; bar = "two"; }
+  ];
+}
 ```
 :::
 
@@ -446,33 +526,33 @@ multiple named definitions of the submodule option set
 ([Example: Definition of attribute sets of submodules](#ex-submodule-attrsof-definition)).
 
 ::: {#ex-submodule-attrsof-declaration .example}
-::: {.title}
-**Example: Declaration of attribute sets of submodules**
-:::
+### Declaration of attribute sets of submodules
 ```nix
-options.mod = mkOption {
-  description = "submodule example";
-  type = with types; attrsOf (submodule {
-    options = {
-      foo = mkOption {
-        type = int;
+{
+  options.mod = mkOption {
+    description = "submodule example";
+    type = with types; attrsOf (submodule {
+      options = {
+        foo = mkOption {
+          type = int;
+        };
+        bar = mkOption {
+          type = str;
+        };
       };
-      bar = mkOption {
-        type = str;
-      };
-    };
-  });
-};
+    });
+  };
+}
 ```
 :::
 
 ::: {#ex-submodule-attrsof-definition .example}
-::: {.title}
-**Example: Definition of attribute sets of submodules**
-:::
+### Definition of attribute sets of submodules
 ```nix
-config.mod.one = { foo = 1; bar = "one"; };
-config.mod.two = { foo = 2; bar = "two"; };
+{
+  config.mod.one = { foo = 1; bar = "one"; };
+  config.mod.two = { foo = 2; bar = "two"; };
+}
 ```
 :::
 
@@ -489,28 +569,30 @@ Types are mainly characterized by their `check` and `merge` functions.
     ([Example: Overriding a type check](#ex-extending-type-check-2)).
 
     ::: {#ex-extending-type-check-1 .example}
-    ::: {.title}
-    **Example: Adding a type check**
-    :::
+    ### Adding a type check
+
     ```nix
-    byte = mkOption {
-      description = "An integer between 0 and 255.";
-      type = types.addCheck types.int (x: x >= 0 && x <= 255);
-    };
+    {
+      byte = mkOption {
+        description = "An integer between 0 and 255.";
+        type = types.addCheck types.int (x: x >= 0 && x <= 255);
+      };
+    }
     ```
     :::
 
     ::: {#ex-extending-type-check-2 .example}
-    ::: {.title}
-    **Example: Overriding a type check**
-    :::
+    ### Overriding a type check
+
     ```nix
-    nixThings = mkOption {
-      description = "words that start with 'nix'";
-      type = types.str // {
-        check = (x: lib.hasPrefix "nix" x)
+    {
+      nixThings = mkOption {
+        description = "words that start with 'nix'";
+        type = types.str // {
+          check = (x: lib.hasPrefix "nix" x);
+        };
       };
-    };
+    }
     ```
     :::
 
@@ -534,7 +616,7 @@ The only required parameter is `name`.
 
 :   A string representation of the type function name.
 
-`definition`
+`description`
 
 :   Description of the type used in documentation. Give information of
     the type and any of its arguments.

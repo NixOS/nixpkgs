@@ -1,14 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, sphinx }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  sphinx,
+}:
 
 buildPythonPackage rec {
   pname = "sphinx-jinja";
   version = "2.0.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xiMrWaiUE5dwvh3G0LAKN55CiM54FXkE4fhHPeo+Bxg=";
+    hash = "sha256-xiMrWaiUE5dwvh3G0LAKN55CiM54FXkE4fhHPeo+Bxg=";
   };
 
   propagatedBuildInputs = [ sphinx ];

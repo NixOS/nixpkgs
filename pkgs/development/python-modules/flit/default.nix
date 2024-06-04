@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, docutils
-, requests
-, pytestCheckHook
-, testpath
-, responses
-, flit-core
-, tomli-w
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  docutils,
+  requests,
+  pytestCheckHook,
+  testpath,
+  responses,
+  flit-core,
+  tomli-w,
 }:
 
 # Flit is actually an application to build universal wheels.
@@ -17,19 +18,17 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "3.8.0";
+  version = "3.9.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "takluyver";
     repo = "flit";
     rev = version;
-    hash = "sha256-iXf9K/xI4u+dDV0Zf6S08nbws4NqycrTEW0B8/qCjQc=";
+    hash = "sha256-yl2+PcKr7xRW4oIBWl+gzh/nKhSNu5GH9fWKRGgaNHU=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     docutils
@@ -38,17 +37,27 @@ buildPythonPackage rec {
     tomli-w
   ];
 
-  checkInputs = [ pytestCheckHook testpath responses ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    testpath
+    responses
+  ];
 
   disabledTests = [
     # needs some ini file.
     "test_invalid_classifier"
+    # calls pip directly. disabled for PEP 668
+    "test_install_data_dir"
+    "test_install_module_pep621"
+    "test_symlink_data_dir"
+    "test_symlink_module_pep621"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/pypa/flit/blob/${version}/doc/history.rst";
     description = "A simple packaging tool for simple packages";
+    mainProgram = "flit";
     homepage = "https://github.com/pypa/flit";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh SuperSandro2000 ];
   };
 }

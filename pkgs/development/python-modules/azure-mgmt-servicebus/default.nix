@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-servicebus";
-  version = "8.1.0";
+  version = "8.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-R8Narn7eC7j59tDjsgbk9lF0PcOgOwSnzoMp3Qu0rmg=";
+    hash = "sha256-i+kgjxQdmnifaNuNIZdU/3gGn9j5OQ6fdkS7laO+nsI=";
   };
 
   propagatedBuildInputs = [

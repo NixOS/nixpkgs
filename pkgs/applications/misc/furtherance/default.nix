@@ -1,21 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, appstream-glib, desktop-file-utils
-, glib, libadwaita, meson, ninja, pkg-config, wrapGAppsHook4, dbus , gtk4, sqlite }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform
+, appstream-glib, cargo, desktop-file-utils, glib, libadwaita, meson, ninja
+, pkg-config, rustc, wrapGAppsHook4
+, dbus, gtk4, sqlite
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "furtherance";
-  version = "1.6.0";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "lakoliu";
     repo = "Furtherance";
-    rev = "v${version}";
-    sha256 = "xshZpwL5AQvYSPoyt9Qutaym5IGBQHWwz4ev3xnVcSk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TxYARpCqqjjwinoRU2Wjihp+FYIvcI0YCGlOuumX6To=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    sha256 = "J/e8NYd9JjmANj+4Eh3/Uq2/vS711CwERgmJ7i5orNw=";
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-VGBxBHs/kqW0mvOiz0UQRg0duDmW8ee9cSh6EOT9aaY=";
   };
 
   nativeBuildInputs = [
@@ -25,8 +28,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     wrapGAppsHook4
   ];
 
@@ -40,9 +43,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Track your time without being tracked";
+    mainProgram = "furtherance";
     homepage = "https://github.com/lakoliu/Furtherance";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ CaptainJawZ ];
   };
-}
+})

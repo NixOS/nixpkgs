@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
     substituteInPlace curses/curses.ml --replace 'pp gcc' "pp $CC"
   '';
 
-  buildInputs = [ ocamlPackages.ocaml ncurses remind ocamlPackages.camlp4 ];
+  strictDeps = true;
+  nativeBuildInputs = [ ocamlPackages.ocaml ocamlPackages.camlp4  ];
+  buildInputs = [ ncurses remind ];
 
   preferLocalBuild = true;
 
@@ -28,8 +30,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://pessimization.com/software/wyrd/";
     downloadPage = "http://pessimization.com/software/wyrd/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.prikhi ];
     platforms = platforms.linux;
+    mainProgram = "wyrd";
   };
 }

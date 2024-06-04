@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "DamienCassou";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "1405v0bh2m8ip9c23l95i8iq2gfrpanc6f4dz17nysdcff2ay2p3";
   };
 
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Rofi-based interface to select source/sink (aka input/output) with PulseAudio";
+    mainProgram = "rofi-pulse-select";
     homepage = "https://gitlab.com/DamienCassou/rofi-pulse-select";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ DamienCassou ];

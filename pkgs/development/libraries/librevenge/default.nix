@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "librevenge";
-  version = "0.0.4";
+  version = "0.0.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/libwpd/librevenge/librevenge-${version}/librevenge-${version}.tar.xz";
-    sha256 = "sha256-kz8HKfBCZ8w1S5oCvD6a/vpVEqO90LRfFZ7hSj4zR7I=";
+    sha256 = "sha256-EG0MRLtkCLE0i54EZWZvqDuBYXdmWiLNAX6IbBqu6zQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];

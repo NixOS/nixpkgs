@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, autoreconfHook, perl }:
 
 stdenv.mkDerivation rec {
   version = "6.0.1";
@@ -9,9 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1d041j0nd1hc0562lbj269dydjm4rbzagdgzdnmwdxr98544yw44";
   };
 
-  nativeBuildInputs = [ perl ];
+  patches = [
+    # fix compile error in configure.ac
+    ./fix-big-endian-config-check.diff
+  ];
 
-  CXXFLAGS = "-std=c++11";
+  nativeBuildInputs = [ autoreconfHook perl ];
+
+  configureFlags = [ "CXXFLAGS=-std=c++11" ];
 
   enableParallelBuilding = true;
 
@@ -21,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The C preprocessor chainsaw";
+    mainProgram = "coan";
     longDescription = ''
       A software engineering tool for analysing preprocessor-based
       configurations of C or C++ source code. Its principal use is to simplify
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
       respect to a specified configuration. Dead code removal is an
       application of this sort.
     '';
-    homepage = "http://coan2.sourceforge.net/";
+    homepage = "https://coan2.sourceforge.net/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

@@ -21,22 +21,21 @@ A complete list of options for the Borgbase module may be found
 ## Basic usage for a local backup {#opt-services-backup-borgbackup-local-directory}
 
 A very basic configuration for backing up to a locally accessible directory is:
-```
+```nix
 {
     opt.services.borgbackup.jobs = {
-      { rootBackup = {
-          paths = "/";
-          exclude = [ "/nix" "/path/to/local/repo" ];
-          repo = "/path/to/local/repo";
-          doInit = true;
-          encryption = {
-            mode = "repokey";
-            passphrase = "secret";
-          };
-          compression = "auto,lzma";
-          startAt = "weekly";
+      rootBackup = {
+        paths = "/";
+        exclude = [ "/nix" "/path/to/local/repo" ];
+        repo = "/path/to/local/repo";
+        doInit = true;
+        encryption = {
+          mode = "repokey";
+          passphrase = "secret";
         };
-      }
+        compression = "auto,lzma";
+        startAt = "weekly";
+      };
     };
 }
 ```
@@ -59,7 +58,7 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/
 ```
 
 Add the following snippet to your NixOS configuration:
-```
+```nix
 {
   services.borgbackup.repos = {
     my_borg_repo = {
@@ -80,7 +79,7 @@ that you have stored a secret passphrasse in the file
 {file}`/run/keys/borgbackup_passphrase`, which should be only
 accessible by root
 
-```
+```nix
 {
   services.borgbackup.jobs = {
     backupToLocalServer = {
@@ -96,7 +95,7 @@ accessible by root
       startAt = "hourly";
     };
   };
-};
+}
 ```
 
 The following few commands (run as root) let you test your backup.
@@ -128,7 +127,7 @@ To backup your home directory to borgbase you have to:
   - Initialize the repository on the server. Eg.
 
         sudo borg init --encryption=repokey-blake2  \
-            -rsh "ssh -i /run/keys/id_ed25519_borgbase" \
+            --rsh "ssh -i /run/keys/id_ed25519_borgbase" \
             zzz2aaaaa@zzz2aaaaa.repo.borgbase.com:repo
 
   - Add it to your NixOS configuration, e.g.

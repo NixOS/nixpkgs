@@ -9,6 +9,7 @@
 , dnsmasq
 , docutils
 , fetchFromGitLab
+, fetchpatch
 , gettext
 , glib
 , gnutls
@@ -22,6 +23,7 @@
 , makeWrapper
 , meson
 , ninja
+, openssh
 , perl
 , perlPackages
 , polkit
@@ -77,13 +79,11 @@
 , zfs
 }:
 
-with lib;
-
 let
   inherit (stdenv) isDarwin isLinux isx86_64;
-  binPath = makeBinPath ([
+  binPath = lib.makeBinPath ([
     dnsmasq
-  ] ++ optionals isLinux [
+  ] ++ lib.optionals isLinux [
     bridge-utils
     dmidecode
     dnsmasq
@@ -93,12 +93,13 @@ let
     lvm2
     numactl
     numad
+    openssh
     pmutils
     systemd
-  ] ++ optionals enableIscsi [
+  ] ++ lib.optionals enableIscsi [
     libiscsi
     openiscsi
-  ] ++ optionals enableZfs [
+  ] ++ lib.optionals enableZfs [
     zfs
   ]);
 in
@@ -114,18 +115,28 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "9.0.0";
+  version = "10.0.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YnkgTl6C3QkvMBGm95JgWmWaP4mAECe9B0wwjOx94p8=";
+    hash = "sha256-xFl8AHcbeuydWzhJNnwZ3Bd7TQiTU8hjBxaALXvcLgE=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
+    (fetchpatch {
+      name = "CVE-2024-2494.patch";
+      url = "https://gitlab.com/libvirt/libvirt/-/commit/8a3f8d957507c1f8223fdcf25a3ff885b15557f2.patch";
+      hash = "sha256-kxSIZ4bPOhN6PpJepoSF+EDTgdmazRWh3a3KSVfm1GU=";
+    })
+    (fetchpatch {
+      name = "CVE-2024-1441.patch";
+      url = "https://gitlab.com/libvirt/libvirt/-/commit/c664015fe3a7bf59db26686e9ed69af011c6ebb8.patch";
+      hash = "sha256-Qi/gk7+NPz9s9OpWOnF8XW6A75C9BbVxBTE4KVwalo4=";
+    })
   ] ++ lib.optionals enableZfs [
     (substituteAll {
       src = ./0002-substitute-zfs-and-zpool-commands.patch;
@@ -141,27 +152,27 @@ stdenv.mkDerivation rec {
     # delete only the first occurrence of this
     sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
 
+  '' + lib.optionalString isLinux ''
     for binary in mount umount mkfs; do
       substituteInPlace meson.build \
         --replace "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
     done
 
+  '' + ''
     substituteInPlace meson.build \
       --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
-  '' + optionalString isLinux ''
+  '' + lib.optionalString isLinux ''
     sed -i 's,define PARTED "parted",define PARTED "${parted}/bin/parted",' \
       src/storage/storage_backend_disk.c \
       src/storage/storage_util.c
-  '' + optionalString isDarwin ''
-    sed -i '/qemucapabilitiestest/d' tests/meson.build
-    sed -i '/vircryptotest/d' tests/meson.build
-    sed -i '/domaincapstest/d' tests/meson.build
+  '' + lib.optionalString isDarwin ''
+    # Darwin doesn’t support -fsemantic-interposition, but the problem doesn’t seem to affect Mach-O.
+    # See https://gitlab.com/libvirt/libvirt/-/merge_requests/235
+    sed -i "s/not supported_cc_flags.contains('-fsemantic-interposition')/false/" meson.build
     sed -i '/qemufirmwaretest/d' tests/meson.build
-    sed -i '/qemuvhostusertest/d' tests/meson.build
-  '' + optionalString (isDarwin && isx86_64) ''
-    sed -i '/qemucaps2xmltest/d' tests/meson.build
     sed -i '/qemuhotplugtest/d' tests/meson.build
-    sed -i '/virnetdaemontest/d' tests/meson.build
+    sed -i '/qemuvhostusertest/d' tests/meson.build
+    sed -i '/qemuxml2xmltest/d' tests/meson.build
   '';
 
   strictDeps = true;
@@ -178,9 +189,9 @@ stdenv.mkDerivation rec {
     perl
     perlPackages.XMLXPath
   ]
-  ++ optional (!isDarwin) rpcsvc-proto
+  ++ lib.optional (!isDarwin) rpcsvc-proto
   # NOTE: needed for rpcgen
-  ++ optional isDarwin darwin.developer_cmds;
+  ++ lib.optional isDarwin darwin.developer_cmds;
 
   buildInputs = [
     bash
@@ -197,7 +208,7 @@ stdenv.mkDerivation rec {
     readline
     xhtml1
     yajl
-  ] ++ optionals isLinux [
+  ] ++ lib.optionals isLinux [
     acl
     attr
     audit
@@ -213,17 +224,17 @@ stdenv.mkDerivation rec {
     parted
     systemd
     util-linux
-  ] ++ optionals isDarwin [
+  ] ++ lib.optionals isDarwin [
     AppKit
     Carbon
     gmp
     libiconv
   ]
-  ++ optionals enableCeph [ ceph ]
-  ++ optionals enableGlusterfs [ glusterfs ]
-  ++ optionals enableIscsi [ libiscsi openiscsi ]
-  ++ optionals enableXen [ xen ]
-  ++ optionals enableZfs [ zfs ];
+  ++ lib.optionals enableCeph [ ceph ]
+  ++ lib.optionals enableGlusterfs [ glusterfs ]
+  ++ lib.optionals enableIscsi [ libiscsi openiscsi ]
+  ++ lib.optionals enableXen [ xen ]
+  ++ lib.optionals enableZfs [ zfs ];
 
   preConfigure =
     let
@@ -251,6 +262,9 @@ stdenv.mkDerivation rec {
       substituteInPlace src/util/virpolkit.h \
         --replace '"/usr/bin/pkttyagent"' '"${if isLinux then polkit.bin else "/usr"}/bin/pkttyagent"'
 
+      substituteInPlace src/util/virpci.c \
+         --replace '/lib/modules' '${if isLinux then "/run/booted-system/kernel-modules" else ""}/lib/modules'
+
       patchShebangs .
     ''
     + (lib.concatStringsSep "\n" (lib.mapAttrsToList patchBuilder overrides));
@@ -268,10 +282,10 @@ stdenv.mkDerivation rec {
       "--sysconfdir=/var/lib"
       (cfg "install_prefix" (placeholder "out"))
       (cfg "localstatedir" "/var")
-      (cfg "runstatedir" "/run")
+      (cfg "runstatedir" (if isDarwin then "/var/run" else "/run"))
 
       (cfg "init_script" (if isDarwin then "none" else "systemd"))
-      (cfg "qemu_datadir" (if isDarwin then "${qemu}/share/qemu" else ""))
+      (cfg "qemu_datadir" (lib.optionalString isDarwin "${qemu}/share/qemu"))
 
       (feat "apparmor" isLinux)
       (feat "attr" isLinux)
@@ -292,7 +306,7 @@ stdenv.mkDerivation rec {
       (feat "libpcap" true)
       (feat "libssh2" true)
       (feat "login_shell" isLinux)
-      (feat "nss" isLinux)
+      (feat "nss" (isLinux && !stdenv.hostPlatform.isMusl))
       (feat "numactl" isLinux)
       (feat "numad" isLinux)
       (feat "pciaccess" isLinux)
@@ -348,7 +362,7 @@ stdenv.mkDerivation rec {
     # Added in nixpkgs:
     gettext() { "${gettext}/bin/gettext" "$@"; }
     '
-  '' + optionalString isLinux ''
+  '' + lib.optionalString isLinux ''
     for f in $out/lib/systemd/system/*.service ; do
       substituteInPlace $f --replace /bin/kill ${coreutils}/bin/kill
     done
@@ -372,7 +386,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.libvirtd = nixosTests.libvirtd;
 
-  meta = {
+  meta = with lib; {
     description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     homepage = "https://libvirt.org/";
     changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";

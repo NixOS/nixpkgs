@@ -1,21 +1,30 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, tzlocal
-, six
-, pyjsparser
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonAtLeast,
+  setuptools,
+  tzlocal,
+  six,
+  pyjsparser,
 }:
 
 buildPythonPackage rec {
   pname = "js2py";
-  version = "0.71";
+  version = "0.74";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "PiotrDabkowski";
-    repo = "Js2Py";
-    rev = "5f665f60083a9796ec33861240ce31d6d2b844b6";
-    sha256 = "sha256-1omTV7zkYSQfxhkNgI4gtXTenWt9J1r3VARRHoRsSfc=";
+  # broken with Python 3.12
+  # https://github.com/PiotrDabkowski/Js2Py/issues/317
+  disabled = pythonAtLeast "3.12";
+
+  src = fetchPypi {
+    pname = "Js2Py";
+    inherit version;
+    hash = "sha256-OfOmqoRpGA77o8hncnHfJ8MTMv0bRx3xryr1i4e4ly8=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyjsparser

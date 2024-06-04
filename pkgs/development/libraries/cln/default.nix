@@ -1,18 +1,19 @@
-{ lib, stdenv, fetchurl, gmp }:
+{ lib, gccStdenv, fetchurl, gmp }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation rec {
   pname = "cln";
-  version = "1.3.6";
+  version = "1.3.7";
 
   src = fetchurl {
     url = "${meta.homepage}${pname}-${version}.tar.bz2";
-    sha256 = "0jlq9l4hphk7qqlgqj9ihjp4m3rwjbhk6q4v00lsbgbri07574pl";
+    sha256 = "sha256-fH7YR0lYM35N9btX6lF2rQNlAEy7mLYhdlvEYGoQ2Gs=";
   };
 
   buildInputs = [ gmp ];
 
   meta = with lib; {
     description = "C/C++ library for numbers, a part of GiNaC";
+    mainProgram = "pi";
     homepage = "https://www.ginac.de/CLN/";
     license = licenses.gpl2;
     platforms = platforms.unix; # Once had cygwin problems

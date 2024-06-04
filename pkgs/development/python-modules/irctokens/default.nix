@@ -1,24 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pyyaml
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pyyaml,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "irctokens";
-  version = "2.0.1";
-  disabled = pythonOlder "3.6";  # f-strings
+  version = "2.0.2";
+  format = "setuptools";
+  disabled = pythonOlder "3.6"; # f-strings
 
   src = fetchFromGitHub {
     owner = "jesopo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FgcLngS11U9eBNV/8jllwdrm89tCmthA1sUaFDovk6U=";
+    hash = "sha256-Y9NBqxGUkt48hnXxsmfydHkJmWWb+sRrElV8C7l9bpw=";
   };
 
-  checkInputs = [ pyyaml ];
+  nativeCheckInputs = [ pyyaml ];
   checkPhase = ''
     ${python.interpreter} -m unittest test
   '';

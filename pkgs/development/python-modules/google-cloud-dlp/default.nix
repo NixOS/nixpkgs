@@ -1,27 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-testutils
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-testutils,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.10.1";
-  format = "setuptools";
+  version = "3.17.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M7JhzttLvWMPC9AEJN/X9ofIFBtNzWGgXjnun8k1CwA=";
+    hash = "sha256-YMUEBj8c154KA5Y/cm1gbypDxkfY4ncCq5wbym5rS9s=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -29,7 +33,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytestCheckHook
@@ -39,6 +43,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires credentials
     "test_inspect_content"
+    "test_list_dlp_jobs"
   ];
 
   pythonImportsCheck = [
@@ -51,6 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-dlp";
     changelog = "https://github.com/googleapis/python-dlp/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

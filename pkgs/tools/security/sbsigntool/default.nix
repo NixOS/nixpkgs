@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   pname = "sbsigntool";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git";
     rev = "v${version}";
-    sha256 = "sha256-dbjdA+hjII/k7wABTTJV5RBdy4KlNkFlBWEaX4zn5vg=";
+    hash = "sha256-5DInWgl1gThjjfGOsts1H1s1GbMCkd0gjbmG3gA3Fhg=";
   };
 
   patches = [ ./autoconf.patch ];

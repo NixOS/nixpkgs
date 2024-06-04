@@ -30,17 +30,18 @@
 , perlPackages
 , sqlite
 , vigra
+, wrapGAppsHook3
 , wxGTK
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "hugin";
-  version = "2022.0.0";
+  version = "2023.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/hugin-${version}.tar.bz2";
-    sha256 = "sha256-l8hWKgupp0PguVWkPf3gSLHGDNnl8u4rad4agWRuBac=";
+    hash = "sha256-BKOfzMYBfgVExjm9IjCUcsV001s0Vcut4fw4cOYxYys=";
   };
 
   buildInputs = [
@@ -70,12 +71,12 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config wrapGAppsHook3 ];
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   postInstall = ''
     for p in $out/bin/*; do

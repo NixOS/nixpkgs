@@ -1,4 +1,10 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, espeak-ng }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  espeak-ng,
+}:
 
 buildPythonPackage rec {
   pname = "pyttsx3";

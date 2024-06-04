@@ -3,6 +3,7 @@
 , avahi, libgphoto2, libieee1284, libjpeg, libpng, libtiff, libusb1, libv4l, net-snmp
 , curl, systemd, libxml2, poppler, gawk
 , sane-drivers
+, nixosTests
 
 # List of { src name backend } attibute sets - see installFirmware below:
 , extraFirmware ? []
@@ -16,7 +17,7 @@
 
 stdenv.mkDerivation {
   pname = "sane-backends";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchurl {
     # raw checkouts of the repo do not work because, the configure script is
@@ -25,8 +26,8 @@ stdenv.mkDerivation {
     # unfortunately this make the url unpredictable on update, to find the link
     # go to https://gitlab.com/sane-project/backends/-/releases and choose
     # the link under the heading "Other".
-    url = "https://gitlab.com/sane-project/backends/uploads/7d30fab4e115029d91027b6a58d64b43/sane-backends-1.1.1.tar.gz";
-    sha256 = "sha256-3UsEw3pC8UxGGejupqlX9MfGF/5Z4yrihys3OUCotgM=";
+    url = "https://gitlab.com/sane-project/backends/uploads/110fc43336d0fb5e514f1fdc7360dd87/sane-backends-1.2.1.tar.gz";
+    sha256 = "f832395efcb90bb5ea8acd367a820c393dda7e0dd578b16f48928b8f5bdd0524";
   };
 
   patches = [
@@ -37,9 +38,6 @@ stdenv.mkDerivation {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/4b97cd2fb4ec38712544438c2491b6d7d5ab334a/srcpkgs/sane/patches/sane-desc-cross.patch";
       sha256 = "sha256-y6BOXnOJBSTqvRp6LwAucqaqv+OLLyhCS/tXfLpnAPI=";
     })
-    # generate hwdb entries for scanners handled by other backends like epkowa
-    # https://gitlab.com/sane-project/backends/-/issues/619
-    ./sane-desc-generate-entries-unsupported-scanners.patch
   ];
 
   postPatch = ''
@@ -109,7 +107,7 @@ stdenv.mkDerivation {
   in ''
     mkdir -p $out/etc/udev/rules.d/ $out/etc/udev/hwdb.d
     ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external > $out/etc/udev/rules.d/49-libsane.rules
-    ./tools/sane-desc -m udev+hwdb -s doc/descriptions -m hwdb > $out/etc/udev/hwdb.d/20-sane.hwdb
+    ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external -m hwdb > $out/etc/udev/hwdb.d/20-sane.hwdb
     # the created 49-libsane references /bin/sh
     substituteInPlace $out/etc/udev/rules.d/49-libsane.rules \
       --replace "RUN+=\"/bin/sh" "RUN+=\"${runtimeShell}"
@@ -127,6 +125,14 @@ stdenv.mkDerivation {
     ln -svT ${scanSnapDriversPackage} $out/share/sane/epjitsu
   ''
   + lib.concatStrings (builtins.map installFirmware compatFirmware);
+
+  # parallel install creates a bad symlink at $out/lib/sane/libsane.so.1 which prevents finding plugins
+  # https://github.com/NixOS/nixpkgs/issues/224569
+  enableParallelInstalling = false;
+
+  passthru.tests = {
+    inherit (nixosTests) sane;
+  };
 
   meta = with lib; {
     description = "SANE (Scanner Access Now Easy) backends";

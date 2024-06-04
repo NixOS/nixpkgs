@@ -12,10 +12,10 @@
 let
 
   inherit (python3Packages)
-    python pytest nose cryptography pyyaml requests mock requests-mock
+    python pytest nose3 cryptography pyyaml requests mock requests-mock
     python-dateutil setuptools;
 
-  version = "4.18";
+  version = "4.79";
 
 in
 
@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    hash = "sha256-xqiEHfbuyAnQBBzKcWEdGoDSxVYOGI55OCx49YMnNK4=";
+    hash = "sha256-m5lIiWOROzNUONAVRoD6vdE7+1TeI6L0tNw+afYtNZA=";
   };
 
   pythonPaths = [ cryptography pyyaml requests ];
   buildInputs = [ python perl python-dateutil setuptools ] ++ pythonPaths;
   nativeBuildInputs = [ gitMinimal zip makeWrapper ];
-  checkInputs = [ nose pytest mock requests-mock ];
+  nativeCheckInputs = [ nose3 pytest mock requests-mock ];
 
   postPatch = ''
     substituteInPlace scripts/run-tests.sh \
@@ -68,5 +68,6 @@ stdenv.mkDerivation rec {
     description = "Command-line tool to download videos from svtplay.se and other sites";
     license = licenses.mit;
     platforms = lib.platforms.unix;
+    mainProgram = "svtplay-dl";
   };
 }

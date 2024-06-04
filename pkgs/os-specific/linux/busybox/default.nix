@@ -50,14 +50,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "busybox";
-  version = "1.35.0";
+  version = "1.36.1";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-+u6yRMNaNIozT0pZ5EYm7ocPsHtohNaMEK6LwZ+DppQ=";
+    sha256 = "sha256-uMwkyVdNgJ5yecO+NJeVxdXOtv3xnKcJ+AzeUOR94xQ=";
   };
 
   hardeningDisable = [ "format" "pie" ]
@@ -74,11 +74,6 @@ stdenv.mkDerivation rec {
       name = "CVE-2022-28391.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/busybox/0002-nslookup-sanitize-all-printed-strings-with-printable.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
       sha256 = "sha256-vl1wPbsHtXY9naajjnTicQ7Uj3N+EQ8pRNnrdsiow+w=";
-    })
-    (fetchurl {
-      name = "CVE-2022-30065.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/busybox/CVE-2022-30065.patch?id=4ffd996b3f8298c7dd424b912c245864c816e354";
-      sha256 = "sha256-+WSYxI6eF8S0tya/S62f9Nc6jVMnHO0q1OyM69GlNTY=";
     })
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
@@ -164,12 +159,14 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tries to access the net
 
+  passthru.shellPath = "/bin/ash";
+
   meta = with lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ TethysSvensson qyliss ];
     platforms = platforms.linux;
-    priority = 10;
+    priority = 15; # below systemd (halt, init, poweroff, reboot) and coreutils
   };
 }

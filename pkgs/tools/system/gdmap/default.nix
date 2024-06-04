@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lm";
 
   meta = with lib; {
-    homepage = "http://gdmap.sourceforge.net";
+    homepage = "https://gdmap.sourceforge.net";
     description = "Recursive rectangle map of disk usage";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "gdmap";
   };
 }

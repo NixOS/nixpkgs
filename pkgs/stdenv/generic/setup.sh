@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=1090,2154,2123,2034,2178,2048,2068,1091
 __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
@@ -15,24 +16,27 @@ if (( "${NIX_DEBUG:-0}" >= 6 )); then
     set -x
 fi
 
-if [ -f .attrs.sh ]; then
+if [ -f .attrs.sh ] || [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
     __structuredAttrs=1
     echo "structuredAttrs is enabled"
-else
-    __structuredAttrs=
-fi
 
-if [ -n "$__structuredAttrs" ]; then
     for outputName in "${!outputs[@]}"; do
         # ex: out=/nix/store/...
         export "$outputName=${outputs[$outputName]}"
     done
-    # $NIX_ATTRS_JSON_FILE points to the wrong location in sandbox
-    # https://github.com/NixOS/nix/issues/6736
-    export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
-    export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
+
+    # $NIX_ATTRS_JSON_FILE pointed to the wrong location in sandbox
+    # https://github.com/NixOS/nix/issues/6736; please keep around until the
+    # fix reaches *every patch version* that's >= lib/minver.nix
+    if ! [[ -e "${NIX_ATTRS_JSON_FILE:-}" ]]; then
+        export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
+    fi
+    if ! [[ -e "${NIX_ATTRS_SH_FILE:-}" ]]; then
+        export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
+    fi
 else
-    : ${outputs:=out}
+    __structuredAttrs=
+    : "${outputs:=out}"
 fi
 
 getAllOutputNames() {
@@ -125,11 +129,6 @@ _eval() {
 ######################################################################
 # Logging.
 
-# Obsolete.
-stopNest() { true; }
-header() { echo "$1"; }
-closeNest() { true; }
-
 # Prints a command such that all word splits are unambiguous. We need
 # to split the command in three parts because the middle format string
 # will be, and must be, repeated for each argument. The first argument
@@ -210,8 +209,8 @@ addToSearchPath() {
 # syntax when they switch to setting __structuredAttrs = true.
 prependToVar() {
     local -n nameref="$1"
+    local useArray type
 
-    useArray=
     if [ -n "$__structuredAttrs" ]; then
         useArray=true
     else
@@ -243,8 +242,8 @@ prependToVar() {
 # Same as above
 appendToVar() {
     local -n nameref="$1"
+    local useArray type
 
-    useArray=
     if [ -n "$__structuredAttrs" ]; then
         useArray=true
     else
@@ -309,12 +308,6 @@ _accumFlagsArray() {
 _addRpathPrefix() {
     if [ "${NIX_NO_SELF_RPATH:-0}" != 1 ]; then
         export NIX_LDFLAGS="-rpath $1/lib ${NIX_LDFLAGS-}"
-        if [ -n "${NIX_LIB64_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib64 ${NIX_LDFLAGS-}"
-        fi
-        if [ -n "${NIX_LIB32_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib32 ${NIX_LDFLAGS-}"
-        fi
     fi
 }
 
@@ -398,7 +391,7 @@ fi
 # implementation uses zip archive and zip does not support dates going back to
 # 1970.
 export SOURCE_DATE_EPOCH
-: ${SOURCE_DATE_EPOCH:=315532800}
+: "${SOURCE_DATE_EPOCH:=315532800}"
 
 
 # Wildcard expansions that don't match should expand to an empty list.
@@ -448,7 +441,6 @@ runHook addInputsHook
 
 # Package accumulators
 
-# shellcheck disable=SC2034
 declare -a pkgsBuildBuild pkgsBuildHost pkgsBuildTarget
 declare -a pkgsHostHost pkgsHostTarget
 declare -a pkgsTargetTarget
@@ -473,7 +465,6 @@ declare -a pkgTargetHookVars=(envTargetTargetHook)
 declare -a pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
 
 # those variables are declared here, since where and if they are used varies
-# shellcheck disable=SC2034
 declare -a preFixupHooks fixupOutputHooks preConfigureHooks postFixupHooks postUnpackHooks unpackCmdHooks
 
 # Add env hooks for all sorts of deps with the specified host offset.
@@ -521,7 +512,7 @@ findInputs() {
     local -r targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit -1
+    (( hostOffset <= targetOffset )) || exit 1
 
     local varVar="${pkgAccumVarVars[hostOffset + 1]}"
     local varRef="$varVar[$((targetOffset - hostOffset))]"
@@ -610,12 +601,12 @@ findInputs() {
 # in each list must be store paths, and therefore space-free.
 
 # Make sure all are at least defined as empty
-: ${depsBuildBuild=} ${depsBuildBuildPropagated=}
-: ${nativeBuildInputs=} ${propagatedNativeBuildInputs=} ${defaultNativeBuildInputs=}
-: ${depsBuildTarget=} ${depsBuildTargetPropagated=}
-: ${depsHostHost=} ${depsHostHostPropagated=}
-: ${buildInputs=} ${propagatedBuildInputs=} ${defaultBuildInputs=}
-: ${depsTargetTarget=} ${depsTargetTargetPropagated=}
+: "${depsBuildBuild=}" "${depsBuildBuildPropagated=}"
+: "${nativeBuildInputs=}" "${propagatedNativeBuildInputs=}" "${defaultNativeBuildInputs=}"
+: "${depsBuildTarget=}" "${depsBuildTargetPropagated=}"
+: "${depsHostHost=}" "${depsHostHostPropagated=}"
+: "${buildInputs=}" "${propagatedBuildInputs=}" "${defaultBuildInputs=}"
+: "${depsTargetTarget=}" "${depsTargetTargetPropagated=}"
 
 for pkg in ${depsBuildBuild[@]} ${depsBuildBuildPropagated[@]}; do
     findInputs "$pkg" -1 -1
@@ -650,7 +641,7 @@ activatePackage() {
     local -r targetOffset="$3"
 
     # Sanity check
-    (( hostOffset <= targetOffset )) || exit -1
+    (( hostOffset <= targetOffset )) || exit 1
 
     if [ -f "$pkg" ]; then
         source "$pkg"
@@ -798,10 +789,6 @@ unset _HOST_PATH
 unset _XDG_DATA_DIRS
 
 
-# Make GNU Make produce nested output.
-export NIX_INDENT_MAKE=1
-
-
 # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
 # means that we're supposed to try and auto-detect the number of
 # available CPU cores at run-time.
@@ -828,6 +815,8 @@ fi
 ######################################################################
 # Textual substitution functions.
 
+# only log once, due to max logging limit on hydra
+_substituteStream_has_warned_replace_deprecation=false
 
 substituteStream() {
     local var=$1
@@ -835,8 +824,18 @@ substituteStream() {
     shift 2
 
     while (( "$#" )); do
+        local replace_mode="$1"
         case "$1" in
             --replace)
+                # deprecated 2023-11-22
+                # this will either get removed, or switch to the behaviour of --replace-fail in the future
+                if ! "$_substituteStream_has_warned_replace_deprecation"; then
+                    echo "substituteStream(): WARNING: '--replace' is deprecated, use --replace-{fail,warn,quiet}. ($description)" >&2
+                    _substituteStream_has_warned_replace_deprecation=true
+                fi
+                replace_mode='--replace-warn'
+                ;&
+            --replace-quiet|--replace-warn|--replace-fail)
                 pattern="$2"
                 replacement="$3"
                 shift 3
@@ -845,7 +844,12 @@ substituteStream() {
                 eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 if [ "$pattern" != "$replacement" ]; then
                     if [ "${!var}" == "$savedvar" ]; then
-                        echo "substituteStream(): WARNING: pattern '$pattern' doesn't match anything in $description" >&2
+                        if [ "$replace_mode" == --replace-warn ]; then
+                            printf "substituteStream(): WARNING: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
+                        elif [ "$replace_mode" == --replace-fail ]; then
+                            printf "substituteStream(): ERROR: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
+                            return 1
+                        fi
                     fi
                 fi
                 ;;
@@ -888,7 +892,7 @@ substituteStream() {
 # fail loudly if provided with a binary (containing null bytes)
 consumeEntire() {
     # read returns non-0 on EOF, so we want read to fail
-    if IFS='' read -r -d '' $1 ; then
+    if IFS='' read -r -d '' "$1" ; then
         echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
         return 1
     fi
@@ -933,7 +937,7 @@ _allFlags() {
     export system pname name version
     for varName in $(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }'); do
         if (( "${NIX_DEBUG:-0}" >= 1 )); then
-            printf "@%s@ -> %q\n" "${varName}" "${!varName}"
+            printf "@%s@ -> %q\n" "${varName}" "${!varName}" >&2
         fi
         args+=("--subst-var" "$varName")
     done
@@ -999,28 +1003,78 @@ stripHash() {
 }
 
 
+recordPropagatedDependencies() {
+    # Propagate dependencies into the development output.
+    declare -ra flatVars=(
+        # Build
+        depsBuildBuildPropagated
+        propagatedNativeBuildInputs
+        depsBuildTargetPropagated
+        # Host
+        depsHostHostPropagated
+        propagatedBuildInputs
+        # Target
+        depsTargetTargetPropagated
+    )
+    declare -ra flatFiles=(
+        "${propagatedBuildDepFiles[@]}"
+        "${propagatedHostDepFiles[@]}"
+        "${propagatedTargetDepFiles[@]}"
+    )
+
+    local propagatedInputsIndex
+    for propagatedInputsIndex in "${!flatVars[@]}"; do
+        local propagatedInputsSlice="${flatVars[$propagatedInputsIndex]}[@]"
+        local propagatedInputsFile="${flatFiles[$propagatedInputsIndex]}"
+
+        [[ "${!propagatedInputsSlice}" ]] || continue
+
+        mkdir -p "${!outputDev}/nix-support"
+        # shellcheck disable=SC2086
+        printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
+    done
+}
+
+
 unpackCmdHooks+=(_defaultUnpack)
 _defaultUnpack() {
     local fn="$1"
+    local destination
 
     if [ -d "$fn" ]; then
+
+        destination="$(stripHash "$fn")"
+
+        if [ -e "$destination" ]; then
+            echo "Cannot copy $fn to $destination: destination already exists!"
+            echo "Did you specify two \"srcs\" with the same \"name\"?"
+            return 1
+        fi
 
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
-        cp -pr --reflink=auto -- "$fn" "$(stripHash "$fn")"
+        cp -pr --reflink=auto -- "$fn" "$destination"
 
     else
 
         case "$fn" in
             *.tar.xz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
-                xz -d < "$fn" | tar xf - --warning=no-timestamp
+                # Additionally, we have multiple different xz binaries with different feature sets in different
+                # stages. The XZ_OPT env var is only used by the full "XZ utils" implementation, which supports
+                # the --threads (-T) flag. This allows us to enable multithreaded decompression exclusively on
+                # that implementation, without the use of complex bash conditionals and checks.
+                # Since tar does not control the decompression, we need to
+                # disregard the error code from the xz invocation. Otherwise,
+                # it can happen that tar exits earlier, causing xz to fail
+                # from a SIGPIPE.
+                (XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < "$fn"; true) | tar xf - --mode=+w --warning=no-timestamp
                 ;;
             *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
-                tar xf "$fn" --warning=no-timestamp
+                tar xf "$fn" --mode=+w --warning=no-timestamp
                 ;;
             *)
                 return 1
@@ -1033,7 +1087,7 @@ _defaultUnpack() {
 
 unpackFile() {
     curSrc="$1"
-    header "unpacking source archive $curSrc" 3
+    echo "unpacking source archive $curSrc"
     if ! runOneHook unpackCmd "$curSrc"; then
         echo "do not know how to unpack source archive $curSrc"
         exit 1
@@ -1079,7 +1133,7 @@ unpackPhase() {
     # Find the source directory.
 
     # set to empty if unset
-    : ${sourceRoot=}
+    : "${sourceRoot=}"
 
     if [ -n "${setSourceRoot:-}" ]; then
         runOneHook setSourceRoot
@@ -1130,7 +1184,7 @@ patchPhase() {
     fi
 
     for i in "${patchesArray[@]}"; do
-        header "applying patch $i" 3
+        echo "applying patch $i"
         local uncompress=cat
         case "$i" in
             *.gz)
@@ -1174,7 +1228,7 @@ fixLibtool() {
     done
 
     sed -i "$1" \
-        -e "s^eval \(sys_lib_search_path=\).*^\1'$search_path'^" \
+        -e "s^eval \(sys_lib_search_path=\).*^\1'${search_path:-}'^" \
         -e 's^eval sys_lib_.+search_path=.*^^'
 }
 
@@ -1183,7 +1237,7 @@ configurePhase() {
     runHook preConfigure
 
     # set to empty if unset
-    : ${configureScript=}
+    : "${configureScript=}"
 
     if [[ -z "$configureScript" && -x ./configure ]]; then
         configureScript=./configure
@@ -1231,6 +1285,10 @@ configurePhase() {
                 prependToVar configureFlags --disable-static
             fi
         fi
+
+        if [ -z "${dontPatchShebangsInConfigure:-}" ]; then
+            patchShebangs --build "$configureScript"
+        fi
     fi
 
     if [ -n "$configureScript" ]; then
@@ -1253,7 +1311,7 @@ buildPhase() {
     runHook preBuild
 
     if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
-        echo "no Makefile, doing nothing"
+        echo "no Makefile or custom buildPhase, doing nothing"
     else
         foundMakefile=1
 
@@ -1323,12 +1381,22 @@ checkPhase() {
 installPhase() {
     runHook preInstall
 
+    # Dont reuse 'foundMakefile' set in buildPhase, a makefile may have been created in buildPhase
+    if [[ -z "${makeFlags-}" && -z "${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ]]; then
+        echo "no Makefile or custom installPhase, doing nothing"
+        runHook postInstall
+        return
+    else
+        foundMakefile=1
+    fi
+
     if [ -n "$prefix" ]; then
         mkdir -p "$prefix"
     fi
 
     # shellcheck disable=SC2086
     local flagsArray=(
+        ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
         SHELL=$SHELL
     )
     _accumFlagsArray makeFlags makeFlagsArray installFlags installFlagsArray
@@ -1353,7 +1421,8 @@ fixupPhase() {
     # Make sure everything is writable so "strip" et al. work.
     local output
     for output in $(getAllOutputNames); do
-        if [ -e "${!output}" ]; then chmod -R u+w "${!output}"; fi
+        # for set*id bits see #300635
+        if [ -e "${!output}" ]; then chmod -R u+w,u-s,g-s "${!output}"; fi
     done
 
     runHook preFixup
@@ -1365,36 +1434,8 @@ fixupPhase() {
     done
 
 
-    # Propagate dependencies & setup hook into the development output.
-    declare -ra flatVars=(
-        # Build
-        depsBuildBuildPropagated
-        propagatedNativeBuildInputs
-        depsBuildTargetPropagated
-        # Host
-        depsHostHostPropagated
-        propagatedBuildInputs
-        # Target
-        depsTargetTargetPropagated
-    )
-    declare -ra flatFiles=(
-        "${propagatedBuildDepFiles[@]}"
-        "${propagatedHostDepFiles[@]}"
-        "${propagatedTargetDepFiles[@]}"
-    )
-
-    local propagatedInputsIndex
-    for propagatedInputsIndex in "${!flatVars[@]}"; do
-        local propagatedInputsSlice="${flatVars[$propagatedInputsIndex]}[@]"
-        local propagatedInputsFile="${flatFiles[$propagatedInputsIndex]}"
-
-        [[ "${!propagatedInputsSlice}" ]] || continue
-
-        mkdir -p "${!outputDev}/nix-support"
-        # shellcheck disable=SC2086
-        printWords ${!propagatedInputsSlice} > "${!outputDev}/nix-support/$propagatedInputsFile"
-    done
-
+    # record propagated dependencies & setup hook into the development output.
+    recordPropagatedDependencies
 
     if [ -n "${setupHook:-}" ]; then
         mkdir -p "${!outputDev}/nix-support"
@@ -1436,7 +1477,7 @@ installCheckPhase() {
         echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
     elif [[ -z "${installCheckTarget:-}" ]] \
-       && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
+       && ! make -n ${makefile:+-f $makefile} "${installCheckTarget:-installcheck}" >/dev/null 2>&1; then
         echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
     else
         # Old bash empty array hack
@@ -1484,17 +1525,7 @@ distPhase() {
 
 showPhaseHeader() {
     local phase="$1"
-    case "$phase" in
-        unpackPhase) header "unpacking sources";;
-        patchPhase) header "patching sources";;
-        configurePhase) header "configuring";;
-        buildPhase) header "building";;
-        checkPhase) header "running tests";;
-        installPhase) header "installing";;
-        fixupPhase) header "post-installation fixup";;
-        installCheckPhase) header "running install tests";;
-        *) header "$phase";;
-    esac
+    echo "Running phase: $phase"
 }
 
 
@@ -1503,19 +1534,61 @@ showPhaseFooter() {
     local startTime="$2"
     local endTime="$3"
     local delta=$(( endTime - startTime ))
-    (( $delta < 30 )) && return
+    (( delta < 30 )) && return
 
     local H=$((delta/3600))
     local M=$((delta%3600/60))
     local S=$((delta%60))
     echo -n "$phase completed in "
-    (( $H > 0 )) && echo -n "$H hours "
-    (( $M > 0 )) && echo -n "$M minutes "
+    (( H > 0 )) && echo -n "$H hours "
+    (( M > 0 )) && echo -n "$M minutes "
     echo "$S seconds"
 }
 
 
+runPhase() {
+    local curPhase="$*"
+    if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then return; fi
+    if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then return; fi
+    if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then return; fi
+    if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then return; fi
+    if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then return; fi
+    if [[ "$curPhase" = installPhase && -n "${dontInstall:-}" ]]; then return; fi
+    if [[ "$curPhase" = fixupPhase && -n "${dontFixup:-}" ]]; then return; fi
+    if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then return; fi
+    if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then return; fi
+
+    if [[ -n $NIX_LOG_FD ]]; then
+        echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&"$NIX_LOG_FD"
+    fi
+
+    showPhaseHeader "$curPhase"
+    dumpVars
+
+    local startTime=$(date +"%s")
+
+    # Evaluate the variable named $curPhase if it exists, otherwise the
+    # function named $curPhase.
+    eval "${!curPhase:-$curPhase}"
+
+    local endTime=$(date +"%s")
+
+    showPhaseFooter "$curPhase" "$startTime" "$endTime"
+
+    if [ "$curPhase" = unpackPhase ]; then
+        # make sure we can cd into the directory
+        [ -n "${sourceRoot:-}" ] && chmod +x "${sourceRoot}"
+
+        cd "${sourceRoot:-.}"
+    fi
+}
+
+
 genericBuild() {
+    # variable used by our gzip wrapper to add -n.
+    # gzip is in common-path.nix and is added to nix-shell but we only want to change its behaviour in nix builds. do not move to a setupHook in gzip.
+    export GZIP_NO_TIMESTAMPS=1
+
     if [ -f "${buildCommandPath:-}" ]; then
         source "$buildCommandPath"
         return
@@ -1537,39 +1610,7 @@ genericBuild() {
     # phase name is space-free, which it must be because it's the name
     # of either a shell variable or a shell function.
     for curPhase in ${phases[*]}; do
-        if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then continue; fi
-        if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then continue; fi
-        if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then continue; fi
-        if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then continue; fi
-        if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then continue; fi
-        if [[ "$curPhase" = installPhase && -n "${dontInstall:-}" ]]; then continue; fi
-        if [[ "$curPhase" = fixupPhase && -n "${dontFixup:-}" ]]; then continue; fi
-        if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then continue; fi
-        if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then continue; fi
-
-        if [[ -n $NIX_LOG_FD ]]; then
-            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&$NIX_LOG_FD
-        fi
-
-        showPhaseHeader "$curPhase"
-        dumpVars
-
-        local startTime=$(date +"%s")
-
-        # Evaluate the variable named $curPhase if it exists, otherwise the
-        # function named $curPhase.
-        eval "${!curPhase:-$curPhase}"
-
-        local endTime=$(date +"%s")
-
-        showPhaseFooter "$curPhase" "$startTime" "$endTime"
-
-        if [ "$curPhase" = unpackPhase ]; then
-            # make sure we can cd into the directory
-            [ -z "${sourceRoot}" ] || chmod +x "${sourceRoot}"
-
-            cd "${sourceRoot:-.}"
-        fi
+        runPhase "$curPhase"
     done
 }
 

@@ -1,12 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "spidev";
   version = "3.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FNvDdZSkqu+FQDq2F5hdPD70ZNYrybdp71UttTcBEVs=";
+    hash = "sha256-FNvDdZSkqu+FQDq2F5hdPD70ZNYrybdp71UttTcBEVs=";
   };
 
   # package does not include tests
@@ -21,5 +26,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ hexa ];
     platforms = platforms.linux;
   };
-
 }

@@ -2,20 +2,21 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "sftpgo";
-  version = "2.4.3";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "drakkan";
     repo = "sftpgo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cSA7ndpIV3VvIZTBa9NCIlJn57EtT1qxrB0UsMENUS0=";
+    hash = "sha256-HsSBW30qSU3SRyexk2tRjY1FQcBsa70fK3UuT+Gdtm0=";
   };
 
-  vendorHash = "sha256-C45KA+9tdj+fR3DUBLdG2dGzT59zuAJczpKVoiAZ7lg=";
+  vendorHash = "sha256-BMwEDsXzk8ExygKreWmtkNvhlg3+YU9KcY1pp+9XffI=";
 
   ldflags = [
     "-s"
@@ -38,7 +39,13 @@ buildGoModule rec {
       --bash <($out/bin/sftpgo gen completion bash) \
       --zsh <($out/bin/sftpgo gen completion zsh) \
       --fish <($out/bin/sftpgo gen completion fish)
+
+    shareDirectory="$out/share/sftpgo"
+    mkdir -p "$shareDirectory"
+    cp -r ./{openapi,static,templates} "$shareDirectory"
   '';
+
+  passthru.tests = nixosTests.sftpgo;
 
   meta = with lib; {
     homepage = "https://github.com/drakkan/sftpgo";
@@ -51,7 +58,8 @@ buildGoModule rec {
       local filesystem, encrypted local filesystem, S3 (compatible) Object Storage,
       Google Cloud Storage, Azure Blob Storage, SFTP.
     '';
-    license = licenses.agpl3Only;
+    license = with licenses; [ agpl3Only unfreeRedistributable ]; # Software is AGPLv3, web UI is unfree
     maintainers = with maintainers; [ thenonameguy ];
+    mainProgram = "sftpgo";
   };
 }

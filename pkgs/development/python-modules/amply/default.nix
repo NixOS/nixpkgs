@@ -1,19 +1,21 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, docutils
-, pyparsing
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
+  docutils,
+  pyparsing,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "amply";
-  version = "0.1.5";
+  version = "0.1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rXF7SQtrcFWQn6oZXoKkQytwb4+VhUBQFy9Ckx5HhCY=";
+    hash = "sha256-YUIRA8z44QZnFxFf55F2ENgx1VHGjTGhEIdqW2x4rqQ=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -21,7 +23,7 @@ buildPythonPackage rec {
     docutils
     pyparsing
   ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "amply" ];
 

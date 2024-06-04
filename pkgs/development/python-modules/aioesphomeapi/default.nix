@@ -1,55 +1,79 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, noiseprotocol
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  cython,
+  setuptools,
+
+  # dependencies
+  aiohappyeyeballs,
+  async-interrupt,
+  async-timeout,
+  chacha20poly1305-reuseable,
+  cryptography,
+  noiseprotocol,
+  protobuf,
+  zeroconf,
+
+  # tests
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "13.0.4";
-  format = "setuptools";
+  version = "24.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
-    repo = pname;
+    repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pqCg4LAFIr5BEDqRWMaNc3M36bUmou5cZdarQ/0W77Y=";
+    hash = "sha256-i/tmPTDb5DJRSj//Ju9OERx8A9S69WkWyoN+j2MO6mI=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "protobuf>=3.12.2,<4.0" "protobuf>=3.12.2"
-  '';
+  build-system = [
+    setuptools
+    cython
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohappyeyeballs
+    async-interrupt
+    chacha20poly1305-reuseable
+    cryptography
     noiseprotocol
     protobuf
     zeroconf
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aioesphomeapi"
+  disabledTests = [
+    # https://github.com/esphome/aioesphomeapi/issues/837
+    "test_reconnect_logic_stop_callback"
   ];
+
+  pythonImportsCheck = [ "aioesphomeapi" ];
 
   meta = with lib; {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
     changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab hexa ];
+    maintainers = with maintainers; [
+      fab
+      hexa
+    ];
   };
 }

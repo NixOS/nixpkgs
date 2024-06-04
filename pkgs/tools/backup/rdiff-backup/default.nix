@@ -1,4 +1,4 @@
-{ lib, python3Packages, librsync }:
+{ lib, python3Packages, fetchPypi, librsync }:
 
 let
   pypkgs = python3Packages;
@@ -6,22 +6,18 @@ let
 in
 pypkgs.buildPythonApplication rec {
   pname = "rdiff-backup";
-  version = "2.0.5";
+  version = "2.2.6";
 
-  src = pypkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VNFgOOYgFO2RbHHIMDsH0vphpqaAOMoYn8LTFTSw84s=";
+    sha256 = "sha256-0HeDVyZrxlE7t/daRXCymySydgNIu/YHur/DpvCUWM8";
   };
 
-  # pkg_resources fails to find the version and then falls back to "DEV"
-  postPatch = ''
-    substituteInPlace src/rdiff_backup/Globals.py \
-      --replace 'version = "DEV"' 'version = "${version}"'
-  '';
+  nativeBuildInputs = with pypkgs; [ setuptools-scm ];
 
   buildInputs = [ librsync ];
 
-  nativeBuildInputs = with pypkgs; [ setuptools-scm ];
+  propagatedBuildInputs = with pypkgs; [ pyyaml ];
 
   # no tests from pypi
   doCheck = false;

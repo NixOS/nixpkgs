@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, rustPlatform
-, stdenv
-, py-bip39-bindings
-, libiconv }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pytestCheckHook,
+  rustPlatform,
+  stdenv,
+  py-bip39-bindings,
+  libiconv,
+}:
 
 buildPythonPackage rec {
   pname = "py-sr25519-bindings";
-  version = "0.2.0";
+  version = "unstable-2023-03-15";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,17 +20,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polkascan";
     repo = "py-sr25519-bindings";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-Lu3J0+YeQHHKItOZTT24DlQAUJuE9fd+py6Eb46/MSE=";
+    rev = "9127501235bf291d7f14f00ec373d0a5000a32cb";
+    hash = "sha256-mxNmiFvMbV9WQhGNIQXxTkOcJHYs0vyOPM6Nd5367RE=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-7fDlEYWOiRVpG3q0n3ZSS1dfNCOh0/4pX/PbcDBvoMI=";
   };
-
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
@@ -38,23 +37,22 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     py-bip39-bindings
   ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "sr25519"
-  ];
+  pythonImportsCheck = [ "sr25519" ];
 
   meta = with lib; {
     description = "Python bindings for sr25519 library";
     homepage = "https://github.com/polkascan/py-sr25519-bindings";
     license = licenses.asl20;
-    maintainers = with maintainers; [ onny stargate01 ];
+    maintainers = with maintainers; [
+      onny
+      stargate01
+    ];
   };
 }

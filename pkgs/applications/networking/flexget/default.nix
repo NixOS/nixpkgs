@@ -1,39 +1,38 @@
 { lib
-, python3Packages
+, python3
 , fetchFromGitHub
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.5.18";
-  format = "pyproject";
+  version = "3.11.35";
+  pyproject = true;
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
-    owner = "flexget";
-    repo = "flexget";
+    owner = "Flexget";
+    repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gMOpKXLUihiNcpHF6045D1ZcYwTgyjaVIFpDRCln5rI=";
+    hash = "sha256-L3A0bU35IfFfwDIbcNVAU4jGb00jODgq7Z67RQrT4u0=";
   };
 
   postPatch = ''
     # remove dependency constraints but keep environment constraints
     sed 's/[~<>=][^;]*//' -i requirements.txt
-
-    # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
-    # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110
-    substituteInPlace requirements.txt --replace "zxcvbn-python" "zxcvbn"
   '';
 
-  # ~400 failures
-  doCheck = false;
+  build-system = with python3.pkgs; [
+    setuptools
+    wheel
+  ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
-    APScheduler
+    apscheduler
     beautifulsoup4
     click
     colorama
+    commonmark
     feedparser
     guessit
     html5lib
@@ -42,9 +41,11 @@ python3Packages.buildPythonApplication rec {
     loguru
     more-itertools
     packaging
+    pendulum
     psutil
     pynzb
-    PyRSS2Gen
+    pyrsistent
+    pyrss2gen
     python-dateutil
     pyyaml
     rebulk
@@ -70,11 +71,19 @@ python3Packages.buildPythonApplication rec {
     transmission-rpc
   ];
 
+  pythonImportsCheck = [
+    "flexget"
+    "flexget.plugins.clients.transmission"
+  ];
+
+  # ~400 failures
+  doCheck = false;
+
   meta = with lib; {
     homepage = "https://flexget.com/";
     changelog = "https://github.com/Flexget/Flexget/releases/tag/v${version}";
     description = "Multipurpose automation tool for all of your media";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ pbsds ];
   };
 }

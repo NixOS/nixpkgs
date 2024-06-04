@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "brisk-reconciler";
   version = "unstable-2020-12-02";
 
+  duneVersion = "3";
+
   src = fetchFromGitHub {
     owner = "briskml";
     repo = "brisk-reconciler";

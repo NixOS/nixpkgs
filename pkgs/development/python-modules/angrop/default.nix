@@ -1,57 +1,41 @@
-{ lib
-, angr
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, progressbar
-, pythonOlder
-, pythonRelaxDepsHook
-, tqdm
+{
+  lib,
+  angr,
+  buildPythonPackage,
+  fetchFromGitHub,
+  progressbar,
+  pythonOlder,
+  setuptools,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "angrop";
-  version = "9.2.7";
-  format = "pyproject";
+  version = "9.2.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-wIPk7Cz7FSPviPFBSLrBjLr9M0o3pyoJM7wiAhHrg9Q=";
+    repo = "angrop";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-T07Y23UDp9eL2DK5gakV8kPNGsXf+4EofZJDSW/JS1Q=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "compatibility-with-newer-angr.patch";
-      url = "https://github.com/angr/angrop/commit/23194ee4ecdcb7a7390ec04eb133786ec3f807b1.patch";
-      hash = "sha256-n9/oPUblUHSk81qwU129rnNOjsNViaegp6454CaDo+8=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     angr
     progressbar
     tqdm
-  ];
-
-  pythonRelaxDeps = [
-    "angr"
   ];
 
   # Tests have additional requirements, e.g., angr binaries
   # cle is executing the tests with the angr binaries already and is a requirement of angr
   doCheck = false;
 
-  pythonImportsCheck = [
-    "angrop"
-  ];
+  pythonImportsCheck = [ "angrop" ];
 
   meta = with lib; {
     description = "ROP gadget finder and chain builder";

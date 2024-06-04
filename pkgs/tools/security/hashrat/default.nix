@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command-line hash-generation utility";
+    mainProgram = "hashrat";
     longDescription = ''
       Hashing tool supporting md5,sha1,sha256,sha512,whirlpool,jh and hmac versions of these.
       Includes recursive file hashing and other features.

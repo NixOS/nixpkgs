@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
+  dontWrapQtApps = true;
+
   buildPhase = ''
     faust2jaqt -time -vec -t 99999 ConstantDetuneChorus.dsp
     faust2lv2  -time -vec -t 99999 -gui ConstantDetuneChorus.dsp
@@ -19,7 +21,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ConstantDetuneChorus $out/bin/
+    for f in $(find . -executable -type f); do
+      cp $f $out/bin/
+    done
     mkdir -p $out/lib/lv2
     cp -r ConstantDetuneChorus.lv2/ $out/lib/lv2
   '';
@@ -29,5 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/magnetophon/constant-detune-chorus";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
+    # ERROR3 : n is NaN in an Interval
+    broken = true;
   };
 }

@@ -1,39 +1,53 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{ lib
 , rustPlatform
+, fetchFromGitHub
 , installShellFiles
-, DiskArbitration
-, Foundation
-, libiconv
-, Security
+, pkg-config
+, oniguruma
+, stdenv
+, darwin
 , git
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.15.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rPtLvO6raBY6BfrP0erBaXD86W1JL8g4XC4VbkR4Pww=";
+    hash = "sha256-r0ED9o2UP91fe6Bng5ioJra5S1bg+UEXMLeSQPkMswI=";
   };
 
-  cargoSha256 = "sha256-raT8a8K05ZpiGuZdM1hNikGxqY6w0g8G1DohfybXD9s=";
+  cargoHash = "sha256-3CxRNhcjfDK/xUuM3w+GwqE0+X6WT92/LGj/qRp0TwA=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation libiconv Security ];
+  buildInputs = [
+    oniguruma
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Foundation
+  ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
+
+  env = {
+    RUSTONIG_SYSTEM_LIBONIG = true;
+  };
 
   postInstall = ''
-    installShellCompletion --bash --name delta.bash etc/completion/completion.bash
-    installShellCompletion --zsh --name _delta etc/completion/completion.zsh
-    installShellCompletion --fish --name delta.fish etc/completion/completion.fish
+    installShellCompletion --cmd delta \
+      etc/completion/completion.{bash,fish,zsh}
   '';
+
+  # test_env_parsing_with_pager_set_to_bat sets environment variables,
+  # which can be flaky with multiple threads:
+  # https://github.com/dandavison/delta/issues/1660
+  dontUseCargoParallelTests = true;
 
   checkFlags = lib.optionals stdenv.isDarwin [
     "--skip=test_diff_same_non_empty_file"
@@ -44,6 +58,7 @@ rustPlatform.buildRustPackage rec {
     description = "A syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [ zowoq SuperSandro2000 figsoda ];
+    mainProgram = "delta";
   };
 }

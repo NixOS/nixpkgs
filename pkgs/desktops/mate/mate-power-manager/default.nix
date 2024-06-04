@@ -6,6 +6,7 @@
 , glib
 , itstool
 , libxml2
+, mate-desktop
 , mate-panel
 , libnotify
 , libcanberra-gtk3
@@ -15,24 +16,24 @@
 , gtk3
 , libtool
 , polkit
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-power-manager";
-  version = "1.26.0";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ybvwv24g8awxjl2asgvx6l2ghn4limcm48ylha68dkpy3607di6";
+    sha256 = "jr3LdLYH6Ggza6moFGze+Pl7zlNcKwyzv2UMWPce7iE=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gettext
     libtool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     dbus-glib
     upower
     polkit
+    mate-desktop
     mate-panel
   ];
 

@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "2021-04-24";
 
   src = fetchurl {
-    url = "https://bellard.org/libnc/gpt2tc-${version}.tar.gz";
-    hash = "sha256-kHnRziSNRewifM/oKDQwG27rXRvntuUUX8M+PUNHpA4=";
+    url = "https://web.archive.org/web/20220603034455/https://bellard.org/libnc/gpt2tc-2021-04-24.tar.gz";
+    hash = "sha256-6oTxnbBwjHAXVrWMjOQVwdODbqLRoinx00pi29ff5w0=";
   };
 
   patches = [

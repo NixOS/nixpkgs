@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       keyboard between two or more computers.
 
       Without the need for any external hardware, Synergy2 uses the TCP-IP
-      protocol to share the resources, even between machines with diferent
+      protocol to share the resources, even between machines with different
       operating systems, such as Mac OS, Linux and Windows.
 
       Remember to open port 24800 (used by synergys program) if you want to
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.spinus ];
     platforms = lib.platforms.linux;
+    mainProgram = "quicksynergy";
   };
 }

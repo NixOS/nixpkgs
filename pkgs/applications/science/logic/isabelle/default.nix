@@ -46,7 +46,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: rec {
   pname = "isabelle";
-  version = "2022";
+  version = "2023";
 
   dirname = "Isabelle${version}";
 
@@ -56,12 +56,18 @@ in stdenv.mkDerivation (finalAttrs: rec {
       fetchurl
         {
           url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_macos.tar.gz";
-          sha256 = "0b84rx9b7b5y8m1sg7xdp17j6yngd2dkx6v5bkd8h7ly102lai18";
+          sha256 = "sha256-0VSW2SrHNI3/k4cCCZ724ruXaq7W1NCPsLrXFZ9l1/Q=";
         }
-    else
+    else if stdenv.hostPlatform.isx86
+    then
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
-        sha256 = "1ih4gykkp1an43qdgc5xzyvf30fhs0dah3y0a5ksbmvmjsfnxyp7";
+        sha256 = "sha256-Go4ZCsDz5gJ7uWG5VLrNJOddMPX18G99FAadpX53Rqg=";
+      }
+    else
+      fetchurl {
+        url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux_arm.tar.gz";
+        hash = "sha256-Tzxxs0gKw6vymbaXIzH8tK5VgUrpOIp9vcWQ/zxnRCc=";
       };
 
   nativeBuildInputs = [ java ];
@@ -71,7 +77,7 @@ in stdenv.mkDerivation (finalAttrs: rec {
 
   sourceRoot = "${dirname}${lib.optionalString stdenv.isDarwin ".app"}";
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform.system != "aarch64-linux";
   checkPhase = "bin/isabelle build -v HOL-SMT_Examples";
 
   postUnpack = lib.optionalString stdenv.isDarwin ''
@@ -112,13 +118,15 @@ in stdenv.mkDerivation (finalAttrs: rec {
       ISABELLE_JDK_HOME=${java}
     EOF
 
+  '' + lib.optionalString stdenv.hostPlatform.isx86 ''
     rm contrib/naproche-*/x86*/Naproche-SAD
     ln -s ${naproche}/bin/Naproche-SAD contrib/naproche-*/x86*/
+  '' + ''
 
     echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
     for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* contrib/e-*; do
-      rm -rf $comp/x86*
+      rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
     done
 
     substituteInPlace lib/Tools/env \
@@ -126,8 +134,7 @@ in stdenv.mkDerivation (finalAttrs: rec {
 
     substituteInPlace src/Tools/Setup/src/Environment.java \
       --replace 'cmd.add("/usr/bin/env");' "" \
-      --replace 'cmd.add("bash");' "cmd.add(\"$SHELL\");" \
-      --replace 'private static read_file(path: Path): String =' 'private static String read_file(Path path) throws IOException'
+      --replace 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
 
     substituteInPlace src/Pure/General/sha1.ML \
       --replace '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
@@ -137,9 +144,11 @@ in stdenv.mkDerivation (finalAttrs: rec {
     substituteInPlace lib/scripts/isabelle-platform \
       --replace 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
   '' + lib.optionalString stdenv.isLinux ''
-    arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
+    arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux"
+           else if stdenv.hostPlatform.isx86 then "x86-linux"
+           else "arm64-linux"}
     for f in contrib/*/$arch/{z3,epclextract,nunchaku,SPASS,zipperposition}; do
-      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
+      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.isAarch64 " || true"}
     done
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/platform_$arch/bash_process
     for d in contrib/kodkodi-*/jni/$arch; do

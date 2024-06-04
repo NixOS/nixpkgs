@@ -1,9 +1,8 @@
 let
-
   makeNode = couchpkg: user: passwd:
     { pkgs, ... } :
 
-      { environment.systemPackages = with pkgs; [ jq ];
+      { environment.systemPackages = [ pkgs.jq ];
         services.couchdb.enable = true;
         services.couchdb.package = couchpkg;
         services.couchdb.adminUser = user;
@@ -12,16 +11,11 @@ let
   testuser = "testadmin";
   testpass = "cowabunga";
   testlogin = "${testuser}:${testpass}@";
-
-in import ./make-test-python.nix ({ pkgs, lib, ...}:
-
-with lib;
-
+in
+import ./make-test-python.nix ({ pkgs, lib, ...}:
 {
   name = "couchdb";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ];
-  };
+  meta.maintainers = [ ];
 
   nodes = {
     couchdb3 = makeNode pkgs.couchdb3 testuser testpass;

@@ -1,45 +1,55 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, click
-, click-log
-, click-threading
-, requests-toolbelt
-, requests
-, atomicwrites
-, hypothesis
-, pytestCheckHook
-, pytest-subtesthack
-, setuptools-scm
-, aiostream
-, aiohttp-oauthlib
-, aiohttp
-, pytest-asyncio
-, trustme
-, aioresponses
-, vdirsyncer
-, testers
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  click,
+  click-log,
+  click-threading,
+  requests-toolbelt,
+  requests,
+  atomicwrites,
+  hypothesis,
+  pytestCheckHook,
+  pytest-subtesthack,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  aiostream,
+  aiohttp-oauthlib,
+  aiohttp,
+  pytest-asyncio,
+  trustme,
+  aioresponses,
+  vdirsyncer,
+  testers,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "vdirsyncer";
-  version = "0.19.0";
-  format = "setuptools";
+  version = "0.19.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256:0995bavlv8s9j0127ncq3yzy5p72lam9qgpswyjfanc6l01q87lf";
+    hash = "sha256-/QWM7quCk0WaBGbNmw5Ks7OUYsbgiaDwrDfDB0INgro=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "click-log>=0.3.0, <0.4.0" "click-log>=0.3.0, <0.5.0"
-
-    sed -i -e '/--cov/d' -e '/--no-cov/d' setup.cfg
+    sed -i -e '/--cov/d' -e '/--no-cov/d' pyproject.toml
   '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [ "aiostream" ];
 
   propagatedBuildInputs = [
     atomicwrites
@@ -53,11 +63,7 @@ buildPythonPackage rec {
     aiohttp-oauthlib
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
     pytest-subtesthack
@@ -79,9 +85,11 @@ buildPythonPackage rec {
   passthru.tests.version = testers.testVersion { package = vdirsyncer; };
 
   meta = with lib; {
-    homepage = "https://github.com/pimutils/vdirsyncer";
     description = "Synchronize calendars and contacts";
-    license = licenses.mit;
-    maintainers = with maintainers; [ loewenheim ];
+    homepage = "https://github.com/pimutils/vdirsyncer";
+    changelog = "https://github.com/pimutils/vdirsyncer/blob/v${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
+    maintainers = [ ];
+    mainProgram = "vdirsyncer";
   };
 }

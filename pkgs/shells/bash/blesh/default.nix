@@ -7,18 +7,18 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  name = "blesh";
-  version = "unstable-2022-07-29";
+  pname = "blesh";
+  version = "0.4.0-devel3";
 
   src = fetchzip {
-    url = "https://github.com/akinomyoga/ble.sh/releases/download/nightly/ble-nightly-20220729+a22e145.tar.xz";
-    sha256 = "088jv02y40pjcfzgrbx8n6aksznfh6zl0j5siwfw3pmwn3i16njw";
+    url = "https://github.com/akinomyoga/ble.sh/releases/download/v${version}/ble-${version}.tar.xz";
+    sha256 = "sha256-kGLp8RaInYSrJEi3h5kWEOMAbZV/gEPFUjOLgBuMhCI=";
   };
 
   dontBuild = true;
 
   doCheck = true;
-  checkInputs = [ bashInteractive glibcLocales ];
+  nativeCheckInputs = [ bashInteractive glibcLocales ];
   preCheck = "export LC_ALL=en_US.UTF-8";
 
   installPhase = ''
@@ -54,6 +54,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/akinomyoga/ble.sh";
     description = "Bash Line Editor -- a full-featured line editor written in pure Bash";
+    mainProgram = "blesh-share";
     license = licenses.bsd3;
     maintainers = with maintainers; [ aiotter ];
     platforms = platforms.unix;

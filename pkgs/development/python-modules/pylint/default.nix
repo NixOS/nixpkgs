@@ -1,87 +1,73 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, installShellFiles
-, astroid
-, dill
-, isort
-, mccabe
-, platformdirs
-, requests
-, setuptools
-, tomli
-, tomlkit
-, typing-extensions
-, gitpython
-, py
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  astroid,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  gitpython,
+  isort,
+  mccabe,
+  platformdirs,
+  py,
+  pytest-timeout,
+  pytest-xdist,
+  pytest7CheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  tomli,
+  tomlkit,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.15.9";
-  format = "pyproject";
+  version = "3.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7.2";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "PyCQA";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-T+om5rrG0Gjyr05L5X4j82/S11Q7JBUDNOm4gVEQ494=";
+    owner = "pylint-dev";
+    repo = "pylint";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LmpLt2GCzYU73BUpORHaFbGqkxyYqoPoKZpUJSChqKQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-dummy-plugin-tests.patch";
-      url = "https://github.com/PyCQA/pylint/commit/e75089bae209d1b9ca72903c0d65530b02f67fdf.patch";
-      hash = "sha256-4ErlCMLTI5xIu1dCvcJsvo03dwcgLLbFFQ5M7DFdL3o=";
-    })
-    (fetchpatch {
-      name = "fix-pythonpath-tests.patch";
-      url = "https://github.com/PyCQA/pylint/commit/6725f761f2ac7a853e315790b496a2eb4d926694.patch";
-      hash = "sha256-Xaeub7uUaC07BBuusA6+neGiXFWWfVNBkGXmYJe7ot4=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    installShellFiles
-    setuptools
-  ];
+  dependencies =
+    [
+      astroid
+      dill
+      isort
+      mccabe
+      platformdirs
+      tomlkit
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+    ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
-  propagatedBuildInputs = [
-    astroid
-    dill
-    isort
-    mccabe
-    platformdirs
-    tomlkit
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    typing-extensions
-  ];
-
-  postInstall = ''
-    mkdir -p $out/share/emacs/site-lisp
-    cp -v "elisp/"*.el $out/share/emacs/site-lisp/
-    installManPage man/*.1
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     gitpython
     # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
     py
     pytest-timeout
     pytest-xdist
-    pytestCheckHook
+    pytest7CheckHook
     requests
     typing-extensions
+  ];
+
+  pytestFlagsArray = [
+    # DeprecationWarning: pyreverse will drop support for resolving and
+    # displaying implemented interfaces in pylint 3.0. The
+    # implementation relies on the '__implements__'  attribute proposed
+    # in PEP 245, which was rejected in 2006.
+    "-W"
+    "ignore::DeprecationWarning"
+    "-v"
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -97,24 +83,33 @@ buildPythonPackage rec {
     "tests/pyreverse/test_writer.py"
   ];
 
-  disabledTests = [
-    # AssertionError when self executing and checking output
-    # expected output looks like it should match though
-    "test_invocation_of_pylint_config"
-    "test_generate_rcfile"
-    "test_generate_toml_config"
-    "test_help_msg"
-    "test_output_of_callback_options"
-    # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted. The list of emitted warnings is: [].
-    "test_save_and_load_not_a_linter_stats"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_parallel_execution"
-    "test_py3k_jobs_option"
-  ];
+  disabledTests =
+    [
+      # AssertionError when self executing and checking output
+      # expected output looks like it should match though
+      "test_invocation_of_pylint_config"
+      "test_generate_rcfile"
+      "test_generate_toml_config"
+      "test_help_msg"
+      "test_output_of_callback_options"
+      # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted. The list of emitted warnings is: [].
+      "test_save_and_load_not_a_linter_stats"
+      # Truncated string expectation mismatch
+      "test_truncated_compare"
+      # Probably related to pytest versions, see pylint-dev/pylint#9477 and pylint-dev/pylint#9483
+      "test_functional"
+      # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
+      "test_functional_relation_extraction"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_parallel_execution"
+      "test_py3k_jobs_option"
+    ];
 
   meta = with lib; {
-    homepage = "https://pylint.pycqa.org/";
     description = "A bug and style checker for Python";
+    homepage = "https://pylint.readthedocs.io/en/stable/";
+    changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
       helps enforcing a coding standard, sniffs for code smells and offers simple
@@ -124,7 +119,7 @@ buildPythonPackage rec {
       - symilar: an independent similarities checker
       - epylint: Emacs and Flymake compatible Pylint
     '';
-    license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ];
   };
 }

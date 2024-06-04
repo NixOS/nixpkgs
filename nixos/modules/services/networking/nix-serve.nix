@@ -8,12 +8,12 @@ in
 {
   options = {
     services.nix-serve = {
-      enable = mkEnableOption (lib.mdDoc "nix-serve, the standalone Nix binary cache server");
+      enable = mkEnableOption "nix-serve, the standalone Nix binary cache server";
 
       port = mkOption {
         type = types.port;
         default = 5000;
-        description = lib.mdDoc ''
+        description = ''
           Port number where nix-serve will listen on.
         '';
       };
@@ -21,30 +21,23 @@ in
       bindAddress = mkOption {
         type = types.str;
         default = "0.0.0.0";
-        description = lib.mdDoc ''
+        description = ''
           IP address where nix-serve will bind its listening socket.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.nix-serve;
-        defaultText = literalExpression "pkgs.nix-serve";
-        description = lib.mdDoc ''
-          nix-serve package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "nix-serve" { };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for nix-serve.";
+        description = "Open ports in the firewall for nix-serve.";
       };
 
       secretKeyFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           The path to the file used for signing derivation data.
           Generate with:
 
@@ -59,7 +52,7 @@ in
       extraParams = mkOption {
         type = types.separatedString " ";
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra command line parameters for nix-serve.
         '';
       };
@@ -67,6 +60,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    nix.settings = lib.optionalAttrs (lib.versionAtLeast config.nix.package.version "2.4") {
+      extra-allowed-users = [ "nix-serve" ];
+    };
+
     systemd.services.nix-serve = {
       description = "nix-serve binary cache server";
       after = [ "network.target" ];

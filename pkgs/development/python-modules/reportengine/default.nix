@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit
-, jinja2
-, ruamel-yaml
-, matplotlib
-, pandas
-, pandoc
-, pygments
-, blessings
-, curio
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit,
+  jinja2,
+  ruamel-yaml,
+  matplotlib,
+  pandas,
+  pandoc,
+  pygments,
+  blessings,
+  curio,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "reportengine";
-  version = "0.30.dev0";
+  version = "0.31";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb612994b7f364e872301b4569b544648e95e587d803284ddb5610efc8f2170f";
+    hash = "sha256-jrt+ml8o1PUidV1bY0hCyNgcPaVTBloW574/i5Pl7iE=";
   };
 
   nativeBuildInputs = [ flit ];
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     curio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pandoc
     pytestCheckHook
@@ -49,5 +50,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/NNPDF/reportengine/";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ veprbl ];
+    # Incompatibility with ruamel >= 0.18
+    # https://github.com/NNPDF/reportengine/issues/60
+    broken = versionAtLeast ruamel-yaml.version "0.18";
   };
 }

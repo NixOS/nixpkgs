@@ -1,26 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, itk_5_2, python3, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, cmake, itk, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname    = "elastix";
-  version = "5.0.1";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
-    owner  = "SuperElastix";
-    repo   = pname;
-    rev    = version;
-    sha256 = "1mx8kkak2d3ibfrxrh8jkmh2zkdlgl9h578wiw3617zcwaa97bxw";
+    owner = "SuperElastix";
+    repo = pname;
+    rev = version;
+    hash = "sha256-wFeLU8IwiF43a9TAvecQG+QMw88PQZdJ8sI1Zz3ZeXc=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "install-executables.patch";  # https://github.com/SuperElastix/elastix/issues/305
-      url = "https://github.com/SuperElastix/elastix/commit/8e26cdc0d66f6030c7be085fdc424d84d4fc7546.patch";
-      sha256 = "12y9wbpi9jlarnw6fk4iby97jxvx5g4daq9zqblbcmn51r134bj5";
-    })
-  ];
-
-  nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ itk_5_2 ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ itk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   doCheck = !stdenv.isDarwin;  # usual dynamic linker issues
 

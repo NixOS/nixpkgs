@@ -25,7 +25,7 @@
 # optional server deps
 , libmicrohttpd
 , libsodium
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd ? null
 
 # options
@@ -98,11 +98,13 @@ in mkDerivation rec {
 
   meta = {
     description = "A collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
+    mainProgram = "drawpile-srv";
     homepage = "https://drawpile.net/";
     downloadPage = "https://drawpile.net/download/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
 

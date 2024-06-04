@@ -1,49 +1,65 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: rec {
   name = "tracee-integration";
+  meta.maintainers = pkgs.tracee.meta.maintainers;
+
+  passthru.hello-world-builder = pkgs: pkgs.dockerTools.buildImage {
+    name = "hello-world";
+    tag = "latest";
+    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+  };
+
   nodes = {
     machine = { config, pkgs, ... }: {
-      # EventFilters/trace_only_events_from_new_containers requires docker
-      # podman with docker compat will suffice
-      virtualisation.podman.enable = true;
-      virtualisation.podman.dockerCompat = true;
+      # EventFilters/trace_only_events_from_new_containers and
+      # Test_EventFilters/trace_only_events_from_"dockerd"_binary_and_contain_it's_pid
+      # require docker/dockerd
+      virtualisation.docker.enable = true;
 
-      environment.systemPackages = [
-        # build the go integration tests as a binary
-        (pkgs.tracee.overrideAttrs (oa: {
-          pname = oa.pname + "-integration";
-          patches = oa.patches or [] ++ [
-            # change the prefix from /usr/bin to /run to find nix processes
-            ../../pkgs/tools/security/tracee/test-EventFilters-prefix-nix-friendly.patch
-          ];
-          buildPhase = ''
-            runHook preBuild
-            # just build the static lib we need for the go test binary
-            make $makeFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES} bpf-core ./dist/btfhub
-
-            # remove the /usr/bin prefix to work with the patch above
-            substituteInPlace tests/integration/integration_test.go \
-              --replace "/usr/bin/ls" "ls"
-
-            # then compile the tests to be ran later
-            CGO_LDFLAGS="$(pkg-config --libs libbpf)" go test -tags core,ebpf,integration -p 1 -c -o $GOPATH/tracee-integration ./tests/integration/...
-            runHook postBuild
-          '';
-          doCheck = false;
-          installPhase = ''
-            mkdir -p $out/bin
-            cp $GOPATH/tracee-integration $out/bin
-          '';
-          doInstallCheck = false;
-        }))
+      environment.systemPackages = with pkgs; [
+        # required by Test_EventFilters/trace_events_from_ls_and_which_binary_in_separate_scopes
+        which
+        # the go integration tests as a binary
+        tracee.passthru.tests.integration-test-cli
       ];
     };
   };
 
-  testScript = ''
-    with subtest("run integration tests"):
-      # EventFilters/trace_only_events_from_new_containers also requires a container called "alpine"
-      machine.succeed('tar cv -C ${pkgs.pkgsStatic.busybox} . | podman import - alpine --change ENTRYPOINT=sleep')
+  testScript =
+    let
+      skippedTests = [
+        # these comm tests for some reason do not resolve.
+        # something about the test is different as it works fine if I replicate
+        # the policies and run tracee myself but doesn't work in the integration
+        # test either with the automatic run or running the commands by hand
+        # while it's searching.
+        "Test_EventFilters/comm:_event:_args:_trace_event_set_in_a_specific_policy_with_args_from_ls_command"
+        "Test_EventFilters/comm:_event:_trace_events_set_in_two_specific_policies_from_ls_and_uname_commands"
 
-      print(machine.succeed('TRC_BIN="${pkgs.tracee}" tracee-integration -test.v'))
-  '';
+        # worked at some point, seems to be flakey
+        "Test_EventFilters/pid:_event:_args:_trace_event_sched_switch_with_args_from_pid_0"
+      ];
+    in
+    ''
+      with subtest("prepare for integration tests"):
+        machine.wait_for_unit("docker.service")
+        machine.succeed('which bash')
+
+        # EventFilters/trace_only_events_from_new_containers also requires a container called "hello-world"
+        machine.succeed('docker load < ${passthru.hello-world-builder pkgs}')
+
+        # exec= needs fully resolved paths
+        machine.succeed(
+          'mkdir /tmp/testdir',
+          'cp $(which who) /tmp/testdir/who',
+          'cp $(which uname) /tmp/testdir/uname',
+        )
+
+      with subtest("run integration tests"):
+        # Test_EventFilters/trace_event_set_in_a_specific_scope expects to be in a dir that includes "integration"
+        # tests must be ran with 1 process
+        print(machine.succeed(
+          'mkdir /tmp/integration',
+          'cd /tmp/integration && export PATH="/tmp/testdir:$PATH" && integration.test -test.v -test.parallel 1 -test.skip="^${builtins.concatStringsSep "$|^" skippedTests}$"'
+        ))
+    '';
 })

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     sed -i 's|zlib-1.2.8/zlib.h|zlib.h|g' *.c *.h
-    ${if stdenv.cc.isClang then "sed -i 's|g++|clang++|g' Makefile.std" else ""}
+    ${lib.optionalString stdenv.cc.isClang "sed -i 's|g++|clang++|g' Makefile.std"}
 
     makeFlagsArray+=(
       ZLIB=-lz
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A comprehensive update to the PLINK association analysis toolset";
+    mainProgram = "plink";
     homepage = "https://www.cog-genomics.org/plink2";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;

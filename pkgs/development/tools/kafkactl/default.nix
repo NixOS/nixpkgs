@@ -1,22 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "kafkactl";
-  version = "3.0.1";
+  version = "5.0.6";
 
   src = fetchFromGitHub {
     owner = "deviceinsight";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-lwyM2l4eBCtkyAtG51cEy29Jw/vakjrfYVBSZ9pIBFs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pAi60t0mtRlAL+z6s5moWwxw0hC6CeiljjjFyzyN+nI=";
   };
 
-  vendorSha256 = "sha256-ba7amhYuCB3k1esu1qYBCgUZMjlq5iac498TMqeGuz0=";
+  vendorHash = "sha256-7ibev9Po8is+PXH0BC8ZLiTMJsPMR6VUwjNA/c1y/g0=";
+
   doCheck = false;
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/deviceinsight/kafkactl";
+    changelog = "https://github.com/deviceinsight/kafkactl/blob/v${version}/CHANGELOG.md";
     description = "Command Line Tool for managing Apache Kafka";
+    mainProgram = "kafkactl";
     longDescription = ''
       A command-line interface for interaction with Apache Kafka.
       Features:
@@ -27,6 +33,5 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ grburst ];
-    platforms = platforms.unix;
   };
 }

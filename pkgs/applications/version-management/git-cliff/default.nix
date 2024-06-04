@@ -3,26 +3,27 @@
 , fetchFromGitHub
 , rustPlatform
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-cliff";
-  version = "1.1.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "git-cliff";
     rev = "v${version}";
-    hash = "sha256-GCHwpOfjti9PETy3cHFHBFBot6YcSSFTBCd3zEtpP3U=";
+    hash = "sha256-e7DeGcavBgjnH2QY/nqRThYHKzhmbNxYPoOmMF+0I3s=";
   };
 
-  cargoHash = "sha256-76HWkfct9weA64yvY5G/l96mjNpuKjPYHFZ5Ctz43Us=";
+  cargoHash = "sha256-MaSqQD3SRuqiOj5hTHAMyTDj2xgboA5QIZEH7BAxjF4=";
 
   # attempts to run the program on .git in src which is not deterministic
   doCheck = false;
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    Security
+    Security SystemConfiguration
   ];
 
   meta = with lib; {
@@ -31,5 +32,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/orhun/git-cliff/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ siraben ];
+    mainProgram = "git-cliff";
   };
 }

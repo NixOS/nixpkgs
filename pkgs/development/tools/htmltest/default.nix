@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-8tkk476kGEfHo3XGu3/0r6fhX1c4vkYiUACpw0uEu2g=";
   };
 
-  vendorSha256 = "sha256-dTn5aYb5IHFbksmhkXSTJtI0Gnn8Uz0PMZPFzFKMo38=";
+  vendorHash = "sha256-dTn5aYb5IHFbksmhkXSTJtI0Gnn8Uz0PMZPFzFKMo38=";
 
   ldflags = [
     "-w"
@@ -27,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to test generated HTML output";
+    mainProgram = "htmltest";
     longDescription = ''
       htmltest runs your HTML output through a series of checks to ensure all your
       links, images, scripts references work, your alt tags are filled in, etc.

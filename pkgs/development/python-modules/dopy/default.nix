@@ -1,12 +1,14 @@
-{ pkgs
-, buildPythonPackage
-, requests
-, six
+{
+  pkgs,
+  buildPythonPackage,
+  requests,
+  six,
 }:
 
 buildPythonPackage {
   pname = "dopy";
   version = "2016-01-04";
+  format = "setuptools";
 
   src = pkgs.fetchFromGitHub {
     owner = "Wiredcraft";
@@ -15,7 +17,10 @@ buildPythonPackage {
     sha256 = "0ams289qcgna96aak96jbz6wybs6qb95h2gn8lb4lmx2p5sq4q56";
   };
 
-  propagatedBuildInputs = [ requests six ];
+  propagatedBuildInputs = [
+    requests
+    six
+  ];
 
   # contains no tests
   doCheck = false;

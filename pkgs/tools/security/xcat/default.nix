@@ -24,9 +24,9 @@ python3.pkgs.buildPythonApplication rec {
     aiodns
     aiohttp
     appdirs
-    cchardet
     click
     colorama
+    faust-cchardet
     prompt-toolkit
     xpath-expressions
   ];
@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "XPath injection tool";
+    mainProgram = "xcat";
     longDescription = ''
       xcat is an advanced tool for exploiting XPath injection vulnerabilities,
       featuring a comprehensive set of features to read the entire file being

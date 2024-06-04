@@ -1,4 +1,4 @@
-{ clangStdenv, fetchFromGitHub, fetchpatch, catch2, rang, fmt, libyamlcpp, cmake
+{ clangStdenv, fetchFromGitHub, fetchpatch, catch2, rang, fmt, yaml-cpp, cmake
 , eigen, lua, luaPackages, liblapack, blas, lib, boost, gsl }:
 
 clangStdenv.mkDerivation rec {
@@ -20,11 +20,12 @@ clangStdenv.mkDerivation rec {
     })
   ];
   nativeBuildInputs = [ cmake lua luaPackages.luafilesystem ];
-  buildInputs = [ fmt rang libyamlcpp eigen catch2 boost gsl liblapack blas ];
+  buildInputs = [ fmt rang yaml-cpp eigen catch2 boost gsl liblapack blas ];
 
   meta = with lib; {
     description =
       "d-SEAMS: Deferred Structural Elucidation Analysis for Molecular Simulations";
+    mainProgram = "yodaStruct";
     longDescription = ''
       d-SEAMS, is a free and open-source postprocessing engine for the analysis
       of molecular dynamics trajectories, which is specifically able to

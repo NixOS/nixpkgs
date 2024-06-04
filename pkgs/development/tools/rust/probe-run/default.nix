@@ -3,6 +3,7 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
+, DarwinTools
 , libusb1
 , libiconv
 , AppKit
@@ -11,17 +12,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";
-  version = "0.3.5";
+  version = "0.3.11";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-C9JxQVsS1Bv9euQ7l+p5aehiGLKdrUMcno9z8UoZKR4=";
+    hash = "sha256-RlmN2PV5Z/+NTYia7LhrAW437bsg6oUxlQ1qcbZuq0o=";
   };
 
-  cargoSha256 = "sha256-kmdRwAq6EOniGHC7JhB6Iov1E4hbQbxHlOcc6gUDOhY=";
+  cargoHash = "sha256-MG3xHArNEqXs0vC5sSyaBM3421yJ25nazvBNQVcs4v0=";
 
   nativeBuildInputs = [
     pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
+    DarwinTools
   ];
 
   buildInputs = [
@@ -34,6 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Run embedded programs just like native ones";
+    mainProgram = "probe-run";
     homepage = "https://github.com/knurling-rs/probe-run";
     changelog = "https://github.com/knurling-rs/probe-run/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

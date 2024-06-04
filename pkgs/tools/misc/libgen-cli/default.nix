@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "libgen-cli";
-  version = "1.0.9";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ciehanski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ga9C4h1dcjIdsLJLgZ9s1Fnq4ejI5q0gUtapg/FpLcM=";
+    sha256 = "sha256-EicXsxAvVe/umpcOn4dVlTexaAol1qYPg/h5MU5dysM=";
   };
 
-  vendorSha256 = "sha256-uHu0BfF26COL/S/yswdcVJVYwozl8Pl3RXHSctYQi+s=";
+  vendorHash = "sha256-q1EPjnVq382gEKVmGKWYgKRcU6Y0rm1Et5ExzOmyeo4=";
 
   doCheck = false;
 
@@ -39,5 +39,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ zaninime ];
+    mainProgram = "libgen-cli";
   };
 }

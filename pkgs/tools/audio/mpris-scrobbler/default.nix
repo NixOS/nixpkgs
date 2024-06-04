@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpris-scrobbler";
-  version = "0.5.0";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "mariusor";
     repo = "mpris-scrobbler";
     rev = "v${version}";
-    sha256 = "sha256-HUEUkVL5d6FD698k8iSCJMNeSo8vGJCsExJW/E0EWpQ=";
+    sha256 = "sha256-eeOhFkLyx+smZmKPTbVB1OiYkHdWk5v2rnOb9yCIuYE=";
   };
 
   postPatch = ''
@@ -53,7 +53,10 @@ stdenv.mkDerivation rec {
     "-Dversion=${version}"
   ];
 
-  NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString ([
+    # Needed with GCC 12
+    "-Wno-error=address"
+  ] ++ lib.optionals stdenv.isDarwin [
     "-Wno-sometimes-uninitialized"
     "-Wno-tautological-pointer-compare"
   ] ++ lib.optionals stdenv.isLinux [
@@ -67,7 +70,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Minimalistic scrobbler for libre.fm & last.fm";
+    description = "Minimalistic scrobbler for ListenBrainz, libre.fm, & last.fm";
     homepage = "https://github.com/mariusor/mpris-scrobbler";
     license = licenses.mit;
     maintainers = with maintainers; [ emantor ];

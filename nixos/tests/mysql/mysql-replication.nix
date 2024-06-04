@@ -18,8 +18,8 @@ let
     name ? mkTestName package,
   }: makeTest {
     name = "${name}-replication";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ ajs124 das_j ];
+    meta = {
+      maintainers = lib.teams.helsinki-systems.members;
     };
 
     nodes = {
@@ -42,7 +42,7 @@ let
           enable = true;
           replication.role = "slave";
           replication.serverId = 2;
-          replication.masterHost = nodes.primary.config.networking.hostName;
+          replication.masterHost = nodes.primary.networking.hostName;
           replication.masterUser = replicateUser;
           replication.masterPassword = replicatePassword;
         };
@@ -54,7 +54,7 @@ let
           enable = true;
           replication.role = "slave";
           replication.serverId = 3;
-          replication.masterHost = nodes.primary.config.networking.hostName;
+          replication.masterHost = nodes.primary.networking.hostName;
           replication.masterUser = replicateUser;
           replication.masterPassword = replicatePassword;
         };

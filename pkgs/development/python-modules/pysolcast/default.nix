@@ -1,19 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isodate
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, responses
-, setuptools-scm
+{
+  lib,
+  anyconfig,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isodate,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  responses,
+  poetry-core,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "pysolcast";
-  version = "1.0.13";
-  format = "setuptools";
+  version = "2.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -21,34 +24,28 @@ buildPythonPackage rec {
     owner = "mcaulifn";
     repo = "solcast";
     rev = "refs/tags/v${version}";
-    hash = "sha256-peoC6NrenfQYqr1hgPth8pqyTRZb+phD6UQhjnZF92U=";
+    hash = "sha256-DXJkbAlkxBjUEbziFNdr8SilB2GRUoAwvrr0HY56Deg=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  pythonRelaxDeps = [ "responses" ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
+    anyconfig
     isodate
     pyyaml
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     responses
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
-  '';
-
-  pythonImportsCheck = [
-    "pysolcast"
-  ];
+  pythonImportsCheck = [ "pysolcast" ];
 
   meta = with lib; {
     description = "Python library for interacting with the Solcast API";

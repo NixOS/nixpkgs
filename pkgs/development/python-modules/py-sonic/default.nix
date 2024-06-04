@@ -1,13 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27 }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+}:
 
 buildPythonPackage rec {
   pname = "py-sonic";
-  version = "0.8.0";
+  version = "1.0.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BzHBoN7zfZ6Bh1IC1TG5NSa6EiFNje2hQY+lSA/PV+c=";
+    hash = "sha256-DU1T86T0jQ6ptkWdjuV70VC8MFx/rK5aQFYjbK6F2Hk=";
   };
 
   # package has no tests

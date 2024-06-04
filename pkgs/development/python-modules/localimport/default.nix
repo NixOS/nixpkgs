@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "localimport";
   version = "1.7.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

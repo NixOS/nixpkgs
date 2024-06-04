@@ -12,12 +12,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mwprocapture";
-  subVersion = "4236";
+  subVersion = "4390";
   version = "1.3.0.${subVersion}-${kernel.version}";
 
   src = fetchurl {
     url = "https://www.magewell.com/files/drivers/ProCaptureForLinux_${subVersion}.tar.gz";
-    sha256 = "1mfgj84km276sq5i8dny1vqp2ycqpvgplrmpbqwnk230d0w3qs74";
+    sha256 = "sha256-a2cU7PYQh1KR5eeMhMNx2Sc3HHd7QvCG9+BoJyVPp1Y=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -33,9 +33,7 @@ stdenv.mkDerivation rec {
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  patches = [ ./pci.patch ];
-
-  NIX_CFLAGS_COMPILE="-Wno-error=implicit-fallthrough";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
 
   postInstall = ''
     cd ../
@@ -59,11 +57,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    broken = kernel.kernelAtLeast "5.16";
-    homepage = "http://www.magewell.com/";
+    homepage = "https://www.magewell.com/";
     description = "Linux driver for the Magewell Pro Capture family";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ MP2E ];
+    maintainers = with maintainers; [ flexiondotorg ];
     platforms = platforms.linux;
   };
 }

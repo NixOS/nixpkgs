@@ -26,8 +26,8 @@ self: super:
 
   # GHCJS does not ship with the same core packages as GHC.
   # https://github.com/ghcjs/ghcjs/issues/676
-  stm = doJailbreak self.stm_2_5_1_0;
-  exceptions = dontCheck self.exceptions_0_10_5;
+  stm = doJailbreak self.stm_2_5_3_1;
+  exceptions = dontCheck self.exceptions_0_10_8;
 
 ## OTHER PACKAGES
 
@@ -108,4 +108,26 @@ self: super:
 
   # Need hedgehog for tests, which fails to compile due to dep on concurrent-output
   zenc = dontCheck super.zenc;
+
+  hspec = self.hspec_2_7_10;
+  hspec-core = self.hspec-core_2_7_10;
+  hspec-meta = self.hspec-meta_2_7_8;
+  hspec-discover = self.hspec-discover_2_7_10;
+
+  # ReferenceError: h$primop_ShrinkSmallMutableArrayOp_Char is not defined
+  unordered-containers = dontCheck super.unordered-containers;
+
+  # Without this revert, test suites using tasty fail with:
+  # ReferenceError: h$getMonotonicNSec is not defined
+  # https://github.com/UnkindPartition/tasty/pull/345#issuecomment-1538216407
+  tasty = appendPatch (pkgs.fetchpatch {
+    name = "tasty-ghcjs.patch";
+    url = "https://github.com/UnkindPartition/tasty/commit/e692065642fd09b82acccea610ad8f49edd207df.patch";
+    revert = true;
+    relative = "core";
+    hash = "sha256-ryABU2ywkVOEPC/jWv8humT3HaRpCwMYEk+Ux3hhi/M=";
+  }) super.tasty;
+
+  # Tests take unacceptably long.
+  vector = dontCheck super.vector;
 }

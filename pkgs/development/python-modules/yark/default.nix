@@ -1,26 +1,61 @@
-{ lib, buildPythonPackage, fetchPypi,
-  click, colorama, flask, requests, yt-dlp }:
+{
+  lib,
+  buildPythonPackage,
+  click,
+  colorama,
+  fetchPypi,
+  flask,
+  poetry-core,
+  progress,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  yt-dlp,
+}:
 
 buildPythonPackage rec {
   pname = "yark";
-  version = "1.2.3";
+  version = "1.2.10";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KMnQpEH2Z19Y0jBjqx2rZjmlle2M9bcuDCjDIljQEYY=";
+    hash = "sha256-Y1fWHpvrqGuBPyJ2dO2y0W2zhEgcTJABtkOAoZ7uyZU=";
   };
 
-  propagatedBuildInputs = [
-    click colorama flask requests yt-dlp
+  pythonRelaxDeps = [
+    "flask"
+    "requests"
+    "yt-dlp"
   ];
 
-  # There aren't any unit tests. If test discovery runs, it will crash, halting the build.
-  # When upstream adds unit tests, please configure them here. Thanks! ~ C.
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  propagatedBuildInputs = [
+    click
+    colorama
+    flask
+    progress
+    requests
+    yt-dlp
+  ];
+
+  # Module has no tests
   doCheck = false;
 
+  pythonImportsCheck = [ "yark" ];
+
   meta = with lib; {
-    description = "YouTube archiving made simple";
+    description = "Module for YouTube archiving";
+    mainProgram = "yark";
     homepage = "https://github.com/Owez/yark";
+    changelog = "https://github.com/Owez/yark/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

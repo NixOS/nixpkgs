@@ -1,14 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, gtk3, gtk-layer-shell }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, librsvg
+, pkg-config
+, gtk3
+, gtk-layer-shell
+, wrapGAppsHook3 }:
 
 buildGoModule rec {
   pname = "nwg-bar";
-  version = "unstable-2021-09-23";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
-    rev = "7dd7df3cd9a9e78fe477e88e0f3cb97309d50ff5";
-    sha256 = "sha256-piysF19WDjb/EGI9MBepYrOrQL9C1fsoq05AP8CYN58=";
+    rev = "v${version}";
+    sha256 = "sha256-5N+WKZ+fuHQ0lVLd95/KkNAwzg/C4ImZ4DnSuKNGunk=";
   };
 
   patches = [ ./fix-paths.patch ];
@@ -17,11 +24,11 @@ buildGoModule rec {
     substituteInPlace tools.go --subst-var out
   '';
 
-  vendorSha256 = "sha256-dgOwflNRb+11umFykozL8DQ50dLbhbMCmCyKmLlW7rw=";
+  vendorHash = "sha256-/kqhZcIuoN/XA0i1ua3lzVGn4ghkekFYScL1o3kgBX4=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
 
-  buildInputs = [ gtk3 gtk-layer-shell ];
+  buildInputs = [ gtk3 gtk-layer-shell librsvg ];
 
   preInstall = ''
     mkdir -p $out/share/nwg-bar
@@ -31,6 +38,7 @@ buildGoModule rec {
   meta = with lib; {
     description =
       "GTK3-based button bar for sway and other wlroots-based compositors";
+    mainProgram = "nwg-bar";
     homepage = "https://github.com/nwg-piotr/nwg-bar";
     license = licenses.mit;
     platforms = platforms.linux;

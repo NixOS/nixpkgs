@@ -9,27 +9,28 @@
 , components ? lib.optionals isFull [
     "kumactl"
     "kuma-cp"
-    "kuma-prometheus-sd"
     "kuma-dp"
   ]
 }:
 
 buildGoModule rec {
-  inherit pname ;
-  version = "1.8.1";
-  tags = lib.optionals enableGateway ["gateway"];
-  vendorSha256 = "sha256-69uXHvpQMeFwQbejMpfQPS8DDXJyVsnn59WUEJpSeng=";
+  inherit pname;
+  version = "2.7.3";
+  tags = lib.optionals enableGateway [ "gateway" ];
 
   src = fetchFromGitHub {
     owner = "kumahq";
     repo = "kuma";
     rev = version;
-    sha256 = "sha256-hNfgiMX3aMb8yjXjFKz73MczOeJyOI3Tna/NRSJBSzs=";
+    hash = "sha256-b3qQ3lFaQvkmP3HYPwQi2TxSeKmWzGbp01OCnjULJ4k=";
   };
 
+  vendorHash = "sha256-ne62twZXac5GfQ8JcWElIMqc+Vpvn0Y9XSNgAtF62q0=";
+
+  # no test files
   doCheck = false;
 
-  nativeBuildInputs = [installShellFiles] ++ lib.optionals isFull [coredns];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals isFull [ coredns ];
 
   preBuild = ''
     export HOME=$TMPDIR
@@ -59,6 +60,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Service mesh controller";
     homepage = "https://kuma.io/";
+    changelog = "https://github.com/kumahq/kuma/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ zbioe ];
   };

@@ -1,20 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip rec {
+stdenvNoCC.mkDerivation rec {
   pname = "garamond-libre";
   version = "1.4";
 
-  url = "https://github.com/dbenjaminmiller/garamond-libre/releases/download/${version}/garamond-libre_${version}.zip";
-  stripRoot = false;
+  src = fetchzip {
+    url = "https://github.com/dbenjaminmiller/garamond-libre/releases/download/${version}/garamond-libre_${version}.zip";
+    stripRoot = false;
+    hash = "sha256-cD/JMICtb6MPIUcWs2VOTHnb/05ma0/KKtPyR4oJlIc=";
+  };
 
-  postFetch = ''
-    install -Dm644 $out/*.otf -t $out/share/fonts/opentype
-    shopt -s extglob dotglob
-    rm -rf $out/!(share)
-    shopt -u extglob dotglob
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
   '';
-
-  sha256 = "6WiuUe3CHXXL/0G7wURvSIgWPQ4isl50e3OBQ+ui0U4=";
 
   meta = with lib; {
     homepage = "https://github.com/dbenjaminmiller/garamond-libre";

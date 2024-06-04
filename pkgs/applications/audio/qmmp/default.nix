@@ -5,16 +5,14 @@
 # input plugins
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
 , libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi, libbs2b, game-music-emu
+, libarchive, opusfile, soxr, wavpack
 # output plugins
-, alsa-lib, libpulseaudio, pipewire
+, alsa-lib, libpulseaudio, pipewire, libjack2
 # effect plugins
 , libsamplerate
 }:
 
 # Additional plugins that can be added:
-#  wavpack (https://www.wavpack.com/)
-#  Ogg Opus support
-#  JACK audio support
 #  ProjectM visualization plugin
 
 # To make MIDI work we must tell Qmmp what instrument configuration to use (and
@@ -28,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qmmp";
-  version = "2.1.2";
+  version = "2.1.8";
 
   src = fetchurl {
     url = "https://qmmp.ylsoftware.com/files/qmmp/2.1/${pname}-${version}.tar.bz2";
-    hash = "sha256-U86LoAkg6mBFVa/cgB8kpCa5KwdkR0PMQmAGvf/KAXo=";
+    hash = "sha256-hGphQ8epqym47C9doiSOQd3yc28XwV2UsNc7ivhaae4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
@@ -45,14 +43,16 @@ stdenv.mkDerivation rec {
       # input plugins
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
       libcdio cdparanoia libcddb faad2 ffmpeg wildmidi libbs2b game-music-emu
+      libarchive opusfile soxr wavpack
       # output plugins
-      alsa-lib libpulseaudio pipewire
+      alsa-lib libpulseaudio pipewire libjack2
       # effect plugins
       libsamplerate
     ];
 
   meta = with lib; {
     description = "Qt-based audio player that looks like Winamp";
+    mainProgram = "qmmp";
     homepage = "https://qmmp.ylsoftware.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

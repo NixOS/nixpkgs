@@ -11,6 +11,7 @@ buildDunePackage {
   pname = "carton-lwt";
 
   inherit (carton) version src postPatch;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     carton
@@ -20,9 +21,13 @@ buildDunePackage {
     bigstringaf
   ];
 
-  doCheck = true;
-  checkInputs = [
+  # Tests fail with git 2.41
+  # see https://github.com/mirage/ocaml-git/issues/617
+  doCheck = false;
+  nativeCheckInputs = [
     git-binary
+  ];
+  checkInputs = [
     alcotest
     alcotest-lwt
     cstruct

@@ -1,39 +1,53 @@
 { lib
 , fetchFromGitHub
+, writeShellScript
+, glib
+, gsettings-desktop-schemas
 , python3
 , unstableGitUpdater
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chirp";
-  version = "unstable-2022-12-07";
+  version = "0.4.0-unstable-2024-05-24";
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "chirp";
-    rev = "dc0c98d22423b496faf0a86296a6ec0bb3b3e11a";
-    hash = "sha256-z0xD11CB7Vt8k0dPXE+E5ZD9XAFwWNxjnUs25/Gd7zI=";
+    rev = "e17c021ba4fc39eea8a2a1de37ef04a0d1253090";
+    hash = "sha256-YvIRo7g9fxnlf8og5CM2JLf8DeADVkcHdvb4ppS1veE=";
   };
-
+  buildInputs = [
+    glib
+    gsettings-desktop-schemas
+  ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+  ];
   propagatedBuildInputs = with python3.pkgs; [
     future
     pyserial
     requests
     six
-    wxPython_4_2
+    wxpython
+    yattag
   ];
 
   # "running build_ext" fails with no output
   doCheck = false;
 
   passthru.updateScript = unstableGitUpdater {
-    branch = "py3";
+    tagConverter = writeShellScript "chirp-tag-converter.sh" ''
+      sed -e 's/^release_//g' -e 's/_/./g'
+    '';
   };
 
   meta = with lib; {
     description = "A free, open-source tool for programming your amateur radio";
     homepage = "https://chirp.danplanet.com/";
     license = licenses.gpl3Plus;
+    maintainers = [ maintainers.emantor ];
     platforms = platforms.linux;
   };
 }

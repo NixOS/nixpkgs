@@ -36,11 +36,14 @@ stdenv.mkDerivation rec {
     substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by syslibpath "${glibc}/lib"
     # Replace the `codesign --remove-signature` command with a custom script, since `codesign` is not available
     # in nixpkgs
+    # Remove the -no_uuid strip flag which does not work on llvm-strip, only
+    # Apple strip.
     substituteInPlace fpcsrc/compiler/Makefile \
       --replace \
         "\$(CODESIGN) --remove-signature" \
         "${./remove-signature.sh}" \
-      --replace "ifneq (\$(CODESIGN),)" "ifeq (\$(OS_TARGET), darwin)"
+      --replace "ifneq (\$(CODESIGN),)" "ifeq (\$(OS_TARGET), darwin)" \
+      --replace "-no_uuid" ""
   '';
 
   NIX_LDFLAGS = lib.optionalString

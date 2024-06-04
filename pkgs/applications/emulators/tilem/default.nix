@@ -19,12 +19,13 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gtk2 libticonv libtifiles2 libticables2 libticalcs2 ];
-  NIX_CFLAGS_COMPILE = [ "-lm" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-lm" ];
   meta = with lib; {
     homepage = "http://lpg.ticalc.org/prj_tilem/";
     description = "Emulator and debugger for Texas Instruments Z80-based graphing calculators";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ siraben luc65r ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "tilem2";
   };
 }

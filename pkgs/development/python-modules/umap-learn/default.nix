@@ -1,30 +1,40 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, keras
-, numba
-, numpy
-, pynndescent
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, scipy
-, tensorflow
-, tqdm
+{
+  lib,
+  bokeh,
+  buildPythonPackage,
+  colorcet,
+  datashader,
+  fetchFromGitHub,
+  holoviews,
+  matplotlib,
+  numba,
+  numpy,
+  pandas,
+  pynndescent,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-image,
+  scikit-learn,
+  scipy,
+  seaborn,
+  tbb,
+  tensorflow,
+  tensorflow-probability,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.3";
+  version = "0.5.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
-    rev = version;
-    hash = "sha256-S2+k7Ec4AxsN6d0GUGnU81oLnBgmlZp8OmUFCNaUJYw=";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-fqYl8T53BgCqsquY6RJHqpDFsdZA0Ihja69E/kG3YGU=";
   };
 
   propagatedBuildInputs = [
@@ -36,11 +46,29 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [
-    keras
-    pytestCheckHook
-    tensorflow
-  ];
+  passthru.optional-dependencies = rec {
+    plot = [
+      bokeh
+      colorcet
+      datashader
+      holoviews
+      matplotlib
+      pandas
+      scikit-image
+      seaborn
+    ];
+
+    parametric_umap = [
+      tensorflow
+      tensorflow-probability
+    ];
+
+    tbb = [ tbb ];
+
+    all = plot ++ parametric_umap ++ tbb;
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -49,8 +77,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Plot functionality requires additional packages.
     # These test also fail with 'RuntimeError: cannot cache function' error.
-    "test_umap_plot_testability"
     "test_plot_runs_at_all"
+    "test_umap_plot_testability"
+    "test_umap_update_large"
 
     # Flaky test. Fails with AssertionError sometimes.
     "test_sparse_hellinger"
@@ -64,6 +93,6 @@ buildPythonPackage rec {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

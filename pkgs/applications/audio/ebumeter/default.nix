@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ebumeter";
-  version = "0.4.2";
+  version = "0.5.1";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "1wm9j1phmpicrp7jdsvdbc3mghdd92l61yl9qbps0brq2ljjyd5s";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.xz";
+    hash = "sha256-U2ZpNfvy+X1RdA9Q4gvFYzAxlgc6kYjJpQ/0sEX0A4I=";
   };
 
   buildInputs = [

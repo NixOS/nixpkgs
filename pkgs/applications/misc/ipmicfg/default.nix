@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   buildVersion = "220906";
 
   src = fetchzip {
-    url = "https://www.supermicro.com/wftp/utility/IPMICFG/IPMICFG_${version}_build.${buildVersion}.zip";
-    sha256 = "ZumCXuR7M2Ep7maBOBFk0UsxyRo4fBkf+9AVmkz4AF0=";
+    url = "https://www.supermicro.com/Bios/sw_download/481/IPMICFG_${version}_build.${buildVersion}.zip";
+    hash = "sha256-ZumCXuR7M2Ep7maBOBFk0UsxyRo4fBkf+9AVmkz4AF0=";
   };
 
   installPhase = ''

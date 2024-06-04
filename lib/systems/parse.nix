@@ -15,19 +15,59 @@
 # systems that overlap with existing ones and won't notice something amiss.
 #
 { lib }:
-with lib.lists;
-with lib.types;
-with lib.attrsets;
-with lib.strings;
-with (import ./inspect.nix { inherit lib; }).predicates;
 
 let
-  inherit (lib.options) mergeOneOption;
+  inherit (lib)
+    all
+    any
+    attrValues
+    elem
+    elemAt
+    hasPrefix
+    id
+    length
+    mapAttrs
+    mergeOneOption
+    optionalString
+    splitString
+    versionAtLeast
+    ;
+
+  inherit (lib.strings) match;
+
+  inherit (lib.systems.inspect.predicates)
+    isAarch32
+    isBigEndian
+    isDarwin
+    isLinux
+    isPower64
+    isWindows
+    ;
+
+  inherit (lib.types)
+    enum
+    float
+    isType
+    mkOptionType
+    number
+    setType
+    string
+    types
+    ;
 
   setTypes = type:
     mapAttrs (name: value:
       assert type.check value;
       setType type.name ({ inherit name; } // value));
+
+  # gnu-config will ignore the portion of a triple matching the
+  # regex `e?abi.*$` when determining the validity of a triple.  In
+  # other words, `i386-linuxabichickenlips` is a valid triple.
+  removeAbiSuffix = x:
+    let found = match "(.*)e?abi.*" x;
+    in if found == null
+       then x
+       else elemAt found 0;
 
 in
 
@@ -67,7 +107,7 @@ rec {
 
   types.cpuType = enum (attrValues cpuTypes);
 
-  cpuTypes = with significantBytes; setTypes types.openCpuType {
+  cpuTypes = let inherit (significantBytes) bigEndian littleEndian; in setTypes types.openCpuType {
     arm      = { bits = 32; significantByte = littleEndian; family = "arm"; };
     armv5tel = { bits = 32; significantByte = littleEndian; family = "arm"; version = "5"; arch = "armv5t"; };
     armv6m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; arch = "armv6-m"; };
@@ -91,14 +131,10 @@ rec {
     microblaze   = { bits = 32; significantByte = bigEndian;    family = "microblaze"; };
     microblazeel = { bits = 32; significantByte = littleEndian; family = "microblaze"; };
 
-    mips          = { bits = 32; significantByte = bigEndian;    family = "mips"; };
-    mipsel        = { bits = 32; significantByte = littleEndian; family = "mips"; };
-    mipsisa32r6   = { bits = 32; significantByte = bigEndian;    family = "mips"; };
-    mipsisa32r6el = { bits = 32; significantByte = littleEndian; family = "mips"; };
-    mips64        = { bits = 64; significantByte = bigEndian;    family = "mips"; };
-    mips64el      = { bits = 64; significantByte = littleEndian; family = "mips"; };
-    mipsisa64r6   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
-    mipsisa64r6el = { bits = 64; significantByte = littleEndian; family = "mips"; };
+    mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
+    mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
+    mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
 
     mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
 
@@ -131,7 +167,9 @@ rec {
 
     or1k     = { bits = 32; significantByte = bigEndian; family = "or1k"; };
 
-    js       = { bits = 32; significantByte = littleEndian; family = "js"; };
+    loongarch64 = { bits = 64; significantByte = littleEndian; family = "loongarch"; };
+
+    javascript = { bits = 32; significantByte = littleEndian; family = "javascript"; };
   };
 
   # GNU build systems assume that older NetBSD architectures are using a.out.
@@ -159,7 +197,7 @@ rec {
   # Note: Since 22.11 the archs of a mode switching CPU are no longer considered
   # pairwise compatible. Mode switching implies that binaries built for A
   # and B respectively can't be executed at the same time.
-  isCompatible = a: b: with cpuTypes; lib.any lib.id [
+  isCompatible = with cpuTypes; a: b: any id [
     # x86
     (b == i386 && isCompatible a i486)
     (b == i486 && isCompatible a i586)
@@ -182,23 +220,12 @@ rec {
     (b == armv7l && isCompatible a armv7a)
     (b == armv7l && isCompatible a armv7r)
     (b == armv7l && isCompatible a armv7m)
-    (b == armv7a && isCompatible a armv8a)
-    (b == armv7r && isCompatible a armv8a)
-    (b == armv7m && isCompatible a armv8a)
-    (b == armv7a && isCompatible a armv8r)
-    (b == armv7r && isCompatible a armv8r)
-    (b == armv7m && isCompatible a armv8r)
-    (b == armv7a && isCompatible a armv8m)
-    (b == armv7r && isCompatible a armv8m)
-    (b == armv7m && isCompatible a armv8m)
 
     # ARMv8
-    (b == armv8r && isCompatible a armv8a)
-    (b == armv8m && isCompatible a armv8a)
-
-    # XXX: not always true! Some arm64 cpus don’t support arm32 mode.
     (b == aarch64 && a == armv8a)
     (b == armv8a && isCompatible a aarch64)
+    (b == armv8r && isCompatible a armv8a)
+    (b == armv8m && isCompatible a armv8a)
 
     # PowerPC
     (b == powerpc && isCompatible a powerpc64)
@@ -234,6 +261,8 @@ rec {
   vendors = setTypes types.openVendor {
     apple = {};
     pc = {};
+    knuth = {};
+
     # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
     # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
     w64 = {};
@@ -289,16 +318,15 @@ rec {
 
   types.kernel = enum (attrValues kernels);
 
-  kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
+  kernels = let
+    inherit (execFormats) elf pe wasm unknown macho;
+    inherit (kernelFamilies) bsd darwin;
+  in setTypes types.openKernel {
     # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
     # the normalized name for macOS.
     macos    = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
     ios      = { execFormat = macho;   families = { inherit darwin; }; };
-    # A tricky thing about FreeBSD is that there is no stable ABI across
-    # versions. That means that putting in the version as part of the
-    # config string is paramount.
-    freebsd12 = { execFormat = elf;     families = { inherit bsd; }; name = "freebsd"; version = 12; };
-    freebsd13 = { execFormat = elf;     families = { inherit bsd; }; name = "freebsd"; version = 13; };
+    freebsd  = { execFormat = elf;     families = { inherit bsd; }; name = "freebsd"; };
     linux    = { execFormat = elf;     families = { }; };
     netbsd   = { execFormat = elf;     families = { inherit bsd; }; };
     none     = { execFormat = unknown; families = { }; };
@@ -361,7 +389,7 @@ rec {
             The "gnu" ABI is ambiguous on 32-bit ARM. Use "gnueabi" or "gnueabihf" instead.
           '';
         }
-        { assertion = platform: with platform; !(isPower64 && isBigEndian);
+        { assertion = platform: !(platform.isPower64 && platform.isBigEndian);
           message = ''
             The "gnu" ABI is ambiguous on big-endian 64-bit PowerPC. Use "gnuabielfv2" or "gnuabielfv1" instead.
           '';
@@ -441,6 +469,7 @@ rec {
               elem (elemAt l 2) [ "wasi" "redox" "mmixware" "ghcjs" "mingw32" ] ||
               hasPrefix "freebsd" (elemAt l 2) ||
               hasPrefix "netbsd" (elemAt l 2) ||
+              hasPrefix "openbsd" (elemAt l 2) ||
               hasPrefix "genode" (elemAt l 2)
       then {
         cpu    = elemAt l 0;
@@ -477,12 +506,12 @@ rec {
         else                     vendors.unknown;
       kernel = if hasPrefix "darwin" args.kernel      then getKernel "darwin"
                else if hasPrefix "netbsd" args.kernel then getKernel "netbsd"
-               else                                   getKernel args.kernel;
+               else                                   getKernel (removeAbiSuffix args.kernel);
       abi =
         /**/ if args ? abi       then getAbi args.abi
         else if isLinux parsed || isWindows parsed then
           if isAarch32 parsed then
-            if lib.versionAtLeast (parsed.cpu.version or "0") "6"
+            if versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
           # Default ppc64 BE to ELFv2
@@ -493,7 +522,7 @@ rec {
 
   in mkSystem parsed;
 
-  mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
+  mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (splitString "-" s));
 
   kernelName = kernel:
     kernel.name + toString (kernel.version or "");
@@ -505,10 +534,10 @@ rec {
 
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let
     optExecFormat =
-      lib.optionalString (kernel.name == "netbsd" &&
+      optionalString (kernel.name == "netbsd" &&
                           gnuNetBSDDefaultExecFormat cpu != kernel.execFormat)
         kernel.execFormat.name;
-    optAbi = lib.optionalString (abi != abis.unknown) "-${abi.name}";
+    optAbi = optionalString (abi != abis.unknown) "-${abi.name}";
   in "${cpu.name}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
 
   ################################################################################

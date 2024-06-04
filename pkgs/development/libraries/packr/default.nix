@@ -13,12 +13,12 @@ let p2 = buildGoModule rec {
     owner = "gobuffalo";
     repo = "packr";
     rev = "v${version}";
-    sha256 = "1x78yq2yg0r82h7a67078llni85gk9nbd2ismlbqgppap7fcpyai";
+    hash = "sha256-UfnL3Lnq3ocXrTqKtmyar6BoKUUHHKMOFCiD5wX26PQ=";
   }+"/v2";
 
   subPackages = [ "packr2" ];
 
-  vendorSha256 = "12yq121b0bn8z12091fyqhhz421kgx4z1nskrkvbxlhyc47bwyrp";
+  vendorHash = "sha256-N3u+DmEe0r72zFPb8El/MwjyIcTehQRE+MgusIII2Is=";
 
   doCheck = false;
 
@@ -45,12 +45,12 @@ p1 = buildGoModule rec {
     owner = "gobuffalo";
     repo = "packr";
     rev = "v${version}";
-    sha256 = "1x78yq2yg0r82h7a67078llni85gk9nbd2ismlbqgppap7fcpyai";
+    hash = "sha256-UfnL3Lnq3ocXrTqKtmyar6BoKUUHHKMOFCiD5wX26PQ=";
   };
 
   subPackages = [ "packr" ];
 
-  vendorSha256 = "0m3yj8ww4a16j56p8d8w0sdnyx0g2bkd8zg0l4d8vb72mvg5asga";
+  vendorHash = "sha256-6mlV3q7irI0aoeB91OYSD3RvmwYcNXRNkSYowjmSflQ=";
 
   doCheck = false;
 

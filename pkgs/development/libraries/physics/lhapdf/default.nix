@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lhapdf";
-  version = "6.5.3";
+  version = "6.5.4";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/lhapdf/LHAPDF-${version}.tar.gz";
-    sha256 = "sha256-V0Nc1pXilwZdU+ab0pCQdlyTSTa2qXX/jFWXZvIjA1k=";
+    sha256 = "sha256-JEOksyzDsFl8gki9biVwOs6ckaeiU8X2CxtUKO+chp4=";
   };
 
   # The Apple SDK only exports locale_t from xlocale.h whereas glibc

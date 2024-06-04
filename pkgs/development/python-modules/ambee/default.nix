@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, poetry-core
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  poetry-core,
+  yarl,
+  aresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,19 +21,17 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-ambee";
     rev = "v${version}";
-    sha256 = "sha256-2wX2CLr6kdVw2AGPW6DmYI2OBfQFI/iWVorok2d3wx4=";
+    hash = "sha256-2wX2CLr6kdVw2AGPW6DmYI2OBfQFI/iWVorok2d3wx4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

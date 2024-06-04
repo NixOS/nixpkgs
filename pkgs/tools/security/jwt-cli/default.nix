@@ -1,19 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jwt-cli";
-  version = "5.0.3";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "mike-engel";
     repo = pname;
     rev = version;
-    sha256 = "01aqqjynfcrn3m36hfjwcfh870imcd0hj5gifxzpnjiqjwpvys59";
+    sha256 = "sha256-iEZlT0Kyx+z/KYDw/YI3rb4eIi98Q48hEoK+6eRpJbM=";
   };
 
-  cargoSha256 = "1n4gmqmi975cd2zyrf0yi4gbxjjg9f99xa191mgmrdyyij7id3cf";
+  cargoHash = "sha256-DXyjdwVJUQpOz/Pctl35D00oSgrfehUg8wYyLdttiew=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optional stdenv.isDarwin Security;
+
+  postInstall = ''
+    installShellCompletion --cmd jwt \
+      --bash <($out/bin/jwt completion bash) \
+      --fish <($out/bin/jwt completion fish) \
+      --zsh <($out/bin/jwt completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''

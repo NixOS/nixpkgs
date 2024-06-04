@@ -27,7 +27,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
         # don't do it with real ssh keys.
         environment.etc."btrbk_key".text = privateKey;
         services.btrbk = {
-          extraPackages = [ pkgs.lz4 ];
           instances = {
             remote = {
               onCalendar = "minutely";

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, psycopg2
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  psycopg2,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-citext";
   version = "1.8.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -30,6 +32,6 @@ buildPythonPackage rec {
     description = "A sqlalchemy plugin that allows postgres use of CITEXT";
     homepage = "https://github.com/mahmoudimus/sqlalchemy-citext";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

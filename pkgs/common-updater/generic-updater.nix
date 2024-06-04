@@ -105,7 +105,10 @@ let
       fi
 
       # update the nix expression
-      ${common-updater-scripts}/bin/update-source-version "$attr_path" "$latest_tag"
+      ${common-updater-scripts}/bin/update-source-version --print-changes "$attr_path" "$latest_tag"
+    else
+      # No changes for commit protocol.
+      echo "[]"
     fi
 
     echo "" >> ${fileForGitCommands}
@@ -114,4 +117,8 @@ let
 in {
   name = "generic-update-script";
   command = [ updateScript name pname version attrPath versionLister ignoredVersions rev-prefix odd-unstable patchlevel-unstable ];
+  supportedFeatures = [
+    # Stdout must contain output according to the updateScript commit protocol when the update script finishes with a non-zero exit code.
+    "commit"
+  ];
 }

@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, pythonOlder
-, pytz
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "solaredge";
   version = "0.0.4";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {

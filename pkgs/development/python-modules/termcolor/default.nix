@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-vcs
-, hatchling
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "termcolor";
-  version = "2.1.1";
+  version = "2.4.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Z87iAJrcZEnGUPa8873u0AyLpTqM2lNiczxT4KOftws=";
+    hash = "sha256-qrnlYEfIrEHteY+jbYkqN6yms+kVnz4MJLxkqbOse3o=";
   };
 
   nativeBuildInputs = [
@@ -21,18 +22,13 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  pythonImportsCheck = [
-    "termcolor"
-  ];
+  pythonImportsCheck = [ "termcolor" ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Termcolor";
-    homepage = "https://pypi.python.org/pypi/termcolor";
+    description = "ANSI color formatting for output in terminal";
+    homepage = "https://github.com/termcolor/termcolor";
     license = licenses.mit;
   };
-
 }

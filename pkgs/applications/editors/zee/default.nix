@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch, pkg-config, openssl, stdenv, Security }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zee";
@@ -32,5 +32,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/zee-editor/zee";
     license = licenses.mit;
     maintainers = with maintainers; [ booklearner ];
+    mainProgram = "zee";
   };
 }

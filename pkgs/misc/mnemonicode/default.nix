@@ -1,20 +1,21 @@
 { stdenv, lib, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mnemonicode";
-  version = "2015-11-30";
+  version = "1.0.0";
   src = fetchFromGitHub {
     owner = "singpolyma";
     repo = "mnemonicode";
-    rev = "1687fabdf48acf68d4186f219bc20bffe02e8ee0";
-    sha256 = "0kp1jhhqfwfiqg9kx0mbyr4qh4yc4zg4szqk5fbf809nx2pvprm5";
+    rev = finalAttrs.version;
+    hash = "sha256-bGipPvLj6ig+lMLsl/Yve8PmuA93ETvhNKoMPh0JMBM=";
   };
   installPhase = ''
     mkdir -p $out/bin
-    cp mnencode $out/bin
-    cp mndecode $out/bin
+    mv mnencode $out/bin
+    mv mndecode $out/bin
   '';
   meta = with lib; {
+    homepage = "https://github.com/singpolyma/mnemonicode";
     description = ''
       Routines which implement a method for encoding binary data into a sequence
       of words which can be spoken over the phone, for example, and converted
@@ -22,6 +23,7 @@ stdenv.mkDerivation {
     '';
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.cstrahan ];
+    maintainers = with maintainers; [ kirillrdy ];
+    mainProgram = "mnencode";
   };
-}
+})

@@ -6,8 +6,8 @@ with lib;
   services.openssh = {
     enable = true;
 
-    permitRootLogin = "prohibit-password";
-    passwordAuthentication = mkDefault false;
+    settings.PermitRootLogin = "prohibit-password";
+    settings.PasswordAuthentication = mkDefault false;
   };
 
   networking = {
@@ -59,7 +59,6 @@ with lib;
 
       grub = {
         enable = true;
-        version = 2;
         forceInstall = true;
         device = "nodev";
 

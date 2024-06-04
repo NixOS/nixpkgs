@@ -1,46 +1,121 @@
-{ lib
-, buildPythonPackage
-, dvc-render
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  datasets,
+  dvc,
+  dvc-render,
+  dvc-studio-client,
+  fastai,
+  fetchFromGitHub,
+  funcy,
+  gto,
+  jsonargparse,
+  lightgbm,
+  lightning,
+  matplotlib,
+  mmcv,
+  numpy,
+  optuna,
+  pandas,
+  pillow,
+  psutil,
+  pynvml,
+  pythonOlder,
+  ruamel-yaml,
+  scikit-learn,
+  scmrepo,
+  setuptools-scm,
+  tensorflow,
+  torch,
+  transformers,
+  xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "1.3.0";
-  format = "pyproject";
+  version = "3.46.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";
-    repo = pname;
+    repo = "dvclive";
     rev = "refs/tags/${version}";
-    hash = "sha256-FAupTvaOLPp5EQ0vvE8tQCa8WnKW/qrQTc7i+6F7F1A=";
+    hash = "sha256-yIViKlkCdoG2vSZdScL38fZd9musLRKzBd9wSR6lJdk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
+    dvc
+    dvc-render
+    dvc-studio-client
+    funcy
+    gto
+    ruamel-yaml
+    scmrepo
+    psutil
+    pynvml
   ];
 
-  propagatedBuildInputs = [
-    dvc-render
-    tabulate # will be available as dvc-render.optional-dependencies.table
-  ];
+  passthru.optional-dependencies = {
+    all = [
+      jsonargparse
+      lightgbm
+      lightning
+      matplotlib
+      mmcv
+      numpy
+      optuna
+      pandas
+      pillow
+      scikit-learn
+      tensorflow
+      torch
+      transformers
+      xgboost
+    ] ++ jsonargparse.optional-dependencies.signatures;
+    image = [
+      numpy
+      pillow
+    ];
+    sklearn = [ scikit-learn ];
+    plots = [
+      pandas
+      scikit-learn
+      numpy
+    ];
+    markdown = [ matplotlib ];
+    mmcv = [ mmcv ];
+    tf = [ tensorflow ];
+    xgb = [ xgboost ];
+    lgbm = [ lightgbm ];
+    huggingface = [
+      datasets
+      transformers
+    ];
+    # catalyst = [
+    #   catalyst
+    # ];
+    fastai = [ fastai ];
+    lightning = [
+      lightning
+      torch
+      jsonargparse
+    ] ++ jsonargparse.optional-dependencies.signatures;
+    optuna = [ optuna ];
+  };
 
   # Circular dependency with dvc
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dvclive"
-  ];
+  pythonImportsCheck = [ "dvclive" ];
 
   meta = with lib; {
     description = "Library for logging machine learning metrics and other metadata in simple file formats";
     homepage = "https://github.com/iterative/dvclive";
+    changelog = "https://github.com/iterative/dvclive/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

@@ -56,17 +56,13 @@ in python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [ libsndfile ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     twisted
   ] ++ bins;
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" (lib.makeBinPath bins)
   ];
-
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
 
   outputs = [ "out" "man" ];
   postBuild = ''
@@ -95,6 +91,6 @@ in python3.pkgs.buildPythonApplication rec {
     description = "A CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ emily ];
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

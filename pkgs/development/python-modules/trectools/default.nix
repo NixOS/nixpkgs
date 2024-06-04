@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, beautifulsoup4
-, pythonOlder
-, pandas
-, python
-, numpy
-, scikit-learn
-, scipy
-, lxml
-, matplotlib
-, sarge
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  beautifulsoup4,
+  pythonOlder,
+  pandas,
+  python,
+  numpy,
+  scikit-learn,
+  scipy,
+  lxml,
+  matplotlib,
+  sarge,
 }:
 
 buildPythonPackage rec {
   pname = "trectools";
   version = "0.0.49";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -24,7 +26,7 @@ buildPythonPackage rec {
     repo = pname;
     # https://github.com/joaopalotti/trectools/issues/41
     rev = "5c1d56e9cf955f45b5a1780ee6a82744d31e7a79";
-    sha256 = "sha256-Lh6sK2rxEdCsOUKHn1jgm+rsn8FK1f2po0UuZfZajBA=";
+    hash = "sha256-Lh6sK2rxEdCsOUKHn1jgm+rsn8FK1f2po0UuZfZajBA=";
   };
 
   postPatch = ''

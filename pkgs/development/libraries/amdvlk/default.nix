@@ -25,13 +25,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2022.Q3.5";
+  version = "2023.Q4.2";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "YY9/njuzGONqAtbM54OGGvC1V73JyL+IHkLSZs4JSYs=";
+    sha256 = "CmlFqHxP6WM4b/MnXbRhd2TvV3qhMiC6rHrn/SHtRdc=";
   };
 
   buildInputs = [
@@ -68,6 +68,7 @@ in stdenv.mkDerivation rec {
     xorg.libX11
     xorg.libxcb
     xorg.libxshmfence
+    zlib
   ];
 
   cmakeDir = "../drivers/xgl";

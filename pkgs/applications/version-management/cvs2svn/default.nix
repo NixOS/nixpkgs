@@ -15,7 +15,7 @@ pypy2Packages.buildPythonApplication  rec {
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  checkInputs = [ subversion git breezy ];
+  nativeCheckInputs = [ subversion git breezy ];
 
   checkPhase = "${pypy2Packages.python.interpreter} run-tests.py";
 

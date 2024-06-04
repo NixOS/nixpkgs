@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ postgresql gcc ];
   buildPhase = "USE_PGXS=1 make";
   installPhase = ''
-    install -D pg_similarity.so -t $out/lib/
+    install -D pg_similarity${postgresql.dlSuffix} -t $out/lib/
     install -D ./{pg_similarity--unpackaged--1.0.sql,pg_similarity--1.0.sql,pg_similarity.control} -t $out/share/postgresql/extension
   '';
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
        operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
     '';
     platforms = postgresql.meta.platforms;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ danbst ];
   };
 }

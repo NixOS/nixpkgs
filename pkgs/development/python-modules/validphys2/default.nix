@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, lhapdf
-, nnpdf
-, prompt-toolkit
-, reportengine
-, requests
-, seaborn
-, validobj
+{
+  lib,
+  buildPythonPackage,
+  lhapdf,
+  nnpdf,
+  prompt-toolkit,
+  reportengine,
+  requests,
+  seaborn,
+  validobj,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace src/validphys/version.py \
-      --replace '= __give_git()' '= "${version}"'
+      --replace '= __give_git()' '= "'$version'"'
   '';
 
   propagatedBuildInputs = [

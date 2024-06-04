@@ -1,27 +1,39 @@
-{pkgs, config, lib, ...}:
-with lib;
+{ pkgs, config, lib, ... }:
+
 let
   cfg = config.programs.fzf;
-in {
+in
+{
   options = {
     programs.fzf = {
-      fuzzyCompletion = mkEnableOption (mdDoc "fuzzy completion with fzf");
-      keybindings = mkEnableOption (mdDoc "fzf keybindings");
+      fuzzyCompletion = lib.mkEnableOption "fuzzy completion with fzf";
+      keybindings = lib.mkEnableOption "fzf keybindings";
     };
   };
-  config = {
-    environment.systemPackages = optional (cfg.keybindings || cfg.fuzzyCompletion) pkgs.fzf;
-    programs.bash.interactiveShellInit = optionalString cfg.fuzzyCompletion ''
-      source ${pkgs.fzf}/share/fzf/completion.bash
-    '' + optionalString cfg.keybindings ''
-      source ${pkgs.fzf}/share/fzf/key-bindings.bash
-    '';
 
-    programs.zsh.interactiveShellInit = optionalString cfg.fuzzyCompletion ''
-      source ${pkgs.fzf}/share/fzf/completion.zsh
-    '' + optionalString cfg.keybindings ''
-      source ${pkgs.fzf}/share/fzf/key-bindings.zsh
-    '';
+  config = lib.mkIf (cfg.keybindings || cfg.fuzzyCompletion) {
+    environment.systemPackages = lib.mkIf (cfg.keybindings || cfg.fuzzyCompletion) [ pkgs.fzf ];
+
+    programs = {
+      # load after programs.bash.enableCompletion
+      bash.promptPluginInit = lib.mkAfter (lib.optionalString cfg.fuzzyCompletion ''
+        source ${pkgs.fzf}/share/fzf/completion.bash
+      '' + lib.optionalString cfg.keybindings ''
+        source ${pkgs.fzf}/share/fzf/key-bindings.bash
+      '');
+
+      zsh = {
+        interactiveShellInit = lib.optionalString (!config.programs.zsh.ohMyZsh.enable)
+        (lib.optionalString cfg.fuzzyCompletion ''
+          source ${pkgs.fzf}/share/fzf/completion.zsh
+        '' + lib.optionalString cfg.keybindings ''
+          source ${pkgs.fzf}/share/fzf/key-bindings.zsh
+        '');
+
+        ohMyZsh.plugins = lib.mkIf config.programs.zsh.ohMyZsh.enable [ "fzf" ];
+      };
+    };
   };
-  meta.maintainers = with maintainers; [ laalsaas ];
+
+  meta.maintainers = with lib.maintainers; [ laalsaas ];
 }

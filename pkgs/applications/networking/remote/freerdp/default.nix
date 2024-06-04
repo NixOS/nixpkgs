@@ -28,6 +28,7 @@
 , libxkbcommon
 , libxkbfile
 , wayland
+, wayland-scanner
 , gstreamer
 , gst-plugins-base
 , gst-plugins-good
@@ -48,6 +49,11 @@
 , Cocoa
 , CoreMedia
 , withUnfree ? false
+
+# tries to compile and run generate_argument_docbook.c
+, withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+
+, buildPackages
 }:
 
 let
@@ -70,13 +76,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freerdp";
-  version = "2.9.0";
+  version = "2.11.7";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = version;
-    sha256 = "sha256-I9xJWHoY8fZ5T9zca77gFciC+7JdD6fMwV16giiY4FU=";
+    hash = "sha256-w+xyMNFmKylSheK0yAGl8J6MXly/HUjjAfR9Qq3s/kA=";
   };
 
   postPatch = ''
@@ -149,7 +155,10 @@ stdenv.mkDerivation rec {
     faac
   ];
 
-  nativeBuildInputs = [ cmake libxslt docbook-xsl-nons pkg-config ];
+  nativeBuildInputs = [
+    cmake libxslt docbook-xsl-nons pkg-config
+    wayland-scanner
+  ];
 
   doCheck = true;
 
@@ -158,6 +167,7 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DDOCBOOKXSL_DIR=${docbook-xsl-nons}/xml/xsl/docbook"
+    "-DWAYLAND_SCANNER=${buildPackages.wayland-scanner}/bin/wayland-scanner"
   ]
   ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
     BUILD_TESTING = false; # false is recommended by upstream
@@ -168,6 +178,7 @@ stdenv.mkDerivation rec {
     WITH_JPEG = (libjpeg_turbo != null);
     WITH_OPENH264 = (openh264 != null);
     WITH_OSS = false;
+    WITH_MANPAGES = withManPages;
     WITH_PCSC = (pcsclite != null);
     WITH_PULSE = (libpulseaudio != null);
     WITH_SERVER = buildServer;
@@ -175,11 +186,13 @@ stdenv.mkDerivation rec {
     WITH_X11 = true;
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
     "-include AudioToolbox/AudioToolbox.h"
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error=incompatible-function-pointer-types"
+  ]);
 
   NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
     "-framework AudioToolbox"
@@ -192,6 +205,7 @@ stdenv.mkDerivation rec {
       following the Microsoft Open Specifications.
     '';
     homepage = "https://www.freerdp.com/";
+    changelog = "https://github.com/FreeRDP/FreeRDP/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg lheckemann ];
     platforms = platforms.unix;

@@ -18,12 +18,6 @@ qmakePrePhase() {
         "NIX_OUTPUT_PLUGIN=${!outputBin}/${qtPluginPrefix:?}"
     )
 
-    if [ -n "@debug@" ]; then
-        qmakeFlags+=("CONFIG+=debug")
-    else
-        qmakeFlags+=("CONFIG+=release")
-    fi
-
     qmakeFlags+=("${qmakeFlags_orig[@]}")
 }
 prePhases+=" qmakePrePhase"
@@ -38,6 +32,11 @@ qmakeConfigurePhase() {
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
         echo "qmake: enabled parallel building"
+    fi
+
+    if ! [[ -v enableParallelInstalling ]]; then
+        enableParallelInstalling=1
+        echo "qmake: enabled parallel installing"
     fi
 
     runHook postConfigure

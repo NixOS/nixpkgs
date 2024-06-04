@@ -1,26 +1,31 @@
-{ lib
-, arc4
-, asn1crypto
-, asn1tools
-, asyauth
-, asysocks
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, minikerberos
-, pillow
-, pyperclip
-, pythonOlder
-, rustPlatform
-, setuptools-rust
-, tqdm
-, unicrypto
-, winsspi
+{
+  lib,
+  stdenv,
+  arc4,
+  asn1crypto,
+  asn1tools,
+  asyauth,
+  asysocks,
+  buildPythonPackage,
+  cargo,
+  colorama,
+  fetchFromGitHub,
+  iconv,
+  minikerberos,
+  pillow,
+  pyperclip,
+  pythonOlder,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
+  tqdm,
+  unicrypto,
+  winsspi,
 }:
 
 buildPythonPackage rec {
   pname = "aardwolf";
-  version = "0.2.1";
+  version = "0.2.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,15 +33,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skelsec";
     repo = "aardwolf";
-    rev = "86c4b511e0dfeeb767081902af2244f6297a68eb";
-    hash = "sha256-ULczCJWVLrj0is6UYZxJNyLV6opzoJAFStqsjEmjaIA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4kJsW0uwWfcgVruEdDw3QhbzfPDuLjmK+YvcLrgF4SI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/aardwolf/utils/rlers";
+    sourceRoot = "${src.name}/aardwolf/utils/rlers";
     name = "${pname}-${version}";
-    hash = "sha256-F6NLWc5B577iH0uKAdj2y2TtQfo4eeXkMIK6he1tpvQ=";
+    hash = "sha256-i7fmdWOseRQGdvdBnlGi+lgWvhC2WFI2FwXU9JywYsc=";
   };
 
   cargoRoot = "aardwolf/utils/rlers";
@@ -44,10 +49,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     setuptools-rust
-  ] ++ (with rustPlatform.rust; [
     cargo
     rustc
-  ]);
+  ];
 
   propagatedBuildInputs = [
     arc4
@@ -62,18 +66,18 @@ buildPythonPackage rec {
     tqdm
     unicrypto
     winsspi
-  ];
+  ] ++ lib.optionals (stdenv.isDarwin) [ iconv ];
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aardwolf"
-  ];
+  pythonImportsCheck = [ "aardwolf" ];
 
   meta = with lib; {
     description = "Asynchronous RDP protocol implementation";
+    mainProgram = "ardpscan";
     homepage = "https://github.com/skelsec/aardwolf";
+    changelog = "https://github.com/skelsec/aardwolf/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

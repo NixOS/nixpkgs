@@ -5,8 +5,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-saved-searches";
-    rev = "be97918d0bbac81b98ab96773d5c8c01313ac0c2";
-    sha256 = "sha256-2HTFfaJkLXuuMDa3m7Ppkh9v4BnLfKXyWiRN4c+xaNI=";
+    rev = "063e35ec5a905aac3332be6821b15eec6909f022";
+    sha256 = "sha256-33aBhw00/tIF0Y0isYISctn3Bd+KntrRngj6sxW30EY=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-saved-searches";

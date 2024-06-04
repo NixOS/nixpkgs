@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "docloud";
   version = "1.0.375";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

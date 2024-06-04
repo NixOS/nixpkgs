@@ -1,14 +1,14 @@
-{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, curl, jq, coreutils }:
+{ lib, stdenvNoCC, fetchFromGitHub, makeWrapper, curl, jq, coreutils, file }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "discord-sh";
-  version = "unstable-2022-05-19";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "ChaoticWeg";
     repo = "discord.sh";
-    rev = "6aaea548f88eb48b7adeef824fbddac1c4749447";
-    sha256 = "sha256-RoPhn/Ot4ID1nEbZEz1bd2iq8g7mU2e7kwNRvZOD/pc=";
+    rev = "v${version}";
+    sha256 = "sha256-ZOGhwR9xFzkm+q0Gm8mSXZ9toXG4xGPNwBQMCVanCbY=";
   };
 
   # ignore Makefile by disabling buildPhase. Upstream Makefile tries to download
@@ -36,12 +36,13 @@ stdenvNoCC.mkDerivation {
     runHook preInstall
     install -Dm555 discord.sh $out/bin/discord.sh
     wrapProgram $out/bin/discord.sh \
-      --set PATH "${lib.makeBinPath [ curl jq coreutils ]}"
+      --set PATH "${lib.makeBinPath [ curl jq coreutils file ]}"
     runHook postInstall
   '';
 
   meta = with lib; {
     description = "Write-only command-line Discord webhook integration written in 100% Bash script";
+    mainProgram = "discord.sh";
     homepage = "https://github.com/ChaoticWeg/discord.sh";
     license = licenses.gpl3;
     platforms = platforms.unix;

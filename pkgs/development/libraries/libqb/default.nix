@@ -1,15 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libxml2 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "libqb";
-  version = "2.0.6";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vt9FmIRojX3INOn3CXAjkswVFD8Th4sRIz3RR4GJHFQ=";
+    sha256 = "sha256-ZjxC7W4U8T68mZy/OvWj/e4W9pJIj2lVDoEjxXYr/G8=";
   };
+
+  patches = [
+    # add a declaration of fdatasync, missing on darwin https://github.com/ClusterLabs/libqb/pull/496
+    (fetchpatch {
+      url = "https://github.com/ClusterLabs/libqb/commit/255ccb70ee19cc0c82dd13e4fd5838ca5427795f.patch";
+      hash = "sha256-6x4B3FM0XSRIeAly8JtMOGOdyunTcbaDzUeBZInXR4U=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 

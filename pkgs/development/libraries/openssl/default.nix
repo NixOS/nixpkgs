@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, buildPackages, perl, coreutils
+{ lib, stdenv, fetchurl, buildPackages, perl, coreutils, writeShellScript
+, makeWrapper
 , withCryptodev ? false, cryptodev
+, withZlib ? false, zlib
 , enableSSL2 ? false
 , enableSSL3 ? false
+, enableKTLS ? stdenv.isLinux
 , static ? stdenv.hostPlatform.isStatic
-# Used to avoid cross compiling perl, for example, in darwin bootstrap tools.
-# This will cause c_rehash to refer to perl via the environment, but otherwise
-# will produce a perfectly functional openssl binary and library.
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
 , conf ? null
 , removeReferencesTo
+, testers
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -18,14 +18,14 @@
 # files.
 
 let
-  common = { version, sha256, patches ? [], withDocs ? false, extraMeta ? {} }:
-   stdenv.mkDerivation rec {
+  common = { version, hash, patches ? [], withDocs ? false, extraMeta ? {} }:
+   stdenv.mkDerivation (finalAttrs: {
     pname = "openssl";
     inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/${pname}-${version}.tar.gz";
-      inherit sha256;
+      url = "https://www.openssl.org/source/${finalAttrs.pname}-${version}.tar.gz";
+      inherit hash;
     };
 
     inherit patches;
@@ -69,12 +69,12 @@ let
       !(stdenv.hostPlatform.useLLVM or false) &&
       stdenv.cc.isGNU;
 
-    nativeBuildInputs = [ perl ]
+    nativeBuildInputs =
+         lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
+      ++ [ perl ]
       ++ lib.optionals static [ removeReferencesTo ];
     buildInputs = lib.optional withCryptodev cryptodev
-      # perl is included to allow the interpreter path fixup hook to set the
-      # correct interpreter in c_rehash.
-      ++ lib.optional withPerl perl;
+      ++ lib.optional withZlib zlib;
 
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
@@ -86,6 +86,7 @@ let
         aarch64-darwin = "./Configure darwin64-arm64-cc";
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
+        powerpc64-linux = "./Configure linux-ppc64";
         riscv64-linux = "./Configure linux64-riscv64";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
@@ -93,7 +94,7 @@ let
         else if stdenv.hostPlatform.isBSD
           then if stdenv.hostPlatform.isx86_64 then "./Configure BSD-x86_64"
           else if stdenv.hostPlatform.isx86_32
-            then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
+            then "./Configure BSD-x86" + lib.optionalString stdenv.hostPlatform.isElf "-elf"
           else "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isMinGW
           then "./Configure mingw${lib.optionalString
@@ -131,7 +132,7 @@ let
       ++ lib.optional enableSSL3 "enable-ssl3"
       # We select KTLS here instead of the configure-time detection (which we patch out).
       # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
-      ++ lib.optional (stdenv.isLinux && lib.versionAtLeast version "3.0.0") "enable-ktls"
+      ++ lib.optional (lib.versionAtLeast version "3.0.0" && enableKTLS) "enable-ktls"
       ++ lib.optional (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
@@ -141,7 +142,20 @@ let
       # This introduces a reference to the CTLOG_FILE which is undesired when
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
-      ;
+      ++ lib.optional withZlib "zlib"
+      ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
+      # This is necessary in order to avoid openssl adding -march
+      # flags which ultimately conflict with those added by
+      # cc-wrapper.  Openssl assumes that it can scan CFLAGS to
+      # detect any -march flags, using this perl code:
+      #
+      #   && !grep { $_ =~ /-m(ips|arch=)/ } (@{$config{CFLAGS}})
+      #
+      # The following bogus CFLAGS environment variable triggers the
+      # the code above, inhibiting `./Configure` from adding the
+      # conflicting flags.
+      "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
+    ];
 
     makeFlags = [
       "MANDIR=$(man)/share/man"
@@ -167,22 +181,20 @@ let
 
       # 'etc' is a separate output on static builds only.
       etc=$out
-    '') + lib.optionalString (!stdenv.hostPlatform.isWindows)
-      # Fix bin/c_rehash's perl interpreter line
-      #
-      # - openssl 1_0_2: embeds a reference to buildPackages.perl
-      # - openssl 1_1:   emits "#!/usr/bin/env perl"
-      #
-      # In the case of openssl_1_0_2, reset the invalid reference and let the
-      # interpreter hook take care of it.
-      #
-      # In both cases, if withPerl = false, the intepreter line is expected be
-      # "#!/usr/bin/env perl"
-    ''
-      substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
-    '' + ''
+    '') + ''
       mkdir -p $bin
       mv $out/bin $bin/bin
+
+    '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
+      # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
+    ''
+      # c_rehash is a legacy perl script with the same functionality
+      # as `openssl rehash`
+      # this wrapper script is created to maintain backwards compatibility without
+      # depending on perl
+      makeWrapper $bin/bin/openssl $bin/bin/c_rehash \
+        --add-flags "rehash"
+    '' + ''
 
       mkdir $dev
       mv $out/include $dev/
@@ -204,20 +216,41 @@ let
       fi
     '';
 
+    passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
     meta = with lib; {
       homepage = "https://www.openssl.org/";
+      changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
       description = "A cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
+      mainProgram = "openssl";
+      maintainers = with maintainers; [ thillux ];
+      pkgConfigModules = [
+        "libcrypto"
+        "libssl"
+        "openssl"
+      ];
       platforms = platforms.all;
     } // extraMeta;
-  };
+  });
 
 in {
+  # intended version "policy":
+  # - 1.1 as long as some package exists, which does not build without it
+  #   (tracking issue: https://github.com/NixOS/nixpkgs/issues/269713)
+  #   try to remove in 24.05 for the first time, if possible then
+  # - latest 3.x LTS
+  # - latest 3.x non-LTS as preview/for development
+  #
+  # - other versions in between only when reasonable need is stated for some package
+  # - backport every security critical fix release e.g. 3.0.y -> 3.0.y+1 but no new version, e.g. 3.1 -> 3.2
 
-
+  # If you do upgrade here, please update in pkgs/top-level/release.nix
+  # the permitted insecure version to ensure it gets cached for our users
+  # and backport this to stable release (at time of writing this 23.11).
   openssl_1_1 = common {
-    version = "1.1.1s";
-    sha256 = "sha256-xawB52Dub/Dath1rK70wFGck0GPrMiGAxvGKb3Tktqo=";
+    version = "1.1.1w";
+    hash = "sha256-zzCYlQy02FOtlcCEHx+cbT3BAtzPys1SHZOSUgi3asg=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
@@ -226,11 +259,17 @@ in {
        else ./use-etc-ssl-certs.patch)
     ];
     withDocs = true;
+    extraMeta = {
+      knownVulnerabilities = [
+        "OpenSSL 1.1 is reaching its end of life on 2023/09/11 and cannot be supported through the NixOS 23.11 release cycle. https://www.openssl.org/blog/blog/2023/03/28/1.1.1-EOL/"
+      ];
+    };
   };
 
   openssl_3 = common {
-    version = "3.0.7";
-    sha256 = "sha256-gwSdBComDmlvYkBqxcCL9wb9hDg/lFzyG9YentlcOW4=";
+    version = "3.0.13";
+    hash = "sha256-iFJXU/edO+wn0vp8ZqoLkrOqlJja/ZPXz6SzeAza4xM=";
+
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 
@@ -241,9 +280,52 @@ in {
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
+    ];
 
-       # Remove with 3.0.8 release
-       ./3.0/CVE-2022-3996.patch
+    withDocs = true;
+
+    extraMeta = with lib; {
+      license = licenses.asl20;
+    };
+  };
+
+  openssl_3_2 = common {
+    version = "3.2.1";
+    hash = "sha256-g8cyn+UshQZ3115dCwyiRTCbl+jsvP3B39xKufrDWzk=";
+
+    patches = [
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./3.2/use-etc-ssl-certs-darwin.patch
+       else ./3.2/use-etc-ssl-certs.patch)
+    ];
+
+    withDocs = true;
+
+    extraMeta = with lib; {
+      license = licenses.asl20;
+    };
+  };
+
+  openssl_3_3 = common {
+    version = "3.3.0";
+    hash = "sha256-U+ZrBDMipgar8Ah+dpmg4DOjf6E/65dC3zXDozsY+wI=";
+
+    patches = [
+      ./3.0/nix-ssl-cert-file.patch
+
+      # openssl will only compile in KTLS if the current kernel supports it.
+      # This patch disables build-time detection.
+      ./3.0/openssl-disable-kernel-detection.patch
+
+      (if stdenv.hostPlatform.isDarwin
+       then ./3.2/use-etc-ssl-certs-darwin.patch
+       else ./3.2/use-etc-ssl-certs.patch)
     ];
 
     withDocs = true;

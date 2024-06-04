@@ -13,13 +13,13 @@ assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "elinks";
-  version = "0.15.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "rkd77";
-    repo = "felinks";
+    repo = "elinks";
     rev = "v${version}";
-    sha256 = "sha256-9OEi4UF/4/IRtccJou3QuevQzWjA6PuU5IVlT7qqGZ0=";
+    hash = "sha256-JeUiMHAqSZxxBe8DplzmzHzsY6KqoBqba0y8GDwaR0Y=";
   };
 
   buildInputs = [
@@ -38,11 +38,13 @@ stdenv.mkDerivation rec {
     "--enable-finger"
     "--enable-html-highlight"
     "--enable-gopher"
+    "--enable-gemini"
     "--enable-cgi"
     "--enable-bittorrent"
     "--enable-nntp"
     "--enable-256-colors"
     "--enable-true-color"
+    "--with-brotli"
     "--with-lzma"
     "--with-libev"
     "--with-terminfo"
@@ -52,8 +54,9 @@ stdenv.mkDerivation rec {
     ;
 
   meta = with lib; {
-    description = "Full-featured text-mode web browser (package based on the fork felinks)";
-    homepage = "https://github.com/rkd77/felinks";
+    description = "Full-featured text-mode web browser";
+    mainProgram = "elinks";
+    homepage = "https://github.com/rkd77/elinks";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ iblech gebner ];

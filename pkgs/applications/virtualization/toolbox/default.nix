@@ -47,5 +47,6 @@ buildGoModule rec {
     description = "Tool for containerized command line environments on Linux";
     license = licenses.asl20;
     maintainers = with maintainers; [ urandom ];
+    mainProgram = "toolbox";
   };
 }

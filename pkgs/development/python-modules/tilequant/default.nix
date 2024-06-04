@@ -1,61 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gitpython
-, click
-, ordered-set
-, pythonOlder
-, pillow
-, sortedcollections
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  ordered-set,
+  pillow,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  setuptools-dso,
+  sortedcollections,
 }:
 
-let
-  aikku93-tilequant = fetchFromGitHub {
-    owner = "SkyTemple";
-    repo = "aikku93-tilequant";
-    rev = "6604e0906edff384b6c8d4cde03e6601731f66fd";
-    sha256 = "0w19h3n2i0xriqsy0b0rifjgbv4hqd7gl78fw0cappkrdykij5r1";
-  };
-in
 buildPythonPackage rec {
   pname = "tilequant";
-  version = "0.4.0.post0";
-  format = "setuptools";
+  version = "1.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
-  src = fetchFromGitHub {
-    owner = "SkyTemple";
-    repo = pname;
-    rev = version;
-    sha256 = "189af203iay3inj1bbgm3hh1fshn879bcm28ypbvfp27fy7j5b25";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-uW1g3nlT6Y+1beifo/MOlGxsGL7on/jcAROxSddySHk=";
   };
 
-  postPatch = ''
-    cp -R --no-preserve=mode ${aikku93-tilequant} __aikku93_tilequant
-  '';
+  pythonRelaxDeps = [ "pillow" ];
 
-  buildInputs = [
-    gitpython
+  build-system = [
+    pythonRelaxDepsHook
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     ordered-set
     pillow
     sortedcollections
+    setuptools-dso
   ];
 
   doCheck = false; # there are no tests
 
-  pythonImportsCheck = [
-    "skytemple_tilequant"
-  ];
+  pythonImportsCheck = [ "tilequant" ];
 
   meta = with lib; {
     description = "Tool for quantizing image colors using tile-based palette restrictions";
     homepage = "https://github.com/SkyTemple/tilequant";
+    changelog = "https://github.com/SkyTemple/tilequant/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ marius851000 ];
+    mainProgram = "tilequant";
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-vi-mode";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "jeffreytse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KQ7UKudrpqUwI6gMluDTVN0qKpB15PI5P1YHHCBIlpg=";
+    sha256 = "sha256-xbchXJTFWeABTwq6h4KWLh+EvydDrDzcY9AQVK65RS8=";
   };
 
   strictDeps = true;
@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "A better and friendly vi(vim) mode plugin for ZSH.";
     maintainers = with maintainers; [ kyleondy ];
+    platforms = platforms.all;
   };
 }

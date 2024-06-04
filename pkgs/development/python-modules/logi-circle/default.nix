@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, aiohttp
-, python-slugify
-, pytz
-, aresponses
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  aiohttp,
+  python-slugify,
+  pytz,
+  aresponses,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytestCheckHook
   ];

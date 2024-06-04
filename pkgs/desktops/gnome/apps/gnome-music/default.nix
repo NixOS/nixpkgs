@@ -23,20 +23,20 @@
 , itstool
 , gnome
 , gst_all_1
-, libsoup
+, libsoup_3
 , libadwaita
 , gsettings-desktop-schemas
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "42.1";
+  version = "46.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "x3R/pqhrVrGK1v+VD/kB5Z7n+sEcaLKmcnr4bq7tgnA=";
+    hash = "sha256-pFDVzgFokvavL4q3H8fDlDguIse2ILqSpuFc9mvF7F8=";
   };
 
   nativeBuildInputs = [
@@ -58,13 +58,12 @@ python3.pkgs.buildPythonApplication rec {
     glib
     libmediaart
     gnome-online-accounts
-    gobject-introspection
     gdk-pixbuf
     python3
     grilo
     grilo-plugins
     libnotify
-    libsoup
+    libsoup_3
     libadwaita
     gsettings-desktop-schemas
     tracker
@@ -103,8 +102,9 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Music";
+    homepage = "https://apps.gnome.org/Music/";
     description = "Music player and management application for the GNOME desktop environment";
+    mainProgram = "gnome-music";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

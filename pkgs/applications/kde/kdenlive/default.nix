@@ -17,6 +17,7 @@
 , knotifyconfig
 , kplotting
 , ktextwidgets
+, mediainfo
 , mlt
 , shared-mime-info
 , libv4l
@@ -32,9 +33,14 @@
 , rttr
 , kpurpose
 , kdeclarative
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
+let
+  mlt-full = mlt.override {
+    ffmpeg = ffmpeg-full;
+  };
+in
 mkDerivation {
   pname = "kdenlive";
   nativeBuildInputs = [
@@ -58,7 +64,8 @@ mkDerivation {
     knotifyconfig
     kplotting
     ktextwidgets
-    mlt
+    mediainfo
+    mlt-full
     phonon-backend-gstreamer
     qtdeclarative
     qtmultimedia
@@ -72,14 +79,17 @@ mkDerivation {
     rttr
     kpurpose
     kdeclarative
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it
   # doesn't find them. See:
   # https://github.com/NixOS/nixpkgs/issues/83885
-  patches = [ ./mlt-path.patch ./ffmpeg-path.patch ];
-  inherit mlt;
+  patches = [ ./dependency-paths.patch ];
+
+  inherit mediainfo;
   ffmpeg = ffmpeg-full;
+  mlt = mlt-full;
+
   postPatch =
     # Module Qt5::Concurrent must be included in `find_package` before it is used.
     ''

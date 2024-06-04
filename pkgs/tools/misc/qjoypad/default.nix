@@ -10,8 +10,8 @@ mkDerivation rec {
     hash = "sha256:1w26ddxb1xirb7qjf7kv9llxzjhbhcb7warnxbx41qhbni46g26y";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ libX11 libXtst qtbase qttools qtx11extras ];
+  nativeBuildInputs = [ pkg-config cmake qttools ];
+  buildInputs = [ libX11 libXtst qtbase qtx11extras ];
 
   meta = with lib; {
     description = "A program that lets you use gaming devices anywhere";
@@ -32,8 +32,9 @@ mkDerivation rec {
       experience just a little bit nicer.
     '';
     homepage = "https://github.com/panzi/qjoypad/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with maintainers; [ astsmtl ];
     platforms = with platforms; linux;
+    mainProgram = "qjoypad";
   };
 }

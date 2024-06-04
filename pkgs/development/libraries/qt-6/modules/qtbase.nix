@@ -4,6 +4,7 @@
 , patches ? [ ]
 , version
 , coreutils
+, buildPackages
 , bison
 , flex
 , gdb
@@ -11,11 +12,9 @@
 , lndir
 , perl
 , pkg-config
-, python3
 , which
 , cmake
 , ninja
-, ccache
 , xmlstarlet
 , libproxy
 , xorg
@@ -23,7 +22,7 @@
 , double-conversion
 , util-linux
 , systemd
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? stdenv.hostPlatform.isLinux
 , libb2
 , md4c
 , mtdev
@@ -71,12 +70,18 @@
 , unixODBC
 , unixODBCDrivers
   # darwin
+, moveBuildTree
 , xcbuild
 , AGL
 , AVFoundation
 , AppKit
+, Contacts
+, CoreBluetooth
+, EventKit
 , GSS
 , MetalKit
+  # mingw
+, pkgsBuildBuild
   # optional dependencies
 , cups
 , libmysqlclient
@@ -85,21 +90,18 @@
 , dconf
 , gtk3
   # options
-, libGLSupported ? stdenv.isLinux
+, libGLSupported ? stdenv.hostPlatform.isLinux
 , libGL
-, debug ? false
-, developerBuild ? false
+, qttranslations ? null
 }:
 
 let
-  debugSymbols = debug || developerBuild;
+  isCrossBuild = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
 stdenv.mkDerivation rec {
   pname = "qtbase";
 
   inherit src version;
-
-  debug = debugSymbols;
 
   propagatedBuildInputs = [
     libxml2
@@ -107,7 +109,6 @@ stdenv.mkDerivation rec {
     openssl
     sqlite
     zlib
-    unixODBC
     # Text rendering
     harfbuzz
     icu
@@ -116,20 +117,22 @@ stdenv.mkDerivation rec {
     libpng
     pcre2
     pcre
-    libproxy
     zstd
-    double-conversion
     libb2
     md4c
+    double-conversion
+  ] ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
+    libproxy
     dbus
     glib
     # unixODBC drivers
+    unixODBC
     unixODBCDrivers.psql
     unixODBCDrivers.sqlite
     unixODBCDrivers.mariadb
   ] ++ lib.optionals systemdSupport [
     systemd
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linux
     mtdev
     lksctp-tools
@@ -162,41 +165,48 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.xcbutilcursor
     libepoxy
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AGL
     AVFoundation
     AppKit
+    Contacts
+    CoreBluetooth
+    EventKit
     GSS
     MetalKit
-  ] ++ lib.optional libGLSupported libGL;
+  ] ++ lib.optionals libGLSupported [
+    libGL
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    vulkan-headers
+    vulkan-loader
+  ];
 
-  buildInputs = [
-    python3
+  buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
     at-spi2-core
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libinput) [
     libinput
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     AppKit
+    CoreBluetooth
   ]
   ++ lib.optional withGtk3 gtk3
-  ++ lib.optional developerBuild gdb
-  ++ lib.optional (cups != null) cups
-  ++ lib.optional (libmysqlclient != null) libmysqlclient
-  ++ lib.optional (postgresql != null) postgresql;
+  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
+  ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
+  ++ lib.optional (postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql) postgresql;
 
-  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ];
+  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
   propagatedNativeBuildInputs = [ lndir ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
   inherit patches;
 
-  # https://bugreports.qt.io/browse/QTBUG-97568
-  postPatch = ''
-    substituteInPlace src/corelib/CMakeLists.txt --replace /bin/ls ${coreutils}/bin/ls
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/QtAutoDetect.cmake --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/QtPublicAppleHelpers.cmake --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
   '';
 
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
@@ -204,85 +214,53 @@ stdenv.mkDerivation rec {
   preHook = ''
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
-    . ${../hooks/move-qt-dev-tools.sh}
-    . ${../hooks/fix-qmake-libtool.sh}
   '';
 
   qtPluginPrefix = "lib/qt-6/plugins";
   qtQmlPrefix = "lib/qt-6/qml";
 
   cmakeFlags = [
+    "-DQT_EMBED_TOOLCHAIN_COMPILER=OFF"
     "-DINSTALL_PLUGINSDIR=${qtPluginPrefix}"
     "-DINSTALL_QMLDIR=${qtQmlPrefix}"
     "-DQT_FEATURE_libproxy=ON"
     "-DQT_FEATURE_system_sqlite=ON"
     "-DQT_FEATURE_openssl_linked=ON"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DQT_FEATURE_sctp=ON"
     "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
     "-DQT_FEATURE_vulkan=ON"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # error: 'path' is unavailable: introduced in macOS 10.15
     "-DQT_FEATURE_cxx17_filesystem=OFF"
-  ];
+  ] ++ lib.optionals isCrossBuild [
+    "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
+    "-DQt6HostInfo_DIR=${pkgsBuildBuild.qt6.qtbase}/lib/cmake/Qt6HostInfo"
+  ]
+  ++ lib.optional (qttranslations != null && !isCrossBuild) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
 
-  NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_LDFLAGS = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     # Undefined symbols for architecture arm64: "___gss_c_nt_hostbased_service_oid_desc"
     "-framework GSS"
   ]);
 
+  env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
+
   outputs = [ "out" "dev" ];
 
-  postInstall = ''
-    moveToOutput "mkspecs" "$dev"
-  '';
-
-  devTools = [
-    "libexec/moc"
-    "libexec/rcc"
-    "libexec/syncqt.pl"
-    "libexec/qlalr"
-    "libexec/ensure_pro_file.cmake"
-    "libexec/cmake_automoc_parser"
-    "libexec/qvkgen"
-    "libexec/tracegen"
-    "libexec/uic"
-    "bin/fixqt4headers.pl"
-    "bin/moc"
-    "bin/qdbuscpp2xml"
-    "bin/qdbusxml2cpp"
-    "bin/qlalr"
-    "bin/qmake"
-    "bin/rcc"
-    "bin/syncqt.pl"
-    "bin/uic"
-  ];
+  moveToDev = false;
 
   postFixup = ''
-    # Don't retain build-time dependencies like gdb.
-    sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
-    fixQtModulePaths "''${!outputDev}/mkspecs/modules"
-    fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
+    moveToOutput      "mkspecs/modules" "$dev"
+    fixQtModulePaths  "$dev/mkspecs/modules"
+    fixQtBuiltinPaths "$out" '*.pr?'
+  '' + lib.optionalString stdenv.isLinux ''
 
-    # Move development tools to $dev
-    moveQtDevTools
-    moveToOutput libexec "$dev"
-
-    # fixup .pc file (where to find 'moc' etc.)
-    if [ -f "$dev/lib/pkgconfig/Qt6Core.pc" ]; then
-      sed -i "$dev/lib/pkgconfig/Qt6Core.pc" \
-        -e "/^bindir=/ c bindir=$dev/bin"
-    fi
-
-    patchShebangs $out $dev
-
-    # QTEST_ASSERT and other macros keeps runtime reference to qtbase.dev
-    if [ -f "$dev/include/QtTest/qtestassert.h" ]; then
-      substituteInPlace "$dev/include/QtTest/qtestassert.h" --replace "__FILE__" "__BASE_FILE__"
-    fi
+    # FIXME: not sure why this isn't added automatically?
+    patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
   '';
 
-  dontStrip = debugSymbols;
+  dontWrapQtApps = true;
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
 
@@ -291,6 +269,6 @@ stdenv.mkDerivation rec {
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ milahu nickcao LunNova ];
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

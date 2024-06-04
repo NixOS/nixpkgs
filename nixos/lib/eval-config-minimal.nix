@@ -38,6 +38,7 @@ let
   #       is experimental.
   lib.evalModules {
     inherit prefix modules;
+    class = "nixos";
     specialArgs = {
       modulesPath = builtins.toString ../modules;
     } // specialArgs;

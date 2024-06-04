@@ -1,39 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, six
-, testfixtures
-, django
-, django-ranged-response
-, pillow
-, withTTS ? true
-, flite
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  testfixtures,
+  django,
+  django-ranged-response,
+  pillow,
+  withTTS ? true,
+  flite,
 }:
 
 buildPythonPackage rec {
   pname = "django-simple-captcha";
-  version = "0.5.14";
+  version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "84b5c188e6ae50e9ecec5e5d734c5bc4d2a50fbbca7f59d2c12da9a3bbee5051";
-    extension = "zip";
+    hash = "sha256-0YhRbTJvrdLVrQduuJZJ1VwCyrr+P9zCFUrBjp9tS5c=";
   };
 
-  checkInputs = [ testfixtures ];
+  nativeCheckInputs = [ testfixtures ];
+
   checkPhase = ''
     cd testproject
     ${python.interpreter} manage.py test captcha
   '';
 
-  propagatedBuildInputs = [ django django-ranged-response six pillow ]
-  ++ lib.optional withTTS flite;
+  propagatedBuildInputs = [
+    django
+    django-ranged-response
+    pillow
+  ] ++ lib.optional withTTS flite;
 
   meta = with lib; {
-    description = "An extremely simple, yet highly customizable Django application to add captcha images to any Django form";
+    description = "Customizable Django application to add captcha images to any Django form";
     homepage = "https://github.com/mbi/django-simple-captcha";
+    changelog = "https://github.com/mbi/django-simple-captcha/blob/v${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ mrmebelman schmittlauch ];
+    maintainers = with maintainers; [
+      mrmebelman
+      schmittlauch
+    ];
   };
 }

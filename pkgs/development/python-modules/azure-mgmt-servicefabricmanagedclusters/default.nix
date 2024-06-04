@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-servicefabricmanagedclusters";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-EJyjolHrt92zWg+IKWFKTapwZaFrwTtSyEIu5/mZXOg=";
+    hash = "sha256-EJyjolHrt92zWg+IKWFKTapwZaFrwTtSyEIu5/mZXOg=";
   };
 
   propagatedBuildInputs = [

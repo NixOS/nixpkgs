@@ -14,12 +14,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "skippy-xd";
-  version = "unstable-2015-03-01";
+  version = "0.7.2";
   src = fetchFromGitHub {
-    owner = "richardgv";
+    owner = "felixfung";
     repo = "skippy-xd";
-    rev = "397216ca67074c71314f5e9a6e3f1710ccabc29e";
-    sha256 = "sha256-iP6g3iS1aPPkauBLHbgZH/l+TXbWyIJ2TmbrSiNTkn0=";
+    rev = "e033b9ea80b5bbe922b05c64ed6ba0bf31c3acf6";
+    hash = "sha256-DsoRxbAF0DitgxknJVHDWH7VL5hWMhwH9I6m1SyItMM=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

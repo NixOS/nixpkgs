@@ -6,13 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wayland-protocols";
-  version = "1.31";
+  version = "1.35";
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && wayland.withLibraries;
+  # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.linker == "bfd" && wayland.withLibraries;
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/${pname}/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-oH+nIu2HZ27AINhncUvJovJMRk2nORLzlwbu71IZ4jg=";
+    hash = "sha256-N6JxaigTPcgZNBxWiinSHoy3ITDlwSah/PyfQsI9las=";
   };
 
   postPatch = lib.optionalString doCheck ''
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja wayland-scanner ];
-  checkInputs = [ python3 wayland ];
+  nativeCheckInputs = [ python3 wayland ];
 
   mesonFlags = [ "-Dtests=${lib.boolToString doCheck}" ];
 

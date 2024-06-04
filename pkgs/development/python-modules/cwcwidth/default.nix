@@ -1,18 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, cython, pytestCheckHook, setuptools }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  pytestCheckHook,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "cwcwidth";
-  version = "0.1.8";
+  version = "0.1.9";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WtwDS3yQ5qhYa9BGvL9gBONeFrDX4x3jlVE6UNcpu/Y=";
+    hash = "sha256-8Z0RoBSNSoys0GTJbpO8qM40FaGGroIEA49F4Qjbdrg=";
   };
 
-  nativeBuildInputs = [ cython setuptools ];
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''
     # Hack needed to make pytest + cython work
     # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298

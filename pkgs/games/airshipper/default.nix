@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitLab
-, fetchpatch
 , openssl
 , libGL
 , vulkan-loader
@@ -63,7 +62,12 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-5zP1Ye1fJNQp8eWKwdxLqBr4qzBfWEEBsJ9s7+8idL4=";
   };
 
-  cargoSha256 = "sha256-oksJYuuHdfP5mMQ+zYHH5SgD6YUK+zE3+AY90ZzHRUU=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "octocrab-0.15.4" = "sha256-uKHLlb0EyWF0Ho8FP38DFZsEWXiAG8FEYzJgwO9W90U=";
+    };
+  };
 
   buildInputs = [
     openssl
@@ -108,7 +112,8 @@ rustPlatform.buildRustPackage {
   cargoTestFlags = [ "--package" "airshipper" ];
 
   meta = with lib; {
-    description = "Provides automatic updates for the voxel RPG Veloren.";
+    description = "Provides automatic updates for the voxel RPG Veloren";
+    mainProgram = "airshipper";
     homepage = "https://www.veloren.net";
     license = licenses.gpl3;
     maintainers = with maintainers; [ yusdacra ];

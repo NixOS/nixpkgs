@@ -1,11 +1,11 @@
 diff --git a/imageio_ffmpeg/_utils.py b/imageio_ffmpeg/_utils.py
-index 1399cfd..c0eb9be 100644
+index 6387834..e5e312d 100644
 --- a/imageio_ffmpeg/_utils.py
 +++ b/imageio_ffmpeg/_utils.py
-@@ -23,33 +23,7 @@ def get_ffmpeg_exe():
-     if exe:
-         return exe
+@@ -38,29 +38,7 @@ def get_ffmpeg_exe():
  
+ @lru_cache()
+ def _get_ffmpeg_exe():
 -    plat = get_platform()
 -
 -    # 2. Try from here
@@ -28,12 +28,8 @@ index 1399cfd..c0eb9be 100644
 -    if _is_valid_exe(exe):
 -        return exe
 -
--    # Nothing was found
--    raise RuntimeError(
--        "No ffmpeg exe could be found. Install ffmpeg on your system, "
--        "or set the IMAGEIO_FFMPEG_EXE environment variable."
--    )
-+    return '@ffmpeg@'
+-    return None
++    return "@ffmpeg@"
  
  
  def _popen_kwargs(prevent_sigint=False):

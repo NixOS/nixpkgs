@@ -1,15 +1,16 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, PyGithub
-, pythonOlder
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  pygithub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ghrepo-stats";
-  version = "0.5.0";
+  version = "0.5.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mrbean-bremen";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-rTW6wADpkP9GglNmQNVecHfA2yJZuzYhJfsLfucbcgY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Mr0FM2CbdgAUF8siMjUIZvypWiPNPU9OncPiBPqK3uE=";
   };
 
   postPatch = ''
@@ -30,18 +31,17 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     beautifulsoup4
     matplotlib
-    PyGithub
+    pygithub
   ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ghrepo_stats"
-  ];
+  pythonImportsCheck = [ "ghrepo_stats" ];
 
   meta = with lib; {
     description = "Python module and CLI tool for GitHub repo statistics";
+    mainProgram = "show-ghstats";
     homepage = "https://github.com/mrbean-bremen/ghrepo-stats";
     changelog = "https://github.com/mrbean-bremen/ghrepo-stats/blob/v${version}/CHANGES.md";
     license = licenses.mit;

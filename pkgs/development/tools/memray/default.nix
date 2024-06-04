@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "memray";
-  version = "1.6.0";
+  version = "1.11.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bloomberg";
-    repo = pname;
+    repo = "memray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iIbx8vK4xAFfTVO4oJ5ELNKn19Tw6LPgwEi6eFOA5yo=";
+    hash = "sha256-DaJ1Hhg7q4ckA5feUx0twOsmy28v5aBBCTUAkn43xAo=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +34,10 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     ipython
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [
+  ] ++ lib.optionals (pythonOlder "3.12") [
     greenlet
   ];
 
@@ -63,9 +63,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Memory profiler for Python";
     homepage = "https://bloomberg.github.io/memray/";
+    changelog = "https://github.com/bloomberg/memray/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;
-    changelog = "https://github.com/bloomberg/memray/releases/tag/v${version}";
   };
 }

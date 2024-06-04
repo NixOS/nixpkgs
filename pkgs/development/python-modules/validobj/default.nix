@@ -1,24 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "validobj";
-  version = "0.6";
+  version = "1.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BvnHn0Erk87Ce3tYwYf0tBwRJMrG19Af/Y568VJ02uo=";
+    sha256 = "sha256-uwP2Mu10AiDWzlPMRH2+0CMSnibTB8KBY8QZNf+icNA=";
   };
 
   nativeBuildInputs = [ flit ];
 
-  checkInputs = [ hypothesis pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "validobj" ];
 

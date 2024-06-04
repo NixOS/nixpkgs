@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, psutil
-, pytestCheckHook
-, lsof
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  psutil,
+  pytestCheckHook,
+  lsof,
 }:
 
 buildPythonPackage rec {
   pname = "daemonocle";
   version = "1.2.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jnrbsn";
@@ -23,7 +25,7 @@ buildPythonPackage rec {
     psutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     lsof
   ];
@@ -39,9 +41,7 @@ buildPythonPackage rec {
     "test_exec_worker"
   ];
 
-  pythonImportsCheck = [
-    "daemonocle"
-  ];
+  pythonImportsCheck = [ "daemonocle" ];
 
   meta = with lib; {
     description = "A Python library for creating super fancy Unix daemons";

@@ -1,33 +1,35 @@
-{ lib
-, fetchFromGitHub
-, bash
-, glib
-, gdk-pixbuf
-, gettext
-, imagemagick
-, ninja
-, meson
-, sassc
-, python3Packages
-, gobject-introspection
-, wrapGAppsHook
-, libappindicator-gtk3
-, libxcb
-, qt5
-, ibus
-, usbutils
+{
+  lib,
+  fetchFromGitHub,
+  bash,
+  glib,
+  gdk-pixbuf,
+  gettext,
+  imagemagick,
+  ninja,
+  meson,
+  sassc,
+  python3Packages,
+  gobject-introspection,
+  wrapGAppsHook3,
+  libayatana-appindicator,
+  libxcb,
+  qt6,
+  ibus,
+  usbutils,
+  psmisc,
 }:
 
 python3Packages.buildPythonApplication rec {
   name = "polychromatic";
-  version = "0.7.3";
+  version = "0.9.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "polychromatic";
     repo = "polychromatic";
     rev = "v${version}";
-    sha256 = "sha256-H++kQ3Fxw56avEsSE1ctu5p0s50s0eQ+jL5zXS3AA94=";
+    sha256 = "sha256-3Pt1Z8G0xDWlFD7LxJILPUifMBTN4OvPNHZv80umO1s=";
   };
 
   postPatch = ''
@@ -35,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace scripts/build-styles.sh \
       --replace '$(which sassc 2>/dev/null)' '${sassc}/bin/sassc' \
       --replace '$(which sass 2>/dev/null)' '${sassc}/bin/sass'
-    substituteInPlace pylib/common.py \
+    substituteInPlace polychromatic/paths.py \
       --replace "/usr/share/polychromatic" "$out/share/polychromatic"
   '';
 
@@ -48,24 +50,32 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     sassc
-    wrapGAppsHook
-    qt5.wrapQtAppsHook
+    wrapGAppsHook3
+    qt6.wrapQtAppsHook
+    qt6.qtbase
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    colorama
-    colour
-    openrazer
-    pyqt5
-    pyqtwebengine
-    requests
-    setproctitle
-    libxcb
-    openrazer-daemon
-    libappindicator-gtk3
-    ibus
-    usbutils
-  ];
+  buildInputs = [ qt6.qtwayland ];
+
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      colorama
+      colour
+      openrazer
+      pyqt6
+      pyqt6-webengine
+      requests
+      setproctitle
+      libxcb
+      openrazer-daemon
+      ibus
+      usbutils
+    ]
+    ++ [
+      libayatana-appindicator
+      psmisc
+    ];
 
   dontWrapGapps = true;
   dontWrapQtApps = true;

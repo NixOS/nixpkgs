@@ -1,26 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchPypi
-, setuptools-scm
-, attrs
-, deprecated
-, hepunits
-, pytestCheckHook
-, tabulate
-, pandas
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  deprecated,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  hepunits,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "particle";
-  version = "0.21.0";
+  version = "0.24.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SDdIg05+gfLNaQ+glitTf3Z/6K9HBci62mjIu9rIoX0=";
+    hash = "sha256-irS13UVHui2ug1SVWkNSEIkqV13/RvMjysbPQGALl2o=";
   };
+
+  postPatch = ''
+    # Disable benchmark tests, so we won't need pytest-benchmark and pytest-cov
+    # as dependencies
+    substituteInPlace pyproject.toml \
+      --replace '"--benchmark-disable",' ""
+  '';
+
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   propagatedBuildInputs = [
@@ -29,28 +44,21 @@ buildPythonPackage rec {
     hepunits
   ];
 
-  pythonImportsCheck = [
-    "particle"
-  ];
-
-  preCheck = ''
-    # Disable benchmark tests, so we won't need pytest-benchmark and pytest-cov
-    # as dependencies
-    substituteInPlace pyproject.toml \
-      --replace '"--benchmark-disable", ' ""
-    rm tests/particle/test_performance.py
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     tabulate
     pandas
   ];
 
-  meta = {
-    description = "Package to deal with particles, the PDG particle data table, PDGIDs, etc.";
+  pythonImportsCheck = [ "particle" ];
+
+  disabledTestPaths = [ "tests/particle/test_performance.py" ];
+
+  meta = with lib; {
+    description = "Package to deal with particles, the PDG particle data table and others";
     homepage = "https://github.com/scikit-hep/particle";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ doronbehar ];
+    changelog = "https://github.com/scikit-hep/particle/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

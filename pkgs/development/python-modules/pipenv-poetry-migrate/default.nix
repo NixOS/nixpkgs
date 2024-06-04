@@ -1,30 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, poetry-core
-, tomlkit
-, typer
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  poetry-core,
+  tomlkit,
+  typer,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  version = "0.3.0";
   pname = "pipenv-poetry-migrate";
+  version = "0.5.6";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "yhino";
     repo = "pipenv-poetry-migrate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-j6YAHMjgaQgHpKBH67PFEUHhLi+kg3L966GbEyMPphM=";
+    hash = "sha256-+OkfuIwbDx6SN5lawDJZYBrjHn9rsT/FT+GQ2MOAtg0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     setuptools # for pkg_resources
@@ -32,17 +32,13 @@ buildPythonPackage rec {
     typer
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace 'typer = "^0.4.0"' 'typer = ">=0.4"'
-  '';
-
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "This is simple migration script, migrate pipenv to poetry";
+    mainProgram = "pipenv-poetry-migrate";
     homepage = "https://github.com/yhino/pipenv-poetry-migrate";
+    changelog = "https://github.com/yhino/pipenv-poetry-migrate/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ gador ];
   };

@@ -1,61 +1,32 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, olm, libsignal-ffi }:
 
-python3.pkgs.buildPythonPackage rec {
+buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.4.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-WcyBv7b1JxiZJSqxgAUUgTa5Q/aNzU9SfXfdXKVuuXQ=";
+    rev = "v${version}";
+    hash = "sha256-JybQhVej82aWcsGLKS/tCBUuy9rARSe4d+ivYEZ0ve4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    CommonMark
-    aiohttp
-    asyncpg
-    attrs
-    mautrix
-    phonenumbers
-    pillow
-    prometheus-client
-    pycryptodome
-    python-olm
-    python-magic
-    qrcode
-    ruamel-yaml
-    unpaddedbase64
-    yarl
+  buildInputs = [
+    olm
+    # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
+    # see https://github.com/mautrix/signal/issues/401
+    libsignal-ffi
   ];
 
+  vendorHash = "sha256-LHq/CH53/Jzh49qXdoqXURqTVbSitczw3yH3KU2BMpc=";
+
   doCheck = false;
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "asyncpg>=0.20,<0.26" "asyncpg>=0.20" \
-      --replace "mautrix>=0.16.0,<0.17" "mautrix>=0.16.0"
-  '';
-
-  postInstall = ''
-    mkdir -p $out/bin
-
-    # Make a little wrapper for running mautrix-signal with its dependencies
-    echo "$mautrixSignalScript" > $out/bin/mautrix-signal
-    echo "#!/bin/sh
-      exec python -m mautrix_signal \"\$@\"
-    " > $out/bin/mautrix-signal
-    chmod +x $out/bin/mautrix-signal
-    wrapProgram $out/bin/mautrix-signal \
-      --prefix PATH : "${python3}/bin" \
-      --prefix PYTHONPATH : "$PYTHONPATH"
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/signal";
     description = "A Matrix-Signal puppeting bridge";
     license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [ expipiplus1 niklaskorz ma27 ];
+    mainProgram = "mautrix-signal";
   };
 }

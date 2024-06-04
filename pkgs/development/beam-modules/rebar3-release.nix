@@ -22,15 +22,13 @@
 , ...
 }@attrs:
 
-with lib;
-
 let
   shell = drv: stdenv.mkDerivation {
     name = "interactive-shell-${drv.pname}";
     buildInputs = [ drv ];
   };
 
-  customPhases = filterAttrs
+  customPhases = lib.filterAttrs
     (_: v: v != null)
     { inherit setupHook configurePhase buildPhase installPhase; };
 
@@ -86,7 +84,8 @@ let
         runHook postInstall
       '';
 
-      postInstall = ''
+      # Release will generate a binary which will cause a read null byte failure, see #261354
+      postInstall = lib.optionalString (releaseType == "escript") ''
         for dir in $out/rel/*/erts-*; do
           echo "ERTS found in $dir - removing references to erlang to reduce closure size"
           for f in $dir/bin/{erl,start}; do
@@ -105,4 +104,4 @@ let
       } // (if attrs ? passthru then attrs.passthru else { }));
     } // customPhases);
 in
-fix pkg
+lib.fix pkg

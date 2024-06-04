@@ -33,7 +33,23 @@ stdenv.mkDerivation rec {
       src = ./make-zoneinfo-available.diff;
       inherit tzdata;
     })
+    # The reported version to cmake's find_package() is 3.0.0, but the actual
+    # version is 3.0.1. This patch fixes that.
+    (fetchpatch {
+      name = "fix-cmake-version.patch";
+      url = "https://github.com/HowardHinnant/date/commit/2e19c006e2218447ee31f864191859517603f59f.patch";
+      hash = "sha256-SRAWrwv64ap3Qh3RlhwqgS0L2YsrjqVSgw6iH3KlWvk=";
+    })
   ];
+
+  # Tweaks to fix undefined variable substitutions
+  # https://github.com/HowardHinnant/date/pull/538#pullrequestreview-1373268697
+  postPatch = ''
+    substituteInPlace date.pc.in \
+      --replace '@CMAKE_INSTALL_LIB@' '@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace '@CMAKE_INSTALL_INCLUDE@' '@CMAKE_INSTALL_FULL_INCLUDEDIR@' \
+      --replace '@PACKAGE_VERSION@' '${version}'
+  '';
 
   nativeBuildInputs = [ cmake ];
 

@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, okteto }:
 
 buildGoModule rec {
   pname = "okteto";
-  version = "2.11.1";
+  version = "2.27.2";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     rev = version;
-    hash = "sha256-Eprsy/wd5lMBXk3yVGhofYD9ZBfdmjGMwXZ61RMgd4k=";
+    hash = "sha256-aackeTtByetowH0SVk4/+Pwyeywe6Vpb/mRHudhzLao=";
   };
 
-  vendorHash = "sha256-Yi+4fGCHLH/kA4DuPI2uQ/27xhMd4cPFkTWlI6Bc13A=";
+  vendorHash = "sha256-RpkKWz/cJ1StbpVydqpSfA6uwIYgKa1YOCJVXZRer6k=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -20,6 +20,8 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
+
+  excludedPackages = [ "integration" "samples" ];
 
   ldflags = [
     "-s"
@@ -30,8 +32,12 @@ buildGoModule rec {
   tags = [ "osusergo" "netgo" "static_build" ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
+    export HOME="$(mktemp -d)"
   '';
+
+  checkFlags = [
+    "-skip=TestCreateDockerfile" # Skip flaky test
+  ];
 
   postInstall = ''
     installShellCompletion --cmd okteto \
@@ -40,10 +46,16 @@ buildGoModule rec {
       --zsh <($out/bin/okteto completion zsh)
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = okteto;
+    command = "HOME=\"$(mktemp -d)\" okteto version";
+  };
+
   meta = with lib; {
     description = "Develop your applications directly in your Kubernetes Cluster";
     homepage = "https://okteto.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "okteto";
   };
 }

@@ -5,51 +5,60 @@
 , simdExtensions ? null
 }:
 
-with rec {
+let
+  inherit (lib)
+    head
+    licenses
+    maintainers
+    platforms
+    replaceStrings
+    toList
+    ;
+
   # SIMD instruction sets to compile for. If none are specified by the user,
   # an appropriate one is selected based on the detected host system
   isas = with stdenv.hostPlatform;
-    if simdExtensions != null then lib.toList simdExtensions
+    if simdExtensions != null then toList simdExtensions
     else if avx2Support then [ "AVX2" ]
     else if sse4_1Support then [ "SSE41" ]
     else if isx86_64 then [ "SSE2" ]
     else if isAarch64 then [ "NEON" ]
     else [ "NONE" ];
 
-  archFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "-DARCH=aarch64" ];
-
   # CMake Build flags for the selected ISAs. For a list of flags, see
   # https://github.com/ARM-software/astc-encoder/blob/main/Docs/Building.md
-  isaFlags = map ( isa: "-DISA_${isa}=ON" ) isas;
+  isaFlags = map ( isa: "-DASTCENC_ISA_${isa}=ON" ) isas;
 
   # The suffix of the binary to link as 'astcenc'
-  mainBinary = builtins.replaceStrings
+  mainBinary = replaceStrings
     [ "AVX2" "SSE41"  "SSE2" "NEON" "NONE" "NATIVE" ]
     [ "avx2" "sse4.1" "sse2" "neon" "none" "native" ]
-    ( builtins.head isas );
-};
+    ( head isas );
+in
 
 stdenv.mkDerivation rec {
   pname = "astc-encoder";
-  version = "4.2.0";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "ARM-software";
     repo = "astc-encoder";
     rev = version;
-    sha256 = "sha256-zE0rXCmRz3z1P1wLm8aO7iQ/Yf1TJeEZqz9fB0Shsz4=";
+    sha256 = "sha256-IG/UpTaeKTXdYIR++BZA7+bMRW4NWQUo9PxsEnqPuB4=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = isaFlags ++ archFlags ++ [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+  cmakeBuildType = "RelWithDebInfo";
+
+  cmakeFlags = isaFlags ++ [
+    "-DASTCENC_UNIVERSAL_BUILD=OFF"
   ];
 
   # Set a fixed build year to display within help output (otherwise, it would be 1980)
   postPatch = ''
     substituteInPlace Source/cmake_core.cmake \
-      --replace 'string(TIMESTAMP astcencoder_YEAR "%Y")' 'set(astcencoder_YEAR "2022")'
+      --replace 'string(TIMESTAMP astcencoder_YEAR "%Y")' 'set(astcencoder_YEAR "2023")'
   '';
 
   # Provide 'astcenc' link to main executable
@@ -57,7 +66,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/astcenc-${mainBinary} $out/bin/astcenc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ARM-software/astc-encoder";
     description = "An encoder for the ASTC texture compression format";
     longDescription = ''

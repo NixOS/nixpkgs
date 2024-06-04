@@ -19,23 +19,20 @@ let
       # Packages that are potentially overridden and used as deps here.
       boost
       volk
+      logLib
+      python
     ;
     inherit mkDerivationWith mkDerivation;
+    inherit gnuradio;
+    inherit (gnuradio) gnuradioOlder gnuradioAtLeast;
   } // lib.optionalAttrs (gnuradio.hasFeature "gr-uhd") {
     inherit (gnuradio) uhd;
-  } // (if (lib.versionAtLeast gnuradio.versionAttr.major "3.10") then {
-    inherit (gnuradio) spdlog;
-  } else {
-    inherit (gnuradio) log4cpp;
-  }));
+  });
 in {
 
   inherit callPackage mkDerivation mkDerivationWith;
 
   ### Packages
-
-  inherit gnuradio;
-  inherit (gnuradio) python;
 
   osmosdr = callPackage ../development/gnuradio-modules/osmosdr/default.nix { };
 

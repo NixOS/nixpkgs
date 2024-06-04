@@ -1,5 +1,16 @@
-{ lib, stdenv, multiStdenv, cmake, fetchFromGitHub, file, libX11, makeWrapper
-, qt5, requireFile, unzip, wine
+{ lib,
+  stdenv,
+  multiStdenv,
+  fetchFromGitHub,
+  requireFile,
+  unzip,
+  wine,
+  cmake,
+  makeWrapper,
+  wrapQtAppsHook,
+  file,
+  libX11,
+  qt5
 }:
 
 let
@@ -13,11 +24,11 @@ let
   };
 
   vst-sdk = stdenv.mkDerivation rec {
-    name = "vstsdk368_08_11_2017_build_121";
+    name = "vstsdk369_01_03_2018_build_132";
     src = requireFile {
       name = "${name}.zip";
       url = "http://www.steinberg.net/en/company/developers.html";
-      sha256 = "e0f235d8826d70f1ae0ae5929cd198acae1ecff74612fde5c60cbfb45c2f4a70";
+      sha256 = "0r29fv6yhm2m5yznn8m4my7fq01w1lpphax4sshagy6b1dgjlv3w";
     };
     nativeBuildInputs = [ unzip ];
     installPhase = "cp -r . $out";
@@ -42,9 +53,18 @@ multiStdenv.mkDerivation {
 
   src = airwave-src;
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ file libX11 qt5.qtbase wine-xembed ];
+  buildInputs = [
+    file
+    libX11
+    qt5.qtbase
+    wine-xembed
+  ];
 
   postPatch = ''
     # Binaries not used directly should land in libexec/.

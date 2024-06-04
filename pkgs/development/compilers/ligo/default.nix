@@ -6,25 +6,29 @@
 , ocamlPackages
 , cacert
 , ocaml-crunch
+, jq
+, mustache-go
+, yaml2json
+, tezos-rust-libs
+, darwin
 }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.59.0";
+  version = "1.6.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-JwFFreUV70W5soXY0UF8/4QlN2oWejdxqwh4KT5VDoQ=";
+    hash = "sha256-ZPHOgozuUij9+4YXZTnn1koddQEQZe/yrpb+OPHO+nA=";
     fetchSubmodules = true;
   };
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
 
-  duneVersion = "3";
-
-  strictDeps = true;
+  # This is a hack to work around the hack used in the dune files
+  OPAM_SWITCH_PREFIX = "${tezos-rust-libs}";
 
   nativeBuildInputs = [
     ocaml-crunch
@@ -33,6 +37,10 @@ ocamlPackages.buildDunePackage rec {
     ocamlPackages.crunch
     ocamlPackages.menhir
     ocamlPackages.ocaml-recovery-parser
+    # deps for changelog
+    jq
+    mustache-go
+    yaml2json
   ];
 
   buildInputs = with ocamlPackages; [
@@ -43,8 +51,10 @@ ocamlPackages.buildDunePackage rec {
     ocamlgraph
     bisect_ppx
     decompress
+    fileutils
     ppx_deriving
     ppx_deriving_yojson
+    ppx_yojson_conv
     ppx_expect
     ppx_import
     terminal_size
@@ -60,15 +70,21 @@ ocamlPackages.buildDunePackage rec {
     lambda-term
     tar-unix
     parse-argv
-
+    hacl-star
+    prometheus
+    lwt_ppx
+    msgpck
+    # lsp
+    linol
+    linol-lwt
+    ocaml-lsp
     # Test helpers deps
     qcheck
     qcheck-alcotest
     alcotest-lwt
-
     # vendored tezos' deps
-    tezos-plonk
-    tezos-bls12-381-polynomial
+    aches
+    aches-lwt
     ctypes
     ctypes_stubs_js
     class_group_vdf
@@ -78,13 +94,10 @@ ocamlPackages.buildDunePackage rec {
     lwt-canceler
     ipaddr
     bls12-381
-    bls12-381-legacy
     bls12-381-signature
     ptime
     mtime
     lwt_log
-    ringo
-    ringo-lwt
     secp256k1-internal
     resto
     resto-directory
@@ -94,9 +107,15 @@ ocamlPackages.buildDunePackage rec {
     data-encoding
     pure-splitmix
     zarith_stubs_js
+    simple-diff
+    seqes
+    stdint
+    tezt
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cacert
     ocamlPackages.ca-certs
   ];
@@ -107,6 +126,7 @@ ocamlPackages.buildDunePackage rec {
     homepage = "https://ligolang.org/";
     downloadPage = "https://ligolang.org/docs/intro/installation";
     description = "A friendly Smart Contract Language for Tezos";
+    mainProgram = "ligo";
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
     broken = stdenv.isLinux && stdenv.isAarch64;

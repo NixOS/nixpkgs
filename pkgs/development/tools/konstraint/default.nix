@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "konstraint";
-  version = "0.24.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "plexsystems";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mNritx2YY6x5lwnOWrraHzddRZqEySDOWGOqdmqUyIs=";
+    sha256 = "sha256-GQ79xsvlRDwrthtYgykwAJLP9rkk5iNHGelWAQzOZoA=";
   };
-  vendorSha256 = "sha256-pqGayeo4JkleZaoZfZW6agbMrK+57tYriKCWXGveoUs=";
+  vendorHash = "sha256-EBlJCcF8UcstaD1ztaAFL4MSfBOYvpeUygzXnQbW8N8=";
 
   # Exclude go within .github folder
   excludedPackages = ".github";
@@ -38,6 +38,7 @@ buildGoModule rec {
     homepage = "https://github.com/plexsystems/konstraint";
     changelog = "https://github.com/plexsystems/konstraint/releases/tag/v${version}";
     description = "A policy management tool for interacting with Gatekeeper";
+    mainProgram = "konstraint";
     longDescription = ''
       konstraint is a CLI tool to assist with the creation and management of templates and constraints when using
       Gatekeeper. Automatically copy Rego to the ConstraintTemplate. Automatically update all ConstraintTemplates with

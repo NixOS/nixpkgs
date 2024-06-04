@@ -8,15 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-json";
-  version = "4.7.2";
+  version = "4.7.3";
 
   src = fetchurl {
     url = "mirror://savannah/guile-json/${pname}-${version}.tar.gz";
-    sha256 = "sha256-lCq37FtAhWeZwMqfuBkhrxf8Q2CuvvHMjLH2rZIg1Rk=";
+    sha256 = "sha256-OLoEjtKdEvBbMsWy+3pReVxEi0HkA6Kxty/wA1gX84g=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
-    pkg-config texinfo
+    guile pkg-config texinfo
   ];
   buildInputs = [
     guile

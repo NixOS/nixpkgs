@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, arrow
-, requests-oauthlib
-, typing-extensions
-, pydantic
-, responses
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  arrow,
+  requests-oauthlib,
+  typing-extensions,
+  pydantic,
+  responses,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "vangorra";
     repo = "python_withings_api";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-8cOLHYnodPGk1b1n6xbVyW2iju3cG6MgnzYTKDsP/nw=";
+    hash = "sha256-8cOLHYnodPGk1b1n6xbVyW2iju3cG6MgnzYTKDsP/nw=";
   };
 
   postPatch = ''
@@ -31,9 +32,7 @@ buildPythonPackage rec {
       --replace 'addopts = "--capture no --cov ./withings_api --cov-report html:build/coverage_report --cov-report term --cov-report xml:build/coverage.xml"' '''
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     arrow
@@ -42,7 +41,7 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     responses
   ];
@@ -52,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vangorra/python_withings_api";
     license = licenses.mit;
     maintainers = with maintainers; [ kittywitch ];
+    broken = versionAtLeast pydantic.version "2";
   };
 }

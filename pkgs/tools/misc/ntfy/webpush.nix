@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "cloudbell webpush notification support for ntfy";
     homepage = "https://dschep.github.io/ntfy-webpush/";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

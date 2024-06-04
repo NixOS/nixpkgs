@@ -3,11 +3,10 @@
 , fetchFromGitHub
 , fetchpatch
 , gitUpdater
+, testers
 , cmake
 , pkg-config
 , python3
-, doxygen
-, libxslt
 , boost
 , egl-wayland
 , freetype
@@ -23,7 +22,7 @@
 , libxcb
 , libxkbcommon
 , libxmlxx
-, libyamlcpp
+, yaml-cpp
 , lttng-ust
 , mesa
 , nettle
@@ -32,55 +31,31 @@
 , xorg
 , xwayland
 , dbus
+, gobject-introspection
 , gtest
 , umockdev
 , wlcs
+, validatePkgConfig
 }:
 
-let
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-  pythonEnv = python3.withPackages(ps: with ps; [
-    pillow
-  ] ++ lib.optionals doCheck [
-    pygobject3
-    python-dbusmock
-  ]);
-in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mir";
-  version = "2.11.0";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "mir";
-    rev = "v${version}";
-    hash = "sha256-103PJZEoSgtSbDGCanD2/XdpX6DXXx678GmghdZI7H4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-c1+gxzLEtNCjR/mx76O5QElQ8+AO4WsfcG7Wy1+nC6E=";
   };
 
   patches = [
-    # These four patches fix various path concatenation problems and missing GNUInstallDirs variable uses that affect
-    # install locations and generated pkg-config files
-    # Remove when MirServer/mir/pull/2786 merged & a version > 2.11.0 has the fixes
+    # Fix gbm-kms tests
+    # Remove when version > 2.15.0
     (fetchpatch {
-      name = "0001-mir-Better-pkg-config-path-concatenations.patch";
-      url = "https://github.com/MirServer/mir/pull/2786/commits/a322be08002ae7b2682d3ca7037c314ce900d3c7.patch";
-      hash = "sha256-6nScVan3eefXZb+0T9TvCjRQt+rCMj27sukpdGMVJzY=";
-    })
-    (fetchpatch {
-      name = "0002-mir-Improve-mirtest-pkg-config.patch";
-      url = "https://github.com/MirServer/mir/pull/2786/commits/7a739fde27f5f5eff0ec33f766a807c3ff462663.patch";
-      hash = "sha256-C2cDN4R0C4654Km27PJwKrNiFi/d0iz9/rcABS6eRVI=";
-    })
-    (fetchpatch {
-      name = "0003-mir-Fix-GNUInstallDirs-variable-concatenations-in-CMake.patch";
-      url = "https://github.com/MirServer/mir/pull/2786/commits/543e1ec0162f95611b282d33a2e81a642dc75374.patch";
-      hash = "sha256-nxgj8tTfSqjRxqi67hAuWM9d604TAwhNjUXwGDAEW6A=";
-    })
-    (fetchpatch {
-      name = "0004-mir-More-GNUInstallDirs-variables-less-FULL.patch";
-      url = "https://github.com/MirServer/mir/pull/2786/commits/0cb0a1d5e3ac4aca25ca2ebacdcb984d7ff3a66a.patch";
-      hash = "sha256-rnDvr8ul/GgajHYbpale+szNE6VDgENRY6PnBhfGMN8=";
+      name = "0001-mir-Fix-the-signature-of-drmModeCrtcSetGamma.patch";
+      url = "https://github.com/MirServer/mir/commit/98250e9c32c5b9b940da2fb0a32d8139bbc68157.patch";
+      hash = "sha256-tTtOHGNue5rsppOIQSfkOH5sVfFSn/KPGHmubNlRtLI=";
     })
   ];
 
@@ -100,46 +75,30 @@ stdenv.mkDerivation rec {
         --replace 'LD_PRELOAD=libumockdev-preload.so.0' 'LD_PRELOAD=${lib.getLib umockdev}/lib/libumockdev-preload.so.0'
     done
 
-    # Patch in which tests we want to skip
-    substituteInPlace cmake/MirCommon.cmake \
-      --replace 'set(test_exclusion_filter)' 'set(test_exclusion_filter "${lib.strings.concatStringsSep ":" [
-        # These all fail in the same way: GDK_BACKEND expected to have "wayland", actually has "wayland,x11".
-        # They succeed when run interactively, don't know how to fix them.
-        "ExternalClient.empty_override_does_nothing"
-        "ExternalClient.strange_override_does_nothing"
-        "ExternalClient.another_strange_override_does_nothing"
-      ]}")'
-
     # Fix Xwayland default
     substituteInPlace src/miral/x11_support.cpp \
-      --replace '/usr/bin/Xwayland' '${xwayland}/bin/Xwayland'
+      --replace '/usr/bin/Xwayland' '${lib.getExe xwayland}'
 
     # Fix paths for generating drm-formats
     substituteInPlace src/platform/graphics/CMakeLists.txt \
       --replace "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
       --replace "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
-
-    # Fix date in generated docs not honouring SOURCE_DATE_EPOCH
-    # Install docs to correct dir
-    substituteInPlace cmake/Doxygen.cmake \
-      --replace '"date"' '"date" "--date=@'"$SOURCE_DATE_EPOCH"'"' \
-      --replace "\''${CMAKE_INSTALL_PREFIX}/share/doc/mir-doc" "\''${CMAKE_INSTALL_DOCDIR}"
-
-    # Not installed on Mir HEAD anymore, hence not part of the MirServer/mir/pull/2786 patches
-    substituteInPlace examples/miral-kiosk/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_PREFIX}/bin" "\''${CMAKE_INSTALL_BINDIR}"
   '';
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    doxygen
     glib # gdbus-codegen
-    libxslt
     lttng-ust # lttng-gen-tp
     pkg-config
-    pythonEnv
+    (python3.withPackages (ps: with ps; [
+      pillow
+    ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
+      pygobject3
+      python-dbusmock
+    ]))
+    validatePkgConfig
   ];
 
   buildInputs = [
@@ -158,7 +117,7 @@ stdenv.mkDerivation rec {
     libxcb
     libxkbcommon
     libxmlxx
-    libyamlcpp
+    yaml-cpp
     lttng-ust
     mesa
     nettle
@@ -168,37 +127,48 @@ stdenv.mkDerivation rec {
     xorg.libXcursor
     xorg.xorgproto
     xwayland
-  ] ++ lib.optionals doCheck [
+  ];
+
+  nativeCheckInputs = [
+    dbus
+    gobject-introspection
+  ];
+
+  checkInputs = [
     gtest
     umockdev
     wlcs
   ];
 
-  checkInputs = [
-    dbus
-  ];
-
-  buildFlags = [ "all" "doc" ];
-
   cmakeFlags = [
+    "-DBUILD_DOXYGEN=OFF"
     "-DMIR_PLATFORM='gbm-kms;x11;eglstream-kms;wayland'"
-    "-DMIR_ENABLE_TESTS=${if doCheck then "ON" else "OFF"}"
-    # Eventually renamed to MIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN
-    "-DMIR_BAD_BUFFER_TEST_ENVIRONMENT_BROKEN=ON"
+    "-DMIR_ENABLE_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
+    # BadBufferTest.test_truncated_shm_file *doesn't* throw an error as the test expected, mark as such
+    # https://github.com/MirServer/mir/pull/1947#issuecomment-811810872
+    "-DMIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN=ON"
+    "-DMIR_EXCLUDE_TESTS=${lib.strings.concatStringsSep ";" [
+    ]}"
     # These get built but don't get executed by default, yet they get installed when tests are enabled
     "-DMIR_BUILD_PERFORMANCE_TESTS=OFF"
     "-DMIR_BUILD_PLATFORM_TEST_HARNESS=OFF"
+    # https://github.com/MirServer/mir/issues/2987
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106799
+    "-DMIR_USE_PRECOMPILED_HEADERS=OFF"
   ];
 
-  inherit doCheck;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   preCheck = ''
-    export XDG_RUNTIME_DIR=$TMPDIR
+    # Needs to be exactly /tmp so some failing tests don't get run, don't know why they fail yet
+    # https://github.com/MirServer/mir/issues/2801
+    export XDG_RUNTIME_DIR=/tmp
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" ];
 
   passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     updateScript = gitUpdater {
       rev-prefix = "v";
     };
@@ -215,8 +185,22 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A display server and Wayland compositor developed by Canonical";
     homepage = "https://mir-server.io";
+    changelog = "https://github.com/MirServer/mir/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ onny OPNA2608 ];
     platforms = platforms.linux;
+    pkgConfigModules = [
+      "miral"
+      "mircommon"
+      "mircookie"
+      "mircore"
+      "miroil"
+      "mirplatform"
+      "mir-renderer-gl-dev"
+      "mirrenderer"
+      "mirserver"
+      "mirtest"
+      "mirwayland"
+    ];
   };
-}
+})

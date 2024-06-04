@@ -70,5 +70,6 @@
     license = lib.licenses.gpl3Plus;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
+    mainProgram = "helm";
   };
 }

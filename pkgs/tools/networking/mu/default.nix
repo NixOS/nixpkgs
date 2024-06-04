@@ -1,9 +1,12 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, glibcLocales
 , meson
 , ninja
 , pkg-config
+, python3
+, cld2
 , coreutils
 , emacs
 , glib
@@ -14,40 +17,68 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.8.13";
+  version = "1.12.5";
+
+  outputs = [ "out" "mu4e" ];
 
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    hash = "sha256-uXrJOBF3X8UF1ktTfAoYgzc0QBLvyzzGQVJVfs8tjng=";
+    hash = "sha256-dQeXL+CcysmlV6VYSuZtWGSgIhoqP6Y20Qora4l0iP8=";
   };
 
   postPatch = ''
-    # Fix mu4e-builddir (set it to $out)
-    substituteInPlace mu4e/mu4e-config.el.in \
-      --replace "@abs_top_builddir@" "$out"
-    substituteInPlace lib/utils/mu-test-utils.cc \
-      --replace "/bin/rm" "${coreutils}/bin/rm"
+    substituteInPlace lib/utils/mu-utils-file.cc \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+    substituteInPlace lib/tests/bench-indexer.cc \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+    substituteInPlace lib/mu-maildir.cc \
+      --replace-fail "/bin/mv" "${coreutils}/bin/mv"
+    patchShebangs build-aux/date.py
   '';
 
-  buildInputs = [ emacs glib gmime3 texinfo xapian ];
+  postInstall = ''
+    rm --verbose $mu4e/share/emacs/site-lisp/mu4e/*.elc
+  '';
+
+  # move only the mu4e info manual
+  # this has to be after preFixup otherwise the info manual may be moved back by _multioutDocs()
+  # we manually move the mu4e info manual instead of setting
+  # outputInfo to mu4e because we do not want to move the mu-guile
+  # info manual (if it exists)
+  postFixup = ''
+    moveToOutput share/info/mu4e.info.gz $mu4e
+    install-info $mu4e/share/info/mu4e.info.gz $mu4e/share/info/dir
+    if [[ -a ''${!outputInfo}/share/info/mu-guile.info.gz ]]; then
+      install-info --delete $mu4e/share/info/mu4e.info.gz ''${!outputInfo}/share/info/dir
+    else
+      rm --verbose --recursive ''${!outputInfo}/share/info
+    fi
+  '';
+
+  buildInputs = [ cld2 emacs glib gmime3 texinfo xapian ];
 
   mesonFlags = [
     "-Dguile=disabled"
     "-Dreadline=disabled"
+    "-Dlispdir=${placeholder "mu4e"}/share/emacs/site-lisp"
   ];
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja python3 glibcLocales ];
 
   doCheck = true;
 
+  # Tests need a UTF-8 aware locale configured
+  env.LANG = "C.UTF-8";
+
   meta = with lib; {
-    description = "A collection of utilties for indexing and searching Maildirs";
+    description = "A collection of utilities for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/v${version}";
     maintainers = with maintainers; [ antono chvp peterhoeg ];
+    mainProgram = "mu";
     platforms = platforms.unix;
   };
 }

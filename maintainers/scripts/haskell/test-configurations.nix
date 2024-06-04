@@ -66,6 +66,28 @@ let
     if !builtins.isList files then [ files ] else files
   );
 
+  packageSetsWithVersionedHead = pkgs.haskell.packages // (
+    let
+      headSet = pkgs.haskell.packages.ghcHEAD;
+      # Determine the next GHC release version following GHC HEAD.
+      # GHC HEAD always has an uneven, tentative version number, e.g. 9.7.
+      # GHC releases always have even numbers, i.e. GHC 9.8 is branched off from
+      # GHC HEAD 9.7. Since we use the to be release number for GHC HEAD's
+      # configuration file, we need to calculate this here.
+      headVersion = lib.pipe headSet.ghc.version [
+        lib.versions.splitVersion
+        (lib.take 2)
+        lib.concatStrings
+        lib.strings.toInt
+        (builtins.add 1)
+        toString
+      ];
+    in
+    {
+      "ghc${headVersion}" = headSet;
+    }
+  );
+
   setsForFile = fileName:
     let
       # extract the unique part of the config's file name
@@ -77,12 +99,12 @@ let
         builtins.match "ghc-([0-9]+).([0-9]+).x" configName
       );
       # return all package sets under haskell.packages matching the version components
-      setsForVersion =  builtins.map (name: pkgs.haskell.packages.${name}) (
+      setsForVersion =  builtins.map (name: packageSetsWithVersionedHead.${name}) (
         builtins.filter (setName:
           lib.hasPrefix "ghc${configVersion}" setName
           && (skipBinaryGHCs -> !(lib.hasInfix "Binary" setName))
         ) (
-          builtins.attrNames pkgs.haskell.packages
+          builtins.attrNames packageSetsWithVersionedHead
         )
       );
 

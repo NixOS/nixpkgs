@@ -1,24 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-copybutton";
-  version = "0.5.1";
+  version = "0.5.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-copybutton";
     rev = "v${version}";
-    sha256 = "sha256-ptQNeklF9f0XeDbBq64ZFV15O8b4lQQLHRfblOQ3nRQ=";
+    hash = "sha256-LM2LtQuYsPRJ2XX9aAW36xRtwghTkzug6A6fpVJ6hbk=";
     fetchSubmodules = true;
   };
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
   doCheck = false; # no tests
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication {
   pname = "sdat2img";
@@ -22,5 +22,6 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.xaverdh ];
     platforms = lib.platforms.unix;
+    mainProgram = "sdat2img";
   };
 }

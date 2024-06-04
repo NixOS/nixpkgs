@@ -16,16 +16,6 @@ let
   '';
 
 
-  # networkd link files are used early by udev to set up interfaces early.
-  # This must be done in stage 1 to avoid race conditions between udev and
-  # network daemons.
-  # TODO move this into the initrd-network module when it exists
-  initrdLinkUnits = pkgs.runCommand "initrd-link-units" {} ''
-    mkdir -p $out
-    ln -s ${udev}/lib/systemd/network/*.link $out/
-    ${lib.concatMapStringsSep "\n" (file: "ln -s ${file} $out/") (lib.mapAttrsToList (n: v: "${v.unit}/${n}") (lib.filterAttrs (n: _: hasSuffix ".link" n) config.systemd.network.units))}
-  '';
-
   extraUdevRules = pkgs.writeTextFile {
     name = "extra-udev-rules";
     text = cfg.extraRules;
@@ -82,7 +72,7 @@ let
           --replace \"/sbin/blkid \"${pkgs.util-linux}/sbin/blkid \
           --replace \"/bin/mount \"${pkgs.util-linux}/bin/mount \
           --replace /usr/bin/readlink ${pkgs.coreutils}/bin/readlink \
-          --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename
+          --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename 2>/dev/null
       ${optionalString (initrdBin != null) ''
         substituteInPlace $i --replace '/run/current-system/systemd' "${removeSuffix "/bin" initrdBin}"
       ''}
@@ -122,7 +112,8 @@ let
       echo "OK"
 
       filesToFixup="$(for i in "$out"/*; do
-        grep -l '\B\(/usr\)\?/s\?bin' "$i" || :
+        # list all files referring to (/usr)/bin paths, but allow references to /bin/sh.
+        grep -P -l '\B(?!\/bin\/sh\b)(\/usr)?\/bin(?:\/.*)?' "$i" || :
       done)"
 
       if [ -n "$filesToFixup" ]; then
@@ -170,16 +161,22 @@ let
 
       echo "Generating hwdb database..."
       # hwdb --update doesn't return error code even on errors!
-      res="$(${pkgs.buildPackages.udev}/bin/udevadm hwdb --update --root=$(pwd) 2>&1)"
+      res="$(${pkgs.buildPackages.systemd}/bin/systemd-hwdb --root=$(pwd) update 2>&1)"
       echo "$res"
       [ -z "$(echo "$res" | egrep '^Error')" ]
       mv etc/udev/hwdb.bin $out
     '';
 
-  compressFirmware = firmware: if (config.boot.kernelPackages.kernelAtLeast "5.3" && (firmware.compressFirmware or true)) then
-    pkgs.compressFirmwareXz firmware
-  else
-    id firmware;
+  compressFirmware = firmware:
+    let
+      inherit (config.boot.kernelPackages) kernelAtLeast;
+    in
+      if ! (firmware.compressFirmware or true) then
+        firmware
+      else
+        if kernelAtLeast "5.19" then pkgs.compressFirmwareZstd firmware
+        else if kernelAtLeast "5.3" then pkgs.compressFirmwareXz firmware
+        else firmware;
 
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.
@@ -200,7 +197,7 @@ in
     boot.hardwareScan = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to try to load kernel modules for all detected hardware.
         Usually this does a good job of providing you with the modules
         you need, but sometimes it can crash the system or cause other
@@ -209,14 +206,14 @@ in
     };
 
     services.udev = {
-      enable = mkEnableOption (lib.mdDoc "udev") // {
+      enable = mkEnableOption "udev, a device manager for the Linux kernel" // {
         default = true;
       };
 
       packages = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           List of packages containing {command}`udev` rules.
           All files found in
           {file}`«pkg»/etc/udev/rules.d` and
@@ -229,9 +226,12 @@ in
       path = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Packages added to the {env}`PATH` environment variable when
           executing programs from Udev rules.
+
+          coreutils, gnu{sed,grep}, util-linux and config.systemd.package are
+          automatically included.
         '';
       };
 
@@ -241,7 +241,7 @@ in
           ENV{ID_VENDOR_ID}=="046d", ENV{ID_MODEL_ID}=="0825", ENV{PULSE_IGNORE}="1"
         '';
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Additional {command}`udev` rules. They'll be written
           into file {file}`99-local.rules`. Thus they are
           read and applied after all other rules.
@@ -256,7 +256,7 @@ in
             KEYBOARD_KEY_700e2=leftctrl
         '';
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Additional {command}`hwdb` files. They'll be written
           into file {file}`99-local.hwdb`. Thus they are
           read after all other files.
@@ -268,7 +268,7 @@ in
     hardware.firmware = mkOption {
       type = types.listOf types.package;
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         List of packages containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them
         (i.e., when it has detected specific hardware that requires
@@ -288,8 +288,8 @@ in
     networking.usePredictableInterfaceNames = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc ''
-        Whether to assign [predictable names to network interfaces](http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames).
+      description = ''
+        Whether to assign [predictable names to network interfaces](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/).
         If enabled, interfaces
         are assigned names that contain topology information
         (e.g. `wlp3s0`) and thus should be stable
@@ -306,8 +306,7 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         default = [];
-        visible = false;
-        description = lib.mdDoc ''
+        description = ''
           *This will only be used when systemd is used in stage 1.*
 
           List of packages containing {command}`udev` rules that will be copied to stage 1.
@@ -321,8 +320,7 @@ in
       binPackages = mkOption {
         type = types.listOf types.path;
         default = [];
-        visible = false;
-        description = lib.mdDoc ''
+        description = ''
           *This will only be used when systemd is used in stage 1.*
 
           Packages to search for binaries that are referenced by the udev rules in stage 1.
@@ -337,7 +335,7 @@ in
           SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:1D:60:B9:6D:4F", KERNEL=="eth*", NAME="my_fast_network_card"
         '';
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           {command}`udev` rules to include in the initrd
           *only*. They'll be written into file
           {file}`99-local.rules`. Thus they are read and applied
@@ -362,7 +360,7 @@ in
 
     boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
-    boot.initrd.extraUdevRulesCommands = optionalString (!config.boot.initrd.systemd.enable && config.boot.initrd.services.udev.rules != "")
+    boot.initrd.extraUdevRulesCommands = mkIf (!config.boot.initrd.systemd.enable && config.boot.initrd.services.udev.rules != "")
       ''
         cat <<'EOF' > $out/99-local.rules
         ${config.boot.initrd.services.udev.rules}
@@ -398,7 +396,6 @@ in
         systemd = config.boot.initrd.systemd.package;
         binPackages = config.boot.initrd.services.udev.binPackages ++ [ config.boot.initrd.systemd.contents."/bin".source ];
       };
-      "/etc/systemd/network".source = initrdLinkUnits;
     };
     # Insert initrd rules
     boot.initrd.services.udev.packages = [
@@ -410,17 +407,19 @@ in
       }))
     ];
 
-    environment.etc =
-      {
-        "udev/rules.d".source = udevRulesFor {
-          name = "udev-rules";
-          udevPackages = cfg.packages;
-          systemd = config.systemd.package;
-          binPackages = cfg.packages;
-          inherit udevPath udev;
-        };
-        "udev/hwdb.bin".source = hwdbBin;
+    environment.etc = {
+      "udev/rules.d".source = udevRulesFor {
+        name = "udev-rules";
+        udevPackages = cfg.packages;
+        systemd = config.systemd.package;
+        binPackages = cfg.packages;
+        inherit udevPath udev;
       };
+      "udev/hwdb.bin".source = hwdbBin;
+    } // lib.optionalAttrs config.boot.modprobeConfig.enable {
+      # We don't place this into `extraModprobeConfig` so that stage-1 ramdisk doesn't bloat.
+      "modprobe.d/firmware.conf".text = "options firmware_class path=${config.hardware.firmware}/lib/firmware";
+    };
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isEnabled "UNIX")
@@ -428,21 +427,17 @@ in
       (isYes "NET")
     ];
 
-    # We don't place this into `extraModprobeConfig` so that stage-1 ramdisk doesn't bloat.
-    environment.etc."modprobe.d/firmware.conf".text = "options firmware_class path=${config.hardware.firmware}/lib/firmware";
+    system.activationScripts.udevd = lib.mkIf config.boot.kernel.enable ''
+      # The deprecated hotplug uevent helper is not used anymore
+      if [ -e /proc/sys/kernel/hotplug ]; then
+        echo "" > /proc/sys/kernel/hotplug
+      fi
 
-    system.activationScripts.udevd =
-      ''
-        # The deprecated hotplug uevent helper is not used anymore
-        if [ -e /proc/sys/kernel/hotplug ]; then
-          echo "" > /proc/sys/kernel/hotplug
-        fi
-
-        # Allow the kernel to find our firmware.
-        if [ -e /sys/module/firmware_class/parameters/path ]; then
-          echo -n "${config.hardware.firmware}/lib/firmware" > /sys/module/firmware_class/parameters/path
-        fi
-      '';
+      # Allow the kernel to find our firmware.
+      if [ -e /sys/module/firmware_class/parameters/path ]; then
+        echo -n "${config.hardware.firmware}/lib/firmware" > /sys/module/firmware_class/parameters/path
+      fi
+    '';
 
     systemd.services.systemd-udevd =
       { restartTriggers = cfg.packages;

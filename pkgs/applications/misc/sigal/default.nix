@@ -1,20 +1,23 @@
 { stdenv
 , lib
 , python3
+, fetchPypi
 , ffmpeg
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigal";
-  version = "2.3";
-  format = "setuptools";
+  version = "2.4";
+  pyproject = true;
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit version pname;
-    hash = "sha256-4Zsb/OBtU/jV0gThEYe8bcrb+6hW+hnzQS19q1H409Q=";
+    hash = "sha256-pDTaqtqfuk7tACkyaKClTJotuVcTKli5yx1wbEM93TM=";
   };
 
-  patches = [ ./copytree-permissions.patch ];
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     # install_requires
@@ -30,11 +33,9 @@ python3.pkgs.buildPythonApplication rec {
     feedgenerator
     zopfli
     cryptography
-
-    setuptools # needs pkg_resources
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ffmpeg
   ] ++ (with python3.pkgs; [
     pytestCheckHook
@@ -50,6 +51,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Yet another simple static gallery generator";
+    mainProgram = "sigal";
     homepage = "http://sigal.saimon.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar matthiasbeyer ];

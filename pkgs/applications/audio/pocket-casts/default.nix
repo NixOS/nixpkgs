@@ -1,57 +1,59 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, alsa-lib, gtk3, libXScrnSaver, libXtst, mesa, nss }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, electron
+}:
 
-stdenv.mkDerivation rec {
+buildNpmPackage rec {
   pname = "pocket-casts";
-  version = "0.6.0";
+  version = "0.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/felicianotech/pocket-casts-desktop-app/releases/download/v${version}/${pname}_${version}_amd64.deb";
-    sha256 = "sha256-nHdF9RDOkM9HwwmK/axiIPM4nmKrWp/FHNC/EI1vTTc=";
+  src = fetchFromGitHub {
+    owner = "felicianotech";
+    repo = "pocket-casts-desktop-app";
+    rev = "v${version}";
+    hash = "sha256-d4uVeHy4/91Ki6Wk6GlOt2lcK6U+M7fOryiOYA7q/x4=";
   };
 
+  npmDepsHash = "sha256-rMLUQGcbBJBbxXP67lXp0ww8U2HYM/m1CP2dOw1cCHc=";
+
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  dontNpmBuild = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "Pocket Casts";
+      genericName = "Podcasts Listener";
+      exec = "pocket-casts";
+      icon = "pocket-casts";
+      comment = meta.description;
+    })
+  ];
+
   nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
+    copyDesktopItems
     makeWrapper
   ];
 
-  buildInputs = [ alsa-lib gtk3 libXScrnSaver libXtst mesa nss ];
+  postInstall = ''
+    install -Dm644 $out/lib/node_modules/pocket-casts/icon.png $out/share/pixmaps/pocket-casts.png
+    install -Dm644 $out/lib/node_modules/pocket-casts/icon-x360.png $out/share/pixmaps/pocket-casts-x360.png
 
-  unpackCmd = ''
-    # If unpacking using -x option, there is a permission error
-    dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner;
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out
-    mv bin $out
-    mv lib $out
-    mv share $out
-
-    cp $out/lib/pocket-casts/resources/app/icon.png $out/share/pixmaps/pocket-casts.png
-
-    runHook postInstall
-  '';
-
-  postFixup = ''
-    substituteInPlace $out/share/applications/pocket-casts.desktop \
-      --replace Name=pocket-casts "Name=Pocket Casts" \
-      --replace GenericName=pocket-casts "GenericName=Podcasts App" \
-      --replace Exec=pocket-casts Exec=$out/bin/pocket-casts
-    makeWrapper ${electron}/bin/electron \
-      $out/bin/pocket-casts \
-      --add-flags $out/lib/pocket-casts/resources/app/main.js
+    makeWrapper ${electron}/bin/electron $out/bin/pocket-casts \
+      --add-flags $out/lib/node_modules/pocket-casts/main.js
   '';
 
   meta = with lib; {
     description = "Pocket Casts webapp, packaged for the Linux Desktop";
     homepage = "https://github.com/felicianotech/pocket-casts-desktop-app";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = with maintainers; [ wolfangaukang ];
-    platforms = [ "x86_64-linux" ];
+    mainProgram = "pocket-casts";
+    platforms = platforms.linux;
   };
 }

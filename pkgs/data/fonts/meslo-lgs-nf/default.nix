@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "meslo-lgs-nf";
-  version = "2021-09-03";
+  version = "unstable-2023-04-03";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k-media";
-    rev = "389133fb8c9a2347929a23702ce3039aacc46c3d";
-    sha256 = "sha256-dWqRxjqsa/Tiv0Ww8VLHRDhftD3eqa1t2/T0irFeMFI=";
+    rev = "145eb9fbc2f42ee408dacd9b22d8e6e0e553f83d";
+    sha256 = "sha256-8xwVOlOP1SresbReNh1ce2Eu12KdIwdJSg6LKM+k2ng=";
   };
 
   installPhase = ''

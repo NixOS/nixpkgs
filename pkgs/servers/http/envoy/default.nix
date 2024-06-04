@@ -1,5 +1,5 @@
 { lib
-, bazel_5
+, bazel_6
 , bazel-gazelle
 , buildBazelPackage
 , fetchFromGitHub
@@ -14,7 +14,7 @@
 , linuxHeaders
 , nixosTests
 
-# v8 (upstream default), wavm, wamr, wasmtime, disabled
+  # v8 (upstream default), wavm, wamr, wasmtime, disabled
 , wasmRuntime ? "wamr"
 }:
 
@@ -24,25 +24,30 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.23.3";
-    rev = "4801f5881893857fbc53a4061f0b20ef4ca91a5b";
+    version = "1.30.1";
+    rev = "816188b86a0a52095b116b107f576324082c7c02";
+    hash = "sha256-G0rT+OfMk2nitTXcxMr04jwUMYTfb4VBEV1zftalgFU=";
   };
+
+  # these need to be updated for any changes to fetchAttrs
+  depsHash = {
+    x86_64-linux = "sha256-S2qfgaKyBSgCU6CkhLwezbgVqqqaFYAHQMCbYjwYRxY=";
+    aarch64-linux = "sha256-Ge6qfzjwdh9078LE5k9hqFMKx7yc2buoYOpB9IIBS/s=";
+  }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
-buildBazelPackage rec {
+buildBazelPackage {
   pname = "envoy";
   inherit (srcVer) version;
-  bazel = bazel_5;
+  bazel = bazel_6;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
-    inherit (srcVer) rev;
-    sha256 = "sha256-akAuFk+jESWWvLRCDQ0XDT1Eplutfj5uacAFQp714vM=";
+    inherit (srcVer) hash rev;
 
     postFetch = ''
       chmod -R +w $out
       rm $out/.bazelversion
       echo ${srcVer.rev} > $out/SOURCE_VERSION
-      sed -i 's/GO_VERSION = ".*"/GO_VERSION = "host"/g' $out/bazel/dependency_imports.bzl
     '';
   };
 
@@ -51,20 +56,23 @@ buildBazelPackage rec {
     sed -i '/javabase=/d' .bazelrc
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
 
-    # Use system Python.
-    sed -i -e '/python_interpreter_target =/d' -e '/@python3_10/d' bazel/python_dependencies.bzl
+    cp ${./dd_trace_cpp.patch} bazel/dd_trace_cpp.patch
   '';
 
   patches = [
-    # fix issues with brotli and GCC 11.2.0+ (-Werror=vla-parameter)
-    ./bump-brotli.patch
-
-    # fix linux-aarch64 WAMR builds
-    # (upstream WAMR only detects aarch64 on Darwin, not Linux)
-    ./fix-aarch64-wamr.patch
-
     # use system Python, not bazel-fetched binary Python
-    ./use-system-python.patch
+    ./0001-nixpkgs-use-system-Python.patch
+
+    # use system Go, not bazel-fetched binary Go
+    ./0002-nixpkgs-use-system-Go.patch
+
+    # use system C/C++ tools
+    ./0003-nixpkgs-use-system-C-C-toolchains.patch
+
+    # apply patch to dd-trace-cpp
+    # remove once a version of dd-trace-cpp is released and adopted by envoy
+    # that contains https://github.com/DataDog/dd-trace-cpp/commit/3a8e1e9a3cf4e87ef053e954a39dc7a967ac6965
+    ./0004-nixpkgs-add-cstdint-in-dd-trace-cpp.patch
   ];
 
   nativeBuildInputs = [
@@ -82,10 +90,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = {
-      x86_64-linux = "sha256-UXTh5sCN7PJxNbTaG47YnW7aQBBtu101UjfsWU1CtBw=";
-      aarch64-linux = "sha256-uynV2/RWBybR2bjErDjcfoacv5vsI4GJ3SL4OF1kFOE=";
-    }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+    sha256 = depsHash;
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''
@@ -100,14 +105,20 @@ buildBazelPackage rec {
         -e 's,${stdenv.shellPackage},__NIXSHELL__,' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/base_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel
 
       rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
 
+      # Remove compiled python
+      find $bazelOut -name '*.pyc' -delete
+
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
+
+      # fix tcmalloc failure https://github.com/envoyproxy/envoy/issues/30838
+      sed -i '/TCMALLOC_GCC_FLAGS = \[/a"-Wno-changes-meaning",' $bazelOut/external/com_github_google_tcmalloc/tcmalloc/copts.bzl
     '';
   };
   buildAttrs = {
@@ -133,7 +144,7 @@ buildBazelPackage rec {
         -e 's,__NIXSHELL__,${stdenv.shellPackage},' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/base_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel
     '';
     installPhase = ''
       install -Dm0755 bazel-bin/source/exe/envoy-static $out/bin/envoy
@@ -143,17 +154,26 @@ buildBazelPackage rec {
   removeRulesCC = false;
   removeLocalConfigCc = true;
   removeLocal = false;
-  bazelTarget = "//source/exe:envoy-static";
+  bazelTargets = [ "//source/exe:envoy-static" ];
   bazelBuildFlags = [
     "-c opt"
     "--spawn_strategy=standalone"
     "--noexperimental_strict_action_env"
     "--cxxopt=-Wno-error"
+    "--linkopt=-Wl,-z,noexecstack"
 
     # Force use of system Java.
     "--extra_toolchains=@local_jdk//:all"
     "--java_runtime_version=local_jdk"
     "--tool_java_runtime_version=local_jdk"
+
+    # undefined reference to 'grpc_core::*Metadata*::*Memento*
+    #
+    # During linking of the final binary, we see undefined references to grpc_core related symbols.
+    # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
+    # "ParseMemento" and "MementoToValue" are only implemented for some types
+    # and appear unused and unimplemented for the undefined cases reported by the linker.
+    "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
 
     "--define=wasm=${wasmRuntime}"
   ] ++ (lib.optionals stdenv.isAarch64 [
@@ -162,8 +182,13 @@ buildBazelPackage rec {
     #       |         ^
     "--define=tcmalloc=disabled"
   ]);
+
   bazelFetchFlags = [
     "--define=wasm=${wasmRuntime}"
+
+    # https://github.com/bazelbuild/rules_go/issues/3844
+    "--repo_env=GOPROXY=https://proxy.golang.org,direct"
+    "--repo_env=GOSUMDB=sum.golang.org"
   ];
 
   passthru.tests = {
@@ -174,7 +199,9 @@ buildBazelPackage rec {
 
   meta = with lib; {
     homepage = "https://envoyproxy.io";
+    changelog = "https://github.com/envoyproxy/envoy/releases/tag/v${version}";
     description = "Cloud-native edge and service proxy";
+    mainProgram = "envoy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

@@ -1,48 +1,64 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, pytestCheckHook
-, atpublic
-, click
-, clickhouse-cityhash
-, clickhouse-driver
-, dask
-, datafusion
-, duckdb
-, duckdb-engine
-, filelock
-, geoalchemy2
-, geopandas
-, graphviz-nox
-, lz4
-, multipledispatch
-, numpy
-, packaging
-, pandas
-, parsy
-, poetry-core
-, poetry-dynamic-versioning
-, psycopg2
-, pyarrow
-, pydantic
-, pymysql
-, pyspark
-, pytest-benchmark
-, pytest-randomly
-, pytest-mock
-, pytest-xdist
-, python
-, pytz
-, regex
-, rich
-, rsync
-, shapely
-, sqlalchemy
-, sqlglot
-, sqlite
-, toolz
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  atpublic,
+  bidict,
+  black,
+  clickhouse-connect,
+  dask,
+  datafusion,
+  db-dtypes,
+  duckdb,
+  duckdb-engine,
+  filelock,
+  geoalchemy2,
+  geopandas,
+  google-cloud-bigquery,
+  google-cloud-bigquery-storage,
+  graphviz,
+  hypothesis,
+  multipledispatch,
+  numpy,
+  oracledb,
+  packaging,
+  pandas,
+  parsy,
+  pins,
+  poetry-core,
+  poetry-dynamic-versioning,
+  polars,
+  psycopg2,
+  pyarrow,
+  pyarrow-hotfix,
+  pydata-google-auth,
+  pydruid,
+  pymysql,
+  pyodbc,
+  pyspark,
+  pytest-benchmark,
+  pytest-httpserver,
+  pytest-mock,
+  pytest-randomly,
+  pytest-snapshot,
+  pytest-timeout,
+  pytest-xdist,
+  python-dateutil,
+  pytz,
+  regex,
+  rich,
+  shapely,
+  snowflake-connector-python,
+  snowflake-sqlalchemy,
+  sqlalchemy,
+  sqlalchemy-views,
+  sqlglot,
+  sqlite,
+  toolz,
+  trino-python-client,
+  typing-extensions,
 }:
 let
   testBackends = [
@@ -53,111 +69,211 @@ let
   ];
 
   ibisTestingData = fetchFromGitHub {
+    name = "ibis-testing-data";
     owner = "ibis-project";
     repo = "testing-data";
-    rev = "3c39abfdb4b284140ff481e8f9fbb128b35f157a";
-    sha256 = "sha256-BZWi4kEumZemQeYoAtlUSw922p+R6opSWp/bmX0DjAo=";
+    # https://github.com/ibis-project/ibis/blob/9.0.0/nix/overlay.nix#L20-L26
+    rev = "1922bd4617546b877e66e78bb2b87abeb510cf8e";
+    hash = "sha256-l5d7r/6Voy6N2pXq3IivLX3N0tNfKKwsbZXRexzc8Z8=";
   };
 in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "3.2.0";
-  format = "pyproject";
+  version = "9.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
+    name = "ibis-source";
     repo = "ibis";
     owner = "ibis-project";
-    rev = version;
-    hash = "sha256-YRP1nGJs4btqXQirm0GfEDKNPCVXexVrwQ6sE8JtD2o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ebTYCBL1zm2Rmwg998x2kYvKhyQDk8Di1pcx5lR37xo=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
+
+  POETRY_DYNAMIC_VERSIONING_BYPASS = version;
 
   propagatedBuildInputs = [
     atpublic
+    bidict
     multipledispatch
     numpy
-    packaging
     pandas
     parsy
-    poetry-dynamic-versioning
-    pydantic
+    pyarrow
+    pyarrow-hotfix
+    python-dateutil
     pytz
-    regex
     rich
+    sqlglot
     toolz
+    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    click
+    black
     filelock
+    hypothesis
     pytest-benchmark
+    pytest-httpserver
     pytest-mock
     pytest-randomly
+    pytest-snapshot
+    pytest-timeout
     pytest-xdist
-    rsync
   ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
-
-  preBuild = ''
-    # setup.py exists only for developer convenience and is automatically generated
-    # it gets in the way in nixpkgs so we remove it
-    rm setup.py
-  '';
 
   pytestFlagsArray = [
     "--dist=loadgroup"
     "-m"
     "'${lib.concatStringsSep " or " testBackends} or core'"
-    # this test fails on nixpkgs datafusion version (0.4.0), but works on
-    # datafusion 0.6.0
-    "-k"
-    "'not datafusion-no_op'"
   ];
 
+  disabledTests = [
+    # breakage from sqlalchemy2 truediv changes
+    "test_tpc_h17"
+    # tries to download duckdb extensions
+    "test_attach_sqlite"
+    "test_connect_extensions"
+    "test_load_extension"
+    "test_read_sqlite"
+    "test_register_sqlite"
+    # duckdb does not respect sample_size=2 (reads 3 lines of csv).
+    "test_csv_reregister_schema"
+    # duckdb fails with:
+    # "This function can not be called with an active transaction!, commit or abort the existing one first"
+    "test_vectorized_udf"
+    "test_s3_403_fallback"
+    "test_map_merge_udf"
+    "test_udf"
+    "test_map_udf"
+    # DataFusion error
+    "datafusion"
+    # pluggy.PluggyTeardownRaisedWarning
+    "test_repr_png_is_not_none_in_not_interactive"
+    "test_interval_arithmetic"
+  ];
+
+  # patch out tests that check formatting with black
+  postPatch = ''
+    find ibis/tests -type f -name '*.py' -exec sed -i \
+      -e '/^ *assert_decompile_roundtrip/d' \
+      -e 's/^\( *\)code = ibis.decompile(expr, format=True)/\1code = ibis.decompile(expr)/g' {} +
+  '';
+
   preCheck = ''
-    set -eo pipefail
-
-    export IBIS_TEST_DATA_DIRECTORY
-    IBIS_TEST_DATA_DIRECTORY="ci/ibis-testing-data"
-
-    mkdir -p "$IBIS_TEST_DATA_DIRECTORY"
+    HOME="$TMPDIR"
+    export IBIS_TEST_DATA_DIRECTORY="ci/ibis-testing-data"
 
     # copy the test data to a directory
-    rsync --chmod=Du+rwx,Fu+rw --archive "${ibisTestingData}/" "$IBIS_TEST_DATA_DIRECTORY"
+    ln -s "${ibisTestingData}" "$IBIS_TEST_DATA_DIRECTORY"
   '';
 
   postCheck = ''
     rm -r "$IBIS_TEST_DATA_DIRECTORY"
   '';
 
-  pythonImportsCheck = [
-    "ibis"
-  ] ++ map (backend: "ibis.backends.${backend}") testBackends;
+  pythonImportsCheck = [ "ibis" ] ++ map (backend: "ibis.backends.${backend}") testBackends;
 
   passthru = {
     optional-dependencies = {
-      clickhouse = [ clickhouse-cityhash clickhouse-driver lz4 sqlglot ];
-      dask = [ dask pyarrow ];
+      bigquery = [
+        db-dtypes
+        google-cloud-bigquery
+        google-cloud-bigquery-storage
+        pydata-google-auth
+      ];
+      clickhouse = [
+        clickhouse-connect
+        sqlalchemy
+      ];
+      dask = [
+        dask
+        regex
+      ];
       datafusion = [ datafusion ];
-      duckdb = [ duckdb duckdb-engine pyarrow sqlalchemy sqlglot ];
-      geospatial = [ geoalchemy2 geopandas shapely ];
-      mysql = [ sqlalchemy pymysql sqlglot ];
-      pandas = [ ];
-      postgres = [ psycopg2 sqlalchemy sqlglot ];
-      pyspark = [ pyarrow pyspark ];
-      sqlite = [ sqlalchemy sqlite sqlglot ];
-      visualization = [ graphviz-nox ];
+      druid = [
+        pydruid
+        sqlalchemy
+      ];
+      duckdb = [
+        duckdb
+        duckdb-engine
+        sqlalchemy
+        sqlalchemy-views
+      ];
+      flink = [ ];
+      geospatial = [
+        geoalchemy2
+        geopandas
+        shapely
+      ];
+      mssql = [
+        sqlalchemy
+        pyodbc
+        sqlalchemy-views
+      ];
+      mysql = [
+        sqlalchemy
+        pymysql
+        sqlalchemy-views
+      ];
+      oracle = [
+        sqlalchemy
+        oracledb
+        packaging
+        sqlalchemy-views
+      ];
+      pandas = [ regex ];
+      polars = [
+        polars
+        packaging
+      ];
+      postgres = [
+        psycopg2
+        sqlalchemy
+        sqlalchemy-views
+      ];
+      pyspark = [
+        pyspark
+        sqlalchemy
+        packaging
+      ];
+      snowflake = [
+        snowflake-connector-python
+        snowflake-sqlalchemy
+        sqlalchemy-views
+        packaging
+      ];
+      sqlite = [
+        regex
+        sqlalchemy
+        sqlalchemy-views
+      ];
+      trino = [
+        trino-python-client
+        sqlalchemy
+        sqlalchemy-views
+      ];
+      visualization = [ graphviz ];
+      decompiler = [ black ];
+      examples = [ pins ] ++ pins.optional-dependencies.gcs;
     };
   };
 
   meta = with lib; {
     description = "Productivity-centric Python Big Data Framework";
     homepage = "https://github.com/ibis-project/ibis";
+    changelog = "https://github.com/ibis-project/ibis/blob/${version}/docs/release_notes.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc cpcloud ];
+    maintainers = with maintainers; [ cpcloud ];
   };
 }

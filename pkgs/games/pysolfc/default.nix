@@ -1,25 +1,42 @@
-{ lib, fetchzip, buildPythonApplication, python3Packages
-  , desktop-file-utils, freecell-solver }:
+{ lib
+, fetchzip
+, buildPythonApplication
+, python3Packages
+, desktop-file-utils
+, freecell-solver
+}:
 
 buildPythonApplication rec {
-  pname = "PySolFC";
-  version = "2.16.0";
+  pname = "pysolfc";
+  version = "2.21.0";
 
   src = fetchzip {
-    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC/PySolFC-${version}/PySolFC-${version}.tar.xz";
-    sha256 = "sha256-kklB16IrDicxqMee1kbxtoqgwcSrMjCV4HP6GtnZxo8=";
+    url = "mirror://sourceforge/pysolfc/PySolFC-${version}.tar.xz";
+    hash = "sha256-Deye7KML5G6RZkth2veVgPOWZI8gnusEvszlrPTAhag=";
   };
 
   cardsets = fetchzip {
-    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC-Cardsets/PySolFC-Cardsets-2.1/PySolFC-Cardsets-2.1.tar.bz2";
-    sha256 = "sha256-0ji6jY7zJFaaaJdInaULKUou+u934RMzYjxVDGVHbE0=";
+    url = "mirror://sourceforge/pysolfc/PySolFC-Cardsets-2.2.tar.bz2";
+    hash = "sha256-mWJ0l9rvn9KeZ9rCWy7VjngJzJtSQSmG8zGcYFE4yM0=";
+  };
+
+  music = fetchzip {
+    url = "mirror://sourceforge/pysolfc/pysol-music-4.50.tar.xz";
+    hash = "sha256-sOl5U98aIorrQHJRy34s0HHaSW8hMUE7q84FMQAj5Yg=";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    tkinter six random2 configobj
-    pysol-cards attrs pycotap
+    tkinter
+    six
+    random2
+    configobj
+    pysol-cards
+    attrs
+    pycotap
     # optional :
-    pygame freecell-solver pillow
+    pygame
+    freecell-solver
+    pillow
   ];
 
   patches = [
@@ -35,6 +52,7 @@ buildPythonApplication rec {
   postInstall = ''
     mkdir $out/share/PySolFC/cardsets
     cp -r $cardsets/* $out/share/PySolFC/cardsets
+    cp -r $music/data/music $out/share/PySolFC
   '';
 
   # No tests in archive
@@ -42,6 +60,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A collection of more than 1000 solitaire card games";
+    mainProgram = "pysol.py";
     homepage = "https://pysolfc.sourceforge.io";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kierdavis ];

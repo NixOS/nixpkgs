@@ -107,6 +107,8 @@ in
 
       with subtest("Network is up"):
           alice.wait_until_succeeds("ping -c1 bob")
+          alice.succeed("systemctl restart ipsec")
+          bob.succeed("systemctl restart ipsec")
 
       with subtest("Eve can eavesdrop cleartext traffic"):
           eavesdrop()
@@ -117,11 +119,11 @@ in
       with subtest("Libreswan is ready"):
           alice.wait_for_unit("ipsec")
           bob.wait_for_unit("ipsec")
-          alice.succeed("ipsec verify 1>&2")
+          alice.succeed("ipsec checkconfig")
 
       with subtest("Alice and Bob can start the tunnel"):
-          alice.execute("ipsec auto --start tunnel >&2 &")
-          bob.succeed("ipsec auto --start tunnel")
+          alice.execute("ipsec start tunnel >&2 &")
+          bob.succeed("ipsec start tunnel")
           # apparently this is needed to "wake" the tunnel
           bob.execute("ping -c1 alice")
 

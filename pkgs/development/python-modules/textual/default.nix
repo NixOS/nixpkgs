@@ -1,71 +1,80 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, importlib-metadata
-, nanoid
-, rich
-, typing-extensions
-, aiohttp
-, click
-, jinja2
-, msgpack
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, syrupy
-, time-machine
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  markdown-it-py,
+  poetry-core,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  syrupy,
+  time-machine,
+  tree-sitter,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.10.0";
-  format = "pyproject";
+  version = "0.53.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Textualize";
-    repo = pname;
+    repo = "textual";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-T71Jmgj/hgLOcSHu5QyqdZ7dYpLjhTQqDBdQgiaGXA8=";
+    hash = "sha256-73qEogHe69B66r4EJOj2RAP95O5z7v/UYARTIEPxrcA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'importlib-metadata = "^4.11.3"' 'importlib-metadata = "*"'
-  '';
-
-  propagatedBuildInputs = [
-    importlib-metadata
-    nanoid
+  dependencies = [
+    markdown-it-py
     rich
-  ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
-  ];
+  ] ++ markdown-it-py.optional-dependencies.plugins ++ markdown-it-py.optional-dependencies.linkify;
 
-  checkInputs = [
-    aiohttp
-    click
+  optional-dependencies = {
+    syntax = [
+      tree-sitter
+      # tree-sitter-languages
+    ];
+  };
+
+  nativeCheckInputs = [
     jinja2
-    msgpack
     pytest-aiohttp
     pytestCheckHook
     syrupy
     time-machine
+  ] ++ optional-dependencies.syntax;
+
+  disabledTestPaths = [
+    # snapshot tests require syrupy<4
+    "tests/snapshot_tests/test_snapshots.py"
   ];
 
-  pythonImportsCheck = [
-    "textual"
+  disabledTests = [
+    # Assertion issues
+    "test_textual_env_var"
+    "test_softbreak_split_links_rendered_correctly"
+
+    # requires tree-sitter-languages which is not packaged in nixpkgs
+    "test_register_language"
+    "test_language_binary_missing"
   ];
+
+  pythonImportsCheck = [ "textual" ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
+    changelog = "https://github.com/Textualize/textual/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ joelkoen ];
   };

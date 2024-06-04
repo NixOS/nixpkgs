@@ -1,18 +1,31 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, digiham, csdr, pycsdr, codecserver }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  digiham,
+  csdr,
+  pycsdr,
+  codecserver,
+}:
 
 buildPythonPackage rec {
   pname = "pydigiham";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = "pydigiham";
     rev = version;
-    sha256 = "sha256-kiEvQl3SuDnHI4Fh97AarsszHGFt7tbWBvBRW84Qv18=";
+    hash = "sha256-kiEvQl3SuDnHI4Fh97AarsszHGFt7tbWBvBRW84Qv18=";
   };
 
   propagatedBuildInputs = [ digiham ];
-  buildInputs = [ codecserver pycsdr ];
+  buildInputs = [
+    codecserver
+    pycsdr
+  ];
   # make pycsdr header files available
   preBuild = ''
     ln -s ${pycsdr}/include/${python.libPrefix}/pycsdr src/pycsdr

@@ -31,7 +31,7 @@ writeScript "update-standardnotes" ''
   fi
 
   function getDownloadUrl() {
-    jq -r ".assets[] | select(.name==\"standard-notes-$newVersion-$1.AppImage\") | .browser_download_url" < "$jsonPath"
+    jq -r ".assets[] | select(.name==\"standard-notes-$newVersion-$1.deb\") | .browser_download_url" < "$jsonPath"
   }
 
   function setJsonKey() {
@@ -44,12 +44,11 @@ writeScript "update-standardnotes" ''
     url=$(getDownloadUrl "$upstreamPlatform")
     hash=$(nix-prefetch-url "$url" --type sha512)
     sriHash=$(nix hash to-sri --type sha512 $hash)
-    setJsonKey .appimage[\""$nixPlatform"\"].url "$url"
-    setJsonKey .appimage[\""$nixPlatform"\"].hash "$sriHash"
+    setJsonKey .deb[\""$nixPlatform"\"].url "$url"
+    setJsonKey .deb[\""$nixPlatform"\"].hash "$sriHash"
   }
 
-  updatePlatform x86_64-linux linux-x86_64
+  updatePlatform x86_64-linux linux-amd64
   updatePlatform aarch64-linux linux-arm64
-  updatePlatform i686-linux linux-i386
   setJsonKey .version "$newVersion"
 ''

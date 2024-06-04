@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
       sha256 = "073h03bmpfdy15qh37lvppayld2747i4acpyk0pm5nf2raiak0zm";
     };
 
-    patchPhase = ''
+    postPatch = ''
       substituteInPlace Makefile \
-        --replace "gcc" "cc"
+        --replace "gcc" "$CC"
     '';
 
     installPhase = ''
@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
     meta = with lib; {
       description = "Dump .torrent file information";
       homepage = "https://sourceforge.net/projects/dumptorrent/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Only;
       maintainers = [ maintainers.zohl ];
       platforms = platforms.all;
+      mainProgram = "dumptorrent";
     };
 }

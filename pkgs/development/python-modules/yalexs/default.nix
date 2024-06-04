@@ -1,64 +1,70 @@
-{ lib
-, aiofiles
-, aiohttp
-, aioresponses
-, aiounittest
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pubnub
-, pyjwt
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aioresponses,
+  aiounittest,
+  buildPythonPackage,
+  ciso8601,
+  fetchFromGitHub,
+  pubnub,
+  pyjwt,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "1.2.6";
-  format = "setuptools";
+  version = "3.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-E+Forcx6dRtDeagcjGGE8DFkAKUgsHyCEONW7WU0lpo=";
+    repo = "yalexs";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+Sn+d6CuxIUEDLkDvcq7OT3AumElJFfWCwM02LPIeyg=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    # Not used requirement
+    substituteInPlace setup.py \
+      --replace-fail '"vol",' ""
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiofiles
     aiohttp
+    ciso8601
     pubnub
     pyjwt
     python-dateutil
     requests
   ];
 
-  checkInputs = [
+  # aiounittest is not supported on 3.12
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [
     aioresponses
     aiounittest
-    asynctest
     pytestCheckHook
     requests-mock
   ];
 
-  postPatch = ''
-    # Not used requirement
-    substituteInPlace setup.py \
-      --replace '"vol",' ""
-  '';
-
-  pythonImportsCheck = [
-    "yalexs"
-  ];
+  pythonImportsCheck = [ "yalexs" ];
 
   meta = with lib; {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
+    changelog = "https://github.com/bdraco/yalexs/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

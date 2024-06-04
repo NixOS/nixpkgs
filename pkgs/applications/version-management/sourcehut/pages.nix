@@ -6,21 +6,25 @@
 
 buildGoModule (rec {
   pname = "pagessrht";
-  version = "0.7.4";
+  version = "0.15.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "pages.sr.ht";
     rev = version;
-    sha256 = "sha256-WM9T2LS8yIqaR0PQQRgMk/tiMYcw8DZVPMqMWkj/5RY=";
+    hash = "sha256-Lobuf12ybSO7Y4ztOLMFW0dmPFaBSEPCy4Nmh89tylI=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: server" ""
+
+    # fix build failure due to unused import
+    substituteInPlace server.go \
+      --replace-warn '	"fmt"' ""
   '';
 
-  vendorSha256 = "sha256-VOqY/nStqGyfWOXnJSZX8UYyp2kzcibQM2NRNysHYEc=";
+  vendorHash = "sha256-9hpOkP6AYSZe7MW1mrwFEKq7TvVt6OcF6eHWY4jARuU=";
 
   postInstall = ''
     mkdir -p $out/share/sql/
@@ -30,9 +34,10 @@ buildGoModule (rec {
   meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/pages.sr.ht";
     description = "Web hosting service for the sr.ht network";
+    mainProgram = "pages.sr.ht";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu ];
+    maintainers = with maintainers; [ eadwu christoph-heiss ];
   };
   # There is no ./loaders but this does not cause troubles
   # to go generate
-} // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion= "0.17.9"; })
+} // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.42"; })

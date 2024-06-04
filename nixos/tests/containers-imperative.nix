@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-imperative";
   meta = {
-    maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
+    maintainers = with lib.maintainers; [ aristid aszlig kampfschlaefer ];
   };
 
   nodes.machine =
@@ -13,6 +13,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       nix.settings.sandbox = false;
       nix.settings.substituters = []; # don't try to access cache.nixos.org
 
+      virtualisation.memorySize = 2048;
       virtualisation.writableStore = true;
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.
@@ -21,10 +22,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           modules = lib.singleton {
             nixpkgs = { inherit (config.nixpkgs) localSystem; };
 
-            containers.foo.config = {
-              system.stateVersion = "18.03";
-            };
+            containers.foo.config = {};
           };
+
+          # The system is inherited from the host above.
+          # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
+          system = null;
         };
       in with pkgs; [
         stdenv stdenvNoCC emptyContainer.config.containers.foo.path

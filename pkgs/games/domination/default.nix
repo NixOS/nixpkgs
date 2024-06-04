@@ -26,7 +26,7 @@ let
 
 in stdenv.mkDerivation {
   pname = "domination";
-  version = "1.2.5";
+  version = "1.3.1";
 
   # The .zip releases do not contain the build.xml file
   src = fetchsvn {
@@ -34,8 +34,8 @@ in stdenv.mkDerivation {
     # There are no tags in the repository.
     # Look for commits like "new version x.y.z info on website"
     # or "website update for x.y.z".
-    rev = "2212";
-    sha256 = "sha256-XuPMxGDap8x7I+U7+1C+DlkQkoV/u2FCwYyTZFWmYHM=";
+    rev = "2538";
+    hash = "sha256-wsLBHkQc1SW+PToyCXIek6qRrRga2nLLkM+5msrnsBo=";
   };
 
   nativeBuildInputs = [
@@ -88,8 +88,8 @@ in stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    homepage = "http://domination.sourceforge.net/";
-    downloadPage = "http://domination.sourceforge.net/download.shtml";
+    homepage = "https://domination.sourceforge.net/";
+    downloadPage = "https://domination.sourceforge.net/download.shtml";
     description = "A game that is a bit like the board game Risk or RisiKo";
     longDescription = ''
       Domination is a game that is a bit like the well known board game of Risk

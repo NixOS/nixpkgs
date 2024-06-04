@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "limesctl";
-  version = "3.1.3";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "sapcc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fi36jsQr/Mn1FyOlle/WSpREQgZU6+h4IJzd3ZfItvI=";
+    hash = "sha256-UYQe2C50tB1uc5ij8oh+RBaFg9UYWwPmJ77LCJ11Ml4=";
   };
 
-  vendorSha256 = "sha256-gcIPASIk4Zq8y+KppYNRkf/9guCsYv9XskFANrqOCts=";
+  vendorHash = null;
 
   subPackages = [ "." ];
 
@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/sapcc/limesctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "limesctl";
   };
 }

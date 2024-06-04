@@ -1,7 +1,14 @@
-{ fetchPypi, buildPythonPackage, pygtrie, isPy3k, lib, }:
+{
+  fetchPypi,
+  buildPythonPackage,
+  pygtrie,
+  isPy3k,
+  lib,
+}:
 buildPythonPackage rec {
   pname = "betacode";
   version = "1.0";
+  format = "setuptools";
   src = fetchPypi {
     inherit pname version;
     sha256 = "0s84kd9vblbjz61q7zchx64a6hmdqb4lillna5ryh0g9ij76g6r5";

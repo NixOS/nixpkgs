@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-bundle.patch ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wformat" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wformat" ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ hdf5 boost ];
@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Short read genome assembler";
+    mainProgram = "minia";
     homepage = "https://github.com/GATB/minia";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" ];
   };

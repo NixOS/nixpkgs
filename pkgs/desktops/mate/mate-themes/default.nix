@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-themes";
-  version = "3.22.23";
+  version = "3.22.26";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/themes/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1avgzccdmr7y18rnp3xrhwk82alv2dlig3wh7ivgahcqdiiavrb1";
+    sha256 = "Ik6J02TrO3Pxz3VtBUlKmEIak8v1Q0miyF/GB+t1Xtc=";
   };
 
   nativeBuildInputs = [

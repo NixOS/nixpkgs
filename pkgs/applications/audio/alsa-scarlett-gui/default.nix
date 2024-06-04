@@ -2,32 +2,53 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+, makeWrapper
+, alsa-utils
 , alsa-lib
 , gtk4
+, openssl
 , wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "alsa-scarlett-gui";
-  version = "unstable-2022-08-11";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "geoffreybennett";
-    repo = pname;
-    rev = "65c0f6aa432501355803a823be1d3f8aafe907a8";
-    sha256 = "sha256-wzBOPTs8PTHzu5RpKwKhx552E7QnDx2Zn4OFaes8Q2I=";
+    repo = "alsa-scarlett-gui";
+    rev = version;
+    hash = "sha256-+74JRQn2xwgPHZSrp5b+uny0+aLnsFvx/cOKIdj4J40=";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+
   makeFlags = [ "DESTDIR=\${out}" "PREFIX=''" ];
-  sourceRoot = "source/src";
-  nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
-  buildInputs = [ gtk4 alsa-lib ];
+  sourceRoot = "${src.name}/src";
+
+  postPatch = ''
+    substituteInPlace file.c \
+      --replace-fail "/usr/sbin/alsactl" "${alsa-utils}/bin/alsactl"
+  '';
+
+  nativeBuildInputs = [ pkg-config wrapGAppsHook4 makeWrapper ];
+  buildInputs = [ gtk4 alsa-lib openssl ];
+  postInstall = ''
+    wrapProgram $out/bin/alsa-scarlett-gui --prefix PATH : ${lib.makeBinPath [ alsa-utils ]}
+
+    substituteInPlace $out/share/applications/vu.b4.alsa-scarlett-gui.desktop \
+      --replace-fail "Exec=/bin/alsa-scarlett-gui" "Exec=$out/bin/alsa-scarlett-gui"
+  '';
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
-    description = "GUI for alsa controls presented by Focusrite Scarlett Gen 2/3 Mixer Driver";
+    description = "GUI for alsa controls presented by Focusrite Scarlett Gen 2/3/4 Mixer Driver";
+    mainProgram = "alsa-scarlett-gui";
     homepage = "https://github.com/geoffreybennett/alsa-scarlett-gui";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sebtm ];
+    maintainers = with maintainers; [ mdorman ];
     platforms = platforms.linux;
   };
 }

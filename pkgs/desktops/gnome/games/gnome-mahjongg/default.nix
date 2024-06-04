@@ -1,11 +1,11 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , pkg-config
 , gnome
-, gtk3
-, wrapGAppsHook
+, gtk4
+, wrapGAppsHook4
+, libadwaita
 , librsvg
 , gettext
 , itstool
@@ -19,22 +19,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-mahjongg";
-  version = "3.38.3";
+  version = "3.40.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-mahjongg/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "144ia3zn9rhwa1xbdkvsz6m0dsysl6mxvqw9bnrlh845hmyy9cfj";
+    hash = "sha256-jtVO7K3jawgzaQb9jmyQKg1ve7u7Z2U8I5Vqa2MSI/Y=";
   };
-
-  patches = [
-    # Fix build with meson 0.61
-    # data/meson.build:24:0: ERROR: Function does not take positional arguments.
-    # data/meson.build:45:0: ERROR: Function does not take positional arguments.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-mahjongg/-/commit/a2037b0747163601a5d5b57856d037eecf3a4db7.patch";
-      sha256 = "Wcder6Y9H6c1f8I+IPDvST3umaCU21HgxfXn809JDz0=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -42,17 +32,17 @@ stdenv.mkDerivation rec {
     vala
     desktop-file-utils
     pkg-config
-    gnome.adwaita-icon-theme
     libxml2
     itstool
     gettext
-    wrapGAppsHook
+    wrapGAppsHook4
     glib # for glib-compile-schemas
   ];
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
+    libadwaita
     librsvg
   ];
 
@@ -64,8 +54,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Mahjongg";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-mahjongg";
     description = "Disassemble a pile of tiles by removing matching pairs";
+    mainProgram = "gnome-mahjongg";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

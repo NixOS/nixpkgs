@@ -9,7 +9,7 @@
 , pulseaudio
 , stdenv
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.anpryl ];
+    mainProgram = "mictray";
   };
 }

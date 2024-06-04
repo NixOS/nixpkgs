@@ -20,9 +20,10 @@ python3.pkgs.buildPythonApplication rec {
     pyshark
   ];
 
-  checkInputs = with python3.pkgs; [
-    wireshark-cli
+  nativeCheckInputs = with python3.pkgs; [
+    py
     pytestCheckHook
+    wireshark-cli
   ];
 
   pytestFlagsArray = [
@@ -50,6 +51,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Extract credentials and other useful info from network captures";
+    mainProgram = "credslayer";
     homepage = "https://github.com/ShellCode33/CredSLayer";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];

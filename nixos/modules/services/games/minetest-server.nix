@@ -3,15 +3,52 @@
 with lib;
 
 let
+  CONTAINS_NEWLINE_RE = ".*\n.*";
+  # The following values are reserved as complete option values:
+  # { - start of a group.
+  # """ - start of a multi-line string.
+  RESERVED_VALUE_RE = "[[:space:]]*(\"\"\"|\\{)[[:space:]]*";
+  NEEDS_MULTILINE_RE = "${CONTAINS_NEWLINE_RE}|${RESERVED_VALUE_RE}";
+
+  # There is no way to encode """ on its own line in a Minetest config.
+  UNESCAPABLE_RE = ".*\n\"\"\"\n.*";
+
+  toConfMultiline = name: value:
+    assert lib.assertMsg
+      ((builtins.match UNESCAPABLE_RE value) == null)
+      ''""" can't be on its own line in a minetest config.'';
+    "${name} = \"\"\"\n${value}\n\"\"\"\n";
+
+  toConf = values:
+    lib.concatStrings
+      (lib.mapAttrsToList
+        (name: value: {
+          bool = "${name} = ${toString value}\n";
+          int = "${name} = ${toString value}\n";
+          null = "";
+          set = "${name} = {\n${toConf value}}\n";
+          string =
+            if (builtins.match NEEDS_MULTILINE_RE value) != null
+            then toConfMultiline name value
+            else "${name} = ${value}\n";
+        }.${builtins.typeOf value})
+        values);
+
   cfg   = config.services.minetest-server;
-  flag  = val: name: if val != null then "--${name} ${toString val} " else "";
+  flag  = val: name: lib.optionals (val != null) ["--${name}" "${toString val}"];
+
   flags = [
-    (flag cfg.gameId "gameid")
-    (flag cfg.world "world")
-    (flag cfg.configPath "config")
-    (flag cfg.logPath "logfile")
-    (flag cfg.port "port")
-  ];
+    "--server"
+  ]
+    ++ (
+      if cfg.configPath != null
+      then ["--config" cfg.configPath]
+      else ["--config" (builtins.toFile "minetest.conf" (toConf cfg.config))])
+    ++ (flag cfg.gameId "gameid")
+    ++ (flag cfg.world "world")
+    ++ (flag cfg.logPath "logfile")
+    ++ (flag cfg.port "port")
+    ++ cfg.extraArgs;
 in
 {
   options = {
@@ -19,13 +56,13 @@ in
       enable = mkOption {
         type        = types.bool;
         default     = false;
-        description = lib.mdDoc "If enabled, starts a Minetest Server.";
+        description = "If enabled, starts a Minetest Server.";
       };
 
       gameId = mkOption {
         type        = types.nullOr types.str;
         default     = null;
-        description = lib.mdDoc ''
+        description = ''
           Id of the game to use. To list available games run
           `minetestserver --gameid list`.
 
@@ -36,7 +73,7 @@ in
       world = mkOption {
         type        = types.nullOr types.path;
         default     = null;
-        description = lib.mdDoc ''
+        description = ''
           Name of the world to use. To list available worlds run
           `minetestserver --world list`.
 
@@ -47,7 +84,7 @@ in
       configPath = mkOption {
         type        = types.nullOr types.path;
         default     = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to the config to use.
 
           If set to null, the config of the running user will be used:
@@ -55,10 +92,20 @@ in
         '';
       };
 
+      config = mkOption {
+        type = types.attrsOf types.anything;
+        default = {};
+        description = ''
+          Settings to add to the minetest config file.
+
+          This option is ignored if `configPath` is set.
+        '';
+      };
+
       logPath = mkOption {
         type        = types.nullOr types.path;
         default     = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to logfile for logging.
 
           If set to null, logging will be output to stdout which means
@@ -69,10 +116,18 @@ in
       port = mkOption {
         type        = types.nullOr types.int;
         default     = null;
-        description = lib.mdDoc ''
+        description = ''
           Port number to bind to.
 
           If set to null, the default 30000 will be used.
+        '';
+      };
+
+      extraArgs = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Additional command line flags to pass to the minetest executable.
         '';
       };
     };
@@ -100,7 +155,7 @@ in
       script = ''
         cd /var/lib/minetest
 
-        exec ${pkgs.minetest}/bin/minetest --server ${concatStrings flags}
+        exec ${pkgs.minetest}/bin/minetest ${lib.escapeShellArgs flags}
       '';
     };
   };

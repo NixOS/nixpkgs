@@ -47,7 +47,7 @@ with python3.pkgs; buildPythonApplication rec {
     urwidtrees
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     future
     gawk
     gnupg
@@ -90,6 +90,7 @@ with python3.pkgs; buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/pazz/alot";
     description = "Terminal MUA using notmuch mail";
+    mainProgram = "alot";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ milibopp ];

@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, glibcLocales
-, python
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  python,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "pypdf3";
   version = "1.0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyPDF3";
     inherit version;
-    sha256 = "sha256-yUbzJzQZ43JY415yJz9JkEqxVyPYenYcERXvmXmfjF8=";
+    hash = "sha256-yUbzJzQZ43JY415yJz9JkEqxVyPYenYcERXvmXmfjF8=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -23,9 +25,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest tests/*.py
   '';
 
-  propagatedBuildInputs = [
-    tqdm
-  ];
+  propagatedBuildInputs = [ tqdm ];
 
   meta = with lib; {
     description = "A Pure-Python library built as a PDF toolkit";

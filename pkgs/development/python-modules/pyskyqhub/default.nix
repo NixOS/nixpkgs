@@ -1,8 +1,9 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,19 +17,15 @@ buildPythonPackage rec {
     owner = "RogerSelwyn";
     repo = "skyq_hub";
     rev = version;
-    sha256 = "sha256-yXqtABbsCh1yb96lsEA0gquikVenGLCo6J93AeXAC8k=";
+    hash = "sha256-yXqtABbsCh1yb96lsEA0gquikVenGLCo6J93AeXAC8k=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Tests require phyiscal hardware
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyskyqhub"
-  ];
+  pythonImportsCheck = [ "pyskyqhub" ];
 
   meta = with lib; {
     description = "Python module for accessing SkyQ Hub";

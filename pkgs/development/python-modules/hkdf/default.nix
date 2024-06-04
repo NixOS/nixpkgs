@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
 
 buildPythonPackage rec {
   pname = "hkdf";
   version = "0.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1jhxk5vhxmxxjp3zj526ry521v9inzzl8jqaaf0ma65w6k332ak2";
   };
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     nosetests
@@ -27,5 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/casebeer/python-hkdf";
     license = licenses.bsd2;
   };
-
 }

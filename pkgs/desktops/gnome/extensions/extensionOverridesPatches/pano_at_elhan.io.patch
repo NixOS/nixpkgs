@@ -1,10 +1,27 @@
+diff --git a/__nix-prepend-search-paths.js b/__nix-prepend-search-paths.js
+new file mode 100644
+index 0000000..bf3071b
+--- /dev/null
++++ b/__nix-prepend-search-paths.js
+@@ -0,0 +1,3 @@
++import GIRepository from 'gi://GIRepository';
++GIRepository.Repository.prepend_search_path('@gsound@/lib/girepository-1.0');
++GIRepository.Repository.prepend_search_path('@libgda@/lib/girepository-1.0');
 diff --git a/extension.js b/extension.js
-index 26561f2..01209e7 100644
+index a3d6741..6a38850 100644
 --- a/extension.js
 +++ b/extension.js
-@@ -1,3 +1,5 @@
-+imports.gi.GIRepository.Repository.prepend_search_path('@gsound@/lib/girepository-1.0')
-+imports.gi.GIRepository.Repository.prepend_search_path('@libgda@/lib/girepository-1.0')
- 
- try {
- 
+@@ -1,3 +1,4 @@
++import './__nix-prepend-search-paths.js';
+ import Gio from 'gi://Gio';
+ import GLib from 'gi://GLib';
+ import Shell from 'gi://Shell';
+diff --git a/prefs.js b/prefs.js
+index 5dd94eb..634b2ef 100644
+--- a/prefs.js
++++ b/prefs.js
+@@ -1,3 +1,4 @@
++import './__nix-prepend-search-paths.js';
+ import Gdk from 'gi://Gdk';
+ import Gtk from 'gi://Gtk';
+ import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';

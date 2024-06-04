@@ -1,59 +1,49 @@
-{ lib
-, backports-zoneinfo
-, buildPythonPackage
-, cached-property
-, defusedxml
-, dnspython
-, fetchFromGitHub
-, fetchpatch
-, flake8
-, isodate
-, lxml
-, oauthlib
-, psutil
-, pygments
-, python-dateutil
-, pythonOlder
-, pytz
-, pyyaml
-, requests
-, requests_ntlm
-, requests-oauthlib
-, requests-kerberos
-, requests-mock
-, tzdata
-, tzlocal
+{
+  lib,
+  backports-zoneinfo,
+  buildPythonPackage,
+  cached-property,
+  defusedxml,
+  dnspython,
+  fetchFromGitHub,
+  flake8,
+  isodate,
+  lxml,
+  oauthlib,
+  psutil,
+  pygments,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  requests,
+  requests-ntlm,
+  requests-gssapi,
+  requests-oauthlib,
+  requests-kerberos,
+  requests-mock,
+  setuptools,
+  tzdata,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "4.7.6";
-  format = "setuptools";
+  version = "5.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ecederstrand";
-    repo = pname;
+    repo = "exchangelib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Oarmdc2PuE4kQ/qUqQhuzdTpIrrMFCK72CrVmoSH1DI=";
+    hash = "sha256-GBfSdX9gFLx+CCV8DWHWtVpWi6zI3fg/3g/MiIvRoVM=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "tests-timezones.patch";
-      url = "https://github.com/ecederstrand/exchangelib/commit/d5d386f54adec8ab02f871332b89e1176c214ba2.diff";
-      hash = "sha256-E3Ys6IDJ/yMsvi+1GKbwckkhbNrc9JLM/+GrPtUz+mY=";
-    })
-    (fetchpatch {
-      name = "tests-timezones-2.patch";
-      url = "https://github.com/ecederstrand/exchangelib/commit/419eafcd9261bfd0617823ee437204d5556a8271.diff";
-      excludes = [ "tests/test_ewsdatetime.py" ];
-      hash = "sha256-dSp6NkNT5dHOg8XgDi8sR3t3hq46sNtPjUXva2YfFSU=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cached-property
     defusedxml
     dnspython
@@ -62,16 +52,25 @@ buildPythonPackage rec {
     oauthlib
     pygments
     requests
-    requests_ntlm
+    requests-ntlm
     requests-oauthlib
     requests-kerberos
     tzdata
     tzlocal
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    complete = [
+      requests-gssapi
+      # requests-negotiate-sspi
+    ];
+    kerberos = [ requests-gssapi ];
+    # sspi = [
+    #   requests-negotiate-sspi
+    # ];
+  };
+
+  nativeCheckInputs = [
     flake8
     psutil
     python-dateutil
@@ -80,13 +79,12 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "exchangelib"
-  ];
+  pythonImportsCheck = [ "exchangelib" ];
 
   meta = with lib; {
     description = "Client for Microsoft Exchange Web Services (EWS)";
     homepage = "https://github.com/ecederstrand/exchangelib";
+    changelog = "https://github.com/ecederstrand/exchangelib/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ catern ];
   };

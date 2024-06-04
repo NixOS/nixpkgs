@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libzbc";
-  version = "5.13.0";
+  version = "5.14.0";
 
   src = fetchFromGitHub {
     owner = "westerndigitalcorporation";
     repo = "libzbc";
     rev = "v${version}";
-    sha256 = "6xkA96bgQ2Ik1vEwkw7hwjMbjMSlopzv5ziTh60Mjx0=";
+    sha256 = "sha256-+MBk2ZUr3Vt6pZFb4gTXMOzKBlf1EXMF8y/c1iDrIZM=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ZBC device manipulation library";
     homepage = "https://github.com/westerndigitalcorporation/libzbc";
-    maintainers = with maintainers; [ zseri ];
+    maintainers = [ ];
     license = with licenses; [ bsd2 lgpl3Plus ];
     platforms = platforms.linux;
   };

@@ -2,22 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lock";
-  version = "8.0.3";
+  version = "9.0.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-Xh39gaiTC3g1FHVWqUr8PR/MzeoRaGlCmGZZZnHB4Kc=";
+    hash = "sha256-SMxM66qo3Xmst+SVXu4LYZ0Zzn15wqVVNqqHzAkip/s=";
   };
 
-  cargoSha256 = "sha256-gf9KDzGKjZt4p5ldZShH4lOwrieJeI2WJQ8hU4hhGJE=";
+  cargoHash = "sha256-wUp4zBY64MvD4anGlVsJrI3pyfwVSQGnn6YuweTeYNk=";
 
   buildFeatures = [ "cli" ];
 
   meta = with lib; {
     description = "Self-contained Cargo.lock parser with graph analysis";
+    mainProgram = "cargo-lock";
     homepage = "https://github.com/rustsec/rustsec/tree/main/cargo-lock";
     changelog = "https://github.com/rustsec/rustsec/blob/cargo-lock/v${version}/cargo-lock/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

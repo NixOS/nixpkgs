@@ -1,22 +1,24 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, isPy27
-, mock
-, pytest
-, pytest-runner
-, sh
-, coverage
-, docopt
-, requests
-, urllib3
-, git
-, isPy3k
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  isPy27,
+  mock,
+  pytest,
+  pytest-runner,
+  sh,
+  coverage,
+  docopt,
+  requests,
+  urllib3,
+  git,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "coveralls";
   version = "3.3.1";
+  format = "setuptools";
   disabled = isPy27;
 
   # wanted by tests
@@ -25,16 +27,14 @@ buildPythonPackage rec {
     sha256 = "b32a8bb5d2df585207c119d6c01567b81fba690c9c10a753bfe27a335bfc43ea";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     sh
     pytest
     git
   ];
 
-  buildInputs = [
-    pytest-runner
-  ];
+  buildInputs = [ pytest-runner ];
 
   postPatch = ''
     sed -i "s/'coverage>=\([^,]\+\),.*',$/'coverage>=\1',/" setup.py
@@ -55,9 +55,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "Show coverage stats online via coveralls.io";
+    mainProgram = "coveralls";
     homepage = "https://github.com/coveralls-clients/coveralls-python";
     license = lib.licenses.mit;
   };
 }
-
-

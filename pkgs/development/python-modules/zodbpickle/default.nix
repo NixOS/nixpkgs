@@ -1,27 +1,26 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "zodbpickle";
-  version = "2.6";
+  version = "3.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BZePwk/5PzSQRa6hH6OtHvqA6rGcq2JR6sdBfGMRodI=";
+    hash = "sha256-dcF5Kse9W89JUFggYqw2hOMiqhOrmEIOO/7EWCJzo2g=";
   };
 
   # fails..
   doCheck = false;
 
-  pythonImportsCheck = [
-    "zodbpickle"
-  ];
+  pythonImportsCheck = [ "zodbpickle" ];
 
   meta = with lib; {
     description = "Fork of Python's pickle module to work with ZODB";

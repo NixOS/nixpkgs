@@ -3,13 +3,13 @@
 , SDL2, libpng, libjpeg, libtiff, giflib, libwebp, libXpm, zlib, Foundation
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_image";
-  version = "2.0.5";
+  version = "2.8.2";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_image/release/${pname}-${version}.tar.gz";
-    sha256 = "1l0864kas9cwpp2d32yxl81g98lx40dhbdp03dz7sbv84vhgdmdx";
+    url = "https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${finalAttrs.version}.tar.gz";
+    hash = "sha256-j0hrv7z4Rk3VjJ5dkzlKsCVc5otRxalmqRgkSCCnbdw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     maintainers = with maintainers; [ cpages ];
   };
-}
+})

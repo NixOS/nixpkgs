@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests, pycountry }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pycountry,
+}:
 
 buildPythonPackage rec {
   pname = "itunespy";
   version = "1.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sleepyfran";
@@ -11,7 +18,10 @@ buildPythonPackage rec {
     sha256 = "0yc3az5531qs8nbcw4rhgrszwczgy4bikfwfar7xb2044360sslw";
   };
 
-  propagatedBuildInputs = [ requests pycountry ];
+  propagatedBuildInputs = [
+    requests
+    pycountry
+  ];
 
   # This module has no tests
   doCheck = false;

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-mgmt-core
-, azure-mgmt-common
-, msrest
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-mgmt-core,
+  azure-mgmt-common,
+  msrest,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-resource";
-  version = "22.0.0";
+  version = "23.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-/rXZeeGLUvLP0CO0oKM+VKb3bMaiUtyM117OLGMpjpQ=";
+    hash = "sha256-wrps/ZnflfVfNurcQkXj3HEyVzAqH9And1bZS9jLKOA=";
   };
 
   propagatedBuildInputs = [
@@ -29,18 +30,18 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonNamespaces = [
-    "azure.mgmt"
-  ];
+  pythonNamespaces = [ "azure.mgmt" ];
 
-  pythonImportsCheck = [
-    "azure.mgmt.resource"
-  ];
+  pythonImportsCheck = [ "azure.mgmt.resource" ];
 
   meta = with lib; {
     description = "Microsoft Azure SDK for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ olcai maxwilson jonringer ];
+    maintainers = with maintainers; [
+      olcai
+      maxwilson
+      jonringer
+    ];
   };
 }

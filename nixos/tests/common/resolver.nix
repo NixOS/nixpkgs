@@ -10,7 +10,7 @@
     type = lib.types.bool;
     default = true;
     internal = true;
-    description = lib.mdDoc ''
+    description = ''
       Whether to enable the resolver that automatically discovers zone in the
       test network.
 
@@ -63,7 +63,7 @@
             matched = builtins.match "[ \t]+(${reHost})(.*)" str;
             continue = lib.singleton (lib.head matched)
                     ++ matchAliases (lib.last matched);
-          in if matched == null then [] else continue;
+          in lib.optional (matched != null) continue;
 
           matchLine = str: let
             result = builtins.match "[ \t]*(${reIp})[ \t]+(${reHost})(.*)" str;

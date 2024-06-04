@@ -10,7 +10,7 @@
 , polkit
 , gtk3
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
   ];
 

@@ -1,31 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, CoreServices, graphviz }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, graphviz }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-graphviz";
-  version = "0.1.4";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "dylanowen";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HTHGb23wc10iAWXX/TNMXjTLWm+OSf1WWW1+/aQRcsk=";
+    hash = "sha256-FuAjuU4IXXuas+ubSuTMrZiYTGcZCuLTCSTJXtY2nlw=";
   };
 
-  cargoPatches = [
-    # Remove when updating mdbook-graphviz past 0.1.4.
-    ./update-mdbook-for-rust-1.64.patch
-  ];
-
-  cargoHash = "sha256-keDyfXooPU/GOx56OTq5psDohfZ0E478bnWn0bbC29o=";
+  cargoHash = "sha256-d4s9wmjqMHjev1Y4nAobFnCc5NTdklXcs7XTRXFMEjU=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  checkInputs = [ graphviz ];
+  nativeCheckInputs = [ graphviz ];
 
   meta = with lib; {
-    description = "A preprocessor for mdbook, rendering Graphviz graphs to HTML at build time.";
+    description = "A preprocessor for mdbook, rendering Graphviz graphs to HTML at build time";
+    mainProgram = "mdbook-graphviz";
     homepage = "https://github.com/dylanowen/mdbook-graphviz";
+    changelog = "https://github.com/dylanowen/mdbook-graphviz/releases/tag/v${version}";
     license = [ licenses.mpl20 ];
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault matthiasbeyer ];
   };
 }

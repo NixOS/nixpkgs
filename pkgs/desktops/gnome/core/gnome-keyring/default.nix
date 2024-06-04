@@ -10,37 +10,35 @@
 , libxslt
 , gettext
 , gcr
-, autoreconfHook
 , libcap_ng
 , libselinux
 , p11-kit
 , openssh
-, wrapGAppsHook
+, wrapGAppsHook3
 , docbook-xsl-nons
 , docbook_xml_dtd_43
 , gnome
+, useWrappedDaemon ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-keyring";
-  version = "42.1";
+  version = "46.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "x/TQQMx2prf+Z+CO+RBpEcPIDUD8iMv8jiaEpMlG4+Y=";
+    hash = "sha256-sdOukTL/L4s/JaGQeQiSlo49Cs+VKkh+QPZEqFUM4/Y=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gettext
     libxslt
-    # Upstream uses ancient autotools to pre-generate the scripts.
-    autoreconfHook
     docbook-xsl-nons
     docbook_xml_dtd_43
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -54,11 +52,18 @@ stdenv.mkDerivation rec {
     p11-kit
   ];
 
-  checkInputs = [ dbus python3 ];
+  nativeCheckInputs = [ dbus python3 ];
 
   configureFlags = [
     "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories
     "--with-pkcs11-modules=${placeholder "out"}/lib/pkcs11/"
+    # gnome-keyring doesn't build with ssh-agent by default anymore, we need to
+    # switch to using gcr https://github.com/NixOS/nixpkgs/issues/140824
+    "--enable-ssh-agent"
+    # cross compilation requires these paths to be explicitly declared:
+    "LIBGCRYPT_CONFIG=${lib.getExe' (lib.getDev libgcrypt) "libgcrypt-config"}"
+    "SSH_ADD=${lib.getExe' openssh "ssh-add"}"
+    "SSH_AGENT=${lib.getExe' openssh "ssh-agent"}"
   ];
 
   # Tends to fail non-deterministically.
@@ -78,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
-  postFixup = ''
+  postFixup = lib.optionalString useWrappedDaemon ''
     files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
 
     for file in ''${files[*]}; do
@@ -96,7 +101,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";
-    homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-keyring";
     license = licenses.gpl2;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

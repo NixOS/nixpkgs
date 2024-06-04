@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "talloc";
-  version = "2.3.3";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
-    sha256 = "sha256-a+lbI2i9CvHEzXqIFG62zuoY5Gw//JMwv2JitA0diqo=";
+    sha256 = "sha256-hez55GXiD5j5lQpS6aQR4UMgvFVfolfYdpe356mx2KY=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,13 @@ stdenv.mkDerivation rec {
     libxslt
     libxcrypt
   ];
+
+  # otherwise the configure script fails with
+  # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
+  '';
 
   wafPath = "buildtools/bin/waf";
 
@@ -64,5 +71,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tdb.samba.org/";
     license = licenses.gpl3;
     platforms = platforms.all;
+    maintainers = [ maintainers.matthiasbeyer ];
   };
 }

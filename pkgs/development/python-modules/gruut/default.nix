@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, babel
-, gruut-ipa
-, dateparser
-, jsonlines
-, num2words
-, python-crfsuite
-, python
-, networkx
-, glibcLocales
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  babel,
+  gruut-ipa,
+  dateparser,
+  jsonlines,
+  num2words,
+  python-crfsuite,
+  python,
+  networkx,
+  glibcLocales,
+  pytestCheckHook,
 }:
 
 let
@@ -41,29 +42,42 @@ buildPythonPackage rec {
     owner = "rhasspy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-DD7gnvH9T2R6E19+exWE7Si+XEpfh0Iy5FYbycjgzgM=";
+    hash = "sha256-DD7gnvH9T2R6E19+exWE7Si+XEpfh0Iy5FYbycjgzgM=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "dateparser~=1.0.0" "dateparser" \
       --replace "gruut_lang_en~=2.0.0" "gruut_lang_en" \
-      --replace "jsonlines~=1.2.0" "jsonlines"
+      --replace "jsonlines~=1.2.0" "jsonlines" \
+      --replace "networkx>=2.5.0,<3.0.0" "networkx"
   '';
 
-  propagatedBuildInputs = [
-    babel
-    gruut-ipa
-    jsonlines
-    num2words
-    python-crfsuite
-    dateparser
-    networkx
-  ] ++ (map (lang: callPackage ./language-pack.nix {
-    inherit lang version format src;
-  }) langPkgs);
+  propagatedBuildInputs =
+    [
+      babel
+      gruut-ipa
+      jsonlines
+      num2words
+      python-crfsuite
+      dateparser
+      networkx
+    ]
+    ++ (map (
+      lang:
+      callPackage ./language-pack.nix {
+        inherit
+          lang
+          version
+          format
+          src
+          ;
+      }
+    ) langPkgs);
 
-  checkInputs = [ glibcLocales pytestCheckHook ];
+  nativeCheckInputs = [
+    glibcLocales
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # https://github.com/rhasspy/gruut/issues/25
@@ -79,12 +93,11 @@ buildPythonPackage rec {
     export LC_ALL=en_US.utf-8
   '';
 
-  pythonImportsCheck = [
-    "gruut"
-  ];
+  pythonImportsCheck = [ "gruut" ];
 
   meta = with lib; {
     description = "A tokenizer, text cleaner, and phonemizer for many human languages";
+    mainProgram = "gruut";
     homepage = "https://github.com/rhasspy/gruut";
     license = licenses.mit;
     maintainers = teams.tts.members;

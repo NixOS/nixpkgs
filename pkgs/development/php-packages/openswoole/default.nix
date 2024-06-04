@@ -1,9 +1,16 @@
-{ lib, stdenv, buildPecl, php, valgrind, pcre2, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  buildPecl,
+  valgrind,
+  pcre2,
+  fetchFromGitHub,
+}:
 
 let
-  pname = "openswoole";
-  version = "22.0.0";
-in buildPecl {
+  version = "22.1.2";
+in
+buildPecl {
   inherit version;
   pname = "openswoole";
 
@@ -11,7 +18,7 @@ in buildPecl {
     owner = "openswoole";
     repo = "swoole-src";
     rev = "v${version}";
-    sha256 = "sha256-4Z7mBNGHXS/giSCmPpSyu9/99MEjCnoXgymDM/s1gk8=";
+    hash = "sha256-Z26E1PdKypB/MImCHFgA3rJW5LvVaLZsQUxRv0RcFuo=";
   };
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];

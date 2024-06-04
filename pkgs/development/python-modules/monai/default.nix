@@ -1,43 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, ninja
-, ignite
-, numpy
-, pybind11
-, torch
-, which
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pythonAtLeast,
+  ninja,
+  ignite,
+  numpy,
+  pybind11,
+  torch,
+  which,
 }:
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "1.1.0";
-  disabled = pythonOlder "3.7";
+  version = "1.3.1";
+  pyproject = true;
+  # upper bound due to use of `distutils`; remove after next release:
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
     rev = "refs/tags/${version}";
-    hash = "sha256-XTjZhynIiFtFjJSW6rRAnpErZvf6QHkuK4e2L6l3naM=";
+    hash = "sha256-YjEJbDM9+PiC3Kse8NA/b/yJBsReaK6yIyEB9uktiEc=";
   };
-
-  # Ninja is not detected by setuptools for some reason even though it's present:
-  postPatch = ''
-    substituteInPlace "setup.cfg" --replace "    ninja" ""
-  '';
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES;
   '';
 
-  nativeBuildInputs = [ ninja which ];
+  nativeBuildInputs = [
+    ninja
+    which
+  ];
   buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [ numpy torch ignite ];
+  propagatedBuildInputs = [
+    numpy
+    torch
+    ignite
+  ];
 
   BUILD_MONAI = 1;
 
-  doCheck = false;  # takes too long; numerous dependencies, some not in Nixpkgs
+  doCheck = false; # takes too long; tries to download data
 
   pythonImportsCheck = [
     "monai"
@@ -58,6 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pytorch framework (based on Ignite) for deep learning in medical imaging";
     homepage = "https://github.com/Project-MONAI/MONAI";
+    changelog = "https://github.com/Project-MONAI/MONAI/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.bcdarwin ];
   };

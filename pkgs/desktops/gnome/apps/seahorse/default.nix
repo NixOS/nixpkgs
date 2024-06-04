@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchurl
 , vala
 , meson
@@ -9,7 +10,7 @@
 , gtk3
 , glib
 , glib-networking
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , gnupg
 , desktop-file-utils
@@ -36,22 +37,26 @@ stdenv.mkDerivation rec {
     hash = "sha256-Wx0b+6dPNlgifzyC4pbzMN0PzR70Y2tqIYIo/uXqgy0=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "gpg-2.4.patch";
+      url = "https://gitlab.gnome.org/GNOME/seahorse/-/commit/9260c74779be3d7a378db0671af862ffa3573d42.patch";
+      hash = "sha256-4QiFgH4jC1ucmA9fFozUQZ3Mat76SgpYkMpRz80RH64=";
+    })
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     vala
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
     openssh
     gnupg
     desktop-file-utils
     gcr
-    # error: Package `...' not found in specified Vala API directories or GObject-Introspection GIR directories
-    # TODO: the vala setuphook should look for vala filess in targetOffset instead of hostOffset
-    libhandy
-    libsecret
   ];
 
   buildInputs = [
@@ -100,8 +105,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Seahorse";
+    homepage = "https://gitlab.gnome.org/GNOME/seahorse";
     description = "Application for managing encryption keys and passwords in the GnomeKeyring";
+    mainProgram = "seahorse";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -1,13 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi
-, black
-, pytest
-, setuptools-scm
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  black,
+  pytest,
+  setuptools-scm,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-black";
   version = "0.3.12";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +22,10 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ black toml ];
+  propagatedBuildInputs = [
+    black
+    toml
+  ];
 
   # does not contain tests
   doCheck = false;

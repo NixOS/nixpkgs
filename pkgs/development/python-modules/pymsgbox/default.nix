@@ -1,12 +1,18 @@
-{ lib, fetchPypi, buildPythonPackage, tkinter }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  tkinter,
+}:
 
 buildPythonPackage rec {
-  pname = "PyMsgBox";
+  pname = "pymsgbox";
   version = "1.0.9";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-IZQifei/96PW2lQYSHBaFV3LsqBu4SDZ8oCh1/USY/8=";
+    pname = "PyMsgBox";
+    inherit version;
+    hash = "sha256-IZQifei/96PW2lQYSHBaFV3LsqBu4SDZ8oCh1/USY/8=";
   };
 
   propagatedBuildInputs = [ tkinter ];

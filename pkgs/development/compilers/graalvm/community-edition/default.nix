@@ -1,75 +1,28 @@
-{ callPackage, Foundation }:
-/*
-  Add new graal versions and products here and then see update.nix on how to
-  generate the sources.
-*/
+{ lib
+, pkgs
+}:
 
-let
-  mkGraal = opts: callPackage (import ./mkGraal.nix opts) {
-    inherit Foundation;
-  };
-
-  /*
-    Looks a bit ugly but makes version update in the update script using sed
-    much easier
-
-    Don't change these values! They will be updated by the update script, see ./update.nix.
-  */
-  graalvm11-ce-release-version = "22.3.0";
-  graalvm17-ce-release-version = "22.3.0";
-
-  products = [
-    "graalvm-ce"
-    "native-image-installable-svm"
-  ];
-
-in
+lib.makeScope pkgs.newScope (self:
 {
-  inherit mkGraal;
+  stdenv =
+    if pkgs.stdenv.isDarwin then
+      pkgs.darwin.apple_sdk_11_0.stdenv
+    else
+      pkgs.stdenv;
 
-  graalvm11-ce = mkGraal rec {
-    config = {
-      x86_64-darwin = {
-        inherit products;
-        arch = "darwin-amd64";
-      };
-      x86_64-linux = {
-        inherit products;
-        arch = "linux-amd64";
-      };
-      aarch64-darwin = {
-        inherit products;
-        arch = "darwin-aarch64";
-      };
-      aarch64-linux = {
-        inherit products;
-        arch = "linux-aarch64";
-      };
-    };
-    defaultVersion = graalvm11-ce-release-version;
-    javaVersion = "11";
-  };
+  buildGraalvm = self.callPackage ./buildGraalvm.nix;
 
-  graalvm17-ce = mkGraal rec {
-    config = {
-      x86_64-darwin = {
-        inherit products;
-        arch = "darwin-amd64";
-      };
-      x86_64-linux = {
-        inherit products;
-        arch = "linux-amd64";
-      };
-      aarch64-darwin = {
-        inherit products;
-        arch = "darwin-aarch64";
-      };
-      aarch64-linux = {
-        inherit products;
-        arch = "linux-aarch64";
-      };
-    };
-    defaultVersion = graalvm17-ce-release-version;
-    javaVersion = "17";
-  };
-}
+  buildGraalvmProduct = self.callPackage ./buildGraalvmProduct.nix;
+
+  graalvm-ce = self.callPackage ./graalvm-ce { };
+
+  graalvm-ce-musl = self.callPackage ./graalvm-ce { useMusl = true; };
+
+  graaljs = self.callPackage ./graaljs { };
+
+  graalnodejs = self.callPackage ./graalnodejs { };
+
+  graalpy = self.callPackage ./graalpy { };
+
+  truffleruby = self.callPackage ./truffleruby { };
+})

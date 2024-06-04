@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook, memstreamHook
 , installShellFiles
 , libuuid
 , libobjc ? null, maloader ? null
 , enableTapiSupport ? true, libtapi
+, fetchpatch
 }:
 
 let
@@ -34,7 +35,8 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ];
+  nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
   buildInputs = [ libuuid ]
     ++ lib.optionals stdenv.isDarwin [ libobjc ]
     ++ lib.optional enableTapiSupport libtapi;
@@ -42,8 +44,17 @@ stdenv.mkDerivation {
   patches = [
     ./ld-ignore-rpath-link.patch
     ./ld-rpath-nonfinal.patch
-  ]
-    ++ lib.optional stdenv.isDarwin ./darwin-no-memstream.patch;
+    (fetchpatch {
+      url = "https://github.com/tpoechtrager/cctools-port/commit/4a734070cd2838e49658464003de5b92271d8b9e.patch";
+      hash = "sha256-72KaJyu7CHXxJJ1GNq/fz+kW1RslO3UaKI91LhBtiXA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/MercuryTechnologies/cctools-port/commit/025899b7b3593dedb0c681e689e57c0e7bbd9b80.patch";
+      hash = "sha256-SWVUzFaJHH2fu9y8RcU3Nx/QKx60hPE5zFx0odYDeQs=";
+    })
+    # Always use `open_memstream`. This is provided by memstream via hook on x86_64-darwin.
+    ./darwin-memstream.patch
+  ];
 
   __propagatedImpureHostDeps = [
     # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
@@ -175,7 +186,7 @@ stdenv.mkDerivation {
     broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
     homepage = "http://www.opensource.apple.com/source/cctools/";
     description = "MacOS Compiler Tools (cross-platform port)";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.apple-psl20;
     maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

@@ -28,9 +28,18 @@
 
 assert name == null -> pname != null;
 
-with  import ./functions.nix { inherit lib gemConfig; };
-
 let
+  functions = import ./functions.nix { inherit lib gemConfig; };
+
+  inherit (functions)
+    applyGemConfigs
+    bundlerFiles
+    composeGemAttrs
+    filterGemset
+    genStubsScript
+    pathDerivation
+    ;
+
   gemFiles = bundlerFiles args;
 
   importedGemset = if builtins.typeOf gemFiles.gemset != "set"
@@ -56,9 +65,9 @@ let
   else
     let
       gem = gems.${pname};
-      version = gem.version;
+      suffix = gem.suffix;
     in
-      "${pname}-${version}";
+      "${pname}-${suffix}";
 
   pname' = if pname != null then
     pname
@@ -66,16 +75,16 @@ let
     name;
 
   copyIfBundledByPath = { bundledByPath ? false, ...}:
-  (if bundledByPath then
-      assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/" #*/
-    else ""
+  (lib.optionalString bundledByPath (
+      assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/") #*/
   );
 
-  maybeCopyAll = pkgname: if pkgname == null then "" else
-  let
-    mainGem = gems.${pkgname} or (throw "bundlerEnv: gem ${pkgname} not found");
-  in
-    copyIfBundledByPath mainGem;
+  maybeCopyAll = pkgname: lib.optionalString (pkgname != null) (
+    let
+      mainGem = gems.${pkgname} or (throw "bundlerEnv: gem ${pkgname} not found");
+    in
+      copyIfBundledByPath mainGem
+  );
 
   # We have to normalize the Gemfile.lock, otherwise bundler tries to be
   # helpful by doing so at run time, causing executables to immediately bail
@@ -117,7 +126,9 @@ let
 
     meta = { platforms = ruby.meta.platforms; } // meta;
 
-    passthru = rec {
+    passthru = (lib.optionalAttrs (pname != null) {
+      inherit (gems.${pname}) gemType;
+    } // rec {
       inherit ruby bundler gems confFiles envPaths;
 
       wrappedRuby = stdenv.mkDerivation {
@@ -171,7 +182,7 @@ let
             exit 1
           '';
         };
-    };
+    });
   };
 
   basicEnv =

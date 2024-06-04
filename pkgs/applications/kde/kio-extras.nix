@@ -3,7 +3,7 @@
   exiv2, kactivities, kactivities-stats, karchive, kbookmarks, kconfig, kconfigwidgets,
   kcoreaddons, kdbusaddons, kdsoap, kguiaddons, kdnssd, kiconthemes, ki18n, kio,
   khtml, kpty, syntax-highlighting, libmtp, libssh, openexr, libtirpc,
-  ilmbase, openslp, phonon, qtsvg, samba, solid, gperf, taglib
+  ilmbase, phonon, qtsvg, samba, solid, gperf, taglib, libX11, libXcursor
 }:
 
 mkDerivation {
@@ -16,8 +16,8 @@ mkDerivation {
   buildInputs = [
     exiv2 kactivities kactivities-stats karchive kbookmarks kconfig kconfigwidgets kcoreaddons
     kdbusaddons kdsoap kguiaddons kdnssd kiconthemes ki18n kio khtml
-    kpty syntax-highlighting libmtp libssh openexr libtirpc openslp
-    phonon qtsvg samba solid gperf taglib
+    kpty syntax-highlighting libmtp libssh openexr libtirpc
+    phonon qtsvg samba solid gperf taglib libX11 libXcursor
   ];
 
   # org.kde.kmtpd5 DBUS service launches kiod5 binary from kio derivation, not from kio-extras

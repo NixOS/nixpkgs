@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , alsa-lib
+, libjack2
 , pkg-config
 , which
 , AudioUnit
@@ -15,17 +16,17 @@ stdenv.mkDerivation rec {
   version = "190700_20210406";
 
   src = fetchurl {
-    url = "http://files.portaudio.com/archives/pa_stable_v${version}.tgz";
+    url = "https://files.portaudio.com/archives/pa_stable_v${version}.tgz";
     sha256 = "1vrdrd42jsnffh6rq8ap2c6fr4g9fcld89z649fs06bwqx1bzvs7";
   };
 
   strictDeps = true;
   nativeBuildInputs = [ pkg-config which ];
-  buildInputs = lib.optional (!stdenv.isDarwin) alsa-lib;
+  buildInputs = [ libjack2 ] ++ lib.optionals (!stdenv.isDarwin) [ alsa-lib ];
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays -Wno-error=implicit-const-int-float-conversion";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays -Wno-error=implicit-const-int-float-conversion";
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
 
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Portable cross-platform Audio API";
-    homepage    = "http://www.portaudio.com/";
+    homepage    = "https://www.portaudio.com/";
     # Not exactly a bsd license, but alike
     license     = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];

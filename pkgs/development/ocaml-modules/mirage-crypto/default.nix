@@ -5,13 +5,14 @@
 
 buildDunePackage rec {
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   pname = "mirage-crypto";
-  version = "0.10.7";
+  version = "0.11.3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-crypto/releases/download/v${version}/mirage-crypto-${version}.tbz";
-    sha256 = "sha256-PoGKdgwjXFtoTHtrQ7HN0qfdBOAQW2gNUk+DbrmIppw=";
+    sha256 = "sha256-v7Uw+hac2QXrx+JEnzQHz71nAjrAspG4tvShQ3pdlbE=";
   };
 
   doCheck = true;
@@ -24,8 +25,6 @@ buildDunePackage rec {
   ] ++ lib.optionals withFreestanding [
     ocaml-freestanding
   ];
-
-  strictDeps = !doCheck;
 
   meta = with lib; {
     homepage = "https://github.com/mirage/mirage-crypto";

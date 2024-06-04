@@ -4,15 +4,15 @@ let bins = [ "crane" "gcrane" ]; in
 
 buildGoModule rec {
   pname = "go-containerregistry";
-  version = "0.11.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9C5tlJChDyflFlqwn9YDZB+40PUqwjgIFcdxNBCxWTM=";
+    sha256 = "sha256-mHuxwIyPNUWuP4QmMyLMdRlpwSueyKkk9VezJ4Sv2Nw=";
   };
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/crane" "cmd/gcrane" ];
 

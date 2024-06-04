@@ -1,59 +1,72 @@
-{ lib
-, acme
-, aiohttp
-, asynctest
-, atomicwrites-homeassistant
-, attrs
-, buildPythonPackage
-, fetchFromGitHub
-, pycognito
-, pytest-aiohttp
-, pytestCheckHook
-, snitun
-, warrant
+{
+  lib,
+  acme,
+  aiohttp,
+  atomicwrites-homeassistant,
+  attrs,
+  buildPythonPackage,
+  ciso8601,
+  cryptography,
+  fetchFromGitHub,
+  pycognito,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  snitun,
+  syrupy,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.61.0";
+  version = "0.81.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-KG2eCwGZWVtepJQdsSwFziWsT1AbV6rYWRIO/I/CR8g=";
+    repo = "hass-nabucasa";
+    rev = "refs/tags/${version}";
+    hash = "sha256-61pdl9bjtvC9Fa7jCtSPEz/5PJiANmKqOSSHjK7is2s=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "acme==" "acme>=" \
-      --replace "pycognito==" "pycognito>=" \
-      --replace "snitun==" "snitun>=" \
-  '';
+  pythonRelaxDeps = [ "acme" ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     acme
     aiohttp
     atomicwrites-homeassistant
     attrs
+    ciso8601
+    cryptography
     pycognito
+    pyjwt
     snitun
-    warrant
   ];
 
-  doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
-
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
     pytest-aiohttp
+    pytest-timeout
     pytestCheckHook
+    syrupy
+    xmltodict
   ];
 
   pythonImportsCheck = [ "hass_nabucasa" ];
 
   meta = with lib; {
-    homepage = "https://github.com/NabuCasa/hass-nabucasa";
     description = "Python module for the Home Assistant cloud integration";
+    homepage = "https://github.com/NabuCasa/hass-nabucasa";
+    changelog = "https://github.com/NabuCasa/hass-nabucasa/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

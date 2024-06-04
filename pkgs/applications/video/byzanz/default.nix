@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchgit
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , glib
 , gnome
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     ./autogen.sh --prefix=$out
   '';
 
-  NIX_CFLAGS_COMPILE = builtins.concatStringsSep " " [
+  env.NIX_CFLAGS_COMPILE = builtins.concatStringsSep " " [
     "-Wno-error=deprecated-declarations"
     "-Wno-error=incompatible-pointer-types"
   ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     gst-plugins-good
     gst-plugins-ugly
     gst-libav
-    wrapGAppsHook
+    wrapGAppsHook3
   ]);
 
   meta = with lib; {

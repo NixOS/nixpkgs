@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sybil";
-  version = "4.0.0";
-  format = "setuptools";
+  version = "6.0.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simplistix";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9fXvQfVS3IVdOV4hbA0bEYFJU7uK0WpqJKMNBltqFTI=";
+    hash = "sha256-SqAP+hj+pivsuGxx9/TvmfVrfrLSWQRYIjKh0ui0AVc=";
   };
+
+  build-system = [ setuptools ];
 
   # Circular dependency with testfixtures
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sybil"
-  ];
+  pythonImportsCheck = [ "sybil" ];
 
   meta = with lib; {
     description = "Automated testing for the examples in your documentation";

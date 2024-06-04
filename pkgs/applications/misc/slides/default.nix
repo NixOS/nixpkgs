@@ -16,12 +16,12 @@ buildGoModule rec {
     sha256 = "sha256-K8VsqaNUPxh3/Yddy6DFiOyjRuZ6r6bU456Pm31A1og=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     bash
     go
   ];
 
-  vendorSha256 = "sha256-c3YCf22L5+rTmH5ePeJ0/goRj5rKY6v+Zon3183MhMY=";
+  vendorHash = "sha256-c3YCf22L5+rTmH5ePeJ0/goRj5rKY6v+Zon3183MhMY=";
 
   ldflags = [
     "-s"
@@ -35,5 +35,6 @@ buildGoModule rec {
     changelog = "https://github.com/maaslalani/slides/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ maaslalani penguwin ];
+    mainProgram = "slides";
   };
 }

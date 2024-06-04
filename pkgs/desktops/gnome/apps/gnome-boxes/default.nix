@@ -3,7 +3,7 @@
 , fetchurl
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , gettext
 , itstool
@@ -14,14 +14,11 @@
 , gtk3
 , libvirt
 , spice-gtk
-, appstream-glib
 , spice-protocol
 , libhandy
 , libsoup_3
 , libosinfo
 , systemd
-, tracker
-, tracker-miners
 , vala
 , libcap
 , yajl
@@ -38,7 +35,6 @@
 , libarchive
 , acl
 , libgudev
-, libsecret
 , libcap_ng
 , numactl
 , libapparmor
@@ -47,15 +43,16 @@
 , vte
 , glib-networking
 , qemu-utils
+, libportal-gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "43.2";
+  version = "46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "nD4OlDPBhTqZ7VLt7BMmP0Q/hW28o7IWXC46cLhjKzA=";
+    hash = "sha256-kAwXf2diZANwpmNM+efTzYIH5Jg2eopmemtzGwQRYDY=";
   };
 
   patches = [
@@ -67,7 +64,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    appstream-glib # for appstream-util
     gettext
     gobject-introspection
     itstool
@@ -75,7 +71,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     # For post install script
     glib
     gtk3
@@ -105,7 +101,6 @@ stdenv.mkDerivation rec {
     libhandy
     libosinfo
     librsvg
-    libsecret
     libsoup_3
     libusb1
     libvirt
@@ -115,11 +110,10 @@ stdenv.mkDerivation rec {
     spice-gtk
     spice-protocol
     systemd
-    tracker
-    tracker-miners
     vte
     webkitgtk_4_1
     yajl
+    libportal-gtk3
   ];
 
   preFixup = ''
@@ -135,7 +129,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple GNOME 3 application to access remote or virtual systems";
-    homepage = "https://wiki.gnome.org/Apps/Boxes";
+    mainProgram = "gnome-boxes";
+    homepage = "https://apps.gnome.org/Boxes/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;

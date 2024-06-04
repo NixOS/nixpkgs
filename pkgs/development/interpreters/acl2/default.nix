@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     which perl hostname
     # Some of the books require one or more of these external tools:
     glucose minisat abc-verifier libipasir
-    z3 (python3.withPackages (ps: [ ps.z3 ]))
+    z3 (python3.withPackages (ps: [ ps.z3-solver ]))
   ];
 
   # NOTE: Parallel building can be memory-intensive depending on the number of
@@ -113,6 +113,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An interpreter and a prover for a Lisp dialect";
+    mainProgram = "acl2";
     longDescription = ''
       ACL2 is a logic and programming language in which you can model computer
       systems, together with a tool to help you prove properties of those

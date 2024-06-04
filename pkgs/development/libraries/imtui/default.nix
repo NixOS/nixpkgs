@@ -8,6 +8,7 @@
 , withCurl ? (!withEmscripten), curl
 , withNcurses ? (!withEmscripten), ncurses
 , static ? withEmscripten
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -25,10 +26,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional withEmscripten emscripten
     ++ lib.optional withCurl curl
-    ++ lib.optional withNcurses ncurses;
+    ++ lib.optional withNcurses ncurses
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   postPatch = ''
-    cp -r ${imgui}/include/imgui third-party/imgui
+    cp -r ${imgui.src}/* third-party/imgui/imgui
+    chmod -R u+w third-party/imgui
+  '' + lib.optionalString (lib.versionAtLeast imgui.version "1.90.1") ''
+    substituteInPlace src/imtui-impl-{emscripten,ncurses}.cpp \
+      --replace "ImGuiKey_KeyPadEnter" "ImGuiKey_KeypadEnter"
   '';
 
   cmakeFlags = [
@@ -40,10 +46,6 @@ stdenv.mkDerivation rec {
     "-DIMTUI_INSTALL_IMGUI_HEADERS:BOOL=OFF"
   ];
 
-  postInstall = ''
-    rm -rf $out/include/imgui
-  '';
-
   meta = with lib; {
     description = "Immediate mode text-based user interface library";
     longDescription = ''
@@ -54,5 +56,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/ggerganov/imtui/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
+    platforms = platforms.unix;
   };
 }

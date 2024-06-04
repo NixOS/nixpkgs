@@ -10,14 +10,14 @@
 
 buildGoModule rec {
   pname = "oci-seccomp-bpf-hook";
-  version = "1.2.8";
+  version = "1.2.10";
   src = fetchFromGitHub {
     owner = "containers";
     repo = "oci-seccomp-bpf-hook";
     rev = "v${version}";
-    sha256 = "sha256-0SSiVnCWs3NLefnmZn1oCc7nwTrSzDsyjPszVBRQVH0=";
+    sha256 = "sha256-bWlm+JYNf7+faKSQfW5fhxoH/D2I8ujjakswH+1r49o=";
   };
-  vendorSha256 = null;
+  vendorHash = null;
 
   outputs = [ "out" "man" ];
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ buildGoModule rec {
     description = ''
       OCI hook to trace syscalls and generate a seccomp profile
     '';
+    mainProgram = "oci-seccomp-bpf-hook";
     license = licenses.asl20;
     maintainers = with maintainers; [ saschagrunert ];
     platforms = platforms.linux;

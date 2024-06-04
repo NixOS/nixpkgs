@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "super-productivity";
-  version = "7.12.0";
+  version = "8.0.5";
 
   src = fetchurl {
     url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity-${version}.AppImage";
-    sha256 = "sha256-Ms7wt79iZz0xnrp+yrFs/FzVqINe6BSOEmYG9Oiz5JU=";
+    sha256 = "sha256-nH7dCrXBhkAYbvb9CPc4zhslFiYtA1ChuYPoHMdBBwQ=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -38,8 +38,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
+      --add-flags $out/share/${pname}/resources/app.asar
   '';
 
   meta = with lib; {
@@ -48,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ offline ];
+    mainProgram = "super-productivity";
   };
 }

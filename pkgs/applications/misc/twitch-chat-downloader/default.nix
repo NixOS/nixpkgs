@@ -1,33 +1,30 @@
 { lib
 , buildPythonApplication
-, fetchPypi
+, fetchFromGitHub
+, iso8601
+, progressbar2
 , requests
-, twitch-python
-, pytz
-, python-dateutil
 }:
 
 buildPythonApplication rec {
   pname = "twitch-chat-downloader";
-  version = "3.2.2";
+  version = "2.5.4";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "tcd";
-    sha256 = "ee6a8e22c54ccfd29988554b13fe56b2a1bf524e110fa421d77e27baa8dcaa19";
+  # NOTE: Using maintained fork because upstream has stopped working, and it has
+  # not been updated in a while.
+  # https://github.com/PetterKraabol/Twitch-Chat-Downloader/issues/142
+  src = fetchFromGitHub {
+    owner = "TheDrHax";
+    repo = "twitch-chat-downloader";
+    rev = version;
+    hash = "sha256-mV60ygrtQa9ZkJ2CImhAV59ckCJ7vJSA9cWkYE2xo1M=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pipenv==2022.4.30'," "" \
-      --replace "setuptools==62.1." "setuptools" \
-      --replace "requests==2.27.1" "requests" \
-      --replace "twitch-python==0.0.20" "twitch-python" \
-      --replace "pytz==2022.1" "pytz" \
-      --replace "python-dateutil==2.8.2" "python-dateutil"
-  '';
-
-  propagatedBuildInputs = [ requests twitch-python pytz python-dateutil ];
+  propagatedBuildInputs = [
+    iso8601
+    progressbar2
+    requests
+  ];
 
   doCheck = false; # no tests
 
@@ -35,8 +32,9 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Twitch Chat Downloader";
-    homepage = "https://github.com/PetterKraabol/Twitch-Chat-Downloader";
+    mainProgram = "tcd";
+    homepage = "https://github.com/TheDrHax/Twitch-Chat-Downloader";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ assistant ];
   };
 }

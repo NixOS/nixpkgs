@@ -1,20 +1,18 @@
 { lib, stdenv, fetchFromGitHub }:
 
-with lib;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kakoune-unwrapped";
-  version = "2022.10.31";
+  version = "2024.05.18";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
-    rev = "v${version}";
-    sha256 = "sha256-vmzGaGl0KSjseSD/s6DXxvMUTmAle+Iv/ZP9llaFnXk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-1nYSVbvQ4tz1r8p7zCD6w/79haqpelb15qva9r3Fwew=";
   };
   makeFlags = [ "debug=no" "PREFIX=${placeholder "out"}" ];
 
-  preConfigure = ''
-    export version="v${version}"
+  postPatch = ''
+    echo "v${finalAttrs.version}" >.version
   '';
 
   enableParallelBuilding = true;
@@ -33,12 +31,12 @@ stdenv.mkDerivation rec {
     ln -s --relative "$autoload_target" autoload
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://kakoune.org/";
     description = "A vim inspired text editor";
     license = licenses.publicDomain;
     mainProgram = "kak";
-    maintainers = with maintainers; [ vrthra srapenne ];
+    maintainers = with maintainers; [ vrthra ];
     platforms = platforms.unix;
   };
-}
+})

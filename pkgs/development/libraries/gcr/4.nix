@@ -26,14 +26,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gcr";
-  version = "4.0.0";
+  version = "4.3.0";
 
   outputs = [ "out" "bin" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "xFhVkk8O57q0Pi3Ti/r9KsgVxumGQ0HAFh4XEXPc7Hw=";
+    hash = "sha256-w+6HKOQ2SwOX9DX6IPkvkBqxOdKyZPTgWdZ7PA9DzTY=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -49,7 +51,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnupg
     libgcrypt
     libtasn1
     pango
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     p11-kit
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
   ];
 
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
     # We are still using ssh-agent from gnome-keyring.
     # https://github.com/NixOS/nixpkgs/issues/140824
     "-Dssh_agent=false"
+    "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
   ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
@@ -98,6 +100,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
     description = "GNOME crypto services (daemon and tools)";
+    mainProgram = "gcr-viewer-gtk4";
     homepage = "https://gitlab.gnome.org/GNOME/gcr";
     license = licenses.lgpl2Plus;
 

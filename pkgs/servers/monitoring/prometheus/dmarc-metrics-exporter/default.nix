@@ -5,17 +5,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
-  version = "0.9.0";
+  version = "1.0.0";
 
-  disabled = python3.pythonOlder "3.7";
+  disabled = python3.pythonOlder "3.8";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OUeTOnb9ZhdJWzO+Wzl+liv4u3mlbyJ4tWyCHU5loqc=";
+    hash = "sha256-pT2GGoNPCHBZZbbBE93cJjgogBNcdpvLmrVakNMu6tY=";
   };
 
   pythonRelaxDeps = true;
@@ -29,13 +29,13 @@ python3.pkgs.buildPythonApplication rec {
     bite-parser
     dataclasses-serialization
     prometheus-client
-    typing-extensions
+    structlog
     uvicorn
     xsdata
   ]
   ++ uvicorn.optional-dependencies.standard;
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     aiohttp
     pytest-asyncio
     pytestCheckHook
@@ -53,6 +53,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     description = "Export Prometheus metrics from DMARC reports";
+    mainProgram = "dmarc-metrics-exporter";
     homepage = "https://github.com/jgosmann/dmarc-metrics-exporter";
     changelog = "https://github.com/jgosmann/dmarc-metrics-exporter/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;

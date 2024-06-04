@@ -1,34 +1,29 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysensibo";
-  version = "1.0.24";
+  version = "1.0.36";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "andrey-git";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-lLorBf4HjynkTyLfKGcxEpSzyCawjKDej/HFtHl/Ar8=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-lsHKwFzfkGWuUiZGkt9zwjNDDU7i6gcqcEsi5SQqsSQ=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # No tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pysensibo"
-  ];
+  pythonImportsCheck = [ "pysensibo" ];
 
   meta = with lib; {
     description = "Module for interacting with Sensibo";

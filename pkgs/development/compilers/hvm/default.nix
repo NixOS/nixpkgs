@@ -7,31 +7,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "1.0.0";
+  version = "2.0.17";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-nPkUGUcekZ2fvQgiVTNvt8vfQsNMyqsrkT2zqEfu/bE=";
+    hash = "sha256-UzPEupmUnph7SjCc/T4sBSGXj8yLVdQlw+X9iM16zD8=";
   };
 
-  cargoSha256 = "sha256-EaZTpKFZPfDlP/2XylhJHznvlah7VNw4snrKDmT7ecw=";
+  cargoHash = "sha256-AchVbf+mn4qQtzWu84Dqek+btCm6BA9mcY+8iHWqdiw=";
 
-  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    darwin.apple_sdk.frameworks.IOKit
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    darwin.apple_sdk_11_0.frameworks.Foundation
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.IOKit
   ];
 
-  # tests are broken
-  doCheck = false;
-
-  # enable nightly features
-  RUSTC_BOOTSTRAP = true;
-
   meta = with lib; {
-    description = "A pure functional compile target that is lazy, non-garbage-collected, and parallel";
-    homepage = "https://github.com/kindelia/hvm";
-    license = licenses.mit;
+    description = "A massively parallel, optimal functional runtime in Rust";
+    mainProgram = "hvm";
+    homepage = "https://github.com/higherorderco/hvm";
+    license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];
   };
 }

@@ -4,16 +4,19 @@
 { stdenv
 , pkgs
 , lib
-,
+, testers
 }:
 
 let
   # early enough not to rebuild gcc but late enough to have patchelf
   earlyPkgs = stdenv.__bootPackages.stdenv.__bootPackages;
+  earlierPkgs = stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages;
   # use a early stdenv so when hacking on stdenv this test can be run quickly
   bootStdenv = stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv;
   pkgsStructured = import pkgs.path { config = { structuredAttrsByDefault = true; }; inherit (stdenv.hostPlatform) system; };
   bootStdenvStructuredAttrsByDefault = pkgsStructured.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv.__bootPackages.stdenv;
+
+  runCommand = earlierPkgs.runCommand;
 
 
   ccWrapperSubstitutionsTest = { name, stdenv', extraAttrs ? { } }:
@@ -97,7 +100,26 @@ in
 
 {
   # tests for hooks in `stdenv.defaultNativeBuildInputs`
-  hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; pkgs = earlyPkgs; });
+  hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenv; pkgs = earlyPkgs; inherit lib; });
+
+  outputs-no-out = runCommand "outputs-no-out-assert" {
+    result = earlierPkgs.testers.testBuildFailure (bootStdenv.mkDerivation {
+      NIX_DEBUG = 1;
+      name = "outputs-no-out";
+      outputs = ["foo"];
+      buildPhase = ":";
+      installPhase = ''
+        touch $foo
+      '';
+    });
+
+    # Assumption: the first output* variable to be configured is
+    #   _overrideFirst outputDev "dev" "out"
+    expectedMsg = "error: _assignFirst: could not find a non-empty variable whose name to assign to outputDev.\n       The following variables were all unset or empty:\n           dev out";
+  } ''
+    grep -F "$expectedMsg" $result/testBuildFailure.log >/dev/null
+    touch $out
+  '';
 
   test-env-attrset = testEnvAttrset { name = "test-env-attrset"; stdenv' = bootStdenv; };
 
@@ -120,6 +142,52 @@ in
     '';
   };
 
+  # Check that mkDerivation rejects MD5 hashes
+  rejectedHashes = lib.recurseIntoAttrs {
+    md5 =
+      let drv = runCommand "md5 outputHash rejected" {
+        outputHash = "md5-fPt7dxVVP7ffY3MxkQdwVw==";
+      } "true";
+      in assert !(builtins.tryEval drv).success; {};
+  };
+
+  test-inputDerivation = let
+    inherit (stdenv.mkDerivation {
+      dep1 = derivation { name = "dep1"; builder = "/bin/sh"; args = [ "-c" ": > $out" ]; system = builtins.currentSystem; };
+      dep2 = derivation { name = "dep2"; builder = "/bin/sh"; args = [ "-c" ": > $out" ]; system = builtins.currentSystem; };
+      passAsFile = [ "dep2" ];
+    }) inputDerivation;
+  in
+    runCommand "test-inputDerivation" {
+      exportReferencesGraph = [ "graph" inputDerivation ];
+    } ''
+      grep ${inputDerivation.dep1} graph
+      grep ${inputDerivation.dep2} graph
+      touch $out
+    '';
+
+  test-inputDerivation-fixed-output = let
+    inherit (stdenv.mkDerivation {
+      dep1 = derivation { name = "dep1"; builder = "/bin/sh"; args = [ "-c" ": > $out" ]; system = builtins.currentSystem; };
+      dep2 = derivation { name = "dep2"; builder = "/bin/sh"; args = [ "-c" ": > $out" ]; system = builtins.currentSystem; };
+      name = "meow";
+      outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";
+      outputHashMode = "flat";
+      outputHashAlgo = "sha256";
+      buildCommand = ''
+        touch $out
+      '';
+      passAsFile = [ "dep2" ];
+    }) inputDerivation;
+  in
+    runCommand "test-inputDerivation" {
+      exportReferencesGraph = [ "graph" inputDerivation ];
+    } ''
+      grep ${inputDerivation.dep1} graph
+      grep ${inputDerivation.dep2} graph
+      touch $out
+    '';
+
   test-prepend-append-to-var = testPrependAndAppendToVar {
     name = "test-prepend-append-to-var";
     stdenv' = bootStdenv;
@@ -138,7 +206,7 @@ in
 
   structuredAttrsByDefault = lib.recurseIntoAttrs {
 
-    hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenvStructuredAttrsByDefault; pkgs = earlyPkgs; });
+    hooks = lib.recurseIntoAttrs (import ./hooks.nix { stdenv = bootStdenvStructuredAttrsByDefault; pkgs = earlyPkgs; inherit lib; });
 
     test-cc-wrapper-substitutions = ccWrapperSubstitutionsTest {
       name = "test-cc-wrapper-substitutions-structuredAttrsByDefault";

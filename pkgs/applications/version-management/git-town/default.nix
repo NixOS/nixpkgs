@@ -1,26 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles, git, testers, git-town, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, git, testers, git-town, makeWrapper }:
 
 buildGoModule rec {
   pname = "git-town";
-  version = "7.8.0";
+  version = "14.2.1";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    sha256 = "sha256-g9ooMIMN8DN2FcWYkDC1hICCleQYdHf30PYMCit/NMI=";
+    hash = "sha256-7wsN95I8Xa5CXh1Mg3Wv4gyTSRzZMqJ06ALLsud3l2k=";
   };
 
-  patches = [
-    # Fix "go vet" when building using Go 1.18.
-    (fetchpatch {
-      name = "fix-go-vet-in-go-1.18.patch";
-      url = "https://github.com/git-town/git-town/commit/23eb0aca7b28c6a0afc21db553aa0e35d35891aa.patch";
-      sha256 = "sha256-EyfhKVrQxRJNrYqaZI04dJogaXs1J+bbOIu7p8g2Clc=";
-    })
-  ];
-
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -28,7 +19,8 @@ buildGoModule rec {
 
   ldflags =
     let
-      modulePath = "github.com/git-town/git-town/v${lib.versions.major version}"; in
+      modulePath = "github.com/git-town/git-town/v${lib.versions.major version}";
+    in
     [
       "-s"
       "-w"
@@ -36,22 +28,23 @@ buildGoModule rec {
       "-X ${modulePath}/src/cmd.buildDate=nix"
     ];
 
-  checkInputs = [ git ];
-  preCheck =
+  nativeCheckInputs = [ git ];
+
+  preCheck = ''
+    HOME=$(mktemp -d)
+  '';
+
+  checkFlags =
     let
+      # Disable tests requiring local operations
       skippedTests = [
         "TestGodog"
-        "TestRunner_CreateChildFeatureBranch"
-        "TestShellRunner_RunStringWith_Dir"
-        "TestMockingShell_MockCommand"
-        "TestShellRunner_RunStringWith_Input"
+        "TestMockingRunner/MockCommand"
+        "TestMockingRunner/QueryWith"
+        "TestTestCommands/CreateChildFeatureBranch"
       ];
     in
-    ''
-      HOME=$(mktemp -d)
-      # Disable tests requiring local operations
-      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
-    '';
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     installShellCompletion --cmd git-town \
@@ -64,14 +57,15 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = git-town;
-    command = "git-town version";
-    version = "v${version}";
+    command = "git-town --version";
+    inherit version;
   };
 
   meta = with lib; {
     description = "Generic, high-level git support for git-flow workflows";
     homepage = "https://www.git-town.com/";
     license = licenses.mit;
-    maintainers = with maintainers; [ allonsy blaggacao ];
+    maintainers = with maintainers; [ allonsy blaggacao gabyx ];
+    mainProgram = "git-town";
   };
 }

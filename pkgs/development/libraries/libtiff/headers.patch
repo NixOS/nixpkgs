@@ -1,9 +1,8 @@
-diff --git i/libtiff/Makefile.am w/libtiff/Makefile.am
-index 44522b62..d66e5948 100644
+export private headers for freeimage
 --- i/libtiff/Makefile.am
 +++ w/libtiff/Makefile.am
 @@ -36,8 +36,12 @@ EXTRA_DIST = \
- 	tiffconf.h.cmake.in
+ 	tif_win32_versioninfo.rc
 
  libtiffinclude_HEADERS = \
 +	tif_config.h \

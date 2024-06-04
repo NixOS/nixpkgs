@@ -1,15 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "text-unidecode";
   version = "1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     py.test

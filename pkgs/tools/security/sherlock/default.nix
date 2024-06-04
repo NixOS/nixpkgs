@@ -1,56 +1,74 @@
-{ stdenv, lib, fetchFromGitHub, python3, makeWrapper }:
-let
-  pyenv = python3.withPackages (pp: with pp; [
-    beautifulsoup4
-    certifi
-    colorama
-    lxml
-    pysocks
-    requests
-    requests-futures
-    soupsieve
-    stem
-    torrequest
-  ]);
-in
-stdenv.mkDerivation rec {
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, python3
+, unstableGitUpdater
+}:
+
+python3.pkgs.buildPythonApplication rec {
   pname = "sherlock";
-  version = "0.14.0";
+  version = "0-unstable-2024-05-29";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
-    repo = pname;
-    rev = "f8566960d461783558b7bcba5c818d9275de492a";
-    sha256 = "sha256-6jG/SmsiEL63EcBrx2fcQDYbmMCA+A7Jsc3E4f5NGts=";
+    repo = "sherlock";
+    rev = "d42dadfc45b0eb1f509587f2babe455a094da604";
+    hash = "sha256-SLQxqPHfPgu7WpyVSvm/sqJfPjPoevMJq/BWND2Pspk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  postPatch = ''
-    substituteInPlace sherlock/sherlock.py \
-      --replace "os.path.dirname(__file__)" "\"$out/share\""
-  '';
+  propagatedBuildInputs = with python3.pkgs; [
+    certifi
+    colorama
+    pandas
+    pysocks
+    requests
+    requests-futures
+    stem
+    torrequest
+  ];
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin $out/share
-    cp ./sherlock/*.py $out/bin/
-    cp --recursive ./sherlock/resources/ $out/share
-    makeWrapper ${pyenv.interpreter} $out/bin/sherlock --add-flags "$out/bin/sherlock.py"
+    cp -R ./sherlock $out/share
+
     runHook postInstall
   '';
 
+  postFixup = ''
+    makeWrapper ${python3.interpreter} $out/bin/sherlock \
+      --add-flags $out/share/sherlock/sherlock.py \
+      --prefix PYTHONPATH : "$PYTHONPATH"
+  '';
+
+  checkInputs = with python3.pkgs; [
+    exrex
+  ];
+
   checkPhase = ''
     runHook preCheck
-    cd $srcRoot/sherlock
-    ${pyenv.interpreter} -m unittest tests.all.SherlockSiteCoverageTests --verbose
+
+    cd $out/share/sherlock
+    for tests in all test_multiple_usernames; do
+      ${python3.interpreter} -m unittest tests.$tests --verbose
+    done
+
     runHook postCheck
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
 
   meta = with lib; {
     homepage = "https://sherlock-project.github.io/";
     description = "Hunt down social media accounts by username across social networks";
     license = licenses.mit;
+    mainProgram = "sherlock";
     maintainers = with maintainers; [ applePrincess ];
   };
 }

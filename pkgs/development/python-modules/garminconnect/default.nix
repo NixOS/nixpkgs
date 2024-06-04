@@ -1,36 +1,40 @@
-{ lib
-, buildPythonPackage
-, cloudscraper
-, fetchFromGitHub
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  garth,
+  pdm-backend,
+  pythonOlder,
+  requests,
+  withings-sync,
 }:
 
 buildPythonPackage rec {
   pname = "garminconnect";
-  version = "0.1.50";
-  format = "setuptools";
+  version = "0.2.18";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect";
     rev = "refs/tags/${version}";
-    hash = "sha256-M9FH8xbNo5NF2PktiG4SpZl4tjH7H937Rbqhe6VV+Bk=";
+    hash = "sha256-ElgSL4NuEYv/VHPZIQlDWehS4B03/PCM6uk3OhvnNjA=";
   };
 
-  propagatedBuildInputs = [
-    cloudscraper
+  build-system = [ pdm-backend ];
+
+  dependencies = [
+    garth
     requests
+    withings-sync
   ];
 
-  # Module has no tests
+  # Tests require a token
   doCheck = false;
 
-  pythonImportsCheck = [
-    "garminconnect"
-  ];
+  pythonImportsCheck = [ "garminconnect" ];
 
   meta = with lib; {
     description = "Garmin Connect Python API wrapper";

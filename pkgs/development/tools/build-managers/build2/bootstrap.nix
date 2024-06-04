@@ -1,14 +1,15 @@
 { lib, stdenv
 , fetchurl
 , pkgs
+, buildPackages
 , fixDarwinDylibNames
 }:
 stdenv.mkDerivation rec {
   pname = "build2-bootstrap";
-  version = "0.15.0";
+  version = "0.16.0";
   src = fetchurl {
     url = "https://download.build2.org/${version}/build2-toolchain-${version}.tar.xz";
-    sha256 = "1i1p52fr5sjs5yz6hqhljwhc148mvs4fyq0cf7wjg5pbv9wzclji";
+    hash = "sha256-I3k/aCoXsdlcgLvYSSRHNe1Zo+JzYVKapIZdJ3b/itw=";
   };
   patches = [
     # Pick up sysdirs from NIX_LDFLAGS
@@ -25,6 +26,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optionals stdenv.targetPlatform.isDarwin [
     fixDarwinDylibNames
+
+    # Build2 needs to use lld on Darwin because it creates thin archives when it detects `llvm-ar`,
+    # which ld64 does not support.
+    (lib.getBin buildPackages.llvmPackages_16.lld)
   ];
 
   doCheck = true;
@@ -38,6 +43,11 @@ stdenv.mkDerivation rec {
     runHook preInstall
     install -D build2/b-boot $out/bin/b
     runHook postInstall
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/nix-support/setup-hook \
+      --subst-var-by isTargetDarwin '${toString stdenv.targetPlatform.isDarwin}'
   '';
 
   inherit (pkgs.build2) passthru;

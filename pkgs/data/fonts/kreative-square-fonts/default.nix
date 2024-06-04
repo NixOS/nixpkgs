@@ -1,22 +1,24 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation {
   pname = "kreative-square-fonts";
   version = "unstable-2021-01-29";
-in
-fetchFromGitHub {
-  name = "${pname}-${version}";
 
-  owner = "kreativekorp";
-  repo = "open-relay";
-  rev = "084f05af3602307499981651eca56851bec01fca";
+  src = fetchFromGitHub {
+    owner = "kreativekorp";
+    repo = "open-relay";
+    rev = "084f05af3602307499981651eca56851bec01fca";
+    hash = "sha256-+ihosENczaGal3BGDIaJ/de0pf8txdtelSYMxPok6ww=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     install -Dm444 -t $out/share/fonts/truetype/ KreativeSquare/KreativeSquare.ttf
     install -Dm444 -t $out/share/fonts/truetype/ KreativeSquare/KreativeSquareSM.ttf
+
+    runHook postInstall
   '';
-  sha256 = "15vvbbzv6b3jh7lxg77viycdd7yf3y8lxy54vs3rsrsxwncg0pak";
 
   meta = with lib; {
     description = "Fullwidth scalable monospace font designed specifically to support pseudographics, semigraphics, and private use characters";

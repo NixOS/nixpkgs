@@ -14,18 +14,18 @@
 , libhandy
 , gcr
 , webkitgtk_4_1
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
-  version = "2.4.3";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "capnet-assist";
     rev = version;
-    sha256 = "sha256-06DWkLkVpdSYnKOR8zqA0tvWXYrglBM9R/XEIfIkwQU=";
+    sha256 = "sha256-vnFrGHt/rtrDmXokYRoebVpNLfkZPe5IShRsXCWWsXs=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , wxGTK32
-, ffmpeg
+, ffmpeg_4
 , lua5_1
 , curl
 , libpng
@@ -11,7 +11,7 @@
 , pkg-config
 , flam3
 , libgtop
-, boost
+, boost179
 , tinyxml
 , freeglut
 , libGLU
@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wxGTK32
-    ffmpeg
+    ffmpeg_4
     lua5_1
     curl
     libpng
     xorg.libXrender
     flam3
     libgtop
-    boost
+    boost179
     tinyxml
     freeglut
     libGLU

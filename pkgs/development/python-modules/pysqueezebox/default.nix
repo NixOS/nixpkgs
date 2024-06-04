@@ -1,15 +1,17 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysqueezebox";
-  version = "0.6.1";
+  version = "0.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,20 +20,21 @@ buildPythonPackage rec {
     owner = "rajlaud";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-NCADVSsnaOJfLJ7i18i7d7wlWcyt1DoRFGOVXEEYHPI=";
+    hash = "sha256-WnL9Va3uaWlUHVBtit4v+XdYOFmPpxG91mAHEGwI+7c=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pysqueezebox"
+  pythonImportsCheck = [ "pysqueezebox" ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'has_calls' is not a valid assertion. Use a spec for the mock if 'has_calls' is meant to be an attribute.
+    "test_verified_pause"
   ];
 
   disabledTestPaths = [

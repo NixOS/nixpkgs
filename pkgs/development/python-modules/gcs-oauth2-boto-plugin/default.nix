@@ -1,19 +1,20 @@
-{ lib
-, boto
-, buildPythonPackage
-, fasteners
-, fetchFromGitHub
-, freezegun
-, google-reauth
-, httplib2
-, oauth2client
-, pyopenssl
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, retry_decorator
-, rsa
-, six
+{
+  lib,
+  boto,
+  buildPythonPackage,
+  fasteners,
+  fetchFromGitHub,
+  freezegun,
+  google-reauth,
+  httplib2,
+  oauth2client,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  retry-decorator,
+  rsa,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "GoogleCloudPlatform";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-slTxh2j9VhLiSyiTmJIFFakzpzH/+mgilDRxx0VqqKQ=";
+    hash = "sha256-slTxh2j9VhLiSyiTmJIFFakzpzH/+mgilDRxx0VqqKQ=";
   };
 
   postPatch = ''
@@ -43,18 +44,14 @@ buildPythonPackage rec {
     httplib2
     oauth2client
     pyopenssl
-    retry_decorator
+    retry-decorator
     rsa
     six
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "gcs_oauth2_boto_plugin"
-  ];
+  pythonImportsCheck = [ "gcs_oauth2_boto_plugin" ];
 
   meta = with lib; {
     description = "Auth plugin allowing use the use of OAuth 2.0 credentials for Google Cloud Storage";

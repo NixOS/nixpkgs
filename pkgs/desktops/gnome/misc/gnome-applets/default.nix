@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-applets";
-  version = "3.46.0";
+  version = "3.52.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "TwRjyoDzCUA4WzCcHmkCWIxx2XFQxlQOg083Tk0nrPc=";
+    hash = "sha256-bz07QoZW/21bHT7lzLfs49Kxi1S/BFes9DtxHlXi1iw=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Applets for use with the GNOME panel";
-    homepage = "https://wiki.gnome.org/Projects/GnomeApplets";
+    mainProgram = "cpufreq-selector";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-applets";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-eventlog";
-  version = "3.2";
+  version = "3.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.eventlog";
-    rev = version;
-    hash = "sha256-emNGZs/5LWD29xE5BmXQKQfkZApLZlGs6KNIqobaKvM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MvCHeeuwwE/EOK5rh5vtwTtMrSO/BtfFenQZn5VTgb0=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -35,17 +34,14 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.eventlog"
-  ];
+  pythonImportsCheck = [ "dissect.eventlog" ];
 
   meta = with lib; {
     description = "Dissect module implementing parsers for the Windows EVT, EVTX and WEVT log file formats";
     homepage = "https://github.com/fox-it/dissect.eventlog";
+    changelog = "https://github.com/fox-it/dissect.eventlog/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

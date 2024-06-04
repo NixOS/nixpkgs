@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 # This package provides a binary "apython" which sometimes invokes
@@ -16,19 +18,21 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.5.1";
-  format = "setuptools";
+  version = "0.7.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
-    repo = pname;
+    repo = "aioconsole";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-PSXYXIWb2zTVC6kwMgkDovF+BVtEnqQh8NFPb96tFRY=";
+    hash = "sha256-c8zeKebS04bZS9pMIKAauaLPvRrWaGoDKbnF906tFzQ=";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [ setuptools ];
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -38,18 +42,20 @@ buildPythonPackage rec {
       --replace "--cov aioconsole --count 2" ""
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   disabledTests = [
     "test_interact_syntax_error"
     # Output and the sandbox don't work well together
     "test_interact_multiple_indented_lines"
   ];
 
-  pythonImportsCheck = [
-    "aioconsole"
-  ];
+  pythonImportsCheck = [ "aioconsole" ];
 
   meta = with lib; {
+    changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
     description = "Asynchronous console and interfaces for asyncio";
+    mainProgram = "apython";
     homepage = "https://github.com/vxgmichel/aioconsole";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ catern ];

@@ -9,13 +9,15 @@
 
 buildDunePackage rec {
   pname = "tsdl-image";
-  version = "0.3.2";
+  version = "0.6";
+
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "sanette";
     repo = pname;
     rev = version;
-    sha256 = "sha256-u6VYAwq+2oLn2Kw1+KQRVPswAqeKDSAaPfGLPrzn30s=";
+    hash = "sha256-mgTFwkuFJVwJmHrzHSdNh8v4ehZIcWemK+eLqjglw5o=";
   };
 
   buildInputs = [

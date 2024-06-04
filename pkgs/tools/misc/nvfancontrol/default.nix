@@ -27,5 +27,6 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ gpl3Only ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ devins2518 ];
+    mainProgram = "nvfancontrol";
   };
 }

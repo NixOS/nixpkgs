@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "mezz64";
     repo = "pyEight";
     rev = version;
-    sha256 = "sha256-JYmhEZQw11qPNV2jZhP+0VFb387kNom70R3C13PM7kc=";
+    hash = "sha256-JYmhEZQw11qPNV2jZhP+0VFb387kNom70R3C13PM7kc=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyeight"
-  ];
+  pythonImportsCheck = [ "pyeight" ];
 
   meta = with lib; {
     description = "Python library to interface with the Eight Sleep API";

@@ -7,21 +7,14 @@ in
 
 {
   options.services.kthxbye = {
-    enable = mkEnableOption (mdDoc "kthxbye alert acknowledgement management daemon");
+    enable = mkEnableOption "kthxbye alert acknowledgement management daemon";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.kthxbye;
-      defaultText = literalExpression "pkgs.kthxbye";
-      description = mdDoc ''
-        The kthxbye package that should be used.
-      '';
-    };
+    package = mkPackageOption pkgs "kthxbye" { };
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whether to open ports in the firewall needed for the daemon to function.
       '';
     };
@@ -29,7 +22,7 @@ in
     extraOptions = mkOption {
       type = with types; listOf str;
       default = [];
-      description = mdDoc ''
+      description = ''
         Extra command line options.
 
         Documentation can be found [here](https://github.com/prymitive/kthxbye/blob/main/README.md).
@@ -45,7 +38,7 @@ in
       timeout = mkOption {
         type = types.str;
         default = "1m0s";
-        description = mdDoc ''
+        description = ''
           Alertmanager request timeout duration in the [time.Duration](https://pkg.go.dev/time#ParseDuration) format.
         '';
         example = "30s";
@@ -53,7 +46,7 @@ in
       uri = mkOption {
         type = types.str;
         default = "http://localhost:9093";
-        description = mdDoc ''
+        description = ''
           Alertmanager URI to use.
         '';
         example = "https://alertmanager.example.com";
@@ -63,7 +56,7 @@ in
     extendBy = mkOption {
       type = types.str;
       default = "15m0s";
-      description = mdDoc ''
+      description = ''
         Extend silences by adding DURATION seconds.
 
         DURATION should be provided in the [time.Duration](https://pkg.go.dev/time#ParseDuration) format.
@@ -74,7 +67,7 @@ in
     extendIfExpiringIn = mkOption {
       type = types.str;
       default = "5m0s";
-      description = mdDoc ''
+      description = ''
         Extend silences that are about to expire in the next DURATION seconds.
 
         DURATION should be provided in the [time.Duration](https://pkg.go.dev/time#ParseDuration) format.
@@ -85,7 +78,7 @@ in
     extendWithPrefix = mkOption {
       type = types.str;
       default = "ACK!";
-      description = mdDoc ''
+      description = ''
         Extend silences with comment starting with PREFIX string.
       '';
       example = "!perma-silence";
@@ -94,7 +87,7 @@ in
     interval = mkOption {
       type = types.str;
       default = "45s";
-      description = mdDoc ''
+      description = ''
         Silence check interval duration in the [time.Duration](https://pkg.go.dev/time#ParseDuration) format.
       '';
       example = "30s";
@@ -103,7 +96,7 @@ in
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = mdDoc ''
+      description = ''
         The address to listen on for HTTP requests.
       '';
       example = "127.0.0.1";
@@ -112,7 +105,7 @@ in
     port = mkOption {
       type = types.port;
       default = 8080;
-      description = mdDoc ''
+      description = ''
         The port to listen on for HTTP requests.
       '';
     };
@@ -120,7 +113,7 @@ in
     logJSON = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Format logged messages as JSON.
       '';
     };
@@ -128,7 +121,7 @@ in
     maxDuration = mkOption {
       type = with types; nullOr str;
       default = null;
-      description = mdDoc ''
+      description = ''
         Maximum duration of a silence, it won't be extended anymore after reaching it.
 
         Duration should be provided in the [time.Duration](https://pkg.go.dev/time#ParseDuration) format.

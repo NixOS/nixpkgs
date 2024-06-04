@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkg-config
-, pytestCheckHook
-, cffi
-, secp256k1
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkg-config,
+  pytestCheckHook,
+  cffi,
+  secp256k1,
 }:
 
 buildPythonPackage rec {
   pname = "secp256k1";
   version = "0.14.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,9 +26,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ cffi secp256k1 ];
+  propagatedBuildInputs = [
+    cffi
+    secp256k1
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Tests are not included in archive
   doCheck = false;

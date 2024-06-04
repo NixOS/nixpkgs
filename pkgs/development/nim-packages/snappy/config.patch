@@ -1,7 +1,0 @@
-diff --git a/tests/config.nims b/tests/config.nims
-index 46348f1..fbe9f5e 100644
---- a/tests/config.nims
-+++ b/tests/config.nims
-@@ -1 +1,2 @@
- switch("path", "..")
-+switch("passL", "-lsnappy")

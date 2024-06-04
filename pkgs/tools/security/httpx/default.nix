@@ -1,20 +1,28 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "httpx";
-  version = "1.2.6";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XGKz4Y04EpfJGkEfUE20Egv9dFiSEHOpDcQ2OfJ9wu8=";
+    hash = "sha256-N2Fym3OwTHjdaJ1fzGWL+BoUYsQ5216d3Ohz5Yrf558=";
   };
 
-  vendorHash = "sha256-PsASCNHR52E4TSIK5s0ReJptKcondq39Dn2PsMQ8laA=";
+  vendorHash = "sha256-jD5LQ9HZbWpoXgnyA7RacaDdyBPMbK02PhKQT+1il4Q=";
+
+  subPackages = [ "cmd/httpx" ];
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # Tests require network access
   doCheck = false;
@@ -30,5 +38,6 @@ buildGoModule rec {
     changelog = "https://github.com/projectdiscovery/httpx/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "httpx";
   };
 }

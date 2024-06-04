@@ -1,15 +1,21 @@
-{ buildPythonPackage, cachetools, fetchFromGitHub, isPy27, lib }:
+{
+  buildPythonPackage,
+  cachetools,
+  fetchFromGitHub,
+  isPy27,
+  lib,
+}:
 
 buildPythonPackage rec {
-  pname = "CoAPthon3";
+  pname = "coapthon3";
   version = "1.0.2";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "Tanganelli";
-    repo = pname;
+    repo = "CoAPthon3";
     rev = version;
-    sha256 = "sha256-9QApoPUu3XFZY/lgjAsf5r2StFiRtUd1UXWDrzYUh6w=";
+    hash = "sha256-9QApoPUu3XFZY/lgjAsf5r2StFiRtUd1UXWDrzYUh6w=";
   };
 
   propagatedBuildInputs = [ cachetools ];

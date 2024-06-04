@@ -1,25 +1,27 @@
-{ lib
-, buildPythonPackage
-, cssselect
-, fetchPypi
-, lxml
-, packaging
-, psutil
-, pytestCheckHook
-, pythonOlder
-, w3lib
+{
+  lib,
+  buildPythonPackage,
+  cssselect,
+  fetchPypi,
+  jmespath,
+  lxml,
+  packaging,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  w3lib,
 }:
 
 buildPythonPackage rec {
   pname = "parsel";
-  version = "1.7.0";
+  version = "1.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AlQTPLAwTeE/zEhXu4IU/3DWmIcnYfpr6DdOG7vVgZI=";
+    hash = "sha256-FOANwHcxyQMNtiDBlfyuiEtbSEjp+cUjxhGfcIzPqaw=";
   };
 
   postPatch = ''
@@ -29,19 +31,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cssselect
+    jmespath
     lxml
     packaging
     w3lib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "parsel"
-  ];
+  pythonImportsCheck = [ "parsel" ];
 
   meta = with lib; {
     description = "Python library to extract data from HTML and XML using XPath and CSS selectors";

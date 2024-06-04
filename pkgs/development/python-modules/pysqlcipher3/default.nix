@@ -1,14 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, sqlcipher }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sqlcipher,
+}:
 
 buildPythonPackage rec {
   pname = "pysqlcipher3";
-  version = "1.1.0";
-
-  disabled = pythonOlder "3.3";
+  version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Lo75+2y2jZJrQZj9xrJvVRGWmOo8fI5iXzEURn00Y3E=";
+    hash = "sha256-PIAzgSZVlH6/KagJrFEGsrxpvgJ06szva1j0WAyNBsU=";
   };
 
   buildInputs = [ sqlcipher ];
@@ -19,6 +23,6 @@ buildPythonPackage rec {
     description = "Python 3 bindings for SQLCipher";
     homepage = "https://github.com/rigglemania/pysqlcipher3/";
     license = licenses.zlib;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

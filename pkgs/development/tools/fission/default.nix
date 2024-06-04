@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fission";
-  version = "1.14.1";
+  version = "1.20.2";
 
   src = fetchFromGitHub {
     owner = "fission";
     repo = "fission";
-    rev = version;
-    sha256 = "sha256-U/UV5NZXmycDp8+g5XV6P2b+4SutR51rVHdPp9HdPjM=";
+    rev = "v${version}";
+    hash = "sha256-DkSilNn98m7E9qTRpf+g2cmo3SHeJkW4eJ5T6XQM3S8=";
   };
 
-  vendorSha256 = "sha256-1ujJuhK7pm/A1Dd+Wm9dtc65mx9pwLBWMWwEJnbja8s=";
+  vendorHash = "sha256-IChr8jC21yI5zOkHF2v9lQoqXT95FSMXJdWj7HqikB4=";
 
   ldflags = [ "-s" "-w" "-X info.Version=${version}" ];
 

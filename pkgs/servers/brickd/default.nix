@@ -30,10 +30,11 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    export
     # build the brickd binary
     mkdir src/daemonlib
     cp -r ${daemonlib}/* src/daemonlib
+    substituteInPlace src/daemonlib/utils.{c,h} \
+      --replace "_GNU_SOURCE" "__GLIBC__"
     cd src/brickd
     make
 
@@ -56,7 +57,8 @@ stdenv.mkDerivation {
     homepage = "https://www.tinkerforge.com/";
     description = "A daemon (or service on Windows) that acts as a bridge between the Bricks/Bricklets and the API bindings for the different programming languages";
     maintainers = [ lib.maintainers.qknight ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+    mainProgram = "brickd";
   };
 }

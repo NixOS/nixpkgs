@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "isabelle-linter";
-  version = "unstable-2022-09-05";
+  version = "2023-1.0.0";
 
   src = fetchFromGitHub {
     owner = "isabelle-prover";
     repo = "isabelle-linter";
-    rev = "0424fc05426d5f7a23adf19ad08c690c17184e86";
-    sha256 = "02afbgmi195ibichjkpni2wjgjkszv7i6qkmmprwrmb4jd2wdvd5";
+    rev = "Isabelle2023-v1.0.0";
+    sha256 = "sha256-q9+qN94NaTzvhbcNQj7yH/VVfs1QgCH8OU8HW+5+s9U=";
   };
 
   nativeBuildInputs = [ isabelle ];
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/isabelle-prover/isabelle-linter";
     maintainers = with maintainers; [ jvanbruegge ];
     license = licenses.mit;
+    platforms = platforms.all;
   };
 }

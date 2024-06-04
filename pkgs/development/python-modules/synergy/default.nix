@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, numpy
-, scipy
-, matplotlib
-, plotly
-, pandas
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  numpy,
+  scipy,
+  matplotlib,
+  plotly,
+  pandas,
 }:
 
 buildPythonPackage rec {
   pname = "synergy";
   version = "0.5.1";
+  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   # Pypi does not contain unit tests
@@ -31,7 +33,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "synergy" ];
 
   meta = with lib; {

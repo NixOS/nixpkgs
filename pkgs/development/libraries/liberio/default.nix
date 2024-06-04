@@ -6,7 +6,7 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liberio";
   version = "unstable-2019-12-11";
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.doronbehar ];
     platforms = platforms.all;
   };
-}
+})

@@ -14,28 +14,40 @@
 , libjpeg
 , libpng
 , gnome
-, gobject-introspection
-, buildPackages
 , doCheck ? false
 , makeWrapper
 , lib
+, testers
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gobject-introspection
+, fetchpatch
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
-  version = "2.42.10";
+  version = "2.42.11";
 
-  outputs = [ "out" "dev" "man" "devdoc" ]
+  outputs = [ "out" "dev" "man" ]
+    ++ lib.optional withIntrospection "devdoc"
     ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "7ptsddE7oJaQei48aye2G80X9cfr6rWltDnS8uOf5Es=";
+    hash = "sha256-Sdy0AjiHCGR+jDIdVrb7MPIeUeUV0MWpQiaNIwUqLwA=";
   };
 
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
+    # Remove post 2.42.11
+    (fetchpatch {
+      name = "fix-meson.build-typo.patch";
+      url = "https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/238893d8cd6f9c2616a05ab521a29651a17a38c2.patch";
+      hash = "sha256-6IhdNH6hhygSXD7EJo/hoBLFeb2lJlBIHNBPTkA3Do0=";
+    })
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work
@@ -53,16 +65,15 @@ stdenv.mkDerivation rec {
     python3
     makeWrapper
     glib
-    gi-docgen
-    gobject-introspection
 
     # for man pages
     docutils
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
+  ] ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
   ];
-
-  buildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
     glib
@@ -73,7 +84,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgio_sniffing=false"
-    "-Dgtk_doc=true"
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "others" true)
   ];
 
   postPatch = ''
@@ -88,6 +101,9 @@ stdenv.mkDerivation rec {
     substituteInPlace docs/meson.build \
       --replace "dependency('gi-docgen'," "dependency('gi-docgen', native:true," \
       --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+
+    # Remove 'ani' loader until proper fix for CVE-2022-48622
+    substituteInPlace meson.build --replace-fail "'ani'," ""
   '';
 
   postInstall =
@@ -99,11 +115,11 @@ stdenv.mkDerivation rec {
     '' + lib.optionalString stdenv.isDarwin ''
       # meson erroneously installs loaders with .dylib extension on Darwin.
       # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
-      for f in $out/${passthru.moduleDir}/*.dylib; do
+      for f in $out/${finalAttrs.passthru.moduleDir}/*.dylib; do
           install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
           mv $f ''${f%.dylib}.so
       done
-    '' + ''
+    '' + lib.optionalString withIntrospection ''
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
       ${stdenv.hostPlatform.emulator buildPackages} $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
@@ -115,7 +131,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString withIntrospection ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
@@ -129,16 +145,18 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
     };
 
     tests = {
       installedTests = nixosTests.installed-tests.gdk-pixbuf;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
 
-    # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc
-    moduleDir = "lib/gdk-pixbuf-2.0/2.10.0/loaders";
+    # gdk_pixbuf_binarydir and gdk_pixbuf_moduledir variables from gdk-pixbuf-2.0.pc
+    binaryDir = "lib/gdk-pixbuf-2.0/2.10.0";
+    moduleDir = "${finalAttrs.passthru.binaryDir}/loaders";
   };
 
   meta = with lib; {
@@ -147,6 +165,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.eelco ] ++ teams.gnome.members;
     mainProgram = "gdk-pixbuf-thumbnailer";
+    pkgConfigModules = [ "gdk-pixbuf-2.0" ];
     platforms = platforms.unix;
   };
-}
+})

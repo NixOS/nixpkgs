@@ -12,6 +12,7 @@
 , nix-update-script
 , testers
 , powertop
+, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/main.cpp --replace "/sbin/modprobe" "modprobe"
-    substituteInPlace src/calibrate/calibrate.cpp --replace "/usr/bin/xset" "xset"
+    substituteInPlace src/calibrate/calibrate.cpp --replace "/usr/bin/xset" "${lib.getExe xorg.xset}"
     substituteInPlace src/tuning/bluetooth.cpp --replace "/usr/bin/hcitool" "hcitool"
   '';
 
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/fenrus75/powertop/releases/tag/v${version}";
     description = "Analyze power consumption on Intel-based laptops";
+    mainProgram = "powertop";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fpletz anthonyroussel ];
     platforms = platforms.linux;

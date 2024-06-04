@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "helio-workstation";
-  version = "3.10";
+  version = "3.12";
 
   src = fetchFromGitHub {
     owner = "helio-fm";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-TqwebaFZXUto+azVJQlggqAc7WKDxAaXxyXcG8x5S/w=";
+    sha256 = "sha256-U5F78RlM6+R+Ms00Z3aTh3npkbgL+FhhFtc9OpGvbdY=";
   };
 
   buildInputs = [
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "One music sequencer for all major platforms, both desktop and mobile";
+    mainProgram = "helio";
     homepage = "https://helio.fm/";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.suhr ];

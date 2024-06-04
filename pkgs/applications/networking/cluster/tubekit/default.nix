@@ -5,19 +5,20 @@
 
 buildGoModule rec {
   pname = "tubekit";
-  version = "4";
+  version = "5";
 
   src = fetchFromGitHub {
     owner = "reconquest";
     repo = "tubekit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sq91uR8ITMOv8hivwKQR02mMlJpjDHw6RxiwVUrpwnY=";
+    hash = "sha256-fUe5bMFF569A9Xdx3bfQH2DzbQDRfZ+ewlDL+gK2gWw=";
   };
 
-  vendorHash = "sha256-qrGzmr1dZPn5r2WBJA7FT7RTqP2sxnrXgbrnKlnpF0Y=";
+  vendorHash = "sha256-qAmkUV5l5g8/w8ZTYFGYvd9I8NUk8rMYjutenHvTRnw=";
 
   meta = with lib; {
     description = "Kubectl alternative with quick context switching";
+    mainProgram = "tubectl";
     homepage = "https://github.com/reconquest/tubekit";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;

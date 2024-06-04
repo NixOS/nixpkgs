@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
+  dontWrapQtApps = true;
+
   buildPhase = ''
     faust2jaqt -vec -time -t 99999 CharacterCompressor.dsp
     faust2jaqt -vec -time -t 99999 CharacterCompressorMono.dsp
@@ -21,8 +23,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp CharacterCompressor $out/bin/
-    cp CharacterCompressorMono $out/bin/
+    for f in $(find . -executable -type f); do
+      cp $f $out/bin/
+    done
     mkdir -p $out/lib/lv2
     cp -r CharacterCompressor.lv2/ $out/lib/lv2
     cp -r CharacterCompressorMono.lv2/ $out/lib/lv2

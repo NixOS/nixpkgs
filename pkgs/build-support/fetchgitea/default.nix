@@ -2,6 +2,8 @@
 
 { lib, fetchFromGitHub }:
 
+lib.makeOverridable (
 { domain, ... }@args:
 
 fetchFromGitHub ((removeAttrs args [ "domain" ]) // { githubBase = domain; })
+)

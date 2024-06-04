@@ -1,35 +1,35 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, lxml
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  lxml,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "xmldiff";
-  version = "2.5";
+  version = "2.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bF8wvGXOboHZpwo8sCafe6YYUv1sqnoPv8Dt8zs8txc=";
+    hash = "sha256-wJELH4ADZt1+xikj5dBuiwahvZEgVpocJ/TyRGucaKI=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     lxml
     setuptools
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "xmldiff"
-  ];
+  pythonImportsCheck = [ "xmldiff" ];
 
   meta = with lib; {
     description = "Creates diffs of XML files";

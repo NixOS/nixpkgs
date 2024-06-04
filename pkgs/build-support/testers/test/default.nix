@@ -12,13 +12,28 @@ let
 
 in
 lib.recurseIntoAttrs {
+  lycheeLinkCheck = lib.recurseIntoAttrs pkgs.lychee.tests;
+
+  hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
+
+  runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest ({ lib, ... }: {
+    name = "runNixOSTest-test";
+    nodes.machine = { pkgs, ... }: {
+      system.nixos = dummyVersioning;
+      environment.systemPackages = [ pkgs.proof-of-overlay-hello pkgs.figlet ];
+    };
+    testScript = ''
+      machine.succeed("hello | figlet >/dev/console")
+    '';
+  });
+
   # Check that the wiring of nixosTest is correct.
   # Correct operation of the NixOS test driver should be asserted elsewhere.
-  nixosTest-example = pkgs-with-overlay.testers.nixosTest ({ lib, pkgs, figlet, ... }: {
+  nixosTest-example = pkgs-with-overlay.testers.nixosTest ({ lib, ... }: {
     name = "nixosTest-test";
     nodes.machine = { pkgs, ... }: {
       system.nixos = dummyVersioning;
-      environment.systemPackages = [ pkgs.proof-of-overlay-hello figlet ];
+      environment.systemPackages = [ pkgs.proof-of-overlay-hello pkgs.figlet ];
     };
     testScript = ''
       machine.succeed("hello | figlet >/dev/console")

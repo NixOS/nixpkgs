@@ -19,7 +19,7 @@ let
   ];
 
   mkArgs = rule:
-    if (isNull rule.args) then ""
+    if (rule.args == null) then ""
     else if (length rule.args == 0) then "args"
     else "args ${concatStringsSep " " rule.args}";
 
@@ -27,9 +27,9 @@ let
     let
       opts = mkOpts rule;
 
-      as = optionalString (!isNull rule.runAs) "as ${rule.runAs}";
+      as = optionalString (rule.runAs != null) "as ${rule.runAs}";
 
-      cmd = optionalString (!isNull rule.cmd) "cmd ${rule.cmd}";
+      cmd = optionalString (rule.cmd != null) "cmd ${rule.cmd}";
 
       args = mkArgs rule;
     in
@@ -53,7 +53,7 @@ in
     enable = mkOption {
       type = with types; bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the {command}`doas` command, which allows
         non-root users to execute commands as root.
       '';
@@ -62,7 +62,7 @@ in
     wheelNeedsPassword = mkOption {
       type = with types; bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether users of the `wheel` group must provide a password to
         run commands as super user via {command}`doas`.
       '';
@@ -70,12 +70,14 @@ in
 
     extraRules = mkOption {
       default = [];
-      description = lib.mdDoc ''
+      description = ''
         Define specific rules to be set in the
         {file}`/etc/doas.conf` file. More specific rules should
         come after more general ones in order to yield the expected behavior.
         You can use `mkBefore` and/or `mkAfter` to ensure
-        this is the case when configuration options are merged.
+        this is the case when configuration options are merged. Be aware that
+        this option cannot be used to override the behaviour allowing
+        passwordless operation for root.
       '';
       example = literalExpression ''
         [
@@ -113,7 +115,7 @@ in
             noPass = mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 If `true`, the user is not required to enter a
                 password.
               '';
@@ -122,7 +124,7 @@ in
             noLog = mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 If `true`, successful executions will not be logged
                 to
                 {manpage}`syslogd(8)`.
@@ -132,7 +134,7 @@ in
             persist = mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 If `true`, do not ask for a password again for some
                 time after the user successfully authenticates.
               '';
@@ -141,7 +143,7 @@ in
             keepEnv = mkOption {
               type = with types; bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 If `true`, environment variables other than those
                 listed in
                 {manpage}`doas(1)`
@@ -152,7 +154,7 @@ in
             setEnv = mkOption {
               type = with types; listOf str;
               default = [];
-              description = lib.mdDoc ''
+              description = ''
                 Keep or set the specified variables. Variables may also be
                 removed with a leading '-' or set using
                 `variable=value`. If the first character of
@@ -171,19 +173,19 @@ in
             users = mkOption {
               type = with types; listOf (either str int);
               default = [];
-              description = lib.mdDoc "The usernames / UIDs this rule should apply for.";
+              description = "The usernames / UIDs this rule should apply for.";
             };
 
             groups = mkOption {
               type = with types; listOf (either str int);
               default = [];
-              description = lib.mdDoc "The groups / GIDs this rule should apply for.";
+              description = "The groups / GIDs this rule should apply for.";
             };
 
             runAs = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Which user or group the specified command is allowed to run as.
                 When set to `null` (the default), all users are
                 allowed.
@@ -197,7 +199,7 @@ in
             cmd = mkOption {
               type = with types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The command the user is allowed to run. When set to
                 `null` (the default), all commands are allowed.
 
@@ -210,7 +212,7 @@ in
             args = mkOption {
               type = with types; nullOr (listOf str);
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Arguments that must be provided to the command. When set to
                 `[]`, the command must be run without any arguments.
               '';
@@ -223,8 +225,10 @@ in
     extraConfig = mkOption {
       type = with types; lines;
       default = "";
-      description = lib.mdDoc ''
-        Extra configuration text appended to {file}`doas.conf`.
+      description = ''
+        Extra configuration text appended to {file}`doas.conf`. Be aware that
+        this option cannot be used to override the behaviour allowing
+        passwordless operation for root.
       '';
     };
   };
@@ -266,14 +270,14 @@ in
             # completely replace the contents of this file, use
             # `environment.etc."doas.conf"`.
 
-            # "root" is allowed to do anything.
-            permit nopass keepenv root
-
             # extraRules
             ${concatStringsSep "\n" (lists.flatten (map mkRule cfg.extraRules))}
 
             # extraConfig
             ${cfg.extraConfig}
+
+            # "root" is allowed to do anything.
+            permit nopass keepenv root
           '';
           preferLocalBuild = true;
         }

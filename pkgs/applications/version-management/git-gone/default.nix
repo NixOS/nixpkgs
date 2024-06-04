@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-gone";
-  version = "0.4.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner = "lunaryorn";
+    owner = "swsnr";
     repo = "git-gone";
     rev = "v${version}";
-    sha256 = "sha256-pHtFLJGZYlxvQxqG/LWoWeQDxa8i3ws0olAtuoyHXTM=";
+    hash = "sha256-Mc9/P4VBmLOC05xqdx/yopbhvdpQS3uejc4YA7BIgug=";
   };
 
-  cargoSha256 = "sha256-BfUR/9WBgyUlKZ80qtqX6+AK7hRBCCsEG/IWjbcDU3c=";
+  cargoHash = "sha256-NyyficEDJReMLAw2VAK2fOXNIwHilnUqQRACGck+0Vo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,9 +29,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cleanup stale Git branches of merge requests";
-    homepage = "https://github.com/lunaryorn/git-gone";
-    changelog = "https://github.com/lunaryorn/git-gone/raw/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/swsnr/git-gone";
+    changelog = "https://github.com/swsnr/git-gone/raw/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ cafkafk ];
+    mainProgram = "git-gone";
   };
 }

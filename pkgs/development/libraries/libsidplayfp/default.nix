@@ -1,58 +1,88 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, makeFontsConf
 , nix-update-script
+, testers
 , autoreconfHook
-, pkg-config
-, perl
-, unittest-cpp
-, xa
-, libgcrypt
-, libexsid
 , docSupport ? true
 , doxygen
 , graphviz
+, libexsid
+, libgcrypt
+, perl
+, pkg-config
+, unittest-cpp
+, xa
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.4.1";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-stfpyJC1AVmDh1Nk5c5Lv0j6ic2AU6mwY02L/IDr8tE=";
+    hash = "sha256-NYdV70YEepjGMmeTALTQvlRvK3R7JjA4VJYYjOwO4AA=";
   };
+
+  outputs = [
+    "out"
+  ] ++ lib.optionals docSupport [
+    "doc"
+  ];
 
   postPatch = ''
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config perl xa ]
-    ++ lib.optionals docSupport [ doxygen graphviz ];
+  strictDeps = true;
 
-  buildInputs = [ libgcrypt libexsid ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+    pkg-config
+    xa
+  ] ++ lib.optionals docSupport [
+    doxygen
+    graphviz
+  ];
 
-  doCheck = true;
+  buildInputs = [
+    libexsid
+    libgcrypt
+  ];
 
-  checkInputs = [ unittest-cpp ];
+  checkInputs = [
+    unittest-cpp
+  ];
 
   enableParallelBuilding = true;
 
-  installTargets = [ "install" ]
-    ++ lib.optionals docSupport [ "doc" ];
-
-  outputs = [ "out" ]
-    ++ lib.optionals docSupport [ "doc" ];
-
   configureFlags = [
-    "--enable-hardsid"
-    "--with-gcrypt"
-    "--with-exsid"
-  ]
-  ++ lib.optional doCheck "--enable-tests";
+    (lib.strings.enableFeature true "hardsid")
+    (lib.strings.withFeature true "gcrypt")
+    (lib.strings.withFeature true "exsid")
+    (lib.strings.enableFeature finalAttrs.finalPackage.doCheck "tests")
+  ];
+
+  # Make Doxygen happy with the setup, reduce log noise
+  FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf { fontDirectories = [ ]; });
+
+  preBuild = ''
+    # Reduce noise from fontconfig during doc building
+    export XDG_CACHE_HOME=$TMPDIR
+  '';
+
+  buildFlags = [
+    "all"
+  ] ++ lib.optionals docSupport [
+    "doc"
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postInstall = lib.optionalString docSupport ''
     mkdir -p $doc/share/doc/libsidplayfp
@@ -60,6 +90,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     updateScript = nix-update-script { };
   };
 
@@ -75,5 +106,9 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ ramkromberg OPNA2608 ];
     platforms = platforms.all;
+    pkgConfigModules = [
+      "libsidplayfp"
+      "libstilview"
+    ];
   };
-}
+})

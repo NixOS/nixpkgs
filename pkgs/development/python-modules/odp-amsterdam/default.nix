@@ -1,52 +1,56 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonRelaxDepsHook,
+  pythonOlder,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "odp-amsterdam";
-  version = "5.0.1";
-  format = "pyproject";
+  version = "6.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-odp-amsterdam";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gRfOZwUguQgoROnqQuQWKOgubR3wjcf7Yfje2+4+CB0=";
+    hash = "sha256-teLjiclkbjlG226gMUgqc2IUEWqKcSm6xIekw+AQPU4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"'
-
+      --replace-fail '"0.0.0"' '"${version}"'
     sed -i '/addopts/d' pyproject.toml
   '';
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
+
+  pythonRelaxDeps = [ "pytz" ];
 
   propagatedBuildInputs = [
     aiohttp
+    pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "odp_amsterdam"
-  ];
+  pythonImportsCheck = [ "odp_amsterdam" ];
 
   meta = with lib; {
     description = "Python client for getting garage occupancy in Amsterdam";

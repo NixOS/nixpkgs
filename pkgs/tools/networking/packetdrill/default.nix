@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     export sourceRoot=$(realpath */gtests/net/packetdrill)
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=unused-result"
     "-Wno-error=stringop-truncation"
     "-Wno-error=address-of-packed-member"
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Quick, precise tests for entire TCP/UDP/IPv4/IPv6 network stacks";
     homepage = "https://github.com/google/packetdrill";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ dmjio cleverca22 ];
   };

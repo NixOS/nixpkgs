@@ -2,15 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "stochas";
-  version = "1.3.9";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AnYViWterLBsTtd0wohff1CEwrSYA4CvOLGhJnPFUt8=";
+    sha256 = "sha256-L7dzUUQNCwcuQavUx9hBH0FX5KSocfeYUv5qBcPD2Vg=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    sed '1i#include <utility>' -i \
+      lib/JUCE/modules/juce_gui_basics/windows/juce_ComponentPeer.h # gcc12
+  '';
 
   nativeBuildInputs = [ cmake pkg-config ];
 

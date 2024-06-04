@@ -1,27 +1,29 @@
-{ lib, stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, makeWrapper, gnugrep, gnused, file, buildEnv }:
+{ lib, stdenv, fetchgit, pkg-config, zlib, pciutils, openssl, coreutils, acpica-tools, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
-  version = "4.14";
+  version = "24.05";
 
   commonMeta = with lib; {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
     license = with licenses; [ gpl2Only gpl2Plus ];
-    maintainers = with maintainers; [ felixsinger yuka ];
+    maintainers = with maintainers; [ felixsinger jmbaur ];
     platforms = platforms.linux;
   };
 
-  generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation (rec {
+  generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation ({
     inherit pname version;
 
-    src = fetchurl {
-      url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
-      sha256 = "0viw2x4ckjwiylb92w85k06b0g9pmamjy2yqs7fxfqbmfadkf1yr";
+    src = fetchgit {
+      url = "https://review.coreboot.org/coreboot";
+      rev = version;
+      hash = "sha256-Fq3tZje6QoMskxqWd61OstgI9Sj25yijf8S3LiTJuYc=";
     };
 
     enableParallelBuilding = true;
 
     postPatch = ''
+      substituteInPlace 3rdparty/vboot/Makefile --replace 'ar qc ' '$$AR qc '
       cd ${path}
       patchShebangs .
     '';
@@ -32,7 +34,7 @@ let
     ];
 
     meta = commonMeta // args.meta;
-  } // (removeAttrs args ["meta"]));
+  } // (removeAttrs args [ "meta" ]));
 
   utils = {
     msrtool = generic {
@@ -53,8 +55,8 @@ let
     intelmetool = generic {
       pname = "intelmetool";
       meta.description = "Dump interesting things about Management Engine";
-      buildInputs = [ pciutils zlib ];
       meta.platforms = [ "x86_64-linux" "i686-linux" ];
+      buildInputs = [ pciutils zlib ];
     };
     cbfstool = generic {
       pname = "cbfstool";
@@ -63,10 +65,12 @@ let
     nvramtool = generic {
       pname = "nvramtool";
       meta.description = "Read and write coreboot parameters and display information from the coreboot table in CMOS/NVRAM";
+      meta.mainProgram = "nvramtool";
     };
     superiotool = generic {
       pname = "superiotool";
       meta.description = "User-space utility to detect Super I/O of a mainboard and provide detailed information about the register contents of the Super I/O";
+      meta.platforms = [ "x86_64-linux" "i686-linux" ];
       buildInputs = [ pciutils zlib ];
     };
     ectool = generic {
@@ -78,12 +82,14 @@ let
     inteltool = generic {
       pname = "inteltool";
       meta.description = "Provides information about Intel CPU/chipset hardware configuration (register contents, MSRs, etc)";
-      buildInputs = [ pciutils zlib ];
       meta.platforms = [ "x86_64-linux" "i686-linux" ];
+      buildInputs = [ pciutils zlib ];
     };
     amdfwtool = generic {
       pname = "amdfwtool";
       meta.description = "Create AMD firmware combination";
+      buildInputs = [ openssl ];
+      nativeBuildInputs = [ pkg-config ];
       installPhase = ''
         runHook preInstall
 
@@ -105,16 +111,18 @@ let
 
         runHook postInstall
       '';
-      postFixup = let
-        binPath = [ coreutils acpica-tools gnugrep gnused file ];
-      in "wrapProgram $out/bin/acpidump-all --set PATH ${lib.makeBinPath binPath}";
+      postFixup = ''
+        wrapProgram $out/bin/acpidump-all \
+          --set PATH ${lib.makeBinPath [ coreutils acpica-tools gnugrep gnused file ]}
+      '';
     };
   };
 
-in utils // {
+in
+utils // {
   coreboot-utils = (buildEnv {
     name = "coreboot-utils-${version}";
-    paths = lib.attrValues utils;
+    paths = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (lib.attrValues utils);
     postBuild = "rm -rf $out/sbin";
   }) // {
     inherit version;

@@ -11,7 +11,8 @@
 , perl
 , luajit
 , darwin
-, python37
+, libiconv
+, python3
 }:
 
 let
@@ -41,7 +42,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config buildSymlinks ];
   buildInputs = [
-    gettext ncurses cscope luajit ruby tcl perl python37
+    gettext ncurses cscope luajit ruby tcl perl python3
   ];
 
   patches = [ ./macvim.patch ];
@@ -61,7 +62,7 @@ stdenv.mkDerivation {
       "--without-local-dir"
       "--with-luajit"
       "--with-lua-prefix=${luajit}"
-      "--with-python3-command=${python37}/bin/python3"
+      "--with-python3-command=${python3}/bin/python3"
       "--with-ruby-command=${ruby}/bin/ruby"
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"
@@ -127,7 +128,7 @@ stdenv.mkDerivation {
       --replace " -L${stdenv.cc.libc}/lib" "" \
       --replace " -L${darwin.libobjc}/lib" "" \
       --replace " -L${darwin.libunwind}/lib" "" \
-      --replace " -L${darwin.libiconv}/lib" ""
+      --replace " -L${libiconv}/lib" ""
 
     # All the libraries we stripped have -osx- in their name as of this time.
     # Assert now that this pattern no longer appears in config.mk.
@@ -159,7 +160,7 @@ stdenv.mkDerivation {
     libperl=$(dirname $(find ${perl} -name "libperl.dylib"))
     install_name_tool -add_rpath ${luajit}/lib $exe
     install_name_tool -add_rpath ${tcl}/lib $exe
-    install_name_tool -add_rpath ${python37}/lib $exe
+    install_name_tool -add_rpath ${python3}/lib $exe
     install_name_tool -add_rpath $libperl $exe
     install_name_tool -add_rpath ${ruby}/lib $exe
 
@@ -180,7 +181,7 @@ stdenv.mkDerivation {
     description = "Vim - the text editor - for macOS";
     homepage    = "https://github.com/macvim-dev/macvim";
     license = licenses.vim;
-    maintainers = with maintainers; [ cstrahan lilyball ];
+    maintainers = with maintainers; [ lilyball ];
     platforms   = platforms.darwin;
     hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };

@@ -1,36 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, libxml2
-, m2crypto
-, ply
-, pyyaml
-, six
-, pbr
-, pythonOlder
-, nocasedict
-, nocaselist
-, yamlloader
-, requests-mock
-, httpretty
-, lxml
-, mock
-, pytest
-, requests
-, decorator
-, FormEncode
-, testfixtures
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchPypi,
+  formencode,
+  httpretty,
+  libxml2,
+  lxml,
+  mock,
+  nocasedict,
+  nocaselist,
+  pbr,
+  ply,
+  pytest,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  requests,
+  requests-mock,
+  six,
+  testfixtures,
+  yamlloader,
 }:
 
 buildPythonPackage rec {
   pname = "pywbem";
-  version = "1.5.0";
+  version = "1.7.2";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xffkWMJTDGE1j7xjM750+vNmqs546uM3QUMSZ63zJhA=";
+    hash = "sha256-3Dt4WEABf1/LY4HFZoJZjOu/yEUYUXaPheIxioTga2g=";
   };
 
   propagatedBuildInputs = [
@@ -42,11 +44,11 @@ buildPythonPackage rec {
     pyyaml
     six
     yamlloader
-  ] ++ lib.optionals (pythonOlder "3.0") [ m2crypto ];
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     decorator
-    FormEncode
+    formencode
     httpretty
     libxml2
     lxml
@@ -57,10 +59,13 @@ buildPythonPackage rec {
     testfixtures
   ];
 
+  pythonImportsCheck = [ "pywbem" ];
+
   meta = with lib; {
     description = "Support for the WBEM standard for systems management";
     homepage = "https://pywbem.github.io";
+    changelog = "https://github.com/pywbem/pywbem/blob/${version}/docs/changes.rst";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,14 +1,12 @@
 { lib
 , fetchpatch
-, python3Packages
+, python3
 , fetchFromGitHub
 , wrapQtAppsHook
 , cups
 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "inkcut";
   version = "2.1.5";
 
@@ -48,7 +46,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     enamlx
     twisted
     lxml
@@ -58,6 +56,7 @@ buildPythonApplication rec {
     pycups
     qtconsole
     pyqt5
+    setuptools
   ];
 
   # QtApplication.instance() does not work during tests?
@@ -90,6 +89,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://www.codelv.com/projects/inkcut/";
     description = "Control 2D plotters, cutters, engravers, and CNC machines";
+    mainProgram = "inkcut";
     license = licenses.gpl3;
     maintainers = with maintainers; [ raboof ];
   };

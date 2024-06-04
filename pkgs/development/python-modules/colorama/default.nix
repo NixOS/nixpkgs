@@ -1,4 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, hatchling, pytestCheckHook }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  hatchling,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "colorama";
@@ -12,7 +18,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatchling ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "colorama" ];
 

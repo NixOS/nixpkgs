@@ -1,24 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, httpcore
-, httpx
-, wsproto
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  httpcore,
+  httpx,
+  wsproto,
 }:
 
 buildPythonPackage rec {
   pname = "h11";
   version = "0.14.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jxn7vpnnJCD/NcALJ6NMuZN+kCqLgQ4siDAMbwo7aZ0=";
+    hash = "sha256-jxn7vpnnJCD/NcALJ6NMuZN+kCqLgQ4siDAMbwo7aZ0=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
@@ -31,6 +33,6 @@ buildPythonPackage rec {
     description = "Pure-Python, bring-your-own-I/O implementation of HTTP/1.1";
     homepage = "https://github.com/python-hyper/h11";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

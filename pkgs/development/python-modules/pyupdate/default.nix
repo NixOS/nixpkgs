@@ -1,9 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "pyupdate";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

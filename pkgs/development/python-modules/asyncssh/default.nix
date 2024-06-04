@@ -1,53 +1,62 @@
-{ stdenv
-, lib
-, bcrypt
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, fido2
-, gssapi
-, libnacl
-, libsodium
-, nettle
-, openssh
-, openssl
-, pyopenssl
-, pytestCheckHook
-, python-pkcs11
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  bcrypt,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  fido2,
+  gssapi,
+  libnacl,
+  libsodium,
+  nettle,
+  openssh,
+  openssl,
+  pyopenssl,
+  pytestCheckHook,
+  python-pkcs11,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.13.0";
-  format = "setuptools";
+  version = "2.14.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vn4ctHIl3JiZ5WRy/cTarANYSmhDZ1MpwM5nF5yyDik=";
+    hash = "sha256-6Va/iYjQega6MwX2YE4mH0ygFMSiMvCHPxx2kvvjz8I=";
   };
 
-  propagatedBuildInputs = [
-    bcrypt
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
-    fido2
-    gssapi
-    libnacl
-    libsodium
     nettle
-    pyopenssl
-    python-pkcs11
     typing-extensions
   ];
 
-  checkInputs = [
+  buildInputs = [ libsodium ];
+
+  optional-dependencies = {
+    bcrypt = [ bcrypt ];
+    fido2 = [ fido2 ];
+    gssapi = [ gssapi ];
+    libnacl = [ libnacl ];
+    pkcs11 = [ python-pkcs11 ];
+    pyOpenSSL = [ pyopenssl ];
+  };
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     openssh
     openssl
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   patches = [
     # Reverts https://github.com/ronf/asyncssh/commit/4b3dec994b3aa821dba4db507030b569c3a32730
@@ -73,12 +82,9 @@ buildPythonPackage rec {
     "test_forward_remote"
   ];
 
-  pythonImportsCheck = [
-    "asyncssh"
-  ];
+  pythonImportsCheck = [ "asyncssh" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
     changelog = "https://github.com/ronf/asyncssh/blob/v${version}/docs/changes.rst";

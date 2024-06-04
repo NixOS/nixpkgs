@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, requests
-, six
-, pytestCheckHook
-, pythonOlder
-, requests-toolbelt
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  requests,
+  six,
+  pytestCheckHook,
+  pythonOlder,
+  requests-toolbelt,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "pushover-complete";
   version = "1.1.1";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
@@ -26,7 +28,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-toolbelt
     responses

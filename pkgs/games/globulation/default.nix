@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libGLU, libGL, SDL, sconsPackages, SDL_ttf, SDL_image, zlib, SDL_net
+{ lib, stdenv, fetchurl, libGLU, libGL, SDL, scons, SDL_ttf, SDL_image, zlib, SDL_net
 , speex, libvorbis, libogg, boost, fribidi, bsdiff
 , fetchpatch
 }:
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s@env = Environment()@env = Environment( ENV = os.environ )@" SConstruct
   '';
 
-  nativeBuildInputs = [ sconsPackages.scons_latest ];
+  nativeBuildInputs = [ scons ];
   buildInputs = [ libGLU libGL SDL SDL_ttf SDL_image zlib SDL_net speex libvorbis libogg boost fribidi bsdiff ];
 
   postConfigure = ''
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "RTS without micromanagement";
+    mainProgram = "glob2";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = licenses.gpl3;

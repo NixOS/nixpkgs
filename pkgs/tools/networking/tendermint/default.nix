@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-3tggW+M3vZChDT1g77W5M3hchEN6pTSVvkrZda6ZTCY=";
   };
 
-  vendorSha256 = "sha256-/enY0qERFzAIJNcuw1djRGoAcmtz7R5Ikvlts0f7rLc=";
+  vendorHash = "sha256-/enY0qERFzAIJNcuw1djRGoAcmtz7R5Ikvlts0f7rLc=";
 
   subPackages = [ "cmd/tendermint" ];
 
@@ -27,5 +27,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ alexfmpe ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "tendermint";
   };
 }

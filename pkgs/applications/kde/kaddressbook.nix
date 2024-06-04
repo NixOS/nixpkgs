@@ -3,7 +3,9 @@
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-search, grantlee, grantleetheme, kcmutils, kcompletion,
   kcrash, kdbusaddons, ki18n, kontactinterface, kparts,
-  kpimtextedit, kxmlgui, libkdepim, libkleo, mailcommon, pimcommon, prison,
+  kpimtextedit,
+  kuserfeedback,
+  kxmlgui, libkdepim, libkleo, mailcommon, pimcommon, prison,
   qgpgme, qtbase,
 }:
 
@@ -12,6 +14,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kaddressbook/";
     description = "KDE contact manager";
+    mainProgram = "kaddressbook";
     license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
@@ -19,6 +22,7 @@ mkDerivation {
   buildInputs = [
     akonadi akonadi-search grantlee grantleetheme kcmutils kcompletion kcrash
     kdbusaddons ki18n kontactinterface kparts kpimtextedit
+    kuserfeedback
     kxmlgui libkdepim libkleo mailcommon pimcommon prison qgpgme qtbase
   ];
   postInstall = ''

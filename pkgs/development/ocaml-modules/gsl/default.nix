@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, buildDunePackage, pkg-config, gsl, darwin, dune-configurator }:
+{ lib, stdenv, fetchFromGitHub, buildDunePackage, pkg-config, gsl, darwin, dune-configurator }:
 
 buildDunePackage rec {
   pname = "gsl";
-  version = "1.24.3";
+  version = "1.25.0";
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.12";
 
-  minimumOCamlVersion = "4.08";
-
-  src = fetchurl {
-    url = "https://github.com/mmottl/gsl-ocaml/releases/download/${version}/gsl-${version}.tbz";
-    sha256 = "1mpzcgbrha2l8iikqbmn32668v2mnnsykxg5n5jgs0qnskn2nvrn";
+  src = fetchFromGitHub {
+    owner = "mmottl";
+    repo = "gsl-ocaml";
+    rev = version;
+    hash = "sha256-vxXv0ZcToXmdYu5k0aLdV3seNn3Y6Sgg+8dpy3Iw68I=";
   };
 
   nativeBuildInputs = [ pkg-config ];

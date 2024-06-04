@@ -1,42 +1,57 @@
-{ buildPythonPackage
-, fetchPypi
-, pythonOlder
-, h5py
-, numpy
-, dill
-, astropy
-, scipy
-, pandas
-, pytestCheckHook
-, lib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  h5py,
+  numpy,
+  dill,
+  astropy,
+  scipy,
+  pandas,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  pname   = "hickle";
-  version = "5.0.2";
-  disabled = pythonOlder "3.5";
+  pname = "hickle";
+  version = "5.0.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2+7OF/a89jK/zLhbk/Q2A+zsKnfRbq3YMKGycEWsLEQ=";
+    hash = "sha256-An5RzK0nnRaBI6JEUl5shLrA22RgWzEbC9NJiRvgxT4=";
   };
 
   postPatch = ''
-    substituteInPlace tox.ini --replace "--cov=./hickle" ""
+    substituteInPlace tox.ini \
+      --replace-fail "--cov=./hickle" ""
   '';
 
-  propagatedBuildInputs = [ h5py numpy dill ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook scipy pandas astropy
+  dependencies = [
+    dill
+    h5py
+    numpy
+  ];
+
+  nativeCheckInputs = [
+    astropy
+    pandas
+    pytestCheckHook
+    scipy
   ];
 
   pythonImportsCheck = [ "hickle" ];
 
-  meta = {
+  meta = with lib; {
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    changelog = "https://github.com/telegraphic/hickle/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

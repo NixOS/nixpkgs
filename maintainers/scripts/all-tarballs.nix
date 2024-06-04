@@ -12,5 +12,5 @@ import ../../pkgs/top-level/release.nix
     scrubJobs = false;
     # No need to evaluate on i686.
     supportedSystems = [ "x86_64-linux" ];
-    limitedSupportedSystems = [];
+    bootstrapConfigs = [];
   }

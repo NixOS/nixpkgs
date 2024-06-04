@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wibo";
-  version = "0.3.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "decompals";
     repo = "wibo";
     rev = version;
-    hash = "sha256-J5h/RpF+twb5fBjSDQMVB5SoTWWs8VD/EUuikuj73YA=";
+    hash = "sha256-oq/i0Hb2y5pwDEvaqSyC4+6LH1oUbvDZ/62l+V3S7Uk=";
   };
 
   nativeBuildInputs = [
@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ r-burns ];
     platforms = [ "i686-linux" ];
+    mainProgram = "wibo";
   };
 }

@@ -4,7 +4,7 @@
   kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons, kguiaddons,
   ki18n, kiconthemes, kinit, kio, knotifications,
   knotifyconfig, kparts, kpty, kservice, ktextwidgets, kwidgetsaddons,
-  kwindowsystem, kxmlgui, qtscript, knewstuff
+  kwindowsystem, kxmlgui, qtscript, knewstuff, qtmultimedia
 }:
 
 mkDerivation {
@@ -13,13 +13,14 @@ mkDerivation {
     homepage = "https://apps.kde.org/konsole/";
     description = "KDE terminal emulator";
     license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
-    maintainers = with lib.maintainers; [ ttuegel turion ];
+    maintainers = with lib.maintainers; [ ttuegel ];
+    mainProgram = "konsole";
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kbookmarks kcompletion kconfig kconfigwidgets kcoreaddons
     kguiaddons ki18n kiconthemes kinit kio knotifications knotifyconfig kparts kpty
-    kservice ktextwidgets kwidgetsaddons kwindowsystem kxmlgui qtscript knewstuff
+    kservice ktextwidgets kwidgetsaddons kwindowsystem kxmlgui qtscript knewstuff qtmultimedia
   ];
 
   passthru.tests.test = nixosTests.terminal-emulators.konsole;

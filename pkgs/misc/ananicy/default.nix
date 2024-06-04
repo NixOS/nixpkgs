@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ananicy";
-  version = "unstable-2021-11-05";
+  version = "unstable-2023-03-21";
 
   src = fetchFromGitHub {
     owner = "nefelim4ag";
     repo = "ananicy";
-    rev = "b8968e9b32b0e4e6a01dc2314e43de8fee9da691";
-    sha256 = "sha256-tlPY81xdUpZrDYdApXooZ0Mst0n7ARVHyUrmymqg0rk=";
+    rev = "1e2cc9a62ba3b6793e59da66aa0039f89e1ad49f";
+    sha256 = "sha256-nHp47eYI36edka+cBMzayPHEflAzpgLx0VehhsyYpwI=";
   };
 
   patches = [
@@ -19,12 +19,6 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-vMcJxekg2QUbm253CLAv3tmo5kedSlw+/PI/LamNWwc=";
       # only used for debian packaging. lets exclude it so the patch applies even when that file is changed
       excludes = [ "package.sh" ];
-    })
-    # https://github.com/Nefelim4ag/Ananicy/pull/439
-    # fix syntax error
-    (fetchpatch {
-      url = "https://github.com/Nefelim4ag/Ananicy/commit/0f8b809298ccfd88d0e2ab952d6e4131865246da.patch";
-      sha256 = "sha256-PWE4F0G97gecgc9HnG7ScA78+QVc8u8aF9u74qVChX0=";
     })
   ];
 
@@ -54,5 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ artturin ];
+    mainProgram = "ananicy";
   };
 }

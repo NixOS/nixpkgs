@@ -63,12 +63,6 @@ self: let
       cl-print = null; # builtin
       tle = null; # builtin
       advice = null; # builtin
-      seq = if lib.versionAtLeast self.emacs.version "27"
-            then null
-            else super.seq;
-      project = if lib.versionAtLeast self.emacs.version "28"
-                then null
-                else super.project;
       # Compilation instructions for the Ada executables:
       # https://www.nongnu.org/ada-mode/
       ada-mode = super.ada-mode.overrideAttrs (old: {
@@ -91,7 +85,7 @@ self: let
         ];
 
         buildInputs = [
-          pkgs.gnatcoll-xref
+          pkgs.gnatPackages.gnatcoll-xref
         ];
 
         buildPhase = ''
@@ -101,11 +95,49 @@ self: let
         '';
 
         postInstall = (old.postInstall or "") + "\n" + ''
-          ./install.sh --prefix=$out
+          ./install.sh "$out"
         '';
 
         meta = old.meta // {
           maintainers = [ lib.maintainers.sternenseemann ];
+        };
+      });
+
+      eglot = super.eglot.overrideAttrs (old: {
+        postInstall = (old.postInstall or "") + ''
+          local info_file=eglot.info
+          pushd $out/share/emacs/site-lisp/elpa/eglot-*
+          # specify output info file to override the one defined in eglot.texi
+          makeinfo --output=$info_file eglot.texi
+          install-info $info_file dir
+          popd
+        '';
+      });
+
+      jinx = super.jinx.overrideAttrs (old: let
+        libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
+      in {
+        dontUnpack = false;
+
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+            pkgs.pkg-config
+        ];
+
+        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+
+        postBuild = ''
+          NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
+          $CC -shared -o jinx-mod${libExt} jinx-mod.c -lenchant-2
+        '';
+
+        postInstall = (old.postInstall or "") + "\n" + ''
+          outd=$out/share/emacs/site-lisp/elpa/jinx-*
+          install -m444 -t $outd jinx-mod${libExt}
+          rm $outd/jinx-mod.c $outd/emacs-module.h
+        '';
+
+        meta = old.meta // {
+          maintainers = [ lib.maintainers.DamienCassou ];
         };
       });
 
@@ -123,10 +155,39 @@ self: let
         }
       );
 
+      xeft = super.xeft.overrideAttrs (old: let
+        libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
+      in {
+        dontUnpack = false;
+
+        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.xapian ];
+        buildPhase = (old.buildPhase or "") + ''
+          $CXX -shared -o xapian-lite${libExt} xapian-lite.cc $NIX_CFLAGS_COMPILE -lxapian
+        '';
+        postInstall = (old.postInstall or "") + "\n" + ''
+          outd=$out/share/emacs/site-lisp/elpa/xeft-*
+          install -m444 -t $outd xapian-lite${libExt}
+          rm $outd/xapian-lite.cc $outd/emacs-module.h $outd/emacs-module-prelude.h $outd/demo.gif $outd/Makefile
+        '';
+      });
+
+      # native compilation for tests/seq-tests.el never ends
+      # delete tests/seq-tests.el to workaround this
+      seq = super.seq.overrideAttrs (old: {
+        dontUnpack = false;
+        postUnpack = (old.postUnpack or "") + "\n" + ''
+          local content_directory=$(echo seq-*)
+          rm --verbose $content_directory/tests/seq-tests.el
+          src=$PWD/$content_directory.tar
+          tar --create --verbose --file=$src $content_directory
+        '';
+      });
+
+
     };
 
     elpaPackages = super // overrides;
 
   in elpaPackages // { inherit elpaBuild; });
 
-in generateElpa { }
+in (generateElpa { }) // { __attrsFailEvaluation = true; }

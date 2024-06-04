@@ -1,42 +1,45 @@
-{ lib, python3Packages, installShellFiles }:
+{ lib, python3Packages, fetchPypi, installShellFiles }:
 
 let
-  pypkgs = python3Packages;
-
-in
-pypkgs.buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.23.0";
+  version = "1.46.0";
+  hash = "sha256-+aXpsB4mjw9sZLalv3knW8okP+mh2P/nbZCiCwa3UBU=";
+in
+python3Packages.buildPythonApplication {
+  inherit pname version;
+  pyproject = true;
 
-  src = pypkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "Ix/43QFOa0kCP5xndszFGk0p12w/t/z+fVcYRIj9y0s=";
+  src = fetchPypi {
+    inherit pname version hash;
   };
+
+  nativeBuildInputs = [
+    python3Packages.poetry-core
+    python3Packages.shtab
+    installShellFiles
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    colorama
+    libtmux
+    pyyaml
+  ];
 
   # No tests in archive
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  propagatedBuildInputs = with pypkgs; [
-    click
-    colorama
-    kaptan
-    libtmux
-  ];
-
   postInstall = ''
     installShellCompletion --cmd tmuxp \
-      --bash <(_TMUXP_COMPLETE=bash_source $out/bin/tmuxp) \
-      --fish <(_TMUXP_COMPLETE=fish_source $out/bin/tmuxp) \
-      --zsh <(_TMUXP_COMPLETE=zsh_source $out/bin/tmuxp)
+      --bash <(shtab --shell=bash -u tmuxp.cli.create_parser) \
+      --zsh <(shtab --shell=zsh -u tmuxp.cli.create_parser)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "tmux session manager";
     homepage = "https://tmuxp.git-pull.com/";
     changelog = "https://github.com/tmux-python/tmuxp/raw/v${version}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ otavio ];
+    mainProgram = "tmuxp";
   };
 }

@@ -1,27 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, autopage
-, cmd2
-, importlib-metadata
-, installShellFiles
-, openstackdocstheme
-, pbr
-, prettytable
-, pyparsing
-, pyyaml
-, stevedore
-, sphinx
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  autopage,
+  cmd2,
+  importlib-metadata,
+  installShellFiles,
+  openstackdocstheme,
+  pbr,
+  prettytable,
+  pyparsing,
+  pyyaml,
+  stevedore,
+  sphinx,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "4.1.0";
+  version = "4.7.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-u+6CEnMIRyoxI+0QtSiWFsssQ1B0ZW3QcuVTYwU9CRw=";
+    hash = "sha256-bKRfjfUZu8ByLGEEnee35EKkZfp/P1Urltc1+ib9WyY=";
   };
 
   postPatch = ''

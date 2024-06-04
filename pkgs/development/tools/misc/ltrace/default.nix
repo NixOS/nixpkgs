@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];  # Some patches impact ./configure.
   buildInputs = [ elfutils ];
-  checkInputs = [ dejagnu ];
+  nativeCheckInputs = [ dejagnu ];
 
   # Import Fedora's (very) large patch series: bug fixes, architecture support,
   # etc. RH/Fedora are currently working with upstream to merge all these
@@ -55,9 +55,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library call tracer";
+    mainProgram = "ltrace";
     homepage = "https://www.ltrace.org/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,52 +1,54 @@
-{ lib
-, buildPythonPackage
-, cachecontrol
-, cwl-upgrader
-, cwlformat
-, fetchFromGitHub
-, packaging
-, pytest-mock
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, rdflib
-, requests
-, schema-salad
+{
+  lib,
+  buildPythonPackage,
+  cwl-upgrader,
+  cwlformat,
+  fetchFromGitHub,
+  packaging,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  rdflib,
+  requests,
+  ruamel-yaml,
+  schema-salad,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cwl-utils";
-  version = "0.21";
-  format = "setuptools";
+  version = "0.33";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
-    repo = pname;
+    repo = "cwl-utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-y1zuYaxoE0XUk8UpCLsg4ty0sn+5Uu4ztRnUoJezO/o=";
+    hash = "sha256-+GvG5Uu2nQWYCcuAkBkegsmMCWhf269jH6Zcex99I4M=";
   };
 
-  propagatedBuildInputs = [
-    cachecontrol
+  build-system = [ setuptools ];
+
+  dependencies = [
     cwl-upgrader
     packaging
     rdflib
     requests
+    ruamel-yaml
     schema-salad
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cwlformat
     pytest-mock
     pytest-xdist
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cwl_utils"
-  ];
+  pythonImportsCheck = [ "cwl_utils" ];
 
   disabledTests = [
     # Don't run tests which require Node.js
@@ -55,6 +57,9 @@ buildPythonPackage rec {
     "test_graph_split"
     "test_caches_js_processes"
     "test_load_document_with_remote_uri"
+    # Don't run tests which require network access
+    "test_remote_packing"
+    "test_remote_packing_github_soft_links"
   ];
 
   meta = with lib; {

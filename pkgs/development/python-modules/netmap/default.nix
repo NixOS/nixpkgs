@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, substituteAll
-, nmap
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  substituteAll,
+  nmap,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "netmap";
   version = "0.7.0.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";

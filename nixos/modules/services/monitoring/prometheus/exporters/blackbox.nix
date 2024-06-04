@@ -1,10 +1,14 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   logPrefix = "services.prometheus.exporter.blackbox";
   cfg = config.services.prometheus.exporters.blackbox;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    escapeShellArg
+    ;
 
   # This ensures that we can deal with string paths, path types and
   # store-path strings with context.
@@ -21,11 +25,11 @@ let
       throw
       "${logPrefix}: configuration file must not reside within /tmp - it won't be visible to the systemd service."
     else
-      true;
+      file;
   checkConfig = file:
     pkgs.runCommand "checked-blackbox-exporter.conf" {
       preferLocalBuild = true;
-      buildInputs = [ pkgs.buildPackages.prometheus-blackbox-exporter ];
+      nativeBuildInputs = [ pkgs.buildPackages.prometheus-blackbox-exporter ];
     } ''
       ln -s ${coerceConfigFile file} $out
       blackbox_exporter --config.check --config.file $out
@@ -35,14 +39,14 @@ in {
   extraOpts = {
     configFile = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to configuration file.
       '';
     };
     enableConfigCheck = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to run a correctness check for the configuration file. This depends
         on the configuration file residing in the nix-store. Paths passed as string will
         be copied to the store.

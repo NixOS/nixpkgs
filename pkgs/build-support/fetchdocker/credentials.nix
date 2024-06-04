@@ -1,3 +1,4 @@
+{ lib }:
 # We provide three paths to get the credentials into the builder's
 # environment:
 #
@@ -35,4 +36,4 @@ let
     ({prefix, path}: "DOCKER_CREDENTIALS" == prefix)
     builtins.nixPath);
 in
-  if (pathParts != []) then (builtins.head pathParts).path else ""
+  lib.optionalString (pathParts != []) ((builtins.head pathParts).path)

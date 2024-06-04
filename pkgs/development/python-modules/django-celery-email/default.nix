@@ -1,22 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, django-appconf
-, celery
-, pytest-django
-, pytestCheckHook
-, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  django-appconf,
+  celery,
+  pytest-django,
+  pytestCheckHook,
+  python,
+}:
 
 buildPythonPackage rec {
   pname = "django-celery-email";
   version = "3.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pmclanahan";
     repo = pname;
     rev = version;
-    sha256 = "sha256-LBavz5Nh2ObmIwLCem8nHvsuKgPwkzbS/OzFPmSje/M=";
+    hash = "sha256-LBavz5Nh2ObmIwLCem8nHvsuKgPwkzbS/OzFPmSje/M=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +30,7 @@ buildPythonPackage rec {
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];

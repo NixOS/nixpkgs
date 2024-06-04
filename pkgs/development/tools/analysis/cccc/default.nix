@@ -21,12 +21,13 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C and C++ Code Counter";
+    mainProgram = "cccc";
     longDescription = ''
       CCCC is a tool which analyzes C++ and Java files and generates a report
       on various metrics of the code. Metrics supported include lines of code, McCabe's
       complexity and metrics proposed by Chidamber&Kemerer and Henry&Kafura.
     '';
-    homepage = "http://cccc.sourceforge.net/";
+    homepage = "https://cccc.sourceforge.net/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.linquize ];

@@ -1,6 +1,5 @@
 { lib, stdenv
 , mkRustcDepArgs, mkRustcFeatureArgs, needUnstableCLI
-, rust
 }:
 
 { crateName,
@@ -21,7 +20,7 @@
         (mkRustcDepArgs dependencies crateRenames)
         (mkRustcFeatureArgs crateFeatures)
       ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "--target" (rust.toRustTargetSpec stdenv.hostPlatform)
+        "--target" stdenv.hostPlatform.rust.rustcTargetSpec
       ] ++ lib.optionals (needUnstableCLI dependencies) [
         "-Z" "unstable-options"
       ] ++ extraRustcOpts
@@ -41,6 +40,7 @@
     );
 
     binRustcOpts = lib.concatStringsSep " " (
+      [ "-C linker=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ] ++
       baseRustcOpts
     );
 
@@ -51,7 +51,7 @@
     # configure & source common build functions
     LIB_RUSTC_OPTS="${libRustcOpts}"
     BIN_RUSTC_OPTS="${binRustcOpts}"
-    LIB_EXT="${stdenv.hostPlatform.extensions.sharedLibrary}"
+    LIB_EXT="${stdenv.hostPlatform.extensions.sharedLibrary or ""}"
     LIB_PATH="${libPath}"
     LIB_NAME="${libName}"
 

@@ -3,9 +3,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "garcon";
-  version = "4.18.0";
+  version = "4.18.2";
 
-  sha256 = "sha256-l1wGitD8MM1GrR4FyyPIxHSqK+AqKKyjTIN7VOaVzpM=";
+  sha256 = "sha256-J9f9MzZ1I9XIyvwuyINkvXDuXY6/MkjlH2Ct4yaEXsY=";
 
   nativeBuildInputs = [ gobject-introspection ];
 

@@ -1,11 +1,14 @@
 { lib, mkCoqDerivation, coq, version ? null }:
-with lib;
 
 mkCoqDerivation {
   pname = "aac-tactics";
 
   releaseRev = v: "v${v}";
 
+  release."8.19.1".sha256 = "sha256-W/V57h+rjb3m0ktCG83PquMHfXiv6H1Nhvw9sVEPLqM=";
+  release."8.19.0".sha256 = "sha256-IeCBd8gcu4bAXH5I/XIT7neQIILi+EWR6qqAA4GzQD0=";
+  release."8.18.0".sha256 = "sha256-Vpe79qCyFLOdOtFFvLKR0N+MMpGD661Q01yx4gxRhZo=";
+  release."8.17.0".sha256 = "sha256-c8DtD21QFDZEVyCQc7ScPZEMTmolxlT3+Db3gStofF8=";
   release."8.16.0".sha256 = "sha256-sE1w8q/60adNF9yMJQO70CEk3D8QUopvgiszdHt5Wsw=";
   release."8.15.1".sha256 = "sha256:0k2sl3ns897a5ll11bazgpv4ppgi1vmx4n89v2dnxabm5dglyglp";
   release."8.14.1".sha256 = "sha256:1w99jgm7mxwdxnalxhralmhmpwwbd52pbbifq0mx13ixkv6iqm1a";
@@ -21,7 +24,10 @@ mkCoqDerivation {
   release."8.5.0".sha256 = "sha256-7yNxJn6CH5xS5w/zsXfcZYORa6e5/qS9v8PUq2o02h4=";
 
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
+    { case = "8.19"; out = "8.19.1"; }
+    { case = "8.18"; out = "8.18.0"; }
+    { case = "8.17"; out = "8.17.0"; }
     { case = "8.16"; out = "8.16.0"; }
     { case = "8.15"; out = "8.15.1"; }
     { case = "8.14"; out = "8.14.1"; }
@@ -37,7 +43,7 @@ mkCoqDerivation {
 
   mlPlugin = true;
 
-  meta = {
+  meta = with lib; {
     description = "Coq plugin providing tactics for rewriting universally quantified equations";
     longDescription = ''
       This Coq plugin provides tactics for rewriting universally quantified

@@ -1,7 +1,7 @@
-{ bctoolbox
+{ lib
+, bc-soci
 , belcard
 , belle-sip
-, belr
 , cmake
 , doxygen
 , fetchFromGitLab
@@ -10,16 +10,15 @@
 , lime
 , mediastreamer
 , python3
-, bc-soci
 , sqlite
-, lib
 , stdenv
 , xercesc
+, zxing-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  version = "5.1.22";
+  version = "5.2.98";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -27,14 +26,25 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hTyp/fUA1+7J1MtqX33kH8Vn1XNjx51Wy5REvrpdJTY=";
+    hash = "sha256-kQZePMa7MTaSJLEObM8khfSFYLqhlgTcVyKfTPLwKYU=";
   };
 
-  patches = [ ./use-normal-jsoncpp.patch ];
+  patches = [
+    # zxing-cpp 2.0+ requires C++ 17
+    # Manual backport as upstream ran formatters in the meantime
+    ./backport-cpp17.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace "jsoncpp_object" "jsoncpp" \
+      --replace "jsoncpp_static" "jsoncpp"
+  '';
 
   cmakeFlags = [
     "-DENABLE_STATIC=NO" # Do not build static libraries
     "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
+    "-DENABLE_STRICT=NO" # Do not build with -Werror
   ];
 
   buildInputs = [
@@ -52,6 +62,7 @@ stdenv.mkDerivation rec {
     (python3.withPackages (ps: [ ps.pystache ps.six ]))
     sqlite
     xercesc
+    zxing-cpp
   ];
 
   nativeBuildInputs = [

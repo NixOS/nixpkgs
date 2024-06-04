@@ -1,36 +1,25 @@
 { stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
 , erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
-, flock
+, flock, autoreconfHook
+, gawk
+, nixosTests
 , withMysql ? false
 , withPgsql ? false
 , withSqlite ? false, sqlite
 , withPam ? false, pam
 , withZlib ? true, zlib
-, withIconv ? true
 , withTools ? false
 , withRedis ? false
+, withImagemagick ? false, imagemagick
 }:
 
 let
-  fakegit = writeScriptBin "git" ''
-    #! ${stdenv.shell} -e
-    if [ "$1" = "describe" ]; then
-      [ -r .rev ] && cat .rev || true
-    fi
-  '';
-
-  ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils util-linux procps ];
-
+  ctlpath = lib.makeBinPath [ bash gnused gnugrep gawk coreutils util-linux procps ];
 in stdenv.mkDerivation rec {
-  version = "21.04";
   pname = "ejabberd";
+  version = "23.10";
 
-  src = fetchurl {
-    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
-    sha256 = "09s8mj0dkvp9mxazsqxqqmnl5n2xyi8avx0rzgvqrbl3byanzfzr";
-  };
-
-  nativeBuildInputs = [ fakegit makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoreconfHook ];
 
   buildInputs = [ erlang openssl expat libyaml gd ]
     ++ lib.optional withSqlite sqlite
@@ -38,15 +27,35 @@ in stdenv.mkDerivation rec {
     ++ lib.optional withZlib zlib
   ;
 
+  src = fetchurl {
+    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/ejabberd-${version}.tar.gz";
+    hash = "sha256-DW5/DYLZHNqJ4lddmag1B0E9ov/eObIVGASUeioPolg=";
+    # remember to update the deps FOD hash & its pinned ejabberd-po commit
+  };
+
+  passthru.tests = {
+    inherit (nixosTests) ejabberd;
+  };
+
   deps = stdenv.mkDerivation {
     pname = "ejabberd-deps";
-    inherit version;
 
-    inherit src;
+    inherit src version;
+
+    # pin ejabberd-po dep
+    # update: curl -L api.github.com/repos/processone/ejabberd-po/branches/main | jq .commit.sha -r
+    postPatch = ''
+      substituteInPlace rebar.config \
+        --replace \
+          '{git, "https://github.com/processone/ejabberd-po", {branch, "main"}}' \
+          '{git, "https://github.com/processone/ejabberd-po", {tag, "26d6463386588d39f07027dabff3cb8dd938bf6b"}}'
+    '';
 
     configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
 
-    nativeBuildInputs = [ git erlang openssl expat libyaml sqlite pam zlib ];
+    nativeBuildInputs = [
+      git erlang openssl expat libyaml sqlite pam zlib autoreconfHook
+    ];
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
@@ -58,33 +67,38 @@ in stdenv.mkDerivation rec {
           git reset --hard
           git clean -ffdx
           git describe --always --tags > .rev
-          rm -rf .git
+          rm -rf .git .github
         )
       done
+      # not a typo; comes from `make deps`
       rm deps/.got
 
       cp -r deps $out
     '';
 
-    outputHashMode = "recursive";
+    dontPatchELF = true;
+    dontStrip = true;
+    # avoid /nix/store references in the source
+    dontPatchShebangs = true;
+
     outputHashAlgo = "sha256";
-    outputHash = "1mvixgb46ss35abjwz3lw38c69bii1xyj557a92bvrxc1gc6gx31";
+    outputHashMode = "recursive";
+    outputHash = "sha256-HrLu3wTF+cUxpGX0yK3nbB57SRM2ND3Crlxs5/8FIwI=";
   };
 
-  configureFlags =
-    [ (lib.enableFeature withMysql "mysql")
-      (lib.enableFeature withPgsql "pgsql")
-      (lib.enableFeature withSqlite "sqlite")
-      (lib.enableFeature withPam "pam")
-      (lib.enableFeature withZlib "zlib")
-      (lib.enableFeature withIconv "iconv")
-      (lib.enableFeature withTools "tools")
-      (lib.enableFeature withRedis "redis")
-    ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
+  configureFlags = [
+    (lib.enableFeature withMysql "mysql")
+    (lib.enableFeature withPgsql "pgsql")
+    (lib.enableFeature withSqlite "sqlite")
+    (lib.enableFeature withPam "pam")
+    (lib.enableFeature withZlib "zlib")
+    (lib.enableFeature withTools "tools")
+    (lib.enableFeature withRedis "redis")
+  ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
 
   enableParallelBuilding = true;
 
-  preBuild = ''
+  postPatch = ''
     cp -r $deps deps
     chmod -R +w deps
     patchShebangs .
@@ -98,12 +112,14 @@ in stdenv.mkDerivation rec {
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
     wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
+    ${lib.optionalString withImagemagick ''wrapProgram $out/lib/ejabberd-*/priv/bin/captcha.sh --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"''}
     rm $out/bin/{mix,iex,elixir}
   '';
 
   meta = with lib; {
     description = "Open-source XMPP application server written in Erlang";
-    license = licenses.gpl2;
+    mainProgram = "ejabberdctl";
+    license = licenses.gpl2Plus;
     homepage = "https://www.ejabberd.im";
     platforms = platforms.linux;
     maintainers = with maintainers; [ sander abbradar ];

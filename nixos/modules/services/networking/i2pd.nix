@@ -17,36 +17,36 @@ let
   optionalNullInt = o: i: optional (i != null) (intOpt o i);
   optionalEmptyList = o: l: optional ([] != l) (lstOpt o l);
 
-  mkEnableTrueOption = name: mkEnableOption (lib.mdDoc name) // { default = true; };
+  mkEnableTrueOption = name: mkEnableOption name // { default = true; };
 
   mkEndpointOpt = name: addr: port: {
-    enable = mkEnableOption (lib.mdDoc name);
+    enable = mkEnableOption name;
     name = mkOption {
       type = types.str;
       default = name;
-      description = lib.mdDoc "The endpoint name.";
+      description = "The endpoint name.";
     };
     address = mkOption {
       type = types.str;
       default = addr;
-      description = lib.mdDoc "Bind address for ${name} endpoint.";
+      description = "Bind address for ${name} endpoint.";
     };
     port = mkOption {
       type = types.port;
       default = port;
-      description = lib.mdDoc "Bind port for ${name} endpoint.";
+      description = "Bind port for ${name} endpoint.";
     };
   };
 
   i2cpOpts = name: {
     length = mkOption {
       type = types.int;
-      description = lib.mdDoc "Guaranteed minimum hops for ${name} tunnels.";
+      description = "Guaranteed minimum hops for ${name} tunnels.";
       default = 3;
     };
     quantity = mkOption {
       type = types.int;
-      description = lib.mdDoc "Number of simultaneous ${name} tunnels.";
+      description = "Number of simultaneous ${name} tunnels.";
       default = 5;
     };
   };
@@ -56,7 +56,7 @@ let
       keys = mkOption {
         type = with types; nullOr str;
         default = keyloc;
-        description = lib.mdDoc ''
+        description = ''
           File to persist ${lib.toUpper name} keys.
         '';
       };
@@ -64,12 +64,12 @@ let
       outbound = i2cpOpts name;
       latency.min = mkOption {
         type = with types; nullOr int;
-        description = lib.mdDoc "Min latency for tunnels.";
+        description = "Min latency for tunnels.";
         default = null;
       };
       latency.max = mkOption {
         type = with types; nullOr int;
-        description = lib.mdDoc "Max latency for tunnels.";
+        description = "Max latency for tunnels.";
         default = null;
       };
     };
@@ -79,17 +79,17 @@ let
     inbound = i2cpOpts name;
     crypto.tagsToSend = mkOption {
       type = types.int;
-      description = lib.mdDoc "Number of ElGamal/AES tags to send.";
+      description = "Number of ElGamal/AES tags to send.";
       default = 40;
     };
     destination = mkOption {
       type = types.str;
-      description = lib.mdDoc "Remote endpoint, I2P hostname or b32.i2p address.";
+      description = "Remote endpoint, I2P hostname or b32.i2p address.";
     };
     keys = mkOption {
       type = types.str;
       default = name + "-keys.dat";
-      description = lib.mdDoc "Keyset used for tunnel identity.";
+      description = "Keyset used for tunnel identity.";
     };
   } // mkEndpointOpt name "127.0.0.1" 0;
 
@@ -169,15 +169,15 @@ let
         (boolOpt "enabled" proto.enable)
         (strOpt "address" proto.address)
         (intOpt "port" proto.port)
-        ] ++ (if proto ? keys then optionalNullString "keys" proto.keys else [])
-        ++ (if proto ? auth then optionalNullBool "auth" proto.auth else [])
-        ++ (if proto ? user then optionalNullString "user" proto.user else [])
-        ++ (if proto ? pass then optionalNullString "pass" proto.pass else [])
-        ++ (if proto ? strictHeaders then optionalNullBool "strictheaders" proto.strictHeaders else [])
-        ++ (if proto ? hostname then optionalNullString "hostname" proto.hostname else [])
-        ++ (if proto ? outproxy then optionalNullString "outproxy" proto.outproxy else [])
-        ++ (if proto ? outproxyPort then optionalNullInt "outproxyport" proto.outproxyPort else [])
-        ++ (if proto ? outproxyEnable then optionalNullBool "outproxy.enabled" proto.outproxyEnable else []);
+        ] ++ (optionals (proto ? keys) (optionalNullString "keys" proto.keys))
+        ++ (optionals (proto ? auth) (optionalNullBool "auth" proto.auth))
+        ++ (optionals (proto ? user) (optionalNullString "user" proto.user))
+        ++ (optionals (proto ? pass) (optionalNullString "pass" proto.pass))
+        ++ (optionals (proto ? strictHeaders) (optionalNullBool "strictheaders" proto.strictHeaders))
+        ++ (optionals (proto ? hostname) (optionalNullString "hostname" proto.hostname))
+        ++ (optionals (proto ? outproxy) (optionalNullString "outproxy" proto.outproxy))
+        ++ (optionals (proto ? outproxyPort) (optionalNullInt "outproxyport" proto.outproxyPort))
+        ++ (optionals (proto ? outproxyEnable) (optionalNullBool "outproxy.enabled" proto.outproxyEnable));
         in (concatStringsSep "\n" protoOpts)
       ));
   in
@@ -192,21 +192,14 @@ let
         "type = client"
         (intOpt "port" tun.port)
         (strOpt "destination" tun.destination)
-        ] ++ (if tun ? destinationPort then optionalNullInt "destinationport" tun.destinationPort else [])
-        ++ (if tun ? keys then
-            optionalNullString "keys" tun.keys else [])
-        ++ (if tun ? address then
-            optionalNullString "address" tun.address else [])
-        ++ (if tun ? inbound.length then
-            optionalNullInt "inbound.length" tun.inbound.length else [])
-        ++ (if tun ? inbound.quantity then
-            optionalNullInt "inbound.quantity" tun.inbound.quantity else [])
-        ++ (if tun ? outbound.length then
-            optionalNullInt "outbound.length" tun.outbound.length else [])
-        ++ (if tun ? outbound.quantity then
-            optionalNullInt "outbound.quantity" tun.outbound.quantity else [])
-        ++ (if tun ? crypto.tagsToSend then
-            optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend else []);
+        ] ++ (optionals (tun ? destinationPort) (optionalNullInt "destinationport" tun.destinationPort))
+        ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
+        ++ (optionals (tun ? address) (optionalNullString "address" tun.address))
+        ++ (optionals (tun ? inbound.length) (optionalNullInt "inbound.length" tun.inbound.length))
+        ++ (optionals (tun ? inbound.quantity) (optionalNullInt "inbound.quantity" tun.inbound.quantity))
+        ++ (optionals (tun ? outbound.length) (optionalNullInt "outbound.length" tun.outbound.length))
+        ++ (optionals (tun ? outbound.quantity) (optionalNullInt "outbound.quantity" tun.outbound.quantity))
+        ++ (optionals (tun ? crypto.tagsToSend) (optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend));
         in concatStringsSep "\n" outTunOpts))
     (flip map
       (collect (tun: tun ? port && tun ? address) cfg.inTunnels)
@@ -215,14 +208,10 @@ let
         "type = server"
         (intOpt "port" tun.port)
         (strOpt "host" tun.address)
-      ] ++ (if tun ? destination then
-            optionalNullString "destination" tun.destination else [])
-        ++ (if tun ? keys then
-            optionalNullString "keys" tun.keys else [])
-        ++ (if tun ? inPort then
-            optionalNullInt "inport" tun.inPort else [])
-        ++ (if tun ? accessList then
-            optionalEmptyList "accesslist" tun.accessList else []);
+      ] ++ (optionals (tun ? destination) (optionalNullString "destination" tun.destination))
+        ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
+        ++ (optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
+        ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
         in concatStringsSep "\n" inTunOpts))];
     in pkgs.writeText "i2pd-tunnels.conf" opts;
 
@@ -247,27 +236,20 @@ in
 
     services.i2pd = {
 
-      enable = mkEnableOption (lib.mdDoc "I2Pd daemon") // {
-        description = lib.mdDoc ''
+      enable = mkEnableOption "I2Pd daemon" // {
+        description = ''
           Enables I2Pd as a running service upon activation.
-          Please read http://i2pd.readthedocs.io/en/latest/ for further
+          Please read <https://i2pd.readthedocs.io/en/latest/> for further
           configuration help.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.i2pd;
-        defaultText = literalExpression "pkgs.i2pd";
-        description = lib.mdDoc ''
-          i2pd package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "i2pd" { };
 
       logLevel = mkOption {
         type = types.enum ["debug" "info" "warn" "error"];
         default = "error";
-        description = lib.mdDoc ''
+        description = ''
           The log level. {command}`i2pd` defaults to "info"
           but that generates copious amounts of log messages.
 
@@ -276,12 +258,12 @@ in
         '';
       };
 
-      logCLFTime = mkEnableOption (lib.mdDoc "Full CLF-formatted date and time to log");
+      logCLFTime = mkEnableOption "full CLF-formatted date and time to log";
 
       address = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Your external IP or hostname.
         '';
       };
@@ -289,7 +271,7 @@ in
       family = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Specify a family the router belongs to.
         '';
       };
@@ -297,7 +279,7 @@ in
       dataDir = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Alternative path to storage of i2pd data (RI, keys, peer profiles, ...)
         '';
       };
@@ -305,7 +287,7 @@ in
       share = mkOption {
         type = types.int;
         default = 100;
-        description = lib.mdDoc ''
+        description = ''
           Limit of transit traffic from max bandwidth in percents.
         '';
       };
@@ -313,7 +295,7 @@ in
       ifname = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Network interface to bind to.
         '';
       };
@@ -321,7 +303,7 @@ in
       ifname4 = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           IPv4 interface to bind to.
         '';
       };
@@ -329,7 +311,7 @@ in
       ifname6 = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           IPv6 interface to bind to.
         '';
       };
@@ -337,7 +319,7 @@ in
       ntcpProxy = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Proxy URL for NTCP transport.
         '';
       };
@@ -345,14 +327,14 @@ in
       ntcp = mkEnableTrueOption "ntcp";
       ssu = mkEnableTrueOption "ssu";
 
-      notransit = mkEnableOption (lib.mdDoc "notransit") // {
-        description = lib.mdDoc ''
+      notransit = mkEnableOption "notransit" // {
+        description = ''
           Tells the router to not accept transit tunnels during startup.
         '';
       };
 
-      floodfill = mkEnableOption (lib.mdDoc "floodfill") // {
-        description = lib.mdDoc ''
+      floodfill = mkEnableOption "floodfill" // {
+        description = ''
           If the router is declared to be unreachable and needs introduction nodes.
         '';
       };
@@ -360,7 +342,7 @@ in
       netid = mkOption {
         type = types.int;
         default = 2;
-        description = lib.mdDoc ''
+        description = ''
           I2P overlay netid.
         '';
       };
@@ -368,7 +350,7 @@ in
       bandwidth = mkOption {
         type = with types; nullOr int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
            Set a router bandwidth limit integer in KBps.
            If not set, {command}`i2pd` defaults to 32KBps.
         '';
@@ -377,26 +359,26 @@ in
       port = mkOption {
         type = with types; nullOr int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           I2P listen port. If no one is given the router will pick between 9111 and 30777.
         '';
       };
 
       enableIPv4 = mkEnableTrueOption "IPv4 connectivity";
-      enableIPv6 = mkEnableOption (lib.mdDoc "IPv6 connectivity");
+      enableIPv6 = mkEnableOption "IPv6 connectivity";
       nat = mkEnableTrueOption "NAT bypass";
 
-      upnp.enable = mkEnableOption (lib.mdDoc "UPnP service discovery");
+      upnp.enable = mkEnableOption "UPnP service discovery";
       upnp.name = mkOption {
         type = types.str;
         default = "I2Pd";
-        description = lib.mdDoc ''
+        description = ''
           Name i2pd appears in UPnP forwardings list.
         '';
       };
 
       precomputation.elgamal = mkEnableTrueOption "Precomputed ElGamal tables" // {
-        description = lib.mdDoc ''
+        description = ''
           Whenever to use precomputated tables for ElGamal.
           {command}`i2pd` defaults to `false`
           to save 64M of memory (and looses some performance).
@@ -406,12 +388,12 @@ in
         '';
       };
 
-      reseed.verify = mkEnableOption (lib.mdDoc "SU3 signature verification");
+      reseed.verify = mkEnableOption "SU3 signature verification";
 
       reseed.file = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Full path to SU3 file to reseed from.
         '';
       };
@@ -419,7 +401,7 @@ in
       reseed.urls = mkOption {
         type = with types; listOf str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Reseed URLs.
         '';
       };
@@ -427,7 +409,7 @@ in
       reseed.floodfill = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to router info of floodfill to reseed from.
         '';
       };
@@ -435,7 +417,7 @@ in
       reseed.zipfile = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to local .zip file to reseed from.
         '';
       };
@@ -443,7 +425,7 @@ in
       reseed.proxy = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           URL for reseed proxy, supports http/socks.
         '';
       };
@@ -451,7 +433,7 @@ in
      addressbook.defaulturl = mkOption {
         type = types.str;
         default = "http://joajgazyztfssty4w2on5oaqksz6tqoxbduy553y34mf4byv6gpq.b32.i2p/export/alive-hosts.txt";
-        description = lib.mdDoc ''
+        description = ''
           AddressBook subscription URL for initial setup
         '';
       };
@@ -462,17 +444,17 @@ in
           "http://i2p-projekt.i2p/hosts.txt"
           "http://stats.i2p/cgi-bin/newhosts.txt"
         ];
-        description = lib.mdDoc ''
+        description = ''
           AddressBook subscription URLs
         '';
       };
 
-      trust.enable = mkEnableOption (lib.mdDoc "Explicit trust options");
+      trust.enable = mkEnableOption "explicit trust options";
 
       trust.family = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Router Family to trust for first hops.
         '';
       };
@@ -480,12 +462,12 @@ in
       trust.routers = mkOption {
         type = with types; listOf str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Only connect to the listed routers.
         '';
       };
 
-      trust.hidden = mkEnableOption (lib.mdDoc "Router concealment");
+      trust.hidden = mkEnableOption "router concealment";
 
       websocket = mkEndpointOpt "websockets" "127.0.0.1" 7666;
 
@@ -493,11 +475,11 @@ in
       exploratory.outbound = i2cpOpts "exploratory";
 
       ntcp2.enable = mkEnableTrueOption "NTCP2";
-      ntcp2.published = mkEnableOption (lib.mdDoc "NTCP2 publication");
+      ntcp2.published = mkEnableOption "NTCP2 publication";
       ntcp2.port = mkOption {
         type = types.port;
         default = 0;
-        description = lib.mdDoc ''
+        description = ''
           Port to listen for incoming NTCP2 connections (0=auto).
         '';
       };
@@ -505,7 +487,7 @@ in
       limits.transittunnels = mkOption {
         type = types.int;
         default = 2500;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of active transit sessions.
         '';
       };
@@ -513,7 +495,7 @@ in
       limits.coreSize = mkOption {
         type = types.int;
         default = 0;
-        description = lib.mdDoc ''
+        description = ''
           Maximum size of corefile in Kb (0 - use system limit).
         '';
       };
@@ -521,7 +503,7 @@ in
       limits.openFiles = mkOption {
         type = types.int;
         default = 0;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of open files (0 - use system default).
         '';
       };
@@ -529,7 +511,7 @@ in
       limits.ntcpHard = mkOption {
         type = types.int;
         default = 0;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of active transit sessions.
         '';
       };
@@ -537,7 +519,7 @@ in
       limits.ntcpSoft = mkOption {
         type = types.int;
         default = 0;
-        description = lib.mdDoc ''
+        description = ''
           Threshold to start probabalistic backoff with ntcp sessions (default: use system limit).
         '';
       };
@@ -545,17 +527,17 @@ in
       limits.ntcpThreads = mkOption {
         type = types.int;
         default = 1;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of threads used by NTCP DH worker.
         '';
       };
 
-      yggdrasil.enable = mkEnableOption (lib.mdDoc "Yggdrasil");
+      yggdrasil.enable = mkEnableOption "Yggdrasil";
 
       yggdrasil.address = mkOption {
         type = with types; nullOr str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Your local yggdrasil address. Specify it if you want to bind your router to a
           particular address.
         '';
@@ -563,12 +545,12 @@ in
 
       proto.http = (mkEndpointOpt "http" "127.0.0.1" 7070) // {
 
-        auth = mkEnableOption (lib.mdDoc "Webconsole authentication");
+        auth = mkEnableOption "webconsole authentication";
 
         user = mkOption {
           type = types.str;
           default = "i2pd";
-          description = lib.mdDoc ''
+          description = ''
             Username for webconsole access
           '';
         };
@@ -576,7 +558,7 @@ in
         pass = mkOption {
           type = types.str;
           default = "i2pd";
-          description = lib.mdDoc ''
+          description = ''
             Password for webconsole access.
           '';
         };
@@ -584,7 +566,7 @@ in
         strictHeaders = mkOption {
           type = with types; nullOr bool;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Enable strict host checking on WebUI.
           '';
         };
@@ -592,7 +574,7 @@ in
         hostname = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Expected hostname for WebUI.
           '';
         };
@@ -603,21 +585,21 @@ in
         outproxy = mkOption {
           type = with types; nullOr str;
           default = null;
-          description = lib.mdDoc "Upstream outproxy bind address.";
+          description = "Upstream outproxy bind address.";
         };
       };
       proto.socksProxy = (mkKeyedEndpointOpt "socksproxy" "127.0.0.1" 4447 "socksproxy-keys.dat")
       // {
-        outproxyEnable = mkEnableOption (lib.mdDoc "SOCKS outproxy");
+        outproxyEnable = mkEnableOption "SOCKS outproxy";
         outproxy = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = lib.mdDoc "Upstream outproxy bind address.";
+          description = "Upstream outproxy bind address.";
         };
         outproxyPort = mkOption {
           type = types.int;
           default = 4444;
-          description = lib.mdDoc "Upstream outproxy bind port.";
+          description = "Upstream outproxy bind port.";
         };
       };
 
@@ -634,7 +616,7 @@ in
               destinationPort = mkOption {
                 type = with types; nullOr int;
                 default = null;
-                description = lib.mdDoc "Connect to particular port at destination.";
+                description = "Connect to particular port at destination.";
               };
             } // commonTunOpts name;
             config = {
@@ -642,7 +624,7 @@ in
             };
           }
         ));
-        description = lib.mdDoc ''
+        description = ''
           Connect to someone as a client and establish a local accept endpoint
         '';
       };
@@ -655,12 +637,12 @@ in
               inPort = mkOption {
                 type = types.int;
                 default = 0;
-                description = lib.mdDoc "Service port. Default to the tunnel's listen port.";
+                description = "Service port. Default to the tunnel's listen port.";
               };
               accessList = mkOption {
                 type = with types; listOf str;
                 default = [];
-                description = lib.mdDoc "I2P nodes that are allowed to connect to this service.";
+                description = "I2P nodes that are allowed to connect to this service.";
               };
             } // commonTunOpts name;
             config = {
@@ -668,7 +650,7 @@ in
             };
           }
         ));
-        description = lib.mdDoc ''
+        description = ''
           Serve something on I2P network at port and delegate requests to address inPort.
         '';
       };

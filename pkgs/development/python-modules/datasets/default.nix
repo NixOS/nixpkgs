@@ -1,49 +1,42 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, dill
-, fetchFromGitHub
-, fetchpatch
-, fsspec
-, huggingface-hub
-, importlib-metadata
-, multiprocess
-, numpy
-, packaging
-, pandas
-, pyarrow
-, pythonOlder
-, requests
-, responses
-, tqdm
-, xxhash
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  fsspec,
+  huggingface-hub,
+  importlib-metadata,
+  multiprocess,
+  numpy,
+  packaging,
+  pandas,
+  pyarrow,
+  pythonOlder,
+  requests,
+  responses,
+  tqdm,
+  xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "2.6.1";
+  version = "2.19.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-5j8HT/DzHH8xssv97g/9kpSgtpaY6daWOGwjasD1psg=";
+    hash = "sha256-m3x3/MCezA0WjYKBa2F12emMZdwLKi/9bFBf59A4qs8=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Backport support for dill<3.7
-      url = "https://github.com/huggingface/datasets/pull/5166.patch";
-      hash = "sha256-QigpXKHi2B60M/iIWSqvBU9hW5vBu6IHGML22aCMevo=";
-    })
-  ];
-
+  # remove pyarrow<14.0.1 vulnerability fix
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "responses<0.19" "responses"
+    substituteInPlace src/datasets/features/features.py \
+      --replace "import pyarrow_hotfix" "#import pyarrow_hotfix"
   '';
 
   propagatedBuildInputs = [
@@ -60,22 +53,19 @@ buildPythonPackage rec {
     responses
     tqdm
     xxhash
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  # Tests require pervasive internet access.
+  # Tests require pervasive internet access
   doCheck = false;
 
-  # Module import will attempt to create a cache directory.
+  # Module import will attempt to create a cache directory
   postFixup = "export HF_MODULES_CACHE=$TMPDIR";
 
-  pythonImportsCheck = [
-    "datasets"
-  ];
+  pythonImportsCheck = [ "datasets" ];
 
   meta = with lib; {
     description = "Open-access datasets and evaluation metrics for natural language processing";
+    mainProgram = "datasets-cli";
     homepage = "https://github.com/huggingface/datasets";
     changelog = "https://github.com/huggingface/datasets/releases/tag/${version}";
     license = licenses.asl20;

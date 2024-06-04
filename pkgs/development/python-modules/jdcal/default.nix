@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "jdcal";
   version = "1.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "472872e096eb8df219c23f2689fc336668bdb43d194094b5cc1707e1640acfc8";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     py.test

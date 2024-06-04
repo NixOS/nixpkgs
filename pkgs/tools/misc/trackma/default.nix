@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , glib
 , gtk3
@@ -24,31 +24,29 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "trackma";
-  version = "0.8.5";
+  version = "0.8.6";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "z411";
     repo = "trackma";
     rev = "v${version}";
-    sha256 = "sha256-BjZw/AYFlTYtgJTDFOALHx1d71ZQsYZ2TXnEUeQVvpw=";
+    sha256 = "qlkFQSJFjxkGd5WkNGfyAo64ys8VJLep/ZOL6icXQ4c=";
     fetchSubmodules = true; # for anime-relations submodule
   };
 
-  nativeBuildInputs = [ copyDesktopItems ]
-    ++ lib.optionals withGTK [ wrapGAppsHook ]
+  nativeBuildInputs = [ copyDesktopItems python3.pkgs.poetry-core ]
+    ++ lib.optionals withGTK [ wrapGAppsHook3 gobject-introspection ]
     ++ lib.optionals withQT [ qt5.wrapQtAppsHook ];
 
-  buildInputs = lib.optionals withGTK [ glib gobject-introspection gtk3 ];
+  buildInputs = lib.optionals withGTK [ glib gtk3 ];
 
-  propagatedBuildInputs = with python3.pkgs; ([ urllib3 ]
+  propagatedBuildInputs = with python3.pkgs; ([ requests ]
     ++ lib.optionals withQT [ pyqt5 ]
-    ++ lib.optionals withGTK [ pycairo ]
+    ++ lib.optionals withGTK [ pycairo pygobject3 ]
     ++ lib.optionals withCurses [ urwid ]
-    ++ lib.optionals stdenv.isLinux [ dbus-python pygobject3 pyinotify ]
+    ++ lib.optionals stdenv.isLinux [ pydbus pyinotify ]
     ++ lib.optionals (withGTK || withQT) [ pillow ]);
-
-  # broken with gobject-introspection setup hook, see https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
@@ -79,6 +77,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Open multi-site list manager for Unix-like systems (ex-wMAL)";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ WeebSorceress ];
+    maintainers = with maintainers; [ ];
   };
 }

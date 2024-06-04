@@ -1,13 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, ipython
-, ipywidgets
-, numpy
-, pyqt5
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  ipython,
+  ipywidgets,
+  numpy,
+  pyqt5,
 }:
 
 buildPythonPackage rec {
   pname = "lightparam";
   version = "0.4.6";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {

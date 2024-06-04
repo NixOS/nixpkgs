@@ -1,15 +1,23 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "1.2";
+stdenvNoCC.mkDerivation rec {
   pname = "norwester";
-in (fetchzip {
-  name = "${pname}-${version}";
+  version = "1.2";
 
-  url = "http://jamiewilson.io/norwester/assets/norwester.zip";
+  src = fetchzip {
+    url = "http://jamiewilson.io/norwester/assets/norwester.zip";
+    stripRoot = false;
+    hash = "sha256-Ak/nobrQE/XYGWs/IhlZlTp74ff+s4adUR6Sht5Yf8g=";
+  };
 
-  sha256 = "1npsaiiz9g5z6315lnmynwcnrfl37fyxc7w1mhkw1xbzcnv74z4r";
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/opentype
+    cp ${pname}-v${version}/${pname}.otf $out/share/fonts/opentype/
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "http://jamiewilson.io/norwester";
@@ -18,9 +26,4 @@ in (fetchzip {
     license = licenses.ofl;
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -D -j $downloadedFile ${pname}-v${version}/${pname}.otf -d $out/share/fonts/opentype/
-  '';
-})
+}

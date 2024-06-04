@@ -6,18 +6,19 @@ expected_lines = {
     "auth required pam_deny.so",
     "auth sufficient @@pam_ccreds@@/lib/security/pam_ccreds.so action=store use_first_pass",
     "auth sufficient pam_rootok.so",
-    "auth sufficient pam_unix.so   likeauth try_first_pass",
+    "auth sufficient pam_unix.so likeauth try_first_pass",
     "password sufficient @@pam_krb5@@/lib/security/pam_krb5.so use_first_pass",
-    "password sufficient pam_unix.so nullok sha512",
+    "password sufficient pam_unix.so nullok yescrypt",
     "session optional @@pam_krb5@@/lib/security/pam_krb5.so",
     "session required pam_env.so conffile=/etc/pam/environment readenv=0",
     "session required pam_unix.so",
 }
 actual_lines = set(machine.succeed("cat /etc/pam.d/chfn").splitlines())
 
-missing_lines = expected_lines - actual_lines
-extra_lines = actual_lines - expected_lines
-non_functional_lines = set([line for line in extra_lines if (line == "" or line.startswith("#"))])
+stripped_lines = set([line.split("#")[0].rstrip() for line in actual_lines])
+missing_lines = expected_lines - stripped_lines
+extra_lines = stripped_lines - expected_lines
+non_functional_lines = set([line for line in extra_lines if line == ""])
 unexpected_functional_lines = extra_lines - non_functional_lines
 
 with subtest("All expected lines are in the file"):

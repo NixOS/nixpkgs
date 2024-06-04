@@ -5,12 +5,12 @@
 }: stdenv.mkDerivation rec {
 
   pname = "vdr";
-  version = "2.6.3";
+  version = "2.6.7";
 
   src = fetchgit {
     url = "git://git.tvdr.de/vdr.git";
     rev = version;
-    sha256 = "sha256-SDaNk8tDaO70+V7sozMGTCzpnOqa52xdEQPURkyuTt8=";
+    hash = "sha256-6i3EQgARwMLNejgB0NevmLmd9OrNBvjqW+qLrAdqUxE=";
   };
 
   enableParallelBuilding = true;

@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "do-agent";
-  version = "3.15.2";
+  version = "3.16.9";
 
   src = fetchFromGitHub {
     owner = "digitalocean";
     repo = "do-agent";
     rev = version;
-    sha256 = "sha256-YK4k2iSKrRVraUjbUCYxNjH+CGn6eASsEKIU5QsfcNM=";
+    sha256 = "sha256-9ZSDBjO28spFymoXBwrJQg7Y17qUfzShcIsmUJBIxyY=";
   };
 
   ldflags = [
     "-X main.version=${version}"
   ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -25,6 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "DigitalOcean droplet system metrics agent";
+    mainProgram = "do-agent";
     longDescription = ''
       do-agent is a program provided by DigitalOcean that collects system
       metrics from a DigitalOcean Droplet (on which the program runs) and sends

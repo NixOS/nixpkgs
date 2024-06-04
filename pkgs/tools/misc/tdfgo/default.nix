@@ -11,14 +11,15 @@ buildGoModule rec {
     sha256 = "sha256-Lr4+bXdVxYbCXKVzE+fjeLD559HuABK6lOLJ0sBBGNY=";
   };
 
-  vendorSha256 = "sha256-T6PSs5NfXSXvzlq67rIDbzURyA+25df3nMMfufo0fow=";
+  vendorHash = "sha256-T6PSs5NfXSXvzlq67rIDbzURyA+25df3nMMfufo0fow=";
 
   meta = with lib; {
-    description = "TheDraw font parser and console text renderer.";
+    description = "TheDraw font parser and console text renderer";
     longDescription = "Supports more fonts than `tdfiglet`, and packs more features.";
     homepage = "https://github.com/digitallyserviced/tdfgo";
     license = licenses.cc0;
     platforms = platforms.linux;
     maintainers = with maintainers; [ crinklywrappr ];
+    mainProgram = "tdfgo";
   };
 }

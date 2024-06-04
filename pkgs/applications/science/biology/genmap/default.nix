@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   patches = [ ./gtest.patch ];
-  checkInputs = [ gtest which ];
+  nativeCheckInputs = [ gtest which ];
   preCheck = "make genmap_algo_test";
 
   # disable benchmarks
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Ultra-fast computation of genome mappability";
+    mainProgram = "genmap";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/cpockrandt/genmap";
     maintainers = with lib.maintainers; [ jbedo ];

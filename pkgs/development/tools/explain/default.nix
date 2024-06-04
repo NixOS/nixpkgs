@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library and utility to explain system call errors";
-    homepage = "http://libexplain.sourceforge.net";
+    mainProgram = "explain";
+    homepage = "https://libexplain.sourceforge.net";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ McSinyx ];
     platforms = platforms.unix;

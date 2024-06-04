@@ -1,30 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyflakes
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  pyflakes,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
 }:
-
 buildPythonPackage rec {
   pname = "autoflake";
-  version = "1.4";
+  version = "2.3.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YaNTASz/arlMoGKCPR+y9pLErNpRx2/4Oo13kV+6Ueo=";
+    hash = "sha256-yYt13FsKhkWcTwGh0yrH60M47EMXpEaVFf8eaH7NkJ4=";
   };
 
-  propagatedBuildInputs = [
-    pyflakes
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  propagatedBuildInputs = [ pyflakes ] ++ lib.optional (pythonOlder "3.11") tomli;
 
-  pythonImportsCheck = [
-    "autoflake"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "autoflake" ];
 
   disabledTests = [
     # AssertionError: True is not false
@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool to remove unused imports and unused variables";
+    mainProgram = "autoflake";
     homepage = "https://github.com/myint/autoflake";
     license = licenses.mit;
     maintainers = with maintainers; [ yuriaisaka ];

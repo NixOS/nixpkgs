@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pillow,
 }:
 
 buildPythonPackage rec {
   pname = "pillowfight";
   version = "0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,5 +22,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/beanbaginc/pillowfight";
     license = licenses.mit;
   };
-
 }

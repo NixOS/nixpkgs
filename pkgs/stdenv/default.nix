@@ -28,7 +28,7 @@ let
   # the GNU C compiler, and so on.
   stagesLinux = import ./linux args;
 
-  inherit (import ./darwin args) stagesDarwin;
+  stagesDarwin = import ./darwin args;
 
   stagesCross = import ./cross args;
 

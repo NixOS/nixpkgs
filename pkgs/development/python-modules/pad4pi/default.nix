@@ -1,12 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, rpi-gpio }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  rpi-gpio,
+}:
 
 buildPythonPackage rec {
   pname = "pad4pi";
   version = "1.1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+oVYlqF5PQAFz4EO1ap6pjmYTLg9xQy6UbQja4utt2Q=";
+    hash = "sha256-+oVYlqF5PQAFz4EO1ap6pjmYTLg9xQy6UbQja4utt2Q=";
   };
 
   propagatedBuildInputs = [ rpi-gpio ];

@@ -1,49 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, poetry-core
-, pytest-asyncio
-, pytest-httpx
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  poetry-core,
+  pytest-asyncio,
+  pytest-httpx,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "glances-api";
-  version = "0.4.1";
-  format = "pyproject";
+  version = "0.7.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-glances-api";
-    rev = version;
-    sha256 = "sha256-IBEy19iouYAHIZwc/bnMgmHLrbfZjLni0Ne4o0I6FNg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BME73/xhNo+KmR5Fd/cFXieZ7fVTFukRg6Wkcw6r2cc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  dependencies = [ httpx ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-httpx
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "glances_api"
-  ];
+  pythonImportsCheck = [ "glances_api" ];
 
   meta = with lib; {
     description = "Python API for interacting with Glances";
     homepage = "https://github.com/home-assistant-ecosystem/python-glances-api";
+    changelog = "https://github.com/home-assistant-ecosystem/python-glances-api/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

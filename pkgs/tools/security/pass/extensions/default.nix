@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
-with pkgs;
+let
+  inherit (pkgs) callPackage python3Packages;
+in
 
 {
   pass-audit = callPackage ./audit {
@@ -12,4 +14,5 @@ with pkgs;
   pass-tomb = callPackage ./tomb.nix {};
   pass-update = callPackage ./update.nix {};
   pass-genphrase = callPackage ./genphrase.nix {};
+  pass-file = callPackage ./file.nix {};
 }

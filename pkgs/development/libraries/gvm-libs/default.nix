@@ -1,37 +1,42 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, glib
-, glib-networking
-, gnutls
-, gpgme
-, hiredis
-, libgcrypt
-, libnet
-, libpcap
-, libssh
-, libuuid
-, libxcrypt
-, libxml2
-, pkg-config
-, zlib
-, freeradius
+{
+  lib,
+  stdenv,
+  cmake,
+  doxygen,
+  fetchFromGitHub,
+  glib,
+  glib-networking,
+  gnutls,
+  gpgme,
+  hiredis,
+  libgcrypt,
+  libnet,
+  libpcap,
+  libssh,
+  libuuid,
+  libxcrypt,
+  libxml2,
+  openldap,
+  paho-mqtt-c,
+  pkg-config,
+  radcli,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
-  version = "21.4.4";
+  version = "22.8.0";
 
   src = fetchFromGitHub {
     owner = "greenbone";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Ps8J9JuLKcrowl9wgZ3Wm7JTXyiejQPDr4OV/IvDy+I=";
+    repo = "gvm-libs";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nFqYpt9OWEPgSbaNsHLhs9mg7ChQcmfcgHh7nFfQh18=";
   };
 
   nativeBuildInputs = [
     cmake
+    doxygen
     pkg-config
   ];
 
@@ -42,23 +47,27 @@ stdenv.mkDerivation rec {
     gpgme
     hiredis
     libgcrypt
-    freeradius
     libnet
     libpcap
     libssh
     libuuid
     libxcrypt
     libxml2
+    openldap
+    paho-mqtt-c
+    radcli
     zlib
   ];
 
-  cmakeFlags = [
-    "-DGVM_RUN_DIR=$out/run/gvm"
-  ];
+  cmakeFlags = [ "-DGVM_RUN_DIR=${placeholder "out"}/run/gvm" ];
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
     description = "Libraries module for the Greenbone Vulnerability Management Solution";
     homepage = "https://github.com/greenbone/gvm-libs";
+    changelog = "https://github.com/greenbone/gvm-libs/releases/tag/v${version}";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;

@@ -1,24 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
+{ lib, stdenv, fetchFromGitHub
+, cmake, pkg-config, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
 , pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
+, lua, curl
 , Cocoa, Foundation
 }:
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.16.6";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "wesnoth";
     repo = "wesnoth";
-    sha256 = "sha256-oQRjVjVjLIvCCafLr0FXvLwnKDjJY2FU20dYGLtNFiU=";
+    hash = "sha256-Db1OwBTA/2jjhu/fOZhwGo7dWV3mZ40y6hTNCCjaRJQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
-                  libvorbis fribidi dbus libpng pcre openssl icu ]
+                  libvorbis fribidi dbus libpng pcre openssl icu lua curl ]
                 ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation];
+
+  cmakeFlags = [
+    "-DENABLE_SYSTEM_LUA=ON"
+  ];
+
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
 
   meta = with lib; {
     description = "The Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";

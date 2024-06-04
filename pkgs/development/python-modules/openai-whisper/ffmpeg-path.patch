@@ -1,13 +1,13 @@
 diff --git a/whisper/audio.py b/whisper/audio.py
-index a6074e8..da18350 100644
+index 4f5b6e0..bfe7924 100644
 --- a/whisper/audio.py
 +++ b/whisper/audio.py
-@@ -41,7 +41,7 @@ def load_audio(file: str, sr: int = SAMPLE_RATE):
-         out, _ = (
-             ffmpeg.input(file, threads=0)
-             .output("-", format="s16le", acodec="pcm_s16le", ac=1, ar=sr)
--            .run(cmd=["ffmpeg", "-nostdin"], capture_stdout=True, capture_stderr=True)
-+            .run(cmd=["@ffmpeg@/bin/ffmpeg", "-nostdin"], capture_stdout=True, capture_stderr=True)
-         )
-     except ffmpeg.Error as e:
-         raise RuntimeError(f"Failed to load audio: {e.stderr.decode()}") from e
+@@ -44,7 +44,7 @@ def load_audio(file: str, sr: int = SAMPLE_RATE):
+     # and resampling as necessary.  Requires the ffmpeg CLI in PATH.
+     # fmt: off
+     cmd = [
+-        "ffmpeg",
++        "@ffmpeg@/bin/ffmpeg",
+         "-nostdin",
+         "-threads", "0",
+         "-i", file,

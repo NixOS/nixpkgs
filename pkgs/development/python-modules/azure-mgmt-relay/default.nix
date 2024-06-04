@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-relay";
   version = "1.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

@@ -15,7 +15,7 @@ dotnetBuildHook() {
     fi
 
     if [ "${selfContainedBuild-}" ]; then
-        dotnetBuildFlags+=(--runtime "@runtimeId@" "-p:SelfContained=true")
+        dotnetBuildFlags+=("-p:SelfContained=true")
     else
         dotnetBuildFlags+=("-p:SelfContained=false")
     fi
@@ -24,20 +24,32 @@ dotnetBuildHook() {
         dotnetBuildFlags+=("-p:UseAppHost=true")
     fi
 
+    local versionFlags=()
     if [ "${version-}" ]; then
-        local -r versionFlag="-p:Version=${version-}"
+        versionFlags+=("-p:InformationalVersion=${version-}")
+    fi
+
+    if [ "${versionForDotnet-}" ]; then
+        versionFlags+=("-p:Version=${versionForDotnet-}")
     fi
 
     dotnetBuild() {
         local -r project="${1-}"
-        env dotnet build ${project-} \
+
+        runtimeIdFlags=()
+        if [[ "$project" == *.csproj ]] || [ "${selfContainedBuild-}" ]; then
+            runtimeIdFlags+=("--runtime @runtimeId@")
+        fi
+
+        dotnet build ${project-} \
             -maxcpucount:$maxCpuFlag \
             -p:BuildInParallel=$parallelBuildFlag \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
             --configuration "@buildType@" \
             --no-restore \
-            ${versionFlag-} \
+            ${versionFlags[@]} \
+            ${runtimeIdFlags[@]} \
             ${dotnetBuildFlags[@]}  \
             ${dotnetFlags[@]}
     }

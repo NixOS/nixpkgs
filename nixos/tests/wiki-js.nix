@@ -5,19 +5,20 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
   };
 
   nodes.machine = { pkgs, ... }: {
-    virtualisation.memorySize = 2048;
+    virtualisation.memorySize = 2047;
     services.wiki-js = {
       enable = true;
       settings.db.host = "/run/postgresql";
       settings.db.user = "wiki-js";
+      settings.db.db = "wiki-js";
       settings.logLevel = "debug";
     };
     services.postgresql = {
       enable = true;
-      ensureDatabases = [ "wiki" ];
+      ensureDatabases = [ "wiki-js" ];
       ensureUsers = [
         { name = "wiki-js";
-          ensurePermissions."DATABASE wiki" = "ALL PRIVILEGES";
+          ensureDBOwnership = true;
         }
       ];
     };

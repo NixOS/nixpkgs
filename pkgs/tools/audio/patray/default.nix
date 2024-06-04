@@ -1,15 +1,16 @@
 { lib
 , python3
+, fetchPypi
 , qt5
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "patray";
-  version = "0.1.1";
+  version = "0.1.2";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit version pname;
-    sha256 = "0vaapn2p4257m1d5nbnwnh252b7lhl00560gr9pqh2b7xqm1bh6g";
+    sha256 = "sha256-O8CBUexL2V1qI7bB/Lns3yjUvFOpC6spd/6asXa5+pw=";
   };
 
   patchPhase = ''
@@ -29,15 +30,14 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
   postFixup = ''
-    wrapQtApp $out/bin/patray
+    wrapQtApp $out/bin/patray --prefix QT_PLUGIN_PATH : ${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}
   '';
-
-
 
   meta = with lib; {
     description = "Yet another tray pulseaudio frontend";
     homepage = "https://github.com/pohmelie/patray";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
+    mainProgram = "patray";
   };
 }

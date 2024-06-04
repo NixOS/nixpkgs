@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, arrow
-, freezegun
-, jinja2
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  arrow,
+  freezegun,
+  jinja2,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jinja2-time";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,13 +23,19 @@ buildPythonPackage rec {
     # fix usage of arrow in tests
     (fetchpatch {
       url = "https://github.com/hackebrot/jinja2-time/pull/19/commits/3b2476c266ba53262352153104ca3501722823a4.patch";
-      sha256 = "sha256-zh4PpAj2GtpgaEap/Yvu6DNY84AwH/YTJlUPRRHPyTs=";
+      hash = "sha256-zh4PpAj2GtpgaEap/Yvu6DNY84AwH/YTJlUPRRHPyTs=";
     })
   ];
 
-  propagatedBuildInputs = [ arrow jinja2 ];
+  propagatedBuildInputs = [
+    arrow
+    jinja2
+  ];
 
-  checkInputs = [ freezegun pytestCheckHook ];
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "jinja2_time" ];
 

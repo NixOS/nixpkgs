@@ -4,10 +4,8 @@
 , substituteAll
 , gettext
 , pkg-config
-, fetchpatch
 , dbus
 , gnome
-, systemd
 , libuuid
 , polkit
 , gnutls
@@ -51,18 +49,22 @@
 , mobile-broadband-provider-info
 , runtimeShell
 , buildPackages
+, nixosTests
+, systemd
+, udev
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 let
-  pythonForDocs = python3.pythonForBuild.withPackages (pkgs: with pkgs; [ pygobject3 ]);
+  pythonForDocs = python3.pythonOnBuildForHost.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.40.6";
+  version = "1.46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "sha256-LwJbLVr33lk7v0fBfk2YorlgjqkKgmD7CAgL6XQ5U04=";
+    hash = "sha256-ciZJ4lNiaTszQ3FHOAKnKbDsnuKDN1CWkF+GiAjnQGg=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -74,14 +76,17 @@ stdenv.mkDerivation rec {
     # System paths
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    (lib.mesonOption "systemdsystemunitdir"
+      (if withSystemd then "${placeholder "out"}/etc/systemd/system" else "no"))
     # to enable link-local connections
     "-Dudev_dir=${placeholder "out"}/lib/udev"
     "-Ddbus_conf_dir=${placeholder "out"}/share/dbus-1/system.d"
     "-Dkernel_firmware_dir=/run/current-system/firmware"
 
     # Platform
-    "-Dsession_tracking=systemd"
+    "-Dmodprobe=${kmod}/bin/modprobe"
+    (lib.mesonOption "session_tracking" (if withSystemd then "systemd" else "no"))
+    (lib.mesonBool "systemd_journal" withSystemd)
     "-Dlibaudit=yes-disabled-by-default"
     "-Dpolkit_agent_helper_1=/run/wrappers/bin/polkit-agent-helper-1"
 
@@ -113,12 +118,13 @@ stdenv.mkDerivation rec {
     "-Dfirewalld_zone=false"
     "-Dtests=no"
     "-Dcrypto=gnutls"
+    "-Dmobile_broadband_provider_info_database=${mobile-broadband-provider-info}/share/mobile-broadband-provider-info/serviceproviders.xml"
   ];
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit iputils kmod openconnect ethtool gnused systemd;
+      inherit iputils openconnect ethtool gnused systemd;
       inherit runtimeShell;
     })
 
@@ -128,8 +134,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
-    systemd
+    (if withSystemd then systemd else udev)
     libselinux
     audit
     libpsl
@@ -181,6 +186,9 @@ stdenv.mkDerivation rec {
     # TODO: submit upstream
     substituteInPlace meson.build \
       --replace "'vala', req" "'vala', native: false, req"
+  '' + lib.optionalString withSystemd ''
+    substituteInPlace data/NetworkManager.service.in \
+      --replace-fail /usr/bin/busctl ${systemd}/bin/busctl
   '';
 
   preBuild = ''
@@ -203,14 +211,21 @@ stdenv.mkDerivation rec {
       attrPath = "networkmanager";
       versionPolicy = "odd-unstable";
     };
+    tests = {
+      inherit (nixosTests.networking) networkmanager;
+    };
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/NetworkManager";
+    homepage = "https://networkmanager.dev";
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz maxeaubrey ]);
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz ]);
     platforms = platforms.linux;
+    badPlatforms = [
+      # Mandatory shared libraries.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }

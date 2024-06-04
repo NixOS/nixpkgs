@@ -1,26 +1,6 @@
 import ./make-test-python.nix ({pkgs, lib, ...}:
 let
-  gpgKeyring = (pkgs.runCommand "gpg-keyring" { buildInputs = [ pkgs.gnupg ]; } ''
-    mkdir -p $out
-    export GNUPGHOME=$out
-    cat > foo <<EOF
-      %echo Generating a basic OpenPGP key
-      %no-protection
-      Key-Type: DSA
-      Key-Length: 1024
-      Subkey-Type: ELG-E
-      Subkey-Length: 1024
-      Name-Real: Bob Foobar
-      Name-Email: bob@foo.bar
-      Expire-Date: 0
-      # Do a commit here, so that we can later print "done"
-      %commit
-      %echo done
-    EOF
-    gpg --batch --generate-key foo
-    rm $out/S.gpg-agent $out/S.gpg-agent.*
-    gpg --export bob@foo.bar -a > $out/pubkey.gpg
-  '');
+  gpgKeyring = import ./common/gpg-keyring.nix { inherit pkgs; };
 
   nspawnImages = (pkgs.runCommand "localhost" { buildInputs = [ pkgs.coreutils pkgs.gnupg ]; } ''
     mkdir -p $out
@@ -58,6 +38,7 @@ in {
     start_all()
 
     server.wait_for_unit("nginx.service")
+    client.systemctl("start network-online.target")
     client.wait_for_unit("network-online.target")
     client.succeed("machinectl pull-raw --verify=signature http://server/testimage.raw")
     client.succeed(

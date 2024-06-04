@@ -3,9 +3,10 @@
 , meson
 , python3
 , ninja
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bzip2-unstable";
   version = "2020-08-11";
 
@@ -34,10 +35,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "High-quality data compression program";
     license = licenses.bsdOriginal;
+    pkgConfigModules = [ "bz2" ];
     platforms = platforms.all;
     maintainers = [];
   };
-}
+})

@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pdfrw }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pdfrw,
+}:
 
 buildPythonPackage rec {
   pname = "pagelabels";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

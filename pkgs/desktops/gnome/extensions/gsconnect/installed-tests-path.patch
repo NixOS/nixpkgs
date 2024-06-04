@@ -1,8 +1,11 @@
 diff --git a/installed-tests/meson.build b/installed-tests/meson.build
-index c7eff2fb..ef4f6052 100644
+index 5bc38bfd..02404c3a 100644
 --- a/installed-tests/meson.build
 +++ b/installed-tests/meson.build
-@@ -1,5 +1,5 @@
+@@ -2,8 +2,8 @@
+ #
+ # SPDX-License-Identifier: GPL-2.0-or-later
+ 
 -installed_tests_execdir = join_paths(libexecdir, 'installed-tests', meson.project_name())
 -installed_tests_metadir = join_paths(datadir, 'installed-tests', meson.project_name())
 +installed_tests_execdir = join_paths(get_option('installed_test_prefix'), 'libexec', 'installed-tests', meson.project_name())
@@ -11,10 +14,10 @@ index c7eff2fb..ef4f6052 100644
  installed_tests_srcdir = meson.current_source_dir()
  installed_tests_builddir = meson.current_build_dir()
 diff --git a/meson_options.txt b/meson_options.txt
-index 8912e052..ca6ee5eb 100644
+index 745c541c..b4b602ca 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -116,6 +116,13 @@ option(
+@@ -104,6 +104,13 @@ option(
    description: 'Native Messaging Host directory for Mozilla'
  )
  

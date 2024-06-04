@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, click
-, configparser
-, decorator
-, fetchFromGitHub
-, mock
-, oauthlib
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
-, six
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  click,
+  configparser,
+  decorator,
+  fetchFromGitHub,
+  mock,
+  oauthlib,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  six,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "databricks-cli";
-  version = "0.17.4";
+  version = "0.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "databricks";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-srrNxiOGrU1u5shssRssr8Hwdy20U4coOAjYsT7eTSA=";
+    hash = "sha256-dH95C2AY/B6F9BROr6rh+gVtKqxsg1gyEU5MzCd5aqs=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     decorator
     mock
     pytestCheckHook
@@ -52,9 +53,7 @@ buildPythonPackage rec {
     "integration/workspace/test_integration.py"
   ];
 
-  pythonImportsCheck = [
-    "databricks_cli"
-  ];
+  pythonImportsCheck = [ "databricks_cli" ];
 
   meta = with lib; {
     description = "Command line interface for Databricks";

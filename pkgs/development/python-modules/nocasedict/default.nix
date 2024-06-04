@@ -1,30 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest7CheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "nocasedict";
-  version = "1.0.4";
+  version = "2.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fBEdpM79JEQzy2M3ev8IGkD4S92unm83bGfwhsD4Bto=";
+    hash = "sha256-HJImx/WoqXrVHcsK4xV6cg4/fLnEVo0i6joF4/hWWKk=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
-  pythonImportsCheck = [
-    "nocasedict"
-  ];
+  pythonImportsCheck = [ "nocasedict" ];
 
   meta = with lib; {
     description = "A case-insensitive ordered dictionary for Python";

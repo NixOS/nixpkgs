@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cbmc";
-  version = "5.74.0";
+  version = "5.95.1";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-n4a/0Ak2psHDCXykVSPYavuIl22uq2ZP7LUcdSzg1ow=";
+    sha256 = "sha256-fDLSo5EeHyPTliAqFp+5mfaB0iZXIMXeMyF21fjl5k4=";
   };
 
   nativeBuildInputs = [
@@ -60,9 +60,13 @@ stdenv.mkDerivation rec {
       --prefix PATH : "$out/share/cbmc" \
   '';
 
-  # fix "argument unused during compilation"
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
+    # Needed with GCC 12 but breaks on darwin (with clang)
+    "-Wno-error=maybe-uninitialized"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    # fix "argument unused during compilation"
+    "-Wno-unused-command-line-argument"
+  ]);
 
   # TODO: add jbmc support
   cmakeFlags = [ "-DWITH_JBMC=OFF" "-Dsat_impl=cadical" "-Dcadical_INCLUDE_DIR=${cadical.dev}/include" ];
@@ -78,7 +82,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ jiegec ];
     platforms = platforms.unix;
-    # https://github.com/diffblue/cbmc/issues/7423
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    # error: no member named 'aligned_alloc' in the global namespace
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

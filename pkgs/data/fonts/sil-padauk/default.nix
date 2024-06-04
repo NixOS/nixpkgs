@@ -1,19 +1,23 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "sil-padauk";
   version = "5.001";
-in
-fetchzip rec {
-  name = "sil-padauk-${version}";
-  url = "https://software.sil.org/downloads/r/padauk/Padauk-${version}.zip";
-  sha256 = "sha256-6H9EDmXr1Ox2fgLw9sG5JrCAllK3tbjvMfLi8DTF1f0=";
 
-  postFetch = ''
+  src = fetchzip {
+    url = "https://software.sil.org/downloads/r/padauk/Padauk-${version}.zip";
+    hash = "sha256-rLzuDUd+idjTN0xQxblXQ9V2rQtJPN2EtWGmTRY1R7U=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
-    rm -rf $out/{manifest.json,web/}
-    mv $out/*.ttf $out/share/fonts/truetype/
-    mkdir -p $out/share/doc/${name}
-    mv $out/*.txt $out/documentation/ $out/share/doc/${name}/
+    mv *.ttf $out/share/fonts/truetype/
+    mkdir -p $out/share/doc/${pname}-${version}
+    mv *.txt documentation/ $out/share/doc/${pname}-${version}/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

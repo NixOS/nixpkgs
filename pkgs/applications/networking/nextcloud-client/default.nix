@@ -1,10 +1,9 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
 , inotify-tools
-, installShellFiles
 , libcloudproviders
 , librsvg
 , libsecret
@@ -22,11 +21,12 @@
 , sphinx
 , sqlite
 , xdg-utils
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.6.4";
+  version = "3.13.0";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +34,7 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-ZtDgm9xlBQflVXsxjt4bFmRby6ni0wjaGYaoiEWH9Q0=";
+    hash = "sha256-i4vQGH9NSxIrLaPdCEh+WN6i6NQilH6uO4dSk/mhLi8=";
   };
 
   patches = [
@@ -56,6 +56,7 @@ mkDerivation rec {
     extra-cmake-modules
     librsvg
     sphinx
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -84,7 +85,7 @@ mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_UPDATER=off"
     "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
-    "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
+    "-DMIRALL_VERSION_SUFFIX=" # remove git suffix from version
   ];
 
   postBuild = ''

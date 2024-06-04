@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flitBuildHook
-, pytestCheckHook
-, pythonOlder
-, inform
-, parametrize-from-file
-, setuptools
-, voluptuous
-, quantiphy-eval
-, rkm-codes
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
+  inform,
+  parametrize-from-file,
+  setuptools,
+  voluptuous,
+  quantiphy-eval,
+  rkm-codes,
 }:
 
 buildPythonPackage rec {
   pname = "quantiphy";
-  version = "2.18";
+  version = "2.20";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,20 +23,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "quantiphy";
-    rev = "v${version}";
-    hash = "sha256-KXZQTal5EQDrMNV9QKeuLeYYDaMfAJlEDEagq2XG9/Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QXCs93plNSVNiCLEoXx2raH6EbH1rXyjvpBfl+8eXjc=";
   };
 
-  nativeBuildInputs = [
-    flitBuildHook
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     quantiphy-eval
     rkm-codes
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     inform
     parametrize-from-file
     pytestCheckHook
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  pythonImportsCheck = [
-    "quantiphy"
-  ];
+  pythonImportsCheck = [ "quantiphy" ];
 
   meta = with lib; {
     description = "Module for physical quantities (numbers with units)";

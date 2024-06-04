@@ -1,16 +1,21 @@
-{ buildDunePackage, ocaml_gettext, dune-configurator, ounit }:
+{ lib, buildDunePackage, ocaml, ocaml_gettext, dune-configurator, ounit }:
 
-buildDunePackage rec {
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "gettext-stub is not available for OCaml ${ocaml.version}"
+
+buildDunePackage {
 
   pname = "gettext-stub";
 
   inherit (ocaml_gettext) src version;
 
+  minimalOCamlVersion = "4.06";
+
   buildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = [ ocaml_gettext ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   checkInputs = [ ounit ];
 

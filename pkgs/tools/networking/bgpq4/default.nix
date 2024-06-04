@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bgpq4";
-  version = "1.7";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "bgp";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0gqd/bEj8ZDpf/3J2iZnGswTO6k8aJOuRiZXMZLm7zo=";
+    sha256 = "sha256-3mfFj9KoQbDe0gH7Le03N1Yds/bTEmY+OiXNaOtHkpY=";
   };
 
   nativeBuildInputs = [
@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ vincentbernat ];
     platforms = with platforms; unix;
+    mainProgram = "bgpq4";
   };
 }

@@ -3,8 +3,6 @@
 , luaSupport ? false, lua5, perl
 }:
 
-with lib;
-
 let luaValue = if luaSupport then lua5 else "no";
     optional = lib.optional;
 in
@@ -14,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "2.9.7";
 
   src = fetchFromGitHub {
-    owner = "SpiderLabs";
+    owner = "owasp-modsecurity";
     repo = pname;
     rev = "v${version}";
     sha256 = "sha256-hJ8wYeC83dl85bkUXGZKHpHzw9QRgtusj1/+Coxsx0k=";
@@ -42,17 +40,17 @@ stdenv.mkDerivation rec {
   patches = [ ./Makefile.am.patch ];
 
   doCheck = true;
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   postInstall = ''
     mkdir -p $nginx
     cp -R * $nginx
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open source, cross-platform web application firewall (WAF)";
     license = licenses.asl20;
-    homepage = "https://www.modsecurity.org/";
+    homepage = "https://github.com/owasp-modsecurity/ModSecurity";
     maintainers = with maintainers; [offline];
     platforms   = lib.platforms.linux ++ lib.platforms.darwin;
   };

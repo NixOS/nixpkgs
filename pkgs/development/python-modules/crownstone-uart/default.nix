@@ -1,9 +1,10 @@
-{ lib
-, crownstone-core
-, buildPythonPackage
-, pyserial
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  crownstone-core,
+  buildPythonPackage,
+  pyserial,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "crownstone";
     repo = "crownstone-lib-python-uart";
     rev = version;
-    sha256 = "sha256-Sc6BCIRbf1+GraTScmV4EAgwtSE/JXNe0f2XhKyACIY=";
+    hash = "sha256-Sc6BCIRbf1+GraTScmV4EAgwtSE/JXNe0f2XhKyACIY=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "crownstone_uart"
-  ];
+  pythonImportsCheck = [ "crownstone_uart" ];
 
   meta = with lib; {
     description = "Python module for communicating with Crownstone USB dongles";

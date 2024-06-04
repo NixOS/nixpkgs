@@ -1,16 +1,30 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
-  version = "1.9.9";
   pname = "bids-validator";
+  version = "1.14.5";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KdYZ5sOpSdUdi7AvnrEfDBnfml4P6thTLM0dUPC/toA=";
+    hash = "sha256-TXIb1ff7D6aM+8L5F47O5Dvupp1Sn4Rnl+GQaUdEgno=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    versioneer
+  ];
 
   # needs packages which are not available in nixpkgs
   doCheck = false;
@@ -20,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Validator for the Brain Imaging Data Structure";
     homepage = "https://github.com/bids-standard/bids-validator";
+    changelog = "https://github.com/bids-standard/bids-validator/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

@@ -1,33 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-org-policy";
-  version = "1.7.0";
+  version = "1.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V1Fpm8P4XD0USNNG1oD6OFrOeDcJyEvYPaHcWKQhLCQ=";
+    hash = "sha256-3BJDTwbIDhscHDR8rcjLQP/JYZrktcW+tcK9WFyV2X8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -37,15 +41,13 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  pythonImportsCheck = [
-    "google.cloud.orgpolicy"
-  ];
+  pythonImportsCheck = [ "google.cloud.orgpolicy" ];
 
   meta = with lib; {
     description = "Protobufs for Google Cloud Organization Policy";
     homepage = "https://github.com/googleapis/python-org-policy";
     changelog = "https://github.com/googleapis/python-org-policy/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
+    maintainers = with maintainers; [ austinbutler ];
   };
 }

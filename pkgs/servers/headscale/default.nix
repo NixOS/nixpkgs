@@ -3,19 +3,20 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "headscale";
-  version = "0.18.0";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "juanfont";
     repo = "headscale";
     rev = "v${version}";
-    hash = "sha256-0viXsBRCiaxBTTKXJngSov5M7toscQUOdXDTr1l0U3I=";
+    hash = "sha256-nqmTqe3F3Oh8rnJH0clwACD/0RpqmfOMXNubr3C8rEc=";
   };
 
-  vendorHash = "sha256-SuKT+b8g6xEK15ry2IAmpS/vwDG+zJqK9nfsWpHNXuU=";
+  vendorHash = "sha256-IOkbbFtE6+tNKnglE/8ZuNxhPSnloqM2sLgTvagMmnc=";
 
   ldflags = ["-s" "-w" "-X github.com/juanfont/headscale/cmd/headscale/cli.Version=v${version}"];
 
@@ -30,6 +31,8 @@ buildGoModule rec {
       --fish <($out/bin/headscale completion fish) \
       --zsh <($out/bin/headscale completion zsh)
   '';
+
+  passthru.tests = { inherit (nixosTests) headscale; };
 
   meta = with lib; {
     homepage = "https://github.com/juanfont/headscale";

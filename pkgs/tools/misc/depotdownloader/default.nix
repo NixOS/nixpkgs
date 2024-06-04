@@ -1,18 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{ lib
 , buildDotnetModule
+, fetchFromGitHub
 }:
 
 buildDotnetModule rec {
   pname = "depotdownloader";
-  version = "2.4.7";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "SteamRE";
     repo = "DepotDownloader";
     rev = "DepotDownloader_${version}";
-    sha256 = "F67bRIIN9aRbcPVFge3o0I9RF5JqHNDlTPhOpwqdADY=";
+    sha256 = "Kgi0u+H5BIAhrjk9e+8H1h0p5Edm3+2twYBPY3JQGps=";
   };
 
   projectFile = "DepotDownloader.sln";
@@ -25,7 +24,7 @@ buildDotnetModule rec {
     changelog = "https://github.com/SteamRE/DepotDownloader/releases/tag/DepotDownloader_${version}";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.babbaj ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "DepotDownloader";
   };
 }

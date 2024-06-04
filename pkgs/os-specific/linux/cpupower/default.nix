@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "cpupower";
-  inherit (kernel) version src;
+  inherit (kernel) version src patches;
 
   nativeBuildInputs = [ gettext ];
   buildInputs = [ pciutils ];
@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     description = "Tool to examine and tune power saving features";
     homepage = "https://www.kernel.org/";
     license = licenses.gpl2;
+    mainProgram = "cpupower";
     platforms = platforms.linux;
   };
 }

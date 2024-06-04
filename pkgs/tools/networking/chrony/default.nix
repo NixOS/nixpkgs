@@ -1,15 +1,16 @@
 { lib, stdenv, fetchurl, pkg-config
 , gnutls, libedit, nspr, nss, readline, texinfo
 , libcap, libseccomp, pps-tools
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "chrony";
-  version = "4.3";
+  version = "4.5";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/chrony/${pname}-${version}.tar.gz";
-    hash = "sha256-nQ2oiahl8ImlohYQ/7ZxPjyUOM4wOmO0nC+26v9biAQ=";
+    hash = "sha256-Gf4dn0Zk1EWmmpbHHo/bYLzY3yTHPROG4CKH9zZq1CI=";
   };
 
   outputs = [ "out" "man" ];
@@ -36,10 +37,12 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
+  passthru.tests = { inherit (nixosTests) chrony chrony-ptp; };
+
   meta = with lib; {
     description = "Sets your computer's clock from time servers on the Net";
     homepage = "https://chrony.tuxfamily.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
     maintainers = with maintainers; [ fpletz thoughtpolice ];
 

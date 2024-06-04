@@ -1,9 +1,9 @@
-{ stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, rpiVersion, ... } @ args:
+{ stdenv, lib, buildPackages, fetchFromGitHub, fetchpatch, perl, buildLinux, rpiVersion, ... } @ args:
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "5.15.84";
-  tag = "1.20230106";
+  modDirVersion = "6.1.63";
+  tag = "stable_20231123";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -13,7 +13,7 @@ lib.overrideDerivation (buildLinux (args // {
     owner = "raspberrypi";
     repo = "linux";
     rev = tag;
-    hash = "sha512-6Dcpo81JBvc8NOv1nvO8JwjUgOOviRgHmXLLcGpE/pI2lEOcSeDRlB/FZtflzXTGilapvmwOSx5NxQfAmysHqQ==";
+    hash = "sha256-4Rc57y70LmRFwDnOD4rHoHGmfxD9zYEAwYm9Wvyb3no=";
   };
 
   defconfig = {
@@ -27,18 +27,31 @@ lib.overrideDerivation (buildLinux (args // {
     efiBootStub = false;
   } // (args.features or {});
 
-  extraConfig = ''
-    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: error: initialization of 'void (*)(struct drm_crtc *, struct drm_atomic_state *)' from incompatible pointer type 'void (*)(struct drm_crtc *, struct drm_crtc_state *)' [-Werror=incompatible-pointer-types]
-    #   851 |  .atomic_flush = ast_crtc_helper_atomic_flush,
-    #       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: note: (near initialization for 'ast_crtc_helper_funcs.atomic_flush')
-    DRM_AST n
-    # ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'amdgpu_dm_atomic_commit_tail':
-    # ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:7757:4: error: implicit declaration of function 'is_hdr_metadata_different' [-Werror=implicit-function-declaration]
-    #  7757 |    is_hdr_metadata_different(old_con_state, new_con_state);
-    #       |    ^~~~~~~~~~~~~~~~~~~~~~~~~
-    DRM_AMDGPU n
-  '';
+  kernelPatches = (args.kernelPatches or []) ++ [
+    # Fix "WARNING: unmet direct dependencies detected for MFD_RP1", and
+    # subsequent build failure.
+    # https://github.com/NixOS/nixpkgs/pull/268280#issuecomment-1911839809
+    # https://github.com/raspberrypi/linux/pull/5900
+    {
+      name = "drm-rp1-depends-on-instead-of-select-MFD_RP1.patch";
+      patch = fetchpatch {
+        url = "https://github.com/peat-psuwit/rpi-linux/commit/6de0bb51929cd3ad4fa27b2a421a2af12e6468f5.patch";
+        hash = "sha256-9pHcbgWTiztu48SBaLPVroUnxnXMKeCGt5vEo9V8WGw=";
+      };
+    }
+
+    # Fix `ERROR: modpost: missing MODULE_LICENSE() in <...>/bcm2712-iommu.o`
+    # by preventing such code from being built as module.
+    # https://github.com/NixOS/nixpkgs/pull/284035#issuecomment-1913015802
+    # https://github.com/raspberrypi/linux/pull/5910
+    {
+      name = "iommu-bcm2712-don-t-allow-building-as-module.patch";
+      patch = fetchpatch {
+        url = "https://github.com/peat-psuwit/rpi-linux/commit/693a5e69bddbcbe1d1b796ebc7581c3597685b1b.patch";
+        hash = "sha256-8BYYQDM5By8cTk48ASYKJhGVQnZBIK4PXtV70UtfS+A=";
+      };
+    }
+  ];
 
   extraMeta = if (rpiVersion < 3) then {
     platforms = with lib.platforms; arm;

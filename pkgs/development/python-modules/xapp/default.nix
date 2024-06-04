@@ -1,28 +1,30 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, python
-, meson
-, ninja
-, psutil
-, pygobject3
-, gtk3
-, gobject-introspection
-, xapp
-, polkit
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  meson,
+  ninja,
+  psutil,
+  pygobject3,
+  gtk3,
+  gobject-introspection,
+  xapp,
+  polkit,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "xapp";
-  version = "2.4.0";
+  version = "22";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "python-xapp";
-    rev = version;
-    hash = "sha256-qEK71cGNGmaThxlFVsfnLUTD83RTr8GP+501c4UbHCk=";
+    rev = "refs/tags/master.mint${version}";
+    hash = "sha256-2Gx85y0ARu6EfDYAT9ZL154RH0R1HY78tm3rceODnZU=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +54,8 @@ buildPythonPackage rec {
 
   doCheck = false;
   pythonImportsCheck = [ "xapp" ];
+
+  passthru.updateScript = gitUpdater { ignoredVersions = "^master.*"; };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/python-xapp";

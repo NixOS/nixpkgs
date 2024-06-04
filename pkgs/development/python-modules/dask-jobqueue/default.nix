@@ -1,26 +1,29 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, cryptography
-, dask
-, distributed
-, docrep
-, fetchPypi
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  cryptography,
+  dask,
+  distributed,
+  docrep,
+  fetchPypi,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dask-jobqueue";
-  version = "0.8.1";
+  version = "0.8.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  # Python 3.12 support should be added in 0.8.6
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Fv0bZGoHOtPedd3hKg3+UpuDbyGjvbzuKoi+8k6REqc=";
+    hash = "sha256-9pI/nX/4lLlu+/cGEYss03/Td1HVZ+kcIt/T4uqpMgI=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +32,7 @@ buildPythonPackage rec {
     docrep
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cryptography
     pytest-asyncio
     pytestCheckHook
@@ -73,15 +76,13 @@ buildPythonPackage rec {
     "test_wrong_parameter_error"
   ];
 
-  pythonImportsCheck = [
-    "dask_jobqueue"
-  ];
+  pythonImportsCheck = [ "dask_jobqueue" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Deploy Dask on job schedulers like PBS, SLURM, and SGE";
     homepage = "https://github.com/dask/dask-jobqueue";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

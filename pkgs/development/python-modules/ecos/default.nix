@@ -1,58 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, nose
-, numpy
-, pythonOlder
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  oldest-supported-numpy,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ecos";
-  version = "2.0.10";
-  format = "setuptools";
+  version = "2.0.13";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "embotech";
     repo = "ecos-python";
-    rev = "v${version}";
-    sha256 = "sha256-TPxrTyVZ1KXgPoDbZZqXT5+NEIEndg9qepujqFQwK+Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3NcZBZ7fnwiMelGssa74b5PgmXmNZhP4etNRpyrCkpo=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Fix for test_interface_bb.py tests
-    (fetchpatch {
-      name = "test_interface_bb_use_nparray.patch";
-      url = "https://github.com/embotech/ecos-python/commit/4440dcb7ddbd92217bc83d8916b72b61537dffbf.patch";
-      hash = "sha256-pcTPviK916jzCLllRhopbC9wDHv+aS6GmV/92sUwzHc=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    numpy
+  dependencies = [
+    oldest-supported-numpy
     scipy
   ];
 
-  checkInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    cd ./src
-    nosetests test_interface.py test_interface_bb.py
-  '';
-
-  pythonImportsCheck = [
-    "ecos"
-  ];
+  pythonImportsCheck = [ "ecos" ];
 
   meta = with lib; {
-    description = "Python package for ECOS: Embedded Cone Solver";
+    description = "Python interface for ECOS";
     homepage = "https://github.com/embotech/ecos-python";
+    changelog = "https://github.com/embotech/ecos-python/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ drewrisinger ];
   };

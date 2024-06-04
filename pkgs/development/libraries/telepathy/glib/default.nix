@@ -22,16 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "sKN013HN0IESXzjDq9B5ZXZCMBxxpUPVVeK/IZGSc/A=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     pkg-config
     libxslt
     gobject-introspection
     vala
+    python3
   ];
 
   buildInputs = [
     glibcLocales
-    python3
   ];
 
   propagatedBuildInputs = [

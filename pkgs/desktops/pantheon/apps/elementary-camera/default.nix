@@ -7,7 +7,7 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , granite
 , gst_all_1
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
-  version = "6.2.1";
+  version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "camera";
     rev = version;
-    sha256 = "sha256-ijzEMGXoH0gACem/3JaC/aOIaOQgP7Y7n48NgoDMKBk=";
+    sha256 = "sha256-Sj89TBat2RY2Ms02M0P7gmE9tXYk1yrnPLzDwGyAFZA=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

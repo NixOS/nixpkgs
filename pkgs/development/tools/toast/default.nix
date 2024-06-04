@@ -5,21 +5,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "toast";
-  version = "0.45.5";
+  version = "0.47.6";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7EF9DCT8Vg7aGOUlRG9c4Lv2EhCX/P9k4zQC6Ruqv0c=";
+    sha256 = "sha256-+qntd687LF4tJwHZglZ6mppHq3dOZ+l431oKBBNDI0k=";
   };
 
-  cargoSha256 = "sha256-tyZrNUT2i9i0yOqz1KqIuFSb4PO+fx1SNa+ZVNfIGfM=";
+  cargoHash = "sha256-A2sJ0o0RDztk3NjxG0CD8wNA4tmOizY4Tvff6ADzYQ8=";
 
   checkFlags = [ "--skip=format::tests::code_str_display" ]; # fails
 
   meta = with lib; {
     description = "Containerize your development and continuous integration environments";
+    mainProgram = "toast";
     homepage = "https://github.com/stepchowfun/toast";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];

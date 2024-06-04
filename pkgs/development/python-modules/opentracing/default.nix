@@ -1,19 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, futures ? null
-, gevent
-, mock
-, pytestCheckHook
-, tornado
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  isPy27,
+  futures ? null,
+  gevent,
+  mock,
+  pytestCheckHook,
+  tornado,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "opentracing";
   version = "2.4.0";
   format = "setuptools";
+
+  # incompatible with asyncio changes in 3.11 and deprecated
+  # https://github.com/opentracing/specification/issues/163
+  disabled = pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional isPy27 futures;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gevent
     mock
     pytestCheckHook

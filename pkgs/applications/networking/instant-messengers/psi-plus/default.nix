@@ -43,13 +43,13 @@ assert enablePsiMedia -> enablePlugins;
 
 mkDerivation rec {
   pname = "psi-plus";
-  version = "1.5.1644";
+  version = "1.5.1653";
 
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = version;
-    sha256 = "sha256-wSfgV0moBar27xa91ywky7Apr5QHISZ27lQlp02J1Mg=";
+    sha256 = "sha256-9WT2S6ZgIsrHoEAvlWUB078gzCdrPylvSjkkogU5tsU=";
   };
 
   cmakeFlags = [
@@ -99,7 +99,8 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://psi-plus.com";
     description = "XMPP (Jabber) client based on Qt5";
-    maintainers = with maintainers; [ orivej misuzu unclechu ];
+    mainProgram = "psi-plus";
+    maintainers = with maintainers; [ orivej unclechu ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;
   };

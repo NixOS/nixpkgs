@@ -22,5 +22,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mgdm/htmlq";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben nerdypepper ];
+    mainProgram = "htmlq";
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, bash }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "autojump";
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A `cd' command that learns";
+    mainProgram = "autojump";
     longDescription = ''
       One of the most used shell commands is “cd”.  A quick survey
       among my friends revealed that between 10 and 20% of all

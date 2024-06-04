@@ -19,11 +19,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "briar-desktop";
-  version = "0.3.1-beta";
+  version = "0.6.0-beta";
 
   src = fetchurl {
-    url = "https://desktop.briarproject.org/jars/linux/0.3.1-beta/briar-desktop-linux-0.3.1-beta.jar";
-    sha256 = "841dc198101e6e8aa6b5ab6bd6b80e9c6b2593cb88bc3b2592f947baf963389d";
+    url = "https://desktop.briarproject.org/jars/linux/${version}/briar-desktop-linux-${version}.jar";
+    hash = "sha256-ITlg2THQwP91nVxHhLfXPBtC4e3EU9V7D/15XqWC7FE=";
   };
 
   dontUnpack = true;
@@ -55,9 +55,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Decentalized and secure messnger";
+    mainProgram = "briar-desktop";
     homepage = "https://code.briarproject.org/briar/briar-desktop";
     license = licenses.gpl3;
     maintainers = with maintainers; [ onny ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

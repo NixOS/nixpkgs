@@ -1,26 +1,29 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, plantuml
-, markdown
-, requests
-, six
-, runCommand
-, writeText
-, plantuml-markdown
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  plantuml,
+  markdown,
+  requests,
+  six,
+  runCommand,
+  writeText,
+  plantuml-markdown,
+  pythonOlder,
 }:
-let
+
+buildPythonPackage rec {
   pname = "plantuml-markdown";
-  version = "3.8.0";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "3.9.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mikitex70";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-6zGE3j+AfS5r3dj+4mfT4juxKUODEOgGlnn3wtvPcEk=";
+    hash = "sha256-/lsu7kiUyQ6LUFINX+/aCFSKm1pGyIfUzSuUehwCz7I=";
   };
 
   propagatedBuildInputs = [
@@ -43,10 +46,7 @@ buildPythonPackage {
         ```
       '';
     in
-    runCommand "plantuml-markdown-example-doc"
-      {
-        nativeBuildInputs = [ plantuml-markdown ];
-      } ''
+    runCommand "plantuml-markdown-example-doc" { nativeBuildInputs = [ plantuml-markdown ]; } ''
       markdown_py -x plantuml_markdown ${exampleDoc} > $out
 
       ! grep -q "Error" $out
@@ -59,6 +59,7 @@ buildPythonPackage {
       diagram which will be converted into an image and inserted in the document.
     '';
     homepage = "https://github.com/mikitex70/plantuml-markdown";
+    changelog = "https://github.com/mikitex70/plantuml-markdown/releases/tag/${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ nikstur ];
   };

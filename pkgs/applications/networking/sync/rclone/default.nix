@@ -1,20 +1,21 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
 , makeWrapper
-, enableCmount ? true, fuse, macfuse-stubs
+, enableCmount ? true, fuse, fuse3, macfuse-stubs
+, librclone
 }:
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.61.1";
+  version = "1.66.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "rclone";
+    repo = "rclone";
     rev = "v${version}";
-    sha256 = "sha256-mBnpmCzuMCXZPM3Tq2SsOPwEfTUn1StahkB5U/6Fe+A=";
+    hash = "sha256-75RnAROICtRUDn95gSCNO0F6wes4CkJteNfUN38GQIY=";
   };
 
-  vendorSha256 = "sha256-EGNRKSlpdH/NNfLzSDL3lQzArVsVM6oRkyZm31V8cgM=";
+  vendorHash = "sha256-zGBwgIuabLDqWbutvPHDbPRo5Dd9kNfmgToZXy7KVgI=";
 
   subPackages = [ "." ];
 
@@ -30,7 +31,7 @@ buildGoModule rec {
   postInstall =
     let
       rcloneBin =
-        if stdenv.buildPlatform == stdenv.hostPlatform
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform
         then "$out"
         else lib.getBin buildPackages.rclone;
     in
@@ -40,20 +41,29 @@ buildGoModule rec {
         ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
         installShellCompletion rclone.$shell
       done
+
+      # filesystem helpers
+      ln -s $out/bin/rclone $out/bin/rclonefs
+      ln -s $out/bin/rclone $out/bin/mount.rclone
     '' + lib.optionalString (enableCmount && !stdenv.isDarwin)
-      # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount,
+      # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount3,
       # as the setuid wrapper is required as non-root on NixOS.
       ''
       wrapProgram $out/bin/rclone \
-                  --suffix PATH : "${lib.makeBinPath [ fuse ] }" \
-                  --prefix LD_LIBRARY_PATH : "${fuse}/lib"
+        --suffix PATH : "${lib.makeBinPath [ fuse3 ] }" \
+        --prefix LD_LIBRARY_PATH : "${fuse3}/lib"
     '';
+
+  passthru.tests = {
+    inherit librclone;
+  };
 
   meta = with lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ danielfullmer marsam SuperSandro2000 ];
+    mainProgram = "rclone";
+    maintainers = with maintainers; [ SuperSandro2000 tomfitzhenry ];
   };
 }

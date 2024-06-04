@@ -1,21 +1,21 @@
 { lib
 , makeDesktopItem
 , copyDesktopItems
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gnome
 , mkCoqDerivation
 , coq
 , version ? null }:
 
-with lib; mkCoqDerivation rec {
+mkCoqDerivation rec {
   pname = "coqide";
   inherit version;
 
   inherit (coq) src;
   release."${coq.version}" = {};
 
-  defaultVersion = if versions.isGe "8.14" coq.version then coq.version else null;
+  defaultVersion = if lib.versions.isGe "8.14" coq.version then coq.version else null;
 
   preConfigure = ''
     patchShebangs dev/tools/
@@ -26,7 +26,7 @@ with lib; mkCoqDerivation rec {
 
   buildInputs = [
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
     coq.ocamlPackages.lablgtk3-sourceview3
     glib
     gnome.adwaita-icon-theme
@@ -55,6 +55,7 @@ with lib; mkCoqDerivation rec {
   meta = with lib; {
     homepage = "https://coq.inria.fr";
     description = "The CoqIDE user interface for the Coq proof assistant";
+    mainProgram = "coqide";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.Zimmi48 ];
   };

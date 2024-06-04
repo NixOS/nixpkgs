@@ -13,7 +13,7 @@ in
     services.xserver.gdk-pixbuf.modulePackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [ ];
-      description = lib.mdDoc "Packages providing GDK-Pixbuf modules, for cache generation.";
+      description = "Packages providing GDK-Pixbuf modules, for cache generation.";
     };
   };
 
@@ -21,7 +21,7 @@ in
   # loaders.cache based on that and set the environment variable
   # GDK_PIXBUF_MODULE_FILE to point to it.
   config = lib.mkIf (cfg.modulePackages != []) {
-    environment.variables = {
+    environment.sessionVariables = {
       GDK_PIXBUF_MODULE_FILE = "${loadersCache}";
     };
   };

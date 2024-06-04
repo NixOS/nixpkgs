@@ -1,16 +1,35 @@
-{ lib, fetchPypi, buildPythonPackage, packaging, sip }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  packaging,
+  setuptools,
+  setuptools-scm,
+  sip,
+  wheel,
+}:
 
 buildPythonPackage rec {
   pname = "pyqt-builder";
-  version = "1.14.0";
+  version = "1.16.0";
+  format = "pyproject";
 
   src = fetchPypi {
     pname = "PyQt-builder";
     inherit version;
-    sha256 = "sha256-Z1WTHG0viUBVPgM00QyTPOXMGLZEJelP2hrM9P93T1k=";
+    hash = "sha256-R7vSz6VDACAQj59AMB4WbL6pi27z5TlTNQvdTGsxqxg=";
   };
 
-  propagatedBuildInputs = [ packaging sip ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
+
+  propagatedBuildInputs = [
+    packaging
+    sip
+  ];
 
   pythonImportsCheck = [ "pyqtbuild" ];
 

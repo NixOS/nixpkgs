@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cocogitto";
-  version = "5.2.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "oknozor";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZjDZMI84z8riRtidZVeCktwJUMkZU28E23MveJSD7xY=";
+    sha256 = "sha256-yGwGWXME9ZjFJk/3pVDRTa1phG6kd8+YhXe/MxOEdF0=";
   };
 
-  cargoSha256 = "sha256-oaWWAVTKxrshfvqE+HMQ1WeeEz8lOE7qc6RrgSjDtdU=";
+  cargoHash = "sha256-iS/nRfy63bgo7MeL/5jJ3Vn6S7dG49erIZ+0516YxKM=";
 
-  # Test depend on git configuration that would likly exist in a normal user enviroment
+  # Test depend on git configuration that would likely exist in a normal user environment
   # and might be failing to create the test repository it works in.
   doCheck = false;
 
@@ -30,8 +30,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A set of cli tools for the conventional commit and semver specifications";
+    mainProgram = "cog";
     homepage = "https://github.com/oknozor/cocogitto";
     license = licenses.mit;
-    maintainers = with maintainers; [ travisdavis-ops ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -12,52 +12,45 @@ in
 
   options = {
     services.tautulli = {
-      enable = mkEnableOption (lib.mdDoc "Tautulli Plex Monitor");
+      enable = mkEnableOption "Tautulli Plex Monitor";
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/plexpy";
-        description = lib.mdDoc "The directory where Tautulli stores its data files.";
+        description = "The directory where Tautulli stores its data files.";
       };
 
       configFile = mkOption {
         type = types.str;
         default = "/var/lib/plexpy/config.ini";
-        description = lib.mdDoc "The location of Tautulli's config file.";
+        description = "The location of Tautulli's config file.";
       };
 
       port = mkOption {
         type = types.port;
         default = 8181;
-        description = lib.mdDoc "TCP port where Tautulli listens.";
+        description = "TCP port where Tautulli listens.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Open ports in the firewall for Tautulli.";
+        description = "Open ports in the firewall for Tautulli.";
       };
 
       user = mkOption {
         type = types.str;
         default = "plexpy";
-        description = lib.mdDoc "User account under which Tautulli runs.";
+        description = "User account under which Tautulli runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "nogroup";
-        description = lib.mdDoc "Group under which Tautulli runs.";
+        description = "Group under which Tautulli runs.";
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.tautulli;
-        defaultText = literalExpression "pkgs.tautulli";
-        description = lib.mdDoc ''
-          The Tautulli package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "tautulli" { };
     };
   };
 

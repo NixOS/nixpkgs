@@ -42,7 +42,7 @@ in stdenv.mkDerivation {
       hostname resolvable:
         services.avahi = {
           enable = true;
-          nssmdns = true;
+          nssmdns4 = true;
         };'';
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ artuuge ];

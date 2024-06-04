@@ -8,19 +8,19 @@
 , unzip
 , wrapQtAppsHook
 , qtwebengine
-, libyamlcpp
+, yaml-cpp
 , libirc
 }:
 
 stdenv.mkDerivation rec {
   pname = "huggle";
-  version = "3.4.10";
+  version = "3.4.12";
 
   src = fetchFromGitHub {
     owner = "huggle";
     repo = "huggle3-qt-lx";
     rev = version;
-    sha256 = "UzoX4kdzYU50W0MUhfpo0HaSfvG3eINNC8u5t/gKuqI=";
+    sha256 = "scNGmMVZ6z9FTQuZCdwRYk0WP5qKfdb/M9Co8TbiMDE=";
     fetchSubmodules = true;
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     which
     cmake
   ];
-  buildInputs = [ ncurses libyamlcpp qtwebengine libirc ];
+  buildInputs = [ ncurses yaml-cpp qtwebengine libirc ];
 
   patches = [ ./00-remove-third-party.patch ./01-extensions.patch ];
   postPatch = ''
@@ -40,9 +40,10 @@ stdenv.mkDerivation rec {
     substituteInPlace src/CMakeLists.txt --replace '@libirc_includes@' '${libirc.out}'
   '';
 
+  cmakeBuildType = "None";
+
   cmakeFlags = [
     "-S" "/build/source/src"
-    "-DCMAKE_BUILD_TYPE=None"
     "-DINSTALL_DATA_DIR=bin"
     "-DQT5_BUILD=ON"
     "-DWEB_ENGINE=ON"
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Anti-vandalism tool for use on MediaWiki-based projects";
+    mainProgram = "huggle";
     homepage = "https://github.com/huggle/huggle3-qt-lx";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.fee1-dead ];

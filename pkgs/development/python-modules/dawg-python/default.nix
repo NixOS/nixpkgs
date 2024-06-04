@@ -1,11 +1,13 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
   pname = "dawg-python";
   version = "0.7.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;

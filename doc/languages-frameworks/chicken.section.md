@@ -4,7 +4,7 @@
 [R⁵RS](https://schemers.org/Documents/Standards/R5RS/HTML/)-compliant Scheme
 compiler. It includes an interactive mode and a custom package format, "eggs".
 
-## Using Eggs
+## Using Eggs {#sec-chicken-using}
 
 Eggs described in nixpkgs are available inside the
 `chickenPackages.chickenEggs` attrset. Including an egg as a build input is
@@ -13,16 +13,18 @@ done in the typical Nix fashion. For example, to include support for [SRFI
 might write:
 
 ```nix
+{
   buildInputs = [
     chicken
     chickenPackages.chickenEggs.srfi-189
   ];
+}
 ```
 
 Both `chicken` and its eggs have a setup hook which configures the environment
 variables `CHICKEN_INCLUDE_PATH` and `CHICKEN_REPOSITORY_PATH`.
 
-## Updating Eggs
+## Updating Eggs {#sec-chicken-updating-eggs}
 
 nixpkgs only knows about a subset of all published eggs. It uses
 [egg2nix](https://github.com/the-kenny/egg2nix) to generate a
@@ -36,7 +38,7 @@ $ cd pkgs/development/compilers/chicken/5/
 $ egg2nix eggs.scm > eggs.nix
 ```
 
-## Adding Eggs
+## Adding Eggs {#sec-chicken-adding-eggs}
 
 When we run `egg2nix`, we obtain one collection of eggs with
 mutually-compatible versions. This means that when we add new eggs, we may
@@ -47,3 +49,32 @@ To include more eggs, edit `pkgs/development/compilers/chicken/5/eggs.scm`.
 The first section of this file lists eggs which are required by `egg2nix`
 itself; all other eggs go into the second section. After editing, follow the
 procedure for updating eggs.
+
+## Override Scope {#sec-chicken-override-scope}
+
+The chicken package and its eggs, respectively, reside in a scope. This means,
+the scope can be overridden to effect other packages in it.
+
+This example shows how to use a local copy of `srfi-180` and have it affect
+all the other eggs:
+
+```nix
+let
+  myChickenPackages = pkgs.chickenPackages.overrideScope' (self: super: {
+      # The chicken package itself can be overridden to effect the whole ecosystem.
+      # chicken = super.chicken.overrideAttrs {
+      #   src = ...
+      # };
+
+      chickenEggs = super.chickenEggs.overrideScope' (eggself: eggsuper: {
+        srfi-180 = eggsuper.srfi-180.overrideAttrs {
+          # path to a local copy of srfi-180
+          src = <...>;
+        };
+      });
+  });
+in
+# Here, `myChickenPackages.chickenEggs.json-rpc`, which depends on `srfi-180` will use
+# the local copy of `srfi-180`.
+<...>
+```

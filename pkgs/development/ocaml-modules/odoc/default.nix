@@ -1,4 +1,5 @@
-{ lib, fetchurl, buildDunePackage, ocaml
+{ lib, buildDunePackage, ocaml
+, ocaml-crunch
 , astring, cmdliner, cppo, fpath, result, tyxml
 , markup, yojson, sexplib0, jq
 , odoc-parser, ppx_expect, bash, fmt
@@ -6,19 +7,13 @@
 
 buildDunePackage rec {
   pname = "odoc";
-  version = "2.1.1";
+  inherit (odoc-parser) version src;
 
-  src = fetchurl {
-    url = "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz";
-    sha256 = "sha256-9XTb0ozQ/DorlVJcS7ld320fZAi7T+EhV/pTeIT5h/0=";
-  };
+  nativeBuildInputs = [ cppo ocaml-crunch ];
+  buildInputs = [ astring cmdliner fpath result tyxml odoc-parser fmt ];
 
-  # dune 3 is required for tests to pass
-  duneVersion = if doCheck then "3" else "2";
-
-  buildInputs = [ astring cmdliner cppo fpath result tyxml odoc-parser fmt ];
-
-  checkInputs = [ markup yojson sexplib0 jq ppx_expect bash ];
+  nativeCheckInputs = [ bash jq ];
+  checkInputs = [ markup yojson sexplib0 jq ppx_expect ];
   doCheck = lib.versionAtLeast ocaml.version "4.08"
     && lib.versionOlder yojson.version "2.0";
 
@@ -31,8 +26,10 @@ buildDunePackage rec {
 
   meta = {
     description = "A documentation generator for OCaml";
+    mainProgram = "odoc";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/ocaml/odoc";
+    changelog = "https://github.com/ocaml/odoc/blob/${version}/CHANGES.md";
   };
 }

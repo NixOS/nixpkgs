@@ -1,44 +1,43 @@
-{ lib
-, aiohttp
-, aresponses
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "regenmaschine";
-  version = "2022.11.2";
-  format = "pyproject";
+  version = "2024.03.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "regenmaschine";
     rev = "refs/tags/${version}";
-    hash = "sha256-0ih0qlN9NxkYkcRl990gVyZF33ymSNUJoNFzpcnqu1o=";
+    hash = "sha256-RdmK6oK92j4xqLoAjjqlONYu3IfNNWudo4v7jcc+VGU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-aiohttp
     pytest-asyncio
     pytest-mock
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  pythonImportsCheck = [
-    "regenmaschine"
-  ];
+  pythonImportsCheck = [ "regenmaschine" ];
 
   __darwinAllowLocalNetworking = true;
 

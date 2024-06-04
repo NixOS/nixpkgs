@@ -1,24 +1,27 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, numpy
-, absl-py
-, dm-tree
-, wrapt
-, tensorflow
-, tensorflow-probability
-, pytestCheckHook
-, nose }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  numpy,
+  absl-py,
+  dm-tree,
+  wrapt,
+  tensorflow,
+  tensorflow-probability,
+  pytestCheckHook,
+  nose,
+}:
 
 buildPythonPackage rec {
   pname = "trfl";
   version = "1.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
     rev = "ed6eff5b79ed56923bcb102e152c01ea52451d4c";
-    sha256 = "sha256-UsDUKJCHSJ4gP+P95Pm7RsPpqTJqJhrsW47C7fTZ77I=";
+    hash = "sha256-UsDUKJCHSJ4gP+P95Pm7RsPpqTJqJhrsW47C7fTZ77I=";
   };
 
   buildInputs = [
@@ -33,14 +36,12 @@ buildPythonPackage rec {
     tensorflow-probability
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "trfl"
-  ];
+  pythonImportsCheck = [ "trfl" ];
 
   # Tests currently fail with assertion errors
   doCheck = false;
@@ -71,5 +72,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/deepmind/trfl";
     license = licenses.asl20;
     maintainers = with maintainers; [ onny ];
+    # ModuleNotFoundError: No module named 'keras.api._v2' as tensorflow is too outdated
+    broken = true;
   };
 }

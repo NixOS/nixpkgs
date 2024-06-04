@@ -1,7 +1,7 @@
 { lib, perlPackages, fetchurl }:
 
 perlPackages.buildPerlPackage {
-  pname = "Graph-Easy";
+  pname = "graph-easy";
   version = "0.76";
   src = fetchurl {
     url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Graph-Easy-0.76.tar.gz";
@@ -13,5 +13,6 @@ perlPackages.buildPerlPackage {
     license = licenses.gpl1Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.jensbin ];
+    mainProgram = "graph-easy";
   };
 }

@@ -1,22 +1,25 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, colorama
-, hypothesis
-, poetry-core
-, setuptools
-, pylama
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  colorama,
+  hypothesis,
+  poetry-core,
+  setuptools,
+  pylama,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "isort";
-  version = "5.11.4";
+  version = "5.13.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-1x0rhQOr6pPFuHtbYSCR10tXeDTGwf47ek49wBmJP+I=";
+    hash = "sha256-/1iKYmtNRw9u59zzJDwV7b9+EPxFJDHvhjTioGt5LLU=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +27,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     colorama
     hypothesis
     pylama
@@ -70,6 +73,8 @@ buildPythonPackage rec {
     "test_value_assignment_list"
     # profiles not available
     "test_isort_supports_shared_profiles_issue_970"
+    # https://github.com/PyCQA/isort/issues/2234
+    "test_isort_should_warn_on_empty_custom_config_issue_1433"
   ];
 
   meta = with lib; {
@@ -77,5 +82,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyCQA/isort";
     license = licenses.mit;
     maintainers = with maintainers; [ couchemar ];
+    mainProgram = "isort";
   };
 }

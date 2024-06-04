@@ -6,7 +6,6 @@ import ./make-test-python.nix ({ pkgs, ... } : {
 
   nodes.machine =
     { lib, pkgs, config, ... }:
-    with lib;
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       imports = [ ../modules/profiles/hardened.nix ];
@@ -29,7 +28,7 @@ import ./make-test-python.nix ({ pkgs, ... } : {
         };
       };
       boot.extraModulePackages =
-        optional (versionOlder config.boot.kernelPackages.kernel.version "5.6")
+        pkgs.lib.optional (pkgs.lib.versionOlder config.boot.kernelPackages.kernel.version "5.6")
           config.boot.kernelPackages.wireguard;
       boot.kernelModules = [ "wireguard" ];
     };

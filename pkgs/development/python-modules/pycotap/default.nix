@@ -1,12 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "pycotap";
-  version = "1.2.2";
+  version = "1.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+Tjs1JMczRnZWY+2M9Xqu3k48IuEcXMV5SUmqmJ3yew=";
+    hash = "sha256-Z0NV8BMAvgPff4cXhOSYZSwtiawZzXfujmFlJjSi+Do=";
   };
 
   meta = with lib; {

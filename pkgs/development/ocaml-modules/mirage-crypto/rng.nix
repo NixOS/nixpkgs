@@ -1,5 +1,5 @@
 { buildDunePackage, mirage-crypto, ounit2, randomconv, dune-configurator
-, cstruct, duration, logs, mtime, ocaml_lwt }:
+, cstruct, duration, logs }:
 
 buildDunePackage rec {
   pname = "mirage-crypto-rng";
@@ -10,9 +10,9 @@ buildDunePackage rec {
   checkInputs = [ ounit2 randomconv ];
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ cstruct mirage-crypto duration logs mtime ocaml_lwt ];
+  propagatedBuildInputs = [ cstruct mirage-crypto duration logs ];
 
-  strictDeps = !doCheck;
+  strictDeps = true;
 
   meta = mirage-crypto.meta // {
     description = "A cryptographically secure PRNG";

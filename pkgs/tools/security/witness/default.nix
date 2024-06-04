@@ -1,17 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+
+# testing
+, testers
+, witness
+}:
 
 buildGoModule rec {
   pname = "witness";
-  version = "0.1.12";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "testifysec";
-    repo = pname;
+    owner = "in-toto";
+    repo = "witness";
     rev = "v${version}";
-    sha256 = "sha256-MH4ByPoHZHIq2b/QGA/fFa3P1a28BbkaX/p48pwnl1Q=";
+    sha256 = "sha256-QnZZVQZMkh9GH6io19mlE3gHaiX73TgH7ibFT1H5DB4=";
   };
-  proxyVendor = true;
-  vendorSha256 = "sha256-CUiex+ljzpbkqbXCmOjO62YTcgqOIE9Cg3JB6CWUbsk=";
+  vendorHash = "sha256-5q405OP8VPChhxiH2tjh2H+ailQRjGmLZvul7CubjJo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -21,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/testifysec/witness/cmd.Version=v${version}"
+    "-X github.com/in-toto/witness/cmd.Version=v${version}"
   ];
 
   # Feed in all tests for testing
@@ -38,13 +45,11 @@ buildGoModule rec {
       --zsh <($out/bin/witness completion zsh)
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/witness --help
-    $out/bin/witness version | grep "v${version}"
-    runHook postInstallCheck
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = witness;
+    command = "witness version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "A pluggable framework for software supply chain security. Witness prevents tampering of build materials and verifies the integrity of the build process from source to target";
@@ -57,6 +62,7 @@ buildGoModule rec {
       PKI distribution system will mitigate against many software supply chain
       attack vectors and can be used as a framework for automated governance.
     '';
+    mainProgram = "witness";
     homepage = "https://github.com/testifysec/witness";
     changelog = "https://github.com/testifysec/witness/releases/tag/v${version}";
     license = licenses.asl20;

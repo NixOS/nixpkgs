@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ethtool";
-  version = "6.0";
+  version = "6.7";
 
   src = fetchurl {
     url = "mirror://kernel/software/network/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1URsk95XDOaPOx6mnb+hL8/Wf8GYl/ZV0/GCMeK4GNY=";
+    sha256 = "sha256-w65SawHOTY32x5SrFw3kpBBNER6o2Ns/H9fCX8uQVhk=";
   };
 
   nativeBuildInputs = [
@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "ethtool";
   };
 }

@@ -7,33 +7,34 @@
 , gtk3
 , gobject-introspection
 , libnotify
-, wrapGAppsHook
+, makeBinaryWrapper
+, wrapGAppsHook3
 , vte
 , nixosTests
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terminator";
-  version = "2.1.2";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "gnome-terminator";
     repo = "terminator";
-    rev = "v${version}";
-    hash = "sha256-dN9+6VGIdIyY52nm2BMONeb+WV7UGL68frjnHRxRzTU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0468d/sAM/UOiaSspwWaOGogoE8/Idth0G4CMCXWFFo=";
   };
 
   nativeBuildInputs = [
     file
     intltool
     gobject-introspection
-    wrapGAppsHook
+    makeBinaryWrapper
+    wrapGAppsHook3
     python3.pkgs.pytest-runner
   ];
 
   buildInputs = [
     gtk3
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
     keybinder3
     libnotify
     python3
@@ -56,8 +57,15 @@ python3.pkgs.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
+  # HACK: 'wrapPythonPrograms' will add things to the $PATH in the wrapper. This bleeds into the
+  # terminal session produced by terminator. To avoid this, we force wrapPythonPrograms to only
+  # use gappsWrapperArgs by redefining wrapProgram to ignore its arguments and only apply the
+  # wrapper arguments we want it to use.
+  # TODO: Adjust wrapPythonPrograms to respect an argument that tells it to leave $PATH alone.
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    wrapProgram() {
+      wrapProgramBinary "$1" "''${gappsWrapperArgs[@]}"
+    }
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.terminator;

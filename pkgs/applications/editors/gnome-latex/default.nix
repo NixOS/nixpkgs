@@ -1,17 +1,17 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , gtk-doc
 , vala
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 , gspell
-, gtksourceview4
+, libgedit-gtksourceview
+, libgedit-tepl
 , libgee
-, tepl
-, amtk
 , gnome
 , glib
 , pkg-config
@@ -21,13 +21,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.42.0";
+  version = "3.46.0";
   pname = "gnome-latex";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ASMecEE3WNGu1pYNqhoigfqRNaYFkQuodM7VMn3LhUM=";
+    sha256 = "1nVVY5sqFaiuvVTzNTVORP40MxQ648s8ynqOJvgRKto=";
   };
+
+  patches = [
+    # Adapt for Tepl -> libgedit-tepl rename
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/swilmet/gnome-latex/-/commit/41e532c427f43a5eed9081766963d6e29a9975a1.patch";
+      hash = "sha256-gu8o/er4mP92dE5gWg9lGx5JwTHB8ytk3EMNlwlIpq4=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -35,21 +43,20 @@ stdenv.mkDerivation rec {
     gtk-doc
     vala
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     itstool
     gettext
   ];
 
   buildInputs = [
-    amtk
     gnome.adwaita-icon-theme
     glib
     gsettings-desktop-schemas
     gspell
-    gtksourceview4
+    libgedit-gtksourceview
+    libgedit-tepl
     libgee
     libxml2
-    tepl
   ];
 
   configureFlags = [
@@ -58,7 +65,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   passthru.updateScript = gnome.updateScript {
     packageName = pname;
@@ -66,10 +73,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/GNOME-LaTeX";
+    homepage = "https://gitlab.gnome.org/swilmet/gnome-latex";
     description = "A LaTeX editor for the GNOME desktop";
-    maintainers = [ maintainers.manveru ];
+    maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    mainProgram = "gnome-latex";
   };
 }

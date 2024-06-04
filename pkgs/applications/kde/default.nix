@@ -13,7 +13,7 @@ IF YOUR PACKAGE IS NOT LISTED IN `./srcs.nix`, IT DOES NOT GO HERE.
 Many of the packages released upstream are not yet built in Nixpkgs due to lack
 of demand. To add a Nixpkgs build for an upstream package, copy one of the
 existing packages here and modify it as necessary. A simple example package that
-still shows most of the available features is in `./gwenview.nix`.
+still shows most of the available features is in `./gwenview`.
 
 # Updates
 
@@ -30,9 +30,6 @@ still shows most of the available features is in `./gwenview.nix`.
 }:
 
 let
-  minQtVersion = "5.15";
-  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
-
   mirror = "mirror://kde";
   srcs = import ./srcs.nix { inherit fetchurl mirror; };
 
@@ -53,7 +50,6 @@ let
           meta // {
             homepage = meta.homepage or "http://www.kde.org";
             platforms = meta.platforms or lib.platforms.linux;
-            broken = meta.broken or broken;
           };
       });
 
@@ -76,12 +72,15 @@ let
       akonadi-search = callPackage ./akonadi-search.nix {};
       akonadiconsole = callPackage ./akonadiconsole.nix {};
       akregator = callPackage ./akregator.nix {};
+      analitza = callPackage ./analitza.nix {};
+      arianna = callPackage ./arianna.nix {};
       ark = callPackage ./ark {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
       bomber = callPackage ./bomber.nix {};
       bovo = callPackage ./bovo.nix {};
       calendarsupport = callPackage ./calendarsupport.nix {};
       colord-kde = callPackage ./colord-kde.nix {};
+      cantor = callPackage ./cantor.nix {};
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};
       dragon = callPackage ./dragon.nix {};
@@ -90,17 +89,20 @@ let
       falkon = callPackage ./falkon.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
+      ghostwriter = callPackage ./ghostwriter.nix {};
       granatier = callPackage ./granatier.nix {};
       grantleetheme = callPackage ./grantleetheme {};
-      gwenview = callPackage ./gwenview.nix {};
+      gwenview = callPackage ./gwenview {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
+      itinerary = callPackage ./itinerary.nix {};
       juk = callPackage ./juk.nix {};
       k3b = callPackage ./k3b.nix {};
       kaccounts-integration = callPackage ./kaccounts-integration.nix {};
       kaccounts-providers = callPackage ./kaccounts-providers.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
-      kalendar = callPackage ./kalendar.nix {};
+      kalgebra = callPackage ./kalgebra.nix {};
+      merkuro = callPackage ./merkuro.nix {};
       kalzium = callPackage ./kalzium.nix {};
       kamoso = callPackage ./kamoso.nix {};
       kapman = callPackage ./kapman.nix {};
@@ -116,10 +118,11 @@ let
       kcalutils = callPackage ./kcalutils.nix {};
       kcharselect = callPackage ./kcharselect.nix {};
       kcolorchooser = callPackage ./kcolorchooser.nix {};
+      kde-inotify-survey = callPackage ./kde-inotify-survey.nix {};
       kdebugsettings = callPackage ./kdebugsettings.nix {};
       kdeconnect-kde = callPackage ./kdeconnect-kde.nix {};
       kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket.nix {};
-      kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
+      kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers {};
       kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
       kdenlive = callPackage ./kdenlive {};
       kdepim-addons = callPackage ./kdepim-addons.nix {};
@@ -134,7 +137,6 @@ let
       kdiamond = callPackage ./kdiamond.nix {};
       keditbookmarks = callPackage ./keditbookmarks.nix {};
       kfind = callPackage ./kfind.nix {};
-      kfloppy = callPackage ./kfloppy.nix {};
       kgeography = callPackage ./kgeography.nix {};
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
@@ -144,6 +146,7 @@ let
       kigo = callPackage ./kigo.nix {};
       killbots = callPackage ./killbots.nix {};
       kimap = callPackage ./kimap.nix {};
+      kio-admin = callPackage ./kio-admin.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kio-gdrive = callPackage ./kio-gdrive.nix {};
       kipi-plugins = callPackage ./kipi-plugins.nix {};
@@ -178,10 +181,13 @@ let
       kontact = callPackage ./kontact.nix {};
       konversation = callPackage ./konversation.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
+      kopeninghours = callPackage ./kopeninghours.nix {};
       korganizer = callPackage ./korganizer.nix {};
+      kosmindoormap = callPackage ./kosmindoormap.nix {};
       kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
+      kpmcore = callPackage ./kpmcore {};
       kpublictransport = callPackage ./kpublictransport.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       krdc = callPackage ./krdc.nix {};
@@ -225,6 +231,7 @@ let
       minuet = callPackage ./minuet.nix {};
       okular = callPackage ./okular.nix {};
       palapeli = callPackage ./palapeli.nix {};
+      partitionmanager = callPackage ./partitionmanager {};
       picmi = callPackage ./picmi.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
@@ -237,6 +244,26 @@ let
       umbrello = callPackage ./umbrello.nix {};
       yakuake = callPackage ./yakuake.nix {};
       zanshin = callPackage ./zanshin.nix {};
+
+      # Plasma Mobile Gear
+      alligator = callPackage ./alligator.nix {};
+      angelfish = callPackage ./angelfish.nix { inherit srcs; };
+      audiotube = callPackage ./audiotube.nix {};
+      calindori = callPackage ./calindori.nix {};
+      kalk = callPackage ./kalk.nix {};
+      kasts = callPackage ./kasts.nix {};
+      kclock = callPackage ./kclock.nix {};
+      keysmith = callPackage ./keysmith.nix {};
+      koko = callPackage ./koko.nix {};
+      kongress = callPackage ./kongress.nix {};
+      krecorder = callPackage ./krecorder.nix {};
+      ktrip = callPackage ./ktrip.nix {};
+      kweather = callPackage ./kweather.nix {};
+      neochat = callPackage ./neochat.nix {};
+      plasmatube = callPackage ./plasmatube {};
+      qmlkonsole = callPackage ./qmlkonsole.nix {};
+      telly-skout = callPackage ./telly-skout.nix {};
+      tokodon = callPackage ./tokodon.nix {};
     };
 
 in lib.makeScope libsForQt5.newScope packages

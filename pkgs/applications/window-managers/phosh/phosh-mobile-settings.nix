@@ -1,10 +1,12 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchurl
+, nixosTests
+, directoryListingUpdater
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , desktop-file-utils
 , feedbackd
 , gtk4
@@ -13,25 +15,26 @@
 , phoc
 , phosh
 , wayland-protocols
+, json-glib
+, gsound
 }:
 
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.21.1";
+  version = "0.38.0";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "guidog";
-    repo = "phosh-mobile-settings";
-    rev = "v${version}";
-    sha256 = "sha256-60AXaKSF8bY+Z3TNlIIa7jZwQ2IkHqCbZ3uIlhkx6i0=";
+  src = fetchurl {
+    # This tarball includes the meson wrapped subproject 'gmobile'.
+    url = "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-WDqgVsJx5y6IlWII9fRBsAeWn/tB8BaXRtlPvA0wmMk=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
+    phosh
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -41,26 +44,34 @@ stdenv.mkDerivation rec {
     libadwaita
     lm_sensors
     phoc
-    phosh
     wayland-protocols
+    json-glib
+    gsound
   ];
+
+  postPatch = ''
+    # There are no schemas to compile.
+    substituteInPlace meson.build \
+      --replace 'glib_compile_schemas: true' 'glib_compile_schemas: false'
+  '';
 
   postInstall = ''
     # this is optional, but without it phosh-mobile-settings won't know about lock screen plugins
     ln -s '${phosh}/lib/phosh' "$out/lib/phosh"
-
-    # .desktop files marked `OnlyShowIn=Phosh;` aren't displayed even in our phosh, so remove that.
-    # also make the Exec path absolute.
-    substituteInPlace "$out/share/applications/org.sigxcpu.MobileSettings.desktop" \
-      --replace 'OnlyShowIn=Phosh;' "" \
-      --replace 'Exec=phosh-mobile-settings' "Exec=$out/bin/phosh-mobile-settings"
   '';
+
+  passthru = {
+    tests.phosh = nixosTests.phosh;
+    updateScript = directoryListingUpdater { };
+  };
 
   meta = with lib; {
     description = "A settings app for mobile specific things";
-    homepage = "https://gitlab.gnome.org/guidog/phosh-mobile-settings";
+    mainProgram = "phosh-mobile-settings";
+    homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ colinsane ];
+    maintainers = with maintainers; [ rvl ];
     platforms = platforms.linux;
   };
 }

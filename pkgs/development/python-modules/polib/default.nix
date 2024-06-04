@@ -1,12 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "polib";
-  version = "1.1.1";
+  version = "1.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e02c355ae5e054912e3b0d16febc56510eff7e49d60bf22aecb463bd2f2a2dfa";
+    hash = "sha256-8++Urv7W4YPjQqiiaa4fxHQroZMYatdvF1k4Yh2/wms=";
   };
 
   # error: invalid command 'test'

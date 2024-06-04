@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, chardet
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  chardet,
 }:
 
 buildPythonPackage rec {
@@ -17,22 +18,18 @@ buildPythonPackage rec {
     hash = "sha256-jPZ3ow28tL56mVNsF+ETCKgnpNIgKNxZpn9sbdPw9Yw=";
   };
 
-  propagatedBuildInputs = [
-    chardet
-  ];
+  propagatedBuildInputs = [ chardet ];
 
   # No tests in archive
   doCheck = false;
 
-  pythonImportsCheck = [
-    "debian"
-  ];
+  pythonImportsCheck = [ "debian" ];
 
   meta = with lib; {
     description = "Debian package related modules";
     homepage = "https://salsa.debian.org/python-debian-team/python-debian";
     changelog = "https://salsa.debian.org/python-debian-team/python-debian/-/blob/master/debian/changelog";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

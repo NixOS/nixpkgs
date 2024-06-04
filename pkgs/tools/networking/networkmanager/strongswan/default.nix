@@ -7,7 +7,6 @@
 , strongswanNM
 , gtk3
 , gtk4
-, gnome
 , libsecret
 , libnma
 , libnma-gtk4
@@ -38,6 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    "--disable-more-warnings" # disables -Werror
     "--with-charon=${strongswanNM}/libexec/ipsec/charon-nm"
     "--with-nm-libexecdir=${placeholder "out"}/libexec"
     "--with-nm-plugindir=${placeholder "out"}/lib/NetworkManager"

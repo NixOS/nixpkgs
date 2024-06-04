@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.mkg20001 ];
     license = licenses.gpl2;
     platforms = platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
+    mainProgram = "bless";
   };
 }

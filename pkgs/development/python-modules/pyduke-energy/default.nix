@@ -1,19 +1,20 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, jsonpickle
-, paho-mqtt
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonpickle,
+  paho-mqtt,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyduke-energy";
-  version = "1.0.5";
+  version = "1.0.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "mjmeli";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-g+s9YaVFOCKaBGR5o9cPk4kcIW4BffFHTtmDNE8f/zE=";
+    hash = "sha256-7KkUpsHg3P2cF0bVl3FzyAQwzeaCmg+vzRHlM/TIcNA=";
   };
 
   propagatedBuildInputs = [
@@ -32,15 +33,13 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyduke_energy"
-  ];
+  pythonImportsCheck = [ "pyduke_energy" ];
 
   meta = with lib; {
     description = "Python module for the Duke Energy API";

@@ -18,29 +18,39 @@
 , gssSupport   ? true
 , writeScript
 }:
+assert smimeSupport -> sslSupport;
+assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.2.9";
+  version = "2.2.13";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    sha256 = "+lMbIx1Y/h8wztoO1iZoPqnr37ds5H74uyfC93Qiz/s=";
+    hash = "sha256-6yP63cHMl9hnaT86Sp8wlJrZN2WtW2/a4nl6QAHFjvs=";
   };
 
-  patches = lib.optional smimeSupport (fetchpatch {
+  patches = [
+    # Avoid build-only references embedding into 'mutt -v' output.
+    ./no-build-only-refs.patch
+  ] ++ lib.optional smimeSupport (fetchpatch {
     url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
     sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
   });
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    perl which
+  ];
+
   buildInputs =
-    [ ncurses which perl ]
+    [ ncurses ]
     ++ lib.optional headerCache  gdbm
     ++ lib.optional sslSupport   openssl
     ++ lib.optional gssSupport   libkrb5
-    ++ lib.optional saslSupport  cyrus_sasl
-    ++ lib.optional gpgmeSupport gpgme;
+    ++ lib.optional saslSupport  cyrus_sasl;
 
   configureFlags = [
     (lib.enableFeature headerCache  "hcache")
@@ -61,9 +71,10 @@ stdenv.mkDerivation rec {
     # set by the installer, and removing the need for the group 'mail'
     # I set the value 'mailbox' because it is a default in the configure script
     "--with-homespool=mailbox"
-  ] ++ lib.optional sslSupport  "--with-ssl"
-    ++ lib.optional gssSupport  "--with-gss"
-    ++ lib.optional saslSupport "--with-sasl";
+  ] ++ lib.optional sslSupport   "--with-ssl"
+    ++ lib.optional gssSupport   "--with-gss"
+    ++ lib.optional saslSupport  "--with-sasl"
+    ++ lib.optional gpgmeSupport "--with-gpgme-prefix=${lib.getDev gpgme}";
 
   postPatch = lib.optionalString (smimeSupport || gpgmeSupport) ''
     sed -i 's#/usr/bin/openssl#${openssl}/bin/openssl#' smime_keys.pl
@@ -98,6 +109,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A small but very powerful text-based mail client";
     homepage = "http://www.mutt.org";
+    mainProgram = "mutt";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ rnhmjoj ];

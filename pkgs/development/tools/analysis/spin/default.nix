@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bison ];
 
-  sourceRoot = "source/Src";
+  sourceRoot = "${src.name}/Src";
 
   preBuild = ''
     mkdir -p $out/bin
@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/spin --prefix PATH : ${binPath}
+
+    mkdir -p $out/share/spin
+    cp $src/optional_gui/ispin.tcl $out/share/spin
+    makeWrapper $out/share/spin/ispin.tcl $out/bin/ispin \
+      --prefix PATH : $out/bin:${binPath}
   '';
 
   meta = with lib; {

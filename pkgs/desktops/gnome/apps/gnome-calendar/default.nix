@@ -7,7 +7,6 @@
 , wrapGAppsHook4
 , libgweather
 , geoclue2
-, geocode-glib_2
 , gettext
 , libxml2
 , gnome
@@ -22,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "43.1";
+  version = "46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "r6X8ZuL2kVU8x9UX2yNjz/LWLNG130VeX09xMxOdIfI=";
+    hash = "sha256-mGH/e4q9W3sgaQulXrdULH7FNLVmJp4ptbHoWMFhCJc=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
     glib
     libgweather
     geoclue2
-    geocode-glib_2
     gsettings-desktop-schemas
     libadwaita
   ];
@@ -59,8 +57,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Calendar";
+    homepage = "https://apps.gnome.org/Calendar/";
     description = "Simple and beautiful calendar application for GNOME";
+    mainProgram = "gnome-calendar";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

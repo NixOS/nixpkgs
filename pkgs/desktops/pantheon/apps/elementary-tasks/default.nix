@@ -7,29 +7,29 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , clutter-gtk
 , evolution-data-server
 , granite
 , geoclue2
-, geocode-glib
+, geocode-glib_2
 , gtk3
-, libchamplain
-, libgdata
+, libchamplain_libsoup3
 , libgee
 , libhandy
 , libical
+, libportal-gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-tasks";
-  version = "6.3.0";
+  version = "6.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "tasks";
     rev = version;
-    sha256 = "sha256-kW36bKA0uzW98Xl2bjbTkcfLm4SeQR8VB2FyKOqfPnM=";
+    sha256 = "sha256-6Vwx+NRVGDqZzN5IVk4cQxGjSkYwrrNhUVoB8TRo28U=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -46,13 +46,13 @@ stdenv.mkDerivation rec {
     evolution-data-server
     granite
     geoclue2
-    geocode-glib
+    geocode-glib_2
     gtk3
-    libchamplain
-    libgdata
+    libchamplain_libsoup3
     libgee
     libhandy
     libical
+    libportal-gtk3
   ];
 
   postPatch = ''
@@ -71,6 +71,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
     mainProgram = "io.elementary.tasks";
-    broken = true; # https://github.com/elementary/tasks/issues/340
   };
 }

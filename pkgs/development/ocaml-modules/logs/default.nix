@@ -3,10 +3,23 @@
 , fmtSupport ? lib.versionAtLeast ocaml.version "4.08"
 , js_of_ocaml
 , jsooSupport ? true
+, lwtSupport ? true
+, cmdlinerSupport ? true
 }:
 let
   pname = "logs";
   webpage = "https://erratique.ch/software/${pname}";
+
+  optional_deps = [
+    { pkg = js_of_ocaml; enable_flag = "--with-js_of_ocaml"; enabled = jsooSupport; }
+    { pkg = fmt; enable_flag = "--with-fmt"; enabled = fmtSupport; }
+    { pkg = lwt; enable_flag = "--with-lwt"; enabled = lwtSupport; }
+    { pkg = cmdliner; enable_flag = "--with-cmdliner"; enabled = cmdlinerSupport; }
+  ];
+  enable_flags =
+    lib.concatMap (d: [ d.enable_flag (lib.boolToString d.enabled)]) optional_deps;
+  optional_buildInputs =
+    map (d: d.pkg) (lib.filter (d: d.enabled) optional_deps);
 in
 
 if lib.versionOlder ocaml.version "4.03"
@@ -23,14 +36,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [ cmdliner lwt topkg ]
-    ++ lib.optional fmtSupport fmt
-    ++ lib.optional jsooSupport js_of_ocaml;
+  buildInputs = [ topkg ] ++ optional_buildInputs;
   propagatedBuildInputs = [ result ];
 
   strictDeps = true;
 
-  buildPhase = "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport} --with-fmt ${lib.boolToString fmtSupport}";
+  buildPhase = "${topkg.run} build ${lib.escapeShellArgs enable_flags}";
 
   inherit (topkg) installPhase;
 

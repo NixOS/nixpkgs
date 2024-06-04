@@ -75,6 +75,18 @@ let
     "tree-sitter-agda"
     # abandoned
     "tree-sitter-fluent"
+    # to unblock my update
+    "csharp-tree-sitter"
+
+    # Non-grammar repositories
+    ".github"
+    "fuzz-action"
+    "parse-action"
+    "parser-setup-action"
+    "parser-test-action"
+    "parser-update-action"
+    "setup-action"
+    "workflows"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -82,6 +94,10 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-bitbake" = {
+      orga = "amaanq";
+      repo = "tree-sitter-bitbake";
+    };
     "tree-sitter-beancount" = {
       orga = "polarmutex";
       repo = "tree-sitter-beancount";
@@ -101,6 +117,10 @@ let
     "tree-sitter-elisp" = {
       orga = "wilfred";
       repo = "tree-sitter-elisp";
+    };
+    "tree-sitter-just" = {
+      orga = "IndianBoy42";
+      repo = "tree-sitter-just";
     };
     "tree-sitter-nix" = {
       orga = "cstrahan";
@@ -126,6 +146,10 @@ let
       orga = "MDeiml";
       repo = "tree-sitter-markdown";
     };
+    "tree-sitter-proto" = {
+      orga = "mitchellh";
+      repo = "tree-sitter-proto";
+    };
     "tree-sitter-rego" = {
       orga = "FallenAngel97";
       repo = "tree-sitter-rego";
@@ -141,6 +165,15 @@ let
     "tree-sitter-sql" = {
       orga = "derekstride";
       repo = "tree-sitter-sql";
+      branch = "gh-pages";
+    };
+    "tree-sitter-talon" = {
+      orga = "wenkokke";
+      repo = "tree-sitter-talon";
+    };
+    "tree-sitter-typst" = {
+      orga = "uben0";
+      repo = "tree-sitter-typst";
     };
     "tree-sitter-vim" = {
       orga = "vigoux";
@@ -165,6 +198,10 @@ let
     "tree-sitter-norg" = {
       orga = "nvim-neorg";
       repo = "tree-sitter-norg";
+    };
+    "tree-sitter-norg-meta" = {
+      orga = "nvim-neorg";
+      repo = "tree-sitter-norg-meta";
     };
     "tree-sitter-commonlisp" = {
       orga = "thehamsta";
@@ -358,6 +395,46 @@ let
       orga = "sourcegraph";
       repo = "tree-sitter-jsonnet";
     };
+    "tree-sitter-solidity" = {
+      orga = "JoranHonig";
+      repo = "tree-sitter-solidity";
+    };
+    "tree-sitter-nu" = {
+      orga = "nushell";
+      repo = "tree-sitter-nu";
+    };
+    "tree-sitter-cue" = {
+      orga = "eonpatapon";
+      repo = "tree-sitter-cue";
+    };
+    "tree-sitter-uiua" = {
+      orga = "shnarazk";
+      repo = "tree-sitter-uiua";
+    };
+    "tree-sitter-wing" = {
+      orga = "winglang";
+      repo = "wing";
+    };
+    "tree-sitter-wgsl" = {
+      orga = "szebniok";
+      repo = "tree-sitter-wgsl";
+    };
+    "tree-sitter-templ" = {
+      orga = "vrischmann";
+      repo = "tree-sitter-templ";
+    };
+    "tree-sitter-gleam" = {
+      orga = "gleam-lang";
+      repo = "tree-sitter-gleam";
+    };
+    "tree-sitter-koka" = {
+      orga = "mtoohey31";
+      repo = "tree-sitter-koka";
+    };
+    "tree-sitter-earthfile" = {
+      orga = "glehmann";
+      repo = "tree-sitter-earthfile";
+    };
   };
 
   allGrammars =
@@ -382,7 +459,8 @@ let
   jsonFile = name: val: (formats.json { }).generate name val;
 
   # implementation of the updater
-  updateImpl = passArgs "updateImpl-with-args" {
+  updateImpl = passArgs "updateImpl-with-args"
+    {
       binaries = {
         curl = "${curl}/bin/curl";
         nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
@@ -393,9 +471,10 @@ let
         ignoredTreeSitterOrgRepos
         ;
     }
-    (writers.writePython3 "updateImpl" {
-        flakeIgnore = ["E501"];
-    } ./update_impl.py);
+    (writers.writePython3 "updateImpl"
+      {
+        flakeIgnore = [ "E501" ];
+      } ./update_impl.py);
 
   # Pass the given arguments to the command, in the ARGS environment variable.
   # The arguments are just a json object that should be available in the script.
@@ -408,7 +487,7 @@ let
     lib.concatMapStringsSep "\n" f
       (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
 
-  jsonNewlines = lib.concatMapStringsSep "\n" (lib.generators.toJSON {});
+  jsonNewlines = lib.concatMapStringsSep "\n" (lib.generators.toJSON { });
 
   # Run the given script for each of the attr list.
   # The attrs are passed to the script as a json value.
@@ -422,34 +501,34 @@ let
   outputDir = "${toString ./.}/grammars";
 
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
-    set -euo pipefail
-   ${updateImpl} fetch-and-check-tree-sitter-repos '{}'
-    echo "writing files to ${outputDir}" 1>&2
-    mkdir -p "${outputDir}"
-    ${forEachParallel
-        "repos-to-fetch"
-        (writeShellScript "fetch-repo" ''
-            ${updateImpl} fetch-repo "$1"
-        '')
-        (lib.mapAttrsToList
-          (nixRepoAttrName: attrs: attrs // {
-            inherit
-              nixRepoAttrName
-              outputDir;
-          })
-          allGrammars)
-    }
-    ${updateImpl} print-all-grammars-nix-file "$(< ${
-        jsonFile "all-grammars.json" {
-          allGrammars =
-            (lib.mapAttrsToList
-              (nixRepoAttrName: attrs: attrs // {
-                inherit nixRepoAttrName;
-              })
-              allGrammars);
-          inherit outputDir;
-        }
-    })"
+     set -euo pipefail
+    ${updateImpl} fetch-and-check-tree-sitter-repos '{}'
+     echo "writing files to ${outputDir}" 1>&2
+     mkdir -p "${outputDir}"
+     ${forEachParallel
+         "repos-to-fetch"
+         (writeShellScript "fetch-repo" ''
+             ${updateImpl} fetch-repo "$1"
+         '')
+         (lib.mapAttrsToList
+           (nixRepoAttrName: attrs: attrs // {
+             inherit
+               nixRepoAttrName
+               outputDir;
+           })
+           allGrammars)
+     }
+     ${updateImpl} print-all-grammars-nix-file "$(< ${
+         jsonFile "all-grammars.json" {
+           allGrammars =
+             (lib.mapAttrsToList
+               (nixRepoAttrName: attrs: attrs // {
+                 inherit nixRepoAttrName;
+               })
+               allGrammars);
+           inherit outputDir;
+         }
+     })"
   '';
 
 

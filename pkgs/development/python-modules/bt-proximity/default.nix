@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pybluez
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pybluez,
 }:
 
 buildPythonPackage rec {
   pname = "bt-proximity";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "bt_proximity";
@@ -14,9 +16,7 @@ buildPythonPackage rec {
     sha256 = "0xlif91vblbz065531yjf8nmlcahrl4q5pz52bc1jmzz7iv9hpgq";
   };
 
-  propagatedBuildInputs = [
-    pybluez
-  ];
+  propagatedBuildInputs = [ pybluez ];
 
   # there are no tests
   doCheck = false;

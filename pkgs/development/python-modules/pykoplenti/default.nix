@@ -1,31 +1,50 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, prompt-toolkit
-, pycryptodome
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  prompt-toolkit,
+  pycryptodome,
+  pydantic,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pykoplenti";
-  version = "1.0.0";
+  version = "1.2.2";
+  pyproject = true;
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stegm";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "12nsyz8a49vhby1jp991vaky82fm93jrgcsjzwa2rixwg1zql4sw";
+    repo = "pykoplenti";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2sGkHCIGo1lzLurvQBmq+16sodAaK8v+mAbIH/Gd3+E=";
   };
+
+  pythonRelaxDeps = [ "pydantic" ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiohttp
-    click
-    prompt-toolkit
     pycryptodome
+    pydantic
   ];
+
+  passthru.optional-dependencies = {
+    CLI = [
+      click
+      prompt-toolkit
+    ];
+  };
 
   # Project has no tests
   doCheck = false;
@@ -34,7 +53,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python REST client API for Kostal Plenticore Inverters";
+    mainProgram = "pykoplenti";
     homepage = "https://github.com/stegm/pykoplenti/";
+    changelog = "https://github.com/stegm/pykoplenti/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

@@ -1,56 +1,63 @@
-{ lib
-, aiofiles
-, aiohttp
-, async_generator
-, buildPythonPackage
-, fetchFromGitHub
-, pypubsub
-, pyserial
-, pyserial-asyncio
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  async-timeout,
+  async-generator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pypubsub,
+  pyserial,
+  pyserial-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.6.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pyinsteon";
+    repo = "pyinsteon";
     rev = "refs/tags/${version}";
-    hash = "sha256-PMjvic+K/m7beavlZvGhJcizSNCzLPZYLm3P2V9EPLs=";
+    hash = "sha256-s8YRDu+UpU1sisdscd87CpcLl3csOUDdIuKqx48GZsw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiofiles
     aiohttp
+    async-timeout
     pypubsub
     pyserial
     pyserial-asyncio
-    pyyaml
+    voluptuous
   ];
 
-  checkInputs = [
-    async_generator
-    pytest-asyncio
-    pytest-timeout
+  nativeCheckInputs = [
+    async-generator
     pytestCheckHook
   ];
 
   disabledTests = [
-    "test_results"
+    # RuntimeError: BUG: Dead Listener called, still subscribed!
+    "test_linking_with_i1_device"
   ];
 
-  pythonImportsCheck = [
-    "pyinsteon"
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # Tests are blocking or failing
+    "tests/test_handlers/"
   ];
+
+  pythonImportsCheck = [ "pyinsteon" ];
 
   meta = with lib; {
     description = "Python library to support Insteon home automation projects";
@@ -60,7 +67,9 @@ buildPythonPackage rec {
       2413U, 2412S, 2448A7 and Hub models 2242 and 2245.
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
+    changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "insteon_tools";
   };
 }

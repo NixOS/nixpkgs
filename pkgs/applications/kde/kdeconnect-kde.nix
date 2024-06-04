@@ -8,6 +8,7 @@
 , kiconthemes
 , kio
 , kirigami2
+, kirigami-addons
 , knotifications
 , kpeople
 , kpeoplevcard
@@ -16,6 +17,7 @@
 , libXtst
 , libfakekey
 , makeWrapper
+, modemmanager-qt
 , pulseaudio-qt
 , qca-qt5
 , qqc2-desktop-style
@@ -26,6 +28,7 @@
 , breeze-icons
 , sshfs
 , wayland
+, wayland-protocols
 , wayland-scanner
 , plasma-wayland-protocols
 }:
@@ -41,12 +44,14 @@ mkDerivation {
     kiconthemes
     kio
     kirigami2
+    kirigami-addons
     knotifications
     kpeople
     kpeoplevcard
     kwayland
     libXtst
     libfakekey
+    modemmanager-qt
     pulseaudio-qt
     qca-qt5
     qqc2-desktop-style
@@ -55,6 +60,7 @@ mkDerivation {
     qtquickcontrols2
     qtx11extras
     wayland
+    wayland-protocols
     wayland-scanner
     plasma-wayland-protocols
     # otherwise buttons are blank on non-kde
@@ -71,6 +77,6 @@ mkDerivation {
     description = "KDE Connect provides several features to integrate your phone and your computer";
     homepage = "https://community.kde.org/KDEConnect";
     license = with licenses; [ gpl2 ];
-    maintainers = with maintainers; [ fridh ];
+    mainProgram = "kdeconnect-app";
   };
 }

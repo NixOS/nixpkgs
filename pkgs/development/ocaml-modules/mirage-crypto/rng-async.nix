@@ -8,6 +8,8 @@ buildDunePackage {
 
   inherit (mirage-crypto) version src;
 
+  duneVersion = "3";
+
   buildInputs = [
     dune-configurator
   ];

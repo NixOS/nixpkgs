@@ -11,6 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "10ndzkip8blgkw572n3dicl6mgjaa7kygwn3vls80liq92vf1sa9";
   };
 
+  patches = [
+    # usrsctp fails to build with clang 15+ due to set but unused variable and missing prototype
+    # errors. These issues are fixed in the master branch, but a new release with them has not
+    # been made. The following patch can be dropped once a release has been made.
+    ./clang-fix-build.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   # https://github.com/sctplab/usrsctp/issues/662

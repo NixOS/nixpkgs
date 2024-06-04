@@ -1,29 +1,35 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, pkg-config
-, glib
-, gnome
-, gnome-menus
-, substituteAll
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  gettext,
+  pkg-config,
+  libgtop,
+  glib,
+  gnome,
+  gnome-menus,
+  substituteAll,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extensions";
-  version = "43.1";
+  version = "46.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "rd4EvZRqExE1V+TDTIkLvpB3UFpqPwdV8XvqHG5KLRc=";
+    url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major finalAttrs.version}/gnome-shell-extensions-${finalAttrs.version}.tar.xz";
+    hash = "sha256-1ELp0mklEl/yFaXBNCkElWVTgHQdqvuzejqZ1vDH2G8=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix_gmenu.patch;
       gmenu_path = "${gnome-menus}/lib/girepository-1.0";
+    })
+    (substituteAll {
+      src = ./fix_gtop.patch;
+      gtop_path = "${libgtop}/lib/girepository-1.0";
     })
   ];
 
@@ -35,44 +41,42 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  mesonFlags = [
-    "-Dextension_set=all"
-  ];
+  mesonFlags = [ "-Dextension_set=all" ];
 
   preFixup = ''
-    # The meson build doesn't compile the schemas.
-    # Fixup adapted from export-zips.sh in the source.
+    # Since we do not install the schemas to central location,
+    # let’s link them to where extensions installed
+    # through the extension portal would look for them.
+    # Adapted from export-zips.sh in the source.
 
     extensiondir=$out/share/gnome-shell/extensions
     schemadir=${glib.makeSchemaPath "$out" "$name"}
 
-    glib-compile-schemas $schemadir
-
     for f in $extensiondir/*; do
-      name=`basename ''${f%%@*}`
-      uuid=$name@gnome-shell-extensions.gcampax.github.com
+      name=$(basename "''${f%%@*}")
       schema=$schemadir/org.gnome.shell.extensions.$name.gschema.xml
+      schemas_compiled=$schemadir/gschemas.compiled
 
-      if [ -f $schema ]; then
-        mkdir $f/schemas
-        ln -s $schema $f/schemas;
-        glib-compile-schemas $f/schemas
+      if [[ -f $schema ]]; then
+        mkdir "$f/schemas"
+        ln -s "$schema" "$f/schemas"
+        ln -s "$schemas_compiled" "$f/schemas"
       fi
     done
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "gnome-shell-extensions";
+      attrPath = "gnome.gnome-shell-extensions";
     };
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/GnomeShell/Extensions";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-shell-extensions";
     description = "Modify and extend GNOME Shell functionality and behavior";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
-}
+})

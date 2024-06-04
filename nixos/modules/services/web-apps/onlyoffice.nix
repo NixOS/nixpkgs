@@ -7,60 +7,55 @@ let
 in
 {
   options.services.onlyoffice = {
-    enable = mkEnableOption (lib.mdDoc "OnlyOffice DocumentServer");
+    enable = mkEnableOption "OnlyOffice DocumentServer";
 
-    enableExampleServer = mkEnableOption (lib.mdDoc "OnlyOffice example server");
+    enableExampleServer = mkEnableOption "OnlyOffice example server";
 
     hostname = mkOption {
       type = types.str;
       default = "localhost";
-      description = lib.mdDoc "FQDN for the onlyoffice instance.";
+      description = "FQDN for the onlyoffice instance.";
     };
 
     jwtSecretFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to a file that contains the secret to sign web requests using JSON Web Tokens.
         If left at the default value null signing is disabled.
       '';
     };
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.onlyoffice-documentserver;
-      defaultText = lib.literalExpression "pkgs.onlyoffice-documentserver";
-      description = lib.mdDoc "Which package to use for the OnlyOffice instance.";
-    };
+    package = mkPackageOption pkgs "onlyoffice-documentserver" { };
 
     port = mkOption {
       type = types.port;
       default = 8000;
-      description = lib.mdDoc "Port the OnlyOffice DocumentServer should listens on.";
+      description = "Port the OnlyOffice DocumentServer should listens on.";
     };
 
     examplePort = mkOption {
       type = types.port;
       default = null;
-      description = lib.mdDoc "Port the OnlyOffice Example server should listens on.";
+      description = "Port the OnlyOffice Example server should listens on.";
     };
 
     postgresHost = mkOption {
       type = types.str;
       default = "/run/postgresql";
-      description = lib.mdDoc "The Postgresql hostname or socket path OnlyOffice should connect to.";
+      description = "The Postgresql hostname or socket path OnlyOffice should connect to.";
     };
 
     postgresName = mkOption {
       type = types.str;
       default = "onlyoffice";
-      description = lib.mdDoc "The name of database OnlyOffice should user.";
+      description = "The name of database OnlyOffice should user.";
     };
 
     postgresPasswordFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to a file that contains the password OnlyOffice should use to connect to Postgresql.
         Unused when using socket authentication.
       '';
@@ -69,7 +64,7 @@ in
     postgresUser = mkOption {
       type = types.str;
       default = "onlyoffice";
-      description = lib.mdDoc ''
+      description = ''
         The username OnlyOffice should use to connect to Postgresql.
         Unused when using socket authentication.
       '';
@@ -78,7 +73,7 @@ in
     rabbitmqUrl = mkOption {
       type = types.str;
       default = "amqp://guest:guest@localhost:5672";
-      description = lib.mdDoc "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
+      description = "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
     };
   };
 
@@ -198,7 +193,7 @@ in
         ensureDatabases = [ "onlyoffice" ];
         ensureUsers = [{
           name = "onlyoffice";
-          ensurePermissions = { "DATABASE \"onlyoffice\"" = "ALL PRIVILEGES"; };
+          ensureDBOwnership = true;
         }];
       };
     };
@@ -228,6 +223,9 @@ in
             mkdir -p /run/onlyoffice/config/ /var/lib/onlyoffice/documentserver/sdkjs/{slide/themes,common}/ /var/lib/onlyoffice/documentserver/{fonts,server/FileConverter/bin}/
             cp -r ${cfg.package}/etc/onlyoffice/documentserver/* /run/onlyoffice/config/
             chmod u+w /run/onlyoffice/config/default.json
+
+            # Allow members of the onlyoffice group to serve files under /var/lib/onlyoffice/documentserver/App_Data
+            chmod g+x /var/lib/onlyoffice/documentserver
 
             cp /run/onlyoffice/config/default.json{,.orig}
 
@@ -267,7 +265,7 @@ in
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
             ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper DocService/docservice /run/onlyoffice/config";
-            ExecStartPre = onlyoffice-prestart;
+            ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";
             RuntimeDirectory = "onlyoffice";
@@ -284,6 +282,8 @@ in
         group = "onlyoffice";
         isSystemUser = true;
       };
+
+      nginx.extraGroups = [ "onlyoffice" ];
     };
 
     users.groups.onlyoffice = { };

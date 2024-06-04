@@ -1,32 +1,40 @@
-{ lib
-, pkgs
-, buildPythonPackage
-, fetchFromGitHub
-, pygame
-, python-i18n
-, pytestCheckHook
+{
+  lib,
+  pkgs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pygame-ce,
+  python-i18n,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "067";
+  version = "0610";
+  pyproject = true;
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "MyreMylar";
     repo = "pygame_gui";
     rev = "refs/tags/v_${version}";
-    sha256 = "sha256-ZBd9jq+20A8kxsvZxuCIfyzuZvk5/73vhh4xmExuwGQ=";
+    hash = "sha256-PVNi/I174AyEEjc+N2UGtgOYSGAgVQbqrKkWZnjOxFY=";
   };
 
-  propagatedBuildInputs = [ pygame python-i18n ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    pygame-ce
+    python-i18n
+  ];
 
   postPatch = ''
     substituteInPlace pygame_gui/core/utility.py \
-      --replace "xsel" "${pkgs.xsel}/bin/xsel"
+      --replace-fail "xsel" "${lib.getExe pkgs.xsel}"
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -46,14 +54,15 @@ buildPythonPackage rec {
     "test_process_event_text_ctrl_x"
   ];
 
-  disabledTestPaths = [
-    "tests/test_performance/test_text_performance.py"
-  ];
+  disabledTestPaths = [ "tests/test_performance/test_text_performance.py" ];
 
   meta = with lib; {
     description = "A GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [
+      emilytrau
+      pbsds
+    ];
   };
 }

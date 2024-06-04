@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=${placeholder "out"}"];
 
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
+
   meta = with lib; {
     description = "The advanced PC speaker beeper";
     homepage = "https://github.com/spkr-beep/beep";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
+    mainProgram = "beep";
   };
 }

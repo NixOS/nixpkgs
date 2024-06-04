@@ -12,6 +12,7 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.04";
+  duneVersion = "3";
 
   checkInputs = [ alcotest ];
 

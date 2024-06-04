@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     owner = "silwol";
     repo = "freenukum";
     rev = "v${version}";
-    sha256 = "sha256-Tk9n2gPwyPin6JZ4RSO8d/+xVpEz4rF8C2eGKwrAXU0=";
+    hash = "sha256-Tk9n2gPwyPin6JZ4RSO8d/+xVpEz4rF8C2eGKwrAXU0=";
   };
 
   cargoSha256 = "sha256-8RfiObWDqZJg+sjjDBk+sRoS5CiECIdNPH79T+O8e8M=";

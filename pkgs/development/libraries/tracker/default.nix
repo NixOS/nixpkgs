@@ -3,18 +3,21 @@
 , fetchurl
 , gettext
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , asciidoc
 , gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, vala
 , python3
-, docbook-xsl-nons
-, docbook_xml_dtd_45
+, gi-docgen
+, graphviz
 , libxml2
 , glib
 , wrapGAppsNoGuiHook
 , sqlite
-, libxslt
 , libstemmer
 , gnome
 , icu
@@ -22,25 +25,25 @@
 , libsoup
 , libsoup_3
 , json-glib
+, avahi
 , systemd
 , dbus
 , writeText
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tracker";
-  version = "3.4.2";
+  version = "3.7.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Tm3xQqT3BIePypjrtaIkdQ5epUaqKqq6pyanNUC9FzE=";
+    url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-qz1KUJN+BMXteEb227mZ4pCYGUAvOJylku5rd90o0fk=";
   };
 
-  postPatch = ''
-    patchShebangs utils/data-generators/cc/generate
-  '';
+  strictDeps = true;
 
   depsBuildBuild = [
     pkg-config
@@ -52,16 +55,19 @@ stdenv.mkDerivation rec {
     pkg-config
     asciidoc
     gettext
-    libxslt
+    glib
     wrapGAppsNoGuiHook
+    gi-docgen
+    graphviz
+    (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
-    docbook-xsl-nons
-    docbook_xml_dtd_45
-    (python3.pythonForBuild.withPackages (p: [ p.pygobject3 ]))
+    vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
-    gobject-introspection
     glib
     libxml2
     sqlite
@@ -70,14 +76,22 @@ stdenv.mkDerivation rec {
     libsoup_3
     libuuid
     json-glib
+    avahi
     libstemmer
     dbus
   ] ++ lib.optionals stdenv.isLinux [
     systemd
   ];
 
+  nativeCheckInputs = [
+    dbus
+  ];
+
   mesonFlags = [
     "-Ddocs=true"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "vapi" withIntrospection)
+    (lib.mesonBool "test_utils" withIntrospection)
   ] ++ (
     let
       # https://gitlab.gnome.org/GNOME/tracker/-/blob/master/meson.build#L159
@@ -93,7 +107,21 @@ stdenv.mkDerivation rec {
     "-Dsystemd_user_services=false"
   ];
 
-  doCheck = true;
+  doCheck =
+    # https://gitlab.gnome.org/GNOME/tracker/-/issues/402
+    !stdenv.isDarwin
+    # https://gitlab.gnome.org/GNOME/tracker/-/issues/398
+    && !stdenv.is32bit;
+
+  postPatch = ''
+    chmod +x \
+      docs/reference/libtracker-sparql/embed-files.py \
+      docs/reference/libtracker-sparql/generate-svgs.sh
+    patchShebangs \
+      utils/data-generators/cc/generate \
+      docs/reference/libtracker-sparql/embed-files.py \
+      docs/reference/libtracker-sparql/generate-svgs.sh
+  '';
 
   preCheck =
     let
@@ -130,17 +158,27 @@ stdenv.mkDerivation rec {
     rm -r $out/lib
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
+    };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/Tracker";
+    homepage = "https://tracker.gnome.org/";
     description = "Desktop-neutral user information store, search tool and indexer";
+    mainProgram = "tracker3";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    pkgConfigModules = [ "tracker-sparql-3.0" "tracker-testutils-3.0" ];
   };
-}
+})

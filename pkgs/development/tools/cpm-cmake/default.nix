@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cpm-cmake";
-  version = "0.36.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "cpm-cmake";
     repo = "cpm.cmake";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XI3yDBhmglQnIe/t6sfL9WxaclqtOgE1kDmocQL+xnA=";
+    hash = "sha256-cDFt+fDpb/gDlFx+3C5Hw/ybf4hdjZOrpeNR8yBwd1M=";
   };
 
   dontConfigure = true;
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       simple API and more.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ken-matsui ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 })

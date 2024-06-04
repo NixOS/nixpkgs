@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_cron";
-  version = "1.4.2";
+  version = "1.6.2";
 
   buildInputs = [ postgresql ];
 
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-P0Fd10Q1p+KrExb35G6otHpc6pD61WnMll45H2jkevM=";
+    hash   = "sha256-/dD1gX0+RRsBFIjSV9TVk+ppPw0Jrzssl+rRZ2qAp4w=";
   };
 
   installPhase = ''
     mkdir -p $out/{lib,share/postgresql/extension}
 
-    cp *.so      $out/lib
+    cp *${postgresql.dlSuffix} $out/lib
     cp *.sql     $out/share/postgresql/extension
     cp *.control $out/share/postgresql/extension
   '';

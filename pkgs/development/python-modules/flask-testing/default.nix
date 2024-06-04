@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, blinker
-, pytestCheckHook
-, buildPythonPackage
-, fetchPypi
-, flask
-, pythonOlder
+{
+  lib,
+  stdenv,
+  blinker,
+  pytestCheckHook,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,11 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-CnNNe2jmOpQQtBPNex+WRW+ahYvQmmIi1GVlDMeC6wE=";
   };
 
-  propagatedBuildInputs = [
-    flask
-  ];
+  propagatedBuildInputs = [ flask ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     blinker
     pytestCheckHook
   ];
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     "tests/test_twill.py"
   ];
 
-  pythonImportsCheck = [
-    "flask_testing"
-  ];
+  pythonImportsCheck = [ "flask_testing" ];
 
   meta = with lib; {
     description = "Extension provides unit testing utilities for Flask";

@@ -2,15 +2,16 @@
 
 buildGoModule rec {
   pname = "conform";
-  version = "0.1.0-alpha.26";
+  version = "0.1.0-alpha.29";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "conform";
     rev = "v${version}";
-    sha256 = "sha256-+VOwQE2uhoQ4sSXa/SVbyjLn9An08D4GQHxxDRRuXks=";
+    hash = "sha256-5knN+lTedUdgWG8rb3zuJAxx9N0lt7LjJvmSJhdTSgw=";
   };
-  vendorSha256 = "sha256-Oigt7tAK4jhBQtfG1wdLHqi11NWu6uJn5fmuqTmR76E=";
+
+  vendorHash = "sha256-hDdNYXy5NIrlqT6yyOglFg2v7HOM9nE+oh7mx2kLdnQ=";
 
   ldflags = [
     "-s"
@@ -18,12 +19,13 @@ buildGoModule rec {
     "-X github.com/siderolabs/conform/internal/version.Tag=v${version}"
   ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   meta = with lib; {
     description = "Policy enforcement for your pipelines";
     homepage = "https://github.com/siderolabs/conform";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jmgilman jk ];
+    mainProgram = "conform";
   };
 }

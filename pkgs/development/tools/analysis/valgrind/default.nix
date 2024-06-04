@@ -6,14 +6,20 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
-  version = "3.20.0";
+  version = "3.22.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-hTbAMdvgeNNC8SH6iBqezSBctaeOY5AFrVcAEb2588Y=";
+    hash = "sha256-yBHbWt0sX3KZRMr0fE56Zdyqu5Rh5HK1eHZd179tLUw=";
   };
 
   patches = [
+    # Fix build on ELFv2 powerpc64
+    # https://bugs.kde.org/show_bug.cgi?id=398883
+    (fetchurl {
+      url = "https://github.com/void-linux/void-packages/raw/3e16b4606235885463fc9ab45b4c120f1a51aa28/srcpkgs/valgrind/patches/elfv2-ppc64-be.patch";
+      sha256 = "NV/F+5aqFZz7+OF5oN5MUTpThv4H5PEY9sBgnnWohQY=";
+    })
     # Fix checks on Musl.
     # https://bugs.kde.org/show_bug.cgi?id=453929
     (fetchpatch {
@@ -52,7 +58,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = lib.optionalString stdenv.isFreeBSD ''
     substituteInPlace configure --replace '`uname -r`' \
-        ${toString stdenv.hostPlatform.parsed.kernel.version}.0
+        ${toString stdenv.hostPlatform.parsed.kernel.version}.0-
   '' + lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
@@ -125,6 +131,7 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; lib.intersectLists
       (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips)
       (darwin ++ freebsd ++ illumos ++ linux);
-    broken = stdenv.isDarwin || stdenv.hostPlatform.isStatic; # https://hydra.nixos.org/build/128521440/nixlog/2
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

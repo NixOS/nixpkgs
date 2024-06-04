@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ghex";
-  version = "43.0";
+  version = "46.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "hmwGIsZv21rSpHXpz8zLIZocZDHwCayyKR1D8hQLFH4=";
+    hash = "sha256-ocRvMCDLNYuDIwJds6U5yX2ZSkxG9wH0jtxjV/f7y9E=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     appstream-glib
     desktop-file-utils
   ];
@@ -77,8 +77,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Ghex";
+    homepage = "https://gitlab.gnome.org/GNOME/ghex";
     description = "Hex editor for GNOME desktop environment";
+    mainProgram = "ghex";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

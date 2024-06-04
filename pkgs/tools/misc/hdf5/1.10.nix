@@ -9,14 +9,14 @@
 , jdk
 }:
 
-let inherit (lib) optional optionals; in
+let inherit (lib) optional; in
 
 stdenv.mkDerivation rec {
-  version = "1.10.9";
+  version = "1.10.11";
   pname = "hdf5";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/${pname}-${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-AMS+cJbzb9yvpPl04SbGwUEkKOOOvHsYHZB0WeeB8ZE=";
+    sha256 = "sha256-Cvx32lxGIXcJR1u++8qRwMtvHqYozNjDYZbPbFpN4wQ=";
   };
 
   outputs = [ "out" "dev" ];

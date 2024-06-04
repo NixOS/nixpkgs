@@ -26,6 +26,12 @@ stdenv.mkDerivation rec {
     sha256 = "VySWVDV9PVGxQDFRaaJMBnHeeqUsb3XIxcmr1Ao1JSk=";
   };
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -47,7 +53,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
     "-Dsniffer=false"
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   # Bail out! GLib-GIO-FATAL-CRITICAL: g_inet_address_to_string: assertion 'G_IS_INET_ADDRESS (address)' failed

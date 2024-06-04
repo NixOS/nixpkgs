@@ -7,8 +7,9 @@
 , cinnamon-session
 , cinnamon-translations
 , cjs
-, clutter
+, evolution-data-server
 , fetchFromGitHub
+, fetchpatch
 , gdk-pixbuf
 , gettext
 , libgnomekbd
@@ -19,17 +20,17 @@
 , intltool
 , json-glib
 , callPackage
-, libsoup
 , libstartup_notification
 , libXtst
 , libXdamage
+, mesa
 , muffin
 , networkmanager
 , pkg-config
 , polkit
 , lib
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gtk-doc
 , gnome
@@ -52,57 +53,68 @@
 , perl
 }:
 
+let
+  pythonEnv = python3.withPackages (pp: with pp; [
+    dbus-python
+    setproctitle
+    pygobject3
+    pycairo
+    pp.xapp # don't omit `pp.`, see #213561
+    pillow
+    pyinotify # for looking-glass
+    pytz
+    tinycss2
+    python-pam
+    pexpect
+    distro
+    requests
+  ]);
+in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "5.6.7";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-oBD9jpZSOB7R3bbMv1qOQkkQyFTKkNnNagJ1INeA0s4=";
+    hash = "sha256-I0GJv2lcl5JlKPIiWoKMXTf4OLkznS5MpiOIvZ76bJQ=";
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
+
+    # Switch to GNOME Online Accounts GTK
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon/commit/d22f889c376734f0ca5d904885c2772e790fbadc.patch";
+      includes = [ "files/usr/share/cinnamon/cinnamon-settings/cinnamon-settings.py" ];
+      hash = "sha256-xutJqxtzk3/BUQGZY/tnBkRyAfZZY7AckaGC6b7Sfn8=";
+    })
   ];
 
   buildInputs = [
-    (python3.withPackages (pp: with pp; [
-      dbus-python
-      setproctitle
-      pygobject3
-      pycairo
-      python3.pkgs.xapp # The scope prefix is required
-      pillow
-      pytz
-      tinycss2
-      python-pam
-      pexpect
-      distro
-      requests
-    ]))
     atk
     cacert
     cinnamon-control-center
     cinnamon-desktop
     cinnamon-menus
     cjs
-    clutter
     dbus
+    evolution-data-server # for calendar-server
     gdk-pixbuf
     glib
     gsound
     gtk3
     json-glib
-    libsoup # referenced in js/ui/environment.js
     libstartup_notification
     libXtst
     libXdamage
+    mesa
     muffin
     networkmanager
     polkit
+    pythonEnv
     libxml2
     libgnomekbd
     gst_all_1.gstreamer
@@ -128,7 +140,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     gtk-doc
     perl
@@ -136,37 +148,46 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  # Use locales from cinnamon-translations.
-  # FIXME: Upstream does not respect localedir option from Meson currently.
-  # https://github.com/linuxmint/cinnamon/pull/11244#issuecomment-1305855783
-  postInstall = ''
-    ln -s ${cinnamon-translations}/share/locale $out/share/locale
-  '';
-
   postPatch = ''
     find . -type f -exec sed -i \
       -e s,/usr/share/cinnamon,$out/share/cinnamon,g \
       -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
       {} +
 
-    sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
+    # All optional and may introduce circular dependency.
+    find ./files/usr/share/cinnamon/applets -type f -exec sed -i \
+      -e '/^#/!s,/usr/bin,/run/current-system/sw/bin,g' \
+      {} +
 
-    sed "s|/usr/share/%s|/run/current-system/sw/share/%s|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_themes.py
+    pushd ./files/usr/share/cinnamon/cinnamon-settings
+      substituteInPlace ./bin/capi.py                     --replace '"/usr/lib"' '"${cinnamon-control-center}/lib"'
+      substituteInPlace ./bin/SettingsWidgets.py          --replace "/usr/share/sounds" "/run/current-system/sw/share/sounds"
+      substituteInPlace ./bin/Spices.py                   --replace "subprocess.run(['/usr/bin/" "subprocess.run(['" \
+                                                          --replace 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
+                                                          --replace "msgfmt" "${gettext}/bin/msgfmt"
+      substituteInPlace ./modules/cs_info.py              --replace "lspci" "${pciutils}/bin/lspci"
+      substituteInPlace ./modules/cs_themes.py            --replace "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
+    popd
 
-    sed "s|\"upload-system-info\"|\"${xapp}/bin/upload-system-info\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
-
-    sed "s|/usr/bin/cinnamon-screensaver-command|/run/current-system/sw/bin/cinnamon-screensaver-command|g" \
-      -i ./files/usr/share/cinnamon/applets/menu@cinnamon.org/applet.js -i ./files/usr/share/cinnamon/applets/user@cinnamon.org/applet.js
-
-    sed "s|\"/usr/lib\"|\"${cinnamon-control-center}/lib\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/capi.py
-
-    sed 's|"lspci"|"${pciutils}/bin/lspci"|g' -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
-
-    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-cinnamon  -i ./files/usr/bin/cinnamon-session-cinnamon2d
-
-    sed "s|msgfmt|${gettext}/bin/msgfmt|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/Spices.py
+    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d}
 
     patchShebangs src/data-to-c.pl
+  '';
+
+  postInstall = ''
+    # Use locales from cinnamon-translations.
+    ln -s ${cinnamon-translations}/share/locale $out/share/locale
+
+    # Do not install online accounts module, with a -Donlineaccounts=false c-c-c
+    # this just shows an empty page.
+    rm -f $out/share/cinnamon/cinnamon-settings/modules/cs_online_accounts.py
+
+    # g-o-a-gtk already provides its own desktop item.
+    rm -f $out/share/applications/cinnamon-settings-online-accounts.desktop
+
+    # Actually removes Adwaita and HighContrast from Cinnamon styles with mint-artwork 1.8.2.
+    # https://github.com/linuxmint/cinnamon/commit/13b1ad104e88197f6c4e2d02ab2674c07254b8e8
+    rm -r $out/share/cinnamon/styles.d
   '';
 
   preFixup = ''
@@ -175,13 +196,20 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
     )
 
+    buildPythonPath "$out ${python3.pkgs.xapp}"
+
+    # https://github.com/NixOS/nixpkgs/issues/200397
+    patchPythonScript $out/bin/cinnamon-spice-updater
+
     # https://github.com/NixOS/nixpkgs/issues/129946
-    buildPythonPath "${python3.pkgs.xapp}"
     patchPythonScript $out/share/cinnamon/cinnamon-desktop-editor/cinnamon-desktop-editor.py
+
+    # Called as `pkexec cinnamon-settings-users.py`.
+    wrapGApp $out/share/cinnamon/cinnamon-settings-users/cinnamon-settings-users.py
   '';
 
   passthru = {
-    providedSessions = [ "cinnamon" "cinnamon2d" ];
+    providedSessions = [ "cinnamon" "cinnamon2d" "cinnamon-wayland" ];
   };
 
   meta = with lib; {

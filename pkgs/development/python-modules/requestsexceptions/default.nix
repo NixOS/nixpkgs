@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pbr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+}:
 
 buildPythonPackage rec {
   pname = "requestsexceptions";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

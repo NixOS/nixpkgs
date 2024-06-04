@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "mubeng";
-  version = "0.12.0-dev";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "kitabisa";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NBZmu0VcVUhJSdM3fzZ+4Q5oX8uxO6GLpEUq74x8HUU=";
+    hash = "sha256-MdTgYhHjgDFplh+wcb9QTwzwMZSmF2kqMmu1x8WmOyQ=";
   };
 
-  vendorHash = "sha256-1JxyP6CrJ4/g7o3eGeN1kRXJU/jNLEB8fW1bjJytQqQ=";
+  vendorHash = "sha256-kOLeaEKtpI3l0qLphRTnm27Ms63ID4LJ6VkUHJzGAcc=";
 
   ldflags = [
     "-s"
@@ -28,5 +28,6 @@ buildGoModule rec {
     changelog = "https://github.com/kitabisa/mubeng/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "mubeng";
   };
 }

@@ -10,24 +10,17 @@
 , bash
 , kmod
 , binutils
-, busybox
 , bzip2
 , coreutils
 , cpio
 , findutils
-, glibc
 , gnugrep
 , gnused
 , gnutar
 , gzip
-, kbd
-, lvm2
 , lz4
 , lzop
-, procps
-, rng-tools
 , squashfsTools
-, systemd
 , util-linux
 , xz
 , zstd
@@ -68,31 +61,20 @@ stdenv.mkDerivation rec {
     echo 'DRACUT_VERSION=${version}' >dracut-version.sh
   '';
 
-  preConfigure = ''
-    patchShebangs ./configure
-  '';
-
   postFixup = ''
     wrapProgram $out/bin/dracut --prefix PATH : ${lib.makeBinPath [
       coreutils
       util-linux
-    ]} --prefix DRACUT_PATH : ${lib.makeBinPath [
+    ]} --suffix DRACUT_PATH : ${lib.makeBinPath [
       bash
       binutils
       coreutils
       findutils
-      glibc
       gnugrep
       gnused
       gnutar
-      kbd
-      lvm2
-      procps
-      rng-tools
-      squashfsTools
-      systemd
+      stdenv.cc.libc  # for ldd command
       util-linux
-      busybox
     ]}
     wrapProgram $out/bin/dracut-catimages --set PATH ${lib.makeBinPath [
       coreutils
@@ -119,7 +101,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    homepage = "https://dracut.wiki.kernel.org";
+    homepage = "https://github.com/dracutdevs/dracut/wiki";
     description = "An event driven initramfs infrastructure";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lilyinstarlight ];

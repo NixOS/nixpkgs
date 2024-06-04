@@ -1,10 +1,10 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "s4cmd";
   version = "2.1.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "0d4mx98i3qhvlmr9x898mjvf827smzx6x5ji6daiwgjdlxc60mj2";
   };

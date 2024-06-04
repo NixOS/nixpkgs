@@ -1,27 +1,28 @@
-{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests }:
+{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests, icu, fetchpatch2, config }:
 
 rec {
-  thunderbird = thunderbird-102;
+  thunderbird = thunderbird-115;
 
-  thunderbird-102 = (buildMozillaMach rec {
+  thunderbird-115 = (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "102.6.1";
+    version = "115.11.1";
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "06ea2fce76c08609d638435869fddc1c4d7f4b748951ebfb2476b4dba9f1f76d3de2c11e5f62540f297a5d30bb0fc637852d8e57f4fadc2c905f299757949d83";
+      sha512 = "1a1f438c7047908788bc983aa681c3293ce02da006477b491a49ced5941433ca3381e01f76afc6bb5572415025acfd0fa657f063ef26b3a63646594c27202717";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
-      ./no-buildconfig.patch
+      ./no-buildconfig-115.patch
     ];
 
     meta = with lib; {
       changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
       description = "A full-featured e-mail client";
       homepage = "https://thunderbird.net/";
+      mainProgram = "thunderbird";
       maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
       platforms = platforms.unix;
       badPlatforms = platforms.darwin;
@@ -31,12 +32,27 @@ rec {
     };
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbird-unwrapped";
-      versionPrefix = "102";
+      versionPrefix = "115";
     };
   }).override {
     geolocationSupport = false;
     webrtcSupport = false;
 
     pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
+
+    icu = icu.overrideAttrs (attrs: {
+      # standardize vtzone output
+      # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
+      patches = attrs.patches ++ [(fetchpatch2 {
+        url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
+        stripLen = 3;
+        hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
+      })];
+    });
   };
 }
+ // lib.optionalAttrs config.allowAliases {
+  thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
+}
+

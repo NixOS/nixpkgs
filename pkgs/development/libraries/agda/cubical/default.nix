@@ -2,16 +2,14 @@
 
 mkDerivation rec {
   pname = "cubical";
-  version = "0.4";
+  version = "0.7";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "agda";
     rev = "v${version}";
-    hash = "sha256-bnHz5uZXZnn1Zd36tq/veA4yT7dhJ1c+AYpgdDfSRzE=";
+    hash = "sha256-oLpKRWfQqb6CIscC2XM0ia9HJ8edJFHoPeql3kfvyrA=";
   };
-
-  LC_ALL = "C.UTF-8";
 
   # The cubical library has several `Everything.agda` files, which are
   # compiled through the make file they provide.
@@ -28,6 +26,6 @@ mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ alexarice ryanorendorff ncfavier ];
+    maintainers = with maintainers; [ alexarice ryanorendorff ncfavier phijor ];
   };
 }

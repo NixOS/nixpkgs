@@ -7,18 +7,20 @@
 
 stdenv.mkDerivation rec {
   pname = "catch2";
-  version = "3.2.1";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
     rev = "v${version}";
-    hash = "sha256-e5S3K0kYCB6nVZDi/DVKzMvrVk6IgXC2g7217sr8xUo=";
+    hash = "sha256-xGPfXjk+oOnR7JqTrZd2pKJxalrlS8CMs7HWDClXaS8=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
+
+  hardeningDisable = [ "trivialautovarinit" ];
 
   cmakeFlags = [
     "-DCATCH_DEVELOPMENT_BUILD=ON"
@@ -29,9 +31,17 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CTEST_ARGUMENTS=-E;ApprovalTests"
   ];
 
+  env = lib.optionalAttrs stdenv.isx86_32 {
+    # Tests fail on x86_32 if compiled with x87 floats: https://github.com/catchorg/Catch2/issues/2796
+    NIX_CFLAGS_COMPILE = "-msse2 -mfpmath=sse";
+  } // lib.optionalAttrs (stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isAarch32) {
+    # Build failure caused by -Werror: https://github.com/catchorg/Catch2/issues/2808
+    NIX_CFLAGS_COMPILE = "-Wno-error=cast-align";
+  };
+
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
   ];
 
@@ -41,6 +51,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/catchorg/Catch2/blob/${src.rev}/docs/release-notes.md";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ dotlambda ];
-    platforms = lib.platforms.unix;
+    platforms = with lib.platforms; unix ++ windows;
   };
 }

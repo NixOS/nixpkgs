@@ -1,52 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, matplotlib
-, palettable
-, pandas
-, pytestCheckHook
-, pythonOlder
-, scipy
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  matplotlib,
+  palettable,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "mizani";
-  version = "0.8.1";
-  format = "pyproject";
+  version = "0.11.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "has2k1";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VE0M5/s8/XmmAe8EE/FcHBFGc9ppVWuYOYMuajQeZww=";
+    repo = "mizani";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2XBvjlVSEjeNc7UlPZ00cNrWVuHh/FgDwkvWus7ndr4=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     palettable
     pandas
     scipy
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
-    substituteInPlace pytest.ini \
+    substituteInPlace pyproject.toml \
       --replace " --cov=mizani --cov-report=xml" ""
   '';
 
-  pythonImportsCheck = [
-    "mizani"
-  ];
+  pythonImportsCheck = [ "mizani" ];
 
   meta = with lib; {
     description = "Scales for Python";

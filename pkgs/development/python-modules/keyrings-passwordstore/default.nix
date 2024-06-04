@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-, keyring
-, setuptools-scm
+  keyring,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -14,25 +15,20 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pylZw45FUtLHzUV4cDyl/nT8tCZwNj4Jf41MMlyskoU=";
+    hash = "sha256-pylZw45FUtLHzUV4cDyl/nT8tCZwNj4Jf41MMlyskoU=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
-    keyring
-  ];
+  nativeCheckInputs = [ keyring ];
 
-  pythonImportsCheck = [
-    "keyrings.passwordstore.backend"
-  ];
+  pythonImportsCheck = [ "keyrings.passwordstore.backend" ];
 
   meta = {
     license = lib.licenses.mit;
     description = "Keyring backend for password-store";
     homepage = "https://github.com/stv0g/keyrings.passwordstore";
     maintainers = [ lib.maintainers.shlevy ];
+    broken = true; # https://github.com/stv0g/keyrings.passwordstore/issues/2
   };
 }

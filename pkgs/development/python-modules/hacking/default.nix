@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, flake8
-, stestr
-, ddt
-, testscenarios
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  flake8,
+  stestr,
+  ddt,
+  testscenarios,
 }:
 
 buildPythonPackage rec {
   pname = "hacking";
-  version = "5.0.0";
+  version = "6.1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qzWyCK8/FHpvlZUnMxw4gK5BrCHMzra/1oqE9OtW4CY=";
+    hash = "sha256-3lBqMSQDThi046acld5JjDRgvLxJwWQ9MXjRW8barBQ=";
   };
 
   postPatch = ''
@@ -27,11 +29,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [
-    flake8
-  ];
+  propagatedBuildInputs = [ flake8 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     stestr
     testscenarios

@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitHub
+, fetchFromGitLab
 , meson
 , ninja
 , pkg-config
@@ -10,22 +10,25 @@
 , glib
 , gobject-introspection
 , desktop-file-utils
+, appstream
 , appstream-glib
 , gtk4
 , librsvg
 , python3Packages
+, blueprint-compiler
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.3.1";
+  version = "0.6.1";
   format = "other";
 
-  src = fetchFromGitHub {
-    owner = "knuxify";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "World";
     repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-gN3V5ZHlhHp52Jg/i+hDLEDpSvP8yFngujyw5ZncQQg=";
+    rev = version;
+    hash = "sha256-CAJz9p1PJxq3VDxzZEHD860xINCQF722bPaf7psNztY=";
   };
 
   postPatch = ''
@@ -40,11 +43,13 @@ python3Packages.buildPythonApplication rec {
     ninja
     glib
     desktop-file-utils
+    appstream
     appstream-glib
     pkg-config
     gettext
     gobject-introspection
     wrapGAppsHook4
+    blueprint-compiler
   ] ++ lib.optional stdenv.isDarwin gtk4; # for gtk4-update-icon-cache
 
   buildInputs = [
@@ -54,11 +59,12 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     pygobject3
-    eyeD3
+    eyed3
     pillow
     mutagen
     pytaglib
     python-magic
+    pyacoustid
   ];
 
   dontWrapGApps = true;
@@ -67,12 +73,13 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/knuxify/eartag";
+    homepage = "https://gitlab.gnome.org/World/eartag";
     description = "Simple music tag editor";
     # This seems to be using ICU license but we're flagging it to MIT license
     # since ICU license is a modified version of MIT and to prevent it from
     # being incorrectly identified as unfree software.
     license = licenses.mit;
+    mainProgram = "eartag";
     maintainers = with maintainers; [ foo-dogsquared ];
   };
 }

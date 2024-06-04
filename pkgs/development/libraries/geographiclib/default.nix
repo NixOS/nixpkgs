@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "geographiclib";
-  version = "2.1.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "geographiclib";
     repo = "geographiclib";
     rev = "v${version}";
-    hash = "sha256-DVJi6EosJOPoVJEgZYsro5C/lrHrXEfbjLWiQVJk4+U=";
+    hash = "sha256-FVA2y1q0WjRSCltCN2qntWC//Zj94TXO/fTebFfQ9NY=";
   };
 
   nativeBuildInputs = [ cmake doxygen ];

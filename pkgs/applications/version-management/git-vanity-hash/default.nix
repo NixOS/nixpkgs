@@ -1,17 +1,22 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "git-vanity-hash";
-  version = "2020-02-26-unstable";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "prasmussen";
     repo = "git-vanity-hash";
-    rev = "000004122124005af8d118a3f379bfc6ecc1e7c7";
-    sha256 = "1wf342zawbphlzvji0yba0qg4f6v67h81nhxqcsir132jv397ma7";
+    # v1.0.0 + build fix
+    rev = "a80e7725ac6d0b7e6807cd7315cfdc7eaf0584f6";
+    hash = "sha256-1z4jbtzUB3SH79dDXAITf7Vup1YZdTLHBieSrhrvSXc=";
   };
 
-  cargoSha256 = "1frdw9bs7y6ch5rrbsgvhrs0wxw4hbwm2n3crslp12w55m7k39fc";
+  cargoHash = "sha256-+SQ0HpURBjnnwH1Ue7IUReOtI4LxVPK9AGSAihs0qsc=";
 
   postInstall = ''
     mkdir -p $out/share/doc/git-vanity-hash
@@ -23,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     description = "Tool for creating commit hashes with a specific prefix";
     license = [ licenses.mit ];
     maintainers = [ maintainers.kaction ];
+    mainProgram = "git-vanity-hash";
   };
 }

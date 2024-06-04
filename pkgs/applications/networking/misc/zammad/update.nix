@@ -3,6 +3,7 @@
 , makeWrapper
 , bundix
 , common-updater-scripts
+, xidel
 , jq
 , nix-prefetch-github
 , yarn
@@ -17,12 +18,13 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin/update.sh
     wrapProgram $out/bin/update.sh --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     bundix
     common-updater-scripts
+    xidel
     jq
     nix-prefetch-github
     yarn

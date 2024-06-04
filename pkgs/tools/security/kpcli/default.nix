@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  version = "3.8.1";
+  version = "4.1";
   pname = "kpcli";
 
   src = fetchurl {
     url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
-    sha256 = "sha256-bIT4Y5JFeZv5stXOKXxBtdTsB4n39fqeh2dVaBbqRyw=";
+    sha256 = "sha256-3t8OhvRPj3oanFJKRaUVhGlF0B4E+UAlcfGMIpcet9s=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "KeePass Command Line Interface";
+    mainProgram = "kpcli";
     longDescription = ''
       KeePass Command Line Interface (CLI) / interactive shell.
       Use this program to access and manage your KeePass 1.x or 2.x databases from a Unix-like command line.

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-reservations";
-  version = "2.1.0";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-CtTOw6cC9fkL+2XgfG/r/LXpzhQoYXLjrwlI6Q5XpP4=";
+    hash = "sha256-BHCFEFst5jfyIEo0hm86belpxW7EygZCBJ8PTqzqHKc=";
   };
 
   propagatedBuildInputs = [

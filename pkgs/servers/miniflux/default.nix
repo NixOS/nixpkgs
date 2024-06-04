@@ -1,29 +1,24 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
 
-let
+buildGoModule rec {
   pname = "miniflux";
-  version = "2.0.41";
-
-in buildGoModule {
-  inherit pname version;
+  version = "2.1.3";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "miniflux";
     repo = "v2";
-    rev = version;
-    sha256 = "sha256-NhxzpNtRzLE9bVWIGSHwnok7RjqRp8Uan9uCvdigAyk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Q43ru/n7cY1DIT/JJP1sTbnXcgtbIh16fTDL9eV0YDE=";
   };
 
-  vendorSha256 = "sha256-906gMXI6zEIIcXvT/ZqAM+5F0GVHbipUtdrPO6+32KQ=";
+  vendorHash = "sha256-WCb0DxicVuJDm52GidivQPZb09LvZqJmgR5BoK8iZ7s=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkPhase = ''
-    go test $(go list ./... | grep -v client)
-  ''; # skip client tests as they require network access
+  checkFlags = [ "-skip=TestClient" ]; # skip client tests as they require network access
 
   ldflags = [
-    "-s" "-w" "-X miniflux.app/version.Version=${version}"
+    "-s" "-w" "-X miniflux.app/v2/internal/version.Version=${version}"
   ];
 
   postInstall = ''
@@ -37,6 +32,7 @@ in buildGoModule {
     description = "Minimalist and opinionated feed reader";
     homepage = "https://miniflux.app/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvolosatovs benpye ];
+    maintainers = with maintainers; [ rvolosatovs benpye emilylange ];
+    mainProgram = "miniflux";
   };
 }

@@ -1,27 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, msgpack
-, pytestCheckHook
-, numpy
-, pandas
-, pydantic
-, pymongo
-, ruamel-yaml
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  msgpack,
+  numpy,
+  pandas,
+  pydantic,
+  pymongo,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  setuptools,
+  setuptools-scm,
+  torch,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2022.9.9";
-  disabled = pythonOlder "3.5"; # uses type annotations
+  version = "2024.5.24";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
-    repo = pname;
+    repo = "monty";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-7ToNiRSWxe9nNcaWWmS6bhVqWMEwXN4uiwtjAmuK5qw=";
+    hash = "sha256-c2RG38lsYWtwdCzrRTH/l9o4k6UPUOFC+wwV9zjoDvk=";
   };
 
   postPatch = ''
@@ -29,18 +35,34 @@ buildPythonPackage rec {
       --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
   '';
 
-  propagatedBuildInputs = [
-    ruamel-yaml
-    tqdm
-    msgpack
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  propagatedBuildInputs = [
+    msgpack
+    ruamel-yaml
+    tqdm
+  ];
+
+  nativeCheckInputs = [
     numpy
     pandas
     pydantic
     pymongo
+    pytestCheckHook
+    torch
+  ];
+
+  pythonImportsCheck = [ "monty" ];
+
+  disabledTests = [
+    # Test file was removed and re-added after 2022.9.9
+    "test_reverse_readfile_gz"
+    "test_Path_objects"
+    "test_zopen"
+    "test_zpath"
   ];
 
   meta = with lib; {
@@ -51,6 +73,7 @@ buildPythonPackage rec {
       patterns such as singleton and cached_class, and many more.
     ";
     homepage = "https://github.com/materialsvirtuallab/monty";
+    changelog = "https://github.com/materialsvirtuallab/monty/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

@@ -1,69 +1,67 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, atomicwrites
-, chardet
-, cloudpickle
-, cookiecutter
-, diff-match-patch
-, flake8
-, intervaltree
-, jedi
-, jellyfish
-, keyring
-, matplotlib
-, mccabe
-, nbconvert
-, numpy
-, numpydoc
-, psutil
-, pygments
-, pylint
-, pylint-venv
-, pyls-spyder
-, pyopengl
-, pyqtwebengine
-, python-lsp-black
-, python-lsp-server
-, pyxdg
-, pyzmq
-, pycodestyle
-, qdarkstyle
-, qstylizer
-, qtawesome
-, qtconsole
-, qtpy
-, rope
-, Rtree
-, scipy
-, spyder-kernels
-, textdistance
-, three-merge
-, watchdog
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  atomicwrites,
+  chardet,
+  cloudpickle,
+  cookiecutter,
+  diff-match-patch,
+  intervaltree,
+  jedi,
+  jellyfish,
+  keyring,
+  matplotlib,
+  nbconvert,
+  numpy,
+  numpydoc,
+  pickleshare,
+  psutil,
+  pygments,
+  pylint-venv,
+  pyls-spyder,
+  pyopengl,
+  pyqtwebengine,
+  python-lsp-black,
+  python-lsp-server,
+  pyxdg,
+  pyzmq,
+  qdarkstyle,
+  qstylizer,
+  qtawesome,
+  qtconsole,
+  qtpy,
+  rope,
+  rtree,
+  scipy,
+  setuptools,
+  spyder-kernels,
+  textdistance,
+  three-merge,
+  watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "5.4.1";
-  format = "setuptools";
+  version = "5.5.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kQBOYRXhjz+OQk7Vlxb/UKiDi92mA8ialsFQ+QzqhlE=";
+    hash = "sha256-UiIyoFREfd3gV0uhSgZ8TVFQiP3yprrBZDOm3+8Dge0=";
   };
 
-  patches = [
-    ./dont-clear-pythonpath.patch
-  ];
+  patches = [ ./dont-clear-pythonpath.patch ];
 
-  nativeBuildInputs = [
+  build-system = [
     pyqtwebengine.wrapQtAppsHook
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     atomicwrites
     chardet
     cloudpickle
@@ -77,6 +75,7 @@ buildPythonPackage rec {
     nbconvert
     numpy
     numpydoc
+    pickleshare
     psutil
     pygments
     pylint-venv
@@ -93,7 +92,7 @@ buildPythonPackage rec {
     qtconsole
     qtpy
     rope
-    Rtree
+    rtree
     scipy
     spyder-kernels
     textdistance
@@ -127,6 +126,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Scientific python development environment";
+    mainProgram = "spyder";
     longDescription = ''
       Spyder (previously known as Pydee) is a powerful interactive development
       environment for the Python language with advanced editing, interactive

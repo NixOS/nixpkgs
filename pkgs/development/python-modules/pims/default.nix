@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, imageio
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scikitimage
-, slicerator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  imageio,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-image,
+  slicerator,
 }:
 
 buildPythonPackage rec {
@@ -29,18 +30,16 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    scikitimage
+    scikit-image
   ];
 
-  pythonImportsCheck = [
-    "pims"
-  ];
+  pythonImportsCheck = [ "pims" ];
 
   pytestFlagsArray = [
     "-W"
-    "ignore::DeprecationWarning"
+    "ignore::Warning"
   ];
 
   disabledTests = [
@@ -48,10 +47,16 @@ buildPythonPackage rec {
     "TestVideo_ImageIO"
   ];
 
+  disabledTestPaths = [
+    # AssertionError: Tuples differ: (377, 505, 4) != (384, 512, 4)
+    "pims/tests/test_display.py"
+  ];
+
   meta = with lib; {
-    description = "Python Image Sequence: Load video and sequential images in many formats with a simple, consistent interface";
+    description = "Module to load video and sequential images in various formats";
     homepage = "https://github.com/soft-matter/pims";
+    changelog = "https://github.com/soft-matter/pims/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

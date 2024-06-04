@@ -1,45 +1,87 @@
-{ mkDerivation, lib, fetchurl, cmake, exiv2, graphicsmagick, libraw, fetchpatch
-, qtbase, qtdeclarative, qtmultimedia, qtquickcontrols, qttools, qtgraphicaleffects
-, extra-cmake-modules, poppler, kimageformats, libarchive}:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, extra-cmake-modules
+, qttools
+, wrapQtAppsHook
+, exiv2
+, graphicsmagick
+, libarchive
+, libraw
+, mpv
+, poppler
+, pugixml
+, qtbase
+, qtcharts
+, qtdeclarative
+, qtimageformats
+, qtlocation
+, qtmultimedia
+, qtpositioning
+, qtsvg
+, zxing-cpp
+, qtwayland
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "photoqt";
-  version = "1.7.1";
+  version = "4.5";
 
   src = fetchurl {
-    url = "https://${pname}.org/pkgs/${pname}-${version}.tar.gz";
-    sha256 = "1qvxdh3cbjcywqx0da2qp8z092660qyzv5yknqbps2zr12qqb103";
+    url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
+    hash = "sha256-QFziMNRhiM4LaNJ8RkJ0iCq/8J82wn0F594qJeSN3Lw=";
   };
 
-  patches = [
-    # Fixes build with exiv2 0.27.1
-    (fetchpatch {
-      url = "https://gitlab.com/luspi/photoqt/commit/c6fd41478e818f3a651d40f96cab3d790e1c09a4.patch";
-      sha256 = "1j2pdr7hm3js7lswhb4qkf9sj9viclhjqz50qxpyd7pqrl1gf2va";
-    })
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    qttools
+    wrapQtAppsHook
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules qttools ];
-
   buildInputs = [
-    qtbase qtquickcontrols exiv2 graphicsmagick poppler
-    qtmultimedia qtdeclarative libraw qtgraphicaleffects
-    kimageformats libarchive
+    exiv2
+    graphicsmagick
+    libarchive
+    libraw
+    mpv
+    poppler
+    pugixml
+    qtbase
+    qtcharts
+    qtdeclarative
+    qtimageformats
+    qtlocation
+    qtmultimedia
+    qtpositioning
+    qtsvg
+    zxing-cpp
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
   cmakeFlags = [
-    "-DFREEIMAGE=OFF"
-    "-DDEVIL=OFF"
+    (lib.cmakeBool "DEVIL" false)
+    (lib.cmakeBool "CHROMECAST" false)
+    (lib.cmakeBool "FREEIMAGE" false)
+    (lib.cmakeBool "IMAGEMAGICK" false)
   ];
 
-  preConfigure = ''
-    export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"
+  env.MAGICK_LOCATION = "${graphicsmagick}/include/GraphicsMagick";
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/photoqt.app $out/Applications
+    makeWrapper $out/{Applications/photoqt.app/Contents/MacOS,bin}/photoqt
   '';
 
   meta = {
-    homepage = "https://photoqt.org/";
     description = "Simple, yet powerful and good looking image viewer";
+    homepage = "https://photoqt.org/";
     license = lib.licenses.gpl2Plus;
+    mainProgram = "photoqt";
+    maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
   };
 }

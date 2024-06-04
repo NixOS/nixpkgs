@@ -16,16 +16,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "hepmc3";
-  version = "3.2.5";
+  version = "3.2.7";
 
   src = fetchurl {
     url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC3-${version}.tar.gz";
-    sha256 = "sha256-zQ91yA91VJxZzCqCns52Acd96Xyypat1eQysjh1YUDI=";
+    sha256 = "sha256-WH+qZVbMVMzYmtNUIUYbR2HXgJvBei5y9QNNrqFCIys=";
   };
 
   nativeBuildInputs = [
     cmake
-  ];
+  ]
+  ++ lib.optional withPython python.pkgs.pythonImportsCheckHook;
 
   buildInputs = [
     root_py
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DHEPMC3_CXX_STANDARD=17"
     "-DHEPMC3_ENABLE_PYTHON=${if withPython then "ON" else "OFF"}"
   ] ++ lib.optionals withPython [
     "-DHEPMC3_PYTHON_VERSIONS=${if python.isPy3k then "3.X" else "2.X"}"
@@ -50,14 +52,11 @@ stdenv.mkDerivation rec {
       --replace 'readlink' '${coreutils}/bin/readlink'
   '';
 
-  doInstallCheck = withPython;
-  # prevent nix from trying to dereference a null python
-  installCheckPhase = lib.optionalString withPython ''
-    PYTHONPATH=${placeholder "out"}/${python.sitePackages} python -c 'import pyHepMC3'
-  '';
+  pythonImportsCheck = [ "pyHepMC3" ];
 
   meta = with lib; {
     description = "The HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo generators and simulation";
+    mainProgram = "HepMC3-config";
     license = licenses.gpl3;
     homepage = "http://hepmc.web.cern.ch/hepmc/";
     platforms = platforms.unix;

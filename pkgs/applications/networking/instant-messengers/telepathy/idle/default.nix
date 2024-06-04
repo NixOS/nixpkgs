@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "IRC connection manager for the Telepathy framework";
-    license = lib.licenses.lgpl21;
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;
+    homepage = "https://telepathy.freedesktop.org/components/telepathy-idle/";
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
 }

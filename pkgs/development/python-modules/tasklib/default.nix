@@ -1,18 +1,21 @@
-{ lib
-, pythonPackages
-, taskwarrior
-, writeShellScriptBin
+{
+  lib,
+  pythonPackages,
+  fetchPypi,
+  taskwarrior,
+  writeShellScriptBin,
 }:
 
 with pythonPackages;
 
 let
 
-wsl_stub = writeShellScriptBin "wsl" "true";
-
-in buildPythonPackage rec {
+  wsl_stub = writeShellScriptBin "wsl" "true";
+in
+buildPythonPackage rec {
   pname = "tasklib";
   version = "2.5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,7 +28,7 @@ in buildPythonPackage rec {
     tzlocal
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     taskwarrior
     wsl_stub
   ];

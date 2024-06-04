@@ -6,14 +6,15 @@
 , zbar
 , secp256k1
 , enableQt ? true
+, qtwayland
 }:
 
 let
-  version = "4.3.1";
+  version = "4.5.4";
 
   libsecp256k1_name =
-    if stdenv.isLinux then "libsecp256k1.so.0"
-    else if stdenv.isDarwin then "libsecp256k1.0.dylib"
+    if stdenv.isLinux then "libsecp256k1.so.{v}"
+    else if stdenv.isDarwin then "libsecp256k1.{v}.dylib"
     else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
@@ -31,10 +32,11 @@ python3.pkgs.buildPythonApplication {
     owner = "Groestlcoin";
     repo = "electrum-grs";
     rev = "refs/tags/v${version}";
-    sha256 = "1h9r32wdn0p7br36r719x96c8gay83dijw80y2ks951mam16mkkb";
+    sha256 = "1k078jg3bw4n3kcxy917m30x1skxm679w8hcw8mlxb94ikrjc66h";
   };
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
+  buildInputs = lib.optional (stdenv.isLinux && enableQt) qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -44,7 +46,7 @@ python3.pkgs.buildPythonApplication {
     bitstring
     cryptography
     dnspython
-    groestlcoin_hash
+    groestlcoin-hash
     jsonrpclib-pelix
     matplotlib
     pbkdf2
@@ -53,20 +55,30 @@ python3.pkgs.buildPythonApplication {
     qrcode
     requests
     tlslite-ng
+    certifi
+    jsonpatch
     # plugins
-    btchip
+    btchip-python
+    ledger-bitcoin
     ckcc-protocol
     keepkey
     trezor
+    bitbox02
+    cbor
+    pyserial
   ] ++ lib.optionals enableQt [
     pyqt5
     qdarkstyle
   ];
 
+  checkInputs = with python3.pkgs; lib.optionals enableQt [
+    pyqt6
+  ];
+
   postPatch = ''
     # make compatible with protobuf4 by easing dependencies ...
     substituteInPlace ./contrib/requirements/requirements.txt \
-      --replace "protobuf>=3.12,<4" "protobuf>=3.12"
+      --replace "protobuf>=3.20,<4" "protobuf>=3.20"
     # ... and regenerating the paymentrequest_pb2.py file
     protoc --python_out=. electrum_grs/paymentrequest.proto
 
@@ -111,5 +123,6 @@ python3.pkgs.buildPythonApplication {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ gruve-p ];
+    mainProgram = "electrum-grs";
   };
 }

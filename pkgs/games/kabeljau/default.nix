@@ -33,6 +33,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "Survive as a stray cat in an ncurses game";
+    mainProgram = "kabeljau";
     homepage = "https://codeberg.org/annaaurora/kabeljau";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ annaaurora ];

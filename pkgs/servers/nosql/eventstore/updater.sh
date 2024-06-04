@@ -6,8 +6,6 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-deps_file="$(realpath "./deps.nix")"
-
 new_version="$(curl -s "https://api.github.com/repos/EventStore/EventStore/releases/latest" | jq -r '.name')"
 new_version="${new_version#oss-v}"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
@@ -20,4 +18,4 @@ fi
 cd ../../../..
 update-source-version eventstore "${new_version//v}"
 
-$(nix-build -A eventstore.fetch-deps --no-out-link) "$deps_file"
+$(nix-build -A eventstore.fetch-deps --no-out-link)

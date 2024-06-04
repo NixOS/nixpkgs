@@ -45,9 +45,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           regular2 = foreground;
         };
       };
+
+      etc."gpg-agent.conf".text = ''
+        pinentry-timeout 86400
+      '';
     };
 
-    fonts.fonts = [ pkgs.inconsolata ];
+    fonts.packages = [ pkgs.inconsolata ];
 
     # Automatically configure and start Sway when logging in on tty1:
     programs.bash.loginShellInit = ''
@@ -71,16 +75,53 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
   };
 
-  enableOCR = true;
-
   testScript = { nodes, ... }: ''
     import shlex
+    import json
 
-    def swaymsg(command: str, succeed=True):
-        with machine.nested(f"sending swaymsg {command!r}" + " (allowed to fail)" * (not succeed)):
-          (machine.succeed if succeed else machine.execute)(
-            f"su - alice -c {shlex.quote('swaymsg -- ' + command)}"
-          )
+    q = shlex.quote
+    NODE_GROUPS = ["nodes", "floating_nodes"]
+
+
+    def swaymsg(command: str = "", succeed=True, type="command"):
+        assert command != "" or type != "command", "Must specify command or type"
+        shell = q(f"swaymsg -t {q(type)} -- {q(command)}")
+        with machine.nested(
+            f"sending swaymsg {shell!r}" + " (allowed to fail)" * (not succeed)
+        ):
+            ret = (machine.succeed if succeed else machine.execute)(
+                f"su - alice -c {shell}"
+            )
+
+        # execute also returns a status code, but disregard.
+        if not succeed:
+            _, ret = ret
+
+        if not succeed and not ret:
+            return None
+
+        parsed = json.loads(ret)
+        return parsed
+
+
+    def walk(tree):
+        yield tree
+        for group in NODE_GROUPS:
+            for node in tree.get(group, []):
+                yield from walk(node)
+
+
+    def wait_for_window(pattern):
+        def func(last_chance):
+            nodes = (node["name"] for node in walk(swaymsg(type="get_tree")))
+
+            if last_chance:
+                nodes = list(nodes)
+                machine.log(f"Last call! Current list of windows: {nodes}")
+
+            return any(pattern in name for name in nodes)
+
+        retry(func)
 
     start_all()
     machine.wait_for_unit("multi-user.target")
@@ -93,8 +134,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.wait_for_file("/tmp/sway-ipc.sock")
 
     # Test XWayland (foot does not support X):
-    swaymsg("exec WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY=invalid alacritty")
-    machine.wait_for_text("alice@machine")
+    swaymsg("exec WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY= alacritty")
+    wait_for_window("alice@machine")
     machine.send_chars("test-x11\n")
     machine.wait_for_file("/tmp/test-x11-exit-ok")
     print(machine.succeed("cat /tmp/test-x11.out"))
@@ -106,7 +147,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.send_key("alt-3")
     machine.sleep(3)
     machine.send_key("alt-ret")
-    machine.wait_for_text("alice@machine")
+    wait_for_window("alice@machine")
     machine.send_chars("test-wayland\n")
     machine.wait_for_file("/tmp/test-wayland-exit-ok")
     print(machine.succeed("cat /tmp/test-wayland.out"))
@@ -117,16 +158,24 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     # Test gpg-agent starting pinentry-gnome3 via D-Bus (tests if
     # $WAYLAND_DISPLAY is correctly imported into the D-Bus user env):
-    swaymsg("exec gpg --no-tty --yes --quick-generate-key test")
+    swaymsg("exec mkdir -p ~/.gnupg")
+    swaymsg("exec cp /etc/gpg-agent.conf ~/.gnupg")
+
+    swaymsg("exec DISPLAY=INVALID gpg --no-tty --yes --quick-generate-key test", succeed=False)
     machine.wait_until_succeeds("pgrep --exact gpg")
-    machine.wait_for_text("Passphrase")
+    wait_for_window("gpg")
+    machine.succeed("pgrep --exact gpg")
     machine.screenshot("gpg_pinentry")
     machine.send_key("alt-shift-q")
     machine.wait_until_fails("pgrep --exact gpg")
 
     # Test swaynag:
+    def get_height():
+        return [node['rect']['height'] for node in walk(swaymsg(type="get_tree")) if node['focused']][0]
+
+    before = get_height()
     machine.send_key("alt-shift-e")
-    machine.wait_for_text("You pressed the exit shortcut.")
+    retry(lambda _: get_height() < before)
     machine.screenshot("sway_exit")
 
     swaymsg("exec swaylock")

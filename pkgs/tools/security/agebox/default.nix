@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "agebox";
@@ -8,12 +8,23 @@ buildGoModule rec {
     owner = "slok";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gi6lj3dpckhsx6hdpdnr8rclqgfkbdmkzx966nlxyi52bjfzbsv";
+    hash = "sha256-W6/v5BIl+k6tMan/Wdua7mHKMsq23QZN13Cy24akJr4=";
   };
-  vendorSha256 = "1jwzx6hp04y8hfpwfvf9zmhqjj3ghvr3gmgnllpcff1lai78vdrw";
+
+  patches = [
+    # Update gopkg.in/yaml.v2 to v2.2.8 to fix vulnerabilities.
+    # https://github.com/slok/agebox/pull/199
+    (fetchpatch {
+      url = "https://github.com/slok/agebox/commit/40a515d39911f601ebe05cc914e8a02695d85dc7.patch";
+      hash = "sha256-0iBI0nID12OoWqWY/8MPb3vvTUDe0JdSHu2vefix/bM=";
+    })
+  ];
+
+  vendorHash = "sha256-MNAF2ExIOYPzXyGR6H7lfUEhnMDCyD7ecst5MKm7u+A=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.Version=${version}"
   ];
 
@@ -23,5 +34,6 @@ buildGoModule rec {
     description = "Age based repository file encryption gitops tool";
     license = licenses.asl20;
     maintainers = with maintainers; [ lesuisse ];
+    mainProgram = "agebox";
   };
 }

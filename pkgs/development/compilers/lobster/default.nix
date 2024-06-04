@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, unstableGitUpdater
 , cmake
 , callPackage
 
@@ -9,7 +8,7 @@
 , xorg
 
 # Darwin deps
-, cf-private
+, CoreFoundation
 , Cocoa
 , AudioToolbox
 , OpenGL
@@ -17,21 +16,21 @@
 , ForceFeedback
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2021.3";
+  version = "2024.0";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
-    rev = "v${version}";
-    sha256 = "sha256-ENs2Jy2l6fogZdCSaIyfV9wQm57qaZfx5HVHOnQBrRk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-EBgb442wI9qU/o6EVCwPnMtPuv1f6Xk2+CZpKWXf3tY=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = if stdenv.isDarwin
     then [
-      cf-private
+      CoreFoundation
       Cocoa
       AudioToolbox
       OpenGL
@@ -54,6 +53,7 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin;
     homepage = "https://strlen.com/lobster/";
     description = "The Lobster programming language";
+    mainProgram = "lobster";
     longDescription = ''
       Lobster is a programming language that tries to combine the advantages of
       very static typing and memory management with a very lightweight,
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

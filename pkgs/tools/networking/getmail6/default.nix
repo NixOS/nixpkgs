@@ -5,14 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "getmail6";
-  version = "6.18.11";
+  version = "6.18.14";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "getmail6";
+    repo = "getmail6";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EJ1lnSeawWezOYZxAHx3QX9kWGoayWZ2vkFY21l+Ijc=";
+    hash = "sha256-NcUGIddbIjwMyE/6fR8lqs90/chzqROQDftF/cNkxOs=";
   };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+  ];
 
   # needs a Docker setup
   doCheck = false;

@@ -1,33 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pdm-pep517
-, flask
-, mock
-, sqlalchemy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  mock,
+  flit-core,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-SQLAlchemy";
-  version = "3.0.2";
+  pname = "flask-sqlalchemy";
+  version = "3.1.1";
   format = "pyproject";
 
+  disabled = pythonOlder "3.9";
+
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FhmfWz3ftp4N8vUq5Mdq7b/sgjRiNJ2rshobLgorZek=";
+    pname = "flask_sqlalchemy";
+    inherit version;
+    hash = "sha256-5LaLuIGALdoafYeLL8hMBtHuV/tAuHTT3Jfav6NrgxI=";
   };
 
-  nativeBuildInputs = [
-    pdm-pep517
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     flask
     sqlalchemy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
@@ -39,9 +43,18 @@ buildPythonPackage rec {
     "test_persist_selectable"
   ];
 
+  pytestFlagsArray = lib.optionals (pythonAtLeast "3.12") [
+    # datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version.
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  pythonImportsCheck = [ "flask_sqlalchemy" ];
+
   meta = with lib; {
     description = "SQLAlchemy extension for Flask";
     homepage = "http://flask-sqlalchemy.pocoo.org/";
+    changelog = "https://github.com/pallets-eco/flask-sqlalchemy/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
   };

@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "cmroche";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PgFsXmdAmHXK0wZ6xLTu94RdME1L2H1Mb6V+qFlGXSk=";
+    hash = "sha256-PgFsXmdAmHXK0wZ6xLTu94RdME1L2H1Mb6V+qFlGXSk=";
   };
 
   postPatch = ''
@@ -27,18 +28,14 @@ buildPythonPackage rec {
       --replace 'name="moonraker-api",' 'name="moonraker-api",version="${version}",'
   '';
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "moonraker_api"
-  ];
+  pythonImportsCheck = [ "moonraker_api" ];
 
   meta = with lib; {
     description = "Python API for the Moonraker API";

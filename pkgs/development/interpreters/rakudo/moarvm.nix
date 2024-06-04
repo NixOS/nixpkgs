@@ -1,7 +1,6 @@
 { lib
 , stdenv
-, fetchurl
-, fetchpatch
+, fetchFromGitHub
 , perl
 , CoreServices
 , ApplicationServices
@@ -9,22 +8,15 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2022.07";
+  version = "2024.01";
 
-  src = fetchurl {
-    url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
-    hash = "sha256-M37wTRb4JvmUZcZTuSAGAo/iIL5o09z9BylhL09rW0Y=";
+  src = fetchFromGitHub {
+    owner = "moarvm";
+    repo = "moarvm";
+    rev = version;
+    hash = "sha256-vU1fhR6pKz2qnznrJ/mknt9DVx+I1kLaPStXKQvp59g=";
+    fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch {
-      name = "mimalloc-older-macos-fixes.patch";
-      url = "https://github.com/microsoft/mimalloc/commit/40e0507a5959ee218f308d33aec212c3ebeef3bb.patch";
-      stripLen = 1;
-      extraPrefix = "3rdparty/mimalloc/";
-      sha256 = "1gcbn1850vy7xzalhn9ffnsg6x1ywi3fmnxvnal3m6lmb4kz5kb1";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
@@ -34,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace '/usr/bin/arch' "$(type -P true)" \
       --replace '/usr/' '/nope/'
     substituteInPlace 3rdparty/dyncall/configure \
-      --replace '`sw_vers -productVersion`' '"$MACOSX_DEPLOYMENT_TARGET"'
+      --replace '`sw_vers -productVersion`' '"11.0"'
   '';
 
   buildInputs = [ perl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];

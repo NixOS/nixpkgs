@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pkg-config
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  pkg-config,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +25,7 @@ buildPythonPackage rec {
     owner = "matze";
     repo = "pkgconfig";
     rev = "v${version}";
-    sha256 = "sha256-uuLUGRNLCR3NS9g6OPCI+qG7tPWsLhI3OE5WmSI3vm8=";
+    hash = "sha256-uuLUGRNLCR3NS9g6OPCI+qG7tPWsLhI3OE5WmSI3vm8=";
   };
 
   postPatch = ''
@@ -37,7 +39,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [ pytestCheckHook ];
+  # ModuleNotFoundError: No module named 'distutils'
+  # https://github.com/matze/pkgconfig/issues/64
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pkgconfig" ];
 
@@ -45,6 +51,6 @@ buildPythonPackage rec {
     description = "Interface Python with pkg-config";
     homepage = "https://github.com/matze/pkgconfig";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

@@ -9,8 +9,9 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
+, glib-networking
 , gtk3
 , json-glib
 , libappindicator
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "meteo";
-  version = "0.9.9.1";
+  version = "0.9.9.3";
 
   src = fetchFromGitLab {
     owner = "bitseater";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kkUVTxh5svk61oDp/dpe3ILGyexYe3UaS+LgWsy+Z9s=";
+    sha256 = "sha256-hubKusrs0Hh8RryoEI29pnhTSNsIbtGMltlH4qoM6gE=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +38,12 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     glib
+    glib-networking # see #311066
     gtk3
     json-glib
     libappindicator

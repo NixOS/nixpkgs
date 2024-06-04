@@ -23,7 +23,7 @@ pkgs.releaseTools.makeSourceTarball {
     cp -prd . ../$releaseName
     chmod -R u+w ../$releaseName
     ln -s . ../$releaseName/nixpkgs # hack to make ‘<nixpkgs>’ work
-    NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
+    NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --show-trace --xml \* > /dev/null
     cd ..
     chmod -R u+w $releaseName
     tar cfJ $out/tarballs/$releaseName.tar.xz $releaseName

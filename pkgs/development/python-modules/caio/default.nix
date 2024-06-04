@@ -1,33 +1,42 @@
-{ lib
-, aiomisc
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  aiomisc,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "caio";
-  version = "0.9.11";
-  format = "setuptools";
+  version = "0.9.17";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mosquito";
-    repo = pname;
+    repo = "caio";
     rev = "refs/tags/${version}";
-    hash = "sha256-BFlpjbC2yxwGtCAMfn1VM5zmioyN5fFNMJDDWceB+LE=";
+    hash = "sha256-aTJ02dCLb3CsT6KmJxkmOzwtg5nuXeBwz+mT7ZTTU9o=";
   };
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
     aiomisc
+    pytest-aiohttp
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "caio"
-  ];
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [ "-Wno-error=implicit-function-declaration" ]
+  );
+
+  pythonImportsCheck = [ "caio" ];
 
   meta = with lib; {
     description = "File operations with asyncio support";

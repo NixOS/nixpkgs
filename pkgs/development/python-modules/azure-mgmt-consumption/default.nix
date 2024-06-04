@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-consumption";
   version = "10.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-BqCGQ2wXN/d6uGiU1R9Zc7bg+l7fVlWOTCllieurkTA=";
+    hash = "sha256-BqCGQ2wXN/d6uGiU1R9Zc7bg+l7fVlWOTCllieurkTA=";
   };
 
   propagatedBuildInputs = [

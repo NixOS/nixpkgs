@@ -1,18 +1,22 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pythonAtLeast
-, pythonOlder
-, python
-, substituteAll
-, importlib-resources
-, tzdata
-, hypothesis
-, pytestCheckHook
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  pythonOlder,
+  python,
+  substituteAll,
+  importlib-resources,
+  tzdata,
+  hypothesis,
+  pytestCheckHook,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "backports-zoneinfo";
   version = "0.2.1";
+  format = "setuptools";
 
   disabled = pythonAtLeast "3.9";
 
@@ -20,7 +24,7 @@ buildPythonPackage rec {
     owner = "pganssle";
     repo = "zoneinfo";
     rev = version;
-    sha256 = "sha256-00xdDOVdDanfsjQTd3yjMN2RFGel4cWRrAA3CvSnl24=";
+    hash = "sha256-00xdDOVdDanfsjQTd3yjMN2RFGel4cWRrAA3CvSnl24=";
   };
 
   # Make sure test data update patch applies
@@ -45,19 +49,15 @@ buildPythonPackage rec {
     (substituteAll {
       name = "zoneinfo-path";
       src = ./zoneinfo.patch;
-      zoneinfo = "${tzdata}/lib/${python.libPrefix}/site-packages/tzdata/zoneinfo";
+      zoneinfo = "${tzdata}/${python.sitePackages}/tzdata/zoneinfo";
     })
   ];
 
-  propagatedBuildInputs = [
-    tzdata
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-resources
-  ];
+  propagatedBuildInputs = [ tzdata ] ++ lib.optionals (pythonOlder "3.7") [ importlib-resources ];
 
   pythonImportsCheck = [ "backports.zoneinfo" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];

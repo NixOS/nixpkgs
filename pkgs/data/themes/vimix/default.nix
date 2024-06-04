@@ -17,20 +17,20 @@ let
   pname = "vimix-gtk-themes";
 
 in
-lib.checkListOfEnum "${pname}: theme variants" [ "doder" "beryl" "ruby" "amethyst" "grey" ] themeVariants
+lib.checkListOfEnum "${pname}: theme variants" [ "doder" "beryl" "ruby" "amethyst" "jade" "grey" "all" ] themeVariants
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
-lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
+lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" "all" ] sizeVariants
 lib.checkListOfEnum "${pname}: tweaks" [ "flat" "grey" "mix" "translucent" ] tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-10-30";
+  version = "2024-04-20";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "QGKh2Md25VNVqy58w/LBzNnEM+g4gBMUjj0W0IuVZ1U=";
+    sha256 = "RbAdoix+UWKiLB+04YiPa0UwzO1fFLy56IG1MipmE+E=";
   };
 
   nativeBuildInputs = [

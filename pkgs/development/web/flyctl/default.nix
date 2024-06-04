@@ -1,29 +1,30 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, flyctl, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, testers, flyctl, installShellFiles, gitUpdater }:
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.0.450";
+  version = "0.2.58";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    sha256 = "sha256-UfqjrWzpi1axud4MkrJxIwq1vzqHZ0qAvI1kNh/tywY=";
+    hash = "sha256-aXiBDPl/x/xeu+fNrxs+JejVtSZu8KZKbrSetJj4/Pk=";
   };
 
-  vendorHash = "sha256-ljyaF6Yz3bz5vjwZfDgYBb3o2l90YnV5DgolaDH3B9o=";
+  vendorHash = "sha256-NmogEh3xWQ/opMm9UarpfuH3MJzJ9+qb0KX/O+i/pcA=";
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s" "-w"
-    "-X github.com/superfly/flyctl/internal/buildinfo.commit=${src.rev}"
     "-X github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z"
-    "-X github.com/superfly/flyctl/internal/buildinfo.environment=production"
-    "-X github.com/superfly/flyctl/internal/buildinfo.version=${version}"
+    "-X github.com/superfly/flyctl/internal/buildinfo.buildVersion=${version}"
   ];
+  tags = ["production"];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  patches = [ ./disable-auto-update.patch ];
 
   preBuild = ''
     go generate ./...
@@ -33,8 +34,15 @@ buildGoModule rec {
     HOME=$(mktemp -d)
   '';
 
-  postCheck = ''
-    go test ./... -ldflags="-X 'github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z'"
+  # We override checkPhase to be able to test ./... while using subPackages
+  checkPhase = ''
+    runHook preCheck
+    # We do not set trimpath for tests, in case they reference test assets
+    export GOFLAGS=''${GOFLAGS//-trimpath/}
+
+    buildGoDir test ./...
+
+    runHook postCheck
   '';
 
   postInstall = ''
@@ -45,17 +53,26 @@ buildGoModule rec {
     ln -s $out/bin/flyctl $out/bin/fly
   '';
 
+  # Upstream tags every PR merged with release tags like
+  # v2024.5.20-pr3545.4. We ignore all revisions containing a '-'
+  # to skip these releases.
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "-";
+  };
+
   passthru.tests.version = testers.testVersion {
     package = flyctl;
     command = "HOME=$(mktemp -d) flyctl version";
     version = "v${flyctl.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line tools for fly.io services";
     downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjanse jsierles techknowlogick viraptor ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ adtya jsierles techknowlogick RaghavSood teutat3s ];
+    mainProgram = "flyctl";
   };
 }

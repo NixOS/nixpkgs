@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, python
-, nose
-, mock
-, requests
-, httpretty
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  python,
+  nose,
+  mock,
+  requests,
+  httpretty,
 }:
 
 buildPythonPackage rec {
   pname = "boto";
   version = "2.49.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,6 +24,9 @@ buildPythonPackage rec {
     # fixes hmac tests
     # https://sources.debian.org/src/python-boto/2.49.0-4/debian/patches/bug-953970_python3.8-compat.patch/
     ./bug-953970_python3.8-compat.patch
+    # fixes test_startElement_with_name_tagSet_calls_ResultSet
+    # https://sources.debian.org/src/python-boto/2.49.0-4.1/debian/patches/0005-Don-t-mock-list-subclass.patch/
+    ./0005-Don-t-mock-list-subclass.patch
   ];
 
   # boto is deprecated by upstream as of 2021-05-27 (https://github.com/boto/boto/commit/4980ac58764c3d401cb0b9552101f9c61c18f445)
@@ -36,8 +41,14 @@ buildPythonPackage rec {
     ${python.interpreter} tests/test.py default
   '';
 
-  checkInputs = [ nose mock ];
-  propagatedBuildInputs = [ requests httpretty ];
+  nativeCheckInputs = [
+    nose
+    mock
+  ];
+  propagatedBuildInputs = [
+    requests
+    httpretty
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/boto/boto";
@@ -48,6 +59,6 @@ buildPythonPackage rec {
       future infrastructural services offered by Amazon Web
       Services.  This includes S3, SQS, EC2, among others.
     '';
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

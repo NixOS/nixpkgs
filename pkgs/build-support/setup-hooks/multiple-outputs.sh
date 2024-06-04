@@ -4,16 +4,33 @@ preFixupHooks+=(_multioutDocs)
 preFixupHooks+=(_multioutDevs)
 postFixupHooks+=(_multioutPropagateDev)
 
-# Assign the first string containing nonempty variable to the variable named $1
+# _assignFirst varName otherVarNames*
+#
+# Set the value of the variable named $varName to the first of otherVarNames
+# that refers to a non-empty variable name.
+#
+# If none of otherVarNames refers to a non-empty variable, the error message is
+# specific to this function's use case, which is setting up the output variables.
 _assignFirst() {
     local varName="$1"
+    local _var
     local REMOVE=REMOVE # slightly hacky - we allow REMOVE (i.e. not a variable name)
     shift
-    while (( $# )); do
-        if [ -n "${!1-}" ]; then eval "${varName}"="$1"; return; fi
-        shift
+    for _var in "$@"; do
+        if [ -n "${!_var-}" ]; then eval "${varName}"="${_var}"; return; fi
     done
-    echo "Error: _assignFirst found no valid variant!"
+    echo
+    echo "error: _assignFirst: could not find a non-empty variable whose name to assign to ${varName}."
+    echo "       The following variables were all unset or empty:"
+    echo "           $*"
+    if [ -z "${out:-}" ]; then
+        echo '       If you do not want an "out" output in your derivation, make sure to define'
+        echo '       the other specific required outputs. This can be achieved by picking one'
+        echo "       of the above as an output."
+        echo '       You do not have to remove "out" if you want to have a different default'
+        echo '       output, because the first output is taken as a default.'
+        echo
+    fi
     return 1 # none found
 }
 
@@ -52,8 +69,8 @@ _multioutConfig() {
     # try to detect share/doc/${shareDocName}
     # Note: sadly, $configureScript detection comes later in configurePhase,
     #   and reordering would cause more trouble than worth.
-    if [ -z "$shareDocName" ]; then
-        local confScript="$configureScript"
+    if [ -z "${shareDocName:-}" ]; then
+        local confScript="${configureScript:-}"
         if [ -z "$confScript" ] && [ -x ./configure ]; then
             confScript=./configure
         fi
@@ -122,9 +139,9 @@ moveToOutput() {
 
             # remove empty directories, printing iff at least one gets removed
             local srcParent="$(readlink -m "$srcPath/..")"
-            if rmdir "$srcParent"; then
+            if [ -n "$(find "$srcParent" -maxdepth 0 -type d -empty 2>/dev/null)" ]; then
                 echo "Removing empty $srcParent/ and (possibly) its parents"
-                rmdir -p --ignore-fail-on-non-empty "$(readlink -m "$srcParent/..")" \
+                rmdir -p --ignore-fail-on-non-empty "$srcParent" \
                     2> /dev/null || true # doesn't ignore failure for some reason
             fi
         done

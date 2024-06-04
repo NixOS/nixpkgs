@@ -1,38 +1,41 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, python-dateutil
-, pytz
-, regex
-, tzlocal
-, hijri-converter
-, convertdate
-, fasttext
-, langdetect
-, parameterized
-, pytestCheckHook
-, gitpython
-, parsel
-, requests
-, ruamel-yaml
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  python-dateutil,
+  pytz,
+  regex,
+  tzlocal,
+  hijri-converter,
+  convertdate,
+  fasttext,
+  langdetect,
+  parameterized,
+  pytestCheckHook,
+  gitpython,
+  parsel,
+  requests,
+  ruamel-yaml,
 }:
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.1.6";
+  version = "1.2.0";
 
   disabled = pythonOlder "3.7";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "dateparser";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-rn8RD1nnUi4MhK6QKLaP5eG6UAFrhlecimvn8sAsu6k=";
+    hash = "sha256-mnL44hojebOwP6qtEBHs5QM4uRmLuGlVNr+sM3jZEKE=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     python-dateutil
@@ -42,12 +45,15 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    calendars = [ hijri-converter convertdate ];
+    calendars = [
+      hijri-converter
+      convertdate
+    ];
     fasttext = [ fasttext ];
     langdetect = [ langdetect ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     parameterized
     pytestCheckHook
     gitpython
@@ -76,6 +82,7 @@ buildPythonPackage rec {
     description = "Date parsing library designed to parse dates from HTML pages";
     homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;
+    mainProgram = "dateparser-download";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

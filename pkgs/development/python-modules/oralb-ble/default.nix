@@ -1,51 +1,57 @@
-{ lib
-, bleak-retry-connector
-, bluetooth-data-tools
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, fetchFromGitHub
-, home-assistant-bluetooth
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  bleak,
+  bleak-retry-connector,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  fetchFromGitHub,
+  home-assistant-bluetooth,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "oralb-ble";
-  version = "0.17.1";
-  format = "pyproject";
+  version = "0.18.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "oralb-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0VZRtsh17W8h1qcGfAxE4KUehtCk1PKy3MO3fVJb4qY=";
+    hash = "sha256-e6L8HXpqOAHnEktIJ1N1atC5QXno669W3c/S7cISa48=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --cov=oralb_ble --cov-report=term-missing:skip-covered" ""
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
+    bleak
     bleak-retry-connector
     bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=oralb_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  pythonImportsCheck = [ "oralb_ble" ];
 
-  pythonImportsCheck = [
-    "oralb_ble"
+  disabledTests = [
+    # Test is outdated, TypeError: BLEDevice.__init__() missing 2 required...
+    "test_async_poll"
   ];
 
   meta = with lib; {

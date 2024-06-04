@@ -16,6 +16,11 @@ stdenv.mkDerivation {
   doCheck = true;
   checkPhase = "./hash_extender --test";
 
+  # https://github.com/iagox86/hash_extender/issues/26
+  hardeningDisable = [ "fortify3" ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   installPhase = ''
     mkdir -p $out/bin
     cp hash_extender $out/bin
@@ -23,6 +28,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Tool to automate hash length extension attacks";
+    mainProgram = "hash_extender";
     homepage = "https://github.com/iagox86/hash_extender";
     license = licenses.bsd3;
     maintainers = with maintainers; [ oxzi ];

@@ -11,10 +11,10 @@ buildGoModule rec {
     owner = "michelin";
     repo = "ChopChop";
     rev = "v${version}";
-    sha256 = "qSBQdcS6d0tctSHRbkY4T7s6Zj7xI2abaPUvNKh1M2E=";
+    hash = "sha256-qSBQdcS6d0tctSHRbkY4T7s6Zj7xI2abaPUvNKh1M2E=";
   };
 
-  vendorSha256 = "UxWARWOFp8AYKEdiJwRZNwFrphgMTJSZjnvktTNOsgU=";
+  vendorHash = "sha256-UxWARWOFp8AYKEdiJwRZNwFrphgMTJSZjnvktTNOsgU=";
 
   meta = with lib; {
     description = "CLI to search for sensitive services/files/folders";

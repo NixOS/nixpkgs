@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchPypi
-, poetry-core
-, pydantic
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
-, yarl
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  python-dotenv,
+  pytz,
+  requests,
+  typing-extensions,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "transmission-rpc";
-  version = "3.4.0";
+  version = "7.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,27 +23,24 @@ buildPythonPackage rec {
     owner = "Trim21";
     repo = "transmission-rpc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O+VimSIVsO4P7v+8HHdYujaKpPx4FV8bF/Nn4EHP2vo=";
+    hash = "sha256-HthWeFInolNEs7RNA773DJjhGvl1rfDhvhO8WwRwuuY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
-    pydantic
     requests
+    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    python-dotenv
     pytz
     pytestCheckHook
     yarl
   ];
 
-  pythonImportsCheck = [
-    "transmission_rpc"
-  ];
+  pythonImportsCheck = [ "transmission_rpc" ];
 
   disabledTests = [
     # Tests require a running Transmission instance
@@ -52,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module that implements the Transmission bittorent client RPC protocol";
     homepage = "https://github.com/Trim21/transmission-rpc";
+    changelog = "https://github.com/trim21/transmission-rpc/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
   };

@@ -18,8 +18,8 @@ let
   src = sage-with-env.env.lib.src;
   runAllTests = files == null;
   testArgs = if runAllTests then "--all" else testFileList;
-  patienceSpecifier = if longTests then "--long" else "";
-  timeSpecifier = if timeLimit == null then "" else "--short ${toString timeLimit}";
+  patienceSpecifier = lib.optionalString longTests "--long";
+  timeSpecifier = lib.optionalString (timeLimit != null) "--short ${toString timeLimit}";
   relpathToArg = relpath: lib.escapeShellArg "${src}/${relpath}"; # paths need to be absolute
   testFileList = lib.concatStringsSep " " (map relpathToArg files);
 in

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -11,7 +10,6 @@
 , gtk4
 , pango
 , wrapGAppsHook4
-, python3
 , desktop-file-utils
 , gobject-introspection
 , gjs
@@ -23,19 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-characters";
-  version = "43.1";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sj4V2VCXizY8gaRyYe4aO0fbPGaX7haf8hPuplcqeEE=";
+    hash = "sha256-pOjixRC/SCBLmZSk581TeEQkbnTIqYb52+BOIj9dgnw=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-characters/-/commit/3e28a6ad668e2239b14f2e05bc477ec1bfb210ba.patch";
-      sha256 = "sha256-2N4eewknhOXBABs6BPA5/YuqZMT8dyXW857iamrrtuA=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
@@ -43,7 +34,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     desktop-file-utils
     wrapGAppsHook4
   ];
@@ -59,11 +49,6 @@ stdenv.mkDerivation rec {
     libadwaita
     pango
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-  '';
 
   dontWrapGApps = true;
 
@@ -83,8 +68,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Characters";
+    homepage = "https://apps.gnome.org/Characters/";
     description = "Simple utility application to find and insert unusual characters";
+    mainProgram = "gnome-characters";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

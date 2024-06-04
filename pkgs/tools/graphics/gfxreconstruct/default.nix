@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gfxreconstruct";
-  version = "0.9.16.1";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "gfxreconstruct";
     rev = "v${version}";
-    hash = "sha256-6yUWXIJlfwaPT1SDVjSfO7Sj10DcpOLAbzASC4dLS1E=";
+    hash = "sha256-MuCdJoBFxKwDCOCltlU3oBS9elFS6F251dHjHcIb4Jg=";
     fetchSubmodules = true;
   };
 
@@ -63,5 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LunarG/gfxreconstruct/";
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];
+    platforms = platforms.linux;
   };
 }

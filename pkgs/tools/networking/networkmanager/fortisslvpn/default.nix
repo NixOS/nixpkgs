@@ -3,6 +3,7 @@
 , fetchurl
 , substituteAll
 , openfortivpn
+, autoreconfHook
 , gettext
 , pkg-config
 , file
@@ -21,7 +22,7 @@
 stdenv.mkDerivation rec {
   pname = "NetworkManager-fortisslvpn";
   version = "1.4.0";
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -33,9 +34,11 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit openfortivpn;
     })
+    ./support-ppp-2.5.0.patch
   ];
 
   nativeBuildInputs = [
+    autoreconfHook
     gettext
     pkg-config
     file
@@ -79,6 +82,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "NetworkManager’s FortiSSL plugin";
     inherit (networkmanager.meta) maintainers platforms;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }

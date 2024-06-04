@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , substituteAll
 , fetchFromGitHub
 , autoreconfHook
@@ -6,17 +7,17 @@
 , makeWrapper
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , dbus
 , systemd
 , dconf ? null
 , glib
 , gdk-pixbuf
 , gobject-introspection
-, gtk2
 , gtk3
 , gtk4
 , gtk-doc
+, libdbusmenu-gtk3
 , runCommand
 , isocodes
 , cldr-annotations
@@ -26,15 +27,13 @@
 , json-glib
 , libnotify ? null
 , enableUI ? true
-, withWayland ? false
+, withWayland ? true
 , libxkbcommon
 , wayland
 , buildPackages
 , runtimeShell
 , nixosTests
 }:
-
-with lib;
 
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
@@ -48,23 +47,24 @@ let
   };
   # make-dconf-override-db.sh needs to execute dbus-launch in the sandbox,
   # it will fail to read /etc/dbus-1/session.conf unless we add this flag
-  dbus-launch = runCommand "sandbox-dbus-launch" {
-    nativeBuildInputs = [ makeWrapper ];
-  } ''
-      makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
-        --add-flags --config-file=${dbus}/share/dbus-1/session.conf
+  dbus-launch = runCommand "sandbox-dbus-launch"
+    {
+      nativeBuildInputs = [ makeWrapper ];
+    } ''
+    makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
+      --add-flags --config-file=${dbus}/share/dbus-1/session.conf
   '';
 in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.27";
+  version = "1.5.30";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "sha256-DwX7SYRb18C0Lz2ySPS3yV99Q1xQezs0Ls2P7Rbtk5Q=";
+    sha256 = "sha256-VgSjeKF9DCkDfE9lHEaWpgZb6ibdgoDf/I6qeJf8Ah4=";
   };
 
   patches = [
@@ -73,11 +73,18 @@ stdenv.mkDerivation rec {
       pythonInterpreter = python3Runtime.interpreter;
       pythonSitePackages = python3.sitePackages;
     })
+    ./build-without-dbus-launch.patch
   ];
 
   outputs = [ "out" "dev" "installedTests" ];
 
   postPatch = ''
+    # Maintainer does not want to create separate tarballs for final release candidate and release versions,
+    # so we need to set `ibus_released` to `1` in `configure.ac`. Otherwise, anyone running `ibus version` gets
+    # a version with an inaccurate `-rcX` suffix.
+    # https://github.com/ibus/ibus/issues/2584
+    substituteInPlace configure.ac --replace "m4_define([ibus_released], [0])" "m4_define([ibus_released], [1])"
+
     patchShebangs --build data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
     substituteInPlace bus/services/org.freedesktop.IBus.session.GNOME.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
@@ -87,11 +94,17 @@ stdenv.mkDerivation rec {
   preAutoreconf = "touch ChangeLog";
 
   configureFlags = [
+    # The `AX_PROG_{CC,CXX}_FOR_BUILD` autoconf macros can pick up unwrapped GCC binaries,
+    # so we set `{CC,CXX}_FOR_BUILD` to override that behavior.
+    # https://github.com/NixOS/nixpkgs/issues/21751
+    "CC_FOR_BUILD=${stdenv.cc}/bin/cc"
+    "CXX_FOR_BUILD=${stdenv.cc}/bin/c++"
     "--disable-memconf"
-    (enableFeature (dconf != null) "dconf")
-    (enableFeature (libnotify != null) "libnotify")
-    (enableFeature withWayland "wayland")
-    (enableFeature enableUI "ui")
+    (lib.enableFeature (dconf != null) "dconf")
+    (lib.enableFeature (libnotify != null) "libnotify")
+    (lib.enableFeature withWayland "wayland")
+    (lib.enableFeature enableUI "ui")
+    "--disable-gtk2"
     "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
@@ -112,8 +125,9 @@ stdenv.mkDerivation rec {
     pkg-config
     python3BuildEnv
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     dbus-launch
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
@@ -125,15 +139,14 @@ stdenv.mkDerivation rec {
     systemd
     dconf
     gdk-pixbuf
-    gobject-introspection
     python3.pkgs.pygobject3 # for pygobject overrides
-    gtk2
     gtk3
     gtk4
     isocodes
     json-glib
     libnotify
-  ] ++ optionals withWayland [
+    libdbusmenu-gtk3
+  ] ++ lib.optionals withWayland [
     libxkbcommon
     wayland
   ];
@@ -165,7 +178,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ibus/ibus";
     description = "Intelligent Input Bus, input method framework";
     license = licenses.lgpl21Plus;

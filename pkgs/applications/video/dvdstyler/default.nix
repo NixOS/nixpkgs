@@ -7,7 +7,7 @@
 , docbook-xsl-nons
 , dvdauthor
 , dvdplusrwtools
-, ffmpeg
+, ffmpeg_4
 , flex
 , fontconfig
 , gettext
@@ -16,7 +16,7 @@
 , libexif
 , libjpeg
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , wxGTK32
 , wxSVG
 , xine-ui
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     xmlto
     zip
   ];
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     cdrtools
     dvdauthor
     dvdplusrwtools
-    ffmpeg
+    ffmpeg_4
     fontconfig
     glib
     libexif
@@ -128,5 +128,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; linux;
+    mainProgram = "dvdstyler";
   };
 }

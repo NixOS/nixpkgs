@@ -1,42 +1,44 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
-, lxqt-build-tools
-, qtbase
-, qttools
-, qtsvg
-, qtx11extras
 , kwindowsystem
 , liblxqt
 , libqtxdg
+, lxqt-build-tools
+, qtbase
+, qtsvg
+, qttools
+, qtwayland
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-openssh-askpass";
-  version = "1.2.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1uBgP4cOKypZZbMVYdvgM7GyZI2Ef3XmuAfs0nPzHd0=";
+    hash = "sha256-poTOXVvVUdM6m1mHBgQGS+mVHu6O4iBKQRs0JwpU8X0=";
   };
 
   nativeBuildInputs = [
     cmake
     lxqt-build-tools
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qttools
-    qtx11extras
-    qtsvg
     kwindowsystem
     liblxqt
     libqtxdg
+    qtbase
+    qtsvg
+    qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };
@@ -47,5 +49,6 @@ mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.lxqt.members;
+    mainProgram = "lxqt-openssh-askpass";
   };
 }

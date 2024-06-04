@@ -3,7 +3,7 @@
 ocamlPackages.buildDunePackage rec {
   pname = "obelisk";
   version = "0.6.0";
-  useDune2 = true;
+  duneVersion = "3";
   src = fetchFromGitHub {
     owner = "Lelio-Brun";
     repo = pname;
@@ -18,6 +18,7 @@ ocamlPackages.buildDunePackage rec {
 
   meta = {
     description = "A simple tool which produces pretty-printed output from a Menhir parser file (.mly)";
+    mainProgram = "obelisk";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/Lelio-Brun/Obelisk";

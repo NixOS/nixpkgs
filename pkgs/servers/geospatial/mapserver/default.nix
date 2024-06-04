@@ -6,14 +6,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mapserver";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "MapServer";
     rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-t9tthHszqtbFEh50IhQMtBb9rD9tU3QbDlUsVRVkQ6U=";
+    sha256 = "sha256-fAf4kOe/6bQW0i46+EZbD/6iWI2Bjkn2no6XeR/+mg4=";
   };
+
+  patches = [
+    # drop this patch for version 8.0.2
+    ./fix-build-w-libxml2-12.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -57,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mapserver.org/";
     changelog = "https://mapserver.org/development/changelog/";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = teams.geospatial.members;
     platforms = platforms.unix;
   };
 }

@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, intltool, pkg-config, gtk3, fetchFromGitHub
-, autoreconfHook, wrapGAppsHook }:
+{ lib, stdenv, intltool, pkg-config, gtk3, fetchFromGitHub
+, autoreconfHook, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   version = "unstable-2022-02-14";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ly2w9jmRlprm/PnyC0LYjrxBVK+J0DLiSpzuTUMZpWA=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook wrapGAppsHook ];
-  buildInputs = [ intltool gtk3 ];
+  nativeBuildInputs = [ pkg-config autoreconfHook wrapGAppsHook3 intltool ];
+  buildInputs = [ gtk3 ];
 
   meta = with lib; {
     description = "Simple text editor forked from Leafpad using GTK+ 3.x";
@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ ckie ];
     license = licenses.gpl2;
+    mainProgram = "l3afpad";
   };
 }

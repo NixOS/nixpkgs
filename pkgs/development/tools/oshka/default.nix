@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-fpWhqFK5h/U7DCC/SyhAlMyCMhjZHRLMlwakvlhOd3w=";
   };
 
-  vendorSha256 = "sha256-ZBI3WDXfJKBEF2rmUN3LvOOPT1185dHmj88qJKsdUiE=";
+  vendorHash = "sha256-ZBI3WDXfJKBEF2rmUN3LvOOPT1185dHmj88qJKsdUiE=";
 
   ldflags = [
     "-w"
@@ -27,6 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for extracting nested CI/CD supply chains and executing commands";
+    mainProgram = "oshka";
     homepage = "https://github.com/k1LoW/oshka";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

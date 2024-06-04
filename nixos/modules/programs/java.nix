@@ -3,20 +3,17 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.programs.java;
 in
-
 {
 
   options = {
 
     programs.java = {
 
-      enable = mkEnableOption (lib.mdDoc "java") // {
-        description = lib.mdDoc ''
+      enable = lib.mkEnableOption "java" // {
+        description = ''
           Install and setup the Java development kit.
 
           ::: {.note}
@@ -31,20 +28,38 @@ in
         '';
       };
 
-      package = mkOption {
-        default = pkgs.jdk;
-        defaultText = literalExpression "pkgs.jdk";
-        description = lib.mdDoc ''
-          Java package to install. Typical values are pkgs.jdk or pkgs.jre.
-        '';
-        type = types.package;
+      package = lib.mkPackageOption pkgs "jdk" {
+        example = "jre";
       };
+
+      binfmt = lib.mkEnableOption "binfmt to execute java jar's and classes";
 
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+
+    boot.binfmt.registrations = lib.mkIf cfg.binfmt {
+      java-class = {
+        recognitionType = "extension";
+        magicOrExtension = "class";
+        interpreter = pkgs.writeShellScript "java-class-wrapper" ''
+          test -e ${cfg.package}/nix-support/setup-hook && source ${cfg.package}/nix-support/setup-hook
+          classpath=$(dirname "$1")
+          class=$(basename "''${1%%.class}")
+          $JAVA_HOME/bin/java -classpath "$classpath" "$class" "''${@:2}"
+        '';
+      };
+      java-jar = {
+        recognitionType = "extension";
+        magicOrExtension = "jar";
+        interpreter = pkgs.writeShellScript "java-jar-wrapper" ''
+          test -e ${cfg.package}/nix-support/setup-hook && source ${cfg.package}/nix-support/setup-hook
+          $JAVA_HOME/bin/java -jar "$@"
+        '';
+      };
+    };
 
     environment.systemPackages = [ cfg.package ];
 

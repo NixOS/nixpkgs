@@ -1,13 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, protobuf, grpcio, setuptools }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  protobuf,
+  grpcio,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.51.1";
+  version = "1.62.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e62d23d3fed9d4f81738f98dd193dbd2e21aed4a8f0dd715e75b5439e649727";
+    hash = "sha256-X9XhWCtnjmuUHuX1gJNAvl4HJGkd9SmaroImZA+U4Y8=";
   };
 
   postPatch = ''
@@ -15,11 +22,18 @@ buildPythonPackage rec {
       --replace 'protobuf>=4.21.6,<5.0dev' 'protobuf'
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [ protobuf grpcio setuptools ];
+  propagatedBuildInputs = [
+    protobuf
+    grpcio
+    setuptools
+  ];
 
   # no tests in the package
   doCheck = false;

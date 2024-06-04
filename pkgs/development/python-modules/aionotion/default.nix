@@ -1,39 +1,52 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  certifi,
+  ciso8601,
+  fetchFromGitHub,
+  frozenlist,
+  mashumaro,
+  poetry-core,
+  pyjwt,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-cov,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aionotion";
-  version = "2022.10.0";
-  format = "pyproject";
+  version = "2024.03.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = version;
-    hash = "sha256-DJkqFj87N8OlWHNto+tInj8QvVoNA9faLBb/pBbQl0U=";
+    repo = "aionotion";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BsbfLb5wCVxR8v2U2Zzt7LMl7XJcZWfVjZN47VDkhFc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
+    certifi
+    ciso8601
+    frozenlist
+    mashumaro
+    pyjwt
+    yarl
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
     pytest-aiohttp
     pytest-asyncio
@@ -41,17 +54,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    "examples"
-  ];
+  disabledTestPaths = [ "examples" ];
 
-  pythonImportsCheck = [
-    "aionotion"
-  ];
+  pythonImportsCheck = [ "aionotion" ];
 
   meta = with lib; {
     description = "Python library for Notion Home Monitoring";
     homepage = "https://github.com/bachya/aionotion";
+    changelog = "https://github.com/bachya/aionotion/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

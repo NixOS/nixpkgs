@@ -1,32 +1,29 @@
-{ lib
-, aliyun-python-sdk-core
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aliyun-python-sdk-core,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-cdn";
-  version = "3.8.0";
+  version = "3.8.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UOakkvWyWT50lVazEivF5TtAR/E3JpKdT6KNb7YJDBs=";
+    hash = "sha256-LMCNvjV85TvdSM0OXean4dPzAiV8apVdRLTvUISOKec=";
   };
 
-  propagatedBuildInputs = [
-    aliyun-python-sdk-core
-  ];
+  propagatedBuildInputs = [ aliyun-python-sdk-core ];
 
   # All components are stored in a mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aliyunsdkcdn"
-  ];
+  pythonImportsCheck = [ "aliyunsdkcdn" ];
 
   meta = with lib; {
     description = "CDN module of Aliyun Python SDK";

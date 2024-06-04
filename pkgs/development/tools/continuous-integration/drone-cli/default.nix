@@ -1,26 +1,31 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+}:
 
 buildGoModule rec {
-  version = "1.6.0";
+  version = "1.8.0";
   pname = "drone-cli";
   revision = "v${version}";
-
-  vendorSha256 = "sha256-0vHOPuSn7eczlUeCTz+SOMuDdRQTzw/TnH1rt/ltWOQ=";
-
-  doCheck = false;
-
-  patches = [ ./0001-use-different-upstream-for-gomod.patch ];
-
-  ldflags = [
-    "-X main.version=${version}"
-  ];
 
   src = fetchFromGitHub {
     owner = "harness";
     repo = "drone-cli";
     rev = revision;
-    sha256 = "sha256-TVOj1C5X3fTRZF29hId13LjkkwaAFntlozpmYVUfVJI=";
+    hash = "sha256-moxsGlm7Q9E0q9SZ2gZotn3tRbnbtwhDc9UNCCSb3pY=";
   };
+
+  vendorHash = "sha256-rKZq2vIXvw4bZ6FXPqOip9dLiV5rSb1fWDJe3oxOBjw=";
+
+  # patch taken from https://patch-diff.githubusercontent.com/raw/harness/drone-cli/pull/179.patch
+  # but with go.mod changes removed due to conflict
+  patches = [ ./0001-use-builtin-go-syscerts.patch ];
+
+  ldflags = [
+    "-X main.version=${version}"
+  ];
+
+  doCheck = false;
 
   meta = with lib; {
     mainProgram = "drone";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, kernel, udev, autoconf, automake, libtool, hwdata, kernelOlder }:
+{ lib, stdenv, kernel, udev, autoconf, automake, libtool, hwdata, kernelOlder }:
 
 stdenv.mkDerivation {
   name = "usbip-${kernel.name}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ udev ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=address-of-packed-member" ];
 
   preConfigure = ''
     cd tools/usb/usbip

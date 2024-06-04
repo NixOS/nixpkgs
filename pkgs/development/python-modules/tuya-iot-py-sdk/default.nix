@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, pycryptodome
-, pythonOlder
-, requests
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  pycryptodome,
+  pythonOlder,
+  requests,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "tuya";
     repo = "tuya-iot-python-sdk";
     rev = "v${version}";
-    sha256 = "sha256-KmSVa71CM/kNhzE4GznaxISGmIaV+UcTSn3v+fmxmrQ=";
+    hash = "sha256-KmSVa71CM/kNhzE4GznaxISGmIaV+UcTSn3v+fmxmrQ=";
   };
 
   propagatedBuildInputs = [

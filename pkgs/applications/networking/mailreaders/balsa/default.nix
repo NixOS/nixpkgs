@@ -19,7 +19,7 @@
 , pkg-config
 , sqlite
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     pkg-config
     intltool
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

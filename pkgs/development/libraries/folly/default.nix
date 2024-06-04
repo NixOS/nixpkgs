@@ -1,9 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
+, overrideSDK
 , fetchFromGitHub
 , boost
 , cmake
 , double-conversion
-, fetchpatch
 , fmt_8
 , gflags
 , glog
@@ -18,17 +19,21 @@
 , zstd
 , jemalloc
 , follyMobile ? false
+
+# for passthru.tests
+, python3
+, watchman
 }:
 
 stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2022.11.28.00";
+  version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-TI3uMlkssKtTvxqj9Et12aAjbHoV9FVBvrZr7oCFlIo=";
+    sha256 = "sha256-INvWTw27fmVbKQIT9ebdRGMCOIzpc/NepRN2EnKLJx0=";
   };
 
   nativeBuildInputs = [
@@ -56,20 +61,42 @@ stdenv.mkDerivation rec {
   # jemalloc headers are required in include/folly/portability/Malloc.h
   propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;
 
-  NIX_CFLAGS_COMPILE = [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
 
+    # temporary hack until folly builds work on aarch64,
+    # see https://github.com/facebook/folly/issues/1880
+    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.isx86_64 then "x86_64" else "dummy"}"
+
+    # ensure correct dirs in $dev/lib/pkgconfig/libfolly.pc
+    # see https://github.com/NixOS/nixpkgs/issues/144170
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ] ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
+  ];
+
+  # split outputs to reduce downstream closure sizes
+  outputs = [ "out" "dev" ];
+
+  # patch prefix issues again
+  # see https://github.com/NixOS/nixpkgs/issues/144170
   postFixup = ''
-    substituteInPlace "$out"/lib/pkgconfig/libfolly.pc \
-      --replace '=''${prefix}//' '=/' \
-      --replace '=''${exec_prefix}//' '=/'
+    substituteInPlace $dev/lib/cmake/${pname}/${pname}-targets-release.cmake  \
+      --replace '$'{_IMPORT_PREFIX}/lib/ $out/lib/
   '';
 
-  # folly-config.cmake, will `find_package` these, thus there should be
-  # a way to ensure abi compatibility.
   passthru = {
+    # folly-config.cmake, will `find_package` these, thus there should be
+    # a way to ensure abi compatibility.
     inherit boost;
     fmt = fmt_8;
+
+    tests = {
+      inherit watchman;
+      inherit (python3.pkgs) django pywatchman;
+    };
   };
 
   meta = with lib; {

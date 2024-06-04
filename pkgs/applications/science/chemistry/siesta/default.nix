@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;  # Started making trouble with gcc-11
 
-  # Must do manualy becuase siesta does not do the regular
+  # Must do manually because siesta does not do the regular
   # ./configure; make; make install
   configurePhase = ''
     cd Obj
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A first-principles materials simulation code using DFT";
+    mainProgram = "siesta";
     longDescription = ''
          SIESTA is both a method and its computer program
          implementation, to perform efficient electronic structure

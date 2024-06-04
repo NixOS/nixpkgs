@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, regex, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  regex,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "pygrok";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "garyelephant";
@@ -13,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ regex ];
 
-  checkInputs =  [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     pytest
   '';
@@ -23,6 +30,6 @@ buildPythonPackage rec {
     description = "A python implementation of jordansissel's grok regular expression library";
     homepage = "https://github.com/garyelephant/pygrok";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

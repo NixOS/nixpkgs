@@ -5,21 +5,20 @@
 
 buildDunePackage rec {
   pname = "ca-certs";
-  version = "0.2.2";
+  version = "0.2.3";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ca-certs/releases/download/v${version}/ca-certs-v${version}.tbz";
-    sha256 = "sha256-Tx53zBJemZh3ODh/8izahxDoJvXvNFLyAA8LMM1mhlI=";
+    url = "https://github.com/mirage/ca-certs/releases/download/v${version}/ca-certs-${version}.tbz";
+    hash = "sha256-0tjWRX2RXvbXg974Lzvl7C9W+S4gIU9Y7dY8nC/GDpw=";
   };
 
-  useDune2 = true;
+  duneVersion = "3";
 
   propagatedBuildInputs = [ bos fpath ptime mirage-crypto x509 astring logs ];
 
-  # Assumes nss-cacert < 3.74 https://github.com/mirage/ca-certs/issues/21
-  doCheck = false;
+  doCheck = true;
   checkInputs = [
     cacert    # for /etc/ssl/certs/ca-bundle.crt
     alcotest

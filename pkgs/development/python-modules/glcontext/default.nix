@@ -1,25 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, libGL
-, libX11
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  libGL,
+  libX11,
 }:
 
 buildPythonPackage rec {
   pname = "glcontext";
-  version = "2.3.7";
+  version = "2.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-U/oP9nx7iTK6EYbUl90UD7fTOo5oDlh9ULPNjRibsXE=";
+    hash = "sha256-ld+INKIGDZA2Y+sTxDPY7MI1nru6x+FeixngaJQzKkg=";
   };
 
   disabled = !isPy3k;
 
-  buildInputs = [ libGL libX11 ];
+  buildInputs = [
+    libGL
+    libX11
+  ];
 
   postPatch = ''
     substituteInPlace glcontext/x11.cpp \

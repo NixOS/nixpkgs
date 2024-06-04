@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, libiconv
-, pandas
-, python
-, pythonOlder
-, readstat
-, zlib
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  libiconv,
+  pandas,
+  python,
+  pythonOlder,
+  readstat,
+  zlib,
 }:
 
 buildPythonPackage rec {
   pname = "pyreadstat";
-  version = "1.2.0";
+  version = "1.2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,27 +23,19 @@ buildPythonPackage rec {
     owner = "Roche";
     repo = "pyreadstat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Rw+v1+KpjSSZoqhlENKcJiaFhAvcNRbZ3+MA2dOsj4Q=";
+    hash = "sha256-VcPpGRrE/5udNijodO88Lw69JPOm6ZN7BZb4xD34srQ=";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  buildInputs = [
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   propagatedBuildInputs = [
     readstat
     pandas
   ];
 
-  pythonImportsCheck = [
-    "pyreadstat"
-  ];
+  pythonImportsCheck = [ "pyreadstat" ];
 
   preCheck = ''
     export HOME=$(mktemp -d);

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
+  env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
   installPhase = ''
     mkdir -p $out/bin
@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ ragge ];
     platforms = platforms.unix;
+    mainProgram = "wrk";
   };
 }

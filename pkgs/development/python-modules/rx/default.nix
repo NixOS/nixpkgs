@@ -1,8 +1,15 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, nose }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  nose,
+}:
 
 buildPythonPackage rec {
   pname = "rx";
   version = "3.2.0";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   # Use fetchPypi to avoid the updater script to migrate it to `reactivex` which
@@ -13,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "b657ca2b45aa485da2f7dcfd09fac2e554f7ac51ff3c2f8f2ff962ecd963d91c";
   };
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   # Some tests are nondeterministic. (`grep sleep -r tests`)
   # test_timeout_schedule_action_cancel: https://hydra.nixos.org/build/74954646

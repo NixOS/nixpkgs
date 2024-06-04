@@ -1,27 +1,32 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
 let
   majorVersion = "1";
   minorVersion = "10";
-  pname = "route159";
 in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "route159";
+  version = "${majorVersion}.${minorVersion}";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
+  src = fetchzip {
+    url = "https://dotcolon.net/download/fonts/${finalAttrs.pname}_${majorVersion}${minorVersion}.zip";
+    hash = "sha256-1InyBW1LGbp/IU/ql9mvT14W3MTxJdWThFwRH6VHpTU=";
+    stripRoot = false;
+  };
 
-  url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
-  sha256 = "1nv5csg73arvvwpac7ylh4j9n0s3qp79rbv2s4jvs2bf6gqhsq7h";
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
+    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${pname}/";
+    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
     description = "A weighted sans serif font";
     platforms = platforms.all;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [ leenaars minijackson ];
     license = licenses.ofl;
   };
-}
+})

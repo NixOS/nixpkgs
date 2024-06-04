@@ -1,19 +1,19 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, pkg-config, wxGTK32,
   boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk3, gtkspell3, pugixml,
-  nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
+  nlohmann_json, hicolor-icon-theme, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "poedit";
-  version = "3.2.2";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
     rev = "v${version}-oss";
-    sha256 = "sha256-kun1x1ql8KLS1+nh5+iItxYZnfvFcrx62cvX4OEczG4=";
+    hash = "sha256-CfCWfKRzeGGk8/B0BLauO4Xb88/Si1ezvcGKeURgC9o=";
   };
 
-  nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook
+  nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook3
     libxslt xmlto boost libtool pkg-config ];
 
   buildInputs = [ lucenepp nlohmann_json wxGTK32 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cross-platform gettext catalogs (.po files) editor";
+    mainProgram = "poedit";
     homepage = "https://www.poedit.net/";
     license = licenses.mit;
     platforms = platforms.unix;

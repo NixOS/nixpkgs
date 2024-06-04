@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "the-foundation";
-  version = "1.5.0";
+  version = "1.8.1";
 
   src = fetchFromGitea {
     domain = "git.skyjake.fi";
     owner = "skyjake";
     repo = "the_Foundation";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wPFBKc20/ED58RFpDhmPnlSHCf3FG5sD2ubQOl5NF+o=";
+    hash = "sha256-gyDBK/bF+QxXMnthUfMjeUuRBZk0Xcahm7wOtLGs5kY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

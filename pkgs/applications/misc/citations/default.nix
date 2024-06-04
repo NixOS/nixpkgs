@@ -1,4 +1,5 @@
-{ darwin
+{ cargo
+, darwin
 , desktop-file-utils
 , fetchFromGitLab
 , gettext
@@ -12,26 +13,28 @@
 , pkg-config
 , poppler
 , rustPlatform
+, rustc
 , stdenv
 , testers
 , wrapGAppsHook4
+, clippy
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
-  version = "0.5.1";
+  version = "0.6.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    hash = "sha256-QPK6Nw0tDdttUDFKMgThTYMTxGXsn5OReqf1LNAai7g=";
+    hash = "sha256-RV9oQcXzRsNcvZc/8Xt7qZ/88DvHofC2Av0ftxzeF6Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-Kounxi4JxoU4+rWMWNB8rzTyG3MDKYD0OzYfAHwm6bY=";
+    hash = "sha256-XlqwgXuwxR6oEz0+hYAp/3b+XxH+Vd/DGr5j+iKhUjQ=";
   };
 
   nativeBuildInputs = [
@@ -42,8 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     wrapGAppsHook4
   ];
 
@@ -53,11 +56,24 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     libadwaita
     poppler
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (lib.concatStringsSep " " [
+    "-Wno-typedef-redefinition"
+    "-Wno-unused-parameter"
+    "-Wno-missing-field-initializers"
+    "-Wno-incompatible-function-pointer-types"
+  ]);
+
   doCheck = true;
+
+  nativeCheckInputs = [ clippy ];
+
+  preCheck = ''
+    sed -i -e '/PATH=/d' ../src/meson.build
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
@@ -70,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ benediktbroich ];
     platforms = platforms.unix;
+    mainProgram = "citations";
   };
 })

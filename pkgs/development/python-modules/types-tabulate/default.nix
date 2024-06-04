@@ -1,23 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-tabulate";
-  version = "0.9.0.0";
+  version = "0.9.0.20240106";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SnlHRxTOoVa80hhbub3dj7nT1SJ8jQp/Ib8hyvX2Dmc=";
+    hash = "sha256-ybbbEN1/z1W9FxLdNTf4bdznKgj9Yrsa9DOMcJbOlH4=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tabulate-stubs"
-  ];
+  pythonImportsCheck = [ "tabulate-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for tabulate";

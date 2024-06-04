@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "linode";
   version = "0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

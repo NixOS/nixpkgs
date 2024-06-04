@@ -1,8 +1,6 @@
 { lib, pkgs, ... }: {
   name = "3proxy";
-  meta = with lib.maintainers; {
-    maintainers = [ misuzu ];
-  };
+  meta.maintainers = with lib.maintainers; [ misuzu ];
 
   nodes = {
     peer0 = { lib, ... }: {
@@ -136,6 +134,7 @@
   testScript = ''
     start_all()
 
+    peer0.systemctl("start network-online.target")
     peer0.wait_for_unit("network-online.target")
 
     peer1.wait_for_unit("3proxy.service")

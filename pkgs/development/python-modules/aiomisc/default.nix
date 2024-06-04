@@ -1,75 +1,66 @@
-{ lib
-, aiocontextvars
-  #, aiocarbon
-, aiohttp
-  #, aiohttp-asgi
-, async-timeout
-, buildPythonPackage
-, colorlog
-, croniter
-, fastapi
-, fetchPypi
-, logging-journald
-, pytestCheckHook
-, pythonOlder
-, raven
-  #, raven-aiohttp
-, setproctitle
-, uvloop
+{
+  lib,
+  stdenv,
+  aiocontextvars,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  colorlog,
+  croniter,
+  fastapi,
+  fetchPypi,
+  logging-journald,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  raven,
+  rich,
+  setproctitle,
+  typing-extensions,
+  uvloop,
 }:
 
 buildPythonPackage rec {
   pname = "aiomisc";
-  version = "16.2.10";
-  format = "setuptools";
+  version = "17.5.19";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iQlbd1DoPgxq+Am0BTDYXIBZoC21/54+bywDtcCXlls=";
+    hash = "sha256-0tcWfi4zxqDDMknDPOLNm+S+K1qmHQ5n/PqNFyNbwZg=";
   };
 
-  propagatedBuildInputs = [
-    colorlog
-    logging-journald
-  ];
+  build-system = [ poetry-core ];
 
-  checkInputs = [
+  dependencies =
+    [ colorlog ]
+    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
+    ++ lib.optionals stdenv.isLinux [ logging-journald ];
+
+  nativeCheckInputs = [
     aiocontextvars
     async-timeout
     fastapi
     pytestCheckHook
-    raven
     setproctitle
-  ] ++ passthru.optional-dependencies.aiohttp
-  ++ passthru.optional-dependencies.cron
-  ++ passthru.optional-dependencies.uvloop;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   passthru.optional-dependencies = {
-    aiohttp = [
+    aiohttp = [ aiohttp ];
+    #asgi = [ aiohttp-asgi ];
+    cron = [ croniter ];
+    #carbon = [ aiocarbon ];
+    raven = [
       aiohttp
+      raven
     ];
-    #asgi = [
-    #  aiohttp-asgi
-    #];
-    cron = [
-      croniter
-    ];
-    #carbon = [
-    #  aiocarbon
-    #];
-    #raven = [
-    #  raven-aiohttp
-    #];
-    uvloop = [
-      uvloop
-    ];
+    rich = [ rich ];
+    uvloop = [ uvloop ];
   };
 
-  pythonImportsCheck = [
-    "aiomisc"
-  ];
+  pythonImportsCheck = [ "aiomisc" ];
 
   # Upstream stopped tagging with 16.2
   doCheck = false;
@@ -83,6 +74,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Miscellaneous utils for asyncio";
     homepage = "https://github.com/aiokitchen/aiomisc";
+    changelog = "https://github.com/aiokitchen/aiomisc/blob/master/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

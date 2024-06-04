@@ -1,52 +1,62 @@
-{ lib
-, stdenv
-, fetchPypi
-, buildPythonPackage
-, appdirs
-, cffi
-, decorator
-, Mako
-, mesa_drivers
-, numpy
-, ocl-icd
-, opencl-headers
-, platformdirs
-, pybind11
-, pytest
-, pytools
-, six
+{
+  lib,
+  stdenv,
+  fetchPypi,
+  buildPythonPackage,
+  appdirs,
+  cffi,
+  decorator,
+  mako,
+  mesa_drivers,
+  numpy,
+  ocl-icd,
+  oldest-supported-numpy,
+  opencl-headers,
+  platformdirs,
+  pybind11,
+  pytestCheckHook,
+  pytools,
+  setuptools,
+  six,
+  wheel,
 }:
 
 let
-  os-specific-buildInputs =
-    if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
-in buildPythonPackage rec {
+  os-specific-buildInputs = if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
+in
+buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2022.3.1";
+  version = "2024.1";
+  format = "pyproject";
 
-  checkInputs = [ pytest ];
-  buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-7NVy7pQK2L2hY5w6e+tog0/JqYrX6z9uAarE99nUusE=";
+  };
+
+  nativeBuildInputs = [
+    oldest-supported-numpy
+    setuptools
+    wheel
+  ];
+
+  buildInputs = [
+    opencl-headers
+    pybind11
+  ] ++ os-specific-buildInputs;
 
   propagatedBuildInputs = [
     appdirs
     cffi
     decorator
-    Mako
+    mako
     numpy
     platformdirs
     pytools
     six
   ];
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Sj2w/mG1zclSZ1Jt7r1xp+HXlWlNSw/idh8GMLzKNiE=";
-  };
-
-  # py.test is not needed during runtime, so remove it from `install_requires`
-  postPatch = ''
-    substituteInPlace setup.py --replace "pytest>=2" ""
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preBuild = ''
     export HOME=$(mktemp -d)
@@ -55,10 +65,11 @@ in buildPythonPackage rec {
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory
   doCheck = false;
 
+  pythonImportsCheck = [ "pyopencl" ];
+
   meta = with lib; {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
     license = licenses.mit;
-    maintainers = [ maintainers.fridh ];
   };
 }

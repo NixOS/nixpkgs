@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, pythonOlder
-, flit-core
-, setuptools-scm
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pythonOlder,
+  flit-core,
+  setuptools-scm,
+  tomli,
 }:
 
 buildPythonPackage rec {
@@ -16,29 +17,20 @@ buildPythonPackage rec {
     owner = "WillDaSilva";
     repo = "flit_scm";
     rev = "refs/tags/${version}";
-    hash = "sha256-K5sH+oHgX/ftvhkY+vIg6wUokAP96YxrTWds3tnEtyg=";
+    hash = "sha256-2nx9kWq/2TzauOW+c67g9a3JZ2dhBM4QzKyK/sqWOPo=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     flit-core
     setuptools-scm
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   propagatedBuildInputs = [
     flit-core
     setuptools-scm
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  pythonImportsCheck = [
-    "flit_scm"
-  ];
-
+  pythonImportsCheck = [ "flit_scm" ];
 
   doCheck = false; # no tests
 

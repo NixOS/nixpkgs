@@ -1,10 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi
-, pika
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pika,
 }:
 
 buildPythonPackage rec {
   pname = "pika-pool";
   version = "0.1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

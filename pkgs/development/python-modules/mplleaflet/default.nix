@@ -1,15 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jinja2
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jinja2,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "mplleaflet";
   version = "0.0.5";
+  format = "setuptools";
 
-  propagatedBuildInputs = [ jinja2 six ];
+  propagatedBuildInputs = [
+    jinja2
+    six
+  ];
 
   # No tests in archive
   doCheck = false;

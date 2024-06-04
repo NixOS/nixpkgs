@@ -1,25 +1,25 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) concatStringsSep mkEnableOption mkIf mkOption types;
   cfg = config.services.openarena;
 in
 {
   options = {
     services.openarena = {
-      enable = mkEnableOption (lib.mdDoc "OpenArena");
+      enable = mkEnableOption "OpenArena game server";
+      package = lib.mkPackageOption pkgs "openarena" { };
 
       openPorts = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to open firewall ports for OpenArena";
+        description = "Whether to open firewall ports for OpenArena";
       };
 
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc "Extra flags to pass to {command}`oa_ded`";
+        description = "Extra flags to pass to {command}`oa_ded`";
         example = [
           "+set dedicated 2"
           "+set sv_hostname 'My NixOS OpenArena Server'"
@@ -43,7 +43,7 @@ in
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "openarena";
-        ExecStart = "${pkgs.openarena}/bin/oa_ded +set fs_basepath ${pkgs.openarena}/openarena-0.8.8 +set fs_homepath /var/lib/openarena ${concatStringsSep " " cfg.extraFlags}";
+        ExecStart = "${cfg.package}/bin/oa_ded +set fs_basepath ${cfg.package}/share/openarena +set fs_homepath /var/lib/openarena ${concatStringsSep " " cfg.extraFlags}";
         Restart = "on-failure";
 
         # Hardening

@@ -1,13 +1,18 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+}:
 
 buildPythonPackage rec {
   pname = "markuppy";
   version = "1.14";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "MarkupPy";
     inherit version;
-    sha256 = "sha256-Gt7iwKVCrzeP6EVI/29rAWjzy39Ca0aWEDiivPqtDV8=";
+    hash = "sha256-Gt7iwKVCrzeP6EVI/29rAWjzy39Ca0aWEDiivPqtDV8=";
   };
 
   # has no tests

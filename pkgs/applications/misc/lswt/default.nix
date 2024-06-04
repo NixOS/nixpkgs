@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchFromSourcehut, nixos, wayland }:
+{ lib, stdenv, fetchFromSourcehut, wayland-scanner, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "lswt";
-  version = "1.0.4";
+  version = "2.0.0";
 
   src = fetchFromSourcehut {
     owner = "~leon_plickat";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Orwa7sV56AeznEcq/Xj5qj4PALMxq0CI+ZnXuY4JYE0=";
+    hash = "sha256-8jP6I2zsDt57STtuq4F9mcsckrjvaCE5lavqKTjhNT0=";
   };
 
+  nativeBuildInputs = [ wayland-scanner ];
   buildInputs = [ wayland ];
 
   makeFlags = [
@@ -24,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ edrex ];
     platforms = platforms.linux;
+    mainProgram = "lswt";
   };
 }

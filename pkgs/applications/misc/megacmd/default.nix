@@ -8,7 +8,6 @@
   # build fails with latest ffmpeg, see https://github.com/meganz/MEGAcmd/issues/523.
   # to be re-enabled when patch available
   # , ffmpeg
-, freeimage
 , gcc-unwrapped
 , libmediainfo
 , libraw
@@ -23,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "megacmd";
-  version = "1.5.1";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAcmd";
     rev = "${version}_Linux";
-    sha256 = "sha256-qOXw/KGt3DyWQGBe/pbMujQITCMItHobxuK+1r00ZIs=";
+    sha256 = "sha256-JnxfFbM+NyeUrEMok62zlsQIxjrUvLLg4tUTiKPDZFc=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
     cryptopp
     curl
     # ffmpeg
-    freeimage
     gcc-unwrapped
     libmediainfo
     libraw
@@ -60,7 +58,7 @@ stdenv.mkDerivation rec {
     "--with-cryptopp"
     "--with-curl"
     # "--with-ffmpeg"
-    "--with-freeimage"
+    "--without-freeimage" # disabled as freeimage is insecure
     "--with-libmediainfo"
     "--with-libuv"
     "--with-libzen"

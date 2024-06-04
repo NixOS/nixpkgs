@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, desktop-file-utils
 , meson
 , ninja
 , vala
@@ -11,42 +12,47 @@
 , gtk3
 , libhandy
 , gnome
-, python3
 , dconf
 , libxml2
 , gettext
 , docbook-xsl-nons
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "dconf-editor";
-  version = "43.0";
+  version = "45.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-k1o8Lddswqk81a7ppU05R/sRHrOW9LY9xfC6j40JkTY=";
+    sha256 = "sha256-EYApdnju2uYhfMUUomOMGH0vHR7ycgy5B5t0DEKZQd0=";
   };
 
   patches = [
+    # Fix crash with GSETTINGS_SCHEMA_DIR env var.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/dconf-editor/-/commit/baf183737d459dcde065c9f8f6fe5be7ed874de6.patch";
+      hash = "sha256-Vp0qjJChDr6IarUD+tZPLJhdI8v8r6EzWNfqFSnGvqQ=";
+    })
+
     # Look for compiled schemas in NIX_GSETTINGS_OVERRIDES_DIR
     # environment variable, to match what we patched GLib to do.
     ./schema-override-variable.patch
   ];
 
   nativeBuildInputs = [
+    desktop-file-utils
     meson
     ninja
     vala
     libxslt
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     docbook-xsl-nons
     libxml2
     gobject-introspection
-    python3
   ];
 
   buildInputs = [
@@ -55,11 +61,6 @@ stdenv.mkDerivation rec {
     libhandy
     dconf
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -70,7 +71,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GSettings editor for GNOME";
-    homepage = "https://wiki.gnome.org/Apps/DconfEditor";
+    mainProgram = "dconf-editor";
+    homepage = "https://apps.gnome.org/DconfEditor/";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

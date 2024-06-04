@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.7.0";
+  version = "0.9.2";
 in
 
 buildGoModule {
@@ -15,12 +15,13 @@ buildGoModule {
     owner = "agola-io";
     repo = "agola";
     rev = "v${version}";
-    sha256 = "sha256-AiD7mVogWk/TOYy7Ed1aT31h1kbrRwseue5qc3wLOCI=";
+    hash = "sha256-ggi0Eb4vO5zBoIrIIa3MFwOIW0IBS8yGF6eveBb+lgY=";
   };
 
-  vendorSha256 = "sha256-Y3ck7Qdo9uq3YuLzZUe+RZkKQqWpSko3q+f4bfkSz6g=";
+  vendorHash = "sha256-Igtccundx/2PHFp8+L44CvOLG+/Ndinhonh/EDcQeoY=";
 
   ldflags = [
+    "-s"
     "-w"
     "-X agola.io/agola/cmd.Version=${version}"
   ];

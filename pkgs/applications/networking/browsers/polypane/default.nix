@@ -2,12 +2,12 @@
 
 let
   pname = "polypane";
-  version = "10.0.1";
+  version = "19.0.2";
 
   src = fetchurl {
     url = "https://github.com/firstversionist/${pname}/releases/download/v${version}/${pname}-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-J0D49VESNgdBEWAf01LkiiU2I01r4PBLyWKpnE9t45Q=";
+    sha256 = "sha256-MyQiq2Lo/XtmJ7D1VZXncYWq53Bu3O3WBT/PkdJuEZM=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -16,18 +16,16 @@ let
 in appimageTools.wrapType2 {
   inherit pname src version;
 
-  multiPkgs = null;
-  extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
+  extraPkgs = pkgs: [ pkgs.bash ];
 
   extraInstallCommands = ''
-    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/${pname}.png \
       $out/share/icons/hicolor/512x512/apps/${pname}.png
   '';
 
   meta = with lib; {
-    description = "Browser with unified devtools targeting responsability and acessibility";
+    description = "Browser with unified devtools targeting responsability and accessibility";
     longDescription = ''
       The stand-alone browser for ambitious developers that want to build responsive,
       accessible and performant websites in a fraction of the time it takes with other browsers.

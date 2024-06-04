@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ arpack spooles blas lapack ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${spooles}/include/spooles"
     "-std=legacy"
   ];
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.calculix.de/";
     description = "Three-dimensional structural finite element program";
+    mainProgram = "ccx";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;

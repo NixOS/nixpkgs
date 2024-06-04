@@ -1,14 +1,22 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, liberasurecode, six }:
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  liberasurecode,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "pyeclib";
   version = "unstable-2022-03-11";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "pyeclib";
     rev = "b50040969a03f7566ffcb468336e875d21486113";
-    sha256 = "sha256-nYYjocStC0q/MC6pum3J4hlXiu/R5xODwIE97Ho3iEY=";
+    hash = "sha256-nYYjocStC0q/MC6pum3J4hlXiu/R5xODwIE97Ho3iEY=";
   };
 
   postPatch = ''
@@ -20,16 +28,18 @@ buildPythonPackage rec {
       --replace '"Darwin"' '"macOS"'
   '';
 
-  preBuild = let
-    ldLibraryPathEnvName = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
-  in ''
-    # required for the custom _find_library function in setup.py
-    export ${ldLibraryPathEnvName}="${lib.makeLibraryPath [ liberasurecode ]}"
-  '';
+  preBuild =
+    let
+      ldLibraryPathEnvName = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    in
+    ''
+      # required for the custom _find_library function in setup.py
+      export ${ldLibraryPathEnvName}="${lib.makeLibraryPath [ liberasurecode ]}"
+    '';
 
   buildInputs = [ liberasurecode ];
 
-  checkInputs = [ six ];
+  nativeCheckInputs = [ six ];
 
   pythonImportsCheck = [ "pyeclib" ];
 

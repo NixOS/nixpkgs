@@ -2,35 +2,38 @@
 , flutter
 , python3
 , fetchFromGitHub
-, stdenv
 , pcre2
+, libnotify
+, libappindicator
+, pkg-config
 , gnome
 , makeWrapper
+, removeReferencesTo
 }:
-let
-  vendorHashes = {
-    x86_64-linux = "sha256-BwhWA8N0S55XkljDKPNkDhsj0QSpmJJ5MwEnrPjymS8=";
-    aarch64-linux = "sha256-T1aGz3+2Sls+rkUVDUo39Ky2igg+dxGSUaf3qpV7ovQ=";
-  };
-in
-flutter.mkFlutterApp rec {
+
+flutter.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "6.0.2";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     rev = version;
-    sha256 = "13nh5qpq02c6azfdh4cbzhlrq0hs9is45q5z5cnxg84hrx26hd4k";
+    hash = "sha256-aXUnmKEUCi0rsVr3HVhEk6xa1z9HMsH+0AIY531hqiU=";
   };
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
 
-  vendorHash = vendorHashes.${stdenv.system};
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+  gitHashes = {
+    window_manager = "sha256-mLX51nbWFccsAfcqLQIYDjYz69y9wAz4U1RZ8TIYSj0=";
+  };
 
   postPatch = ''
+    rm -f pubspec.lock
+
     substituteInPlace linux/CMakeLists.txt \
-      --replace "../build/linux/helper" "${passthru.helper}/libexec/helper"
+      --replace-fail "../build/linux/helper" "${passthru.helper}/libexec/helper"
   '';
 
   preInstall = ''
@@ -56,29 +59,35 @@ flutter.mkFlutterApp rec {
     # Symlink binary.
     ln -sf "$out/app/authenticator" "$out/bin/yubioath-flutter"
 
-    # Needed for QR scanning to work.
-    wrapProgram "$out/bin/yubioath-flutter" \
-      --prefix PATH : ${lib.makeBinPath [ gnome.gnome-screenshot ]}
-
     # Set the correct path to the binary in desktop file.
     substituteInPlace "$out/share/applications/com.yubico.authenticator.desktop" \
       --replace "@EXEC_PATH/authenticator" "$out/bin/yubioath-flutter" \
       --replace "@EXEC_PATH/linux_support/com.yubico.yubioath.png" "$out/share/icons/com.yubico.yubioath.png"
   '';
 
+  # Needed for QR scanning to work
+  extraWrapProgramArgs = ''
+    --prefix PATH : ${lib.makeBinPath [ gnome.gnome-screenshot ]}
+  '';
+
   nativeBuildInputs = [
     makeWrapper
+    removeReferencesTo
+    pkg-config
   ];
 
   buildInputs = [
     pcre2
+    libnotify
+    libappindicator
   ];
 
   meta = with lib; {
     description = "Yubico Authenticator for Desktop";
+    mainProgram = "yubioath-flutter";
     homepage = "https://github.com/Yubico/yubioath-flutter";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = builtins.attrNames vendorHashes;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mediaelch";
-  version = "2.8.18";
+  version = "2.10.6";
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
-    sha256 = "sha256-9kwU9j8YNF/OmzrQaRAlBpW+t/tIpZJw5+pfEoTmCBA=";
+    hash = "sha256-qc7HaCMAmALY9MoIKmaCWF0cnwBBFDAXwqiBzwzu2bU=";
     fetchSubmodules = true;
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     qtsvg
     qtwayland
     quazip
-  ] ++ lib.optional (qtVersion == "6") [
+  ] ++ lib.optionals (qtVersion == "6") [
     qt5compat
   ];
 
@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://mediaelch.de/mediaelch/";
     description = "Media Manager for Kodi";
+    mainProgram = "MediaElch";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ stunkymonkey ];
     platforms = platforms.linux;

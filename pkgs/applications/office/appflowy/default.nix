@@ -6,18 +6,19 @@
 , copyDesktopItems
 , makeDesktopItem
 , gtk3
-, openssl
 , xdg-user-dirs
 , keybinder3
+, libnotify
 }:
 
 stdenv.mkDerivation rec {
   pname = "appflowy";
-  version = "0.0.9";
+  version = "0.5.7";
 
   src = fetchzip {
-    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-linux-x86.tar.gz";
-    sha256 = "sha256-E75ZqenCs5zWBERYoIrWc2v5CyjGKLrfsae1RCi/qNQ=";
+    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-${version}-linux-x86_64.tar.gz";
+    hash = "sha256-SVtAx/yllHugBys506pT/5n6IDEZvPEeCHRjFHLMZ0A=";
+    stripRoot = false;
   };
 
   nativeBuildInputs = [
@@ -28,8 +29,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    openssl
     keybinder3
+    libnotify
   ];
 
   dontBuild = true;
@@ -38,18 +39,23 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+    cd AppFlowy/
+
     mkdir -p $out/opt/
     mkdir -p $out/bin/
 
     # Copy archive contents to the outpout directory
     cp -r ./* $out/opt/
 
+    # Copy icon
+    install -Dm444 data/flutter_assets/assets/images/flowy_logo.svg $out/share/icons/hicolor/scalable/apps/appflowy.svg
+
     runHook postInstall
   '';
 
   preFixup = ''
     # Add missing libraries to appflowy using the ones it comes with
-    makeWrapper $out/opt/app_flowy $out/bin/appflowy \
+    makeWrapper $out/opt/AppFlowy $out/bin/appflowy \
       --set LD_LIBRARY_PATH "$out/opt/lib/" \
       --prefix PATH : "${lib.makeBinPath [ xdg-user-dirs ]}"
   '';
@@ -60,6 +66,7 @@ stdenv.mkDerivation rec {
       desktopName = "AppFlowy";
       comment = meta.description;
       exec = "appflowy";
+      icon = "appflowy";
       categories = [ "Office" ];
     })
   ];
@@ -72,5 +79,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${version}";
     maintainers = with maintainers; [ darkonion0 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "appflowy";
   };
 }

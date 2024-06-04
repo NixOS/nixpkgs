@@ -1,40 +1,78 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, cython
-, gfortran
-, pytestCheckHook
-, numpy }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  gfortran,
+  git,
+  meson-python,
+  pkg-config,
+  blas,
+  lapack,
+  numpy,
+  setuptools,
+  wheel,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "scikit-misc";
-  version = "0.1.4";
+  version = "0.3.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-93RqA0eBEGPh7PkSHflINXhQA5U8OLW6hPY/xQjCKRE=";
+  src = fetchFromGitHub {
+    owner = "has2k1";
+    repo = "scikit-misc";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2L30hvKbFqIGlSEbzc1HvHybBqDGldJfZoUpqJJOv2Q=";
   };
 
   postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace "--cov --cov-report=xml" ""
+    patchShebangs .
+
+    # unbound numpy and disable coverage testing in pytest
+    substituteInPlace pyproject.toml \
+      --replace 'numpy==' 'numpy>=' \
+      --replace 'addopts = "' '#addopts = "'
+
+    # provide a version to use when git fails to get the tag
+    [[ -f skmisc/_version.py ]] || \
+      echo '__version__ = "${version}"' > skmisc/_version.py
   '';
 
   nativeBuildInputs = [
+    cython
     gfortran
+    git
+    meson-python
+    numpy
+    pkg-config
+    setuptools
+    wheel
   ];
+
+  propagatedBuildInputs = [ numpy ];
 
   buildInputs = [
-    cython
-    numpy
+    blas
+    lapack
   ];
 
-  # Tests fail because of infinite recursion error
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "skmisc"
+  mesonFlags = [
+    "-Dblas=${blas.pname}"
+    "-Dlapack=${lapack.pname}"
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # can not run tests from source directory
+  preCheck = ''
+    cd "$(mktemp -d)"
+  '';
+
+  pytestFlagsArray = [ "--pyargs skmisc" ];
+
+  pythonImportsCheck = [ "skmisc" ];
 
   meta = with lib; {
     description = "Miscellaneous tools for scientific computing";

@@ -9,16 +9,16 @@
 , optparse-applicative, prettyprinter, process, QuickCheck, retry
 , rio, rio-orphans, safe, semver-range, stm, stringsearch, tar
 , template-haskell, temporary, text, time, transformers, turtle
-, unliftio, unordered-containers, utf8-string, versions, with-utf8
-, zlib
+, unliftio, unordered-containers, uri-encode, utf8-string, versions
+, with-utf8, yaml, zlib
 }:
 mkDerivation {
   pname = "spago";
-  version = "0.20.9";
+  version = "0.21.0";
   src = fetchgit {
     url = "https://github.com/purescript/spago.git";
-    sha256 = "00vdqg7vaw3d9zwh47886lw9fhhlwjagzhaj3aqz4xm92pjavhih";
-    rev = "d16d4914200783fbd820ba89dbdf67270454faf5";
+    sha256 = "1v5y15nhw6smnir0y7y854pa70iv8asxsqph2y8rz1c9lkz5d41g";
+    rev = "c354f4a461f65fcb83aaa843830ea1589f6c7179";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -31,7 +31,7 @@ mkDerivation {
     optparse-applicative prettyprinter process retry rio rio-orphans
     safe semver-range stm stringsearch tar template-haskell temporary
     text time transformers turtle unliftio unordered-containers
-    utf8-string versions with-utf8 zlib
+    uri-encode utf8-string versions with-utf8 yaml zlib
   ];
   executableHaskellDepends = [
     ansi-terminal base text turtle with-utf8
@@ -43,4 +43,5 @@ mkDerivation {
   testToolDepends = [ hspec-discover ];
   homepage = "https://github.com/purescript/spago#readme";
   license = lib.licenses.bsd3;
+  mainProgram = "spago";
 }

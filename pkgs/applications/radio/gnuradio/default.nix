@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 # Remove gcc and python references
 , removeReferencesTo
@@ -30,7 +29,6 @@
 , libunwind
 , thrift
 , cppzmq
-, zeromq
 # Needed only if qt-gui is disabled, from some reason
 , icu
 # GUI related
@@ -46,15 +44,11 @@
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
-, versionAttr ? {
-  major = "3.10";
-  minor = "5";
-  patch = "0";
-}
+, version ? "3.10.10.0"
 }:
 
 let
-  sourceSha256 = "sha256-NP7OH4kRulWpWxyHudIzCJPfjiiilgnhBlixmwOj70I=";
+  sourceSha256 = "sha256-pEVWhXDjOevrduDbZQbiDbODZY8PpsGY4O8yxrwlCcs=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -73,7 +67,7 @@ let
         # building with boost 1.7x fails
         ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
-        Mako
+        mako
         six
       ];
     };
@@ -120,7 +114,7 @@ let
     gnuradio-companion = {
       pythonRuntime = with python.pkgs; [
         pyyaml
-        Mako
+        mako
         numpy
         pygobject3
       ];
@@ -144,6 +138,10 @@ let
     };
     gr-blocks = {
       cmakeEnableFlag = "GR_BLOCKS";
+      runtime = [
+        # Required to compile wavfile blocks.
+        libsndfile
+      ];
     };
     gr-fec = {
       cmakeEnableFlag = "GR_FEC";
@@ -247,8 +245,13 @@ let
       runtime = [ gsl libsodium ];
     };
     gr-zeromq = {
-      runtime = [ cppzmq zeromq ];
+      runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
+      pythonRuntime = [
+        # Will compile without this, but it is required by tests, and by some
+        # gr blocks.
+        python.pkgs.pyzmq
+      ];
     };
     gr-network = {
       cmakeEnableFlag = "GR_NETWORK";
@@ -268,7 +271,7 @@ let
       removeReferencesTo
       featuresInfo
       features
-      versionAttr
+      version
       sourceSha256
       overrideSrc
       fetchFromGitHub
@@ -276,24 +279,14 @@ let
     qt = qt5;
     gtk = gtk3;
   });
-  inherit (shared) hasFeature; # function
+  inherit (shared.passthru) hasFeature; # function
 in
 
-stdenv.mkDerivation rec {
-  inherit pname;
-  inherit (shared)
-    version
-    src
-    nativeBuildInputs
-    buildInputs
-    cmakeFlags
-    disallowedReferences
-    stripDebugList
-    doCheck
-    dontWrapPythonPrograms
-    dontWrapQtApps
-    meta
-  ;
+stdenv.mkDerivation (finalAttrs: (shared // {
+  inherit pname version;
+  # Will still evaluate correctly if not used here. It only helps nix-update
+  # find the right file in which version is defined.
+  inherit (shared) src;
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.patch
@@ -303,8 +296,10 @@ stdenv.mkDerivation rec {
     inherit
       boost
       volk
-      spdlog
     ;
+    # Used by many gnuradio modules, the same attribute is present in
+    # previous gnuradio versions where there it's log4cpp.
+    logLib = spdlog;
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
   } // lib.optionalAttrs (hasFeature "gr-pdu") {
@@ -321,4 +316,4 @@ stdenv.mkDerivation rec {
       ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
     ''
   ;
-}
+}))

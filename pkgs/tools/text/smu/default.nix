@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   # _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = "-O";
+  env.NIX_CFLAGS_COMPILE = "-O";
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "simple markup - markdown like syntax";
+    mainProgram = "smu";
     homepage = "https://github.com/Gottox/smu";
     license = licenses.mit;
     maintainers = with maintainers; [ oxzi ];

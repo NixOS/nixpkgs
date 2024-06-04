@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "spaceship-prompt";
-  version = "4.13.1";
+  version = "4.15.3";
 
   src = fetchFromGitHub {
     owner = "denysdovhan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NGm5uM85ThVBSnwMF//drr4GBiYv5JXZU6ZmbjQ2fLU=";
+    sha256 = "sha256-2Z9NUC1TR0lYBQux+Tkac0oFVnYIxsMkdWNGKQIz9IU=";
   };
 
   strictDeps = true;
@@ -35,6 +35,6 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/spaceship-prompt/spaceship-prompt/releases/tag/v${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ nyanloutre fortuneteller2k kyleondy ];
+    maintainers = with maintainers; [ nyanloutre moni kyleondy ];
   };
 }

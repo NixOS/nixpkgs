@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gum";
-  version = "0.8.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6x1t/PLs1dqlY5XQ1F0PDqZ/TofZ0h1hTc0C1sjn3fA=";
+    hash = "sha256-rQSSbDHMSWJDSxn/SNNMaOrdZJUhQPnZutmpY9828t0=";
   };
 
-  vendorSha256 = "sha256-rOBwhPXo4sTSI3j3rn3c5qWGnGFgkpeFUKgtzKBltbg=";
+  vendorHash = "sha256-pkQ8UvWLIWH8gXux/dd0HLdiz7RDrmFJ8SX63Q+nNyw=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -34,5 +34,6 @@ buildGoModule rec {
     changelog = "https://github.com/charmbracelet/gum/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ maaslalani ];
+    mainProgram = "gum";
   };
 }

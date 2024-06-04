@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
       recognises key combinations and can handle press, repeat and
       release events.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "http://users.softlab.ece.ntua.gr/~thkala/projects/actkbd/";
     platforms = platforms.linux;
+    mainProgram = "actkbd";
   };
 }

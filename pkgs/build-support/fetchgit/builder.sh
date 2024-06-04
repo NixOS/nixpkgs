@@ -3,10 +3,10 @@
 # - revision specified and remote has a HEAD
 # - revision specified and remote without HEAD
 #
-if [ -e .attrs.sh ]; then source .attrs.sh; fi
+if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
 source $stdenv/setup
 
-header "exporting $url (rev $rev) into $out"
+echo "exporting $url (rev $rev) into $out"
 
 $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${leaveDotGit:+--leave-dotGit} \
@@ -18,4 +18,3 @@ $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${branchName:+--branch-name "$branchName"}
 
 runHook postFetch
-stopNest

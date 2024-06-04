@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "temporal";
-  version = "1.17.5";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
-    sha256 = "sha256-u8GyaXpiVZdPDoPAqIa+TY+JQFZeSGOLrUy+e3E4kig=";
+    hash = "sha256-yu5EfW5ThTJx6ouCBoEEq9wU4MtlFGqqRaHMgIPaRqY=";
   };
 
-  vendorSha256 = "sha256-MT/BmGTdyEzmXjuwlA6WhLIWlrQz3Wc4Tl5dMI1587Q=";
+  vendorHash = "sha256-INmc/qbayjI+umkoGL8ih/iC7xqUkO1kfIZN5cQn/bw=";
+
+  excludedPackages = [ "./build" ];
 
   CGO_ENABLED = 0;
 
@@ -23,9 +25,13 @@ buildGoModule rec {
   installPhase = ''
     runHook preInstall
 
+    mkdir -p $out/share
+    cp -r ./schema $out/share/
+
     install -Dm755 "$GOPATH/bin/server" -T $out/bin/temporal-server
     install -Dm755 "$GOPATH/bin/cassandra" -T $out/bin/temporal-cassandra-tool
     install -Dm755 "$GOPATH/bin/sql" -T $out/bin/temporal-sql-tool
+    install -Dm755 "$GOPATH/bin/tdbg" -T $out/bin/tdbg
 
     runHook postInstall
   '';
@@ -39,7 +45,7 @@ buildGoModule rec {
     homepage = "https://temporal.io";
     changelog = "https://github.com/temporalio/temporal/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ titanous ];
+    maintainers = with maintainers; [ ];
     mainProgram = "temporal-server";
   };
 }

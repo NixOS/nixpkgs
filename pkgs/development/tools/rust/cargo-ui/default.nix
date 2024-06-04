@@ -2,7 +2,6 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
-, makeWrapper
 , libgit2
 , openssl
 , stdenv
@@ -15,23 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-ui";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-IL7BxiJg6eTuFM0pJ3qLxYCVofE/RjmgQjvOW96QF9A=";
+    hash = "sha256-M/ljgtTHMSc7rY/a8CpKGNuOSdVDwRt6+tzPPHdpKOw=";
   };
 
-  # update dependencies so it is compatible with libgit2 1.5
-  # libgit2-sys 0.14.3 is only compatible with libgit2 1.4
-  cargoPatches = [ ./update-git2.patch ];
-
-  cargoSha256 = "sha256-i/ERVPzAWtN4884051VoA/ItypyURpHb/Py6w3KDOAo=";
+  cargoHash = "sha256-u3YqXQZCfveSBjxdWb+GC0IA9bpruAYQdxX1zanT3fw=";
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.isLinux [
-    makeWrapper
   ];
 
   buildInputs = [
@@ -47,21 +40,24 @@ rustPlatform.buildRustPackage rec {
     xorg.libXrandr
     xorg.libxcb
   ] ++ lib.optionals stdenv.isDarwin [
-    # dark-light doesn't build on apple sdk < 10.14
-    # see https://github.com/frewsxcv/rust-dark-light/issues/14
-    darwin.apple_sdk_11_0.frameworks.AppKit
+    darwin.apple_sdk.frameworks.AppKit
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/cargo-ui \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf $out/bin/cargo-ui \
+      --add-rpath ${lib.makeLibraryPath [ fontconfig libGL ]}
   '';
+
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   meta = with lib; {
     description = "A GUI for Cargo";
+    mainProgram = "cargo-ui";
     homepage = "https://github.com/slint-ui/cargo-ui";
     changelog = "https://github.com/slint-ui/cargo-ui/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 gpl3Only ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

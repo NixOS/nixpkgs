@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, asyncserial
-, jinja2
-, migen
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  asyncserial,
+  jinja2,
+  migen,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "misoc";
   version = "unstable-2022-10-08";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "m-labs";
@@ -26,9 +28,7 @@ buildPythonPackage rec {
     migen
   ];
 
-  checkInputs = [
-    numpy
-  ];
+  nativeCheckInputs = [ numpy ];
 
   pythonImportsCheck = [ "misoc" ];
 

@@ -1,7 +1,5 @@
-{ lib, stdenv, fetchurl, jre, writeScript, common-updater-scripts, git, nixfmt
+{ lib, stdenv, fetchurl, jre, writeScript, common-updater-scripts, git, nixfmt-classic
 , nix, coreutils, gnused, disableRemoteLogging ? true }:
-
-with lib;
 
 let
   repo = "git@github.com:lihaoyi/Ammonite.git";
@@ -9,7 +7,7 @@ let
   common = { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
-      version = "2.5.3";
+      version = "3.0.0-M1";
 
       src = fetchurl {
         url =
@@ -22,7 +20,7 @@ let
       installPhase = ''
         install -Dm755 $src $out/bin/amm
         sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
-      '' + optionalString (disableRemoteLogging) ''
+      '' + lib.optionalString (disableRemoteLogging) ''
         sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
         sed -i '1i #!/bin/sh' $out/bin/amm
       '';
@@ -39,7 +37,7 @@ let
               git
               gnused
               nix
-              nixfmt
+              nixfmt-classic
             ]
           }
           oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
@@ -66,7 +64,7 @@ let
         runHook postInstallCheck
       '';
 
-      meta = {
+      meta = with lib; {
         description = "Improved Scala REPL";
         longDescription = ''
           The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.
@@ -84,10 +82,10 @@ let
 in {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
-    sha256 = "sha256-Iov55ohFjcGhur5UEng7aAZJPVua1H/JaKKW6OKS6Zg=";
+    sha256 = "sha256-SlweOVHudknbInM4rfEPJ9bLd3Z/EImLhVLzeKfjfMQ=";
   };
   ammonite_2_13 = common {
     scalaVersion = "2.13";
-    sha256 = "sha256-dzUhKUQDHrYZ4WyCk4z4CTxb6vK05qfApR/WPOwhA5s=";
+    sha256 = "sha256-2BydXmF6AkWDdG5rbRLD2I/6z3w3UD0dCd5Tp+3lU7c=";
   };
 }

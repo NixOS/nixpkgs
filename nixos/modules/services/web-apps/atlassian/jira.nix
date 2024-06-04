@@ -29,100 +29,100 @@ in
 {
   options = {
     services.jira = {
-      enable = mkEnableOption (lib.mdDoc "Atlassian JIRA service");
+      enable = mkEnableOption "Atlassian JIRA service";
 
       user = mkOption {
         type = types.str;
         default = "jira";
-        description = lib.mdDoc "User which runs JIRA.";
+        description = "User which runs JIRA.";
       };
 
       group = mkOption {
         type = types.str;
         default = "jira";
-        description = lib.mdDoc "Group which runs JIRA.";
+        description = "Group which runs JIRA.";
       };
 
       home = mkOption {
         type = types.str;
         default = "/var/lib/jira";
-        description = lib.mdDoc "Home directory of the JIRA instance.";
+        description = "Home directory of the JIRA instance.";
       };
 
       listenAddress = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = lib.mdDoc "Address to listen on.";
+        description = "Address to listen on.";
       };
 
       listenPort = mkOption {
         type = types.port;
         default = 8091;
-        description = lib.mdDoc "Port to listen on.";
+        description = "Port to listen on.";
       };
 
       catalinaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "-Xms1024m" "-Xmx2048m" ];
-        description = lib.mdDoc "Java options to pass to catalina/tomcat.";
+        description = "Java options to pass to catalina/tomcat.";
       };
 
       proxy = {
-        enable = mkEnableOption (lib.mdDoc "reverse proxy support");
+        enable = mkEnableOption "reverse proxy support";
 
         name = mkOption {
           type = types.str;
           example = "jira.example.com";
-          description = lib.mdDoc "Virtual hostname at the proxy";
+          description = "Virtual hostname at the proxy";
         };
 
         port = mkOption {
           type = types.port;
           default = 443;
           example = 80;
-          description = lib.mdDoc "Port used at the proxy";
+          description = "Port used at the proxy";
         };
 
         scheme = mkOption {
           type = types.str;
           default = "https";
           example = "http";
-          description = lib.mdDoc "Protocol used at the proxy.";
+          description = "Protocol used at the proxy.";
         };
 
         secure = mkOption {
           type = types.bool;
           default = true;
-          description = lib.mdDoc "Whether the connections to the proxy should be considered secure.";
+          description = "Whether the connections to the proxy should be considered secure.";
         };
       };
 
       sso = {
-        enable = mkEnableOption (lib.mdDoc "SSO with Atlassian Crowd");
+        enable = mkEnableOption "SSO with Atlassian Crowd";
 
         crowd = mkOption {
           type = types.str;
           example = "http://localhost:8095/crowd";
-          description = lib.mdDoc "Crowd Base URL without trailing slash";
+          description = "Crowd Base URL without trailing slash";
         };
 
         applicationName = mkOption {
           type = types.str;
           example = "jira";
-          description = lib.mdDoc "Exact name of this JIRA instance in Crowd";
+          description = "Exact name of this JIRA instance in Crowd";
         };
 
         applicationPasswordFile = mkOption {
           type = types.str;
-          description = lib.mdDoc "Path to the file containing the application password of this JIRA instance in Crowd";
+          description = "Path to the file containing the application password of this JIRA instance in Crowd";
         };
 
         validationInterval = mkOption {
           type = types.int;
           default = 2;
           example = 0;
-          description = lib.mdDoc ''
+          description = ''
             Set to 0, if you want authentication checks to occur on each
             request. Otherwise set to the number of minutes between request
             to validate if the user is logged in or out of the Crowd SSO
@@ -132,18 +132,14 @@ in
         };
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.atlassian-jira;
-        defaultText = literalExpression "pkgs.atlassian-jira";
-        description = lib.mdDoc "Atlassian JIRA package to use.";
-      };
+      package = mkPackageOption pkgs "atlassian-jira" { };
 
-      jrePackage = mkOption {
-        type = types.package;
-        default = pkgs.oraclejre8;
-        defaultText = literalExpression "pkgs.oraclejre8";
-        description = lib.mdDoc "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
+      jrePackage = mkPackageOption pkgs "oraclejre8" {
+        extraDescription = ''
+        ::: {.note }
+        Atlassian only supports the Oracle JRE (JRASERVER-46152).
+        :::
+        '';
       };
     };
   };

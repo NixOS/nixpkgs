@@ -2,13 +2,13 @@
 buildKodiBinaryAddon rec {
   pname = namespace;
   namespace = "peripheral.joystick";
-  version = "19.0.1";
+  version = "20.1.9";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    sha256 = "sha256-jSz0AgxhbCIbbZJxm4oq22y/hqew949UsqEAPoqEnHA=";
+    sha256 = "sha256-xJh9Rj+PcxrgGomEsKnQcO/yZDQCnG6gNBwfK2JGuNA=";
   };
 
   extraBuildInputs = [ tinyxml udev ];

@@ -29,18 +29,18 @@
 , python3
 , tracker
 , tracker-miners
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "43.0";
+  version = "44.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "x6x0WNUz8p2VUBHHS3YiTXnqMbzBLp1tDOe2w3BNCOE=";
+    sha256 = "544hA5fTxigJxs1VIdpuzLShHd6lvyr4YypH9Npcgp4=";
   };
 
   patches = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       pygobject3
       pyatspi
     ]))
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -113,7 +113,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Access, organize and share your photos";
-    homepage = "https://wiki.gnome.org/Apps/Photos";
+    mainProgram = "gnome-photos";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-photos";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

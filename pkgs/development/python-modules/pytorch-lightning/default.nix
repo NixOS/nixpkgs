@@ -1,40 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, fsspec
-, lightning-utilities
-, numpy
-, packaging
-, pyyaml
-, tensorboardx
-, torch
-, torchmetrics
-, tqdm
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fsspec,
+  lightning-utilities,
+  numpy,
+  packaging,
+  pyyaml,
+  setuptools,
+  tensorboardx,
+  torch,
+  torchmetrics,
+  tqdm,
+  traitlets,
 
-# tests
-, psutil
-, pytestCheckHook
+  # tests
+  psutil,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "1.8.6";
-  format = "pyproject";
+  version = "2.2.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     rev = "refs/tags/${version}";
-    hash = "sha256-5AyOCeRFiV7rdmoBPx03Xju6eTR/3jiE+HQBiEmdzmo=";
+    hash = "sha256-2O6Gr9BdjI/WTU0+KTfOQG31xzHyBeqxGv97f3WxUMs=";
   };
 
   preConfigure = ''
     export PACKAGE_NAME=pytorch
- '';
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     fsspec
     numpy
     packaging
@@ -45,10 +48,9 @@ buildPythonPackage rec {
     torchmetrics
     tqdm
     traitlets
-  ]
-  ++ fsspec.optional-dependencies.http;
+  ] ++ fsspec.optional-dependencies.http;
 
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
     pytestCheckHook
   ];
@@ -57,13 +59,12 @@ buildPythonPackage rec {
   # models, which doesn't work in the sandbox.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytorch_lightning"
-  ];
+  pythonImportsCheck = [ "pytorch_lightning" ];
 
   meta = with lib; {
     description = "Lightweight PyTorch wrapper for machine learning researchers";
-    homepage = "https://pytorch-lightning.readthedocs.io";
+    homepage = "https://github.com/Lightning-AI/pytorch-lightning";
+    changelog = "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
   };

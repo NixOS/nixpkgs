@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, six
-, wcwidth
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  six,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "prompt-toolkit";
-  version = "3.0.36";
+  version = "3.0.43";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "prompt_toolkit";
     inherit version;
-    sha256 = "sha256-PhY/JUvvWgOxRjl9fBljvT4oEvCWS7miTm7HYf0o22M=";
+    hash = "sha256-NSe3ryYQbLxloEC8yEg5o1ZuwbBRuwv+lTYx5wSw/30=";
   };
 
   propagatedBuildInputs = [
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     wcwidth
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # tests/test_completion.py:206: AssertionError
@@ -35,9 +34,7 @@ buildPythonPackage rec {
     "test_pathcompleter_can_expanduser"
   ];
 
-  pythonImportsCheck = [
-    "prompt_toolkit"
-  ];
+  pythonImportsCheck = [ "prompt_toolkit" ];
 
   meta = with lib; {
     description = "Python library for building powerful interactive command lines";
@@ -48,6 +45,7 @@ buildPythonPackage rec {
       with a nice interactive Python shell (called ptpython) built on top.
     '';
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
+    changelog = "https://github.com/prompt-toolkit/python-prompt-toolkit/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

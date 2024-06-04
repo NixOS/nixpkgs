@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.coconnor ];
+    mainProgram = "jmtpfs";
   };
 }

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "easeprobe";
-  version = "1.9.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "megaease";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iw24TuK5nbHabzRdaJ8X/MzRPNP35M8RjhKnZZXjVfA=";
+    sha256 = "sha256-vdbzDwFpCYVgH9T8e62+1hnMyWsWrT7e6WPaAlBc2H0=";
   };
 
-  vendorSha256 = "sha256-bfqP57YS2KD6CuFytJyWYCFl0Cx/JJgc1CeW13yBUoo=";
+  vendorHash = "sha256-ZB6q8XvDVSF5/kx2Avq0PYBkYqSoMD6YHhuXRrotFgk=";
 
   subPackages = [ "cmd/easeprobe" ];
 
@@ -33,5 +33,6 @@ buildGoModule rec {
     homepage = "https://github.com/megaease/easeprobe";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "easeprobe";
   };
 }

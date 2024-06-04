@@ -1,28 +1,26 @@
-{ lib
-, pyserial
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  pyserial,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "nad-receiver";
   version = "0.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joopert";
     repo = "nad_receiver";
     rev = version;
-    sha256 = "sha256-jRMk/yMA48ei+g/33+mMYwfwixaKTMYcU/z/VOoJbvY=";
+    hash = "sha256-jRMk/yMA48ei+g/33+mMYwfwixaKTMYcU/z/VOoJbvY=";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  propagatedBuildInputs = [ pyserial ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "nad_receiver" ];
 

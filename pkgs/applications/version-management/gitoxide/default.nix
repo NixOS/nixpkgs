@@ -7,29 +7,43 @@
 , libiconv
 , Security
 , SystemConfiguration
+, curl
 , openssl
+, buildPackages
+, installShellFiles
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  canRunCmd = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  gix = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/gix";
+in rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
-  version = "0.19.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "gitoxide";
     rev = "v${version}";
-    sha256 = "sha256-GGXujTn5Xb63vKIycj5o9+PCsMN1Kp3RCSg1wiM31qA=";
+    hash = "sha256-HXuMcLY5BAC2dODlI6sgwCyGEBDW6ojlHRCBnIQ6P6A=";
   };
 
-  cargoSha256 = "sha256-MAZhrd9CtFOIAaUUbXplBo+eo6Zaws2LIRkPoX4HztE=";
+  cargoHash = "sha256-v+HVrYMPwbD0RDyxufv11KOnWGbTljpbx6ZlSJ46Olk=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = if stdenv.isDarwin
+  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
+
+  buildInputs = [ curl ] ++ (if stdenv.isDarwin
     then [ libiconv Security SystemConfiguration ]
-    else [ openssl ];
+    else [ openssl ]);
+
+  preFixup = lib.optionalString canRunCmd ''
+    installShellCompletion --cmd gix \
+      --bash <(${gix} completions --shell bash) \
+      --fish <(${gix} completions --shell fish) \
+      --zsh <(${gix} completions --shell zsh)
+  '';
 
   # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  env.OPENSSL_NO_VENDOR = 1;
 
   meta = with lib; {
     description = "A command-line application for interacting with git repositories";

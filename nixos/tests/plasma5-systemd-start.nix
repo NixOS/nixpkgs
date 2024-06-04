@@ -12,24 +12,25 @@ import ./make-test-python.nix ({ pkgs, ...} :
     imports = [ ./common/user-account.nix ];
     services.xserver = {
       enable = true;
-      displayManager.sddm.enable = true;
-      displayManager.defaultSession = "plasma";
       desktopManager.plasma5.enable = true;
       desktopManager.plasma5.runUsingSystemd = true;
-      displayManager.autoLogin = {
+    };
+
+    services.displayManager = {
+      sddm.enable = true;
+      defaultSession = "plasma";
+      autoLogin = {
         enable = true;
         user = "alice";
       };
     };
   };
 
-  testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
-  in ''
+  testScript = { nodes, ... }: ''
     with subtest("Wait for login"):
         start_all()
-        machine.wait_for_file("${user.home}/.Xauthority")
-        machine.succeed("xauth merge ${user.home}/.Xauthority")
+        machine.wait_for_file("/tmp/xauth_*")
+        machine.succeed("xauth merge /tmp/xauth_*")
 
     with subtest("Check plasmashell started"):
         machine.wait_until_succeeds("pgrep plasmashell")

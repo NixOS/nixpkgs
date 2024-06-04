@@ -1,50 +1,51 @@
-{ lib
-, buildPythonPackage
-, colorful
-, fetchFromGitHub
-, git
-, httpx
-, packaging
-, poetry-core
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, rich
-, tomlkit
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  colorful,
+  fetchFromGitHub,
+  git,
+  httpx,
+  lxml,
+  packaging,
+  poetry-core,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  semver,
+  shtab,
+  rich,
+  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "23.1.3";
-  format = "pyproject";
+  version = "24.3.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
-    repo = pname;
+    repo = "pontos";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qmgfEsB3Mg6xjQxQLR2JMXATzurtuOem2kdIkD0WQXI=";
+    hash = "sha256-DXZDXipYBClqSdlTJsaPWaKr3qTiJ3osm3hHPp/MPow=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     colorful
     httpx
+    lxml
     packaging
     python-dateutil
+    semver
+    shtab
     rich
-    typing-extensions
     tomlkit
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ] ++ httpx.optional-dependencies.http2;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];
@@ -61,11 +62,17 @@ buildPythonPackage rec {
     # Network access
     "test_fail_sign_on_upload_fail"
     "test_successfully_sign"
+    # calls git log, but our fetcher removes .git
+    "test_git_error"
+    # Tests require git executable
+    "test_github_action_output"
+    "test_initial_release"
+    # Tests are out-dated
+    "test_getting_version_without_version_config"
+    "test_verify_version_does_not_match"
   ];
 
-  pythonImportsCheck = [
-    "pontos"
-  ];
+  pythonImportsCheck = [ "pontos" ];
 
   meta = with lib; {
     description = "Collection of Python utilities, tools, classes and functions";

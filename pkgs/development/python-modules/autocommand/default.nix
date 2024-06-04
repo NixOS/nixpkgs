@@ -1,31 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "autocommand";
-  version = "2.2.1";
+  version = "2.2.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Lucretiel";
     repo = "autocommand";
-    rev = version;
-    sha256 = "sha256-bjoVGfP57qhvPuHHcMP8JQddAaW4/fEyatElk1UEPZo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-9bv9Agj4RpeyNJvTLUaMwygQld2iZZkoLb81rkXOd3E=";
   };
+
+  postPatch = ''
+    #  _MissingDynamic: `license` defined outside of `pyproject.toml` is ignored.
+    rm setup.py
+  '';
+
+  nativeBuildInputs = [ setuptools ];
 
   # fails with: SyntaxError: invalid syntax
   doCheck = false;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "autocommand" ];
 
   meta = with lib; {
-    description = " Autocommand turns a python function into a CLI program ";
+    description = "Autocommand turns a python function into a CLI program";
     homepage = "https://github.com/Lucretiel/autocommand";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ ];
   };
 }

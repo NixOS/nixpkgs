@@ -12,29 +12,31 @@
 , fuse-overlayfs
 , dockerTools
 , runCommand
+, testers
+, skopeo
 }:
 
 buildGoModule rec {
   pname = "skopeo";
-  version = "1.10.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "sha256-Q6gdkaIYTDUqDbjmE9TcRtQcHjpOJ3bXLJtN8NPp9KA=";
+    hash = "sha256-Zv36vSPfXcpBmxyEA8b3Xoo9HhSWtxnWPP/SubIcHDo=";
   };
 
   outputs = [ "out" "man" ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
   buildInputs = [ gpgme ]
-  ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
+    ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
   buildPhase = ''
     runHook preBuild
@@ -45,8 +47,7 @@ buildGoModule rec {
 
   installPhase = ''
     runHook preInstall
-    PREFIX=$out make install-binary install-completions
-    PREFIX=$man make install-docs
+    PREFIX=${placeholder "out"} make install-binary install-completions install-docs
     install ${passthru.policy}/default-policy.json -Dt $out/etc/containers
   '' + lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/skopeo \
@@ -60,14 +61,19 @@ buildGoModule rec {
       install ${src}/default-policy.json -Dt $out
     '';
     tests = {
+      version = testers.testVersion {
+        package = skopeo;
+      };
       inherit (dockerTools.examples) testNixFromDockerHub;
     };
   };
 
   meta = with lib; {
+    changelog = "https://github.com/containers/skopeo/releases/tag/${src.rev}";
     description = "A command line utility for various operations on container images and image repositories";
+    mainProgram = "skopeo";
     homepage = "https://github.com/containers/skopeo";
-    maintainers = with maintainers; [ lewo ] ++ teams.podman.members;
+    maintainers = with maintainers; [ lewo developer-guy ] ++ teams.podman.members;
     license = licenses.asl20;
   };
 }

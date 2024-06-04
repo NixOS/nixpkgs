@@ -1,32 +1,42 @@
-{ stdenv
-, buildPythonPackage
-, lib
-, python
-, systemd
-, pytest
-, mock
-, pkg-config }:
+{
+  stdenv,
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  systemd,
+  lxml,
+  psutil,
+  pytest,
+  mock,
+  pkg-config,
+}:
 
 buildPythonPackage rec {
   pname = "pystemd";
-  version = "0.10.0";
-  src = python.pkgs.fetchPypi {
+  version = "0.13.2";
+  format = "setuptools";
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-10qBS/2gEIXbGorZC+PLJ9ryOlGrawPn4p7IEfoq6Fk=";
+    hash = "sha256-Tc+ksTpVaFxJ09F8EGMeyhjDN3D2Yxb47yM3uJUcwUQ=";
   };
-
-  disabled = python.pythonOlder "3.4";
 
   buildInputs = [ systemd ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  checkInputs = [ pytest mock ];
+  propagatedBuildInputs = [
+    lxml
+    psutil
+  ];
+
+  nativeCheckInputs = [
+    mock
+    pytest
+  ];
 
   checkPhase = "pytest tests";
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = ''
       Thin Cython-based wrapper on top of libsystemd, focused on exposing the
       dbus API via sd-bus in an automated and easy to consume way

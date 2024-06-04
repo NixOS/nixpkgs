@@ -10,9 +10,9 @@ buildGoModule rec {
     hash = "sha256-IOBgrU3C0ZHD2wx9LRVgKEJzDlUj6z2UXlHGU3tdTdQ=";
   };
 
-  vendorSha256 = "sha256-Hid9OK91LNjLmDHam0ZlrVQopVOsqbZ+BH2rfQi5lS0=";
+  vendorHash = "sha256-Hid9OK91LNjLmDHam0ZlrVQopVOsqbZ+BH2rfQi5lS0=";
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
 
   ldflags = [
     "-X main.GitExactTag=${version}"
@@ -30,5 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/MichaelMure/git-bug-migration";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ DeeUnderscore ];
+    mainProgram = "git-bug-migration";
   };
 }

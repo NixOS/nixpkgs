@@ -1,13 +1,12 @@
 { lib
 , stdenv
 , rustPlatform
-, fetchCrate
+, fetchzip
 , openssl
 , pkg-config
-, makeWrapper
 , installShellFiles
-, Security
-, libiconv
+, darwin
+, bash
 
   # rbw-fzf
 , withFzf ? false
@@ -26,61 +25,50 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.4.3";
+  version = "1.10.2";
 
-  src = fetchCrate {
-    inherit version;
-    crateName = pname;
-    sha256 = "sha256-teeGKQNf+nuUcF9BcdiTV/ycENTbcGvPZZ34FdOO31k=";
+  src = fetchzip {
+    url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
+    hash = "sha256-ScVXtNk2QtfAQn6PtQkbDJNLWAu49l55s6Zpf1fiVjM=";
   };
 
-  cargoSha256 = "sha256-Soquc3OuGlDsGSwNCvYOWQeraYpkzX1oJwmM03Rc3Jg=";
+  cargoHash = "sha256-ii0401TTDm1ySRGOcSmPts/10wTguxsx8h7wA4FsgQk=";
 
   nativeBuildInputs = [
-    pkg-config
-    makeWrapper
     installShellFiles
+  ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
+
+  buildInputs = [ bash ] # for git-credential-rbw
+  ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Security
+    darwin.apple_sdk_11_0.frameworks.AppKit
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
-
-  postPatch = ''
-    patchShebangs bin/git-credential-rbw
-    substituteInPlace bin/git-credential-rbw \
-        --replace rbw $out/bin/rbw
-  '' + lib.optionalString withFzf ''
-    patchShebangs bin/rbw-fzf
-    substituteInPlace bin/rbw-fzf \
-        --replace fzf ${fzf}/bin/fzf \
-        --replace perl ${perl}/bin/perl
-  '' + lib.optionalString withRofi ''
-    patchShebangs bin/rbw-rofi
-    substituteInPlace bin/rbw-rofi \
-        --replace rofi ${rofi}/bin/rofi \
-        --replace xclip ${xclip}/bin/xclip
-  '' + lib.optionalString withRofi ''
-    patchShebangs bin/pass-import
-    substituteInPlace bin/pass-import \
-        --replace pass ${pass}/bin/pass
-  '';
-
-  preConfigure = ''
+  preConfigure = lib.optionalString stdenv.isLinux ''
     export OPENSSL_INCLUDE_DIR="${openssl.dev}/include"
     export OPENSSL_LIB_DIR="${lib.getLib openssl}/lib"
   '';
 
   postInstall = ''
-    for shell in bash zsh fish; do
-      $out/bin/rbw gen-completions $shell > rbw.$shell
-      installShellCompletion rbw.$shell
-    done
-    cp bin/git-credential-rbw $out/bin
+    install -Dm755 -t $out/bin bin/git-credential-rbw
+    installShellCompletion --cmd rbw \
+      --bash <($out/bin/rbw gen-completions bash) \
+      --fish <($out/bin/rbw gen-completions fish) \
+      --zsh <($out/bin/rbw gen-completions zsh)
   '' + lib.optionalString withFzf ''
-    cp bin/rbw-fzf $out/bin
+    install -Dm755 -t $out/bin bin/rbw-fzf
+    substituteInPlace $out/bin/rbw-fzf \
+      --replace fzf ${fzf}/bin/fzf \
+      --replace perl ${perl}/bin/perl
   '' + lib.optionalString withRofi ''
-    cp bin/rbw-rofi $out/bin
+    install -Dm755 -t $out/bin bin/rbw-rofi
+    substituteInPlace $out/bin/rbw-rofi \
+      --replace rofi ${rofi}/bin/rofi \
+      --replace xclip ${xclip}/bin/xclip
   '' + lib.optionalString withPass ''
-    cp bin/pass-import $out/bin
+    install -Dm755 -t $out/bin bin/pass-import
+    substituteInPlace $out/bin/pass-import \
+      --replace pass ${pass}/bin/pass
   '';
 
   meta = with lib; {
@@ -88,6 +76,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://crates.io/crates/rbw";
     changelog = "https://git.tozt.net/rbw/plain/CHANGELOG.md?id=${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ albakham luc65r marsam ];
+    maintainers = with maintainers; [ albakham luc65r ];
+    mainProgram = "rbw";
   };
 }

@@ -4,18 +4,18 @@
 , pkg-config
 , wayland
 , libinput
-, libyamlcpp
+, yaml-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "way-displays";
-  version = "1.6.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "way-displays";
-    rev = "${version}";
-    sha256 = "sha256-/dZDYc0XQ1fZYAsk9bd8vMAh7GMKuY6FX0WK5of+AMk=";
+    rev = version;
+    sha256 = "sha256-uJsamTsfxpFoKOSgNs6+VQpB7/ec4NoHJsjtDa5Dex8=";
   };
 
   strictDeps = true;
@@ -27,11 +27,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wayland
-    libyamlcpp
+    yaml-cpp
     libinput
   ];
 
-  makeFlags = [ "DESTDIR=$(out) PREFIX= PREFIX_ETC= ROOT_ETC=$(out)/etc"];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "PREFIX_ETC=${placeholder "out"}"
+    "CC:=$(CC)"
+    "CXX:=$(CXX)"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/alex-courtis/way-displays";
@@ -39,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ simoneruffini ];
     platforms = platforms.linux;
+    mainProgram = "way-displays";
   };
 }

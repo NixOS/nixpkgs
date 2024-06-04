@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
       'from pygit2 import RemoteCallbacks'
   '';
 
-  checkInputs = with python3Packages; [ pytest pytest-cov mock ];
+  nativeCheckInputs = with python3Packages; [ pytest pytest-cov mock ];
   propagatedBuildInputs = with python3Packages; [ atomiclong fusepy pygit2 six ];
 
   checkPhase = "py.test";
@@ -39,5 +39,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.robbinch ];
+    mainProgram = "gitfs";
   };
 }

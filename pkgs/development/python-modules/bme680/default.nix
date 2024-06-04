@@ -1,31 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, smbus-cffi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  smbus-cffi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "bme680";
   version = "1.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pimoroni";
     repo = "bme680-python";
     rev = "v${version}";
-    sha256 = "sha256-gmdRxMJ0DoCyNcb/bYp746PBi4HktHAAYOcSQJ0Uheg=";
+    hash = "sha256-gmdRxMJ0DoCyNcb/bYp746PBi4HktHAAYOcSQJ0Uheg=";
   };
 
-  propagatedBuildInputs = [
-    smbus-cffi
-  ];
+  propagatedBuildInputs = [ smbus-cffi ];
 
   preBuild = ''
     cd library
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

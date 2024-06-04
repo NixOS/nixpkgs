@@ -2,7 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 
-, llvmPackages_13
+, clang
 , pkg-config
 
 , zlib
@@ -12,25 +12,28 @@
 , nixosTests
 , testers
 , tracee
+, makeWrapper
 }:
 
-let
-  inherit (llvmPackages_13) clang;
-in
 buildGoModule rec {
   pname = "tracee";
-  version = "0.9.2";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-w/x7KhopkADKvpDc5TE5Kf34pRY6HP3kX1Lqujnl0b8=";
+    # project has branches and tags of the same name
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OnOayDxisvDd802kDKGctaQc5LyoyFfdfvC+2JpRjHY=";
   };
-  vendorSha256 = "sha256-5RXNRNoMydFcemNGgyfqcUPtfMVgMYdiyWo/sZi8GQw=";
+  vendorHash = "sha256-26sAKTJQ7Rf5KRlu7j5XiZVr6CkAC6fm60Pam7KH0uA=";
 
   patches = [
     ./use-our-libbpf.patch
+    # can not vendor dependencies with old pyroscope
+    # remove once https://github.com/aquasecurity/tracee/pull/3927
+    # makes it to a release
+    ./update-pyroscope.patch
   ];
 
   enableParallelBuilding = true;
@@ -50,7 +53,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
     mkdir -p ./dist
-    make $makeFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES} bpf-core all
+    make $makeFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES} bpf all
     runHook postBuild
   '';
 
@@ -59,38 +62,27 @@ buildGoModule rec {
   # see passthru.tests.integration
   doCheck = false;
 
+  outputs = [ "out" "lib" "share" ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share/tracee}
+    mkdir -p $out/bin $lib/lib/tracee $share/share/tracee
 
-    cp ./dist/tracee-ebpf $out/bin
-    cp ./dist/tracee-rules $out/bin
-
-    cp -r ./dist/rules $out/share/tracee/
-    cp -r ./cmd/tracee-rules/templates $out/share/tracee/
+    mv ./dist/{tracee,signatures} $out/bin/
+    mv ./dist/tracee.bpf.o $lib/lib/tracee/
+    mv ./cmd/tracee-rules/templates $share/share/tracee/
 
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/tracee-ebpf --help
-    $out/bin/tracee-ebpf --version | grep "v${version}"
-
-    $out/bin/tracee-rules --help
-
-    runHook postInstallCheck
-  '';
-
   passthru.tests = {
     integration = nixosTests.tracee;
+    integration-test-cli = import ./integration-tests.nix { inherit lib tracee makeWrapper; };
     version = testers.testVersion {
       package = tracee;
       version = "v${version}";
-      command = "tracee-ebpf --version";
+      command = "tracee version";
     };
   };
 
@@ -98,6 +90,7 @@ buildGoModule rec {
     homepage = "https://aquasecurity.github.io/tracee/latest/";
     changelog = "https://github.com/aquasecurity/tracee/releases/tag/v${version}";
     description = "Linux Runtime Security and Forensics using eBPF";
+    mainProgram = "tracee";
     longDescription = ''
       Tracee is a Runtime Security and forensics tool for Linux. It is using
       Linux eBPF technology to trace your system and applications at runtime,
@@ -105,8 +98,14 @@ buildGoModule rec {
       is delivered as a Docker image that monitors the OS and detects suspicious
       behavior based on a pre-defined set of behavioral patterns.
     '';
-    license = licenses.asl20;
+    license = with licenses; [
+      # general license
+      asl20
+      # pkg/ebpf/c/*
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    outputsToInstall = [ "out" "share" ];
   };
 }

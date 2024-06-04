@@ -1,0 +1,111 @@
+diff --git a/aiopurpleair/api.py b/aiopurpleair/api.py
+index d3b276b..c557015 100644
+--- a/aiopurpleair/api.py
++++ b/aiopurpleair/api.py
+@@ -5,7 +5,10 @@ from typing import Any, cast
+ 
+ from aiohttp import ClientSession, ClientTimeout
+ from aiohttp.client_exceptions import ClientError
+-from pydantic import BaseModel, ValidationError
++try:
++    from pydantic.v1 import BaseModel, ValidationError
++except ModuleNotFoundError:
++    from pydantic import BaseModel, ValidationError
+ 
+ from aiopurpleair.const import LOGGER
+ from aiopurpleair.endpoints.sensors import SensorsEndpoints
+diff --git a/aiopurpleair/endpoints/__init__.py b/aiopurpleair/endpoints/__init__.py
+index 4d263e1..6632310 100644
+--- a/aiopurpleair/endpoints/__init__.py
++++ b/aiopurpleair/endpoints/__init__.py
+@@ -4,7 +4,10 @@ from __future__ import annotations
+ from collections.abc import Awaitable, Callable, Iterable
+ from typing import Any
+ 
+-from pydantic import BaseModel, ValidationError
++try:
++    from pydantic.v1 import BaseModel, ValidationError
++except ModuleNotFoundError:
++    from pydantic import BaseModel, ValidationError
+ 
+ from aiopurpleair.errors import InvalidRequestError
+ from aiopurpleair.helpers.typing import ModelT
+diff --git a/aiopurpleair/helpers/typing.py b/aiopurpleair/helpers/typing.py
+index 4ae01e6..49f59e6 100644
+--- a/aiopurpleair/helpers/typing.py
++++ b/aiopurpleair/helpers/typing.py
+@@ -1,6 +1,9 @@
+ """Define typing helpers."""
+ from typing import TypeVar
+ 
+-from pydantic import BaseModel
++try:
++    from pydantic.v1 import BaseModel
++except ModuleNotFoundError:
++    from pydantic import BaseModel
+ 
+ ModelT = TypeVar("ModelT", bound=BaseModel)
+diff --git a/aiopurpleair/models/keys.py b/aiopurpleair/models/keys.py
+index 591ae01..ffadbcc 100644
+--- a/aiopurpleair/models/keys.py
++++ b/aiopurpleair/models/keys.py
+@@ -3,7 +3,10 @@ from __future__ import annotations
+ 
+ from datetime import datetime
+ 
+-from pydantic import BaseModel, validator
++try:
++    from pydantic.v1 import BaseModel, validator
++except ModuleNotFoundError:
++    from pydantic import BaseModel, validator
+ 
+ from aiopurpleair.backports.enum import StrEnum
+ from aiopurpleair.helpers.validators import validate_timestamp
+diff --git a/aiopurpleair/models/sensors.py b/aiopurpleair/models/sensors.py
+index 5b99b51..d435996 100644
+--- a/aiopurpleair/models/sensors.py
++++ b/aiopurpleair/models/sensors.py
+@@ -5,7 +5,10 @@ from __future__ import annotations
+ from datetime import datetime
+ from typing import Any, Optional
+ 
+-from pydantic import BaseModel, root_validator, validator
++try:
++    from pydantic.v1 import BaseModel, root_validator, validator
++except ModuleNotFoundError:
++    from pydantic import BaseModel, root_validator, validator
+ 
+ from aiopurpleair.const import SENSOR_FIELDS, ChannelFlag, ChannelState, LocationType
+ from aiopurpleair.helpers.validators import validate_timestamp
+diff --git a/tests/models/test_keys.py b/tests/models/test_keys.py
+index 0d7d7c8..b2e30c1 100644
+--- a/tests/models/test_keys.py
++++ b/tests/models/test_keys.py
+@@ -5,7 +5,10 @@ from datetime import datetime
+ from typing import Any
+ 
+ import pytest
+-from pydantic import ValidationError
++try:
++    from pydantic.v1 import ValidationError
++except ModuleNotFoundError:
++    from pydantic import ValidationError
+ 
+ from aiopurpleair.models.keys import ApiKeyType, GetKeysResponse
+ 
+diff --git a/tests/models/test_sensors.py b/tests/models/test_sensors.py
+index a984b36..7b2c84f 100644
+--- a/tests/models/test_sensors.py
++++ b/tests/models/test_sensors.py
+@@ -5,7 +5,10 @@ from datetime import datetime
+ from typing import Any
+ 
+ import pytest
+-from pydantic import ValidationError
++try:
++    from pydantic.v1 import ValidationError
++except ModuleNotFoundError:
++    from pydantic import ValidationError
+ 
+ from aiopurpleair.models.sensors import (
+     GetSensorsRequest,

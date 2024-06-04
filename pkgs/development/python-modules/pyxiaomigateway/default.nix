@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cryptography,
 }:
 
 buildPythonPackage rec {
   pname = "pyxiaomigateway";
   version = "0.14.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "PyXiaomiGateway";
     rev = version;
-    sha256 = "sha256-TAbZvs1RrUy9+l2KpfbBopc3poTy+M+Q3ERQLFYbQis=";
+    hash = "sha256-TAbZvs1RrUy9+l2KpfbBopc3poTy+M+Q3ERQLFYbQis=";
   };
 
   propagatedBuildInputs = [ cryptography ];

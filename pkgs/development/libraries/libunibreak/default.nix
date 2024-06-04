@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libunibreak";
-  version = "5.0";
+  version = "6.1";
 
   src = let
       rev_version = lib.replaceStrings ["."] ["_"] version;
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "adah1972";
     repo = pname;
     rev = "libunibreak_${rev_version}";
-    sha256 = "sha256-ju+DNCzwD+y/ebLVBU96iNpE1Wt7/K0qLcZHzWGzrWQ=";
+    sha256 = "sha256-8yheb+XSvc1AqITjSutF+/4OWb4+7hweedKzhKJcE1Y=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

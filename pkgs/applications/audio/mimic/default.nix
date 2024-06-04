@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
     pcre2
   ] ++ lib.optional pulseaudioSupport libpulseaudio;
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=free-nonheap-object"
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/mimic \
       --run "export ALSA_PLUGIN_DIR=${alsa-plugins}/lib/alsa-lib"
@@ -48,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mimic.mycroft.ai/";
     license = lib.licenses.free;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.noneucat ];
+    maintainers = [ lib.maintainers.fx-chun ];
   };
 }

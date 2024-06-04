@@ -3,7 +3,7 @@
 with lib;
 
 let
-  version = "1.7.1";
+  version = "1.10.1";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -12,10 +12,10 @@ let
   };
 in {
   options.services.kubernetes.addons.dns = {
-    enable = mkEnableOption (lib.mdDoc "kubernetes dns addon");
+    enable = mkEnableOption "kubernetes dns addon";
 
     clusterIp = mkOption {
-      description = lib.mdDoc "Dns addon clusterIP";
+      description = "Dns addon clusterIP";
 
       # this default is also what kubernetes users
       default = (
@@ -31,19 +31,19 @@ in {
     };
 
     clusterDomain = mkOption {
-      description = lib.mdDoc "Dns cluster domain";
+      description = "Dns cluster domain";
       default = "cluster.local";
       type = types.str;
     };
 
     replicas = mkOption {
-      description = lib.mdDoc "Number of DNS pod replicas to deploy in the cluster.";
+      description = "Number of DNS pod replicas to deploy in the cluster.";
       default = 2;
       type = types.int;
     };
 
     reconcileMode = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Controls the addon manager reconciliation mode for the DNS addon.
 
         Setting reconcile mode to EnsureExists makes it possible to tailor DNS behavior by editing the coredns ConfigMap.
@@ -55,18 +55,18 @@ in {
     };
 
     coredns = mkOption {
-      description = lib.mdDoc "Docker image to seed for the CoreDNS container.";
+      description = "Docker image to seed for the CoreDNS container.";
       type = types.attrs;
       default = {
         imageName = "coredns/coredns";
-        imageDigest = "sha256:4a6e0769130686518325b21b0c1d0688b54e7c79244d48e1b15634e98e40c6ef";
+        imageDigest = "sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e";
         finalImageTag = version;
-        sha256 = "02r440xcdsgi137k5lmmvp0z5w5fmk8g9mysq5pnysq1wl8sj6mw";
+        sha256 = "0wg696920smmal7552a2zdhfncndn5kfammfa8bk8l7dz9bhk0y1";
       };
     };
 
     corefile = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Custom coredns corefile configuration.
 
         See: <https://coredns.io/manual/toc/#configuration>.
@@ -135,6 +135,11 @@ in {
             apiGroups = [ "" ];
             resources = [ "nodes" ];
             verbs = [ "get" ];
+          }
+          {
+            apiGroups = [ "discovery.k8s.io" ];
+            resources = [ "endpointslices" ];
+            verbs = [ "list" "watch" ];
           }
         ];
       };

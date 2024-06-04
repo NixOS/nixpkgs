@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , appstream
 , desktop-file-utils
@@ -9,9 +8,8 @@
 , ninja
 , pkg-config
 , polkit
-, python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , editorconfig-core-c
 , granite
 , gtk3
@@ -28,23 +26,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "6.2.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     rev = version;
-    sha256 = "sha256-QhJNRhYgGbPMd7B1X3kG+pnC/lGUoF7gc7O1PdG49LI=";
+    sha256 = "sha256-6lvn8c+JfbtZQf5dtViosVqtt/RWL6B/MvksXqmCfFs=";
   };
-
-  patches = [
-    # Fix drag and drop of accented text and between tabs
-    # https://github.com/elementary/code/pull/1194
-    (fetchpatch {
-      url = "https://github.com/elementary/code/commit/1ed7b590768ea9cb5b4658e27d9dc7ac224442ae.patch";
-      sha256 = "sha256-VrYcEbkzQKi5gFB/Vw/0NITZvSXKXfuEv2R3m0VALVM=";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream
@@ -53,9 +42,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     polkit # needed for ITS rules
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -77,11 +65,6 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix PATH : "${lib.makeBinPath [ ctags ]}"
     )
-  '';
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
   '';
 
   passthru = {

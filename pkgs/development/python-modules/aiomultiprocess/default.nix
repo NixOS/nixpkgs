@@ -1,27 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiomultiprocess";
-  version = "0.9.0";
-  format = "pyproject";
+  version = "0.9.1";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "omnilib";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-yOP69FXDb2Grmtszx7oa6uiJGUar8su3KwqQPI+xjrw=";
+    repo = "aiomultiprocess";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LWrAr3i2CgOMZFxWi9B3kiou0UtaHdDbpkr6f9pReRA=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "aiomultiprocess/tests/*.py" ];
 

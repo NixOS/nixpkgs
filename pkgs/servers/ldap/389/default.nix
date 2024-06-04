@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , autoconf
 , automake
+, cargo
 , libtool
 , pkg-config
 , cracklib
@@ -25,31 +26,40 @@
 , pcre2
 , python3
 , rustPlatform
+, rustc
 , openssl
-, systemd
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , zlib
 , rsync
+, fetchpatch
 , withCockpit ? true
 , withAsan ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "2.3.1";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-14zl0zGVb8ykgtjao8QGakFyr+b5Cve0NbiZeZig/Ac=";
+    hash = "sha256-12JCd2R00L0T5EPUNO/Aw2HRID+z2krNQ09RSX9Qkj8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-32bit.patch";
+      url = "https://github.com/389ds/389-ds-base/commit/1fe029c495cc9f069c989cfbb09d449a078c56e2.patch";
+      hash = "sha256-b0HSaDjuEUKERIXKg8np+lZDdZNmrCTAXybJzF+0hq0=";
+    })
+  ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/src";
+    sourceRoot = "${src.name}/src";
     name = "${pname}-${version}";
-    hash = "sha256-C7HFv6tTBXoi0a1yEQeGjcKjruvBrm/kiu5zgUUTse0=";
+    hash = "sha256-fE3bJROwti9Ru0jhCiWhXcuQdxXTqzN9yOd2nlhKABI=";
   };
 
   nativeBuildInputs = [
@@ -58,8 +68,8 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
     python3
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
   ]
   ++ lib.optional withCockpit rsync;
 
@@ -120,6 +130,10 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+  # Disable parallel builds as those lack some dependencies:
+  #   ld: cannot find -lslapd: No such file or directory
+  # https://hydra.nixos.org/log/h38bj77gav0r6jbi4bgzy1lfjq22k2wy-389-ds-base-2.3.1.drv
+  enableParallelInstalling = false;
 
   doCheck = true;
 

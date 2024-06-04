@@ -1,37 +1,48 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
-, attrs, click, cligj, click-plugins, six, munch, enum34
-, pytestCheckHook, boto3, mock, giflib, pytz
-, gdal, certifi
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython,
+  gdal,
+  oldest-supported-numpy,
+  setuptools,
+  wheel,
+  attrs,
+  certifi,
+  click,
+  click-plugins,
+  cligj,
+  munch,
+  shapely,
+  boto3,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "fiona";
-  version = "1.8.22";
+  version = "1.9.6";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "Fiona";
-    inherit version;
-    sha256 = "sha256-qCqZzps+eCV0AVfEXJ+yJZ1OkvCohqqsJfDbQP/h7qM=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "Toblerity";
+    repo = "Fiona";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MboM3IwGF8cuz+jMQ3QVZFAHjpspQ6kVJincq7OEkCM=";
   };
 
-  patches = [
-    # https://github.com/Toblerity/Fiona/pull/1122
-    (fetchpatch {
-      url = "https://github.com/Toblerity/Fiona/commit/fa632130dcd9dfbb982ecaa4911b3fab3459168f.patch";
-      hash = "sha256-IuNHr3yBqS1jY9Swvcq8XPv6BpVlInDx0FVuzEMaYTY=";
-    })
-  ];
-
-  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
-
   nativeBuildInputs = [
+    cython
     gdal # for gdal-config
+    oldest-supported-numpy
+    setuptools
+    wheel
   ];
 
-  buildInputs = [
-    gdal
-  ] ++ lib.optionals stdenv.cc.isClang [ giflib ];
+  buildInputs = [ gdal ];
 
   propagatedBuildInputs = [
     attrs
@@ -39,33 +50,49 @@ buildPythonPackage rec {
     click
     cligj
     click-plugins
-    six
     munch
-    pytz
-  ] ++ lib.optional (!isPy3k) enum34;
+  ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    calc = [ shapely ];
+    s3 = [ boto3 ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
-    boto3
-  ] ++ lib.optional (pythonOlder "3.4") mock;
+    pytz
+  ] ++ passthru.optional-dependencies.s3;
 
   preCheck = ''
     rm -r fiona # prevent importing local fiona
-    # disable gdal deprecation warnings
-    export GDAL_ENABLE_DEPRECATED_DRIVER_GTM=YES
   '';
+
+  pytestFlagsArray = [
+    # Tests with gdal marker do not test the functionality of Fiona,
+    # but they are used to check GDAL driver capabilities.
+    "-m 'not gdal'"
+  ];
 
   disabledTests = [
     # Some tests access network, others test packaging
-    "http" "https" "wheel"
-    # https://github.com/Toblerity/Fiona/issues/1164
-    "test_no_append_driver_cannot_append"
+    "http"
+    "https"
+    "wheel"
+
+    # see: https://github.com/Toblerity/Fiona/issues/1273
+    "test_append_memoryfile_drivers"
   ];
 
+  pythonImportsCheck = [ "fiona" ];
+
+  doInstallCheck = true;
+
   meta = with lib; {
+    changelog = "https://github.com/Toblerity/Fiona/blob/${src.rev}/CHANGES.txt";
     description = "OGR's neat, nimble, no-nonsense API for Python";
+    mainProgram = "fio";
     homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = teams.geospatial.members;
   };
 }

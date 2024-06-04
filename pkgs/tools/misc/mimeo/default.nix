@@ -1,13 +1,13 @@
 { lib, fetchurl, desktop-file-utils, file, python3Packages }:
 
-let version = "2022.7";
+let version = "2023";
 in python3Packages.buildPythonApplication {
   pname = "mimeo";
   inherit version;
 
   src = fetchurl {
     url = "https://xyne.dev/projects/mimeo/src/mimeo-${version}.tar.xz";
-    hash = "sha256-xzWPMtlKj35mkE04jcGalbf/94qEOOUi9pvZgSPgdj8=";
+    hash = "sha256-CahvSypwR1aHVDHTdtty1ZfaKBWPolxc73uZ5OyeqZA=";
   };
 
   buildInputs = [ file desktop-file-utils ];
@@ -35,5 +35,6 @@ in python3Packages.buildPythonApplication {
     license = [ licenses.gpl2Only ];
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;
+    mainProgram = "mimeo";
   };
 }

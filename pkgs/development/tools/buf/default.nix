@@ -1,7 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, protobuf
+, protobuf_26
 , git
 , testers
 , buf
@@ -10,39 +10,42 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.12.0";
+  version = "1.32.2";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
-    repo = pname;
+    repo = "buf";
     rev = "v${version}";
-    hash = "sha256-tEeAr1QSec1Sayfg2/erk5u6wBZDodZIMYq9MaU7ATA=";
+    hash = "sha256-lSK1ETeCnK/NeCHaZoHcgFO5OhbE6XcvbJg1+p9x4Hg=";
   };
 
-  vendorHash = "sha256-FCAxqyacDdt3mR628/sguvrBx+nG10648XqF5hA8z+s=";
+  vendorHash = "sha256-LMjDR8tTZPLiIKxvdGjeaVMOh76eYhmAlI7lDJ7HG7I=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
-    ./skip_test_requiring_network.patch
-    # Skip TestWorkspaceGit which requires .git and commits.
-    ./skip_test_requiring_dotgit.patch
+    ./skip_broken_tests.patch
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git # Required for TestGitCloner
-    protobuf # Required for buftesting.GetProtocFilePaths
+    protobuf_26 # Required for buftesting.GetProtocFilePaths
+  ];
+
+  checkFlags = [
+    "-skip=TestWorkspaceGit"
   ];
 
   preCheck = ''
     # The tests need access to some of the built utilities
     export PATH="$PATH:$GOPATH/bin"
-    # To skip TestCloneBranchAndRefToBucket
-    export CI=true
   '';
+
+  # Allow tests that bind or connect to localhost on macOS.
+  __darwinAllowLocalNetworking = true;
 
   installPhase = ''
     runHook preInstall
@@ -74,5 +77,6 @@ buildGoModule rec {
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk lrewega ];
+    mainProgram = "buf";
   };
 }

@@ -1,31 +1,35 @@
-{ buildPythonPackage
-, fetchPypi
-, pytest
-, tqdm
-, docopt
-, requests
-, jsonpatch
-, schema
-, responses
-, lib
-, glibcLocales
-, setuptools
-, urllib3
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
+  jsonpatch,
+  schema,
+  responses,
+  setuptools,
+  tqdm,
+  urllib3,
+  pythonOlder,
+  importlib-metadata,
 }:
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "3.2.0";
+  version = "4.1.0";
+  pyproject = true;
 
-  format = "setuptools";
+  disabled = pythonOlder "3.8";
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-cB7nRDmO2NNaHjNkHCuXH0+15WZfxseS8DBdIqefSzk=";
+  src = fetchFromGitHub {
+    owner = "jjjake";
+    repo = "internetarchive";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CqfwAKhrq4VEBU258x19JT8+ay2vOYIzVoFWjAzh3wY=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     tqdm
@@ -33,27 +37,38 @@ buildPythonPackage rec {
     requests
     jsonpatch
     schema
-    setuptools # needs pkg_resources at runtime
     urllib3
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+
+  nativeCheckInputs = [
+    responses
+    pytestCheckHook
   ];
 
-  checkInputs = [ pytest responses glibcLocales ];
+  disabledTests = [
+    # Tests require network access
+    "test_get_item_with_kwargs"
+    "test_upload"
+    "test_upload_metadata"
+    "test_upload_queue_derive"
+    "test_upload_validate_identifie"
+    "test_upload_validate_identifier"
+  ];
 
-  # tests depend on network
-  doCheck = false;
-
-  checkPhase = ''
-    LC_ALL=en_US.utf-8 pytest tests
-  '';
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/cli/test_ia.py"
+    "tests/cli/test_ia_download.py"
+  ];
 
   pythonImportsCheck = [ "internetarchive" ];
 
   meta = with lib; {
     description = "A Python and Command-Line Interface to Archive.org";
     homepage = "https://github.com/jjjake/internetarchive";
-    changelog = "https://github.com/jjjake/internetarchive/raw/v${version}/HISTORY.rst";
+    changelog = "https://github.com/jjjake/internetarchive/blob/v${version}/HISTORY.rst";
     license = licenses.agpl3Plus;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "ia";
   };
 }

@@ -1,51 +1,48 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-shellitem";
-  version = "3.2";
-  format = "pyproject";
+  version = "3.8";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.shellitem";
-    rev = version;
-    hash = "sha256-z0/KSOgo5Gnl4MLOY5eUPHlI/8dCyYaEEiKMmkP7cgg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-zoq42Au2dNJTryj3GNXJrEGvE0az8psPuMXoJNc74QM=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.shellitem"
-  ];
+  pythonImportsCheck = [ "dissect.shellitem" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the Shellitem structures";
+    mainProgram = "parse-lnk";
     homepage = "https://github.com/fox-it/dissect.shellitem";
+    changelog = "https://github.com/fox-it/dissect.shellitem/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

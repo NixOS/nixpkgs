@@ -1,48 +1,48 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, cachetools
-, pyasn1-modules
-, rsa
-, six
-, aiohttp
-, cryptography
-, pyopenssl
-, pyu2f
-, requests
-, pythonOlder
-, aioresponses
-, asynctest
-, flask
-, freezegun
-, grpcio
-, mock
-, oauth2client
-, pytest-asyncio
-, pytest-localserver
-, pytestCheckHook
-, responses
-, urllib3
+{
+  lib,
+  stdenv,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  cachetools,
+  cryptography,
+  fetchPypi,
+  flask,
+  freezegun,
+  grpcio,
+  mock,
+  oauth2client,
+  pyasn1-modules,
+  pyopenssl,
+  pytest-asyncio,
+  pytest-localserver,
+  pytestCheckHook,
+  pythonOlder,
+  pyu2f,
+  requests,
+  responses,
+  rsa,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.15.0";
-  format = "setuptools";
+  version = "2.29.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cvEqbPyWjXVNe9qzacXFwWAyEG5S0yxt/YSE5MAabR8=";
+    hash = "sha256-Zy3/My0HMidVD/x0V4aKxCGNbFALFV/mzBfSsTYCw2A=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cachetools
     pyasn1-modules
     rsa
-    six
   ];
 
   passthru.optional-dependencies = {
@@ -55,33 +55,29 @@ buildPythonPackage rec {
       pyopenssl
     ];
     pyopenssl = [
+      cryptography
       pyopenssl
     ];
-    reauth = [
-      pyu2f
-    ];
-    requests = [
-      requests
-    ];
+    reauth = [ pyu2f ];
+    requests = [ requests ];
   };
 
-  checkInputs = [
-    aioresponses
-    asynctest
-    flask
-    freezegun
-    grpcio
-    mock
-    oauth2client
-    pytest-asyncio
-    pytest-localserver
-    pytestCheckHook
-    responses
-    urllib3
-  ] ++ passthru.optional-dependencies.aiohttp
-  # `cryptography` is still required on `aarch64-darwin` for `tests/crypt/*`
-  ++ (if (stdenv.isDarwin && stdenv.isAarch64) then [ cryptography ] else passthru.optional-dependencies.enterprise_cert)
-  ++ passthru.optional-dependencies.reauth;
+  nativeCheckInputs =
+    [
+      aioresponses
+      flask
+      freezegun
+      grpcio
+      mock
+      oauth2client
+      pytest-asyncio
+      pytest-localserver
+      pytestCheckHook
+      responses
+    ]
+    ++ passthru.optional-dependencies.aiohttp
+    ++ passthru.optional-dependencies.enterprise_cert
+    ++ passthru.optional-dependencies.reauth;
 
   pythonImportsCheck = [
     "google.auth"
@@ -96,6 +92,8 @@ buildPythonPackage rec {
     "tests/transport/test__custom_tls_signer.py"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Google Auth Python Library";
     longDescription = ''
@@ -105,6 +103,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-auth-library-python";
     changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

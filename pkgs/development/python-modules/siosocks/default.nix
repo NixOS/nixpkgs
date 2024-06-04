@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
-, pythonOlder
-, trio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
+  pythonOlder,
+  trio,
 }:
 
 buildPythonPackage rec {
@@ -17,14 +18,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uja79vWhPYOhhTUBIh+XpS4GnrYJy0/XpDXXQjnyHWM=";
+    hash = "sha256-uja79vWhPYOhhTUBIh+XpS4GnrYJy0/XpDXXQjnyHWM=";
   };
 
-  propagatedBuildInputs = [
-    trio
-  ];
+  propagatedBuildInputs = [ trio ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     pytest-trio
@@ -44,9 +43,7 @@ buildPythonPackage rec {
     "tests/test_socketserver.py"
   ];
 
-  pythonImportsCheck = [
-    "siosocks"
-  ];
+  pythonImportsCheck = [ "siosocks" ];
 
   meta = with lib; {
     description = "Python socks 4/5 client/server library/framework";

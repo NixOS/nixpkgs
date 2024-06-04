@@ -1,4 +1,4 @@
-{ lib, python3 }:
+{ lib, python3, fetchPypi }:
 
 with python3.pkgs;
 
@@ -22,5 +22,6 @@ buildPythonApplication rec {
     license = licenses.mit;
     description = "Utility to interact with a MicroPython board over a serial connection";
     maintainers = with maintainers; [ ];
+    mainProgram = "ampy";
   };
 }

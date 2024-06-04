@@ -15,7 +15,7 @@ with python3.pkgs; buildPythonApplication rec {
     hash = "sha256-bPCNQqiG50vWVFA6J2kyxftwsXunHTNBdSkoIRYkb0s=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     vcrpy
   ];
@@ -29,5 +29,6 @@ with python3.pkgs; buildPythonApplication rec {
     description = "Generate Bibtex entries for IETF RFCs and Internet-Drafts";
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];
+    mainProgram = "rfcbibtex";
   };
 }

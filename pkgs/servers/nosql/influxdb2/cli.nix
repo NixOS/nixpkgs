@@ -1,17 +1,16 @@
 { buildGoModule
-, buildGoPackage
 , fetchFromGitHub
 , lib
 }:
 
 let
-  version = "2.5.0";
+  version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influx-cli";
     rev = "v${version}";
-    sha256 = "sha256-gztLANO42VbgA6LxiuVh8ESF20JqjC+7znYhmWJKxVA=";
+    sha256 = "sha256-0Gyoy9T5pA+40k8kKybWBMtOfpKZxw3Vvp4ZB4ptcJs=";
   };
 
 in buildGoModule {
@@ -19,7 +18,7 @@ in buildGoModule {
   version = version;
   inherit src;
 
-  vendorSha256 = "sha256-GnVLr9mWehgw8vs4RiOrFHVlPpPT/LP6XvCq94aJxJQ=";
+  vendorHash = "sha256-Ov0TPoMm0qi7kkWUUni677sCP1LwkT9+n3KHcAlQkDA=";
   subPackages = [ "cmd/influx" ];
 
   ldflags = [ "-X main.commit=v${version}" "-X main.version=${version}" ];
@@ -28,6 +27,7 @@ in buildGoModule {
     description = "CLI for managing resources in InfluxDB v2";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [ abbradar danderson ];
+    maintainers = with maintainers; [ abbradar ];
+    mainProgram = "influx";
   };
 }

@@ -1,12 +1,23 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let version = "1.100"; in
-(fetchzip {
-  name = "ankacoder-${version}";
-  url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/anka-coder-fonts/AnkaCoder.${version}.zip";
+stdenvNoCC.mkDerivation rec {
+  pname = "ankacoder";
+  version = "1.100";
 
-  sha256 = "1jqx9micfmiarqh9xp330gl96v3vxbwzz9cmg2vi845n9md4im85";
+  src = fetchzip {
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/anka-coder-fonts/AnkaCoder.${version}.zip";
+    stripRoot = false;
+    hash = "sha256-14ItaSQ/fO/WDq0O4SXGWnZgiM0kayJrWQgsKb7bsyY=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/truetype
+    cp *.ttf $out/share/fonts/truetype
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Anka/Coder fonts";
@@ -15,10 +26,4 @@ let version = "1.100"; in
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    unzip $downloadedFile
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
-  '';
-})
+}

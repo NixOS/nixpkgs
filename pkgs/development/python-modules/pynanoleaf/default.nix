@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, requests }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "pynanoleaf";
   version = "0.1.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,9 +23,7 @@ buildPythonPackage rec {
   # pynanoleaf does not contain tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pynanoleaf"
-  ];
+  pythonImportsCheck = [ "pynanoleaf" ];
 
   meta = with lib; {
     homepage = "https://github.com/Oro/pynanoleaf";

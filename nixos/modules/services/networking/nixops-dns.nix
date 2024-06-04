@@ -12,7 +12,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the nixops-dns resolution
           of NixOps virtual machines via dnsmasq and fake domain name.
         '';
@@ -20,7 +20,7 @@ in
 
       user = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The user the nixops-dns daemon should run as.
           This should be the user, which is also used for nixops and
           have the .nixops directory in its home.
@@ -29,7 +29,7 @@ in
 
       domain = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Fake domain name to resolve to NixOps virtual machines.
 
           For example "ops" will resolve "vm.ops".
@@ -40,7 +40,7 @@ in
       dnsmasq = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Enable dnsmasq forwarding to nixops-dns. This allows to use
           nixops-dns for `services.nixops-dns.domain` resolution
           while forwarding the rest of the queries to original resolvers.

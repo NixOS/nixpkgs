@@ -18,13 +18,13 @@
 # See: https://github.com/Shizcow/dmenu-rs#plugins
 stdenv.mkDerivation rec {
   pname = "dmenu-rs";
-  version = "5.5.1";
+  version = "5.5.3";
 
   src = fetchFromGitHub {
     owner = "Shizcow";
-    repo = pname;
+    repo = "dmenu-rs";
     rev = version;
-    sha256 = "sha256-WpDqBjIZ5ESnoRtWZmvm+gNTLKqxL4IibRVCj0yRIFM=";
+    hash = "sha256-05Ia+GHeL8PzOwR7H+NEVhKJVMPhlIaQLwGfvwOAl0g=";
   };
 
   nativeBuildInputs = [
@@ -51,21 +51,8 @@ stdenv.mkDerivation rec {
     lockFile = ./Cargo.lock;
   };
 
-  # The rust-xcb dependency dynamically generates rust code at build time.
-  # This derivation uses nixpkgs rust functions that vendor each cargo
-  # dependency's source code into the READ-ONLY nix store. To avoid the code
-  # generation step failing, we copy the rust-xcb source out of the nix store
-  # and make it writeable. Also, we remove the build's hardcoded c compiler.
-  # See: https://github.com/rust-x-bindings/rust-xcb/tree/v0.8.2
+  # Copy the Cargo.lock stored here in nixpkgs into the build directory.
   postPatch = ''
-    substituteInPlace config.mk --replace "clang" ""
-
-    chmod +w "$NIX_BUILD_TOP/cargo-vendor-dir"
-    mkdir -p "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2-readwrite"
-    cp -r --no-preserve=mod "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2/." "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2-readwrite"
-    unlink "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2"
-    mv "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2-readwrite" "$NIX_BUILD_TOP/cargo-vendor-dir/xcb-0.8.2"
-
     cp ${./Cargo.lock} src/Cargo.lock
   '';
 

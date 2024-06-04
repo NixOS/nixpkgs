@@ -1,9 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, click }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+}:
 
 buildPythonPackage rec {
   pname = "click-datetime";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "click-contrib";

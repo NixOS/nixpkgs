@@ -7,7 +7,7 @@
 , libX11
 , pango
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gnome
 , withGtk3 ? true
 , gtk2
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib gtk libfm' libX11 pango gnome.adwaita-icon-theme ];
-  nativeBuildInputs = [ pkg-config wrapGAppsHook intltool ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 intltool ];
 
   configureFlags = optional withGtk3 "--with-gtk=3";
 
@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     description = "File manager with GTK interface";
     maintainers = [ maintainers.ttuegel ];
     platforms = platforms.linux;
+    mainProgram = "pcmanfm";
   };
 }

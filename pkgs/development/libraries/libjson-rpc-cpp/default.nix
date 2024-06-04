@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${catch2}/include/catch2";
+  env.NIX_CFLAGS_COMPILE = "-I${catch2}/include/catch2";
 
   patches = [
     (fetchpatch {
@@ -94,6 +94,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ framework for json-rpc (json remote procedure call)";
+    mainProgram = "jsonrpcstub";
     homepage = "https://github.com/cinemast/libjson-rpc-cpp";
     license = licenses.mit;
     platforms = platforms.linux;

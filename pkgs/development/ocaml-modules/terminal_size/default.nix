@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "terminal_size";
-  version = "0.1.4";
+  version = "0.2.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/cryptosense/terminal_size/releases/download/v${version}/terminal_size-v${version}.tbz";
-    sha256 = "fdca1fee7d872c4a8e5ab003d9915b6782b272e2a3661ca877f2d78dd25371a7";
+    url = "https://github.com/cryptosense/terminal_size/releases/download/v${version}/terminal_size-${version}.tbz";
+    hash = "sha256-1rYs0oxAcayFypUoCIdFwSTJCU7+rpFyJRRzb5lzsPs=";
   };
 
   checkInputs = [ alcotest ];

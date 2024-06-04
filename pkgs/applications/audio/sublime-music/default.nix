@@ -1,85 +1,82 @@
-{ fetchFromGitLab
-, lib
-, python3Packages
+{ lib
+, fetchFromGitHub
+, python3
 , gobject-introspection
 , gtk3
 , pango
-, wrapGAppsHook
-, xvfb-run
+, wrapGAppsHook3
 , chromecastSupport ? false
 , serverSupport ? false
 , keyringSupport ? true
-, notifySupport ? true, libnotify
-, networkSupport ? true, networkmanager
+, notifySupport ? true
+, libnotify
+, networkSupport ? true
+, networkmanager
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.11.16";
-  format = "pyproject";
+  version = "0.12.0";
+  pyproject = true;
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "sublime-music";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-n77mTgElwwFaX3WQL8tZzbkPwnsyQ08OW9imSOjpBlg=";
+    repo = "sublime-music";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FPzeFqDOcaiariz7qJwz6P3Wd+ZDxNP57uj+ptMtEyM=";
   };
+
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+    sed -i "/--no-cov-on-fail/d" setup.cfg
+
+    # https://github.com/sublime-music/sublime-music/commit/f477659d24e372ed6654501deebad91ae4b0b51c
+    sed -i "s/python-mpv/mpv/g" pyproject.toml
+  '';
+
+  build-system = with python3.pkgs; [
+    flit-core
+  ];
 
   nativeBuildInputs = [
     gobject-introspection
-    python3Packages.poetry-core
-    python3Packages.pythonRelaxDepsHook
-    wrapGAppsHook
-  ];
-
-  # Can be removed in later versions (probably > 0.11.16)
-  pythonRelaxDeps = [
-    "deepdiff"
-    "python-mpv"
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     gtk3
     pango
   ]
-   ++ lib.optional notifySupport libnotify
-   ++ lib.optional networkSupport networkmanager
+  ++ lib.optional notifySupport libnotify
+  ++ lib.optional networkSupport networkmanager
   ;
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     bleach
+    bottle
     dataclasses-json
     deepdiff
-    fuzzywuzzy
+    levenshtein
     mpv
     peewee
+    pychromecast
     pygobject3
-    levenshtein
     python-dateutil
     requests
     semver
+    thefuzz
   ]
-   ++ lib.optional chromecastSupport PyChromecast
-   ++ lib.optional keyringSupport keyring
-   ++ lib.optional serverSupport bottle
+  ++ lib.optional keyringSupport keyring
   ;
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-    sed -i "/--no-cov-on-fail/d" setup.cfg
-  '';
-
-  # hook for gobject-introspection doesn't like strictDeps
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
-  checkInputs = with python3Packages; [
-    pytest
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    ${xvfb-run}/bin/xvfb-run pytest
-  '';
+  disabledTests = [
+    # https://github.com/sublime-music/sublime-music/issues/439
+    "test_get_music_directory"
+  ];
 
   pythonImportsCheck = [
     "sublime_music"
@@ -98,7 +95,9 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";
     homepage = "https://sublimemusic.app/";
+    changelog = "https://github.com/sublime-music/sublime-music/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ albakham sumnerevans ];
+    mainProgram = "sublime-music";
   };
 }

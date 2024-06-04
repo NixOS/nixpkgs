@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "py3dns";
   version = "3.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,5 +28,4 @@ buildPythonPackage rec {
     homepage = "https://launchpad.net/py3dns";
     license = licenses.psfl;
   };
-
 }

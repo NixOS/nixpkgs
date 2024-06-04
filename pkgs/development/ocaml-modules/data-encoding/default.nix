@@ -1,11 +1,11 @@
 { lib
-, fetchFromGitLab
 , buildDunePackage
 , ppx_hash
+, bigstringaf
 , either
 , ezjsonm
 , zarith
-, zarith_stubs_js
+, zarith_stubs_js ? null
 , hex
 , json-data-encoding
 , json-data-encoding-bson
@@ -14,18 +14,14 @@
 , ppx_expect
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "data-encoding";
-  version = "0.5.3";
+  inherit (json-data-encoding) src version;
 
-  src = fetchFromGitLab {
-    owner = "nomadic-labs";
-    repo = "data-encoding";
-    rev = "v0.5.3";
-    sha256 = "sha256-HMNpjh5x7vU/kXQNRjJtOvShEENoNuxjNNPBJfm+Rhg=";
-  };
+  minimalOCamlVersion = "4.10";
 
   propagatedBuildInputs = [
+    bigstringaf
     either
     ezjsonm
     ppx_hash
@@ -36,13 +32,9 @@ buildDunePackage {
     json-data-encoding-bson
   ];
 
-  checkInputs = [
-    alcotest
-    crowbar
+  buildInputs = [
     ppx_expect
   ];
-
-  doCheck = true;
 
   meta = {
     homepage = "https://gitlab.com/nomadic-labs/data-encoding";

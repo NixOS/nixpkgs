@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-vet";
-  version = "0.3.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = pname;
-    rev = "0.3";
-    sha256 = "sha256-m+2Rbaa7wtzdUyl8VzrGsxtZPhQMwlrx6okhc4zZNsI=";
+    rev = version;
+    sha256 = "sha256-VnOqQ1dKgNZSHTzJrD7stoCzNGrSkYxcLDJAsrJUsEQ=";
   };
 
-  cargoSha256 = "sha256-2Ri/CvTZ/RQqxHSgl05kaCbg0ATJapaFEF6y8fWGSwM=";
+  cargoSha256 = "sha256-M8sZzgSEMIB6pPVaE+tC18MCbwYaYpHOnhrEvm9JTso=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A tool to help projects ensure that third-party Rust dependencies have been audited by a trusted source";
+    mainProgram = "cargo-vet";
     homepage = "https://mozilla.github.io/cargo-vet";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ figsoda jk ];

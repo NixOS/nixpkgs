@@ -1,33 +1,34 @@
-{ lib
-, buildPythonPackage
-, rustPlatform
-, setuptools
-, setuptools-rust
-, isPyPy
-, fetchPypi
-, pythonOlder
-, cffi
-, pytestCheckHook
-, libiconv
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  cargo,
+  rustPlatform,
+  rustc,
+  setuptools,
+  setuptools-rust,
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
+  libiconv,
+  stdenv,
   # for passthru.tests
-, asyncssh
-, django_4
-, fastapi
-, paramiko
-, twisted
+  asyncssh,
+  django_4,
+  fastapi,
+  paramiko,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "4.0.0";
+  version = "4.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xZwXD8kiX6rQTd4bph2FtBOUbozi5fX1/zDf1nKD8xk=";
+    hash = "sha256-MzE6EgCjrpC3VYfOrFArBIuED8aef3oJBbX4f6x6Elg=";
   };
 
   cargoRoot = "src/_bcrypt";
@@ -35,39 +36,32 @@ buildPythonPackage rec {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-HvfRLyUhlXVuvxWrtSDKx3rMKJbjvuiMcDY6g+pYFS0=";
+    hash = "sha256-fTD1AKvyeni5ukYjK53gueKLey+rcIUjW/0R289xeb0=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   # Remove when https://github.com/NixOS/nixpkgs/pull/190093 lands.
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "bcrypt"
-  ];
+  pythonImportsCheck = [ "bcrypt" ];
 
   passthru.tests = {
-    inherit asyncssh django_4 fastapi paramiko twisted;
+    inherit
+      asyncssh
+      django_4
+      fastapi
+      paramiko
+      twisted
+      ;
   };
 
   meta = with lib; {

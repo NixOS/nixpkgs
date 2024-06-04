@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, mock
-, pytestCheckHook
-, requests
-, requests_ntlm
-, six
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  mock,
+  pytestCheckHook,
+  requests,
+  requests-ntlm,
+  six,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -24,28 +25,27 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     requests
-    requests_ntlm
+    requests-ntlm
     six
     xmltodict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "winrm"
-  ];
+  pythonImportsCheck = [ "winrm" ];
 
-  pytestFlagsArray = [
-    "winrm/tests/"
-  ];
+  pytestFlagsArray = [ "winrm/tests/" ];
 
   meta = with lib; {
     description = "Python library for Windows Remote Management";
     homepage = "https://github.com/diyan/pywinrm";
     license = licenses.mit;
-    maintainers = with maintainers; [ elasticdog kamadorueda ];
+    maintainers = with maintainers; [
+      elasticdog
+      kamadorueda
+    ];
   };
 }

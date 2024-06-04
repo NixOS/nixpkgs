@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, oauth2client
-, pytestCheckHook
-, pythonOlder
-, pyu2f
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  oauth2client,
+  pytestCheckHook,
+  pythonOlder,
+  pyu2f,
 }:
 
 buildPythonPackage rec {
@@ -27,14 +28,12 @@ buildPythonPackage rec {
     pyu2f
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "google_reauth"
-  ];
+  pythonImportsCheck = [ "google_reauth" ];
 
   meta = with lib; {
     description = "Auth plugin allowing use the use of OAuth 2.0 credentials for Google Cloud Storage";

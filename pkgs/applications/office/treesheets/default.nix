@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 , wxGTK
 , Cocoa
@@ -12,19 +12,19 @@
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "unstable-2023-01-04";
+  version = "0-unstable-2024-05-20";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "treesheets";
-    rev = "fad7747720a602268525d5a900c03c252c9070dd";
-    sha256 = "2n8AEK2YZd+zZjYiDNFe45ACW2cl7YMoOpGIidsKLZU=";
+    rev = "149d3377692cf5c585522f9245d9eb5dd7ddb742";
+    hash = "sha256-qqeK13EazfdQteYcBMgWQ/0F4sBaOYCUpw7BMwfoe7k=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     makeWrapper
   ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     Cocoa
   ];
 
-  NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
+  env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     shopt -s extglob
@@ -45,11 +45,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      hardcodeZeroVersion = true;
+    };
   };
 
   meta = with lib; {
     description = "Free Form Data Organizer";
+    mainProgram = "treesheets";
 
     longDescription = ''
       The ultimate replacement for spreadsheets, mind mappers, outliners,
@@ -61,7 +64,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://strlen.com/treesheets/";
-    maintainers = with maintainers; [ obadz avery ];
+    maintainers = with maintainers; [ obadz ];
     platforms = platforms.unix;
     license = licenses.zlib;
   };

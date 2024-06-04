@@ -1,29 +1,26 @@
-{ lib
-, buildPythonPackage
-, django_4
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django_4,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-admin-sortable2";
-  version = "2.1.4";
+  version = "2.1.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "sha256-fcCP8PvOWFlQL4CdEIwElfOw2UYJJp6u27EjfgMISss=";
+    hash = "sha256-N1awLH0JxbN+/mV3GNWq4rdfRv0Bu/4cOdTmBlEBnXk=";
   };
 
-  propagatedBuildInputs = [
-    django_4
-  ];
+  propagatedBuildInputs = [ django_4 ];
 
-  pythonImportsCheck = [
-    "adminsortable2"
-  ];
+  pythonImportsCheck = [ "adminsortable2" ];
 
   # Tests are very slow (end-to-end with playwright)
   doCheck = false;

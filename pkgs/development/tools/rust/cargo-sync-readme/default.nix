@@ -15,9 +15,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A cargo plugin that generates a Markdown section in your README based on your Rust documentation";
+    mainProgram = "cargo-sync-readme";
     homepage = "https://github.com/phaazon/cargo-sync-readme";
     changelog = "https://github.com/phaazon/cargo-sync-readme/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ b4dm4n ];
+    maintainers = with maintainers; [ b4dm4n matthiasbeyer ];
   };
 }

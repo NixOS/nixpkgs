@@ -9,21 +9,21 @@
 let
   appName = "LibreOffice.app";
   scriptName = "soffice";
-  version = "7.4.3";
+  version = "7.6.7";
 
   dist = {
     aarch64-darwin = rec {
       arch = "aarch64";
       archSuffix = arch;
       url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
-      sha256 = "cf95f9ecd4451d27e8304cea3ba116675267bdf75f08fbb60e0d8917f86edc04";
+      sha256 = "17686aff42734ea4feef08e1189bab3011220000f7784061314c1ae9e5942531";
     };
 
     x86_64-darwin = rec {
       arch = "x86_64";
       archSuffix = "x86-64";
       url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
-      sha256 = "fe569ba23bb74eb3e86974537dd80e504debe5fd8526a00edbad6be4da18986a";
+      sha256 = "42d2eeaeee7bcb0e76e9decdcb8f5a4beebf133ad31f7d42a5e96ea770860110";
     };
   };
 in
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation {
   };
 
   nativeBuildInputs = [ undmg ];
-  sourceRoot = "${appName}";
+  sourceRoot = appName;
 
   installPhase = ''
     runHook preInstall
@@ -75,6 +75,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://libreoffice.org/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ tricktron ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-darwin" "aarch64-darwin" ];
   };
 }

@@ -2,8 +2,9 @@
 , buildPythonApplication
 , fetchPypi
 , gdb
-, flask-socketio
+, eventlet
 , flask-compress
+, flask-socketio
 , pygdbmi
 , pygments
 , }:
@@ -11,26 +12,26 @@
 buildPythonApplication rec {
   pname = "gdbgui";
 
-  version = "0.15.0.1";
-
+  version = "0.15.2.0";
 
   buildInputs = [ gdb ];
   propagatedBuildInputs = [
-    flask-socketio
+    eventlet
     flask-compress
+    flask-socketio
     pygdbmi
     pygments
   ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bwrleLn3GBx4Mie2kujtaUo+XCALM+hRLySIZERlBg0=";
+    sha256 = "sha256-vmMlRmjFqhs3Vf+IU9IDtJzt4dZ0yIOmXIVOx5chZPA=";
   };
 
   postPatch = ''
     echo ${version} > gdbgui/VERSION.txt
-    # remove upper version bound
-    sed -ie 's!,.*<.*!!' requirements.in
+    # relax version requirements
+    sed -i 's/==.*$//' requirements.txt
   '';
 
   postInstall = ''
@@ -43,6 +44,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A browser-based frontend for GDB";
+    mainProgram = "gdbgui";
     homepage = "https://www.gdbgui.com/";
     license = licenses.gpl3;
     platforms = platforms.unix;

@@ -1,24 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, stdenv
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "simplejson";
-  version = "3.18.0";
+  version = "3.19.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-X1lD/kCbKDPPgpr2deoVbC5LADqBlNZHvDg7206E9ZE=";
+    hash = "sha256-+HHtU6sxxwISciLxiwa5m1zj7h/SLDmRxOZNqW5FQSY=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -33,7 +36,11 @@ buildPythonPackage rec {
       for unicode characters).
     '';
     homepage = "https://github.com/simplejson/simplejson";
-    license = with licenses; [ mit afl21 ];
+    changelog = "https://github.com/simplejson/simplejson/blob/v${version}/CHANGES.txt";
+    license = with licenses; [
+      mit
+      afl21
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

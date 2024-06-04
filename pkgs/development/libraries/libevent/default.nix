@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  configureFlags = lib.optional (!sslSupport) "--disable-openssl";
+
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
@@ -52,6 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Event notification library";
+    mainProgram = "event_rpcgen.py";
     longDescription = ''
       The libevent API provides a mechanism to execute a callback function
       when a specific event occurs on a file descriptor or after a timeout

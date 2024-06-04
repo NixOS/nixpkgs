@@ -24,11 +24,11 @@ python3.pkgs.buildPythonApplication rec {
     attrs
     click
     cloudflare
-    pydantic
+    pydantic_1
     requests
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
@@ -56,5 +56,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/kissgyorgy/cloudflare-dyndns";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];
+    mainProgram = "cloudflare-dyndns";
   };
 }

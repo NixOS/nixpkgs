@@ -80,7 +80,8 @@ The first step to declare the list of packages you want in your Emacs
 installation is to create a dedicated derivation. This can be done in a
 dedicated {file}`emacs.nix` file such as:
 
-[]{#ex-emacsNix}
+::: {.example #ex-emacsNix}
+### Nix expression to build Emacs with packages (`emacs.nix`)
 
 ```nix
 /*
@@ -136,6 +137,7 @@ in
     pkgs.notmuch   # From main packages set
   ])
 ```
+:::
 
 The result of this configuration will be an {command}`emacs`
 command which launches Emacs with all of your chosen packages in the
@@ -158,27 +160,33 @@ and yasnippet.
 
 The list of available packages in the various ELPA repositories can be seen
 with the following commands:
-[]{#module-services-emacs-querying-packages}
+::: {.example #module-services-emacs-querying-packages}
+### Querying Emacs packages
+
 ```
 nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.elpaPackages
 nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.melpaPackages
 nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.melpaStablePackages
 nix-env -f "<nixpkgs>" -qaP -A emacs.pkgs.orgPackages
 ```
+:::
 
 If you are on NixOS, you can install this particular Emacs for all users by
-adding it to the list of system packages (see
-[](#sec-declarative-package-mgmt)). Simply modify your file
-{file}`configuration.nix` to make it contain:
-[]{#module-services-emacs-configuration-nix}
-```
+putting the `emacs.nix` file in `/etc/nixos` and adding it to the list of
+system packages (see [](#sec-declarative-package-mgmt)). Simply modify your
+file {file}`configuration.nix` to make it contain:
+::: {.example #module-services-emacs-configuration-nix}
+### Custom Emacs in `configuration.nix`
+
+```nix
 {
  environment.systemPackages = [
    # [...]
-   (import /path/to/emacs.nix { inherit pkgs; })
+   (import ./emacs.nix { inherit pkgs; })
   ];
 }
 ```
+:::
 
 In this case, the next {command}`nixos-rebuild switch` will take
 care of adding your {command}`emacs` to the {var}`PATH`
@@ -189,17 +197,20 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
 -->
 
 If you are not on NixOS or want to install this particular Emacs only for
-yourself, you can do so by adding it to your
-{file}`~/.config/nixpkgs/config.nix` (see
+yourself, you can do so by putting `emacs.nix` in `~/.config/nixpkgs` and
+adding it to your {file}`~/.config/nixpkgs/config.nix` (see
 [Nixpkgs manual](https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides)):
-[]{#module-services-emacs-config-nix}
-```
+::: {.example #module-services-emacs-config-nix}
+### Custom Emacs in `~/.config/nixpkgs/config.nix`
+
+```nix
 {
   packageOverrides = super: let self = super.pkgs; in {
-    myemacs = import /path/to/emacs.nix { pkgs = self; };
+    myemacs = import ./emacs.nix { pkgs = self; };
   };
 }
 ```
+:::
 
 In this case, the next `nix-env -f '<nixpkgs>' -iA
 myemacs` will take care of adding your emacs to the
@@ -214,8 +225,10 @@ automatically generated {file}`emacs.desktop` (useful if you
 only use {command}`emacsclient`), you can change your file
 {file}`emacs.nix` in this way:
 
-[]{#ex-emacsGtk3Nix}
-```
+::: {.example #ex-emacsGtk3Nix}
+### Custom Emacs build
+
+```nix
 { pkgs ? import <nixpkgs> {} }:
 let
   myEmacs = (pkgs.emacs.override {
@@ -229,10 +242,11 @@ let
       rm $out/share/applications/emacs.desktop
     '';
   });
-in [...]
+in [ /* ... */ ]
 ```
+:::
 
-After building this file as shown in [the example above](#ex-emacsNix), you
+After building this file as shown in [](#ex-emacsNix), you
 will get an GTK 3-based Emacs binary pre-loaded with your favorite packages.
 
 ## Running Emacs as a Service {#module-services-emacs-running}
@@ -248,9 +262,10 @@ with the user's login session.
 
 To install and enable the {command}`systemd` user service for Emacs
 daemon, add the following to your {file}`configuration.nix`:
-```
-services.emacs.enable = true;
-services.emacs.package = import /home/cassou/.emacs.d { pkgs = pkgs; };
+```nix
+{
+  services.emacs.enable = true;
+}
 ```
 
 The {var}`services.emacs.package` option allows a custom
@@ -272,11 +287,11 @@ The server should now be ready to serve Emacs clients.
 
 ### Starting the client {#module-services-emacs-starting-client}
 
-Ensure that the emacs server is enabled, either by customizing the
+Ensure that the Emacs server is enabled, either by customizing the
 {var}`server-mode` variable, or by adding
 `(server-start)` to {file}`~/.emacs`.
 
-To connect to the emacs daemon, run one of the following:
+To connect to the Emacs daemon, run one of the following:
 ```
 emacsclient FILENAME
 emacsclient --create-frame  # opens a new frame (window)
@@ -310,9 +325,11 @@ In general, {command}`systemd` user services are globally enabled
 by symlinks in {file}`/etc/systemd/user`. In the case where
 Emacs daemon is not wanted for all users, it is possible to install the
 service but not globally enable it:
-```
-services.emacs.enable = false;
-services.emacs.install = true;
+```nix
+{
+  services.emacs.enable = false;
+  services.emacs.install = true;
+}
 ```
 
 To enable the {command}`systemd` user service for just the
@@ -325,20 +342,10 @@ This will add the symlink
 
 ## Configuring Emacs {#module-services-emacs-configuring}
 
-The Emacs init file should be changed to load the extension packages at
-startup:
-[]{#module-services-emacs-package-initialisation}
-```
-(require 'package)
+If you want to only use extension packages from Nixpkgs, you can add
+`(setq package-archives nil)` to your init file.
 
-;; optional. makes unpure packages archives unavailable
-(setq package-archives nil)
-
-(setq package-enable-at-startup nil)
-(package-initialize)
-```
-
-After the declarative emacs package configuration has been tested,
+After the declarative Emacs package configuration has been tested,
 previously downloaded packages can be cleaned up by removing
 {file}`~/.emacs.d/elpa` (do make a backup first, in case you
 forgot a package).
@@ -359,41 +366,3 @@ convenient if you regularly edit Nix files.
 You can use `woman` to get completion of all available
 man pages. For example, type `M-x woman <RET> nixos-rebuild <RET>.`
 
-### Editing DocBook 5 XML Documents {#sec-emacs-docbook-xml}
-
-Emacs includes
-[nXML](https://www.gnu.org/software/emacs/manual/html_node/nxml-mode/Introduction.html),
-a major-mode for validating and editing XML documents. When editing DocBook
-5.0 documents, such as [this one](#book-nixos-manual),
-nXML needs to be configured with the relevant schema, which is not
-included.
-
-To install the DocBook 5.0 schemas, either add
-{var}`pkgs.docbook5` to [](#opt-environment.systemPackages)
-([NixOS](#sec-declarative-package-mgmt)), or run
-`nix-env -f '<nixpkgs>' -iA docbook5`
-([Nix](#sec-ad-hoc-packages)).
-
-Then customize the variable {var}`rng-schema-locating-files` to
-include {file}`~/.emacs.d/schemas.xml` and put the following
-text into that file:
-[]{#ex-emacs-docbook-xml}
-```xml
-<?xml version="1.0"?>
-<!--
-  To let emacs find this file, evaluate:
-  (add-to-list 'rng-schema-locating-files "~/.emacs.d/schemas.xml")
--->
-<locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
-  <!--
-    Use this variation if pkgs.docbook5 is added to environment.systemPackages
-  -->
-  <namespace ns="http://docbook.org/ns/docbook"
-             uri="/run/current-system/sw/share/xml/docbook-5.0/rng/docbookxi.rnc"/>
-  <!--
-    Use this variation if installing schema with "nix-env -iA pkgs.docbook5".
-  <namespace ns="http://docbook.org/ns/docbook"
-             uri="../.nix-profile/share/xml/docbook-5.0/rng/docbookxi.rnc"/>
-  -->
-</locatingRules>
-```

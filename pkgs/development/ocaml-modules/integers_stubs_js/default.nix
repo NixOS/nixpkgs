@@ -1,6 +1,6 @@
 {
   lib, fetchFromGitHub, buildDunePackage
-, zarith_stubs_js
+, zarith_stubs_js ? null
 }:
 
 buildDunePackage rec {
@@ -8,6 +8,7 @@ buildDunePackage rec {
   version = "1.0";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "o1-labs";

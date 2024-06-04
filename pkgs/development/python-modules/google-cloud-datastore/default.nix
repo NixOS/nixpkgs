@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, google-cloud-testutils
-, libcst
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-core,
+  google-cloud-testutils,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.11.0";
+  version = "2.19.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PSk6IYBfGL7g0FBCqUgT4T8k1IYprtLGQQQEybEO99o=";
+    hash = "sha256-B/xYcKAmHyVGbFV8E035Wpbf0lN6vQiLnVN/ur6ZuXQ=";
   };
 
   propagatedBuildInputs = [
@@ -33,12 +34,10 @@ buildPythonPackage rec {
   ] ++ google-api-core.optional-dependencies.grpc;
 
   passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
+    libcst = [ libcst ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytestCheckHook
@@ -52,6 +51,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Requires credentials
+    "tests/system/test_aggregation_query.py"
     "tests/system/test_allocate_reserve_ids.py"
     "tests/system/test_query.py"
     "tests/system/test_put.py"
@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-datastore";
     changelog = "https://github.com/googleapis/python-datastore/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

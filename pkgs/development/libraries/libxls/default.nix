@@ -30,5 +30,13 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ abbradar ];
     mainProgram = "xls2csv";
     platforms = platforms.unix;
+    knownVulnerabilities = [
+      "CVE-2023-38851"
+      "CVE-2023-38852"
+      "CVE-2023-38853"
+      "CVE-2023-38854"
+      "CVE-2023-38855"
+      "CVE-2023-38856"
+    ];
   };
 }

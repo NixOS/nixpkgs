@@ -9,7 +9,7 @@
       value.int = 0;
       value.bool = false;
       value.string = "";
-      value.path = /.;
+      value.path = ./.;
       value.null = null;
       value.float = 0.1;
     }
@@ -17,7 +17,7 @@
       value.int = 0;
       value.bool = false;
       value.string = "";
-      value.path = /.;
+      value.path = ./.;
       value.null = null;
       value.float = 0.1;
     }

@@ -28,34 +28,34 @@ let
   );
 in {
   options.networking.ucarp = {
-    enable = mkEnableOption (lib.mdDoc "ucarp, userspace implementation of CARP");
+    enable = mkEnableOption "ucarp, userspace implementation of CARP";
 
     interface = mkOption {
       type = types.str;
-      description = lib.mdDoc "Network interface to bind to.";
+      description = "Network interface to bind to.";
       example = "eth0";
     };
 
     srcIp = mkOption {
       type = types.str;
-      description = lib.mdDoc "Source (real) IP address of this host.";
+      description = "Source (real) IP address of this host.";
     };
 
     vhId = mkOption {
       type = types.ints.between 1 255;
-      description = lib.mdDoc "Virtual IP identifier shared between CARP hosts.";
+      description = "Virtual IP identifier shared between CARP hosts.";
       example = 1;
     };
 
     passwordFile = mkOption {
       type = types.str;
-      description = lib.mdDoc "File containing shared password between CARP hosts.";
+      description = "File containing shared password between CARP hosts.";
       example = "/run/keys/ucarp-password";
     };
 
     preempt = mkOption {
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Enable preemptive failover.
         Thus, this host becomes the CARP master as soon as possible.
       '';
@@ -64,30 +64,30 @@ in {
 
     neutral = mkOption {
       type = types.bool;
-      description = lib.mdDoc "Do not run downscript at start if the host is the backup.";
+      description = "Do not run downscript at start if the host is the backup.";
       default = false;
     };
 
     addr = mkOption {
       type = types.str;
-      description = lib.mdDoc "Virtual shared IP address.";
+      description = "Virtual shared IP address.";
     };
 
     advBase = mkOption {
       type = types.ints.unsigned;
-      description = lib.mdDoc "Advertisement frequency in seconds.";
+      description = "Advertisement frequency in seconds.";
       default = 1;
     };
 
     advSkew = mkOption {
       type = types.ints.unsigned;
-      description = lib.mdDoc "Advertisement skew in seconds.";
+      description = "Advertisement skew in seconds.";
       default = 0;
     };
 
     upscript = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Command to run after become master, the interface name, virtual address
         and optional extra parameters are passed as arguments.
       '';
@@ -101,7 +101,7 @@ in {
 
     downscript = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Command to run after become backup, the interface name, virtual address
         and optional extra parameters are passed as arguments.
       '';
@@ -115,44 +115,39 @@ in {
 
     deadratio = mkOption {
       type = types.ints.unsigned;
-      description = lib.mdDoc "Ratio to consider a host as dead.";
+      description = "Ratio to consider a host as dead.";
       default = 3;
     };
 
     shutdown = mkOption {
       type = types.bool;
-      description = lib.mdDoc "Call downscript at exit.";
+      description = "Call downscript at exit.";
       default = false;
     };
 
     ignoreIfState = mkOption {
       type = types.bool;
-      description = lib.mdDoc "Ignore interface state, e.g., down or no carrier.";
+      description = "Ignore interface state, e.g., down or no carrier.";
       default = false;
     };
 
     noMcast = mkOption {
       type = types.bool;
-      description = lib.mdDoc "Use broadcast instead of multicast advertisements.";
+      description = "Use broadcast instead of multicast advertisements.";
       default = false;
     };
 
     extraParam = mkOption {
       type = types.nullOr types.str;
-      description = lib.mdDoc "Extra parameter to pass to the up/down scripts.";
+      description = "Extra parameter to pass to the up/down scripts.";
       default = null;
     };
 
-    package = mkOption {
-      type = types.package;
-      description = lib.mdDoc ''
-        Package that should be used for ucarp.
-
+    package = mkPackageOption pkgs "ucarp" {
+      extraDescription = ''
         Please note that the default package, pkgs.ucarp, has not received any
         upstream updates for a long time and can be considered as unmaintained.
       '';
-      default = pkgs.ucarp;
-      defaultText = literalExpression "pkgs.ucarp";
     };
   };
 

@@ -1,18 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, bash, pkg-config, autoconf, cpio, file, which, unzip
+{ stdenv, lib, fetchpatch, fetchFromGitHub, bash, pkg-config, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, harfbuzz, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
 , libXcursor, libXrandr, fontconfig, openjdk11-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
 let
   major = "11";
   minor = "0";
-  update = "17";
-  build = "8";
+  update = "23";
+  build = "9";
+
+  # when building a headless jdk, also bootstrap it with a headless jdk
+  openjdk-bootstrap = openjdk11-bootstrap.override { gtkSupport = !headless; };
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -22,14 +25,14 @@ let
       owner = "openjdk";
       repo = "jdk${major}u";
       rev = "jdk-${version}";
-      sha256 = "sha256-kvgLYqQZPqyuigVyzbDHc3TMff0clvzM8IdzYLYcxPU=";
+      sha256 = "sha256-6y6wge8ZuSKBpb5QNihvAlD4Pv/0d3AQCPOkxUm/sJk=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
       cpio file which zip perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk11-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -40,6 +43,14 @@ let
       ./currency-date-range-jdk10.patch
       ./increase-javadoc-heap.patch
       ./fix-library-path-jdk11.patch
+
+      # Fix build for gnumake-4.4.1:
+      #   https://github.com/openjdk/jdk/pull/12992
+      (fetchpatch {
+        name = "gnumake-4.4.1";
+        url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
+        hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
+      })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk10.patch
     ];
@@ -50,7 +61,7 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk11-bootstrap.home}"
+      "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
@@ -72,7 +83,7 @@ let
     # Workaround for
     # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
     # when building jtreg
-    NIX_CFLAGS_COMPILE = "-Wformat";
+    env.NIX_CFLAGS_COMPILE = "-Wformat";
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
@@ -147,7 +158,7 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk11-bootstrap ];
+    disallowedReferences = [ openjdk-bootstrap ];
 
     meta = import ./meta.nix lib version;
 

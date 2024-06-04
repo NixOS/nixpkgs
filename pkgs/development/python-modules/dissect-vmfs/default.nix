@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-vmfs";
-  version = "3.2";
+  version = "3.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.vmfs";
-    rev = version;
-    hash = "sha256-6ZNybNRL97Zz6O32r4X0K3/+vZF3Qid98rj2pgGWgvI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-AcVWKUgykgTgP0haBOtWR+wNWzc/PN9qIwVJMqNg8hg=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
@@ -35,17 +34,14 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.vmfs"
-  ];
+  pythonImportsCheck = [ "dissect.vmfs" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the VMFS file system";
     homepage = "https://github.com/fox-it/dissect.vmfs";
+    changelog = "https://github.com/fox-it/dissect.vmfs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

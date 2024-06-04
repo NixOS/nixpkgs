@@ -1,29 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, markupsafe
-, babel
-, pytestCheckHook
-, email-validator
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  babel,
+  hatchling,
+  setuptools,
+
+  # dependencies
+  markupsafe,
+
+  # optional-dependencies
+  email-validator,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "3.0.1";
   pname = "wtforms";
+  version = "3.1.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "WTForms";
-    inherit version;
-    sha256 = "1g654ghavds387hqxmhg9s8x222x89wbq1ggzxbsyn6x2axindbb";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "wtforms";
+    repo = "wtforms";
+    rev = "refs/tags/${version}";
+    hash = "sha256-L6DmB7iVpJR775oRxuEkCKWlUJnmw8VPZTr2dZbqeEc=";
   };
 
-  propagatedBuildInputs = [ markupsafe babel ];
-
-
-  checkInputs = [
-    pytestCheckHook
-    email-validator
+  nativeBuildInputs = [
+    babel
+    hatchling
+    setuptools
   ];
+
+  propagatedBuildInputs = [ markupsafe ];
+
+  passthru.optional-dependencies = {
+    email = [ email-validator ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [ "wtforms" ];
 
@@ -32,7 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wtforms/wtforms";
     changelog = "https://github.com/wtforms/wtforms/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = [ maintainers.bhipple ];
+    maintainers = with maintainers; [ bhipple ];
   };
-
 }

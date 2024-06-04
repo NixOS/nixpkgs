@@ -12,7 +12,7 @@ with lib;
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable sensitivity and speed configuration for trackpoints.
         '';
       };
@@ -21,7 +21,7 @@ with lib;
         default = 128;
         example = 255;
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
           Configure the trackpoint sensitivity. By default, the kernel
           configures 128.
         '';
@@ -31,7 +31,7 @@ with lib;
         default = 97;
         example = 255;
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
           Configure the trackpoint speed. By default, the kernel
           configures 97.
         '';
@@ -40,7 +40,7 @@ with lib;
       emulateWheel = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Enable scrolling while holding the middle mouse button.
         '';
       };
@@ -48,7 +48,7 @@ with lib;
       fakeButtons = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Switch to "bare" PS/2 mouse support in case Trackpoint buttons are not recognized
           properly. This can happen for example on models like the L430, T450, T450s, on
           which the Trackpoint buttons are actually a part of the Synaptics touchpad.
@@ -58,7 +58,7 @@ with lib;
       device = mkOption {
         default = "TPPS/2 IBM TrackPoint";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The device name of the trackpoint. You can check with xinput.
           Some newer devices (example x1c6) use "TPPS/2 Elan TrackPoint".
         '';
@@ -80,10 +80,17 @@ with lib;
         ACTION=="add|change", SUBSYSTEM=="input", ATTR{name}=="${cfg.device}", ATTR{device/speed}="${toString cfg.speed}", ATTR{device/sensitivity}="${toString cfg.sensitivity}"
       '';
 
-      system.activationScripts.trackpoint =
-        ''
+      systemd.services.trackpoint = {
+        wantedBy = [ "sysinit.target" ] ;
+        before = [ "sysinit.target" "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
+        unitConfig.DefaultDependencies = false;
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+        serviceConfig.ExecStart = ''
           ${config.systemd.package}/bin/udevadm trigger --attr-match=name="${cfg.device}"
         '';
+      };
     })
 
     (mkIf (cfg.emulateWheel) {

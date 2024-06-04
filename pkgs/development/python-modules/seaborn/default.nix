@@ -1,64 +1,73 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, matplotlib
-, pytestCheckHook
-, numpy
-, pandas
-, pythonOlder
-, scipy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  matplotlib,
+  pytest-xdist,
+  pytestCheckHook,
+  numpy,
+  pandas,
+  pythonOlder,
+  scipy,
+  statsmodels,
 }:
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.12.1";
+  version = "0.13.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ux6x1R0wlzaMGHw+8InAKI7B/oqhxp+zJMaKodAt9ME=";
+  src = fetchFromGitHub {
+    owner = "mwaskom";
+    repo = "seaborn";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aGIVcdG/XN999nYBHh3lJqGa3QVt0j8kmzaxdkULznY=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     matplotlib
     numpy
     pandas
-    scipy
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    stats = [
+      scipy
+      statsmodels
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # incompatible with matplotlib 3.5
-    "TestKDEPlotBivariate"
-    "TestBoxPlotter"
-    "TestCatPlot"
-    "TestKDEPlotUnivariate"
-    "test_with_rug"
-    "test_bivariate_kde_norm"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isx86) [
-    # overly strict float tolerances
-    "TestDendrogram"
-  ];
+  disabledTests =
+    [
+      # requires internet connection
+      "test_load_dataset_string_error"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+      # overly strict float tolerances
+      "TestDendrogram"
+    ];
 
-  pythonImportsCheck = [
-    "seaborn"
-  ];
+  # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
+  # backends (leads to crashes on macOS).
+  env.MPLBACKEND = "Agg";
+
+  pythonImportsCheck = [ "seaborn" ];
 
   meta = with lib; {
     description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
+    changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fridh ];
   };
 }

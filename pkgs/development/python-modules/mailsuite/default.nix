@@ -1,33 +1,32 @@
-{ buildPythonPackage
-, fetchPypi
-, pythonOlder
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  lib,
 
-# pythonPackages
-, hatchling
-, dnspython
-, expiringdict
-, html2text
-, mail-parser
-, imapclient
-, publicsuffix2
+  # pythonPackages
+  hatchling,
+  dnspython,
+  expiringdict,
+  html2text,
+  mail-parser,
+  imapclient,
+  publicsuffix2,
 }:
 
 buildPythonPackage rec {
   pname = "mailsuite";
-  version = "1.9.14";
+  version = "1.9.15";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8vybabJPQyR0XMXaNp8lQFyuPajrhucgdfazt2ci8Gs=";
+    hash = "sha256-R4nAphydamZojQR7pro5Y3dZg3nYK0+X5lFBMJUpCfw=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     dnspython

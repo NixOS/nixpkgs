@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "numix-solarized-gtk-theme";
-  version = "20210831";
+  version = "20230408";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = pname;
     rev = version;
-    sha256 = "1q8qhpw0hfv625sm626zp4vbz2106b0g5m11ygk87s6kbxrfg6lr";
+    sha256 = "sha256-r5xCe8Ew+/SuCUaZ0yjlumORTy/y1VwbQQjQ6uEyGsY=";
   };
 
   nativeBuildInputs = [ python3 sassc glib gdk-pixbuf inkscape ];

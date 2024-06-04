@@ -5,9 +5,10 @@
 , meson
 , ninja
 , gettext
-, python3
 , desktop-file-utils
+, cargo
 , rustPlatform
+, rustc
 , pkg-config
 , glib
 , libadwaita
@@ -17,23 +18,25 @@
 , alsa-lib
 , libpulseaudio
 , wrapGAppsHook4
+, blueprint-compiler
+, gst_all_1
 }:
 
 stdenv.mkDerivation rec {
   pname = "spot";
-  version = "0.3.3";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "xou816";
     repo = "spot";
     rev = version;
-    hash = "sha256-0iuLZq9FSxaOchxx6LzGwpY8qnOq2APl/qkBYzEV2uw=";
+    hash = "sha256-F875e/VZyN8mTfe9lgjtILNxMqn+66XoPCdaEUagHyU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-g46BkrTv6tdrGe/p245O4cBoPjbvyRP7U6hH1Hp4ja0=";
+    hash = "sha256-45Rqs2/tSWoyZVjFuygR5SxldjoqpprtOKEnMqJK+p8=";
   };
 
   nativeBuildInputs = [
@@ -41,14 +44,14 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3 # for meson postinstall script
     gtk4 # for gtk-update-icon-cache
     glib # for glib-compile-schemas
     desktop-file-utils
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook4
+    blueprint-compiler
   ];
 
   buildInputs = [
@@ -59,17 +62,12 @@ stdenv.mkDerivation rec {
     openssl
     alsa-lib
     libpulseaudio
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
   ];
 
   # https://github.com/xou816/spot/issues/313
   mesonBuildType = "release";
-
-  postPatch = ''
-    chmod +x build-aux/cargo.sh
-    patchShebangs build-aux/cargo.sh build-aux/meson/postinstall.py
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
-  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -77,9 +75,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Native Spotify client for the GNOME desktop";
+    mainProgram = "spot";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
-    maintainers = with maintainers; [ tomfitzhenry ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

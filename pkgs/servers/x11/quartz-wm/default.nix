@@ -12,6 +12,7 @@ in stdenv.mkDerivation {
     ./no_title_crash.patch
     ./extern-patch.patch
   ];
+  configureFlags = [ "--enable-xplugin-dock-support" ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libXinerama
@@ -23,7 +24,7 @@ in stdenv.mkDerivation {
     AppKit Xplugin Foundation
   ];
   meta = with lib; {
-    license = licenses.apsl20;
+    license = licenses.apple-psl20;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];
   };

@@ -11,22 +11,29 @@
 , openssl
 , pkg-config
 , zeromq
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Foundation;
+in
 stdenv.mkDerivation rec {
   pname = "p2pool";
-  version = "2.4";
+  version = "3.10";
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
     rev = "v${version}";
-    sha256 = "sha256-En2ogxAD61w7DRTsCGIp6fEP/cC2A+pTYIbjeJ1MktY=";
+    sha256 = "sha256-IDOtwrIKzP/pbwqIespvZtNS1VdR3246uXxgxR3V6VI=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libuv zeromq libsodium gss hwloc openssl curl ];
+  buildInputs = [ libuv zeromq libsodium gss hwloc openssl curl ]
+    ++ lib.optionals stdenv.isDarwin [ Foundation ];
+
+  cmakeFlags = ["-DWITH_LTO=OFF"];
 
   installPhase = ''
     runHook preInstall
@@ -45,5 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/SChernykh/p2pool";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ratsclub ];
+    mainProgram = "p2pool";
   };
 }

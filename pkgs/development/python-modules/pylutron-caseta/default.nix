@@ -1,51 +1,54 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-sugar
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  click,
+  cryptography,
+  fetchFromGitHub,
+  hatchling,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  xdg,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.18.0";
-  format = "pyproject";
+  version = "0.20.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "gurumitts";
-    repo = pname;
+    repo = "pylutron-caseta";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7bQgMDmvEAvnEoHZxZ9JzYsx1JR9W5eYuvcVUmYM/dw=";
+    hash = "sha256-7uUNLlVrMEgah2YvTECC4S2WArAQjeAyfgDd62sQsYA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    cli = [
+      click
+      xdg
+      zeroconf
+    ];
+  };
+
+  nativeCheckInputs = [
     pytest-asyncio
-    pytest-sugar
     pytest-timeout
     pytestCheckHook
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
-  pythonImportsCheck = [
-    "pylutron_caseta"
-  ];
+  pythonImportsCheck = [ "pylutron_caseta" ];
 
   meta = with lib; {
     description = "Python module o control Lutron Caseta devices";

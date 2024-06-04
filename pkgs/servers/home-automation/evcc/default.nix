@@ -1,9 +1,10 @@
 { lib
-, buildGoModule
+, stdenv
+, buildGo122Module
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
-, go
+, go_1_22
 , git
 , enumer
 , mockgen
@@ -11,25 +12,29 @@
 , npmHooks
 , nix-update-script
 , nixosTests
-, stdenv
 }:
+
+let
+  buildGoModule = buildGo122Module;
+  go = go_1_22;
+in
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.111.1";
+  version = "0.126.5";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
-    repo = pname;
+    repo = "evcc";
     rev = version;
-    hash = "sha256-2ZxEUhDNF2E5http8Pz21L0tw6r4UOK5XYDXbHJDnEU=";
+    hash = "sha256-hw8DImLXFwTEAyPEFUVnyNPXrQTfEk7OOk+w/izJz9s=";
   };
 
-  vendorHash = "sha256-+qne/eB+z8e0vStC9V0w7jgWgo3vvkaR42dUe+/eXDE=";
+  vendorHash = "sha256-gfKJiZ7wSFWEEB/UCAbH18jdZdgG/58q3Yj0FQqMH8E=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-zrNfev2x5quuujifRHUufBK/GnR7QkCypHCyYb4nwkI=";
+    hash = "sha256-ghDLmsmcG+qDItiqaZy8MTYw/AU58bZfUzYY32XKNyk=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +58,7 @@ buildGoModule rec {
 
   tags = [
     "release"
+    "test"
   ];
 
   ldflags = [
@@ -62,20 +68,37 @@ buildGoModule rec {
     "-w"
   ];
 
-  npmInstallFlags = [
-    "--legacy-peer-deps"
-  ];
-
   preBuild = ''
     make ui
   '';
 
-  doCheck = !stdenv.isDarwin; # tries to bind to local network, doesn't work in darwin sandbox
+  doCheck = !stdenv.isDarwin; # darwin sandbox limitations around network access, access to /etc/protocols and likely more
 
-  preCheck = ''
-    # requires network access
-    rm meter/template_test.go
-  '';
+  checkFlags = let
+    skippedTests = [
+      # network access
+      "TestOctopusConfigParse"
+      "TestTemplates/allinpower"
+      "TestTemplates/electricitymaps"
+      "TestTemplates/elering"
+      "TestTemplates/energinet"
+      "TestTemplates/grünstromindex"
+      "TestTemplates/pun"
+      "TestTemplates/entsoe"
+      "TestTemplates/ngeso"
+      "TestTemplates/tibber"
+      "TestTemplates/groupe-e"
+      "TestTemplates/awattar"
+      "TestTemplates/energy-charts-api"
+      "TestTemplates/polestar"
+      "TestTemplates/sma-inverter-speedwire/battery"
+      "TestTemplates/sma-inverter-speedwire/pv"
+      "TestTemplates/smartenergy"
+      "TestTemplates/tibber-pulse/grid"
+
+    ];
+  in
+  [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
     tests = {
@@ -87,7 +110,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "EV Charge Controller";
     homepage = "https://evcc.io";
-    changelog = "https://github.com/andig/evcc/releases/tag/${version}";
+    changelog = "https://github.com/evcc-io/evcc/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

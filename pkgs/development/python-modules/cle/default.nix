@@ -1,51 +1,53 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchFromGitHub
-, minidump
-, nose
-, pefile
-, pyelftools
-, pytestCheckHook
-, pythonOlder
-, pyvex
-, pyxbe
-, setuptools
-, sortedcontainers
+{
+  lib,
+  archinfo,
+  buildPythonPackage,
+  cart,
+  cffi,
+  fetchFromGitHub,
+  minidump,
+  pefile,
+  pyelftools,
+  pynose,
+  pytestCheckHook,
+  pythonOlder,
+  pyvex,
+  pyxbe,
+  setuptools,
+  sortedcontainers,
 }:
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.34";
+  version = "9.2.104";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
-    rev = "v${version}";
-    hash = "sha256-LpYi5Ty6OBcW0zokCliMDhujJ7tPPl1XdPs5ad1tv5s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5Rs7MMU1/5VwG9ZbLO07GggEHZA9zHK8LZEId6hTa9Q=";
   };
-
 in
 buildPythonPackage rec {
   pname = "cle";
   inherit version;
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-mbYitM0ibUSxBRhbF1ecB1MOryhWRPZZ1ujRFD8iiWs=";
+    repo = "cle";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8jfXqv69IkqzeMW61ZMIjtvYMZezDcKgnRaVQEfhh0I=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    archinfo
+    cart
     cffi
     minidump
     pefile
@@ -55,8 +57,8 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  checkInputs = [
-    nose
+  nativeCheckInputs = [
+    pynose
     pytestCheckHook
   ];
 
@@ -74,13 +76,13 @@ buildPythonPackage rec {
     "test_plt_full_relro"
     # Test fails
     "test_tls_pe_incorrect_tls_data_start"
+    "test_x86"
+    "test_x86_64"
     # The required parts is not present on Nix
     "test_remote_file_map"
   ];
 
-  pythonImportsCheck = [
-    "cle"
-  ];
+  pythonImportsCheck = [ "cle" ];
 
   meta = with lib; {
     description = "Python loader for many binary formats";

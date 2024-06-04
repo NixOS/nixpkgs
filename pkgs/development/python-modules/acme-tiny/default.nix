@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, fusepy
-, fuse
-, openssl
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  fusepy,
+  fuse,
+  openssl,
 }:
 
 buildPythonPackage rec {
   pname = "acme-tiny";
   version = "5.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +26,10 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools-scm ];
 
-  checkInputs = [ fusepy fuse ];
+  nativeCheckInputs = [
+    fusepy
+    fuse
+  ];
 
   doCheck = false; # seems to hang, not sure
 
@@ -32,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A tiny script to issue and renew TLS certs from Let's Encrypt";
+    mainProgram = "acme-tiny";
     homepage = "https://github.com/diafygi/acme-tiny";
     license = licenses.mit;
   };

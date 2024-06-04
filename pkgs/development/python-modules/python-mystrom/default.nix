@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, click
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  click,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-mystrom";
-  version = "2.1.0";
+  version = "2.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Kqv5rUdwkynOzssID77gVYyzs0CDR/bUWh6zpt5zOP8=";
+    hash = "sha256-VFsTA/isBw0H7qXQhOX6K2p1QcVxO7q5TIzf8YivVgc=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API client for interacting with myStrom devices";
+    mainProgram = "mystrom";
     longDescription = ''
       Asynchronous Python API client for interacting with myStrom devices.
       There is support for bulbs, motion sensors, plugs and buttons.

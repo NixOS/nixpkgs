@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , python3
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , glibcLocales
 , gobject-introspection
 , gettext
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     pango
     gdk-pixbuf
@@ -54,6 +54,11 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
     librsvg
   ];
+
+  postInstall = ''
+    install -Dm444 gspeech.desktop -t $out/share/applications
+    install -Dm444 icons/*.svg -t $out/share/icons/hicolor/scalable/apps
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/gspeech --prefix PATH : ${lib.makeBinPath [ picotts sox ]}

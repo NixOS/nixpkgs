@@ -1,23 +1,48 @@
 { lib, stdenv, fetchzip }@args:
-let lib' = lib; in
-let lib = import ../extra-lib.nix {lib = lib';}; in
-with builtins; with lib;
+
 let
+  lib = import ../extra-lib.nix {
+    inherit (args) lib;
+  };
+
+  inherit (lib)
+    attrNames
+    fakeSha256
+    filter
+    findFirst
+    head
+    isAttrs
+    isPath
+    isString
+    last
+    length
+    optionalAttrs
+    pathExists
+    pred
+    sort
+    switch
+    switch-if
+    versionAtLeast
+    versions
+    ;
+
+  inherit (lib.strings) match split;
+
   default-fetcher = {domain ? "github.com", owner ? "", repo, rev, name ? "source", sha256 ? null, ...}@args:
     let ext = if args?sha256 then "zip" else "tar.gz";
         fmt = if args?sha256 then "zip" else "tarball";
         pr  = match "^#(.*)$" rev;
         url = switch-if [
-          { cond = isNull pr && !isNull (match "^github.*" domain);
+          { cond = pr == null && (match "^github.*" domain) != null;
             out = "https://${domain}/${owner}/${repo}/archive/${rev}.${ext}"; }
-          { cond = !isNull pr && !isNull (match "^github.*" domain);
+          { cond = pr != null && (match "^github.*" domain) != null;
             out = "https://api.${domain}/repos/${owner}/${repo}/${fmt}/pull/${head pr}/head"; }
-          { cond = isNull pr && !isNull (match "^gitlab.*" domain);
+          { cond = pr == null && (match "^gitlab.*" domain) != null;
             out = "https://${domain}/${owner}/${repo}/-/archive/${rev}/${repo}-${rev}.${ext}"; }
-          { cond = !isNull (match "(www.)?mpi-sws.org" domain);
+          { cond = (match "(www.)?mpi-sws.org" domain) != null;
             out = "https://www.mpi-sws.org/~${owner}/${repo}/download/${repo}-${rev}.${ext}";}
         ] (throw "meta-fetch: no fetcher found for domain ${domain} on ${rev}");
-        fetch = x: if args?sha256 then fetchzip (x // { inherit sha256; }) else fetchTarball x;
+        fetch = x: if args?sha256 then fetchzip (x // { inherit sha256; }) else builtins.fetchTarball x;
     in fetch { inherit url ; };
 in
 {
@@ -38,11 +63,12 @@ switch arg [
   { case = isNull;       out = { version = "broken"; src = ""; broken = true; }; }
   { case = isPathString; out = { version = "dev"; src = arg; }; }
   { case = pred.union isVersion isShortVersion;
-    out = let v = if isVersion arg then arg else shortVersion arg; in
-      let
-        given-sha256 = release.${v}.sha256 or "";
-        sha256 = if given-sha256 == "" then lib.fakeSha256 else given-sha256;
-        rv = release.${v} // { inherit sha256; }; in
+    out = let
+      v = if isVersion arg then arg else shortVersion arg;
+      given-sha256 = release.${v}.sha256 or "";
+      sha256 = if given-sha256 == "" then fakeSha256 else given-sha256;
+      rv = release.${v} // { inherit sha256; };
+    in
       {
         version = rv.version or v;
         src = rv.src or fetcher (location // { rev = releaseRev v; } // rv);

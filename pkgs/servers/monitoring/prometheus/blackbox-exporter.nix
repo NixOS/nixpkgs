@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "blackbox_exporter";
-  version = "0.23.0";
+  version = "0.25.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "blackbox_exporter";
-    sha256 = "sha256-im/B5PM7oSE9ejcr558sJKM67UjZUXfm5dci4ZlMycA=";
+    sha256 = "sha256-RyVP/lcCN/HbhRtGM7n4kFRpBxMO5SvpleeygzCq5bA=";
   };
 
-  vendorSha256 = "sha256-f2m/8KvnEX0lZkmQtFOLOMj5gMUIiBKKvC+yq7QY0B4=";
+  vendorHash = "sha256-gVVYccbwtB9/WA3lfzXwI9cZkTdTv96/2gLfwtoE+WM=";
 
   # dns-lookup is performed for the tests
   doCheck = false;
@@ -31,9 +31,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Blackbox probing of endpoints over HTTP, HTTPS, DNS, TCP and ICMP";
+    mainProgram = "blackbox_exporter";
     homepage = "https://github.com/prometheus/blackbox_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ globin fpletz willibutz Frostman ma27 ];
-    platforms = platforms.unix;
   };
 }

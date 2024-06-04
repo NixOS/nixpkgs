@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   proxyVendor = true;
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
 
@@ -35,5 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/metafates/mangal";
     license = licenses.mit;
     maintainers = [ maintainers.bertof ];
+    mainProgram = "mangal";
   };
 }

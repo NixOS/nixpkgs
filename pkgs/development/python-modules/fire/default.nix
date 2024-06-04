@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, six
-, hypothesis
-, mock
-, levenshtein
-, pytestCheckHook
-, termcolor
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  six,
+  hypothesis,
+  mock,
+  levenshtein,
+  pytestCheckHook,
+  termcolor,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,21 +26,28 @@ buildPythonPackage rec {
     hash = "sha256-cwY1RRNtpAn6LnBASQLTNf4XXSPnfhOa1WgglGEM2/s=";
   };
 
+  patches = [
+    # https://github.com/google/python-fire/pull/440
+    (fetchpatch {
+      name = "remove-asyncio-coroutine.patch";
+      url = "https://github.com/google/python-fire/pull/440/commits/30b775a7b36ce7fbc04656c7eec4809f99d3e178.patch";
+      hash = "sha256-GDAAlvZKbJl3OhajsEO0SZvWIXcPDi3eNKKVgbwSNKk=";
+    })
+  ];
+
   propagatedBuildInputs = [
     six
     termcolor
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
     levenshtein
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "fire"
-  ];
+  pythonImportsCheck = [ "fire" ];
 
   meta = with lib; {
     description = "A library for automatically generating command line interfaces";

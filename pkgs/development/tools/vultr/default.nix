@@ -14,13 +14,14 @@ buildGoModule rec {
     sha256 = "sha256-kyB6gUbc32NsSDqDy1zVT4HXn0pWxHdBOEBOSaI0Xro=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # There are not test files
   doCheck = false;
 
   meta = with lib; {
     description = "Vultr CLI and API client library";
+    mainProgram = "vultr";
     homepage = "https://jamesclonk.github.io/vultr";
     changelog = "https://github.com/JamesClonk/vultr/releases/tag/${src.rev}";
     license = licenses.mit;

@@ -1,116 +1,141 @@
 { lib
-, stdenv
-, fetchFromGitHub
-, genBytecode ? false
-, bqn-path ? null
-, mbqn-source ? null
-, enableReplxx ? false
-  # No support for macOS' .dylib on the CBQN side
-, enableLibcbqn ? stdenv.hostPlatform.isLinux
+, callPackage
+, fixDarwinDylibNames
 , libffi
+, mbqn-source
 , pkg-config
+, stdenv
+# Boolean flags
+, enableReplxx ? false
+, enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx)
+, generateBytecode ? false
+# "Configurable" options
+, bqn-interpreter
 }:
 
 let
-  # TODO: these submodules should be separated libraries
-  cbqn-bytecode-files = fetchFromGitHub {
-    name = "cbqn-bytecode-files";
-    owner = "dzaima";
-    repo = "CBQN";
-    rev = "3df8ae563a626ff7ae0683643092f0c3bc2481e5";
-    hash = "sha256:0rh9qp1bdm9aa77l0kn9n4jdy08gl6l7898lncskxiq9id6xvyb8";
-  };
-  replxx-submodule = fetchFromGitHub {
-    name = "replxx-submodule";
-    owner = "dzaima";
-    repo = "replxx";
-    rev = "ba94c293caad52486df8712e808783df9a8f4501";
-    hash = "sha256-pMLvURksj/5k5b6BTwWxjomoROMOE5+GRjyaoqu/iYE=";
-  };
+  sources = callPackage ./sources.nix { };
 in
-assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
-
 stdenv.mkDerivation rec {
-  pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.pre+date=2022-11-27";
-
-  src = fetchFromGitHub {
-    owner = "dzaima";
-    repo = "CBQN";
-    rev = "49c0d9a355698f54fff2c0caa177e2b341fabb45";
-    hash = "sha256-jm2ZzFxhr9o4nFR2rjYJz/4GH+WFnfU4QDovrOPI3jQ=";
-  };
+  pname = "cbqn" + lib.optionalString (!generateBytecode) "-standalone";
+  inherit (sources.cbqn) version src;
 
   nativeBuildInputs = [
     pkg-config
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
   ];
 
   buildInputs = [
     libffi
   ];
 
-  dontConfigure = true;
-
-  postPatch = ''
-    sed -i '/SHELL =.*/ d' makefile
-  '';
-
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
-  ]
-  ++ lib.optional enableReplxx "REPLXX=1";
+  ];
 
   buildFlags = [
     # interpreter binary
     "o3"
+    "notui=1" # display build progress in a plain-text format
+    "REPLXX=${if enableReplxx then "1" else "0"}"
+  ] ++ lib.optionals stdenv.hostPlatform.avx2Support [
+    "has=avx2"
   ] ++ lib.optionals enableLibcbqn [
     # embeddable interpreter as a shared lib
     "shared-o3"
   ];
 
-  preBuild = ''
-    # Purity: avoids git downloading bytecode files
-    mkdir -p build/bytecodeLocal/gen
-  '' + (if genBytecode then ''
-    ${bqn-path} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
-  '' else ''
-    cp ${cbqn-bytecode-files}/src/gen/{compiles,explain,formatter,runtime0,runtime1,src} build/bytecodeLocal/gen/
-  '')
-  + lib.optionalString enableReplxx ''
-    cp -r ${replxx-submodule} build/replxxLocal/
-  '';
-
   outputs = [
     "out"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals enableLibcbqn [
     "lib"
     "dev"
   ];
 
-  installPhase = ''
-     runHook preInstall
+  dontConfigure = true;
 
-     mkdir -p $out/bin/
-     cp BQN -t $out/bin/
-     # note guard condition for case-insensitive filesystems
-     [ -e $out/bin/bqn ] || ln -s $out/bin/BQN $out/bin/bqn
-     [ -e $out/bin/cbqn ] || ln -s $out/bin/BQN $out/bin/cbqn
-  ''
-  + lib.optionalString enableLibcbqn ''
-     install -Dm644 include/bqnffi.h -t "$dev/include"
-     install -Dm755 libcbqn${stdenv.hostPlatform.extensions.sharedLibrary} -t "$lib/lib"
-  ''
-  + ''
-     runHook postInstall
+  doInstallCheck = true;
+
+  strictDeps = true;
+
+  postPatch = ''
+    sed -i '/SHELL =.*/ d' makefile
+    patchShebangs build/build
   '';
 
-  meta = with lib; {
+  preBuild = ''
+    mkdir -p build/singeliLocal/
+    cp -r ${sources.singeli.src}/* build/singeliLocal/
+  '' + (if generateBytecode then ''
+    mkdir -p build/bytecodeLocal/gen
+    ${bqn-interpreter} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
+  '' else ''
+    mkdir -p build/bytecodeLocal/gen
+    cp -r ${sources.cbqn-bytecode.src}/* build/bytecodeLocal/
+  '')
+  + lib.optionalString enableReplxx ''
+    mkdir -p build/replxxLocal/
+    cp -r ${sources.replxx.src}/* build/replxxLocal/
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin/
+    cp BQN -t $out/bin/
+    # note guard condition for case-insensitive filesystems
+    [ -e $out/bin/bqn ] || ln -s $out/bin/BQN $out/bin/bqn
+    [ -e $out/bin/cbqn ] || ln -s $out/bin/BQN $out/bin/cbqn
+  ''
+  + lib.optionalString enableLibcbqn ''
+    install -Dm644 include/bqnffi.h -t "$dev/include"
+    install -Dm755 libcbqn${stdenv.hostPlatform.extensions.sharedLibrary} -t "$lib/lib"
+  ''
+  + ''
+    runHook postInstall
+  '';
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # main test suite from mlochbaum/BQN
+    $out/bin/BQN ${mbqn-source}/test/this.bqn
+
+    # CBQN tests that do not require compiling with test-only flags
+    $out/bin/BQN test/cmp.bqn
+    $out/bin/BQN test/equal.bqn
+    $out/bin/BQN test/copy.bqn
+    $out/bin/BQN test/bit.bqn
+    $out/bin/BQN test/hash.bqn
+    $out/bin/BQN test/squeezeValid.bqn
+    $out/bin/BQN test/squeezeExact.bqn
+    $out/bin/BQN test/various.bqn
+    $out/bin/BQN test/random.bqn
+
+    runHook postInstallCheck
+  '';
+
+  meta = {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk ];
-    platforms = platforms.all;
+    license = with lib.licenses; [
+      # https://github.com/dzaima/CBQN?tab=readme-ov-file#licensing
+      asl20
+      boost
+      gpl3Only
+      lgpl3Only
+      mit
+      mpl20
+    ];
+    mainProgram = "cbqn";
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      detegr
+      shnarazk
+      sternenseemann
+      synthetica
+    ];
+    platforms = lib.platforms.all;
   };
 }
-# TODO: version cbqn-bytecode-files
-# TODO: test suite

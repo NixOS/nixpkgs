@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, pythonOlder
-, docutils
-, installShellFiles
-, poetry-core
-, google-api-python-client
-, simplejson
-, oauth2client
-, setuptools
-, pyxdg
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pythonOlder,
+  docutils,
+  installShellFiles,
+  poetry-core,
+  google-api-python-client,
+  simplejson,
+  oauth2client,
+  setuptools,
+  pyxdg,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "goobook";
     repo = "goobook";
     rev = version;
-    sha256 = "sha256-gWmeRlte+lP7VP9gbPuMHwhVkx91wQ0GpQFQRLJ29h8=";
+    hash = "sha256-gWmeRlte+lP7VP9gbPuMHwhVkx91wQ0GpQFQRLJ29h8=";
   };
 
   postPatch = ''
@@ -59,6 +60,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Access your Google contacts from the command line";
+    mainProgram = "goobook";
     longDescription = ''
       The purpose of GooBook is to make it possible to use your Google Contacts
       from the command-line and from MUAs such as Mutt.

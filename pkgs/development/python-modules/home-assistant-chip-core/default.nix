@@ -1,67 +1,78 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build
-, autoPatchelfHook
+  # build
+  autoPatchelfHook,
 
-# runtime
-, openssl_1_1
+  # runtime
+  glib,
+  libnl,
 
-# propagates
-, coloredlogs
-, construct
-, dacite
-, rich
-, pyyaml
-, ipdb
-, deprecation
-, mobly
-, pygobject3
+  # propagates
+  aenum,
+  coloredlogs,
+  construct,
+  cryptography,
+  dacite,
+  ecdsa,
+  rich,
+  pyyaml,
+  ipdb,
+  deprecation,
+  mobly,
+  pygobject3,
 }:
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-core";
-  version = "2022.12.0";
+  version = "2024.3.2";
   format = "wheel";
 
   disabled = pythonOlder "3.7";
 
-  src = let
-    system = {
-      "aarch64-linux" = {
-        name = "aarch64";
-        hash = "sha256-oNqrvbzXeXpMG3v9RK6kppONH4n7xLVaJCEFXxVj2jE=";
-      };
-      "x86_64-linux" = {
-        name = "x86_64";
-        hash = "sha256-S5n1MUig8ZDSLgWeVmu+5qLZ4kfHQUC9qZcVfM8rPvw=";
-      };
-    }.${stdenv.system} or (throw "Unsupported system");
-  in fetchPypi {
-    pname = "home_assistant_chip_core";
-    inherit version format;
-    dist = "cp37";
-    python = "cp37";
-    abi = "abi3";
-    platform = "manylinux_2_31_${system.name}";
-    hash = system.hash;
-  };
+  src =
+    let
+      system =
+        {
+          "aarch64-linux" = {
+            name = "aarch64";
+            hash = "sha256-li+fmEikVnTAkgQnoiWjoZaVRwGRadTYuQySR5s8VB4=";
+          };
+          "x86_64-linux" = {
+            name = "x86_64";
+            hash = "sha256-iUKtAz00qFklTW2ilUPGAWhpqDmnLb6D3Zdy1oHpQl0=";
+          };
+        }
+        .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+    in
+    fetchPypi {
+      pname = "home_assistant_chip_core";
+      inherit version format;
+      dist = "cp37";
+      python = "cp37";
+      abi = "abi3";
+      platform = "manylinux_2_31_${system.name}";
+      hash = system.hash;
+    };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
-    openssl_1_1
+    glib
+    libnl
   ];
 
   propagatedBuildInputs = [
+    aenum
     coloredlogs
     construct
+    cryptography
     dacite
+    ecdsa
     rich
     pyyaml
     ipdb
@@ -70,12 +81,17 @@ buildPythonPackage rec {
     pygobject3
   ];
 
+  pythonNamespaces = [
+    "chip"
+    "chip.clusters"
+  ];
+
   pythonImportsCheck = [
     "chip"
     "chip.ble"
-    # https://github.com/project-chip/connectedhomeip/pull/24376
-    #"chip.configuration"
+    "chip.configuration"
     "chip.discovery"
+    "chip.exceptions"
     "chip.native"
     "chip.storage"
   ];
@@ -85,9 +101,13 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python-base APIs and tools for CHIP";
     homepage = "https://github.com/home-assistant-libs/chip-wheels";
+    changelog = "https://github.com/home-assistant-libs/chip-wheels/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
-    platforms = platforms.linux;
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

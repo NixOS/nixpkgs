@@ -8,20 +8,13 @@ in {
 
   options = {
     services.surrealdb = {
-      enable = mkEnableOption (lib.mdDoc "A scalable, distributed, collaborative, document-graph database, for the realtime web ");
+      enable = mkEnableOption "SurrealDB, a scalable, distributed, collaborative, document-graph database, for the realtime web";
 
-      package = mkOption {
-        default = pkgs.surrealdb;
-        defaultText = literalExpression "pkgs.surrealdb";
-        type = types.package;
-        description = lib.mdDoc ''
-          Which surrealdb derivation to use.
-        '';
-      };
+      package = mkPackageOption pkgs "surrealdb" { };
 
       dbPath = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The path that surrealdb will write data to. Use null for in-memory.
           Can be one of "memory", "file://:path", "tikv://:addr".
         '';
@@ -31,7 +24,7 @@ in {
 
       host = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The host that surrealdb will connect to.
         '';
         default = "127.0.0.1";
@@ -40,24 +33,20 @@ in {
 
       port = mkOption {
         type = types.port;
-        description = lib.mdDoc ''
+        description = ''
           The port that surrealdb will connect to.
         '';
         default = 8000;
         example = 8000;
       };
 
-      userNamePath = mkOption {
-        type = types.path;
-        description = lib.mdDoc ''
-          Path to read the username from.
-        '';
-      };
-
-      passwordPath = mkOption {
-        type = types.path;
-        description = lib.mdDoc ''
-          Path to read the password from.
+      extraFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "--allow-all" "--auth" "--user root" "--pass root" ];
+        description = ''
+          Specify a list of additional command line flags,
+          which get escaped and are then passed to surrealdb.
         '';
       };
     };
@@ -73,19 +62,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      script = ''
-        ${cfg.package}/bin/surreal start \
-          --user $(${pkgs.systemd}/bin/systemd-creds cat SURREALDB_USERNAME) \
-          --pass $(${pkgs.systemd}/bin/systemd-creds cat SURREALDB_PASSWORD) \
-          --bind ${cfg.host}:${toString cfg.port} \
-          -- ${cfg.dbPath}
-      '';
       serviceConfig = {
-        LoadCredential = [
-          "SURREALDB_USERNAME:${cfg.userNamePath}"
-          "SURREALDB_PASSWORD:${cfg.passwordPath}"
-        ];
-
+        ExecStart = "${cfg.package}/bin/surreal start --bind ${cfg.host}:${toString cfg.port} ${escapeShellArgs cfg.extraFlags} -- ${cfg.dbPath}";
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "surrealdb";

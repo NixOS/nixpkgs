@@ -2,7 +2,6 @@
 , stdenv
 , buildPackages
 , fetchurl
-, binutils
 , bison
 , util-linux
 
@@ -12,6 +11,8 @@
 , withDocs ? false
 , texinfo
 , forFHSEnv ? false
+
+, pkgsStatic
 }:
 
 let
@@ -21,11 +22,12 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  name = "bash-${lib.optionalString interactive "interactive-"}${version}-p${toString (builtins.length upstreamPatches)}";
-  version = "5.2";
+  pname = "bash${lib.optionalString interactive "-interactive"}";
+  version = "5.2${patch_suffix}";
+  patch_suffix = "p${toString (builtins.length upstreamPatches)}";
 
   src = fetchurl {
-    url = "mirror://gnu/bash/bash-${version}.tar.gz";
+    url = "mirror://gnu/bash/bash-${lib.removeSuffix patch_suffix version}.tar.gz";
     sha256 = "sha256-oTnBZt9/9EccXgczBRZC7lVWwcyKSnjxRVg8XIGrMvs=";
   };
 
@@ -37,7 +39,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
 
-  NIX_CFLAGS_COMPILE = ''
+  separateDebugInfo = true;
+
+  env.NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
     -DSYS_BASH_LOGOUT="/etc/bash_logout"
   '' + lib.optionalString (!forFHSEnv) ''
@@ -50,15 +54,26 @@ stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
-  patches = upstreamPatches
-    ++ [ ./pgrp-pipe-5.patch ]
-    ++ lib.optional stdenv.hostPlatform.isStatic (fetchurl {
+  patches = upstreamPatches ++ [
+    ./pgrp-pipe-5.patch
+    (fetchurl {
       name = "fix-static.patch";
       url = "https://cgit.freebsd.org/ports/plain/shells/bash/files/patch-configure?id=3e147a1f594751a68fea00a28090d0792bee0b51";
       sha256 = "XHFMQ6eXTReNoywdETyrfQEv1rKF8+XFbQZP4YoVKFk=";
-    });
+    })
+    # Apply parallel build fix pending upstream inclusion:
+    #   https://savannah.gnu.org/patch/index.php?10373
+    # Had to fetch manually to workaround -p0 default.
+    ./parallel.patch
+  ];
 
   configureFlags = [
+    # At least on Linux bash memory allocator has pathological performance
+    # in scenarios involving use of larger memory:
+    #   https://lists.gnu.org/archive/html/bug-bash/2023-08/msg00052.html
+    # Various distributions default to system allocator. Let's nixpkgs
+    # do the same.
+    "--without-bash-malloc"
     (if interactive then "--with-installed-readline" else "--disable-readline")
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "bash_cv_job_control_missing=nomissing"
@@ -72,7 +87,6 @@ stdenv.mkDerivation rec {
     "bash_cv_dev_fd=standard"
     "bash_cv_termcap_lib=libncurses"
   ] ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
-    "--without-bash-malloc"
     "--disable-nls"
   ];
 
@@ -81,7 +95,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison ]
     ++ lib.optional withDocs texinfo
-    ++ lib.optional stdenv.hostPlatform.isDarwin binutils;
+    ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
 
   buildInputs = lib.optional interactive readline;
 
@@ -92,7 +106,7 @@ stdenv.mkDerivation rec {
     "SHOBJ_LIBS=-lbash"
   ];
 
-  checkInputs = [ util-linux ];
+  nativeCheckInputs = [ util-linux ];
   doCheck = false; # dependency cycle, needs to be interactive
 
   postInstall = ''
@@ -113,6 +127,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     shellPath = "/bin/bash";
+    tests.static = pkgsStatic.bash;
   };
 
   meta = with lib; {

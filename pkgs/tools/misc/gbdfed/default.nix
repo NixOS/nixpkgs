@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.linquize ];
     platforms = lib.platforms.all;
+    mainProgram = "gbdfed";
   };
 }

@@ -17,4 +17,5 @@ buildGoPackage rec {
 
   doCheck = false; # fails, silently
 
+  meta.mainProgram = "govers";
 }

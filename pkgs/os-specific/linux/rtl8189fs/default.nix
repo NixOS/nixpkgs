@@ -1,23 +1,16 @@
-{ lib, kernel, rtl8189es, fetchFromGitHub, fetchpatch }:
+{ lib, kernel, rtl8189es, fetchFromGitHub }:
 
 # rtl8189fs is a branch of the rtl8189es driver
 rtl8189es.overrideAttrs (drv: rec {
   name = "rtl8189fs-${kernel.version}-${version}";
-  version = "2022-05-20";
+  version = "2024-01-22";
 
   src = fetchFromGitHub {
     owner = "jwrdegoede";
     repo = "rtl8189ES_linux";
-    rev = "71500c28164369800041d1716ac513457179ce93";
-    sha256 = "sha256-JTv+ssSv5toNcZ5wR6p0Cywdk87z9Bdq0ftU0ekr/98=";
+    rev = "5d523593f41c0b8d723c6aa86b217ee1d0965786";
+    sha256 = "sha256-pziaUM6XfF4Tt9yfWUnLUiTw+sw6uZrr1HcaXdRQ31E=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/jwrdegoede/rtl8189ES_linux/pull/81.patch";
-      sha256 = "sha256-ovFQBIHLk3wi2uwAyr8VmdbuhPcoHsZ/lpA66obVBK4=";
-    })
-  ];
 
   meta = with lib; {
     description = "Driver for Realtek rtl8189fs";

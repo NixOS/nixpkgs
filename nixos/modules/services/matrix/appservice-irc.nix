@@ -12,46 +12,44 @@ let
 
   configFile = pkgs.runCommand "matrix-appservice-irc.yml" {
     # Because this program will be run at build time, we need `nativeBuildInputs`
-    nativeBuildInputs = [ (pkgs.python3.withPackages (ps: [ ps.pyyaml ps.jsonschema ])) ];
+    nativeBuildInputs = [ (pkgs.python3.withPackages (ps: [ ps.jsonschema ])) pkgs.remarshal ];
     preferLocalBuild = true;
 
     config = builtins.toJSON cfg.settings;
     passAsFile = [ "config" ];
   } ''
     # The schema is given as yaml, we need to convert it to json
-    python -c 'import json; import yaml; import sys; json.dump(yaml.safe_load(sys.stdin), sys.stdout)' \
-      < ${pkg}/lib/node_modules/matrix-appservice-irc/config.schema.yml \
-      > config.schema.json
+    remarshal --if yaml --of json -i ${pkg}/config.schema.yml -o config.schema.json
     python -m jsonschema config.schema.json -i $configPath
     cp "$configPath" "$out"
   '';
   registrationFile = "/var/lib/matrix-appservice-irc/registration.yml";
 in {
   options.services.matrix-appservice-irc = with types; {
-    enable = mkEnableOption (lib.mdDoc "the Matrix/IRC bridge");
+    enable = mkEnableOption "the Matrix/IRC bridge";
 
     port = mkOption {
       type = port;
-      description = lib.mdDoc "The port to listen on";
+      description = "The port to listen on";
       default = 8009;
     };
 
     needBindingCap = mkOption {
       type = bool;
-      description = lib.mdDoc "Whether the daemon needs to bind to ports below 1024 (e.g. for the ident service)";
+      description = "Whether the daemon needs to bind to ports below 1024 (e.g. for the ident service)";
       default = false;
     };
 
     passwordEncryptionKeyLength = mkOption {
       type = ints.unsigned;
-      description = lib.mdDoc "Length of the key to encrypt IRC passwords with";
+      description = "Length of the key to encrypt IRC passwords with";
       default = 4096;
       example = 8192;
     };
 
     registrationUrl = mkOption {
       type = str;
-      description = lib.mdDoc ''
+      description = ''
         The URL where the application service is listening for homeserver requests,
         from the Matrix homeserver perspective.
       '';
@@ -60,12 +58,12 @@ in {
 
     localpart = mkOption {
       type = str;
-      description = lib.mdDoc "The user_id localpart to assign to the appservice";
+      description = "The user_id localpart to assign to the appservice";
       default = "appservice-irc";
     };
 
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Configuration for the appservice, see
         <https://github.com/matrix-org/matrix-appservice-irc/blob/${pkgs.matrix-appservice-irc.version}/config.sample.yaml>
         for supported values
@@ -76,7 +74,7 @@ in {
 
         options = {
           homeserver = mkOption {
-            description = lib.mdDoc "Homeserver configuration";
+            description = "Homeserver configuration";
             default = {};
             type = submodule {
               freeformType = jsonType;
@@ -84,12 +82,12 @@ in {
               options = {
                 url = mkOption {
                   type = str;
-                  description = lib.mdDoc "The URL to the home server for client-server API calls";
+                  description = "The URL to the home server for client-server API calls";
                 };
 
                 domain = mkOption {
                   type = str;
-                  description = lib.mdDoc ''
+                  description = ''
                     The 'domain' part for user IDs on this home server. Usually
                     (but not always) is the "domain name" part of the homeserver URL.
                   '';
@@ -100,21 +98,21 @@ in {
 
           database = mkOption {
             default = {};
-            description = lib.mdDoc "Configuration for the database";
+            description = "Configuration for the database";
             type = submodule {
               freeformType = jsonType;
 
               options = {
                 engine = mkOption {
                   type = str;
-                  description = lib.mdDoc "Which database engine to use";
+                  description = "Which database engine to use";
                   default = "nedb";
                   example = "postgres";
                 };
 
                 connectionString = mkOption {
                   type = str;
-                  description = lib.mdDoc "The database connection string";
+                  description = "The database connection string";
                   default = "nedb://var/lib/matrix-appservice-irc/data";
                   example = "postgres://username:password@host:port/databasename";
                 };
@@ -124,14 +122,14 @@ in {
 
           ircService = mkOption {
             default = {};
-            description = lib.mdDoc "IRC bridge configuration";
+            description = "IRC bridge configuration";
             type = submodule {
               freeformType = jsonType;
 
               options = {
                 passwordEncryptionKeyPath = mkOption {
                   type = str;
-                  description = lib.mdDoc ''
+                  description = ''
                     Location of the key with which IRC passwords are encrypted
                     for storage. Will be generated on first run if not present.
                   '';
@@ -140,7 +138,7 @@ in {
 
                 servers = mkOption {
                   type = submodule { freeformType = jsonType; };
-                  description = lib.mdDoc "IRC servers to connect to";
+                  description = "IRC servers to connect to";
                 };
               };
             };
@@ -187,7 +185,7 @@ in {
           sed -i "s/^as_token:.*$/$as_token/g" ${registrationFile}
         fi
         # Allow synapse access to the registration
-        if ${getBin pkgs.glibc}/bin/getent group matrix-synapse > /dev/null; then
+        if ${pkgs.getent}/bin/getent group matrix-synapse > /dev/null; then
           chgrp matrix-synapse ${registrationFile}
           chmod g+r ${registrationFile}
         fi
@@ -215,7 +213,11 @@ in {
         LockPersonality = true;
         RestrictRealtime = true;
         PrivateMounts = true;
-        SystemCallFilter = "~@aio @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @setuid @swap";
+        SystemCallFilter = [
+          "@system-service @pkey"
+          "~@privileged @resources"
+          "@chown"
+        ];
         SystemCallArchitectures = "native";
         # AF_UNIX is required to connect to a postgres socket.
         RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";

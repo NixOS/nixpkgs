@@ -1,51 +1,50 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-xfs";
-  version = "3.2";
-  format = "pyproject";
+  version = "3.9";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.xfs";
-    rev = version;
-    hash = "sha256-S05Y+Oe1q4DcTR9al2K82Q41EP0FnDGUp1gfzYiS/Yk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-jUNstyHVPJazf4idXNe9xICpi0MKkz8q0rWUEHjk2ZA=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dissect.xfs"
-  ];
+  pythonImportsCheck = [ "dissect.xfs" ];
+
+  # Archive files seems to be corrupt
+  doCheck = false;
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the XFS file system";
     homepage = "https://github.com/fox-it/dissect.xfs";
+    changelog = "https://github.com/fox-it/dissect.xfs/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

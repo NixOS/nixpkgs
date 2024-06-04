@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Gottox/chelf";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
+    mainProgram = "chelf";
   };
 }

@@ -1,29 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "prefixed";
-  version = "0.6.0";
+  version = "0.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s5+/rHJhj6HutbP9ntE0HxDdkN91SZy0w4psPvR83ZQ=";
+    hash = "sha256-0QrJCs/EzBTYLBQIszCy/ahe187CIGqADUOJn4w4UmU=";
   };
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "prefixed"
-  ];
+  pythonImportsCheck = [ "prefixed" ];
 
   meta = with lib; {
     description = "Prefixed alternative numeric library";

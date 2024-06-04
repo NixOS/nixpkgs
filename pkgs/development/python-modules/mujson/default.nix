@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "mujson";
   version = "1.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J9nPGxDkLQje6AkL9cewNqmQ7Z+00TXBEr3p71E2cnE=";
+    hash = "sha256-J9nPGxDkLQje6AkL9cewNqmQ7Z+00TXBEr3p71E2cnE=";
   };
 
   # LICENSE file missing from src

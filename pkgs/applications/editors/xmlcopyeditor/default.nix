@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./xmlcopyeditor.patch ];
 
+  # error: cannot initialize a variable of type 'xmlErrorPtr' (aka '_xmlError *')
+  #        with an rvalue of type 'const xmlError *' (aka 'const _xmlError *')
+  postPatch = ''
+    substituteInPlace src/wraplibxml.cpp \
+      --replace "xmlErrorPtr err" "const xmlError *err"
+  '';
+
   nativeBuildInputs = [
     intltool
     pkg-config
@@ -51,5 +58,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ candeira wegank ];
+    mainProgram = "xmlcopyeditor";
   };
 }

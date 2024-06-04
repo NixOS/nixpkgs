@@ -1,16 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, elementpath
-, lxml
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  elementpath,
+  fetchFromGitHub,
+  jinja2,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xmlschema";
-  version = "2.1.1";
-  format = "setuptools";
+  version = "3.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,38 +21,25 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rt7QScg458ezDwktO1QRydmC3XqedX+kPpv6J+JvLzQ=";
+    hash = "sha256-Sy70OQvKx0H8vxRFTEkg+QV9eVij5C9dlAwJ2HTFOi8=";
   };
 
-  propagatedBuildInputs = [
-    elementpath
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
+  dependencies = [ elementpath ];
+
+  nativeCheckInputs = [
+    jinja2
     lxml
     pytestCheckHook
   ];
 
-  # Ignore broken fixtures, and tests for files which don't exist.
-  # For darwin, we need to explicity say we can't reach network
-  disabledTests = [
-    "export_remote"
-    "element_tree_import_script"
-  ];
-
-  disabledTestPaths = [
-    "tests/test_schemas.py"
-    "tests/test_memory.py"
-    "tests/test_validation.py"
-  ];
-
-  pythonImportsCheck = [
-    "xmlschema"
-  ];
+  pythonImportsCheck = [ "xmlschema" ];
 
   meta = with lib; {
     description = "XML Schema validator and data conversion library for Python";
     homepage = "https://github.com/sissaschool/xmlschema";
+    changelog = "https://github.com/sissaschool/xmlschema/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

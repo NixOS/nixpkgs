@@ -1,12 +1,27 @@
-{ fetchFromGitHub, stdenv, lib, pkg-config, autoreconfHook
-, ncurses, gnutls, readline
-, openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
-, ldns, libedit, yasm, which, libsndfile, libtiff, libxcrypt
-
+{ fetchFromGitHub
+, stdenv
+, lib
+, pkg-config
+, autoreconfHook
+, ncurses
+, gnutls
+, readline
+, openssl
+, perl
+, sqlite
+, libjpeg
+, speex
+, pcre
+, libuuid
+, ldns
+, libedit
+, yasm
+, which
+, libsndfile
+, libtiff
+, libxcrypt
 , callPackage
-
 , SystemConfiguration
-
 , modules ? null
 , nixosTests
 }:
@@ -88,12 +103,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.8";
+  version = "1.10.11";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-66kwEN42LjTh/oEdFeOyXP2fU88tjR1K5ZWQJkKcDLQ=";
+    hash = "sha256-LzGqrXzPED3PoCDnrwUmmSQsvlAucYo2gTkwFausM7A=";
   };
 
   postPatch = ''
@@ -123,7 +138,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   # Using c++14 because of build error
   # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications
@@ -151,7 +166,8 @@ stdenv.mkDerivation rec {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
     license = lib.licenses.mpl11;
-    maintainers = with lib.maintainers; [ misuzu ];
+    maintainers = with lib.maintainers; [ mikaelfangel ];
     platforms = with lib.platforms; unix;
+    broken = stdenv.isDarwin;
   };
 }

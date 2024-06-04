@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flake8
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flake8,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-l7zZUOMWyTxnTbkFkzfABY/eVMKnv0kNJ0UPzJo0W1Y=";
   };
 
-  propagatedBuildInputs = [
-    flake8
-  ];
+  propagatedBuildInputs = [ flake8 ];
 
   checkPhase = ''
     runHook preCheck
@@ -30,9 +29,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "pep8ext_naming"
-  ];
+  pythonImportsCheck = [ "pep8ext_naming" ];
 
   meta = with lib; {
     description = "Check PEP-8 naming conventions, plugin for flake8";

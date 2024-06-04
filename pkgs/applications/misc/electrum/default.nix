@@ -7,24 +7,33 @@
 , zbar
 , secp256k1
 , enableQt ? true
-# for updater.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
+, callPackage
+, qtwayland
+, fetchPypi
 }:
 
 let
-  version = "4.3.3";
+  version = "4.5.5";
+
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      # Pin ledger-bitcoin to 0.2.1
+      ledger-bitcoin = super.ledger-bitcoin.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.1";
+        format = "pyproject";
+        src = fetchPypi {
+          pname = "ledger_bitcoin";
+          inherit version;
+          hash = "sha256-AWl/q2MzzspNIo6yf30S92PgM/Ygsb+1lJsg7Asztso=";
+        };
+      });
+    };
+  };
 
   libsecp256k1_name =
-    if stdenv.isLinux then "libsecp256k1.so.0"
-    else if stdenv.isDarwin then "libsecp256k1.0.dylib"
+    if stdenv.isLinux then "libsecp256k1.so.{v}"
+    else if stdenv.isDarwin then "libsecp256k1.{v}.dylib"
     else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
@@ -37,33 +46,34 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-40GfOKBTAi8RAsAVrG9rv1Jr5IqM+1yro6YYRsSULxw=";
+    sha256 = "sha256-CbhI/q+zjk9odxuvdzpogi046FqkedJooiQwS+WAkJ8=";
 
     postFetch = ''
       mv $out ./all
-      mv ./all/electrum/tests $out
+      mv ./all/tests $out
     '';
   };
 
 in
 
-python3.pkgs.buildPythonApplication {
+python.pkgs.buildPythonApplication {
   pname = "electrum";
   inherit version;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-NPXGfbEjT9l88ZnGbDcE3+oGxThTzW7YfesBzssGsbc=";
+    sha256 = "1jiagz9avkbd158pcip7p4wz0pdsxi94ndvg5p8afvshb32aqwav";
   };
 
   postUnpack = ''
     # can't symlink, tests get confused
-    cp -ar ${tests} $sourceRoot/electrum/tests
+    cp -ar ${tests} $sourceRoot/tests
   '';
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
+  buildInputs = lib.optional (stdenv.isLinux && enableQt) qtwayland;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
@@ -79,20 +89,30 @@ python3.pkgs.buildPythonApplication {
     qrcode
     requests
     tlslite-ng
+    certifi
+    jsonpatch
     # plugins
-    btchip
+    btchip-python
+    ledger-bitcoin
     ckcc-protocol
     keepkey
     trezor
+    bitbox02
+    cbor2
+    pyserial
   ] ++ lib.optionals enableQt [
     pyqt5
     qdarkstyle
   ];
 
+  checkInputs = with python.pkgs; lib.optionals enableQt [
+    pyqt6
+  ];
+
   postPatch = ''
     # make compatible with protobuf4 by easing dependencies ...
     substituteInPlace ./contrib/requirements/requirements.txt \
-      --replace "protobuf>=3.12,<4" "protobuf>=3.12"
+      --replace "protobuf>=3.20,<4" "protobuf>=3.20"
     # ... and regenerating the paymentrequest_pb2.py file
     protoc --python_out=. electrum/paymentrequest.proto
 
@@ -117,28 +137,15 @@ python3.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum
   '';
 
-  checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
-  pytestFlagsArray = [ "electrum/tests" ];
+  pytestFlagsArray = [ "tests" ];
 
   postCheck = ''
     $out/bin/electrum help >/dev/null
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
-  };
+  passthru.updateScript = callPackage ./update.nix { };
 
   meta = with lib; {
     description = "Lightweight Bitcoin wallet";
@@ -153,6 +160,7 @@ python3.pkgs.buildPythonApplication {
     changelog = "https://github.com/spesmilo/electrum/blob/master/RELEASE-NOTES";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ joachifm np prusnak ];
+    maintainers = with maintainers; [ joachifm np prusnak chewblacka ];
+    mainProgram = "electrum";
   };
 }

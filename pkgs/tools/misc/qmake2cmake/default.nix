@@ -2,19 +2,21 @@
 , buildPythonPackage
 , fetchgit
 , packaging
+, platformdirs
 , portalocker
+, pyparsing
 , sympy
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "qmake2cmake";
-  version = "1.0.2";
+  version = "1.0.6";
 
   src = fetchgit {
     url = "https://codereview.qt-project.org/qt/qmake2cmake";
     rev = "v${version}";
-    hash = "sha256-Ibi7tIaMI44POfoRfKsgTMR3u+Li5UzeHBUNylnc9dw=";
+    hash = "sha256-M5XVQ8MXo2Yxg5eZCho2YAGFtB0h++mEAg8NcQVuP/w=";
   };
 
   patches = [
@@ -23,13 +25,19 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     packaging
+    platformdirs
     portalocker
+    pyparsing
     sympy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   meta = with lib; {
     description = "Tool to convert qmake .pro files to CMakeLists.txt";

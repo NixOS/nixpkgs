@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "glitter";
-  version = "1.6.3";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "milo123459";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xrQqeRJfBEcjX0tkULg+94R7+mWWn6QeKIfZiDp+Vt8=";
+    hash = "sha256-dImQLC7owPf2EB5COO5vjN3a6k7gJ88D2hMSUW2/wn4=";
   };
 
-  cargoSha256 = "sha256-GQ7Bns+FPj4jl2dBXnMrmcKIYcZTLZc1WvaHgKGj/gU=";
+  cargoHash = "sha256-7JQcY3HCG3UQ0Mfz/+ZZ0axGEpQoH410FT72tjHW7EE=";
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
   ];
 
@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Milo123459/glitter/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "glitter";
   };
 }

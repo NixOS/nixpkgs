@@ -4,24 +4,33 @@
 , rustPlatform
 , darwin
 , pandoc
+, pkg-config
+, openssl
 , installShellFiles
+, copyDesktopItems
+, makeDesktopItem
+, nix-update-script
+, testers
+, writeText
+, runCommand
+, fend
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.1.4";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "printfn";
-    repo = pname;
+    repo = "fend";
     rev = "v${version}";
-    sha256 = "sha256-jg2rMiFXtN3oLru1gTaTyIo5eBEI23paKJiDV6KZZE4=";
+    hash = "sha256-i4h2QYgA1XX+qHOEH07PR3G/0SSA8a413vm9T39TuYQ=";
   };
 
-  cargoHash = "sha256-9Gri/EBaUiCpFBL0f132JDD4Zl5v40e8JmlRvm019S4=";
+  cargoHash = "sha256-EhumvDwXNXB0Vp3qWkJs0y0gEwiy3Z9/3KZ92YDTlqk=";
 
-  nativeBuildInputs = [ pandoc installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  nativeBuildInputs = [ pandoc installShellFiles pkg-config copyDesktopItems ];
+  buildInputs = [ pkg-config openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postBuild = ''
     patchShebangs --build ./documentation/build.sh
@@ -38,10 +47,45 @@ rustPlatform.buildRustPackage rec {
     [[ "$($out/bin/fend "1 km to m")" = "1000 m" ]]
   '';
 
+  postInstall = ''
+    install -D -m 444 $src/icon/icon.svg $out/share/icons/hicolor/scalable/apps/fend.svg
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "fend";
+      desktopName = "fend";
+      genericName = "Calculator";
+      comment = "Arbitrary-precision unit-aware calculator";
+      icon = "fend";
+      exec = "fend";
+      terminal = true;
+      categories = [ "Utility" "Calculator" "ConsoleOnly" ];
+    })
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion { package = fend; };
+      units = testers.testEqualContents {
+        assertion = "fend does simple math and unit conversions";
+        expected = writeText "expected" ''
+          36 kph
+        '';
+        actual = runCommand "actual" { } ''
+          ${lib.getExe fend} '(100 meters) / (10 seconds) to kph' > $out
+        '';
+      };
+    };
+  };
+
   meta = with lib; {
     description = "Arbitrary-precision unit-aware calculator";
     homepage = "https://github.com/printfn/fend";
+    changelog = "https://github.com/printfn/fend/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ djanatyn ];
+    maintainers = with maintainers; [ djanatyn liff ];
+    mainProgram = "fend";
   };
 }

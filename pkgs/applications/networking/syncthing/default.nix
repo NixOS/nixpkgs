@@ -1,19 +1,37 @@
-{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
+{ pkgsBuildBuild
+, go
+, buildGoModule
+, stdenv
+, lib
+, procps
+, fetchFromGitHub
+, nixosTests
+, autoSignDarwinBinariesHook
+}:
 
 let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.23.0";
+      version = "1.27.7";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         rev = "v${version}";
-        hash = "sha256-Z4YVU45na4BgIbN/IlORpTCuf2EuSuOyppDRzswn3EI=";
+        hash = "sha256-Y/gwQfb3ShOsXsNLomtqUlmYaw7FQQ6IUN1fHSYOouQ=";
       };
 
-      vendorHash = "sha256-q63iaRxJRvPY0Np20O6JmdMEjSg/kxRneBfs8fRTwXk=";
+      vendorHash = "sha256-xVSSFFTqU7jww8YTeXKfa3096c2FmEgkcXvuqFHb12E=";
+
+      nativeBuildInputs = lib.optionals stdenv.isDarwin [
+        # Recent versions of macOS seem to require binaries to be signed when
+        # run from Launch Agents/Daemons, even on x86 devices where it has a
+        # more lax code signing policy compared to Apple Silicon. So just sign
+        # the binaries on both architectures to make it possible for launchd to
+        # auto-start Syncthing at login.
+        autoSignDarwinBinariesHook
+      ];
 
       doCheck = false;
 
@@ -22,7 +40,12 @@ let
 
       buildPhase = ''
         runHook preBuild
-        go run build.go -no-upgrade -version v${version} build ${target}
+        (
+          export GOOS="${pkgsBuildBuild.go.GOOS}" GOARCH="${pkgsBuildBuild.go.GOARCH}" CC=$CC_FOR_BUILD
+          go build build.go
+          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/strelaypoolsrv/auto
+        )
+        ./build -goos ${go.GOOS} -goarch ${go.GOARCH} -no-upgrade -version v${version} build ${target}
         runHook postBuild
       '';
 
@@ -43,7 +66,7 @@ let
         description = "Open Source Continuous File Synchronization";
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = licenses.mpl20;
-        maintainers = with maintainers; [ joko peterhoeg andrew-d ];
+        maintainers = with maintainers; [ joko peterhoeg ];
         mainProgram = target;
         platforms = platforms.unix;
       };

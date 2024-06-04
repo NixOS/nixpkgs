@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "toml";
   version = "0.10.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

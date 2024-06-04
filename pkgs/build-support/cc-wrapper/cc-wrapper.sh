@@ -31,8 +31,8 @@ cxxLibrary=1
 cInclude=1
 
 expandResponseParams "$@"
-linkType=$(checkLinkType "${params[@]}")
 
+declare -ag positionalArgs=()
 declare -i n=0
 nParams=${#params[@]}
 while (( "$n" < "$nParams" )); do
@@ -46,11 +46,24 @@ while (( "$n" < "$nParams" )); do
         -nostdinc) cInclude=0 cxxInclude=0 ;;
         -nostdinc++) cxxInclude=0 ;;
         -nostdlib) cxxLibrary=0 ;;
+        -x*-header) dontLink=1 ;; # both `-x c-header` and `-xc-header` are accepted by clang
+        -xc++*) isCxx=1 ;;        # both `-xc++` and `-x c++` are accepted by clang
         -x)
             case "$p2" in
                 *-header) dontLink=1 ;;
                 c++*) isCxx=1 ;;
             esac
+            ;;
+        --) # Everything else is positional args!
+            # See: https://github.com/llvm/llvm-project/commit/ed1d07282cc9d8e4c25d585e03e5c8a1b6f63a74
+
+            # Any positional arg (i.e. any argument after `--`) will be
+            # interpreted as a "non flag" arg:
+            if [[ -v "params[$n]" ]]; then nonFlagArgs=1; fi
+
+            positionalArgs=("${params[@]:$n}")
+            params=("${params[@]:0:$((n - 1))}")
+            break;
             ;;
         -?*) ;;
         *) nonFlagArgs=1 ;; # Includes a solitary dash (`-`) which signifies standard input; it is not a flag
@@ -157,10 +170,11 @@ fi
 source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.
-extraAfter=($NIX_CFLAGS_COMPILE_@suffixSalt@)
-extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
+extraAfter=(${hardeningCFlagsAfter[@]+"${hardeningCFlagsAfter[@]}"} $NIX_CFLAGS_COMPILE_@suffixSalt@)
+extraBefore=(${hardeningCFlagsBefore[@]+"${hardeningCFlagsBefore[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
 
 if [ "$dontLink" != 1 ]; then
+    linkType=$(checkLinkType $NIX_LDFLAGS_BEFORE_@suffixSalt@ "${params[@]}" ${NIX_CFLAGS_LINK_@suffixSalt@:-} $NIX_LDFLAGS_@suffixSalt@)
 
     # Add the flags that should only be passed to the compiler when
     # linking.
@@ -205,6 +219,12 @@ if [ "$cc1" = 1 ]; then
   extraBefore=()
 fi
 
+# Finally, if we got any positional args, append them to `extraAfter`
+# now:
+if [[ "${#positionalArgs[@]}" -gt 0 ]]; then
+    extraAfter+=(-- "${positionalArgs[@]}")
+fi
+
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see ld-wrapper for explanation.
@@ -226,10 +246,13 @@ if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
 fi
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    exec @prog@ @<(printf "%q\n" \
+    responseFile=$(mktemp "${TMPDIR:-/tmp}/cc-params.XXXXXX")
+    trap 'rm -f -- "$responseFile"' EXIT
+    printf "%q\n" \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
-       ${extraAfter+"${extraAfter[@]}"})
+       ${extraAfter+"${extraAfter[@]}"} > "$responseFile"
+    @prog@ "@$responseFile"
 else
     exec @prog@ \
        ${extraBefore+"${extraBefore[@]}"} \

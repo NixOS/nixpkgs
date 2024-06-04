@@ -12,7 +12,6 @@ GIT_REVISION=$(echo ${VERSION_JSON} | jq -r '.cef_version' | cut -d'+' -f2 | cut
 CHROMIUM_VERSION=$(echo ${VERSION_JSON} | jq -r '.chromium_version')
 
 SHA256_LINUX64=$(nix-prefetch-url --quiet https://cef-builds.spotifycdn.com/cef_binary_${CEF_VERSION}+g${GIT_REVISION}+chromium-${CHROMIUM_VERSION}_linux64_minimal.tar.bz2)
-SHA256_LINUX32=$(nix-prefetch-url --quiet https://cef-builds.spotifycdn.com/cef_binary_${CEF_VERSION}+g${GIT_REVISION}+chromium-${CHROMIUM_VERSION}_linux32_minimal.tar.bz2)
 SHA256_LINUXARM64=$(nix-prefetch-url --quiet https://cef-builds.spotifycdn.com/cef_binary_${CEF_VERSION}+g${GIT_REVISION}+chromium-${CHROMIUM_VERSION}_linuxarm64_minimal.tar.bz2)
 
 setKV () {
@@ -23,5 +22,4 @@ setKV version ${CEF_VERSION}
 setKV gitRevision ${GIT_REVISION}
 setKV chromiumVersion ${CHROMIUM_VERSION}
 setKV 'platforms."aarch64-linux".sha256' ${SHA256_LINUXARM64}
-setKV 'platforms."i686-linux".sha256' ${SHA256_LINUX32}
 setKV 'platforms."x86_64-linux".sha256' ${SHA256_LINUX64}

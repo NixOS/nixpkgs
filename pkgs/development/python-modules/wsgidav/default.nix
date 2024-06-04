@@ -1,38 +1,39 @@
-{ lib
-, buildPythonPackage
-, cheroot
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, defusedxml
-, jinja2
-, json5
-, python-pam
-, pyyaml
-, requests
-, setuptools
-, webtest
+{
+  lib,
+  buildPythonPackage,
+  cheroot,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  defusedxml,
+  jinja2,
+  json5,
+  python-pam,
+  pyyaml,
+  requests,
+  setuptools,
+  webtest,
 }:
 
 buildPythonPackage rec {
   pname = "wsgidav";
-  version = "4.1.0";
-  format = "pyproject";
+  version = "4.3.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mar10";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-iNyXY0txKX4X1+O27T7my8dfs8wqXoG7Kuo9yN9SRnY=";
+    repo = "wsgidav";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vUqNC7ixpta0s7wRC5ROSKMa/MsgEBu5rr0XNu69FRw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     defusedxml
     jinja2
     json5
@@ -40,21 +41,21 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cheroot
     pytestCheckHook
     requests
     webtest
   ];
 
-  pythonImportsCheck = [
-    "wsgidav"
-  ];
+  pythonImportsCheck = [ "wsgidav" ];
 
   meta = with lib; {
     description = "Generic and extendable WebDAV server based on WSGI";
     homepage = "https://wsgidav.readthedocs.io/";
+    changelog = "https://github.com/mar10/wsgidav/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "wsgidav";
   };
 }

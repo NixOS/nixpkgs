@@ -1,4 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, eigen, opencv, cgal, ceres-solver, boost, vcg, glfw, zstd }:
+{ lib
+, boost
+, breakpad
+, ceres-solver
+, cgal
+, cmake
+, eigen
+, fetchFromGitHub
+, glfw
+, gmp
+, libjpeg
+, libpng
+, libtiff
+, mpfr
+, opencv
+, openmp
+, pkg-config
+, stdenv
+, vcg
+, zstd
+}:
 
 let
   boostWithZstd = boost.overrideAttrs (old: {
@@ -6,23 +26,51 @@ let
   });
 in
 stdenv.mkDerivation rec {
-  version = "2.1.0";
+  version = "2.2.0";
   pname = "openmvs";
 
   src = fetchFromGitHub {
     owner = "cdcseacave";
     repo = "openmvs";
     rev = "v${version}";
-    sha256 = "sha256-eqNprBgR0hZnbLKLZLJqjemKxHhDtGblmaSxYlmegsc=";
+    sha256 = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
     fetchSubmodules = true;
   };
 
   # SSE is enabled by default
   cmakeFlags = lib.optional (!stdenv.isx86_64) "-DOpenMVS_USE_SSE=OFF";
 
-  buildInputs = [ eigen opencv cgal ceres-solver vcg glfw boostWithZstd ];
+  buildInputs = [
+    boostWithZstd
+    breakpad
+    ceres-solver
+    cgal
+    eigen
+    glfw
+    gmp
+    libjpeg
+    libpng
+    libtiff
+    mpfr
+    opencv
+    openmp
+    vcg
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
+
+  postInstall = ''
+    mv $out/bin/OpenMVS/* $out/bin
+    rmdir $out/bin/OpenMVS
+    rm $out/bin/Tests
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ctest
+    runHook postCheck
+  '';
 
   meta = {
     description = "Open Multi-View Stereo reconstruction library";

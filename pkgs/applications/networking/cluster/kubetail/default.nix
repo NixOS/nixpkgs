@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubetail";
-  version = "1.6.16";
+  version = "1.6.20";
 
   src = fetchFromGitHub {
     owner = "johanhaleby";
     repo = "kubetail";
     rev = version;
-    sha256 = "sha256-kkbhhAaiKP01LR7F5JVMgy6Ujji8JDc+Aaho1vft3XQ=";
+    sha256 = "sha256-RbbZHKXRtbs42cCbw+xb8TLul6ebUeCiNclMFF39c3M=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Bash script to tail Kubernetes logs from multiple pods at the same time";
+    mainProgram = "kubetail";
     longDescription = ''
       Bash script that enables you to aggregate (tail/follow) logs from
       multiple pods into one stream. This is the same as running "kubectl logs
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/johanhaleby/kubetail";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [ kalbasit qjoly ];
     platforms = platforms.all;
   };
 }

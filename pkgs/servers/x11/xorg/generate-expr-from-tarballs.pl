@@ -18,6 +18,7 @@ my %pkgVersions;
 my %pkgRequires;
 my %pkgNativeRequires;
 
+my %pcProvides;
 my %pcMap;
 
 my %extraAttrs;
@@ -34,6 +35,7 @@ $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
 $pcMap{"GL"} = "libGL";
 $pcMap{"gbm"} = "mesa";
+$pcMap{"hwdata"} = "hwdata";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -111,6 +113,7 @@ while (<>) {
         my $pc = $pcFile;
         $pc =~ s/.*\///;
         $pc =~ s/.pc.in//;
+        push @{$pcProvides{$pkg}}, $pc;
         print "PROVIDES $pc\n";
         die "collision with $pcMap{$pc}" if defined $pcMap{$pc};
         $pcMap{$pc} = $pkg;
@@ -321,9 +324,14 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       $extraAttrsStr = join "", map { "\n    " . $_ } @{$extraAttrs{$pkg}};
     }
 
+    my $pcProvidesStr = "";
+    if (defined $pcProvides{$pkg}) {
+      $pcProvidesStr = join "", map { "\"" . $_ . "\" " } (sort @{$pcProvides{$pkg}});
+    }
+
     print OUT <<EOF
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  $pkg = callPackage ({ $argumentsStr }: stdenv.mkDerivation {
+  $pkg = callPackage ({ $argumentsStr, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "$pkgNames{$pkg}";
     version = "$pkgVersions{$pkg}";
     builder = ./builder.sh;
@@ -335,8 +343,12 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     strictDeps = true;
     nativeBuildInputs = [ pkg-config $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
-    meta.platforms = lib.platforms.unix;
-  }) {};
+    passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    meta = {
+      pkgConfigModules = [ $pcProvidesStr];
+      platforms = lib.platforms.unix;
+    };
+  })) {};
 
 EOF
 }

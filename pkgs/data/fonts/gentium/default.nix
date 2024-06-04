@@ -1,15 +1,23 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "6.101";
-  name = "gentium-${version}";
-in (fetchzip rec {
-  inherit name;
+stdenvNoCC.mkDerivation rec {
+  pname = "gentium";
+  version = "6.200";
 
-  url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
+  src = fetchzip {
+    url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
+    hash = "sha256-gpVOtmF4Kp3y1Rm00c4o3WQEskO7mY1Z5SVaYHI0hzg=";
+  };
 
-  sha256 = "sha256-+T5aUlqQYDWRp4/4AZzsREHgjAnOeUB6qn1GAI0A5hE=";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+    install -Dm644 FONTLOG.txt README.txt -t $out/share/doc/${pname}-${version}
+    cp -r documentation $out/share/doc/${pname}-${version}
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://software.sil.org/gentium/";
@@ -34,20 +42,4 @@ in (fetchzip rec {
     license = licenses.ofl;
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf \
-      -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \
-      \*/FONTLOG.txt \
-      \*/README.txt \
-      -d $out/share/doc/${name}
-    unzip -j $downloadedFile \
-      \*/documentation/\*.html \
-      \*/documentation/\*.txt \
-      -x \*/documentation/source/\* \
-      -d $out/share/doc/${name}/documentation
-  '';
-})
+}

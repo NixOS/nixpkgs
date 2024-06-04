@@ -2,8 +2,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
 
   cfg = config.programs.xonsh;
@@ -16,35 +14,29 @@ in
 
     programs.xonsh = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to configure xonsh as an interactive shell.
         '';
-        type = types.bool;
+        type = lib.types.bool;
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.xonsh;
-        defaultText = literalExpression "pkgs.xonsh";
-        example = literalExpression "pkgs.xonsh.override { configFile = \"/path/to/xonshrc\"; }";
-        description = lib.mdDoc ''
-          xonsh package to use.
-        '';
+      package = lib.mkPackageOption pkgs "xonsh" {
+        example = "xonsh.override { extraPackages = ps: [ ps.requests ]; }";
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         default = "";
-        description = lib.mdDoc "Control file to customize your shell behavior.";
-        type = types.lines;
+        description = "Control file to customize your shell behavior.";
+        type = lib.types.lines;
       };
 
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.etc."xonsh/xonshrc".text = ''
       # /etc/xonsh/xonshrc: DO NOT EDIT -- this file has been generated automatically.
@@ -83,4 +75,3 @@ in
   };
 
 }
-

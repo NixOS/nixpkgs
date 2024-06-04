@@ -2,8 +2,8 @@
 
 grafanaPlugin rec {
   pname = "grafadruid-druid-datasource";
-  version = "1.2.0";
-  zipHash = "sha256-DPeyV2jZquSQcSE+HzvxArWEefs9bFNPjZwDFp+dIjg=";
+  version = "1.4.1";
+  zipHash = "sha256-7atxqRqKqop6ABQ+ead6wR/YRpJaV8j/Ri4VB9FXMu8=";
   meta = with lib; {
     description = "Connects Grafana to Druid";
     license = licenses.asl20;

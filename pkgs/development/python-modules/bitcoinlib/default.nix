@@ -1,8 +1,16 @@
-{ stdenv, lib, buildPythonPackage, isPy3k, fetchFromGitHub, openssl }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchFromGitHub,
+  openssl,
+}:
 
 buildPythonPackage rec {
   pname = "bitcoinlib";
-  version = "0.11.2";
+  version = "0.12.2";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -10,16 +18,19 @@ buildPythonPackage rec {
     owner = "petertodd";
     repo = "python-bitcoinlib";
     rev = "refs/tags/python-bitcoinlib-v${version}";
-    sha256 = "sha256-/VgCTN010W/Svdrs0mGA8W1YZnyTHhcaWJKgP/c8CN8=";
+    hash = "sha256-jfd2Buy6GSCH0ZeccRREC1NmlS6Mq1qtNv/NLNJOsX0=";
   };
 
   postPatch = ''
     substituteInPlace bitcoin/core/key.py --replace \
-      "ctypes.util.find_library('ssl.35') or ctypes.util.find_library('ssl') or 'libeay32'" \
+      "ctypes.util.find_library('ssl.35') or ctypes.util.find_library('ssl') or ctypes.util.find_library('libeay32')" \
       "'${lib.getLib openssl}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  pythonImportsCheck = [ "bitcoin" "bitcoin.core.key" ];
+  pythonImportsCheck = [
+    "bitcoin"
+    "bitcoin.core.key"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/petertodd/python-bitcoinlib";

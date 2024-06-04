@@ -1,12 +1,17 @@
-{ stdenv, lib, fetchzip, cmake }:
+{ stdenv
+, lib
+, fetchzip
+, cmake
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "openfec";
-  version = "1.4.2";
+  version = "1.4.2.9";
 
   src = fetchzip {
-    url = "http://openfec.org/files/openfec_v1_4_2.tgz";
-    sha256 = "sha256:0c2lg8afr7lqpzrsi0g44a6h6s7nq4vz7yc9vm2k57ph2y6r86la";
+    url = "https://github.com/roc-streaming/openfec/archive/refs/tags/v${version}.tar.gz";
+    hash = "sha256-A/U9Nh8tspRoT3bYePJLUrNa9jxiL0r2Xaf64wWbmVA=";
   };
 
   outputs = [ "out" "dev" ];
@@ -32,6 +37,11 @@ stdenv.mkDerivation rec {
     '' + ''
       ln -s libopenfec${so} $out/lib/libopenfec${so}.1
     '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/roc-streaming/openfec.git";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "Application-level Forward Erasure Correction codes";

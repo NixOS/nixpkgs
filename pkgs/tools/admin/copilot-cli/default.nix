@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "copilot-cli";
-  version = "1.24.0";
+  version = "1.33.4";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OTt9sJuLv+fY2OTK4FGl15/YmxnPRqGXNnKYl9TtHxE=";
+    hash = "sha256-sYsrjp23F/fyvNfLbJdZrptwNrZYespz8xMLYIwGfH0=";
   };
 
-  vendorSha256 = "sha256-dH39ZpATq5Oafr7Guc+zYUhjlAgiwpc5HKHWlMm4buU=";
+  vendorHash = "sha256-GOr1l+4xDPm8ArqZpY0PshPeDnqYT+C4hgHGQkezBt8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/aws/copilot-cli/internal/pkg/version.Version=${version}"
+    "-X github.com/aws/copilot-cli/internal/pkg/version.Version=v${version}"
     "-X github.com/aws/copilot-cli/internal/pkg/cli.binaryS3BucketPath=https://ecs-cli-v2-release.s3.amazonaws.com"
   ];
 
@@ -35,13 +35,15 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = copilot-cli;
     command = "copilot version";
+    version = "v${version}";
   };
 
   meta = with lib; {
-    description = "Build, Release and Operate Containerized Applications on AWS.";
+    description = "Build, Release and Operate Containerized Applications on AWS";
     homepage = "https://github.com/aws/copilot-cli";
     changelog = "https://github.com/aws/copilot-cli/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jiegec ];
+    mainProgram = "copilot";
   };
 }

@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = [ maintainers.benley ];
     platforms = platforms.unix;
+    mainProgram = "git-stree";
   };
 }

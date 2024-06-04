@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, darwin, networkmanager, iw, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, networkmanager, iw, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ifwifi";
@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "araujobsd";
     repo = "ifwifi";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-DPMCwyKqGJrav0wASBky9bS1bvJ3xaGsDzsk1bKaH1U=";
   };
 
@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A simple wrapper over nmcli using wifiscanner made in rust";
+    mainProgram = "ifwifi";
     longDescription = ''
       In the author's words:
 

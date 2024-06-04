@@ -5,21 +5,16 @@
 
 stdenv.mkDerivation rec {
   pname = "snappy";
-  version = "1.1.9";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "snappy";
     rev = version;
-    sha256 = "sha256-JXWl63KVP+CDNWIXYtz+EKqWLJbPKl3ifhr8dKAp/w8=";
+    hash = "sha256-mpEeUoJs+lGlqh1m6Mmr8UnbtQDn/8kfkeQdFwo2rQ0=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "clang-7-compat.patch";
-      url = "https://github.com/google/snappy/pull/142/commits/658cb2fcf67b626fff2122a3dbf7a3560c58f7ee.patch";
-      sha256 = "1kg3lxjwmhc7gjx36nylilnf444ddbnr3px1wpvyc6l1nh6zh4al";
-    })
     # Re-enable RTTI, without which other applications can't subclass
     # snappy::Source (this breaks Ceph, as one example)
     # https://tracker.ceph.com/issues/53060

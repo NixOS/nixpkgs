@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.linux;
+    mainProgram = "zgv";
   };
 }

@@ -13,15 +13,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jibri";
-  version = "8.0-139-g7ab9aa2";
+  version = "8.0-169-g1258814";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "14V5khp6S9T3SWiNfKyxn2WCzwhcXDCRDtATa15p01M=";
+    sha256 = "MAZJq2v25XQE6nbaAHSuxeoZOBwlOxCOIJkzxQVlKog=";
   };
 
   dontBuild = true;
   nativeBuildInputs = [ dpkg makeWrapper ];
-  unpackCmd = "dpkg-deb -x $src debcontents";
 
   installPhase = ''
     runHook preInstall
@@ -41,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "JItsi BRoadcasting Infrastructure";
+    mainProgram = "jibri";
     longDescription = ''
       Jibri provides services for recording or streaming a Jitsi Meet conference.
       It works by launching a Chrome instance rendered in a virtual framebuffer and capturing and

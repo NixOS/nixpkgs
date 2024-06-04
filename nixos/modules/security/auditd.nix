@@ -3,7 +3,7 @@
 with lib;
 
 {
-  options.security.auditd.enable = mkEnableOption (lib.mdDoc "the Linux Audit daemon");
+  options.security.auditd.enable = mkEnableOption "the Linux Audit daemon";
 
   config = mkIf config.security.auditd.enable {
     boot.kernelParams = [ "audit=1" ];
@@ -13,6 +13,8 @@ with lib;
     systemd.services.auditd = {
       description = "Linux Audit daemon";
       wantedBy = [ "basic.target" ];
+      before = [ "shutdown.target" ];
+      conflicts = [ "shutdown.target" ];
 
       unitConfig = {
         ConditionVirtualization = "!container";
@@ -23,7 +25,7 @@ with lib;
       path = [ pkgs.audit ];
 
       serviceConfig = {
-        ExecStartPre="${pkgs.coreutils}/bin/mkdir -p /var/log/audit";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/log/audit";
         ExecStart = "${pkgs.audit}/bin/auditd -l -n -s nochange";
       };
     };

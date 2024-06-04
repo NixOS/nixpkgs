@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ unzip ];
+  nativeCheckInputs = [ unzip ];
 
   # We cannot run the pkgtests, as Nix does not allow network
   # connections.
@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = mlton.meta.platforms;
     maintainers = with maintainers; [ athas ];
+    mainProgram = "smlpkg";
   };
 }

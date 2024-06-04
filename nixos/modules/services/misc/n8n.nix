@@ -9,20 +9,29 @@ let
 in
 {
   options.services.n8n = {
-    enable = mkEnableOption (lib.mdDoc "n8n server");
+    enable = mkEnableOption "n8n server";
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc "Open ports in the firewall for the n8n web interface.";
+      description = "Open ports in the firewall for the n8n web interface.";
     };
 
     settings = mkOption {
       type = format.type;
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Configuration for n8n, see <https://docs.n8n.io/hosting/environment-variables/configuration-methods/>
         for supported values.
+      '';
+    };
+
+    webhookUrl = mkOption {
+      type = types.str;
+      default = "";
+      description = ''
+        WEBHOOK_URL for n8n, in case we're running behind a reverse proxy.
+        This cannot be set through configuration and must reside in an environment variable.
       '';
     };
 
@@ -44,6 +53,7 @@ in
         N8N_USER_FOLDER = "/var/lib/n8n";
         HOME = "/var/lib/n8n";
         N8N_CONFIG_FILES = "${configFile}";
+        WEBHOOK_URL = "${cfg.webhookUrl}";
 
         # Don't phone home
         N8N_DIAGNOSTICS_ENABLED = "false";

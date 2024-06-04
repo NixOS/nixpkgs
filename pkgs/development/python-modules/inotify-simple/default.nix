@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "inotify-simple";
   version = "1.3.5";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "inotify_simple";

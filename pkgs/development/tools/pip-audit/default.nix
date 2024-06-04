@@ -1,65 +1,43 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      # ansible doesn't support resolvelib > 0.6.0 and can't have an override
-      resolvelib = super.resolvelib.overridePythonAttrs (oldAttrs: rec {
-        version = "0.8.1";
-        src = fetchFromGitHub {
-          owner = "sarugaku";
-          repo = "resolvelib";
-          rev = version;
-          sha256 = "1qpd0gg9yl0kbamlgjs9pkxd39kx511kbc92civ77v0ka5sw8ca0";
-        };
-      });
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.4.12";
+  version = "2.7.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
-    repo = pname;
+    repo = "pip-audit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bpAs7xXWvBVGzbX6Fij71BnEMpqYjSSCtWjuA/EFms8=";
+    hash = "sha256-MRFfF5OygUCIdUnPvxhYk4IcLSWGgmlw2qgzPoZDniw=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = with python3.pkgs; [ flit-core ];
 
-  propagatedBuildInputs = [
-    cachecontrol
-    cyclonedx-python-lib
-    html5lib
-    lockfile
-    packaging
-    pip-api
-    pip-requirements-parser
-    progress
-    resolvelib
-    rich
-  ];
+  dependencies =
+    with python3.pkgs;
+    [
+      cachecontrol
+      cyclonedx-python-lib
+      html5lib
+      packaging
+      pip-api
+      pip-requirements-parser
+      rich
+      toml
+    ]
+    ++ cachecontrol.optional-dependencies.filecache;
 
-  checkInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pretend
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pip_audit"
-  ];
+  pythonImportsCheck = [ "pip_audit" ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -68,7 +46,6 @@ buildPythonApplication rec {
   disabledTestPaths = [
     # Tests require network access
     "test/dependency_source/test_requirement.py"
-    "test/dependency_source/resolvelib/test_resolvelib.py"
     "test/service/test_pypi.py"
     "test/service/test_osv.py"
   ];
@@ -87,5 +64,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/pypa/pip-audit/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pip-audit";
   };
 }

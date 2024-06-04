@@ -1,18 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, kernel, fetchurl }:
+{ stdenv, lib, fetchFromGitHub, kernel }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xone";
-  version = "0.3";
+  version = "0.3-unstable-2024-03-16";
 
   src = fetchFromGitHub {
     owner = "medusalix";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-h+j4xCV9R6hp9trsv1NByh9m0UBafOz42ZuYUjclILE=";
+    repo = "xone";
+    rev = "948d2302acdd6333295eaba4da06d96677290ad3";
+    hash = "sha256-srAEw1ai5KT0rmVUL3Dut9R2mNb00AAZVCcINikh2sM=";
   };
 
   setSourceRoot = ''
-    export sourceRoot=$(pwd)/source
+    export sourceRoot=$(pwd)/${finalAttrs.src.name}
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "-C"
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(sourceRoot)"
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
   ];
 
   buildFlags = [ "modules" ];
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-
+)

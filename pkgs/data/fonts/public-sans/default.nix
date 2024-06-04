@@ -1,14 +1,23 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "public-sans";
   version = "2.001";
-in (fetchzip {
-  name = "public-sans-${version}";
 
-  url = "https://github.com/uswds/public-sans/releases/download/v${version}/public-sans-v${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/uswds/public-sans/releases/download/v${version}/public-sans-v${version}.zip";
+    stripRoot = false;
+    hash = "sha256-XFs/UMXI/kdrW+53t8Mj26+Rn5p+LQ6KW2K2/ShoIag=";
+  };
 
-  sha256 = "sha256-Ba7D4J72GZQsGn0KINRib9BmHsAnoEsAwAOC+M3CkMU=";
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 */*/*.otf -t $out/share/fonts/opentype
+    install -Dm644 */*/*.ttf -t $out/share/fonts/truetype
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "A strong, neutral, principles-driven, open source typeface for text or display";
@@ -18,10 +27,4 @@ in (fetchzip {
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-  '';
-})
+}

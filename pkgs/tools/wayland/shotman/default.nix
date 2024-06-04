@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shotman";
-  version = "0.2.0";
+  version = "0.4.6";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QNRQInFZcB1nqzESTAqYWwqJ0oiJa6UMCpjY3aHBiyA=";
+    hash = "sha256-OmYCeB2szWmFJQ+MXWmVI7IzeXgbix9ZK4/4kgR5S6A=";
   };
 
-  cargoHash = "sha256-BfH1HhBbgdCA1IqKNdl4/FEzZxHgJmoSKNVMJUrSHCA=";
+  cargoHash = "sha256-Kq2uq171B+4WzEJauH19/nzkm2irM4ggoFfxlARfyEg=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -34,6 +34,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.sr.ht/~whynothugo/shotman";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with maintainers; [ zendo fpletz ];
   };
 }

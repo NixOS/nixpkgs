@@ -12,6 +12,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+    # remove non-essential plugins and themes
+    rm -r wp-content/{plugins,themes}
+    mkdir wp-content/plugins
+    cat << EOF > wp-content/plugins/index.php
+    <?php
+    // Silence is golden.
+    EOF
+    cp -a wp-content/{plugins,themes}
+
     mkdir -p $out/share/wordpress
     cp -r . $out/share/wordpress
 
@@ -33,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wordpress.org";
     description = "WordPress is open source software you can use to create a beautiful website, blog, or app";
-    license = [ licenses.gpl2 ];
+    license = [ licenses.gpl2Plus ];
     maintainers = [ maintainers.basvandijk ];
     platforms = platforms.all;
   };

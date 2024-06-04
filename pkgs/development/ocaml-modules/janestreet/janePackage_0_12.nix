@@ -1,11 +1,9 @@
 { lib, fetchFromGitHub, buildDunePackage, defaultVersion ? "0.12.0" }:
 
-{ pname, version ? defaultVersion, hash, ...}@args:
+{ pname, version ? defaultVersion, duneVersion ? "3", hash, ...}@args:
 
 buildDunePackage (args // {
-  inherit version;
-
-  useDune2 = false;
+  inherit version duneVersion;
 
   minimalOCamlVersion = "4.07";
 
@@ -15,8 +13,6 @@ buildDunePackage (args // {
     rev = "v${version}";
     sha256 = hash;
   };
-
-  strictDeps = true;
 
   meta = {
     license = lib.licenses.mit;

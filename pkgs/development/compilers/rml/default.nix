@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-UFqXQBeIQMSV4O439j9s06p1hh7xA98Tu79FsjK9PIY=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = with ocamlPackages; [
     ocaml
   ];
@@ -23,9 +25,7 @@ stdenv.mkDerivation rec {
     num
   ];
 
-  configureFlags = [ "--prefix" "${placeholder "out"}" ];
-
-  dontAddPrefix = true;
+  prefixKey = "-prefix ";
 
   meta = with lib; {
     description = "ReactiveML: a programming language for implementing interactive systems";

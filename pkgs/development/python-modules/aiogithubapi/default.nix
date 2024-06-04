@@ -1,60 +1,69 @@
-{ lib
-, aiohttp
-, aresponses
-, async-timeout
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  async-timeout,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  sigstore,
 }:
 
 buildPythonPackage rec {
   pname = "aiogithubapi";
-  version = "22.12.2";
-  format = "pyproject";
+  version = "23.11.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
-    repo = pname;
+    repo = "aiogithubapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-j7ikJS6lcqr7K4fU/EL43lFlWtGvPT4V9JC2Iqhi0ec=";
+    hash = "sha256-SbpfHKD4QJuCe3QG0GTvsffkuFiGPLEUXOVW9f1gyTI=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     # Upstream is releasing with the help of a CI to PyPI, GitHub releases
     # are not in their focus
     substituteInPlace pyproject.toml \
       --replace 'version = "0"' 'version = "${version}"' \
-      --replace 'backoff = "^1.10.0"' 'backoff = "*"'
+      --replace 'backoff = "^1.10.0"' 'backoff = "*"' \
+      --replace 'sigstore = "<2"' 'sigstore = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
     async-timeout
     backoff
+    sigstore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
-  pythonImportsCheck = [
-    "aiogithubapi"
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [ "aiogithubapi" ];
+
+  disabledTests = [
+    # sigstore.errors.TUFError: Failed to refresh TUF metadata
+    "test_sigstore"
   ];
 
   meta = with lib; {

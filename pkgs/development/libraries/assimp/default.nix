@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "assimp";
-  version = "5.2.5";
+  version = "5.4.1";
   outputs = [ "out" "lib" "dev" ];
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";
-    hash = "sha256-vQx+PaET5mlvvIGHk6pEnZvM3qw8DiC3hd1Po6OAHxQ=";
+    hash = "sha256-F3aaEaHZyOLES6zOYqHRG0BtaKk9d/bAHCtal6FsIWc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,8 +23,14 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DASSIMP_BUILD_ASSIMP_TOOLS=ON" ];
 
+  env.NIX_CFLAGS_COMPILE = toString ([
+    # Needed with GCC 12
+    "-Wno-error=array-bounds"
+  ]);
+
   meta = with lib; {
     description = "A library to import various 3D model formats";
+    mainProgram = "assimp";
     homepage = "https://www.assimp.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ehmry ];

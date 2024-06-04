@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   # when using SDL_compat instead of SDL_classic, SDL_mixer isn't correctly
   # detected, but there is no harm just specifying it
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${lib.getDev SDL_mixer}/include/SDL"
   ];
 
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SDL port of Rise of the Triad";
+    mainProgram = "rott";
     homepage = "https://icculus.org/rott/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];

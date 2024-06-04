@@ -5,12 +5,12 @@
 , libtirpc
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xinetd";
   version = "2.3.15.4";
 
   src = fetchurl {
-    url = "https://github.com/openSUSE/xinetd/releases/download/${version}/xinetd-${version}.tar.xz";
+    url = "https://github.com/openSUSE/xinetd/releases/download/${finalAttrs.version}/xinetd-${finalAttrs.version}.tar.xz";
     hash = "sha256-K6pYEBC8cDYavfo38SHpKuucXOZ/mnGRPOvWk1nMllQ=";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Secure replacement for inetd";
     platforms = lib.platforms.linux;
     homepage = "https://github.com/openSUSE/xinetd";
-    license = lib.licenses.free;
+    license = lib.licenses.xinetd;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

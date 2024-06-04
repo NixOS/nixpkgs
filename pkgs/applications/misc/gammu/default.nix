@@ -4,8 +4,6 @@
 , postgresSupport ? false, postgresql ? null
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "gammu";
   version = "1.42.0";
@@ -31,10 +29,10 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildInputs = [ bash bluez libusb1 curl gettext sqlite libiconv ]
-  ++ optionals dbiSupport [ libdbi libdbiDrivers ]
-  ++ optionals postgresSupport [ postgresql ];
+  ++ lib.optionals dbiSupport [ libdbi libdbiDrivers ]
+  ++ lib.optionals postgresSupport [ postgresql ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://wammu.eu/gammu/";
     description = "Command line utility and library to control mobile phones";
     license = licenses.gpl2;

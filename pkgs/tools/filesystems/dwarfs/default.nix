@@ -1,68 +1,65 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, substituteAll
-
-, bison
-, boost
-, cmake
-, double-conversion
-, fmt_8
-, fuse3
-, gflags
-, glog
-, gtest
-, jemalloc
-, libarchive
-, libevent
-, libunwind
-, lz4
-, openssl
-, pkg-config
-, ronn
-, xxHash
-, zstd
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  substituteAll,
+  bison,
+  boost,
+  cmake,
+  double-conversion,
+  fmt,
+  fuse3,
+  glog,
+  gtest,
+  jemalloc,
+  libarchive,
+  libevent,
+  libunwind,
+  lz4,
+  openssl,
+  pkg-config,
+  ronn,
+  xxHash,
+  utf8cpp,
+  zstd,
 }:
-
-stdenv.mkDerivation rec {
+let
   pname = "dwarfs";
-  version = "0.6.2";
-
+  version = "0.9.9";
+in
+stdenv.mkDerivation {
+  inherit pname version;
   src = fetchFromGitHub {
     owner = "mhx";
     repo = "dwarfs";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-fA/3AooDndqYiK215cu/zTqCqeccHnwIX2CfJ9sC+Fc=";
+    hash = "sha256-Zzm2SaFR31TBBMDfgJulVbqsJBh1He2wBFzHRC/c5vg=";
   };
 
-  patches = with lib.versions; [
-    (substituteAll {
-      src = ./version_info.patch;
+  patches = [
+    (
+      with lib.versions;
+      substituteAll {
+        src = ./version_info.patch;
 
-      gitRev = "v${version}";
-      gitDesc = "v${version}";
-      gitBranch = "v${version}";
-      gitId = "v${version}"; # displayed as version number
-
-      versionMajor = major version;
-      versionMinor = minor version;
-      versionPatch = patch version;
-    })
+        versionFull = version; # displayed as version number (with v prepended)
+        versionMajor = major version;
+        versionMinor = minor version;
+        versionPatch = patch version;
+      }
+    )
   ];
 
   cmakeFlags = [
     "-DPREFER_SYSTEM_ZSTD=ON"
     "-DPREFER_SYSTEM_XXHASH=ON"
     "-DPREFER_SYSTEM_GTEST=ON"
+    "-DPREFER_SYSTEM_LIBFMT=ON"
 
     # may be added under an option in the future
     # "-DWITH_LEGACY_FUSE=ON"
     "-DWITH_TESTS=ON"
-
-    # temporary hack until folly builds work on aarch64,
-    # see https://github.com/facebook/folly/issues/1880
-    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.isx86_64 then "x86_64" else "dummy"}"
   ];
 
   nativeBuildInputs = [
@@ -75,12 +72,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     # dwarfs
     boost
-    fmt_8
+    fmt
     fuse3
     jemalloc
     libarchive
     lz4
     xxHash
+    utf8cpp
     zstd
 
     # folly
@@ -92,16 +90,17 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  checkInputs = [ gtest ];
-  # this fails inside of the sandbox due to missing access
+  nativeCheckInputs = [ gtest ];
+  # these fail inside of the sandbox due to missing access
   # to the FUSE device
-  GTEST_FILTER = "-tools.everything";
+  GTEST_FILTER = "-dwarfs/tools_test.end_to_end/*:dwarfs/tools_test.mutating_ops/*";
 
-  meta = with lib; {
+  meta = {
     description = "A fast high compression read-only file system";
     homepage = "https://github.com/mhx/dwarfs";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ keksbg ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/mhx/dwarfs/blob/v${version}/CHANGES.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.luftmensch-luftmensch ];
+    platforms = lib.platforms.linux;
   };
 }

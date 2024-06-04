@@ -2,16 +2,14 @@
 
 buildDunePackage rec {
   pname = "ppx_irmin";
-  version = "3.4.1";
+  version = "3.9.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
-    sha256 = "sha256-kig2EWww7GgGijhpSgm7pSHPR+3Q5K5E4Ha5tJY9oYA=";
+    hash = "sha256-jgc6vhtf+1ttWMMmBsnX2rwyxTUBdWvoCpLtR3etUaA=";
   };
 
   minimalOCamlVersion = "4.10";
-
-  strictDeps = false; # We must provide checkInputs as buildInputs because dune builds tests at build time
 
   propagatedBuildInputs = [
     ppx_repr

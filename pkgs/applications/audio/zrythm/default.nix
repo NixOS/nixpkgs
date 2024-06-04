@@ -1,157 +1,194 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, SDL2
+, fetchzip
 , alsa-lib
-, libaudec
+, appstream
 , bash-completion
+, boost
 , breeze-icons
 , carla
 , chromaprint
 , cmake
 , curl
+, dbus
 , dconf
-, libepoxy
 , fftw
 , fftwFloat
 , flex
 , glib
+, graphviz
 , gtk4
 , gtksourceview5
 , guile
-, graphviz
 , help2man
-, json-glib
 , jq
+, kissfft
+, libadwaita
 , libbacktrace
 , libcyaml
-, libgtop
+, libepoxy
 , libjack2
+, libpanel
 , libpulseaudio
 , libsamplerate
 , libsndfile
-, libsoundio
 , libxml2
 , libyaml
 , lilv
 , lv2
 , meson
 , ninja
-, pandoc
-, pcre
 , pcre2
 , pkg-config
 , python3
-, reproc
-, rtaudio
+, rtaudio_6
 , rtmidi
 , rubberband
+, sassc
 , serd
 , sord
+, sox
+, soxr
 , sratom
 , texi2html
-, wrapGAppsHook
+, vamp-plugin-sdk
+, wrapGAppsHook4
+, writeScript
 , xdg-utils
 , xxHash
-, vamp-plugin-sdk
+, yyjson
+, zix
 , zstd
-, libadwaita
-, sassc
 }:
 
-stdenv.mkDerivation rec {
-  pname = "zrythm";
-  version = "1.0.0-alpha.28.1.3";
+let
+  # Error: Dependency carla-host-plugin found: NO found 2.5.6 but need: '>=2.6.0'
+  # So we need Carla unstable
+  carla-unstable = carla.overrideAttrs (oldAttrs: {
+    pname = "carla";
+    version = "unstable-2024-04-26";
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ERE7I6E3+RmmpnZEtcJL/1v9a37IwFauVsbJvI9gsRQ=";
+    src = fetchFromGitHub {
+      owner = "falkTX";
+      repo = "carla";
+      rev = "948991d7b5104280c03960925908e589c77b169a";
+      hash = "sha256-uGAuKheoMfP9hZXsw29ec+58dJM8wMuowe95QutzKBY=";
+    };
+  });
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "zrythm";
+  version = "1.0.0-rc.1";
+
+  src = fetchzip {
+    url = "https://www.zrythm.org/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-Ljbw7bjGI6js4OP9KEXCkhC9AMbInSz0nn+pROm4vXw=";
   };
 
+  passthru.updateScript = writeScript "update-zrythm" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+
+    version="$(curl -s https://www.zrythm.org/releases/ | grep -o -m 1 'href="zrythm-[^"]*\.tar\.xz"' | head -1 | sed 's/href="zrythm-\(.*\)\.tar\.xz"/\1/')"
+    update-source-version zrythm "$version"
+  '';
+
   nativeBuildInputs = [
+    chromaprint
+    cmake
+    flex
+    guile
     help2man
     jq
-    libaudec
     libxml2
+    lilv
     meson
     ninja
-    pandoc
     pkg-config
     python3
     python3.pkgs.sphinx
-    texi2html
-    wrapGAppsHook
-    cmake
-  ];
-
-  buildInputs = [
-    SDL2
-    alsa-lib
-    bash-completion
-    carla
-    chromaprint
-    curl
-    dconf
-    libepoxy
-    fftw
-    fftwFloat
-    flex
-    breeze-icons
-    glib
-    gtk4
-    gtksourceview5
-    graphviz
-    guile
-    json-glib
-    libbacktrace
-    libcyaml
-    libgtop
-    libjack2
-    libpulseaudio
-    libsamplerate
-    libsndfile
-    libsoundio
-    libyaml
-    lilv
-    lv2
-    pcre
-    pcre2
-    reproc
-    rtaudio
-    rtmidi
-    rubberband
+    sassc
     serd
     sord
     sratom
+    texi2html
+    wrapGAppsHook4
+  ];
+
+  buildInputs = [
+    alsa-lib
+    appstream
+    bash-completion
+    boost
+    carla-unstable
+    curl
+    dbus
+    dconf
+    fftw
+    fftwFloat
+    glib
+    graphviz
+    gtk4
+    gtksourceview5
+    kissfft
+    libadwaita
+    libbacktrace
+    libcyaml
+    libepoxy
+    libjack2
+    libpanel
+    libpulseaudio
+    libsamplerate
+    libsndfile
+    libyaml
+    lv2
+    pcre2
+    rtaudio_6
+    rtmidi
+    rubberband
+    sox
+    soxr
     vamp-plugin-sdk
     xdg-utils
     xxHash
+    yyjson
+    zix
     zstd
-    libadwaita
-    sassc
   ];
 
+  # Zrythm uses meson to build, but requires cmake for dependency detection.
+  dontUseCmakeConfigure = true;
+
+  dontWrapQtApps = true;
+
   mesonFlags = [
-    "-Drtmidi=enabled"
-    "-Drtaudio=enabled"
-    "-Dsdl=enabled"
-    "-Dcarla=enabled"
-    "-Dmanpage=true"
-    # "-Duser_manual=true" # needs sphinx-intl
-    "-Dlsp_dsp=disabled"
     "-Db_lto=false"
+    "-Dcarla=enabled"
+    "-Dcarla_binaries_dir=${carla-unstable}/lib/carla"
     "-Ddebug=true"
+    "-Dfftw3_threads_separate=false"
+    "-Dfftw3_threads_separate_type=library"
+    "-Dfftw3f_separate=false"
+    "-Dlsp_dsp=disabled"
+    "-Dmanpage=true"
+    "-Drtaudio=enabled"
+    "-Drtmidi=enabled"
+    # "-Duser_manual=true" # needs sphinx-intl
   ];
 
   NIX_LDFLAGS = ''
     -lfftw3_threads -lfftw3f_threads
   '';
 
+  GUILE_AUTO_COMPILE = 0;
+
   dontStrip = true;
 
   postPatch = ''
+    substituteInPlace meson.build \
+      --replace "'/usr/lib', '/usr/local/lib', '/opt/homebrew/lib'" "'${fftw}/lib'"
+
     chmod +x scripts/meson-post-install.sh
     patchShebangs ext/sh-manpage-completions/run.sh scripts/generic_guile_wrap.sh \
       scripts/meson-post-install.sh tools/check_have_unlimited_memlock.sh
@@ -159,16 +196,17 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas/"
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
-             )
+      --prefix GSETTINGS_SCHEMA_DIR : "$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}/glib-2.0/schemas/"
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${breeze-icons}/share"
+    )
   '';
 
   meta = with lib; {
     homepage = "https://www.zrythm.org";
-    description = "Highly automated and intuitive digital audio workstation";
-    maintainers = with maintainers; [ tshaynik magnetophon ];
-    platforms = platforms.linux;
+    description = "Automated and intuitive digital audio workstation";
+    maintainers = with maintainers; [ tshaynik magnetophon yuu astavie PowerUser64 ];
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     license = licenses.agpl3Plus;
   };
-}
+})

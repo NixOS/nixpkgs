@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xchm";
-  version = "1.33";
+  version = "1.36";
 
   src = fetchFromGitHub {
     owner = "rzvncj";
     repo = "xCHM";
     rev = version;
-    sha256 = "sha256-8HQaXxZQwfBaWc22GivKri1vZEnZ23anSfriCvmLHHw=";
+    sha256 = "sha256-+RbFE/jOD8sofHMCFgTIfgokrXYqDbCSSnN6SdEZ/b0=";
   };
 
   nativeBuildInputs = [
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;
+    mainProgram = "xchm";
   };
 }

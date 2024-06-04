@@ -8,6 +8,7 @@
 , sassc
 , vala
 , gobject-introspection
+, appstream
 , fribidi
 , glib
 , gtk4
@@ -16,11 +17,12 @@
 , xvfb-run
 , AppKit
 , Foundation
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.2.1";
+  version = "1.5.1";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -29,8 +31,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libadwaita";
-    rev = version;
-    hash = "sha256-FJmH/DTTn01UlATgxC0d7vrpVLwAot6Y4cZralQz2nU=";
+    rev = finalAttrs.version;
+    hash = "sha256-dH0VPIt6SGTDcb1I72cKnNlyqZ3dptvKmMDjOd17BfA=";
   };
 
   depsBuildBuild = [
@@ -49,11 +51,12 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
-  ] ++ lib.optionals (!doCheck) [
+  ] ++ lib.optionals (!finalAttrs.doCheck) [
     "-Dtests=false"
   ];
 
   buildInputs = [
+    appstream
     fribidi
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -64,17 +67,18 @@ stdenv.mkDerivation rec {
     gtk4
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gnome.adwaita-icon-theme
   ] ++ lib.optionals (!stdenv.isDarwin) [
     xvfb-run
   ];
 
-  # Tests had to be disabled on Darwin because they fail with the same error as https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=264947 on Hydra:
+  # Tests had to be disabled on Darwin because test-button-content fails
   #
-  # In file included from ../tests/test-style-manager.c:10:
-  # ../src/adw-settings-private.h:16:10: fatal error: 'adw-enums-private.h' file not found
+  # not ok /Adwaita/ButtonContent/style_class_button - Gdk-FATAL-CRITICAL:
+  # gdk_macos_monitor_get_workarea: assertion 'GDK_IS_MACOS_MONITOR (self)' failed
   doCheck = !stdenv.isDarwin;
+  separateDebugInfo = true;
 
   checkPhase = ''
     runHook preCheck
@@ -104,16 +108,21 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = finalAttrs.pname;
+    };
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
   };
 
   meta = with lib; {
-    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${src.rev}/NEWS";
+    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${finalAttrs.src.rev}/NEWS";
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
+    mainProgram = "adwaita-1-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
     platforms = platforms.unix;
+    pkgConfigModules = [ "libadwaita-1" ];
   };
-}
+})

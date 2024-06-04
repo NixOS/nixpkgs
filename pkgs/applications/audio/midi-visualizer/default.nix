@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "MIDIVisualizer";
-  version = "6.5";
+  version = "7.0";
 
   src = fetchFromGitHub {
     owner = "kosua20";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-thRcRJ88bz3jwu6rKaQxt2MkBSf5Ri1jygkKDguP2eE=";
+    sha256 = "sha256-wfPSPH+E9cErVvfJZqHttFtjiUYJopM/u6w6NpRHifE=";
   };
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper];
@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A small MIDI visualizer tool, using OpenGL";
+    mainProgram = "MIDIVisualizer";
     homepage = "https://github.com/kosua20/MIDIVisualizer";
     license = licenses.mit;
     platforms = platforms.unix;

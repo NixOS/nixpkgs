@@ -1,13 +1,18 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "py4j";
 
   version = "0.10.9.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-C25TFbs62lz2KsZR0Qe7LrwC3vPe6dlUjjuqxkTqjbs=";
+    hash = "sha256-C25TFbs62lz2KsZR0Qe7LrwC3vPe6dlUjjuqxkTqjbs=";
   };
 
   # No tests in archive

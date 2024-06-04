@@ -1,63 +1,69 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  cacert,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "1.0.3";
-  format = "pyproject";
+  version = "1.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
-    repo = pname;
+    repo = "gallia";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CoZ3niGuEjcaSyIGc0MIy95v64nTbhgqW/0uz4a/f1o=";
+    hash = "sha256-hLGaImYkv6/1Wv1a+0tKmW4qmV4akNoyd0RXopJjetI=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "httpx" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ poetry-core ];
+
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
+
+  dependencies = with python3.pkgs; [
     aiofiles
     aiohttp
     aiosqlite
     argcomplete
     can
+    exitcode
+    httpx
+    platformdirs
+    psutil
     construct
     msgspec
     pydantic
+    pygit2
     tabulate
-    tomlkit
-    xdg
+    tomli
     zstandard
   ];
 
-  checkInputs = with python3.pkgs; [
+  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    pytest-asyncio
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'aiofiles = "^0.8.0"' 'aiofiles = ">=0.8.0"' \
-      --replace 'zstandard = "^0.17.0"' 'zstandard = "*"'
-  '';
-
-  pythonImportsCheck = [
-    "gallia"
-  ];
+  pythonImportsCheck = [ "gallia" ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
 
   meta = with lib; {
-    description = "Pentesting framework with the focus on the automotive domain";
+    description = "Extendable Pentesting Framework for the Automotive Domain";
     homepage = "https://github.com/Fraunhofer-AISEC/gallia";
+    changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [
+      fab
+      rumpelsepp
+    ];
+    platforms = platforms.linux;
   };
 }

@@ -34,5 +34,6 @@ buildPythonApplication rec {
     platforms = platforms.all;
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
+    mainProgram = "kargo";
   };
 }

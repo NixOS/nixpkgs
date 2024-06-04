@@ -1,8 +1,16 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, humanfriendly, pytestCheckHook }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  humanfriendly,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "capturer";
   version = "3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xolox";
@@ -15,7 +23,7 @@ buildPythonPackage rec {
 
   # hangs on darwin
   doCheck = !stdenv.isDarwin;
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Easily capture stdout/stderr of the current process and subprocesses";

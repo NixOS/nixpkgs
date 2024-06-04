@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wps39h8rx2b00vyvkia5j40fkak3dpipp1kzilqla0cgvk73dn2";
   };
 
+  outputs = [ "out" "dev" ];
+
   strictDeps = true;
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -58,6 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An implementation of the XDG Sound Theme and Name Specifications";
+    mainProgram = "canberra-gtk-play";
     longDescription = ''
       libcanberra is an implementation of the XDG Sound Theme and Name
       Specifications, for generating event sounds on free desktops
@@ -67,7 +70,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://0pointer.de/lennart/projects/libcanberra/";
     license = licenses.lgpl2Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ RossComputerGuy ];
     platforms = platforms.unix;
   };
 }

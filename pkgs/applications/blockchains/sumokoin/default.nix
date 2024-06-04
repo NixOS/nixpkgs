@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, boost
+, boost179
 , openssl
 , libsodium
 , libunwind
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    boost179
     openssl
     libsodium
     libunwind
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     unbound
     zeromq
   ];
+
+  env.CXXFLAGS = "-include cstdint";
 
   # cc1: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
   hardeningDisable = [ "format" ];

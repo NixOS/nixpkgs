@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ip2location-c";
-  version = "8.5.1";
+  version = "8.6.1";
 
   src = fetchFromGitHub {
     owner = "chrislim2888";
     repo = "IP2Location-C-Library";
     rev = version;
-    sha256 = "sha256-+Az1bAJ3HT9mIjO43FOcEqxX3oA3RcIY7VvxfaHtBX8=";
+    sha256 = "sha256-3/cLoGV7go4S1ew73IJzJEMTlLnvM3adl+/Sb7mPrZY=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library to look up locations of host names and IP addresses";
+    mainProgram = "ip2location";
     longDescription = ''
       A C library to find the country, region, city,coordinates,
       zip code, time zone, ISP, domain name, connection type, area code,

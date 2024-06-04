@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin-native";
-  version = "1.8.0";
+  version = "1.9.23";
 
   src = let
     getArch = {
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
       "https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${arch}-${version}.tar.gz";
 
     getHash = arch: {
-      "macos-aarch64" = "19dcc2ylh11vxirglda8xrrm06i2nd53ndd8b1smf2vyj0v9593m";
-      "macos-x86_64" = "0pkc4g09qwp4lcvs62qis0zxdjbr9z5mbgyi4mczxx5kqha4fxp3";
-      "linux-x86_64" = "124nvhjh9xj8nsdjf71vzsgfjdq6mc0nalk79xfvsp2wh7xd8d0n";
+      "macos-aarch64" = "1v1ld4nxa77vjxiz4jw5h29s8i4ghfbmq0d01r15i75pr46md8r7";
+      "macos-x86_64" = "05ywdhagj3qzjaw5sd94sgjk89dysky7d7lfqpwvc8s35v77rv8f";
+      "linux-x86_64" = "1j2lpl1r7r30dgard6ia29n3qrsr98wb3qwpc80z4jh6k42qn6id";
     }.${arch};
   in
     fetchurl {
@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
-    rm bin/kotlinc
     mv * $out
 
     runHook postInstall

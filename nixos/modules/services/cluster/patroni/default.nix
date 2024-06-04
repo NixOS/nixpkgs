@@ -6,21 +6,18 @@ let
   defaultGroup = "patroni";
   format = pkgs.formats.yaml { };
 
-  #boto doesn't support python 3.10 yet
-  patroni = pkgs.patroni.override { pythonPackages = pkgs.python39Packages; };
-
   configFileName = "patroni-${cfg.scope}-${cfg.name}.yaml";
   configFile = format.generate configFileName cfg.settings;
 in
 {
   options.services.patroni = {
 
-    enable = mkEnableOption (lib.mdDoc "Patroni");
+    enable = mkEnableOption "Patroni";
 
     postgresqlPackage = mkOption {
       type = types.package;
       example = literalExpression "pkgs.postgresql_14";
-      description = mdDoc ''
+      description = ''
         PostgreSQL package to use.
         Plugins can be enabled like this `pkgs.postgresql_14.withPackages (p: [ p.pg_safeupdate p.postgis ])`.
       '';
@@ -31,7 +28,7 @@ in
       defaultText = literalExpression ''"/var/lib/postgresql/''${config.services.patroni.postgresqlPackage.psqlSchema}"'';
       example = "/var/lib/postgresql/14";
       default = "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}";
-      description = mdDoc ''
+      description = ''
         The data directory for PostgreSQL. If left as the default value
         this directory will automatically be created before the PostgreSQL server starts, otherwise
         the sysadmin is responsible for ensuring the directory exists with appropriate ownership
@@ -42,7 +39,7 @@ in
     postgresqlPort = mkOption {
       type = types.port;
       default = 5432;
-      description = mdDoc ''
+      description = ''
         The port on which PostgreSQL listens.
       '';
     };
@@ -51,7 +48,7 @@ in
       type = types.str;
       default = defaultUser;
       example = "postgres";
-      description = mdDoc ''
+      description = ''
         The user for the service. If left as the default value this user will automatically be created,
         otherwise the sysadmin is responsible for ensuring the user exists.
       '';
@@ -61,7 +58,7 @@ in
       type = types.str;
       default = defaultGroup;
       example = "postgres";
-      description = mdDoc ''
+      description = ''
         The group for the service. If left as the default value this group will automatically be created,
         otherwise the sysadmin is responsible for ensuring the group exists.
       '';
@@ -70,7 +67,7 @@ in
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/patroni";
-      description = mdDoc ''
+      description = ''
         Folder where Patroni data will be written, used by Raft as well if enabled.
       '';
     };
@@ -78,7 +75,7 @@ in
     scope = mkOption {
       type = types.str;
       example = "cluster1";
-      description = mdDoc ''
+      description = ''
         Cluster name.
       '';
     };
@@ -86,7 +83,7 @@ in
     name = mkOption {
       type = types.str;
       example = "node1";
-      description = mdDoc ''
+      description = ''
         The name of the host. Must be unique for the cluster.
       '';
     };
@@ -94,7 +91,7 @@ in
     namespace = mkOption {
       type = types.str;
       default = "/service";
-      description = mdDoc ''
+      description = ''
         Path within the configuration store where Patroni will keep information about the cluster.
       '';
     };
@@ -102,15 +99,15 @@ in
     nodeIp = mkOption {
       type = types.str;
       example = "192.168.1.1";
-      description = mdDoc ''
+      description = ''
         IP address of this node.
       '';
     };
 
     otherNodesIps = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       example = [ "192.168.1.2" "192.168.1.3" ];
-      description = mdDoc ''
+      description = ''
         IP addresses of the other nodes.
       '';
     };
@@ -118,7 +115,7 @@ in
     restApiPort = mkOption {
       type = types.port;
       default = 8008;
-      description = mdDoc ''
+      description = ''
         The port on Patroni's REST api listens.
       '';
     };
@@ -126,7 +123,7 @@ in
     raft = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         This will configure Patroni to use its own RAFT implementation instead of using a dedicated DCS.
       '';
     };
@@ -134,7 +131,7 @@ in
     raftPort = mkOption {
       type = types.port;
       default = 5010;
-      description = mdDoc ''
+      description = ''
         The port on which RAFT listens.
       '';
     };
@@ -142,7 +139,7 @@ in
     softwareWatchdog = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         This will configure Patroni to use the software watchdog built into the Linux kernel
         as described in the [documentation](https://patroni.readthedocs.io/en/latest/watchdog.html#setting-up-software-watchdog-on-linux).
       '';
@@ -151,7 +148,7 @@ in
     settings = mkOption {
       type = format.type;
       default = { };
-      description = mdDoc ''
+      description = ''
         The primary patroni configuration. See the [documentation](https://patroni.readthedocs.io/en/latest/SETTINGS.html)
         for possible values.
         Secrets should be passed in by using the `environmentFiles` option.
@@ -165,7 +162,7 @@ in
         PATRONI_REPLICATION_PASSWORD = "/secret/file";
         PATRONI_SUPERUSER_PASSWORD = "/secret/file";
       };
-      description = mdDoc "Environment variables made available to Patroni as files content, useful for providing secrets from files.";
+      description = "Environment variables made available to Patroni as files content, useful for providing secrets from files.";
     };
   };
 
@@ -224,7 +221,7 @@ in
 
         script = ''
           ${concatStringsSep "\n" (attrValues (mapAttrs (name: path: ''export ${name}="$(< ${escapeShellArg path})"'') cfg.environmentFiles))}
-          exec ${patroni}/bin/patroni ${configFile}
+          exec ${pkgs.patroni}/bin/patroni ${configFile}
         '';
 
         serviceConfig = mkMerge [
@@ -252,7 +249,7 @@ in
     '';
 
     environment.systemPackages = [
-      patroni
+      pkgs.patroni
       cfg.postgresqlPackage
       (mkIf cfg.raft pkgs.python310Packages.pysyncobj)
     ];

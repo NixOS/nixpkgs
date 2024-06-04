@@ -8,22 +8,25 @@
 , haskellPackages
 , mercurial
 , python3Packages
+, abseil-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "re2";
-  version = "2022-12-01";
+  version = "2024-05-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = version;
-    hash = "sha256-RmPXfavSKVnnl/RJ5aTjc/GbkPz+EXiFg1n5e4s6wjw=";
+    hash = "sha256-p4MdHjTk0SQsBPVkEy+EceAN/QTyzBDe7Pd1hJwOs3A=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ninja ];
+
+  propagatedBuildInputs = [ abseil-cpp ];
 
   postPatch = ''
     substituteInPlace re2Config.cmake.in \
@@ -65,7 +68,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd3;
     homepage = "https://github.com/google/re2";
-    maintainers = with maintainers; [ azahi ];
+    maintainers = with maintainers; [ azahi networkexception ];
     platforms = platforms.all;
   };
 }

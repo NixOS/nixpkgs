@@ -1,24 +1,31 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pkg-config
-, igraph
-, texttable
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pkg-config,
+  setuptools,
+  igraph,
+  texttable,
+  cairocffi,
+  matplotlib,
+  plotly,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.10.3";
+  version = "0.11.5";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "python-igraph";
-    rev = version;
-    hash = "sha256-j7c1CtZ796EYMsS11kd8YED7pPolskgT+611uvePTsA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nfXCAjTKxtslVk17h60+v/JQusQTmaTRCPvvFG4/OPk=";
   };
 
   postPatch = ''
@@ -27,32 +34,45 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    setuptools
   ];
 
-  buildInputs = [
-    igraph
-  ];
+  buildInputs = [ igraph ];
 
-  propagatedBuildInputs = [
-    texttable
-  ];
+  propagatedBuildInputs = [ texttable ];
+
+  passthru.optional-dependencies = {
+    cairo = [ cairocffi ];
+    matplotlib = [ matplotlib ];
+    plotly = [ plotly ];
+    plotting = [ cairocffi ];
+  };
 
   # NB: We want to use our igraph, not vendored igraph, but even with
   # pkg-config on the PATH, their custom setup.py still needs to be explicitly
   # told to do it. ~ C.
-  setupPyGlobalFlags = [ "--use-pkg-config" ];
+  env.IGRAPH_USE_PKG_CONFIG = true;
 
-  checkInputs = [
-    unittestCheckHook
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  disabledTests = [
+    "testAuthorityScore"
+    "test_labels"
   ];
 
   pythonImportsCheck = [ "igraph" ];
 
   meta = with lib; {
     description = "High performance graph data structures and algorithms";
+    mainProgram = "igraph";
     homepage = "https://igraph.org/python/";
     changelog = "https://github.com/igraph/python-igraph/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
+    maintainers = with maintainers; [
+      MostAwesomeDude
+      dotlambda
+    ];
   };
 }

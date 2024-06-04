@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     urllib3
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
@@ -52,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to execute Atomic Red Team tests (Atomics)";
+    mainProgram = "atomic-operator";
     homepage = "https://www.atomic-operator.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

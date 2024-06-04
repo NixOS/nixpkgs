@@ -1,18 +1,26 @@
+From e26ae067644ea780f050fb900bd850027bb86456 Mon Sep 17 00:00:00 2001
+From: superherointj <5861043+superherointj@users.noreply.github.com>
+Date: Tue, 7 Mar 2023 14:59:31 -0300
+Subject: [PATCH] make-safe-for-sandbox.patch
+
+---
+ lib/CMakeLists.txt | 80 ++--------------------------------------------
+ 1 file changed, 2 insertions(+), 78 deletions(-)
+
 diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
-index dab2aaef..26b587b1 100644
+index 129e26e6..d25bdf9d 100644
 --- a/lib/CMakeLists.txt
 +++ b/lib/CMakeLists.txt
-@@ -36,7 +36,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
- endif()
+@@ -32,14 +32,14 @@ endif()
  
+ set(PONYC_GBENCHMARK_URL https://github.com/google/benchmark/archive/v1.7.1.tar.gz)
  ExternalProject_Add(gbenchmark
 -    URL ${PONYC_GBENCHMARK_URL}
 +    SOURCE_DIR gbenchmark-prefix/src/benchmark
-     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${PONYC_LIBS_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DCMAKE_CXX_FLAGS=${PONY_PIC_FLAG} --no-warn-unused-cli
+     CMAKE_ARGS -DCMAKE_BUILD_TYPE=${PONYC_LIBS_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DBENCHMARK_ENABLE_WERROR=OFF -DCMAKE_CXX_FLAGS=${PONY_PIC_FLAG} --no-warn-unused-cli
  )
  
-@@ -46,7 +46,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
- endif()
+ set(PONYC_GOOGLETEST_URL https://github.com/google/googletest/archive/release-1.12.1.tar.gz)
  
  ExternalProject_Add(googletest
 -    URL ${PONYC_GOOGLETEST_URL}
@@ -20,14 +28,14 @@ index dab2aaef..26b587b1 100644
      CMAKE_ARGS -DCMAKE_BUILD_TYPE=${PONYC_LIBS_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_CXX_FLAGS=${PONY_PIC_FLAG} -Dgtest_force_shared_crt=ON --no-warn-unused-cli
  )
  
-@@ -59,82 +59,6 @@ install(TARGETS blake2
+@@ -52,82 +52,6 @@ install(TARGETS blake2
      COMPONENT library
  )
  
 -find_package(Git)
 -
--set(LLVM_DESIRED_HASH "75e33f71c2dae584b13a7d1186ae0a038ba98838")
--set(PATCHES_DESIRED_HASH "a16f299fbfced16a2bbc628746db341f2a5af9ae8cc9c9ef4b1e9ca26de3c292")
+-set(LLVM_DESIRED_HASH "1f9140064dfbfb0bbda8e51306ea51080b2f7aac")
+-set(PATCHES_DESIRED_HASH "3e16c097794cb669a8f6a0bd7600b440205ac5c29a6135750c2e83263eb16a95")
 -
 -if(GIT_FOUND)
 -    if(EXISTS "${PROJECT_SOURCE_DIR}/../.git")
@@ -102,4 +110,7 @@ index dab2aaef..26b587b1 100644
 -
  message("Building targets: ${LLVM_TARGETS_TO_BUILD}")
  
- set(LLVM_ENABLE_BINDINGS OFF)
+ set(LLVM_ENABLE_BINDINGS OFF CACHE BOOL "ponyc specific override of LLVM cache entry")
+-- 
+2.39.2
+

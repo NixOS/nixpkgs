@@ -33,4 +33,10 @@ mkDerivation {
     kactivities
     plasma-workspace
   ];
+
+  meta = {
+    description = "Components necessary to integrate browsers into the Plasma Desktop";
+    mainProgram = "plasma-browser-integration-host";
+    homepage = "https://community.kde.org/Plasma/Browser_Integration";
+  };
 }

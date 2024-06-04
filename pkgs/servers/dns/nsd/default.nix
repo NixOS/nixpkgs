@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nsd";
-  version = "4.6.1";
+  version = "4.9.1";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-P2CjoT7D9o6Ev6fhna/2Y8grzx3pbk9T8iRlJedzono=";
+    sha256 = "sha256-psI6U+6BEfpx53t1ZdG49IbqaVdwgWWF+93xTkNn5t8=";
   };
 
   prePatch = ''
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ libevent openssl ];
+
+  enableParallelBuilding = true;
 
   configureFlags =
     let edf = c: o: if c then ["--enable-${o}"] else ["--disable-${o}"];

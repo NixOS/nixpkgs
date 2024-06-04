@@ -37,19 +37,14 @@ let
 in {
   options = {
     services.mxisd = {
-      enable = mkEnableOption (lib.mdDoc "matrix federated identity server");
+      enable = mkEnableOption "matrix federated identity server";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.ma1sd;
-        defaultText = literalExpression "pkgs.ma1sd";
-        description = lib.mdDoc "The mxisd/ma1sd package to use";
-      };
+      package = mkPackageOption pkgs "ma1sd" { };
 
       environmentFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to an environment-file which may contain secrets to be
           substituted via `envsubst`.
         '';
@@ -58,20 +53,20 @@ in {
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/mxisd";
-        description = lib.mdDoc "Where data mxisd/ma1sd uses resides";
+        description = "Where data mxisd/ma1sd uses resides";
       };
 
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
-        description = lib.mdDoc "Extra options merged into the mxisd/ma1sd configuration";
+        description = "Extra options merged into the mxisd/ma1sd configuration";
       };
 
       matrix = {
 
         domain = mkOption {
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             the domain of the matrix homeserver
           '';
         };
@@ -83,7 +78,7 @@ in {
         name = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             Public hostname of mxisd/ma1sd, if different from the Matrix domain.
           '';
         };
@@ -91,7 +86,7 @@ in {
         port = mkOption {
           type = types.nullOr types.int;
           default = null;
-          description = lib.mdDoc ''
+          description = ''
             HTTP port to listen on (unencrypted)
           '';
         };

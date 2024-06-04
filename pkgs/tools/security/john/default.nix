@@ -2,8 +2,6 @@
 , gcc, python3Packages, perl, perlPackages, makeWrapper, fetchpatch
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "john";
   version = "1.9.0-jumbo-1";
@@ -83,7 +81,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "John the Ripper password cracker";
     license = licenses.gpl2Plus;
     homepage = "https://github.com/openwall/john/";

@@ -40,7 +40,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to synchronise your machine's time using ntpd, as a peer in
           the NTP network.
 
@@ -50,20 +50,20 @@ in
 
       restrictDefault = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           The restriction flags to be set by default.
 
           The default flags prevent external hosts from using ntpd as a DDoS
           reflector, setting system time, and querying OS/ntpd version. As
           recommended in section 6.5.1.1.3, answer "No" of
-          http://support.ntp.org/bin/view/Support/AccessRestrictions
+          https://support.ntp.org/Support/AccessRestrictions
         '';
         default = [ "limited" "kod" "nomodify" "notrap" "noquery" "nopeer" ];
       };
 
       restrictSource = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           The restriction flags to be set on source.
 
           The default flags allow peers to be added by ntpd from configured
@@ -76,7 +76,7 @@ in
         default = config.networking.timeServers;
         defaultText = literalExpression "config.networking.timeServers";
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           The set of NTP servers from which to synchronise.
         '';
       };
@@ -87,14 +87,14 @@ in
         example = ''
           fudge 127.127.1.0 stratum 10
         '';
-        description = lib.mdDoc ''
+        description = ''
           Additional text appended to {file}`ntp.conf`.
         '';
       };
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc "Extra flags passed to the ntpd command.";
+        description = "Extra flags passed to the ntpd command.";
         example = literalExpression ''[ "--interface=eth0" ]'';
         default = [];
       };

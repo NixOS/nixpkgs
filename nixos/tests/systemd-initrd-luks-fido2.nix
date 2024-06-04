@@ -6,8 +6,9 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     virtualisation = {
       emptyDiskImages = [ 512 ];
       useBootLoader = true;
+      # Booting off the encrypted disk requires having a Nix store available for the init script
+      mountHostNixStore = true;
       useEFIBoot = true;
-      qemu.package = lib.mkForce (pkgs.qemu_test.override { canokeySupport = true; });
       qemu.options = [ "-device canokey,file=/tmp/canokey-file" ];
     };
     boot.loader.systemd-boot.enable = true;
@@ -19,19 +20,20 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     specialisation.boot-luks.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         cryptroot = {
-          device = "/dev/vdc";
+          device = "/dev/vdb";
           crypttabExtraOpts = [ "fido2-device=auto" ];
         };
       };
-      virtualisation.bootDevice = "/dev/mapper/cryptroot";
+      virtualisation.rootDevice = "/dev/mapper/cryptroot";
+      virtualisation.fileSystems."/".autoFormat = true;
     };
   };
 
   testScript = ''
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
-    machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdc -")
-    machine.succeed("PASSWORD=supersecret SYSTEMD_LOG_LEVEL=debug systemd-cryptenroll --fido2-device=auto /dev/vdc |& systemd-cat")
+    machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdb -")
+    machine.succeed("PASSWORD=supersecret SYSTEMD_LOG_LEVEL=debug systemd-cryptenroll --fido2-device=auto /dev/vdb |& systemd-cat")
 
     # Boot from the encrypted disk
     machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")

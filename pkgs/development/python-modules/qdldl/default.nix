@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, pybind11
-, numpy
-, scipy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cmake,
+  pybind11,
+  numpy,
+  scipy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "qdldl";
-  version = "0.1.5.post2";
+  version = "0.1.7.post2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fa960b//HacdoG6C1RR72xrIZlgWF9jwbMTu2kjioUk=";
+    hash = "sha256-SxU5pewQzHV6/XFW1960AGAHythtd0yfD9w+NEFVV9M=";
   };
 
   dontUseCmakeConfigure = true;
@@ -28,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "qdldl" ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A free LDL factorization routine";

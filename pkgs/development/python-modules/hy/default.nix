@@ -1,55 +1,44 @@
-{ lib
-, astor
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, funcparserlib
-, hy
-, pytestCheckHook
-, python
-, pythonOlder
-, rply
-, testers
+{
+  lib,
+  astor,
+  buildPythonPackage,
+  fetchFromGitHub,
+  funcparserlib,
+  hy,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools,
+  testers,
 }:
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "0.25.0";
-  format = "setuptools";
+  version = "0.29.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hylang";
-    repo = pname;
+    repo = "hy";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-V+ZtPm17ESxCGpRieGvEeO2bkwHfZQ6k9lsnDWr6pqo=";
+    hash = "sha256-8b2V78mwzSThmVl1SfMGBw8VSpE5rCuucnIyD0nq5To=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
   HY_VERSION = version;
 
-  propagatedBuildInputs = [
-    colorama
-    funcparserlib
-  ] ++
-  lib.optionals (pythonOlder "3.9") [
-    astor
-  ];
+  build-system = [ setuptools ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  dependencies = [ funcparserlib ] ++ lib.optionals (pythonOlder "3.9") [ astor ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # For test_bin_hy
     export PATH="$out/bin:$PATH"
   '';
-
-  disabledTests = [
-    "test_circular_macro_require"
-    "test_macro_require"
-  ];
 
   pythonImportsCheck = [ "hy" ];
 
@@ -61,14 +50,12 @@ buildPythonPackage rec {
     # For backwards compatibility with removed pkgs/development/interpreters/hy
     # Example usage:
     #   hy.withPackages (ps: with ps; [ hyrule requests ])
-    withPackages = python-packages:
-      (python.withPackages
-        (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
-          name = "${hy.name}-env";
-          meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) {
-            mainProgram = "hy";
-          };
-        });
+    withPackages =
+      python-packages:
+      (python.withPackages (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
+        name = "${hy.name}-env";
+        meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) { mainProgram = "hy"; };
+      });
   };
 
   meta = with lib; {
@@ -76,6 +63,10 @@ buildPythonPackage rec {
     homepage = "https://hylang.org/";
     changelog = "https://github.com/hylang/hy/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab mazurel nixy thiagokokada ];
+    maintainers = with maintainers; [
+      mazurel
+      nixy
+      thiagokokada
+    ];
   };
 }

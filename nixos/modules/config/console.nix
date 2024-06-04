@@ -21,7 +21,7 @@ let
   # Sadly, systemd-vconsole-setup doesn't support binary keymaps.
   vconsoleConf = pkgs.writeText "vconsole.conf" ''
     KEYMAP=${cfg.keyMap}
-    FONT=${cfg.font}
+    ${optionalString (cfg.font != null) "FONT=${cfg.font}"}
   '';
 
   consoleEnv = kbd: pkgs.buildEnv {
@@ -40,19 +40,24 @@ in
   ###### interface
 
   options.console  = {
-    enable = mkEnableOption (lib.mdDoc "virtual console") // {
+    enable = mkEnableOption "virtual console" // {
       default = true;
     };
 
     font = mkOption {
-      type = with types; either str path;
-      default = "Lat2-Terminus16";
+      type = with types; nullOr (either str path);
+      default = null;
       example = "LatArCyrHeb-16";
-      description = mdDoc ''
-        The font used for the virtual consoles.  Leave empty to use
-        whatever the {command}`setfont` program considers the
-        default font.
-        Can be either a font name or a path to a PSF font file.
+      description = ''
+        The font used for the virtual consoles.
+        Can be `null`, a font name, or a path to a PSF font file.
+
+        Use `null` to let the kernel choose a built-in font.
+        The default is 8x16, and, as of Linux 5.3, Terminus 32 bold for display
+        resolutions of 2560x1080 and higher.
+        These fonts cover the [IBM437][] character set.
+
+        [IBM437]: https://en.wikipedia.org/wiki/Code_page_437
       '';
     };
 
@@ -60,7 +65,7 @@ in
       type = with types; either str path;
       default = "us";
       example = "fr";
-      description = lib.mdDoc ''
+      description = ''
         The keyboard mapping table for the virtual consoles.
       '';
     };
@@ -74,7 +79,7 @@ in
         "002b36" "cb4b16" "586e75" "657b83"
         "839496" "6c71c4" "93a1a1" "fdf6e3"
       ];
-      description = lib.mdDoc ''
+      description = ''
         The 16 colors palette used by the virtual consoles.
         Leave empty to use the default colors.
         Colors must be in hexadecimal format and listed in
@@ -86,7 +91,7 @@ in
     packages = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         List of additional packages that provide console fonts, keymaps and
         other resources for virtual consoles use.
       '';
@@ -95,7 +100,7 @@ in
     useXkbConfig = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         If set, configure the virtual console keymap from the xserver
         keyboard settings.
       '';
@@ -104,7 +109,7 @@ in
     earlySetup = mkOption {
       default = false;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Enable setting virtual console options as early as possible (in initrd).
       '';
     };
@@ -122,8 +127,8 @@ in
               ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
                 "-I${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
               } \
-              -model '${xkbModel}' -layout '${layout}' \
-              -option '${xkbOptions}' -variant '${xkbVariant}' > "$out"
+              -model '${xkb.model}' -layout '${xkb.layout}' \
+              -option '${xkb.options}' -variant '${xkb.variant}' > "$out"
           '');
     }
 
@@ -151,7 +156,7 @@ in
           printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
           loadkmap < ${optimizedKeymap}
 
-          ${optionalString cfg.earlySetup ''
+          ${optionalString (cfg.earlySetup && cfg.font != null) ''
             setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
           ''}
         '');
@@ -163,12 +168,15 @@ in
           # ...but only the keymaps if we don't
           "/etc/kbd/keymaps" = lib.mkIf (!cfg.earlySetup) { source = "${consoleEnv config.boot.initrd.systemd.package.kbd}/share/keymaps"; };
         };
+        boot.initrd.systemd.additionalUpstreamUnits = [
+          "systemd-vconsole-setup.service"
+        ];
         boot.initrd.systemd.storePaths = [
           "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
           "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
           "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
           "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # Fonts and keyboard layouts are compressed
-        ] ++ optionals (hasPrefix builtins.storeDir cfg.font) [
+        ] ++ optionals (cfg.font != null && hasPrefix builtins.storeDir cfg.font) [
           "${cfg.font}"
         ] ++ optionals (hasPrefix builtins.storeDir cfg.keyMap) [
           "${cfg.keyMap}"
@@ -195,7 +203,7 @@ in
         ];
       })
 
-      (mkIf (cfg.earlySetup && !config.boot.initrd.systemd.enable) {
+      (mkIf (cfg.earlySetup && cfg.font != null && !config.boot.initrd.systemd.enable) {
         boot.initrd.extraUtilsCommands = ''
           mkdir -p $out/share/consolefonts
           ${if substring 0 1 cfg.font == "/" then ''

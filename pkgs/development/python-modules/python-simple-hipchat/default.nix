@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "python-simple-hipchat";
   version = "0.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

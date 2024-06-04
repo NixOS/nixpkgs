@@ -15,7 +15,8 @@ let
   mkAntlr = {
     version, sourceSha256, jarSha256,
     extraCppBuildInputs ? [],
-    extraCppCmakeFlags ? []
+    extraCppCmakeFlags ? [],
+    extraPatches ? [ ]
   }: rec {
     source = fetchFromGitHub {
       owner = "antlr";
@@ -37,23 +38,27 @@ let
 
       installPhase = ''
         mkdir -p "$out"/{share/java,bin}
-        cp "$src" "$out/share/java/antlr-${version}-complete.jar"
+        ln -s "$src" "$out/share/java/antlr-${version}-complete.jar"
 
         echo "#! ${stdenv.shell}" >> "$out/bin/antlr"
         echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.Tool \"\$@\"" >> "$out/bin/antlr"
 
+        echo "#! ${stdenv.shell}" >> "$out/bin/antlr-parse"
+        echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.gui.Interpreter \"\$@\"" >> "$out/bin/antlr-parse"
+
         echo "#! ${stdenv.shell}" >> "$out/bin/grun"
         echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' org.antlr.v4.gui.TestRig \"\$@\"" >> "$out/bin/grun"
 
-        chmod a+x "$out/bin/antlr" "$out/bin/grun"
+        chmod a+x "$out/bin/antlr" "$out/bin/antlr-parse" "$out/bin/grun"
         ln -s "$out/bin/antlr"{,4}
+        ln -s "$out/bin/antlr"{,4}-parse
       '';
 
       inherit jre;
 
       passthru = {
         inherit runtime;
-        jarLocation = "${antlr}/share/java/antlr-${version}-complete.jar";
+        jarLocation = antlr.src;
       };
 
       meta = with lib; {
@@ -77,7 +82,8 @@ let
         pname = "antlr-runtime-cpp";
         inherit version;
         src = source;
-        sourceRoot = "source/runtime/Cpp";
+
+        patches = extraPatches;
 
         outputs = [ "out" "dev" "doc" ];
 
@@ -85,6 +91,8 @@ let
         buildInputs =
           lib.optional stdenv.isDarwin CoreFoundation ++
           extraCppBuildInputs;
+
+        cmakeDir = "../runtime/Cpp";
 
         cmakeFlags = extraCppCmakeFlags;
 
@@ -99,6 +107,34 @@ let
   };
 
 in {
+  antlr4_13 = (mkAntlr {
+    version = "4.13.0";
+    sourceSha256 = "sha256-s1yAdScMYg1wFpYNsBAtpifIhQsnSAgJg7JjPDx+htc=";
+    jarSha256 = "sha256-vG9KvA0iWidXASbFFAJWnwAKje2jSHtw52QoQOVw5KY=";
+    extraCppCmakeFlags = [
+      # Generate CMake config files, which are not installed by default.
+      "-DANTLR4_INSTALL=ON"
+
+      # Disable tests, since they require downloading googletest, which is
+      # not available in a sandboxed build.
+      "-DANTLR_BUILD_CPP_TESTS=OFF"
+    ];
+  }).antlr;
+
+  antlr4_12 = (mkAntlr {
+    version = "4.12.0";
+    sourceSha256 = "sha256-0JMG8UYFT+IAWvARY2KnuXSr5X6LlVZN4LJHy5d4x08=";
+    jarSha256 = "sha256-iPGKK/rA3eEAntpcfc41ilKHf673ho9WIjpbzBUynkM=";
+    extraCppCmakeFlags = [
+      # Generate CMake config files, which are not installed by default.
+      "-DANTLR4_INSTALL=ON"
+
+      # Disable tests, since they require downloading googletest, which is
+      # not available in a sandboxed build.
+      "-DANTLR_BUILD_CPP_TESTS=OFF"
+    ];
+  }).antlr;
+
   antlr4_11 = (mkAntlr {
     version = "4.11.1";
     sourceSha256 = "sha256-SUeDgfqLjYQorC8r/CKlwbYooTThMOILkizwQV8pocc=";
@@ -130,6 +166,12 @@ in {
     jarSha256 = "0dnz2x54kigc58bxnynjhmr5iq49f938vj6p50gdir1xdna41kdg";
     extraCppBuildInputs = [ utf8cpp ]
       ++ lib.optional stdenv.isLinux libuuid;
+    extraCppCmakeFlags = [
+      "-DCMAKE_CXX_FLAGS='-I${lib.getDev utf8cpp}/include/utf8cpp'"
+    ];
+    extraPatches = [
+      ./utf8cpp.patch
+    ];
   }).antlr;
 
   antlr4_8 = (mkAntlr {

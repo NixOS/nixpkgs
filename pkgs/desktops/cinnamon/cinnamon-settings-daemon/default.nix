@@ -10,7 +10,7 @@
 , libgnomekbd
 , libnotify
 , libxklavier
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , lib
 , stdenv
@@ -32,18 +32,17 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "5.6.1";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-QR77O3rFfY0+6cKoS75xoFRplNo4nvTMtR2rNKZERYE=";
+    hash = "sha256-bT6NetCBo3J9IiiJ9Hs4iC1N3n/AP9Q+6wZciuKA4i4=";
   };
 
   patches = [
     ./csd-backlight-helper-fix.patch
-    ./use-sane-install-dir.patch
   ];
 
   buildInputs = [
@@ -76,7 +75,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
   ];
 

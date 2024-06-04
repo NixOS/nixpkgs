@@ -1,15 +1,23 @@
-# when changing this expression convert it from 'fetchzip' to 'stdenvNoCC.mkDerivation'
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "VER2.5";
-  fullName = "NanumGothicCoding-2.5";
+stdenvNoCC.mkDerivation rec {
+  pname = "nanum-gothic-coding";
+  version = "2.5";
 
-in (fetchzip {
-  name = "nanum-gothic-coding";
-  url = "https://github.com/naver/nanumfont/releases/download/${version}/${fullName}.zip";
+  src = fetchzip {
+    url = "https://github.com/naver/nanumfont/releases/download/VER${version}/NanumGothicCoding-${version}.zip";
+    stripRoot = false;
+    hash = "sha256-jHbbCMUxn54iQMKdAWI3r8CDxi+5LLJh8ucQzq2Ukdc=";
+  };
 
-  sha256 = "0b3pkhd6xn6393zi0dhj3ah08w1y1ji9fl6584bi0c8lanamf2pc";
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/NanumGothicCoding
+    cp *.ttf $out/share/fonts/NanumGothicCoding
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "A contemporary monospaced sans-serif typeface with a warm touch";
@@ -18,9 +26,4 @@ in (fetchzip {
     platforms = platforms.all;
     maintainers = with maintainers; [ ];
   };
-}).overrideAttrs (_: {
-  postFetch = ''
-    mkdir -p $out/share/fonts/NanumGothicCoding
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/NanumGothicCoding
-  '';
-})
+}

@@ -3,7 +3,7 @@
 , fetchFromGitLab
 , autoreconfHook
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtk3
 , expat
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoreconfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
     # doc generation
     gnome-doc-utils
@@ -64,7 +64,8 @@ stdenv.mkDerivation {
     homepage = "https://www.inference.org.uk/dasher/";
     description = "Information-efficient text-entry interface, driven by natural continuous pointing gestures";
     license = lib.licenses.gpl2Only;
-    maintainers = [ lib.maintainers.Profpatsch ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
+    mainProgram = "dasher";
   };
 }

@@ -1,12 +1,12 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
 buildKodiAddon rec {
   pname = "typing_extensions";
   namespace = "script.module.typing_extensions";
-  version = "3.7.4.3";
+  version = "4.7.1";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "0p28hchj05hmccs6b2836kh4vqdqnl169409f2845d0nw9y4wkqq";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
+    sha256 = "sha256-bCGPl5fGVyptCenpNXP/Msi7hu+UdtZd2ms7MfzbsbM=";
   };
 
   passthru = {

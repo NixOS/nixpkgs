@@ -13,26 +13,26 @@
 , libpeas
 , shared-mime-info
 , gtk3
-, mate
+, mate-desktop
 , hicolor-icon-theme
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "eom";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1nv7q0yw11grgxr5lyvll0f7fl823kpjp05z81bwgnvd76m6kw97";
+    sha256 = "mgHKsplaGoxyWMhl6uXxgu1HMMRGcq/cOgfkI+3VOrw=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     shared-mime-info
     gtk3
     libpeas
-    mate.mate-desktop
+    mate-desktop
     hicolor-icon-theme
   ];
 
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An image viewing and cataloging program for the MATE desktop";
+    mainProgram = "eom";
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

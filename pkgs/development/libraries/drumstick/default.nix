@@ -1,15 +1,18 @@
 { lib, stdenv, fetchurl
 , cmake, docbook_xml_dtd_45, docbook_xsl, doxygen, graphviz-nox, pkg-config, qttools, wrapQtAppsHook
-, alsa-lib, fluidsynth, qtbase, qtsvg, libpulseaudio
+, alsa-lib, fluidsynth, libpulseaudio, qtbase, qtsvg, sonivox, qt5compat ? null
 }:
 
+let
+  isQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation rec {
   pname = "drumstick";
-  version = "2.6.1";
+  version = "2.9.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumstick/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-5O9yD3MexorJUm5tv6oghDb4J/b3SO10mDQR9dT2jlA=";
+    hash = "sha256-p0N8EeCtVEPCGzPwiRxPdI1XT5XQ5pcKYEDJXbYYTrM=";
   };
 
   patches = [
@@ -18,11 +21,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace library/rt/backendmanager.cpp --subst-var out
-
-    # https://sourceforge.net/p/drumstick/bugs/39/
-    substituteInPlace drumstick-alsa.pc.in drumstick-file.pc.in drumstick-rt.pc.in drumstick-widgets.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
   outputs = [ "out" "dev" "man" ];
@@ -32,18 +30,19 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsa-lib fluidsynth libpulseaudio qtbase qtsvg
-  ];
+    alsa-lib fluidsynth libpulseaudio qtbase qtsvg sonivox
+  ] ++ lib.optionals isQt6 [ qt5compat ];
 
   cmakeFlags = [
-    "-DUSE_DBUS=ON"
+    (lib.cmakeBool "USE_DBUS" true)
+    (lib.cmakeBool "USE_QT5" (!isQt6))
   ];
 
   meta = with lib; {
-    maintainers = [];
-    description = "MIDI libraries for Qt5/C++";
+    description = "MIDI libraries for Qt/C++";
     homepage = "https://drumstick.sourceforge.io/";
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ wegank ];
     platforms = platforms.linux;
   };
 }

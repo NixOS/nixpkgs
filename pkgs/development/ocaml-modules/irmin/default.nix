@@ -7,9 +7,9 @@
 buildDunePackage {
   pname = "irmin";
 
-  inherit (ppx_irmin) src version strictDeps;
+  inherit (ppx_irmin) src version;
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.10";
 
   propagatedBuildInputs = [
     astring

@@ -1,38 +1,43 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, setuptools-rust
-, unittestCheckHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  rustPlatform,
+  cargo,
+  rustc,
+  setuptools-rust,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "gb-io";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "althonos";
     repo = "gb-io.py";
     rev = "v${version}";
-    sha256 = "sha256-1B7BUJ8H+pTtmDtazfPfYtlXzL/x4rAHtRIFAAsSoWs=";
+    hash = "sha256-1B7BUJ8H+pTtmDtazfPfYtlXzL/x4rAHtRIFAAsSoWs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src sourceRoot;
     name = "${pname}-${version}";
-    sha256 = "sha256-lPnOFbEJgcaPPl9bTngugubhW//AUFp9RAjyiFHxC70=";
+    hash = "sha256-lPnOFbEJgcaPPl9bTngugubhW//AUFp9RAjyiFHxC70=";
   };
 
-  sourceRoot = "source";
+  sourceRoot = src.name;
 
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs = [
+    setuptools-rust
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "gb_io" ];
 

@@ -1,12 +1,13 @@
-{ lib
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pycryptodomex
-, pytestCheckHook
-, pythonOlder
-, sensor-state-data
+{
+  lib,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pycryptodomex,
+  pytestCheckHook,
+  pythonOlder,
+  sensor-state-data,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-rwOFKxUlbbNIDJRdCmZpHstXwxcTnvlExgcVDdGbIVY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=atc_ble --cov-report=term-missing:skip-covered" ""
+  '';
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     bluetooth-sensor-state-data
@@ -33,22 +37,14 @@ buildPythonPackage rec {
     sensor-state-data
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=atc_ble --cov-report=term-missing:skip-covered" ""
-  '';
-
-  pythonImportsCheck = [
-    "atc_ble"
-  ];
+  pythonImportsCheck = [ "atc_ble" ];
 
   meta = with lib; {
     description = "Library for ATC devices with custom firmware";
     homepage = "https://github.com/Bluetooth-Devices/atc-ble";
+    changelog = "https://github.com/Bluetooth-Devices/atc-ble/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

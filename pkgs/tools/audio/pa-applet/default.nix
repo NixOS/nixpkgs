@@ -21,13 +21,14 @@ stdenv.mkDerivation {
   '';
 
   # work around a problem related to gtk3 updates
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   postInstall = "";
 
   meta = with lib; {
     description = "";
-    license = licenses.gpl2;
+    mainProgram = "pa-applet";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.linux;
   };

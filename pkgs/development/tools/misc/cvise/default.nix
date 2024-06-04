@@ -16,14 +16,14 @@
 
 buildPythonApplication rec {
   pname = "cvise";
-  version = "2.7.0";
+  version = "2.10.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-j4s1xH0vO+/NNafQf1Jei7fgebSQ53WJKA+kYxuG2zQ=";
+    hash = "sha256-0gk4O1q90eH1FMhj4ncNVqX/MfVyaU0nckh1xny2wlM=";
   };
 
   patches = [
@@ -36,10 +36,6 @@ buildPythonApplication rec {
     # tested compilers.
     substituteInPlace CMakeLists.txt \
       --replace " -Werror " " "
-
-    # 'cvise --command=...' generates a script with hardcoded shebang.
-    substituteInPlace cvise.py \
-      --replace "#!/bin/bash" "#!${bash}/bin/bash"
 
     substituteInPlace cvise/utils/testing.py \
       --replace "'colordiff --version'" "'${colordiff}/bin/colordiff --version'" \
@@ -65,7 +61,7 @@ buildPythonApplication rec {
     psutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     unifdef
   ];

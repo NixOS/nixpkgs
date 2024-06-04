@@ -38,20 +38,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.176.0";
+  version = "1.202.1";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    hash = "sha256-7J/FAcmZYmgbmYEFm2V3+RBUcLE+8A+yOiJd/xp2Aww=";
+    hash = "sha256-ZFMO986D4RtrTnLFdcL0a2BNjcsB+9pIolylblku7j4=";
   };
+
+  patches = [ ./proc_globdata.patch ];
 
   postPatch = ''
     substituteInPlace app/proc_globdata.pas \
-      --replace "/usr/share/cudatext" "$out/share/cudatext" \
-      --replace "libpython3.so" "${python3}/lib/libpython${python3.pythonVersion}.so" \
-      --replace "AllowProgramUpdates:= true;" "AllowProgramUpdates:= false;"
+      --subst-var out \
+      --subst-var-by python3 ${python3}
   '';
 
   nativeBuildInputs = [ lazarus fpc ]
@@ -66,8 +67,12 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: dep: ''
-    ln -s ${dep} ${name}
+    cp -r ${dep} ${name}
   '') deps) + ''
+    # See https://wiki.freepascal.org/CudaText#How_to_compile_CudaText
+    substituteInPlace ATSynEdit/atsynedit/atsynedit_package.lpk \
+      --replace GTK2_IME_CODE _GTK2_IME_CODE
+
     lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
       bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
       EncConv/encconv/encconv_package.lpk \
@@ -113,5 +118,6 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;
+    mainProgram = "cudatext";
   };
 }

@@ -2,25 +2,23 @@
 , stdenv
 , fetchgit
 , fetchFromGitHub
-, fetchurl
-, writeShellScript
+, nix-update-script
 , runCommand
 , which
-, formats
 , rustPlatform
-, jq
-, nix-prefetch-git
-, xe
-, curl
 , emscripten
 , Security
 , callPackage
 , linkFarm
-
+, substitute
+, CoreServices
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 , webUISupport ? false
 , extraGrammars ? { }
+
+# tests
+, lunarvim
 }:
 
 let
@@ -29,19 +27,18 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.7";
-  sha256 = "sha256-5ILiN5EfJ7WpeYBiXynfcLucdp8zmxVOj4gLkaFQYts=";
-  cargoSha256 = "sha256-V4frCaU5QzTx3ujdaplw7vNkosbzyXHQvE+T7ntVOtU=";
+  version = "0.22.5";
+  hash = "sha256-f8bdpiPNo5M8aefTmrQ2MQVg7lS0Yq7j312K1slortA=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
     rev = "v${version}";
-    inherit sha256;
+    inherit hash;
     fetchSubmodules = true;
   };
 
-  update-all-grammars = callPackage ./update.nix {};
+  update-all-grammars = callPackage ./update.nix { };
 
   fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 
@@ -51,26 +48,34 @@ let
     '' + (lib.concatStrings (lib.mapAttrsToList
       (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n")
       (import ./grammars { inherit lib; }))));
+
+  buildGrammar = callPackage ./grammar.nix { };
+
   builtGrammars =
     let
-      change = name: grammar:
-        callPackage ./grammar.nix { } {
-          language = if grammar ? language then grammar.language else name;
+      build = name: grammar:
+        buildGrammar {
+          language = grammar.language or name;
           inherit version;
-          source = if grammar ? src then grammar.src else fetchGrammar grammar;
-          location = if grammar ? location then grammar.location else null;
+          src = grammar.src or (fetchGrammar grammar);
+          location = grammar.location or null;
+          generate = grammar.generate or false;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars = grammars' //
-        { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
-        { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
+        { tree-sitter-latex = grammars'.tree-sitter-latex // { generate = true; }; } //
+        { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "grammars/ocaml"; }; } //
+        { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "grammars/interface"; }; } //
         { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
-        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
+        { tree-sitter-php = grammars'.tree-sitter-php // { location = "php"; }; } //
+        { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; } //
+        { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
     in
-    lib.mapAttrs change (grammars);
+    lib.mapAttrs build (grammars);
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -105,20 +110,29 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "tree-sitter";
-  inherit src version cargoSha256;
+  inherit src version;
+
+  cargoHash = "sha256-Fk6V/kPKc/GL/q6QsaCUrq+ZG0R+N5FLOpIm77Y+n2A=";
 
   buildInputs =
-    lib.optionals stdenv.isDarwin [ Security ];
+    lib.optionals stdenv.isDarwin [ Security CoreServices ];
   nativeBuildInputs =
     [ which ]
     ++ lib.optionals webUISupport [ emscripten ];
 
+  patches = lib.optionals webUISupport [
+    (substitute {
+      src = ./fix-paths.patch;
+      substitutions = [ "--subst-var-by" "emcc" "${emscripten}/bin/emcc" ];
+    })
+  ];
+
   postPatch = lib.optionalString (!webUISupport) ''
     # remove web interface
-    sed -e '/pub mod web_ui/d' \
+    sed -e '/pub mod playground/d' \
         -i cli/src/lib.rs
-    sed -e 's/web_ui,//' \
-        -e 's/web_ui::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+    sed -e 's/playground,//' \
+        -e 's/playground::serve(&grammar_path.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
         -i cli/src/main.rs
   '';
 
@@ -126,6 +140,8 @@ rustPlatform.buildRustPackage {
   # minifying the JavaScript; passing it allows us to side-step more Node
   # JS dependencies for installation.
   preBuild = lib.optionalString webUISupport ''
+    mkdir -p .emscriptencache
+    export EM_CACHE=$(pwd)/.emscriptencache
     bash ./script/build-wasm --debug
   '';
 
@@ -142,17 +158,23 @@ rustPlatform.buildRustPackage {
     updater = {
       inherit update-all-grammars;
     };
-    inherit grammars builtGrammars withPlugins allGrammars;
+    inherit grammars buildGrammar builtGrammars withPlugins allGrammars;
+
+    updateScript = nix-update-script { };
 
     tests = {
       # make sure all grammars build
       builtGrammars = lib.recurseIntoAttrs builtGrammars;
+
+      inherit lunarvim;
     };
   };
 
   meta = with lib; {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "A parser generator tool and an incremental parsing library";
+    mainProgram = "tree-sitter";
+    changelog = "https://github.com/tree-sitter/tree-sitter/blob/v${version}/CHANGELOG.md";
     longDescription = ''
       Tree-sitter is a parser generator tool and an incremental parsing library.
       It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.
@@ -165,6 +187,6 @@ rustPlatform.buildRustPackage {
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ Profpatsch oxalica ];
+    maintainers = with maintainers; [ Profpatsch ];
   };
 }

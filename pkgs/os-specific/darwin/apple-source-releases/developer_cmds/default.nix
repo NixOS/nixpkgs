@@ -18,7 +18,7 @@ appleDerivation {
 
   # Workaround build failure on -fno-common toolchains:
   #   duplicate symbol '_btype_2' in:args.o pr_comment.o
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''

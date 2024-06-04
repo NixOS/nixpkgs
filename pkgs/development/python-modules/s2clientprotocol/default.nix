@@ -1,12 +1,14 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, protobuf
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  protobuf,
 }:
 
 buildPythonPackage rec {
   pname = "s2clientprotocol";
   version = "3.19.1.58600.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

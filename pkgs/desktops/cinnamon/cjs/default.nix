@@ -6,7 +6,7 @@
 , cairo
 , glib
 , readline
-, spidermonkey_78
+, spidermonkey_102
 , meson
 , dbus
 , ninja
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "5.6.1";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     rev = version;
-    hash = "sha256-f9esbQi5WWSMAGlEs9HJFToOvmOrbP2lDW1gGh/48gw=";
+    hash = "sha256-oSqEAZWEVb8NxFTScl8s5Mb04tCGDyVVslYW00s4YYk=";
   };
 
   outputs = [ "out" "dev" ];
@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
     pkg-config
     which # for locale detection
     libxml2 # for xml-stripblanks
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     cairo
     readline
-    spidermonkey_78
+    spidermonkey_102
     dbus # for dbus-run-session
   ];
 

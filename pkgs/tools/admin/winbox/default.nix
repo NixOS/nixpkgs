@@ -1,8 +1,6 @@
 { lib
-, stdenv
 , fetchurl
 , makeDesktopItem
-, makeWrapper
 , symlinkJoin
 , writeShellScriptBin
 , wine
@@ -12,15 +10,15 @@ let
   inherit (lib) last splitString;
 
   pname = "winbox";
-  version = "3.37";
+  version = "3.40";
   name = "${pname}-${version}";
 
   executable = fetchurl (if (wine.meta.mainProgram == "wine64") then {
-    url = "https://download.mikrotik.com/winbox/${version}/winbox64.exe";
-    sha256 = "0fbl0i5ga9afg8mklm9xqidcr388sca00slj401npwh9b3j9drmb";
+    url = "https://download.mikrotik.com/routeros/winbox/${version}/winbox64.exe";
+    sha256 = "1dxny1qmq4pmdn40j9zk461p3qwwjin5d18ajhczrnqrcr2v1xwi";
   } else {
-    url = "https://download.mikrotik.com/winbox/${version}/winbox.exe";
-    sha256 = "1zla30bc755x5gfv9ff1bgjvpsjmg2d7jsjxnwwy679fry4n4cwl";
+    url = "https://download.mikrotik.com/routeros/winbox/${version}/winbox.exe";
+    sha256 = "11vmdkwi38y7wkdkgsqpfs4l2bdaj9yg6c8wlgfzp91227gjn5li";
   });
 
   # This is from the winbox AUR package:

@@ -6,9 +6,9 @@ index 990afe3e8c..cd5b7b1b7a 100644
  ])
  
  DARWIN_XCODE_LOCATOR_COMPILE_COMMAND = """
--  /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.9 -fobjc-arc -framework CoreServices \
+-  /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.13 -fobjc-arc -framework CoreServices \
 -      -framework Foundation -arch arm64 -arch x86_64 -Wl,-no_adhoc_codesign -Wl,-no_uuid -o $@ $< && \
-+  /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.9 -framework CoreServices \
++  /usr/bin/xcrun --sdk macosx clang -mmacosx-version-min=10.13 -framework CoreServices \
 +      -framework Foundation -arch @multiBinPatch@ -Wl,-no_uuid -o $@ $< && \
    env -i codesign --identifier $@ --force --sign - $@
  """
@@ -20,7 +20,7 @@ index 2b819f07ec..a98ce37673 100644
 @@ -127,7 +127,6 @@ def run_xcode_locator(repository_ctx, xcode_locator_src_label):
          "macosx",
          "clang",
-         "-mmacosx-version-min=10.9",
+         "-mmacosx-version-min=10.13",
 -        "-fobjc-arc",
          "-framework",
          "CoreServices",

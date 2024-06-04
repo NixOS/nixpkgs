@@ -1,4 +1,5 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub
+, nixosTests
 , pkg-config, taglib, zlib
 
 # Disable on-the-fly transcoding,
@@ -12,17 +13,17 @@
 
 buildGoModule rec {
   pname = "gonic";
-  version = "0.15.2";
+  version = "0.16.4";
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lyKKD6Rxr4psFUxqGTtqQ3M/vQXoNPbcg0cTam9MkXk=";
+    sha256 = "sha256-+8rKODoADU2k1quKvbijjs/6S/hpkegHhG7Si0LSE0k=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ taglib zlib ];
-  vendorSha256 = "sha256-+PUKPqW+ER7mmZXrDIc0cE4opoTxA3po3WXSeZO+Xwo=";
+  vendorHash = "sha256-6JkaiaAgtXYAZqVSRZJFObZvhEsHsbPaO9pwmKqIhYI=";
 
   # TODO(Profpatsch): write a test for transcoding support,
   # since it is prone to break
@@ -38,13 +39,22 @@ buildGoModule rec {
       --replace \
         '"mpv"' \
         '"${lib.getBin mpv}/bin/mpv"'
+  '' + ''
+    substituteInPlace server/ctrlsubsonic/testdata/test* \
+      --replace \
+        '"audio/flac"' \
+        '"audio/x-flac"'
   '';
+
+  passthru = {
+    tests.gonic = nixosTests.gonic;
+  };
 
   meta = {
     homepage = "https://github.com/sentriz/gonic";
     description = "Music streaming server / subsonic server API implementation";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ Profpatsch ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ autrimpo ];
+    mainProgram = "gonic";
   };
 }

@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
   pname = "pytricia";
   version = "unstable-2019-01-16";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jsommers";

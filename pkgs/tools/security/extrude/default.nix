@@ -14,10 +14,11 @@ buildGoModule rec {
     hash = "sha256-7gCEBhnNU5CqC5n0KP4Dd/fmddPRwNqyMFXTrRrJjfU=";
   };
 
-  vendorSha256 = "sha256-8qjIYPkWtYTvl7wAnefpZAjbNSQLQFqRnGGccYZ8ZmU=";
+  vendorHash = "sha256-8qjIYPkWtYTvl7wAnefpZAjbNSQLQFqRnGGccYZ8ZmU=";
 
   meta = with lib; {
     description = "Tool to analyse binaries for missing security features";
+    mainProgram = "extrude";
     homepage = "https://github.com/liamg/extrude";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+8DU1QT3Lgqf1AIReVnXQ2Lq6R6eBb8VjdkJfAn/Rtc=";
   };
 
-  sourceRoot = "source/Quake";
+  sourceRoot = "${src.name}/Quake";
 
   nativeBuildInputs = [
     makeWrapper
@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out) bindir=$(out)/bin" ];
 
+  env = lib.optionalAttrs stdenv.isDarwin {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+  };
+
   postFixup = ''
     wrapProgram $out/bin/vkquake \
       --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
@@ -45,6 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Vulkan Quake port based on QuakeSpasm";
+    mainProgram = "vkquake";
     homepage = src.meta.homepage;
     longDescription = ''
       vkQuake is a Quake 1 port using Vulkan instead of OpenGL for rendering.

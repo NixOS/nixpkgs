@@ -13,7 +13,7 @@
 , libsoup
 , libxml2
 , taglib
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GTK client for MPD (Music player daemon)";
-    homepage = "http://ario-player.sourceforge.net/";
+    mainProgram = "ario";
+    homepage = "https://ario-player.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.garrison ];
     platforms = platforms.all;

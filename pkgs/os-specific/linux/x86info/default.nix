@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     pciutils
   ];
 
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
+
   postBuild = ''
     patchShebangs lsmsr/createheader.py
     make -C lsmsr

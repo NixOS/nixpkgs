@@ -18,18 +18,19 @@
 , Cocoa
 , AGL
 , OpenGL
-, withCuda ? false, cudatoolkit
+, config
+, cudaSupport ? config.cudaSupport, cudaPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "pcl";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     rev = "${pname}-${version}";
-    sha256 = "0jhvciaw43y6iqqk7hyxnfhn1b4bsw5fpy04s01r5pkcsjjbdbqc";
+    sha256 = "sha256-JDiDAmdpwUR3Sff63ehyvetIFXAgGOrI+HEaZ5lURps=";
   };
 
   # remove attempt to prevent (x86/x87-specific) extended precision use
@@ -38,7 +39,13 @@ stdenv.mkDerivation rec {
     sed -i '/-ffloat-store/d' cmake/pcl_find_sse.cmake
   '';
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+
   buildInputs = [
     eigen
     libusb1
@@ -46,8 +53,7 @@ stdenv.mkDerivation rec {
     qtbase
     libXt
   ]
-  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ]
-  ++ lib.optionals withCuda [ cudatoolkit ];
+  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ];
 
   propagatedBuildInputs = [
     boost
@@ -60,7 +66,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-  ] ++ lib.optionals withCuda [ "-DWITH_CUDA=true" ];
+  ] ++ lib.optionals cudaSupport [ "-DWITH_CUDA=true" ];
 
   meta = {
     homepage = "https://pointclouds.org/";

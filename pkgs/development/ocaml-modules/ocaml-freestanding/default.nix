@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     ./configurable-binding.patch
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     ocaml
     pkg-config
@@ -62,12 +64,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true; # Not compatible with solo5 ≥ 0.7
     description = "Freestanding OCaml runtime";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
     homepage = "https://github.com/mirage/ocaml-freestanding";
     platforms = builtins.map ({ arch, os }: "${arch}-${os}")
-      (cartesianProductOfSets {
+      (cartesianProduct {
           arch = [ "aarch64" "x86_64" ];
           os = [ "linux" ];
       } ++ [

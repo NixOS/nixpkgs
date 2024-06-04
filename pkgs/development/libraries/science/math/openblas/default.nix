@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, which
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -6,14 +6,14 @@
 # Multi-threaded applications must not call a threaded OpenBLAS
 # (the only exception is when an application uses OpenMP as its
 # *only* form of multi-threading). See
-#     https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
-#     https://github.com/xianyi/OpenBLAS/issues/2543
+#     https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+#     https://github.com/OpenMathLib/OpenBLAS/issues/2543
 # This flag builds a single-threaded OpenBLAS using the flags
 # stated in thre.
 , singleThreaded ? false
 , buildPackages
 # Select a specific optimization target (other than the default)
-# See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
+# See https://github.com/OpenMathLib/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
 # Select whether DYNAMIC_ARCH is enabled or not.
 , dynamicArch ? null
@@ -30,9 +30,8 @@
 , octave
 , opencv
 , python3
+, openmp ? null
 }:
-
-with lib;
 
 let blas64_ = blas64; in
 
@@ -108,6 +107,13 @@ let
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
+
+    loongarch64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "LOONGSONGENERIC";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = true;
+    };
   };
 in
 
@@ -121,7 +127,7 @@ let
   blas64 =
     if blas64_ != null
       then blas64_
-      else hasPrefix "x86_64" stdenv.hostPlatform.system;
+      else lib.hasPrefix "x86_64" stdenv.hostPlatform.system;
   # Convert flag values to format OpenBLAS's build expects.
   # `toString` is almost what we need other than bools,
   # which we need to map {true -> 1, false -> 0}
@@ -129,23 +135,31 @@ let
   mkMakeFlagValue = val:
     if !builtins.isBool val then toString val
     else if val then "1" else "0";
-  mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
+  mkMakeFlagsFromConfig = lib.mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
 
   shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.21";
+  version = "0.3.27";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
-    owner = "xianyi";
+    owner = "OpenMathLib";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "sha256-F6cXPqQai4kA5zrsa8E0Q7dD9zZHlwZ+B16EOGNXoXs=";
+    hash = "sha256-VKDFSPwHGZMa2DoOXbSKNQRsl07LatMLK1lHVcEep8U=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "no-gemm3m-tests-static.patch";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/48e017de095018c60d83355804a3075658b4970c.patch";
+      hash = "sha256-Wa6EE0M1H0efVn26pOKpi0dFGLuPuzmvAzpBLrAYe5k=";
+    })
+  ];
 
   postPatch = ''
     # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
@@ -174,6 +188,8 @@ stdenv.mkDerivation rec {
     which
   ];
 
+  buildInputs = lib.optional (stdenv.cc.isClang && config.USE_OPENMP) openmp;
+
   depsBuildBuild = [
     buildPackages.gfortran
     buildPackages.stdenv.cc
@@ -185,6 +201,7 @@ stdenv.mkDerivation rec {
     FC = "${stdenv.cc.targetPrefix}gfortran";
     CC = "${stdenv.cc.targetPrefix}${if stdenv.cc.isClang then "clang" else "cc"}";
     PREFIX = placeholder "out";
+    OPENBLAS_INCLUDE_DIR = "${placeholder "dev"}/include";
     NUM_THREADS = 64;
     INTERFACE64 = blas64;
     NO_STATIC = !enableStatic;
@@ -200,10 +217,12 @@ stdenv.mkDerivation rec {
         else stdenv.hostPlatform != stdenv.buildPlatform;
     # This disables automatic build job count detection (which honours neither enableParallelBuilding nor NIX_BUILD_CORES)
     # and uses the main make invocation's job count, falling back to 1 if no parallelism is used.
-    # https://github.com/xianyi/OpenBLAS/blob/v0.3.20/getarch.c#L1781-L1792
+    # https://github.com/OpenMathLib/OpenBLAS/blob/v0.3.20/getarch.c#L1781-L1792
     MAKE_NB_JOBS = 0;
-  } // (lib.optionalAttrs singleThreaded {
-    # As described on https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
+  } // (lib.optionalAttrs stdenv.cc.isClang {
+    LDFLAGS = "-L${lib.getLib buildPackages.gfortran.cc}/lib"; # contains `libgfortran.so`; building with clang needs this, gcc has it implicit
+  }) // (lib.optionalAttrs singleThreaded {
+    # As described on https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
     USE_THREAD = false;
     USE_LOCKING = true; # available with openblas >= 0.3.7
     USE_OPENMP = false; # openblas will refuse building with both USE_OPENMP=1 and USE_THREAD=0
@@ -214,13 +233,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Write pkgconfig aliases. Upstream report:
-    # https://github.com/xianyi/OpenBLAS/issues/1740
+    # https://github.com/OpenMathLib/OpenBLAS/issues/1740
     for alias in blas cblas lapack; do
       cat <<EOF > $out/lib/pkgconfig/$alias.pc
 Name: $alias
 Version: ${version}
 Description: $alias provided by the OpenBLAS package.
-Cflags: -I$out/include
+Cflags: -I$dev/include
 Libs: -L$out/lib -lopenblas
 EOF
     done
@@ -244,15 +263,15 @@ EOF
   '';
 
   passthru.tests = {
-    inherit (python3.pkgs) numpy scipy;
+    inherit (python3.pkgs) numpy scipy scikit-learn;
     inherit ceres-solver giac octave opencv;
   };
 
   meta = with lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
-    homepage = "https://github.com/xianyi/OpenBLAS";
-    platforms = platforms.unix;
+    homepage = "https://github.com/OpenMathLib/OpenBLAS";
+    platforms = attrNames configs;
     maintainers = with maintainers; [ ttuegel ];
   };
 }

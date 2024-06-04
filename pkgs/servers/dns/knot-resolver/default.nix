@@ -3,7 +3,8 @@
 , runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
 , knot-dns, luajitPackages, libuv, gnutls, lmdb
-, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
+, jemalloc, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
+, fstrm, protobufc # more optionals
 # test-only deps.
 , cmocka, which, cacert
 , extraFeatures ? false /* catch-all if defaults aren't enough */
@@ -17,11 +18,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.5.3";
+  version = "5.7.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "a38f57c68b7d237d662784d8406e6098aad66a148f44dcf498d1e9664c5fed2d";
+    hash = "sha256-78bkX/xe/ZiSHqXNP+zhZqGlzp6qEtQbRiaJZDU9vts=";
   };
 
   outputs = [ "out" "dev" ];
@@ -62,15 +63,17 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
+    ## the rest are optional dependencies
     ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
-    ++ [ nghttp2 ]
-    ## optional dependencies; TODO: dnstap
+    ++ [ jemalloc nghttp2 ]
+    ++ [ fstrm protobufc ] # dnstap support
     ;
 
   mesonFlags = [
     "-Dkeyfile_default=${dns-root-data}/root.ds"
     "-Droot_hints=${dns-root-data}/root.hints"
     "-Dinstall_kresd_conf=disabled" # not really useful; examples are inside share/doc/
+    "-Dmalloc=jemalloc"
     "--default-library=static" # not used by anyone
   ]
   ++ optional doInstallCheck "-Dunit_tests=enabled"
@@ -82,14 +85,14 @@ unwrapped = stdenv.mkDerivation rec {
   postInstall = ''
     rm "$out"/lib/libkres.a
     rm "$out"/lib/knot-resolver/upgrade-4-to-5.lua # not meaningful on NixOS
-  '' + optionalString stdenv.targetPlatform.isLinux ''
+  '' + optionalString stdenv.hostPlatform.isLinux ''
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
   doInstallCheck = with stdenv; hostPlatform == buildPlatform;
-  installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
+  nativeInstallCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
-    meson test --print-errorlogs
+    meson test --print-errorlogs --no-suite snowflake
   '';
 
   meta = with lib; {
@@ -109,13 +112,14 @@ wrapped-full = runCommand unwrapped.name
       # For http module, prefill module, trust anchor bootstrap.
       # It brings lots of deps; some are useful elsewhere (e.g. cqueues).
       http
-      # psl isn't in nixpkgs yet, but policy.slice_randomize_psl() seems not important.
+      # used by policy.slice_randomize_psl()
+      psl
     ];
     preferLocalBuild = true;
     allowSubstitutes = false;
     inherit (unwrapped) meta;
   }
-  ''
+  (''
     mkdir -p "$out"/bin
     makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
       --set LUA_PATH  "$LUA_PATH" \
@@ -124,10 +128,10 @@ wrapped-full = runCommand unwrapped.name
     ln -sr '${unwrapped}/share' "$out"/
     ln -sr '${unwrapped}/lib'   "$out"/ # useful in NixOS service
     ln -sr "$out"/{bin,sbin}
-
+  '' + lib.optionalString unwrapped.doInstallCheck ''
     echo "Checking that 'http' module loads, i.e. lua search paths work:"
     echo "modules.load('http')" > test-http.lua
     echo -e 'quit()' | env -i "$out"/bin/kresd -a 127.0.0.1#53535 -c test-http.lua
-  '';
+  '');
 
 in result

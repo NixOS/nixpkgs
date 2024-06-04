@@ -11,15 +11,16 @@
 
 buildDunePackage rec {
   pname = "secp256k1-internal";
-  version = "0.3";
+  version = "0.4";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "ocaml-secp256k1-internal";
-    rev = version;
-    sha256 = "sha256-1wvQ4RW7avcGsIc0qgDzhGrwOBY0KHrtNVHCj2cgNzo=";
+    rev = "v${version}";
+    hash = "sha256-amVtp94cE1NxClWJgcJvRmilnQlC7z44mORUaxvPn00=";
   };
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     gmp

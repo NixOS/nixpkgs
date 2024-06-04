@@ -1,16 +1,17 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "zamg";
-  version = "0.2.2";
-  format = "pyproject";
+  version = "0.3.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "killer0071234";
     repo = "python-zamg";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pBXt7t7Cs7F0bxvB8N67XaY/uvYhZPw10+bei/3QSfw=";
+    hash = "sha256-j864+3c0GDDftdLqLDD0hizT54c0IgTjT77jOneXlq0=";
   };
 
   postPatch = ''
@@ -26,20 +27,14 @@ buildPythonPackage rec {
       --replace " --cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "zamg"
-  ];
+  pythonImportsCheck = [ "zamg" ];
 
   meta = with lib; {
     description = "Library to read weather data from ZAMG Austria";

@@ -1,41 +1,45 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, sphinx
-, pydata-sphinx-theme
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  sphinx,
+  pydata-sphinx-theme,
+  jupyter-book,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-book-theme";
-  version = "0.4.0rc1";
+  version = "1.1.2";
 
   format = "wheel";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version format;
     dist = "py3";
     python = "py3";
     pname = "sphinx_book_theme";
-    sha256 = "bfad8ef469885da5633f7cf7f8cd9a0ae11ea2351a91e507b44cf15973934512";
+    hash = "sha256-zudERm/eSPUDArhRKRsgiqZ+cmyjG3o7+5tuahRWY+A=";
   };
 
   propagatedBuildInputs = [
-    sphinx
     pydata-sphinx-theme
-    pyyaml
+    sphinx
   ];
 
   pythonImportsCheck = [ "sphinx_book_theme" ];
+
+  passthru.tests = {
+    inherit jupyter-book;
+  };
 
   meta = with lib; {
     description = "A clean book theme for scientific explanations and documentation with Sphinx";
     homepage = "https://github.com/executablebooks/sphinx-book-theme";
     changelog = "https://github.com/executablebooks/sphinx-book-theme/raw/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -12,13 +12,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "toybox";
-  version = "0.8.8";
+  version = "0.8.11";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = pname;
     rev = version;
-    sha256 = "sha256-T3qE9xlcEoZOcY52XfYPpN34zzQl6mfcRnyuldnIvCk=";
+    sha256 = "sha256-7izs2C5/czec0Dt3apL8s7luARAlw4PfUFy9Xsxb0zw=";
   };
 
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
@@ -63,10 +63,10 @@ stdenv.mkDerivation rec {
   # ...this is fixed in latest git, so doCheck can likely be enabled for next release
   # see https://github.com/landley/toybox/commit/b928ec480cd73fd83511c0f5ca786d1b9f3167c3
   #doCheck = true;
-  checkInputs = [ which ]; # used for tests with checkFlags = [ "DEBUG=true" ];
+  nativeCheckInputs = [ which ]; # used for tests with checkFlags = [ "DEBUG=true" ];
   checkTarget = "tests";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = with lib; {
     description = "Lightweight implementation of some Unix command line utilities";

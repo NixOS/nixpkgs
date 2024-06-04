@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+}:
 
 buildPythonPackage rec {
   pname = "cmdline";
   version = "0.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

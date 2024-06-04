@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, stups-tokens
-, stups-cli-support
-, pytest
-, pytest-cov
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  stups-tokens,
+  stups-cli-support,
+  pytest,
+  pytest-cov,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "stups-zign";
   version = "1.2";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
@@ -38,7 +40,7 @@ buildPythonPackage rec {
     export HOME=$TEMPDIR
   ";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-cov
   ];

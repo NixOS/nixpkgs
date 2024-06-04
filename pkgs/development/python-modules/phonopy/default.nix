@@ -1,27 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pyyaml
-, matplotlib
-, h5py
-, scipy
-, spglib
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  pyyaml,
+  matplotlib,
+  h5py,
+  scipy,
+  spglib,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "2.17.1";
-  format = "setuptools";
+  version = "2.23.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t+1i1S8UVd0s9/Fda0H2kaouDDBVS+x6G40Meb2rLYc=";
+    hash = "sha256-xJohROJNAPdEITtM/VncAYL8ASkfgThKy8XXnqiS3hU=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     h5py
@@ -32,18 +36,14 @@ buildPythonPackage rec {
     spglib
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # prevent pytest from importing local directory
   preCheck = ''
     rm -r phonopy
   '';
 
-  pythonImportsCheck = [
-    "phonopy"
-  ];
+  pythonImportsCheck = [ "phonopy" ];
 
   meta = with lib; {
     description = "Modulefor phonon calculations at harmonic and quasi-harmonic levels";
