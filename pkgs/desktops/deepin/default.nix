@@ -84,6 +84,7 @@ let
     #### TOOLS
     dde-device-formatter = callPackage ./tools/dde-device-formatter { };
     deepin-gettext-tools = callPackage ./tools/deepin-gettext-tools { };
+    deepin-anything = callPackage ./tools/deepin-anything { };
 
     #### ARTWORK
     dde-account-faces = callPackage ./artwork/dde-account-faces { };
