@@ -24,7 +24,7 @@ in
 
       host = lib.mkOption {
         type = types.str;
-        default = "localhost";
+        default = "127.0.0.1";
         example = "0.0.0.0";
         description = ''
           The host address which the Open-WebUI server HTTP interface listens to.
@@ -42,7 +42,11 @@ in
 
       environment = lib.mkOption {
         type = types.attrsOf types.str;
-        default = { };
+        default = {
+          SCARF_NO_ANALYTICS = "True";
+          DO_NOT_TRACK = "True";
+          ANONYMIZED_TELEMETRY = "False";
+        };
         example = ''
           {
             OLLAMA_API_BASE_URL = "http://127.0.0.1:11434";
