@@ -2204,6 +2204,8 @@ self: super: with self; {
 
   clip-anytorch = callPackage ../development/python-modules/clip-anytorch { };
 
+  clip-server = callPackage ../development/python-modules/clip-server { };
+
   clr-loader = callPackage ../development/python-modules/clr-loader { };
 
   cock = callPackage ../development/python-modules/cock { };
