@@ -116,6 +116,14 @@ in
           Since `ollama run` is mostly a shell around the ollama server, this is usually sufficient.
         '';
       };
+      openFirewall = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the firewall for ollama.
+          This adds `services.ollama.port` to `networking.firewall.allowedTCPPorts`.
+        '';
+      };
     };
   };
 
@@ -141,6 +149,8 @@ in
         ReadWritePaths = cfg.writablePaths;
       };
     };
+
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
     environment.systemPackages = [ ollamaPackage ];
   };
