@@ -1,21 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
+  wheel,
+   docarray, numpy, grpcio, protobuf, pyyaml
 }:
 buildPythonPackage rec {
   pname = "jina";
   version = "3.25.1";
   pyproject = true;
 
-  src = fetchPypi {
+  src = fetchFromGitHub {
     inherit pname version;
-    hash = "sha256-lb7nEZu0Wd7hUnkfuZdPbuy0vJ0kONZ1S1z1ZccF5gE=";
+    owner = "jina-ai";
+    repo = "jina";
+    rev = "v${version}";
+    hash = "sha256-VjxatPynuFdyux5zY3ixAhuafPAROL9GfzGLzfOOnko=";
   };
 
   nativeBuildInputs = [
     setuptools
+    wheel
+  ];
+
+  propagatedBuildInputs = [
+    docarray
+    numpy
+    grpcio
+    protobuf
+    pyyaml
   ];
 
   meta = with lib; {
