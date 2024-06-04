@@ -38,7 +38,7 @@ in
 
     extraOptions = mkOption {
       type = listOf str;
-      default = [];
+      default = [ "--config" "/var/lib/music-assistant" ];
       example = [
         "--log-level"
         "DEBUG"
@@ -52,7 +52,7 @@ in
       type = listOf (enum cfg.package.providerNames);
       default = [];
       example = [
-        "opensubsoic"
+        "opensubsonic"
         "snapcast"
       ];
       description = ''
