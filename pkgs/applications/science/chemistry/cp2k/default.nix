@@ -177,7 +177,6 @@ stdenv.mkDerivation rec {
                  -lz -ldl ${lib.optionalString (mpi.pname == "openmpi") "$(mpicxx --showme:link)"} \
                  -lplumed -lhdf5_fortran -lhdf5_hl -lhdf5 -lgsl -lsirius -lspla -lspfft -lvdwxc \
                  ${lib.strings.optionalString (gpuBackend == "cuda") ''
-                   -L${cudaPackages.cuda_cudart}/lib/stubs/ \
                    -lcudart -lnvrtc -lcuda -lcublas
                    ''
                  } \
