@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, glib, ncurses, libcap_ng }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, ncurses, libcap_ng }:
 
 stdenv.mkDerivation rec {
   pname = "irqbalance";

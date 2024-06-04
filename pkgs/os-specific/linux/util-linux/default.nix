@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, gtk-doc, pkg-config
+{ lib, stdenv, fetchurl, pkg-config
 , zlib, shadow
 , capabilitiesSupport ? stdenv.isLinux
 , libcap_ng

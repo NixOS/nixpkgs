@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 , curl, ed, pkg-config, freetype, zlib, libX11
 , SDL2, SDL2_image, SDL2_mixer
 }:

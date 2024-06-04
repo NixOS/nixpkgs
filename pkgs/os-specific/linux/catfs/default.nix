@@ -1,5 +1,4 @@
 { lib, rustPlatform, fetchFromGitHub
-, fetchpatch
 , fuse
 , pkg-config
 }:

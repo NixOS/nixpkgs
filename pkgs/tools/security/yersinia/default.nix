@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config, fetchpatch
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
 , ncurses, libpcap, libnet
 # alpha version of GTK interface
 , withGtk ? false, gtk2
