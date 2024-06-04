@@ -1,13 +1,15 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, testers
+, unstableGitUpdater
 , cmake
 , boost
 , properties-cpp
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "process-cpp";
   version = "unstable-2021-05-11";
 
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "ubports";
     repo = "development/core/lib-cpp/process-cpp";
     rev = "ee6d99a3278343f5fdcec7ed3dad38763e257310";
-    sha256 = "sha256-jDYXKCzrg/ZGFC2xpyfkn/f7J3t0cdOwHK2mLlYWNN0=";
+    hash = "sha256-jDYXKCzrg/ZGFC2xpyfkn/f7J3t0cdOwHK2mLlYWNN0=";
   };
 
   postPatch = ''
@@ -40,11 +42,17 @@ stdenv.mkDerivation rec {
     properties-cpp
   ];
 
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = unstableGitUpdater { };
+  };
+
   meta = with lib; {
     description = "A simple convenience library for handling processes in C++11";
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/process-cpp";
     license = with licenses; [ gpl3Only lgpl3Only ];
     maintainers = with maintainers; [ onny OPNA2608 ];
     platforms = platforms.linux;
+    pkgConfigModules = [ "process-cpp" ];
   };
-}
+})
