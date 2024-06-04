@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/michaelrsweet/lprint";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ pandapip1 ];
   };
 }
