@@ -1,9 +1,7 @@
 { lib
 , stdenv
-, fetchFromRepoOrCz
-, gnu-efi
+, fetchgit
 , fetchurl
-, fetchpatch
 , libuuid
 , makeWrapper
 , mtools
@@ -18,10 +16,11 @@ stdenv.mkDerivation {
 
   # This is syslinux-6.04-pre3^1; syslinux-6.04-pre3 fails to run.
   # Same issue here https://www.syslinux.org/archives/2019-February/026330.html
-  src = fetchFromRepoOrCz {
-    repo = "syslinux";
-    rev = "759fe3d75276aac5c7f9dd7dcbfb56323a85fff1";
-    hash = "sha256-NNA8Q7+rQ/TdcB6rgtjWjtoXxLJtI4HjV+2UVKqTSR0=";
+  src = fetchgit {
+    url = "https://repo.or.cz/syslinux";
+    rev = "b40487005223a78c3bb4c300ef6c436b3f6ec1f7";
+    sha256 = "sha256-GqvRTr9mA2yRD0G0CF11x1X0jCgqV4Mh+tvE0/0yjqk=";
+    fetchSubmodules = true;
   };
 
   patches = let
@@ -66,21 +65,19 @@ stdenv.mkDerivation {
       "0018-prevent-pow-optimization.patch"
       "26f0e7b2"
       "sha256-dVzXBi/oSV9vYgU85mRFHBKuZdup+1x1BipJX74ED7E=")
-    (fetchpatch {
-      # Fixes build with "modern" gnu-efi
-      # https://github.com/samueldr/syslinux/commit/68defee52f4eba82eefaeea17f21c7498448dd6b
-      url = "https://github.com/samueldr/syslinux/commit/68defee52f4eba82eefaeea17f21c7498448dd6b.patch";
-      hash = "sha256-5xIqM8Gq8D86HL1i7fBTHRB/ZR2XtCz5VsT4bI5vneo=";
-    })
   ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace-fail /bin/pwd $(type -P pwd)
-    substituteInPlace utils/ppmtolss16 --replace-fail /usr/bin/perl $(type -P perl)
+    substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
+    substituteInPlace utils/ppmtolss16 --replace /usr/bin/perl $(type -P perl)
 
     # fix tests
     substituteInPlace tests/unittest/include/unittest/unittest.h \
-      --replace-fail /usr/include/ ""
+      --replace /usr/include/ ""
+
+    # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
+    mkdir gnu-efi/inc/ia32/gnu
+    touch gnu-efi/inc/ia32/gnu/stubs-32.h
   '';
 
   nativeBuildInputs = [
@@ -92,7 +89,6 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libuuid
-    gnu-efi
   ];
 
   # Fails very rarely with 'No rule to make target: ...'
@@ -115,22 +111,8 @@ stdenv.mkDerivation {
     "MANDIR=$(out)/share/man"
     "PERL=perl"
     "HEXDATE=0x00000000"
-    # Works around confusing (unrelated) error messages when upx is not made available
-    "UPX=false"
-
-    # Configurations needed to make use of external gnu-efi
-    "LIBEFI=${gnu-efi}/lib/libefi.a"
-    "LIBDIR=${gnu-efi}/lib/"
-    "EFIINC=${gnu-efi}/include/efi"
-
-    # Legacy bios boot target is always built
-    "bios"
   ]
-  # Build "ia32" EFI for i686
-  ++ lib.optional stdenv.hostPlatform.isi686 "efi32"
-  # Build "x86_64" EFI for x86_64
-  ++ lib.optional stdenv.hostPlatform.isx86_64 "efi64"
-  ;
+  ++ lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
 
   # Some tests require qemu, some others fail in a sandboxed environment
   doCheck = false;
@@ -144,7 +126,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "https://www.syslinux.org/";
+    homepage = "http://www.syslinux.org/";
     description = "A lightweight bootloader";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.samueldr ];
