@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/daleroberts/hdmedians";
     description = "High-dimensional medians";
-    license = licenses.gpl3;
+    license = licenses.asl20;
     maintainers = [ ];
   };
 }
