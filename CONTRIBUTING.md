@@ -316,11 +316,21 @@ When reviewing a pull request, please always be nice and polite. Controversial c
 
 GitHub provides reactions as a simple and quick way to provide feedback to pull requests or any comments. The thumb-down reaction should be used with care and if possible accompanied with some explanation so the submitter has directions to improve their contribution.
 
-When doing a review, consider focusing on the changes proposed, if you find out about anything that could be improved but is not part of the proposed changes, consider tracking it as an issue, **offer** the original contributor to do a follow-up pull request or do it in that pull request, but remember that you should ideally not make this a blocker or give the impression to the contributor this would be a blocker for this merge. If the follow-up change is structural for the contribution, make your point clear about why you feel it is important to do it before the proposed changes.
+When doing a review:
+- Aim to drive the proposal to a timely conclusion.
+- Focus on the proposed changes to keep the scope of the discussion narrow.
+- Help the contributor prioritise their efforts towards getting their change merged.
 
-Also, consider giving to the contributor a clear representation of what you consider to be blocker and not to help them prioritize their efforts towards a potential merge.
+If you find anything related that could be improved but is not immediately required for acceptance, consider
+- Implementing the changes yourself in a follow-up pull request (and request review from the person who inspired you)
+- Tracking your idea in an issue
+- Offering the original contributor to review a follow-up pull request
+- Making concrete [suggestions](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/incorporating-feedback-in-your-pull-request) in the same pull request.
 
-Examples of follow-up changes can involve a cleanup in the touched files.
+For example, follow-up changes could involve refactoring code in the affected files.
+
+But please remember not to make such additional considerations a blocker, and communicate that to the contributor, for example by following the [conventional comments](https://conventionalcomments.org/) pattern.
+If the related change is essential for the contribution at hand, make clear why you think it is important to address that first.
 
 Pull request reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.
 
