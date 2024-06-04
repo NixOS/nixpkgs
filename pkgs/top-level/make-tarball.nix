@@ -55,6 +55,8 @@ pkgs.releaseTools.sourceTarball {
     echo "file json-br $packages" >> $out/nix-support/hydra-build-products
   '';
 
+  # --hard-dereference: reproducibility for src if auto-optimise-store = true
+  #   Some context: https://github.com/NixOS/infra/issues/438
   distPhase = ''
     mkdir -p $out/tarballs
     XZ_OPT="-T0" tar \
@@ -71,6 +73,7 @@ pkgs.releaseTools.sourceTarball {
       --sort=name \
       --mtime="@$SOURCE_DATE_EPOCH" \
       --mode=ug+w \
+      --hard-dereference \
       $src $(pwd)/{.version-suffix,.git-revision}
   '';
 }
