@@ -88,6 +88,11 @@ self: super: {
   # Needs to use ghc-lib due to incompatible GHC
   ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_6);
 
+  # ghc-lib >= 9.6 and friends no longer build with GHC 9.0
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_8_20230729;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
+  ghc-lib = doDistribute self.ghc-lib_9_2_8_20230729;
+
   # Test suite sometimes segfaults with GHC 9.0.1 and 9.0.2
   # https://github.com/ekmett/reflection/issues/51
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21141
