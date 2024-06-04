@@ -37,12 +37,37 @@ let
     "--openssl-use-def-ca-store"
   ];
 
+  crossConfigureFlags =
+    let
+      platform = stdenv.hostPlatform;
+      inherit (platform) gcc isAarch32;
+    in
+    [
+      "--cross-compiling"
+      "--dest-cpu=${let platform = stdenv.hostPlatform; in
+                    if      platform.isAarch32 then "arm"
+                    else if platform.isAarch64 then "arm64"
+                    else if platform.isMips32 && platform.isLittleEndian then "mipsel"
+                    else if platform.isMips32 && !platform.isLittleEndian then "mips"
+                    else if platform.isMips64 && platform.isLittleEndian then "mips64el"
+                    else if platform.isPower && platform.is32bit then "ppc"
+                    else if platform.isPower && platform.is64bit then "ppc64"
+                    else if platform.isx86_64 then "x86_64"
+                    else if platform.isx86_32 then "x86"
+                    else if platform.isS390 && platform.is64bit then "s390x"
+                    else if platform.isRiscV && platform.is64bit then "riscv64"
+                    else throw "unsupported cpu ${stdenv.hostPlatform.uname.processor}"}"
+    ] ++ lib.optionals (isAarch32 && lib.hasAttr "fpu" gcc) [
+      "--with-arm-fpu=${gcc.fpu}"
+    ] ++ lib.optionals (isAarch32 && lib.hasAttr "float-abi" gcc) [
+      "--with-arm-float-abi=${gcc.float-abi}"
+    ];
+
   copyLibHeaders =
     map
       (name: "${lib.getDev sharedLibDeps.${name}}/include/*")
       (builtins.attrNames sharedLibDeps);
 
-  extraConfigFlags = lib.optionals (!enableNpm) [ "--without-npm" ];
   self = stdenv.mkDerivation {
     inherit pname version;
 
@@ -76,30 +101,13 @@ let
     setOutputFlags = false;
     moveToDev = false;
 
-    configureFlags = let
-      inherit (stdenv.hostPlatform) gcc isAarch32;
-    in sharedConfigureFlags ++ lib.optionals (lib.versionOlder version "19") [
-      "--without-dtrace"
-    ] ++ (lib.optionals isCross [
-      "--cross-compiling"
-      "--dest-cpu=${let platform = stdenv.hostPlatform; in
-                    if      platform.isAarch32 then "arm"
-                    else if platform.isAarch64 then "arm64"
-                    else if platform.isMips32 && platform.isLittleEndian then "mipsel"
-                    else if platform.isMips32 && !platform.isLittleEndian then "mips"
-                    else if platform.isMips64 && platform.isLittleEndian then "mips64el"
-                    else if platform.isPower && platform.is32bit then "ppc"
-                    else if platform.isPower && platform.is64bit then "ppc64"
-                    else if platform.isx86_64 then "x86_64"
-                    else if platform.isx86_32 then "x86"
-                    else if platform.isS390 && platform.is64bit then "s390x"
-                    else if platform.isRiscV && platform.is64bit then "riscv64"
-                    else throw "unsupported cpu ${stdenv.hostPlatform.uname.processor}"}"
-    ]) ++ (lib.optionals (isCross && isAarch32 && lib.hasAttr "fpu" gcc) [
-      "--with-arm-fpu=${gcc.fpu}"
-    ]) ++ (lib.optionals (isCross && isAarch32 && lib.hasAttr "float-abi" gcc) [
-      "--with-arm-float-abi=${gcc.float-abi}"
-    ]) ++ extraConfigFlags;
+    configureFlags =
+      sharedConfigureFlags
+      ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
+      ++ lib.optionals isCross crossConfigureFlags
+      ++ lib.optionals (!enableNpm) [
+        "--without-npm"
+      ];
 
     configurePlatforms = [];
 
