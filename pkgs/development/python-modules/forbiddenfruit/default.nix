@@ -39,6 +39,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Patch python built-in objects";
     homepage = "https://github.com/clarete/forbiddenfruit";
-    license = licenses.mit;
+    license = with licenses; [
+      mit
+      gpl3Plus
+    ];
   };
 }
