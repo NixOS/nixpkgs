@@ -26761,8 +26761,6 @@ with pkgs;
 
   pg_tileserv = callPackage ../servers/geospatial/pg_tileserv { };
 
-  tile38 = callPackage ../servers/geospatial/tile38 { };
-
   ### OS-SPECIFIC
 
   airbuddy = callPackage ../os-specific/darwin/airbuddy { };
