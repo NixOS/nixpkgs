@@ -18,7 +18,7 @@ let
       environment = {
         systemPackages = [
           pkgs.nyancat
-#          (pkgs.callPackage ./xnode-admin {})
+          (pkgs.callPackage ./xnode-admin {})
 #          (pkgs.callPackage ./openmesh-core {})
         ];
       };
