@@ -12,10 +12,16 @@ in
   options.services.openmesh.xnode.admin = {
     enable = mkEnableOption "Management service for Xnode";
 
-    localDir = mkOption {
+    stateDir = mkOption {
       type = types.str;
-      default = "/var/lib/openmesh/config.nix";
-      description = "Local repository for nix configurations, typically a cloned git repository.";
+      default = "/var/lib/openmesh-xnode-admin";
+      description = "State storage directory.";
+    };
+
+    localStateFilename = mkOption {
+      type = types.str;
+      default = "config.nix";
+      description = "Local file destination for nix configurations.";
     };
 
     package = mkOption {
@@ -39,15 +45,35 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    #environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.openmesh-xnode-admin = {
+      description = "Openmesh Xnode Administration and Configuration Subsystem Daemon";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+
       serviceConfig = {
-        DynamicUser = true;
+        ExecStart = ''${lib.getExe cfg.package} -p ${cfg.stateDir}/${cfg.localStateFilename} ${cfg.remoteDir} ${toString cfg.searchInterval}''; 
         Restart = "always";
-        ExecStart = "${cfg.package}/src/nix_rebuilder.py \
-                    ${cfg.localDir} ${cfg.remoteDir} ${toString cfg.searchInterval}
-                    "; 
+        WorkingDirectory = cfg.stateDir;
+        StateDirectory = "openmesh-xnode-admin";
+        RuntimeDirectory = "openmesh-xnode-admin";
+        RuntimeDirectoryMode = "0755";
+        PrivateTmp = true;
+        DynamicUser = true;
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        PrivateUsers = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectControlGroups = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        UMask = "0077";
       };
     };
 

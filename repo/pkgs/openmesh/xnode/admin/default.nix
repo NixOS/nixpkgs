@@ -8,8 +8,8 @@ pkgs.python3Packages.buildPythonPackage rec {
   src = pkgs.fetchFromGitHub {
     owner = "Openmesh-Network";
     repo = pname;
-    rev = "96ee992e5f2cc95672964d7f5a55168549e501d4";
-    sha256 = "0p11b039vfn9696zrnl1hl6hrm60mpkhg76jrwk57rg29vy1lcfv";
+    rev = "568ca78e3881f1b2af988b6846ab59f316f2e731";
+    sha256 = "e/GVoWFKEp54gZNkllAf7Q9rBogJ0bSa3aT62pelutw=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,8 @@ pkgs.python3Packages.buildPythonPackage rec {
   meta = with lib; {
       homepage = "https://openmesh.network/";
       description = "Agent service for Xnode reconfiguration and management";
+      mainProgram = "openmesh-xnode-admin";
       #license = with licenses; [ x ];
-      maintainers = with maintainers; [ harrys522 ];
+      maintainers = with maintainers; [ harrys522 j-openmesh ];
     };
 }
