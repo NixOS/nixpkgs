@@ -1,7 +1,6 @@
 {
   apache-beam,
   array-record,
-  attrs,
   beautifulsoup4,
   buildPythonPackage,
   click,
@@ -12,6 +11,7 @@
   ffmpeg,
   future,
   imagemagick,
+  immutabledict,
   importlib-resources,
   jax,
   jaxlib,
@@ -35,9 +35,11 @@
   pydub,
   pytest-xdist,
   pytestCheckHook,
+  pythonOlder,
   requests,
   scikit-image,
   scipy,
+  simple-parsing,
   six,
   tensorflow,
   tensorflow-metadata,
@@ -49,33 +51,31 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.9.4";
-  format = "setuptools";
+  version = "4.9.6";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HY/atBEWeEJgBNxEapq9jPFoZbFof2AHEDAiJa/lYAE=";
+    hash = "sha256-2zR1b/Zkj3hcwiVK7wdxix3taNgFFOxqy7fSge6dAIk=";
   };
 
-  patches = [
-    # addresses https://github.com/tensorflow/datasets/issues/3673
-    ./corruptions.patch
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     array-record
-    attrs
     dill
     dm-tree
     future
+    immutabledict
     importlib-resources
     numpy
     promise
     protobuf
     psutil
     requests
+    simple-parsing
     six
     tensorflow-metadata
     termcolor
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tensorflow_datasets" ];
 
   nativeCheckInputs = [
-    apache-beam
+    # apache-beam
     beautifulsoup4
     click
     datasets
@@ -147,10 +147,6 @@ buildPythonPackage rec {
     "tensorflow_datasets/core/features/audio_feature_test.py"
     "tensorflow_datasets/image/lsun_test.py"
 
-    # Requires `envlogger` which is not packaged in `nixpkgs`.
-    "tensorflow_datasets/rlds/locomotion/locomotion_test.py"
-    "tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can_test.py"
-
     # Fails with `TypeError: Constant constructor takes either 0 or 2 positional arguments`
     # deep in TF AutoGraph. Doesn't reproduce in Docker with Ubuntu 22.04 => might be related
     # to the differences in some of the dependencies?
@@ -171,10 +167,11 @@ buildPythonPackage rec {
     "tensorflow_datasets/text/c4_utils_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of datasets ready to use with TensorFlow";
     homepage = "https://www.tensorflow.org/datasets/overview";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    changelog = "https://github.com/tensorflow/datasets/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }
