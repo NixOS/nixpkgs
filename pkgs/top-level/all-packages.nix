@@ -10825,8 +10825,16 @@ with pkgs;
 
   grocy = callPackage ../servers/grocy { };
 
-  inherit (callPackages ../servers/nextcloud {})
-    nextcloud28 nextcloud29;
+  nextcloud29 = nextcloud;
+  nextcloud28 = nextcloud.overrideAttrs rec {
+    pname = "nextcloud";
+    version = "28.0.6";
+    src = fetchurl {
+      url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
+      hash = "sha256-3w0zhLRHy6HhKPIggPZ4BSH4aBab6r7o6g0VW/nGa48=";
+    };
+    passthru.packages = nextcloud28Packages;
+  };
 
   nextcloud28Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/28.json;
