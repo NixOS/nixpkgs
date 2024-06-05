@@ -40,7 +40,7 @@ rec {
         NIX_LDFLAGS = (oa.NIX_LDFLAGS or "") + " -headerpad_max_install_names";
       });
 
-      cctools_ = darwin.cctools;
+      bintools_ = darwin.binutils-unwrapped;
 
       # Avoid messing with libkrb5 and libnghttp2.
       curl_ = curlMinimal.override (args: {
@@ -112,7 +112,7 @@ rec {
 
       # Copy binutils.
       for i in as ld ar ranlib nm strip otool install_name_tool lipo codesign_allocate; do
-        cp ${getBin cctools_}/bin/$i $out/bin
+        cp ${getBin bintools_}/bin/$i $out/bin
       done
 
       # Copy coreutils, bash, etc.
@@ -175,7 +175,7 @@ rec {
       # copy sigtool
       cp -d ${getBin darwin.sigtool}/bin/{codesign,sigtool} $out/bin
 
-      cp -d ${getLib darwin.libtapi}/lib/libtapi*.dylib $out/lib
+      cp -d ${getLib libtapi}/lib/libtapi*.dylib $out/lib
 
       # tools needed to unpack bootstrap archive
       mkdir -p unpack/bin unpack/lib

@@ -33,7 +33,8 @@ let
   useLLVM = stdenv.hostPlatform.useLLVM or false;
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
   haveLibc = stdenv.cc.libc != null;
-  isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic && lib.versionAtLeast release_version "16";
+  isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic;
+
   inherit (stdenv.hostPlatform) isMusl isAarch64;
 
   baseName = "compiler-rt";
@@ -92,7 +93,7 @@ stdenv.mkDerivation ({
     "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
   ] ++ lib.optionals (useLLVM || bareMetal) [
      "-DCOMPILER_RT_BUILD_PROFILE=OFF"
-  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal || isDarwinStatic) [
+  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
   ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"

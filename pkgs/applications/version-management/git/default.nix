@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./git-sh-i18n.patch
     ./git-send-email-honor-PATH.patch
     ./installCheck-path.patch
+    # The source-based SDK uses a newer version of AvailabilityMacros.h that causes git to misdetect the SDK version.
+    ./use-version-based-SDK-check.patch
   ] ++ lib.optionals withSsh [
     ./ssh-path.patch
   ];

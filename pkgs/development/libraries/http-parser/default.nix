@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "DESTDIR="
     "PREFIX=$(out)"
     "BINEXT=${stdenv.hostPlatform.extensions.executable}"
-    "Platform=${lib.toLower stdenv.hostPlatform.uname.system}"
+    "PLATFORM=${lib.toLower stdenv.hostPlatform.uname.system}"
     "AEXT=${lib.strings.removePrefix "." stdenv.hostPlatform.extensions.staticLibrary}"
     "ENABLE_SHARED=${if enableShared then "1" else "0"}"
     "ENABLE_STATIC=${if enableStatic then "1" else "0"}"

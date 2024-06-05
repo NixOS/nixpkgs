@@ -2,6 +2,7 @@
 , buildPackages, pkgs, targetPackages
 , generateSplicesForMkScope, makeScopeWithSplicing'
 , stdenv
+, overrideCC
 , preLibcCrossHeaders
 , config
 }:
@@ -64,13 +65,15 @@ makeScopeWithSplicing' {
       if useAppleSDKLibs
         then apple_sdk
         else appleSourcePackages
-    ) ["Libsystem" "LibsystemCross" "libcharset" "libunwind" "objc4" "configd" "IOKit"]
+    ) ["Libsystem" "LibsystemCross" "libcharset" "objc4" "configd" "IOKit"]
   ) // {
     inherit (
       if useAppleSDKLibs
         then apple_sdk.frameworks
         else appleSourcePackages
     ) Security;
+  } // lib.optionalAttrs (!useAppleSDKLibs) {
+    LibsystemCross = self.Libsystem;
   };
 in
 
@@ -79,14 +82,82 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0;
 
   stdenvNoCF = stdenv.override {
-    extraBuildInputs = [];
+    extraBuildInputs = [ apple_sdk.sdkRoot ];
   };
+
+  # Rewrapping clang is necessary to avoid infinite recursions while overriding Libsystem.
+  # This is used for building dependencies of Libsystem that require a working clang.
+  stdenvBootstrap = overrideCC buildPackages.targetPackages.darwin.stdenvNoCF (import ../build-support/cc-wrapper (
+    let
+      LibsystemNoResolv = buildPackages.targetPackages.darwin.Libsystem.override {
+        withCsu = false;
+        withLibresolv = false;
+      };
+    in
+    {
+      inherit lib;
+      inherit (buildPackages) stdenvNoCC coreutils gnugrep runtimeShell;
+
+      expand-response-params = "";
+
+      nativeTools = false;
+      nativeLibc = false;
+
+      cc = buildPackages.llvmPackages.clang-unwrapped;
+      libc = LibsystemNoResolv;
+
+      bintools = import ../build-support/bintools-wrapper {
+        inherit lib;
+        inherit (buildPackages) stdenvNoCC coreutils gnugrep runtimeShell;
+
+        expand-response-params = "";
+
+        libc = LibsystemNoResolv;
+
+        bintools = buildPackages.darwin.binutils-unwrapped;
+
+        nativeTools = false;
+        nativeLibc = false;
+      };
+
+      # Can’t rely on `release_version` because this may be used with the bootstrap compiler,
+      # which does not necessarily provide a correct `release_version`.
+      extraBuildCommands = ''
+        function clangResourceRootIncludePath() {
+          clangLib="$1/lib/clang"
+          if (( $(ls "$clangLib" | wc -l) > 1 )); then
+            echo "Multiple LLVM versions were found at "$clangLib", but there must only be one used when building the stdenv." >&2
+            exit 1
+          fi
+          echo "$clangLib/$(ls -1 "$clangLib")/include"
+        }
+
+        rsrc="$out/resource-root"
+        mkdir "$rsrc"
+        ln -s "$(clangResourceRootIncludePath "${buildPackages.llvmPackages.clang-unwrapped.lib}")" "$rsrc"
+        echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+      '';
+    })
+  );
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
-    inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
+    inherit (pkgs.llvmPackages) clang-unwrapped llvm llvm-manpages;
   };
 
+  # x86-64 Darwin gnat-bootstrap emits assembly
+  # with MOVQ as the mnemonic for quadword interunit moves
+  # such as `movq %rbp, %xmm0`.
+  # The clang integrated assembler recognises this as valid,
+  # but unfortunately the cctools^gas GNU assembler does not;
+  # it instead uses MOVD as the mnemonic.
+  # The assembly that a GCC build emits is determined at build time
+  # and cannot be changed afterwards.
+  #
+  # To build GNAT on x86-64 Darwin, therefore,
+  # we need both the clang _and_ the cctools^gas assemblers to be available:
+  # the former to build at least the stage1 compiler,
+  # and the latter at least to be detectable
+  # as the target for the final compiler.
   binutils = pkgs.wrapBintoolsWith {
     libc =
       if stdenv.targetPlatform != stdenv.hostPlatform
@@ -95,37 +166,21 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
-  binutilsDualAs-unwrapped = callPackage ../os-specific/darwin/binutils {
-    inherit (pkgs) binutils-unwrapped;
-    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
-    dualAs = true;
+  binutilsDualAs-unwrapped = pkgs.buildEnv {
+    name = "${lib.getName self.binutils-unwrapped}-dualas-${lib.getVersion self.binutils-unwrapped}";
+    paths = [
+      self.binutils-unwrapped
+      (lib.getOutput "gas" pkgs.cctools)
+    ];
   };
 
-  binutilsDualAs = pkgs.wrapBintoolsWith {
-    libc =
-      if stdenv.targetPlatform != stdenv.hostPlatform
-      then pkgs.libcCross
-      else pkgs.stdenv.cc.libc;
+  binutilsDualAs = self.binutils.override {
     bintools = self.binutilsDualAs-unwrapped;
   };
 
   binutilsNoLibc = pkgs.wrapBintoolsWith {
     libc = preLibcCrossHeaders;
     bintools = self.binutils-unwrapped;
-  };
-
-  cctools = self.cctools-llvm;
-
-  cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
-
-  cctools-llvm = callPackage ../os-specific/darwin/cctools/llvm.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
-
-  cctools-port = callPackage ../os-specific/darwin/cctools/port.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
   # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
@@ -195,26 +250,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     inherit (apple_sdk) darwin-stubs;
   };
 
-  # TODO: Remove the CF hook if a solution to the crashes is not found.
-  CF =
-    # CF used to refer to the open source version of CoreFoundation from the Swift
-    # project. As of macOS 14, the rpath-based approach allowing packages to choose
-    # which version to use no longer seems to work reliably. Sometimes they works,
-    # but sometimes they crash with the error (in the system crash logs):
-    # CF objects must have a non-zero isa.
-    # See https://developer.apple.com/forums/thread/739355 for more on that error.
-    #
-    # In this branch, we only have a single "CoreFoundation" to choose from.
-    # To be compatible with the existing convention, we define
-    # CoreFoundation with the setup hook, and CF as the same package but
-    # with the setup hook removed.
-    #
-    # This may seem unimportant, but without it packages (e.g., bacula) will
-    # fail with linker errors referring ___CFConstantStringClassReference.
-    # It's not clear to me why some packages need this extra setup.
-    lib.overrideDerivation apple_sdk.frameworks.CoreFoundation (drv: {
-      setupHook = null;
-    });
+  # TODO: Move stdenv to use apple_sdk.frameworks.CoreFoundation and deprecate darwin.CF.
+  CF = apple_sdk.frameworks.CoreFoundation;
 
   # Formerly the CF attribute. Use this is you need the open source release.
   swift-corelibs-foundation = callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };

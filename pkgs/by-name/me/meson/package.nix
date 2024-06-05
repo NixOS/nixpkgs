@@ -78,6 +78,10 @@ python3.pkgs.buildPythonApplication rec {
     # Fix compilation of Meson using Ninja 1.12
     # FIXME: remove in the next point release
     ./007-Allow-building-via-ninja-12.patch
+
+    # Fix extraframework lookup on case-sensitive APFS.
+    # https://github.com/mesonbuild/meson/pull/13038
+    ./007-case-sensitive-fs.patch
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [

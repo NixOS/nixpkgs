@@ -783,10 +783,7 @@ in
       substituteInPlace lib/sassc/native.rb \
         --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
     '';
-  } // (lib.optionalAttrs stdenv.isDarwin {
-    # https://github.com/NixOS/nixpkgs/issues/19098
-    buildFlags = [ "--disable-lto" ];
-  });
+  };
 
   sass-embedded = attrs: {
     # Patch the Rakefile to use our dart-sass and not try to fetch anything.

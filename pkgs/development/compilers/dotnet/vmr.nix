@@ -16,6 +16,7 @@
 , glibcLocales
 , ensureNewerSourcesForZipFilesHook
 , darwin
+, ld64
 , xcbuild
 , swiftPackages
 , openssl
@@ -41,7 +42,6 @@ let
     isDarwin
     buildPlatform
     targetPlatform;
-  inherit (darwin) cctools;
   inherit (swiftPackages) apple_sdk swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
@@ -53,13 +53,13 @@ let
 
   sigtool = callPackage ./sigtool.nix {};
 
-  # we need dwarfdump from cctools, but can't have e.g. 'ar' overriding stdenv
+  # we need dwarfdump from ld64
   dwarfdump = stdenvNoCC.mkDerivation {
     name = "dwarfdump-wrapper";
     dontUnpack = true;
     installPhase = ''
       mkdir -p "$out/bin"
-      ln -s "${cctools}/bin/dwarfdump" "$out/bin"
+      ln -s "${ld64}/bin/dwarfdump" "$out/bin"
     '';
   };
 

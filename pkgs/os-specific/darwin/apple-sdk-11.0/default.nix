@@ -90,6 +90,11 @@ let
   packages = stdenvs // {
     inherit (callPackage ./apple_sdk.nix { }) frameworks libs;
 
+    libunwind = (
+      pkgs.darwin.libunwind
+      or lib.throw "darwin.apple_sdk_11_0.libunwind has been removed, please use libunwind instead"
+    );
+
     # TODO: this is nice to be private. is it worth the callPackage above?
     # Probably, I don't think that callPackage costs much at all.
     inherit MacOSX-SDK CLTools_Executables;
@@ -98,7 +103,6 @@ let
     LibsystemCross = pkgs.darwin.Libsystem;
     libcharset = callPackage ./libcharset.nix { };
     libcompression = callPackage ./libcompression.nix { };
-    libunwind = callPackage ./libunwind.nix { };
     libnetwork = callPackage ./libnetwork.nix { };
     libpm = callPackage ./libpm.nix { };
     # Avoid introducing a new objc4 if stdenv already has one, to prevent
@@ -137,7 +141,6 @@ let
           Security
           configd
           libcharset
-          libunwind
           objc4
           ;
         apple_sdk = prev.darwin.apple_sdk_11_0;

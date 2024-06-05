@@ -31,6 +31,10 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # Does network IO
     "--skip=ticket_lookup::test::lookup_ticket"
+    # Impurely access system Xcode installations
+    "--skip=parsed_sdk::test::find_all_sdks"
+    "--skip=simple_sdk::test::find_all_sdks"
+    "--skip=test::find_all_platform_directories"
   ];
 
   meta = with lib; {

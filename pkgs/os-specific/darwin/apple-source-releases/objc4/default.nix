@@ -1,6 +1,10 @@
-{ appleDerivation, darwin-stubs }:
+{ lib
+, appleDerivation'
+, stdenvNoCF
+, darwin-stubs
+}:
 
-appleDerivation {
+appleDerivation' stdenvNoCF {
   # Not strictly necessary, since libSystem depends on it, but it's nice to be explicit so we
   # can easily find out what's impure.
   __propagatedImpureHostDeps = [

@@ -1,7 +1,10 @@
-{ lib, appleDerivation', stdenv }:
+{ lib
+, Libsystem
+, stdenvBootstrap
+, appleDerivation'
+}:
 
-appleDerivation' stdenv {
-
+appleDerivation' stdenvBootstrap {
   prePatch = ''
     substituteInPlace Makefile \
       --replace /usr/lib /lib \
@@ -9,12 +12,7 @@ appleDerivation' stdenv {
       --replace /usr/bin "" \
       --replace /bin/ "" \
       --replace "CC = " "#" \
-      --replace "SDK_DIR = " "SDK_DIR = . #" \
-
-    # Mac OS didn't support rpaths back before 10.5, but we don't care about it.
-    substituteInPlace Makefile \
-      --replace -mmacosx-version-min=10.4 -mmacosx-version-min=10.6 \
-      --replace -mmacosx-version-min=10.5 -mmacosx-version-min=10.6
+      --replace "SDK_DIR = " "SDK_DIR = . #"
   '';
 
   installFlags = [ "DSTROOT=$(out)" ];

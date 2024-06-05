@@ -6,6 +6,7 @@
 , brotli
 , testers
 , frankenphp
+, cctools
 , darwin
 , libiconv
 , pkg-config
@@ -44,7 +45,7 @@ in buildGoModule rec {
   vendorHash = "sha256-eNW03oBaON2X5X2ZbM3Ly5T+bJzSDhEYajY5LaZhwdQ=";
 
   buildInputs = [ phpUnwrapped brotli ] ++ phpUnwrapped.buildInputs;
-  nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config darwin.cctools darwin.autoSignDarwinBinariesHook ];
+  nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config cctools darwin.autoSignDarwinBinariesHook ];
 
   subPackages = [ "frankenphp" ];
 

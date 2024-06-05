@@ -1,9 +1,10 @@
-{ lib, stdenv, buildPackages, fetchzip, fetchFromGitHub
-, appleDerivation', xnu, Libc, Libm, libdispatch, Libinfo
+{ lib, stdenvNoCC, buildPackages, fetchzip, fetchFromGitHub
+, appleDerivation', AvailabilityVersions, xnu, Libc, Libm, libdispatch, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
 , copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libmalloc, libplatform, libpthread
 , mDNSResponder, launchd, libutilHeaders, hfsHeaders, darwin-stubs
 , headersOnly ? false
+, withCsu ? !headersOnly
 , withLibresolv ? !headersOnly
 }:
 
@@ -29,7 +30,7 @@ let
     hash = "sha256-tXLW/TNsluhO1X9Rv3FANyzyOe5TE/hZz0gVo7JGvHA=";
   };
 in
-appleDerivation' stdenv {
+appleDerivation' stdenvNoCC {
   dontBuild = true;
   dontFixup = true;
 
@@ -48,18 +49,28 @@ appleDerivation' stdenv {
 
     # Set up our include directories
     (cd ${xnu}/include && find . -name '*.h' -or -name '*.defs' | copyHierarchy $out/include)
-    cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/Availability*.h $out/include
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/stdarg.h        $out/include
 
+    # These headers are from a newer SDK, but they’re more compatible with GCC (and still work with older SDKs).
+    cp ${AvailabilityVersions}/include/Availability*.h $out/include
+    cp -r ${AvailabilityVersions}/include/os $out/include
+    # But make sure the max version is set correctly for the current SDK.
+    # TODO: Make this replacement be independent of SDK version.
+    substituteInPlace $out/include/AvailabilityInternal.h \
+      --replace-fail '__MAC_OS_X_VERSION_MAX_ALLOWED __MAC_15_0' '__MAC_OS_X_VERSION_MAX_ALLOWED __MAC_10_12_4'
+    substituteInPlace $out/include/AvailabilityMacros.h \
+      --replace-fail 'MAC_OS_X_VERSION_MIN_REQUIRED > MAC_OS_VERSION_14_0' 'MAC_OS_X_VERSION_MIN_REQUIRED > __MAC_10_12_4' \
+      --replace-fail 'MAC_OS_X_VERSION_MAX_ALLOWED MAC_OS_VERSION_14_0' 'MAC_OS_X_VERSION_MAX_ALLOWED __MAC_10_12_4'
+
     for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} \
-               ${libclosure} ${CarbonHeaders} ${libdispatch} ${ncurses.dev} \
+               ${libclosure} ${CarbonHeaders} ${libdispatch} \
                ${CommonCrypto} ${copyfile} ${removefile} ${libresolvHeaders} \
                ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} \
                ${libutilHeaders} ${libmalloc} ${libpthread} ${hfsHeaders}; do
       (cd $dep/include && find . -name '*.h' | copyHierarchy $out/include)
     done
 
-    (cd ${buildPackages.darwin.cctools.dev}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
+    (cd ${lib.getDev buildPackages.cctools}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
 
     for header in pthread.h pthread_impl.h pthread_spis.h sched.h; do
       ln -s "$out/include/pthread/$header" "$out/include/$header"
@@ -73,27 +84,6 @@ appleDerivation' stdenv {
     cp ${darling.src}/src/libc/os/activity.h $out/include/os
     cp ${darling.src}/src/libc/os/log.h $out/include/os
     cp ${darling.src}/src/duct/include/os/trace.h $out/include/os
-
-    cat <<EOF > $out/include/os/availability.h
-    #ifndef __OS_AVAILABILITY__
-    #define __OS_AVAILABILITY__
-    #include <AvailabilityInternal.h>
-
-    #if defined(__has_feature) && defined(__has_attribute) && __has_attribute(availability)
-      #define API_AVAILABLE(...) __API_AVAILABLE_GET_MACRO(__VA_ARGS__, __API_AVAILABLE4, __API_AVAILABLE3, __API_AVAILABLE2, __API_AVAILABLE1)(__VA_ARGS__)
-      #define API_DEPRECATED(...) __API_DEPRECATED_MSG_GET_MACRO(__VA_ARGS__, __API_DEPRECATED_MSG5, __API_DEPRECATED_MSG4, __API_DEPRECATED_MSG3, __API_DEPRECATED_MSG2, __API_DEPRECATED_MSG1)(__VA_ARGS__)
-      #define API_DEPRECATED_WITH_REPLACEMENT(...) __API_DEPRECATED_REP_GET_MACRO(__VA_ARGS__, __API_DEPRECATED_REP5, __API_DEPRECATED_REP4, __API_DEPRECATED_REP3, __API_DEPRECATED_REP2, __API_DEPRECATED_REP1)(__VA_ARGS__)
-      #define API_UNAVAILABLE(...) __API_UNAVAILABLE_GET_MACRO(__VA_ARGS__, __API_UNAVAILABLE3, __API_UNAVAILABLE2, __API_UNAVAILABLE1)(__VA_ARGS__)
-    #else
-
-      #define API_AVAILABLE(...)
-      #define API_DEPRECATED(...)
-      #define API_DEPRECATED_WITH_REPLACEMENT(...)
-      #define API_UNAVAILABLE(...)
-
-    #endif
-    #endif
-    EOF
 
     cat <<EOF > $out/include/TargetConditionals.h
     #ifndef __TARGETCONDITIONALS__
@@ -132,35 +122,25 @@ appleDerivation' stdenv {
     #endif  /* __TARGETCONDITIONALS__ */
     EOF
   '' + lib.optionalString (!headersOnly) ''
-
-    # The startup object files
-    cp ${Csu}/lib/* $out/lib
-
     cp -vr \
       ${darwin-stubs}/usr/lib/libSystem.B.tbd \
       ${darwin-stubs}/usr/lib/system \
       $out/lib
 
     substituteInPlace $out/lib/libSystem.B.tbd \
-      --replace "/usr/lib/system/" "$out/lib/system/"
+      --replace-fail "/usr/lib/system/" "$out/lib/system/"
     ln -s libSystem.B.tbd $out/lib/libSystem.tbd
 
     # Set up links to pretend we work like a conventional unix (Apple's design, not mine!)
     for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
       ln -s libSystem.tbd $out/lib/lib$name.tbd
     done
+  '' + lib.optionalString withCsu ''
+    # The startup object files
+    cp ${Csu}/lib/* $out/lib
   '' + lib.optionalString withLibresolv ''
-
     # This probably doesn't belong here, but we want to stay similar to glibc, which includes resolv internally...
-    cp ${libresolv}/lib/libresolv.9.dylib $out/lib/libresolv.9.dylib
-    resolv_libSystem=$(${stdenv.cc.bintools.targetPrefix}otool -L "$out/lib/libresolv.9.dylib" | tail -n +3 | grep -o "$NIX_STORE.*-\S*") || true
-    echo $libs
-
-    chmod +w $out/lib/libresolv.9.dylib
-    ${stdenv.cc.bintools.targetPrefix}install_name_tool \
-      -id $out/lib/libresolv.9.dylib \
-      -change "$resolv_libSystem" /usr/lib/libSystem.dylib \
-      $out/lib/libresolv.9.dylib
+    ln -s ${lib.getLib libresolv}/lib/libresolv.9.dylib $out/lib
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
   '';
 

@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     # but on NixOS they're spread across different paths.
     # This patch + the setup-hook will ensure that `sdl2-config --cflags` works correctly.
     ./find-headers.patch
+    # The source-based SDK uses a newer version of AvailabilityMacros.h that causes SDK2 to misdetect the SDK version.
+    ./0001-Use-version-checks-with-SDK-macros.patch
   ];
 
   postPatch = ''

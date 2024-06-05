@@ -70,8 +70,7 @@
 , enableNoSemanticInterposition ? true
 
 # enabling LTO on 32bit arch causes downstream packages to fail when linking
-# enabling LTO on *-darwin causes python3 to fail when linking.
-, enableLTO ? stdenv.is64bit && stdenv.isLinux
+, enableLTO ? stdenv.is64bit && (stdenv.isLinux || stdenv.isDarwin)
 
 # enable asserts to ensure the build remains reproducible
 , reproducibleBuild ? false
@@ -445,7 +444,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
-  ] ++ optionals static [
+  ] ++ optionals (static && !stdenv.hostPlatform.isDarwin) [
     "LDFLAGS=-static"
   ];
 

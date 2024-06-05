@@ -274,9 +274,9 @@ in
   ./6/gnat-glibc234.patch
 ]
 
-# The clang-based assembler used in darwin.cctools-llvm (LLVM >11) does not support piping input.
+# The clang-based assembler used in darwin.binutils does not support piping input.
 # Fortunately, it does not exhibit the problem GCC has with the cctools assembler.
-# This patch can be dropped should darwin.cctools-llvm ever implement support.
+# This patch can be dropped should darwin.binutils ever implement support.
 ++ optional (!atLeast7 && hostPlatform.isDarwin && lib.versionAtLeast (lib.getVersion stdenv.cc) "12") ./4.9/darwin-clang-as.patch
 
 # Building libstdc++ with flat namespaces results in trying to link CoreFoundation, which

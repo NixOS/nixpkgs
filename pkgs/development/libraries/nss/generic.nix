@@ -7,7 +7,7 @@
 , zlib
 , sqlite
 , ninja
-, darwin
+, cctools
 , fixDarwinDylibNames
 , buildPackages
 , useP11kit ? true
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.cctools fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools fixDarwinDylibNames ];
 
   buildInputs = [ zlib sqlite ];
 

@@ -46,7 +46,17 @@ let
     cd ../runtimes
   '';
 
-  postInstall = lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin) ''
+  postInstall = ''
+    # GNU libunwind ships pkg-config files, which some packages expect to use to find libunwind.
+    # Upstream issue: https://github.com/llvm/llvm-project/issues/84662
+    mkdir -p ''${!outputDev}/lib/pkgconfig
+    substitute ${./libunwind.pc} ''${!outputDev}/lib/pkgconfig/libunwind.pc \
+      --subst-var version \
+      --subst-var-by CMAKE_INSTALL_PREFIX $out \
+      --subst-var-by CMAKE_INSTALL_FULL_INCLUDEDIR ''${!outputDev}/include \
+      --subst-var-by CMAKE_INSTALL_FULL_LIBDIR ''${!outputLib}/lib
+  ''
+  + lib.optionalString ((lib.versionAtLeast release_version "15") && enableShared && !stdenv.hostPlatform.isDarwin) ''
     # libcxxabi wants to link to libunwind_shared.so (?).
     ln -s $out/lib/libunwind.so $out/lib/libunwind_shared.so
   '';
@@ -82,6 +92,6 @@ stdenv.mkDerivation (rec {
     '';
   };
 } // (if postUnpack != "" then { inherit postUnpack; } else {})
-  // (if (lib.versionAtLeast release_version "15") then { inherit postInstall; } else {})
+  // (if postInstall != "" then { inherit postInstall; } else {})
   // (if prePatch != "" then { inherit prePatch; } else {})
   // (if postPatch != "" then { inherit postPatch; } else {}))

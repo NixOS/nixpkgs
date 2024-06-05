@@ -3,7 +3,7 @@
 , buildNpmPackage
 , fetchFromGitHub
 , python3
-, darwin
+, cctools
 }:
 
 buildNpmPackage rec {
@@ -31,7 +31,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     python3
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
+    cctools
   ];
 
   meta = {

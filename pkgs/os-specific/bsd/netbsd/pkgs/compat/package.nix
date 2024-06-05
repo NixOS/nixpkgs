@@ -5,7 +5,7 @@
   zlib,
   defaultMakeFlags,
   coreutils,
-  cctools-port,
+  cctools,
   include,
   libc,
   libutil,
@@ -76,7 +76,7 @@ mkDerivation (
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # GNU objcopy produces broken .a libs which won't link into dependers.
         # Makefiles only invoke `$OBJCOPY -x/-X`, so cctools strip works here.
-        "OBJCOPY=${cctools-port}/bin/strip"
+        "OBJCOPY=${cctools}/bin/strip"
       ];
     RENAME = "-D";
 

@@ -66,9 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash-completion
+    libunwind
   ] ++ lib.optionals stdenv.isLinux [
     libcap
-    libunwind
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
   ] ++ lib.optionals stdenv.isDarwin [
@@ -85,8 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     (lib.mesonEnable "doc" enableDocumentation)
   ] ++ lib.optionals stdenv.isDarwin [
-    # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
-    "-Dlibunwind=disabled"
     "-Dlibdw=disabled"
   ];
 

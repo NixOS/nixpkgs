@@ -51,6 +51,13 @@ mapAliases ({
 
   builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
 
+  ### C ###
+
+  cctools = pkgs.cctools; # added 2024-05-15
+  cctools-apple = pkgs.cctools; # added 2024-05-15
+  cctools-port = pkgs.cctools; # added 2024-05-15
+  cctools-llvm = self.binutils-unwrapped; # added 2024-05-15
+
   ### I ###
 
   insert_dylib = throw "'darwin.insert_dylib' has been renamed to 'insert-dylib'"; # added 2024-04-04
@@ -59,6 +66,8 @@ mapAliases ({
 
   libauto = throw "'darwin.libauto' has been removed, as it was broken and unmaintained"; # added 2024-05-10
   libiconv = pkgs.libiconv; # 2024-03-27
+  libtapi = pkgs.libtapi; # added 2024-05-15
+  libunwind = pkgs.libunwind; # added 2024-05-15
 
   ### O ###
 
