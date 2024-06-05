@@ -344,5 +344,20 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
             self."10.13.6"
             { }."${namePath}" or namePath;
       in
-      import ./macos-10.13.6.nix { applePackage' = applePackageMapping; };
+      {
+        inherit (import ./macos-10.13.6.nix { applePackage' = applePackageMapping; })
+          architecture
+          copyfile
+          Csu
+          dyld
+          libclosure
+          Libinfo
+          libmalloc
+          Libnotify
+          libresolv
+          mDNSResponder
+          objc4
+          removefile
+          ;
+      };
 }
