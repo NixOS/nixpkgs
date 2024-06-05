@@ -15105,23 +15105,6 @@ self: super: with self; {
 
   tgcrypto = callPackage ../development/python-modules/tgcrypto { };
 
-  theano-pymc = callPackage ../development/python-modules/theano-pymc { };
-
-  theano = callPackage ../development/python-modules/theano rec {
-    inherit (pkgs.config) cudaSupport;
-    cudnnSupport = cudaSupport;
-  };
-
-  theanoWithCuda = self.theano.override {
-    cudaSupport = true;
-    cudnnSupport = true;
-  };
-
-  theanoWithoutCuda = self.theano.override {
-    cudaSupport = false;
-    cudnnSupport = false;
-  };
-
   thefuzz = callPackage ../development/python-modules/thefuzz { };
 
   thelogrus = callPackage ../development/python-modules/thelogrus { };
