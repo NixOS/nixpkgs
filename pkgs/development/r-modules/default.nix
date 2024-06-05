@@ -934,7 +934,6 @@ let
     "uHMM"
     "vcdExtra"
     "VecStatGraphs3D"
-    "vegan"
     "vegan3d"
     "vegclust"
     "x12GUI"
