@@ -1558,6 +1558,8 @@ Both parameters take a list of flags as strings. The special `"all"` flag can be
 
 For more in-depth information on these hardening flags and hardening in general, refer to the [Debian Wiki](https://wiki.debian.org/Hardening), [Ubuntu Wiki](https://wiki.ubuntu.com/Security/Features), [Gentoo Wiki](https://wiki.gentoo.org/wiki/Project:Hardened), and the [Arch Wiki](https://wiki.archlinux.org/title/Security).
 
+Note that support for some hardening flags varies by compiler, CPU architecture, target OS and libc. Combinations of these that don't support a particular hardening flag will silently ignore attempts to enable it. To see exactly which hardening flags are being employed in any invocation, the `NIX_DEBUG` environment variable can be used.
+
 ### Hardening flags enabled by default {#sec-hardening-flags-enabled-by-default}
 
 The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to package is incompatible.
