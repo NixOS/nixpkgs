@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage rec {
   # NOTE: we need to force lld otherwise rust-lld is not found for wasm32 target
   CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
   OPENSSL_NO_VENDOR = 1;
-  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC = "${lib.getExe protobuf}";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   meta = with lib; {

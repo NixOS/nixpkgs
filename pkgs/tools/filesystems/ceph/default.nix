@@ -396,7 +396,7 @@ in rec {
         --replace "char command[128];" "char command[256];" \
         --replace "/sbin/modinfo"  "${kmod}/bin/modinfo" \
         --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
-        --replace "/bin/grep" "${gnugrep}/bin/grep"
+        --replace "/bin/grep" "${lib.getExe gnugrep}"
 
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others

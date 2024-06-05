@@ -25,10 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     substituteInPlace unipicker \
       --replace-fail "/etc/unipickerrc" "$out/etc/unipickerrc" \
-      --replace-fail "fzf" "${fzf}/bin/fzf"
+      --replace-fail "fzf" "${lib.getExe fzf}"
     substituteInPlace unipickerrc \
       --replace-fail "/usr/local" "$out" \
-      --replace-fail "fzf" "${fzf}/bin/fzf"
+      --replace-fail "fzf" "${lib.getExe fzf}"
   '';
 
   makeFlags = [

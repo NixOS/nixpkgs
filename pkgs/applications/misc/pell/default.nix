@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/pell --replace "/usr/bin/env scsh" "${scsh}/bin/scsh"
+    substituteInPlace $out/bin/pell --replace "/usr/bin/env scsh" "${lib.getExe scsh}"
     substituteInPlace $out/bin/pell --replace "(play " "(${sox}/bin/play "
     substituteInPlace $out/bin/pell --replace "(notify-send " "(${libnotify}/bin/notify-send "
     substituteInPlace $out/bin/pell --replace "/usr/share/pell/online.mp3" "$out/share/online.mp3"

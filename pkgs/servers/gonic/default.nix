@@ -38,7 +38,7 @@ buildGoModule rec {
       jukebox/jukebox.go \
       --replace \
         '"mpv"' \
-        '"${lib.getBin mpv}/bin/mpv"'
+        '"${lib.getExe mpv}"'
   '' + ''
     substituteInPlace server/ctrlsubsonic/testdata/test* \
       --replace \

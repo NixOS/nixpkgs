@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
      --subst-var-by pname ${pname}
     substituteInPlace taoup-fortune \
       --subst-var-by out $out \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace "/bin/bash" "${lib.getExe bash}"
   '';
 
   dontConfigure = true;

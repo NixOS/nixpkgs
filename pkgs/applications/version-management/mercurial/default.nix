@@ -158,7 +158,7 @@ let
     test-patchbomb-tls.t
     EOF
 
-    export HGTEST_REAL_HG="${mercurial}/bin/hg"
+    export HGTEST_REAL_HG="${lib.getExe mercurial}"
     # include tests for native components
     export HGMODULEPOLICY="rust+c"
     # extended timeout necessary for tests to pass on the busy CI workers

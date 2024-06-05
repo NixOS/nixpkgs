@@ -105,10 +105,10 @@ stdenvNoCC.mkDerivation rec {
       cp build/icon.png "$out/share/icons/hicolor/512x512/apps/Sharedown.png"
 
       # Install electron wrapper script
-      makeWrapper "${electron}/bin/electron" "$out/bin/Sharedown" \
+      makeWrapper "${lib.getExe electron}" "$out/bin/Sharedown" \
         --add-flags "$out/share/Sharedown" \
         --prefix PATH : "${binPath}" \
-        --set PUPPETEER_EXECUTABLE_PATH "${chromium}/bin/chromium"
+        --set PUPPETEER_EXECUTABLE_PATH "${lib.getExe chromium}"
 
       runHook postInstall
     '';

@@ -31,7 +31,7 @@ buildPythonPackage rec {
     ''
       substituteInPlace setup.py \
         --replace "build_cmd = [sys.executable, build_skia_py, build_dir]" \
-          'build_cmd = [sys.executable, build_skia_py, "--no-fetch-gn", "--no-virtualenv", "--gn-path", "${gn}/bin/gn", build_dir]'
+          'build_cmd = [sys.executable, build_skia_py, "--no-fetch-gn", "--no-virtualenv", "--gn-path", "${lib.getExe gn}", build_dir]'
     ''
     + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
       substituteInPlace src/cpp/skia-builder/skia/gn/skia/BUILD.gn \

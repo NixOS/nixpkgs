@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
     # Fix bash path
     substituteInPlace scripts/nixexpr2xml.in \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace "/bin/bash" "${lib.getExe bash}"
   '';
 
   preAutoreconf = ''

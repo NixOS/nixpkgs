@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
         gnused
       ]}
     substituteInPlace $dir/lpd/psconvertij2 \
-      --replace '`which gs`' "${ghostscript}/bin/gs"
+      --replace '`which gs`' "${lib.getExe ghostscript}"
     wrapProgram $dir/lpd/psconvertij2 \
       --prefix PATH : ${lib.makeBinPath [
         gnused

@@ -19,7 +19,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   ];
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."shellcheck.executablePath".default = "${shellcheck}/bin/shellcheck"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."shellcheck.executablePath".default = "${lib.getExe shellcheck}"' package.json | sponge package.json
   '';
   meta = {
     description = "Integrates ShellCheck into VS Code, a linter for Shell scripts";

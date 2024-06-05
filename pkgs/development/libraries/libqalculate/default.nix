@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patchPhase = ''
     substituteInPlace libqalculate/Calculator-plot.cc \
-      --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
+      --replace 'commandline = "gnuplot"' 'commandline = "${lib.getExe gnuplot}"' \
       --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
   '' + lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/qalc.cc \

@@ -23,9 +23,9 @@ stdenv.mkDerivation {
   pythonPath = with python3Packages; [ pygments markdown ];
 
   postPatch = ''
-    sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
+    sed -e 's|"gzip"|"${lib.getExe gzip}"|' \
         -e 's|"bzip2"|"${bzip2.bin}/bin/bzip2"|' \
-        -e 's|"lzip"|"${lzip}/bin/lzip"|' \
+        -e 's|"lzip"|"${lib.getExe lzip}"|' \
         -e 's|"xz"|"${xz.bin}/bin/xz"|' \
         -e 's|"zstd"|"${zstd}/bin/zstd"|' \
         -i ui-snapshot.c

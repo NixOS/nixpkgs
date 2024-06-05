@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     substituteInPlace rmate \
       --replace-fail \
         'echo "hostname"' \
-        'echo "${hostname}/bin/hostname"'
+        'echo "${lib.getExe hostname}"'
     patsh -f rmate -s ${builtins.storeDir}
 
     runHook preBuild

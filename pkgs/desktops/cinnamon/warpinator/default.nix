@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     # landlock mode is not supported in old kernels.
     substituteInPlace src/warpinator-launch.py \
       --replace '"/bin/python3"' '"${pythonEnv.interpreter}"' \
-      --replace "/bin/bwrap" "${bubblewrap}/bin/bwrap" \
+      --replace "/bin/bwrap" "${lib.getExe bubblewrap}" \
       --replace 'GLib.find_program_in_path("bwrap")' "True"
   '';
 

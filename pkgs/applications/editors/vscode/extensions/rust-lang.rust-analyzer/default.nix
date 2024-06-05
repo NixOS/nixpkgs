@@ -88,7 +88,7 @@ vscode-utils.buildVscodeExtension {
 
   preInstall = lib.optionalString setDefaultServerPath ''
     jq '.contributes.configuration.properties."rust-analyzer.server.path".default = $s' \
-      --arg s "${rust-analyzer}/bin/rust-analyzer" \
+      --arg s "${lib.getExe rust-analyzer}" \
       package.json | sponge package.json
   '';
 

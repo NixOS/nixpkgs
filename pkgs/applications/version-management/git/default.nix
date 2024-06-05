@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString withSsh ''
     for x in connect.c git-gui/lib/remote_add.tcl ; do
       substituteInPlace "$x" \
-        --subst-var-by ssh "${openssh}/bin/ssh"
+        --subst-var-by ssh "${lib.getExe openssh}"
     done
   '';
 

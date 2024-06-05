@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     substituteInPlace src/fPreferences.pas \
       --replace "/usr/bin/rigctld" "${hamlib}/bin/rigctld" \
       --replace "/usr/bin/rotctld" "${hamlib}/bin/rotctld" \
-      --replace "/usr/bin/xplanet" "${xplanet}/bin/xplanet"
+      --replace "/usr/bin/xplanet" "${lib.getExe xplanet}"
     substituteInPlace src/fLoTWExport.pas \
-      --replace "/usr/bin/tqsl" "${tqsl}/bin/tqsl"
+      --replace "/usr/bin/tqsl" "${lib.getExe tqsl}"
     substituteInPlace src/dUtils.pas \
-      --replace "/usr/bin/xplanet" "${xplanet}/bin/xplanet" \
+      --replace "/usr/bin/xplanet" "${lib.getExe xplanet}" \
       --replace "/usr/bin/rigctld" "${hamlib}/bin/rigctld"
     # Order is important
     substituteInPlace src/dData.pas \

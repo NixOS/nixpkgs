@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
       install -m 644 cnsetuputil* $out/usr/share/cnsetuputil2
     )
 
-    makeWrapper "${ghostscript}/bin/gs" "$out/bin/gs" \
+    makeWrapper "${lib.getExe ghostscript}" "$out/bin/gs" \
       --prefix LD_LIBRARY_PATH ":" "$out/lib" \
       --prefix PATH ":" "$out/bin"
 

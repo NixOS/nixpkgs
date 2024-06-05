@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/qtpass.cpp \
-      --replace "/usr/bin/qrencode" "${qrencode}/bin/qrencode"
+      --replace "/usr/bin/qrencode" "${lib.getExe qrencode}"
   '';
 
   buildInputs = [ git gnupg pass qtbase qtsvg ];

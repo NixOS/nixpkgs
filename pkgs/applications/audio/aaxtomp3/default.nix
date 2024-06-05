@@ -45,7 +45,7 @@ resholve.mkDerivation rec {
       "bin/aaxtomp3"
       "bin/interactiveaaxtomp3"
     ];
-    interpreter = "${bash}/bin/bash";
+    interpreter = "${lib.getExe bash}";
     inputs = [
       bc
       coreutils

@@ -19,7 +19,7 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram "$out/bin/prototool" \
-      --prefix PROTOTOOL_PROTOC_BIN_PATH : "${protobuf}/bin/protoc" \
+      --prefix PROTOTOOL_PROTOC_BIN_PATH : "${lib.getExe protobuf}" \
       --prefix PROTOTOOL_PROTOC_WKT_PATH : "${protobuf}/include"
   '';
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace matrix.lua \
-      --replace "/usr/bin/curl" "${curl}/bin/curl" \
+      --replace "/usr/bin/curl" "${lib.getExe curl}" \
       --replace "__NIX_LIB_PATH__" "$out/lib/?.so" \
       --replace "__NIX_OLM_PATH__" "$out/share/?.lua"
 

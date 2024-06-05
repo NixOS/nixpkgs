@@ -32,14 +32,14 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace bin/rivet-build.in \
       --replace 'num_jobs=$(getconf _NPROCESSORS_ONLN)' 'num_jobs=''${NIX_BUILD_CORES:-$(getconf _NPROCESSORS_ONLN)}' \
-      --replace 'which' '"${which}/bin/which"' \
+      --replace 'which' '"${lib.getExe which}"' \
       --replace 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \
       --replace 'mycxxflags="' "mycxxflags=\"$NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
   '';
 
   preInstall = ''
     substituteInPlace bin/make-plots \
-      --replace '"which"' '"${which}/bin/which"' \
+      --replace '"which"' '"${lib.getExe which}"' \
       --replace '"latex"' '"'$latex'/bin/latex"' \
       --replace '"dvips"' '"'$latex'/bin/dvips"' \
       --replace '"ps2pdf"' '"${ghostscript}/bin/ps2pdf"' \
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       --replace '"kpsewhich"' '"'$latex'/bin/kpsewhich"' \
       --replace '"convert"' '"${imagemagick.out}/bin/convert"'
     substituteInPlace bin/rivet \
-      --replace '"less"' '"${less}/bin/less"'
+      --replace '"less"' '"${lib.getExe less}"'
     substituteInPlace bin/rivet-mkhtml \
       --replace '"make-plots"' \"$out/bin/make-plots\" \
       --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\" \

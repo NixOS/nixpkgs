@@ -1,4 +1,4 @@
-{ symlinkJoin, makeWrapper, kakoune, plugins ? [], configure ? {} }:
+{ lib, symlinkJoin, makeWrapper, kakoune, plugins ? [], configure ? {} }:
 
 let
   # "plugins" is the preferred way, but some configurations may be
@@ -17,7 +17,7 @@ in
       # location of kak binary is used to find ../share/kak/autoload,
       # unless explicitly overriden with KAKOUNE_RUNTIME
       rm "$out/bin/kak"
-      makeWrapper "${kakoune}/bin/kak" "$out/bin/kak" --set KAKOUNE_RUNTIME "$out/share/kak"
+      makeWrapper "${lib.getExe kakoune}" "$out/bin/kak" --set KAKOUNE_RUNTIME "$out/share/kak"
 
       # currently kakoune ignores doc files if they are symlinks, so workaround by
       # copying doc files over, so they become regular files...

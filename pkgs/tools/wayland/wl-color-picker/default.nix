@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace Makefile \
       --replace 'which' 'ls' \
-      --replace 'grim' "${grim}/bin/grim" \
-      --replace 'slurp' "${slurp}/bin/slurp" \
+      --replace 'grim' "${lib.getExe grim}" \
+      --replace 'slurp' "${lib.getExe slurp}" \
       --replace 'convert' "${imagemagick}/bin/convert" \
-      --replace 'zenity' "${gnome.zenity}/bin/zenity" \
+      --replace 'zenity' "${lib.getExe gnome.zenity}" \
       --replace 'wl-copy' "${wl-clipboard}/bin/wl-copy"
   '';
 

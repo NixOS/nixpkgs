@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
   buildPhase = ''
     for i in Classes/MidiPlayer.cs Classes/MidiSheetMusic.cs
     do
-      substituteInPlace $i --replace "/usr/bin/timidity" "${timidity}/bin/timidity"
+      substituteInPlace $i --replace "/usr/bin/timidity" "${lib.getExe timidity}"
     done
 
     ./build.sh

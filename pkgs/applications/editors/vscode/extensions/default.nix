@@ -4903,7 +4903,7 @@ let
         ];
         postInstall = ''
           cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties.protoc.properties.path.default = "${protobuf}/bin/protoc"' package.json | sponge package.json
+          jq '.contributes.configuration.properties.protoc.properties.path.default = "${lib.getExe protobuf}"' package.json | sponge package.json
         '';
         meta = {
           license = lib.licenses.mit;

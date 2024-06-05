@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs meson_post_install.py
 
-    substituteInPlace tests/libgitg/test-commit.vala --replace-fail "/bin/bash" "${bash}/bin/bash"
+    substituteInPlace tests/libgitg/test-commit.vala --replace-fail "/bin/bash" "${lib.getExe bash}"
   '';
 
   preFixup = ''

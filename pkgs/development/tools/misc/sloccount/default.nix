@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       then
           echo "patching \`$file'..."
           substituteInPlace "$file" --replace \
-            "/usr/bin/perl" "${perl}/bin/perl"
+            "/usr/bin/perl" "${lib.getExe perl}"
       fi
     done
 

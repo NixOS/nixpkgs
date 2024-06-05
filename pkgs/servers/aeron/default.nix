@@ -99,7 +99,7 @@ in stdenv.mkDerivation {
 
   postFixup = ''
     function wrap {
-      makeWrapper "${jdk11}/bin/java" "$out/bin/$1" \
+      makeWrapper "${lib.getExe jdk11}" "$out/bin/$1" \
         --add-flags "--add-opens java.base/sun.nio.ch=ALL-UNNAMED" \
         --add-flags "--class-path ${aeronAll.jar}" \
         --add-flags "$2"

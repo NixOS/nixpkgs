@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
     # Fix various executable references
     substituteInPlace sbysrc/sby_core.py \
-      --replace '"/usr/bin/env", "bash"' '"${bash}/bin/bash"' \
+      --replace '"/usr/bin/env", "bash"' '"${lib.getExe bash}"' \
       --replace ', "btormc"'             ', "${boolector}/bin/btormc"' \
       --replace ', "aigbmc"'             ', "${aiger}/bin/aigbmc"'
 

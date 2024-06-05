@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
 
     substituteInPlace plugins/editor/external/vstgui4/vstgui/lib/platform/linux/x11fileselector.cpp \
-      --replace 'zenitypath = "zenity"' 'zenitypath = "${gnome.zenity}/bin/zenity"'
+      --replace 'zenitypath = "zenity"' 'zenitypath = "${lib.getExe gnome.zenity}"'
     substituteInPlace plugins/editor/src/editor/NativeHelpers.cpp \
       --replace '/usr/bin/zenity' '${gnome.zenity}/bin/zenity'
   '';

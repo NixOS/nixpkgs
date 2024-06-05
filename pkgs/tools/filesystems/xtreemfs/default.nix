@@ -87,13 +87,13 @@ stdenv.mkDerivation {
       --replace "/bin/bash" "${stdenv.shell}"
 
     substituteInPlace cpp/thirdparty/gtest-1.7.0/configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace "/usr/bin/file" "${lib.getExe file}"
 
     substituteInPlace cpp/thirdparty/protobuf-2.5.0/configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace "/usr/bin/file" "${lib.getExe file}"
 
     substituteInPlace cpp/thirdparty/protobuf-2.5.0/gtest/configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace "/usr/bin/file" "${lib.getExe file}"
 
     # do not put cmake into buildInputs
     export PATH="$PATH:${cmake}/bin"

@@ -29,7 +29,7 @@ buildPythonPackage rec {
   doCheck = isPy3k; # fails on linting
 
   postPatch = ''
-    sed -i 's#^_mystem_info = .*#_mystem_info = ["${mystem}/bin", "${mystem}/bin/mystem"]#' pymystem3/constants.py
+    sed -i 's#^_mystem_info = .*#_mystem_info = ["${mystem}/bin", "${lib.getExe mystem}"]#' pymystem3/constants.py
   '';
 
   meta = with lib; {

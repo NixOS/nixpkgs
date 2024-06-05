@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace i3lock-pixeled \
-       --replace i3lock    "${i3lock}/bin/i3lock" \
+       --replace i3lock    "${lib.getExe i3lock}" \
        --replace convert   "${imagemagick}/bin/convert" \
-       --replace scrot     "${scrot}/bin/scrot" \
-       --replace playerctl "${playerctl}/bin/playerctl"
+       --replace scrot     "${lib.getExe scrot}" \
+       --replace playerctl "${lib.getExe playerctl}"
   '';
 
   meta = with lib; {

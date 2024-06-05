@@ -33,7 +33,7 @@ stdenv.mkDerivation {
       --replace "which" "type -P"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace $out/bin/vpnc-script \
-      --replace "/sbin/resolvconf" "${openresolv}/bin/resolvconf" \
+      --replace "/sbin/resolvconf" "${lib.getExe openresolv}" \
       --replace "/usr/bin/resolvectl" "${systemd}/bin/resolvectl"
   '' + ''
     wrapProgram $out/bin/vpnc-script \

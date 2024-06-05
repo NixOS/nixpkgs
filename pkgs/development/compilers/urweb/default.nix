@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     export SQHEADER="${sqlite.dev}/include/sqlite3.h";
     export ICU_INCLUDES="-I${icu.dev}/include";
 
-    export CC="${gcc}/bin/gcc";
+    export CC="${lib.getExe gcc}";
     export CCARGS="-I$out/include \
                    -L${lib.getLib openssl}/lib \
                    -L${libmysqlclient}/lib \

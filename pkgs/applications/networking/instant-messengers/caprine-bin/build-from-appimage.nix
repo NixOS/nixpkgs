@@ -1,4 +1,5 @@
-{ fetchurl
+{ lib
+, fetchurl
 , appimageTools
 , xorg
 , pname
@@ -28,7 +29,7 @@ in
 
   extraInstallCommands = ''
     mkdir -p $out/share
-    "${xorg.lndir}/bin/lndir" -silent "${extracted}/usr/share" "$out/share"
+    "${lib.getExe xorg.lndir}" -silent "${extracted}/usr/share" "$out/share"
     ln -s ${extracted}/caprine.png $out/share/icons/caprine.png
     mkdir $out/share/applications
     cp ${extracted}/caprine.desktop $out/share/applications/

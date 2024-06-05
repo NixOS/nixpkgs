@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
 
       substituteInPlace libinput-gestures \
         --replace      /etc     "$out/etc" \
-        --subst-var-by libinput "${libinput}/bin/libinput" \
-        --subst-var-by wmctrl   "${wmctrl}/bin/wmctrl"
+        --subst-var-by libinput "${lib.getExe libinput}" \
+        --subst-var-by wmctrl   "${lib.getExe wmctrl}"
     '';
   installPhase =
     ''

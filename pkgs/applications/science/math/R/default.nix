@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       AWK=$(type -p gawk)
       CC=$(type -p cc)
       CXX=$(type -p c++)
-      FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
+      FC="${lib.getExe gfortran}" F77="${lib.getExe gfortran}"
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
       r_cv_have_curl728=yes

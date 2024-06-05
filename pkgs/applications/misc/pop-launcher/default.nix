@@ -22,9 +22,9 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace plugins/src/scripts/mod.rs \
         --replace '/usr/lib/pop-launcher' "$out/share/pop-launcher"
     substituteInPlace plugins/src/calc/mod.rs \
-        --replace 'Command::new("qalc")' 'Command::new("${libqalculate}/bin/qalc")'
+        --replace 'Command::new("qalc")' 'Command::new("${lib.getExe libqalculate}")'
     substituteInPlace plugins/src/find/mod.rs \
-        --replace 'spawn("fd")' 'spawn("${fd}/bin/fd")'
+        --replace 'spawn("fd")' 'spawn("${lib.getExe fd}")'
     substituteInPlace plugins/src/terminal/mod.rs \
         --replace '/usr/bin/gnome-terminal' 'gnome-terminal'
   '';

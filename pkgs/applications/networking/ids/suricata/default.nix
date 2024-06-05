@@ -84,9 +84,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace "/usr/bin/file" "${lib.getExe file}"
     substituteInPlace ./libhtp/configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace "/usr/bin/file" "${lib.getExe file}"
 
     mkdir -p bpf_stubs_workaround/gnu
     touch bpf_stubs_workaround/gnu/stubs-32.h

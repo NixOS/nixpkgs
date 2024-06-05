@@ -124,11 +124,11 @@ stdenv.mkDerivation rec {
         --replace "InaccessiblePaths=/mnt /srv /boot /media" "InaccessiblePaths=-/mnt -/srv -/boot -/media"
 
     substituteInPlace $out/lib/systemd/system/appgate-resolver.service \
-        --replace "/usr/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq" \
+        --replace "/usr/sbin/dnsmasq" "${lib.getExe dnsmasq}" \
         --replace "/opt/" "$out/opt/"
 
     substituteInPlace $out/opt/appgate/linux/nm.py \
-        --replace "/usr/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq"
+        --replace "/usr/sbin/dnsmasq" "${lib.getExe dnsmasq}"
 
     substituteInPlace $out/opt/appgate/linux/set_dns \
         --replace "/etc/appgate.conf" "$out/etc/appgate.conf"

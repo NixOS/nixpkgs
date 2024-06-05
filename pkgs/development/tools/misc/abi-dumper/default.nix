@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     substituteInPlace abi-dumper.pl \
       --replace eu-readelf ${elfutils}/bin/eu-readelf \
       --replace vtable-dumper ${vtable-dumper}/bin/vtable-dumper \
-      --replace '"ctags"' '"${ctags}/bin/ctags"'
+      --replace '"ctags"' '"${lib.getExe ctags}"'
   '';
 
   buildInputs = [ elfutils ctags perl vtable-dumper ];

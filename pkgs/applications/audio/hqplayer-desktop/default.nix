@@ -89,7 +89,7 @@ mkDerivation rec {
     done
     substituteInPlace "$doc/share/applications/hqplayer4desktop-manual.desktop" \
         --replace /usr/share/doc/hqplayer4desktop "$doc/share/doc/${pname}" \
-        --replace evince "${evince}/bin/evince"
+        --replace evince "${lib.getExe evince}"
   '';
 
   postFixup = ''

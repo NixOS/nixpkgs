@@ -29,11 +29,11 @@ in stdenv.mkDerivation {
       --replace "alias echo=/bin/echo" ""
 
     substituteInPlace ./src/config.c \
-      --replace "/usr/bin/gpg" "${gnupg}/bin/gpg" \
+      --replace "/usr/bin/gpg" "${lib.getExe gnupg}" \
       --replace "/usr/bin/vi" "vi"
 
     substituteInPlace ./mdp.1 \
-      --replace "/usr/bin/gpg" "${gnupg}/bin/gpg"
+      --replace "/usr/bin/gpg" "${lib.getExe gnupg}"
   '';
   # we add symlinks to the binary and man page with the name 'gpg-mdp', in case
   # the completely unrelated program also named 'mdp' is already installed.

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/lib/include/fwts_binpaths.h \
-      --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci" \
+      --replace "/usr/bin/lspci"      "${lib.getExe pciutils}" \
       --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode" \
       --replace "/usr/bin/iasl"       "${acpica-tools}/bin/iasl"
 

@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       mkdir -p $out/bin
       install checksec $out/bin
       substituteInPlace $out/bin/checksec \
-        --replace "/bin/sed" "${gnused}/bin/sed" \
+        --replace "/bin/sed" "${lib.getExe gnused}" \
         --replace "/usr/bin/id" "${coreutils}/bin/id" \
         --replace "/lib/libc.so.6" "${glibc}/lib/libc.so.6"
       wrapProgram $out/bin/checksec \

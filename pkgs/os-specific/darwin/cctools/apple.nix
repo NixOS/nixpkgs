@@ -71,7 +71,7 @@ ld64 = stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ld64.xcodeproj/project.pbxproj \
-      --replace "/bin/csh" "${tcsh}/bin/tcsh" \
+      --replace "/bin/csh" "${lib.getExe tcsh}" \
       --replace 'F9E8D4BE07FCAF2A00FD5801 /* PBXBuildRule */,' "" \
       --replace 'F9E8D4BD07FCAF2000FD5801 /* PBXBuildRule */,' ""
 

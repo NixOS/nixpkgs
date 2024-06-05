@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
     # ffmpeg is required for Video Clips feature
     substituteInPlace modules/MediaClipper/VideoClipper.php \
-      --replace "ffmpeg" "${ffmpeg-headless}/bin/ffmpeg"
+      --replace "ffmpeg" "${lib.getExe ffmpeg-headless}"
     substituteInPlace modules/Admin/Controllers/VideoClipsController.php \
       --replace "which ffmpeg" "echo ${ffmpeg-headless}/bin/ffmpeg"
   '';

@@ -66,7 +66,7 @@ buildPythonPackage {
   # preCheck = ''
   #   substituteInPlace Makefile \
   #     --replace "PYTHONPATH=." "" \
-  #     --replace "mypy" "${mypy}/bin/mypy"
+  #     --replace "mypy" "${lib.getExe mypy}"
   #   make generate-test-api
   # '';
 

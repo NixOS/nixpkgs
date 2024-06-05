@@ -93,7 +93,7 @@ let
       postBuild = ''
         # wrapProgram can't operate on symlinks
         rm "$out/bin/mpv"
-        makeWrapper "${mpv}/bin/mpv" "$out/bin/mpv" ${mostMakeWrapperArgs}
+        makeWrapper "${lib.getExe mpv}" "$out/bin/mpv" ${mostMakeWrapperArgs}
         rm "$out/bin/umpv"
         makeWrapper "${mpv}/bin/umpv" "$out/bin/umpv" ${umpvWrapperArgs}
       '' + lib.optionalString stdenv.isDarwin ''

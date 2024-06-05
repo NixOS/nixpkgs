@@ -80,7 +80,7 @@ mkDerivation rec {
     sed -e 's,/usr/share/X11/xkb/rules/base.lst,${xkeyboard_config}/share/X11/xkb/rules/base.lst,' \
         -i src/modules/keyboard/keyboardwidget/keyboardglobal.cpp
 
-    sed -e 's,"ckbcomp","${ckbcomp}/bin/ckbcomp",' \
+    sed -e 's,"ckbcomp","${lib.getExe ckbcomp}",' \
         -i src/modules/keyboard/keyboardwidget/keyboardpreview.cpp
 
     sed "s,\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR},''${out}/share/polkit-1/actions," \

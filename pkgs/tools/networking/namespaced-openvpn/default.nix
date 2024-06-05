@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace namespaced-openvpn \
-      --replace-fail "/usr/sbin/openvpn" "${openvpn}/bin/openvpn" \
+      --replace-fail "/usr/sbin/openvpn" "${lib.getExe openvpn}" \
       --replace-fail "/sbin/ip" "${iproute2}/bin/ip" \
       --replace-fail "/usr/bin/nsenter" "${util-linux}/bin/nsenter" \
       --replace-fail "/bin/mount" "${util-linux}/bin/mount" \

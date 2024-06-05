@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs check_smartmon.py
     substituteInPlace check_smartmon.py \
-      --replace '"/usr/sbin/smartctl"' '"${smartmontools}/bin/smartctl"'
+      --replace '"/usr/sbin/smartctl"' '"${lib.getExe smartmontools}"'
   '';
 
   installPhase = ''
