@@ -1,12 +1,9 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
+{ pkgs, ...}:
 
 with pkgs.lib;
 
 let
-  makeKafkaTest = name: { kafkaPackage, mode ? "zookeeper" }: (import ./make-test-python.nix ({
+  makeKafkaTest = name: { kafkaPackage, mode ? "zookeeper" }: (import ../make-test-python.nix ({
     inherit name;
     meta = with pkgs.lib.maintainers; {
       maintainers = [ nequissimus ];

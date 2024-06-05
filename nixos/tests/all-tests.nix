@@ -465,7 +465,7 @@ in {
   jool = import ./jool.nix { inherit pkgs runTest; };
   jotta-cli = handleTest ./jotta-cli.nix {};
   k3s = handleTest ./k3s {};
-  kafka = handleTest ./kafka.nix {};
+  kafka = handleTest ./kafka {};
   kanidm = handleTest ./kanidm.nix {};
   karma = handleTest ./karma.nix {};
   kavita = handleTest ./kavita.nix {};
