@@ -110,6 +110,12 @@ self: super: ({
         substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
       '' + (drv.postPatch or "");
     }) super.x509-system;
+  crypton-x509-system = overrideCabal (drv:
+    lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
+      postPatch = ''
+        substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
+      '' + (drv.postPatch or "");
+    }) super.crypton-x509-system;
 
   # https://github.com/haskell-foundation/foundation/pull/412
   foundation = dontCheck super.foundation;
