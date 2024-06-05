@@ -1,26 +1,32 @@
-{ lib
-, stdenv
+{ asciidoctor
+, darwin
 , fetchgit
-, asciidoctor
 , git
 , installShellFiles
-, rustPlatform
-, testers
+, jq
+, lib
+, makeWrapper
+, man-db
+, openssh
 , radicle-node
-, darwin
+, runCommand
+, rustPlatform
+, stdenv
+, testers
+, xdg-utils
 }: rustPlatform.buildRustPackage rec {
   pname = "radicle-node";
-  version = "1.0.0-rc.9";
+  version = "1.0.0-rc.10";
   env.RADICLE_VERSION = version;
 
   src = fetchgit {
     url = "https://seed.radicle.xyz/z3gqcJUoA1n9HaHKufZs5FCSGazv5.git";
     rev = "refs/namespaces/z6MksFqXN3Yhqk8pTJdUGLwATkRfQvwZXPqR2qMEhbS9wzpT/refs/tags/v${version}";
-    hash = "sha256-GFltwKc6madTJWPTeAeslmFffHtixR0Dxd+3hAnHvz0=";
+    hash = "sha256-bkP9/S9luT0tgESabt3KaaEUObx6SGxz87XLOIIrDNw=";
   };
-  cargoHash = "sha256-UM9eDWyeewWPq3+z0JWqdAsCxx6EqytuYMwLXDHOC64=";
+  cargoHash = "sha256-FDxXFhQmpWwkvAMawBTwuSXOz1UMqP83Csk9N0atlN8=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [ asciidoctor installShellFiles makeWrapper ];
   nativeCheckInputs = [ git ];
   buildInputs = lib.optionals stdenv.buildPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -36,6 +42,8 @@
   checkFlags = [
     "--skip=service::message::tests::test_node_announcement_validate"
     "--skip=tests::test_announcement_relay"
+    # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Flaky.20tests/near/438352360
+    "--skip=tests::e2e::test_connection_crossing"
   ];
 
   postInstall = ''
@@ -45,7 +53,40 @@
     done
   '';
 
-  passthru.tests.version = testers.testVersion { package = radicle-node; };
+  postFixup = ''
+    for program in $out/bin/* ;
+    do
+      wrapProgram "$program" \
+        --prefix PATH : "${lib.makeBinPath [ git man-db openssh xdg-utils ]}"
+    done
+  '';
+
+  passthru.tests =
+    let
+      package = radicle-node;
+    in
+    {
+      version = testers.testVersion { inherit package; };
+      basic = runCommand "${package.name}-basic-test"
+        {
+          nativeBuildInputs = [ jq openssh radicle-node ];
+        } ''
+        set -e
+        export RAD_HOME="$PWD/.radicle"
+        mkdir -p "$RAD_HOME/keys"
+        ssh-keygen -t ed25519 -N "" -f "$RAD_HOME/keys/radicle" > /dev/null
+        jq -n '.node.alias |= "nix"' > "$RAD_HOME/config.json"
+
+        rad config > /dev/null
+        rad debug | jq -e '
+            (.sshVersion | contains("${openssh.version}"))
+          and
+            (.gitVersion | contains("${git.version}"))
+        '
+
+        touch $out
+      '';
+    };
 
   meta = {
     description = "Radicle node and CLI for decentralized code collaboration";
