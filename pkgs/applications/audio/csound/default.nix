@@ -9,12 +9,7 @@
 , libjack2 ? null
 , liblo ? null
 , ladspa-sdk ? null
-, fluidsynth ? null
-# , gmm ? null  # opcodes don't build with gmm 5.1
-, eigen ? null
 , curl ? null
-, tcltk ? null
-, fltk ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -36,14 +31,13 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin";
 
   nativeBuildInputs = [ cmake flex bison gettext ];
-  buildInputs = [ libsndfile libsamplerate boost ]
+  buildInputs = [ libsndfile libsamplerate boost curl ]
     ++ lib.optionals stdenv.isDarwin [
       Accelerate AudioUnit CoreAudio CoreMIDI portaudio
-    ] ++ lib.optionals stdenv.isLinux (builtins.filter (optional: optional != null) [
+    ] ++ lib.optionals stdenv.isLinux [
       alsa-lib libpulseaudio libjack2
-      liblo ladspa-sdk fluidsynth eigen
-      curl tcltk fltk
-    ]);
+      liblo ladspa-sdk
+    ];
 
   postInstall = lib.optional stdenv.isDarwin ''
     mkdir -p $out/Library/Frameworks
