@@ -419,8 +419,6 @@ with pkgs;
 
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
-  catppuccin-catwalk = callPackage ../development/tools/misc/catppuccin-catwalk { };
-
   catppuccin-gtk = callPackage ../data/themes/catppuccin-gtk { };
 
   catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
