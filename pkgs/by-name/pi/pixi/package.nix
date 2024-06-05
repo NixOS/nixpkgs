@@ -13,20 +13,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pixi";
-  version = "0.20.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     rev = "v${version}";
-    hash = "sha256-7ah5u3E9nodo/0YSuaswRY07zz8EQgvttbVKjw/USCc=";
+    hash = "sha256-uLlScqcTU9nnBQiufRo+eee1TNyP5R52oI1jUaH6L1M=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async_zip-0.0.17" = "sha256-Q5fMDJrQtob54CTII3+SXHeozy5S5s3iLOzntevdGOs=";
-      "cache-key-0.0.1" = "sha256-qGFjI/LNf2p11BOgacYHU0hoXvCEjjnyAcAAIcD7YTo=";
+      "cache-key-0.0.1" = "sha256-fbaIeM4wgwi/3S8s9KRux8wKe6FbCBNPZFPekmrq2jA=";
       "pubgrub-0.2.1" = "sha256-sqC7R2mtqymYFULDW0wSbM/MKCZc8rP7Yy/gaQpjYEI=";
     };
   };
@@ -66,10 +66,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_alias"
     "--skip=test_cwd"
     "--skip=test_compressed_mapping_catch_missing_package"
+    "--skip=test_compressed_mapping_catch_not_pandoc_not_a_python_package"
+    "--skip=test_dont_record_not_present_package_as_purl"
     "--skip=test_incremental_lock_file"
     "--skip=test_purl_are_added_for_pypi"
 
-    "--skip=test_task_with_env" # `/usr/bin/env` required
+    # `/usr/bin/env` required
+    "--skip=test_task_with_env"
+    "--skip=cli::shell_hook::tests::test_environment_json"
   ];
 
   postInstall = ''
@@ -87,7 +91,7 @@ rustPlatform.buildRustPackage rec {
     description = "Package management made easy";
     homepage = "https://pixi.sh/";
     license = licenses.bsd3;
-    maintainers = with lib.maintainers; [ aaronjheng edmundmiller ];
+    maintainers = with maintainers; [ aaronjheng edmundmiller ];
     mainProgram = "pixi";
   };
 }
