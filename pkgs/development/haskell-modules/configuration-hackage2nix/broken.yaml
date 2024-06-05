@@ -3447,7 +3447,6 @@ broken-packages:
   - lenz-template # failure in job https://hydra.nixos.org/build/233206822 at 2023-09-02
   - less-arbitrary # failure in job https://hydra.nixos.org/build/233231412 at 2023-09-02
   - Level0 # failure in job https://hydra.nixos.org/build/233220758 at 2023-09-02
-  - leveldb-haskell # failure in job https://hydra.nixos.org/build/252739424 at 2024-03-16
   - level-monad # failure in job https://hydra.nixos.org/build/233257036 at 2023-09-02
   - levmar # failure in job https://hydra.nixos.org/build/233254731 at 2023-09-02
   - lfst # failure in job https://hydra.nixos.org/build/233240622 at 2023-09-02

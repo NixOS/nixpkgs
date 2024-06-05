@@ -220,10 +220,16 @@ self: super: {
   fused-effects-random = doJailbreak super.fused-effects-random;
   fused-effects-readline = doJailbreak super.fused-effects-readline;
 
-  # fix tests failure for base≥4.15 (https://github.com/kim/leveldb-haskell/pull/41)
-  leveldb-haskell = appendPatch (fetchpatch {
-    url = "https://github.com/kim/leveldb-haskell/commit/f5249081f589233890ddb1945ec548ca9fb717cf.patch";
-    sha256 = "14gllipl28lqry73c5dnclsskzk1bsrrgazibl4lkl8z98j2csjb";
+  leveldb-haskell = overrideCabal (drv: {
+    version = "2024-05-05-unstable";
+    # Fix tests on mtl ≥ 2.3
+    # https://github.com/kim/leveldb-haskell/pull/42
+    src = pkgs.fetchFromGitHub {
+      owner = "kim";
+      repo = "leveldb-haskell";
+      rev = "3a505f3a7de0f5d14463538d7c2c9a9881a60eb9";
+      sha256 = "sha256-okUn5ZuWcj8vPr0GWXvO1LygNCrDfttkDaUoOt+FLA0=";
+    };
   }) super.leveldb-haskell;
 
   # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
