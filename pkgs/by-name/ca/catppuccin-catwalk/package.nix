@@ -1,27 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, pkg-config
-, libwebp
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  pkg-config,
+  libwebp,
 }:
-
+let
+  version = "1.3.1";
+in
 rustPlatform.buildRustPackage {
   pname = "catppuccin-catwalk";
-  version = "0.1.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "toolbox";
-    rev = "b38153e94622bab574224bb24a6ae953b3a849da";
-    hash = "sha256-zZRl6Xem41pBQmEoK24YR4TKiQ84nU5phBih2TF8G8g=";
+    rev = "refs/tags/catwalk-v${version}";
+    hash = "sha256-Mk4Kv1EfaDiqLUa+aOPeoM4jFlKoUau+VuqmnazRgGI=";
   };
 
   buildAndTestSubdir = "catwalk";
-  cargoHash = "sha256-KoxivYLzJEjWbxIkizrMpmVwUF7bfVxl13H774lzQRg=";
+  cargoHash = "sha256-qxY8CUOl7fF4afJyFjGeOVk7GX/cewC/hAaJf6m5tfA=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
   buildInputs = [ libwebp ];
 
   postInstall = ''
@@ -38,11 +44,11 @@ rustPlatform.buildRustPackage {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/catppuccin/toolbox/tree/main/catwalk";
     description = "A CLI for Catppuccin that takes in four showcase images and displays them all at once";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ryanccn ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ryanccn ];
     mainProgram = "catwalk";
   };
 }

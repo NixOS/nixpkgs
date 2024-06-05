@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pypugjs";
-  version = "5.9.12";
+  version = "5.10.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kakulukia";
     repo = "pypugjs";
-    rev = "v${version}";
-    hash = "sha256-6tIhKCa8wg01gNFygCS6GdUHfbWBu7wOZeMkCExRR34=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-W+EVNxT2OimNENHe4lJDn6Wm1EbBysGuCD3/Wkdew/U=";
   };
 
   propagatedBuildInputs = [
