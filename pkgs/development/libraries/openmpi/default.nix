@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, removeReferencesTo, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
-, libpsm2, libfabric, pmix, ucx, ucc, prrte, makeWrapper
+, libpsm2, libfabric, pmix, ucx, ucc, prrte, makeWrapper, python3
 , config
 
 # Enable CUDA support
@@ -62,13 +62,15 @@ stdenv.mkDerivation rec {
     export SOURCE_DATE_EPOCH=0
   '';
 
-  outputs = [ "out" "man" "dev" ];
+  # Split output is too fragile. Limit to Linux.
+  outputs = if stdenv.isLinux then [ "out" "man" "dev" ] else [ "out" ];
 
   buildInputs = [ zlib libevent hwloc ]
     ++ lib.optionals stdenv.isLinux [ numactl pmix ucx ucc prrte ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
-    ++ lib.optionals fabricSupport [ libpsm2 libfabric ];
+    ++ lib.optionals fabricSupport [ libpsm2 libfabric ]
+    ++ lib.optional (!stdenv.isLinux) python3; # needed for internal pmix
 
   nativeBuildInputs = [ perl removeReferencesTo makeWrapper ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
@@ -87,11 +89,12 @@ stdenv.mkDerivation rec {
       "--with-psm2=${lib.getDev libpsm2}"
       "--with-libfabric=${lib.getDev libfabric}"
       "--with-libfabric-libdir=${lib.getLib libfabric}/lib"
-    ];
+    ]
+    ++ lib.optional (!stdenv.isLinux) "--with-pmix=internal";
 
   enableParallelBuilding = true;
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;
 
     # Move compiler wrappers to $dev
@@ -110,7 +113,7 @@ stdenv.mkDerivation rec {
     moveToOutput "share/openmpi/ortecc-wrapper-data.txt" "''${!outputDev}"
    '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     # These reference are caused by hard coded "configure options"
     remove-references-to -t $dev $out/bin/mpirun
     remove-references-to -t $dev $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
@@ -123,15 +126,21 @@ stdenv.mkDerivation rec {
 
     # default compilers should be identical to the compilers at build time
     for api in mpi shmem; do
-      sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
-        $dev/share/openmpi/''${api}cc-wrapper-data.txt
-      sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++:' \
-        $dev/share/openmpi/''${api}c++-wrapper-data.txt
+      if [ -e $dev/share/openmpi/''${api}cc-wrapper-data.txt ]; then
+        sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
+          $dev/share/openmpi/''${api}cc-wrapper-data.txt
+      fi
+      if [ -e $dev/share/openmpi/''${api}c++-wrapper-data.txt ]; then
+        sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++:' \
+          $dev/share/openmpi/''${api}c++-wrapper-data.txt
+      fi
     done
-  '' + lib.optionalString fortranSupport ''
+  '' + lib.optionalString (fortranSupport && stdenv.isLinux) ''
     for api in mpi shmem; do
-      sed -i 's:compiler=.*:compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran:'  \
-        $dev/share/openmpi/''${api}fort-wrapper-data.txt
+      if [ -e $dev/share/openmpi/''${api}fort-wrapper-data.txt ]; then
+        sed -i 's:compiler=.*:compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran:'  \
+          $dev/share/openmpi/''${api}fort-wrapper-data.txt
+      fi
     done
   '';
 
