@@ -13,7 +13,21 @@ import ./make-test-python.nix (
         networking.firewall.allowedTCPPorts = [
           sshAuditPort
         ];
-        services.openssh.enable = true;
+        services.openssh = {
+          enable = true;
+          settings = {
+            # An arbitrary minimum that passes ssh-audit.
+            KexAlgorithms = [
+              "curve25519-sha256"
+            ];
+            Ciphers = [
+              "chacha20-poly1305@openssh.com"
+            ];
+            Macs = [
+              "hmac-sha2-512-etm@openssh.com"
+            ];
+          };
+        };
         users.users."${sshUsername}" = {
           isNormalUser = true;
           openssh.authorizedKeys.keys = [
