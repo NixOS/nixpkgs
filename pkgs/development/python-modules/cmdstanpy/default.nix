@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "cmdstanpy";
-  version = "1.2.3";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PV7W1H4QYIOx1EHrGljrGUhCH1Y8ZPd9gEtCocc7x64=";
+    hash = "sha256-q+AFhWEzjYElJpiHT4h6YfZrwZJ56pv+8R+001vREyQ=";
   };
 
   patches = [
