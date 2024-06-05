@@ -1501,8 +1501,6 @@ with pkgs;
 
   acme-sh = callPackage ../tools/admin/acme-sh { };
 
-  acousticbrainz-client = callPackage ../tools/audio/acousticbrainz-client { };
-
   alsaequal = callPackage ../tools/audio/alsaequal { };
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
