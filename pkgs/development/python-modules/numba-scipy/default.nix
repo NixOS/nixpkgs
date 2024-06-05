@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -39,7 +38,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "numba_scipy" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Extends Numba to make it aware of SciPy";
     homepage = "https://github.com/numba/numba-scipy";
     changelog = "https://github.com/numba/numba-scipy/blob/master/CHANGE_LOG";
