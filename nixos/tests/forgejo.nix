@@ -41,6 +41,8 @@ let
     hash = "sha256-h2/UIp8IjPo3eE4Gzx52Fb7pcgG/Ww7u31w5fdKVMos=";
   };
 
+  metricSecret = "fakesecret";
+
   supportedDbTypes = [ "mysql" "postgres" "sqlite3" ];
   makeForgejoTest = type: nameValuePair type (makeTest {
     name = "forgejo-${type}";
@@ -59,6 +61,8 @@ let
             ENABLE_PUSH_CREATE_USER = true;
             DEFAULT_PUSH_CREATE_PRIVATE = false;
           };
+          settings.metrics.ENABLED = true;
+          secrets.metrics.TOKEN = pkgs.writeText "metrics_secret" metricSecret;
         };
         environment.systemPackages = [ config.services.forgejo.package pkgs.gnupg pkgs.jq pkgs.file pkgs.htmlq ];
         services.openssh.enable = true;
@@ -191,6 +195,10 @@ let
             + '-H "Accept: application/json" | jq length)" = "1"',
             timeout=10
         )
+
+        with subtest("Testing /metrics endpoint with token from cfg.secrets"):
+            server.fail("curl --fail http://localhost:3000/metrics")
+            server.succeed('curl --fail http://localhost:3000/metrics -H "Authorization: Bearer ${metricSecret}"')
 
         with subtest("Testing runner registration and action workflow"):
             server.succeed(
