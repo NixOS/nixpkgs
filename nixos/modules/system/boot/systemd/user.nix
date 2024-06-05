@@ -53,7 +53,105 @@ let
         ${concatStringsSep "\n" rules}
       '';
     };
-in {
+
+  writeTmpfilesSettings = {settings, user ? null }:
+    let
+      suffix = optionalString (user != null) "-${user}";
+    in
+    mapAttrsToList (name: paths:
+      pkgs.writeTextFile {
+        name = "nixos-user-tmpfiles.d${suffix}-settings";
+        destination = "/etc/xdg/user-tmpfiles.d/${name}${suffix}.conf";
+        text = ''
+          # This file is created automatically and should not be modified.
+          # Please change the options ‘systemd.user.tmpfiles’ instead.
+          ${(concatStrings (mapAttrsToList (path: types:
+            concatStrings (mapAttrsToList (_type: entry: ''
+              '${entry.type}' '${path}' '${entry.mode}' '${entry.user}' '${entry.group}' '${entry.age}' ${entry.argument}
+            '') types)
+          ) paths ))}
+        '';
+      }
+    ) settings;
+
+  tmpfilesSettingsType = types.attrsOf (types.attrsOf (types.attrsOf (types.submodule ({ name, config, ... }: {
+    options.type = mkOption {
+      type = types.str;
+      default = name;
+      example = "d";
+      description = ''
+        The type of operation to perform on the file.
+
+        The type consists of a single letter and optionally one or more
+        modifier characters.
+
+        Please see the upstream documentation for the available types and
+        more details:
+        <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
+      '';
+    };
+    options.mode = mkOption {
+      type = types.str;
+      default = "-";
+      example = "0755";
+      description = ''
+        The file access mode to use when creating this file or directory.
+      '';
+    };
+    options.user = mkOption {
+      type = types.str;
+      default = "-";
+      example = "root";
+      description = ''
+        The user of the file.
+
+        This may either be a numeric ID or a user/group name.
+
+        If omitted or when set to `"-"`, the user and group of the user who
+        invokes systemd-tmpfiles is used.
+      '';
+    };
+    options.group = mkOption {
+      type = types.str;
+      default = "-";
+      example = "root";
+      description = ''
+        The group of the file.
+
+        This may either be a numeric ID or a user/group name.
+
+        If omitted or when set to `"-"`, the user and group of the user who
+        invokes systemd-tmpfiles is used.
+      '';
+    };
+    options.age = mkOption {
+      type = types.str;
+      default = "-";
+      example = "10d";
+      description = ''
+        Delete a file when it reaches a certain age.
+
+        If a file or directory is older than the current time minus the age
+        field, it is deleted.
+
+        If set to `"-"` no automatic clean-up is done.
+      '';
+    };
+    options.argument = mkOption {
+      type = types.str;
+      default = "";
+      example = "";
+      description = ''
+        An argument whose meaning depends on the type of operation.
+
+        Please see the upstream documentation for the meaning of this
+        parameter in different situations:
+        <https://www.freedesktop.org/software/systemd/man/tmpfiles.d>
+      '';
+    };
+  }))));
+in
+{
   options = {
     systemd.user.extraConfig = mkOption {
       default = "";
@@ -120,6 +218,26 @@ in {
         '';
       };
 
+      settings = mkOption {
+        default = {};
+        description = ''
+          Global user rules to create, delete, and clean up volatile
+          and temporary files and directories.
+
+          Even though the service is called `*tmp*files` you can also create
+          persistent files.
+        '';
+        example = {
+          "10-mypackage" = {
+            "%h/.config/configfile".d = {
+              mode = "0755";
+              text = "example";
+            };
+          };
+        };
+        type = tmpfilesSettingsType;
+      };
+
       users = mkOption {
         description = ''
           Per-user rules for creation, deletion and cleaning of volatile and
@@ -138,6 +256,26 @@ in {
                 {manpage}`tmpfiles.d(5)`
                 for the exact format.
               '';
+            };
+
+            settings = mkOption {
+              default = {};
+              description = ''
+                Per-user rules to create, delete, and clean up volatile
+                and temporary files and directories.
+
+                Even though the service is called `*tmp*files` you can also create
+                persistent files.
+              '';
+              example = {
+                "10-mypackage" = {
+                  "%h/.config/configfile".d = {
+                    mode = "0755";
+                    text = "example";
+                  };
+                };
+              };
+              type = tmpfilesSettingsType;
             };
           };
         });
@@ -221,7 +359,7 @@ in {
     # enable systemd user tmpfiles
     systemd.user.services.systemd-tmpfiles-setup.wantedBy =
       optional
-        (cfg.tmpfiles.rules != [] || any (cfg': cfg'.rules != []) (attrValues cfg.tmpfiles.users))
+        (cfg.tmpfiles.rules != [] || cfg.tmpfiles.settings != {} || any (cfg': cfg'.rules != [] || cfg'.settings != {}) (attrValues cfg.tmpfiles.users))
         "basic.target";
 
     # /run/current-system/sw/etc/xdg is in systemd's $XDG_CONFIG_DIRS so we can
@@ -229,16 +367,25 @@ in {
     environment.systemPackages =
       optional
         (cfg.tmpfiles.rules != [])
-        (writeTmpfiles { inherit (cfg.tmpfiles) rules; });
+        (writeTmpfiles { inherit (cfg.tmpfiles) rules; }) ++
+      optionals
+        (cfg.tmpfiles.settings != {})
+        (writeTmpfilesSettings { inherit (cfg.tmpfiles) settings; }
+      );
 
     # /etc/profiles/per-user/$USER/etc/xdg is in systemd's $XDG_CONFIG_DIRS so
     # we can write a single user's tmpfiles.d rules there
     users.users =
       mapAttrs
         (user: cfg': {
-          packages = optional (cfg'.rules != []) (writeTmpfiles {
+          packages =
+          optional (cfg'.rules != []) (writeTmpfiles {
             inherit (cfg') rules;
             inherit user;
+          }) ++
+          optionals (cfg'.settings != {}) (writeTmpfilesSettings {
+              inherit (cfg') settings;
+              inherit user;
           });
         })
         cfg.tmpfiles.users;
