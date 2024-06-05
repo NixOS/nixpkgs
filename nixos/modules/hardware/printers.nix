@@ -13,7 +13,7 @@ let
     } // optionalAttrs (p.description != null) {
       D = p.description;
     } // optionalAttrs (p.ppdOptions != {}) {
-      o = mapAttrsToList (name: value: "'${name}'='${value}'") p.ppdOptions;
+      o = mapAttrsToList (name: value: "${name}=${value}") p.ppdOptions;
     });
   in ''
     ${pkgs.cups}/bin/lpadmin ${args} -E
