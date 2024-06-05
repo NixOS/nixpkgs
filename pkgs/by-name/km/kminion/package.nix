@@ -19,6 +19,13 @@ buildGoModule rec {
 
   doCheck = false;
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.builtAt=unknown"
+  ];
+
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
