@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   substituteAll,
   cmdstan,
   pythonRelaxDepsHook,
@@ -17,20 +18,25 @@
 
 buildPythonPackage rec {
   pname = "cmdstanpy";
-  version = "1.2.1";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q+AFhWEzjYElJpiHT4h6YfZrwZJ56pv+8R+001vREyQ=";
+    hash = "sha256-PV7W1H4QYIOx1EHrGljrGUhCH1Y8ZPd9gEtCocc7x64=";
   };
 
   patches = [
     (substituteAll {
       src = ./use-nix-cmdstan-path.patch;
       cmdstan = "${cmdstan}/opt/cmdstan";
+    })
+    # Fix seed-dependent tests
+    (fetchpatch {
+      url = "https://github.com/stan-dev/cmdstanpy/commit/c72acd0b8123c02b47d5d583bdd7d8408b04562c.patch";
+      hash = "sha256-cliyDDko4spYa62DMwWBavy5pePkofJo4Kf8I0RzueM=";
     })
   ];
 
@@ -75,6 +81,9 @@ buildPythonPackage rec {
       # These tests use the flag -DSTAN_THREADS which doesn't work in cmdstan (missing file)
       "test_multi_proc_threads"
       "test_compile_force"
+      # These tests require a writeable cmdstan source directory
+      "test_pathfinder_threads"
+      "test_save_profile"
     ]
     ++ lib.optionals stdenv.isDarwin [
       "test_init_types" # CmdStan error: error during processing Operation not permitted
