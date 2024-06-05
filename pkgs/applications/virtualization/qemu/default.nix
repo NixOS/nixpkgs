@@ -223,6 +223,11 @@ stdenv.mkDerivation (finalAttrs: {
     for f in $out/bin/qemu-system-*; do
       wrapGApp $f
     done
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    # HACK: Otherwise the result will have the entire buildInputs closure
+    # injected by the pkgsStatic stdenv
+    # <https://github.com/NixOS/nixpkgs/issues/83667>
+    rm -f $out/nix-support/propagated-build-inputs
   '';
   preBuild = "cd build";
 
