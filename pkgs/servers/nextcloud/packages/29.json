@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "sha256": "0i070c5a66yxs8h7w6r9wi0n1bf41q4vrhvwr4vybi1siwr3psv6",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.0.2/bookmarks-14.0.2.tar.gz",
-    "version": "14.0.2",
+    "sha256": "1i003cp6x4hw3zkaf49a0srkgr257fbv3p612whd1nsbm2mfd2mf",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.1.1/bookmarks-14.1.1.tar.gz",
+    "version": "14.1.1",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
@@ -70,9 +70,9 @@
     ]
   },
   "forms": {
-    "sha256": "0ca627nyrs61k5990j3m1l7vxavsh8x8rrhfvk01pdl9f1556jmf",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.2.3/forms-v4.2.3.tar.gz",
-    "version": "4.2.3",
+    "sha256": "1hwc7ra12nsr79xp8lkv3ip46bxxbjpaglb0a4k06ikfnzjaddny",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.2.4/forms-v4.2.4.tar.gz",
+    "version": "4.2.4",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -170,9 +170,9 @@
     ]
   },
   "notify_push": {
-    "sha256": "1w0nb74q5ishwsd9xhgjlp5ik159xjfp5i2cczi0fmwlb185n1ik",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.11/notify_push-v0.6.11.tar.gz",
-    "version": "0.6.11",
+    "sha256": "14s8g3dqwrxjz1zww64n1lhwdb8374wr1b5v76xhawypmfz2a68h",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.12/notify_push-v0.6.12.tar.gz",
+    "version": "0.6.12",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
@@ -180,9 +180,9 @@
     ]
   },
   "onlyoffice": {
-    "sha256": "1h4jjphpqzxmnx300fkj0gf831sb61r8vxd3w9vnj4v38mxdmcc0",
-    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.2.0/onlyoffice.tar.gz",
-    "version": "9.2.0",
+    "sha256": "1vflj70q8d0hrfck9c5l1k4qa38gpdh3zjgx4aqamnlbvkfssk7h",
+    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.2.2/onlyoffice.tar.gz",
+    "version": "9.2.2",
     "description": "ONLYOFFICE connector allows you to view, edit and collaborate on text documents, spreadsheets and presentations within Nextcloud using ONLYOFFICE Docs. This will create a new Edit in ONLYOFFICE action within the document library for Office documents. This allows multiple users to co-author documents in real time from the familiar web interface and save the changes back to your file storage.",
     "homepage": "https://www.onlyoffice.com",
     "licenses": [
