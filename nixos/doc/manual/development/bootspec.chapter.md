@@ -1,17 +1,17 @@
-# Experimental feature: Bootspec {#sec-experimental-bootspec}
+# Bootspec {#sec-bootspec}
 
-Bootspec is a experimental feature, introduced in the [RFC-0125 proposal](https://github.com/NixOS/rfcs/pull/125), the reference implementation can be found [there](https://github.com/NixOS/nixpkgs/pull/172237) in order to standardize bootloader support
+Bootspec is a feature, introduced in the [RFC-0125 proposal](https://github.com/NixOS/rfcs/pull/125), the reference implementation can be found [there](https://github.com/NixOS/nixpkgs/pull/172237) in order to standardize bootloader support
 and advanced boot workflows such as SecureBoot and potentially more.
 
 The creation of bootspec documents is enabled by default.
 
-## Schema {#sec-experimental-bootspec-schema}
+## Schema {#sec-bootspec-schema}
 
 The bootspec schema is versioned and validated against [a CUE schema file](https://cuelang.org/) which should considered as the source of truth for your applications.
 
 You will find the current version [here](../../../modules/system/activation/bootspec.cue).
 
-## Extensions mechanism {#sec-experimental-bootspec-extensions}
+## Extensions mechanism {#sec-bootspec-extensions}
 
 Bootspec cannot account for all usecases.
 
@@ -29,7 +29,7 @@ An example for SecureBoot is to get the Nix store path to `/etc/os-release` in o
 
 To reduce incompatibility and prevent names from clashing between applications, it is **highly recommended** to use a unique namespace for your extensions.
 
-## External bootloaders {#sec-experimental-bootspec-external-bootloaders}
+## External bootloaders {#sec-bootspec-external-bootloaders}
 
 It is possible to enable your own bootloader through [`boot.loader.external.installHook`](options.html#opt-boot.loader.external.installHook) which can wrap an existing bootloader.
 
