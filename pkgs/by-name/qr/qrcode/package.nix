@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, unstableGitUpdater }:
 
 stdenv.mkDerivation {
   pname = "qrcode";
@@ -19,11 +19,13 @@ stdenv.mkDerivation {
     cp DOCUMENTATION LICENCE "$out/share/doc/qrcode"
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
     description = "A small QR-code tool";
     homepage = "https://github.com/qsantos/qrcode";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin lucasew ];
     platforms = with platforms; unix;
     mainProgram = "qrcode";
   };

@@ -33888,8 +33888,6 @@ with pkgs;
 
   qpwgraph = qt6Packages.callPackage ../applications/audio/qpwgraph { };
 
-  qrcode = callPackage ../tools/graphics/qrcode { };
-
   qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
 
   qscreenshot = libsForQt5.callPackage ../applications/graphics/qscreenshot { };
