@@ -55,7 +55,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "xapp" ];
 
-  passthru.updateScript = gitUpdater { ignoredVersions = "^master.*"; };
+  passthru = {
+    updateScript = gitUpdater { ignoredVersions = "^master.*"; };
+    skipBulkUpdate = true; # This should be bumped as part of Cinnamon update.
+  };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/python-xapp";
