@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "xapp";
-  version = "21";
+  version = "2.4.1";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "python-xapp";
-    rev = "refs/tags/master.mint${version}";
+    rev = version;
     hash = "sha256-Kvhp+biZ+KK9FYma/8cUEaQCHPKMLjOO909kbyMLQ3o=";
   };
 
