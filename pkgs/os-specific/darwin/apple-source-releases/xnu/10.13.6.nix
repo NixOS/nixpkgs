@@ -32,12 +32,6 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
     substituteInPlace makedefs/MakeInc.top \
       --replace-fail "MEMORY_SIZE := " 'MEMORY_SIZE := 1073741824 # '
 
-    substituteInPlace libkern/kxld/Makefile \
-      --replace-fail "-Werror " ""
-
-    substituteInPlace SETUP/kextsymboltool/Makefile \
-      --replace-fail "-lstdc++" "-lc++ -lc++abi"
-
     substituteInPlace libsyscall/xcodescripts/mach_install_mig.sh \
       --replace-fail "/usr/include" "/include" \
       --replace-fail 'MIG=`' "# " \
