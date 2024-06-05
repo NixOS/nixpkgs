@@ -123,3 +123,38 @@ they were declared in separate modules. This can be done using
     ];
 }
 ```
+
+## Defining Over All Elements/Attributes {#sec-option-definitions-for-all-items}
+
+For options that take lists or attrsets, it may be useful to define
+defaults or overrides on all of the elements or attributes of that option
+independently of the population of the list or set. For example, one
+module can define a list of `swapDevices`, while another module can
+define that for every element of the list of `swapDevices`,
+`swapDevices.*.discardPolicy` should have a particular value. This can be
+done using `mkForAllItems`:
+
+```nix
+{
+  swapDevices = mkForAllItems {
+    discardPolicy = mkDefault "once";
+  };
+}
+```
+
+The argument to `mkForAllItems` will be merged with every element of the
+list, or every attribute of the attrset. As usual, use `mkDefault`,
+`mkForce`, `mkBefore`, `mkAfter`, etc. to control how multiple
+definitions of an option are combined.
+
+`mkForAllItems` can also accept a function which will receive the element
+index (starting at 1) or attribute name for each element or attribute on
+which it is used. The result of this function is used as described above. For example:
+
+```nix
+{
+  services.wordpress.sites = mkForAllItems (name: {
+    uploadsDir = mkDefault "/mnt/wordpress-data/${name}/uploads";
+  });
+}
+```
