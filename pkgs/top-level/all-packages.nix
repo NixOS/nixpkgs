@@ -5025,6 +5025,8 @@ with pkgs;
 
   easyabc = callPackage ../applications/audio/easyabc { };
 
+  easyaudiosync = qt6Packages.callPackage ../applications/audio/easyaudiosync {};
+
   easycrypt = callPackage ../applications/science/logic/easycrypt {
     why3 = pkgs.why3.override { ideSupport = false; };
   };
@@ -27649,8 +27651,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  ols = callPackage ../development/tools/ols { };
-
   openpam = callPackage ../development/libraries/openpam { };
 
   openbsm = callPackage ../development/libraries/openbsm { };
@@ -32846,8 +32846,6 @@ with pkgs;
 
   motif = callPackage ../development/libraries/motif { };
 
-  mousai = callPackage ../applications/audio/mousai { };
-
   mozjpeg = callPackage ../applications/graphics/mozjpeg { };
 
   edgetx = libsForQt5.callPackage ../applications/misc/edgetx { };
@@ -37896,7 +37894,7 @@ with pkgs;
 
   minia = callPackage ../applications/science/biology/minia { };
 
-  mirtk = callPackage ../development/libraries/science/biology/mirtk { };
+  mirtk = callPackage ../development/libraries/science/biology/mirtk { itk = itk_5_2; };
 
   muscle = callPackage ../applications/science/biology/muscle { };
 
