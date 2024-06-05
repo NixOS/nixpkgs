@@ -1,8 +1,7 @@
 { lib
 , llvmPackages_15
-, fetchFromGitHub
+, fetchzip
 , sbcl
-, git
 , pkg-config
 , fmt_9
 , gmpxx
@@ -15,39 +14,28 @@
 
 let
   inherit (llvmPackages_15) stdenv llvm libclang;
-
-  # Gathered from https://github.com/clasp-developers/clasp/raw/2.2.0/repos.sexp
-  dependencies = import ./dependencies.nix {
-    inherit fetchFromGitHub;
-  };
-
-  # Shortened version of `_defaultUnpack`
-  unpackDependency = elem: ''
-    mkdir -p "source/${elem.directory}"
-    cp -pr --reflink=auto -- ${elem.src}/* "source/${elem.directory}"
-    chmod -R u+w -- "source/${elem.directory}"
-  '';
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "clasp";
-  version = "2.2.0";
+  version = "2.6.0";
 
-  src = fetchFromGitHub {
-    owner = "clasp-developers";
-    repo = "clasp";
-    rev = "2.2.0";
-    hash = "sha256-gvUqUb0dftW1miiBcAPJur0wOunox4y2SUYeeJpR9R4=";
+  src = fetchzip {
+    url = "https://github.com/clasp-developers/clasp/releases/download/${version}/clasp-${version}.tar.gz";
+    hash = "sha256-SiQ4RMha6dMV7V2fh+UxtAIgEEH/6/hF9fe+bPtoGIw=";
   };
 
   patches = [
-    ./clasp-pin-repos-commits.patch
     ./remove-unused-command-line-argument.patch
   ];
 
+  # Workaround for https://github.com/clasp-developers/clasp/issues/1590
+  postPatch = ''
+    echo '(defmethod configure-unit (c (u (eql :git))))' >> src/koga/units.lisp
+  '';
+
   nativeBuildInputs = [
     sbcl
-    git
     pkg-config
     fmt_9
     gmpxx
@@ -61,13 +49,12 @@ stdenv.mkDerivation {
 
   ninjaFlags = [ "-C" "build" ];
 
-  postUnpack = lib.concatStringsSep "\n" (builtins.map unpackDependency dependencies);
-
   configurePhase = ''
     export SOURCE_DATE_EPOCH=1
     export ASDF_OUTPUT_TRANSLATIONS=$(pwd):$(pwd)/__fasls
     sbcl --script koga \
       --skip-sync \
+      --build-mode=bytecode-faso \
       --cc=$NIX_CC/bin/cc \
       --cxx=$NIX_CC/bin/c++ \
       --reproducible-build \
