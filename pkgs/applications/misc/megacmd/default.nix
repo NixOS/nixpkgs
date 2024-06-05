@@ -9,6 +9,7 @@
   # to be re-enabled when patch available
   # , ffmpeg
 , gcc-unwrapped
+, icu
 , libmediainfo
 , libraw
 , libsodium
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "megacmd";
-  version = "1.6.3";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAcmd";
     rev = "${version}_Linux";
-    sha256 = "sha256-JnxfFbM+NyeUrEMok62zlsQIxjrUvLLg4tUTiKPDZFc=";
+    sha256 = "sha256-UlSqwM8GQKeG8/K0t5DbM034NQOeBg+ujNi/MMsVCuM=";
     fetchSubmodules = true;
   };
 
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     cryptopp
     curl
     # ffmpeg
+    icu
     gcc-unwrapped
     libmediainfo
     libraw
@@ -59,6 +61,7 @@ stdenv.mkDerivation rec {
     "--with-curl"
     # "--with-ffmpeg"
     "--without-freeimage" # disabled as freeimage is insecure
+    "--with-icu"
     "--with-libmediainfo"
     "--with-libuv"
     "--with-libzen"

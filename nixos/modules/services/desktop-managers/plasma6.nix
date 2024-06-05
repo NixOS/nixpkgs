@@ -142,7 +142,6 @@ in {
         okular
         kate
         khelpcenter
-        print-manager
         dolphin
         dolphin-plugins
         spectacle
@@ -168,12 +167,13 @@ in {
         )
         kio-extras-kf5
       ]
-      # Optional hardware support features
+      # Optional and hardware support features
       ++ lib.optionals config.hardware.bluetooth.enable [bluedevil bluez-qt pkgs.openobex pkgs.obexftp]
       ++ lib.optional config.networking.networkmanager.enable plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
       ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
       ++ lib.optional config.powerManagement.enable powerdevil
+      ++ lib.optional config.services.printing.enable print-manager
       ++ lib.optional config.services.colord.enable colord-kde
       ++ lib.optional config.services.hardware.bolt.enable plasma-thunderbolt
       ++ lib.optional config.services.samba.enable kdenetwork-filesharing
