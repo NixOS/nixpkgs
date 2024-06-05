@@ -87,6 +87,9 @@ buildPythonPackage rec {
     homepage = "https://mujoco.org/";
     changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ tmplt ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      tmplt
+    ];
   };
 }
