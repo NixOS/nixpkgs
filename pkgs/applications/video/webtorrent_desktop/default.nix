@@ -12,12 +12,14 @@ buildNpmPackage {
   patches = [
     # electron 27 fix
     (fetchpatch {
-      url = "https://github.com/webtorrent/webtorrent-desktop/pull/2388.patch";
+      name = "2388.patch"; # https://github.com/webtorrent/webtorrent-desktop/pull/2388
+      url = "https://github.com/webtorrent/webtorrent-desktop/compare/ebaf9cf8487dbd9e14a9a0c5adc3eab23b199e58...0c3e55d1f091bf66a342e2732550ebeccc2e4169.patch";
       hash = "sha256-gam5oAZtsaiCNFwecA5ff0nhraySLx3SOHlb/js+cPM=";
     })
     # startup fix
     (fetchpatch {
-      url = "https://github.com/webtorrent/webtorrent-desktop/pull/2389.patch";
+      name = "2389.patch"; # https://github.com/webtorrent/webtorrent-desktop/pull/2389
+      url = "https://github.com/webtorrent/webtorrent-desktop/commit/407046d150ed7ff876a5e1978f68630e9c8f0074.patch";
       hash = "sha256-hBJGLNNjcGRhYOFlLm/RL0po+70tEeJtR6Y/CfacPAI=";
     })
   ];
