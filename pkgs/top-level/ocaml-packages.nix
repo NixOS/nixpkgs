@@ -480,6 +480,8 @@ let
 
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
+    ezjsonm-encoding = callPackage ../development/ocaml-modules/ezjsonm-encoding { };
+
     ezxmlm = callPackage ../development/ocaml-modules/ezxmlm { };
 
     ### F ###
