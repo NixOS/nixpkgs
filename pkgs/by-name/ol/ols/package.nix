@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, makeBinaryWrapper, unstableGitUpdater, odin, lib }:
+{
+  fetchFromGitHub,
+  lib,
+  makeBinaryWrapper,
+  odin,
+  stdenv,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation {
   pname = "ols";
@@ -11,21 +18,13 @@ stdenv.mkDerivation {
     hash = "sha256-zvojGIxMGawddWx5vnBQMTybz+jL9LXfaShbof7wwq0=";
   };
 
-  passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
-  };
-
-  nativeBuildInputs = [
-    makeBinaryWrapper
-  ];
-
-  buildInputs = [
-    odin
-  ];
-
   postPatch = ''
     patchShebangs build.sh
   '';
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
+  buildInputs = [ odin ];
 
   buildPhase = ''
     runHook preBuild
@@ -44,12 +43,17 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
+
+  meta = {
     inherit (odin.meta) platforms;
     description = "Language server for the Odin programming language";
-    mainProgram = "ols";
     homepage = "https://github.com/DanielGavin/ols";
-    license = licenses.mit;
-    maintainers = with maintainers; [ astavie znaniye ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      astavie
+      znaniye
+    ];
+    mainProgram = "ols";
   };
 }
