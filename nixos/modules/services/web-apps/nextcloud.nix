@@ -105,11 +105,6 @@ let
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
   nextcloudGreaterOrEqualThan = versionAtLeast cfg.package.version;
-  nextcloudOlderThan = versionOlder cfg.package.version;
-
-  # https://github.com/nextcloud/documentation/pull/11179
-  ocmProviderIsNotAStaticDirAnymore = nextcloudGreaterOrEqualThan "27.1.2"
-    || (nextcloudOlderThan "27.0.0" && nextcloudGreaterOrEqualThan "26.0.8");
 
   overrideConfig = let
     c = cfg.config;
@@ -1138,7 +1133,7 @@ in {
             priority = 500;
             extraConfig = ''
               # legacy support (i.e. static files and directories in cfg.package)
-              rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[s${optionalString (!ocmProviderIsNotAStaticDirAnymore) "m"}]-provider\/.+|.+\/richdocumentscode\/proxy) /index.php$request_uri;
+              rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[s]-provider\/.+|.+\/richdocumentscode\/proxy) /index.php$request_uri;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
               fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
               set $path_info $fastcgi_path_info;
@@ -1165,7 +1160,7 @@ in {
               default_type application/wasm;
             }
           '';
-          "~ ^\\/(?:updater|ocs-provider${optionalString (!ocmProviderIsNotAStaticDirAnymore) "|ocm-provider"})(?:$|\\/)".extraConfig = ''
+          "~ ^\\/(?:updater|ocs-provider)(?:$|\\/)".extraConfig = ''
             try_files $uri/ =404;
             index index.php;
           '';
