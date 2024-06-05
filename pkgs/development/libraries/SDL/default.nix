@@ -1,8 +1,9 @@
-{ lib, stdenv, config, fetchurl, fetchpatch, pkg-config, audiofile, libcap, libiconv
+{ lib, stdenv, config, fetchurl, fetchpatch, pkg-config, audiofile, libcap, libiconv, libcaca
 , libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL
 , openglSupport ? libGLSupported, libGL, libGLU
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, cacaSupport ? x11Support || stdenv.isDarwin
 , libXext, libICE, libXrandr
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid && lib.meta.availableOn stdenv.hostPlatform libpulseaudio, libpulseaudio
 , OpenGL, GLUT, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
@@ -41,7 +42,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ]
     ++ lib.optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ]
+    ++ lib.optional cacaSupport libcaca;
 
   configureFlags = [
     "--disable-oss"
@@ -55,7 +57,8 @@ stdenv.mkDerivation rec {
   # Please try revert the change that introduced this comment when updating SDL.
   ] ++ lib.optional stdenv.isDarwin "--disable-x11-shared"
     ++ lib.optional (!x11Support) "--without-x"
-    ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib";
+    ++ lib.optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib"
+    ++ lib.optional cacaSupport "--enable-video-caca";
 
   patches = [
     ./find-headers.patch
