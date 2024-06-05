@@ -11,7 +11,7 @@
 
 let
   pin = {
-
+    # TODO: Check the following file and ensure the dependencies are up-to-date
     # See https://github.com/google-deepmind/mujoco/blob/<VERSION>/cmake/MujocoDependencies.cmake#L17-L64
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
