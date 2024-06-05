@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  fetchpatch,
-  ffmpeg_5-headless,
+  ffmpeg-headless,
   numpy,
   pillow,
   pkg-config,
@@ -16,37 +14,36 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "11.0.0";
+  version = "12.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "mikeboers";
+    owner = "PyAV-Org";
     repo = "PyAV";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pCKP+4ZmZCJcG7/Qy9H6aS4svQdgaRA9S1QVNWFYhSQ=";
+    hash = "sha256-ezeYv55UzNnnYDjrMz5YS5g2pV6U/Fxx3e2bCoPP3eI=";
   };
 
   patches = [
-    # merged upstream PR: https://github.com/PyAV-Org/PyAV/pull/1387
-    (fetchpatch {
-      name = "use-pkg-config-env-var-fix-cross.patch";
-      url = "https://github.com/PyAV-Org/PyAV/commit/ba7a2c9f716af506838d399e6ed27ed6d64d2435.patch";
-      sha256 = "sha256-oH+g8sVoVCQe6DimRN38VT2GdziriwHYRAhldNxz9/E=";
-    })
+    # call pytest.skip() in certain functions using the network when SKIP_NETWORK_TESTS is set
+    ./allow-skipping-network-tests.patch
   ];
 
-  nativeBuildInputs = [
+  env.SKIP_NETWORK_TESTS = "1";
+
+  build-system = [
     cython
-    pkg-config
     setuptools
   ];
 
-  buildInputs = [ ffmpeg_5-headless ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ ffmpeg-headless ];
 
   preCheck = ''
-    # ensure we import the built version
+    # ensure we import the built package from $out
     rm -r av
   '';
 
@@ -56,72 +53,21 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # urlopen fails during DNS resolution
-      "test_writing_to_custom_io"
-      "test_decode_close_then_use"
-      # Tests that want to download FATE data, https://github.com/PyAV-Org/PyAV/issues/955
-      "test_vobsub"
-      "test_transcode"
-      "test_stream_tuples"
-      "test_stream_seek"
-      "test_stream_probing"
-      "test_seek_start"
-      "test_seek_middle"
-      "test_seek_int64"
-      "test_seek_float"
-      "test_seek_end"
-      "test_roundtrip"
-      "test_reading_from_write_readonl"
-      "test_reading_from_pipe_readonly"
-      "test_reading_from_file"
-      "test_reading_from_buffer"
-      "test_reading_from_buffer_no_see"
-      "test_parse"
-      "test_movtext"
-      "test_encoding_xvid"
-      "test_encoding_tiff"
-      "test_encoding_png"
-      "test_encoding_pcm_s24le"
-      "test_encoding_mpeg4"
-      "test_encoding_mpeg1video"
-      "test_encoding_mp2"
-      "test_encoding_mjpeg"
-      "test_encoding_h264"
-      "test_encoding_dvvideo"
-      "test_encoding_dnxhd"
-      "test_encoding_aac"
-      "test_decoded_video_frame_count"
-      "test_decoded_time_base"
-      "test_decoded_motion_vectors"
-      "test_decode_half"
-      "test_decode_audio_sample_count"
-      "test_data"
-      "test_container_probing"
-      "test_codec_tag"
-      "test_selection"
-    ]
-    ++ lib.optionals (stdenv.isDarwin) [
-      # Segmentation Faults
-      "test_encoding_with_pts"
-      "test_bayer_write"
-    ];
-
-  disabledTestPaths = [
-    # urlopen fails during DNS resolution
-    "tests/test_doctests.py"
-    "tests/test_timeout.py"
+  disabledTests = [
+    # Error: Invalid data found when processing input: 'custom_io_output.mpd'
+    # Probably has to do something with the fact that this is using the @run_in_sandbox decorator
+    "test_writing_to_custom_io_dash"
   ];
 
   pythonImportsCheck = [
     "av"
+    "av._core"
     "av.audio"
+    "av.bitstream"
     "av.buffer"
     "av.bytesource"
     "av.codec"
     "av.container"
-    "av._core"
     "av.datasets"
     "av.descriptor"
     "av.dictionary"
@@ -134,18 +80,19 @@ buildPythonPackage rec {
     "av.option"
     "av.packet"
     "av.plane"
+    "av.sidedata"
     "av.stream"
     "av.subtitles"
     "av.utils"
     "av.video"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic bindings for FFmpeg/Libav";
     mainProgram = "pyav";
-    homepage = "https://github.com/mikeboers/PyAV/";
-    changelog = "https://github.com/PyAV-Org/PyAV/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/PyAV-Org/PyAV/";
+    changelog = "https://github.com/PyAV-Org/PyAV/blob/${src.rev}/CHANGELOG.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ tomasajt ];
   };
 }
