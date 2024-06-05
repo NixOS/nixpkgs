@@ -1,9 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
-, patchelf
-, freetype
 , libusb-compat-0_1
 }:
 let

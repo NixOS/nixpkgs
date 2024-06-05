@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python3, fetchpatch, applyPatches, glm, meshoptimizer, SDL2, ninja}:
+{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python3, glm, meshoptimizer, SDL2, ninja}:
 
 let
 

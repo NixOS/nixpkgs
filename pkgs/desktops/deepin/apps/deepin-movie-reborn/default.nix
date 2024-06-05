@@ -1,11 +1,9 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
-, qtbase
 , qttools
 , qtx11extras
 , qtmultimedia
@@ -30,7 +28,6 @@
 , gst_all_1
 , gtest
 , libpulseaudio
-, runtimeShell
 }:
 
 stdenv.mkDerivation rec {

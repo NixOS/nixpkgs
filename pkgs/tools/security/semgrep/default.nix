@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , semgrep-core
 , buildPythonApplication
 , pythonPackages

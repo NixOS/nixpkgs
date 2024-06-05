@@ -1,4 +1,4 @@
-{ lib, stdenv, runCommand, fetchFromSavannah, fetchpatch, flex, bison, python3, autoconf, automake, libtool, bash
+{ lib, stdenv, fetchFromSavannah, flex, bison, python3, autoconf, automake, libtool, bash
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
 , fetchzip
 , buildPackages
