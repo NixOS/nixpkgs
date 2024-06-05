@@ -1671,6 +1671,12 @@ If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 
 Adds the `-fzero-call-used-regs=used-gpr` compiler option. This causes the general-purpose registers that an architecture's calling convention considers "call-used" to be zeroed on return from the function. This can make it harder for attackers to construct useful ROP gadgets and also reduces the chance of data leakage from a function call.
 
+#### `trivialautovarinit` {#trivialautovarinit}
+
+Adds the `-ftrivial-auto-var-init=pattern` compiler option. This causes "trivially-initializable" uninitialized stack variables to be forcibly initialized with a nonzero value that is likely to cause a crash (and therefore be noticed). Uninitialized variables generally take on their values based on fragments of previous program state, and attackers can carefully manipulate that state to craft malicious initial values for these variables.
+
+Use of this flag is controversial as it can prevent tools that detect uninitialized variable use (such as valgrind) from operating correctly.
+
 [^footnote-stdenv-ignored-build-platform]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
 [^footnote-stdenv-native-dependencies-in-path]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.
 [^footnote-stdenv-propagated-dependencies]: Nix itself already takes a package’s transitive dependencies into account, but this propagation ensures nixpkgs-specific infrastructure like [setup hooks](#ssec-setup-hooks) also are run as if it were a propagated dependency.
