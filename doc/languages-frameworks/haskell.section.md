@@ -26,11 +26,36 @@ set and are re-exposed with a reduced dependency closure for convenience.
 (see `justStaticExecutables` or `separateBinOutput` below)
 
 The `haskellPackages` set includes at least one version of every package from [Hackage](https://hackage.haskell.org/) as well as some manually injected packages.
-Haskell packages can be searched on [search.nixos.org](https://search.nixos.org/packages?query=haskellPackages) or listed on the command line with [`nix-instantiate`](https://nixos.org/manual/nix/stable/command-ref/nix-instantiate):
+Haskell packages can be searched on [search.nixos.org](https://search.nixos.org/packages?query=haskellPackages) or listed on the command line with [`nix-instantiate`](https://nixos.org/manual/nix/stable/command-ref/nix-instantiate).
+
+:::{.example #example-list-haskellPackages}
+
+# List all Haskell packages in Nixpkgs
+
+The follwowing command evaluates a Nix expression that maps names of Haskell packages to their version, and displays the result as a JSON.
 
 ```shell-session
-nix-instantiate --eval -E 'builtins.attrNames (import <nixpkgs> {}).haskellPackages' --json | jq -r '.[]'
+nix-instantiate --strict --eval --json --expr "$(cat << EOF
+  with (import <nixpkgs> {}); with lib;
+  mapAttrs (k: v: v.version)
+    (filterAttrs (k: v: isDerivation v) haskellPackages)
+EOF
+)" | jq . | head -10
 ```
+
+```console
+{
+  "2captcha": "0.1.0.0",
+  "3d-graphics-examples": "0.0.0.2",
+  "3dmodels": "0.3.0",
+  "4Blocks": "0.2",
+  "AAI": "0.2.0.1",
+  "ABList": "0.0.3",
+  "AC-Angle": "1.0",
+  "AC-Boolean": "1.1.0",
+  "AC-BuildPlatform": "1.1.0",
+```
+:::
 
 The attribute names in `haskellPackages` always correspond with their name on
 Hackage. Since Hackage allows names that are not valid Nix without escaping,
