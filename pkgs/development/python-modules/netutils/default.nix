@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   jinja2,
@@ -66,6 +65,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/networktocode/netutils/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
   };
 }
