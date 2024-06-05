@@ -1,20 +1,23 @@
-{ lib
-, stdenv
-, buildPackages
-, callPackage
-, fetchurl
-, perl
-, libintl
-, bash
-, updateAutotoolsGnuConfigScriptsHook
-, gnulib
-, gawk
-, freebsd
-, libiconv
-, xz
+{
+  lib,
+  stdenv,
+  buildPackages,
+  callPackage,
+  fetchurl,
+  perl,
+  libintl,
+  bash,
+  updateAutotoolsGnuConfigScriptsHook,
+  gnulib,
+  gawk,
+  freebsd,
+  libiconv,
+  xz,
 
-# we are a dependency of gcc, this simplifies bootstraping
-, interactive ? false, ncurses, procps
+  # we are a dependency of gcc, this simplifies bootstraping
+  interactive ? false,
+  ncurses,
+  procps,
 }:
 
 let
@@ -44,9 +47,25 @@ let
     mainProgram = "texi2any";
   };
   buildTexinfo = callPackage ./common.nix {
-    inherit lib stdenv buildPackages updateAutotoolsGnuConfigScriptsHook
-    fetchurl perl xz libintl libiconv bash gnulib gawk freebsd ncurses procps
-    meta interactive;
+    inherit
+      lib
+      stdenv
+      buildPackages
+      updateAutotoolsGnuConfigScriptsHook
+      fetchurl
+      perl
+      xz
+      libintl
+      libiconv
+      bash
+      gnulib
+      gawk
+      freebsd
+      ncurses
+      procps
+      meta
+      interactive
+      ;
   };
 in
 {
