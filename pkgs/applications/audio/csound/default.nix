@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-O7s92N54+zIl07eIdK/puoSve/qJ3O01fTh0TP+VdZA=";
   };
 
-  cmakeFlags = [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp
+  cmakeFlags = lib.optional stdenv.isAarch32 (lib.cmakeFeature "CMAKE_C_FLAGS" "-DPFFFT_SIMD_DISABLE")
     ++ lib.optional stdenv.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib"
     # Ignore gettext in CMAKE_PREFIX_PATH on cross to prevent find_program picking up the wrong gettext
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin";
