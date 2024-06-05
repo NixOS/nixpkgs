@@ -30,15 +30,6 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioaladdinconnect = super.aioaladdinconnect.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.58";
-        src = fetchPypi {
-          pname = "AIOAladdinConnect";
-          inherit version;
-          hash = "sha256-ymynaOKvnqqHIEuQc+5CagsaH5cHnQit8ileoUO6G+I=";
-        };
-      });
-
       aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.0";
         src = fetchFromGitHub {
@@ -102,13 +93,15 @@ let
         '';
       });
 
-      anova-wifi = super.anova-wifi.overridePythonAttrs (old: rec {
-        version = "0.10.3";
+      aiowithings = super.aiowithings.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.0";
         src = fetchFromGitHub {
-          owner = "Lash-L";
-          repo = "anova_wifi";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-tCmvp29KSCkc+g0w0odcB7vGjtDx6evac7XsHEF0syM=";
+          inherit (oldAttrs.src)
+            owner
+            repo
+          ;
+          rev = "refs/tags/${version}";
+          hash = "sha256-+pIIVCR+QsW9M3pH9Ss3dMvkeKM1OdhQ1y+s/T6pHtk=";
         };
       });
 
@@ -178,16 +171,6 @@ let
           hash = "sha256-QaMFVvglipN0kG1+ZQNKk7WTydSyIPn2qa32UtvLidw=";
         };
       });
-
-      homematicip = super.homematicip.overridePythonAttrs rec {
-        version = "1.1.0";
-        src = fetchFromGitHub {
-          owner = "hahn-th";
-          repo = "homematicip-rest-api";
-          rev = "refs/tags/${version}";
-          hash = "sha256-tx7/amXG3rLdUFgRPQcuf57qkBLAPxPWjLGSO7MrcWU=";
-        };
-      };
 
       intellifire4py = super.intellifire4py.overridePythonAttrs (oldAttrs: rec {
         version = "2.2.2";
@@ -458,16 +441,6 @@ let
         ];
       };
 
-      tesla-powerwall = super.tesla-powerwall.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.1";
-        src = fetchFromGitHub {
-          owner = "jrester";
-          repo = "tesla_powerwall";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-if/FCfxAB48WGXZOMvCtdSOW2FWO43OrlcHZbXIPmGE=";
-        };
-      });
-
       tuf = super.tuf.overridePythonAttrs rec {
         version = "2.1.0";
         src = fetchFromGitHub {
@@ -560,12 +533,12 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.5.5";
+  hassVersion = "2024.6.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
-  format = "pyproject";
+  pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
   disabled = python.pythonOlder "3.11";
@@ -578,13 +551,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-WAwLir9+O82kNBAwy0hUdfVxgDb3C4sIRDcyzVxfcuM=";
+    hash = "sha256-MO7JtWedZJCqK4kVgwxNGaEikBoFTddMSYf8ZG8e9ic=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-kcZM+IK96/q2GXeDSJzJTbzbz5mYcHevTDLpKspII6o=";
+    hash = "sha256-0gNwlkZoEDRk4vlX63lkpa6ykH79WxmiUeOv7oS6n2A=";
   };
 
   build-system = with python.pkgs; [
@@ -641,8 +614,8 @@ in python.pkgs.buildPythonApplication rec {
     aiohttp
     aiohttp-cors
     aiohttp-fast-url-dispatcher
-    aiohttp-isal
-    aiohttp-session
+    aiohttp-fast-zlib
+    aiozoneinfo
     astral
     async-interrupt
     atomicwrites-homeassistant
