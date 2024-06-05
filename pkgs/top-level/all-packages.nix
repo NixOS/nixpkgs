@@ -35935,7 +35935,7 @@ with pkgs;
 
   zotero = callPackage ../applications/office/zotero { };
 
-  zotero_7 = callPackage ../applications/office/zotero/zotero_7.nix { };
+  zotero_7 = pkgs.zotero-beta;
 
   zscroll = callPackage ../applications/misc/zscroll { };
 
