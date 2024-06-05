@@ -710,8 +710,8 @@ in {
           # `builtins.warn` requires a string message, so we enforce that in our implementation, so that callers aren't accidentally incompatible with newer Nix versions.
           assert isString msg;
           if mustAbort
-          then builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
-          else builtins.trace "[1;31mwarning: ${msg}[0m" v
+          then builtins.trace "[1;31mevaluation warning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
+          else builtins.trace "[1;31mevaluation warning: ${msg}[0m" v
     );
 
   /**
