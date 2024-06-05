@@ -1,13 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, python3Packages, installShellFiles }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+  installShellFiles,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.6.0-unstable-2021-08-02";
   pname = "arduino-mk";
 
   src = fetchFromGitHub {
-    owner  = "sudar";
-    repo   = "Arduino-Makefile";
-    rev    = "a1fbda0c53a75862bd7ac6285b70103ed04f70a6";
+    owner = "sudar";
+    repo = "Arduino-Makefile";
+    rev = "a1fbda0c53a75862bd7ac6285b70103ed04f70a6";
     sha256 = "sha256-sXFTkPv15RRzBna8eXeDjTYxLCDBiqBYqS2luwXN4kI=";
   };
 
@@ -19,7 +26,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ python3Packages.wrapPython installShellFiles ];
+  nativeBuildInputs = [
+    python3Packages.wrapPython
+    installShellFiles
+  ];
   propagatedBuildInputs = with python3Packages; [ pyserial ];
   installPhase = ''
     mkdir $out
