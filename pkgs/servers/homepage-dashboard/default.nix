@@ -33,7 +33,7 @@ buildNpmPackage rec {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-EgZhk3NtuIjvFab0y9UdGYDR+Iw/0vg/uFxnzqKuloo=";
+    hash = "sha256-K1brnHA4e8lHIXwpajdY6f+3/pgP8My4QznoYLmZNWw=";
   };
 
   npmDepsHash = "sha256-jYZUVwrOxoAbfHHSBkN5IlYhC6yZVVwRoZErkbYrjUs=";
