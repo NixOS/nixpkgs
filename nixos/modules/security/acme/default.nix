@@ -545,7 +545,7 @@ let
       };
 
       server = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         inherit (defaultAndText "server" "https://acme-v02.api.letsencrypt.org/directory") default defaultText;
         example = "https://acme-staging-v02.api.letsencrypt.org/directory";
         description = ''

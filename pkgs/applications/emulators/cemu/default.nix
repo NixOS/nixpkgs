@@ -108,7 +108,8 @@ in stdenv.mkDerivation rec {
     tag = last (splitString "-" version);
   in ''
     rm -rf dependencies/imgui
-    ln -s ${imgui'}/include/imgui dependencies/imgui
+    # cemu expects imgui source code, not just header files
+    ln -s ${imgui'.src} dependencies/imgui
     substituteInPlace src/Common/version.h --replace " (experimental)" "-${tag} (experimental)"
     substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
   '';

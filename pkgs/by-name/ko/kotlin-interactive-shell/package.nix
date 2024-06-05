@@ -12,9 +12,11 @@ maven.buildMavenPackage rec {
   };
 
   mvnHash = "sha256-m1o0m0foqJhEzWjC9behBeld5HT08WClcZN2xc3fZrI=";
-  mvnParameters = "-DskipTests compile";
+  mvnParameters = "compile";
 
   nativeBuildInputs = [ makeWrapper ];
+
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall
