@@ -54,17 +54,11 @@ buildPythonPackage rec {
     pillow
   ];
 
-  disabledTests =
-    [
-      # Error: Invalid data found when processing input: 'custom_io_output.mpd'
-      # Probably has to do something with the fact that this is using the @run_in_sandbox decorator
-      "test_writing_to_custom_io_dash"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # Segmentation Faults
-      # "test_encoding_with_pts"
-      # "test_bayer_write"
-    ];
+  disabledTests = [
+    # Error: Invalid data found when processing input: 'custom_io_output.mpd'
+    # Probably has to do something with the fact that this is using the @run_in_sandbox decorator
+    "test_writing_to_custom_io_dash"
+  ];
 
   pythonImportsCheck = [
     "av"
