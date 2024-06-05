@@ -505,7 +505,7 @@ let
     NASDF_USE_LOGICAL_PATHS = true;
 
     buildScript = pkgs.writeText "build-nyxt.lisp" ''
-      (load "${super.alexandria.asdfFasl}/asdf.${super.alexandria.faslExt}")
+      (load "${super.alexandria.asdfFasl}")
       (require :uiop)
       (let ((pwd (uiop:ensure-directory-pathname (uiop/os:getcwd))))
         (asdf:load-asd (uiop:merge-pathnames* "libraries/nasdf/nasdf.asd" pwd))
@@ -542,7 +542,7 @@ let
       hash = "sha256-zXj17ucgyFhv7P0qEr4cYSVRPGrL1KEIofXWN2trr/M=";
     };
     buildScript = pkgs.writeText "build-stumpwm.lisp" ''
-      (load "${super.stumpwm.asdfFasl}/asdf.${super.stumpwm.faslExt}")
+      (load "${super.stumpwm.asdfFasl}")
 
       (asdf:load-system 'stumpwm)
 
@@ -575,7 +575,7 @@ let
 
   clfswm = super.clfswm.overrideAttrs (o: rec {
     buildScript = pkgs.writeText "build-clfswm.lisp" ''
-      (load "${o.asdfFasl}/asdf.${o.faslExt}")
+      (load "${o.asdfFasl}")
       (asdf:load-system 'clfswm)
       (sb-ext:save-lisp-and-die
         "clfswm"
@@ -863,7 +863,7 @@ let
     ];
 
     buildScript = pkgs.writeText "build-qlot-cli" ''
-      (load "${self.qlot-cli.asdfFasl}/asdf.${self.qlot-cli.faslExt}")
+      (load "${self.qlot-cli.asdfFasl}")
       (asdf:load-system :qlot/command)
       (asdf:load-system :qlot/subcommands)
 

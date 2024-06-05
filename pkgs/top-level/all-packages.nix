@@ -25230,7 +25230,6 @@ with pkgs;
   # Armed Bear Common Lisp
   abcl = wrapLisp {
     pkg = callPackage ../development/compilers/abcl { };
-    faslExt = "abcl";
   };
 
   # Clozure Common Lisp
@@ -25238,19 +25237,16 @@ with pkgs;
     pkg = callPackage ../development/compilers/ccl {
       inherit (buildPackages.darwin) bootstrap_cmds;
     };
-    faslExt = "lx64fsl";
   };
 
   # Clasp Common Lisp
   clasp-common-lisp = wrapLisp {
     pkg = callPackage ../development/compilers/clasp { };
-    faslExt = "fasl";
   };
 
   # CLISP
   clisp = wrapLisp {
     pkg = callPackage ../development/interpreters/clisp { };
-    faslExt = "fas";
     flags = ["-E" "UTF-8"];
   };
 
@@ -25259,41 +25255,34 @@ with pkgs;
   # CMU Common Lisp
   cmucl_binary = wrapLispi686Linux {
     pkg = pkgsi686Linux.callPackage ../development/compilers/cmucl/binary.nix { };
-    faslExt = "sse2f";
     program = "lisp";
   };
 
   # Embeddable Common Lisp
   ecl = wrapLisp {
     pkg = callPackage ../development/compilers/ecl { };
-    faslExt = "fas";
   };
   ecl_16_1_2 = wrapLisp {
     pkg = callPackage ../development/compilers/ecl/16.1.2.nix { };
-    faslExt = "fas";
   };
 
   # GNU Common Lisp
   gcl = wrapLisp {
     pkg = callPackage ../development/compilers/gcl { };
-    faslExt = "o";
   };
 
   # ManKai Common Lisp
   mkcl = wrapLisp {
     pkg = callPackage ../development/compilers/mkcl {};
-    faslExt = "fas";
   };
 
   # Steel Bank Common Lisp
   sbcl_2_4_4 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.4.4"; };
-    faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
   sbcl_2_4_5 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.4.5"; };
-    faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
   sbcl = sbcl_2_4_5;

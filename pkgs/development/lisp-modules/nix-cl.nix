@@ -74,20 +74,12 @@ let
       }
       else ff;
 
-  buildAsdf = { asdf, pkg, program, flags, faslExt }:
-    stdenv.mkDerivation {
-      inherit (asdf) pname version;
-      dontUnpack = true;
-      buildPhase = ''
-        cp -v ${asdf}/lib/common-lisp/asdf/build/asdf.lisp asdf.lisp
-        ${pkg}/bin/${program} ${toString flags} < <(echo '(compile-file "asdf.lisp")')
-      '';
-      installPhase = ''
-        mkdir -p $out
-        cp -v asdf.${faslExt} $out
-      '';
-    };
-
+  buildAsdf = { asdf, pkg, program, flags }:
+    pkgs.runCommand "asdf-${pkg.name}" {} ''
+      cp ${asdf}/lib/common-lisp/asdf/build/asdf.lisp .
+      ${pkg}/bin/${program} ${toString flags} < \
+        <(echo "(compile-file \"asdf.lisp\" :output-file \"$out\")")
+    '';
 
   #
   # Wrapper around stdenv.mkDerivation for building ASDF systems.
@@ -118,9 +110,6 @@ let
       # General flags to the Lisp executable
       flags ? [],
 
-      # Extension for implementation-dependent FASL files
-      faslExt,
-
       # ASDF amalgamation file to use
       # Created in build/asdf.lisp by `make` in ASDF source tree
       asdf,
@@ -148,7 +137,7 @@ let
     (stdenv.mkDerivation (rec {
       inherit
         version nativeLibs javaLibs lispLibs systems asds
-        pkg program flags faslExt
+        pkg program flags
       ;
 
       # When src is null, we are building a lispWithPackages and only
@@ -170,11 +159,11 @@ let
       # load-system. Strange.
 
       # TODO(kasper) portable quit
-      asdfFasl = buildAsdf { inherit asdf pkg program flags faslExt; };
+      asdfFasl = buildAsdf { inherit asdf pkg program flags; };
 
       buildScript = substituteAll {
         src = ./builder.lisp;
-        asdf = "${asdfFasl}/asdf.${faslExt}";
+        asdf = "${asdfFasl}";
       };
 
       preConfigure = ''
@@ -271,7 +260,7 @@ let
   lispWithPackages = clpkgs: packages:
     let first = head (lib.attrValues clpkgs); in
     (build-asdf-system {
-      inherit (first) pkg program flags faslExt asdf;
+      inherit (first) pkg program flags asdf;
       # See dontUnpack in build-asdf-system
       src = null;
       pname = first.pkg.pname;
@@ -286,7 +275,7 @@ let
           ${o.pkg}/bin/${o.program} \
           $out/bin/${o.program} \
           --add-flags "${toString o.flags}" \
-          --set ASDF "${o.asdfFasl}/asdf.${o.faslExt}" \
+          --set ASDF "${o.asdfFasl}" \
           --prefix CL_SOURCE_REGISTRY : "$CL_SOURCE_REGISTRY" \
           --prefix ASDF_OUTPUT_TRANSLATIONS : "$(echo $CL_SOURCE_REGISTRY | sed s,//:,::,g):" \
           --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
@@ -299,19 +288,19 @@ let
 
   wrapLisp = {
     pkg
-    , faslExt
     , program ? pkg.meta.mainProgram or pkg.pname
     , flags ? []
     , asdf ? pkgs.asdf_3_3
     , packageOverrides ? (self: super: {})
+    , ...
   }:
     let
-      spec = { inherit pkg faslExt program flags asdf; };
+      spec = { inherit pkg program flags asdf; };
       pkgs = (commonLispPackagesFor spec).overrideScope packageOverrides;
       withPackages = lispWithPackages pkgs;
       withOverrides = packageOverrides:
         wrapLisp {
-          inherit pkg faslExt program flags asdf;
+          inherit pkg program flags asdf;
           inherit packageOverrides;
         };
       buildASDFSystem = args: build-asdf-system (args // spec);
