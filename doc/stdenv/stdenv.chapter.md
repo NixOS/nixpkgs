@@ -1609,6 +1609,16 @@ installwatch.c:3751:5: error: conflicting types for '__open_2'
 fcntl2.h:50:4: error: call to '__open_missing_mode' declared with attribute error: open with O_CREAT or O_TMPFILE in second argument needs 3 arguments
 ```
 
+Disabling `fortify` implies disablement of `fortify3`
+
+#### `fortify3` {#fortify3}
+
+Adds the `-O2 -D_FORTIFY_SOURCE=3` compiler options. This expands the cases that can be protected by fortify-checks to include some situations with dynamic-length buffers whose length can be inferred at runtime using compiler hints.
+
+Enabling this flag implies enablement of `fortify`. Disabling this flag does not imply disablement of `fortify`.
+
+This flag can sometimes conflict with a build-system's own attempts at enabling fortify support and result in errors complaining about `redefinition of _FORTIFY_SOURCE`.
+
 #### `pic` {#pic}
 
 Adds the `-fPIC` compiler options. This options adds support for position independent code in shared libraries and thus making ASLR possible.
