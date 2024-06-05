@@ -2652,6 +2652,8 @@ self: super: with self; {
 
   curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
 
+  cvc5 = (toPythonModule (pkgs.cvc5.override { withPythonBindings = true; })).python;
+
   cvelib = callPackage ../development/python-modules/cvelib { };
 
   cvss = callPackage ../development/python-modules/cvss { };
