@@ -2704,6 +2704,8 @@ self: super: with self; {
 
   daff = callPackage ../development/python-modules/daff { };
 
+  dahlia = callPackage ../development/python-modules/dahlia { };
+
   daiquiri = callPackage ../development/python-modules/daiquiri { };
 
   dalle-mini = callPackage ../development/python-modules/dalle-mini { };
