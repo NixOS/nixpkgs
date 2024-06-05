@@ -200,9 +200,9 @@ dependencies = [
 
 [[package]]
 name = "async-compression"
-version = "0.4.10"
+version = "0.4.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c90a406b4495d129f00461241616194cb8a032c8d1c53c657f0961d5f8e0498"
+checksum = "cd066d0b4ef8ecb03a55319dc13aa6910616d0f44008a045bb1835af830abff5"
 dependencies = [
  "brotli",
  "bzip2",
@@ -313,9 +313,9 @@ dependencies = [
 
 [[package]]
 name = "axoupdater"
-version = "0.6.4"
+version = "0.6.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d6bf8aaa32e7d33071ed9a339fc34ac30b0a5190f82069fbd12a1266bda9068"
+checksum = "669a5ea910fb9b97e3df709c7d0f626fc9e5e9cb83c00bd3a1b4c54835ed8b66"
 dependencies = [
  "axoasset",
  "axoprocess",
@@ -325,7 +325,7 @@ dependencies = [
  "miette",
  "reqwest",
  "serde",
- "temp-dir",
+ "tempfile",
  "thiserror",
  "tokio",
 ]
@@ -399,12 +399,14 @@ dependencies = [
  "once_cell",
  "pep508_rs",
  "platform-tags",
+ "pypi-types",
  "tokio",
  "uv-cache",
  "uv-client",
  "uv-configuration",
  "uv-dispatch",
  "uv-distribution",
+ "uv-git",
  "uv-interpreter",
  "uv-resolver",
  "uv-types",
@@ -1058,7 +1060,6 @@ checksum = "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292"
 dependencies = [
  "block-buffer",
  "crypto-common",
- "subtle",
 ]
 
 [[package]]
@@ -1104,7 +1105,6 @@ dependencies = [
  "cache-key",
  "distribution-filename",
  "fs-err",
- "indexmap",
  "itertools 0.13.0",
  "once_cell",
  "pep440_rs",
@@ -1466,21 +1466,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4271d37baee1b8c7e4b708028c57d816cf9d2434acb33a549475f78c181f6253"
 
 [[package]]
-name = "git2"
-version = "0.18.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "232e6a7bfe35766bf715e55a88b39a700596c0ccfd88cd3680b4cdb40d66ef70"
-dependencies = [
- "bitflags 2.5.0",
- "libc",
- "libgit2-sys",
- "log",
- "openssl-probe",
- "openssl-sys",
- "url",
-]
-
-[[package]]
 name = "glob"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1577,15 +1562,6 @@ name = "hex"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
-
-[[package]]
-name = "hmac"
-version = "0.12.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c49c37c09c17a53d937dfbb742eb3a961d65a994e6bcdcf37e7399d0cc8ab5e"
-dependencies = [
- "digest",
-]
 
 [[package]]
 name = "home"
@@ -1711,9 +1687,9 @@ dependencies = [
 
 [[package]]
 name = "hyper-util"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d8d52be92d09acc2e01dddb7fde3ad983fc6489c7db4837e605bc3fca4cb63e"
+checksum = "7b875924a60b96e5d7b9ae7b066540b1dd1cbd90d1828f54c92e02a283351c56"
 dependencies = [
  "bytes",
  "futures-channel",
@@ -2003,20 +1979,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c198f91728a82281a64e1f4f9eeb25d82cb32a5de251c6bd1b5154d63a8e7bd"
 
 [[package]]
-name = "libgit2-sys"
-version = "0.16.2+1.7.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ee4126d8b4ee5c9d9ea891dd875cfdc1e9d0950437179104b183d7d8a74d24e8"
-dependencies = [
- "cc",
- "libc",
- "libssh2-sys",
- "libz-sys",
- "openssl-sys",
- "pkg-config",
-]
-
-[[package]]
 name = "libmimalloc-sys"
 version = "0.1.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2037,20 +1999,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "libssh2-sys"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2dc8a030b787e2119a731f1951d6a773e2280c660f8ec4b0f5e1505a386e71ee"
-dependencies = [
- "cc",
- "libc",
- "libz-sys",
- "openssl-sys",
- "pkg-config",
- "vcpkg",
-]
-
-[[package]]
 name = "libz-ng-sys"
 version = "1.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2058,18 +2006,6 @@ checksum = "c6409efc61b12687963e602df8ecf70e8ddacf95bc6576bcf16e3ac6328083c5"
 dependencies = [
  "cmake",
  "libc",
-]
-
-[[package]]
-name = "libz-sys"
-version = "1.1.16"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e143b5e666b2695d28f6bca6497720813f699c9602dd7f5cac91008b8ada7f9"
-dependencies = [
- "cc",
- "libc",
- "pkg-config",
- "vcpkg",
 ]
 
 [[package]]
@@ -2367,28 +2303,6 @@ name = "openssl-probe"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ff011a302c396a5197692431fc1948019154afc178baf7d8e37367442a4601cf"
-
-[[package]]
-name = "openssl-src"
-version = "300.2.3+3.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5cff92b6f71555b61bb9315f7c64da3ca43d87531622120fea0195fc761b4843"
-dependencies = [
- "cc",
-]
-
-[[package]]
-name = "openssl-sys"
-version = "0.9.102"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c597637d56fbc83893a35eb0dd04b2b8e7a50c91e64e9493e398b5df4fb45fa2"
-dependencies = [
- "cc",
- "libc",
- "openssl-src",
- "pkg-config",
- "vcpkg",
-]
 
 [[package]]
 name = "option-ext"
@@ -2777,7 +2691,7 @@ dependencies = [
 [[package]]
 name = "pubgrub"
 version = "0.2.1"
-source = "git+https://github.com/astral-sh/pubgrub?rev=0e684a874c9fb8f74738cd8875524c80e3d4820b#0e684a874c9fb8f74738cd8875524c80e3d4820b"
+source = "git+https://github.com/astral-sh/pubgrub?rev=d4795a31be17669aba11eb741b4a9086acc3eb11#d4795a31be17669aba11eb741b4a9086acc3eb11"
 dependencies = [
  "indexmap",
  "log",
@@ -2866,7 +2780,6 @@ version = "0.0.1"
 dependencies = [
  "anyhow",
  "chrono",
- "git2",
  "indexmap",
  "mailparse",
  "once_cell",
@@ -3089,6 +3002,7 @@ dependencies = [
  "reqwest-middleware",
  "tempfile",
  "test-case",
+ "thiserror",
  "tokio",
  "tracing",
  "unscanny",
@@ -3574,17 +3488,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sha1"
-version = "0.10.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3bf829a2d51ab4a5ddf1352d8470c140cadc8301b2ae1789db023f01cedd6ba"
-dependencies = [
- "cfg-if",
- "cpufeatures",
- "digest",
-]
-
-[[package]]
 name = "sha2"
 version = "0.10.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3824,12 +3727,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e1fc403891a21bcfb7c37834ba66a547a8f402146eba7265b5a6d88059c9ff2f"
 
 [[package]]
-name = "temp-dir"
-version = "0.1.13"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1f227968ec00f0e5322f9b8173c7a0cbcff6181a0a5b28e9892491c286277231"
-
-[[package]]
 name = "temp-env"
 version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4048,9 +3945,9 @@ checksum = "b130bd8a58c163224b44e217b4239ca7b927d82bf6cc2fea1fc561d15056e3f7"
 
 [[package]]
 name = "tokio"
-version = "1.37.0"
+version = "1.38.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1adbebffeca75fcfd058afa480fb6c0b81e165a0323f9c9d39c9697e37c46787"
+checksum = "ba4f4a02a7a80d6f274636f0aa95c7e383b912d41fe721a31f29e29698585a4a"
 dependencies = [
  "backtrace",
  "bytes",
@@ -4067,9 +3964,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-macros"
-version = "2.2.0"
+version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5b8a1e28f2deaa14e508979454cb3a223b10b938b45af148bc0986de36f1923b"
+checksum = "5f5ae998a069d4b5aba8ee9dad856af7d520c3699e6159b185c2acd48155d39a"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -4470,7 +4367,7 @@ checksum = "a183cf7feeba97b4dd1c0d46788634f6221d87fa961b305bed08c851829efcc0"
 
 [[package]]
 name = "uv"
-version = "0.2.5"
+version = "0.2.6"
 dependencies = [
  "anstream",
  "anyhow",
@@ -4523,6 +4420,7 @@ dependencies = [
  "uv-dispatch",
  "uv-distribution",
  "uv-fs",
+ "uv-git",
  "uv-installer",
  "uv-interpreter",
  "uv-normalize",
@@ -4666,10 +4564,10 @@ version = "0.0.1"
 dependencies = [
  "anyhow",
  "clap",
- "distribution-types",
  "either",
  "pep508_rs",
  "platform-tags",
+ "pypi-types",
  "rustc-hash",
  "schemars",
  "serde",
@@ -4714,10 +4612,11 @@ dependencies = [
  "uv-client",
  "uv-configuration",
  "uv-dispatch",
+ "uv-distribution",
  "uv-fs",
+ "uv-git",
  "uv-installer",
  "uv-interpreter",
- "uv-requirements",
  "uv-resolver",
  "uv-types",
  "uv-workspace",
@@ -4733,6 +4632,7 @@ dependencies = [
  "futures",
  "install-wheel-rs",
  "itertools 0.13.0",
+ "pypi-types",
  "rustc-hash",
  "tracing",
  "uv-build",
@@ -4740,6 +4640,7 @@ dependencies = [
  "uv-client",
  "uv-configuration",
  "uv-distribution",
+ "uv-git",
  "uv-installer",
  "uv-interpreter",
  "uv-resolver",
@@ -4751,27 +4652,32 @@ name = "uv-distribution"
 version = "0.0.1"
 dependencies = [
  "anyhow",
- "cache-key",
  "distribution-filename",
  "distribution-types",
  "fs-err",
  "futures",
+ "glob",
+ "indoc",
+ "insta",
  "install-wheel-rs",
  "nanoid",
- "once_cell",
+ "path-absolutize",
  "pep440_rs",
  "pep508_rs",
  "platform-tags",
  "pypi-types",
+ "regex",
  "reqwest",
  "reqwest-middleware",
  "rmp-serde",
  "rustc-hash",
+ "schemars",
  "serde",
  "tempfile",
  "thiserror",
  "tokio",
  "tokio-util",
+ "toml",
  "tracing",
  "url",
  "uv-cache",
@@ -4782,6 +4688,7 @@ dependencies = [
  "uv-git",
  "uv-normalize",
  "uv-types",
+ "uv-warnings",
  "zip",
 ]
 
@@ -4832,17 +4739,12 @@ name = "uv-git"
 version = "0.0.1"
 dependencies = [
  "anyhow",
- "base64 0.22.1",
  "cache-key",
  "cargo-util",
+ "dashmap",
  "fs-err",
- "git2",
- "glob",
- "hmac",
- "home",
- "rand",
  "reqwest",
- "sha1",
+ "thiserror",
  "tokio",
  "tracing",
  "url",
@@ -4867,6 +4769,7 @@ dependencies = [
  "pypi-types",
  "rayon",
  "rustc-hash",
+ "same-file",
  "serde",
  "tempfile",
  "thiserror",
@@ -4944,6 +4847,7 @@ dependencies = [
 name = "uv-requirements"
 version = "0.1.0"
 dependencies = [
+ "anstream",
  "anyhow",
  "cache-key",
  "configparser",
@@ -4953,22 +4857,12 @@ dependencies = [
  "distribution-types",
  "fs-err",
  "futures",
- "glob",
- "indexmap",
- "indoc",
- "insta",
- "path-absolutize",
- "pep440_rs",
  "pep508_rs",
  "pypi-types",
- "regex",
  "requirements-txt",
  "rustc-hash",
- "same-file",
- "schemars",
  "serde",
  "thiserror",
- "tokio",
  "toml",
  "tracing",
  "url",
@@ -5021,6 +4915,7 @@ dependencies = [
  "tokio",
  "tokio-stream",
  "toml",
+ "toml_edit",
  "tracing",
  "url",
  "uv-cache",
@@ -5058,13 +4953,14 @@ dependencies = [
  "url",
  "uv-cache",
  "uv-configuration",
+ "uv-git",
  "uv-interpreter",
  "uv-normalize",
 ]
 
 [[package]]
 name = "uv-version"
-version = "0.2.5"
+version = "0.2.6"
 
 [[package]]
 name = "uv-virtualenv"
@@ -5100,6 +4996,8 @@ dependencies = [
  "distribution-types",
  "fs-err",
  "install-wheel-rs",
+ "pep508_rs",
+ "pypi-types",
  "schemars",
  "serde",
  "thiserror",
@@ -5118,12 +5016,6 @@ name = "valuable"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "830b7e5d4d90034032940e4ace0d9a9a057e7a45cd94e6c007832e39edb82f6d"
-
-[[package]]
-name = "vcpkg"
-version = "0.2.15"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426"
 
 [[package]]
 name = "version_check"

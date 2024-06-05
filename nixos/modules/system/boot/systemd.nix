@@ -503,8 +503,8 @@ in
     environment.systemPackages = [ cfg.package ];
 
     environment.etc = let
-      # generate contents for /etc/systemd/system-${type} from attrset of links and packages
-      hooks = type: links: pkgs.runCommand "system-${type}" {
+      # generate contents for /etc/systemd/${dir} from attrset of links and packages
+      hooks = dir: links: pkgs.runCommand "${dir}" {
           preferLocalBuild = true;
           packages = cfg.packages;
       } ''
@@ -512,7 +512,7 @@ in
         mkdir -p $out
         for package in $packages
         do
-          for hook in $package/lib/systemd/system-${type}/*
+          for hook in $package/lib/systemd/${dir}/*
           do
             ln -s $hook $out/
           done
@@ -562,8 +562,9 @@ in
         ${cfg.sleep.extraConfig}
       '';
 
-      "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
-      "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
+      "systemd/user-generators" = { source = hooks "user-generators" cfg.user.generators; };
+      "systemd/system-generators" = { source = hooks "system-generators" cfg.generators; };
+      "systemd/system-shutdown" = { source = hooks "system-shutdown" cfg.shutdown; };
     });
 
     services.dbus.enable = true;

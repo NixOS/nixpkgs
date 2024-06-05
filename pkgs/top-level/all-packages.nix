@@ -1501,8 +1501,6 @@ with pkgs;
 
   acme-sh = callPackage ../tools/admin/acme-sh { };
 
-  acousticbrainz-client = callPackage ../tools/audio/acousticbrainz-client { };
-
   alsaequal = callPackage ../tools/audio/alsaequal { };
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
@@ -11346,12 +11344,21 @@ with pkgs;
     etcDir = "/etc/ssh";
   };
 
+  opensshWithKerberos = openssh.override {
+    withKerberos = true;
+  };
+
   openssh_hpn = opensshPackages.openssh_hpn.override {
     etcDir = "/etc/ssh";
   };
 
+  openssh_hpnWithKerberos = openssh_hpn.override {
+    withKerberos = true;
+  };
+
   openssh_gssapi = opensshPackages.openssh_gssapi.override {
     etcDir = "/etc/ssh";
+    withKerberos = true;
   };
 
   ssh-copy-id = callPackage ../tools/networking/openssh/copyid.nix { };
@@ -17180,7 +17187,6 @@ with pkgs;
 
   inherit (beam.interpreters)
     erlang erlang_27 erlang_26 erlang_25 erlang_24
-    erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_16 elixir_1_15 elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10
     elixir-ls;
 
@@ -25236,7 +25242,7 @@ with pkgs;
   # Clasp Common Lisp
   clasp-common-lisp = wrapLisp {
     pkg = callPackage ../development/compilers/clasp { };
-    faslExt = "fasp";
+    faslExt = "fasl";
   };
 
   # CLISP
@@ -26431,7 +26437,7 @@ with pkgs;
 
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
-    elixir = elixir_1_14;
+    erlang = erlang_26;
   };
 
   radicale2 = callPackage ../servers/radicale/2.x.nix { };
@@ -28318,8 +28324,6 @@ with pkgs;
   comic-relief = callPackage ../data/fonts/comic-relief { };
 
   comixcursors = callPackage ../data/icons/comixcursors { };
-
-  corefonts = callPackage ../data/fonts/corefonts { };
 
   courier-prime = callPackage ../data/fonts/courier-prime { };
 
@@ -33762,8 +33766,6 @@ with pkgs;
   };
 
   premid = callPackage ../applications/misc/premid { };
-
-  process-cpp = callPackage ../development/libraries/process-cpp { };
 
   processing = callPackage ../applications/graphics/processing {
     jdk = jdk17;
