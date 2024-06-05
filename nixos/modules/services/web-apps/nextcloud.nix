@@ -104,8 +104,6 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.config.dbtype == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
-  nextcloudGreaterOrEqualThan = versionAtLeast cfg.package.version;
-
   overrideConfig = let
     c = cfg.config;
     requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
@@ -976,9 +974,7 @@ in {
           '';
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
-          # an automatic creation of the database user.
-          environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
+          environment.NC_setup_create_db_user = "false";
         };
         nextcloud-cron = {
           after = [ "nextcloud-setup.service" ];
