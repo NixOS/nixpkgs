@@ -22,7 +22,8 @@ function retrieve_latest_version () {
 function calc_hash () {
     local version=$1
     local url=$2
-    nix-prefetch "{ stdenv, fetchzip }:
+    nix-prefetch --option extra-experimental-features flakes \
+                 "{ stdenv, fetchzip }:
 stdenv.mkDerivation {
   pname = \"yourkit-java-source\";
   version = \"$version\";
