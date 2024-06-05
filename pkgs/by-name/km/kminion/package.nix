@@ -6,16 +6,16 @@
 
 buildGoModule {
   pname = "kafka-minion";
-  version = "2.2.7";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "kminion";
-    rev = "0c90d4301ed4600d1aaf3345b6f16587d2f282fc";
-    hash = "sha256-CWjX46Sfc9Xj+R7+CZeMuTY0iUStzyZXI4FotwqR44M=";
+    rev = "v${version}";
+    hash = "sha256-y9FcvWJ9izS5vkgDsiHa8TKdS4jOYLMOHJUyCPsmTZ4=";
   };
 
-  vendorHash = "sha256-6yfQVoY/bHMA4s0IN5ltnQdHWnE3kIKza36uEcGa11U=";
+  vendorHash = "sha256-ekOS16B2AIB4LQXOLbiaOMUvtqy8f51UJfu0uhn4gzg=";
 
   doCheck = false;
 
