@@ -970,12 +970,12 @@ self: super: {
   # See https://github.com/valderman/selda/issues/187
   inherit (let
     mkSeldaPackage = name: overrideCabal (drv: {
-      version = "2023-02-05-unstable";
+      version = "2024-05-05-unstable";
       src = pkgs.fetchFromGitHub {
         owner = "valderman";
         repo = "selda";
-        rev = "ab9619db13b93867d1a244441bb4de03d3e1dadb";
-        hash = "sha256-P0nqAYzbeTyEEgzMij/3mKcs++/p/Wgc7Y6bDudXt2U=";
+        rev = "50c3ba5c5da72bb758a4112363ba2fe1c0e968ea";
+        hash = "sha256-LEAJsSsDL0mmVHntnI16fH8m5DmePfcU0hFw9ErqTgQ=";
       } + "/${name}";
     }) super.${name};
   in
