@@ -3,7 +3,7 @@
 Bootspec is a experimental feature, introduced in the [RFC-0125 proposal](https://github.com/NixOS/rfcs/pull/125), the reference implementation can be found [there](https://github.com/NixOS/nixpkgs/pull/172237) in order to standardize bootloader support
 and advanced boot workflows such as SecureBoot and potentially more.
 
-You can enable the creation of bootspec documents through [`boot.bootspec.enable = true`](options.html#opt-boot.bootspec.enable), which will prompt a warning until [RFC-0125](https://github.com/NixOS/rfcs/pull/125) is officially merged.
+The creation of bootspec documents is enabled by default.
 
 ## Schema {#sec-experimental-bootspec-schema}
 
