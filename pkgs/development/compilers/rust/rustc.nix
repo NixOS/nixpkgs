@@ -142,6 +142,10 @@ in stdenv.mkDerivation (finalAttrs: {
     "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost.dev}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget.dev}/bin/llvm-config"
+  ] ++ optionals fastCross [
+    # Since fastCross only builds std, it doesn't make sense (and
+    # doesn't work) to build a linker.
+    "--disable-llvm-bitcode-linker"
   ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
     "--enable-profiler" # build libprofiler_builtins
   ] ++ optionals stdenv.buildPlatform.isMusl [

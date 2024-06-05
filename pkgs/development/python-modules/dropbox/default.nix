@@ -7,7 +7,6 @@
   requests,
   six,
   stone,
-  urllib3,
   mock,
   pytest-mock,
   pytestCheckHook,
@@ -18,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "12.0.0";
+  version = "12.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,7 +31,7 @@ buildPythonPackage rec {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0MDm6NB+0vkN8QRSHvuDYEyYhYQWQD4jsctyd5fLdwE=";
+    hash = "sha256-9Fsh06V226vIyJhrlLkh9Xr4UGoEIISnIFCtuKqI218=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +40,6 @@ buildPythonPackage rec {
     requests
     six
     stone
-    urllib3
   ];
 
   nativeCheckInputs = [
@@ -69,9 +67,7 @@ buildPythonPackage rec {
   # https://github.com/dropbox/dropbox-sdk-python/commit/75596daf316b4a806f18057e2797a15bdf83cf6d
   # This will be the last major version to support Python 2, so version bounds might be more reasonable again in the future.
   pythonRelaxDeps = [
-    "requests"
     "stone"
-    "urllib3"
   ];
 
   # Set SCOPED_USER_DROPBOX_TOKEN environment variable to a valid value.

@@ -78,11 +78,11 @@ in
         '';
       };
       port = lib.mkOption {
-        type = types.nullOr types.ints.u16;
+        type = types.port;
         default = 11434;
         example = 11111;
         description = ''
-          Which port the ollama server listens to. Set to `null` to not specify a port.
+          Which port the ollama server listens to.
         '';
       };
       acceleration = lib.mkOption {
@@ -116,6 +116,14 @@ in
           Since `ollama run` is mostly a shell around the ollama server, this is usually sufficient.
         '';
       };
+      openFirewall = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the firewall for ollama.
+          This adds `services.ollama.port` to `networking.firewall.allowedTCPPorts`.
+        '';
+      };
     };
   };
 
@@ -127,11 +135,7 @@ in
       environment = cfg.environmentVariables // {
         HOME = cfg.home;
         OLLAMA_MODELS = cfg.models;
-        OLLAMA_HOST =
-          if cfg.port == null then
-            cfg.host
-          else
-            "${cfg.host}:${toString cfg.port}";
+        OLLAMA_HOST = "${cfg.host}:${toString cfg.port}";
       };
       serviceConfig = {
         ExecStart = "${lib.getExe ollamaPackage} serve";
@@ -141,6 +145,8 @@ in
         ReadWritePaths = cfg.writablePaths;
       };
     };
+
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
     environment.systemPackages = [ ollamaPackage ];
   };

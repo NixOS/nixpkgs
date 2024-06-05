@@ -69,7 +69,8 @@ in
 
     (import ./wayland-session.nix {
       inherit lib pkgs;
-      xwayland = cfg.xwayland.enable;
+      enableXWayland = cfg.xwayland.enable;
+      enableWlrPortal = false; # Hyprland has its own portal, wlr is not needed
     })
   ]);
 
@@ -87,4 +88,6 @@ in
       "Nvidia patches are no longer needed"
     )
   ];
+
+  meta.maintainers = with lib.maintainers; [ fufexan ];
 }
