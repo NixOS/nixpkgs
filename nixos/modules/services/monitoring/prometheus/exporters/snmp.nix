@@ -81,6 +81,32 @@ in
         Only log messages with the given severity or above.
       '';
     };
+
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/root/prometheus-snmp-exporter.env";
+      description = ''
+        EnvironmentFile as defined in {manpage}`systemd.exec(5)`.
+
+        Secrets may be passed to the service without adding them to the
+        world-readable Nix store, by specifying placeholder variables as
+        the option value in Nix and setting these variables accordingly in the
+        environment file.
+
+        Environment variables from this file will be interpolated into the
+        config file using envsubst with this syntax:
+        `$ENVIRONMENT ''${VARIABLE}`
+
+        For variables to use see [Prometheus Configuration](https://github.com/prometheus/snmp_exporter#prometheus-configuration).
+
+        Besides setting the filepath for this option, you also need to add
+        flag `--config.expand-environment-variables` to `extraFlags`.
+
+        Note that this file needs to be available on the host on which
+        this exporter is running.
+      '';
+    };
   };
   serviceOpts = let
     uncheckedConfigFile = if cfg.configurationPath != null
@@ -92,6 +118,7 @@ in
       uncheckedConfigFile;
     in {
     serviceConfig = {
+      EnvironmentFile = lib.mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
       ExecStart = ''
         ${pkgs.prometheus-snmp-exporter}/bin/snmp_exporter \
           --config.file=${escapeShellArg configFile} \
