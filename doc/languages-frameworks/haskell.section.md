@@ -25,21 +25,12 @@ All of these packages are originally defined in the `haskellPackages` package
 set and are re-exposed with a reduced dependency closure for convenience.
 (see `justStaticExecutables` or `separateBinOutput` below)
 
-The `haskellPackages` set includes at least one version of every package from
-Hackage as well as some manually injected packages. This amounts to a lot of
-packages, so it is hidden from `nix-env -qa` by default for performance reasons.
-You can still list all packages in the set like this:
+The `haskellPackages` set includes at least one version of every package from [Hackage](https://hackage.haskell.org/) as well as some manually injected packages.
+Haskell packages can be searched on [search.nixos.org](https://search.nixos.org/packages?query=haskellPackages) or listed on the command line with [`nix-instantiate`](https://nixos.org/manual/nix/stable/command-ref/nix-instantiate):
 
-```console
-$ nix-env -f '<nixpkgs>' -qaP -A haskellPackages
-haskellPackages.a50                                                         a50-0.5
-haskellPackages.AAI                                                         AAI-0.2.0.1
-haskellPackages.aasam                                                       aasam-0.2.0.0
-haskellPackages.abacate                                                     abacate-0.0.0.0
-haskellPackages.abc-puzzle                                                  abc-puzzle-0.2.1
-…
+```shell-session
+nix-instantiate --eval -E 'builtins.attrNames (import <nixpkgs> {}).haskellPackages' --json | jq -r '.[]'
 ```
-Also, the `haskellPackages` set is included on [search.nixos.org].
 
 The attribute names in `haskellPackages` always correspond with their name on
 Hackage. Since Hackage allows names that are not valid Nix without escaping,
