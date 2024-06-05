@@ -419,8 +419,6 @@ with pkgs;
 
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
-  catppuccin-catwalk = callPackage ../development/tools/misc/catppuccin-catwalk { };
-
   catppuccin-gtk = callPackage ../data/themes/catppuccin-gtk { };
 
   catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
@@ -4796,6 +4794,8 @@ with pkgs;
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
+
+  csv2md = with python3Packages; toPythonApplication csv2md;
 
   csv2odf = callPackage ../applications/office/csv2odf { };
 

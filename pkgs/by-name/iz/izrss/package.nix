@@ -5,7 +5,7 @@
   ...
 }:
 let
-  version = "0.0.6";
+  version = "0.1.0";
 in
 buildGoModule {
   pname = "izrss";
@@ -15,7 +15,7 @@ buildGoModule {
     owner = "isabelroses";
     repo = "izrss";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tO/m39FMtvxZzNgnVY84k4J2v8vQVdzR3IKofJWCf9U=";
+    hash = "sha256-Op9aiCQrBH8TuhMTt+3Wthd8UY3lU2g9yJ110v7TtXA=";
   };
 
   ldflags = [
@@ -24,7 +24,7 @@ buildGoModule {
     "-X main.version=${version}"
   ];
 
-  vendorHash = "sha256-/gD82wT4jWNMQsGPb2nYQiFQsUdKICyO6eiRPHrLsy8=";
+  vendorHash = "sha256-/TRCD6akZV2qDqJz62p7UzFIGuTAKLnUtYqqvdw3rCI=";
 
   meta = {
     description = "An RSS feed reader for the terminal written in Go";
