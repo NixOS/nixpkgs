@@ -6132,6 +6132,8 @@ self: super: with self; {
 
   json5 = callPackage ../development/python-modules/json5 { };
 
+  jsonxs = callPackage ../development/python-modules/jsonxs { };
+
   jsonargparse = callPackage ../development/python-modules/jsonargparse { };
 
   jsonconversion = callPackage ../development/python-modules/jsonconversion { };
