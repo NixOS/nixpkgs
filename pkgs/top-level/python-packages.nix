@@ -9394,6 +9394,8 @@ self: super: with self; {
 
   outcome = callPackage ../development/python-modules/outcome { };
 
+  outspin = callPackage ../development/python-modules/outspin { };
+
   ovh = callPackage ../development/python-modules/ovh { };
 
   ovmfvartool = callPackage ../development/python-modules/ovmfvartool { };
