@@ -205,30 +205,6 @@ in {
     (mkRenamedOptionModule
       [ "services" "nextcloud" "cron" "memoryLimit" ]
       [ "services" "nextcloud" "cli" "memoryLimit" ])
-    (mkRemovedOptionModule [ "services" "nextcloud" "enableBrokenCiphersForSSE" ] ''
-      This option has no effect since there's no supported Nextcloud version packaged here
-      using OpenSSL for RC4 SSE.
-    '')
-    (mkRemovedOptionModule [ "services" "nextcloud" "config" "dbport" ] ''
-      Add port to services.nextcloud.config.dbhost instead.
-    '')
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "logLevel" ] [ "services" "nextcloud" "settings" "loglevel" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "logType" ] [ "services" "nextcloud" "settings" "log_type" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "defaultPhoneRegion" ] [ "services" "nextcloud" "settings" "default_phone_region" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "overwriteProtocol" ] [ "services" "nextcloud" "settings" "overwriteprotocol" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "skeletonDirectory" ] [ "services" "nextcloud" "settings" "skeletondirectory" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "globalProfiles" ] [ "services" "nextcloud" "settings" "profile.enabled" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "extraTrustedDomains" ] [ "services" "nextcloud" "settings" "trusted_domains" ])
-    (mkRenamedOptionModule
-      [ "services" "nextcloud" "config" "trustedProxies" ] [ "services" "nextcloud" "settings" "trusted_proxies" ])
-    (mkRenamedOptionModule ["services" "nextcloud" "extraOptions" ] [ "services" "nextcloud" "settings" ])
   ];
 
   options.services.nextcloud = {
@@ -836,22 +812,8 @@ in {
             `services.nextcloud.package`.
           '';
 
-      in (optional (cfg.poolConfig != null) ''
-          Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
-          Please migrate your configuration to config.services.nextcloud.poolSettings.
-        '')
-        ++ (optional (cfg.config.dbtableprefix != null) ''
-          Using `services.nextcloud.config.dbtableprefix` is deprecated. Fresh installations with this
-          option set are not allowed anymore since v20.
-
-          If you have an existing installation with a custom table prefix, make sure it is
-          set correctly in `config.php` and remove the option from your NixOS config.
-        '')
-        ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
-        ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
-        ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
-        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
-        ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"));
+      in optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05")
+        ++ optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11");
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -861,7 +823,7 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "24.05" then nextcloud27
+          else if versionOlder stateVersion "24.05" then nextcloud28
           else nextcloud29
         );
 
