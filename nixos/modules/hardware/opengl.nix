@@ -136,17 +136,16 @@ in
       }
     ];
 
-    systemd.tmpfiles.rules = [
-      "L+ /run/opengl-driver - - - - ${package}"
-      (
+    systemd.tmpfiles.settings.opengl = {
+      "/run/opengl-driver"."L+".argument = toString package;
+      "/run/opengl-drive-32" =
         if pkgs.stdenv.isi686 then
-          "L+ /run/opengl-driver-32 - - - - opengl-driver"
+          { "L+".argument = "opengl-driver"; }
         else if cfg.driSupport32Bit then
-          "L+ /run/opengl-driver-32 - - - - ${package32}"
+          { "L+".argument = toString package32; }
         else
-          "r /run/opengl-driver-32"
-      )
-    ];
+          { "r" = {}; };
+    };
 
     environment.sessionVariables.LD_LIBRARY_PATH = lib.mkIf cfg.setLdLibraryPath
       ([ "/run/opengl-driver/lib" ] ++ lib.optional cfg.driSupport32Bit "/run/opengl-driver-32/lib");
