@@ -56,6 +56,14 @@ rustPlatform.buildRustPackage rec {
   postBuild = ''
     cargo run --package generate-book
 
+    mkdir -p completions man
+
+    cargo run -- --man > man/just.1
+
+    for shell in bash fish zsh; do
+        cargo run -- --completions $shell > completions/just.$shell
+    done
+
     # No linkcheck in sandbox
     echo 'optional = true' >> book/en/book.toml
     mdbook build book/en
