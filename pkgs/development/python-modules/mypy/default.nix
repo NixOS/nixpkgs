@@ -26,6 +26,7 @@
   filelock,
   pytest-xdist,
   pytestCheckHook,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -117,6 +118,10 @@ buildPythonPackage rec {
       # https://github.com/python/mypy/issues/15221
       "mypyc/test/test_run.py"
     ];
+
+  passthru.tests = {
+    inherit (nixosTests) nixos-test-driver;
+  };
 
   meta = with lib; {
     description = "Optional static typing for Python";
