@@ -114,11 +114,12 @@ stdenv.mkDerivation {
     fi
   '';
 
-  nativeBuildInputs = [ pkg-config m4 addOpenGLRunpath ];
+  nativeBuildInputs = [ pkg-config m4 addOpenGLRunpath ]
+    ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
 
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 dbus ]
     ++ lib.optionals (withGtk2 || lib.versionOlder nvidia_x11.settingsVersion "525.53") [ gtk2 ]
-    ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook3 ];
+    ++ lib.optionals withGtk3 [ gtk3 librsvg ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
