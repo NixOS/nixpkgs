@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    mv rogauracore $out/bin
+    install -Dm755 rogauracore $out/bin/
 
     runHook postInstall
   '';
