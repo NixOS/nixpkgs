@@ -1240,7 +1240,7 @@ dependencies = [
 [[package]]
 name = "chitchat"
 version = "0.8.0"
-source = "git+https://github.com/quickwit-oss/chitchat.git?rev=f783620#f78362008b4b5522181c77e830f585c9d9e8b799"
+source = "git+https://github.com/quickwit-oss/chitchat.git?rev=d039699#d03969982e1c199aa05cb8e4f86d8d83118057ff"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5441,7 +5441,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-actors"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5461,7 +5461,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-aws"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "async-trait",
  "aws-config",
@@ -5483,7 +5483,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-cli"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5541,7 +5541,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-cluster"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5570,7 +5570,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-codegen"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "futures",
@@ -5587,7 +5587,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-codegen-example"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5614,7 +5614,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-common"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-speed-limit",
@@ -5652,7 +5652,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-config"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "bytes",
@@ -5686,7 +5686,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-control-plane"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5724,7 +5724,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-datetime"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "itertools 0.12.1",
@@ -5738,7 +5738,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-directories"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5759,7 +5759,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-doc-mapper"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "base64 0.21.7",
@@ -5794,7 +5794,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-index-management"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5826,7 +5826,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-indexing"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "arc-swap",
@@ -5891,7 +5891,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-ingest"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5931,7 +5931,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-integration-tests"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "bytes",
@@ -5964,7 +5964,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-jaeger"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5998,7 +5998,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-janitor"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -6035,7 +6035,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-lambda"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "aws_lambda_events",
@@ -6075,7 +6075,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-macros"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -6084,7 +6084,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-metastore"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -6127,7 +6127,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-opentelemetry"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -6151,7 +6151,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-proto"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -6188,7 +6188,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-query"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "base64 0.21.7",
@@ -6214,7 +6214,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-rest-client"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "bytes",
@@ -6238,7 +6238,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-search"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "assert-json-diff 2.0.2",
@@ -6290,7 +6290,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-serve"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "assert-json-diff 2.0.2",
@@ -6359,7 +6359,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-storage"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -6407,7 +6407,7 @@ dependencies = [
 
 [[package]]
 name = "quickwit-telemetry"
-version = "0.8.0"
+version = "0.8.1"
 dependencies = [
  "async-trait",
  "encoding_rs",
