@@ -1,4 +1,4 @@
-{ mkDerivation
+{ stdenv
 , lib
 , fetchFromGitHub
 , cmake
@@ -6,6 +6,8 @@
 , qtbase
 , qtsvg
 , qttools
+, qtwayland
+, wrapQtAppsHook
 , perl
 
   # Cantata doesn't build with cdparanoia enabled so we disable that
@@ -20,7 +22,7 @@
 , libmusicbrainz5
 
 , withTaglib ? true
-, taglib
+, taglib2
 , taglib_extras
 , withHttpStream ? true
 , qtmultimedia
@@ -35,7 +37,7 @@
 , udisks2
 , withDynamic ? true
 , withHttpServer ? true
-, withLibVlc ? false
+, withLibVlc ? true
 , libvlc
 , withStreams ? true
 }:
@@ -71,20 +73,20 @@ let
     { names = [ "MUSICBRAINZ" ]; enable = withMusicbrainz; pkgs = [ libmusicbrainz5 ]; }
     { names = [ "ONLINE_SERVICES" ]; enable = withOnlineServices; pkgs = [ ]; }
     { names = [ "STREAMS" ]; enable = withStreams; pkgs = [ ]; }
-    { names = [ "TAGLIB" "TAGLIB_EXTRAS" ]; enable = withTaglib; pkgs = [ taglib taglib_extras ]; }
+    { names = [ "TAGLIB" "TAGLIB_EXTRAS" ]; enable = withTaglib; pkgs = [ taglib2 taglib_extras ]; }
     { names = [ "UDISKS2" ]; enable = withUdisks; pkgs = [ udisks2 ]; }
   ];
 
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "cantata";
-  version = "2.5.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
-    owner = "CDrummond";
+    owner = "nullobsi";
     repo = "cantata";
     rev = "v${version}";
-    sha256 = "sha256-UaZEKZvCA50WsdQSSJQQ11KTK6rM4ouCHDX7pn3NlQw=";
+    sha256 = "sha256-/zbQEUTLrBod+rWEH5XsjM/nrOAN7yXF1TEoorZ+usQ=";
   };
 
   patches = [
@@ -101,11 +103,12 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     qtsvg
+    qtwayland
     (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
   ]
   ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));
 
-  nativeBuildInputs = [ cmake pkg-config qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
   cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
 
@@ -115,7 +118,7 @@ mkDerivation rec {
     homepage = "https://github.com/cdrummond/cantata";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ peterhoeg ];
-    # Technically, Cantata should run on Darwin/Windows so if someone wants to
+    # Technically, Cantata runs on Darwin/Windows so if someone wants to
     # bother figuring that one out, be my guest.
     platforms = platforms.linux;
   };
