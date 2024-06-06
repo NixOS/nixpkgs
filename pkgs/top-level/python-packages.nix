@@ -8834,6 +8834,8 @@ self: super: with self; {
     inherit (pkgs) which;
   };
 
+  nireports = callPackage ../development/python-modules/nireports { };
+
   nitime = callPackage ../development/python-modules/nitime { };
 
   nitpick = callPackage ../applications/version-management/nitpick { };
