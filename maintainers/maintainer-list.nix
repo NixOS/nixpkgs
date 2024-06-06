@@ -4721,6 +4721,12 @@
     githubId = 62989;
     name = "Demyan Rogozhin";
   };
+  denperidge = {
+    email = "contact@denperidge.com";
+    github = "denperidge";
+    githubId = 27348469;
+    name = "Cat";
+  };
   derchris = {
     email = "derchris@me.com";
     github = "derchrisuk";
