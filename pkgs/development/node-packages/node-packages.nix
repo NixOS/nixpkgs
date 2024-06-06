@@ -87158,11 +87158,11 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  "pgrok-build-deps-../../tools/networking/pgrok/build-deps" = nodeEnv.buildNodePackage {
+  "pgrok-build-deps-../../by-name/pg/pgrok/build-deps" = nodeEnv.buildNodePackage {
     name = "pgrokd";
     packageName = "pgrokd";
     version = "1.4.1";
-    src = ../../tools/networking/pgrok/build-deps;
+    src = ../../by-name/pg/pgrok/build-deps;
     dependencies = [
       sources."@adobe/css-tools-4.3.3"
       sources."@alloc/quick-lru-5.2.0"
