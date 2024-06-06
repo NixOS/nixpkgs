@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+, bashInteractive
 , coreutils
 , installShellFiles
 , libiconv
@@ -42,7 +43,15 @@ rustPlatform.buildRustPackage rec {
 
     # Return unchanged string.rs
     cp $TMPDIR/string.rs tests/string.rs
+
+    # For shell completion tests
+    export PATH=${bashInteractive}/bin:$PATH
+    patchShebangs tests
   '';
+
+  patches = [
+    ./fix-just-path-in-tests.patch
+  ];
 
   postBuild = ''
     cargo run --package generate-book
