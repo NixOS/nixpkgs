@@ -14,6 +14,7 @@
 , gnum4
 , openssl
 , libxml2
+, unzip
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +37,8 @@ stdenv.mkDerivation rec {
     perl
     gnum4
     openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    unzip
   ];
 
   buildInputs = [
@@ -87,6 +90,6 @@ stdenv.mkDerivation rec {
     homepage = "https://julialang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ nickcao joshniemela thomasjm ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
   };
 }
