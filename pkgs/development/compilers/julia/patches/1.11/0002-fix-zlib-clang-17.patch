@@ -1,0 +1,110 @@
+From c84bdfdf0fcdbb1f78de3b4116ae507980a63654 Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Sat, 20 Sep 2025 16:44:03 -0500
+Subject: [PATCH] fix zlib build on clang 17
+
+---
+ deps/libgit2.mk                  |  7 +++++
+ deps/patches/zlib-clang-17.patch | 52 ++++++++++++++++++++++++++++++++
+ deps/zlib.mk                     |  7 +++++
+ 3 files changed, 66 insertions(+)
+ create mode 100644 deps/patches/zlib-clang-17.patch
+
+diff --git a/deps/libgit2.mk b/deps/libgit2.mk
+index d68a7a80d6..36984d61f2 100644
+--- a/deps/libgit2.mk
++++ b/deps/libgit2.mk
+@@ -40,6 +40,13 @@ endif
+ 
+ LIBGIT2_SRC_PATH := $(SRCCACHE)/$(LIBGIT2_SRC_DIR)
+ 
++$(BUILDDIR)/$(LIBGIT2_SRC_DIR)/zlib-clang-17.patch-applied: $(LIBGIT2_SRC_PATH)/source-extracted
++	cd $(LIBGIT2_SRC_PATH)/deps/zlib && \
++		patch -p1 -f < $(SRCDIR)/patches/zlib-clang-17.patch
++	mkdir -p $(dir $@) && echo 1 > $@
++
++$(BUILDDIR)/$(LIBGIT2_SRC_DIR)/build-configured: $(BUILDDIR)/$(LIBGIT2_SRC_DIR)/zlib-clang-17.patch-applied
++
+ $(BUILDDIR)/$(LIBGIT2_SRC_DIR)/build-configured: $(LIBGIT2_SRC_PATH)/source-extracted
+ 	mkdir -p $(dir $@)
+ 	cd $(dir $@) && \
+diff --git a/deps/patches/zlib-clang-17.patch b/deps/patches/zlib-clang-17.patch
+new file mode 100644
+index 0000000000..8bfbbadfba
+--- /dev/null
++++ b/deps/patches/zlib-clang-17.patch
+@@ -0,0 +1,52 @@
++From 4bd9a71f3539b5ce47f0c67ab5e01f3196dc8ef9 Mon Sep 17 00:00:00 2001
++From: Mark Adler <madler@alumni.caltech.edu>
++Date: Tue, 12 Dec 2023 22:19:05 -0600
++Subject: [PATCH] Remove fdopen #defines in zutil.h.
++
++fdopen() is not used by zlib anymore. The #defines are vestigial.
++---
++ zutil.h | 23 +----------------------
++ 1 file changed, 1 insertion(+), 22 deletions(-)
++
++diff --git a/zutil.h b/zutil.h
++index 0bd2dbcba..bb513cb4b 100644
++--- a/zutil.h
+++++ b/zutil.h
++@@ -137,17 +137,8 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
++ #  endif
++ #endif
++ 
++-#if defined(MACOS) || defined(TARGET_OS_MAC)
+++#if defined(MACOS)
++ #  define OS_CODE  7
++-#  ifndef Z_SOLO
++-#    if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
++-#      include <unix.h> /* for fdopen */
++-#    else
++-#      ifndef fdopen
++-#        define fdopen(fd,mode) NULL /* No fdopen() */
++-#      endif
++-#    endif
++-#  endif
++ #endif
++ 
++ #ifdef __acorn
++@@ -170,18 +161,6 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
++ #  define OS_CODE 19
++ #endif
++ 
++-#if defined(_BEOS_) || defined(RISCOS)
++-#  define fdopen(fd,mode) NULL /* No fdopen() */
++-#endif
++-
++-#if (defined(_MSC_VER) && (_MSC_VER > 600)) && !defined __INTERIX
++-#  if defined(_WIN32_WCE)
++-#    define fdopen(fd,mode) NULL /* No fdopen() */
++-#  else
++-#    define fdopen(fd,type)  _fdopen(fd,type)
++-#  endif
++-#endif
++-
++ #if defined(__BORLANDC__) && !defined(MSDOS)
++   #pragma warn -8004
++   #pragma warn -8008
+\ No newline at end of file
+diff --git a/deps/zlib.mk b/deps/zlib.mk
+index 5548a0791f..7313c87107 100644
+--- a/deps/zlib.mk
++++ b/deps/zlib.mk
+@@ -8,6 +8,13 @@ $(eval $(call git-external,zlib,ZLIB,,,$(SRCCACHE)))
+ ZLIB_BUILD_OPTS := $(CMAKE_COMMON) -DCMAKE_BUILD_TYPE=Release -DUNIX=true
+ ZLIB_BUILD_OPTS += -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+ 
++$(BUILDDIR)/$(ZLIB_SRC_DIR)/zlib-clang-17.patch-applied: $(SRCCACHE)/$(ZLIB_SRC_DIR)/source-extracted
++	cd $(SRCCACHE)/$(ZLIB_SRC_DIR) && \
++		patch -p1 -f < $(SRCDIR)/patches/zlib-clang-17.patch
++	mkdir -p $(dir $@) && echo 1 > $@
++
++$(BUILDDIR)/$(ZLIB_SRC_DIR)/build-configured: $(BUILDDIR)/$(ZLIB_SRC_DIR)/zlib-clang-17.patch-applied
++
+ $(BUILDDIR)/$(ZLIB_SRC_DIR)/build-configured: $(SRCCACHE)/$(ZLIB_SRC_DIR)/source-extracted
+ 	mkdir -p $(dir $@)
+ 	cd $(dir $@) && $(CMAKE) $(ZLIB_BUILD_OPTS) $(dir $<)
+-- 
+2.50.1
+

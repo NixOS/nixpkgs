@@ -1,0 +1,58 @@
+From c9fcbd2936202908af56ac0e186d22b80771a635 Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Mon, 23 Feb 2026 12:53:48 -0600
+Subject: [PATCH] fix build on darwin
+
+---
+ deps/llvm.mk                       |  2 ++
+ deps/patches/llvm-libcxx-fix.patch | 25 +++++++++++++++++++++++++
+ 2 files changed, 27 insertions(+)
+ create mode 100644 deps/patches/llvm-libcxx-fix.patch
+
+diff --git a/deps/llvm.mk b/deps/llvm.mk
+index de55846aa0..d2f4e82f36 100644
+--- a/deps/llvm.mk
++++ b/deps/llvm.mk
+@@ -234,6 +234,8 @@ endef
+ 
+ $(eval $(call LLVM_PATCH,llvm-ittapi-cmake))
+ 
++$(eval $(call LLVM_PATCH,llvm-libcxx-fix))
++
+ ifeq ($(USE_SYSTEM_ZLIB), 0)
+ $(LLVM_BUILDDIR_withtype)/build-configured: | $(build_prefix)/manifest/zlib
+ endif
+diff --git a/deps/patches/llvm-libcxx-fix.patch b/deps/patches/llvm-libcxx-fix.patch
+new file mode 100644
+index 0000000000..e03c1ff0a2
+--- /dev/null
++++ b/deps/patches/llvm-libcxx-fix.patch
+@@ -0,0 +1,25 @@
++From 08f2df45b9bbec34c13da85ecbb339f71c050853 Mon Sep 17 00:00:00 2001
++From: George Huebner <george@feyor.sh>
++Date: Mon, 23 Feb 2026 12:52:40 -0600
++Subject: [PATCH] fix build with libcxx
++
++---
++ llvm/tools/sancov/sancov.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tools/sancov/sancov.cpp b/tools/sancov/sancov.cpp
++index f2e71f97d..9045b302d 100644
++--- a/tools/sancov/sancov.cpp
+++++ b/tools/sancov/sancov.cpp
++@@ -541,7 +541,7 @@ private:
++   static std::unique_ptr<SpecialCaseList> createUserIgnorelist() {
++     if (ClIgnorelist.empty())
++       return std::unique_ptr<SpecialCaseList>();
++-    return SpecialCaseList::createOrDie({{ClIgnorelist}},
+++    return SpecialCaseList::createOrDie({std::string{ClIgnorelist}},
++                                         *vfs::getRealFileSystem());
++   }
++   std::unique_ptr<SpecialCaseList> DefaultIgnorelist;
++-- 
++2.52.0
++
+-- 
+2.52.0
+

@@ -1,4 +1,6 @@
 {
+  stdenv,
+  lib,
   callPackage,
   fetchpatch2,
   gcc14Stdenv,
@@ -66,33 +68,83 @@ in
             revert = true;
             hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
           })
+        ]
+        ++ lib.optionals stdenv.cc.isClang [
+          ./patches/1.10/0001-zlib-rpath.patch
+          ./patches/1.10/0002-fix-zlib-clang-17.patch
+          ./patches/1.10/0003-fix-lbt-trampolines-clang-17.patch
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          ./patches/1.10/0004-lbt-blas-detection.patch
+          ./patches/1.10/0005-fix-llvm-clang.patch
+
+          (fetchpatch2 {
+            name = "fix-libcurl-rpath.patch";
+            url = "https://github.com/JuliaLang/julia/commit/d10a0fbcfe7e339e5d9bab161ff64dd022b44418.patch";
+            hash = "sha256-qTlzxALNiMOvlgDDPjHsJiOAWifwGQwhF07Q5vmfp/A=";
+          })
         ];
       })
-      {
-        stdenv = gcc14Stdenv;
-        gfortran = gfortran14;
-      }
+      (
+        if stdenv.cc.isGNU then
+          {
+            stdenv = gcc14Stdenv;
+            gfortran = gfortran14;
+          }
+        else
+          { }
+      )
   );
   julia_111 = wrapJulia (
     callPackage
       (import ./generic.nix {
         version = "1.11.8";
         hash = "sha256-ACblvJzyoRlzaWMZL/1ieF4izdNuhCvYgxvPrtCyJBo=";
+        patches =
+          lib.optionals stdenv.cc.isClang [
+            ./patches/1.11/0001-zlib-rpath.patch
+            ./patches/1.11/0002-fix-zlib-clang-17.patch
+            ./patches/1.11/0003-fix-lbt-trampolines-clang-17.patch
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            ./patches/1.11/0004-lbt-blas-detection.patch
+            ./patches/1.11/0005-fix-llvm-clang.patch
+
+            (fetchpatch2 {
+              name = "fix-libcurl-rpath.patch";
+              url = "https://github.com/JuliaLang/julia/commit/d10a0fbcfe7e339e5d9bab161ff64dd022b44418.patch";
+              hash = "sha256-qTlzxALNiMOvlgDDPjHsJiOAWifwGQwhF07Q5vmfp/A=";
+            })
+          ];
       })
-      {
-        stdenv = gcc14Stdenv;
-        gfortran = gfortran14;
-      }
+      (
+        if stdenv.cc.isGNU then
+          {
+            stdenv = gcc14Stdenv;
+            gfortran = gfortran14;
+          }
+        else
+          { }
+      )
   );
   julia_112 = wrapJulia (
     callPackage
       (import ./generic.nix {
         version = "1.12.5";
         hash = "sha256-3jvzaT2TjX4VU5pcOsIXfFRqzQ17e8TjJ+MNanI48eM=";
+        patches = lib.optionals stdenv.hostPlatform.isDarwin [
+          ./patches/1.12/0001-zlib-rpath.patch
+          ./patches/1.12/0002-lbt-blas-detection.patch
+        ];
       })
-      {
-        stdenv = gcc14Stdenv;
-        gfortran = gfortran14;
-      }
+      (
+        if stdenv.cc.isGNU then
+          {
+            stdenv = gcc14Stdenv;
+            gfortran = gfortran14;
+          }
+        else
+          { }
+      )
   );
 }
