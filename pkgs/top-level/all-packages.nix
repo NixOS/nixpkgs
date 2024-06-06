@@ -8252,8 +8252,6 @@ with pkgs;
 
   geteltorito = callPackage ../tools/misc/geteltorito { };
 
-  getmail6 = callPackage ../tools/networking/getmail6 { };
-
   getopt = callPackage ../tools/misc/getopt { };
 
   getoptions = callPackage ../tools/misc/getoptions { };
