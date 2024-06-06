@@ -14134,10 +14134,9 @@ with pkgs;
 
   vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
 
-  vp = callPackage ../applications/misc/vp {
-    # Enable next line for console graphics. Note that
-    # it requires `sixel` enabled terminals such as mlterm
-    # or xterm -ti 340
+  vpWithSixel = vp.override {
+    # Enable next line for console graphics. Note that it requires `sixel`
+    # enabled terminals such as mlterm or xterm -ti 340
     SDL = SDL_sixel;
   };
 
@@ -17748,7 +17747,7 @@ with pkgs;
 
   guile-reader = callPackage ../development/guile-modules/guile-reader { };
 
-  guile-sdl = callPackage ../development/guile-modules/guile-sdl {
+  guile-sdl = callPackage ../by-name/gu/guile-sdl/package.nix {
     guile = guile_2_2;
   };
 
@@ -24194,28 +24193,6 @@ with pkgs;
 
   SDL = SDL_classic;
 
-  SDL_audiolib = callPackage ../development/libraries/SDL_audiolib { };
-
-  SDL_sixel = callPackage ../development/libraries/SDL_sixel { };
-
-  SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
-
-  SDL_gpu = callPackage ../development/libraries/SDL_gpu { };
-
-  SDL_image = callPackage ../development/libraries/SDL_image { };
-
-  SDL_mixer = callPackage ../development/libraries/SDL_mixer { };
-
-  SDL_net = callPackage ../development/libraries/SDL_net { };
-
-  SDL_Pango = callPackage ../development/libraries/SDL_Pango { };
-
-  SDL_sound = callPackage ../development/libraries/SDL_sound { };
-
-  SDL_stretch= callPackage ../development/libraries/SDL_stretch { };
-
-  SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
-
   SDL2 = callPackage ../development/libraries/SDL2 {
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
@@ -24240,14 +24217,6 @@ with pkgs;
       hash = "sha256-kxyb5b8dfI+um33BV4KLfu6HTiPH8ktEun7/a0g2MSw=";
     };
   });
-
-  SDL2_gfx = callPackage ../development/libraries/SDL2_gfx { };
-
-  SDL2_sound = callPackage ../development/libraries/SDL2_sound {
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox CoreAudio;
-  };
-
-  SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
 
   sdrplay = callPackage ../applications/radio/sdrplay { };
 
@@ -36486,8 +36455,6 @@ with pkgs;
 
   bsdgames = callPackage ../games/bsdgames { };
 
-  btanks = callPackage ../games/btanks { };
-
   bugdom = callPackage ../games/bugdom {
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit Foundation OpenGL;
@@ -36994,8 +36961,6 @@ with pkgs;
   nudoku = callPackage ../games/nudoku { };
 
   oilrush = callPackage ../games/oilrush { };
-
-  onscripter-en = callPackage ../games/onscripter-en { };
 
   openarena = callPackage ../games/openarena { };
 
