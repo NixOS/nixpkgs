@@ -29,6 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
       ericsagnes
       ShamrockLee
     ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 })
