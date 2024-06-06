@@ -29840,11 +29840,7 @@ with pkgs;
 
   keylight-controller-mschneider82 = callPackage ../applications/misc/keylight-controller-mschneider82 { };
 
-  leftwm = callPackage ../applications/window-managers/leftwm/leftwm { };
-
-  leftwm-config = callPackage ../applications/window-managers/leftwm/leftwm-config { };
-
-  leftwm-theme = callPackage ../applications/window-managers/leftwm/leftwm-theme { };
+  leftwm = callPackage ../applications/window-managers/leftwm { };
 
   levant = callPackage ../applications/networking/cluster/levant { };
 
