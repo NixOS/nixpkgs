@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "rbspy";
     repo = "rbspy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ut/QeckPdgaVPYNWNjo6RCmLOc2EOXfcqRIC14I/Ruk=";
+    hash = "sha256-FnnpMin0hDNjQ/CpTBme4RUrp7+A5FH1DkQ8FcqwK7Q=";
   };
 
-  cargoHash = "sha256-EJ9ij3Q10CehhrJ/nyXOuqVhiVVfHHhyqIcq8fVmzTU=";
+  cargoHash = "sha256-HzXbNoColjxrbswAPY/cr3p6qWXb/0os8VYi/nQyEgo=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
