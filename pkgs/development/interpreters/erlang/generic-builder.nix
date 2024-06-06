@@ -11,6 +11,7 @@
 , ncurses
 , openssl
 , perl
+, runtimeShell
 , autoconf
 , openjdk11 ? null # javacSupport
 , unixODBC ? null # odbcSupport
@@ -115,6 +116,9 @@ stdenv.mkDerivation ({
     patchShebangs make
 
     ${postPatch}
+  '' + optionalString (lib.versionOlder "25" version) ''
+    substituteInPlace lib/os_mon/src/disksup.erl \
+      --replace-fail '"sh ' '"${runtimeShell} '
   '';
 
   # For OTP 27+ we need ex_doc to build the documentation
