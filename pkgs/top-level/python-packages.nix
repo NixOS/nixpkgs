@@ -2571,6 +2571,8 @@ self: super: with self; {
 
   crontab = callPackage ../development/python-modules/crontab { };
 
+  crossandra = callPackage ../development/python-modules/crossandra { };
+
   crossplane = callPackage ../development/python-modules/crossplane { };
 
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
