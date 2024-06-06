@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "xapp";
-  version = "22";
+  version = "2.4.1";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "python-xapp";
-    rev = "refs/tags/master.mint${version}";
-    hash = "sha256-2Gx85y0ARu6EfDYAT9ZL154RH0R1HY78tm3rceODnZU=";
+    rev = version;
+    hash = "sha256-Kvhp+biZ+KK9FYma/8cUEaQCHPKMLjOO909kbyMLQ3o=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "xapp" ];
 
-  passthru.updateScript = gitUpdater { ignoredVersions = "^master.*"; };
+  passthru = {
+    updateScript = gitUpdater { ignoredVersions = "^master.*"; };
+    skipBulkUpdate = true; # This should be bumped as part of Cinnamon update.
+  };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/python-xapp";

@@ -10186,7 +10186,7 @@
     githubId = 27734541;
   };
   jtbx = {
-    email = "jtbx@duck.com";
+    email = "jeremy@baxters.nz";
     name = "Jeremy Baxter";
     github = "jtbx";
     githubId = 92071952;

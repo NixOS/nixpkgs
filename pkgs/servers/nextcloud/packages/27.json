@@ -200,9 +200,9 @@
     ]
   },
   "notify_push": {
-    "sha256": "1w0nb74q5ishwsd9xhgjlp5ik159xjfp5i2cczi0fmwlb185n1ik",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.11/notify_push-v0.6.11.tar.gz",
-    "version": "0.6.11",
+    "sha256": "14s8g3dqwrxjz1zww64n1lhwdb8374wr1b5v76xhawypmfz2a68h",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.12/notify_push-v0.6.12.tar.gz",
+    "version": "0.6.12",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
@@ -210,9 +210,9 @@
     ]
   },
   "onlyoffice": {
-    "sha256": "1h4jjphpqzxmnx300fkj0gf831sb61r8vxd3w9vnj4v38mxdmcc0",
-    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.2.0/onlyoffice.tar.gz",
-    "version": "9.2.0",
+    "sha256": "1vflj70q8d0hrfck9c5l1k4qa38gpdh3zjgx4aqamnlbvkfssk7h",
+    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.2.2/onlyoffice.tar.gz",
+    "version": "9.2.2",
     "description": "ONLYOFFICE connector allows you to view, edit and collaborate on text documents, spreadsheets and presentations within Nextcloud using ONLYOFFICE Docs. This will create a new Edit in ONLYOFFICE action within the document library for Office documents. This allows multiple users to co-author documents in real time from the familiar web interface and save the changes back to your file storage.",
     "homepage": "https://www.onlyoffice.com",
     "licenses": [
@@ -230,9 +230,9 @@
     ]
   },
   "polls": {
-    "sha256": "1s3rlfdk3g3c45ch8kb66ydzxfx20vcaff1926m5h8m50cmapq6x",
-    "url": "https://github.com/nextcloud/polls/releases/download/v6.3.0/polls.tar.gz",
-    "version": "6.3.0",
+    "sha256": "0zsklab2sjz5b37b1dn0fpc21yvxrp7fvacppv1v6x5yppnmm6kh",
+    "url": "https://github.com/nextcloud/polls/releases/download/v6.4.0/polls.tar.gz",
+    "version": "6.4.0",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
