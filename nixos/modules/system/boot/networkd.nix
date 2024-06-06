@@ -634,6 +634,7 @@ let
           "LinkLocalAddressing"
           "IPv6LinkLocalAddressGenerationMode"
           "IPv6StableSecretAddress"
+          "IPv4LLStartAddress"
           "IPv4LLRoute"
           "DefaultRouteOnDevice"
           "LLMNR"
@@ -656,12 +657,16 @@ let
           "IPv6AcceptRA"
           "IPv6DuplicateAddressDetection"
           "IPv6HopLimit"
+          "IPv4ReversePathFilter"
+          "IPv4AcceptLocal"
+          "IPv4RouteLocalnet"
           "IPv4ProxyARP"
           "IPv6ProxyNDP"
           "IPv6ProxyNDPAddress"
           "IPv6SendRA"
           "DHCPPrefixDelegation"
           "IPv6MTUBytes"
+          "KeepMaster"
           "Bridge"
           "Bond"
           "VRF"
@@ -703,11 +708,15 @@ let
         (assertMinimum "IPv6DuplicateAddressDetection" 0)
         (assertInt "IPv6HopLimit")
         (assertMinimum "IPv6HopLimit" 0)
+        (assertValueOneOf "IPv4ReversePathFilter" ["no" "strict" "loose"])
+        (assertValueOneOf "IPv4AcceptLocal" boolValues)
+        (assertValueOneOf "IPv4RouteLocalnet" boolValues)
         (assertValueOneOf "IPv4ProxyARP" boolValues)
         (assertValueOneOf "IPv6ProxyNDP" boolValues)
         (assertValueOneOf "IPv6SendRA" boolValues)
         (assertValueOneOf "DHCPPrefixDelegation" boolValues)
         (assertByteFormat "IPv6MTUBytes")
+        (assertValueOneOf "KeepMaster" boolValues)
         (assertValueOneOf "ActiveSlave" boolValues)
         (assertValueOneOf "PrimarySlave" boolValues)
         (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
