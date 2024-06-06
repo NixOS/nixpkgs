@@ -15,6 +15,7 @@
         x86_64-linux = {
           iso = import ./systems/iso.nix flakeContext;
           netboot = import ./systems/netboot.nix flakeContext;
+          kexec = import ./systems/kexec.nix flakeContext;
         };
       };
     };
