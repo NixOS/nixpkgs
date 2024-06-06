@@ -184,7 +184,6 @@
 , "patch-package"
 , "peerflix"
 , "peerflix-server"
-, {"pgrok-build-deps": "../../by-name/pg/pgrok/build-deps"}
 , "pnpm"
 , "poor-mans-t-sql-formatter-cli"
 , "postcss"
