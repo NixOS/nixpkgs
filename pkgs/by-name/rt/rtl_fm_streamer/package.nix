@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/AlbrechtL/rtl_fm_streamer";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ doronbehar ];
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 })
