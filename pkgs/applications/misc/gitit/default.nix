@@ -18,9 +18,5 @@ let
   static = haskell.lib.compose.justStaticExecutables plugins;
 
 in
-  static.overrideAttrs (drv: {
-    meta = drv.meta // {
-      maintainers = drv.meta.maintainers or []
-        ++ [ lib.maintainers.Profpatsch ];
-    };
-  })
+
+static
