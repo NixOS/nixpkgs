@@ -4,7 +4,7 @@
 }:
 buildGoModule rec {
   pname = "buildkite-agent-metrics";
-  version = "5.9.5";
+  version = "5.9.6";
 
   outputs = [ "out" "lambda" ];
 
@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "buildkite";
     repo = "buildkite-agent-metrics";
     rev = "v${version}";
-    hash = "sha256-oNUNSy8VzyOteNge/ZIoln+GGa/xWl6MNmU/Ke/nlBk=";
+    hash = "sha256-OrdU640gC14Y4SMtZZtW2Yz82JRwoQRtjY1KCL+vyEc=";
   };
 
   vendorHash = "sha256-i2+nefRE4BD93rG842oZj0/coamYVRMPxEHio80bdWk=";
