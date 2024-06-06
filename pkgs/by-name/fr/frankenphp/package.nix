@@ -27,7 +27,7 @@ let
   pieBuild = stdenv.hostPlatform.isMusl;
 in buildGoModule rec {
   pname = "frankenphp";
-  version = "1.1.5";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "dunglas";
@@ -54,7 +54,7 @@ in buildGoModule rec {
     "-s"
     "-w"
     "-X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP ${version} PHP ${phpUnwrapped.version} Caddy'"
-    # pie mode is only available with pkgsMusl, it also automaticaly add -buildmode=pie to $GOFLAGS
+    # pie mode is only available with pkgsMusl, it also automatically add -buildmode=pie to $GOFLAGS
   ]  ++ (lib.optional pieBuild [ "-static-pie" ]);
 
   preBuild = ''
@@ -96,13 +96,13 @@ in buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/dunglas/frankenphp/releases/tag/v${version}";
     description = "The modern PHP app server";
     homepage = "https://github.com/dunglas/frankenphp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "frankenphp";
-    maintainers = with maintainers; [ gaelreyrol shyim ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ gaelreyrol shyim ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

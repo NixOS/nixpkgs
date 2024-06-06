@@ -212,6 +212,7 @@
         - pkgs/development/node-packages/**/*
         - pkgs/development/tools/yarn/*
         - pkgs/development/tools/yarn2nix-moretea/**/*
+        - pkgs/development/tools/pnpm/**/*
         - pkgs/development/web/nodejs/*
 
 "6.topic: ocaml":

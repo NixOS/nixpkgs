@@ -10,11 +10,11 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "VirtualBox-GuestAdditions-builder-${kernel.version}";
-  version = "7.0.14";
+  version = "7.0.18";
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${finalAttrs.version}/VirtualBox-${finalAttrs.version}.tar.bz2";
-    sha256 = "45860d834804a24a163c1bb264a6b1cb802a5bc7ce7e01128072f8d6a4617ca9";
+    sha256 = "d999513533631674a024762668de999411d8197060c51e68c5faf0a2c0eea1a5";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
@@ -37,13 +37,9 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    ../gcc-13.patch
-    # https://www.virtualbox.org/changeset/100258/vbox
+    #../gcc-13.patch
+    ## https://www.virtualbox.org/changeset/100258/vbox
     ./no-legacy-xorg.patch
-    # https://www.virtualbox.org/changeset/102989/vbox
-    ./strlcpy-1.patch
-    # https://www.virtualbox.org/changeset/102990/vbox
-    ./strlcpy-2.patch
   ];
 
   postPatch = ''
