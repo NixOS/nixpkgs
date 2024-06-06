@@ -11,7 +11,7 @@
 , xorg
 # To define a the gnuradio.pkgs scope
 , newScope
-# For Emulating wrapGAppsHook
+# For Emulating wrapGAppsHook3
 , gsettings-desktop-schemas
 , glib
 , hicolor-icon-theme
@@ -58,6 +58,10 @@ let
   # may wish to wrap GR without python support.
   pythonPkgs = extraPythonPackages
     ++ [ (unwrapped.python.pkgs.toPythonModule unwrapped) ]
+    ++ unwrapped.passthru.uhd.pythonPath
+    ++ lib.optionals (unwrapped.passthru.uhd.pythonPath != []) [
+      (unwrapped.python.pkgs.toPythonModule unwrapped.passthru.uhd)
+    ]
     # Add the extraPackages as python modules as well
     ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ lib.flatten (lib.mapAttrsToList (
@@ -72,7 +76,7 @@ let
   inherit (unwrapped) version;
   makeWrapperArgs = builtins.concatStringsSep " " ([
   ]
-    # Emulating wrapGAppsHook & wrapQtAppsHook working together
+    # Emulating wrapGAppsHook3 & wrapQtAppsHook working together
     ++ lib.optionals (
       (unwrapped.hasFeature "gnuradio-companion")
       || (unwrapped.hasFeature "gr-qtgui")
@@ -91,6 +95,7 @@ let
       "--prefix" "XDG_DATA_DIRS" ":" "${unwrapped.gtk}/share"
       "--prefix" "XDG_DATA_DIRS" ":" "${unwrapped.gtk}/share/gsettings-schemas/${unwrapped.gtk.name}"
       "--prefix" "GI_TYPELIB_PATH" ":" "${lib.makeSearchPath "lib/girepository-1.0" [
+        (lib.getLib glib)
         unwrapped.gtk
         gsettings-desktop-schemas
         atk

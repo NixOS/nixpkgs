@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An open-source distributed database built with love";
+    mainProgram = "rethinkdb";
     longDescription = ''
       RethinkDB is built to store JSON documents, and scale to
       multiple machines with very little effort. It has a pleasant

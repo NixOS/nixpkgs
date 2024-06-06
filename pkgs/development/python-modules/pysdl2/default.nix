@@ -1,7 +1,18 @@
-{ stdenv, lib, substituteAll, fetchPypi, buildPythonPackage, SDL2, SDL2_ttf, SDL2_image, SDL2_gfx, SDL2_mixer }:
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchPypi,
+  buildPythonPackage,
+  SDL2,
+  SDL2_ttf,
+  SDL2_image,
+  SDL2_gfx,
+  SDL2_mixer,
+}:
 
 buildPythonPackage rec {
-  pname = "PySDL2";
+  pname = "pysdl2";
   version = "0.9.16";
 
   # The tests use OpenGL using find_library, which would have to be
@@ -12,25 +23,37 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sdl2" ];
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "PySDL2";
+    inherit version;
     hash = "sha256-ECdAa62+zdMP5W6AClp2rX1ycaOuwLes94DuJqAPLUA=";
   };
 
   # Deliberately not in propagated build inputs; users can decide
   # which library they want to include.
-  buildInputs = [ SDL2_ttf SDL2_image SDL2_gfx SDL2_mixer ];
+  buildInputs = [
+    SDL2_ttf
+    SDL2_image
+    SDL2_gfx
+    SDL2_mixer
+  ];
   propagatedBuildInputs = [ SDL2 ];
   patches = [
-    (substituteAll ({
-      src = ./PySDL2-dll.patch;
-    } // builtins.mapAttrs (_: pkg: "${pkg}/lib/lib${pkg.pname}${stdenv.hostPlatform.extensions.sharedLibrary}") {
-      # substituteAll keys must start lowercase
-      sdl2 = SDL2;
-      sdl2_ttf = SDL2_ttf;
-      sdl2_image = SDL2_image;
-      sdl2_gfx = SDL2_gfx;
-      sdl2_mixer = SDL2_mixer;
-    }))
+    (substituteAll (
+      {
+        src = ./PySDL2-dll.patch;
+      }
+      //
+        builtins.mapAttrs
+          (_: pkg: "${pkg}/lib/lib${pkg.pname}${stdenv.hostPlatform.extensions.sharedLibrary}")
+          {
+            # substituteAll keys must start lowercase
+            sdl2 = SDL2;
+            sdl2_ttf = SDL2_ttf;
+            sdl2_image = SDL2_image;
+            sdl2_gfx = SDL2_gfx;
+            sdl2_mixer = SDL2_mixer;
+          }
+    ))
   ];
 
   meta = {

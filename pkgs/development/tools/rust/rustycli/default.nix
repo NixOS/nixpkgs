@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Access the rust playground right in terminal";
+    mainProgram = "rustycli";
     homepage = "https://github.com/pwnwriter/rustycli";
     changelog = "https://github.com/pwnwriter/rustycli/releases/tag/v${version}";
     license = licenses.mit;

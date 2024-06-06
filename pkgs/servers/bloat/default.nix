@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "bloat";
-  version = "unstable-2024-02-12";
+  version = "0-unstable-2024-02-12";
 
   src = fetchgit {
     url = "git://git.freesoftwareextremist.com/bloat";

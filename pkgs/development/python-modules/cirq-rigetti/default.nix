@@ -1,26 +1,27 @@
-{ buildPythonPackage
-, cirq-core
-, requests
-, pytestCheckHook
-, attrs
-, certifi
-, h11
-, httpcore
-, idna
-, httpx
-, iso8601
-, pydantic
-, pyjwt
-, pyquil
-, python-dateutil
-, pythonOlder
-, qcs-api-client
-, retrying
-, rfc3339
-, rfc3986
-, six
-, sniffio
-, toml
+{
+  buildPythonPackage,
+  cirq-core,
+  requests,
+  pytestCheckHook,
+  attrs,
+  certifi,
+  h11,
+  httpcore,
+  idna,
+  httpx,
+  iso8601,
+  pydantic,
+  pyjwt,
+  pyquil,
+  python-dateutil,
+  pythonOlder,
+  qcs-api-client,
+  retrying,
+  rfc3339,
+  rfc3986,
+  six,
+  sniffio,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -74,9 +75,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # No need to test the version number

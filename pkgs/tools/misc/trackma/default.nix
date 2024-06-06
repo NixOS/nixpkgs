@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , glib
 , gtk3
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ copyDesktopItems python3.pkgs.poetry-core ]
-    ++ lib.optionals withGTK [ wrapGAppsHook gobject-introspection ]
+    ++ lib.optionals withGTK [ wrapGAppsHook3 gobject-introspection ]
     ++ lib.optionals withQT [ qt5.wrapQtAppsHook ];
 
   buildInputs = lib.optionals withGTK [ glib gtk3 ];

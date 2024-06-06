@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xiu";
-  version = "0.10.0";
+  version = "0.12.7";
 
   src = fetchFromGitHub {
     owner = "harlanc";
     repo = "xiu";
     rev = "v${version}";
-    hash = "sha256-wJXVxkW+jbqc2zFOn8RGUVI9G0+oow+eFGtF4Nsj5pA=";
+    hash = "sha256-tFArcI7NcIopM5uPshaOU3ExJW5URc5Mf2V0ZwwgwKo=";
   };
 
-  cargoHash = "sha256-gpPEHe/RDmEapkioXq7TicrFRrJlcRqiilY+munQKws=";
+  cargoHash = "sha256-OBL1uDVogcU6saEz2d2sWJTwXM2KE/YfhsNZtH0Cnk8=";
 
   nativeBuildInputs = [
     cmake
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isLinux [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   OPENSSL_NO_VENDOR = 1;
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/harlanc/xiu";
     changelog = "https://github.com/harlanc/xiu/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ cafkafk ];
     mainProgram = "xiu";
   };
 }

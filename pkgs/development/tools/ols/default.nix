@@ -1,14 +1,18 @@
-{ stdenv, fetchFromGitHub, makeBinaryWrapper, odin, lib }:
+{ stdenv, fetchFromGitHub, makeBinaryWrapper, unstableGitUpdater, odin, lib }:
 
 stdenv.mkDerivation {
   pname = "ols";
-  version = "0-unstable-2024-02-09";
+  version = "0-unstable-2024-05-22";
 
   src = fetchFromGitHub {
     owner = "DanielGavin";
     repo = "ols";
-    rev = "3eb1e0e60a66a4fc7347fb77837ff45ccbe1cabb";
-    hash = "sha256-qPcSZjvlBmFf3M98GrwIu8SGO2VbgdqBKzyFpGSEtrI=";
+    rev = "a2f333bfbdd187aa7463ae230f7a617f6bccb611";
+    hash = "sha256-sM8UkfuzQib0L8mUhmtVZAjbZKA07aY2YLvooj3zdc0=";
+  };
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
   };
 
   nativeBuildInputs = [
@@ -43,6 +47,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     inherit (odin.meta) platforms;
     description = "Language server for the Odin programming language";
+    mainProgram = "ols";
     homepage = "https://github.com/DanielGavin/ols";
     license = licenses.mit;
     maintainers = with maintainers; [ astavie znaniye ];

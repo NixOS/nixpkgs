@@ -120,6 +120,6 @@ mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ friedelino shamilton ];
     platforms = platforms.linux;
-    knownVulnerabilities = [ "Includes vulnerable bundled libraries." ];
+    knownVulnerabilities = [ "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj." ];
   };
 }

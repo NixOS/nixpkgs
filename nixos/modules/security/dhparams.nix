@@ -15,7 +15,7 @@ let
       type = bitType;
       default = cfg.defaultBitSize;
       defaultText = literalExpression "config.${opt.defaultBitSize}";
-      description = lib.mdDoc ''
+      description = ''
         The bit size for the prime that is used during a Diffie-Hellman
         key exchange.
       '';
@@ -24,7 +24,7 @@ let
     options.path = mkOption {
       type = types.path;
       readOnly = true;
-      description = lib.mdDoc ''
+      description = ''
         The resulting path of the generated Diffie-Hellman parameters
         file for other services to reference. This could be either a
         store path or a file inside the directory specified by
@@ -45,7 +45,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to generate new DH params and clean up old DH params.
         '';
       };
@@ -56,7 +56,7 @@ in {
         in attrsOf (coercedTo int coerce (submodule paramsSubmodule));
         default = {};
         example = lib.literalExpression "{ nginx.bits = 3072; }";
-        description = lib.mdDoc ''
+        description = ''
           Diffie-Hellman parameters to generate.
 
           The value is the size (in bits) of the DH params to generate. The
@@ -91,7 +91,7 @@ in {
       stateful = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether generation of Diffie-Hellman parameters should be stateful or
           not. If this is enabled, PEM-encoded files for Diffie-Hellman
           parameters are placed in the directory specified by
@@ -109,7 +109,7 @@ in {
       defaultBitSize = mkOption {
         type = bitType;
         default = 2048;
-        description = lib.mdDoc ''
+        description = ''
           This allows to override the default bit size for all of the
           Diffie-Hellman parameters set in
           {option}`security.dhparams.params`.
@@ -119,7 +119,7 @@ in {
       path = mkOption {
         type = types.str;
         default = "/var/lib/dhparams";
-        description = lib.mdDoc ''
+        description = ''
           Path to the directory in which Diffie-Hellman parameters will be
           stored. This only is relevant if
           {option}`security.dhparams.stateful` is

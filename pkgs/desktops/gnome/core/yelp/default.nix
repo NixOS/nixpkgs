@@ -13,7 +13,7 @@
 , libxml2
 , libxslt
 , gst_all_1
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Yelp";
+    homepage = "https://apps.gnome.org/Yelp/";
     description = "The help viewer in Gnome";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;

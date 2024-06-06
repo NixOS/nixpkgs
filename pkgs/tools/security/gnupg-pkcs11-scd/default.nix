@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A smart-card daemon to enable the use of PKCS#11 tokens with GnuPG";
+    mainProgram = "gnupg-pkcs11-scd";
     longDescription = ''
     gnupg-pkcs11 is a project to implement a BSD-licensed smart-card
     daemon to enable the use of PKCS#11 tokens with GnuPG.

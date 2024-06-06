@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "minilibx";
-  version = "unstable-2021-10-30";
+  version = "0-unstable-2021-10-30";
 
   src = fetchFromGitHub {
     owner = "42Paris";

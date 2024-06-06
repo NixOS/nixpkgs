@@ -43,6 +43,7 @@ buildGoModule rec {
     homepage = "https://github.com/aquasecurity/chain-bench";
     changelog = "https://github.com/aquasecurity/chain-bench/releases/tag/v${version}";
     description = "An open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark";
+    mainProgram = "chain-bench";
     longDescription = ''
       Chain-bench is an open-source tool for auditing your software supply chain
       stack for security compliance based on a new CIS Software Supply Chain

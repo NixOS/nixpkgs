@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   # of the nix store -- but ekam builds capnp locally and links against it,
   # so that causes the build to fail. So, we turn this off.
   #
-  # See: https://nixos.wiki/wiki/Development_environment_with_nix-shell#Troubleshooting
+  # See: https://wiki.nixos.org/wiki/Development_environment_with_nix-shell#Troubleshooting
   preBuild = ''
     unset NIX_ENFORCE_PURITY
   '';

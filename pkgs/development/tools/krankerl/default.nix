@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A CLI helper to manage, package and publish Nextcloud apps";
+    mainProgram = "krankerl";
     homepage = "https://github.com/ChristophWurst/krankerl";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

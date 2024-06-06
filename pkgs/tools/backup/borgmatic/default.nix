@@ -3,6 +3,7 @@
 , borgbackup
 , coreutils
 , python3Packages
+, fetchpatch
 , fetchPypi
 , systemd
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
@@ -13,14 +14,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.8.1";
+  version = "1.8.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XbihTQJtoiRRfwjMCP+XEPmbt7//zFPx1fIWOvn92Nc=";
+    sha256 = "sha256-Sgj15etVx8nnk0AZv+GzWscSqfqdC7+1wBE6gF/0aL0=";
   };
 
-  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
+  patches = [
+    (fetchpatch {
+      name = "prevent-network-access-in-tests.patch";
+      url = "https://projects.torsion.org/borgmatic-collective/borgmatic/pulls/869.patch";
+      hash = "sha256-jOo3LjgvJtyTaRKZX1wfnKNdw975hVekBkKfK4mJFAc=";
+    })
+  ];
+
+  nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ] ++ passthru.optional-dependencies.apprise;
 
   # - test_borgmatic_version_matches_news_version
   # The file NEWS not available on the pypi source, and this test is useless
@@ -39,6 +48,10 @@ python3Packages.buildPythonApplication rec {
     requests
     setuptools
   ];
+
+  passthru.optional-dependencies = {
+    apprise = with python3Packages; [ apprise ];
+  };
 
   postInstall = ''
     installShellCompletion --cmd borgmatic \

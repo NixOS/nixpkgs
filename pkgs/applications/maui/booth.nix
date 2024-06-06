@@ -47,6 +47,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Camera application";
+    mainProgram = "booth";
     homepage = "https://invent.kde.org/maui/booth";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ milahu ];

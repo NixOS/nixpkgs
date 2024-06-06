@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, cogapp
-, datasette
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cogapp,
+  datasette,
+  fetchFromGitHub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-diaxr+fNNgkJvLGkLo+lK0ThTsXYDePFsvTetMbDRMk=";
   };
 
-  propagatedBuildInputs = [
-    datasette
-  ];
+  propagatedBuildInputs = [ datasette ];
 
   nativeCheckInputs = [
     cogapp
@@ -32,9 +31,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "datasette_publish_fly"
-  ];
+  pythonImportsCheck = [ "datasette_publish_fly" ];
 
   meta = with lib; {
     description = "Datasette plugin for publishing data using Fly";

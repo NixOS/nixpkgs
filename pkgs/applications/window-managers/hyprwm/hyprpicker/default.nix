@@ -19,7 +19,6 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
-, wlroots
 , libXdmcp
 , debug ? false
 }:
@@ -57,7 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wayland-scanner
-    wlroots
     libXdmcp
     util-linux
   ];

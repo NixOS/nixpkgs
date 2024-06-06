@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, decorator
-, future
-, lxml
-, matplotlib
-, numpy
-, requests
-, scipy
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  decorator,
+  future,
+  lxml,
+  matplotlib,
+  numpy,
+  requests,
+  scipy,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {

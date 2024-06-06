@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchFromGitHub
 , fetchurl
 , fetchpatch
 , patchelf
@@ -88,6 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A daemon that makes it possible to use the Logitech keyboard G-Buttons and draw on various Logitech LCDs";
+    mainProgram = "g15daemon";
     inherit license maintainers;
   };
 }

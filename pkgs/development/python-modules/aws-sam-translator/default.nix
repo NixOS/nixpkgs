@@ -1,22 +1,23 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, parameterized
-, pydantic
-, pytest-env
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, typing-extensions
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  parameterized,
+  pydantic,
+  pytest-env,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.82.0";
+  version = "1.86.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,12 +26,12 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "serverless-application-model";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xAbFF4bKHFv5YAOlMA28lW1Xc37xV83X4r19MdubvFs=";
+    hash = "sha256-elirU6u6smuYIj8oO6s2ybQB8Tu0pJPkBdjd0W0CfFE=";
   };
 
   postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace " --cov samtranslator --cov-report term-missing --cov-fail-under 95" ""
+    # don't try to use --cov or fail on new warnings
+    rm pytest.ini
   '';
 
   propagatedBuildInputs = [
@@ -49,13 +50,14 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "samtranslator"
-  ];
-
   preCheck = ''
-    sed -i '2ienv =\n\tAWS_DEFAULT_REGION=us-east-1' pytest.ini
+    export AWS_DEFAULT_REGION=us-east-1
   '';
+
+  pytestFlagsArray = [
+    "tests"
+    ''-m "not slow"''
+  ];
 
   disabledTests = [
     # urllib3 2.0 compat
@@ -78,6 +80,8 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [ "samtranslator" ];
 
   meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";

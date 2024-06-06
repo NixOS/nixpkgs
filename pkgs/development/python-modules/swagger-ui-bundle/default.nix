@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, importlib-resources
-, jinja2
+  # dependencies
+  importlib-resources,
+  jinja2,
 
- }:
+}:
 
 buildPythonPackage rec {
   pname = "swagger-ui-bundle";
@@ -23,15 +24,9 @@ buildPythonPackage rec {
     hash = "sha256-IGc8NDHIcz1dFhXs952azzDP91ICrK8hp9nH9IlxRSk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    jinja2
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  propagatedBuildInputs = [ jinja2 ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
   # package contains no tests
   doCheck = false;

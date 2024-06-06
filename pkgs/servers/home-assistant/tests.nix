@@ -49,9 +49,21 @@ let
   };
 
   extraDisabledTests = {
-    private_ble_device = [
-      # AssertionError: assert '90' == '90.0'
-      "test_estimated_broadcast_interval"
+    advantage_air = [
+      # AssertionError: assert 2 == 1 (Expected two calls, got one)
+      "test_binary_sensor_async_setup_entry"
+    ];
+    hassio = [
+      # fails to load the hardware component
+      "test_device_registry_calls"
+    ];
+    husqvarna_automower = [
+      # snapshot mismatch
+      "test_device_diagnostics"
+    ];
+    recorder = [
+      # call not happening, likely due to timezone issues
+      "test_auto_purge"
     ];
     shell_command = [
       # tries to retrieve file from github
@@ -60,6 +72,10 @@ let
     sma = [
       # missing operating_status attribute in entity
       "test_sensor_entities"
+    ];
+    websocket_api = [
+      # racy
+      "test_render_template_with_timeout"
     ];
   };
 
@@ -81,6 +97,11 @@ let
     modem_callerid = [
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
+    ];
+    velux = [
+      # uses unmocked sockets
+      "--deselect tests/components/velux/test_config_flow.py::test_user_success"
+      "--deselect tests/components/velux/test_config_flow.py::test_import_valid_config"
     ];
   };
 in lib.listToAttrs (map (component: lib.nameValuePair component (

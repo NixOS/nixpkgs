@@ -10,6 +10,7 @@ mkDerivation {
   meta = with lib; {
     homepage = "https://apps.kde.org/minuet/";
     description = "Music Education Software";
+    mainProgram = "minuet";
     license = with licenses; [ lgpl21 gpl3 ];
     maintainers = with maintainers; [ peterhoeg HaoZeke ];
   };

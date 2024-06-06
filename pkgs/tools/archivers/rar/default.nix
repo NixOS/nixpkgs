@@ -6,25 +6,25 @@
 }:
 
 let
-  version = "6.24";
+  version = "7.01";
   downloadVersion = lib.replaceStrings [ "." ] [ "" ] version;
   # Use `./update.sh` to generate the entries below
   srcs = {
     i686-linux = {
       url = "https://www.rarlab.com/rar/rarlinux-x32-${downloadVersion}.tar.gz";
-      hash = "sha256-aacgJH0iJLRNEaZuVyzl/FxZgSnW3dIZFUfaqt0l88M=";
+      hash = "sha256-1CSbxM7arGpn4Yj5fHEFKcDURFPrC2+XptLoaDH8LDs=";
     };
     x86_64-linux = {
       url = "https://www.rarlab.com/rar/rarlinux-x64-${downloadVersion}.tar.gz";
-      hash = "sha256-iOIqjoQSXJR2N7vyjHRuM4oKYyedgPn51zc2A4ddses=";
+      hash = "sha256-34iWajylsSmIOuAT6kV7c2537qWFHc+gT+JT/trWrw8=";
     };
     aarch64-darwin = {
       url = "https://www.rarlab.com/rar/rarmacos-arm-${downloadVersion}.tar.gz";
-      hash = "sha256-2r4zWDT7Xw/CNvA7oNEsGfrXJDzFa5gNthIB/5TYR5U=";
+      hash = "sha256-BjEJFzKyRpN4XL6KYW7ykQcSxqF4tYr2dCFf50JHH38=";
     };
     x86_64-darwin = {
       url = "https://www.rarlab.com/rar/rarmacos-x64-${downloadVersion}.tar.gz";
-      hash = "sha256-4vENPNfMpQstsm9+8+glHPK9fAlDmnHWbCHW+HUwSX4=";
+      hash = "sha256-1ExnVDre49wWwB/BKP/L9xdYOMx8qkeZfmObJ7xm4dY=";
     };
   };
   manSrc = fetchurl {
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   pname = "rar";
   inherit version;
 
-  src = fetchurl (srcs.${stdenv.hostPlatform.system});
+  src = fetchurl (srcs.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}"));
 
   dontBuild = true;
 

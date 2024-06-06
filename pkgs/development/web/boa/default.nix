@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "An embeddable and experimental Javascript engine written in Rust";
+    mainProgram = "boa";
     homepage = "https://github.com/boa-dev/boa";
     changelog = "https://github.com/boa-dev/boa/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ unlicense ];

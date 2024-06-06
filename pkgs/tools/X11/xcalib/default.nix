@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "A tiny monitor calibration loader for X and MS-Windows";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [];
     platforms = platforms.linux;
     mainProgram = "xcalib";

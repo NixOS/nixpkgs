@@ -12,17 +12,17 @@ with lib;
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Whether to run the postfix sender rewriting scheme daemon.";
+        description = "Whether to run the postfix sender rewriting scheme daemon.";
       };
 
       domain = mkOption {
-        description = lib.mdDoc "The domain for which to enable srs";
+        description = "The domain for which to enable srs";
         type = types.str;
         example = "example.com";
       };
 
       secretsFile = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           The secret data used to encode the SRS address.
           to generate, use a command like:
           `for n in $(seq 5); do dd if=/dev/urandom count=1 bs=1024 status=none | sha256sum | sed 's/  -$//' | sed 's/^/          /'; done`

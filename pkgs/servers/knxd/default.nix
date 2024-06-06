@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "knxd";
-  version = "0.14.60";
+  version = "0.14.61";
 
   src = fetchFromGitHub {
     owner = "knxd";
     repo = "knxd";
     rev = version;
-    hash = "sha256-djcp3b0OSnyrNOkvaacjQ3Nw9H54HOfKeBo26tkz/Ew=";
+    hash = "sha256-b8svjGaxW8YqonhXewebDUitezKoMcZxcUFGd2EKZQ4=";
   };
 
   postPatch = ''

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatchling
-, httpx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hatchling,
+  httpx,
 }:
 buildPythonPackage rec {
   pname = "tika-client";
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hatchling
     httpx
   ];
-  pythonImportsCheck = [
-    "tika_client"
-  ];
+  pythonImportsCheck = [ "tika_client" ];
   # Almost all of the tests (all except one in 0.1.0) fail since there
   # is no tika http API endpoint reachable. Since tika is not yet
   # packaged for nixpkgs, it seems like an unreasonable amount of effort

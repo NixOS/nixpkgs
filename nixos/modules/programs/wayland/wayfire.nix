@@ -6,7 +6,7 @@ in
   meta.maintainers = with lib.maintainers; [ rewine ];
 
   options.programs.wayfire = {
-    enable = lib.mkEnableOption (lib.mdDoc "Wayfire, a wayland compositor based on wlroots");
+    enable = lib.mkEnableOption "Wayfire, a wayland compositor based on wlroots";
 
     package = lib.mkPackageOption pkgs "wayfire" { };
 
@@ -21,7 +21,7 @@ in
           wayfire-plugins-extra
         ];
       '';
-      description = lib.mdDoc ''
+      description = ''
         Additional plugins to use with the wayfire window manager.
       '';
     };
@@ -38,7 +38,7 @@ in
       finalPackage
     ];
 
-    services.xserver.displayManager.sessionPackages = [ finalPackage ];
+    services.displayManager.sessionPackages = [ finalPackage ];
 
     xdg.portal = {
       enable = lib.mkDefault true;

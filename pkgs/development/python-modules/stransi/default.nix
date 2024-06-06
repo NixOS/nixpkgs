@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, hypothesis
-, pytestCheckHook
-, ochre
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  hypothesis,
+  pytestCheckHook,
+  ochre,
 }:
 
 buildPythonPackage rec {
@@ -19,18 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-PDMel6emra5bzX+FwHvUVpFu2YkRKy31UwkCL4sGJ14=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
-    ochre
-  ];
+  propagatedBuildInputs = [ ochre ];
 
   pythonImportsCheck = [ "stransi" ];
 

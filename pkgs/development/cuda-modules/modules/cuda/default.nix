@@ -1,1 +1,4 @@
-{options, ...}: {options.cuda.manifests = options.generic.manifests;}
+{ options, ... }:
+{
+  options.cuda.manifests = options.generic.manifests;
+}

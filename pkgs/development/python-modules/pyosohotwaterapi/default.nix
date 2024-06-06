@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, loguru
-, numpy
-, pythonOlder
-, setuptools
-, unasync
-, urllib3
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  loguru,
+  numpy,
+  pythonOlder,
+  setuptools,
+  unasync,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -49,9 +50,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "apyosoenergyapi"
-  ];
+  pythonImportsCheck = [ "apyosoenergyapi" ];
 
   meta = with lib; {
     description = "Module for using the OSO Hotwater API";

@@ -1,63 +1,66 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, defusedxml
-, lxml
-, relatorio
-, genshi
-, python-dateutil
-, polib
-, python-sql
-, werkzeug
-, wrapt
-, passlib
-, pydot
-, levenshtein
-, html2text
-, weasyprint
-, gevent
-, pillow
-, withPostgresql ? true
-, psycopg2
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  defusedxml,
+  lxml,
+  relatorio,
+  genshi,
+  python-dateutil,
+  polib,
+  python-sql,
+  werkzeug,
+  wrapt,
+  passlib,
+  pydot,
+  levenshtein,
+  html2text,
+  weasyprint,
+  gevent,
+  pillow,
+  withPostgresql ? true,
+  psycopg2,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.0.5";
+  version = "7.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UTDONJrb28gnGkoV6Rb/2ChsgcLIxCmDhSd4gvFxq14=";
+    hash = "sha256-gIWWzm7emSwgKoO5geNIXUqKNsDiq6fle5OHb+KvhLE=";
   };
 
-  propagatedBuildInputs = [
-    defusedxml
-    lxml
-    relatorio
-    genshi
-    python-dateutil
-    polib
-    python-sql
-    werkzeug
-    wrapt
-    passlib
+  propagatedBuildInputs =
+    [
+      defusedxml
+      lxml
+      relatorio
+      genshi
+      python-dateutil
+      polib
+      python-sql
+      werkzeug
+      wrapt
+      passlib
 
-    # extra dependencies
-    pydot
-    levenshtein
-    html2text
-    weasyprint
-    gevent
-    pillow
-  ] ++ relatorio.optional-dependencies.fodt
-  ++ passlib.optional-dependencies.bcrypt
-  ++ passlib.optional-dependencies.argon2
-  ++ lib.optional withPostgresql psycopg2;
+      # extra dependencies
+      pydot
+      levenshtein
+      html2text
+      weasyprint
+      gevent
+      pillow
+    ]
+    ++ relatorio.optional-dependencies.fodt
+    ++ passlib.optional-dependencies.bcrypt
+    ++ passlib.optional-dependencies.argon2
+    ++ lib.optional withPostgresql psycopg2;
 
   nativeCheckInputs = [ unittestCheckHook ];
 
@@ -67,7 +70,10 @@ buildPythonPackage rec {
     export DB_NAME=":memory:";
   '';
 
-  unittestFlagsArray = [ "-s" "trytond.tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "trytond.tests"
+  ];
 
   meta = with lib; {
     description = "The server of the Tryton application platform";
@@ -80,8 +86,11 @@ buildPythonPackage rec {
       modularity, scalability and security.
     '';
     homepage = "http://www.tryton.org/";
-    changelog = "https://hg.tryton.org/trytond/file/${version}/CHANGELOG";
+    changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ udono johbo ];
+    maintainers = with maintainers; [
+      udono
+      johbo
+    ];
   };
 }

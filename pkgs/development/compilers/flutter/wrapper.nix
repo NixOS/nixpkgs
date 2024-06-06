@@ -20,7 +20,7 @@
 , makeWrapper
 , runCommandLocal
 , writeShellScript
-, wrapGAppsHook
+, wrapGAppsHook3
 , git
 , which
 , pkg-config
@@ -123,7 +123,7 @@ in
 
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ]
-    ++ lib.optionals supportsLinuxDesktopTarget [ glib wrapGAppsHook ];
+    ++ lib.optionals supportsLinuxDesktopTarget [ glib wrapGAppsHook3 ];
 
   passthru = flutter.passthru // {
     inherit (flutter) version;

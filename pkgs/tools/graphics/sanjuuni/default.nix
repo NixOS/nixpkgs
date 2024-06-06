@@ -1,7 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
+, autoreconfHook
 , ffmpeg
 , poco
 , ocl-icd
@@ -19,8 +21,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wgtyrik4Z5AXd8MHkiMuxMpGh/xcEtNqivyhvL68aac=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "build-with-cxx17.patch";
+      url = "https://github.com/MCJack123/sanjuuni/commit/f2164bc18935bcf63ee5b0a82087bc91f7fd258d.patch";
+      hash = "sha256-MjDeAiB3WkemCRYzgOHzHlbPUoI4DHEYe28xIIC+c7I=";
+      excludes = [ "configure" ]; # conflicts with release tarball; we manually regenerate this
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
+    autoreconfHook
   ];
 
   buildInputs = [

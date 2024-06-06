@@ -1,4 +1,11 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage, dos2unix, pyasn1 }:
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+  dos2unix,
+  pyasn1,
+}:
 
 buildPythonPackage rec {
   pname = "ldap3";

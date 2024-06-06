@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A command-line tool to batch rename files and directories";
+    mainProgram = "rnr";
     homepage = "https://github.com/ismaelgv/rnr";
     changelog = "https://github.com/ismaelgv/rnr/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

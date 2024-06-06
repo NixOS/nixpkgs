@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pandas
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
+  setuptools,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +25,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -31,13 +34,11 @@ buildPythonPackage rec {
     scikit-learn
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ppscore"
-  ];
+  pythonRelaxDeps = [ "pandas" ];
+
+  pythonImportsCheck = [ "ppscore" ];
 
   meta = with lib; {
     description = "Python implementation of the Predictive Power Score (PPS)";

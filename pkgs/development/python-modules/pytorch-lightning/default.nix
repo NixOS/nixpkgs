@@ -1,38 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, fsspec
-, lightning-utilities
-, numpy
-, packaging
-, pyyaml
-, tensorboardx
-, torch
-, torchmetrics
-, tqdm
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  fsspec,
+  lightning-utilities,
+  numpy,
+  packaging,
+  pyyaml,
+  tensorboardx,
+  torch,
+  torchmetrics,
+  tqdm,
+  traitlets,
 
-# tests
-, psutil
-, pytestCheckHook
+  # tests
+  psutil,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "2.1.3";
+  version = "2.2.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     rev = "refs/tags/${version}";
-    hash = "sha256-3ELx4ukYlmsWvzK+GxEXM/0xFPPcZZcMv566jOXfcMs=";
+    hash = "sha256-IkoSID7nEPbKrhEMlo/UaMcF80HYldvndFA54DoHT+M=";
   };
 
   preConfigure = ''
     export PACKAGE_NAME=pytorch
- '';
+  '';
 
   propagatedBuildInputs = [
     fsspec
@@ -45,8 +46,7 @@ buildPythonPackage rec {
     torchmetrics
     tqdm
     traitlets
-  ]
-  ++ fsspec.optional-dependencies.http;
+  ] ++ fsspec.optional-dependencies.http;
 
   nativeCheckInputs = [
     psutil
@@ -57,9 +57,7 @@ buildPythonPackage rec {
   # models, which doesn't work in the sandbox.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytorch_lightning"
-  ];
+  pythonImportsCheck = [ "pytorch_lightning" ];
 
   meta = with lib; {
     description = "Lightweight PyTorch wrapper for machine learning researchers";

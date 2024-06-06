@@ -2,6 +2,8 @@
 , lib
 , fetchFromGitHub
 , cmake
+, doctest
+, fmt
 , perl
 , glib
 , luajit
@@ -17,6 +19,8 @@
 , lapack
 , lua
 , libsodium
+, xxHash
+, zstd
 , withBlas ? true
 , withHyperscan ? stdenv.isx86_64
 , withLuaJIT ? stdenv.isx86_64
@@ -27,19 +31,19 @@ assert withHyperscan -> stdenv.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "3.8.1";
+  version = "3.8.4";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    hash = "sha256-XbsebaplhLWPXpdwZyMbxsRyuvaBHtO2WtMoFzN7yXA=";
+    hash = "sha256-3skF+aQv8Y3ATujV+WH4DxwyQ2hXR6CDZz77CkaRso0=";
   };
 
   hardeningEnable = [ "pie" ];
 
   nativeBuildInputs = [ cmake pkg-config perl ];
-  buildInputs = [ glib openssl pcre sqlite ragel icu jemalloc libsodium ]
+  buildInputs = [ doctest fmt glib openssl pcre sqlite ragel icu jemalloc libsodium xxHash zstd ]
     ++ lib.optional withHyperscan hyperscan
     ++ lib.optionals withBlas [ blas lapack ]
     ++ lib.optional withLuaJIT luajit ++ lib.optional (!withLuaJIT) lua;
@@ -53,6 +57,10 @@ stdenv.mkDerivation rec {
     "-DLOGDIR=/var/log/rspamd"
     "-DLOCAL_CONFDIR=/etc/rspamd"
     "-DENABLE_JEMALLOC=ON"
+    "-DSYSTEM_DOCTEST=ON"
+    "-DSYSTEM_FMT=ON"
+    "-DSYSTEM_XXHASH=ON"
+    "-DSYSTEM_ZSTD=ON"
   ] ++ lib.optional withHyperscan "-DENABLE_HYPERSCAN=ON"
   ++ lib.optional (!withLuaJIT) "-DENABLE_LUAJIT=OFF";
 

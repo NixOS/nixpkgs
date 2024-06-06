@@ -2,7 +2,6 @@
 , config
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , addOpenGLRunpath
 , bash
 , docutils
@@ -227,6 +226,10 @@ in stdenv'.mkDerivation (finalAttrs: {
     cp mpv_identify.sh umpv $out/bin/
     popd
     pushd $out/share/applications
+
+    # patch out smb protocol reference, since our ffmpeg can't handle it
+    substituteInPlace mpv.desktop --replace-fail "smb," ""
+
     sed -e '/Icon=/ ! s|mpv|umpv|g; s|^Exec=.*|Exec=umpv %U|' \
       mpv.desktop > umpv.desktop
     printf "NoDisplay=true\n" >> umpv.desktop

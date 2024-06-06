@@ -12,7 +12,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable OnlyKey device (https://crp.to/p/) support.
         '';
       };

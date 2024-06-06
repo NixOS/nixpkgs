@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       included.
     '';
 
+    mainProgram = "idn";
     license = lib.licenses.lgpl2Plus;
     pkgConfigModules = [ "libidn" ];
     platforms = lib.platforms.all;

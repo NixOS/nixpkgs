@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchPypi
-, zope-interface
-, sphinx
-, manuel
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  zope-interface,
+  sphinx,
+  manuel,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "persistent";
-  version = "5.1";
+  version = "5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l8zC+ibMm9zDvh/GWqT08or+UgTC1P0kpnRFkI23Rps=";
+    hash = "sha256-2+pdH/nbTkUco5vAtCqepTfmyskoKujAeA+4/64+yDQ=";
   };
 
   nativeBuildInputs = [
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     cffi
   ];
 
-  pythonImportsCheck = [
-    "persistent"
-  ];
+  pythonImportsCheck = [ "persistent" ];
 
   meta = with lib; {
     description = "Automatic persistence for Python objects";

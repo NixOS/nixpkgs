@@ -18,13 +18,19 @@
   };
 
   testScript = ''
-    machine.succeed("findmnt --kernel --type overlay /etc")
-    machine.fail("stat /etc/newgen")
-    machine.succeed("echo -n 'mutable' > /etc/mutable")
+    with subtest("/etc is mounted as an overlay"):
+      machine.succeed("findmnt --kernel --type overlay /etc")
 
-    machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
+    with subtest("switching to the same generation"):
+      machine.succeed("/run/current-system/bin/switch-to-configuration test")
 
-    assert machine.succeed("cat /etc/newgen") == "newgen"
-    assert machine.succeed("cat /etc/mutable") == "mutable"
+    with subtest("switching to a new generation"):
+      machine.fail("stat /etc/newgen")
+      machine.succeed("echo -n 'mutable' > /etc/mutable")
+
+      machine.succeed("/run/current-system/specialisation/new-generation/bin/switch-to-configuration switch")
+
+      assert machine.succeed("cat /etc/newgen") == "newgen"
+      assert machine.succeed("cat /etc/mutable") == "mutable"
   '';
 }

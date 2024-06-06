@@ -1,4 +1,7 @@
-{ pkgs, lib, ... }: let
+{ config, lib, ... }: let
+
+  pkgs = config.node.pkgs;
+
   commonConfig = ./common/acme/client;
 
   dnsServerIP = nodes: nodes.dnsserver.networking.primaryIPAddress;
@@ -96,7 +99,14 @@
               serverAliases = [ "${server}-wildcard-alias.example.test" ];
               useACMEHost = "example.test";
             };
-          };
+          } // (lib.optionalAttrs (server == "nginx") {
+            # The nginx module supports using a different key than the hostname
+            different-key = vhostBaseData // {
+              serverName = "${server}-different-key.example.test";
+              serverAliases = [ "${server}-different-key-alias.example.test" ];
+              enableACME = true;
+            };
+          });
         };
 
         # Used to determine if service reload was triggered
@@ -650,20 +660,20 @@ in {
           webserver.succeed("systemctl restart caddy.service")
           check_connection_key_bits(client, "a.example.test", "384")
 
-      domains = ["http", "dns", "wildcard"]
-      for server, logsrc in [
-          ("nginx", "journalctl -n 30 -u nginx.service"),
-          ("httpd", "tail -n 30 /var/log/httpd/*.log"),
+      common_domains = ["http", "dns", "wildcard"]
+      for server, logsrc, domains in [
+          ("nginx", "journalctl -n 30 -u nginx.service", common_domains + ["different-key"]),
+          ("httpd", "tail -n 30 /var/log/httpd/*.log", common_domains),
       ]:
           wait_for_server = lambda: webserver.wait_for_unit(f"{server}.service")
           with subtest(f"Works with {server}"):
               try:
                   switch_to(webserver, server)
-                  # Skip wildcard domain for this check ([:-1])
-                  for domain in domains[:-1]:
-                      webserver.wait_for_unit(
-                          f"acme-finished-{server}-{domain}.example.test.target"
-                      )
+                  for domain in domains:
+                      if domain != "wildcard":
+                          webserver.wait_for_unit(
+                              f"acme-finished-{server}-{domain}.example.test.target"
+                          )
               except Exception as err:
                   _, output = webserver.execute(
                       f"{logsrc} && ls -al /var/lib/acme/acme-challenge"
@@ -673,8 +683,9 @@ in {
 
               wait_for_server()
 
-              for domain in domains[:-1]:
-                  check_issuer(webserver, f"{server}-{domain}.example.test", "pebble")
+              for domain in domains:
+                  if domain != "wildcard":
+                      check_issuer(webserver, f"{server}-{domain}.example.test", "pebble")
               for domain in domains:
                   check_connection(client, f"{server}-{domain}.example.test")
                   check_connection(client, f"{server}-{domain}-alias.example.test")

@@ -18,6 +18,7 @@
 , sndio
 , libjack2
 , speechd
+, removeReferencesTo
 }:
 
 ## configurability of the wrapper itself
@@ -66,7 +67,7 @@ let
       deprecatedNativeMessagingHost = option: pkg:
         if (cfg.${option} or false)
           then
-            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts.packages` instead"
+            lib.warn "The cfg.${option} argument for `firefox.override` is deprecated, please add `pkgs.${pkg.pname}` to `nativeMessagingHosts` instead"
             [pkg]
           else [];
 
@@ -238,7 +239,7 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeWrapper lndir jq ];
+      nativeBuildInputs = [ makeWrapper lndir jq removeReferencesTo ];
       buildInputs = [ browser.gtk3 ];
 
 
@@ -413,7 +414,9 @@ let
       passthru = { unwrapped = browser; };
 
       disallowedRequisites = [ stdenv.cc ];
-
+      postInstall = ''
+        find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+      '';
       meta = browser.meta // {
         inherit (browser.meta) description;
         mainProgram = launcherName;

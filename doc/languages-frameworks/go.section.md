@@ -2,7 +2,7 @@
 
 ## Building Go modules with `buildGoModule` {#ssec-language-go}
 
-The function `buildGoModule` builds Go programs managed with Go modules. It builds [Go Modules](https://github.com/golang/go/wiki/Modules) through a two phase build:
+The function `buildGoModule` builds Go programs managed with Go modules. It builds [Go Modules](https://go.dev/wiki/Modules) through a two phase build:
 
 - An intermediate fetcher derivation called `goModules`. This derivation will be used to fetch all the dependencies of the Go module.
 - A final derivation will use the output of the intermediate derivation to build the binaries and produce the final output.
@@ -38,24 +38,26 @@ The `buildGoModule` function accepts the following parameters in addition to the
 The following is an example expression using `buildGoModule`:
 
 ```nix
-pet = buildGoModule rec {
-  pname = "pet";
-  version = "0.3.4";
+{
+  pet = buildGoModule rec {
+    pname = "pet";
+    version = "0.3.4";
 
-  src = fetchFromGitHub {
-    owner = "knqyf263";
-    repo = "pet";
-    rev = "v${version}";
-    hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
-  };
+    src = fetchFromGitHub {
+      owner = "knqyf263";
+      repo = "pet";
+      rev = "v${version}";
+      hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
+    };
 
-  vendorHash = "sha256-ciBIR+a1oaYH+H1PcC8cD8ncfJczk1IiJ8iYNM+R6aA=";
+    vendorHash = "sha256-ciBIR+a1oaYH+H1PcC8cD8ncfJczk1IiJ8iYNM+R6aA=";
 
-  meta = with lib; {
-    description = "Simple command-line snippet manager, written in Go";
-    homepage = "https://github.com/knqyf263/pet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    meta = {
+      description = "Simple command-line snippet manager, written in Go";
+      homepage = "https://github.com/knqyf263/pet";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ kalbasit ];
+    };
   };
 }
 ```
@@ -72,20 +74,22 @@ In the following is an example expression using `buildGoPackage`, the following 
 - `goDeps` is where the Go dependencies of a Go program are listed as a list of package source identified by Go import path. It could be imported as a separate `deps.nix` file for readability. The dependency data structure is described below.
 
 ```nix
-deis = buildGoPackage rec {
-  pname = "deis";
-  version = "1.13.0";
+{
+  deis = buildGoPackage rec {
+    pname = "deis";
+    version = "1.13.0";
 
-  goPackagePath = "github.com/deis/deis";
+    goPackagePath = "github.com/deis/deis";
 
-  src = fetchFromGitHub {
-    owner = "deis";
-    repo = "deis";
-    rev = "v${version}";
-    hash = "sha256-XCPD4LNWtAd8uz7zyCLRfT8rzxycIUmTACjU03GnaeM=";
+    src = fetchFromGitHub {
+      owner = "deis";
+      repo = "deis";
+      rev = "v${version}";
+      hash = "sha256-XCPD4LNWtAd8uz7zyCLRfT8rzxycIUmTACjU03GnaeM=";
+    };
+
+    goDeps = ./deps.nix;
   };
-
-  goDeps = ./deps.nix;
 }
 ```
 
@@ -138,6 +142,7 @@ Many attributes [controlling the build phase](#variables-controlling-the-build-p
 - [`patchFlags`](#var-stdenv-patchFlags)
 - [`postPatch`](#var-stdenv-postPatch)
 - [`preBuild`](#var-stdenv-preBuild)
+- `env`: useful for passing down variables such as `GOWORK`.
 
 To control test execution of the build derivation, the following attributes are of interest:
 
@@ -153,10 +158,12 @@ A string list of flags to pass to the Go linker tool via the `-ldflags` argument
 The most common use case for this argument is to make the resulting executable aware of its own version by injecting the value of string variable using the `-X` flag. For example:
 
 ```nix
+{
   ldflags = [
     "-X main.Version=${version}"
     "-X main.Commit=${version}"
   ];
+}
 ```
 
 ### `tags` {#var-go-tags}
@@ -164,16 +171,20 @@ The most common use case for this argument is to make the resulting executable a
 A string list of [Go build tags (also called build constraints)](https://pkg.go.dev/cmd/go#hdr-Build_constraints) that are passed via the `-tags` argument of `go build`.  These constraints control whether Go files from the source should be included in the build. For example:
 
 ```nix
+{
   tags = [
     "production"
     "sqlite"
   ];
+}
 ```
 
 Tags can also be set conditionally:
 
 ```nix
+{
   tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ];
+}
 ```
 
 ### `deleteVendor` {#var-go-deleteVendor}
@@ -188,10 +199,12 @@ Many Go projects keep the main package in a `cmd` directory.
 Following example could be used to only build the example-cli and example-server binaries:
 
 ```nix
-subPackages = [
-  "cmd/example-cli"
-  "cmd/example-server"
-];
+{
+  subPackages = [
+    "cmd/example-cli"
+    "cmd/example-server"
+  ];
+}
 ```
 
 ### `excludedPackages` {#var-go-excludedPackages}
@@ -213,10 +226,12 @@ on a per package level using build tags (`tags`). In case CGO is disabled, these
 When a Go program depends on C libraries, place those dependencies in `buildInputs`:
 
 ```nix
+{
   buildInputs = [
     libvirt
     libxml2
   ];
+}
 ```
 
 `CGO_ENABLED` defaults to `1`.
@@ -245,15 +260,18 @@ This is done with the [`-skip` or `-run`](https://pkg.go.dev/cmd/go#hdr-Testing_
 For example, only a selection of tests could be run with:
 
 ```nix
+{
   # -run and -skip accept regular expressions
   checkFlags = [
     "-run=^Test(Simple|Fast)$"
   ];
+}
 ```
 
 If a larger amount of tests should be skipped, the following pattern can be used:
 
 ```nix
+{
   checkFlags =
     let
       # Skip tests that require network access
@@ -264,6 +282,7 @@ If a larger amount of tests should be skipped, the following pattern can be used
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+}
 ```
 
 To disable tests altogether, set `doCheck = false;`.

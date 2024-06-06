@@ -5,15 +5,16 @@
 , copyDesktopItems
 , makeDesktopItem
 , jre
+, libGL
 }:
 
 stdenv.mkDerivation rec {
   pname = "gitnuro";
-  version = "1.1.1";
+  version = "1.3.1";
 
   src = fetchurl {
-    url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${version}/Gitnuro-linux-${version}.jar";
-    hash = "sha256-ugZBk/aQ2pjL9xY66g20MorAQ02GHIdJTv8ejadaBgY=";
+    url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${version}/Gitnuro-linux-x86_64-${version}.jar";
+    hash = "sha256-7yne9dD/7VT+H4tIBJvpOf8ksECCpoNAa8TSmFmjYMw=";
   };
 
   icon = fetchurl {
@@ -30,8 +31,13 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    makeWrapper ${jre}/bin/java $out/bin/gitnuro --add-flags "-jar $src"
+
+    makeWrapper ${jre}/bin/java $out/bin/gitnuro \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+      --add-flags "-jar $src"
+
     install -Dm444 $icon $out/share/icons/hicolor/scalable/apps/com.jetpackduba.Gitnuro.svg
+
     runHook postInstall
   '';
 
@@ -50,7 +56,8 @@ stdenv.mkDerivation rec {
     description = "A FOSS Git multiplatform client based on Compose and JGit";
     homepage = "https://gitnuro.com/";
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ zendo ];
     mainProgram = "gitnuro";
   };

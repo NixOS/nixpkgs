@@ -5,22 +5,23 @@
 
 buildGoModule rec {
   pname = "oauth2c";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "cloudentity";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NNVHEV8qnPv+xXFzPsh1V+fSOQZxpADCRPIUsak5M5M=";
+    hash = "sha256-sxaInCsW3MKOYV3TscJYGwzSncg5TUW9YVheuxoO1h4=";
   };
 
-  vendorHash = "sha256-x6cb19rKJXm+EIxJeykhpFmUYOPb/VljzCOVjorP5MQ=";
+  vendorHash = "sha256-PdLh/J0HUvr1JjW/ew5PQe9TJNykI4tJhlRoVjRT/hg=";
 
   doCheck = false; # tests want to talk to oauth2c.us.authz.cloudentity.io
 
   meta = with lib; {
     homepage = "https://github.com/cloudentity/oauth2c";
     description = "User-friendly OAuth2 CLI";
+    mainProgram = "oauth2c";
     longDescription = ''
       oauth2c is a command-line tool for interacting with OAuth 2.0
       authorization servers. Its goal is to make it easy to fetch access tokens

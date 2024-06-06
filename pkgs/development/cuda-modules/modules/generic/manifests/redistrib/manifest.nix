@@ -1,7 +1,7 @@
-{lib, ...}:
+{ lib, ... }:
 let
   inherit (lib) options trivial types;
-  Release = import ./release.nix {inherit lib;};
+  Release = import ./release.nix { inherit lib; };
 in
 options.mkOption {
   description = "A redistributable manifest is an attribute set which includes a mapping from package name to release";

@@ -1,10 +1,31 @@
 { lib }:
-with import ./parse.nix { inherit lib; };
-with lib.attrsets;
-with lib.lists;
 
-let abis_ = abis; in
-let abis = lib.mapAttrs (_: abi: builtins.removeAttrs abi [ "assertions" ]) abis_; in
+let
+  inherit (lib)
+    any
+    attrValues
+    concatMap
+    filter
+    hasPrefix
+    isList
+    mapAttrs
+    matchAttrs
+    recursiveUpdateUntil
+    toList
+    ;
+
+  inherit (lib.strings) toJSON;
+
+  inherit (lib.systems.parse)
+    kernels
+    kernelFamilies
+    significantBytes
+    cpuTypes
+    execFormats
+    ;
+
+  abis = mapAttrs (_: abi: removeAttrs abi [ "assertions" ]) lib.systems.parse.abis;
+in
 
 rec {
   # these patterns are to be matched against {host,build,target}Platform.parsed
@@ -32,8 +53,8 @@ rec {
     isx86          = { cpu = { family = "x86"; }; };
     isAarch32      = { cpu = { family = "arm"; bits = 32; }; };
     isArmv7        = map ({ arch, ... }: { cpu = { inherit arch; }; })
-                       (lib.filter (cpu: lib.hasPrefix "armv7" cpu.arch or "")
-                         (lib.attrValues cpuTypes));
+                       (filter (cpu: hasPrefix "armv7" cpu.arch or "")
+                         (attrValues cpuTypes));
     isAarch64      = { cpu = { family = "arm"; bits = 64; }; };
     isAarch        = { cpu = { family = "arm"; }; };
     isMicroBlaze   = { cpu = { family = "microblaze"; }; };
@@ -111,19 +132,19 @@ rec {
     let
       # patterns can be either a list or a (bare) singleton; turn
       # them into singletons for uniform handling
-      pat1 = lib.toList pat1_;
-      pat2 = lib.toList pat2_;
+      pat1 = toList pat1_;
+      pat2 = toList pat2_;
     in
-      lib.concatMap (attr1:
+      concatMap (attr1:
         map (attr2:
-          lib.recursiveUpdateUntil
+          recursiveUpdateUntil
             (path: subattr1: subattr2:
               if (builtins.intersectAttrs subattr1 subattr2) == {} || subattr1 == subattr2
               then true
               else throw ''
                 pattern conflict at path ${toString path}:
-                  ${builtins.toJSON subattr1}
-                  ${builtins.toJSON subattr2}
+                  ${toJSON subattr1}
+                  ${toJSON subattr2}
                 '')
             attr1
             attr2
@@ -132,7 +153,7 @@ rec {
         pat1;
 
   matchAnyAttrs = patterns:
-    if builtins.isList patterns then attrs: any (pattern: matchAttrs pattern attrs) patterns
+    if isList patterns then attrs: any (pattern: matchAttrs pattern attrs) patterns
     else matchAttrs patterns;
 
   predicates = mapAttrs (_: matchAnyAttrs) patterns;

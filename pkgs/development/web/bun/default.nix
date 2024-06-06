@@ -12,7 +12,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "1.0.26";
+  version = "1.1.9";
   pname = "bun";
 
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
@@ -51,19 +51,19 @@ stdenvNoCC.mkDerivation rec {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-        hash = "sha256-UEYA6q83fxD3yQuHsQiO9bQ5gptQSipFGjE5eGUb+1c=";
+        hash = "sha256-gk3Zi8AcpMTCexL8ASY29W2LcwYICpD2QwpvuEbQpB4=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
-        hash = "sha256-H+hmbZdRKjljskwNicLeFguo5STZ8fIxk7FHvOenuRc=";
+        hash = "sha256-F5yfovHAsWeLiQ4Uigrm0hy3gwz8pK5PA6AuZiyrfOI=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64.zip";
-        hash = "sha256-mlKspcFpeYXJuINYDvCoDEuNHJDMcDqngPNIBpD39T4=";
+        hash = "sha256-HV8iVZwHPPyini8rCVMnSHmqL7HUM27uOSfaTcdnnZ0=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-mWVe8BFGSXKJYnr2QXZah1XYfir5zN5+2wQ4HfgdOyE=";
+        hash = "sha256-yIz/CWKTSKoeOTb/2rxbyYovw0rralSj0r2ZMPu29i8=";
       };
     };
     updateScript = writeShellScript "update-bun" ''
@@ -92,6 +92,7 @@ stdenvNoCC.mkDerivation rec {
       mit # bun core
       lgpl21Only # javascriptcore and webkit
     ];
+    mainProgram = "bun";
     maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman coffeeispower ];
     platforms = builtins.attrNames passthru.sources;
     # Broken for Musl at 2024-01-13, tracking issue:

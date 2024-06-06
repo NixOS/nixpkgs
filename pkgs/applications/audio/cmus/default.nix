@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, pkg-config
+{ config, lib, stdenv, fetchFromGitHub, ncurses, pkg-config
 , libiconv, CoreAudio, AudioUnit, VideoToolbox
 
 , alsaSupport ? stdenv.isLinux, alsa-lib ? null
@@ -92,30 +92,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cmus";
-  version = "2.10.0";
+  version = "2.10.0-unstable-2023-11-05";
 
   src = fetchFromGitHub {
     owner  = "cmus";
     repo   = "cmus";
-    rev    = "v${version}";
-    sha256 = "sha256-Ha0bIh3SYMhA28YXQ//Loaz9J1lTJAzjTx8eK3AqUjM=";
+    rev    = "23afab39902d3d97c47697196b07581305337529";
+    sha256 = "sha256-pxDIYbeJMoaAuErCghWJpDSh1WbYbhgJ7+ca5WLCrOs=";
   };
-
-  patches = [
-    ./option-debugging.patch
-    # ffmpeg 6 fix https://github.com/cmus/cmus/pull/1254/
-    (fetchpatch {
-      name = "ffmpeg-6-compat.patch";
-      url = "https://github.com/cmus/cmus/commit/07b368ff1500e1d2957cad61ced982fa10243fbc.patch";
-      hash = "sha256-5gsz3q8R9FPobHoLj8BQPsa9s4ULEA9w2VQR+gmpmgA=";
-    })
-    # function detection breaks with clang 16
-    (fetchpatch {
-      name = "clang-16-function-detection.patch";
-      url = "https://github.com/cmus/cmus/commit/4123b54bad3d8874205aad7f1885191c8e93343c.patch";
-      hash = "sha256-YKqroibgMZFxWQnbmLIHSHR5sMJduyEv6swnKZQ33Fg=";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]

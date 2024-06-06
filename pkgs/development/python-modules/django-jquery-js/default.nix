@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromBitbucket
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchFromBitbucket,
+  django,
 }:
 
 buildPythonPackage rec {
@@ -16,13 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-TzMo31jFhcvlrmq2TJgQyds9n8eATaChnyhnQ7bwdzs=";
   };
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
-  pythonImportsCheck = [
-    "jquery"
-  ];
+  pythonImportsCheck = [ "jquery" ];
 
   doCheck = false; # no tests
 

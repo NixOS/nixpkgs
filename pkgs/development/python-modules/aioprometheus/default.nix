@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, orjson
-, quantile-python
-, aiohttp
-, aiohttp-basicauth
-, starlette
-, quart
-, pytestCheckHook
-, httpx
-, fastapi
-, uvicorn
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  orjson,
+  quantile-python,
+  aiohttp,
+  aiohttp-basicauth,
+  starlette,
+  quart,
+  pytestCheckHook,
+  httpx,
+  fastapi,
+  uvicorn,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,15 +35,9 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    aiohttp = [
-      aiohttp
-    ];
-    starlette = [
-      starlette
-    ];
-    quart = [
-      quart
-    ];
+    aiohttp = [ aiohttp ];
+    starlette = [ starlette ];
+    quart = [ quart ];
   };
 
   nativeCheckInputs = [

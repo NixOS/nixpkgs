@@ -135,21 +135,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_VOMS=${if stdenv.isLinux then "TRUE" else "FALSE"}"
   ];
 
-  # Workaround the library-not-found issue
-  # happening to binaries compiled with xrootd libraries.
-  # See #169677
-  preFixup = ''
-    makeWrapperArgs+=("--prefix" "${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH" ":" "${placeholder "out"}/lib")
-  '';
-
-  postFixup = ''
-    while IFS= read -r FILE; do
-      wrapProgram "$FILE" "''${makeWrapperArgs[@]}"
-    done < <(find "$bin/bin" -mindepth 1 -maxdepth 1 -type f,l -perm -a+x)
-  '' + lib.optionalString (externalEtc != null) ''
+  postFixup = lib.optionalString (externalEtc != null) ''
     moveToOutput etc "$etc"
     ln -s ${lib.escapeShellArg externalEtc} "$out/etc"
   '';
+
+  dontPatchELF = true; # shrinking rpath will cause runtime failures in dlopen
 
   meta = with lib; {
     description = "High performance, scalable fault tolerant data access";

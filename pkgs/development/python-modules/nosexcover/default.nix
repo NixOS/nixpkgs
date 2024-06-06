@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, coverage
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  coverage,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -19,12 +20,14 @@ buildPythonPackage rec {
     sha256 = "298c3c655da587f6cab8a666e9f4b150320032431062dea91353988d45c8b883";
   };
 
-  propagatedBuildInputs = [ coverage nose ];
+  propagatedBuildInputs = [
+    coverage
+    nose
+  ];
 
   meta = with lib; {
     description = "Extends nose.plugins.cover to add Cobertura-style XML reports";
     homepage = "https://github.com/cmheisel/nose-xcover/";
     license = licenses.bsd3;
   };
-
 }

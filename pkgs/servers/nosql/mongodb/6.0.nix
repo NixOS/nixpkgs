@@ -6,9 +6,12 @@ let
   };
 in
 buildMongoDB {
-  version = "6.0.12";
-  sha256 = "sha256-5orVFio+4HIzhs63KJdZ1RHOPoOMa9Uk/8bygRs1JoY=";
+  version = "6.0.15";
+  sha256 = "sha256-DX1wbrDx1/JrEHbzNaXC4Hqq7MrLqz+JZgG98beyVds=";
   patches = [
+    # Patches a bug that it couldn't build MongoDB 6.0 on gcc 13 because a include in ctype.h was missing
+    ./fix-gcc-13-ctype-6_0.patch
+
     (fetchpatch {
       name = "mongodb-6.1.0-rc-more-specific-cache-alignment-types.patch";
       url = "https://github.com/mongodb/mongo/commit/5435f9585f857f6145beaf6d31daf336453ba86f.patch";

@@ -83,6 +83,7 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-comp";
     description = "Compositor for the COSMIC Desktop Environment";
+    mainProgram = "cosmic-comp";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ qyliss nyanbinary ];
     platforms = platforms.linux;

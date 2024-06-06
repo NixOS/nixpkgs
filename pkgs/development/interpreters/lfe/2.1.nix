@@ -1,4 +1,4 @@
-{ fetchpatch, mkDerivation }:
+{ mkDerivation }:
 
 mkDerivation {
   version = "2.1.3";

@@ -1,40 +1,44 @@
-{ lib
-, buildPythonPackage
-, deprecated
-, fetchFromGitHub
-, importlib-metadata
-, jaconv
-, py-cpuinfo
-, pytest-benchmark
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  deprecated,
+  fetchFromGitHub,
+  importlib-metadata,
+  jaconv,
+  py-cpuinfo,
+  pytest-benchmark,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pykakasi";
   version = "2.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "miurahr";
-    repo = pname;
+    repo = "pykakasi";
     rev = "refs/tags/v${version}";
     hash = "sha256-ivlenHPD00bxc0c9G368tfTEckOC3vqDB5kMQzHXbVM==";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "klepto"' ""
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     jaconv
     deprecated
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+    setuptools
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     py-cpuinfo
@@ -49,12 +53,11 @@ buildPythonPackage rec {
     "pytest_benchmark_update_json"
   ];
 
-  pythonImportsCheck = [
-    "pykakasi"
-  ];
+  pythonImportsCheck = [ "pykakasi" ];
 
   meta = with lib; {
     description = "Python converter for Japanese Kana-kanji sentences into Kana-Roman";
+    mainProgram = "kakasi";
     homepage = "https://github.com/miurahr/pykakasi";
     changelog = "https://github.com/miurahr/pykakasi/releases/tag/v${version}";
     license = licenses.mit;

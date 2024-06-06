@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool for handling machine-in-the-middle tasks";
+    mainProgram = "pretender";
     homepage = "https://github.com/RedTeamPentesting/pretender";
     changelog = "https://github.com/RedTeamPentesting/pretender/releases/tag/v${version}";
     license = with licenses; [ mit ];

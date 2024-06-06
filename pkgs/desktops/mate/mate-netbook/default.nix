@@ -8,7 +8,7 @@
 , libfakekey
 , libXtst
 , mate
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MATE utilities for netbooks";
+    mainProgram = "mate-maximus";
     longDescription = ''
       MATE utilities for netbooks are an applet and a daemon to maximize
       windows and move their titles on the panel.

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, ncurses
-, importlib-metadata
-, setuptools
-, wheel
-, patchelf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  ncurses,
+  importlib-metadata,
+  setuptools,
+  wheel,
+  patchelf,
 }:
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "6.15.13";
+  version = "6.15.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cx_Freeze";
     inherit version;
-    hash = "sha256-VeOgoVrga9dPJ0W9S3Ye/9Ff5yEOlP2DlDf0sDUh1yo=";
+    hash = "sha256-xjmRiG/ypTGfjw0HwDSaa74aZbXzIPi5JDiI5jyaSiI=";
   };
 
   nativeBuildInputs = [

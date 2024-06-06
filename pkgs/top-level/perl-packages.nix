@@ -1253,7 +1253,7 @@ with self; {
     };
   };
 
-  AstroFITSHeader = buildPerlModule rec {
+  AstroFITSHeader = buildPerlModule {
     pname = "Astro-FITS-Header";
     version = "3.09";
     src = fetchurl {
@@ -1358,7 +1358,7 @@ with self; {
     };
   };
 
-  AuthenKrb5Admin = buildPerlPackage rec {
+  AuthenKrb5Admin = buildPerlPackage {
     pname = "Authen-Krb5-Admin";
     version = "0.17";
     src = fetchurl {
@@ -1700,7 +1700,7 @@ with self; {
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PM/PMQS/BerkeleyDB-0.65.tar.gz";
-      hash = "sha256-QQqonnIylB1JEGyeBI1jN0dVQ+wdIz6nzbcly1uWNQQ=i";
+      hash = "sha256-QQqonnIylB1JEGyeBI1jN0dVQ+wdIz6nzbcly1uWNQQ=";
     };
 
     preConfigure = ''
@@ -1836,7 +1836,7 @@ with self; {
     };
   };
 
-  BKeywords = buildPerlPackage rec {
+  BKeywords = buildPerlPackage {
     pname = "B-Keywords";
     version = "1.26";
     src = fetchurl {
@@ -3312,6 +3312,9 @@ with self; {
       "-Wno-error=implicit-int"
       "-Wno-error=int-conversion"
     ]);
+    postPatch = ''
+      substituteInPlace Makefile.PL --replace pkg-config $PKG_CONFIG
+    '';
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.pcsclite}/lib -lpcsclite";
     # tests fail; look unfinished
     doCheck = false;
@@ -3627,7 +3630,7 @@ with self; {
     };
   };
 
-  ClassLoader = buildPerlPackage rec {
+  ClassLoader = buildPerlPackage {
     pname = "Class-Loader";
     version = "2.03";
     src = fetchurl {
@@ -4529,7 +4532,7 @@ with self; {
     };
   };
 
-  ConvertBencode = buildPerlPackage rec {
+  ConvertBencode = buildPerlPackage {
     pname = "Convert-Bencode";
     version = "1.03";
     src = fetchurl {
@@ -4557,7 +4560,7 @@ with self; {
     };
   };
 
-  ConvertUU = buildPerlPackage rec {
+  ConvertUU = buildPerlPackage {
     pname = "Convert-UU";
     version = "0.5201";
     src = fetchurl {
@@ -5241,7 +5244,7 @@ with self; {
     };
   };
 
-  CryptRandom = buildPerlPackage rec {
+  CryptRandom = buildPerlPackage {
     pname = "Crypt-Random";
     version = "1.54";
     src = fetchurl {
@@ -5552,7 +5555,7 @@ with self; {
     };
   };
 
-  CryptOpenSSLX509 = buildPerlPackage rec {
+  CryptOpenSSLX509 = buildPerlPackage {
     pname = "Crypt-OpenSSL-X509";
     version = "1.915";
     src = fetchurl {
@@ -6961,7 +6964,7 @@ with self; {
     };
   };
 
-  DevelLeak = buildPerlPackage rec {
+  DevelLeak = buildPerlPackage {
     pname = "Devel-Leak";
     version = "0.03";
     src = fetchurl {
@@ -9166,7 +9169,7 @@ with self; {
     };
   };
 
-  ExtUtilsF77 = buildPerlPackage rec {
+  ExtUtilsF77 = buildPerlPackage {
     pname = "ExtUtils-F77";
     version = "1.26";
     src = fetchurl {
@@ -9463,10 +9466,10 @@ with self; {
 
   FFICStat = buildPerlPackage {
     pname = "FFI-C-Stat";
-    version = "0.02";
+    version = "0.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.02.tar.gz";
-      hash = "sha256-ThXY9vn5hAfGUtnTE7URUHcTkgGOBx18GShDrILBvlk=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-C-Stat-0.03.tar.gz";
+      hash = "sha256-YOjveCyLs0cFXJ49ov1BTzX2EP5P77eNBzncyiQoQx4=";
     };
     buildInputs = [ Filechdir PathTiny Test2Suite TestScript ];
     propagatedBuildInputs = [ FFIPlatypus RefUtil ];
@@ -9835,7 +9838,7 @@ with self; {
     meta = {
       description = "File locking with fcntl(2)";
       license = with lib.licenses; [ artistic1 ];
-      maintainers = with maintainers; [ ajs124 das_j ];
+      maintainers = with maintainers; [ das_j ];
     };
   };
 
@@ -10394,13 +10397,13 @@ with self; {
 
   FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.59";
+    version = "1.62";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
-      hash = "sha256-mukoeazGgv9AFuHsqSScjko4y38wHnKio21fIVfxKSg=";
+      hash = "sha256-DTEzsL89d5WCxWaFDVd/K76OGsvRFJeDHNQ9jzFgZII=";
     };
     buildInputs = [ DateManip DateRange DateSimple DateTime DateTimeFormatISO8601 StringUtil TestKwalitee TestPerlCritic TestPod TestPodCoverage ];
-    propagatedBuildInputs = [ DateManip DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies JSON IOCompress IOString LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
+    propagatedBuildInputs = [ DateManip DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies HTTPCookieJar JSON IOCompress IOString LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
     meta = {
       homepage = "https://finance-quote.sourceforge.net/";
       changelog = "https://github.com/finance-quote/finance-quote/releases/tag/v${version}";
@@ -10538,7 +10541,7 @@ with self; {
     };
   };
 
-  FutureAsyncAwait = buildPerlModule rec {
+  FutureAsyncAwait = buildPerlModule {
     pname = "Future-AsyncAwait";
     version = "0.66";
     src = fetchurl {
@@ -10772,7 +10775,7 @@ with self; {
     };
   };
 
-  GitAutofixup = buildPerlPackage rec {
+  GitAutofixup = buildPerlPackage {
     pname = "App-Git-Autofixup";
     version = "0.004001";
     src = fetchurl {
@@ -11310,7 +11313,14 @@ with self; {
       hash = "sha256-cNxL8qp0mBx54V/SmNmY4FqS66SBHxrVyfH03jdzesw=";
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
-    preCheck = lib.optionalString stdenv.isDarwin "rm t/overrides.t"; # Currently failing on macOS
+    preCheck = lib.optionalString stdenv.isDarwin ''
+      # Currently failing on macOS
+      rm t/overrides.t
+      rm t/signals.t
+      rm t/zz-GdkEvent.t
+      rm t/zz-GtkContainer.t
+      rm t/zz-GtkDialog.t
+    '';
     meta = {
       description = "Perl interface to the 3.x series of the gtk+ toolkit";
       license = with lib.licenses; [ lgpl21Plus ];
@@ -11376,7 +11386,7 @@ with self; {
     propagatedBuildInputs = [ DateCalc ];
     meta = {
       description = "Finnish APRS Parser (Fabulous APRS Parser)";
-      maintainers = with maintainers; [ andrew-d ];
+      maintainers = [ ];
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -12099,10 +12109,10 @@ with self; {
 
   HTTPBody = buildPerlPackage {
     pname = "HTTP-Body";
-    version = "1.22";
+    version = "1.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.22.tar.gz";
-      hash = "sha256-/A0sWFs70VMtkmCZZdWJ4Mh804DnzKQvua0KExEicpc=";
+      url = "mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.23.tar.gz";
+      hash = "sha256-7OmB9BYWNaL7piFdAlcZXlOMTyNDhFMFAd/bahvY1jY=";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ HTTPMessage ];
@@ -13205,40 +13215,7 @@ with self; {
     };
   };
 
-  ImageExifTool = buildPerlPackage rec {
-    pname = "Image-ExifTool";
-    version = "12.70";
-
-    src = fetchurl {
-      url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-TLJSJEXMPj870TkExq6uraX8Wl4kmNerrSlX3LQsr/4=";
-    };
-
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
-      shortenPerlShebang $out/bin/exiftool
-    '';
-
-    meta = {
-      description = "A tool to read, write and edit EXIF meta information";
-      longDescription = ''
-        ExifTool is a platform-independent Perl library plus a command-line
-        application for reading, writing and editing meta information in a wide
-        variety of files. ExifTool supports many different metadata formats
-        including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop
-        IRB, FlashPix, AFCP and ID3, as well as the maker notes of many digital
-        cameras by Canon, Casio, DJI, FLIR, FujiFilm, GE, GoPro, HP,
-        JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Motorola, Nikon,
-        Nintendo, Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Phase One,
-        Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
-      '';
-      homepage = "https://exiftool.org/";
-      changelog = "https://exiftool.org/history.html";
-      license = with lib.licenses; [ gpl1Plus /* or */ artistic2 ];
-      maintainers = with maintainers; [ kiloreux anthonyroussel ];
-      mainProgram = "exiftool";
-    };
-  };
+  ImageExifTool = callPackage ../development/perl-modules/ImageExifTool { };
 
   Inline = buildPerlPackage {
     pname = "Inline";
@@ -13563,10 +13540,10 @@ with self; {
 
   LaTeXML = buildPerlPackage rec {
     pname = "LaTeXML";
-    version = "0.8.7";
+    version = "0.8.8";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
-      hash = "sha256-JdqdlEB3newNrdTMLUIn6Oq4dDfAcZh3J03PuQakzHk=";
+      hash = "sha256-fSu+LOJSuvhro/OIzQ3sOqSDj0nWErnsfMT/iBBbrcw=";
     };
     outputs = [ "out" "tex" ];
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageMagick ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
@@ -13595,7 +13572,7 @@ with self; {
       homepage = "https://dlmf.nist.gov/LaTeXML/";
       license = with lib.licenses; [ publicDomain ];
       maintainers = with maintainers; [ xworld21 ];
-      mainProgram = "latexml";
+      mainProgram = "latexmlc";
     };
   };
 
@@ -14636,7 +14613,7 @@ with self; {
     };
   };
 
-  LogJournald = buildPerlModule rec {
+  LogJournald = buildPerlModule {
     pname = "Log-Journald";
     version = "0.30";
     src = fetchurl {
@@ -15753,7 +15730,7 @@ with self; {
   };
 
   # TODO: use CPAN version
-  MHonArc = buildPerlPackage rec {
+  MHonArc = buildPerlPackage {
     pname = "MHonArc";
     version = "2.6.24";
 
@@ -16168,7 +16145,7 @@ with self; {
     };
   };
 
-  ModuleCompile = buildPerlPackage rec {
+  ModuleCompile = buildPerlPackage {
     pname = "Module-Compile";
     version = "0.38";
     src = fetchurl {
@@ -16624,16 +16601,16 @@ with self; {
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "9.35";
+    version = "9.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.35.tar.gz";
-      hash = "sha256-akpEbuB/ynxtty9dgXVA1oMwCcuN58zkxvskoV7n1Gs=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.36.tar.gz";
+      hash = "sha256-UX7Pb9hqC3xhadVRAiOL+YUWGNt2L7ANTPDZTGJSAV8=";
     };
     meta = {
       description = "Real-time web framework";
       homepage = "https://mojolicious.org";
       license = with lib.licenses; [ artistic2 ];
-      maintainers = with maintainers; [ thoughtpolice sgo ];
+      maintainers = with maintainers; [ marcusramberg sgo thoughtpolice ];
       mainProgram = "mojo";
     };
   };
@@ -16862,7 +16839,7 @@ with self; {
     };
   };
 
-  Mojomysql = buildPerlPackage rec {
+  Mojomysql = buildPerlPackage {
     pname = "Mojo-mysql";
     version = "1.26";
     src = fetchurl {
@@ -18201,9 +18178,11 @@ with self; {
       url = "mirror://cpan/authors/id/N/NJ/NJH/MusicBrainz-DiscID-0.06.tar.gz";
       hash = "sha256-ugtu0JiX/1Y7pZhy7pNxW+83FXUVsZt8bW8obmVI7Ks=";
     };
-    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
-    # Makefile.PL in this package uses which to find pkg-config -- make it use path instead
-    patchPhase = ''sed -ie 's/`which pkg-config`/"pkg-config"/' Makefile.PL'';
+    # Makefile.PL in this package uses which to find pkg-config -- make it use envvar instead
+    postPatch = ''
+      substituteInPlace Makefile.PL \
+        --replace-fail '`which pkg-config`' "'$PKG_CONFIG'"
+    '';
     doCheck = false; # The main test performs network access
     nativeBuildInputs = [ pkgs.pkg-config ];
     propagatedBuildInputs = [ pkgs.libdiscid ];
@@ -18242,7 +18221,7 @@ with self; {
     };
   };
 
-  MySQLDiff = buildPerlPackage rec {
+  MySQLDiff = buildPerlPackage {
     pname = "MySQL-Diff";
     version = "0.60";
     src = fetchurl {
@@ -18632,10 +18611,10 @@ with self; {
 
   NetDNS = buildPerlPackage {
     pname = "Net-DNS";
-    version = "1.40";
+    version = "1.44";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.40.tar.gz";
-      hash = "sha256-IJu9QN6NSMG9eq3kjaI3/gpJn4nSebqi4amb1eySLdw=";
+      url = "mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.44.tar.gz";
+      hash = "sha256-E9ftxLjOoBMhR/qsNXH2s8cdHQz9hExTDFoET0o+wx4=";
     };
     propagatedBuildInputs = [ DigestHMAC ];
     makeMakerFlags = [ "--noonline-tests" ];
@@ -19192,7 +19171,7 @@ with self; {
     };
   };
 
-  NetSNPP = buildPerlPackage rec {
+  NetSNPP = buildPerlPackage {
     pname = "Net-SNPP";
     version = "1.17";
     src = fetchurl {
@@ -19572,7 +19551,7 @@ with self; {
     };
   };
 
-  OpenAPIClient = buildPerlPackage rec {
+  OpenAPIClient = buildPerlPackage {
     pname = "OpenAPI-Client";
     version = "1.07";
     src = fetchurl {
@@ -19814,10 +19793,10 @@ with self; {
 
   ParallelLoops = buildPerlPackage {
     pname = "Parallel-Loops";
-    version = "0.10";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMORCH/Parallel-Loops-0.10.tar.gz";
-      hash = "sha256-b5Z7RuejY7FocbmZHDWeFC3Dsigc/psa85kEcEyL0qo=";
+      url = "mirror://cpan/authors/id/P/PM/PMORCH/Parallel-Loops-0.12.tar.gz";
+      hash = "sha256-tmyP4v1RmHPIp7atHRoE3yAmkSJZteKKQeUdnJsVQVA=";
     };
     propagatedBuildInputs = [ ParallelForkManager ];
     meta = {
@@ -20283,7 +20262,7 @@ with self; {
     };
   };
 
-  PDL = buildPerlPackage rec {
+  PDL = buildPerlPackage {
     pname = "PDL";
     version = "2.025";
     src = fetchurl {
@@ -20628,7 +20607,7 @@ with self; {
     };
   };
 
-  PerlTidy = buildPerlPackage rec {
+  PerlTidy = buildPerlPackage {
     pname = "Perl-Tidy";
     version = "20230912";
     src = fetchurl {
@@ -22337,7 +22316,7 @@ with self; {
     };
   };
 
-  SearchXapian = buildPerlPackage rec {
+  SearchXapian = buildPerlPackage {
     pname = "Search-Xapian";
     version = "1.2.25.5";
     src = fetchurl {
@@ -22401,7 +22380,7 @@ with self; {
     };
   };
 
-  DeviceSerialPort = buildPerlPackage rec {
+  DeviceSerialPort = buildPerlPackage {
     pname = "Device-SerialPort";
     version = "1.04";
     src = fetchurl {
@@ -22432,7 +22411,7 @@ with self; {
     };
   };
 
-  SessionToken = buildPerlPackage rec {
+  SessionToken = buildPerlPackage {
     pname = "Session-Token";
     version = "1.503";
     src = fetchurl {
@@ -22507,7 +22486,7 @@ with self; {
     };
   };
 
-  SmartComments = buildPerlPackage rec {
+  SmartComments = buildPerlPackage {
     pname = "Smart-Comments";
     version = "1.06";
     src = fetchurl {
@@ -23001,7 +22980,7 @@ with self; {
     };
   };
 
-  StatisticsChiSquare = buildPerlPackage rec {
+  StatisticsChiSquare = buildPerlPackage {
     pname = "Statistics-ChiSquare";
     version = "1.0000";
     src = fetchurl {
@@ -23791,7 +23770,7 @@ with self; {
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ XSParseKeyword ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
     meta = {
       description = "A try/catch/finally syntax for perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -25626,7 +25605,7 @@ with self; {
     };
   };
 
-  TestPerlTidy = buildPerlModule rec {
+  TestPerlTidy = buildPerlModule {
     pname = "Test-PerlTidy";
     version = "20230226";
     src = fetchurl {
@@ -27493,47 +27472,7 @@ with self; {
     };
   };
 
-  Tirex = buildPerlPackage rec {
-    pname = "Tirex";
-    version = "0.7.0";
-
-    src = fetchFromGitHub {
-      owner = "openstreetmap";
-      repo = "tirex";
-      rev = "v${version}";
-      hash = "sha256-0QbPfCPBdNBbUiZ8Ppg2zao98+Ddl3l+yX6y1/J50rg=";
-    };
-
-    patches = [
-      # https://github.com/openstreetmap/tirex/pull/54
-      (fetchpatch {
-        url = "https://github.com/openstreetmap/tirex/commit/da0c5db926bc0939c53dd902a969b689ccf9edde.patch";
-        hash = "sha256-bnL1ZGy8ZNSZuCRbZn59qRVLg3TL0GjFYnhRKroeVO0=";
-      })
-    ];
-
-    buildInputs = [
-      GD
-      IPCShareLite
-      JSON
-      LWP
-      pkgs.mapnik
-    ] ++ pkgs.mapnik.buildInputs;
-
-    installPhase = ''
-      install -m 755 -d $out/usr/libexec
-      make install DESTDIR=$out INSTALLOPTS=""
-      mv $out/$out/lib $out/$out/share $out
-      rmdir $out/$out $out/nix/store $out/nix
-    '';
-
-    meta = {
-      description = "Tools for running a map tile server";
-      homepage = "https://wiki.openstreetmap.org/wiki/Tirex";
-      maintainers = with maintainers; [ jglukasik ];
-      license = with lib.licenses; [ gpl2Only ];
-    };
-  };
+  Tirex = callPackage ../development/perl-modules/Tirex { };
 
   Tk = buildPerlPackage {
     pname = "Tk";
@@ -28431,9 +28370,9 @@ with self; {
     };
     env.AUTOMATED_TESTING = false;
     nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException XSObjectMagic ];
-    propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple ];
-    NIX_CFLAGS_LINK = "-lxcb -lxcb-util -lxcb-xinerama -lxcb-icccm";
+    buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException ];
+    propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple XSObjectMagic ];
+    NIX_CFLAGS_LINK = "-lxcb -lxcb-util -lxcb-xinerama -lxcb-icccm -lxcb-randr -lxcb-xkb";
     doCheck = false; # requires an X server
     meta = {
       description = "Perl bindings for libxcb";
@@ -29005,7 +28944,7 @@ with self; {
       hash = "sha256-JQDEeGnPXKjGHdI8Z7rav2a48e+14nkgdlfBzmk+IR4=";
     };
     buildInputs = [ ExtUtilsCChecker Test2Suite ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
     meta = {
       description = "XS functions to assist in parsing keyword syntax";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -29106,10 +29045,10 @@ with self; {
 
   YAMLLibYAML = buildPerlPackage {
     pname = "YAML-LibYAML";
-    version = "0.88";
+    version = "0.89";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/YAML-LibYAML-0.88.tar.gz";
-      hash = "sha256-qKJzjMzDMqj3VJxMJ/PgCQyasR7vD2yFZEUXc5gTVng=";
+      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.89.tar.gz";
+      hash = "sha256-FVq4NnU0XFCt0DMRrPndkVlVcH+Qmiq9ixfXeShZsuw=";
     };
     meta = {
       description = "Perl YAML Serialization using XS and libyaml";

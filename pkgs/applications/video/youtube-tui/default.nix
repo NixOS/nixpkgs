@@ -6,6 +6,7 @@
 , xorg
 , stdenv
 , python3
+, makeBinaryWrapper
 , libsixel
 , mpv
 , CoreFoundation
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "Siriusmart";
-    repo = pname;
+    repo = "youtube-tui";
     rev = "v${version}";
     hash = "sha256-FOiK3yQcQuwdCEjBtRPW4iBd+8uNsvZ6l5tclHVzL+M=";
   };
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     python3
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -46,6 +48,12 @@ rustPlatform.buildRustPackage rec {
     Security
     AppKit
   ];
+
+  # sixel-sys is dynamically linked to libsixel
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    wrapProgram $out/bin/youtube-tui \
+      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [libsixel]}"
+  '';
 
   meta = with lib; {
     description = "An aesthetically pleasing YouTube TUI written in Rust";

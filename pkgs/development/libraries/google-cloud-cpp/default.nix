@@ -28,7 +28,6 @@ let
     rev = googleapisRev;
     hash = "sha256-4Qiz0pBgW3OZi+Z8Zq6k9E94+8q6/EFMwPh8eQxDjdI=";
   };
-  excludedTests = builtins.fromTOML (builtins.readFile ./skipped_tests.toml);
 in
 stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
@@ -106,16 +105,17 @@ stdenv.mkDerivation rec {
     lib.optionalString doInstallCheck (
       lib.optionalString (!staticOnly) ''
         export ${ldLibraryPathName}=${lib.concatStringsSep ":" additionalLibraryPaths}
-      '' + ''
-        export GTEST_FILTER="-${lib.concatStringsSep ":" excludedTests.cases}"
       ''
     );
 
   installCheckPhase = lib.optionalString doInstallCheck ''
     runHook preInstallCheck
 
-    # disable tests that contact the internet
-    ctest --exclude-regex '^(${lib.concatStringsSep "|" excludedTests.whole})'
+    # Disable any integration tests, which need to contact the internet.
+    # Also disable the `storage_benchmark_*` tests.
+    # With Protobuf < 23.x they require -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=ON.
+    # With Protobuf >= 23.x they require They require setting -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=OFF
+    ctest --label-exclude integration-test --exclude-regex storage_benchmarks_
 
     runHook postInstallCheck
   '';

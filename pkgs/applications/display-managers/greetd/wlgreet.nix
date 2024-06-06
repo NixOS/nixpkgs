@@ -1,6 +1,10 @@
 { lib
 , rustPlatform
 , fetchFromSourcehut
+, autoPatchelfHook
+, gcc-unwrapped
+, wayland
+, libxkbcommon
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,8 +20,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-1ugExUtrzqyd9dTlBHcc44UrtEfYrfUryuG79IkTv2Y=";
 
+  nativeBuildInputs = [ autoPatchelfHook ];
+  buildInputs = [ gcc-unwrapped ];
+
+  runtimeDependencies = map lib.getLib [
+    gcc-unwrapped
+    wayland
+    libxkbcommon
+  ];
+
   meta = with lib; {
     description = "Raw wayland greeter for greetd, to be run under sway or similar";
+    mainProgram = "wlgreet";
     homepage = "https://git.sr.ht/~kennylevinsen/wlgreet";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];

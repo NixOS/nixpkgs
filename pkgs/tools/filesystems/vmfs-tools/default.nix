@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "FUSE-based VMFS (vmware) file system tools";
     maintainers = with maintainers; [ peterhoeg ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     inherit (src.meta) homepage;
   };

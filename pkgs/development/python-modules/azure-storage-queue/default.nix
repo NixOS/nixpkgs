@@ -1,12 +1,13 @@
-{ lib
-, azure-core
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, isodate
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  azure-core,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-mBAbDhfaDUcM9XALbEDP50Q57Dycds84OYCW5zcbnRs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     azure-core
@@ -33,17 +32,13 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    aio = [
-      azure-core
-    ] ++ azure-core.optional-dependencies.aio;
+    aio = [ azure-core ] ++ azure-core.optional-dependencies.aio;
   };
 
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.storage.queue"
-  ];
+  pythonImportsCheck = [ "azure.storage.queue" ];
 
   meta = with lib; {
     description = "Client library for Microsoft Azure Storage services containing the queue service APIs";

@@ -4,27 +4,20 @@
 , gitUpdater
 }:
 
-let
-  # Strip optional dependencies from logs to make the closure smaller as this
-  # package contains a binary
-  logs' = logs.override { jsooSupport = false; lwtSupport = false; };
-
-in
-
 buildDunePackage rec {
   pname = "mdx";
-  version = "2.3.1";
+  version = "2.4.1";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/realworldocaml/mdx/releases/download/${version}/mdx-${version}.tbz";
-    hash = "sha256-mkCkX6p41H4pOSvU/sJg0UAWysGweOSrAW6jrcCXQ/M=";
+    hash = "sha256-GkDMkcxVPe0KIMmNQ0NUlTvbdZ7Mka02u7mn3QQSrxM=";
   };
 
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [
-    astring fmt logs' csexp ocaml-version camlp-streams re findlib
+    astring fmt logs csexp ocaml-version camlp-streams re findlib
   ];
   checkInputs = [ alcotest lwt ];
 

@@ -1,43 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, cython
-, numpy
-, scipy
-, sympy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scipy,
+  sympy,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pydy";
   version = "0.7.1";
-  format = "setuptools";
+
+  pyproject = true;
+  build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-aaRinJMGR8v/OVkeSp1hA4+QLOrmDWq50wvA6b/suvk=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
     sympy
   ];
 
-  nativeCheckInputs = [
-    nose
-    cython
-    pytestCheckHook
-  ];
+  # nose test does not support 3.10 or later
+  doCheck = false;
 
-  disabledTests = [
-    # Tests not fixed yet. Check https://github.com/pydy/pydy/issues/465
-    "test_generate_cse"
-    "test_generate_code_blocks"
-    "test_doprint"
-    "test_OctaveMatrixGenerator"
-  ];
+  pythonImportsCheck = [ "pydy" ];
 
   meta = with lib; {
     description = "Python tool kit for multi-body dynamics";

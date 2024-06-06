@@ -16,7 +16,7 @@ nvidia_x11: sha256:
 , libXxf86vm
 , libvdpau
 , librsvg
-, wrapGAppsHook
+, wrapGAppsHook3
 , addOpenGLRunpath
 , withGtk2 ? false
 , withGtk3 ? true
@@ -43,6 +43,14 @@ let
 
     makeFlags = [
       "OUTPUTDIR=." # src/libXNVCtrl
+      "libXNVCtrl.a"
+      "libXNVCtrl.so"
+    ];
+
+    patches = [
+      # Patch the Makefile to also produce a shared library.
+      (if lib.versionOlder nvidia_x11.settingsVersion "400" then ./libxnvctrl-build-shared-3xx.patch
+      else ./libxnvctrl-build-shared.patch)
     ];
 
     installPhase = ''
@@ -52,6 +60,7 @@ let
       cp libXNVCtrl.a $out/lib
       cp NVCtrl.h     $out/include/NVCtrl
       cp NVCtrlLib.h  $out/include/NVCtrl
+      cp -P libXNVCtrl.so* $out/lib
     '';
   };
 
@@ -96,7 +105,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config m4 addOpenGLRunpath ];
 
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
-    ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
+    ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook3 ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -138,6 +147,6 @@ stdenv.mkDerivation {
     license = licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
     mainProgram = "nvidia-settings";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar aidalgol ];
   };
 }

@@ -1,5 +1,13 @@
-{ wrapPython, python, lib, stdenv, cmake, qt5,
-  shiboken2, pyside2 }:
+{
+  wrapPython,
+  python,
+  lib,
+  stdenv,
+  cmake,
+  qt5,
+  shiboken2,
+  pyside2,
+}:
 
 stdenv.mkDerivation {
   pname = "pyside2-tools";
@@ -17,13 +25,20 @@ stdenv.mkDerivation {
     cd sources/pyside2-tools
   '';
 
-  nativeBuildInputs = [ cmake wrapPython ];
-  propagatedBuildInputs = [ shiboken2 pyside2 ];
-  buildInputs = [ python qt5.qtbase ];
-
-  cmakeFlags = [
-    "-DBUILD_TESTS=OFF"
+  nativeBuildInputs = [
+    cmake
+    wrapPython
   ];
+  propagatedBuildInputs = [
+    shiboken2
+    pyside2
+  ];
+  buildInputs = [
+    python
+    qt5.qtbase
+  ];
+
+  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 
   dontWrapQtApps = true;
 

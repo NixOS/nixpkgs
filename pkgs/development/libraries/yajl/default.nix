@@ -2,19 +2,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yajl";
-  version = "unstable-2022-04-20";
+  version = "2.1.0-unstable-2024-02-01";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "yajl";
-    rev = "49923ccb2143e36850bcdeb781e2bcdf5ce22f15";
-    hash = "sha256-9bMPA5FpyBp8fvG/kkT/MnhYtdqg3QzOnmDFXKwJVW0=";
+    rev = "6bc5219389fd2752631682b0a8368e6d8218a8c5";
+    hash = "sha256-vY0tqCkz6PN00Qbip5ViO64L3C06fJ4JjFuIk0TWgCo=";
   };
-
-  patches = [
-    # https://github.com/containers/yajl/pull/1
-    ./cmake-shared-static-fix.patch
-  ];
 
   nativeBuildInputs = [ cmake ];
 

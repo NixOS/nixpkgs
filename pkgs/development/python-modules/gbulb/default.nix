@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pygobject3
-, pytestCheckHook
-, gtk3
-, gobject-introspection
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pygobject3,
+  pytestCheckHook,
+  gtk3,
+  gobject-introspection,
 }:
 
 buildPythonPackage rec {

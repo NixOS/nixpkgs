@@ -13,7 +13,7 @@
 , lib
 , stdenv
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , inxi
 , mate
 , dbus
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

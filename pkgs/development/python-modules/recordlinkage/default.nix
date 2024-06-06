@@ -1,21 +1,22 @@
-{ lib
-, bottleneck
-, buildPythonPackage
-, fetchPypi
-, jellyfish
-, joblib
-, networkx
-, numexpr
-, numpy
-, pandas
-, pyarrow
-, pytest
-, pythonOlder
-, scikit-learn
-, scipy
-, setuptools
-, setuptools-scm
-, wheel
+{
+  lib,
+  bottleneck,
+  buildPythonPackage,
+  fetchPypi,
+  jellyfish,
+  joblib,
+  networkx,
+  numexpr,
+  numpy,
+  pandas,
+  pyarrow,
+  pytest,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -51,13 +52,9 @@ buildPythonPackage rec {
 
   # pytestCheckHook does not work
   # Reusing their CI setup which involves 'rm -rf recordlinkage' in preCheck phase do not work too.
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
-  pythonImportsCheck = [
-    "recordlinkage"
-  ];
+  pythonImportsCheck = [ "recordlinkage" ];
 
   meta = with lib; {
     description = "Library to link records in or between data sources";

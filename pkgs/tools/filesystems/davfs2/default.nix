@@ -8,12 +8,12 @@
 , wrapperDir ? "/run/wrappers/bin"
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "davfs2";
   version = "1.7.0";
 
   src = fetchurl {
-    url = "mirror://savannah/davfs2/davfs2-${version}.tar.gz";
+    url = "mirror://savannah/davfs2/davfs2-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-JR23Wic4DMoTMLG5cXAMXl3MDJDlpHYiKF8BQO3+Oi8=";
   };
 
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

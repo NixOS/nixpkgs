@@ -1,24 +1,23 @@
 # Configuration for the pwdutils suite of tools: passwd, useradd, etc.
 { config, lib, utils, pkgs, ... }:
-with lib;
 let
   cfg = config.security.loginDefs;
 in
 {
-  options = with types; {
+  options = with lib.types; {
     security.loginDefs = {
-      package = mkPackageOption pkgs "shadow" { };
+      package = lib.mkPackageOption pkgs "shadow" { };
 
-      chfnRestrict = mkOption {
-        description = mdDoc ''
+      chfnRestrict = lib.mkOption {
+        description = ''
           Use chfn SUID to allow non-root users to change their account GECOS information.
         '';
         type = nullOr str;
         default = null;
       };
 
-      settings = mkOption {
-        description = mdDoc ''
+      settings = lib.mkOption {
+        description = ''
           Config options for the /etc/login.defs file, that defines
           the site-specific configuration for the shadow password suite.
           See login.defs(5) man page for available options.
@@ -35,77 +34,77 @@ in
                by systemd for features like ConditionUser=@system and systemd-sysusers
               */
           options = {
-            DEFAULT_HOME = mkOption {
-              description = mdDoc "Indicate if login is allowed if we can't cd to the home directory.";
+            DEFAULT_HOME = lib.mkOption {
+              description = "Indicate if login is allowed if we can't cd to the home directory.";
               default = "yes";
               type = enum [ "yes" "no" ];
             };
 
-            ENCRYPT_METHOD = mkOption {
-              description = mdDoc "This defines the system default encryption algorithm for encrypting passwords.";
+            ENCRYPT_METHOD = lib.mkOption {
+              description = "This defines the system default encryption algorithm for encrypting passwords.";
               # The default crypt() method, keep in sync with the PAM default
               default = "YESCRYPT";
               type = enum [ "YESCRYPT" "SHA512" "SHA256" "MD5" "DES"];
             };
 
-            SYS_UID_MIN = mkOption {
-              description = mdDoc "Range of user IDs used for the creation of system users by useradd or newusers.";
+            SYS_UID_MIN = lib.mkOption {
+              description = "Range of user IDs used for the creation of system users by useradd or newusers.";
               default = 400;
               type = int;
             };
 
-            SYS_UID_MAX = mkOption {
-              description = mdDoc "Range of user IDs used for the creation of system users by useradd or newusers.";
+            SYS_UID_MAX = lib.mkOption {
+              description = "Range of user IDs used for the creation of system users by useradd or newusers.";
               default = 999;
               type = int;
             };
 
-            UID_MIN = mkOption {
-              description = mdDoc "Range of user IDs used for the creation of regular users by useradd or newusers.";
+            UID_MIN = lib.mkOption {
+              description = "Range of user IDs used for the creation of regular users by useradd or newusers.";
               default = 1000;
               type = int;
             };
 
-            UID_MAX = mkOption {
-              description = mdDoc "Range of user IDs used for the creation of regular users by useradd or newusers.";
+            UID_MAX = lib.mkOption {
+              description = "Range of user IDs used for the creation of regular users by useradd or newusers.";
               default = 29999;
               type = int;
             };
 
-            SYS_GID_MIN = mkOption {
-              description = mdDoc "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
+            SYS_GID_MIN = lib.mkOption {
+              description = "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
               default = 400;
               type = int;
             };
 
-            SYS_GID_MAX = mkOption {
-              description = mdDoc "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
+            SYS_GID_MAX = lib.mkOption {
+              description = "Range of group IDs used for the creation of system groups by useradd, groupadd, or newusers";
               default = 999;
               type = int;
             };
 
-            GID_MIN = mkOption {
-              description = mdDoc "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
+            GID_MIN = lib.mkOption {
+              description = "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
               default = 1000;
               type = int;
             };
 
-            GID_MAX = mkOption {
-              description = mdDoc "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
+            GID_MAX = lib.mkOption {
+              description = "Range of group IDs used for the creation of regular groups by useradd, groupadd, or newusers.";
               default = 29999;
               type = int;
             };
 
-            TTYGROUP = mkOption {
-              description = mdDoc ''
+            TTYGROUP = lib.mkOption {
+              description = ''
                 The terminal permissions: the login tty will be owned by the TTYGROUP group,
                 and the permissions will be set to TTYPERM'';
               default = "tty";
               type = str;
             };
 
-            TTYPERM = mkOption {
-              description = mdDoc ''
+            TTYPERM = lib.mkOption {
+              description = ''
                 The terminal permissions: the login tty will be owned by the TTYGROUP group,
                 and the permissions will be set to TTYPERM'';
               default = "0620";
@@ -113,8 +112,8 @@ in
             };
 
             # Ensure privacy for newly created home directories.
-            UMASK = mkOption {
-              description = mdDoc "The file mode creation mask is initialized to this value.";
+            UMASK = lib.mkOption {
+              description = "The file mode creation mask is initialized to this value.";
               default = "077";
               type = str;
             };
@@ -124,15 +123,15 @@ in
       };
     };
 
-    users.defaultUserShell = mkOption {
-      description = mdDoc ''
+    users.defaultUserShell = lib.mkOption {
+      description = ''
         This option defines the default shell assigned to user
         accounts. This can be either a full system path or a shell package.
 
         This must not be a store path, since the path is
         used outside the store (in particular in /etc/passwd).
       '';
-      example = literalExpression "pkgs.zsh";
+      example = lib.literalExpression "pkgs.zsh";
       type = either path shellPackage;
     };
   };
@@ -160,18 +159,18 @@ in
     ];
 
     security.loginDefs.settings.CHFN_RESTRICT =
-      mkIf (cfg.chfnRestrict != null) cfg.chfnRestrict;
+      lib.mkIf (cfg.chfnRestrict != null) cfg.chfnRestrict;
 
-    environment.systemPackages = optional config.users.mutableUsers cfg.package
-      ++ optional (types.shellPackage.check config.users.defaultUserShell) config.users.defaultUserShell
-      ++ optional (cfg.chfnRestrict != null) pkgs.util-linux;
+    environment.systemPackages = lib.optional config.users.mutableUsers cfg.package
+      ++ lib.optional (lib.types.shellPackage.check config.users.defaultUserShell) config.users.defaultUserShell
+      ++ lib.optional (cfg.chfnRestrict != null) pkgs.util-linux;
 
     environment.etc =
       # Create custom toKeyValue generator
       # see https://man7.org/linux/man-pages/man5/login.defs.5.html for config specification
       let
-        toKeyValue = generators.toKeyValue {
-          mkKeyValue = generators.mkKeyValueDefault { } " ";
+        toKeyValue = lib.generators.toKeyValue {
+          mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
         };
       in
       {
@@ -231,7 +230,7 @@ in
         newuidmap = mkSetuidRoot "${cfg.package.out}/bin/newuidmap";
         newgidmap = mkSetuidRoot "${cfg.package.out}/bin/newgidmap";
       }
-      // optionalAttrs config.users.mutableUsers {
+      // lib.optionalAttrs config.users.mutableUsers {
         chsh = mkSetuidRoot "${cfg.package.out}/bin/chsh";
         passwd = mkSetuidRoot "${cfg.package.out}/bin/passwd";
       };

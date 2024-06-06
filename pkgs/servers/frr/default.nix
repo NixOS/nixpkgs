@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 # build time
 , autoreconfHook
@@ -15,7 +16,7 @@
 , c-ares
 , json_c
 , libcap
-, libelf
+, elfutils
 , libunwind
 , libyang
 , net-snmp
@@ -85,13 +86,13 @@ lib.warnIf (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
 
 stdenv.mkDerivation rec {
   pname = "frr";
-  version = "9.1";
+  version = "10.0";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-oDPr51vI+tlT1IiUPufmZh/UE0TNKWrn4RqpnGoGxNo=";
+    hash = "sha256-vvh9z2hmjvAA7OXgrUmlcrrTE5MRedZzfmhX5FEDKwE=";
   };
 
   nativeBuildInputs = [
@@ -108,7 +109,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     c-ares
     json_c
-    libelf
     libunwind
     libyang
     openssl
@@ -122,6 +122,8 @@ stdenv.mkDerivation rec {
     libcap
   ] ++ lib.optionals snmpSupport [
     net-snmp
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
   ];
 
   # otherwise in cross-compilation: "configure: error: no working python version found"

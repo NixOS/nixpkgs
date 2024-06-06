@@ -1,15 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dulwich
-, pbr
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  dulwich,
+  pbr,
+  sphinx,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "openstackdocstheme";
   version = "3.2.0";
   format = "setuptools";
+
+  # breaks on import due to distutils import through pbr.packaging
+  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +27,11 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [ dulwich pbr sphinx ];
+  propagatedBuildInputs = [
+    dulwich
+    pbr
+    sphinx
+  ];
 
   # no tests
   doCheck = false;

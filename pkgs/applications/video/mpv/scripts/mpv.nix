@@ -1,24 +1,31 @@
-{ lib
-, buildLua
-, mpv-unwrapped
+{
+  lib,
+  buildLua,
+  mpv-unwrapped,
 }:
 
-let mkBuiltin = name: args:
-  let srcPath = "TOOLS/lua/${name}.lua";
-  in buildLua (lib.attrsets.recursiveUpdate rec {
-    inherit (mpv-unwrapped) src version;
-    pname = "mpv-${name}";
+let
+  mkBuiltin =
+    name: args:
+    let
+      srcPath = "TOOLS/lua/${name}.lua";
+    in
+    buildLua (
+      lib.attrsets.recursiveUpdate rec {
+        inherit (mpv-unwrapped) src version;
+        pname = "mpv-${name}";
 
-    dontUnpack = true;
-    scriptPath = "${src}/${srcPath}";
+        dontUnpack = true;
+        scriptPath = "${src}/${srcPath}";
 
-    meta = with lib; {
-      inherit (mpv-unwrapped.meta) license;
-      homepage = "https://github.com/mpv-player/mpv/blob/v${version}/${srcPath}";
-    };
-  } args);
-
-in lib.mapAttrs (name: lib.makeOverridable (mkBuiltin name)) {
+        meta = with lib; {
+          inherit (mpv-unwrapped.meta) license;
+          homepage = "https://github.com/mpv-player/mpv/blob/v${version}/${srcPath}";
+        };
+      } args
+    );
+in
+lib.mapAttrs (name: lib.makeOverridable (mkBuiltin name)) {
   acompressor.meta = {
     description = "Script to toggle and control ffmpeg's dynamic range compression filter.";
     maintainers = with lib.maintainers; [ nicoo ];

@@ -11,7 +11,7 @@
 , libxml2
 , gettext
 , itstool
-, wrapGAppsHook
+, wrapGAppsHook3
 , docbook_xsl
 , docbook_xml_dtd_43
 , gnome
@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
     # Fix test dependencies with meson 0.57, can be removed on next bump
     # We need to explicitly depend on the generated files.
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-dictionary/-/commit/87c026cfe4acbcfc62d15950f88a71d8d9678c7e.patch";
+      url = "https://gitlab.gnome.org/Archive/gnome-dictionary/-/commit/87c026cfe4acbcfc62d15950f88a71d8d9678c7e.patch";
       sha256 = "tKesWeOK3OqOxrXm4dZvCZHHdTD7AQbYDjtYDCsLd3A=";
     })
     # Fix build with meson 0.61, can be removed on next bump
     # data/appdata/meson.build:3:5: ERROR: Function does not take positional arguments.
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-dictionary/-/commit/cf3f8a67cd6f3059c555ed9cf0f5fba10abb7f68.patch";
+      url = "https://gitlab.gnome.org/Archive/gnome-dictionary/-/commit/cf3f8a67cd6f3059c555ed9cf0f5fba10abb7f68.patch";
       sha256 = "cIRM6ACqsnEo2JWYvr6EBye5o0BudugZMShCe1U5hz8=";
     })
   ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     libxml2
     gettext
     itstool
@@ -76,8 +76,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Dictionary";
+    homepage = "https://gitlab.gnome.org/Archive/gnome-dictionary";
     description = "Dictionary is the GNOME application to look up definitions";
+    mainProgram = "gnome-dictionary";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.unix;

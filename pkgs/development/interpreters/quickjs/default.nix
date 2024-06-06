@@ -1,25 +1,23 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , texinfo
 }:
 
 stdenv.mkDerivation rec {
   pname = "quickjs";
-  version = "2021-12-09";
+  version = "2024-01-13";
 
-  src = fetchFromGitHub {
-    owner = "bellard";
-    repo = pname;
-    rev = "daa35bc1e5d43192098af9b51caeb4f18f73f9f9";
-    hash = "sha256-BhAsa8tumCQ4jK/TbRbptj2iOIUFFjU1MQYdIrDMpko=";
+  src = fetchurl {
+    url = "https://bellard.org/quickjs/quickjs-${version}.tar.xz";
+    hash = "sha256-PEv4+JW/pUvrSGyNEhgRJ3Hs/FrDvhA2hR70FWghLgM=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile --replace "CONFIG_LTO=y" ""
   '';
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
   enableParallelBuilding = true;
 
   nativeBuildInputs = [

@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Minimalistic program launcher";
+    mainProgram = "kickoff";
     homepage = "https://github.com/j0ru/kickoff";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pyxels ];

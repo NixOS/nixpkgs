@@ -26,6 +26,7 @@ stdenv.mkDerivation {
 
   meta = sawja.meta // {
     description = "Pretty-print .class files";
+    mainProgram = "sawjap";
   };
 
 }

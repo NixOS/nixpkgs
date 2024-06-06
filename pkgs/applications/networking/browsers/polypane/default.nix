@@ -2,12 +2,12 @@
 
 let
   pname = "polypane";
-  version = "17.1.0";
+  version = "19.0.2";
 
   src = fetchurl {
     url = "https://github.com/firstversionist/${pname}/releases/download/v${version}/${pname}-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-vOSw+zjO8OJWRzAdnl4i3MLg+AyXFQwYBg332MXdQhw=";
+    sha256 = "sha256-MyQiq2Lo/XtmJ7D1VZXncYWq53Bu3O3WBT/PkdJuEZM=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -16,11 +16,9 @@ let
 in appimageTools.wrapType2 {
   inherit pname src version;
 
-  multiArch = false;
-  extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
+  extraPkgs = pkgs: [ pkgs.bash ];
 
   extraInstallCommands = ''
-    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/${pname}.png \
       $out/share/icons/hicolor/512x512/apps/${pname}.png

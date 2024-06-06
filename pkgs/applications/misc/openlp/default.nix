@@ -1,6 +1,6 @@
 # This file contains all runtime glue: Bindings to optional runtime dependencies
 # for pdfSupport, presentationSupport, and media playback.
-{ lib, mkDerivation, wrapGAppsHook, python3Packages
+{ lib, mkDerivation, wrapGAppsHook3, python3Packages
 
 # qt deps
 , qtbase, qtmultimedia
@@ -40,7 +40,7 @@ in mkDerivation {
   pname = baseLib.pname + lib.optionalString (pdfSupport && presentationSupport && vlcSupport && gstreamerSupport) "-full";
   inherit (baseLib) version src;
 
-  nativeBuildInputs = [ python3Packages.wrapPython wrapGAppsHook ];
+  nativeBuildInputs = [ python3Packages.wrapPython wrapGAppsHook3 ];
   buildInputs = [ qtbase ] ++ optionals gstreamerSupport
     ([ qtmultimedia.bin gst_all_1.gstreamer ] ++ gstPlugins gst_all_1);
   propagatedBuildInputs = optional pdfSupport mupdf

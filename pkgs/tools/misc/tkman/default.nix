@@ -10,12 +10,12 @@
 , rman
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tkman";
   version = "2.2";
 
   src = fetchzip {
-    url = "mirror://sourceforge/tkman/tkman-${version}.tar.gz";
+    url = "mirror://sourceforge/tkman/tkman-${finalAttrs.version}.tar.gz";
     hash = "sha256-S4ffz+7zmVy9+isz/8q+FV4wF5Rw2iL1ftY8RsJjRLs=";
   };
 
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical, hypertext manual page and Texinfo browser for UNIX";
+    mainProgram = "tkman";
     longDescription = ''
       TkMan is a graphical, hypertext manual page and Texinfo browser for UNIX.
       TkMan boasts hypertext links, unmatched online text formatting and display
@@ -84,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ fgaz ];
   };
-}
+})

@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://libclc.llvm.org/";
     description = "Implementation of the library requirements of the OpenCL C programming language";
+    mainProgram = "prepare_builtins";
     license = licenses.mit;
     platforms = platforms.all;
   };

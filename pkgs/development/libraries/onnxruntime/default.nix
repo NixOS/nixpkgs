@@ -1,7 +1,7 @@
-{ stdenv
+{ config
+, stdenv
 , lib
 , fetchFromGitHub
-, fetchFromGitLab
 , Foundation
 , abseil-cpp
 , cmake
@@ -15,13 +15,25 @@
 , re2
 , zlib
 , microsoft-gsl
-, iconv
+, libiconv
 , protobuf_21
 , pythonSupport ? true
-}:
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? {}
+}@inputs:
 
 
 let
+  version = "1.16.3";
+
+  stdenv = throw "Use effectiveStdenv instead";
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
+
+  cudaCapabilities = cudaPackages.cudaFlags.cudaCapabilities;
+  # E.g. [ "80" "86" "90" ]
+  cudaArchitectures = (builtins.map cudaPackages.cudaFlags.dropDot cudaCapabilities);
+  cudaArchitecturesString = lib.strings.concatStringsSep ";" cudaArchitectures;
+
   howard-hinnant-date = fetchFromGitHub {
     owner = "HowardHinnant";
     repo = "date";
@@ -58,26 +70,23 @@ let
     hash = "sha256-L1B5Y/c897Jg9fGwT2J3+vaXsZ+lfXnskp8Gto1p/Tg=";
   };
 
-  gtest' = gtest.overrideAttrs (oldAttrs: rec {
-    version = "1.13.0";
-    src = fetchFromGitHub {
-      owner = "google";
-      repo = "googletest";
-      rev = "v${version}";
-      hash = "sha256-LVLEn+e7c8013pwiLzJiiIObyrlbBHYaioO/SWbItPQ=";
-    };
-  });
-
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     rev = "refs/tags/v1.14.1";
     hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
   };
+
+   cutlass = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "cutlass";
+    rev = "v3.0.0";
+    sha256 = "sha256-YPD5Sy6SvByjIcGtgeGH80TEKg2BtqJWSg46RvnJChY=";
+   };
 in
-stdenv.mkDerivation rec {
+effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "1.16.3";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "microsoft";
@@ -96,6 +105,10 @@ stdenv.mkDerivation rec {
     # - use MakeAvailable instead of the low-level Populate,
     # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
     ./0001-eigen-allow-dependency-injection.patch
+  ] ++ lib.optionals cudaSupport [
+    # We apply the referenced 1064.patch ourselves to our nix dependency.
+    #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
+    ./nvcc-gsl.patch
   ];
 
   nativeBuildInputs = [
@@ -109,7 +122,9 @@ stdenv.mkDerivation rec {
     pythonOutputDistHook
     setuptools
     wheel
-  ]);
+  ]) ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
   buildInputs = [
     eigen
@@ -121,13 +136,22 @@ stdenv.mkDerivation rec {
     numpy
     pybind11
     packaging
-  ]) ++ lib.optionals stdenv.isDarwin [
+  ]) ++ lib.optionals effectiveStdenv.isDarwin [
     Foundation
-    iconv
-  ];
+    libiconv
+  ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_cccl # cub/cub.cuh
+    libcublas # cublas_v2.h
+    libcurand # curand.h
+    libcusparse # cusparse.h
+    libcufft # cufft.h
+    cudnn # cudnn.h
+    cuda_cudart
+  ]);
 
-  nativeCheckInputs = lib.optionals pythonSupport (with python3Packages; [
-    gtest'
+  nativeCheckInputs = [
+    gtest
+  ] ++ lib.optionals pythonSupport (with python3Packages; [
     pytest
     sympy
     onnx
@@ -156,26 +180,35 @@ stdenv.mkDerivation rec {
     "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
     "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
-    "-Donnxruntime_BUILD_UNIT_TESTS=ON"
+    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
     "-Donnxruntime_ENABLE_LTO=ON"
     "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
+    (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
+    (lib.cmakeBool "onnxruntime_USE_NCCL" cudaSupport)
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
+  ] ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass}")
+    (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+    (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
   ];
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
+  env = lib.optionalAttrs effectiveStdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=deprecated-declarations"
       "-Wno-error=unused-but-set-variable"
     ];
   };
 
-  doCheck = true;
+  doCheck = !cudaSupport;
+
+  requiredSystemFeatures = lib.optionals cudaSupport [ "big-parallel" ];
 
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
-  '' + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
+  '' + lib.optionalString (effectiveStdenv.hostPlatform.system == "aarch64-linux") ''
     # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
     rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc
   '';
@@ -193,6 +226,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    inherit cudaSupport cudaPackages; # for the python module
     protobuf = protobuf_21;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;

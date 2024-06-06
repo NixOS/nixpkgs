@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, proj
-, pythonOlder
-, substituteAll
-, cython
-, pytestCheckHook
-, mock
-, certifi
-, numpy
-, shapely
-, pandas
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  proj,
+  pythonOlder,
+  substituteAll,
+  cython,
+  pytestCheckHook,
+  mock,
+  certifi,
+  numpy,
+  shapely,
+  pandas,
+  xarray,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cython ];
   buildInputs = [ proj ];
 
-  propagatedBuildInputs = [
-     certifi
-  ];
+  propagatedBuildInputs = [ certifi ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -83,6 +82,9 @@ buildPythonPackage rec {
     "test_sync_download__directory"
     "test_sync_download__system_directory"
     "test_transformer_group__download_grids"
+
+    # proj-data grid required
+    "test_azimuthal_equidistant"
   ];
 
   pythonImportsCheck = [
@@ -103,9 +105,16 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface to PROJ library";
+    mainProgram = "pyproj";
     homepage = "https://github.com/pyproj4/pyproj";
     changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
     license = licenses.mit;
-    maintainers = with maintainers; teams.geospatial.members ++ [ lsix dotlambda ];
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        lsix
+        dotlambda
+      ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, boost, capstone
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, boost, capstone_4
 , double-conversion, graphviz, qtxmlpatterns }:
 
 mkDerivation rec {
@@ -15,7 +15,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ boost.dev capstone double-conversion graphviz qtxmlpatterns ];
+  buildInputs = [ boost.dev capstone_4 double-conversion graphviz qtxmlpatterns ];
 
   postPatch = ''
     # Remove CMAKE_INSTALL_PREFIX from DEFAULT_PLUGIN_PATH otherwise the nix store path will appear twice.
@@ -34,6 +34,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Cross platform AArch32/x86/x86-64 debugger";
+    mainProgram = "edb";
     homepage = "https://github.com/eteran/edb-debugger";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lihop maxxk ];

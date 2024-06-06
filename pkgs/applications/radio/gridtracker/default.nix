@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, nix-update-script, nwjs, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitLab, nix-update-script, nwjs, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "gridtracker";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-p3PdYOk0yvG3QkM17grzZmf9upK1n0zo4aOrlhGTvTU=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An amateur radio companion to WSJT-X or JTDX";
+    mainProgram = "gridtracker";
     longDescription = ''
       GridTracker listens to traffic from WSJT-X/JTDX, displays it on a map,
       and has a sophisticated alerting and filtering system for finding and

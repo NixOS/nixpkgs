@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  numpy,
 }:
 let
   pname = "rank-bm25";
@@ -27,9 +28,7 @@ buildPythonPackage {
     substituteInPlace setup.py --replace "get_version()" "'${version}'"
   '';
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "rank_bm25" ];
 

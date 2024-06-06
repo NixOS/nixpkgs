@@ -1,0 +1,16 @@
+diff --git a/next.config.mjs b/next.config.mjs
+index dc34f1a..f6f90c4 100644
+--- a/next.config.mjs
++++ b/next.config.mjs
+@@ -1,6 +1,7 @@
+ /** @type {import('next').NextConfig} */
+ const nextConfig = {
+-    webpack: (config, { isServer }) => {
++  output: 'standalone',
++  webpack: (config, { isServer }) => {
+         // Fixes npm packages that depend on `fs` module
+         if (!isServer) {
+           config.resolve.fallback = {
+-- 
+2.42.0
+

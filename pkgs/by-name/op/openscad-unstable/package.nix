@@ -15,24 +15,27 @@
 , flex
 , fontconfig
 , freetype
+, ghostscript
 , glib
 , glm
 , gmp
 , harfbuzz
 , hidapi
 , lib3mf
-, libGL
 , libGLU
 , libICE
 , libSM
 , libsForQt5
 , libspnav
 , libzip
+, mesa
 , mpfr
 , python3
-, tbb_2021_8
+, tbb_2021_11
 , wayland
 , wayland-protocols
+, wrapGAppsHook3
+, xorg
 }:
 let
   # get cccl from source to avoid license issues
@@ -48,7 +51,7 @@ let
       hash = "sha256-f11CNfa8jF9VbzvOoX1vT8zGIJL9cZ/VBpiklUn0YdU=";
     };
     nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = [ tbb_2021_8 ];
+    buildInputs = [ tbb_2021_11 ];
     cmakeFlags = [
       # only enable what we need
       "-DCCCL_ENABLE_CUB=OFF"
@@ -78,29 +81,31 @@ in
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-01-22";
+  version = "2024-03-10";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "88d244aed3c40a76194ff537ed84bd65bc0e1aeb";
-    hash = "sha256-qkQNbYhmOxF14zm+eCcwe9asLOEciYBANefUb8+KNEI=";
+    rev = "db167b1df31fbd8a2101cf3a13dac148b0c2165d";
+    hash = "sha256-i2ZGYsNfMLDi3wRd/lohs9BuO2KuQ/7kJIXGtV65OQU=";
     fetchSubmodules = true;
   };
+  patches = [ ./test.diff ];
   nativeBuildInputs = [
-    pkg-config
-    cmake
-    ninja
+    (python3.withPackages (ps: with ps; [ numpy pillow ]))
     bison
+    cmake
     flex
-    python3
     libsForQt5.qt5.wrapQtAppsHook
     llvmPackages.bintools
+    wrapGAppsHook3
+    ninja
+    pkg-config
   ];
   buildInputs = with libsForQt5; with qt5; [
     # manifold dependencies
     clipper2
     glm
-    tbb_2021_8
+    tbb_2021_11
     nvidia-cccl
 
     boost
@@ -110,6 +115,7 @@ clangStdenv.mkDerivation rec {
     eigen
     fontconfig
     freetype
+    ghostscript
     glib
     gmp
     harfbuzz
@@ -122,7 +128,15 @@ clangStdenv.mkDerivation rec {
     qtbase
     qtmultimedia
   ]
-  ++ lib.optionals clangStdenv.isLinux [ libICE libSM libGLU libGL wayland wayland-protocols qtwayland ]
+  ++ lib.optionals clangStdenv.isLinux [
+    xorg.libXdmcp
+    libICE
+    libSM
+    wayland
+    wayland-protocols
+    qtwayland
+    libGLU
+  ]
   ++ lib.optional clangStdenv.isDarwin qtmacextras
   ;
   cmakeFlags = [
@@ -131,11 +145,18 @@ clangStdenv.mkDerivation rec {
     "-DUSE_BUILTIN_OPENCSG=ON" # bundled latest opencsg
     "-DOPENSCAD_VERSION=\"${builtins.replaceStrings ["-"] ["."] version}\""
     "-DCMAKE_UNITY_BUILD=ON" # faster build
-    "-DENABLE_TESTS=OFF" # tests do not work for now
     # IPO
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
   ];
+  doCheck = true;
+  checkPhase = ''
+    # for running mesa llvmpipe
+    export __EGL_VENDOR_LIBRARY_FILENAMES=${mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json
+    export LIBGL_DRIVERS_PATH=${mesa.drivers}/lib:${mesa.drivers}/lib/dri
+    # some fontconfig issues cause pdf output to have wrong font
+    ctest -j$NIX_BUILD_CORES -E pdfexporttest.\*
+  '';
   meta = with lib; {
     description = "3D parametric model compiler (unstable)";
     longDescription = ''

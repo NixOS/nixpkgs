@@ -32,6 +32,7 @@ let
     "mips" = "mips";
     "mips64el" = "mips64le";
     "mipsel" = "mipsle";
+    "powerpc64" = "ppc64";
     "powerpc64le" = "ppc64le";
     "riscv64" = "riscv64";
     "s390x" = "s390x";
@@ -46,11 +47,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.21.6";
+  version = "1.21.10";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-Ekkmpi5F942qu67bnAEdl2MxhqM8I4/8HiUyDAIEYkg=";
+    hash = "sha256-kA4K/okAwe5lqKjE8MWjygLc+FwdHLE6ZSviLCE5k5Q=";
   };
 
   strictDeps = true;

@@ -4,8 +4,6 @@ buildDunePackage {
   pname = "linol-lwt";
   inherit (linol) version src;
 
-  duneVersion = "3";
-
   propagatedBuildInputs = [
     linol
     jsonrpc

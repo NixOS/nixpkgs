@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     sed -i 's/,--version-script=.*$/\\/' libgamin/Makefile
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   patches = [ ./deadlock.patch ]
     ++ map fetchurl (import ./debian-patches.nix)
     ++ lib.optional stdenv.cc.isClang ./returnval.patch

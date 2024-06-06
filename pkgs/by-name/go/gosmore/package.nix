@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open Street Map viewer";
+    mainProgram = "gosmore";
     homepage = "https://sourceforge.net/projects/gosmore/";
     maintainers = with maintainers; [
       raskin

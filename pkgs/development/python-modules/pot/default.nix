@@ -1,21 +1,22 @@
-{ lib
-, autograd
-, buildPythonPackage
-, fetchFromGitHub
-, cupy
-, cvxopt
-, cython
-, oldest-supported-numpy
-, matplotlib
-, numpy
-, tensorflow
-, pymanopt
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, scipy
-, enableDimensionalityReduction ? false
-, enableGPU ? false
+{
+  lib,
+  autograd,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cupy,
+  cvxopt,
+  cython,
+  oldest-supported-numpy,
+  matplotlib,
+  numpy,
+  tensorflow,
+  pymanopt,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  enableDimensionalityReduction ? false,
+  enableGPU ? false,
 }:
 
 buildPythonPackage rec {
@@ -37,15 +38,16 @@ buildPythonPackage rec {
     oldest-supported-numpy
   ];
 
-  propagatedBuildInputs = [
-    numpy
-    scipy
-  ] ++ lib.optionals enableGPU [
-    cupy
-  ] ++ lib.optionals enableDimensionalityReduction [
-    autograd
-    pymanopt
-  ];
+  propagatedBuildInputs =
+    [
+      numpy
+      scipy
+    ]
+    ++ lib.optionals enableGPU [ cupy ]
+    ++ lib.optionals enableDimensionalityReduction [
+      autograd
+      pymanopt
+    ];
 
   nativeCheckInputs = [
     cvxopt
@@ -104,9 +106,7 @@ buildPythonPackage rec {
     "test_emd1d_device_tf"
   ];
 
-  disabledTestPaths = lib.optionals (!enableDimensionalityReduction) [
-    "test/test_dr.py"
-  ];
+  disabledTestPaths = lib.optionals (!enableDimensionalityReduction) [ "test/test_dr.py" ];
 
   pythonImportsCheck = [
     "ot"

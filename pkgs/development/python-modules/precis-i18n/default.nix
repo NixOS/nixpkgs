@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-0Z8JbakShuB8FFGl3NS8VFpHAQgr2P900HVxUafAmyU=";
   };
 
-  pythonImportsCheck = [
-    "precis_i18n"
-  ];
+  pythonImportsCheck = [ "precis_i18n" ];
 
   meta = with lib; {
     description = "Internationalized usernames and passwords";

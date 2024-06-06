@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , cargo
 , curl
@@ -29,24 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
   inherit nvimAlias viAlias vimAlias globalConfig;
 
   pname = "lunarvim";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "LunarVim";
     repo = "LunarVim";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-z1Cw3wGpFDmlrAIy7rrjlMtzcW7a6HWSjI+asEDcGPA=";
+    hash = "sha256-uuXaDvZ9VaRJlZrdu28gawSOJFVSo5XX+JG53IB+Ijw=";
   };
-
-  # Pull in the fix for Nerd Fonts until the next release
-  patches = [
-    (
-      fetchpatch {
-        url = "https://github.com/LunarVim/LunarVim/commit/d187cbd03fbc8bd1b59250869e0e325518bf8798.patch";
-        sha256 = "sha256-ktkQ2GiIOhbVOMjy1u5Bf8dJP4SXHdG4j9OEFa9Fm7w=";
-      }
-    )
-  ];
 
   nativeBuildInputs = [
     gnused
@@ -140,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/LunarVim/LunarVim/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     sourceProvenance = with sourceTypes; [ fromSource ];
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ prominentretail ];
+    maintainers = with maintainers; [ prominentretail lebensterben ];
     platforms = platforms.unix;
     mainProgram = "lvim";
   };

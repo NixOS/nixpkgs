@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, libopus
-, pynacl
-, pythonOlder
-, withVoice ? true
-, ffmpeg
+{
+  lib,
+  stdenv,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libopus,
+  pynacl,
+  pythonOlder,
+  withVoice ? true,
+  ffmpeg,
 }:
 
 buildPythonPackage rec {
@@ -24,21 +25,23 @@ buildPythonPackage rec {
     hash = "sha256-bZoYdDpk34x+Vw1pAZ3EcTFp2JJ/Ow0Jfof/XjqeRmY=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ] ++ lib.optionals withVoice [
-    libopus
-    pynacl
-    ffmpeg
-  ];
+  propagatedBuildInputs =
+    [ aiohttp ]
+    ++ lib.optionals withVoice [
+      libopus
+      pynacl
+      ffmpeg
+    ];
 
-  patchPhase = ''
-    substituteInPlace "discord/opus.py" \
-      --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
-  '' + lib.optionalString withVoice ''
-    substituteInPlace "discord/player.py" \
-      --replace "executable='ffmpeg'" "executable='${ffmpeg}/bin/ffmpeg'"
-  '';
+  patchPhase =
+    ''
+      substituteInPlace "discord/opus.py" \
+        --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    ''
+    + lib.optionalString withVoice ''
+      substituteInPlace "discord/player.py" \
+        --replace "executable='ffmpeg'" "executable='${ffmpeg}/bin/ffmpeg'"
+    '';
 
   # Only have integration tests with discord
   doCheck = false;

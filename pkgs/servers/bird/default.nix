@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bird";
-  version = "2.14";
+  version = "2.15.1";
 
   src = fetchurl {
     url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
-    hash = "sha256-sLn2+FZlQbm+SvHwysZ1xaN4VgGlVmen7D194pc1p4Y=";
+    hash = "sha256-SOhcYi3hZHVsEy6netGoqVzJ/QE3/9DYgnRlic51x10=";
   };
 
   nativeBuildInputs = [ flex bison ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "BIRD Internet Routing Daemon";
     homepage = "http://bird.network.cz";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ herbetom ];
     platforms = platforms.linux;
   };
 }

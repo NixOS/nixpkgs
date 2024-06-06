@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Network authentication tool";
+    mainProgram = "ncrack";
     homepage = "https://nmap.org/ncrack/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ siraben ];

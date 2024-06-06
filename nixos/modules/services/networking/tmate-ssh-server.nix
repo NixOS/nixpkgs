@@ -16,13 +16,13 @@ let
 in
 {
   options.services.tmate-ssh-server = {
-    enable = mkEnableOption (mdDoc "tmate ssh server");
+    enable = mkEnableOption "tmate ssh server";
 
     package = mkPackageOption pkgs "tmate-ssh-server" { };
 
     host = mkOption {
       type = types.str;
-      description = mdDoc "External host name";
+      description = "External host name";
       defaultText = lib.literalExpression "config.networking.domain or config.networking.hostName";
       default =
         if domain == null then
@@ -33,24 +33,24 @@ in
 
     port = mkOption {
       type = types.port;
-      description = mdDoc "Listen port for the ssh server";
+      description = "Listen port for the ssh server";
       default = 2222;
     };
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc "Whether to automatically open the specified ports in the firewall.";
+      description = "Whether to automatically open the specified ports in the firewall.";
     };
 
     advertisedPort = mkOption {
       type = types.port;
-      description = mdDoc "External port advertised to clients";
+      description = "External port advertised to clients";
     };
 
     keysDir = mkOption {
       type = with types; nullOr str;
-      description = mdDoc "Directory containing ssh keys, defaulting to auto-generation";
+      description = "Directory containing ssh keys, defaulting to auto-generation";
       default = null;
     };
   };

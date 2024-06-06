@@ -36,7 +36,7 @@
 , nss
 , openssl
 , pango
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     dpkg
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl openssl libnghttp2 ];
@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://getpolarized.io/";
     description = "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation";
+    mainProgram = "polar-bookshelf";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.dansbandit ];
     platforms = lib.platforms.linux;

@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, callPackage
-, factory-boy
-, fetchFromGitHub
-, lib
-, wagtail
+{
+  buildPythonPackage,
+  callPackage,
+  factory-boy,
+  fetchFromGitHub,
+  lib,
+  wagtail,
 }:
 
 buildPythonPackage rec {

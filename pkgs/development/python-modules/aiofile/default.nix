@@ -1,11 +1,12 @@
-{ lib
-, aiomisc
-, aiomisc-pytest
-, caio
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiomisc,
+  aiomisc-pytest,
+  caio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-KBly/aeHHZh7mL8MJ9gmxbqS7PmR4sedtBY/2HCXt54=";
   };
 
-  propagatedBuildInputs = [
-    caio
-  ];
+  propagatedBuildInputs = [ caio ];
 
   nativeCheckInputs = [
     aiomisc
@@ -32,9 +31,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiofile"
-  ];
+  pythonImportsCheck = [ "aiofile" ];
 
   disabledTests = [
     # Tests (SystemError) fails randomly during nix-review

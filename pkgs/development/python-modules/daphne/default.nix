@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, asgiref
-, autobahn
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, hypothesis
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, twisted
+{
+  lib,
+  stdenv,
+  asgiref,
+  autobahn,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  hypothesis,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  twisted,
 }:
 
 buildPythonPackage rec {
@@ -47,12 +48,11 @@ buildPythonPackage rec {
   # Most tests fail on darwin
   doCheck = !stdenv.isDarwin;
 
-  pythonImportsCheck = [
-    "daphne"
-  ];
+  pythonImportsCheck = [ "daphne" ];
 
   meta = with lib; {
     description = "Django ASGI (HTTP/WebSocket) server";
+    mainProgram = "daphne";
     homepage = "https://github.com/django/daphne";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

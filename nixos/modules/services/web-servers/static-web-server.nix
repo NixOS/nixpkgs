@@ -7,11 +7,11 @@ let
 in {
   options = {
     services.static-web-server = {
-      enable = lib.mkEnableOption (lib.mdDoc ''Static Web Server'');
+      enable = lib.mkEnableOption ''Static Web Server'';
       listen = lib.mkOption {
         default = "[::]:8787";
         type = lib.types.str;
-        description = lib.mdDoc ''
+        description = ''
           The "ListenStream" used in static-web-server.socket.
           This is equivalent to SWS's "host" and "port" options.
           See here for specific syntax: <https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream=>
@@ -19,7 +19,7 @@ in {
       };
       root = lib.mkOption {
         type = lib.types.path;
-        description = lib.mdDoc ''
+        description = ''
           The location of files for SWS to serve. Equivalent to SWS's "root" config value.
           NOTE: This folder must exist before starting SWS.
         '';
@@ -30,7 +30,7 @@ in {
         example = {
           general = { log-level = "error"; directory-listing = true; };
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Static Web Server. See
           <https://static-web-server.net/configuration/config-file/>.
           NOTE: Don't set "host", "port", or "root" here. They will be ignored.

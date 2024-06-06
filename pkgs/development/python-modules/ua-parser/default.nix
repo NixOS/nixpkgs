@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,17 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-GiuGPnyYL0HQ/J2OpDTD1/panZCuzKtD3mKW5op5lXA=";
   };
 
-  patches = [
-    ./dont-fetch-submodule.patch
-  ];
+  patches = [ ./dont-fetch-submodule.patch ];
 
-  nativeBuildInputs = [
-    pyyaml
-  ];
+  nativeBuildInputs = [ pyyaml ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # import from $out

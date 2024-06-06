@@ -99,6 +99,7 @@ in {
     meta = with lib; {
       inherit (src.meta) homepage;
       description = "Searchtimer and replacement of the VDR program menu";
+      mainProgram = "createcats";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       inherit (vdr.meta) platforms;

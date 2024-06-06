@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pandas
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pandas,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,13 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-l41LLo9k075EL8rV48bwa4Yw12XuqNJSDYtd9kyqS3U=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pandas
-  ];
+  nativeCheckInputs = [ pandas ];
 
   # This packages does not have real tests
   # But we can run this file as smoketest
@@ -38,9 +35,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "pycatch22"
-  ];
+  pythonImportsCheck = [ "pycatch22" ];
 
   meta = with lib; {
     description = "Python implementation of catch22";

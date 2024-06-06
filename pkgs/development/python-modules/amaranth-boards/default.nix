@@ -1,27 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, amaranth
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  amaranth,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "amaranth-boards";
-  version = "unstable-2021-12-17";
-  format = "setuptools";
+  version = "0-unstable-2023-12-13";
+  pyproject = true;
   # python setup.py --version
   realVersion = "0.1.dev202+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth-boards";
-    rev = "8e2615765e255144403431ca95c5cdf6c78eb638";
-    sha256 = "3EOG8SO5xBNevshXMRrxKWoJUbeaVi8ckbkmqd6Tw70=";
+    rev = "170675812b71ee722bcf8ccdb88409a9ad97ffe2";
+    hash = "sha256-dwZCKMJnEY9RjzkcJ9r3TEC7W+Wfi/P7Hjl4/d60/qo=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ setuptools amaranth ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+  dependencies = [
+    setuptools
+    amaranth
+  ];
 
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
@@ -34,6 +41,10 @@ buildPythonPackage rec {
     description = "Board definitions for Amaranth HDL";
     homepage = "https://github.com/amaranth-lang/amaranth-boards";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ emily thoughtpolice ];
+    maintainers = with maintainers; [
+      emily
+      thoughtpolice
+      pbsds
+    ];
   };
 }

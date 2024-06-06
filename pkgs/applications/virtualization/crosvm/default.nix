@@ -5,18 +5,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "121.3";
+  version = "124.0";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "1e7125327a29b7b7a0593caf339d382728c55cf6";
-    sha256 = "Rjs46TtOhFZxqnEyqa4IyrRs7HnDZ/DJZ9DPEe7Oux0=";
+    rev = "bc2900b9ccbdf37b780a63888ca94437fd7dd6af";
+    hash = "sha256-t/47u5BlSC5vbRc7OQSbGBF+wnhcDFOMjrRQc/p2HcQ=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  cargoHash = "sha256-7nfeg/q8baLvB0CoRWKU60TRfLAaRkeRxGojPvKpOLs=";
+  cargoHash = "sha256-7zx0k7HXequpwcURHx+Ml3cDhdvLkXTg+V71F6TO/d0=";
 
   nativeBuildInputs = [
     pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
@@ -30,9 +30,10 @@ rustPlatform.buildRustPackage rec {
     patchShebangs third_party/minijail/tools/*.py
   '';
 
+  CROSVM_USE_SYSTEM_MINIGBM = true;
   CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
 
-  buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
+  buildFeatures = [ "virgl_renderer" ];
 
   passthru.updateScript = ./update.py;
 

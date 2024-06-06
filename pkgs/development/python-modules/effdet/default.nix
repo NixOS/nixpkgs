@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-# build inputs
-, torch
-, torchvision
-, timm
-, pycocotools
-, omegaconf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  # build inputs
+  torch,
+  torchvision,
+  timm,
+  pycocotools,
+  omegaconf,
 }:
 let
   pname = "effdet";

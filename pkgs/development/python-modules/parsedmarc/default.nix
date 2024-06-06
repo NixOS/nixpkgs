@@ -1,35 +1,37 @@
-{ lib
-, azure-identity
-, azure-monitor-ingestion
-, boto3
-, buildPythonPackage
-, dateparser
-, dnspython
-, elastic-transport
-, elasticsearch
-, elasticsearch-dsl
-, expiringdict
-, fetchPypi
-, fetchurl
-, geoip2
-, google-api-core
-, google-api-python-client
-, google-auth
-, google-auth-httplib2
-, google-auth-oauthlib
-, hatchling
-, imapclient
-, kafka-python
-, lxml
-, mailsuite
-, msgraph-core
-, nixosTests
-, publicsuffixlist
-, pythonOlder
-, requests
-, tqdm
-, urllib3
-, xmltodict
+{
+  lib,
+  azure-identity,
+  azure-monitor-ingestion,
+  boto3,
+  buildPythonPackage,
+  dateparser,
+  dnspython,
+  elastic-transport,
+  elasticsearch,
+  elasticsearch-dsl,
+  expiringdict,
+  fetchPypi,
+  fetchurl,
+  geoip2,
+  google-api-core,
+  google-api-python-client,
+  google-auth,
+  google-auth-httplib2,
+  google-auth-oauthlib,
+  hatchling,
+  imapclient,
+  kafka-python,
+  lxml,
+  mailsuite,
+  msgraph-core,
+  nixosTests,
+  opensearch-py,
+  publicsuffixlist,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  tqdm,
+  xmltodict,
 }:
 
 let
@@ -40,24 +42,24 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.6.4";
+  version = "8.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ibxSp1M85WngQKdjlRC4JvLxn0rEn9oVkid/V4iD6zY=";
+    hash = "sha256-OBxiaXB8NKNMviRI19rYYJxpnfnaEL3zSPmYB4urIug=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "elasticsearch<7.14.0" "elasticsearch" \
-      --replace "elasticsearch-dsl==7.4.0" "elasticsearch-dsl"
-  '';
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "elasticsearch"
+    "elasticsearch-dsl"
   ];
 
   propagatedBuildInputs = [
@@ -84,17 +86,15 @@ buildPythonPackage rec {
     publicsuffixlist
     requests
     tqdm
-    urllib3
     xmltodict
+    opensearch-py
   ];
 
   # no tests on PyPI, no tags on GitHub
   # https://github.com/domainaware/parsedmarc/issues/426
   doCheck = false;
 
-  pythonImportsCheck = [
-    "parsedmarc"
-  ];
+  pythonImportsCheck = [ "parsedmarc" ];
 
   passthru = {
     inherit dashboard;
@@ -104,9 +104,13 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
-    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${lib.replaceStrings [ "." ] [ "" ] version}";
+    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${
+      lib.replaceStrings [ "." ] [ "" ] version
+    }";
     license = licenses.asl20;
     maintainers = with maintainers; [ talyz ];
     mainProgram = "parsedmarc";
+    # https://github.com/domainaware/parsedmarc/issues/464
+    broken = lib.versionAtLeast msgraph-core.version "1.0.0";
   };
 }

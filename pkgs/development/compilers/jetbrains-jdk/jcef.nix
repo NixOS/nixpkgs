@@ -11,6 +11,8 @@
 , lib
 , ant
 , ninja
+, strip-nondeterminism
+, stripJavaArchivesHook
 
 , debugBuild ? false
 
@@ -101,7 +103,7 @@ stdenv.mkDerivation rec {
   # Run `git rev-list --count HEAD`
   version = "675";
 
-  nativeBuildInputs = [ cmake python3 jdk17 git rsync ant ninja ];
+  nativeBuildInputs = [ cmake python3 jdk17 git rsync ant ninja strip-nondeterminism stripJavaArchivesHook ];
   buildInputs = [ libX11 libXdamage nss nspr ];
 
   src = fetchFromGitHub {
@@ -249,6 +251,10 @@ stdenv.mkDerivation rec {
     jmod create --module-path . --class-path jogl-all.jar --libs lib $out/jmods/jogl.all.jmod
     cd ../jcef
     jmod create --module-path . --class-path jcef.jar --libs lib $out/jmods/jcef.jmod
+
+    # stripJavaArchivesHook gets rid of jar file timestamps, but not of jmod file timestamps
+    # We have to manually call strip-nondeterminism to do this for jmod files too
+    find $out -name "*.jmod" -exec strip-nondeterminism --type jmod {} +
   '';
 
   meta = {

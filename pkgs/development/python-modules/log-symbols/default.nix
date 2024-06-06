@@ -1,8 +1,10 @@
-{ buildPythonPackage
-, colorama
-, fetchPypi
-, isPy27
-, lib }:
+{
+  buildPythonPackage,
+  colorama,
+  fetchPypi,
+  isPy27,
+  lib,
+}:
 
 buildPythonPackage rec {
   pname = "log_symbols";

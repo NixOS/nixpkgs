@@ -181,11 +181,11 @@ let
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "A LaTeX2e class for overhead transparencies";
-      license = licenses.unfreeRedistributable;
-      maintainers = with maintainers; [ veprbl ];
-      platforms = platforms.all;
+      license = lib.licenses.unfreeRedistributable;
+      maintainers = with lib.maintainers; [ veprbl ];
+      platforms = lib.platforms.all;
     };
   };
 

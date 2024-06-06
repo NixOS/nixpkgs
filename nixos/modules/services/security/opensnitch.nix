@@ -13,7 +13,7 @@ let
 in {
   options = {
     services.opensnitch = {
-      enable = mkEnableOption (mdDoc "Opensnitch application firewall");
+      enable = mkEnableOption "Opensnitch application firewall";
 
       rules = mkOption {
         default = {};
@@ -34,7 +34,7 @@ in {
           };
         '';
 
-        description = mdDoc ''
+        description = ''
           Declarative configuration of firewall rules.
           All rules will be stored in `/var/lib/opensnitch/rules` by default.
           Rules path can be configured with `settings.Rules.Path`.
@@ -56,7 +56,7 @@ in {
 
               Address = mkOption {
                 type = types.str;
-                description = mdDoc ''
+                description = ''
                   Unix socket path (unix:///tmp/osui.sock, the "unix:///" part is
                   mandatory) or TCP socket (192.168.1.100:50051).
                 '';
@@ -64,7 +64,7 @@ in {
 
               LogFile = mkOption {
                 type = types.path;
-                description = mdDoc ''
+                description = ''
                   File to write logs to (use /dev/stdout to write logs to standard
                   output).
                 '';
@@ -74,7 +74,7 @@ in {
 
             DefaultAction = mkOption {
               type = types.enum [ "allow" "deny" ];
-              description = mdDoc ''
+              description = ''
                 Default action whether to block or allow application internet
                 access.
               '';
@@ -82,21 +82,21 @@ in {
 
             InterceptUnknown = mkOption {
               type = types.bool;
-              description = mdDoc ''
+              description = ''
                 Whether to intercept spare connections.
               '';
             };
 
             ProcMonitorMethod = mkOption {
               type = types.enum [ "ebpf" "proc" "ftrace" "audit" ];
-              description = mdDoc ''
+              description = ''
                 Which process monitoring method to use.
               '';
             };
 
             LogLevel = mkOption {
               type = types.enum [ 0 1 2 3 4 ];
-              description = mdDoc ''
+              description = ''
                 Default log level from 0 to 4 (debug, info, important, warning,
                 error).
               '';
@@ -104,7 +104,7 @@ in {
 
             Firewall = mkOption {
               type = types.enum [ "iptables" "nftables" ];
-              description = mdDoc ''
+              description = ''
                 Which firewall backend to use.
               '';
             };
@@ -113,14 +113,14 @@ in {
 
               MaxEvents = mkOption {
                 type = types.int;
-                description = mdDoc ''
+                description = ''
                   Max events to send to the GUI.
                 '';
               };
 
               MaxStats = mkOption {
                 type = types.int;
-                description = mdDoc ''
+                description = ''
                   Max stats per item to keep in backlog.
                 '';
               };
@@ -135,7 +135,7 @@ in {
                   "\\$\\{config.boot.kernelPackages.opensnitch-ebpf\\}/etc/opensnitchd"
                 else null;
               '';
-              description = mdDoc ''
+              description = ''
                 Configure eBPF modules path. Used when
                 `settings.ProcMonitorMethod` is set to `ebpf`.
               '';
@@ -144,7 +144,7 @@ in {
             Rules.Path = mkOption {
               type = types.path;
               default = "/var/lib/opensnitch/rules";
-              description = mdDoc ''
+              description = ''
                 Path to the directory where firewall rules can be found and will
                 get stored by the NixOS module.
               '';
@@ -152,7 +152,7 @@ in {
 
           };
         };
-        description = mdDoc ''
+        description = ''
           opensnitchd configuration. Refer to [upstream documentation](https://github.com/evilsocket/opensnitch/wiki/Configurations)
           for details on supported values.
         '';

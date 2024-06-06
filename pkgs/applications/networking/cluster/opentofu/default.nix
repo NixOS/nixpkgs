@@ -14,22 +14,22 @@
 let
   package =  buildGoModule rec {
     pname = "opentofu";
-    version = "1.6.1";
+    version = "1.7.1";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       rev = "v${version}";
-      hash = "sha256-wEDxZtmC+SLIYbN+mGTmefcD6VZu87E9E0XhiJPGmK0=";
+      hash = "sha256-201zceUedEl93nyglWJo0f9SDfFX31toP0MzzHQeJds=";
     };
 
-    vendorHash = "sha256-kSm5RZqQRgbmPaKt5IWmuMhHwAu+oJKTX1q1lbE7hWk=";
+    vendorHash = "sha256-cML742FfWFNIwGyIdRd3JWcfDlOXnJVgUXz4j5fa74Q=";
     ldflags = [ "-s" "-w" "-X" "github.com/opentofu/opentofu/version.dev=no" ];
 
     postConfigure = ''
       # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
       substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
-        --replace "/bin/stty" "${coreutils}/bin/stty"
+        --replace-fail "/bin/stty" "${coreutils}/bin/stty"
     '';
 
     nativeBuildInputs = [ installShellFiles ];

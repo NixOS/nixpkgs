@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, protobuf, six }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  protobuf,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "protobuf3-to-dict";
@@ -14,7 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "protobuf_to_dict" ];
 
-  propagatedBuildInputs = [ protobuf six ];
+  propagatedBuildInputs = [
+    protobuf
+    six
+  ];
 
   meta = with lib; {
     description = "A teeny Python library for creating Python dicts from protocol buffers and the reverse";

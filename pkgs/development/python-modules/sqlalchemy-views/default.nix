@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, sqlalchemy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  sqlalchemy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,21 +23,13 @@ buildPythonPackage rec {
     substituteInPlace tox.ini --replace '--cov=sqlalchemy_views --cov-report=term' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    sqlalchemy
-  ];
+  propagatedBuildInputs = [ sqlalchemy ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "sqlalchemy_views"
-  ];
+  pythonImportsCheck = [ "sqlalchemy_views" ];
 
   meta = with lib; {
     description = "Adds CreateView and DropView constructs to SQLAlchemy";

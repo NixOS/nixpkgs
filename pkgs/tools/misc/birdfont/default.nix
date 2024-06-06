@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, python3, xmlbird,
 cairo, gdk-pixbuf, libgee, glib, gtk3, webkitgtk, libnotify, sqlite, vala,
-gobject-introspection, gsettings-desktop-schemas, wrapGAppsHook, autoPatchelfHook }:
+gobject-introspection, gsettings-desktop-schemas, wrapGAppsHook3, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
   pname = "birdfont";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NNw7203BtHhNyyQezb3/EP98cTsu7ABDFBnM5Ms2ePY=";
   };
 
-  nativeBuildInputs = [ python3 pkg-config vala gobject-introspection wrapGAppsHook autoPatchelfHook ];
+  nativeBuildInputs = [ python3 pkg-config vala gobject-introspection wrapGAppsHook3 autoPatchelfHook ];
   buildInputs = [ xmlbird libgee cairo gdk-pixbuf glib gtk3 webkitgtk libnotify sqlite gsettings-desktop-schemas ];
 
   postPatch = ''

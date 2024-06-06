@@ -33,7 +33,7 @@ in
 
     hardware.opengl = {
       enable = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable OpenGL drivers. This is needed to enable
           OpenGL support in X11 systems, as well as for Wayland compositors
           like sway and Weston. It is enabled by default
@@ -49,7 +49,7 @@ in
       driSupport = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable accelerated OpenGL rendering through the
           Direct Rendering Interface (DRI).
         '';
@@ -58,7 +58,7 @@ in
       driSupport32Bit = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           On 64-bit systems, whether to support Direct Rendering for
           32-bit applications (such as Wine).  This is currently only
           supported for the `nvidia` as well as
@@ -69,7 +69,7 @@ in
       package = mkOption {
         type = types.package;
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           The package that provides the OpenGL implementation.
         '';
       };
@@ -77,7 +77,7 @@ in
       package32 = mkOption {
         type = types.package;
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           The package that provides the 32-bit OpenGL implementation on
           64-bit systems. Used when {option}`driSupport32Bit` is
           set.
@@ -88,7 +88,7 @@ in
         type = types.listOf types.package;
         default = [];
         example = literalExpression "with pkgs; [ intel-media-driver intel-ocl intel-vaapi-driver ]";
-        description = lib.mdDoc ''
+        description = ''
           Additional packages to add to OpenGL drivers.
           This can be used to add OpenCL drivers, VA-API/VDPAU drivers etc.
 
@@ -102,7 +102,7 @@ in
         type = types.listOf types.package;
         default = [];
         example = literalExpression "with pkgs.pkgsi686Linux; [ intel-media-driver intel-vaapi-driver ]";
-        description = lib.mdDoc ''
+        description = ''
           Additional packages to add to 32-bit OpenGL drivers on 64-bit systems.
           Used when {option}`driSupport32Bit` is set. This can be used to add OpenCL drivers, VA-API/VDPAU drivers etc.
 
@@ -116,7 +116,7 @@ in
         type = types.bool;
         internal = true;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether the `LD_LIBRARY_PATH` environment variable
           should be set to the locations of driver libraries. Drivers which
           rely on overriding libraries should set this to true. Drivers which

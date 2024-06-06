@@ -1,14 +1,15 @@
-{ buildPythonPackage
-, click
-, ecdsa
-, fetchpatch
-, fetchPypi
-, fido2
-, intelhex
-, lib
-, pyserial
-, pyusb
-, requests
+{
+  buildPythonPackage,
+  click,
+  ecdsa,
+  fetchpatch,
+  fetchPypi,
+  fido2,
+  intelhex,
+  lib,
+  pyserial,
+  pyusb,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +35,15 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ click ecdsa fido2 intelhex pyserial pyusb requests ];
+  propagatedBuildInputs = [
+    click
+    ecdsa
+    fido2
+    intelhex
+    pyserial
+    pyusb
+    requests
+  ];
 
   # no tests
   doCheck = false;
@@ -43,8 +52,8 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/trustcrypto/onlykey-solo-python";
     description = "Python library for OnlyKey with Solo FIDO2";
+    mainProgram = "solo";
     maintainers = with maintainers; [ kalbasit ];
     license = licenses.asl20;
   };
 }
-

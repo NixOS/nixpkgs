@@ -7,14 +7,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "librecast";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "librecast";
     repo = "librecast";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NlwYJJn1yewx92y6UKJcj6R2MnPn+XuEiKOmsR2oE3g=";
+    hash = "sha256-8Qit1KFazVG+2TEmSGXiBNawvpc7Ihr/0mx4KCzBoAY=";
   };
   buildInputs = [ lcrq libsodium ];
   installFlags = [ "PREFIX=$(out)" ];

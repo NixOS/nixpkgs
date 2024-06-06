@@ -4,7 +4,7 @@
 , copyDesktopItems
 , fetchFromGitHub
 , gradle
-, jdk
+, jdk17
 , perl
 
 # for arc
@@ -40,6 +40,7 @@ let
   version = "146";
   buildVersion = makeBuildVersion version;
 
+  jdk = jdk17;
   gradleWithJdk = gradle.override { java = jdk; };
 
   selectedGlew = if enableWayland then glew-egl else glew;
@@ -97,6 +98,7 @@ let
     desktopName = "Mindustry";
     exec = "mindustry";
     icon = "mindustry";
+    categories = [ "Game" ];
   };
 
   cleanupMindustrySrc = ''

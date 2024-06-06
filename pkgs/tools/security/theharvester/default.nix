@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.5.1";
+  version = "4.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = "theharvester";
     rev = "refs/tags/${version}";
-    hash = "sha256-yfi1+SCCLCV3SJ28EVmR6V2i3O92iVRBo4EwHbKKcYY=";
+    hash = "sha256-B2pZBrWZqbtvcO0pnM57GFhrryYilLCBTMEmsKvyU/I=";
   };
 
   postPatch = ''
@@ -38,6 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     lxml
     netaddr
     ujson
+    playwright
     plotly
     pyppeteer
     python-dateutil

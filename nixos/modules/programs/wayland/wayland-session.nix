@@ -1,23 +1,18 @@
-{ lib, pkgs, ... }: with lib; {
-    security = {
-      polkit.enable = true;
-      pam.services.swaylock = {};
-    };
+{ lib, pkgs, xwayland ? true }:
 
-    hardware.opengl.enable = mkDefault true;
-    fonts.enableDefaultPackages = mkDefault true;
+{
+  security = {
+    polkit.enable = true;
+    pam.services.swaylock = {};
+  };
 
-    programs = {
-      dconf.enable = mkDefault true;
-      xwayland.enable = mkDefault true;
-    };
+  hardware.opengl.enable = lib.mkDefault true;
+  fonts.enableDefaultPackages = lib.mkDefault true;
 
-    xdg.portal = {
-      enable = mkDefault true;
+  programs = {
+    dconf.enable = lib.mkDefault true;
+    xwayland.enable = lib.mkDefault xwayland;
+  };
 
-      extraPortals = [
-        # For screen sharing
-        pkgs.xdg-desktop-portal-wlr
-      ];
-    };
+  xdg.portal.wlr.enable = lib.mkDefault true;
 }

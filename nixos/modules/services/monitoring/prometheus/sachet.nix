@@ -9,7 +9,7 @@ in
 {
   options = {
     services.prometheus.sachet = {
-      enable = mkEnableOption (lib.mdDoc "Sachet, an SMS alerting tool for the Prometheus Alertmanager");
+      enable = mkEnableOption "Sachet, an SMS alerting tool for the Prometheus Alertmanager";
 
       configuration = mkOption {
         type = types.nullOr types.attrs;
@@ -32,7 +32,7 @@ in
             }];
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Sachet's configuration as a nix attribute set.
         '';
       };
@@ -40,7 +40,7 @@ in
       address = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           The address Sachet will listen to.
         '';
       };
@@ -48,7 +48,7 @@ in
       port = mkOption {
         type = types.port;
         default = 9876;
-        description = lib.mdDoc ''
+        description = ''
           The port Sachet will listen to.
         '';
       };

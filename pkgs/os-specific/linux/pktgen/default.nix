@@ -18,22 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pktgen";
-  version = "22.07.1";
+  version = "23.10.0";
 
   src = fetchFromGitHub {
     owner = "pktgen";
     repo = "Pktgen-DPDK";
     rev = "pktgen-${version}";
-    sha256 = "sha256-wBLGwVdn3ymUTVv7J/kbQYz4WNIgV246PHg51+FStUo=";
+    sha256 = "sha256-eujVEU+XkxF1kIGQJoBW3oXXNSqBEzx6mwR2XYoHinM=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Ealier DPDK deprecated some macros, which were finally removed in >= 22.11
-      url = "https://github.com/pktgen/Pktgen-DPDK/commit/089ef94ac04629f7380f5e618443bcacb2cef5ab.patch";
-      sha256 = "sha256-ITU/dIfu7QPpdIVYuCuDhDG9rVF+n8i1YYn9bFmQUME=";
-    })
-  ];
 
   nativeBuildInputs = [ meson ninja pkg-config ];
 
@@ -47,9 +39,7 @@ stdenv.mkDerivation rec {
   GUI = lib.optionalString withGtk "true";
 
   env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=address"
-    "-Wno-error=use-after-free"
+    "-Wno-error=sign-compare"
   ];
 
   # requires symbols from this file

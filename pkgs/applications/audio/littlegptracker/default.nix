@@ -6,9 +6,9 @@
 , Foundation
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "littlegptracker";
-  version = "unstable-2020-11-26";
+  version = "0-unstable-2020-11-26";
 
   src = fetchFromGitHub {
     owner = "Mdashdotdashn";

@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "gmnitohtml";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromSourcehut {
     owner = "~adnano";
     repo = pname;
     rev = version;
-    hash = "sha256-nKNSLVBBdZI5mkbEUkMv0CIOQIyH3OX+SEFf5O47DFY=";
+    hash = "sha256-9lsZgh/OyxAu1rsixD6XUgQzR1xDGOxGt0sR12zrs2M=";
   };
-  vendorHash = "sha256-Cx8x8AISRVTA4Ufd73vOVky97LX23NkizHDingr/zVk=";
+  vendorHash = "sha256-ppplXXqb2DM/AU+B+LefndrBiiTgCRNw6hEupfeWr+o=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -18,11 +18,11 @@ buildGoModule rec {
   nativeBuildInputs = [ scdoc installShellFiles ];
 
   postBuild = ''
-    make gmnitohtml.1
+    make docs
   '';
 
   postInstall = ''
-    installManPage gmnitohtml.1
+    installManPage docs/gmnitohtml.1
   '';
 
   doInstallCheck = true;

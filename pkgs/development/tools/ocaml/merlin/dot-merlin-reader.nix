@@ -1,4 +1,4 @@
-{ lib, fetchurl, yojson, csexp, findlib, buildDunePackage, merlin-lib, merlin, result }:
+{ lib, yojson, csexp, findlib, buildDunePackage, merlin-lib, merlin, result }:
 
 buildDunePackage rec {
   pname = "dot-merlin-reader";
@@ -16,6 +16,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     description = "Reads config files for merlin";
+    mainProgram = "dot-merlin-reader";
     homepage = "https://github.com/ocaml/merlin";
     license = licenses.mit;
     maintainers = [ maintainers.hongchangwu ];

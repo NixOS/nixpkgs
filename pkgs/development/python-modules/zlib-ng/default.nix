@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, cmake
-, setuptools
+  # build-system
+  cmake,
+  setuptools,
 
-# native dependencies
-, zlib-ng
+  # native dependencies
+  zlib-ng,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "zlib-ng";
-  version = "0.4.0";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-zlib-ng";
     rev = "v${version}";
-    hash = "sha256-bVdt4GYdbzhoT6et+LOycg0Bt6dX9DtusNr8HPpgIFI=";
+    hash = "sha256-M0R39vUX3JMDEDJfsRzg1ipxbWJ/kl0FzW6ZUMXvGDs=";
   };
 
   nativeBuildInputs = [
@@ -34,17 +35,11 @@ buildPythonPackage rec {
 
   env.PYTHON_ZLIB_NG_LINK_DYNAMIC = true;
 
-  buildInputs = [
-    zlib-ng
-  ];
+  buildInputs = [ zlib-ng ];
 
-  pythonImportsCheck = [
-    "zlib_ng"
-  ];
+  pythonImportsCheck = [ "zlib_ng" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     rm -rf src

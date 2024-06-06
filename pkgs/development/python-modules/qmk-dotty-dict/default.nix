@@ -1,7 +1,8 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, poetry-core
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -9,16 +10,14 @@ buildPythonPackage rec {
   version = "1.3.1";
   pyproject = true;
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "pawelzny";
     repo = "dotty_dict";
     rev = "refs/tags/v${version}";
     hash = "sha256-kY7o9wgfsV7oc5twOeuhG47C0Js6JzCt02S9Sd8dSGc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   doCheck = false;
 

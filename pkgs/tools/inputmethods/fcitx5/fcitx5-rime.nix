@@ -5,6 +5,7 @@
 , cmake
 , extra-cmake-modules
 , gettext
+, zstd
 , fcitx5
 , librime
 , rime-data
@@ -14,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.1.4";
+  version = "5.1.6";
 
   src = fetchurl {
-    url = "https://download.fcitx-im.org/fcitx5/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-tbCIWenH5brJUVIsmOiw/E/uIXAWwK1yangIVlkeOAs=";
+    url = "https://download.fcitx-im.org/fcitx5/${pname}/${pname}-${version}.tar.zst";
+    hash = "sha256-Ll0T+bgGXYbg/POJmCeDVjkTvaNuR/bxw9hQJJV+CQo=";
   };
 
   cmakeFlags = [
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     pkg-config
     gettext
+    zstd
   ];
 
   buildInputs = [

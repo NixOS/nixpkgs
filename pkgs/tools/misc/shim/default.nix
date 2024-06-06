@@ -7,9 +7,9 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  target = {
-    x86_64-linux = "shimx64.efi";
-    aarch64-linux = "shimaa64.efi";
+  archSuffix = {
+    x86_64-linux = "x64";
+    aarch64-linux = "aa64";
   }.${system} or throwSystem;
 in stdenv.mkDerivation rec {
   pname = "shim";
@@ -38,19 +38,21 @@ in stdenv.mkDerivation rec {
   makeFlags =
     lib.optional (vendorCertFile != null) "VENDOR_CERT_FILE=${vendorCertFile}"
     ++ lib.optional (defaultLoader != null) "DEFAULT_LOADER=${defaultLoader}"
-    ++ lib.optional overrideSecurityPolicy "OVERRIDE_SECURITY_POLICY=1"
-    ++ [ target ];
+    ++ lib.optional overrideSecurityPolicy "OVERRIDE_SECURITY_POLICY=1";
 
-  installPhase = ''
-    mkdir -p $out/share/shim
-    install -m 644 ${target} $out/share/shim/
-  '';
+  installTargets = ["install-as-data"];
+  installFlags = [
+    "DATATARGETDIR=$(out)/share/shim"
+  ];
 
   passthru = {
-    # Expose the target file name so that consumers
+    # Expose the arch suffix and target file names so that consumers
     # (e.g. infrastructure for signing this shim) don't need to
     # duplicate the logic from here
-    inherit target;
+    inherit archSuffix;
+    target = "shim${archSuffix}.efi";
+    mokManagerTarget = "mm${archSuffix}.efi";
+    fallbackTarget = "fb${archSuffix}.efi";
   };
 
   meta = with lib; {

@@ -86,6 +86,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Samsung/netcoredbg";
     license = licenses.mit;
     platforms = platforms.unix;
+    mainProgram = "netcoredbg";
     maintainers = with maintainers; [ leo60228 konradmalik ];
   };
 }

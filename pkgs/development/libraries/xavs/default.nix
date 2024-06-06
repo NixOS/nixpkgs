@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "AVS encoder and decoder";
+    mainProgram = "xavs";
     homepage    = "https://xavs.sourceforge.net/";
     license     = licenses.lgpl2;
     platforms   = platforms.linux ++ platforms.darwin;

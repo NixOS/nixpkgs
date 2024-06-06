@@ -22,17 +22,14 @@ let
     inherit pname version src;
   };
 in
-(appimageTools.wrapType2 {
+appimageTools.wrapType2 {
   inherit pname version src;
 
   profile = ''
     export LC_ALL=C.UTF-8
   '';
 
-  extraPkgs = ps: appimageTools.defaultFhsEnvArgs.multiPkgs ps;
-
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},losslesscut}
     (
       mkdir -p $out/share
       cd ${extracted}/usr
@@ -53,6 +50,4 @@ in
     platforms = [ "x86_64-linux" ];
     mainProgram = "losslesscut";
   };
-}) // {
-  inherit pname version;
 }

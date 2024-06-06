@@ -26,7 +26,7 @@
 , bison
 , flex
 , clutter-gtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , shared-mime-info
 , python3
 , desktop-file-utils
@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.12.4";
+  version = "3.12.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-rdaTrArrmjDYKboDoGIIKJ0/aGjcOwJXNUnogZDHlOg=";
+    sha256 = "sha256-YIdwxsjnMHOh1AS2W9G3YeGsXcJecBMP8HJIj6kvXDM=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -107,8 +107,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Gthumb";
+    homepage = "https://gitlab.gnome.org/GNOME/gthumb";
     description = "Image browser and viewer for GNOME";
+    mainProgram = "gthumb";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.mimame ];

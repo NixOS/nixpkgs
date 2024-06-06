@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-extension-manager";
-  version = "0.4.3";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mjakeman";
     repo = "extension-manager";
     rev = "v${version}";
-    hash = "sha256-e+s8iIUvW9Rw0Wq4aIn3IzBLGTQC6o0TmNXd5gz892Y=";
+    hash = "sha256-PWpnLtzQDF2Is63CY9bNzYSo+MiA2oxzJi7B4nQZ7v8=";
   };
 
   nativeBuildInputs = [

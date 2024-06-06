@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , callPackage
 , gnat
 , zlib
@@ -13,13 +12,13 @@ assert backend == "mcode" || backend == "llvm";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghdl-${backend}";
-  version = "3.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner  = "ghdl";
     repo   = "ghdl";
     rev    = "v${finalAttrs.version}";
-    hash   = "sha256-94RNtHbOpbC2q/Z+PsQplrLxXmpS3LXOCXyTBB+n9c4=";
+    hash   = "sha256-tPSHer3qdtEZoPh9BsEyuTOrXgyENFUyJqnUS3UYAvM=";
   };
 
   LIBRARY_PATH = "${stdenv.cc.libc}/lib";
@@ -66,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "VHDL 2008/93/87 simulator";
     license = lib.licenses.gpl2Plus;
     mainProgram = "ghdl";
-    maintainers = with lib.maintainers; [ eclairevoyant lucus16 thoughtpolice ];
+    maintainers = with lib.maintainers; [ lucus16 thoughtpolice ];
     platforms = lib.platforms.linux;
   };
 })

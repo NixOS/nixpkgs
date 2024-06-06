@@ -37,6 +37,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/ljanyst/carddav-util";
     description = "A CardDAV import/export utility";
+    mainProgram = "carddav-util.py";
     platforms = platforms.unix;
     license = licenses.isc;
   };

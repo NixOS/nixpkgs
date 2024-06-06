@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromBitbucket
-, h5py
-, termcolor
-, pexpect
-, jinja2
-, sphinxHook
-, sphinx-rtd-theme
+{
+  lib,
+  buildPythonPackage,
+  fetchFromBitbucket,
+  h5py,
+  termcolor,
+  pexpect,
+  jinja2,
+  sphinxHook,
+  sphinx-rtd-theme,
 }:
 
 buildPythonPackage {

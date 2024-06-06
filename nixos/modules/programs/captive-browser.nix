@@ -49,13 +49,13 @@ in
 
   options = {
     programs.captive-browser = {
-      enable = mkEnableOption (lib.mdDoc "captive browser");
+      enable = mkEnableOption "captive browser, a dedicated Chrome instance to log into captive portals without messing with DNS settings";
 
       package = mkPackageOption pkgs "captive-browser" { };
 
       interface = mkOption {
         type = types.str;
-        description = lib.mdDoc "your public network interface (wlp3s0, wlan0, eth0, ...)";
+        description = "your public network interface (wlp3s0, wlan0, eth0, ...)";
       };
 
       # the options below are the same as in "captive-browser.toml"
@@ -63,7 +63,7 @@ in
         type = types.str;
         default = browserDefault pkgs.chromium;
         defaultText = literalExpression (browserDefault "\${pkgs.chromium}");
-        description = lib.mdDoc ''
+        description = ''
           The shell (/bin/sh) command executed once the proxy starts.
           When browser exits, the proxy exits. An extra env var PROXY is available.
 
@@ -79,7 +79,7 @@ in
 
       dhcp-dns = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           The shell (/bin/sh) command executed to obtain the DHCP
           DNS server address. The first match of an IPv4 regex is used.
           IPv4 only, because let's be real, it's a captive portal.
@@ -89,13 +89,13 @@ in
       socks5-addr = mkOption {
         type = types.str;
         default = "localhost:1666";
-        description = lib.mdDoc "the listen address for the SOCKS5 proxy server";
+        description = "the listen address for the SOCKS5 proxy server";
       };
 
       bindInterface = mkOption {
         default = true;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Binds `captive-browser` to the network interface declared in
           `cfg.interface`. This can be used to avoid collisions
           with private subnets.

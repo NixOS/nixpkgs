@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A multiplayer space combat game (client part)";
+    mainProgram = "bloodspilot-client-sdl";
     homepage = "http://bloodspilot.sf.net/";
     license = lib.licenses.gpl2Plus ;
     maintainers = [lib.maintainers.raskin];

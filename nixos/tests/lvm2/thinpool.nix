@@ -1,4 +1,4 @@
-{ kernelPackages ? null }:
+{ kernelPackages ? null, mkXfsFlags ? "" }:
 import ../make-test-python.nix ({ pkgs, lib, ... }: {
   name = "lvm2-thinpool";
   meta.maintainers = lib.teams.helsinki-systems.members;
@@ -18,7 +18,8 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
   };
 
   testScript = let
-    mkXfsFlags = lib.optionalString (lib.versionOlder kernelPackages.kernel.version "5.10") "-m bigtime=0 -m inobtcount=0";
+    mkXfsFlags = lib.optionalString (lib.versionOlder kernelPackages.kernel.version "5.10") " -m bigtime=0 -m inobtcount=0 "
+               + lib.optionalString (lib.versionOlder kernelPackages.kernel.version "5.19") " -i nrext64=0 ";
   in ''
     machine.succeed("vgcreate test_vg /dev/vdb")
     machine.succeed("lvcreate -L 512M -T test_vg/test_thin_pool")

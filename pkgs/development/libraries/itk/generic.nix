@@ -109,6 +109,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";
+    mainProgram = "itkTestDriver";
     homepage = "https://www.itk.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [viric];

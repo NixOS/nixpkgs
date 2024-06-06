@@ -15,14 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-launchpad";
-  version = "0.3.0";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-8m0DjQYih3hB/n2VHuJgUYBe8tpGwBU0NdkLxr1OsFc=";
+    hash = "sha256-az8BC3n44NGpATNu3Exjn3H7Rumx/YqDXztEGqCpAbY=";
   };
+
+  postPatch = ''
+    substituteInPlace desktopintegration.cpp \
+      --replace "AppStreamQt/pool.h" "AppStreamQt5/pool.h"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -50,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The 'launcher' or 'start menu' component for DDE";
+    mainProgram = "dde-launchpad";
     homepage = "https://github.com/linuxdeepin/dde-launchpad";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

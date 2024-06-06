@@ -24,6 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "An alternative to rss2email written in golang with many filters";
+    mainProgram = "goeland";
     longDescription = ''
       Goeland excels at creating beautiful emails from RSS feeds,
       tailored for daily or weekly digest. It includes a number of

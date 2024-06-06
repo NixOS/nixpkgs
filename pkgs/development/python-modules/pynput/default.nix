@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
-, setuptools-lint
-, sphinx
+  # build-system
+  setuptools,
+  setuptools-lint,
+  sphinx,
 
-# dependencies
-, xlib
-, evdev
-, darwin
-, six
+  # dependencies
+  xlib,
+  evdev,
+  darwin,
+  six,
 
- # tests
-, unittestCheckHook
- }:
+  # tests
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "pynput";
@@ -41,21 +42,23 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  propagatedBuildInputs = [
-    six
-  ] ++ lib.optionals stdenv.isLinux [
-    evdev
-    xlib
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    ApplicationServices
-    Quartz
-  ]);
+  propagatedBuildInputs =
+    [ six ]
+    ++ lib.optionals stdenv.isLinux [
+      evdev
+      xlib
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        ApplicationServices
+        Quartz
+      ]
+    );
 
   doCheck = false; # requires running X server
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
@@ -65,4 +68,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ nickhu ];
   };
 }
-

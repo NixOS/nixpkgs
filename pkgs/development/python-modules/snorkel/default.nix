@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, tensorboard
-, scipy
-, tqdm
-, scikit-learn
-, munkres
-, networkx
-, torch
-, pandas
-# test dependencies
-, pytestCheckHook
-, spacy
-, pyspark
-, dill
-, dask
-, spacy_models
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  tensorboard,
+  scipy,
+  tqdm,
+  scikit-learn,
+  munkres,
+  networkx,
+  torch,
+  pandas,
+  # test dependencies
+  pytestCheckHook,
+  spacy,
+  pyspark,
+  dill,
+  dask,
+  spacy-models,
 }:
 let
   pname = "snorkel";
-  version = "0.9.9";
+  version = "0.10.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -31,8 +32,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "snorkel-team";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-IDWYvblS0Q8ubuHzgIc7fU/gwpJ43Dd7VMWycMfAJxc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1DgkMHYToiI3266yCND1bXiui80x8AaBttxM83kJImw=";
   };
 
   propagatedBuildInputs = [
@@ -56,7 +57,7 @@ buildPythonPackage {
     pyspark
     dill
     dask
-    spacy_models.en_core_web_sm
+    spacy-models.en_core_web_sm
   ] ++ dask.optional-dependencies.distributed;
 
   meta = with lib; {

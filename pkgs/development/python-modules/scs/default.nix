@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, meson-python
-, pkg-config
-, Accelerate
-, blas
-, lapack
-, numpy
-, scipy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  meson-python,
+  pkg-config,
+  Accelerate,
+  blas,
+  lapack,
+  numpy,
+  scipy,
   # check inputs
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -55,12 +56,14 @@ buildPythonPackage rec {
     pkg-config
   ];
 
-  buildInputs = if stdenv.isDarwin then [
-    Accelerate
-  ] else [
-    blas
-    lapack
-  ];
+  buildInputs =
+    if stdenv.isDarwin then
+      [ Accelerate ]
+    else
+      [
+        blas
+        lapack
+      ];
 
   propagatedBuildInputs = [
     numpy
@@ -80,6 +83,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cvxgrp/scs"; # upstream C package
     downloadPage = "https://github.com/bodono/scs-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ a-n-n-a-l-e-e drewrisinger ];
+    maintainers = with maintainers; [ drewrisinger ];
   };
 }

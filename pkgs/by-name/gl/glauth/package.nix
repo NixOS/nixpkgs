@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "glauth";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "glauth";
     repo = "glauth";
     rev = "v${version}";
-    hash = "sha256-OkkiB1AGO7r7ehpnSJ+cB00crVpZ5Cwy4rAT55LUUdE=";
+    hash = "sha256-FOhtL8nIm5kuKRxFtkrDyUU2z1K22ZdHaes3GY0KmfQ=";
   };
 
   vendorHash = "sha256-MfauZRufl3kxr1fqatxTmiIvLJ+5JhbpSnbTHiujME8=";

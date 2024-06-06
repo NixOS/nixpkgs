@@ -41,7 +41,7 @@ dotnetBuildHook() {
             runtimeIdFlags+=("--runtime @runtimeId@")
         fi
 
-        env dotnet build ${project-} \
+        dotnet build ${project-} \
             -maxcpucount:$maxCpuFlag \
             -p:BuildInParallel=$parallelBuildFlag \
             -p:ContinuousIntegrationBuild=true \

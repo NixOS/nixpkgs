@@ -107,6 +107,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Decentralized and portable C/C++ package manager";
+    mainProgram = "conan";
     homepage = "https://conan.io";
     changelog = "https://github.com/conan-io/conan/releases/tag/${version}";
     license = licenses.mit;

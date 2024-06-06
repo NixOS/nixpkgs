@@ -1,13 +1,28 @@
-{ buildPerlPackage, shortenPerlShebang, stdenv, lib, fetchFromGitHub, which, bzip2, PodMarkdown, JSONXS
-, TextCSV_XS }:
+{
+  buildPerlPackage,
+  bzip2,
+  fetchFromGitHub,
+  JSONXS,
+  lib,
+  nix-update-script,
+  pgbadger,
+  PodMarkdown,
+  shortenPerlShebang,
+  stdenv,
+  testers,
+  TextCSV_XS,
+  which,
+}:
+
 buildPerlPackage rec {
   pname = "pgbadger";
-  version = "12.2";
+  version = "12.4";
+
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgbadger";
-    rev = "v${version}";
-    hash = "sha256-IzfpDqzS5VcehkPsFxyn3kJsvXs8nLgJ3WT8ZCmIDxI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-an/BOkQsMkTXS0HywV1JWerS16HRbO1MHVleYhVqmBM=";
   };
 
   postPatch = ''
@@ -25,10 +40,27 @@ buildPerlPackage rec {
 
   PERL_MM_OPT = "INSTALL_BASE=${placeholder "out"}";
 
-  buildInputs = [ PodMarkdown JSONXS TextCSV_XS ];
+  buildInputs = [
+    JSONXS
+    PodMarkdown
+    TextCSV_XS
+  ];
+
   nativeBuildInputs = lib.optionals stdenv.isDarwin [ shortenPerlShebang ];
 
-  nativeCheckInputs = [ which bzip2 ];
+  nativeCheckInputs = [
+    bzip2
+    which
+  ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit version;
+      command = "${lib.getExe pgbadger} --version";
+      package = pgbadger;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/darold/pgbadger";

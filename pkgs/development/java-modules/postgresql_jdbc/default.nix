@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "postgresql-jdbc";
-  version = "42.6.0";
+  version = "42.6.1";
 
   src = fetchMavenArtifact {
     artifactId = "postgresql";
     groupId = "org.postgresql";
-    hash = "sha256-uBfGekDJQkn9WdTmhuMyftDT0/rkJrINoPHnVlLPxGE=";
+    hash = "sha256-ywd0/X0JsjniHp0Es3RKQId7/0Y6jVjD9AfPfZdsNVc=";
     inherit version;
   };
 

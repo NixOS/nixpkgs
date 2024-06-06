@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, jax
-, jaxlib
-, lib
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  jax,
+  jaxlib,
+  lib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,9 @@ buildPythonPackage rec {
   };
 
   # Wheel requires only `numpy`, but the import needs `jax`.
-  propagatedBuildInputs = [
-    jax
-  ];
+  propagatedBuildInputs = [ jax ];
 
-  pythonImportsCheck = [
-    "jmp"
-  ];
+  pythonImportsCheck = [ "jmp" ];
 
   nativeCheckInputs = [
     jaxlib

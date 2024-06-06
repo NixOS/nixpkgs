@@ -11,7 +11,7 @@
 
 buildPythonPackage {
   pname = "nixops-gce";
-  version = "unstable-2023-05-26";
+  version = "0-unstable-2023-05-26";
   pyproject = true;
 
   src = fetchFromGitHub {

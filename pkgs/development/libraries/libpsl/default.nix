@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-mp9qjG7bplDPnqVUdc0XLdKEhzFoBOnHMgLZdXLNOi0=";
   };
 
+  # bin/psl-make-dafsa brings a large runtime closure through python3
+  outputs = [ "bin" "out" "dev" ];
+
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
@@ -78,7 +81,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.c0bw3b ];
     mainProgram = "psl";
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "libpsl" ];
   };
 }

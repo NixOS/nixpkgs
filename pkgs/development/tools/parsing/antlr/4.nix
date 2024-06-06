@@ -38,7 +38,7 @@ let
 
       installPhase = ''
         mkdir -p "$out"/{share/java,bin}
-        cp "$src" "$out/share/java/antlr-${version}-complete.jar"
+        ln -s "$src" "$out/share/java/antlr-${version}-complete.jar"
 
         echo "#! ${stdenv.shell}" >> "$out/bin/antlr"
         echo "'${jre}/bin/java' -cp '$out/share/java/antlr-${version}-complete.jar:$CLASSPATH' -Xmx500M org.antlr.v4.Tool \"\$@\"" >> "$out/bin/antlr"
@@ -58,7 +58,7 @@ let
 
       passthru = {
         inherit runtime;
-        jarLocation = "${antlr}/share/java/antlr-${version}-complete.jar";
+        jarLocation = antlr.src;
       };
 
       meta = with lib; {

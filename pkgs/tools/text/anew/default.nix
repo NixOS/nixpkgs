@@ -20,6 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A tool for adding new lines to files, skipping duplicates";
+    mainProgram = "anew";
     homepage = "https://github.com/tomnomnom/anew";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

@@ -9,7 +9,7 @@
 , gobject-introspection
 , vulkan-tools
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , gdk-pixbuf
 , lsb-release
 , glxinfo
@@ -19,7 +19,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gpu-viewer";
-  version = "3.02";
+  version = "3.04";
 
   format = "other";
 
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "arunsivaramanneo";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/m8kXCICvWDqKIC6DbhUAXsjT+RNLMTsvlVTx85AJhE=";
+    hash = "sha256-+FDBHSVBTUHnhu2n7i9W1zIZe2wjY+OuFwQOJZojuzs=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

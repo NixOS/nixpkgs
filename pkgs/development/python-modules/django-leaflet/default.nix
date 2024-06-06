@@ -1,25 +1,24 @@
-{ pkgs
-, buildPythonPackage
-, django
-, fetchPypi
-, pythonOlder
+{
+  pkgs,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-leaflet";
-  version = "0.29.0";
+  version = "0.29.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-L23Ixxh/0i5itvK3tC7thpIPgb7DEqplSYHr5byOCGY=";
+    hash = "sha256-ECtocPJHYR1DsFLeVMVdtlia4UNOJyNMsU1CrX1aVsQ=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   # The tests seem to be impure.
   # They are throwing a error about unset configs:

@@ -4,15 +4,16 @@
 , jre
 , autoPatchelfHook
 , zlib
+, ncurses
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
-  version = "1.9.8";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "https://github.com/sbt/sbt/releases/download/v${finalAttrs.version}/sbt-${finalAttrs.version}.tgz";
-    hash = "sha256-qG//418Ga2XV4C67SiytHPu0GPgwv19z0n8wc+7K/c0=";
+    hash = "sha256-FUt95sGSB8c9CjBPkByMS26tmpw6mamKnXKsGUGdJkA=";
   };
 
   postPatch = ''
@@ -24,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.isLinux [
     stdenv.cc.cc # libstdc++.so.6
     zlib
+  ];
+
+  propagatedBuildInputs = [
+    # for infocmp
+    ncurses
   ];
 
   installPhase = ''

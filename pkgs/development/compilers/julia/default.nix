@@ -30,12 +30,12 @@ in
     { });
   julia_110-bin = wrapJulia (callPackage
     (import ./generic-bin.nix {
-      version = "1.10.0";
+      version = "1.10.3";
       sha256 = {
-        x86_64-linux = "a7298207f72f2b27b2ab1ce392a6ea37afbd1fbee0f1f8d190b054dcaba878fe";
-        aarch64-linux = "048d96b4398efd524e94be3f49e8829cf6b30c8f3f4b46c75751a4679635e45b";
-        x86_64-darwin = "eb1cdf2d373ee40412e8f5ee6b4681916f1ead6d794883903619c7bf147d4f46";
-        aarch64-darwin = "dc4ca01b1294c02d47b33ef26d489dc288ac68655a03774870c6872b82a9a7d6";
+        x86_64-linux = "81b910c922fff0e27ae1f256f2cc803db81f3960215281eddd2d484721928c70";
+        aarch64-linux = "2d52a61826872b3170c65f99a954bd9d21a31211cb50948056d924f811a0024f";
+        x86_64-darwin = "af61600db0abdc56fffb1b47cd18c30213b8925796546b53b657e164126082b4";
+        aarch64-darwin = "9ea32daa1bef34c8e48d6c76187f48fd2bf1054cc921fb8c374b737b51c9ffdd";
       };
     })
     { });
@@ -50,8 +50,8 @@ in
     { });
   julia_110 = wrapJulia (callPackage
     (import ./generic.nix {
-      version = "1.10.0";
-      hash = "sha256-pfjAzgjPEyvdkZygtbOytmyJ4OX35/sqgf+n8iXj20w=";
+      version = "1.10.3";
+      hash = "sha256-2JKyEjvmTaz50F5My61/F5f2v4fDl6dIBLARyHUPbI8=";
       patches = [
         ./patches/1.10/0001-skip-building-docs-as-it-requires-network-access.patch
         ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
