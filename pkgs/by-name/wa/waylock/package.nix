@@ -46,6 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     "${finalAttrs.deps}"
   ];
 
+  preBuild = ''
+    substituteInPlace pam.d/waylock --replace-fail "system-auth" "login"
+  '';
+
   passthru.updateScript = ./update.nu;
 
   meta = {

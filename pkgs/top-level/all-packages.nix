@@ -33886,8 +33886,6 @@ with pkgs;
 
   qpwgraph = qt6Packages.callPackage ../applications/audio/qpwgraph { };
 
-  qrcode = callPackage ../tools/graphics/qrcode { };
-
   qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
 
   qscreenshot = libsForQt5.callPackage ../applications/graphics/qscreenshot { };
@@ -35891,7 +35889,7 @@ with pkgs;
 
   zotero = callPackage ../applications/office/zotero { };
 
-  zotero_7 = callPackage ../applications/office/zotero/zotero_7.nix { };
+  zotero_7 = pkgs.zotero-beta;
 
   zscroll = callPackage ../applications/misc/zscroll { };
 
@@ -38186,6 +38184,8 @@ with pkgs;
   mathematica11 = callPackage ../applications/science/math/mathematica {
     version = "11";
   };
+
+  mathmod = libsForQt5.callPackage ../applications/science/math/mathmod { };
 
   metis = callPackage ../development/libraries/science/math/metis { };
 

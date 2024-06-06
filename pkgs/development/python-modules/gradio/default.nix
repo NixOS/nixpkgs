@@ -63,7 +63,7 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "4.32.1";
+  version = "4.33.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   # We use the Pypi release, since it provides prebuilt webui assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t8C8BwE2xfVI2eKyST1jCZgrbytxiKcrsbVhfX07nA4=";
+    hash = "sha256-zPBTUAHpPvNUzb+2MtdqEvIARU6f1r9PpZOUTXQBZWI=";
   };
 
   # fix packaging.ParserSyntaxError, which can't handle comments
