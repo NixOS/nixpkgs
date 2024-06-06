@@ -53,7 +53,7 @@
 
 let
   pname = "ray";
-  version = "2.23.0";
+  version = "2.24.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -122,7 +122,7 @@ buildPythonPackage rec {
     "virtualenv"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     aiohttp
     aiohttp-cors
@@ -158,12 +158,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ray" ];
 
-  meta = with lib; {
+  meta = {
     description = "A unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
     changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ billhuang ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ billhuang ];
     platforms = [ "x86_64-linux" ];
   };
 }
