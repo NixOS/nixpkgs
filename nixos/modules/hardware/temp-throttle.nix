@@ -2,7 +2,7 @@
 
 let
   cfg = config.services.temp-throttle;
-  configFile = builtins.toFile "temp-throttle.conf" (''
+  configFile = pkgs.writeText "temp-throttle.conf" (''
     MAX_TEMP=${toString cfg.max_temp}
     INTERVAL=${toString cfg.interval}
   '' + lib.optionalString (cfg.temp_file != null) ''
@@ -20,16 +20,19 @@ in {
     nullOr = lib.types.nullOr;
     str = lib.types.str;
     int = lib.types.int;
+    uint = lib.types.ints.unsigned;
   in {
     enable = lib.mkEnableOption "Whether to enable temp-throttle service";
     package = lib.mkPackageOption pkgs "temp-throttle" { };
     max_temp = mkOption {
-      type = int;
+      type = uint;
+#      type = int;
       default = 80;
       description = "Maximum desired temperature in Celcius";
     };
     interval = mkOption {
-      type = int;
+      type = uint;
+#      type = int;
       default = 3;
       description = "Seconds between checking temperature. Default 3";
     };
@@ -41,8 +44,9 @@ in {
       example = "/sys/class/hwmon/hwmon1/device/temp1_input";
     };
     core = mkOption {
-      type = nullOr int;
-      default = null;
+      type = uint;
+#      type = nullOr int;
+      default = 0;
       description =
         "Force read frequency from given CPU Core. May be needed for big.little endian. Default 0";
     };
