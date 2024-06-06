@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nixosTests,
 }:
 rustPlatform.buildRustPackage {
   pname = "piped-proxy";
@@ -15,6 +16,10 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-d13I/YBbyms6MoXXcKkE6P3n9Tu7I2X1HP0eZHlhbuI=";
+
+  passthru.tests = {
+    piped = nixosTests.piped;
+  };
 
   meta = {
     description = "A proxy for Piped written in Rust";

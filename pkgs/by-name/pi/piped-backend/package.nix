@@ -6,6 +6,7 @@
   gradle,
   perl,
   makeWrapper,
+  nixosTests,
 }: let
   pname = "piped-backend";
   version = "0-unstable-2024-07-11";
@@ -81,6 +82,10 @@ in
       makeWrapper ${jdk}/bin/java $out/bin/piped-backend \
         --add-flags "-jar $out/share/piped-backend.jar"
     '';
+
+    passthru.tests = {
+      piped = nixosTests.piped;
+    };
 
     meta = {
       description = "The core component behind Piped, and other alternative frontends";

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nodejs,
   pnpm,
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "piped";
@@ -30,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     cp -r dist/ $out
   '';
+
+  passthru.tests = {
+    piped = nixosTests.piped;
+  };
 
   meta = {
     description = "An alternative privacy-friendly YouTube frontend which is efficient by design";
