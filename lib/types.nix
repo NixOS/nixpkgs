@@ -30,6 +30,7 @@ let
     imap1
     last
     length
+    partition
     tail
     ;
   inherit (lib.attrsets)
@@ -548,17 +549,23 @@ rec {
       name = "listOf";
       description = "list of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
       descriptionClass = "composite";
-      check = isList;
+      check = x: isList x || x._type or "" == "forAllItems";
       merge = loc: defs:
+        let
+          # partitionedDefs.right: all forAllItems definitions
+          # partitionedDefs.wrong: all regular definitions
+          partitionedDefs = partition (d: d.value._type or "" == "forAllItems") defs;
+          extraDefs = idx: map (def: { inherit (def) file; value = def.value.content idx; }) partitionedDefs.right;
+        in
         map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
           imap1 (m: def':
             (mergeDefinitions
               (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
               elemType
-              [{ inherit (def) file; value = def'; }]
+              ([{ inherit (def) file; value = def'; }] ++ extraDefs m)
             ).optionalValue
           ) def.value
-        ) defs)));
+        ) partitionedDefs.wrong)));
       emptyValue = { value = []; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
@@ -581,11 +588,17 @@ rec {
       descriptionClass = "composite";
       check = isAttrs;
       merge = loc: defs:
+        let
+          # partitionedDefs.right: all forAllItems definitions
+          # partitionedDefs.wrong: all regular definitions
+          partitionedDefs = partition (d: d.value._type or "" == "forAllItems") defs;
+          extraDefs = name: map (def: { inherit (def) file; value = def.value.content name; }) partitionedDefs.right;
+        in
         mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
-            (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
+            (mergeDefinitions (loc ++ [name]) elemType (defs ++ extraDefs name)).optionalValue
           )
           # Push down position info.
-          (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs)));
+          (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) partitionedDefs.wrong)));
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
@@ -605,13 +618,19 @@ rec {
       descriptionClass = "composite";
       check = isAttrs;
       merge = loc: defs:
+        let
+          # partitionedDefs.right: all forAllItems definitions
+          # partitionedDefs.wrong: all regular definitions
+          partitionedDefs = partition (d: d.value._type or "" == "forAllItems") defs;
+          extraDefs = name: map (def: { inherit (def) file; value = def.value.content name; }) partitionedDefs.right;
+        in
         zipAttrsWith (name: defs:
-          let merged = mergeDefinitions (loc ++ [name]) elemType defs;
+          let merged = mergeDefinitions (loc ++ [name]) elemType (defs ++ extraDefs name);
           # mergedValue will trigger an appropriate error when accessed
           in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
         )
         # Push down position info.
-        (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs);
+        (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) partitionedDefs.wrong);
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;

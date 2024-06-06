@@ -1036,6 +1036,17 @@ let
   defaultOrderPriority = 1000;
   mkAfter = mkOrder 1500;
 
+  /*
+    For use with options of type `attrsOf *`, `lazyAttrsOf *`, or `listOf *`.
+    Accepts a value that is merged with every element defined elsewhere. May
+    also accept a function that takes the attribute name or index (1-based),
+    the result of which is used as above.
+  */
+  mkForAllItems = content:
+    { _type = "forAllItems";
+      content = if isFunction content then content else _: content;
+    };
+
   # Convenient property used to transfer all definitions and their
   # properties from one option to another. This property is useful for
   # renaming options, and also for including properties from another module
@@ -1421,6 +1432,7 @@ private //
     mkDefault
     mkDerivedConfig
     mkFixStrictness
+    mkForAllItems
     mkForce
     mkIf
     mkImageMediaOverride
