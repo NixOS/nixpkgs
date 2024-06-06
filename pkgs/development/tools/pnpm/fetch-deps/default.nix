@@ -1,6 +1,5 @@
 {
   stdenvNoCC,
-  fetchurl,
   callPackage,
   jq,
   moreutils,
@@ -11,7 +10,6 @@
 {
   fetchDeps =
     {
-      src,
       hash ? "",
       pname,
       ...
@@ -36,10 +34,10 @@
         name = "${pname}-pnpm-deps";
 
         nativeBuildInputs = [
+          cacert
           jq
           moreutils
           pnpm
-          cacert
         ];
 
         installPhase = ''
