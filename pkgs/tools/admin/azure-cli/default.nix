@@ -245,7 +245,8 @@ py.pkgs.toPythonApplication (
         # pip is required to install extensions locally, but it's not needed if
         # we're using the default immutable configuration.
         pip
-      ];
+      ]
+      ++ lib.concatMap (extension: extension.propagatedBuildInputs) withExtensions;
 
     postInstall =
       ''
