@@ -33,10 +33,7 @@ in
 {
   ###### interface
   imports = [
-    (mkRenamedOptionModule
-      [ "virtualisation" "virtualbox" "guest" "draganddrop" ]
-      [ "virtualisation" "virtualbox" "guest" "dragAndDrop" ]
-    )
+    (mkRenamedOptionModule [ "virtualisation" "virtualbox" "guest" "draganddrop" ] [ "virtualisation" "virtualbox" "guest" "dragAndDrop" ])
   ];
 
   options.virtualisation.virtualbox.guest = {
