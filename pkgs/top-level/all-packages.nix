@@ -14281,8 +14281,6 @@ with pkgs;
 
   wsmancli = callPackage ../tools/system/wsmancli { };
 
-  wstunnel = haskell.lib.compose.justStaticExecutables haskellPackages.wstunnel;
-
   wolfebin = callPackage ../tools/networking/wolfebin { };
 
   wthrr = callPackage ../applications/misc/wthrr { };
