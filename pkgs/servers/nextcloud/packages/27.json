@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "0zm2a63f99q7n1qw2n3p4pk50j5v4q24vpgndk4nnvaz6c792rzg",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.7.4/calendar-v4.7.4.tar.gz",
-    "version": "4.7.4",
+    "sha256": "09rsp5anpaqzwmrixza5qh12vmq9hd3an045064vm3rnynz537qc",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.7.6/calendar-v4.7.6.tar.gz",
+    "version": "4.7.6",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -140,9 +140,9 @@
     ]
   },
   "mail": {
-    "sha256": "1w6bww8wc42biz1zjf4fxgf60ryh1cdsm8b6ji3fhsqjlmkvs4ly",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.6.1/mail-v3.6.1.tar.gz",
-    "version": "3.6.1",
+    "sha256": "1q0ihgrb6sk0rizs45clqhjpmai2m2zislw6s1694j1zssz4jpqg",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.1/mail-v3.7.1.tar.gz",
+    "version": "3.7.1",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -230,9 +230,9 @@
     ]
   },
   "polls": {
-    "sha256": "0zsklab2sjz5b37b1dn0fpc21yvxrp7fvacppv1v6x5yppnmm6kh",
-    "url": "https://github.com/nextcloud/polls/releases/download/v6.4.0/polls.tar.gz",
-    "version": "6.4.0",
+    "sha256": "0wijb8dkszyzs3108qylcjnvd3kdhlciqndhgc993ybwqxqxfsxn",
+    "url": "https://github.com/nextcloud/polls/releases/download/v6.4.1/polls.tar.gz",
+    "version": "6.4.1",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
