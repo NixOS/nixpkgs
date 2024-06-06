@@ -32,6 +32,7 @@
 , systemd
 , xdg-utils
 , xorg
+, libGL
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -84,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXScrnSaver
     xorg.libxshmfence
     xorg.libXtst
+    libGL
   ];
 
   runtimeDependencies =
