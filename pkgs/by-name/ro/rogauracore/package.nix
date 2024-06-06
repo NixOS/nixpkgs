@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux-compatible open-source libusb implementation similar to the ROG Aura Core software";
     homepage = "https://github.com/wroberts/rogauracore";
-    maintainers = with maintainers; [ truebad0ur ];
-    licenses = licenses.mit;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ truebad0ur ];
+    licenses = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }
