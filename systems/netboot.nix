@@ -22,13 +22,16 @@ let
           };
         };
         getty = {
-          greetingLine = ''<<< Welcome to Openmesh Xnode/OS ${config.system.nixos.label} (\m) - \l >>>'';
+          greetingLine = ''<<< Welcome to Openmesh XnodeOS ${config.system.nixos.label} (\m) - \l >>>'';
         };
       };
       environment = {
         systemPackages = with pkgs; [
           nyancat
         ];
+      };
+      netboot = {
+        squashfsCompression = "gzip -Xcompression-level 1";
       };
       networking = {
         hostName = "xnode";
@@ -38,6 +41,7 @@ let
           xnode = {
             isNormalUser = true;
             password = "xnode";
+            extraGroups = [ "wheel" ];
           };
         };
       };

@@ -15,10 +15,14 @@ let
       };
       services = {
         getty = {
-          greetingLine = ''<<< Welcome to Openmesh Xnode/OS ${config.system.nixos.label} (\m) - \l >>>'';
+          greetingLine = ''<<< Welcome to Openmesh XnodeOS ${config.system.nixos.label} (\m) - \l >>>'';
         };
-        openmesh.xnode.admin = {
-          enable = true;
+        openmesh = {
+          xnode = {
+            admin = {
+              enable = true;
+            };
+          };
         };
       };
       boot = {
@@ -34,13 +38,11 @@ let
         makeBiosBootable = true;
         makeEfiBootable = true;
         makeUsbBootable = true;
+        squashfsCompression = "gzip -Xcompression-level 1";
       };
       environment = {
         systemPackages = with pkgs; [
-          prometheus
-          grafana
-#          (callPackage ./xnode-admin {})
-#          (callPackage ./openmesh-core {})
+          nyancat
         ];
       };
       networking = {
@@ -51,6 +53,7 @@ let
           "xnode" = {
             isNormalUser = true;
             password = "xnode";
+            extraGroups = [ "wheel" ];
           };
         };
       };
