@@ -22486,6 +22486,11 @@
     githubId = 46590321;
     name = "xrelkd";
   };
+  xtrayambak = {
+    github = "xTrayambak";
+    githubId = 59499552;
+    name = "Trayambak Rai";
+  };
   xurei = {
     email = "olivier.bourdoux@gmail.com";
     github = "xurei";
