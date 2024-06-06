@@ -87257,24 +87257,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  npm = nodeEnv.buildNodePackage {
-    name = "npm";
-    packageName = "npm";
-    version = "10.5.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/npm/-/npm-10.5.0.tgz";
-      sha512 = "Ejxwvfh9YnWVU2yA5FzoYLTW52vxHCz+MHrOFg9Cc8IFgF/6f5AGPAvb5WTay5DIUP1NIfN3VBZ0cLlGO0Ys+A==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "a package manager for JavaScript";
-      homepage = "https://docs.npmjs.com/";
-      license = "Artistic-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   npm-merge-driver = nodeEnv.buildNodePackage {
     name = "npm-merge-driver";
     packageName = "npm-merge-driver";
