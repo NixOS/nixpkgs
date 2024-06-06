@@ -108,6 +108,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Open source OpenTelemetry Collector distribution with built-in Prometheus pipelines and support for metrics, logs, traces, and profiles";
+    mainProgram = "alloy";
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/alloy";
     maintainers = with maintainers; [ flokli emilylange ];
