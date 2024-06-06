@@ -31,13 +31,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldc";
-  version = "1.36.0";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "ldc-developers";
     repo = "ldc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tFc+vgC9Iq3VvlKEn3c1yHFEbgbz6/zP8S9IEDz8Qvw=";
+    hash = "sha256-d/UREh+fHRRh0r3H60uPjHute+qspcm9TBFWZMbGDxk=";
     fetchSubmodules = true;
   };
 
