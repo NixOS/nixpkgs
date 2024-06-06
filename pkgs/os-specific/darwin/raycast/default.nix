@@ -11,12 +11,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast";
-  version = "1.75.1";
+  version = "1.75.2";
 
   src = fetchurl {
     name = "Raycast.dmg";
     url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=universal";
-    hash = "sha256-lHGKWj4nn0GsviV83MKgCaQ6HW/CfeP8gg4VXlVXaXg=";
+    hash = "sha256-P9lbIU8IBdowy8vkv+PHITBUpRNTI9t0j8Vm1DjYXnQ=";
   };
 
   dontPatch = true;
@@ -45,7 +45,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       common-updater-scripts
     ];
     text = ''
-      set -eo pipefail
       url=$(curl --silent "https://releases.raycast.com/releases/latest?build=universal")
       version=$(echo "$url" | jq -r '.version')
       update-source-version raycast "$version" --file=./pkgs/os-specific/darwin/raycast/default.nix

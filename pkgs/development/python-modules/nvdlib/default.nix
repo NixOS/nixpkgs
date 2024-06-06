@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "nvdlib";
-  version = "0.7.6";
+  version = "0.7.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Vehemont";
     repo = "nvdlib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-p2xx+QC0P30FR+nMiFW/PoINbcTM49ufADW9B9u2WxI=";
+    hash = "sha256-/UmBNdch9yM6yCVcJbzsCx6om4XlqQa40X/fgEYgRuI=";
   };
 
   nativeBuildInputs = [ setuptools ];

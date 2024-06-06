@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-uOOZX8bKRunTOgYVbmetu2m0B7kijxBgWdNiLCAhiQ4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NCnc4C/YFKHN/kT7RTFCYs/yC00Kt1E7mWCoQuUjxG8=";
   };
 
   build-system = [

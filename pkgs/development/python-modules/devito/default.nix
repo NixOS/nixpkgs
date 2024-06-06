@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "devito";
-  version = "4.8.6";
+  version = "4.8.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "devitocodes";
     repo = "devito";
     rev = "refs/tags/v${version}";
-    hash = "sha256-unuJLp+zTyGpOk5O78xYbW6Zrzp60WyqgT9mf2YpTG4=";
+    hash = "sha256-UEj3WXRBaEOMX+wIDUjE6AP30QSSBUJHzNh3Kp/2AkE=";
   };
 
   pythonRemoveDeps = [
@@ -86,14 +86,16 @@ buildPythonPackage rec {
       "test_gs_parallel"
       "test_if_halo_mpi"
       "test_if_parallel"
+      "test_index_derivative"
       "test_init_omp_env_w_mpi"
       "test_loop_bounds_forward"
-      "test_mpi_nocomms"
+      "test_min_max_mpi"
       "test_mpi"
-      "test_index_derivative"
+      "test_mpi_nocomms"
       "test_new_distributor"
       "test_setupWOverQ"
       "test_shortcuts"
+      "test_stability_mpi"
       "test_subdomainset_mpi"
       "test_subdomains_mpi"
     ]
@@ -128,11 +130,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "devito" ];
 
-  meta = with lib; {
+  meta = {
     description = "Code generation framework for automated finite difference computation";
     homepage = "https://www.devitoproject.org/";
     changelog = "https://github.com/devitocodes/devito/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ atila ];
   };
 }

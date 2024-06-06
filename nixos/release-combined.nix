@@ -113,7 +113,7 @@ in rec {
         (onFullSupported "nixos.tests.latestKernel.login")
         (onFullSupported "nixos.tests.lightdm")
         (onFullSupported "nixos.tests.login")
-        (onFullSupported "nixos.tests.misc.default")
+        (onFullSupported "nixos.tests.misc")
         (onFullSupported "nixos.tests.mutableUsers")
         (onFullSupported "nixos.tests.nat.firewall")
         (onFullSupported "nixos.tests.nat.standalone")

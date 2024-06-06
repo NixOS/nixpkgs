@@ -1,17 +1,18 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, unstableGitUpdater
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "kitty-themes";
-  version = "unstable-2024-04-23";
+  version = "0-unstable-2024-05-28";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty-themes";
-    rev = "8026ce6ec70a0a67fedd02319e6fa39d36bbc1d1";
-    hash = "sha256-RN4YTcsVRg+3c+SEtKkJC8EvuNiiToduASMy/Rr+ZwA=";
+    rev = "891ca835de3112e69f1dfc87fd6cfab354a30f25";
+    hash = "sha256-Ah5qR5tMy1JlmT4rgYdHags4ZuuAOz1wzoByjo8T8TI=";
   };
 
   dontConfigure = true;
@@ -25,6 +26,10 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
 
   meta = {
     homepage = "https://github.com/kovidgoyal/kitty-themes";

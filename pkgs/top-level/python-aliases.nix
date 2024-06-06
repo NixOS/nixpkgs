@@ -136,6 +136,7 @@ mapAliases ({
   django_polymorphic = django-polymorphic; # added 2022-05-24
   django_redis = django-redis; # added 2021-10-11
   django_silk = django-silk; # added 2023-07-25
+  django-sr = throw "django-sr has been removed since it has been unmaintained for 10 years"; # added 2024-05-26
   django_tagging = django-tagging; # added 2023-07-25
   django_taggit = django-taggit; # added 2021-10-11
   django_treebeard = django-treebeard; # added 2023-07-25
@@ -306,6 +307,7 @@ mapAliases ({
   ninja-python = ninja; # add 2022-08-03
   nosejs = throw "nosejs has been removed since it has not been maintained for 15 years and there are no dependent packages"; # added 2024-05-21
   nose-cov = throw "nose-cov has been removed, it was archived and unmaintained since 2012"; # added 2024-05-21
+  nosexcover = throw "nosexcover has been removed since it has not been maintained and there are no dependent packages"; # added 2024-05-21
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   nose-cprof = throw "nose-cprof has been removed since it has not been maintained for 7 years and there are no dependent packages"; # added 2024-05-21
   nose-exclude = throw "nose-exclude has been removed since it has not been maintained since 2016"; # added 2024-05-21
@@ -531,6 +533,10 @@ mapAliases ({
   Theano = theano; # added 2023-02-19
   TheanoWithCuda = theanoWithCuda; # added 2023-02-19
   TheanoWithoutCuda = theanoWithoutCuda; # added 2023-02-19
+  theano = throw "theano has been removed because it is no longer maintained"; # added 2024-05-20
+  theanoWithCuda = throw "theano has been removed because it is no longer maintained"; # added 2024-05-20
+  theanoWithoutCuda = throw "theano has been removed because it is no longer maintained"; # added 2024-05-20
+  theano-pymc = throw "theano-pymc has been removed because it is no longer maintained"; # added 2024-05-20
   thumborPexif = throw "thumborPexif has been removed, because it was unused."; # added 2024-01-07
   torchgpipe = throw "torchgpipe has been removed, because it appears unmaintained and Pytorch now includes pipeline parallelism support"; # added 2024-05-18
   torrent_parser = torrent-parser; # added 2023-11-04

@@ -12,55 +12,71 @@ in
 {
   options = {
     services.open-webui = {
-      enable = lib.mkEnableOption "Enable open-webui, an interactive chat web app";
+      enable = lib.mkEnableOption "Open-WebUI server";
       package = lib.mkPackageOption pkgs "open-webui" { };
 
       stateDir = lib.mkOption {
         type = types.path;
         default = "/var/lib/open-webui";
-        description = "State directory of open-webui.";
+        example = "/home/foo";
+        description = "State directory of Open-WebUI.";
       };
 
       host = lib.mkOption {
         type = types.str;
-        default = "localhost";
-        description = "Host of open-webui";
+        default = "127.0.0.1";
+        example = "0.0.0.0";
+        description = ''
+          The host address which the Open-WebUI server HTTP interface listens to.
+        '';
       };
 
       port = lib.mkOption {
         type = types.port;
         default = 8080;
-        description = "Port of open-webui";
+        example = 11111;
+        description = ''
+          Which port the Open-WebUI server listens to.
+        '';
       };
 
       environment = lib.mkOption {
         type = types.attrsOf types.str;
-        default = { };
+        default = {
+          SCARF_NO_ANALYTICS = "True";
+          DO_NOT_TRACK = "True";
+          ANONYMIZED_TELEMETRY = "False";
+        };
         example = ''
           {
-            OLLAMA_API_BASE_URL = "http://localhost:11434";
+            OLLAMA_API_BASE_URL = "http://127.0.0.1:11434";
             # Disable authentication
             WEBUI_AUTH = "False";
           }
         '';
-        description = "Extra environment variables for open-webui";
+        description = "Extra environment variables for Open-WebUI";
+      };
+
+      openFirewall = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the firewall for Open-WebUI.
+          This adds `services.open-webui.port` to `networking.firewall.allowedTCPPorts`.
+        '';
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
     systemd.services.open-webui = {
-      description = "User-friendly WebUI for LLMs (Formerly Ollama WebUI)";
+      description = "User-friendly WebUI for LLMs";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -p ${cfg.stateDir}/static
-      '';
-
       environment = {
-        STATIC_DIR = "${cfg.stateDir}/static";
-        DATA_DIR = "${cfg.stateDir}";
+        STATIC_DIR = ".";
+        DATA_DIR = ".";
       } // cfg.environment;
 
       serviceConfig = {
@@ -88,6 +104,8 @@ in
         UMask = "0077";
       };
     };
+
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
   };
 
   meta.maintainers = with lib.maintainers; [ shivaraj-bh ];
