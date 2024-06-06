@@ -31,8 +31,6 @@ let
   };
 in
 {
-  ###### interface
-
   options.virtualisation.virtualbox.guest = {
     enable = mkOption {
       default = false;
