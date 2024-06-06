@@ -3,7 +3,6 @@
   stdenv,
   fetchFromSourcehut,
   harec,
-  qbe,
   gitUpdater,
   scdoc,
   tzdata,
@@ -33,6 +32,7 @@ assert
   '';
 
 let
+  inherit (harec) qbe;
   buildArch = stdenv.buildPlatform.uname.processor;
   arch = stdenv.hostPlatform.uname.processor;
   platform = lib.toLower stdenv.hostPlatform.uname.system;
@@ -130,13 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  # Needed for build frameworks like `haredo`, which set the HAREC and QBE env vars to `harec` and
-  # `qbe` respectively.
-  propagatedBuildInputs = [
-    harec
-    qbe
-  ];
-
   buildInputs = [
     harec
     qbe
@@ -171,8 +164,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s configs/${platform}.mk config.mk
   '';
 
-  setupHook = ./setup-hook.sh;
-
   passthru = {
     updateScript = gitUpdater { };
     tests =
@@ -182,6 +173,8 @@ stdenv.mkDerivation (finalAttrs: {
       // lib.optionalAttrs (stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
         mimeModule = callPackage ./mime-module-test.nix { hare = finalAttrs.finalPackage; };
       };
+    # To be propagated by `hareHook`.
+    inherit harec qbe;
   };
 
   meta = {
