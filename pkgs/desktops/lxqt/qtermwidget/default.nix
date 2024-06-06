@@ -7,17 +7,21 @@
 , lxqt-build-tools
 , wrapQtAppsHook
 , gitUpdater
+, version ? "2.0.0"
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtermwidget";
-  version = "2.0.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-kZS6D/wSJFRt/+Afq0zCCmNnJPpFT+1hd4zVPc+rJsE=";
+    hash = {
+      "1.4.0" = "sha256-wYUOqAiBjnupX1ITbFMw7sAk42V37yDz9SrjVhE4FgU=";
+      "2.0.0" = "sha256-kZS6D/wSJFRt/+Afq0zCCmNnJPpFT+1hd4zVPc+rJsE=";
+    }."${version}";
   };
 
   nativeBuildInputs = [
