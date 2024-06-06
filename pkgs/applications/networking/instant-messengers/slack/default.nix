@@ -48,8 +48,8 @@ let
   x86_64-darwin-version = "4.38.121";
   x86_64-darwin-sha256 = "1w0s6j8z8961sv4y00jxpy5gjlj0dswyxs15c7isb26ii11nn1i2";
 
-  x86_64-linux-version = "4.38.121";
-  x86_64-linux-sha256 = "0qp7wxmdg2lpvbx7gshgbqxf7jjvgnwx20cfjwgw6wwzanb0gi96";
+  x86_64-linux-version = "4.38.125";
+  x86_64-linux-sha256 = "sha256-BJeFXZ8STbMCmGvYRoFsfsyIpGukQkuwv0m2NzE+89c=";
 
   aarch64-darwin-version = "4.38.121";
   aarch64-darwin-sha256 = "161z947p7a2d7584hybl77chab8y027cqpph2hd2s4b5k6bchkj5";
