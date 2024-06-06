@@ -378,7 +378,7 @@ let
           elm
           elm-format
           elm-instrument
-          # elmi-to-json broken by hashable-time on 2024-03-16
+          elmi-to-json
           ;
       };
 
