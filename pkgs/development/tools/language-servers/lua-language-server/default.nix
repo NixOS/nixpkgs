@@ -7,6 +7,7 @@
   CoreFoundation,
   Foundation,
   ditto,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -83,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # some tests require local networking
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A language server that offers Lua language support";
