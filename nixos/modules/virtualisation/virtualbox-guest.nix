@@ -31,7 +31,6 @@ let
   };
 in
 {
-  ###### interface
   imports = [
     (mkRenamedOptionModule [ "virtualisation" "virtualbox" "guest" "draganddrop" ] [ "virtualisation" "virtualbox" "guest" "dragAndDrop" ])
   ];
