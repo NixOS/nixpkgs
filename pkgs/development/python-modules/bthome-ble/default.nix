@@ -26,6 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-v3SzzbdWRJISuF1THHlrvci4b+H1Zw/0e5iSEB0Scvw=";
   };
 
+  patches = [
+    ./habluetooth-3.0-compat.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail " --cov=bthome_ble --cov-report=term-missing:skip-covered" ""
