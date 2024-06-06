@@ -12453,7 +12453,9 @@ with pkgs;
 
   revolt-desktop = callPackage ../applications/networking/instant-messengers/revolt-desktop { };
 
-  rbw = callPackage ../tools/security/rbw { };
+  rbw = callPackage ../tools/security/rbw {
+    inherit (rustPackages_1_76) rustPlatform;
+  };
 
   remarshal = with python3Packages; toPythonApplication remarshal;
 
