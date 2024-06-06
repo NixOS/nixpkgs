@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "leftwm-theme";
-  version = "unstable-2022-12-24";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "leftwm";
-    repo = pname;
-    rev = "7f2292f91f31d14a30d49372198c0e7cbe183223";
-    sha256 = "sha256-tYT1eT7Rbs/6zZcl9eWsOA651dUGoXc7eRtVK8fn610=";
+    repo = "leftwm-theme";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tYT1eT7Rbs/6zZcl9eWsOA651dUGoXc7eRtVK8fn610=";
   };
 
-  cargoSha256 = "sha256-3ZwVmyLvDq2z1FEqNuBlEgJLQ9KwcWj/jRlPNCNjCE4=";
+  cargoHash = "sha256-aT1aMtpgHqtgBjL3CuRlPkuKirvb7x/SQWMuWhDBvOs=";
 
   checkFlags = [
     # direct writing /tmp
@@ -21,15 +21,17 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-
   buildInputs = [ openssl ];
 
-  meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+  };
+
+  meta = {
     description = "A theme manager for LeftWM";
     homepage = "https://github.com/leftwm/leftwm-theme";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ yanganto ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ denperidge ];
   };
 }
