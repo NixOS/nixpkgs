@@ -1,14 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, gettext
-, pkg-config
-, glib
-, gnome
-, gnome-menus
-, substituteAll
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  gettext,
+  pkg-config,
+  libgtop,
+  glib,
+  gnome,
+  gnome-menus,
+  substituteAll,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./fix_gmenu.patch;
       gmenu_path = "${gnome-menus}/lib/girepository-1.0";
     })
+    (substituteAll {
+      src = ./fix_gtop.patch;
+      gtop_path = "${libgtop}/lib/girepository-1.0";
+    })
   ];
 
   nativeBuildInputs = [
@@ -35,9 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  mesonFlags = [
-    "-Dextension_set=all"
-  ];
+  mesonFlags = [ "-Dextension_set=all" ];
 
   preFixup = ''
     # Since we do not install the schemas to central location,

@@ -36,6 +36,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    click
     ordered-set
     orjson
   ];

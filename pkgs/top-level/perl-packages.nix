@@ -938,6 +938,23 @@ with self; {
     };
   };
 
+  Apppapersway = buildPerlPackage rec {
+    pname = "App-papersway";
+    version = "1.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SP/SPWHITTON/App-papersway-${version}.tar.gz";
+      hash = "sha256-61OMfvEhgwFbNlOFjm9p3QxDOn31jQZdN8i1nIsWlns=";
+    };
+    buildInputs = [ AnyEvent AnyEventI3 GetoptLong JSON ];
+    meta = {
+      description = "PaperWM-like scrollable tiling window management for Sway/i3wm";
+      homepage = "https://spwhitton.name/tech/code/papersway/";
+      license = lib.licenses.gpl3Plus;
+      mainProgram = "papersway";
+      maintainers = with lib.maintainers; [ fgaz ];
+    };
+  };
+
   Appperlbrew = buildPerlModule {
     pname = "App-perlbrew";
     version = "0.98";

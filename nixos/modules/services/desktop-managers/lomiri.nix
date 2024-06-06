@@ -38,6 +38,7 @@ in {
       ]);
     };
 
+    hardware.pulseaudio.enable = lib.mkDefault true;
     networking.networkmanager.enable = lib.mkDefault true;
 
     systemd.packages = with pkgs.lomiri; [
@@ -71,9 +72,12 @@ in {
       enable = true;
       packages = (with pkgs; [
         ayatana-indicator-datetime
+        ayatana-indicator-display
         ayatana-indicator-messages
         ayatana-indicator-power
         ayatana-indicator-session
+      ] ++ lib.optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
+        ayatana-indicator-sound
       ]) ++ (with pkgs.lomiri; [
         # telephony-service # currently broken: https://github.com/NixOS/nixpkgs/pull/314043
       ] ++ lib.optionals config.networking.networkmanager.enable [

@@ -34,13 +34,13 @@
 , pantheon
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "epiphany";
-  version = "46.0";
+  version = "46.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-9DSPLPUcB8DBBtEwFy1NI/LNQGh3Hh3gB7dYyireVmA=";
+    url = "mirror://gnome/sources/epiphany/${lib.versions.major finalAttrs.version}/epiphany-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Jg+BRp7WR0bCsRQ/Lzi+3NloR3hlZ7CX2fcv072dsUI=";
   };
 
   nativeBuildInputs = [
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "epiphany";
     };
   };
 
@@ -106,4 +106,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})
