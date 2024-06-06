@@ -9,6 +9,7 @@
 , nodejs
 , grafana-alloy
 , nix-update-script
+, installShellFiles
 , testers
 }:
 
@@ -26,7 +27,7 @@ buildGoModule rec {
   proxyVendor = true;
   vendorHash = "sha256-6Xc2siImM1Dl716uGhtAGcn+PO2OLuYLxanzg8Ho6SA=";
 
-  nativeBuildInputs = [ fixup-yarn-lock yarn nodejs ];
+  nativeBuildInputs = [ fixup-yarn-lock yarn nodejs installShellFiles ];
 
   ldflags =
     let
@@ -91,6 +92,13 @@ buildGoModule rec {
     patchelf \
       --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/alloy)" \
       $out/bin/alloy
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd alloy \
+      --bash <($out/bin/alloy completion bash) \
+      --fish <($out/bin/alloy completion fish) \
+      --zsh <($out/bin/alloy completion zsh)
   '';
 
   passthru = {
