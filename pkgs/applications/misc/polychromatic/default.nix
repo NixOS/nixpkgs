@@ -1,11 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  bash,
-  glib,
-  gdk-pixbuf,
   gettext,
-  imagemagick,
   ninja,
   meson,
   sassc,
@@ -29,22 +25,23 @@ python3Packages.buildPythonApplication rec {
     owner = "polychromatic";
     repo = "polychromatic";
     rev = "v${version}";
-    sha256 = "sha256-3Pt1Z8G0xDWlFD7LxJILPUifMBTN4OvPNHZv80umO1s=";
+    hash = "sha256-3Pt1Z8G0xDWlFD7LxJILPUifMBTN4OvPNHZv80umO1s=";
   };
 
   postPatch = ''
     patchShebangs scripts
     substituteInPlace scripts/build-styles.sh \
-      --replace '$(which sassc 2>/dev/null)' '${sassc}/bin/sassc' \
-      --replace '$(which sass 2>/dev/null)' '${sassc}/bin/sass'
+      --replace-fail '$(which sassc 2>/dev/null)' '${sassc}/bin/sassc' \
+      --replace-fail '$(which sass 2>/dev/null)' '${sassc}/bin/sass'
     substituteInPlace polychromatic/paths.py \
-      --replace "/usr/share/polychromatic" "$out/share/polychromatic"
+      --replace-fail "/usr/share/polychromatic" "$out/share/polychromatic"
   '';
 
   preConfigure = ''
     scripts/build-styles.sh
   '';
-  nativeBuildInputs = with python3Packages; [
+
+  nativeBuildInputs = [
     gettext
     gobject-introspection
     meson
@@ -57,25 +54,22 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ qt6.qtwayland ];
 
-  propagatedBuildInputs =
-    with python3Packages;
-    [
-      colorama
-      colour
-      openrazer
-      pyqt6
-      pyqt6-webengine
-      requests
-      setproctitle
-      libxcb
-      openrazer-daemon
-      ibus
-      usbutils
-    ]
-    ++ [
-      libayatana-appindicator
-      psmisc
-    ];
+  propagatedBuildInputs = with python3Packages; [
+    colorama
+    colour
+    openrazer
+    pyqt6
+    pyqt6-webengine
+    requests
+    setproctitle
+    libxcb
+    openrazer-daemon
+    ibus
+    usbutils
+  ] ++ [
+    libayatana-appindicator
+    psmisc
+  ];
 
   dontWrapGapps = true;
   dontWrapQtApps = true;
