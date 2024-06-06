@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-rELkSYwqfMFX++w6e7/7suzPaB91GhbqFsLaYCeeIm4=";
 
   meta = {
-    description = "Entropy is a CLI tool that will scan your codebase for high entropy lines, which are often secrets.";
+    description = "Tool to scan your codebase for high entropy lines, which are often secrets";
     homepage = "https://github.com/EwenQuim/entropy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ starsep ];
