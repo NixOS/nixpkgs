@@ -43,30 +43,6 @@ in {
       contents = [];
     });
 
-    kexec_tarball_self_extract_script = pkgs.writeTextFile {
-      executable = true;
-      name = "kexec-nixos";
-      text = ''
-        #!/bin/sh
-        set -eu
-        ARCHIVE=`awk '/^__ARCHIVE_BELOW__/ { print NR + 1; exit 0; }' $0`
-
-        tail -n+$ARCHIVE $0 | tar xJ -C /
-        /kexec_nixos
-
-        exit 1
-
-        __ARCHIVE_BELOW__
-      '';
-    };
-
-    kexec_bundle = pkgs.runCommand "kexec_bundle" {} ''
-      cat \
-        ${kexec_tarball_self_extract_script} \
-        ${config.system.build.kexec_tarball}/tarball/nixos-system-${config.system.build.kexec_tarball.system}.tar.xz \
-        > $out
-      chmod +x $out
-    '';
   };
 
   boot.loader.grub.enable = lib.mkForce false;
@@ -76,14 +52,9 @@ in {
     "panic=30"
     "boot.panic_on_fail" # reboot the machine upon fatal boot issues
   ];
-  systemd.services.sshd.wantedBy = lib.mkForce ["multi-user.target"];
   networking.hostName = lib.mkDefault "kexec";
 
   formatAttr = "kexec_tarball";
   fileExtension = ".tar.xz";
 
-  boot.initrd.postMountCommands = ''
-    mkdir -p /mnt-root/root/.ssh/
-    cp /authorized_keys /mnt-root/root/.ssh/
-  '';
 }
