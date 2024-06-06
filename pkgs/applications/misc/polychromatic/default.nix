@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication rec {
     psmisc
   ];
 
-  dontWrapGapps = true;
+  dontWrapGApps = true;
   dontWrapQtApps = true;
 
   makeWrapperArgs = [
