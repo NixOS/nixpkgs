@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "nbmake";
-  version = "1.5.3";
+  version = "1.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "treebeardtech";
     repo = "nbmake";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sX0YqyBchLlo0QPIpLvl11/gwoiZknG5rBDzmQKiXhs=";
+    hash = "sha256-OzjqpipFb5COhqc//Sg6OU65ShPrYe/KtxifToEXveg=";
   };
 
   build-system = [
@@ -60,11 +60,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for testing notebooks";
     homepage = "https://github.com/treebeardtech/nbmake";
     changelog = "https://github.com/treebeardtech/nbmake/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
