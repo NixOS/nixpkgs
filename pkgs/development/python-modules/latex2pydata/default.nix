@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "latex2pydata";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XMGmTK1H6f66pI/wDLA3+Pytl4A7spbMMpfa77xr2M4=";
+    hash = "sha256-Ega1cHSP187njyelb0yiCdpk08QZyObelRa2S79AE1E=";
   };
 
   build-system = [
