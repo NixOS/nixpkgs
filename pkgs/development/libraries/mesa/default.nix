@@ -46,7 +46,7 @@
 , withLibunwind ? lib.meta.availableOn stdenv.hostPlatform libunwind
 , enableGalliumNine ? stdenv.isLinux
 , enableOSMesa ? stdenv.isLinux
-, enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
+, enableOpenCL ? stdenv.isLinux && (stdenv.isx86_64 || stdenv.isAarch64) && stdenv.buildPlatform == stdenv.hostPlatform
 , enablePatentEncumberedCodecs ? true
 
 , galliumDrivers ?
@@ -68,6 +68,7 @@
     "lima" # ARM Mali 4xx
     "panfrost" # ARM Mali Midgard and up (T/G series)
     "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
+    "asahi" # Apple Silicon GPU
   ] ++ lib.optionals stdenv.isAarch64 [
     "tegra" # Nvidia Tegra SoCs
     "v3d" # Broadcom VC5 (Raspberry Pi 4)
@@ -82,7 +83,7 @@
   then [
     "amd" # AMD (aka RADV)
     "microsoft-experimental" # WSL virtualized GPU (aka DZN/Dozen)
-    "nouveau-experimental" # Nouveau (aka NVK)
+    "nouveau" # Nouveau (aka NVK)
     "swrast" # software renderer (aka Lavapipe)
   ] ++ lib.optionals (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") [
     # QEMU virtualized GPU (aka VirGL)
@@ -110,8 +111,8 @@
 # nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
 
 let
-  version = "24.0.8";
-  hash = "sha256-0e2GombVt7jBNq5YfvVhjtGpg3pDRA83E2Ir8BI79cE=";
+  version = "24.1.1";
+  hash = "sha256-ADiCbG9+iNkLTOb3GRkvpYyn3t9O3KoRdM972SDvieo=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -233,6 +234,7 @@ self = stdenv.mkDerivation {
     (lib.mesonBool "gallium-nine" enableGalliumNine) # Direct3D in Wine
     (lib.mesonBool "osmesa" enableOSMesa) # used by wine
     (lib.mesonEnable "microsoft-clc" false) # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
+    (lib.mesonEnable "intel-rt" stdenv.hostPlatform.isx86_64)
 
     # To enable non-mesa gbm backends to be found (e.g. Nvidia)
     (lib.mesonOption "gbm-backends-path" "${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm")
@@ -240,7 +242,7 @@ self = stdenv.mkDerivation {
     # meson auto_features enables these features, but we do not want them
     (lib.mesonEnable "android-libbacktrace" false)
   ] ++ lib.optionals stdenv.isLinux [
-    (lib.mesonBool "glvnd" true)
+    (lib.mesonEnable "glvnd" true)
 
     # Enable RT for Intel hardware
     # https://gitlab.freedesktop.org/mesa/mesa/-/issues/9080
@@ -344,6 +346,7 @@ self = stdenv.mkDerivation {
     python3Packages.python
     python3Packages.mako
     python3Packages.ply
+    python3Packages.pycparser
     jdupes
     glslang
     rustc
@@ -351,6 +354,11 @@ self = stdenv.mkDerivation {
     rustPlatform.bindgenHook
   ] ++ lib.optionals haveWayland [
     wayland-scanner
+  ] ++ lib.optionals enableOpenCL [
+    llvmPackages.libclc
+    llvmPackages.clang
+    llvmPackages.clang-unwrapped
+    spirv-llvm-translator
   ];
 
   propagatedBuildInputs = (with xorg; [
