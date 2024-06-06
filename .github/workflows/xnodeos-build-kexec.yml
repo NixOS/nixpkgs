@@ -1,0 +1,26 @@
+---
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+    name: Build XnodeOS kexec Image and Support Files
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+      - name: Install Nix
+        uses: cachix/install-nix-action@v22
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - name: Build XnodeOS kexec Image
+        run: make kexec
+      - name: Archive kexec Archive as Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xnodeos-kexec-system-x86_64-linux.tar.xz
+          path: result/tarball/nixos-system-x86_64-linux.tar.xz
