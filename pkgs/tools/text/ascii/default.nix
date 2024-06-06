@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ascii";
-  version = "3.20";
+  version = "3.30";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "ascii";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-vkU5QZdUfr8aGKlAK+4d4rL+lKD/7C7E1Ul1LPgfZXo=";
+    hash = "sha256-TE9YR5Va9tXaf2ZyNxz7d8lZRTgnD4Lz7FyqRDl1HNY=";
   };
 
   nativeBuildInputs = [
