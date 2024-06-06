@@ -27,13 +27,13 @@ let
 in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-K1brnHA4e8lHIXwpajdY6f+3/pgP8My4QznoYLmZNWw=";
+    hash = "sha256-4nSlL4m0SL3B7+lI/BGt1aY1UE46la7/4NU4BaJ7EwQ=";
   };
 
   npmDepsHash = "sha256-jYZUVwrOxoAbfHHSBkN5IlYhC6yZVVwRoZErkbYrjUs=";

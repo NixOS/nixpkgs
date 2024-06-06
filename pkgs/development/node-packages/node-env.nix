@@ -109,7 +109,7 @@ let
     );
 
   # Recursively composes the dependencies of a package
-  composePackage = { name, packageName, src, dependencies ? [], ... }@args:
+  composePackage = { name, packageName, src, dependencies ? [], ... }:
     builtins.addErrorContext "while evaluating node package '${packageName}'" ''
       installPackage "${packageName}" "${src}"
       ${includeDependencies { inherit dependencies; }}
@@ -194,7 +194,7 @@ let
   # dependencies in the package.json file to the versions that are actually
   # being used.
 
-  pinpointDependenciesOfPackage = { packageName, dependencies ? [], production ? true, ... }@args:
+  pinpointDependenciesOfPackage = { packageName, dependencies ? [], production ? true, ... }:
     ''
       if [ -d "${packageName}" ]
       then
@@ -496,7 +496,7 @@ let
     let
       extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" "dontStrip" "dontNpmInstall" "preRebuild" "unpackPhase" "buildPhase" "meta" ];
     in
-    stdenv.mkDerivation ({
+    stdenv.mkDerivation (finalAttrs: {
       name = "${name}${if version == null then "" else "-${version}"}";
       buildInputs = [ tarWrapper python nodejs ]
         ++ lib.optional (stdenv.isLinux) utillinux
@@ -508,8 +508,9 @@ let
       inherit dontStrip; # Stripping may fail a build for some package deployments
       inherit dontNpmInstall preRebuild unpackPhase buildPhase;
 
-      compositionScript = composePackage args;
-      pinpointDependenciesScript = pinpointDependenciesOfPackage args;
+      # TODO: enable overriding dependencies too?
+      compositionScript = composePackage { inherit packageName dependencies; inherit (finalAttrs) name src; };
+      pinpointDependenciesScript = pinpointDependenciesOfPackage { inherit packageName dependencies production; };
 
       passAsFile = [ "compositionScript" "pinpointDependenciesScript" ];
 
