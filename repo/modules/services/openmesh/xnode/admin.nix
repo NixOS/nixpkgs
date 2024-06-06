@@ -14,7 +14,7 @@ in
 
     stateDir = mkOption {
       type = types.str;
-      default = "/var/lib/openmesh-xnode-admin";
+      default = "/var/lib/openmesh-xnode-admin/default.nix";
       description = "State storage directory.";
     };
 
@@ -32,7 +32,7 @@ in
 
     remoteDir = mkOption {
       type = types.str;
-      default = "openmesh.network/xnodes/functions";
+      default = "https://openmesh.network/xnodes/functions";
       description = "The remote repository to pull down a configuration from.";
     };
 

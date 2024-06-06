@@ -18,6 +18,7 @@ let
           xnode = {
             admin = {
               enable = true;
+              remoteDir = "https://dpl-backend-staging.up.railway.app/xnodes/functions";
             };
           };
         };
