@@ -21,7 +21,13 @@
 .br
 .Op Fl -flake Ar flake-uri
 .Op Fl -no-flake
-.Op Fl -override-input Ar input-name flake-uri
+.Op Fl -recreate-lock-file
+.Op Fl -no-update-lock-file
+.Op Fl -no-write-lock-file
+.Op Fl -no-registries
+.Op Fl -commit-lock-file
+.Op Fl -update-input Ar input-path
+.Op Fl -override-input Ar input-path flake-url
 .br
 .Op Fl -profile-name | p Ar name
 .Op Fl -specialisation | c Ar name
@@ -401,7 +407,23 @@ even if the current NixOS systems uses flakes.
 .Pp
 In addition,
 .Nm
-accepts following builder flags:
+accepts following options from nix commands that the tool calls:
+.
+.Pp
+flake-related options:
+.Bd -offset indent
+.Fl -recreate-lock-file Ns ,
+.Fl -no-update-lock-file Ns ,
+.Fl -no-write-lock-file Ns ,
+.Fl -no-registries Ns ,
+.Fl -commit-lock-file Ns ,
+.Fl -update-input Ar input-path Ns ,
+.Fl -override-input Ar input-path flake-url Ns
+.Ed
+.
+.Pp
+Builder options:
+.Bd -offset indent
 .Fl -verbose Ns ,
 .Fl v Ns ,
 .Fl -quiet Ns ,
@@ -426,9 +448,16 @@ accepts following builder flags:
 .Fl -show-trace Ns ,
 .Fl -refresh Ns ,
 .Fl -impure Ns ,
-.Fl -offline Ns , and
+.Fl -offline Ns ,
 .Fl -no-net Ns
-\&. See the Nix manual or nix-build manpage for details.
+.Ed
+.
+.Pp
+See the Nix manual,
+.Ic nix flake lock --help
+or
+.Ic nix-build --help
+for details.
 .
 .
 .
