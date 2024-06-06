@@ -120,6 +120,7 @@ buildPythonPackage rec {
     ];
 
   passthru.tests = {
+    # Failing typing checks on the test-driver result in channel blockers.
     inherit (nixosTests) nixos-test-driver;
   };
 
