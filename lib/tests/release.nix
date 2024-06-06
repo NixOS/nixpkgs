@@ -24,7 +24,10 @@ in
       #
       #   https://github.com/NixOS/nixpkgs/issues/272591
       #
-      [(import ../../pkgs/test/release {})]
+      [(import ../../pkgs/test/release {
+        inherit pkgs;
+        pkgs-path = pkgs.path;
+      })]
     ;
 
   }
