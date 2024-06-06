@@ -30,7 +30,7 @@ let
           nyancat
         ];
       };
-      kexec = {
+      netboot = {
         squashfsCompression = "gzip -Xcompression-level 1";
       };
       networking = {
