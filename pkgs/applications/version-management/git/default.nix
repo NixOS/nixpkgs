@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    hash = "sha256-e2CmJMD3AJoWuFYlBiGq/c3YXrjUS7AgYXtlJbhyYeQ=";
+    hash = "sha256-Ub/ofrHAL+0UhAUYdTZe6rIpgx0w0M7F2JoU+eQOmts=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
