@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "ixia";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trag1c";
     repo = "ixia";
     rev = "refs/tags/${version}";
-    hash = "sha256-JGTwctzswItAJsKZzVVl+B2fZnCWpMmq9TnNgYY2Kng=";
+    hash = "sha256-lsov5AIT5uRf9nmS8ZsFmInKUFAxUATTbpfhV1fabhA=";
   };
 
   build-system = [ poetry-core ];

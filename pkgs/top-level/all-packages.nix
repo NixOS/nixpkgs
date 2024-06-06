@@ -5623,8 +5623,6 @@ with pkgs;
 
   klog = qt5.callPackage ../applications/radio/klog { };
 
-  knxd = callPackage ../servers/knxd { };
-
   komga = callPackage ../servers/komga { };
 
   komorebi = callPackage ../applications/graphics/komorebi { };
@@ -23665,10 +23663,6 @@ with pkgs;
   openjpeg = callPackage ../development/libraries/openjpeg { };
 
   openpa = callPackage ../development/libraries/openpa { };
-
-  openpgp-card-tools = callPackage ../tools/security/openpgp-card-tools {
-    inherit (darwin.apple_sdk.frameworks) PCSC;
-  };
 
   opensaml-cpp = callPackage ../development/libraries/opensaml-cpp { };
 
