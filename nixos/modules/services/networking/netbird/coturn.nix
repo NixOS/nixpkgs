@@ -143,7 +143,11 @@ in
           ];
         });
 
-      security.acme.certs = mkIf cfg.useAcmeCertificates {${cfg.domain}.postRun = "systemctl restart coturn.service";};
+      security.acme.certs = mkIf cfg.useAcmeCertificates {
+        ${cfg.domain}.postRun = ''
+          systemctl restart coturn.service
+        '';
+      };
 
       networking.firewall = {
         allowedUDPPorts = cfg.openPorts;
