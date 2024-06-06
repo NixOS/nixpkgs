@@ -30,5 +30,6 @@ buildPythonPackage rec {
     mainProgram = "targetctl";
     homepage = "https://github.com/open-iscsi/rtslib-fb";
     license = licenses.asl20;
+    platforms = platforms.linux;
   };
 }
