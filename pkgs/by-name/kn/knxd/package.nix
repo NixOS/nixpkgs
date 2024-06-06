@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, buildPackages
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -12,19 +13,19 @@
 , withUsb ? stdenv.isLinux, libusb1
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "knxd";
   version = "0.14.61";
 
   src = fetchFromGitHub {
     owner = "knxd";
     repo = "knxd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-b8svjGaxW8YqonhXewebDUitezKoMcZxcUFGd2EKZQ4=";
   };
 
   postPatch = ''
-    sed -i '2i echo ${version}; exit' tools/version.sh
+    sed -i '2i echo ${finalAttrs.version}; exit' tools/version.sh
     sed -i '2i exit' tools/get_libfmt
   '';
 
@@ -35,8 +36,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional withUsb libusb1
     ++ lib.optional stdenv.isDarwin argp-standalone;
 
-  configureFlags = lib.optional (!withSystemd) "--disable-systemd"
-    ++ lib.optional (!withUsb) "--disable-usb";
+  configureFlags = [
+    (lib.enableFeature withSystemd "systemd")
+    (lib.enableFeature withUsb "usb")
+  ];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   installFlags = lib.optionals withSystemd [
     "systemdsystemunitdir=$(out)/lib/systemd/system"
@@ -50,5 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };
-}
-
+})
