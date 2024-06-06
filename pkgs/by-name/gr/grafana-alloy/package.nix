@@ -23,7 +23,8 @@ buildGoModule rec {
     hash = "sha256-G+lLxdUnE07QXt2wBcS6K3DVHIS35aKCh0TZCzpNgBE=";
   };
 
-  vendorHash = "sha256-Dj3K0ynPPl350tNYClZDHNNan54N1iGfnryH60nO1bg=";
+  proxyVendor = true;
+  vendorHash = "sha256-eF2BvfxH7pKtBp/rTYxCxwSsuKRJlcBDkiJGPDsiNOE=";
 
   nativeBuildInputs = [ fixup-yarn-lock yarn nodejs ];
 
@@ -110,6 +111,6 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/alloy";
     maintainers = with maintainers; [ flokli emilylange ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = lib.platforms.unix;
   };
 }
