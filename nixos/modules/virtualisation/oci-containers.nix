@@ -221,6 +221,13 @@ let
           example = "hello-world";
         };
 
+        preRunExtraOptions = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = "Extra options for {command}`${defaultBackend}` that go before the `run` argument.";
+          example = [ "--runtime" "runsc" ];
+        };
+
         extraOptions = mkOption {
           type = with types; listOf str;
           default = [];
@@ -284,7 +291,9 @@ let
       else throw "Unhandled backend: ${cfg.backend}";
 
     script = concatStringsSep " \\\n  " ([
-      "exec ${cfg.backend} run"
+      "exec ${cfg.backend} "
+    ]  ++ map escapeShellArg container.preRunExtraOptions ++ [
+      "run"
       "--rm"
       "--name=${escapedName}"
       "--log-driver=${container.log-driver}"
