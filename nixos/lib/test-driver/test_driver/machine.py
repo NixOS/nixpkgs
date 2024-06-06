@@ -938,6 +938,31 @@ class Machine:
             else:
                 shutil.copy(intermediate, abs_target)
 
+    def copy_to_tmp_dir(self, source: str, target_dir: str = "") -> None:
+        """Copy a file from the VM (specified by an in-VM source path) to a path
+        relative to `$TMPDIR`. This can be used for saving artifacts in the build
+        directory that will persist when using the `--keep-failed` flag. The file
+        is copied via the `shared_dir` shared among all the VMs (using a temporary directory).
+        """
+        # Compute the source, target, and intermediate shared file names
+        vm_src = Path(source)
+        with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
+            shared_temp = Path(shared_td)
+            vm_shared_temp = Path("/tmp/shared") / shared_temp.name
+            vm_intermediate = vm_shared_temp / vm_src.name
+            intermediate = shared_temp / vm_src.name
+            # Copy the file to the shared directory inside VM
+            self.succeed(make_command(["mkdir", "-p", vm_shared_temp]))
+            self.succeed(make_command(["cp", "-r", vm_src, vm_intermediate]))
+            abs_target = self.tmp_dir / target_dir / vm_src.name
+            print("f{}", abs_target)
+            abs_target.parent.mkdir(exist_ok=True, parents=True)
+            # Copy the file from the state directory outside VM
+            if intermediate.is_dir():
+                shutil.copytree(intermediate, abs_target)
+            else:
+                shutil.copy(intermediate, abs_target)
+
     def dump_tty_contents(self, tty: str) -> None:
         """Debugging: Dump the contents of the TTY<n>"""
         self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
