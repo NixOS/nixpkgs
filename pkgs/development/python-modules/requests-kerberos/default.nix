@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "requests-kerberos";
-  version = "0.14.0";
+  version = "0.15.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "requests";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Y9dTzFCgVmSnbnTE0kEfjpEkXDEA+uOqFHLkSC27YGg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-s1Q3zqKPSuTkiFExr+axai9Eta1xjw/cip8xzfDGR88=";
   };
 
   propagatedBuildInputs = [
