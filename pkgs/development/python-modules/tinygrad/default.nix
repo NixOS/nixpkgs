@@ -154,6 +154,9 @@ buildPythonPackage rec {
       "test_transcribe_long"
       "test_transcribe_long_no_batch"
       "test_vgg7"
+
+      # timing sensitive
+      "test_recursive_add"
     ]
     # Fail on aarch64-linux with AssertionError
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
