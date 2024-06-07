@@ -42,7 +42,6 @@
 let
   inherit (builtins) unsafeDiscardStringContext appendContext;
   inherit (lib)
-    trace
     listToAttrs
     isStorePath
     readFile
@@ -55,7 +54,7 @@ let
   inherit (lib.attrsets) mergeAttrsList;
 
   toContextlessString = x: unsafeDiscardStringContext (toString x);
-  warn = if verbose then trace else (x: y: y);
+  warn = if verbose then lib.warn else (x: y: y);
 
   referencesOf =
     drv:
