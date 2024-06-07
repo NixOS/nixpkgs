@@ -4,6 +4,7 @@
   fetchFromGitLab,
   fetchpatch,
   gitUpdater,
+  nixosTests,
   biometryd,
   cmake,
   content-hub,
@@ -125,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.vm = nixosTests.lomiri-filemanager-app;
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
