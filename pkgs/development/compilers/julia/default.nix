@@ -54,6 +54,7 @@ in
       hash = "sha256-8y5Sd/XYKmOCSILN6/rBWBmbuEgUw8AZo/7MNgFYYZE=";
       patches = [
         ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
+        ./patches/1.10/0001-hardcode-macos-SDK.patch
       ];
     })
     { });
