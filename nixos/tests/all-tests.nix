@@ -853,6 +853,7 @@ in {
   soft-serve = handleTest ./soft-serve.nix {};
   sogo = handleTest ./sogo.nix {};
   soju = handleTest ./soju.nix {};
+  sozu = handleTest ./web-servers/sozu.nix {};
   solanum = handleTest ./solanum.nix {};
   sonarr = handleTest ./sonarr.nix {};
   sonic-server = handleTest ./sonic-server.nix {};
