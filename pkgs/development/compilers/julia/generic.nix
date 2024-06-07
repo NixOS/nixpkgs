@@ -3,6 +3,10 @@
 , patches
 }:
 
+let
+  pkgs = import <nixpkgs> {};
+in
+
 { lib
 , stdenv
 , fetchurl
@@ -61,10 +65,10 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ] ++ lib.optionals stdenv.isDarwin (
     let
-      macosProductVersion = stdenv.lib.runCommand "macos-product-version" { } ''
+      macosProductVersion = pkgs.runCommand "macos-product-version" { } ''
         echo -n $(${darwin.DarwinTools}/bin/sw_vers -productVersion) > $out
       '';
-      macosPlatformVersion = stdenv.lib.runCommand "macos-platform-version" { } ''
+      macosPlatformVersion = pkgs.runCommand "macos-platform-version" { } ''
         echo -n $(${darwin.DarwinTools}/bin/xcrun --show-sdk-version) > $out
       '';
     in [

@@ -4,8 +4,8 @@ Date: Fri, 7 Jun 2024 03:04:20 +0100
 Subject: [PATCH] hardcode macos SDK
 
 ---
- base/Makefile | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ base/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/base/Makefile b/base/Makefile
 index ad2bb6a63c..666eefac36 100644
@@ -18,9 +18,7 @@ index ad2bb6a63c..666eefac36 100644
 -	@echo "const MACOS_PRODUCT_VERSION = \"$(shell sw_vers -productVersion)\"" >> $@
 -	@echo "const MACOS_PLATFORM_VERSION = \"$(shell xcrun --show-sdk-version)\"" >> $@
 +	@echo "const MACOS_PRODUCT_VERSION = \"$(MACOS_PRODUCT_VERSION)\"" >> $@
-+	@echo "println(\"MACOS_PRODUCT_VERSION=\", MACOS_PRODUCT_VERSION)" >> $@
 +	@echo "const MACOS_PLATFORM_VERSION = \"$(MACOS_PLATFORM_VERSION)\"" >> $@
-+	@echo "println(\"MACOS_PLATFORM_VERSION=\", MACOS_PLATFORM_VERSION)" >> $@
  endif
  	@echo "const BUILD_TRIPLET = \"$(BB_TRIPLET_LIBGFORTRAN_CXXABI)\"" >> $@
  
