@@ -1,4 +1,9 @@
-{ makeSetupHook, zig }:
+{
+  lib,
+  makeSetupHook,
+  zig,
+  targetPlatform,
+}:
 
 makeSetupHook {
   name = "zig-hook";
@@ -27,7 +32,7 @@ makeSetupHook {
     # https://github.com/ziglang/zig/issues/14281#issuecomment-1624220653
 
     zig_default_flags = [
-      "-Dcpu=baseline"
+      "-Dcpu=${targetPlatform.cpuModel.zig}"
       "-Drelease-safe=true"
     ];
   };
