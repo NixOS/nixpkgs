@@ -54,20 +54,26 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-  '' + lib.optionalString stdenv.isDarwin (''
-    substituteInPlace base/Makefile \
-      --replace 'sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers" }"
-    substituteInPlace base/Makefile \
-      --replace 'xcrun' "${(builtins.toString darwin.DarwinTools) + "/bin/xcrun" }"
-  '');
+  '';
 
 
   makeFlags = [
     "prefix=$(out)"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # TODO: figure out how to build deps on darwin
-    "USE_BINARYBUILDER=1"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals stdenv.isDarwin (
+    let
+      macosProductVersion = stdenv.lib.runCommand "macos-product-version" { } ''
+        echo -n $(${darwin.DarwinTools}/bin/sw_vers -productVersion) > $out
+      '';
+      macosPlatformVersion = stdenv.lib.runCommand "macos-platform-version" { } ''
+        echo -n $(${darwin.DarwinTools}/bin/xcrun --show-sdk-version) > $out
+      '';
+    in [
+      # TODO: figure out how to build deps on darwin
+      "USE_BINARYBUILDER=1"
+      "MACOS_PRODUCT_VERSION=${macosProductVersion}"
+      "MACOS_PLATFORM_VERSION=${macosPlatformVersion}"
+    ])
+  ++ lib.optionals (!stdenv.isDarwin) [
     "USE_BINARYBUILDER=0"
   ] ++ lib.optionals stdenv.isx86_64 [
     # https://github.com/JuliaCI/julia-buildkite/blob/main/utilities/build_envs.sh
