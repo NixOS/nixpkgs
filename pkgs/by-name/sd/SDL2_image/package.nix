@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_image";
     license = lib.licenses.zlib;
     maintainers = lib.teams.sdl.members
-                 ++ (with lib.maintainers; [ cpages ]);
+                 ++ (with lib.maintainers; [ ]);
     platforms = lib.platforms.unix;
   };
 })
