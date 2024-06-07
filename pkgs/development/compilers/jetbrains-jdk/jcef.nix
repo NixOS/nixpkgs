@@ -4,7 +4,7 @@
 , stdenv
 , cmake
 , python3
-, jdk17
+, jdk
 , git
 , libcef
 , rsync
@@ -101,20 +101,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "5e368cf6456d6319967e466e96ad5fa99f412c85";
+  rev = "34dfd656652c24da31b89c39d0885f284722eeaa";
   # This is the commit number
-  # Currently from the branch: https://github.com/JetBrains/jcef/tree/232
+  # Currently from the branch: https://github.com/JetBrains/jcef/tree/242
   # Run `git rev-list --count HEAD`
-  version = "767";
+  version = "867";
 
-  nativeBuildInputs = [ cmake python3 jdk17 git rsync ant ninja strip-nondeterminism stripJavaArchivesHook ];
+  nativeBuildInputs = [ cmake python3 jdk git rsync ant ninja strip-nondeterminism stripJavaArchivesHook ];
   buildInputs = [ boost libX11 libXdamage nss nspr thrift ];
 
   src = fetchFromGitHub {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-n+zwxHkyjkjaFhnYWcDNfsqRZIXzZplZiyeHNExfxKU=";
+    hash = "sha256-JlTGKqvgdBpBs2xtFMTVJ/ZksT1uME/8a2g7niH2sq8=";
   };
   cef-bin =
     let
@@ -130,6 +130,7 @@ stdenv.mkDerivation rec {
       url = "https://cef-builds.spotifycdn.com/${urlName}.tar.bz2";
       inherit name hash;
     };
+  # Find the hash in tools/buildtools/linux64/clang-format.sha1
   clang-fmt = fetchurl {
     url = "https://storage.googleapis.com/chromium-clang-format/dd736afb28430c9782750fc0fd5f0ed497399263";
     hash = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
@@ -180,11 +181,15 @@ stdenv.mkDerivation rec {
     ../tools/compile.sh ${platform} Release
   '';
 
-  # Mostly taken from jb/tools/common/create_modules.sh
+  # N.B. For new versions, manually synchronize the following
+  # definitions with jb/tools/common/create_modules.sh to include
+  # newly added modules
   installPhase = ''
     runHook preInstall
 
     export JCEF_ROOT_DIR=$(realpath ..)
+    export THRIFT_DIR="$JCEF_ROOT_DIR"/third_party/thrift
+    export THRIFT_JAR=libthrift-0.19.0.jar
     export OUT_NATIVE_DIR=$JCEF_ROOT_DIR/jcef_build/native/${buildType}
     export JB_TOOLS_DIR=$(realpath ../jb/tools)
     export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/linux
@@ -244,6 +249,11 @@ stdenv.mkDerivation rec {
   '' + ''
 
     cd ../jcef
+    cp "$THRIFT_DIR"/"$THRIFT_JAR" .
+    cp "$JB_TOOLS_DIR"/common/thrift-module-info.java module-info.java
+    javac --patch-module org.apache.thrift=$THRIFT_JAR module-info.java
+    jar uf $THRIFT_JAR module-info.class
+    rm module-info.class module-info.java
     cp "$OUT_CLS_DIR"/jcef.jar .
     mkdir lib
     cp -R "$OUT_NATIVE_DIR"/* lib
@@ -264,6 +274,7 @@ stdenv.mkDerivation rec {
     jmod create --module-path . --class-path jogl-all.jar --libs lib $out/jmods/jogl.all.jmod
     cd ../jcef
     jmod create --module-path . --class-path jcef.jar --libs lib $out/jmods/jcef.jmod
+    jmod create --module-path . --class-path $THRIFT_JAR $out/jmods/org.apache.thrift.jmod
 
     # stripJavaArchivesHook gets rid of jar file timestamps, but not of jmod file timestamps
     # We have to manually call strip-nondeterminism to do this for jmod files too
