@@ -9,6 +9,7 @@
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
+, system ? builtins.currentSystem
 , officialRelease ? false
   # The platform doubles for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]
@@ -54,7 +55,7 @@
 
 let
   release-lib = import ./release-lib.nix {
-    inherit supportedSystems scrubJobs nixpkgsArgs;
+    inherit supportedSystems scrubJobs nixpkgsArgs system;
   };
 
   inherit (release-lib) mapTestOn pkgs;
