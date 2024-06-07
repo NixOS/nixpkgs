@@ -109,8 +109,17 @@ buildPythonPackage rec {
     transformers
   ];
 
+  # fan out the caches to avoid `sqlite3.OperationalError: database is locked`
+  # during checkPhase, due to pytest-xdist
   preCheck = ''
-    export HOME=$(mktemp -d)
+    export CACHEDB=test/.cachedb
+    cat <<"EOF" >> test/conftest.py
+    import pytest, tinygrad.helpers, pathlib
+    @pytest.fixture(autouse=True)
+    def per_worker_cachedb(worker_id):
+        old = pathlib.Path(tinygrad.helpers.CACHEDB)
+        tinygrad.helpers.CACHEDB = str(old.parent / f"worker-{worker_id}" / old.name)
+    EOF
   '';
 
   disabledTests =
