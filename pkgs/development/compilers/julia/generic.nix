@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=$(out)"
   ] ++ lib.optionals stdenv.isDarwin [
+    # TODO: figure out how to build deps on darwin
     "USE_BINARYBUILDER=1"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "USE_BINARYBUILDER=0"
@@ -70,7 +71,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [] ++ lib.optionals stdenv.isDarwin [
     "-Wno-error=implicit-function-declaration"
+    "-Wno-elaborated-enum-base"
   ];
+  # TODO: figure out how to re-enable these as errors?
 
   # remove forbidden reference to $TMPDIR
   preFixup = ''
