@@ -4,7 +4,7 @@
 , fetchFromGitHub
 }:
 
-let version = "0.41.0";
+let version = "0.41.1";
 in buildGoModule {
   pname = "geesefs";
   inherit version;
@@ -13,7 +13,7 @@ in buildGoModule {
     owner = "yandex-cloud";
     repo = "geesefs";
     rev = "v${version}";
-    hash = "sha256-tOioEimL4+xf19sdMwRS8tRmKKxLXmR8DWMEmvRqdJM=";
+    hash = "sha256-4uPq4NUd6upsOxuKAVqay7UTMfiHlCKwVvJed0jdeyc=";
   };
 
   # hashes differ per architecture otherwise.
