@@ -56,5 +56,6 @@ llvmPackages.stdenv.mkDerivation rec {
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
+    mainProgram = "c3c";
   };
 }
