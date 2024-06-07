@@ -88,7 +88,6 @@ let
         ''
       ).outPath;
 
-  targetDerivations = [ drv ] ++ map ({ newDependency, ... }: newDependency) replacements;
   realisation =
     drv:
     if isStorePath drv then
@@ -110,6 +109,24 @@ let
             ''
         )
       );
+  rootReferences = referencesOf drv;
+  relevantReplacements = filter (
+    { oldDependency, newDependency }:
+    if toString oldDependency == toString newDependency then
+      warn "replaceDependencies: attempting to replace dependency ${oldDependency} of ${drv} with itself"
+        # Attempting to replace a dependency by itself is completely useless, and would only lead to infinite recursion.
+        # Hence it must not be attempted to apply this replacement in any case.
+        false
+    else if !hasAttr (realisation oldDependency) rootReferences then
+      warn "replaceDependencies: ${drv} does not depend on ${oldDependency}, so it will not be replaced"
+        # Strictly speaking, another replacement could introduce the dependency.
+        # However, handling this corner case would add significant complexity.
+        # So we just leave it to the user to apply the replacement at the correct place, but show a warning to let them know.
+        false
+    else
+      true
+  ) replacements;
+  targetDerivations = [ drv ] ++ map ({ newDependency, ... }: newDependency) relevantReplacements;
   referencesMemo = listToAttrs (
     map (drv: {
       name = realisation drv;
@@ -133,22 +150,6 @@ let
         value = drv;
       }) targetDerivations
     );
-
-  relevantReplacements = filter (
-    { oldDependency, newDependency }:
-    if toString oldDependency == toString newDependency then
-      warn "replaceDependencies: attempting to replace dependency ${oldDependency} of ${drv} with itself"
-        # Attempting to replace a dependency by itself is completely useless, and would only lead to infinite recursion.
-        # Hence it must not be attempted to apply this replacement in any case.
-        false
-    else if !hasAttr (realisation oldDependency) referencesMemo.${realisation drv} then
-      warn "replaceDependencies: ${drv} does not depend on ${oldDependency}"
-        # Handle the corner case where one of the other replacements introduces the dependency.
-        # It would be more correct to not show the warning in this case, but the added complexity is probably not worth it.
-        true
-    else
-      true
-  ) replacements;
 
   rewriteMemo =
     # Mind the order of how the three attrsets are merged here.
