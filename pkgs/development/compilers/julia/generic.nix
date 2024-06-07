@@ -15,6 +15,8 @@
 , openssl
 , libxml2
 , unzip
+, curl
+, xcbuild
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +41,8 @@ stdenv.mkDerivation rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     unzip
+    curl
+    xcbuild
   ];
 
   buildInputs = [
@@ -53,6 +57,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=$(out)"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "USE_BINARYBUILDER=1"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     "USE_BINARYBUILDER=0"
   ] ++ lib.optionals stdenv.isx86_64 [
     # https://github.com/JuliaCI/julia-buildkite/blob/main/utilities/build_envs.sh
