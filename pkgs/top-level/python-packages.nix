@@ -543,8 +543,6 @@ self: super: with self; {
 
   amberelectric = callPackage ../development/python-modules/amberelectric { };
 
-  ambiclimate = callPackage ../development/python-modules/ambiclimate { };
-
   amcrest = callPackage ../development/python-modules/amcrest { };
 
   amiibo-py = callPackage ../development/python-modules/amiibo-py { };
