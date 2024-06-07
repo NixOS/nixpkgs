@@ -77,10 +77,12 @@ stdenv.mkDerivation rec {
 
   # remove forbidden reference to $TMPDIR
   preFixup = ''
+  ''
+  + lib.optionalString stdenv.isLinux (''
     for file in libcurl.so libgmpxx.so libmpfr.so; do
       patchelf --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir} "$out/lib/julia/$file"
     done
-  '';
+  '');
 
   # tests are flaky for aarch64-linux on hydra
   doInstallCheck = if (lib.versionOlder version "1.10") then !stdenv.hostPlatform.isAarch64 else true;
