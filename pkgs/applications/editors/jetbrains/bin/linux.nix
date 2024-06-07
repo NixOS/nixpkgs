@@ -102,14 +102,15 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     jdk=${jdk.home}
     item=${desktopItem}
 
-    BOOT_JDK_BASE_NAME=$(grep '\.jdk' "$out/$pname/bin/${loName}.sh" \
+    BOOT_JDK_FULL_NAME=$(grep '\.jdk' "$out/$pname/bin/${loName}.sh" \
                          | grep '^if' \
                          | head -n 1 \
                          | sed -e 's|\(.*\)".*|\1|' \
                                -e 's|.*"||' \
                                -e 's|.*/\(.*/.*\)|\1|')
-    BOOT_JDK_NAME="\$HOME/.config/JetBrains/$BOOT_JDK_BASE_NAME"
-    wrapProgram  "$out/$pname/bin/${loName}.sh" \
+    BOOT_JDK_DIR_NAME=$(dirname $BOOT_JDK_FULL_NAME)
+    BOOT_JDK_BASE_NAME=$(basename $BOOT_JDK_FULL_NAME)
+    wrapProgram "$out/$pname/bin/${loName}.sh" \
       --prefix PATH : "${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
@@ -120,12 +121,15 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
       --set-default JETBRAINSCLIENT_JDK "$jdk" \
       --set-default ${hiName}_JDK "$jdk" \
       --set-default ${hiName}_VM_OPTIONS ${vmoptsFile}
+
     sed -i -e '/^export ${hiName}_JDK=/afi' \
-        -e "/^export ${hiName}_JDK=/iif [[ ! -s \"$BOOT_JDK_NAME\" ]]; then" \
+        -e "/^export ${hiName}_JDK=/iCONFIG_HOME=\"\''${XDG_CONFIG_HOME-\''${HOME}/.config}/JetBrains/$BOOT_JDK_DIR_NAME\"\\
+    if [[ ! -s \"\$CONFIG_HOME/$BOOT_JDK_BASE_NAME\" ]]; then" \
         -e 's|^export ${hiName}_JDK\(.*\)|    export ${hiName}_JDK\1|' \
         "$out/$pname/bin/${loName}.sh"
+
     sed -i -e '/^export ${hiName}_VM_OPTIONS=/afi' \
-        -e "/^export ${hiName}_VM_OPTIONS=/iVMOPTS_STR=\"\$(dirname $BOOT_JDK_NAME)/*.vmoptions\"\\
+        -e "/^export ${hiName}_VM_OPTIONS=/iVMOPTS_STR=\"\$CONFIG_HOME/*.vmoptions\"\\
     VMOPTS=\"\$(echo \$VMOPTS_STR)\"\\
     if [[ -s \"\$VMOPTS\" ]]; then\\
         export ${hiName}_VM_OPTIONS=\$(cat \"\$VMOPTS\")\\
