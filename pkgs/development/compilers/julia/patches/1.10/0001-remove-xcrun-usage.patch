@@ -1,0 +1,24 @@
+From e341b0809059a06efa8831cf6cffc71becc80336 Mon Sep 17 00:00:00 2001
+From: MilesCranmer <miles.cranmer@gmail.com>
+Date: Fri, 7 Jun 2024 02:54:49 +0100
+Subject: [PATCH] remove xcrun usage
+
+---
+ Make.inc | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Make.inc b/Make.inc
+index d033781a97..8986bf0614 100644
+--- a/Make.inc
++++ b/Make.inc
+@@ -1500,7 +1500,6 @@ endif
+ CLANGSA_FLAGS :=
+ CLANGSA_CXXFLAGS :=
+ ifeq ($(OS), Darwin) # on new XCode, the files are hidden
+- CLANGSA_FLAGS += -isysroot $(shell xcrun --show-sdk-path -sdk macosx)
+ endif
+ ifeq ($(USEGCC),1)
+ # try to help clang find the c++ files for CC by guessing the value for --prefix
+-- 
+2.39.0
+
