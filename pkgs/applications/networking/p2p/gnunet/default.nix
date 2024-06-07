@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, adns, curl, gettext, gmp, gnutls, libextractor
+{ lib, stdenv, fetchurl, fetchpatch, adns, curl, gettext, gmp, gnutls, libextractor
 , libgcrypt, libgnurl, libidn, libmicrohttpd, libtool, libunistring
 , makeWrapper, ncurses, pkg-config, libxml2, sqlite, zlib
 , libpulseaudio, libopus, libogg, jansson, libsodium
@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/gnunet/gnunet-${version}.tar.gz";
     hash = "sha256-k+aLPqynCHJz49doX+auOLLoBV5MnnANNg3UBVJJeFw=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "add-pq-result-and-query-helpers-for-blind-sign-keys.patch";
+      url = "https://git.gnunet.org/gnunet.git/patch/?id=ca828a0edb853ef841620253c8e56ad5eae16014";
+      hash = "sha256-6CiEm2CRIhmK1jgTpSEfUwqZNfldokeGoo4fl9AcBcQ=";
+    })
+  ];
 
   enableParallelBuilding = true;
 
