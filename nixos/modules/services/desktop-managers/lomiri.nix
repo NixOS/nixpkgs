@@ -22,6 +22,7 @@ in {
         libusermetrics
         lomiri
         lomiri-download-manager
+        lomiri-filemanager-app
         lomiri-schemas # exposes some required dbus interfaces
         lomiri-session # wrappers to properly launch the session
         lomiri-sounds
