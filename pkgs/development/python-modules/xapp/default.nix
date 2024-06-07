@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "xapp";
-  version = "2.4.1";
+  version = "2.4.2";
 
   format = "other";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "linuxmint";
     repo = "python-xapp";
     rev = version;
-    hash = "sha256-Kvhp+biZ+KK9FYma/8cUEaQCHPKMLjOO909kbyMLQ3o=";
+    hash = "sha256-Gbm4YT9ZyrROOAbKz5xYd9J9YG9cUL2Oo6dDCPciaBs=";
   };
 
   nativeBuildInputs = [
