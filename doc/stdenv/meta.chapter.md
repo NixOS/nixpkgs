@@ -125,17 +125,41 @@ $ cd path/to/nixpkgs
 $ nix-build -A your-package.tests
 ```
 
+Note that Hydra and [`nixpkgs-review`](https://github.com/Mic92/nixpkgs-review) don't build these derivations by default, and that ([`@ofborg`](https://github.com/NixOS/ofborg)) only builds them when evaluating PRs for that particular package (or when manually instructed).
+
 #### Package tests {#var-meta-tests-packages}
 
-Tests that are part of the source package are often executed in the `installCheckPhase`.
+Tests that are part of the source package are often executed in the `installCheckPhase`. This phase is also suitable for performing a `--version` test for packages that support such flag. Here's an example:
 
-Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
+```nix
+# Say the package is git
+stdenv.mkDerivation(finalAttrs: {
+  pname = "git";
+  version = "...";
+  # ...
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo checking if 'git --version' mentions ${finalAttrs.version}
+    $out/bin/git --version | grep ${finalAttrs.version}
+
+    runHook postInstallCheck
+  '';
+  # ...
+})
+```
+
+Most programs distributed by Nixpkgs support such a `--version` flag, and it can help give confidence that the package at least got compiled properly. However, tests that are slightly non trivial will better fit into `passthru.tests`, because:
 
 * `passthru.tests` tests the 'real' package, independently from the environment in which it was built
-* we can run `passthru.tests` independently
+* We can run and debug a `passthru.tests` independently, after the package was built (useful if it takes a long time).
 * `installCheckPhase` adds overhead to each build
 
-For more on how to write and run package tests, see [](#sec-package-tests).
+It is also possible to still use `passthru.tests` to test the version, with [testVersion](#tester-testVersion).
+
+For more on how to write and run package tests, see [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests).
 
 #### NixOS tests {#var-meta-tests-nixos}
 
