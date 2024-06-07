@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cyanrip";
-  version = "0.9.2";
+  version = "0.9.3.1";
 
   src = fetchFromGitHub {
     owner = "cyanreg";
     repo = "cyanrip";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sWgHf8S4GZDAIvMUf5KvGy2y0JcUbRS53IjArdgokqc=";
+    hash = "sha256-GAPHsYQYJQOBV4ok7omqhiDPKX+VC4Bw3Msb3pd8Zo8=";
   };
 
   nativeBuildInputs = [
