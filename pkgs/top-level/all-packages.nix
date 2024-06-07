@@ -29967,7 +29967,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
-  celeste = callPackage ../applications/networking/sync/celeste { };
+  celeste = callPackage ../applications/networking/sync/celeste {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
 
   cyan = callPackage ../applications/graphics/cyan { };
 
