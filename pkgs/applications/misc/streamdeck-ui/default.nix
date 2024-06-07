@@ -1,28 +1,44 @@
 { lib
 , python3Packages
 , fetchFromGitHub
+, fetchpatch
+, substituteAll
 , copyDesktopItems
 , writeText
 , makeDesktopItem
 , wrapGAppsHook3
 , xvfb-run
 , qt6
+, fontconfig
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "streamdeck-ui";
-  version = "3.1.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     repo = "streamdeck-linux-gui";
     owner = "streamdeck-linux-gui";
     rev = "v${version}";
-    sha256 = "sha256-AIE9j022L4WSlHBAu3TT5uE4Ilgk/jYSmU03K8Hs8xY=";
+    sha256 = "sha256-az00iCLWMLd9YsdSZoVDB6UQIHVEln+gkf84hmUlqFY=";
   };
 
   patches = [
     # nixpkgs has a newer pillow version
     ./update-pillow.patch
+
+    # upstream forgot to bump the project version
+    (fetchpatch {
+      name = "bump-version.patch";
+      url = "https://github.com/streamdeck-linux-gui/streamdeck-linux-gui/commit/bd76e7e3e0ac0da6dd070c3e81f4fcbed2db825a.patch";
+      sha256 = "sha256-GXz/a0fDmcPoHBHPYbjPkrhOMTJgoz0BRx+TkGi96QE=";
+    })
+
+    # fix path to fc-list
+    (substituteAll {
+      src = ./fix-fc-list.patch;
+      fclist = "${fontconfig}/bin/fc-list";
+    })
   ];
 
   desktopItems = let
@@ -78,6 +94,7 @@ python3Packages.buildPythonApplication rec {
     setuptools
     filetype
     cairosvg
+    importlib-metadata
     pillow
     pynput
     pyside6
@@ -90,9 +107,12 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     xvfb-run
     python3Packages.pytest
+    python3Packages.pytest-mock
+    python3Packages.pytest-qt
   ];
 
   checkPhase = ''
+    export HOME=$(pwd)
     xvfb-run pytest tests
   '';
 

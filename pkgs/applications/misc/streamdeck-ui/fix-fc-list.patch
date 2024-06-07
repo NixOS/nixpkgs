@@ -1,0 +1,17 @@
+diff --git a/streamdeck_ui/fonts.py b/streamdeck_ui/fonts.py
+index 89c7ae8..af720ea 100644
+--- a/streamdeck_ui/fonts.py
++++ b/streamdeck_ui/fonts.py
+@@ -34,11 +34,7 @@ def get_system_fonts():
+     fonts_dict = {}
+     try:
+         fclist_locations = [
+-            "/usr/bin/fc-list",
+-            "/usr/sbin/fc-list",
+-            "/bin/fc-list",
+-            "/usr/local/sbin/fc-list",
+-            "/usr/local/bin/fc-list",
++            "@fclist@",
+         ]
+         fclist_path = None
+         for file_path in fclist_locations:
