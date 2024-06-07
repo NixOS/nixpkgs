@@ -26,7 +26,7 @@ fixDarwinDylibNames() {
         int_out=$(@targetPrefix@install_name_tool -id "$fn" "${flags[@]}" "$fn" 2>&1)
         result=$?
         if [ "$result" -ne 0 ] &&
-            ! grep "shared library stub file and can't be changed" <<< "$out"
+            ! grep "shared library stub file and can't be changed" <<< "$int_out"
         then
             echo "$int_out" >&2
             exit "$result"
