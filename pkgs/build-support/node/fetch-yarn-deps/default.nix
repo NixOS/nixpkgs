@@ -164,4 +164,11 @@ in
       description = "Install nodejs dependencies from an offline yarn cache produced by fetchYarnDeps";
     };
   } ./yarn-config-hook.sh;
+
+  yarnBuildHook = makeSetupHook {
+    name = "yarn-build-hook";
+    meta = {
+      description = "Run yarn build in buildPhase";
+    };
+  } ./yarn-build-hook.sh;
 }
