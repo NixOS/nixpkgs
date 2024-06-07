@@ -74,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
     cc = callPackage ./cc.nix {
       zig = finalAttrs.finalPackage;
     };
+    stdenv = callPackage ./stdenv.nix {
+      zig = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
