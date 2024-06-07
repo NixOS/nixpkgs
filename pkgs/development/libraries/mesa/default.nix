@@ -179,6 +179,11 @@ self = stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Reorder things to make it build on Darwin again
+    # Submitted upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/29592
+    # FIXME: remove when merged or otherwise addressed
+    ./darwin.patch
   ];
 
   postPatch = ''
