@@ -25,7 +25,7 @@ function calc_hash () {
     nix-prefetch --option extra-experimental-features flakes \
                  "{ stdenv, fetchzip }:
 stdenv.mkDerivation {
-  pname = \"yourkit-java-source\";
+  pname = \"yourkit-java-binary\";
   version = \"$version\";
   src = fetchzip {
     url = \"$url\";
