@@ -66,11 +66,15 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin (
     let
       macosProductVersion = pkgs.runCommand "macos-product-version" { } ''
+        echo "Running sw_vers..."
         echo -n $(${darwin.DarwinTools}/bin/sw_vers -productVersion) > $out
+        echo "macOS product version: $(cat $out)"
       '';
       macosProductVersionStr = builtins.readFile "${macosProductVersion}";
       macosPlatformVersion = pkgs.runCommand "macos-platform-version" { } ''
-        echo -n $(xcrun --show-sdk-version) > $out
+        echo "Running xcrun..."
+        echo -n $(${pkgs.xcbuild}/bin/xcrun --show-sdk-version) > $out
+        echo "macOS platform version: $(cat $out)"
       '';
       macosPlatformVersionStr = builtins.readFile "${macosPlatformVersion}";
     in [
