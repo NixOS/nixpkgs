@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "langcodes";
-  version = "3.3.0";
+  version = "3.4.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "794d07d5a28781231ac335a1561b8442f8648ca07cd518310aeb45d6f0807ef6";
+    sha256 = "sha256-rlp30aAdDR6RhUpnGJCJK3zpq7YBq3Mn/FyHT4meGXk=";
   };
 
   nativeBuildInputs = [ poetry-core ];
