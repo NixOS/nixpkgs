@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "rich-argparse";
-  version = "1.4.0";
+  version = "1.5.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hamdanal";
     repo = "rich-argparse";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iQ8x8UM0zmb2qYUpSh6RSEaBMrDpwY0ZHaJ9GJqn4Hs=";
+    hash = "sha256-NcsEGImUAqwZI6Ga3UIqnoELvz6WRKyVqGkR4jPIKPI=";
   };
 
   propagatedBuildInputs = [
