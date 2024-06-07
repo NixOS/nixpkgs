@@ -77,6 +77,8 @@ in
       environment = {
         STATIC_DIR = ".";
         DATA_DIR = ".";
+        HF_HOME = ".";
+        SENTENCE_TRANSFORMERS_HOME = ".";
       } // cfg.environment;
 
       serviceConfig = {
