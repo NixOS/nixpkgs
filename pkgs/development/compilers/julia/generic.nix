@@ -55,10 +55,6 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  shellHook = ''
-    export JULIA_SSL_CA_ROOTS_PATH=""
-  '';
-
   makeFlags = [
     "prefix=$(out)"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -92,6 +88,7 @@ stdenv.mkDerivation rec {
   installCheckTarget = "testall";
 
   preInstallCheck = ''
+    export JULIA_SSL_CA_ROOTS_PATH=""
     export JULIA_TEST_USE_MULTIPLE_WORKERS="true"
     # Some tests require read/write access to $HOME.
     # And $HOME cannot be equal to $TMPDIR as it causes test failures
