@@ -13,13 +13,13 @@
 
 let
   pname = "iaito";
-  version = "5.9.0";
+  version = "5.9.2";
 
   main_src = fetchFromGitHub rec {
     owner = "radareorg";
     repo = pname;
-    rev = version;
-    hash = "sha256-Ep3Cbi0qjY4PKG0urr12y0DgX/l/Tsq8w1qlyH0lu3s=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bq4kaP3BmDprKAxMxO+OvTceEQFeAxJ7aGDnRFHjVDA=";
     name = repo;
   };
 
@@ -31,8 +31,7 @@ let
     name = repo;
   };
 in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   srcs = [ main_src translations_src ];
@@ -61,9 +60,6 @@ stdenv.mkDerivation rec {
     radare2
   ];
 
-  # the radare2 binary package seems to not install all necessary headers.
-  env.NIX_CFLAGS_COMPILE = toString [ "-I" "${radare2.src}/shlr/sdb/include/sdb" ];
-
   postBuild = ''
     pushd ../../../${translations_src.name}
     make build -j$NIX_BUILD_CORES PREFIX=$out
@@ -86,16 +82,16 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An official graphical interface of radare2";
-    mainProgram = "iaito";
+    description = "Official Qt frontend of radare2";
     longDescription = ''
-      iaito is the official graphical interface of radare2. It's the
-      continuation of Cutter for radare2 after the Rizin fork.
+      iaito is the official graphical interface for radare2, a libre reverse
+      engineering framework.
     '';
     homepage = "https://radare.org/n/iaito.html";
-    changelog = "https://github.com/radareorg/iaito/releases/tag/${version}";
-    license = licenses.gpl3Plus;
+    changelog = "https://github.com/radareorg/iaito/releases/tag/${finalAttrs.version}";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ azahi ];
+    mainProgram = "iaito";
     platforms = platforms.linux;
   };
-}
+})
