@@ -117,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     ./9901-lomiri-Disable-Wizard.patch
+    ./9902-lomiri-Check-NIXOS_XKB_LAYOUTS.patch
   ];
 
   postPatch = ''
