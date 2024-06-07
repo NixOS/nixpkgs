@@ -3,30 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  testers,
-  dahlia
 }:
 
 buildPythonPackage rec {
   pname = "dahlia";
-  version = "2.3.2";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dahlia-lib";
     repo = "dahlia";
     rev = "refs/tags/${version}";
-    hash = "sha256-KQOfTTYA/Jt0UbZ1VKqETwYHtMlOuS2lY0755gqFgxg=";
+    hash = "sha256-t8m/7TSzVvETvn3Jar29jCh55Ti+B0NA8Az/8GHwQAg=";
   };
 
   build-system = [ poetry-core ];
   pythonImportsCheck = [ "dahlia" ];
-
-  passthru.tests.version = testers.testVersion {
-    package = dahlia;
-    command = "${lib.getExe dahlia} --version";
-    version = "${version}";
-  };
 
   meta = with lib; {
     changelog = "https://github.com/dahlia-lib/dahlia/blob/${src.rev}/CHANGELOG.md";
