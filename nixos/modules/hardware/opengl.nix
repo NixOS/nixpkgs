@@ -138,7 +138,7 @@ in
 
     systemd.tmpfiles.settings.opengl = {
       "/run/opengl-driver"."L+".argument = toString package;
-      "/run/opengl-drive-32" =
+      "/run/opengl-driver-32" =
         if pkgs.stdenv.isi686 then
           { "L+".argument = "opengl-driver"; }
         else if cfg.driSupport32Bit then
