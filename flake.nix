@@ -44,13 +44,14 @@
           );
       });
 
-      checks.x86_64-linux = {
-        tarball = jobs.x86_64-linux.tarball;
+      checks = forAllSystems (system: {
+        tarball = jobs.${system}.tarball;
+      } // lib.optionalAttrs (self.legacyPackages.${system}.stdenv.isLinux) {
         # Test that ensures that the nixosSystem function can accept a lib argument
         # Note: prefer not to extend or modify `lib`, especially if you want to share reusable modules
         #       alternatives include: `import` a file, or put a custom library in an option or in `_module.args.<libname>`
         nixosSystemAcceptsLib = (self.lib.nixosSystem {
-          pkgs = self.legacyPackages.x86_64-linux;
+          pkgs = self.legacyPackages.${system};
           lib = self.lib.extend (final: prev: {
             ifThisFunctionIsMissingTheTestFails = final.id;
           });
@@ -66,13 +67,13 @@
             })
           ];
         }).config.system.build.toplevel;
-      };
+      });
 
       htmlDocs = {
-        nixpkgsManual = jobs.x86_64-linux.manual;
+        nixpkgsManual = builtins.mapAttrs (_: jobSet: jobSet.manual) jobs;
         nixosManual = (import ./nixos/release-small.nix {
           nixpkgs = self;
-        }).nixos.manual.x86_64-linux;
+        }).nixos.manual;
       };
 
       # The "legacy" in `legacyPackages` doesn't imply that the packages exposed
