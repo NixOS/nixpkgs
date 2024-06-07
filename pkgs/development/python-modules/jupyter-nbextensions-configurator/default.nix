@@ -8,7 +8,6 @@
   notebook,
   pyyaml,
   tornado,
-  nose,
   pytestCheckHook,
   selenium,
 }:
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
     pytestCheckHook
     selenium
   ];
