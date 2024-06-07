@@ -168,7 +168,7 @@ in
 
       apply = set: {
         script = ''
-          export PATH=/empty
+          export PATH=
           for i in ${toString path}; do
             PATH=$PATH:$i/bin:$i/sbin
           done
