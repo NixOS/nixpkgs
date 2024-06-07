@@ -5,7 +5,6 @@
   rustPlatform,
   buildGoModule,
   nix-update-script,
-  modrinth-app-unwrapped,
   cargo-tauri,
   desktop-file-utils,
   esbuild,
@@ -24,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "modrinth";
     repo = "theseus";
-    rev = "v${modrinth-app-unwrapped.version}";
+    rev = "v${version}";
     sha256 = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
   };
 
@@ -73,7 +72,7 @@ rustPlatform.buildRustPackage rec {
         Darwin = "app";
       }
       .${stdenv.hostPlatform.uname.system}
-      or (builtins.throw "No tauri bundle available for ${stdenv.hostPlatform.uname.system}!");
+      or (throw "No tauri bundle available for ${stdenv.hostPlatform.uname.system}!");
 
     ESBUILD_BINARY_PATH = lib.getExe (
       esbuild.override {
@@ -133,9 +132,9 @@ rustPlatform.buildRustPackage rec {
       A unique, open source launcher that allows you to play your favorite mods,
       and keep them up to date, all in one neat little package
     '';
-    mainProgram = "modrinth-app";
     homepage = "https://modrinth.com";
-    changelog = "https://github.com/modrinth/theseus/releases/tag/v${modrinth-app-unwrapped.version}";
+    changelog = "https://github.com/modrinth/theseus/releases/tag/v${version}";
+    mainProgram = "modrinth-app";
     license = with lib.licenses; [
       gpl3Plus
       unfreeRedistributable
