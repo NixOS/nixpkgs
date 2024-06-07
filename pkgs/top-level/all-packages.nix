@@ -25042,7 +25042,7 @@ with pkgs;
   zig_0_13 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.13 {
     llvmPackages = llvmPackages_18;
   };
-  zig = zig_0_12;
+  zig = zig_0_13;
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
