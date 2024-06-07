@@ -5,6 +5,7 @@ self: {
   fetchurl,
   cmake,
   qt6,
+  jq,
 }: let
   dependencies = (lib.importJSON ../generated/dependencies.json).dependencies;
   projectInfo = lib.importJSON ../generated/projects.json;
@@ -68,6 +69,16 @@ self: {
       None = null;
     };
 
+  qmllintHook =
+    makeSetupHook {
+      name = "qmllint-validate-hook";
+      substitutions = {
+        qmllint = "${qt6.qtdeclarative}/bin/qmllint";
+        jq = lib.getExe jq;
+      };
+    }
+    ./qmllint-hook.sh;
+
   moveDevHook = makeSetupHook {name = "kf6-move-dev-hook";} ./move-dev-hook.sh;
 in
   {
@@ -107,7 +118,7 @@ in
 
       outputs = ["out" "dev" "devtools"];
 
-      nativeBuildInputs = [cmake qt6.wrapQtAppsHook moveDevHook] ++ extraNativeBuildInputs;
+      nativeBuildInputs = [cmake qt6.wrapQtAppsHook qmllintHook moveDevHook] ++ extraNativeBuildInputs;
       buildInputs = [qt6.qtbase] ++ extraBuildInputs;
 
       # FIXME: figure out what to propagate here
