@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, findutils, fixDarwinDylibNames
+, updateAutotoolsGnuConfigScriptsHook
 , sslSupport ? true, openssl
 , fetchpatch
 }:
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional sslSupport "openssl"
     ;
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = lib.optional sslSupport openssl
     ++ lib.optional stdenv.isCygwin findutils;
