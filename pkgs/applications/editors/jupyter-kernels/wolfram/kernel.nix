@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Jupyter kernel for Wolfram Language.";
+    description = "A Jupyter kernel for Wolfram Language";
     homepage = "https://github.com/WolframResearch/WolframLanguageForJupyter";
     license = licenses.mit;
     maintainers = with maintainers; [ fbeffa ];

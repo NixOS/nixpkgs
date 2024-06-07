@@ -89,7 +89,7 @@ in stdenv.mkDerivation rec {
   makeFlags = ["HAVE_DOT_CONFIG=y"];
 
   meta = with lib; {
-    description = "A modified version of uClibc for KLEE.";
+    description = "A modified version of uClibc for KLEE";
     longDescription = ''
       klee-uclibc is a bitcode build of uClibc meant for compatibility with the
       KLEE symbolic virtual machine.

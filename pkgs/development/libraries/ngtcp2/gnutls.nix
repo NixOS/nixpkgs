@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/ngtcp2";
-    description = "an effort to implement RFC9000 QUIC protocol.";
+    description = "an effort to implement RFC9000 QUIC protocol";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ vcunat/* for knot-dns */ ];

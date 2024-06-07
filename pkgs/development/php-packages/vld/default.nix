@@ -24,7 +24,7 @@ buildPecl {
 
   meta = {
     changelog = "https://github.com/derickr/vld/releases/tag/${version}";
-    description = "The Vulcan Logic Dumper hooks into the Zend Engine and dumps all the opcodes (execution units) of a script.";
+    description = "The Vulcan Logic Dumper hooks into the Zend Engine and dumps all the opcodes (execution units) of a script";
     homepage = "https://github.com/derickr/vld";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ gaelreyrol ];

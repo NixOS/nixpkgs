@@ -124,7 +124,7 @@ in {
 
     meta = with lib; {
       inherit (src.meta) homepage;
-      description = "VDR plugin to handle KODI clients.";
+      description = "VDR plugin to handle KODI clients";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       inherit (vdr.meta) platforms;

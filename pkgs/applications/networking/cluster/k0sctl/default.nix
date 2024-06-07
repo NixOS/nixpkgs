@@ -44,7 +44,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A bootstrapping and management tool for k0s clusters.";
+    description = "A bootstrapping and management tool for k0s clusters";
     homepage = "https://k0sproject.io/";
     license = licenses.asl20;
     mainProgram = "k0sctl";

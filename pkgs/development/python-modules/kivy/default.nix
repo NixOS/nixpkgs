@@ -99,7 +99,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "kivy" ];
 
   meta = with lib; {
-    description = "Library for rapid development of hardware-accelerated multitouch applications.";
+    description = "Library for rapid development of hardware-accelerated multitouch applications";
     homepage = "https://pypi.python.org/pypi/kivy";
     license = licenses.mit;
     maintainers = with maintainers; [ risson ];

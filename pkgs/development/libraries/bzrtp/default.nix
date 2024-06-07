@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An opensource implementation of ZRTP keys exchange protocol. Part of the Linphone project.";
+    description = "An opensource implementation of ZRTP keys exchange protocol. Part of the Linphone project";
     homepage = "https://gitlab.linphone.org/BC/public/bzrtp";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

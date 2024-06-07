@@ -40,7 +40,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A text-based user interface (TUI) for Ansible.";
+    description = "A text-based user interface (TUI) for Ansible";
     homepage = "https://ansible.readthedocs.io/projects/navigator/";
     license = licenses.asl20;
     maintainers = with maintainers; [ melkor333 ];

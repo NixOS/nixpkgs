@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     };
 
   meta = with lib; {
-    description = "A Framework for Reliable Benchmarking and Resource Measurement.";
+    description = "A Framework for Reliable Benchmarking and Resource Measurement";
     homepage = "https://github.com/sosy-lab/benchexec";
     maintainers = with maintainers; [ lorenzleutgeb ];
     license = licenses.asl20;

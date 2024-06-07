@@ -57,7 +57,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A tool for securing CI/CD workflows with version pinning.";
+    description = "A tool for securing CI/CD workflows with version pinning";
     mainProgram = "ratchet";
     downloadPage = "https://github.com/sethvargo/ratchet";
     homepage = "https://github.com/sethvargo/ratchet";

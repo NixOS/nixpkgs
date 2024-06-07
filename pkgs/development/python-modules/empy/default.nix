@@ -15,7 +15,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "em" ];
   meta = with lib; {
     homepage = "http://www.alcyone.com/software/empy/";
-    description = "A templating system for Python.";
+    description = "A templating system for Python";
     mainProgram = "em.py";
     maintainers = with maintainers; [ nkalupahana ];
     license = licenses.lgpl21Only;

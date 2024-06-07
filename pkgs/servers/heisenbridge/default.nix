@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A bouncer-style Matrix-IRC bridge.";
+    description = "A bouncer-style Matrix-IRC bridge";
     homepage = "https://github.com/hifi/heisenbridge";
     license = licenses.mit;
     maintainers = [ maintainers.sumnerevans ];

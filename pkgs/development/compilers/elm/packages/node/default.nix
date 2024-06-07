@@ -70,7 +70,7 @@ with self; with elmLib; {
   elm-graphql =
     nodePkgs."@dillonkearns/elm-graphql" // {
       meta = with lib; nodePkgs."@dillonkearns/elm-graphql".meta // {
-        description = " Autogenerate type-safe GraphQL queries in Elm.";
+        description = " Autogenerate type-safe GraphQL queries in Elm";
         license = licenses.bsd3;
         maintainers = [ maintainers.pedrohlc ];
       };
@@ -125,7 +125,7 @@ with self; with elmLib; {
     in
     patched.override (old: {
       meta = with lib; nodePkgs."elm-land".meta // {
-        description = "A production-ready framework for building Elm applications.";
+        description = "A production-ready framework for building Elm applications";
         homepage = "https://elm.land/";
         license = licenses.bsd3;
         maintainers = [ maintainers.zupo ];

@@ -47,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Microsoft Azure Storage Client Library for Python with multi API version support.";
+    description = "Microsoft Azure Storage Client Library for Python with multi API version support";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];

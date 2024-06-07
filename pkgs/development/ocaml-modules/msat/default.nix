@@ -28,7 +28,7 @@ buildDunePackage rec {
   nativeCheckInputs = [ mdx.bin ];
 
   meta = {
-    description = "A modular sat/smt solver with proof output.";
+    description = "A modular sat/smt solver with proof output";
     homepage = "https://gbury.github.io/mSAT/";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.vbgl ];

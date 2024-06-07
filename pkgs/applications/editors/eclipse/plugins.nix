@@ -705,7 +705,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://ant.apache.org/ivy/ivyde/index.html";
-      description = "A graph viewer of the resolved dependencies.";
+      description = "A graph viewer of the resolved dependencies";
       longDescription = ''
         Apache IvyDE Resolve Visualizer is an optional dependency of Apache IvyDE since
         it requires additional plugins to be installed (Zest).

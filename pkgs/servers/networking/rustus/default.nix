@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage {
 
 
   meta = with lib; {
-    description = "TUS protocol implementation in Rust.";
+    description = "TUS protocol implementation in Rust";
     mainProgram = "rustus";
     homepage = "https://s3rius.github.io/rustus/";
     license = licenses.asl20;

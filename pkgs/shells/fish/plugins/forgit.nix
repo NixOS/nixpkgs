@@ -16,7 +16,7 @@ buildFishPlugin rec {
   '';
 
   meta = with lib; {
-    description = "A utility tool powered by fzf for using git interactively.";
+    description = "A utility tool powered by fzf for using git interactively";
     homepage = "https://github.com/wfxr/forgit";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];

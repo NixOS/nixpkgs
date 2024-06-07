@@ -23,7 +23,7 @@ python3Packages.buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A terminal-based presentation tool with colors and effects.";
+    description = "A terminal-based presentation tool with colors and effects";
     homepage = "https://github.com/vinayak-mehta/present";
     license = licenses.asl20;
     maintainers = with maintainers; [ lom ];

@@ -26,7 +26,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) blocky; };
 
   meta = with lib; {
-    description = "Fast and lightweight DNS proxy as ad-blocker for local network with many features.";
+    description = "Fast and lightweight DNS proxy as ad-blocker for local network with many features";
     homepage = "https://0xerr0r.github.io/blocky";
     changelog = "https://github.com/0xERR0R/blocky/releases";
     license = licenses.asl20;

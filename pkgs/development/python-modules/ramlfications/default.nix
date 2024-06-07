@@ -28,7 +28,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A Python RAML parser.";
+    description = "A Python RAML parser";
     mainProgram = "ramlfications";
     homepage = "https://ramlfications.readthedocs.org";
     license = licenses.asl20;

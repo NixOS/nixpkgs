@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "H.264 encoder/decoder plugin for mediastreamer2. Part of the Linphone project.";
+    description = "H.264 encoder/decoder plugin for mediastreamer2. Part of the Linphone project";
     homepage = "https://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl2;
     platforms = platforms.linux;

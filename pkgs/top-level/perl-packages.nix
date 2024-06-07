@@ -3508,7 +3508,7 @@ with self; {
       hash = "sha256-m2XUG5kVOJkugWsyzE+ptKSguz6cEOfuvv+CZY27yPY=";
     };
     meta = {
-      description = "Simplifies creation, manipulation and usage of complex objects.";
+      description = "Simplifies creation, manipulation and usage of complex objects";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "classgen";
     };
@@ -10210,7 +10210,7 @@ with self; {
       hash = "sha256-/onLtCfg4F8c2Xwt1tOGasayG8eoVzTt4Vm9w1R5VSo=";
     };
     meta = {
-      description = "Perl extension for filesystem disk space information.";
+      description = "Perl extension for filesystem disk space information";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -22405,7 +22405,7 @@ with self; {
       hash = "sha256-05JWfLObTqYGwOCsr9jtcjIDEbmVM27OX878+bFQ6dc=";
     };
     meta = {
-      description = "Linux/POSIX emulation of Win32::SerialPort functions.";
+      description = "Linux/POSIX emulation of Win32::SerialPort functions";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "modemtest";
     };
@@ -23248,7 +23248,7 @@ with self; {
     };
     meta = {
       # https://metacpan.org/pod/String::Interpolate
-      description = "String::Interpolate - Wrapper for builtin the Perl interpolation engine.";
+      description = "String::Interpolate - Wrapper for builtin the Perl interpolation engine";
       license = with lib.licenses; [ gpl1Plus ];
     };
     propagatedBuildInputs = [ PadWalker SafeHole ];
@@ -23845,7 +23845,7 @@ with self; {
     buildInputs = lib.optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
     doCheck = !stdenv.isAarch64;
     meta = {
-      description = "Perl extension for getting CPU information. Currently only number of CPU's supported.";
+      description = "Perl extension for getting CPU information. Currently only number of CPU's supported";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -27329,7 +27329,7 @@ with self; {
       hash = "sha256-KeniEzlRBGx48gXxs+jfYskOEU8OCPoGuBd2ag+AixI=";
     };
     meta = {
-      description = "Variable ties made much easier: much, much, much easier..";
+      description = "Variable ties made much easier: much, much, much easier.";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

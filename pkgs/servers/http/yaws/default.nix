@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A webserver for dynamic content written in Erlang.";
+    description = "A webserver for dynamic content written in Erlang";
     mainProgram = "yaws";
     homepage = "https://github.com/erlyaws/yaws";
     license = licenses.bsd2;

@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://pypi.org/project/pkgutil_resolve_name/";
-    description = "A backport of Python 3.9’s pkgutil.resolve_name.";
+    description = "A backport of Python 3.9’s pkgutil.resolve_name";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yajo ];
   };

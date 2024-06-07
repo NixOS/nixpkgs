@@ -31,7 +31,7 @@ maven.buildMavenPackage rec {
   '';
 
   meta = with lib; {
-    description = "A program that reformats Kotlin source code to comply with the common community standard for Kotlin code conventions.";
+    description = "A program that reformats Kotlin source code to comply with the common community standard for Kotlin code conventions";
     homepage = "https://github.com/facebook/ktfmt";
     license = licenses.asl20;
     mainProgram = "ktfmt";

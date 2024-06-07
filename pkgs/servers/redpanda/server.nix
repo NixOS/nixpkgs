@@ -110,7 +110,7 @@ llvmPackages_14.stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = true;
-    description = "Kafka-compatible streaming platform.";
+    description = "Kafka-compatible streaming platform";
     license = licenses.bsl11;
     longDescription = ''
       Redpanda is a Kafka-compatible streaming data platform that is

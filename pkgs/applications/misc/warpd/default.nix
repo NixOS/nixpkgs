@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A modal keyboard driven interface for mouse manipulation.";
+    description = "A modal keyboard driven interface for mouse manipulation";
     homepage = "https://github.com/rvaiya/warpd";
     changelog = "https://github.com/rvaiya/warpd/blob/${src.rev}/CHANGELOG.md";
     maintainers = with maintainers; [ hhydraa ];

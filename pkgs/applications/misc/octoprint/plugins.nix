@@ -89,7 +89,7 @@ in
     };
 
     meta = with lib; {
-      description = "Plugin to display the estimated print cost for the loaded model.";
+      description = "Plugin to display the estimated print cost for the loaded model";
       homepage = "https://github.com/OllisGit/OctoPrint-CostEstimation";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ stunkymonkey ];
@@ -341,7 +341,7 @@ in
     propagatedBuildInputs = with super; [ pillow ];
 
     meta = with lib; {
-      description = "Plugin to send status messages and receive commands via Telegram messenger.";
+      description = "Plugin to send status messages and receive commands via Telegram messenger";
       homepage = "https://github.com/fabianonline/OctoPrint-Telegram";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ stunkymonkey ];

@@ -119,7 +119,7 @@ in stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "Unreal Tournament GOTY (1999) with the OldUnreal patch.";
+    description = "Unreal Tournament GOTY (1999) with the OldUnreal patch";
     license = licenses.unfree;
     platforms = attrNames srcs;
     maintainers = with maintainers; [ eliandoran ];
