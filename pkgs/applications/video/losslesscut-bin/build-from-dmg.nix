@@ -1,7 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchurl
-, undmg
+, _7zz
 , pname
 , version
 , hash
@@ -19,7 +19,7 @@ in
 stdenvNoCC.mkDerivation {
   inherit pname version src;
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [ _7zz ];
 
   sourceRoot = "LosslessCut.app";
 
