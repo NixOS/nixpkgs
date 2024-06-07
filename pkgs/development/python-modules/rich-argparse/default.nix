@@ -3,14 +3,17 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  rich,
   pytestCheckHook,
+  pythonOlder,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "rich-argparse";
   version = "1.5.1";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hamdanal";
@@ -19,17 +22,16 @@ buildPythonPackage rec {
     hash = "sha256-NcsEGImUAqwZI6Ga3UIqnoELvz6WRKyVqGkR4jPIKPI=";
   };
 
-  propagatedBuildInputs = [
-    hatchling
-    rich
-  ];
+  build-system = [ hatchling ];
+
+  dependencies = [ rich ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "rich_argparse" ];
 
   meta = with lib; {
-    description = "Format argparse help output using rich.";
+    description = "Format argparse help output using rich";
     homepage = "https://github.com/hamdanal/rich-argparse";
     changelog = "https://github.com/hamdanal/rich-argparse/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
