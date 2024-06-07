@@ -16,13 +16,13 @@ let
 
 in package.override rec {
   pname = "bookstack";
-  version = "24.02.3";
+  version = "24.05.1";
 
   src = fetchFromGitHub {
     owner = "bookstackapp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+8J7dB666KZSJbvnmJl/PivtMQ6Hlz3AAy6E1xpRRmU=";
+    sha256 = "1m20435sp4n3dg7am4lh73yw1wdmnsf15wdl554lrklhg7f21s0w";
   };
 
   meta = with lib; {

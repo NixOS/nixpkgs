@@ -14,6 +14,9 @@
   smpeg2,
   stdenv,
   timidity,
+  # Boolean flags
+  enableSdltest ? (!stdenv.isDarwin),
+  enableSmpegtest ? (!stdenv.isDarwin),
 }:
 
 let
@@ -66,8 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
    (lib.enableFeature false "music-mp3-mpg123-shared")
    (lib.enableFeature false "music-opus-shared")
    (lib.enableFeature false "music-midi-fluidsynth-shared")
-   (lib.enableFeature (!stdenv.isDarwin) "sdltest")
-   (lib.enableFeature (!stdenv.isDarwin) "smpegtest")
+   (lib.enableFeature enableSdltest "sdltest")
+   (lib.enableFeature enableSmpegtest "smpegtest")
    # override default path to allow MIDI files to be played
    (lib.withFeatureAs true "timidity-cfg" "${timidity}/share/timidity/timidity.cfg")
   ];
@@ -76,7 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_mixer";
     description = "SDL multi-channel audio mixer library";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = lib.teams.sdl.members
+                  ++ (with lib.maintainers; [ AndersonTorres ]);
     platforms = lib.platforms.unix;
   };
 })
