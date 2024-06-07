@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
 
   # remove forbidden reference to $TMPDIR
   preFixup = ''
-  '' + lib.optionalString stdenv.isLinux (''
+  '' + lib.optionalString stdenv.hostPlatform.isElf (''
     for file in libcurl.so libgmpxx.so libmpfr.so; do
       patchelf --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir} "$out/lib/julia/$file"
     done
