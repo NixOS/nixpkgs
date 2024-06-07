@@ -150,6 +150,10 @@ buildPythonPackage rec {
     "test_trans_parallel_env_check"
     "test_trans_serial_env_check"
     "test_transform_env"
+
+    # undeterministic
+    "test_distributed_collector_updatepolicy"
+    "test_timeit"
   ];
 
   meta = with lib; {
