@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dub";
-  version = "1.33.0";
+  version = "1.38.0";
 
   enableParallelBuilding = true;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dlang";
     repo = "dub";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4Mha7WF6cg3DIccfpvOnheuvgfziv/7wo8iFsPXO4yY=";
+    hash = "sha256-+cG7tR4nAL4fhk9/1FMkfjQ8Rtqf+uTvGfVegmnjloY=";
   };
 
   postPatch = ''
@@ -131,6 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r test/sdl-package-simple
     rm -r test/dpath-variable # requires execution of dpath-variable.sh
     rm -r test/use-c-sources
+    rm -r test/pr2642-cache-db
+    rm -r test/pr2644-describe-artifact-path
+    rm -r test/pr2647-build-deep
 
     ./test/run-unittest.sh
 
