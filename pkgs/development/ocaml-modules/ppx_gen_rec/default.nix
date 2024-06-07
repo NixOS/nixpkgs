@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/flowtype/ocaml-ppx_gen_rec";
-    description = "A ppx rewriter that transforms a recursive module expression into a struct";
+    description = "Ppx rewriter that transforms a recursive module expression into a struct";
     license = licenses.mit;
     maintainers = with maintainers; [ frontsideair ];
   };

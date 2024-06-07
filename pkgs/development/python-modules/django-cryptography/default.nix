@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/georgemarshall/django-cryptography";
-    description = "A set of primitives for performing cryptography in Django";
+    description = "Set of primitives for performing cryptography in Django";
     license = licenses.bsd3;
     maintainers = with maintainers; [ centromere ];
   };

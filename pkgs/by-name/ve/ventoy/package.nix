@@ -185,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.ventoy.net";
-    description = "A New Bootable USB Solution";
+    description = "New Bootable USB Solution";
     longDescription = ''
       Ventoy is an open source tool to create bootable USB drive for
       ISO/WIM/IMG/VHD(x)/EFI files.  With ventoy, you don't need to format the

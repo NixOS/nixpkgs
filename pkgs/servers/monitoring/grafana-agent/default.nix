@@ -105,7 +105,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
+    description = "Lightweight subset of Prometheus and more, optimized for Grafana Cloud";
     license = lib.licenses.asl20;
     homepage = "https://grafana.com/products/cloud";
     changelog = "https://github.com/grafana/agent/blob/${src.rev}/CHANGELOG.md";

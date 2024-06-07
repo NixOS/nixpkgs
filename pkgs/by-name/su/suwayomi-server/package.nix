@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A free and open source manga reader server that runs extensions built for Tachiyomi";
+    description = "Free and open source manga reader server that runs extensions built for Tachiyomi";
     longDescription = ''
       Suwayomi is an independent Tachiyomi compatible software and is not a Fork of Tachiyomi.
 

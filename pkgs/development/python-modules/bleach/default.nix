@@ -48,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "bleach" ];
 
   meta = with lib; {
-    description = "An easy, HTML5, whitelisting HTML sanitizer";
+    description = "Easy, HTML5, whitelisting HTML sanitizer";
     longDescription = ''
       Bleach is an HTML sanitizing library that escapes or strips markup and
       attributes based on a white list. Bleach can also linkify text safely,

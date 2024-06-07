@@ -124,7 +124,7 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = ./update-vivaldi.sh;
 
   meta = with lib; {
-    description = "A Browser for our Friends, powerful and personal";
+    description = "Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

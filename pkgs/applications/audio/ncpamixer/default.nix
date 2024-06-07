@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An ncurses mixer for PulseAudio inspired by pavucontrol";
+    description = "Ncurses mixer for PulseAudio inspired by pavucontrol";
     homepage = "https://github.com/fulhax/ncpamixer";
     license = licenses.mit;
     platforms = platforms.linux;

@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
-    description = "A Conventional commit cli";
+    description = "Conventional commit cli";
     mainProgram = "convco";
     homepage = "https://github.com/convco/convco";
     license = with licenses; [ mit ];

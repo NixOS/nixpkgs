@@ -154,7 +154,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://podman.io/";
-    description = "A program for managing pods, containers and container images";
+    description = "Program for managing pods, containers and container images";
     longDescription = ''
       Podman (the POD MANager) is a tool for managing containers and images, volumes mounted into those containers, and pods made from groups of containers. Podman runs containers on Linux, but can also be used on Mac and Windows systems using a Podman-managed virtual machine. Podman is based on libpod, a library for container lifecycle management that is also contained in this repository. The libpod library provides APIs for managing containers, pods, container images, and volumes.
 

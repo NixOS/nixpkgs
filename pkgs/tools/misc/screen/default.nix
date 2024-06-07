@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/screen/";
-    description = "A window manager that multiplexes a physical terminal";
+    description = "Window manager that multiplexes a physical terminal";
     license = licenses.gpl3Plus;
 
     longDescription =

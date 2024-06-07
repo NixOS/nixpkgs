@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://zegrapher.com/";
-    description = "An open source math plotter";
+    description = "Open source math plotter";
     mainProgram = "ZeGrapher";
     longDescription = ''
       An open source, free and easy to use math plotter. It can plot functions,

@@ -47,7 +47,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "speechbrain" ];
 
   meta = with lib; {
-    description = "A PyTorch-based Speech Toolkit";
+    description = "PyTorch-based Speech Toolkit";
     homepage = "https://speechbrain.github.io";
     changelog = "https://github.com/speechbrain/speechbrain/releases/tag/v${version}";
     license = licenses.asl20;

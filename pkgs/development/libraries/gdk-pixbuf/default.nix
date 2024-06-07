@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A library for image loading and manipulation";
+    description = "Library for image loading and manipulation";
     homepage = "https://gitlab.gnome.org/GNOME/gdk-pixbuf";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.eelco ] ++ teams.gnome.members;

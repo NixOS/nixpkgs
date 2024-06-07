@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An anti-bikeshedding Kotlin linter with built-in formatter";
+    description = "Anti-bikeshedding Kotlin linter with built-in formatter";
     homepage = "https://ktlint.github.io/";
     license = licenses.mit;
     platforms = jre_headless.meta.platforms;

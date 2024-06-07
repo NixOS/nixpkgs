@@ -49,7 +49,7 @@ let
         };
         meta = {
           changelog = "https://github.com/1Password/op-vscode/releases";
-          description = "A VSCode extension that integrates your development workflow with 1Password service";
+          description = "VSCode extension that integrates your development workflow with 1Password service";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=1Password.op-vscode";
           homepage = "https://github.com/1Password/op-vscode";
           license = lib.licenses.mit;
@@ -65,7 +65,7 @@ let
           sha256 = "TVBvF/5KQVvWX1uHwZDlmvwGjOO5/lXbgVzB26U8rNQ=";
         };
         meta = {
-          description = "A Visual Studio Code extension providing rainbow brackets";
+          description = "Visual Studio Code extension providing rainbow brackets";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=2gua.rainbow-brackets";
           homepage = "https://github.com/lcultx/rainbow-brackets";
           license = lib.licenses.mit;
@@ -95,7 +95,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/42Crunch.vscode-openapi/changelog";
-          description = "A Visual Studio Code extension with rich support for the OpenAPI Specification (OAS)";
+          description = "Visual Studio Code extension with rich support for the OpenAPI Specification (OAS)";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=42Crunch.vscode-openapi";
           homepage = "https://github.com/42Crunch/vscode-openapi";
           license = lib.licenses.gpl3;
@@ -153,7 +153,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/adzero.vscode-sievehighlight/changelog";
-          description = "A Visual Studio Code extension to enable syntax highlight support for Sieve mail filtering language";
+          description = "Visual Studio Code extension to enable syntax highlight support for Sieve mail filtering language";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=adzero.vscode-sievehighlight";
           homepage = "https://github.com/adzero/vscode-sievehighlight";
           license = lib.licenses.mit;
@@ -233,7 +233,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/alexisvt.flutter-snippets/changelog";
-          description = "A set of helpful widget snippets for day to day Flutter development";
+          description = "Set of helpful widget snippets for day to day Flutter development";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=alexisvt.flutter-snippets";
           homepage = "https://github.com/Alexisvt/flutter-snippets";
           license = lib.licenses.mit;
@@ -334,7 +334,7 @@ let
           hash = "sha256-awbqFv6YuYI0tzM/QbHRTUl4B2vNUdy52F4nPmv+dRU=";
         };
         meta = {
-          description = "An arctic, north-bluish clean and elegant Visual Studio Code theme";
+          description = "Arctic, north-bluish clean and elegant Visual Studio Code theme";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=arcticicestudio.nord-visual-studio-code";
           homepage = "https://github.com/arcticicestudio/nord-visual-studio-code";
           license = lib.licenses.mit;
@@ -476,7 +476,7 @@ let
           hash = "sha256-79Yg4I0OkfG7PaDYnTA8HK8jrSxre4FGriq0Baiq7wA=";
         };
         meta = {
-          description = "A Visual Studio Code extension for Spellchecker";
+          description = "Visual Studio Code extension for Spellchecker";
           changelog = "https://marketplace.visualstudio.com/items/ban.spellright/changelog";
           homepage = "https://github.com/bartosz-antosik/vscode-spellright";
           license = lib.licenses.mit;
@@ -551,7 +551,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/bierner.docs-view/changelog";
-          description = "A VSCode extension that displays documentation in the sidebar or panel";
+          description = "VSCode extension that displays documentation in the sidebar or panel";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.docs-view";
           homepage = "https://github.com/mattbierner/vscode-docs-view#readme";
           license = lib.licenses.mit;
@@ -712,7 +712,7 @@ let
           hash = "sha256-tVbd+j9+90Z07+jGAiT0gylZN9YWHdJmq2sh1wf2oGE=";
         };
         meta = {
-          description = "A cyberpunk-inspired colour theme to satisfy your neon dreams";
+          description = "Cyberpunk-inspired colour theme to satisfy your neon dreams";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=carrie999.cyberpunk-2020";
           homepage = "https://github.com/Carrie999/cyberpunk";
           license = lib.licenses.mit;
@@ -783,7 +783,7 @@ let
         meta = {
           license = lib.licenses.mit;
           changelog = "https://marketplace.visualstudio.com/items/charliermarsh.ruff/changelog";
-          description = "A Visual Studio Code extension with support for the Ruff linter";
+          description = "Visual Studio Code extension with support for the Ruff linter";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff";
           homepage = "https://github.com/astral-sh/ruff-vscode";
           maintainers = [ lib.maintainers.azd325 ];
@@ -799,7 +799,7 @@ let
         };
         meta = {
           changelog = "https://github.com/cameronmaske/pytest-vscode/blob/master/CHANGELOG.md";
-          description = "A Visual Studio Code extension that adds IntelliSense support for pytest fixtures";
+          description = "Visual Studio Code extension that adds IntelliSense support for pytest fixtures";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Cameron.vscode-pytest";
           license = lib.licenses.unlicense;
           maintainers = [ lib.maintainers.rhoriguchi ];
@@ -828,7 +828,7 @@ let
       chris-hayes.chatgpt-reborn = buildVscodeMarketplaceExtension {
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/chris-hayes.chatgpt-reborn/changelog";
-          description = "A Visual Studio Code extension to support ChatGPT, GPT-3 and Codex conversations";
+          description = "Visual Studio Code extension to support ChatGPT, GPT-3 and Codex conversations";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=chris-hayes.chatgpt-reborn";
           homepage = "https://github.com/christopher-hayes/vscode-chatgpt-reborn";
           license = lib.licenses.isc;
@@ -878,7 +878,7 @@ let
           hash = "sha256-N1X8wB2n6JYoFHCP5iHBXHnEaRa9S1zooQZsR5mUeh8=";
         };
         meta = {
-          description = "An extension for Visual Studio Code to open any Coder workspace in VS Code with a single click";
+          description = "Extension for Visual Studio Code to open any Coder workspace in VS Code with a single click";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=coder.coder-remote";
           homepage = "https://github.com/coder/vscode-coder";
           license = lib.licenses.mit;
@@ -906,7 +906,7 @@ let
           hash = "sha256-blqLK7S+RmEoyr9zktS5/SNC0GeSXnNpbhltyajoAfw=";
         };
         meta = {
-          description = "A Visual Studio Code extension to provide purely hover translation";
+          description = "Visual Studio Code extension to provide purely hover translation";
           longDescription = ''
             Code Translate is a purely hover translation extension
             - Non-intrusive display of translation results: perfectly integrated with VS Code code analysis.
@@ -1038,7 +1038,7 @@ let
           hash = "sha256-yVXltjvtLc+zqela/Jyg+g66PU61+YTMX1hWPW8fIkk=";
         };
         meta = {
-          description = "A Visual Studio Code extension for Odin language";
+          description = "Visual Studio Code extension for Odin language";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=DanielGavin.ols";
           homepage = "https://github.com/DanielGavin/ols";
           license = lib.licenses.mit;
@@ -1139,7 +1139,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/denoland.vscode-deno/changelog";
-          description = "A language server client for Deno";
+          description = "Language server client for Deno";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno";
           homepage = "https://github.com/denoland/vscode_deno";
           license = lib.licenses.mit;
@@ -1156,7 +1156,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.composer-php-vscode/changelog";
-          description = "A visual studio code extension for full development integration for Composer, the PHP package manager";
+          description = "Visual studio code extension for full development integration for Composer, the PHP package manager";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.composer-php-vscode";
           homepage = "https://github.com/DEVSENSE/phptools-docs";
           license = lib.licenses.unfree;
@@ -1206,7 +1206,7 @@ let
 
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.phptools-vscode/changelog";
-          description = "A visual studio code extension for full development integration for the PHP language";
+          description = "Visual studio code extension for full development integration for the PHP language";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.phptools-vscode";
           homepage = "https://github.com/DEVSENSE/phptools-docs";
           license = lib.licenses.unfree;
@@ -1229,7 +1229,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.profiler-php-vscode/changelog";
-          description = "A visual studio code extension for PHP and XDebug profiling and inspecting";
+          description = "Visual studio code extension for PHP and XDebug profiling and inspecting";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=DEVSENSE.profiler-php-vscode";
           homepage = "https://github.com/DEVSENSE/phptools-docs";
           license = lib.licenses.unfree;
@@ -1270,7 +1270,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/dhedgecock.radical-vscode/changelog";
-          description = "A dark theme for radical hacking inspired by retro futuristic design";
+          description = "Dark theme for radical hacking inspired by retro futuristic design";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=dhedgecock.radical-vscode";
           homepage = "https://github.com/dhedgecock/radical-vscode";
           license = lib.licenses.isc;
@@ -1287,7 +1287,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
-          description = "A Visual Studio Code extension for hosting and managing applications on Discloud";
+          description = "Visual Studio Code extension for hosting and managing applications on Discloud";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=discloud.discloud";
           homepage = "https://github.com/discloud/vscode-discloud";
           license = lib.licenses.asl20;
@@ -1400,7 +1400,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
-          description = "A Visual Studio Code extension that improves its built-in Git capabilities";
+          description = "Visual Studio Code extension that improves its built-in Git capabilities";
           longDescription = ''
             Supercharge the Git capabilities built into Visual Studio Code — Visualize code authorship at a glance via Git
             blame annotations and code lens, seamlessly navigate and explore Git repositories, gain valuable insights via
@@ -1543,7 +1543,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/emroussel.atomize-atom-one-dark-theme/changelog";
-          description = "A detailed and accurate Atom One Dark theme for VSCode";
+          description = "Detailed and accurate Atom One Dark theme for VSCode";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=emroussel.atomize-atom-one-dark-theme";
           homepage = "https://github.com/emroussel/atomize/blob/main/README.md";
           license = lib.licenses.mit;
@@ -1559,7 +1559,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/enkia.tokyo-night/changelog";
-          description = "A clean Visual Studio Code theme that celebrates the lights of Downtown Tokyo at night";
+          description = "Clean Visual Studio Code theme that celebrates the lights of Downtown Tokyo at night";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=enkia.tokyo-night";
           homepage = "https://github.com/enkia/tokyo-night-vscode-theme";
           license = lib.licenses.mit;
@@ -1620,7 +1620,7 @@ let
           hash = "sha256-caNcbDTB/F2mdlGpfIfJv13lzY5Wwj7p7r8dAte9+3A=";
         };
         meta = {
-          description = "A Visual Studio Code extension of using chinese-english dictonary in right-click menu";
+          description = "Visual Studio Code extension of using chinese-english dictonary in right-click menu";
           homepage = "https://github.com/exiahuang/fanyi-vscode";
           changelog = "https://marketplace.visualstudio.com/items/ExiaHuang.dictionary/changelog";
           license = lib.licenses.gpl3Only;
@@ -1654,7 +1654,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/firefox-devtools.vscode-firefox-debug/changelog";
-          description = "A Visual Studio Code extension for debugging web applications and browser extensions in Firefox";
+          description = "Visual Studio Code extension for debugging web applications and browser extensions in Firefox";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=firefox-devtools.vscode-firefox-debug";
           homepage = "https://github.com/firefox-devtools/vscode-firefox-debug";
           license = lib.licenses.mit;
@@ -1687,7 +1687,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
-          description = "A personal knowledge management and sharing system for VSCode ";
+          description = "Personal knowledge management and sharing system for VSCode ";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=foam.foam-vscode";
           homepage = "https://foambubble.github.io/";
           license = lib.licenses.mit;
@@ -1758,7 +1758,7 @@ let
           hash = "sha256-9Vo6lwqD1eE3zY0Gi9ME/6lPwmwuJ3Iq9StHPvncnM4=";
         };
         meta = {
-          description = "A Visual Studio Code extension using google translation to helping you quickly translate text right in your code rocket";
+          description = "Visual Studio Code extension using google translation to helping you quickly translate text right in your code rocket";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=funkyremi.vscode-google-translate";
           homepage = "https://github.com/funkyremi/vscode-google-translate.git";
           changelog = "https://marketplace.visualstudio.com/items/funkyremi.vscode-google-translate/changelog";
@@ -1786,7 +1786,7 @@ let
       genieai.chatgpt-vscode = buildVscodeMarketplaceExtension {
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/genieai.chatgpt-vscode/changelog";
-          description = "A Visual Studio Code extension to support ChatGPT, GPT-3 and Codex conversations";
+          description = "Visual Studio Code extension to support ChatGPT, GPT-3 and Codex conversations";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=genieai.chatgpt-vscode";
           homepage = "https://github.com/ai-genie/chatgpt-vscode";
           license = lib.licenses.isc;
@@ -1873,7 +1873,7 @@ let
           hash = "sha256-sEc6Fbn4XpK8vNK32R4fjnx/R+1xYOwcuhKlo7sPd5o=";
         };
         meta = {
-          description = "A Visual Studio Code extension for GitHub Actions workflows and runs for github.com hosted repositories";
+          description = "Visual Studio Code extension for GitHub Actions workflows and runs for github.com hosted repositories";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=github.vscode-github-actions";
           homepage = "https://github.com/github/vscode-github-actions";
           license = lib.licenses.mit;
@@ -2077,7 +2077,7 @@ let
         };
         meta = {
           changelog = "https://github.com/hbenl/vscode-test-explorer/blob/master/CHANGELOG.md";
-          description = "A Visual Studio Code extension that runs your tests in the sidebar";
+          description = "Visual Studio Code extension that runs your tests in the sidebar";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer";
           homepage = "https://github.com/hbenl/vscode-test-explorer";
           license = lib.licenses.mit;
@@ -2204,7 +2204,7 @@ let
           hash = "sha256-g6mlScxv8opZuqgWtTJ3k0Yo7W7WzIkwB+8lWf6cMiU=";
         };
         meta = {
-          description = "A Visual Studio Code extension to translate the comments for computer language";
+          description = "Visual Studio Code extension to translate the comments for computer language";
           longDescription = ''
             This plugin uses the Google Translate API to translate comments for the VSCode programming language.
           '';
@@ -2262,7 +2262,7 @@ let
         '';
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jackmacwindows.vscode-computercraft/changelog";
-          description = "A Visual Studio Code extension for ComputerCraft and CC: Tweaked auto-completion";
+          description = "Visual Studio Code extension for ComputerCraft and CC: Tweaked auto-completion";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jackmacwindows.vscode-computercraft";
           homepage = "https://github.com/MCJack123/vscode-computercraft";
           license = lib.licenses.mit;
@@ -2328,7 +2328,7 @@ let
           hash = "sha256-BHw+T2EPdQq/wOD5kzvSln5SBFTYUXip8QDjnAGBfFY=";
         };
         meta = {
-          description = "A VSCode extension to formats all files in the current workspace";
+          description = "VSCode extension to formats all files in the current workspace";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jbockle.jbockle-format-files";
           homepage = "https://github.com/jbockle/format-files";
           license = lib.licenses.mit;
@@ -2345,7 +2345,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jdinhlife.gruvbox/changelog";
-          description = "A port of Gruvbox theme to VS Code editor";
+          description = "Port of Gruvbox theme to VS Code editor";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=jdinhlife.gruvbox";
           homepage = "https://github.com/jdinhify/vscode-theme-gruvbox";
           license = lib.licenses.mit;
@@ -2435,7 +2435,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
-          description = "A Visual Studio Code extension for Julia programming language";
+          description = "Visual Studio Code extension for Julia programming language";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=julialang.language-julia";
           homepage = "https://github.com/julia-vscode/julia-vscode";
           license = lib.licenses.mit;
@@ -3061,7 +3061,7 @@ let
           hash = "sha256-FJolnWU0DbuQYvMuGL3mytf0h39SH9rUPCl2ahLXLuY=";
         };
         meta = {
-          description = "A Visual Studio Code extension for PowerShell language support";
+          description = "Visual Studio Code extension for PowerShell language support";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell";
           homepage = "https://github.com/PowerShell/vscode-powershell";
           license = lib.licenses.mit;
@@ -3077,7 +3077,7 @@ let
           hash = "sha256-M53jhAVawk2yCeSrLkWrUit3xbDc0zgCK2snbK+BaSs=";
         };
         meta = {
-          description = "A Visual Studio Code extension that converts from the Test Explorer UI API into native VS Code testing";
+          description = "Visual Studio Code extension that converts from the Test Explorer UI API into native VS Code testing";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.test-adapter-converter";
           homepage = "https://github.com/microsoft/vscode-test-adapter-converter";
           license = lib.licenses.mit;
@@ -3129,7 +3129,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mshr-h.VerilogHDL/changelog";
-          description = "A Visual Studio Code extension for supporting Verilog-HDL, SystemVerilog, Bluespec and SystemVerilog";
+          description = "Visual Studio Code extension for supporting Verilog-HDL, SystemVerilog, Bluespec and SystemVerilog";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=mshr-h.VerilogHDL";
           homepage = "https://github.com/mshr-h/vscode-verilog-hdl-support";
           license = lib.licenses.mit;
@@ -3254,7 +3254,7 @@ let
           hash = "sha256-fatJZquCDsLDFGVzBol2D6LIZUbZ6GzqcVEFAwLodW0=";
         };
         meta = {
-          description = "A dark theme designed specifically for syntax highlighting";
+          description = "Dark theme designed specifically for syntax highlighting";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=nur.just-black";
           homepage = "https://github.com/nurmohammed840/extension.vsix/tree/Just-Black";
           license = lib.licenses.mit;
@@ -3406,7 +3406,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/PythagoraTechnologies.gpt-pilot-vs-code/changelog";
-          description = "A VSCode extension for assisting the developer to code, debug, build applications using LLMs/AI";
+          description = "VSCode extension for assisting the developer to code, debug, build applications using LLMs/AI";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=PythagoraTechnologies.gpt-pilot-vs-code";
           homepage = "https://github.com/Pythagora-io/gpt-pilot/";
           license = lib.licenses.asl20;
@@ -3782,7 +3782,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/signageos.signageos-vscode-sops/changelog";
-          description = "A Visual Studio Code extension for SOPS support";
+          description = "Visual Studio Code extension for SOPS support";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=signageos.signageos-vscode-sops";
           homepage = "https://github.com/signageos/vscode-sops";
           license = lib.licenses.unfree;
@@ -3799,7 +3799,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/silofy.hackthebox/changelog";
-          description = "A Visual Studio Code theme built for hackers by hackers";
+          description = "Visual Studio Code theme built for hackers by hackers";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=silofy.hackthebox";
           homepage = "https://github.com/silofy/hackthebox";
           license = lib.licenses.mit;
@@ -3914,7 +3914,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/stephlin.vscode-tmux-keybinding/changelog";
-          description = "A simple extension for tmux behavior in vscode terminal";
+          description = "Simple extension for tmux behavior in vscode terminal";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=stephlin.vscode-tmux-keybinding";
           homepage = "https://github.com/StephLin/vscode-tmux-keybinding";
           license = lib.licenses.mit;
@@ -3999,7 +3999,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/supermaven.supermaven/changelog";
-          description = "A Visual Studio Code extension for code completion suggestions";
+          description = "Visual Studio Code extension for code completion suggestions";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=supermaven.supermaven";
           homepage = "https://supermaven.com/";
           license = lib.licenses.unfree;
@@ -4122,7 +4122,7 @@ let
           sha256 = "sha256-+IFqgWliKr+qjBLmQlzF44XNbN7Br5a119v9WAnZOu4=";
         };
         meta = {
-          description = "A simple theme with bright colors and comes in three versions — dark, light and mirage for all day long comfortable work";
+          description = "Simple theme with bright colors and comes in three versions — dark, light and mirage for all day long comfortable work";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=teabyii.ayu";
           homepage = "https://github.com/ayu-theme/vscode-ayu";
           license = lib.licenses.mit;
@@ -4137,7 +4137,7 @@ let
           hash = "sha256-t9DYY1fqW7M5F1pbIUtnnodxMzIzURew4RXT78djWMI=";
         };
         meta = {
-          description = "A VSCode extension that provides some language features for Yew's html macro syntax";
+          description = "VSCode extension that provides some language features for Yew's html macro syntax";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=TechTheAwesome.rust-yew";
           homepage = "https://github.com/TechTheAwesome/code-yew-server";
           license = lib.licenses.gpl3Only;
@@ -4254,7 +4254,7 @@ let
         };
         meta = {
           changelog = "https://github.com/open-policy-agent/vscode-opa/blob/master/CHANGELOG.md";
-          description = "An extension for VS Code which provides support for OPA";
+          description = "Extension for VS Code which provides support for OPA";
           homepage = "https://github.com/open-policy-agent/vscode-opa";
           license = lib.licenses.asl20;
           maintainers = [ lib.maintainers.msanft ];
@@ -4346,7 +4346,7 @@ let
           rm -r $out/share/vscode/extensions/uloco.theme-bluloco-light/screenshots
         '';
         meta = {
-          description = "A fancy but yet sophisticated light designer color scheme / theme for Visual Studio Code";
+          description = "Fancy but yet sophisticated light designer color scheme / theme for Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=uloco.theme-bluloco-light";
           homepage = "https://github.com/uloco/theme-bluloco-light";
           license = lib.licenses.lgpl3;
@@ -4378,7 +4378,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/usernamehw.errorlens/changelog";
-          description = "A Visual Studio Code extension that improves highlighting of errors, warnings and other language diagnostics";
+          description = "Visual Studio Code extension that improves highlighting of errors, warnings and other language diagnostics";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens";
           homepage = "https://github.com/usernamehw/vscode-error-lens";
           license = lib.licenses.mit;
@@ -4502,7 +4502,7 @@ let
 
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/vscjava.vscode-gradle/changelog";
-          description = "A Visual Studio Code extension for Gradle build tool";
+          description = "Visual Studio Code extension for Gradle build tool";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-gradle";
           homepage = "https://github.com/microsoft/vscode-gradle";
           license = lib.licenses.mit;
@@ -4731,7 +4731,7 @@ let
           hash = "sha256-tN/jlG2PzuiCeERpgQvdqDoa3UgrUaM7fKHv6KFqujc=";
         };
         meta = {
-          description = "A VSCode extension for quickly changing the case (camelCase, CONSTANT_CASE, snake_case, etc) of the current selection or current word";
+          description = "VSCode extension for quickly changing the case (camelCase, CONSTANT_CASE, snake_case, etc) of the current selection or current word";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=wmaurer.change-case";
           homepage = "https://github.com/wmaurer/vscode-change-case";
           license = lib.licenses.mit;
@@ -4800,7 +4800,7 @@ let
           hash = "sha256-dpJcJARRKzRNHfXs/qknud8OQ8xIyeaVnt/EcDq0k4E=";
         };
         meta = {
-          description = "A Visual Studio Code extension to help user easyly finish long words ";
+          description = "Visual Studio Code extension to help user easyly finish long words ";
           longDescription = ''
             Dictionary completion allows user to get a list of keywords, based off of the current word at the cursor.
             This is useful if you are typing a long word (e.g. acknowledgeable) and don't want to finish typing or don't remember the Spelling
@@ -4838,7 +4838,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ZainChen.json/changelog";
-          description = "A Visual Studio Code extension for JSON support";
+          description = "Visual Studio Code extension for JSON support";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ZainChen.json";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.rhoriguchi ];

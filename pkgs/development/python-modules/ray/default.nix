@@ -159,7 +159,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ray" ];
 
   meta = {
-    description = "A unified framework for scaling AI and Python applications";
+    description = "Unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
     changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
     license = lib.licenses.asl20;

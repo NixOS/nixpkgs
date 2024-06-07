@@ -30,7 +30,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A pluggable linter and fixer to enforce Protocol Buffer style and conventions";
+    description = "Pluggable linter and fixer to enforce Protocol Buffer style and conventions";
     homepage = "https://github.com/yoheimuta/protolint";
     license = licenses.mit;
     platforms = platforms.all;

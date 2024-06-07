@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A CLI for the PRQL compiler - a simple, powerful, pipelined SQL replacement";
+    description = "CLI for the PRQL compiler - a simple, powerful, pipelined SQL replacement";
     homepage = "https://github.com/prql/prql";
     changelog = "https://github.com/prql/prql/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

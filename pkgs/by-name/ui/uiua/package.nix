@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     changelog = "https://github.com/uiua-lang/uiua/blob/${src.rev}/changelog.md";
-    description = "A stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
+    description = "Stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
     longDescription = ''
       Uiua combines the stack-oriented and array-oriented paradigms in a single
       language. Combining these already terse paradigms results in code with a very

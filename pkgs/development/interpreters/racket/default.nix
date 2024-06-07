@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
   dontStrip = stdenv.isDarwin;
 
   meta = with lib; {
-    description = "A programmable programming language";
+    description = "Programmable programming language";
     longDescription = ''
       Racket is a full-spectrum programming language. It goes beyond
       Lisp and Scheme with dialects that support objects, types,

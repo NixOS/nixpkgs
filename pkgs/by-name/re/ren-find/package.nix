@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-pUy8850v4m9P5OuL15qxmDDQYYyae9HFXRbg3b4f3Lw=";
 
   meta = with lib; {
-    description = "A command-line utility that takes find-formatted lines and batch renames them";
+    description = "Command-line utility that takes find-formatted lines and batch renames them";
     homepage = "https://github.com/robenkleene/ren-find";
     license = licenses.mit;
     maintainers = with maintainers; [ philiptaron ];

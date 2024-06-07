@@ -19,7 +19,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   meta = with lib; {
-    description = "A TUI playground to experiment with jq";
+    description = "TUI playground to experiment with jq";
     mainProgram = "jqp";
     homepage = "https://github.com/noahgorstein/jqp";
     license = licenses.mit;

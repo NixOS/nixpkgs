@@ -4,7 +4,7 @@ let
   Release = import ./release.nix { inherit lib; };
 in
 options.mkOption {
-  description = "A redistributable manifest is an attribute set which includes a mapping from package name to release";
+  description = "Redistributable manifest is an attribute set which includes a mapping from package name to release";
   example = trivial.importJSON ../../../../cuda/manifests/redistrib_11.5.2.json;
   type = types.submodule {
     # Allow any attribute name as these will be the package names

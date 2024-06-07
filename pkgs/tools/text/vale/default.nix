@@ -42,7 +42,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A syntax-aware linter for prose built with speed and extensibility in mind";
+    description = "Syntax-aware linter for prose built with speed and extensibility in mind";
     longDescription = ''
       Vale in Nixpkgs offers the helper `.withStyles` allow you to install it
       predefined styles:

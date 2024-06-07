@@ -37,7 +37,7 @@ buildPythonPackage rec {
   propagatedNativeBuildInputs = [ cffi ];
 
   meta = {
-    description = "An audio library based on libsndfile, CFFI and NumPy";
+    description = "Audio library based on libsndfile, CFFI and NumPy";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/bastibe/python-soundfile";
   };

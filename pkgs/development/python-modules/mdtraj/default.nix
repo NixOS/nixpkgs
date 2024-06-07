@@ -116,7 +116,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mdtraj" ];
 
   meta = with lib; {
-    description = "An open library for the analysis of molecular dynamics trajectories";
+    description = "Open library for the analysis of molecular dynamics trajectories";
     homepage = "https://github.com/mdtraj/mdtraj";
     changelog = "https://github.com/mdtraj/mdtraj/releases/tag/${src.rev}";
     license = licenses.lgpl21Plus;

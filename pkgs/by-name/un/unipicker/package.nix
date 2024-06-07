@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A CLI utility for searching unicode characters by description and optionally copying them to clipboard";
+    description = "CLI utility for searching unicode characters by description and optionally copying them to clipboard";
     homepage = "https://github.com/jeremija/unipicker";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];

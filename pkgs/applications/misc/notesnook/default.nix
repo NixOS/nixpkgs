@@ -27,7 +27,7 @@ let
   };
 
   meta = with lib; {
-    description = "A fully open source & end-to-end encrypted note taking alternative to Evernote";
+    description = "Fully open source & end-to-end encrypted note taking alternative to Evernote";
     longDescription = ''
       Notesnook is a free (as in speech) & open source note taking app
       focused on user privacy & ease of use. To ensure zero knowledge

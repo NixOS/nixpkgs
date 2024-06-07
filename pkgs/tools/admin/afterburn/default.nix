@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/coreos/ignition";
-    description = "A one-shot cloud provider agent";
+    description = "One-shot cloud provider agent";
     license = licenses.asl20;
     maintainers = [ maintainers.arianvp ];
     platforms = platforms.linux;

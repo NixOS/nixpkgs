@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://new-session-manager.jackaudio.org/";
-    description = "A session manager designed for audio applications";
+    description = "Session manager designed for audio applications";
     maintainers = [ maintainers._6AA4FD ];
     license = licenses.gpl3Plus;
     platforms = ["x86_64-linux"];

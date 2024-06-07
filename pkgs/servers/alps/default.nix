@@ -42,7 +42,7 @@ buildGoModule rec {
   passthru.tests = { inherit(nixosTests) alps; };
 
   meta = with lib; {
-    description = "A simple and extensible webmail";
+    description = "Simple and extensible webmail";
     homepage = "https://git.sr.ht/~migadu/alps";
     license = licenses.mit;
     maintainers = with maintainers; [ booklearner madonius hmenke ];

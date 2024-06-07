@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/libunwind";
-    description = "A portable and efficient API to determine the call-chain of a program";
+    description = "Portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
     # https://github.com/libunwind/libunwind#libunwind
     platforms = [ "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "i686-freebsd" "i686-linux" "loongarch64-linux" "mips64el-linux" "mipsel-linux" "powerpc64-linux" "powerpc64le-linux" "riscv64-linux" "s390x-linux" "x86_64-freebsd" "x86_64-linux" "x86_64-solaris" ];

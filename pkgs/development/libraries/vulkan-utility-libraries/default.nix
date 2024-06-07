@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ vulkan-headers ];
 
   meta = with lib; {
-    description = "A set of utility libraries for Vulkan";
+    description = "Set of utility libraries for Vulkan";
     homepage = "https://github.com/KhronosGroup/Vulkan-Utility-Libraries";
     platforms = platforms.all;
     license = licenses.asl20;

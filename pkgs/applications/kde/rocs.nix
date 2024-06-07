@@ -10,7 +10,7 @@ mkDerivation {
 
   meta = with lib; {
     homepage = "https://edu.kde.org/rocs/";
-    description = "A graph theory IDE";
+    description = "Graph theory IDE";
     mainProgram = "rocs";
     license = with licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     platforms = lib.platforms.linux;

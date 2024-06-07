@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     maintainers = with maintainers; [ philiptaron ];
-    description = "A utility for encoding and decoding QR code images";
+    description = "Utility for encoding and decoding QR code images";
     license = licenses.asl20;
     homepage = "https://sorairolake.github.io/qrtool/book/index.html";
     changelog = "https://sorairolake.github.io/qrtool/book/changelog.html";

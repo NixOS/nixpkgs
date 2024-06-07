@@ -92,7 +92,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "A terminal spotify player that has feature parity with the official client";
+    description = "Terminal spotify player that has feature parity with the official client";
     homepage = "https://github.com/aome510/spotify-player";
     changelog = "https://github.com/aome510/spotify-player/releases/tag/v${version}";
     mainProgram = "spotify_player";

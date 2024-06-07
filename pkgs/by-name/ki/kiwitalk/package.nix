@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "An UNOFFICIAL cross-platform KakaoTalk client written in TypeScript & Rust (SolidJS, tauri)";
+    description = "UNOFFICIAL cross-platform KakaoTalk client written in TypeScript & Rust (SolidJS, tauri)";
     homepage = "https://github.com/KiwiTalk/KiwiTalk";
     maintainers = with maintainers; [ honnip ];
     license = licenses.asl20;

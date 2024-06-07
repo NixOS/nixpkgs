@@ -72,7 +72,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A friend to fetch your data files";
+    description = "Friend to fetch your data files";
     homepage = "https://github.com/fatiando/pooch";
     license = licenses.bsd3;
     maintainers = with maintainers; [ GuillaumeDesforges ];

@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit tex; };
 
   meta = {
-    description = "A program to convert DocBook to DVI, PostScript or PDF via LaTeX or ConTeXt";
+    description = "Program to convert DocBook to DVI, PostScript or PDF via LaTeX or ConTeXt";
     mainProgram = "dblatex";
     homepage = "https://dblatex.sourceforge.net/";
     license = lib.licenses.gpl2Plus;

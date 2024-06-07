@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A simple and unix-idiomatic build automator";
+    description = "Simple and unix-idiomatic build automator";
     homepage = "https://sr.ht/~autumnull/haredo/";
     license = lib.licenses.wtfpl;
     maintainers = with lib.maintainers; [ onemoresuza ];

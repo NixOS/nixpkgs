@@ -80,7 +80,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "An open source implementation of CLIP";
+    description = "Open source implementation of CLIP";
     homepage = "https://github.com/mlfoundations/open_clip";
     license = licenses.asl20;
     maintainers = with maintainers; [ iynaix ];

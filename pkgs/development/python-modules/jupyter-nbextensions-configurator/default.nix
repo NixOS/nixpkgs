@@ -48,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jupyter_nbextensions_configurator" ];
 
   meta = {
-    description = "A jupyter notebook serverextension providing config interfaces for nbextensions";
+    description = "Jupyter notebook serverextension providing config interfaces for nbextensions";
     mainProgram = "jupyter-nbextensions_configurator";
     homepage = "https://github.com/jupyter-contrib/jupyter_nbextensions_configurator";
     changelog = "https://github.com/Jupyter-contrib/jupyter_nbextensions_configurator/releases/tag/${version}";

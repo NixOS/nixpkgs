@@ -83,7 +83,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/mindstorm38/portablemc";
-    description = "A fast, reliable and cross-platform command-line Minecraft launcher and API for developers";
+    description = "Fast, reliable and cross-platform command-line Minecraft launcher and API for developers";
     longDescription = ''
       A fast, reliable and cross-platform command-line Minecraft launcher and API for developers.
       Including fast and easy installation of common mod loaders such as Fabric, Forge, NeoForge and Quilt.

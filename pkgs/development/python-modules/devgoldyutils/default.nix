@@ -22,7 +22,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "devgoldyutils" ];
 
   meta = {
-    description = "A collection of utility functions for Python used by mov-cli";
+    description = "Collection of utility functions for Python used by mov-cli";
     homepage = "https://github.com/THEGOLDENPRO/devgoldyutils";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ roshaen ];

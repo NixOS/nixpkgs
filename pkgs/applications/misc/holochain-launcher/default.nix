@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A cross-platform executable that launches a local Holochain conductor, and installs and opens apps";
+    description = "Cross-platform executable that launches a local Holochain conductor, and installs and opens apps";
     homepage = "https://github.com/holochain/launcher";
     maintainers = [ maintainers.steveej ];
     license = licenses.cal10;

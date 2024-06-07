@@ -24,7 +24,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool for building modern cloud native development environments";
+    description = "Tool for building modern cloud native development environments";
     homepage = "https://jumppad.dev";
     license = licenses.mpl20;
     maintainers = with maintainers; [ cpcloud ];

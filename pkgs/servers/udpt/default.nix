@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "A lightweight UDP torrent tracker";
+    description = "Lightweight UDP torrent tracker";
     homepage = "https://naim94a.github.io/udpt";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;

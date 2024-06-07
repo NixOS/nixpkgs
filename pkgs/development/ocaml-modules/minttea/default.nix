@@ -22,7 +22,7 @@ buildDunePackage rec {
   ];
 
   meta = {
-    description = "A fun, functional, and stateful way to build terminal apps in OCaml heavily inspired by Go's BubbleTea";
+    description = "Fun, functional, and stateful way to build terminal apps in OCaml heavily inspired by Go's BubbleTea";
     homepage = "https://github.com/leostera/minttea";
     changelog = "https://github.com/leostera/minttea/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;

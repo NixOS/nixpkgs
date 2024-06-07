@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://sqids.org/python";
-    description = "A library that lets you generate short YouTube-looking IDs from numbers";
+    description = "Library that lets you generate short YouTube-looking IDs from numbers";
     license = with licenses; mit;
     maintainers = with maintainers; [ panicgh ];
   };

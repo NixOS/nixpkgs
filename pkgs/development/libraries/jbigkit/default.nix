@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";
-    description = "A software implementation of the JBIG1 data compression standard";
+    description = "Software implementation of the JBIG1 data compression standard";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

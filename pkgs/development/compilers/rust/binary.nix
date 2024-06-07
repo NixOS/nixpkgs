@@ -28,7 +28,7 @@ rec {
     meta = with lib; {
       homepage = "https://www.rust-lang.org/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      description = "A safe, concurrent, practical language";
+      description = "Safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };

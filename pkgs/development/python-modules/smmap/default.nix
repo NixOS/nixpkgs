@@ -23,7 +23,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    description = "A pure python implementation of a sliding window memory map manager";
+    description = "Pure python implementation of a sliding window memory map manager";
     homepage = "https://github.com/gitpython-developers/smmap";
     maintainers = [ ];
     license = lib.licenses.bsd3;

@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A basic http server for hosting a folder fast and simply";
+    description = "Basic http server for hosting a folder fast and simply";
     mainProgram = "httplz";
     homepage = "https://github.com/thecoshman/http";
     changelog = "https://github.com/thecoshman/http/releases/tag/v${version}";

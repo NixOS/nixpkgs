@@ -44,7 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "treeo" ];
 
   meta = with lib; {
-    description = "A small library for creating and manipulating custom JAX Pytree classes";
+    description = "Small library for creating and manipulating custom JAX Pytree classes";
     homepage = "https://github.com/cgarciae/treeo";
     license = licenses.mit;
     maintainers = with maintainers; [ ndl ];

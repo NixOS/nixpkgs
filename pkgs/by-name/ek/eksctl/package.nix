@@ -40,7 +40,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A CLI for Amazon EKS";
+    description = "CLI for Amazon EKS";
     homepage = "https://github.com/weaveworks/eksctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ xrelkd Chili-Man ];

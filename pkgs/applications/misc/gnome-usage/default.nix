@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A nice way to view information about use of system resources, like memory and disk space";
+    description = "Nice way to view information about use of system resources, like memory and disk space";
     mainProgram = "gnome-usage";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-usage";
     license = licenses.gpl3Plus;

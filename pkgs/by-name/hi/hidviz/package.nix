@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/hidviz/hidviz";
-    description = "A GUI application for in-depth analysis of USB HID class devices";
+    description = "GUI application for in-depth analysis of USB HID class devices";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nayala ];

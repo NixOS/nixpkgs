@@ -36,7 +36,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A clean book theme for scientific explanations and documentation with Sphinx";
+    description = "Clean book theme for scientific explanations and documentation with Sphinx";
     homepage = "https://github.com/executablebooks/sphinx-book-theme";
     changelog = "https://github.com/executablebooks/sphinx-book-theme/raw/v${version}/CHANGELOG.md";
     license = licenses.bsd3;

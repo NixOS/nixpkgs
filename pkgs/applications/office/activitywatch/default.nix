@@ -240,7 +240,7 @@ rec {
     '';
 
     meta = with lib; {
-      description = "A web-based UI for ActivityWatch, built with Vue.js";
+      description = "Web-based UI for ActivityWatch, built with Vue.js";
       homepage = "https://github.com/ActivityWatch/aw-webui/";
       maintainers = with maintainers; [ huantian ];
       license = licenses.mpl20;

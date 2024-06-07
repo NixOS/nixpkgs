@@ -19,7 +19,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "korean_lunar_calendar" ];
 
   meta = with lib; {
-    description = "A library to convert Korean lunar-calendar to Gregorian calendar";
+    description = "Library to convert Korean lunar-calendar to Gregorian calendar";
     homepage = "https://github.com/usingsky/korean_lunar_calendar_py";
     license = licenses.mit;
     maintainers = [ maintainers.ris ];

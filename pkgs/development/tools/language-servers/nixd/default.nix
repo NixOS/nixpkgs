@@ -76,7 +76,7 @@ in
       };
 
       meta = common.meta // {
-        description = "A Nix language frontend, parser & semantic analysis";
+        description = "Nix language frontend, parser & semantic analysis";
         mainProgram = "nixf-tidy";
       };
     }
@@ -108,7 +108,7 @@ in
       };
 
       meta = common.meta // {
-        description = "A supporting library that wraps C++ nix";
+        description = "Supporting library that wraps C++ nix";
       };
     }
   );
@@ -140,7 +140,7 @@ in
       };
 
       meta = common.meta // {
-        description = "A feature-rich Nix language server interoperating with C++ nix";
+        description = "Feature-rich Nix language server interoperating with C++ nix";
         mainProgram = "nixd";
       };
     }

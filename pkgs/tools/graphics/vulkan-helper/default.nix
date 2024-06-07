@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple CLI app used to interface with basic Vulkan APIs";
+    description = "Simple CLI app used to interface with basic Vulkan APIs";
     homepage = "https://github.com/imLinguin/vulkan-helper-rs";
     license = licenses.mit;
     maintainers = with maintainers; [ aidalgol ];

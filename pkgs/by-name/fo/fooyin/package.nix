@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.LANG = "C.UTF-8";
 
   meta = with lib; {
-    description = "A customisable music player";
+    description = "Customisable music player";
     mainProgram = "fooyin";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ peterhoeg ];

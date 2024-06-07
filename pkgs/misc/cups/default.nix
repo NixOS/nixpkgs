@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";
-    description = "A standards-based printing system for UNIX";
+    description = "Standards-based printing system for UNIX";
     license = licenses.asl20;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;

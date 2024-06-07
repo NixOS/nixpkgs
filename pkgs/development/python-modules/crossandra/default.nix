@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/trag1c/crossandra/blob/${src.rev}/CHANGELOG.md";
-    description = "A fast and simple enum/regex-based tokenizer with decent configurability";
+    description = "Fast and simple enum/regex-based tokenizer with decent configurability";
     license = licenses.mit;
     homepage = "https://trag1c.github.io/crossandra";
     maintainers = with maintainers; [ sigmanificient ];

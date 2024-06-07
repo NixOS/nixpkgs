@@ -301,7 +301,7 @@ in
     };
 
     meta = with lib; {
-      description = "A simple plugin that add an emergency stop buton on NavBar of OctoPrint";
+      description = "Simple plugin that add an emergency stop buton on NavBar of OctoPrint";
       homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ WhittlesJr ];
@@ -320,7 +320,7 @@ in
     };
 
     meta = with lib; {
-      description = "A simple stl viewer tab for OctoPrint";
+      description = "Simple stl viewer tab for OctoPrint";
       homepage = "https://github.com/jneilliii/Octoprint-STLViewer";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ abbradar ];
@@ -417,7 +417,7 @@ in
     };
 
     meta = with lib; {
-      description = "A plugin for a better integration of Klipper into OctoPrint";
+      description = "Plugin for a better integration of Klipper into OctoPrint";
       homepage = "https://github.com/AliceGrey/OctoprintKlipperPlugin";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ lovesegfault ];
@@ -471,7 +471,7 @@ in
     };
 
     meta = with lib; {
-      description = "A dashboard for Octoprint";
+      description = "Dashboard for Octoprint";
       homepage = "https://github.com/StefanCohen/OctoPrint-Dashboard";
       license = licenses.agpl3Plus;
       maintainers = with maintainers; [ j0hax ];

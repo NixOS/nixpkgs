@@ -24,7 +24,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A command line utility to facilitate terraforming your existing Cloudflare resources";
+    description = "Command line utility to facilitate terraforming your existing Cloudflare resources";
     homepage = "https://github.com/cloudflare/cf-terraforming/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ benley ];

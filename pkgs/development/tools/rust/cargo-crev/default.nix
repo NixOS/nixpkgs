@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [ git ];
 
   meta = with lib; {
-    description = "A cryptographically verifiable code review system for the cargo (Rust) package manager";
+    description = "Cryptographically verifiable code review system for the cargo (Rust) package manager";
     mainProgram = "cargo-crev";
     homepage = "https://github.com/crev-dev/cargo-crev";
     license = with licenses; [ asl20 mit mpl20 ];

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python library that keeps OAuth 2.0 service access tokens in memory for your usage";
+    description = "Python library that keeps OAuth 2.0 service access tokens in memory for your usage";
     homepage = "https://github.com/zalando-stups/python-tokens";
     license = licenses.asl20;
     maintainers = [ maintainers.mschuwalow ];

@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A program launcher for window managers, written in Rust";
+    description = "Program launcher for window managers, written in Rust";
     mainProgram = "aphorme";
     homepage = "https://github.com/Iaphetes/aphorme_launcher";
     license = lib.licenses.gpl3Plus;

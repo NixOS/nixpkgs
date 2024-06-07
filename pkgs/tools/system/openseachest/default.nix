@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A collection of command line diagnostic tools for storage devices";
+    description = "Collection of command line diagnostic tools for storage devices";
     homepage = "https://github.com/Seagate/openSeaChest";
     license = licenses.mpl20;
     maintainers = with maintainers; [ justinas ];

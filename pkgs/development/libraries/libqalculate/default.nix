@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An advanced calculator library";
+    description = "Advanced calculator library";
     homepage = "http://qalculate.github.io";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ gebner doronbehar alyaeanyx ];

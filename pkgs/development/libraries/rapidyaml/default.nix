@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake git ];
 
   meta = with lib; {
-    description = "A library to parse and emit YAML, and do it fast";
+    description = "Library to parse and emit YAML, and do it fast";
     homepage = "https://github.com/biojppm/rapidyaml";
     license = licenses.mit;
     maintainers = with maintainers; [ martfont ];

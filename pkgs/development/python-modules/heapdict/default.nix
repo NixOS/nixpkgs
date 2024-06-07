@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = !isPy3k;
 
   meta = with lib; {
-    description = "a heap with decrease-key and increase-key operations";
+    description = "Heap with decrease-key and increase-key operations";
     homepage = "http://stutzbachenterprises.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];

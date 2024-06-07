@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://arctic-hen7.github.io/perseus";
-    description = "A high-level web development framework for Rust with full support for server-side rendering and static generation";
+    description = "High-level web development framework for Rust with full support for server-side rendering and static generation";
     maintainers = with maintainers; [ max-niederman ];
     license = with licenses; [ mit ];
     mainProgram = "perseus";

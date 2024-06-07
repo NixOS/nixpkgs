@@ -35,7 +35,7 @@ buildDubPackage rec {
 
   meta = {
     changelog = "https://github.com/fbeline/luneta/releases/tag/${src.rev}";
-    description = "An interactive filter and fuzzy finder for the command-line";
+    description = "Interactive filter and fuzzy finder for the command-line";
     homepage = "https://github.com/fbeline/luneta";
     license = lib.licenses.gpl2Only;
     mainProgram = "luneta";

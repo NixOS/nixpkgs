@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://mike-fabian.github.io/ibus-typing-booster/";
     license = licenses.gpl3Plus;
-    description = "A completion input method for faster typing";
+    description = "Completion input method for faster typing";
     mainProgram = "emoji-picker";
     maintainers = with maintainers; [ ncfavier ];
     isIbusEngine = true;

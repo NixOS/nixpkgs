@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A program which reads job descriptions line by line and executes them in parallel";
+    description = "Program which reads job descriptions line by line and executes them in parallel";
     homepage = "https://www.maier-komor.de/xjobs.html";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

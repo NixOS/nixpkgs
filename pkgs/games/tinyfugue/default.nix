@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://tinyfugue.sourceforge.net/";
-    description = "A terminal UI, screen-oriented MUD client";
+    description = "Terminal UI, screen-oriented MUD client";
     mainProgram = "tf";
     longDescription = ''
       TinyFugue, aka "tf", is a flexible, screen-oriented MUD client, for use

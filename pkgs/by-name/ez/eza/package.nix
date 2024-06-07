@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A modern, maintained replacement for ls";
+    description = "Modern, maintained replacement for ls";
     longDescription = ''
       eza is a modern replacement for ls. It uses colours for information by
       default, helping you distinguish between many types of files, such as

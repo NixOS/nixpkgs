@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A markdown LSP server inspired by Obsidian";
+    description = "Markdown LSP server inspired by Obsidian";
     homepage = "https://github.com/Feel-ix-343/markdown-oxide";
     license = with licenses; [ cc0 ];
     maintainers = with maintainers; [ linsui ];

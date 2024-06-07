@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/psb1558/Junicode-font";
-    description = "A Unicode font for medievalists";
+    description = "Unicode font for medievalists";
     maintainers = with lib.maintainers; [ ivan-timokhin ];
     license = lib.licenses.ofl;
   };

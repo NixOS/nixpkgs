@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage    = "https://newsboat.org/";
     changelog   = "https://github.com/newsboat/newsboat/blob/${src.rev}/CHANGELOG.md";
-    description = "A fork of Newsbeuter, an RSS/Atom feed reader for the text console";
+    description = "Fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with lib.maintainers; [ dotlambda nicknovitski ];
     license     = lib.licenses.mit;
     platforms   = lib.platforms.unix;

@@ -176,7 +176,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.mamedev.org/";
-    description = "A multi-purpose emulation framework";
+    description = "Multi-purpose emulation framework";
     longDescription = ''
       MAME's purpose is to preserve decades of software history. As electronic
       technology continues to rush forward, MAME prevents this important

@@ -63,7 +63,7 @@ buildPythonPackage (common // {
   '';
 
   meta = common.meta // {
-    description = "An entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
+    description = "Entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
     mainProgram = "openrazer-daemon";
   };
 })

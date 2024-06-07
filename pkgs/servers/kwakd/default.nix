@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A super small webserver that serves blank pages";
+    description = "Super small webserver that serves blank pages";
     mainProgram = "kwakd";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.nicknovitski ];

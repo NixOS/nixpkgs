@@ -39,7 +39,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A new version for Marwaita GTK theme";
+    description = "New version for Marwaita GTK theme";
     homepage = "https://www.pling.com/p/2044790/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;

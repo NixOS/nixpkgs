@@ -36,7 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymatreader" ];
 
   meta = with lib; {
-    description = "A python package to read all kinds and all versions of Matlab mat files";
+    description = "Python package to read all kinds and all versions of Matlab mat files";
     homepage = "https://gitlab.com/obob/pymatreader/";
     changelog = "https://gitlab.com/obob/pymatreader/-/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd2;

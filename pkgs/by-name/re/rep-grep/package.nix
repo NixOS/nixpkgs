@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ch+RMLc+xogL0gkrnw+n+bmUVIcixdPTaNPHPuJ0/EI=";
 
   meta = with lib; {
-    description = "A command-line utility that takes grep-formatted lines and performs a find-and-replace on them";
+    description = "Command-line utility that takes grep-formatted lines and performs a find-and-replace on them";
     homepage = "https://github.com/robenkleene/rep-grep";
     license = licenses.mit;
     maintainers = with maintainers; [ philiptaron ];

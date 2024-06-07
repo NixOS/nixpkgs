@@ -38,7 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aioruuvigateway" ];
 
   meta = with lib; {
-    description = "An asyncio-native library for requesting data from a Ruuvi Gateway";
+    description = "Asyncio-native library for requesting data from a Ruuvi Gateway";
     homepage = "https://github.com/akx/aioruuvigateway";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

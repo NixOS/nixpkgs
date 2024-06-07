@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
   passthru.linuxHeaders = linuxHeaders;
 
   meta = with lib; {
-    description = "An efficient, small, quality libc implementation";
+    description = "Efficient, small, quality libc implementation";
     homepage    = "https://musl.libc.org/";
     changelog   = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
     license     = licenses.mit;

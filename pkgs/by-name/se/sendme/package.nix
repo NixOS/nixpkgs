@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   );
 
   meta = with lib; {
-    description = "A tool to send files and directories, based on iroh";
+    description = "Tool to send files and directories, based on iroh";
     homepage = "https://iroh.computer/sendme";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ cameronfyfe ];

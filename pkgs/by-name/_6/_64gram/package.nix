@@ -21,7 +21,7 @@ telegram-desktop.overrideAttrs (old: rec {
   passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
-    description = "An unofficial Telegram Desktop providing Windows 64bit build and extra features";
+    description = "Unofficial Telegram Desktop providing Windows 64bit build and extra features";
     license = licenses.gpl3Only;
     platforms = platforms.all;
     homepage = "https://github.com/TDesktop-x64/tdesktop";

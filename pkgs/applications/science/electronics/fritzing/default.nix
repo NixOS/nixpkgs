@@ -109,7 +109,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An open source prototyping tool for Arduino-based projects";
+    description = "Open source prototyping tool for Arduino-based projects";
     homepage = "https://fritzing.org/";
     license = with licenses; [ gpl3 cc-by-sa-30 ];
     maintainers = with maintainers; [ robberer muscaln ];

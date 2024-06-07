@@ -27,7 +27,7 @@ buildGoModule rec {
   ];
 
   meta = {
-    description = "A language for writing HTML user interfaces in Go";
+    description = "Language for writing HTML user interfaces in Go";
     homepage = "https://github.com/a-h/templ";
     license = lib.licenses.mit;
     mainProgram = "templ";

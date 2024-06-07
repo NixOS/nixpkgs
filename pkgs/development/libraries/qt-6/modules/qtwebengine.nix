@@ -311,7 +311,7 @@ qtModule {
   '';
 
   meta = with lib; {
-    description = "A web engine based on the Chromium web browser";
+    description = "Web engine based on the Chromium web browser";
     platforms = [ "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7a-linux" "armv7l-linux" "x86_64-linux" ];
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz

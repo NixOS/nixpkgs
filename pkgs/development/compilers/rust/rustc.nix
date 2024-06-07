@@ -267,7 +267,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
-    description = "A safe, concurrent, practical language";
+    description = "Safe, concurrent, practical language";
     maintainers = with maintainers; [ havvy ] ++ teams.rust.members;
     license = [ licenses.mit licenses.asl20 ];
     platforms = [

@@ -24,7 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     mainProgram = "nodeinfo";
-    description = "A command line tool to query nodeinfo based on a given domain";
+    description = "Command line tool to query nodeinfo based on a given domain";
     homepage = "https://codeberg.org/thefederationinfo/nodeinfo-go";
     changelog = "https://codeberg.org/thefederationinfo/nodeinfo-go/releases/tag/v${version}";
     license = licenses.mit;

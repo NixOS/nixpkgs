@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A cross-platform translation software";
+    description = "Cross-platform translation software";
     mainProgram = "pot";
     homepage = "https://pot.pylogmon.com";
     platforms = platforms.linux;

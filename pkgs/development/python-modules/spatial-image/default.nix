@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "spatial_image" ];
 
   meta = with lib; {
-    description = "A multi-dimensional spatial image data structure for scientific Python";
+    description = "Multi-dimensional spatial image data structure for scientific Python";
     homepage = "https://github.com/spatial-image/spatial-image";
     changelog = "https://github.com/spatial-image/spatial-image/releases/tag/v${version}";
     license = licenses.mit;

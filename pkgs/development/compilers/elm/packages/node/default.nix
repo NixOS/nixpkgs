@@ -100,7 +100,7 @@ with self; with elmLib; {
       nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ makeWrapper old.nodejs.pkgs.node-gyp-build ];
 
       meta = with lib; nodePkgs."elm-spa".meta // {
-        description = "A tool for building single page apps in Elm";
+        description = "Tool for building single page apps in Elm";
         homepage = "https://www.elm-spa.dev/";
         license = licenses.bsd3;
         maintainers = [ maintainers.ilyakooo0 ];
@@ -110,7 +110,7 @@ with self; with elmLib; {
 
   elm-optimize-level-2 = nodePkgs."elm-optimize-level-2" // {
     meta = with lib; nodePkgs."elm-optimize-level-2".meta // {
-      description = "A second level of optimization for the Javascript that the Elm Compiler produces";
+      description = "Second level of optimization for the Javascript that the Elm Compiler produces";
       homepage = "https://github.com/mdgriffith/elm-optimize-level-2";
       license = licenses.bsd3;
       maintainers = [ maintainers.turbomack ];
@@ -125,7 +125,7 @@ with self; with elmLib; {
     in
     patched.override (old: {
       meta = with lib; nodePkgs."elm-land".meta // {
-        description = "A production-ready framework for building Elm applications";
+        description = "Production-ready framework for building Elm applications";
         homepage = "https://elm.land/";
         license = licenses.bsd3;
         maintainers = [ maintainers.zupo ];

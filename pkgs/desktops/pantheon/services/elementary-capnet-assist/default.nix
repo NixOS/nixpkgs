@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A small WebKit app that assists a user with login when a captive portal is detected";
+    description = "Small WebKit app that assists a user with login when a captive portal is detected";
     homepage = "https://github.com/elementary/capnet-assist";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

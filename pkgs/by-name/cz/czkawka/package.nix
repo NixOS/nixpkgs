@@ -80,7 +80,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     changelog = "https://github.com/qarmin/czkawka/raw/${version}/Changelog.md";
-    description = "A simple, fast and easy to use app to remove unnecessary files from your computer";
+    description = "Simple, fast and easy to use app to remove unnecessary files from your computer";
     homepage = "https://github.com/qarmin/czkawka";
     license = with lib.licenses; [ mit ];
     mainProgram = "czkawka_gui";

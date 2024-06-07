@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "A Real-Time Transport Protocol (RFC3550) stack. Part of the Linphone project";
+    description = "Real-Time Transport Protocol (RFC3550) stack. Part of the Linphone project";
     mainProgram = "ortp_tester";
     homepage = "https://linphone.org/technical-corner/ortp";
     license = licenses.gpl3Plus;

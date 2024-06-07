@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "An extensible mail notification service";
+    description = "Extensible mail notification service";
     homepage = "http://bubblemail.free.fr/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

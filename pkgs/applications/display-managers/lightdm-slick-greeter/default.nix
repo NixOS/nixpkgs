@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   }];
 
   meta = with lib; {
-    description = "A slick-looking LightDM greeter";
+    description = "Slick-looking LightDM greeter";
     homepage = "https://github.com/linuxmint/slick-greeter";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ water-sucks bobby285271 ];

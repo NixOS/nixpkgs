@@ -132,7 +132,7 @@ in buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A graphics application for digital painters";
+    description = "Graphics application for digital painters";
     homepage = "http://mypaint.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

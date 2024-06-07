@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A functional Scheme for world domination";
+    description = "Functional Scheme for world domination";
     homepage    = "https://gitlab.com/owl-lisp/owl";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

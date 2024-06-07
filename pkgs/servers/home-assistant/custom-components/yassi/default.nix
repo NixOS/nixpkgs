@@ -19,7 +19,7 @@ buildHomeAssistantComponent rec {
   propagatedBuildInputs = [ pysmartthings ];
 
   meta = with lib; {
-    description = "A HomeAssistant integration for Samsung Soundbars";
+    description = "HomeAssistant integration for Samsung Soundbars";
     homepage = "https://ha-samsung-soundbar.vercel.app/";
     changelog = "https://github.com/samuelspagl/ha_samsung_soundbar/releases/tag/${version}";
     maintainers = with maintainers; [ k900 ];

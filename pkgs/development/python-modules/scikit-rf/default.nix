@@ -99,7 +99,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "skrf" ];
 
   meta = with lib; {
-    description = "A Python library for RF/Microwave engineering";
+    description = "Python library for RF/Microwave engineering";
     homepage = "https://scikit-rf.org/";
     changelog = "https://github.com/scikit-rf/scikit-rf/releases/tag/v${version}";
     license = licenses.bsd3;

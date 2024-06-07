@@ -654,7 +654,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"
       else
         "https://docs.python.org/${majorMinor}/whatsnew/changelog.html#python-${dashedVersion}";
-    description = "A high-level dynamically-typed programming language";
+    description = "High-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that
       is used in a wide variety of application domains. Some of its key

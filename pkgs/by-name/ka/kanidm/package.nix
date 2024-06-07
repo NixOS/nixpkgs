@@ -96,7 +96,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
-    description = "A simple, secure and fast identity management platform";
+    description = "Simple, secure and fast identity management platform";
     homepage = "https://github.com/kanidm/kanidm";
     license = licenses.mpl20;
     platforms = platforms.linux;

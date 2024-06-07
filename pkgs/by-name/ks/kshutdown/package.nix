@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://kshutdown.sourceforge.io/";
-    description = "A graphical shutdown utility for Linux and Windows";
+    description = "Graphical shutdown utility for Linux and Windows";
     mainProgram = "kshutdown";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers ; [ eymeric ];

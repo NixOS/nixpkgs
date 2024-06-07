@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A helper class for handling configuration defaults of packaged apps gracefully";
+    description = "Helper class for handling configuration defaults of packaged apps gracefully";
     homepage = "https://django-appconf.readthedocs.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];

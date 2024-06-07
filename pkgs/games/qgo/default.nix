@@ -12,7 +12,7 @@ mkDerivation {
   version = "unstable-2017-12-18";
 
   meta = with lib; {
-    description = "A Go client based on Qt5";
+    description = "Go client based on Qt5";
     mainProgram = "qgo";
     longDescription = ''
       qGo is a Go Client based on Qt 5. It supports playing online at

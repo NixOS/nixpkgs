@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   installCheckTarget = "check";
 
   meta = with lib; {
-    description = "A tuning tool for Monte Carlo event generators";
+    description = "Tuning tool for Monte Carlo event generators";
     homepage = "https://professor.hepforge.org/";
     license = licenses.unfree; # no license specified
     maintainers = [ maintainers.veprbl ];

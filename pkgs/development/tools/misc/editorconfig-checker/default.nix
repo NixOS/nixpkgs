@@ -29,7 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     changelog = "https://github.com/editorconfig-checker/editorconfig-checker/releases/tag/${src.rev}";
-    description = "A tool to verify that your files are in harmony with your .editorconfig";
+    description = "Tool to verify that your files are in harmony with your .editorconfig";
     mainProgram = "editorconfig-checker";
     homepage = "https://editorconfig-checker.github.io/";
     license = licenses.mit;

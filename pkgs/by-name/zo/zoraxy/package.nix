@@ -32,7 +32,7 @@ buildGoModule rec {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   meta = {
-    description = "A general purpose HTTP reverse proxy and forwarding tool written in Go";
+    description = "General purpose HTTP reverse proxy and forwarding tool written in Go";
     homepage = "https://zoraxy.arozos.com/";
     changelog = "https://github.com/tobychui/zoraxy/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;

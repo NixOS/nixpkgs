@@ -19,7 +19,7 @@ buildLua {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A recent files menu for mpv";
+    description = "Recent files menu for mpv";
     homepage = "https://github.com/po5/memo";
     license = licenses.gpl3Only;
     maintainers = with lib.maintainers; [ purrpurrn ];

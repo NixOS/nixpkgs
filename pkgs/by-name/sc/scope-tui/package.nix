@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [ libpulseaudio ];
 
   meta = with lib; {
-    description = "A simple oscilloscope/vectorscope/spectroscope for your terminal";
+    description = "Simple oscilloscope/vectorscope/spectroscope for your terminal";
     homepage = "https://github.com/alemidev/scope-tui";
     license = licenses.mit;
     maintainers = with maintainers; [ iynaix ];

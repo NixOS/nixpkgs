@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple CLI for MAA by Rust";
+    description = "Simple CLI for MAA by Rust";
     homepage = "https://github.com/MaaAssistantArknights/maa-cli";
     license = licenses.agpl3Only;
     platforms = platforms.linux ++ platforms.darwin;

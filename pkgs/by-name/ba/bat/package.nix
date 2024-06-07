@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A cat(1) clone with syntax highlighting and Git integration";
+    description = "Cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A desktop application for creating diagrams";
+    description = "Desktop application for creating diagrams";
     homepage = "https://about.draw.io/";
     license = licenses.asl20;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";

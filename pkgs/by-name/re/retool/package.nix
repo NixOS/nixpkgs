@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A better filter tool for Redump and No-Intro dats";
+    description = "Better filter tool for Redump and No-Intro dats";
     homepage = "https://github.com/unexpectedpanda/retool";
     license = licenses.bsd3;
     maintainers = with maintainers; [ thiagokokada ];

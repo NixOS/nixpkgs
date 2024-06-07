@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/15five/django-scim2/blob/${src.rev}/CHANGES.txt";
-    description = "A SCIM 2.0 Service Provider Implementation (for Django)";
+    description = "SCIM 2.0 Service Provider Implementation (for Django)";
     homepage = "https://github.com/15five/django-scim2";
     license = licenses.mit;
     maintainers = with maintainers; [ s1341 ];

@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A simple Python wrapper around for YouTube Data API";
+    description = "Simple Python wrapper around for YouTube Data API";
     homepage = "https://github.com/sns-sdks/python-youtube";
     changelog = "https://github.com/sns-sdks/python-youtube/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

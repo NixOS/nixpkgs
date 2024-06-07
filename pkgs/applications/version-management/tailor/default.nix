@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool to migrate changesets between various kinds of version control system";
+    description = "Tool to migrate changesets between various kinds of version control system";
     longDescription = ''
       With its ability to "translate the history" from one VCS kind to another,
       this tool makes it easier to keep the upstream changes merged in

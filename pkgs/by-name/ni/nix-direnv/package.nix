@@ -56,7 +56,7 @@ resholve.mkDerivation rec {
   };
 
   meta = {
-    description = "A fast, persistent use_nix implementation for direnv";
+    description = "Fast, persistent use_nix implementation for direnv";
     homepage    = "https://github.com/nix-community/nix-direnv";
     license     = lib.licenses.mit;
     platforms   = lib.platforms.unix;

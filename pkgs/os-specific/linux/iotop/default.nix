@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool to find out the processes doing the most IO";
+    description = "Tool to find out the processes doing the most IO";
     homepage = "http://guichaz.free.fr/iotop";
     license = licenses.gpl2;
     mainProgram = "iotop";

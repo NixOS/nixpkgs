@@ -89,7 +89,7 @@ lib:
 let
 
   baseMeta = with lib; {
-    description = "A lightweight Kubernetes distribution";
+    description = "Lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
     maintainers = with maintainers; [

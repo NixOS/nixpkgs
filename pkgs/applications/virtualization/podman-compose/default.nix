@@ -21,7 +21,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ pypaBuildHook ];
 
   meta = {
-    description = "An implementation of docker-compose with podman backend";
+    description = "Implementation of docker-compose with podman backend";
     homepage = "https://github.com/containers/podman-compose";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;

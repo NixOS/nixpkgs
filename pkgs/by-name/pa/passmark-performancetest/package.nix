@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A software tool that allows everybody to quickly assess the performance of their computer and compare it to a number of standard 'baseline' computer systems";
+    description = "Software tool that allows everybody to quickly assess the performance of their computer and compare it to a number of standard 'baseline' computer systems";
     homepage = "https://www.passmark.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    description = "A bit vector library for OCaml";
+    description = "Bit vector library for OCaml";
     license = lib.licenses.lgpl21;
     homepage = "https://github.com/backtracking/bitv";
     maintainers = [ lib.maintainers.vbgl ];

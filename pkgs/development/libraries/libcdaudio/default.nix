@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A portable library for controlling audio CDs";
+    description = "Portable library for controlling audio CDs";
     mainProgram = "libcdaudio-config";
     homepage = "https://libcdaudio.sourceforge.net";
     platforms = lib.platforms.linux;

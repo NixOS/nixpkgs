@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "A library to allow applications to export a menu into the Unity Menu bar";
+    description = "Library to allow applications to export a menu into the Unity Menu bar";
     homepage = "https://launchpad.net/libappindicator";
     license = with licenses; [ lgpl21 lgpl3 ];
     pkgConfigModules = {

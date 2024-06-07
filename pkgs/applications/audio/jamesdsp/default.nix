@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     broken = (stdenv.isLinux && stdenv.isAarch64);
-    description = "An audio effect processor for PipeWire clients";
+    description = "Audio effect processor for PipeWire clients";
     mainProgram = "jamesdsp";
     homepage = "https://github.com/Audio4Linux/JDSP4Linux";
     license = lib.licenses.gpl3Only;

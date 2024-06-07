@@ -29,7 +29,7 @@ runCommand "optifine-${mcVersion}" {
 
   meta = with lib; {
     homepage = "https://optifine.net/";
-    description = "A Minecraft ${mcVersion} optimization mod";
+    description = "Minecraft ${mcVersion} optimization mod";
     longDescription = ''
       OptiFine is a Minecraft optimization mod.
       It allows Minecraft to run faster and look better with full support for HD textures and many configuration options.

@@ -59,7 +59,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "psycopg2cffi" ];
 
   meta = with lib; {
-    description = "An implementation of the psycopg2 module using cffi";
+    description = "Implementation of the psycopg2 module using cffi";
     homepage = "https://pypi.org/project/psycopg2cffi/";
     license = with licenses; [ lgpl3Plus ];
     maintainers = with maintainers; [ lovesegfault ];

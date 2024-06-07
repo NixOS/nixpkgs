@@ -38,7 +38,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A set of UFO based objects for use in font editing applications";
+    description = "Set of UFO based objects for use in font editing applications";
     homepage = "https://github.com/robotools/defcon";
     changelog = "https://github.com/robotools/defcon/releases/tag/${version}";
     license = licenses.mit;

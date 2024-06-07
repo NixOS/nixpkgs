@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/hhatto/autopep8/releases/tag/v${version}";
-    description = "A tool that automatically formats Python code to conform to the PEP 8 style guide";
+    description = "Tool that automatically formats Python code to conform to the PEP 8 style guide";
     homepage = "https://github.com/hhatto/autopep8";
     license = licenses.mit;
     mainProgram = "autopep8";

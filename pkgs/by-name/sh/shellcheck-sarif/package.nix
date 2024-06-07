@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A CLI tool to convert shellcheck diagnostics into SARIF";
+    description = "CLI tool to convert shellcheck diagnostics into SARIF";
     homepage = "https://psastras.github.io/sarif-rs";
     mainProgram = "shellcheck-sarif";
     maintainers = with lib.maintainers; [ getchoo ];

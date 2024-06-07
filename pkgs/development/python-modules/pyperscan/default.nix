@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyperscan" ];
 
   meta = with lib; {
-    description = "a hyperscan binding for Python, which supports vectorscan";
+    description = "Hyperscan binding for Python, which supports vectorscan";
     homepage = "https://vlaci.github.io/pyperscan/";
     changelog = "https://github.com/vlaci/pyperscan/releases/tag/${src.rev}";
     platforms = platforms.unix;

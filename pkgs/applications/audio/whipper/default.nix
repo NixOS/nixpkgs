@@ -96,7 +96,7 @@ in python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/whipper-team/whipper";
-    description = "A CD ripper aiming for accuracy over speed";
+    description = "CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ emily ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

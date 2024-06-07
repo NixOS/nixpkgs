@@ -64,7 +64,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A modern and clean Gtk theme";
+    description = "Modern and clean Gtk theme";
     homepage = "https://github.com/vinceliuice/Colloid-gtk-theme";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

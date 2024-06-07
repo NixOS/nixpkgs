@@ -221,7 +221,7 @@ let
     meta = with lib; {
       homepage = "https://www.openssl.org/";
       changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
-      description = "A cryptographic library that implements the SSL and TLS protocols";
+      description = "Cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
       mainProgram = "openssl";
       maintainers = with maintainers; [ thillux ];

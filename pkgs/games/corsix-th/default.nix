@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A reimplementation of the 1997 Bullfrog business sim Theme Hospital";
+    description = "Reimplementation of the 1997 Bullfrog business sim Theme Hospital";
     mainProgram = "corsix-th";
     homepage = "https://corsixth.com/";
     license = licenses.mit;

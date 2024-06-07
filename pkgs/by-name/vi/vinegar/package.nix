@@ -92,7 +92,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An open-source, minimal, configurable, fast bootstrapper for running Roblox on Linux";
+    description = "Open-source, minimal, configurable, fast bootstrapper for running Roblox on Linux";
     homepage = "https://github.com/vinegarhq/vinegar";
     changelog = "https://github.com/vinegarhq/vinegar/releases/tag/v${version}";
     mainProgram = "vinegar";

@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    description = "A cross platform front-end GUI of the popular youtube-dl written in wxPython";
+    description = "Cross platform front-end GUI of the popular youtube-dl written in wxPython";
     homepage = "https://oleksis.github.io/youtube-dl-gui";
     license = lib.licenses.unlicense;
     mainProgram = "yt-dlg";

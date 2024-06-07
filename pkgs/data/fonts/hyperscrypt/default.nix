@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://velvetyne.fr/fonts/hyper-scrypt/";
-    description = "A modern stencil typeface inspired by stained glass technique";
+    description = "Modern stencil typeface inspired by stained glass technique";
     longDescription = ''
       The Hyper Scrypt typeface was designed for the Hyper Chapelle
       exhibition. It was commissioned by AAAAA Atelier to Studio

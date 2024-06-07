@@ -94,7 +94,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "A static content management system";
+    description = "Static content management system";
     homepage = "https://www.getlektor.com/";
     changelog = "https://github.com/lektor/lektor/blob/v${version}/CHANGES.md";
     license = lib.licenses.bsd3;

@@ -74,7 +74,7 @@ python.pkgs.buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/mautrix/telegram";
-    description = "A Matrix-Telegram hybrid puppeting/relaybot bridge";
+    description = "Matrix-Telegram hybrid puppeting/relaybot bridge";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nyanloutre ma27 nickcao ];

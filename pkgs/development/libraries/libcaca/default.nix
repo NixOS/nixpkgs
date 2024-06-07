@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://caca.zoy.org/wiki/libcaca";
-    description = "A graphics library that outputs text instead of pixels";
+    description = "Graphics library that outputs text instead of pixels";
     longDescription = ''
       libcaca is a graphics library that outputs text instead of pixels, so that
       it can work on older video cards or text terminals. It is not unlike the

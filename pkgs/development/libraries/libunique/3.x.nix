@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/Archive/unique";
-    description = "A library for writing single instance applications";
+    description = "Library for writing single instance applications";
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.linux;

@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "A minimalistic crossplatform image viewer written in Rust";
+    description = "Minimalistic crossplatform image viewer written in Rust";
     homepage = "https://github.com/woelper/oculante";
     changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

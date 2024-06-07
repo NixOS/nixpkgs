@@ -153,7 +153,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://mesonbuild.com";
-    description = "An open source, fast and friendly build system made in Python";
+    description = "Open source, fast and friendly build system made in Python";
     mainProgram = "meson";
     longDescription = ''
       Meson is an open source build system meant to be both extremely fast, and,
