@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , ffmpeg
 , glfw
+, libglvnd
 , libogg
 , libvorbis
 , makeWrapper
@@ -88,6 +89,10 @@ buildDotnetModule rec {
   nugetDeps = ./deps.nix;
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
+
+  runtimeDeps = lib.optionals stdenv.hostPlatform.isLinux [
+    libglvnd
+  ];
 
   executables = [ "FamiStudio" ];
 
