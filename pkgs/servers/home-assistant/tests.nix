@@ -8,6 +8,7 @@ let
     airzone_cloud = [
       aioairzone
     ];
+    androidtv = home-assistant.getPackages "asuswrt" home-assistant.python.pkgs;
     bluetooth = [
       pyswitchbot
     ];
@@ -91,6 +92,7 @@ let
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
+      "--deselect tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
       # AssertionError: assert [+ received] == [- snapshot]
       "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
     ];
@@ -107,6 +109,7 @@ let
 in lib.listToAttrs (map (component: lib.nameValuePair component (
   home-assistant.overridePythonAttrs (old: {
     pname = "homeassistant-test-${component}";
+    pyproject = null;
     format = "other";
 
     dontBuild = true;

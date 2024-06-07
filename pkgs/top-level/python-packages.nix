@@ -153,8 +153,6 @@ self: super: with self; {
 
   aioairq = callPackage ../development/python-modules/aioairq { };
 
-  aioaladdinconnect = callPackage ../development/python-modules/aioaladdinconnect { };
-
   aioambient = callPackage ../development/python-modules/aioambient { };
 
   aioapcaccess = callPackage ../development/python-modules/aioapcaccess { };
@@ -248,6 +246,8 @@ self: super: with self; {
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
   aiohttp-fast-url-dispatcher = callPackage ../development/python-modules/aiohttp-fast-url-dispatcher { };
+
+  aiohttp-fast-zlib = callPackage ../development/python-modules/aiohttp-fast-zlib { };
 
   aiohttp-isal = callPackage ../development/python-modules/aiohttp-isal { };
 
@@ -540,8 +540,6 @@ self: super: with self; {
   ambee = callPackage ../development/python-modules/ambee { };
 
   amberelectric = callPackage ../development/python-modules/amberelectric { };
-
-  ambiclimate = callPackage ../development/python-modules/ambiclimate { };
 
   amcrest = callPackage ../development/python-modules/amcrest { };
 
@@ -16763,6 +16761,8 @@ self: super: with self; {
   volkszaehler = callPackage ../development/python-modules/volkszaehler { };
 
   voluptuous = callPackage ../development/python-modules/voluptuous { };
+
+  voluptuous-openapi = callPackage ../development/python-modules/voluptuous-openapi { };
 
   voluptuous-serialize = callPackage ../development/python-modules/voluptuous-serialize { };
 

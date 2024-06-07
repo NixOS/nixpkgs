@@ -19088,7 +19088,7 @@ with pkgs;
 
   python-matter-server = with python3Packages; toPythonApplication (
     python-matter-server.overridePythonAttrs (oldAttrs: {
-      propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ oldAttrs.passthru.optional-dependencies.server;
+      dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.server;
     })
   );
 

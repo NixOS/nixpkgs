@@ -1,10 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
-  # propagates
+  # build-system
+  setuptools,
+
+  # dependencies
   pyyaml,
   unicode-rbnf,
 
@@ -14,20 +17,24 @@
 
 let
   pname = "hassil";
-  version = "1.6.1";
+  version = "1.7.1";
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jkPo02Jy6UqyC5YvwMw+DDkT8rG5Xe4EiNVED/JHzKc=";
+  src = fetchFromGitHub {
+    owner = "home-assistant";
+    repo = "hassil";
+    rev = "refs/tags/${version}";
+    hash = "sha256-yrjzsJzyUFqTauEcNEOCQx2YxomkNS4J0JfQEQQ5m3E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyyaml
     unicode-rbnf
   ];
