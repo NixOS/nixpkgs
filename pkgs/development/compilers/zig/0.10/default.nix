@@ -89,6 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     hook = callPackage ./hook.nix { zig = finalAttrs.finalPackage; };
+    cc = callPackage ../cc.nix {
+      zig = finalAttrs.finalPackage;
+    };
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
