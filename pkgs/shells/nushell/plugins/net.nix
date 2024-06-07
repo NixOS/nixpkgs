@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, IOKit
-, CoreFoundation
-, unstableGitUpdater
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  IOKit,
+  CoreFoundation,
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage {
@@ -20,9 +21,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-nBxcxADyvPgGrfkW8eBq/wmB2Slq+YGJV2IlxuuCgCg=";
 
-  nativeBuildInputs = [
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreFoundation
@@ -36,6 +35,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/fennewald/nu_plugin_net";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
-    mainProgram = "nu-plugin-net";
+    mainProgram = "nu_plugin_net";
   };
 }
