@@ -17,6 +17,7 @@
 , unzip
 , curl
 , xcbuild
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +54,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-  '';
+  '' + lib.optionalString stdenv.isDarwin (''
+    substituteInPlace base/Makefile \
+      --replace '$(shell sw_vers -productVersion)' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers" }"
+    substituteInPlace base/Makefile \
+      --replace '$(shell xcrun --show-sdk-version)' "${(builtins.toString darwin.DarwinTools) + "/bin/xcrun" }"
+  '');
+
+
+
 
   makeFlags = [
     "prefix=$(out)"
@@ -77,8 +86,7 @@ stdenv.mkDerivation rec {
 
   # remove forbidden reference to $TMPDIR
   preFixup = ''
-  ''
-  + lib.optionalString stdenv.isLinux (''
+  '' + lib.optionalString stdenv.isLinux (''
     for file in libcurl.so libgmpxx.so libmpfr.so; do
       patchelf --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir} "$out/lib/julia/$file"
     done
