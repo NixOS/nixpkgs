@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://bidict.readthedocs.io";
     changelog = "https://bidict.readthedocs.io/changelog.html";
-    description = "The bidirectional mapping library for Python";
+    description = "Bidirectional mapping library for Python";
     license = licenses.mpl20;
     maintainers = with maintainers; [
       jab

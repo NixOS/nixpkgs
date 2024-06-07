@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The TeamSpeak voice communication tool (beta version)";
+    description = "TeamSpeak voice communication tool (beta version)";
     homepage = "https://teamspeak.com/";
     license = {
       fullName = "Teamspeak client license";

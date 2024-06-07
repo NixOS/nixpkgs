@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The official C client library for MongoDB";
+    description = "Official C client library for MongoDB";
     homepage = "http://mongoc.org";
     license = licenses.asl20;
     mainProgram = "mongoc-stat";

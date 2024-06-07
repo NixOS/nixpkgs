@@ -22,7 +22,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The cli used by end user to interact Fission";
+    description = "Cli used by end user to interact Fission";
     homepage = "https://fission.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ neverbehave ];

@@ -11,20 +11,20 @@ options.mkOption {
     freeformType = types.attrsOf Release.type;
     options = {
       release_date = options.mkOption {
-        description = "The release date of the manifest";
+        description = "Release date of the manifest";
         type = types.nullOr types.str;
         default = null;
         example = "2023-08-29";
       };
       release_label = options.mkOption {
-        description = "The release label of the manifest";
+        description = "Release label of the manifest";
         type = types.nullOr types.str;
         default = null;
         example = "12.2.2";
       };
       release_product = options.mkOption {
         example = "cuda";
-        description = "The release product of the manifest";
+        description = "Release product of the manifest";
         type = types.nullOr types.str;
         default = null;
       };

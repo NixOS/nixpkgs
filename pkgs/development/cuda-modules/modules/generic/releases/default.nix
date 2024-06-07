@@ -21,19 +21,19 @@ in
             freeformType = types.attrsOf types.anything;
             options = {
               version = options.mkOption {
-                description = "The version of the package";
+                description = "Version of the package";
                 type = majorMinorPatchBuildVersion;
               };
               minCudaVersion = options.mkOption {
-                description = "The minimum CUDA version supported";
+                description = "Minimum CUDA version supported";
                 type = majorMinorVersion;
               };
               maxCudaVersion = options.mkOption {
-                description = "The maximum CUDA version supported";
+                description = "Maximum CUDA version supported";
                 type = majorMinorVersion;
               };
               hash = options.mkOption {
-                description = "The hash of the tarball";
+                description = "Hash of the tarball";
                 type = types.str;
               };
             };

@@ -34,7 +34,7 @@ in appimageTools.wrapAppImage {
 
   meta = with lib; {
     homepage = "https://todoist.com";
-    description = "The official Todoist electron app";
+    description = "Official Todoist electron app";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     maintainers = with maintainers; [ kylesferrazza pokon548 ];

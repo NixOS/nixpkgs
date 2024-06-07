@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The fre:ac audio converter project";
+    description = "Fre:ac audio converter project";
     license = licenses.gpl2Plus;
     homepage = "https://www.freac.org/";
     maintainers = with maintainers; [ shamilton ];

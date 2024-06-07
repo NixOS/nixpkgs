@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/ncbi/sra-tools";
-    description = "The SRA Toolkit and SDK from NCBI is a collection of tools and libraries for using data in the INSDC Sequence Read Archives";
+    description = "SRA Toolkit and SDK from NCBI is a collection of tools and libraries for using data in the INSDC Sequence Read Archives";
     license = licenses.ncbiPd;
     maintainers = with maintainers; [ thyol ];
     platforms = [ "x86_64-linux" ];

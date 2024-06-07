@@ -2799,7 +2799,7 @@ let
 
         meta = {
           changelog = "https://github.com/moshfeu/vscode-compare-folders/releases";
-          description = "The extension allows you to compare folders, show the diffs in a list and present diff in a splitted view side by side";
+          description = "Extension allows you to compare folders, show the diffs in a list and present diff in a splitted view side by side";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=moshfeu.compare-folders";
           homepage = "https://github.com/moshfeu/vscode-compare-folders";
           license = lib.licenses.mit;
@@ -4182,7 +4182,7 @@ let
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/thorerik.hacker-theme/changelog";
-          description = "The perfect theme for writing IP tracers in Visual Basic and reverse-proxying a UNIX-system firewall";
+          description = "Perfect theme for writing IP tracers in Visual Basic and reverse-proxying a UNIX-system firewall";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=thorerik.hacker-theme";
           homepage = "https://github.com/thorerik/vscode-hacker-theme";
           license = lib.licenses.mit;
@@ -4635,7 +4635,7 @@ let
         };
         meta = {
           changelog = "https://github.com/vuejs/language-tools/blob/master/CHANGELOG.md";
-          description = "The official Vue VSCode extension";
+          description = "Official Vue VSCode extension";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Vue.volar";
           homepage = "https://github.com/vuejs/language-tools";
           license = lib.licenses.mit;

@@ -328,7 +328,7 @@ context = stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja ];
 
   meta = with lib; {
-    description = "The LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
+    description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
     homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
     license = licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ apfelkuchen6 xworld21 ];

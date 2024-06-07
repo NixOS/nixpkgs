@@ -106,7 +106,7 @@ buildGoModule {
 
   meta = {
     changelog = "https://kolaente.dev/vikunja/api/src/tag/v${version}/CHANGELOG.md";
-    description = "The Todo-app to organize your life";
+    description = "Todo-app to organize your life";
     homepage = "https://vikunja.io/";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ leona ];

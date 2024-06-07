@@ -272,7 +272,7 @@ let
     '';
 
     meta = baseMeta // {
-      description = "The various binaries that get packaged into the final k3s binary";
+      description = "Various binaries that get packaged into the final k3s binary";
     };
   };
   # Only used for the shim since

@@ -103,7 +103,7 @@ let
       '';
 
       meta = {
-        description = "The cross-platform virtual machine for Squeak, Pharo, Cuis, and Newspeak";
+        description = "Cross-platform virtual machine for Squeak, Pharo, Cuis, and Newspeak";
         mainProgram = scriptName;
         homepage = "https://opensmalltalk.org/";
         license = with lib.licenses; [ mit ];

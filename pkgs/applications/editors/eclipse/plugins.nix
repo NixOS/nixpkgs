@@ -552,7 +552,7 @@ rec {
 
     meta = with lib; {
       homepage = "http://scala-ide.org/";
-      description = "The Scala IDE for Eclipse";
+      description = "Scala IDE for Eclipse";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
       platforms = platforms.all;
@@ -658,7 +658,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://www.eclipse.org/gef/zest/";
-      description = "The Eclipse Visualization Toolkit";
+      description = "Eclipse Visualization Toolkit";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];

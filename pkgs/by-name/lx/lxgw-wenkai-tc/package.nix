@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lxgw/LxgwWenKaiTC";
-    description = "The Traditional Chinese Edition of LXGW WenKai";
+    description = "Traditional Chinese Edition of LXGW WenKai";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ lebensterben ];

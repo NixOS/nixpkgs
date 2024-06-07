@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonRemoveDeps = [ "conda" ];
 
   meta = {
-    description = "The libmamba based solver for conda";
+    description = "Libmamba based solver for conda";
     homepage = "https://github.com/conda/conda-libmamba-solver";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ericthemagician ];

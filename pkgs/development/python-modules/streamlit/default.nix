@@ -89,7 +89,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://streamlit.io/";
     changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
-    description = "The fastest way to build custom ML tools";
+    description = "Fastest way to build custom ML tools";
     mainProgram = "streamlit";
     maintainers = with maintainers; [
       natsukium

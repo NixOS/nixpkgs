@@ -374,7 +374,7 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
 * `meta.description` must:
   * Be short, just one sentence.
   * Be capitalized.
-  * Not start with an indefinite article.
+  * Not start with the definite or an indefinite article.
   * Not start with the package name.
     * More generally, it should not refer to the package name.
   * Not end with a period (or any punctuation for that matter).

@@ -167,7 +167,7 @@ appleDerivation' stdenv {
   appleHeaders = builtins.readFile ./headers.txt;
 
   meta = with lib; {
-    description = "The Mac OS libc/libSystem (tapi library with pure headers)";
+    description = "Mac OS libc/libSystem (tapi library with pure headers)";
     maintainers = with maintainers; [ copumpkin gridaphobe ];
     platforms   = platforms.darwin;
     license     = licenses.apple-psl20;

@@ -36,7 +36,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The official command line client for Cloud Foundry";
+    description = "Official command line client for Cloud Foundry";
     homepage = "https://github.com/cloudfoundry/cli";
     maintainers = with maintainers; [ ris ];
     mainProgram = "cf";

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.genivia.com/doc/reflex/html";
-    description = "The regex-centric, fast lexical analyzer generator for C++ with full Unicode support";
+    description = "Regex-centric, fast lexical analyzer generator for C++ with full Unicode support";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with lib.maintainers; [ prrlvr ];
