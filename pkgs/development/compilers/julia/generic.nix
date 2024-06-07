@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   # tests are flaky for aarch64-linux on hydra
   # some tests not working on aarch64-darwin for unrelated reasons
-  doInstallCheck = if (lib.versionOlder version "1.10") then !stdenv.hostPlatform.isAarch64 else stdenv.isLinux;
+  doInstallCheck = if (lib.versionOlder version "1.10") then (stdenv.isLinux && !stdenv.hostPlatform.isAarch64) else stdenv.isLinux;
 
   installCheckTarget = "testall";
 
