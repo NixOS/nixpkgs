@@ -16,6 +16,7 @@ nvidia_x11: sha256:
 , libXxf86vm
 , libvdpau
 , librsvg
+, libglvnd
 , wrapGAppsHook3
 , addOpenGLRunpath
 , withGtk2 ? false
@@ -63,6 +64,12 @@ let
       cp -P libXNVCtrl.so* $out/lib
     '';
   };
+
+  runtimeDependencies = [
+    libglvnd libXrandr
+  ];
+
+  runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
 
 in
 
@@ -131,7 +138,7 @@ stdenv.mkDerivation {
 
   binaryName = if withGtk3 then ".nvidia-settings-wrapped" else "nvidia-settings";
   postFixup = ''
-    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${libXv}/lib" \
+    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${libXv}/lib:${runtimeLibraryPath}" \
       $out/bin/$binaryName
 
     addOpenGLRunpath $out/bin/$binaryName
