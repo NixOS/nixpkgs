@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       '';
       macosProductVersionStr = builtins.readFile "${macosProductVersion}";
       macosPlatformVersion = pkgs.runCommand "macos-platform-version" { } ''
-        xcrun --show-sdk-version > $out
+        echo -n $(xcrun --show-sdk-version) > $out
       '';
       macosPlatformVersionStr = builtins.readFile "${macosPlatformVersion}";
     in [
