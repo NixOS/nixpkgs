@@ -1,6 +1,7 @@
 { lib
 , makeSetupHook
 , zig
+, targetPlatform
 }:
 
 makeSetupHook {
@@ -39,7 +40,7 @@ makeSetupHook {
           else
             "-Drelease-safe=true";
       in
-      [ "-Dcpu=baseline" releaseType ];
+      [ "-Dcpu=${targetPlatform.cpuModel.zig}" releaseType ];
   };
 
   passthru = { inherit zig; };
