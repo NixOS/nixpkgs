@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pythonRelaxDepsHook,
   pytestCheckHook,
   pythonOlder,
   pytz,
@@ -11,8 +12,8 @@
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "0.10.4";
-  format = "pyproject";
+  version = "0.10.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,18 +21,20 @@ buildPythonPackage rec {
     owner = "py-libhdate";
     repo = "py-libhdate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NF2ZA9ruW7sL2tLY11VAtyPRxGg2o5/mpv3ZsH/Zxb8=";
+    hash = "sha256-SANCZl+1ghUuuxZAl6oycvo7hB7mIagjVEmwzarsspk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pytz = ">= 2020.0"' 'pytz = "*"' \
-      --replace 'astral = {version = "^2.2", python = "^3.6"}' 'astral = "*"'
-  '';
+  build-system = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [
+    "astral"
+    "pytz"
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astral
     pytz
   ];
