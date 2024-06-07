@@ -623,6 +623,37 @@ in {
   /**
     Reads a JSON file.
 
+    # Examples
+    :::{.example}
+    ## `lib.trivial.importJSON` usage example
+
+    example.json
+    ```json
+    {
+      "title": "Example JSON",
+      "hello": {
+        "world": "foo",
+        "bar": {
+          "foobar": true
+        }
+      }
+    }
+    ```
+
+    ```nix
+    importJSON ./example.json
+    => {
+      title = "Example JSON";
+      hello = {
+        world = "foo";
+        bar = {
+          foobar = true;
+        };
+      };
+    }
+    ```
+
+    :::
 
     # Inputs
 
