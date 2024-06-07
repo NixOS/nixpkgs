@@ -75,6 +75,8 @@ in lib.init bootStages ++ [
                then buildPackages.llvmPackages.libcxxClang
              else if crossSystem.useLLVM or false
                then buildPackages.llvmPackages.clang
+             else if crossSystem.useZig or false
+               then buildPackages.zig.cc
              else buildPackages.gcc;
 
         extraNativeBuildInputs = old.extraNativeBuildInputs
