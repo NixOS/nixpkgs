@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.13.3";
+  version = "8.13.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "untergeek";
     repo = "es_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aJ7BDS/0qi7NsFQBRxkMYXbOLhH0P/IRKhJHysowcvk=";
+    hash = "sha256-M/LxLYXJ+I+78iDo+mrZkJzrJ9VgdkZPRHaP7qbsQPI=";
   };
 
   pythonRelaxDeps = true;
@@ -67,6 +67,7 @@ buildPythonPackage rec {
     "test_basic_operation"
     "test_basic_operation"
     "test_client_info"
+    "test_exit_if_not_master"
     "test_logging_options_ecs"
     "test_logging_options_json"
     "test_multiple_hosts_raises"
