@@ -2,6 +2,7 @@
 
 let
   inherit (lib)
+    mkDefault
     mkEnableOption
     mkIf
     mkOption
@@ -15,7 +16,7 @@ in
 
 {
   meta = {
-    maintainers = with lib.maintainers; [ thubrecht ];
+    maintainers = with lib.maintainers; [thubrecht patrickdag];
     doc = ./server.md;
   };
 
@@ -41,26 +42,46 @@ in
   config = mkIf cfg.enable {
     services.netbird.server = {
       dashboard = {
-        inherit (cfg) enable domain enableNginx;
+        domain = mkDefault cfg.domain;
+        enable = mkDefault cfg.enable;
+        enableNginx = mkDefault cfg.enableNginx;
 
         managementServer = "https://${cfg.domain}";
       };
 
       management =
         {
-          inherit (cfg) enable domain enableNginx;
+          domain = mkDefault cfg.domain;
+          enable = mkDefault cfg.enable;
+          enableNginx = mkDefault cfg.enableNginx;
         }
-        // (optionalAttrs cfg.coturn.enable {
+        // (optionalAttrs cfg.coturn.enable rec {
           turnDomain = cfg.domain;
           turnPort = config.services.coturn.tls-listening-port;
+          # We cannot merge a list of attrsets so we have to redefine the whole list
+          settings = {
+            TURNConfig.Turns = mkDefault [
+              {
+                Proto = "udp";
+                URI = "turn:${turnDomain}:${builtins.toString turnPort}";
+                Username = "netbird";
+                Password =
+                  if (cfg.coturn.password != null)
+                  then cfg.coturn.password
+                  else {_secret = cfg.coturn.passwordFile;};
+              }
+            ];
+          };
         });
 
       signal = {
-        inherit (cfg) enable domain enableNginx;
+        domain = mkDefault cfg.domain;
+        enable = mkDefault cfg.enable;
+        enableNginx = mkDefault cfg.enableNginx;
       };
 
       coturn = {
-        inherit (cfg) domain;
+        domain = mkDefault cfg.domain;
       };
     };
   };

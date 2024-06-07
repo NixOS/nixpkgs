@@ -17,8 +17,8 @@ buildFishPlugin rec {
 
   preFixup = ''
     substituteInPlace $out/share/fish/vendor_conf.d/wakatime.fish \
-      --replace-fail "if type -p wakatime-cli" "if type -p ${lib.getExe wakatime-cli}" \
-      --replace-fail "(type -p wakatime-cli)" "${lib.getExe wakatime-cli}"
+      --replace-fail "if type -p wakatime" "if type -p ${lib.getExe wakatime-cli}" \
+      --replace-fail "(type -p wakatime)" "${lib.getExe wakatime-cli}"
   '';
 
   meta = with lib; {

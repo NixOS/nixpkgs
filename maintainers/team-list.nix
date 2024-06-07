@@ -962,6 +962,12 @@ with lib.maintainers; {
     shortName = "SageMath";
   };
 
+  sdl = {
+    members = [ ];
+    scope = "Maintain SDL libraries.";
+    shortName = "SDL";
+  };
+
   sphinx = {
     members = [ ];
     scope = "Maintain Sphinx related packages.";
