@@ -2682,6 +2682,8 @@ self: super: with self; {
 
   cyclonedx-python-lib = callPackage ../development/python-modules/cyclonedx-python-lib { };
 
+  cyclopts = callPackage ../development/python-modules/cyclopts { };
+
   cymem = callPackage ../development/python-modules/cymem { };
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
