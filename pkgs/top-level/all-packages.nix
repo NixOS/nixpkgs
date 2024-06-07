@@ -23980,7 +23980,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
 
-  SDL2_image = callPackage ../development/libraries/SDL2_image {
+  SDL2_image = callPackage ../by-name/sd/SDL2_image/package.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
   # Pinned for pygame, toppler
