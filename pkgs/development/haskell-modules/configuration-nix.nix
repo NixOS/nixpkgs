@@ -1038,6 +1038,8 @@ self: super: builtins.intersectAttrs super {
         pkgs.buildPackages.makeWrapper
       ];
       postInstall = ''
+        ${drv.postInstall or ""}
+
         wrapProgram $out/bin/cabal2nix \
           --prefix PATH ":" "${
             pkgs.lib.makeBinPath [ pkgs.nix pkgs.nix-prefetch-scripts ]

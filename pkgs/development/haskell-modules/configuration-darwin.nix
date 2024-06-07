@@ -341,14 +341,26 @@ self: super: ({
 
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
-  cabal2nix = overrideCabal (old: {
-    postInstall = ''
-      ${old.postInstall or ""}
-      remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
-      # Note: The `data` output is needed at runtime.
-      remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
-    '';
-  }) super.cabal2nix;
+  # Workarounds for justStaticExecutables on aarch64-darwin. Since dead code
+  # elimination barely works on aarch64-darwin, any package that has a
+  # dependency that uses a Paths_ module will incur a reference on GHC, making
+  # it fail with disallowGhcReference (which is set by justStaticExecutables).
+  #
+  # To address this, you can either manually remove the references causing this
+  # after verifying they are indeed erroneous (e.g. cabal2nix) or just disable
+  # the check, sticking with the status quo. Ideally there'll be zero cases of
+  # the latter in the future!
+  inherit (
+    lib.mapAttrs (_: overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
+        # Note: The `data` output is needed at runtime.
+        remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
+
+        ${old.postInstall or ""}
+      '';
+    })) super
+  ) cabal2nix cabal2nix-unstable;
 
   # https://github.com/fpco/unliftio/issues/87
   unliftio = dontCheck super.unliftio;
