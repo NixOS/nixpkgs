@@ -55,13 +55,15 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+  shellHook = ''
+    export JULIA_SSL_CA_ROOTS_PATH=""
+  '';
+
   makeFlags = [
     "prefix=$(out)"
   ] ++ lib.optionals stdenv.isDarwin [
     # TODO: figure out how to build deps on darwin
     "USE_BINARYBUILDER=1"
-    # TODO: Figure out why libgit2 complains about certs
-    "JULIA_SSL_CA_ROOTS_PATH=\"\""
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "USE_BINARYBUILDER=0"
   ] ++ lib.optionals stdenv.isx86_64 [
