@@ -4,27 +4,29 @@
   fetchFromGitHub,
   rustPlatform,
   buildGoModule,
-  nix-update-script,
-  modrinth-app-unwrapped,
   cargo-tauri,
+  darwin,
   desktop-file-utils,
   esbuild,
-  darwin,
   libsoup,
-  pnpm_8,
+  nix-update-script,
   nodejs,
   openssl,
   pkg-config,
-  webkitgtk_4_0,
-}:
+  pnpm_8,
+  webkitgtk_4_0, }:
+
+let
+  pnpm = pnpm_8;
+in
 rustPlatform.buildRustPackage rec {
   pname = "modrinth-app-unwrapped";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "modrinth";
-    repo = "theseus";
-    rev = "v${modrinth-app-unwrapped.version}";
+    repo = "code";
+    rev = "refs/tags/v${version}";
     hash = "sha256-JWR0e2vOBvOLosr22Oo2mAlR0KAhL+261RRybhNctlM=";
   };
 
@@ -35,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
     sourceRoot = "${src.name}/theseus_gui";
     hash = "sha256-g/uUGfC9TQh0LE8ed51oFY17FySoeTvfaeEpzpNeMao=";
@@ -45,9 +47,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     cargo-tauri.hook
     desktop-file-utils
-    pnpm_8.configHook
     nodejs
     pkg-config
+    pnpm.configHook
   ];
 
   buildInputs =
@@ -69,16 +71,21 @@ rustPlatform.buildRustPackage rec {
   env = {
     ESBUILD_BINARY_PATH = lib.getExe (
       esbuild.override {
-        buildGoModule = args: buildGoModule (args // rec {
-          version = "0.20.2";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        });
+        buildGoModule =
+          args:
+          buildGoModule (
+            args
+            // rec {
+              version = "0.20.2";
+              src = fetchFromGitHub {
+                owner = "evanw";
+                repo = "esbuild";
+                rev = "refs/tags/v${version}";
+                hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
+              };
+              vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+            }
+          );
       }
     );
   };
@@ -108,15 +115,14 @@ rustPlatform.buildRustPackage rec {
       A unique, open source launcher that allows you to play your favorite mods,
       and keep them up to date, all in one neat little package
     '';
-    mainProgram = "modrinth-app";
     homepage = "https://modrinth.com";
-    changelog = "https://github.com/modrinth/theseus/releases/tag/v${modrinth-app-unwrapped.version}";
+    changelog = "https://github.com/modrinth/theseus/releases/tag/v${version}";
     license = with lib.licenses; [
       gpl3Plus
       unfreeRedistributable
     ];
     maintainers = with lib.maintainers; [ getchoo ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = with lib; platforms.linux ++ platforms.darwin;
     # this builds on architectures like aarch64, but the launcher itself does not support them yet
     broken = !stdenv.hostPlatform.isx86_64;
   };
