@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "ziglang";
     repo = "zig";
     rev = finalAttrs.version;
-    hash = "sha256-RNZiUZtaKXoab5kFrDij6YCAospeVvlLWheTc3FGMks=";
+    hash = "sha256-C56jyVf16Co/XCloMLSRsbG9r/gBc8mzCdeEMHV2T2s=";
   };
 
   nativeBuildInputs = [
