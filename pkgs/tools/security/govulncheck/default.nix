@@ -40,6 +40,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck";
     downloadPage = "https://github.com/golang/vuln";
+    changelog = "https://github.com/golang/vuln/releases/tag/v${version}";
     description = "The database client and tools for the Go vulnerability database, also known as vuln";
     mainProgram = "govulncheck";
     longDescription = ''
