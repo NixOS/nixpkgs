@@ -3,24 +3,21 @@
 , fetchFromGitHub
 , qt5
 , openssl
-, protobuf3_20  # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
+, protobuf
 , pkg-config
 , cmake
 }:
 
-let
-  protobuf = protobuf3_20;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ricochet-refresh";
-  version = "3.0.23";
+  version = "3.0.24";
 
   src = fetchFromGitHub {
     owner = "blueprint-freespeech";
     repo = "ricochet-refresh";
     rev = "v${finalAttrs.version}-release";
-    hash = "sha256-Wz53KeI3t12MqnvGuGS8Jd9gDY4eCTc5wcXBDHp5m0U=";
     fetchSubmodules = true;
+    hash = "sha256-xz1cyNQgmXUIZc56OHwWZCGVNpp7CFFyCd0EvAas4zw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

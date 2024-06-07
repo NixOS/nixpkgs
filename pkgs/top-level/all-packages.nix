@@ -29027,6 +29027,10 @@ with pkgs;
 
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
 
+  ricochet-refresh = callPackage ../by-name/ri/ricochet-refresh/package.nix {
+    protobuf = protobuf_21; # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
+  };
+
   rime-data = callPackage ../data/misc/rime-data { };
 
   roapi-http = callPackage ../servers/roapi/http.nix { };
