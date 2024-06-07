@@ -5,11 +5,12 @@
   amaranth,
   setuptools,
   setuptools-scm,
+  unstableGitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "amaranth-boards";
-  version = "0-unstable-2023-12-13";
+  version = "0-unstable-2024-05-01";
   pyproject = true;
   # python setup.py --version
   realVersion = "0.1.dev202+g${lib.substring 0 7 src.rev}";
@@ -17,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth-boards";
-    rev = "170675812b71ee722bcf8ccdb88409a9ad97ffe2";
-    hash = "sha256-dwZCKMJnEY9RjzkcJ9r3TEC7W+Wfi/P7Hjl4/d60/qo=";
+    rev = "aba2300dc83216523e1c98fdb22471cb4bac5027";
+    hash = "sha256-IMhNMkOf6dg4Djyi39TDTpU0S3TQM1+e6TBoyiITaos=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,8 @@ buildPythonPackage rec {
 
   # no tests
   doCheck = false;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Board definitions for Amaranth HDL";
