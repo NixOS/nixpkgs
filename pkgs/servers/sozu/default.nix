@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , darwin
 , protobuf
+, nixosTests
 , nix-update-script
 , testers
 , sozu
@@ -30,12 +31,15 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = sozu;
-      command = "sozu --version";
-      version = "${version}";
+    tests = {
+      inherit (nixosTests) sozu;
+      version = testers.testVersion {
+        package = sozu;
+        command = "sozu --version";
+        version = "${version}";
+      };
     };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
