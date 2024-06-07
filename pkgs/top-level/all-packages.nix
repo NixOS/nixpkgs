@@ -2217,6 +2217,10 @@ with pkgs;
 
   delta = darwin.apple_sdk_11_0.callPackage ../applications/version-management/delta { };
 
+  debase = callPackage ../by-name/de/debase/package.nix {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  };
+
   diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
 
   gex = callPackage ../applications/version-management/gex {
