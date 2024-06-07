@@ -26736,10 +26736,11 @@ with pkgs;
     server = server-pgsql;
   };
 
+  zabbix70 = recurseIntoAttrs (zabbixFor "v70");
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
   zabbix50 = recurseIntoAttrs (zabbixFor "v50");
 
-  zabbix = zabbix60;
+  zabbix = zabbix70;
 
   zipkin = callPackage ../servers/monitoring/zipkin { };
 
