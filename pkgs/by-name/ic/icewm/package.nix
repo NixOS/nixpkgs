@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
     rev = finalAttrs.version;
-    hash = "sha256-n0p8i6v6QreCFiChngHnx+5K4Djj34/+dmIA+bj/0cU=";
+    hash = "sha256-5rDOmhXMc7B67rMa9s55LV/T9B8yb2vVNGM2fnFG6u8=";
   };
 
   strictDeps = true;
