@@ -68,14 +68,16 @@ stdenv.mkDerivation rec {
       macosProductVersion = pkgs.runCommand "macos-product-version" { } ''
         echo -n $(${darwin.DarwinTools}/bin/sw_vers -productVersion) > $out
       '';
+      macosProductVersionStr = builtins.readFile "${macosProductVersion}";
       macosPlatformVersion = pkgs.runCommand "macos-platform-version" { } ''
         echo -n $(${darwin.DarwinTools}/bin/xcrun --show-sdk-version) > $out
       '';
+      macosPlatformVersionStr = builtins.readFile "${macosPlatformVersion}";
     in [
       # TODO: figure out how to build deps on darwin
       "USE_BINARYBUILDER=1"
-      "MACOS_PRODUCT_VERSION=${macosProductVersion}"
-      "MACOS_PLATFORM_VERSION=${macosPlatformVersion}"
+      "MACOS_PRODUCT_VERSION=${macosProductVersionStr}"
+      "MACOS_PLATFORM_VERSION=${macosPlatformVersionStr}"
     ])
   ++ lib.optionals (!stdenv.isDarwin) [
     "USE_BINARYBUILDER=0"
