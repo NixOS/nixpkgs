@@ -23980,14 +23980,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
   };
 
-  # Pinned for pygame, toppler
-  SDL2_image_2_0 = SDL2_image.overrideAttrs (oldAttrs: {
-    version = "2.0.5";
-    src = fetchurl {
-      inherit (oldAttrs.src) url;
-      hash = "sha256-vdX24CZoL31+G+C2BRsgnaL0AqLdi9HEvZwlrSYxCNA";
-    };
-  });
   # Pinned for hedgewars:
   #   https://github.com/NixOS/nixpkgs/pull/274185#issuecomment-1856764786
   SDL2_image_2_6 = SDL2_image.overrideAttrs (oldAttrs: {
