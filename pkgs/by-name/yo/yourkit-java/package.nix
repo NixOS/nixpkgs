@@ -1,6 +1,6 @@
 { fetchzip
 , lib
-, stdenv
+, stdenvNoCC
 , copyDesktopItems
 , imagemagick
 , makeDesktopItem
@@ -16,7 +16,8 @@ let
     x86_64-linux = "x64";
   };
 
-  arch = arches.${stdenv.targetPlatform.system} or (throw "Unsupported system");
+  arch =
+    arches.${stdenvNoCC.targetPlatform.system} or (throw "Unsupported system");
 
   hashes = {
     arm64 = "sha256-r3DZtiuFhQcnkxhhm8mPibisGvDxn9AgNdX9S5HY9I4=";
@@ -34,7 +35,7 @@ let
     startupWMClass = "YourKit Java Profiler";
   };
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   inherit version;
 
   pname = "yourkit-java";
@@ -79,13 +80,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Award winning, fully featured low overhead profiler for Java EE and Java SE platforms";
     homepage = "https://www.yourkit.com";
     changelog = "https://www.yourkit.com/changes/";
     license = licenses.unfree;
     mainProgram = "yourkit-java-profiler";
-    platforms = platforms.linux;
+    platforms = attrNames arches;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ herberteuler ];
   };
