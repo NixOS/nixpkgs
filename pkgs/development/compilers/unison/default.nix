@@ -13,17 +13,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  version = "0.5.20";
+  version = "0.5.21";
 
   src = if stdenv.isDarwin then
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos.tar.gz";
-      hash = "sha256-jhI3qy2ov8bf3l1n0wsslWT70LDeQ6sGNSH62VFJ5cE=";
+      hash = "sha256-AtLky8RevRRAZFAzGz4UqWhBP+Qm/kRu4fMTdx9KB+w=";
     }
   else
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux.tar.gz";
-      hash = "sha256-MOm0RsMFWGik2OL2MPkgmHqKYNO28fkZHVJ/6P3aIww=";
+      hash = "sha256-ninkfYB9dmOD6+LsQNDJW89FrwZn2GrZkLGbafMsrHg=";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.

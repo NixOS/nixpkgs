@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.5.5";
+  version = "2024.6.0";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -51,6 +51,8 @@
     ];
     "air_quality" = ps: with ps; [
     ];
+    "airgradient" = ps: with ps; [
+    ]; # missing inputs: airgradient
     "airly" = ps: with ps; [
       airly
     ];
@@ -82,6 +84,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -109,16 +112,21 @@
       aioairzone-cloud
     ];
     "aladdin_connect" = ps: with ps; [
-      aioaladdinconnect
-    ];
+      fnv-hash-fast
+      isal
+      psutil-home-assistant
+      sqlalchemy
+    ]; # missing inputs: genie-partner-sdk
     "alarm_control_panel" = ps: with ps; [
     ];
     "alarmdecoder" = ps: with ps; [
       adext
     ];
     "alert" = ps: with ps; [
+      isal
     ];
     "alexa" = ps: with ps; [
+      isal
       pyturbojpeg
     ];
     "alpha_vantage" = ps: with ps; [
@@ -129,9 +137,6 @@
     ];
     "amberelectric" = ps: with ps; [
       amberelectric
-    ];
-    "ambiclimate" = ps: with ps; [
-      ambiclimate
     ];
     "ambient_network" = ps: with ps; [
       aioambient
@@ -150,6 +155,7 @@
     ];
     "analytics" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -191,12 +197,14 @@
       aioapcaccess
     ];
     "api" = ps: with ps; [
+      isal
     ];
     "appalachianpower" = ps: with ps; [
     ];
     "apple_tv" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       pyatv
       sqlalchemy
@@ -204,6 +212,7 @@
     ];
     "application_credentials" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -216,6 +225,8 @@
       aprslib
       geopy
     ];
+    "apsystems" = ps: with ps; [
+    ]; # missing inputs: apsystems-ez1
     "aqualogic" = ps: with ps; [
       aqualogic
     ];
@@ -241,6 +252,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -263,6 +275,7 @@
     "arve" = ps: with ps; [
     ]; # missing inputs: asyncarve
     "arwn" = ps: with ps; [
+      isal
       paho-mqtt
     ];
     "aseko_pool_live" = ps: with ps; [
@@ -272,6 +285,7 @@
       ha-ffmpeg
       hassil
       home-assistant-intents
+      isal
       mutagen
       webrtc-noise-gain
     ];
@@ -312,8 +326,10 @@
       pyaussiebb
     ];
     "auth" = ps: with ps; [
+      isal
     ];
     "automation" = ps: with ps; [
+      isal
     ];
     "avea" = ps: with ps; [
       avea
@@ -329,8 +345,11 @@
     ];
     "axis" = ps: with ps; [
       axis
+      isal
       paho-mqtt
     ];
+    "azure_data_explorer" = ps: with ps; [
+    ]; # missing inputs: azure-kusto-data azure-kusto-ingest
     "azure_devops" = ps: with ps; [
       aioazuredevops
     ];
@@ -342,6 +361,7 @@
     ];
     "backup" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       securetar
       sqlalchemy
@@ -414,6 +434,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -436,6 +457,7 @@
       dbus-fast
       fnv-hash-fast
       habluetooth
+      isal
       psutil-home-assistant
       pyserial
       pyudev
@@ -459,6 +481,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -485,6 +508,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -508,6 +532,7 @@
       boschshcpy
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
       zeroconf
@@ -527,6 +552,7 @@
     ];
     "brother" = ps: with ps; [
       brother
+      pysnmp-lextudio
     ];
     "brottsplatskartan" = ps: with ps; [
       brottsplatskartan
@@ -565,6 +591,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -586,8 +613,10 @@
       caldav
     ];
     "calendar" = ps: with ps; [
+      isal
     ];
     "camera" = ps: with ps; [
+      isal
       pyturbojpeg
     ];
     "canary" = ps: with ps; [
@@ -601,6 +630,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       plexapi
       plexauth
@@ -647,6 +677,7 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      isal
       mutagen
       psutil-home-assistant
       python-matter-server
@@ -689,6 +720,7 @@
     "coned" = ps: with ps; [
     ];
     "config" = ps: with ps; [
+      isal
     ];
     "configurator" = ps: with ps; [
     ];
@@ -698,6 +730,7 @@
     "conversation" = ps: with ps; [
       hassil
       home-assistant-intents
+      isal
     ];
     "coolmaster" = ps: with ps; [
       pycoolmasternet-async
@@ -720,6 +753,7 @@
       crownstone-sse
       crownstone-uart
       fnv-hash-fast
+      isal
       psutil-home-assistant
       pyserial
       pyudev
@@ -778,6 +812,7 @@
       home-assistant-frontend
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       numpy
       pillow
@@ -801,8 +836,13 @@
       deluge-client
     ];
     "demo" = ps: with ps; [
+      fnv-hash-fast
       hassil
       home-assistant-intents
+      isal
+      pillow
+      psutil-home-assistant
+      sqlalchemy
     ];
     "denon" = ps: with ps; [
     ];
@@ -815,6 +855,7 @@
       devialet
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
       zeroconf
@@ -822,7 +863,11 @@
     "device_automation" = ps: with ps; [
     ];
     "device_sun_light_trigger" = ps: with ps; [
+      fnv-hash-fast
+      isal
       pillow
+      psutil-home-assistant
+      sqlalchemy
     ];
     "device_tracker" = ps: with ps; [
     ];
@@ -830,6 +875,7 @@
       devolo-home-control-api
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
       zeroconf
@@ -846,8 +892,10 @@
       cached-ipaddress
     ];
     "diagnostics" = ps: with ps; [
+      isal
     ];
     "dialogflow" = ps: with ps; [
+      isal
     ];
     "diaz" = ps: with ps; [
     ];
@@ -881,6 +929,7 @@
       fnv-hash-fast
       getmac
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -888,6 +937,7 @@
       async-upnp-client
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -895,6 +945,7 @@
       aiodns
     ];
     "dominos" = ps: with ps; [
+      isal
     ]; # missing inputs: pizzapi
     "doods" = ps: with ps; [
       pillow
@@ -902,6 +953,7 @@
     ];
     "doorbird" = ps: with ps; [
       doorbirdpy
+      isal
     ];
     "dooya" = ps: with ps; [
     ];
@@ -923,6 +975,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       py-dormakaba-dkey
@@ -941,12 +994,14 @@
     ];
     "drop_connect" = ps: with ps; [
       dropmqttapi
+      isal
       paho-mqtt
     ];
     "dsmr" = ps: with ps; [
       dsmr-parser
     ];
     "dsmr_reader" = ps: with ps; [
+      isal
       paho-mqtt
     ];
     "dte_energy_bridge" = ps: with ps; [
@@ -973,6 +1028,7 @@
       dynalite-panel
       fnv-hash-fast
       home-assistant-frontend
+      isal
       pillow
       psutil-home-assistant
       sqlalchemy
@@ -1006,6 +1062,7 @@
     ]; # missing inputs: py-sucks
     "ecowitt" = ps: with ps; [
       aioecowitt
+      isal
     ];
     "eddystone_temperature" = ps: with ps; [
     ]; # missing inputs: beacontools
@@ -1027,6 +1084,7 @@
     ]; # missing inputs: pyElectra
     "electric_kiwi" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ]; # missing inputs: electrickiwi-api
@@ -1040,6 +1098,7 @@
       elkm1-lib
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1051,6 +1110,7 @@
     ];
     "elvia" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ]; # missing inputs: elvia
@@ -1067,6 +1127,7 @@
     "emulated_hue" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1077,6 +1138,7 @@
       emulated-roku
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1086,6 +1148,7 @@
     ];
     "energy" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1141,6 +1204,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -1170,6 +1234,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -1202,6 +1267,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -1263,11 +1329,13 @@
       file-read-backwards
     ];
     "file_upload" = ps: with ps; [
+      isal
     ];
     "filesize" = ps: with ps; [
     ];
     "filter" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1285,6 +1353,7 @@
     "fitbit" = ps: with ps; [
       fitbit
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1313,6 +1382,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -1354,6 +1424,7 @@
       flux-led
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1370,6 +1441,7 @@
     ];
     "forked_daapd" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       spotipy
       sqlalchemy
@@ -1381,6 +1453,7 @@
       libpyfoscam
     ];
     "foursquare" = ps: with ps; [
+      isal
     ];
     "free_mobile" = ps: with ps; [
     ]; # missing inputs: freesms
@@ -1397,6 +1470,7 @@
       fnv-hash-fast
       fritzconnection
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
       xmltodict
@@ -1415,6 +1489,7 @@
     "frontend" = ps: with ps; [
       fnv-hash-fast
       home-assistant-frontend
+      isal
       pillow
       psutil-home-assistant
       sqlalchemy
@@ -1425,6 +1500,7 @@
     "fujitsu_anywair" = ps: with ps; [
     ];
     "fully_kiosk" = ps: with ps; [
+      isal
       paho-mqtt
       python-fullykiosk
     ];
@@ -1458,6 +1534,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -1475,12 +1552,14 @@
     ];
     "generic" = ps: with ps; [
       ha-av
+      isal
       pillow
     ];
     "generic_hygrostat" = ps: with ps; [
     ];
     "generic_thermostat" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1498,10 +1577,12 @@
     "geocaching" = ps: with ps; [
       fnv-hash-fast
       geocachingapi
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
     "geofency" = ps: with ps; [
+      isal
     ];
     "geonetnz_quakes" = ps: with ps; [
       aio-geojson-geonetnz-quakes
@@ -1536,12 +1617,14 @@
       fnv-hash-fast
       gcal-sync
       ical
+      isal
       oauth2client
       psutil-home-assistant
       sqlalchemy
     ];
     "google_assistant" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       python-matter-server
       pyturbojpeg
@@ -1550,6 +1633,7 @@
     "google_assistant_sdk" = ps: with ps; [
       fnv-hash-fast
       gassist-text
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1560,12 +1644,18 @@
     ];
     "google_generative_ai_conversation" = ps: with ps; [
       google-generativeai
+      ha-ffmpeg
       hassil
       home-assistant-intents
+      isal
+      mutagen
+      voluptuous-openapi
+      webrtc-noise-gain
     ];
     "google_mail" = ps: with ps; [
       fnv-hash-fast
       google-api-python-client
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1578,12 +1668,14 @@
     "google_sheets" = ps: with ps; [
       fnv-hash-fast
       gspread
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
     "google_tasks" = ps: with ps; [
       fnv-hash-fast
       google-api-python-client
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1614,6 +1706,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -1626,6 +1719,7 @@
       fnv-hash-fast
       govee-local-api
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1633,6 +1727,7 @@
       gps3
     ];
     "gpslogger" = ps: with ps; [
+      isal
     ];
     "graphite" = ps: with ps; [
     ];
@@ -1640,6 +1735,7 @@
       fnv-hash-fast
       greeclimate
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1649,6 +1745,11 @@
     "greenwave" = ps: with ps; [
     ]; # missing inputs: greenwavereality
     "group" = ps: with ps; [
+      fnv-hash-fast
+      isal
+      pillow
+      psutil-home-assistant
+      sqlalchemy
     ];
     "growatt_server" = ps: with ps; [
       growattserver
@@ -1665,6 +1766,7 @@
       habitipy
     ];
     "hardkernel" = ps: with ps; [
+      isal
       psutil-home-assistant
     ];
     "hardware" = ps: with ps; [
@@ -1677,6 +1779,7 @@
       aioharmony
     ];
     "hassio" = ps: with ps; [
+      isal
     ];
     "havana_shade" = ps: with ps; [
     ];
@@ -1712,11 +1815,13 @@
     ];
     "history" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
     "history_stats" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1737,6 +1842,7 @@
     "home_connect" = ps: with ps; [
       fnv-hash-fast
       homeconnect
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1749,10 +1855,10 @@
     "homeassistant_green" = ps: with ps; [
       bellows
       fnv-hash-fast
+      isal
       pillow
       psutil-home-assistant
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       pyudev
       sqlalchemy
@@ -1767,10 +1873,10 @@
     "homeassistant_hardware" = ps: with ps; [
       bellows
       fnv-hash-fast
+      isal
       pillow
       psutil-home-assistant
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       pyudev
       sqlalchemy
@@ -1785,10 +1891,10 @@
     "homeassistant_sky_connect" = ps: with ps; [
       bellows
       fnv-hash-fast
+      isal
       pillow
       psutil-home-assistant
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       pyudev
       sqlalchemy
@@ -1803,10 +1909,10 @@
     "homeassistant_yellow" = ps: with ps; [
       bellows
       fnv-hash-fast
+      isal
       pillow
       psutil-home-assistant
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       pyudev
       sqlalchemy
@@ -1824,6 +1930,7 @@
       ha-ffmpeg
       hap-python
       ifaddr
+      isal
       psutil-home-assistant
       pyqrcode
       pyturbojpeg
@@ -1849,6 +1956,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyroute2
@@ -1880,9 +1988,11 @@
       python-hpilo
     ];
     "html5" = ps: with ps; [
+      isal
       pywebpush
     ];
     "http" = ps: with ps; [
+      isal
     ];
     "huawei_lte" = ps: with ps; [
       huawei-lte-api
@@ -1905,6 +2015,7 @@
     "husqvarna_automower" = ps: with ps; [
       aioautomower
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -1949,6 +2060,7 @@
       home-assistant-intents
       ibeacon-ble
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -1978,6 +2090,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -1989,6 +2102,7 @@
     "idteck_prox" = ps: with ps; [
     ]; # missing inputs: rfk101py
     "ifttt" = ps: with ps; [
+      isal
       pyfttt
     ];
     "iglo" = ps: with ps; [
@@ -2000,16 +2114,22 @@
       defusedxml
     ]; # missing inputs: ihcsdk
     "image" = ps: with ps; [
+      isal
     ];
     "image_processing" = ps: with ps; [
+      isal
       pyturbojpeg
     ];
     "image_upload" = ps: with ps; [
+      isal
       pillow
     ];
     "imap" = ps: with ps; [
       aioimaplib
+      isal
     ];
+    "imgw_pib" = ps: with ps; [
+    ]; # missing inputs: imgw_pib
     "improv_ble" = ps: with ps; [
       aioesphomeapi
       aioruuvigateway
@@ -2028,6 +2148,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -2064,6 +2185,7 @@
       home-assistant-intents
       ifaddr
       inkbird-ble
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -2090,6 +2212,7 @@
       fnv-hash-fast
       home-assistant-frontend
       insteon-frontend-home-assistant
+      isal
       pillow
       psutil-home-assistant
       pyinsteon
@@ -2103,6 +2226,7 @@
       intellifire4py
     ];
     "intent" = ps: with ps; [
+      isal
     ];
     "intent_script" = ps: with ps; [
     ];
@@ -2112,6 +2236,7 @@
     "ios" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
       zeroconf
@@ -2132,6 +2257,9 @@
     ];
     "irish_rail_transport" = ps: with ps; [
     ]; # missing inputs: pyirishrail
+    "isal" = ps: with ps; [
+      isal
+    ];
     "islamic_prayer_times" = ps: with ps; [
     ]; # missing inputs: prayer-times-calculator-offline
     "ismartwindow" = ps: with ps; [
@@ -2199,6 +2327,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       kegtron-ble
       mutagen
       psutil-home-assistant
@@ -2234,6 +2363,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pymicrobot
@@ -2248,6 +2378,7 @@
     ];
     "kitchen_sink" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -2260,6 +2391,7 @@
     "knx" = ps: with ps; [
       fnv-hash-fast
       home-assistant-frontend
+      isal
       knx-frontend
       pillow
       psutil-home-assistant
@@ -2268,9 +2400,11 @@
       xknxproject
     ];
     "kodi" = ps: with ps; [
+      isal
       pykodi
     ];
     "konnected" = ps: with ps; [
+      isal
       konnected
     ];
     "kostal_plenticore" = ps: with ps; [
@@ -2311,6 +2445,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       lmcloud
       mutagen
       psutil-home-assistant
@@ -2323,11 +2458,13 @@
     "lametric" = ps: with ps; [
       demetriek
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
     "landisgyr_heat_meter" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       pyserial
       pyudev
@@ -2368,6 +2505,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       ld2410-ble
       mutagen
       psutil-home-assistant
@@ -2395,6 +2533,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -2421,6 +2560,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       led-ble
       mutagen
       psutil-home-assistant
@@ -2435,6 +2575,7 @@
     "lg_netcast" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       pylgnetcast
       sqlalchemy
@@ -2453,6 +2594,7 @@
       aiolifx-themes
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -2497,6 +2639,7 @@
     "local_ip" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -2504,12 +2647,14 @@
       ical
     ];
     "locative" = ps: with ps; [
+      isal
     ];
     "lock" = ps: with ps; [
     ];
     "logbook" = ps: with ps; [
       fnv-hash-fast
       home-assistant-frontend
+      isal
       pillow
       psutil-home-assistant
       sqlalchemy
@@ -2520,6 +2665,7 @@
     ];
     "logi_circle" = ps: with ps; [
       ha-ffmpeg
+      isal
       logi-circle
     ];
     "london_air" = ps: with ps; [
@@ -2535,6 +2681,7 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      isal
       loqedapi
       mutagen
       psutil-home-assistant
@@ -2544,6 +2691,7 @@
       webrtc-noise-gain
     ];
     "lovelace" = ps: with ps; [
+      isal
       pillow
     ];
     "luci" = ps: with ps; [
@@ -2568,24 +2716,29 @@
     "lyric" = ps: with ps; [
       aiolyric
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
     "madeco" = ps: with ps; [
     ];
     "mailbox" = ps: with ps; [
+      isal
     ];
     "mailgun" = ps: with ps; [
+      isal
       pymailgunner
     ];
     "manual" = ps: with ps; [
     ];
     "manual_mqtt" = ps: with ps; [
+      isal
       paho-mqtt
     ];
     "map" = ps: with ps; [
       fnv-hash-fast
       home-assistant-frontend
+      isal
       pillow
       psutil-home-assistant
       sqlalchemy
@@ -2605,6 +2758,7 @@
     ];
     "matter" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       python-matter-server
       sqlalchemy
@@ -2635,6 +2789,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -2644,11 +2799,14 @@
       zeroconf
     ]; # missing inputs: medcom-ble
     "media_extractor" = ps: with ps; [
+      isal
       yt-dlp
     ];
     "media_player" = ps: with ps; [
+      isal
     ];
     "media_source" = ps: with ps; [
+      isal
     ];
     "mediaroom" = ps: with ps; [
       pymediaroom
@@ -2676,6 +2834,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -2685,6 +2844,7 @@
       zeroconf
     ]; # missing inputs: melnor-bluetooth
     "meraki" = ps: with ps; [
+      isal
     ];
     "message_bird" = ps: with ps; [
       messagebird
@@ -2711,18 +2871,22 @@
     ]; # missing inputs: mficlient
     "microbees" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ]; # missing inputs: microBeesPy
     "microsoft" = ps: with ps; [
     ]; # missing inputs: pycsspeechtts
     "microsoft_face" = ps: with ps; [
+      isal
       pyturbojpeg
     ];
     "microsoft_face_detect" = ps: with ps; [
+      isal
       pyturbojpeg
     ];
     "microsoft_face_identify" = ps: with ps; [
+      isal
       pyturbojpeg
     ];
     "mijndomein_energie" = ps: with ps; [
@@ -2762,6 +2926,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       moat-ble
       mutagen
       psutil-home-assistant
@@ -2777,6 +2942,7 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      isal
       mutagen
       pillow
       psutil-home-assistant
@@ -2793,6 +2959,7 @@
     ];
     "modem_callerid" = ps: with ps; [
       fnv-hash-fast
+      isal
       phone-modem
       psutil-home-assistant
       pyserial
@@ -2810,6 +2977,13 @@
     ];
     "monoprice" = ps: with ps; [
     ]; # missing inputs: pymonoprice
+    "monzo" = ps: with ps; [
+      fnv-hash-fast
+      isal
+      monzopy
+      psutil-home-assistant
+      sqlalchemy
+    ];
     "moon" = ps: with ps; [
     ];
     "mopeka" = ps: with ps; [
@@ -2830,6 +3004,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mopeka-iot-ble
       mutagen
       psutil-home-assistant
@@ -2842,6 +3017,7 @@
     "motion_blinds" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       motionblinds
       psutil-home-assistant
       sqlalchemy
@@ -2864,6 +3040,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -2873,6 +3050,7 @@
       zeroconf
     ]; # missing inputs: motionblindsble
     "motioneye" = ps: with ps; [
+      isal
       motioneye-client
     ];
     "motionmount" = ps: with ps; [
@@ -2882,18 +3060,23 @@
       mpd2
     ];
     "mqtt" = ps: with ps; [
+      isal
       paho-mqtt
     ];
     "mqtt_eventstream" = ps: with ps; [
+      isal
       paho-mqtt
     ];
     "mqtt_json" = ps: with ps; [
+      isal
       paho-mqtt
     ];
     "mqtt_room" = ps: with ps; [
+      isal
       paho-mqtt
     ];
     "mqtt_statestream" = ps: with ps; [
+      isal
       paho-mqtt
     ];
     "msteams" = ps: with ps; [
@@ -2911,6 +3094,7 @@
     "my" = ps: with ps; [
       fnv-hash-fast
       home-assistant-frontend
+      isal
       pillow
       psutil-home-assistant
       sqlalchemy
@@ -2918,10 +3102,12 @@
     "myq" = ps: with ps; [
     ];
     "mysensors" = ps: with ps; [
+      isal
       paho-mqtt
       pymysensors
     ];
     "mystrom" = ps: with ps; [
+      isal
       python-mystrom
     ];
     "mythicbeastsdns" = ps: with ps; [
@@ -2929,6 +3115,7 @@
     ];
     "myuplink" = ps: with ps; [
       fnv-hash-fast
+      isal
       myuplink
       psutil-home-assistant
       sqlalchemy
@@ -2947,6 +3134,7 @@
     ];
     "neato" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       pybotvac
       sqlalchemy
@@ -2961,6 +3149,7 @@
       fnv-hash-fast
       google-nest-sdm
       ha-ffmpeg
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -2970,6 +3159,7 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      isal
       mutagen
       psutil-home-assistant
       pyatmo
@@ -2988,10 +3178,12 @@
       eternalegypt
     ];
     "netio" = ps: with ps; [
+      isal
     ]; # missing inputs: pynetio
     "network" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -3037,6 +3229,7 @@
       fnv-hash-fast
       getmac
       ifaddr
+      isal
       netmap
       psutil-home-assistant
       sqlalchemy
@@ -3054,6 +3247,7 @@
       pymetno
     ];
     "notify" = ps: with ps; [
+      isal
     ];
     "notify_events" = ps: with ps; [
       notify-events
@@ -3070,6 +3264,7 @@
       nuheat
     ];
     "nuki" = ps: with ps; [
+      isal
       pynuki
     ];
     "numato" = ps: with ps; [
@@ -3106,8 +3301,12 @@
       defusedxml
     ];
     "ollama" = ps: with ps; [
+      ha-ffmpeg
       hassil
       home-assistant-intents
+      isal
+      mutagen
+      webrtc-noise-gain
     ]; # missing inputs: ollama-hass
     "ombi" = ps: with ps; [
       pyombi
@@ -3116,12 +3315,14 @@
       omnilogic
     ];
     "onboarding" = ps: with ps; [
+      isal
       pillow
     ];
     "oncue" = ps: with ps; [
       aiooncue
     ];
     "ondilo_ico" = ps: with ps; [
+      isal
       ondilo
     ];
     "onewire" = ps: with ps; [
@@ -3142,8 +3343,10 @@
       ha-ffmpeg
       hassil
       home-assistant-intents
+      isal
       mutagen
       openai
+      voluptuous-openapi
       webrtc-noise-gain
     ];
     "openalpr_cloud" = ps: with ps; [
@@ -3178,13 +3381,13 @@
       pyopenuv
     ];
     "openweathermap" = ps: with ps; [
-      pyowm
-    ];
+    ]; # missing inputs: pyopenweathermap
     "opnsense" = ps: with ps; [
       pyopnsense
     ];
     "opower" = ps: with ps; [
       fnv-hash-fast
+      isal
       opower
       psutil-home-assistant
       sqlalchemy
@@ -3209,6 +3412,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       oralb-ble
       psutil-home-assistant
@@ -3233,11 +3437,11 @@
       bellows
       fnv-hash-fast
       ifaddr
+      isal
       pillow
       psutil-home-assistant
       pyroute2
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       python-otbr-api
       pyudev
@@ -3268,6 +3472,7 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      isal
       mutagen
       paho-mqtt
       psutil-home-assistant
@@ -3292,6 +3497,7 @@
     "panel_custom" = ps: with ps; [
       fnv-hash-fast
       home-assistant-frontend
+      isal
       pillow
       psutil-home-assistant
       sqlalchemy
@@ -3299,6 +3505,7 @@
     "panel_iframe" = ps: with ps; [
       fnv-hash-fast
       home-assistant-frontend
+      isal
       pillow
       psutil-home-assistant
       sqlalchemy
@@ -3323,6 +3530,7 @@
     "persistent_notification" = ps: with ps; [
     ];
     "person" = ps: with ps; [
+      isal
       pillow
     ];
     "pge" = ps: with ps; [
@@ -3355,6 +3563,7 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      isal
       mutagen
       psutil-home-assistant
       pyplaato
@@ -3365,10 +3574,12 @@
     ];
     "plant" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
     "plex" = ps: with ps; [
+      isal
       plexapi
       plexauth
       plexwebsocket
@@ -3382,6 +3593,7 @@
       pycketcasts
     ];
     "point" = ps: with ps; [
+      isal
       pypoint
     ];
     "poolsense" = ps: with ps; [
@@ -3410,6 +3622,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -3428,6 +3641,7 @@
     "proliphix" = ps: with ps; [
     ]; # missing inputs: proliphix
     "prometheus" = ps: with ps; [
+      isal
       prometheus-client
     ];
     "prosegur" = ps: with ps; [
@@ -3462,6 +3676,7 @@
       aiopurpleair
     ];
     "push" = ps: with ps; [
+      isal
     ];
     "pushbullet" = ps: with ps; [
       pushbullet-py
@@ -3502,6 +3717,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -3538,6 +3754,7 @@
     "rabbitair" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       python-rabbitair
       sqlalchemy
@@ -3549,6 +3766,7 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      isal
       mutagen
       psutil-home-assistant
       python-matter-server
@@ -3579,6 +3797,7 @@
     "rainforest_raven" = ps: with ps; [
       aioraven
       fnv-hash-fast
+      isal
       psutil-home-assistant
       pyserial
       pyudev
@@ -3607,6 +3826,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -3617,6 +3837,7 @@
       zeroconf
     ];
     "raspberry_pi" = ps: with ps; [
+      isal
       psutil-home-assistant
     ];
     "raspyrfm" = ps: with ps; [
@@ -3631,6 +3852,7 @@
     ];
     "recorder" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -3641,6 +3863,7 @@
       hassil
       home-assistant-frontend
       home-assistant-intents
+      isal
       mutagen
       pillow
       psutil-home-assistant
@@ -3674,9 +3897,11 @@
       renson-endura-delta
     ];
     "reolink" = ps: with ps; [
+      isal
       reolink-aio
     ];
     "repairs" = ps: with ps; [
+      isal
     ];
     "repetier" = ps: with ps; [
     ]; # missing inputs: pyrepetierng
@@ -3695,6 +3920,7 @@
       pyrfxtrx
     ];
     "rhasspy" = ps: with ps; [
+      isal
     ];
     "ridwell" = ps: with ps; [
       aioridwell
@@ -3745,10 +3971,12 @@
       rpi-bad-power
     ];
     "rss_feed_template" = ps: with ps; [
+      isal
     ];
     "rtorrent" = ps: with ps; [
     ];
     "rtsp_to_webrtc" = ps: with ps; [
+      isal
       pyturbojpeg
       rtsp-to-webrtc
     ];
@@ -3769,6 +3997,7 @@
       dbus-fast
       fnv-hash-fast
       habluetooth
+      isal
       psutil-home-assistant
       pyserial
       pyudev
@@ -3792,6 +4021,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -3817,6 +4047,7 @@
       fnv-hash-fast
       getmac
       ifaddr
+      isal
       psutil-home-assistant
       samsungctl
       samsungtvws
@@ -3859,6 +4090,8 @@
     ]; # missing inputs: scsgate
     "search" = ps: with ps; [
       fnv-hash-fast
+      isal
+      pillow
       psutil-home-assistant
       sqlalchemy
     ];
@@ -3894,6 +4127,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -3905,6 +4139,7 @@
     ];
     "sensor" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -3928,6 +4163,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -3955,6 +4191,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -3970,11 +4207,12 @@
     "senz" = ps: with ps; [
       aiosenz
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
     "serial" = ps: with ps; [
-      pyserial-asyncio
+      pyserial-asyncio-fast
     ];
     "serial_pm" = ps: with ps; [
       pmsensor
@@ -4006,6 +4244,7 @@
       fnv-hash-fast
       habluetooth
       ifaddr
+      isal
       psutil-home-assistant
       pyserial
       pyudev
@@ -4015,6 +4254,7 @@
       shodan
     ];
     "shopping_list" = ps: with ps; [
+      isal
     ];
     "sia" = ps: with ps; [
       pysiaalarm
@@ -4068,11 +4308,13 @@
     ]; # missing inputs: goslide-api
     "slimproto" = ps: with ps; [
       aioslimproto
+      isal
     ];
     "sma" = ps: with ps; [
       pysma
     ];
     "smappee" = ps: with ps; [
+      isal
       pysmappee
     ];
     "smart_blinds" = ps: with ps; [
@@ -4090,6 +4332,7 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      isal
       mutagen
       psutil-home-assistant
       pysmartapp
@@ -4116,6 +4359,7 @@
       snapcast
     ];
     "snips" = ps: with ps; [
+      isal
       paho-mqtt
     ];
     "snmp" = ps: with ps; [
@@ -4139,6 +4383,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -4177,6 +4422,7 @@
       async-upnp-client
       fnv-hash-fast
       ifaddr
+      isal
       plexapi
       plexauth
       plexwebsocket
@@ -4194,6 +4440,7 @@
       libsoundtouch
     ];
     "spaceapi" = ps: with ps; [
+      isal
     ];
     "spc" = ps: with ps; [
       pyspcwebgw
@@ -4208,6 +4455,7 @@
     ]; # missing inputs: hass-splunk
     "spotify" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       spotipy
       sqlalchemy
@@ -4226,6 +4474,7 @@
       async-upnp-client
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -4241,6 +4490,7 @@
     ];
     "statistics" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -4255,6 +4505,7 @@
       discovery30303
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -4268,6 +4519,7 @@
     ]; # missing inputs: stookwijzer
     "stream" = ps: with ps; [
       ha-av
+      isal
       numpy
       pyturbojpeg
     ];
@@ -4275,6 +4527,7 @@
       streamlabswater
     ];
     "stt" = ps: with ps; [
+      isal
     ];
     "subaru" = ps: with ps; [
       subarulink
@@ -4329,6 +4582,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -4358,6 +4612,7 @@
     "synology_chat" = ps: with ps; [
     ];
     "synology_dsm" = ps: with ps; [
+      isal
       py-synologydsm-api
     ];
     "synology_srm" = ps: with ps; [
@@ -4367,6 +4622,7 @@
     "system_bridge" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
       systembridgeconnector
@@ -4374,6 +4630,7 @@
       zeroconf
     ];
     "system_health" = ps: with ps; [
+      isal
     ];
     "system_log" = ps: with ps; [
     ];
@@ -4404,6 +4661,7 @@
     ]; # missing inputs: tapsaff
     "tasmota" = ps: with ps; [
       hatasmota
+      isal
       paho-mqtt
     ];
     "tautulli" = ps: with ps; [
@@ -4418,12 +4676,15 @@
       xmltodict
     ];
     "tedee" = ps: with ps; [
+      isal
       pytedee-async
     ];
     "telegram" = ps: with ps; [
+      isal
       python-telegram-bot
     ]; # missing inputs: python-telegram-bot.optional-dependencies.socks
     "telegram_bot" = ps: with ps; [
+      isal
       python-telegram-bot
     ]; # missing inputs: python-telegram-bot.optional-dependencies.socks
     "tellduslive" = ps: with ps; [
@@ -4437,6 +4698,11 @@
       temperusb
     ];
     "template" = ps: with ps; [
+      fnv-hash-fast
+      isal
+      pillow
+      psutil-home-assistant
+      sqlalchemy
     ];
     "tensorflow" = ps: with ps; [
       numpy
@@ -4474,6 +4740,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -4503,6 +4770,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -4516,6 +4784,7 @@
       stringcase
     ]; # missing inputs: thermoworks-smoke
     "thethingsnetwork" = ps: with ps; [
+      ttn-client
     ];
     "thingspeak" = ps: with ps; [
     ]; # missing inputs: thingspeak
@@ -4526,6 +4795,7 @@
     "thread" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       pyroute2
       python-otbr-api
@@ -4536,6 +4806,7 @@
     ];
     "tibber" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       pytibber
       sqlalchemy
@@ -4563,6 +4834,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -4584,6 +4856,7 @@
     "tod" = ps: with ps; [
     ];
     "todo" = ps: with ps; [
+      isal
     ];
     "todoist" = ps: with ps; [
       todoist-api-python
@@ -4602,6 +4875,7 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      isal
       mutagen
       psutil-home-assistant
       python-matter-server
@@ -4611,6 +4885,7 @@
       webrtc-noise-gain
     ];
     "torque" = ps: with ps; [
+      isal
     ];
     "totalconnect" = ps: with ps; [
       total-connect-client
@@ -4620,6 +4895,7 @@
     "tplink" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       python-kasa
       sqlalchemy
@@ -4633,6 +4909,7 @@
     "tplink_tapo" = ps: with ps; [
     ];
     "traccar" = ps: with ps; [
+      isal
       pytraccar
       stringcase
     ];
@@ -4673,6 +4950,7 @@
     ];
     "tts" = ps: with ps; [
       ha-ffmpeg
+      isal
       mutagen
     ];
     "tuya" = ps: with ps; [
@@ -4683,12 +4961,15 @@
       twentemilieu
     ];
     "twilio" = ps: with ps; [
+      isal
       twilio
     ];
     "twilio_call" = ps: with ps; [
+      isal
       twilio
     ];
     "twilio_sms" = ps: with ps; [
+      isal
       twilio
     ];
     "twinkly" = ps: with ps; [
@@ -4696,6 +4977,7 @@
     ];
     "twitch" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
       twitchapi
@@ -4726,6 +5008,7 @@
       unifiled
     ];
     "unifiprotect" = ps: with ps; [
+      isal
       pyunifiprotect
       unifi-discovery
     ];
@@ -4747,6 +5030,7 @@
       fnv-hash-fast
       getmac
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -4759,6 +5043,7 @@
     ];
     "usb" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       pyserial
       pyudev
@@ -4788,6 +5073,7 @@
     ];
     "velbus" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       pyserial
       pyudev
@@ -4846,6 +5132,7 @@
       ha-ffmpeg
       hassil
       home-assistant-intents
+      isal
       mutagen
       webrtc-noise-gain
     ]; # missing inputs: voip-utils
@@ -4902,6 +5189,7 @@
       apple-weatherkit
     ];
     "webhook" = ps: with ps; [
+      isal
     ];
     "webmin" = ps: with ps; [
     ]; # missing inputs: webmin-xmlrpc
@@ -4910,6 +5198,7 @@
     ];
     "websocket_api" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -4939,6 +5228,7 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      isal
       mutagen
       psutil-home-assistant
       python-matter-server
@@ -4949,6 +5239,7 @@
     "wiz" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       pywizlight
       sqlalchemy
@@ -4976,6 +5267,7 @@
       ha-ffmpeg
       hassil
       home-assistant-intents
+      isal
       mutagen
       webrtc-noise-gain
       wyoming
@@ -4984,6 +5276,7 @@
     ];
     "xbox" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
       xbox-webapi
@@ -5015,6 +5308,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -5061,6 +5355,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      isal
       mutagen
       psutil-home-assistant
       pyserial
@@ -5078,6 +5373,7 @@
       async-upnp-client
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
     ];
@@ -5093,6 +5389,7 @@
       async-upnp-client
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
       yeelight
@@ -5105,6 +5402,7 @@
     ];
     "yolink" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
       yolink-api
@@ -5114,6 +5412,7 @@
     ];
     "youtube" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       sqlalchemy
       youtubeaio
@@ -5130,6 +5429,7 @@
     "zeroconf" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
       zeroconf
@@ -5145,10 +5445,10 @@
     "zha" = ps: with ps; [
       bellows
       fnv-hash-fast
+      isal
       pillow
       psutil-home-assistant
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       pyudev
       sqlalchemy
@@ -5175,6 +5475,7 @@
     ];
     "zwave_js" = ps: with ps; [
       fnv-hash-fast
+      isal
       psutil-home-assistant
       pyserial
       pyudev
@@ -5184,6 +5485,7 @@
     "zwave_me" = ps: with ps; [
       fnv-hash-fast
       ifaddr
+      isal
       psutil-home-assistant
       sqlalchemy
       url-normalize
@@ -5214,13 +5516,11 @@
     "airvisual_pro"
     "airzone"
     "airzone_cloud"
-    "aladdin_connect"
     "alarm_control_panel"
     "alarmdecoder"
     "alert"
     "alexa"
     "amberelectric"
-    "ambiclimate"
     "ambient_network"
     "ambient_station"
     "analytics"
@@ -5529,6 +5829,7 @@
     "ipma"
     "ipp"
     "iqvia"
+    "isal"
     "isy994"
     "izone"
     "jellyfin"
@@ -5621,6 +5922,7 @@
     "modem_callerid"
     "modern_forms"
     "mold_indicator"
+    "monzo"
     "moon"
     "mopeka"
     "motion_blinds"
@@ -5689,7 +5991,6 @@
     "opensky"
     "opentherm_gw"
     "openuv"
-    "openweathermap"
     "opnsense"
     "opower"
     "oralb"
@@ -5894,6 +6195,7 @@
     "text"
     "thermobeacon"
     "thermopro"
+    "thethingsnetwork"
     "thread"
     "threshold"
     "tibber"

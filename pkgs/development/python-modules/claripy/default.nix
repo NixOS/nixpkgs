@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "claripy";
-  version = "9.2.104";
+  version = "9.2.105";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "claripy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J4XoqlUZzm7WMfZJ0DY+yHvMaP5kUEtRv9JnnMhVAm0=";
+    hash = "sha256-Jiv8j6lpNaQjPFSaWUiakxQnh67EvTtE+WxjB3E06LY=";
   };
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail
