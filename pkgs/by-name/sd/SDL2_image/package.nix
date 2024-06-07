@@ -40,10 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libwebp
     zlib
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    Foundation
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
 
   configureFlags = [
     # Disable dynamically loaded dependencies
@@ -62,8 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SDL image library";
     homepage = "https://github.com/libsdl-org/SDL_image";
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members
-                 ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     platforms = lib.platforms.unix;
   };
 })
