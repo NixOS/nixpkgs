@@ -33,6 +33,9 @@ let
       netboot = {
         squashfsCompression = "gzip -Xcompression-level 1";
       };
+      boot = {
+        postBootCommands = ''nixos-generate-config && echo '{config,lib,pkgs,...}:{imports=[./hardware-configuration.nix] ++ lib.optional (builtins.pathExists ./local-configuration.nix) ./local-configuration.nix; boot.loader.grub.enable=false;}' > /etc/nixos/configuration.nix'';
+      };
       networking = {
         hostName = "xnode";
       };
