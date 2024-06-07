@@ -2571,6 +2571,8 @@ self: super: with self; {
 
   crontab = callPackage ../development/python-modules/crontab { };
 
+  crossandra = callPackage ../development/python-modules/crossandra { };
+
   crossplane = callPackage ../development/python-modules/crossplane { };
 
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
@@ -4815,6 +4817,8 @@ self: super: with self; {
     callPackage ../development/python-modules/git-annex-adapter { };
 
   git-filter-repo = callPackage ../development/python-modules/git-filter-repo { };
+
+  git-find-repos = callPackage ../development/python-modules/git-find-repos { };
 
   git-revise = callPackage ../development/python-modules/git-revise { };
 
@@ -17160,6 +17164,8 @@ self: super: with self; {
   xmod = callPackage ../development/python-modules/xmod { };
 
   xmodem = callPackage ../development/python-modules/xmodem { };
+
+  xmpppy = callPackage ../development/python-modules/xmpppy { };
 
   xnatpy = callPackage ../development/python-modules/xnatpy { };
 

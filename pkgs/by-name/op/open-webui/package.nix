@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     rev = "v${version}";
-    hash = "sha256-jWO0mo26C+QTIX5j3ucDk/no+vQnAh7Q6JwB3lLM83k=";
+    hash = "sha256-BqclBrkFmTUJZuUySyNsQFlfdyENaIhqjn50797zJHY=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-QIgYHZusuq2QD8p8MGsNVhCbz6fR+qP9UuU/kbBkadc=";
+    npmDepsHash = "sha256-drMUcCUeyPEnaa1fSsfHJfInenyfH7NNJgBFeRsfOuE=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   # The custom hook tries to run `npm install` in `buildPhase`.
-  # We don't have to worry, as nodejs depedencies are managed by `frontend` drv.
+  # We don't have to worry, as node dependencies are managed by `frontend` drv.
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '[tool.hatch.build.hooks.custom]' "" \

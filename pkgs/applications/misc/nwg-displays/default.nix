@@ -14,13 +14,13 @@
 
 python310Packages.buildPythonApplication rec {
   pname = "nwg-displays";
-  version = "0.3.19";
+  version = "0.3.20";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-displays";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pZelKuTClRELZT80r44FxocdW+KRARD027ZV18XTTss=";
+    hash = "sha256-lpXcH45BFgfRjkEHqimnHonDenm5YA6oahe4sN2wpY4=";
   };
 
   nativeBuildInputs = [
