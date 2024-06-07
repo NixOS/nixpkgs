@@ -90,6 +90,14 @@ python3.pkgs.buildPythonApplication rec {
     # Fix extraframework lookup on case-sensitive APFS.
     # https://github.com/mesonbuild/meson/pull/13038
     ./007-case-sensitive-fs.patch
+
+    # Fix meson's detection for zig's linker
+    # https://github.com/mesonbuild/meson/pull/12293
+    (fetchpatch {
+      name = "linker-support-zig-cc.patch";
+      url = "https://github.com/mesonbuild/meson/pull/12293/commits/2baae244c995794d9addfe6ed924dfa72f01be82.patch";
+      hash = "sha256-dDOmSRBKl/gs7I3kmLXIyQk3zsOdlaYov72pPSel4+I=";
+    })
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
