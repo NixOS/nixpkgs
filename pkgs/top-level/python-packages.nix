@@ -17163,6 +17163,8 @@ self: super: with self; {
 
   xmodem = callPackage ../development/python-modules/xmodem { };
 
+  xmpppy = callPackage ../development/python-modules/xmpppy { };
+
   xnatpy = callPackage ../development/python-modules/xnatpy { };
 
   xnd = callPackage ../development/python-modules/xnd { };
