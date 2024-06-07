@@ -1476,6 +1476,7 @@
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/pomerium.nix
   ./services/web-servers/rustus.nix
+  ./services/web-servers/sozu.nix
   ./services/web-servers/stargazer.nix
   ./services/web-servers/static-web-server.nix
   ./services/web-servers/tomcat.nix
