@@ -7,6 +7,9 @@
   fetchurl,
   nodejs-slim,
   prefetch-yarn-deps,
+  fixup-yarn-lock,
+  yarn,
+  makeSetupHook,
   cacert,
   callPackage,
   nix,
@@ -154,4 +157,15 @@ in
         );
     in
     lib.setFunctionArgs f (lib.functionArgs f) // { inherit tests; };
+
+  yarnConfigHook = makeSetupHook {
+    name = "yarn-config-hook";
+    propagatedBuildInputs = [
+      yarn
+      fixup-yarn-lock
+    ];
+    meta = {
+      description = "Install nodejs dependencies from an offline yarn cache produced by fetchYarnDeps";
+    };
+  } ./yarn-config-hook.sh;
 }
