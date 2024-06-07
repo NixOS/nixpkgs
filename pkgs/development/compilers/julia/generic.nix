@@ -56,12 +56,10 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '' + lib.optionalString stdenv.isDarwin (''
     substituteInPlace base/Makefile \
-      --replace '$(shell sw_vers -productVersion)' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers" }"
+      --replace 'sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers" }"
     substituteInPlace base/Makefile \
-      --replace '$(shell xcrun --show-sdk-version)' "${(builtins.toString darwin.DarwinTools) + "/bin/xcrun" }"
+      --replace 'xcrun' "${(builtins.toString darwin.DarwinTools) + "/bin/xcrun" }"
   '');
-
-
 
 
   makeFlags = [
