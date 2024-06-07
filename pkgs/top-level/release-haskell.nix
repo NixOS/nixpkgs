@@ -265,6 +265,7 @@ let
       # top-level packages that depend on haskellPackages
       inherit (pkgsPlatforms)
         agda
+        alex
         arion
         bench
         blucontrol
@@ -272,6 +273,8 @@ let
         cabal2nix
         cachix
         # carp broken on 2024-04-09
+        changelog-d
+        cornelis
         cedille
         client-ip-echo
         darcs
@@ -282,7 +285,10 @@ let
         dhall-lsp-server
         dhall-json
         dhall-nix
+        dhall-nixpkgs
+        dhall-yaml
         diagrams-builder
+        echidna
         elm2nix
         emanote
         fffuu
@@ -293,6 +299,7 @@ let
         gitit
         glirc
         hadolint
+        happy
         haskell-ci
         haskell-language-server
         hasura-graphql-engine
@@ -308,10 +315,12 @@ let
         hledger-web
         hlint
         hpack
+        hscolour
         icepeak
         ihaskell
         jacinda
         jl
+        json2yaml
         koka
         krank
         lambdabot
@@ -338,12 +347,13 @@ let
         ormolu
         # pakcs broken by set-extra on 2024-03-15
         pandoc
-        petrinizer
         place-cursor-at
         pinboard-notes-backup
         pretty-simple
+        purenix
         shake
         shellcheck
+        shellcheck-minimal
         sourceAndTags
         spacecookie
         spago
@@ -368,7 +378,6 @@ let
         xmobar
         xmonadctl
         xmonad-with-packages
-        yi
         zsh-git-prompt
         ;
 
