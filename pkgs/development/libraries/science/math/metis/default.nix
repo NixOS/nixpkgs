@@ -1,20 +1,37 @@
-{ lib, stdenv, fetchurl, unzip, cmake }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gklib, llvmPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "metis";
-  version = "5.1.0";
+  version = "5.2.1";
 
-  src = fetchurl {
-    url = "http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-${version}.tar.gz";
-    sha256 = "1cjxgh41r8k6j029yxs8msp3z6lcnpm16g5pvckk35kc7zhfpykn";
+  src = fetchFromGitHub {
+    owner = "KarypisLab";
+    repo = "METIS";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-eddLR6DvZ+2LeR0DkknN6zzRvnW+hLN2qeI+ETUPcac=";
   };
 
-  cmakeFlags = [
-    "-DGKLIB_PATH=../GKlib"
-    # remove once updated past https://github.com/KarypisLab/METIS/commit/521a2c360dc21ace5c4feb6dc0b7992433e3cb0f
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  patches = [
+    # fix gklib link error
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-libs/metis/files/metis-5.2.1-add-gklib-as-required.patch?id=c78ecbd3fdf9b33e307023baf0de12c4448dd283";
+      hash = "sha256-uoXMi6pMs5VrzUmjsLlQYFLob1A8NAt9CbFi8qhQXVQ=";
+    })
   ];
-  nativeBuildInputs = [ unzip cmake ];
+
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ gklib ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+
+  preConfigure = ''
+    make config
+  '';
+
+  cmakeFlags = [
+    (lib.cmakeFeature "GKLIB_PATH" "${gklib}")
+    (lib.cmakeBool "OPENMP" true)
+    (lib.cmakeBool "SHARED" (!stdenv.hostPlatform.isStatic))
+  ];
 
   meta = {
     description = "Serial graph partitioning and fill-reducing matrix ordering";
@@ -22,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
   };
-}
+})
