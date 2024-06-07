@@ -7,6 +7,7 @@
 , libxml2
 , libffi
 , xar
+, testers
 }:
 
 llvmPackages.stdenv.mkDerivation rec {
@@ -49,6 +50,12 @@ llvmPackages.stdenv.mkDerivation rec {
     ( cd ../test; python src/tester.py ../build/c3c test_suite )
     runHook postCheck
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = c3c;
+    };
+  };
 
   meta = with lib; {
     description = "Compiler for the C3 language";
