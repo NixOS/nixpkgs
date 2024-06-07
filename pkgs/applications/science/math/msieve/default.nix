@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "msieve";
-  version = "r1050";
+  version = "1052";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/msieve/code/trunk";
-    rev = "1050";
-    hash = "sha256-cn6OhE4zhrpB7BFrRdOnucjATbfo5mLkK7O0Usx1quE=";
+    rev = version;
+    hash = "sha256-kQJOXbA6XZi1p3gS20fVlNiHoFpks6YceyLFL5I9paY=";
   };
 
   buildInputs = [ zlib gmp ecm ];
