@@ -101,6 +101,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preInstall = ''
+    export JULIA_SSL_CA_ROOTS_PATH=""
+  '';
+
   meta = with lib; {
     description = "High-level performance-oriented dynamical language for technical computing";
     mainProgram = "julia";
