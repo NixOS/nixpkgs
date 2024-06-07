@@ -61,6 +61,10 @@ stdenv.mkDerivation rec {
     "JULIA_CPU_TARGET=generic;cortex-a57;thunderx2t99;carmel,clone_all;apple-m1,base(3);neoverse-512tvb,base(3)"
   ];
 
+  NIX_CFLAGS_COMPILE = [] ++ lib.optionals stdenv.isDarwin [
+    "-Wno-error=implicit-function-declaration"
+  ];
+
   # remove forbidden reference to $TMPDIR
   preFixup = ''
     for file in libcurl.so libgmpxx.so libmpfr.so; do
