@@ -71,7 +71,7 @@ in {
 
   aspnetcore = mkCommon "aspnetcore" rec {
     pname = "dotnet-aspnetcore-runtime";
-    version = releaseManifest.aspnetcoreRuntimeVersion or releaseManifest.runtimeVersion;
+    version = releaseManifest.aspNetCoreVersion or releaseManifest.runtimeVersion;
 
     src = vmr;
     dontUnpack = true;
