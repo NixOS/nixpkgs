@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
-  version = "4.0.2";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-X5XMkO2JFceLyH7KEp8mnDltdjGpCT4kVGdcpGRpUJI=";
+    sha256 = "sha256-MWSAyXQcE8cDdzJISFV7UHheHX+7zF1Ula+LGicvUPM=";
   };
 
   nativeBuildInputs = [
