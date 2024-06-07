@@ -1,8 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, curl, libevent, rsync, ldc, dcompiler ? ldc }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, ldc
+, libevent
+, rsync
+}:
 
-assert dcompiler != null;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dub";
   version = "1.33.0";
 
@@ -11,46 +16,34 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dlang";
     repo = "dub";
-    rev = "v${version}";
-    sha256 = "sha256-4Mha7WF6cg3DIccfpvOnheuvgfziv/7wo8iFsPXO4yY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4Mha7WF6cg3DIccfpvOnheuvgfziv/7wo8iFsPXO4yY=";
   };
 
-  dubvar = "\\$DUB";
   postPatch = ''
     patchShebangs test
-
-
-    # Can be removed with https://github.com/dlang/dub/pull/1368
-    substituteInPlace test/fetchzip.sh \
-        --replace "dub remove" "\"${dubvar}\" remove"
   '';
 
-  nativeBuildInputs = [ dcompiler libevent rsync ];
+  nativeBuildInputs = [ ldc libevent rsync ];
   buildInputs = [ curl ];
 
   buildPhase = ''
-    for dc_ in dmd ldmd2 gdmd; do
-      echo "... check for D compiler $dc_ ..."
-      dc=$(type -P $dc_ || echo "")
-      if [ ! "$dc" == "" ]; then
-        break
-      fi
-    done
-    if [ "$dc" == "" ]; then
-      exit "Error: could not find D compiler"
-    fi
-    echo "$dc_ found and used as D compiler to build $pname"
-    $dc ./build.d
-    ./build
+    runHook preBuild
+
+    export DMD=${ldc}/bin/ldmd2
+    ldc2 -run ./build.d
+
+    runHook postBuild
   '';
 
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
+    runHook preCheck
+
     export DUB=$NIX_BUILD_TOP/source/bin/dub
     export PATH=$PATH:$NIX_BUILD_TOP/source/bin/
-    export DC=${dcompiler.out}/bin/${if dcompiler.pname=="ldc" then "ldc2" else dcompiler.pname}
-    echo "DC out --> $DC"
+    export DC=${lib.getExe ldc}
     export HOME=$TMP
 
     rm -rf test/issue502-root-import
@@ -140,19 +133,24 @@ stdenv.mkDerivation rec {
     rm -r test/use-c-sources
 
     ./test/run-unittest.sh
+
+    runHook postCheck
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp bin/dub $out/bin
+    runHook preInstall
+
+    install -Dm755 bin/dub $out/bin/dub
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "Package and build manager for D applications and libraries";
-    mainProgram = "dub";
+    description = "Package and build manager for D programs and libraries";
     homepage = "https://code.dlang.org/";
     license = licenses.mit;
+    mainProgram = "dub";
     maintainers = with maintainers; [ jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
-}
+})
