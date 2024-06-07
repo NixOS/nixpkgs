@@ -20539,6 +20539,12 @@
       fingerprint = "556A 403F B0A2 D423 F656  3424 8489 B911 F9ED 617B";
     }];
   };
+  tlinden = {
+    email = "git@daemon.de";
+    github = "tlinden";
+    githubId = 1322812;
+    name = "Tom von Dein";
+  };
   tljuniper = {
     email = "tljuniper1@gmail.com";
     github = "tljuniper";
