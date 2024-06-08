@@ -7,6 +7,7 @@
   llvmPackages,
   python3,
   stdenv,
+  testers,
   zlib,
   # Boolean flags
   withHTML ? true,
@@ -65,6 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     ctest -E 'cmd.cc-(gnu|msvc)-((c-src-c)|(src-cxx))-cmd'
     runHook postCheck
   '';
+
+  passthru.tests = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = {
     homepage = "https://github.com/CastXML/CastXML";
