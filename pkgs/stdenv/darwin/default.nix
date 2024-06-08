@@ -329,6 +329,7 @@ in
                 isFromBootstrapFiles = true;
                 hardeningUnsupportedFlags = [
                   "fortify3"
+                  "hardbackedgecfi"
                   "stackclashprotection"
                   "zerocallusedregs"
                 ];
