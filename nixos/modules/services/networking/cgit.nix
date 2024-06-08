@@ -72,25 +72,11 @@ let
     ${cfg.extraConfig}
   '';
 
-  mkCgitReposDir = cfg:
-    if cfg.scanPath != null then
-      cfg.scanPath
-    else
-      pkgs.runCommand "cgit-repos" {
-        preferLocalBuild = true;
-        allowSubstitutes = false;
-      } ''
-        mkdir -p "$out"
-        ${
-          concatStrings (
-            mapAttrsToList
-              (name: value: ''
-                ln -s ${escapeShellArg value.path} "$out"/${escapeShellArg name}
-              '')
-              cfg.repos
-          )
-        }
-      '';
+  fcgiwrapUnitName = name: "fcgiwrap-cgit-${name}";
+  fcgiwrapRuntimeDir = name: "/run/${fcgiwrapUnitName name}";
+  gitProjectRoot = name: cfg: if cfg.scanPath != null
+    then cfg.scanPath
+    else "${fcgiwrapRuntimeDir name}/repos";
 
 in
 {
@@ -192,6 +178,21 @@ in
       }
     );
 
+    systemd.services = flip mapAttrs' cfgs (name: cfg:
+      nameValuePair (fcgiwrapUnitName name)
+      (mkIf (cfg.repos != { }) {
+        serviceConfig.RuntimeDirectory = fcgiwrapUnitName name;
+        preStart = ''
+          GIT_PROJECT_ROOT=${escapeShellArg (gitProjectRoot name cfg)}
+          mkdir -p "$GIT_PROJECT_ROOT"
+          cd "$GIT_PROJECT_ROOT"
+          ${concatLines (flip mapAttrsToList cfg.repos (name: repo: ''
+            ln -s ${escapeShellArg repo.path} ${escapeShellArg name}
+          ''))}
+        '';
+      }
+    ));
+
     services.nginx.enable = true;
 
     services.nginx.virtualHosts = mkMerge (mapAttrsToList (name: cfg: {
@@ -209,7 +210,7 @@ in
             fastcgiParams = rec {
               SCRIPT_FILENAME = "${pkgs.git}/libexec/git-core/git-http-backend";
               GIT_HTTP_EXPORT_ALL = "1";
-              GIT_PROJECT_ROOT = mkCgitReposDir cfg;
+              GIT_PROJECT_ROOT = gitProjectRoot name cfg;
               HOME = GIT_PROJECT_ROOT;
             };
             extraConfig = mkFastcgiPass name cfg;
