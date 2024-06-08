@@ -1,4 +1,14 @@
 {
+  aarch64 = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1c0hkbm94prkw0nb76l0il7fhz1xz5dkgzh6wwyrs88lwggv9avh";
+      type = "gem";
+    };
+    version = "2.1.0";
+  };
   actionpack = {
     groups = ["default"];
     platforms = [];
@@ -674,12 +684,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "5dfb48d9f70d811d52e0633998108f22b4959b1a";
-      sha256 = "0fpngqrw4jfpi9dx7ywiqn6yc1x4b3zcwsqx89ppw40id19giz7z";
+      rev = "4248753964d0fe0e89bf84cf2b8c8c4871009a96";
+      sha256 = "15rparliwh3b44gc0b7wamqwk7grslgkrk57khdpsz7pn5p49jy0";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.4.11";
+    version = "6.4.12";
   };
   metasploit-model = {
     groups = ["default"];
