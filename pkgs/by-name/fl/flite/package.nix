@@ -7,12 +7,10 @@
   libpulseaudio,
   audioBackend ? "pulseaudio",
 }:
-
 assert lib.assertOneOf "audioBackend" audioBackend [
   "alsa"
   "pulseaudio"
 ];
-
 stdenv.mkDerivation rec {
   pname = "flite";
   version = "2.2";
@@ -21,12 +19,8 @@ stdenv.mkDerivation rec {
     owner = "festvox";
     repo = "flite";
     rev = "v${version}";
-    sha256 = "1n0p81jzndzc1rzgm66kw9ls189ricy5v1ps11y0p2fk1p56kbjf";
+    hash = "sha256-Tq5pyg3TiQt8CPqGXTyLOaGgaeLTmPp+Duw3+2VAF9g=";
   };
-
-  buildInputs =
-    lib.optional (stdenv.isLinux && audioBackend == "alsa") alsa-lib
-    ++ lib.optional (stdenv.isLinux && audioBackend == "pulseaudio") libpulseaudio;
 
   # https://github.com/festvox/flite/pull/60.
   # Replaces `ar` with `$(AR)` in config/common_make_rules.
@@ -34,9 +28,17 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/festvox/flite/commit/54c65164840777326bbb83517568e38a128122ef.patch";
-      sha256 = "sha256-hvKzdX7adiqd9D+9DbnfNdqEULg1Hhqe1xElYxNM1B8=";
+      hash = "sha256-hvKzdX7adiqd9D+9DbnfNdqEULg1Hhqe1xElYxNM1B8=";
     })
   ];
+
+  buildInputs = lib.optional stdenv.isLinux (
+    {
+      alsa = alsa-lib;
+      pulseaudio = libpulseaudio;
+    }
+    .${audioBackend} or (throw "${audioBackend} is not a supported backend!")
+  );
 
   configureFlags = [
     "--enable-shared"
@@ -49,8 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Small, fast run-time speech synthesis engine";
     homepage = "http://www.festvox.org/flite/";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ getchoo ];
-    platforms = platforms.all;
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }
