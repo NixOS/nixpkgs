@@ -6,6 +6,7 @@
   blueprint-compiler,
   desktop-file-utils,
   gobject-introspection,
+  glib-networking,
   libadwaita,
   meson,
   ninja,
@@ -38,7 +39,10 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [ libadwaita ];
+  buildInputs = [
+    glib-networking
+    libadwaita
+  ];
 
   dependencies = with python3Packages; [
     pillow
