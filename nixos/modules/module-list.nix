@@ -224,6 +224,7 @@
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/light.nix
+  ./programs/looking-glass/default.nix
   ./programs/mdevctl.nix
   ./programs/mepo.nix
   ./programs/mininet.nix
