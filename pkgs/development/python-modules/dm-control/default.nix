@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "dm-control";
-  version = "1.0.19";
+  version = "1.0.20";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "google-deepmind";
     repo = "dm_control";
     rev = "refs/tags/${version}";
-    hash = "sha256-q9hY/icvc1tPI0xBYxExc2a+gv0i6utaB4GBnJwQPCw=";
+    hash = "sha256-huXvfQz7E+OCqRrhLC5dUaG/A2PQXrPBzseIFx7ZIeE=";
   };
 
   build-system = [
