@@ -2,23 +2,24 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  alsa-lib,
   fetchpatch,
+  alsa-lib,
   libpulseaudio,
+  testers,
   audioBackend ? "pulseaudio",
 }:
 assert lib.assertOneOf "audioBackend" audioBackend [
   "alsa"
   "pulseaudio"
 ];
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flite";
   version = "2.2";
 
   src = fetchFromGitHub {
     owner = "festvox";
     repo = "flite";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Tq5pyg3TiQt8CPqGXTyLOaGgaeLTmPp+Duw3+2VAF9g=";
   };
 
@@ -48,10 +49,18 @@ stdenv.mkDerivation rec {
   # make[1]: *** No rule to make target 'flite_voice_list.c', needed by 'all'.  Stop
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  passthru = {
+    tests.version = testers.testVersion {
+      # `flite` does have a `--version` command, but it returns 1
+      command = "flite --help";
+      package = finalAttrs.finalPackage;
+    };
+  };
+
+  meta = {
     description = "Small, fast run-time speech synthesis engine";
     homepage = "http://www.festvox.org/flite/";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ getchoo ];
   };
-}
+})
