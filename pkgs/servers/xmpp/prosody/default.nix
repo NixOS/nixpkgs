@@ -64,13 +64,17 @@ stdenv.mkDerivation rec {
     make -C tools/migration
   '';
 
+  buildFlags = [
+    # don't search for configs in the nix store when running prosodyctl
+    "INSTALLEDCONFIG=/etc/prosody"
+    "INSTALLEDDATA=/var/lib/prosody"
+  ];
+
   # the wrapping should go away once lua hook is fixed
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
-      wrapProgram $out/bin/prosodyctl \
-        --add-flags '--config "/etc/prosody/prosody.cfg.lua"'
       make -C tools/migration install
     '';
 
