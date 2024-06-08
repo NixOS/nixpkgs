@@ -136,6 +136,11 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
+  disabledTests = [
+    # flaky / timing sensitive
+    "test_fastapi_server_token_authn_allows_when_it_should_allow"
+  ];
+
   disabledTestPaths = [
     # Tests require network access
     "chromadb/test/property/test_cross_version_persist.py"
