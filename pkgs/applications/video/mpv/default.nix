@@ -88,7 +88,7 @@
   pulseSupport ? config.pulseaudio or stdenv.isLinux,
   rubberbandSupport ? true,
   screenSaverSupport ? true,
-  sdl2Support ? true,
+  sdl2Support ? !stdenv.isDarwin,
   sixelSupport ? false,
   speexSupport ? true,
   swiftSupport ? stdenv.isDarwin,
@@ -151,6 +151,11 @@ stdenv'.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-dFajnCpGlNqUv33A8eFEn8kjtzIPkcBY5j0gNVlaiIY=";
   };
+
+  patches = [
+    # Fix build with Darwin SDK 11
+    ./0001-fix-darwin-build.patch
+  ];
 
   postPatch = lib.concatStringsSep "\n" [
     # Don't reference compile time dependencies or create a build outputs cycle
@@ -355,7 +360,6 @@ stdenv'.mkDerivation (finalAttrs: {
       mpv is a free and open-source general-purpose video player, based on the
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
-    broken = stdenv.isDarwin; # Yet another SDK incompatibility...
     changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "mpv";
