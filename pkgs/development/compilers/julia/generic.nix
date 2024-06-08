@@ -59,10 +59,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=$(out)"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "USE_BINARYBUILDER=1" # TODO: figure out how to build deps on darwin
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    "USE_BINARYBUILDER=0"
+    "USE_BINARYBUILDER=${if stdenv.hostPlatform.isDarwin then "1" else "0"}"
   ] ++ lib.optionals stdenv.isx86_64 [
     # https://github.com/JuliaCI/julia-buildkite/blob/main/utilities/build_envs.sh
     "JULIA_CPU_TARGET=generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1);x64-64-v4,-rdrnd,base(1)"
@@ -70,28 +67,26 @@ stdenv.mkDerivation rec {
     "JULIA_CPU_TARGET=generic;cortex-a57;thunderx2t99;carmel,clone_all;apple-m1,base(3);neoverse-512tvb,base(3)"
   ];
 
-  NIX_CFLAGS_COMPILE = [] ++ lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
     "-Wno-error=implicit-function-declaration"
     "-Wno-error=elaborated-enum-base"
   ];
   # TODO: figure out how to re-enable these as errors?
 
   # remove forbidden reference to $TMPDIR
-  preFixup = ''
-  '' + lib.optionalString stdenv.hostPlatform.isElf (''
+  preFixup = lib.optionalString stdenv.hostPlatform.isElf ''
     for file in libcurl.so libgmpxx.so libmpfr.so; do
       patchelf --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir} "$out/lib/julia/$file"
     done
-  '');
+  '';
 
   # tests are flaky for aarch64-linux on hydra
   # some tests not working on aarch64-darwin for unrelated reasons
-  doInstallCheck = if (lib.versionOlder version "1.10") then (stdenv.isLinux && !stdenv.hostPlatform.isAarch64) else stdenv.isLinux;
+  doInstallCheck = stdenv.hostPlatform.isLinux && (lib.versionAtLeast version "1.10" || !stdenv.hostPlatform.isAarch64);
 
   installCheckTarget = "testall";
 
   preInstallCheck = ''
-    export JULIA_SSL_CA_ROOTS_PATH=""
     export JULIA_TEST_USE_MULTIPLE_WORKERS="true"
     # Some tests require read/write access to $HOME.
     # And $HOME cannot be equal to $TMPDIR as it causes test failures
@@ -102,9 +97,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preInstall = ''
-    export JULIA_SSL_CA_ROOTS_PATH=""
-  '';
+  env.JULIA_SSL_CA_ROOTS_PATH = "";
 
   meta = with lib; {
     description = "High-level performance-oriented dynamical language for technical computing";
