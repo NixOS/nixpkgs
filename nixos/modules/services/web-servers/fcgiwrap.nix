@@ -21,7 +21,10 @@ in {
       process.user = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "User as which this instance of fcgiwrap will be run.";
+        description = ''
+          User as which this instance of fcgiwrap will be run.
+          Set to `null` (the default) to use a dynamically allocated user.
+        '';
       };
 
       process.group = mkOption {
@@ -106,10 +109,12 @@ in {
             s = "${cfg.socket.type}:${cfg.socket.address}";
           }))}
         '';
-      } // (if cfg.process.user != null && cfg.process.group != null then {
+      } // (if cfg.process.user != null then {
         User = cfg.process.user;
         Group = cfg.process.group;
-      } else { } );
+      } else {
+        DynamicUser = true;
+      });
     });
 
     systemd.sockets = forEachInstance (cfg: mkIf (cfg.socket.type == "unix") {
