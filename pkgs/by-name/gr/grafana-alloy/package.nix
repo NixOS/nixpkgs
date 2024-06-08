@@ -8,6 +8,7 @@
 , fixup-yarn-lock
 , nodejs
 , grafana-alloy
+, nixosTests
 , nix-update-script
 , installShellFiles
 , testers
@@ -103,6 +104,7 @@ buildGoModule rec {
 
   passthru = {
     tests = {
+      inherit (nixosTests) alloy;
       version = testers.testVersion {
         version = "v${version}";
         command = "${lib.getExe grafana-alloy} --version";
