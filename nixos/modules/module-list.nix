@@ -1411,6 +1411,7 @@
   ./services/web-apps/freshrss.nix
   ./services/web-apps/galene.nix
   ./services/web-apps/gancio.nix
+  ./services/web-apps/geoserver.nix
   ./services/web-apps/gerrit.nix
   ./services/web-apps/glance.nix
   ./services/web-apps/gotify-server.nix
