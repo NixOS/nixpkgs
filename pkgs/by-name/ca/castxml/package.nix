@@ -30,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    (lib.getDev llvm)
   ]
   ++ lib.optionals (withManual || withHTML) [
     sphinx
@@ -39,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libffi
     libxml2
+    llvm
     zlib
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libclang
