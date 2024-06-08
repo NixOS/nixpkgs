@@ -10,6 +10,7 @@
   renovate,
   testers,
   xcbuild,
+  nixosTests,
 }:
 
 let
@@ -89,6 +90,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     version = testers.testVersion { package = renovate; };
+    vm-test = nixosTests.renovate;
   };
 
   meta = {
