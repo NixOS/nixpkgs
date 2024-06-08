@@ -24,7 +24,7 @@ let
 
   inherit (buildPackages)
     fetchurl removeReferencesTo
-    pkg-config coreutils gnugrep glibcLocales
+    pkg-config coreutils glibcLocales
     emscripten;
 
 in
@@ -569,7 +569,7 @@ stdenv.mkDerivation ({
     echo configureFlags: $configureFlags
     ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
     ${lib.optionalString (!allowInconsistentDependencies) ''
-      if ${gnugrep}/bin/egrep -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
+      if grep -E -q -z 'Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
         echo >&2 "*** abort because of serious configure-time warning from Cabal"
         exit 1
       fi
