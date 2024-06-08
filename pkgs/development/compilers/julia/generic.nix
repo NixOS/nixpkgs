@@ -97,6 +97,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Julia build complains about the built-in SSL certs during its
+  # attempt to read the Julia package registry
   env.JULIA_SSL_CA_ROOTS_PATH = "";
 
   meta = with lib; {
