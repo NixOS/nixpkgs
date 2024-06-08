@@ -8136,6 +8136,18 @@ final: prev:
     meta.homepage = "https://github.com/ojroques/nvim-osc52/";
   };
 
+  nvim-parinfer = buildVimPlugin {
+    pname = "nvim-parinfer";
+    version = "2023-08-09";
+    src = fetchFromGitHub {
+      owner = "gpanders";
+      repo = "nvim-parinfer";
+      rev = "5ca09287ab3f4144f78ff7977fabc27466f71044";
+      sha256 = "0qci774sf7kxsq1a77nmis4zgjggf89w0j5ibzdbrw11cyv0nb3n";
+    };
+    meta.homepage = "https://github.com/gpanders/nvim-parinfer/";
+  };
+
   nvim-peekup = buildVimPlugin {
     pname = "nvim-peekup";
     version = "2023-02-23";
