@@ -130,6 +130,9 @@ stdenv.mkDerivation (finalAttrs: {
     # and by default meson installs in to $out/share/gdb/auto-load
     # which does not help
     ./gdb_script.patch
+
+    # glib assumes that `RTLD_LOCAL` is defined to `0`, which is true on Linux and FreeBSD but not on Darwin.
+    ./gmodule-rtld_local.patch
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
