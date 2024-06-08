@@ -154,6 +154,18 @@ in
             type = types.lines;
             default = "";
           };
+
+          user = mkOption {
+            description = "User to run the cgit service as.";
+            type = types.str;
+            default = "cgit";
+          };
+
+          group = mkOption {
+            description = "Group to run the cgit service as.";
+            type = types.str;
+            default = "cgit";
+          };
         };
       }));
     };
@@ -165,8 +177,17 @@ in
       message = "Exactly one of services.cgit.${vhost}.scanPath or services.cgit.${vhost}.repos must be set.";
     }) cfgs;
 
+    users = mkMerge (flip mapAttrsToList cfgs (_: cfg: {
+      users.${cfg.user} = {
+        isSystemUser = true;
+        inherit (cfg) group;
+      };
+      groups.${cfg.group} = { };
+    }));
+
     services.fcgiwrap = flip mapAttrs' cfgs (name: cfg:
       nameValuePair "cgit-${name}" {
+        process = { inherit (cfg) user group; };
         socket = { inherit (config.services.nginx) user group; };
       }
     );
