@@ -2,12 +2,14 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  appstream,
   blueprint-compiler,
   desktop-file-utils,
   gobject-introspection,
   libadwaita,
   meson,
   ninja,
+  pkg-config,
   wrapGAppsHook4,
 }:
 python3Packages.buildPythonApplication rec {
@@ -26,11 +28,13 @@ python3Packages.buildPythonApplication rec {
   mesonFlags = [ "-Dtiff_compression=jpeg" ];
 
   nativeBuildInputs = [
+    appstream
     blueprint-compiler
     desktop-file-utils
     gobject-introspection
     meson
     ninja
+    pkg-config
     wrapGAppsHook4
   ];
 
