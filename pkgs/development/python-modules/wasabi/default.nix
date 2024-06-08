@@ -32,6 +32,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wasabi" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "A lightweight console printing and formatting toolkit";
     homepage = "https://github.com/ines/wasabi";
