@@ -13,7 +13,7 @@ in {
     default = { };
     type = types.attrsOf (types.submodule ({ config, ... }: { options = {
       process.prefork = mkOption {
-        type = types.int;
+        type = types.ints.positive;
         default = 1;
         description = "Number of processes to prefork.";
       };
