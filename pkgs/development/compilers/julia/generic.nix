@@ -42,13 +42,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     unzip
     curl
+    darwin.DarwinTools
+    xcbuild
   ];
 
   buildInputs = [
     libxml2
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.DarwinTools
-    xcbuild
   ];
 
   dontUseCmakeConfigure = true;
