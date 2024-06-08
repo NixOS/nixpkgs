@@ -7,6 +7,7 @@
   jupyter-client,
   nbformat,
   nbconvert,
+  setuptools,
   # check inputs
   unittestCheckHook,
   ipykernel,
@@ -17,7 +18,7 @@ let
 in
 buildPythonPackage {
   inherit pname version;
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -28,7 +29,9 @@ buildPythonPackage {
     hash = "sha256-Vv6EHX6WlnSmzQAYlO1mHnz5t078z3RQfVfte1+X2pw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     jupyter-client
     nbformat
     nbconvert
