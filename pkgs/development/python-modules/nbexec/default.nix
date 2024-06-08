@@ -52,6 +52,8 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nbexec" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "A dead-simple tool for executing Jupyter notebooks from the command line.";
     mainProgram = "nbexec";
