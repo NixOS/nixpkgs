@@ -31366,8 +31366,6 @@ with pkgs;
 
   gpsd = callPackage ../servers/gpsd { };
 
-  gpsprune = callPackage ../applications/misc/gpsprune { };
-
   gpu-screen-recorder = callPackage ../applications/video/gpu-screen-recorder { };
 
   gpu-screen-recorder-gtk = callPackage ../applications/video/gpu-screen-recorder/gpu-screen-recorder-gtk.nix { };

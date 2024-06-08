@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "tauri-plugin-localhost-0.1.0" = "sha256-z+cxkNtaaV7m7Rt2mpdw0Rm0oDR4VZPKwtdhY5V/HlI=";
+      "tauri-plugin-localhost-0.1.0" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
     };
   };
 
