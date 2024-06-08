@@ -12,14 +12,14 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "psastras";
     repo = "sarif-rs";
-    rev = "${pname}-v${version}";
+    rev = "shellcheck-sarif-v${version}";
     hash = "sha256-EzWzDeIeSJ11CVcVyAhMjYQJcKHnieRrFkULc5eXAno=";
   };
 
   cargoHash = "sha256-JuE/Z0qrS/3BRlb0jTGDfV0TYk74Q75X1wv/IERxqeQ=";
   cargoBuildFlags = [
     "--package"
-    pname
+    "shellcheck-sarif"
   ];
   cargoTestFlags = cargoBuildFlags;
 
