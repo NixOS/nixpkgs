@@ -742,6 +742,8 @@ let
     vapour = with pkgs; [ proj.dev gdal ];
     MedianaDesigner = [ pkgs.zlib.dev ];
     ChemmineOB = [ pkgs.eigen ];
+    RNifti = [ pkgs.zlib.dev ];
+    RNiftyReg = [ pkgs.zlib.dev ];
   };
 
   packagesRequiringX = [
