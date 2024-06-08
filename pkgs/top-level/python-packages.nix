@@ -2208,6 +2208,8 @@ self: super: with self; {
 
   clip-anytorch = callPackage ../development/python-modules/clip-anytorch { };
 
+  clip-server = callPackage ../development/python-modules/clip-server { };
+
   clr-loader = callPackage ../development/python-modules/clr-loader { };
 
   cock = callPackage ../development/python-modules/cock { };
@@ -3469,6 +3471,8 @@ self: super: with self; {
   dns-lexicon = callPackage ../development/python-modules/dns-lexicon { };
 
   doc8 = callPackage ../development/python-modules/doc8 { };
+
+  docarray = callPackage ../development/python-modules/docarray { };
 
   docformatter = callPackage ../development/python-modules/docformatter { };
 
@@ -6097,6 +6101,8 @@ self: super: with self; {
   jenkins-job-builder = callPackage ../development/python-modules/jenkins-job-builder { };
 
   jieba = callPackage ../development/python-modules/jieba { };
+
+  jina = callPackage ../development/python-modules/jina { };
 
   jinja2 = callPackage ../development/python-modules/jinja2 { };
 
@@ -9852,6 +9858,8 @@ self: super: with self; {
     inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
     inherit (pkgs.xorg) libX11 libxcb;
   };
+
+  pillow-avif-plugin = callPackage ../development/python-modules/pillow-avif-plugin { };
 
   pillow-heif = callPackage ../development/python-modules/pillow-heif { };
 
