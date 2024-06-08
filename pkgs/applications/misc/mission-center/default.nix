@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mission-center";
-  version = "0.4.5";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
     rev = "v${version}";
-    hash = "sha256-e5+uB2vzwRqjUiR+gxpSARHPqG+1iX3yifsfwv5LnZI=";
+    hash = "sha256-I/UkHXDGbKiOcn7R0nQVKcgdvyV4ycgQGNoHA6QMAnw=";
   };
 
   cargoDeps = symlinkJoin {
@@ -136,12 +136,12 @@ stdenv.mkDerivation rec {
     patchShebangs data/hwdb/generate_hwdb.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Monitor your CPU, Memory, Disk, Network and GPU usage";
     homepage = "https://gitlab.com/mission-center-devs/mission-center";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ GaetanLepage ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    platforms = lib.platforms.linux;
     mainProgram = "missioncenter";
   };
 }
