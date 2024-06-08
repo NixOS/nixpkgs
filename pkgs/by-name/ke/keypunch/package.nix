@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "keypunch";
     maintainers = with lib.maintainers; [ tomasajt ];
+    platforms = lib.platforms.linux;
   };
 })
