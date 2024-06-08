@@ -20,11 +20,24 @@
 , darwin
 , runCommand
 }:
-
+let
+  macosProductVersion = if stdenv.isDarwin then (runCommand "macos-product-version" { } ''
+    echo "Running sw_vers..."
+    echo -n $(${darwin.DarwinTools}/bin/sw_vers -productVersion) > $out
+    echo "macOS product version: $(cat $out)"
+  '') else "";
+  macosProductVersionStr = if stdenv.isDarwin then (builtins.readFile "${macosProductVersion}") else "";
+  macosPlatformVersion = if stdenv.isDarwin then (runCommand "macos-platform-version" { } ''
+    echo "Running xcrun..."
+    echo -n $(${xcbuild}/bin/xcrun --show-sdk-version) > $out
+    echo "macOS platform version: $(cat $out)"
+  '') else "";
+  macosPlatformVersionStr = if stdenv.isDarwin then (builtins.readFile "${macosPlatformVersion}") else "";
+in
 stdenv.mkDerivation rec {
   pname = "julia";
 
-  inherit version patches;
+  inherit version patches macosProductVersionStr macosPlatformVersionStr;
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
@@ -48,7 +61,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
-    xcbuild
   ];
 
   dontUseCmakeConfigure = true;
@@ -60,27 +72,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=$(out)"
-  ] ++ lib.optionals stdenv.isDarwin (
-    let
-      macosProductVersion = runCommand "macos-product-version" { } ''
-        echo "Running sw_vers..."
-        echo -n $(${darwin.DarwinTools}/bin/sw_vers -productVersion) > $out
-        echo "macOS product version: $(cat $out)"
-      '';
-      macosProductVersionStr = builtins.readFile "${macosProductVersion}";
-      macosPlatformVersion = runCommand "macos-platform-version" { } ''
-        echo "Running xcrun..."
-        echo -n $(${xcbuild}/bin/xcrun --show-sdk-version) > $out
-        echo "macOS platform version: $(cat $out)"
-      '';
-      macosPlatformVersionStr = builtins.readFile "${macosPlatformVersion}";
-    in [
-      # TODO: figure out how to build deps on darwin
+  ] ++ lib.optionals stdenv.isDarwin [
       "USE_BINARYBUILDER=1"
+      # ^TODO: figure out how to build deps on darwin
       "MACOS_PRODUCT_VERSION=${macosProductVersionStr}"
       "MACOS_PLATFORM_VERSION=${macosPlatformVersionStr}"
-    ])
-  ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     "USE_BINARYBUILDER=0"
   ] ++ lib.optionals stdenv.isx86_64 [
     # https://github.com/JuliaCI/julia-buildkite/blob/main/utilities/build_envs.sh
