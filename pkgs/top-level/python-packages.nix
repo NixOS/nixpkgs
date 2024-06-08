@@ -2654,6 +2654,8 @@ self: super: with self; {
 
   curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
 
+  curvefitgui = callPackage ../development/python-modules/curvefitgui { };
+
   cvelib = callPackage ../development/python-modules/cvelib { };
 
   cvss = callPackage ../development/python-modules/cvss { };
