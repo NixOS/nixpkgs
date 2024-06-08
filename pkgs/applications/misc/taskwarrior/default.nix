@@ -1,29 +1,72 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libuuid, gnutls, python3, xdg-utils, installShellFiles }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libuuid
+, gnutls
+, rustPlatform
+, python3
+, xdg-utils
+, installShellFiles
+}:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
+
   pname = "taskwarrior";
-  version = "2.6.2";
+
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
     rev = "v${version}";
-    sha256 = "sha256-0YveqiylXJi4cdDCfnPtwCVOJbQrZYsxnXES+9B4Yfw=";
+    sha256 = "sha256-vN3X6vLuD4Fw9wpEUYLf8sboA5GIcdP5EFb41KS6d5s=";
     fetchSubmodules = true;
   };
+
+  cargoHash = "sha256-KJ2h/fTZFTu5P/N9W8maOiqGGEMqAzvVRkoB9ncdJxc=";
 
   postPatch = ''
     substituteInPlace src/commands/CmdNews.cpp \
       --replace "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
   '';
 
-  nativeBuildInputs = [ cmake libuuid gnutls python3 installShellFiles ];
+  nativeBuildInputs = [ cmake gnutls python3 installShellFiles ];
+
+  buildInputs = [ libuuid ];
+
+  configurePhase = ''
+    runHook preConfigure
+    cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+    cmake --build build -j $NIX_BUILD_CORES
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    cmake --install build --prefix $out
+    runHook postInstall
+  '';
 
   doCheck = true;
+
   preCheck = ''
     patchShebangs --build test
   '';
+
   checkTarget = "test";
+
+  checkPhase = ''
+    runHook preCheck
+    cmake --build build --target build_tests -j $NIX_BUILD_CORES
+    ctest --test-dir build -j $NIX_BUILD_CORES
+    runHook postCheck
+  '';
 
   postInstall = ''
     # ZSH is installed automatically from some reason, only bash and fish need
