@@ -215,6 +215,10 @@
     '';
   };
 
+  cmp-ai = super.cmp-ai.overrideAttrs {
+    dependencies = with self; [ nvim-cmp plenary-nvim ];
+  };
+
   cmp-clippy = super.cmp-clippy.overrideAttrs {
     dependencies = with self; [ nvim-cmp plenary-nvim ];
   };
