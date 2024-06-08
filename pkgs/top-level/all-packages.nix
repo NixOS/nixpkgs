@@ -2144,7 +2144,9 @@ with pkgs;
 
   archi = callPackage ../tools/misc/archi { };
 
-  breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
+  breitbandmessung = callPackage ../applications/networking/breitbandmessung {
+    electron = electron_29;
+  };
 
   ### APPLICATIONS/VERSION-MANAGEMENT
 
