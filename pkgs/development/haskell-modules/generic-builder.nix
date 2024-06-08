@@ -237,9 +237,6 @@ let
 
   parallelBuildingFlags = "-j$NIX_BUILD_CORES" + optionalString stdenv.isLinux " +RTS -A64M -RTS";
 
-  crossCabalFlagsString =
-    lib.optionalString isCross (" " + lib.concatStringsSep " " crossCabalFlags);
-
   buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
 
   defaultConfigureFlags = [
@@ -603,7 +600,7 @@ stdenv.mkDerivation ({
         find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
         ''
     + ''
-      ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}
+      ${setupCommand} build ${buildTarget}${buildFlagsString}
       runHook postBuild
       '';
 

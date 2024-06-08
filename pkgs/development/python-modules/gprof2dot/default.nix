@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "gprof2dot";
-  version = "2022.07.29";
+  version = "2024.06.06";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "jrfonseca";
     repo = "gprof2dot";
     rev = "refs/tags/${version}";
-    hash = "sha256-nIsBO6KTyG2VZZRXrkU/T/a9Ki1x6hda5Vv3rZv/mJM=";
+    hash = "sha256-6TTshVbfYh/2Ss1uysGW0nxmNQdIiAhe4LldMS7hpCo=";
   };
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ graphviz ]}" ];

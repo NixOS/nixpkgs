@@ -32,9 +32,7 @@ let
 
   meta = with lib; {
     homepage = "https://www.nvidia.com/object/unix.html";
-    license = licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
-    mainProgram = "nvidia-settings";
     maintainers = with maintainers; [ abbradar aidalgol ];
   };
 
@@ -73,6 +71,8 @@ let
 
     meta = meta // {
       description = "NVIDIA NV-CONTROL X extension";
+      # https://github.com/NVIDIA/nvidia-settings/commit/edcf9edad9f52f9b10e63d4480bbe88b22dde884
+      license = lib.licenses.mit;
     };
   };
 
@@ -154,5 +154,8 @@ stdenv.mkDerivation {
 
   meta = meta // {
     description = "Settings application for NVIDIA graphics cards";
+    # nvml.h is licensed as part of the cuda developer license.
+    license = lib.licenses.unfreeRedistributable;
+    mainProgram = "nvidia-settings";
   };
 }

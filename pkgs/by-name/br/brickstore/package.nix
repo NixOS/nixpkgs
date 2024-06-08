@@ -16,12 +16,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "brickstore";
-  version = "0-unstable-2024-05-02";
+  version = "2024.5.2";
 
   src = fetchFromGitHub {
     owner = "rgriebl";
     repo = "brickstore";
-    rev = "v2024.5.2";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Bu9oNbZm3lx/CfYAReHyWe/kW+kaefDWeBtWLHOCORU=";
     fetchSubmodules = true;
   };

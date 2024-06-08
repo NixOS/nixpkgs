@@ -20902,6 +20902,7 @@ with pkgs;
   };
 
   gdcm = callPackage ../development/libraries/gdcm {
+    inherit (darwin) DarwinTools;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
   };
 
@@ -31384,8 +31385,6 @@ with pkgs;
 
   gpsd = callPackage ../servers/gpsd { };
 
-  gpsprune = callPackage ../applications/misc/gpsprune { };
-
   gpu-screen-recorder = callPackage ../applications/video/gpu-screen-recorder { };
 
   gpu-screen-recorder-gtk = callPackage ../applications/video/gpu-screen-recorder/gpu-screen-recorder-gtk.nix { };
@@ -32020,8 +32019,6 @@ with pkgs;
   joe = callPackage ../applications/editors/joe { };
 
   johnny = callPackage ../applications/misc/johnny { };
-
-  josm = callPackage ../applications/misc/josm { };
 
   js8call = qt5.callPackage ../applications/radio/js8call { };
 
@@ -32959,15 +32956,14 @@ with pkgs;
     inherit lua;
   };
 
+  # Wrap avoiding rebuild
+  mpv = mpv-unwrapped.wrapper { mpv = mpv-unwrapped; };
+
+  mpvScripts = mpv-unwrapped.scripts;
+
   shaka-packager = callPackage ../applications/video/shaka-packager { };
 
-  # Wraps without triggering a rebuild
-  wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { };
-  mpv = wrapMpv mpv-unwrapped { };
-
   mpvpaper = callPackage ../tools/wayland/mpvpaper { };
-
-  mpvScripts = callPackage ../applications/video/mpv/scripts { };
 
   open-in-mpv = callPackage ../applications/video/open-in-mpv { };
 
@@ -38187,6 +38183,7 @@ with pkgs;
   osi = callPackage ../development/libraries/science/math/osi { };
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
+    inherit (darwin) DarwinTools;
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     python = python3;
     protobuf = protobuf_21;

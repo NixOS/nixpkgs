@@ -15,7 +15,11 @@
 , copyDesktopItems
 , makeDesktopItem
 }:
-
+let
+  arch =
+    /**/ if stdenv.hostPlatform.isx86_64 then "x64"
+    else stdenv.hostPlatform.parsed.cpu.name;
+in
 stdenv.mkDerivation rec {
   pname = "Quake3e";
   version = "2022-04-01-dev";
@@ -52,8 +56,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     make install DESTDIR=$out/lib
-    makeWrapper $out/lib/quake3e.x64 $out/bin/quake3e
-    makeWrapper $out/lib/quake3e.ded.x64 $out/bin/quake3e.ded
+    makeWrapper $out/lib/quake3e.${arch} $out/bin/quake3e
+    makeWrapper $out/lib/quake3e.ded.${arch} $out/bin/quake3e.ded
     runHook postInstall
   '';
 
@@ -72,8 +76,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pmiddend ];
-    badPlatforms = platforms.aarch64;
-    # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }
