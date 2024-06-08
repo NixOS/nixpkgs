@@ -1,5 +1,7 @@
 addCMakeParams() {
-    addToSearchPath CMAKE_PREFIX_PATH $1
+    # NIXPKGS_CMAKE_PREFIX_PATH is like CMAKE_PREFIX_PATH except cmake
+    # will not search it for programs
+    addToSearchPath NIXPKGS_CMAKE_PREFIX_PATH $1
 }
 
 fixCmakeFiles() {

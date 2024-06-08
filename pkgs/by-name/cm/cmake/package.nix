@@ -56,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Add NIXPKGS_CMAKE_PREFIX_PATH to cmake which is like CMAKE_PREFIX_PATH
+    # except it is not searched for programs
+    ./000-nixpkgs-cmake-prefix-path.diff
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
     # Don't depend on frameworks.
