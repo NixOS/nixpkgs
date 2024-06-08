@@ -20,6 +20,8 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ setuptools ];
 
+  dependencies = with python3.pkgs; [ packaging ];
+
   nativeBuildInputs = [ which ] ++ (with python3.pkgs; [ cython ]);
 
   propagatedBuildInputs = with python3.pkgs; [
