@@ -115,7 +115,7 @@ let
         "pak64.german" = {
           url = "https://simutrans-germany.com/pak.german/pak64.german_0-124-0-0-2_full.zip";
           prefix = "/pak64.german";
-          hash = "sha256-EMT4IqvsoG1FYvvWUcqR7sur0ERDfApC/iVEJKp3Prw=";
+          hash = "sha256-gNTM85/WcqnnLS/9j+IeN9KNyrRTVH+m7qkcRHeFmo4=";
         };
         "pak64.ho-scale" = {
           url = "http://simutrans.bilkinfo.de/pak64.ho-scale-latest.tar.gz";
@@ -194,7 +194,7 @@ let
             "PAK128.german_2.2_for_ST_124.0.zip"
           ];
           prefix = "/PAK128.german";
-          hash = "sha256-QafYmTFq8zb2NdH6EThQi9Zb+xmCqbxYABaEfzotPg0=";
+          hash = "sha256-hs8R7+MKCdGR1ahgUg6tggrMTejDexSgPFLieerTqMg=";
         };
         "pak128.japan" = {
           fetcher = fetchcab;
