@@ -68,6 +68,7 @@ self: super: {
   ] (super.hashable.override {
     os-string = null;
   });
+  hashable-time = doDistribute (unmarkBroken super.hashable-time);
 
   # Too strict lower bounds on base
   primitive-addr = doJailbreak super.primitive-addr;
