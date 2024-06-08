@@ -1,0 +1,39 @@
+diff --git a/jiten/app.py b/jiten/app.py
+index 6d54020..f30a1d8 100644
+--- a/jiten/app.py
++++ b/jiten/app.py
+@@ -149,13 +149,22 @@ True
+ >>> d.index("JLPT N3") < d.index("歯", d.index("JLPT N5")) < d.index("JLPT N2")
+ True
+ 
+->>> sorted( (c.name, c.value) for c in client.cookie_jar )
++>>> def cookies():
++...   import importlib.metadata
++...   v = tuple(map(int, importlib.metadata.version("werkzeug").split(".")))
++...   if v < (2, 3):
++...     return sorted( (c.name, c.value) for c in client.cookie_jar )
++...   else:
++...     cookies = [ client.get_cookie(k) for k in PREFS ]
++...     return sorted( (c.key, c.value) for c in cookies if c is not None )
++
++>>> cookies()
+ []
+ >>> p = dict(dark = "yes", lang = "eng ger oops".split())
+ >>> r = client.post("/_save_prefs", data = p, follow_redirects = True)
+ >>> r.status
+ '200 OK'
+->>> sorted( (c.name, c.value) for c in client.cookie_jar )
++>>> cookies()
+ [('dark', 'yes'), ('lang', '"eng ger"'), ('large', 'no'), ('max', '50'), ('nogrid', 'no'), ('nor2h', 'no'), ('roma', 'no')]
+ 
+ """                                                             # }}}1
+@@ -168,8 +177,7 @@ import kanjidraw
+ import click, flask, jinja2, werkzeug
+ 
+ os.environ["FLASK_SKIP_DOTENV"] = "yes"                       #  FIXME
+-from flask import Flask, abort, escape, make_response, redirect, \
+-                  request, render_template, url_for
++from flask import Flask, abort, make_response, redirect, request, render_template, url_for
+ 
+ from .version import __version__, py_version
+ from .kana import kana2romaji

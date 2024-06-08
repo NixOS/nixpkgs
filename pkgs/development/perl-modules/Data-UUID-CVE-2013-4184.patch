@@ -1,0 +1,214 @@
+Eliminate use of state/node files in temp directory, which are a security concern due to insecure writing of State/Node files in a temporary directory, with predictable filenames, with a possible symlink attack.
+
+Fixes CVE-2013-4184
+
+https://github.com/bleargh45/Data-UUID/pull/40 by Graham TerMarsch @bleargh45
+
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 4ca26af..fb1a0f0 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -89,30 +89,14 @@ WriteMakefile(
+ 
+   CONFIGURE           => sub {
+     my %opt;
+-    GetOptions(\%opt, 's|state-storage-directory:s', 'd|default-umask:s',
+-        'help|?', 'man') or pod2usage(2);
++    GetOptions(\%opt, 'help|?', 'man') or pod2usage(2);
+     pod2usage(1) if $opt{help};
+     pod2usage(-verbose => 2) if $opt{man};
+ 
+     print "Configured options (run perl Makefile.PL --help for how to change this):\n";
+ 
+-    my $d = File::Spec->tmpdir;
+-    $d = $opt{s} || $d;
+-    print "\tUUID state storage: $d\n";
+-    $d =~ s/\\/\\\\/g if $^O eq 'MSWin32';
+-
+-    my $m = '0007';
+-    unless ($^O eq 'MSWin32') {
+-        $m = $opt{d} || $m;
+-        print "\tdefault umask: $m\n";
+-    }
+-
+-    chmod(0666, sprintf("%s/%s", $d, ".UUID_NODEID"));
+-    chmod(0666, sprintf("%s/%s", $d, ".UUID_STATE"));
+     return {
+-      DEFINE => '-D_STDIR=' . shell_quote(c_quote($d))
+-              . ' -D' . shell_quote("__$Config{osname}__")
+-              . ' -D_DEFAULT_UMASK=' . shell_quote($m)
++      DEFINE => ' -D' . shell_quote("__$Config{osname}__")
+            };
+   }
+ );
+@@ -127,11 +111,9 @@ Makefile.PL - configure Makefile for Data::UUID
+ 
+ perl Makefile.PL [options] [EU::MM options]
+ 
+-perl Makefile.PL -s=/var/local/lib/data-uuid -d=0007
++perl Makefile.PL
+ 
+     Options:
+-    --state-storage-directory   directory for storing library state information
+-    --default-umask             umask for files in the state storage directory
+     --help                      brief help message
+     --man                       full documentation
+ 
+@@ -141,18 +123,6 @@ Options can be abbreviated, see L<Getopt::Long/"Case and abbreviations">.
+ 
+ =over
+ 
+-=item --state-storage-directory
+-
+-Optional. Takes a string that is interpreted as directory for storing library
+-state information. Default is c:/tmp/ on Windows if it already exists, or the
+-operating system's temporary directory (see tmpdir in L<File::Spec/"METHODS">),
+-or /var/tmp as fallback.
+-
+-=item --default-umask
+-
+-Optional. Takes a string that is interpreted as umask for the files in the state
+-storage directory. Default is 0007. This is ignored on Windows.
+-
+ =item --help
+ 
+ Print a brief help message and exits.
+@@ -165,10 +135,7 @@ Prints the manual page and exits.
+ 
+ =head1 DESCRIPTION
+ 
+-B<Makefile.PL> writes the Makefile for the Data::UUID library. It is configured
+-with the options L</"--state-storage-directory"> and L</"--default-umask">.
+-Unless given, default values are used. In any case the values are printed for
+-confirmation.
++B<Makefile.PL> writes the Makefile for the Data::UUID library.
+ 
+ Additionally, the usual EU::MM options are processed, see
+ L<ExtUtils::MakeMaker/"Using Attributes and Parameters">.
+diff --git a/README b/README
+index 8aaa1c2..34d53a5 100644
+--- a/README
++++ b/README
+@@ -23,15 +23,6 @@ To install this module type the following:
+    make test
+    make install
+ 
+-NOTE: This module is designed to save its state information in a permanent 
+-storage location. The installation script (i.e. Makefile.PL) prompts for 
+-a directory name to use as a storage location for state file and defaults 
+-this directory to "/var/tmp" if no directory name is provided. 
+-The installation script will not accept names of directories that do not
+-exist, however, it will take the locations, which the installing user
+-has no write permissions to. In this case, the state information will not be
+-saved, which will maximize the chances of generating duplicate UUIDs.
+-
+ COPYRIGHT AND LICENCE
+ 
+ Copyright (C) 2001, Alexander Golomshtok
+diff --git a/UUID.h b/UUID.h
+index dc5ea28..11d6e13 100644
+--- a/UUID.h
++++ b/UUID.h
+@@ -44,23 +44,6 @@
+ #include <process.h>
+ #endif
+ 
+-#if !defined _STDIR
+-#    define  _STDIR			"/var/tmp"
+-#endif
+-#if !defined _DEFAULT_UMASK
+-#    define  _DEFAULT_UMASK		0007
+-#endif
+-
+-#define UUID_STATE			".UUID_STATE"
+-#define UUID_NODEID			".UUID_NODEID"
+-#if defined __mingw32__ || (defined _WIN32 && !defined(__cygwin__)) || defined _MSC_VER
+-#define UUID_STATE_NV_STORE		_STDIR"\\"UUID_STATE
+-#define UUID_NODEID_NV_STORE		_STDIR"\\"UUID_NODEID
+-#else
+-#define UUID_STATE_NV_STORE		_STDIR"/"UUID_STATE
+-#define UUID_NODEID_NV_STORE		_STDIR"/"UUID_NODEID
+-#endif
+-
+ #define UUIDS_PER_TICK 1024
+ #ifdef _MSC_VER
+ #define I64(C) C##i64
+@@ -134,7 +117,6 @@ typedef struct _uuid_state_t {
+ typedef struct _uuid_context_t {
+    uuid_state_t state;
+    uuid_node_t  nodeid;
+-   perl_uuid_time_t  next_save;
+ } uuid_context_t;
+ 
+ static void format_uuid_v1(
+diff --git a/UUID.xs b/UUID.xs
+index c3496a8..8191727 100644
+--- a/UUID.xs
++++ b/UUID.xs
+@@ -356,29 +356,11 @@ PREINIT:
+    UV             one = 1;
+ CODE:
+    RETVAL = (uuid_context_t *)PerlMemShared_malloc(sizeof(uuid_context_t));
+-   if ((fd = fopen(UUID_STATE_NV_STORE, "rb"))) {
+-      fread(&(RETVAL->state), sizeof(uuid_state_t), 1, fd);
+-      fclose(fd);
+-      get_current_time(&timestamp);
+-      RETVAL->next_save = timestamp;
+-   }
+-   if ((fd = fopen(UUID_NODEID_NV_STORE, "rb"))) {
+-      pid_t *hate = (pid_t *) &(RETVAL->nodeid); 
+-      fread(&(RETVAL->nodeid), sizeof(uuid_node_t), 1, fd );
+-      fclose(fd);
+-      
+-      *hate += getpid();
+-   } else {
++
+       get_random_info(seed);
+       seed[0] |= 0x80;
+       memcpy(&(RETVAL->nodeid), seed, sizeof(uuid_node_t));
+-      mask = umask(_DEFAULT_UMASK);
+-      if ((fd = fopen(UUID_NODEID_NV_STORE, "wb"))) {
+-         fwrite(&(RETVAL->nodeid), sizeof(uuid_node_t), 1, fd);
+-         fclose(fd);
+-      };
+-      umask(mask);
+-   }
++
+    errno = 0;
+ #if DU_THREADSAFE
+    MUTEX_LOCK(&instances_mutex);
+@@ -415,17 +397,6 @@ PPCODE:
+    self->state.node = self->nodeid;
+    self->state.ts   = timestamp;
+    self->state.cs   = clockseq;
+-   if (timestamp > self->next_save ) {
+-      mask = umask(_DEFAULT_UMASK);
+-      if((fd = fopen(UUID_STATE_NV_STORE, "wb"))) {
+-	 LOCK(fd);
+-         fwrite(&(self->state), sizeof(uuid_state_t), 1, fd);
+-	 UNLOCK(fd);
+-         fclose(fd);
+-      }
+-      umask(mask);
+-      self->next_save = timestamp + (10 * 10 * 1000 * 1000);
+-   }
+    ST(0) = make_ret(uuid, ix);
+    XSRETURN(1);
+ 
+@@ -585,14 +556,6 @@ CODE:
+    MUTEX_UNLOCK(&instances_mutex);
+    if (count == 0) {
+ #endif
+-      mask = umask(_DEFAULT_UMASK);
+-      if ((fd = fopen(UUID_STATE_NV_STORE, "wb"))) {
+-         LOCK(fd);
+-         fwrite(&(self->state), sizeof(uuid_state_t), 1, fd);
+-         UNLOCK(fd);
+-         fclose(fd);
+-      };
+-      umask(mask);
+       PerlMemShared_free(self);
+ #if DU_THREADSAFE
+    }
+

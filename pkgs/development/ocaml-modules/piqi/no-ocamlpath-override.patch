@@ -1,0 +1,17 @@
+diff -rupN piqi-0.6.12.orig/make/Makefile.ocaml piqi-0.6.12/make/Makefile.ocaml
+--- piqi-0.6.12.orig/make/Makefile.ocaml	2015-03-13 13:35:19.000000000 +0100
++++ piqi-0.6.12/make/Makefile.ocaml	2015-06-10 21:19:57.231000000 +0200
+@@ -1,13 +1,5 @@
+ OCAMLMAKEFILE := $(PIQI_ROOT)/make/OCamlMakefile
+ 
+-
+-OCAMLPATH := $(PIQI_BUILD)/lib/ocaml
+-ifeq ($(SYSTEM),$(filter $(SYSTEM),mingw mingw64))
+-OCAMLPATH := $(shell cygpath -w $(OCAMLPATH))
+-endif
+-export OCAMLPATH
+-
+-
+ # make sure camlp4o produces pretty-printed text instead of AST
+ export CAMLP4_O = $(CAMLP4)o -printer o
+ 

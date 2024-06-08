@@ -1,0 +1,20 @@
+diff --git a/src/Fl_cocoa.mm b/src/Fl_cocoa.mm
+index 6f5b8b1..2c7763d 100644
+--- a/src/Fl_cocoa.mm
++++ b/src/Fl_cocoa.mm
+@@ -4074,15 +4074,6 @@ Window fl_xid(const Fl_Window* w)
+ static int calc_mac_os_version() {
+   int M, m, b = 0;
+   NSAutoreleasePool *localPool = [[NSAutoreleasePool alloc] init];
+-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+-  if ([NSProcessInfo instancesRespondToSelector:@selector(operatingSystemVersion)]) {
+-    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+-    M = version.majorVersion;
+-    m = version.minorVersion;
+-    b = version.patchVersion;
+-  }
+-  else
+-#endif
+   {
+     NSDictionary * sv = [NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"];
+     const char *s = [[sv objectForKey:@"ProductVersion"] UTF8String];

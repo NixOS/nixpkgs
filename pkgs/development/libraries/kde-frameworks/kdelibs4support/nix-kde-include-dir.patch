@@ -1,0 +1,13 @@
+Index: kdelibs4support-5.18.0/src/kdecore/kstandarddirs.cpp
+===================================================================
+--- kdelibs4support-5.18.0.orig/src/kdecore/kstandarddirs.cpp
++++ kdelibs4support-5.18.0/src/kdecore/kstandarddirs.cpp
+@@ -292,7 +292,7 @@ static QString relativeInstallPath(const
+             return QFile::decodeName(ICON_INSTALL_DIR "/");
+         }
+         if (strcmp("include", type) == 0) {
+-            return QFile::decodeName(INCLUDE_INSTALL_DIR "/");
++            return QFile::decodeName(qgetenv("NIX_KDE_INCLUDE_DIR"));
+         }
+         break;
+     case 'l':

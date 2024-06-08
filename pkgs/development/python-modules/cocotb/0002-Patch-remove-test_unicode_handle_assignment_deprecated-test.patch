@@ -1,0 +1,25 @@
+diff --git a/tests/test_cases/test_cocotb/test_deprecated.py b/tests/test_cases/test_cocotb/test_deprecated.py
+index 523b93ba..b4f1701e 100644
+--- a/tests/test_cases/test_cocotb/test_deprecated.py
++++ b/tests/test_cases/test_cocotb/test_deprecated.py
+@@ -26,20 +26,6 @@ async def test_returnvalue_deprecated(dut):
+     assert val == 42
+ 
+ 
+-# strings are not supported on Icarus (gh-2585) or GHDL (gh-2584)
+-@cocotb.test(
+-    expect_error=AttributeError
+-    if cocotb.SIM_NAME.lower().startswith("icarus")
+-    else TypeError
+-    if cocotb.SIM_NAME.lower().startswith("ghdl")
+-    else ()
+-)
+-async def test_unicode_handle_assignment_deprecated(dut):
+-    with pytest.warns(DeprecationWarning, match=".*bytes.*"):
+-        dut.stream_in_string.value = "Bad idea"
+-        await cocotb.triggers.ReadWrite()
+-
+-
+ @cocotb.test()
+ async def test_convert_handle_to_string_deprecated(dut):
+     dut.stream_in_data.value = 0

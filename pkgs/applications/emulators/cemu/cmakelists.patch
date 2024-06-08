@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4b2b789..48d9be0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -92,6 +92,7 @@ find_package(pugixml REQUIRED)
+ find_package(RapidJSON REQUIRED)
+ find_package(Boost COMPONENTS program_options filesystem nowide REQUIRED)
+ find_package(libzip REQUIRED)
++find_package(SPIRV-Tools-opt REQUIRED)
+ find_package(glslang REQUIRED)
+ find_package(ZLIB REQUIRED)
+ find_package(zstd MODULE REQUIRED) # MODULE so that zstd::zstd is available
