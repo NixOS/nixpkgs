@@ -24549,6 +24549,7 @@ with pkgs;
   ta-lib = callPackage ../development/libraries/ta-lib { };
 
   taglib = callPackage ../development/libraries/taglib { };
+  taglib2 = callPackage ../development/libraries/taglib/2.x.nix { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
