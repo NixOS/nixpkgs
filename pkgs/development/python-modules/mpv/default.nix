@@ -1,22 +1,22 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   mpv,
   setuptools,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "mpv";
-  version = "1.0.4";
+  version = "1.0.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "python-mpv";
     rev = "v${version}";
-    hash = "sha256-qP5Biw4sTLioAhmMZX+Pemue2PWc3N7afAe38dwJv3U=";
+    hash = "sha256-1axVJ8XXs0ZPgsVux3+6YUm1KttLceZyyHOuUEHIFl4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -33,10 +33,13 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "mpv" ];
 
-  meta = with lib; {
-    description = "A python interface to the mpv media player";
+  meta = {
     homepage = "https://github.com/jaseg/python-mpv";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ onny ];
+    description = "A python interface to the mpv media player";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
+      onny
+      AndersonTorres
+    ];
   };
 }
