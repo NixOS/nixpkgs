@@ -24,7 +24,7 @@ with two "luarocks" derivations.
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "luarocks";
+  pname = "luarocks_bootstrap";
   version = "3.11.1";
 
   src = fetchFromGitHub {
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
     substituteInPlace $out/etc/luarocks/* \
-     --replace '${lua.luaOnBuild}' '${lua}'
+     --replace-fail '${lua.luaOnBuild}' '${lua}'
    ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd luarocks \
