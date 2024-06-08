@@ -11116,6 +11116,8 @@ with pkgs;
 
   tageditor = libsForQt5.callPackage ../applications/audio/tageditor { };
 
+  taglib2 = callPackage ../by-name/ta/taglib/2.x.nix { };
+
   tclap = tclap_1_2;
 
   tclap_1_2 = callPackage ../development/libraries/tclap/1.2.nix { };
