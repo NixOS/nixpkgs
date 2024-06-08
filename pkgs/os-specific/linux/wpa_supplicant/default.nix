@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./unprivileged-dbus.patch
     # Fix a bug when using two config files
     ./Use-unique-IDs-for-networks-and-credentials.patch
   ] ++ lib.optionals readOnlyModeSSIDs [
