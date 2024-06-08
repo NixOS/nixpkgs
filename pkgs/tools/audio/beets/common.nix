@@ -94,6 +94,7 @@ python3Packages.buildPythonApplication {
   nativeBuildInputs = [
     gobject-introspection
     sphinxHook
+    python3Packages.pydata-sphinx-theme
   ] ++ extraNativeBuildInputs;
 
   buildInputs = [
@@ -119,6 +120,7 @@ python3Packages.buildPythonApplication {
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
+    pytest-cov
     mock
     rarfile
     responses
