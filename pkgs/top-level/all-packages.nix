@@ -27523,8 +27523,6 @@ with pkgs;
 
   go-protobuf = callPackage ../development/tools/go-protobuf { };
 
-  go-symbols = callPackage ../development/tools/go-symbols { };
-
   go-toml = callPackage ../development/tools/go-toml { };
 
   go-outline = callPackage ../development/tools/go-outline { };
