@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-spec";
-  version = "unstable-2023-06-04";
+  version = "3.2.0-unstable-2023-06-04";
   pyproject = true;
 
   src = fetchFromGitHub {
