@@ -7,24 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pcre2";
-  version = "10.43";
+  version = "10.44";
 
   src = fetchurl {
     url = "https://github.com/PhilipHazel/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
-    hash = "sha256-4qU5hP8LB9/bWuRIa7ubIcyo598kNAlsyb8bcow1C8s=";
+    hash = "sha256-008C4RPPcZOh6/J3DTrFJwiNSF1OBH7RDl0hfG713pY=";
   };
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
-
-  postPatch = ''
-    # Fix jit autodetection:
-    #   https://github.com/PCRE2Project/pcre2/pull/396
-    # Applying manually to avoid fetchpatch and autoreconfHook.
-    # TODO: remove once 10.44 is released
-    substituteInPlace configure --replace-fail \
-      '#include "src/sljit/sljitConfigInternal.h"' \
-      '#include "src/sljit/sljitConfigCPU.h"'
-  '';
 
   configureFlags = [
     "--enable-pcre2-16"
