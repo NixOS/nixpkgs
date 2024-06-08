@@ -1,9 +1,10 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 5dfb48d9f70d811d52e0633998108f22b4959b1a
-  ref: refs/tags/6.4.11
+  revision: 4248753964d0fe0e89bf84cf2b8c8c4871009a96
+  ref: refs/tags/6.4.12
   specs:
-    metasploit-framework (6.4.11)
+    metasploit-framework (6.4.12)
+      aarch64
       actionpack (~> 7.0.0)
       activerecord (~> 7.0.0)
       activesupport (~> 7.0.0)
@@ -106,6 +107,8 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.1)
+    aarch64 (2.1.0)
+      racc (~> 1.6)
     actionpack (7.0.8.3)
       actionview (= 7.0.8.3)
       activesupport (= 7.0.8.3)

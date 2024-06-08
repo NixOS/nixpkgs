@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "bee";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "ethersphere";
     repo = "bee";
     rev = "v${version}";
-    sha256 = "sha256-4Pg8zKhXQwYK7eGH886sErzkdJRD4iCoQ+mLoS7GlZg=";
+    sha256 = "sha256-FflPGsHF2kZ5eh0bNFtK5aMLon5m5B/se/5PdIIafzo=";
   };
 
-  vendorHash = "sha256-YhlUnmJuVejzy1I4+YkNnOPM+AUURr/j3dGdT3J6bVQ=";
+  vendorHash = "sha256-XbOp0821HeCU5c+es3/UJNF0StDSDKKT+sasBJ+uTLM=";
 
   subPackages = [ "cmd/bee" ];
 

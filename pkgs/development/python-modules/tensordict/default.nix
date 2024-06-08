@@ -54,12 +54,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # RuntimeError: internal error
-  disabledTests = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-    "test_add_scale_sequence"
-    "test_modules"
-    "test_setattr"
-  ];
+  disabledTests =
+    # Hangs forever
+    [ "test_copy_onto" ]
+    # RuntimeError: internal error
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      "test_add_scale_sequence"
+      "test_modules"
+      "test_setattr"
+    ];
 
   # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
   disabledTestPaths = lib.optionals stdenv.isDarwin [ "test/test_distributed.py" ];

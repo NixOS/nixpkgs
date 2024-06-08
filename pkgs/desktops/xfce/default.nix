@@ -81,6 +81,8 @@ makeScopeWithSplicing' {
 
       ristretto = callPackage ./applications/ristretto { };
 
+      xfmpc = callPackage ./applications/xfmpc { };
+
       xfce4-taskmanager = callPackage ./applications/xfce4-taskmanager { };
 
       xfce4-dict = callPackage ./applications/xfce4-dict { };
