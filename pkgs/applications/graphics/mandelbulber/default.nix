@@ -55,6 +55,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A 3D fractal rendering engine";
+    mainProgram = "mandelbulber2";
     longDescription = "Mandelbulber creatively generates three-dimensional fractals. Explore trigonometric, hyper-complex, Mandelbox, IFS, and many other 3D fractals.";
     homepage = "https://mandelbulber.com";
     license = licenses.gpl3Plus;

@@ -19,7 +19,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the atftpd TFTP server. By default, the server
           binds to address 0.0.0.0.
         '';
@@ -33,7 +33,7 @@ in
             "--verbose=7"
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra command line arguments to pass to atftp.
         '';
       };
@@ -41,7 +41,7 @@ in
       root = mkOption {
         default = "/srv/tftp";
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           Document root directory for the atftpd.
         '';
       };

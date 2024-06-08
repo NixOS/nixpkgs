@@ -19,6 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "CloudFlare Dynamic DNS Client";
+    mainProgram = "cfdyndns";
     homepage = "https://github.com/nrdxp/cfdyndns";
     license = lib.licenses.mit;
     maintainers = with maintainers; [ colemickens nrdxp ];

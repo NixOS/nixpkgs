@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, aiooui
-, buildPythonPackage
-, fetchFromGitHub
-, home-assistant-bluetooth
-, mac-vendor-lookup
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aiooui,
+  buildPythonPackage,
+  fetchFromGitHub,
+  home-assistant-bluetooth,
+  mac-vendor-lookup,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
       --replace-fail " --cov=ibeacon_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -40,13 +39,9 @@ buildPythonPackage rec {
     mac-vendor-lookup
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ibeacon_ble"
-  ];
+  pythonImportsCheck = [ "ibeacon_ble" ];
 
   meta = with lib; {
     description = "Library for iBeacon BLE devices";

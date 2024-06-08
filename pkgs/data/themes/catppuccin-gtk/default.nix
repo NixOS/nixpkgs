@@ -29,16 +29,20 @@ lib.checkListOfEnum "${pname}: tweaks" validTweaks tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "0.7.1";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "gtk";
     rev = "v${version}";
-    hash = "sha256-V3JasiHaATbVDQJeJPeFq5sjbkQnSMbDRWsaRzGccXU=";
+    hash = "sha256-DIeMdkEjIcPIf/EgE83F5URHY+lR2+hxdc4wSrruFJ8=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
+
+  patches = [
+    ./colloid-src-git-reset.patch
+  ];
 
   buildInputs = [
     gnome-themes-extra
@@ -54,7 +58,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   postPatch = ''
-    patchShebangs --build colloid/install.sh
+    patchShebangs --build colloid/install.sh colloid/build.sh
   '';
 
   dontConfigure = true;
@@ -63,6 +67,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+    cp -r colloid colloid-base
     mkdir -p $out/share/themes
     export HOME=$(mktemp -d)
 

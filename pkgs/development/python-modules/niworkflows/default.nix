@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, pytestCheckHook
-, attrs
-, importlib-resources
-, jinja2
-, looseversion
-, matplotlib
-, nibabel
-, nilearn
-, nipype
-, nitransforms
-, numpy
-, packaging
-, pandas
-, pybids
-, pyyaml
-, scikit-image
-, scipy
-, seaborn
-, svgutils
-, templateflow
-, traits
-, transforms3d
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  pytestCheckHook,
+  attrs,
+  importlib-resources,
+  jinja2,
+  looseversion,
+  matplotlib,
+  nibabel,
+  nilearn,
+  nipype,
+  nitransforms,
+  numpy,
+  packaging,
+  pandas,
+  pybids,
+  pyyaml,
+  scikit-image,
+  scipy,
+  seaborn,
+  svgutils,
+  templateflow,
+  traits,
+  transforms3d,
 }:
 
 buildPythonPackage rec {
@@ -93,6 +94,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Common workflows for MRI (anatomical, functional, diffusion, etc.)";
+    mainProgram = "niworkflows-boldref";
     homepage = "https://github.com/nipreps/niworkflows";
     changelog = "https://github.com/nipreps/niworkflows/blob/${src.rev}/CHANGES.rst";
     license = licenses.asl20;

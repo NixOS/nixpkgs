@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , fetchFromGitLab
-, attr
 , libevdev
 , libxkbcommon
 , meson
@@ -10,8 +9,8 @@
 , pkg-config
 , protobuf
 , protobufc
-, python3
 , systemd
+, buildPackages
 }:
 let
   munit = fetchFromGitHub {
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    (python3.withPackages(ps: with ps; [
+    (buildPackages.python3.withPackages (ps: with ps; [
       attrs
       jinja2
       pytest
@@ -61,6 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for Emulated Input";
+    mainProgram = "ei-debug-events";
     homepage = "https://gitlab.freedesktop.org/libinput/libei";
     license = licenses.mit;
     maintainers = [ maintainers.pedrohlc ];

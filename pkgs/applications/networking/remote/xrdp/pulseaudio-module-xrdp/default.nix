@@ -1,11 +1,11 @@
 { stdenv
 , fetchFromGitHub
 , lib
-, nix-update-script
 , pulseaudio
 , autoreconfHook
 , pkg-config
 , nixosTests
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = gitUpdater { rev-prefix = "v"; };
     tests = {
       inherit (nixosTests) xrdp-with-audio-pulseaudio;
     };

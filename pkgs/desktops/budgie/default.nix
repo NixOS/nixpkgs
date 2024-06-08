@@ -1,6 +1,8 @@
-{ lib, pkgs }:
+{ lib, newScope }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope newScope (self: let
+  inherit (self) callPackage;
+in {
   budgie-backgrounds = callPackage ./budgie-backgrounds { };
   budgie-control-center = callPackage ./budgie-control-center { };
   budgie-desktop = callPackage ./budgie-desktop { };

@@ -7,6 +7,7 @@
 , gperf
 , libmicrohttpd
 , libsodium
+, lz4
 , openssl
 , readline
 , secp256k1
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ton";
-  version = "2024.02";
+  version = "2024.04";
 
   src = fetchFromGitHub {
     owner = "ton-blockchain";
     repo = "ton";
     rev = "v${version}";
-    hash = "sha256-ZYW1/7jebgPu0IvBkopUjaXZZLymJ4yYp8Di0vI2WUg=";
+    hash = "sha256-hh8D4IZX6RS/RXdhVONhgetqp89kpTC2IwDQ2KHdKsE=";
     fetchSubmodules = true;
   };
 
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     gperf
     libmicrohttpd
     libsodium
+    lz4
     openssl
     readline
     secp256k1

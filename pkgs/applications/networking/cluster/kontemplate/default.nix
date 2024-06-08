@@ -15,6 +15,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description      = "Extremely simple Kubernetes resource templates";
+    mainProgram = "kontemplate";
     homepage         = "http://kontemplate.works";
     downloadPage     = "https://github.com/tazjin/kontemplate/releases";
     license          = licenses.gpl3;

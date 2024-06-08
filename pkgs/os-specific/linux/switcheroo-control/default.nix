@@ -46,6 +46,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "D-Bus service to check the availability of dual-GPU";
+    mainProgram = "switcherooctl";
     homepage = "https://gitlab.freedesktop.org/hadess/switcheroo-control/";
     changelog = "https://gitlab.freedesktop.org/hadess/switcheroo-control/-/blob/${version}/NEWS";
     license = licenses.gpl3Plus;

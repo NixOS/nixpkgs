@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pillow
-, zbar
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pillow,
+  zbar,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,12 @@ buildPythonPackage rec {
     sha256 = "8IZQY6qB4r1SUPItDlTDnVQuPs0I38K3yJ6LiPJuwbU=";
   };
 
-  propagatedBuildInputs = [ zbar pillow numpy ];
+  buildInputs = [ zbar ];
+
+  propagatedBuildInputs = [
+    pillow
+    numpy
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

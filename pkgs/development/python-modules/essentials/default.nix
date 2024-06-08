@@ -20,19 +20,18 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "essentials"
-  ];
+  pythonImportsCheck = [ "essentials" ];
 
   meta = with lib; {
     homepage = "https://github.com/Neoteroi/essentials";
     description = "General purpose classes and functions";
     changelog = "https://github.com/Neoteroi/essentials/releases/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [aldoborrero zimbatm];
+    maintainers = with maintainers; [
+      aldoborrero
+      zimbatm
+    ];
   };
 }

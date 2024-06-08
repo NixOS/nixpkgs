@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-you-should-use";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "MichaelAquilina";
     repo = pname;
     rev = version;
-    sha256 = "1dz48rd66priqhxx7byndqhbmlwxi1nfw8ik25k0z5k7k754brgy";
+    sha256 = "sha256-Jl3wZa/WIA+GtkUiCn0vKfd6N/GitOavwZ+uqfmzdps=";
   };
 
   strictDeps = true;

@@ -1,2 +1,0 @@
-pkgs/by-name/fo/foo: Path package.nix is a symlink pointing to a path outside the directory of that package.
-This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

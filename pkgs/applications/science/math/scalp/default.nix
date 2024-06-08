@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Scalable Linear Programming Library";
+    mainProgram = "scalp";
     homepage = "https://digidev.digi.e-technik.uni-kassel.de/scalp/";
     license = licenses.lgpl3;
     platforms = platforms.unix;

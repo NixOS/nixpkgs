@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "stereotool";
-  version = "10.21";
+  version = "10.30";
 
   srcs =
     let
@@ -35,19 +35,19 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_64_${versionNoPoint}";
-            hash = "sha256-ByRguhZ29ertQM3q+TPUUT1BMnAJGbwNe8WbNxLhcmk=";
+            hash = "sha256-sy1ps4knMlSKVapSQTJ6+8Q7x70/CpRUj7UkWWUkraI=";
           })
           # Jack version for 64bits.
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_64_${versionNoPoint}";
-            hash = "sha256-ByRguhZ29ertQM3q+TPUUT1BMnAJGbwNe8WbNxLhcmk=";
+            hash = "sha256-sy1ps4knMlSKVapSQTJ6+8Q7x70/CpRUj7UkWWUkraI=";
           })
           # Cmd version for 64bits
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_cmd_64_${versionNoPoint}";
-            hash = "sha256-PGheJfOQJzI1gs05qW9vcAMoVnCPIHR2qS0GIg5V6vw=";
+            hash = "sha256-ncrMkuqNkdhfa1l5Ya+EMoeySDTkFshbpXVIvoJdEAc=";
           })
         ];
         # Sources if the system is aarch64-linux
@@ -55,17 +55,17 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_pi2_64_${versionNoPoint}";
-            hash = "sha256-iwoc6c+ox+2DSqmiz8mpDotDjqki7iL0jgqc7Z1htNI=";
+            hash = "sha256-o4KW7oPPUYrFLKGo/Q+ISrga9EoA7FUZUzuGtYVVT+Y=";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_pi2_64_${versionNoPoint}";
-            hash = "sha256-iwoc6c+ox+2DSqmiz8mpDotDjqki7iL0jgqc7Z1htNI==";
+            hash = "sha256-o4KW7oPPUYrFLKGo/Q+ISrga9EoA7FUZUzuGtYVVT+Y=";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_pi2_64_${versionNoPoint}";
-            hash = "sha256-bIFnQkJB9XoEKo7IG+MSMvx/ia1C8i97Cw7EX4EDizk=";
+            hash = "sha256-kzzPh/l+ShvdFnFqTn6CGsj8MlMxikuhi7tThD3qFEk=";
           })
         ];
         # Sources if the system is aarch32-linux
@@ -73,17 +73,17 @@ stdenv.mkDerivation rec {
           (fetchurl {
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_pi2_${versionNoPoint}";
-            hash = "sha256-922yqmis5acvASU2rEi5YzFLAUuDO7BiEiW49RKfcoU=";
+            hash = "sha256-D5e72QabHJPaXhLa06pkS+Q/X6PiRzTn8jF2EpSf41k=";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_pi2_${versionNoPoint}";
-            hash = "sha256-922yqmis5acvASU2rEi5YzFLAUuDO7BiEiW49RKfcoU=";
+            hash = "sha256-D5e72QabHJPaXhLa06pkS+Q/X6PiRzTn8jF2EpSf41k=";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_pi2_${versionNoPoint}";
-            hash = "sha256-xKM5Mg6gEAvbp63rd81ssnx2Bj1hUylCo36mQBYwIvg=";
+            hash = "sha256-RELyXszIVjsAl0qPufLbcqDTKFOTt4Hqp8CsAl56Ybo=";
           })
         ];
         # Sources if the system is 32bits i686
@@ -92,17 +92,17 @@ stdenv.mkDerivation rec {
             # The name is the name of this source in the build directory
             name = "alsa";
             url = "https://download.thimeo.com/stereo_tool_gui_${versionNoPoint}";
-            hash = "sha256-iEPqJvmXKXD4AVbM+1QZeUOwpMjMT7ROYNQpmhRVZyw=";
+            hash = "sha256-JSy88rTlbqIclLIg1HT+OYltve5lw8Q2fH6MIQNouUk=";
           })
           (fetchurl {
             name = "jack";
             url = "https://download.thimeo.com/stereo_tool_gui_jack_${versionNoPoint}";
-            hash = "sha256-iEPqJvmXKXD4AVbM+1QZeUOwpMjMT7ROYNQpmhRVZyw=";
+            hash = "sha256-JSy88rTlbqIclLIg1HT+OYltve5lw8Q2fH6MIQNouUk=";
           })
           (fetchurl {
             name = "cmd";
             url = "https://download.thimeo.com/stereo_tool_cmd_${versionNoPoint}";
-            hash = "sha256-sk13wj7XvuwTDWWW6tMYHdTV9XjPeHe6hHv2JPBxBLA=";
+            hash = "sha256-b6v0TJaCaJKZP6uwJmmHek4y51YsK8NoslysljYHcF0=";
           })
         ];
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}"));

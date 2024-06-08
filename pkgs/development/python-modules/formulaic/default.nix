@@ -1,19 +1,20 @@
-{ lib
-, astor
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, hatch-vcs
-, hatchling
-, interface-meta
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, scipy
-, sympy
-, typing-extensions
-, wrapt
+{
+  lib,
+  astor,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  hatch-vcs,
+  hatchling,
+  interface-meta,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  sympy,
+  typing-extensions,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -48,17 +49,11 @@ buildPythonPackage rec {
     sympy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "formulaic"
-  ];
+  pythonImportsCheck = [ "formulaic" ];
 
-  disabledTestPaths = [
-    "tests/transforms/test_poly.py"
-  ];
+  disabledTestPaths = [ "tests/transforms/test_poly.py" ];
 
   meta = with lib; {
     description = "High-performance implementation of Wilkinson formulas";

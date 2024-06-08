@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "dgraph";
-  version = "23.1.0";
+  version = "23.1.1";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "sha256-AC/5ykNH2eb6IrZ3KlU0DTP4r8RiHE5iUZFCUn6H2cw=";
+    sha256 = "sha256-xmWFRqdGUk+9MKd9cQLquOmike3soNRgPwQ+F27MSAQ=";
   };
 
   vendorHash = "sha256-YRfFRCCm25zS+tQer6UcrBBltOxA7+Iqi+Ejyrjdu/A=";

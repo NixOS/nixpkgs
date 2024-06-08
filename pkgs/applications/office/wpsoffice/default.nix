@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchurl
 , dpkg
 , autoPatchelfHook
 , alsa-lib
@@ -49,6 +48,7 @@ stdenv.mkDerivation rec {
 
       nativeBuildInputs = [ curl coreutils ];
 
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
       SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
     } ''
     timestamp10=$(date '+%s')

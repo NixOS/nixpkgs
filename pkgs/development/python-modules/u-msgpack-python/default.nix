@@ -1,8 +1,9 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, glibcLocales
-, unittestCheckHook
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  glibcLocales,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-uAGoPW7XXm30HkRRi08qnCIdwtpLzVOA46D+2lILxho=";
   };
 
-  env.LC_ALL="en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   buildInputs = [ glibcLocales ];
 

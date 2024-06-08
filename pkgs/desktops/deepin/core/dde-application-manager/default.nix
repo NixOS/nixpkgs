@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Application manager for DDE";
+    mainProgram = "dde-application-manager";
     homepage = "https://github.com/linuxdeepin/dde-application-manager";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, python-dateutil
-, ephem
-, pytz
+  python-dateutil,
+  ephem,
+  pytz,
 
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/wolfhong/LunarCalendar";
     description = "A Lunar-Solar Converter, containing a number of lunar and solar festivals in China";
+    mainProgram = "lunar-find";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };

@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.15.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    hash = "sha256-yppQIffjpyQ2nqhiZbV2pSMQJx8srmHjAk+UClCQfRw=";
+    hash = "sha256-5KKF85RNCPPaXMxBb7m2XC3EaEo+UcEhBdfMEzNPsAg=";
   };
 
-  cargoHash = "sha256-2BmKC8DaOdD/THchImmGqplhDrHQHEMyWORWnE2ygSM=";
+  cargoHash = "sha256-MiJuen3Lo7nPaAK30cENw3ACAdoYbHDoiGS05dk5m6U=";
 
   cargoBuildFlags = [ "--bin" "jj" ]; # don't install the fake editors
   useNextest = false; # nextest is the upstream integration framework, but is problematic for test skipping

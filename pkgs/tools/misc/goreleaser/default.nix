@@ -9,16 +9,16 @@
 }:
 buildGoModule rec {
   pname = "goreleaser";
-  version = "1.24.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-oC35g9F9tsbpoccfh1bgLHveW4xAQ3cMnvdYiGoI8Ys=";
+    hash = "sha256-mUs+MElOgo5aiFsU5vSgvCSVNLpTOsBoIF7m/sDSQ98=";
   };
 
-  vendorHash = "sha256-5M2OkmjQJM+n5Hr4nRGSFWSmNAj5vXJp/3aw6ppOXoI=";
+  vendorHash = "sha256-1tJksVsGEWVd2wjic4k8ow+/Is9GaCnBMg0UAJzwpkA=";
 
   ldflags =
     [ "-s" "-w" "-X main.version=${version}" "-X main.builtBy=nixpkgs" ];
@@ -50,7 +50,6 @@ buildGoModule rec {
     homepage = "https://goreleaser.com";
     maintainers = with maintainers; [
       c0deaddict
-      endocrimes
       sarcasticadmin
       techknowlogick
       developer-guy

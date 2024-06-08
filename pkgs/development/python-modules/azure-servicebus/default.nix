@@ -1,25 +1,26 @@
-{ lib
-, azure-common
-, azure-core
-, buildPythonPackage
-, fetchPypi
-, isodate
-, msrest
-, pythonOlder
-, typing-extensions
-, uamqp
+{
+  lib,
+  azure-common,
+  azure-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  msrest,
+  pythonOlder,
+  typing-extensions,
+  uamqp,
 }:
 
 buildPythonPackage rec {
   pname = "azure-servicebus";
-  version = "7.11.4";
+  version = "7.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-970pd5G2pXfONqOeoKuxCqD4dba7DTFSLtntK7AojUw=";
+    hash = "sha256-sRv1aer3fDDYp2+IuTwIcT/TYYjZzG2r9x6tsQ63Qvk=";
   };
 
   propagatedBuildInputs = [
@@ -34,9 +35,7 @@ buildPythonPackage rec {
   # Tests require dev-tools
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.servicebus"
-  ];
+  pythonImportsCheck = [ "azure.servicebus" ];
 
   meta = with lib; {
     description = "Microsoft Azure Service Bus Client Library";

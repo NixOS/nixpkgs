@@ -1,13 +1,10 @@
 { binaryen
 , fetchFromGitHub
-, fetchpatch
-, fetchzip
 , lib
 , lldap
 , nixosTests
 , rustPlatform
 , rustc
-, stdenv
 , wasm-bindgen-cli
 , wasm-pack
 , which

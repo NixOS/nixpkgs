@@ -1,4 +1,12 @@
-{ aiohttp, buildPythonPackage, fetchPypi, isPy3k, lib, python, requests }:
+{
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  lib,
+  python,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "agent-py";
@@ -12,7 +20,10 @@ buildPythonPackage rec {
     sha256 = "1hx88m8b8kfb2gm6hii5ldjv7hlvqf99cz0w2vj0d0grrxcbn5cz";
   };
 
-  propagatedBuildInputs = [ requests aiohttp ];
+  propagatedBuildInputs = [
+    requests
+    aiohttp
+  ];
 
   checkPhase = ''
     ${python.interpreter} tests/test_agent.py

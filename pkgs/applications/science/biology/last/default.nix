@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "last";
-  version = "1542";
+  version = "1544";
 
   src = fetchFromGitLab {
     owner = "mcfrith";
     repo = "last";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZzvyyecYiBscogfN9/FnDbHg/lqb8y14n9C2KLIqhFA=";
+    hash = "sha256-jxNudfUvSqV1QUzdvG8LWtL977oho9QuOQImmwbQiIM=";
   };
 
   nativeBuildInputs = [

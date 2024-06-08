@@ -1,10 +1,11 @@
-{ buildPythonPackage
-, fetchFromGitLab
-, lib
-, pytestCheckHook
-, python-dateutil
-, pythonAtLeast
-, pythonOlder
+{
+  buildPythonPackage,
+  fetchFromGitLab,
+  lib,
+  pytestCheckHook,
+  python-dateutil,
+  pythonAtLeast,
+  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "vcard";

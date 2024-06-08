@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Eclipse Paho MQTT C Client Library";
+    mainProgram = "MQTTVersion";
     homepage = "https://www.eclipse.org/paho/";
     license = licenses.epl20;
     maintainers = with maintainers; [ sikmir ];

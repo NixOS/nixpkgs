@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
 
-# pythonPackages
-, pyasn1-modules
-, pycryptodomex
-, twofish
+  # pythonPackages
+  pyasn1-modules,
+  pycryptodomex,
+  twofish,
 }:
 
 buildPythonPackage rec {
@@ -31,8 +32,6 @@ buildPythonPackage rec {
     description = "Pure-Python Java Keystore (JKS) library";
     homepage = "https://github.com/kurtbrose/pyjks";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      kamadorueda
-    ];
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

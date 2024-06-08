@@ -51,6 +51,7 @@ python3.pkgs.buildPythonPackage rec {
 
   meta = with lib; {
     description = "Command line interface for zigpy";
+    mainProgram = "zigpy";
     homepage = "https://github.com/zigpy/zigpy-cli";
     changelog = "https://github.com/zigpy/zigpy/releases/tag/v${version}";
     license = licenses.gpl3Plus;

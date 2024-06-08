@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Foomatic printing filters";
+    mainProgram = "foomatic-rip";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;

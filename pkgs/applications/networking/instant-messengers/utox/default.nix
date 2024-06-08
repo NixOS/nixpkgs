@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight Tox client";
+    mainProgram = "utox";
     homepage = "https://github.com/uTox/uTox";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];

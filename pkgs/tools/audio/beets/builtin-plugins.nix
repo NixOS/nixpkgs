@@ -13,8 +13,7 @@
 , ...
 }: {
   absubmit = {
-    enable = lib.elem stdenv.hostPlatform.system essentia-extractor.meta.platforms;
-    wrapperBins = [ essentia-extractor ];
+    deprecated = true;
     testPaths = [ ];
   };
   acousticbrainz.propagatedBuildInputs = [ python3Packages.requests ];
@@ -134,6 +133,9 @@
     testPaths = [ ];
   };
   autobpm = {
+    testPaths = [ ];
+  };
+  listenbrainz = {
     testPaths = [ ];
   };
 }

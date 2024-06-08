@@ -42,6 +42,7 @@ buildGoModule {
   meta = {
     homepage = "https://elv.sh/";
     description = "A friendly and expressive command shell";
+    mainProgram = "elvish";
     longDescription = ''
       Elvish is a friendly interactive shell and an expressive programming
       language. It runs on Linux, BSDs, macOS and Windows. Despite its pre-1.0

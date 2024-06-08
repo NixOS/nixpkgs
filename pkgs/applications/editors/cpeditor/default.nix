@@ -5,6 +5,7 @@
 , qtbase
 , qttools
 , wrapQtAppsHook
+, syntax-highlighting
 , cmake
 , ninja
 , python3
@@ -13,24 +14,22 @@
 
 stdenv.mkDerivation rec {
   pname = "cpeditor";
-  version = "6.11.2";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "cpeditor";
     repo = "cpeditor";
     rev = version;
-    sha256 = "sha256-zotbXzRjIwZdYluJiz6GWUIOXl/wz1TWt+dcTwMhURo=";
+    hash = "sha256-t7nn3sO45dOQq5OMWhaseO9XHicQ/1fjukXal5yPMgY";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapQtAppsHook python3 ];
-  buildInputs = [ qtbase qttools ];
+  buildInputs = [ qtbase qttools syntax-highlighting ];
 
   postPatch = ''
-    substituteInPlace src/Core/Runner.cpp --replace "/bin/bash" "${runtimeShell}"
+    substituteInPlace src/Core/Runner.cpp --replace-fail "/bin/bash" "${runtimeShell}"
   '';
-
-  env.NIX_CFLAGS_COMPILE = "-std=c++14";
 
   meta = with lib; {
     description = "An IDE specially designed for competitive programming";

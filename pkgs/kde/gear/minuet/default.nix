@@ -8,4 +8,5 @@ mkKdeDerivation {
   pname = "minuet";
 
   extraBuildInputs = [qtdeclarative qtsvg fluidsynth];
+  meta.mainProgram = "minuet";
 }

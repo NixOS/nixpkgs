@@ -33,6 +33,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A kernel module to create V4L2 loopback devices";
+    mainProgram = "v4l2loopback-ctl";
     homepage = "https://github.com/umlaeute/v4l2loopback";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ moni ];

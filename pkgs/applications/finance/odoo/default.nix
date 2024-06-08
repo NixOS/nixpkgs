@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, fetchFromGitHub
 , fetchzip
 , python310
 , rtlcss

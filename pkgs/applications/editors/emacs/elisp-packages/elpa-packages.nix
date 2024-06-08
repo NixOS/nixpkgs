@@ -63,9 +63,6 @@ self: let
       cl-print = null; # builtin
       tle = null; # builtin
       advice = null; # builtin
-      seq = if lib.versionAtLeast self.emacs.version "27"
-            then null
-            else super.seq;
       # Compilation instructions for the Ada executables:
       # https://www.nongnu.org/ada-mode/
       ada-mode = super.ada-mode.overrideAttrs (old: {
@@ -171,6 +168,18 @@ self: let
           outd=$out/share/emacs/site-lisp/elpa/xeft-*
           install -m444 -t $outd xapian-lite${libExt}
           rm $outd/xapian-lite.cc $outd/emacs-module.h $outd/emacs-module-prelude.h $outd/demo.gif $outd/Makefile
+        '';
+      });
+
+      # native compilation for tests/seq-tests.el never ends
+      # delete tests/seq-tests.el to workaround this
+      seq = super.seq.overrideAttrs (old: {
+        dontUnpack = false;
+        postUnpack = (old.postUnpack or "") + "\n" + ''
+          local content_directory=$(echo seq-*)
+          rm --verbose $content_directory/tests/seq-tests.el
+          src=$PWD/$content_directory.tar
+          tar --create --verbose --file=$src $content_directory
         '';
       });
 

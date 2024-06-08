@@ -1,23 +1,32 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchpatch2
 , nixosTests
 }:
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.4.0";
-  format = "pyproject";
+  version = "1.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-zJH2ojLQChElRvU2TWg4lW+Mey+wP0XbLJhVF16nvss=";
+    hash = "sha256-1Q/jRjFUoJb1S3cGF8aVuguWMJwYrAtXdKpZV8nRK0k=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      # fix entrypoint
+      url = "https://github.com/supakeen/pinnwand/commit/7868b4b4dcd57066dd0023b5a3cbe91fc5a0a858.patch";
+      hash = "sha256-Fln9yJNRvNPHZ0JIgzmwwjUpAHMu55NaEb8ZVDWhLyE=";
+    })
+  ];
+
   nativeBuildInputs = [
-    poetry-core
+    pdm-pep517
     pythonRelaxDepsHook
   ];
 
@@ -31,6 +40,7 @@ with python3.pkgs; buildPythonApplication rec {
     docutils
     pygments
     pygments-better-html
+    python-dotenv
     sqlalchemy
     token-bucket
     tomli

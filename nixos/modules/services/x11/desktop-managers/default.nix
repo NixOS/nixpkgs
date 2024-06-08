@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkOption types;
 
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager;
@@ -21,7 +20,7 @@ in
     ./none.nix ./xterm.nix ./phosh.nix ./xfce.nix ./plasma5.nix ../../desktop-managers/plasma6.nix ./lumina.nix
     ./lxqt.nix ./enlightenment.nix ./gnome.nix ./retroarch.nix ./kodi.nix
     ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
-    ./cinnamon.nix ./budgie.nix ./deepin.nix
+    ./cinnamon.nix ./budgie.nix ./deepin.nix ../../desktop-managers/lomiri.nix
   ];
 
   options = {
@@ -33,7 +32,7 @@ in
           type = types.enum [ "center" "fill" "max" "scale" "tile" ];
           default = "scale";
           example = "fill";
-          description = lib.mdDoc ''
+          description = ''
             The file {file}`~/.background-image` is used as a background image.
             This option specifies the placement of this image onto your desktop.
 
@@ -49,7 +48,7 @@ in
         combineScreens = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             When set to `true` the wallpaper will stretch across all screens.
             When set to `false` the wallpaper is duplicated to all screens.
           '';
@@ -59,12 +58,12 @@ in
       session = mkOption {
         internal = true;
         default = [];
-        example = singleton
+        example = lib.singleton
           { name = "kde";
             bgSupport = true;
             start = "...";
           };
-        description = lib.mdDoc ''
+        description = ''
           Internal option used to add some common line to desktop manager
           scripts before forwarding the value to the
           `displayManager`.
@@ -73,24 +72,13 @@ in
           manage = "desktop";
           start = d.start
           # literal newline to ensure d.start's last line is not appended to
-          + optionalString (needBGCond d) ''
+          + lib.optionalString (needBGCond d) ''
 
             if [ -e $HOME/.background-image ]; then
-              ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
+              ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${lib.optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
             fi
           '';
         });
-      };
-
-      default = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "none";
-        description = lib.mdDoc ''
-          **Deprecated**, please use [](#opt-services.xserver.displayManager.defaultSession) instead.
-
-          Default desktop manager loaded if none have been chosen.
-        '';
       };
 
     };

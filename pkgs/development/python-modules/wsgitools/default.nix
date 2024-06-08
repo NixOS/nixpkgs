@@ -1,17 +1,31 @@
-{lib
-,buildPythonPackage
-,fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchPypi,
+  setuptools,
+  pyasyncore,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "wsgitools";
   version = "0.3.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q6kmrkqf02fgww7z1g9cw8f70fimdzs1bvv9inb7fsk0c3pcf1i";
+    hash = "sha256-MTh2BwNTu7NsTHuvoH+r0YHjEGfphX84f04Ah2eu02A=";
   };
+
+  build-system = [ setuptools ];
+
+  # the built-in asyncore library was removed in python 3.12
+  dependencies = lib.optionals (pythonAtLeast "3.12") [ pyasyncore ];
+
+  pythonImportsCheck = [ "wsgitools" ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     maintainers = with maintainers; [ clkamp ];

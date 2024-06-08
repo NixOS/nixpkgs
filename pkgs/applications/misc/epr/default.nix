@@ -13,6 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "CLI Epub Reader";
+    mainProgram = "epr";
     homepage = "https://github.com/wustho/epr";
     license = licenses.mit;
     maintainers = [ maintainers.Br1ght0ne ];

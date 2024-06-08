@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, psutil
-, pylibmc
-, pytest
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
-, setuptools-scm
-, toml
-, mysqlclient
-, zc-lockfile
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  psutil,
+  pylibmc,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
+  setuptools-scm,
+  toml,
+  mysqlclient,
+  zc-lockfile,
 }:
 
 buildPythonPackage rec {
@@ -57,9 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pytest_services"
-  ];
+  pythonImportsCheck = [ "pytest_services" ];
 
   disabledTests = [
     # Tests require binaries and additional parts

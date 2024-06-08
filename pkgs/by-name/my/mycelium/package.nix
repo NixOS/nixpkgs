@@ -2,24 +2,27 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
+, openssl
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mycelium";
-  version = "0.4.2";
+  version = "0.5.3";
+
+  sourceRoot = "source/myceliumd";
 
   src = fetchFromGitHub {
     owner = "threefoldtech";
     repo = "mycelium";
     rev = "v${version}";
-    hash = "sha256-VWrWg9UpBSug0cvY/zuzGFI6Y0CRFcrh1Cy4mbYtg9Q=";
+    hash = "sha256-nyHHuwOHaIh8WCxaQb7QoTReV09ydhHLYwEVHQg2Hek=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "tun-0.6.1" = "sha256-DelNPCOWvVSMS2BNGA2Gw/Mn9c7RdFNR21/jo1xf+xk=";
+      "tun-0.6.1" = "sha256-tJx/qRwPcZOAfxyjZUHKLKsLu+loltVUOCP8IzWMryM=";
     };
   };
 
@@ -28,12 +31,18 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+    OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+    OPENSSL_DIR = "${lib.getDev openssl}";
+  };
+
   meta = with lib; {
     description = "End-2-end encrypted IPv6 overlay network";
     homepage = "https://github.com/threefoldtech/mycelium";
     changelog = "https://github.com/threefoldtech/mycelium/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ matthewcroughan ];
+    maintainers = with maintainers; [ flokli matthewcroughan ];
     mainProgram = "mycelium";
   };
 }

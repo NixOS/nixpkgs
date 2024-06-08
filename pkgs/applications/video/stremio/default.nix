@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, qmake, wrapQtAppsHook
-, mpv, qtwebengine, qtwebchannel, nodejs
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, ffmpeg
+, mpv
+, nodejs
+, qmake
+, qtwebchannel
+, qtwebengine
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +39,8 @@ stdenv.mkDerivation rec {
     install -Dm 644 images/stremio_window.png $out/share/pixmaps/smartcode-stremio.png
     ln -s ${nodejs}/bin/node $out/opt/stremio/node
     ln -s $server $out/opt/stremio/server.js
+    wrapProgram $out/bin/stremio \
+      --suffix PATH ":" ${lib.makeBinPath [ ffmpeg ]}
   '';
 
   meta = with lib; {

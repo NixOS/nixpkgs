@@ -19,9 +19,20 @@
 # (and all of its dependencies) without rebuilding further.
 { drv, oldDependency, newDependency, verbose ? true }:
 
-with lib;
-
 let
+  inherit (lib)
+    any
+    attrNames
+    concatStringsSep
+    elem
+    filter
+    filterAttrs
+    listToAttrs
+    mapAttrsToList
+    stringLength
+    substring
+    ;
+
   warn = if verbose then builtins.trace else (x: y: y);
   references = import (runCommandLocal "references.nix" { exportReferencesGraph = [ "graph" drv ]; } ''
     (echo {
@@ -54,7 +65,7 @@ let
     (drv: { name = discard (toString drv);
             value = elem oldStorepath (referencesOf drv) ||
                     any dependsOnOld (referencesOf drv);
-          }) (builtins.attrNames references));
+          }) (attrNames references));
 
   dependsOnOld = drv: dependsOnOldMemo.${discard (toString drv)};
 
@@ -74,9 +85,9 @@ let
   rewriteMemo = listToAttrs (map
     (drv: { name = discard (toString drv);
             value = rewriteHashes (builtins.storePath drv)
-              (filterAttrs (n: v: builtins.elem (builtins.storePath (discard (toString n))) (referencesOf drv)) rewriteMemo);
+              (filterAttrs (n: v: elem (builtins.storePath (discard (toString n))) (referencesOf drv)) rewriteMemo);
           })
-    (filter dependsOnOld (builtins.attrNames references))) // rewrittenDeps;
+    (filter dependsOnOld (attrNames references))) // rewrittenDeps;
 
   drvHash = discard (toString drv);
 in assert (stringLength (drvName (toString oldDependency)) == stringLength (drvName (toString newDependency)));

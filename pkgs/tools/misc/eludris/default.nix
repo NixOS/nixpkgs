@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A simple CLI to help you with setting up and managing your Eludris instance";
+    mainProgram = "eludris";
     homepage = "https://github.com/eludris/eludris/tree/main/cli";
     license = licenses.mit;
     maintainers = with maintainers; [ ooliver1 ];

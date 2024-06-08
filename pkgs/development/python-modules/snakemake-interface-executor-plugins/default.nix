@@ -1,27 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, argparse-dataclass
-, throttler
-, snakemake-interface-common
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  argparse-dataclass,
+  throttler,
+  snakemake-interface-common,
 }:
 
 buildPythonPackage rec {
   pname = "snakemake-interface-executor-plugins";
-  version = "8.2.0";
+  version = "9.1.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZkhayXWy83/INRH7FYwFkhgHL+nSj7ReYC9I97SEeTM=";
+    hash = "sha256-jANSGNdWmc6ERClLR/pExoboyz8gUL2FW3W7kDQDOQo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     argparse-dataclass

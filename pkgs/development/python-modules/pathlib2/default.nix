@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pythonOlder
-, scandir ? null
-, glibcLocales
-, mock
-, typing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pythonOlder,
+  scandir ? null,
+  glibcLocales,
+  typing,
 }:
 
 buildPythonPackage rec {
@@ -19,10 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-n+DtrYmLg8DD4ZnIQrJ+0hZkXS4Xd1ey3Wc4TUETxkE=";
   };
 
-  propagatedBuildInputs = [ six ]
-    ++ lib.optionals (pythonOlder "3.5") [ scandir typing ];
-  nativeCheckInputs = [ glibcLocales ]
-    ++ lib.optional (pythonOlder "3.3") mock;
+  propagatedBuildInputs =
+    [ six ]
+    ++ lib.optionals (pythonOlder "3.5") [
+      scandir
+      typing
+    ];
+  nativeCheckInputs = [ glibcLocales ];
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"

@@ -75,6 +75,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "CLI for downloading Coursera.org videos and naming them";
+    mainProgram = "coursera-dl";
     homepage = "https://github.com/coursera-dl/coursera-dl";
     changelog = "https://github.com/coursera-dl/coursera-dl/blob/0.11.5/CHANGELOG.md";
     license = licenses.lgpl3Plus;

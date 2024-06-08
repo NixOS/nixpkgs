@@ -1,4 +1,4 @@
-{ stdenv, lib, python3Packages, fetchFromGitHub, gtk3, gobject-introspection, ffmpeg, wrapGAppsHook }:
+{ stdenv, lib, python3Packages, fetchFromGitHub, gtk3, gobject-introspection, ffmpeg, wrapGAppsHook3 }:
 
 with python3Packages;
 buildPythonApplication rec {
@@ -12,7 +12,7 @@ buildPythonApplication rec {
     sha256 = "sha256-CJpbBuRzEjWb8hsh3HMW4bZA7nyDAwjrERCS5uGdwn8=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   propagatedBuildInputs = [
     pychromecast
     bottle

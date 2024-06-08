@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "5.12.191";
+  version = "5.12.203";
 in
 rustPlatform.buildRustPackage {
   pname = "git-mit";
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage {
     owner = "PurpleBooth";
     repo = "git-mit";
     rev = "v${version}";
-    hash = "sha256-aSEoAs0s7zyALf3s77eVlrjkCrn7ihW/4OW5hN8YL8k=";
+    hash = "sha256-8sxC8peASy13Q582DbHHpQUj0AZN0soJrOocuPyJeHI=";
   };
 
-  cargoHash = "sha256-pm+XreLGxZJKRcrmU1ooMjN7MTRJqgKOy2J1OqdodxE=";
+  cargoHash = "sha256-zDUANe5zQNufPepbFoADkfjtEAE48GkMCpmG41OP2og=";
 
   nativeBuildInputs = [ pkg-config ];
 

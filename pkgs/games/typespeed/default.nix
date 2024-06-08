@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A curses based typing game";
+    mainProgram = "typespeed";
     homepage = "https://typespeed.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.unix;

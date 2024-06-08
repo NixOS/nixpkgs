@@ -7,4 +7,5 @@ mkKdeDerivation {
   pname = "khelpcenter";
 
   extraBuildInputs = [qtwebengine xapian];
+  meta.mainProgram = "khelpcenter";
 }

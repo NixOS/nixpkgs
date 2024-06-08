@@ -18,6 +18,7 @@
 
   meta = with lib; {
     description = "CLI tool for managing your products from Contabo like VPS and VDS";
+    mainProgram = "cntb";
     homepage = "https://github.com/contabo/cntb";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aciceri ];

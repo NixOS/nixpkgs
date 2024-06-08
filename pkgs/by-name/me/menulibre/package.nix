@@ -5,7 +5,7 @@
 , gtk3
 , intltool
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , nix-update-script
 , testers
 , menulibre
@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     gtk3
     intltool
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   postPatch = ''

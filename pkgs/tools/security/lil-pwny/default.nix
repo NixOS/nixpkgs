@@ -24,6 +24,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Offline auditing of Active Directory passwords";
+    mainProgram = "lil-pwny";
     homepage = "https://github.com/PaperMtn/lil-pwny";
     changelog = "https://github.com/PaperMtn/lil-pwny/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;

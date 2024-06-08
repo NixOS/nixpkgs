@@ -1,14 +1,15 @@
-{ stdenv
-, buildPythonPackage
-, lib
-, fetchPypi
-, poetry-core
-, networkx
-, numpy
-, pint
-, pydantic
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  poetry-core,
+  networkx,
+  numpy,
+  pint,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-dlcfIUKAg6yc4S3RXVJ1sKM29E1ZvHY82kjx1CM8/08=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     networkx
@@ -35,13 +34,9 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "qcelemental"
-  ];
+  pythonImportsCheck = [ "qcelemental" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

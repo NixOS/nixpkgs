@@ -13,7 +13,7 @@
 , lib
 , stdenv
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , inxi
 , mate
 , dbus
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xapp";
-  version = "2.8.2";
+  version = "2.8.3";
 
   outputs = [ "out" "dev" ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-n600mc8/4+bYUtYaHUnmr90ThVkngcu8Ft02iuSrWWQ=";
+    hash = "sha256-uWBHCsKcW0vP2HYHQWXPrCSr5NsN2nYWAzBByxJBVrY=";
   };
 
   # Recommended by upstream, which enables the build of xapp-debug.
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

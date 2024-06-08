@@ -1,7 +1,6 @@
 { lib, stdenv
 , autoreconfHook
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , lua
 , fpc
@@ -31,13 +30,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "2024.1.0";
+  version = "2024.5.1";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${version}";
-    hash = "sha256-pyX2zQiCp9lHSV1sGz0GaM5jTaBtyw50I6bFVbSm5S4=";
+    hash = "sha256-HtvKy3uQwIO2BiLUqIcv9crf9Ngq0dmYOm6E8Gm2EHs=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -80,7 +79,9 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://usdx.eu/";
     description = "Free and open source karaoke game";
+    mainProgram = "ultrastardx";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch ];
+    platforms = platforms.linux;
   };
 }

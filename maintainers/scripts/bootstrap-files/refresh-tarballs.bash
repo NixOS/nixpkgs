@@ -6,6 +6,8 @@
 #! nix-shell -p nix
 #! nix-shell -p jq
 
+set -o pipefail
+
 # How the refresher works:
 #
 # For a given list of <targets>:
@@ -14,6 +16,9 @@
 # 3. fetch all the `.build` artifacts from '$out/on-server/' directory
 # 4. calculate hashes and craft the commit message with the details on
 #    how to upload the result to 'tarballs.nixos.org'
+
+scratch_dir=$(mktemp -d)
+trap 'rm -rf -- "${scratch_dir}"' EXIT
 
 usage() {
     cat >&2 <<EOF
@@ -67,14 +72,8 @@ NATIVE_TARGETS=(
     i686-unknown-linux-gnu
     x86_64-unknown-linux-gnu
     x86_64-unknown-linux-musl
-
-    # TODO: add darwin here once a few prerequisites are satisfied:
-    #   - bootstrap-files are factored out into a separate file
-    #   - the build artifacts are factored out into an `on-server`
-    #     directory. Right onw if does not match `linux` layout.
-    #
-    #aarch64-apple-darwin
-    #x86_64-apple-darwin
+    aarch64-apple-darwin
+    x86_64-apple-darwin
 )
 
 is_native() {
@@ -104,6 +103,20 @@ is_cross() {
         [[ $t == $target ]] && return 0
     done
     return 1
+}
+
+nar_sri_get() {
+    local restore_path store_path
+    ((${#@} != 2)) && die "nar_sri_get /path/to/name.nar.xz name"
+    restore_path="${scratch_dir}/$2"
+    xz -d < "$1" | nix-store --restore "${restore_path}"
+    [[ $? -ne 0 ]] && die "Failed to unpack '$1'"
+
+    store_path=$(nix-store --add "${restore_path}")
+    [[ $? -ne 0 ]] && die "Failed to add '$restore_path' to store"
+    rm -rf -- "${restore_path}"
+
+    nix-hash --to-sri "$(nix-store --query --hash "${store_path}")"
 }
 
 # collect passed options
@@ -222,6 +235,7 @@ EOF
           case "$fname" in
               bootstrap-tools.tar.xz) attr=bootstrapTools ;;
               busybox) attr=$fname ;;
+              unpack.nar.xz) attr=unpack ;;
               *) die "Don't know how to map '$fname' to attribute name. Please update me."
           esac
 
@@ -229,18 +243,31 @@ EOF
           executable_nix=
           if [[ -x "$p" ]]; then
               executable_arg="--executable"
-              executable_nix="    executable = true;"
+              executable_nix="executable = true;"
           fi
-          sha256=$(nix-prefetch-url $executable_arg --name "$fname" "file://$p")
-          [[ $? -ne 0 ]] && die "Failed to get the hash for '$p'"
-          sri=$(nix-hash --to-sri "sha256:$sha256")
-          [[ $? -ne 0 ]] && die "Failed to convert '$sha256' hash to an SRI form"
+          unpack_nix=
+          name_nix=
+          if [[ $fname = *.nar.xz ]]; then
+              unpack_nix="unpack = true;"
+              name_nix="name = \"${fname%.nar.xz}\";"
+              sri=$(nar_sri_get "$p" "${fname%.nar.xz}")
+              [[ $? -ne 0 ]] && die "Failed to get hash of '$p'"
+          else
+              sha256=$(nix-prefetch-url $executable_arg --name "$fname" "file://$p")
+              [[ $? -ne 0 ]] && die "Failed to get the hash for '$p'"
+              sri=$(nix-hash --to-sri "sha256:$sha256")
+              [[ $? -ne 0 ]] && die "Failed to convert '$sha256' hash to an SRI form"
+          fi
 
           # individual file entries
           cat <<EOF
   $attr = import <nix/fetchurl.nix> {
     url = "http://tarballs.nixos.org/${s3_prefix}/${nixpkgs_revision}/$fname";
-    hash = "${sri}";$(printf "\n%s" "${executable_nix}")
+    hash = "${sri}";$(
+    [[ -n ${executable_nix} ]] && printf "\n    %s" "${executable_nix}"
+    [[ -n ${name_nix} ]]       && printf "\n    %s" "${name_nix}"
+    [[ -n ${unpack_nix} ]]     && printf "\n    %s" "${unpack_nix}"
+)
   };
 EOF
       done

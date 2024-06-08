@@ -1,11 +1,12 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchPypi,
+  pytest7CheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    pytest7CheckHook
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "favicon"
-  ];
+  pythonImportsCheck = [ "favicon" ];
 
   meta = with lib; {
     description = "Find a website's favicon";

@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A Conventional commit cli";
+    mainProgram = "convco";
     homepage = "https://github.com/convco/convco";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ hoverbear cafkafk ];

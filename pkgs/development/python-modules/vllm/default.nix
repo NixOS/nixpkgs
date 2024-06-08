@@ -1,38 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, which
-, ninja
-, packaging
-, setuptools
-, torch
-, outlines
-, wheel
-, psutil
-, ray
-, pandas
-, pyarrow
-, sentencepiece
-, numpy
-, transformers
-, xformers
-, fastapi
-, uvicorn
-, pydantic
-, aioprometheus
-, pynvml
-, cupy
-, writeShellScript
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  which,
+  ninja,
+  packaging,
+  setuptools,
+  torch,
+  outlines,
+  wheel,
+  psutil,
+  ray,
+  pandas,
+  pyarrow,
+  sentencepiece,
+  numpy,
+  transformers,
+  xformers,
+  fastapi,
+  uvicorn,
+  pydantic,
+  aioprometheus,
+  pynvml,
+  cupy,
+  writeShellScript,
 
-, config
+  config,
 
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
 
-, rocmSupport ? config.rocmSupport
-, rocmPackages ? {}
-, gpuTargets ? []
+  rocmSupport ? config.rocmSupport,
+  rocmPackages ? { },
+  gpuTargets ? [ ],
 }:
 
 buildPythonPackage rec {
@@ -48,7 +48,9 @@ buildPythonPackage rec {
   };
 
   # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
-  PYTORCH_ROCM_ARCH = lib.optionalString rocmSupport (lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets);
+  PYTORCH_ROCM_ARCH = lib.optionalString rocmSupport (
+    lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets
+  );
 
   # xformers 0.0.23.post1 github release specifies its version as 0.0.24
   #
@@ -57,29 +59,32 @@ buildPythonPackage rec {
   # https://github.com/vllm-project/vllm/pull/2845/commits/34a0ad7f9bb7880c0daa2992d700df3e01e91363
   #
   # hipcc --version works badly on NixOS due to unresolved paths.
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "xformers == 0.0.23.post1" "xformers == 0.0.24"
-    substituteInPlace requirements.txt \
-      --replace "cupy-cuda12x == 12.1.0" "cupy == 12.3.0"
-    substituteInPlace requirements-build.txt \
-      --replace "torch==2.1.2" "torch == 2.2.1"
-    substituteInPlace pyproject.toml \
-      --replace "torch == 2.1.2" "torch == 2.2.1"
-    substituteInPlace requirements.txt \
-      --replace "torch == 2.1.2" "torch == 2.2.1"
-  '' + lib.optionalString rocmSupport ''
-    substituteInPlace setup.py \
-      --replace "'hipcc', '--version'" "'${writeShellScript "hipcc-version-stub" "echo HIP version: 0.0"}'"
-  '';
+  postPatch =
+    ''
+      substituteInPlace requirements.txt \
+        --replace "xformers == 0.0.23.post1" "xformers == 0.0.24"
+      substituteInPlace requirements.txt \
+        --replace "cupy-cuda12x == 12.1.0" "cupy == 12.3.0"
+      substituteInPlace requirements-build.txt \
+        --replace "torch==2.1.2" "torch == 2.2.1"
+      substituteInPlace pyproject.toml \
+        --replace "torch == 2.1.2" "torch == 2.2.1"
+      substituteInPlace requirements.txt \
+        --replace "torch == 2.1.2" "torch == 2.2.1"
+    ''
+    + lib.optionalString rocmSupport ''
+      substituteInPlace setup.py \
+        --replace "'hipcc', '--version'" "'${writeShellScript "hipcc-version-stub" "echo HIP version: 0.0"}'"
+    '';
 
-  preBuild = lib.optionalString cudaSupport ''
-    export CUDA_HOME=${cudaPackages.cuda_nvcc}
-  ''
-  + lib.optionalString rocmSupport ''
-    export ROCM_HOME=${rocmPackages.clr}
-    export PATH=$PATH:${rocmPackages.hipcc}
-  '';
+  preBuild =
+    lib.optionalString cudaSupport ''
+      export CUDA_HOME=${cudaPackages.cuda_nvcc}
+    ''
+    + lib.optionalString rocmSupport ''
+      export ROCM_HOME=${rocmPackages.clr}
+      export PATH=$PATH:${rocmPackages.hipcc}
+    '';
 
   nativeBuildInputs = [
     ninja
@@ -88,40 +93,48 @@ buildPythonPackage rec {
     torch
     wheel
     which
-  ] ++ lib.optionals rocmSupport [
-    rocmPackages.hipcc
-  ];
+  ] ++ lib.optionals rocmSupport [ rocmPackages.hipcc ];
 
-  buildInputs = (lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart # cuda_runtime.h, -lcudart
-    cuda_cccl.dev # <thrust/*>
-    libcusparse.dev # cusparse.h
-    libcublas.dev # cublas_v2.h
-    libcusolver # cusolverDn.h
-  ])) ++ (lib.optionals rocmSupport (with rocmPackages; [
-    clr
-    rocthrust
-    rocprim
-    hipsparse
-    hipblas
-  ]));
+  buildInputs =
+    (lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cudart # cuda_runtime.h, -lcudart
+        cuda_cccl.dev # <thrust/*>
+        libcusparse.dev # cusparse.h
+        libcublas.dev # cublas_v2.h
+        libcusolver # cusolverDn.h
+      ]
+    ))
+    ++ (lib.optionals rocmSupport (
+      with rocmPackages;
+      [
+        clr
+        rocthrust
+        rocprim
+        hipsparse
+        hipblas
+      ]
+    ));
 
-  propagatedBuildInputs = [
-    psutil
-    ray
-    pandas
-    pyarrow
-    sentencepiece
-    numpy
-    torch
-    transformers
-    outlines
-    xformers
-    fastapi
-    uvicorn
-    pydantic
-    aioprometheus
-  ] ++ uvicorn.optional-dependencies.standard
+  propagatedBuildInputs =
+    [
+      psutil
+      ray
+      pandas
+      pyarrow
+      sentencepiece
+      numpy
+      torch
+      transformers
+      outlines
+      xformers
+      fastapi
+      uvicorn
+      pydantic
+      aioprometheus
+    ]
+    ++ uvicorn.optional-dependencies.standard
     ++ aioprometheus.optional-dependencies.starlette
     ++ lib.optionals cudaSupport [
       pynvml
@@ -135,7 +148,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/vllm-project/vllm/releases/tag/v${version}";
     homepage = "https://github.com/vllm-project/vllm";
     license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada lach ];
+    maintainers = with maintainers; [
+      happysalada
+      lach
+    ];
     broken = !cudaSupport && !rocmSupport;
   };
 }

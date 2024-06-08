@@ -27,20 +27,20 @@ let
 in
 buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.10.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-wxQaKewKIfN93Wvb7WmOSuflTgfk1XKvHAA1UIVyMqk=";
+    hash = "sha256-hUziF2HfQ8ekFwj7+8qw7Aj01la9yY57/+xujZpmVJE=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-IXFFOegzJbDcQejqQsAg11jDnhSKi27Olm8m3qr7bqw=";
+  npmDepsHash = "sha256-BVCyZKhSBNJDmhnO68ULj5aMINFQIIlwlGqwjGkOoEI=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ buildNpmPackage' rec {
 
   postPatch = ''
     substituteInPlace scripts/build-electron.sh \
-      --replace 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
+      --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
   '';
 
   ELECTRON_SKIP_BINARY_DOWNLOAD=1;
@@ -94,8 +94,8 @@ buildNpmPackage' rec {
     find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
     substituteInPlace electron-builder-config.js \
-      --replace "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
-      --replace "afterSign: 'notarize.js'," ""
+      --replace-fail "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
+      --replace-fail "afterSign: 'notarize.js'," ""
 
     npm exec electron-builder -- \
       --dir \
@@ -151,7 +151,7 @@ buildNpmPackage' rec {
     homepage = "https://www.usebruno.com";
     inherit (electron.meta) platforms;
     license = licenses.mit;
-    maintainers = with maintainers; [ water-sucks lucasew kashw2 mattpolzin ];
+    maintainers = with maintainers; [ gepbird kashw2 lucasew mattpolzin water-sucks ];
     mainProgram = "bruno";
   };
 }

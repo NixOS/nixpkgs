@@ -1,55 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonRelaxDepsHook,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, brotlicffi
-, decorator
-, flasgger
-, flask
-, greenlet
-, six
-, werkzeug
+  # dependencies
+  brotlicffi,
+  decorator,
+  flasgger,
+  flask,
+  greenlet,
+  six,
+  werkzeug,
 
-# optional-dependencies
-, gunicorn
-, gevent
+  # optional-dependencies
+  gunicorn,
+  gevent,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "httpbin";
-  version = "0.10.1";
+  version = "0.10.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e4WWvrDnWntlPDnR888mPW1cR20p4d9ve7K3C/nwaj0=";
+    hash = "sha256-YyFIaYJhyGhOotK2JM3qhFtAKx/pFzbonfiGQIxjF6k=";
   };
-
-  patches = [
-    (fetchpatch {
-      # backport flask 3.0 support; drop after 0.10.1
-      url = "https://github.com/psf/httpbin/commit/c1d9e33049263fed3cb27806a97f094acc350905.patch";
-      hash = "sha256-SYJgQN3ERDgLIaBc4eqDfey+EX4z6CSxLoAA7j+16xI=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "greenlet"
-  ];
+  pythonRelaxDeps = [ "greenlet" ];
 
   propagatedBuildInputs = [
     brotlicffi
@@ -68,9 +58,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Tests seems to be outdated
@@ -83,9 +71,7 @@ buildPythonPackage rec {
     "test_relative_redirect_n_higher_than_1"
   ];
 
-  pythonImportsCheck = [
-    "httpbin"
-  ];
+  pythonImportsCheck = [ "httpbin" ];
 
   meta = with lib; {
     description = "HTTP Request and Response Service";

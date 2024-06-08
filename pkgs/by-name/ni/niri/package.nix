@@ -13,35 +13,25 @@
 , mesa
 , fontconfig
 , libglvnd
-, libclang
 , autoPatchelfHook
 , clang
-, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.3";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "v${version}";
-    hash = "sha256-VTtXEfxc3OCdtdYiEdtftOQ7gDJNb679Yw8v1Lu3lhY=";
+    hash = "sha256-MJh0CR2YHJE0GNnxaTcElNMuZUEI0pe9fvC0mfy4484=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "revert-viewporter.patch";
-      url = "https://github.com/YaLTeR/niri/commit/40cec34aa4a7f99ab12b30cba1a0ee83a706a413.patch";
-      hash = "sha256-3fg8v0eotfjUQY6EVFEPK5BBIBrr6vQpXbjDcsw2E8Q=";
-    })
-  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-sXdixfPLAUIIVK+PhqRuMZ7XKNJIGkWNlH8nBzXlxCU=";
+      "smithay-0.3.0" = "sha256-UzX5pws8yxJhXdKIDzu6uw+PlVLRS9U9ZAfQovKv0w0=";
     };
   };
 
@@ -70,8 +60,6 @@ rustPlatform.buildRustPackage rec {
     mesa
     libglvnd # For libEGL
   ];
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   passthru.providedSessions = ["niri"];
 

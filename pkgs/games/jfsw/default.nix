@@ -5,20 +5,20 @@
 , SDL2
 , perl
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jfsw";
-  version = "20211225";
+  version = "20240303";
 
   src = fetchFromGitHub {
     owner = "jonof";
     repo = "jfsw";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-oRJHVsVo+KQfJyd8TcPxTMPPi993qxQb0wnD9nR4vJY=";
+    hash = "sha256-bOUgRa9zWufTFEj5huXAKeRerV8PqfqQVDoVUvRrj2I=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     perl
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

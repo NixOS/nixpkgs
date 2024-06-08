@@ -1,6 +1,4 @@
-{ buildPecl
-, lib
-}:
+{ buildPecl, lib }:
 
 buildPecl {
   pname = "inotify";

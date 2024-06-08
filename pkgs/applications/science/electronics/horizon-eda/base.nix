@@ -9,12 +9,14 @@
 , libgit2
 , librsvg
 , libuuid
-, opencascade-occt
+, opencascade-occt_7_6
 , pkg-config
 , podofo
 , sqlite
 }:
-
+let
+  opencascade-occt = opencascade-occt_7_6;
+in
 # This base is used in horizon-eda and python3Packages.horizon-eda
 rec {
   pname = "horizon-eda";

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation {
   pname = "libfive";
-  version = "0-unstable-2024-02-14";
+  version = "0-unstable-2024-03-28";
 
   src = fetchFromGitHub {
     owner = "libfive";
     repo = "libfive";
-    rev = "7af5f43684a8a497ac8610d39f7fca935364a9b9";
-    hash = "sha256-GQzsHKeKsCWKOVfBrTuUFq2XasPxhsN+19stWY0WtVc=";
+    rev = "4c59b11667bbe8be9802f59697fa64bbfe1ea82d";
+    hash = "sha256-scYSprozfC537vAXhMfWswyS3xivpoURWPhplH7yHIg=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config python.pkgs.pythonImportsCheckHook ];

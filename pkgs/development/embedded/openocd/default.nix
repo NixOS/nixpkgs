@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Free and Open On-Chip Debugging, In-System Programming and Boundary-Scan Testing";
+    mainProgram = "openocd";
     longDescription = ''
       OpenOCD provides on-chip programming and debugging support with a layered
       architecture of JTAG interface and TAP support, debug target support

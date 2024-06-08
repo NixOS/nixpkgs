@@ -9,7 +9,6 @@
 , flutterSrc
 , patches ? [ ]
 , pubspecLock
-, darwin
 }:
 
 buildDartApplication.override { inherit dart; } rec {
@@ -27,10 +26,9 @@ buildDartApplication.override { inherit dart; } rec {
   postPatch = ''
     popd
   ''
-  # Remove impure references to `arch` and use arm64 instead of arm64e.
+  # Use arm64 instead of arm64e.
   + lib.optionalString stdenv.isDarwin ''
     substituteInPlace lib/src/ios/xcodeproj.dart \
-      --replace-fail /usr/bin/arch '${darwin.adv_cmds}/bin/arch' \
       --replace-fail arm64e arm64
   '';
 

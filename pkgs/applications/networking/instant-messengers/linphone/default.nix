@@ -134,6 +134,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.linphone.org/";
     description = "Open source SIP phone for voice/video calls and instant messaging";
+    mainProgram = "linphone";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];

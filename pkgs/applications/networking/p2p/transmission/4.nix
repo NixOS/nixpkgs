@@ -26,7 +26,7 @@
 , enableGTK3 ? false
 , gtkmm3
 , xorg
-, wrapGAppsHook
+, wrapGAppsHook3
 , enableQt5 ? false
 , enableQt6 ? false
 , qt5
@@ -59,13 +59,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  version = "4.0.5";
+  version = "4.0.6";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
     rev = finalAttrs.version;
-    hash = "sha256-gd1LGAhMuSyC/19wxkoE2mqVozjGPfupIPGojKY0Hn4=";
+    hash = "sha256-KBXvBFgrJ3njIoXrxHbHHLsiocwfd7Eba/GNI8uZA38=";
     fetchSubmodules = true;
   };
 
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3
   ]
-  ++ optionals enableGTK3 [ wrapGAppsHook ]
+  ++ optionals enableGTK3 [ wrapGAppsHook3 ]
   ++ optionals enableQt5 [ qt5.wrapQtAppsHook ]
   ++ optionals enableQt6 [ qt6Packages.wrapQtAppsHook ]
   ;

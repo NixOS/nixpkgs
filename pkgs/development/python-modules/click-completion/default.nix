@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 
-# propagates
-, click
-, jinja2
-, shellingham
-, six
+  # propagates
+  click,
+  jinja2,
+  shellingham,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     six
   ];
 
-  pythonImportsCheck = [
-    "click_completion"
-  ];
+  pythonImportsCheck = [ "click_completion" ];
 
   # has no tests
   doCheck = false;

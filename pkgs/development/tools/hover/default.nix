@@ -85,7 +85,7 @@ let
 
 in
 buildFHSEnv rec {
-  name = pname;
+  inherit pname version;
   targetPkgs = pkgs: [
     binutils
     dejavu_fonts

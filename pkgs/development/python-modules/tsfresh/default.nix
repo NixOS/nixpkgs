@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, requests
-, numpy
-, pandas
-, scipy
-, statsmodels
-, patsy
-, scikit-learn
-, tqdm
-, dask
-, distributed
-, stumpy
-, cloudpickle
-, pytestCheckHook
-, pytest-xdist
-, mock
-, matplotlib
-, seaborn
-, ipython
-, notebook
-, pandas-datareader
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  numpy,
+  pandas,
+  scipy,
+  statsmodels,
+  patsy,
+  scikit-learn,
+  tqdm,
+  dask,
+  distributed,
+  stumpy,
+  cloudpickle,
+  pytestCheckHook,
+  pytest-xdist,
+  mock,
+  matplotlib,
+  seaborn,
+  ipython,
+  notebook,
+  pandas-datareader,
 }:
 
 buildPythonPackage rec {
@@ -85,6 +86,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Automatic extraction of relevant features from time series";
+    mainProgram = "run_tsfresh";
     homepage = "https://github.com/blue-yonder/tsfresh";
     changelog = "https://github.com/blue-yonder/tsfresh/blob/${src.rev}/CHANGES.rst";
     license = licenses.mit;

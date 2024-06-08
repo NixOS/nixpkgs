@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, isPy38
-, isPy39
-, pythonAtLeast
-, flake8
-, six
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  isPy38,
+  isPy39,
+  pythonAtLeast,
+  flake8,
+  six,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -23,16 +24,15 @@ buildPythonPackage rec {
     hash = "sha256-2EcCOx3+PCk9LYpQjHCFNpQVI2Pdi+lWL8R6bNadFe0=";
   };
 
-  patches = lib.optionals (pythonAtLeast "3.10") [
-    ./fix-annotations-version-11.patch
-  ] ++ lib.optionals (isPy38 || isPy39) [
-    ./fix-annotations-version-10.patch
-  ] ++ lib.optionals isPy27 [
-    # Upstream disables this test case naturally on python 3, but it also fails
-    # inside NixPkgs for python 2. Since it's going to be deleted, we just skip it
-    # on py2 as well.
-    ./skip-test.patch
-  ];
+  patches =
+    lib.optionals (pythonAtLeast "3.10") [ ./fix-annotations-version-11.patch ]
+    ++ lib.optionals (isPy38 || isPy39) [ ./fix-annotations-version-10.patch ]
+    ++ lib.optionals isPy27 [
+      # Upstream disables this test case naturally on python 3, but it also fails
+      # inside NixPkgs for python 2. Since it's going to be deleted, we just skip it
+      # on py2 as well.
+      ./skip-test.patch
+    ];
 
   postPatch = ''
     substituteInPlace "test_flake8_future_import.py" \

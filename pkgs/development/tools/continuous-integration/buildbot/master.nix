@@ -1,13 +1,15 @@
 { lib
 , stdenv
 , buildPythonApplication
-, fetchPypi
+, fetchFromGitHub
+, fetchpatch
 , makeWrapper
 # Tie withPlugins through the fixed point here, so it will receive an
 # overridden version properly
 , buildbot
 , pythonOlder
 , python
+, pythonRelaxDepsHook
 , twisted
 , jinja2
 , msgpack
@@ -71,15 +73,25 @@ let
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "3.11.1";
+  version = "3.11.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ruYW1sVoGvFMi+NS+xiNsn0Iq2RmKlax4bxHgYrj6ZY=";
+  src = fetchFromGitHub {
+    owner = "buildbot";
+    repo = "buildbot";
+    rev = "v${version}";
+    hash = "sha256-rDbAWLoEEjygW72YDBsVwiaHdRTVYA9IFxY3XMDleho=";
   };
+
+  build-system = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "twisted"
+  ];
 
   propagatedBuildInputs = [
     # core
@@ -125,10 +137,20 @@ buildPythonApplication rec {
     # This patch disables the test that tries to read /etc/os-release which
     # is not accessible in sandboxed builds.
     ./skip_test_linux_distro.patch
+    # Fix gitpoller, source: https://github.com/buildbot/buildbot/pull/7664
+    # Included in next release.
+    (fetchpatch {
+      url = "https://github.com/buildbot/buildbot/commit/dd5d61e63e3b0740cc538a225ccf104ccecfc734.patch";
+      sha256 = "sha256-CL6uRaKxh8uCBfWQ0tNiLh2Ym0HVatWni8hcuTyAAw0=";
+      excludes = ["master/buildbot/test/unit/changes/test_gitpoller.py"];
+    })
   ];
 
   postPatch = ''
-    substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+    substituteInPlace master/buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+  '';
+  preBuild = ''
+    cd master
   '';
 
   # Silence the depreciation warning from SqlAlchemy

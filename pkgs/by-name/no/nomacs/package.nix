@@ -38,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     exiv2
     libraw
     libtiff
-    opencv4
+    # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
+    # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
+    # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
+    (lib.getOutput "cxxdev" opencv4)
   ] ++ (with libsForQt5; [
     qtbase
     qtimageformats

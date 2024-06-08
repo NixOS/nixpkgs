@@ -1,6 +1,5 @@
 { lib
 , python3Packages
-, fetchFromGitHub
 
 , withGUI ? true
 }:

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
   # needs to be updated to newer pytest version and requires physical device
   doCheck = false;
 
-  pytestFlags = [
-    "icontrol/test"
-  ];
+  pytestFlags = [ "icontrol/test" ];
 
   pythonImportsCheck = [ "icontrol" ];
 

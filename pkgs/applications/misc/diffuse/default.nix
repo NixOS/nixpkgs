@@ -3,7 +3,7 @@
 , meson
 , ninja
 , gettext
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , pango
 , gdk-pixbuf
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     meson
     ninja
     gettext
@@ -71,6 +71,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/MightyCreak/diffuse";
     description = "Graphical tool for merging and comparing text files";
+    mainProgram = "diffuse";
     license = licenses.gpl2;
     maintainers = with maintainers; [ k3a ];
     platforms = platforms.unix;

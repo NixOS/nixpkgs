@@ -6,7 +6,7 @@
 
 let
   pname = "certificate-ripper";
-  version = "2.2.0";
+  version = "2.3.0";
 
   jar = maven.buildMavenPackage {
     pname = "${pname}-jar";
@@ -16,15 +16,20 @@ let
       owner = "Hakky54";
       repo = "certificate-ripper";
       rev = version;
-      hash = "sha256-snavZVLY8sHinLnG6k61eSQlR9sb8+k5tRHqu4kzQKM=";
+      hash = "sha256-q/UhKLFAre3YUH2W7e+SH4kRM0GIZAUyNJFDm02eL+8=";
     };
 
     patches = [
-      ./make-deterministic.patch
+      ./pin-default-maven-plguin-versions.patch
       ./fix-test-temp-dir-path.patch
     ];
 
-    mvnHash = "sha256-ahw9VVlvBPlWChcJzXFna55kxqVeJMmdaLtwWcJ+qSA=";
+    mvnHash = "sha256-/iy7DXBAyq8TIpvrd2WAQh+9OApfxCWo1NoGwbzbq7s=";
+
+    mvnParameters = lib.escapeShellArgs [
+      "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z" # make timestamp deterministic
+      "-Dtest=!PemExportCommandShould#resolveRootCaOnlyWhenEnabled" # disable test using network
+    ];
 
     installPhase = ''
       install -Dm644 target/crip.jar $out

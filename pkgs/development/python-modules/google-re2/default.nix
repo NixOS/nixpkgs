@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pybind11
-, re2
-, six
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  pybind11,
+  re2,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     six
   ];
 
-  pythonImportsCheck = [
-    "re2"
-  ];
+  pythonImportsCheck = [ "re2" ];
 
   meta = with lib; {
     description = "RE2 Python bindings";

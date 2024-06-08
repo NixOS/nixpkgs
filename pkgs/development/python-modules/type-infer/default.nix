@@ -1,30 +1,35 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry-core
-, colorlog
-, dataclasses-json
-, langid
-, nltk
-, numpy
-, pandas
-, psutil
-, python-dateutil
-, scipy
-, toml
-, nltk-data
-, symlinkJoin
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  poetry-core,
+  colorlog,
+  dataclasses-json,
+  langid,
+  nltk,
+  numpy,
+  pandas,
+  psutil,
+  py3langid,
+  python-dateutil,
+  scipy,
+  toml,
+  nltk-data,
+  symlinkJoin,
 }:
 let
   testNltkData = symlinkJoin {
     name = "nltk-test-data";
-    paths = [ nltk-data.punkt nltk-data.stopwords ];
+    paths = [
+      nltk-data.punkt
+      nltk-data.stopwords
+    ];
   };
 in
 buildPythonPackage rec {
   pname = "type-infer";
-  version = "0.0.17";
+  version = "0.0.20";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -33,12 +38,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "type_infer";
     inherit version;
-    hash = "sha256-2bPXJuGDXTVoYUP9IfwyRy8LbMT/ySoHDzuelrOq/DU=";
+    hash = "sha256-F+gfA7ofrbMEE5SrVt9H3s2mZKQLyr6roNUmL4EMJbI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     colorlog
@@ -48,6 +51,7 @@ buildPythonPackage rec {
     numpy
     pandas
     psutil
+    py3langid
     python-dateutil
     scipy
     toml

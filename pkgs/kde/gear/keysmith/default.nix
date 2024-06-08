@@ -9,4 +9,5 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [pkg-config];
   extraBuildInputs = [qtsvg libsodium];
+  meta.mainProgram = "keysmith";
 }

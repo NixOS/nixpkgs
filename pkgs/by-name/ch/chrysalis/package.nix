@@ -14,16 +14,13 @@ let
 in appimageTools.wrapType2 rec {
   inherit name pname src;
 
-  multiArch = false;
-  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [ p.glib ];
+  extraPkgs = pkgs: [ pkgs.glib ];
 
   # Also expose the udev rules here, so it can be used as:
   #   services.udev.packages = [ pkgs.chrysalis ];
   # to allow non-root modifications to the keyboards.
 
   extraInstallCommands = ''
-    mv $out/bin/{${name},${pname}}
-
     install -m 444 \
       -D ${appimageContents}/usr/lib/chrysalis/resources/static/udev/60-kaleidoscope.rules \
       -t $out/lib/udev/rules.d

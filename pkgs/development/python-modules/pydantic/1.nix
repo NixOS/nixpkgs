@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, cython
-, email-validator
-, fetchFromGitHub
-, pytest-mock
-, pytestCheckHook
-, python-dotenv
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, typing-extensions
-, libxcrypt
+{
+  lib,
+  buildPythonPackage,
+  cython_0,
+  email-validator,
+  fetchFromGitHub,
+  pytest-mock,
+  pytest7CheckHook,
+  python-dotenv,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
+  libxcrypt,
 }:
 
 buildPythonPackage rec {
@@ -29,34 +30,27 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    cython
+    cython_0
   ];
 
-  buildInputs = lib.optionals (pythonOlder "3.9") [
-    libxcrypt
-  ];
+  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
   passthru.optional-dependencies = {
-    dotenv = [
-      python-dotenv
-    ];
-    email = [
-      email-validator
-    ];
+    dotenv = [ python-dotenv ];
+    email = [ email-validator ];
   };
 
   nativeCheckInputs = [
     pytest-mock
-    pytestCheckHook
+    pytest7CheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [
     # https://github.com/pydantic/pydantic/issues/4817
-    "-W" "ignore::pytest.PytestReturnNotNoneWarning"
+    "-W"
+    "ignore::pytest.PytestReturnNotNoneWarning"
   ];
 
   preCheck = ''

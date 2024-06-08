@@ -1,6 +1,6 @@
 { fetchFromGitHub
 , lib
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3Packages
 , gtk3
 , poppler_gi
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ (with python3Packages; [
     setuptools
   ]);
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     python-dateutil
   ];
 
-  # incompatible with wrapGAppsHook
+  # incompatible with wrapGAppsHook3
   strictDeps = false;
   dontWrapGApps = true;
   preFixup = ''
@@ -51,6 +51,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Merge or split pdf documents and rotate, crop and rearrange their pages using an interactive and intuitive graphical interface";
+    mainProgram = "pdfarranger";
     platforms = platforms.linux;
     maintainers = with maintainers; [ symphorien ];
     license = licenses.gpl3Plus;

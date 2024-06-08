@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Tree ldd with an option to bundle dependencies into a single folder";
+    mainProgram = "libtree";
     homepage = "https://github.com/haampie/libtree";
     license = licenses.mit;
     platforms = platforms.linux;

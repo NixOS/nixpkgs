@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, ed25519
-, fetchFromGitHub
-, hatchling
-, pytestCheckHook
-, pythonOlder
-, requests
-, securesystemslib
+{
+  lib,
+  buildPythonPackage,
+  ed25519,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  securesystemslib,
 }:
 
 buildPythonPackage rec {
@@ -28,24 +29,19 @@ buildPythonPackage rec {
       --replace-fail "hatchling==" "hatchling>="
   '';
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     requests
     securesystemslib
-  ] ++ securesystemslib.optional-dependencies.pynacl
-  ++ securesystemslib.optional-dependencies.crypto;
+  ] ++ securesystemslib.optional-dependencies.pynacl ++ securesystemslib.optional-dependencies.crypto;
 
   nativeCheckInputs = [
     ed25519
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "tuf"
-  ];
+  pythonImportsCheck = [ "tuf" ];
 
   preCheck = ''
     cd tests
@@ -55,7 +51,10 @@ buildPythonPackage rec {
     description = "Python reference implementation of The Update Framework (TUF)";
     homepage = "https://github.com/theupdateframework/python-tuf";
     changelog = "https://github.com/theupdateframework/python-tuf/blob/v${version}/docs/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

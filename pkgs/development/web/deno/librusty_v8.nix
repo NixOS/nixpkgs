@@ -4,17 +4,17 @@
 let
   fetch_librusty_v8 = args: fetchurl {
     name = "librusty_v8-${args.version}";
-    url = "https://github.com/denoland/rusty_v8/releases/download/v${args.version}/librusty_v8_release_${stdenv.hostPlatform.rust.rustcTarget}.a";
+    url = "https://github.com/denoland/rusty_v8/releases/download/v${args.version}/librusty_v8_release_${stdenv.hostPlatform.rust.rustcTarget}.a.gz";
     sha256 = args.shas.${stdenv.hostPlatform.system};
     meta = { inherit (args) version; };
   };
 in
 fetch_librusty_v8 {
-  version = "0.83.2";
+  version = "0.91.1";
   shas = {
-    x86_64-linux = "sha256-RJNdy5jRZK3dTgrHsWuZZAHUyy1EogyNNuBekZ3Arrk=";
-    aarch64-linux = "sha256-mpOmuqtd7ob6xvrgH4P/6GLa/hXTS/ok0WOYo7+7ZhI=";
-    x86_64-darwin = "sha256-2o8CvJ3r5+4PLNGTySqPPDTqbU0piX4D1UtZMscMdHU=";
-    aarch64-darwin = "sha256-WHeITWSHjZxfQJndxcjsp4yIERKrKXSHFZ0UBc43p8o=";
+    x86_64-linux = "sha256-2J/YDTtSCXo2nsO0Lx6mJqKSFu2hUc8HmNAL2SD9ImI=";
+    aarch64-linux = "sha256-NwuDVaEbYWZfF2epVPPhIKM1aw35e8Bp5siBoREpym8=";
+    x86_64-darwin = "sha256-JNf4Me4VMdvjgYM4OyCUlQW6Q/OdQ2BuDNWFKI4sbtg=";
+    aarch64-darwin = "sha256-WVBDiGWVBvMiKNgPaPw8KQChARkFDfx8Nt9QEobGNG4=";
   };
 }

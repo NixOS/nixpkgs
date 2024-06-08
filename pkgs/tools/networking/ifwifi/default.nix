@@ -31,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A simple wrapper over nmcli using wifiscanner made in rust";
+    mainProgram = "ifwifi";
     longDescription = ''
       In the author's words:
 

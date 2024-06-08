@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, isPy27
-, pytestCheckHook
-, autoconf271
-, automake
-, cmake
-, gcc
-, libtool
-, perl
-, setuptools
-, simplejson
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  isPy27,
+  pytestCheckHook,
+  autoconf271,
+  automake,
+  cmake,
+  gcc,
+  libtool,
+  perl,
+  setuptools,
+  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "2.0.8";
+  version = "2.0.10";
   pyproject = true;
 
   disabled = isPy27;
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-0ej+Gy9nF96SaGhohHF9EJObSpHdxIe9QXHNHejVwbQ=";
+    sha256 = "sha256-tvTN6gV73Qnbe4OBHtfxt4jXV32fMTPE4H79WIkgkxE=";
   };
 
   patches = [
@@ -44,7 +45,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ simplejson ];
 
-  nativeBuildInputs = [ autoconf271 automake cmake libtool perl setuptools ];
+  nativeBuildInputs = [
+    autoconf271
+    automake
+    cmake
+    libtool
+    perl
+    setuptools
+  ];
 
   buildInputs = [ gcc ];
 
@@ -57,7 +65,10 @@ buildPythonPackage rec {
     "test_handle_event_request_fault_exception_logging_syntax_error"
   ];
 
-  pythonImportsCheck = [ "awslambdaric" "runtime_client" ];
+  pythonImportsCheck = [
+    "awslambdaric"
+    "runtime_client"
+  ];
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);

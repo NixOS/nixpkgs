@@ -19,17 +19,18 @@ let
       "java.xml"
       "java.desktop"
       "java.management"
+      "java.naming"
     ];
     jdk = jdk_headless;
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dynamodb-local";
-  version = "2.2.1";
+  version = "2.5.0";
 
   src = fetchurl {
-    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2024-01-04.tar.gz";
-    hash = "sha256-CbZ9Z9A70JoHu4G6It+7WycaEtzuwjVJ2YrOK+37zYA=";
+    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2024-05-28.tar.gz";
+    hash = "sha256-vwExzekzNdNWcEOHZ22b5F9pADdqZ4XSWscrndfPcsQ=";
   };
 
   sourceRoot = ".";

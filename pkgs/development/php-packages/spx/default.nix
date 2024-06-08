@@ -1,8 +1,14 @@
-{ buildPecl, lib, fetchFromGitHub, zlib }:
+{
+  buildPecl,
+  lib,
+  fetchFromGitHub,
+  zlib,
+}:
 
 let
   version = "0.4.15";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "spx";
 
@@ -13,9 +19,7 @@ in buildPecl {
     hash = "sha256-gw6wbPt1Qy0vNfT0flq7bxpnGU3SgJvPVhk8H0Imvx4=";
   };
 
-  configureFlags = [
-    "--with-zlib-dir=${zlib.dev}"
-  ];
+  configureFlags = [ "--with-zlib-dir=${zlib.dev}" ];
 
   preConfigure = ''
     substituteInPlace Makefile.frag \

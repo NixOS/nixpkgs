@@ -50,6 +50,10 @@ while [ "$#" -gt 0 ]; do
         ;;
       switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
         if [ "$i" = dry-run ]; then i=dry-build; fi
+        if [ "$i" = list-generations ]; then
+            buildNix=
+            fast=1
+        fi
         # exactly one action mandatory, bail out if multiple are given
         if [ -n "$action" ]; then showSyntax; fi
         action="$i"
@@ -387,7 +391,7 @@ if [[ -n $flake ]]; then
        flakeAttr="${BASH_REMATCH[2]}"
     fi
     if [[ -z $flakeAttr ]]; then
-        read -r hostname < /proc/sys/kernel/hostname
+        hostname="$(targetHostCmd cat /proc/sys/kernel/hostname)"
         if [[ -z $hostname ]]; then
             hostname=default
         fi
@@ -559,11 +563,16 @@ if [ "$action" = repl ]; then
         blue="$(echo -e '\033[34;1m')"
         attention="$(echo -e '\033[35;1m')"
         reset="$(echo -e '\033[0m')"
+        if [[ -e $flake ]]; then
+            flakePath=$(realpath "$flake")
+        else
+            flakePath=$flake
+        fi
         # This nix repl invocation is impure, because usually the flakeref is.
         # For a solution that preserves the motd and custom scope, we need
         # something like https://github.com/NixOS/nix/issues/8679.
         exec nix repl --impure --expr "
-          let flake = builtins.getFlake ''$flake'';
+          let flake = builtins.getFlake ''$flakePath'';
               configuration = flake.$flakeAttr;
               motd = ''
                 $d{$q\n$q}
@@ -756,7 +765,7 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         "-E" "NIXOS_INSTALL_BOOTLOADER=$installBootloader"
         "--collect"
         "--no-ask-password"
-        "--pty"
+        "--pipe"
         "--quiet"
         "--same-dir"
         "--service-type=exec"
@@ -788,7 +797,13 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     else
         cmd+=("$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration")
 
-        if [[ ! -f "${cmd[-1]}" ]]; then
+        if [ -z "$targetHost" ]; then
+            specialisationExists=$(test -f "${cmd[-1]}")
+        else
+            specialisationExists=$(targetHostCmd test -f "${cmd[-1]}")
+        fi
+
+        if ! $specialisationExists; then
             log "error: specialisation not found: $specialisation"
             exit 1
         fi

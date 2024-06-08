@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/mrocklin/multipledispatch/";
     description = "A relatively sane approach to multiple dispatch in Python";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

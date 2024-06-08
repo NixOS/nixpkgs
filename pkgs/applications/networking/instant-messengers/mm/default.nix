@@ -14,6 +14,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "A file system based matrix client";
+    mainProgram = "mm";
     homepage = "https://git.lost.host/meutraa/mm";
     license = licenses.isc;
     maintainers = with maintainers; [ ];

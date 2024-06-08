@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,12 +31,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "plac"
-  ];
+  pythonImportsCheck = [ "plac" ];
 
   meta = with lib; {
     description = "Parsing the Command Line the Easy Way";
+    mainProgram = "plac_runner.py";
     homepage = "https://github.com/micheles/plac";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ ];

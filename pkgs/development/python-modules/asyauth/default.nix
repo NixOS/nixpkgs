@@ -1,11 +1,12 @@
-{ lib
-, asn1crypto
-, asysocks
-, buildPythonPackage
-, fetchPypi
-, minikerberos
-, pythonOlder
-, unicrypto
+{
+  lib,
+  asn1crypto,
+  asysocks,
+  buildPythonPackage,
+  fetchPypi,
+  minikerberos,
+  pythonOlder,
+  unicrypto,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Project doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "asyauth"
-  ];
+  pythonImportsCheck = [ "asyauth" ];
 
   meta = with lib; {
     description = "Unified authentication library";

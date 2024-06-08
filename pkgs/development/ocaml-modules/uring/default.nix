@@ -10,13 +10,13 @@
 
 buildDunePackage rec {
   pname = "uring";
-  version = "0.8";
+  version = "0.9";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-4OGst19vqEzuNVxO5xxtzS+mEilEBFoEc7lC3j3sTk4=";
+    hash = "sha256-eXWIxfL9UsKKf4sanBjKfr6Od4fPDctVnkU+wjIXW0M=";
   };
 
   propagatedBuildInputs = [

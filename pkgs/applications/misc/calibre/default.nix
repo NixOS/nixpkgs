@@ -26,17 +26,17 @@
 , sqlite
 , wrapQtAppsHook
 , xdg-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 , unrarSupport ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.6.0";
+  version = "7.11.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fD2kTwH692x6Nm93NrUQvmbcXiX9hHBpo4wvUvBqLAM=";
+    hash = "sha256-JSQ8BpZf7ZvLld3GM5/yfLS+zRiFGi0r7V67Xb662Os=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "0001-only-plugin-update.patch";
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/0001-only-plugin-update.patch";
-      hash = "sha256-uL1mSjgCl5ZRLbSuKxJM6XTfvVwog70F7vgKtQzQNEQ=";
+      hash = "sha256-mHZkUoVcoVi9XBOSvM5jyvpOTCcM91g9+Pa/lY6L5p8=";
     })
     (fetchpatch {
       name = "0007-Hardening-Qt-code.patch";
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qmake
     removeReferencesTo
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 

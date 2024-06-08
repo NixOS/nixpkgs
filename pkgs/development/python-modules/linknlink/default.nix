@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "linknlink";
-  version = "0.2.1";
+  version = "0.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,20 +18,14 @@ buildPythonPackage rec {
     owner = "xuanxuan000";
     repo = "python-linknlink";
     rev = "refs/tags/${version}";
-    hash = "sha256-MOZw+7oFHeH7Vaj6pylR7wqe3ZyHcsiG+n8jnRAQ8PA=";
+    hash = "sha256-ObPEcdDHi+SPFjuVKBtu7/5/IgHcam+IWblxxS3+mmI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  dependencies = [ cryptography ];
 
-  pythonImportsCheck = [
-    "linknlink"
-  ];
+  pythonImportsCheck = [ "linknlink" ];
 
   # Module has no test
   doCheck = false;

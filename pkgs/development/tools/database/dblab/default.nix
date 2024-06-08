@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "dblab";
-  version = "0.21.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "danvergara";
     repo = "dblab";
     rev = "v${version}";
-    hash = "sha256-3Bmus2yVTwvy0CpoNE1mzVvocpBnRoI11Sf+x2JXhgM=";
+    hash = "sha256-xaggGX1BROyfexPV3I2TGYf3BPHg2uFebm8XZ0qwXUw=";
   };
 
-  vendorHash = "sha256-vf0CeiLBVqMGV2oqxRHzhvL7SoT9zcg8P5c63z3UR3g=";
+  vendorHash = "sha256-RmZkSlA6KU1wXKFHPLYVhRjwxsDjO1XNoGBdNCmeGSw=";
 
   ldflags = [ "-s -w -X main.version=${version}" ];
 

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oath
-, pycryptodome
-, requests
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  oath,
+  pycryptodome,
+  requests,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A free software implementation of Symantec's VIP Access application and protocol";
+    mainProgram = "vipaccess";
     homepage = "https://github.com/dlenski/python-vipaccess";
     license = licenses.asl20;
     maintainers = with maintainers; [ aw ];

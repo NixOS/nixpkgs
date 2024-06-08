@@ -29,7 +29,7 @@ assert lib.assertOneOf "backend" backend [ "x11" "wayland" ];
 
 stdenv.mkDerivation {
   pname = "rofi-pass";
-  version = "unstable-2024-02-13";
+  version = "2.0.2-unstable-2024-02-13";
 
   src = fetchFromGitHub {
     owner = "carnager";
@@ -84,6 +84,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A script to make rofi work with password-store";
+    mainProgram = "rofi-pass";
     homepage = "https://github.com/carnager/rofi-pass";
     license = lib.licenses.gpl3;
     platforms = with lib.platforms; linux;

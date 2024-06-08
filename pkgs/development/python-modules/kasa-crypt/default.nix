@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, poetry-core
-, pytestCheckHook
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  poetry-core,
+  pytestCheckHook,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "kasa-crypt";
-  version = "0.4.1";
-  format = "pyproject";
+  version = "0.4.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,27 +20,23 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "kasa-crypt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZAynSL6tIQoe9veYGusel9GQEffeLQ8dBA9HfA6TMzI=";
+    hash = "sha256-7PLOuWxA5ziOuysSu+nLWNmNA3/sbuUCuZcMRBflf6U=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=kasa_crypt --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=kasa_crypt --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "kasa_crypt"
-  ];
+  pythonImportsCheck = [ "kasa_crypt" ];
 
   meta = with lib; {
     description = "Fast kasa crypt";

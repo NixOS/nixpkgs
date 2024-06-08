@@ -98,6 +98,7 @@ maven.buildMavenPackage rec {
 
   meta = with lib; {
     description = "XML Language Server";
+    mainProgram = "lemminx";
     homepage = "https://github.com/eclipse/lemminx";
     license = licenses.epl20;
     maintainers = with maintainers; [ tricktron ];

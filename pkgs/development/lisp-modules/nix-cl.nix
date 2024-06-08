@@ -274,8 +274,8 @@ let
       inherit (first) pkg program flags faslExt asdf;
       # See dontUnpack in build-asdf-system
       src = null;
-      pname = first.pkg.pname;
-      version = "with-packages";
+      pname = "with";
+      version = "packages";
       lispLibs = packages clpkgs;
       systems = [];
     }).overrideAttrs(o: {

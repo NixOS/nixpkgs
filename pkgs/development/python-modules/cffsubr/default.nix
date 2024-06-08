@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, fonttools
-, pytestCheckHook
-, setuptools-scm
-, wheel
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  fonttools,
+  pytestCheckHook,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -33,19 +34,16 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    fonttools
-  ];
+  propagatedBuildInputs = [ fonttools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cffsubr" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Standalone CFF subroutinizer based on AFDKO tx";
+    mainProgram = "cffsubr";
     homepage = "https://github.com/adobe-type-tools/cffsubr";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

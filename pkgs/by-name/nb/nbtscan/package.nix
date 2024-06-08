@@ -19,6 +19,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Scan networks searching for NetBIOS information";
+    mainProgram = "nbtscan";
     homepage = "https://github.com/resurrecting-open-source-projects/nbtscan";
     maintainers = with maintainers; [ d3vil0p3r ];
     platforms = platforms.unix;

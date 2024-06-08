@@ -28,6 +28,7 @@ let
 
   meta = with lib; {
     description = "An open source note taking and to-do application with synchronisation capabilities";
+    mainProgram = "joplin-desktop";
     longDescription = ''
       Joplin is a free, open source note taking and to-do application, which can
       handle a large number of notes organised into notebooks. The notes are
@@ -48,10 +49,7 @@ let
       export LC_ALL=C.UTF-8
     '';
 
-    multiArch = false; # no 32bit needed
-    extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
-      mv $out/bin/{${pname}-${version},${pname}}
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"

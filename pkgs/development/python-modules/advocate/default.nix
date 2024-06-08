@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, ndg-httpsclient
-, netifaces
-, pyasn1
-, pyopenssl
-, requests
-, six
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ndg-httpsclient,
+  netifaces,
+  pyasn1,
+  pyopenssl,
+  requests,
+  six,
+  urllib3,
 }:
 
 buildPythonPackage rec {

@@ -89,10 +89,13 @@ rec {
             machine.succeed("xauth merge ${xauth}")
             machine.sleep(5)
 
+            machine.wait_until_succeeds("pgrep fcitx5")
             machine.succeed("su - ${user.name} -c 'kill $(pgrep fcitx5)'")
             machine.sleep(1)
 
             machine.succeed("su - ${user.name} -c 'alacritty >&2 &'")
+            machine.wait_for_window("alice@machine")
+
             machine.succeed("su - ${user.name} -c 'fcitx5 >&2 &'")
             machine.sleep(10)
 

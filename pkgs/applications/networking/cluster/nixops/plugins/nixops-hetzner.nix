@@ -11,7 +11,7 @@
 
 buildPythonPackage {
   pname = "nixops-hetzner";
-  version = "unstable-2022-04-23";
+  version = "1.0.1-unstable-2022-04-24";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -43,12 +43,15 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nixops_hetzner" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     description = "Hetzner bare metal NixOps plugin";
     homepage = "https://github.com/NixOS/nixops-hetzner";
     license = licenses.mit;
     maintainers = nixops.meta.maintainers;
+    broken = true; # never built on Hydra
   };
 }

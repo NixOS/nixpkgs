@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An advanced MIDI arpeggiator";
+    mainProgram = "qmidiarp";
     longDescription = ''
       An advanced MIDI arpeggiator, programmable step sequencer and LFO for Linux.
       It can hold any number of arpeggiator, sequencer, or LFO modules running in

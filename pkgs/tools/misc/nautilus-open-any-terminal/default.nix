@@ -9,7 +9,7 @@
 , gsettings-desktop-schemas
 , gtk3
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonPackage rec {
     glib
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     python3.pkgs.setuptools
   ];
 

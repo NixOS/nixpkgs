@@ -1,2 +1,0 @@
-pkgs/by-name/aa/aa: File package.nix at line 2 contains the path expression "/foo" which cannot be resolved: No such file or directory (os error 2).
-This PR introduces the problems listed above. Please fix them before merging, otherwise the base branch would break.

@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "bitmagnet";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "bitmagnet-io";
     repo = "bitmagnet";
     rev = "v${version}";
-    hash = "sha256-lomTfG6Fo4IywI8VMRvv4mBNRxLCq6IQGIuaR61UwOE=";
+    hash = "sha256-P5GfPRIrwLLMBRgoN6d092HiThMghEj1zcaf6BU+IWU=";
   };
 
-  vendorHash = "sha256-tKU4GoaEwwdbpWjojx+Z/mWxXKjceJPYRg5UTpYzad4=";
+  vendorHash = "sha256-exKQTsyP7LL63WHZ8/WchLh4y0Oj9LC4lxiZTOfWARU=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [ "-s" "-w" "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}" ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -30,7 +30,7 @@ buildGoModule rec {
     '';
     homepage = "https://bitmagnet.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eclairevoyant viraptor ];
+    maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "bitmagnet";
   };
 }

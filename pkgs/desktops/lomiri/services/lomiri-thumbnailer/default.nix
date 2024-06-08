@@ -25,7 +25,7 @@
 , shared-mime-info
 , taglib
 , validatePkgConfig
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 }:
 
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       tornado
     ]))
     validatePkgConfig
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -205,6 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "D-Bus service for out of process thumbnailing";
+    mainProgram = "lomiri-thumbnailer-admin";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/blob/${finalAttrs.version}/ChangeLog";
     license = with licenses; [ gpl3Only lgpl3Only ];

@@ -6,7 +6,7 @@
 
 # Gtk deps
 # upstream gImagereader supports Qt too
-, gobject-introspection, wrapGAppsHook
+, gobject-introspection, wrapGAppsHook3
 , gtkmm3, gtksourceview3, gtksourceviewmm, gtkspell3, gtkspellmm, cairomm
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     pythonEnv
 
     # Gtk specific
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple Gtk/Qt front-end to tesseract-ocr";
+    mainProgram = "gimagereader-gtk";
     homepage = "https://github.com/manisandro/gImageReader";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [teto];

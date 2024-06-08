@@ -1,10 +1,10 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
 let
-  mainPort = "11434";
-  altPort = "11435";
+  mainPort = 11434;
+  altPort = 11435;
 
   curlRequest = port: request:
-    "curl http://127.0.0.1:${port}/api/generate -d '${builtins.toJSON request}'";
+    "curl http://127.0.0.1:${toString port}/api/generate -d '${builtins.toJSON request}'";
 
   prompt = {
     model = "tinydolphin";
@@ -38,7 +38,7 @@ in
 
     altAddress = { ... }: {
       services.ollama.enable = true;
-      services.ollama.listenAddress = "127.0.0.1:${altPort}";
+      services.ollama.port = altPort;
     };
   };
 

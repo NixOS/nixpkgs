@@ -13,6 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A simple digital waveform viewer with vi-like key bindings";
+    mainProgram = "dwfv";
     homepage = "https://github.com/psurply/dwfv";
     license = licenses.mit;
     maintainers = with maintainers; [ newam ];

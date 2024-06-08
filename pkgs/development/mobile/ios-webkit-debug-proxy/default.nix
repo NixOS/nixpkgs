@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A DevTools proxy (Chrome Remote Debugging Protocol) for iOS devices (Safari Remote Web Inspector)";
+    mainProgram = "ios_webkit_debug_proxy";
     longDescription = ''
       The ios_webkit_debug_proxy (aka iwdp) proxies requests from usbmuxd
       daemon over a websocket connection, allowing developers to send commands

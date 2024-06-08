@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-nibbles";
-  version = "4.0.2";
+  version = "4.0.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-nibbles/${lib.versions.majorMinor finalAttrs.version}/gnome-nibbles-${finalAttrs.version}.tar.xz";
-    sha256 = "SF+Mnq03/xr/ANXFfZk40PXc/xyocDHyKkrjhS6HU8U=";
+    hash = "sha256-1xKkxpQ78ylWrfuSIvHxQ2mRHlTs67DNYffCWr16Wdo=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Guide a worm around a maze";
-    homepage = "https://wiki.gnome.org/Apps/Nibbles";
+    mainProgram = "gnome-nibbles";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-nibbles";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

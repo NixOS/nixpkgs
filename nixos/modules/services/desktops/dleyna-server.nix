@@ -10,7 +10,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable dleyna-server service, a DBus service
           for handling DLNA servers.
         '';

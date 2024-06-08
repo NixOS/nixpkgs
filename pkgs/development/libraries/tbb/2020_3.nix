@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   ] ++ (lib.optional (stdenv.buildPlatform != stdenv.hostPlatform)
     (if stdenv.hostPlatform.isAarch64 then "arch=arm64"
     else if stdenv.hostPlatform.isx86_64 then "arch=intel64"
+    else if stdenv.hostPlatform.isi686 then "arch=ia32"
     else throw "Unsupported cross architecture"));
 
   enableParallelBuilding = true;

@@ -1,14 +1,15 @@
-{ lib
-, asyncio-dgram
-, buildPythonPackage
-, dnspython
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
-, pytest-asyncio
-, pytest-rerunfailures
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asyncio-dgram,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytest-asyncio,
+  pytest-rerunfailures,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -48,9 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "mcstatus"
-  ];
+  pythonImportsCheck = [ "mcstatus" ];
 
   disabledTests = [
     # DNS features are limited in the sandbox
@@ -62,6 +61,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for checking the status of Minecraft servers";
+    mainProgram = "mcstatus";
     homepage = "https://github.com/py-mine/mcstatus";
     changelog = "https://github.com/py-mine/mcstatus/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

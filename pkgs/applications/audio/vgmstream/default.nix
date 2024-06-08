@@ -1,17 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, mpg123, ffmpeg, libvorbis, libao, jansson, speex
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, gtk3
+, audacious, mpg123, ffmpeg, libvorbis, libao, jansson, speex
 , nix-update-script
+, buildAudaciousPlugin ? false  # only build cli by default, pkgs.audacious-plugins sets this to enable plugin support
 }:
 
 stdenv.mkDerivation rec {
   pname = "vgmstream";
-  version = "1896";
+  version = "1917";
 
   src = fetchFromGitHub {
     owner = "vgmstream";
     repo = "vgmstream";
     rev = "refs/tags/r${version}";
-    sha256 = "sha256-1BWJgV631MxxzdUtK8f+XRb9cqfhjlwN2LgWI0VmIHE=";
+    sha256 = "sha256-9HIa5/whdLouUWNFml7tPfXStIkO76dxUl5S4yiat64=";
   };
 
   passthru.updateScript = nix-update-script {
@@ -19,16 +20,29 @@ stdenv.mkDerivation rec {
     extraArgs = [ "--version-regex" "r(.*)" ];
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ] ++ lib.optional buildAudaciousPlugin gtk3;
 
-  buildInputs = [ mpg123 ffmpeg libvorbis libao jansson speex ];
+  buildInputs = [
+    mpg123
+    ffmpeg
+    libvorbis
+    libao
+    jansson
+    speex
+  ] ++ lib.optional buildAudaciousPlugin (audacious.override { audacious-plugins = null; });
+
+  preConfigure = ''
+    substituteInPlace cmake/dependencies/audacious.cmake \
+      --replace "pkg_get_variable(AUDACIOUS_PLUGIN_DIR audacious plugin_dir)" "set(AUDACIOUS_PLUGIN_DIR \"$out/lib/audacious\")"
+  '';
 
   cmakeFlags = [
-    # There's no nice way to build the audacious plugin without a circular dependency
-    "-DBUILD_AUDACIOUS=OFF"
     # It always tries to download it, no option to use the system one
     "-DUSE_CELT=OFF"
-  ];
+  ] ++ lib.optional (! buildAudaciousPlugin) "-DBUILD_AUDACIOUS=OFF";
 
   meta = with lib; {
     description = "A library for playback of various streamed audio formats used in video games";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, lxml
-, beautifulsoup4
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  lxml,
+  beautifulsoup4,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-NWJLD70783Ie6efyCvGopxMIlP3rLz0uM/D1rLQwBXE=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     lxml
     beautifulsoup4
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "html_sanitizer/tests.py"
-  ];
+  pytestFlagsArray = [ "html_sanitizer/tests.py" ];
 
   disabledTests = [
     # Tests are sensitive to output
@@ -45,9 +40,7 @@ buildPythonPackage rec {
     "test_10_broken_html"
   ];
 
-  pythonImportsCheck = [
-    "html_sanitizer"
-  ];
+  pythonImportsCheck = [ "html_sanitizer" ];
 
   meta = with lib; {
     description = "Allowlist-based and very opinionated HTML sanitizer";

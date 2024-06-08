@@ -9,7 +9,7 @@ let
     options = {
       name = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Name of this overlay
         '';
       };
@@ -18,14 +18,14 @@ let
         type = types.nullOr types.str;
         default = null;
         example = "*rpi*.dtb";
-        description = lib.mdDoc ''
+        description = ''
           Only apply to .dtb files matching glob expression.
         '';
       };
 
       dtsFile = mkOption {
         type = types.nullOr types.path;
-        description = lib.mdDoc ''
+        description = ''
           Path to .dts overlay file, overlay is applied to
           each .dtb file matching "compatible" of the overlay.
         '';
@@ -36,7 +36,7 @@ let
       dtsText = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Literal DTS contents, overlay is applied to
           each .dtb file matching "compatible" of the overlay.
         '';
@@ -58,7 +58,7 @@ let
       dtboFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to .dtbo compiled overlay file.
         '';
       };
@@ -105,7 +105,7 @@ in
         enable = mkOption {
           default = pkgs.stdenv.hostPlatform.linux-kernel.DTB or false;
           type = types.bool;
-          description = lib.mdDoc ''
+          description = ''
             Build device tree files. These are used to describe the
             non-discoverable hardware of a system.
           '';
@@ -116,7 +116,7 @@ in
           defaultText = literalExpression "config.boot.kernelPackages.kernel";
           example = literalExpression "pkgs.linux_latest";
           type = types.path;
-          description = lib.mdDoc ''
+          description = ''
             Kernel package where device tree include directory is from. Also used as default source of dtb package to apply overlays to
           '';
         };
@@ -125,7 +125,7 @@ in
           default = [];
           example = literalExpression "[ \"-DMY_DTB_DEFINE\" ]";
           type = types.listOf types.str;
-          description = lib.mdDoc ''
+          description = ''
             Additional flags to pass to the preprocessor during dtbo compilations
           '';
         };
@@ -139,7 +139,7 @@ in
             ]
           '';
           type = types.listOf types.path;
-          description = lib.mdDoc ''
+          description = ''
             Additional include paths that will be passed to the preprocessor when creating the final .dts to compile into .dtbo
           '';
         };
@@ -148,7 +148,7 @@ in
           default = "${cfg.kernelPackage}/dtbs";
           defaultText = literalExpression "\${cfg.kernelPackage}/dtbs";
           type = types.path;
-          description = lib.mdDoc ''
+          description = ''
             Path to dtb directory that overlays and other processing will be applied to. Uses
             device trees bundled with the Linux kernel by default.
           '';
@@ -158,7 +158,7 @@ in
           default = null;
           example = "some-dtb.dtb";
           type = types.nullOr types.str;
-          description = lib.mdDoc ''
+          description = ''
             The name of an explicit dtb to be loaded, relative to the dtb base.
             Useful in extlinux scenarios if the bootloader doesn't pick the
             right .dtb file from FDTDIR.
@@ -169,7 +169,7 @@ in
           type = types.nullOr types.str;
           default = null;
           example = "*rpi*.dtb";
-          description = lib.mdDoc ''
+          description = ''
             Only include .dtb files matching glob expression.
           '';
         };
@@ -190,7 +190,7 @@ in
             filter = null;
             dtboFile = path;
           }) overlayType);
-          description = lib.mdDoc ''
+          description = ''
             List of overlays to apply to base device-tree (.dtb) files.
           '';
         };
@@ -199,7 +199,7 @@ in
           default = null;
           type = types.nullOr types.path;
           internal = true;
-          description = lib.mdDoc ''
+          description = ''
             A path containing the result of applying `overlays` to `kernelPackage`.
           '';
         };

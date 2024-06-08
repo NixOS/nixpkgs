@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jemalloc, jre, runCommand, testers }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "besu";
   version = "24.1.2";
 
@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CC24z0+2dSeqDddX5dJUs7SX9QJ8Iyh/nAp0pqdDvwg=";
   };
 
+  buildInputs = lib.optionals stdenv.isLinux [ jemalloc ];
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
@@ -16,8 +17,26 @@ stdenv.mkDerivation rec {
     cp -r bin $out/
     mkdir -p $out/lib
     cp -r lib $out/
-    wrapProgram $out/bin/${pname} --set JAVA_HOME "${jre}"
+    wrapProgram $out/bin/${pname} \
+      --set JAVA_HOME "${jre}" \
+      --suffix ${if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} : ${lib.makeLibraryPath buildInputs}
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      version = "v${version}";
+    };
+    jemalloc = runCommand "${pname}-test-jemalloc"
+      {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+        meta.platforms = with lib.platforms; linux;
+      } ''
+      # Expect to find this string in the output, ignore other failures.
+      (besu 2>&1 || true) | grep -q "# jemalloc: ${jemalloc.version}"
+      mkdir $out
+    '';
+  };
 
   meta = with lib; {
     description = "An enterprise-grade Java-based, Apache 2.0 licensed Ethereum client";
@@ -27,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ mmahut ];
   };
-}
+})

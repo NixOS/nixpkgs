@@ -1,32 +1,27 @@
 { lib
-, ocaml
 , buildDunePackage
-, fetchFromGitHub
+, fetchurl
 , ppx_deriving
 , bppsuite
 , alcotest
 , angstrom-unix
-, biocaml
+, biotk
 , core
 , gsl
 , lacaml
 , menhir
 , menhirLib
 , printbox-text
+, yojson
 }:
-
-lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
-  "phylogenetics is not compatible with OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "phylogenetics";
-  version = "unstable-2022-05-06";
+  version = "0.2.0";
 
-  src = fetchFromGitHub {
-    owner = "biocaml";
-    repo = pname;
-    rev = "cd7c624d0f98e31b02933ca4511b9809b26d35b5";
-    sha256 = "sha256:0w0xyah3hj05hxg1rsa40hhma3dm1cyq0zvnjrihhf22laxap7ga";
+  src = fetchurl {
+    url = "https://github.com/biocaml/phylogenetics/releases/download/v${version}/phylogenetics-${version}.tbz";
+    hash = "sha256-JFpYp3pyW7PrBjqCwwDZxkJPA84dp6Qs8rOPvHPY92o=";
   };
 
   minimalOCamlVersion = "4.08";
@@ -36,13 +31,14 @@ buildDunePackage rec {
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [
     angstrom-unix
-    biocaml
+    biotk
     core
     gsl
     lacaml
     menhirLib
     ppx_deriving
     printbox-text
+    yojson
   ];
 
   checkPhase = ''

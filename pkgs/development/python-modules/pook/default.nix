@@ -1,20 +1,22 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, furl
-, hatchling
-, jsonschema
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, requests
-, xmltodict
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  furl,
+  hatchling,
+  jsonschema,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest7CheckHook,
+  pythonOlder,
+  requests,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pook";
-  version = "1.3.0";
+  version = "1.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,12 +25,10 @@ buildPythonPackage rec {
     owner = "h2non";
     repo = "pook";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0sS2QJcshMuxxCGlrcVHeIQnVMZbBoJfLsRIxpvl7pM=";
+    hash = "sha256-sdfkMvPSlVK7EoDUEuJbiuocOjGJygqiCiftrsjnDhU=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -40,12 +40,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytestCheckHook
+    pytest-httpbin
+    pytest7CheckHook
   ];
 
-  pythonImportsCheck = [
-    "pook"
-  ];
+  pythonImportsCheck = [ "pook" ];
 
   disabledTestPaths = [
     # Don't test integrations

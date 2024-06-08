@@ -42,7 +42,7 @@ let
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";
-  pythonForPypy = python.withPackages (ppkgs: [ ppkgs.pycparser ]);
+  pythonForPypy = python.withPackages (ppkgs: [ ]);
 
 in with passthru; stdenv.mkDerivation rec {
   inherit pname version;
@@ -201,6 +201,7 @@ in with passthru; stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
+    mainProgram = "pypy";
     license = licenses.mit;
     platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
     broken = optimizationLevel == "0"; # generates invalid code

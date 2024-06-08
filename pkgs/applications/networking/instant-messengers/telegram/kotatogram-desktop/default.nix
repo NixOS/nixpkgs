@@ -209,6 +209,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Kotatogram – experimental Telegram Desktop fork";
+    mainProgram = "kotatogram-desktop";
     longDescription = ''
       Unofficial desktop client for the Telegram messenger, based on Telegram Desktop.
 

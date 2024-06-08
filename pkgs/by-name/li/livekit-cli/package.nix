@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "livekit-cli";
-  version = "1.4.0";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "livekit-cli";
     rev = "v${version}";
-    hash = "sha256-u6tqrh2Au4XL590EqD3WInQbN6H6GzRoaA3Uke94Y60=";
+    hash = "sha256-IARQ5yxktem729SrxdT5i+7+1dY60xw+2KZU+unlsKM=";
   };
 
-  vendorHash = "sha256-PCZNFt08Ad+pjKrl7KZy7jUhu/fWO3raoQM0abCpaGs=";
+  vendorHash = "sha256-3ePOwEEPexM+k0atW/mW4yNVtnsEXwv1w5NVQLyexbs=";
 
   subPackages = [ "cmd/livekit-cli" ];
 

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, flit-core
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  flit-core,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/sphinx-design";
     changelog = "https://github.com/executablebooks/sphinx-design/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

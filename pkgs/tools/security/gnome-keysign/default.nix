@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitLab
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gtk3
 , glib
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ] ++ (with python3.pkgs; [
     babel
@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "GTK/GNOME application to use GnuPG for signing other peoples’ keys";
-    homepage = "https://wiki.gnome.org/Apps/Keysign";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-keysign";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

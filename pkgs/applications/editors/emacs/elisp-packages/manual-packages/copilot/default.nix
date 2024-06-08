@@ -8,7 +8,7 @@
 }:
 trivialBuild {
   pname = "copilot";
-  version = "unstable-2023-12-26";
+  version = "0-unstable-2023-12-26";
   src = fetchFromGitHub {
     owner = "zerolfx";
     repo = "copilot.el";

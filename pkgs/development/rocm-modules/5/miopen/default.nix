@@ -156,6 +156,7 @@ in stdenv.mkDerivation (finalAttrs: {
     python3Packages.breathe
     python3Packages.myst-parser
   ] ++ lib.optionals buildTests [
+    gtest
     zlib
   ];
 
@@ -189,6 +190,9 @@ in stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace test/gtest/CMakeLists.txt \
       --replace "include(googletest)" ""
+
+    substituteInPlace test/gtest/CMakeLists.txt \
+      --replace-fail " gtest_main " " ${gtest}/lib/libgtest.so ${gtest}/lib/libgtest_main.so "
 
     ln -sf ${gfx900} src/kernels/gfx900.kdb
     ln -sf ${gfx906} src/kernels/gfx906.kdb

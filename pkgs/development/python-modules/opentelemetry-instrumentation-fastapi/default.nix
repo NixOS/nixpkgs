@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fastapi
-, hatchling
-, httpx
-, opentelemetry-api
-, opentelemetry-instrumentation
-, opentelemetry-instrumentation-asgi
-, opentelemetry-semantic-conventions
-, opentelemetry-test-utils
-, opentelemetry-util-http
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fastapi,
+  hatchling,
+  httpx,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-instrumentation-asgi,
+  opentelemetry-semantic-conventions,
+  opentelemetry-test-utils,
+  opentelemetry-util-http,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage {
@@ -23,9 +24,7 @@ buildPythonPackage {
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-fastapi";
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     fastapi
@@ -43,9 +42,7 @@ buildPythonPackage {
     requests
   ];
 
-  pythonImportsCheck = [
-    "opentelemetry.instrumentation.fastapi"
-  ];
+  pythonImportsCheck = [ "opentelemetry.instrumentation.fastapi" ];
 
   meta = opentelemetry-instrumentation.meta // {
     description = "OpenTelemetry Instrumentation for fastapi";

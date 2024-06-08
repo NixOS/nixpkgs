@@ -25,7 +25,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/jmoon018/PacVim";
     description = "A game that teaches you vim commands";
-    maintainers = with maintainers; [ infinisil ];
+    mainProgram = "pacvim";
+    maintainers = [ ];
     license = licenses.lgpl3;
     platforms = platforms.unix;
   };

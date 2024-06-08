@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch2
-, isPyPy
-, setuptools
-, docutils
-, pygments
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  isPyPy,
+  setuptools,
+  docutils,
+  pygments,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     docutils
@@ -48,6 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python with the SmartyPants";
+    mainProgram = "smartypants";
     homepage = "https://github.com/leohemsted/smartypants.py";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dotlambda ];

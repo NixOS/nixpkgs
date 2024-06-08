@@ -35,6 +35,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://tailordev.github.io/Watson/";
     description = "A wonderful CLI to track your time!";
+    mainProgram = "watson";
     license = licenses.mit;
     maintainers = with maintainers; [ mguentner nathyong oxzi ];
   };

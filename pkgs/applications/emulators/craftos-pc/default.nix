@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , callPackage
 , patchelf
 , unzip
@@ -16,18 +15,18 @@
 }:
 
 let
-  version = "2.8.1";
+  version = "2.8.2";
   craftos2-lua = fetchFromGitHub {
     owner = "MCJack123";
     repo = "craftos2-lua";
     rev = "v${version}";
-    hash = "sha256-8bl83AOIWtUQ06F2unYEF08VT13o9EGo9YDZpdNxd8w=";
+    hash = "sha256-Kv0supnYKWLaVqOeZAzQNd3tQRP2KJugZqytyoj8QtY=";
   };
   craftos2-rom = fetchFromGitHub {
     owner = "McJack123";
     repo = "craftos2-rom";
     rev = "v${version}";
-    hash = "sha256-aCRJ3idSrRM8ydt8hP8nA1RR0etPnWpQKphXcOGgTfk=";
+    hash = "sha256-5ZsLsqrkO02NLJCzsgf0k/ifsqNybTi4DcB9GLmWDHw=";
   };
 in
 
@@ -39,10 +38,12 @@ stdenv.mkDerivation rec {
     owner = "MCJack123";
     repo = "craftos2";
     rev = "v${version}";
-    hash = "sha256-iQCv4EDdqmnU0fYxMwpCZ2Z5p43P0MGBNIG/dZrWndg=";
+    hash = "sha256-ozebHgUgwdqYtWAyL+EdwpjEvZC+PkWcLYCPWz2FjSw=";
   };
 
-  buildInputs = [ patchelf poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
+  nativeBuildInputs = [ patchelf unzip ];
+  buildInputs = [ poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
+  strictDeps = true;
 
   preBuild = ''
     cp -R ${craftos2-lua}/* ./craftos2-lua/
@@ -65,6 +66,17 @@ stdenv.mkDerivation rec {
     patchelf --replace-needed craftos2-lua/src/liblua.so liblua.so $out/bin/craftos
     cp -R api $out/include/CraftOS-PC
     cp -R ${craftos2-rom}/* $out/share/craftos
+
+    mkdir -p resources/linux-icons
+    unzip resources/linux-icons.zip -d resources/linux-icons
+    for dim in 16 24 32 48 64 96 128 256 1024; do
+      dir="$out/share/icons/hicolor/$dimx$dim/apps"
+      mkdir -p "$dir"
+      cp "resources/linux-icons/$dim.png" "$dir/craftos.png"
+    done
+
+    mkdir -p $out/share/applications
+    cp resources/linux-icons/CraftOS-PC.desktop $out/share/applications/CraftOS-PC.desktop
   '';
 
   passthru.tests = {

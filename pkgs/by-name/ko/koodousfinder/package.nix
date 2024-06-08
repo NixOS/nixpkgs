@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,11 +18,13 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-skCbt2lDKgSyZdHY3WImbr6CF0icrDPTIXNV1736gKk=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "keyring" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ poetry-core ];
+
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
+
+  dependencies = with python3.pkgs; [
     keyring
     requests
   ];
@@ -29,9 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no tests, re-check with next release
   doCheck = false;
 
-  pythonImportsCheck = [
-    "koodousfinder"
-  ];
+  pythonImportsCheck = [ "koodousfinder" ];
 
   meta = with lib; {
     description = "Tool to allows users to search for and analyze Android apps";

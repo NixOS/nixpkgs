@@ -1,0 +1,17 @@
+diff --git a/scripts/create_theme.py b/scripts/create_theme.py
+index 074dc43..7e7a8eb 100644
+--- a/scripts/create_theme.py
++++ b/scripts/create_theme.py
+@@ -34,7 +34,11 @@ def create_theme(types: List[str], accents: List[str], dest: str, link: bool = F
+             os.chdir(work_dir)
+             subprocess.call("./build.sh", shell=True) # Rebuild all scss
+             subprocess.call(install_cmd, shell=True) # Install the theme globally for you
+-            subprocess.call("git reset --hard HEAD", shell=True)  # reset colloid repo to original state
++            # subprocess.call("git reset --hard HEAD", shell=True)  # reset colloid repo to original state
++            # recreate git reset
++            os.chdir(repo_dir)
++            shutil.rmtree("colloid")
++            shutil.copytree("colloid-base", "colloid")
+ 
+             try:
+                 # Rename colloid generated files as per catppuccin

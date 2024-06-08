@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Calendar for Deepin Desktop Environment";
+    mainProgram = "dde-calendar";
     homepage = "https://github.com/linuxdeepin/dde-calendar";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

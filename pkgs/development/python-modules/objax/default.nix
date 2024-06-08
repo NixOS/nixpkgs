@@ -1,19 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, jax
-, jaxlib
-, keras
-, numpy
-, parameterized
-, pillow
-, pytestCheckHook
-, pythonOlder
-, scipy
-, setuptools
-, tensorboard
-, tensorflow
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jax,
+  jaxlib,
+  keras,
+  numpy,
+  parameterized,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools,
+  tensorboard,
+  tensorflow,
 }:
 
 buildPythonPackage rec {
@@ -30,17 +30,18 @@ buildPythonPackage rec {
     hash = "sha256-WD+pmR8cEay4iziRXqF3sHUzCMBjmLJ3wZ3iYOD+hzk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    # Issue reported upstream: https://github.com/google/objax/issues/270
+    ./replace-deprecated-device_buffers.patch
   ];
+
+  build-system = [ setuptools ];
 
   # Avoid propagating the dependency on `jaxlib`, see
   # https://github.com/NixOS/nixpkgs/issues/156767
-  buildInputs = [
-    jaxlib
-  ];
+  buildInputs = [ jaxlib ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jax
     numpy
     parameterized
@@ -49,9 +50,7 @@ buildPythonPackage rec {
     tensorboard
   ];
 
-  pythonImportsCheck = [
-    "objax"
-  ];
+  pythonImportsCheck = [ "objax" ];
 
   # This is necessay to ignore the presence of two protobufs version (tensorflow is bringing an
   # older version).
@@ -63,9 +62,7 @@ buildPythonPackage rec {
     tensorflow
   ];
 
-  pytestFlagsArray = [
-    "tests/*.py"
-  ];
+  pytestFlagsArray = [ "tests/*.py" ];
 
   disabledTests = [
     # Test requires internet access for prefetching some weights

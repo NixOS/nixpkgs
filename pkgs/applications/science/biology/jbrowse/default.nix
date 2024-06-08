@@ -1,12 +1,12 @@
-{ lib, fetchurl, appimageTools, wrapGAppsHook }:
+{ lib, fetchurl, appimageTools, wrapGAppsHook3 }:
 
 let
   pname = "jbrowse";
-  version = "2.5.0";
+  version = "2.11.1";
 
   src = fetchurl {
     url = "https://github.com/GMOD/jbrowse-components/releases/download/v${version}/jbrowse-desktop-v${version}-linux.AppImage";
-    sha256 = "sha256-YLsyA+RVoFvjE4MfAtglJYdUgic487SxwdUhvolzBPc=";
+    sha256 = "sha256-/1QNpoJy4u2sSw6907UQpdYX9aFWp31BxsYVTQoDpi4=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -19,9 +19,7 @@ appimageTools.wrapType2 {
   unshareIpc = false;
 
   extraInstallCommands = ''
-    mkdir -p $out/bin
-    mv $out/bin/jbrowse-${version} $out/bin/jbrowse-desktop
-
+    mv $out/bin/jbrowse $out/bin/jbrowse-desktop
     install -m 444 -D ${appimageContents}/jbrowse-desktop.desktop $out/share/applications/jbrowse-desktop.desktop
     install -m 444 -D ${appimageContents}/jbrowse-desktop.png \
        $out/share/icons/hicolor/512x512/apps/jbrowse-desktop.png
@@ -31,6 +29,7 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     description = "The next-generation genome browser";
+    mainProgram = "jbrowse-desktop";
     homepage = "https://jbrowse.org/jb2/";
     license = licenses.asl20;
     maintainers = with maintainers; [ benwbooth ];

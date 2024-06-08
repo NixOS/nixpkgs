@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Lightning-fast linter for .env files. Written in Rust";
+    mainProgram = "dotenv-linter";
     homepage = "https://dotenv-linter.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ humancalico ];

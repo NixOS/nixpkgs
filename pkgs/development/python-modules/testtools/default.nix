@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  pythonRelaxDepsHook,
 
-# build-system
-, hatchling
-, hatch-vcs
+  # build-system
+  hatchling,
+  hatch-vcs,
 
-# dependencies
-, setuptools
+  # dependencies
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRemoveDeps = [
-    "fixtures"
-  ];
+  pythonRemoveDeps = [ "fixtures" ];
 
-  propagatedBuildInputs = lib.optionals (pythonAtLeast "3.12") [
-    setuptools
-  ];
+  propagatedBuildInputs = lib.optionals (pythonAtLeast "3.12") [ setuptools ];
 
   # testscenarios has a circular dependency on testtools
   doCheck = false;

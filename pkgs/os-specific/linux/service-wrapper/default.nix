@@ -14,6 +14,7 @@ runCommand name {
 
   meta = with lib; {
     description = "A convenient wrapper for the systemctl commands, borrow from Ubuntu";
+    mainProgram = "service";
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ DerTim1 ];

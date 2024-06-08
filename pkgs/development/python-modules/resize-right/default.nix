@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# dependencies
-, numpy
-, torch
+  # dependencies
+  numpy,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     torch
   ];
 
-  pythonImportsCheck = [
-    "resize_right"
-  ];
+  pythonImportsCheck = [ "resize_right" ];
 
   # no tests
   doCheck = false;

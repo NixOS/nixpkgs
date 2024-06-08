@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, huggingface-hub
-, pythonOlder
-, pythonRelaxDepsHook
-, poetry-core
-, onnx
-, onnxruntime
-, requests
-, tokenizers
-, tqdm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  huggingface-hub,
+  loguru,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  poetry-core,
+  onnx,
+  onnxruntime,
+  requests,
+  tokenizers,
+  tqdm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fastembed";
-  version = "0.1.2";
+  version = "0.2.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,16 +26,16 @@ buildPythonPackage rec {
     owner = "qdrant";
     repo = "fastembed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FW85xeRcrPL3euXcQ3dS40SapimFgpWtRu6XiIzdzSM=";
+    hash = "sha256-ArLilvixzpHIGGAom4smX0jZ6lJSZe6tSGreeD+Pzmk=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     huggingface-hub
+    loguru
     onnx
     onnxruntime
     requests
@@ -41,17 +43,15 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  pythonImportsCheck = [
-    "fastembed"
-  ];
+  pythonImportsCheck = [ "fastembed" ];
 
   pythonRelaxDeps = [
     "huggingface-hub"
+    "onnxruntime"
+    "tokenizers"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # there is one test and it requires network
   doCheck = false;

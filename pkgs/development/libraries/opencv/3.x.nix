@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , callPackage
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
 , glog, boost, gflags, protobuf_21
@@ -16,7 +15,7 @@
 , enableContrib   ? true
 
 , enableCuda      ? config.cudaSupport
-, cudaPackages ? { }
+, cudaPackages
 , enableUnfree    ? false
 , enableIpp       ? false
 , enablePython    ? false, pythonPackages ? null
@@ -39,7 +38,7 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 assert enablePython -> pythonPackages != null;
 
 let
-  inherit (cudaPackages) cudatoolkit;
+  inherit (cudaPackages) backendStdenv cudatoolkit;
   inherit (cudaPackages.cudaFlags) cudaCapabilities;
 
   version = "3.4.18";
@@ -241,7 +240,7 @@ stdenv.mkDerivation {
     (opencvFlag "TBB" enableTbb)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
-    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+    "-DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin/cc"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
     "-DCUDA_ARCH_BIN=${lib.concatStringsSep ";" cudaCapabilities}"
     "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"
@@ -296,6 +295,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
+    # OpenCV 3 won't build with CUDA 12+
+    broken = enableCuda && cudaPackages.cudaAtLeast "12";
     license = with licenses; if enableUnfree then unfree else bsd3;
     maintainers = with maintainers; [mdaiter basvandijk];
     platforms = with platforms; linux ++ darwin;

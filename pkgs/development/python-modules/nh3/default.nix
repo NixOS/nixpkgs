@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, rustPlatform
-, libiconv
-, fetchFromGitHub
-, darwin
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  rustPlatform,
+  libiconv,
+  fetchFromGitHub,
+  darwin,
 }:
 let
   pname = "nh3";
-  version = "0.2.13";
+  version = "0.2.15";
   src = fetchFromGitHub {
     owner = "messense";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NILPy+lC0jhOF6ykriUPZWHLlSYBC00tpDdfJ6XjcjA=";
+    hash = "sha256-OyTehgnjmDALU2qPRL/HrvoAMyIsmYuTKFlOJT8r+Gk=";
   };
 in
 buildPythonPackage {
@@ -25,10 +26,13 @@ buildPythonPackage {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Ror2KcIdSeXHa44eUWGiPsKiD935hsBREREySbGedxA=";
+    hash = "sha256-fetAE3cj9hh4SoPE72Bqco5ytUMiDqbazeS2MHdUibM=";
   };
 
-  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv

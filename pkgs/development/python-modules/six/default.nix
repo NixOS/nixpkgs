@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -16,14 +17,16 @@ buildPythonPackage rec {
     sha256 = "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = if isPyPy then [
-    # uses ctypes to find native library
-    "--deselect=test_six.py::test_move_items"
-  ] else null;
+  pytestFlagsArray =
+    if isPyPy then
+      [
+        # uses ctypes to find native library
+        "--deselect=test_six.py::test_move_items"
+      ]
+    else
+      null;
 
   pythonImportsCheck = [ "six" ];
 

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, poetry-core
-, python
-, pythonOlder
-, ua-parser
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  poetry-core,
+  python,
+  pythonOlder,
+  ua-parser,
 }:
 
 buildPythonPackage rec {
@@ -22,18 +23,14 @@ buildPythonPackage rec {
     hash = "sha256-8jbYhD/PfPnutJZonmdrqLIQdXiUHF12w0M9tuyyDz0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     django
     ua-parser
   ];
 
-  pythonImportsCheck = [
-    "sesame"
-  ];
+  pythonImportsCheck = [ "sesame" ];
 
   checkPhase = ''
     runHook preCheck

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xiu";
-  version = "0.12.4";
+  version = "0.12.7";
 
   src = fetchFromGitHub {
     owner = "harlanc";
     repo = "xiu";
     rev = "v${version}";
-    hash = "sha256-tXZCWbqwt3v20rvfre/gAUzs8i78FpbNd5qAGNOX5VE=";
+    hash = "sha256-tFArcI7NcIopM5uPshaOU3ExJW5URc5Mf2V0ZwwgwKo=";
   };
 
-  cargoHash = "sha256-6nWnw31A27VWJe8JGM+S05sqcZwQRrb1aanamv6ITZ4=";
+  cargoHash = "sha256-OBL1uDVogcU6saEz2d2sWJTwXM2KE/YfhsNZtH0Cnk8=";
 
   nativeBuildInputs = [
     cmake
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/harlanc/xiu";
     changelog = "https://github.com/harlanc/xiu/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ cafkafk ];
     mainProgram = "xiu";
   };
 }

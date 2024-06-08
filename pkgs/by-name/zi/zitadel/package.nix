@@ -22,7 +22,7 @@ let
     rev = "v${version}";
     hash = "sha256-Uv0iEIFkTdBAi0WDBQHf0ATs4L2FOU4NmiE9p1MHSa0=";
   };
-  goModulesHash = "sha256-PQch046YjYhAmVlNNdgDLWIqFvEpXRgXAYFMwSZmk4w=";
+  goModulesHash = "sha256-thd1bhbPVedYd+Yq1IYYUJFr66AWRTzA3DceCXFTEQo=";
 
   buildZitadelProtocGen = name:
     buildGoModule {
@@ -92,7 +92,7 @@ let
       protoc-gen-zitadel
     ];
     outputPath = ".artifacts";
-    hash = "sha256-3qDVY2CvtY8lZDr+p5i0vV6zZ5KyTtxBLyV7Os9KuIw=";
+    hash = "sha256-ntIKudNFBs7kHjK7cfzbOfDCA6J8uvJRUbCTa6afK/I=";
   };
 in
 buildGoModule rec {

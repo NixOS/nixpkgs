@@ -43,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "HTML Template Linter and Formatter. Django - Jinja - Nunjucks - Handlebars - GoLang";
+    mainProgram = "djlint";
     homepage = "https://github.com/Riverside-Healthcare/djlint";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ traxys ];

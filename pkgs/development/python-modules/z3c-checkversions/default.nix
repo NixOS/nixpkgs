@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, python
-, zc-buildout
-, zope-testrunner
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  zc-buildout,
+  zope-testrunner,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/z3c.checkversions";
     changelog = "https://github.com/zopefoundation/z3c.checkversions/blob/${version}/CHANGES.rst";
     description = "Find newer package versions on PyPI";
+    mainProgram = "checkversions";
     license = licenses.zpl21;
   };
 }

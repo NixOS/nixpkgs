@@ -4,11 +4,9 @@
 , meson
 , ninja
 , pkg-config
-, wayland
-, wrapGAppsHook
+, wrapGAppsHook3
 , wayfire
 , wf-shell
-, wf-config
 , wayland-scanner
 , wayland-protocols
 , gtk3
@@ -35,14 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wayland-scanner
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     wayfire
-    wf-config
     wf-shell
-    wayland
     wayland-protocols
     gtk3
     gtkmm3

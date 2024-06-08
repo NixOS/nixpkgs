@@ -1,27 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "openrgb-python";
-  version = "0.2.15";
-  format = "setuptools";
+  version = "0.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rTfpqMM+IUd8rMmw/r15sICLoPHL6KLaRrmUjWTfUkA=";
+    hash = "sha256-2eeb2XHYvBaHkHHs9KxZKDGXtcLaT28c/aLC9pxrRmM=";
   };
+
+  build-system = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "openrgb"
-  ];
+  pythonImportsCheck = [ "openrgb" ];
 
   meta = with lib; {
     description = "Module for the OpenRGB SDK";

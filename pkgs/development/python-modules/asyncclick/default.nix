@@ -1,11 +1,12 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pytestCheckHook
-, pythonOlder
-, trio
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  pytestCheckHook,
+  pythonOlder,
+  trio,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-gx7s/HikvjsXalc0Z73JWMKc1SlhR+kohwk2sW4o19I=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    anyio
-  ];
+  propagatedBuildInputs = [ anyio ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -36,7 +33,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-W" "ignore::trio.TrioDeprecationWarning"
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [
@@ -44,9 +42,7 @@ buildPythonPackage rec {
     "test_context_pushing"
   ];
 
-  pythonImportsCheck = [
-    "asyncclick"
-  ];
+  pythonImportsCheck = [ "asyncclick" ];
 
   meta = with lib; {
     description = "Python composable command line utility";

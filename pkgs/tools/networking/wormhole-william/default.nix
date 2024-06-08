@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-oJz7HgtjuP4ooXdpofIKaDndGg4WqVZgbT8Yb1AyaMs=";
 
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     # wormhole_test.go:692: failed to establish connection
     substituteInPlace wormhole/wormhole_test.go \

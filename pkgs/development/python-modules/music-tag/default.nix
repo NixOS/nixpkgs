@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mutagen
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mutagen,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -15,22 +16,16 @@ buildPythonPackage rec {
     hash = "sha256-Cqtubu2o3w9TFuwtIZC9dFYbfgNWKrCRzo1Wh828//Y=";
   };
 
-  propagatedBuildInputs = [
-    mutagen
-  ];
+  propagatedBuildInputs = [ mutagen ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "test" ];
 
   # Tests fail: ModuleNotFoundError: No module named '_test_common'
   doCheck = false;
 
-  pythonImportsCheck = [
-    "music_tag"
-  ];
+  pythonImportsCheck = [ "music_tag" ];
 
   meta = with lib; {
     description = "Simple interface to edit audio file metadata";

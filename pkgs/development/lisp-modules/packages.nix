@@ -108,18 +108,7 @@ let
     ];
   };
 
-  jzon = build-asdf-system {
-    src = pkgs.fetchzip {
-      url = "https://github.com/Zulu-Inuoe/jzon/archive/6b201d4208ac3f9721c461105b282c94139bed29.tar.gz";
-      sha256 = "01d4a78pjb1amx5amdb966qwwk9vblysm1li94n3g26mxy5zc2k3";
-    };
-    version = "0.0.0-20210905-6b201d4208";
-    pname = "jzon";
-    lispLibs = [
-      super.closer-mop
-    ];
-    systems = [ "com.inuoe.jzon" ];
-  };
+  jzon = super.com_dot_inuoe_dot_jzon;
 
   cl-notify = build-asdf-system {
     pname = "cl-notify";
@@ -198,6 +187,14 @@ let
     patches = [ ./patches/swank-pure-paths.patch ];
     postConfigure = ''
       substituteAllInPlace swank-loader.lisp
+    '';
+  };
+
+  cephes = build-with-compile-into-pwd {
+    inherit (super.cephes) pname version src lispLibs;
+    patches = [ ./patches/cephes-make.patch ];
+    postConfigure = ''
+      substituteAllInPlace cephes.asd
     '';
   };
 
@@ -362,7 +359,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.11.4";
+    version = "3.11.6";
 
     lispLibs = (with super; [
       alexandria
@@ -445,6 +442,8 @@ let
                     "slynk/profiler" "slynk/stickers" "slynk/indentation"
                     "slynk/retro" ];
       }))
+      iterate
+      symbol-munger
     ]) ++ (with self; [
       history-tree
       nhooks
@@ -457,7 +456,6 @@ let
       nfiles
       cl-containers
       # remove this override after quicklisp one is updated.
-      # Because of building failure with new sbcl, the slime version is different from the nyxt pinned one
       (swank.overrideAttrs (final: prev: {
         src = pkgs.fetchFromGitHub {
           owner = "slime";
@@ -472,8 +470,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.11.4";
-      hash = "sha256-5LhpcuQTioOXZtzwN9B1vWo/xsYXxn9fSKRCdhSPM7A=";
+      rev = "3.11.6";
+      hash = "sha256-o+4LnSNyhdz5YAjNQJuE2ERtt48PckjKfts9QVRw82A=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -505,7 +503,7 @@ let
       (asdf:operate :program-op :nyxt/gi-gtk-application)
     '';
 
-    # TODO(kasper): use wrapGAppsHook
+    # TODO(kasper): use wrapGAppsHook3
     installPhase = ''
       mkdir -pv $out
       cp -r * $out
@@ -563,6 +561,23 @@ let
   });
 
   stumpwm-unwrapped = super.stumpwm;
+
+  clfswm = super.clfswm.overrideAttrs (o: rec {
+    buildScript = pkgs.writeText "build-clfswm.lisp" ''
+      (load "${o.asdfFasl}/asdf.${o.faslExt}")
+      (asdf:load-system 'clfswm)
+      (sb-ext:save-lisp-and-die
+        "clfswm"
+        :executable t
+        #+sb-core-compression :compression
+        #+sb-core-compression t
+        :toplevel #'clfswm:main)
+    '';
+    installPhase = o.installPhase + ''
+      mkdir -p $out/bin
+      mv $out/clfswm $out/bin
+    '';
+  });
 
   ltk = super.ltk.overrideLispAttrs (o: {
     src = pkgs.fetchzip {
@@ -806,6 +821,66 @@ let
   nsb-cga = super.nsb-cga.overrideLispAttrs (oa: {
     lispLibs = oa.lispLibs ++ [ self.sb-cga ];
   });
+
+  qlot-cli = build-asdf-system rec {
+    pname = "qlot";
+    version = "1.5.2";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "fukamachi";
+      repo = "qlot";
+      rev = "refs/tags/${version}";
+      hash = "sha256-j9iT25Yz9Z6llCKwwiHlVNKLqwuKvY194LrAzXuljsE=";
+    };
+
+    lispLibs = with super; [
+      archive
+      deflate
+      dexador
+      fuzzy-match
+      ironclad
+      lparallel
+      yason
+    ];
+
+    nativeLibs = [
+      pkgs.openssl
+    ];
+
+    nativeBuildInputs = [
+      pkgs.makeWrapper
+    ];
+
+    buildScript = pkgs.writeText "build-qlot-cli" ''
+      (load "${self.qlot-cli.asdfFasl}/asdf.${self.qlot-cli.faslExt}")
+      (asdf:load-system :qlot/command)
+      (asdf:load-system :qlot/subcommands)
+
+      ;; Use uiop:dump-image instead of sb-ext:dump-image for the image restore hooks
+      (setf uiop:*image-entry-point* #'qlot/cli:main)
+      (uiop:dump-image "qlot"
+                       :executable t
+                       #+sb-core-compression :compression
+                       #+sb-core-compression t)
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/bin
+      cp qlot.asd $out
+      rm *.asd
+      cp -r * $out
+
+      mv $out/qlot $out/bin
+      wrapProgram $out/bin/qlot \
+        --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH
+
+      runHook postInstall
+    '';
+
+    meta.mainProgram = "qlot";
+  };
 
   });
 

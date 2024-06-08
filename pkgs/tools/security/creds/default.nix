@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to search a collection of default credentials";
+    mainProgram = "creds";
     homepage = "https://github.com/ihebski/DefaultCreds-cheat-sheet";
     changelog = "https://github.com/ihebski/DefaultCreds-cheat-sheet/releases/tag/creds-${version}";
     license = licenses.mit;

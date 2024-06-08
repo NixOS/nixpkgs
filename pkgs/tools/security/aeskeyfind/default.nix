@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Locates 128-bit and 256-bit AES keys in a captured memory image";
+    mainProgram = "aeskeyfind";
     homepage = "https://citp.princeton.edu/our-work/memory/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fedx-sudo ];

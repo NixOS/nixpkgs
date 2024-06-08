@@ -1,9 +1,10 @@
 {
-  "release": "8.0.2",
+  "release": "8.0.6",
   "channel": "8.0",
-  "tag": "v8.0.2",
-  "sdkVersion": "8.0.102",
-  "runtimeVersion": "8.0.2",
+  "tag": "v8.0.6",
+  "sdkVersion": "8.0.106",
+  "runtimeVersion": "8.0.6",
+  "aspNetCoreVersion": "8.0.6",
   "sourceRepository": "https://github.com/dotnet/dotnet",
-  "sourceVersion": "d396b0c4d3e51c2d8d679b2f7233912bc5bfc2fa"
+  "sourceVersion": "64c5c1aee8dc1faa16021350fcdd0bba15004160"
 }

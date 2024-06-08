@@ -1,5 +1,4 @@
 { lib
-, fetchpatch
 , writeScript
 , buildPythonApplication
 , fetchFromGitHub
@@ -32,6 +31,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "GOG Downloading module for Heroic Games Launcher";
+    mainProgram = "gogdl";
     homepage = "https://github.com/Heroic-Games-Launcher/heroic-gogdl";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ aidalgol ];

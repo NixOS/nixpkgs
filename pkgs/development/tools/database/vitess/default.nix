@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "vitess";
-  version = "18.0.2";
+  version = "19.0.4";
 
   src = fetchFromGitHub {
     owner = "vitessio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-CKhnP6sTw7rNzqMhJpwuYhoc5F3MNnL58JxnoKPHyl0=";
+    hash = "sha256-rP2a/t+5FhGIj9T6CQodMp9YXYf3fL5oBdFpAn7e7hw=";
   };
 
-  vendorHash = "sha256-FwgKsv5fQSWKa2K2djEwd7lnbE2qtADoiIokR9U5t1k=";
+  vendorHash = "sha256-BlHd5GQJwdntmvVti+Jvfw65LrYM+hjwdvQ0duKk5d8=";
 
   buildInputs = [ sqlite ];
 

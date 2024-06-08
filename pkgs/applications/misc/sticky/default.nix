@@ -5,7 +5,7 @@
 , meson
 , ninja
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , cinnamon
 , glib
 , gspell
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3.pkgs.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A sticky notes app for the linux desktop";
+    mainProgram = "sticky";
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

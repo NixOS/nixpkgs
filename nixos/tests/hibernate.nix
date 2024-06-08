@@ -24,8 +24,8 @@ makeTest {
       virtualisation.useNixStoreImage = true;
 
       swapDevices = lib.mkOverride 0 [ { device = "/dev/vdc"; options = [ "x-systemd.makefs" ]; } ];
-      boot.resumeDevice = "/dev/vdc";
       boot.initrd.systemd.enable = systemdStage1;
+      virtualisation.useEFIBoot = true;
     };
   };
 

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl
-, dpkg, wrapGAppsHook
+, dpkg, wrapGAppsHook3
 , hicolor-icon-theme
 , gtk3, glib, systemd
 , xorg, nss, nspr
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-ULdrAQCiQlTN+aRhETj+ASMKkKctFgC2AfvUHGc6stU=";
     };
 
-  nativeBuildInputs = [ wrapGAppsHook dpkg ];
+  nativeBuildInputs = [ wrapGAppsHook3 dpkg ];
   buildInputs = [ glib hicolor-icon-theme ];
 
   unpackPhase = ''

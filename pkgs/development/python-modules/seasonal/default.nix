@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, numpy
-, scipy
-, pandas
-, matplotlib
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  numpy,
+  scipy,
+  pandas,
+  matplotlib,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
       --replace 'setup_requires=["pytest-runner"],' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
@@ -41,15 +40,15 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    csv = [
-      pandas
-    ];
-    plot = [
-      matplotlib
-    ];
+    csv = [ pandas ];
+    plot = [ matplotlib ];
   };
 
-  pythonImportsCheck = [ "seasonal" "seasonal.trend" "seasonal.periodogram" ];
+  pythonImportsCheck = [
+    "seasonal"
+    "seasonal.trend"
+    "seasonal.periodogram"
+  ];
   nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);

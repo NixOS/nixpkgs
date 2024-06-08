@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://libusb.info/";
     description = "cross-platform user-mode USB device library";
+    mainProgram = "libusb-config";
     longDescription = ''
       libusb is a cross-platform user-mode library that provides access to USB devices.
       The current API is of 1.0 version (libusb-1.0 API), this library is a wrapper exposing the legacy API.

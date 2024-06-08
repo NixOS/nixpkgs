@@ -4,13 +4,13 @@ let
   INSTALL_PATH="${placeholder "out"}/share/fzf-tab";
 in stdenv.mkDerivation rec {
   pname = "zsh-fzf-tab";
-  version = "1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "fzf-tab";
     rev = "v${version}";
-    hash = "sha256-o3R9dh9t8w/SVO3IUeJqP8kkQxwnRjNX8oZ4wSZxBYo=";
+    hash = "sha256-Qv8zAiMtrr67CbLRrFjGaPzFZcOiMVEFLg1Z+N6VMhg=";
   };
 
   strictDeps = true;
@@ -31,8 +31,8 @@ in stdenv.mkDerivation rec {
     pushd modules
 
     tar -xf ${zsh.src}
-    ln -s $(pwd)/src/fzftab.c zsh-${zsh.version}/Src/Modules/
-    ln -s $(pwd)/src/fzftab.mdd zsh-${zsh.version}/Src/Modules/
+    ln -s $(pwd)/Src/fzftab.c zsh-${zsh.version}/Src/Modules/
+    ln -s $(pwd)/Src/fzftab.mdd zsh-${zsh.version}/Src/Modules/
 
     pushd zsh-${zsh.version}
 
@@ -81,11 +81,11 @@ in stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Aloxaf/fzf-tab";
     description = "Replace zsh's default completion selection menu with fzf!";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vonfry ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vonfry ];
+    platforms = lib.platforms.unix;
   };
 }
