@@ -29,8 +29,10 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    hash = "sha256-0iFXYyGctOoHCdc232Ud80/wV81tiS7ItiS0uLKyq2Y=";
+    hash = "sha256-f0x561ehKw6uMSri0RZip+v1JHZuhixtywl0PVU/N44=";
   };
+
+  sourceRoot = "libffado-${version}/libffado";
 
   prePatch = ''
     substituteInPlace ./support/tools/ffado-diag.in \
