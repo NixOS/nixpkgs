@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "moodle-dl";
-  version = "2.3.7";
+  version = "2.3.9";
 
   src = fetchFromGitHub {
     owner = "C0D3D3V";
     repo = "Moodle-DL";
     rev = "refs/tags/${version}";
-    hash = "sha256-IBd8cVXxbQ8oR10RXSPmu5cLajn5PuNXomXHOWsXfdM=";
+    hash = "sha256-GTOeqHWtFsuf5KcklEidjBNJP/9rtMGnQFym3PSp+ss=";
   };
 
   propagatedBuildInputs = with python3Packages; [
