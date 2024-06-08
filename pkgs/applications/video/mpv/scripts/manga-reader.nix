@@ -22,7 +22,7 @@ buildLua rec {
     longDescription = ''
       mpv-manga-reader is a script aimed at making mpv a usable manga reader.
     '';
-    homepage = "https://github.com//mpv-manga-reader";
+    homepage = "https://github.com/Dudemanguy/mpv-manga-reader";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ idlip ];
   };
