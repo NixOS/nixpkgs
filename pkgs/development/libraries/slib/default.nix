@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The SLIB Portable Scheme Library";
+    mainProgram = "slib";
 
     longDescription = ''
       SLIB is a portable library for the programming language Scheme.  It

@@ -7,32 +7,35 @@
 let
   py = python3.override {
     packageOverrides = final: prev: {
-      django = prev.django_4;
+      django = prev.django_5;
     };
   };
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
-  version = "2.10";
+  version = "3.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "healthchecks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-1x+pYMHaKgLFWcL1axOv/ok1ebs0I7Q+Q6htncmgJzU=";
+    sha256 = "sha256-XQ8nr9z9Yjwr1irExIgYiGX2knMXX701i6BwvXsVP+E=";
   };
 
   propagatedBuildInputs = with py.pkgs; [
+    aiosmtpd
     apprise
-    cron-descriptor
     cronsim
     django
     django-compressor
+    django-stubs-ext
     fido2
     minio
+    oncalendar
     psycopg2
     pycurl
+    pydantic
     pyotp
     segno
     statsd

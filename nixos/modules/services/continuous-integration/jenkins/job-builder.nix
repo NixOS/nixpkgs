@@ -9,7 +9,7 @@ let
 in {
   options = {
     services.jenkins.jobBuilder = {
-      enable = mkEnableOption (mdDoc ''
+      enable = mkEnableOption ''
         the Jenkins Job Builder (JJB) service. It
         allows defining jobs for Jenkins in a declarative manner.
 
@@ -22,12 +22,12 @@ in {
 
         Please see the Jenkins Job Builder documentation for more info:
         <https://jenkins-job-builder.readthedocs.io/>
-      '');
+      '';
 
       accessUser = mkOption {
         default = "admin";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           User id in Jenkins used to reload config.
         '';
       };
@@ -35,7 +35,7 @@ in {
       accessToken = mkOption {
         default = "";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           User token in Jenkins used to reload config.
           WARNING: This token will be world readable in the Nix store. To keep
           it secret, use the {option}`accessTokenFile` option instead.
@@ -47,7 +47,7 @@ in {
         defaultText = literalExpression ''"''${config.services.jenkins.home}/secrets/initialAdminPassword"'';
         type = types.str;
         example = "/run/keys/jenkins-job-builder-access-token";
-        description = lib.mdDoc ''
+        description = ''
           File containing the API token for the {option}`accessUser`
           user.
         '';
@@ -62,7 +62,7 @@ in {
               builders:
                 - shell: echo 'Hello world!'
         '';
-        description = lib.mdDoc ''
+        description = ''
           Job descriptions for Jenkins Job Builder in YAML format.
         '';
       };
@@ -82,7 +82,7 @@ in {
             '''
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Job descriptions for Jenkins Job Builder in JSON format.
         '';
       };
@@ -100,7 +100,7 @@ in {
             }
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Job descriptions for Jenkins Job Builder in Nix format.
 
           This is a trivial wrapper around jsonJobs, using builtins.toJSON

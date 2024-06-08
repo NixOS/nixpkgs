@@ -42,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tools to find secrets from various signatures";
+    mainProgram = "tell-me-your-secrets";
     homepage = "https://github.com/valayDave/tell-me-your-secrets";
     changelog = "https://github.com/valayDave/tell-me-your-secrets/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

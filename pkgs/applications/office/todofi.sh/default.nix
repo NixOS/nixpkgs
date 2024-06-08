@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Todo-txt + Rofi = Todofi.sh";
+    mainProgram = "todofi.sh";
     homepage = "https://github.com/hugokernel/todofi.sh";
     license = licenses.mit;
     maintainers = with maintainers; [ ewok ];

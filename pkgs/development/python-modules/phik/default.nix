@@ -1,89 +1,64 @@
-{ lib
-, buildPythonPackage
-, cmake
-, fetchFromGitHub
-, joblib
-, jupyter
-, jupyter-client
-, matplotlib
-, nbconvert
-, ninja
-, numba
-, numpy
-, pandas
-, pybind11
-, pytestCheckHook
-, pythonOlder
-, scikit-build
-, scipy
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cmake,
+  fetchFromGitHub,
+  joblib,
+  matplotlib,
+  ninja,
+  numpy,
+  pandas,
+  pathspec,
+  pyproject-metadata,
+  pybind11,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-build-core,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "phik";
-  version = "0.12.3";
+  version = "0.12.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "KaveIO";
     repo = "PhiK";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9o3EDhgmne2J1QfzjjNQc1mUcyCzoVrCnWXqjWkiZU0=";
+    hash = "sha256-YsH7vVn6gzejunUjUY/RIcvWtaQ/W1gbciJWKi5LDTk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     ninja
-    scikit-build
-    setuptools
-  ];
-
-  propagatedBuildInputs = [
-    joblib
-    numpy
-    scipy
-    pandas
-    matplotlib
-    numba
+    pathspec
     pybind11
+    pyproject-metadata
+    scikit-build-core
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    nbconvert
-    jupyter
-    jupyter-client
+  dependencies = [
+    joblib
+    matplotlib
+    numpy
+    pandas
+    scipy
   ];
 
-  # Uses setuptools to drive build process
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # Uses scikit-build-core to drive build process
   dontUseCmakeConfigure = true;
 
-  pythonImportsCheck = [
-    "phik"
-  ];
-
-  postInstall = ''
-    rm -r $out/bin
-  '';
+  pythonImportsCheck = [ "phik" ];
 
   preCheck = ''
     # import from $out
     rm -r phik
   '';
-
-  disabledTests = [
-    # TypeError: 'numpy.float64' object cannot be interpreted as an integer
-    # https://github.com/KaveIO/PhiK/issues/73
-    "test_significance_matrix_hybrid"
-    "test_significance_matrix_mc"
-  ];
-
-  disabledTestPaths = [
-    # Don't test integrations
-    "tests/phik_python/integration/"
-  ];
 
   meta = with lib; {
     description = "Phi_K correlation analyzer library";

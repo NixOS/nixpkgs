@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, cffi
-, fetchPypi
-, zope-interface
-, sphinx
-, manuel
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  zope-interface,
+  sphinx,
+  manuel,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     cffi
   ];
 
-  pythonImportsCheck = [
-    "persistent"
-  ];
+  pythonImportsCheck = [ "persistent" ];
 
   meta = with lib; {
     description = "Automatic persistence for Python objects";

@@ -1,4 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, nose }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  nose,
+}:
 
 buildPythonPackage rec {
   pname = "rx";

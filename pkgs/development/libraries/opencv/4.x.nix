@@ -80,6 +80,12 @@
 , doxygen
 , graphviz-nox
 
+, runAccuracyTests ? true
+, runPerformanceTests ? false
+# Modules to enable via BUILD_LIST to build a customized opencv.
+# An empty lists means this setting is ommited which matches upstreams default.
+, enabledModules ? [ ]
+
 , AVFoundation
 , Cocoa
 , VideoDecodeAcceleration
@@ -234,8 +240,6 @@ let
 
   opencvFlag = name: enabled: "-DWITH_${name}=${printEnabled enabled}";
 
-  runAccuracyTests = true;
-  runPerformanceTests = false;
   printEnabled = enabled: if enabled then "ON" else "OFF";
   withOpenblas = (enableBlas && blas.provider.pname == "openblas");
   #multithreaded openblas conflicts with opencv multithreading, which manifest itself in hung tests
@@ -254,6 +258,7 @@ effectiveStdenv.mkDerivation {
   outputs = [
     "out"
     "cxxdev"
+  ] ++ lib.optionals (runAccuracyTests || runPerformanceTests) [
     "package_tests"
   ];
   cudaPropagateToOutput = "cxxdev";
@@ -479,6 +484,8 @@ effectiveStdenv.mkDerivation {
     "-DOPENCL_LIBRARY=${ocl-icd}/lib/libOpenCL.so"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
+  ] ++ lib.optionals (enabledModules != [ ]) [
+    "-DBUILD_LIST=${lib.concatStringsSep "," enabledModules}"
   ];
 
   postBuild = lib.optionalString enableDocs ''

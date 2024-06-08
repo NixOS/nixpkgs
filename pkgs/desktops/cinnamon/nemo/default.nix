@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, fetchpatch
 , glib
 , gobject-introspection
 , meson
@@ -7,7 +6,7 @@
 , pkg-config
 , lib
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , gtk3
 , gvfs
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
     meson
     pkg-config
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     shared-mime-info
     gobject-introspection
@@ -66,6 +65,13 @@ stdenv.mkDerivation rec {
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
+
+  postInstall = ''
+    # This fixes open as root and handles nemo-with-extensions well.
+    # https://github.com/NixOS/nixpkgs/issues/297570
+    substituteInPlace $out/share/polkit-1/actions/org.nemo.root.policy \
+      --replace-fail "$out/bin/nemo" "/run/current-system/sw/bin/nemo"
+  '';
 
   preFixup = ''
     # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)

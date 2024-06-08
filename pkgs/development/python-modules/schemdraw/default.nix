@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, pyparsing
-, matplotlib
-, latex2mathml
-, ziafont
-, ziamath
-, pytestCheckHook
-, nbval
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pyparsing,
+  matplotlib,
+  latex2mathml,
+  ziafont,
+  ziamath,
+  pytestCheckHook,
+  nbval,
 }:
 
 buildPythonPackage rec {
   pname = "schemdraw";
-  version = "0.18";
-  format = "pyproject";
+  version = "0.19";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,21 +24,15 @@ buildPythonPackage rec {
     owner = "cdelker";
     repo = pname;
     rev = version;
-    hash = "sha256-JJc3LA+fqB+2g7pPIZ8YMV921EyYpLZrHSJCYyYThZg=";
+    hash = "sha256-vqEHcazE5DNHr0FceOWLqq+RZmMK5ovHDVjy/2wbTJU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyparsing
-  ];
+  dependencies = [ pyparsing ];
 
-  passthru.optional-dependencies = {
-    matplotlib = [
-      matplotlib
-    ];
+  optional-dependencies = {
+    matplotlib = [ matplotlib ];
     svgmath = [
       latex2mathml
       ziafont
@@ -58,6 +53,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace test/test_styles.ipynb --replace "font='Times', " ""
   '';
+
+  preCheck = "rm test/test_pictorial.ipynb"; # Tries to download files
 
   pytestFlagsArray = [ "--nbval-lax" ];
 

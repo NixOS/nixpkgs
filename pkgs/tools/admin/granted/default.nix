@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.21.1";
+  version = "0.27.2";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aHqMsEqlD/a/qQEjRKQU/+9Ov5BTnptExuO0eEXvf9k=";
+    sha256 = "sha256-VsE6CozVl+g+tAGQnf2q1lzKuxIMwbziQ2S76dY542A=";
   };
 
-  vendorHash = "sha256-I4sds5r61oGop+EtOpDgTYwLbSVBBSBmNbRU56sCYjo=";
+  vendorHash = "sha256-ScWYqbhWwhrTh+k4LNkapiJbrRRSwxnxPT44lt048vw=";
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -129,6 +129,7 @@
       "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
     changelog = "https://github.com/linrunner/TLP/releases/tag/${version}";
     platforms = platforms.linux;
+    mainProgram = "tlp";
     maintainers = with maintainers; [ abbradar lovesegfault ];
     license = licenses.gpl2Plus;
   };

@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "The Persistent Homology Software";
+    mainProgram = "perseus";
     longDescription = ''
       Persistent homology - or simply, persistence - is an algebraic
       topological invariant of a filtered cell complex. Perseus

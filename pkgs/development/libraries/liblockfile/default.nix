@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Shared library with NFS-safe locking functions";
+    mainProgram = "dotlockfile";
     homepage = "http://packages.debian.org/unstable/libs/liblockfile1";
     license = lib.licenses.gpl2Plus;
 

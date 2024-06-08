@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
   sourceRoot = pname;
-  phases = [ "unpackPhase installPhase" ];
 
   libPath = lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.cc.libc SDL2 SDL2_mixer
     libogg libvorbis ];
@@ -70,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://worldofgoo.com";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ jcumming amaxine ];
+    maintainers = with maintainers; [ jcumming ];
   };
 }

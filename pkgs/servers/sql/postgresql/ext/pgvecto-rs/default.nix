@@ -1,8 +1,7 @@
 { lib
 , buildPgrxExtension
-, cargo-pgrx
+, cargo-pgrx_0_11_2
 , clang_16
-, fetchCrate
 , fetchFromGitHub
 , nix-update-script
 , nixosTests
@@ -23,27 +22,11 @@ let
     bindgenHook = rustPlatform.bindgenHook.override { inherit clang; };
   };
 
+in
+(buildPgrxExtension.override {
   # Upstream only works with a fixed version of cargo-pgrx for each release,
   # so we're pinning it here to avoid future incompatibility.
   # See https://docs.pgvecto.rs/developers/development.html#environment, step 6
-  cargo-pgrx_0_11_2 = cargo-pgrx.overrideAttrs (old: rec {
-    pname = "cargo-pgrx";
-    version = "0.11.2";
-
-    src = fetchCrate {
-      pname = "cargo-pgrx";
-      inherit version;
-      hash = "sha256-8NlpMDFaltTIA8G4JioYm8LaPJ2RGKH5o6sd6lBHmmM=";
-    };
-
-    cargoDeps = old.cargoDeps.overrideAttrs (_: {
-      inherit src;
-      outputHash = "sha256-qTb3JV3u42EilaK2jP9oa5D09mkuHyRbGGRs9Rg4TzI=";
-    });
-  });
-
-in
-(buildPgrxExtension.override {
   cargo-pgrx = cargo-pgrx_0_11_2;
   rustPlatform = rustPlatform';
 }) rec {
@@ -109,7 +92,9 @@ in
   meta = with lib; {
     # The pgrx 0.11.2 dependency is broken in aarch64-linux: https://github.com/pgcentralfoundation/pgrx/issues/1429
     # It is fixed in pgrx 0.11.3, but upstream is still using pgrx 0.11.2
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    # Additionally, upstream (accidentally) broke support for PostgreSQL 12 and 13 on 0.2.1, but
+    # they are removing it in 0.3.0 either way: https://github.com/tensorchord/pgvecto.rs/issues/343
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin || (versionOlder postgresql.version "14");
     description = "Scalable, Low-latency and Hybrid-enabled Vector Search in Postgres";
     homepage = "https://github.com/tensorchord/pgvecto.rs";
     license = licenses.asl20;

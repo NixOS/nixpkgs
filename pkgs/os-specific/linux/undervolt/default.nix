@@ -14,6 +14,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/georgewhewell/undervolt/";
     description = "A program for undervolting Intel CPUs on Linux";
+    mainProgram = "undervolt";
 
     longDescription = ''
       Undervolt is a program for undervolting Intel CPUs under Linux. It works in a similar

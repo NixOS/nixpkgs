@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, pkg-config, meson, ninja, wrapGAppsHook
+{ stdenv, lib, fetchgit, pkg-config, meson, ninja, wrapGAppsHook3
 , enchant, gtkmm3, libchamplain, libgcrypt, shared-mime-info }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     shared-mime-info # for update-mime-database
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

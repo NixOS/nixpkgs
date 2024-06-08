@@ -14,25 +14,25 @@ in {
 
   options = {
     services.gns3-server = {
-      enable = lib.mkEnableOption (lib.mdDoc "GNS3 Server daemon");
+      enable = lib.mkEnableOption "GNS3 Server daemon";
 
       package = lib.mkPackageOptionMD pkgs "gns3-server" { };
 
       auth = {
-        enable = lib.mkEnableOption (lib.mdDoc "password based HTTP authentication to access the GNS3 Server");
+        enable = lib.mkEnableOption "password based HTTP authentication to access the GNS3 Server";
 
         user = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           default = null;
           example = "gns3";
-          description = lib.mdDoc ''Username used to access the GNS3 Server.'';
+          description = ''Username used to access the GNS3 Server.'';
         };
 
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/secrets/gns3-server-password";
-          description = lib.mdDoc ''
+          description = ''
             A file containing the password to access the GNS3 Server.
 
             ::: {.warning}
@@ -47,7 +47,7 @@ in {
         type = lib.types.submodule { freeformType = settingsFormat.type; };
         default = {};
         example = { host = "127.0.0.1"; port = 3080; };
-        description = lib.mdDoc ''
+        description = ''
           The global options in `config` file in ini format.
 
           Refer to <https://docs.gns3.com/docs/using-gns3/administration/gns3-server-configuration-file/>
@@ -59,20 +59,20 @@ in {
         file = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = "/var/log/gns3/server.log";
-          description = lib.mdDoc ''Path of the file GNS3 Server should log to.'';
+          description = ''Path of the file GNS3 Server should log to.'';
         };
 
-        debug = lib.mkEnableOption (lib.mdDoc "debug logging");
+        debug = lib.mkEnableOption "debug logging";
       };
 
       ssl = {
-        enable = lib.mkEnableOption (lib.mdDoc "SSL encryption");
+        enable = lib.mkEnableOption "SSL encryption";
 
         certFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/var/lib/gns3/ssl/server.pem";
-          description = lib.mdDoc ''
+          description = ''
             Path to the SSL certificate file. This certificate will
             be offered to, and may be verified by, clients.
           '';
@@ -82,22 +82,22 @@ in {
           type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/var/lib/gns3/ssl/server.key";
-          description = lib.mdDoc "Private key file for the certificate.";
+          description = "Private key file for the certificate.";
         };
       };
 
       dynamips = {
-        enable = lib.mkEnableOption (lib.mdDoc ''Whether to enable Dynamips support.'');
+        enable = lib.mkEnableOption ''Whether to enable Dynamips support.'';
         package = lib.mkPackageOptionMD pkgs "dynamips" { };
       };
 
       ubridge = {
-        enable = lib.mkEnableOption (lib.mdDoc ''Whether to enable uBridge support.'');
+        enable = lib.mkEnableOption ''Whether to enable uBridge support.'';
         package = lib.mkPackageOptionMD pkgs "ubridge" { };
       };
 
       vpcs = {
-        enable = lib.mkEnableOption (lib.mdDoc ''Whether to enable VPCS support.'');
+        enable = lib.mkEnableOption ''Whether to enable VPCS support.'';
         package = lib.mkPackageOptionMD pkgs "vpcs" { };
       };
     };

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -28,5 +29,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/casebeer/python-hkdf";
     license = licenses.bsd2;
   };
-
 }

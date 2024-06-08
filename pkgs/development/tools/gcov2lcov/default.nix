@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Convert go coverage files to lcov format";
+    mainProgram = "gcov2lcov";
     homepage = "https://github.com/jandelgado/gcov2lcov";
     changelog = "https://github.com/jandelgado/gcov2lcov/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

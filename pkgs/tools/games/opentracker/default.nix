@@ -3,8 +3,7 @@
   stdenv,
   buildDotnetModule,
   fetchFromGitHub,
-  autoPatchelfHook,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   dotnetCorePackages,
   fontconfig,
   gtk3,
@@ -40,8 +39,7 @@ buildDotnetModule rec {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -63,12 +61,6 @@ buildDotnetModule rec {
       libX11
       libXi
     ]);
-
-  # Attempts to patchelf unneeded SOs
-  autoPatchelfIgnoreMissingDeps = [
-    "libc.musl-x86_64.so.1"
-    "libintl.so.8"
-  ];
 
   meta = with lib; {
     description = "A tracking application for A Link to the Past Randomizer";

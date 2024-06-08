@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, django
-, django-formtools
-, django-otp
-, django-phonenumber-field
-, fetchFromGitHub
-, phonenumbers
-, pydantic
-, pythonOlder
-, pythonRelaxDepsHook
-, qrcode
-, setuptools-scm
-, twilio
-, webauthn
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-formtools,
+  django-otp,
+  django-phonenumber-field,
+  fetchFromGitHub,
+  phonenumbers,
+  pydantic,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  qrcode,
+  setuptools-scm,
+  twilio,
+  webauthn,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonRelaxDeps = [
-    "django-phonenumber-field"
-  ];
+  pythonRelaxDeps = [ "django-phonenumber-field" ];
 
   propagatedBuildInputs = [
     django
@@ -47,12 +46,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    call = [
-      twilio
-    ];
-    sms = [
-      twilio
-    ];
+    call = [ twilio ];
+    sms = [ twilio ];
     webauthn = [
       pydantic
       webauthn
@@ -60,9 +55,7 @@ buildPythonPackage rec {
     # yubikey = [
     #   django-otp-yubikey
     # ];
-    phonenumbers = [
-      phonenumbers
-    ];
+    phonenumbers = [ phonenumbers ];
     # phonenumberslite = [
     #   phonenumberslite
     # ];
@@ -71,9 +64,7 @@ buildPythonPackage rec {
   # Tests require internet connection
   doCheck = false;
 
-  pythonImportsCheck = [
-    "two_factor"
-  ];
+  pythonImportsCheck = [ "two_factor" ];
 
   meta = with lib; {
     description = "Complete Two-Factor Authentication for Django";

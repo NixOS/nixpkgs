@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cryptographic algorithms library";
+    mainProgram = "botan";
     maintainers = with maintainers; [ raskin thillux ];
     platforms = platforms.unix;
     license = licenses.bsd2;

@@ -74,6 +74,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Abstract shooter created by Kenta Cho";
+    mainProgram = "rrootage";
     homepage = "https://rrootage.sourceforge.net/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];

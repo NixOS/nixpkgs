@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,12 +20,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "bumps"
-  ];
+  pythonImportsCheck = [ "bumps" ];
 
   meta = with lib; {
     description = "Data fitting with bayesian uncertainty analysis";
+    mainProgram = "bumps";
     homepage = "https://bumps.readthedocs.io/";
     changelog = "https://github.com/bumps/bumps/releases/tag/v${version}";
     license = licenses.publicDomain;

@@ -28,8 +28,18 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-werror"
   ];
 
-  # fixes: can't build x86_64-w64-mingw32 shared library unless -no-undefined is specified
-  makeFlags = lib.optionals stdenv.hostPlatform.isWindows [ "LDFLAGS=-no-undefined"] ;
+  makeFlags = let
+    lld17Plus = stdenv.cc.bintools.isLLVM
+      && lib.versionAtLeast stdenv.cc.bintools.version "17";
+  in []
+    # fixes: can't build x86_64-w64-mingw32 shared library unless -no-undefined is specified
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ "LDFLAGS+=-no-undefined" ]
+
+    # lld 17 sets `--no-undefined-version` by default and `libxcrypt`'s
+    # version script unconditionally lists legacy compatibility symbols, even
+    # when not exported: https://github.com/besser82/libxcrypt/issues/181
+    ++ lib.optionals lld17Plus [ "LDFLAGS+=-Wl,--undefined-version" ]
+  ;
 
   nativeBuildInputs = [
     perl

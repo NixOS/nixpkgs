@@ -26,6 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "An autocompletion daemon for the Go programming language";
+    mainProgram = "gocode-gomod";
     longDescription = ''
       Gocode is a helper tool which is intended to be integrated with your
       source code editor, like vim, neovim and emacs. It provides several

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flake8
-, python-lsp-server
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flake8,
+  python-lsp-server,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,10 @@ buildPythonPackage rec {
     sha256 = "14wkmwh8mqr826vdzxhvhdwrnx2akzmnbv3ar391qs4imwqfjx3l";
   };
 
-  propagatedBuildInputs = [ flake8 python-lsp-server ];
+  propagatedBuildInputs = [
+    flake8
+    python-lsp-server
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/emanspeaks/pyls-flake8";

@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "lxgw-wenkai";
-  version = "1.320";
+  version = "1.330";
 
   src = fetchurl {
     url = "https://github.com/lxgw/LxgwWenKai/releases/download/v${version}/${pname}-v${version}.tar.gz";
-    hash = "sha256-9crFUfj1mOXg4gD607jL2eHq8wlq/yEi5sgzKJ5YavM=";
+    hash = "sha256-CscUUcyLsk/S70tT2uGRqLiF8fa4KxC9pVrOziWJ/fI=";
   };
 
   installPhase = ''

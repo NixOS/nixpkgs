@@ -18,17 +18,17 @@ in
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "grey" "all" ] themeVariants
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
-lib.checkListOfEnum "${pname}: tweaks" [ "nord" "dracula" "gruvbox" "all" "black" "rimless" "normal" "float" ] tweaks
+lib.checkListOfEnum "${pname}: tweaks" [ "nord" "dracula" "gruvbox" "everforest" "all" "black" "rimless" "normal" "float" ] tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2023-10-28";
+  version = "2024-05-13";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-NxIWH3qLW8sEguovAv9wfgnlnmPlTipRJTmMo3rSHNY=";
+    hash = "sha256-24U1iMByy+cFQuLUWYPBSuvJwYzwS0rCr7L6OWyMUz0=";
   };
 
   nativeBuildInputs = [

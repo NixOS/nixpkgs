@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://linux.tlk.fr/games/Powermanga/";
     downloadPage = "https://linux.tlk.fr/games/Powermanga/download/";
     description = "An arcade 2D shoot-em-up game";
+    mainProgram = "powermanga";
     longDescription = ''
       Powermanga is an arcade 2D shoot-em-up game with 41 levels and more than
       200 sprites. It runs in 320x200 or 640x400 pixels, with Window mode or

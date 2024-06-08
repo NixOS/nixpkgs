@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrar";
-  version = "7.0.7";
+  version = "7.0.9";
 
   src = fetchzip {
     url = "https://www.rarlab.com/rar/unrarsrc-${finalAttrs.version}.tar.gz";
     stripRoot = false;
-    hash = "sha256-S7BMywydetDh1GINcK3k3fN9ciDoKTCAe/1tkgykoAQ=";
+    hash = "sha256-lHh02uqHdX2Q9yyaGiHlkdBjlQE1tQyB44d39yDE4ls=";
   };
 
   sourceRoot = finalAttrs.src.name;

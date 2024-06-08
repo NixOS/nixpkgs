@@ -12,18 +12,18 @@
 , vulkan-loader
 , xorg
 
-, nix-update-script
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "unstable-2024-03-04";
+  version = "0-unstable-2024-05-24";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    rev = "1bfdf67358add5f573efedbec1fa65d18b790e0e";
-    hash = "sha256-qF5oMI9B5a1oE2gQb/scbom/39Efccja0pTPHHaHMA8=";
+    rev = "762f93d91f4c23ad70c81c81486b6bcd7e9bbb5e";
+    hash = "sha256-Z1Is+yjyAG8X5+FWaxtCkF7paRGV9ZlNVubuVkeO7yg=";
   };
 
   nativeBuildInputs = [
@@ -41,8 +41,10 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DUSE_SYSTEM_OPENXR=ON"
-    "-DUSE_SYSTEM_GLM=ON"
+    (lib.cmakeBool "USE_SYSTEM_OPENXR" true)
+    (lib.cmakeBool "USE_SYSTEM_GLM" true)
+    # debug logging macros cause format-security warnings
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=format-security")
   ];
 
   installPhase = ''
@@ -52,8 +54,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch=openxr" ];
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+    branch = "openxr";
   };
 
   meta = with lib; {

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , autoreconfHook
 , bsd-finger
 , perl
@@ -76,7 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://freeradius.org/";
     description = "A modular, high performance free RADIUS suite";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sheenobu willibutz lheckemann ];
     platforms = with platforms; linux;
   };

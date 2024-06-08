@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, isPyPy
-, setuptools
-, setuptools-scm
-, flask
-, brotli
-, brotlicffi
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPyPy,
+  setuptools,
+  setuptools-scm,
+  flask,
+  brotli,
+  brotlicffi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,19 +30,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     flask
-  ] ++ lib.optionals (!isPyPy) [
-    brotli
-  ] ++ lib.optionals isPyPy [
-    brotlicffi
-  ];
+  ] ++ lib.optionals (!isPyPy) [ brotli ] ++ lib.optionals isPyPy [ brotlicffi ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "flask_compress"
-  ];
+  pythonImportsCheck = [ "flask_compress" ];
 
   meta = with lib; {
     description = "Compress responses in your Flask app with gzip, deflate or brotli";

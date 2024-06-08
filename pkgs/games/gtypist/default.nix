@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xzrkkmj0b1dw3yr0m9hml2y634cc4h61im6zwcq57s7285z8fn1";
   };
 
+  CFLAGS = "-std=gnu89";
+
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ ncurses perl fortune ]
    ++ lib.optional stdenv.isDarwin libiconv;

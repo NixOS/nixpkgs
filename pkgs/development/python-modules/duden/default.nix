@@ -1,13 +1,14 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, crayons
-, fetchFromGitHub
-, poetry-core
-, pyxdg
-, pyyaml
-, requests
-, setuptools
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  crayons,
+  fetchFromGitHub,
+  poetry-core,
+  pyxdg,
+  pyyaml,
+  requests,
+  setuptools,
 }:
 
 let
@@ -23,9 +24,7 @@ let
       hash = "sha256-c6IItrjFVbsdYg3sDrExcxv7aRcKhd/M5hiZD+wBZ2Y=";
     };
 
-    nativeBuildInputs = [
-      poetry-core
-    ];
+    nativeBuildInputs = [ poetry-core ];
 
     propagatedBuildInputs = [
       beautifulsoup4
@@ -49,7 +48,10 @@ let
       '';
       license = with lib.licenses; [ mit ];
       mainProgram = "duden";
-      maintainers = with lib.maintainers; [ AndersonTorres linuxissuper ];
+      maintainers = with lib.maintainers; [
+        AndersonTorres
+        linuxissuper
+      ];
     };
   };
 in

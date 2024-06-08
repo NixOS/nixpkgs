@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, git }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+}:
 
 buildPythonPackage rec {
   pname = "versiontag";

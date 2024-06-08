@@ -8,6 +8,7 @@
 , cmark
 , docbook_xsl
 , expat
+, fetchpatch2
 , file
 , flac
 , fmt
@@ -49,13 +50,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "83.0";
+  version = "84.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    hash = "sha256-MHi3ewxCn560vpVfOucV34CNj/95U2OFd6bxAjtMBoc=";
+    hash = "sha256-//I++WWnSHnkpTZ0TzS3lhH5+eDD5mazTQ1HVMQS4Ug=";
   };
 
   nativeBuildInputs = [
@@ -93,6 +94,11 @@ stdenv.mkDerivation rec {
   ++ optionals withGUI [ cmark ]
   ++ optionals stdenv.isLinux [ qtwayland ]
   ++ optionals stdenv.isDarwin [ libiconv ];
+
+  patches = [ (fetchpatch2 {
+    url = "https://gitlab.com/mbunkus/mkvtoolnix/-/commit/7e1bea9527616ab6ab38425e7290579f05dd9bb1.patch";
+    hash = "sha256-9UZrfwrzfKwF8XDzqYnuaDgZws7l1YAb5O1O1+nxo0g=";
+  }) ];
 
   # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''

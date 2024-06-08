@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, isPyPy
-, pythonAtLeast
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPyPy,
+  pythonAtLeast,
 
-# build-system
-, llvm
-, setuptools
+  # build-system
+  llvm,
+  setuptools,
 
-# tests
-, python
+  # tests
+  python,
 }:
 
 buildPythonPackage rec {
@@ -61,6 +62,5 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/numba/llvmlite";
     homepage = "http://llvmlite.pydata.org/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ fridh ];
   };
 }

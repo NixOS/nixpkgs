@@ -5,7 +5,7 @@
 , jdk8
 , jre8
 , makeWrapper
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 }:
 
 let
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     ant
     jdk
     makeWrapper
-    canonicalize-jars-hook
+    stripJavaArchivesHook
   ];
 
   src = fetchFromGitHub {
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; teams.geospatial.members ++ [ das-g ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "ili2c";
   };
 })

@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Collection of command line Operators to manipulate and analyse Climate and NWP model Data";
+    mainProgram = "cdo";
     longDescription = ''
       Supported data formats are GRIB 1/2, netCDF 3/4, SERVICE, EXTRA and IEG.
       There are more than 600 operators available.

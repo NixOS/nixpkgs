@@ -1,14 +1,14 @@
 {lib, stdenv, fetchFromGitHub, cmake, eigen, boost}:
 
 stdenv.mkDerivation rec {
-  version = "1.1.0";
+  version = "1.1.2";
   pname = "libnabo";
 
   src = fetchFromGitHub {
     owner = "ethz-asl";
     repo = "libnabo";
     rev = version;
-    sha256 = "sha256-KWqNJWdyFFe5zAs1HzGnIshGXkBAKjnbEmBZXxty99E=";
+    sha256 = "sha256-/XXRwiLLaEvp+Q+c6lBiuWBb9by6o0pDf8wFtBNp7o8=";
   };
 
   nativeBuildInputs = [ cmake ];

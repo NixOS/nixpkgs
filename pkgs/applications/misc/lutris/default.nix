@@ -1,7 +1,6 @@
 { buildPythonApplication
 , lib
 , fetchFromGitHub
-, fetchpatch
 
   # build inputs
 , atk
@@ -15,7 +14,7 @@
 , libnotify
 , pango
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 
   # check inputs
 , xvfb-run
@@ -85,7 +84,7 @@ buildPythonApplication rec {
     hash = "sha256-Ed1bhugBe97XmY050A5jCPcnLj0Fd7qPX2p/Ab+YbOE=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
   buildInputs = [
     atk
     gdk-pixbuf

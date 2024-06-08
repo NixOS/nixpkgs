@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpbin
-, pytest
-, pytestCheckHook
-, pythonOlder
-, requests
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpbin,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-tq9nz2na94HkLACt7xB1MUanh9/JOoe2vyEm5sAq0/4=";
   };
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     httpbin
@@ -44,9 +43,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "pytest_httpbin"
-  ];
+  pythonImportsCheck = [ "pytest_httpbin" ];
 
   meta = with lib; {
     description = "Test your HTTP library against a local copy of httpbin.org";

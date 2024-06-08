@@ -17,10 +17,12 @@
 # NOTICE: An `idris2WithPackages` is available at: https://github.com/claymager/idris2-pkgs
 
 let
-  # Taken from Idris2/idris2/flake.nix. Check if the idris2 project does it this
-  # way, still, every now and then.
-  platformChez = if stdenv.system == "x86_64-linux" then chez else chez-racket;
-# Uses scheme to bootstrap the build of idris2
+  platformChez =
+    if (stdenv.system == "x86_64-linux") || (lib.versionAtLeast chez.version "10.0.0")
+      then
+        chez
+      else
+        chez-racket;
 in stdenv.mkDerivation rec {
   pname = "idris2";
   version = "0.7.0";
@@ -89,6 +91,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A purely functional programming language with first class types";
+    mainProgram = "idris2";
     homepage = "https://github.com/idris-lang/Idris2";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fabianhjr wchresta mattpolzin ];

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, dpkt
+  # dependencies
+  dpkt,
 
-# tests
-, mock
-, pytestCheckHook
-, pytest-asyncio
+  # tests
+  mock,
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-bxfnKAzMYh0lhS3he617eGhO7hmNbiwEYHh8k/PZ6r4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    dpkt
-  ];
+  propagatedBuildInputs = [ dpkt ];
 
   nativeCheckInputs = [
     mock
@@ -40,9 +37,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "aiortsp"
-  ];
+  pythonImportsCheck = [ "aiortsp" ];
 
   meta = with lib; {
     description = "An Asyncio-based RTSP library";

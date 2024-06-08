@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A semantic analysis tool for C";
     homepage = "https://sparse.docs.kernel.org/";
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

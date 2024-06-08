@@ -60,8 +60,6 @@ stdenv.mkDerivation rec {
 
   env = lib.optionalAttrs stdenv.isDarwin {
     GETTEXT_DIR = gettext;
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
   };
 
   meta = with lib; {

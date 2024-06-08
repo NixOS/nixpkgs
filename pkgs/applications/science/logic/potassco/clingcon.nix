@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Extension of clingo to handle constraints over integers";
+    mainProgram = "clingcon";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     homepage = "https://potassco.org/";

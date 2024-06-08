@@ -19,7 +19,7 @@
 , mpi
 , ninja
 , ode
-, opencascade-occt
+, opencascade-occt_7_6
 , pkg-config
 , python3Packages
 , runCommand  # for passthru.tests
@@ -27,12 +27,13 @@
 , stdenv
 , swig
 , vtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , xercesc
 , zlib
 }:
 
 let
+  opencascade-occt = opencascade-occt_7_6;
   boost = python3Packages.boost;
   inherit (libsForQt5)
     qtbase
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     pyside2-tools
     gfortran
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

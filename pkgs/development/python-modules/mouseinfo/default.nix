@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pyperclip
-, fetchFromGitHub
-, xlib
-, pillow
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pyperclip,
+  fetchFromGitHub,
+  xlib,
+  pillow,
 }:
 buildPythonPackage rec {
-  pname = "MouseInfo";
+  pname = "mouseinfo";
   version = "0.1.3";
 
   src = fetchFromGitHub {

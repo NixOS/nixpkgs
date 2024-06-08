@@ -53,6 +53,53 @@ rec {
 
   inherit type isGVariant;
 
+  intConstructors = [
+    {
+      name = "mkInt32";
+      type = type.int32;
+      min = -2147483648;
+      max = 2147483647;
+    }
+    {
+      name = "mkUint32";
+      type = type.uint32;
+      min = 0;
+      max = 4294967295;
+    }
+    {
+      name = "mkInt64";
+      type = type.int64;
+      # Nix does not support such large numbers.
+      min = null;
+      max = null;
+    }
+    {
+      name = "mkUint64";
+      type = type.uint64;
+      min = 0;
+      # Nix does not support such large numbers.
+      max = null;
+    }
+    {
+      name = "mkInt16";
+      type = type.int16;
+      min = -32768;
+      max = 32767;
+    }
+    {
+      name = "mkUint16";
+      type = type.uint16;
+      min = 0;
+      max = 65535;
+    }
+    {
+      name = "mkUchar";
+      type = type.uchar;
+      min = 0;
+      max = 255;
+    }
+  ];
+
   /* Returns the GVariant value that most closely matches the given Nix value.
      If no GVariant value can be found unambiguously then error is thrown.
 
@@ -70,8 +117,20 @@ rec {
       mkArray v
     else if isGVariant v then
       v
+    else if builtins.isInt v then
+      let
+        validConstructors = builtins.filter ({ min, max, ... }: (min == null || min <= v) && (max == null || v <= max)) intConstructors;
+      in
+      throw ''
+        The GVariant type for number “${builtins.toString v}” is unclear.
+        Please wrap the value with one of the following, depending on the value type in GSettings schema:
+
+        ${lib.concatMapStringsSep "\n" ({ name, type, ...}: "- `lib.gvariant.${name}` for `${type}`") validConstructors}
+      ''
+    else if builtins.isAttrs v then
+      throw "Cannot construct GVariant value from an attribute set. If you want to construct a dictionary, you will need to create an array containing items constructed with `lib.gvariant.mkDictionaryEntry`."
     else
-      throw "The GVariant type of ${v} can't be inferred.";
+      throw "The GVariant type of “${builtins.typeOf v}” can't be inferred.";
 
   /* Returns the GVariant array from the given type of the elements and a Nix list.
 

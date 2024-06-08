@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/usnistgov/SP800-90B_EntropyAssessment";
     description = "Implementation of min-entropy assessment methods included in Special Publication 800-90B";
     platforms = lib.platforms.linux;
-    license = lib.licenses.free; #this software uses the NIST software license
+    license = lib.licenses.nistSoftware;
     maintainers = with lib.maintainers; [ orichter thillux ];
   };
 }

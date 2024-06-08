@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
 
 buildKodiAddon rec {
   pname = "six";
@@ -6,7 +6,7 @@ buildKodiAddon rec {
   version = "1.16.0+matrix.1";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
+    url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
     sha256 = "sha256-d6BNpnTg6K7NPX3uWp5X0rog33C+B7YoAtLH/CrUYno=";
   };
 

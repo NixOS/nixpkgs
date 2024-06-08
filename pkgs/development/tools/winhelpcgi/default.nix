@@ -14,6 +14,7 @@
 
   meta = {
     description = "CGI module for Linux, Solaris, MacOS X and AIX to read Windows Help Files";
+    mainProgram = "winhelpcgi.cgi";
     homepage = "http://www.herdsoft.com/linux/produkte/winhelpcgi.html";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.shlevy ];

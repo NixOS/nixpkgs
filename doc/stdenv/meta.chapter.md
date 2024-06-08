@@ -3,17 +3,19 @@
 Nix packages can declare *meta-attributes* that contain information about a package such as a description, its homepage, its license, and so on. For instance, the GNU Hello package has a `meta` declaration like this:
 
 ```nix
-meta = {
-  description = "A program that produces a familiar, friendly greeting";
-  longDescription = ''
-    GNU Hello is a program that prints "Hello, world!" when you run it.
-    It is fully customizable.
-  '';
-  homepage = "https://www.gnu.org/software/hello/manual/";
-  license = lib.licenses.gpl3Plus;
-  maintainers = with lib.maintainers; [ eelco ];
-  platforms = lib.platforms.all;
-};
+{
+  meta = {
+    description = "A program that produces a familiar, friendly greeting";
+    longDescription = ''
+      GNU Hello is a program that prints "Hello, world!" when you run it.
+      It is fully customizable.
+    '';
+    homepage = "https://www.gnu.org/software/hello/manual/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ eelco ];
+    platforms = lib.platforms.all;
+  };
+}
 ```
 
 Meta-attributes are not passed to the builder of the package. Thus, a change to a meta-attribute doesn’t trigger a recompilation of the package.
@@ -82,7 +84,9 @@ The *priority* of the package, used by `nix-env` to resolve file name conflicts 
 The list of Nix platform types on which the package is supported. Hydra builds packages according to the platform specified. If no platform is specified, the package does not have prebuilt binaries. An example is:
 
 ```nix
-meta.platforms = lib.platforms.linux;
+{
+  meta.platforms = lib.platforms.linux;
+}
 ```
 
 Attribute Set `lib.platforms` defines [various common lists](https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix) of platforms types.
@@ -95,8 +99,10 @@ In general it is preferable to set `meta.platforms = lib.platforms.all` and then
 For example, a package which requires dynamic linking and cannot be linked statically could use this:
 
 ```nix
-meta.platforms = lib.platforms.all;
-meta.badPlatforms = [ lib.systems.inspect.patterns.isStatic ];
+{
+  meta.platforms = lib.platforms.all;
+  meta.badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+}
 ```
 
 The [`lib.meta.availableOn`](https://github.com/NixOS/nixpkgs/blob/b03ac42b0734da3e7be9bf8d94433a5195734b19/lib/meta.nix#L95-L106) function can be used to test whether or not a package is available (i.e. buildable) on a given platform.
@@ -119,24 +125,48 @@ $ cd path/to/nixpkgs
 $ nix-build -A your-package.tests
 ```
 
+Note that Hydra and [`nixpkgs-review`](https://github.com/Mic92/nixpkgs-review) don't build these derivations by default, and that ([`@ofborg`](https://github.com/NixOS/ofborg)) only builds them when evaluating PRs for that particular package (or when manually instructed).
+
 #### Package tests {#var-meta-tests-packages}
 
-Tests that are part of the source package are often executed in the `installCheckPhase`.
+Tests that are part of the source package are often executed in the `installCheckPhase`. This phase is also suitable for performing a `--version` test for packages that support such flag. Here's an example:
 
-Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
+```nix
+# Say the package is git
+stdenv.mkDerivation(finalAttrs: {
+  pname = "git";
+  version = "...";
+  # ...
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo checking if 'git --version' mentions ${finalAttrs.version}
+    $out/bin/git --version | grep ${finalAttrs.version}
+
+    runHook postInstallCheck
+  '';
+  # ...
+})
+```
+
+Most programs distributed by Nixpkgs support such a `--version` flag, and it can help give confidence that the package at least got compiled properly. However, tests that are slightly non trivial will better fit into `passthru.tests`, because:
 
 * `passthru.tests` tests the 'real' package, independently from the environment in which it was built
-* we can run `passthru.tests` independently
+* We can run and debug a `passthru.tests` independently, after the package was built (useful if it takes a long time).
 * `installCheckPhase` adds overhead to each build
 
-For more on how to write and run package tests, see [](#sec-package-tests).
+It is also possible to still use `passthru.tests` to test the version, with [testVersion](#tester-testVersion).
+
+For more on how to write and run package tests, see [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests).
 
 #### NixOS tests {#var-meta-tests-nixos}
 
 The NixOS tests are available as `nixosTests` in parameters of derivations. For instance, the OpenSMTPD derivation includes lines similar to:
 
 ```nix
-{ /* ... */, nixosTests }:
+{ /* ... , */ nixosTests }:
 {
   # ...
   passthru.tests = {
@@ -194,8 +224,10 @@ To be effective, it must be presented directly to an evaluation process that han
 The list of Nix platform types for which the [Hydra](https://github.com/nixos/hydra) [instance at `hydra.nixos.org`](https://nixos.org/hydra) will build the package. (Hydra is the Nix-based continuous build system.) It defaults to the value of `meta.platforms`. Thus, the only reason to set `meta.hydraPlatforms` is if you want `hydra.nixos.org` to build the package on a subset of `meta.platforms`, or not at all, e.g.
 
 ```nix
-meta.platforms = lib.platforms.linux;
-meta.hydraPlatforms = [];
+{
+  meta.platforms = lib.platforms.linux;
+  meta.hydraPlatforms = [];
+}
 ```
 
 ### `broken` {#var-meta-broken}
@@ -209,13 +241,17 @@ This means that `broken` can be used to express constraints, for example:
 - Does not cross compile
 
   ```nix
-   meta.broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+  {
+    meta.broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+  }
   ```
 
 - Broken if all of a certain set of its dependencies are broken
 
   ```nix
-  meta.broken = lib.all (map (p: p.meta.broken) [ glibc musl ])
+  {
+    meta.broken = lib.all (map (p: p.meta.broken) [ glibc musl ]);
+  }
   ```
 
 This makes `broken` strictly more powerful than `meta.badPlatforms`.

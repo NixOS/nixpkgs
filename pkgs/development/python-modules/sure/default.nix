@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, mock
-, six
-, isPyPy
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  mock,
+  six,
+  isPyPy,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -32,16 +33,13 @@ buildPythonPackage rec {
 
   doCheck = pythonOlder "3.12"; # nose requires imp module
 
-  nativeCheckInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ nose ];
 
-  pythonImportsCheck = [
-    "sure"
-  ];
+  pythonImportsCheck = [ "sure" ];
 
   meta = with lib; {
     description = "Utility belt for automated testing";
+    mainProgram = "sure";
     homepage = "https://sure.readthedocs.io/";
     changelog = "https://github.com/gabrielfalcao/sure/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;

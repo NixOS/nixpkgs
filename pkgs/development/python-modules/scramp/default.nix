@@ -1,13 +1,14 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -29,11 +30,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    asn1crypto
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ asn1crypto ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytest-mock
@@ -47,13 +44,9 @@ buildPythonPackage rec {
     sed -i "/dynamic =/d" pyproject.toml
   '';
 
-  pythonImportsCheck = [
-    "scramp"
-  ];
+  pythonImportsCheck = [ "scramp" ];
 
-  disabledTests = [
-    "test_readme"
-  ];
+  disabledTests = [ "test_readme" ];
 
   meta = with lib; {
     description = "Implementation of the SCRAM authentication protocol";

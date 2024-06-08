@@ -22,15 +22,15 @@ let
 
   plugins = {
     hy3 = { fetchFromGitHub, cmake, hyprland }:
-      mkHyprlandPlugin hyprland rec {
+      mkHyprlandPlugin hyprland {
         pluginName = "hy3";
-        version = "0.36.0";
+        version = "0.40.0";
 
         src = fetchFromGitHub {
           owner = "outfoxxed";
           repo = "hy3";
-          rev = "hl${version}";
-          hash = "sha256-nRBeHh0Vr0gB3BHiqP9ZE4/yyZvRt8jJHwBF5lFu/24=";
+          rev = "hl0.40.0";
+          hash = "sha256-Y9bIML3C5xyKKv+Yel4LUfSkScwGunOVZkg+Z1dPwHI=";
         };
 
         nativeBuildInputs = [ cmake ];

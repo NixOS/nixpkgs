@@ -1,4 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, pkg-config, libsmf, glib, pytest, cython }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkg-config,
+  libsmf,
+  glib,
+  pytest,
+  cython,
+}:
 
 buildPythonPackage rec {
   pname = "pysmf";
@@ -14,8 +23,15 @@ buildPythonPackage rec {
     rm $sourceRoot/src/smf.c
   '';
 
-  nativeBuildInputs = [ pkg-config pytest cython ];
-  buildInputs = [ libsmf glib ];
+  nativeBuildInputs = [
+    pkg-config
+    pytest
+    cython
+  ];
+  buildInputs = [
+    libsmf
+    glib
+  ];
 
   meta = with lib; {
     homepage = "https://das.nasophon.de/pysmf/";

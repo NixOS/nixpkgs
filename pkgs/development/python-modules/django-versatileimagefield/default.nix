@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, pillow
-, python-magic
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  pillow,
+  python-magic,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-M5DiAEgJjol78pmwNgdj0QzQiWZbeu+OupAO7Lrq0Ng=";
   };
-  propagatedBuildInputs = [ pillow python-magic ];
+  propagatedBuildInputs = [
+    pillow
+    python-magic
+  ];
 
   nativeCheckInputs = [ django ];
 
@@ -31,4 +35,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ mmai ];
   };
 }
-

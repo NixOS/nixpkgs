@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, certifi
-, python-dateutil
-, requests
-, six
-, urllib3
+  # dependencies
+  certifi,
+  python-dateutil,
+  requests,
+  six,
+  urllib3,
 
-# optional-dependencies
-, aiohttp
+  # optional-dependencies
+  aiohttp,
 
-# tests
-, botocore
-, mock
-, pytest-asyncio
-, pytest-mock
-, pytestCheckHook
-, pyyaml
-, pytz
+  # tests
+  botocore,
+  mock,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pyyaml,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     hash = "sha256-MPuHdjhsrccKYUIDlDYGoXBbBu/V+q43Puf0e5j8vhU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     certifi
@@ -49,9 +48,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  passthru.optional-dependencies.async = [
-    aiohttp
-  ];
+  passthru.optional-dependencies.async = [ aiohttp ];
 
   nativeCheckInputs = [
     botocore

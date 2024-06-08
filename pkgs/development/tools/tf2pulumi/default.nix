@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Convert Terraform projects to Pulumi TypeScript programs";
+    mainProgram = "tf2pulumi";
     homepage = "https://www.pulumi.com/tf2pulumi/";
     license = licenses.asl20;
     maintainers = with maintainers; [ mausch ];

@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The 'launcher' or 'start menu' component for DDE";
+    mainProgram = "dde-launchpad";
     homepage = "https://github.com/linuxdeepin/dde-launchpad";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

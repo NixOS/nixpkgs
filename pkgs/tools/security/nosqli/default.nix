@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "NoSql Injection tool for finding vulnerable websites using MongoDB";
+    mainProgram = "nosqli";
     homepage = "https://github.com/Charlie-belmer/nosqli";
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ fab ];

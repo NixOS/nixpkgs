@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flacon";
-  version = "11.3.0";
+  version = "11.4.0";
 
   src = fetchFromGitHub {
     owner = "flacon";
     repo = "flacon";
     rev = "v${version}";
-    sha256 = "sha256-jzpD8+zhIbOYgSNsoE1Pay+FiPXtRCd6Zz6HHkzWAkY=";
+    sha256 = "sha256-guIGSKmpinDDfTDSCmcJKWysUPdG/gw5oaKmXqgf53o=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description =
       "Extracts audio tracks from an audio CD image to separate tracks";
+    mainProgram = "flacon";
     homepage = "https://flacon.github.io/";
     license = licenses.lgpl21;
     platforms = platforms.linux;

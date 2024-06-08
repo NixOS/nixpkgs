@@ -2,7 +2,6 @@
 , stdenvNoCC
 , fetchurl
 , appimageTools
-, libsecret
 , makeWrapper
 , writeShellApplication
 , curl
@@ -11,15 +10,15 @@
 }:
 let
   pname = "beeper";
-  version = "3.99.23";
+  version = "3.105.2";
   name = "${pname}-${version}";
   src = fetchurl {
-    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.99.23-build-240309svrjfqia1-x86_64.AppImage";
-    hash = "sha256-8kZk5tEJCcSPKgpsVKrHB5twujZF2LdepW7HIJsb52E=";
+    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.105.2-build-240521yxdjizhu0-x86_64.AppImage";
+    hash = "sha256-Ov2Kii4f4zg/9OyUfm/qhyiqK6C6CC3DgETTx1HqIZ4=";
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;
-    extraPkgs = pkgs: with pkgs; [ libsecret ];
+    extraPkgs = pkgs: [ pkgs.libsecret ];
   };
   appimageContents = appimageTools.extractType2 {
     inherit version pname src;
@@ -34,8 +33,6 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-
-    mv bin/${name} bin/${pname}
 
     mkdir -p $out/
     cp -r bin $out/bin

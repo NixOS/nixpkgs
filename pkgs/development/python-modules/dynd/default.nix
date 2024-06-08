@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cython
-, numpy
-, libdynd
-, fetchpatch
-, cmake
-, fetchFromGitHub
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  numpy,
+  libdynd,
+  fetchpatch,
+  cmake,
+  fetchFromGitHub,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -65,5 +66,4 @@ buildPythonPackage rec {
     description = "Python exposure of dynd";
     maintainers = with maintainers; [ teh ];
   };
-
 }

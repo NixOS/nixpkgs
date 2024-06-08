@@ -31,7 +31,7 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Enable Peering Manager.
 
         This module requires a reverse proxy that serves `/static` separately.
@@ -50,7 +50,7 @@ in {
     listenAddress = mkOption {
       type = types.str;
       default = "[::1]";
-      description = mdDoc ''
+      description = ''
         Address the server will listen on.
       '';
     };
@@ -58,7 +58,7 @@ in {
     port = mkOption {
       type = types.port;
       default = 8001;
-      description = mdDoc ''
+      description = ''
         Port the server will listen on.
       '';
     };
@@ -69,14 +69,14 @@ in {
       defaultText = literalExpression ''
         python3Packages: with python3Packages; [];
       '';
-      description = mdDoc ''
+      description = ''
         List of plugin packages to install.
       '';
     };
 
     secretKeyFile = mkOption {
       type = types.path;
-      description = mdDoc ''
+      description = ''
         Path to a file containing the secret key.
       '';
     };
@@ -84,13 +84,13 @@ in {
     peeringdbApiKeyFile = mkOption {
       type = with types; nullOr path;
       default = null;
-      description = mdDoc ''
+      description = ''
         Path to a file containing the PeeringDB API key.
       '';
     };
 
     settings = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Configuration options to set in `configuration.py`.
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/configuration/optional-settings/) for more possible options.
       '';
@@ -104,7 +104,7 @@ in {
           ALLOWED_HOSTS = lib.mkOption {
             type = with lib.types; listOf str;
             default = ["*"];
-            description = lib.mdDoc ''
+            description = ''
               A list of valid fully-qualified domain names (FQDNs) and/or IP
               addresses that can be used to reach the peering manager service.
             '';
@@ -116,7 +116,7 @@ in {
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = mdDoc ''
+      description = ''
         Additional lines of configuration appended to the `configuration.py`.
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/configuration/optional-settings/) for more possible options.
       '';
@@ -125,7 +125,7 @@ in {
     enableLdap = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Enable LDAP-Authentication for Peering Manager.
 
         This requires a configuration file being pass through `ldapConfigPath`.
@@ -134,7 +134,7 @@ in {
 
     ldapConfigPath = mkOption {
       type = types.path;
-      description = mdDoc ''
+      description = ''
         Path to the Configuration-File for LDAP-Authentication, will be loaded as `ldap_config.py`.
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/setup/6-ldap/#configuration) for possible options.
       '';

@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "open-scq30";
-  version = "1.10.6";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "Oppzippy";
     repo = "OpenSCQ30";
     rev = "v${version}";
-    hash = "sha256-qYWLf0ns4YSq+yAspVTMvKQi861iUMJar2wjqm+BV/0=";
+    hash = "sha256-DL2hYm1j27K0nnBvE3iGnguqm0m1k56bkuG+6+u4u4c=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Foundation
   ];
 
-  cargoHash = "sha256-BQLNm+yyimBh7WomrccdQ2lvrQzCNXf4MEa1LlPhck0=";
+  cargoHash = "sha256-YBJd43xOCumQbrvzfV/+F63McYzHg1bGI3icgGzGZrQ=";
 
   INSTALL_PREFIX = placeholder "out";
 

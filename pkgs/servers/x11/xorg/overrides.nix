@@ -422,6 +422,10 @@ self: super:
       # https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/blob/master/configure.ac#L108-114
       platforms = lib.fold (os: ps: ps ++ lib.platforms.${os}) []
         [ "cygwin" "freebsd" "linux" "netbsd" "openbsd" "illumos" ];
+      badPlatforms = [
+        # mandatory shared library
+        lib.systems.inspect.platformPatterns.isStatic
+      ];
     };
   });
 
@@ -557,7 +561,6 @@ self: super:
   xf86videoi128    = super.xf86videoi128.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videonewport = super.xf86videonewport.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
-  xf86videosavage  = super.xf86videosavage.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videotga     = super.xf86videotga.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videov4l     = super.xf86videov4l.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videovoodoo  = super.xf86videovoodoo.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });

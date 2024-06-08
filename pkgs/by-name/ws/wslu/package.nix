@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wslu";
-  version = "4.1.1";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "wslutilities";
     repo = "wslu";
     rev = "v${version}";
-    hash = "sha256-yhugh836BoSISbTu19ubLOrz5X31Opu5QtCR0DXrbWc=";
+    hash = "sha256-lyJk8nOADq+s7GkZXsd1T4ilrDzMRsoALOesG8NxYK8=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];

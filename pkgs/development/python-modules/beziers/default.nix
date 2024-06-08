@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dotmap
-, matplotlib
-, pyclipper
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  dotmap,
+  matplotlib,
+  pyclipper,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-4014u7s47Tfdpa2Q9hKAoHg7Ebcs1/DVW5TpEmoh2bc=";
   };
 
-  propagatedBuildInputs = [
-    pyclipper
-  ];
+  propagatedBuildInputs = [ pyclipper ];
 
   doCheck = true;
   nativeCheckInputs = [
@@ -30,7 +29,11 @@ buildPythonPackage rec {
     matplotlib
     unittestCheckHook
   ];
-  unittestFlagsArray = [ "-s" "test" "-v" ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+    "-v"
+  ];
 
   meta = with lib; {
     description = "Python library for manipulating Bezier curves and paths in fonts";

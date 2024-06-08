@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Kingcom/armips";
     description = "Assembler for various ARM and MIPS platforms.";
+    mainProgram = "armips";
     license = licenses.mit;
     maintainers = with maintainers; [ marius851000 ];
   };

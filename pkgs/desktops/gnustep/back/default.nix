@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "A generic backend for GNUstep";
+    mainProgram = "gpbs";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];

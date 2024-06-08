@@ -1,24 +1,25 @@
-{ lib
-, aiofiles
-, aiohttp
-, aioresponses
-, aiounittest
-, buildPythonPackage
-, ciso8601
-, fetchFromGitHub
-, pubnub
-, pyjwt
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, requests-mock
-, setuptools
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aioresponses,
+  aiounittest,
+  buildPythonPackage,
+  ciso8601,
+  fetchFromGitHub,
+  pubnub,
+  pyjwt,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  requests-mock,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "2.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ozohIzw80YfyB0sxXQ9MY6VpF+EDDvXZYfkpuloE4AU=";
+    hash = "sha256-+Sn+d6CuxIUEDLkDvcq7OT3AumElJFfWCwM02LPIeyg=";
   };
 
   postPatch = ''
@@ -36,11 +37,9 @@ buildPythonPackage rec {
       --replace-fail '"vol",' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
     ciso8601
@@ -60,9 +59,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "yalexs"
-  ];
+  pythonImportsCheck = [ "yalexs" ];
 
   meta = with lib; {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";

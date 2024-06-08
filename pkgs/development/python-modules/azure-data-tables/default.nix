@@ -1,11 +1,12 @@
-{ lib
-, azure-core
-, buildPythonPackage
-, fetchPypi
-, isodate
-, pythonOlder
-, typing-extensions
-, yarl
+{
+  lib,
+  azure-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  typing-extensions,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.data.tables"
-  ];
+  pythonImportsCheck = [ "azure.data.tables" ];
 
   meta = with lib; {
     description = "NoSQL data storage service that can be accessed from anywhere";

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pam
-, six
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pam,
+  six,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +26,9 @@ buildPythonPackage rec {
       --replace 'find_library("pam_misc")' '"${pam}/lib/libpam_misc.so"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    pam
-  ];
+  buildInputs = [ pam ];
 
   propagatedBuildInputs = [
     six
@@ -44,6 +41,9 @@ buildPythonPackage rec {
     description = "Python pam module";
     homepage = "https://github.com/FirefighterBlu3/python-pam";
     license = licenses.mit;
-    maintainers = with maintainers; [ abbradar mkg20001 ];
+    maintainers = with maintainers; [
+      abbradar
+      mkg20001
+    ];
   };
 }

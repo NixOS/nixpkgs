@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
-  version = "0.2.10";
+  version = "0.2.11";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.9";
@@ -14,8 +14,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
-    rev = "v${version}";
-    hash = "sha256-SqU/K3b8OML3PvFmP7L5R3Ub9vbW66xRpf79mgFZPfc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cBsceJ6tib8OYx5L2Hv2AqRS+ADRSLIuJGIULNpAmEI=";
   };
 
   nativeBuildInputs = with python3Packages; [

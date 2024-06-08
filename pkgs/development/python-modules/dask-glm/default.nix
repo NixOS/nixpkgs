@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, cloudpickle
-, dask
-, distributed
-, fetchPypi
-, multipledispatch
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, scipy
-, setuptools-scm
-, sparse
+{
+  lib,
+  buildPythonPackage,
+  cloudpickle,
+  dask,
+  distributed,
+  fetchPypi,
+  multipledispatch,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  setuptools-scm,
+  sparse,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-yUelZoZmmKAdeZeK5zIzy16DitXq1ghRQ1gsXpMLmko=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     cloudpickle
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "dask_glm"
-  ];
+  pythonImportsCheck = [ "dask_glm" ];
 
   disabledTestPaths = [
     # Circular dependency with dask-ml
@@ -58,6 +55,8 @@ buildPythonPackage rec {
     # missing fixture with distributed>=2022.8.0
     "test_determinism_distributed"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Generalized Linear Models with Dask";

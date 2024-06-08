@@ -40,6 +40,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/m3ng9i/ran";
     description = "Ran is a simple web server for serving static files";
+    mainProgram = "ran";
     license = licenses.mit;
     maintainers = with maintainers; [ tomberek ];
   };

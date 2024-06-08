@@ -4,6 +4,7 @@
 , ant
 , jdk8
 , sharutils
+, stripJavaArchivesHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,15 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     ant
     jdk8
     sharutils
+    stripJavaArchivesHook
   ];
 
   sourceRoot = "${finalAttrs.src.name}/freetts-${finalAttrs.version}";
-
-  postPatch = ''
-    # Fix jar timestamps for reproducibility
-    substituteInPlace build.xml demo.xml \
-        --replace-fail '<jar ' '<jar modificationtime="0" '
-  '';
 
   buildPhase = ''
     runHook preBuild

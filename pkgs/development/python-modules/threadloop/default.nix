@@ -1,7 +1,8 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, tornado
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  tornado,
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "8b180aac31013de13c2ad5c834819771992d350267bddb854613ae77ef571944";
   };
 
-  propagatedBuildInputs = [
-    tornado
-  ];
+  propagatedBuildInputs = [ tornado ];
 
   doCheck = false; # ImportError: cannot import name 'ThreadLoop' from 'threadloop'
 

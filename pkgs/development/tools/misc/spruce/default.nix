@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A BOSH template merge tool";
+    mainProgram = "spruce";
     homepage = "https://github.com/geofffranks/spruce";
     license = licenses.mit;
     maintainers = with maintainers; [ risson ];

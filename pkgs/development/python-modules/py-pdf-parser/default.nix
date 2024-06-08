@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchPypi
-, pdfminer-six
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, wand
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchPypi,
+  pdfminer-six,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  wand,
 }:
 
 buildPythonPackage rec {
@@ -51,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jstockwin/py-pdf-parser";
     changelog = "https://github.com/jstockwin/py-pdf-parser/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

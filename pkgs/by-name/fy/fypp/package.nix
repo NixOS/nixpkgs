@@ -16,6 +16,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Python powered Fortran preprocessor";
+    mainProgram = "fypp";
     homepage = "https://github.com/aradi/fypp";
     license = licenses.gpl3Only;
     maintainers = [ maintainers.sheepforce ];

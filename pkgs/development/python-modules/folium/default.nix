@@ -1,26 +1,27 @@
-{ lib
-, branca
-, buildPythonPackage
-, fetchFromGitHub
-, geopandas
-, jinja2
-, nbconvert
-, numpy
-, pandas
-, pillow
-, pytestCheckHook
-, pythonOlder
-, requests
-, selenium
-, setuptools
-, setuptools-scm
-, wheel
-, xyzservices
+{
+  lib,
+  branca,
+  buildPythonPackage,
+  fetchFromGitHub,
+  geopandas,
+  jinja2,
+  nbconvert,
+  numpy,
+  pandas,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  selenium,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  xyzservices,
 }:
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "python-visualization";
     repo = "folium";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CHPHxp8xEZhEEMLvhs/xAiOr2Hw6B+5svFNY+QvQa+U=";
+    hash = "sha256-ADDqjZUQVI4K/Bf38905g1K9TD2/e1RYvYWddvFtdrU=";
   };
 
   nativeBuildInputs = [
@@ -66,15 +67,12 @@ buildPythonPackage rec {
     "test_valid_png"
   ];
 
-  pythonImportsCheck = [
-    "folium"
-  ];
+  pythonImportsCheck = [ "folium" ];
 
   meta = {
     description = "Make beautiful maps with Leaflet.js & Python";
     homepage = "https://github.com/python-visualization/folium";
     changelog = "https://github.com/python-visualization/folium/blob/v${version}/CHANGES.txt";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

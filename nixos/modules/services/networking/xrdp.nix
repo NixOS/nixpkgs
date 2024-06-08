@@ -49,19 +49,19 @@ in
 
     services.xrdp = {
 
-      enable = mkEnableOption (lib.mdDoc "xrdp, the Remote Desktop Protocol server");
+      enable = mkEnableOption "xrdp, the Remote Desktop Protocol server";
 
       package = mkPackageOptionMD pkgs "xrdp" { };
 
       audio = {
-        enable = mkEnableOption (lib.mdDoc "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet");
+        enable = mkEnableOption "audio support for xrdp sessions. So far it only works with PulseAudio sessions on the server side. No PipeWire support yet";
         package = mkPackageOptionMD pkgs "pulseaudio-module-xrdp" {};
       };
 
       port = mkOption {
         type = types.port;
         default = 3389;
-        description = lib.mdDoc ''
+        description = ''
           Specifies on which port the xrdp daemon listens.
         '';
       };
@@ -69,14 +69,14 @@ in
       openFirewall = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc "Whether to open the firewall for the specified RDP port.";
+        description = "Whether to open the firewall for the specified RDP port.";
       };
 
       sslKey = mkOption {
         type = types.str;
         default = "/etc/xrdp/key.pem";
         example = "/path/to/your/key.pem";
-        description = lib.mdDoc ''
+        description = ''
           ssl private key path
           A self-signed certificate will be generated if file not exists.
         '';
@@ -86,7 +86,7 @@ in
         type = types.str;
         default = "/etc/xrdp/cert.pem";
         example = "/path/to/your/cert.pem";
-        description = lib.mdDoc ''
+        description = ''
           ssl certificate path
           A self-signed certificate will be generated if file not exists.
         '';
@@ -96,7 +96,7 @@ in
         type = types.str;
         default = "xterm";
         example = "xfce4-session";
-        description = lib.mdDoc ''
+        description = ''
           The script to run when user log in, usually a window manager, e.g. "icewm", "xfce4-session"
           This is per-user overridable, if file ~/startwm.sh exists it will be used instead.
         '';
@@ -106,7 +106,7 @@ in
         type = types.path;
         default = confDir;
         internal = true;
-        description = lib.mdDoc ''
+        description = ''
           Configuration directory of xrdp and sesman.
 
           Changes to this must be made through extraConfDirCommands.
@@ -117,7 +117,7 @@ in
       extraConfDirCommands = mkOption {
         type = types.str;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra commands to run on the default confDir derivation.
         '';
         example = ''

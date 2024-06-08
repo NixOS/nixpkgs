@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "FAT filesystems explore, extract, repair, and forensic tool";
+    mainProgram = "fatcat";
     homepage = "https://github.com/Gregwar/fatcat";
     license = licenses.mit;
     maintainers = with maintainers; [ cynerd ];

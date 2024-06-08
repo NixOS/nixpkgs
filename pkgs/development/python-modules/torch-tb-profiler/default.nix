@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, pandas
-, pytestCheckHook
-, torch
-, tensorboard
-, torchvision
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pandas,
+  pytestCheckHook,
+  torch,
+  tensorboard,
+  torchvision,
 }:
 
 let
@@ -25,9 +26,16 @@ buildPythonPackage rec {
   # See https://discourse.nixos.org/t/extracting-sub-directory-from-fetchgit-or-fetchurl-or-any-derivation/8830.
   src = "${repo}/tb_plugin";
 
-  propagatedBuildInputs = [ pandas tensorboard ];
+  propagatedBuildInputs = [
+    pandas
+    tensorboard
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook torch torchvision ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    torch
+    torchvision
+  ];
 
   disabledTests = [
     # Tests that attempt to access the filesystem in naughty ways.

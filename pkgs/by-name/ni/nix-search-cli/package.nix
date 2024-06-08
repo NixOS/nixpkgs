@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "nix-search-cli";
-  version = "unstable-2023-09-12";
+  version = "0-unstable-2023-09-12";
 
   src = fetchFromGitHub {
     owner = "peterldowns";
@@ -17,7 +17,11 @@ buildGoModule {
 
   vendorHash = "sha256-JDOu7YdX9ztMZt0EFAMz++gD7n+Mn1VOe5g6XwrgS5M=";
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    # Almost every commit is tagged as "release-<unix-time>-<commit>", software doesn't keep track of its version
+    # Using 0 feels closer to what the tagging is trying to express
+    hardcodeZeroVersion = true;
+  };
 
   meta = with lib; {
     description = "CLI for searching packages on search.nixos.org";

@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A CLI and Go library for Github's CODEOWNERS file";
+    mainProgram = "codeowners";
     homepage = "https://github.com/hmarr/codeowners";
     license = licenses.mit;
     maintainers = with maintainers; [ yorickvp ];

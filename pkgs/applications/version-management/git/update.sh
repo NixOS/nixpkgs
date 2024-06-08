@@ -10,7 +10,7 @@ targetVersion="${1:-$latestTag}"
 if [ ! "${oldVersion}" = "${targetVersion}" ]; then
   update-source-version git "${targetVersion}"
   nixpkgs="$(git rev-parse --show-toplevel)"
-  default_nix="$nixpkgs/pkgs/applications/version-management/git-and-tools/git/default.nix"
+  default_nix="$nixpkgs/pkgs/applications/version-management/git/default.nix"
   nix-build -A git
   git add "${default_nix}"
   git commit -m "git: ${oldVersion} -> ${targetVersion}"

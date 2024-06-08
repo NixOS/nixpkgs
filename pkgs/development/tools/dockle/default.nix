@@ -39,6 +39,7 @@ buildGoModule rec {
     homepage = "https://containers.goodwith.tech";
     changelog = "https://github.com/goodwithtech/dockle/releases/tag/v${version}";
     description = "Container Image Linter for Security";
+    mainProgram = "dockle";
     longDescription = ''
       Container Image Linter for Security.
       Helping build the Best-Practice Docker Image.

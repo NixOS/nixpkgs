@@ -6,6 +6,7 @@
   repo = "Coq-Equations";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
+    { case = "8.19"; out = "1.3+8.19"; }
     { case = "8.18"; out = "1.3+8.18"; }
     { case = "8.17"; out = "1.3+8.17"; }
     { case = "8.16"; out = "1.3+8.16"; }
@@ -60,6 +61,8 @@
     release."1.3+8.17".sha256         = "sha256-yNotSIxFkhTg3reZIchGQ7cV9WmTJ7p7hPfKGBiByDw=";
     release."1.3+8.18".rev            = "v1.3-8.18";
     release."1.3+8.18".sha256         = "sha256-8MZO9vWdr8wlAov0lBTYMnde0RuMyhaiM99zp7Zwfao=";
+    release."1.3+8.19".rev            = "v1.3-8.19";
+    release."1.3+8.19".sha256         = "sha256-roBCWfAHDww2Z2JbV5yMI3+EOfIsv3WvxEcUbBiZBsk=";
 
   mlPlugin = true;
 

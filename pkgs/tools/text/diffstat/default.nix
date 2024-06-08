@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Read output of diff and display a histogram of the changes";
+    mainProgram = "diffstat";
     longDescription = ''
       diffstat reads the output of diff and displays a histogram of the
       insertions, deletions, and modifications per-file. It is useful for

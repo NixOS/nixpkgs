@@ -20,13 +20,14 @@
 , qtsvg
 , qtx11extras
 , readline
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 , zlib
 
 , LocalAuthentication
 
 , withKeePassBrowser ? true
+, withKeePassBrowserPasskeys ? true
 , withKeePassFDOSecrets ? true
 , withKeePassKeeShare ? true
 , withKeePassNetworking ? true
@@ -40,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.7.7";
+  version = "2.7.8";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    hash = "sha256-HjDzb1H3eMSraKbfHgg9S+w4TXNt40lQkDz+EChb5Ks=";
+    hash = "sha256-Gb5/CPhn/phVVvz9BFv7rb12n/P3rPNl5r2gA+E5b0o=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
@@ -70,6 +71,7 @@ stdenv.mkDerivation rec {
   ++ (lib.optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
   ++ (lib.optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
   ++ (lib.optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
+  ++ (lib.optional withKeePassBrowserPasskeys "-DWITH_XC_BROWSER_PASSKEYS=ON")
   ++ (lib.optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
   ++ (lib.optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
   ++ (lib.optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
@@ -95,7 +97,7 @@ stdenv.mkDerivation rec {
     qttools
     pkg-config
   ]
-  ++ lib.optional (!stdenv.isDarwin) wrapGAppsHook;
+  ++ lib.optional (!stdenv.isDarwin) wrapGAppsHook3;
 
   dontWrapGApps = true;
   preFixup = ''

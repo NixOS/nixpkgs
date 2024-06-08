@@ -1,6 +1,7 @@
 { lib
 , callPackage
 , fetchFromGitHub
+, fetchPypi
 , fetchpatch
 , python3Packages
 }:
@@ -17,11 +18,25 @@
 **   alternatives = { enable = true; propagatedBuildInputs = [ beetsPackages.alternatives ]; };
 ** }; }
 */
-lib.makeExtensible (self: {
+let
+  legacyMediafilePython3Packages = python3Packages.override {
+    overrides = self: super: {
+      mediafile = super.mediafile.overridePythonAttrs (oldAttrs: rec {
+        version = "0.10.1";
+        format = "pyproject";
+        src = fetchPypi {
+          pname = "mediafile";
+          inherit version;
+          hash = "sha256-kpZCoX7lAjuQhiIc6AzcLFHQYCGokNRDOwvVvTLysp8=";
+        };
+      });
+    };
+  };
+in lib.makeExtensible (self: {
   beets = self.beets-stable;
 
   beets-stable = callPackage ./common.nix rec {
-    inherit python3Packages;
+    python3Packages = legacyMediafilePython3Packages;
     # NOTE: ./builtin-plugins.nix and ./common.nix can have some conditionals
     # be removed when stable version updates
     version = "1.6.0";
@@ -70,12 +85,12 @@ lib.makeExtensible (self: {
 
   beets-unstable = callPackage ./common.nix {
     inherit python3Packages;
-    version = "unstable-2023-10-26";
+    version = "unstable-2024-03-16";
     src = fetchFromGitHub {
       owner = "beetbox";
       repo = "beets";
-      rev = "6655760732100f5387fad2d2890c015ee5039981";
-      hash = "sha256-Nz9BHtacYpJMLmB3f9WFg6GvMa+BuUhiNbJ9cyannek=";
+      rev = "b09806e0df8f01b9155017d3693764ae7beedcd5";
+      hash = "sha256-jE6nZLOEFufqclT6p1zK7dW+vt69q2ulaRsUldL7cSQ=";
     };
     extraPatches = [
       # Bash completion fix for Nix

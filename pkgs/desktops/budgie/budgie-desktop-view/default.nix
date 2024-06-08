@@ -9,7 +9,7 @@
 , ninja
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,13 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     glib
     gtk3
   ];
+
+  mesonFlags = [ (lib.mesonBool "werror" false) ];
 
   meta = {
     description = "The official Budgie desktop icons application/implementation";

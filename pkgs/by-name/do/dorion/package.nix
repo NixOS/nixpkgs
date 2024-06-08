@@ -8,16 +8,16 @@
 , libappindicator
 , libayatana-appindicator
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   name = "dorion";
-  version = "4.1.3";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "https://github.com/SpikeHD/Dorion/releases/download/v${finalAttrs.version }/Dorion_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-O6KXOouutrNla5dkHRQeT0kp8DQO9MLoJrIMuqam/60=";
+    hash = "sha256-bVanhJqHQxe3imP07EsRuDu0Isj9rf4VoIjmoAPfaQk=";
   };
 
   unpackCmd = ''
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

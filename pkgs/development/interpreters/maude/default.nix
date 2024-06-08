@@ -58,6 +58,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://maude.cs.illinois.edu/";
     description = "High-level specification language";
+    mainProgram = "maude";
     license = lib.licenses.gpl2Plus;
 
     longDescription = ''

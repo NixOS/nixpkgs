@@ -8,24 +8,24 @@ let
 in
 {
   options.services.signald = {
-    enable = mkEnableOption (lib.mdDoc "the signald service");
+    enable = mkEnableOption "signald, the unofficial daemon for interacting with Signal";
 
     user = mkOption {
       type = types.str;
       default = defaultUser;
-      description = lib.mdDoc "User under which signald runs.";
+      description = "User under which signald runs.";
     };
 
     group = mkOption {
       type = types.str;
       default = defaultUser;
-      description = lib.mdDoc "Group under which signald runs.";
+      description = "Group under which signald runs.";
     };
 
     socketPath = mkOption {
       type = types.str;
       default = "/run/signald/signald.sock";
-      description = lib.mdDoc "Path to the signald socket";
+      description = "Path to the signald socket";
     };
   };
 

@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "OpenBSD signing tool";
+    mainProgram = "signify";
     longDescription = ''
       OpenBSDs signing tool, which uses the Ed25519 public key signature system
       for fast signing and verification of messages using small public keys.

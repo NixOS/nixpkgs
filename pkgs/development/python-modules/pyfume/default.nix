@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fst-pso
-, numpy
-, pandas
-, pythonOlder
-, scipy
-, setuptools
-, simpful
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fst-pso,
+  numpy,
+  pandas,
+  pythonOlder,
+  scipy,
+  setuptools,
+  simpful,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-8J9qhSaTlb/KiCjegmc8iaGaZOXJ0Pk1EquOTEUUtW0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     fst-pso
@@ -40,9 +39,7 @@ buildPythonPackage rec {
   # Module has not test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyfume"
-  ];
+  pythonImportsCheck = [ "pyfume" ];
 
   meta = with lib; {
     description = "A Python package for fuzzy model estimation";

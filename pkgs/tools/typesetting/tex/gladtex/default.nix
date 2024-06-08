@@ -16,6 +16,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = with lib; {
     description = "Embed LaTeX formulas into HTML documents as SVG images";
+    mainProgram = "gladtex";
     homepage = "https://humenda.github.io/GladTeX";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;

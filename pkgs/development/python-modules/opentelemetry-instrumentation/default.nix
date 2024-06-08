@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatchling
-, opentelemetry-api
-, opentelemetry-test-utils
-, setuptools
-, wrapt
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-test-utils,
+  setuptools,
+  wrapt,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "opentelemetry-instrumentation";
-  version = "0.44b0";
+  version = "0.45b0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,14 +23,12 @@ buildPythonPackage rec {
     owner = "open-telemetry";
     repo = "opentelemetry-python-contrib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-r+k/YdK7YqYme8nKoy3ig3krvZjxYRKgLBkcdEtFy3k=";
+    hash = "sha256-snpanTREdvfqpqPI8UWzm55pDK8Q77guqgT8kFULRKU=";
   };
 
   sourceRoot = "${src.name}/opentelemetry-instrumentation";
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     opentelemetry-api
@@ -43,6 +42,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "opentelemetry.instrumentation" ];
+
+  passthru.updateScript = opentelemetry-api.updateScript;
 
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-instrumentation";

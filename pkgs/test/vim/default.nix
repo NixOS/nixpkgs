@@ -1,5 +1,5 @@
 { vimUtils, vim-full, writeText, vimPlugins
-, lib, fetchFromGitHub
+, lib
 , pkgs
 }:
 let

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pdm-backend
-, pdm-pep517
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pdm-backend,
+  pdm-pep517,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,17 +27,11 @@ buildPythonPackage rec {
     pdm-pep517
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
-  pythonImportsCheck = [
-    "jsonref"
-  ];
+  pythonImportsCheck = [ "jsonref" ];
 
   meta = with lib; {
     description = "An implementation of JSON Reference for Python";

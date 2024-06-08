@@ -1,48 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, cython_3
-, setuptools
+  # build-system
+  cython,
+  setuptools,
 
-# dependencies
-, aiohappyeyeballs
-, async-interrupt
-, async-timeout
-, chacha20poly1305-reuseable
-, cryptography
-, noiseprotocol
-, protobuf
-, zeroconf
+  # dependencies
+  aiohappyeyeballs,
+  async-interrupt,
+  async-timeout,
+  chacha20poly1305-reuseable,
+  cryptography,
+  noiseprotocol,
+  protobuf,
+  zeroconf,
 
-# tests
-, mock
-, pytest-asyncio
-, pytestCheckHook
+  # tests
+  mock,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "23.0.0";
+  version = "24.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
-    repo = pname;
+    repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iYaRA1Jj9Ew/s/LyS6U+NZ3TsAlXdDq0DAaudgFV5/o=";
+    hash = "sha256-i/tmPTDb5DJRSj//Ju9OERx8A9S69WkWyoN+j2MO6mI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    cython_3
+    cython
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohappyeyeballs
     async-interrupt
     chacha20poly1305-reuseable
@@ -50,9 +51,7 @@ buildPythonPackage rec {
     noiseprotocol
     protobuf
     zeroconf
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     mock
@@ -65,15 +64,16 @@ buildPythonPackage rec {
     "test_reconnect_logic_stop_callback"
   ];
 
-  pythonImportsCheck = [
-    "aioesphomeapi"
-  ];
+  pythonImportsCheck = [ "aioesphomeapi" ];
 
   meta = with lib; {
     description = "Python Client for ESPHome native API";
     homepage = "https://github.com/esphome/aioesphomeapi";
     changelog = "https://github.com/esphome/aioesphomeapi/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab hexa ];
+    maintainers = with maintainers; [
+      fab
+      hexa
+    ];
   };
 }

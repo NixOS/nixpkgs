@@ -1,26 +1,26 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
 
-# propagates
-, pyyaml
+  # propagates
+  pyyaml,
 
-# optionals
-, boto3
-, botocore
-, google-cloud-dataproc
-, google-cloud-logging
-, google-cloud-storage
-, python-rapidjson
-, simplejson
-, ujson
+  # optionals
+  boto3,
+  botocore,
+  google-cloud-dataproc,
+  google-cloud-logging,
+  google-cloud-storage,
+  python-rapidjson,
+  simplejson,
+  ujson,
 
-
-# tests
-, pyspark
-, unittestCheckHook
-, warcio
+  # tests
+  pyspark,
+  unittestCheckHook,
+  warcio,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +37,7 @@ buildPythonPackage rec {
     hash = "sha256-Yp4yUx6tkyGB622I9y+AWK2AkIDVGKQPMM+LtB/M3uo=";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
-  ];
+  propagatedBuildInputs = [ pyyaml ];
 
   passthru.optional-dependencies = {
     aws = [
@@ -51,15 +49,9 @@ buildPythonPackage rec {
       google-cloud-logging
       google-cloud-storage
     ];
-    rapidjson = [
-      python-rapidjson
-    ];
-    simplejson = [
-      simplejson
-    ];
-    ujson = [
-      ujson
-    ];
+    rapidjson = [ python-rapidjson ];
+    simplejson = [ simplejson ];
+    ujson = [ ujson ];
   };
 
   doCheck = false; # failing tests
@@ -70,9 +62,7 @@ buildPythonPackage rec {
     warcio
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  unittestFlagsArray = [
-    "-v"
-  ];
+  unittestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     changelog = "https://github.com/Yelp/mrjob/blob/v${version}/CHANGES.txt";

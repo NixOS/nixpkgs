@@ -53,8 +53,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description      = "Wrapper to safely torify applications";
+    mainProgram = "torsocks";
     homepage         = "https://gitlab.torproject.org/tpo/core/torsocks";
-    license          = lib.licenses.gpl2;
+    license          = lib.licenses.gpl2Plus;
     platforms        = lib.platforms.unix;
     maintainers      = with lib.maintainers; [ thoughtpolice ];
   };

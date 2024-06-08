@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, flit-core
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  flit-core,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -27,17 +28,11 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "ptyprocess"
-  ];
+  pythonImportsCheck = [ "ptyprocess" ];
 
   meta = with lib; {
     description = "Run a subprocess in a pseudo terminal";

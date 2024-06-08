@@ -4,16 +4,16 @@
 , glib
 , jre
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "VASSAL";
-  version = "3.7.9";
+  version = "3.7.12";
 
   src = fetchzip {
     url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
-    sha256 = "sha256-RvP0HhndYRrRX7ag2nwmsOoNPKXXWJXfmfZqAWSZuv8=";
+    sha256 = "sha256-pNpDaGx/h3W+AsX965zu3zZ94kMYvh1pV8C8qYN0imc=";
   };
 
   buildInputs = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   installPhase = ''

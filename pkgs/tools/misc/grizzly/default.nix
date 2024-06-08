@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "grizzly";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-c+QT3NwfnkVzAb1mqNIuNhSJJOnzME4e3ASawdNBFmg=";
+    hash = "sha256-UOUBck1GrG3ijUpE3jPaFcC/KtlObaR38u3St8NToTk=";
   };
 
-  vendorHash = "sha256-EVP2w0mvzzBcrhohM2VmetK8UQu7fauelSa+C+q3n+g=";
+  vendorHash = "sha256-lioFmaFzqaxN1wnYJaoHA54to1xGZjaLGaqAFIfTaTs=";
 
   subPackages = [ "cmd/grr" ];
 

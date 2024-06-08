@@ -1,6 +1,5 @@
-diff -Naur postgresql-9.6.1-orig/src/include/fe_utils/print.h postgresql-9.6.1/src/include/fe_utils/print.h
---- postgresql-9.6.1-orig/src/include/fe_utils/print.h	2016-11-22 21:39:29.148932827 +0100
-+++ postgresql-9.6.1/src/include/fe_utils/print.h	2016-11-22 21:39:36.283626258 +0100
+--- a/src/include/fe_utils/print.h
++++ b/src/include/fe_utils/print.h
 @@ -18,7 +18,7 @@
  
  /* This is not a particularly great place for this ... */

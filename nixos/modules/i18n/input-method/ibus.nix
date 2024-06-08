@@ -41,14 +41,13 @@ in
             enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
             engines = concatStringsSep ", "
               (map (name: "`${name}`") (attrNames enginesDrv));
-          in
-            lib.mdDoc "Enabled IBus engines. Available engines are: ${engines}.";
+          in "Enabled IBus engines. Available engines are: ${engines}.";
       };
       panel = mkOption {
         type = with types; nullOr path;
         default = null;
         example = literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
-        description = lib.mdDoc "Replace the IBus panel with another panel.";
+        description = "Replace the IBus panel with another panel.";
       };
     };
   };

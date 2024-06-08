@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, zope-testrunner
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  zope-testrunner,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,18 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-AAHvG2XKZQUZBW3OUwxY0LOWlXzPBQIyPIoVSdtk0xc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
     zope-testrunner
   ];
 
-  pythonImportsCheck = [
-    "zope.contenttype"
-  ];
+  pythonImportsCheck = [ "zope.contenttype" ];
 
   meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.contenttype";

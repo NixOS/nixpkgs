@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, glibcLocales
-, lxml
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  glibcLocales,
+  lxml,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,12 +22,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future ];
 
-  nativeCheckInputs = [ unittestCheckHook lxml glibcLocales ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    lxml
+    glibcLocales
+  ];
 
   unittestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     description = "Manipulates JUnit/xUnit Result XML files";
+    mainProgram = "junitparser";
     license = licenses.asl20;
     homepage = "https://github.com/weiwei/junitparser";
     maintainers = with maintainers; [ multun ];

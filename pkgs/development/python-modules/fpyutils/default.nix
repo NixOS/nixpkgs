@@ -1,11 +1,12 @@
-{ lib
-, atomicwrites
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  atomicwrites,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,31 +23,23 @@ buildPythonPackage rec {
     hash = "sha256-VVR1zsejO6kHlMjqqlftDKu3/SyDzgPov9f48HYL/Bk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     atomicwrites
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "fpyutils/tests/*.py"
-  ];
+  pytestFlagsArray = [ "fpyutils/tests/*.py" ];
 
   disabledTests = [
     # Don't run test which requires bash
     "test_execute_command_live_output"
   ];
 
-  pythonImportsCheck = [
-    "fpyutils"
-  ];
+  pythonImportsCheck = [ "fpyutils" ];
 
   meta = with lib; {
     description = "Collection of useful non-standard Python functions";

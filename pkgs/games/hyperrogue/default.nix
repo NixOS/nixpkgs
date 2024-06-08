@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hyperrogue";
-  version = "13.0c";
+  version = "13.0i";
 
   src = fetchFromGitHub {
     owner = "zenorogue";
     repo = "hyperrogue";
     rev = "v${version}";
-    sha256 = "sha256-eELR/1GzR9wWJ433rIpueMu9omlsl1y5rmvG3GgSHZA=";
+    sha256 = "sha256-jXiZ/+XvDluXvNFmSp4suAFVsQvbHEx6fa4iztu+n6c=";
   };
 
   CXXFLAGS = [
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.roguetemple.com/z/hyper/";
     description = "A roguelike game set in hyperbolic geometry";
+    mainProgram = "hyperrogue";
     maintainers = with maintainers; [ rardiol ];
     license = licenses.gpl2;
     platforms = platforms.all;

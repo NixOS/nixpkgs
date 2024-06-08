@@ -76,6 +76,7 @@ let
 
     buildHaskellPackages = true;
     buildPackages = true;
+    buildFreebsd = true;
     generateOptparseApplicativeCompletions = true;
 
     callPackage = true;

@@ -1,4 +1,10 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, unrar }:
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  unrar,
+}:
 
 buildPythonPackage rec {
   pname = "unrardll";

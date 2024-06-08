@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.35.1";
+  version = "3.37.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "task";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HFjoLzGF62noA9NQk1Delq6vOcuTZzsyq6kH6QtR7zI=";
+    hash = "sha256-yVQR7D3zpReBlYyuZNMBVs3lgWBR54doMUjRMhfgUJw=";
   };
 
-  vendorHash = "sha256-HhnherRx5YQn4ArcavVZutze9usYP+PRI07lEXyw8a0=";
+  vendorHash = "sha256-iugFWBIKt/Rm5ccQnIFR75P1AVZbbFhWN97dvr8DoBs=";
 
   doCheck = false;
 

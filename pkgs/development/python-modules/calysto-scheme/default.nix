@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, metakernel
-, pytestCheckHook
-, yasi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  metakernel,
+  pytestCheckHook,
+  yasi,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     metakernel
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "calysto_scheme" ];
 

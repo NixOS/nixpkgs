@@ -197,6 +197,11 @@ let
     ];
     qtwebkit = [
       (fetchpatch {
+        name = "qtwebkit-python39-json.patch";
+        url = "https://github.com/qtwebkit/qtwebkit/commit/78360c01c796b6260bf828bc9c8a0ef73c5132fd.patch";
+        sha256 = "yCX/UL666BPxjnxT6rIsUrJsPcSWHhZwMFJfuHhbkhk=";
+      })
+      (fetchpatch {
         name = "qtwebkit-bison-3.7-build.patch";
         url = "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
         sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
@@ -279,7 +284,11 @@ let
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
       qtpim = callPackage ../modules/qtpim.nix {};
       qtpositioning = callPackage ../modules/qtpositioning.nix {};
+      qtpurchasing = callPackage ../modules/qtpurchasing.nix {
+        inherit (darwin.apple_sdk_11_0.frameworks) Foundation StoreKit;
+      };
       qtquick1 = null;
+      qtquick3d = callPackage ../modules/qtquick3d.nix { };
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
       qtremoteobjects = callPackage ../modules/qtremoteobjects.nix {};

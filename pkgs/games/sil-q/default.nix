@@ -56,6 +56,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A roguelike game set in the First Age of Middle-earth";
+    mainProgram = "sil-q";
     longDescription = ''
       A game of adventure set in the First Age of Middle-earth, when the world still
       rang with Elven song and gleamed with Dwarven mail.

@@ -1,28 +1,29 @@
-{ lib
-, absl-py
-, buildPythonPackage
-, cached-property
-, etils
-, fetchPypi
-, flit-core
-, importlib-resources
-, jax
-, jaxlib
-, msgpack
-, nest-asyncio
-, numpy
-, protobuf
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tensorstore
-, typing-extensions
+{
+  lib,
+  absl-py,
+  buildPythonPackage,
+  cached-property,
+  etils,
+  fetchPypi,
+  flit-core,
+  importlib-resources,
+  jax,
+  jaxlib,
+  msgpack,
+  nest-asyncio,
+  numpy,
+  protobuf,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tensorstore,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.5.5";
+  version = "0.5.9";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,14 +31,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "orbax_checkpoint";
     inherit version;
-    hash = "sha256-zry5byLxFzah+e52x4yIi6roU3Jox/9mY62cujB2xlU=";
+    hash = "sha256-H96IkUM3IxV79uddNBCU0dq+0dvPx8/Ps4HeCItGi2A=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     absl-py
     cached-property
     etils
@@ -60,6 +59,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "orbax"
+    "orbax.checkpoint"
   ];
 
   disabledTestPaths = [
@@ -73,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/google/orbax/tree/main/checkpoint";
     changelog = "https://github.com/google/orbax/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [fab ];
+    maintainers = with maintainers; [ fab ];
   };
 }

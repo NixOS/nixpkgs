@@ -50,6 +50,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Nginx configuration static analyzer";
+    mainProgram = "gixy";
     longDescription = ''
       Gixy is a tool to analyze Nginx configuration.
       The main goal of Gixy is to prevent security misconfiguration and automate flaw detection.

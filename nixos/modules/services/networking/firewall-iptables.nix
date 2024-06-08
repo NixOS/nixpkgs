@@ -260,7 +260,7 @@ in
         type = types.lines;
         default = "";
         example = "iptables -A INPUT -p icmp -j ACCEPT";
-        description = lib.mdDoc ''
+        description = ''
           Additional shell commands executed as part of the firewall
           initialisation script.  These are executed just before the
           final "reject" firewall rule is added, so they can be used
@@ -274,7 +274,7 @@ in
         type = types.lines;
         default = "";
         example = "iptables -P INPUT ACCEPT";
-        description = lib.mdDoc ''
+        description = ''
           Additional shell commands executed as part of the firewall
           shutdown script.  These are executed just after the removal
           of the NixOS input rule, or if the service enters a failed

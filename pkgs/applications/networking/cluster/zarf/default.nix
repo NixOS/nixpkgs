@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "zarf";
-  version = "0.32.5";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "defenseunicorns";
     repo = "zarf";
     rev = "v${version}";
-    hash = "sha256-uItOFBvxre7GHgASfTILkFkGddzISNciIpyQhsnyQGY=";
+    hash = "sha256-o3sfvzUCCW7hwNDrWH1IiRyZHkVnxffJdLS8BqzD5Ng=";
   };
 
-  vendorHash = "sha256-ZwcyUteDgR9mNVE3UVqHwHzE0bkxE3voxk3b3Ie4Els=";
+  vendorHash = "sha256-Co9xKC7J0WGoaYxa+YukrP+6aOuhweZyXaH5wD97ioA=";
   proxyVendor = true;
 
   preBuild = ''
@@ -28,6 +28,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "DevSecOps for Air Gap & Limited-Connection Systems. https://zarf.dev";
+    mainProgram = "zarf";
     homepage = "https://github.com/defenseunicorns/zarf.git";
     license = licenses.asl20;
     maintainers = with maintainers; [ ragingpastry ];

@@ -11,9 +11,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+  ];
+
   meta = with lib; {
     homepage = "http://libndp.org/";
     description = "Library for Neighbor Discovery Protocol";
+    mainProgram = "ndptool";
     platforms = platforms.linux;
     maintainers = [ ];
     license = licenses.lgpl21;

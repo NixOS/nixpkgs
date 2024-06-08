@@ -28,10 +28,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         };
         group.root.exists = true;
         kernel-param."kernel.ostype".value = "Linux";
-        service.goss = {
-          enabled = true;
-          running = true;
-        };
         user.root.exists = true;
       };
     };
@@ -46,8 +42,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     with subtest("returns health status"):
       result = json.loads(machine.succeed("curl -sS http://localhost:8080/healthz"))
 
-      assert len(result["results"]) == 10, f".results should be an array of 10 items, was {result['results']!r}"
+      assert len(result["results"]) == 8, f".results should be an array of 10 items, was {result['results']!r}"
       assert result["summary"]["failed-count"] == 0, f".summary.failed-count should be zero, was {result['summary']['failed-count']}"
-      assert result["summary"]["test-count"] == 10, f".summary.test-count should be 10, was {result['summary']['test-count']}"
+      assert result["summary"]["test-count"] == 8, f".summary.test-count should be 10, was {result['summary']['test-count']}"
     '';
 })

@@ -1,4 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, numpy, future, spglib, glibcLocales, pytest, scipy }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  numpy,
+  future,
+  spglib,
+  glibcLocales,
+  pytest,
+  scipy,
+}:
 
 buildPythonPackage rec {
   pname = "seekpath";
@@ -16,7 +27,12 @@ buildPythonPackage rec {
   LC_ALL = "en_US.utf-8";
 
   # scipy isn't listed in install_requires, but used in package
-  propagatedBuildInputs = [ numpy spglib future scipy ];
+  propagatedBuildInputs = [
+    numpy
+    spglib
+    future
+    scipy
+  ];
 
   nativeBuildInputs = [ glibcLocales ];
 
@@ -34,4 +50,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

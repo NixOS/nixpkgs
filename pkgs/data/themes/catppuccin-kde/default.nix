@@ -21,19 +21,19 @@ in
 
 stdenvNoCC.mkDerivation rec {
   pname = "kde";
-  version = "0.2.4";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-w77lzeSisx/PPxctMJKIdRJenq0s8HwR8gLmgNh4SH8=";
+    hash = "sha256-pfG0L4eSXLYLZM8Mhla4yalpEro74S9kc0sOmQtnG3w=";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/michaelBelsanti/catppuccin-kde/commit/81a8edb3c24bd6af896c92b5051e09af97d69c51.patch";
-      hash = "sha256-cb4/dQ52T+H8UqXEgExblmnMfxwO0Y1BrjMCay/EAkI=";
+      url = "https://github.com/GiggleSquid/catppuccin-kde/commit/f0291c17d2e4711b0d0aac00e3dbb94ee89b4a82.patch";
+      hash = "sha256-iD+mEX2LRFmrCwLr3VAs6kzcTuZ231TKDn+U188iOss=";
     })
   ];
 
@@ -57,6 +57,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Soothing pastel theme for KDE";
     homepage = "https://github.com/catppuccin/kde";
     license = licenses.mit;
-    maintainers = with maintainers; [ michaelBelsanti ];
+    maintainers = with maintainers; [ michaelBelsanti gigglesquid ];
   };
 }

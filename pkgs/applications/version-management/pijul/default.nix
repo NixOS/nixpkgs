@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "1.0.0-beta.8";
+  version = "1.0.0-beta.9";
 
   src = fetchCrate {
     inherit version pname;
-    hash = "sha256-BQic+E+SOfZYHJcYMaUmfjlIfop0YcVcASSjtnRtwD4=";
+    hash = "sha256-jy0mzgLw9iWuoWe2ictMTL3cHnjJ5kzs6TAK+pdm28g=";
   };
 
-  cargoHash = "sha256-D5P9pizerJiZK4UhCKEY1DXvaBMiWBXGu6Azlv6AjQA=";
+  cargoHash = "sha256-iXGvb4qmZK7Sjbf/Jkyzj+nhpZFV3ngjtJfz6x/8z2s=";
 
   doCheck = false;
   nativeBuildInputs = [ installShellFiles pkg-config ];

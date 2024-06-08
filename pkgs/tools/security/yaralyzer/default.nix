@@ -3,31 +3,16 @@
 , fetchFromGitHub
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      yara-python = super.yara-python.overridePythonAttrs (oldAttrs: rec {
-        version = "4.2.3";
-        src = fetchFromGitHub {
-          owner = "VirusTotal";
-          repo = "yara-python";
-          rev = "v${version}";
-          hash = "sha256-spUQuezQMqaG1hboM0/Gs7siCM6x0b40O+sV7qGGBng=";
-        };
-      });
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "yaralyzer";
-  version = "0.9.3";
+  version = "0.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "michelcrypt4d4mus";
     repo = "yaralyzer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KGQNonzAZp8c0a3Rjb1WfsEkx5srgRzZfGR3gfNEdzY=";
+    hash = "sha256-rDb09XJOGWNARR0hhQQ91KXWepsLyR2a6/o3jagh6nA=";
   };
 
   pythonRelaxDeps = [
@@ -35,12 +20,12 @@ python.pkgs.buildPythonApplication rec {
     "rich"
   ];
 
-  nativeBuildInputs = with python.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     chardet
     python-dotenv
     rich
@@ -52,12 +37,12 @@ python.pkgs.buildPythonApplication rec {
     "yaralyzer"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to visually inspect and force decode YARA and regex matches";
     homepage = "https://github.com/michelcrypt4d4mus/yaralyzer";
-    changelog = "https://github.com/michelcrypt4d4mus/yaralyzer/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/michelcrypt4d4mus/yaralyzer/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "yaralyze";
   };
 }

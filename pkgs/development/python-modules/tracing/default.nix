@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,6 @@ buildPythonPackage rec {
     homepage = "https://liw.fi/tracing/";
     description = "Python debug logging helper";
     license = licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
   };
-
 }

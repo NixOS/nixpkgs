@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, graphviz
-, jupyter
-, matplotlib
-, networkx
-, opt-einsum
-, pandas
-, pillow
-, pyro-api
-, pythonOlder
-, torch
-, scikit-learn
-, seaborn
-, setuptools
-, torchvision
-, tqdm
-, wget
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  graphviz,
+  jupyter,
+  matplotlib,
+  networkx,
+  opt-einsum,
+  pandas,
+  pillow,
+  pyro-api,
+  pythonOlder,
+  torch,
+  scikit-learn,
+  seaborn,
+  setuptools,
+  torchvision,
+  tqdm,
+  wget,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-QfTABRWVaCgPvFEWSJYKmKKxpBACfYvQpDIgrJsQLN8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyro-api
@@ -74,6 +73,9 @@ buildPythonPackage rec {
     homepage = "http://pyro.ai";
     changelog = "https://github.com/pyro-ppl/pyro/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ teh georgewhewell ];
+    maintainers = with maintainers; [
+      teh
+      georgewhewell
+    ];
   };
 }

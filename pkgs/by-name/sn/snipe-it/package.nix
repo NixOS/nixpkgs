@@ -8,16 +8,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "snipe-it";
-  version = "6.3.3";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "snipe";
     repo = "snipe-it";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ePE55mK8woopNuRXox51I0sJGBmjF6XDfjE+k+ncoJ0=";
+    hash = "sha256-wNHFFqi1WNTzI3xv1/aXTPpVXe7oxiTqWMEYhplNM9A=";
   };
 
-  vendorHash = "sha256-wO+hKttiI7T7C+4oSl8G0I4pQEfZpXjYspUhoaaLrAQ=";
+  vendorHash = "sha256-KkFoc/fqYVgA5Vv6oEk+1/Rcj9VA52ZnH5O5qmLhmE4=";
 
   postInstall = ''
     snipe_it_out="$out/share/php/snipe-it"
@@ -53,7 +53,7 @@ php.buildComposerProject (finalAttrs: {
       Details for snipe-it can be found on the official website at https://snipeitapp.com/.
     '';
     homepage = "https://snipeitapp.com/";
-    changelog = "https://github.com/snipe/snipe-it/releases/tag/v${version}";
+    changelog = "https://github.com/snipe/snipe-it/releases/tag/v${finalAttrs.version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ yayayayaka ];
     platforms = platforms.linux;

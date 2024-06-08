@@ -32,15 +32,16 @@
 , systemd
 , xdg-utils
 , xorg
+, libGL
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tidal-hifi";
-  version = "5.9.0";
+  version = "5.13.1";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
-    sha256 = "sha256-t79GNCqY99JfCT+4wO3CTtLXFdKQudMw4pZNiJzOufo=";
+    sha256 = "sha256-TnvVm0qjm41if90+f9YtO8wR6NYg6oUZbZd0RiUU33M=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
@@ -84,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXScrnSaver
     xorg.libxshmfence
     xorg.libXtst
+    libGL
   ];
 
   runtimeDependencies =

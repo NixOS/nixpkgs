@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cargo
-, fetchFromGitHub
-, frelatage
-, libiconv
-, maturin
-, pytestCheckHook
-, pythonOlder
-, rustc
-, rustPlatform
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cargo,
+  fetchFromGitHub,
+  frelatage,
+  libiconv,
+  maturin,
+  pytestCheckHook,
+  pythonOlder,
+  rustc,
+  rustPlatform,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-OXlfycJB1IrW2Zq0xPDGjjwCdRTWtX/ixPGWcd+YjAg=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
@@ -41,23 +40,15 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   passthru.optional-dependencies = {
-    fuzz = [
-      frelatage
-    ];
+    fuzz = [ frelatage ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "base2048"
-  ];
+  pythonImportsCheck = [ "base2048" ];
 
   meta = with lib; {
     description = "Binary encoding with base-2048 in Python with Rust";

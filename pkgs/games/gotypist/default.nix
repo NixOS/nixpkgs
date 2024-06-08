@@ -15,6 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A touch-typing tutor";
+    mainProgram = "gotypist";
     longDescription = ''
       A simple touch-typing tutor that follows Steve Yegge's methodology of
       going in fast, slow, and medium cycles.

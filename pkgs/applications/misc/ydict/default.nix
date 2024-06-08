@@ -36,6 +36,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Yet another command-line Youdao Chinese dictionary";
+    mainProgram = "ydict";
     homepage = "https://github.com/TimothyYe/ydict";
     license = licenses.mit;
     maintainers = with maintainers; [ zendo ];

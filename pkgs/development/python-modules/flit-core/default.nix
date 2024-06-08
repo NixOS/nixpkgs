@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, flit
+{
+  lib,
+  buildPythonPackage,
+  flit,
 }:
 
 buildPythonPackage rec {

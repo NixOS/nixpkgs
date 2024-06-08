@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, hatchling
-, opentelemetry-api
-, protobuf
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  hatchling,
+  opentelemetry-api,
+  protobuf,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
@@ -16,17 +17,11 @@ buildPythonPackage {
 
   sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-proto";
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    protobuf
-  ];
+  dependencies = [ protobuf ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "opentelemetry.proto" ];
 

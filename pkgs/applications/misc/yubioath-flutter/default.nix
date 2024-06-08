@@ -1,5 +1,5 @@
 { lib
-, flutter
+, flutter319
 , python3
 , fetchFromGitHub
 , pcre2
@@ -11,7 +11,7 @@
 , removeReferencesTo
 }:
 
-flutter.buildFlutterApplication rec {
+flutter319.buildFlutterApplication rec {
   pname = "yubioath-flutter";
   version = "6.4.0";
 
@@ -84,6 +84,7 @@ flutter.buildFlutterApplication rec {
 
   meta = with lib; {
     description = "Yubico Authenticator for Desktop";
+    mainProgram = "yubioath-flutter";
     homepage = "https://github.com/Yubico/yubioath-flutter";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];

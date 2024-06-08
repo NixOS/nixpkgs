@@ -4,7 +4,7 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "check-jsonschema";
-  version = "0.28.0";
+  version = "0.28.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -13,7 +13,7 @@ buildPythonApplication rec {
     owner = "python-jsonschema";
     repo = "check-jsonschema";
     rev = "refs/tags/${version}";
-    hash = "sha256-qcY846y8xLEsPfdtzoOfxo5gdggH6Dn3QkQOY7kMwm0=";
+    hash = "sha256-7EHx5XQ3sthxKcD+9ujo5ZXWQ7tZx/f7eN9OiK4k7mc=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +41,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A jsonschema CLI and pre-commit hook";
+    mainProgram = "check-jsonschema";
     homepage = "https://github.com/python-jsonschema/check-jsonschema";
     changelog = "https://github.com/python-jsonschema/check-jsonschema/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;

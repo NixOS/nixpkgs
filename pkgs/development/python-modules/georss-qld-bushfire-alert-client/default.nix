@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, georss-client
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  georss-client,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,21 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-ajCw1m7Qm1kZE/hOsBzFXPWAxl/pFD8pOOQo6qvachE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    georss-client
-  ];
+  propagatedBuildInputs = [ georss-client ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "georss_qld_bushfire_alert_client"
-  ];
+  pythonImportsCheck = [ "georss_qld_bushfire_alert_client" ];
 
   meta = with lib; {
     description = "Python library for accessing Queensland Bushfire Alert feed";

@@ -17,15 +17,15 @@
 , wrapGAppsHook4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "forge-sparks";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
-    repo = pname;
-    rev = version;
-    hash = "sha256-kUvUAJLCqIQpjm8RzAZaHVkdDCD9uKSQz9cYN60xS+4=";
+    repo = "forge-sparks";
+    rev = finalAttrs.version;
+    hash = "sha256-1Aq9Bv1UEckoA9IkQ9++rM6623GD41hgBJoeXKr2ipM=";
     fetchSubmodules = true;
   };
 
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/rafaelmardojai/forge-sparks/releases/tag/${finalAttrs.version}";
     description = "Get Git forges notifications";
     homepage = "https://github.com/rafaelmardojai/forge-sparks";
-    changelog = "https://github.com/rafaelmardojai/forge-sparks/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ michaelgrahamevans ];
     mainProgram = "forge-sparks";
+    maintainers = with maintainers; [ michaelgrahamevans ];
     platforms = platforms.linux;
   };
-}
+})

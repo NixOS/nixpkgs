@@ -10,9 +10,16 @@
 , useProprietaryAssets ? true
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    and
+    licenses
+    maintainers
+    optional
+    optionalString
+    platforms
+    ;
+
   pname = "koboredux";
   version = "0.7.5.1";
 
@@ -75,6 +82,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A frantic 80's style 2D shooter, similar to XKobo and Kobo Deluxe" +
       optionalString (!useProprietaryAssets) " (built without proprietary assets)";
+    mainProgram = "kobord";
     longDescription = ''
       Kobo Redux is a frantic 80's style 2D shooter, inspired by the look and
       feel of 90's arcade cabinets. The gameplay is fast and unforgiving,

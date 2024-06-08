@@ -1,15 +1,16 @@
-{ lib
-, aioesphomeapi
-, bleak
-, bluetooth-data-tools
-, buildPythonPackage
-, fetchFromGitHub
-, habluetooth
-, lru-dict
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aioesphomeapi,
+  bleak,
+  bluetooth-data-tools,
+  buildPythonPackage,
+  fetchFromGitHub,
+  habluetooth,
+  lru-dict,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
       --replace " --cov=bleak_esphome --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aioesphomeapi
@@ -48,9 +47,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "bleak_esphome"
-  ];
+  pythonImportsCheck = [ "bleak_esphome" ];
 
   meta = with lib; {
     description = "Bleak backend of ESPHome";

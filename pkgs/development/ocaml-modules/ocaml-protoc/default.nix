@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage
+{ lib, buildDunePackage
 , pbrt
 , stdlib-shims
 }:

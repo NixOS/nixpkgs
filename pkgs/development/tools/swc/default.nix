@@ -24,6 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Rust-based platform for the Web";
+    mainProgram = "swc";
     homepage = "https://github.com/swc-project/swc";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya kashw2 ];

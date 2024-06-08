@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.marutan.net/rpcemu/index.php";
     description = "Risc PC Emulator";
+    mainProgram = "rpcemu-interpreter";
     longDescription = ''
       RPCEmu is an emulator of classic Acorn computer systems, such as the Risc
       PC and A7000. It runs on multiple platforms including Windows, Linux and

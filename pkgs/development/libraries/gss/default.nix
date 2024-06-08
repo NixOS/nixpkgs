@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.gnu.org/software/gss/";
     description = "Generic Security Service";
+    mainProgram = "gss";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.all;

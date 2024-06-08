@@ -13,7 +13,6 @@
 , gmp
 , gfan
 , python3
-, flintqs
 , eclib
 , ntl
 , ecm
@@ -40,7 +39,6 @@ let
     gfan
     maxima
     eclib
-    flintqs
     ntl
     ecm
   ];

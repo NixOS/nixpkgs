@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, keystoneauth1
-, oslo-i18n
-, oslo-serialization
-, oslo-utils
-, pbr
-, requests
-, prettytable
-, requests-mock
-, simplejson
-, stestr
-, stevedore
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  keystoneauth1,
+  oslo-i18n,
+  oslo-serialization,
+  oslo-utils,
+  pbr,
+  requests,
+  prettytable,
+  requests-mock,
+  simplejson,
+  stestr,
+  stevedore,
 }:
 
 buildPythonPackage rec {
@@ -51,6 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "OpenStack Block Storage API Client Library";
+    mainProgram = "cinder";
     homepage = "https://github.com/openstack/python-cinderclient";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

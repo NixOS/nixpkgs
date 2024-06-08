@@ -20,6 +20,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.openrsync.org/";
     description = "BSD-licensed implementation of rsync";
+    mainProgram = "openrsync";
     license = licenses.isc;
     maintainers = with maintainers; [ fgaz ];
     # https://github.com/kristapsdz/openrsync#portability

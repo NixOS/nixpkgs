@@ -27,13 +27,13 @@ lib.checkListOfEnum "${pname}: theme variants" [
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2023-07-03";
+  version = "2024-05-28";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-lq6d3BForrvzEJYeEMQZplvn/p6dPjggTToAU9UcPoM=";
+    hash = "sha256-60pz/ET3jorEui31Aq6I3LMTz0djwWUv7poEI0USzJw=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

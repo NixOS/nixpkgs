@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, installShellFiles
-, mock
-, scripttest
-, setuptools
-, virtualenv
-, wheel
-, pretend
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  installShellFiles,
+  mock,
+  scripttest,
+  setuptools,
+  virtualenv,
+  wheel,
+  pretend,
+  pytest,
 
-# docs
-, sphinx
+  # docs
+  sphinx,
 
-# coupled downsteam dependencies
-, pip-tools
+  # coupled downsteam dependencies
+  pip-tools,
 }:
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "23.3.1";
+  version = "24.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-mJesZxFyZkGTR1s8/C88eWprW6WVGlwORXoKXc6NnoM=";
+    hash = "sha256-yojk2T5wuPkS1OKusilj253AT+xyKwXCWKBNUEH2Mgo=";
   };
 
   postPatch = ''
@@ -71,7 +72,13 @@ buildPythonPackage rec {
     cd ..
   '';
 
-  nativeCheckInputs = [ mock scripttest virtualenv pretend pytest ];
+  nativeCheckInputs = [
+    mock
+    scripttest
+    virtualenv
+    pretend
+    pytest
+  ];
 
   # Pip wants pytest, but tests are not distributed
   doCheck = false;
@@ -85,7 +92,9 @@ buildPythonPackage rec {
       --zsh <($out/bin/pip completion --zsh --no-cache-dir)
   '';
 
-  passthru.tests = { inherit pip-tools; };
+  passthru.tests = {
+    inherit pip-tools;
+  };
 
   meta = {
     description = "The PyPA recommended tool for installing Python packages";

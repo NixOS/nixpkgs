@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo command to create the README.md from your crate's documentation";
+    mainProgram = "cargo-rdme";
     homepage = "https://github.com/orium/cargo-rdme";
     changelog = "https://github.com/orium/cargo-rdme/blob/v${version}/release-notes.md";
     license = with licenses; [ mpl20 ];

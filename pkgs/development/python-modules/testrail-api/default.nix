@@ -1,43 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, responses
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  responses,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "testrail-api";
-  version = "1.12.1";
+  version = "1.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tolstislon";
     repo = "testrail-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-lIlTrAdNtBJdwiSFwpcHA2e+fRC+MbHS0PX7prAN+RY=";
+    hash = "sha256-NGdNpNJ9ejwneSacNmifGJ8TMUuBqMu9tHTyLxTB5Uk=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "setuptools_scm==7.1.0" "setuptools_scm"
+  '';
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook
     responses
   ];
 
-  pythonImportsCheck = [
-    "testrail_api"
-  ];
+  pythonImportsCheck = [ "testrail_api" ];
 
   meta = with lib; {
     description = "A Python wrapper of the TestRail API";

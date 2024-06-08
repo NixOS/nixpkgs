@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Containerize your development and continuous integration environments";
+    mainProgram = "toast";
     homepage = "https://github.com/stepchowfun/toast";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];

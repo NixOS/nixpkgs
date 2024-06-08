@@ -19,11 +19,11 @@ in
 
   options = {
     services.dante = {
-      enable = mkEnableOption (lib.mdDoc "Dante SOCKS proxy");
+      enable = mkEnableOption "Dante SOCKS proxy";
 
       config = mkOption {
         type        = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Contents of Dante's configuration file.
           NOTE: user.privileged, user.unprivileged and logoutput are set by the service.
         '';

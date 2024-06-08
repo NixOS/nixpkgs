@@ -12,10 +12,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       services.xserver.displayManager = {
         gdm.enable = true;
         gdm.debug = true;
-        autoLogin = {
-          enable = true;
-          user = "alice";
-        };
+      };
+
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = "alice";
       };
 
       services.xserver.desktopManager.gnome.enable = true;

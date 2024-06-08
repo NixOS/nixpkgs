@@ -11,6 +11,7 @@ in
   src = librewolf-src.firefox;
   requireSigning = false;
   allowAddonSideload = true;
+  branding = "browser/branding/librewolf";
   inherit (librewolf-src) extraConfigureFlags extraPatches extraPostPatch extraPassthru;
 
   meta = {

@@ -13,11 +13,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-4qU5hP8LB9/bWuRIa7ubIcyo598kNAlsyb8bcow1C8s=";
   };
 
+  postPatch = ''
+    # Fix jit autodetection:
+    #   https://github.com/PCRE2Project/pcre2/pull/396
+    # Applying manually to avoid fetchpatch and autoreconfHook.
+    # TODO: remove once 10.44 is released
+    substituteInPlace configure --replace-fail \
+      '#include "src/sljit/sljitConfigInternal.h"' \
+      '#include "src/sljit/sljitConfigCPU.h"'
+  '';
+
   configureFlags = [
     "--enable-pcre2-16"
     "--enable-pcre2-32"
     # only enable jit on supported platforms which excludes Apple Silicon, see https://github.com/zherczeg/sljit/issues/51
-    "--enable-jit=${if stdenv.hostPlatform.isS390x then "no" else "auto"}"
+    "--enable-jit=${if stdenv.hostPlatform.isS390x || stdenv.hostPlatform.isLoongArch64 then "no" else "auto"}"
   ]
   # fix pcre jit in systemd units that set MemoryDenyWriteExecute=true like gitea
   ++ lib.optional withJitSealloc "--enable-jit-sealloc";

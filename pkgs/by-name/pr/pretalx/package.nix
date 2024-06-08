@@ -3,6 +3,7 @@
 , gettext
 , python3
 , fetchFromGitHub
+, plugins ? [ ]
 , nixosTests
 }:
 
@@ -38,10 +39,11 @@ let
 
   meta = with lib; {
     description = "Conference planning tool: CfP, scheduling, speaker management";
+    mainProgram = "pretalx-manage";
     homepage = "https://github.com/pretalx/pretalx";
     changelog = "https://docs.pretalx.org/en/latest/changelog.html";
     license = licenses.asl20;
-    maintainers = teams.c3d2.members;
+    maintainers = with maintainers; [ hexa] ++ teams.c3d2.members;
     platforms = platforms.linux;
   };
 
@@ -78,6 +80,23 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
+  ] ++ (with python.pkgs; [
+    pythonRelaxDepsHook
+    setuptools
+  ]);
+
+  pythonRelaxDeps = [
+    "celery"
+    "css-inline"
+    "cssutils"
+    "django-csp"
+    "django-filter"
+    "django-hierarkey"
+    "markdown"
+    "pillow"
+    "python-dateutil"
+    "reportlab"
+    "rules"
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -115,7 +134,7 @@ python.pkgs.buildPythonApplication rec {
     vobject
     whitenoise
     zxcvbn
-  ] ++ beautifulsoup4.optional-dependencies.lxml;
+  ] ++ beautifulsoup4.optional-dependencies.lxml ++ plugins;
 
   passthru.optional-dependencies = {
     mysql = with python.pkgs; [
@@ -193,6 +212,12 @@ python.pkgs.buildPythonApplication rec {
     tests = {
       inherit (nixosTests) pretalx;
     };
+    plugins = lib.recurseIntoAttrs (
+      lib.packagesFromDirectoryRecursive {
+        inherit (python.pkgs) callPackage;
+        directory = ./plugins;
+      }
+    );
   };
 
   inherit meta;

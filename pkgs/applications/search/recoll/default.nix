@@ -70,11 +70,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.37.4";
+  version = "1.37.5";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-MQnXamW7L4hyMbZDmU7XAcLv5roHcfhFGzni8YbDtq0=";
+    hash = "sha256-vv2AMt6ufrfxRX2yF28X3E500MYP9hnGfDb3I9RdMVU=";
   };
 
   configureFlags = [
@@ -158,6 +158,8 @@ mkDerivation rec {
     done
     wrapProgram $out/share/recoll/filters/rclaudio.py \
       --prefix PYTHONPATH : $PYTHONPATH
+    wrapProgram $out/share/recoll/filters/rcljoplin.py \
+      --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
     wrapProgram $out/share/recoll/filters/rclimg \
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
   '' + lib.optionalString stdenv.isLinux ''

@@ -2,7 +2,7 @@
 , libXtst, libvorbis, hunspell, lzo, xz, bzip2, libiconv
 , qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , withCC ? true, opencc
 , withEpwing ? true, libeb
 , withExtraTiff ? true, libtiff
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       --replace "opencc.2" "opencc"
   '';
 
-  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook wrapGAppsHook3 ];
   buildInputs = [
     qtbase qtsvg qtwebkit qttools
     libvorbis hunspell xz lzo

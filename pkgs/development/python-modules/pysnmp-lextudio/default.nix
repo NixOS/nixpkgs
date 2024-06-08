@@ -1,35 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, pyasn1
-, pysmi-lextudio
-, pysnmpcrypto
+  # dependencies
+  pyasn1,
+  pysmi-lextudio,
+  pysnmpcrypto,
 
-# tests
-, pytestCheckHook
-, pytest-asyncio
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pysnmp-lextudio";
-  version = "6.0.6";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
-    rev = "v${version}";
-    hash = "sha256-Mbzpe2wVoW4m7hnfsdcSO/8uOgWl5f1sLLqvdpQP2gU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-iVej39OmTPiZL11+IetnqHaxFAhZ/YR7tjiRoc7pu8U=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     pyasn1
@@ -57,11 +56,11 @@ buildPythonPackage rec {
     # pysnmp.smi.error.MibNotFoundError
     "test_send_v3_trap_notification"
     "test_addAsn1MibSource"
+    "test_v1_walk"
+    "test_v2_walk"
   ];
 
-  pythonImportsCheck = [
-    "pysnmp"
-  ];
+  pythonImportsCheck = [ "pysnmp" ];
 
   meta = with lib; {
     description = "Python SNMP library";

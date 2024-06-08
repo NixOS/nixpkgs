@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
+    glib
     itstool
     desktop-file-utils
   ];
@@ -54,10 +55,13 @@ stdenv.mkDerivation rec {
     exiv2
   ];
 
+  strictDeps = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "gnome.${pname}";
+      freeze = true;
     };
   };
 

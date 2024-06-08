@@ -9,7 +9,7 @@
 
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "hax11";
-  version = "unstable-2023-09-25";
+  version = "0-unstable-2023-09-25";
 
   src = fetchFromGitHub {
     owner = "CyberShadow";
@@ -44,7 +44,7 @@ multiStdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/CyberShadow/hax11";
     description = "Hackbrary to Hook and Augment X11 protocol calls";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres cybershadow ];
     platforms = lib.platforms.linux;
   };
 })

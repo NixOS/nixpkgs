@@ -1,41 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nats-python";
   version = "0.8.0";
-  disabled = pythonOlder "3.6";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Gr1N";
     repo = "nats-python";
-    rev = version;
-    sha256 = "1j7skyxldir3mphvnsyhjxmf3cimv4h7n5v58jl2gff4yd0hdw7g";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7/AGQfPEuSeoRGUXeyDZNbLhapfQa7vhrSPHRruf+sg=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
 
   patches = [
     # Switch to poetry-core, https://github.com/Gr1N/nats-python/pull/19
     (fetchpatch {
       name = "use-poetry-core.patch";
       url = "https://github.com/Gr1N/nats-python/commit/71b25b324212dccd7fc06ba3914491adba22e83f.patch";
-      sha256 = "1fip1qpzk2ka7qgkrdpdr6vnrnb1p8cwapa51xp0h26nm7yis1gl";
+      hash = "sha256-9AUd/anWCAhuD0VdxRm6Ydlst8nttjwfPmqK+S8ON7o=";
     })
   ];
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  build-system = [ poetry-core ];
+
+  dependencies = [ setuptools ];
 
   # Tests require a running NATS server
   doCheck = false;
@@ -45,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for NATS messaging system";
     homepage = "https://github.com/Gr1N/nats-python";
+    changelog = "https://github.com/Gr1N/nats-python/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

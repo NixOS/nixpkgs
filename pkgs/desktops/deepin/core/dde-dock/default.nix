@@ -1,13 +1,12 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
 , qttools
 , pkg-config
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , qtbase
 , dtkwidget
 , qt5integration
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
     qttools
     pkg-config
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   dontWrapGApps = true;
 
@@ -81,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Deepin desktop-environment - dock module";
+    mainProgram = "dde-dock";
     homepage = "https://github.com/linuxdeepin/dde-dock";
     platforms = platforms.linux;
     license = licenses.lgpl3Plus;

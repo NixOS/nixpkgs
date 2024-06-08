@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-7jSz4qNxFJix+No9naqKEjnv3yVaISGBdCtqWJD6wDk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # upstream has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "grappelli_safe"
-  ];
+  pythonImportsCheck = [ "grappelli_safe" ];
 
   meta = with lib; {
     description = "A snapshot of django-grappelli for the Mezzanine CMS";

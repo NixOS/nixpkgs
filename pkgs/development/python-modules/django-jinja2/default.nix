@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, django
-, jinja2
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  django,
+  jinja2,
+  python,
 }:
 
 buildPythonPackage rec {

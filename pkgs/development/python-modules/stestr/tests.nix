@@ -1,6 +1,4 @@
-{  buildPythonPackage
-, stestr
-}:
+{ buildPythonPackage, stestr }:
 
 buildPythonPackage {
   pname = "stestr-tests";
@@ -19,9 +17,7 @@ buildPythonPackage {
     pythonOutputDistPhase() { touch $dist; }
   '';
 
-  nativeCheckInputs = [
-    stestr
-  ];
+  nativeCheckInputs = [ stestr ];
 
   checkPhase = ''
     export PATH=$out/bin:$PATH

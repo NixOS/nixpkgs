@@ -9,7 +9,6 @@
 , gtk3
 , libnotify
 , libxml2
-, gnome-online-accounts
 , colord
 , polkit
 , libxkbfile
@@ -20,7 +19,7 @@
 , libgudev
 , libwacom
 , gnome
-, wrapGAppsHook
+, wrapGAppsHook3
 , tzdata
 , glibc
 , libnma
@@ -59,7 +58,6 @@ stdenv.mkDerivation rec {
     colord
     libgudev
     libwacom
-    gnome-online-accounts
     tzdata
     networkmanager
     libnma
@@ -85,13 +83,15 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
+    # https://github.com/linuxmint/cinnamon-control-center/issues/326
+    "-Donlineaccounts=false"
   ];
 
   nativeBuildInputs = [
     pkg-config
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     python3
   ];
@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-control-center";
     description = "A collection of configuration plugins used in cinnamon-settings";
+    mainProgram = "cinnamon-control-center";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

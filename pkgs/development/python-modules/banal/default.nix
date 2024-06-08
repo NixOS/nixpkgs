@@ -1,6 +1,7 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
 buildPythonPackage rec {
   pname = "banal";
@@ -15,9 +16,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "banal"
-  ];
+  pythonImportsCheck = [ "banal" ];
 
   meta = with lib; {
     description = "Commons of banal micro-functions for Python";

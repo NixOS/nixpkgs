@@ -13,6 +13,7 @@
 , libunwind
 , libxcrypt
 , libyaml
+, rust-jemalloc-sys-unprefixed
 , Foundation
 , Security
 }:
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage rec {
     zlib
     libxcrypt
     libyaml
+    rust-jemalloc-sys-unprefixed
   ] ++ lib.optionals stdenv.isDarwin [
     readline
     libiconv

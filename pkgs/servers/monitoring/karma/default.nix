@@ -62,6 +62,7 @@ buildGoModule rec {
   meta = with lib; {
     changelog = "https://github.com/prymitive/karma/blob/${src.rev}/CHANGELOG.md";
     description = "Alert dashboard for Prometheus Alertmanager";
+    mainProgram = "karma";
     homepage = "https://karma-dashboard.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ nukaduka ];

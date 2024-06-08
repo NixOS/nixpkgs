@@ -1,7 +1,5 @@
 { lib
 , stdenv
-, fetchFromGitHub
-, fetchpatch
 , gprbuild-boot
 , which
 , gnat
@@ -40,6 +38,12 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
     "LIBRARY_TYPE=relocatable"
   ];
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
+    # update the install names of the output dylibs.
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
 
   # Fixes gprbuild being linked statically always. Based on the AUR's patch:
   # https://aur.archlinux.org/cgit/aur.git/plain/0001-Makefile-build-relocatable-instead-of-static-binary.patch?h=gprbuild&id=bac524c76cd59c68fb91ef4dfcbe427357b9f850

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, enum34
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  enum34,
 }:
 
 buildPythonPackage rec {
@@ -13,13 +14,15 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "0c6ea5026ded927c8c93c990b01c695257c1df446e45e549a158cfbc79e19ed6";
-
   };
 
-  propagatedBuildInputs = [ six enum34 ];
+  propagatedBuildInputs = [
+    six
+    enum34
+  ];
 
   # PyPI archive does not ship with tests
-  doCheck= false;
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/google/gin-config";

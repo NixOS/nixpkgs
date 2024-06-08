@@ -33,13 +33,13 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gplates";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "GPlates";
     repo = "GPlates";
     rev = "GPlates-${finalAttrs.version}";
-    hash = "sha256-BRvrqczGguE2z44ZboxeJxgWEA+t02XkzvU+yF4ki6s=";
+    hash = "sha256-3fEwm5EKK9RcRbnyUejgwfjdsXaujjZjoMbq/BbVMeM=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +67,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Desktop software for the interactive visualisation of plate-tectonics";
+    mainProgram = "gplates";
     homepage = "https://www.gplates.org";
     license = licenses.gpl2Only;
     platforms = platforms.all;

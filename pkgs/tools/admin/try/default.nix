@@ -18,6 +18,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib;{
     homepage = "https://github.com/binpash/try";
     description = "Lets you run a command and inspect its effects before changing your live system";
+    mainProgram = "try";
     maintainers = with maintainers; [ pasqui23 ];
     license = with licenses; [ mit ];
     platforms = platforms.linux;

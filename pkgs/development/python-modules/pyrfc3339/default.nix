@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, pytz
+  # dependencies
+  pytz,
 
-# tests
-, nose
+  # tests
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -24,24 +25,17 @@ buildPythonPackage rec {
     sha256 = "06jv7ar7lpvvk0dixzwdr3wgm0g1lipxs429s2z7knwwa7hwpf41";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pytz
-  ];
+  propagatedBuildInputs = [ pytz ];
 
   doCheck = pythonOlder "3.12";
 
-  nativeCheckInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ nose ];
 
   meta = with lib; {
     description = "Generate and parse RFC 3339 timestamps";
     homepage = "https://github.com/kurtraschke/pyRFC3339";
     license = licenses.mit;
   };
-
 }

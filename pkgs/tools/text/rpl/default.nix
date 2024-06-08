@@ -29,8 +29,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Replace strings in files";
+    mainProgram = "rpl";
     homepage = "https://github.com/rrthomas/rpl";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ cbley ];
   };
 }

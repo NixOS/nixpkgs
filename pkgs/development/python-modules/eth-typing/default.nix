@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, setuptools
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-JT/2bCPYFSRNt3V7QnHSAJR7HrZ1JpRKdU7gQpoYIn0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "eth_typing"
-  ];
+  pythonImportsCheck = [ "eth_typing" ];
 
   meta = with lib; {
     description = "Common type annotations for Ethereum Python packages";

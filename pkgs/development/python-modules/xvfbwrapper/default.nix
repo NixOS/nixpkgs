@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, xorgserver
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  xorgserver,
+  mock,
 }:
 
 buildPythonPackage rec {

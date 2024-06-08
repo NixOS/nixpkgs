@@ -6,4 +6,5 @@ mkKdeDerivation {
   pname = "kfind";
 
   extraBuildInputs = [qt5compat];
+  meta.mainProgram = "kfind";
 }

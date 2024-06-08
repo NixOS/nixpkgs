@@ -18,15 +18,16 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = [
     "beautifulsoup4"
     "dnspython"
+    "pyopenssl"
     "tqdm"
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     pythonRelaxDepsHook
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     dnspython
     pyopenssl
@@ -47,5 +48,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/guelfoweb/knock/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "knockpy";
   };
 }

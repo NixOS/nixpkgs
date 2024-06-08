@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, contexttimer
-, setuptools
-, versioneer
-, cython
-, numpy
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  contexttimer,
+  setuptools,
+  versioneer,
+  cython_0,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyrevolve";
-  version = "2.2.3";
+  version = "2.2.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "devitocodes";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-z1G8DXG06Capd87x02zqrtYyBrX4xmJP94t4bgaR2PE=";
+    hash = "sha256-fcIq/zuKO3W7K9N2E4f2Q6ZVcssZwN/n8o9cCOYmr3E=";
   };
 
   postPatch = ''
@@ -30,7 +31,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython
+    cython_0
     setuptools
     versioneer
   ];
@@ -40,17 +41,13 @@ buildPythonPackage rec {
     numpy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     rm -rf pyrevolve
   '';
 
-  pythonImportsCheck = [
-    "pyrevolve"
-  ];
+  pythonImportsCheck = [ "pyrevolve" ];
 
   meta = with lib; {
     homepage = "https://github.com/devitocodes/pyrevolve";

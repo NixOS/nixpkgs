@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A foreign function interface for bash";
+    mainProgram = "ctypes.sh";
     homepage = "https://github.com/taviso/ctypes.sh";
     license = licenses.mit;
     maintainers = with maintainers; [ tadeokondrak ];

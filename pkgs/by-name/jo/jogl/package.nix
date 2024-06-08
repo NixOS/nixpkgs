@@ -5,6 +5,7 @@
 , jdk11
 , git
 , xmlstarlet
+, stripJavaArchivesHook
 , xcbuild
 , udev
 , xorg
@@ -42,13 +43,6 @@ stdenv.mkDerivation {
     substituteInPlace gluegen/src/java/com/jogamp/common/util/IOUtil.java \
       --replace-fail '#!/bin/true' '#!${coreutils}/bin/true'
   ''
-  # set timestamp of files in jar to a fixed point in time
-  + ''
-    xmlstarlet ed --inplace \
-      --append //jar --type attr -n modificationtime --value 1980-01-01T00:00Z \
-      gluegen/make/{build.xml,gluegen-cpptasks-base.xml} \
-      jogl/make/{build.xml,build-nativewindow.xml,build-jogl.xml}
-  ''
   # prevent looking for native libraries in /usr/lib
   + ''
     substituteInPlace jogl/make/build-*.xml \
@@ -72,6 +66,7 @@ stdenv.mkDerivation {
     jdk11
     git
     xmlstarlet
+    stripJavaArchivesHook
   ] ++ lib.optionals stdenv.isDarwin [
     xcbuild
   ];

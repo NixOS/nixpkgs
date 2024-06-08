@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , trezor-udev-rules
 , AppKit
 }:
@@ -20,6 +21,13 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-wXgAmZEXdM4FcMCQbAs+ydXshCAMu7nl/yVv/3sqaXE=";
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/trezor/trezord-go/commit/616473d53a8ae49f1099e36ab05a2981a08fa606.patch";
+      hash = "sha256-yKTwgqWr4L6XEPV85A6D1wpRdpef8hkIbl4LrRmOyuo=";
+    })
+  ];
 
   propagatedBuildInputs = lib.optionals stdenv.isLinux [ trezor-udev-rules ]
     ++ lib.optionals stdenv.isDarwin [ AppKit ];

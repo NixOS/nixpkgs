@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pathspec
-, pythonOlder
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pathspec,
+  pythonOlder,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,21 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-qtEBr22yyj6WcSfyYr/4r0IuuMJ6chFFqnmb+uMfQPA=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    pathspec
-  ];
+  propagatedBuildInputs = [ pathspec ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "trailrunner"
-  ];
+  pythonImportsCheck = [ "trailrunner" ];
 
   meta = with lib; {
     description = "Module to walk paths and run things";

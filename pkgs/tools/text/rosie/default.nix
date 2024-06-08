@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://rosie-lang.org";
     description = "Tools for searching using parsing expression grammars";
+    mainProgram = "rosie";
     license = licenses.mit;
     maintainers = with maintainers; [ kovirobi ];
     platforms = with platforms; linux ++ darwin;

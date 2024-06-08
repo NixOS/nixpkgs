@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, git
-, hatchling
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  git,
+  hatchling,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-CTgQdI/gHbDUUfq88sGsJojK79Iy1O3pZwkLHBsH2fc=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     hatchling
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     "test_write"
   ];
 
-  pythonImportsCheck = [
-    "hatch_vcs"
-  ];
+  pythonImportsCheck = [ "hatch_vcs" ];
 
   meta = with lib; {
     changelog = "https://github.com/ofek/hatch-vcs/releases/tag/v${version}";

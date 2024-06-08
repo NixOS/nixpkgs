@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, zconfig
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  zconfig,
 }:
 
 buildPythonPackage rec {
@@ -24,5 +25,4 @@ buildPythonPackage rec {
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
   };
-
 }

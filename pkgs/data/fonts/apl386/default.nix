@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://abrudz.github.io/APL386/";
     description = "APL385 Unicode font evolved";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.all;
   };
 }

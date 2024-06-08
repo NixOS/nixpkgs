@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, ipython
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  ipython,
 }:
 
 buildPythonPackage rec {
@@ -21,11 +22,9 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools ];
-  propagatedBuildInputs = [
-    ipython
-  ];
+  propagatedBuildInputs = [ ipython ];
 
-  doCheck = false;  # no tests in package :(
+  doCheck = false; # no tests in package :(
   pythonImportsCheck = [ "jupyter_ui_poll" ];
 
   meta = with lib; {

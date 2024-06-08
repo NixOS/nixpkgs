@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, curtsies
-, cwcwidth
-, greenlet
-, jedi
-, pygments
-, pytestCheckHook
-, pythonOlder
-, pyperclip
-, pyxdg
-, requests
-, substituteAll
-, typing-extensions
-, urwid
-, watchdog
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  curtsies,
+  cwcwidth,
+  greenlet,
+  jedi,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  pyperclip,
+  pyxdg,
+  requests,
+  substituteAll,
+  typing-extensions,
+  urwid,
+  watchdog,
 }:
 
 buildPythonPackage rec {
@@ -48,13 +49,9 @@ buildPythonPackage rec {
       --replace "Exec=/usr/bin/bpython" "Exec=$out/bin/bpython"
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "bpython"
-  ];
+  pythonImportsCheck = [ "bpython" ];
 
   disabledTests = [
     # Check for syntax error ends with an AssertionError
@@ -65,6 +62,9 @@ buildPythonPackage rec {
     description = "A fancy curses interface to the Python interactive interpreter";
     homepage = "https://bpython-interpreter.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ flokli dotlambda ];
+    maintainers = with maintainers; [
+      flokli
+      dotlambda
+    ];
   };
 }

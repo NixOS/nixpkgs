@@ -7,18 +7,24 @@
 , hyprlang
 , librsvg
 , libzip
+, tomlplusplus
 , nix-update-script
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprcursor";
-  version = "0.1.4";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprcursor";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-m5I69a5t+xXxNMQrFuzKgPR6nrFiWDEDnEqlVwTy4C4=";
+    hash = "sha256-FIN1wMoyePBTtibCbaeJaoKNLuAYIGwLCWAYC1DJanw=";
   };
+
+  patches = [
+    # fix icon directories system search path
+    "${finalAttrs.src}/nix/dirs.patch"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -30,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     hyprlang
     librsvg
     libzip
+    tomlplusplus
   ];
 
   outputs = [

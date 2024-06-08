@@ -1,4 +1,12 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, zope-interface, twisted, greenlet }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPy3k,
+  zope-interface,
+  twisted,
+  greenlet,
+}:
 
 buildPythonPackage rec {
   pname = "python3-eventlib";
@@ -14,7 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-LFW3rCGa7A8tk6SjgYgjkLQ+72GE2WN8wG+XkXYTAoQ=";
   };
 
-  propagatedBuildInputs = [ zope-interface twisted greenlet ];
+  propagatedBuildInputs = [
+    zope-interface
+    twisted
+    greenlet
+  ];
 
   dontUseSetuptoolsCheck = true;
 

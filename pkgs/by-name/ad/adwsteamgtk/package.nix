@@ -12,15 +12,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "adwsteamgtk";
-  version = "0.6.9";
+  version = "0.6.11";
   # built with meson, not a python format
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "AdwSteamGtk";
-    rev = "v${version}";
-    hash = "sha256-aHJxgSb7oZTRrfFVYdLimwhSGzdRjGf7dGTRA+ANQiM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-f7+2gTpG5Ntgq+U2AkQihzSTrO+oMsLWxgxe4dVyz8A=";
   };
 
   buildInputs = [

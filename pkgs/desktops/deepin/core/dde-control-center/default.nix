@@ -6,7 +6,7 @@
 , qttools
 , doxygen
 , wrapQtAppsHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , dtkwidget
 , qt5integration
 , qt5platform-plugins
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     qttools
     doxygen
     wrapQtAppsHook
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   dontWrapGApps = true;
 
@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Control panel of Deepin Desktop Environment";
+    mainProgram = "dde-control-center";
     homepage = "https://github.com/linuxdeepin/dde-control-center";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

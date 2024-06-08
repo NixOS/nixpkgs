@@ -6,19 +6,19 @@
 
 buildGoModule rec {
   pname = "optimism";
-  version = "1.7.0";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "ethereum-optimism";
     repo = "optimism";
     rev = "op-node/v${version}";
-    hash = "sha256-ru6/PDgsQOpOjKSolk3US6dV/NMH/lWEuJf5lmuR4SI=";
+    hash = "sha256-LpkmNJqPe73qbTNvqxlDDTh9hD/H39ll3Rn2NEFEcg8=";
     fetchSubmodules = true;
   };
 
   subPackages = [ "op-node/cmd" "op-proposer/cmd" "op-batcher/cmd" ];
 
-  vendorHash = "sha256-BrlF8uwnD1hlrrpvc2JEsaPY4/+bGR1cXwjkkYANyiE=";
+  vendorHash = "sha256-2eVwGWw/z6ct3PA8fC0rBwkNaICd20llVE/9essF95Q=";
 
   buildInputs = [
     libpcap
