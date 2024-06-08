@@ -338,8 +338,8 @@ in
 
     # use nginx to serve the smokeping web service
     services.fcgiwrap.smokeping = mkIf cfg.webService {
-      user = cfg.user;
-      group = cfg.user;
+      process.user = cfg.user;
+      process.group = cfg.user;
     };
     services.nginx = mkIf cfg.webService {
       enable = true;
@@ -352,7 +352,7 @@ in
         locations."/smokeping.fcgi" = {
           extraConfig = ''
             include ${config.services.nginx.package}/conf/fastcgi_params;
-            fastcgi_pass unix:${config.services.fcgiwrap.smokeping.socketAddress};
+            fastcgi_pass unix:${config.services.fcgiwrap.smokeping.socket.address};
             fastcgi_param SCRIPT_FILENAME ${smokepingHome}/smokeping.fcgi;
             fastcgi_param DOCUMENT_ROOT ${smokepingHome};
           '';

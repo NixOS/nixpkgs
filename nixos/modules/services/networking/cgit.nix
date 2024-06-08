@@ -32,7 +32,7 @@ let
       fastcgi_split_path_info ^(${regexLocation cfg})(/.+)$;
       fastcgi_param PATH_INFO $fastcgi_path_info;
     ''
-    }fastcgi_pass unix:${config.services.fcgiwrap."cgit-${name}".socketAddress};
+    }fastcgi_pass unix:${config.services.fcgiwrap."cgit-${name}".socket.address};
   '';
 
   cgitrcLine = name: value: "${name}=${
