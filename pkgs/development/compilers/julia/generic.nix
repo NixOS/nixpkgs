@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     unzip
     curl
-    darwin.DarwinTools
     xcbuild
+    darwin.DarwinTools
   ];
 
   buildInputs = [
