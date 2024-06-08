@@ -20902,6 +20902,7 @@ with pkgs;
   };
 
   gdcm = callPackage ../development/libraries/gdcm {
+    inherit (darwin) DarwinTools;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
   };
 
@@ -38182,6 +38183,7 @@ with pkgs;
   osi = callPackage ../development/libraries/science/math/osi { };
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
+    inherit (darwin) DarwinTools;
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     python = python3;
     protobuf = protobuf_21;
