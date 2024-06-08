@@ -20,14 +20,10 @@ let
     else toString value;
 
   configFile = pkgs.writeText "davfs2.conf" (
-    if (cfg.settings != { }) then
-      (toINIWithGlobalSection {
-        mkSectionName = escapeString;
-        mkKeyValue = k: v: "${k} ${formatValue v}";
-      } cfg.settings)
-    else
-      cfg.extraConfig
-  );
+    toINIWithGlobalSection {
+      mkSectionName = escapeString;
+      mkKeyValue = k: v: "${k} ${formatValue v}";
+    } cfg.settings);
 in
 {
 
@@ -51,29 +47,6 @@ in
         member of this group in order to mount a davfs2 file system. Value must
         be given as name, not as numerical id.
       '';
-    };
-
-    extraConfig = mkOption {
-      type = lines;
-      default = "";
-      example = ''
-        proxy foo.bar:8080
-        use_locks 0
-
-        [/media/dav]
-        use_locks 1
-
-        [/home/otto/mywebspace]
-        gui_optimize 1
-      '';
-      description = ''
-        Extra lines appended to the configuration of davfs2.
-        See {manpage}`davfs2.conf(5)` for available settings.
-
-        **Note**: Please pass structured settings via
-        {option}`settings` instead, this option
-        will get deprecated in the future.
-      ''  ;
     };
 
     settings = mkOption {
@@ -108,21 +81,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    assertions = [
-      {
-        assertion = cfg.extraConfig != "" -> cfg.settings == { };
-        message = ''
-          services.davfs2.extraConfig and services.davfs2.settings cannot be used together.
-          Please prefer using services.davfs2.settings.
-        '';
-      }
-    ];
-
-    warnings = optional (cfg.extraConfig != "") ''
-      services.davfs2.extraConfig will be deprecated in future releases;
-      please use services.davfs2.settings instead.
-    '';
 
     environment.systemPackages = [ pkgs.davfs2 ];
     environment.etc."davfs2/davfs2.conf".source = configFile;
