@@ -1,11 +1,12 @@
-{ lib
-, callPackage
-, fetchurl
-, makeWrapper
-, nixosTests
-, stdenv
-, jre
-, unzip
+{
+  lib,
+  callPackage,
+  fetchurl,
+  makeWrapper,
+  nixosTests,
+  stdenv,
+  jre,
+  unzip,
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "geoserver";
@@ -19,10 +20,15 @@ stdenv.mkDerivation (finalAttrs: rec {
   patches = [
     # set GEOSERVER_DATA_DIR to current working directory if not provided
     ./data-dir.patch
+    # forward any JETTY_OPTS if that environment variable exists
+    ./forward-jetty-opts.patch
   ];
 
   sourceRoot = ".";
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   installPhase =
     let
@@ -48,28 +54,34 @@ stdenv.mkDerivation (finalAttrs: rec {
       runHook postInstall
     '';
 
-
   passthru =
     let
       geoserver = finalAttrs.finalPackage;
       extensions = lib.attrsets.filterAttrs (n: v: lib.isDerivation v) (callPackage ./extensions.nix { });
     in
     {
-      withExtensions = selector:
+      withExtensions =
+        selector:
         let
           selectedExtensions = selector extensions;
         in
-        geoserver.overrideAttrs (finalAttrs: previousAttrs: {
-          pname = previousAttrs.pname + "-with-extensions";
-          buildInputs = lib.lists.unique ((previousAttrs.buildInputs or [ ]) ++ lib.lists.concatMap (drv: drv.buildInputs) selectedExtensions);
-          postInstall = (previousAttrs.postInstall or "") + ''
-            for extension in ${builtins.toString selectedExtensions} ; do
-              cp -r $extension/* $out
-              # Some files are the same for all/several extensions. We allow overwriting them again.
-              chmod -R +w $out
-            done
-          '';
-        });
+        geoserver.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            pname = previousAttrs.pname + "-with-extensions";
+            buildInputs = lib.lists.unique (
+              (previousAttrs.buildInputs or [ ]) ++ lib.lists.concatMap (drv: drv.buildInputs) selectedExtensions
+            );
+            postInstall =
+              (previousAttrs.postInstall or "")
+              + ''
+                for extension in ${builtins.toString selectedExtensions} ; do
+                  cp -r $extension/* $out
+                  # Some files are the same for all/several extensions. We allow overwriting them again.
+                  chmod -R +w $out
+                done
+              '';
+          }
+        );
       tests.geoserver = nixosTests.geoserver;
       updateScript = ./update.sh;
     };
