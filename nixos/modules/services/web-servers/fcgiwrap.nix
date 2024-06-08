@@ -54,9 +54,13 @@ in {
       wantedBy = optional (cfg.socket.type != "unix") "multi-user.target";
 
       serviceConfig = {
-        ExecStart = "${pkgs.fcgiwrap}/sbin/fcgiwrap -c ${builtins.toString cfg.process.prefork} ${
-          optionalString (cfg.socket.type != "unix") "-s ${cfg.socket.type}:${cfg.socket.address}"
-        }";
+        ExecStart = ''
+          ${pkgs.fcgiwrap}/sbin/fcgiwrap ${cli.toGNUCommandLineShell {} ({
+            c = cfg.process.prefork;
+          } // (optionalAttrs (cfg.socket.type != "unix") {
+            s = "${cfg.socket.type}:${cfg.socket.address}";
+          }))}
+        '';
       } // (if cfg.process.user != null && cfg.process.group != null then {
         User = cfg.process.user;
         Group = cfg.process.group;
