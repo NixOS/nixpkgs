@@ -24,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-h4NzfS27+jWyHbegxF+pgN6JzJdVAoM16J6G/9uNJc4=";
   };
 
+  # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2277
+  prePatch = lib.optionalString (stdenv.isLinux && stdenv.isAarch64) ''
+    substituteInPlace unittest/algorithm/utils/CMakeLists.txt \
+      --replace-fail "add_pinocchio_unit_test(force)" ""
+  '';
+
   # example-robot-data models are used in checks.
   # Upstream provide them as git submodule, but we can use our own version instead.
   postPatch = ''
