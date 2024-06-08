@@ -20692,8 +20692,6 @@ with pkgs;
 
   flint3 = callPackage ../development/libraries/flint/3.nix { };
 
-  flite = callPackage ../development/libraries/flite { };
-
   fltk13 = callPackage ../development/libraries/fltk {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa OpenGL;
   };
