@@ -2,8 +2,8 @@
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkPackageOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) literalExpression mapAttrs optionalString versionAtLeast;
+  inherit (lib) mkDefault mkEnableOption mkPackageOption mkRenamedOptionModule mkForce mkIf mkMerge mkOption types;
+  inherit (lib) literalExpression mapAttrs optionalString optionals versionAtLeast;
 
   cfg = config.services.zabbixWeb;
   opt = options.services.zabbixWeb;
@@ -36,6 +36,10 @@ let
 
 in
 {
+  imports = [
+  (mkRenamedOptionModule
+      [ "services" "zabbixWeb" "virtualHost" ] [ "services" "zabbixWeb" "HttpdVirtualHost" ])
+  ];
   # interface
 
   options.services = {
@@ -116,7 +120,17 @@ in
         };
       };
 
-      virtualHost = mkOption {
+      frontend = mkOption {
+        type = types.enum [
+          "nginx"
+          "httpd"
+        ];
+        example = "nginx";
+        default = "httpd";
+        description = "Frontend server to use.";
+      };
+
+      HttpdVirtualHost = mkOption {
         type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
         example = literalExpression ''
           {
@@ -126,9 +140,32 @@ in
             enableACME = true;
           }
         '';
+        default = { };
         description = ''
           Apache configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
           See [](#opt-services.httpd.virtualHosts) for further information.
+        '';
+      };
+
+      hostname = mkOption {
+          type = types.str;
+          default = "zabbix.local";
+          description = "Hostname for either nginx or httpd.";
+      };
+
+      NginxVirtualHost = mkOption {
+        type = types.submodule (import ../web-servers/nginx/vhost-options.nix);
+        example = literalExpression ''
+          {
+            forceSSL = true;
+            sslCertificateKey = "/etc/ssl/zabbix.key";
+            sslCertificate = "/etc/ssl/zabbix.crt";
+          }
+        '';
+        default = { };
+        description = ''
+          Nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+          See [](#opt-services.nginx.virtualHosts) for further information.
         '';
       };
 
@@ -167,13 +204,15 @@ in
     '';
 
     systemd.tmpfiles.rules = [
-      "d '${stateDir}' 0750 ${user} ${group} - -"
+      "d '${stateDir}' 0750 ${user} ${group} - -" ] ++ optionals (cfg.frontend == "httpd") [
       "d '${stateDir}/session' 0750 ${user} ${config.services.httpd.group} - -"
+    ] ++ optionals (cfg.frontend == "nginx") [
+      "d '${stateDir}/session' 0750 ${user} ${config.services.nginx.group} - -"
     ];
 
     services.phpfpm.pools.zabbix = {
       inherit user;
-      group = config.services.httpd.group;
+      group = if cfg.frontend == "httpd" then config.services.httpd.group else config.services.nginx.group;
       phpOptions = ''
         # https://www.zabbix.com/documentation/current/manual/installation/install
         memory_limit = 128M
@@ -193,16 +232,16 @@ in
       '';
       phpEnv.ZABBIX_CONFIG = "${zabbixConfig}";
       settings = {
-        "listen.owner" = config.services.httpd.user;
-        "listen.group" = config.services.httpd.group;
+        "listen.owner" = if cfg.frontend == "httpd" then config.services.httpd.user else config.services.nginx.user;
+        "listen.group" = if cfg.frontend == "httpd" then config.services.httpd.group else config.services.nginx.group;
       } // cfg.poolConfig;
     };
 
-    services.httpd = {
+    services.httpd = mkIf (cfg.frontend == "httpd") {
       enable = true;
-      adminAddr = mkDefault cfg.virtualHost.adminAddr;
+      adminAddr = mkDefault cfg.HttpdVirtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
+      virtualHosts.${cfg.hostname} = mkMerge [ cfg.HttpdVirtualHost {
         documentRoot = mkForce "${cfg.package}/share/zabbix";
         extraConfig = ''
           <Directory "${cfg.package}/share/zabbix">
@@ -215,8 +254,26 @@ in
             Options -Indexes
             DirectoryIndex index.php
           </Directory>
-        '';
+          '';
       } ];
+    };
+
+    services.nginx = mkIf (cfg.frontend == "nginx") {
+        enable = true;
+        virtualHosts.${cfg.hostname} = mkMerge [
+        cfg.NginxVirtualHost
+        {
+              root = mkForce "${cfg.package}/share/zabbix";
+              locations."/" = {
+                index = "index.html index.htm index.php";
+                tryFiles = "$uri $uri/ =404";
+              };
+              locations."~ \.php$".extraConfig = ''
+                fastcgi_pass  unix:${fpm.socket};
+                fastcgi_index index.php;
+              '';
+            }
+        ];
     };
 
     users.users.${user} = mapAttrs (name: mkDefault) {
