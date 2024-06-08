@@ -1,5 +1,14 @@
 addCMakeParams() {
-    addToSearchPath CMAKE_PREFIX_PATH $1
+    addToSearchPath CMAKE_INCLUDE_PATH "$1/include"
+    addToSearchPath CMAKE_LIBRARY_PATH "$1/lib"
+    # have not hit but CMAKE_PREFIX_PATH $1 would search here
+    addToSearchPath CMAKE_PREFIX_PATH "$1/lib"
+    # many things openexr_3, zig, castxml
+    addToSearchPath CMAKE_PREFIX_PATH "$1/lib/cmake"
+    # vulkan-headers / vulkan-loader
+    addToSearchPath CMAKE_PREFIX_PATH "$1/share"
+    # kdePackages.attica / extra-cmake-modules
+    addToSearchPath CMAKE_PREFIX_PATH "$1/share/cmake"
 }
 
 fixCmakeFiles() {
