@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Desktop application for Proton Pass";
     homepage = "https://proton.me/pass";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ massimogengarelli ];
+    maintainers = with lib.maintainers; [ massimogengarelli sebtm ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "proton-pass";
