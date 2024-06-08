@@ -13198,6 +13198,8 @@ self: super: with self; {
 
   repeated-test = callPackage ../development/python-modules/repeated-test { };
 
+  repl-python-wakatime = callPackage ../development/python-modules/repl-python-wakatime { };
+
   repocheck = callPackage ../development/python-modules/repocheck { };
 
   reportengine = callPackage ../development/python-modules/reportengine { };
