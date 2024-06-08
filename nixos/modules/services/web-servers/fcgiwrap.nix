@@ -3,17 +3,15 @@
 with lib;
 
 let
-  cfg = config.services.fcgiwrap;
+  forEachInstance = f: flip mapAttrs' config.services.fcgiwrap (name: cfg:
+    nameValuePair "fcgiwrap-${name}" (f cfg)
+  );
+
 in {
-
-  options = {
-    services.fcgiwrap = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable fcgiwrap, a server for running CGI applications over FastCGI.";
-      };
-
+  options.services.fcgiwrap = mkOption {
+    description = "Configuration for fcgiwrap instances.";
+    default = { };
+    type = types.attrsOf (types.submodule ({ config, ... }: { options = {
       preforkProcesses = mkOption {
         type = types.int;
         default = 1;
@@ -28,7 +26,7 @@ in {
 
       socketAddress = mkOption {
         type = types.str;
-        default = "/run/fcgiwrap.sock";
+        default = "/run/fcgiwrap-${config._module.args.name}.sock";
         example = "1.2.3.4:5678";
         description = "Socket address. In case of a UNIX socket, this should be its filesystem path.";
       };
@@ -44,11 +42,11 @@ in {
         default = null;
         description = "Group permissions for the socket.";
       };
-    };
+    }; }));
   };
 
-  config = mkIf cfg.enable {
-    systemd.services.fcgiwrap = {
+  config = {
+    systemd.services = forEachInstance (cfg: {
       after = [ "nss-user-lookup.target" ];
       wantedBy = optional (cfg.socketType != "unix") "multi-user.target";
 
@@ -60,13 +58,13 @@ in {
         User = cfg.user;
         Group = cfg.group;
       } else { } );
-    };
+    });
 
-    systemd.sockets = if (cfg.socketType == "unix") then {
-      fcgiwrap = {
-        wantedBy = [ "sockets.target" ];
-        socketConfig.ListenStream = cfg.socketAddress;
+    systemd.sockets = forEachInstance (cfg: mkIf (cfg.socketType == "unix") {
+      wantedBy = [ "sockets.target" ];
+      socketConfig = {
+        ListenStream = cfg.socketAddress;
       };
-    } else { };
+    });
   };
 }
