@@ -69,6 +69,8 @@ EOF
                 "$binary"
 
             patchelf --set-rpath "@libPath@" "$binary"
+            # fixes crossgen2 on .NET7+ and other binaries that are bundled with libraries
+            patchelf --add-rpath '$ORIGIN' "$binary"
         fi
     done
 
