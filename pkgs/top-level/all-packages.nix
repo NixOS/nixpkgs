@@ -14817,6 +14817,8 @@ with pkgs;
 
   zed = callPackage ../development/tools/zed { };
 
+  zed-editor = callPackage ../applications/editors/zed { };
+
   zellij = callPackage ../tools/misc/zellij {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
   };
