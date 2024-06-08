@@ -46,26 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeOptionType "path" "CLANG_RESOURCE_DIR" "${lib.getDev libclang}")
+    (lib.cmakeOptionType "path" "CLANG_RESOURCE_DIR"
+       "${lib.getLib libclang}/lib/clang/${lib.versions.major libclang.version}")
+
     (lib.cmakeBool "SPHINX_HTML" withHTML)
     (lib.cmakeBool "SPHINX_MAN" withManual)
   ] ++ lib.optionals stdenv.isDarwin [
     (lib.cmakeOptionType "path" "Clang_DIR" "${lib.getDev libclang}/lib/cmake/clang")
   ];
 
-  # 97% tests passed, 97 tests failed out of 2881
-  # mostly because it checks command line and nix append -isystem and all
-  doCheck = false;
+  doCheck = true;
 
   strictDeps = true;
-
-  # -E exclude 4 tests based on names
-  # see https://github.com/CastXML/CastXML/issues/90
-  checkPhase = ''
-    runHook preCheck
-    ctest -E 'cmd.cc-(gnu|msvc)-((c-src-c)|(src-cxx))-cmd'
-    runHook postCheck
-  '';
 
   passthru.tests = testers.testVersion {
     package = finalAttrs.finalPackage;
