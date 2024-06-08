@@ -67,10 +67,7 @@ stdenv.mkDerivation rec {
     "JULIA_CPU_TARGET=generic;cortex-a57;thunderx2t99;armv8.2-a,crypto,fullfp16,lse,rdm"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
-    "-Wno-error=implicit-function-declaration"
-    "-Wno-error=elaborated-enum-base"
-  ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=implicit-function-declaration -Wno-error=elaborated-enum-base";
   # TODO: figure out how to re-enable these as errors?
 
   # remove forbidden reference to $TMPDIR
