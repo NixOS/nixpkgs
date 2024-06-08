@@ -11,7 +11,7 @@
 
 let
   pname = "repl-python-wakatime";
-  version = "0.0.6";
+  version = "0.0.11";
 in
 
 buildPythonPackage {
@@ -21,7 +21,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s2UelniMn4+wWILbVIIKidRCFaOvo/nNNofA7yf2+9c=";
+    hash = "sha256-HoCdeo03Lf3g5Xg0GgAyWOu2PtGqy33vg5bQrfkEPkE=";
   };
 
   nativeBuildInputs = [
