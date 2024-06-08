@@ -128,13 +128,11 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
         -e 's|^export ${hiName}_JDK\(.*\)|    export ${hiName}_JDK\1|' \
         "$out/$pname/bin/${loName}.sh"
 
-    sed -i -e '/^export ${hiName}_VM_OPTIONS=/afi' \
-        -e "/^export ${hiName}_VM_OPTIONS=/iVMOPTS_STR=\"\$CONFIG_HOME/*.vmoptions\"\\
-    VMOPTS=\"\$(echo \$VMOPTS_STR)\"\\
-    if [[ -s \"\$VMOPTS\" ]]; then\\
-        export ${hiName}_VM_OPTIONS=\$(cat \"\$VMOPTS\")\\
-    else" \
-        -e 's|^export ${hiName}_VM_OPTIONS\(.*\)|    export ${hiName}_VM_OPTIONS\1|' \
+    sed -i -e '/^export ${hiName}_VM_OPTIONS=/aVMOPTS_PATTERN=\"\$CONFIG_HOME/*.vmoptions\"' \
+           -e '/^export ${hiName}_VM_OPTIONS=/aVMOPTS=\"\$(echo \$VMOPTS_PATTERN)\"' \
+           -e '/^export ${hiName}_VM_OPTIONS=/aif [[ -s \"\$VMOPTS\" ]]; then' \
+           -e '/^export ${hiName}_VM_OPTIONS=/a\ \ \ \ export ${hiName}_VM_OPTIONS=\"''$${hiName}_VM_OPTIONS \$(cat \"\$VMOPTS\")\"' \
+           -e '/^export ${hiName}_VM_OPTIONS=/afi' \
         "$out/$pname/bin/${loName}.sh"
 
     ln -s "$out/$pname/bin/${loName}.sh" $out/bin/$pname
