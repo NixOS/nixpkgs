@@ -27,6 +27,7 @@ import ./make-test-python.nix (
                 services.fcgiwrap.gitolite = {
                   process.user = "gitolite";
                   process.group = "gitolite";
+                  socket = { inherit (config.services.nginx) user group; };
                 };
 
                 services.gitolite = {

@@ -167,6 +167,7 @@ in
 
     services.fcgiwrap = flip mapAttrs' cfgs (name: cfg:
       nameValuePair "cgit-${name}" {
+        socket = { inherit (config.services.nginx) user group; };
       }
     );
 
