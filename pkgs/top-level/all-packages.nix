@@ -3656,6 +3656,8 @@ with pkgs;
 
   deterministic-uname = callPackage ../build-support/deterministic-uname { };
 
+  deterministic-host-uname = deterministic-uname.override { forPlatform = stdenv.hostPlatform; };
+
   dfmt = callPackage ../tools/text/dfmt { };
 
   diopser = callPackage ../applications/audio/diopser { };
@@ -35209,7 +35211,7 @@ with pkgs;
   };
 
   virt-manager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix {
-    qtermwidget = lxqt.qtermwidget;
+    qtermwidget = lxqt.qtermwidget_1_4;
   };
 
   virtscreen = callPackage ../tools/admin/virtscreen { };

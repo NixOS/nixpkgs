@@ -47,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Remove when https://gitlab.com/ubports/development/core/content-hub/-/merge_requests/33 merged & in release
+    # Remove when version > 1.1.1
     (fetchpatch {
       name = "0001-content-hub-Migrate-to-GetConnectionCredentials.patch";
-      url = "https://gitlab.com/ubports/development/core/content-hub/-/commit/9c0eae42d856b4b6e24fa609ade0e674c7a84cfe.patch";
-      hash = "sha256-IWoCQKSCCk26n7133oG0Ht+iEjavn/IiOVUM+tCLX2U=";
+      url = "https://gitlab.com/ubports/development/core/content-hub/-/commit/9ec9df32f77383eec7994d8e3e6961531bc8464d.patch";
+      hash = "sha256-14dZosMTMa1FDGEMuil0r1Hz6vn+L9XC83NMAqC7Ol8=";
     })
 
     # Remove when https://gitlab.com/ubports/development/core/content-hub/-/merge_requests/34 merged & in release
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-T+6T9lXne6AhDFv9d7L8JNwdl8f0wjDmvSoNVPkHza4=";
     })
 
-    # Remove when https://gitlab.com/ubports/development/core/content-hub/-/merge_requests/35 merged & in release
+    # Remove when version > 1.1.1
     # fetchpatch2 due to renames, https://github.com/NixOS/nixpkgs/issues/32084
     (fetchpatch2 {
       name = "0003-content-hub-Add-more-better-GNUInstallDirs-variables-usage.patch";
@@ -69,16 +69,18 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-kYN0eLwMyM/9yK+zboyEsoPKZMZ4SCXodVYsvkQr2F8=";
     })
 
-    # Remove when https://gitlab.com/ubports/development/core/content-hub/-/merge_requests/37 merged & in release
+    # Remove when version > 1.1.1
     (fetchpatch {
-      name = "0004-content-hub-Fix-generation-of-transfer_files.patch";
-      url = "https://gitlab.com/ubports/development/core/content-hub/-/commit/7ab3a4421356f83515f0deffb5f97a5b38601c13.patch";
-      hash = "sha256-MJZm3ny5t0/GX0bd5hGQbPM2k7M4KUvKqce/0cYYgvM=";
+      name = "0004-content-hub-Fix-generation-of-transfer_files-and-moc_test_harness.patch";
+      url = "https://gitlab.com/ubports/development/core/content-hub/-/commit/68899c75e77e1f34176b8a550d52794413e5070f.patch";
+      hash = "sha256-HAxePnzY/cL2c+o+Aw2N1pdr8rsbHGmRsH2EQkrBcHg=";
     })
+
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-content-hub/-/merge_requests/40 merged & in release
     (fetchpatch {
-      name = "0005-content-hub-Fix-generation-of-moc_test_harness.patch";
-      url = "https://gitlab.com/ubports/development/core/content-hub/-/commit/6e30f4f10ef90e817ca01d32959b6c782de48955.patch";
-      hash = "sha256-TAbYn265RpHpulaRVaHy9XqNF+qoDE7YQIfFMPfqEhw=";
+      name = "0006-content-hub-Fix-AppArmor-less-transfer.patch";
+      url = "https://gitlab.com/ubports/development/core/content-hub/-/commit/b58e5c8babf00ad7c402555c96254ce0165adb9e.patch";
+      hash = "sha256-a7x/0NiUBmmFlq96jkHyLCL0f5NIFh5JR/H+FQ/2GqI=";
     })
   ];
 
@@ -175,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Content sharing/picking service";
     longDescription = ''
       content-hub is a mediation service to let applications share content between them,
@@ -183,10 +185,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/ubports/development/core/content-hub";
     changelog = "https://gitlab.com/ubports/development/core/content-hub/-/blob/${finalAttrs.version}/ChangeLog";
-    license = with licenses; [ gpl3Only lgpl3Only ];
+    license = with lib.licenses; [ gpl3Only lgpl3Only ];
     mainProgram = "content-hub-service";
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "libcontent-hub"
       "libcontent-hub-glib"
