@@ -7,13 +7,16 @@
 , fontconfig
 , libxkbcommon
 , makeWrapper
+, nix-update-script
 , openvr
 , openxr-loader
 , pipewire
 , pkg-config
 , pulseaudio
 , shaderc
+, testers
 , wayland
+, wlx-overlay-s
 , xorg
 }:
 
@@ -70,6 +73,12 @@ rustPlatform.buildRustPackage rec {
       --add-needed ${lib.getLib wayland}/lib/libwayland-client.so.0 \
       --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0
   '';
+
+  passthru = {
+    tests.testVersion = testers.testVersion { package = wlx-overlay-s; };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Wayland/X11 desktop overlay for SteamVR and OpenXR, Vulkan edition";
