@@ -5298,6 +5298,8 @@ self: super: with self; {
 
   hahomematic = callPackage ../development/python-modules/hahomematic { };
 
+  hakuin = callPackage ../development/python-modules/hakuin { };
+
   halo = callPackage ../development/python-modules/halo { };
 
   halohome = callPackage ../development/python-modules/halohome { };
@@ -13197,6 +13199,8 @@ self: super: with self; {
   repath = callPackage ../development/python-modules/repath { };
 
   repeated-test = callPackage ../development/python-modules/repeated-test { };
+
+  repl-python-wakatime = callPackage ../development/python-modules/repl-python-wakatime { };
 
   repocheck = callPackage ../development/python-modules/repocheck { };
 

@@ -5061,7 +5061,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_29;
+    electron = electron_30;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -8228,8 +8228,6 @@ with pkgs;
 
   gdmap = callPackage ../tools/system/gdmap { };
 
-  gdtoolkit = callPackage ../development/tools/gdtoolkit { };
-
   gef = callPackage ../development/tools/misc/gef { };
 
   gelasio = callPackage ../data/fonts/gelasio { };
@@ -9620,8 +9618,6 @@ with pkgs;
 
   last-resort = callPackage ../data/fonts/last-resort { };
 
-  ldc = callPackage ../development/compilers/ldc { };
-
   ligo =
     let ocaml_p = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15; in
     callPackage ../development/compilers/ligo {
@@ -10477,8 +10473,6 @@ with pkgs;
   man-db = callPackage ../tools/misc/man-db { };
 
   mandoc = callPackage ../tools/misc/mandoc { };
-
-  mangareader = libsForQt5.callPackage ../applications/graphics/mangareader { };
 
   mangohud = callPackage ../tools/graphics/mangohud {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
@@ -32038,7 +32032,7 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/k3s {
     buildGoModule = buildGo121Module;
     go = go_1_21;
-  }) k3s_1_27 k3s_1_28 k3s_1_29;
+  }) k3s_1_28 k3s_1_29;
   inherit (callPackage ../applications/networking/cluster/k3s {
     buildGoModule = buildGo122Module;
     go = go_1_22;

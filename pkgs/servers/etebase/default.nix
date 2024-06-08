@@ -16,13 +16,13 @@ let
 in
 python.pkgs.buildPythonPackage rec {
   pname = "etebase-server";
-  version = "0.11.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "server";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+MSNX+CFmIQII+SFjM2TQKCgRMOTdsOIVAP8ur4WjQY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GEieXue3Kvc4zZjfypKLmTmhNPbn/GR8g0qEqkl+wkw=";
   };
 
   patches = [ ./secret.patch ];
@@ -31,7 +31,7 @@ python.pkgs.buildPythonPackage rec {
 
   propagatedBuildInputs = with python.pkgs; [
     aiofiles
-    django_3
+    django_4
     fastapi
     msgpack
     pynacl

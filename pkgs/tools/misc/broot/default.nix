@@ -13,7 +13,8 @@
 , xorg
 , zlib
 , buildPackages
-, withClipboard ? false
+, withClipboard ? !stdenv.isDarwin
+, withTrash ? !stdenv.isDarwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  buildFeatures = lib.optionals withClipboard [ "clipboard" ];
+  buildFeatures = lib.optionals withTrash [ "trash" ] ++ lib.optionals withClipboard [ "clipboard" ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 

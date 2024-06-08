@@ -11,7 +11,7 @@
 
 let
   pname = "edge-runtime";
-  version = "1.53.3";
+  version = "1.53.4";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
     owner = "supabase";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-eGFLwypLgoTKUapG3kbI9J9jSyR39JtKgM0dwtkR9zk=";
+    hash = "sha256-sDgGfQiAUuI+JaF0BRB5lwvjbWWIoTV/k/tbQsBBc4E=";
     fetchSubmodules = true;
   };
 
