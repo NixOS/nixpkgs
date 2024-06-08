@@ -32002,8 +32002,6 @@ with pkgs;
 
   johnny = callPackage ../applications/misc/johnny { };
 
-  josm = callPackage ../applications/misc/josm { };
-
   js8call = qt5.callPackage ../applications/radio/js8call { };
 
   jwm = callPackage ../applications/window-managers/jwm { };
