@@ -3,17 +3,18 @@
 , fetchFromGitHub
 , meson
 , ninja
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-valent";
-  version = "unstable-2023-11-10";
+  version = "0-unstable-2024-05-12";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "gnome-shell-extension-valent";
-    rev = "c0fad083db3c23382efca623488834054bbbd5cd";
-    hash = "sha256-H0EjR7sYK0mepT59PoHgecbk4ksQN8Vyisf6Y+2vT8g=";
+    rev = "9998f737de3d538b26b085871739e2f3de9e3d0f";
+    hash = "sha256-lDAHPThhSacju9LltsM11gSfj0nYfpj0S19iu+wA/98=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
   passthru = {
     extensionUuid = "valent@andyholmes.ca";
     extensionPortalSlug = "valent";
+    updateScript = unstableGitUpdater { };
   };
 
   meta = {
