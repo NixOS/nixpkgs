@@ -45,10 +45,55 @@ in {
           In case of a UNIX socket, this should be its filesystem path.
         '';
       };
+
+      socket.user = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          User to be set as owner of the UNIX socket.
+          Defaults to the process running user.
+        '';
+      };
+
+      socket.group = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Group to be set as owner of the UNIX socket.
+          Defaults to the process running group.
+        '';
+      };
+
+      socket.mode = mkOption {
+        type = types.nullOr types.str;
+        default = if config.socket.type == "unix" then "0600" else null;
+        defaultText = literalExpression ''
+          if config.socket.type == "unix" then "0600" else null
+        '';
+        description = ''
+          Mode to be set on the UNIX socket.
+          Defaults to private to the socket's owner.
+        '';
+      };
     }; }));
   };
 
   config = {
+    assertions = concatLists (mapAttrsToList (name: cfg: [
+      {
+        assertion = cfg.socket.user != null -> cfg.socket.type == "unix";
+        message = "Socket owner can only be set for the UNIX socket type.";
+      }
+      {
+        assertion = cfg.socket.group != null -> cfg.socket.type == "unix";
+        message = "Socket owner can only be set for the UNIX socket type.";
+      }
+      {
+        assertion = cfg.socket.mode != null -> cfg.socket.type == "unix";
+        message = "Socket mode can only be set for the UNIX socket type.";
+      }
+    ]) config.services.fcgiwrap);
+
     systemd.services = forEachInstance (cfg: {
       after = [ "nss-user-lookup.target" ];
       wantedBy = optional (cfg.socket.type != "unix") "multi-user.target";
@@ -71,6 +116,9 @@ in {
       wantedBy = [ "sockets.target" ];
       socketConfig = {
         ListenStream = cfg.socket.address;
+        SocketUser = cfg.socket.user;
+        SocketGroup = cfg.socket.group;
+        SocketMode = cfg.socket.mode;
       };
     });
   };
