@@ -11,10 +11,10 @@ in {
     supportExperimental.enable = lib.mkEnableOption "Experimental features support";
 
     support32Bit.enable = lib.mkEnableOption "32-bit driver support";
-    support32Bit.package = lib.mkPackageOption pkgs.driversi686Linux "amdvlk" { };
+    support32Bit.package = lib.mkPackageOption pkgs [ "driversi686Linux" "amdvlk" ] { };
 
     settings = lib.mkOption {
-      type = lib.types.attrs;
+      type = with lib.types; attrsOf (either str int);
       default = { };
       example = {
         AllowVkPipelineCachingToDisk = 1;
@@ -31,17 +31,13 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    hardware.opengl = lib.mkMerge [
-      {
-        enable = lib.mkDefault true;
-        driSupport = lib.mkDefault true;
-        extraPackages = [ cfg.package ];
-      }
-      (lib.mkIf cfg.support32Bit.enable {
-        driSupport32Bit = lib.mkDefault true;
-        extraPackages32 = [ cfg.support32Bit.package ];
-      })
-    ];
+    hardware.opengl = {
+      enable = true;
+      driSupport = true;
+      extraPackages = [ cfg.package ];
+      driSupport32Bit = cfg.support32Bit.enable;
+      extraPackages32 = [ cfg.support32Bit.package ];
+    };
 
     services.xserver.videoDrivers = [ "amdgpu" ];
 
