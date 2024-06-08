@@ -8136,6 +8136,18 @@ final: prev:
     meta.homepage = "https://github.com/ojroques/nvim-osc52/";
   };
 
+  nvim-paredit = buildVimPlugin {
+    pname = "nvim-paredit";
+    version = "2024-03-30";
+    src = fetchFromGitHub {
+      owner = "julienvincent";
+      repo = "nvim-paredit";
+      rev = "8dd4ffd6ee0d798026f9ad6cf04344560207b9f1";
+      sha256 = "0kqd87m58ya9faijs2ldzirps5ayillfmcdgd19b342jw0q393k6";
+    };
+    meta.homepage = "https://github.com/julienvincent/nvim-paredit/";
+  };
+
   nvim-parinfer = buildVimPlugin {
     pname = "nvim-parinfer";
     version = "2023-08-09";
