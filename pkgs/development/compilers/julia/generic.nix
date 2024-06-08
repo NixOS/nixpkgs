@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     curl
     xcbuild
     darwin.DarwinTools
+    darwin.cctools
   ];
 
   buildInputs = [
