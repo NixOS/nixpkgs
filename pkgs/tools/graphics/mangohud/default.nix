@@ -231,8 +231,9 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
         --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
     '' + ''
-      # Add OpenGL driver path to RUNPATH to support NVIDIA cards
+      # Add OpenGL driver and libXNVCtrl paths to RUNPATH to support NVIDIA cards
       addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
+      patchelf --add-rpath ${libXNVCtrl}/lib "$out/lib/mangohud/libMangoHud.so"
     '' + lib.optionalString gamescopeSupport ''
       addOpenGLRunpath "$out/bin/mangoapp"
     '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
