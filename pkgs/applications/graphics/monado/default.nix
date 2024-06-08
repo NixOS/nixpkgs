@@ -9,7 +9,6 @@
 , doxygen
 , eigen
 , elfutils
-, ffmpeg
 , glslang
 , gst-plugins-base
 , gstreamer
@@ -51,23 +50,23 @@
 , zlib
 , zstd
 , nixosTests
-# Set as 'false' to build monado without service support, i.e. allow VR
-# applications linking against libopenxr_monado.so to use OpenXR standalone
-# instead of via the monado-service program. For more information see:
-# https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
+  # Set as 'false' to build monado without service support, i.e. allow VR
+  # applications linking against libopenxr_monado.so to use OpenXR standalone
+  # instead of via the monado-service program. For more information see:
+  # https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
 , serviceSupport ? true
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
-  version = "unstable-2024-01-02";
+  version = "24.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
-    rev = "bfa1c16ff9fc759327ca251a5d086b958b1a3b8a";
-    hash = "sha256-wXRwOs9MkDre/VeW686DzmvKjX0qCSS13MILbYQD6OY=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-lFy0VvaLD4Oyu2TZJnaIWjuaJUZjGGDJS0VsRfIUpcc=";
   };
 
   nativeBuildInputs = [
@@ -92,7 +91,6 @@ stdenv.mkDerivation {
     dbus
     eigen
     elfutils
-    ffmpeg
     gst-plugins-base
     gstreamer
     hidapi
@@ -155,4 +153,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     mainProgram = "monado-cli";
   };
-}
+})
