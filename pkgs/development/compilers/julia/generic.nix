@@ -19,6 +19,7 @@
 , xcbuild
 , darwin
 }:
+
 stdenv.mkDerivation rec {
   pname = "julia";
 
@@ -55,7 +56,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs .
   '';
-
 
   makeFlags = [
     "prefix=$(out)"
