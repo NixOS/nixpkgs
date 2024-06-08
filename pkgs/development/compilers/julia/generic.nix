@@ -3,10 +3,6 @@
 , patches
 }:
 
-let
-  pkgs = import <nixpkgs> {};
-in
-
 { lib
 , stdenv
 , fetchurl
@@ -22,6 +18,7 @@ in
 , curl
 , xcbuild
 , darwin
+, runCommand
 }:
 
 stdenv.mkDerivation rec {
@@ -47,11 +44,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     unzip
     curl
-    xcbuild
   ];
 
   buildInputs = [
     libxml2
+    xcbuild
   ];
 
   dontUseCmakeConfigure = true;
@@ -65,15 +62,15 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ] ++ lib.optionals stdenv.isDarwin (
     let
-      macosProductVersion = pkgs.runCommand "macos-product-version" { } ''
+      macosProductVersion = runCommand "macos-product-version" { } ''
         echo "Running sw_vers..."
         echo -n $(${darwin.DarwinTools}/bin/sw_vers -productVersion) > $out
         echo "macOS product version: $(cat $out)"
       '';
       macosProductVersionStr = builtins.readFile "${macosProductVersion}";
-      macosPlatformVersion = pkgs.runCommand "macos-platform-version" { } ''
+      macosPlatformVersion = runCommand "macos-platform-version" { } ''
         echo "Running xcrun..."
-        echo -n $(${pkgs.xcbuild}/bin/xcrun --show-sdk-version) > $out
+        echo -n $(${xcbuild}/bin/xcrun --show-sdk-version) > $out
         echo "macOS platform version: $(cat $out)"
       '';
       macosPlatformVersionStr = builtins.readFile "${macosPlatformVersion}";
