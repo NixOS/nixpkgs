@@ -40,6 +40,9 @@ stdenv.mkDerivation rec {
       url = "https://bugsfiles.kde.org/attachment.cgi?id=149174";
       sha256 = "sha256-f1YIFIhWhXYVw3/UNEWewDak2mvbAd3aGzK4B+wTlys=";
     })
+
+    # Support NIX_DEBUG_INFO_DIRS environment variable.
+    ./Support-NIX_DEBUG_INFO_DIRS.patch
   ];
 
   outputs = [ "out" "dev" "man" "doc" ];
