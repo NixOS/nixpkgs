@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2154,SC2164
+
 # BSD makefiles should be able to detect this
 # but without they end up using gcc on Darwin stdenv
 addMakeFlags() {
@@ -60,13 +62,13 @@ setBSDSourceDir() {
   sourceRoot=$PWD/$sourceRoot
   export BSDSRCDIR=$sourceRoot
   export _SRC_TOP_=$BSDSRCDIR
-  cd $sourceRoot
+  cd "$sourceRoot"
 }
 
 cdBSDPath() {
   if [ -d "$COMPONENT_PATH" ]
     then sourceRoot=$sourceRoot/$COMPONENT_PATH
-    cd $COMPONENT_PATH
+    cd "$COMPONENT_PATH"
   fi
 }
 
@@ -88,19 +90,19 @@ includesPhase() {
 }
 
 moveUsrDir() {
-  if [ -d $prefix ]; then
+  if [ -d "$prefix" ]; then
     # Remove lingering /usr references
-    if [ -d $prefix/usr ]; then
+    if [ -d "$prefix/usr" ]; then
       # Didn't try using rsync yet because per
       # https://unix.stackexchange.com/questions/127712/merging-folders-with-mv,
       # it's not neessarily better.
-      pushd $prefix/usr
-      find . -type d -exec mkdir -p $out/\{} \;
-      find . \( -type f -o -type l \) -exec mv \{} $out/\{} \;
+      pushd "$prefix/usr"
+      find . -type d -exec mkdir -p "$out/{}" \;
+      find . \( -type f -o -type l \) -exec mv "{}" "$out/{}" \;
       popd
     fi
 
-    find $prefix -type d -empty -delete
+    find "$prefix" -type d -empty -delete
   fi
 }
 
