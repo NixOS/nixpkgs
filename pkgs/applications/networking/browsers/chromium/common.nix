@@ -12,7 +12,6 @@
 , ninja, pkg-config
 , python3, perl
 , which
-, llvmPackages_attrName
 , libuuid
 , overrideCC
 # postPatch:
@@ -131,7 +130,7 @@ let
   # https://github.com/NixOS/nixpkgs/issues/142901
   buildPlatformLlvmStdenv =
     let
-      llvmPackages = pkgsBuildBuild.${llvmPackages_attrName};
+      llvmPackages = pkgsBuildBuild.rustc.llvmPackages;
     in
       overrideCC llvmPackages.stdenv
         (llvmPackages.stdenv.cc.override {
@@ -164,7 +163,7 @@ let
       ninja pkg-config
       python3WithPackages perl
       which
-      buildPackages.${llvmPackages_attrName}.bintools
+      buildPackages.rustc.llvmPackages.bintools
       bison gperf
     ];
 
@@ -381,8 +380,8 @@ let
     llvmCcAndBintools = symlinkJoin {
       name = "llvmCcAndBintools";
       paths = [
-        buildPackages.${llvmPackages_attrName}.llvm
-        buildPackages.${llvmPackages_attrName}.stdenv.cc
+        buildPackages.rustc.llvmPackages.llvm
+        buildPackages.rustc.llvmPackages.stdenv.cc
       ];
     };
 
