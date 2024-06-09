@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, flyctl, installShellFiles, gitUpdater }:
+{ lib, buildGoModule, fetchFromGitHub, testers, flyctl, installShellFiles }:
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.2.58";
+  version = "0.2.65";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-aXiBDPl/x/xeu+fNrxs+JejVtSZu8KZKbrSetJj4/Pk=";
+    hash = "sha256-TB0Y3QgoGM5RlKWBKg2XKuFQJz0mw6sqWuDn1z93+6g=";
   };
 
-  vendorHash = "sha256-NmogEh3xWQ/opMm9UarpfuH3MJzJ9+qb0KX/O+i/pcA=";
+  vendorHash = "sha256-dQDkW1fSXn6c2bImnAyvb3WpdARe3EZdPkPkLZHMKzY=";
 
   subPackages = [ "." ];
 
@@ -52,14 +52,6 @@ buildGoModule rec {
       --zsh <($out/bin/flyctl completion zsh)
     ln -s $out/bin/flyctl $out/bin/fly
   '';
-
-  # Upstream tags every PR merged with release tags like
-  # v2024.5.20-pr3545.4. We ignore all revisions containing a '-'
-  # to skip these releases.
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-    ignoredVersions = "-";
-  };
 
   passthru.tests.version = testers.testVersion {
     package = flyctl;
