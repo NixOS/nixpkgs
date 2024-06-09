@@ -17,8 +17,8 @@ let
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash = {
       x86_64-linux = "sha256-H25PGhCD5uqh2BHMMjb7GyftinBsRs2O5+9xNNV+5m4=";
-      x86_64-darwin = "sha256-A0Rbm6boYI2B3Ne+FczAM3qmtM2KwNWD+C2N0sgWRtg=";
-      aarch64-darwin = "sha256-Jm7rZWEsMspjKrMODGPBGJP0I5fF3aj+WXdBNsmv4jw=";
+      x86_64-darwin = "sha256-uT4xo4LT70jq7bHmiYu4FL8Fldppc2ai8yEZzGMzM6Q=";
+      aarch64-darwin = "sha256-D5KIXHhzXXBOEcoOn2QKKUbVGMWhRW+L7fgxRxLpX/0=";
     }.${system} or throwSystem;
   };
 
