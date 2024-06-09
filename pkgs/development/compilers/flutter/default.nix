@@ -19,7 +19,7 @@ let
       args = {
         inherit version engineVersion patches pubspecLock artifactHashes;
 
-        dart = dart.override {
+        dart = let dartOverride = {
           version = dartVersion;
           sources = {
             "${dartVersion}-x86_64-linux" = fetchzip {
@@ -30,6 +30,10 @@ let
               url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-arm64-release.zip";
               sha256 = dartHash.aarch64-linux;
             };
+            "${dartVersion}-riscv64-linux" = fetchzip {
+              url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-linux-riscv64-release.zip";
+              sha256 = dartHash.riscv64-linux;
+            };
             "${dartVersion}-x86_64-darwin" = fetchzip {
               url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${dartVersion}/sdk/dartsdk-macos-x64-release.zip";
               sha256 = dartHash.x86_64-darwin;
@@ -39,7 +43,7 @@ let
               sha256 = dartHash.aarch64-darwin;
             };
           };
-        };
+        }; in dart.override dartOverride // (lib.optionalAttrs (dart ? __spliced) { __spliced = lib.mapAttrs (_: dart: dart.override dartOverride) dart.__spliced; });
         src = fetchFromGitHub {
           owner = "flutter";
           repo = "flutter";
@@ -61,7 +65,7 @@ let
         versionDir = ./versions + "/${version}";
         data = lib.importJSON (versionDir + "/data.json");
       in
-      lib.nameValuePair "v${version}" (wrapFlutter (mkFlutter ({
+      lib.nameValuePair "v${version}" (wrapFlutter( mkFlutter ({
         patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
       } // data))))
     (builtins.readDir ./versions);

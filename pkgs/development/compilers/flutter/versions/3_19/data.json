@@ -5,6 +5,7 @@
   "dartHash": {
     "x86_64-linux": "sha256-eO8qcSQNWGEz/5oVaJ5tjRMnGy2aq3PbcF15z/Pi3xQ=",
     "aarch64-linux": "sha256-K/sxpQAVd5Z75KPCb3XbIZ8dhuS/zTIDgO/YZoIKQjU=",
+    "riscv64-linux": "sha256-B6oYUTlMemA143C/N8f17uTtA62U7o5TxOOy+/KdjqM=",
     "x86_64-darwin": "sha256-Zh+nXms2NIOuS3Cc25kQT2ZKUXW3NbDZB6CugI4GJnM=",
     "aarch64-darwin": "sha256-5mSNavcc3l8Cv3WkJFTjtpbR/x6MRZ1i9iwyv7V1BYQ="
   },
