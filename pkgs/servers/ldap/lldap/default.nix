@@ -84,6 +84,9 @@ in rustPlatform.buildRustPackage (commonDerivationAttrs // {
     changelog = "https://github.com/lldap/lldap/blob/v${lldap.version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
+    # See comment about wasm32-unknown-unknown in rustc.nix.
+    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+      !stdenv.hostPlatform.gcc.thumb or true;
     maintainers = with maintainers; [ bendlas ];
     mainProgram = "lldap";
   };
