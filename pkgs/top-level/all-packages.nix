@@ -8437,7 +8437,7 @@ with pkgs;
 
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
-  godot_4 = callPackage ../development/tools/godot/4 { };
+  godot4 = callPackage ../development/tools/godot/4 { };
 
   godot3 = callPackage ../development/tools/godot/3 { };
 

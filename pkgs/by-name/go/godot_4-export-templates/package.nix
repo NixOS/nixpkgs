@@ -3,11 +3,11 @@
 # Export templates version should be kept in sync with Godot version.
 # https://docs.godotengine.org/en/stable/tutorials/export/exporting_projects.html#export-templates
 
-{ fetchzip, godot_4, ... }:
+{ fetchzip, godot4, ... }:
 
 fetchzip {
   pname = "export_templates";
   extension = "zip";
-  url = "https://github.com/godotengine/godot/releases/download/${godot_4.version}/Godot_v${godot_4.version}_export_templates.tpz";
+  url = "https://github.com/godotengine/godot/releases/download/${godot4.version}/Godot_v${godot4.version}_export_templates.tpz";
   hash = "sha256-eomGLH9lbZhl7VtHTWjJ5mxVt0Yg8LfnAnpqoCksPgs=";
 }
