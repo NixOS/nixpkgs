@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "clarete";
     repo = "forbiddenfruit";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-yHIZsVn2UVmWeBNIzWDE6AOwAXZilPqXo+bVtXqGkJk=";
   };
 
@@ -39,9 +39,11 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Patch python built-in objects";
     homepage = "https://github.com/clarete/forbiddenfruit";
+    changelog = "https://github.com/clarete/forbiddenfruit/releases/tag/${version}";
     license = with licenses; [
       mit
       gpl3Plus
     ];
+    maintainers = with maintainers; [ ];
   };
 }
