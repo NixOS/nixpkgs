@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-cyclonedx";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-rust-cargo";
     rev = "${pname}-${version}";
-    hash = "sha256-FQM2H/W9p0wmI1GGxnleDGU1y9hpz/Fnxi0KhF2RYeA=";
+    hash = "sha256-Hq5yEYikov/+/Vgf4Bn0b23+K6yqefrJOoEbC0YdnFY=";
   };
 
-  cargoHash = "sha256-Y4OoQ3JG0syKBJ2KDJ5qzwu/gI+/unvrTafQ+UYiZYA=";
+  cargoHash = "sha256-Q6Qanjfu5rIIZw4KeZo0kHJML5aq+12Lkn7CTscK8yE=";
 
   nativeBuildInputs = [
     pkg-config

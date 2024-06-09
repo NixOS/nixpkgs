@@ -6,7 +6,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "stanc";
-  version = "2.34.0";
+  version = "2.35.0";
 
   minimalOCamlVersion = "4.12";
   duneVersion = "3";
@@ -15,7 +15,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "stan-dev";
     repo = "stanc3";
     rev = "v${version}";
-    hash = "sha256-ixZCix3oLZhzs08JbmbNCO0lhAu1Jf+KnpHNKlU/FaA=";
+    hash = "sha256-QN/yY4tn0U5yOE0FKkOvvEFXDaj5GDBdeqI2UqjVN2c=";
   };
 
   nativeBuildInputs = with ocamlPackages; [ menhir ];
