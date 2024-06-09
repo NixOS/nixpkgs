@@ -21,8 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     valgrind
   ];
 
-  # TODO(@Ericson2314): Separate binaries and libraries
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [ "dev" "lib" "man" "out" ];
 
   patches = [
     (fetchpatch { # https://github.com/lz4/lz4/pull/1162
