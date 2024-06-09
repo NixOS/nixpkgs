@@ -45,6 +45,7 @@ in
       hash = "sha256-YYQ7lkf9BtOymU8yd6ZN4ctaWlKX2TC4yOO8DpN0ACQ=";
       patches = [
         ./patches/1.9/0002-skip-failing-and-flaky-tests.patch
+        ./patches/1.9/0001-patch-options-for-codesign.patch
       ];
     })
     { });
