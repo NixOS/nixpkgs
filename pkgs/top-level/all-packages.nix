@@ -26189,7 +26189,9 @@ with pkgs;
     buildGoModule = buildGo122Module;
   };
 
-  mir = callPackage ../servers/mir { };
+  inherit (callPackage ../servers/mir { })
+    mir
+    mir_2_15;
 
   miriway = callPackage ../applications/window-managers/miriway { };
 
