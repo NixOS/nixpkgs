@@ -14363,6 +14363,12 @@
     githubId = 1009523;
     name = "Ashijit Pramanik";
   };
+  nalves599 = {
+    name = "Nuno Alves";
+    email = "me@nalves.pt";
+    github = "nalves599";
+    githubId = 50085568;
+  };
   name-snrl = {
     github = "name-snrl";
     githubId = 72071763;
