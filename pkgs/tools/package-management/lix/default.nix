@@ -47,6 +47,8 @@ let
     };
 in
 lib.makeExtensible (self: ({
+  buildLix = common;
+
   lix_2_90 = (
     common {
       version = "2.90-beta.1";
