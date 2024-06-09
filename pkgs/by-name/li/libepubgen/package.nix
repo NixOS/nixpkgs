@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An EPUB generator for librevenge";
+    description = "EPUB generator for librevenge";
     homepage = "https://sourceforge.net/projects/libepubgen/";
     license = licenses.mpl20;
     maintainers = [ ];

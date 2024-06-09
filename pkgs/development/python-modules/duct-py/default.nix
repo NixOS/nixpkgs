@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python library for running child processes";
+    description = "Python library for running child processes";
     homepage = "https://github.com/oconnor663/duct.py";
     license = licenses.mit;
     maintainers = with maintainers; [ zmitchell ];

@@ -26,7 +26,7 @@ trivialBuild {
   '';
 
   meta = {
-    description = "An unofficial copilot plugin for Emacs";
+    description = "Unofficial copilot plugin for Emacs";
     homepage = "https://github.com/zerolfx/copilot.el";
     platforms = [
       "x86_64-darwin"

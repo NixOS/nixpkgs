@@ -20,7 +20,7 @@ buildGoPackage rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A simple RPC framework with protobuf service definitions";
+    description = "Simple RPC framework with protobuf service definitions";
     mainProgram = "protoc-gen-twirp";
     homepage = "https://github.com/twitchtv/twirp";
     license = licenses.asl20;

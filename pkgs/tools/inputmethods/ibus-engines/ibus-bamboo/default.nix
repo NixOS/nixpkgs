@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     isIbusEngine = true;
-    description = "A Vietnamese IME for IBus";
+    description = "Vietnamese IME for IBus";
     homepage = "https://github.com/BambooEngine/ibus-bamboo";
     license = licenses.gpl3;
     platforms = platforms.linux;

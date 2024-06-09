@@ -28,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A simple utility to separate the implementation of your Python package and its public API surface";
+    description = "Simple utility to separate the implementation of your Python package and its public API surface";
     homepage = "https://github.com/fchollet/namex";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];

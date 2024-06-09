@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/Ferdi265/wl-mirror";
-    description = "A simple Wayland output mirror client";
+    description = "Simple Wayland output mirror client";
     license = licenses.gpl3;
     maintainers = with maintainers; [ synthetica ];
     platforms = platforms.linux;

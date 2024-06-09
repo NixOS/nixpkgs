@@ -58,7 +58,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jedi_language_server" ];
 
   meta = with lib; {
-    description = "A Language Server for the latest version(s) of Jedi";
+    description = "Language Server for the latest version(s) of Jedi";
     mainProgram = "jedi-language-server";
     homepage = "https://github.com/pappasam/jedi-language-server";
     changelog = "https://github.com/pappasam/jedi-language-server/blob/${version}/CHANGELOG.md";

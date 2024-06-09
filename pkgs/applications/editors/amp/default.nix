@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   preCheck = "export HOME=`mktemp -d`";
 
   meta = with lib; {
-    description = "A modern text editor inspired by Vim";
+    description = "Modern text editor inspired by Vim";
     homepage = "https://amp.rs";
     license = [ licenses.gpl3 ];
     maintainers = [ maintainers.sb0 ];

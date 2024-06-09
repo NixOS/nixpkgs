@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A sophisticated software modeler";
+    description = "Sophisticated software modeler";
     homepage = "https://staruml.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;

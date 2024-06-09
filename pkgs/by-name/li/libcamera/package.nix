@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   meta = with lib; {
-    description = "An open source camera stack and framework for Linux, Android, and ChromeOS";
+    description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ citadelcore ];

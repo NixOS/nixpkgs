@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A chess library with move generation, move validation, and support for common formats";
+    description = "Chess library with move generation, move validation, and support for common formats";
     homepage = "https://github.com/niklasf/python-chess";
     changelog = "https://github.com/niklasf/python-chess/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;

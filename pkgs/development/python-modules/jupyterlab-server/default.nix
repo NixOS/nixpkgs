@@ -85,7 +85,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A set of server components for JupyterLab and JupyterLab like applications";
+    description = "Set of server components for JupyterLab and JupyterLab like applications";
     homepage = "https://github.com/jupyterlab/jupyterlab_server";
     changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;

@@ -72,7 +72,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Advanced AI explainability for computer vision.";
+    description = "Advanced AI explainability for computer vision";
     homepage = "https://jacobgil.github.io/pytorch-gradcam-book";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];

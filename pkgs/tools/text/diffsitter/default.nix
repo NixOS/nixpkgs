@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/afnanenayet/diffsitter";
-    description = "A tree-sitter based AST difftool to get meaningful semantic diffs";
+    description = "Tree-sitter based AST difftool to get meaningful semantic diffs";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];
   };

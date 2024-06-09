@@ -22,7 +22,7 @@ mkDerivation {
   ];
   jailbreak = true;
   homepage = "https://github.com/NixOS/nixfmt";
-  description = "An opinionated formatter for Nix";
+  description = "Opinionated formatter for Nix";
   license = lib.licenses.mpl20;
   mainProgram = "nixfmt";
 }

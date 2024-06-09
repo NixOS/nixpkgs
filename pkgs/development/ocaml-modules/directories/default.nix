@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/ocamlpro/directories";
-    description = "An OCaml library that provides configuration, cache and data paths (and more!) following the suitable conventions on Linux, macOS and Windows";
+    description = "OCaml library that provides configuration, cache and data paths (and more!) following the suitable conventions on Linux, macOS and Windows";
     longDescription = ''
       directories is an OCaml library that provides configuration, cache and
       data paths (and more!) following the suitable conventions on Linux, macOS

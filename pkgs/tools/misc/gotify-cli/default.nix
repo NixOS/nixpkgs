@@ -24,7 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     license = licenses.mit;
     homepage = "https://github.com/gotify/cli";
-    description = "A command line interface for pushing messages to gotify/server";
+    description = "Command line interface for pushing messages to gotify/server";
     maintainers = with maintainers; [ ];
     mainProgram = "gotify";
   };

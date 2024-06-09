@@ -37,7 +37,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A set of extensions to the Python standard library's unit testing framework";
+    description = "Set of extensions to the Python standard library's unit testing framework";
     homepage = "https://pypi.python.org/pypi/testtools";
     license = lib.licenses.mit;
   };

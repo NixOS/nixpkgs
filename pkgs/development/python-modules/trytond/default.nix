@@ -76,7 +76,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "The server of the Tryton application platform";
+    description = "Server of the Tryton application platform";
     longDescription = ''
       The server for Tryton, a three-tier high-level general purpose
       application platform under the license GPL-3 written in Python and using

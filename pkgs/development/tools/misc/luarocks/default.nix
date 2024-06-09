@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A package manager for Lua";
+    description = "Package manager for Lua";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin teto ];
     mainProgram = "luarocks";

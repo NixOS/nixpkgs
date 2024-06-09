@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-+jYl/oUeJaABgDX/OBTyeo/B7RYc2MUTreU1ySLG0XQ=";
 
   meta = with lib; {
-    description = "A CLI tool to manage todo lists in todo.txt format";
+    description = "CLI tool to manage todo lists in todo.txt format";
     homepage = "https://github.com/VladimirMarkelov/ttdl";
     changelog = "https://github.com/VladimirMarkelov/ttdl/blob/v${version}/changelog";
     license = with licenses; [ mit ];

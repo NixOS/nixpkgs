@@ -198,7 +198,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://salsa.debian.org/signing-party-team/signing-party";
-    description = "A collection of several projects relating to OpenPGP";
+    description = "Collection of several projects relating to OpenPGP";
     longDescription = ''
       This is a collection of several projects relating to OpenPGP.
 

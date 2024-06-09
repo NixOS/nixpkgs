@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-std=gnu90";
 
   meta = with lib; {
-    description = "A Library to Access SMI MIB Information";
+    description = "Library to Access SMI MIB Information";
     homepage = "https://www.ibr.cs.tu-bs.de/projects/libsmi/index.html";
     license = licenses.free;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

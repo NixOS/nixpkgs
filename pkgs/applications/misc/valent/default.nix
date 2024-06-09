@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "An implementation of the KDE Connect protocol, built on GNOME platform libraries";
+    description = "Implementation of the KDE Connect protocol, built on GNOME platform libraries";
     mainProgram = "valent";
     longDescription = ''
       Note that you have to open firewall ports for other devices

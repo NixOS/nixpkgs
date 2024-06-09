@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "A simple X-Window (X11R6) programming API in C";
+    description = "Simple X-Window (X11R6) programming API in C";
     homepage = "https://github.com/42Paris/minilibx-linux";
     license = licenses.bsd2;
     maintainers = with maintainers; [ wegank ];

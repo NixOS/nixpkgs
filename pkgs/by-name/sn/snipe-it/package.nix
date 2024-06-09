@@ -45,7 +45,7 @@ php.buildComposerProject (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A free open source IT asset/license management system";
+    description = "Free open source IT asset/license management system";
     longDescription = ''
       Snipe-IT was made for IT asset management, to enable IT departments to track
       who has which laptop, when it was purchased, which software licenses and accessories

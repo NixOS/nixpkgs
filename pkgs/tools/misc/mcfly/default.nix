@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/cantino/mcfly";
-    description = "An upgraded ctrl-r where history results make sense for what you're working on right now";
+    description = "Upgraded ctrl-r where history results make sense for what you're working on right now";
     changelog = "https://github.com/cantino/mcfly/raw/v${version}/CHANGELOG.txt";
     license = licenses.mit;
     maintainers = [ maintainers.melkor333 ];

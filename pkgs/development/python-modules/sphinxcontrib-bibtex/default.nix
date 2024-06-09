@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
-    description = "A Sphinx extension for BibTeX style citations";
+    description = "Sphinx extension for BibTeX style citations";
     homepage = "https://github.com/mcmtroffaes/sphinxcontrib-bibtex";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];

@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "An alternate client for Discord with Vencord built-in";
+    description = "Alternate client for Discord with Vencord built-in";
     homepage = "https://github.com/Vencord/Vesktop";
     changelog = "https://github.com/Vencord/Vesktop/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;

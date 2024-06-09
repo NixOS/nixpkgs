@@ -33,7 +33,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A chatbot framework written in Go";
+    description = "Chatbot framework written in Go";
     homepage = "https://github.com/target/flottbot";
     license = licenses.asl20;
     maintainers = with maintainers; [ bryanhonof ];

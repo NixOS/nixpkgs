@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   PYTHON_CONFIG = "/invalid";
 
   meta = with lib; {
-    description = "The trivial database";
+    description = "Trivial database";
     longDescription = ''
       TDB is a Trivial Database. In concept, it is very much like GDBM,
       and BSD's DB except that it allows multiple simultaneous writers

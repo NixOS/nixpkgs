@@ -93,7 +93,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/stan-dev/cmdstanpy";
-    description = "A lightweight interface to Stan for Python users";
+    description = "Lightweight interface to Stan for Python users";
     changelog = "https://github.com/stan-dev/cmdstanpy/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tomasajt ];

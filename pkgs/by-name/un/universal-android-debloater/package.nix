@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool to debloat non-rooted Android devices";
+    description = "Tool to debloat non-rooted Android devices";
     changelog = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation";
     license = licenses.gpl3Only;

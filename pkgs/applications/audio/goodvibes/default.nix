@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A lightweight internet radio player";
+    description = "Lightweight internet radio player";
     homepage = "https://gitlab.com/goodvibes/goodvibes";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

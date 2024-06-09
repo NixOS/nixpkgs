@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "switchbot_api" ];
 
   meta = with lib; {
-    description = "An asynchronous library to use Switchbot API";
+    description = "Asynchronous library to use Switchbot API";
     homepage = "https://github.com/SeraphicCorp/py-switchbot-api";
     changelog = "https://github.com/SeraphicCorp/py-switchbot-api/releases/tag/v${version}";
     license = licenses.mit;

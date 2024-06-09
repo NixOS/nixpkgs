@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://links.twibright.com/";
-    description = "A small browser with some graphics support";
+    description = "Small browser with some graphics support";
     maintainers = with maintainers; [ raskin ];
     mainProgram = "links";
     license = licenses.gpl2Plus;

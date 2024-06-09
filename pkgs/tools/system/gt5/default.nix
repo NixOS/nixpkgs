@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A diff-capable 'du' browser";
+    description = "Diff-capable 'du' browser";
     homepage = "https://gt5.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [viric];

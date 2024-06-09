@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "The BLAKE2 family of cryptographic hash functions";
+    description = "BLAKE2 family of cryptographic hash functions";
     homepage = "https://blake2.net/";
     pkgConfigModules = [ "libb2" ];
     platforms = platforms.all;

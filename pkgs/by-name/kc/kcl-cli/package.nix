@@ -18,7 +18,7 @@ buildGoModule rec {
   ];
   subPackages = [ "cmd/kcl" ];
   meta = with lib; {
-    description = "A command line interface for KCL programming language";
+    description = "Command line interface for KCL programming language";
     homepage = "https://github.com/kcl-lang/cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ peefy ];

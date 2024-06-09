@@ -169,7 +169,7 @@ buildPythonPackage rec {
     ++ lib.optionals (!rocmSupport) [ "extra/hip_gpu_driver/" ];
 
   meta = with lib; {
-    description = "A simple and powerful neural network framework";
+    description = "Simple and powerful neural network framework";
     homepage = "https://github.com/tinygrad/tinygrad";
     changelog = "https://github.com/tinygrad/tinygrad/releases/tag/v${version}";
     license = licenses.mit;

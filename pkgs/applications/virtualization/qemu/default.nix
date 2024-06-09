@@ -272,7 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.qemu.org/";
-    description = "A generic and open source machine emulator and virtualizer";
+    description = "Generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco qyliss ];
     platforms = platforms.unix;

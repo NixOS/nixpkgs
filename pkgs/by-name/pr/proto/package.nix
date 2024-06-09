@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "A pluggable multi-language version manager";
+    description = "Pluggable multi-language version manager";
     longDescription = ''
       proto is a pluggable next-generation version manager for multiple programming languages. A unified toolchain.
     '';

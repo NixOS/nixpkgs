@@ -80,7 +80,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pycyphal" ];
 
   meta = with lib; {
-    description = "A full-featured implementation of the Cyphal protocol stack in Python";
+    description = "Full-featured implementation of the Cyphal protocol stack in Python";
     longDescription = ''
       Cyphal is an open technology for real-time intravehicular distributed computing and communication based on modern networking standards (Ethernet, CAN FD, etc.).
     '';

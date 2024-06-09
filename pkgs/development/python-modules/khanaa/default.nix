@@ -36,7 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "khanaa" ];
 
   meta = with lib; {
-    description = "A tool to make spelling Thai more convenient";
+    description = "Tool to make spelling Thai more convenient";
     homepage = "https://github.com/cakimpei/khanaa";
     changelog = "https://github.com/cakimpei/khanaa/blob/main/CHANGELOG.md";
     license = licenses.mit;

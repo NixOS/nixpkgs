@@ -50,7 +50,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";
     changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/v${version}/CHANGELOG.md";
-    description = "A vendor-agnostic implementation on how to receive, process and export telemetry data";
+    description = "Vendor-agnostic implementation on how to receive, process and export telemetry data";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
       to receive, process and export telemetry data. In addition, it removes the

@@ -38,7 +38,7 @@ let
 
       meta = with lib; {
         homepage = "https://www.nomadproject.io/";
-        description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
+        description = "Distributed, Highly Available, Datacenter-Aware Scheduler";
         mainProgram = "nomad";
         inherit license;
         maintainers = with maintainers; [ rushmorem pradeepchhetri techknowlogick cottand ];

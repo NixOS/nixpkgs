@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "An open-source collection of tools for doing computation in game theory";
+    description = "Open-source collection of tools for doing computation in game theory";
     homepage = "http://www.gambit-project.org";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ t4ccer ];

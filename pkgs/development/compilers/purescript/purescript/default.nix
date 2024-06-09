@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A strongly-typed functional programming language that compiles to JavaScript";
+    description = "Strongly-typed functional programming language that compiles to JavaScript";
     homepage = "https://www.purescript.org/";
     license = licenses.bsd3;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

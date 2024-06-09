@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     isIbusEngine = true;
-    description  = "An IBus framework for table-based input methods";
+    description  = "IBus framework for table-based input methods";
     mainProgram = "ibus-table-createdb";
     homepage     = "https://github.com/kaio/ibus-table/wiki";
     license      = licenses.lgpl21;

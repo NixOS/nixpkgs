@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A library to handle i2c sensors with the Raspberry Pi";
+    description = "Library to handle i2c sensors with the Raspberry Pi";
     mainProgram = "i2csense";
     homepage = "https://github.com/azogue/i2csense";
     license = licenses.mit;

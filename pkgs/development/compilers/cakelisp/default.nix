@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "A performance-oriented Lisp-like language";
+    description = "Performance-oriented Lisp-like language";
     mainProgram = "cakelisp";
     homepage = "https://macoy.me/code/macoy/cakelisp";
     license = licenses.gpl3Plus;

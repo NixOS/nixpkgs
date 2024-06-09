@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/neithere/argh/blob/v${version}/CHANGES";
     homepage = "https://github.com/neithere/argh";
-    description = "An unobtrusive argparse wrapper with natural syntax";
+    description = "Unobtrusive argparse wrapper with natural syntax";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ domenkozar ];
   };

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isLinux qtwayland;
 
   meta = with lib; {
-    description = "A GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
+    description = "GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
     mainProgram = "DSView";
     homepage = "https://www.dreamsourcelab.com/";
     license = licenses.gpl3Plus;

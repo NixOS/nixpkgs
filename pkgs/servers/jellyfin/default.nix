@@ -51,7 +51,7 @@ buildDotnetModule rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "The Free Software Media System";
+    description = "Free Software Media System";
     homepage = "https://jellyfin.org/";
     # https://github.com/jellyfin/jellyfin/issues/610#issuecomment-537625510
     license = licenses.gpl2Plus;

@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An implementation for VA-API (Video Acceleration API)";
+    description = "Implementation for VA-API (Video Acceleration API)";
     longDescription = ''
       VA-API is an open-source library and API specification, which provides
       access to graphics hardware acceleration capabilities for video

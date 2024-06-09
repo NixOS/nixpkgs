@@ -15,7 +15,7 @@ mkCoqDerivation rec {
   releaseRev = v: "${v}";
   propagatedBuildInputs = [ coq-ext-lib paco ];
   meta = {
-    description = "A Library for Representing Recursive and Impure Programs in Coq";
+    description = "Library for Representing Recursive and Impure Programs in Coq";
     maintainers = with lib.maintainers; [ larsr ];
   };
 }

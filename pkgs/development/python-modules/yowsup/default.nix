@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/tgalal/yowsup";
-    description = "The python WhatsApp library";
+    description = "Python WhatsApp library";
     mainProgram = "yowsup-cli";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];

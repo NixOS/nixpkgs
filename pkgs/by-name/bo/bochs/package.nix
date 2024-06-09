@@ -136,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://bochs.sourceforge.io/";
-    description = "An open-source IA-32 (x86) PC emulator";
+    description = "Open-source IA-32 (x86) PC emulator";
     longDescription = ''
       Bochs is an open-source (LGPL), highly portable IA-32 PC emulator, written
       in C++, that runs on most popular platforms. It includes emulation of the

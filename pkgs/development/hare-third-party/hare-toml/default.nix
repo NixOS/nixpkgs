@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A TOML implementation for Hare";
+    description = "TOML implementation for Hare";
     homepage = "https://codeberg.org/lunacb/hare-toml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onemoresuza ];

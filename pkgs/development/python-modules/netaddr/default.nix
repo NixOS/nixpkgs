@@ -26,7 +26,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "netaddr" ];
 
   meta = with lib; {
-    description = "A network address manipulation library for Python";
+    description = "Network address manipulation library for Python";
     mainProgram = "netaddr";
     homepage = "https://netaddr.readthedocs.io/";
     downloadPage = "https://github.com/netaddr/netaddr/releases";

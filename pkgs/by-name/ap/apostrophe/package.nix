@@ -106,7 +106,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/World/apostrophe";
-    description = "A distraction free Markdown editor for GNU/Linux";
+    description = "Distraction free Markdown editor for GNU/Linux";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

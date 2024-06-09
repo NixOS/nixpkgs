@@ -23,7 +23,7 @@ let
     cargoHash = "sha256-4o3ctun/8VcBRuj+j0Yaawdkyn6Z6LPp+FTyhPxQWU8=";
 
     meta = with lib; {
-      description = "A tool to make production Rust binaries auditable";
+      description = "Tool to make production Rust binaries auditable";
       mainProgram = "cargo-auditable";
       homepage = "https://github.com/rust-secure-code/cargo-auditable";
       changelog = "https://github.com/rust-secure-code/cargo-auditable/blob/v${version}/cargo-auditable/CHANGELOG.md";

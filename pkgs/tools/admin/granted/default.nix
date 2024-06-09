@@ -57,7 +57,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The easiest way to access your cloud";
+    description = "Easiest way to access your cloud";
     homepage = "https://github.com/common-fate/granted";
     changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
     license = licenses.mit;

@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://tigerbeetle.com/";
-    description = "A financial accounting database designed to be distributed and fast";
+    description = "Financial accounting database designed to be distributed and fast";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danielsidhion ];
     platforms = lib.platforms.linux;

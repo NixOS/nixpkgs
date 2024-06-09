@@ -244,7 +244,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more";
+    description = "Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more";
     homepage = "https://github.com/flightlessmango/MangoHud";
     changelog = "https://github.com/flightlessmango/MangoHud/releases/tag/v${finalAttrs.version}";
     platforms = platforms.linux;

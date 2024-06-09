@@ -220,7 +220,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = ./update.mjs;
 
   meta = {
-    description = "A Community-led Hyper-Hackable Text Editor";
+    description = "Community-led Hyper-Hackable Text Editor";
     longDescription = ''
       A Community-led Hyper-Hackable Text Editor, Forked from Atom, built on Electron.
       Designed to be deeply customizable, but still approachable using the default configuration.

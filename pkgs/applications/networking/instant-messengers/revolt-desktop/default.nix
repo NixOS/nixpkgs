@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An open source user-first chat platform";
+    description = "Open source user-first chat platform";
     homepage = "https://revolt.chat/";
     changelog = "https://github.com/revoltchat/desktop/releases/tag/v${version}";
     license = licenses.agpl3Only;

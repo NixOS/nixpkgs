@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A simple and adorable sysinfo utility written in Rust";
+    description = "Simple and adorable sysinfo utility written in Rust";
     homepage = "https://github.com/devraza/bunbun";
     changelog = "https://github.com/devraza/bunbun/releases/tag/v${version}";
     license = licenses.mit;

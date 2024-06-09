@@ -84,7 +84,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The best way to play itch.io games";
+    description = "Best way to play itch.io games";
     homepage = "https://github.com/itchio/itch";
     license = licenses.mit;
     platforms = platforms.linux;

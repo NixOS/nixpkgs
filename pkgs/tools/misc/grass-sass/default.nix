@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Sass compiler written purely in Rust";
+    description = "Sass compiler written purely in Rust";
     homepage = "https://github.com/connorskees/grass";
     changelog = "https://github.com/connorskees/grass/blob/master/CHANGELOG.md#${replaceStrings [ "." ] [ "" ] version}";
     license = licenses.mit;

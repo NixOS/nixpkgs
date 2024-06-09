@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A complete emulation of CPC464, CPC664 and CPC6128";
+    description = "Complete emulation of CPC464, CPC664 and CPC6128";
     homepage = "https://github.com/ColinPitrat/caprice32";
     license = licenses.gpl2;
     maintainers = [ ];

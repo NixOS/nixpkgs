@@ -27,7 +27,7 @@ buildGoModule {
   vendorHash = "sha256-/TRCD6akZV2qDqJz62p7UzFIGuTAKLnUtYqqvdw3rCI=";
 
   meta = {
-    description = "An RSS feed reader for the terminal written in Go";
+    description = "RSS feed reader for the terminal written in Go";
     changelog = "https://github.com/isabelroses/izrss/releases/v${version}";
     homepage = "https://github.com/isabelroses/izrss";
     license = lib.licenses.gpl3Plus;

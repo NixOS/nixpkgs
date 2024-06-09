@@ -37,7 +37,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A novel data lake based on super-structured data";
+    description = "Novel data lake based on super-structured data";
     homepage = "https://zed.brimdata.io";
     changelog = "https://github.com/brimdata/zed/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;

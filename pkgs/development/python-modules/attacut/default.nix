@@ -64,7 +64,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "attacut" ];
 
   meta = with lib; {
-    description = "A Fast and Accurate Neural Thai Word Segmenter";
+    description = "Fast and Accurate Neural Thai Word Segmenter";
     homepage = "https://github.com/PyThaiNLP/attacut";
     license = licenses.mit;
     maintainers = with maintainers; [ vizid ];

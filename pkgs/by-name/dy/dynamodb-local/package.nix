@@ -73,7 +73,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "DynamoDB Local is a small client-side database and server that mimics the DynamoDB service.";
+    description = "DynamoDB Local is a small client-side database and server that mimics the DynamoDB service";
     homepage = "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html";
     license = licenses.unfree;
     mainProgram = "dynamodb-local";

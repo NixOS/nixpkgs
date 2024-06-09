@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A tool for refurbishing and modernizing Python codebases";
+    description = "Tool for refurbishing and modernizing Python codebases";
     mainProgram = "refurb";
     homepage = "https://github.com/dosisod/refurb";
     license = with licenses; [ gpl3Only ];

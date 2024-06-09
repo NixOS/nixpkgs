@@ -22,7 +22,7 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "A GUI front-end for Neo4j";
+    description = "GUI front-end for Neo4j";
     homepage = "https://neo4j.com/";
     license = licenses.unfree;
     maintainers = [ maintainers.bobvanderlinden ];

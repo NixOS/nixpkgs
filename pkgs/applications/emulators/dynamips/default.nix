@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A Cisco router emulator";
+    description = "Cisco router emulator";
     longDescription = ''
       Dynamips is an emulator computer program that was written to emulate Cisco
       routers.

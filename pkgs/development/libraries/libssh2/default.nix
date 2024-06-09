@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
   meta = with lib; {
-    description = "A client-side C library implementing the SSH2 protocol";
+    description = "Client-side C library implementing the SSH2 protocol";
     homepage = "https://www.libssh2.org";
     platforms = platforms.all;
     license = with licenses; [ bsd3 libssh2 ];

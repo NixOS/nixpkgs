@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mitmproxy_rs" ];
 
   meta = with lib; {
-    description = "The Rust bits in mitmproxy";
+    description = "Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs";
     changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

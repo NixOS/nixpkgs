@@ -31,7 +31,7 @@ buildGoModule {
   meta = {
     platforms = lib.platforms.all;
     mainProgram = "kubectl-validate";
-    description = "A tool for local validation of resources for native Kubernetes types and CRDs";
+    description = "Tool for local validation of resources for native Kubernetes types and CRDs";
     homepage = "https://github.com/kubernetes-sigs/kubectl-validate";
     changelog = "https://github.com/kubernetes-sigs/kubectl-validate/releases/tag/v${version}";
     license = lib.licenses.asl20;

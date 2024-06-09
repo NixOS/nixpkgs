@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "Tree is a library for working with nested data structures.";
+    description = "Tree is a library for working with nested data structures";
     homepage = "https://github.com/deepmind/tree";
     license = licenses.asl20;
     maintainers = with maintainers; [

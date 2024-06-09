@@ -45,7 +45,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.rev}";
-    description = "A secure and free password manager for all of your devices";
+    description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3Only;
     mainProgram = "bw";

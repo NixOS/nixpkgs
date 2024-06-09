@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
   meta = with lib; {
-    description = "A virtual guitar amplifier for Linux running with JACK";
+    description = "Virtual guitar amplifier for Linux running with JACK";
     mainProgram = "guitarix";
     longDescription = ''
         guitarix is a virtual guitar amplifier for Linux running with

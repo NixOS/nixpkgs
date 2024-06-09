@@ -28,7 +28,7 @@ rec {
     meta = with lib; {
       homepage = "https://www.rust-lang.org/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      description = "A safe, concurrent, practical language";
+      description = "Safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
@@ -73,7 +73,7 @@ rec {
     meta = with lib; {
       homepage = "https://doc.rust-lang.org/cargo/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      description = "The Rust package manager";
+      description = "Rust package manager";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };

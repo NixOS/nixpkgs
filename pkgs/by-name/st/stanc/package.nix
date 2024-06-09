@@ -30,7 +30,7 @@ ocamlPackages.buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/stan-dev/stanc3";
-    description = "The Stan compiler and utilities";
+    description = "Stan compiler and utilities";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.unix;

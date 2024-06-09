@@ -35,7 +35,7 @@ mkXfceDerivation {
   '';
 
   meta = with lib; {
-    description = "A power manager for the Xfce Desktop Environment";
+    description = "Power manager for the Xfce Desktop Environment";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

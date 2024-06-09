@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A tool for building final distributable artifacts and uploading them to an archive";
+    description = "Tool for building final distributable artifacts and uploading them to an archive";
     mainProgram = "cargo-dist";
     homepage = "https://github.com/axodotdev/cargo-dist";
     changelog = "https://github.com/axodotdev/cargo-dist/blob/${src.rev}/CHANGELOG.md";

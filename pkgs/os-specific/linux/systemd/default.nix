@@ -894,7 +894,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
-    description = "A system and service manager for Linux";
+    description = "System and service manager for Linux";
     longDescription = ''
       systemd is a suite of basic building blocks for a Linux system. It
       provides a system and service manager that runs as PID 1 and starts the

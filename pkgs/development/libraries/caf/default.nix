@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = with lib; {
-    description = "An open source implementation of the actor model in C++";
+    description = "Open source implementation of the actor model in C++";
     homepage = "http://actor-framework.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;

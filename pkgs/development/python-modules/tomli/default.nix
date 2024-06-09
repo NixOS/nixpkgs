@@ -42,7 +42,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A Python library for parsing TOML, fully compatible with TOML v1.0.0";
+    description = "Python library for parsing TOML, fully compatible with TOML v1.0.0";
     homepage = "https://github.com/hukkin/tomli";
     license = licenses.mit;
     maintainers = with maintainers; [ veehaitch ];

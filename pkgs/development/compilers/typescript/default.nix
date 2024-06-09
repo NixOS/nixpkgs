@@ -24,7 +24,7 @@ buildNpmPackage rec {
   };
 
   meta = with lib; {
-    description = "A superset of JavaScript that compiles to clean JavaScript output";
+    description = "Superset of JavaScript that compiles to clean JavaScript output";
     homepage = "https://www.typescriptlang.org/";
     changelog = "https://github.com/microsoft/TypeScript/releases/tag/v${version}";
     license = licenses.asl20;

@@ -19,7 +19,7 @@ buildGoModule rec {
   subPackages = [ "cmd/grr" ];
 
   meta = with lib; {
-    description = "A utility for managing Jsonnet dashboards against the Grafana API";
+    description = "Utility for managing Jsonnet dashboards against the Grafana API";
     homepage = "https://grafana.github.io/grizzly/";
     license = licenses.asl20;
     maintainers = with lib.maintainers; [ nrhtr ];

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A highly accurate clone of the classic Fasttracker II software for MS-DOS";
+    description = "Highly accurate clone of the classic Fasttracker II software for MS-DOS";
     homepage = "https://16-bits.org/ft2.php";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];

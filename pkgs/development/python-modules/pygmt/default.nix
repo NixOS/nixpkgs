@@ -63,7 +63,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pygmt" ];
 
   meta = with lib; {
-    description = "A Python interface for the Generic Mapping Tools";
+    description = "Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = licenses.bsd3;
     changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/v${version}";

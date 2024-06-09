@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "niaarm" ];
 
   meta = with lib; {
-    description = "A minimalistic framework for Numerical Association Rule Mining";
+    description = "Minimalistic framework for Numerical Association Rule Mining";
     mainProgram = "niaarm";
     homepage = "https://github.com/firefly-cpp/NiaARM";
     changelog = "https://github.com/firefly-cpp/NiaARM/blob/${version}/CHANGELOG.md";

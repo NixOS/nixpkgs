@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     homepage = "https://github.com/catppuccin/toolbox/tree/main/catwalk";
-    description = "A CLI for Catppuccin that takes in four showcase images and displays them all at once";
+    description = "CLI for Catppuccin that takes in four showcase images and displays them all at once";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ryanccn ];
     mainProgram = "catwalk";

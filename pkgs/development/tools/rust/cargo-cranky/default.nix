@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-jmyrtaJTdZlffC7i5k7z9BEsHAs1rPTCs2/jgq1Jt6Y=";
 
   meta = with lib; {
-    description = "An easy to configure wrapper for Rust's clippy";
+    description = "Easy to configure wrapper for Rust's clippy";
     mainProgram = "cargo-cranky";
     homepage = "https://github.com/ericseppanen/cargo-cranky";
     changelog = "https://github.com/ericseppanen/cargo-cranky/releases/tag/${src.rev}";

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails 3 tests, probably needs the net
 
   meta = with lib; {
-    description = "A free and open source utility for network discovery and security auditing";
+    description = "Free and open source utility for network discovery and security auditing";
     homepage    = "http://www.nmap.org";
     license     = licenses.gpl2Only;
     platforms   = platforms.all;

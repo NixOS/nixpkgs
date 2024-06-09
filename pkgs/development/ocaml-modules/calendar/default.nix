@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   meta = {
     inherit (src.meta) homepage;
-    description = "A library for handling dates and times";
+    description = "Library for handling dates and times";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ lib.maintainers.gal_bolle ];
   };

@@ -33,7 +33,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "wasabi" ];
 
   meta = with lib; {
-    description = "A lightweight console printing and formatting toolkit";
+    description = "Lightweight console printing and formatting toolkit";
     homepage = "https://github.com/ines/wasabi";
     changelog = "https://github.com/ines/wasabi/releases/tag/v${version}";
     license = licenses.mit;

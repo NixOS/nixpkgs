@@ -29,7 +29,7 @@ let
 
     meta = with lib; {
       homepage = "https://tomcat.apache.org/";
-      description = "An implementation of the Java Servlet and JavaServer Pages technologies";
+      description = "Implementation of the Java Servlet and JavaServer Pages technologies";
       platforms = jre.meta.platforms;
       maintainers = with maintainers; [ anthonyroussel ];
       license = [ licenses.asl20 ];

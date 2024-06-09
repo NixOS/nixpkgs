@@ -5,11 +5,11 @@
   # to the generic release.
   # {
   #   cudnnVersion = lib.options.mkOption {
-  #     description = "The CUDNN version supported";
+  #     description = "CUDNN version supported";
   #     type = types.nullOr majorMinorVersion;
   #   };
   #   filename = lib.options.mkOption {
-  #     description = "The tarball name";
+  #     description = "Tarball name";
   #     type = types.str;
   #   };
   # }

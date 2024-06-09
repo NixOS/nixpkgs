@@ -338,7 +338,7 @@ in with passthru; stdenv.mkDerivation ({
 
     meta = {
       homepage = "http://python.org";
-      description = "A high-level dynamically-typed programming language";
+      description = "High-level dynamically-typed programming language";
       longDescription = ''
         Python is a remarkably powerful dynamic programming language that
         is used in a wide variety of application domains. Some of its key

@@ -68,7 +68,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "shazamio" ];
 
   meta = with lib; {
-    description = "A free asynchronous library from reverse engineered Shazam API";
+    description = "Free asynchronous library from reverse engineered Shazam API";
     homepage = "https://github.com/dotX12/ShazamIO";
     changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${src.rev}";
     license = licenses.mit;

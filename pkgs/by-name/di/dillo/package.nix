@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://dillo-browser.github.io/";
-    description = "A fast graphical web browser with a small footprint";
+    description = "Fast graphical web browser with a small footprint";
     longDescription = ''
       Dillo is a fast and small graphical web browser with the following
       features:

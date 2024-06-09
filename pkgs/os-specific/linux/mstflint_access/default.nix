@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A kernel module for Nvidia NIC firmware update";
+    description = "Kernel module for Nvidia NIC firmware update";
     homepage = "https://github.com/Mellanox/mstflint";
     license = [ licenses.gpl2Only ];
     maintainers = with maintainers; [ thillux ];

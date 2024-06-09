@@ -63,7 +63,7 @@ maven.buildMavenPackage rec {
   '';
 
   meta = with lib; {
-    description = "A program to visualize different juggling pattens";
+    description = "Program to visualize different juggling pattens";
     homepage = "https://jugglinglab.org/";
     license = licenses.gpl2Only;
     mainProgram = "jugglinglab";

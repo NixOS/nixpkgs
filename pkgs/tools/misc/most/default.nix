@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A terminal pager similar to 'more' and 'less'";
+    description = "Terminal pager similar to 'more' and 'less'";
     longDescription = ''
       MOST is a powerful paging program for Unix, VMS, MSDOS, and win32
       systems. Unlike other well-known paging programs most supports multiple

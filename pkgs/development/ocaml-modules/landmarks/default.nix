@@ -16,7 +16,7 @@ buildDunePackage {
     && lib.versionOlder ocaml.version "5.0";
 
   meta = with lib; {
-    description = "A Simple Profiling Library for OCaml";
+    description = "Simple Profiling Library for OCaml";
     maintainers = [ maintainers.kenran ];
     license = licenses.mit;
   };

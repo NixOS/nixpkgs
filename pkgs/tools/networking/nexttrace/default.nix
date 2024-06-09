@@ -25,7 +25,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An open source visual route tracking CLI tool";
+    description = "Open source visual route tracking CLI tool";
     homepage = "https://mtr.moe";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ sharzy ];

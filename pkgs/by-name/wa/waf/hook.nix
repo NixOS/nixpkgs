@@ -16,7 +16,7 @@ makeSetupHook {
   };
 
   meta = {
-    description = "A setup hook for using Waf in Nixpkgs";
+    description = "Setup hook for using Waf in Nixpkgs";
     inherit (waf.meta) maintainers platforms broken;
   };
 } ./setup-hook.sh

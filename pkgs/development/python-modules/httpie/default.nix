@@ -118,7 +118,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "A command line HTTP client whose goal is to make CLI human-friendly";
+    description = "Command line HTTP client whose goal is to make CLI human-friendly";
     homepage = "https://httpie.org/";
     changelog = "https://github.com/httpie/httpie/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;

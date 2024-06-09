@@ -19,7 +19,7 @@ php.buildComposerProject (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/phpro/grumphp/releases/tag/v${finalAttrs.version}";
-    description = "A PHP code-quality tool";
+    description = "PHP code-quality tool";
     homepage = "https://github.com/phpro/grumphp";
     license = lib.licenses.mit;
     mainProgram = "grumphp";

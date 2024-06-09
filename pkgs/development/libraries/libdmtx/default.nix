@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = {
-    description = "An open source software for reading and writing Data Matrix barcodes";
+    description = "Open source software for reading and writing Data Matrix barcodes";
     homepage = "https://github.com/dmtx/libdmtx";
     changelog = "https://github.com/dmtx/libdmtx/blob/v${version}/ChangeLog";
     platforms = lib.platforms.all;

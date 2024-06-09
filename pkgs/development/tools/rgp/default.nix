@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A tool from AMD that allows for deep inspection of GPU workloads";
+    description = "Tool from AMD that allows for deep inspection of GPU workloads";
     homepage = "https://gpuopen.com/rgp/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;

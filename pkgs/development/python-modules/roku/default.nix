@@ -30,7 +30,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "roku" ];
 
   meta = with lib; {
-    description = "Screw remotes. Control your Roku with Python.";
+    description = "Screw remotes. Control your Roku with Python";
     homepage = "https://github.com/jcarbaugh/python-roku";
     license = licenses.bsd3;
   };

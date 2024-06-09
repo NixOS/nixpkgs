@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional (static) "LDFLAGS=-static";
 
   meta = {
-    description = "A high-performance event loop/event model with lots of features";
+    description = "High-performance event loop/event model with lots of features";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2; # or GPL2+

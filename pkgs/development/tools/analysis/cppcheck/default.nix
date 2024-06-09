@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A static analysis tool for C/C++ code";
+    description = "Static analysis tool for C/C++ code";
     homepage = "http://cppcheck.sourceforge.net";
     license = lib.licenses.gpl3Plus;
     longDescription = ''

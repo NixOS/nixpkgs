@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Python package which creates simple interactive menus on the command line";
+    description = "Python package which creates simple interactive menus on the command line";
     mainProgram = "simple-term-menu";
     homepage = "https://github.com/IngoMeyer441/simple-term-menu";
     license = licenses.mit;

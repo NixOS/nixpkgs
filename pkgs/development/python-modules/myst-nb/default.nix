@@ -52,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Jupyter Notebook Sphinx reader built on top of the MyST markdown parser";
+    description = "Jupyter Notebook Sphinx reader built on top of the MyST markdown parser";
     homepage = "https://github.com/executablebooks/MyST-NB";
     changelog = "https://github.com/executablebooks/MyST-NB/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A file system for mounting container images";
+    description = "File system for mounting container images";
     homepage = "https://github.com/containers/composefs";
     changelog = "https://github.com/containers/composefs/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ gpl3Plus lgpl21Plus ];

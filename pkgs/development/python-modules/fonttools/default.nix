@@ -118,7 +118,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";
-    description = "A library to manipulate font files from Python";
+    description = "Library to manipulate font files from Python";
     changelog = "https://github.com/fonttools/fonttools/blob/${version}/NEWS.rst";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];

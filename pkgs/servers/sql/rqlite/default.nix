@@ -29,7 +29,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The lightweight, distributed relational database built on SQLite";
+    description = "Lightweight, distributed relational database built on SQLite";
     homepage = "https://github.com/rqlite/rqlite";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];

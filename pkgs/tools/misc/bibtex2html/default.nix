@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ ocaml perl ];
 
   meta = with lib; {
-    description = "A collection of tools for translating from BibTeX to HTML";
+    description = "Collection of tools for translating from BibTeX to HTML";
     homepage = "https://www.lri.fr/~filliatr/bibtex2html/";
     license = licenses.gpl2Only;
     platforms = ocaml.meta.platforms or [];

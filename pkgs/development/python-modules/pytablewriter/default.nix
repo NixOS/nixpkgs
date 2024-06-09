@@ -104,7 +104,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A library to write a table in various formats";
+    description = "Library to write a table in various formats";
     homepage = "https://github.com/thombashi/pytablewriter";
     changelog = "https://github.com/thombashi/pytablewriter/releases/tag/v${version}";
     license = licenses.mit;

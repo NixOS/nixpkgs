@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-w3oDpJMsfV9mIWI44YgOsNZH2vahSRCSJnYpFWBx/eU=";
 
   meta = with lib; {
-    description = "A diff filter highlighting which line parts have changed";
+    description = "Diff filter highlighting which line parts have changed";
     homepage = "https://github.com/walles/riff";
     license = licenses.mit;
     maintainers = with maintainers; [ johnpyp ];

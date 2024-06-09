@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A bunch of tools that revolve around fiddling with dates and times in the command line";
+    description = "Bunch of tools that revolve around fiddling with dates and times in the command line";
     homepage = "http://www.fresse.org/dateutils/";
     license = licenses.bsd3;
     platforms = platforms.unix;

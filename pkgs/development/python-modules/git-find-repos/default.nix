@@ -19,7 +19,7 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   meta = {
-    description = "A simple CLI tool for finding git repositories";
+    description = "Simple CLI tool for finding git repositories";
     homepage = "https://github.com/acroz/git-find-repos";
     license = lib.licenses.mit;
     mainProgram = "git-find-repos";

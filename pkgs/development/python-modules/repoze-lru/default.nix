@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonNamespaces = [ "repoze" ];
 
   meta = with lib; {
-    description = "A tiny LRU cache implementation and decorator";
+    description = "Tiny LRU cache implementation and decorator";
     homepage = "http://www.repoze.org/";
     changelog = "https://github.com/repoze/repoze.lru/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;

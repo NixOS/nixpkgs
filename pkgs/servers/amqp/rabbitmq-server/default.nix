@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.rabbitmq.com/";
-    description = "An implementation of the AMQP messaging protocol";
+    description = "Implementation of the AMQP messaging protocol";
     changelog = "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v${version}";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;

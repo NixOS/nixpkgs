@@ -16,7 +16,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/ms-python.vscode-pylance/changelog";
-    description = "A performant, feature-rich language server for Python in VS Code";
+    description = "Performant, feature-rich language server for Python in VS Code";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance";
     homepage = "https://github.com/microsoft/pylance-release";
     license = lib.licenses.unfree;

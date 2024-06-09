@@ -64,7 +64,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "trainer" ];
 
   meta = with lib; {
-    description = "A general purpose model trainer, as flexible as it gets";
+    description = "General purpose model trainer, as flexible as it gets";
     homepage = "https://github.com/coqui-ai/Trainer";
     changelog = "https://github.com/coqui-ai/Trainer/releases/tag/v${version}";
     license = licenses.asl20;

@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/npiv/chatblade/";
-    description = "A CLI Swiss Army Knife for ChatGPT";
+    description = "CLI Swiss Army Knife for ChatGPT";
     mainProgram = "chatblade";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ deejayem ];

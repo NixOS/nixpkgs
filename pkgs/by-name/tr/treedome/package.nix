@@ -139,7 +139,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "A local-first, encrypted, note taking application organized in tree-like structures";
+    description = "Local-first, encrypted, note taking application organized in tree-like structures";
     homepage = " https://codeberg.org/solver-orgz/treedome";
     license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];

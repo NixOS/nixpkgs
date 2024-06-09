@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "a C library intended for use on embedded systems";
+    description = "C library intended for use on embedded systems";
     homepage = "https://sourceware.org/newlib/";
     # arch has "bsd" while gentoo has "NEWLIB LIBGLOSS GPL-2" while COPYING has "gpl2"
     # there are 5 copying files in total

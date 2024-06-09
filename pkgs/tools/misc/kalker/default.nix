@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://kalker.strct.net";
     changelog = "https://github.com/PaddiM8/kalker/releases/tag/v${version}";
-    description = "A command line calculator";
+    description = "Command line calculator";
     longDescription = ''
       A command line calculator that supports math-like syntax with user-defined
       variables, functions, derivation, integration, and complex numbers

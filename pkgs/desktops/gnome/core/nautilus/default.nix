@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "The file manager for GNOME";
+    description = "File manager for GNOME";
     homepage = "https://apps.gnome.org/Nautilus/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A jq clone focused on correctness, speed and simplicity";
+    description = "Jq clone focused on correctness, speed and simplicity";
     homepage = "https://github.com/01mf02/jaq";
     changelog = "https://github.com/01mf02/jaq/releases/tag/${src.rev}";
     license = licenses.mit;

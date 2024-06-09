@@ -30,7 +30,7 @@ buildGoModule rec {
 
   meta = with lib;{
     homepage = "https://github.com/macronut/phantomsocks";
-    description = "A cross-platform proxy client/server for Linux/Windows/macOS";
+    description = "Cross-platform proxy client/server for Linux/Windows/macOS";
     longDescription = ''
       A cross-platform proxy tool that could be used to modify TCP packets
       to implement TCB desync to bypass detection and censoring.

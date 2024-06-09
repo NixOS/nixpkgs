@@ -14,7 +14,7 @@ callPackage ./build.nix rec {
   };
 
   extraMeta = {
-    description = "A fully working re-implementation of Fallout, with the same original gameplay, engine bugfixes, and some quality of life improvements";
+    description = "Fully working re-implementation of Fallout, with the same original gameplay, engine bugfixes, and some quality of life improvements";
     homepage = "https://github.com/alexbatalov/fallout1-ce";
   };
 }

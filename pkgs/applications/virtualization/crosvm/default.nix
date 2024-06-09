@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = ./update.py;
 
   meta = with lib; {
-    description = "A secure virtual machine monitor for KVM";
+    description = "Secure virtual machine monitor for KVM";
     homepage = "https://crosvm.dev/";
     mainProgram = "crosvm";
     maintainers = with maintainers; [ qyliss ];

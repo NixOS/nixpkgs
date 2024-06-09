@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Tool for installing and maintaining Espressif Rust ecosystem.";
+    description = "Tool for installing and maintaining Espressif Rust ecosystem";
     homepage = "https://github.com/esp-rs/espup/";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ knightpp beeb ];

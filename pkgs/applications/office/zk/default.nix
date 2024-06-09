@@ -24,7 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     maintainers = with maintainers; [ pinpox ];
     license = licenses.gpl3;
-    description = "A zettelkasten plain text note-taking assistant";
+    description = "Zettelkasten plain text note-taking assistant";
     homepage = "https://github.com/mickael-menu/zk";
     mainProgram = "zk";
   };

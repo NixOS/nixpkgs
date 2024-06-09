@@ -24,7 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://git.sixfoisneuf.fr/termsonic";
-    description = "A Subsonic client running in your terminal";
+    description = "Subsonic client running in your terminal";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     mainProgram = "termsonic";

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   meta = with lib; {
-    description = "A compiler for the Berkely Unified Parallel C language";
+    description = "Compiler for the Berkely Unified Parallel C language";
     longDescription = ''
       Unified Parallel C (UPC) is an extension of the C programming language
       designed for high performance computing on large-scale parallel

@@ -29,7 +29,7 @@ buildGoPackage rec {
   buildInputs = [ glib cairo gdk-pixbuf gtk3 gnome.adwaita-icon-theme ];
 
   meta = with lib; {
-    description = "a safe and secure chat client";
+    description = "Safe and secure chat client";
     mainProgram = "coyim";
     homepage = "https://coy.im/";
     license = licenses.gpl3;

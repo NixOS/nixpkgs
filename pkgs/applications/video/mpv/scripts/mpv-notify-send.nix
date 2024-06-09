@@ -36,7 +36,7 @@ buildLua rec {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A Lua script for mpv to send notifications with notify-send";
+    description = "Lua script for mpv to send notifications with notify-send";
     homepage = "https://github.com/emilazy/mpv-notify-send";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ r3n3gad3p3arl ];
