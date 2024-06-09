@@ -7,10 +7,13 @@
 , ninja
 , vala
 , desktop-file-utils
+, gala
 , gtk4
 , glib
+, gnome-settings-daemon
 , granite7
 , libgee
+, mutter
 , wrapGAppsHook4
 }:
 
@@ -35,10 +38,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gala # org.pantheon.desktop.gala.keybindings
     glib
+    gnome-settings-daemon # org.gnome.settings-daemon.plugins.media-keys
     granite7
     gtk4
     libgee
+    mutter # org.gnome.mutter.keybindings
   ];
 
   passthru = {
