@@ -1820,8 +1820,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.180.827";
-          hash = "sha256-HA1na9FoExIiAay+tEjxWKqpG2+wq4Oww77Gl2Bhciw=";
+          version = "1.200.920";
+          hash = "sha256-LMShW9GN/wsDBodVn33Ui4qW0619r13VO2rSTPVE9TQ=";
         };
 
         meta = {
