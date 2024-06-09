@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake
-, valgrind
+, valgrind, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,6 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # tests take a very long time
   checkTarget = "test";
 
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      version = "v${finalAttrs.version}";
+    };
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "liblz4" ];
+    };
+  };
+
   meta = with lib; {
     description = "Extremely fast compression algorithm";
     longDescription = ''
@@ -49,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://lz4.github.io/lz4/";
     license = with licenses; [ bsd2 gpl2Plus ];
     platforms = platforms.all;
+    mainProgram = "lz4";
   };
 })
