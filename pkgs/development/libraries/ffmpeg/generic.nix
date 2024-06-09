@@ -73,6 +73,7 @@
 , withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLzma ? withHeadlessDeps # xz-utils
+, withMetal ? false # Unfree and requires manual downloading of files
 , withMfx ? withFullDeps && (with stdenv.hostPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
@@ -317,6 +318,7 @@
 , AVFoundation
 , CoreImage
 , VideoToolbox
+, xcode # unfree contains metalcc and metallib
 /*
  *  Testing
  */
@@ -605,6 +607,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ [
     (enableFeature withLadspa "ladspa")
     (enableFeature withLzma "lzma")
+  ] ++ optionals (versionAtLeast version "5.0") [
+    (enableFeature withMetal "metal")
+  ] ++ [
     (enableFeature withMfx "libmfx")
     (enableFeature withModplug "libmodplug")
     (enableFeature withMp3lame "libmp3lame")
@@ -689,6 +694,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals stdenv.cc.isClang [
     "--cc=clang"
     "--cxx=clang++"
+  ] ++ optionals withMetal [
+    "--metalcc=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metal"
+    "--metallib=${xcode}/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/metallib"
   ];
 
   # ffmpeg embeds the configureFlags verbatim in its binaries and because we
@@ -697,7 +705,8 @@ stdenv.mkDerivation (finalAttrs: {
   # such references except for data.
   postConfigure = let
     toStrip = map placeholder (lib.remove "data" finalAttrs.outputs) # We want to keep references to the data dir.
-      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc;
+      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc
+      ++ lib.optional withMetal xcode;
   in
     "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
 
