@@ -10919,7 +10919,6 @@ with pkgs;
   noip = callPackage ../tools/networking/noip { };
 
   inherit (callPackages ../applications/networking/cluster/nomad { })
-    nomad
     nomad_1_4
     nomad_1_5
     nomad_1_6
