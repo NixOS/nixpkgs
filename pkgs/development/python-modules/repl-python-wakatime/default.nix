@@ -1,47 +1,51 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, ptpython
-, ipython
-, setuptools
-, setuptools-scm
-, setuptools-generate
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ipython,
+  keyring,
+  ptpython,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-generate,
+  setuptools-scm,
 }:
 
-let
+buildPythonPackage rec {
   pname = "repl-python-wakatime";
   version = "0.0.11";
-in
+  pyproject = true;
 
-buildPythonPackage {
-  inherit pname version;
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-HoCdeo03Lf3g5Xg0GgAyWOu2PtGqy33vg5bQrfkEPkE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
     setuptools-generate
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ptpython
     ipython
   ];
 
-  pythonImportsCheck = [
-    "repl_python_wakatime"
+  nativeCheckInputs = [
+    keyring
+    pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "repl_python_wakatime" ];
 
   meta = with lib; {
     description = "Python REPL plugin for automatic time tracking and metrics generated from your programming activity";
     homepage = "https://github.com/wakatime/repl-python-wakatime";
+    changelog = "https://github.com/wakatime/repl-python-wakatime/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jfvillablanca ];
   };
