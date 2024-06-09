@@ -10,8 +10,8 @@ ninjaBuildPhase() {
 
     local flagsArray=(
         -j$buildCores
-        $ninjaFlags "${ninjaFlagsArray[@]}"
     )
+    concatTo flagsArray ninjaFlags ninjaFlagsArray
 
     echoCmd 'build flags' "${flagsArray[@]}"
     TERM=dumb ninja "${flagsArray[@]}"
@@ -39,9 +39,8 @@ ninjaCheckPhase() {
 
         local flagsArray=(
             -j$buildCores
-            $ninjaFlags "${ninjaFlagsArray[@]}"
-            $checkTarget
         )
+        concatTo flagsArray ninjaFlags ninjaFlagsArray checkTarget
 
         echoCmd 'check flags' "${flagsArray[@]}"
         TERM=dumb ninja "${flagsArray[@]}"
@@ -63,9 +62,9 @@ ninjaInstallPhase() {
     # shellcheck disable=SC2086
     local flagsArray=(
         -j$buildCores
-        $ninjaFlags "${ninjaFlagsArray[@]}"
-        ${installTargets:-install}
     )
+    : ${installTargets:=install}
+    concatTo flagsArray ninjaFlags ninjaFlagsArray installTargets
 
     echoCmd 'install flags' "${flagsArray[@]}"
     TERM=dumb ninja "${flagsArray[@]}"
