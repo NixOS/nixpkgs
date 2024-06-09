@@ -39396,8 +39396,6 @@ with pkgs;
     fmt = fmt_8;
   };
 
-  kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
-
   # In general we only want keep the last three minor versions around that
   # correspond to the last three supported kubernetes versions:
   # https://kubernetes.io/docs/setup/release/version-skew-policy/#supported-versions
