@@ -3,9 +3,9 @@ premakeConfigurePhase() {
 
     local flagsArray=(
         ${premakefile:+--file=$premakefile}
-        $premakeFlags ${premakeFlagsArray[@]}
-        ${premakeBackend:-gmake}
     )
+    : "${premakeBackend:=gmake}"
+    concatTo flagsArray premakeFlags premakeFlagsArray premakeBackend
 
     echoCmd 'configure flags' "${flagsArray[@]}"
 
