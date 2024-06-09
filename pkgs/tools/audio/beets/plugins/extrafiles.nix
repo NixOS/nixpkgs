@@ -33,5 +33,7 @@ python3Packages.buildPythonApplication {
     description = "A plugin for beets that copies additional files and directories during the import process";
     license = lib.licenses.mit;
     inherit (beets.meta) platforms;
+    # Upstream hasn't had commits since 2020, build is broken since beets 2.0.0
+    broken = true;
   };
 }
