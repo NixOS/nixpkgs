@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Build using 'swift-build'.
 swiftpmBuildPhase() {
     runHook preBuild
@@ -8,7 +10,7 @@ swiftpmBuildPhase() {
     fi
 
     local flagsArray=(
-        -j $buildCores
+        -j "$buildCores"
         -c "${swiftpmBuildConfig-release}"
     )
     concatTo flagsArray swiftpmFlags swiftpmFlagsArray
@@ -33,7 +35,7 @@ swiftpmCheckPhase() {
     fi
 
     local flagsArray=(
-        -j $buildCores
+        -j "$buildCores"
         -c "${swiftpmBuildConfig-release}"
     )
     concatTo flagsArray swiftpmFlags swiftpmFlagsArray
