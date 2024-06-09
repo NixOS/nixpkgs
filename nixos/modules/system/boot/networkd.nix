@@ -963,6 +963,7 @@ let
           "UseGateway"
           "UseRoutePrefix"
           "Token"
+          "UsePREF64"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
@@ -973,6 +974,7 @@ let
         (assertValueOneOf "UseMTU" boolValues)
         (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutePrefix" boolValues)
+        (assertValueOneOf "UsePREF64" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
@@ -1042,6 +1044,14 @@ let
         (assertValueOneOf "RouterPreference" ["high" "medium" "low" "normal" "default"])
         (assertValueOneOf "EmitDNS" boolValues)
         (assertValueOneOf "EmitDomains" boolValues)
+      ];
+
+      sectionIPv6PREF64Prefix = checkUnitConfig "IPv6PREF64Prefix" [
+        (assertOnlyFields [
+          "Prefix"
+          "LifetimeSec"
+        ])
+        (assertInt "LifetimeSec")
       ];
 
       sectionIPv6Prefix = checkUnitConfig "IPv6Prefix" [
@@ -1987,6 +1997,21 @@ let
     };
   };
 
+  ipv6PREF64PrefixOptions = {
+    options = {
+      ipv6PREF64PrefixConfig = mkOption {
+        default = {};
+        example = { Prefix = "64:ff9b::/96"; };
+        type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6PREF64Prefix;
+        description = ''
+          Each attribute in this set specifies an option in the
+          `[IPv6PREF64Prefix]` section of the unit.  See
+          {manpage}`systemd.network(5)` for details.
+        '';
+      };
+    };
+  };
+
   ipv6RoutePrefixOptions = {
     options = {
       ipv6RoutePrefixConfig = mkOption {
@@ -2170,6 +2195,16 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         `[IPv6SendRA]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    ipv6PREF64Prefixes = mkOption {
+      default = [];
+      example = [ { ipv6PREF64PrefixConfig = { Prefix = "64:ff9b::/96"; }; } ];
+      type = with types; listOf (submodule ipv6PREF64PrefixOptions);
+      description = ''
+        A list of IPv6PREF64Prefix sections to be added to the unit. See
         {manpage}`systemd.network(5)` for details.
       '';
     };
