@@ -912,7 +912,7 @@ in
           "ppc64-linux" = "tpm-spapr";
           "armv7-linux" = "tpm-tis-device";
           "aarch64-linux" = "tpm-tis-device";
-        }.${pkgs.hostPlatform.system} or (throw "Unsupported system for TPM2 emulation in QEMU"));
+        }.${pkgs.stdenv.hostPlatform.system} or (throw "Unsupported system for TPM2 emulation in QEMU"));
         defaultText = ''
           Based on the guest platform Linux system:
 

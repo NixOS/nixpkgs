@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , rustPlatform
 , xorg
+, darwin
 }:
 
 rustPlatform.buildRustPackage {
@@ -21,6 +22,11 @@ rustPlatform.buildRustPackage {
   # tests are network based :(
   doCheck = false;
 
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    CoreServices
+    AppKit
+  ]);
+
   meta = with lib; {
     description = "A TUI RSS reader with vim-like controls and a local-first, offline-first focus";
     mainProgram = "russ";
@@ -28,6 +34,5 @@ rustPlatform.buildRustPackage {
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ blusk ];
     changelog = "https://github.com/ckampfe/russ/blob/master/CHANGELOG.md";
-    broken = stdenv.isDarwin;
   };
 }

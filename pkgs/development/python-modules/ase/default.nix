@@ -1,18 +1,21 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPy27
-, pythonAtLeast
-, setuptools
-, numpy
-, scipy
-, matplotlib
-, flask
-, pillow
-, psycopg2
-, pytestCheckHook
-, pytest-mock
-, pytest-xdist
+{
+  lib,
+  stdenv,
+  fetchPypi,
+  buildPythonPackage,
+  isPy27,
+  pythonAtLeast,
+  setuptools,
+  numpy,
+  scipy,
+  matplotlib,
+  flask,
+  pillow,
+  psycopg2,
+  tkinter,
+  pytestCheckHook,
+  pytest-mock,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +32,22 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ numpy scipy matplotlib flask pillow psycopg2 ];
+  dependencies = [
+    numpy
+    scipy
+    matplotlib
+    flask
+    pillow
+    psycopg2
+  ] ++ lib.optionals stdenv.isDarwin [
+    tkinter
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-mock pytest-xdist ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+    pytest-xdist
+  ];
 
   disabledTests = [
     "test_fundamental_params"
@@ -41,10 +57,7 @@ buildPythonPackage rec {
     "test_favicon"
     "test_vibrations_methods" # missing attribute
     "test_jmol_roundtrip" # missing attribute
-  ]
-  ++ lib.optionals (pythonAtLeast "3.12") [
-    "test_info_calculators"
-  ];
+  ] ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
 
   preCheck = ''
     export PATH="$out/bin:$PATH"

@@ -1,35 +1,36 @@
-{ lib
-, buildPythonPackage
-, deprecation
-, fetchFromGitHub
-, ghostscript
-, hypothesis
-, img2pdf
-, importlib-resources
-, jbig2enc
-, packaging
-, pdfminer-six
-, pillow-heif
-, pikepdf
-, pillow
-, pluggy
-, pngquant
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, rich
-, reportlab
-, setuptools-scm
-, substituteAll
-, tesseract
-, tqdm
-, unpaper
-, installShellFiles
+{
+  lib,
+  buildPythonPackage,
+  deprecation,
+  fetchFromGitHub,
+  ghostscript,
+  hypothesis,
+  img2pdf,
+  importlib-resources,
+  jbig2enc,
+  packaging,
+  pdfminer-six,
+  pillow-heif,
+  pikepdf,
+  pillow,
+  pluggy,
+  pngquant,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  reportlab,
+  setuptools-scm,
+  substituteAll,
+  tesseract,
+  tqdm,
+  unpaper,
+  installShellFiles,
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.2.0";
+  version = "16.3.1";
 
   disabled = pythonOlder "3.10";
 
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-sqhuQ+no6UymxbVtDtWiYQK8kKpO1y37NxLDmRT1LEQ=";
+    hash = "sha256-AGBLxN4XVP298a2DS14nfpDFbYTCvX3gx/BNVAj0iH8=";
   };
 
   patches = [
@@ -60,13 +61,9 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   dependencies = [
     deprecation
@@ -87,9 +84,7 @@ buildPythonPackage rec {
     reportlab
   ];
 
-  pythonImportsCheck = [
-    "ocrmypdf"
-  ];
+  pythonImportsCheck = [ "ocrmypdf" ];
 
   postInstall = ''
     installShellCompletion --cmd ocrmypdf \
@@ -100,8 +95,14 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/ocrmypdf/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
-    license = with licenses; [ mpl20 mit ];
-    maintainers = with maintainers; [ kiwi dotlambda ];
+    license = with licenses; [
+      mpl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      kiwi
+      dotlambda
+    ];
     changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
     mainProgram = "ocrmypdf";
   };

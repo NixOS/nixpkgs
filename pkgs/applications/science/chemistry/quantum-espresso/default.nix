@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitLab
 , fetchFromGitHub
-, fetchurl
 , git
 , cmake
 , gnum4

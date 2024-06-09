@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, websockets
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  websockets,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,10 @@ buildPythonPackage rec {
     sha256 = "2e4d7b4a17d3013e279c6f993746ea18cd60b45d8fa3be24f47bc2de22b9b3b4";
   };
 
-  propagatedBuildInputs = [ websockets requests ];
+  propagatedBuildInputs = [
+    websockets
+    requests
+  ];
 
   pythonImportsCheck = [ "mattermostdriver" ];
 

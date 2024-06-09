@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libusb1
-, mock
-, ndeflib
-, pydes
-, pyserial
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libusb1,
+  mock,
+  ndeflib,
+  pydes,
+  pyserial,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "nfc"
-  ];
+  pythonImportsCheck = [ "nfc" ];
 
   disabledTestPaths = [
     # AttributeError: 'NoneType' object has no attribute 'EC_KEY'
@@ -58,4 +57,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ fab ];
   };
 }
-

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, coverage
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  coverage,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {

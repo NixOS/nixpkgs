@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, types-psycopg2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  types-psycopg2,
 }:
 
 buildPythonPackage rec {
@@ -16,13 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-WueYhhLPb7w1ewGLvDs6h4tl4EJ1zEbg011mpwja/xI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    types-psycopg2
-  ];
+  propagatedBuildInputs = [ types-psycopg2 ];
 
   meta = with lib; {
     description = "Type stubs for Django";

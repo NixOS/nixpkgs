@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyqt5
-, twisted
-, pytest-twisted
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyqt5,
+  twisted,
+  pytest-twisted,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

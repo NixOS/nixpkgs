@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchpatch
-, fetchPypi
-, gmpy2
-, mpmath
-, numpy
-, pythonOlder
-, scipy
-, setuptools-scm
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchpatch,
+  fetchPypi,
+  gmpy2,
+  mpmath,
+  numpy,
+  pythonOlder,
+  scipy,
+  setuptools-scm,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    mpmath
-  ];
+  propagatedBuildInputs = [ mpmath ];
 
   passthru.optional-dependencies = {
     exports = [
@@ -47,9 +46,7 @@ buildPythonPackage rec {
       numpy
       scipy
     ];
-    gmpy = [
-      gmpy2
-    ];
+    gmpy = [ gmpy2 ];
   };
 
   # tests take ~1h

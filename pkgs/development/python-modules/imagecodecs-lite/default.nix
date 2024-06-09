@@ -1,8 +1,11 @@
-{ stdenv
-, lib, fetchPypi, buildPythonPackage
-, pytest
-, numpy
-, cython
+{
+  stdenv,
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytest,
+  numpy,
+  cython,
 }:
 
 buildPythonPackage rec {
@@ -15,17 +18,11 @@ buildPythonPackage rec {
     sha256 = "0s4xb17qd7vimc46rafbjnibj4sf0lnv8cwl22k1h6zb7jhqmlcm";
   };
 
-  nativeBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ cython ];
 
-  nativeCheckInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   checkPhase = ''
     pytest

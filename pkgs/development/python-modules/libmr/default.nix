@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, cython }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  cython,
+}:
 
 buildPythonPackage rec {
   pname = "libmr";
@@ -11,7 +17,10 @@ buildPythonPackage rec {
     sha256 = "43ccd86693b725fa3abe648c8cdcef17ba5fa46b5528168829e5f9b968dfeb70";
   };
 
-  propagatedBuildInputs = [ numpy cython ];
+  propagatedBuildInputs = [
+    numpy
+    cython
+  ];
 
   # No tests in the pypi tarball
   doCheck = false;
@@ -23,4 +32,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

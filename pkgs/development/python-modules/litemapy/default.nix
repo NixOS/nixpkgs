@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nbtlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nbtlib,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-VfEo/JLeU17bEkvc8oZYfq19RsHl6QvKv0sGZYQjYhE=";
   };
 
-  propagatedBuildInputs = [
-    nbtlib
-  ];
+  propagatedBuildInputs = [ nbtlib ];
 
   pythonImportsCheck = [ "litemapy" ];
 

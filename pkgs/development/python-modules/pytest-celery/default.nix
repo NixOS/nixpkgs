@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, flit-core }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+}:
 
 buildPythonPackage rec {
   pname = "pytest-celery";
@@ -19,9 +24,7 @@ buildPythonPackage rec {
       --replace '"celery >= 4.4.0"' ""
   '';
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   # This package has nothing to test or import.
   doCheck = false;

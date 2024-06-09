@@ -1,30 +1,38 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, fonttools
-, lxml
-, pillow
-, python-barcode
-, pythonOlder
-, qrcode
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  fonttools,
+  lxml,
+  matplotlib,
+  pandas,
+  pillow,
+  python-barcode,
+  pythonOlder,
+  qrcode,
+  pytestCheckHook,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "borb";
-  version = "2.1.22";
-  format = "setuptools";
+  version = "2.1.23";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-T+uSq/KF3p4zJJhQeompJIJ6BWhYFK9Ko9w0sZFtFhE=";
+  src = fetchFromGitHub {
+    owner = "jorisschellekens";
+    repo = "borb";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cpih7ijoT4dEdoFjh6qQcnzjWd2zusv4tNgPyrIghvg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
     fonttools
     lxml
@@ -35,11 +43,25 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  pythonImportsCheck = [
-    "borb.pdf"
+  nativeCheckInputs = [
+    matplotlib
+    pandas
+    pytestCheckHook
   ];
 
-  doCheck = false;
+  pythonImportsCheck = [ "borb.pdf" ];
+
+  disabledTests = [
+    "test_code_files_are_small "
+    "test_image_has_pdfobject_methods"
+  ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/pdf/"
+    "tests/toolkit/"
+    "tests/license/"
+  ];
 
   meta = with lib; {
     description = "Library for reading, creating and manipulating PDF files in Python";

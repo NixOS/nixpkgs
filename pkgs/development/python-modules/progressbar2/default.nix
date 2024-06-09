@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dill
-, freezegun
-, pytestCheckHook
-, python-utils
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  dill,
+  freezegun,
+  pytestCheckHook,
+  python-utils,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    python-utils
-  ];
+  propagatedBuildInputs = [ python-utils ];
 
   nativeCheckInputs = [
     dill
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "progressbar"
-  ];
+  pythonImportsCheck = [ "progressbar" ];
 
   meta = with lib; {
     description = "Text progressbar library";

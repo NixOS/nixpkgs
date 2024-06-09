@@ -2,15 +2,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "scdl";
-  version = "2.7.7";
-  format = "setuptools";
+  version = "2.7.9";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/QQb8xbi0rv5dU3WFr/hm2BuM/iDZ2OhrGjuqsQMqdk=";
+    hash = "sha256-/TRRVZc0b7WRjNNe24KdCFyKuaic3I3B5Tnb8ZnMS1o=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = with python3Packages; [
     docopt
     mutagen
     termcolor

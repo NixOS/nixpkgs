@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
-, isPyPy
-, python
- ,pythonAtLeast
-, coverage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  isPyPy,
+  python,
+  pythonAtLeast,
+  coverage,
 }:
 
 buildPythonPackage rec {
@@ -37,12 +38,17 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ coverage ];
 
   doCheck = false; # lot's of transient errors, too much hassle
-  checkPhase = if isPy3k then ''
-    ${python.pythonOnBuildForHost.interpreter} setup.py build_tests
-  '' else "" + ''
-    rm functional_tests/test_multiprocessing/test_concurrent_shared.py* # see https://github.com/nose-devs/nose/commit/226bc671c73643887b36b8467b34ad485c2df062
-    ${python.pythonOnBuildForHost.interpreter} selftest.py
-  '';
+  checkPhase =
+    if isPy3k then
+      ''
+        ${python.pythonOnBuildForHost.interpreter} setup.py build_tests
+      ''
+    else
+      ""
+      + ''
+        rm functional_tests/test_multiprocessing/test_concurrent_shared.py* # see https://github.com/nose-devs/nose/commit/226bc671c73643887b36b8467b34ad485c2df062
+        ${python.pythonOnBuildForHost.interpreter} selftest.py
+      '';
 
   meta = with lib; {
     broken = isPyPy; # missing 2to3 conversion utility

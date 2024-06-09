@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, cherrypy
-, fetchPypi
-, gevent
-, git
-, mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  cherrypy,
+  fetchPypi,
+  gevent,
+  git,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tornado,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-KdBz1/LgBjc+aoSLHQCVGhEH64HzdClSvpBUKdxaVIM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cherrypy
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "ws4py"
-  ];
+  pythonImportsCheck = [ "ws4py" ];
 
   meta = with lib; {
     description = "A WebSocket package for Python";

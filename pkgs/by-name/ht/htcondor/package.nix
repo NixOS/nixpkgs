@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "htcondor";
-  version = "23.4.0";
+  version = "23.7.2";
 
   src = fetchFromGitHub {
     owner = "htcondor";
     repo = "htcondor";
 
     rev = "v${version}";
-    hash = "sha256-+WfNVxP7qsEpn8zPretLnOEAnPq0GylyxCbcQI8o0L0=";
+    hash = "sha256-U0IeZlDd21RYR9XNoIGPpuwhEL1MfQ9+DDyeX8sLgWM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     scitokens-cpp
   ];
 
+  env.CXXFLAGS = "-fpermissive";
 
   cmakeFlags = [ "-DSYSTEM_NAME=NixOS" "-DWITH_PYTHON_BINDINGS=false" ];
 

@@ -34,6 +34,9 @@ stdenv.mkDerivation rec {
   patches = [
     # Removes hardcoded toolchain for aarch64, allowing successful aarch64 builds.
     ./0001-toolchain.patch
+    # Avoid leaking the build timestamp
+    # https://sourceforge.net/p/refind/code/merge-requests/53/
+    ./reproducible.patch
   ];
 
   nativeBuildInputs = [ makeWrapper ];

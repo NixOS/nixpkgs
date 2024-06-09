@@ -1,16 +1,15 @@
-{ lib
-, aiohttp
-, apispec
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, fetchPypi
-, jinja2
-, packaging
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, webargs
+{
+  lib,
+  aiohttp,
+  apispec,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  packaging,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  webargs,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiohttp_apispec"
-  ];
+  pythonImportsCheck = [ "aiohttp_apispec" ];
 
   meta = with lib; {
     description = "Build and document REST APIs with aiohttp and apispec";

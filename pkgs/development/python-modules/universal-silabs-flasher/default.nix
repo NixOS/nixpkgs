@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, async-timeout
-, bellows
-, click
-, coloredlogs
-, crc
-, libgpiod
-, typing-extensions
-, zigpy
+  # dependencies
+  async-timeout,
+  bellows,
+  click,
+  coloredlogs,
+  crc,
+  libgpiod,
+  typing-extensions,
+  zigpy,
 
-# tests
-, pytestCheckHook
-, pytest-asyncio
-, pytest-mock
-, pytest-timeout
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-timeout,
 }:
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.19";
+  version = "0.0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VoO9B27CNY2Cnt/Q2HsU6DVYkukQMgbIHc6xqfN0P7w=";
+    hash = "sha256-+wmBsb7zsN6vdNqUvozV317kEZCg1b+lBToRSdN2YM4=";
   };
 
   postPatch = ''
@@ -42,13 +43,9 @@ buildPythonPackage rec {
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     # https://github.com/NabuCasa/universal-silabs-flasher/pull/50
@@ -63,9 +60,7 @@ buildPythonPackage rec {
     crc
     typing-extensions
     zigpy
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    libgpiod
-  ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
 
   nativeCheckInputs = [
     pytestCheckHook

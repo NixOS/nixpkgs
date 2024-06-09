@@ -748,6 +748,7 @@ Review process:
   - License must match the upstream license.
   - Platforms should be set (or the package will not get binary substitutes).
   - Maintainers must be set. This can be the package submitter or a community member that accepts taking up maintainership of the package.
+  - The `meta.mainProgram` must be set if a main executable exists.
 - Report detected typos.
 - Ensure the package source:
   - Uses `mirror://` URLs when available.
@@ -769,6 +770,7 @@ Sample template for a new package review is provided below.
 - [ ] `meta.license` fits upstream license
 - [ ] `meta.platforms` is set
 - [ ] `meta.maintainers` is set
+- [ ] `meta.mainProgram` is set, if applicable.
 - [ ] build time only dependencies are declared in `nativeBuildInputs`
 - [ ] source is fetched using the appropriate function
 - [ ] the list of `phases` is not overridden

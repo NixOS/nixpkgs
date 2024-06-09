@@ -1,9 +1,10 @@
-{ lib
-, aiosmtpd
-, buildPythonPackage
-, fetchPypi
-, werkzeug
-, pythonOlder
+{
+  lib,
+  aiosmtpd,
+  buildPythonPackage,
+  fetchPypi,
+  werkzeug,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
   # all tests access network: does not work in sandbox
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pytest_localserver"
-  ];
+  pythonImportsCheck = [ "pytest_localserver" ];
 
   meta = with lib; {
     description = "Plugin for the pytest testing framework to test server connections locally";

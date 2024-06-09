@@ -20,6 +20,9 @@
 , qtdeclarative
 , qtgraphicaleffects
 , flac
+, libopusenc
+, libopus
+, tinyxml-2
 , qtquickcontrols
 , qtquickcontrols2
 , qtscript
@@ -47,13 +50,13 @@ let
   } else portaudio;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-X3zvrIf5DOC5PWcnuw0aClm++IWUED1ZzAyjnp7Mo+g=";
+    sha256 = "sha256-EqPofl2l+UBkmuzym4bL0EyFx+SOxVy0EXtxbw9Sqiw=";
   };
 
   cmakeFlags = [
@@ -62,8 +65,12 @@ in stdenv'.mkDerivation (finalAttrs: {
     # not useful on NixOS, see:
     # https://github.com/musescore/MuseScore/issues/15571
     "-DMUE_BUILD_CRASHPAD_CLIENT=OFF"
-    # Use our freetype
+    # Use our versions of system libraries
     "-DMUE_COMPILE_USE_SYSTEM_FREETYPE=ON"
+    "-DMUE_COMPILE_USE_SYSTEM_TINYXML=ON"
+    # Implies also -DMUE_COMPILE_USE_SYSTEM_OPUS=ON
+    "-DMUE_COMPILE_USE_SYSTEM_OPUSENC=ON"
+    "-DMUE_COMPILE_USE_SYSTEM_FLAC=ON"
     # From some reason, in $src/build/cmake/SetupBuildEnvironment.cmake,
     # upstream defaults to compiling to x86_64 only, unless this cmake flag is
     # set
@@ -102,6 +109,9 @@ in stdenv'.mkDerivation (finalAttrs: {
     portaudio'
     portmidi
     flac
+    libopusenc
+    libopus
+    tinyxml-2
     qtbase
     qtdeclarative
     qtgraphicaleffects

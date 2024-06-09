@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, cmake
-, nasm
-, substituteAll
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  rustPlatform,
+  cmake,
+  nasm,
+  substituteAll,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   cargoRoot = "py-kornia";
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   # The path dependency doesn't vendor the dependencies correctly, so get kornia-rs from crates instead.
   patches = [
@@ -47,7 +46,10 @@ buildPythonPackage rec {
     cp ${./Cargo.lock} py-kornia/Cargo.lock
   '';
 
-  maturinBuildFlags = [ "-m" "py-kornia/Cargo.toml" ];
+  maturinBuildFlags = [
+    "-m"
+    "py-kornia/Cargo.toml"
+  ];
 
   dontUseCmakeConfigure = true; # We only want to use CMake to build some Rust dependencies.
 

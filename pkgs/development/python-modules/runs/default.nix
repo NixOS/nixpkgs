@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, xmod
-, pytestCheckHook
-, tdir
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  xmod,
+  pytestCheckHook,
+  tdir,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-aEamhXr3C+jYDzQGzcmGFyl5oEtovxlNacFM08y0ZEk=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  dependencies = [
-    xmod
-  ];
+  dependencies = [ xmod ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -37,9 +34,7 @@ buildPythonPackage rec {
     "test_many"
   ];
 
-  pythonImportsCheck = [
-    "runs"
-  ];
+  pythonImportsCheck = [ "runs" ];
 
   meta = with lib; {
     description = "Run a block of text as a subprocess";

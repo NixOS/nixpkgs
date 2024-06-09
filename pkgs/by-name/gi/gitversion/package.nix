@@ -14,7 +14,7 @@ buildDotnetGlobalTool {
     homepage = "https://gitversion.net/";
     downloadPage = "https://github.com/GitTools/GitVersion";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.windows ++ platforms.darwin;
     maintainers = with maintainers; [ acesyde ];
   };
 }

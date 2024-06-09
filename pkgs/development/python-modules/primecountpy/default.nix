@@ -1,12 +1,13 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, primecount
-, cython
-, cysignals
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  primecount,
+  cython,
+  cysignals,
 
-# Reverse dependency
-, sage
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
@@ -21,14 +22,19 @@ buildPythonPackage rec {
 
   buildInputs = [ primecount ];
 
-  propagatedBuildInputs = [ cython cysignals ];
+  propagatedBuildInputs = [
+    cython
+    cysignals
+  ];
 
   # depends on pytest-cython for "pytest --doctest-cython"
   doCheck = false;
 
   pythonImportsCheck = [ "primecountpy" ];
 
-  passthru.tests = { inherit sage; };
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     description = "Cython interface for C++ primecount library";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, azure-core
-, msrest
-, msrestazure
-, isodate
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  azure-core,
+  msrest,
+  msrestazure,
+  isodate,
 }:
 
 buildPythonPackage rec {

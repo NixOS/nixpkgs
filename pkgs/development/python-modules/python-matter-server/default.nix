@@ -1,45 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, stdenvNoCC
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  stdenvNoCC,
+  substituteAll,
 
-# build
-, setuptools
-, pythonRelaxDepsHook
+  # build
+  setuptools,
+  pythonRelaxDepsHook,
 
-# propagates
-, aiohttp
-, aiorun
-, async-timeout
-, coloredlogs
-, dacite
-, orjson
-, home-assistant-chip-clusters
+  # propagates
+  aiohttp,
+  aiorun,
+  async-timeout,
+  coloredlogs,
+  dacite,
+  orjson,
+  home-assistant-chip-clusters,
 
-# optionals
-, cryptography
-, home-assistant-chip-core
-, zeroconf
+  # optionals
+  cryptography,
+  home-assistant-chip-core,
+  zeroconf,
 
-# tests
-, python
-, pytest
-, pytest-aiohttp
-, pytestCheckHook
+  # tests
+  python,
+  pytest,
+  pytest-aiohttp,
+  pytestCheckHook,
 }:
 
 let
   paaCerts = stdenvNoCC.mkDerivation rec {
     pname = "matter-server-paa-certificates";
-    version = "1.2.0.1";
+    version = "1.3.0.0";
 
     src = fetchFromGitHub {
       owner = "project-chip";
       repo = "connectedhomeip";
       rev = "refs/tags/v${version}";
-      hash = "sha256-p3P0n5oKRasYz386K2bhN3QVfN6oFndFIUWLEUWB0ss=";
+      hash = "sha256-5MI6r0KhSTzolesTQ8YWeoko64jFu4jHfO5KOOKpV0A=";
     };
 
     installPhase = ''
@@ -55,8 +56,8 @@ in
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "5.10.0";
-  format = "pyproject";
+  version = "6.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -64,7 +65,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-rfpGclSgCBTxlTgVqgNz3ixoldB9M+6mLmogkNDDdWs=";
+    hash = "sha256-sY/FaMZ3p/AC63t1ku1Khgqi71G7u2O+ZPTuMPHFkuk=";
   };
 
   patches = [
@@ -80,16 +81,14 @@ buildPythonPackage rec {
       --replace '--cov' ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "home-assistant-chip-clusters"
-  ];
+  pythonRelaxDeps = [ "home-assistant-chip-clusters" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aiorun
     async-timeout
@@ -99,7 +98,7 @@ buildPythonPackage rec {
     home-assistant-chip-clusters
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server = [
       cryptography
       home-assistant-chip-core
@@ -110,15 +109,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
-  ]
-  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  preCheck = let
-    pythonEnv = python.withPackages (_: propagatedBuildInputs ++ nativeCheckInputs ++ [ pytest ]);
-  in
-  ''
-    export PYTHONPATH=${pythonEnv}/${python.sitePackages}
-  '';
+  preCheck =
+    let
+      pythonEnv = python.withPackages (_: dependencies ++ nativeCheckInputs ++ [ pytest ]);
+    in
+    ''
+      export PYTHONPATH=${pythonEnv}/${python.sitePackages}
+    '';
 
   pytestFlagsArray = [
     # Upstream theymselves limit the test scope

@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "objsize";
   version = "0.7.0";
-  pyproject= true;
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -26,17 +27,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "objsize"
-  ];
+  pythonImportsCheck = [ "objsize" ];
 
-  pytestFlagsArray = [
-    "test_objsize.py"
-  ];
+  pytestFlagsArray = [ "test_objsize.py" ];
 
   meta = with lib; {
     description = "Traversal over objects subtree and calculate the total size";

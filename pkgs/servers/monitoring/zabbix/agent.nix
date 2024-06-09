@@ -36,7 +36,7 @@ import ./versions.nix ({ version, hash, ... }:
     meta = with lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = "https://www.zabbix.com/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       maintainers = with maintainers; [ mmahut psyanticy ];
       platforms = platforms.linux;
     };

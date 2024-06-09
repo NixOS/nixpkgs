@@ -1,7 +1,7 @@
 import ../../make-test-python.nix ({ lib, pkgs, ... }:
 
 let
-  inherit (lib) mkMerge nameValuePair maintainers;
+  inherit (lib) mkMerge maintainers;
 
   baseGrafanaConf = {
     services.grafana = {
@@ -33,35 +33,6 @@ let
   };
 
   extraNodeConfs = {
-    provisionLegacyNotifiers = {
-      services.grafana.provision = {
-        datasources.settings = {
-          apiVersion = 1;
-          datasources = [{
-            name = "Test Datasource";
-            type = "testdata";
-            access = "proxy";
-            uid = "test_datasource";
-          }];
-        };
-        dashboards.settings = {
-          apiVersion = 1;
-          providers = [{
-            name = "default";
-            options.path = "/var/lib/grafana/dashboards";
-          }];
-        };
-        notifiers = [{
-          uid = "test_notifiers";
-          name = "Test Notifiers";
-          type = "email";
-          settings = {
-            singleEmail = true;
-            addresses = "test@test.com";
-          };
-        }];
-      };
-    };
     provisionNix = {
       services.grafana.provision = {
         datasources.settings = {
@@ -242,15 +213,5 @@ in {
             machine.succeed(
                 "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/mute-timings | grep Test\ Mute\ Timing"
             )
-
-    with subtest("Successful notifiers provision"):
-        provisionLegacyNotifiers.wait_for_unit("grafana.service")
-        provisionLegacyNotifiers.wait_for_open_port(3000)
-        print(provisionLegacyNotifiers.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/alert-notifications/uid/test_notifiers"
-        ))
-        provisionLegacyNotifiers.succeed(
-            "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/alert-notifications/uid/test_notifiers | grep Test\ Notifiers"
-        )
   '';
 })

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, pythonOlder
-, pybind11
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  pythonOlder,
+  pybind11,
+  numpy,
 }:
 let
   pname = "lanms-neo";

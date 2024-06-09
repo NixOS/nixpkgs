@@ -1,4 +1,4 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests, inputstream-adaptive, inputstreamhelper }:
+{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, infotagger, requests, inputstream-adaptive, inputstreamhelper }:
 
 buildKodiAddon rec {
   pname = "invidious";
@@ -11,6 +11,7 @@ buildKodiAddon rec {
   };
 
   propagatedBuildInputs = [
+    infotagger
     requests
     inputstream-adaptive
     inputstreamhelper

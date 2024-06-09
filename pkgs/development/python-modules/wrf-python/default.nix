@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pythonOlder
-, buildPythonPackage
-, basemap
-, gfortran
-, netcdf4
-, numpy
-, python
-, setuptools
-, xarray
-, wrapt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pythonOlder,
+  buildPythonPackage,
+  basemap,
+  gfortran,
+  netcdf4,
+  numpy,
+  python,
+  setuptools,
+  xarray,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-4iIs/M9fzGJsnKCDSl09OTUoh7j6REBXuutE5uXFe3k=";
   };
 
-  nativeBuildInputs = [
-    gfortran
-  ];
+  nativeBuildInputs = [ gfortran ];
 
   propagatedBuildInputs = [
     basemap
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  nativeCheckInputs = [
-    netcdf4
-  ];
+  nativeCheckInputs = [ netcdf4 ];
 
   checkPhase = ''
     runHook preCheck
@@ -50,9 +47,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "wrf"
-  ];
+  pythonImportsCheck = [ "wrf" ];
 
   meta = with lib; {
     description = "WRF postprocessing library for Python";

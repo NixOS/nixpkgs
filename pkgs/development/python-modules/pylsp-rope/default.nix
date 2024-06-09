@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rope
-, pytestCheckHook
-, python-lsp-server
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  rope,
+  pytestCheckHook,
+  python-lsp-server,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +25,9 @@ buildPythonPackage rec {
     python-lsp-server
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pylsp_rope"
-  ];
+  pythonImportsCheck = [ "pylsp_rope" ];
 
   meta = with lib; {
     description = "Extended refactoring capabilities for Python LSP Server using Rope";

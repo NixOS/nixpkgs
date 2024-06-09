@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ansible-core
-, flaky
-, pytest-mock
-, pytestCheckHook
-, pyyaml
-, setuptools
-, setuptools-scm
-, subprocess-tee
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ansible-core,
+  flaky,
+  pytest-mock,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  subprocess-tee,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -60,9 +61,7 @@ buildPythonPackage rec {
     "test_runtime"
   ];
 
-  pythonImportsCheck = [
-    "ansible_compat"
-  ];
+  pythonImportsCheck = [ "ansible_compat" ];
 
   meta = with lib; {
     description = "Function collection that help interacting with various versions of Ansible";

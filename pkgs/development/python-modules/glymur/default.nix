@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, substituteAll
-, glibc
-, libtiff
-, openjpeg
-, fetchFromGitHub
-, lxml
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scikit-image
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  substituteAll,
+  glibc,
+  libtiff,
+  openjpeg,
+  fetchFromGitHub,
+  lxml,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-image,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
 
   __propagatedImpureHostDeps = lib.optional stdenv.isDarwin "/usr/lib/libc.dylib";
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     lxml
@@ -67,9 +66,7 @@ buildPythonPackage rec {
     "tests/test_config.py"
   ];
 
-  pythonImportsCheck = [
-    "glymur"
-  ];
+  pythonImportsCheck = [ "glymur" ];
 
   meta = {
     description = "Tools for accessing JPEG2000 files";

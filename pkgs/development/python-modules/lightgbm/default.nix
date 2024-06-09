@@ -1,36 +1,37 @@
-{ lib
-, config
-, stdenv
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  config,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, cmake
-, ninja
-, pathspec
-, pyproject-metadata
-, scikit-build-core
+  # build-system
+  cmake,
+  ninja,
+  pathspec,
+  pyproject-metadata,
+  scikit-build-core,
 
-# dependencies
-, llvmPackages
-, numpy
-, scipy
-, pythonOlder
+  # dependencies
+  llvmPackages,
+  numpy,
+  scipy,
+  pythonOlder,
 
-# optionals
-, cffi
-, dask
-, pandas
-, pyarrow
-, scikit-learn
+  # optionals
+  cffi,
+  dask,
+  pandas,
+  pyarrow,
+  scikit-learn,
 
-# optionals: gpu
-, boost
-, ocl-icd
-, opencl-headers
-, gpuSupport ? stdenv.isLinux && !cudaSupport
-, cudaSupport ? config.cudaSupport
-, cudaPackages
+  # optionals: gpu
+  boost,
+  ocl-icd,
+  opencl-headers,
+  gpuSupport ? stdenv.isLinux && !cudaSupport,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
 }:
 
 assert gpuSupport -> cudaSupport != true;
@@ -54,33 +55,30 @@ buildPythonPackage rec {
     pathspec
     pyproject-metadata
     scikit-build-core
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-  ];
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = (lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ]) ++ (lib.optionals gpuSupport [
-    boost
-    ocl-icd
-    opencl-headers
-  ]) ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-    cudaPackages.cuda_cudart
-  ];
+  buildInputs =
+    (lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ])
+    ++ (lib.optionals gpuSupport [
+      boost
+      ocl-icd
+      opencl-headers
+    ])
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+      cudaPackages.cuda_cudart
+    ];
 
   propagatedBuildInputs = [
     numpy
     scipy
   ];
 
-  pypaBuildFlags = lib.optionals gpuSupport [
-    "--config-setting=cmake.define.USE_GPU=ON"
-  ] ++ lib.optionals cudaSupport [
-    "--config-setting=cmake.define.USE_CUDA=ON"
-  ];
+  pypaBuildFlags =
+    lib.optionals gpuSupport [ "--config-setting=cmake.define.USE_GPU=ON" ]
+    ++ lib.optionals cudaSupport [ "--config-setting=cmake.define.USE_CUDA=ON" ];
 
   postConfigure = ''
     export HOME=$(mktemp -d)
@@ -91,18 +89,16 @@ buildPythonPackage rec {
       cffi
       pyarrow
     ];
-    dask = [
-      dask
-      pandas
-    ] ++ dask.optional-dependencies.array
+    dask =
+      [
+        dask
+        pandas
+      ]
+      ++ dask.optional-dependencies.array
       ++ dask.optional-dependencies.dataframe
       ++ dask.optional-dependencies.distributed;
-    pandas = [
-      pandas
-    ];
-    scikit-learn = [
-      scikit-learn
-    ];
+    pandas = [ pandas ];
+    scikit-learn = [ scikit-learn ];
   };
 
   # The pypi package doesn't distribute the tests from the GitHub
@@ -110,9 +106,7 @@ buildPythonPackage rec {
   # `make check`.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "lightgbm"
-  ];
+  pythonImportsCheck = [ "lightgbm" ];
 
   meta = {
     description = "A fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";

@@ -3,7 +3,7 @@
 , fetchurl
 , perl
 , buildsystem
-, iconv
+, libiconv
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     perl
     buildsystem
-    iconv
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
   makeFlags = [

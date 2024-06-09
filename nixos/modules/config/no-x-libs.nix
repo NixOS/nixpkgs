@@ -46,18 +46,20 @@ with lib;
       graphviz = super.graphviz-nox;
       gst_all_1 = super.gst_all_1 // {
         gst-plugins-bad = super.gst_all_1.gst-plugins-bad.override { guiSupport = false; };
-        gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableWayland = false; enableX11 = false; };
+        gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableGl = false; enableWayland = false; enableX11 = false; };
         gst-plugins-good = super.gst_all_1.gst-plugins-good.override { enableWayland = false; enableX11 = false; gtkSupport = false; qt5Support = false; qt6Support = false; };
+        gst-plugins-rs = super.gst_all_1.gst-plugins-rs.override { withGtkPlugins = false; };
       };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
       intel-vaapi-driver = super.intel-vaapi-driver.override { enableGui = false; };
       libdevil = super.libdevil-nox;
       libextractor = super.libextractor.override { gtkSupport = false; };
+      libplacebo = super.libplacebo.override { vulkanSupport = false; };
       libva = super.libva-minimal;
       limesuite = super.limesuite.override { withGui = false; };
       mc = super.mc.override { x11Support = false; };
-      mpv-unwrapped = super.mpv-unwrapped.override { sdl2Support = false; x11Support = false; waylandSupport = false; };
+      mpv-unwrapped = super.mpv-unwrapped.override { drmSupport = false; screenSaverSupport = false; sdl2Support = false; vulkanSupport = false; waylandSupport = false; x11Support = false; };
       msmtp = super.msmtp.override { withKeyring = false; };
       mupdf = super.mupdf.override { enableGL = false; enableX11 = false; };
       neofetch = super.neofetch.override { x11Support = false; };
@@ -70,6 +72,7 @@ with lib;
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
       pango = super.pango.override { x11Support = false; };
       pinentry-curses = super.pinentry-curses.override { withLibsecret = false; };
+      pinentry-tty = super.pinentry-tty.override { withLibsecret = false; };
       pipewire = super.pipewire.override { vulkanSupport = false; x11Support = false; };
       pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
         (python-final: python-prev: {

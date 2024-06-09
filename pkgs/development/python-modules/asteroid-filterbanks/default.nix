@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, black
-, codecov
-, coverage
-, librosa
-, numpy
-, pre-commit
-, pytest
-, scipy
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  black,
+  codecov,
+  coverage,
+  librosa,
+  numpy,
+  pre-commit,
+  pytest,
+  scipy,
+  torch,
 }:
 
 buildPythonPackage rec {

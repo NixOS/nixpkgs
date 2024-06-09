@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, pythonOlder
-, fetchPypi
-, lib
-, python
-, pytestCheckHook
+{
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  lib,
+  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-QboOevyXUt+1PO1UieifgYa+AOWZ5xJmBpW3p1/yZj8=";
   };
 
-  pythonImportsCheck = [
-    "pycodestyle"
-  ];
+  pythonImportsCheck = [ "pycodestyle" ];
 
-  nativCheckInputs = [
-    pytestCheckHook
-  ];
+  nativCheckInputs = [ pytestCheckHook ];
 
   # https://github.com/PyCQA/pycodestyle/blob/2.11.0/tox.ini#L16
   postCheck = ''
@@ -38,8 +35,6 @@ buildPythonPackage rec {
     mainProgram = "pycodestyle";
     homepage = "https://pycodestyle.pycqa.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

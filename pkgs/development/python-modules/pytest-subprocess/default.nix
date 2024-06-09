@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, pytest
-, pytestCheckHook
-, docutils
-, pygments
-, pytest-rerunfailures
-, pytest-asyncio
-, anyio
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  pytest,
+  pytestCheckHook,
+  docutils,
+  pygments,
+  pytest-rerunfailures,
+  pytest-asyncio,
+  anyio,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-u9d9RhbikOyknMWs18j2efYJb9YdHsQrp31LfcbudoA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -43,9 +40,7 @@ buildPythonPackage rec {
     anyio
   ];
 
-  pytestFlagsArray = [
-    "-W ignore::DeprecationWarning"
-  ];
+  pytestFlagsArray = [ "-W ignore::DeprecationWarning" ];
 
   meta = with lib; {
     description = "A plugin to fake subprocess for pytest";

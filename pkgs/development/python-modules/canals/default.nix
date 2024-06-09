@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, mkdocs-material
-, mkdocs-mermaid2-plugin
-, mkdocstrings
-, networkx
-, pytestCheckHook
-, pythonOlder
-, requests
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  mkdocs-material,
+  mkdocs-mermaid2-plugin,
+  mkdocstrings,
+  networkx,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-xoJqj/zPBPPCheBxA+8EFRJqUnlP+4aWLEh42q1X1mM=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     networkx
@@ -58,9 +57,7 @@ buildPythonPackage rec {
     "test_draw_pygraphviz"
   ];
 
-  pythonImportsCheck = [
-    "canals"
-  ];
+  pythonImportsCheck = [ "canals" ];
 
   meta = with lib; {
     description = "A component orchestration engine";

@@ -1,7 +1,6 @@
 { stdenv
 , fetchgit
 , lib
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -33,10 +32,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-x0Im9m9MoACJhQKorMI34YQ+/bd62NdAPc2nWwaJAvM=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" ];
 
   postPatch = ''
     patchShebangs utils/
+  '';
+
+  # libcamera signs the IPA module libraries at install time, but they are then
+  # modified by stripping and RPATH fixup. Therefore, we need to generate the
+  # signatures again ourselves. For reproducibility, we use a static private key.
+  #
+  # If this is not done, libcamera will still try to load them, but it will
+  # isolate them in separate processes, which can cause crashes for IPA modules
+  # that are not designed for this (notably ipa_rpi.so).
+  preBuild = ''
+    ninja src/ipa-priv-key.pem
+    install -D ${./ipa-priv-key.pem} src/ipa-priv-key.pem
   '';
 
   strictDeps = true;
@@ -86,6 +97,10 @@ stdenv.mkDerivation rec {
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
     "-Dwerror=false"
+    # Documentation breaks binary compatibility.
+    # Given that upstream also provides public documentation,
+    # we can disable it here.
+    "-Ddocumentation=disabled"
   ];
 
   # Fixes error on a deprecated declaration
@@ -94,21 +109,14 @@ stdenv.mkDerivation rec {
   # Silence fontconfig warnings about missing config
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
-  # libcamera signs the IPA module libraries at install time, but they are then
-  # modified by stripping and RPATH fixup. Therefore, we need to generate the
-  # signatures again ourselves.
-  #
-  # If this is not done, libcamera will still try to load them, but it will
-  # isolate them in separate processes, which can cause crashes for IPA modules
-  # that are not designed for this (notably ipa_rpi.so).
-  postFixup = ''
-    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
-  '';
-
   meta = with lib; {
     description = "An open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ citadelcore ];
+    badPlatforms = [
+      # Mandatory shared libraries.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }

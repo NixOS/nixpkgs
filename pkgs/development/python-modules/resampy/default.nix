@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, numba
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  numba,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
       --replace " --cov-report term-missing --cov resampy --cov-report=xml" ""
   '';
 
-  pythonImportsCheck = [
-    "resampy"
-  ];
+  pythonImportsCheck = [ "resampy" ];
 
   meta = with lib; {
     description = "Efficient signal resampling";

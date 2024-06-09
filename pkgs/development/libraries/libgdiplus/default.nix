@@ -1,6 +1,6 @@
 { lib, stdenv, fetchzip, pkg-config, glib, cairo, Carbon, fontconfig
 , libtiff, giflib, libjpeg, libpng
-, libXrender, libexif, autoreconfHook, fetchpatch }:
+, libXrender, libexif, autoreconfHook }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgdiplus";

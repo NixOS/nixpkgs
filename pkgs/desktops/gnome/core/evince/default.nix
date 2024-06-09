@@ -40,15 +40,15 @@
 , withLibsecret ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evince";
-  version = "46.1";
+  version = "46.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-lLtSU2WwYKKML2AX0iy/KvURVQclSqQum/wAC7wYq2I=";
+    url = "mirror://gnome/sources/evince/${lib.versions.major finalAttrs.version}/evince-${finalAttrs.version}.tar.xz";
+    hash = "sha256-vA0dQbnX/8di6Z0qv6+sv3RRgvCzHYbbXuyMZ/XzAGs=";
   };
 
   depsBuildBuild = [
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "evince";
     };
   };
 
@@ -141,4 +141,4 @@ stdenv.mkDerivation rec {
     mainProgram = "evince";
     maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
-}
+})

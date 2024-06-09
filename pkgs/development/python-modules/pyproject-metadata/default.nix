@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, packaging
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, tomli
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  packaging,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tomli,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -23,26 +24,16 @@ buildPythonPackage rec {
     hash = "sha256-N21aAHZKwpRApUV5+I5mt9nLfmKdNcNaHHJIv+vJtFU=";
   };
 
-  build-system = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  dependencies = [
-    packaging
-  ];
+  dependencies = [ packaging ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # Many broken tests, and missing test files
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyproject_metadata"
-  ];
+  pythonImportsCheck = [ "pyproject_metadata" ];
 
   meta = with lib; {
     description = "PEP 621 metadata parsing";

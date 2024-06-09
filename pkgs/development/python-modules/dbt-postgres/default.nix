@@ -1,10 +1,11 @@
-{ lib
-, agate
-, buildPythonPackage
-, dbt-core
-, psycopg2
-, pythonOlder
-, setuptools
+{
+  lib,
+  agate,
+  buildPythonPackage,
+  dbt-core,
+  psycopg2,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage {
@@ -19,9 +20,7 @@ buildPythonPackage {
 
   env.DBT_PSYCOPG2_NAME = "psycopg2";
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     agate
@@ -32,9 +31,7 @@ buildPythonPackage {
   # tests exist for the dbt tool but not for this package specifically
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dbt.adapters.postgres"
-  ];
+  pythonImportsCheck = [ "dbt.adapters.postgres" ];
 
   meta = with lib; {
     description = "Plugin enabling dbt to work with a Postgres database";

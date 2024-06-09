@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-sqop";
-  version = "0.32.0";
+  version = "0.34.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage rec {
     # generated etc
     repo = "sequoia-sop";
     rev = "v${version}";
-    hash = "sha256-6g6JVNlLi++XboU/ewHM7KM0tJlDayCoz1octKloQro=";
+    hash = "sha256-RpXMF0Q5Dp0zDt1gPl2Z3RKyDa4NI0uZY7kIc230F48=";
   };
 
-  cargoHash = "sha256-Vci29mnFiRRbI45Qkj6t8aVrEaJdKVB01zTXHQT5ckw=";
+  cargoHash = "sha256-ccEnZPFUYU5F1PqkX1u7K2xuWYShhzJwEOfBEbi53gg=";
 
   nativeBuildInputs = [
     pkg-config

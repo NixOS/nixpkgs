@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, six
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  six,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
     sha256 = "sha256-UhWpWwU40m8YlgDgmCsx2oKB90U81uKGLFsh4+EAIzE=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
   nativeCheckInputs = [
     mock
@@ -30,9 +29,7 @@ buildPythonPackage rec {
     rm -rf $out/${python.sitePackages}/tests
   '';
 
-  pythonImportsCheck = [
-    "smpplib"
-  ];
+  pythonImportsCheck = [ "smpplib" ];
 
   meta = with lib; {
     description = "SMPP library for Python";

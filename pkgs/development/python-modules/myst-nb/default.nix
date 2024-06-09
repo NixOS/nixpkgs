@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, flit-core
-, importlib-metadata
-, ipython
-, jupyter-cache
-, nbclient
-, myst-parser
-, nbformat
-, pyyaml
-, sphinx
-, sphinx-togglebutton
-, typing-extensions
-, ipykernel
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  flit-core,
+  importlib-metadata,
+  ipython,
+  jupyter-cache,
+  nbclient,
+  myst-parser,
+  nbformat,
+  pyyaml,
+  sphinx,
+  sphinx-togglebutton,
+  typing-extensions,
+  ipykernel,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-kniEDoRPXXgLWsxUAMv2PZfKrM+OtEKlXr2aA+JSLV4=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     importlib-metadata

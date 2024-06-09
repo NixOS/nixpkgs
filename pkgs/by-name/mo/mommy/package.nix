@@ -4,7 +4,6 @@
 , makeWrapper
 , writeText
 , shellspec
-, fetchpatch
   # usage:
   # pkgs.mommy.override {
   #  mommySettings.sweetie = "catgirl";

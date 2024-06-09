@@ -1,8 +1,9 @@
-{ lib
-, fetchPypi
-, setuptools
-, buildPythonPackage
-, doit
+{
+  lib,
+  fetchPypi,
+  setuptools,
+  buildPythonPackage,
+  doit,
 }:
 
 buildPythonPackage rec {
@@ -15,17 +16,11 @@ buildPythonPackage rec {
     hash = "sha256-JeO6Tz0zzKwz7iuXdZlYSNSemzGLehRkd/tdUveG/Io=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    doit
-  ];
+  propagatedBuildInputs = [ doit ];
 
-  pythonImportsCheck = [
-    "pydevtool"
-  ];
+  pythonImportsCheck = [ "pydevtool" ];
 
   meta = with lib; {
     homepage = "https://github.com/pydoit/pydevtool";
@@ -33,5 +28,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
   };
-
 }

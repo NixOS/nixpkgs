@@ -5,11 +5,11 @@ with lib;
 let
 
   # The splicing information needed for nativeBuildInputs isn't available
-  # on the derivations likely to be used as `cfgc.package`.
+  # on the derivations likely to be used as `cfg.package`.
   # This middle-ground solution ensures *an* sshd can do their basic validation
   # on the configuration.
   validationPackage = if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
-    then cfgc.package
+    then cfg.package
     else pkgs.buildPackages.openssh;
 
   # dont use the "=" operator
@@ -167,6 +167,13 @@ in
           Whether to enable the OpenSSH secure shell daemon, which
           allows secure remote logins.
         '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = config.programs.ssh.package;
+        defaultText = literalExpression "programs.ssh.package";
+        description = "OpenSSH package to use for sshd.";
       };
 
       startWhenNeeded = mkOption {
@@ -342,7 +349,7 @@ in
           freeformType = settingsFormat.type;
           options = {
             AuthorizedPrincipalsFile = mkOption {
-              type = types.str;
+              type = types.nullOr types.str;
               default = "none"; # upstream default
               description = ''
                 Specifies a file that lists principal names that are accepted for certificate authentication. The default
@@ -350,16 +357,18 @@ in
               '';
             };
             LogLevel = mkOption {
-              type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
+              type = types.nullOr (types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ]);
               default = "INFO"; # upstream default
               description = ''
                 Gives the verbosity level that is used when logging messages from sshd(8). Logging with a DEBUG level
                 violates the privacy of users and is not recommended.
               '';
             };
-            UsePAM = mkEnableOption "PAM authentication" // { default = true; };
+            UsePAM =
+              mkEnableOption "PAM authentication"
+              // { default = true; type = types.nullOr types.bool; };
             UseDns = mkOption {
-              type = types.bool;
+              type = types.nullOr types.bool;
               # apply if cfg.useDns then "yes" else "no"
               default = false;
               description = ''
@@ -370,14 +379,14 @@ in
               '';
             };
             X11Forwarding = mkOption {
-              type = types.bool;
+              type = types.nullOr types.bool;
               default = false;
               description = ''
                 Whether to allow X11 connections to be forwarded.
               '';
             };
             PasswordAuthentication = mkOption {
-              type = types.bool;
+              type = types.nullOr types.bool;
               default = true;
               description = ''
                 Specifies whether password authentication is allowed.
@@ -385,20 +394,20 @@ in
             };
             PermitRootLogin = mkOption {
               default = "prohibit-password";
-              type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
+              type = types.nullOr (types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"]);
               description = ''
                 Whether the root user can login using ssh.
               '';
             };
             KbdInteractiveAuthentication = mkOption {
-              type = types.bool;
+              type = types.nullOr types.bool;
               default = true;
               description = ''
                 Specifies whether keyboard-interactive authentication is allowed.
               '';
             };
             GatewayPorts = mkOption {
-              type = types.str;
+              type = types.nullOr types.str;
               default = "no";
               description = ''
                 Specifies whether remote hosts are allowed to connect to
@@ -407,7 +416,7 @@ in
               '';
             };
             KexAlgorithms = mkOption {
-              type = types.listOf types.str;
+              type = types.nullOr (types.listOf types.str);
               default = [
                 "sntrup761x25519-sha512@openssh.com"
                 "curve25519-sha256"
@@ -424,7 +433,7 @@ in
               '';
             };
             Macs = mkOption {
-              type = types.listOf types.str;
+              type = types.nullOr (types.listOf types.str);
               default = [
                 "hmac-sha2-512-etm@openssh.com"
                 "hmac-sha2-256-etm@openssh.com"
@@ -440,14 +449,14 @@ in
               '';
             };
             StrictModes = mkOption {
-              type = types.bool;
+              type = types.nullOr (types.bool);
               default = true;
               description = ''
                 Whether sshd should check file modes and ownership of directories
               '';
             };
             Ciphers = mkOption {
-              type = types.listOf types.str;
+              type = types.nullOr (types.listOf types.str);
               default = [
                 "chacha20-poly1305@openssh.com"
                 "aes256-gcm@openssh.com"
@@ -502,7 +511,9 @@ in
               '';
             };
             # Disabled by default, since pam_motd handles this.
-            PrintMotd = mkEnableOption "printing /etc/motd when a user logs in interactively";
+            PrintMotd =
+              mkEnableOption "printing /etc/motd when a user logs in interactively"
+              // { type = types.nullOr types.bool; };
           };
         });
       };
@@ -544,8 +555,8 @@ in
       };
     users.groups.sshd = {};
 
-    services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
-    services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";
+    services.openssh.moduliFile = mkDefault "${cfg.package}/etc/ssh/moduli";
+    services.openssh.sftpServerExecutable = mkDefault "${cfg.package}/libexec/sftp-server";
 
     environment.etc = authKeysFiles // authPrincipalsFiles //
       { "ssh/moduli".source = cfg.moduliFile;
@@ -559,7 +570,7 @@ in
             wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
             after = [ "network.target" ];
             stopIfChanged = false;
-            path = [ cfgc.package pkgs.gawk ];
+            path = [ cfg.package pkgs.gawk ];
             environment.LD_LIBRARY_PATH = nssModulesPath;
 
             restartTriggers = optionals (!cfg.startWhenNeeded) [
@@ -593,7 +604,7 @@ in
             serviceConfig =
               { ExecStart =
                   (optionalString cfg.startWhenNeeded "-") +
-                  "${cfgc.package}/bin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
+                  "${cfg.package}/bin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
                   "-D " +  # don't detach into a daemon process
                   "-f /etc/ssh/sshd_config";
                 KillMode = "process";
@@ -639,7 +650,10 @@ in
     security.pam.services.sshd = lib.mkIf cfg.settings.UsePAM
       { startSession = true;
         showMotd = true;
-        unixAuth = cfg.settings.PasswordAuthentication;
+        unixAuth =
+          if cfg.settings.PasswordAuthentication == true
+          then true
+          else false;
       };
 
     # These values are merged with the ones defined externally, see:
@@ -701,6 +715,10 @@ in
 
     assertions = [{ assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}
+                  { assertion = (builtins.match "(.*\n)?(\t )*[Kk][Ee][Rr][Bb][Ee][Rr][Oo][Ss][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}") != null -> cfgc.package.withKerberos;
+                    message = "cannot enable Kerberos authentication without using a package with Kerberos support";}
+                  { assertion = (builtins.match "(.*\n)?(\t )*[Gg][Ss][Ss][Aa][Pp][Ii][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}") != null -> cfgc.package.withKerberos;
+                    message = "cannot enable GSSAPI authentication without using a package with Kerberos support";}
                   (let
                     duplicates =
                       # Filter out the groups with more than 1 element

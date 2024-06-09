@@ -1,36 +1,34 @@
 { lib
 , buildDunePackage
-, cstruct
 , fetchurl
-, mdx
-, poll
-, ptime
+, mirage-crypto-rng
+, mtime
+, gluon
+, randomconv
+, rio
 , telemetry
-, uri
+, tls
 }:
 
 buildDunePackage rec {
   pname = "riot";
-  version = "0.0.7";
+  version = "0.0.8";
 
   minimalOCamlVersion = "5.1";
 
   src = fetchurl {
     url = "https://github.com/leostera/riot/releases/download/${version}/riot-${version}.tbz";
-    hash = "sha256-t+PMBh4rZXi82dUljv3nLzZX5o1iagBbQ9FfGnr/dp4=";
+    hash = "sha256-SsiDz53b9bMIT9Q3IwDdB3WKy98WSd9fiieU41qZpeE=";
   };
 
   propagatedBuildInputs = [
-    cstruct
-    poll
-    ptime
+    gluon
+    mirage-crypto-rng
+    mtime
+    randomconv
+    rio
     telemetry
-    uri
-  ];
-
-  checkInputs = [
-    mdx
-    mdx.bin
+    tls
   ];
 
   doCheck = false; # fails on sandbox

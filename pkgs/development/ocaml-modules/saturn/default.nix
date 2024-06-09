@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, ocaml
+{ lib, buildDunePackage, ocaml
 , saturn_lockfree
 , dscheck
 , qcheck, qcheck-alcotest, qcheck-stm

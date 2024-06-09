@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchPypi
-, pdfminer-six
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, wand
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchPypi,
+  pdfminer-six,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  wand,
 }:
 
 buildPythonPackage rec {

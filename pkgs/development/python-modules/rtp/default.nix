@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python3,
 
   # nativeCheckInputs
-, hypothesis
-, unittestCheckHook
+  hypothesis,
+  unittestCheckHook,
 
 }:
 
@@ -24,12 +25,13 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [ "-s" "tests" "-v" ];
-
-  pythonImportsCheck = [
-    "rtp"
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+    "-v"
   ];
 
+  pythonImportsCheck = [ "rtp" ];
 
   meta = with lib; {
     description = "A library for decoding/encoding rtp packets";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, isPyPy
-, fetchPypi
-, hatchling
-, hatch-vcs
-, gevent
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPyPy,
+  fetchPypi,
+  hatchling,
+  hatch-vcs,
+  gevent,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,15 +19,17 @@ buildPythonPackage rec {
     hash = "sha256-UYm1LGEhwk/q4ogWarQbMlScfiNIZSc2VAuebn1OcuM=";
   };
 
-  postPatch = ''
-    # remove vbox tests
-    rm testing/test_termination.py
-    rm testing/test_channel.py
-    rm testing/test_xspec.py
-    rm testing/test_gateway.py
-  '' + lib.optionalString isPyPy ''
-    rm testing/test_multi.py
-  '';
+  postPatch =
+    ''
+      # remove vbox tests
+      rm testing/test_termination.py
+      rm testing/test_channel.py
+      rm testing/test_xspec.py
+      rm testing/test_gateway.py
+    ''
+    + lib.optionalString isPyPy ''
+      rm testing/test_multi.py
+    '';
 
   nativeBuildInputs = [
     hatchling
@@ -50,9 +53,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-vvv" ];
 
-  pythonImportsCheck = [
-    "execnet"
-  ];
+  pythonImportsCheck = [ "execnet" ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -1,10 +1,11 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, jax
-, jaxlib
-, lib
-, poetry-core
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  jax,
+  jaxlib,
+  lib,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -34,19 +35,13 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   # jax is not declared in the dependencies, but is necessary.
-  propagatedBuildInputs = [
-    jax
-  ];
+  propagatedBuildInputs = [ jax ];
 
   nativeCheckInputs = [ jaxlib ];
-  pythonImportsCheck = [
-    "treeo"
-  ];
+  pythonImportsCheck = [ "treeo" ];
 
   meta = with lib; {
     description = "A small library for creating and manipulating custom JAX Pytree classes.";

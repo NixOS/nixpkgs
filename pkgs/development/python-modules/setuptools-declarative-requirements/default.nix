@@ -1,5 +1,12 @@
-{ buildPythonPackage, fetchPypi, lib, pypiserver, pytestCheckHook
-, setuptools-scm, virtualenv }:
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pypiserver,
+  pytestCheckHook,
+  setuptools-scm,
+  virtualenv,
+}:
 
 buildPythonPackage rec {
   pname = "setuptools-declarative-requirements";
@@ -13,7 +20,11 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools-scm ];
 
-  nativeCheckInputs = [ pypiserver pytestCheckHook virtualenv ];
+  nativeCheckInputs = [
+    pypiserver
+    pytestCheckHook
+    virtualenv
+  ];
 
   # Tests use network
   doCheck = false;

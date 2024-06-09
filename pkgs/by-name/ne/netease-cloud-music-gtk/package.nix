@@ -6,11 +6,7 @@
 , meson
 , ninja
 , pkg-config
-, glib
-, gtk4
-, appstream-glib
 , desktop-file-utils
-, libxml2
 , rustc
 , wrapGAppsHook4
 , openssl
@@ -22,19 +18,19 @@
 
 stdenv.mkDerivation rec {
   pname = "netease-cloud-music-gtk";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "gmg137";
     repo = "netease-cloud-music-gtk";
     rev = version;
-    hash = "sha256-75zovq7Q370L+bRczTCCC34G2w8xeMMUK5EUTfKAc+w=";
+    hash = "sha256-uoC9J09U2aI1dhaKc3TxIyFwRrPRxDrzaV+RyoZ6mKo=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "netease-cloud-music-api-1.3.1" = "sha256-ZIc5zj9ZtLBYlZqBR7iUW+KmD71M+OYDiv0dkZrpFos=";
+      "netease-cloud-music-api-1.3.2" = "sha256-QRz9Sdu+0I7SwujoTBKWPQMjPDdX8ZyVlFwMw9pM7UY=";
     };
   };
 
@@ -46,11 +42,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    glib # glib-compile-resources
-    gtk4 # gtk4-update-icon-cache
-    appstream-glib # appstream-util
     desktop-file-utils # update-desktop-database
-    libxml2 # xmllint
     wrapGAppsHook4
     rustPlatform.cargoSetupHook
     cargo

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, cryptography
-, onetimepad
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  cryptography,
+  onetimepad,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,16 @@
 diff --git a/boxapi.c b/boxapi.c
-index 4964273..1a32e0d 100644
+index 4964273..e4b7404 100644
 --- a/boxapi.c
 +++ b/boxapi.c
-@@ -38,8 +38,8 @@
+@@ -29,6 +29,7 @@
+ #include <curl/curl.h>
+ 
+ #include <libxml/hash.h>
++#include <libxml/parser.h>
+ 
+ #include <libapp/app.h>
+ /* Building blocks for OpenBox api endpoints
+@@ -38,8 +39,8 @@
  //    AUTH
  #define API_KEY_VAL "f9ss11y2w0hg5r04jsidxlhk4pil28cf"
  #define API_SECRET  "r3ZHAIhsOL2FoHjgERI9xf74W5skIM0w"

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, certifi
-, click
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  certifi,
+  click,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "gistyc"
-  ];
+  pythonImportsCheck = [ "gistyc" ];
 
   meta = with lib; {
     homepage = "https://github.com/ThomasAlbin/gistyc";

@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, arxiv2bib
-, beautifulsoup4
-, bibtexparser
-, buildPythonPackage
-, chardet
-, click
-, colorama
-, configparser
-, dominate
-, fetchFromGitHub
-, filetype
-, habanero
-, isbnlib
-, lxml
-, prompt-toolkit
-, pygments
-, pyparsing
-, pytestCheckHook
-, python-doi
-, python-slugify
-, pythonAtLeast
-, pythonOlder
-, pyyaml
-, requests
-, stevedore
-, tqdm
-, typing-extensions
-, whoosh
+{
+  lib,
+  stdenv,
+  arxiv2bib,
+  beautifulsoup4,
+  bibtexparser,
+  buildPythonPackage,
+  chardet,
+  click,
+  colorama,
+  configparser,
+  dominate,
+  fetchFromGitHub,
+  filetype,
+  habanero,
+  isbnlib,
+  lxml,
+  prompt-toolkit,
+  pygments,
+  pyparsing,
+  pytestCheckHook,
+  python-doi,
+  python-slugify,
+  pythonAtLeast,
+  pythonOlder,
+  pyyaml,
+  requests,
+  stevedore,
+  tqdm,
+  typing-extensions,
+  whoosh,
 }:
 
 buildPythonPackage rec {
@@ -75,17 +76,13 @@ buildPythonPackage rec {
       --replace "--cov=papis" ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  pytestFlagsArray = [
-    "papis tests"
-  ];
+  pytestFlagsArray = [ "papis tests" ];
 
   disabledTestPaths = [
     "tests/downloaders"
@@ -104,13 +101,9 @@ buildPythonPackage rec {
     "test_valid_dblp_key"
     "test_validate_arxivid"
     "test_yaml"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_default_opener"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "test_default_opener" ];
 
-  pythonImportsCheck = [
-    "papis"
-  ];
+  pythonImportsCheck = [ "papis" ];
 
   meta = with lib; {
     description = "Powerful command-line document and bibliography manager";
@@ -118,6 +111,9 @@ buildPythonPackage rec {
     homepage = "https://papis.readthedocs.io/";
     changelog = "https://github.com/papis/papis/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nico202 teto ];
+    maintainers = with maintainers; [
+      nico202
+      teto
+    ];
   };
 }

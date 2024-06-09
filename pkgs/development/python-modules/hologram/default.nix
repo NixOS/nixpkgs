@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, jsonschema
-, pytestCheckHook
-, python-dateutil
-, pythonRelaxDepsHook
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  jsonschema,
+  pytestCheckHook,
+  python-dateutil,
+  pythonRelaxDepsHook,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -42,22 +43,19 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonRelaxDeps = [
-    "python-dateutil"
-  ];
+  pythonRelaxDeps = [ "python-dateutil" ];
 
-  pythonImportsCheck = [
-    "hologram"
-  ];
+  pythonImportsCheck = [ "hologram" ];
 
   meta = with lib; {
     description = "A library for automatically generating Draft 7 JSON Schemas from Python dataclasses";
     homepage = "https://github.com/dbt-labs/hologram";
     license = licenses.mit;
-    maintainers = with maintainers; [ mausch tjni ];
+    maintainers = with maintainers; [
+      mausch
+      tjni
+    ];
   };
 }

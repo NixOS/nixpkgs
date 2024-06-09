@@ -1,75 +1,48 @@
 { lib
 , stdenv
-, stdenvNoCC
 , rustPlatform
 , fetchFromGitHub
+, nodejs
+, pnpm
 , wrapGAppsHook3
 , cargo
 , rustc
 , cargo-tauri
 , pkg-config
-, nodePackages
 , esbuild
 , buildGoModule
-, jq
-, moreutils
 , libayatana-appindicator
 , gtk3
 , webkitgtk
 , libsoup
 , openssl
 , xdotool
-, cacert
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pot";
   version = "2.7.9";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Y2gFLvRNBjOGxdpIeoY1CXEip0Ht73aymWIP5wuc9kU=";
   };
 
-  sourceRoot = "${src.name}/src-tauri";
+  sourceRoot = "${finalAttrs.src.name}/src-tauri";
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
-  pnpm-deps = stdenvNoCC.mkDerivation {
-    pname = "${pname}-pnpm-deps";
-    inherit src version;
-
-    nativeBuildInputs = [
-      jq
-      moreutils
-      nodePackages.pnpm
-      cacert
-    ];
-
-    installPhase = ''
-      export HOME=$(mktemp -d)
-      pnpm config set store-dir $out
-      # use --ignore-script and --no-optional to avoid downloading binaries
-      # use --frozen-lockfile to avoid checking git deps
-      pnpm install --frozen-lockfile --no-optional --ignore-script
-
-      # Remove timestamp and sort the json files
-      rm -rf $out/v3/tmp
-      for f in $(find $out -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . $f | sponge $f
-      done
-    '';
-
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHash = "sha256-LuY5vh642DgSa91eUcA/AT+ovDcP9tZFE2dKyicCOeQ=";
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-nRRUX6CH3s1cEoI80gtRmu0ovXpIwS+h1rFJo8kw60E=";
   };
+
+  pnpmRoot = "..";
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
@@ -84,8 +57,9 @@ stdenv.mkDerivation rec {
     cargo
     rustc
     cargo-tauri
+    nodejs
+    pnpm.configHook
     wrapGAppsHook3
-    nodePackages.pnpm
     pkg-config
   ];
 
@@ -111,13 +85,13 @@ stdenv.mkDerivation rec {
     });
   })}";
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-    pnpm config set store-dir ${pnpm-deps}
+  preConfigure = ''
+    # pnpm.configHook has to write to .., as our sourceRoot is set to src-tauri
+    # TODO: move frontend into its own drv
     chmod +w ..
-    pnpm install --offline --frozen-lockfile --no-optional --ignore-script
-    chmod -R +w ../node_modules
-    pnpm rebuild
+  '';
+
+  preBuild = ''
     # Use cargo-tauri from nixpkgs instead of pnpm tauri from npm
     cargo tauri build -b deb
   '';
@@ -134,5 +108,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ linsui ];
   };
-}
-
+})

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
       --replace "statsmodels>=0.6" ""
   '';
 
-  pythonImportsCheck = [
-    "numdifftools"
-  ];
+  pythonImportsCheck = [ "numdifftools" ];
 
   meta = with lib; {
     description = "Library to solve automatic numerical differentiation problems in one or more variables";

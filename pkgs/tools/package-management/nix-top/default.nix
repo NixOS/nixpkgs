@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/samueldr/nix-top";
     license = licenses.mit;
     maintainers = with maintainers; [ samueldr ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
     mainProgram = "nix-top";
   };
 }

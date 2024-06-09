@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchpatch, ncurses, lib, stdenv
+{ fetchFromGitHub, ncurses, lib, stdenv
 , updateAutotoolsGnuConfigScriptsHook, installShellFiles }:
 
 stdenv.mkDerivation rec {

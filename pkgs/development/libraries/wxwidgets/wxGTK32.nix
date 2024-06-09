@@ -51,22 +51,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  version = "3.2.4";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-YkV150sDsfBEHvHne0GF6i8Y5881NrByPkLtPAmb24E=";
+    hash = "sha256-ibkXs693xO+z3JuMvlG4b/+A8f4Lf5TYqdDa67fb9ck=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "avoid_gtk3_crash.patch";
-      url = "https://github.com/wxWidgets/wxWidgets/commit/8ea22b5e92bf46add0b20059f6e39a938858ff97.patch";
-      hash = "sha256-zAyqVTdej4F3R7vVMLiKkXqJTAHDtGYJnyjaRyDmMOM=";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config ];
 

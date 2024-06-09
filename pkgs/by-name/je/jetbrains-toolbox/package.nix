@@ -35,7 +35,6 @@ let
   appimage = appimageTools.wrapAppImage {
     inherit pname version;
     src = appimageContents;
-    extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.targetPkgs pkgs);
   };
 in
 stdenv.mkDerivation {

@@ -5,12 +5,12 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-store";
-  version = "unstable-2024-03-13";
+  version = "unstable-2024-04-14";
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "df014ea82ae0465470f5d237bfe71d2c085d29a0";
-    hash = "sha256-1Sp6/qVONK+O5FLEcsu45eEBNaVbJLptt+ByXOZYwpo=";
+    rev = "b1bbeaa6e6bdc85c84d329ae01b69d72716411fc";
+    hash = "sha256-KHYcQnaRFoYzl/00mFkS6MJS7Th0T0fQhxYUErjzGCo=";
     fetchSubmodules = true;
   };
 
@@ -20,10 +20,12 @@ rustPlatform.buildRustPackage rec {
       "accesskit-0.12.2" = "sha256-ksaYMGT/oug7isQY8/1WD97XDUsX2ShBdabUzxWffYw=";
       "appstream-0.2.2" = "sha256-Qb/zzZJ2sM97nGVtp8amecTlwuaDrx1cacDcZOwhUm8=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-J6c2pRCpyfCFMmzwJ4RdEghSaFDshDtZL6DteAiaq1o=";
-      "cosmic-text-0.11.2" = "sha256-6mvGyMCFC/tSIiDgDX+zuDUi15S9dXI6Dc6pj36hIJM=";
+      "clipboard_macos-0.1.0" = "sha256-PEH+aCpjDCEIj8s39nIeWxb7qu3u9IfriGqf0pYObMk=";
+      "cosmic-config-0.1.0" = "sha256-Ps2QIzlwgW8ENB+uD6cOjCkjlZvmWspazsXNxDFCu7g=";
+      "cosmic-text-0.11.2" = "sha256-K9cZeClr1zz4LanJS0WPEpxAplQrXfCjFKrSn5n4rDA=";
       "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
       "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
+      "smithay-clipboard-0.8.0" = "sha256-OZOGbdzkgRIeDFrAENXE7g62eQTs60Je6lYVr0WudlE=";
       "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
       "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";

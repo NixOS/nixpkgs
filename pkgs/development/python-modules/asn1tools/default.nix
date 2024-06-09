@@ -1,14 +1,15 @@
-{ lib
-, bitstruct
-, buildPythonPackage
-, diskcache
-, fetchFromGitHub
-, prompt-toolkit
-, pyparsing
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  bitstruct,
+  buildPythonPackage,
+  diskcache,
+  fetchFromGitHub,
+  prompt-toolkit,
+  pyparsing,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-TWAOML6nsLX3TYqoQ9fcSjrUmC4byXOfczfkmSaSa0k=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     bitstruct
@@ -35,12 +34,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-depdendencies = {
-    shell = [
-      prompt-toolkit
-    ];
-    cache = [
-      diskcache
-    ];
+    shell = [ prompt-toolkit ];
+    cache = [ diskcache ];
   };
 
   nativeCheckInputs = [
@@ -48,9 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-depdendencies);
 
-  pythonImportsCheck = [
-    "asn1tools"
-  ];
+  pythonImportsCheck = [ "asn1tools" ];
 
   disabledTests = [
     # assert exact error message of pyparsing which changed and no longer matches

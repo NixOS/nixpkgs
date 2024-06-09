@@ -2,7 +2,7 @@
 
 trivialBuild {
   pname = "yes-no";
-  version = "2017-10-01";
+  version = "0-unstable-2017-10-01";
 
   src = fetchurl {
     url = "https://raw.githubusercontent.com/emacsmirror/emacswiki.org/143bcaeb679a8fa8a548e92a5a9d5c2baff50d9c/yes-no.el";

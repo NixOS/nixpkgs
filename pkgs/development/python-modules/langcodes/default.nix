@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, marisa-trie
-, pythonOlder
-, fetchPypi
-, poetry-core
-, pytestCheckHook
-, language-data
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  marisa-trie,
+  pythonOlder,
+  fetchPypi,
+  poetry-core,
+  pytestCheckHook,
+  language-data,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     sha256 = "794d07d5a28781231ac335a1561b8442f8648ca07cd518310aeb45d6f0807ef6";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     language-data
@@ -31,18 +30,14 @@ buildPythonPackage rec {
     setuptools # pkg_resources import in language_data/util.py
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # AssertionError: assert 'Unknown language [aqk]' == 'Aninka'
     "test_updated_iana"
   ];
 
-  pythonImportsCheck = [
-    "langcodes"
-  ];
+  pythonImportsCheck = [ "langcodes" ];
 
   meta = with lib; {
     description = "Python toolkit for working with and comparing the standardized codes for languages";

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "minio-certgen";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "certgen";
     rev = "v${version}";
-    sha256 = "sha256-qi+SeNLW/jE2dGar4Lf16TKRT3ZTmWB/j8EsnoyrdxI=";
+    sha256 = "sha256-bYZfQeqPqroMkqJOqHri3l7xscEK9ml/oNLVPBVSDKk=";
   };
 
   vendorHash = null;

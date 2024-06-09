@@ -134,7 +134,7 @@ in
     assertions = [
       {
         assertion = !cfg.addNetworkInterface;
-        message = "VirtualBox KVM only supports standard NAT networking for VMs. Please turn off virtualisation.virtualbox.host.addNetworkInferface.";
+        message = "VirtualBox KVM only supports standard NAT networking for VMs. Please turn off virtualisation.virtualbox.host.addNetworkInterface.";
       }
 
       {

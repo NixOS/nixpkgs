@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, influxdb
-, jsonpath-ng
-, paho-mqtt
-, py-expression-eval
-, pyaml
-, pycron
-, schema
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  influxdb,
+  jsonpath-ng,
+  paho-mqtt,
+  py-expression-eval,
+  pyaml,
+  pycron,
+  schema,
 }:
 buildPythonPackage rec {
   pname = "mqtt2influxdb";

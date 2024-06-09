@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, verilog
-, ghdl
-, pytest
-, pytest-xdist
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  verilog,
+  ghdl,
+  pytest,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {

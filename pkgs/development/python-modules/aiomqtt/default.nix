@@ -1,13 +1,14 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, paho-mqtt
-, poetry-core
-, poetry-dynamic-versioning
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paho-mqtt,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -39,12 +40,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiomqtt"
-  ];
+  pythonImportsCheck = [ "aiomqtt" ];
 
   pytestFlagsArray = [
-    "-m" "'not network'"
+    "-m"
+    "'not network'"
   ];
 
   meta = with lib; {

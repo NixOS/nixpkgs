@@ -1,70 +1,57 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  protobuf,
+  stdenv,
+  darwin,
+  pkg-config,
+  openssl,
+}:
 let
   pname = "teller";
-  version = "1.5.6";
-  date = "2022-10-13";
+  version = "2.0.7";
+  date = "2024-05-19";
 in
-buildGoModule {
+rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "tellerops";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vgrfWKKXf4C4qkbGiB3ndtJy1VyTx2NJs2QiOSFFZkE=";
+    hash = "sha256-CI74nMMTIPwjJfy7ASR19V6EbYZ62NoAOxlP3Xt2BuI=";
   };
 
-  vendorHash = null;
+  cargoHash = "sha256-iqZX+9l3TWrFuaQreNz4RrCgPQCyKJt6RJ1UeKYaNRs=";
 
-  # use make instead of default checks because e2e does not work with `buildGoDir`
-  checkPhase = ''
-    runHook preCheck
-    HOME="$(mktemp -d)"
-    # We do not set trimpath for tests, in case they reference test assets
-    export GOFLAGS=''${GOFLAGS//-trimpath/}
+  nativeBuildInputs = [
+    protobuf
+    pkg-config
+  ];
 
-    make test
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
-    # e2e tests can fail on first try
+  doCheck = false;
 
-    max_iteration=3
-    for i in $(seq 1 $max_iteration)
-    do
-      make e2e
-      result=$?
-      if [[ $result -eq 0 ]]
-      then
-        echo "e2e tests passed"
-        break
-      else
-        echo "e2e tests failed, retrying..."
-        sleep 1
-      fi
-    done
-
-    if [[ $result -ne 0 ]]
-    then
-      echo "e2e tests failed after $max_iteration attempts"
-    fi
-
-    runHook postCheck
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/teller --version 2>&1 | grep ${version};
   '';
 
   passthru.updateScript = nix-update-script { };
-
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${version}"
-    "-X main.date=${date}"
-  ];
 
   meta = with lib; {
     homepage = "https://github.com/tellerops/teller/";
     description = "Cloud native secrets management for developers";
     mainProgram = "teller";
     license = licenses.asl20;
-    maintainers = with maintainers; [ wahtique ];
+    maintainers = with maintainers; [
+      cameronraysmith
+      wahtique
+    ];
   };
 }

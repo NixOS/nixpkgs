@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, numba
-, pandas
-, dask
-, distributed
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  numba,
+  pandas,
+  dask,
+  distributed,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "stumpy"
-  ];
+  pythonImportsCheck = [ "stumpy" ];
 
   pytestFlagsArray = [
     # whole testsuite is very CPU intensive, only run core tests

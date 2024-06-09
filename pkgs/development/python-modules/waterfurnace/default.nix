@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, requests
-, pythonOlder
-, websocket-client
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  requests,
+  pythonOlder,
+  websocket-client,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "waterfurnace"
-  ];
+  pythonImportsCheck = [ "waterfurnace" ];
 
   meta = with lib; {
     description = "Python interface to waterfurnace geothermal systems";

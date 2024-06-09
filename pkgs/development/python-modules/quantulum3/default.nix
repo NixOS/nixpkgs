@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  pythonAtLeast,
+  fetchFromGitHub,
   # build inputs
-, inflect
-, num2words
-, numpy
-, scipy
-, scikit-learn
-, joblib
-, wikipedia
-, stemming
-, setuptools
+  inflect,
+  num2words,
+  numpy,
+  scipy,
+  scikit-learn,
+  joblib,
+  wikipedia,
+  stemming,
+  setuptools,
 }:
 let
   pname = "quantulum3";

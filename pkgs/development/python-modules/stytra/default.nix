@@ -1,33 +1,34 @@
-{ lib
-, anytree
-, arrayqueues
-, av
-, buildPythonPackage
-, colorspacious
-, fetchPypi
-, flammkuchen
-, git
-, gitpython
-, imageio
-, imageio-ffmpeg
-, lightparam
-, matplotlib
-, nose
-, numba
-, numpy
-, opencv4
-, pandas
-, pims
-, pyqt5
-, pyqtgraph
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, qdarkstyle
-, qimage2ndarray
-, scikit-image
-, scipy
-, tables
+{
+  lib,
+  anytree,
+  arrayqueues,
+  av,
+  buildPythonPackage,
+  colorspacious,
+  fetchPypi,
+  flammkuchen,
+  git,
+  gitpython,
+  imageio,
+  imageio-ffmpeg,
+  lightparam,
+  matplotlib,
+  nose,
+  numba,
+  numpy,
+  opencv4,
+  pandas,
+  pims,
+  pyqt5,
+  pyqtgraph,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  qdarkstyle,
+  qimage2ndarray,
+  scikit-image,
+  scipy,
+  tables,
 }:
 
 buildPythonPackage rec {
@@ -88,6 +89,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/portugueslab/stytra";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tbenst ];
-    broken = true;  # incompatible with pyqtgraph>0.13.0: https://github.com/portugueslab/stytra/issues/87
+    broken = true; # incompatible with pyqtgraph>0.13.0: https://github.com/portugueslab/stytra/issues/87
   };
 }

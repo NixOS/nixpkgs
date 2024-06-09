@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyqt5
-, pytestCheckHook
-, pythonOlder
-, qtpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyqt5,
+  pytestCheckHook,
+  pythonOlder,
+  qtpy,
 }:
 
 buildPythonPackage rec {
@@ -26,16 +27,12 @@ buildPythonPackage rec {
     qtpy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Requires https://github.com/boylea/qtbot which is unmaintained
   doCheck = false;
 
-  pythonImportsCheck = [
-    "qtawesome"
-  ];
+  pythonImportsCheck = [ "qtawesome" ];
 
   meta = with lib; {
     description = "Iconic fonts in PyQt and PySide applications";

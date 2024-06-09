@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, python
-, pygobject3
-, pyatspi
-, pycairo
-, at-spi2-core
-, gobject-introspection
-, gtk3
-, gsettings-desktop-schemas
-, fetchurl
-, dbus
-, xvfb-run
-, wrapGAppsHook3
+{
+  lib,
+  buildPythonPackage,
+  python,
+  pygobject3,
+  pyatspi,
+  pycairo,
+  at-spi2-core,
+  gobject-introspection,
+  gtk3,
+  gsettings-desktop-schemas,
+  fetchurl,
+  dbus,
+  xvfb-run,
+  wrapGAppsHook3,
 # , fetchPypi
 }:
 
@@ -20,7 +21,10 @@ buildPythonPackage {
   version = "0.9.11";
   format = "setuptools";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   # https://gitlab.com/dogtail/dogtail/issues/1
   # src = fetchPypi {
@@ -32,12 +36,21 @@ buildPythonPackage {
     sha256 = "EGyxYopupfXPYtTL9mm9ujZorvh8AGaNXVKBPWsGy3c=";
   };
 
-  patches = [
-    ./nix-support.patch
-  ];
+  patches = [ ./nix-support.patch ];
 
-  nativeBuildInputs = [ gobject-introspection dbus xvfb-run wrapGAppsHook3 ]; # for setup hooks
-  propagatedBuildInputs = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
+  nativeBuildInputs = [
+    gobject-introspection
+    dbus
+    xvfb-run
+    wrapGAppsHook3
+  ]; # for setup hooks
+  propagatedBuildInputs = [
+    at-spi2-core
+    gtk3
+    pygobject3
+    pyatspi
+    pycairo
+  ];
 
   checkPhase = ''
     runHook preCheck

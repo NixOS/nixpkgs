@@ -10,11 +10,11 @@
 with lib;
 stdenv.mkDerivation (finalAttrs: {
   pname = "figma-linux";
-  version = "0.11.3";
+  version = "0.11.4";
 
   src = fetchurl {
     url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${finalAttrs.version}/figma-linux_${finalAttrs.version}_linux_amd64.deb";
-    hash = "sha256-9UfyCqgsg9XAFyZ7V7TogkQou4x+ixFUfjXZ1/qlDmA=";
+    hash = "sha256-ukUsNgWOtIRe54vsmRdI62syjIPwSsgNV7kITCw0YUQ=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook3 ];

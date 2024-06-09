@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gpytorch
-, linear-operator
-, multipledispatch
-, pyro-ppl
-, setuptools
-, setuptools-scm
-, wheel
-, torch
-, scipy
-, pytestCheckHook
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gpytorch,
+  linear-operator,
+  multipledispatch,
+  pyro-ppl,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  torch,
+  scipy,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -42,13 +43,9 @@ buildPythonPackage rec {
     torch
   ];
 
-  pythonRelaxDeps = [
-    "linear-operator"
-  ];
+  pythonRelaxDeps = [ "linear-operator" ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "botorch" ];
 
   meta = with lib; {

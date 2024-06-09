@@ -153,6 +153,7 @@ in
           inherit name;
 
           dontUnpack = true;
+          preferLocalBuild = true;
 
           json = builtins.toJSON finalValue;
           passAsFile = [ "json" ];

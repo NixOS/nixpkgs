@@ -1,32 +1,25 @@
-{ lib,
+{
+  lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   fetchpatch,
   pytestCheckHook,
   astunparse,
-  setuptools
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "import-expression";
-  version = "1.1.4";
+  version = "1.1.5";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "ioistired";
-    repo = "import-expression-parser";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-mll2NePB7fthzltLOk6D9BgaDpH6GaW4psqcGun/0qM=";
+  src = fetchPypi {
+    inherit version;
+    pname = "import_expression";
+    hash = "sha256-mVlYj8/I3LFEoHJRds/vbCjH2x/C1oNiUCXmh1FtQME=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ioistired/import-expression-parser/commit/3daf968c3163b64685aa529740e132f0df5ab262.patch";
-      hash = "sha256-2Ubv3onor2D26udZbDDMb3iNLopEIRnIcO/X6WUVmJU=";
-    })
-  ];
-
-  nativeBuildInputs = [ setuptools ];
-  propagatedBuildInputs = [ astunparse ];
+  build-system = [ setuptools ];
+  dependencies = [ astunparse ];
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests.py" ];
 
@@ -38,7 +31,10 @@ buildPythonPackage rec {
   meta = {
     description = "Transpiles a superset of python to allow easy inline imports";
     homepage = "https://github.com/ioistired/import-expression-parser";
-    license = with lib.licenses; [ mit psfl ];
+    license = with lib.licenses; [
+      mit
+      psfl
+    ];
     mainProgram = "import-expression";
     maintainers = with lib.maintainers; [ lychee ];
   };

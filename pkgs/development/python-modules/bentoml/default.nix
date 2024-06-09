@@ -1,71 +1,72 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, hatch-vcs
-, aiohttp
-, attrs
-, cattrs
-, circus
-, click
-, click-option-group
-, cloudpickle
-, deepmerge
-, fs
-, httpx
-, inflection
-, jinja2
-, numpy
-, opentelemetry-api
-, opentelemetry-instrumentation
-, opentelemetry-instrumentation-aiohttp-client
-, opentelemetry-instrumentation-asgi
-, opentelemetry-sdk
-, opentelemetry-semantic-conventions
-, opentelemetry-util-http
-, packaging
-, pathspec
-, pip-requirements-parser
-, pip-tools
-, prometheus-client
-, psutil
-, nvidia-ml-py
-, python-dateutil
-, python-json-logger
-, python-multipart
-, pyyaml
-, requests
-, rich
-, schema
-, simple-di
-, starlette
-, uvicorn
-, watchfiles
-, fs-s3fs
-, grpcio
-, grpcio-health-checking
-, opentelemetry-instrumentation-grpc
-, protobuf
-, grpcio-channelz
-, grpcio-reflection
-, filetype
-, pillow
-, pydantic
-, pandas
-, pyarrow
-, opentelemetry-exporter-otlp-proto-http
-# https://pypi.org/project/opentelemetry-exporter-jaeger-proto-grpc/
-# , opentelemetry-exporter-jaeger # support for this exporter ends in july 2023
-, opentelemetry-exporter-otlp
-# , opentelemetry-exporter-zipkin
-, tritonclient
-# native check inputs
-, pytestCheckHook
-, scikit-learn
-, lxml
-, orjson
-, pytest-asyncio
-, fastapi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  aiohttp,
+  attrs,
+  cattrs,
+  circus,
+  click,
+  click-option-group,
+  cloudpickle,
+  deepmerge,
+  fs,
+  httpx,
+  inflection,
+  jinja2,
+  numpy,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-instrumentation-aiohttp-client,
+  opentelemetry-instrumentation-asgi,
+  opentelemetry-sdk,
+  opentelemetry-semantic-conventions,
+  opentelemetry-util-http,
+  packaging,
+  pathspec,
+  pip-requirements-parser,
+  pip-tools,
+  prometheus-client,
+  psutil,
+  nvidia-ml-py,
+  python-dateutil,
+  python-json-logger,
+  python-multipart,
+  pyyaml,
+  requests,
+  rich,
+  schema,
+  simple-di,
+  starlette,
+  uvicorn,
+  watchfiles,
+  fs-s3fs,
+  grpcio,
+  grpcio-health-checking,
+  opentelemetry-instrumentation-grpc,
+  protobuf,
+  grpcio-channelz,
+  grpcio-reflection,
+  filetype,
+  pillow,
+  pydantic,
+  pandas,
+  pyarrow,
+  opentelemetry-exporter-otlp-proto-http,
+  # https://pypi.org/project/opentelemetry-exporter-jaeger-proto-grpc/
+  # , opentelemetry-exporter-jaeger # support for this exporter ends in july 2023
+  opentelemetry-exporter-otlp,
+  # , opentelemetry-exporter-zipkin
+  tritonclient,
+  # native check inputs
+  pytestCheckHook,
+  scikit-learn,
+  lxml,
+  orjson,
+  pytest-asyncio,
+  fastapi,
 }:
 
 let
@@ -80,7 +81,10 @@ let
   io-file = [ filetype ];
   io-image = io-file ++ [ pillow ];
   io-json = [ pydantic ];
-  io-pandas = [ pandas pyarrow ];
+  io-pandas = [
+    pandas
+    pyarrow
+  ];
   grpc-reflection = grpc ++ [ grpcio-reflection ];
   grpc-channelz = grpc ++ [ grpcio-channelz ];
   monitor-otlp = [ opentelemetry-exporter-otlp-proto-http ];
@@ -91,9 +95,23 @@ let
   tracing = tracing-otlp; # ++ tracing-zipkin ++ tracing-jaeger
   optional-dependencies = {
     all = aws ++ io ++ grpc ++ grpc-reflection ++ grpc-channelz ++ tracing ++ monitor-otlp;
-    inherit aws grpc io-file io-image io-json io-pandas io grpc-reflection
-      grpc-channelz monitor-otlp tracing-otlp tracing;
-    triton = [ tritonclient ] ++ tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc;
+    inherit
+      aws
+      grpc
+      io-file
+      io-image
+      io-json
+      io-pandas
+      io
+      grpc-reflection
+      grpc-channelz
+      monitor-otlp
+      tracing-otlp
+      tracing
+      ;
+    triton = [
+      tritonclient
+    ] ++ tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc;
   };
 in
 buildPythonPackage {
@@ -114,9 +132,7 @@ buildPythonPackage {
       --replace "requests" "httpx"
   '';
 
-  pythonRelaxDeps = [
-    "opentelemetry-semantic-conventions"
-  ];
+  pythonRelaxDeps = [ "opentelemetry-semantic-conventions" ];
 
   nativeBuildInputs = [
     hatchling
@@ -197,13 +213,15 @@ buildPythonPackage {
     starlette
   ] ++ optional-dependencies.grpc;
 
-
   meta = with lib; {
     description = "Build Production-Grade AI Applications";
     homepage = "https://github.com/bentoml/BentoML";
     changelog = "https://github.com/bentoml/BentoML/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada natsukium ];
+    maintainers = with maintainers; [
+      happysalada
+      natsukium
+    ];
     # https://github.com/bentoml/BentoML/issues/3885
     broken = versionAtLeast pydantic.version "2";
   };

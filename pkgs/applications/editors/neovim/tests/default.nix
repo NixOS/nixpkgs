@@ -1,6 +1,6 @@
 # run tests by building `neovim.tests`
 { vimUtils, writeText, neovim, vimPlugins
-, lib, fetchFromGitHub, neovimUtils, wrapNeovimUnstable
+, lib, neovimUtils, wrapNeovimUnstable
 , neovim-unwrapped
 , fetchFromGitLab
 , runCommandLocal

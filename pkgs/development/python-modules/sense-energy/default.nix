@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, aiohttp
-, ciso8601
-, async-timeout
-, kasa-crypt
-, orjson
-, pythonOlder
-, requests
-, websocket-client
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  aiohttp,
+  ciso8601,
+  async-timeout,
+  kasa-crypt,
+  orjson,
+  pythonOlder,
+  requests,
+  websocket-client,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
       --replace-fail "{{VERSION_PLACEHOLDER}}" "${version}"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -50,9 +49,7 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sense_energy"
-  ];
+  pythonImportsCheck = [ "sense_energy" ];
 
   meta = with lib; {
     description = "API for the Sense Energy Monitor";

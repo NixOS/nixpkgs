@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, click
-, pycryptodome
-, requests
-, tzlocal
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  click,
+  pycryptodome,
+  requests,
+  tzlocal,
 }:
 
 buildPythonPackage rec {

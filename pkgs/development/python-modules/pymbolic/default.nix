@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, matchpy
-, pytestCheckHook
-, pythonOlder
-, pytools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  matchpy,
+  pytestCheckHook,
+  pythonOlder,
+  pytools,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    pytools
-  ];
+  propagatedBuildInputs = [ pytools ];
 
   nativeCheckInputs = [
     matchpy
@@ -43,9 +42,7 @@ buildPythonPackage rec {
         --replace '"pytest>=2.3",' ""
   '';
 
-  pythonImportsCheck = [
-    "pymbolic"
-  ];
+  pythonImportsCheck = [ "pymbolic" ];
 
   meta = with lib; {
     description = "A package for symbolic computation";

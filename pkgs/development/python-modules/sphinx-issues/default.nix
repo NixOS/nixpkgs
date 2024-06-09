@@ -1,10 +1,19 @@
-{ lib, buildPythonPackage, sphinx, fetchFromGitHub, pandoc }:
+{
+  lib,
+  buildPythonPackage,
+  sphinx,
+  fetchFromGitHub,
+  pandoc,
+}:
 
 buildPythonPackage rec {
   pname = "sphinx-issues";
   version = "3.0.1";
   format = "setuptools";
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "sloria";

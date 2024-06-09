@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, setuptools
-, h5py
-, numpy
-, scipy
-, xmltodict
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  setuptools,
+  h5py,
+  numpy,
+  scipy,
+  xmltodict,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pymatreader" ];
 

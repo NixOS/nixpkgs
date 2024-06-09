@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "laurel";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "threathunters-io";
     repo = "laurel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dGgBcugIQ3ZPnqyTw6wRMN2PZLm6GqobeFZ1/uzMKbs=";
+    hash = "sha256-1V5VonSH631bS5sIYkHC3lk4yumDCJ+LZHE00Kbx+J8=";
   };
 
-  cargoHash = "sha256-8JNLssWTCfwrfQ/jg/rj7BUo9bCNCsM2RDwPI7cacRw=";
+  cargoHash = "sha256-GhgGMETOOPjG6ANwwavI5lhMmByq73KDHvcO5pnADHE=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
   buildInputs = [ acl ];

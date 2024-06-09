@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, python
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, flit-core
-, babel
-, markupsafe
-, pytestCheckHook
-, sphinxHook
-, pallets-sphinx-themes
-, sphinxcontrib-log-cabinet
-, sphinx-issues
+{
+  lib,
+  stdenv,
+  python,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  flit-core,
+  babel,
+  markupsafe,
+  pytestCheckHook,
+  sphinxHook,
+  pallets-sphinx-themes,
+  sphinxcontrib-log-cabinet,
+  sphinx-issues,
 
-# Reverse dependency
-, sage
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
@@ -29,27 +30,19 @@ buildPythonPackage rec {
     hash = "sha256-Sjruesu+cwOu3o6WSNE7i/iKQpKCqmEiqZPwrIAMs2k=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    markupsafe
-  ];
+  propagatedBuildInputs = [ markupsafe ];
 
   passthru.optional-dependencies = {
-    i18n = [
-      babel
-    ];
+    i18n = [ babel ];
   };
 
   # Multiple tests run out of stack space on 32bit systems with python2.
   # See https://github.com/pallets/jinja/issues/1158
   doCheck = !stdenv.is32bit;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.i18n;
+  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.i18n;
 
   passthru.doc = stdenv.mkDerivation {
     # Forge look and feel of multi-output derivation as best as we can.
@@ -78,7 +71,9 @@ buildPythonPackage rec {
     inherit meta;
   };
 
-  passthru.tests = { inherit sage; };
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/pallets/jinja/blob/${version}/CHANGES.rst";

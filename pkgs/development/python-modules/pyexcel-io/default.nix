@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lml
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lml,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-9ghL8a+l+/TGHPffRDcPpROCGvGIsC4+GbXvtm2Klp8=";
   };
 
-  propagatedBuildInputs = [
-    lml
-  ];
+  propagatedBuildInputs = [ lml ];
 
   # Tests depend on stuff that depends on this.
   doCheck = false;

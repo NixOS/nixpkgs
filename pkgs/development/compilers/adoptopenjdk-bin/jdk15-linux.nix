@@ -5,8 +5,8 @@ let
   sources = lib.importJSON ./sources.json;
 in
 {
-  jdk-hotspot = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk15.${variant}.jdk.hotspot; };
-  jre-hotspot = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk15.${variant}.jre.hotspot; };
-  jdk-openj9 = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk15.${variant}.jdk.openj9; };
-  jre-openj9 = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk15.${variant}.jre.openj9; };
+  jdk-hotspot = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk15.${variant}.jdk.hotspot; knownVulnerabilities = [ "Support ended" ]; };
+  jre-hotspot = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk15.${variant}.jre.hotspot; knownVulnerabilities = [ "Support ended" ]; };
+  jdk-openj9 = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk15.${variant}.jdk.openj9; knownVulnerabilities = [ "Support ended" ]; };
+  jre-openj9 = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk15.${variant}.jre.openj9; knownVulnerabilities = [ "Support ended" ]; };
 }

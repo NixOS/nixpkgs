@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, atpublic
-, pdm-pep517
-, pytestCheckHook
-, sybil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  atpublic,
+  pdm-pep517,
+  pytestCheckHook,
+  sybil,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     sybil
   ];
 
-  pythonNamespaces = [
-    "flufl"
-  ];
+  pythonNamespaces = [ "flufl" ];
 
   meta = with lib; {
     description = "A high level API for internationalizing Python libraries and applications";

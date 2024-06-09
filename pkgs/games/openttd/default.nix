@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip, cmake, pkg-config
+{ lib, stdenv, fetchzip, cmake, pkg-config
 , SDL2, libpng, zlib, xz, freetype, fontconfig
 , nlohmann_json, curl, icu, harfbuzz, expat, glib, pcre2
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
@@ -32,11 +32,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
-  version = "13.4";
+  version = "14.1";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
-    hash = "sha256-Kh3roBv+WOIYiHn0UMP6TzgZJxq0m/NI3WZUXwQNFG8=";
+    hash = "sha256-YT4IE/rJ9pnpeMWKbOra6AbSUwW19RwOKlXkxwoMeKY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];

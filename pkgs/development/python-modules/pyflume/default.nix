@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyjwt
-, ratelimit
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyjwt,
+  ratelimit,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyflume"
-  ];
+  pythonImportsCheck = [ "pyflume" ];
 
   meta = with lib; {
     description = "Python module to work with Flume sensors";

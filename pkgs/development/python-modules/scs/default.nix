@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, meson-python
-, pkg-config
-, Accelerate
-, blas
-, lapack
-, numpy
-, scipy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  meson-python,
+  pkg-config,
+  Accelerate,
+  blas,
+  lapack,
+  numpy,
+  scipy,
   # check inputs
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -55,12 +56,14 @@ buildPythonPackage rec {
     pkg-config
   ];
 
-  buildInputs = if stdenv.isDarwin then [
-    Accelerate
-  ] else [
-    blas
-    lapack
-  ];
+  buildInputs =
+    if stdenv.isDarwin then
+      [ Accelerate ]
+    else
+      [
+        blas
+        lapack
+      ];
 
   propagatedBuildInputs = [
     numpy

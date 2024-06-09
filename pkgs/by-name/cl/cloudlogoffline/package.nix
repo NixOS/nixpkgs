@@ -1,15 +1,15 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, qt5
+, qt6
 , makeDesktopItem
 , copyDesktopItems
 }:
 stdenv.mkDerivation (self: {
   pname = "cloudlogoffline";
-  version = "1.1.4";
-  rev = "185f294ec36d7ebe40e37d70148b15f58d60bf0d";
-  hash = "sha256-UEi7q3NbTgkg4tSjiksEO05YE4yjRul4qB9hFPswnK0=";
+  version = "1.1.5";
+  rev = self.version;
+  hash = "sha256-CF56yk7hsM4M43le+CLy93oLyZ9kaqaRTFWtjJuF6Vo=";
 
   src = fetchFromGitHub {
     inherit (self) rev hash;
@@ -18,20 +18,18 @@ stdenv.mkDerivation (self: {
   };
 
   nativeBuildInputs = [
-    qt5.qmake
-    qt5.wrapQtAppsHook
+    qt6.qmake
+    qt6.wrapQtAppsHook
   ]
   ++ lib.optionals (!stdenv.isDarwin) [
     copyDesktopItems
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qtgraphicaleffects
-    qt5.qtlocation
-    qt5.qtpositioning
-    qt5.qtquickcontrols2
-    qt5.qtsvg
+    qt6.qtbase
+    qt6.qtlocation
+    qt6.qtpositioning
+    qt6.qtsvg
   ];
 
   postPatch = let
@@ -44,6 +42,15 @@ stdenv.mkDerivation (self: {
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     install -d $out/share/pixmaps
     install -m644 images/logo_circle.svg $out/share/pixmaps/cloudlogoffline.svg
+  '' + lib.optionalString stdenv.isDarwin ''
+    # FIXME: For some reason, the Info.plist isn't copied correctly to
+    # the application bundle when building normally, instead creating an
+    # empty file. This doesn't happen when building in a dev shell with
+    # genericBuild.
+    # So, just copy the file manually.
+    plistPath="$out/Applications/CloudLogOffline.app/Contents/Info.plist"
+    [[ -s "$plistPath" ]] && { echo "expected Info.plist to be empty; workaround no longer needed?"; exit 1; }
+    install -m644 macos/Info.plist $out/Applications/CloudLogOffline.app/Contents/Info.plist
   '';
 
   desktopItems = lib.optionals (!stdenv.isDarwin) [

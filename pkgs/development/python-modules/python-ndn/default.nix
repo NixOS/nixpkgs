@@ -1,17 +1,18 @@
-{ lib
-, aenum
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, lark
-, poetry-core
-, poetry-dynamic-versioning
-, pycryptodomex
-, pygtrie
-, pytestCheckHook
-, pythonRelaxDepsHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  aenum,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lark,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pycryptodomex,
+  pygtrie,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -44,13 +45,9 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonRelaxDeps = [
-    "lark"
-  ];
+  pythonRelaxDeps = [ "lark" ];
 
   pythonImportsCheck = [ "ndn" ];
 

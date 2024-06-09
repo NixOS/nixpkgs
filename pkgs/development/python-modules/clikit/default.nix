@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, pythonAtLeast
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  pythonAtLeast,
+  poetry-core,
 
-# propagates
-, pylev
-, pastel
+  # propagates
+  pylev,
+  pastel,
 
-# python36+
-, crashtest
+  # python36+
+  crashtest,
 
-# python2
-, typing
-, enum34
+  # python2
+  typing,
+  enum34,
 
-# tests
-, pytest-mock
-, pytestCheckHook
+  # tests
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -39,25 +40,25 @@ buildPythonPackage rec {
       'crashtest = { version = "*", python = "^3.6" }'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    pylev
-    pastel
-  ]
-  ++ lib.optionals (pythonAtLeast "3.6") [ crashtest ]
-  ++ lib.optionals isPy27 [ typing enum34 ];
+  propagatedBuildInputs =
+    [
+      pylev
+      pastel
+    ]
+    ++ lib.optionals (pythonAtLeast "3.6") [ crashtest ]
+    ++ lib.optionals isPy27 [
+      typing
+      enum34
+    ];
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "clikit"
-  ];
+  pythonImportsCheck = [ "clikit" ];
 
   meta = with lib; {
     homepage = "https://github.com/sdispater/clikit";

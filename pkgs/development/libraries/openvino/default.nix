@@ -17,6 +17,7 @@
 
 # runtime
 , flatbuffers
+, level-zero
 , libusb1
 , libxml2
 , ocl-icd
@@ -53,14 +54,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2024.0.0";
+  version = "2024.1.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-Xsrmc1EynkjgPgiQ+ESyVJRJT9Afqyob0/uH+Is4TYA=";
+    hash = "sha256-OOSxXpLjmhOgKvrSO6SmY7xLhJSzGXT8w/Y4FnfwTqU=";
   };
 
   outputs = [
@@ -132,6 +133,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     flatbuffers
+    level-zero
     libusb1
     libxml2
     ocl-icd

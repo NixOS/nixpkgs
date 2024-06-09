@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, confluent-kafka
-, dask
-, dask-expr
-, distributed
-, flaky
-, graphviz
-, networkx
-, pytest-asyncio
-, pytestCheckHook
-, requests
-, six
-, toolz
-, tornado
-, zict
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools,
+  confluent-kafka,
+  dask,
+  dask-expr,
+  distributed,
+  flaky,
+  graphviz,
+  networkx,
+  pytest-asyncio,
+  pytestCheckHook,
+  requests,
+  six,
+  toolz,
+  tornado,
+  zict,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-VXfWkEwuxInBQVQJV3IQXgGVRkiBmYfUZCBMbjyWNPM=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     networkx
@@ -56,9 +55,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "streamz"
-  ];
+  pythonImportsCheck = [ "streamz" ];
 
   disabledTests = [
     # Error with distutils version: fixture 'cleanup' not found

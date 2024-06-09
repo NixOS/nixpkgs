@@ -1,7 +1,8 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
   # Tests are not included in pypi distribution
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sabyenc3"
-  ];
+  pythonImportsCheck = [ "sabyenc3" ];
 
   meta = with lib; {
     description = "yEnc Decoding for Python 3";

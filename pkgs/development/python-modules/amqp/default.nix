@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, case
-, fetchPypi
-, pytestCheckHook
-, pytest-rerunfailures
-, pythonOlder
-, vine
+{
+  lib,
+  buildPythonPackage,
+  case,
+  fetchPypi,
+  pytestCheckHook,
+  pytest-rerunfailures,
+  pythonOlder,
+  vine,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-oez/QlrQY61CpIbJAoB9FIIxFIHIrZWnJpSyl1519/0=";
   };
 
-  propagatedBuildInputs = [
-    vine
-  ];
+  propagatedBuildInputs = [ vine ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -37,9 +36,7 @@ buildPythonPackage rec {
     "test_rmq.py"
   ];
 
-  pythonImportsCheck = [
-    "amqp"
-  ];
+  pythonImportsCheck = [ "amqp" ];
 
   meta = with lib; {
     description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";

@@ -6,8 +6,7 @@ let
 
   cfg = config.services.emacs;
 
-  editorScript = pkgs.writeScriptBin "emacseditor" ''
-    #!${pkgs.runtimeShell}
+  editorScript = pkgs.writeShellScriptBin "emacseditor" ''
     if [ -z "$1" ]; then
       exec ${cfg.package}/bin/emacsclient --create-frame --alternate-editor ${cfg.package}/bin/emacs
     else
@@ -70,8 +69,8 @@ in
       description = "Emacs: the extensible, self-documenting text editor";
 
       serviceConfig = {
-        Type = "forking";
-        ExecStart = "${pkgs.bash}/bin/bash -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --daemon'";
+        Type = "notify";
+        ExecStart = "${pkgs.runtimeShell} -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --fg-daemon'";
         ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
         Restart = "always";
       };

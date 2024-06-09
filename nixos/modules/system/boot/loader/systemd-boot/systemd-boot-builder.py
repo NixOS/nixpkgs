@@ -196,8 +196,7 @@ def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
         f"{NIX}/bin/nix-env",
         "--list-generations",
         "-p",
-        "/nix/var/nix/profiles/%s" % ("system-profiles/" + profile if profile else "system"),
-        "--option", "build-users-group", ""],
+        "/nix/var/nix/profiles/%s" % ("system-profiles/" + profile if profile else "system")],
         universal_newlines=True)
     gen_lines = gen_list.split('\n')
     gen_lines.pop()

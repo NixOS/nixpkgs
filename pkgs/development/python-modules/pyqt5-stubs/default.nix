@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, pyqt5
-, pyqt3d
-, pyqtchart
-, pyqtdatavisualization
-, pyqtwebengine
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  pyqt5,
+  pyqt3d,
+  pyqtchart,
+  pyqtdatavisualization,
+  pyqtwebengine,
 }:
 
 buildPythonPackage rec {
@@ -22,26 +23,30 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-qWnvlHnFRy8wbZJ28C0pYqAxod623Epe5z5FZufheDc=";
   };
-  postPatch = ''
-    # pulls in a dependency to mypy, but we don't want to run linters
-    rm tests/test_stubs.py
-  '' + lib.optionalString (!pyqt5.connectivityEnabled) ''
-    rm tests/qflags/test_QtBluetooth_*
-    rm tests/qflags/test_QtNfc_*
-  '' + lib.optionalString (!pyqt5.locationEnabled) ''
-    rm tests/qflags/test_QtLocation_*
-    rm tests/qflags/test_QtPositioning_*
-  '' + lib.optionalString (!pyqt5.multimediaEnabled) ''
-    rm tests/qflags/test_QtMultimedia_*
-  '' + lib.optionalString (!pyqt5.serialPortEnabled) ''
-    rm tests/qflags/test_QtSerialPort_*
-  '' + lib.optionalString (!pyqt5.toolsEnabled) ''
-    rm tests/qflags/test_QtDesigner_*
-  '';
+  postPatch =
+    ''
+      # pulls in a dependency to mypy, but we don't want to run linters
+      rm tests/test_stubs.py
+    ''
+    + lib.optionalString (!pyqt5.connectivityEnabled) ''
+      rm tests/qflags/test_QtBluetooth_*
+      rm tests/qflags/test_QtNfc_*
+    ''
+    + lib.optionalString (!pyqt5.locationEnabled) ''
+      rm tests/qflags/test_QtLocation_*
+      rm tests/qflags/test_QtPositioning_*
+    ''
+    + lib.optionalString (!pyqt5.multimediaEnabled) ''
+      rm tests/qflags/test_QtMultimedia_*
+    ''
+    + lib.optionalString (!pyqt5.serialPortEnabled) ''
+      rm tests/qflags/test_QtSerialPort_*
+    ''
+    + lib.optionalString (!pyqt5.toolsEnabled) ''
+      rm tests/qflags/test_QtDesigner_*
+    '';
 
-  pythonImportsCheck = [
-    "PyQt5-stubs"
-  ];
+  pythonImportsCheck = [ "PyQt5-stubs" ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, snakemake-interface-common
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  snakemake-interface-common,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-30x4avA3FrqZ4GoTl6Js5h3VG5LW7BNHOcNWxznXoT0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    snakemake-interface-common
-  ];
+  propagatedBuildInputs = [ snakemake-interface-common ];
 
   pythonImportsCheck = [ "snakemake_interface_report_plugins" ];
 

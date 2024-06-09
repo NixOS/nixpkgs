@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "smtprelay";
-  version = "1.10.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "decke";
     repo = "smtprelay";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zZ3rgbo8nvrpFMtUmhyXnTgoVd0FIh1kWzuM2hCh5gY=";
+    hash = "sha256-2fZA2vYJ6c5oaNImvS0KKZo1+Eu7LFO6jCRnChReMcE=";
   };
 
-  vendorHash = "sha256-assGzM8/APNVVm2vZapPK6sh3tWNTnw6PSFwvEqNDPk=";
+  vendorHash = "sha256-BX1Ll0EEo59p+Pe5oM6+6zT6fvnv1RsfX8YEh9RKkWU=";
 
   subPackages = [
     "."

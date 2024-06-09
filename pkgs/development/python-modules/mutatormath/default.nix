@@ -1,6 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi
-, defcon, fontmath
-, unicodedata2, fs
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  defcon,
+  fontmath,
+  unicodedata2,
+  fs,
 }:
 
 buildPythonPackage rec {
@@ -14,8 +19,15 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ fontmath unicodedata2 defcon ];
-  nativeCheckInputs = [ unicodedata2 fs ];
+  propagatedBuildInputs = [
+    fontmath
+    unicodedata2
+    defcon
+  ];
+  nativeCheckInputs = [
+    unicodedata2
+    fs
+  ];
 
   meta = with lib; {
     description = "Piecewise linear interpolation in multiple dimensions with multiple, arbitrarily placed, masters";

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, borgbackup
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  borgbackup,
 }:
 
 buildPythonPackage rec {
@@ -19,17 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-lcArDifnBuSNDlQm0XEMp44PBijW6J1bWluRpfEidPM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "msgpack"
-  ];
+  pythonImportsCheck = [ "msgpack" ];
 
   passthru.tests = {
     # borgbackup is sensible to msgpack versions: https://github.com/borgbackup/borg/issues/3753
@@ -37,7 +32,7 @@ buildPythonPackage rec {
     inherit borgbackup;
   };
 
-  meta = with lib;  {
+  meta = with lib; {
     description = "MessagePack serializer implementation";
     homepage = "https://github.com/msgpack/msgpack-python";
     changelog = "https://github.com/msgpack/msgpack-python/blob/v${version}/ChangeLog.rst";

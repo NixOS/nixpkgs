@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-vcs
-, hatchling
-, importlib-resources
-, pytestCheckHook
-, pythonOlder
-, referencing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-vcs,
+  hatchling,
+  importlib-resources,
+  pytestCheckHook,
+  pythonOlder,
+  referencing,
 }:
 
 buildPythonPackage rec {
@@ -29,17 +30,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     referencing
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "jsonschema_specifications"
-  ];
+  pythonImportsCheck = [ "jsonschema_specifications" ];
 
   meta = with lib; {
     description = "Support files exposing JSON from the JSON Schema specifications";

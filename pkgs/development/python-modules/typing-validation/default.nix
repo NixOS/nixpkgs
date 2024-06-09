@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, pytestCheckHook
+  pytestCheckHook,
 
-, pythonOlder
+  pythonOlder,
 
-, setuptools
-, setuptools-scm
-, wheel
+  setuptools,
+  setuptools-scm,
+  wheel,
 
-, numpy
+  numpy,
 
-, typing-extensions
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -35,18 +36,14 @@ buildPythonPackage rec {
     wheel
   ];
 
-  dependencies = [
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
     numpy
   ];
 
-  pythonImportsCheck = [
-    "typing_validation"
-  ];
+  pythonImportsCheck = [ "typing_validation" ];
 
   meta = with lib; {
     description = "A simple library for runtime type-checking";

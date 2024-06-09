@@ -1,17 +1,18 @@
-{ lib
-, brotli
-, buildPythonPackage
-, certifi
-, dpkt
-, fetchFromGitHub
-, gevent
-, llhttp
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, six
-, stdenv
-, urllib3
+{
+  lib,
+  brotli,
+  buildPythonPackage,
+  certifi,
+  dpkt,
+  fetchFromGitHub,
+  gevent,
+  llhttp,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
+  stdenv,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-uOGnwPbvTam14SFTUT0UrwxHfP4a5cn3a7EhLoGBUrA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     brotli
@@ -55,13 +54,9 @@ buildPythonPackage rec {
     rm -rf geventhttpclient
   '';
 
-  pytestFlagsArray = [
-    "-m 'not network'"
-  ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
-  pythonImportsCheck = [
-    "geventhttpclient"
-  ];
+  pythonImportsCheck = [ "geventhttpclient" ];
 
   meta = with lib; {
     homepage = "https://github.com/geventhttpclient/geventhttpclient";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gobject-introspection, python3Packages, pciutils, wrapGAppsHook3 }:
+{ lib, stdenv, fetchFromGitHub, gobject-introspection, python3Packages, pciutils, wrapGAppsNoGuiHook }:
 
 stdenv.mkDerivation rec {
   pname = "throttled";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gobject-introspection
     python3Packages.wrapPython
-    wrapGAppsHook3
+    wrapGAppsNoGuiHook
   ];
 
   pythonPath = with python3Packages; [
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/erpalma/throttled";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ michaelpj ];
+    maintainers = with maintainers; [ ];
   };
 }

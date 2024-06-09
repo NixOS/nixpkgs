@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, razdel
-, gensim
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  razdel,
+  gensim,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -17,8 +18,14 @@ buildPythonPackage rec {
     hash = "sha256-TyNHSxwnmvbGBfhOeHPofEfKWLDFOKP50w2QxgnJ/SE=";
   };
 
-  propagatedBuildInputs = [ numpy razdel ];
-  nativeCheckInputs = [ pytestCheckHook gensim ];
+  propagatedBuildInputs = [
+    numpy
+    razdel
+  ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    gensim
+  ];
   # TODO: remove when gensim usage will be fixed in `navec`.
   disabledTests = [ "test_gensim" ];
   pythonImportsCheck = [ "navec" ];

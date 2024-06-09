@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "findex";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "mdgaziur";
     repo = "findex";
     rev = "v${version}";
-    hash = "sha256-rxOVrl2Q27z5oo1J6D4ft4fKaOMOadmidflD0jK0+3k=";
+    hash = "sha256-IpgmeH5oREstud0nw4i2xYeZcJYG6eCWyw3hhid/DfU=";
   };
 
-  cargoHash = "sha256-MiD96suB88NZWg7Ay/ACZfOeE66WOe9dLsvtOhCQgGo=";
+  cargoHash = "sha256-wsqsPh1kevkIz235qnkLkp47CnCh6qi56sZP95Upymc=";
 
   postPatch = ''
     # failing rust documentation tests and faulty quotes "`README.md`"

@@ -1,22 +1,23 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, astropy
-, requests
-, keyring
-, beautifulsoup4
-, html5lib
-, matplotlib
-, pillow
-, pytest
-, pytest-astropy
-, pytest-dependency
-, pytest-rerunfailures
-, pytestCheckHook
-, pyvo
-, astropy-helpers
-, setuptools
-, isPy3k
+{
+  pkgs,
+  buildPythonPackage,
+  fetchPypi,
+  astropy,
+  requests,
+  keyring,
+  beautifulsoup4,
+  html5lib,
+  matplotlib,
+  pillow,
+  pytest,
+  pytest-astropy,
+  pytest-dependency,
+  pytest-rerunfailures,
+  pytestCheckHook,
+  pyvo,
+  astropy-helpers,
+  setuptools,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
@@ -40,16 +41,17 @@ buildPythonPackage rec {
     pyvo
   ];
 
-  nativeBuildInputs = [ astropy-helpers setuptools ];
+  nativeBuildInputs = [
+    astropy-helpers
+    setuptools
+  ];
 
   # Disable automatic update of the astropy-helper module
   postPatch = ''
     substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     matplotlib
@@ -62,7 +64,8 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   # Tests must be run in the build directory. The tests create files

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, flet-client-flutter
-, poetry-core
-, pythonRelaxDepsHook
-, flet-core
-, httpx
-, oauthlib
+{
+  lib,
+  buildPythonPackage,
+  flet-client-flutter,
+  poetry-core,
+  pythonRelaxDepsHook,
+  flet-core,
+  httpx,
+  oauthlib,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "httpx"
-  ];
+  pythonRelaxDeps = [ "httpx" ];
 
   propagatedBuildInputs = [
     flet-core
@@ -38,9 +37,7 @@ buildPythonPackage rec {
     oauthlib
   ];
 
-  pythonImportsCheck = [
-    "flet_runtime"
-  ];
+  pythonImportsCheck = [ "flet_runtime" ];
 
   meta = {
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";

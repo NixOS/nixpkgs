@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, pythonOlder
-, pythonRelaxDepsHook
-, fetchFromGitHub
-, setuptools
-, construct
-, websockets
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  fetchFromGitHub,
+  setuptools,
+  construct,
+  websockets,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "websockets"
-  ];
+  pythonRelaxDeps = [ "websockets" ];
 
   propagatedBuildInputs = [
     aiohttp

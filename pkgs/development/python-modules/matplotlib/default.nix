@@ -1,77 +1,78 @@
-{ lib
-, stdenv
-, fetchPypi
-, writeText
-, buildPythonPackage
-, isPyPy
-, pythonOlder
+{
+  lib,
+  stdenv,
+  fetchPypi,
+  writeText,
+  buildPythonPackage,
+  isPyPy,
+  pythonOlder,
 
-# build-system
-, certifi
-, pkg-config
-, pybind11
-, setuptools
-, setuptools-scm
+  # build-system
+  certifi,
+  pkg-config,
+  pybind11,
+  setuptools,
+  setuptools-scm,
 
-# native libraries
-, ffmpeg-headless
-, freetype
-, qhull
+  # native libraries
+  ffmpeg-headless,
+  freetype,
+  qhull,
 
-# propagates
-, contourpy
-, cycler
-, fonttools
-, kiwisolver
-, numpy
-, packaging
-, pillow
-, pyparsing
-, python-dateutil
+  # propagates
+  contourpy,
+  cycler,
+  fonttools,
+  kiwisolver,
+  numpy,
+  packaging,
+  pillow,
+  pyparsing,
+  python-dateutil,
 
-# optional
-, importlib-resources
+  # optional
+  importlib-resources,
 
-# GTK3
-, enableGtk3 ? false
-, cairo
-, gobject-introspection
-, gtk3
-, pycairo
-, pygobject3
+  # GTK3
+  enableGtk3 ? false,
+  cairo,
+  gobject-introspection,
+  gtk3,
+  pycairo,
+  pygobject3,
 
-# Tk
-# Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
-, enableTk ? (!stdenv.isDarwin && !isPyPy)
-, tcl
-, tk
-, tkinter
+  # Tk
+  # Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
+  enableTk ? (!stdenv.isDarwin && !isPyPy),
+  tcl,
+  tk,
+  tkinter,
 
-# Ghostscript
-, enableGhostscript ? true
-, ghostscript
+  # Ghostscript
+  enableGhostscript ? true,
+  ghostscript,
 
-# Qt
-, enableQt ? false
-, pyqt5
+  # Qt
+  enableQt ? false,
+  pyqt5,
 
-# Webagg
-, enableWebagg ? false
-, tornado
+  # Webagg
+  enableWebagg ? false,
+  tornado,
 
-# nbagg
-, enableNbagg ? false
-, ipykernel
+  # nbagg
+  enableNbagg ? false,
+  ipykernel,
 
-# darwin
-, Cocoa
+  # darwin
+  Cocoa,
 
-# required for headless detection
-, libX11
-, wayland
+  # required for headless detection
+  libX11,
+  wayland,
 
-# Reverse dependency
-, sage
+  # Reverse dependency
+  sage,
 }:
 
 let
@@ -105,42 +106,39 @@ buildPythonPackage rec {
     ''
       substituteInPlace pyproject.toml \
         --replace-fail '"numpy>=2.0.0rc1,<2.3",' ""
-    '' + lib.optionalString enableTk ''
+    ''
+    + lib.optionalString enableTk ''
       sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py
-    '' + lib.optionalString (stdenv.isLinux && interactive) ''
+    ''
+    + lib.optionalString (stdenv.isLinux && interactive) ''
       # fix paths to libraries in dlopen calls (headless detection)
       substituteInPlace src/_c_internal_utils.c \
         --replace libX11.so.6 ${libX11}/lib/libX11.so.6 \
         --replace libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
     '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ lib.optionals enableGtk3 [
-    gobject-introspection
-  ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableGtk3 [ gobject-introspection ];
 
-  buildInputs = [
-    ffmpeg-headless
-    freetype
-    qhull
-  ] ++ lib.optionals enableGhostscript [
-    ghostscript
-  ] ++ lib.optionals enableGtk3 [
-    cairo
-    gtk3
-  ] ++ lib.optionals enableTk [
-    libX11
-    tcl
-    tk
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-  ];
+  buildInputs =
+    [
+      ffmpeg-headless
+      freetype
+      qhull
+    ]
+    ++ lib.optionals enableGhostscript [ ghostscript ]
+    ++ lib.optionals enableGtk3 [
+      cairo
+      gtk3
+    ]
+    ++ lib.optionals enableTk [
+      libX11
+      tcl
+      tk
+    ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
-  hardeningDisable = lib.optionals stdenv.isDarwin [
-    "strictoverflow"
-  ];
+  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
   build-system = [
     certifi
@@ -150,34 +148,33 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    # explicit
-    contourpy
-    cycler
-    fonttools
-    kiwisolver
-    numpy
-    packaging
-    pillow
-    pyparsing
-    python-dateutil
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-resources
-  ] ++ lib.optionals enableGtk3 [
-    pycairo
-    pygobject3
-  ] ++ lib.optionals enableQt [
-    pyqt5
-  ] ++ lib.optionals enableWebagg [
-    tornado
-  ] ++ lib.optionals enableNbagg [
-    ipykernel
-  ] ++ lib.optionals enableTk [
-    tkinter
-  ];
+  dependencies =
+    [
+      # explicit
+      contourpy
+      cycler
+      fonttools
+      kiwisolver
+      numpy
+      packaging
+      pillow
+      pyparsing
+      python-dateutil
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
+    ++ lib.optionals enableGtk3 [
+      pycairo
+      pygobject3
+    ]
+    ++ lib.optionals enableQt [ pyqt5 ]
+    ++ lib.optionals enableWebagg [ tornado ]
+    ++ lib.optionals enableNbagg [ ipykernel ]
+    ++ lib.optionals enableTk [ tkinter ];
 
   passthru.config = {
-    directories = { basedirlist = "."; };
+    directories = {
+      basedirlist = ".";
+    };
     libs = {
       system_freetype = true;
       system_qhull = true;
@@ -186,9 +183,11 @@ buildPythonPackage rec {
     };
   };
 
-  passthru.tests = { inherit sage; };
+  passthru.tests = {
+    inherit sage;
+  };
 
-  env.MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI {} passthru.config);
+  env.MPLSETUPCFG = writeText "mplsetup.cfg" (lib.generators.toINI { } passthru.config);
 
   # Encountering a ModuleNotFoundError, as describved and investigated at:
   # https://github.com/NixOS/nixpkgs/issues/255262 . It could be that some of
@@ -200,7 +199,13 @@ buildPythonPackage rec {
     description = "Python plotting library, making publication quality plots";
     homepage = "https://matplotlib.org/";
     changelog = "https://github.com/matplotlib/matplotlib/releases/tag/v${version}";
-    license = with licenses; [ psfl bsd0 ];
-    maintainers = with maintainers; [ lovek323 veprbl ];
+    license = with licenses; [
+      psfl
+      bsd0
+    ];
+    maintainers = with maintainers; [
+      lovek323
+      veprbl
+    ];
   };
 }

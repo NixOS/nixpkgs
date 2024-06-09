@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 , autoreconfHook
 , go-md2man
@@ -24,17 +25,26 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "composefs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YmredtZZKMjzJW/kxiTUmdgO/1iPIKzJsuJz8DeEdGM=";
+    hash = "sha256-ekUFLZGWTsiJZFv3nHoxuV057zoOtWBIkt+VdtzlaU4=";
   };
 
   strictDeps = true;
   outputs = [ "out" "lib" "dev" ];
+
+  patches = [
+    # fixes composefs-info tests, remove in next release
+    # https://github.com/containers/composefs/pull/291
+    (fetchpatch {
+      url = "https://github.com/containers/composefs/commit/f7465b3a57935d96451b392b07aa3a1dafb56e7b.patch";
+      hash = "sha256-OO3IfqLf3dQGjEgKx3Bo630KALmLAWwgdACuyZm2Ujc=";
+    })
+  ];
 
   postPatch = lib.optionalString installExperimentalTools ''
     sed -i "s/noinst_PROGRAMS +\?=/bin_PROGRAMS +=/g" tools/Makefile.am
@@ -64,8 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     patchShebangs --build tests/*dir tests/*.sh
     substituteInPlace tests/*.sh \
-      --replace " /tmp" " $TMPDIR" \
-      --replace " /var/tmp" " $TMPDIR"
+      --replace-quiet " /tmp" " $TMPDIR" \
+      --replace-quiet " /var/tmp" " $TMPDIR"
   '';
 
   passthru = {

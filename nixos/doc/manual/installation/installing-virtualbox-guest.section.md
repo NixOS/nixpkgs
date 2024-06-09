@@ -3,8 +3,8 @@
 Installing NixOS into a VirtualBox guest is convenient for users who
 want to try NixOS without installing it on bare metal. If you want to
 use a pre-made VirtualBox appliance, it is available at [the downloads
-page](https://nixos.org/nixos/download.html). If you want to set up a
-VirtualBox guest manually, follow these instructions:
+page](https://nixos.org/download/#nixos-virtualbox). If you want to set
+up a VirtualBox guest manually, follow these instructions:
 
 1.  Add a New Machine in VirtualBox with OS Type "Linux / Other Linux"
 

@@ -122,7 +122,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools for the google cloud platform";
-    longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
+    longDescription = "The Google Cloud SDK for GCE hosts. Used by `google-cloud-sdk` only on GCE guests.";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryNativeCode  # anthoscli and possibly more

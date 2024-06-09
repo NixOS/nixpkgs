@@ -103,6 +103,12 @@ stdenv.mkDerivation rec {
       mv "$file" "''${file%%-shared}"
     done
     popd
+  '' + lib.optionalString fortranSupport
+  ''
+    mv $out/mod/shared $dev/include
+    rm -r $out/mod
+
+    find "$out" -type f -exec remove-references-to -t ${fortran} '{}' +
   '';
 
   enableParallelBuilding = true;

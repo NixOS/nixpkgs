@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, numpy
-, cvxopt
-, python
-, networkx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  numpy,
+  cvxopt,
+  python,
+  networkx,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
   };
 
   # Needed only for the tests
-  nativeCheckInputs = [
-    networkx
-  ];
+  nativeCheckInputs = [ networkx ];
 
   propagatedBuildInputs = [
     numpy

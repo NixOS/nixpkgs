@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, importlib-metadata
+  # dependencies
+  importlib-metadata,
 
-# Reverse dependency
-, sage
+  # Reverse dependency
+  sage,
 
-# tests
-, jaraco-collections
-, pytestCheckHook
+  # tests
+  jaraco-collections,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,20 +37,18 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    importlib-metadata
-  ];
+  dependencies = [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytestCheckHook
     jaraco-collections
   ];
 
-  pythonImportsCheck = [
-    "importlib_resources"
-  ];
+  pythonImportsCheck = [ "importlib_resources" ];
 
-  passthru.tests = { inherit sage; };
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     description = "Read resources from Python packages";

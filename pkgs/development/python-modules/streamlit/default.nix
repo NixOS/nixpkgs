@@ -1,46 +1,47 @@
-{ lib
-, stdenv
-, altair
-, blinker
-, buildPythonPackage
-, cachetools
-, click
-, fetchPypi
-, gitpython
-, importlib-metadata
-, numpy
-, packaging
-, pandas
-, pillow
-, protobuf
-, pyarrow
-, pydeck
-, pympler
-, python-dateutil
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, requests
-, rich
-, tenacity
-, toml
-, tornado
-, typing-extensions
-, tzlocal
-, validators
-, watchdog
+{
+  lib,
+  stdenv,
+  altair,
+  blinker,
+  buildPythonPackage,
+  cachetools,
+  click,
+  fetchPypi,
+  gitpython,
+  importlib-metadata,
+  numpy,
+  packaging,
+  pandas,
+  pillow,
+  protobuf,
+  pyarrow,
+  pydeck,
+  pympler,
+  python-dateutil,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  requests,
+  rich,
+  tenacity,
+  toml,
+  tornado,
+  typing-extensions,
+  tzlocal,
+  validators,
+  watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.34.0";
+  version = "1.35.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E1o7eaaGsxMrc/IERQrW6IneBPM0nWkpJeCfDiHnS1I=";
+    hash = "sha256-Z51Vu2GJdD9gar8GlmI98L/SI6bQyNlrjWBnjUiR0tY=";
   };
 
   nativeBuildInputs = [
@@ -48,9 +49,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "packaging"
-  ];
+  pythonRelaxDeps = [ "packaging" ];
 
   propagatedBuildInputs = [
     altair
@@ -76,16 +75,12 @@ buildPythonPackage rec {
     typing-extensions
     tzlocal
     validators
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    watchdog
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ watchdog ];
 
   # pypi package does not include the tests, but cannot be built with fetchFromGitHub
   doCheck = false;
 
-  pythonImportsCheck = [
-    "streamlit"
-  ];
+  pythonImportsCheck = [ "streamlit" ];
 
   postInstall = ''
     rm $out/bin/streamlit.cmd # remove windows helper
@@ -96,7 +91,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
     description = "The fastest way to build custom ML tools";
     mainProgram = "streamlit";
-    maintainers = with maintainers; [ natsukium yrashk ];
+    maintainers = with maintainers; [
+      natsukium
+      yrashk
+    ];
     license = licenses.asl20;
   };
 }

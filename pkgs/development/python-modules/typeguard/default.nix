@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, setuptools-scm
-, pytestCheckHook
-, typing-extensions
-, importlib-metadata
-, sphinxHook
-, sphinx-autodoc-typehints
-, sphinx-rtd-theme
-, glibcLocales
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  typing-extensions,
+  importlib-metadata,
+  sphinxHook,
+  sphinx-autodoc-typehints,
+  sphinx-rtd-theme,
+  glibcLocales,
 }:
 
 buildPythonPackage rec {
@@ -41,19 +42,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   env.LC_ALL = "en_US.utf-8";
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "typeguard"
-  ];
+  pythonImportsCheck = [ "typeguard" ];
 
   disabledTestPaths = [
     # mypy tests aren't passing with latest mypy

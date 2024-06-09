@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, pytestCheckHook
-, pythonOlder
-, twine
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  twine,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-vOr67DWfAyOT3dVgrizI0WNhODPsY8k85xifhZBOU9Y=";
   };
 
-  nativeBuildInputs = [
-    twine
-  ];
+  nativeBuildInputs = [ twine ];
 
   nativeCheckInputs = [
     numpy
@@ -33,9 +32,7 @@ buildPythonPackage rec {
     "test_check_users"
   ];
 
-  pythonImportsCheck = [
-    "nagiosplugin"
-  ];
+  pythonImportsCheck = [ "nagiosplugin" ];
 
   meta = with lib; {
     description = "Python class library which helps with writing Nagios (Icinga) compatible plugins";

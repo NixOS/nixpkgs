@@ -141,5 +141,8 @@ in makePackage {
     description = "The next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
+    knownVulnerabilities = [
+      "This OpenJFX version has reached its end of life."
+    ];
   };
 }

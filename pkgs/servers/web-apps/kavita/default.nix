@@ -34,6 +34,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       })
       # The webroot is hardcoded as ./wwwroot
       ./change-webroot.diff
+      # Upstream removes database migrations between versions
+      # Restore them to avoid breaking on updates
+      # Info: Restores migrations for versions between v0.7.1.4 and v0.7.9
+      # On update: check if more migrations need to be restored!
+      # Migrations should at least allow updates from previous NixOS versions
+      ./restore-migrations.diff
     ];
     postPatch = ''
       substituteInPlace API/Services/DirectoryService.cs --subst-var out

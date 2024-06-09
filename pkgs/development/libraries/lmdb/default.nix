@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "lmdb";
-  version = "0.9.32";
+  version = "0.9.33";
 
   src = fetchFromGitLab {
     domain = "git.openldap.org";
     owner = "openldap";
     repo = "openldap";
     rev = "LMDB_${version}";
-    sha256 = "sha256-29ZrGIiGqrvX+WsPRs2V25hPmAJSHTHaGo19nMldsb8=";
+    sha256 = "sha256-5IBoJ3jaNXao5zVzb0LDM8RGid4s8DGQpjVqrVPLpXQ=";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";

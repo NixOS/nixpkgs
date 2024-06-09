@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bowtie2";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "BenLangmead";
     repo = "bowtie2";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-vjJRA9KFfJChxxg2wxBkwsnDw7fx5SNH3JhRXQw+7XA=";
+    hash = "sha256-ZbmVOItfAgKdsMrvQIXgKiPtoQJZYfGblCGDoNPjvTU=";
   };
 
   # because of this flag, gcc on aarch64 cannot find the Threads

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, llama-index-agent-openai
-, llama-index-cli
-, llama-index-core
-, llama-index-embeddings-openai
-, llama-index-indices-managed-llama-cloud
-, llama-index-legacy
-, llama-index-llms-openai
-, llama-index-multi-modal-llms-openai
-, llama-index-program-openai
-, llama-index-question-gen-openai
-, llama-index-readers-file
-, llama-index-readers-llama-parse
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  llama-index-agent-openai,
+  llama-index-cli,
+  llama-index-core,
+  llama-index-embeddings-openai,
+  llama-index-indices-managed-llama-cloud,
+  llama-index-legacy,
+  llama-index-llms-openai,
+  llama-index-multi-modal-llms-openai,
+  llama-index-program-openai,
+  llama-index-question-gen-openai,
+  llama-index-readers-file,
+  llama-index-readers-llama-parse,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     llama-index-agent-openai
@@ -41,7 +40,5 @@ buildPythonPackage rec {
     llama-index-readers-llama-parse
   ];
 
-  pythonImportsCheck = [
-    "llama_index"
-  ];
+  pythonImportsCheck = [ "llama_index" ];
 }

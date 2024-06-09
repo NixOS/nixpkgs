@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pytestCheckHook
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -16,31 +17,29 @@ buildPythonPackage rec {
     hash = "sha256-4anJSXCubXELP7RSYpTf64byy0qB7/OkuY3ED7Dl4CE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     cd test
   '';
 
-  disabledTests = [
-    "test_delete_cookie"
-    "test_error"
-    "test_error_in_generator_callback"
-    # timing sensitive
-    "test_ims"
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/bottlepy/bottle/issues/1422
-    # ModuleNotFoundError: No module named 'bottle.ext'
-    "test_data_import"
-    "test_direkt_import"
-    "test_from_import"
-  ];
+  disabledTests =
+    [
+      "test_delete_cookie"
+      "test_error"
+      "test_error_in_generator_callback"
+      # timing sensitive
+      "test_ims"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # https://github.com/bottlepy/bottle/issues/1422
+      # ModuleNotFoundError: No module named 'bottle.ext'
+      "test_data_import"
+      "test_direkt_import"
+      "test_from_import"
+    ];
 
   __darwinAllowLocalNetworking = true;
 

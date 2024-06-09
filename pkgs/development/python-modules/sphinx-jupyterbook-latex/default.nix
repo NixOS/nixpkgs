@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, flit-core
-, packaging
-, sphinx
-, click
-, myst-parser
-, pytest-regressions
-, pytestCheckHook
-, sphinx-external-toc
-, sphinxcontrib-bibtex
-, texsoup
-, defusedxml
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  flit-core,
+  packaging,
+  sphinx,
+  click,
+  myst-parser,
+  pytest-regressions,
+  pytestCheckHook,
+  sphinx-external-toc,
+  sphinxcontrib-bibtex,
+  texsoup,
+  defusedxml,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-ZTR+s6a/++xXrLMtfFRmSmAeMWa/1de12ukxfsx85g4=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     packaging

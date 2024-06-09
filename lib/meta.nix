@@ -26,8 +26,12 @@ rec {
   dontDistribute = drv: addMetaAttrs { hydraPlatforms = []; } drv;
 
 
-  /* Change the symbolic name of a package for presentation purposes
-     (i.e., so that nix-env users can tell them apart).
+  /*
+  Change the [symbolic name of a derivation](https://nixos.org/manual/nix/stable/language/derivations.html#attr-name).
+
+  :::{.warning}
+  Dependent derivations will be rebuilt when the symbolic name is changed.
+  :::
   */
   setName = name: drv: drv // {inherit name;};
 

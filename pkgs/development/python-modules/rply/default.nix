@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, appdirs
-, py
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  appdirs,
+  py,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-5uINDCX4Jr4bSSwqBjvkS3f5wTMnZvsRGq1DeCw8Y+M=";
   };
 
-  propagatedBuildInputs = [
-    appdirs
-  ];
+  propagatedBuildInputs = [ appdirs ];
 
   nativeCheckInputs = [
     py

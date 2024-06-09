@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pandas
-, setuptools
-, simplesqlite
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pandas,
+  setuptools,
+  simplesqlite,
+  typing-extensions,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

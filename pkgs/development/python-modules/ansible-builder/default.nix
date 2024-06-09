@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, podman
-, fetchPypi
-, bindep
+{
+  lib,
+  python3Packages,
+  podman,
+  fetchPypi,
+  bindep,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "ansible-builder";
@@ -19,9 +20,7 @@ python3Packages.buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    bindep
-  ];
+  buildInputs = [ bindep ];
 
   propagatedBuildInputs = with python3Packages; [
     podman

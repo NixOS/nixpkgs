@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
   # required dependencies
-, requests
-, setuptools
+  requests,
+  setuptools,
   # optional dependencies
-, pandas
-, tornado
-, sqlalchemy
+  pandas,
+  tornado,
+  sqlalchemy,
   # test dependencies
-, pycurl
-, pytestCheckHook
+  pycurl,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,22 +34,16 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace '"console_scripts": ["pydruid = pydruid.console:main"],' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pycurl
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "pydruid"
-  ];
+  pythonImportsCheck = [ "pydruid" ];
 
   passthru = {
     optional-dependencies = {

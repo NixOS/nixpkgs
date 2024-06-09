@@ -1,30 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, python
-, pythonOlder
-, setuptools
-, which
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  which,
 }:
 
 buildPythonPackage rec {
   pname = "nodeenv";
-  version = "1.8.0";
-  format = "setuptools";
+  version = "1.9.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ekalinin";
-    repo = pname;
+    repo = "nodeenv";
     rev = "refs/tags/${version}";
-    hash = "sha256-aW/aNZbFXfP4bF/Nlvv419IDfaJRA1pJYM7awj+6Hz0=";
+    hash = "sha256-85Zr4RbmNeW3JAdtvDblWaPTivWWUJKh+mJbtsGJVO4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
     setuptools
+    setuptools-scm
   ];
 
   nativeCheckInputs = [
@@ -37,9 +40,7 @@ buildPythonPackage rec {
       --replace '["which", candidate]' '["${lib.getBin which}/bin/which", candidate]'
   '';
 
-  pythonImportsCheck = [
-    "nodeenv"
-  ];
+  pythonImportsCheck = [ "nodeenv" ];
 
   disabledTests = [
     # Test requires coverage

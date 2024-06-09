@@ -7,12 +7,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "g3kb-switch";
-  version = "1.4";
+  version = "1.5";
   src = fetchFromGitHub {
     owner = "lyokha";
     repo = "g3kb-switch";
     rev = version;
-    sha256 = "sha256-mcZduHcteZ+nS0YEZG5DfmpA8xrnLhwxumq6hLuLPIs=";
+    sha256 = "sha256-kTJfV0xQmWuxibUlfC1qJX2J2nrZ4wimdf/nGciQq0Y=";
   };
 
   nativeBuildInputs = [

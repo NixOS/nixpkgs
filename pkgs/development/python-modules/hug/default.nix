@@ -1,10 +1,14 @@
-{ lib , buildPythonPackage, fetchFromGitHub, isPy27
-, falcon
-, requests
-, pytestCheckHook
-, marshmallow
-, mock
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  falcon,
+  requests,
+  pytestCheckHook,
+  marshmallow,
+  mock,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +24,17 @@ buildPythonPackage rec {
     sha256 = "05rsv16g7ph100p8kl4l2jba0y4wcpp3xblc02mfp67zp1279vaq";
   };
 
-  propagatedBuildInputs = [ falcon requests ];
+  propagatedBuildInputs = [
+    falcon
+    requests
+  ];
 
-  nativeCheckInputs = [ mock marshmallow pytestCheckHook numpy ];
+  nativeCheckInputs = [
+    mock
+    marshmallow
+    pytestCheckHook
+    numpy
+  ];
 
   postPatch = ''
     substituteInPlace setup.py --replace '"pytest-runner"' ""

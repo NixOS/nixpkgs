@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, stdenv
-, testers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  stdenv,
+  testers,
 
-, affine
-, attrs
-, boto3
-, certifi
-, click
-, click-plugins
-, cligj
-, cython
-, gdal
-, hypothesis
-, ipython
-, matplotlib
-, numpy
-, packaging
-, pytest-randomly
-, setuptools
-, shapely
-, snuggs
-, wheel
+  affine,
+  attrs,
+  boto3,
+  certifi,
+  click,
+  click-plugins,
+  cligj,
+  cython,
+  gdal,
+  hypothesis,
+  ipython,
+  matplotlib,
+  numpy,
+  packaging,
+  pytest-randomly,
+  setuptools,
+  shapely,
+  snuggs,
+  wheel,
 
-, rasterio  # required to run version test
+  rasterio, # required to run version test
 }:
 
 buildPythonPackage rec {
@@ -51,7 +52,7 @@ buildPythonPackage rec {
     # relax dependency on yet non-packaged, RC version of numpy
     substituteInPlace pyproject.toml \
       --replace-fail "numpy==2.0.0rc1" "numpy"
-    '';
+  '';
 
   nativeBuildInputs = [
     cython
@@ -73,15 +74,9 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    ipython = [
-      ipython
-    ];
-    plot = [
-      matplotlib
-    ];
-    s3 = [
-      boto3
-    ];
+    ipython = [ ipython ];
+    plot = [ matplotlib ];
+    s3 = [ boto3 ];
   };
 
   nativeCheckInputs = [
@@ -99,20 +94,14 @@ buildPythonPackage rec {
     rm -r rasterio # prevent importing local rasterio
   '';
 
-  pytestFlagsArray = [
-    "-m 'not network'"
-  ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
   disabledTests = [
     # flaky
     "test_outer_boundless_pixel_fidelity"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_reproject_error_propagation"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "test_reproject_error_propagation" ];
 
-  pythonImportsCheck = [
-    "rasterio"
-  ];
+  pythonImportsCheck = [ "rasterio" ];
 
   passthru.tests.version = testers.testVersion {
     package = rasterio;

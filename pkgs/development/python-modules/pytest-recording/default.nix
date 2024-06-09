@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-# install dependencies
-, pytest
-, vcrpy
-# test dependencies
-, hatchling
-, pytestCheckHook
-, pytest-httpbin
-, pytest-mock
-, requests
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # install dependencies
+  pytest,
+  vcrpy,
+  # test dependencies
+  hatchling,
+  pytestCheckHook,
+  pytest-httpbin,
+  pytest-mock,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  propagatedBuildInputs = [
-    vcrpy
-  ];
+  propagatedBuildInputs = [ vcrpy ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -43,20 +42,16 @@ buildPythonPackage rec {
     requests
   ];
 
-  disabledTests = [
-    "test_block_network_with_allowed_hosts"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Missing socket.AF_NETLINK
-    "test_other_socket"
-  ];
+  disabledTests =
+    [ "test_block_network_with_allowed_hosts" ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Missing socket.AF_NETLINK
+      "test_other_socket"
+    ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
-  pythonImportsCheck = [
-    "pytest_recording"
-  ];
+  pythonImportsCheck = [ "pytest_recording" ];
 
   meta = with lib; {
     description = "A pytest plugin that allows you recording of network interactions via VCR.py";

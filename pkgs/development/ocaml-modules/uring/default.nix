@@ -3,7 +3,6 @@
 , cstruct
 , dune-configurator
 , fetchurl
-, fetchpatch
 , fmt
 , optint
 , mdx
@@ -11,22 +10,14 @@
 
 buildDunePackage rec {
   pname = "uring";
-  version = "0.8";
+  version = "0.9";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-4OGst19vqEzuNVxO5xxtzS+mEilEBFoEc7lC3j3sTk4=";
+    hash = "sha256-eXWIxfL9UsKKf4sanBjKfr6Od4fPDctVnkU+wjIXW0M=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "musl-1.2.5.patch";
-      url = "https://github.com/ocaml-multicore/ocaml-uring/commit/abe340086574c124061434054937d1f19ee6bb71.patch";
-      hash = "sha256-J4ZQAdQZ9fhT3/vAh5FYMyvMllTowe4GyHJy5RGUTv0=";
-    })
-  ];
 
   propagatedBuildInputs = [
     cstruct

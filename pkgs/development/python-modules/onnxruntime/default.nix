@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, autoPatchelfHook
-, pythonRelaxDepsHook
-, onnxruntime
-, coloredlogs
-, numpy
-, packaging
-, oneDNN
-, re2
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  autoPatchelfHook,
+  pythonRelaxDepsHook,
+  onnxruntime,
+  coloredlogs,
+  numpy,
+  packaging,
+  oneDNN,
+  re2,
 
 }:
 
@@ -35,11 +36,7 @@ buildPythonPackage {
     chmod +w dist
   '';
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ] ++ lib.optionals stdenv.isLinux [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   # This project requires fairly large dependencies such as sympy which we really don't always need.
   pythonRemoveDeps = [
@@ -49,17 +46,22 @@ buildPythonPackage {
   ];
 
   # Libraries are not linked correctly.
-  buildInputs = [
-    oneDNN
-    re2
-    onnxruntime.protobuf
-  ] ++ lib.optionals onnxruntime.passthru.cudaSupport (with onnxruntime.passthru.cudaPackages; [
-    libcublas # libcublasLt.so.XX libcublas.so.XX
-    libcurand # libcurand.so.XX
-    libcufft # libcufft.so.XX
-    cudnn # libcudnn.soXX
-    cuda_cudart # libcudart.so.XX
-  ]);
+  buildInputs =
+    [
+      oneDNN
+      re2
+      onnxruntime.protobuf
+    ]
+    ++ lib.optionals onnxruntime.passthru.cudaSupport (
+      with onnxruntime.passthru.cudaPackages;
+      [
+        libcublas # libcublasLt.so.XX libcublas.so.XX
+        libcurand # libcurand.so.XX
+        libcufft # libcufft.so.XX
+        cudnn # libcudnn.soXX
+        cuda_cudart # libcudart.so.XX
+      ]
+    );
 
   propagatedBuildInputs = [
     coloredlogs

@@ -7,7 +7,6 @@
   darwin,
   dlib,
   fetchFromGitHub,
-  fetchpatch,
   hdf5,
   hmat-oss,
   ipopt,

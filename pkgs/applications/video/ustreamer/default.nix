@@ -1,19 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, libbsd, libevent, libjpeg }:
+{ lib, stdenv, fetchFromGitHub, libbsd, libevent, libjpeg, libdrm, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "ustreamer";
-  version = "6.4";
+  version = "6.12";
 
   src = fetchFromGitHub {
     owner = "pikvm";
     repo = "ustreamer";
     rev = "v${version}";
-    hash = "sha256-pTfct+nki1t7ltCUnxSyOkDocSr2pkoqOldkECtNfDU=";
+    hash = "sha256-iaCgPHgklk7tbhJhQmyjKggb1bMWBD+Zurgfk9sCQ3E=";
   };
 
-  buildInputs = [ libbsd libevent libjpeg ];
+  buildInputs = [ libbsd libevent libjpeg libdrm ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  nativeBuildInputs = [ pkg-config ];
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "WITH_V4P=1"
+  ];
 
   enableParallelBuilding = true;
 

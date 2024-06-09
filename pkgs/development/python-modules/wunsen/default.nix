@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, pythonOlder
+  pythonOlder,
 
-, unittestCheckHook
+  unittestCheckHook,
 
-, hatchling
+  hatchling,
 
-, khanaa
+  khanaa,
 }:
 
 buildPythonPackage rec {
@@ -25,28 +26,24 @@ buildPythonPackage rec {
     hash = "sha256-lMEhtcWG+S3vAz+Y/qDxhaZslsO0pbs5xUn5QgZNs2U=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    khanaa
-  ];
+  dependencies = [ khanaa ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "tests" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+  ];
 
   pythonImportsCheck = [ "wunsen" ];
 
-  meta = with lib;
-    {
-      description = "Transliterate/transcribe other languages into Thai Topics";
-      homepage = "https://github.com/cakimpei/wunsen";
-      changelog = "https://github.com/cakimpei/wunsen/releases/tag/v${version}";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vizid ];
-    };
+  meta = with lib; {
+    description = "Transliterate/transcribe other languages into Thai Topics";
+    homepage = "https://github.com/cakimpei/wunsen";
+    changelog = "https://github.com/cakimpei/wunsen/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vizid ];
+  };
 }

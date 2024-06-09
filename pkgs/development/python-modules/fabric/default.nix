@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, decorator
-, invoke
-, mock
-, paramiko
-, pytestCheckHook
-, pytest-relaxed
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
+  decorator,
+  invoke,
+  mock,
+  paramiko,
+  pytestCheckHook,
+  pytest-relaxed,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,18 @@ buildPythonPackage rec {
         --replace ', "pathlib2"' ' '
   '';
 
-  propagatedBuildInputs = [ invoke paramiko cryptography decorator ];
+  propagatedBuildInputs = [
+    invoke
+    paramiko
+    cryptography
+    decorator
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-relaxed mock ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-relaxed
+    mock
+  ];
 
   # ==================================== ERRORS ====================================
   # ________________________ ERROR collecting test session _________________________

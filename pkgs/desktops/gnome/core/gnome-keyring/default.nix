@@ -10,7 +10,6 @@
 , libxslt
 , gettext
 , gcr
-, autoreconfHook
 , libcap_ng
 , libselinux
 , p11-kit
@@ -37,8 +36,6 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     libxslt
-    # Upstream uses ancient autotools to pre-generate the scripts.
-    autoreconfHook
     docbook-xsl-nons
     docbook_xml_dtd_43
     wrapGAppsHook3
@@ -63,6 +60,10 @@ stdenv.mkDerivation rec {
     # gnome-keyring doesn't build with ssh-agent by default anymore, we need to
     # switch to using gcr https://github.com/NixOS/nixpkgs/issues/140824
     "--enable-ssh-agent"
+    # cross compilation requires these paths to be explicitly declared:
+    "LIBGCRYPT_CONFIG=${lib.getExe' (lib.getDev libgcrypt) "libgcrypt-config"}"
+    "SSH_ADD=${lib.getExe' openssh "ssh-add"}"
+    "SSH_AGENT=${lib.getExe' openssh "ssh-agent"}"
   ];
 
   # Tends to fail non-deterministically.

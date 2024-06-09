@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, enum-compat
-, requests
-, websocket-client
-, zeroconf
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  enum-compat,
+  requests,
+  websocket-client,
+  zeroconf,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname   = "libsoundtouch";
+  pname = "libsoundtouch";
   version = "0.8.0";
   format = "setuptools";
 
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # mock data order mismatch
@@ -39,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Bose Soundtouch Python library";
-    homepage    = "https://github.com/CharlesBlonde/libsoundtouch";
-    license     = licenses.asl20;
+    homepage = "https://github.com/CharlesBlonde/libsoundtouch";
+    license = licenses.asl20;
   };
 }

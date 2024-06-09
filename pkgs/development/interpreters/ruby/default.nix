@@ -1,5 +1,5 @@
 { stdenv, buildPackages, lib
-, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
+, fetchurl, fetchpatch, fetchFromSavannah
 , zlib, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix, cargo, rustPlatform, rustc
@@ -26,7 +26,7 @@ let
     yjitSupported = atLeast32 && (stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64));
     rubyDrv = lib.makeOverridable (
       { stdenv, buildPackages, lib
-      , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
+      , fetchurl, fetchpatch, fetchFromSavannah
       , rubygemsSupport ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true
@@ -160,6 +160,9 @@ let
           "--with-out-ext=tk"
           # on yosemite, "generating encdb.h" will hang for a very long time without this flag
           "--with-setjmp-type=setjmp"
+        ] ++ ops stdenv.hostPlatform.isFreeBSD [
+          "rb_cv_gnu_qsort_r=no"
+          "rb_cv_bsd_qsort_r=yes"
         ];
 
         preConfigure = opString docSupport ''

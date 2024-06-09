@@ -13,19 +13,19 @@ rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.8";
+  version = "0.11.10";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
-    rev = "v${version}";
-    hash = "sha256-1mgtyOXSvovO2f4XSdirzTIcUlbFoT9t/UFa2uW5CpI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lmT0da517dVaXGeObyCXZyte8DNBh+/vaqV7hA+SJR4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "typst-0.11.0" = "sha256-J3oSrxylR00r3Tc4KDmuW6ungQkoYJiI7cZEpbyyNsc=";
+      "typst-0.11.1" = "sha256-VDwyTKrtzmjMhVCp/GnZrgL6P6dLyKlLNA+LhoXBDl0=";
       "typst-syntax-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
       "typstfmt_lib-0.2.7" = "sha256-LBYsTCjZ+U+lgd7Z3H1sBcWwseoHsuepPd66bWgfvhI=";
     };
@@ -50,12 +50,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=e2e"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/${src.rev}/CHANGELOG.md";
     description = "Tinymist is an integrated language service for Typst";
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "tinymist";
-    maintainers = with maintainers; [ lampros ];
+    maintainers = with lib.maintainers; [ lampros ];
   };
 }

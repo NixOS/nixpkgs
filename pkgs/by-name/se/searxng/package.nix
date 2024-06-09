@@ -5,13 +5,13 @@
 
 python3.pkgs.toPythonModule (python3.pkgs.buildPythonApplication rec {
   pname = "searxng";
-  version = "0-unstable-2024-03-08";
+  version = "0-unstable-2024-05-31";
 
   src = fetchFromGitHub {
     owner = "searxng";
     repo = "searxng";
-    rev = "9c08a0cdddae7ceafbe5e00ce94cf7f1d36c97e0";
-    hash = "sha256-0qlOpJqpOmseIeIafd0NLd2lF5whu18QxmwOua8dKzg=";
+    rev = "18fb701be225560b3fb1011cc533f785823f26a4";
+    hash = "sha256-okE/Uxl7YqcM99kLJ4KAlMQi50x5m0bPfYp5bv62WEw=";
   };
 
   postPatch = ''

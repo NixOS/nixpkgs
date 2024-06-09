@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pythonOlder
-, numpy
-, jsonschema
-, svgwrite
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pythonOlder,
+  numpy,
+  jsonschema,
+  svgwrite,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-3f4hPxywY822mCF3IwooBezX38fM1zAm4Th4q//SzkY=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     numpy
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   # will ask upstream to include tests in pypi
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tskit"
-  ];
+  pythonImportsCheck = [ "tskit" ];
 
   meta = with lib; {
     description = "The tree sequence toolkit";

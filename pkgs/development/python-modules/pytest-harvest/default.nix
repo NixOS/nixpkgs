@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools-scm
-, pytest-runner
-, pytest
-, decopatch
-, makefun
-, six
-, pytestCheckHook
-, numpy
-, pandas
-, tabulate
-, pytest-cases
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools-scm,
+  pytest-runner,
+  pytest,
+  decopatch,
+  makefun,
+  six,
+  pytestCheckHook,
+  numpy,
+  pandas,
+  tabulate,
+  pytest-cases,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {

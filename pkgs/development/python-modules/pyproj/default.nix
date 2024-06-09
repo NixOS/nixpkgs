@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, proj
-, pythonOlder
-, substituteAll
-, cython
-, pytestCheckHook
-, mock
-, certifi
-, numpy
-, shapely
-, pandas
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonOlder,
+  substituteAll,
+
+  certifi,
+  cython,
+  mock,
+  numpy,
+  pandas,
+  proj,
+  shapely,
+  xarray,
 }:
 
 buildPythonPackage rec {
@@ -35,21 +37,25 @@ buildPythonPackage rec {
       proj = proj;
       projdev = proj.dev;
     })
+
+    # fix test failure caused by update of EPSG DB
+    (fetchpatch {
+      url = "https://github.com/pyproj4/pyproj/commit/3f7c7e5bcec33d9b2f37ceb03c484ea318dff3ce.patch";
+      hash = "sha256-0J8AlInuhFDAYIBJAJ00XbqIanJY/D8xPVwlOapmLDE=";
+    })
   ];
 
   nativeBuildInputs = [ cython ];
   buildInputs = [ proj ];
 
-  propagatedBuildInputs = [
-     certifi
-  ];
+  propagatedBuildInputs = [ certifi ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     mock
     numpy
-    shapely
     pandas
+    pytestCheckHook
+    shapely
     xarray
   ];
 
@@ -110,6 +116,12 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyproj4/pyproj";
     changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
     license = licenses.mit;
-    maintainers = with maintainers; teams.geospatial.members ++ [ lsix dotlambda ];
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        lsix
+        dotlambda
+      ];
   };
 }

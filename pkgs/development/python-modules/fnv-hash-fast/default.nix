@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cython
-, poetry-core
-, setuptools
-, wheel
-, fnvhash
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  poetry-core,
+  setuptools,
+  wheel,
+  fnvhash,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,17 +34,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    fnvhash
-  ];
+  propagatedBuildInputs = [ fnvhash ];
 
-  pythonImportsCheck = [
-    "fnv_hash_fast"
-  ];
+  pythonImportsCheck = [ "fnv_hash_fast" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A fast version of fnv1a";

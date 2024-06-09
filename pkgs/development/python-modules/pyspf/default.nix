@@ -1,4 +1,10 @@
-{ lib, python, buildPythonPackage, fetchFromGitHub, pydns }:
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pydns,
+}:
 
 buildPythonPackage rec {
   pname = "pyspf";

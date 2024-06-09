@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pythonRelaxDepsHook
-, installShellFiles
-, docutils
-, ansible
-, cryptography
-, importlib-resources
-, jinja2
-, junit-xml
-, lxml
-, ncclient
-, packaging
-, paramiko
-, ansible-pylibssh
-, passlib
-, pexpect
-, psutil
-, pycrypto
-, pyyaml
-, requests
-, resolvelib
-, scp
-, windowsSupport ? false, pywinrm
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  installShellFiles,
+  docutils,
+  ansible,
+  cryptography,
+  importlib-resources,
+  jinja2,
+  junit-xml,
+  lxml,
+  ncclient,
+  packaging,
+  paramiko,
+  ansible-pylibssh,
+  passlib,
+  pexpect,
+  psutil,
+  pycrypto,
+  pyyaml,
+  requests,
+  resolvelib,
+  scp,
+  windowsSupport ? false,
+  pywinrm,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
@@ -49,41 +51,36 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     installShellFiles
     docutils
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    pythonRelaxDepsHook
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ pythonRelaxDepsHook ];
 
-  propagatedBuildInputs = [
-    # depend on ansible instead of the other way around
-    ansible
-    # from requirements.txt
-    cryptography
-    jinja2
-    packaging
-    passlib
-    pyyaml
-    resolvelib
-    # optional dependencies
-    junit-xml
-    lxml
-    ncclient
-    paramiko
-    ansible-pylibssh
-    pexpect
-    psutil
-    pycrypto
-    requests
-    scp
-    xmltodict
-  ] ++ lib.optionals windowsSupport [
-    pywinrm
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    [
+      # depend on ansible instead of the other way around
+      ansible
+      # from requirements.txt
+      cryptography
+      jinja2
+      packaging
+      passlib
+      pyyaml
+      resolvelib
+      # optional dependencies
+      junit-xml
+      lxml
+      ncclient
+      paramiko
+      ansible-pylibssh
+      pexpect
+      psutil
+      pycrypto
+      requests
+      scp
+      xmltodict
+    ]
+    ++ lib.optionals windowsSupport [ pywinrm ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ];
 
-  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [
-    "importlib-resources"
-  ];
+  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [ "importlib-resources" ];
 
   postInstall = ''
     export HOME="$(mktemp -d)"

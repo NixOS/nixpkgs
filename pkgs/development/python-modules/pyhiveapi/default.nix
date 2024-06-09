@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, unasync
-, boto3
-, botocore
-, requests
-, aiohttp
-, pyquery
-, loguru
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  unasync,
+  boto3,
+  botocore,
+  requests,
+  aiohttp,
+  pyquery,
+  loguru,
 }:
 
 buildPythonPackage rec {

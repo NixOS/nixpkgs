@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, coverage
-, fetchPypi
-, isPyPy
-, isPy311
-, python
-, pythonAtLeast
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  coverage,
+  fetchPypi,
+  isPyPy,
+  isPy311,
+  python,
+  pythonAtLeast,
+  stdenv,
 }:
 
 buildPythonPackage rec {

@@ -14,7 +14,7 @@
   pythonImportsCheckHook,
   pyyaml,
   rich,
-  setuptools
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "essentials-openapi";
@@ -28,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-/NYv0NrE8+0kQg5G3Qf2DtesMHlmKQYczNT8pFlNFZE=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   nativeCheckInputs = [
     flask
@@ -48,18 +46,24 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    full = [ click jinja2 rich httpx ];
+    full = [
+      click
+      jinja2
+      rich
+      httpx
+    ];
   };
 
-  pythonImportsCheck = [
-    "openapidocs"
-  ];
+  pythonImportsCheck = [ "openapidocs" ];
 
   meta = with lib; {
     homepage = "https://github.com/Neoteroi/essentials-openapi";
     description = "Functions to handle OpenAPI Documentation";
     changelog = "https://github.com/Neoteroi/essentials-openapi/releases/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [aldoborrero zimbatm];
+    maintainers = with maintainers; [
+      aldoborrero
+      zimbatm
+    ];
   };
 }

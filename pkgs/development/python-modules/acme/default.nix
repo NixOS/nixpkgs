@@ -1,16 +1,17 @@
-{ buildPythonPackage
-, certbot
-, cryptography
-, pyasn1
-, pyopenssl
-, pyrfc3339
-, josepy
-, pytz
-, requests
-, requests-toolbelt
-, six
-, werkzeug
-, ndg-httpsclient
+{
+  buildPythonPackage,
+  certbot,
+  cryptography,
+  pyasn1,
+  pyopenssl,
+  pyrfc3339,
+  josepy,
+  pytz,
+  requests,
+  requests-toolbelt,
+  six,
+  werkzeug,
+  ndg-httpsclient,
 }:
 
 buildPythonPackage rec {
@@ -20,8 +21,17 @@ buildPythonPackage rec {
   format = "setuptools";
 
   propagatedBuildInputs = [
-    cryptography pyasn1 pyopenssl pyrfc3339 pytz requests requests-toolbelt six
-    werkzeug ndg-httpsclient josepy
+    cryptography
+    pyasn1
+    pyopenssl
+    pyrfc3339
+    pytz
+    requests
+    requests-toolbelt
+    six
+    werkzeug
+    ndg-httpsclient
+    josepy
   ];
 
   # does not contain any tests

@@ -4,7 +4,6 @@
 , generateSplicesForMkScope
 , makeScopeWithSplicing'
 , fetchurl
-, fetchpatch
 , fetchpatch2
 , makeSetupHook
 , makeWrapper

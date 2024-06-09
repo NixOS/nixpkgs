@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, einops
-, fetchPypi
-, jax
-, jaxlib
-, lib
-, pythonOlder
-, setuptools
+{
+  buildPythonPackage,
+  einops,
+  fetchFromGitHub,
+  jax,
+  jaxlib,
+  lib,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -15,19 +16,19 @@ buildPythonPackage rec {
 
   disbaled = pythonOlder "3.6";
 
-  # Using fetchPypi because the latest version was not tagged on GitHub.
-  # Switch back to fetchFromGitHub when a tag will be available
-  # https://github.com/khdlr/augmax/issues/8
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pf1DTaHA7D+s2rqwwGYlJrJOI7fok+WOvOCtZhOOGHo=";
+  src = fetchFromGitHub {
+    owner = "khdlr";
+    repo = "augmax";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xz6yJiVZUkRcRa2rKZdytfpP+XCk/QI4xtKlNaS9FYo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ einops jax ];
+  dependencies = [
+    einops
+    jax
+  ];
 
   # augmax does not have any tests at the time of writing (2022-02-19), but
   # jaxlib is necessary for the pythonImportsCheckPhase.

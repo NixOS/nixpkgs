@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, six
-, twisted
-, nixosTests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  six,
+  twisted,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
@@ -19,19 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-6Z2vurTAw9YHxvEiixtdxBH0YHj+Y9aTdsSkafPMZus=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     six
     twisted
-  ]
-  ++ twisted.optional-dependencies.tls;
+  ] ++ twisted.optional-dependencies.tls;
 
-  pythonImportsCheck = [
-    "txredisapi"
-  ];
+  pythonImportsCheck = [ "txredisapi" ];
 
   doCheck = false;
 
@@ -44,4 +40,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ dandellion ];
   };
 }
-

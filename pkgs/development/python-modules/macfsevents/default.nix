@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, CoreFoundation
-, CoreServices
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  CoreFoundation,
+  CoreServices,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,10 @@ buildPythonPackage rec {
     sha256 = "sha256-v3KD8dUXdkzNyBlbIWMdu6wcUGuSC/mo6ilWsxJ2Ucs=";
   };
 
-  buildInputs = [ CoreFoundation CoreServices ];
+  buildInputs = [
+    CoreFoundation
+    CoreServices
+  ];
 
   # Some tests fail under nix build directory
   doCheck = false;

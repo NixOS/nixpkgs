@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, mock
-, pbr
-, pytest-mock
-, pytestCheckHook
-, pytz
-, requests
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  mock,
+  pbr,
+  pytest-mock,
+  pytestCheckHook,
+  pytz,
+  requests,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-JGqYpj5h9UoV0WEFyxVIjFZwc030HobHrw1dnAryQLk=";
   };
 
-  patches = [
-    ./pytest-warn-none.patch
-  ];
+  patches = [ ./pytest-warn-none.patch ];
 
   nativeBuildInputs = [
     flit-core
@@ -59,5 +58,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ drets ] ++ teams.deshaw.members;
     license = licenses.mit;
   };
-
 }

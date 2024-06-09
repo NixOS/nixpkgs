@@ -33,6 +33,12 @@ mkKdeDerivation {
     patchShebangs src/plugins/strip-effect-metadata.py
   '';
 
+  # TZDIR may be unset when running through the kwin_wayland wrapper,
+  # but we need it for the lockscreen clock to render
+  qtWrapperArgs = [
+    "--set-default TZDIR /etc/zoneinfo"
+  ];
+
   extraNativeBuildInputs = [pkg-config python3];
   extraBuildInputs = [
     qtquick3d

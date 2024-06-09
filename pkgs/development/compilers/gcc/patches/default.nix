@@ -25,6 +25,7 @@
 }:
 
 let
+  atLeast14 = lib.versionAtLeast version "14";
   atLeast13 = lib.versionAtLeast version "13";
   atLeast12 = lib.versionAtLeast version "12";
   atLeast11 = lib.versionAtLeast version "11";
@@ -34,6 +35,7 @@ let
   atLeast7  = lib.versionAtLeast version  "7";
   atLeast6  = lib.versionAtLeast version  "6";
   atLeast49 = lib.versionAtLeast version  "4.9";
+  is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
@@ -63,6 +65,7 @@ in
 ++ optionals (noSysDirs) (
   [(if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)] ++
   ({
+    "14" = [ ./13/no-sys-dirs-riscv.patch ./13/mangle-NIX_STORE-in-__FILE__.patch ];
     "13" = [ ./13/no-sys-dirs-riscv.patch ./13/mangle-NIX_STORE-in-__FILE__.patch ];
     "12" = [ ./no-sys-dirs-riscv.patch ./12/mangle-NIX_STORE-in-__FILE__.patch ];
     "11" = [ ./no-sys-dirs-riscv.patch ];
@@ -124,11 +127,18 @@ in
 
 ## Darwin
 
+# Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
+++ optional (atLeast14 && stdenv.isDarwin && stdenv.isx86_64) ../patches/14/libgcc-darwin-detection.patch
+
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
 ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
+# Remove CoreServices on Darwin, as it is only needed for macOS SDK 14+
+++ optional (atLeast14 && stdenv.isDarwin && langAda) ../patches/14/gcc-darwin-remove-coreservices.patch
+
 # Use absolute path in GNAT dylib install names on Darwin
 ++ optionals (stdenv.isDarwin && langAda) ({
+  "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
   "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
   "12" = [ ./gnat-darwin-dylib-install-name.patch ];
 }.${majorVersion} or [])
@@ -136,6 +146,11 @@ in
 # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
 # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
 ++ optionals (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
+  "14" = [ (fetchpatch {
+    name = "gcc-14-darwin-aarch64-support.patch";
+    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/82b5c1cd38826ab67ac7fc498a8fe74376a40f4a/gcc/gcc-14.1.0.diff";
+    sha256 = "sha256-jCY65l1DGdESNyzEmD8FFC/xMmqeqBIQF+BhT4uTBBU=";
+  }) ];
   "13" = [ (fetchpatch {
     name = "gcc-13-darwin-aarch64-support.patch";
     url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";

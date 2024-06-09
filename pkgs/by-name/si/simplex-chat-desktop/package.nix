@@ -6,11 +6,11 @@
 
 let
   pname = "simplex-chat-desktop";
-  version = "5.7.0";
+  version = "5.8.0";
 
   src = fetchurl {
     url = "https://github.com/simplex-chat/simplex-chat/releases/download/v${version}/simplex-desktop-x86_64.AppImage";
-    hash = "sha256-T8ojnay/FCa9Q4PObqlfy2MC4pKTF73taNW8elNDjIg=";
+    hash = "sha256-EYoUsxJgG9xqXtjys0InJJaqvX1XXcef9PYQ3nZPNuo=";
   };
 
   appimageContents = appimageTools.extract {
@@ -19,10 +19,6 @@ let
 in appimageTools.wrapType2 {
     inherit pname version src;
 
-    extraPkgs = pkgs: with pkgs; [
-      makeWrapper
-    ];
-
     extraBwrapArgs = [
       "--setenv _JAVA_AWT_WM_NONREPARENTING 1"
     ];
@@ -30,9 +26,16 @@ in appimageTools.wrapType2 {
     extraInstallCommands = ''
       install --mode=444 -D ${appimageContents}/chat.simplex.app.desktop --target-directory=$out/share/applications
       substituteInPlace $out/share/applications/chat.simplex.app.desktop \
-        --replace 'Exec=simplex' 'Exec=${pname}'
+        --replace-fail 'Exec=simplex' 'Exec=simplex-chat-desktop'
       cp -r ${appimageContents}/usr/share/icons $out/share
     '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/simplex-chat/simplex-chat";
+    rev-prefix = "v";
+    # skip tags that does not correspond to official releases, like vX.Y.Z-(beta,fdroid,armv7a).
+    ignoredVersions = "-";
+  };
 
   meta = with lib; {
     description = "Desktop application for SimpleX Chat";
@@ -42,12 +45,5 @@ in appimageTools.wrapType2 {
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ yuu ];
     platforms = [ "x86_64-linux" ];
-  };
-
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/simplex-chat/simplex-chat";
-    rev-prefix = "v";
-    # skip tags that does not correspond to official releases, like vX.Y.Z-(beta,fdroid,armv7a).
-    ignoredVersions = "-";
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, allure-python-commons
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  allure-python-commons,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -19,24 +20,16 @@ buildPythonPackage rec {
     hash = "sha256-DvjheQxEqYjba4PE1PXpFFHixMjqEGAd+ohSjSOvz24=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    allure-python-commons
-  ];
+  propagatedBuildInputs = [ allure-python-commons ];
 
   # Tests were moved to the meta package
   doCheck = false;
 
-  pythonImportsCheck = [
-    "allure_pytest"
-  ];
+  pythonImportsCheck = [ "allure_pytest" ];
 
   meta = with lib; {
     description = "Allure integrations for Python test frameworks";

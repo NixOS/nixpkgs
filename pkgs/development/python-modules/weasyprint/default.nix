@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cairosvg
-, cffi
-, cssselect2
-, fetchPypi
-, flit-core
-, fontconfig
-, fonttools
-, ghostscript
-, glib
-, harfbuzz
-, html5lib
-, pango
-, pillow
-, pydyf
-, pyphen
-, pytestCheckHook
-, pythonOlder
-, substituteAll
-, tinycss2
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cairosvg,
+  cffi,
+  cssselect2,
+  fetchPypi,
+  flit-core,
+  fontconfig,
+  fonttools,
+  ghostscript,
+  glib,
+  harfbuzz,
+  html5lib,
+  pango,
+  pillow,
+  pydyf,
+  pyphen,
+  pytestCheckHook,
+  pythonOlder,
+  substituteAll,
+  tinycss2,
 }:
 
 buildPythonPackage rec {
@@ -47,9 +48,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     cffi
@@ -80,9 +79,7 @@ buildPythonPackage rec {
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
-  makeWrapperArgs = [
-    "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}"
-  ];
+  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}" ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -94,9 +91,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pythonImportsCheck = [
-    "weasyprint"
-  ];
+  pythonImportsCheck = [ "weasyprint" ];
 
   meta = with lib; {
     description = "Converts web documents to PDF";

@@ -1,0 +1,44 @@
+diff --git a/contrib/deterministic-build/requirements.txt b/contrib/deterministic-build/requirements.txt
+index 7441e3389..2a4718f96 100644
+--- a/contrib/deterministic-build/requirements.txt
++++ b/contrib/deterministic-build/requirements.txt
+@@ -74,9 +74,8 @@ aiohttp==3.8.1 \
+ aiohttp-socks==0.7.1 \
+     --hash=sha256:2215cac4891ef3fa14b7d600ed343ed0f0a670c23b10e4142aa862b3db20341a \
+     --hash=sha256:94bcff5ef73611c6c6231c2ffc1be4af1599abec90dbd2fdbbd63233ec2fb0ff
+-aiorpcX==0.22.1 \
+-    --hash=sha256:6026f7bed3432e206589c94dcf599be8cd85b5736b118c7275845c1bd922a553 \
+-    --hash=sha256:e74f9fbed3fd21598e71fe05066618fc2c06feec504fe29490ddda05fdbdde62
++aiorpcX==0.23.1 \
++    --hash=sha256:5b23002f1a4d5d3085e31555a07519c5ef8d4c40071eb499556ffda8114860a2
+ aiosignal==1.2.0 \
+     --hash=sha256:26e62109036cd181df6e6ad646f91f0dcfd05fe16d0cb924138ff2ab75d64e3a \
+     --hash=sha256:78ed67db6c7b7ced4f98e495e572106d5c432a93e1ddd1bf475e1dc05f5b7df2
+diff --git a/contrib/requirements/requirements.txt b/contrib/requirements/requirements.txt
+index 04b0a77f3..2330ea921 100644
+--- a/contrib/requirements/requirements.txt
++++ b/contrib/requirements/requirements.txt
+@@ -1,7 +1,7 @@
+ qrcode
+ protobuf>=3.12
+ qdarkstyle>=2.7
+-aiorpcx>=0.22.0,<0.23
++aiorpcx>=0.22.0,<0.24
+ aiohttp>=3.3.0,<4.0.0
+ aiohttp_socks>=0.3
+ certifi
+diff --git a/run_electrum b/run_electrum
+index a1b30f29e..cb22f8724 100755
+--- a/run_electrum
++++ b/run_electrum
+@@ -67,8 +67,8 @@ def check_imports():
+         import aiorpcx
+     except ImportError as e:
+         sys.exit(f"Error: {str(e)}. Try 'sudo python3 -m pip install <module-name>'")
+-    if not ((0, 22, 0) <= aiorpcx._version < (0, 23)):
+-        raise RuntimeError(f'aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.23')
++    if not ((0, 22, 0) <= aiorpcx._version < (0, 24)):
++        raise RuntimeError(f'aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.24')
+     # the following imports are for pyinstaller
+     from google.protobuf import descriptor
+     from google.protobuf import message

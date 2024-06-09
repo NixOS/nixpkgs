@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitLab
 , fetchpatch
-, fetchpatch2
 , gitUpdater
 , nixosTests
 , ayatana-indicator-messages
@@ -20,7 +19,6 @@
 , libphonenumber
 , libpulseaudio
 , libusermetrics
-, lomiri-ui-toolkit
 , lomiri-url-dispatcher
 , makeWrapper
 , pkg-config
@@ -197,5 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
+    # Completely broken until https://github.com/NixOS/nixpkgs/pull/314043 is merged
+    broken = true;
   };
 })

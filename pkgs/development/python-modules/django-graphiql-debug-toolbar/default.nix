@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, django
-, django-debug-toolbar
-, graphene-django
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  django,
+  django-debug-toolbar,
+  graphene-django,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     sha256 = "0fikr7xl786jqfkjdifymqpqnxy4qj8g3nlkgfm24wwq0za719dw";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     django
@@ -32,9 +31,7 @@ buildPythonPackage rec {
     graphene-django
   ];
 
-  pythonImportsCheck = [
-    "graphiql_debug_toolbar"
-  ];
+  pythonImportsCheck = [ "graphiql_debug_toolbar" ];
 
   DB_BACKEND = "sqlite";
   DB_NAME = ":memory:";

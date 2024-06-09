@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, cython
-, oldest-supported-numpy
-, packaging
-, setuptools
-, setuptools-scm
-, wheel
-, numpy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  cython,
+  oldest-supported-numpy,
+  packaging,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  numpy,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -35,13 +36,9 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "A Python wrapper for Ofir Pele and Michael Werman's implementation of the Earth Mover's Distance";

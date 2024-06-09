@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, chardet
-, click
-, flex
-, packaging
-, pyicu
-, requests
-, ruamel-yaml
-, setuptools-scm
-, six
-, swagger-spec-validator
-, pytestCheckHook
-, openapi-spec-validator
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  chardet,
+  click,
+  flex,
+  packaging,
+  pyicu,
+  requests,
+  ruamel-yaml,
+  setuptools-scm,
+  six,
+  swagger-spec-validator,
+  pytestCheckHook,
+  openapi-spec-validator,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace "--cov=prance --cov-report=term-missing --cov-fail-under=90" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     chardet
@@ -61,9 +60,7 @@ buildPythonPackage rec {
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   # Disable tests that require network
-  disabledTestPaths = [
-    "tests/test_convert.py"
-  ];
+  disabledTestPaths = [ "tests/test_convert.py" ];
   disabledTests = [
     "test_convert_defaults"
     "test_convert_output"

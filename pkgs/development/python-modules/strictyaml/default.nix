@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, ruamel-yaml
-, python-dateutil
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  ruamel-yaml,
+  python-dateutil,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
   # https://hitchdev.com/approach/contributing-to-hitch-libraries/
   doCheck = false;
 
-  pythonImportsCheck = [
-    "strictyaml"
-  ];
+  pythonImportsCheck = [ "strictyaml" ];
 
   meta = with lib; {
     description = "Strict, typed YAML parser";

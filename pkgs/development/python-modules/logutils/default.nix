@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, redis
-, redis-server
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  redis-server,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
       --replace-fail "'redis-server'" "'${redis-server}/bin/redis-server'"
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     pytestCheckHook
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     "tests/test_redis.py"
   ];
 
-  pythonImportsCheck = [
-    "logutils"
-  ];
+  pythonImportsCheck = [ "logutils" ];
 
   meta = with lib; {
     description = "Logging utilities";

@@ -10,13 +10,14 @@
 , libGL
 , Cocoa
 , OpenGL
+, withManual ? !stdenv.isDarwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "f3d";
   version = "2.4.0";
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
   src = fetchFromGitHub {
     owner = "f3d-app";
@@ -27,8 +28,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+  ] ++ lib.optionals withManual [
+    # manpage
     help2man
     gzip
+  ] ++ lib.optionals stdenv.hostPlatform.isElf [
     # https://github.com/f3d-app/f3d/pull/1217
     autoPatchelfHook
   ];
@@ -41,7 +45,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
-
+  ] ++ lib.optionals withManual [
     "-DF3D_LINUX_GENERATE_MAN=ON"
   ];
 

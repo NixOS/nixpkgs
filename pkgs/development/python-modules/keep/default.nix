@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pygithub
-, terminaltables
-, click
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pygithub,
+  terminaltables,
+  click,
+  requests,
 }:
 
 buildPythonPackage rec {

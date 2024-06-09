@@ -7,7 +7,7 @@
 
 buildDunePackage {
   pname = "eio_linux";
-  inherit (eio) meta src version;
+  inherit (eio) meta src patches version;
 
   minimalOCamlVersion = "5.0";
 

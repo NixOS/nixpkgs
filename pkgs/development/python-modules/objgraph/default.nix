@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, graphviz
-, graphvizPkgs
-, isPyPy
-, python
-, pythonOlder
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  graphviz,
+  graphvizPkgs,
+  isPyPy,
+  python,
+  pythonOlder,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -29,14 +30,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    ipython = [
-      graphviz
-    ];
+    ipython = [ graphviz ];
   };
 
-  pythonImportsCheck = [
-    "objgraph"
-  ];
+  pythonImportsCheck = [ "objgraph" ];
 
   checkPhase = ''
     runHook preCheck

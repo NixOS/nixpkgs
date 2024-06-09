@@ -4,6 +4,7 @@
   netbsdSetupHook,
   rsync,
   make,
+  make-rules,
 }:
 
 mkDerivation {
@@ -22,7 +23,9 @@ mkDerivation {
 
   postPatch = ''
     patchShebangs $COMPONENT_PATH/configure
-    ${make.postPatch}
+
+    # make needs this to pick up our sys make files
+    appendToVar NIX_CFLAGS_COMPILE "-D_PATH_DEFSYSPATH=\"$out/share/mk\""
   '';
 
   buildPhase = ''
@@ -39,10 +42,10 @@ mkDerivation {
     install -D nbmake $out/bin/nbmake
     ln -s $out/bin/nbmake $out/bin/make
     mkdir -p $out/share
-    cp -r $BSDSRCDIR/share/mk $out/share/mk
+    cp -r ${make-rules} $out/share/mk
 
     runHook postInstall
   '';
 
-  extraPaths = [ make.src ] ++ make.extraPaths;
+  extraPaths = [ make.src ];
 }

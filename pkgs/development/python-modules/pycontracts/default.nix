@@ -1,5 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi
-, nose, pyparsing, decorator, six, future }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  pyparsing,
+  decorator,
+  six,
+  future,
+}:
 
 buildPythonPackage rec {
   pname = "pycontracts";
@@ -12,7 +20,12 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ nose ];
-  propagatedBuildInputs = [ pyparsing decorator six future ];
+  propagatedBuildInputs = [
+    pyparsing
+    decorator
+    six
+    future
+  ];
 
   meta = with lib; {
     description = "Allows to declare constraints on function parameters and return values";

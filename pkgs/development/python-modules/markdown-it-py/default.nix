@@ -1,27 +1,28 @@
-{ lib
-, attrs
-, buildPythonPackage
-, commonmark
-, fetchFromGitHub
-, flit-core
-, linkify-it-py
-, markdown
-, mdit-py-plugins
-, mdurl
-, mistletoe
-, mistune
-, myst-parser
-, panflute
-, pyyaml
-, sphinx
-, sphinx-book-theme
-, sphinx-copybutton
-, sphinx-design
-, stdenv
-, pytest-regressions
-, pytestCheckHook
-, pythonRelaxDepsHook
-, pythonOlder
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  commonmark,
+  fetchFromGitHub,
+  flit-core,
+  linkify-it-py,
+  markdown,
+  mdit-py-plugins,
+  mdurl,
+  mistletoe,
+  mistune,
+  myst-parser,
+  panflute,
+  pyyaml,
+  sphinx,
+  sphinx-book-theme,
+  sphinx-copybutton,
+  sphinx-design,
+  stdenv,
+  pytest-regressions,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -39,18 +40,14 @@ buildPythonPackage rec {
   };
 
   # fix downstrem usage of markdown-it-py[linkify]
-  pythonRelaxDeps = [
-    "linkify-it-py"
-  ];
+  pythonRelaxDeps = [ "linkify-it-py" ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
     flit-core
   ];
 
-  propagatedBuildInputs = [
-    mdurl
-  ];
+  propagatedBuildInputs = [ mdurl ];
 
   nativeCheckInputs = [
     pytest-regressions
@@ -63,15 +60,27 @@ buildPythonPackage rec {
   '';
   doCheck = !stdenv.isi686;
 
-  pythonImportsCheck = [
-    "markdown_it"
-  ];
+  pythonImportsCheck = [ "markdown_it" ];
 
   passthru.optional-dependencies = {
-    compare = [ commonmark markdown mistletoe mistune panflute ];
+    compare = [
+      commonmark
+      markdown
+      mistletoe
+      mistune
+      panflute
+    ];
     linkify = [ linkify-it-py ];
     plugins = [ mdit-py-plugins ];
-    rtd = [ attrs myst-parser pyyaml sphinx sphinx-copybutton sphinx-design sphinx-book-theme ];
+    rtd = [
+      attrs
+      myst-parser
+      pyyaml
+      sphinx
+      sphinx-copybutton
+      sphinx-design
+      sphinx-book-theme
+    ];
   };
 
   meta = with lib; {

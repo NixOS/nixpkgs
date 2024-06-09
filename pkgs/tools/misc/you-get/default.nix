@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "you-get";
-  version = "0.4.1650";
+  version = "0.4.1700";
   format = "setuptools";
 
   # Tests aren't packaged, but they all hit the real network so
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-s8lEz3pjzEaMzMiBbc5/wAjC5rW6Uq7+XOIIGBijrUc=";
+    sha256 = "sha256-XNIUkgEqRGrBtSxvfkSUSqxltZ6ZdkWoTc9kz4BD6Zw=";
   };
 
   patches = [

@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       rev = "v${finalAttrs.version}";
       hash = "sha256-58nNTOLund/KeDlNwzwwihjFVigs/P0K8SN07zExE2c=";
     };
+    updateScript = ./update.sh;
   };
 
   # Some libraries are loaded dynamically, but QLibrary doesn't seem to search

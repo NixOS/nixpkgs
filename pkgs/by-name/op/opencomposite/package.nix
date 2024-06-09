@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation {
   pname = "opencomposite";
-  version = "0-unstable-2024-05-08";
+  version = "0-unstable-2024-06-01";
 
   src = fetchFromGitLab {
     owner = "znixian";
     repo = "OpenOVR";
-    rev = "5ddd6024efafa82c7a432c9dd8a67e3d5c3f9b38";
-    hash = "sha256-m6Xhi6xlDWiVqtYyxpQP2vp5JsB2EKsoXkmd0IYtPQ8=";
+    rev = "49c4b89579fd49c5b40b72924d6593fcd47c5065";
+    hash = "sha256-Aubf1tupyXzmff3ho/yKx9B3uJ8I0aoZi9zRV3A89Pc=";
   };
 
   nativeBuildInputs = [
@@ -41,8 +41,10 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DUSE_SYSTEM_OPENXR=ON"
-    "-DUSE_SYSTEM_GLM=ON"
+    (lib.cmakeBool "USE_SYSTEM_OPENXR" true)
+    (lib.cmakeBool "USE_SYSTEM_GLM" true)
+    # debug logging macros cause format-security warnings
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=format-security")
   ];
 
   installPhase = ''

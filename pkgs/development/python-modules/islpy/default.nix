@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "islpy";
-  version = "2023.2.5";
+  version = "2024.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "islpy";
-    rev = "v${version}";
-    hash = "sha256-0m41G5HlPrgt4rDY3Y9cKBJGHSnLg/R+IywBO1anRpQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-N5XI6V3BvNobCh7NAvtzVejtDMnlcb31S5gseyab1T0=";
   };
 
   postPatch = ''

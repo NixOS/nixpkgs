@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, django
-, sly
-, mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  django,
+  sly,
+  mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,28 +31,20 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
-  propagatedBuildInputs = [
-    sly
-  ];
+  propagatedBuildInputs = [ sly ];
 
   passthru.optional-dependencies = {
-    django-query = [
-      django
-    ];
+    django-query = [ django ];
   };
 
-  pythonImportsCheck = [
-    "scim2_filter_parser"
-  ];
+  pythonImportsCheck = [ "scim2_filter_parser" ];
 
   nativeCheckInputs = [
     mock

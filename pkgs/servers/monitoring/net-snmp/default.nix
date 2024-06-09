@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, file, openssl, perl, perlPackages, nettools
+{ lib, stdenv, fetchurl
+, file, openssl, perl, nettools
 , withPerlTools ? false }: let
 
   perlWithPkgs = perl.withPackages (ps: with ps; [

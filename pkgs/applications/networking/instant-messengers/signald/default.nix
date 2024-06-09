@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, findutils, gnused,
-gradle, git, perl, makeWrapper, fetchpatch, substituteAll, jre_minimal
+{ lib, stdenv, fetchFromGitLab, jdk17_headless, coreutils, findutils, gnused,
+gradle, git, perl, makeWrapper, substituteAll, jre_minimal
 }:
 
 # NOTE: when updating the package, please check if some of the hacks in `deps.installPhase`

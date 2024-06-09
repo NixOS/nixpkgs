@@ -2,7 +2,6 @@
 , cmake
 , curl
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg
 , gnutls
 , lame

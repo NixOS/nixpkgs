@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "qcm";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "hypengw";
     repo = "Qcm";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-6QivAQqOuWIldx2Rh5nNsj0gia3AOUm6vy9aqyJ1G6k=";
+    hash = "sha256-9xbAw5U4BtpupelsOzfZGosdLx06TKPTG8hhc/no3R0=";
   };
 
   patches = [ ./remove_cubeb_vendor.patch ];

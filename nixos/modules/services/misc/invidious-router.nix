@@ -8,10 +8,10 @@
   settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "config.yaml" cfg.settings;
 in {
-  meta.maintainers = [lib.maintainers.s1ls];
+  meta.maintainers = [lib.maintainers.sils];
 
   options.services.invidious-router = {
-    enable = lib.mkEnableOption "Enables the invidious-router service";
+    enable = lib.mkEnableOption "the invidious-router service";
     port = lib.mkOption {
       type = lib.types.port;
       default = 8050;

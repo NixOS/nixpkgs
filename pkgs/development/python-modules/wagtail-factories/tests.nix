@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, django-pattern-library
-, pytest-django
-, pytestCheckHook
-, wagtail
-, wagtail-factories
+{
+  buildPythonPackage,
+  django-pattern-library,
+  pytest-django,
+  pytestCheckHook,
+  wagtail,
+  wagtail-factories,
 }:
 
 buildPythonPackage {

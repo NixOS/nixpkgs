@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-, unittestCheckHook
+  unittestCheckHook,
 
-, setuptools
+  setuptools,
 
-, unicodecsv
-, pyyaml
-, regex
-, numpy
-, editdistance
-, munkres
-, levenshtein
+  unicodecsv,
+  pyyaml,
+  regex,
+  numpy,
+  editdistance,
+  munkres,
+  levenshtein,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-gio52n1NZWeyCK+eJW/Fp827wjvwnMNDFAR4pKa8VcY=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     setuptools # need for pkg_resources
@@ -40,11 +39,12 @@ buildPythonPackage rec {
     levenshtein # need for align_wordlists.py script
   ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "test" ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+  ];
 
   pythonImportsCheck = [
     "panphon"

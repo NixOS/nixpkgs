@@ -1,67 +1,88 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, flit-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  flit-core,
 
   # tests
-, chex
-, jaxlib
-, pytest-subtests
-, pytest-xdist
-, pytestCheckHook
-, yapf
+  chex,
+  jaxlib,
+  pytest-subtests,
+  pytest-xdist,
+  pytestCheckHook,
+  yapf,
 
   # optional
-, jupyter
-, mediapy
-, numpy
-, importlib-resources
-, typing-extensions
-, zipp
-, absl-py
-, tqdm
-, dm-tree
-, jax
-, tensorflow
+  jupyter,
+  mediapy,
+  numpy,
+  importlib-resources,
+  typing-extensions,
+  zipp,
+  absl-py,
+  tqdm,
+  dm-tree,
+  jax,
+  tensorflow,
 }:
 
 buildPythonPackage rec {
   pname = "etils";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+0ePV/7CAuJg5UyRkrMXaS/WPbLRHZk+cLzf+inMzVg=";
+    hash = "sha256-XQ+N2qjg5kDGhe16f+H8XIFiUz+hL7lF8J7MU5sLNmw=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   passthru.optional-dependencies = rec {
     array-types = enp;
-    eapp = [ absl-py /* FIXME package simple-parsing */ ] ++ epy;
-    ecolab = [ jupyter numpy mediapy ] ++ enp ++ epy;
+    eapp = [
+      absl-py # FIXME package simple-parsing
+    ] ++ epy;
+    ecolab = [
+      jupyter
+      numpy
+      mediapy
+    ] ++ enp ++ epy;
     edc = epy;
     enp = [ numpy ] ++ epy;
-    epath = [ importlib-resources typing-extensions zipp ] ++ epy;
+    epath = [
+      importlib-resources
+      typing-extensions
+      zipp
+    ] ++ epy;
     epy = [ typing-extensions ];
-    etqdm = [ absl-py tqdm ] ++ epy;
+    etqdm = [
+      absl-py
+      tqdm
+    ] ++ epy;
     etree = array-types ++ epy ++ enp ++ etqdm;
     etree-dm = [ dm-tree ] ++ etree;
     etree-jax = [ jax ] ++ etree;
     etree-tf = [ tensorflow ] ++ etree;
-    all = array-types ++ eapp ++ ecolab ++ edc ++ enp ++ epath ++ epy ++ etqdm
-      ++ etree ++ etree-dm ++ etree-jax ++ etree-tf;
+    all =
+      array-types
+      ++ eapp
+      ++ ecolab
+      ++ edc
+      ++ enp
+      ++ epath
+      ++ epy
+      ++ etqdm
+      ++ etree
+      ++ etree-dm
+      ++ etree-jax
+      ++ etree-tf;
   };
 
-  pythonImportsCheck = [
-    "etils"
-  ];
+  pythonImportsCheck = [ "etils" ];
 
   nativeCheckInputs = [
     chex
@@ -70,8 +91,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     yapf
-  ]
-  ++ passthru.optional-dependencies.all;
+  ] ++ passthru.optional-dependencies.all;
 
   disabledTests = [
     "test_public_access" # requires network access

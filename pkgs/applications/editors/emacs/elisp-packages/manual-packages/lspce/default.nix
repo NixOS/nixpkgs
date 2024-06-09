@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "unstable-2024-02-03";
+  version = "1.0.0-unstable-2024-02-03";
 
   src = fetchFromGitHub {
     owner = "zbelial";

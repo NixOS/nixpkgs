@@ -182,8 +182,11 @@ let
         ''}
       '';
 
+    mesonBuildType = "release";
     mesonFlags =
       [
+        # LTO optimization
+        (lib.mesonBool "b_lto" (!stdenv.isDarwin))
         (lib.mesonEnable "gc" true)
         (lib.mesonBool "enable-tests" true)
         (lib.mesonBool "enable-docs" enableDocumentation)
@@ -257,7 +260,7 @@ let
     passthru = {
       inherit aws-sdk-cpp boehmgc;
       tests = {
-        misc = nixosTests.misc.lix.passthru.override { nixPackage = self; };
+        misc = nixosTests.nix-misc.lix;
       };
     };
 

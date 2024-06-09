@@ -1,85 +1,97 @@
-{ alsa-lib
-, fetchFromGitHub
-, makeWrapper
-, openssl
-, pkg-config
-, python3
-, rustPlatform
-, lib
-, wayland
-, xorg
-, vulkan-loader
-, udev
-, jre_minimal
-, cairo
-, gtk3
-, wrapGAppsHook3
-, gsettings-desktop-schemas
-, glib
-, libxkbcommon
+{
+  alsa-lib,
+  fetchFromGitHub,
+  makeWrapper,
+  openssl,
+  pkg-config,
+  python3,
+  rustPlatform,
+  stdenv,
+  lib,
+  wayland,
+  xorg,
+  vulkan-loader,
+  udev,
+  jre_minimal,
+  cairo,
+  gtk3,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
+  glib,
+  libxkbcommon,
+  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  version = "nightly-2024-05-01";
+in
+rustPlatform.buildRustPackage {
   pname = "ruffle";
-  version = "nightly-2024-03-25";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
-    repo = pname;
+    repo = "ruffle";
     rev = version;
-    hash = "sha256-3G5xSGdMl4ISQmb2BVGdKz1cXU5Mnl+VkVYpJ6P12og=";
+    hash = "sha256-WfoYQku1NFhvWyqeSVKtsMMEyUA97YFD7cvdn4XYIPI=";
   };
 
-  nativeBuildInputs = [
-    glib
-    gsettings-desktop-schemas
-    jre_minimal
-    makeWrapper
-    pkg-config
-    python3
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs =
+    [ jre_minimal ]
+    ++ lib.optionals stdenv.isLinux [
+      glib
+      gsettings-desktop-schemas
+      makeWrapper
+      pkg-config
+      python3
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs = [
-    alsa-lib
-    cairo
-    gtk3
-    openssl
-    wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libxcb
-    xorg.libXrender
-    vulkan-loader
-    udev
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      alsa-lib
+      cairo
+      gtk3
+      openssl
+      wayland
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXrandr
+      xorg.libXi
+      xorg.libxcb
+      xorg.libXrender
+      vulkan-loader
+      udev
+    ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
 
   dontWrapGApps = true;
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/ruffle_desktop \
       --add-needed libxkbcommon-x11.so \
       --add-needed libwayland-client.so \
       --add-rpath ${libxkbcommon}/lib:${wayland}/lib
   '';
 
-  postFixup = ''
-    # This name is too generic
-    mv $out/bin/exporter $out/bin/ruffle_exporter
+  postFixup =
+    ''
+      # This name is too generic
+      mv $out/bin/exporter $out/bin/ruffle_exporter
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      vulkanWrapperArgs+=(
+        --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
+      )
 
-    vulkanWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
-    )
+      wrapProgram $out/bin/ruffle_exporter \
+        "''${vulkanWrapperArgs[@]}"
 
-    wrapProgram $out/bin/ruffle_exporter \
-      "''${vulkanWrapperArgs[@]}"
-
-    wrapProgram $out/bin/ruffle_desktop \
-      "''${vulkanWrapperArgs[@]}" \
-      "''${gappsWrapperArgs[@]}"
-  '';
+      wrapProgram $out/bin/ruffle_desktop \
+        "''${vulkanWrapperArgs[@]}" \
+        "''${gappsWrapperArgs[@]}"
+    '';
 
   cargoBuildFlags = [ "--workspace" ];
 
@@ -97,9 +109,15 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "An Adobe Flash Player emulator written in the Rust programming language";
     homepage = "https://ruffle.rs/";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ govanify jchw ];
-    platforms = platforms.linux;
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      govanify
+      jchw
+    ];
+    platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "ruffle_desktop";
   };
 }

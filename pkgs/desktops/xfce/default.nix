@@ -1,5 +1,6 @@
 { config
 , lib
+, linuxPackages
 , pkgs
 , generateSplicesForMkScope
 , makeScopeWithSplicing'
@@ -80,6 +81,8 @@ makeScopeWithSplicing' {
 
       ristretto = callPackage ./applications/ristretto { };
 
+      xfmpc = callPackage ./applications/xfmpc { };
+
       xfce4-taskmanager = callPackage ./applications/xfce4-taskmanager { };
 
       xfce4-dict = callPackage ./applications/xfce4-dict { };
@@ -140,7 +143,9 @@ makeScopeWithSplicing' {
 
       xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin { };
 
-      xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin { };
+      xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin {
+        libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+      };
 
       xfce4-systemload-plugin = callPackage ./panel-plugins/xfce4-systemload-plugin { };
 

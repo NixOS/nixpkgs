@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pyglet
-, pytestCheckHook
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pyglet,
+  pytestCheckHook,
+  mock,
 }:
 
 buildPythonPackage rec {
@@ -19,19 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-ci40L2opJ+NYYtaAeX1Y5pzkdK+loFspTriX/xv4KR8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies.visualization = [
-    pyglet
-  ];
+  passthru.optional-dependencies.visualization = [ pyglet ];
 
   nativeCheckInputs = [
     pytestCheckHook
     mock
   ];
-
 
   pythonImportsCheck = [ "pywavefront" ];
 

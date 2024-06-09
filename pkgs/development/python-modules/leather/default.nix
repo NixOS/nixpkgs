@@ -1,10 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, six
-, cssselect
-, lxml
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  six,
+  cssselect,
+  lxml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

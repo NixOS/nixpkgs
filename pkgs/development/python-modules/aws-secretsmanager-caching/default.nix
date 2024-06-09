@@ -1,12 +1,13 @@
-{ lib
-, botocore
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, setuptools
-, setuptools-scm
+{
+  lib,
+  botocore,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -32,18 +33,14 @@ buildPythonPackage rec {
       --replace-fail "'pytest-runner'," ""
   '';
 
-  build-system = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
   dependencies = [
     botocore
-    setuptools  # Needs pkg_resources at runtime.
+    setuptools # Needs pkg_resources at runtime.
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Integration tests require networking.
@@ -65,9 +62,7 @@ buildPythonPackage rec {
     "test_valid_json"
   ];
 
-  pythonImportsCheck = [
-    "aws_secretsmanager_caching"
-  ];
+  pythonImportsCheck = [ "aws_secretsmanager_caching" ];
 
   meta = with lib; {
     description = "Client-side AWS secrets manager caching library";

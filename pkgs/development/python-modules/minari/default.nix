@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, wheel
-, google-cloud-storage
-, gymnasium
-, h5py
-, numpy
-, packaging
-, portion
-, rich
-, tqdm
-, typer
-, typing-extensions
-, imageio
-, nbmake
-, pytest
-, pytest-markdown-docs
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  google-cloud-storage,
+  gymnasium,
+  h5py,
+  numpy,
+  packaging,
+  portion,
+  rich,
+  tqdm,
+  typer,
+  typing-extensions,
+  imageio,
+  nbmake,
+  pytest,
+  pytest-markdown-docs,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -63,13 +64,9 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "minari"
-  ];
+  pythonImportsCheck = [ "minari" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Require internet access
@@ -81,7 +78,10 @@ buildPythonPackage rec {
     description = "A standard format for offline reinforcement learning datasets, with popular reference datasets and related utilities";
     homepage = "https://github.com/Farama-Foundation/Minari";
     changelog = "https://github.com/Farama-Foundation/Minari/releases/tag/v${version}";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "minari";
   };

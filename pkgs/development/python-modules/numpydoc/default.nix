@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, setuptools
-, jinja2
-, sphinx
-, tabulate
-, pytestCheckHook
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  setuptools,
+  jinja2,
+  sphinx,
+  tabulate,
+  pytestCheckHook,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
       --replace "--cov=numpydoc" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     jinja2
@@ -51,9 +50,7 @@ buildPythonPackage rec {
     "test_reference"
   ];
 
-  pythonImportsCheck = [
-    "numpydoc"
-  ];
+  pythonImportsCheck = [ "numpydoc" ];
 
   meta = {
     changelog = "https://github.com/numpy/numpydoc/releases/tag/v${version}";
@@ -61,5 +58,5 @@ buildPythonPackage rec {
     mainProgram = "validate-docstrings";
     homepage = "https://github.com/numpy/numpydoc";
     license = lib.licenses.free;
-   };
+  };
 }

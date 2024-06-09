@@ -1,17 +1,18 @@
-{ lib
-, atom
-, buildPythonPackage
-, bytecode
-, cppy
-, fetchFromGitHub
-, kiwisolver
-, pegen
-, ply
-, qtpy
-, setuptools
-, setuptools-scm
-, pythonOlder
-, sip
+{
+  lib,
+  atom,
+  buildPythonPackage,
+  bytecode,
+  cppy,
+  fetchFromGitHub,
+  kiwisolver,
+  pegen,
+  ply,
+  qtpy,
+  setuptools,
+  setuptools-scm,
+  pythonOlder,
+  sip,
 }:
 
 buildPythonPackage rec {

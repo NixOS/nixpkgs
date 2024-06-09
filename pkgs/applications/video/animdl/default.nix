@@ -2,6 +2,7 @@
   buildPythonApplication,
   fetchFromGitHub,
   poetry-core,
+  pythonRelaxDepsHook,
   anchor-kr,
   anitopy,
   click,
@@ -30,8 +31,23 @@ buildPythonApplication {
     hash = "sha256-kn6vCCFhJNlruxoO+PTHVIwTf1E5j1aSdBhrFuGzUq4=";
   };
 
+  pythonRemoveDeps = [
+    "comtypes" # windows only
+  ];
+  pythonRelaxDeps = [
+    "httpx"
+    "lxml"
+    "packaging"
+    "pycryptodomex"
+    "regex"
+    "rich"
+    "tqdm"
+    "yarl"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
   propagatedBuildInputs = [
     anchor-kr

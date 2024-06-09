@@ -1,12 +1,13 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, drawio-headless
-, fetchFromGitHub
-, mkdocs
-, pathspec
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  drawio-headless,
+  fetchFromGitHub,
+  mkdocs,
+  pathspec,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "mkdocs_swagger_ui_tag"
-  ];
+  pythonImportsCheck = [ "mkdocs_swagger_ui_tag" ];
 
   disabledTests = [
     # Don't actually build results

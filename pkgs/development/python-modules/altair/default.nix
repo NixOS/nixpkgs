@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# Runtime dependencies
-, hatchling
-, toolz
-, numpy
-, jsonschema
-, typing-extensions
-, pandas
-, jinja2
-, packaging
+  # Runtime dependencies
+  hatchling,
+  toolz,
+  numpy,
+  jsonschema,
+  typing-extensions,
+  pandas,
+  jinja2,
+  packaging,
 
-# Build, dev and test dependencies
-, anywidget
-, ipython
-, pytestCheckHook
-, vega-datasets
-, sphinx
+  # Build, dev and test dependencies
+  anywidget,
+  ipython,
+  pytestCheckHook,
+  vega-datasets,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     hash = "sha256-uTG+V0SQgAQtMjvrVvKVKgIBT9qO+26EPRxQCEXj/gc=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     jinja2
@@ -74,6 +73,9 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/altair-viz/altair";
     changelog = "https://altair-viz.github.io/releases/changes.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ teh vinetos ];
+    maintainers = with maintainers; [
+      teh
+      vinetos
+    ];
   };
 }

@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, pythonOlder, fetchzip, flit-core, mistune, nh3 }:
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchzip,
+  flit-core,
+  mistune,
+  nh3,
+}:
 
 buildPythonPackage rec {
   pname = "formbox";
@@ -12,7 +20,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ flit-core ];
-  propagatedBuildInputs = [ mistune nh3 ];
+  propagatedBuildInputs = [
+    mistune
+    nh3
+  ];
   doCheck = false; # there's no test
   pythonImportsCheck = [ "formbox" ];
 

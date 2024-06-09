@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, dulwich
-, fetchFromGitHub
-, gitpython
-, pythonOlder
-, requests
-, setuptools-scm
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  dulwich,
+  fetchFromGitHub,
+  gitpython,
+  pythonOlder,
+  requests,
+  setuptools-scm,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-JLrsbgifoUnN1Mwml9tO3/SkA6miE14AGjxrFwEcRks=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     dulwich
@@ -34,9 +33,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  pythonImportsCheck = [
-    "dvc_studio_client"
-  ];
+  pythonImportsCheck = [ "dvc_studio_client" ];
 
   # Tests try to access network
   doCheck = false;

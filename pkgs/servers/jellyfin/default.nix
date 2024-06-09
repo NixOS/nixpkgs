@@ -1,36 +1,29 @@
-{ lib
-, fetchFromGitHub
-, fetchurl
-, nixosTests
-, stdenv
-, dotnetCorePackages
-, buildDotnetModule
-, ffmpeg
-, fontconfig
-, freetype
-, jellyfin-web
-, sqlite
+{
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  stdenv,
+  dotnetCorePackages,
+  buildDotnetModule,
+  ffmpeg,
+  fontconfig,
+  freetype,
+  jellyfin-web,
+  sqlite,
 }:
 
 buildDotnetModule rec {
   pname = "jellyfin";
-  version = "10.8.13"; # ensure that jellyfin-web has matching version
+  version = "10.9.3"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     rev = "v${version}";
-    sha256 = "sha256-UtcrJRqDIPyewCNfI89E/IYrgLUhWx1me6MtPX+aeFU=";
+    sha256 = "sha256-gJMz2LfxC0JXqGYNKNz1zRbWZOH1UxbcoGtmdymZ/Oo=";
   };
 
-  patches = [
-    # when building some warnings are reported as error and fail the build.
-    ./disable-warnings.patch
-  ];
-
-  propagatedBuildInputs = [
-    sqlite
-  ];
+  propagatedBuildInputs = [ sqlite ];
 
   projectFile = "Jellyfin.Server/Jellyfin.Server.csproj";
   executables = [ "jellyfin" ];
@@ -40,8 +33,8 @@ buildDotnetModule rec {
     fontconfig
     freetype
   ];
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   dotnetBuildFlags = [ "--no-self-contained" ];
 
   preInstall = ''
@@ -62,7 +55,12 @@ buildDotnetModule rec {
     homepage = "https://jellyfin.org/";
     # https://github.com/jellyfin/jellyfin/issues/610#issuecomment-537625510
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nyanloutre minijackson purcell jojosch ];
+    maintainers = with maintainers; [
+      nyanloutre
+      minijackson
+      purcell
+      jojosch
+    ];
     mainProgram = "jellyfin";
     platforms = dotnet-runtime.meta.platforms;
   };

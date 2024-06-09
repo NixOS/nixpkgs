@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, certifi
-, cython
-, mbedtls_2
-, pytestCheckHook
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  certifi,
+  cython,
+  mbedtls_2,
+  pytestCheckHook,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -26,18 +27,14 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [
-    mbedtls_2
-  ];
+  buildInputs = [ mbedtls_2 ];
 
   propagatedBuildInputs = [
     certifi
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "mbedtls" ];
 

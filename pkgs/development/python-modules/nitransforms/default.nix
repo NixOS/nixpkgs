@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pythonRelaxDepsHook
-, h5py
-, nibabel
-, numpy
-, scipy
-, setuptools-scm
-, toml
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  h5py,
+  nibabel,
+  numpy,
+  scipy,
+  setuptools-scm,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -23,8 +24,16 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
-  buildInputs = [ setuptools-scm toml ];
-  propagatedBuildInputs = [ h5py nibabel numpy scipy ];
+  buildInputs = [
+    setuptools-scm
+    toml
+  ];
+  propagatedBuildInputs = [
+    h5py
+    nibabel
+    numpy
+    scipy
+  ];
 
   pythonRelaxDeps = [ "scipy" ];
 

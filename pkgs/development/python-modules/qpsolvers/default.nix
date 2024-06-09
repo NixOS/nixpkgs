@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, unittestCheckHook
-, flit-core
-, numpy
-, scipy
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  unittestCheckHook,
+  flit-core,
+  numpy,
+  scipy,
 
-# optional dependencies
-, clarabel
-, cvxopt
-, daqp
-, ecos
-, gurobipy
-, osqp
-, quadprog
-, scs
+  # optional dependencies
+  clarabel,
+  cvxopt,
+  daqp,
+  ecos,
+  gurobipy,
+  osqp,
+  quadprog,
+  scs,
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-EU7/OGLeOIHw7wyNTibMmHZLAiRTCUFwjEaVNsHg1vw=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   pythonImportsCheck = [ "qpsolvers" ];
 
@@ -55,14 +54,20 @@ buildPythonPackage rec {
     # qpalm = [ qpalm ];
     quadprog = [ quadprog ];
     scs = [ scs ];
-    open_source_solvers = with passthru.optional-dependencies; lib.flatten [
-      clarabel cvxopt daqp ecos /* highs */ osqp /* piqp proxqp qpalm */ quadprog scs
-    ];
+    open_source_solvers =
+      with passthru.optional-dependencies;
+      lib.flatten [
+        clarabel
+        cvxopt
+        daqp
+        ecos # highs
+        osqp # piqp proxqp qpalm
+        quadprog
+        scs
+      ];
   };
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ] ++ passthru.optional-dependencies.open_source_solvers;
+  nativeCheckInputs = [ unittestCheckHook ] ++ passthru.optional-dependencies.open_source_solvers;
 
   meta = with lib; {
     changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.rev}/CHANGELOG.md";

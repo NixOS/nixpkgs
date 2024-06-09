@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, proton-core
-, proton-vpn-connection
-, proton-vpn-logger
-, proton-vpn-killswitch
-, proton-vpn-session
-, sentry-sdk
-, distro
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  proton-core,
+  proton-vpn-connection,
+  proton-vpn-logger,
+  proton-vpn-killswitch,
+  proton-vpn-session,
+  sentry-sdk,
+  distro,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-BGei6tw6VTKkHmaIWa2VJfKOL5cRUbauOQ7zp1RY9Bo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     distro
@@ -45,9 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proton.vpn.core" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # Needed for Permission denied: '/homeless-shelter'

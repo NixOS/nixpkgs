@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     mock
   ];
 
-  pythonImportsCheck = [
-    "verboselogs"
-  ];
+  pythonImportsCheck = [ "verboselogs" ];
 
   disabledTests = [
     # Do not run pylint plugin test

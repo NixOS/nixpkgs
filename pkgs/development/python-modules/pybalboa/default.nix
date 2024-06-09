@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-7vjdRGnEnMf32pZwoKRxX16hxkyf0CXlncpbBJMQtfI=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pybalboa"
-  ];
+  pythonImportsCheck = [ "pybalboa" ];
 
   meta = with lib; {
     description = " Python module to interface with a Balboa Spa";

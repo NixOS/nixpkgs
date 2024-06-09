@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, arc4
-, asn1crypto
-, asn1tools
-, asyauth
-, asysocks
-, buildPythonPackage
-, cargo
-, colorama
-, fetchFromGitHub
-, iconv
-, minikerberos
-, pillow
-, pyperclip
-, pythonOlder
-, rustPlatform
-, rustc
-, setuptools-rust
-, tqdm
-, unicrypto
-, winsspi
+{
+  lib,
+  stdenv,
+  arc4,
+  asn1crypto,
+  asn1tools,
+  asyauth,
+  asysocks,
+  buildPythonPackage,
+  cargo,
+  colorama,
+  fetchFromGitHub,
+  iconv,
+  minikerberos,
+  pillow,
+  pyperclip,
+  pythonOlder,
+  rustPlatform,
+  rustc,
+  setuptools-rust,
+  tqdm,
+  unicrypto,
+  winsspi,
 }:
 
 buildPythonPackage rec {
@@ -65,16 +66,12 @@ buildPythonPackage rec {
     tqdm
     unicrypto
     winsspi
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    iconv
-  ];
+  ] ++ lib.optionals (stdenv.isDarwin) [ iconv ];
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aardwolf"
-  ];
+  pythonImportsCheck = [ "aardwolf" ];
 
   meta = with lib; {
     description = "Asynchronous RDP protocol implementation";

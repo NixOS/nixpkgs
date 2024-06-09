@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pbr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+}:
 
 buildPythonPackage rec {
   pname = "requestsexceptions";

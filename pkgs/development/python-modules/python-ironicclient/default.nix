@@ -1,36 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, appdirs
-, cliff
-, dogpile-cache
-, jsonschema
-, keystoneauth1
-, openstacksdk
-, osc-lib
-, oslo-utils
-, pyyaml
-, requests
-, stevedore
-, stestr
-, requests-mock
-, oslotest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cliff,
+  dogpile-cache,
+  jsonschema,
+  keystoneauth1,
+  openstacksdk,
+  osc-lib,
+  oslo-utils,
+  oslotest,
+  pbr,
+  platformdirs,
+  pyyaml,
+  requests,
+  requests-mock,
+  stestr,
+  stevedore,
 }:
 
 buildPythonPackage rec {
   pname = "python-ironicclient";
-  version = "5.5.0";
+  version = "5.6.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JlO487QSPsBJZqPYRhsQYFA7noIN2q/stH4eZXAFLnY=";
+    hash = "sha256-zWlfy+Pfu0l7vBQnLOIP9vaXzx+i35k4oQqPUtLg3cE=";
   };
 
   propagatedBuildInputs = [
-    pbr
-    appdirs
     cliff
     dogpile-cache
     jsonschema
@@ -38,6 +37,8 @@ buildPythonPackage rec {
     openstacksdk
     osc-lib
     oslo-utils
+    pbr
+    platformdirs
     pyyaml
     requests
     stevedore

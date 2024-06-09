@@ -12,17 +12,18 @@ index 7379af1..4eef3fe 100644
          return false;
      }
 diff --git a/src/logging.cpp b/src/logging.cpp
-index ca33ee3..90d3638 100644
+index 7d4cb98..256128c 100644
 --- a/src/logging.cpp
 +++ b/src/logging.cpp
-@@ -26,7 +26,11 @@ string exec(string command) {
+@@ -27,8 +27,12 @@ string exec(string command) {
  #endif
      std::array<char, 128> buffer;
      std::string result;
 +
 +    char* originalPath = getenv("PATH");
 +    setenv("PATH", "@path@", 1);
-     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);
+     auto deleter = [](FILE* ptr){ pclose(ptr); };
+     std::unique_ptr<FILE, decltype(deleter)> pipe(popen(command.c_str(), "r"), deleter);
 +    setenv("PATH", originalPath, 1);
      if (!pipe) {
        return "popen failed!";

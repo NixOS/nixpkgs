@@ -20,6 +20,7 @@
 , pkgsBuildHost
 # configurePhase:
 , gnChromium
+, symlinkJoin
 
 # Build inputs:
 , libpng
@@ -378,6 +379,14 @@ let
       ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
     '';
 
+    llvmCcAndBintools = symlinkJoin {
+      name = "llvmCcAndBintools";
+      paths = [
+        pkgsBuildTarget.${llvmPackages_attrName}.llvm
+        pkgsBuildTarget.${llvmPackages_attrName}.stdenv.cc
+      ];
+    };
+
     gnFlags = mkGnFlags ({
       # Main build and toolchain settings:
       # Create an official and optimized release build (only official builds
@@ -445,7 +454,7 @@ let
       rtc_use_pipewire = true;
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
       chrome_pgo_phase = 0;
-      clang_base_path = "${pkgsBuildTarget.${llvmPackages_attrName}.stdenv.cc}";
+      clang_base_path = "${llvmCcAndBintools}";
       use_qt = false;
       # To fix the build as we don't provide libffi_pic.a
       # (ld.lld: error: unable to find library -l:libffi_pic.a):

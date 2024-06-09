@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-fKVjPb+p4OD6QA0xUaigxL7FO9Ls7cCmdwWxdWXDGoM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Wrong encoding
   postPatch = ''
@@ -34,13 +31,9 @@ buildPythonPackage rec {
       --replace-fail "[pytest]" "[tool:pytest]"
   '';
 
-  pythonImportsCheck = [
-    "whoosh"
-  ];
+  pythonImportsCheck = [ "whoosh" ];
 
-  disabledTests = [
-    "test_minimize_dfa"
-  ];
+  disabledTests = [ "test_minimize_dfa" ];
 
   meta = with lib; {
     description = "Fast, pure-Python full text indexing, search, and spell checking library";

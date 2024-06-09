@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, skawarePackages, skalibs }:
+{ lib, skawarePackages, skalibs }:
 
 let
   version = "2.9.5.1";

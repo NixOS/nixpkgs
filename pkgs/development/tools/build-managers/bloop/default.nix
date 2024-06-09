@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "1.5.17";
+  version = "1.5.18";
 
   platform =
     if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   bloop-binary = fetchurl rec {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
     sha256 =
-      if stdenv.isLinux && stdenv.isx86_64 then "sha256-lP7j7pPG7wC36sG+d80F2E6ZHPZcOZN/M/j6CniaNGY="
-      else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-awSBYSN4do4w9dAx6JwoexiptfC01vW1/o53Tp13xj0="
+      if stdenv.isLinux && stdenv.isx86_64 then "sha256-gfmsroHyr/xrbQ72x6LNRvIYaxgUjBOxYsyKqc0c9Oo="
+      else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-fluOkbpVy895YyWisfTaDP2yXbqF+gToc1KbVL8Mon8="
       else throw "unsupported platform";
   };
 

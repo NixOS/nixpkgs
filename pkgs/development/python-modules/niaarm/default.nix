@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, niapy
-, nltk
-, numpy
-, pandas
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  niapy,
+  nltk,
+  numpy,
+  pandas,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  tomli,
 }:
 
 buildPythonPackage rec {
@@ -25,31 +26,23 @@ buildPythonPackage rec {
     hash = "sha256-J3126RSJYBCSyxoPsvsDgmx9E+9fP2h6avPiCHISL7c=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     niapy
     nltk
     numpy
     pandas
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   disabledTests = [
     # Test requires extra nltk data dependency
     "test_text_mining"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "niaarm"
-  ];
+  pythonImportsCheck = [ "niaarm" ];
 
   meta = with lib; {
     description = "A minimalistic framework for Numerical Association Rule Mining";

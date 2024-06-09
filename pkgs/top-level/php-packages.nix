@@ -57,7 +57,7 @@ in {
     php = php.unwrapped;
   };
 
-  inherit (builders.v1) buildComposerProject composerHooks mkComposerRepository;
+  inherit (builders.v1) buildComposerProject buildComposerWithPlugin composerHooks mkComposerRepository;
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
@@ -190,6 +190,10 @@ in {
     castor = callPackage ../development/php-packages/castor { };
 
     composer = callPackage ../development/php-packages/composer { };
+
+    composer-local-repo-plugin = callPackage ../development/php-packages/composer-local-repo-plugin { };
+
+    cyclonedx-php-composer = callPackage ../development/php-packages/cyclonedx-php-composer { };
 
     deployer = callPackage ../development/php-packages/deployer { };
 
@@ -616,6 +620,7 @@ in {
             "--enable-soap"
           ];
           doCheck = false;
+          internalDeps = [ php.extensions.session ];
         }
         {
           name = "sockets";
@@ -674,7 +679,11 @@ in {
           env.NIX_CFLAGS_COMPILE = toString [ "-I../.." "-DHAVE_DOM" ];
           configureFlags = [ "--with-xsl=${libxslt.dev}" ];
         }
-        { name = "zend_test"; }
+        {
+          name = "zend_test";
+          internalDeps = [ php.extensions.dom ];
+          env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+        }
         {
           name = "zip";
           buildInputs = [ libzip pcre2 ];

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, colorclass
-, easygui
-, fetchFromGitHub
-, msoffcrypto-tool
-, olefile
-, pcodedmp
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  colorclass,
+  easygui,
+  fetchFromGitHub,
+  msoffcrypto-tool,
+  olefile,
+  pcodedmp,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     pyparsing
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -50,14 +49,15 @@ buildPythonPackage rec {
     "test_xlm"
   ];
 
-  pythonImportsCheck = [
-    "oletools"
-  ];
+  pythonImportsCheck = [ "oletools" ];
 
   meta = with lib; {
     description = "Module to analyze MS OLE2 files and MS Office documents";
     homepage = "https://github.com/decalage2/oletools";
-    license = with licenses; [ bsd2 /* and */ mit ];
+    license = with licenses; [
+      bsd2 # and
+      mit
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

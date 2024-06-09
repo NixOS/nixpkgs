@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, meson
-, ninja
-, setuptools
-, toml
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  meson,
+  ninja,
+  setuptools,
+  toml,
+  wheel,
 }:
 
 # TODO: offer meson as a Python package so we have dist-info folder.
@@ -35,7 +36,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ toml ];
 
-  propagatedNativeBuildInputs = [ meson ninja ];
+  propagatedNativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   meta = {
     description = "Create pep517 compliant packages from the meson build system";

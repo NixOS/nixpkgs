@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, requests
-, six
-, sseclient-py
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python-dateutil,
+  requests,
+  six,
+  sseclient-py,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nest"
-  ];
+  pythonImportsCheck = [ "nest" ];
 
   meta = with lib; {
     description = "Python API and command line tool for talking to the Nest™ Thermostat";

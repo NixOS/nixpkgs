@@ -1,22 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, docopt
-, pytz
-, requests
-, setuptools
-, vincenty
-, xmltodict
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  docopt,
+  pytz,
+  requests,
+  setuptools,
+  vincenty,
+  xmltodict,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "buienradar";
   version = "1.0.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.4";
 
   src = fetchFromGitHub {
     owner = "mjj4791";
@@ -35,9 +33,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # require network connection

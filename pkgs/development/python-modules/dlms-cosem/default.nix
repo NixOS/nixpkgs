@@ -1,16 +1,17 @@
-{ lib
-, asn1crypto
-, attrs
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pyserial
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, setuptools
-, structlog
-, typing-extensions
+{
+  lib,
+  asn1crypto,
+  attrs,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pyserial,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  structlog,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-NeTaU8i18Zb39Y2JnYzr87Ozt7Rj074xusL4xaNe0q0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -41,13 +40,9 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "dlms_cosem"
-  ];
+  pythonImportsCheck = [ "dlms_cosem" ];
 
   meta = with lib; {
     description = "Python module to parse DLMS/COSEM";

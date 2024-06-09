@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , wrapGAppsHook4
 , python3
-, appstream-glib
 , blueprint-compiler
 , desktop-file-utils
 , meson
@@ -15,21 +14,21 @@
 , libsoup_3
 , glib-networking
 , libadwaita
+, libsecret
 , nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dialect";
-  version = "2.3.0";
-
-  format = "other";
+  version = "2.4.1";
+  pyproject = false; # built with meson
 
   src = fetchFromGitHub {
     owner = "dialect-app";
     repo = "dialect";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-A6jZHcSzHSmHLvyegyzxjQ6+jL6rLb7oefhryXoSrH4=";
+    hash = "sha256-WEeTdUdhDSfStu+rBYcuk6miuh5e0AsodbyF93Mg4mo=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     libsoup_3
     glib-networking
     libadwaita
+    libsecret
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -74,12 +74,12 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dialect-app/dialect";
     description = "A translation app for GNOME";
-    maintainers = with maintainers; [ aleksana ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ aleksana ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "dialect";
   };
 }

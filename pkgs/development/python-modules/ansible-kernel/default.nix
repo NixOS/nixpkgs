@@ -1,27 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, writeText
-, setuptools
-, ipywidgets
-, six
-, docopt
-, tqdm
-, jupyter
-, psutil
-, pyyaml
-, ansible-runner
-, ansible
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  writeText,
+  setuptools,
+  ipywidgets,
+  six,
+  docopt,
+  tqdm,
+  jupyter,
+  psutil,
+  pyyaml,
+  ansible-runner,
+  ansible,
+  python,
 }:
 
 let
-  kernelSpecFile = writeText "kernel.json" (builtins.toJSON {
-    argv = [ python.interpreter "-m" "ansible_kernel" "-f" "{connection_file}" ];
-    codemirror_mode = "yaml";
-    display_name = "Ansible";
-    language = "ansible";
-  });
+  kernelSpecFile = writeText "kernel.json" (
+    builtins.toJSON {
+      argv = [
+        python.interpreter
+        "-m"
+        "ansible_kernel"
+        "-f"
+        "{connection_file}"
+      ];
+      codemirror_mode = "yaml";
+      display_name = "Ansible";
+      language = "ansible";
+    }
+  );
 in
 buildPythonPackage rec {
   pname = "ansible-kernel";
@@ -35,15 +44,25 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ ipywidgets six docopt tqdm jupyter psutil pyyaml ansible-runner ansible ];
+  dependencies = [
+    ipywidgets
+    six
+    docopt
+    tqdm
+    jupyter
+    psutil
+    pyyaml
+    ansible-runner
+    ansible
+  ];
 
   postPatch = ''
-   # remove when merged
-   # https://github.com/ansible/ansible-jupyter-kernel/pull/82
-   touch LICENSE.md
+    # remove when merged
+    # https://github.com/ansible/ansible-jupyter-kernel/pull/82
+    touch LICENSE.md
 
-   # remove custom install
-   sed -i "s/cmdclass={'install': Installer},//" setup.py
+    # remove custom install
+    sed -i "s/cmdclass={'install': Installer},//" setup.py
   '';
 
   # tests hang with launched kernel

@@ -52,7 +52,10 @@ runCommand "julia-depot" {
   # for finding the extra packages we need to add
   python ${./python}/find_package_implications.py "${closureYaml}" '${lib.generators.toJSON {} packageImplications}' extra_package_names.txt
 
-  # git config --global --add safe.directory '/nix'
+  # Work around new git security features added in git 2.44.1
+  # See https://github.com/NixOS/nixpkgs/issues/315890
+  git config --global --add safe.directory '*'
+
   export JULIA_PKG_USE_CLI_GIT="true"
 
   # At time of writing, this appears to be the only way to turn precompiling's

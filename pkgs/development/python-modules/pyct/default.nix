@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, param
-, pytestCheckHook
-, pythonAtLeast
-, pyyaml
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  param,
+  pytestCheckHook,
+  pythonAtLeast,
+  pyyaml,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyct"
-  ];
+  pythonImportsCheck = [ "pyct" ];
 
   meta = with lib; {
     description = "ClI for Python common tasks for users";

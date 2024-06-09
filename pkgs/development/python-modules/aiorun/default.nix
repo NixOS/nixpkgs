@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, fetchpatch
-, flit-core
-, pygments
-, pytestCheckHook
-, uvloop
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  fetchpatch,
+  flit-core,
+  pygments,
+  pytestCheckHook,
+  uvloop,
 }:
 
 buildPythonPackage rec {
@@ -25,19 +26,16 @@ buildPythonPackage rec {
 
   patches = [
     # Raise flit-core version constrains
-    (fetchpatch { # https://github.com/cjrh/aiorun/pull/85
+    (fetchpatch {
+      # https://github.com/cjrh/aiorun/pull/85
       url = "https://github.com/cjrh/aiorun/commit/a0c027ea331167712738e35ca70fefcd794e16d5.patch";
       hash = "sha256-M1rcrkdFcoFa3IncPnJaRhnXbelyk56QnMGtmgB6bvk=";
     })
   ];
 
-  build-system = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  dependencies = [
-    pygments
-  ];
+  dependencies = [ pygments ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -49,9 +47,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pythonImportsCheck = [
-    "aiorun"
-  ];
+  pythonImportsCheck = [ "aiorun" ];
 
   meta = with lib; {
     description = "Boilerplate for asyncio applications";

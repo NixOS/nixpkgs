@@ -1,23 +1,24 @@
-{ lib
-, attrs
-, buildPythonPackage
-, cbor2
-, fetchFromGitHub
-, exceptiongroup
-, hatchling
-, hatch-vcs
-, hypothesis
-, immutables
-, motor
-, msgpack
-, orjson
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tomlkit
-, typing-extensions
-, ujson
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  cbor2,
+  fetchFromGitHub,
+  exceptiongroup,
+  hatchling,
+  hatch-vcs,
+  hypothesis,
+  immutables,
+  motor,
+  msgpack,
+  orjson,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tomlkit,
+  typing-extensions,
+  ujson,
 }:
 
 buildPythonPackage rec {
@@ -39,12 +40,12 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
-    attrs
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [ attrs ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      typing-extensions
+    ];
 
   nativeCheckInputs = [
     cbor2
@@ -60,7 +61,6 @@ buildPythonPackage rec {
     typing-extensions
     ujson
   ];
-
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -89,9 +89,7 @@ buildPythonPackage rec {
     "test_tomlkit"
   ];
 
-  pythonImportsCheck = [
-    "cattr"
-  ];
+  pythonImportsCheck = [ "cattr" ];
 
   meta = with lib; {
     description = "Python custom class converters for attrs";

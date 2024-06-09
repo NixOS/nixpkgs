@@ -76,6 +76,9 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
+    # this patch disables a flaky test
+    # see https://bugs.gnucash.org/show_bug.cgi?id=799289
+    ./0005-disable-test-lots.patch
     # Fix importing QIF by backporting a fix. remove on next release
     # https://bugs.gnucash.org/show_bug.cgi?id=799262
     (fetchpatch {

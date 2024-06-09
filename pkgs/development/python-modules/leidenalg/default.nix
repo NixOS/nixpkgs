@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, ddt
-, fetchFromGitHub
-, igraph
-, igraph-c
-, libleidenalg
-, pythonOlder
-, setuptools-scm
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  ddt,
+  fetchFromGitHub,
+  igraph,
+  igraph-c,
+  libleidenalg,
+  pythonOlder,
+  setuptools-scm,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,18 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-oaTV+BIB/YQBWKrVXuiIEMH/1MxPxeHhjUzbmxt6hlw=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [
     igraph-c
     libleidenalg
   ];
 
-  propagatedBuildInputs = [
-    igraph
-  ];
+  propagatedBuildInputs = [ igraph ];
 
   checkInputs = [
     ddt

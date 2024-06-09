@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchPypi
-, pybtex
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchPypi,
+  pybtex,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -24,13 +25,9 @@ buildPythonPackage rec {
     pybtex
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pybtex_docutils"
-  ];
+  pythonImportsCheck = [ "pybtex_docutils" ];
 
   meta = with lib; {
     description = "A docutils backend for pybtex";

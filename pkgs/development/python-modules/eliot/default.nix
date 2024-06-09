@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, aiocontextvars
-, boltons
-, hypothesis
-, pyrsistent
-, pytestCheckHook
-, setuptools
-, six
-, testtools
-, zope-interface
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  aiocontextvars,
+  boltons,
+  hypothesis,
+  pyrsistent,
+  pytestCheckHook,
+  setuptools,
+  six,
+  testtools,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
     testtools
   ];
 
-  pythonImportsCheck = [
-    "eliot"
-  ];
+  pythonImportsCheck = [ "eliot" ];
 
   # Tests run eliot-prettyprint in out/bin.
   preCheck = ''

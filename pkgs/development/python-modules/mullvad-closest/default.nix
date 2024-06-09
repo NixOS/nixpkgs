@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, setuptools
-, click
-, geopy
-, ping3
-, requests
-, tabulate
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  click,
+  geopy,
+  ping3,
+  requests,
+  tabulate,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-scJiYjEmnDDElE5rHdPbnnuNjjRB0/X3vNGLoi2MAmo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     click

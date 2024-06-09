@@ -1,11 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 , autoreconfHook, bison, glm, flex, wrapQtAppsHook, cmake, pkg-config
 , freeglut, ghostscriptX, imagemagick, fftw, eigen, libtirpc
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
 , python3, qtbase, qtsvg, boost
 , zlib, perl, curl
 , texinfo
-, texlive
 , texliveSmall
 , darwin
 }:

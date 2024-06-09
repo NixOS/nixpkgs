@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchurl
+, fetchpatch
 , cmake
 , flatbuffers
 , gettext
@@ -17,18 +18,26 @@
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.4.0";
+  version = "4.5.1";
 
   src = fetchurl {
     url =
       "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    hash = "sha256-5zo0yoY0wufm9DWRIccxJ5g4DXn75nT4fd2h+5QP4oQ=";
+    hash = "sha256-grhSuexp5yd/s8h5AdmdSLBmQY85l9HKZ15oTTvC6PI=";
   };
 
   tsl = fetchurl {
     url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-300.xml";
     sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
+
+  patches = [
+    # https://github.com/open-eid/DigiDoc4-Client/pull/1251
+    (fetchpatch {
+      url = "https://github.com/open-eid/DigiDoc4-Client/commit/30281d14c5fb5582832eafbc254b56f8d685227d.patch";
+      hash = "sha256-nv23NbPUogOhS8No3SMIrAcPChl+d1HkxnePpCKIoUw=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake gettext pkg-config qttools ];
 
@@ -64,6 +73,6 @@ mkDerivation rec {
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mmahut yana ];
+    maintainers = with maintainers; [ flokli mmahut yana ];
   };
 }

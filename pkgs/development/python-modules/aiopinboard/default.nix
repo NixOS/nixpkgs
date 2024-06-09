@@ -1,16 +1,17 @@
-{ lib
-, aiohttp
-, aresponses
-, arrow
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, frozenlist
-, poetry-core
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  arrow,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  frozenlist,
+  poetry-core,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-/N9r17e0ZvPmcqW/XtRyAENKCGRzWqeOSKPpWHHYomg=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -45,10 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-
-  pythonImportsCheck = [
-    "aiopinboard"
-  ];
+  pythonImportsCheck = [ "aiopinboard" ];
 
   meta = with lib; {
     description = "Library to interact with the Pinboard API";

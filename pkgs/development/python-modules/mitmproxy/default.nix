@@ -1,46 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pythonRelaxDepsHook,
   # Mitmproxy requirements
-, aioquic
-, asgiref
-, blinker
-, brotli
-, certifi
-, cryptography
-, flask
-, h11
-, h2
-, hyperframe
-, kaitaistruct
-, ldap3
-, mitmproxy-macos
-, mitmproxy-rs
-, msgpack
-, passlib
-, protobuf
-, publicsuffix2
-, pyopenssl
-, pyparsing
-, pyperclip
-, ruamel-yaml
-, setuptools
-, sortedcontainers
-, tornado
-, urwid-mitmproxy
-, wsproto
-, zstandard
+  aioquic,
+  asgiref,
+  blinker,
+  brotli,
+  certifi,
+  cryptography,
+  flask,
+  h11,
+  h2,
+  hyperframe,
+  kaitaistruct,
+  ldap3,
+  mitmproxy-macos,
+  mitmproxy-rs,
+  msgpack,
+  passlib,
+  protobuf,
+  publicsuffix2,
+  pyopenssl,
+  pyparsing,
+  pyperclip,
+  ruamel-yaml,
+  setuptools,
+  sortedcontainers,
+  tornado,
+  urwid-mitmproxy,
+  wsproto,
+  zstandard,
   # Additional check requirements
-, hypothesis
-, parver
-, pytest-asyncio
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, requests
+  hypothesis,
+  parver,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -57,9 +58,7 @@ buildPythonPackage rec {
     hash = "sha256-YjvGsnpQQ8GWLyKmnd3lOxesnr+F2xCNXyahZh0JQnc=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [
     "aioquic"
@@ -94,9 +93,7 @@ buildPythonPackage rec {
     urwid-mitmproxy
     wsproto
     zstandard
-  ] ++ lib.optionals stdenv.isDarwin [
-    mitmproxy-macos
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ mitmproxy-macos ];
 
   nativeCheckInputs = [
     hypothesis

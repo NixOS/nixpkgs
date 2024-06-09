@@ -1,7 +1,8 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, portalocker
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  portalocker,
 }:
 
 buildPythonPackage rec {

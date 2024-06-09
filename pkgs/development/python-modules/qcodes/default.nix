@@ -1,49 +1,50 @@
-{ lib
-, broadbean
-, buildPythonPackage
-, cf-xarray
-, dask
-, deepdiff
-, fetchFromGitHub
-, h5netcdf
-, h5py
-, hypothesis
-, importlib-metadata
-, ipykernel
-, ipython
-, ipywidgets
-, jsonschema
-, lxml
-, matplotlib
-, numpy
-, opencensus
-, opencensus-ext-azure
-, opentelemetry-api
-, packaging
-, pandas
-, pillow
-, pip
-, pytest-asyncio
-, pytest-mock
-, pytest-rerunfailures
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyvisa
-, pyvisa-sim
-, rsa
-, ruamel-yaml
-, setuptools
-, sphinx
-, tabulate
-, tqdm
-, typing-extensions
-, uncertainties
-, versioningit
-, websockets
-, wheel
-, wrapt
-, xarray
+{
+  lib,
+  broadbean,
+  buildPythonPackage,
+  cf-xarray,
+  dask,
+  deepdiff,
+  fetchFromGitHub,
+  h5netcdf,
+  h5py,
+  hypothesis,
+  importlib-metadata,
+  ipykernel,
+  ipython,
+  ipywidgets,
+  jsonschema,
+  lxml,
+  matplotlib,
+  numpy,
+  opencensus,
+  opencensus-ext-azure,
+  opentelemetry-api,
+  packaging,
+  pandas,
+  pillow,
+  pip,
+  pytest-asyncio,
+  pytest-mock,
+  pytest-rerunfailures,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyvisa,
+  pyvisa-sim,
+  rsa,
+  ruamel-yaml,
+  setuptools,
+  sphinx,
+  tabulate,
+  tqdm,
+  typing-extensions,
+  uncertainties,
+  versioningit,
+  websockets,
+  wheel,
+  wrapt,
+  xarray,
 }:
 
 buildPythonPackage rec {
@@ -94,9 +95,7 @@ buildPythonPackage rec {
     websockets
     wrapt
     xarray
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [
     deepdiff
@@ -150,9 +149,7 @@ buildPythonPackage rec {
     "test_step_ramp"
   ];
 
-  pythonImportsCheck = [
-    "qcodes"
-  ];
+  pythonImportsCheck = [ "qcodes" ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

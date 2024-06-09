@@ -15,6 +15,7 @@
 , gnome-desktop
 , gspell
 , gtk4
+, gtksourceview5
 , gst_all_1
 , json-glib
 , libgcrypt
@@ -28,17 +29,17 @@
 , plugins ? [ ]
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chatty";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Chatty";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-7SdoN9JjGwELOdISJwS1Afcydp/rE2uq/tHO/UrFKNU=";
+    hash = "sha256-Ywed/8PhOgmzcka+5dyxjmWTcDBPF90LW+C2eeQmyLo=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
     gnome-desktop
     gspell
     gtk4
+    gtksourceview5
     gst_all_1.gstreamer
     json-glib
     libgcrypt
@@ -82,9 +84,9 @@ stdenv.mkDerivation rec {
     description = "XMPP and SMS messaging via libpurple and ModemManager";
     mainProgram = "chatty";
     homepage = "https://gitlab.gnome.org/World/Chatty";
-    changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${src.rev}/NEWS";
+    changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${finalAttrs.src.rev}/NEWS";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.linux;
   };
-}
+})

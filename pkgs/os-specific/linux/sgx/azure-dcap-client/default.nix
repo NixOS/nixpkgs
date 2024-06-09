@@ -16,7 +16,7 @@ let
     find "$out" -mindepth 1 -delete
     cp ${lib.concatStringsSep " " list} "$out/"
   '';
-  headers = linkFarmFromDrvs "azure-dcpa-client-intel-headers" [
+  headers = linkFarmFromDrvs "azure-dcap-client-intel-headers" [
     (fetchFromGitHub rec {
       name = "${repo}-headers";
       owner = "intel";
@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
     find -L '${headers}' -type f -exec ln -s {} src/Linux/ext/intel \;
 
     substitute src/Linux/Makefile{.in,} \
-      --replace '##CURLINC##' '${curl.dev}/include/curl/' \
-      --replace '$(TEST_SUITE): $(PROVIDER_LIB) $(TEST_SUITE_OBJ)' '$(TEST_SUITE): $(TEST_SUITE_OBJ)'
+      --replace-fail '##CURLINC##' '${curl.dev}/include/curl/' \
+      --replace-fail '$(TEST_SUITE): $(PROVIDER_LIB) $(TEST_SUITE_OBJ)' '$(TEST_SUITE): $(TEST_SUITE_OBJ)'
   '';
 
   env.NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
   # $(nix-build -A sgx-azure-dcap-client.tests.suite)/bin/tests
   passthru.tests.suite = callPackage ./test-suite.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Interfaces between SGX SDKs and the Azure Attestation SGX Certification Cache";
     homepage = "https://github.com/microsoft/azure-dcap-client";
-    maintainers = with maintainers; [ phlip9 trundle veehaitch ];
+    maintainers = with lib.maintainers; [ phlip9 trundle veehaitch ];
     platforms = [ "x86_64-linux" ];
-    license = [ licenses.mit ];
+    license = [ lib.licenses.mit ];
   };
 }

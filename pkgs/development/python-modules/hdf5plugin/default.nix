@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, h5py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  h5py,
 }:
 
 buildPythonPackage rec {
@@ -16,16 +17,12 @@ buildPythonPackage rec {
     hash = "sha256-MnqY1PyGzo31H696J9CekiA2rJrUYzUMDC3UJMZaFLA=";
   };
 
-  dependencies = [
-    h5py
-  ];
+  dependencies = [ h5py ];
 
   checkPhase = ''
     python test/test.py
   '';
-  pythonImportsCheck = [
-    "hdf5plugin"
-  ];
+  pythonImportsCheck = [ "hdf5plugin" ];
 
   preBuild = ''
     mkdir src/hdf5plugin/plugins
@@ -41,5 +38,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
   };
-
 }

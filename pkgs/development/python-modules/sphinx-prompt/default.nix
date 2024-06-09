@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
 
-# build-system
-, poetry-core
-, poetry-dynamic-versioning
+  # build-system
+  poetry-core,
+  poetry-dynamic-versioning,
 
-# dependencies
-, docutils
-, pygments
-, sphinx
+  # dependencies
+  docutils,
+  pygments,
+  sphinx,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -51,9 +52,7 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # versions >=1.8.0 cannot be build from source
   passthru.skipBulkUpdate = true;

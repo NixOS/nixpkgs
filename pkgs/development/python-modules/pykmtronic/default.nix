@@ -1,8 +1,9 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, lxml
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,10 @@ buildPythonPackage rec {
     hash = "sha256-8qLyBJp7C93x0PWbgDAtNEDJ5VLNfwZ3DRZfudRCBgo=";
   };
 
-  propagatedBuildInputs = [ aiohttp lxml ];
+  propagatedBuildInputs = [
+    aiohttp
+    lxml
+  ];
 
   # Project has no tests
   doCheck = false;

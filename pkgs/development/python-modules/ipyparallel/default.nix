@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, decorator
-, entrypoints
-, fetchPypi
-, hatchling
-, ipykernel
-, ipython
-, jupyter-client
-, psutil
-, python-dateutil
-, pythonOlder
-, pyzmq
-, tornado
-, tqdm
-, traitlets
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  entrypoints,
+  fetchPypi,
+  hatchling,
+  ipykernel,
+  ipython,
+  jupyter-client,
+  psutil,
+  python-dateutil,
+  pythonOlder,
+  pyzmq,
+  tornado,
+  tqdm,
+  traitlets,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace '"jupyterlab==4.*",' ""
   '';
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     decorator
@@ -57,11 +56,9 @@ buildPythonPackage rec {
   # Requires access to cluster
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ipyparallel"
-  ];
+  pythonImportsCheck = [ "ipyparallel" ];
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Interactive Parallel Computing with IPython";
     homepage = "https://ipyparallel.readthedocs.io/";
     changelog = "https://github.com/ipython/ipyparallel/blob/${version}/docs/source/changelog.md";

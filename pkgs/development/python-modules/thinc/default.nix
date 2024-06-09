@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, Accelerate
-, blis
-, buildPythonPackage
-, catalogue
-, confection
-, CoreFoundation
-, CoreGraphics
-, CoreVideo
-, cymem
-, cython_0
-, fetchPypi
-, hypothesis
-, mock
-, murmurhash
-, numpy
-, plac
-, preshed
-, pydantic
-, pytestCheckHook
-, python
-, pythonOlder
-, setuptools
-, srsly
-, tqdm
-, typing-extensions
-, wasabi
+{
+  lib,
+  stdenv,
+  Accelerate,
+  blis,
+  buildPythonPackage,
+  catalogue,
+  confection,
+  CoreFoundation,
+  CoreGraphics,
+  CoreVideo,
+  cymem,
+  cython_0,
+  fetchPypi,
+  hypothesis,
+  mock,
+  murmurhash,
+  numpy,
+  plac,
+  preshed,
+  pydantic,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools,
+  srsly,
+  tqdm,
+  typing-extensions,
+  wasabi,
 }:
 
 buildPythonPackage rec {
@@ -45,18 +46,16 @@ buildPythonPackage rec {
       --replace "preshed>=3.0.2,<3.1.0" "preshed"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    cython_0
-  ] ++ lib.optionals stdenv.isDarwin [
-    Accelerate
-    CoreFoundation
-    CoreGraphics
-    CoreVideo
-  ];
+  buildInputs =
+    [ cython_0 ]
+    ++ lib.optionals stdenv.isDarwin [
+      Accelerate
+      CoreFoundation
+      CoreGraphics
+      CoreVideo
+    ];
 
   propagatedBuildInputs = [
     blis
@@ -71,9 +70,7 @@ buildPythonPackage rec {
     srsly
     tqdm
     wasabi
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
   nativeCheckInputs = [
     hypothesis
@@ -90,9 +87,7 @@ buildPythonPackage rec {
     rm -r thinc
   '';
 
-  pythonImportsCheck = [
-    "thinc"
-  ];
+  pythonImportsCheck = [ "thinc" ];
 
   meta = with lib; {
     description = "Library for NLP machine learning";

@@ -1,7 +1,8 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, protobuf
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  protobuf,
 }:
 
 buildPythonPackage rec {

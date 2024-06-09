@@ -20,6 +20,10 @@ python3Packages.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
+  pythonRelaxDeps = [
+    "wyoming"
+  ];
+
   pythonRemoveDeps = [
     "tflite-runtime-nightly"
   ];

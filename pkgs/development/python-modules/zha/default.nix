@@ -1,27 +1,28 @@
-{ lib
-, awesomeversion
-, bellows
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial
-, pyserial-asyncio
-, pyserial-asyncio-fast
-, pytest-asyncio
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, python-slugify
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, universal-silabs-flasher
-, wheel
-, zha-quirks
-, zigpy
-, zigpy-deconz
-, zigpy-xbee
-, zigpy-zigate
-, zigpy-znp
+{
+  lib,
+  awesomeversion,
+  bellows,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial,
+  pyserial-asyncio,
+  pyserial-asyncio-fast,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  python-slugify,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  setuptools,
+  universal-silabs-flasher,
+  wheel,
+  zha-quirks,
+  zigpy,
+  zigpy-deconz,
+  zigpy-xbee,
+  zigpy-zigate,
+  zigpy-znp,
 }:
 
 buildPythonPackage rec {
@@ -50,9 +51,7 @@ buildPythonPackage rec {
     "zha-quirks"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     setuptools
@@ -82,9 +81,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "zha"
-  ];
+  pythonImportsCheck = [ "zha" ];
 
   disabledTests = [
     # Tests are long-running and often keep hanging
@@ -107,9 +104,7 @@ buildPythonPackage rec {
     "test_zha_group_light_entity"
   ];
 
-  disabledTestPaths = [
-    "tests/test_cluster_handlers.py"
-  ];
+  disabledTestPaths = [ "tests/test_cluster_handlers.py" ];
 
   pytestFlagsArray = [
     "-v"

@@ -1,17 +1,18 @@
-{ asttokens
-, buildPythonPackage
-, cython
-, executing
-, fetchFromGitHub
-, lib
-, littleutils
-, pure-eval
-, pygments
-, pytestCheckHook
-, setuptools-scm
-, typeguard
-, setuptools
-, wheel
+{
+  asttokens,
+  buildPythonPackage,
+  cython,
+  executing,
+  fetchFromGitHub,
+  lib,
+  littleutils,
+  pure-eval,
+  pygments,
+  pytestCheckHook,
+  setuptools-scm,
+  typeguard,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {

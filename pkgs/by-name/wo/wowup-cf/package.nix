@@ -27,6 +27,7 @@ in appimageTools.wrapType1 {
     longDescription = ''
     WowUp is the community centered World of Warcraft addon updater. We attempt to bring the addon community together in an easy to use updater application. We have an ever growing list of supported features.
     '';
+    mainProgram = "wowup-cf";
     homepage = "https://wowup.io/";
     downloadPage = "https://github.com/WowUp/WowUp.CF/releases";
     license = licenses.unfree;

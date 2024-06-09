@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pythonOlder
-, pydantic
-, requests
-, tqdm
-, typer
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
+  pydantic,
+  requests,
+  tqdm,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     typer
   ];
 
-  doCheck = false;  # majority of tests require Docker and/or network access
+  doCheck = false; # majority of tests require Docker and/or network access
   pythonImportsCheck = [ "python_on_whales" ];
 
   meta = with lib; {

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cargo
-, libiconv
-, fetchFromGitHub
-, json-stream
-, json-stream-rs-tokenizer
-, pythonOlder
-, rustc
-, rustPlatform
-, setuptools
-, setuptools-rust
-, wheel
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cargo,
+  libiconv,
+  fetchFromGitHub,
+  json-stream,
+  json-stream-rs-tokenizer,
+  pythonOlder,
+  rustc,
+  rustPlatform,
+  setuptools,
+  setuptools-rust,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -44,24 +45,20 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   # Tests depend on json-stream, which depends on this package.
   # To avoid infinite recursion, we only enable tests when building passthru.tests.
   doCheck = false;
 
-  checkInputs = [
-    json-stream
-  ];
+  checkInputs = [ json-stream ];
 
-  pythonImportsCheck = [
-    "json_stream_rs_tokenizer"
-  ];
+  pythonImportsCheck = [ "json_stream_rs_tokenizer" ];
 
   passthru.tests = {
-    runTests = json-stream-rs-tokenizer.overrideAttrs (_: { doCheck = true; });
+    runTests = json-stream-rs-tokenizer.overrideAttrs (_: {
+      doCheck = true;
+    });
   };
 
   meta = with lib; {

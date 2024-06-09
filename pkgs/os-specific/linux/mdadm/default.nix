@@ -17,6 +17,15 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/e58d2b17d3c40faffc0d426aab00184f28d9dafa/srcpkgs/mdadm/patches/musl.patch";
       hash = "sha256-TIcQs+8RM5Q6Z8MHkI50kaJd7f9WdS/EVI16F7b2+SA=";
     })
+    # Fixes build on musl 1.2.5+
+    (fetchurl {
+      url = "https://lore.kernel.org/linux-raid/20240220165158.3521874-1-raj.khem@gmail.com/raw";
+      hash = "sha256-JOZ8n7zi+nq236NPpB4e2gUy8I3l3DbcoLhpeL73f98=";
+    })
+    (fetchurl {
+      url = "https://github.com/md-raid-utilities/mdadm/commit/9dbd11e091f84eb0bf9d717283774816c4c4453d.patch";
+      hash = "sha256-8GdjP1ceVwejTOFXcHXG8wkIF9/D6hOUGD6btvuqs24=";
+    })
   ];
 
   makeFlags = [

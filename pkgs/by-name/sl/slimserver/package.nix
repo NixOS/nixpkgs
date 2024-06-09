@@ -33,13 +33,13 @@ let
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "8.5.1";
+  version = "8.5.2";
 
   src = fetchFromGitHub {
     owner = "LMS-Community";
     repo = "slimserver";
     rev = version;
-    hash = "sha256-ULyYZC0/ruJCdwR6cxvBRV1S3DTBJiNua64foi80qvI=";
+    hash = "sha256-262SHaxt5ow3nJtNVk10sbiPUfDb/U+Ab97DRjkJZFI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, click
-, click-log
-, paho-mqtt
-, pyaml
-, pyserial
-, schema
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  appdirs,
+  click,
+  click-log,
+  paho-mqtt,
+  pyaml,
+  pyserial,
+  schema,
+  simplejson,
 }:
 buildPythonPackage rec {
   pname = "bcg";

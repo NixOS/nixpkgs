@@ -17,9 +17,6 @@ appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  multiArch = false; # no 32bit needed
-  extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
-
   meta = with lib; {
     description = "Sylk WebRTC client";
     homepage = "https://sylkserver.com/";

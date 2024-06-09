@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, filelock
-, requests
-, unicode-character-database
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  filelock,
+  requests,
+  unicode-character-database,
 }:
 
 buildPythonPackage rec {

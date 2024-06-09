@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , autoreconfHook
 , ncurses
 , libxcrypt
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.gnu.org/software/screen/";
     description = "A window manager that multiplexes a physical terminal";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
 
     longDescription =
       '' GNU Screen is a full-screen window manager that multiplexes a physical

@@ -1,8 +1,9 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, azure-core
-, typing-extensions
+{
+  pkgs,
+  buildPythonPackage,
+  fetchPypi,
+  azure-core,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,10 @@ buildPythonPackage rec {
   # not included
   doCheck = false;
 
-  pythonImportsCheck = [ "azure.mgmt.core" "azure.core" ];
+  pythonImportsCheck = [
+    "azure.mgmt.core"
+    "azure.core"
+  ];
 
   meta = with pkgs.lib; {
     description = "Microsoft Azure Management Core Library for Python";

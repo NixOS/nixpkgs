@@ -1,17 +1,18 @@
-{ lib
-, aiofiles
-, async-timeout
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, isPy3k
-, libusb1
-, mock
-, pyasn1
-, pythonAtLeast
-, pycryptodome
-, pytestCheckHook
-, rsa
+{
+  lib,
+  aiofiles,
+  async-timeout,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  isPy3k,
+  libusb1,
+  mock,
+  pyasn1,
+  pythonAtLeast,
+  pycryptodome,
+  pytestCheckHook,
+  rsa,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
       aiofiles
       async-timeout
     ];
-    usb = [
-      libusb1
-    ];
+    usb = [ libusb1 ];
   };
 
   nativeCheckInputs = [
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "adb_shell"
-  ];
+  pythonImportsCheck = [ "adb_shell" ];
 
   meta = with lib; {
     description = "Python implementation of ADB with shell and FileSync functionality";

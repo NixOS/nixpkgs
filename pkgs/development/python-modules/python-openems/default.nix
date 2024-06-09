@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cython_0
-, openems
-, csxcad
-, boost
-, python-csxcad
-, numpy
-, h5py
+{
+  lib,
+  buildPythonPackage,
+  cython_0,
+  openems,
+  csxcad,
+  boost,
+  python-csxcad,
+  numpy,
+  h5py,
 }:
 
 buildPythonPackage rec {
@@ -31,7 +32,11 @@ buildPythonPackage rec {
     h5py
   ];
 
-  setupPyBuildFlags = [ "-I${openems}/include" "-L${openems}/lib" "-R${openems}/lib" ];
+  setupPyBuildFlags = [
+    "-I${openems}/include"
+    "-L${openems}/lib"
+    "-R${openems}/lib"
+  ];
   pythonImportsCheck = [ "openEMS" ];
 
   meta = with lib; {

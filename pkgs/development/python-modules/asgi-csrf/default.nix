@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, itsdangerous
-, python-multipart
-, pytestCheckHook
-, starlette
-, httpx
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  itsdangerous,
+  python-multipart,
+  pytestCheckHook,
+  starlette,
+  httpx,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {

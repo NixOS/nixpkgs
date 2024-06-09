@@ -76,6 +76,6 @@ buildGraalvmNativeImage rec {
     homepage = "https://github.com/clojure-lsp/clojure-lsp";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ ericdallo babariviere ];
+    maintainers = with maintainers; [ ericdallo ];
   };
 }

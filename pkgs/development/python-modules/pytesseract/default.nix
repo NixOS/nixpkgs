@@ -1,12 +1,13 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, packaging
-, pillow
-, tesseract
-, substituteAll
-, pytestCheckHook
-, setuptools
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  packaging,
+  pillow,
+  tesseract,
+  substituteAll,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    tesseract
-  ];
+  buildInputs = [ tesseract ];
 
   propagatedBuildInputs = [
     packaging

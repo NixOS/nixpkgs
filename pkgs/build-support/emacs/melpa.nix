@@ -35,25 +35,41 @@ in
   pname
   /*
     ename: Original Emacs package name, possibly containing special symbols.
+    Default: pname
   */
-, ename ? null
+, ename ? pname
 , version
-, recipe
+  /*
+    commit: Optional package history commit.
+    Default: src.rev or "unknown"
+    This will be written into the generated package but it is not needed during
+    the build process.
+  */
+, commit ? (args.src.rev or "unknown")
+  /*
+    files: Optional recipe property specifying the files used to build the package.
+    If null, do not set it in recipe, keeping the default upstream behaviour.
+    Default: null
+  */
+, files ? null
+  /*
+    recipe: Optional MELPA recipe.
+    Default: a minimally functional recipe
+  */
+, recipe ? (writeText "${pname}-recipe" ''
+    (${ename} :fetcher git :url ""
+              ${lib.optionalString (files != null) ":files ${files}"})
+  '')
 , meta ? {}
 , ...
 }@args:
 
 genericBuild ({
 
-  ename =
-    if ename == null
-    then pname
-    else ename;
-
   elpa2nix = ./elpa2nix.el;
   melpa2nix = ./melpa2nix.el;
 
-  inherit packageBuild;
+  inherit packageBuild commit ename recipe;
 
   preUnpack = ''
     mkdir -p "$NIX_BUILD_TOP/recipes"

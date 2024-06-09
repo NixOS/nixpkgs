@@ -1,7 +1,6 @@
 { lib
 , dbus
 , fetchFromGitHub
-, fetchPypi
 , python3
 }:
 

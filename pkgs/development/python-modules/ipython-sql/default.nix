@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, ipython
-, ipython-genutils
-, prettytable
-, sqlalchemy
-, sqlparse
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  ipython,
+  ipython-genutils,
+  prettytable,
+  sqlalchemy,
+  sqlparse,
 }:
 buildPythonPackage rec {
   pname = "ipython-sql";
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-PbPOf5qV369Dh2+oCxa9u5oE3guhIELKsT6fWW/P/b4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     ipython

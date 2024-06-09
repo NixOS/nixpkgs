@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pkg-config
-, pytestCheckHook
-, cffi
-, secp256k1
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pkg-config,
+  pytestCheckHook,
+  cffi,
+  secp256k1,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ cffi secp256k1 ];
+  propagatedBuildInputs = [
+    cffi
+    secp256k1
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

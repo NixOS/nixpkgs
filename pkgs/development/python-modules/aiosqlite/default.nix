@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -21,26 +22,16 @@ buildPythonPackage rec {
     hash = "sha256-JQ9iNxK7FvBhPyr825d+8P5ZYFztDIX3gOwp4FPfyU4=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ typing-extensions ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Tests are not pick-up automatically by the hook
-  pytestFlagsArray = [
-    "aiosqlite/tests/*.py"
-  ];
+  pytestFlagsArray = [ "aiosqlite/tests/*.py" ];
 
-  pythonImportsCheck = [
-    "aiosqlite"
-  ];
+  pythonImportsCheck = [ "aiosqlite" ];
 
   meta = with lib; {
     description = "Asyncio bridge to the standard sqlite3 module";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, setuptools
-, strct
-, pytestCheckHook
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  setuptools,
+  strct,
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
@@ -40,13 +41,9 @@ buildPythonPackage rec {
       --replace-fail '"0+unknown"' '"${version}"'
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  dependencies = [
-    strct
-  ];
+  dependencies = [ strct ];
 
   pythonImportsCheck = [
     "birch"
@@ -63,7 +60,6 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME="$(mktemp -d)"
   '';
-
 
   meta = with lib; {
     description = "Simple hierarchical configuration for Python packages";

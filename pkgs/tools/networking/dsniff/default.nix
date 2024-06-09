@@ -1,9 +1,6 @@
-{ gcc9Stdenv, lib, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl
+{ stdenv, lib, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl
 , rpcsvc-proto, libtirpc, libnsl, libnl
 }:
-
-# We compile with GCC 9 since GCC 10 segfaults on the code
-# (see https://bugzilla.redhat.com/show_bug.cgi?id=1862809).
 
 let
   /*
@@ -42,7 +39,7 @@ let
     inherit (openssl) name;
     paths = with openssl.override { static = true; }; [ out dev ];
   };
-in gcc9Stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "dsniff";
   version = "2.4b1";
   # upstream is so old that nearly every distribution packages the beta version.

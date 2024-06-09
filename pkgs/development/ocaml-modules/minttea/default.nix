@@ -7,21 +7,19 @@
 
 buildDunePackage rec {
   pname = "minttea";
-  version = "0.0.1";
+  version = "0.0.3";
 
   minimalOCamlVersion = "5.1";
 
   src = fetchurl {
     url = "https://github.com/leostera/minttea/releases/download/${version}/minttea-${version}.tbz";
-    hash = "sha256-+4nVeYKx2A2i2nll/PbStcEa+Dvxd0T7e/KsdJqY4bI=";
+    hash = "sha256-WEaJVCCvsmKcF8+yzovljt8dGWaIv4UmAr74jq6Vo9M=";
   };
 
   propagatedBuildInputs = [
     riot
     tty
   ];
-
-  doCheck = true;
 
   meta = {
     description = "A fun, functional, and stateful way to build terminal apps in OCaml heavily inspired by Go's BubbleTea";

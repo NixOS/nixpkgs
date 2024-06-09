@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-# Python deps
-, attrs
-, cbor2
-, certvalidator
-, cryptography
-, ecdsa
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  # Python deps
+  attrs,
+  cbor2,
+  certvalidator,
+  cryptography,
+  ecdsa,
+  setuptools,
 }:
 
 buildPythonPackage rec {

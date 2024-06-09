@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, imagemagick
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  imagemagick,
+  matplotlib,
 }:
 
 buildPythonPackage rec {

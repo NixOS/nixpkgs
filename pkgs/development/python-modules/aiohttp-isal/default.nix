@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, aiohttp
-, isal
+  # dependencies
+  aiohttp,
+  isal,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,26 +26,20 @@ buildPythonPackage rec {
     hash = "sha256-rSXV5Z5JdznQGtRI83UIbaSfbIYkUHphJTVK/LM2V4U=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
     isal
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     sed -i '/addopts/d' pyproject.toml
   '';
 
-  pythonImportsCheck = [
-    "aiohttp_isal"
-  ];
+  pythonImportsCheck = [ "aiohttp_isal" ];
 
   meta = with lib; {
     changelog = "https://github.com/bdraco/aiohttp-isal/blob/${src.rev}/CHANGELOG.md";

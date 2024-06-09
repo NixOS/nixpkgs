@@ -1,15 +1,16 @@
-{ buildPythonPackage
-, fetchPypi
-, hatch-vcs
-, importlib-metadata
-, lib
-, manifestoo-core
-, nix-update-script
-, pytestCheckHook
-, pythonOlder
-, textual
-, typer
-, typing-extensions
+{
+  buildPythonPackage,
+  fetchPypi,
+  hatch-vcs,
+  importlib-metadata,
+  lib,
+  manifestoo-core,
+  nix-update-script,
+  pytestCheckHook,
+  pythonOlder,
+  textual,
+  typer,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -22,21 +23,18 @@ buildPythonPackage rec {
     hash = "sha256-gCGchc+fShBgt6fVJAx80+QnH+vxWo3jsIyePkFwhYE=";
   };
 
-  nativeBuildInputs = [
-    hatch-vcs
-  ];
+  nativeBuildInputs = [ hatch-vcs ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = [
-    manifestoo-core
-    textual
-    typer
-  ]
-  ++ typer.passthru.optional-dependencies.all
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs =
+    [
+      manifestoo-core
+      textual
+      typer
+    ]
+    ++ typer.passthru.optional-dependencies.all
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   passthru.updateScript = nix-update-script { };
 

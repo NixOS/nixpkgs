@@ -1,9 +1,11 @@
-{ buildPythonPackage
-, exempi
-, fetchFromGitHub
-, mock
-, pytz
-, lib, stdenv
+{
+  buildPythonPackage,
+  exempi,
+  fetchFromGitHub,
+  mock,
+  pytz,
+  lib,
+  stdenv,
 }:
 
 buildPythonPackage {

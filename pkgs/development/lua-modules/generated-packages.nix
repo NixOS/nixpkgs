@@ -1913,6 +1913,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+luarocks = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl }:
+buildLuarocksPackage {
+  pname = "luarocks";
+  version = "3.11.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luarocks-3.11.0-1.rockspec";
+    sha256 = "0pi55445dskpw6nhrq52589h4v39fsf23c0kp8d4zg2qaf6y2n38";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "luarocks";
+    repo = "luarocks";
+    rev = "v3.11.0";
+    hash = "sha256-mSwwBuLWoMT38iYaV/BTdDmmBz4heTRJzxBHC0Vrvc4=";
+  };
+
+
+  meta = {
+    homepage = "http://www.luarocks.org";
+    description = "A package manager for Lua modules.";
+    maintainers = with lib.maintainers; [ mrcjkb teto ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 luarocks-build-rust-mlua = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl }:
 buildLuarocksPackage {
   pname = "luarocks-build-rust-mlua";
@@ -2105,6 +2129,30 @@ buildLuarocksPackage {
     homepage = "https://github.com/lunarmodules/luasystem";
     description = "Platform independent system calls for Lua.";
     license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+  };
+}) {};
+
+luatext = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder }:
+buildLuarocksPackage {
+  pname = "luatext";
+  version = "1.2.1-0";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luatext-1.2.1-0.rockspec";
+    sha256 = "12ia4ibihd537mjmvdasnwgkinaygqwk03bsj3s0qrfhy6yz84ka";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "f4z3r";
+    repo = "luatext";
+    rev = "v1.2.1";
+    hash = "sha256-StxCmjSSy3ok0hNkKTQyq4yS1LfX980R5pULCUjLPek=";
+  };
+
+  disabled = luaOlder "5.1";
+
+  meta = {
+    homepage = "https://github.com/f4z3r/luatext/tree/main";
+    description = "A small library to print colored text";
+    license.fullName = "MIT";
   };
 }) {};
 
@@ -2635,6 +2683,27 @@ buildLuarocksPackage {
     homepage = "http://github.com/nvim-lua/plenary.nvim";
     description = "lua functions you don't want to write ";
     license.fullName = "MIT/X11";
+  };
+}) {};
+
+psl = callPackage({ buildLuarocksPackage, fetchurl, fetchzip }:
+buildLuarocksPackage {
+  pname = "psl";
+  version = "0.3-0";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/psl-0.3-0.rockspec";
+    sha256 = "1x7sc8n780k67v31bvqqxhh6ihy0k91zmp6xcxmkifr0gd008x9z";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/daurnimator/lua-psl/archive/v0.3.zip";
+    sha256 = "1x9zskjn6fp9343w9314104128ik4lbk98pg6zfhl1v35107m1jx";
+  };
+
+
+  meta = {
+    homepage = "https://github.com/daurnimator/lua-psl";
+    description = "Bindings to libpsl, a C library that handles the Public Suffix List (PSL)";
+    license.fullName = "MIT";
   };
 }) {};
 

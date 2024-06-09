@@ -1,6 +1,7 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "about_time"
-  ];
+  pythonImportsCheck = [ "about_time" ];
 
   meta = with lib; {
     description = "A cool helper for tracking time and throughput of code blocks, with beautiful human friendly renditions";

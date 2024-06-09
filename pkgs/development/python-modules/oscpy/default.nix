@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "oscpy";

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, marshmallow
-, poetry-core
-, poetry-dynamic-versioning
-, pytestCheckHook
-, pythonOlder
-, typing-inspect
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  marshmallow,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pytestCheckHook,
+  pythonOlder,
+  typing-inspect,
 }:
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.6.5";
+  version = "0.6.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "lidatong";
     repo = "dataclasses-json";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YkGxUQgnUB7WfpsZz74b3j/TIqJi2ihsk9Ib05S7uPM=";
+    hash = "sha256-JpZwRln7QC0SO/+8xFxc6xrC+ZBFSHVQ9NJscAO+Lf8=";
   };
 
   postPatch = ''
@@ -51,9 +52,7 @@ buildPythonPackage rec {
     "tests/test_annotations.py"
   ];
 
-  pythonImportsCheck = [
-    "dataclasses_json"
-  ];
+  pythonImportsCheck = [ "dataclasses_json" ];
 
   meta = with lib; {
     description = "Simple API for encoding and decoding dataclasses to and from JSON";

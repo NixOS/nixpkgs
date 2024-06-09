@@ -4,6 +4,7 @@
 , python3
 , cunit
 , dpdk
+, fuse3
 , libaio
 , libbsd
 , libuuid
@@ -22,19 +23,22 @@
 stdenv.mkDerivation rec {
   pname = "spdk";
 
-  version = "23.09";
+  version = "24.01";
 
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
     rev = "v${version}";
-    sha256 = "sha256-P10NDa+MIEY8B3bu34Dq2keyuv2a24XV5Wf+Ah701b8=";
+    sha256 = "sha256-5znYELR6WvVXbfFKAcRtJnSwAE5WHmA8v1rvZUtszS4=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     python3
+    python3.pkgs.pip
     python3.pkgs.setuptools
+    python3.pkgs.wheel
+    python3.pkgs.wrapPython
     pkg-config
     ensureNewerSourcesForZipFilesHook
   ];
@@ -42,6 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cunit
     dpdk
+    fuse3
     jansson
     libaio
     libbsd
@@ -56,10 +61,8 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
-  patches = [
-    # https://review.spdk.io/gerrit/c/spdk/spdk/+/20394
-    ./setuptools.patch
-    ./0001-fix-setuptools-installation.patch
+  propagatedBuildInputs = [
+    python3.pkgs.configshell
   ];
 
   postPatch = ''
@@ -70,11 +73,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-dpdk=${dpdk}"
-    "--pydir=${placeholder "out"}"
   ];
 
   postCheck = ''
     python3 -m spdk
+  '';
+
+  postFixup = ''
+    wrapPythonPrograms
   '';
 
   env.NIX_CFLAGS_COMPILE = "-mssse3"; # Necessary to compile.

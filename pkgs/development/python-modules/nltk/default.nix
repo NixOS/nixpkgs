@@ -1,11 +1,12 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, click
-, joblib
-, regex
-, tqdm
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  click,
+  joblib,
+  regex,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
   # best.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nltk"
-  ];
+  pythonImportsCheck = [ "nltk" ];
 
   meta = with lib; {
     description = "Natural Language Processing ToolKit";

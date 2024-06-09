@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, flit-core
+  # build-system
+  flit-core,
 
-# dependenices
-, progress
-, pyserial
+  # dependenices
+  progress,
+  pyserial,
 
-# optional-dependencies
-, intelhex
+  # optional-dependencies
+  intelhex,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-QTLSEjdJtDH4GCamnKHN5pEjW41rRtAMXxyZZMM5K3w=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     progress
@@ -36,18 +35,14 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    hex = [
-      intelhex
-    ];
+    hex = [ intelhex ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   meta = with lib; {
     description = "Flash firmware to STM32 microcontrollers in Python";

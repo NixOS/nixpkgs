@@ -8,11 +8,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quisk";
-  version = "4.2.33";
+  version = "4.2.34";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-41eyqYxRg0crtN6qp239eHWSFPt7XuJneTAndZuS3EY=";
+    sha256 = "sha256-PwBQmL6CnDp55eLhXr3vpJXf4DcKAwzFSCnzxt5Nob4=";
   };
 
   buildInputs = [

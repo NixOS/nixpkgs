@@ -1,18 +1,22 @@
-{ lib
-, buildPythonPackage
-, chardet
-, fetchPypi
-, freetype
-, pillow
-, setuptools
-, glibcLocales
-, python
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  chardet,
+  fetchPypi,
+  freetype,
+  pillow,
+  setuptools,
+  glibcLocales,
+  python,
+  isPyPy,
 }:
 
 let
-  ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
-in buildPythonPackage rec {
+  ft = freetype.overrideAttrs (oldArgs: {
+    dontDisableStatic = true;
+  });
+in
+buildPythonPackage rec {
   pname = "reportlab";
   version = "4.2.0";
   pyproject = true;
@@ -36,22 +40,16 @@ in buildPythonPackage rec {
     rm tests/test_graphics_charts.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    ft
-  ];
+  buildInputs = [ ft ];
 
   propagatedBuildInputs = [
     chardet
     pillow
   ];
 
-  nativeCheckInputs = [
-    glibcLocales
-  ];
+  nativeCheckInputs = [ glibcLocales ];
 
   checkPhase = ''
     runHook preCheck

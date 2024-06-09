@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, pythonOlder
-, pythonAtLeast
-, argcomplete
-, requests
-, looseversion
-, gnupg
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pythonOlder,
+  pythonAtLeast,
+  argcomplete,
+  requests,
+  looseversion,
+  gnupg,
 }:
 
 buildPythonPackage rec {
@@ -26,10 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     argcomplete
     requests
-  ] ++ requests.optional-dependencies.socks
-  ++ lib.optionals (pythonAtLeast "3.12") [
-    looseversion
-  ];
+  ] ++ requests.optional-dependencies.socks ++ lib.optionals (pythonAtLeast "3.12") [ looseversion ];
 
   postInstall = ''
     wrapProgram $out/bin/sdkmanager \

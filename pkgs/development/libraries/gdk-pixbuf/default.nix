@@ -21,6 +21,7 @@
 , buildPackages
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
+, fetchpatch
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,6 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
+    # Remove post 2.42.11
+    (fetchpatch {
+      name = "fix-meson.build-typo.patch";
+      url = "https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/238893d8cd6f9c2616a05ab521a29651a17a38c2.patch";
+      hash = "sha256-6IhdNH6hhygSXD7EJo/hoBLFeb2lJlBIHNBPTkA3Do0=";
+    })
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work
@@ -79,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgio_sniffing=false"
     (lib.mesonBool "gtk_doc" withIntrospection)
     (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "others" true)
   ];
 
   postPatch = ''
@@ -93,6 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace docs/meson.build \
       --replace "dependency('gi-docgen'," "dependency('gi-docgen', native:true," \
       --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+
+    # Remove 'ani' loader until proper fix for CVE-2022-48622
+    substituteInPlace meson.build --replace-fail "'ani'," ""
   '';
 
   postInstall =

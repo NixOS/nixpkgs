@@ -338,6 +338,7 @@ buildGoModule rec {
     util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
     runc
+    bash
   ];
 
   k3sKillallDeps = [

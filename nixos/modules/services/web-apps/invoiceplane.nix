@@ -39,10 +39,7 @@ let
 
   extraConfig = hostName: cfg: let
     settings = mapAttrsToList (k: v: "${k}=${mkPhpValue v}") cfg.settings;
-  in pkgs.writeText "extraConfig.php" ''
-    ${concatStringsSep "\n" settings}
-    ${toString cfg.extraConfig}
-  '';
+  in pkgs.writeText "extraConfig.php" (concatStringsSep "\n" settings);
 
   pkg = hostName: cfg: pkgs.stdenv.mkDerivation rec {
     pname = "invoiceplane-${hostName}";
@@ -182,25 +179,6 @@ let
           '';
         };
 
-        extraConfig = mkOption {
-          type = types.nullOr types.lines;
-          default = null;
-          example = ''
-            SETUP_COMPLETED=true
-            DISABLE_SETUP=true
-            IP_URL=https://invoice.example.com
-          '';
-          description = ''
-            InvoicePlane configuration. Refer to
-            <https://github.com/InvoicePlane/InvoicePlane/blob/master/ipconfig.php.example>
-            for details on supported values.
-
-            **Note**: Please pass structured settings via
-            `services.invoiceplane.sites.${name}.settings` instead, this option
-            will get deprecated in the future.
-          '';
-        };
-
         settings = mkOption {
           type = types.attrsOf types.anything;
           default = {};
@@ -268,12 +246,6 @@ in
 
   # implementation
   config = mkIf (eachSite != {}) (mkMerge [{
-
-    warnings = flatten (mapAttrsToList (hostName: cfg: [
-      (optional (cfg.extraConfig != null) ''
-        services.invoiceplane.sites."${hostName}".extraConfig will be deprecated in future releases, please use the settings option now.
-      '')
-    ]) eachSite);
 
     assertions = flatten (mapAttrsToList (hostName: cfg: [
       { assertion = cfg.database.createLocally -> cfg.database.user == user;

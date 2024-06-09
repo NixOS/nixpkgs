@@ -28,6 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libiec61850.com/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ stv0g ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })

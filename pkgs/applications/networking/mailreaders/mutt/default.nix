@@ -39,13 +39,18 @@ stdenv.mkDerivation rec {
     sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
   });
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    perl which
+  ];
+
   buildInputs =
-    [ ncurses which perl ]
+    [ ncurses ]
     ++ lib.optional headerCache  gdbm
     ++ lib.optional sslSupport   openssl
     ++ lib.optional gssSupport   libkrb5
-    ++ lib.optional saslSupport  cyrus_sasl
-    ++ lib.optional gpgmeSupport gpgme;
+    ++ lib.optional saslSupport  cyrus_sasl;
 
   configureFlags = [
     (lib.enableFeature headerCache  "hcache")
@@ -66,9 +71,10 @@ stdenv.mkDerivation rec {
     # set by the installer, and removing the need for the group 'mail'
     # I set the value 'mailbox' because it is a default in the configure script
     "--with-homespool=mailbox"
-  ] ++ lib.optional sslSupport  "--with-ssl"
-    ++ lib.optional gssSupport  "--with-gss"
-    ++ lib.optional saslSupport "--with-sasl";
+  ] ++ lib.optional sslSupport   "--with-ssl"
+    ++ lib.optional gssSupport   "--with-gss"
+    ++ lib.optional saslSupport  "--with-sasl"
+    ++ lib.optional gpgmeSupport "--with-gpgme-prefix=${lib.getDev gpgme}";
 
   postPatch = lib.optionalString (smimeSupport || gpgmeSupport) ''
     sed -i 's#/usr/bin/openssl#${openssl}/bin/openssl#' smime_keys.pl

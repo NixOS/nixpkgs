@@ -7,7 +7,6 @@
 , elfutils
 , expat
 , fetchCrate
-, fetchpatch
 , fetchurl
 , file
 , flex
@@ -111,8 +110,8 @@
 # nix build .#mesa .#pkgsi686Linux.mesa .#pkgsCross.aarch64-multiplatform.mesa .#pkgsMusl.mesa
 
 let
-  version = "24.0.6";
-  hash = "sha256-i3qS2+ZGjBjyODcAE1tf6d6DbN8MyP19uuPHEQI31gQ=";
+  version = "24.0.7";
+  hash = "sha256-dFRCXx7UpvG1sQfhZyswyIsi6g7+oACuLH2W25P2wmo=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -500,6 +499,7 @@ self = stdenv.mkDerivation {
     changelog = "https://www.mesa3d.org/relnotes/${version}.html";
     license = with lib.licenses; [ mit ]; # X11 variant, in most files
     platforms = lib.platforms.mesaPlatforms;
+    badPlatforms = []; # Load bearing for libGL meta on Darwin.
     maintainers = with lib.maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
 };

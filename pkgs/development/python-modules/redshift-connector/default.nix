@@ -1,16 +1,17 @@
-{ beautifulsoup4
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, lib
-, lxml
-, packaging
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pytz
-, requests
-, scramp
+{
+  beautifulsoup4,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  lxml,
+  packaging,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  requests,
+  scramp,
 }:
 
 buildPythonPackage rec {

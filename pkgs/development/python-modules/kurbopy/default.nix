@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fonttools
-, pytestCheckHook
-, python
-, rustPlatform
-, unzip
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fonttools,
+  pytestCheckHook,
+  python,
+  rustPlatform,
+  unzip,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-dhpcDi20Na6SDbRxrC8N3SWdN1J/CWJgCUI3scJX/6s=";
   };
 
-  propagatedBuildInputs = [
-    fonttools
-  ];
+  propagatedBuildInputs = [ fonttools ];
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
@@ -33,9 +32,7 @@ buildPythonPackage rec {
   };
 
   doCheck = true;
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''
     # pytestCheckHook puts . at the front of Python's sys.path, due to:
     # https://github.com/NixOS/nixpkgs/issues/255262

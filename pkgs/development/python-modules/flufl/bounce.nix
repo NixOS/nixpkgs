@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, atpublic
-, zope-interface
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  atpublic,
+  zope-interface,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,26 +19,18 @@ buildPythonPackage rec {
     hash = "sha256-JVBK65duwP5aGc1sQTo0EMtRT9zb3Kn5tdjTQ6hgODE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     atpublic
     zope-interface
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "flufl.bounce"
-  ];
+  pythonImportsCheck = [ "flufl.bounce" ];
 
-  pythonNamespaces = [
-    "flufl"
-  ];
+  pythonNamespaces = [ "flufl" ];
 
   meta = with lib; {
     description = "Email bounce detectors";

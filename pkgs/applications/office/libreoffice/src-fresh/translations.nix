@@ -1,4 +1,4 @@
 {
-  sha256 = "0ybn7c569wrj3xj20sx34rym8zkxazv9aj4rv76mbp5b82z0snis";
-  url = "https://download.documentfoundation.org/libreoffice/src/7.6.4/libreoffice-translations-7.6.4.1.tar.xz";
+  sha256 = "0jibmsghr9719nmq6w2m947g4arc8dl3wrj5yyg0fy8znnim6477";
+  url = "https://download.documentfoundation.org/libreoffice/src/24.2.3/libreoffice-translations-24.2.3.2.tar.xz";
 }

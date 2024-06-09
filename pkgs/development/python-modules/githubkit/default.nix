@@ -11,12 +11,13 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
+  pythonRelaxDepsHook,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.4";
+  version = "0.11.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "yanyongyu";
     repo = "githubkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uxXRDavp5c3e1MOZR2B4wUxEHh6K81avTeaIVsOdup8=";
+    hash = "sha256-YlI5NEfZD+9I2Ikd/LyEq+MnsdYixi+UVNUP8mfFKc8=";
   };
 
   postPatch = ''
@@ -33,7 +34,11 @@ buildPythonPackage rec {
       --replace-fail "--cov=githubkit --cov-append --cov-report=term-missing" ""
   '';
 
+  pythonRelaxDeps = [ "hishel" ];
+
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     hishel

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, importlib-metadata
-, packaging
-, tomli
-, pytestCheckHook
-, build
-, hatchling
-, pydantic
-, pytest-mock
-, setuptools
-, git
-, mercurial
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  importlib-metadata,
+  packaging,
+  tomli,
+  pytestCheckHook,
+  build,
+  hatchling,
+  pydantic,
+  pytest-mock,
+  setuptools,
+  git,
+  mercurial,
 }:
 
 buildPythonPackage rec {
@@ -34,17 +35,12 @@ buildPythonPackage rec {
       --replace "--no-cov-on-fail" ""
   '';
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  propagatedBuildInputs =
+    [ packaging ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -62,16 +58,14 @@ buildPythonPackage rec {
     "test_editable_mode"
   ];
 
-  pythonImportsCheck = [
-    "versioningit"
-  ];
+  pythonImportsCheck = [ "versioningit" ];
 
   meta = with lib; {
     description = "setuptools plugin for determining package version from VCS";
     mainProgram = "versioningit";
     homepage = "https://github.com/jwodder/versioningit";
     changelog = "https://versioningit.readthedocs.io/en/latest/changelog.html";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ DeeUnderscore ];
   };
 }

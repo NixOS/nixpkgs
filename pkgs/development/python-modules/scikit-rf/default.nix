@@ -1,33 +1,34 @@
-{ stdenv
-, lib
-, pythonOlder
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, pandas
-, matplotlib
-, tox
-, coverage
-, flake8
-, nbval
-, pyvisa
-, networkx
-, ipython
-, ipykernel
-, ipywidgets
-, jupyter-client
-, sphinx-rtd-theme
-, sphinx
-, nbsphinx
-, openpyxl
-, qtpy
-, pyqtgraph
-, pyqt5
-, setuptools
-, pytestCheckHook
-, pytest-cov
-, pytest-mock
+{
+  stdenv,
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  pandas,
+  matplotlib,
+  tox,
+  coverage,
+  flake8,
+  nbval,
+  pyvisa,
+  networkx,
+  ipython,
+  ipykernel,
+  ipywidgets,
+  jupyter-client,
+  sphinx-rtd-theme,
+  sphinx,
+  nbsphinx,
+  openpyxl,
+  qtpy,
+  pyqtgraph,
+  pyqt5,
+  setuptools,
+  pytestCheckHook,
+  pytest-cov,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
     hash = "sha256-TtRj9pqm5153y78MzhlVpL1EvNiNJyjUH1aOlAWU0WE=";
   };
 
-  buildInputs = [
-    setuptools
-  ];
+  buildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
@@ -55,18 +54,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    plot = [
-      matplotlib
-    ];
-    xlsx = [
-      openpyxl
-    ];
-    netw = [
-      networkx
-    ];
-    visa = [
-      pyvisa
-    ];
+    plot = [ matplotlib ];
+    xlsx = [ openpyxl ];
+    netw = [ networkx ];
+    visa = [ pyvisa ];
     docs = [
       ipython
       ipykernel
@@ -97,19 +88,15 @@ buildPythonPackage rec {
     networkx
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   # test_calibration.py generates a divide by zero error on darwin
   # https://github.com/scikit-rf/scikit-rf/issues/972
-  disabledTestPaths =
-    lib.optional (stdenv.isAarch64 && stdenv.isDarwin)
-    "skrf/calibration/tests/test_calibration.py";
+  disabledTestPaths = lib.optional (
+    stdenv.isAarch64 && stdenv.isDarwin
+  ) "skrf/calibration/tests/test_calibration.py";
 
-  pythonImportsCheck = [
-    "skrf"
-  ];
+  pythonImportsCheck = [ "skrf" ];
 
   meta = with lib; {
     description = "A Python library for RF/Microwave engineering";

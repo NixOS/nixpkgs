@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, dataproperty
-, dominate
-, elasticsearch
-, fetchFromGitHub
-, loguru
-, mbstrdecoder
-, pandas
-, pathvalidate
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
-, simplejson
-, tabledata
-, tcolorpy
-, toml
-, typepy
-, xlsxwriter
-, xlwt
+{
+  lib,
+  buildPythonPackage,
+  dataproperty,
+  dominate,
+  elasticsearch,
+  fetchFromGitHub,
+  loguru,
+  mbstrdecoder,
+  pandas,
+  pathvalidate,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  simplejson,
+  tabledata,
+  tcolorpy,
+  toml,
+  typepy,
+  xlsxwriter,
+  xlwt,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-b3YzDqNATaT/FFG4/x9EGlYlhXKPvgNB2xnm0bzvLJQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     dataproperty
@@ -61,49 +60,33 @@ buildPythonPackage rec {
       xlsxwriter
       xlwt
     ];
-    es = [
-      elasticsearch
-    ];
-    es8 = [
-      elasticsearch
-    ];
+    es = [ elasticsearch ];
+    es8 = [ elasticsearch ];
     excel = [
       xlwt
       xlsxwriter
     ];
-    html = [
-      dominate
-    ];
-    logging = [
-      loguru
-    ];
+    html = [ dominate ];
+    logging = [ loguru ];
     # from = [
     #   pytablereader
     # ];
-    pandas = [
-      pandas
-    ];
+    pandas = [ pandas ];
     # sqlite = [
     #   simplesqlite
     # ];
     # theme = [
     #   pytablewriter-altrow-theme
     # ];
-    toml = [
-      toml
-    ];
-    yaml = [
-      pyyaml
-    ];
+    toml = [ toml ];
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "pathvalidate"
-  ];
+  pythonImportsCheck = [ "pathvalidate" ];
 
   disabledTests = [
     # Circular dependency

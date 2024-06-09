@@ -81,7 +81,7 @@ in
       meta = with lib; {
         description = "An enterprise-class open source distributed monitoring solution (client-server proxy)";
         homepage = "https://www.zabbix.com/";
-        license = licenses.gpl2;
+        license = licenses.gpl2Plus;
         maintainers = [ maintainers.mmahut ];
         platforms = platforms.linux;
       };

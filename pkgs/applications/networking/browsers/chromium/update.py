@@ -20,7 +20,6 @@ from os.path import abspath, dirname
 from urllib.request import urlopen
 
 RELEASES_URL = 'https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/all/versions/all/releases'
-DEB_URL = 'https://dl.google.com/linux/chrome/deb/pool/main/g'
 
 PIN_PATH = dirname(abspath(__file__)) + '/upstream-info.nix'
 UNGOOGLED_FLAGS_PATH = dirname(abspath(__file__)) + '/ungoogled-flags.toml'
@@ -259,10 +258,6 @@ with urlopen(RELEASES_URL) as resp:
                     version
                 )
                 src_hash_cache[version] = channel["hash"]
-
-            channel['hash_deb_amd64'] = nix_prefetch_url(
-                f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
-                f'google-chrome-{google_chrome_suffix}_{version}-1_amd64.deb')
         except subprocess.CalledProcessError:
             # This release isn't actually available yet.  Continue to
             # the next one.

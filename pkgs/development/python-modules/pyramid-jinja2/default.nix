@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, webtest
-, markupsafe
-, jinja2
-, pytestCheckHook
-, zope-deprecation
-, pyramid
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  webtest,
+  markupsafe,
+  jinja2,
+  pytestCheckHook,
+  zope-deprecation,
+  pyramid,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
       --replace " --cov" ""
   '';
 
-  pythonImportsCheck = [
-    "pyramid_jinja2"
-  ];
+  pythonImportsCheck = [ "pyramid_jinja2" ];
 
   disabledTests = [
     # AssertionError: Lists differ: ['pyramid_jinja2-2.10',...

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, pillow
-, poetry-core
-, pytest-benchmark
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchgit,
+  pillow,
+  poetry-core,
+  pytest-benchmark,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     fetchLFS = true;
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     pillow
@@ -33,13 +32,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--benchmark-disable"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
-  pythonImportsCheck = [
-    "pixelmatch"
-  ];
+  pythonImportsCheck = [ "pixelmatch" ];
 
   meta = with lib; {
     description = "Pixel-level image comparison library";

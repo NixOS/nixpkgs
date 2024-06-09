@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, diskcache
-, eventlet
-, fetchFromGitHub
-, more-itertools
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  diskcache,
+  eventlet,
+  fetchFromGitHub,
+  more-itertools,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-XFa1ItFqkSYE940p/imWFp5e9gS6n+D1uM6Cj+Vzmmg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     diskcache
@@ -34,13 +33,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "fasteners"
-  ];
+  pythonImportsCheck = [ "fasteners" ];
 
-  pytestFlagsArray = [
-    "tests/"
-  ];
+  pytestFlagsArray = [ "tests/" ];
 
   meta = with lib; {
     description = "Module that provides useful locks";

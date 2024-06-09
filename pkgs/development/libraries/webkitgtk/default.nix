@@ -48,6 +48,8 @@
 , lcms2
 , libmanette
 , geoclue2
+, flite
+, openssl
 , sqlite
 , gst-plugins-base
 , gst-plugins-bad
@@ -62,6 +64,7 @@
 , unifdef
 , addOpenGLRunpath
 , enableGeoLocation ? true
+, enableExperimental ? false
 , withLibsecret ? true
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , testers
@@ -69,7 +72,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.44.1";
+  version = "2.44.2";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -80,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QlsUWbDwTQYAx40au15+36PAYKQg+LIx6aai1dKcVWE=";
+    hash = "sha256-Uj9CyP8kgyrdF2Mfbqr+j5MDr+MW7xp+GES5Uqf3Uhs=";
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -165,6 +168,9 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
+  ] ++ lib.optionals enableExperimental [
+    flite
+    openssl
   ] ++ lib.optionals withLibsecret [
     libsecret
   ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
@@ -184,6 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
     "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
+    "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
   ] ++ lib.optionals stdenv.isLinux [
     # Have to be explicitly specified when cross.
     # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353

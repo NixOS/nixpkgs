@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  stdenv,
 
-# build-system
-, pybind11
-, setuptools
+  # build-system
+  pybind11,
+  setuptools,
 
-# native dependencies
-, abseil-cpp
-, darwin
+  # native dependencies
+  abseil-cpp,
+  darwin,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,17 +35,11 @@ buildPythonPackage rec {
 
   buildInputs = [
     abseil-cpp
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  ] ++ lib.optionals (stdenv.isDarwin) [ darwin.apple_sdk.frameworks.CoreServices ];
 
-  pythonImportsCheck = [
-    "webrtc_noise_gain"
-  ];
+  pythonImportsCheck = [ "webrtc_noise_gain" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Tiny wrapper around webrtc-audio-processing for noise suppression/auto gain only";

@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -16,14 +17,15 @@ buildPythonPackage rec {
     hash = "sha256-jexKLuN7+OUzeeu/DTjO/sTgbHySJ/Wa8527exYygXs=";
   };
 
-  pythonImportsCheck = [
-    "fontawesomefree"
-  ];
+  pythonImportsCheck = [ "fontawesomefree" ];
 
   meta = with lib; {
     homepage = "https://github.com/FortAwesome/Font-Awesome";
     description = "Icon library and toolkit";
-    license = with licenses; [ ofl cc-by-40 ];
+    license = with licenses; [
+      ofl
+      cc-by-40
+    ];
     maintainers = with maintainers; [ netali ];
   };
 }

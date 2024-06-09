@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "$out/bin/pulsemixer" \
-      --replace "libpulse.so.0" "$libpulseaudio/lib/libpulse.so.0"
+      --replace-fail "libpulse.so.0" "$libpulseaudio/lib/libpulse${stdenv.hostPlatform.extensions.sharedLibrary}"
   '';
 
   meta = with lib; {

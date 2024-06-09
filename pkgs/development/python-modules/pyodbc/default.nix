@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pythonOlder
-, unixODBC
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pythonOlder,
+  unixODBC,
 }:
 
 buildPythonPackage rec {
@@ -19,19 +20,15 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    unixODBC  # for odbc_config
+    unixODBC # for odbc_config
   ];
 
-  buildInputs = [
-    unixODBC
-  ];
+  buildInputs = [ unixODBC ];
 
   # Tests require a database server
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyodbc"
-  ];
+  pythonImportsCheck = [ "pyodbc" ];
 
   meta = with lib; {
     description = "Python ODBC module to connect to almost any database";

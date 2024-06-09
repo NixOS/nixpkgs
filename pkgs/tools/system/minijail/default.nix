@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "minijail";
-  version = "18";
+  version = "2024.05.22";
 
   src = fetchFromGitiles {
-    url = "https://android.googlesource.com/platform/external/minijail";
+    url = "https://chromium.googlesource.com/chromiumos/platform/minijail";
     rev = "linux-v${version}";
-    sha256 = "sha256-OpwzISZ5iZNQvJAX7UJJ4gELEaVfcQgY9cqMM0YvBzc=";
+    sha256 = "sha256-1NNjNEC0pNb0WW0PG5smltT1/dGYNRfhNxJtW0hngI8=";
   };
 
   buildInputs = [ libcap ];
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "https://android.googlesource.com/platform/external/minijail/";
+    homepage = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/heads/main/README.md";
     description = "Sandboxing library and application using Linux namespaces and capabilities";
-    changelog = "https://android.googlesource.com/platform/external/minijail/+/refs/tags/linux-v${version}";
+    changelog = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/tags/linux-v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pcarrier qyliss ];
     platforms = platforms.linux;

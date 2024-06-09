@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch2
-, cython_0
-, zfs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  cython_0,
+  zfs,
 }:
 
 buildPythonPackage rec {
@@ -50,4 +51,3 @@ buildPythonPackage rec {
     platforms = platforms.linux;
   };
 }
-

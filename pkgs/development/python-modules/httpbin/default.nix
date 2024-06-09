@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonRelaxDepsHook,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, brotlicffi
-, decorator
-, flasgger
-, flask
-, greenlet
-, six
-, werkzeug
+  # dependencies
+  brotlicffi,
+  decorator,
+  flasgger,
+  flask,
+  greenlet,
+  six,
+  werkzeug,
 
-# optional-dependencies
-, gunicorn
-, gevent
+  # optional-dependencies
+  gunicorn,
+  gevent,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "greenlet"
-  ];
+  pythonRelaxDeps = [ "greenlet" ];
 
   propagatedBuildInputs = [
     brotlicffi
@@ -59,9 +58,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Tests seems to be outdated
@@ -74,9 +71,7 @@ buildPythonPackage rec {
     "test_relative_redirect_n_higher_than_1"
   ];
 
-  pythonImportsCheck = [
-    "httpbin"
-  ];
+  pythonImportsCheck = [ "httpbin" ];
 
   meta = with lib; {
     description = "HTTP Request and Response Service";

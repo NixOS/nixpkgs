@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    (opencv4.override { inherit ffmpeg; })
     ffmpeg
     fftw
     frei0r
@@ -73,7 +74,6 @@ stdenv.mkDerivation rec {
     libvorbis
     libxml2
     movit
-    opencv4
     rtaudio
     rubberband
     sox

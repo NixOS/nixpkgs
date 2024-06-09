@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, unittestCheckHook
-, fetchPypi
-, pythonOlder
-, glibcLocales
+{
+  lib,
+  buildPythonPackage,
+  unittestCheckHook,
+  fetchPypi,
+  pythonOlder,
+  glibcLocales,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +21,11 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  buildInputs = [
-    glibcLocales
-  ];
+  buildInputs = [ glibcLocales ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "pystache"
-  ];
+  pythonImportsCheck = [ "pystache" ];
 
   meta = with lib; {
     description = "A framework-agnostic, logic-free templating system inspired by ctemplate and et";

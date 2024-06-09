@@ -1,21 +1,22 @@
-{ lib
-, autograd
-, autograd-gamma
-, buildPythonPackage
-, dill
-, fetchFromGitHub
-, flaky
-, formulaic
-, jinja2
-, matplotlib
-, numpy
-, pandas
-, psutil
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, scipy
-, sybil
+{
+  lib,
+  autograd,
+  autograd-gamma,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  flaky,
+  formulaic,
+  jinja2,
+  matplotlib,
+  numpy,
+  pandas,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  sybil,
 }:
 
 buildPythonPackage rec {
@@ -52,17 +53,11 @@ buildPythonPackage rec {
     sybil
   ];
 
-  pythonImportsCheck = [
-    "lifelines"
-  ];
+  pythonImportsCheck = [ "lifelines" ];
 
-  disabledTestPaths = [
-    "lifelines/tests/test_estimation.py"
-  ];
+  disabledTestPaths = [ "lifelines/tests/test_estimation.py" ];
 
-  disabledTests = [
-    "test_datetimes_to_durations_with_different_frequencies"
-  ];
+  disabledTests = [ "test_datetimes_to_durations_with_different_frequencies" ];
 
   meta = with lib; {
     description = "Survival analysis in Python";

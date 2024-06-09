@@ -46,13 +46,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-82";
+  version = "2.0-85";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-rmlkit7ZNUM0ErqoclivfBHolV0tRWyToLmsvoTslbI=";
+    hash = "sha256-uMVbKJhdHLLKsJnj7YFIG+S5pm7rSZfBSWebhTP01Y8=";
   };
 
   patches = [
@@ -108,7 +108,8 @@ in stdenv.mkDerivation rec {
     tag = last (splitString "-" version);
   in ''
     rm -rf dependencies/imgui
-    ln -s ${imgui'}/include/imgui dependencies/imgui
+    # cemu expects imgui source code, not just header files
+    ln -s ${imgui'.src} dependencies/imgui
     substituteInPlace src/Common/version.h --replace " (experimental)" "-${tag} (experimental)"
     substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
   '';

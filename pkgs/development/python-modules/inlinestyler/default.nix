@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch2
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
 
-# build system
-, setuptools
+  # build system
+  setuptools,
 
-# dependencies
-, cssutils
-, lxml
-, requests
+  # dependencies
+  cssutils,
+  lxml,
+  requests,
 
-# tests
-, ipdb
-, pytestCheckHook
+  # tests
+  ipdb,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     cssutils
@@ -46,9 +45,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "inlinestyler"
-  ];
+  pythonImportsCheck = [ "inlinestyler" ];
 
   nativeCheckInputs = [
     ipdb

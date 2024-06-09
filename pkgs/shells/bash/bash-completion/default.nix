@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl
-, fetchpatch
 , autoreconfHook
 , perl
 , ps

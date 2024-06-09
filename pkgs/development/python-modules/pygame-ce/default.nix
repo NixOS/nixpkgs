@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, substituteAll
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, python
-, pkg-config
-, setuptools
-, cython
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  python,
+  pkg-config,
+  setuptools,
+  cython,
 
-, AppKit
-, fontconfig
-, freetype
-, libjpeg
-, libpng
-, libX11
-, portmidi
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
+  AppKit,
+  fontconfig,
+  freetype,
+  libjpeg,
+  libpng,
+  libX11,
+  portmidi,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
 }:
 
 buildPythonPackage rec {
@@ -41,30 +42,36 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./fix-dependency-finding.patch;
-      buildinputs_include = builtins.toJSON (builtins.concatMap (dep: [
-        "${lib.getDev dep}/"
-        "${lib.getDev dep}/include"
-        "${lib.getDev dep}/include/SDL2"
-      ]) buildInputs);
-      buildinputs_lib = builtins.toJSON (builtins.concatMap (dep: [
-        "${lib.getLib dep}/"
-        "${lib.getLib dep}/lib"
-      ]) buildInputs);
+      buildinputs_include = builtins.toJSON (
+        builtins.concatMap (dep: [
+          "${lib.getDev dep}/"
+          "${lib.getDev dep}/include"
+          "${lib.getDev dep}/include/SDL2"
+        ]) buildInputs
+      );
+      buildinputs_lib = builtins.toJSON (
+        builtins.concatMap (dep: [
+          "${lib.getLib dep}/"
+          "${lib.getLib dep}/lib"
+        ]) buildInputs
+      );
     })
     # Skip tests that should be disabled without video driver
     ./skip-surface-tests.patch
   ];
 
-  postPatch = ''
-    substituteInPlace buildconfig/config_{unix,darwin}.py \
-      --replace-fail 'from distutils' 'from setuptools._distutils'
-    substituteInPlace src_py/sysfont.py \
-      --replace-fail 'path="fc-list"' 'path="${fontconfig}/bin/fc-list"' \
-      --replace-fail /usr/X11/bin/fc-list ${fontconfig}/bin/fc-list
-  '' + lib.optionalString stdenv.isDarwin ''
-    # flaky
-    rm test/system_test.py
-  '';
+  postPatch =
+    ''
+      substituteInPlace buildconfig/config_{unix,darwin}.py \
+        --replace-fail 'from distutils' 'from setuptools._distutils'
+      substituteInPlace src_py/sysfont.py \
+        --replace-fail 'path="fc-list"' 'path="${fontconfig}/bin/fc-list"' \
+        --replace-fail /usr/X11/bin/fc-list ${fontconfig}/bin/fc-list
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # flaky
+      rm test/system_test.py
+    '';
 
   nativeBuildInputs = [
     pkg-config
@@ -82,19 +89,19 @@ buildPythonPackage rec {
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
   preConfigure = ''
     ${python.pythonOnBuildForHost.interpreter} buildconfig/config.py
   '';
 
-  env = {
-    SDL_CONFIG = "${SDL2.dev}/bin/sdl2-config";
-  } // lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
-  };
+  env =
+    {
+      SDL_CONFIG = "${SDL2.dev}/bin/sdl2-config";
+    }
+    // lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+    };
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -109,9 +116,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "pygame"
-  ];
+  pythonImportsCheck = [ "pygame" ];
 
   meta = with lib; {
     description = "Pygame Community Edition (CE) - library for multimedia application built on SDL";

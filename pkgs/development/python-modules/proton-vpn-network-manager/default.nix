@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gobject-introspection
-, setuptools
-, networkmanager
-, proton-core
-, proton-vpn-connection
-, pycairo
-, pygobject3
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gobject-introspection,
+  setuptools,
+  networkmanager,
+  proton-core,
+  proton-vpn-connection,
+  pycairo,
+  pygobject3,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

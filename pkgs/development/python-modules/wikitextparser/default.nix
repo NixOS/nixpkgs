@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, lib
-, setuptools
-, pytestCheckHook
-, regex
-, wcwidth
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  lib,
+  setuptools,
+  pytestCheckHook,
+  regex,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-qLctOX0BsKAn2JzfmV2sTLJ/KcNfaJFAjOB3pxd5LQI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     flit-core
@@ -30,9 +29,7 @@ buildPythonPackage rec {
     regex
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "wikitextparser" ];
 

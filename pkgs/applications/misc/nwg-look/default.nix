@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, substituteAll
+, wrapGAppsHook3
 , buildGoModule
 , go
 , glib
@@ -15,32 +15,26 @@
 
 buildGoModule rec {
   pname = "nwg-look";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-look";
     rev = "v${version}";
-    hash = "sha256-kOoYhJKt7/BsQ0/RuVhj0bWnX9GU8ET3MSq6NMCOw5E=";
+    hash = "sha256-qUNTJkNHWoJisLH0SU23UQuamEL27MMRnxw0kBxzWLk=";
   };
 
-  vendorHash = "sha256-V0KXK6jxBYI+tixBLq24pJJcnu4gDF6nfyns2IBTss4=";
-
-  # Replace /usr/ directories with the packages output location
-  # This means it references the correct path
-  patches = [ ./fix-paths.patch ];
-
-  postPatch = ''
-    substituteInPlace main.go tools.go --replace '@out@' $out
-  '';
+  vendorHash = "sha256-qHWy9OCxENrrWk00YoRveSjqYWIy/fe4Fyc8tc4n34E=";
 
   ldflags = [ "-s" "-w" ];
 
   nativeBuildInputs = [
     pkg-config
+    wrapGAppsHook3
   ];
 
   buildInputs = [
+    glib
     cairo
     xcur2png
     libX11.dev
@@ -55,10 +49,19 @@ buildGoModule rec {
     mkdir -p $out/share/nwg-look/langs
     mkdir -p $out/share/applications
     mkdir -p $out/share/pixmaps
+    mkdir -p $out/share/icons
     cp stuff/main.glade $out/share/nwg-look/
     cp langs/* $out/share/nwg-look/langs
     cp stuff/nwg-look.desktop $out/share/applications
     cp stuff/nwg-look.svg $out/share/pixmaps
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${glib.bin}/bin"
+      --prefix PATH : "${xcur2png}/bin"
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+    )
   '';
 
   meta = with lib; {

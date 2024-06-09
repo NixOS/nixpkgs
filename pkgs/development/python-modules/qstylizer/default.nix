@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, inflection
-, pbr
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, tinycss2
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  inflection,
+  pbr,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  tinycss2,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
 
   PBR_VERSION = version;
 
-  nativeBuildInputs = [
-    pbr
-  ];
+  nativeBuildInputs = [ pbr ];
 
   propagatedBuildInputs = [
     inflection
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  pythonImportsCheck = [
-    "qstylizer"
-  ];
+  pythonImportsCheck = [ "qstylizer" ];
 
   meta = with lib; {
     description = "Qt stylesheet generation utility for PyQt/PySide";

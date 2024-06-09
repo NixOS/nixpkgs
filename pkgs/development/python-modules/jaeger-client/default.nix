@@ -1,10 +1,11 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, opentracing
-, threadloop
-, thrift
-, tornado
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  opentracing,
+  threadloop,
+  thrift,
+  tornado,
 }:
 
 buildPythonPackage rec {

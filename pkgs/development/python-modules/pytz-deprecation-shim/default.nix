@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, pythonOlder
-, backports-zoneinfo
-, python-dateutil
-, setuptools
-, tzdata
-, hypothesis
-, pytestCheckHook
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
+  pythonOlder,
+  backports-zoneinfo,
+  python-dateutil,
+  setuptools,
+  tzdata,
+  hypothesis,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = (lib.optionals (pythonAtLeast "3.6" && pythonOlder "3.9") [
-    backports-zoneinfo
-  ]) ++ (lib.optionals (pythonOlder "3.6") [
-    python-dateutil
-  ]) ++ (lib.optionals (pythonAtLeast "3.6") [
-    tzdata
-  ]);
+  propagatedBuildInputs =
+    (lib.optionals (pythonAtLeast "3.6" && pythonOlder "3.9") [ backports-zoneinfo ])
+    ++ (lib.optionals (pythonOlder "3.6") [ python-dateutil ])
+    ++ (lib.optionals (pythonAtLeast "3.6") [ tzdata ]);
 
   nativeCheckInputs = [
     hypothesis

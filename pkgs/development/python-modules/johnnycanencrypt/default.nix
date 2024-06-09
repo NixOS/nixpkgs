@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, pkg-config
-, pcsclite
-, nettle
-, httpx
-, pytestCheckHook
-, pythonOlder
-, vcrpy
-, PCSC
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  rustPlatform,
+  pkg-config,
+  pcsclite,
+  nettle,
+  httpx,
+  pytestCheckHook,
+  pythonOlder,
+  vcrpy,
+  PCSC,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -34,26 +35,23 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ (with rustPlatform; [
-    bindgenHook
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs =
+    [ pkg-config ]
+    ++ (with rustPlatform; [
+      bindgenHook
+      cargoSetupHook
+      maturinBuildHook
+    ]);
 
-  buildInputs = [
-    nettle
-  ] ++ lib.optionals stdenv.isLinux [
-    pcsclite
-  ] ++ lib.optionals stdenv.isDarwin [
-    PCSC
-    libiconv
-  ];
+  buildInputs =
+    [ nettle ]
+    ++ lib.optionals stdenv.isLinux [ pcsclite ]
+    ++ lib.optionals stdenv.isDarwin [
+      PCSC
+      libiconv
+    ];
 
   nativeCheckInputs = [
     pytestCheckHook

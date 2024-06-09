@@ -1,29 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, chardet
-, gitpython
-, pygments
-, rich
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  chardet,
+  gitpython,
+  pygments,
+  rich,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygount";
-  version = "1.6.1";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roskakori";
     repo = "pygount";
     rev = "refs/tags/v${version}";
-    hash = "sha256-j+mXIyF/54MCm0yv7Z+ymy/EeZz7iS/a+/5I9lo1+Zo=";
+    hash = "sha256-PFqcSnJoGL4bXFy3hu3Iurbb8QK1NqCDs8aJmMxP4Hc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     chardet
@@ -32,9 +31,7 @@ buildPythonPackage rec {
     rich
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # requires network access
@@ -42,9 +39,7 @@ buildPythonPackage rec {
     "test_can_extract_and_close_and_find_files_from_cloned_git_remote_url_with_revision"
   ];
 
-  pythonImportsCheck = [
-    "pygount"
-  ];
+  pythonImportsCheck = [ "pygount" ];
 
   meta = with lib; {
     description = "Count lines of code for hundreds of languages using pygments";

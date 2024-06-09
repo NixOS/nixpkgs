@@ -58,9 +58,9 @@ if stdenv.isDarwin then stdenv.mkDerivation {
 } else appimageTools.wrapType2 {
   inherit pname version src meta;
 
-  extraPkgs = ps: (appimageTools.defaultFhsEnvArgs.multiPkgs ps) ++ [
+  extraPkgs = pkgs: [
     # Required to run DynamoDB locally
-    ps.jdk21
+    pkgs.jdk21
   ];
 
   extraInstallCommands = let

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, colorama
-, tqdm
-, pytestCheckHook
-, pythonOlder
-, ffmpeg
-, procps
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  colorama,
+  tqdm,
+  pytestCheckHook,
+  pythonOlder,
+  ffmpeg,
+  procps,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,16 @@ buildPythonPackage rec {
     hash = "sha256-muauX4Mq58ew9lGPE0H+bu4bqPydNADLocujjy6qRh4=";
   };
 
-  propagatedBuildInputs = [ colorama tqdm ];
+  propagatedBuildInputs = [
+    colorama
+    tqdm
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ffmpeg procps ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    ffmpeg
+    procps
+  ];
 
   disabledTests = [
     "test_quit"

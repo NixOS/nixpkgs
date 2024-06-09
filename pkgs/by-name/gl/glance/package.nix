@@ -6,13 +6,13 @@ nix-update-script
 
 buildGoModule rec {
   pname = "glance";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "glanceapp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-37nQEpJxioELNFJxacOUWOxGMFm80UtaYLDCxsoXRe8=";
+    hash = "sha256-37DmLZ8ESJwB2R8o5WjeypKsCQwarF3x8UYz1OQT/tM=";
   };
 
   vendorHash = "sha256-Okme73vLc3Pe9+rNlmG8Bj1msKaVb5PaIBsAAeTer6s=";

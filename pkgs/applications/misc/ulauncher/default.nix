@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "sha256-YgOw3Gyy/o8qorWAnAlQrAZ2ZTnyP3PagLs2Qkdg788=";
+    hash = "sha256-YgOw3Gyy/o8qorWAnAlQrAZ2ZTnyP3PagLs2Qkdg788=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -57,6 +57,7 @@ python3Packages.buildPythonApplication rec {
     pyxdg
     pycairo
     requests
+    semver
     websocket-client
   ];
 
@@ -76,7 +77,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace setup.py --subst-var out
     patchShebangs bin/ulauncher-toggle
     substituteInPlace bin/ulauncher-toggle \
-      --replace wmctrl ${wmctrl}/bin/wmctrl
+      --replace-fail wmctrl ${wmctrl}/bin/wmctrl
   '';
 
   # https://github.com/Ulauncher/Ulauncher/issues/390

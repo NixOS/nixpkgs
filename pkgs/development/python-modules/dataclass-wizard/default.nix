@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, pytimeparse
-, pyyaml
-, pytestCheckHook
-, pytest-mock
-, typing-extensions
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pythonAtLeast,
+  pytimeparse,
+  pyyaml,
+  pytestCheckHook,
+  pytest-mock,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -22,36 +23,29 @@ buildPythonPackage rec {
     hash = "sha256-Ufi4lZc+UkM6NZr4bS2OibpOmMjyiBEoVKxmrqauW50=";
   };
 
-  propagatedBuildInputs = [
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = [ ] ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
   passthru.optional-dependencies = {
-    timedelta = [
-      pytimeparse
-    ];
-    yaml = [
-      pyyaml
-    ];
+    timedelta = [ pytimeparse ];
+    yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
-  ] ++ passthru.optional-dependencies.timedelta
-  ++ passthru.optional-dependencies.yaml;
+  ] ++ passthru.optional-dependencies.timedelta ++ passthru.optional-dependencies.yaml;
 
-  disabledTests = [
-  ] ++ lib.optionals (pythonAtLeast "3.11") [
-    # Any/None internal changes, tests need adjusting upstream
-    "without_type_hinting"
-    "default_dict"
-    "test_frozenset"
-    "test_set"
-    "date_times_with_custom_pattern"
-    "from_dict_handles_identical_cased_json_keys"
-  ];
+  disabledTests =
+    [ ]
+    ++ lib.optionals (pythonAtLeast "3.11") [
+      # Any/None internal changes, tests need adjusting upstream
+      "without_type_hinting"
+      "default_dict"
+      "test_frozenset"
+      "test_set"
+      "date_times_with_custom_pattern"
+      "from_dict_handles_identical_cased_json_keys"
+    ];
 
   pythonImportsCheck = [ "dataclass_wizard" ];
 

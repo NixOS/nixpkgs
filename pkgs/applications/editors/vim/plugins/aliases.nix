@@ -116,6 +116,7 @@ mapAliases (with prev; {
   solidity            = vim-solidity;
   stylish-haskell     = vim-stylish-haskell;
   stylishHaskell      = vim-stylish-haskell; # backwards compat, added 2014-10-18
+  suda-vim            = vim-suda; # backwards compat, added 2024-05-16
   Supertab            = supertab;
   Syntastic           = syntastic;
   SyntaxRange         = vim-SyntaxRange;

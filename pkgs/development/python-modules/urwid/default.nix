@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, exceptiongroup
-, fetchFromGitHub
-, glibcLocales
-, pygobject3
-, pyserial
-, pytestCheckHook
-, pythonOlder
-, pyzmq
-, setuptools
-, setuptools-scm
-, tornado
-, trio
-, twisted
-, typing-extensions
-, wcwidth
+{
+  lib,
+  buildPythonPackage,
+  exceptiongroup,
+  fetchFromGitHub,
+  glibcLocales,
+  pygobject3,
+  pyserial,
+  pytestCheckHook,
+  pythonOlder,
+  pyzmq,
+  setuptools,
+  setuptools-scm,
+  tornado,
+  trio,
+  twisted,
+  typing-extensions,
+  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "2.6.11";
+  version = "2.6.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,46 +29,34 @@ buildPythonPackage rec {
     owner = "urwid";
     repo = "urwid";
     rev = "refs/tags/${version}";
-    hash = "sha256-EArHHsHqr1z+UhdsUCc4IPZa33sSCaR1sDSr7eCGSOM=";
+    hash = "sha256-JGX9v/x8c7ayHnxVjC7u4YLs3OvZmTzPNFUfqGCeIRQ=";
   };
 
   postPatch = ''
     sed -i '/addopts =/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     typing-extensions
     wcwidth
   ];
 
   passthru.optional-dependencies = {
-    glib = [
-      pygobject3
-    ];
-    tornado = [
-      tornado
-    ];
+    glib = [ pygobject3 ];
+    tornado = [ tornado ];
     trio = [
       exceptiongroup
       trio
     ];
-    twisted = [
-      twisted
-    ];
-    zmq = [
-      pyzmq
-    ];
-    serial = [
-      pyserial
-    ];
-    lcd = [
-      pyserial
-    ];
+    twisted = [ twisted ];
+    zmq = [ pyzmq ];
+    serial = [ pyserial ];
+    lcd = [ pyserial ];
   };
 
   nativeCheckInputs = [
@@ -77,18 +66,14 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF8";
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   disabledTestPaths = [
     # expect call hangs
     "tests/test_vterm.py"
   ];
 
-  pythonImportsCheck = [
-    "urwid"
-  ];
+  pythonImportsCheck = [ "urwid" ];
 
   meta = with lib; {
     description = "A full-featured console (xterm et al.) user interface library";

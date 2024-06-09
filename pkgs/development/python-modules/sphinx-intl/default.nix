@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, transifex-cli
-, babel
-, click
-, setuptools
-, sphinx
-, pytestCheckHook
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  transifex-cli,
+  babel,
+  click,
+  setuptools,
+  sphinx,
+  pytestCheckHook,
+  mock,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
   version = "2.2.0";
   format = "pyproject";
 
- src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = pname;
     rev = version;

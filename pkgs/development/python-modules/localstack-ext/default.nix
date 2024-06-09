@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, dill
-, dnslib
-, dnspython
-, plux
-, pyaes
-, python-jose
-, requests
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  dill,
+  dnslib,
+  dnspython,
+  plux,
+  pyaes,
+  python-jose,
+  requests,
+  tabulate,
 
-# Sensitive downstream dependencies
-, localstack
+  # Sensitive downstream dependencies
+  localstack,
 }:
 
 buildPythonPackage rec {

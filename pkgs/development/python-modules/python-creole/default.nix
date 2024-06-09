@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, runtimeShell
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  runtimeShell,
 
-# build
-, poetry-core
+  # build
+  poetry-core,
 
-# propagates
-, docutils
+  # propagates
+  docutils,
 
-# tests
-, pytestCheckHook
-, readme-renderer
-, textile
+  # tests
+  pytestCheckHook,
+  readme-renderer,
+  textile,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -48,13 +47,9 @@ buildPythonPackage rec {
     sed -i "/-cov/d" pytest.ini
   '';
 
-  propagatedBuildInputs = [
-    docutils
-  ];
+  propagatedBuildInputs = [ docutils ];
 
-  pythonImportsCheck = [
-    "creole"
-  ];
+  pythonImportsCheck = [ "creole" ];
 
   nativeCheckInputs = [
     pytestCheckHook

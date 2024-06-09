@@ -7,23 +7,24 @@
 , xz
 , stdenv
 , darwin
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     rev = "v${version}";
-    hash = "sha256-RbkirnVrhYT/OuZSdJWMOvQXAeBmsFICsCrezyT6ukA=";
+    hash = "sha256-FagjVU8BJZStE/geexZERuV2P28iF/pPn2mTi1Gu9iU=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "typst-dev-assets-0.11.0" = "sha256-wTmux3GsUIU+PX6SO9rrQHr3korPFBeP/Z8byC97KUI=";
+      "typst-dev-assets-0.11.1" = "sha256-SMRtitDHFpdMEoOuPBnC3RBTyZ96hb4KmMSCXpAyKfU=";
     };
   };
 
@@ -46,12 +47,22 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
+  # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
+  postPatch = ''
+    substituteInPlace tests/src/tests.rs --replace-fail 'ARGS.num_threads' 'ARGS.test_threads'
+    substituteInPlace tests/src/args.rs --replace-fail 'num_threads' 'test_threads'
+  '';
+
   postInstall = ''
     installManPage crates/typst-cli/artifacts/*.1
     installShellCompletion \
       crates/typst-cli/artifacts/typst.{bash,fish} \
       --zsh crates/typst-cli/artifacts/_typst
   '';
+
+  cargoTestFlags = [ "--workspace" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/typst/typst/releases/tag/${src.rev}";

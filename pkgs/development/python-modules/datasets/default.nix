@@ -1,22 +1,22 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, dill
-, fetchFromGitHub
-, fetchpatch
-, fsspec
-, huggingface-hub
-, importlib-metadata
-, multiprocess
-, numpy
-, packaging
-, pandas
-, pyarrow
-, pythonOlder
-, requests
-, responses
-, tqdm
-, xxhash
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  dill,
+  fetchFromGitHub,
+  fsspec,
+  huggingface-hub,
+  importlib-metadata,
+  multiprocess,
+  numpy,
+  packaging,
+  pandas,
+  pyarrow,
+  pythonOlder,
+  requests,
+  responses,
+  tqdm,
+  xxhash,
 }:
 
 buildPythonPackage rec {
@@ -53,9 +53,7 @@ buildPythonPackage rec {
     responses
     tqdm
     xxhash
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Tests require pervasive internet access
   doCheck = false;
@@ -63,9 +61,7 @@ buildPythonPackage rec {
   # Module import will attempt to create a cache directory
   postFixup = "export HF_MODULES_CACHE=$TMPDIR";
 
-  pythonImportsCheck = [
-    "datasets"
-  ];
+  pythonImportsCheck = [ "datasets" ];
 
   meta = with lib; {
     description = "Open-access datasets and evaluation metrics for natural language processing";

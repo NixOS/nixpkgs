@@ -1,9 +1,11 @@
-{ gevent
-, buildPythonPackage
-, fetchFromGitHub
-, hostname
-, pytest
-, lib, stdenv
+{
+  gevent,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hostname,
+  pytest,
+  lib,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -45,4 +47,3 @@ buildPythonPackage rec {
     maintainers = [ maintainers.kiwi ];
   };
 }
-

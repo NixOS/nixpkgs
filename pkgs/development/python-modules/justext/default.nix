@@ -1,29 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, lxml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  lxml,
 }:
 
 buildPythonPackage rec {
   pname = "justext";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "miso-belica";
     repo = "jusText";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WNxDoM5666tEHS9pMl5dOoig4S7dSYaCLZq71tehWqw=";
+    hash = "sha256-9i7hzCK/ijh8xw9l2ZbVhVj5IBf0WD/49/R1tSWgqrQ=";
   };
 
-  propagatedBuildInputs = [
-    lxml
-  ];
+  propagatedBuildInputs = [ lxml ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # patch out coverage report
   postPatch = ''

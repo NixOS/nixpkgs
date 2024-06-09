@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-XfmiewI74eDLKTAU6Ed76QXfJYMRb+idRACl6CW07ME=";
   };
 
-  pythonImportsCheck = [
-    "reprshed"
-  ];
+  pythonImportsCheck = [ "reprshed" ];
 
   meta = with lib; {
     homepage = "https://github.com/mentalisttraceur/python-reprshed";

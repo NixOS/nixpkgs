@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , expat
 , flac
@@ -41,19 +40,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
-  version = "3.4.7";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
     rev = finalAttrs.version;
-    hash = "sha256-p7qbmR8NcE8mgmlTtkHxVRo4DDUHPMiAUhdF3zm9IEc=";
+    hash = "sha256-5rDOmhXMc7B67rMa9s55LV/T9B8yb2vVNGM2fnFG6u8=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     perl
     pkg-config
+    gettext # msgmerge
   ];
 
   buildInputs = [

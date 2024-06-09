@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyasn1
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyasn1,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,17 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-AAS1VuppCIxgswpLSHFAc6q9cyJBLpdDuU9D1KU13vg=";
   };
 
-  propagatedBuildInputs = [
-    pyasn1
-  ];
+  propagatedBuildInputs = [ pyasn1 ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyasn1_modules"
-  ];
+  pythonImportsCheck = [ "pyasn1_modules" ];
 
   meta = with lib; {
     description = "A collection of ASN.1-based protocols modules";

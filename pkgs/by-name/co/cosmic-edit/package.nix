@@ -21,13 +21,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-edit";
-  version = "unstable-2024-02-28";
+  version = "unstable-2024-03-30";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "536a66eff9c032afd76b60be6a9067a14ed38ab1";
-    hash = "sha256-UsZBxeamw8VuHtHrVtTwHhPPG+SMBrGY5taw+da/Ll0=";
+    rev = "cd1b32218078979aa9a944b3a32f9b96996764a1";
+    hash = "sha256-54DwcI/pwN6nRnHC6GeDYVJXNgS+xBQTnRrKV2YMGUA=";
   };
 
   cargoLock = {
@@ -35,14 +35,15 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "accesskit-0.12.2" = "sha256-ksaYMGT/oug7isQY8/1WD97XDUsX2ShBdabUzxWffYw=";
       "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-Zyi95zcBAohM1WBropLzJczSIfNNNBK2odB4AmW4h5I=";
-      "cosmic-files-0.1.0" = "sha256-64An0MPgnFgyVlWmtBGBs+IV2z+4vmEY2uRPetZM4/M=";
+      "clipboard_macos-0.1.0" = "sha256-PEH+aCpjDCEIj8s39nIeWxb7qu3u9IfriGqf0pYObMk=";
+      "cosmic-config-0.1.0" = "sha256-x/xWMR5w2oEbghTSa8iCi24DA2s99+tcnga8K6jS6HQ=";
+      "cosmic-files-0.1.0" = "sha256-4uwqRzkttmPQlqkX6xLjxyXRcqUhchCjAzZH9wmR+Tk=";
       "cosmic-syntax-theme-0.1.0" = "sha256-BNb9wrryD5FJImboD3TTdPRIfiBqPpItqwGdT1ZiNng=";
-      "cosmic-text-0.11.2" = "sha256-Y9i5stMYpx+iqn4y5DJm1O1+3UIGp0/fSsnNq3Zloug=";
+      "cosmic-text-0.11.2" = "sha256-gUIQFHPaFTmtUfgpVvsGTnw2UKIBx9gl0K67KPuynWs=";
       "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
       "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
+      "smithay-clipboard-0.8.0" = "sha256-OZOGbdzkgRIeDFrAENXE7g62eQTs60Je6lYVr0WudlE=";
       "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
-      "systemicons-0.7.0" = "sha256-zzAI+6mnpQOh+3mX7/sJ+w4a7uX27RduQ99PNxLNF78=";
       "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
       "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
     };
@@ -50,7 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-02-28";
+  env.VERGEN_GIT_COMMIT_DATE = "2024-03-30";
   env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''

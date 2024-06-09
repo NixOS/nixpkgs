@@ -1,12 +1,26 @@
-{ lib, buildPythonPackage, fetchPypi, six, unidecode, nose, yanc }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  unidecode,
+  nose,
+  yanc,
+}:
 
 buildPythonPackage rec {
   pname = "preggy";
   version = "1.4.4";
   format = "setuptools";
 
-  propagatedBuildInputs = [ six unidecode ];
-  nativeCheckInputs = [ nose yanc ];
+  propagatedBuildInputs = [
+    six
+    unidecode
+  ];
+  nativeCheckInputs = [
+    nose
+    yanc
+  ];
 
   src = fetchPypi {
     inherit pname version;

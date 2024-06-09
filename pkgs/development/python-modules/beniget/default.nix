@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gast
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gast,
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "75554b3b8ad0553ce2f607627dad3d95c60c441189875b98e097528f8e23ac0c";
   };
 
-  propagatedBuildInputs = [
-    gast
-  ];
+  propagatedBuildInputs = [ gast ];
 
   meta = {
     description = "Extract semantic information about static Python code";

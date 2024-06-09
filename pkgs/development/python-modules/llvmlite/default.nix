@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, isPyPy
-, pythonAtLeast
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  isPyPy,
+  pythonAtLeast,
 
-# build-system
-, llvm
-, setuptools
+  # build-system
+  llvm,
+  setuptools,
 
-# tests
-, python
+  # tests
+  python,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, capstone
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  capstone,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-6m8opcTM4vrK+VCPXxNhZttUq6YmS8swLUDhjyfinWE=";
   };
 
-  propagatedBuildInputs = [
-    capstone
-  ];
+  propagatedBuildInputs = [ capstone ];
 
   # Test suite is working with binaries
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ropgadget"
-  ];
+  pythonImportsCheck = [ "ropgadget" ];
 
   meta = with lib; {
     description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";

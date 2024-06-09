@@ -60,6 +60,8 @@ in
     networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ 9651 ];
     networking.firewall.allowedUDPPorts = lib.optionals cfg.openFirewall [ 9650 9651 ];
 
+    environment.systemPackages = [ cfg.package ];
+
     systemd.services.mycelium = {
       description = "Mycelium network";
       after = [ "network.target" ];

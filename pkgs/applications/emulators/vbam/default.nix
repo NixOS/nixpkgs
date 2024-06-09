@@ -2,7 +2,6 @@
 , cairo
 , cmake
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg
 , gettext
 , wxGTK32

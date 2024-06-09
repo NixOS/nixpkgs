@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, requests
-, ciso8601
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  requests,
+  ciso8601,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-7dIVD+4MiYtsjAM5j67MlbiUN2Q5DpK6bUU0ZuHN2rk=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     requests
@@ -31,9 +30,7 @@ buildPythonPackage rec {
   # All tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dwdwfsapi"
-  ];
+  pythonImportsCheck = [ "dwdwfsapi" ];
 
   meta = with lib; {
     description = "Python client to retrieve data provided by DWD via their geoserver WFS API";

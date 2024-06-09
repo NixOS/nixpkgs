@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, packaging
-, setuptools
-, pkgconfig
-, freetype
-, pytest
-, python
-, pillow
-, numpy
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  packaging,
+  setuptools,
+  pkgconfig,
+  freetype,
+  pytest,
+  python,
+  pillow,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     pkgconfig
   ];
 
-  buildInputs = [
-    freetype
-  ];
+  buildInputs = [ freetype ];
 
   nativeCheckInputs = [
     numpy

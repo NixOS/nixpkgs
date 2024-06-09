@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, packaging
-, torch
-, kornia-rs
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  packaging,
+  torch,
+  kornia-rs,
 }:
 
 buildPythonPackage rec {
@@ -44,7 +45,7 @@ buildPythonPackage rec {
     "kornia.utils"
   ];
 
-  doCheck = false;  # tests hang with no single test clearly responsible
+  doCheck = false; # tests hang with no single test clearly responsible
 
   meta = with lib; {
     homepage = "https://kornia.github.io/kornia";

@@ -87,7 +87,7 @@ in
     ];
 
     programs.zsh.interactiveShellInit =
-      lib.lib.mkAfter (lib.concatStringsSep "\n" ([
+      lib.mkAfter (lib.concatStringsSep "\n" ([
         "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
       ] ++ lib.optional (builtins.length(cfg.highlighters) > 0)
         "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${builtins.concatStringsSep " " cfg.highlighters})"

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, greenlet
-, trio
-, outcome
-, sniffio
-, exceptiongroup
-, pytest-trio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  greenlet,
+  trio,
+  outcome,
+  sniffio,
+  exceptiongroup,
+  pytest-trio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -31,22 +32,19 @@ buildPythonPackage rec {
       --replace-fail '"pytest-runner"' ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     greenlet
     trio
     outcome
     sniffio
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
   pytestFlagsArray = [
     # RuntimeWarning: Can't run the Python asyncio tests because they're not installed
-    "-W" "ignore::RuntimeWarning"
+    "-W"
+    "ignore::RuntimeWarning"
   ];
 
   nativeCheckInputs = [
@@ -54,15 +52,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "trio_asyncio"
-  ];
+  pythonImportsCheck = [ "trio_asyncio" ];
 
   meta = with lib; {
     changelog = "https://github.com/python-trio/trio-asyncio/blob/v${version}/docs/source/history.rst";
     description = "Re-implementation of the asyncio mainloop on top of Trio";
     homepage = "https://github.com/python-trio/trio-asyncio";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ dotlambda ];
   };
 }
