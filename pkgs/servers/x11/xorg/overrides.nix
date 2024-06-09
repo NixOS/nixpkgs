@@ -636,7 +636,7 @@ self: super:
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
     prePatch = ''
-      patchShebangs rules/merge.py rules/compat/map-variants.py rules/xml2lst.pl
+      patchShebangs rules/merge.py rules/compat/map-variants.py rules/generate-options-symbols.py rules/xml2lst.pl
     '';
     nativeBuildInputs = attrs.nativeBuildInputs ++ [
       meson
