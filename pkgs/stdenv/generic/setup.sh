@@ -272,19 +272,20 @@ appendToVar() {
     fi
 }
 
-# Accumulate into `flagsArray` the flags from the named variables.
+# Accumulate flags from the named variables $2+ into the array $1.
 #
 # Arrays are simply concatenated, strings are split on whitespace.
-_accumFlagsArray() {
+concatTo() {
+    local -n targetref="$1"; shift
     local name type
     for name in "$@"; do
         if type=$(declare -p "$name" 2> /dev/null); then
             local -n nameref="$name"
             case "${type#* }" in
                 -A*|-a*)
-                    flagsArray+=( "${nameref[@]}" ) ;;
+                    targetref+=( "${nameref[@]}" ) ;;
                 *)
-                    flagsArray+=( ${nameref-} ) ;;
+                    targetref+=( ${nameref-} ) ;;
             esac
         fi
     done
@@ -1096,11 +1097,7 @@ unpackPhase() {
     fi
 
     local -a srcsArray
-    if [ -n "$__structuredAttrs" ]; then
-        srcsArray=( "${srcs[@]}" )
-    else
-        srcsArray=( $srcs )
-    fi
+    concatTo srcsArray srcs
 
     # To determine the source directory created by unpacking the
     # source archives, we record the contents of the current
@@ -1165,11 +1162,7 @@ patchPhase() {
     runHook prePatch
 
     local -a patchesArray
-    if [ -n "$__structuredAttrs" ]; then
-        patchesArray=( ${patches:+"${patches[@]}"} )
-    else
-        patchesArray=( ${patches:-} )
-    fi
+    concatTo patchesArray patches
 
     for i in "${patchesArray[@]}"; do
         echo "applying patch $i"
@@ -1281,7 +1274,7 @@ configurePhase() {
 
     if [ -n "$configureScript" ]; then
         local -a flagsArray
-        _accumFlagsArray configureFlags configureFlagsArray
+        concatTo flagsArray configureFlags configureFlagsArray
 
         echoCmd 'configure flags' "${flagsArray[@]}"
         # shellcheck disable=SC2086
@@ -1308,7 +1301,7 @@ buildPhase() {
             ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
             SHELL=$SHELL
         )
-        _accumFlagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
+        concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
 
         echoCmd 'build flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1347,13 +1340,13 @@ checkPhase() {
             SHELL=$SHELL
         )
 
-        _accumFlagsArray makeFlags makeFlagsArray
+        concatTo flagsArray makeFlags makeFlagsArray
         if [ -n "$__structuredAttrs" ]; then
             flagsArray+=( "${checkFlags[@]:-VERBOSE=y}" )
         else
             flagsArray+=( ${checkFlags:-VERBOSE=y} )
         fi
-        _accumFlagsArray checkFlagsArray
+        concatTo flagsArray checkFlagsArray
         flagsArray+=( ${checkTarget} )
 
         echoCmd 'check flags' "${flagsArray[@]}"
@@ -1387,7 +1380,7 @@ installPhase() {
         ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
         SHELL=$SHELL
     )
-    _accumFlagsArray makeFlags makeFlagsArray installFlags installFlagsArray
+    concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray
     if [ -n "$__structuredAttrs" ]; then
         flagsArray+=( "${installTargets[@]:-install}" )
     else
@@ -1475,7 +1468,7 @@ installCheckPhase() {
             SHELL=$SHELL
         )
 
-        _accumFlagsArray makeFlags makeFlagsArray \
+        concatTo flagsArray makeFlags makeFlagsArray \
           installCheckFlags installCheckFlagsArray
         flagsArray+=( ${installCheckTarget:-installcheck} )
 
@@ -1492,7 +1485,7 @@ distPhase() {
     runHook preDist
 
     local flagsArray=()
-    _accumFlagsArray distFlags distFlagsArray
+    concatTo flagsArray distFlags distFlagsArray
     flagsArray+=( ${distTarget:-dist} )
 
     echo 'dist flags: %q' "${flagsArray[@]}"
