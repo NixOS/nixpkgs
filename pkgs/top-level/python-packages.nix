@@ -9932,6 +9932,8 @@ self: super: with self; {
 
   pycrdt-websocket = callPackage ../development/python-modules/pycrdt-websocket { };
 
+  pycycling = callPackage ../development/python-modules/pycycling { };
+
   pyfibaro = callPackage ../development/python-modules/pyfibaro { };
 
   pyfireservicerota = callPackage ../development/python-modules/pyfireservicerota { };
