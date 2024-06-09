@@ -24,11 +24,7 @@
 }:
 
 let
-  # Sometimes we access `llvmPackages` via `pkgs`, and other times
-  # via `pkgsFooBar`, so a string (attrname) is the only way to have
-  # a single point of control over the LLVM version used.
-  llvmPackages_attrName = "llvmPackages_17";
-  stdenv = pkgs.${llvmPackages_attrName}.stdenv;
+  stdenv = pkgs.rustc.llvmPackages.stdenv;
 
   # Helper functions for changes that depend on specific versions:
   warnObsoleteVersionConditional = min-version: result:
@@ -48,7 +44,7 @@ let
   callPackage = newScope chromium;
 
   chromium = rec {
-    inherit stdenv llvmPackages_attrName upstream-info;
+    inherit stdenv upstream-info;
 
     mkChromiumDerivation = callPackage ./common.nix ({
       inherit channel chromiumVersionAtLeast versionRange;
