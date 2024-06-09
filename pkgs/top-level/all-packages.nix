@@ -2707,8 +2707,6 @@ with pkgs;
 
   pcem = callPackage ../applications/emulators/pcem { };
 
-  pcsx2 = qt6Packages.callPackage ../applications/emulators/pcsx2 { };
-
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
   ppsspp-sdl = let
