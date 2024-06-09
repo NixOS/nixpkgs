@@ -13,6 +13,8 @@ usage() {
     echo "                              [--version-key=<version-key>] [--source-key=<source-key>]"
     echo "                              [--system=<system>] [--file=<file-to-update>] [--rev=<revision>]"
     echo "                              [--ignore-same-hash] [--ignore-same-version] [--print-changes]"
+    echo ""
+    echo "The <version> positional argument is also optional when passing --ignore-same-version."
 }
 
 ignoreSameVersion=
@@ -71,7 +73,13 @@ newUrl=${args[3]}
 # Third-party repositories might not accept arguments in their default.nix.
 importTree="(let tree = import ./.; in if builtins.isFunction tree then tree {} else tree)"
 
-if (( "${#args[*]}" < 2 )); then
+if [[ -z "$ignoreSameVersion" ]]; then
+    requiredArgs=2
+else
+    requiredArgs=1
+fi
+
+if (( "${#args[*]}" < $requiredArgs )); then
     echo "$scriptName: Too few arguments"
     usage
     exit 1
@@ -141,6 +149,10 @@ oldVersion=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.${ver
 
 if [[ -z "$oldVersion" ]]; then
     die "Couldn't find out the old version of '$attr'!"
+fi
+
+if [[ -n "$ignoreSameVersion" && -z "$newVersion" ]]; then
+    newVersion="$oldVersion"
 fi
 
 if [[ -z "$ignoreSameVersion" && "$oldVersion" = "$newVersion" ]]; then
