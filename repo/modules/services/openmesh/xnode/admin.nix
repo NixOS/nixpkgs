@@ -14,7 +14,7 @@ in
 
     stateDir = mkOption {
       type = types.str;
-      default = "/var/lib/openmesh-xnode-admin/default.nix";
+      default = "/var/lib/openmesh-xnode-admin";
       description = "State storage directory.";
     };
 
@@ -32,7 +32,7 @@ in
 
     remoteDir = mkOption {
       type = types.str;
-      default = "https://openmesh.network/xnodes/functions";
+      default = "https://dpl-backend-staging.up.railway.app/xnodes/functions";
       description = "The remote repository to pull down a configuration from.";
     };
 
@@ -41,7 +41,6 @@ in
       default = 0;
       description = "Number of seconds between fetching for changes to configuration.";
     };
-    # Todo: UUID + PSK implementation
   };
 
   config = lib.mkIf cfg.enable {
@@ -57,6 +56,7 @@ in
         Restart = "always";
         WorkingDirectory = cfg.stateDir;
         StateDirectory = "openmesh-xnode-admin";
+        StateDirectoryMode = "0755";
         RuntimeDirectory = "openmesh-xnode-admin";
         RuntimeDirectoryMode = "0755";
         PrivateTmp = true;

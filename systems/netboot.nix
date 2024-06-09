@@ -24,6 +24,7 @@ let
         };
         getty = {
           greetingLine = ''<<< Welcome to Openmesh XnodeOS ${config.system.nixos.label} (\m) - \l >>>'';
+          autologinUser = lib.mkForce "xnode";
         };
       };
       environment = {
@@ -35,7 +36,8 @@ let
         squashfsCompression = "gzip -Xcompression-level 1";
       };
       boot = {
-        postBootCommands = ''nixos-generate-config && echo '{config,lib,pkgs,...}:{imports=[./hardware-configuration.nix] ++ lib.optional (builtins.pathExists ./local-configuration.nix) ./local-configuration.nix; boot.loader.grub.enable=false;}' > /etc/nixos/configuration.nix'';
+        postBootCommands = ''nixos-generate-config; echo '{config,lib,pkgs,...}:{imports=[./hardware-configuration.nix] ++ lib.optional (builtins.pathExists /home/xnode/config.nix) /home/xnode/config.nix; boot.loader.grub.enable=false;}' > /etc/nixos/configuration.nix'';
+        # Fixme: Hardcoded import location /var/lib/openmesh-xnode-admin/config.nix
       };
       networking = {
         hostName = "xnode";
