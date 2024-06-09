@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.7.0-unstable-2024-05-09";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
