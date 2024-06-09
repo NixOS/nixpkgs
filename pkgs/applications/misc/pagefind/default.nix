@@ -120,6 +120,9 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];
     platforms = platforms.unix;
+    # See comment about wasm32-unknown-unknown in rustc.nix.
+    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+      !stdenv.hostPlatform.gcc.thumb or true;
     mainProgram = "pagefind";
   };
 }
