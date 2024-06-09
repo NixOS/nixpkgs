@@ -1,10 +1,11 @@
-{ stdenv, lib, pkgArches, makeSetupHook,
+{ stdenv, lib, pkgArches, makeSetupHook, substituteAll,
   pname, version, src, mingwGccs, monos, geckos, platforms,
   bison, flex, fontforge, makeWrapper, pkg-config,
   nixosTests,
   supportFlags,
   wineRelease,
   patches,
+  d3dmetal,
   moltenvk,
   buildScript ? null, configureFlags ? [], mainProgram ? "wine"
 }:
@@ -36,7 +37,8 @@ let
     "udevSupport" "v4lSupport" "vaSupport" "waylandSupport" "x11Support" "xineramaSupport"
   ];
 
-  badPlatforms = lib.optional (!supportFlags.mingwSupport || lib.any (flag: supportFlags.${flag}) darwinUnsupportedFlags) "x86_64-darwin";
+  badPlatforms = lib.optional (!supportFlags.mingwSupport || lib.any (flag: supportFlags.${flag}) darwinUnsupportedFlags) "x86_64-darwin"
+    ++ lib.optionals (supportFlags.d3dmetalSupport && !stdenv.isDarwin) [ "i686-linux" "x86_64-linux" ];
 in
 stdenv.mkDerivation (finalAttrs:
 lib.optionalAttrs (buildScript != null) { builder = buildScript; }
@@ -110,7 +112,24 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
      mesa # for libgbm
   ])));
 
-  inherit patches;
+  patches = lib.optionals supportFlags.d3dmetalSupport [
+    # GPTK patches ported from Apple’s Homebrew formula and CrossOver’s GPTK support.
+    (substituteAll {
+      src = ./gptk/0001-winemac.drv-changes-for-GPTK-compatibility.patch;
+      usePre910API = if lib.versionOlder finalAttrs.version "9.10" then 1 else 0;
+    })
+    (substituteAll {
+      src =
+        # wine-staging requires a slightly different patch due to a conflict with the BPF patches it applies.
+        if wineRelease == "staging" then
+          ./gptk/0002-ntdll-changes-for-GPTK-compatibility-staging.patch
+        else
+          ./gptk/0002-ntdll-changes-for-GPTK-compatibility.patch;
+      nixD3dMetal = lib.head (toBuildInputs pkgArches (pkgs: [ (lib.getLib d3dmetal) ]));
+    })
+    # Making `__wine_unix_call` an inline function breaks GPTK.
+    ./gptk/0003-Revert-ntdll-Make-__wine_unix_call-an-inline-functio.patch
+  ] ++ patches;
 
   configureFlags = prevConfigFlags
     ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]

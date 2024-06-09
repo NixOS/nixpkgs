@@ -1,0 +1,265 @@
+From 7e4247cc8485eeb3560eb27d8928dd98138f6eef Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 8 Jun 2024 02:16:35 -0400
+Subject: [PATCH 3/4] ntdll changes for GPTK compatibility
+
+---
+ dlls/ntdll/loader.c             |   8 +++
+ dlls/ntdll/unix/loader.c        | 100 +++++++++++++++++++++++++++++++-
+ dlls/ntdll/unix/signal_x86_64.c |  31 ++++++++++
+ dlls/ntdll/unixlib.h            |   9 +++
+ 4 files changed, 147 insertions(+), 1 deletion(-)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 5c59d102dd9..6d22a255e0a 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -2271,6 +2271,14 @@ static NTSTATUS build_module( LPCWSTR load_path, const UNICODE_STRING *nt_name,
+     TRACE_(loaddll)( "Loaded %s at %p: %s\n", debugstr_w(wm->ldr.FullDllName.Buffer), *module,
+                      is_builtin ? "builtin" : "native" );
+ 
++#if defined(__x86_64__)
++    if (is_builtin == FALSE)
++    {
++        struct pe_module_loaded_params params = { *module, (void*)((BYTE*)*module + map_size) };
++        WINE_UNIX_CALL( unix_pe_module_loaded, &params );
++    }
++#endif
++
+     wm->ldr.LoadCount = 1;
+     *pwm = wm;
+     *module = NULL;
+diff --git a/dlls/ntdll/unix/loader.c b/dlls/ntdll/unix/loader.c
+index 9d866fa70f5..bd9ce36c30b 100644
+--- a/dlls/ntdll/unix/loader.c
++++ b/dlls/ntdll/unix/loader.c
+@@ -37,6 +37,7 @@
+ #include <sys/stat.h>
+ #include <sys/mman.h>
+ #include <sys/wait.h>
++#include <sys/utsname.h>
+ #include <unistd.h>
+ #include <dlfcn.h>
+ #ifdef HAVE_PWD_H
+@@ -343,9 +344,11 @@ static void set_dll_path(void)
+ 
+     if (path) for (p = path, count = 1; *p; p++) if (*p == ':') count++;
+ 
+-    dll_paths = malloc( (count + 2) * sizeof(*dll_paths) );
++    dll_paths = malloc( (count + 2 + 1 /* For the D3DMetal store path */) * sizeof(*dll_paths) );
+     count = 0;
+ 
++    dll_paths[count++] = "@nixD3dMetal@/lib/wine";
++
+     if (!build_dir) dll_paths[count++] = dll_dir;
+ 
+     if (path)
+@@ -356,6 +359,7 @@ static void set_dll_path(void)
+     }
+ 
+     for (i = 0; i < count; i++) dll_path_maxlen = max( dll_path_maxlen, strlen(dll_paths[i]) );
++
+     dll_paths[count] = NULL;
+ }
+ 
+@@ -973,6 +977,93 @@ static NTSTATUS load_so_dll( void *args )
+     return status;
+ }
+ 
++#if defined(__APPLE__) && defined(__x86_64__)
++static pthread_once_t non_native_init_once = PTHREAD_ONCE_INIT;
++static void* non_native_support_lib;
++static void (*register_non_native_code_region) (void*, void*);
++static bool (*supports_non_native_code_regions) (void);
++
++/* libd3dshared.dylib requires Ventura or later, don't bother loading on earlier OSes */
++static BOOL ventura_or_later(void)
++{
++    int result;
++    struct utsname name;
++    unsigned major, minor;
++
++    result = (uname( &name ) == 0 &&
++              sscanf( name.release, "%u.%u", &major, &minor ) == 2 &&
++              major >= 22 /* macOS 13 Ventura */);
++
++    return (result == 1) ? TRUE : FALSE;
++}
++
++/* Only load libd3dshared under Rosetta/Apple Silicon.
++ * On Intel, supports_non_native_code_regions() returns TRUE, but of course
++ * it actually doesn't.
++ * register_non_native_code_region() then does a syscall() which triggers a
++ * SIGSYS and crashes.
++ */
++static BOOL is_apple_silicon(void)
++{
++    /* returns 0 for native process or on error, 1 for translated */
++    int ret = 0;
++    size_t size = sizeof(ret);
++    if (sysctlbyname( "sysctl.proc_translated", &ret, &size, NULL, 0 ) == -1)
++        return FALSE;
++    else
++        return (ret == 1) ? TRUE : FALSE;
++}
++
++static void init_non_native_support(void)
++{
++    size_t idx = 0;
++
++    register_non_native_code_region = NULL;
++    supports_non_native_code_regions = NULL;
++
++    non_native_support_lib = NULL;
++
++    if (!ventura_or_later() || !is_apple_silicon())
++    {
++        return;
++    }
++
++    const char* libd3dshared_path = "@nixD3dMetal@/lib/external/libd3dshared.dylib";
++    non_native_support_lib = dlopen( libd3dshared_path, RTLD_LOCAL );
++    if (non_native_support_lib)
++    {
++        TRACE( "Found libd3dshared.dylib at %s\n", libd3dshared_path );
++    }
++
++    if (non_native_support_lib)
++    {
++        register_non_native_code_region = dlsym( non_native_support_lib, "register_non_native_code_region" );
++        supports_non_native_code_regions = dlsym( non_native_support_lib, "supports_non_native_code_regions" );
++        TRACE( "Loaded libd3dshared.dylib, does%s support non-native code regions\n",
++               supports_non_native_code_regions ? (supports_non_native_code_regions() ? "" : " not") : " not" );
++    }
++    else
++    {
++        TRACE( "Loading libd3dshared.dylib failed: %s\n", dlerror() );
++    }
++}
++
++static NTSTATUS pe_module_loaded( void *args )
++{
++    struct pe_module_loaded_params *params = args;
++
++    pthread_once( &non_native_init_once, &init_non_native_support );
++    if ((supports_non_native_code_regions && supports_non_native_code_regions()))
++    {
++        TRACE("Marking non_native_code_region: %p, %p\n", params->start, params->end);
++        register_non_native_code_region(params->start, params->end);
++    }
++    return STATUS_SUCCESS;
++}
++#elif defined(__x86_64__)
++static NTSTATUS pe_module_loaded( void *args ) { return STATUS_NOT_IMPLEMENTED; }
++#endif
++
+ 
+ static const unixlib_entry_t unix_call_funcs[] =
+ {
+@@ -984,6 +1075,9 @@ static const unixlib_entry_t unix_call_funcs[] =
+     unixcall_wine_server_handle_to_fd,
+     unixcall_wine_spawnvp,
+     system_time_precise,
++#if defined(__x86_64__)
++    pe_module_loaded,
++#endif
+ };
+ 
+ 
+@@ -991,6 +1085,7 @@ static const unixlib_entry_t unix_call_funcs[] =
+ 
+ static NTSTATUS wow64_load_so_dll( void *args ) { return STATUS_INVALID_IMAGE_FORMAT; }
+ static NTSTATUS wow64_unwind_builtin_dll( void *args ) { return STATUS_UNSUCCESSFUL; }
++static NTSTATUS wow64_pe_module_loaded( void *args ) { return STATUS_NOT_IMPLEMENTED; }
+ 
+ const unixlib_entry_t unix_call_wow64_funcs[] =
+ {
+@@ -1002,6 +1097,9 @@ const unixlib_entry_t unix_call_wow64_funcs[] =
+     wow64_wine_server_handle_to_fd,
+     wow64_wine_spawnvp,
+     system_time_precise,
++#if defined(__x86_64__)
++    wow64_pe_module_loaded,
++#endif
+ };
+ 
+ #endif  /* _WIN64 */
+diff --git a/dlls/ntdll/unix/signal_x86_64.c b/dlls/ntdll/unix/signal_x86_64.c
+index e6b53003257..91043d7289f 100644
+--- a/dlls/ntdll/unix/signal_x86_64.c
++++ b/dlls/ntdll/unix/signal_x86_64.c
+@@ -2203,6 +2203,33 @@ static void usr1_handler( int signal, siginfo_t *siginfo, void *sigcontext )
+ }
+ 
+ 
++#ifdef __APPLE__
++/**********************************************************************
++ *		sigsys_handler
++ *
++ * Handler for SIGSYS, signals that a non-existent system call was invoked.
++ * Only called on macOS 14 Sonoma and later.
++ */
++static void sigsys_handler( int signal, siginfo_t *siginfo, void *sigcontext )
++{
++    extern const void *__wine_syscall_dispatcher_prolog_end_ptr;
++    struct syscall_frame *frame = amd64_thread_data()->syscall_frame;
++    ucontext_t *ctx = sigcontext;
++
++    TRACE_(seh)("SIGSYS, rax %#llx, rip %#llx.\n", RAX_sig(ctx), RIP_sig(ctx));
++
++    frame->rip = RIP_sig(ctx) + 0xb;
++    frame->rcx = RIP_sig(ctx);
++    frame->eflags = EFL_sig(ctx);
++    frame->restore_flags = 0;
++    RCX_sig(ctx) = (ULONG_PTR)frame;
++    R11_sig(ctx) = frame->eflags;
++    EFL_sig(ctx) &= ~0x100;  /* clear single-step flag */
++    RIP_sig(ctx) = (ULONG64)__wine_syscall_dispatcher_prolog_end_ptr;
++}
++#endif
++
++
+ /***********************************************************************
+  *           LDT support
+  */
+@@ -2496,6 +2523,10 @@ void signal_init_process(void)
+     if (sigaction( SIGSEGV, &sig_act, NULL ) == -1) goto error;
+     if (sigaction( SIGILL, &sig_act, NULL ) == -1) goto error;
+     if (sigaction( SIGBUS, &sig_act, NULL ) == -1) goto error;
++#ifdef __APPLE__
++    sig_act.sa_sigaction = sigsys_handler;
++    if (sigaction( SIGSYS, &sig_act, NULL ) == -1) goto error;
++#endif
+     install_bpf(&sig_act);
+     return;
+ 
+diff --git a/dlls/ntdll/unixlib.h b/dlls/ntdll/unixlib.h
+index 9cb444342fe..3a4a3700e03 100644
+--- a/dlls/ntdll/unixlib.h
++++ b/dlls/ntdll/unixlib.h
+@@ -66,6 +66,12 @@ struct unwind_builtin_dll_params
+     CONTEXT                    *context;
+ };
+ 
++struct pe_module_loaded_params
++{
++    void *start;
++    void *end;
++};
++
+ enum ntdll_unix_funcs
+ {
+     unix_load_so_dll,
+@@ -76,6 +82,9 @@ enum ntdll_unix_funcs
+     unix_wine_server_handle_to_fd,
+     unix_wine_spawnvp,
+     unix_system_time_precise,
++#if defined(__x86_64__)
++    unix_pe_module_loaded,
++#endif
+ };
+ 
+ extern unixlib_handle_t __wine_unixlib_handle;
+-- 
+2.45.1
+
