@@ -57,22 +57,25 @@ buildPythonPackage rec {
   disabledTests =
     # Hangs forever
     [ "test_copy_onto" ]
-    # RuntimeError: internal error
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      # RuntimeError: internal error
       "test_add_scale_sequence"
       "test_modules"
       "test_setattr"
+
+      # _queue.Empty errors in multiprocessing tests
+      "test_isend"
     ];
 
   # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
   disabledTestPaths = lib.optionals stdenv.isDarwin [ "test/test_distributed.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "A pytorch dedicated tensor container";
     changelog = "https://github.com/pytorch/tensordict/releases/tag/v${version}";
     homepage = "https://github.com/pytorch/tensordict";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     # No python 3.12 support yet: https://github.com/pytorch/rl/issues/2035
     broken = pythonAtLeast "3.12";
   };

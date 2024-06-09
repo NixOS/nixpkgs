@@ -6,7 +6,7 @@
 }:
 buildGoModule {
   pname = "hexxy";
-  version = "0-unstable-2024-02-24";
+  version = "0-unstable-2024-02-23";
   src = fetchFromGitHub {
     owner = "sweetbbak";
     repo = "hexxy";
