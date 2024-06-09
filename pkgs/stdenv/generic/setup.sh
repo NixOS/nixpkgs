@@ -1254,12 +1254,8 @@ patchPhase() {
         esac
 
         local -a flagsArray
-        if [ -n "$__structuredAttrs" ]; then
-            flagsArray=( "${patchFlags[@]:--p1}" )
-        else
-            # shellcheck disable=SC2086,SC2206
-            flagsArray=( ${patchFlags:--p1} )
-        fi
+        : "${patchFlags:=-p1}"
+        concatTo flagsArray patchFlags
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
         # shellcheck disable=SC2086
         $uncompress < "$i" 2>&1 | patch "${flagsArray[@]}"
@@ -1411,16 +1407,8 @@ checkPhase() {
             SHELL="$SHELL"
         )
 
-        concatTo flagsArray makeFlags makeFlagsArray
-        if [ -n "$__structuredAttrs" ]; then
-            flagsArray+=( "${checkFlags[@]:-VERBOSE=y}" )
-        else
-            # shellcheck disable=SC2206
-            flagsArray+=( ${checkFlags:-VERBOSE=y} )
-        fi
-        concatTo flagsArray checkFlagsArray
-        # shellcheck disable=SC2206
-        flagsArray+=( ${checkTarget} )
+        : "${checkFlags:=VERBOSE=y}"
+        concatTo flagsArray makeFlags makeFlagsArray checkFlags checkFlagsArray checkTarget
 
         echoCmd 'check flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1453,13 +1441,9 @@ installPhase() {
         ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
         SHELL="$SHELL"
     )
-    concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray
-    if [ -n "$__structuredAttrs" ]; then
-        flagsArray+=( "${installTargets[@]:-install}" )
-    else
-        # shellcheck disable=SC2206
-        flagsArray+=( ${installTargets:-install} )
-    fi
+
+    : "${installTargets:=install}"
+    concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray installTargets
 
     echoCmd 'install flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1542,10 +1526,9 @@ installCheckPhase() {
             SHELL="$SHELL"
         )
 
+        : "${installCheckTarget:=installcheck}"
         concatTo flagsArray makeFlags makeFlagsArray \
-          installCheckFlags installCheckFlagsArray
-        # shellcheck disable=SC2206
-        flagsArray+=( ${installCheckTarget:-installcheck} )
+          installCheckFlags installCheckFlagsArray installCheckTarget
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1560,9 +1543,8 @@ distPhase() {
     runHook preDist
 
     local flagsArray=()
-    concatTo flagsArray distFlags distFlagsArray
-    # shellcheck disable=SC2206
-    flagsArray+=( ${distTarget:-dist} )
+    : "${distTarget:=dist}"
+    concatTo flagsArray distFlags distFlagsArray distTarget
 
     echo 'dist flags: %q' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
