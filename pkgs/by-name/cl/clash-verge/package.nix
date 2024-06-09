@@ -1,66 +1,114 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, wrapGAppsHook3
-, autoPatchelfHook
-, clash-meta
-, openssl
-, webkitgtk
-, udev
-, libayatana-appindicator
-, nix-update-script
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  nodejs,
+  pnpm,
+  cargo,
+  rustc,
+  cargo-tauri,
+  pkg-config,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  libsoup,
+  openssl,
+  webkitgtk,
+  libayatana-appindicator,
+  clash-meta,
+  dbip-country-lite,
+  v2ray-geoip,
+  v2ray-domain-list-community,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clash-verge";
-  version = "1.3.8";
+  version = "1.6.4";
 
-  src = fetchurl {
-    url = "https://github.com/zzzgydi/clash-verge/releases/download/v${version}/clash-verge_${version}_amd64.deb";
-    hash = "sha256-kOju4yaa+EKzFWDrk0iSJVoWkQMBjQG3hKLfAsqlsy8=";
+  src = fetchFromGitHub {
+    owner = "clash-verge-rev";
+    repo = "clash-verge-rev";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-1oPDrNsL92VUXe7HRIR7zlf45K0xQFIdncC11MRvsP8=";
+  };
+
+  sourceRoot = "${finalAttrs.src.name}/src-tauri";
+
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+
+    # correct path for resources
+    substituteInPlace $cargoDepsCopy/tauri-utils-*/src/platform.rs \
+      --replace-fail "\"/usr" "\"$out"
+
+    # skip build sidecar and resources
+    sed -i -e '/externalBin/d' -e '/resources/d' tauri.conf.json
+  '';
+
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-yv7VjLcwIBR5Xh14IAwiUFzjoLgdJV18psKGWzhXULw=";
+  };
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "auto-launch-0.5.0" = "sha256-hH3jcPkcwHZToEu/IPJB4Gk/8X+pyRgkE0Fez4hpRD8=";
+      "sysproxy-0.3.0" = "sha256-kxpbzWgIrIvQXezF/cnL/R7YmMKxTGCjB5O2NjJ5gDw=";
+    };
   };
 
   nativeBuildInputs = [
-    dpkg
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    cargo-tauri
+    nodejs
+    pnpm.configHook
+    pkg-config
     wrapGAppsHook3
-    autoPatchelfHook
   ];
 
   buildInputs = [
+    glib
+    gtk3
+    libsoup
     openssl
     webkitgtk
-    stdenv.cc.cc
-  ];
-
-  runtimeDependencies = [
-    (lib.getLib udev)
     libayatana-appindicator
   ];
 
-  installPhase = ''
-    runHook preInstall
+  preConfigure = ''
+    chmod +w ..
+  '';
 
-    mkdir -p $out/bin
-    mv usr/* $out
+  preBuild = ''
+    cargo tauri build -b deb
+  '';
 
-    runHook postInstall
+  preInstall = ''
+    mv target/release/bundle/deb/*/data/usr/ $out
   '';
 
   postFixup = ''
-    rm -f $out/bin/clash
-    ln -sf ${lib.getExe clash-meta} $out/bin/${clash-meta.meta.mainProgram}
+    ln -sf ${lib.getExe clash-meta} $out/bin/clash-meta
+    # nixpkgs doesn't have clash-meta-alpha right now.
+    ln -sf ${lib.getExe clash-meta} $out/bin/clash-meta-alpha
+
+    mkdir -p $out/lib/clash-verge/resources
+    ln -sf ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/clash-verge/resources
+    ln -sf ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/clash-verge/resources
+    ln -sf ${dbip-country-lite.mmdb} $out/lib/clash-verge/resources/Country.mmdb
   '';
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = with lib; {
-    description = "Clash GUI based on tauri";
-    homepage = "https://github.com/zzzgydi/clash-verge";
-    platforms = [ "x86_64-linux" ];
-    license = licenses.gpl3Plus;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ zendo ];
+  meta = {
+    description = "Clash Meta GUI based on Tauri, Continuation of Clash Verge";
+    homepage = "https://github.com/clash-verge-rev/clash-verge-rev";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "clash-verge";
+    maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})
