@@ -8,6 +8,7 @@
 , gzip
 , nodejs
 , rustc
+, stdenv
 , wasm-bindgen-cli
 , wasm-pack
 }:
