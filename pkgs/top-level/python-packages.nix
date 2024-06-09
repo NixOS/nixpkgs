@@ -1945,6 +1945,8 @@ self: super: with self; {
 
   cashaddress = callPackage ../development/python-modules/cashaddress { };
 
+  cashews = callPackage ../development/python-modules/cashews {  };
+
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
   castepxbin = callPackage ../development/python-modules/castepxbin { };
@@ -5785,6 +5787,8 @@ self: super: with self; {
 
   indexed-zstd = callPackage ../development/python-modules/indexed-zstd { inherit (pkgs) zstd; };
 
+  inequality = callPackage ../development/python-modules/inequality { };
+
   infinity = callPackage ../development/python-modules/infinity { };
 
   inflect = callPackage ../development/python-modules/inflect { };
@@ -7275,6 +7279,8 @@ self: super: with self; {
 
   matplotlib-sixel = callPackage ../development/python-modules/matplotlib-sixel { };
 
+  matplotlib-venn = callPackage ../development/python-modules/matplotlib-venn { };
+
   matplotx = callPackage ../development/python-modules/matplotx { };
 
   matrix-api-async = callPackage ../development/python-modules/matrix-api-async { };
@@ -7672,6 +7678,8 @@ self: super: with self; {
   molecule = callPackage ../development/python-modules/molecule { };
 
   molecule-plugins = callPackage ../development/python-modules/molecule/plugins.nix { };
+
+  momepy = callPackage ../development/python-modules/momepy { };
 
   monai = callPackage ../development/python-modules/monai { };
 
@@ -8647,6 +8655,8 @@ self: super: with self; {
   natasha = callPackage ../development/python-modules/natasha { };
 
   nomadnet = callPackage ../development/python-modules/nomadnet { };
+
+  noneprompt = callPackage ../development/python-modules/noneprompt {  };
 
   nox = callPackage ../development/python-modules/nox { };
 

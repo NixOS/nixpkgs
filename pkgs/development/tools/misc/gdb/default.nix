@@ -140,6 +140,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    mainProgram = "gdb";
+
     description = "The GNU Project debugger";
 
     longDescription = ''
