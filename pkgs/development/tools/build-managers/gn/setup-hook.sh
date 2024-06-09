@@ -1,9 +1,12 @@
 gnConfigurePhase() {
     runHook preConfigure
 
-    echo "gn flags: $gnFlags ${gnFlagsArray[@]}"
+    local flagsArray=()
+    concatTo flagsArray gnFlags gnFlagsArray
 
-    gn gen out/Release --args="$gnFlags ${gnFlagsArray[@]}"
+    echoCmd 'gn flags' "${flagsArray[@]}"
+
+    gn gen out/Release --args="${flagsArray[*]}"
     cd out/Release/
 
     runHook postConfigure
