@@ -21,7 +21,6 @@ mesonConfigurePhase() {
         "--localedir=${!outputLib}/share/locale"
         "-Dauto_features=${mesonAutoFeatures:-enabled}"
         "-Dwrap_mode=${mesonWrapMode:-nodownload}"
-        ${crossMesonFlags}
         "--buildtype=${mesonBuildType:-plain}"
     )
 
