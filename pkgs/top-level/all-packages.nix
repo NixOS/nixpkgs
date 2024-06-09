@@ -25674,8 +25674,6 @@ with pkgs;
 
   phlare = callPackage ../servers/monitoring/phlare { };
 
-  grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
-
   grafana-image-renderer = callPackage ../servers/monitoring/grafana-image-renderer { };
 
   grafana-dash-n-grab = callPackage ../servers/monitoring/grafana-dash-n-grab { };
