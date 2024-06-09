@@ -1114,6 +1114,11 @@ let
     # this is a straightforward approach. Example where patching was necessary
     # -> arrow 14.0.0.2 on CRAN; was lagging behind libarrow release:
     #   https://github.com/apache/arrow/issues/39698 )
+
+    vegan3d = old.vegan3d.overrideAttrs (attrs: {
+      RGL_USE_NULL = "true";
+    });
+
     arrow = old.arrow.overrideAttrs (attrs: {
       src = pkgs.arrow-cpp.src;
       name = "r-arrow-${pkgs.arrow-cpp.version}";
