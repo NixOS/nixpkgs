@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p curl xq-xml nix-prefetch
+#! nix-shell -I nixpkgs=./. -i bash -p curl xq-xml nix-prefetch
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
