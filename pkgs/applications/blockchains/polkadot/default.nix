@@ -93,6 +93,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://polkadot.network";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ akru andresilva FlorianFranzen RaghavSood ];
-    platforms = platforms.unix;
+    # See Iso::from_arch in src/isa/mod.rs in cranelift-codegen-meta.
+    platforms = intersectLists platforms.unix (platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86);
   };
 }
