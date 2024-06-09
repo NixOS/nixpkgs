@@ -14,9 +14,8 @@ bmakeBuildPhase() {
     local flagsArray=(
         ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
         SHELL="$SHELL"
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
     )
+    concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
 
     echoCmd 'build flags' "${flagsArray[@]}"
     bmake ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -42,11 +41,9 @@ bmakeCheckPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
             SHELL="$SHELL"
-            # Old bash empty array hack
-            $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-            ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
-            ${checkTarget}
         )
+        : "${checkFlags:=VERBOSE=y}"
+        concatTo flagsArray makeFlags makeFlagsArray checkFlags checkFlagsArray checkTarget
 
         echoCmd 'check flags' "${flagsArray[@]}"
         bmake ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -65,11 +62,9 @@ bmakeInstallPhase() {
     local flagsArray=(
         ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
         SHELL="$SHELL"
-        # Old bash empty array hack
-        $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-        $installFlags ${installFlagsArray+"${installFlagsArray[@]}"}
-        ${installTargets:-install}
     )
+    : "${installTargets:=install}"
+    concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray installTargets
 
     echoCmd 'install flags' "${flagsArray[@]}"
     bmake ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -85,9 +80,9 @@ bmakeDistPhase() {
     fi
 
     # Old bash empty array hack
-    local flagsArray=(
-        $distFlags ${distFlagsArray+"${distFlagsArray[@]}"} ${distTarget:-dist}
-    )
+    local flagsArray=()
+    : "${distTarget:=dist}"
+    concatTo flagsArray distFlags distFlagsArray distTarget
 
     echo 'dist flags: %q' "${flagsArray[@]}"
     bmake ${makefile:+-f $makefile} "${flagsArray[@]}"
