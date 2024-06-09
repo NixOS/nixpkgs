@@ -213,6 +213,6 @@ goBuild ((lib.optionalAttrs enableRocm {
     license = licenses.mit;
     platforms = platforms.unix;
     mainProgram = "ollama";
-    maintainers = with maintainers; [ abysssol dit7ya elohmeier ];
+    maintainers = with maintainers; [ abysssol dit7ya elohmeier roydubnium ];
   };
 })
