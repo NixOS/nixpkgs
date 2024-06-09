@@ -336,34 +336,24 @@ appendToVar() {
 
 # Accumulate into `flagsArray` the flags from the named variables.
 #
-# If __structuredAttrs, the variables are all treated as arrays
-# and simply concatenated onto `flagsArray`.
-#
-# If not __structuredAttrs, then:
-#   * Each variable is treated as a string, and split on whitespace;
-#   * except variables whose names end in "Array", which are treated
-#     as arrays.
+# Arrays are simply concatenated, strings are split on whitespace.
 _accumFlagsArray() {
-    local name
-    if [ -n "$__structuredAttrs" ]; then
-        for name in "$@"; do
+    local name type
+    for name in "$@"; do
+        if type=$(declare -p "$name" 2> /dev/null); then
             local -n nameref="$name"
-            flagsArray+=( ${nameref+"${nameref[@]}"} )
-        done
-    else
-        for name in "$@"; do
-            local -n nameref="$name"
-            case "$name" in
-                *Array)
-                    # shellcheck disable=SC2206
-                    flagsArray+=( ${nameref+"${nameref[@]}"} ) ;;
+            case "${type#* }" in
+                -A*)
+                    echo "_accumFlagsArray(): ERROR: trying to use _accumFlagsArray on an associative array." >&2
+                    return 1 ;;
+                -a*)
+                    flagsArray+=( "${nameref[@]}" ) ;;
                 *)
                     # shellcheck disable=SC2206
                     flagsArray+=( ${nameref-} ) ;;
             esac
-        done
-    fi
-
+        fi
+    done
 }
 
 # Add $1/lib* into rpaths.
