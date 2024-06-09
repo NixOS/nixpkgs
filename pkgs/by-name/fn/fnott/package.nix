@@ -20,15 +20,17 @@
 
 stdenv.mkDerivation rec {
   pname = "fnott";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fnott";
     rev = version;
-    hash = "sha256-F2Pt3xbWDZZ3s056KU3qLXUrFQ0wT7QYK4GvR7slMYc=";
+    hash = "sha256-out3OZCGZGIIHFZ4t2nN6/3UpsRH9zfw35emexVo4RE=";
   };
+
+  PKG_CONFIG_DBUS_1_SESSION_BUS_SERVICES_DIR = "${placeholder "out"}/share/dbus-1/services";
 
   strictDeps = true;
   depsBuildBuild = [
