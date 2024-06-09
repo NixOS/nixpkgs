@@ -1,7 +1,8 @@
 justBuildPhase() {
     runHook preBuild
 
-    local flagsArray=($justFlags "${justFlagsArray[@]}")
+    local flagsArray=()
+    concatTo flagsArray justFlags justFlagsArray
 
     echoCmd 'build flags' "${flagsArray[@]}"
     just "${flagsArray[@]}"
@@ -21,10 +22,8 @@ justCheckPhase() {
     if [ -z "${checkTarget:-}" ]; then
         echo "no test target found in just, doing nothing"
     else
-        local flagsArray=(
-            $justFlags "${justFlagsArray[@]}"
-            $checkTarget
-        )
+        local flagsArray=()
+        concatTo flagsArray justFlags justFlagsArray checkTarget
 
         echoCmd 'check flags' "${flagsArray[@]}"
         just "${flagsArray[@]}"
@@ -36,8 +35,8 @@ justCheckPhase() {
 justInstallPhase() {
     runHook preInstall
 
-    # shellcheck disable=SC2086
-    local flagsArray=($justFlags "${justFlagsArray[@]}" ${installTargets:-install})
+    local flagsArray=()
+    concatTo flagsArray justFlags justFlagsArray installTargets=install
 
     echoCmd 'install flags' "${flagsArray[@]}"
     just "${flagsArray[@]}"
