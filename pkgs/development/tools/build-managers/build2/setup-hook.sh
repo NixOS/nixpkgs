@@ -16,8 +16,8 @@ build2ConfigurePhase() {
         "config.install.man=${!outputDoc}/share/man"
         "config.install.sbin=${!outputBin}/sbin"
         "config.install.bin.mode=755"
-        $build2ConfigureFlags "${build2ConfigureFlagsArray[@]}"
     )
+    concatTo flagsArray build2ConfigureFlags build2ConfigureFlagsArray
 
     if [ -n "@isTargetDarwin@" ]; then
         flagsArray+=("config.bin.ld=ld64-lld")
@@ -35,9 +35,8 @@ build2ConfigurePhase() {
 build2BuildPhase() {
     runHook preBuild
 
-    local flagsArray=(
-        $build2BuildFlags "${build2BuildFlagsArray[@]}"
-    )
+    local flagsArray=()
+    concatTo flagsArray build2BuildFlags build2BuildFlagsArray
 
     echo 'build flags' "${flagsArray[@]}"
     b "${flagsArray[@]}"
@@ -48,9 +47,8 @@ build2BuildPhase() {
 build2CheckPhase() {
     runHook preCheck
 
-    local flagsArray=(
-        $build2CheckFlags "${build2CheckFlags[@]}"
-    )
+    local flagsArray=()
+    concatTo flagsArray build2CheckFlags build2CheckFlags
 
     echo 'check flags' "${flagsArray[@]}"
 
@@ -62,10 +60,8 @@ build2CheckPhase() {
 build2InstallPhase() {
     runHook preInstall
 
-    local flagsArray=(
-        $build2InstallFlags "${build2InstallFlagsArray[@]}"
-        ${installTargets:-}
-    )
+    local flagsArray=()
+    concatTo flagsArray build2InstallFlags build2InstallFlagsArray installTargets
 
     echo 'install flags' "${flagsArray[@]}"
     b install "${flagsArray[@]}"
