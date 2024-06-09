@@ -250,6 +250,7 @@ mapAliases ({
 
   demjson = with python3Packages; toPythonApplication demjson; # Added 2022-01-18
   dep = throw "'dep' has been removed, because it is deprecated and archived in favor of Go modules"; # Added 2023-12-26
+  dep2nix = throw "'dep2nix' has been removed because it's no longer updated";
   devserver = throw "'devserver' has been removed in favor of 'miniserve' or other alternatives"; # Added 2023-01-13
   dfeet = throw "'dfeet' has been removed because it is archived upstream. Please use 'd-spy' instead"; # Added 2024-03-07
   dgsh = throw "'dgsh' has been removed, as it was broken and unmaintained"; # added 2024-05-09
