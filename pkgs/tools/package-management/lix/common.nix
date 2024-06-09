@@ -65,6 +65,11 @@ assert (hash == null) -> (src != null);
   util-linuxMinimal,
   xz,
   nixosTests,
+  lix-doc ? callPackage ./doc {
+    inherit src;
+    version = "${version}${suffix}";
+    cargoHash = docCargoHash;
+  },
 
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
@@ -79,11 +84,6 @@ assert (hash == null) -> (src != null);
   storeDir,
 }:
 let
-  lix-doc = callPackage ./doc {
-    inherit src;
-    version = "${version}${suffix}";
-    cargoHash = docCargoHash;
-  };
   self = stdenv.mkDerivation {
     pname = "lix";
 
