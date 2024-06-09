@@ -8,8 +8,8 @@ mergeNetBSDSourceDir() {
 }
 
 addNetBSDMakeFlags() {
-  makeFlags="INCSDIR=${!outputDev}/include $makeFlags"
-  makeFlags="MANDIR=${!outputMan}/share/man $makeFlags"
+  prependToVar makeFlags "INCSDIR=${!outputDev}/include"
+  prependToVar makeFlags "MANDIR=${!outputMan}/share/man"
 }
 
 postUnpackHooks+=(mergeNetBSDSourceDir)
