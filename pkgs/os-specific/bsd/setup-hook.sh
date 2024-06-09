@@ -35,25 +35,25 @@ addMakeFlags() {
   export MKUNPRIVED=yes
   export EXTERNAL_TOOLCHAIN=yes
 
-  makeFlags="MACHINE=$MACHINE $makeFlags"
-  makeFlags="MACHINE_ARCH=$MACHINE_ARCH $makeFlags"
-  makeFlags="AR=$AR $makeFlags"
-  makeFlags="CC=$CC $makeFlags"
-  makeFlags="CPP=$CPP $makeFlags"
-  makeFlags="CXX=$CXX $makeFlags"
-  makeFlags="LD=$LD $makeFlags"
-  makeFlags="STRIP=$STRIP $makeFlags"
+  prependToVar makeFlags "MACHINE=$MACHINE"
+  prependToVar makeFlags "MACHINE_ARCH=$MACHINE_ARCH"
+  prependToVar makeFlags "AR=$AR"
+  prependToVar makeFlags "CC=$CC"
+  prependToVar makeFlags "CPP=$CPP"
+  prependToVar makeFlags "CXX=$CXX"
+  prependToVar makeFlags "LD=$LD"
+  prependToVar makeFlags "STRIP=$STRIP"
 
-  makeFlags="BINDIR=${!outputBin}/bin $makeFlags"
-  makeFlags="LIBDIR=${!outputLib}/lib $makeFlags"
-  makeFlags="SHLIBDIR=${!outputLib}/lib $makeFlags"
-  makeFlags="SHAREDIR=${!outputLib}/share $makeFlags"
-  makeFlags="INFODIR=${!outputInfo}/share/info $makeFlags"
-  makeFlags="DOCDIR=${!outputDoc}/share/doc $makeFlags"
-  makeFlags="LOCALEDIR=${!outputLib}/share/locale $makeFlags"
+  prependToVar makeFlags "BINDIR=${!outputBin}/bin"
+  prependToVar makeFlags "LIBDIR=${!outputLib}/lib"
+  prependToVar makeFlags "SHLIBDIR=${!outputLib}/lib"
+  prependToVar makeFlags "SHAREDIR=${!outputLib}/share"
+  prependToVar makeFlags "INFODIR=${!outputInfo}/share/info"
+  prependToVar makeFlags "DOCDIR=${!outputDoc}/share/doc"
+  prependToVar makeFlags "LOCALEDIR=${!outputLib}/share/locale"
 
   # Parallel building. Needs the space.
-  makeFlags="-j $NIX_BUILD_CORES $makeFlags"
+  prependToVar makeFlags "-j $NIX_BUILD_CORES"
 }
 
 setBSDSourceDir() {
@@ -74,10 +74,9 @@ includesPhase() {
   if [ -z "${skipIncludesPhase:-}" ]; then
     runHook preIncludes
 
-    local flagsArray=(
-         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-         includes
-    )
+    local flagsArray=()
+    concatTo flagsArray makeFlags makeFlagsArray
+    flagsArray+=(includes)
 
     echoCmd 'includes flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
