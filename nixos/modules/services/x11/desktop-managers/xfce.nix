@@ -153,7 +153,7 @@ in
     }];
 
     services.xserver.updateDbusEnvironment = true;
-    services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+    programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
