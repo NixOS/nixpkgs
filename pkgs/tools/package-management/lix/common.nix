@@ -11,6 +11,7 @@
     inherit hash;
   },
   docCargoHash ? null,
+  docCargoLock ? null,
   patches ? [ ],
   maintainers ? lib.teams.lix.members,
 }@args:
@@ -69,6 +70,7 @@ assert (hash == null) -> (src != null);
     inherit src;
     version = "${version}${suffix}";
     cargoHash = docCargoHash;
+    cargoLock = docCargoLock;
   },
 
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
@@ -83,6 +85,7 @@ assert (hash == null) -> (src != null);
   stateDir,
   storeDir,
 }:
+assert lib.assertMsg (docCargoHash != null || docCargoLock != null) "Either `lix-doc`'s cargoHash using `docCargoHash` or `lix-doc`'s `cargoLock.lockFile` using `docCargoLock` must be set!";
 stdenv.mkDerivation {
   pname = "lix";
 
