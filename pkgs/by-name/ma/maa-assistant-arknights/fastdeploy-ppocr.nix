@@ -1,14 +1,15 @@
-{ stdenv
-, config
-, pkgs
-, lib
-, fetchFromGitHub
-, cmake
-, eigen
-, onnxruntime
-, opencv
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
+{
+  stdenv,
+  config,
+  pkgs,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  eigen,
+  onnxruntime,
+  opencv,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
 }@inputs:
 
 let
@@ -30,34 +31,42 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5TItnPDc5WShpZAgBYeqgI9KKkk3qw/M8HPMlq/H4BM=";
   };
 
-  outputs = [ "out" "cmake" ];
+  outputs = [
+    "out"
+    "cmake"
+  ];
 
   nativeBuildInputs = [
     cmake
     eigen
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-  ];
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
-  buildInputs = [
-    onnxruntime
-    opencv
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cccl # cub/cub.cuh
-    libcublas # cublas_v2.h
-    libcurand # curand.h
-    libcusparse # cusparse.h
-    libcufft # cufft.h
-    cudnn # cudnn.h
-    cuda_cudart
-  ]);
+  buildInputs =
+    [
+      onnxruntime
+      opencv
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cccl # cub/cub.cuh
+        libcublas # cublas_v2.h
+        libcurand # curand.h
+        libcusparse # cusparse.h
+        libcufft # cufft.h
+        cudnn # cudnn.h
+        cuda_cudart
+      ]
+    );
 
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "None")
-    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-  ] ++ lib.optionals cudaSupport [
-    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeFeature "CMAKE_BUILD_TYPE" "None")
+      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+    ]
+    ++ lib.optionals cudaSupport [
+      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+    ];
 
   postInstall = ''
     mkdir $cmake
@@ -67,7 +76,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "MaaAssistantArknights stripped-down version of FastDeploy";
     homepage = "https://github.com/MaaAssistantArknights/FastDeploy";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
     broken = cudaSupport && stdenv.hostPlatform.system != "x86_64-linux";
   };
