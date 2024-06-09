@@ -96,6 +96,41 @@ let
         '';
       } // extraAttrs);
 
+  testConcatTo = { name, stdenv', extraAttrs ? { } }:
+    stdenv'.mkDerivation
+      ({
+        inherit name;
+
+        string = "a b";
+        list = ["c" "d"];
+
+        passAsFile = [ "buildCommand" ] ++ lib.optionals (extraAttrs ? extraTest) [ "extraTest" ];
+        buildCommand = ''
+          declare -A associativeArray=(["X"]="Y")
+          [[ $(concatTo nowhere associativeArray 2>&1) =~ "trying to use" ]] || (echo "concatTo did not throw concatenating associativeArray" && false)
+
+          declare -a flagsArray
+          concatTo flagsArray string list
+          declare -p flagsArray
+          [[ "''${flagsArray[0]}" == "a" ]] || (echo "'\$flagsArray[0]' was not 'a'" && false)
+          [[ "''${flagsArray[1]}" == "b" ]] || (echo "'\$flagsArray[1]' was not 'b'" && false)
+          [[ "''${flagsArray[2]}" == "c" ]] || (echo "'\$flagsArray[2]' was not 'c'" && false)
+          [[ "''${flagsArray[3]}" == "d" ]] || (echo "'\$flagsArray[3]' was not 'd'" && false)
+
+          # test concatenating to unset variable
+          concatTo nonExistant string list
+          declare -p nonExistant
+          [[ "''${nonExistant[0]}" == "a" ]] || (echo "'\$nonExistant[0]' was not 'a'" && false)
+          [[ "''${nonExistant[1]}" == "b" ]] || (echo "'\$nonExistant[1]' was not 'b'" && false)
+          [[ "''${nonExistant[2]}" == "c" ]] || (echo "'\$nonExistant[2]' was not 'c'" && false)
+          [[ "''${nonExistant[3]}" == "d" ]] || (echo "'\$nonExistant[3]' was not 'd'" && false)
+
+          eval "$extraTest"
+
+          touch $out
+        '';
+      } // extraAttrs);
+
 in
 
 {
@@ -196,6 +231,11 @@ in
     stdenv' = bootStdenv;
   };
 
+  test-concat-to = testConcatTo {
+    name = "test-concat-to";
+    stdenv' = bootStdenv;
+  };
+
   test-structured-env-attrset = testEnvAttrset {
     name = "test-structured-env-attrset";
     stdenv' = bootStdenv;
@@ -251,6 +291,24 @@ in
           [[ "''${list[0]}" == "hello" ]] || (echo "first element of '\$list' was not 'hello'" && false)
           [[ "''${list[1]}" == "a" ]] || (echo "first element of '\$list' was not 'a'" && false)
           [[ "''${list[-1]}" == "world" ]] || (echo "last element of '\$list' was not 'world'" && false)
+        '';
+      };
+    };
+
+    test-concat-to = testConcatTo {
+      name = "test-concat-to-structuredAttrsByDefault";
+      stdenv' = bootStdenvStructuredAttrsByDefault;
+      extraAttrs = {
+        # test that whitespace is kept in the bash array for structuredAttrs
+        listWithSpaces = [ "c c" "d d" ];
+        extraTest = ''
+          declare -a flagsWithSpaces
+          concatTo flagsWithSpaces string listWithSpaces
+          declare -p flagsWithSpaces
+          [[ "''${flagsWithSpaces[0]}" == "a" ]] || (echo "'\$flagsWithSpaces[0]' was not 'a'" && false)
+          [[ "''${flagsWithSpaces[1]}" == "b" ]] || (echo "'\$flagsWithSpaces[1]' was not 'b'" && false)
+          [[ "''${flagsWithSpaces[2]}" == "c c" ]] || (echo "'\$flagsWithSpaces[2]' was not 'c c'" && false)
+          [[ "''${flagsWithSpaces[3]}" == "d d" ]] || (echo "'\$flagsWithSpaces[3]' was not 'd d'" && false)
         '';
       };
     };
