@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2034,SC2157
+
 build2ConfigurePhase() {
     runHook preConfigure
 
@@ -52,7 +54,7 @@ build2CheckPhase() {
 
     echo 'check flags' "${flagsArray[@]}"
 
-    b test ${build2Dir:-.} "${flagsArray[@]}"
+    b test "${build2Dir:-.}" "${flagsArray[@]}"
 
     runHook postCheck
 }
@@ -69,19 +71,19 @@ build2InstallPhase() {
     runHook postInstall
 }
 
-if [ -z "${dontUseBuild2Configure-}" -a -z "${configurePhase-}" ]; then
+if [ -z "${dontUseBuild2Configure-}" ] && [ -z "${configurePhase-}" ]; then
     setOutputFlags=
     configurePhase=build2ConfigurePhase
 fi
 
-if [ -z "${dontUseBuild2Build-}" -a -z "${buildPhase-}" ]; then
+if [ -z "${dontUseBuild2Build-}" ] && [ -z "${buildPhase-}" ]; then
     buildPhase=build2BuildPhase
 fi
 
-if [ -z "${dontUseBuild2Check-}" -a -z "${checkPhase-}" ]; then
+if [ -z "${dontUseBuild2Check-}" ] && [ -z "${checkPhase-}" ]; then
     checkPhase=build2CheckPhase
 fi
 
-if [ -z "${dontUseBuild2Install-}" -a -z "${installPhase-}" ]; then
+if [ -z "${dontUseBuild2Install-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=build2InstallPhase
 fi
