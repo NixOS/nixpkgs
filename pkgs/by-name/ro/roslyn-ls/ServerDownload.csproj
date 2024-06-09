@@ -1,0 +1,15 @@
+<!-- https://github.com/dotnet/vscode-csharp/blob/main/server/ServerDownload.csproj -->
+<Project Sdk="Microsoft.Build.NoTargets/1.0.80">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+        <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageDownload Include="$(PackageName).linux-x64" version="[$(PackageVersion)]" />
+        <PackageDownload Include="$(PackageName).linux-arm64" version="[$(PackageVersion)]" />
+        <PackageDownload Include="$(PackageName).osx-x64" version="[$(PackageVersion)]" />
+        <PackageDownload Include="$(PackageName).osx-arm64" version="[$(PackageVersion)]" />
+    </ItemGroup>
+</Project>
+
