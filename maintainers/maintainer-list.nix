@@ -3766,6 +3766,12 @@
     githubId = 42220376;
     name = "Charlotte Van Petegem";
   };
+  chysi = {
+    email = "cazim.hysi@gmail.com";
+    github = "chysi";
+    githubId = 11850195;
+    name = "Cazim Hysi";
+  };
   ciferkey = {
     name = "Matthew Brunelle";
     email = "ciferkey@gmail.com";
