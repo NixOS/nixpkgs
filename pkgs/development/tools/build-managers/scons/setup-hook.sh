@@ -62,7 +62,7 @@ sconsCheckPhase() {
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
         )
-        concatTo flagsArray sconsFlags sconsFlagsArray checkFlagsArray
+        concatTo flagsArray sconsFlags sconsFlagsArray checkFlagsArray checkTarget
 
         echoCmd 'scons check flags' "${flagsArray[@]}"
         scons "${flagsArray[@]}"
