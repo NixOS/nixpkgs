@@ -49,16 +49,17 @@ in
     systemd.services.openmesh-xnode-admin = {
       description = "Openmesh Xnode Administration and Configuration Subsystem Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
 
       serviceConfig = {
         ExecStart = ''${lib.getExe cfg.package} -p ${cfg.stateDir}/${cfg.localStateFilename} ${cfg.remoteDir} ${toString cfg.searchInterval}''; 
         Restart = "always";
         WorkingDirectory = cfg.stateDir;
         StateDirectory = "openmesh-xnode-admin";
-        StateDirectoryMode = "0755";
+        StateDirectoryMode = "0775";
         RuntimeDirectory = "openmesh-xnode-admin";
-        RuntimeDirectoryMode = "0755";
+        RuntimeDirectoryMode = "0775";
         PrivateTmp = true;
         DynamicUser = true;
         DevicePolicy = "closed";
@@ -73,7 +74,6 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        UMask = "0077";
       };
     };
 
