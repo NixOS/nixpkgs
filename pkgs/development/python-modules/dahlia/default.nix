@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/dahlia-lib/dahlia/blob/${src.rev}/CHANGELOG.md";
-    description = "A simple text formatting package, inspired by the game Minecraft";
+    description = "Simple text formatting package, inspired by the game Minecraft";
     license = licenses.mit;
     homepage = "https://github.com/dahlia-lib/dahlia";
     maintainers = with maintainers; [ sigmanificient ];

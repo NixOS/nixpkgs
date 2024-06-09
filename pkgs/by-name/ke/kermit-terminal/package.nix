@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/orhun/kermit";
-    description = "A VTE-based, simple and froggy terminal emulator";
+    description = "VTE-based, simple and froggy terminal emulator";
     changelog = "https://github.com/orhun/kermit/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "kermit";

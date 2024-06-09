@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage {
   RUSTC_BOOTSTRAP = true;
 
   meta = {
-    description = "A tui-based PDF viewer";
+    description = "Tui-based PDF viewer";
     homepage = "https://github.com/itsjunetime/tdf";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];

@@ -92,7 +92,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jsonschema" ];
 
   meta = with lib; {
-    description = "An implementation of JSON Schema validation";
+    description = "Implementation of JSON Schema validation";
     mainProgram = "jsonschema";
     homepage = "https://github.com/python-jsonschema/jsonschema";
     license = licenses.mit;

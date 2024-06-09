@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A simple application for converting currencies, with support for various APIs";
+    description = "Simple application for converting currencies, with support for various APIs";
     homepage = "https://github.com/ideveCore/Valuta";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ arthsmn ];

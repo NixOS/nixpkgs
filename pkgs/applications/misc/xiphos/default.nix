@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A GTK Bible study tool";
+    description = "GTK Bible study tool";
     longDescription = ''
       Xiphos (formerly known as GnomeSword) is a Bible study tool
       written for Linux, UNIX, and Windows using GTK, offering a rich

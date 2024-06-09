@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Zest Framework used in ZynAddSubFX's UI";
+    description = "Zest Framework used in ZynAddSubFX's UI";
     homepage = "https://github.com/mruby-zest";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ kira-bruneau ];

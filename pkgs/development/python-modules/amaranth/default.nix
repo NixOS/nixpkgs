@@ -53,7 +53,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "amaranth" ];
 
   meta = with lib; {
-    description = "A modern hardware definition language and toolchain based on Python";
+    description = "Modern hardware definition language and toolchain based on Python";
     mainProgram = "amaranth-rpc";
     homepage = "https://amaranth-lang.org/docs/amaranth";
     license = licenses.bsd2;

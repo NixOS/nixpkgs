@@ -16,7 +16,7 @@ buildGoModule rec {
   preCheck = "export HOME=$(mktemp -d)";
 
   meta = with lib; {
-    description = "A tool to list and diagnose Go processes currently running on your system";
+    description = "Tool to list and diagnose Go processes currently running on your system";
     mainProgram = "gops";
     homepage = "https://github.com/google/gops";
     license = licenses.bsd3;

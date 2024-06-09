@@ -54,7 +54,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "A rewrite of Dask DataFrame that includes query optimization and generally improved organization";
+    description = "Rewrite of Dask DataFrame that includes query optimization and generally improved organization";
     homepage = "https://github.com/dask/dask-expr";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];

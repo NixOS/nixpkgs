@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.run = callPackage ./test.nix { hello = finalAttrs.finalPackage; };
 
   meta = with lib; {
-    description = "A program that produces a familiar, friendly greeting";
+    description = "Program that produces a familiar, friendly greeting";
     longDescription = ''
       GNU Hello is a program that prints "Hello, world!" when you run it.
       It is fully customizable.

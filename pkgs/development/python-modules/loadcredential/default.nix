@@ -26,7 +26,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "loadcredential" ];
 
   meta = {
-    description = "A simple python package to read credentials passed through systemd's LoadCredential, with a fallback on env variables ";
+    description = "Simple python package to read credentials passed through systemd's LoadCredential, with a fallback on env variables ";
     homepage = "https://github.com/Tom-Hubrecht/loadcredential";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thubrecht ];

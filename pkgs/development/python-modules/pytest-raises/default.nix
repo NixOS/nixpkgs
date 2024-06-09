@@ -36,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "An implementation of pytest.raises as a pytest.mark fixture";
+    description = "Implementation of pytest.raises as a pytest.mark fixture";
     homepage = "https://github.com/Lemmons/pytest-raises";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

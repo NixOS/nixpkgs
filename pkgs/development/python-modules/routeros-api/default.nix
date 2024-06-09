@@ -28,7 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = with lib; {
-    description = "Python API to RouterBoard devices produced by MikroTik.";
+    description = "Python API to RouterBoard devices produced by MikroTik";
     homepage = "https://github.com/socialwifi/RouterOS-api";
     license = licenses.mit;
     maintainers = with maintainers; [ quentin ];

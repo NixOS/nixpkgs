@@ -57,7 +57,7 @@ buildPythonPackage rec {
   disabledTestPaths = [ "tests/test_performance/test_text_performance.py" ];
 
   meta = with lib; {
-    description = "A GUI system for pygame";
+    description = "GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [

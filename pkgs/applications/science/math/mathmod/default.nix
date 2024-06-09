@@ -24,7 +24,7 @@ mkDerivation {
   nativeBuildInputs = [ qmake ];
 
   meta = {
-    description = "A mathematical modelling software";
+    description = "Mathematical modelling software";
     homepage = "https://github.com/parisolab/mathmod";
     license = lib.licenses.gpl2Plus;
     mainProgram = "MathMod";

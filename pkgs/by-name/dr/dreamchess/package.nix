@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/dreamchess/dreamchess";
-    description = "An OpenGL Chess Game";
+    description = "OpenGL Chess Game";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ spk ];
     platforms = lib.platforms.linux;

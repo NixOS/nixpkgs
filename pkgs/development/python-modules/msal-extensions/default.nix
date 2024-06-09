@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "msal_extensions" ];
 
   meta = with lib; {
-    description = "The Microsoft Authentication Library Extensions (MSAL-Extensions) for Python";
+    description = "Microsoft Authentication Library Extensions (MSAL-Extensions) for Python";
     homepage = "https://github.com/AzureAD/microsoft-authentication-extensions-for-python";
     changelog = "https://github.com/AzureAD/microsoft-authentication-extensions-for-python/releases/tag/${version}";
     license = licenses.mit;

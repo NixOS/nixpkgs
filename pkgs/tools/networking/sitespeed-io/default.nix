@@ -87,7 +87,7 @@ buildNpmPackage rec {
   };
 
   meta = with lib; {
-    description = "An open source tool that helps you monitor, analyze and optimize your website speed and performance";
+    description = "Open source tool that helps you monitor, analyze and optimize your website speed and performance";
     homepage = "https://sitespeed.io";
     license = licenses.mit;
     maintainers = with maintainers; [ misterio77 ];

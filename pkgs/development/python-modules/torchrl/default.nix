@@ -157,7 +157,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
+    description = "Modular, primitive-first, python-first PyTorch library for Reinforcement Learning";
     homepage = "https://github.com/pytorch/rl";
     changelog = "https://github.com/pytorch/rl/releases/tag/v${version}";
     license = licenses.mit;

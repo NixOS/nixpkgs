@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Stash is a self-hosted porn app.";
+    description = "Stash is a self-hosted porn app";
     homepage = "https://github.com/stashapp/stash";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ Golo300 ];

@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/WhatAmISupposedToPutHere/tiny-dfr";
-    description = "The most basic dynamic function row daemon possible";
+    description = "Most basic dynamic function row daemon possible";
     license = [ licenses.asl20 licenses.mit ];
     mainProgram = "tiny-dfr";
     maintainers = [ maintainers.qyliss ];

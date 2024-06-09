@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/fedoradesign/backgrounds";
-    description = "A set of default and supplemental wallpapers for Fedora";
+    description = "Set of default and supplemental wallpapers for Fedora";
     license = licenses.cc-by-sa-40;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

@@ -22,7 +22,7 @@ php.buildComposerProject (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/releases/tag/v${finalAttrs.version}";
-    description = "A tool to automatically fix PHP coding standards issues";
+    description = "Tool to automatically fix PHP coding standards issues";
     homepage = "https://cs.symfony.com/";
     license = lib.licenses.mit;
     mainProgram = "php-cs-fixer";

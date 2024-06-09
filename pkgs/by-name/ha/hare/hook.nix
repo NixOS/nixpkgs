@@ -50,7 +50,7 @@ makeSetupHook {
     hare_stdlib = "${hare}/src/hare/stdlib";
   };
   meta = {
-    description = "A setup hook for the Hare compiler";
+    description = "Setup hook for the Hare compiler";
     inherit (hare.meta) badPlatforms platforms;
   };
 } ./setup-hook.sh

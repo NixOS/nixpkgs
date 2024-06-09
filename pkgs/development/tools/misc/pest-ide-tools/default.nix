@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "IDE support for Pest, via the LSP.";
+    description = "IDE support for Pest, via the LSP";
     homepage = "https://pest.rs";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ nickhu ];

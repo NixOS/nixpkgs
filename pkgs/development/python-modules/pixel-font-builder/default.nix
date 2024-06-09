@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/TakWolf/pixel-font-builder";
-    description = "A library that helps create pixel style fonts";
+    description = "Library that helps create pixel style fonts";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ h7x4 ];

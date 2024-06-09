@@ -43,7 +43,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A fast text scanner/regex extractor and realtime summarizer";
+    description = "Fast text scanner/regex extractor and realtime summarizer";
     homepage = "https://rare.zdyn.net";
     changelog = "https://github.com/zix99/rare/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;

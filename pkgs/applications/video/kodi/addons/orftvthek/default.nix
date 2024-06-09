@@ -21,7 +21,7 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://github.com/s0faking/plugin.video.orftvthek";
-    description = "An addon that gives you access to the ORF TVthek Video Platform";
+    description = "Addon that gives you access to the ORF TVthek Video Platform";
     license = licenses.gpl2Only;
     maintainers = teams.kodi.members;
   };

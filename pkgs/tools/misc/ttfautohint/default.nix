@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "An automatic hinter for TrueType fonts";
+    description = "Automatic hinter for TrueType fonts";
     mainProgram = "ttfautohint";
     longDescription = ''
       A library and two programs which take a TrueType font as the

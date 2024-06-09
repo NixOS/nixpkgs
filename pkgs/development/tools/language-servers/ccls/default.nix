@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A c/c++ language server powered by clang";
+    description = "C/c++ language server powered by clang";
     mainProgram = "ccls";
     homepage    = "https://github.com/MaskRay/ccls";
     license     = licenses.asl20;

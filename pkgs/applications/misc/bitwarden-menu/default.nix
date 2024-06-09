@@ -31,7 +31,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     changelog = "https://github.com/firecat53/bitwarden-menu/releases/tag/v${version}";
-    description = "Dmenu/Rofi frontend for managing Bitwarden vaults. Uses the Bitwarden CLI tool to interact with the Bitwarden database.";
+    description = "Dmenu/Rofi frontend for managing Bitwarden vaults. Uses the Bitwarden CLI tool to interact with the Bitwarden database";
     mainProgram = "bwm";
     homepage = "https://github.com/firecat53/bitwarden-menu";
     license = licenses.mit;

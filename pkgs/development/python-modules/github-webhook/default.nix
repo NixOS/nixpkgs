@@ -25,7 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A framework for writing webhooks for GitHub";
+    description = "Framework for writing webhooks for GitHub";
     homepage = "https://github.com/bloomberg/python-github-webhook";
     license = licenses.mit;
   };

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fingerprints" ];
 
   meta = with lib; {
-    description = "A library to generate entity fingerprints";
+    description = "Library to generate entity fingerprints";
     homepage = "https://github.com/alephdata/fingerprints";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

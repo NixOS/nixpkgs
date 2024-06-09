@@ -71,7 +71,7 @@ buildPythonPackage rec {
   disabledTestPaths = lib.optionals stdenv.isDarwin [ "test/test_distributed.py" ];
 
   meta = {
-    description = "A pytorch dedicated tensor container";
+    description = "Pytorch dedicated tensor container";
     changelog = "https://github.com/pytorch/tensordict/releases/tag/v${version}";
     homepage = "https://github.com/pytorch/tensordict";
     license = lib.licenses.mit;

@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://amarok.kde.org";
-    description = "A powerful music player with an intuitive interface";
+    description = "Powerful music player with an intuitive interface";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
   };

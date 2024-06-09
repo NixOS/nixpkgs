@@ -93,7 +93,7 @@ buildGoModule rec {
 
   meta = {
     changelog = "https://github.com/richardwilkes/gcs/releases/tag/${src.rev}";
-    description = "A stand-alone, interactive, character sheet editor for the GURPS 4th Edition roleplaying game system";
+    description = "Stand-alone, interactive, character sheet editor for the GURPS 4th Edition roleplaying game system";
     homepage = "https://gurpscharactersheet.com/";
     license = lib.licenses.mpl20;
     mainProgram = "gcs";

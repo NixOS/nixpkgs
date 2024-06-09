@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "A Tetris AI";
+    description = "Tetris AI";
     homepage = "https://github.com/26F-Studio/cold-clear";
     license = licenses.mpl20;
     maintainers = with maintainers; [ chayleaf ];

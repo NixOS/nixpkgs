@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Python library to manipulate PDF page labels.";
+    description = "Python library to manipulate PDF page labels";
     homepage = "https://github.com/lovasoa/pagelabels-py";
     maintainers = with maintainers; [ teto ];
     license = licenses.gpl3;

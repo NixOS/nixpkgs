@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A set of graphical utilities for color management to be used in the GNOME desktop";
+    description = "Set of graphical utilities for color management to be used in the GNOME desktop";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

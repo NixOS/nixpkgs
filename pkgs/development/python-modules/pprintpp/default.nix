@@ -57,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A drop-in replacement for pprint that's actually pretty";
+    description = "Drop-in replacement for pprint that's actually pretty";
     homepage = "https://github.com/wolever/pprintpp";
     changelog = "https://github.com/wolever/pprintpp/blob/${version}/CHANGELOG.txt";
     license = licenses.bsd2;

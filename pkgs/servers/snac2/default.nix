@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://codeberg.org/grunfink/snac2";
-    description = "A simple, minimalistic ActivityPub instance (2.x, C)";
+    description = "Simple, minimalistic ActivityPub instance (2.x, C)";
     changelog = "https://codeberg.org/grunfink/snac2/src/tag/${version}/RELEASE_NOTES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ misuzu ];

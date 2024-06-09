@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://gitlab.com/adhami3310/Switcheroo/-/releases/v${finalAttrs.version}";
-    description = "An app for converting images between different formats";
+    description = "App for converting images between different formats";
     homepage = "https://apps.gnome.org/Converter/";
     license = licenses.gpl3Plus;
     mainProgram = "switcheroo";

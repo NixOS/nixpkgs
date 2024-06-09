@@ -28,7 +28,7 @@ php.buildComposerProject (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/Roave/BackwardCompatibilityCheck/releases/tag/${finalAttrs.version}";
-    description = "A tool that can be used to verify BC breaks between two versions of a PHP library";
+    description = "Tool that can be used to verify BC breaks between two versions of a PHP library";
     homepage = "https://github.com/Roave/BackwardCompatibilityCheck";
     license = lib.licenses.mit;
     mainProgram = "roave-backward-compatibility-check";

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/trag1c/paperbush/blob/${src.rev}/CHANGELOG.md";
-    description = "A super concise argument parsing tool for Python";
+    description = "Super concise argument parsing tool for Python";
     license = licenses.mit;
     maintainers = with maintainers; [ sigmanificient ];
   };

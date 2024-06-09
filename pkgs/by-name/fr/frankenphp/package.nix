@@ -98,7 +98,7 @@ in buildGoModule rec {
 
   meta = {
     changelog = "https://github.com/dunglas/frankenphp/releases/tag/v${version}";
-    description = "The modern PHP app server";
+    description = "Modern PHP app server";
     homepage = "https://github.com/dunglas/frankenphp";
     license = lib.licenses.mit;
     mainProgram = "frankenphp";

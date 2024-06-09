@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A simple but powerful template language for C++";
+    description = "Simple but powerful template language for C++";
     longDescription = ''
       CTemplate is a simple but powerful template language for C++. It
       emphasizes separating logic from presentation: it is impossible to

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config ];
 
   meta = with lib; {
-    description = "A library for reading and resampling audio files";
+    description = "Library for reading and resampling audio files";
     homepage = "https://www.zrythm.org";
     license = licenses.agpl3Plus;
     mainProgram = "audec";

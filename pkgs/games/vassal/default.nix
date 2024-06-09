@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   forceShare = [ "man" "info" ];
 
   meta = with lib; {
-      description = "A free, open-source boardgame engine";
+      description = "Free, open-source boardgame engine";
       homepage = "https://vassalengine.org/";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.lgpl21Only;

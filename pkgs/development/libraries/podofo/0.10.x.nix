@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/podofo/podofo";
-    description = "A library to work with the PDF file format";
+    description = "Library to work with the PDF file format";
     platforms = lib.platforms.all;
     license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
     maintainers = [];

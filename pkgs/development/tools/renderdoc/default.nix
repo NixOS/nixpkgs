@@ -85,7 +85,7 @@ mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A single-frame graphics debugger";
+    description = "Single-frame graphics debugger";
     homepage = "https://renderdoc.org/";
     license = licenses.mit;
     longDescription = ''

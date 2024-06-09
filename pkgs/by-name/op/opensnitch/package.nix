@@ -89,7 +89,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "An application firewall";
+    description = "Application firewall";
     mainProgram = "opensnitchd";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
     license = licenses.gpl3Only;

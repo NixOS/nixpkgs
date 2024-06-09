@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   passthru.providedSessions = [ "weston" ];
 
   meta = with lib; {
-    description = "A lightweight and functional Wayland compositor";
+    description = "Lightweight and functional Wayland compositor";
     longDescription = ''
       Weston is the reference implementation of a Wayland compositor, as well
       as a useful environment in and of itself.

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpthreadstubs icu ];
 
   meta = with lib; {
-    description = "A clock, timer, and stopwatch for the terminal";
+    description = "Clock, timer, and stopwatch for the terminal";
     homepage = "https://octobanana.com/software/peaclock";
     license = licenses.mit;
     platforms = platforms.unix;

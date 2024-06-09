@@ -166,7 +166,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "A darktable fork minus the bloat plus some design vision";
+    description = "Darktable fork minus the bloat plus some design vision";
     homepage = "https://ansel.photos/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ eclairevoyant ];

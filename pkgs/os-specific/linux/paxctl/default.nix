@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    description = "A tool for controlling PaX flags on a per binary basis";
+    description = "Tool for controlling PaX flags on a per binary basis";
     mainProgram = "paxctl";
     homepage    = "https://pax.grsecurity.net";
     license     = licenses.gpl2;

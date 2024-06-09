@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Helm plugin that helps manage secrets";
+    description = "Helm plugin that helps manage secrets";
     homepage = "https://github.com/jkroepke/helm-secrets";
     license = licenses.asl20;
     maintainers = with maintainers; [ yurrriq ];

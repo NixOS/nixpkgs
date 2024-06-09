@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
-    description = "A command line tool and shell to manage keycards";
+    description = "Command line tool and shell to manage keycards";
     mainProgram = "keycard-cli";
     homepage = "https://keycard.status.im";
     license = licenses.mpl20;

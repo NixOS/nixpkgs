@@ -34,7 +34,7 @@ buildDunePackage rec {
   doCheck = false; # fails on sandbox
 
   meta = {
-    description = "An actor-model multi-core scheduler for OCaml 5";
+    description = "Actor-model multi-core scheduler for OCaml 5";
     homepage = "https://github.com/leostera/riot";
     changelog = "https://github.com/leostera/riot/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;

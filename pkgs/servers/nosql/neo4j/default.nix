@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   passthru.tests.nixos = nixosTests.neo4j;
 
   meta = with lib; {
-    description = "A highly scalable, robust (fully ACID) native graph database";
+    description = "Highly scalable, robust (fully ACID) native graph database";
     homepage = "https://neo4j.com/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jonringer offline ];

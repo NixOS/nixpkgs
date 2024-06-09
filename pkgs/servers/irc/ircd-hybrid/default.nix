@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   postInstall = "echo postinstall; mkdir -p \${out}/ ; rm -rf \${out}/logs ; ln -s /home/ircd \${out}/logs;";
 
   meta = {
-    description = "An IPv6-capable IRC server";
+    description = "IPv6-capable IRC server";
     platforms = lib.platforms.unix;
     homepage = "https://www.ircd-hybrid.org/";
   };

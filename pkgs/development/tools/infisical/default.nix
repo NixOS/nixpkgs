@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "The official Infisical CLI";
+    description = "Official Infisical CLI";
     longDescription = ''
       Infisical is the open-source secret management platform:
       Sync secrets across your team/infrastructure and prevent secret leaks.

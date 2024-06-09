@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
 
   meta = {
     homepage = "https://git.sr.ht/~rycee/nmt";
-    description = "A basic test framework for projects using the Nixpkgs module system";
+    description = "Basic test framework for projects using the Nixpkgs module system";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rycee ];
   };

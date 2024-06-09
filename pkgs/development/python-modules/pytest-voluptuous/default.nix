@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/test_plugin.py" ];
 
   meta = with lib; {
-    description = "A pytest plugin for asserting data against voluptuous schema";
+    description = "Pytest plugin for asserting data against voluptuous schema";
     homepage = "https://github.com/F-Secure/pytest-voluptuous";
     changelog = "https://github.com/F-Secure/pytest-voluptuous/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;

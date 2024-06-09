@@ -28,7 +28,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A sliding sync implementation of MSC3575 for matrix";
+    description = "Sliding sync implementation of MSC3575 for matrix";
     homepage = "https://github.com/matrix-org/sliding-sync";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ emilylange yayayayaka ];

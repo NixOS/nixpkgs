@@ -317,7 +317,7 @@ let
 
     meta = with lib; {
       homepage = "https://handbrake.fr/";
-      description = "A tool for converting video files and ripping DVDs";
+      description = "Tool for converting video files and ripping DVDs";
       longDescription = ''
         Tool for converting and remuxing video files
         into selection of modern and widely supported codecs

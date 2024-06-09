@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "A monospaced Latin font suitable for coding";
+    description = "Monospaced Latin font suitable for coding";
     maintainers = with lib.maintainers; [ mt-caret ];
     platforms = with lib.platforms; all;
     homepage = "https://blogs.adobe.com/CCJKType/2015/06/source-han-code-jp.html";

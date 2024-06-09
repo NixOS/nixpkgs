@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   makeFlags = [ "DESTDIR=$(out)" "prefix=" ];
 
   meta = {
-    description = "A collection of postfix-related tools";
+    description = "Collection of postfix-related tools";
     license = with lib.licenses; [ bsd3 ];
     homepage = "https://github.com/Fruneau/pfixtools";
     platforms = lib.platforms.linux;

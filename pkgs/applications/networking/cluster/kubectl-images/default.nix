@@ -18,7 +18,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Show container images used in the cluster.";
+    description = "Show container images used in the cluster";
     mainProgram = "kubectl-images";
     homepage = "https://github.com/chenjiandongx/kubectl-images";
     changelog = "https://github.com/chenjiandongx/kubectl-images/releases/tag/v${version}";

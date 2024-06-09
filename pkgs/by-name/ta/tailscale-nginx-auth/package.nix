@@ -35,7 +35,7 @@ buildGoModule {
 
   meta = with lib; {
     homepage = "https://tailscale.com";
-    description = "Tool that allows users to use Tailscale Whois authentication with NGINX as a reverse proxy.";
+    description = "Tool that allows users to use Tailscale Whois authentication with NGINX as a reverse proxy";
     license = licenses.bsd3;
     mainProgram = "tailscale.nginx-auth";
     maintainers = with maintainers; [ phaer ];

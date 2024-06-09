@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A compiler to compile HLSL programs into DXIL and SPIR-V";
+    description = "Compiler to compile HLSL programs into DXIL and SPIR-V";
     homepage = "https://github.com/microsoft/DirectXShaderCompiler";
     platforms = with platforms; linux ++ darwin;
     license = licenses.ncsa;

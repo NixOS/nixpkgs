@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "The LLVM-based D compiler";
+    description = "LLVM-based D compiler";
     homepage = "https://github.com/ldc-developers/ldc";
     changelog = "https://github.com/ldc-developers/ldc/releases/tag/v${finalAttrs.version}";
     # from https://github.com/ldc-developers/ldc/blob/master/LICENSE

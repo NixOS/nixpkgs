@@ -51,7 +51,7 @@ in {
     })
   ];
   meta = with lib; {
-    description = "A workspace with fully merged docs, whiteboards and databases";
+    description = "Workspace with fully merged docs, whiteboards and databases";
     longDescription = ''
       AFFiNE is an open-source, all-in-one workspace and an operating
       system for all the building blocks that assemble your knowledge

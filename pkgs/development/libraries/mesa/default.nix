@@ -485,7 +485,7 @@ self = stdenv.mkDerivation {
   };
 
   meta = {
-    description = "An open source 3D graphics library";
+    description = "Open source 3D graphics library";
     longDescription = ''
       The Mesa project began as an open-source implementation of the OpenGL
       specification - a system for rendering interactive 3D graphics. Over the

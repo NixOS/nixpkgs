@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A graphical {,U}EFI boot manager";
+    description = "Graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based
       computers, such as all Intel-based Macs and recent (most 2011

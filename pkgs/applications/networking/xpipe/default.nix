@@ -118,7 +118,7 @@ in stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A cross-platform shell connection hub and remote file manager";
+    description = "Cross-platform shell connection hub and remote file manager";
     homepage = "https://github.com/xpipe-io/${pname}";
     downloadPage = "https://github.com/xpipe-io/${pname}/releases/latest";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

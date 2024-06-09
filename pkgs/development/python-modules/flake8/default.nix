@@ -36,7 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "The modular source code checker: pep8, pyflakes and co";
+    description = "Modular source code checker: pep8, pyflakes and co";
     homepage = "https://github.com/PyCQA/flake8";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

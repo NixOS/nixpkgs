@@ -43,7 +43,7 @@ buildPecl rec {
     ];
 
   meta = {
-    description = "The Official MongoDB PHP driver";
+    description = "Official MongoDB PHP driver";
     homepage = "https://github.com/mongodb/mongo-php-driver";
     license = lib.licenses.asl20;
     maintainers = lib.teams.php.members;

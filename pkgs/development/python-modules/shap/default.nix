@@ -143,7 +143,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "shap" ];
 
   meta = with lib; {
-    description = "A unified approach to explain the output of any machine learning model";
+    description = "Unified approach to explain the output of any machine learning model";
     homepage = "https://github.com/slundberg/shap";
     changelog = "https://github.com/slundberg/shap/releases/tag/v${version}";
     license = licenses.mit;

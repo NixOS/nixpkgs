@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A nushell plugin to list system network interfaces";
+    description = "Nushell plugin to list system network interfaces";
     homepage = "https://github.com/fennewald/nu_plugin_net";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];

@@ -26,7 +26,7 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    description = "A command line tool to help build, run, and test web extensions";
+    description = "Command line tool to help build, run, and test web extensions";
     homepage = "https://github.com/mozilla/web-ext";
     license = lib.licenses.mpl20;
     mainProgram = "web-ext";

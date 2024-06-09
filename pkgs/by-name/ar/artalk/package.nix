@@ -41,7 +41,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A self-hosted comment system";
+    description = "Self-hosted comment system";
     homepage = "https://github.com/ArtalkJS/Artalk";
     license = licenses.mit;
     maintainers = with maintainers; [ moraxyc ];

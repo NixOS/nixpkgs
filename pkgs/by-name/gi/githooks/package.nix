@@ -77,7 +77,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A Git hooks manager with per-repo and shared Git hooks including version control";
+    description = "Git hooks manager with per-repo and shared Git hooks including version control";
     homepage = "https://github.com/gabyx/Githooks";
     license = licenses.mpl20;
     maintainers = with maintainers; [ gabyx ];

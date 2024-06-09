@@ -18,7 +18,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/AssemblyScript/${pname}";
-    description = "A TypeScript-like language for WebAssembly";
+    description = "TypeScript-like language for WebAssembly";
     license = licenses.asl20;
     maintainers = with maintainers; [ lucperkins ];
   };

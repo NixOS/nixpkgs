@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A python wrapper around the Agent REST API.";
+    description = "Python wrapper around the Agent REST API";
     homepage = "https://github.com/ispysoftware/agent-py";
     license = licenses.asl20;
     maintainers = with maintainers; [ jamiemagee ];

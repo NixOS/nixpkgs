@@ -25,7 +25,7 @@ buildPythonPackage rec {
     url-normalize
   ];
   meta = with lib; {
-    description = "An async persistent cache for aiohttp requests";
+    description = "Async persistent cache for aiohttp requests";
     homepage = "https://pypi.org/project/aiohttp-client-cache/";
     license = licenses.mit;
     maintainers = with maintainers; [ seirl ];

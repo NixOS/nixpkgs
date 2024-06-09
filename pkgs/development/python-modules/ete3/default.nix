@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ] ++ lib.optional withTreeVisualization pyqt5 ++ lib.optional withXmlSupport lxml;
 
   meta = with lib; {
-    description = "A Python framework for the analysis and visualization of trees";
+    description = "Python framework for the analysis and visualization of trees";
     mainProgram = "ete3";
     homepage = "http://etetoolkit.org/";
     license = licenses.gpl3Only;

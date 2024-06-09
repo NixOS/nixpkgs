@@ -142,7 +142,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    description = "A way to run various GGML and GGUF models";
+    description = "Way to run various GGML and GGUF models";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       maxstrid

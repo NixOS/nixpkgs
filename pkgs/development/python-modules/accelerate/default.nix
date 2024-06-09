@@ -120,7 +120,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://huggingface.co/docs/accelerate";
-    description = "A simple way to train and use PyTorch models with multi-GPU, TPU, mixed-precision";
+    description = "Simple way to train and use PyTorch models with multi-GPU, TPU, mixed-precision";
     changelog = "https://github.com/huggingface/accelerate/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];

@@ -74,7 +74,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/inducer/pycuda/";
-    description = "CUDA integration for Python.";
+    description = "CUDA integration for Python";
     license = licenses.mit;
     maintainers = with maintainers; [ artuuge ];
   };

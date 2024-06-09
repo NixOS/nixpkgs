@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
   ]);
 
   meta = with lib; {
-    description = "A TUI RSS reader with vim-like controls and a local-first, offline-first focus";
+    description = "TUI RSS reader with vim-like controls and a local-first, offline-first focus";
     mainProgram = "russ";
     homepage = "https://github.com/ckampfe/russ";
     license = with licenses; [ agpl3Only ];

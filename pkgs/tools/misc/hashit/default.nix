@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A simple app for checking usual checksums - Designed for elementary OS";
+    description = "Simple app for checking usual checksums - Designed for elementary OS";
     homepage = "https://github.com/artemanufrij/hashit";
     license = licenses.gpl2Plus;
     maintainers = teams.pantheon.members;

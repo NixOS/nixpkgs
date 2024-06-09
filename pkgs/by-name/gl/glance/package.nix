@@ -24,7 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/glanceapp/glance";
     changelog = "https://github.com/glanceapp/glance/releases/tag/v${version}";
-    description = "A self-hosted dashboard that puts all your feeds in one place";
+    description = "Self-hosted dashboard that puts all your feeds in one place";
     mainProgram = "glance";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ dvn0 ];

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A lightweight Gopher server";
+    description = "Lightweight Gopher server";
     homepage = "https://gofish.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];

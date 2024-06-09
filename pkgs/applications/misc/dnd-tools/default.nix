@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/savagezen/dnd-tools";
-    description = "A set of interactive command line tools for Dungeons and Dragons 5th Edition";
+    description = "Set of interactive command line tools for Dungeons and Dragons 5th Edition";
     mainProgram = "dnd-tools";
     license = licenses.agpl3Only;
     maintainers = [ maintainers.urlordjames ];

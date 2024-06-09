@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/fontforge/libuninameslist/";
-    description = "A Library of Unicode names and annotation data";
+    description = "Library of Unicode names and annotation data";
     license = licenses.bsd3;
     maintainers = with maintainers; [ erictapen ];
     platforms = platforms.all;

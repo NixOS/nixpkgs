@@ -24,7 +24,7 @@ in
     '';
 
     meta = {
-      description = "A cross-platform GTD app with focus on privacy";
+      description = "Cross-platform GTD app with focus on privacy";
       homepage = "https://everdo.net/";
       license = lib.licenses.unfree;
       maintainers = [lib.maintainers.luftmensch-luftmensch];

@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A fork of the QuakeSpasm engine for iD software's Quake";
+    description = "Fork of the QuakeSpasm engine for iD software's Quake";
     homepage = "https://github.com/andrei-drexler/ironwail";
     longDescription = ''
       Ironwail is a fork of QuakeSpasm with focus on high performance instead of

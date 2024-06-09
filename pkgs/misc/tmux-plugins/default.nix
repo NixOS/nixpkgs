@@ -207,7 +207,7 @@ in rec {
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
-      description = "A feature packed Dracula theme for tmux!";
+      description = "Feature packed Dracula theme for tmux!";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ ethancedwards8 ];

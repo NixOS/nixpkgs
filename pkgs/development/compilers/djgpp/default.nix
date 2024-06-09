@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A complete 32-bit GNU-based development system for Intel x86 PCs running DOS";
+    description = "Complete 32-bit GNU-based development system for Intel x86 PCs running DOS";
     homepage = "https://www.delorie.com/djgpp/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ hughobrien ];

@@ -33,7 +33,7 @@ in pythonPackages.buildPythonApplication rec {
   '';
 
   meta = with pkgs.lib; {
-    description = "A simplenote-syncing note-taking tool inspired by Notational Velocity";
+    description = "Simplenote-syncing note-taking tool inspired by Notational Velocity";
     homepage = "https://github.com/cpbotha/nvpy";
     platforms = platforms.linux;
     license = licenses.bsd3;

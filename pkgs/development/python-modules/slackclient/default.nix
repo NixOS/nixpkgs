@@ -82,7 +82,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "slack" ];
 
   meta = with lib; {
-    description = "A client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API";
+    description = "Client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API";
     homepage = "https://github.com/slackapi/python-slackclient";
     changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/v${version}";
     license = licenses.mit;

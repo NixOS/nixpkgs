@@ -54,7 +54,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Decentralized peer to peer chat application.";
+    description = "Decentralized peer to peer chat application";
     homepage = "https://retroshare.cc/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

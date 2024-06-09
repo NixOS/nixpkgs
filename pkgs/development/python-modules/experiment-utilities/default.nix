@@ -63,7 +63,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "exputils" ];
 
   meta = with lib; {
-    description = "Various tools to run scientific computer experiments.";
+    description = "Various tools to run scientific computer experiments";
     homepage = "https://gitlab.inria.fr/creinke/exputils";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ GaetanLepage ];

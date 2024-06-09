@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A small QR code decoding library";
+    description = "Small QR code decoding library";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux ++ [ "x86_64-darwin" "aarch64-darwin" ];

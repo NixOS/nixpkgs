@@ -77,7 +77,7 @@ buildPythonPackage rec {
   disabledTests = [ "test_check_env" ];
 
   meta = {
-    description = "A simple framework that allows researchers and hobbyists to develop AI agents for Atari 2600 games";
+    description = "Simple framework that allows researchers and hobbyists to develop AI agents for Atari 2600 games";
     mainProgram = "ale-import-roms";
     homepage = "https://github.com/mgbellemare/Arcade-Learning-Environment";
     changelog = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/releases/tag/v${version}";

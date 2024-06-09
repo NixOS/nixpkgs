@@ -58,7 +58,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dask_gateway_server" ];
 
   meta = with lib; {
-    description = "A multi-tenant server for securely deploying and managing multiple Dask clusters";
+    description = "Multi-tenant server for securely deploying and managing multiple Dask clusters";
     homepage = "https://gateway.dask.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

@@ -51,7 +51,7 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/containerd/nerdctl/";
     changelog = "https://github.com/containerd/nerdctl/releases/tag/v${version}";
-    description = "A Docker-compatible CLI for containerd";
+    description = "Docker-compatible CLI for containerd";
     mainProgram = "nerdctl";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ developer-guy jk ];

@@ -18,7 +18,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   meta = with lib; {
-    description = "A command-line tool for one-click proxy in your research and development without installing v2ray or anything else";
+    description = "Command-line tool for one-click proxy in your research and development without installing v2ray or anything else";
     homepage = "https://github.com/mzz2017/gg";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ xyenon ];

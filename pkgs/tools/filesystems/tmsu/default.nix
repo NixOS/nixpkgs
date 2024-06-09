@@ -34,7 +34,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     homepage    = "http://www.tmsu.org";
-    description = "A tool for tagging your files using a virtual filesystem";
+    description = "Tool for tagging your files using a virtual filesystem";
     maintainers = with maintainers; [ pSub ];
     license     = licenses.gpl3Plus;
     platforms   = platforms.unix;

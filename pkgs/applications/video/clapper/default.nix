@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A GNOME media player built using GTK4 toolkit and powered by GStreamer with OpenGL rendering";
+    description = "GNOME media player built using GTK4 toolkit and powered by GStreamer with OpenGL rendering";
     longDescription = ''
       Clapper is a GNOME media player built using the GTK4 toolkit.
       The media player is using GStreamer as a media backend.

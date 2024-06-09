@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
   checkTarget = "-C tests run_tests";
 
   meta = with lib; {
-    description = "A lean and mean Atmel AVR simulator";
+    description = "Lean and mean Atmel AVR simulator";
     mainProgram = "simavr";
     homepage    = "https://github.com/buserror/simavr";
     license     = licenses.gpl3;
