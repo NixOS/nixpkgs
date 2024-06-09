@@ -86,5 +86,6 @@ stdenv.mkDerivation {
     # error: use of undeclared identifier 'aligned_alloc'
     broken = stdenv.isDarwin;
     homepage = "https://github.com/clasp-developers/clasp";
+    mainProgram = "clasp";
   };
 }
