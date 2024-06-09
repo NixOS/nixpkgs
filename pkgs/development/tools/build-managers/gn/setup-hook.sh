@@ -1,3 +1,5 @@
+# shellcheck shell=bash disable=SC2164
+
 gnConfigurePhase() {
     runHook preConfigure
 
@@ -12,6 +14,6 @@ gnConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "${dontUseGnConfigure-}" -a -z "${configurePhase-}" ]; then
+if [ -z "${dontUseGnConfigure-}" ] && [ -z "${configurePhase-}" ]; then
     configurePhase=gnConfigurePhase
 fi
