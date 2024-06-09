@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rshim-user-space";
-  version = "2.0.20";
+  version = "2.0.31";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = pname;
     rev = "rshim-${version}";
-    hash = "sha256-zm1cMTna9o8edl0M7tjUhbnElbUkQZSkh3KOI6tbE6I=";
+    hash = "sha256-gD7LexJomHplGLRlBkjxoZm25MgZaw+n47mkZ70QHRI=";
   };
 
   nativeBuildInputs = [
