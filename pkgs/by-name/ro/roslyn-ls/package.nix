@@ -2,7 +2,7 @@
 let
   pname = "roslyn-ls";
   # see https://github.com/dotnet/roslyn/blob/main/eng/targets/TargetFrameworks.props
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 sdk_8_0 ];
+  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 sdk_8_0 sdk_9_0 ];
   # need sdk on runtime as well
   dotnet-runtime = dotnetCorePackages.sdk_8_0;
 
@@ -11,19 +11,19 @@ in
 buildDotnetModule rec {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.22.2";
+  vsVersion = "2.34.10";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${vsVersion}";
-    hash = "sha256-j7PXgYjISlPBbhUEEIxkDlOx7TMYPHtC3KH2DViWxJ8=";
+    hash = "sha256-fsVo1F7G4b6tcU1lyySEO6cDqIa8i/f4AvQD8ua/mXs=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "4.10.0-2.24124.2";
-  projectFile = "src/Features/LanguageServer/${project}/${project}.csproj";
+  version = "4.11.0-3.24307.2";
+  projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.nix;
 
@@ -36,7 +36,7 @@ buildDotnetModule rec {
 
     substituteInPlace $projectFile \
       --replace-fail \
-        '>win-x64;win-x86;win-arm64;linux-x64;linux-arm64;linux-musl-x64;linux-musl-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>' \
+        '>win-x64;win-arm64;linux-x64;linux-arm64;linux-musl-x64;linux-musl-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>' \
         '>linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>'
   '';
 
