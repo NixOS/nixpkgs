@@ -220,8 +220,7 @@ stdenv.mkDerivation {
         new_version=$(echo $package_info | jq -r '.data.version_number' | sed -n 's/.*@V//p')
         sha256_hash=$(nix-prefetch-url $update_link)
         sri_hash=$(nix hash to-sri --type sha256 $sha256_hash)
-        update-source-version feishu 0 ${lib.fakeSha256} --system=$platform --source-key="sources.$platform"
-        update-source-version feishu $new_version $sri_hash $update_link --system=$platform --source-key="sources.$platform"
+        update-source-version feishu $new_version $sri_hash $update_link --system=$platform --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };
