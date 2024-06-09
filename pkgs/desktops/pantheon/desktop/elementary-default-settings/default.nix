@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -15,23 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
-  version = "7.1.0";
+  version = "7.1.0-unstable-2024-05-17";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "default-settings";
-    rev = version;
-    sha256 = "sha256-j4K8qYwfu6/s4qnTSzwv6KRsk9f+Qr/l1bhLywKMHMU=";
+    rev = "a089b3919c6091afa8b2cca697ffe17bd9f51a75";
+    sha256 = "sha256-PbuqoqUyXc13lJH1D8TL/EcKE8q9Cd/GQf9Ck+3KsiQ=";
   };
-
-  patches = [
-    # Add pantheon-portals.conf
-    # https://github.com/elementary/default-settings/pull/293
-    (fetchpatch {
-      url = "https://github.com/elementary/default-settings/commit/8201eeb6a356e6059b505756ef7a556a6848ad3b.patch";
-      sha256 = "sha256-qhGj7WQTAWJTC1kouUZhBWKqyO4hQWJghEhLVl8QVUM=";
-    })
-  ];
 
   nativeBuildInputs = [
     accountsservice
@@ -46,18 +36,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
     "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
-    "-Dplank-dockitems=false"
   ];
-
-  preInstall = ''
-    # Install our override for plank dockitems as the desktop file path is different.
-    schema_dir=$out/share/glib-2.0/schemas
-    install -D ${./overrides/plank-dockitems.gschema.override} $schema_dir/plank-dockitems.gschema.override
-
-    # Our launchers that use paths at /run/current-system/sw/bin
-    mkdir -p $out/etc/skel/.config/plank/dock1
-    cp -avr ${./launchers} $out/etc/skel/.config/plank/dock1/launchers
-  '';
 
   postFixup = ''
     # https://github.com/elementary/default-settings/issues/55

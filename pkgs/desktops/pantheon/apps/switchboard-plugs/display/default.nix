@@ -6,22 +6,22 @@
 , ninja
 , pkg-config
 , vala
+, libadwaita
 , libgee
-, libhandy
-, granite
-, gtk3
+, granite7
+, gtk4
 , switchboard
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-display";
-  version = "7.0.0";
+  version = "7.0.0-unstable-2024-05-05";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-NgTpV/hbPttAsDY8Y9AsqdpjRlZqTy2rTu3v1jQZjBo=";
+    rev = "58627fa60406cfb437428dea1a45a3ee34018b7a";
+    sha256 = "sha256-7ULCSzIzj2A1XH8neSm8YQunMTtWwIYL6I6TMkQw5mE=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
     switchboard
   ];
 

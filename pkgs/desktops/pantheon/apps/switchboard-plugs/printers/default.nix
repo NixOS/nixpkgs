@@ -6,22 +6,23 @@
 , ninja
 , pkg-config
 , vala
+, libadwaita
 , libgee
-, granite
-, gtk3
+, granite7
+, gtk4
 , cups
 , switchboard
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-printers";
-  version = "2.2.1";
+  version = "2.2.1-unstable-2024-04-26";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-RJYyCKTcTiHNhwZBrgyMacoKREg5+sfZ0oB4H+lL76Y=";
+    rev = "480a51253793801e0bb5c4f1b330459b7b43b1b2";
+    sha256 = "sha256-iaWU99rMA3KdgBgt8OPPmdwiAXpQkS6rqs4sX0m2Q0I=";
   };
 
   nativeBuildInputs = [
@@ -33,8 +34,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cups
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     switchboard
   ];

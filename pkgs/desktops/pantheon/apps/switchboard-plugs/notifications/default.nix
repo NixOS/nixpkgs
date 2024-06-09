@@ -2,37 +2,28 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, fetchpatch
 , meson
 , ninja
 , pkg-config
 , vala
+, libadwaita
 , libgee
-, granite
-, gtk3
+, granite7
+, gtk4
 , switchboard
 , elementary-notifications
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-notifications";
-  version = "2.2.0";
+  version = "2.2.0-unstable-2024-04-04";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "0zzhgs8m1y7ab31hbn7v8g8k7rx51gqajl243zmysn86lfqk8iay";
+    rev = "0b6188e1b4bc483a7fd5b5192b548e27de4b2970";
+    sha256 = "sha256-6Jb6yyUR6yDmn/jaUUto2ZEEYg/+8yYGb31oRLhG4zA=";
   };
-
-  patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-notifications/pull/83
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-notifications/commit/2e0320aab62b6932e8ef5f941d02e244de381957.patch";
-      sha256 = "0rcamasq837grck0i2yx6psggzrhv7p7m3mra5l0k9zsjxgar92v";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -43,8 +34,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     elementary-notifications
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     switchboard
   ];

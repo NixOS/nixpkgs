@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -14,6 +13,7 @@
 , gtk3
 , granite
 , libgee
+, libhandy
 , bamf
 , libcanberra-gtk3
 , gnome-desktop
@@ -21,39 +21,25 @@
 , mutter
 , gnome-settings-daemon
 , wrapGAppsHook3
-, gexiv2
+, sqlite
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "7.1.3";
+  version = "7.1.3-unstable-2024-05-31";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-0fDbR28gh7F8Bcnofn48BBP1CTsYnfmY5kG72ookOXw=";
+    rev = "d5e89a9fd1bdd3fdadfbd3c9a562e738684d048f";
+    sha256 = "sha256-YOAdufrnoHjICCP2e91Cl1BnS1QNbQ9yWzW140eK5Po=";
   };
 
   patches = [
     # We look for plugins in `/run/current-system/sw/lib/` because
     # there are multiple plugin providers (e.g. gala and wingpanel).
     ./plugins-dir.patch
-
-    # Start gala-daemon internally (needed for systemd managed gnome-session)
-    # https://github.com/elementary/gala/pull/1844
-    (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/351722c5a4fded46992b725e03dc94971c5bd31f.patch";
-      hash = "sha256-RvdVHQjCUNmLrROBZTF+m1vE2XudtQZjk/YW28P/vKc=";
-    })
-
-    # InternalUtils: Fix window placement
-    # https://github.com/elementary/gala/pull/1913
-    (fetchpatch {
-      url = "https://github.com/elementary/gala/commit/2d30bee678788c5a853721d16b5b39c997b23c02.patch";
-      hash = "sha256-vhGFaLpJZFx1VTfjY1BahQiOUvBPi0dBSXLGhYc7r8A=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -69,16 +55,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    bamf
     gnome-settings-daemon
-    gexiv2
     gnome-desktop
     granite
     gtk3
     libcanberra-gtk3
     libgee
+    libhandy
     mesa # for libEGL
     mutter
+    sqlite
     systemd
   ];
 

@@ -1,18 +1,18 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
 , pkg-config
 , vala
+, libadwaita
 , libgee
 , libgtop
 , libgudev
-, libhandy
-, granite
-, gtk3
+, granite7
+, gtk4
+, packagekit
 , switchboard
 , udisks2
 , fwupd
@@ -21,23 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "6.2.0";
+  version = "6.2.0-unstable-2024-05-05";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-MJybc2yAchU6qMqkoRz45QdhR7bj/UFk2nyxcBivsHI=";
+    rev = "1abd84718bf909cc744a1348c3b9d64e1b56db57";
+    sha256 = "sha256-iQwbqw/tIEmhlB0Co9pmfD9apMvavMqZM2W6dzRS54E=";
   };
-
-  patches = [
-    # Add support for AppStream 1.0
-    # https://github.com/elementary/switchboard-plug-about/pull/275
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-about/commit/72d7da13da2824812908276751fd3024db2dd0f8.patch";
-      hash = "sha256-R7oW3mL77/JNqxuMiqxtdMlHWMJgGRQBBzVeRiqx8PY=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -49,19 +40,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     appstream
     fwupd
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     libgtop
     libgudev
-    libhandy
+    packagekit
     switchboard
     udisks2
-  ];
-
-  mesonFlags = [
-    # Does not play nice with the nix-snowflake logo
-    "-Dwallpaper=false"
   ];
 
   passthru = {

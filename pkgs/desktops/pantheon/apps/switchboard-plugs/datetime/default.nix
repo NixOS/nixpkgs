@@ -1,16 +1,16 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
 , substituteAll
 , pkg-config
 , vala
+, libadwaita
 , libgee
-, granite
-, gtk3
+, granite7
+, gtk4
 , libxml2
 , switchboard
 , tzdata
@@ -18,25 +18,19 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-datetime";
-  version = "2.2.0";
+  version = "2.2.0-unstable-2024-04-26";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "10rqhxsqbl1xnz5n84d7m39c3vb71k153989xvyc55djia1wjx96";
+    rev = "29d0c3b4d58d2cf13ddf47ef9984d6aaf52b518a";
+    sha256 = "sha256-p6ocJrW9aGzVxVY7i/IV71w/QBnG4NztgCYFHMnbLgk=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
       tzdata = tzdata;
-    })
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/switchboard-plug-datetime/pull/100
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-datetime/commit/a90639ed4f185f50d4ae448cd9503203dc24b3f4.patch";
-      sha256 = "0dz0s02ccnds62dqil44k652pc5icka2rfhcx0a5bj1wi5sifnp7";
     })
   ];
 
@@ -49,8 +43,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     switchboard
   ];

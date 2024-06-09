@@ -6,23 +6,23 @@
 , ninja
 , pkg-config
 , vala
+, libadwaita
 , libgee
-, libhandy
-, granite
-, gtk3
+, granite7
+, gtk4
 , switchboard
 , flatpak
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-applications";
-  version = "7.0.1";
+  version = "7.0.1-unstable-2024-05-16";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-r2JKiTewsLQSZPriC0w72CFevRQXytrFcO2VfA9BKHA=";
+    rev = "70ca310184490898cdfababb4c1abafa557cacc0";
+    sha256 = "sha256-8UFr6bPLnKB3Fggk0Zej2x/19igS5CRFGAKnlSLK4NU=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     flatpak
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
-    libhandy
     switchboard
   ];
 

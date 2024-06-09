@@ -6,23 +6,23 @@
 , ninja
 , pkg-config
 , vala
-, evolution-data-server
+, evolution-data-server-gtk4
 , glib
-, granite
-, gtk3
-, libhandy
+, granite7
+, gtk4
+, libadwaita
 , switchboard
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
-  version = "6.5.3";
+  version = "6.5.3-unstable-2024-05-04";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-qERXF7aymI2xbyqrD6rwUBiFNRnIiVllavSPgW0F8yk=";
+    rev = "42f38c66fc7db56ee3eaa78d4f0384519c7b23c7";
+    sha256 = "sha256-1Xmu0m/RhkIV+XeqgbZwfF7ZP3BrPsGY0LuVfqAsL6A=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    evolution-data-server
+    evolution-data-server-gtk4
     glib
-    granite
-    gtk3
-    libhandy
+    granite7
+    gtk4
+    libadwaita
     switchboard
   ];
 

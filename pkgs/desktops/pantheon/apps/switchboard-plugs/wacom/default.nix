@@ -7,8 +7,9 @@
 , pkg-config
 , vala
 , glib
-, granite
-, gtk3
+, granite7
+, gtk4
+, libadwaita
 , libgee
 , libgudev
 , libwacom
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-wacom";
-  version = "1.0.1";
+  version = "1.0.1-unstable-2024-03-22";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-+E+MTIi2Dvv7TvzYEzudeIqlDcP8VP61eBh/PQz9SWI=";
+    rev = "c69e306f4fe0ad72bbf445443bd89df3554dcae5";
+    sha256 = "sha256-0ouy71z4oa8g6K+cHS7sRAVGvHxm+fXvWvvRit2jBps=";
   };
 
   nativeBuildInputs = [
@@ -36,8 +37,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     libgudev
     libwacom

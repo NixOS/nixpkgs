@@ -20,47 +20,7 @@
 }:
 
 let
-
-  #
-  # ─── ENSURES PLANK GETS ELEMENTARY'S DEFAULT DOCKITEMS ────────────────────────────
-  #
-
-  #
-  # Upstream relies on /etc/skel to initiate a new users home directory with plank's dockitems.
-  #
-  # That is not possible within nixos, but we can achieve this easily with a simple script that copies
-  # them. We then use a xdg autostart and initialize it during the "EarlyInitialization" phase of a gnome session
-  # which is most appropriate for installing files into $HOME.
-  #
-
-  dockitems-script = writeScript "dockitems-script" ''
-    #!${runtimeShell}
-
-    elementary_default_settings="${elementary-default-settings}"
-    dock_items="$elementary_default_settings/etc/skel/.config/plank/dock1/launchers"/*
-
-    if [ ! -d "$HOME/.config/plank/dock1" ]; then
-        echo "Instantiating default Plank Dockitems..."
-
-        mkdir -p "$HOME/.config/plank/dock1/launchers"
-        cp -r --no-preserve=mode,ownership $dock_items "$HOME/.config/plank/dock1/launchers/"
-    else
-        echo "Plank Dockitems already instantiated"
-    fi
-  '';
-
-  dockitemAutostart = writeText "default-elementary-dockitems.desktop" ''
-    [Desktop Entry]
-    Type=Application
-    Name=Instantiate Default elementary dockitems
-    Exec=${dockitems-script}
-    StartupNotify=false
-    NoDisplay=true
-    OnlyShowIn=Pantheon;
-    X-GNOME-Autostart-Phase=EarlyInitialization
-  '';
-
-  executable = writeScript "pantheon" ''
+  common-export = ''
     # gnome-session can find RequiredComponents for `pantheon` session (notably pantheon's patched g-s-d autostarts)
     export XDG_CONFIG_DIRS=@out@/etc/xdg:$XDG_CONFIG_DIRS
 
@@ -70,10 +30,17 @@ let
     # * gnome-session can find the `pantheon' session
     # * use pantheon-mimeapps.list
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
+  '';
 
+  executable = writeScript "pantheon" (common-export + ''
     # Start pantheon session. Keep in sync with upstream
     exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
-  '';
+  '');
+
+  executable-wayland = writeScript "pantheon-wayland" (common-export + ''
+    # Start pantheon-wayland session. Keep in sync with upstream
+    exec ${gnome-session}/bin/gnome-session --session=pantheon-wayland "$@"
+  '');
 
   # Absolute path patched version of the upstream xsession
   xsession = writeText "pantheon.desktop" ''
@@ -87,11 +54,21 @@ let
     Type=Application
   '';
 
+  wayland-session = writeText "pantheon-wayland.desktop" ''
+    [Desktop Entry]
+    Name=Pantheon (Wayland)
+    Comment=This session provides elementary experience
+    Exec=@out@/libexec/pantheon-wayland
+    TryExec=${wingpanel}/bin/io.elementary.wingpanel
+    Icon=
+    DesktopNames=Pantheon
+    Type=Application
+  '';
 in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings";
-  version = "6.0.0-unstable-2024-03-29";
+  version = "6.0.0-unstable-2024-05-30";
 
   src = fetchFromGitHub {
     owner = "elementary";
@@ -99,8 +76,8 @@ stdenv.mkDerivation rec {
     # For systemd managed gnome-session support.
     # https://github.com/NixOS/nixpkgs/issues/228946
     # nixpkgs-update: no auto update
-    rev = "53bf57e5b32936befc3003a0f99c5b3a69349c76";
-    sha256 = "sha256-TX9V6gZiuPEKSHQoSD4+5QptuqEvuErCJ8OF2KFRf9k=";
+    rev = "71b7b445189419c34ef24bfbb47709f714055136";
+    sha256 = "sha256-Ska64MtyODPtyWkq7PUJnGO/ssegShH6XNuLMVMaFBM=";
   };
 
   nativeBuildInputs = [
@@ -123,6 +100,7 @@ stdenv.mkDerivation rec {
     "-Dfallback-session=GNOME"
     "-Ddetect-program-prefixes=true"
     "--sysconfdir=${placeholder "out"}/etc"
+    "-Dwayland=true"
   ];
 
   postInstall = ''
@@ -131,16 +109,15 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
-    # instantiates pantheon's dockitems
-    cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
-
     # script `Exec` to start pantheon
     mkdir -p $out/libexec
     substitute ${executable} $out/libexec/pantheon --subst-var out
-    chmod +x $out/libexec/pantheon
+    substitute ${executable-wayland} $out/libexec/pantheon-wayland --subst-var out
+    chmod +x $out/libexec/pantheon{,-wayland}
 
     # absolute path patched xsession
     substitute ${xsession} $out/share/xsessions/pantheon.desktop --subst-var out
+    substitute ${wayland-session} $out/share/wayland-sessions/pantheon-wayland.desktop --subst-var out
   '';
 
   passthru = {
@@ -148,6 +125,7 @@ stdenv.mkDerivation rec {
 
     providedSessions = [
       "pantheon"
+      "pantheon-wayland"
     ];
   };
 

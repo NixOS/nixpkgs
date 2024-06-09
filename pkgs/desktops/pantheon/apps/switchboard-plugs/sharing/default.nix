@@ -7,20 +7,20 @@
 , pkg-config
 , vala
 , libgee
-, granite
-, gtk3
+, granite7
+, gtk4
 , switchboard
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sharing";
-  version = "2.1.6";
+  version = "2.1.6-unstable-2024-05-05";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-izo30JjPkZtR6A/bfvZNmIE4Hq5hofWmxdUwBJYoSm8=";
+    rev = "1d69fcc46c7d193696dc1a89f28a94e1d8a25873";
+    sha256 = "sha256-50LMUv/TLK8sTWuk+ZQasQNxy92Ap5yCgnhNHDgMFOY=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    granite
-    gtk3
+    granite7
+    gtk4
     libgee
     switchboard
   ];
