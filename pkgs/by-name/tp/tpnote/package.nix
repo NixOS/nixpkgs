@@ -39,6 +39,10 @@ rustPlatform.buildRustPackage rec {
      SystemConfiguration
   ]);
 
+  postInstall = ''
+    installManPage docs/build/man/man1/tpnote.1
+  '';
+
   RUSTONIG_SYSTEM_LIBONIG = true;
 
   passthru.tests.version = testers.testVersion { package = tpnote; };
