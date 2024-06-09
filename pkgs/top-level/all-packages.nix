@@ -2585,6 +2585,13 @@ with pkgs;
       pkgsCross.gnu64.hello;
   };
 
+  box86 = callPackage ../applications/emulators/box86 {
+    hello-x86_32 = if stdenv.hostPlatform.isx86_32 then
+      hello
+    else
+      pkgsCross.gnu32.hello;
+  };
+
   caprice32 = callPackage ../applications/emulators/caprice32 { };
 
   ccemux = callPackage ../applications/emulators/ccemux { };
