@@ -2585,12 +2585,23 @@ with pkgs;
       pkgsCross.gnu64.hello;
   };
 
-  box86 = callPackage ../applications/emulators/box86 {
-    hello-x86_32 = if stdenv.hostPlatform.isx86_32 then
-      hello
+  box86 =
+    let
+      args = {
+        hello-x86_32 = if stdenv.hostPlatform.isx86_32 then
+          hello
+        else
+          pkgsCross.gnu32.hello;
+      };
+    in
+    if stdenv.hostPlatform.is32bit then
+      callPackage ../applications/emulators/box86 args
+    else if stdenv.hostPlatform.isx86_64 then
+      pkgsCross.gnu32.callPackage ../applications/emulators/box86 args
+    else if stdenv.hostPlatform.isAarch64 then
+      pkgsCross.armv7l-hf-multiplatform.callPackage ../applications/emulators/box86 args
     else
-      pkgsCross.gnu32.hello;
-  };
+      throw "Don't know 32-bit platform for cross from: ${stdenv.hostPlatform.stdenv}";
 
   caprice32 = callPackage ../applications/emulators/caprice32 { };
 
