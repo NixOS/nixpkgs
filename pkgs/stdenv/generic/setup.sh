@@ -280,16 +280,16 @@ prependToVar() {
     fi
 
     # check if variable already exist and if it does then do extra checks
-    if declare -p "$1" 2> /dev/null | grep -q '^'; then
-        type="$(declare -p "$1")"
-        if [[ "$type" =~ "declare -A" ]]; then
-            echo "prependToVar(): ERROR: trying to use prependToVar on an associative array." >&2
-            return 1
-        elif [[ "$type" =~ "declare -a" ]]; then
-            useArray=true
-        else
-            useArray=false
-        fi
+    if type=$(declare -p "$1" 2> /dev/null); then
+        case "${type#* }" in
+            -A*)
+                echo "prependToVar(): ERROR: trying to use prependToVar on an associative array." >&2
+                return 1 ;;
+            -a*)
+                useArray=true ;;
+            *)
+                useArray=false ;;
+        esac
     fi
 
     shift
@@ -313,16 +313,16 @@ appendToVar() {
     fi
 
     # check if variable already exist and if it does then do extra checks
-    if declare -p "$1" 2> /dev/null | grep -q '^'; then
-        type="$(declare -p "$1")"
-        if [[ "$type" =~ "declare -A" ]]; then
-            echo "appendToVar(): ERROR: trying to use appendToVar on an associative array, use variable+=([\"X\"]=\"Y\") instead." >&2
-            return 1
-        elif [[ "$type" =~ "declare -a" ]]; then
-            useArray=true
-        else
-            useArray=false
-        fi
+    if type=$(declare -p "$1" 2> /dev/null); then
+        case "${type#* }" in
+            -A*)
+                echo "appendToVar(): ERROR: trying to use appendToVar on an associative array, use variable+=([\"X\"]=\"Y\") instead." >&2
+                return 1 ;;
+            -a*)
+                useArray=true ;;
+            *)
+                useArray=false ;;
+        esac
     fi
 
     shift
