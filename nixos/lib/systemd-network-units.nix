@@ -147,7 +147,10 @@ in {
     '' + optionalString (def.ipv6SendRAConfig != { }) ''
       [IPv6SendRA]
       ${attrsToSection def.ipv6SendRAConfig}
-    '' + flip concatMapStrings def.ipv6Prefixes (x: ''
+    '' + flip concatMapStrings def.ipv6PREF64Prefixes (x: ''
+      [IPv6PREF64Prefix]
+      ${attrsToSection x}
+    '') + flip concatMapStrings def.ipv6Prefixes (x: ''
       [IPv6Prefix]
       ${attrsToSection x}
     '') + flip concatMapStrings def.ipv6RoutePrefixes (x: ''
