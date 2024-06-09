@@ -43,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/cisco/openh264/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ bsd2 ];
     maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.unix ++ lib.platforms.windows;
+    # See meson.build
+    platforms = lib.platforms.windows ++ lib.intersectLists
+      (lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64 ++ lib.platforms.loongarch64)
+      (lib.platforms.linux ++ lib.platforms.darwin);
   };
 })
