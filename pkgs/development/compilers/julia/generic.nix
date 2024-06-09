@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     xcbuild
     darwin.DarwinTools
     darwin.cctools
+    darwin.sigtool
   ];
 
   buildInputs = [
