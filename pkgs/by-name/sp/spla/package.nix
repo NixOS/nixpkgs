@@ -22,13 +22,13 @@ assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
 
 stdenv.mkDerivation rec {
   pname = "spla";
-  version = "1.5.5";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-71QpwTsRogH+6Bik9DKwezl9SqwoLxQt4SZ7zw5X6DE=";
+    hash = "sha256-1k9Su7loXsH7AyhYFZax+4nyNoCO5+WJbXrzGGAIy/c=";
   };
 
   outputs = [ "out" "dev" ];
