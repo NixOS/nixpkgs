@@ -16,11 +16,9 @@ wafConfigurePhase() {
       export PKGCONFIG="${PKG_CONFIG}"
     fi
 
-    local flagsArray=(
-        $prefixFlag
-        $wafConfigureFlags "${wafConfigureFlagsArray[@]}"
-        ${wafConfigureTargets:-configure}
-    )
+    local flagsArray=( $prefixFlag )
+    : "${wafConfigureTargets:=configure}"
+    concatTo flagsArray wafConfigureFlags wafConfigureFlagsArray wafConfigureTargets
 
     echoCmd 'waf configure flags' "${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
@@ -41,15 +39,9 @@ wafConfigurePhase() {
 wafBuildPhase () {
     runHook preBuild
 
-    # set to empty if unset
-    : "${wafFlags=}"
-
-    local flagsArray=(
-      ${enableParallelBuilding:+-j ${NIX_BUILD_CORES}}
-      $wafFlags ${wafFlagsArray[@]}
-      $wafBuildFlags ${wafBuildFlagsArray[@]}
-      ${wafBuildTargets:-build}
-    )
+    local flagsArray=( ${enableParallelBuilding:+-j ${NIX_BUILD_CORES}} )
+    : "${wafBuildTargets:=build}"
+    concatTo flagsArray wafFlags wafFlagsArray wafBuildFlags wafBuildFlagsArray wafBuildTargets
 
     echoCmd 'waf build flags' "${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
@@ -64,12 +56,9 @@ wafInstallPhase() {
         mkdir -p "$prefix"
     fi
 
-    local flagsArray=(
-        ${enableParallelInstalling:+-j ${NIX_BUILD_CORES}}
-        $wafFlags ${wafFlagsArray[@]}
-        $wafInstallFlags ${wafInstallFlagsArray[@]}
-        ${wafInstallTargets:-install}
-    )
+    local flagsArray=( ${enableParallelInstalling:+-j ${NIX_BUILD_CORES}} )
+    : "${wafInstallTargets:=install}"
+    concatTo flagsArray wafFlags wafFlagsArray wafInstallFlags wafInstallFlagsArray wafInstallTargets
 
     echoCmd 'waf install flags' "${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
