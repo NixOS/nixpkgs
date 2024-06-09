@@ -403,8 +403,6 @@ with pkgs;
   buildFHSEnvChroot = callPackage ../build-support/build-fhsenv-chroot { }; # Deprecated; use buildFHSEnv/buildFHSEnvBubblewrap
   buildFHSEnvBubblewrap = callPackage ../build-support/build-fhsenv-bubblewrap { };
 
-  buildMaven = callPackage ../build-support/build-maven.nix { };
-
   c64-debugger = callPackage ../applications/emulators/c64-debugger { };
 
   camunda-modeler = callPackage ../applications/misc/camunda-modeler { };
@@ -19067,8 +19065,8 @@ with pkgs;
 
   math-preview = callPackage ../tools/text/math-review { };
 
-  maven = maven3;
-  maven3 = callPackage ../development/tools/build-managers/apache-maven { };
+  maven3 = maven;
+  inherit (maven) buildMaven;
 
   mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
 
