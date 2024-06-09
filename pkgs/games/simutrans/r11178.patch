@@ -1,0 +1,13 @@
+--- a/src/simutrans/sys/simsys.cc	(revision 11177)
++++ b/src/simutrans/sys/simsys.cc	(revision 11178)
+@@ -382,7 +382,9 @@
+ 		if(testfile) {
+ 			FILE* testf = fopen(testfile,"r");
+ 			ok = ok && testf;
+-			fclose(testf);
++			if(testf) {
++				fclose(testf);
++			}
+ 		}
+ 		if(!ok) {
+ 			printf("WARNING: Objects not found in %s \"%s\"!\n",  info, path);
