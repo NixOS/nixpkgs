@@ -488,6 +488,7 @@ in {
   honk = runTest ./honk.nix;
   installed-tests = pkgs.recurseIntoAttrs (handleTest ./installed-tests {});
   invidious = handleTest ./invidious.nix {};
+  iosched = handleTest ./iosched.nix {};
   isolate = handleTest ./isolate.nix {};
   livebook-service = handleTest ./livebook-service.nix {};
   pyload = handleTest ./pyload.nix {};
