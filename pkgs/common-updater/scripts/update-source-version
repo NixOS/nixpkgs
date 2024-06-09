@@ -12,9 +12,10 @@ usage() {
     echo "Usage: $scriptName <attr> <version> [<new-source-hash>] [<new-source-url>]"
     echo "                              [--version-key=<version-key>] [--source-key=<source-key>]"
     echo "                              [--system=<system>] [--file=<file-to-update>] [--rev=<revision>]"
-    echo "                              [--ignore-same-hash] [--print-changes]"
+    echo "                              [--ignore-same-hash] [--ignore-same-version] [--print-changes]"
 }
 
+ignoreSameVersion=
 args=()
 
 for arg in "$@"; do
@@ -40,6 +41,9 @@ for arg in "$@"; do
         ;;
         --ignore-same-hash)
             ignoreSameHash="true"
+        ;;
+        --ignore-same-version)
+            ignoreSameVersion="true"
         ;;
         --print-changes)
             printChanges="true"
@@ -139,7 +143,7 @@ if [[ -z "$oldVersion" ]]; then
     die "Couldn't find out the old version of '$attr'!"
 fi
 
-if [[ "$oldVersion" = "$newVersion" ]]; then
+if [[ -z "$ignoreSameVersion" && "$oldVersion" = "$newVersion" ]]; then
     echo "$scriptName: New version same as old version, nothing to do." >&2
     if [ -n "$printChanges" ]; then
         printf '[]\n'
@@ -198,10 +202,12 @@ fi
 oldHashEscaped=$(echo "$oldHash" | sed -re 's|[+]|\\&|g')
 tempHashEscaped=$(echo "$tempHash" | sed -re 's|[+]|\\&|g')
 
-# Replace new version
-sed -i.cmp "$nixFile" -re "$pattern"
-if cmp -s "$nixFile" "$nixFile.cmp"; then
-    die "Failed to replace version '$oldVersion' to '$newVersion' in '$attr'!"
+if [[ "$oldVersion" != "$newVersion" ]]; then
+    # Replace new version
+    sed -i.cmp "$nixFile" -re "$pattern"
+    if cmp -s "$nixFile" "$nixFile.cmp"; then
+        die "Failed to replace version '$oldVersion' to '$newVersion' in '$attr'!"
+    fi
 fi
 
 # Replace new URL
