@@ -1,6 +1,6 @@
 { lowPrio, newScope, pkgs, lib, stdenv
 , preLibcCrossHeaders
-, substitute, substituteAll, fetchFromGitHub
+, substitute, substituteAll, fetchFromGitHub, fetchpatch
 , overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
@@ -155,6 +155,14 @@ in let
         (substituteAll {
           src = ../common/clang/clang-at-least-16-LLVMgold-path.patch;
           libllvmLibdir = "${tools.libllvm.lib}/lib";
+        })
+        (fetchpatch {
+          name = "tweak-tryCaptureVariable-for-unevaluated-lambdas.patch";
+          url = "https://github.com/llvm/llvm-project/commit/3d361b225fe89ce1d8c93639f27d689082bd8dad.patch";
+          # TreeTransform.h is not affected in LLVM 18.
+          excludes = ["docs/ReleaseNotes.rst" "lib/Sema/TreeTransform.h"];
+          stripLen = 1;
+          hash = "sha256-1NKej08R9SPlbDY/5b0OKUsHjX07i9brR84yXiPwi7E=";
         })
       ];
     };
