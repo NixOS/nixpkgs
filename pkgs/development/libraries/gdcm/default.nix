@@ -6,6 +6,7 @@
 , vtk
 , ApplicationServices
 , Cocoa
+, DarwinTools # sw_vers
 , libiconv
 , enablePython ? false
 , python ? null
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ];
+  ] ++ lib.optional stdenv.isDarwin DarwinTools;
 
   buildInputs = [
     expat

@@ -12,8 +12,8 @@
   lm_sensors,
   hddtemp,
   netcat-gnu,
-  nvidiaSupport ? true,
   libXNVCtrl,
+  nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform libXNVCtrl,
   gitUpdater,
 }:
 

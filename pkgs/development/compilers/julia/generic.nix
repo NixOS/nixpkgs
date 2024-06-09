@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
     "USE_BINARYBUILDER=0"
   ] ++ lib.optionals stdenv.isx86_64 [
-    # https://github.com/JuliaCI/julia-buildbot/blob/master/master/inventory.py
-    "JULIA_CPU_TARGET=generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1)"
+    # https://github.com/JuliaCI/julia-buildkite/blob/main/utilities/build_envs.sh
+    "JULIA_CPU_TARGET=generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1);x86-64-v4,-rdrnd,base(1)"
   ] ++ lib.optionals stdenv.isAarch64 [
-    "JULIA_CPU_TARGET=generic;cortex-a57;thunderx2t99;armv8.2-a,crypto,fullfp16,lse,rdm"
+    "JULIA_CPU_TARGET=generic;cortex-a57;thunderx2t99;carmel,clone_all;apple-m1,base(3);neoverse-512tvb,base(3)"
   ];
 
   # remove forbidden reference to $TMPDIR

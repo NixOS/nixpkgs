@@ -66,10 +66,11 @@ extra-packages:
   - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
   - ghc-exactprint == 1.8.*             # 2024-05-20: needed for GHC == 9.8
-  - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.2
-  - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.2
+  - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 8.10, 9.0
+  - ghc-lib == 9.8.*                    # 2024-05-19: preserve for GHC 9.8
+  - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 8.10, 9.0
   - ghc-lib-parser == 9.8.*             # 2024-05-19: preserve for GHC 9.8
-  - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.2
+  - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 8.10, 9.0
   - ghc-lib-parser-ex == 9.8.*          # 2024-05-19: preserve for GHC 9.8
   - ghc-syntax-highlighter == 0.0.10.*  # 2023-11-20:
   - gi-soup == 2.4.28                   # 2023-04-05: the last version to support libsoup-2.4 (and thus be compatible with our other gi- packages)
@@ -118,6 +119,7 @@ extra-packages:
   - retrie < 1.2.0.0                    # 2022-12-30: required for hls on ghc < 9.2
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - ghc-tags == 1.6.*                   # 2023-02-18: preserve for ghc-lib == 9.4.*
+  - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*
   - shake-cabal < 0.2.2.3               # 2023-07-01: last version to support Cabal 3.6.*
   - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
@@ -128,6 +130,57 @@ extra-packages:
 package-maintainers:
   abbradar:
     - Agda
+  alexfmpe:
+    - aeson-gadt-th
+    - basic-sop
+    - cli-extras
+    - cli-git
+    - cli-nix
+    - commutative-semigroups
+    - constraints-extras
+    - dependent-map
+    - dependent-monoidal-map
+    - dependent-sum
+    - dependent-sum-aeson-orphans
+    - dependent-sum-template
+    - gargoyle
+    - gargoyle-postgresql
+    - gargoyle-postgresql-connect
+    - gargoyle-postgresql-nix
+    - generics-sop
+    - ghcjs-base
+    - ghcjs-dom
+    - ghcjs-dom-hello
+    - ghcjs-dom-javascript
+    - haveibeenpwned
+    - jsaddle
+    - jsaddle-clib
+    - jsaddle-dom
+    - jsaddle-hello
+    - jsaddle-warp
+    - jsaddle-webkit2gtk
+    - jsaddle-wkwebview
+    - json-sop
+    - large-generics
+    - large-records
+    - lens-sop
+    - linux-namespaces
+    - monoidal-containers
+    - nix-thunk
+    - patch
+    - proto-lens-arbitrary
+    - proto3-suite
+    - proto3-wire
+    - records-sop
+    - reflex
+    - reflex-dom
+    - reflex-dom-core
+    - reflex-gadt-api
+    - universe
+    - universe-some
+    - vessel
+    - warp
+    - which
   Anton-Latukha:
     - hnix
     - hnix-store-core
@@ -337,6 +390,8 @@ package-maintainers:
     - cornelis
   poscat:
     - hinit
+  Profpatsch:
+    - gitit
   psibi:
     - path-pieces
     - persistent
