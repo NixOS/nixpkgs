@@ -8,7 +8,6 @@
   fetchFromGitHub,
   cmake,
   libuuid,
-  gnutls,
   python3,
   xdg-utils,
   installShellFiles,
@@ -30,20 +29,22 @@ stdenv.mkDerivation rec {
       --replace "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
   '';
 
-  nativeBuildInputs = [
-    cmake
-    libuuid
-    python3
-    installShellFiles
-    corrosion
-    cargo
-    rustc
-    rustPlatform.cargoSetupHook
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin dependencies
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      libuuid
+      python3
+      installShellFiles
+      corrosion
+      cargo
+      rustc
+      rustPlatform.cargoSetupHook
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # darwin dependencies
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   doCheck = true;
   preCheck = ''
@@ -77,12 +78,17 @@ stdenv.mkDerivation rec {
     ln -s $out/share/vim-plugins/task $out/share/nvim/site
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [marcweber oxalica mlaradji];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      marcweber
+      oxalica
+      mlaradji
+      doronbehar
+    ];
     mainProgram = "task";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }
