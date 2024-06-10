@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchgit,
+  fetchFromGitHub,
 
   # runtime dependencies
   certifi,
@@ -19,11 +19,14 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = "${fetchgit {
-    url = "https://github.com/dnanexus/dx-toolkit.git";
-    rev = "v0.377.0";
+  src = fetchFromGitHub {
+    owner = "dnanexus";
+    repo = "dx-toolkit";
+    rev = "v${version}";
     hash = "sha256-xcUSl5C9XKFc0TQh7wJPeTP7syZCwU5BWo55mtSBdN0=";
-  }}/src/python";
+  };
+
+  sourceRoot = "${src.name}/src/python";
 
   dependencies = [
     certifi
