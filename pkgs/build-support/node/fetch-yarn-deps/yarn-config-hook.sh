@@ -12,6 +12,7 @@ yarnConfigHook(){
         --offline --frozen-lockfile \
         --force --production=false \
         --ignore-engines --ignore-scripts
+    # TODO: Check if this is really needed
     patchShebangs node_modules
 
     echo "finished yarnConfigHook"
