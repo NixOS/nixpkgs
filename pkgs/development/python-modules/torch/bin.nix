@@ -27,7 +27,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.3.0";
+  version = "2.3.1";
 in
 buildPythonPackage {
   inherit version;
@@ -75,7 +75,7 @@ buildPythonPackage {
     "libcuda.so.1"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     future
     numpy
     pyyaml
@@ -102,7 +102,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "torch" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
@@ -111,18 +111,18 @@ buildPythonPackage {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     # torch's license is BSD3.
     # torch-bin used to vendor CUDA. It still links against CUDA and MKL.
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       issl
       unfreeRedistributable
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
       "x86_64-linux"
     ];
     hydraPlatforms = [ ]; # output size 3.2G on 1.11.0
-    maintainers = with maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [ junjihashimoto ];
   };
 }
