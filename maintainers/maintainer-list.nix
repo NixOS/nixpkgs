@@ -1095,6 +1095,12 @@
       fingerprint = "1F73 8879 5E5A 3DFC E2B3 FA32 87D1 AADC D25B 8DEE";
     }];
   };
+  amaihoefner = {
+    email = "alexander.maihoefner@protonmail.com";
+    github = "amaihoefner";
+    githubId = 52039028;
+    name = "Alexander Maihöfner";
+  };
   aman9das = {
     email = "amandas62640@gmail.com";
     github = "Aman9das";
