@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An unofficial Qt client for netease cloud music";
+    description = "Unofficial Qt client for netease cloud music";
     homepage = "https://github.com/hypengw/Qcm";
     license = licenses.gpl2Plus;
     mainProgram = "Qcm";

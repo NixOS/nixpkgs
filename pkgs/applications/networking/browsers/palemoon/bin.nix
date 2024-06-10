@@ -194,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.palemoon.org/";
-    description = "An Open Source, Goanna-based web browser focusing on efficiency and customization";
+    description = "Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.

@@ -35,7 +35,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A python wrapper for the \"PulseAudio simple API\". Supports playing and recording audio via PulseAudio and PipeWire";
+    description = "Python wrapper for the \"PulseAudio simple API\". Supports playing and recording audio via PulseAudio and PipeWire";
     homepage = "https://github.com/henrikschnor/pasimple";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];

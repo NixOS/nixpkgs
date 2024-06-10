@@ -80,7 +80,7 @@ buildPythonPackage rec {
     );
 
   meta = with lib; {
-    description = "A language and compiler for custom Deep Learning operations";
+    description = "Language and compiler for custom Deep Learning operations";
     homepage = "https://github.com/openai/triton/";
     changelog = "https://github.com/openai/triton/releases/tag/v${version}";
     # Includes NVIDIA's ptxas, but redistributions of the binary are not limited.

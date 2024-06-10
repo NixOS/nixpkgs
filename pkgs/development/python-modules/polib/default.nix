@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A library to manipulate gettext files (po and mo files)";
+    description = "Library to manipulate gettext files (po and mo files)";
     homepage = "https://bitbucket.org/izi/polib/";
     license = licenses.mit;
   };

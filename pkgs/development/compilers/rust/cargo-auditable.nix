@@ -28,7 +28,7 @@ let
     '';
 
     meta = with lib; {
-      description = "A tool to make production Rust binaries auditable";
+      description = "Tool to make production Rust binaries auditable";
       mainProgram = "cargo-auditable";
       homepage = "https://github.com/rust-secure-code/cargo-auditable";
       changelog = "https://github.com/rust-secure-code/cargo-auditable/blob/v${version}/cargo-auditable/CHANGELOG.md";

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/psmisc/psmisc";
-    description = "A set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
+    description = "Set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ryantm ];

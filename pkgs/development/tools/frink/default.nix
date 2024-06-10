@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A practical calculating tool and programming language";
+    description = "Practical calculating tool and programming language";
     homepage = "https://frinklang.org/";
     license = licenses.unfree;
     sourceProvenance = [ sourceTypes.binaryBytecode ];

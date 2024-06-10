@@ -16,7 +16,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   meta = with lib; {
     changelog = "https://marketplace.visualstudio.com/items/Equinusocio.vsc-material-theme/changelog";
-    description = "The most epic theme now for Visual Studio Code";
+    description = "Most epic theme now for Visual Studio Code";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=Equinusocio.vsc-material-theme";
     homepage = "https://github.com/material-theme/vsc-material-theme";
     license = licenses.asl20;

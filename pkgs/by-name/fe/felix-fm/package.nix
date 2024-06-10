@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A tui file manager with vim-like key mapping";
+    description = "Tui file manager with vim-like key mapping";
     homepage = "https://github.com/kyoheiu/felix";
     changelog = "https://github.com/kyoheiu/felix/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

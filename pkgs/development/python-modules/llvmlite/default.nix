@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/numba/llvmlite/blob/v${version}/CHANGE_LOG";
-    description = "A lightweight LLVM python binding for writing JIT compilers";
+    description = "Lightweight LLVM python binding for writing JIT compilers";
     downloadPage = "https://github.com/numba/llvmlite";
     homepage = "http://llvmlite.pydata.org/";
     license = licenses.bsd2;

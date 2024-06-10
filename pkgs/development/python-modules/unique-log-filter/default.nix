@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "unique_log_filter" ];
 
   meta = with lib; {
-    description = "A log filter that removes duplicate log messages";
+    description = "Log filter that removes duplicate log messages";
     homepage = "https://github.com/twizmwazin/unique_log_filter";
     changelog = "https://github.com/twizmwazin/unique_log_filter/releases/tag/v${version}";
     license = licenses.bsd2;

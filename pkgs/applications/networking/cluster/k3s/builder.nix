@@ -89,7 +89,7 @@ lib:
 let
 
   baseMeta = with lib; {
-    description = "A lightweight Kubernetes distribution";
+    description = "Lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
     maintainers = with maintainers; [
@@ -272,7 +272,7 @@ let
     '';
 
     meta = baseMeta // {
-      description = "The various binaries that get packaged into the final k3s binary";
+      description = "Various binaries that get packaged into the final k3s binary";
     };
   };
   # Only used for the shim since

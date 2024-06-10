@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A language server for intelligent editing of the Fennel Programming Language";
+    description = "Language server for intelligent editing of the Fennel Programming Language";
     homepage = "https://git.sr.ht/~xerool/fennel-ls/";
     license = licenses.mit;
     changelog = "https://git.sr.ht/~xerool/fennel-ls/refs/${version}";

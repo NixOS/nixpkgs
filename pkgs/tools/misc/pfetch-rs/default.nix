@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
 
   meta = with lib; {
-    description = "A rewrite of the pfetch system information tool in Rust";
+    description = "Rewrite of the pfetch system information tool in Rust";
     homepage = "https://github.com/Gobidev/pfetch-rs";
     changelog = "https://github.com/Gobidev/pfetch-rs/releases/tag/v${version}";
     license = licenses.mit;

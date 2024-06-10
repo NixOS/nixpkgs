@@ -74,7 +74,7 @@ grimshot = stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; meta // {
-    description = "A helper for screenshots within sway";
+    description = "Helper for screenshots within sway";
     maintainers = with maintainers; [ evils ];
     mainProgram = "grimshot";
   };

@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An easy to use, cross-platform remote desktop assistance solution";
+    description = "Easy to use, cross-platform remote desktop assistance solution";
     homepage = "https://retgal.github.io/Dayon/index.html";
     license = licenses.gpl3Plus; # https://github.com/RetGal/Dayon/issues/59
     mainProgram = "dayon";

@@ -42,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An opensource cursor theme inspired by Google";
+    description = "Opensource cursor theme inspired by Google";
     homepage = "https://github.com/ful1e5/Google_Cursor";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

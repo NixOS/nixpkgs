@@ -38,7 +38,7 @@ gcc9Stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-lSDL";
 
   meta = with lib; {
-    description = "A lightweight, highly customizable and scriptable image viewer";
+    description = "Lightweight, highly customizable and scriptable image viewer";
     longDescription = ''
       FIM (Fbi IMproved) is a lightweight, console based image viewer that aims
       to be a highly customizable and scriptable for users who are comfortable

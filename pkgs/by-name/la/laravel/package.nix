@@ -26,7 +26,7 @@ php.buildComposerProject (finalAttrs: {
   '';
 
   meta = {
-    description = "The Laravel application installer.";
+    description = "Laravel application installer";
     homepage = "https://laravel.com/docs#creating-a-laravel-project";
     changelog = "https://github.com/laravel/installer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;

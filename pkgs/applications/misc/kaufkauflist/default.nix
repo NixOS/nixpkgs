@@ -45,7 +45,7 @@ in buildNpmPackage rec {
 
   meta = with lib; {
     homepage = "https://codeberg.org/annaaurora/kaufkauflist";
-    description = "A to-do list for shopping or other use cases";
+    description = "To-do list for shopping or other use cases";
     license = licenses.mit;
     maintainers = with maintainers; [ annaaurora ];
     mainProgram = "kaufdbclean";

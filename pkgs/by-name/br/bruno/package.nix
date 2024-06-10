@@ -147,7 +147,7 @@ buildNpmPackage' rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Open-source IDE For exploring and testing APIs.";
+    description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
     inherit (electron.meta) platforms;
     license = licenses.mit;

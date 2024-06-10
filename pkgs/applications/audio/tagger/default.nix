@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An easy-to-use music tag (metadata) editor";
+    description = "Easy-to-use music tag (metadata) editor";
     homepage = "https://github.com/nlogozzo/NickvisionTagger";
     mainProgram = "org.nickvision.tagger";
     license = licenses.gpl3Plus;

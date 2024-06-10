@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # No checks defined
 
   meta = with lib; {
-    description = "An unofficial GUI for managing your Distroboxes, written with GTK4 + Libadwaita";
+    description = "Unofficial GUI for managing your Distroboxes, written with GTK4 + Libadwaita";
     homepage = "https://dvlv.github.io/BoxBuddyRS";
     license = licenses.mit;
     mainProgram = "boxbuddy-rs";

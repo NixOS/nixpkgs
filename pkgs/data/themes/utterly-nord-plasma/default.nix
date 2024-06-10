@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Plasma theme with Nordic Colors, transparency, blur and round edges for UI elements";
+    description = "Plasma theme with Nordic Colors, transparency, blur and round edges for UI elements";
     homepage = "https://himdek.com/Utterly-Nord-Plasma/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

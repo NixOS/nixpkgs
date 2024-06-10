@@ -93,7 +93,7 @@ vscode-utils.buildVscodeExtension {
   '';
 
   meta = {
-    description = "An alternative rust language server to the RLS";
+    description = "Alternative rust language server to the RLS";
     homepage = "https://github.com/rust-lang/rust-analyzer";
     license = [
       lib.licenses.mit

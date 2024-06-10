@@ -178,7 +178,7 @@ in stdenv.mkDerivation rec {
   passthru.pin = { inherit (pin) lodepng eigen3 abseil-cpp; };
 
   meta = {
-    description = "Multi-Joint dynamics with Contact. A general purpose physics simulator.";
+    description = "Multi-Joint dynamics with Contact. A general purpose physics simulator";
     homepage = "https://mujoco.org/";
     changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
     license = lib.licenses.asl20;

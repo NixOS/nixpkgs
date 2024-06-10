@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A permissioned implementation of Ethereum supporting data privacy";
+    description = "Permissioned implementation of Ethereum supporting data privacy";
     homepage = "https://consensys.net/quorum/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ mmahut ];

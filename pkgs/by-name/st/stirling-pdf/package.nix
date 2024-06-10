@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/${finalAttrs.src.rev}";
-    description = "A locally hosted web application that allows you to perform various operations on PDF files";
+    description = "Locally hosted web application that allows you to perform various operations on PDF files";
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
     license = lib.licenses.gpl3Only;
     mainProgram = "Stirling-PDF";

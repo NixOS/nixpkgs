@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "LDFLAGS=-lncurses" ];
 
   meta = with lib; {
-    description = "A framework for layer 2 attacks";
+    description = "Framework for layer 2 attacks";
     mainProgram = "yersinia";
     homepage = "https://github.com/tomac/yersinia";
     license = licenses.gpl2Plus;

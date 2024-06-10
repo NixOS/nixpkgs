@@ -23,7 +23,7 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://github.com/websocket-client/websocket-client";
-    description = "A WebSocket client for Python";
+    description = "WebSocket client for Python";
     license = licenses.lgpl2Only;
     maintainers = teams.kodi.members;
   };

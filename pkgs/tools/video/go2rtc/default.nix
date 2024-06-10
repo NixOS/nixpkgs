@@ -26,7 +26,7 @@ buildGoModule rec {
   doCheck = false; # tests fail
 
   meta = with lib; {
-    description = "Ultimate camera streaming application with support RTSP, RTMP, HTTP-FLV, WebRTC, MSE, HLS, MJPEG, HomeKit, FFmpeg, etc.";
+    description = "Ultimate camera streaming application with support RTSP, RTMP, HTTP-FLV, WebRTC, MSE, HLS, MJPEG, HomeKit, FFmpeg, etc";
     homepage = "https://github.com/AlexxIT/go2rtc";
     changelog = "https://github.com/AlexxIT/go2rtc/releases/tag/v${version}";
     license = licenses.mit;

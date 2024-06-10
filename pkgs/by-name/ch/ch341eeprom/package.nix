@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "A libusb based programming tool for 24Cxx serial EEPROMs using the WinChipHead CH341A IC";
+    description = "Libusb based programming tool for 24Cxx serial EEPROMs using the WinChipHead CH341A IC";
     homepage = "https://github.com/command-tab/ch341eeprom";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ch341eeprom";

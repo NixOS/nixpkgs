@@ -135,7 +135,7 @@
   barbecue-nvim = super.barbecue-nvim.overrideAttrs {
     dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
     meta = {
-      description = "A VS Code like winbar for Neovim";
+      description = "VS Code like winbar for Neovim";
       homepage = "https://github.com/utilyre/barbecue.nvim";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ lightquantum ];
@@ -213,6 +213,10 @@
     postPatch = ''
       sed -i -e 's/require "health"/vim.health/' lua/clipboard-image/health.lua
     '';
+  };
+
+  cmp-ai = super.cmp-ai.overrideAttrs {
+    dependencies = with self; [ nvim-cmp plenary-nvim ];
   };
 
   cmp-clippy = super.cmp-clippy.overrideAttrs {
@@ -1895,7 +1899,7 @@
     '';
 
     meta = with lib; {
-      description = "A code-completion engine for Vim";
+      description = "Code-completion engine for Vim";
       homepage = "https://github.com/Valloric/YouCompleteMe";
       license = licenses.gpl3;
       maintainers = with maintainers; [ marcweber jagajaga ];

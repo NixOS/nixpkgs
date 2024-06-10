@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A viewer for info files";
+    description = "Viewer for info files";
     homepage = "https://github.com/baszoetekouw/pinfo";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

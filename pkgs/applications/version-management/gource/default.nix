@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gource.io/";
-    description = "A Software version control visualization tool";
+    description = "Software version control visualization tool";
     license = licenses.gpl3Plus;
     longDescription = ''
       Software projects are displayed by Gource as an animated tree with

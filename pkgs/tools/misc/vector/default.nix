@@ -128,7 +128,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "A high-performance observability data pipeline";
+    description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
     license = licenses.mpl20;
     maintainers = with maintainers; [ thoughtpolice happysalada ];

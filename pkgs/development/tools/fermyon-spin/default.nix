@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly.";
+    description = "Framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly";
     homepage = "https://github.com/fermyon/spin";
     license = with licenses; [ asl20 ];
     mainProgram = "spin";

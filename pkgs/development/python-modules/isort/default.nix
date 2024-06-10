@@ -78,7 +78,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python utility / library to sort Python imports";
+    description = "Python utility / library to sort Python imports";
     homepage = "https://github.com/PyCQA/isort";
     license = licenses.mit;
     maintainers = with maintainers; [ couchemar ];

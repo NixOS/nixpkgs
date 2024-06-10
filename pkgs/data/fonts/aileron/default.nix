@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
-    description = "A helvetica font in nine weights";
+    description = "Helvetica font in nine weights";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars minijackson ];
     license = licenses.cc0;

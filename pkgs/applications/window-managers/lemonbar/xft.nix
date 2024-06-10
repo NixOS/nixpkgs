@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
   meta = with lib; {
-    description = "A lightweight xcb based bar with XFT-support";
+    description = "Lightweight xcb based bar with XFT-support";
     mainProgram = "lemonbar";
     homepage = "https://github.com/drscream/lemonbar-xft";
     license = licenses.mit;

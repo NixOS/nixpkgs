@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.spinnaker.de/lbdb/";
-    description = "The Little Brother's Database";
+    description = "Little Brother's Database";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kaiha bfortz ];
     platforms = platforms.all;

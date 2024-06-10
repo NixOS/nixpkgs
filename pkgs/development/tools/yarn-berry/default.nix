@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://yarnpkg.com/";
-    description = "Fast, reliable, and secure dependency management.";
+    description = "Fast, reliable, and secure dependency management";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ryota-ka pyrox0 DimitarNestorov ];
     platforms = platforms.unix;

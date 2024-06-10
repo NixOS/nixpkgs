@@ -58,7 +58,7 @@ in buildNpmPackage' rec {
   };
 
   meta = with lib; {
-    description = "A command line interface for balenaCloud or openBalena";
+    description = "Command line interface for balenaCloud or openBalena";
     longDescription = ''
       The balena CLI is a Command Line Interface for balenaCloud or openBalena. It is a software
       tool available for Windows, macOS and Linux, used through a command prompt / terminal window.

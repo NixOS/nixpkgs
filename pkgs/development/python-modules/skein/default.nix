@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://jcristharif.com/skein";
-    description = "A tool and library for easily deploying applications on Apache YARN";
+    description = "Tool and library for easily deploying applications on Apache YARN";
     mainProgram = "skein";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [

@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "model_checker" ];
 
   meta = with lib; {
-    description = "A hyperintensional theorem prover for counterfactual conditionals and modal operators";
+    description = "Hyperintensional theorem prover for counterfactual conditionals and modal operators";
     homepage = "https://pypi.org/project/model-checker/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

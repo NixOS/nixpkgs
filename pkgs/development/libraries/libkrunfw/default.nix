@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A dynamic library bundling the guest payload consumed by libkrun";
+    description = "Dynamic library bundling the guest payload consumed by libkrun";
     homepage = "https://github.com/containers/libkrunfw";
     license = with licenses; [ lgpl2Only lgpl21Only ];
     maintainers = with maintainers; [ nickcao ];

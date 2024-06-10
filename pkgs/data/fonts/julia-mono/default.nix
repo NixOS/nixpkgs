@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A monospaced font for scientific and technical computing";
+    description = "Monospaced font for scientific and technical computing";
     longDescription = ''
       JuliaMono is a monospaced typeface designed for use in text editing
       environments that require a wide range of specialist and technical Unicode

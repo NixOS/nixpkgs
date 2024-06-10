@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A task runner and repo management tool for the web ecosystem, written in Rust";
+    description = "Task runner and repo management tool for the web ecosystem, written in Rust";
     mainProgram = "moon";
     homepage = "https://github.com/moonrepo/moon";
     license = licenses.mit;

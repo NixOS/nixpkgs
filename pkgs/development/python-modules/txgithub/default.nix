@@ -36,7 +36,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "GitHub API client implemented using Twisted.";
+    description = "GitHub API client implemented using Twisted";
     homepage = "https://github.com/tomprince/txgithub";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

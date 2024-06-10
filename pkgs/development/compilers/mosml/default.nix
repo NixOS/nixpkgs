@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "A light-weight implementation of Standard ML";
+    description = "Light-weight implementation of Standard ML";
     longDescription = ''
       Moscow ML is a light-weight implementation of Standard ML (SML), a strict
       functional language used in teaching and research.

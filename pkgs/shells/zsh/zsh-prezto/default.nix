@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = unstableGitUpdater {};
 
   meta = with lib; {
-    description = "The configuration framework for Zsh";
+    description = "Configuration framework for Zsh";
     longDescription = ''
       Prezto is the configuration framework for Zsh; it enriches
       the command line interface environment with sane defaults,

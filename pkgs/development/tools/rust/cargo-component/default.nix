@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Cargo subcommand for creating WebAssembly components based on the component model proposal";
+    description = "Cargo subcommand for creating WebAssembly components based on the component model proposal";
     homepage = "https://github.com/bytecodealliance/cargo-component";
     changelog = "https://github.com/bytecodealliance/cargo-component/releases/tag/${src.rev}";
     license = licenses.asl20;

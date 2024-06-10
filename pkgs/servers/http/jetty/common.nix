@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Web server and javax.servlet container";
+    description = "Web server and javax.servlet container";
     homepage = "https://eclipse.dev/jetty/";
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

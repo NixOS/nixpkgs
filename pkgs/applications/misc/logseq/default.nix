@@ -68,7 +68,7 @@ in {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
+    description = "Local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
     homepage = "https://github.com/logseq/logseq";
     changelog = "https://github.com/logseq/logseq/releases/tag/${version}";
     license = lib.licenses.agpl3Plus;

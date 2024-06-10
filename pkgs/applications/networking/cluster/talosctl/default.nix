@@ -31,7 +31,7 @@ buildGoModule rec {
   doCheck = false; # no tests
 
   meta = with lib; {
-    description = "A CLI for out-of-band management of Kubernetes nodes created by Talos";
+    description = "CLI for out-of-band management of Kubernetes nodes created by Talos";
     mainProgram = "talosctl";
     homepage = "https://www.talos.dev/";
     license = licenses.mpl20;

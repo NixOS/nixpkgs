@@ -48,7 +48,7 @@ tcl.mkTclDerivation rec {
   outputs = [ "out" "dev" ];
 
   meta = with lib; {
-    description = "A tool for automating interactive applications";
+    description = "Tool for automating interactive applications";
     homepage = "https://expect.sourceforge.net/";
     license = licenses.publicDomain;
     platforms = platforms.unix;

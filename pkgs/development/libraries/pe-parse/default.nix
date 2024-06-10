@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A principled, lightweight parser for Windows portable executable files";
+    description = "Principled, lightweight parser for Windows portable executable files";
     homepage = "https://github.com/trailofbits/pe-parse";
     changelog = "https://github.com/trailofbits/pe-parse/releases/tag/v${version}";
     license = licenses.mit;

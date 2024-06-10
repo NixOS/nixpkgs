@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://wheezytemplate.readthedocs.io/en/latest/";
-    description = "A lightweight template library";
+    description = "Lightweight template library";
     mainProgram = "wheezy.template";
     license = licenses.mit;
     maintainers = with maintainers; [ lilyinstarlight ];

@@ -82,7 +82,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Implementation of next-generation file format (NGFF) specifications for storing bioimaging data in the cloud.";
+    description = "Implementation of next-generation file format (NGFF) specifications for storing bioimaging data in the cloud";
     homepage = "https://pypi.org/project/ome-zarr";
     changelog = "https://github.com/ome/ome-zarr-py/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;

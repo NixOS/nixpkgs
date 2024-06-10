@@ -36,7 +36,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = {
-    description = "A free and open source messaging and emailing app that combines common web applications into one";
+    description = "Free and open source messaging and emailing app that combines common web applications into one";
     homepage = "https://github.com/TheGoddessInari/hamsket";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nova-madeline ];

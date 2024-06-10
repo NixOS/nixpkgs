@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A fully-featured minimalistic configurable calculator written in Rust";
+    description = "Fully-featured minimalistic configurable calculator written in Rust";
     changelog = "https://github.com/coco33920/calc/blob/${version}/CHANGELOG.md";
     homepage = "https://calc.nwa2coco.fr";
     license = lib.licenses.gpl3Plus;

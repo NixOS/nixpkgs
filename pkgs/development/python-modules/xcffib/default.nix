@@ -46,7 +46,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A drop in replacement for xpyb, an XCB python binding";
+    description = "Drop in replacement for xpyb, an XCB python binding";
     homepage = "https://github.com/tych0/xcffib";
     changelog = "https://github.com/tych0/xcffib/releases/tag/v${version}";
     license = licenses.asl20;

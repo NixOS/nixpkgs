@@ -55,7 +55,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/tekumara.typos-vscode/changelog";
-    description = "A VSCode extension for providing a low false-positive source code spell checker";
+    description = "VSCode extension for providing a low false-positive source code spell checker";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=tekumara.typos-vscode";
     homepage = "https://github.com/tekumara/typos-lsp";
     license = lib.licenses.mit;

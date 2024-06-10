@@ -66,7 +66,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/facebook/prophet/releases/tag/${src.rev}";
-    description = "A tool for producing high quality forecasts for time series data that has multiple seasonality with linear or non-linear growth";
+    description = "Tool for producing high quality forecasts for time series data that has multiple seasonality with linear or non-linear growth";
     homepage = "https://facebook.github.io/prophet/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];

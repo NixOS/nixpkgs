@@ -23,7 +23,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mongoquery" ];
 
   meta = with lib; {
-    description = "A python implementation of mongodb queries";
+    description = "Python implementation of mongodb queries";
     homepage = "https://github.com/kapouille/mongoquery";
     license = with licenses; [ unlicense ];
     maintainers = with maintainers; [ misuzu ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/fwaeytens/dnsenum";
-    description = "A tool to enumerate DNS information";
+    description = "Tool to enumerate DNS information";
     mainProgram = "dnsenum";
     maintainers = with maintainers; [ c0bw3b ];
     license = licenses.gpl2Plus;

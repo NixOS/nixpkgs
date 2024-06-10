@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A small MIDI visualizer tool, using OpenGL";
+    description = "Small MIDI visualizer tool, using OpenGL";
     mainProgram = "MIDIVisualizer";
     homepage = "https://github.com/kosua20/MIDIVisualizer";
     license = licenses.mit;

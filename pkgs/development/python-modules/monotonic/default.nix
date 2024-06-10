@@ -23,7 +23,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "An implementation of time.monotonic() for Python 2 & < 3.3";
+    description = "Implementation of time.monotonic() for Python 2 & < 3.3";
     homepage = "https://github.com/atdt/monotonic";
     license = licenses.asl20;
   };

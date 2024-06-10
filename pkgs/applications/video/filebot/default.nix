@@ -52,7 +52,7 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "The ultimate TV and Movie Renamer";
+    description = "Ultimate TV and Movie Renamer";
     longDescription = ''
       FileBot is the ultimate tool for organizing and renaming your Movies, TV
       Shows and Anime as well as fetching subtitles and artwork. It's smart and

@@ -25,7 +25,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "An application for uploading Final Fantasy XIV combat logs to fflogs.com";
+    description = "Application for uploading Final Fantasy XIV combat logs to fflogs.com";
     homepage = "https://www.fflogs.com/client/download";
     downloadPage = "https://github.com/RPGLogs/Uploaders-fflogs/releases/latest";
     license = licenses.unfree; # no license listed

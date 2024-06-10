@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   installTargets = [ "install-compiler" ];
 
   meta = with lib; {
-    description = "A free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
+    description = "Free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
     homepage = "https://nsis.sourceforge.io/";
     license = licenses.zlib;
     platforms = platforms.unix;

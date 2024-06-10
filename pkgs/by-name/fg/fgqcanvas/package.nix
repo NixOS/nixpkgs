@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sourceforge.net/p/flightgear/flightgear/ci/next/tree/utils/fgqcanvas/README.md";
-    description = "A Qt-based remote canvas application for FlightGear";
+    description = "Qt-based remote canvas application for FlightGear";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nayala ];

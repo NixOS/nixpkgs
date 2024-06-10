@@ -25,7 +25,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Telegram downloader/tools written in Golang";
+    description = "Telegram downloader/tools written in Golang";
     homepage = "https://github.com/iyear/tdl";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ Ligthiago ];

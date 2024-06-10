@@ -43,6 +43,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [
+    numpy.blas
     pillow
     glibcLocales
   ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
@@ -59,8 +60,6 @@ buildPythonPackage rec {
     setuptools
     wheel
   ];
-
-  propagatedBuildInputs = [ numpy.blas ];
 
   dependencies = [
     joblib
@@ -112,7 +111,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sklearn" ];
 
   meta = with lib; {
-    description = "A set of python modules for machine learning and data mining";
+    description = "Set of python modules for machine learning and data mining";
     changelog =
       let
         major = versions.major version;

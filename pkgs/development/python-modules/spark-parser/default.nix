@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ click ];
 
   meta = with lib; {
-    description = "An Early-Algorithm Context-free grammar Parser";
+    description = "Early-Algorithm Context-free grammar Parser";
     mainProgram = "spark-parser-coverage";
     homepage = "https://github.com/rocky/python-spark";
     license = licenses.mit;

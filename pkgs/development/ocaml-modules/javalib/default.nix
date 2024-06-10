@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ camlzip extlib ];
 
   meta = with lib; {
-    description = "A library that parses Java .class files into OCaml data structures";
+    description = "Library that parses Java .class files into OCaml data structures";
     homepage = "https://javalib-team.github.io/javalib/";
     license = licenses.lgpl3;
     maintainers = [ maintainers.vbgl ];

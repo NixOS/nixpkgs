@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/nomic-ai/gpt4all/releases/tag/v${finalAttrs.version}";
-    description = "A free-to-use, locally running, privacy-aware chatbot. No GPU or internet required";
+    description = "Free-to-use, locally running, privacy-aware chatbot. No GPU or internet required";
     homepage = "https://github.com/nomic-ai/gpt4all";
     license = lib.licenses.mit;
     mainProgram = "gpt4all";

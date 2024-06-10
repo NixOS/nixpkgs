@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   passthru.tests.phosh = nixosTests.phosh;
 
   meta = with lib; {
-    description = "A virtual keyboard supporting Wayland";
+    description = "Virtual keyboard supporting Wayland";
     homepage = "https://gitlab.gnome.org/World/Phosh/squeekboard";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ artturin ];

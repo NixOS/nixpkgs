@@ -16,7 +16,7 @@
 , lomiri-app-launch
 , lomiri-url-dispatcher
 , lttng-ust
-, mir
+, mir_2_15
 , process-cpp
 , qtbase
 , qtdeclarative
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-app-launch
     lomiri-url-dispatcher
     lttng-ust
-    mir
+    mir_2_15
     process-cpp
     protobuf
     qtbase

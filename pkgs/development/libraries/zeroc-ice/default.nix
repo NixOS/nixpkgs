@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.zeroc.com/ice.html";
-    description = "The internet communications engine";
+    description = "Internet communications engine";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage    = "https://github.com/cracklib/cracklib";
-    description = "A library for checking the strength of passwords";
+    description = "Library for checking the strength of passwords";
     license = licenses.lgpl21; # Different license for the wordlist: http://www.openwall.com/wordlists
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

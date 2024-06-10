@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An extensible and embeddable directory server";
+    description = "Extensible and embeddable directory server";
     mainProgram = "apache-directory-server";
     homepage = "https://directory.apache.org/apacheds/";
     license = licenses.asl20;

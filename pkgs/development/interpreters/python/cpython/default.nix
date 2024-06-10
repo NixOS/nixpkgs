@@ -303,10 +303,15 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
     noldconfigPatch
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.isFreeBSD) [
+    # Cross compilation only supports a limited number of "known good"
+    # configurations. If you're reading this and it's been a long time
+    # since this diff, consider submitting this patch upstream!
+    ./freebsd-cross.patch
+  ] ++ optionals (pythonOlder "3.13") [
     # Make sure that the virtualenv activation scripts are
     # owner-writable, so venvs can be recreated without permission
     # errors.
-  ] ++ optionals (pythonOlder "3.13") [
     ./virtualenv-permissions.patch
   ] ++ optionals (pythonAtLeast "3.13") [
     ./3.13/virtualenv-permissions.patch
@@ -649,7 +654,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
         "https://docs.python.org/release/${version}/whatsnew/changelog.html"
       else
         "https://docs.python.org/${majorMinor}/whatsnew/changelog.html#python-${dashedVersion}";
-    description = "A high-level dynamically-typed programming language";
+    description = "High-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that
       is used in a wide variety of application domains. Some of its key

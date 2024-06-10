@@ -29,7 +29,7 @@ skawarePackages.buildPackage {
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 
-  description = "A suite of small networking utilities for Unix systems";
+  description = "Suite of small networking utilities for Unix systems";
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 

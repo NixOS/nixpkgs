@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Flutter frontend for quickemu";
+    description = "Flutter frontend for quickemu";
     homepage = "https://github.com/quickemu-project/quickgui";
     changelog = "https://github.com/quickemu-project/quickgui/releases/tag/v${version}";
     license = licenses.mit;

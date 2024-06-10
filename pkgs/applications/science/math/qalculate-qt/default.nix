@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "The ultimate desktop calculator";
+    description = "Ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [ _4825764518 ];
     license = licenses.gpl2Plus;

@@ -133,7 +133,7 @@ rustPlatform.buildRustPackage {
   ];
 
   meta = with lib; {
-    description = "A cloud-native observability platform built specifically for logs, metrics, traces, analytics & realtime user-monitoring";
+    description = "Cloud-native observability platform built specifically for logs, metrics, traces, analytics & realtime user-monitoring";
     homepage = "https://github.com/openobserve/openobserve";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];

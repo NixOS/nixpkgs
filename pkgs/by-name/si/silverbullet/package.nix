@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/silverbulletmd/silverbullet/blob/${finalAttrs.version}/website/CHANGELOG.md";
-    description = "An open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
+    description = "Open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
     homepage = "https://silverbullet.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aorith ];

@@ -57,7 +57,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple python interface for FFmpeg/FFprobe";
+    description = "Simple python interface for FFmpeg/FFprobe";
     homepage = "https://github.com/Ch00k/ffmpy";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];

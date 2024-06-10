@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A modern C++ MIDI real-time & file I/O library";
+    description = "Modern C++ MIDI real-time & file I/O library";
     homepage = "https://github.com/jcelerier/libremidi";
     maintainers = [ ];
     license = lib.licenses.bsd2;

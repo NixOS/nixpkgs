@@ -278,7 +278,7 @@ stdenv.mkDerivation ({
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/libc/";
-    description = "The GNU C Library";
+    description = "GNU C Library";
 
     longDescription =
       '' Any Unix-like operating system needs a C library: the library which

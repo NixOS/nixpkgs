@@ -69,7 +69,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vega" ];
 
   meta = with lib; {
-    description = "An IPython/Jupyter widget for Vega and Vega-Lite";
+    description = "IPython/Jupyter widget for Vega and Vega-Lite";
     longDescription = ''
       To use this you have to enter a nix-shell with vega. Then run:
 

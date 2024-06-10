@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool to find potential unused enabled feature flags and prune them";
+    description = "Tool to find potential unused enabled feature flags and prune them";
     homepage = "https://github.com/timonpost/cargo-unused-features";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda matthiasbeyer ];

@@ -62,7 +62,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A Python utility library with a stdlib like feel and extra batteries. Paths, Progress, Dicts, Downloads, Caching, Hashing: ubelt makes it easy";
+    description = "Python utility library with a stdlib like feel and extra batteries. Paths, Progress, Dicts, Downloads, Caching, Hashing: ubelt makes it easy";
     homepage = "https://github.com/Erotemic/ubelt";
     changelog = "https://github.com/Erotemic/ubelt/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

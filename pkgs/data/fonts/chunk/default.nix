@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "An ultra-bold, ultra-awesome slab serif typeface";
+    description = "Ultra-bold, ultra-awesome slab serif typeface";
     longDescription = ''
       Chunk is an ultra-bold slab serif typeface that is reminiscent of old
       American Western woodcuts, broadsides, and newspaper headlines. Used

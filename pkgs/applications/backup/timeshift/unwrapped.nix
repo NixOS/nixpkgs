@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A system restore tool for Linux";
+    description = "System restore tool for Linux";
     longDescription = ''
       TimeShift creates filesystem snapshots using rsync+hardlinks or BTRFS snapshots.
       Snapshots can be restored using TimeShift installed on the system or from Live CD or USB.

@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://dev.lovelyhq.com/libburnia/web/wiki";
-    description = "A library by which preformatted data get onto optical media: CD, DVD, BD (Blu-Ray)";
+    description = "Library by which preformatted data get onto optical media: CD, DVD, BD (Blu-Ray)";
     changelog = "https://dev.lovelyhq.com/libburnia/libburn/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ abbradar AndersonTorres ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gfortran ];
 
   meta = {
-    description = "A collection of special mathematical functions";
+    description = "Collection of special mathematical functions";
     homepage = "https://github.com/JuliaLang/openspecfun";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ttuegel ];

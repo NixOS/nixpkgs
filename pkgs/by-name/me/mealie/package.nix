@@ -124,7 +124,7 @@ in pythonpkgs.buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A self hosted recipe manager and meal planner";
+    description = "Self hosted recipe manager and meal planner";
     longDescription = ''
       Mealie is a self hosted recipe manager and meal planner with a REST API and a reactive frontend
       application built in NuxtJS for a pleasant user experience for the whole family. Easily add recipes into your

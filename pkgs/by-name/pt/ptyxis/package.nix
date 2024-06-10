@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "A terminal for GNOME with first-class support for containers";
+    description = "Terminal for GNOME with first-class support for containers";
     homepage = "https://gitlab.gnome.org/chergert/ptyxis";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ptyxis";

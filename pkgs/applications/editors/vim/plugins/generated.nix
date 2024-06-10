@@ -17406,5 +17406,16 @@ final: prev:
     meta.homepage = "https://github.com/declancm/cinnamon.nvim";
   };
 
+  cmp-ai = buildVimPlugin {
+    pname = "cmp-ai";
+    version = "2024-06-02";
+    src = fetchFromGitHub {
+      owner = "tzachar";
+      repo = "cmp-ai";
+      rev = "2b787129314c5fb8bfd41a6919d4889210e6b265";
+      sha256 = "sha256-ul2X6kIdreJ9dCQERw7C3l2dss7Mtcwtm7CGhAxjjvY=";
+    };
+    meta.homepage = "https://github.com/tzachar/cmp-ai/";
+  };
 
 }

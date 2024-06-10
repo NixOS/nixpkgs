@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A Qt/C++ GUI front end for yt-dlp and others";
+    description = "Qt/C++ GUI front end for yt-dlp and others";
     homepage = "https://github.com/mhogomchungu/media-downloader";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ zendo ];

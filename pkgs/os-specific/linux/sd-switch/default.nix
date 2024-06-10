@@ -19,7 +19,7 @@ in rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "A systemd unit switcher for Home Manager";
+    description = "Systemd unit switcher for Home Manager";
     mainProgram = "sd-switch";
     homepage = "https://git.sr.ht/~rycee/sd-switch";
     changelog = "https://git.sr.ht/~rycee/sd-switch/refs/${version}";

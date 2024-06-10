@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     mainProgram = "prismlauncher";
     homepage = "https://prismlauncher.org/";
-    description = "A free, open source launcher for Minecraft";
+    description = "Free, open source launcher for Minecraft";
     longDescription = ''
       Allows you to have multiple, separate instances of Minecraft (each with
       their own mods, texture packs, saves, etc) and helps you manage them and

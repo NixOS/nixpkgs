@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A MPI based benchmark for network diagnostics";
+    description = "MPI based benchmark for network diagnostics";
     homepage = "https://github.com/cea-hpc/hp2p";
     platforms = platforms.unix;
     license = licenses.cecill-c;

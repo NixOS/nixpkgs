@@ -20,7 +20,7 @@ buildNpmPackage rec {
 
   meta = with lib; {
     homepage = "https://www.getpostman.com";
-    description = "A command-line collection runner for Postman";
+    description = "Command-line collection runner for Postman";
     mainProgram = "newman";
     changelog = "https://github.com/postmanlabs/newman/releases/tag/v${version}";
     maintainers = with maintainers; [ freezeboy ];

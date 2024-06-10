@@ -128,7 +128,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fsspec" ];
 
   meta = with lib; {
-    description = "A specification that Python filesystems should adhere to";
+    description = "Specification that Python filesystems should adhere to";
     homepage = "https://github.com/fsspec/filesystem_spec";
     changelog = "https://github.com/fsspec/filesystem_spec/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;

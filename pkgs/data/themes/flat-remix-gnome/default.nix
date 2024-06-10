@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "GNOME Shell theme inspired by material design.";
+    description = "GNOME Shell theme inspired by material design";
     homepage = "https://drasite.com/flat-remix-gnome";
     license = licenses.cc-by-sa-40;
     platforms = platforms.linux;

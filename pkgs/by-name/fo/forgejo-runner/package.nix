@@ -37,7 +37,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A runner for Forgejo based on act";
+    description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
     changelog = "https://code.forgejo.org/forgejo/runner/src/tag/${src.rev}/RELEASE-NOTES.md";
     license = licenses.mit;

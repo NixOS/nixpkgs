@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A full featured CLI system information tool";
+    description = "Full featured CLI system information tool";
     longDescription = ''
       inxi is a command line system information script built for console and
       IRC. It is also used a debugging tool for forum technical support to

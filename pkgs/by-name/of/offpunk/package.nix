@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
   passthru.tests.version = testers.testVersion { package = offpunk; };
 
   meta = {
-    description = "A command-line and offline-first smolnet browser/feed reader";
+    description = "Command-line and offline-first smolnet browser/feed reader";
     homepage = src.meta.homepage;
     license = lib.licenses.agpl3Plus;
     mainProgram = "offpunk";

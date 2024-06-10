@@ -46,7 +46,7 @@ buildGoModule rec {
 
   meta = with lib; {
     changelog = "https://github.com/mykso/myks/blob/v${version}/CHANGELOG.md";
-    description = "A configuration framework for Kubernetes applications";
+    description = "Configuration framework for Kubernetes applications";
     license = licenses.mit;
     homepage = "https://github.com/mykso/myks";
     maintainers = [ maintainers.kbudde ];

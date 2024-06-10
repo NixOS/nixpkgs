@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A real time, nanosecond resolution, remote telemetry frame profiler for games and other applications";
+    description = "Real time, nanosecond resolution, remote telemetry frame profiler for games and other applications";
     homepage = "https://github.com/wolfpld/tracy";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;

@@ -24,7 +24,7 @@ let
         "mainline" = "https://www.gnu.org/software/emacs/";
         "macport" = "https://bitbucket.org/mituharu/emacs-mac/";
       }.${variant};
-      description = "The extensible, customizable GNU text editor"
+      description = "Extensible, customizable GNU text editor"
                     + lib.optionalString (variant == "macport") " - macport variant";
       longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more. At its core

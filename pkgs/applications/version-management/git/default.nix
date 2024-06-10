@@ -121,7 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
   # acceptable version.
   #
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
-  ++ lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent";
+  ++ lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent"
+  ++ lib.optional (stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform != stdenv.buildPlatform) "uname_S=FreeBSD";
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     stdenv.shellPackage

@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A recursive DNS server";
+    description = "Recursive DNS server";
     homepage = "https://www.powerdns.com/";
     platforms = platforms.linux;
     badPlatforms = [

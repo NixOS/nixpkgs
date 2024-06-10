@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.hiawatha-webserver.org";
-    description = "An advanced and secure webserver";
+    description = "Advanced and secure webserver";
     license = licenses.gpl2Only;
     platforms = platforms.unix;    # "Hiawatha runs perfectly on Linux, BSD and MacOS X"
     maintainers = [];

@@ -50,7 +50,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hologram" ];
 
   meta = with lib; {
-    description = "A library for automatically generating Draft 7 JSON Schemas from Python dataclasses";
+    description = "Library for automatically generating Draft 7 JSON Schemas from Python dataclasses";
     homepage = "https://github.com/dbt-labs/hologram";
     license = licenses.mit;
     maintainers = with maintainers; [

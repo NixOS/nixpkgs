@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A GTK-based news feed aggregator";
+    description = "GTK-based news feed aggregator";
     homepage = "http://lzone.de/liferea/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ romildo yayayayaka ];

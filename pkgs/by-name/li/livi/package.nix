@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/guidog/livi";
-    description = "A small video player targeting mobile devices (also named μPlayer)";
+    description = "Small video player targeting mobile devices (also named μPlayer)";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "livi";

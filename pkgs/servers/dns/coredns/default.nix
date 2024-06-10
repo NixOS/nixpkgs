@@ -72,7 +72,7 @@ in buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://coredns.io";
-    description = "A DNS server that runs middleware";
+    description = "DNS server that runs middleware";
     mainProgram = "coredns";
     license = licenses.asl20;
     maintainers = with maintainers; [ rushmorem rtreffer deltaevo ];

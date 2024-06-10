@@ -403,8 +403,6 @@ with pkgs;
   buildFHSEnvChroot = callPackage ../build-support/build-fhsenv-chroot { }; # Deprecated; use buildFHSEnv/buildFHSEnvBubblewrap
   buildFHSEnvBubblewrap = callPackage ../build-support/build-fhsenv-bubblewrap { };
 
-  buildMaven = callPackage ../build-support/build-maven.nix { };
-
   c64-debugger = callPackage ../applications/emulators/c64-debugger { };
 
   camunda-modeler = callPackage ../applications/misc/camunda-modeler { };
@@ -2708,8 +2706,6 @@ with pkgs;
   packwiz = callPackage ../tools/games/minecraft/packwiz { };
 
   pcem = callPackage ../applications/emulators/pcem { };
-
-  pcsx2 = qt6Packages.callPackage ../applications/emulators/pcsx2 { };
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
@@ -8249,8 +8245,6 @@ with pkgs;
   gerrit = callPackage ../applications/version-management/gerrit { };
 
   geteltorito = callPackage ../tools/misc/geteltorito { };
-
-  getmail6 = callPackage ../tools/networking/getmail6 { };
 
   getopt = callPackage ../tools/misc/getopt { };
 
@@ -19069,8 +19063,8 @@ with pkgs;
 
   math-preview = callPackage ../tools/text/math-review { };
 
-  maven = maven3;
-  maven3 = callPackage ../development/tools/build-managers/apache-maven { };
+  maven3 = maven;
+  inherit (maven) buildMaven;
 
   mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
 
@@ -22216,7 +22210,8 @@ with pkgs;
 
   libfabric = callPackage ../development/libraries/libfabric { };
 
-  libfive = qt6Packages.callPackage ../development/libraries/libfive {
+  libfive = libsForQt5.callPackage ../development/libraries/libfive {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     python = python3;
   };
 
@@ -26192,7 +26187,9 @@ with pkgs;
     buildGoModule = buildGo122Module;
   };
 
-  mir = callPackage ../servers/mir { };
+  inherit (callPackage ../servers/mir { })
+    mir
+    mir_2_15;
 
   miriway = callPackage ../applications/window-managers/miriway { };
 
@@ -27533,8 +27530,6 @@ with pkgs;
   go-minimock = callPackage ../development/tools/go-minimock { };
 
   go-protobuf = callPackage ../development/tools/go-protobuf { };
-
-  go-symbols = callPackage ../development/tools/go-symbols { };
 
   go-toml = callPackage ../development/tools/go-toml { };
 

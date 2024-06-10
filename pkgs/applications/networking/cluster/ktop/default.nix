@@ -22,7 +22,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A top-like tool for your Kubernetes cluster";
+    description = "Top-like tool for your Kubernetes cluster";
     mainProgram = "ktop";
     longDescription = ''
       Following the tradition of Unix/Linux top tools, ktop is a tool that displays useful metrics information about nodes, pods, and other workload resources running in a Kubernetes cluster.

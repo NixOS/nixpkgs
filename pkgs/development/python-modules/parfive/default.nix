@@ -52,7 +52,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "parfive" ];
 
   meta = with lib; {
-    description = "A HTTP and FTP parallel file downloader";
+    description = "HTTP and FTP parallel file downloader";
     mainProgram = "parfive";
     homepage = "https://parfive.readthedocs.io/";
     license = licenses.mit;

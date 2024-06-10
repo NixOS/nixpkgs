@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
-    description = "The Compositing Window Manager and Desktop Shell";
+    description = "Compositing Window Manager and Desktop Shell";
     homepage = "https://www.enlightenment.org";
     license = licenses.bsd2;
     platforms = platforms.linux;

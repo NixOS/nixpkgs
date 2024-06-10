@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/markuskimius/SDL2_Pango";
-    description = "A library for graphically rendering internationalized and tagged text in SDL2 using TrueType fonts";
+    description = "Library for graphically rendering internationalized and tagged text in SDL2 using TrueType fonts";
     license = lib.licenses.lgpl21Plus;
     maintainers = lib.teams.sdl.members
                   ++ (with lib.maintainers; [ rardiol ]);

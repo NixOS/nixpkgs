@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Simplified Chinese sans-serif font derived from IPAex Gothic";
+    description = "Simplified Chinese sans-serif font derived from IPAex Gothic";
     homepage = "https://github.com/lxgw/LxgwNeoXiHei";
     license = licenses.ipa;
     platforms = platforms.all;

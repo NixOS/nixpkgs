@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A collection of computer vision methods for solving geometric vision problems";
+    description = "Collection of computer vision methods for solving geometric vision problems";
     homepage = "https://github.com/laurentkneip/opengv";
     license = lib.licenses.bsd2;
     longDescription = ''OpenGV is a collection of computer vision methods for solving

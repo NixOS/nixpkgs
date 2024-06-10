@@ -64,7 +64,7 @@ python.pkgs.buildPythonApplication rec {
   dontWrapPythonPrograms = false;
 
   meta = {
-    description = "The Microsoft Azure Linux Agent (waagent)";
+    description = "Microsoft Azure Linux Agent (waagent)";
     mainProgram = "waagent";
     longDescription = ''
       The Microsoft Azure Linux Agent (waagent)

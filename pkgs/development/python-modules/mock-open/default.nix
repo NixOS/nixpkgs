@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/nivbend/mock-open";
-    description = "A better mock for file I/O";
+    description = "Better mock for file I/O";
     license = licenses.mit;
   };
 }

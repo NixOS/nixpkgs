@@ -44,7 +44,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A Linux high-performance transparent proxy solution based on eBPF";
+    description = "Linux high-performance transparent proxy solution based on eBPF";
     homepage = "https://github.com/daeuniverse/dae";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ oluceps pokon548 ];

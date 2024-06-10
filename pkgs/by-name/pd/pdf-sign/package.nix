@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A tool to visually sign PDF files";
+    description = "Tool to visually sign PDF files";
     homepage = "https://github.com/svenssonaxel/pdf-sign";
     license = lib.licenses.mit;
     mainProgram = "pdf-sign";

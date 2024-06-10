@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A set of C++ classes that provide a cross platform API for realtime MIDI input/output";
+    description = "Set of C++ classes that provide a cross platform API for realtime MIDI input/output";
     homepage = "https://www.music.mcgill.ca/~gary/rtmidi/";
     license = licenses.mit;
     maintainers = with maintainers; [ magnetophon ];

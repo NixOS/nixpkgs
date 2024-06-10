@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Bitcoin Lightning Network implementation in C";
+    description = "Bitcoin Lightning Network implementation in C";
     longDescription = ''
       c-lightning is a standard compliant implementation of the Lightning
       Network protocol. The Lightning Network is a scalability solution for

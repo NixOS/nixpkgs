@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A generic image viewer from Linux Mint";
+    description = "Generic image viewer from Linux Mint";
     mainProgram = "pix";
     homepage = "https://github.com/linuxmint/pix";
     license = licenses.gpl2Only;

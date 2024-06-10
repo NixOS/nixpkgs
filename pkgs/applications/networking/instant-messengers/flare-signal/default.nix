@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://gitlab.com/schmiddi-on-mobile/flare/-/blob/${src.rev}/CHANGELOG.md";
-    description = "An unofficial Signal GTK client";
+    description = "Unofficial Signal GTK client";
     mainProgram = "flare";
     homepage = "https://gitlab.com/schmiddi-on-mobile/flare";
     license = lib.licenses.agpl3Plus;

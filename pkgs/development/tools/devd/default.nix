@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A local webserver for developers";
+    description = "Local webserver for developers";
     mainProgram = "devd";
     homepage = "https://github.com/cortesi/devd";
     license = licenses.mit;

@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/stanford-rc/sasutils";
-    description = "A set of command-line tools to ease the administration of Serial Attached SCSI (SAS) fabrics";
+    description = "Set of command-line tools to ease the administration of Serial Attached SCSI (SAS) fabrics";
     license = licenses.asl20;
     maintainers = with maintainers; [ aij ];
   };

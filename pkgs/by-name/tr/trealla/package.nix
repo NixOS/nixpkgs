@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://trealla-prolog.github.io/trealla/";
-    description = "A compact, efficient Prolog interpreter written in ANSI C";
+    description = "Compact, efficient Prolog interpreter written in ANSI C";
     longDescription = ''
       Trealla is a compact, efficient Prolog interpreter with ISO Prolog
       aspirations.

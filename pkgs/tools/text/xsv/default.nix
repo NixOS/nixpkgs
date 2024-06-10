@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
-    description = "A fast CSV toolkit written in Rust";
+    description = "Fast CSV toolkit written in Rust";
     mainProgram = "xsv";
     homepage = "https://github.com/BurntSushi/xsv";
     license = with licenses; [ unlicense /* or */ mit ];

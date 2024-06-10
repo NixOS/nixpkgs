@@ -41,7 +41,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "googleapiclient" ];
 
   meta = with lib; {
-    description = "The official Python client library for Google's discovery based APIs";
+    description = "Official Python client library for Google's discovery based APIs";
     longDescription = ''
       These client libraries are officially supported by Google. However, the
       libraries are considered complete and are in maintenance mode. This means

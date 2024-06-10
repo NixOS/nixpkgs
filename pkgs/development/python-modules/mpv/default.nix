@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mpv" ];
 
   meta = with lib; {
-    description = "A python interface to the mpv media player";
+    description = "Python interface to the mpv media player";
     homepage = "https://github.com/jaseg/python-mpv";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ onny ];

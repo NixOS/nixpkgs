@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
-    description = "A toolbox designed to speak the many languages of chemical data";
+    description = "Toolbox designed to speak the many languages of chemical data";
     homepage = "http://openbabel.org";
     platforms = platforms.all;
     maintainers = with maintainers; [ danielbarter ];

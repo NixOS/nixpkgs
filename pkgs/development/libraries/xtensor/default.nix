@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = "xtest";
 
   meta = with lib; {
-    description = "Multi-dimensional arrays with broadcasting and lazy computing.";
+    description = "Multi-dimensional arrays with broadcasting and lazy computing";
     homepage = "https://github.com/xtensor-stack/xtensor";
     license = licenses.bsd3;
     maintainers = with maintainers; [ cpcloud ];

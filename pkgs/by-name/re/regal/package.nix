@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-I0aJFvJmmnxlqgeETOyg2/mjGX8lUJz99t56Qe+9uZg=";
 
   meta = with lib; {
-    description = "a linter and language server for Rego";
+    description = "Linter and language server for Rego";
     mainProgram = "regal";
     homepage = "https://github.com/StyraInc/regal";
     license = licenses.asl20;

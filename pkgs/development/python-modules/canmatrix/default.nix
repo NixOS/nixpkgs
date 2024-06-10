@@ -12,7 +12,9 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
+  setuptools,
   six,
+  versioneer,
   xlrd,
   xlwt,
 }:
@@ -20,7 +22,7 @@
 buildPythonPackage rec {
   pname = "canmatrix";
   version = "1.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -32,11 +34,15 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "version = versioneer.get_version()" 'version = "${version}"'
+    # Remove vendorized versioneer.py
+    rm versioneer.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ versioneer ];
+
+  dependencies = [
     attrs
     click
     future

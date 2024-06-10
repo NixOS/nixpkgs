@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://rsms.me/inter/";
-    description = "A typeface specially designed for user interfaces";
+    description = "Typeface specially designed for user interfaces";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ demize dtzWill ];

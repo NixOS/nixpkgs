@@ -40,7 +40,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A sample PyO3 library used in pdoc tests";
+    description = "Sample PyO3 library used in pdoc tests";
     homepage = "https://github.com/mitmproxy/pdoc-pyo3-sample-library";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pbsds ];

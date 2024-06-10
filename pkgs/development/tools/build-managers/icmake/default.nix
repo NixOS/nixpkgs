@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A program maintenance (make) utility using a C-like grammar";
+    description = "Program maintenance (make) utility using a C-like grammar";
     homepage = "https://fbb-git.gitlab.io/icmake/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];

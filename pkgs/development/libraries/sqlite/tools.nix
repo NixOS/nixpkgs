@@ -32,14 +32,14 @@ in
   sqldiff = mkTool {
     pname = "sqldiff";
     makeTarget = "sqldiff";
-    description = "A tool that displays the differences between SQLite databases";
+    description = "Tool that displays the differences between SQLite databases";
     homepage = "https://www.sqlite.org/sqldiff.html";
     mainProgram = "sqldiff";
   };
   sqlite-analyzer = mkTool {
     pname = "sqlite-analyzer";
     makeTarget = "sqlite3_analyzer";
-    description = "A tool that shows statistics about SQLite databases";
+    description = "Tool that shows statistics about SQLite databases";
     homepage = "https://www.sqlite.org/sqlanalyze.html";
     mainProgram = "sqlite3_analyzer";
   };

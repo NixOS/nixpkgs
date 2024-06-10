@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiohttp_fast_url_dispatcher" ];
 
   meta = with lib; {
-    description = "A faster URL dispatcher for aiohttp";
+    description = "Faster URL dispatcher for aiohttp";
     homepage = "https://github.com/bdraco/aiohttp-fast-url-dispatcher";
     changelog = "https://github.com/bdraco/aiohttp-fast-url-dispatcher/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

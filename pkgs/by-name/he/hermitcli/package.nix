@@ -25,7 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://cashapp.github.io/hermit";
-    description = "Manages isolated, self-bootstrapping sets of tools in software projects.";
+    description = "Manages isolated, self-bootstrapping sets of tools in software projects";
     license = licenses.asl20;
     maintainers = with maintainers; [ cbrewster ];
     platforms = platforms.unix;

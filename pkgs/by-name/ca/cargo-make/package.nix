@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Rust task runner and build tool";
+    description = "Rust task runner and build tool";
     homepage = "https://github.com/sagiegurari/cargo-make";
     changelog = "https://github.com/sagiegurari/cargo-make/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

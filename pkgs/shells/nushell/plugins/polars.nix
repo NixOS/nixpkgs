@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Nushell dataframe plugin commands based on polars.";
+    description = "Nushell dataframe plugin commands based on polars";
     mainProgram = "nu_plugin_polars";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_polars";
     license = licenses.mit;
