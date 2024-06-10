@@ -5,12 +5,15 @@ let
 
   inherit (lib) mkOption types;
 
-  podmanPackage = (pkgs.podman.override {
+  podmanPackage = pkgs.podman.override {
     extraPackages = cfg.extraPackages
       # setuid shadow
       ++ [ "/run/wrappers" ]
       ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
-  });
+    extraRuntimes = lib.optionals (config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or "" == "slirp4netns") (with pkgs; [
+      slirp4netns
+    ]);
+  };
 
   # Provides a fake "docker" binary mapping to podman
   dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}"
