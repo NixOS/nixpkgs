@@ -310,12 +310,11 @@ in
         "pm.min_spare_servers" = mkDefault 1;
         "pm.max_spare_servers" = mkDefault 3;
       };
-      # mkBefore so the pool's own phpOptions can override these
-      phpOptions = mkBefore ''
-        error_log = syslog
-        log_errors = on
-        memory_limit = ${memoryLimit}
-      '';
+      phpOptions = {
+        error_log = "syslog";
+        log_errors = "on";
+        memory_limit = "${memoryLimit}";
+      };
     };
 
     services.nginx = {
