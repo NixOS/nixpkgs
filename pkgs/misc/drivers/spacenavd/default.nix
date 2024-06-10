@@ -1,22 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, libX11, IOKit }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, libX11, IOKit, xorg }:
 
 stdenv.mkDerivation rec {
-  version = "0.8";
+  version = "1.3";
   pname = "spacenavd";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "spacenavd";
     rev = "v${version}";
-    sha256 = "1zz0cm5cgvp9s5n4nzksl8rb11c7sw214bdafzra74smvqfjcjcf";
+    sha256 = "sha256-26geQYOXjMZZ/FpPpav7zfql0davTBwB4Ir+X1oep9Q=";
   };
 
   patches = [
-    # Fixes Darwin: https://github.com/FreeSpacenav/spacenavd/pull/38
-    (fetchpatch {
-      url = "https://github.com/FreeSpacenav/spacenavd/commit/d6a25d5c3f49b9676d039775efc8bf854737c43c.patch";
-      sha256 = "02pdgcvaqc20qf9hi3r73nb9ds7yk2ps9nnxaj0x9p50xjnhfg5c";
-    })
     # Changes the socket path from /run/spnav.sock to $XDG_RUNTIME_DIR/spnav.sock
     # to allow for a user service
     ./configure-socket-path.patch
@@ -28,7 +23,7 @@ stdenv.mkDerivation rec {
     ./configure-cfgfile-path.patch
   ];
 
-  buildInputs = [ libX11 ]
+  buildInputs = [ libX11 xorg.libXext ]
     ++ lib.optional stdenv.isDarwin IOKit;
 
   configureFlags = [ "--disable-debug" ];
