@@ -25374,8 +25374,6 @@ with pkgs;
 
   alerta-server = callPackage ../servers/monitoring/alerta { };
 
-  allmark = callPackage ../servers/allmark { };
-
   alps = callPackage ../servers/alps { };
 
   anuko-time-tracker = callPackage ../servers/web-apps/anuko-time-tracker { };
