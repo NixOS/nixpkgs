@@ -18467,8 +18467,6 @@ with pkgs;
 
   libcxx = llvmPackages.libcxx;
 
-  librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
-
   libgcc = stdenv.cc.cc.libgcc or null;
 
   # This is for e.g. LLVM libraries on linux.
