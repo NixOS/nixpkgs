@@ -35474,6 +35474,10 @@ with pkgs;
   wpsoffice-cn = libsForQt5.callPackage ../applications/office/wpsoffice {
     useChineseVersion = true;
   };
+  wpsoffice-cn-365 = libsForQt5.callPackage ../applications/office/wpsoffice {
+    useChineseVersion = true;
+    use365Version = true;
+  };
 
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
 
