@@ -56,6 +56,7 @@ in
       services.displayManager.sessionPackages = [ cfg.package ];
 
       xdg.portal = {
+        enable = true;
         extraPortals = [ cfg.portalPackage ];
         configPackages = lib.mkDefault [ cfg.package ];
       };
