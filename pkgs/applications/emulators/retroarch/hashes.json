@@ -794,10 +794,10 @@
         "src": {
             "owner": "stella-emu",
             "repo": "stella",
-            "rev": "49166ca9949708c3bddaed5cc549194c4bfcfae5",
-            "hash": "sha256-Oszglo1BQYTkuSZ96RSIBa1A0v/4qLQSBzsSVmOq07I="
+            "rev": "1c2dceab2b74980effb8d6497ea64fc3bd6b0be3",
+            "hash": "sha256-UeuSHHAZV798sSws32PhcBq9q2bGfX758mR+mIEnX+I="
         },
-        "version": "unstable-2024-05-13"
+        "version": "unstable-2024-06-08"
     },
     "stella2014": {
         "fetcher": "fetchFromGitHub",
