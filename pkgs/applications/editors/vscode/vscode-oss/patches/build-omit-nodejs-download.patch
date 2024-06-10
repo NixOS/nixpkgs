@@ -1,0 +1,41 @@
+From cc179ad383409558e171318ddfeeceabb53674bf Mon Sep 17 00:00:00 2001
+From: Yingchi Long <i@lyc.dev>
+Date: Mon, 3 Jun 2024 22:30:26 +0800
+Subject: [PATCH] build: omit nodejs download
+
+---
+ build/gulpfile.reh.js | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/build/gulpfile.reh.js b/build/gulpfile.reh.js
+index c2b81d0cf7c..b5a08c7fc53 100644
+--- a/build/gulpfile.reh.js
++++ b/build/gulpfile.reh.js
+@@ -311,9 +311,6 @@ function packageTask(type, platform, arch, sourceFolderName, destinationFolderNa
+ 			.pipe(util.stripSourceMappingURL())
+ 			.pipe(jsFilter.restore);
+
+-		const nodePath = `.build/node/v${nodeVersion}/${platform}-${arch}`;
+-		const node = gulp.src(`${nodePath}/**`, { base: nodePath, dot: true });
+-
+ 		let web = [];
+ 		if (type === 'reh-web') {
+ 			web = [
+@@ -330,7 +327,6 @@ function packageTask(type, platform, arch, sourceFolderName, destinationFolderNa
+ 			license,
+ 			sources,
+ 			deps,
+-			node,
+ 			...web
+ 		);
+
+@@ -453,7 +449,6 @@ function tweakProductForServerWeb(product) {
+ 			const destinationFolderName = `vscode-${type}${dashed(platform)}${dashed(arch)}`;
+
+ 			const serverTaskCI = task.define(`vscode-${type}${dashed(platform)}${dashed(arch)}${dashed(minified)}-ci`, task.series(
+-				gulp.task(`node-${platform}-${arch}`),
+ 				util.rimraf(path.join(BUILD_ROOT, destinationFolderName)),
+ 				packageTask(type, platform, arch, sourceFolderName, destinationFolderName)
+ 			));
+--
+2.44.0
