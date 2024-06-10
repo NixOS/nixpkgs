@@ -24,7 +24,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    mv $out/bin/cli $out/bin/${meta.mainProgram}
+    mv $out/bin/cli $out/bin/nhost
   '';
 
   meta = {

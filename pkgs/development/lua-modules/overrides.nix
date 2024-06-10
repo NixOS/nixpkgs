@@ -409,6 +409,12 @@ in
     ];
   });
 
+  luaprompt = prev.luaprompt.overrideAttrs (_: {
+    externalDeps = [
+      { name = "READLINE"; dep = readline; }
+      { name = "HISTORY"; dep = readline; }
+    ];
+  });
 
   # As a nix user, use this derivation instead of "luarocks_bootstrap"
   luarocks = prev.luarocks.overrideAttrs (oa: {

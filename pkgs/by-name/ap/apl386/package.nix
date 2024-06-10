@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "apl386";
-  version = "unstable-2022-03-07";
+  version = "0-unstable-2024-01-10";
 
   src = fetchFromGitHub {
     owner = "abrudz";
     repo = "APL386";
-    rev = "6332c9dbb588946a0e8c9d7984dd0c003eeea266";
-    hash = "sha256-oHk4e7NRgAjGtZzQmZToYz7wCZETaj7/yRwZMeeYF2M=";
+    rev = "43ebc6349506b0e7ab5c49f6b08f8afe66c4d9c5";
+    hash = "sha256-MLHSYHFyI9eKdrE/yM7u4vu4Dz6riEk7XQTUuAXPfzM=";
   };
 
   installPhase = ''
