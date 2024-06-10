@@ -9,6 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mcdreforged";
   version = "2.12.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fallen-Breath";
