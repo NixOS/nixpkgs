@@ -17,9 +17,9 @@
         sha256 = "sha256-A75OMzmEn0VmDAvmQCp6/7uptxzwWJTwsih3kWlYioA=";
       };
 
-      nativeCheckInputs = [ pytest ];
       propagatedBuildInputs = [ setuptools ];
 
+      nativeCheckInputs = [ pytestCheckHook ];
       pythonImportsCheck = [ "plover_stroke" ];
 
       meta = with lib; {
@@ -44,9 +44,9 @@
         sha256 = "sha256-zwD2sRYTY1Kmm/Ag2hps9VRdUyQoi4zKtDPR+F52t9A=";
       };
 
-      nativeCheckInputs = [ pytest ];
       propagatedBuildInputs = [ setuptools ];
 
+      nativeCheckInputs = [ pytestCheckHook ];
       pythonImportsCheck = [
         "rtf_tokenize"
       ];
@@ -72,7 +72,6 @@
       sha256 = "sha256-rmMec/BbvOJ92u8Tmp3Kv2YezzJxB/L8UrDntTDSKj4=";
     };
 
-    nativeCheckInputs = [ pytest mock ];
     propagatedBuildInputs = [
       babel
       pyqt5
@@ -85,6 +84,8 @@
       plover_stroke
       rtf_tokenize
     ];
+
+    nativeCheckInputs = [ pytestCheckHook mock ];
 
     dontWrapQtApps = true;
 
