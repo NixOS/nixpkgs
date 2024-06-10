@@ -1,7 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, nixosTests
 }:
 
 buildGoModule {
@@ -26,7 +27,12 @@ buildGoModule {
     "-X main.builtAt=unknown"
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = {
+      inherit (nixosTests.prometheus-exporters) kafka;
+    };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Feature-rich Prometheus exporter for Apache Kafka written in Go";
