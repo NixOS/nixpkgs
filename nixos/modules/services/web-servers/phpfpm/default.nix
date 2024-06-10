@@ -31,6 +31,7 @@ let
       [global]
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings)}
       ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
+
       [${pool}]
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") poolOpts.settings)}
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "env[${n}] = ${toStr v}") poolOpts.phpEnv)}

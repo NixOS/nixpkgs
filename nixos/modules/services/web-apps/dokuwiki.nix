@@ -15,13 +15,10 @@ let
   user = "dokuwiki";
   webserver = config.services.${cfg.webserver};
 
-  mkPhpIni = generators.toKeyValue {
-    mkKeyValue = generators.mkKeyValueDefault { } " = ";
-  };
   mkPhpPackage =
     cfg:
     cfg.phpPackage.buildEnv {
-      extraConfig = mkPhpIni cfg.phpOptions;
+      extraConfig = cfg.phpOptions;
     };
 
   # "you're escaped" -> "'you\'re escaped'"

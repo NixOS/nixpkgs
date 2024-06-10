@@ -196,9 +196,7 @@ in
           );
         };
         phpPackage = pkgs.php83.withExtensions ({ enabled, all }: [ all.imagick ] ++ enabled);
-        phpOptions = ''
-          date.timezone = "${cfg.timezone}"
-        '';
+        phpOptions."date.timezone" = cfg.timezone;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";
           "listen.group" = "nginx";
