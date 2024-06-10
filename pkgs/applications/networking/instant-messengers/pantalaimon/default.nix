@@ -4,6 +4,8 @@
 , fetchFromGitHub
 , installShellFiles
 , nixosTests
+, gobject-introspection
+, wrapGAppsNoGuiHook
 , enableDbusUi ? true
 }:
 
@@ -52,6 +54,17 @@ python3Packages.buildPythonApplication rec {
     notify2
     pygobject3
     pydbus
+  ];
+
+  nativeBuildInputs = [
+    wrapGAppsNoGuiHook
+    gobject-introspection
+  ];
+
+  # Prevent double wrapping from wrapGApps and wrapPythonProgram
+  dontWrapGApps = true;
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
   ];
 
   nativeCheckInputs = with python3Packages; [
