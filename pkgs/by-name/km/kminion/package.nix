@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , buildGoModule
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -26,7 +27,12 @@ buildGoModule rec {
     "-X main.builtAt=unknown"
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = {
+      inherit (nixosTests.prometheus-exporters) kafka;
+    };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "KMinion is a feature-rich Prometheus exporter for Apache Kafka written in Go";
