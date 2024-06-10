@@ -38,8 +38,7 @@
 , executableName
 , longName
 , shortName
-, desktopItem
-, urlHandlerDesktopItem
+, common
 , pname
 , updateScript
 , dontFixup ? false
@@ -124,7 +123,7 @@ in
     inherit rev vscodeServer;
   };
 
-  inherit desktopItem urlHandlerDesktopItem;
+  inherit (common) desktopItem urlHandlerDesktopItem;
 
   buildInputs = [ libsecret libXScrnSaver libxshmfence ]
     ++ lib.optionals (!stdenv.isDarwin) [ alsa-lib at-spi2-atk libkrb5 mesa nss nspr systemd xorg.libxkbfile ];

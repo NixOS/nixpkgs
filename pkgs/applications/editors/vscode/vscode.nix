@@ -2,6 +2,7 @@
 , lib
 , callPackage
 , fetchurl
+, makeDesktopItem
 , nixosTests
 , srcOnly
 , isInsiders ? false
@@ -58,10 +59,9 @@ in
         executableName
         longName
         shortName
+        makeDesktopItem
         ;
     };
-
-    inherit (common) desktopItem urlHandlerDesktopItem;
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
