@@ -8,7 +8,7 @@
   libwebp,
 }:
 let
-  version = "1.3.1";
+  version = "1.3.2";
 in
 rustPlatform.buildRustPackage {
   pname = "catppuccin-catwalk";
@@ -16,13 +16,12 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "catppuccin";
-    repo = "toolbox";
-    rev = "refs/tags/catwalk-v${version}";
-    hash = "sha256-Mk4Kv1EfaDiqLUa+aOPeoM4jFlKoUau+VuqmnazRgGI=";
+    repo = "catwalk";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Yj9xTQJ0eu3Ymi2R9fgYwBJO0V+4bN4MOxXCJGQ8NjU=";
   };
 
-  buildAndTestSubdir = "catwalk";
-  cargoHash = "sha256-qxY8CUOl7fF4afJyFjGeOVk7GX/cewC/hAaJf6m5tfA=";
+  cargoHash = "sha256-bx7AvzPoMJqPa+zcn139lH2zyF09EIz7FNHnh1g8wis=";
 
   nativeBuildInputs = [
     installShellFiles
