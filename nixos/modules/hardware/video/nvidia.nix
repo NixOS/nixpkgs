@@ -288,7 +288,7 @@ in
               softdep nvidia post: nvidia-uvm
             '';
           };
-          systemd.tmpfiles.rules = lib.mkIf config.virtualisation.docker.enableNvidia "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin";
+          systemd.tmpfiles.rules = lib.mkIf config.virtualisation.docker.enableNvidia [ "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin" ];
           services.udev.extraRules = ''
             # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
             KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c 195 255'"
