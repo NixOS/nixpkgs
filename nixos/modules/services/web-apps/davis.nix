@@ -373,9 +373,7 @@ in
 
       services.phpfpm.pools.davis = {
         inherit user group;
-        phpOptions = ''
-          log_errors = on
-        '';
+        phpOptions.log_errors = "on";
         phpEnv = {
           ENV_DIR = "${cfg.dataDir}";
           APP_CACHE_DIR = "${cfg.dataDir}/var/cache";

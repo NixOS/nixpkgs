@@ -74,7 +74,7 @@ let
         };
 
         phpOptions = mkOption {
-          type = with types; attrsOf (oneOf [ str int ]);
+          type = with types; attrsOf (oneOf [ str int null float ]);
           default = { };
           example = literalExpression ''
             {

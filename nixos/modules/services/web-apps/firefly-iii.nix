@@ -265,9 +265,9 @@ in {
     services.phpfpm.pools.firefly-iii = {
       inherit user group;
       phpPackage = cfg.package.phpPackage;
-      phpOptions = ''
-        log_errors = on
-      '';
+      phpOptions = {
+        log_errors = "on";
+      };
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = user;
