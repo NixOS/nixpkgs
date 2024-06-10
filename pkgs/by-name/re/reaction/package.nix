@@ -26,8 +26,8 @@ in buildGoModule {
   ];
 
   postBuild = ''
-    gcc helpers_c/ip46tables.c -o ip46tables
-    gcc helpers_c/nft46.c -o nft46
+    $CC helpers_c/ip46tables.c -o ip46tables
+    $CC helpers_c/nft46.c -o nft46
   '';
 
   postInstall = ''
