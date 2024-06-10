@@ -5,20 +5,20 @@
 }:
 let
 
-  version = "0.25.1";
+  version = "0.26.1";
 
   sources = {
     x86_64-linux = {
       url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-linux";
-      hash = "sha256-Rb4x6iKx6T9NPuWWDbNaz+35XPzLqZzSm0psv+k2Gw4=";
+      hash = "sha256-Z+Zd3WXMABa8MmpX4xGdHavre5nzYkg5Ok+0b8dM1N4=";
     };
     aarch64-linux = {
       url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-linux-arm64v8";
-      hash = "sha256-6qPyIYKFkhmBNO47w9E91FSKlByepBOnl0MNJighGSc=";
+      hash = "sha256-5e2r/qZXD0nCuw+jPDb9LWGclFWpxHIrJsoLjbBvogg=";
     };
     x86_64-darwin = {
       url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-macos";
-      hash = "sha256-W8+rgqWUDTOB8ykGO2GL9tKEjaDXdx9LpFg0TAtJsxM=";
+      hash = "sha256-jJPsjVLneqmtZduiUjM1nPX7t39cH/UWTXve68EC4Jw=";
     };
   };
 in
