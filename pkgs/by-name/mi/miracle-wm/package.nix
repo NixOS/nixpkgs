@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   gitUpdater,
+  nixosTests,
   cmake,
   glib,
   gtest,
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
     providedSessions = [ "miracle-wm" ];
+    tests.vm = nixosTests.miracle-wm;
   };
 
   meta = with lib; {
