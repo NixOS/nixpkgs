@@ -13,7 +13,7 @@
       src = fetchFromGitHub {
         owner = "openstenoproject";
         repo = "plover_stroke";
-        rev = "${version}";
+        rev = version;
         sha256 = "sha256-A75OMzmEn0VmDAvmQCp6/7uptxzwWJTwsih3kWlYioA=";
       };
 
@@ -40,7 +40,7 @@
       src = fetchFromGitHub {
         owner = "openstenoproject";
         repo = "rtf_tokenize";
-        rev = "${version}";
+        rev = version;
         sha256 = "sha256-zwD2sRYTY1Kmm/Ag2hps9VRdUyQoi4zKtDPR+F52t9A=";
       };
 
