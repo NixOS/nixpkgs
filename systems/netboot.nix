@@ -6,7 +6,7 @@ let
     ];
     config = {
       nix.settings.experimental-features = [ "nix-command" "flakes" ];
-      nix.settings.trusted-users = [ "root" "xnode" ];
+      nix.settings.trusted-users = [ "root" "xnode" "openmesh-xnode-admin" ];
       documentation = {
         nixos = {
           enable = false;
@@ -44,7 +44,7 @@ let
                               imports=[./hardware-configuration.nix] ++ lib.optional (builtins.pathExists /var/lib/openmesh-xnode-admin/config.nix) /var/lib/openmesh-xnode-admin/config.nix ++ lib.optional (builtins.pathExists /var/lib/openmesh-xnode-admin/xnodeos) /var/lib/openmesh-xnode-admin/xnodeos/repo/modules/services/openmesh/xnode/admin.nix ;
                               config = {
                                 nix.settings.experimental-features = [ "nix-command" "flakes" ];
-                                nix.settings.trusted-users = [ "root" "xnode" ];
+                                nix.settings.trusted-users = [ "root" "xnode" "openmesh-xnode-admin" ];
                                 boot.loader.grub.enable=false;
                                 services.openmesh.xnode.admin = {
                                   enable = true;
@@ -65,51 +65,12 @@ let
                             {config, lib, pkgs, modulesPath, ...}: {
                               fileSystems = {
                                 "/" = {
+                                  device = "none";
                                   fsType = "tmpfs";
-                                  options = [ "mode=0755" "size=80%" ];
                                 };
-
-                                "/nix/.ro-store" = {
-                                  fsType = "squashfs";
-                                  device = "/dev/loop0";
-                                  options = [ "loop" ];
-                                  neededForBoot = true;
-                                };
-
-                                "/nix/.rw-store" = {
-                                  fsType = "tmpfs";
-                                  options = [ "mode=0755" ];
-                                  neededForBoot = true;
-                                };
-
-                                "/nix/store" = {
-                                  neededForBoot = true;
-                                  fsType = "overlay";
-                                  device = "overlay";
-                                  options = [
-                                    "lowerdir=/nix/.ro-store"
-                                    "upperdir=/nix/.rw-store/store"
-                                    "workdir=/nix/.rw-store/work"
-                                  ];
-                                };
-
                               };
 
                               networking.useDHCP = lib.mkForce true;
-
-                              boot.initrd = {
-                                availableKernelModules = [
-                                  "squashfs"
-                                  "overlay"
-                                ];
-                                kernelModules = [
-                                  "loop"
-                                  "overlay"
-                                ];
-
-                                network.enable = true;
-                              };
-
                               nixpkgs.hostPlatform=lib.mkDefault "x86_64-linux";
                             }
                             ENDFILE
