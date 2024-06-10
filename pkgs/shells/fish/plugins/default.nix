@@ -21,6 +21,8 @@ lib.makeScope newScope (self: with self; {
 
   fifc = callPackage ./fifc.nix { };
 
+  fish-bd = callPackage ./fish-bd.nix { };
+
   # Fishtape 2.x and 3.x aren't compatible,
   # but both versions are used in the tests of different other plugins.
   fishtape = callPackage ./fishtape.nix { };
