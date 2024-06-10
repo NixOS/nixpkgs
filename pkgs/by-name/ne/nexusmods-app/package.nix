@@ -113,7 +113,10 @@ buildDotnetModule rec {
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
     changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${src.rev}";
     license = [ lib.licenses.gpl3Plus ];
-    maintainers = [ lib.maintainers.l0b0 ];
+    maintainers = with lib.maintainers; [
+      l0b0
+      MattSturgeon
+    ];
     platforms = lib.platforms.linux;
   };
 }
