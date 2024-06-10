@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage {
 
   buildFeatures = [ "${adaptor}-adaptor" ];
 
-  PROTOC = "${lib.getExe protobuf}";
+  PROTOC = lib.getExe protobuf;
 
   passthru.tests = [ nixosTests.crabfit ];
 

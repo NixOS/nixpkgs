@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage {
     ++ lib.optionals stdenv.isDarwin [ rust-jemalloc-sys Security libiconv coreutils CoreServices SystemConfiguration ];
 
   # needed for internal protobuf c wrapper library
-  PROTOC = "${lib.getExe protobuf}";
+  PROTOC = lib.getExe protobuf;
   PROTOC_INCLUDE = "${protobuf}/include";
   RUSTONIG_SYSTEM_LIBONIG = true;
 

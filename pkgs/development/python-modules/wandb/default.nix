@@ -72,7 +72,7 @@ buildPythonPackage rec {
     # Replace git paths
     (substituteAll {
       src = ./hardcode-git-path.patch;
-      git = "${lib.getExe git}";
+      git = lib.getExe git;
     })
   ];
 

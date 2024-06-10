@@ -47,7 +47,7 @@ resholve.mkDerivation rec {
   solutions = {
     git-ftp = {
       scripts = [ "bin/git-ftp" ];
-      interpreter = "${lib.getExe bash}";
+      interpreter = lib.getExe bash;
       inputs = [
         coreutils
         git

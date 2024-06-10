@@ -6,7 +6,7 @@
 buildFHSEnv {
   name = "sparrow-desktop";
 
-  runScript = "${lib.getExe sparrow-unwrapped}";
+  runScript = lib.getExe sparrow-unwrapped;
 
   targetPkgs = pkgs: with pkgs; [
     sparrow-unwrapped

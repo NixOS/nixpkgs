@@ -51,7 +51,7 @@ resholve.mkDerivation rec {
         "libexec/bats-core/*"
         "lib/bats-core/*"
       ];
-      interpreter = "${lib.getExe bash}";
+      interpreter = lib.getExe bash;
       inputs = [
         bash
         coreutils
@@ -99,8 +99,8 @@ resholve.mkDerivation rec {
         "$BATS_TEST_NAME" = true;
         "${placeholder "out"}/libexec/bats-core/bats-exec-test" = true;
         "$BATS_LINE_REFERENCE_FORMAT" = "comma_line";
-        "$BATS_LOCKING_IMPLEMENTATION" = "${lib.getExe flock}";
-        "$parallel_binary_name" = "${lib.getExe parallel}";
+        "$BATS_LOCKING_IMPLEMENTATION" = lib.getExe flock;
+        "$parallel_binary_name" = lib.getExe parallel;
         "${placeholder "out"}/libexec/bats-core/bats-preprocess" = true;
       };
       execer = [

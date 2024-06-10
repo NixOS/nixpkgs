@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      gkbd_keyboard_display = "${lib.getExe libgnomekbd}";
+      gkbd_keyboard_display = lib.getExe libgnomekbd;
     })
   ];
 

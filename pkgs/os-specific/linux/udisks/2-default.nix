@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      bash = "${lib.getExe bash}";
+      bash = lib.getExe bash;
       false = "${coreutils}/bin/false";
-      mdadm = "${lib.getExe mdadm}";
+      mdadm = lib.getExe mdadm;
       mkswap = "${util-linux}/bin/mkswap";
-      sed = "${lib.getExe gnused}";
+      sed = lib.getExe gnused;
       sh = "${bash}/bin/sh";
       sleep = "${coreutils}/bin/sleep";
       swapon = "${util-linux}/bin/swapon";

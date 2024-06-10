@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   patches = lib.optionals stdenv.isLinux [
     (substituteAll {
       src = ./bubblewrap-paths.patch;
-      bubblewrap_bin = "${lib.getExe bubblewrap}";
+      bubblewrap_bin = lib.getExe bubblewrap;
       inherit (builtins) storeDir;
     })
   ];

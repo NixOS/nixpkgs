@@ -650,7 +650,7 @@ stdenv.mkDerivation (finalAttrs: {
       binaryReplacements = [
         {
           search = "/usr/bin/getent";
-          replacement = "${lib.getExe getent}";
+          replacement = lib.getExe getent;
           where = [ "src/nspawn/nspawn-setuid.c" ];
         }
         {

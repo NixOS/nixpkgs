@@ -21,8 +21,8 @@ mkKdeDerivation {
   patches = [
     (substituteAll {
       src = ./tool-paths.patch;
-      xmessage = "${lib.getExe xorg.xmessage}";
-      xsetroot = "${lib.getExe xorg.xsetroot}";
+      xmessage = lib.getExe xorg.xmessage;
+      xsetroot = lib.getExe xorg.xsetroot;
       qdbus = "${lib.getBin qttools}/bin/qdbus";
     })
     (substituteAll {

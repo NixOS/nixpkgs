@@ -23,7 +23,7 @@ resholve.mkDerivation {
 
   solutions.default = {
     scripts = [ "bin/ix" ];
-    interpreter = "${lib.getExe bash}";
+    interpreter = lib.getExe bash;
     inputs = [ curl ];
   };
 

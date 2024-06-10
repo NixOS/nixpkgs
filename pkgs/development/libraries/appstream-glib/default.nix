@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      pngquant = "${lib.getExe pngquant}";
+      pngquant = lib.getExe pngquant;
     })
   ];
 

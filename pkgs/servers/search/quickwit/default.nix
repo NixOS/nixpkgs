@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   # needed for internal protobuf c wrapper library
-  PROTOC = "${lib.getExe protobuf}";
+  PROTOC = lib.getExe protobuf;
   PROTOC_INCLUDE = "${protobuf}/include";
 
   passthru = {

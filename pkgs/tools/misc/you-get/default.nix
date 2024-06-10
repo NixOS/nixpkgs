@@ -23,8 +23,8 @@ python3.pkgs.buildPythonApplication rec {
   patches = [
     (substituteAll {
       src = ./ffmpeg-path.patch;
-      ffmpeg = "${lib.getExe ffmpeg}";
-      ffprobe = "${lib.getExe ffmpeg}";
+      ffmpeg = lib.getExe ffmpeg;
+      ffprobe = lib.getExe ffmpeg;
       version = lib.getVersion ffmpeg;
     })
   ];

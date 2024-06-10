@@ -24,11 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      xsel = "${lib.getExe xsel}";
-      xprop = "${lib.getExe xorg.xprop}";
-      xdotool = "${lib.getExe xdotool}";
+      xsel = lib.getExe xsel;
+      xprop = lib.getExe xorg.xprop;
+      xdotool = lib.getExe xdotool;
       uname = "${coreutils}/bin/uname";
-      whereis = "${lib.getExe unixtools.whereis}";
+      whereis = lib.getExe unixtools.whereis;
       gsettings = "${glib}/bin/gsettings";
     })
   ];

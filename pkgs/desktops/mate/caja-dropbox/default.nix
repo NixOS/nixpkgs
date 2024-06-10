@@ -13,7 +13,7 @@
 }:
 
 let
-  dropboxd = "${lib.getExe dropbox}";
+  dropboxd = lib.getExe dropbox;
 in
 stdenv.mkDerivation rec {
   pname = "caja-dropbox";

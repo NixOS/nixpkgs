@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   installPhase =
-    let unwrapped-bin = "${lib.getExe babashka-unwrapped}"; in
+    let unwrapped-bin = lib.getExe babashka-unwrapped; in
     ''
       mkdir -p $out/clojure_tools
       ln -s -t $out/clojure_tools ${clojureToolsBabashka}/*.edn

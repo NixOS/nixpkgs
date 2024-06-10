@@ -33,11 +33,11 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./mark-executables.patch;
-      git_exec = "${lib.getExe git}";
-      grep_exec = "${lib.getExe gnugrep}";
+      git_exec = lib.getExe git;
+      grep_exec = lib.getExe gnugrep;
       gpg_exec = "${gnupg}/bin/gpg2";
-      tree_exec = "${lib.getExe tree}";
-      xclip_exec = "${lib.getExe xclip}";
+      tree_exec = lib.getExe tree;
+      xclip_exec = lib.getExe xclip;
     })
   ];
 

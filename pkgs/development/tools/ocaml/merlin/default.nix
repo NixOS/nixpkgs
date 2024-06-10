@@ -15,8 +15,8 @@ buildDunePackage rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      dot_merlin_reader = "${lib.getExe dot-merlin-reader}";
-      dune = "${lib.getExe dune_2}";
+      dot_merlin_reader = lib.getExe dot-merlin-reader;
+      dune = lib.getExe dune_2;
     })
   ];
 

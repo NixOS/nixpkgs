@@ -20,7 +20,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./ffmpeg-path.patch;
-      ffmpeg = "${lib.getExe ffmpeg_4}";
+      ffmpeg = lib.getExe ffmpeg_4;
     })
   ];
 

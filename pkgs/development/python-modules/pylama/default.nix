@@ -35,7 +35,7 @@ let
     patches = [
       (substituteAll {
         src = ./paths.patch;
-        git = "${lib.getExe git}";
+        git = lib.getExe git;
       })
     ];
 

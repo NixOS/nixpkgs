@@ -13,7 +13,7 @@
 
 let
   version = "2024.04.17";
-  dropboxd = "${lib.getExe dropbox}";
+  dropboxd = lib.getExe dropbox;
 in
 stdenv.mkDerivation {
   pname = "dropbox-cli";

@@ -163,7 +163,7 @@ let inherit (localSystem) system;
                         "--with-ca-bundle=${cacert}"
                       ];
     };
-    bashExe = "${lib.getExe bash}";
+    bashExe = lib.getExe bash;
 in
 [
 
