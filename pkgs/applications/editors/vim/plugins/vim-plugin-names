@@ -1,4 +1,5 @@
 repo,branch,alias
+https://codeberg.org/FelipeLema/cmp-async-path/,,
 https://github.com/euclidianAce/BetterLua.vim/,,
 https://github.com/vim-scripts/BufOnly.vim/,,
 https://github.com/jackMort/ChatGPT.nvim/,HEAD,
@@ -131,8 +132,11 @@ https://github.com/laytan/cloak.nvim/,HEAD,
 https://github.com/asheq/close-buffers.vim/,HEAD,
 https://github.com/Civitasv/cmake-tools.nvim/,,
 https://github.com/winston0410/cmd-parser.nvim/,,
+<<<<<<< HEAD
 https://github.com/tzachar/cmp-ai/,HEAD,
 https://codeberg.org/FelipeLema/cmp-async-path/,,
+=======
+>>>>>>> 8c49439301ad (vimPlugins.nvim-genghis: init at 2024-05-21)
 https://github.com/crispgm/cmp-beancount/,HEAD,
 https://github.com/hrsh7th/cmp-buffer/,,
 https://github.com/hrsh7th/cmp-calc/,,
@@ -657,6 +661,7 @@ https://github.com/allendang/nvim-expand-expr/,,
 https://github.com/vijaymarupudi/nvim-fzf/,,
 https://github.com/vijaymarupudi/nvim-fzf-commands/,,
 https://github.com/sakhnik/nvim-gdb/,,
+https://github.com/chrisgrieser/nvim-genghis/,HEAD,
 https://github.com/smiteshp/nvim-gps/,,
 https://github.com/brenoprata10/nvim-highlight-colors/,HEAD,
 https://github.com/Iron-E/nvim-highlite/,,
