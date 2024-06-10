@@ -48,14 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Disabled tests:
   # * directive-export{,-gmake}: another failure related to TZ variables
-  # * opt-chdir: ofborg complains about it somehow
   # * opt-keep-going-indirect: not yet known
   # * varmod-localtime: musl doesn't support TZDIR and this test relies on
   #   impure, implicit paths
   env.BROKEN_TESTS = builtins.concatStringsSep " " [
     "directive-export"
     "directive-export-gmake"
-    "opt-chdir" # works on my machine -- AndersonTorres
     "opt-keep-going-indirect"
     "varmod-localtime"
   ];
