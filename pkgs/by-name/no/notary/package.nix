@@ -1,41 +1,32 @@
-{ lib, fetchFromGitHub, buildGoPackage, libtool }:
-
-buildGoPackage rec {
+{ lib
+, fetchFromGitHub
+, buildGoModule
+}:
+buildGoModule rec {
   pname = "notary";
-  version = "0.6.1";
-  gitcommit = "d6e1431f";
+  version = "0.6.1-unstable-2024-04-16";
 
   src = fetchFromGitHub {
-    owner = "theupdateframework";
+    owner = "notaryproject";
     repo = "notary";
-    rev = "v${version}";
-    sha256 = "1ak9dk6vjny5069hp3w36dbjawcnaq82l3i2qvf7mn7zfglbsnf9";
+    rev = "9d2b3b35929392c9945d976b8bdecbe2f53a299e";
+    sha256 = "sha256-u19BfTJwRWholK0b3BcgSmcMM9AR7OeXo64AOi87r0A=";
   };
 
-  patches = [ ./no-git-usage.patch ];
+  vendorHash = null;
 
-  buildInputs = [ libtool ];
-  buildPhase = ''
-    runHook preBuild
-    cd go/src/github.com/theupdateframework/notary
-    SKIPENVCHECK=1 make client GITCOMMIT=${gitcommit}
-    runHook postBuild
-  '';
+  tags = [
+    "pkcs11"
+  ];
 
-  goPackagePath = "github.com/theupdateframework/notary";
+  ldflags = [
+    "-X github.com/theupdateframework/notary/version.NotaryVersion=${version}"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    install -D bin/notary $out/bin/notary
-    runHook postInstall
-  '';
+  # Tests try to use network.
+  doCheck = false;
 
-  #doCheck = true; # broken by tzdata: 2018g -> 2019a
-  checkPhase = ''
-    make test PKGS=github.com/theupdateframework/notary/cmd/notary
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Project that allows anyone to have trust over arbitrary collections of data";
     mainProgram = "notary";
     longDescription = ''
@@ -58,9 +49,9 @@ buildGoPackage rec {
       relying only on the publisher's key to determine the validity and
       integrity of the received content.
     '';
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/theupdateframework/notary";
-    maintainers = with maintainers; [ vdemeester ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.vdemeester ];
+    platforms = lib.platforms.unix;
   };
 }
