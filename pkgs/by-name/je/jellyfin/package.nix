@@ -2,10 +2,9 @@
   lib,
   fetchFromGitHub,
   nixosTests,
-  stdenv,
   dotnetCorePackages,
   buildDotnetModule,
-  ffmpeg,
+  jellyfin-ffmpeg,
   fontconfig,
   freetype,
   jellyfin-web,
@@ -29,7 +28,7 @@ buildDotnetModule rec {
   executables = [ "jellyfin" ];
   nugetDeps = ./nuget-deps.nix;
   runtimeDeps = [
-    ffmpeg
+    jellyfin-ffmpeg
     fontconfig
     freetype
   ];
@@ -39,7 +38,7 @@ buildDotnetModule rec {
 
   preInstall = ''
     makeWrapperArgs+=(
-      --add-flags "--ffmpeg ${ffmpeg}/bin/ffmpeg"
+      --add-flags "--ffmpeg ${jellyfin-ffmpeg}/bin/ffmpeg"
       --add-flags "--webdir ${jellyfin-web}/share/jellyfin-web"
     )
   '';
