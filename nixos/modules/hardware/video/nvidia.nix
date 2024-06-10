@@ -206,6 +206,19 @@ in
         option is supported is used
       '';
 
+      prime.reverseSync.setupCommands.enable =
+        (lib.mkEnableOption ''
+          configure the display manager to be able to use the outputs
+          attached to the NVIDIA GPU.
+          Disable in order to configure the NVIDIA GPU outputs manually using xrandr.
+          Note that this configuration will only be successful when a display manager
+          for which the {option}`services.xserver.displayManager.setupCommands`
+          option is supported is used
+        '')
+        // {
+          default = true;
+        };
+
       nvidiaSettings =
         (lib.mkEnableOption ''
           nvidia-settings, NVIDIA's GUI configuration tool
@@ -437,11 +450,13 @@ in
               providerCmdParams =
                 if syncCfg.enable then "\"${gpuProviderName}\" NVIDIA-0" else "NVIDIA-G0 \"${gpuProviderName}\"";
             in
-            lib.optionalString (syncCfg.enable || reverseSyncCfg.enable) ''
-              # Added by nvidia configuration module for Optimus/PRIME.
-              ${lib.getExe pkgs.xorg.xrandr} --setprovideroutputsource ${providerCmdParams}
-              ${lib.getExe pkgs.xorg.xrandr} --auto
-            '';
+            lib.optionalString
+              (syncCfg.enable || (reverseSyncCfg.enable && reverseSyncCfg.setupCommands.enable))
+              ''
+                # Added by nvidia configuration module for Optimus/PRIME.
+                ${lib.getExe pkgs.xorg.xrandr} --setprovideroutputsource ${providerCmdParams}
+                ${lib.getExe pkgs.xorg.xrandr} --auto
+              '';
 
           environment.etc = {
             "nvidia/nvidia-application-profiles-rc" = lib.mkIf nvidia_x11.useProfiles {
