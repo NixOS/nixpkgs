@@ -35807,7 +35807,9 @@ with pkgs;
 
   youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
 
-  youtube-music = callPackage ../applications/audio/youtube-music { pnpm = pnpm_8; };
+  youtube-music = callPackage ../applications/audio/youtube-music {
+    pnpm = pnpm_9;
+  };
 
   youtube-tui = callPackage ../applications/video/youtube-tui {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
