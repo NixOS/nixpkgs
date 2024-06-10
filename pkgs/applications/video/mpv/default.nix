@@ -50,6 +50,7 @@
   meson,
   mujs,
   ninja,
+  nixosTests,
   nv-codec-headers-11,
   openalSoft,
   pipewire,
@@ -60,6 +61,7 @@
   speex,
   stdenv,
   swift,
+  testers,
   vapoursynth,
   vulkan-headers,
   vulkan-loader,
@@ -351,6 +353,18 @@ stdenv'.mkDerivation (finalAttrs: {
 
     wrapper = callPackage ./wrapper.nix { };
     scripts = callPackage ./scripts { };
+
+    tests = {
+      inherit (nixosTests) mpv;
+
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        moduleNames = [ "mpv" ];
+      };
+    };
   };
 
   meta = {
