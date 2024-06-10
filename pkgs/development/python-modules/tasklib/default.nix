@@ -2,7 +2,7 @@
   lib,
   pythonPackages,
   fetchPypi,
-  taskwarrior,
+  taskwarrior2,
   writeShellScriptBin,
 }:
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    taskwarrior
+    taskwarrior2
     wsl_stub
   ];
 
