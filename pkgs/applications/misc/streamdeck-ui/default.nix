@@ -1,13 +1,14 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, fetchPypi
-, copyDesktopItems
-, writeText
-, makeDesktopItem
-, wrapGAppsHook3
-, xvfb-run
-, qt6
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  fetchPypi,
+  copyDesktopItems,
+  writeText,
+  makeDesktopItem,
+  wrapGAppsHook3,
+  xvfb-run,
+  qt6,
 }:
 let
   # There are breaking changes between 6 and 7
@@ -31,23 +32,28 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-CSsFPGnKVQUCND6YOA9kfO41KS85C57YL9LcrWlQRKo=";
   };
 
-  desktopItems = let
-    common = {
-      name = "streamdeck-ui";
-      desktopName = "Stream Deck UI";
-      icon = "streamdeck-ui";
-      exec = "streamdeck";
-      comment = "UI for the Elgato Stream Deck";
-      categories = [ "Utility" ];
-    };
-  in builtins.map makeDesktopItem [
-    common
-    (common // {
-      name = "${common.name}-noui";
-      exec = "${common.exec} --no-ui";
-      noDisplay = true;
-    })
-  ];
+  desktopItems =
+    let
+      common = {
+        name = "streamdeck-ui";
+        desktopName = "Stream Deck UI";
+        icon = "streamdeck-ui";
+        exec = "streamdeck";
+        comment = "UI for the Elgato Stream Deck";
+        categories = [ "Utility" ];
+      };
+    in
+    builtins.map makeDesktopItem [
+      common
+      (
+        common
+        // {
+          name = "${common.name}-noui";
+          exec = "${common.exec} --no-ui";
+          noDisplay = true;
+        }
+      )
+    ];
 
   postInstall =
     let
@@ -55,21 +61,24 @@ python3Packages.buildPythonApplication rec {
         SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", TAG+="uaccess"
       '';
     in
-      ''
-        mkdir -p $out/lib/systemd/user
-        substitute scripts/streamdeck.service $out/lib/systemd/user/streamdeck.service \
-          --replace '<path to streamdeck>' $out/bin/streamdeck
+    ''
+      mkdir -p $out/lib/systemd/user
+      substitute scripts/streamdeck.service $out/lib/systemd/user/streamdeck.service \
+        --replace '<path to streamdeck>' $out/bin/streamdeck
 
-        mkdir -p "$out/etc/udev/rules.d"
-        cp ${writeText "70-streamdeck.rules" udevRules} $out/etc/udev/rules.d/70-streamdeck.rules
+      mkdir -p "$out/etc/udev/rules.d"
+      cp ${writeText "70-streamdeck.rules" udevRules} $out/etc/udev/rules.d/70-streamdeck.rules
 
-        mkdir -p "$out/share/pixmaps"
-        cp streamdeck_ui/logo.png $out/share/pixmaps/streamdeck-ui.png
-      '';
+      mkdir -p "$out/share/pixmaps"
+      cp streamdeck_ui/logo.png $out/share/pixmaps/streamdeck-ui.png
+    '';
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" "\${gappsWrapperArgs[@]}"];
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
+    "\${gappsWrapperArgs[@]}"
+  ];
 
   format = "pyproject";
 
@@ -99,13 +108,13 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ lib.optionals stdenv.isLinux [ qt6.qtwayland ];
 
-  nativeCheckInputs = [
-    xvfb-run
-  ] ++ (with python3Packages; [
-    pytest
-    pytest-qt
-    pytest-mock
-  ]);
+  nativeCheckInputs =
+    [ xvfb-run ]
+    ++ (with python3Packages; [
+      pytest
+      pytest-qt
+      pytest-mock
+    ]);
 
   checkPhase = ''
     # The tests needs to find the log file
