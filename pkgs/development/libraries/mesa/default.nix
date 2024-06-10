@@ -270,6 +270,8 @@ self = stdenv.mkDerivation {
     (lib.mesonEnable "gallium-va" false)
     (lib.mesonEnable "gallium-xa" false)
     (lib.mesonEnable "lmsensors" false)
+    # Don’t build with glvnd support to make sure Mesa builds libGL on Darwin
+    (lib.mesonEnable "glvnd" false)
   ] ++ lib.optionals enableOpenCL [
     # Clover, old OpenCL frontend
     (lib.mesonOption "gallium-opencl" "icd")
