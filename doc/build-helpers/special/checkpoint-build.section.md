@@ -38,7 +38,11 @@ let
   changedHello = pkgs.hello.overrideAttrs (_: {
     doCheck = false;
     patchPhase = ''
+      runHook prePatch
+
       sed -i 's/Hello, world!/Hello, Nix!/g' src/hello.c
+
+      runHook postPatch
     '';
   });
 in
