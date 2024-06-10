@@ -43,7 +43,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-ai-textanalytics_${version}/sdk/textanalytics/azure-ai-textanalytics/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-       mahalel     
+       mahalel
     ];
   };
 }
