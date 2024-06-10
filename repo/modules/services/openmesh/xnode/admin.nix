@@ -54,7 +54,7 @@ in
 
       serviceConfig = {
         ExecStart = ''${lib.getExe cfg.package} -p ${cfg.stateDir}/${cfg.localStateFilename} ${cfg.remoteDir} ${toString cfg.searchInterval}''; 
-        ExecStartPre = ''(test -d ${cfg.stateDir}/xnodeos && ${lib.getExe pkgs.git} -C ${cfg.stateDir}/xnodeos pull --rebase) || ${lib.getExe pkgs.git} clone --branch feature/import-agent-config-dynamically https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
+        ExecStartPre = ''-${lib.getExe pkgs.git} clone --branch feature/import-agent-config-dynamically https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
         Restart = "always";
         WorkingDirectory = cfg.stateDir;
         StateDirectory = "openmesh-xnode-admin";
