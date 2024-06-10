@@ -227,7 +227,9 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.variables.LOCATE_PATH = cfg.output;
+    environment.variables = lib.mkIf isFindutils {
+      LOCATE_PATH = cfg.output;
+    };
 
     environment.etc = {
       # write /etc/updatedb.conf for manual calls to `updatedb`
