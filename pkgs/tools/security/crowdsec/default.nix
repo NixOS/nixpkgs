@@ -7,8 +7,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-7E//BhimgHOQ4Plmf1XEXXf7B/fiKRRdl1u3bo8lIn0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3GpSpADtCNvekR7gjbIlqzog7PMog6Sra5tpcnUf/gk=";
   };
 
   vendorHash = "sha256-kkQYKiOSmFHjhOrYV40YRZX9w6rUue0NSKfw+Bqxb9s=";
