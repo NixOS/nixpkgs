@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-${toString rev}.zip";
-    sha256 = "sha256-45paGy6SfUFXK6vY8L4tHFYiio1/5ah9vTyGImdgwHI=";
+    hash = "sha256-45paGy6SfUFXK6vY8L4tHFYiio1/5ah9vTyGImdgwHI=";
   };
 
   postPatch = ''
