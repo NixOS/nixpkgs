@@ -5,7 +5,7 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli hbjydev ];
   };
 
   options.services.alloy = {

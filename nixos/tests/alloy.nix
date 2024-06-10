@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     name = "alloy";
 
     meta = with lib.maintainers; {
-      maintainers = [ flokli ];
+      maintainers = [ flokli hbjydev ];
     };
 
     inherit nodes;
