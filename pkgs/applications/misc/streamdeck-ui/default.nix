@@ -1,6 +1,7 @@
 { lib
 , python3Packages
 , fetchFromGitHub
+, fetchPypi
 , copyDesktopItems
 , writeText
 , makeDesktopItem
@@ -8,22 +9,27 @@
 , xvfb-run
 , qt6
 }:
-
+let
+  # There are breaking changes between 6 and 7
+  importlib-metadata_6 = python3Packages.importlib-metadata.overrideAttrs (_: rec {
+    version = "6.9.0";
+    src = fetchPypi {
+      pname = "importlib_metadata";
+      inherit version;
+      hash = "sha256-6Ky1I8M1qRgiZ04Um0bAOZ7E0yjE0fbknCc9pf8CAbk=";
+    };
+  });
+in
 python3Packages.buildPythonApplication rec {
   pname = "streamdeck-ui";
-  version = "3.1.0";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     repo = "streamdeck-linux-gui";
     owner = "streamdeck-linux-gui";
     rev = "v${version}";
-    sha256 = "sha256-AIE9j022L4WSlHBAu3TT5uE4Ilgk/jYSmU03K8Hs8xY=";
+    hash = "sha256-CSsFPGnKVQUCND6YOA9kfO41KS85C57YL9LcrWlQRKo=";
   };
-
-  patches = [
-    # nixpkgs has a newer pillow version
-    ./update-pillow.patch
-  ];
 
   desktopItems = let
     common = {
@@ -69,30 +75,41 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     python3Packages.poetry-core
+    python3Packages.pythonRelaxDepsHook
     copyDesktopItems
     qt6.wrapQtAppsHook
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    setuptools
-    filetype
-    cairosvg
-    pillow
-    pynput
-    pyside6
-    streamdeck
-    xlib
-  ] ++ lib.optionals stdenv.isLinux [
-    qt6.qtwayland
-  ];
+  pythonRelaxDeps = [ "pillow" ];
+
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      setuptools
+      filetype
+      cairosvg
+      pillow
+      pynput
+      pyside6
+      streamdeck
+      xlib
+      importlib-metadata_6
+      evdev
+    ]
+    ++ lib.optionals stdenv.isLinux [ qt6.qtwayland ];
 
   nativeCheckInputs = [
     xvfb-run
-    python3Packages.pytest
-  ];
+  ] ++ (with python3Packages; [
+    pytest
+    pytest-qt
+    pytest-mock
+  ]);
 
   checkPhase = ''
+    # The tests needs to find the log file
+    export STREAMDECK_UI_LOG_FILE=$(pwd)/.streamdeck_ui.log
     xvfb-run pytest tests
   '';
 
