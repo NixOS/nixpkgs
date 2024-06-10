@@ -78,9 +78,6 @@ let
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ huantian wackbyte ];
       platforms = lib.platforms.linux;
-      # See comment about wasm32-unknown-unknown in rustc.nix.
-      broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
-        !stdenv.hostPlatform.gcc.thumb or true;
     };
   };
 

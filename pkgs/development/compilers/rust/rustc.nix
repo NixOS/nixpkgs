@@ -106,9 +106,7 @@ in stdenv.mkDerivation (finalAttrs: {
       stdenv.targetPlatform.rust.rustcTargetSpec
 
     # Other targets that don't need any extra dependencies to build.
-    # Temporarily broken if some global compiler flags are set:
-    # https://github.com/NixOS/nixpkgs/pull/317273
-    ] ++ optionals (!fastCross && !lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] && stdenv.hostPlatform.gcc.thumb or true) [
+    ] ++ optionals (!fastCross) [
       "wasm32-unknown-unknown"
 
     # (build!=target): When cross-building a compiler we need to add
