@@ -10359,10 +10359,6 @@ with pkgs;
 
   lv = callPackage ../tools/text/lv { };
 
-  lv_img_conv = callPackage ../development/tools/lv_img_conv  {
-    inherit (darwin.apple_sdk.frameworks) CoreText;
-  };
-
   lwc = callPackage ../tools/misc/lwc { };
 
   lxd-image-server = callPackage ../tools/virtualization/lxd-image-server { };
