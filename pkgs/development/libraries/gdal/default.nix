@@ -79,7 +79,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gdal";
+  pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
   version = "3.8.5";
 
   src = fetchFromGitHub {
