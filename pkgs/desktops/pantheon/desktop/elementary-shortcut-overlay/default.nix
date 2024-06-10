@@ -8,6 +8,7 @@
 , vala
 , desktop-file-utils
 , gala
+, gsettings-desktop-schemas
 , gtk4
 , glib
 , gnome-settings-daemon
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gala # org.pantheon.desktop.gala.keybindings
+    gsettings-desktop-schemas # org.gnome.desktop.wm.keybindings
     glib
     gnome-settings-daemon # org.gnome.settings-daemon.plugins.media-keys
     granite7
