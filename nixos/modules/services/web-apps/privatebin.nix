@@ -153,9 +153,9 @@ in
     services.phpfpm.pools.privatebin = {
       inherit user group;
       phpPackage = pkgs.php83;
-      phpOptions = ''
-        log_errors = on
-      '';
+      phpOptions = {
+        log_errors = "on";
+      };
       settings = {
         "listen.mode" = lib.mkDefault "0660";
         "listen.owner" = lib.mkDefault user;

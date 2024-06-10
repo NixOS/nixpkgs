@@ -14,16 +14,16 @@ let
     inherit (cfg) logDir dataDir;
   };
 
-  toKeyValue = lib.generators.toKeyValue {
-    mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
-  };
-
   defaultPHPSettings = {
     log_errors = "on";
     post_max_size = "100M";
     upload_max_filesize = "100M";
     memory_limit = "${toString cfg.settings.php_memory_limit}M";
     "date.timezone" = config.time.timeZone;
+  };
+
+  toKeyValue = lib.generators.toKeyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " = ";
   };
 
   phpIni =
@@ -562,7 +562,7 @@ in
       user = cfg.user;
       group = cfg.group;
       inherit (package) phpPackage;
-      phpOptions = toKeyValue cfg.phpOptions;
+      phpOptions = cfg.phpOptions;
       settings = {
         "listen.mode" = "0660";
         "listen.owner" = config.services.nginx.user;
