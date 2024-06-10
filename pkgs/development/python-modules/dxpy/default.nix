@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/dnanexus/dx-toolkit/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/dnanexus/dx-toolkit/blob/${src.rev}/CHANGELOG.md";
     description = "DNAnexus Python API";
     homepage = "https://github.com/dnanexus/dx-toolkit/tree/master/src/python";
     license = lib.licenses.asl20;
