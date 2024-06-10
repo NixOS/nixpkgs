@@ -208,7 +208,7 @@ in
 
       prime.reverseSync.setupCommands.enable =
         (lib.mkEnableOption ''
-          Configure the display manager to be able to use the outputs
+          configure the display manager to be able to use the outputs
           attached to the NVIDIA GPU.
           Disable in order to configure the NVIDIA GPU outputs manually using xrandr.
           Note that this configuration will only be successful when a display manager
