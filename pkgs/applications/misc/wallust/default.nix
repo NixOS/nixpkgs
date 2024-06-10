@@ -6,7 +6,7 @@
 , makeWrapper
 }:
 let
-  version = "2.10.0";
+  version = "3.0.0-beta";
 in
 rustPlatform.buildRustPackage {
   pname = "wallust";
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "explosion-mental";
     repo = "wallust";
     rev = version;
-    hash = "sha256-0kPmr7/2uVncpCGVOeIkYlm2M0n9+ypVl7bQ9HnqLb4=";
+    hash = "sha256-gGyxRdv2I/3TQWrTbUjlJGsaRv4SaNE+4Zo9LMWmxk8";
   };
 
-  cargoHash = "sha256-p1NKEppBYLdCsTY7FHPzaGladLv5HqIVNJxSoFJOx50=";
+  cargoHash = "sha256-dkHS8EOzmn5VLiKP3SMT0ZGAsk2wzvQeioG7NuGGUzA=";
 
   nativeBuildInputs = [ makeWrapper ];
 
