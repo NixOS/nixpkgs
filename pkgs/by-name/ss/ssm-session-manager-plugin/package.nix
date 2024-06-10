@@ -1,13 +1,10 @@
 { lib
 , fetchFromGitHub
-, buildGoPackage
+, buildGoModule
 }:
-
-buildGoPackage rec {
+buildGoModule rec {
   pname = "ssm-session-manager-plugin";
   version = "1.2.633.0";
-
-  goPackagePath = "github.com/aws/session-manager-plugin";
 
   src = fetchFromGitHub {
     owner = "aws";
@@ -16,17 +13,20 @@ buildGoPackage rec {
     hash = "sha256-dwNCTJOxpothAcJSfch2jkxdgXg6xDd/fDQCQo2Xd+8=";
   };
 
+  vendorHash = null;
+
+  subPackages = [ "src/sessionmanagerplugin-main" ];
+
   postPatch = ''
     mv vendor{,-old}
     mv vendor-old/src vendor
     rm -r vendor-old
+    go mod init github.com/aws/session-manager-plugin
   '';
 
   preBuild = ''
-    pushd go/src/${lib.escapeShellArg goPackagePath}
     echo -n ${lib.escapeShellArg version} > VERSION
     go run src/version/versiongenerator/version-gen.go
-    popd
   '';
 
   doCheck = true;
@@ -45,11 +45,11 @@ buildGoPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html";
     description = "Amazon SSM Session Manager Plugin";
     mainProgram = "session-manager-plugin";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ amarshall mbaillie ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ amarshall mbaillie ];
   };
 }
