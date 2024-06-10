@@ -8,6 +8,7 @@
   fetchFromGitHub,
   cmake,
   libuuid,
+  nixosTests,
   python3,
   xdg-utils,
   installShellFiles,
@@ -77,6 +78,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/nvim
     ln -s $out/share/vim-plugins/task $out/share/nvim/site
   '';
+
+  passthru.tests.nixos = nixosTests.taskchampion-sync-server;
 
   meta = {
     description = "Highly flexible command-line tool to manage TODO lists";
