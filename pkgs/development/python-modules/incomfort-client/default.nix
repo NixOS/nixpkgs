@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "incomfort-client";
-  version = "0.5.0";
+  version = "0.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-kdPue3IfF85O+0dgvX+dN6S4WoQmjxdCfwfv83SnO8E=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HWooJ18aOps+3/zpn1k6tWSOD0DSsTDs0Nm+iHb/p2w=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
