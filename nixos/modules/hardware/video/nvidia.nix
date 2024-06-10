@@ -275,7 +275,7 @@ in
               softdep nvidia post: nvidia-uvm
             '';
           };
-          systemd.tmpfiles.rules = lib.optional config.virtualisation.docker.enableNvidia "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin";
+          systemd.tmpfiles.rules = lib.mkIf config.virtualisation.docker.enableNvidia "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin";
           services.udev.extraRules = ''
             # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
             KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c 195 255'"
@@ -290,6 +290,7 @@ in
           };
           environment.systemPackages = [ nvidia_x11.bin ];
         })
+
         # X11
         (lib.mkIf nvidiaEnabled {
           assertions = [
@@ -455,6 +456,7 @@ in
             extraPackages = [ pkgs.nvidia-vaapi-driver ];
             extraPackages32 = [ pkgs.pkgsi686Linux.nvidia-vaapi-driver ];
           };
+
           environment.systemPackages =
             lib.optional cfg.nvidiaSettings nvidia_x11.settings
             ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced
@@ -527,16 +529,12 @@ in
                 };
               })
             ];
+
           services.acpid.enable = true;
 
           services.dbus.packages = lib.optional cfg.dynamicBoost.enable nvidia_x11.bin;
 
-          hardware.firmware =
-            let
-              isOpen = cfg.open;
-              isNewUnfree = lib.versionAtLeast nvidia_x11.version "555";
-            in
-            lib.optional (isOpen || isNewUnfree) nvidia_x11.firmware;
+          hardware.firmware = lib.optional (cfg.open || lib.versionAtLeast nvidia_x11.version "555") nvidia_x11.firmware;
 
           systemd.tmpfiles.rules =
             [
