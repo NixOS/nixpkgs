@@ -1074,6 +1074,8 @@ self: super: with self; {
 
   axisregistry = callPackage ../development/python-modules/axisregistry { };
 
+  azure-ai-textanalytics = callPackage ../development/python-modules/azure-ai-textanalytics { };
+
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
 
   azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
