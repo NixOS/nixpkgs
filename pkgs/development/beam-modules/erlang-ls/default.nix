@@ -49,7 +49,7 @@ rebar3Relx {
   installFlags = [ "PREFIX=$(out)" ];
   meta = with lib; {
     homepage = "https://github.com/erlang-ls/erlang_ls";
-    description = "The Erlang Language Server";
+    description = "Erlang Language Server";
     platforms = platforms.unix;
     license = licenses.asl20;
     mainProgram = "erlang_ls";

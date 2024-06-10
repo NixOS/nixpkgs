@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/labwc/labwc";
-    description = "A Wayland stacking compositor, inspired by Openbox";
+    description = "Wayland stacking compositor, inspired by Openbox";
     changelog = "https://github.com/labwc/labwc/blob/${finalAttrs.src.rev}/NEWS.md";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "labwc";

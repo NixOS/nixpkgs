@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://betamax.readthedocs.org/en/latest/";
-    description = "A VCR imitation for requests";
+    description = "VCR imitation for requests";
     license = licenses.asl20;
     maintainers = with maintainers; [ pSub ];
   };

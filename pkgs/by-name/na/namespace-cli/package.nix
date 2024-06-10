@@ -30,6 +30,6 @@ buildGoModule rec {
     license = licenses.asl20;
     changelog = "https://github.com/namespacelabs/foundation/releases/tag/v${version}";
     homepage = "https://github.com/namespacelabs/foundation";
-    description = "A command line interface for the Namespaces platform";
+    description = "Command line interface for the Namespaces platform";
   };
 }

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A dmenu wrapper for connmann";
+    description = "Dmenu wrapper for connmann";
     mainProgram = "connman_dmenu";
     homepage = "https://github.com/march-linux/connman_dmenu";
     license = lib.licenses.free;

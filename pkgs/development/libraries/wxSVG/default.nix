@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wxsvg.sourceforge.net/";
-    description = "A SVG manipulation library built with wxWidgets";
+    description = "SVG manipulation library built with wxWidgets";
     mainProgram = "svgview";
     longDescription = ''
       wxSVG is C++ library to create, manipulate and render Scalable Vector

@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/seebye/ueberzug";
-    description = "An alternative for w3mimgdisplay";
+    description = "Alternative for w3mimgdisplay";
     mainProgram = "ueberzug";
     license = licenses.gpl3;
     maintainers = with maintainers; [ Br1ght0ne ];

@@ -29,7 +29,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool to collect and aggregate respondd data";
+    description = "Tool to collect and aggregate respondd data";
     homepage = "https://github.com/FreifunkBremen/yanic";
     changelog = "https://github.com/FreifunkBremen/yanic/releases/tag/${src.rev}";
     license = licenses.agpl3Only;

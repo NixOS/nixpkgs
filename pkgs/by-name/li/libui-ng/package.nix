@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A portable GUI library for C";
+    description = "Portable GUI library for C";
     homepage = "https://github.com/libui-ng/libui-ng";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

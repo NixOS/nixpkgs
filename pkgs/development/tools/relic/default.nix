@@ -33,7 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/sassoftware/relic";
-    description = "A service and a tool for adding digital signatures to operating system packages for Linux and Windows";
+    description = "Service and a tool for adding digital signatures to operating system packages for Linux and Windows";
     mainProgram = "relic";
     license = licenses.asl20;
     maintainers = with maintainers; [ strager ];

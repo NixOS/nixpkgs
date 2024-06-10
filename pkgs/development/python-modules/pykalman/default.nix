@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pykalman" ];
 
   meta = with lib; {
-    description = "An implementation of the Kalman Filter, Kalman Smoother, and EM algorithm in Python";
+    description = "Implementation of the Kalman Filter, Kalman Smoother, and EM algorithm in Python";
     homepage = "https://github.com/pykalman/pykalman";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mbalatsko ];

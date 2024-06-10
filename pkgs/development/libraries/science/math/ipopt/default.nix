@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A software package for large-scale nonlinear optimization";
+    description = "Software package for large-scale nonlinear optimization";
     homepage = "https://projects.coin-or.org/Ipopt";
     license = licenses.epl10;
     platforms = platforms.unix;

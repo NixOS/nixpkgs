@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/loupe";
-    description = "A simple image viewer application written with GTK4 and Rust";
+    description = "Simple image viewer application written with GTK4 and Rust";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jk ] ++ teams.gnome.members;
     platforms = platforms.unix;

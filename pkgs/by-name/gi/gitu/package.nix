@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A TUI Git client inspired by Magit";
+    description = "TUI Git client inspired by Magit";
     homepage = "https://github.com/altsem/gitu";
     changelog = "https://github.com/altsem/gitu/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

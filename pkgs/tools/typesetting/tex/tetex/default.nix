@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description  = "A full-featured (La)TeX distribution";
+    description  = "Full-featured (La)TeX distribution";
     homepage     = "http://www.tug.org/tetex/";
     maintainers  = with maintainers; [ lovek323 ];
     platforms    = platforms.unix;

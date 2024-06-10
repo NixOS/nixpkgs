@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/GIScience/openrouteservice-py";
-    description = "The Python API to consume openrouteservice(s) painlessly";
+    description = "Python API to consume openrouteservice(s) painlessly";
     license = licenses.asl20;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

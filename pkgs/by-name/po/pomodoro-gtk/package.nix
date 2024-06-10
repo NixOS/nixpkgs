@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "A simple and intuitive timer application (also named Planytimer)";
+    description = "Simple and intuitive timer application (also named Planytimer)";
     homepage = "https://gitlab.com/idevecore/pomodoro";
     license = lib.licenses.gpl3Plus;
     mainProgram = "pomodoro";

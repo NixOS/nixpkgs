@@ -51,7 +51,7 @@ callPackage ../nginx/generic.nix args rec {
   };
 
   meta = {
-    description = "A fast web application server built on Nginx";
+    description = "Fast web application server built on Nginx";
     homepage = "https://openresty.org";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;

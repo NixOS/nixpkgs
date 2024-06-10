@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "stransi" ];
 
   meta = with lib; {
-    description = "A lightweight Python parser library for ANSI escape code sequences";
+    description = "Lightweight Python parser library for ANSI escape code sequences";
     homepage = "https://github.com/getcuia/stransi";
     changelog = "https://github.com/getcuia/stransi/releases/tag/${src.rev}";
     license = licenses.mit;

@@ -124,7 +124,7 @@ in {
 
     meta = with lib; {
       inherit (src.meta) homepage;
-      description = "VDR plugin to handle KODI clients.";
+      description = "VDR plugin to handle KODI clients";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       inherit (vdr.meta) platforms;
@@ -186,7 +186,7 @@ in {
 
     meta = with lib; {
       inherit (src.meta) homepage;
-      description = "A plugin for VDR to access AVMs Fritz Box routers";
+      description = "Plugin for VDR to access AVMs Fritz Box routers";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       inherit (vdr.meta) platforms;

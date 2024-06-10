@@ -161,7 +161,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "Zammad, a web-based, open source user support/ticketing solution.";
+    description = "Zammad, a web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "aarch64-linux" ];

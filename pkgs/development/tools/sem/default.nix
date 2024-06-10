@@ -21,7 +21,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A cli to operate on semaphore ci (2.0)";
+    description = "Cli to operate on semaphore ci (2.0)";
     homepage = "https://github.com/semaphoreci/cli";
     changelog = "https://github.com/semaphoreci/cli/releases/tag/v${version}";
     license = licenses.asl20;

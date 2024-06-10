@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A simple but detailed weather indicator for Waybar using wttr.in";
+    description = "Simple but detailed weather indicator for Waybar using wttr.in";
     homepage = "https://github.com/bjesus/wttrbar";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];

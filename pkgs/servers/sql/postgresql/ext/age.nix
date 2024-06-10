@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = !builtins.elem (versions.major postgresql.version) (builtins.attrNames hashes);
-    description = "A graph database extension for PostgreSQL";
+    description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
     changelog = "https://github.com/apache/age/raw/v${src.rev}/RELEASE";
     maintainers = with maintainers; [ ];

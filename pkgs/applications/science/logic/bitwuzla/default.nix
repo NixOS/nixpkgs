@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.hostPlatform.isLinux;
 
   meta = {
-    description = "A SMT solver for fixed-size bit-vectors, floating-point arithmetic, arrays, and uninterpreted functions";
+    description = "SMT solver for fixed-size bit-vectors, floating-point arithmetic, arrays, and uninterpreted functions";
     mainProgram = "bitwuzla";
     homepage = "https://bitwuzla.github.io";
     license = lib.licenses.mit;

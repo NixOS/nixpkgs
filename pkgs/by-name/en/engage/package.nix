@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
       );
 
   meta = {
-    description = "A task runner with DAG-based parallelism";
+    description = "Task runner with DAG-based parallelism";
     mainProgram = "engage";
     homepage = "https://gitlab.computer.surgery/charles/engage";
     changelog = "https://gitlab.computer.surgery/charles/engage/-/blob/v${version}/CHANGELOG.md";

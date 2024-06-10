@@ -94,7 +94,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A QR code scanner desktop app for Linux";
+    description = "QR code scanner desktop app for Linux";
     homepage = "https://github.com/hongquan/CoBang";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];

@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-wVZR/h0AtwZ1eo7EoRKNzaS2Wp0X01e2u3Ugmsnj644=";
 
   meta = with lib; {
-    description = "A set of rewrite proxies and gateways for UnifiedPush";
+    description = "Set of rewrite proxies and gateways for UnifiedPush";
     homepage = "https://github.com/UnifiedPush/common-proxies";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

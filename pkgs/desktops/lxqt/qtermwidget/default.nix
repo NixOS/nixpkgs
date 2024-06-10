@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "https://github.com/lxqt/qtermwidget";
-    description = "A terminal emulator widget for Qt, used by QTerminal";
+    description = "Terminal emulator widget for Qt, used by QTerminal";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = teams.lxqt.members;

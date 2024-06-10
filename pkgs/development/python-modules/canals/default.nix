@@ -60,7 +60,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "canals" ];
 
   meta = with lib; {
-    description = "A component orchestration engine";
+    description = "Component orchestration engine";
     homepage = "https://github.com/deepset-ai/canals";
     changelog = "https://github.com/deepset-ai/canals/releases/tag/v${version}";
     license = licenses.asl20;

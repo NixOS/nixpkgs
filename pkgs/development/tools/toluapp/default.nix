@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   patches = [ ./environ-and-linux-is-kinda-posix.patch ./headers.patch ];
 
   meta = with lib; {
-    description = "A tool to integrate C/Cpp code with Lua";
+    description = "Tool to integrate C/Cpp code with Lua";
     homepage = "http://www.codenix.com/~tolua/";
     license = licenses.mit;
     maintainers = with maintainers; [ vrthra ];

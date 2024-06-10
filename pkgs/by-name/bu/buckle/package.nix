@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A buck2 launcher";
+    description = "Buck2 launcher";
     longDescription = ''
       Buckle is a launcher for [Buck2](https://buck2.build). It manages
       Buck2 on a per-project basis. This enables a project or team to do

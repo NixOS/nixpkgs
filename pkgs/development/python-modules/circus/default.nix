@@ -84,7 +84,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "circus" ];
 
   meta = with lib; {
-    description = "A process and socket manager";
+    description = "Process and socket manager";
     homepage = "https://github.com/circus-tent/circus";
     changelog = "https://github.com/circus-tent/circus/releases/tag/${version}";
     license = licenses.asl20;

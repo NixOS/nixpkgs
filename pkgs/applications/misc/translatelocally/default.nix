@@ -70,7 +70,7 @@ in stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     mainProgram = "translateLocally";
     homepage = "https://translatelocally.com/";
-    description = "Fast and secure translation on your local machine, powered by marian and Bergamot.";
+    description = "Fast and secure translation on your local machine, powered by marian and Bergamot";
     license = licenses.mit;
     maintainers = with maintainers; [ pacien ];
     platforms = platforms.linux;

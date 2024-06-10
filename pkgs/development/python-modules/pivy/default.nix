@@ -62,7 +62,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/coin3d/pivy/";
-    description = "A Python binding for Coin";
+    description = "Python binding for Coin";
     license = licenses.bsd0;
     maintainers = with maintainers; [ gebner ];
   };

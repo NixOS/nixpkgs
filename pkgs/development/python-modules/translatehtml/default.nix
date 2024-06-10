@@ -46,7 +46,7 @@ buildPythonPackage rec {
   doCheck = false; # no tests
 
   meta = with lib; {
-    description = "Translate HTML using Beautiful Soup and Argos Translate.";
+    description = "Translate HTML using Beautiful Soup and Argos Translate";
     homepage = "https://www.argosopentech.com";
     license = licenses.mit;
     maintainers = with maintainers; [ misuzu ];

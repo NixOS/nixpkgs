@@ -26,7 +26,7 @@ buildGoModule rec {
   doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   meta = {
-    description = "A federated nanoblogging service with a Gemini frontend";
+    description = "Federated nanoblogging service with a Gemini frontend";
     homepage = "https://github.com/dimkr/tootik";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sikmir ];

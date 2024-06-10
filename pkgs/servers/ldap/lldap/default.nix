@@ -80,7 +80,7 @@ in rustPlatform.buildRustPackage (commonDerivationAttrs // {
   };
 
   meta = with lib; {
-    description = "A lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
+    description = "Lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
     homepage = "https://github.com/lldap/lldap";
     changelog = "https://github.com/lldap/lldap/blob/v${lldap.version}/CHANGELOG.md";
     license = licenses.gpl3Only;

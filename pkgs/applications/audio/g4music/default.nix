@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A beautiful, fast, fluent, light weight music player written in GTK4";
+    description = "Beautiful, fast, fluent, light weight music player written in GTK4";
     mainProgram = "g4music";
     homepage = "https://gitlab.gnome.org/neithern/g4music";
     license = licenses.gpl3Only;

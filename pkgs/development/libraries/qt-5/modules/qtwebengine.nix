@@ -280,7 +280,7 @@ qtModule ({
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
-    description = "A web engine based on the Chromium web browser";
+    description = "Web engine based on the Chromium web browser";
     mainProgram = "qwebengine_convert_dict";
     maintainers = with maintainers; [ matthewbauer ];
 

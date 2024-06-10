@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     '';
 
   meta = with lib; {
-    description = "A modern shell";
+    description = "Modern shell";
     homepage = "https://github.com/geophile/marcel";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kud ];

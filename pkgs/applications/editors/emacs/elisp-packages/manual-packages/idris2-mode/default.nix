@@ -24,7 +24,7 @@ trivialBuild rec {
 
   meta = with lib; {
     homepage = "https://github.com/idris-community/idris2-mode";
-    description = "This is an emacs mode for editing Idris 2 code.";
+    description = "This is an emacs mode for editing Idris 2 code";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wuyoli ];
     inherit (emacs.meta) platforms;

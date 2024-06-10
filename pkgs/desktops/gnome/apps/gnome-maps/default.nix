@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://apps.gnome.org/Maps/";
-    description = "A map application for GNOME 3";
+    description = "Map application for GNOME 3";
     mainProgram = "gnome-maps";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;

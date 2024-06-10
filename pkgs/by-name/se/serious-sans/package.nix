@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/kaBeech/serious-sans";
-    description = "A legible monospace font for playful professionals";
+    description = "Legible monospace font for playful professionals";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ CobaltCause ];
     platforms = lib.platforms.all;

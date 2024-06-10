@@ -265,7 +265,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://www.docker.com/";
-      description = "An open source project to pack, ship and run any application as a lightweight container";
+      description = "Open source project to pack, ship and run any application as a lightweight container";
       longDescription = ''
         Docker is a platform designed to help developers build, share, and run modern applications.
 

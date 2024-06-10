@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
@@ -76,7 +77,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "The server of the Tryton application platform";
+    description = "Server of the Tryton application platform";
     longDescription = ''
       The server for Tryton, a three-tier high-level general purpose
       application platform under the license GPL-3 written in Python and using
@@ -88,6 +89,7 @@ buildPythonPackage rec {
     homepage = "http://www.tryton.org/";
     changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
     license = licenses.gpl3Plus;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [
       udono
       johbo

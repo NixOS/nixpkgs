@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "A low-level library that provides a high level interface to XML processing for OpenSAML 2";
+    description = "Low-level library that provides a high level interface to XML processing for OpenSAML 2";
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sigmanificient ];

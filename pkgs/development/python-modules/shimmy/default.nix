@@ -89,7 +89,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/Farama-Foundation/Shimmy/releases/tag/v${version}";
-    description = "An API conversion tool for popular external reinforcement learning environments";
+    description = "API conversion tool for popular external reinforcement learning environments";
     homepage = "https://github.com/Farama-Foundation/Shimmy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];

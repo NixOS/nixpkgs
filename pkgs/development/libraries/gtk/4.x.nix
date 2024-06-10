@@ -261,7 +261,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A multi-platform toolkit for creating graphical user interfaces";
+    description = "Multi-platform toolkit for creating graphical user interfaces";
     longDescription = ''
       GTK is a highly usable, feature rich toolkit for creating
       graphical user interfaces which boasts cross platform

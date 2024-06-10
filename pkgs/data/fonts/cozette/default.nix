@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A bitmap programming font optimized for coziness";
+    description = "Bitmap programming font optimized for coziness";
     homepage = "https://github.com/slavfox/cozette";
     changelog = "https://github.com/slavfox/Cozette/blob/v.${version}/CHANGELOG.md";
     license = licenses.mit;

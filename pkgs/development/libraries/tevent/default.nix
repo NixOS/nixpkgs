@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   PYTHON_CONFIG = "/invalid";
 
   meta = with lib; {
-    description = "An event system based on the talloc memory management library";
+    description = "Event system based on the talloc memory management library";
     homepage = "https://tevent.samba.org/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;

@@ -26,7 +26,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "A Helm plugin which maps deprecated or removed Kubernetes APIs in a release to supported APIs";
+    description = "Helm plugin which maps deprecated or removed Kubernetes APIs in a release to supported APIs";
     homepage = "https://github.com/helm/helm-mapkubeapis";
     license = with lib.licenses; [ asl20 ];
     maintainers = with lib.maintainers; [ aos ];

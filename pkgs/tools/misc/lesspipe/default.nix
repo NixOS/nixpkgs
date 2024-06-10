@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A preprocessor for less";
+    description = "Preprocessor for less";
     longDescription = ''
       Usually lesspipe.sh is called as an input filter to less. With the help
       of that filter less will display the uncompressed contents of compressed

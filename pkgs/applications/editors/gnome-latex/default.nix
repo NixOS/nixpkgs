@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/swilmet/gnome-latex";
-    description = "A LaTeX editor for the GNOME desktop";
+    description = "LaTeX editor for the GNOME desktop";
     maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

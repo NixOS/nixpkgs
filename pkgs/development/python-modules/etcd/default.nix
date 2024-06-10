@@ -34,7 +34,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Python etcd client that just works";
+    description = "Python etcd client that just works";
     homepage = "https://github.com/dsoprea/PythonEtcdClient";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];

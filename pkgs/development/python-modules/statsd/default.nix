@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     maintainers = with maintainers; [ domenkozar ];
-    description = "A simple statsd client";
+    description = "Simple statsd client";
     license = licenses.mit;
     homepage = "https://github.com/jsocol/pystatsd";
   };

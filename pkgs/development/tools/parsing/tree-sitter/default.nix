@@ -172,7 +172,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     homepage = "https://github.com/tree-sitter/tree-sitter";
-    description = "A parser generator tool and an incremental parsing library";
+    description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
     changelog = "https://github.com/tree-sitter/tree-sitter/blob/v${version}/CHANGELOG.md";
     longDescription = ''

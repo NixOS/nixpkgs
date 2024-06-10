@@ -62,7 +62,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A library for handling archives/repositories in Canonical craft applications";
+    description = "Library for handling archives/repositories in Canonical craft applications";
     homepage = "https://github.com/canonical/craft-archives";
     changelog = "https://github.com/canonical/craft-archives/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;

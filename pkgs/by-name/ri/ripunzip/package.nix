@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool to unzip files in parallel";
+    description = "Tool to unzip files in parallel";
     mainProgram = "ripunzip";
     homepage = "https://github.com/google/ripunzip";
     license = with lib.licenses; [ mit asl20 ];

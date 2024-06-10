@@ -32,7 +32,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://traefik.io";
-    description = "A modern reverse proxy";
+    description = "Modern reverse proxy";
     changelog = "https://github.com/traefik/traefik/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ vdemeester ];

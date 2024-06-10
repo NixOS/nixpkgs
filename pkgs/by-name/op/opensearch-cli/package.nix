@@ -27,7 +27,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "A full-featured command line interface (CLI) for OpenSearch.";
+    description = "Full-featured command line interface (CLI) for OpenSearch";
     homepage = "https://github.com/opensearch-project/opensearch-cli";
     license = lib.licenses.asl20;
     mainProgram = "opensearch-cli";

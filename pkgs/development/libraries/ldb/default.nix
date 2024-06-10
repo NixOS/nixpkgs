@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "A LDAP-like embedded database";
+    description = "LDAP-like embedded database";
     homepage = "https://ldb.samba.org/";
     license = licenses.lgpl3Plus;
     pkgConfigModules = [ "ldb" ];

@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "A server side focus component used in Jitsi Meet conferences";
+    description = "Server side focus component used in Jitsi Meet conferences";
     mainProgram = "jicofo";
     longDescription = ''
       JItsi COnference FOcus is a server side focus component used in Jitsi Meet conferences.

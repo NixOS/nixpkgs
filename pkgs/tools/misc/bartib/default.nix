@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple timetracker for the command line";
+    description = "Simple timetracker for the command line";
     homepage = "https://github.com/nikolassv/bartib";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ figsoda ];

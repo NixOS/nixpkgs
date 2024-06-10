@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A GTK theme based on Material Design Refresh";
+    description = "GTK theme based on Material Design Refresh";
     homepage = "https://gitlab.com/tista500/plata-theme";
     license = with licenses; [ gpl2 cc-by-sa-40 ];
     platforms = platforms.linux;

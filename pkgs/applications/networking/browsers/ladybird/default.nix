@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
+    description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
     homepage = "https://ladybird.dev";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];

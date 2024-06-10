@@ -24,7 +24,7 @@ buildGoModule rec {
   subPackages = [ "cmd/gobgp" ];
 
   meta = with lib; {
-    description = "A CLI tool for GoBGP";
+    description = "CLI tool for GoBGP";
     homepage = "https://osrg.github.io/gobgp/";
     license = licenses.asl20;
     maintainers = with maintainers; [ higebu ];

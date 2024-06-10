@@ -181,7 +181,7 @@ in mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Free and Open Source Geographic Information System";
+    description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; teams.geospatial.members ++ [ lsix ];

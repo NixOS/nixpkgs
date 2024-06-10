@@ -197,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A display server and Wayland compositor developed by Canonical";
+    description = "Display server and Wayland compositor developed by Canonical";
     homepage = "https://mir-server.io";
     changelog = "https://github.com/canonical/mir/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;

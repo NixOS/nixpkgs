@@ -127,7 +127,7 @@ EOF
   '';
 
   meta = {
-    description = "The Z shell";
+    description = "Z shell";
     longDescription = ''
       Zsh is a UNIX command interpreter (shell) usable as an interactive login
       shell and as a shell script command processor.  Of the standard shells,

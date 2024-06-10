@@ -87,7 +87,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/letsencrypt/boulder";
-    description = "An ACME-based certificate authority, written in Go";
+    description = "ACME-based certificate authority, written in Go";
     longDescription = ''
       This is an implementation of an ACME-based CA. The ACME protocol allows
       the CA to automatically verify that an applicant for a certificate

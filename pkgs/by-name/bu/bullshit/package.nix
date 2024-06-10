@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A nonsense phrase generator";
+    description = "Nonsense phrase generator";
     mainProgram = "bullshit";
     homepage = "https://github.com/fceschmidt/bullshit-arch";
     license = licenses.gpl2Only;

@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A cross-platform C library that allows one to defer selection of an OpenGL API and window system until runtime";
+    description = "Cross-platform C library that allows one to defer selection of an OpenGL API and window system until runtime";
     mainProgram = "wflinfo";
     homepage = "https://www.waffle-gl.org/";
     license = licenses.bsd2;

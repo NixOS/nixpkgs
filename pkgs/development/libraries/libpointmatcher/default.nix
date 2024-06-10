@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "An \"Iterative Closest Point\" library for 2-D/3-D mapping in robotic";
+    description = "\"Iterative Closest Point\" library for 2-D/3-D mapping in robotic";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cryptix ];

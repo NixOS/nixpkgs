@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Flix Programming Language";
+    description = "Flix Programming Language";
     mainProgram = "flix";
     homepage = "https://github.com/flix/flix";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

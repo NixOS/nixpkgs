@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "PyPDF2" ];
 
   meta = with lib; {
-    description = "A Pure-Python library built as a PDF toolkit";
+    description = "Pure-Python library built as a PDF toolkit";
     homepage = "https://pypdf2.readthedocs.io/";
     changelog = "https://github.com/py-pdf/PyPDF2/raw/${version}/CHANGELOG.md";
     license = licenses.bsd3;

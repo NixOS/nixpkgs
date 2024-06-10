@@ -49,7 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "twill" ];
 
   meta = with lib; {
-    description = "A simple scripting language for Web browsing";
+    description = "Simple scripting language for Web browsing";
     homepage = "https://twill-tools.github.io/twill/";
     changelog = "https://github.com/twill-tools/twill/releases/tag/v${version}";
     license = licenses.mit;

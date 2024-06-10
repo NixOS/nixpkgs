@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.basic = nixosTests.sway;
 
   meta = {
-    description = "An i3-compatible tiling Wayland compositor";
+    description = "I3-compatible tiling Wayland compositor";
     longDescription = ''
       Sway is a tiling Wayland compositor and a drop-in replacement for the i3
       window manager for X11. It works with your existing i3 configuration and

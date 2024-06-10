@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A command line tool that transforms Lua code";
+    description = "Command line tool that transforms Lua code";
     mainProgram = "darklua";
     homepage = "https://darklua.com";
     changelog = "https://github.com/seaofvoices/darklua/blob/${src.rev}/CHANGELOG.md";

@@ -29,7 +29,7 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   meta = {
-    description = "A simple zero-configuration command-line http server";
+    description = "Simple zero-configuration command-line http server";
     homepage = "https://github.com/http-party/http-server";
     license = lib.licenses.mit;
     mainProgram = "http-server";

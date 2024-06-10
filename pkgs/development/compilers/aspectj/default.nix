@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     homepage = "https://www.eclipse.org/aspectj/";
-    description = "A seamless aspect-oriented extension to the Java programming language";
+    description = "Seamless aspect-oriented extension to the Java programming language";
     license = lib.licenses.epl10;
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];

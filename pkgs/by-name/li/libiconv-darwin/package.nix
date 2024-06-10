@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    description = "An iconv(3) implementation";
+    description = "Iconv(3) implementation";
     homepage = "https://opensource.apple.com/releases/";
     license =
       with lib.licenses;

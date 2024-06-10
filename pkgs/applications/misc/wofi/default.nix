@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A launcher/menu program for wlroots based wayland compositors such as sway";
+    description = "Launcher/menu program for wlroots based wayland compositors such as sway";
     homepage = "https://hg.sr.ht/~scoopta/wofi";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];

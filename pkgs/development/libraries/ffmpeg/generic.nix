@@ -859,7 +859,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "A complete, cross-platform solution to record, convert and stream audio and video";
+    description = "Complete, cross-platform solution to record, convert and stream audio and video";
     homepage = "https://www.ffmpeg.org/";
     changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
     longDescription = ''

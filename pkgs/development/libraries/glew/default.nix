@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "An OpenGL extension loading library for C/C++";
+    description = "OpenGL extension loading library for C/C++";
     homepage = "https://glew.sourceforge.net/";
     license = with licenses; [ /* modified bsd */ free mit gpl2Only ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
     pkgConfigModules = [ "glew" ];

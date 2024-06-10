@@ -26,7 +26,7 @@ buildPythonPackage {
 
   meta = with lib; {
     homepage = "https://github.com/kxxoling/PTable";
-    description = "A simple Python library designed to make it quick and easy to represent tabular data in visually appealing ASCII tables";
+    description = "Simple Python library designed to make it quick and easy to represent tabular data in visually appealing ASCII tables";
     mainProgram = "ptable";
     license = licenses.bsd3;
     maintainers = [ maintainers.mmahut ];

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A better i7 (and now i3, i5) reporting tool for Linux";
+    description = "Better i7 (and now i3, i5) reporting tool for Linux";
     mainProgram = "i7z";
     homepage = "https://github.com/DimitryAndric/i7z";
     license = licenses.gpl2;

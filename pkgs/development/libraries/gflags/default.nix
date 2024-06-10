@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A C++ library that implements commandline flags processing";
+    description = "C++ library that implements commandline flags processing";
     mainProgram = "gflags_completions.sh";
     longDescription = ''
       The gflags package contains a C++ library that implements commandline flags processing.

@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A linux kernel driver for Thrustmaster T150 and TMX Force Feedback wheel";
+    description = "Linux kernel driver for Thrustmaster T150 and TMX Force Feedback wheel";
     homepage = "https://github.com/scarburato/t150_driver";
     license = licenses.gpl2;
     maintainers = [ maintainers.dbalan ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   doCheck = false; # fails with "../build-scripts/test-driver: line 107: -Mstrict: command not found"
 
   meta = with lib;{
-    description = "A MP2 encoder";
+    description = "MP2 encoder";
     mainProgram = "twolame";
     longDescription = ''
       TwoLAME is an optimised MPEG Audio Layer 2 (MP2) encoder based on

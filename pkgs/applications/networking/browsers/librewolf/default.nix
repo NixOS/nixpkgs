@@ -15,7 +15,7 @@ in
   inherit (librewolf-src) extraConfigureFlags extraPatches extraPostPatch extraPassthru;
 
   meta = {
-    description = "A fork of Firefox, focused on privacy, security and freedom";
+    description = "Fork of Firefox, focused on privacy, security and freedom";
     homepage = "https://librewolf.net/";
     maintainers = with lib.maintainers; [ dotlambda squalus ];
     platforms = lib.platforms.unix;

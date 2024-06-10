@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/Nukesor/pueue";
-    description = "A daemon for managing long running shell commands";
+    description = "Daemon for managing long running shell commands";
     longDescription = ''
       Pueue is a command-line task management tool for sequential and parallel
       execution of long-running tasks.

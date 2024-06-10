@@ -227,7 +227,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "An all-in-one collaboration suite";
+    description = "All-in-one collaboration suite";
     homepage = "https://www.feishu.cn/en/";
     downloadPage = "https://www.feishu.cn/en/#en_home_download_block";
     license = licenses.unfree;

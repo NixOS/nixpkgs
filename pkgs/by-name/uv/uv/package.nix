@@ -77,7 +77,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = {
-    description = "An extremely fast Python package installer and resolver, written in Rust";
+    description = "Extremely fast Python package installer and resolver, written in Rust";
     homepage = "https://github.com/astral-sh/uv";
     changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 mit ];

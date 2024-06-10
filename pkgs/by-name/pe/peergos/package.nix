@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://github.com/Peergos/web-ui/releases/tag/v${version}";
-    description = "A p2p, secure file storage, social network and application protocol";
+    description = "P2p, secure file storage, social network and application protocol";
     downloadPage = "https://github.com/Peergos/web-ui";
     homepage = "https://peergos.org/";
     # peergos have agpt3 license, peergos-web-ui have gpl3, both are used

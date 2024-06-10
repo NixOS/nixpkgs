@@ -19,7 +19,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The single-file utility for creating and working with PMTiles archives";
+    description = "Single-file utility for creating and working with PMTiles archives";
     homepage = "https://github.com/protomaps/go-pmtiles";
     license = licenses.bsd3;
     maintainers = [ maintainers.theaninova ];

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/softprops/git-codeowners";
-    description = "a git extension to work with CODEOWNERS files";
+    description = "Git extension to work with CODEOWNERS files";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
     mainProgram = "git-codeowners";

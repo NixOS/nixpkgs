@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A cargo subcommand to manage local registries";
+    description = "Cargo subcommand to manage local registries";
     mainProgram = "cargo-local-registry";
     homepage = "https://github.com/dhovart/cargo-local-registry";
     changelog = "https://github.com/dhovart/cargo-local-registry/releases/tag/${src.rev}";

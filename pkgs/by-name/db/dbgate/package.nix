@@ -27,7 +27,7 @@ let
       .${stdenv.system} or (throw "dbgate: ${stdenv.system} is unsupported.");
 
   meta = with lib; {
-    description = "Database manager for MySQL, PostgreSQL, SQL Server, MongoDB, SQLite and others.";
+    description = "Database manager for MySQL, PostgreSQL, SQL Server, MongoDB, SQLite and others";
     homepage = "https://github.com/dbgate/dbgate";
     license = licenses.mit;
     maintainers = with maintainers; [ luftmensch-luftmensch ];

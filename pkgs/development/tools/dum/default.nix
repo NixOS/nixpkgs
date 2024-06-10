@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-aMx4xfWYiiz5TY/CVCogZ3WNR6md77jb8RKhhVwqeto=";
 
   meta = with lib; {
-    description = "An npm scripts runner written in Rust";
+    description = "Npm scripts runner written in Rust";
     mainProgram = "dum";
     homepage = "https://github.com/egoist/dum";
     changelog = "https://github.com/egoist/dum/blob/v${version}/CHANGELOG.md";

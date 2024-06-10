@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "a software development technology specifically designed for engineering high-reliability applications";
+    description = "Software development technology specifically designed for engineering high-reliability applications";
     homepage = "https://github.com/AdaCore/spark2014";
     maintainers = [ maintainers.jiegec ];
     license = licenses.gpl3;

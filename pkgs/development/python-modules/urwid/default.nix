@@ -76,7 +76,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "urwid" ];
 
   meta = with lib; {
-    description = "A full-featured console (xterm et al.) user interface library";
+    description = "Full-featured console (xterm et al.) user interface library";
     changelog = "https://github.com/urwid/urwid/releases/tag/${version}";
     downloadPage = "https://github.com/urwid/urwid";
     homepage = "https://urwid.org/";

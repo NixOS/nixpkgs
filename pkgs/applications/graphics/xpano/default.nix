@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A panorama stitching tool";
+    description = "Panorama stitching tool";
     mainProgram = "Xpano";
     homepage = "https://krupkat.github.io/xpano/";
     changelog = "https://github.com/krupkat/xpano/releases/tag/v${version}";

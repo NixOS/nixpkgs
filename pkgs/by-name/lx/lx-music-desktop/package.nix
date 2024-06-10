@@ -76,7 +76,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A music software based on Electron and Vue";
+    description = "Music software based on Electron and Vue";
     homepage = "https://github.com/lyswhut/lx-music-desktop";
     changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${version}";
     license = licenses.asl20;

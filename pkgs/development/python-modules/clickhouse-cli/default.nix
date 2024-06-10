@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "clickhouse_cli" ];
 
   meta = with lib; {
-    description = "A third-party client for the Clickhouse DBMS server";
+    description = "Third-party client for the Clickhouse DBMS server";
     mainProgram = "clickhouse-cli";
     homepage = "https://github.com/hatarist/clickhouse-cli";
     license = licenses.mit;

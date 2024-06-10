@@ -43,7 +43,7 @@ buildGoModule rec {
   passthru.tests.test = nixosTests.terminal-emulators.darktile;
 
   meta = with lib; {
-    description = "A GPU rendered terminal emulator designed for tiling window managers";
+    description = "GPU rendered terminal emulator designed for tiling window managers";
     homepage = "https://github.com/liamg/darktile";
     downloadPage = "https://github.com/liamg/darktile/releases";
     changelog = "https://github.com/liamg/darktile/releases/tag/v${version}";

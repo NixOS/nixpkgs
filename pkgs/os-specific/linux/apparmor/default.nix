@@ -27,7 +27,7 @@ let
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
-    description = "A mandatory access control system - ${component}";
+    description = "Mandatory access control system - ${component}";
     license = with licenses; [ gpl2Only lgpl21Only ];
     maintainers = with maintainers; [ julm thoughtpolice ] ++ teams.helsinki-systems.members;
     platforms = platforms.linux;

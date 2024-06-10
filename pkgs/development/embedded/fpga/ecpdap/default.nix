@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A tool to program ECP5 FPGAs";
+    description = "Tool to program ECP5 FPGAs";
     mainProgram = "ecpdap";
     longDescription = ''
       ECPDAP allows you to program ECP5 FPGAs and attached SPI flash

@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A scalable, distributed, collaborative, document-graph database, for the realtime web";
+    description = "Scalable, distributed, collaborative, document-graph database, for the realtime web";
     homepage = "https://surrealdb.com/";
     mainProgram = "surreal";
     license = licenses.bsl11;

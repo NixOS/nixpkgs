@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   passthru.tests.coturn = nixosTests.coturn;
 
   meta = with lib; {
-    description = "A TURN server";
+    description = "TURN server";
     homepage = "https://coturn.net/";
     changelog = "https://github.com/coturn/coturn/blob/${version}/ChangeLog";
     license = with licenses; [ bsd3 ];

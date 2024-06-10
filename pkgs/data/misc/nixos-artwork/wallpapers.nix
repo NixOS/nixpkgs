@@ -274,7 +274,7 @@ rec {
 
   simple-dark-gray-bootloader = mkNixBackground {
     name = "simple-dark-gray-bootloader-2018-08-28";
-    description = "Simple dark gray background for NixOS, specifically bootloaders.";
+    description = "Simple dark gray background for NixOS, specifically bootloaders";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/9d1f11f652ed5ffe460b6c602fbfe2e7e9a08dff/bootloader/nix-wallpaper-simple-dark-gray_bootloader.png";
       hash = "sha256-Sd52CEw/pHmk6Cs+yrM/8wscG9bvYuECylQd27ybRmw=";
@@ -284,7 +284,7 @@ rec {
 
   simple-dark-gray-bottom = mkNixBackground {
     name = "simple-dark-gray-2018-08-28";
-    description = "Simple dark gray background for NixOS, specifically bootloaders and graphical login.";
+    description = "Simple dark gray background for NixOS, specifically bootloaders and graphical login";
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/783c38b22de09f6ee33aacc817470a4513392d83/wallpapers/nix-wallpaper-simple-dark-gray_bottom.png";
       hash = "sha256-JUyzf9dYRyLQmxJPKptDxXL7yRqAFt5uM0C9crkkEY4=";

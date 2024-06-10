@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://hboehm.info/gc/";
-    description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
+    description = "Boehm-Demers-Weiser conservative garbage collector for C and C++";
     longDescription = ''
       The Boehm-Demers-Weiser conservative garbage collector can be used as a
       garbage collecting replacement for C malloc or C++ new.  It allows you

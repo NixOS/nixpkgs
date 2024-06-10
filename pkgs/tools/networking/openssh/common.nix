@@ -186,7 +186,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "An implementation of the SSH protocol${extraDesc}";
+    description = "Implementation of the SSH protocol${extraDesc}";
     homepage = "https://www.openssh.com/";
     changelog = "https://www.openssh.com/releasenotes.html";
     license = licenses.bsd2;

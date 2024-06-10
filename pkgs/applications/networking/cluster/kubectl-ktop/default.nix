@@ -27,7 +27,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A top-like tool for your Kubernetes clusters";
+    description = "Top-like tool for your Kubernetes clusters";
     homepage = "https://github.com/vladimirvivien/ktop";
     changelog = "https://github.com/vladimirvivien/ktop/releases/tag/v${version}";
     license = licenses.asl20;

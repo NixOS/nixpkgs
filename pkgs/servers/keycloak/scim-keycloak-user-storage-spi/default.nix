@@ -22,7 +22,7 @@ maven.buildMavenPackage {
 
   meta = with lib; {
     homepage = "https://github.com/justin-stephenson/scim-keycloak-user-storage-spi";
-    description = "A third party module that extends Keycloak, allow for user storage in an external scimv2 server";
+    description = "Third party module that extends Keycloak, allow for user storage in an external scimv2 server";
     sourceProvenance = with sourceTypes; [
       fromSource
     ];

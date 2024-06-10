@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A modern experience for GDB with advanced debugging features for exploit developers & reverse engineers";
+    description = "Modern experience for GDB with advanced debugging features for exploit developers & reverse engineers";
     mainProgram = "gef";
     homepage = "https://github.com/hugsy/gef";
     license = licenses.mit;

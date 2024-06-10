@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A proof assistant for Nominal Computational Type Theory";
+    description = "Proof assistant for Nominal Computational Type Theory";
     mainProgram = "redprl";
     homepage = "http://www.redprl.org/";
     license = licenses.mit;

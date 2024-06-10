@@ -29,7 +29,7 @@ mkCoqDerivation {
 
   meta = {
     homepage = "https://github.com/fblanqui/color";
-    description = "CoLoR is a library of formal mathematical definitions and proofs of theorems on rewriting theory and termination whose correctness has been mechanically checked by the Coq proof assistant.";
+    description = "CoLoR is a library of formal mathematical definitions and proofs of theorems on rewriting theory and termination whose correctness has been mechanically checked by the Coq proof assistant";
     maintainers = with lib.maintainers; [ jpas jwiegley ];
   };
 }

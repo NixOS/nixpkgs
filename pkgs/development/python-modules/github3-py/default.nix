@@ -61,7 +61,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github3py.readthedocs.org/en/master/";
-    description = "A wrapper for the GitHub API written in python";
+    description = "Wrapper for the GitHub API written in python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
   };

@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://codeberg.org/ifreund/waylock";
     changelog = "https://codeberg.org/ifreund/waylock/releases/tag/v${finalAttrs.version}";
-    description = "A small screenlocker for Wayland compositors";
+    description = "Small screenlocker for Wayland compositors";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
       adamcstephens

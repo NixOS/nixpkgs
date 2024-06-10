@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "LPrint implements printing for a variety of common label and receipt printers connected via network or USB.";
+    description = "LPrint implements printing for a variety of common label and receipt printers connected via network or USB";
     mainProgram = "lprint";
     homepage = "https://github.com/michaelrsweet/lprint";
     license = licenses.asl20;

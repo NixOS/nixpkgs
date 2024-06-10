@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://fc-solve.shlomifish.org/";
-    description = "A FreeCell automatic solver";
+    description = "FreeCell automatic solver";
     longDescription = ''
       FreeCell Solver is a program that automatically solves layouts of Freecell
       and similar variants of Card Solitaire such as Eight Off, Forecell, and

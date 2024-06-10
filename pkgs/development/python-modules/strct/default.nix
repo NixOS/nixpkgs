@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A small pure-python package for data structure related utility functions";
+    description = "Small pure-python package for data structure related utility functions";
     homepage = "https://github.com/shaypal5/strct";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];

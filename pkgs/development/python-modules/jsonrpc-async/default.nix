@@ -38,7 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jsonrpc_async" ];
 
   meta = with lib; {
-    description = "A JSON-RPC client library for asyncio";
+    description = "JSON-RPC client library for asyncio";
     homepage = "https://github.com/emlove/jsonrpc-async";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];

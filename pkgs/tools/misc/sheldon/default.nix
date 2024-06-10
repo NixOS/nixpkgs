@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A fast and configurable shell plugin manager";
+    description = "Fast and configurable shell plugin manager";
     homepage = "https://github.com/rossmacarthur/sheldon";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ seqizz ];

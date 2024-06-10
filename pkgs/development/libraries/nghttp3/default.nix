@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/nghttp3";
-    description = "nghttp3 is an implementation of HTTP/3 mapping over QUIC and QPACK in C.";
+    description = "nghttp3 is an implementation of HTTP/3 mapping over QUIC and QPACK in C";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ izorkin ];

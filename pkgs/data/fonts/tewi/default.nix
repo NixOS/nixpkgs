@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A nice bitmap font, readable even at small sizes";
+    description = "Nice bitmap font, readable even at small sizes";
     longDescription = ''
       Tewi is a bitmap font, readable even at very small font sizes. This is
       particularily useful while programming, to fit a lot of code on your

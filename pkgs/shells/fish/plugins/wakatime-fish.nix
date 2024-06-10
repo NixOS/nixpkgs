@@ -22,7 +22,7 @@ buildFishPlugin rec {
   '';
 
   meta = with lib; {
-    description = "A fish plugin for wakatime";
+    description = "Fish plugin for wakatime";
     homepage = "https://github.com/ik11235/wakatime.fish";
     license = licenses.mit;
     maintainers = with maintainers; [ ocfox ];

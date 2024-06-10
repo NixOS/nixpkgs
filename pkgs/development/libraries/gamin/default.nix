@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage    = "https://people.gnome.org/~veillard/gamin/";
-    description = "A file and directory monitoring system";
+    description = "File and directory monitoring system";
     maintainers = with maintainers; [ lovek323 ];
     license = licenses.gpl2;
     platforms   = platforms.unix;

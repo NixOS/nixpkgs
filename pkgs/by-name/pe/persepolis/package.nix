@@ -75,7 +75,7 @@ python3.pkgs.buildPythonApplication rec {
   ]);
 
   meta = with lib; {
-    description = "A GUI for aria2";
+    description = "GUI for aria2";
     mainProgram = "persepolis";
     homepage = "https://persepolisdm.github.io/";
     license = licenses.gpl3Plus;

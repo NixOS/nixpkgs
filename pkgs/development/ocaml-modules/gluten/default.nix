@@ -24,7 +24,7 @@ buildDunePackage rec {
   doCheck = false; # No tests
 
   meta = {
-    description = "An implementation of a platform specific runtime code for driving network libraries based on state machines, such as http/af, h2 and websocketaf";
+    description = "Implementation of a platform specific runtime code for driving network libraries based on state machines, such as http/af, h2 and websocketaf";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/anmonteiro/gluten";
     maintainers = with lib.maintainers; [ anmonteiro ];

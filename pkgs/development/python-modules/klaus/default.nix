@@ -53,7 +53,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The first Git web viewer that Just Works";
+    description = "First Git web viewer that Just Works";
     mainProgram = "klaus";
     homepage = "https://github.com/jonashaag/klaus";
     license = licenses.isc;

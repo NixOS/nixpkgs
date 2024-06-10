@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A high-performance theorem prover and SMT solver";
+    description = "High-performance theorem prover and SMT solver";
     homepage    = "https://yices.csl.sri.com";
     license     = licenses.gpl3;
     platforms   = with platforms; linux ++ darwin;

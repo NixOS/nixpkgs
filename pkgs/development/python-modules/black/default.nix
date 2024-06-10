@@ -107,7 +107,7 @@ buildPythonPackage rec {
   doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   meta = with lib; {
-    description = "The uncompromising Python code formatter";
+    description = "Uncompromising Python code formatter";
     homepage = "https://github.com/psf/black";
     changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
     license = licenses.mit;

@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://redis.io";
-    description = "An open source, advanced key-value store";
+    description = "Open source, advanced key-value store";
     license = licenses.bsd3;
     platforms = platforms.all;
     changelog = "https://github.com/redis/redis/raw/${finalAttrs.version}/00-RELEASENOTES";

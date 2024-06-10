@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://cimg.eu/";
-    description = "A small, open source, C++ toolkit for image processing";
+    description = "Small, open source, C++ toolkit for image processing";
     longDescription = ''
       CImg stands for Cool Image. It is easy to use, efficient and is intended
       to be a very pleasant toolbox to design image processing algorithms in

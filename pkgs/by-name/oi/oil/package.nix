@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
-    description = "A new unix shell - Python version";
+    description = "New unix shell - Python version";
     homepage = "https://www.oilshell.org/";
 
     license = with lib.licenses; [

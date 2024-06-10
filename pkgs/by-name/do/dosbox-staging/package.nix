@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://dosbox-staging.github.io/";
-    description = "A modernized DOS emulator";
+    description = "Modernized DOS emulator";
     longDescription = ''
       DOSBox Staging is an attempt to revitalize DOSBox's development
       process. It's not a rewrite, but a continuation and improvement on the

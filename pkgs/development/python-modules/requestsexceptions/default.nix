@@ -23,7 +23,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Import exceptions from potentially bundled packages in requests.";
+    description = "Import exceptions from potentially bundled packages in requests";
     homepage = "https://pypi.python.org/pypi/requestsexceptions";
     license = licenses.asl20;
     maintainers = with maintainers; [ makefu ];

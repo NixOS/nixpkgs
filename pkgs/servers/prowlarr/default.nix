@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An indexer manager/proxy built on the popular arr .net/reactjs base stack";
+    description = "Indexer manager/proxy built on the popular arr .net/reactjs base stack";
     homepage = "https://wiki.servarr.com/prowlarr";
     changelog = "https://github.com/Prowlarr/Prowlarr/releases/tag/v${version}";
     license = licenses.gpl3Only;

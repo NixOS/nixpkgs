@@ -47,7 +47,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A tool to generate documentation based on a database structure";
+    description = "Tool to generate documentation based on a database structure";
     homepage = "https://github.com/k1LoW/tbls";
     changelog = "https://github.com/k1LoW/tbls/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

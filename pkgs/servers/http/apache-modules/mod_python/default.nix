@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://modpython.org/";
     changelog = "https://github.com/grisha/mod_python/blob/${version}/NEWS";
-    description = "An Apache module that embeds the Python interpreter within the server";
+    description = "Apache module that embeds the Python interpreter within the server";
     mainProgram = "mod_python";
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

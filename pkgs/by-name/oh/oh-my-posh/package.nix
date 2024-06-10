@@ -52,7 +52,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A prompt theme engine for any shell";
+    description = "Prompt theme engine for any shell";
     mainProgram = "oh-my-posh";
     homepage = "https://ohmyposh.dev";
     changelog = "https://github.com/JanDeDobbeleer/oh-my-posh/releases/tag/v${version}";

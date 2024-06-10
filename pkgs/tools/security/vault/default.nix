@@ -44,7 +44,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://www.vaultproject.io/";
-    description = "A tool for managing secrets";
+    description = "Tool for managing secrets";
     changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
     license = licenses.bsl11;
     mainProgram = "vault";

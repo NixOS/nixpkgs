@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = "make PREFIX=$out copy-data";
 
   meta = with lib; {
-    description = "A CLI program for produce fake datas";
+    description = "CLI program for produce fake datas";
     homepage = "https://github.com/mothsart/pouf";
     changelog = "https://github.com/mothsart/pouf/releases/tag/${version}";
     maintainers = with maintainers; [ mothsart ];

@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     inherit (finalAttrs.src.meta) homepage;
-    description = "A tiling X11 window manager written in modern C++";
+    description = "Tiling X11 window manager written in modern C++";
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (libX11.meta) platforms;

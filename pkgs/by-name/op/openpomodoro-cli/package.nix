@@ -23,7 +23,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A command-line Pomodoro tracker which uses the Open Pomodoro Format";
+    description = "Command-line Pomodoro tracker which uses the Open Pomodoro Format";
     homepage = "https://github.com/open-pomodoro/openpomodoro-cli";
     changelog = "https://github.com/open-pomodoro/openpomodoro-cli/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

@@ -32,7 +32,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A tool to help users who are familiar with docker-compose move to Kubernetes";
+    description = "Tool to help users who are familiar with docker-compose move to Kubernetes";
     mainProgram = "kompose";
     homepage = "https://kompose.io";
     license = licenses.asl20;

@@ -55,7 +55,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "matchpy" ];
 
   meta = with lib; {
-    description = "A library for pattern matching on symbolic expressions";
+    description = "Library for pattern matching on symbolic expressions";
     homepage = "https://github.com/HPAC/matchpy";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

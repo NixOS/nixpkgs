@@ -19,7 +19,7 @@ appimageTools.wrapType2 rec {
     '';
 
   meta = with lib; {
-    description = "An app for managing ROMs in Steam";
+    description = "App for managing ROMs in Steam";
     homepage = "https://github.com/SteamGridDB/steam-rom-manager";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ squarepear ];

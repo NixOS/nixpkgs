@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A client library for the GoCardless Pro API";
+    description = "Client library for the GoCardless Pro API";
     homepage = "https://github.com/gocardless/gocardless-pro-python";
     changelog = "https://github.com/gocardless/gocardless-pro-python/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

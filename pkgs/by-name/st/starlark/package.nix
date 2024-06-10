@@ -16,7 +16,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/google/starlark-go";
-    description = "An interpreter for Starlark, implemented in Go";
+    description = "Interpreter for Starlark, implemented in Go";
     license = licenses.bsd3;
     maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "starlark";

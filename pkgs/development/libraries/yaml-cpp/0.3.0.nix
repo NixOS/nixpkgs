@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = with lib; {
-    description = "A YAML parser and emitter for C++";
+    description = "YAML parser and emitter for C++";
     homepage = "https://github.com/jbeder/yaml-cpp";
     license = licenses.mit;
     platforms = platforms.all;

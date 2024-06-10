@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "An extremely fast Python linter";
+    description = "Extremely fast Python linter";
     homepage = "https://github.com/astral-sh/ruff";
     changelog = "https://github.com/astral-sh/ruff/releases/tag/v${version}";
     license = lib.licenses.mit;

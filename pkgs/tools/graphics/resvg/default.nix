@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An SVG rendering library";
+    description = "SVG rendering library";
     homepage = "https://github.com/RazrFalcon/resvg";
     changelog = "https://github.com/RazrFalcon/resvg/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;

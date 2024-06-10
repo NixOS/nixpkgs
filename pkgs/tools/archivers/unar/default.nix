@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://theunarchiver.com";
-    description = "An archive unpacker program";
+    description = "Archive unpacker program";
     longDescription = ''
       The Unarchiver is an archive unpacker program with support for the popular
       zip, RAR, 7z, tar, gzip, bzip2, LZMA, XZ, CAB, MSI, NSIS, EXE, ISO, BIN,

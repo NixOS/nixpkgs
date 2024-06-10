@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://rgbds.gbdev.io/";
-    description = "A free assembler/linker package for the Game Boy and Game Boy Color";
+    description = "Free assembler/linker package for the Game Boy and Game Boy Color";
     license = licenses.mit;
     longDescription =
       ''RGBDS (Rednex Game Boy Development System) is a free assembler/linker package for the Game Boy and Game Boy Color. It consists of:

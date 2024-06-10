@@ -23,7 +23,7 @@ buildGoModule rec {
 
   meta = {
     changelog = "https://github.com/jovandeginste/workout-tracker/releases/tag/v${version}";
-    description = "A workout tracking web application for personal use";
+    description = "Workout tracking web application for personal use";
     homepage = "https://github.com/jovandeginste/workout-tracker";
     license = lib.licenses.mit;
     mainProgram = "workout-tracker";

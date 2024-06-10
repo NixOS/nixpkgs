@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A GTK4 + Libadwaita game launcher";
+    description = "GTK4 + Libadwaita game launcher";
     mainProgram = "cartridges";
     longDescription = ''
       A simple game launcher for all of your games.

@@ -92,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "GUI for managing Git and GitHub.";
+    description = "GUI for managing Git and GitHub";
     homepage = "https://desktop.github.com/";
     license = lib.licenses.mit;
     mainProgram = "github-desktop";
