@@ -442,6 +442,22 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3bb00c0a420c3ce83c6fafee30270d69622ccad7";
         hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
       })
+      ./5.1.4-CVE-2023-49502.patch
+      (fetchpatch2 {
+        name = "CVE-2023-50008.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/5f87a68cf70dafeab2fb89b42e41a4c29053b89b";
+        hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-51793.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/8b8b4bdef311f88c0075a06a25320187aff00bf2";
+        hash = "sha256-e7oGyOfUXuA8XK3vfygNtFlHpHl92O2KSLAo50sNJ5o=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-51796.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e01a55c5283b82667dad347331816a5e20869ce9";
+        hash = "sha256-m4rq+UFG3nXdgOJ3S6XcruMZ+CPw+twmy2HFv3cnvJc=";
+      })
     ]
     ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
       (fetchpatch2 { # this can be removed post 6.1
