@@ -128,12 +128,12 @@ in
 
   write-good = buildStyle rec {
     name = "write-good";
-    version = "0.4.0";
+    version = "0.4.1";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "write-good";
       rev = "v${version}";
-      hash = "sha256-KQzY6MeHV/owPVmUAfzGUO0HmFPkD7wdQqOvBkipwP8=";
+      hash = "sha256-W/eHlXklAVlAnY8nLPi/SIKsg8UUnH8UkH99BDo5yKk=";
     };
     meta = {
       description = "Vale-compatible implementation of the write-good linter";
