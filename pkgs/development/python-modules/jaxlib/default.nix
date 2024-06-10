@@ -52,32 +52,28 @@
 }@inputs:
 
 let
-  inherit (cudaPackages)
-    cudaFlags
-    cudaVersion
-    nccl
-    ;
+  inherit (cudaPackages) cudaFlags cudaVersion nccl;
 
   pname = "jaxlib";
-  version = "0.4.28";
+  version = "0.4.32";
 
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
-  meta = with lib; {
+  meta = {
     description = "Source-built JAX backend. JAX is Autograd and XLA, brought together for high-performance machine learning research";
     homepage = "https://github.com/google/jax";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
 
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
     # Make this platforms.unix once Darwin is supported.
     # The top-level jaxlib now falls back to jaxlib-bin on unsupported platforms.
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 
   # Bazel wants a merged cudnn at configuration time
@@ -199,8 +195,8 @@ let
       owner = "openxla";
       repo = "xla";
       # Update this according to https://github.com/google/jax/blob/jaxlib-v${version}/third_party/xla/workspace.bzl.
-      rev = "e8247c3ea1d4d7f31cf27def4c7ac6f2ce64ecd4";
-      hash = "sha256-ZhgMIVs3Z4dTrkRWDqaPC/i7yJz2dsYXrZbjzqvPX3E=";
+      rev = "720b2c53346660e95abbed7cf3309a8b85e979f9";
+      hash = "sha256-9+YmFAYbOLDw5K3J14CqnwNxMoiU1/iIKC2gs2PlBBA=";
     };
 
     dontBuild = true;
@@ -229,7 +225,7 @@ let
       repo = "jax";
       # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
       rev = "refs/tags/${pname}-v${version}";
-      hash = "sha256-qSHPwi3is6Ts7pz5s4KzQHBMbcjGp+vAOsejW3o36Ek=";
+      hash = "sha256-ApzbztRZTPqXJasoIkfk8GN0T65xYYbcRlFfydKxj64=";
     };
 
     nativeBuildInputs = [
@@ -385,20 +381,20 @@ let
       sha256 =
         (
           if cudaSupport then
-            { x86_64-linux = "sha256-Uf0VMRE0jgaWEYiuphWkWloZ5jMeqaWBl3lSvk2y1HI="; }
+            { x86_64-linux = ""; }
           else
             {
-              x86_64-linux = "sha256-NzJJg6NlrPGMiR8Fn8u4+fu0m+AulfmN5Xqk63Um6sw=";
-              aarch64-linux = "sha256-Ro3qzrUxSR+3TH6ROoJTq+dLSufrDN/9oEo2MRkx7wM=";
+              x86_64-linux = "";
+              aarch64-linux = "";
             }
         ).${effectiveStdenv.system} or (throw "jaxlib: unsupported system: ${effectiveStdenv.system}");
 
-        # Non-reproducible fetch https://github.com/NixOS/nixpkgs/issues/321920#issuecomment-2184940546
-        preInstall = ''
-          cat << \EOF > "$bazelOut/external/go_sdk/versions.json"
-          []
-          EOF
-        '';
+      # Non-reproducible fetch https://github.com/NixOS/nixpkgs/issues/321920#issuecomment-2184940546
+      preInstall = ''
+        cat << \EOF > "$bazelOut/external/go_sdk/versions.json"
+        []
+        EOF
+      '';
     };
 
     buildAttrs = {
