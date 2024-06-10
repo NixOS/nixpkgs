@@ -6,6 +6,7 @@ let
     ];
     config = {
       nix.settings.experimental-features = [ "nix-command" "flakes" ];
+      nix.settings.trusted-users = [ "root" "xnode" ];
       documentation = {
         nixos = {
           enable = false;
@@ -43,6 +44,7 @@ let
                               imports=[./hardware-configuration.nix] ++ lib.optional (builtins.pathExists /var/lib/openmesh-xnode-admin/config.nix) /var/lib/openmesh-xnode-admin/config.nix ++ lib.optional (builtins.pathExists /var/lib/openmesh-xnode-admin/xnodeos) /var/lib/openmesh-xnode-admin/xnodeos/repo/modules/services/openmesh/xnode/admin.nix ;
                               config = {
                                 nix.settings.experimental-features = [ "nix-command" "flakes" ];
+                                nix.settings.trusted-users = [ "root" "xnode" ];
                                 boot.loader.grub.enable=false;
                                 services.openmesh.xnode.admin = {
                                   enable = true;
@@ -97,7 +99,6 @@ let
 
                               boot.initrd = {
                                 availableKernelModules = [
-                                  # To mount /nix/store
                                   "squashfs"
                                   "overlay"
                                 ];
