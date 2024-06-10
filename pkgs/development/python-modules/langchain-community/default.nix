@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.2.1";
+  version = "0.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "langchain-community==${version}";
-    hash = "sha256-h8ZJiQYmyvzaRrEVNS7SamJTq4zY7J1IgYdQiVBFh4I=";
+    hash = "sha256-rqlYaSfDZIQHCndsnydeR1oeVZNIOH6NAgXeOSdBF5A=";
   };
 
   sourceRoot = "${src.name}/libs/community";
@@ -83,11 +83,13 @@ buildPythonPackage rec {
     updateScript = langchain-core.updateScript;
   };
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Community contributed LangChain integrations";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }
