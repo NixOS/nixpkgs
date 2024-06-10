@@ -49,5 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dnanexus/dx-toolkit/tree/master/src/python";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [giang];
+    mainProgram = "dx";
   };
 }
