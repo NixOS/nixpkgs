@@ -17,7 +17,7 @@ buildDunePackage rec {
     homepage = "https://ocaml.org/p/memprof-limits/latest";
     description =
       "Memory limits, allocation limits, and thread cancellation for OCaml";
-    liscense = licenses.lgpl3;
+    license = licenses.lgpl3;
     maintainers = with maintainers; [ alizter ];
   };
 }
