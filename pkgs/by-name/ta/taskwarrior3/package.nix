@@ -8,6 +8,7 @@
   fetchFromGitHub,
   cmake,
   libuuid,
+  nixosTests,
   python3,
   xdg-utils,
   installShellFiles,
@@ -74,6 +75,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/nvim
     ln -s $out/share/vim-plugins/task $out/share/nvim/site
   '';
+
+  passthru.tests.nixos = nixosTests.taskchampion-sync-server;
 
   meta = {
     changelog = "https://github.com/GothenburgBitFactory/taskwarrior/blob/${src.rev}/ChangeLog";
