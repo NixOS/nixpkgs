@@ -15225,6 +15225,8 @@ self: super: with self; {
 
   timm = callPackage ../development/python-modules/timm { };
 
+  timy = callPackage ../development/python-modules/timy { };
+
   tiny-cuda-nn = toPythonModule (pkgs.tiny-cuda-nn.override {
     cudaPackages = self.torch.cudaPackages;
     python3Packages = self;
