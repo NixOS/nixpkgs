@@ -297,10 +297,10 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-fceumm",
-            "rev": "c970bcc2b527f2c9d072e3ad2a5e3b4143246e25",
-            "hash": "sha256-EOtUExsYIXyuX2bTzs9Ia0i9aIMdXVByhZ+S0bSPfJw="
+            "rev": "bc9d865f9427384e40084cb090d94d72d4970e78",
+            "hash": "sha256-/g7gRNWDbW5LFZ+uBkIf5DMELas0/ilqbmUbvq8YSsE="
         },
-        "version": "unstable-2024-05-29"
+        "version": "unstable-2024-06-09"
     },
     "flycast": {
         "fetcher": "fetchFromGitHub",
