@@ -62,7 +62,7 @@
 
 final: prev:
 let
-  inherit (prev) luaOlder luaAtLeast lua isLuaJIT;
+  inherit (prev) luaOlder luaAtLeast lua isLuaJIT isLua51;
 in
 {
   argparse = prev.argparse.overrideAttrs(oa: {
@@ -522,6 +522,27 @@ in
       broken = luaOlder "5.1" || (luaAtLeast "5.4");
       platforms = lib.platforms.linux;
     };
+  });
+
+  neotest  = prev.neotest.overrideAttrs(oa: {
+    doCheck = true;
+    nativeCheckInputs = oa.nativeCheckInputs ++ [
+      final.nlua final.busted neovim-unwrapped
+    ];
+
+    # stick to neovim's lua version else loading shared libraries fail
+    meta = oa.meta // { broken = !isLua51; };
+
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      export LUA_PATH="./lua/?.lua;./lua/?/init.lua;$LUA_PATH"
+      nvim --headless -i NONE \
+        --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
+        -c "PlenaryBustedDirectory tests/ {}"
+
+      runHook postCheck
+      '';
   });
 
   haskell-tools-nvim  = prev.haskell-tools-nvim.overrideAttrs(oa: {
