@@ -3,7 +3,6 @@
 , buildPackages
 , buildPlatform
 , pkgsBuildBuild
-, pkgsBuildTarget
 # Channel data:
 , channel, upstream-info
 # Helper functions:
@@ -382,8 +381,8 @@ let
     llvmCcAndBintools = symlinkJoin {
       name = "llvmCcAndBintools";
       paths = [
-        pkgsBuildTarget.${llvmPackages_attrName}.llvm
-        pkgsBuildTarget.${llvmPackages_attrName}.stdenv.cc
+        buildPackages.${llvmPackages_attrName}.llvm
+        buildPackages.${llvmPackages_attrName}.stdenv.cc
       ];
     };
 
