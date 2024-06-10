@@ -1,0 +1,12 @@
+diff --git a/configure.ac b/configure.ac
+index ee72283..b42c42a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -19,7 +19,6 @@ AM_SILENT_RULES([yes])
+ LT_INIT([disable-static pic-only])
+ DOLT
+ 
+-AS_IF([test "x$enable_static" = "xyes"], [AC_MSG_ERROR([--enable-static is not supported by kmod])])
+ AS_IF([test "x$enable_largefile" = "xno"], [AC_MSG_ERROR([--disable-largefile is not supported by kmod])])
+ 
+ #####################################################################

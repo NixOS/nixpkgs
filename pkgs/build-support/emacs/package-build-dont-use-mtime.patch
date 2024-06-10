@@ -1,0 +1,21 @@
+diff --git a/package-build.el b/package-build.el
+index 29cdb61..c19be1b 100644
+--- a/package-build.el
++++ b/package-build.el
+@@ -923,7 +923,6 @@ DIRECTORY is a temporary directory that contains the directory
+ that is put in the tarball."
+   (let* ((name (oref rcp name))
+          (version (oref rcp version))
+-         (time (oref rcp time))
+          (tar (expand-file-name (concat name "-" version ".tar")
+                                 package-build-archive-dir))
+          (dir (concat name "-" version)))
+@@ -939,7 +938,7 @@ that is put in the tarball."
+        ;; prevent a reproducible tarball as described at
+        ;; https://reproducible-builds.org/docs/archives.
+        "--sort=name"
+-       (format "--mtime=@%d" time)
++       "--mtime=@0"
+        "--owner=0" "--group=0" "--numeric-owner"
+        "--pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime"))
+     (when (and package-build-verbose noninteractive)

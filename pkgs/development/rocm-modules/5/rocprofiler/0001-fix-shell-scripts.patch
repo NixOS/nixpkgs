@@ -1,0 +1,111 @@
+diff --git a/bin/rocprofv2 b/bin/rocprofv2
+index 92f7489..8839d4d 100755
+--- a/bin/rocprofv2
++++ b/bin/rocprofv2
+@@ -2,7 +2,8 @@
+ set -eo pipefail
+ CURRENT_DIR="$(dirname -- "$0")"
+ ROCPROFV2_DIR=$(dirname -- $(realpath ${BASH_SOURCE[0]}))
+-ROCM_DIR=$(dirname -- "$ROCPROFV2_DIR")
++ROCPROFILER_DIR=$(dirname -- "$ROCPROFV2_DIR")
++ROCM_DIR=@rocmtoolkit_merged@
+ PLUGIN_LIST=("ctf" "perfetto" "file" "att")
+ RUN_FROM_BUILD=0
+ if [[ $ROCPROFV2_DIR == *"/build"* ]]; then
+@@ -10,7 +11,7 @@ if [[ $ROCPROFV2_DIR == *"/build"* ]]; then
+   ROCM_DIR=$ROCPROFV2_DIR
+ fi
+ 
+-export ROCPROFILER_METRICS_PATH=$ROCM_DIR/libexec/rocprofiler/counters/derived_counters.xml
++export ROCPROFILER_METRICS_PATH=$ROCPROFILER_DIR/libexec/rocprofiler/counters/derived_counters.xml
+ export LD_LIBRARY_PATH=$ROCM_DIR/lib:$LD_LIBRARY_PATH
+ 
+ usage() {
+@@ -70,8 +71,8 @@ while [ 1 ]; do
+       exit 1
+     fi
+   elif [[ "$1" = "--list-counters" ]]; then
+-    export LD_PRELOAD=$LD_PRELOAD:$ROCM_DIR/lib/rocprofiler/librocprofiler_tool.so
+-    eval $ROCM_DIR/libexec/rocprofiler/ctrl
++    export LD_PRELOAD=$LD_PRELOAD:$ROCPROFILER_DIR/lib/rocprofiler/librocprofiler_tool.so
++    eval $ROCPROFILER_DIR/libexec/rocprofiler/ctrl
+     exit 1
+   elif [[ "$1" = "-i" || "$1" = "--input" ]]; then
+     if [ $2 ] && [ -n $2 ] && [ -r $2 ]; then
+@@ -171,7 +172,7 @@ while [ 1 ]; do
+       if [ $RUN_FROM_BUILD == 1 ]; then
+         ATT_PATH=$ROCM_DIR/plugin/att/att/att.py
+       else
+-        ATT_PATH=$ROCM_DIR/libexec/rocprofiler/att/att.py
++        ATT_PATH=$ROCPROFILER_DIR/libexec/rocprofiler/att/att.py
+         export ROCPROFV2_ATT_LIB_PATH=$ROCM_DIR/lib/hsa-amd-aqlprofile/librocprofv2_att.so
+       fi
+       ATT_ARGV=$3
+@@ -236,13 +237,13 @@ if [ -n "$PMC_LINES" ] && [ ! -n "$ATT_ARGV" ]; then
+       export OUTPUT_PATH=$FINAL_PATH
+     fi
+     let COUNTER=COUNTER+1
+-    LD_PRELOAD=$LD_PRELOAD:$ROCM_DIR/lib/rocprofiler/librocprofiler_tool.so $*
++    LD_PRELOAD=$LD_PRELOAD:$ROCPROFILER_DIR/lib/rocprofiler/librocprofiler_tool.so $*
+     if [ -n "$OUTPUT_PATH" ]; then
+       echo -e "\nThe output path for the following counters: $OUTPUT_PATH"
+     fi
+   done
+ else
+-  LD_PRELOAD=$LD_PRELOAD:$ROCM_DIR/lib/rocprofiler/librocprofiler_tool.so $*
++  LD_PRELOAD=$LD_PRELOAD:$ROCPROFILER_DIR/lib/rocprofiler/librocprofiler_tool.so $*
+ fi
+ 
+ get_pmc_results_txt_path() {
+diff --git a/bin/rpl_run.sh b/bin/rpl_run.sh
+index c1a3daa..bc868a5 100755
+--- a/bin/rpl_run.sh
++++ b/bin/rpl_run.sh
+@@ -24,16 +24,17 @@
+ 
+ time_stamp=`date +%y%m%d_%H%M%S`
+ BIN_DIR=$(dirname $(realpath ${BASH_SOURCE[0]}))
+-ROOT_DIR=$(dirname $BIN_DIR)
++ROCPROFILER_DIR=$(dirname $BIN_DIR)
++ROOT_DIR=@rocmtoolkit_merged@
+ RUN_DIR=`pwd`
+ TMP_DIR="/tmp"
+ DATA_DIR="rpl_data_${time_stamp}_$$"
+ 
+-RPL_PATH=$ROOT_DIR/lib
++RPL_PATH=$ROCPROFILER_DIR/lib
+ TLIB_PATH=$RPL_PATH/rocprofiler
+ TTLIB_PATH=$ROOT_DIR/lib/roctracer
+ ROCM_LIB_PATH=$ROOT_DIR/lib
+-PROF_BIN_DIR=$ROOT_DIR/libexec/rocprofiler
++PROF_BIN_DIR=$ROCPROFILER_DIR/libexec/rocprofiler
+ 
+ if [ -z "$ROCP_PYTHON_VERSION" ] ; then
+   ROCP_PYTHON_VERSION=python3
+@@ -73,7 +74,7 @@ export ROCP_METRICS=$TLIB_PATH/metrics.xml
+ # Disable AQL-profile read API
+ export AQLPROFILE_READ_API=0
+ # ROC Profiler package path
+-export ROCP_PACKAGE_DIR=$ROOT_DIR
++export ROCP_PACKAGE_DIR=$ROCPROFILER_DIR
+ # enabled SPM KFD mode
+ export ROCP_SPM_KFD_MODE=1
+ 
+@@ -350,7 +351,7 @@ convert_time_val() {
+ 
+ ################################################################################################
+ # main
+-echo "RPL: on '$time_stamp' from '$ROOT_DIR' in '$RUN_DIR'"
++echo "RPL: on '$time_stamp' from '$ROCPROFILER_DIR' in '$RUN_DIR'"
+ # Parsing arguments
+ if [ -z "$1" ] ; then
+   usage
+@@ -557,7 +558,7 @@ elif [ "$input_type" = "txt" -o "$input_type" = "none" ] ; then
+   else
+     echo "<metric></metric>" > $RES_DIR/input.xml
+   fi
+-  input_list=`/bin/ls $RES_DIR/input*.xml`
++  input_list=`ls $RES_DIR/input*.xml`
+   export ROCPROFILER_SESS=$RES_DIR
+ else
+   fatal "Bad input file type '$INPUT_FILE'"

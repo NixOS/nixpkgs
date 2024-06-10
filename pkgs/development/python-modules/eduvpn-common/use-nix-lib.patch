@@ -1,0 +1,25 @@
+diff --git a/eduvpn_common/loader.py b/eduvpn_common/loader.py
+index 673d180..195f8c1 100644
+--- a/eduvpn_common/loader.py
++++ b/eduvpn_common/loader.py
+@@ -21,6 +21,7 @@ def load_lib() -> CDLL:
+     :return: The Go shared library loaded with cdll.LoadLibrary from ctypes
+     :rtype: CDLL
+     """
++    return cdll.LoadLibrary("@libeduvpn-common@")
+     lib_prefixes = defaultdict(
+         lambda: "lib",
+         {
+diff --git a/setup.py b/setup.py
+index 0d23379..a9d7926 100755
+--- a/setup.py
++++ b/setup.py
+@@ -92,4 +92,6 @@ class bdist_wheel(_bdist_wheel):
+         self.exports_lib_path = "../../exports/lib"  # default
+
+     def run(self):
++        _bdist_wheel.run(self)
++        return
+         self.plat_name_supplied = True  # Force use platform
+
+         libpath = getlibpath(self.plat_name)

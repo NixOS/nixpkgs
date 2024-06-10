@@ -1,0 +1,17 @@
+diff --git a/src/sage/graphs/generic_graph.py b/src/sage/graphs/generic_graph.py
+index 2deb533f7f..663ff2cd13 100644
+--- a/src/sage/graphs/generic_graph.py
++++ b/src/sage/graphs/generic_graph.py
+@@ -6953,12 +6953,6 @@ class GenericGraph(GenericGraph_pyx):
+             sage: G = DiGraph(d6, format='dig6')
+             sage: G.edge_connectivity()
+             5
+-            sage: G.edge_disjoint_spanning_trees(5)     # long time                     # needs sage.numerical.mip
+-            [Digraph on 28 vertices,
+-             Digraph on 28 vertices,
+-             Digraph on 28 vertices,
+-             Digraph on 28 vertices,
+-             Digraph on 28 vertices]
+ 
+         Small cases::
+ 

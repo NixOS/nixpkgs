@@ -1,0 +1,30 @@
+diff -Naurd x/tensorflow/workspace2.bzl y/tensorflow/workspace2.bzl
+--- x/tensorflow/workspace2.bzl	2023-09-17 22:22:22.029075202 +0000
++++ y/tensorflow/workspace2.bzl	2023-09-17 22:25:27.501289587 +0000
+@@ -876,7 +876,10 @@
+         urls = tf_mirror_urls("https://github.com/pybind/pybind11_protobuf/archive/80f3440cd8fee124e077e2e47a8a17b78b451363.zip"),
+         sha256 = "c7ab64b1ccf9a678694a89035a8c865a693e4e872803778f91f0965c2f281d78",
+         strip_prefix = "pybind11_protobuf-80f3440cd8fee124e077e2e47a8a17b78b451363",
+-        patch_file = ["//third_party/pybind11_protobuf:remove_license.patch"],
++        patch_file = [
++            "//third_party/pybind11_protobuf:remove_license.patch",
++            "//third_party/pybind11_protobuf:python_runtime_dep.patch",
++	],
+     )
+ 
+     tf_http_archive(
+diff -Naurd x/third_party/pybind11_protobuf/python_runtime_dep.patch y/third_party/pybind11_protobuf/python_runtime_dep.patch
+--- x/third_party/pybind11_protobuf/python_runtime_dep.patch	1970-01-01 00:00:00.000000000 +0000
++++ y/third_party/pybind11_protobuf/python_runtime_dep.patch	2023-09-17 22:23:07.849128180 +0000
+@@ -0,0 +1,11 @@
++diff -Naurd x/pybind11_protobuf/BUILD y/pybind11_protobuf/BUILD
++--- x/pybind11_protobuf/BUILD	2023-09-17 22:17:19.932725814 +0000
+++++ y/pybind11_protobuf/BUILD	2023-09-17 22:20:44.056961932 +0000
++@@ -86,6 +86,7 @@
++         "//visibility:private",
++     ],
++     deps = [
+++        "@org_tensorflow//third_party/python_runtime:headers",
++         "@com_google_absl//absl/container:flat_hash_map",
++         "@com_google_absl//absl/container:flat_hash_set",
++         "@com_google_absl//absl/meta:type_traits",

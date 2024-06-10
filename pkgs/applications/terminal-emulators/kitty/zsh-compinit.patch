@@ -1,0 +1,13 @@
+diff --git a/kitty_tests/ssh.py b/kitty_tests/ssh.py
+index 1f424146..d9a65d25 100644
+--- a/kitty_tests/ssh.py
++++ b/kitty_tests/ssh.py
+@@ -268,6 +268,8 @@ def check_untar_or_fail():
+                 return 'UNTAR_DONE' in q
+             pty.wait_till(check_untar_or_fail)
+             self.assertTrue(os.path.exists(os.path.join(home_dir, '.terminfo/kitty.terminfo')))
++            if login_shell == 'zsh':
++                pty.send_cmd_to_child('y')
+             if SHELL_INTEGRATION_VALUE != 'enabled':
+                 pty.wait_till(lambda: len(pty.screen_contents().splitlines()) > 1)
+                 self.assertEqual(pty.screen.cursor.shape, 0)

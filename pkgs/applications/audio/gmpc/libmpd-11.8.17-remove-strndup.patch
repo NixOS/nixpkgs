@@ -1,0 +1,15 @@
+diff --git a/src/libmpd-internal.h b/src/libmpd-internal.h
+index c84c3a4..51be441 100644
+--- a/src/libmpd-internal.h
++++ b/src/libmpd-internal.h
+@@ -206,10 +206,6 @@ int mpd_unlock_conn(MpdObj *mi);
+ MpdData * mpd_misc_sort_tag_list(MpdData *data);
+ 
+ 
+-#ifndef HAVE_STRNDUP
+-char * 		strndup					(const char *s, size_t n);
+-#endif
+-
+ int mpd_server_get_allowed_commands(MpdObj *mi);
+ typedef enum _MpdSearchType {
+ 	MPD_SEARCH_TYPE_NONE,
