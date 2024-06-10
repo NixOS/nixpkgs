@@ -7,33 +7,36 @@
 , fontconfig
 , libxkbcommon
 , makeWrapper
+, nix-update-script
 , openvr
 , openxr-loader
 , pipewire
 , pkg-config
 , pulseaudio
 , shaderc
+, testers
 , wayland
+, wlx-overlay-s
 , xorg
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wlx-overlay-s";
-  version = "0.3.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "wlx-overlay-s";
     rev = "v${version}";
-    hash = "sha256-5uvdLBUnc8ba6b/dJNWsuqjnbbidaCcqgvSafFEXaMU=";
+    hash = "sha256-9ess8/H7cByNYFNHvCi0124xCBwXk+PTNhAZKBcS08A=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ovr_overlay-0.0.0" = "sha256-b2sGzBOB2aNNJ0dsDBjgV2jH3ROO/Cdu8AIHPSXMCPg=";
       "vulkano-0.34.0" = "sha256-0ZIxU2oItT35IFnS0YTVNmM775x21gXOvaahg/B9sj8=";
-      "wlx-capture-0.3.1" = "sha256-kK3OQMdIqCLZlgZuevNtfMDmpR8J2DFFD8jRHHWAvSA=";
+      "ovr_overlay-0.0.0" = "sha256-d38LqhKOp9tHbiK4eU7OPdFvkExqaJN1tB6y2qqPm9U=";
+      "wlx-capture-0.3.11" = "sha256-CmFnVfA3MAYXSejn9GpuaNCRu4HiX0CN0j3aN4Pxvjw=";
     };
   };
 
@@ -71,12 +74,18 @@ rustPlatform.buildRustPackage rec {
       --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0
   '';
 
-  meta = with lib; {
+  passthru = {
+    tests.testVersion = testers.testVersion { package = wlx-overlay-s; };
+
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Wayland/X11 desktop overlay for SteamVR and OpenXR, Vulkan edition";
     homepage = "https://github.com/galister/wlx-overlay-s";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Scrumplex ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Scrumplex ];
+    platforms = lib.platforms.linux;
     broken = stdenv.isAarch64;
     mainProgram = "wlx-overlay-s";
   };
