@@ -28095,8 +28095,6 @@ with pkgs;
 
   vendir = callPackage ../development/tools/vendir { };
 
-  vndr = callPackage ../development/tools/vndr { };
-
   vdo = callPackage ../os-specific/linux/vdo { };
 
   windows = callPackages ../os-specific/windows {};
