@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, popt, ncurses, python3, readline, lib }:
+{ stdenv, fetchurl, popt, ncurses, python3, readline, lib, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "OpenIPMI";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sFkRT2KZ1z8E/252oIV6Crgao2Le6ZZE0layI4ckN60=";
   };
 
-  buildInputs = [ ncurses popt python3 readline ];
+  buildInputs = [ ncurses popt python3 readline openssl ];
 
   outputs = [ "out" "lib" "dev" "man" ];
 
