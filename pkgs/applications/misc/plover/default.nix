@@ -17,6 +17,11 @@
         sha256 = "sha256-A75OMzmEn0VmDAvmQCp6/7uptxzwWJTwsih3kWlYioA=";
       };
 
+      nativeCheckInputs = [ pytest ];
+      propagatedBuildInputs = [ setuptools ];
+
+      pythonImportsCheck = [ "plover_stroke" ];
+
       meta = with lib; {
         description = "Stroke handling helper library for Plover";
         license = licenses.gpl2Plus;
@@ -24,11 +29,6 @@
         platforms = platforms.linux ++ platforms.windows;
         maintainers = with maintainers; [ FirelightFlagboy ];
       };
-
-      nativeCheckInputs = [ pytest ];
-      propagatedBuildInputs = [ setuptools ];
-
-      pythonImportsCheck = [ "plover_stroke" ];
     };
 
     rtf_tokenize = mkDerivationWith buildPythonPackage rec {
@@ -44,6 +44,13 @@
         sha256 = "sha256-zwD2sRYTY1Kmm/Ag2hps9VRdUyQoi4zKtDPR+F52t9A=";
       };
 
+      nativeCheckInputs = [ pytest ];
+      propagatedBuildInputs = [ setuptools ];
+
+      pythonImportsCheck = [
+        "rtf_tokenize"
+      ];
+
       meta = with lib; {
         description = "Simple RTF tokenizer";
         license = licenses.gpl2Plus;
@@ -51,27 +58,12 @@
         platforms = platforms.linux ++ platforms.windows;
         maintainers = with maintainers; [ FirelightFlagboy ];
       };
-
-      nativeCheckInputs = [ pytest ];
-      propagatedBuildInputs = [ setuptools ];
-
-      pythonImportsCheck = [
-        "rtf_tokenize"
-      ];
     };
   in mkDerivationWith buildPythonPackage rec {
     pname = "plover";
     version = "4.0.0rc2";
 
     pyproject = true;
-
-    meta = with lib; {
-      mainProgram = "plover";
-      broken = stdenv.isDarwin;
-      description = "OpenSteno Plover stenography software";
-      maintainers = with maintainers; [ FirelightFlagboy twey kovirobi ];
-      license     = licenses.gpl2;
-    };
 
     src = fetchFromGitHub {
       owner = "openstenoproject";
@@ -99,5 +91,13 @@
     preFixup = ''
       makeWrapperArgs+=("''${qtWrapperArgs[@]}")
     '';
+
+    meta = with lib; {
+      mainProgram = "plover";
+      broken = stdenv.isDarwin;
+      description = "OpenSteno Plover stenography software";
+      maintainers = with maintainers; [ FirelightFlagboy twey kovirobi ];
+      license     = licenses.gpl2;
+    };
   };
 }
