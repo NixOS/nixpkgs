@@ -4,7 +4,7 @@
 , autoPatchelfHook
 , makeWrapper
 , dpkg
-, alsaLib
+, alsa-lib
 , eudev
 , gnome
 , libglvnd
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
   buildInputs = [
-    alsaLib
+    alsa-lib
     eudev
     gnome.zenity
     libglvnd
