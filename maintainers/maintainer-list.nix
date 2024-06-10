@@ -16957,6 +16957,12 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
+  qubitnano = {
+    name = "qubitnano";
+    email = "qubitnano@protonmail.com";
+    github = "qubitnano";
+    githubId = 146656568;
+  };
   queezle = {
     email = "git@queezle.net";
     github = "queezle42";
