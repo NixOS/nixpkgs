@@ -34,8 +34,7 @@ let
     mkKeyValue = generators.mkKeyValueDefault { } " = ";
   };
 
-  toPhpIni =
-    v: if isString v then v else toKeyValue (filterAttrs (_: v: v != null) v);
+  toPhpIni = v: if isString v then v else toKeyValue (filterAttrs (_: v: v != null) v);
 
   # Combine global and pool-specific phpOptions, supporting both the
   # deprecated string format and the new attribute set format, including
@@ -54,6 +53,7 @@ let
       [global]
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings)}
       ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
+
       [${pool}]
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") poolOpts.settings)}
       ${concatStringsSep "\n" (mapAttrsToList (n: v: "env[${n}] = ${toStr v}") poolOpts.phpEnv)}
@@ -116,12 +116,16 @@ let
         phpOptions = mkOption {
           type =
             with types;
-            either lines (attrsOf (nullOr (oneOf [
-              bool
-              int
-              float
-              str
-            ])));
+            either lines (
+              attrsOf (
+                nullOr (oneOf [
+                  bool
+                  int
+                  float
+                  str
+                ])
+              )
+            );
           default = { };
           example = literalExpression ''
             {
@@ -268,12 +272,16 @@ in
       phpOptions = mkOption {
         type =
           with types;
-          either lines (attrsOf (nullOr (oneOf [
-            bool
-            int
-            float
-            str
-          ])));
+          either lines (
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                float
+                str
+              ])
+            )
+          );
         default = { };
         example = literalExpression ''
           {

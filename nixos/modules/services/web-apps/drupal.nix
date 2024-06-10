@@ -350,18 +350,27 @@ let
         };
 
         phpOptions = mkOption {
-          type = types.attrsOf types.str;
+          type =
+            with types;
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                float
+                str
+              ])
+            );
           default = { };
           description = ''
             Options for PHP's php.ini file for this Drupal site.
           '';
           example = literalExpression ''
             {
-              "opcache.interned_strings_buffer" = "8";
-              "opcache.max_accelerated_files" = "10000";
-              "opcache.memory_consumption" = "128";
-              "opcache.revalidate_freq" = "15";
-              "opcache.fast_shutdown" = "1";
+              "opcache.interned_strings_buffer" = 8;
+              "opcache.max_accelerated_files" = 10000;
+              "opcache.memory_consumption" = 128;
+              "opcache.revalidate_freq" = 15;
+              "opcache.fast_shutdown" = 1;
             }
           '';
         };
