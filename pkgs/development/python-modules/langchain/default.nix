@@ -48,7 +48,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.2.1";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain==${version}";
-    hash = "sha256-cLJhdeft9XNLk5njSBaEBSuP31c2VFCJ1ET+ypo6mNY=";
+    hash = "sha256-9WrWQuZxtl/eBEDdgKCUqT7fYBl6gSsW9rB8tTBqMso=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -164,12 +164,12 @@ buildPythonPackage rec {
     updateScript = langchain-core.updateScript;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "langchain-server";
   };
 }
