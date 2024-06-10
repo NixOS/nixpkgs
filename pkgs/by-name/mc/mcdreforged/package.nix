@@ -9,6 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mcdreforged";
   version = "2.12.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fallen-Breath";
@@ -16,8 +17,6 @@ python3.pkgs.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     sha256 = "sha256-MLub++mkkB/jshpHJXtqgIhs7Gcb4jHUyHqGE65S8A8=";
   };
-
-  disabled = python3.pkgs.pythonOlder "3.8";
 
   build-system = [ python3.pkgs.setuptools ];
 

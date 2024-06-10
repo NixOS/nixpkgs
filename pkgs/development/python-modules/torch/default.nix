@@ -207,7 +207,7 @@ in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8.0";
@@ -225,7 +225,7 @@ buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-UmH4Mv5QL7Mz4Y4pvxn8F1FGBR/UzYZjE2Ys8Oc0FWQ=";
+    hash = "sha256-vpgtOqzIDKgRuqdT8lB/g6j+oMIH1RPxdbjtlzZFjV8=";
   };
 
   patches =
@@ -499,7 +499,7 @@ buildPythonPackage rec {
     ++ lib.optionals MPISupport [ mpi ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astunparse
     cffi
     click
@@ -629,18 +629,18 @@ buildPythonPackage rec {
     cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
     # keep PyTorch in the description so the package can be found under that name on search.nixos.org
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
     homepage = "https://pytorch.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       teh
       thoughtpolice
       tscholak
     ]; # tscholak esp. for darwin-related builds
-    platforms = with platforms; linux ++ lib.optionals (!cudaSupport && !rocmSupport) darwin;
+    platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport && !rocmSupport) darwin;
     broken = builtins.any trivial.id (builtins.attrValues brokenConditions);
   };
 }

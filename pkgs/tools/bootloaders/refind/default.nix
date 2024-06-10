@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ./0001-toolchain.patch
     # Avoid leaking the build timestamp
     # https://sourceforge.net/p/refind/code/merge-requests/53/
-    ./reproducible.patch
+    ./0002-preserve-dates.patch
   ];
 
   nativeBuildInputs = [ makeWrapper ];

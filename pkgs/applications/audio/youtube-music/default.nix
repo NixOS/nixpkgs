@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "3.3.6";
+  version = "3.3.12";
 
   src = fetchFromGitHub {
     owner = "th-ch";
     repo = "youtube-music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nxpctEG4XoxW6jOAxGdgTEYr6YnhFRR8+5HUQLxRJB0=";
+    hash = "sha256-kBGMp58086NQ77x1YGS5NewWfiDaXHOEbyflHPtdfIs=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-8oeloQYiwUy+GDG4R+XtiynT+8Fad4WYFWTO1KANZKQ=";
+    hash = "sha256-t5omzz6y8lVFGAuhtc+HF5gwu4Ntt/dxml+nWysEpVs=";
   };
 
   nativeBuildInputs = [ makeWrapper python3 nodejs pnpm.configHook ]
@@ -87,8 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Electron wrapper around YouTube Music";
     homepage = "https://th-ch.github.io/youtube-music/";
+    changelog = "https://github.com/th-ch/youtube-music/blob/master/changelog.md#${lib.replaceStrings ["."] [""] finalAttrs.src.rev}";
     license = licenses.mit;
-    maintainers = [ maintainers.aacebedo ];
+    maintainers = with maintainers; [ aacebedo SuperSandro2000 ];
     mainProgram = "youtube-music";
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };

@@ -1867,6 +1867,31 @@ buildLuarocksPackage {
   };
 }) {};
 
+luaprompt = callPackage({ argparse, buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder }:
+buildLuarocksPackage {
+  pname = "luaprompt";
+  version = "0.8-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luaprompt-0.8-1.rockspec";
+    sha256 = "17v7yqkvm4rxszqvqk3f6a6vqysh80p18l1ryif79bc7ic948br4";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "dpapavas";
+    repo = "luaprompt";
+    rev = "v0.8";
+    hash = "sha256-GdI5sj7FBeb9q23oxVOzT+yVhMYTnggaN8Xt/z/2xZo=";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ argparse ];
+
+  meta = {
+    homepage = "https://github.com/dpapavas/luaprompt";
+    description = "A Lua command prompt with pretty-printing and auto-completion";
+    license.fullName = "MIT/X11";
+  };
+}) {};
+
 luaposix = callPackage({ bit32, buildLuarocksPackage, fetchurl, fetchzip, luaAtLeast, luaOlder }:
 buildLuarocksPackage {
   pname = "luaposix";

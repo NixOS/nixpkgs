@@ -85,13 +85,13 @@ lib.warnIf (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
 
 stdenv.mkDerivation rec {
   pname = "frr";
-  version = "10.0";
+  version = "10.0.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-vvh9z2hmjvAA7OXgrUmlcrrTE5MRedZzfmhX5FEDKwE=";
+    hash = "sha256-bY5SSF/fmKQc8ECPik0v/ZlUiFsbZhwG2C5pbmoMzwQ=";
   };
 
   nativeBuildInputs = [
