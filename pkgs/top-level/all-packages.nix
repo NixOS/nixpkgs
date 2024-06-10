@@ -5553,10 +5553,6 @@ with pkgs;
 
   jellycli = callPackage ../applications/audio/jellycli { };
 
-  jellyfin = callPackage ../servers/jellyfin {
-    ffmpeg = jellyfin-ffmpeg;
-  };
-
   jellyfin-ffmpeg = callPackage ../development/libraries/jellyfin-ffmpeg { };
 
   jellyfin-media-player = libsForQt5.callPackage ../applications/video/jellyfin-media-player {
@@ -5564,8 +5560,6 @@ with pkgs;
   };
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
-
-  jellyfin-web = callPackage ../servers/jellyfin/web.nix { };
 
   jellyseerr = callPackage ../servers/jellyseerr { };
 
