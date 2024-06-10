@@ -54,6 +54,7 @@ in
 
       serviceConfig = {
         ExecStart = ''${lib.getExe cfg.package} -p ${cfg.stateDir}/${cfg.localStateFilename} ${cfg.remoteDir} ${toString cfg.searchInterval}''; 
+        ExecStartPre = ''${lib.getExe pkgs.git} clone https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
         Restart = "always";
         WorkingDirectory = cfg.stateDir;
         StateDirectory = "openmesh-xnode-admin";
