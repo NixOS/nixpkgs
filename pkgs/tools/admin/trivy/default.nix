@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "trivy";
-  version = "0.52.0";
+  version = "0.52.1";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "trivy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lsUqzbHv+/P5RAOc774GhFMaY21+T7NnPKK9v/uLP8M=";
+    hash = "sha256-7jM0eTUydehzlY8esSxIvQ11Y8VEF6Uyk7mSC0whmq0=";
   };
 
   # Hash mismatch on across Linux and Darwin
