@@ -7878,8 +7878,6 @@ with pkgs;
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
-  flatpak = callPackage ../development/libraries/flatpak { };
-
   flatpak-builder = callPackage ../development/tools/flatpak-builder {
     binutils = binutils-unwrapped;
   };
