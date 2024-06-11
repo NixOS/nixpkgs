@@ -53,7 +53,7 @@ in
       wants = [ "network-online.target" ];
 
       serviceConfig = {
-        ExecStart = ''${lib.getExe cfg.package} -p ${cfg.stateDir}/${cfg.localStateFilename} ${cfg.remoteDir} ${toString cfg.searchInterval}''; 
+        ExecStart = ''${lib.getExe cfg.package} -p ${cfg.stateDir} ${cfg.remoteDir} ${toString cfg.searchInterval}''; 
         ExecStartPre = ''-${lib.getExe pkgs.git} clone --branch feature/import-agent-config-dynamically https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
         Restart = "always";
         WorkingDirectory = cfg.stateDir;
