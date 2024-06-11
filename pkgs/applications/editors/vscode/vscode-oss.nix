@@ -1,4 +1,3 @@
-# Variant built microsoft/vscode from source
 {
   lib,
   stdenv,
@@ -25,6 +24,16 @@
   # Customize product.json, with some reasonable defaults
   product ? (import ./vscode-oss/product.nix { inherit lib; }),
 
+  shortName ? "Code - OSS",
+  longName ? "Code - OSS",
+  executableName ? "code-oss",
+
+  # Extension gallery to use in vscode. It is open-vsix registry by default.
+  extensionsGallery ? {
+    serviceUrl = "https://open-vsx.org/vscode/gallery";
+    itemUrl = "https://open-vsx.org/vscode/item";
+  },
+
   # Override product.json
   productOverrides ? { },
 }:
@@ -32,10 +41,6 @@
 let
   inherit (nodePackages) node-gyp;
   inherit (darwin) autoSignDarwinBinariesHook;
-
-  shortName = productOverrides.nameShort or "Code - OSS";
-  longName = productOverrides.nameLong or "Code - OSS";
-  executableName = productOverrides.applicationName or "code-oss";
 
   common = import ./common.nix {
     inherit
@@ -49,24 +54,11 @@ let
 
   inherit (common) desktopItem urlHandlerDesktopItem;
 
-  pname = executableName;
-  version = "1.89.1";
-  commit = "dc96b837cf6bb4af9cd736aa3af08cf8279f7685";
-
-  product' = product // { inherit version; } // productOverrides;
-
   nodejs = nodejs_18;
 
   electron = electron_28;
 
   yarn' = yarn.override { inherit nodejs; };
-
-  src = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "vscode";
-    rev = version;
-    sha256 = "sha256-z4VA1pv+RPAzUOH/yK6EB84h4DOFG5TcRH443N7EIL0=";
-  };
 
   # Give all platform related information in this lambda.
   vscodePlatforms =
@@ -91,31 +83,6 @@ let
     };
 
   platform = vscodePlatforms stdenv.hostPlatform;
-
-  yarnCache = stdenv.mkDerivation {
-    name = "${pname}-${version}-yarn-cache";
-    inherit src;
-    GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-    nativeBuildInputs = [ yarn ];
-    buildPhase = ''
-      export HOME=$PWD
-      yarn config set yarn-offline-mirror $out
-      find "$PWD" -name "yarn.lock" -printf "%h\n" | \
-        xargs -I {}                                                            \
-          yarn --cwd {}                                                        \
-          --frozen-lockfile                                                    \
-          --ignore-scripts                                                     \
-          --ignore-platform                                                    \
-          --ignore-engines                                                     \
-          --no-progress                                                        \
-          --non-interactive
-    '';
-
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = "sha256-7Qy0xMLcvmZ43EcNbsy7lko0nsXlbVYSMiq6aa4LuoQ=";
-  };
 
   esbuild' = esbuild.override {
     buildGoModule =
@@ -144,8 +111,61 @@ let
   '';
 in
 
-stdenv.mkDerivation {
-  inherit pname version src;
+stdenv.mkDerivation (finalAttrs: {
+  pname = executableName;
+  version = "1.89.1";
+  commit = "dc96b837cf6bb4af9cd736aa3af08cf8279f7685";
+
+  src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "vscode";
+    rev = finalAttrs.version;
+    sha256 = "sha256-z4VA1pv+RPAzUOH/yK6EB84h4DOFG5TcRH443N7EIL0=";
+  };
+
+  passthru.product =
+    # Base
+    product
+    // {
+      inherit (finalAttrs) version;
+      inherit extensionsGallery;
+
+      nameShort = shortName;
+      nameLong = longName;
+      applicationName = executableName;
+    }
+    # Extra overrides
+    // productOverrides;
+
+  yarnCache = stdenv.mkDerivation (
+    let
+      inherit (finalAttrs) pname version src;
+    in
+    {
+      inherit src;
+      name = "${pname}-${version}-yarn-cache";
+      GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+      NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+      nativeBuildInputs = [ yarn ];
+      buildPhase = ''
+        export HOME=$PWD
+        yarn config set yarn-offline-mirror $out
+        find "$PWD" -name "yarn.lock" -printf "%h\n" | \
+          xargs -I {}                                                          \
+            yarn --cwd {}                                                      \
+            --frozen-lockfile                                                  \
+            --ignore-scripts                                                   \
+            --ignore-platform                                                  \
+            --ignore-engines                                                   \
+            --no-progress                                                      \
+            --non-interactive
+      '';
+
+      outputHashMode = "recursive";
+      outputHashAlgo = "sha256";
+      outputHash = "sha256-7Qy0xMLcvmZ43EcNbsy7lko0nsXlbVYSMiq6aa4LuoQ=";
+    }
+  );
 
   outputs = [
     # Desktop version.
@@ -187,7 +207,7 @@ stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE = "-DNODE_API_EXPERIMENTAL_NOGC_ENV_OPT_OUT";
 
     # Commit version embeded in vscode
-    BUILD_SOURCEVERSION = commit;
+    BUILD_SOURCEVERSION = finalAttrs.commit;
   };
 
   postPatch = ''
@@ -198,10 +218,10 @@ stdenv.mkDerivation {
     runHook preConfigure
 
     # Generate product.json
-    cp ${builtins.toFile "product.json" (builtins.toJSON product')} product.json
+    cp ${builtins.toFile "product.json" (builtins.toJSON finalAttrs.passthru.product)} product.json
 
     # set offline mirror to yarn cache we created in previous steps
-    yarn --offline config set yarn-offline-mirror "${yarnCache}"
+    yarn --offline config set yarn-offline-mirror "${finalAttrs.yarnCache}"
     # set nodedir to prevent node-gyp from downloading headers
     # taken from https://nixos.org/manual/nixpkgs/stable/#javascript-tool-specific
     mkdir -p $HOME/.node-gyp/${nodejs.version}
@@ -308,4 +328,4 @@ stdenv.mkDerivation {
     homepage = "https://github.com/microsoft/vscode";
     maintainers = with lib.maintainers; [ inclyc ];
   };
-}
+})
