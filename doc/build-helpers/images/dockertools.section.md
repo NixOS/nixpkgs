@@ -576,7 +576,7 @@ This allows the function to produce reproducible images.
 
 `passthru` (Attribute Set; _optional_)
 
-: Use this to pass any attributes as [passthru](#chap-passthru) for the resulting derivation.
+: Use this to pass any attributes as [`passthru`](#chap-passthru) for the resulting derivation.
 
   _Default value:_ `{}`
 
