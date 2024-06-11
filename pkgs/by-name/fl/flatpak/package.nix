@@ -52,6 +52,7 @@
   dconf,
   gsettings-desktop-schemas,
   librsvg,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -204,6 +205,8 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./fix-icon-validation.patch;
       inherit (builtins) storeDir;
     };
+
+    updateScript = nix-update-script { };
 
     tests = {
       installedTests = nixosTests.installed-tests.flatpak;
