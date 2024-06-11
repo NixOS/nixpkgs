@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lwan";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "lpereira";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Z8kiuZHLEupCKFrj8guiu9fTG7s+5KiQ6x0pg9iMy0c=";
+    sha256 = "sha256-otiPH+e+auMCyeOTq4LJYaBNv+I91kOCww7DCepQTAQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
