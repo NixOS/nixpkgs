@@ -182,7 +182,7 @@ let
           {
             name = "wrap-qt6-apps-hook";
             propagatedBuildInputs = [ qtbase.dev makeBinaryWrapper ]
-              ++ lib.optional (lib.meta.availableOn stdenv.targetPlatform qtwayland) qtwayland.dev;
+              ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform qtwayland) qtwayland.dev;
           } ./hooks/wrap-qt-apps-hook.sh)
         { };
 
