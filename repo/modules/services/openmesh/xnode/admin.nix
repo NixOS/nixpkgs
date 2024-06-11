@@ -55,6 +55,7 @@ in
       serviceConfig = {
         ExecStart = ''${lib.getExe cfg.package} -p ${cfg.stateDir} ${cfg.remoteDir} ${toString cfg.searchInterval}''; 
         ExecStartPre = ''-${lib.getExe pkgs.git} clone --branch feature/import-agent-config-dynamically https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
+        ExecCondition = ''-${lib.getExe pkgs.git} pull --branch feature/import-agent-config-dynamically https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
         Restart = "always";
         WorkingDirectory = cfg.stateDir;
         StateDirectory = "openmesh-xnode-admin";
@@ -62,18 +63,18 @@ in
         RuntimeDirectory = "openmesh-xnode-admin";
         RuntimeDirectoryMode = "0775";
         PrivateTmp = true;
-        DynamicUser = true;
-        DevicePolicy = "closed";
-        LockPersonality = true;
-        PrivateUsers = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
+        User="root";
+        #DevicePolicy = "closed";
+        #LockPersonality = true;
+        #PrivateUsers = true;
+        #ProtectHome = true;
+        #ProtectHostname = true;
+        #ProtectKernelLogs = true;
+        #ProtectKernelModules = true;
+        #ProtectKernelTunables = true;
+        #ProtectControlGroups = true;
+        #RestrictNamespaces = true;
+        #RestrictRealtime = true;
         SystemCallArchitectures = "native";
         Environment="NIX_PATH=nixpkgs=flake:nixpkgs:/nix/var/nix/profiles/per-user/root/channels";
       };
