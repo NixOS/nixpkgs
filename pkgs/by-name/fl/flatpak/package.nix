@@ -37,6 +37,7 @@
   desktop-file-utils,
   gtk3,
   fuse3,
+  testers,
   nixosTests,
   xz,
   zstd,
@@ -211,6 +212,8 @@ stdenv.mkDerivation (finalAttrs: {
         ${finalAttrs.finalPackage}/libexec/flatpak-validate-icon --sandbox 512 512 ${../../../applications/audio/zynaddsubfx/ZynLogo.svg} > "$out"
         grep format=svg "$out"
       '';
+
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
     };
   };
 
