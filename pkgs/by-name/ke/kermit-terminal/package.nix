@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kermit";
-  version = "3.8";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "kermit";
     rev = finalAttrs.version;
-    hash = "sha256-XPHF33Nu+H8OcQFwsuUOhDBDWKm8sh5B36sfROeSWPg=";
+    hash = "sha256-rhlUnRfyd7PmtMSyP+tiu+TxZNb/YyS0Yc5IkWft7/4=";
   };
 
   outputs = [ "out" "man" ];
