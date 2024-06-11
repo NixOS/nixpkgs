@@ -31,8 +31,8 @@ Each interpreter has the following attributes:
 
 ### Building packages and applications {#building-packages-and-applications}
 
-Python libraries and applications that use `setuptools` or
-`distutils` are typically built with respectively the [`buildPythonPackage`](#buildpythonpackage-function) and
+Python libraries and applications that use tools to follow PEP 517 (e.g. `setuptools` or `hatchling`, etc.) or
+previous tools such as `distutils` are typically built with respectively the [`buildPythonPackage`](#buildpythonpackage-function) and
 [`buildPythonApplication`](#buildpythonapplication-function) functions. These two functions also support installing a `wheel`.
 
 All Python packages reside in `pkgs/top-level/python-packages.nix` and all
@@ -78,6 +78,7 @@ The following is an example:
 , fetchPypi
 
 # build-system
+, setuptools
 , setuptools-scm
 
 # dependencies
@@ -107,6 +108,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
+    setuptools
     setuptools-scm
   ];
 
@@ -134,13 +136,13 @@ buildPythonPackage rec {
 
 The `buildPythonPackage` mainly does four things:
 
-* In the [`buildPhase`](#build-phase), it calls `${python.pythonOnBuildForHost.interpreter} setup.py bdist_wheel` to
+* In the [`buildPhase`](#build-phase), it calls `${python.pythonOnBuildForHost.interpreter} -m build --wheel` to
   build a wheel binary zipfile.
-* In the [`installPhase`](#ssec-install-phase), it installs the wheel file using `pip install *.whl`.
+* In the [`installPhase`](#ssec-install-phase), it installs the wheel file using `${python.pythonOnBuildForHost.interpreter} -m installer *.whl`.
 * In the [`postFixup`](#var-stdenv-postFixup) phase, the `wrapPythonPrograms` bash function is called to
   wrap all programs in the `$out/bin/*` directory to include `$PATH`
   environment variable and add dependent libraries to script's `sys.path`.
-* In the [`installCheck`](#ssec-installCheck-phase) phase, `${python.interpreter} setup.py test` is run.
+* In the [`installCheck`](#ssec-installCheck-phase) phase, `${python.interpreter} -m pytest` is run.
 
 By default tests are run because [`doCheck = true`](#var-stdenv-doCheck). Test dependencies, like
 e.g. the test runner, should be added to [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs).
@@ -177,10 +179,6 @@ following are specific to `buildPythonPackage`:
   `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
   defaults to `"python3.8-"` for Python 3.8, etc., and in case of applications to `""`.
-* `pipInstallFlags ? []`: A list of strings. Arguments to be passed to `pip
-  install`. To pass options to `python setup.py install`, use
-  `--install-option`. E.g., `pipInstallFlags=["--install-option='--cpp_implementation'"]`.
-* `pipBuildFlags ? []`: A list of strings. Arguments to be passed to `pip wheel`.
 * `pypaBuildFlags ? []`: A list of strings. Arguments to be passed to `python -m build --wheel`.
 * `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages
   in `pythonPath` are not propagated (contrary to [`propagatedBuildInputs`](#var-stdenv-propagatedBuildInputs)).
@@ -298,7 +296,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [
     setuptools
-    wheel
   ];
 
   dependencies = with python3Packages; [
@@ -465,13 +462,11 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
   with the `eggInstallHook`
 - `eggBuildHook` to skip building for eggs.
 - `eggInstallHook` to install eggs.
-- `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
-  (e.g. `setuptools` or `flit`) should still be added as `build-system`.
 - `pypaBuildHook` to build a wheel using
   [`pypa/build`](https://pypa-build.readthedocs.io/en/latest/index.html) and
   PEP 517/518. Note a build system (e.g. `setuptools` or `flit`) should still
   be added as `build-system`.
-- `pipInstallHook` to install wheels.
+- `pypaInstallHook` to install wheels.
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to fail if the package depends on two different versions of the same dependency.
 - `pythonImportsCheckHook` to check whether importing the listed modules works.
@@ -609,7 +604,8 @@ that sets up an interpreter pointing to them. This matters much more for "big"
 modules like `pytorch` or `tensorflow`.
 
 Module names usually match their names on [pypi.org](https://pypi.org/), but
-you can use the [Nixpkgs search website](https://nixos.org/nixos/packages.html)
+normalized according to PEP 503/508. (e.g. Foo__Bar.baz -> foo-bar-baz)
+You can use the [Nixpkgs search website](https://nixos.org/nixos/packages.html)
 to find them as well (along with non-python packages).
 
 At this point we can create throwaway experimental Python environments with
@@ -837,7 +833,6 @@ building Python libraries is [`buildPythonPackage`](#buildpythonpackage-function
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -852,7 +847,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   # has no tests
@@ -876,7 +870,7 @@ buildPythonPackage rec {
 What happens here? The function [`buildPythonPackage`](#buildpythonpackage-function) is called and as argument
 it accepts a set. In this case the set is a recursive set, `rec`. One of the
 arguments is the name of the package, which consists of a basename (generally
-following the name on PyPi) and a version. Another argument, `src` specifies the
+following the name on PyPI) and a version. Another argument, `src` specifies the
 source, which in this case is fetched from PyPI using the helper function
 `fetchPypi`. The argument `doCheck` is used to set whether tests should be run
 when building the package. Since there are no tests, we rely on [`pythonImportsCheck`](#using-pythonimportscheck)
@@ -911,7 +905,6 @@ with import <nixpkgs> {};
 
       build-system = [
         python311.pkgs.setuptools
-        python311.pkgs.wheel
       ];
 
       # has no tests
@@ -964,13 +957,13 @@ order to build [`datashape`](https://github.com/blaze/datashape).
 , fetchPypi
 
 # build dependencies
-, setuptools, wheel
+, setuptools
 
 # dependencies
 , numpy, multipledispatch, python-dateutil
 
 # tests
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -985,7 +978,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
@@ -995,7 +987,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
   ];
 
   meta = {
@@ -1008,8 +1000,8 @@ buildPythonPackage rec {
 ```
 
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
-`python-dateutil`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytest`.
-`pytest` is a test runner and is only used during the [`checkPhase`](#ssec-check-phase) and is
+`python-dateutil`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytestCheckHook`.
+`pytestCheckHook` is a test runner hook and is only used during the [`checkPhase`](#ssec-check-phase) and is
 therefore not added to `dependencies`.
 
 In the previous case we had only dependencies on other Python packages to consider.
@@ -1022,7 +1014,6 @@ when building the bindings and are therefore added as [`buildInputs`](#var-stden
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, wheel
 , libxml2
 , libxslt
 }:
@@ -1039,12 +1030,19 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   buildInputs = [
     libxml2
     libxslt
+  ];
+
+  # tests are meant to be ran "in-place" in the same directory as src
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "lxml"
+    "lxml.etree"
   ];
 
   meta = {
@@ -1074,7 +1072,6 @@ therefore we have to set `LDFLAGS` and `CFLAGS`.
 
 # build dependencies
 , setuptools
-, wheel
 
 # dependencies
 , fftw
@@ -1085,7 +1082,7 @@ therefore we have to set `LDFLAGS` and `CFLAGS`.
 }:
 
 buildPythonPackage rec {
-  pname = "pyFFTW";
+  pname = "pyfftw";
   version = "0.9.2";
   pyproject = true;
 
@@ -1096,7 +1093,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   buildInputs = [
@@ -1118,6 +1114,8 @@ buildPythonPackage rec {
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;
 
+  pythonImportsCheck = [ "pyfftw" ];
+
   meta = {
     changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${version}";
     description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
@@ -1133,10 +1131,8 @@ Note also the line [`doCheck = false;`](#var-stdenv-doCheck), we explicitly disa
 
 It is highly encouraged to have testing as part of the package build. This
 helps to avoid situations where the package was able to build and install,
-but is not usable at runtime. Currently, all packages will use the `test`
-command provided by the setup.py (i.e. `python setup.py test`). However,
-this is currently deprecated https://github.com/pypa/setuptools/pull/1878
-and your package should provide its own [`checkPhase`](#ssec-check-phase).
+but is not usable at runtime.
+Your package should provide its own [`checkPhase`](#ssec-check-phase).
 
 ::: {.note}
 The [`checkPhase`](#ssec-check-phase) for python maps to the `installCheckPhase` on a
@@ -1207,9 +1203,11 @@ been removed, in this case, it's recommended to use `pytestCheckHook`.
 
 #### Using pytestCheckHook {#using-pytestcheckhook}
 
-`pytestCheckHook` is a convenient hook which will substitute the setuptools
-`test` command for a [`checkPhase`](#ssec-check-phase) which runs `pytest`. This is also beneficial
+`pytestCheckHook` is a convenient hook which will set up (or configure)
+a [`checkPhase`](#ssec-check-phase) to run `pytest`. This is also beneficial
 when a package may need many items disabled to run the test suite.
+Most packages use `pytest` or `unittest`, which is compatible with `pytest`,
+so you will most likely use `pytestCheckHook`.
 
 Using the example above, the analogous `pytestCheckHook` usage would be:
 
@@ -1364,10 +1362,12 @@ instead of a dev dependency).
 Keep in mind that while the examples above are done with `requirements.txt`,
 `pythonRelaxDepsHook` works by modifying the resulting wheel file, so it should
 work with any of the [existing hooks](#setup-hooks).
+It indicates that `pythonRelaxDepsHook` has no effect on build time dependencies, such as in `build-system`.
+If a package requires incompatible build time dependencies, they should be removed in `postPatch` with `substituteInPlace` or something similar.
 
 #### Using unittestCheckHook {#using-unittestcheckhook}
 
-`unittestCheckHook` is a hook which will substitute the setuptools `test` command for a [`checkPhase`](#ssec-check-phase) which runs `python -m unittest discover`:
+`unittestCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m unittest discover`:
 
 ```nix
 {
@@ -1380,6 +1380,8 @@ work with any of the [existing hooks](#setup-hooks).
   ];
 }
 ```
+
+`pytest` is compatible with `unittest`, so in most cases you can use `pytestCheckHook` instead.
 
 #### Using sphinxHook {#using-sphinxhook}
 
@@ -1459,7 +1461,6 @@ We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, wheel
 }:
 
 buildPythonPackage rec {
@@ -1474,7 +1475,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    wheel
   ];
 
   meta = {
@@ -1494,10 +1494,9 @@ with import <nixpkgs> {};
 
 ( let
     toolz = callPackage /path/to/toolz/release.nix {
-      buildPythonPackage = python310
-Packages.buildPythonPackage;
+      buildPythonPackage = python3Packages.buildPythonPackage;
     };
-  in python310.withPackages (ps: [
+  in python3.withPackages (ps: [
     ps.numpy
     toolz
   ])
@@ -1918,6 +1917,8 @@ because we can only provide security support for non-vendored dependencies.
 We recommend [nix-init](https://github.com/nix-community/nix-init) for creating new python packages within nixpkgs,
 as it already prefetches the source, parses dependencies for common formats and prefills most things in `meta`.
 
+See also [contributing section](#contributing).
+
 ### Are Python interpreters built deterministically? {#deterministic-builds}
 
 The Python interpreters are now built deterministically. Minor modifications had
@@ -1935,16 +1936,15 @@ Both are also exported in `nix-shell`.
 It is recommended to test packages as part of the build process.
 Source distributions (`sdist`) often include test files, but not always.
 
-By default the command `python setup.py test` is run as part of the
-[`checkPhase`](#ssec-check-phase), but often it is necessary to pass a custom [`checkPhase`](#ssec-check-phase). An
-example of such a situation is when `py.test` is used.
+The best practice today is to pass a test hook (e.g. pytestCheckHook, unittestCheckHook) into nativeCheckInputs.
+This will reconfigure the checkPhase to make use of that particular test framework.
+Occasionally packages don't make use of a common test framework, which may then require a custom checkPhase.
 
 #### Common issues {#common-issues}
 
-* Non-working tests can often be deselected. By default [`buildPythonPackage`](#buildpythonpackage-function)
-  runs `python setup.py test`. which is deprecated. Most Python modules however
-  do follow the standard test protocol where the pytest runner can be used
-  instead. `pytest` supports the `-k` and `--ignore` parameters to ignore test
+* Non-working tests can often be deselected. Most Python modules
+  do follow the standard test protocol where the pytest runner can be used.
+  `pytest` supports the `-k` and `--ignore` parameters to ignore test
   methods or classes as well as whole files. For `pytestCheckHook` these are
   conveniently exposed as `disabledTests` and `disabledTestPaths` respectively.
 
@@ -1985,14 +1985,25 @@ The following rules are desired to be respected:
 * Python applications live outside of `python-packages.nix` and are packaged
   with [`buildPythonApplication`](#buildpythonapplication-function).
 * Make sure libraries build for all Python interpreters.
-* By default we enable tests. Make sure the tests are found and, in the case of
+  If it fails to build on some Python versions, consider disabling them by setting `disable = pythonAtLeast "3.x"` along with a comment.
+* The two parameters, `pyproject` and `build-system` are set to avoid the legacy setuptools/distutils build.
+* Only unversioned attributes (e.g. `pydantic`, but not `pypdantic_1`) can be included in `dependencies`,
+  since due to `PYTHONPATH` limitations we can only ever support a single version for libraries
+  without running into duplicate module name conflicts.
+* The version restrictions of `dependencies` can be relaxed by [`pythonRelaxDepsHook`](#using-pythonrelaxdepshook).
+* Make sure the tests are enabled using for example [`pytestCheckHook`](#using-pytestcheckhook) and, in the case of
   libraries, are passing for all interpreters. If certain tests fail they can be
   disabled individually. Try to avoid disabling the tests altogether. In any
   case, when you disable tests, leave a comment explaining why.
+* `pythonImportsCheck` is set. This is still a good smoke test even if `pytestCheckHook` is set.
+* `meta.platforms` takes the default value in many cases.
+  It does not need to be set explicitly unless the package requires a specific platform.
+* The file is formatted with `nixfmt-rfc-style`.
 * Commit names of Python libraries should reflect that they are Python
   libraries, so write for example `python311Packages.numpy: 1.11 -> 1.12`.
   It is highly recommended to specify the current default version to enable
   automatic build by ofborg.
+  Note that `pythonPackages` is an alias for `python27Packages`.
 * Attribute names in `python-packages.nix` as well as `pname`s should match the
   library's name on PyPI, but be normalized according to [PEP
   0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means
@@ -2005,6 +2016,8 @@ The following rules are desired to be respected:
   and using a `-` as delimiter.
 * Attribute names in `python-packages.nix` should be sorted alphanumerically to
   avoid merge conflicts and ease locating attributes.
+
+This list is useful for reviewers as well as for self-checking when submitting packages.
 
 ## Package set maintenance {#python-package-set-maintenance}
 
