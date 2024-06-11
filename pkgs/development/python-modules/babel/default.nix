@@ -29,9 +29,9 @@ buildPythonPackage rec {
     hash = "sha256-aRmGfbA2OYuiHrXHoPayirjLw656c6ROvjSudKTn02M=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ pytz ];
+  dependencies = lib.optionals (pythonOlder "3.9") [ pytz ];
 
   # including backports.zoneinfo for python<3.9 yields infinite recursion
   doCheck = pythonAtLeast "3.9";
@@ -49,12 +49,14 @@ buildPythonPackage rec {
     "test_format_time"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "babel" ];
+
+  meta = {
+    description = "Collection of internationalizing tools";
     homepage = "https://babel.pocoo.org/";
     changelog = "https://github.com/python-babel/babel/releases/tag/v${version}";
-    description = "Collection of internationalizing tools";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "pybabel";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ getchoo ];
   };
 }
