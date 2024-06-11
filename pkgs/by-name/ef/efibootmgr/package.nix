@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
     homepage = "https://github.com/rhboot/efibootmgr";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ getchoo ];
     platforms = platforms.linux;
   };
 }
