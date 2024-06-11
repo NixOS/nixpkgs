@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "nhost-cli";
-  version = "1.18.1";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     owner = "nhost";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-B0kkbRwL808+p6WwvitxY+6FvnjkNN7NFSSYpNJNOrk=";
+    hash = "sha256-WIkuYmNXpKLsHY6de6PDa56NFTkgpXt1aGouJrEiyUo=";
   };
 
   vendorHash = null;
@@ -24,7 +24,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    mv $out/bin/cli $out/bin/${meta.mainProgram}
+    mv $out/bin/cli $out/bin/nhost
   '';
 
   meta = {

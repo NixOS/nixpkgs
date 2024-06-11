@@ -7,22 +7,26 @@
 , ninja
 , vala
 , desktop-file-utils
+, gala
+, gsettings-desktop-schemas
 , gtk4
 , glib
+, gnome-settings-daemon
 , granite7
 , libgee
+, mutter
 , wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "2.0.1";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "shortcut-overlay";
     rev = version;
-    sha256 = "sha256-YVeCO7mZmf+FEY4d8tvC76lW/HkOwQ6kw7nvmzAFEtw=";
+    sha256 = "sha256-HqF2eSNwAzgzwyfNQIeumaGkPYiSc+2OfaD3JRQp4/4=";
   };
 
   nativeBuildInputs = [
@@ -35,10 +39,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gala # org.pantheon.desktop.gala.keybindings
+    gsettings-desktop-schemas # org.gnome.desktop.wm.keybindings
     glib
+    gnome-settings-daemon # org.gnome.settings-daemon.plugins.media-keys
     granite7
     gtk4
     libgee
+    mutter # org.gnome.mutter.keybindings
   ];
 
   passthru = {

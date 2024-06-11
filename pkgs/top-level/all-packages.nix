@@ -2144,7 +2144,9 @@ with pkgs;
 
   archi = callPackage ../tools/misc/archi { };
 
-  breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
+  breitbandmessung = callPackage ../applications/networking/breitbandmessung {
+    electron = electron_29;
+  };
 
   ### APPLICATIONS/VERSION-MANAGEMENT
 
@@ -5551,10 +5553,6 @@ with pkgs;
 
   jellycli = callPackage ../applications/audio/jellycli { };
 
-  jellyfin = callPackage ../servers/jellyfin {
-    ffmpeg = jellyfin-ffmpeg;
-  };
-
   jellyfin-ffmpeg = callPackage ../development/libraries/jellyfin-ffmpeg { };
 
   jellyfin-media-player = libsForQt5.callPackage ../applications/video/jellyfin-media-player {
@@ -5562,8 +5560,6 @@ with pkgs;
   };
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
-
-  jellyfin-web = callPackage ../servers/jellyfin/web.nix { };
 
   jellyseerr = callPackage ../servers/jellyseerr { };
 
@@ -17943,6 +17939,10 @@ with pkgs;
 
   ansible-lint = callPackage ../tools/admin/ansible/lint.nix { };
 
+  antares = callPackage ../by-name/an/antares/package.nix {
+    electron = electron_29;
+  };
+
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
   antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
   antlr3_5 = callPackage ../development/tools/parsing/antlr/3.5.nix { };
@@ -18012,8 +18012,8 @@ with pkgs;
   electron_28 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_28 then electron-source.electron_28 else electron_28-bin;
   electron_29 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_29 then electron-source.electron_29 else electron_29-bin;
   electron_30 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_30 then electron-source.electron_30 else electron_30-bin;
-  electron = electron_29;
-  electron-bin = electron_29-bin;
+  electron = electron_30;
+  electron-bin = electron_30-bin;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -18460,8 +18460,6 @@ with pkgs;
   devbox = callPackage ../development/tools/devbox { };
 
   libcxx = llvmPackages.libcxx;
-
-  librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
   libgcc = stdenv.cc.cc.libgcc or null;
 
@@ -20512,8 +20510,6 @@ with pkgs;
   doctest = callPackage ../development/libraries/doctest { };
 
   docopt_cpp = callPackage ../development/libraries/docopt_cpp { };
-
-  docopts = callPackage ../development/tools/misc/docopts { };
 
   dotconf = callPackage ../development/libraries/dotconf { };
 
@@ -25370,8 +25366,6 @@ with pkgs;
 
   alerta-server = callPackage ../servers/monitoring/alerta { };
 
-  allmark = callPackage ../servers/allmark { };
-
   alps = callPackage ../servers/alps { };
 
   anuko-time-tracker = callPackage ../servers/web-apps/anuko-time-tracker { };
@@ -27569,8 +27563,6 @@ with pkgs;
 
   gotraceui = callPackage ../development/tools/gotraceui { };
 
-  govers = callPackage ../development/tools/govers { };
-
   goverview = callPackage ../tools/security/goverview { };
 
   go-tools = callPackage ../development/tools/go-tools {
@@ -28253,8 +28245,6 @@ with pkgs;
   breath-theme = libsForQt5.callPackage ../data/themes/breath-theme { };
 
   brise = callPackage ../data/misc/brise { };
-
-  apl386 = callPackage ../data/fonts/apl386 { };
 
   bqn386 = callPackage ../data/fonts/bqn386 { };
 
@@ -31253,6 +31243,13 @@ with pkgs;
   );
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
+
+  metacubexd = callPackage ../by-name/me/metacubexd/package.nix {
+    pnpm = callPackage ../development/tools/pnpm/generic.nix {
+      version = "9.1.4";
+      hash = "sha256-MKGAGsTnI3ee/tE6IfTDn562yfu0ztEBvOBrQiWT18k=";
+    };
+  };
 
   minari = python3Packages.toPythonApplication python3Packages.minari;
 
@@ -34700,6 +34697,8 @@ with pkgs;
 
   termimage = callPackage ../tools/graphics/termimage { };
 
+  terminaltexteffects = with python3Packages; toPythonApplication terminaltexteffects ;
+
   terminal-notifier = callPackage ../applications/misc/terminal-notifier { };
 
   textplots = callPackage ../tools/graphics/textplots { };
@@ -35796,7 +35795,9 @@ with pkgs;
 
   youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
 
-  youtube-music = callPackage ../applications/audio/youtube-music { pnpm = pnpm_8; };
+  youtube-music = callPackage ../applications/audio/youtube-music {
+    pnpm = pnpm_9;
+  };
 
   youtube-tui = callPackage ../applications/video/youtube-tui {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;

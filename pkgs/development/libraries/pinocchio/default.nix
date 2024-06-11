@@ -6,6 +6,7 @@
 , eigen
 , example-robot-data
 , collisionSupport ? !stdenv.isDarwin
+, console-bridge
 , jrl-cmakemodules
 , hpp-fcl
 , urdfdom
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
+    console-bridge
     jrl-cmakemodules
     urdfdom
   ] ++ lib.optionals (!pythonSupport) [

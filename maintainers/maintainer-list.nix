@@ -6700,6 +6700,16 @@
     githubId = 9959940;
     name = "Andreas Fehn";
   };
+  felbinger = {
+    name = "Nico Felbinger";
+    email = "nico@felbinger.eu";
+    matrix = "@nico:felbinger.eu";
+    github = "felbinger";
+    githubId = 26925347;
+    keys = [{
+      fingerprint = "0797 D238 9769 CA1E 57B7 2ED9 2BA7 8116 87C9 0DE4";
+    }];
+  };
   felipeqq2 = {
     name = "Felipe Silva";
     email = "nixpkgs@felipeqq2.rocks";
@@ -12893,6 +12903,12 @@
     githubId = 427866;
     name = "Matthias Beyer";
   };
+  matthiasq = {
+    email = "matthias.queitsch@mailbox.org";
+    github = "matthias-Q";
+    githubId = 35303817;
+    name = "Matthias Queitsch";
+  };
   MatthieuBarthel = {
     email = "matthieu@imatt.ch";
     name = "Matthieu Barthel";
@@ -12925,6 +12941,16 @@
     github = "matt-snider";
     githubId = 11810057;
     name = "Matt Snider";
+  };
+  MattSturgeon = {
+    email = "matt@sturgeon.me.uk";
+    github = "MattSturgeon";
+    githubId = 5046562;
+    matrix = "@mattsturg:matrix.org";
+    name = "Matt Sturgeon";
+    keys = [{
+      fingerprint = "7082 22EA 1808 E39A 83AC  8B18 4F91 844C ED1A 8299";
+    }];
   };
   matusf = {
     email = "matus.ferech@gmail.com";
@@ -16937,6 +16963,12 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
+  qubitnano = {
+    name = "qubitnano";
+    email = "qubitnano@protonmail.com";
+    github = "qubitnano";
+    githubId = 146656568;
+  };
   queezle = {
     email = "git@queezle.net";
     github = "queezle42";
@@ -16975,6 +17007,12 @@
     github = "Qusic";
     githubId = 2141853;
     name = "Bang Lee";
+  };
+  qwqawawow = {
+    email = "eihqnh@outlook.com";
+    github = "qwqawawow";
+    githubId = 40905037;
+    name = "qwqawawow";
   };
   qyliss = {
     email = "hi@alyssa.is";
@@ -22754,6 +22792,11 @@
     github = "yoctocell";
     githubId = 40352765;
     name = "Yoctocell";
+  };
+  yomaq = {
+    name = "yomaq";
+    github = "yomaq";
+    githubId = 112864332;
   };
   yorickvp = {
     email = "yorickvanpelt@gmail.com";

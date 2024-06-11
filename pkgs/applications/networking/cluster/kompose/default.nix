@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kompose";
-  version = "1.32.0";
+  version = "1.34.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kompose";
     rev = "v${version}";
-    hash = "sha256-W9KAjyMp8fbnZunH5hwj0uctNYxEN/vbEDGaFJpv5hM=";
+    hash = "sha256-lBNf/pNJulex3WNRx8ZQcGag2nUPqjPKU9X/xDNxQjc=";
   };
 
-  vendorHash = "sha256-nY0d3r3faowHa7ylqDkUrX6MrGW3g1jYjm1MLFW/jK8=";
+  vendorHash = "sha256-SakezUp2Gj1PxY1Gwf8tH2yShtB/MPIqGjM/scrGG4I=";
 
   nativeBuildInputs = [ installShellFiles git ];
 

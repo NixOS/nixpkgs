@@ -72,14 +72,14 @@ let
 in
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8EPoZ/dfxrQjdtE0rZ+2pOaXxlyhRuweYnVuA9i0Fgc=";
+    hash = "sha256-PYaqRNKIhQ1DnFRZYyJJfBszVM2Bmu7A/lvvzJ6lL3g=";
   };
 
   patches = [ ./0001-setup.py-propagate-cmakeFlags.patch ];
@@ -133,7 +133,7 @@ buildPythonPackage rec {
     torch.cxxdev
   ];
 
-  propagatedBuildInputs = [ torch ];
+  dependencies = [ torch ];
 
   BUILD_SOX = 0;
   BUILD_KALDI = 0;
@@ -149,16 +149,16 @@ buildPythonPackage rec {
 
   doCheck = false; # requires sox backend
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch audio library";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [ junjihashimoto ];
   };
 }
