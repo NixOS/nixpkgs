@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Collection of internationalizing tools";
     mainProgram = "pybabel";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ getchoo ];
   };
 }
