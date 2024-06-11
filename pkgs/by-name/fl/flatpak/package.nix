@@ -51,7 +51,6 @@
   dconf,
   gsettings-desktop-schemas,
   librsvg,
-  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-U482ssb4xw7v0S0TrVsa2DCCAQaovTqfa45NnegeSUY="; # Taken from https://github.com/flatpak/flatpak/releases/
+    hash = "sha256-U482ssb4xw7v0S0TrVsa2DCCAQaovTqfa45NnegeSUY=";
   };
 
   patches = [
@@ -174,8 +173,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-curl"
-    "--with-system-bubblewrap=${bubblewrap}/bin/bwrap"
-    "--with-system-dbus-proxy=${xdg-dbus-proxy}/bin/xdg-dbus-proxy"
+    "--with-system-bubblewrap=${lib.getExe bubblewrap}"
+    "--with-system-dbus-proxy=${lib.getExe xdg-dbus-proxy}"
     "--with-dbus-config-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-profile-dir=${placeholder "out"}/etc/profile.d"
     "--localstatedir=/var"
@@ -215,11 +214,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Linux application sandboxing and distribution framework";
     homepage = "https://flatpak.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ getchoo ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/flatpak/flatpak/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ getchoo ];
+    platforms = lib.platforms.linux;
   };
 })
