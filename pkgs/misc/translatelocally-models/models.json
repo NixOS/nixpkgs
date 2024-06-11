@@ -1,0 +1,149 @@
+[
+  {
+    "version": 1,
+    "checksum": "3714539160d5b4dce3ce0d829939315e3daffeaff53647249cc6336d745c09f2",
+    "url": "https://data.statmt.org/bergamot/models/csen/csen.student.base.tar.gz",
+    "name": "Czech-English base",
+    "code": "cs-en-base"
+  },
+  {
+    "version": 1,
+    "checksum": "693aa14ecb86275169ad4b01cbca294f3bd38d8d9bc1fad8dd89fa7e937e7d2c",
+    "url": "https://data.statmt.org/bergamot/models/csen/csen.student.tiny11.tar.gz",
+    "name": "Czech-English tiny",
+    "code": "cs-en-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "7a57b4e3a11a2c5e03fc6855ffc2b8f61ce3f1a68aeefa4592577a9eebe25031",
+    "url": "https://data.statmt.org/bergamot/models/csen/encs.student.base.tar.gz",
+    "name": "English-Czech base",
+    "code": "en-cs-base"
+  },
+  {
+    "version": 1,
+    "checksum": "f999d6511bdb4f1ff246b0563fdf9b71d836e1c3037fe5306a61836d3b5b8d19",
+    "url": "https://data.statmt.org/bergamot/models/csen/encs.student.tiny11.tar.gz",
+    "name": "English-Czech tiny",
+    "code": "en-cs-tiny"
+  },
+  {
+    "version": 2,
+    "checksum": "e7362faa83c4f61e552adf8fbd4bc528fe706746eb9fc1c286ec9af7566e3daf",
+    "url": "https://data.statmt.org/bergamot/models/deen/deen.student.base.tar.gz",
+    "name": "German-English base",
+    "code": "de-en-base"
+  },
+  {
+    "version": 2,
+    "checksum": "5c11b6ccfa0533fd5632b3cbccbb054972076266e2d1d989d3babb0ec0b10e28",
+    "url": "https://data.statmt.org/bergamot/models/deen/deen.student.tiny11.tar.gz",
+    "name": "German-English tiny",
+    "code": "de-en-tiny"
+  },
+  {
+    "version": 2,
+    "checksum": "cf9ab5a41ce359672ab47579686f9af50fc1fe040552c375ca86912f0fce7827",
+    "url": "https://data.statmt.org/bergamot/models/deen/ende.student.base.tar.gz",
+    "name": "English-German base",
+    "code": "en-de-base"
+  },
+  {
+    "version": 2,
+    "checksum": "0e85d1d7ee4f8a3ec12680696ffc11fa97d67a54d068ceafcf390a87df94877f",
+    "url": "https://data.statmt.org/bergamot/models/deen/ende.student.tiny11.tar.gz",
+    "name": "English-German tiny",
+    "code": "en-de-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "adf49d0e2f21b82414bc353ae1f0904d93360caa92203ae9f2fc209a83882d81",
+    "url": "https://data.statmt.org/bergamot/models/esen/esen.student.tiny11.tar.gz",
+    "name": "Spanish-English tiny",
+    "code": "es-en-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "6594dda2a4f5d333969c30f8356f4a9f3fe15a9f8a5fd018b0d85b9d9ad2abb0",
+    "url": "https://data.statmt.org/bergamot/models/esen/enes.student.tiny11.tar.gz",
+    "name": "English-Spanish tiny",
+    "code": "en-es-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "05c6525549c9c621e348f8de74533764ad7696aba8245fc9a504116f8ef4053c",
+    "url": "https://data.statmt.org/bergamot/models/eten/eten.student.tiny11.tar.gz",
+    "name": "Estonian-English tiny",
+    "code": "et-en-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "afce6c566270abdd4db332e8dcf4fe22057ada3b2a1171aab04d0d4817396fb5",
+    "url": "https://data.statmt.org/bergamot/models/eten/enet.student.tiny11.tar.gz",
+    "name": "English-Estonian tiny",
+    "code": "en-et-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "5c1696747590d1a75bef67348dce96bcd3889eb5a06a0f670c3d7232ed79f60e",
+    "url": "https://data.statmt.org/bergamot/models/isen/isen.student.tiny11.tar.gz",
+    "name": "Icelandic-English tiny",
+    "code": "is-en-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "9f5dde2f4f87438c24c9561990636e624c53b527ddc8505f822b22b073069de8",
+    "url": "https://data.statmt.org/bergamot/models/nben/nben.student.tiny11.tar.gz",
+    "name": "Norwegian (Bokmål)-English tiny",
+    "code": "nb-en-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "0bb4b83560caaffae95940574d939999092800a7803fae4c79a97e6481887a4f",
+    "url": "https://data.statmt.org/bergamot/models/nnen/nnen.student.tiny11.tar.gz",
+    "name": "Norwegian (Nynorsk)-English tiny",
+    "code": "nn-en-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "ecfe9c2b0be3406c0205ad2da58f4005893a4ae969e81dd9c523093cf5c7abc3",
+    "url": "https://data.statmt.org/bergamot/models/bgen/bgen.student.tiny11.tar.gz",
+    "name": "Bulgarian-English tiny",
+    "code": "bg-en-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "eb9a7511ae9c89fb91ab6da1e9d5061946ad752e5801351f39c8eddca9705c74",
+    "url": "https://data.statmt.org/bergamot/models/bgen/enbg.student.tiny11.tar.gz",
+    "name": "English-Bulgarian tiny",
+    "code": "en-bg-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "87148203cbda28421d76fffbd7d3cd6c1fc0d6dae2843c248870274d6512a388",
+    "url": "https://data.statmt.org/bergamot/models/plen/plen.student.tiny11.tar.gz",
+    "name": "Polish-English tiny",
+    "code": "pl-en-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "c33219daa12e7872cf7ac8a1b86a2f3e0592ebadd7e756bf11d16d9a7725cf9b",
+    "url": "https://data.statmt.org/bergamot/models/plen/enpl.student.tiny11.tar.gz",
+    "name": "English-Polish tiny",
+    "code": "en-pl-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "817a45ed9ec3228bfb797e5e14781ab7fe9f388fe1e834e280031f05089809f8",
+    "url": "https://data.statmt.org/bergamot/models/fren/fren.student.tiny11.tar.gz",
+    "name": "French-English tiny",
+    "code": "fr-en-tiny"
+  },
+  {
+    "version": 1,
+    "checksum": "28deea86d2a02102a7fedf19391a7628386f01f1f532d430306a9728dc5ec2d6",
+    "url": "https://data.statmt.org/bergamot/models/fren/enfr.student.tiny11.tar.gz",
+    "name": "English-French tiny",
+    "code": "en-fr-tiny"
+  }
+]

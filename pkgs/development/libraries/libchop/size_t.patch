@@ -1,0 +1,11 @@
+--- a/src/chop.c
++++ b/src/chop.c
+@@ -539,7 +539,7 @@ extern const chop_class_t chop_gdbm_bloc
+   chop_qdbm_block_iterator_class;
+ 
+ const struct chop_class_entry *
+-chop_lookup_class_entry (const char *str, unsigned int len);
++chop_lookup_class_entry (const char *str, size_t len);
+ 
+ /* Include the gperf-generated perfect hash table.  */
+ #include "class-lookup.c"

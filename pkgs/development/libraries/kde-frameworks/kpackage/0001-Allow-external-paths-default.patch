@@ -1,0 +1,25 @@
+From c134a83d226fc6b92412ee714bb6c7ab7e3a800f Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Sun, 28 Mar 2021 10:25:18 -0500
+Subject: [PATCH 1/2] Allow external paths default
+
+---
+ src/kpackage/package.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/kpackage/package.cpp b/src/kpackage/package.cpp
+index 36f5600..881f176 100644
+--- a/src/kpackage/package.cpp
++++ b/src/kpackage/package.cpp
+@@ -866,7 +866,7 @@ PackagePrivate::PackagePrivate()
+ PackagePrivate::PackagePrivate()
+     : QSharedData()
+     , fallbackPackage(nullptr)
+-    , externalPaths(false)
++    , externalPaths(true)
+     , valid(false)
+     , checkedValid(false)
+ {
+-- 
+2.30.1
+

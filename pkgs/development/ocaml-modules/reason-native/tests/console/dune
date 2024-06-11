@@ -1,0 +1,4 @@
+(executable
+ (name console-test)
+ (public_name console-test)
+ (libraries reason console.lib))

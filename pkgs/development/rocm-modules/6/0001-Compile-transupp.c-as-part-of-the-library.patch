@@ -1,0 +1,104 @@
+From 4a0584f7c05641143151ebdc1be1163bebf9d35d Mon Sep 17 00:00:00 2001
+From: Las <las@protonmail.ch>
+Date: Sun, 3 Jan 2021 18:35:37 +0000
+Subject: [PATCH] Compile transupp.c as part of the library
+
+The exported symbols are made weak to not conflict with users
+of the library that already vendor this functionality.
+---
+ CMakeLists.txt |  4 ++--
+ transupp.c     | 14 +++++++-------
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0ca6f98..a9a0fae 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -533,7 +533,7 @@ set(JPEG_SOURCES jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c
+   jdatasrc.c jdcoefct.c jdcolor.c jddctmgr.c jdhuff.c jdicc.c jdinput.c
+   jdmainct.c jdmarker.c jdmaster.c jdmerge.c jdphuff.c jdpostct.c jdsample.c
+   jdtrans.c jerror.c jfdctflt.c jfdctfst.c jfdctint.c jidctflt.c jidctfst.c
+-  jidctint.c jidctred.c jquant1.c jquant2.c jutils.c jmemmgr.c jmemnobs.c)
++  jidctint.c jidctred.c jquant1.c jquant2.c jutils.c jmemmgr.c jmemnobs.c transupp.c)
+ 
+ if(WITH_ARITH_ENC OR WITH_ARITH_DEC)
+   set(JPEG_SOURCES ${JPEG_SOURCES} jaricom.c)
+@@ -1489,7 +1489,7 @@ install(EXPORT ${CMAKE_PROJECT_NAME}Targets
+ 
+ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/jconfig.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/jerror.h ${CMAKE_CURRENT_SOURCE_DIR}/jmorecfg.h
+-  ${CMAKE_CURRENT_SOURCE_DIR}/jpeglib.h
++  ${CMAKE_CURRENT_SOURCE_DIR}/jpeglib.h ${CMAKE_CURRENT_SOURCE_DIR}/transupp.h
+   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+ 
+ include(cmakescripts/BuildPackages.cmake)
+diff --git a/transupp.c b/transupp.c
+index 6e86077..2da49a7 100644
+--- a/transupp.c
++++ b/transupp.c
+@@ -1386,7 +1386,7 @@ jt_read_integer(const char **strptr, JDIMENSION *result)
+  * This code is loosely based on XParseGeometry from the X11 distribution.
+  */
+ 
+-GLOBAL(boolean)
++GLOBAL(boolean) __attribute__((weak))
+ jtransform_parse_crop_spec(jpeg_transform_info *info, const char *spec)
+ {
+   info->crop = FALSE;
+@@ -1486,7 +1486,7 @@ trim_bottom_edge(jpeg_transform_info *info, JDIMENSION full_height)
+  * and transformation is not perfect.  Otherwise returns TRUE.
+  */
+ 
+-GLOBAL(boolean)
++GLOBAL(boolean) __attribute__((weak))
+ jtransform_request_workspace(j_decompress_ptr srcinfo,
+                              jpeg_transform_info *info)
+ {
+@@ -2033,7 +2033,7 @@ adjust_exif_parameters(JOCTET *data, unsigned int length, JDIMENSION new_width,
+  * to jpeg_write_coefficients().
+  */
+ 
+-GLOBAL(jvirt_barray_ptr *)
++GLOBAL(jvirt_barray_ptr *) __attribute__((weak))
+ jtransform_adjust_parameters(j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+                              jvirt_barray_ptr *src_coef_arrays,
+                              jpeg_transform_info *info)
+@@ -2152,7 +2152,7 @@ jtransform_adjust_parameters(j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+  * Note that some transformations will modify the source data arrays!
+  */
+ 
+-GLOBAL(void)
++GLOBAL(void) __attribute__((weak))
+ jtransform_execute_transform(j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+                              jvirt_barray_ptr *src_coef_arrays,
+                              jpeg_transform_info *info)
+@@ -2264,7 +2264,7 @@ jtransform_execute_transform(j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+  *           (may use custom action then)
+  */
+ 
+-GLOBAL(boolean)
++GLOBAL(boolean) __attribute__((weak))
+ jtransform_perfect_transform(JDIMENSION image_width, JDIMENSION image_height,
+                              int MCU_width, int MCU_height,
+                              JXFORM_CODE transform)
+@@ -2303,7 +2303,7 @@ jtransform_perfect_transform(JDIMENSION image_width, JDIMENSION image_height,
+  * This must be called before jpeg_read_header() to have the desired effect.
+  */
+ 
+-GLOBAL(void)
++GLOBAL(void) __attribute__((weak))
+ jcopy_markers_setup(j_decompress_ptr srcinfo, JCOPY_OPTION option)
+ {
+ #ifdef SAVE_MARKERS_SUPPORTED
+@@ -2331,7 +2331,7 @@ jcopy_markers_setup(j_decompress_ptr srcinfo, JCOPY_OPTION option)
+  * JFIF APP0 or Adobe APP14 markers if selected.
+  */
+ 
+-GLOBAL(void)
++GLOBAL(void) __attribute__((weak))
+ jcopy_markers_execute(j_decompress_ptr srcinfo, j_compress_ptr dstinfo,
+                       JCOPY_OPTION option)
+ {
+-- 
+2.29.2
+
