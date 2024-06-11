@@ -94,6 +94,7 @@ python3.pkgs.buildPythonApplication rec {
     peewee
     peewee-migrate
     psycopg2
+    pydub
     pyjwt
     pymysql
     pypandoc
