@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, git
 , cmake
 , ninja
 , openssl
@@ -13,19 +14,26 @@
 
 let
   enableFeature = yes: if yes then "ON" else "OFF";
-  versions = lib.importJSON ./versions.json;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckdb";
-  inherit (versions) rev version;
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    # to update run:
-    # nix-shell maintainers/scripts/update.nix --argstr path duckdb
-    inherit (versions) hash;
     owner = "duckdb";
     repo = "duckdb";
     rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-6pP0MZs4IClszNcLTN+nkcuKml1rIG4FY/ybRV6nINU=";
+
+    # pull the git revision from the tar file and store it in .git/HEAD
+    nativeBuildInputs = [ git ];
+    # Ignore broken pipe error from gzip as git get-tar-common-id exits after
+    # reading 1k from the input stream.
+    postFetch = ''
+      mkdir "$out"/.git
+      (gzip -cd "$renamed" 2>/dev/null || true) | \
+        git get-tar-commit-id > "$out"/.git/HEAD
+    '';
   };
 
   outputs = [ "out" "lib" "dev" ];
@@ -39,11 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDUCKDB_EXTENSION_CONFIGS=${finalAttrs.src}/.github/config/in_tree_extensions.cmake"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
-    "-DOVERRIDE_GIT_DESCRIBE=v${finalAttrs.version}-0-g${finalAttrs.rev}"
   ] ++ lib.optionals finalAttrs.doInstallCheck [
     # development settings
     "-DBUILD_UNITTESTS=ON"
   ];
+
+  preConfigure = ''
+    cmakeFlagsArray+=( "-DOVERRIDE_GIT_DESCRIBE=v${finalAttrs.version}-0-g$(< .git/HEAD)" )
+  '';
 
   postInstall = ''
     mkdir -p $lib
@@ -113,8 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       runHook postInstallCheck
     '';
-
-  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     changelog = "https://github.com/duckdb/duckdb/releases/tag/v${finalAttrs.version}";
