@@ -24,7 +24,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.prowlarr = {
       description = "Prowlarr";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
