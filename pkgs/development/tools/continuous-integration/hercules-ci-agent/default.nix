@@ -23,15 +23,16 @@ let
       (o: {
         postInstall = ''
           ${o.postInstall or ""}
+          ${lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+            remove-references-to -t ${haskellPackages.hercules-ci-cnix-expr} $out/bin/hercules-ci-agent
+            remove-references-to -t ${haskellPackages.hercules-ci-cnix-expr} $out/bin/hercules-ci-agent-worker
+          ''}
           mkdir -p $out/libexec
           mv $out/bin/hercules-ci-agent $out/libexec
           makeWrapper $out/libexec/hercules-ci-agent $out/bin/hercules-ci-agent --prefix PATH : ${lib.escapeShellArg (makeBinPath bundledBins)}
         '';
       })
-      (addBuildTools [ makeBinaryWrapper ]
-        # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-        ((if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then lib.id else haskell.lib.compose.justStaticExecutables)
-          haskellPackages.hercules-ci-agent));
+      (addBuildTools [ makeBinaryWrapper ] (justStaticExecutables haskellPackages.hercules-ci-agent));
 in pkg.overrideAttrs (finalAttrs: o: {
     meta = o.meta // {
       position = toString ./default.nix + ":1";
