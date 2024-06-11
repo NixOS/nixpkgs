@@ -863,6 +863,7 @@ let
     "logmult"
     "loon"
     "loon_ggplot"
+    "loon_shiny"
     "loon_tourr"
     "LS2Wstat"
     "MareyMap"
