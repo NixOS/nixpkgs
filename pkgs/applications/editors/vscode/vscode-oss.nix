@@ -11,8 +11,8 @@
   makeDesktopItem,
   makeWrapper,
   moreutils,
-  nodejs_18,
-  electron_28,
+  nodejs_20,
+  electron_29,
   nodePackages,
   pkg-config,
   python3,
@@ -54,9 +54,9 @@ let
 
   inherit (common) desktopItem urlHandlerDesktopItem;
 
-  nodejs = nodejs_18;
+  nodejs = nodejs_20;
 
-  electron = electron_28;
+  electron = electron_29;
 
   yarn' = yarn.override { inherit nodejs; };
 
@@ -113,14 +113,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = executableName;
-  version = "1.89.1";
-  commit = "dc96b837cf6bb4af9cd736aa3af08cf8279f7685";
+  version = "1.90.0";
+  commit = "89de5a8d4d6205e5b11647eb6a74844ca23d2573";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode";
     rev = finalAttrs.version;
-    sha256 = "sha256-z4VA1pv+RPAzUOH/yK6EB84h4DOFG5TcRH443N7EIL0=";
+    sha256 = "sha256-Y+tmIZLayW+M3IuNNGufZJSlHD90nakL/WP9ACCiES0=";
   };
 
   passthru.product =
@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
-      outputHash = "sha256-7Qy0xMLcvmZ43EcNbsy7lko0nsXlbVYSMiq6aa4LuoQ=";
+      outputHash = "sha256-GogYDiEwx+IzJi11kPY55QnXSxI1zFsQXx9FJQxDbiU=";
     }
   );
 
