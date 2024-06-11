@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
   # Add FHS paths for non-NixOS applications.
-  configureFlags = [ "--with-drivers-path=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri" ]
+  configureFlags = lib.optionals stdenv.isLinux [ "--with-drivers-path=${mesa.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri" ]
     ++ lib.optionals (!minimal) [ "--enable-glx" ];
 
   installFlags = [ "dummy_drv_video_ladir=$(out)/lib/dri" ];

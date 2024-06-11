@@ -5,9 +5,9 @@
   buildPythonPackage,
   appdirs,
   cffi,
+  darwin,
   decorator,
   mako,
-  mesa_drivers,
   numpy,
   ocl-icd,
   oldest-supported-numpy,
@@ -22,7 +22,7 @@
 }:
 
 let
-  os-specific-buildInputs = if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
+  os-specific-buildInputs = if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.OpenCL ] else [ ocl-icd ];
 in
 buildPythonPackage rec {
   pname = "pyopencl";

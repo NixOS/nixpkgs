@@ -149,11 +149,13 @@ clangStdenv.mkDerivation rec {
     "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
   ];
+
   doCheck = true;
+
   checkPhase = ''
     # for running mesa llvmpipe
+    export LIBGL_DRIVERS_PATH=${mesa.drivers}/lib/dri
     export __EGL_VENDOR_LIBRARY_FILENAMES=${mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json
-    export LIBGL_DRIVERS_PATH=${mesa.drivers}/lib:${mesa.drivers}/lib/dri
     # some fontconfig issues cause pdf output to have wrong font
     ctest -j$NIX_BUILD_CORES -E pdfexporttest.\*
   '';
