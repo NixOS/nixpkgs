@@ -10,6 +10,20 @@
 , withOdbc ? false
 }:
 
+let
+  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # needs to match source/src/include/duckdb/common/platform.h
+  duckDBPlatform = let
+    os = if stdenv.hostPlatform.parsed.kernel.name == "darwin"
+      then "osx"
+      else stdenv.hostPlatform.parsed.kernel.name;
+    arch = {
+      "aarch64" = "arm64";
+      "x86_64" = "amd64";
+    }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
+  in
+    "${os}_${arch}";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckdb";
   version = "1.0.0";
@@ -44,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+  ]
+  ++ lib.optionals (!canExecute) [
+    "-DDUCKDB_EXPLICIT_PLATFORM=${duckDBPlatform}"
   ];
 
   preConfigure = ''
@@ -53,7 +70,14 @@ stdenv.mkDerivation (finalAttrs: {
     cmakeFlagsArray+=( "-DOVERRIDE_GIT_DESCRIBE=v${finalAttrs.version}-0-g$(< .git/HEAD)" )
   '';
 
-  doInstallCheck = true;
+  postBuild = ''
+    if [[ $(< duckdb_platform_out) != "${duckDBPlatform}" ]]; then
+      echo "error: $(< duckdb_platform_out) != ${duckDBPlatform}" >&2
+      exit 1
+    fi
+  '';
+
+  doInstallCheck = canExecute;
 
   installCheckPhase =
     let
