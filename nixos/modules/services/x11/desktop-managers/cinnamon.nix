@@ -229,7 +229,6 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.geary.enable = mkDefault (notExcluded pkgs.gnome.geary);
       programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome.gnome-disk-utility);
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome.gnome-terminal);
       programs.file-roller.enable = mkDefault (notExcluded pkgs.gnome.file-roller);
@@ -247,7 +246,6 @@ in
         pix
 
         # external apps shipped with linux-mint
-        hexchat
         gnome-calculator
         gnome-calendar
         gnome-screenshot
