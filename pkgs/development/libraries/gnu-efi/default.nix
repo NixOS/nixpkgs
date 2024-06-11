@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, fetchFromGitHub, pciutils
-, gitUpdater }:
+, gitUpdater, fwupd-efi, ipxe, refind, syslinux }:
 
 stdenv.mkDerivation rec {
   pname = "gnu-efi";
@@ -27,9 +27,14 @@ stdenv.mkDerivation rec {
       --replace "-Werror" ""
   '';
 
-  passthru.updateScript = gitUpdater {
-    # No nicer place to find latest release.
-    url = "https://git.code.sf.net/p/gnu-efi/code";
+  passthru = {
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://git.code.sf.net/p/gnu-efi/code";
+    };
+    tests = {
+      inherit fwupd-efi ipxe refind syslinux;
+    };
   };
 
   meta = with lib; {

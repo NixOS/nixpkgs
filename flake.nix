@@ -5,14 +5,15 @@
 
   outputs = { self }:
     let
-      jobs = import ./pkgs/top-level/release.nix {
-        nixpkgs = self;
-      };
-
       libVersionInfoOverlay = import ./lib/flake-version-info.nix self;
       lib = (import ./lib).extend libVersionInfoOverlay;
 
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
+
+      jobs = forAllSystems (system: import ./pkgs/top-level/release.nix {
+        nixpkgs = self;
+        inherit system;
+      });
     in
     {
       lib = lib.extend (final: prev: {
@@ -43,12 +44,14 @@
           );
       });
 
-      checks.x86_64-linux = {
-        tarball = jobs.tarball;
+      checks = forAllSystems (system: {
+        tarball = jobs.${system}.tarball;
+      } // lib.optionalAttrs (self.legacyPackages.${system}.stdenv.isLinux) {
         # Test that ensures that the nixosSystem function can accept a lib argument
         # Note: prefer not to extend or modify `lib`, especially if you want to share reusable modules
         #       alternatives include: `import` a file, or put a custom library in an option or in `_module.args.<libname>`
         nixosSystemAcceptsLib = (self.lib.nixosSystem {
+          pkgs = self.legacyPackages.${system};
           lib = self.lib.extend (final: prev: {
             ifThisFunctionIsMissingTheTestFails = final.id;
           });
@@ -64,13 +67,13 @@
             })
           ];
         }).config.system.build.toplevel;
-      };
+      });
 
       htmlDocs = {
-        nixpkgsManual = jobs.manual;
+        nixpkgsManual = builtins.mapAttrs (_: jobSet: jobSet.manual) jobs;
         nixosManual = (import ./nixos/release-small.nix {
           nixpkgs = self;
-        }).nixos.manual.x86_64-linux;
+        }).nixos.manual;
       };
 
       # The "legacy" in `legacyPackages` doesn't imply that the packages exposed
