@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, dmenu }:
+{ lib, stdenv, fetchFromGitHub, cmake, dmenu, fmt, spdlog }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "j4-dmenu-desktop";
-  version = "unstable-2023-09-12";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "enkore";
     repo = "j4-dmenu-desktop";
-    rev = "7e3fd045482a8ea70619e422975b52feabc75175";
-    hash = "sha256-8PmfzQkHlEdMbrcQO0bPruP3jaKEcr/17x0/Z7Jedh0=";
+    rev = "r${version}";
+    hash = "sha256-/HlH7BIQvsczzXm8SFwSRKlt5kj38l3DYFJ655J1qas=";
   };
 
   postPatch = ''
@@ -18,14 +18,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  # tests are fetching an external git repository
+  buildInputs = [
+    fmt
+    spdlog
+  ];
+
+  # Disable unit tests and the fetching of external dependencies.
   cmakeFlags = [
     "-DWITH_TESTS=OFF"
-    "-DWITH_GIT_CATCH=OFF"
+    "-DNO_DOWNLOAD=ON"
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/enkore/j4-dmenu-desktop/blob/${finalAttrs.src.rev}/CHANGELOG";
+    changelog = "https://github.com/enkore/j4-dmenu-desktop/blob/${version}/CHANGELOG";
     description = "Wrapper for dmenu that recognizes .desktop files";
     homepage = "https://github.com/enkore/j4-dmenu-desktop";
     license = licenses.gpl3Only;
@@ -33,4 +38,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ ericsagnes ];
     platforms = platforms.unix;
   };
-})
+}
