@@ -29,7 +29,7 @@ let
     doInstallCheck = false;
   });
 
-  version = "1.0.5";
+  version = "1.0.6";
 in rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
@@ -38,10 +38,10 @@ in rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-W5DFIifCjGYJXJzLU3RpqBeqes4zrf0Sr/6rwzTygPU=";
+    hash = "sha256-vGmMEQohwHiTtkFm6WTKtNNYVqPJA6YxRhAizbhtCwE=";
   };
 
-  cargoHash = "sha256-a6o28oonA6G0xo83PXwbH86V0aDDAAA2zajE67qsSU0=";
+  cargoHash = "sha256-89pivwMs/TpCQBaKFH6iUEpaid5eQOrvyz5otcFKy54=";
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
