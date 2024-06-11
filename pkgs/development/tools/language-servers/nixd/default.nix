@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
   boost182,
   gtest,
   llvmPackages,
@@ -35,6 +36,8 @@ let
     ];
 
     mesonBuildType = "release";
+
+    strictDeps = true;
 
     doCheck = true;
 
@@ -128,6 +131,8 @@ in
         gtest
         boost182
       ];
+
+      nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
 
       env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
 
