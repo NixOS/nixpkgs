@@ -5,24 +5,26 @@
 , ninja
 , pkg-config
 , vala
+, wayland-scanner
 , wrapGAppsHook4
 , glib
 , granite7
 , gtk4
 , libadwaita
+, wayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-dock";
-  version = "0-unstable-2024-05-15";
+  version = "0-unstable-2024-06-11";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "dock";
-    rev = "1c324c00faad8e29e72e6ff5fc0250ab9b9dc6f9";
-    sha256 = "sha256-WXHkoRZtOKohRzQplomz/lx+fX56MF4kRQE7bOd7ljo=";
+    rev = "ba5dfdfd5d8217379ede3db6fe29eca193a21a51";
+    sha256 = "sha256-x5dRmUp6TdWNSlORgGPV2bIOjU2vosq7qkUQjlfTN6Q=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +32,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    wayland-scanner
     wrapGAppsHook4
   ];
 
@@ -38,6 +41,7 @@ stdenv.mkDerivation rec {
     granite7
     gtk4
     libadwaita
+    wayland
   ];
 
   meta = with lib; {
