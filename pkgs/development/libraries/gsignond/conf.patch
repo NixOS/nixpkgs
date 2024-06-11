@@ -1,0 +1,12 @@
+diff --git a/meson.build b/meson.build
+index cb1e0df..d90c85c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -95,6 +95,6 @@ endif
+ configure_file(
+     input: 'gsignond.conf.in',
+     configuration: conf_data,
+-    install_dir: sysconf_dir,
++    install_dir: 'etc/',
+     output: 'gsignond.conf'
+ )

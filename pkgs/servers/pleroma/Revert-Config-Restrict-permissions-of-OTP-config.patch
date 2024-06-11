@@ -1,0 +1,40 @@
+From 29af78b112f7956ac1211fbfec2eadbf4caca40f Mon Sep 17 00:00:00 2001
+From: Yaya <yaya@uwu.is>
+Date: Sun, 6 Aug 2023 00:02:40 +0000
+Subject: [PATCH] Revert "Config: Restrict permissions of OTP config file"
+
+This reverts commit 4befb3b1d02f32eb2c56f12e4684a7bb3167b0ee.
+
+The Nix store is world readable by design.
+---
+ lib/pleroma/config/release_runtime_provider.ex | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/lib/pleroma/config/release_runtime_provider.ex b/lib/pleroma/config/release_runtime_provider.ex
+index 9ec0f975e..91e5f1a54 100644
+--- a/lib/pleroma/config/release_runtime_provider.ex
++++ b/lib/pleroma/config/release_runtime_provider.ex
+@@ -20,20 +20,6 @@ def load(config, opts) do
+ 
+     with_runtime_config =
+       if File.exists?(config_path) do
+-        # <https://git.pleroma.social/pleroma/pleroma/-/issues/3135>
+-        %File.Stat{mode: mode} = File.lstat!(config_path)
+-
+-        if Bitwise.band(mode, 0o007) > 0 do
+-          raise "Configuration at #{config_path} has world-permissions, execute the following: chmod o= #{config_path}"
+-        end
+-
+-        if Bitwise.band(mode, 0o020) > 0 do
+-          raise "Configuration at #{config_path} has group-wise write permissions, execute the following: chmod g-w #{config_path}"
+-        end
+-
+-        # Note: Elixir doesn't provides a getuid(2)
+-        # so cannot forbid group-read only when config is owned by us
+-
+         runtime_config = Config.Reader.read!(config_path)
+ 
+         with_defaults
+-- 
+2.40.1
+

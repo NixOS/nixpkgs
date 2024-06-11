@@ -1,0 +1,46 @@
+--- libav/libavcodec/libvpx.c.orig	2018-02-12 21:25:59 UTC
++++ libav/libavcodec/libvpx.c
+@@ -25,6 +25,7 @@
+ enum AVPixelFormat ff_vpx_imgfmt_to_pixfmt(vpx_img_fmt_t img)
+ {
+     switch (img) {
++#if VPX_IMAGE_ABI_VERSION < 5
+     case VPX_IMG_FMT_RGB24:     return AV_PIX_FMT_RGB24;
+     case VPX_IMG_FMT_RGB565:    return AV_PIX_FMT_RGB565BE;
+     case VPX_IMG_FMT_RGB555:    return AV_PIX_FMT_RGB555BE;
+@@ -36,10 +37,13 @@ enum AVPixelFormat ff_vpx_imgfmt_to_pixfmt(vpx_img_fmt
+     case VPX_IMG_FMT_ARGB_LE:   return AV_PIX_FMT_BGRA;
+     case VPX_IMG_FMT_RGB565_LE: return AV_PIX_FMT_RGB565LE;
+     case VPX_IMG_FMT_RGB555_LE: return AV_PIX_FMT_RGB555LE;
++#endif
+     case VPX_IMG_FMT_I420:      return AV_PIX_FMT_YUV420P;
+     case VPX_IMG_FMT_I422:      return AV_PIX_FMT_YUV422P;
+     case VPX_IMG_FMT_I444:      return AV_PIX_FMT_YUV444P;
++#if VPX_IMAGE_ABI_VERSION < 5
+     case VPX_IMG_FMT_444A:      return AV_PIX_FMT_YUVA444P;
++#endif
+ #if VPX_IMAGE_ABI_VERSION >= 3
+     case VPX_IMG_FMT_I440:      return AV_PIX_FMT_YUV440P;
+     case VPX_IMG_FMT_I42016:    return AV_PIX_FMT_YUV420P16BE;
+@@ -53,6 +57,7 @@ enum AVPixelFormat ff_vpx_imgfmt_to_pixfmt(vpx_img_fmt
+ vpx_img_fmt_t ff_vpx_pixfmt_to_imgfmt(enum AVPixelFormat pix)
+ {
+     switch (pix) {
++#if VPX_IMAGE_ABI_VERSION < 5
+     case AV_PIX_FMT_RGB24:        return VPX_IMG_FMT_RGB24;
+     case AV_PIX_FMT_RGB565BE:     return VPX_IMG_FMT_RGB565;
+     case AV_PIX_FMT_RGB555BE:     return VPX_IMG_FMT_RGB555;
+@@ -64,10 +69,13 @@ vpx_img_fmt_t ff_vpx_pixfmt_to_imgfmt(enum AVPixelForm
+     case AV_PIX_FMT_BGRA:         return VPX_IMG_FMT_ARGB_LE;
+     case AV_PIX_FMT_RGB565LE:     return VPX_IMG_FMT_RGB565_LE;
+     case AV_PIX_FMT_RGB555LE:     return VPX_IMG_FMT_RGB555_LE;
++#endif
+     case AV_PIX_FMT_YUV420P:      return VPX_IMG_FMT_I420;
+     case AV_PIX_FMT_YUV422P:      return VPX_IMG_FMT_I422;
+     case AV_PIX_FMT_YUV444P:      return VPX_IMG_FMT_I444;
++#if VPX_IMAGE_ABI_VERSION < 5
+     case AV_PIX_FMT_YUVA444P:     return VPX_IMG_FMT_444A;
++#endif
+ #if VPX_IMAGE_ABI_VERSION >= 3
+     case AV_PIX_FMT_YUV440P:      return VPX_IMG_FMT_I440;
+     case AV_PIX_FMT_YUV420P16BE:  return VPX_IMG_FMT_I42016;

@@ -1,0 +1,34 @@
+diff --git a/mk b/mk
+index a5baa0f8..37cac28e 100755
+--- a/mk
++++ b/mk
+@@ -25,7 +25,7 @@ const rm = (x) => {
+ };
+ const pj = JSON.parse(rf('package.json'));
+ // v:version string - "x.y.z" where z is the number of commits since the beginning of the project
+-const v = `${pj.version.replace(/\.0$/, '')}.${sh('git rev-list --count HEAD')}`;
++const v = "@version@";
+ const isDyalogBuild = /^dyalog/.test(pj.name);
+ const tasks = { };
+ 
+@@ -36,8 +36,8 @@ const b = (f) => {
+   const vi = {
+     versionInfo: {
+       version: v,
+-      date: sh('git show -s HEAD --pretty=format:%ci'),
+-      rev: sh('git rev-parse HEAD'),
++      date: 'unknown',
++      rev: 'nixpkgs',
+     },
+   };
+   wf('_/version.js', `D=${JSON.stringify(vi)}`);
+@@ -50,6 +50,9 @@ const incl = new RegExp('^$'
+   + '|^/style($|/(fonts|img)|.*\\.css$)');
+ const pkg = (x, y, f) => {
+   rq('electron-packager')({
++    asar: true,
++    electronZipDir: "local-cache",
++    electronVersion: "@electron_version@",
+     dir: '.',
+     platform: x,
+     arch: y,

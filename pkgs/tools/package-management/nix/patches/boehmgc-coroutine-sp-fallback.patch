@@ -1,0 +1,45 @@
+diff --git a/pthread_stop_world.c b/pthread_stop_world.c
+index 2b45489..0e6d8ef 100644
+--- a/pthread_stop_world.c
++++ b/pthread_stop_world.c
+@@ -776,6 +776,8 @@ STATIC void GC_restart_handler(int sig)
+ /* world is stopped.  Should not fail if it isn't.                      */
+ GC_INNER void GC_push_all_stacks(void)
+ {
++    size_t stack_limit;
++    pthread_attr_t pattr;
+     GC_bool found_me = FALSE;
+     size_t nthreads = 0;
+     int i;
+@@ -868,6 +870,31 @@ GC_INNER void GC_push_all_stacks(void)
+             hi = p->altstack + p->altstack_size;
+ #         endif
+           /* FIXME: Need to scan the normal stack too, but how ? */
++        } else {
++          if (pthread_getattr_np(p->id, &pattr)) {
++            ABORT("GC_push_all_stacks: pthread_getattr_np failed!");
++          }
++          if (pthread_attr_getstacksize(&pattr, &stack_limit)) {
++            ABORT("GC_push_all_stacks: pthread_attr_getstacksize failed!");
++          }
++          if (pthread_attr_destroy(&pattr)) {
++            ABORT("GC_push_all_stacks: pthread_attr_destroy failed!");
++          }
++          // When a thread goes into a coroutine, we lose its original sp until
++          // control flow returns to the thread.
++          // While in the coroutine, the sp points outside the thread stack,
++          // so we can detect this and push the entire thread stack instead,
++          // as an approximation.
++          // We assume that the coroutine has similarly added its entire stack.
++          // This could be made accurate by cooperating with the application
++          // via new functions and/or callbacks.
++          #ifndef STACK_GROWS_UP
++            if (lo >= hi || lo < hi - stack_limit) { // sp outside stack
++              lo = hi - stack_limit;
++            }
++          #else
++          #error "STACK_GROWS_UP not supported in boost_coroutine2 (as of june 2021), so we don't support it in Nix."
++          #endif
+         }
+ #       ifdef STACKPTR_CORRECTOR_AVAILABLE
+           if (GC_sp_corrector != 0)

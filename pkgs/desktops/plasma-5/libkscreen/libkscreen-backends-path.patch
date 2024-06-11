@@ -1,0 +1,28 @@
+diff --git a/src/backendmanager.cpp b/src/backendmanager.cpp
+index e1013d5..4bded53 100644
+--- a/src/backendmanager.cpp
++++ b/src/backendmanager.cpp
+@@ -164,18 +164,11 @@ QFileInfo BackendManager::preferredBackend(const QString &backend)
+ 
+ QFileInfoList BackendManager::listBackends()
+ {
+-    // Compile a list of installed backends first
+-    const QString backendFilter = QStringLiteral("KSC_*");
+-    const QStringList paths = QCoreApplication::libraryPaths();
+-    QFileInfoList finfos;
+-    for (const QString &path : paths) {
+-        const QDir dir(path + QStringLiteral("/kf" QT_STRINGIFY(QT_VERSION_MAJOR) "/kscreen/"),
+-                       backendFilter,
+-                       QDir::SortFlags(QDir::QDir::Name),
+-                       QDir::NoDotAndDotDot | QDir::Files);
+-        finfos.append(dir.entryInfoList());
+-    }
+-    return finfos;
++    const QDir dir(QLatin1String(NIXPKGS_LIBKSCREEN_BACKENDS),
++                   QStringLiteral("KSC_*"),
++                   QDir::SortFlags(QDir::QDir::Name),
++                   QDir::NoDotAndDotDot | QDir::Files);
++    return dir.entryInfoList();
+ }
+ 
+ void BackendManager::setBackendArgs(const QVariantMap &arguments)

@@ -1,0 +1,42 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 5c1b40af4..917451dee 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -59,13 +59,14 @@ if(USE_IMAGE_COMPARE_PY)
+ 
+   # Since msys2 on Windows prefers bin/ over Scripts, we need to look for the actual folder to determine
+   # how to utilize the venv
+-  find_path(VENV_BIN_PATH activate PATHS "${VENV_DIR}/bin" "${VENV_DIR}/Scripts" NO_DEFAULT_PATH NO_CACHE)
+-  if(WIN32)
+-    set(IMAGE_COMPARE_EXE "${VENV_BIN_PATH}/python.exe")
+-  else()
+-    set(IMAGE_COMPARE_EXE "${VENV_BIN_PATH}/python")
+-  endif()
+-  if(EXISTS "${IMAGE_COMPARE_EXE}")
++  # find_path(VENV_BIN_PATH activate PATHS "${VENV_DIR}/bin" "${VENV_DIR}/Scripts" NO_DEFAULT_PATH NO_CACHE)
++  # if(WIN32)
++  #   set(IMAGE_COMPARE_EXE "${VENV_BIN_PATH}/python.exe")
++  # else()
++  #   set(IMAGE_COMPARE_EXE "${VENV_BIN_PATH}/python")
++  # endif()
++  set(IMAGE_COMPARE_EXE "python3")
++  # if(EXISTS "${IMAGE_COMPARE_EXE}")
+     message(STATUS "venv found, testing libraries")
+     execute_process(
+       COMMAND "${IMAGE_COMPARE_EXE}" "${CCSD}/image_compare.py" "--status"
+@@ -77,10 +78,10 @@ if(USE_IMAGE_COMPARE_PY)
+       message(STATUS "venv libraries complete")
+       set(BUILD_VENV FALSE)
+     endif()
+-  else()
+-    message(STATUS "venv not found")
+-    set(BUILD_VENV TRUE)
+-  endif()
++  # else()
++  #   message(STATUS "venv not found")
++  #   set(BUILD_VENV TRUE)
++  # endif()
+   if(BUILD_VENV)
+     message(STATUS "Setting up testing venv for image comparison")
+     execute_process(
+

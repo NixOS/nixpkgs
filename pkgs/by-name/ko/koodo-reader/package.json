@@ -1,0 +1,312 @@
+{
+  "name": "koodo-reader",
+  "main": "main.js",
+  "version": "1.6.6",
+  "description": "A cross-platform ebook reader",
+  "author": {
+    "name": "App by Troye",
+    "email": "support@960960.xyz"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=6.0.0"
+  },
+  "repository": "https://github.com/koodo-reader/koodo-reader",
+  "private": false,
+  "resolutions": {
+    "//": "See https://github.com/facebook/create-react-app/issues/11773",
+    "react-error-overlay": "6.0.9"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.485.0",
+    "adm-zip": "^0.5.2",
+    "axios": "^0.19.2",
+    "buffer": "^6.0.3",
+    "copy-text-to-clipboard": "^2.2.0",
+    "dompurify": "^3.0.1",
+    "electron-is-dev": "^1.1.0",
+    "electron-store": "^8.0.1",
+    "font-list": "^1.4.5",
+    "fs-extra": "^9.1.0",
+    "ftp": "^0.3.10",
+    "howler": "^2.2.3",
+    "iconv-lite": "^0.6.3",
+    "qs": "^6.11.2",
+    "react-hot-toast": "^2.1.1",
+    "react-tooltip": "^5.26.3",
+    "ssh2-sftp-client": "^9.1.0",
+    "webdav": "^3.6.2",
+    "wink-lemmatizer": "^3.0.4",
+    "ws": "^8.13.0",
+    "zip-a-folder": "^0.0.12"
+  },
+  "devDependencies": {
+    "@types/i18next": "^13.0.0",
+    "@types/iconv-lite": "^0.0.1",
+    "@types/node": "^13.13.2",
+    "@types/react": "17.0.2",
+    "@types/react-dom": "17.0.2",
+    "@types/react-i18next": "^8.1.0",
+    "@types/react-lottie": "^1.2.5",
+    "@types/react-redux": "^7.1.7",
+    "@types/react-router-dom": "^5.1.6",
+    "@types/spark-md5": "^3.0.2",
+    "@types/ws": "^8.5.5",
+    "classnames": "^2.2.6",
+    "concurrently": "^5.0.1",
+    "cross-env": "^6.0.3",
+    "electron": "14.1.1",
+    "electron-builder": "^23.6.0",
+    "hard-source-webpack-plugin": "^0.13.1",
+    "html-react-parser": "^0.13.0",
+    "i18next": "^20.2.4",
+    "node-sass": "^9.0.0",
+    "nodemon": "^2.0.6",
+    "rc-color-picker": "^1.2.6",
+    "react": "^17.0.2",
+    "react-device-detect": "^1.12.1",
+    "react-dom": "^17.0.2",
+    "react-dropzone": "^11.3.0",
+    "react-i18next": "^13.2.2",
+    "react-lottie": "^1.2.3",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^5.0.1",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "sass-loader": "^13.3.2",
+    "source-map-explorer": "^2.5.2",
+    "spark-md5": "^3.0.1",
+    "typescript": "3.8.3",
+    "wait-on": "^7.0.1"
+  },
+  "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "ele": "electron .",
+    "dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://127.0.0.1:3000/ && nodemon --watch main.js --exec electron .\"",
+    "release": "electron-builder",
+    "prerelease": "react-scripts build"
+  },
+  "homepage": "./",
+  "build": {
+    "appId": "xyz.960960.koodo",
+    "productName": "Koodo Reader",
+    "copyright": "Copyright (c) 2021-2022 ${author}",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "main.js",
+      "edge-tts.js"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "publish": {
+      "provider": "github",
+      "repo": "koodo-reader",
+      "owner": "koodo-reader"
+    },
+    "buildDependenciesFromSource": false,
+    "nodeGypRebuild": false,
+    "fileAssociations": [
+      {
+        "ext": "epub",
+        "icon": "assets/icons/epub",
+        "role": "Viewer",
+        "mimeType": "application/epub+zip"
+      },
+      {
+        "ext": "pdf",
+        "icon": "assets/icons/pdf",
+        "role": "Viewer",
+        "mimeType": "application/pdf"
+      },
+      {
+        "ext": "mobi",
+        "icon": "assets/icons/mobi",
+        "role": "Viewer",
+        "mimeType": "application/x-mobipocket-ebook"
+      },
+      {
+        "ext": "azw3",
+        "icon": "assets/icons/azw3",
+        "role": "Viewer",
+        "mimeType": "application/vnd.amazon.ebook"
+      },
+      {
+        "ext": "azw",
+        "icon": "assets/icons/azw3",
+        "role": "Viewer",
+        "mimeType": "application/vnd.amazon.ebook"
+      },
+      {
+        "ext": "cbz",
+        "icon": "assets/icons/comic",
+        "role": "Viewer",
+        "mimeType": "application/x-cbz"
+      },
+      {
+        "ext": "cbr",
+        "icon": "assets/icons/comic",
+        "role": "Viewer",
+        "mimeType": "application/x-cbr"
+      },
+      {
+        "ext": "cbt",
+        "icon": "assets/icons/comic",
+        "role": "Viewer",
+        "mimeType": "application/x-cbt"
+      },
+      {
+        "ext": "cb7",
+        "icon": "assets/icons/comic",
+        "role": "Viewer",
+        "mimeType": "application/x-cb7"
+      },
+      {
+        "ext": "fb2",
+        "icon": "assets/icons/fb2",
+        "role": "Viewer",
+        "mimeType": "application/x-fictionbook+xml"
+      }
+    ],
+    "extends": null,
+    "dmg": {
+      "contents": [
+        {
+          "x": 410,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 150,
+          "type": "file"
+        }
+      ]
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "icon": "assets/icons/icon.icns",
+      "category": "public.app-category.productivity",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "ia32",
+            "arm64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icons/icon.ico",
+      "artifactName": "${productName}-${version}-${arch}-Win.${ext}",
+      "publisherName": "App by Troye"
+    },
+    "linux": {
+      "icon": "assets/icons",
+      "category": "Office",
+      "target": [
+        {
+          "target": "snap",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "arm64",
+            "ia32",
+            "x64"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "arm64",
+            "ia32",
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-Portable.${ext}"
+    },
+    "nsis": {
+      "artifactName": "${productName}-${version}.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "include": "assets/windows/installer.nsh"
+    },
+    "snap": {
+      "publish": [
+        {
+          "provider": "github"
+        }
+      ]
+    }
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ],
+    "plugins": [
+      [
+        "react-hot-loader/babel"
+      ]
+    ]
+  }
+}

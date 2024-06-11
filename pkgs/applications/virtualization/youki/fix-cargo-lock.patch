@@ -1,0 +1,40 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index cfef78c0..7cad3faa 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1879,7 +1879,7 @@ checksum = "13e3bf6590cbc649f4d1a3eefc9d5d6eb746f5200ffb04e5e142700b8faa56e7"
+ 
+ [[package]]
+ name = "libcgroups"
+-version = "0.3.1"
++version = "0.3.2"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -1904,7 +1904,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "libcontainer"
+-version = "0.3.1"
++version = "0.3.2"
+ dependencies = [
+  "anyhow",
+  "bitflags 2.4.2",
+@@ -1947,7 +1947,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "liboci-cli"
+-version = "0.3.1"
++version = "0.3.2"
+ dependencies = [
+  "clap",
+ ]
+@@ -5712,7 +5712,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "youki"
+-version = "0.3.1"
++version = "0.3.2"
+ dependencies = [
+  "anyhow",
+  "caps",

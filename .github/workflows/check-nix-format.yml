@@ -1,0 +1,62 @@
+# This file was copied mostly from check-maintainers-sorted.yaml.
+# NOTE: Formatting with the RFC-style nixfmt command is not yet stable. See
+# https://github.com/NixOS/rfcs/pull/166.
+# Because of this, this action is not yet enabled for all files -- only for
+# those who have opted in.
+name: Check that Nix files are formatted
+
+on:
+  pull_request_target:
+permissions:
+  contents: read
+
+jobs:
+  nixos:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'NixOS'
+    steps:
+      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+        with:
+          # pull_request_target checks out the base branch by default
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+      - uses: cachix/install-nix-action@8887e596b4ee1134dae06b98d573bd674693f47c # v26
+        with:
+          # explicitly enable sandbox
+          extra_nix_config: sandbox = true
+          # fix a commit from nixpkgs-unstable to avoid e.g. building nixfmt
+          # from staging
+          nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/4b455dc2048f73a79eb3713f342369ff58f93e0b.tar.gz
+      - name: Install nixfmt
+        run: "nix-env -f '<nixpkgs>' -iAP nixfmt-rfc-style"
+      - name: Check that Nix files are formatted according to the RFC style
+        # Each environment variable beginning with NIX_FMT_PATHS_ is a list of
+        # paths to check with nixfmt.
+        env:
+          NIX_FMT_PATHS_BSD: pkgs/os-specific/bsd
+          NIX_FMT_PATHS_MPVSCRIPTS: pkgs/applications/video/mpv/scripts
+          # Format paths related to the Nixpkgs CUDA ecosystem.
+          NIX_FMT_PATHS_CUDA: |
+            pkgs/development/cuda-modules
+            pkgs/test/cuda
+            pkgs/top-level/cuda-packages.nix
+          NIX_FMT_PATHS_K3S: |
+            nixos/modules/services/cluster/k3s
+            nixos/tests/k3s
+            pkgs/applications/networking/cluster/k3s
+          NIX_FMT_PATHS_VSCODE_EXTS: pkgs/applications/editors/vscode/extensions
+          NIX_FMT_PATHS_PHP_PACKAGES: pkgs/development/php-packages
+          NIX_FMT_PATHS_BUILD_SUPPORT_PHP: pkgs/build-support/php
+        # Iterate over all environment variables beginning with NIX_FMT_PATHS_.
+        run: |
+          for env_var in "${!NIX_FMT_PATHS_@}"; do
+            readarray -t paths <<< "${!env_var}"
+            if [[ "${paths[*]}" == "" ]]; then
+              echo "Error: $env_var is empty."
+              exit 1
+            fi
+            echo "Checking paths: ${paths[@]}"
+            if ! nixfmt --check "${paths[@]}"; then
+              echo "Error: nixfmt failed."
+              exit 1
+            fi
+          done

@@ -1,0 +1,13 @@
+diff --git a/src/borg/process.rs b/src/borg/process.rs
+index 9af8da7..85bcbf8 100644
+--- a/src/borg/process.rs
++++ b/src/borg/process.rs
+@@ -278,7 +278,7 @@ impl BorgCall {
+     }
+ 
+     pub(super) fn command(&self) -> Result<(async_process::Command, UnixStream)> {
+-        let mut cmd = async_process::Command::new("borg");
++        let mut cmd = async_process::Command::new("@borg@");
+ 
+         let unix_stream = self.stream_password(&mut cmd)?;
+ 

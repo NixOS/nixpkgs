@@ -1,0 +1,28 @@
+From ab8bd63b32b963ddc7346a2dabfd39fba8bfba72 Mon Sep 17 00:00:00 2001
+From: Paul Meyer <49727155+katexochen@users.noreply.github.com>
+Date: Sun, 13 Aug 2023 14:13:21 +0200
+Subject: [PATCH] make config path injectable during build
+
+This way a config path can be added to the list during build by
+defining the makro.
+
+Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
+---
+ dumpasn1.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/dumpasn1.c b/dumpasn1.c
+index e7bf268..94f1582 100644
+--- a/dumpasn1.c
++++ b/dumpasn1.c
+@@ -451,6 +451,10 @@ static const char *configPaths[] = {
+ 	/* General environment-based paths */
+ 	"$DUMPASN1_PATH/",
+ 
++  #ifdef DUMPASN1_CONFIG_PATH
++	DUMPASN1_CONFIG_PATH,
++  #endif /* DUMPASN1_CONFIG_PATH */
++
+ 	NULL
+ 	};
+ #endif /* OS-specific search paths */
