@@ -1,9 +1,9 @@
-{ newScope, config, stdenv, fetchurl, makeWrapper
+{ newScope, config, stdenv, makeWrapper
 , buildPackages
 , ed, gnugrep, coreutils, xdg-utils
 , glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
-, gcc, nspr, nss, runCommand
+, runCommand
 , lib, libkrb5
 , widevine-cdm
 , electron-source # for warnObsoleteVersionConditional
@@ -18,7 +18,6 @@
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
-, pkgsBuildTarget
 , pkgsBuildBuild
 , pkgs
 }:
