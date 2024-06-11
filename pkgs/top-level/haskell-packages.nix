@@ -229,7 +229,7 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc948 = callPackage ../development/compilers/ghc/9.4.8.fixme.nix {
+    ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
       bootPkgs =
         # Building with 9.2 is broken due to
         # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
