@@ -4,33 +4,28 @@
 , python3
 , makeWrapper
 , nixosTests
+, seafile-server-override ? null
 }:
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      django = super.django_3;
+  python = python3.override (lib.optionalAttrs (!builtins.isNull seafile-server-override) {
+    packageOverrides = final: prev: {
+      seaserv = prev.toPythonModule (seafile-server-override.override {
+        python3 = prev.python;
+      });
     };
-  };
+  });
 in
 python.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "10.0.1";
+  version = "11.0.9";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "e8c02236c0eaca6dde009872745f089da4b77e6e"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "sha256-7JXWKEFqCsC+ZByhvyP8AmDpajT3hpgyYDNUqc3wXyg=";
+    rev = "40b0ba08d6c298a744c6df0d53e057cf7f805881"; # using a fixed revision because upstream may re-tag releases :/
+    hash = "sha256-m7xWOO5FW7p8D3e7alIqhBR83/XeDGRsN2d3npVE1CY=";
   };
-
-  patches = [
-    (fetchpatch {
-      # PIL update fix
-      url = "https://patch-diff.githubusercontent.com/raw/haiwen/seahub/pull/5570.patch";
-      sha256 = "sha256-7V2aRlacJ7Qhdi9k4Bs+t/Emx+EAM/NNCI+K40bMwLA=";
-    })
-  ];
 
   dontBuild = true;
 
@@ -49,6 +44,7 @@ python.pkgs.buildPythonApplication rec {
     django-simple-captcha
     django-picklefield
     django-formtools
+    djangosaml2
     mysqlclient
     pillow
     python-dateutil
@@ -59,12 +55,15 @@ python.pkgs.buildPythonApplication rec {
     chardet
     pyjwt
     pycryptodome
+    pyopenssl
+    python-ldap
     qrcode
     pysearpc
-    seaserv
     gunicorn
     markdown
     bleach
+
+    seaserv
   ];
 
   installPhase = ''
@@ -79,6 +78,7 @@ python.pkgs.buildPythonApplication rec {
     tests = {
       inherit (nixosTests) seafile;
     };
+    seafile-server = python.pkgs.seaserv;
   };
 
   meta = with lib; {
