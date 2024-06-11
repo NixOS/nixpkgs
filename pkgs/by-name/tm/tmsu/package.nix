@@ -1,42 +1,44 @@
-{ lib, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
-buildGoPackage rec {
+buildGoModule {
   pname = "tmsu";
-  version = "0.7.5";
-  goPackagePath = "github.com/oniony/TMSU";
+  version = "0.7.5-unstable-2024-06-08";
 
   src = fetchFromGitHub {
     owner = "oniony";
     repo = "tmsu";
-    rev = "v${version}";
-    sha256 = "0834hah7p6ad81w60ifnxyh9zn09ddfgrll04kwjxwp7ypbv38wq";
+    rev = "0bf4b8031cbeffc0347007d85647062953e90571";
+    sha256 = "sha256-5Rmelgiqs7YkdDBZNXZW4sBf0l/bwiq0xxB2tWpm1s8=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-r2wzVkPTsxWdVPFLO84tJgl3VJonoU7kNKLOBgHHdF8=";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  preBuild = ''
-    mv go/src/${goPackagePath} src
-    mv src/src/${goPackagePath} go/src/${goPackagePath}
-    export GOPATH=$PWD:$GOPATH
-  '';
 
   postInstall = ''
     # can't do "mv TMSU tmsu" on case-insensitive filesystems
     mv $out/bin/{TMSU,tmsu.tmp}
     mv $out/bin/{tmsu.tmp,tmsu}
 
-    cp src/misc/bin/* $out/bin/
-    installManPage src/misc/man/tmsu.1
-    installShellCompletion --zsh src/misc/zsh/_tmsu
+    installManPage misc/man/tmsu.1
+    installShellCompletion --bash misc/bash/tmsu
+    installShellCompletion --zsh misc/zsh/_tmsu
   '';
 
-  meta = with lib; {
-    homepage    = "http://www.tmsu.org";
+  meta = {
+    homepage = "https://www.tmsu.org";
     description = "Tool for tagging your files using a virtual filesystem";
-    maintainers = with maintainers; [ pSub ];
-    license     = licenses.gpl3Plus;
-    platforms   = platforms.unix;
+    maintainers = with lib.maintainers; [
+      luftmensch-luftmensch
+      pSub
+    ];
+    mainProgram = "tmsu";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }
