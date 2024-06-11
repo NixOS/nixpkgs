@@ -14146,6 +14146,12 @@
     githubId = 3856390;
     email = "mschwaig+nixpkgs@eml.cc";
   };
+  msciabarra = {
+    email = "msciabarra@apache.org";
+    github = "sciabarracom";
+    githubId = 30654959;
+    name = "Michele Sciabarra";
+  };
   msiedlarek = {
     email = "mikolaj@siedlarek.pl";
     github = "msiedlarek";
