@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , darwin
 , protobuf
+, nixosTests
 , nix-update-script
 , testers
 , sozu
@@ -11,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sozu";
-  version = "0.15.19";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "sozu-proxy";
     repo = pname;
     rev = version;
-    hash = "sha256-9TSu27s/rnO48zEhBzaHaU3pHyIJ0LVZC8LBRhn0PNM=";
+    hash = "sha256-ftM5PTxjyhYd2182HjaNeDC/ulZHoPBgE9O0MscotEs=";
   };
 
-  cargoHash = "sha256-h9igqV9YqMqRhqwsKYIji8WAVmcPQfErcPPm0PcDwss=";
+  cargoHash = "sha256-aC+0ZobFilRk3X20ubtEt9VdfySdQgBDy7TIvpttDEc=";
 
   nativeBuildInputs = [ protobuf ];
 
@@ -30,12 +31,15 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = sozu;
-      command = "sozu --version";
-      version = "${version}";
+    tests = {
+      inherit (nixosTests) sozu;
+      version = testers.testVersion {
+        package = sozu;
+        command = "sozu --version";
+        version = "${version}";
+      };
     };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
