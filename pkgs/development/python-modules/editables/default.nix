@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Editable installations";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ getchoo ];
     homepage = "https://github.com/pfmoore/editables";
     license = licenses.mit;
   };
