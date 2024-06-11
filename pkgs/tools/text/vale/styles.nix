@@ -32,12 +32,12 @@ in
 {
   alex = buildStyle rec {
     name = "alex";
-    version = "0.2.1";
+    version = "0.2.2";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "alex";
       rev = "v${version}";
-      hash = "sha256-xNF7se2FwKgNe5KYx/zvGWpIwBsBADYGH4JV1lUww+Q=";
+      hash = "sha256-mfeMa+KlkqwyS+h+oo5p5+P2bsmZ0BOph2nbQiaoNqM=";
     };
     meta = {
       description = "A Vale-compatible implementation of the guidelines enforced by the alex linter";
@@ -96,12 +96,12 @@ in
 
   proselint = buildStyle rec {
     name = "proselint";
-    version = "0.3.3";
+    version = "0.3.4";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "proselint";
       rev = "v${version}";
-      hash = "sha256-faeWr1bRhnKsycJY89WqnRv8qIowUmz3EQvDyjtl63w=";
+      hash = "sha256-ryKJDX1JrvDWVKLC5qQGctweDf74yuwEXxl/IqumM4s=";
     };
     meta = {
       description = "A Vale-compatible implementation of Python's proselint linter";
@@ -128,12 +128,12 @@ in
 
   write-good = buildStyle rec {
     name = "write-good";
-    version = "0.4.0";
+    version = "0.4.1";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "write-good";
       rev = "v${version}";
-      hash = "sha256-KQzY6MeHV/owPVmUAfzGUO0HmFPkD7wdQqOvBkipwP8=";
+      hash = "sha256-W/eHlXklAVlAnY8nLPi/SIKsg8UUnH8UkH99BDo5yKk=";
     };
     meta = {
       description = "A Vale-compatible implementation of the write-good linter";
