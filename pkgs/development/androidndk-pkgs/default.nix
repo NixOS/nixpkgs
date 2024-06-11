@@ -37,4 +37,5 @@ in
   "23b" = makeNdkPkgs "23.1.7779620";
   "24" = makeNdkPkgs "24.0.8215888";
   "25" = makeNdkPkgs "25.2.9519653";
+  "26" = makeNdkPkgs "26.3.11579264";
 }
