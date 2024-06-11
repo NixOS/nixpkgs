@@ -219,7 +219,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Linux application sandboxing and distribution framework";
     homepage = "https://flatpak.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ getchoo ];
     platforms = platforms.linux;
   };
 })
