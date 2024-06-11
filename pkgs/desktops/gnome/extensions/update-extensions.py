@@ -9,7 +9,7 @@ import urllib.error
 import urllib.request
 from operator import itemgetter
 from pathlib import Path
-from typing import List, Dict, Optional, Any, Tuple, Set
+from typing import List, Dict, Optional, Any, Tuple, Set, TypedDict
 
 # We don't want all those deprecated legacy extensions
 # Group extensions by GNOME "major" version for compatibility reasons
@@ -24,11 +24,29 @@ supported_versions = {
     "46": "46",
 }
 
-# Some type alias to increase readability of complex compound types
 PackageName = str
 ShellVersion = str
 Uuid = str
-ExtensionVersion = int
+class ExtensionVersion(TypedDict):
+    version: int
+    pk: int
+
+class ExtensionVersionInfo(TypedDict):
+    """
+    Metadata for a single extension version.
+    This contains the content of metadata.json, as the author can change it at any time.
+    """
+    version: str
+    sha256: str
+    metadata: str
+
+class ExtensionEntry(TypedDict):
+    uuid: Uuid
+    name: str
+    pname: PackageName
+    description: str
+    link: str
+    shell_version_map: Dict[ShellVersion, ExtensionVersionInfo]
 
 # Keep track of all names that have been used till now to detect collisions.
 # This works because we deterministically process all extensions in historical order
@@ -41,19 +59,20 @@ for shell_version in supported_versions.keys():
 updater_dir_path = Path(__file__).resolve().parent
 
 
-def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
+def fetch_extension_data(uuid: str, version_pk: str) -> Tuple[str, str]:
     """
     Download the extension and hash it. We use `nix-prefetch-url` for this for efficiency reasons.
     Returns a tuple with the hash (Nix-compatible) of the zip file's content and the base64-encoded content of its metadata.json.
     """
 
-    # The download URLs follow this schema
-    uuid = uuid.replace("@", "")
-    url: str = f"https://extensions.gnome.org/extension-data/{uuid}.v{version}.shell-extension.zip"
+    url = f"https://extensions.gnome.org/download-extension/{uuid}.shell-extension.zip?version_tag={version_pk}"
+
+    # The character '@' cannot be included in the store path
+    store_name = f"{uuid.replace('@', '')}-{version_pk}"
 
     # Download extension and add the zip content to nix-store
     process = subprocess.run(
-        ["nix-prefetch-url", "--unpack", "--print-path", url], capture_output=True, text=True
+        ["nix-prefetch-url", "--unpack", "--print-path", "--name", store_name, url], capture_output=True, text=True
     )
 
     lines = process.stdout.splitlines()
@@ -73,7 +92,7 @@ def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
 
 def generate_extension_versions(
         extension_version_map: Dict[ShellVersion, ExtensionVersion], uuid: str
-) -> Dict[ShellVersion, Dict[str, str]]:
+) -> Dict[ShellVersion, ExtensionVersionInfo]:
     """
     Takes in a mapping from shell versions to extension versions and transforms it the way we need it:
     - Only take one extension version per GNOME Shell major version (as per `supported_versions`)
@@ -85,36 +104,38 @@ def generate_extension_versions(
     extension_versions: Dict[ShellVersion, ExtensionVersion] = {}
     for shell_version, version_prefix in supported_versions.items():
         # Newest compatible extension version
-        extension_version: Optional[int] = max(
+        version: Optional[ExtensionVersion] = max(
             (
-                int(ext_ver)
+                ext_ver
                 for shell_ver, ext_ver in extension_version_map.items()
                 if (shell_ver.startswith(version_prefix))
             ),
             default=None,
+            key=lambda e: e["version"]
         )
         # Extension is not compatible with this GNOME version
-        if not extension_version:
+        if not version:
             continue
-
-        extension_versions[shell_version] = extension_version
+        extension_versions[shell_version] = version
 
     # Download information once for all extension versions chosen above
-    extension_info_cache: Dict[ExtensionVersion, Tuple[str, str]] = {}
-    for extension_version in sorted(set(extension_versions.values())):
+    extension_info_cache: Dict[int, Tuple[str, str]] = {}
+    # Deduplicate for the pk
+    extension_versions_filtered = list({e['pk']: e for e in extension_versions.values()}.values())
+    for version in sorted(extension_versions_filtered, key=lambda v: v["version"]):
         logging.debug(
-            f"[{uuid}] Downloading v{extension_version}"
+            f"[{uuid}] Downloading {version}"
         )
-        extension_info_cache[extension_version] = \
-            fetch_extension_data(uuid, str(extension_version))
+        extension_info_cache[version["pk"]] = \
+            fetch_extension_data(uuid, str(version["pk"]))
 
     # Fill map
-    extension_versions_full: Dict[ShellVersion, Dict[str, str]] = {}
-    for shell_version, extension_version in extension_versions.items():
-        sha256, metadata = extension_info_cache[extension_version]
+    extension_versions_full: Dict[ShellVersion, ExtensionVersionInfo] = {}
+    for shell_version, ext_version in extension_versions.items():
+        sha256, metadata = extension_info_cache[ext_version["pk"]]
 
         extension_versions_full[shell_version] = {
-            "version": str(extension_version),
+            "version": str(ext_version["version"]),
             "sha256": sha256,
             # The downloads are impure, their metadata.json may change at any time.
             # Thus, we back it up / pin it to remain deterministic
@@ -133,7 +154,7 @@ def pname_from_url(url: str) -> Tuple[str, str]:
     return url[3], url[2]
 
 
-def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+def process_extension(extension: Dict[str, Any]) -> Optional[ExtensionEntry]:
     """
     Process an extension. It takes in raw scraped data and downloads all the necessary information that buildGnomeExtension.nix requires
 
@@ -144,7 +165,7 @@ def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
                 "description": str,
                 "link": str,
                 "shell_version_map": {
-                    str: { "version": int, … },
+                    str: { "version": int, "pk": int },
                     …
                 },
                 …
@@ -166,7 +187,7 @@ def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
                 "description": str,
                 "link": str,
                 "shell_version_map": {
-                    str: { "version": int, "sha256": str, "metadata": <hex> },
+                    str: { "version": str, "sha256": str, "metadata": <hex> },
                     …
                 }
             }
@@ -184,20 +205,18 @@ def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 
     # Input is a mapping str -> { version: int, … }
     # We want to map shell versions to extension versions
-    shell_version_map: Dict[ShellVersion, int] = {
-        k: v["version"] for k, v in extension["shell_version_map"].items()
-    }
+    shell_version_map: Dict[ShellVersion, ExtensionVersion] = extension["shell_version_map"]
     # Transform shell_version_map to be more useful for us. Also throw away unwanted versions
-    shell_version_map: Dict[ShellVersion, Dict[str, str]] = generate_extension_versions(shell_version_map, uuid)  # type: ignore
+    processed_shell_version_map = generate_extension_versions(shell_version_map, uuid)
 
     # No compatible versions found
-    if not shell_version_map:
+    if not processed_shell_version_map:
         return None
 
     # Fetch a human-readable name for the package.
     (pname, _pname_id) = pname_from_url(extension["link"])
 
-    for shell_version in shell_version_map.keys():
+    for shell_version in processed_shell_version_map.keys():
         if pname in package_name_registry[shell_version]:
             logging.warning(f"Package name '{pname}' for GNOME '{shell_version}' is colliding.")
             package_name_registry[shell_version][pname].append(uuid)
@@ -210,7 +229,7 @@ def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         "pname": pname,
         "description": extension["description"],
         "link": "https://extensions.gnome.org" + extension["link"],
-        "shell_version_map": shell_version_map,
+        "shell_version_map": processed_shell_version_map,
     }
 
 
@@ -261,7 +280,7 @@ if __name__ == "__main__":
     raw_extensions = scrape_extensions_index()
 
     logging.info(f"Downloaded {len(raw_extensions)} extensions. Processing …")
-    processed_extensions: List[Dict[str, Any]] = []
+    processed_extensions: List[ExtensionEntry] = []
     for num, raw_extension in enumerate(raw_extensions):
         processed_extension = process_extension(raw_extension)
         if processed_extension:
