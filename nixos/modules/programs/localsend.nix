@@ -13,7 +13,7 @@ in {
 
     openFirewall = mkOption {
       description = ''
-        Whether to open the firewall port ${firewallPort} for receiving files.
+        Whether to open the firewall port ${builtins.toString firewallPort} for receiving files.
       '';
       default = true;
       type = types.bool;
