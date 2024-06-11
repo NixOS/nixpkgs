@@ -96,6 +96,9 @@ buildPythonPackage rec {
     description = "Python binding for DuckDB";
     homepage = "https://duckdb.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [
+      cpcloud
+      paparodeo
+    ];
   };
 }
