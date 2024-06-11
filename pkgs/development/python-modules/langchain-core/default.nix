@@ -72,6 +72,8 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   disabledTests = [
+    # Fail for an unclear reason with:
+    # AssertionError: assert '6a92363c-4ac...-d344769ab6ac' == '09af124a-2ed...-671c64c72b70'
     "test_config_traceable_handoff"
     "test_config_traceable_async_handoff"
   ];
