@@ -214,7 +214,7 @@ in
                 baseDN = "ou=groups,${cfg.ldap.suffix}";
                 filter = "(objectclass=groupOfNames)";
                 nameAttr = "cn";
-                userMatchers = [{ userAttr = "DN"; groupAttr = "member"; }];
+                userMatchers = [{ userAttr = "dn"; groupAttr = "member"; }];
               };
             };
           }];
