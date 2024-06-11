@@ -525,8 +525,6 @@ with pkgs;
 
   containerlab = callPackage ../tools/networking/containerlab { };
 
-  containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   confetty = callPackage ../applications/misc/confetty { };
