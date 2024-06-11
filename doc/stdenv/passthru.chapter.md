@@ -83,7 +83,7 @@ Most programs distributed by Nixpkgs support such a `--version` flag, and succes
 
 ## Checking builds with `installCheckPhase`
 
-When building `git`, a rudimentary test for successful compilation would be running `git --version`:
+When building `git`, a rudimentary test for successful compilation would be running `git --version` with a clean environment:
 
 ```nix
 stdenv.mkDerivation (finalAttrs: {
@@ -94,19 +94,21 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckPhase = ''
     runHook preInstallCheck
     echo checking if 'git --version' mentions ${finalAttrs.version}
-    $out/bin/git --version | grep ${finalAttrs.version}
+    env --ignore-environment $out/bin/git --version | grep --silent "${finalAttrs.version}"
     runHook postInstallCheck
   '';
   # ...
 })
 ```
+
+Testing with a clean environment is encouraged to ensure the `bin/` entrypoints are properly wrapped and self-contained, and do not depend on variables like PYTHONPATH and PERL5LIB being configured.
 :::
 
 However, tests that are non-trivial will better fit into `passthru.tests` because they:
 
-- Access the package as consumers would, independently from the environment in which it was built
+- Access the package outputs as any consumer would, with an environment as setup up with either `stdenv` or `environment.systemPackages`, and without temporary build artifacts and state produced in `configurePhase` and `buildPhase`.
 - Can be run and debugged without rebuilding the package, which is useful if that takes a long time
-- Don't add overhad to each build, as opposed to `installCheckPhase`
+- Don't add overhead to each build, as opposed to `installCheckPhase`
 
 It is also possible to use `passthru.tests` to test the version with [`testVersion`](#tester-testVersion).
 
