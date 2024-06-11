@@ -5,16 +5,11 @@
 , cmake
 , ninja
 , openssl
-, openjdk11
 , python3
 , unixODBC
-, withJdbc ? false
 , withOdbc ? false
 }:
 
-let
-  enableFeature = yes: if yes then "ON" else "OFF";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckdb";
   version = "1.0.0";
@@ -40,16 +35,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ninja python3 ];
   buildInputs = [ openssl ]
-    ++ lib.optionals withJdbc [ openjdk11 ]
     ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags = [
-    "-DDUCKDB_EXTENSION_CONFIGS=${finalAttrs.src}/.github/config/in_tree_extensions.cmake"
-    "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
-    "-DJDBC_DRIVER=${enableFeature withJdbc}"
-  ] ++ lib.optionals finalAttrs.doInstallCheck [
-    # development settings
-    "-DBUILD_UNITTESTS=ON"
+    "-DDUCKDB_EXTENSION_CONFIGS=.github/config/in_tree_extensions.cmake"
+    (lib.cmakeBool "BUILD_ODBC_DRIVER" withOdbc)
+    (lib.cmakeBool "BUILD_UNITTESTS" finalAttrs.doInstallCheck)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
   preConfigure = ''
