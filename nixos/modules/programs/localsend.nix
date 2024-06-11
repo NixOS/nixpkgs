@@ -12,7 +12,7 @@ in {
     enable = mkEnableOption "localsend, an open source cross-platform alternative to AirDrop";
 
     openFirewall = mkOption {
-      description = mdDoc ''
+      description = ''
         Whether to open the firewall port ${firewallPort} for receiving files.
       '';
       default = true;
