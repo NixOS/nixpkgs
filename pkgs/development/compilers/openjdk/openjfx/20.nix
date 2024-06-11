@@ -7,8 +7,8 @@
 
 let
   major = "20";
-  update = "";
-  build = "+19";
+  update = ".0.2";
+  build = "-ga";
   repover = "${major}${update}${build}";
   gradle_ = (gradle_7.override {
     # note: gradle does not yet support running on 19
@@ -30,9 +30,9 @@ let
 
     src = fetchFromGitHub {
       owner = "openjdk";
-      repo = "jfx";
+      repo = "jfx20u";
       rev = repover;
-      hash = "sha256-QPPJyl6+XU+m5xqYOFtQKJNNrovqy7ngNE/e7kiEJVU=";
+      hash = "sha256-3Hhz4i8fPU2yowb4roylCXzuO9HkW7ZWF9TMA3HIH9o=";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4 ];
