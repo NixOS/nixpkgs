@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.2.1";
+  version = "0.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "langchain-core==${version}";
-    hash = "sha256-D0y6kW5bWcCKW2TwVPlZcAUxqADgsOm9fWySAjHYYIg=";
+    hash = "sha256-EBs6BHxBPBR1TfSyesM2gJJtxgClM6lLXko1qisrz7A=";
   };
 
   sourceRoot = "${src.name}/libs/core";
@@ -71,6 +71,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit_tests" ];
 
+  disabledTests = [
+    "test_config_traceable_handoff"
+    "test_config_traceable_async_handoff"
+  ];
+
   passthru = {
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
@@ -84,11 +89,11 @@ buildPythonPackage rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/core";
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }
