@@ -38,12 +38,14 @@ platform_sources () {
     )
 
     echo "srcs = {"
+    local kv
     for kv in "${platforms[@]}"; do
         local nix_platform=${kv%% *}
         local ms_platform=${kv##* }
+        local url hash
 
-        local url=$(release_platform_attr "$release_files" "$ms_platform" url)
-        local hash=$(release_platform_attr "$release_files" "$ms_platform" hash)
+        url=$(release_platform_attr "$release_files" "$ms_platform" url)
+        hash=$(release_platform_attr "$release_files" "$ms_platform" hash)
 
         [[ -z "$url" || -z "$hash" ]] && continue
         echo "      $nix_platform = {
@@ -55,15 +57,13 @@ platform_sources () {
 }
 
 generate_package_list() {
-    local version pkgs nuget_url
-    version="$1"
+    local version="$1"
     shift
-    pkgs=( "$@" )
+    local pkgs=( "$@" ) nuget_url pkg url hash
 
     nuget_url="$(curl -f "https://api.nuget.org/v3/index.json" | jq --raw-output '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')"
 
     for pkg in "${pkgs[@]}"; do
-        local url hash
         url="${nuget_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg"
         hash="$(nix-prefetch-url "$url")"
         if [[ -z "$hash" ]]; then
@@ -76,8 +76,10 @@ generate_package_list() {
 }
 
 version_older () {
-    cur_version=$1
-    max_version=$2
+    local cur_version=$1
+    local max_version=$2
+    local result
+
     result=$(nix-instantiate -I ../../../../. \
         --eval -E "(import ../../../../. {}).lib.versionOlder \"$cur_version\" \"$max_version\"")
     if [[ "$result" == "true" ]]; then
@@ -260,6 +262,7 @@ sdk_packages () {
     # These packages were removed on .NET 9
     if ! version_older "$version" "9"; then
         local newpkgs=()
+        local pkg
         for pkg in "${pkgs[@]}"; do
             [[ "$pkg" = *Microsoft.NETCore.DotNetHost* ]] || newpkgs+=("$pkg")
         done
@@ -304,6 +307,7 @@ sdk_packages () {
 }
 
 main () {
+    local pname
     pname=$(basename "$0")
     if [[ ! "$*" =~ ^.*[0-9]{1,}\.[0-9]{1,}.*$ ]]; then
         echo "Usage: $pname [sem-versions]
@@ -318,7 +322,7 @@ Examples:
 
     for sem_version in "$@"; do
         echo "Generating ./versions/${sem_version}.nix"
-        patch_specified=false
+        local patch_specified=false
         # Check if a patch was specified as an argument.
         # If so, generate file for the specific version.
         # If only x.y version was provided, get the latest patch
@@ -331,19 +335,23 @@ Examples:
 
         # Make sure the x.y version is properly passed to .NET release metadata url.
         # Then get the json file and parse it to find the latest patch release.
+        local major_minor content major_minor_patch
         major_minor=$(sed 's/^\([0-9]*\.[0-9]*\).*$/\1/' <<< "$sem_version")
         content=$(curl -sL https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/"$major_minor"/releases.json)
         major_minor_patch=$([ "$patch_specified" == true ] && echo "$sem_version" || jq -r '."latest-release"' <<< "$content")
-        major_minor_underscore=${major_minor/./_}
+        local major_minor_underscore=${major_minor/./_}
 
+        local release_content aspnetcore_version runtime_version
         release_content=$(release "$content" "$major_minor_patch")
         aspnetcore_version=$(jq -r '."aspnetcore-runtime".version' <<< "$release_content")
         runtime_version=$(jq -r '.runtime.version' <<< "$release_content")
+        local -a sdk_versions
         mapfile -t sdk_versions < <(jq -r '.sdks[] | .version' <<< "$release_content" | sort -rn)
 
         # If patch was not specified, check if the package is already the latest version
         # If it is, exit early
         if [ "$patch_specified" == false ] && [ -f "./versions/${sem_version}.nix" ]; then
+            local current_version
             current_version=$(nix-instantiate --eval -E "(import ./versions/${sem_version}.nix { \
             buildAspNetCore = { ... }: {}; \
             buildNetSdk = { ... }: {}; \
@@ -356,15 +364,19 @@ Examples:
             fi
         fi
 
+        local aspnetcore_files runtime_files
         aspnetcore_files="$(release_files "$release_content" .\"aspnetcore-runtime\")"
         runtime_files="$(release_files "$release_content" .runtime)"
 
+        local channel_version support_phase
         channel_version=$(jq -r '."channel-version"' <<< "$content")
         support_phase=$(jq -r '."support-phase"' <<< "$content")
 
+        local aspnetcore_sources runtime_sources
         aspnetcore_sources="$(platform_sources "$aspnetcore_files")"
         runtime_sources="$(platform_sources "$runtime_files")"
 
+        local sdk_packages aspnetcore_packages
         sdk_packages="$(sdk_packages "${runtime_version}")"
         aspnetcore_packages="$(aspnetcore_packages "${aspnetcore_version}")"
 
@@ -393,19 +405,20 @@ in rec {
     $runtime_sources
   };" > "${result}"
 
-        declare -A feature_bands
+        local -A feature_bands
         unset latest_sdk
 
         for sdk_version in "${sdk_versions[@]}"; do
-            sdk_base_version=${sdk_version%-*}
-            feature_band=${sdk_base_version:0:-2}xx
+            local sdk_base_version=${sdk_version%-*}
+            local feature_band=${sdk_base_version:0:-2}xx
             # sometimes one release has e.g. both 8.0.202 and 8.0.203
             [[ ! ${feature_bands[$feature_band]+true} ]] || continue
             feature_bands[$feature_band]=$sdk_version
+            local sdk_files sdk_sources
             sdk_files="$(release_files "$release_content" ".sdks[] | select(.version == \"$sdk_version\")")"
             sdk_sources="$(platform_sources "$sdk_files")"
-            sdk_attrname=sdk_${feature_band//./_}
-            [[ -v latest_sdk ]] || latest_sdk=$sdk_attrname
+            local sdk_attrname=sdk_${feature_band//./_}
+            [[ -v latest_sdk ]] || local latest_sdk=$sdk_attrname
 
             echo "
   $sdk_attrname = buildNetSdk {
