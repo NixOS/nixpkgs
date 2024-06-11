@@ -4,6 +4,7 @@
 , installShellFiles
 , rustPlatform
 , libiconv
+, protobuf
 , darwin
 , nixosTests
 }:
@@ -29,10 +30,17 @@ rustPlatform.buildRustPackage rec {
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
   buildFeatures = [
-    "client" "sync" "server" "clipboard"
+    "client"
+    "sync"
+    "server"
+    "clipboard"
+    "daemon"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    protobuf
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
@@ -62,6 +70,8 @@ rustPlatform.buildRustPackage rec {
     "--skip=multi_user_test"
     # Tries to touch files
     "--skip=build_aliases"
+    # impure
+    "--skip=build_vars"
   ];
 
   meta = with lib; {
