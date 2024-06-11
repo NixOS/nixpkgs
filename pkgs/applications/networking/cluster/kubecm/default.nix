@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/sunny0826/kubecm/";
     license = licenses.asl20;
     maintainers = with maintainers; [ qjoly ];
+    mainProgram = "kubecm";
   };
 }
