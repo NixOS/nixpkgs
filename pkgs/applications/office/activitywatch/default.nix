@@ -1,28 +1,29 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, makeWrapper
-, pkg-config
-, perl
-, openssl
-, rust-jemalloc-sys
-, python3
-, wrapQtAppsHook
-, qtbase
-, qtsvg
-, xdg-utils
-, substituteAll
-, buildNpmPackage
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  makeWrapper,
+  pkg-config,
+  perl,
+  openssl,
+  rust-jemalloc-sys,
+  python3,
+  wrapQtAppsHook,
+  qtbase,
+  qtsvg,
+  xdg-utils,
+  substituteAll,
+  buildNpmPackage,
 }:
 
 let
-  version = "0.12.2";
+  version = "0.13.2";
   sources = fetchFromGitHub {
     owner = "ActivityWatch";
     repo = "activitywatch";
     rev = "v${version}";
-    sha256 = "sha256-IvRXfxTOSgBVlxy4SVij+POr7KgvXTEjGN3lSozhHkY=";
+    sha256 = "sha256-Z3WAg3b1zN0nS00u0zIose55JXRzQ7X7qy39XMY7Snk=";
     fetchSubmodules = true;
   };
 in
@@ -37,12 +38,17 @@ rec {
 
     nativeBuildInputs = [
       python3.pkgs.poetry-core
+      python3.pkgs.pythonRelaxDepsHook
     ];
 
     propagatedBuildInputs = with python3.pkgs; [
       aw-client
       xlib
       pynput
+    ];
+
+    pythonRelaxDeps = [
+      "python-xlib"
     ];
 
     pythonImportsCheck = [ "aw_watcher_afk" ];
@@ -65,11 +71,16 @@ rec {
 
     nativeBuildInputs = [
       python3.pkgs.poetry-core
+      python3.pkgs.pythonRelaxDepsHook
     ];
 
     propagatedBuildInputs = with python3.pkgs; [
       aw-client
       xlib
+    ];
+
+    pythonRelaxDeps = [
+      "python-xlib"
     ];
 
     pythonImportsCheck = [ "aw_watcher_window" ];
@@ -110,10 +121,6 @@ rec {
       "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
     ];
 
-    postPatch = ''
-      sed -E 's#PyQt6 = "6.3.1"#PyQt6 = "^6.4.0"#g' -i pyproject.toml
-    '';
-
     postInstall = ''
       install -D resources/aw-qt.desktop $out/share/applications/aw-qt.desktop
 
@@ -143,35 +150,51 @@ rec {
     };
   };
 
+  aw-notify = python3.pkgs.buildPythonApplication {
+    pname = "aw-notify";
+    inherit version;
+
+    format = "pyproject";
+
+    src = "${sources}/aw-notify";
+
+    nativeBuildInputs = [
+      python3.pkgs.poetry-core
+      python3.pkgs.pythonRelaxDepsHook
+    ];
+
+    propagatedBuildInputs = with python3.pkgs; [
+      aw-client
+      desktop-notifier
+    ];
+
+    pythonRelaxDeps = [
+      "desktop-notifier"
+    ];
+
+    pythonImportsCheck = [ "aw_notify" ];
+
+    meta = with lib; {
+      description = "Desktop notification service for ActivityWatch";
+      homepage = "https://github.com/ActivityWatch/aw-notify";
+      maintainers = with maintainers; [ huantian ];
+      license = licenses.mpl20;
+    };
+  };
+
   aw-server-rust = rustPlatform.buildRustPackage {
     pname = "aw-server-rust";
     inherit version;
 
     src = "${sources}/aw-server-rust";
 
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "rocket_cors-0.6.0-alpha1" = "sha256-GuMekgnsyuOg6lMiVvi4TwMba4sAFJ/zkgrdzSeBrv0=";
-      };
-    };
-
-    # Bypass rust nightly features not being available on rust stable
-    RUSTC_BOOTSTRAP = 1;
+    cargoHash = "sha256-2KnfLNVw48VVQ1Ec8MS2MaiA3BpGeFd/uIrJRHhaJR8=";
 
     patches = [
       # Override version string with hardcoded value as it may be outdated upstream.
       (substituteAll {
         src = ./override-version.patch;
         version = sources.rev;
-      })
-
-      # Can be removed with release 0.12.3
-      (fetchpatch {
-        name = "remove-unused-unstable-features.patch";
-        url = "https://github.com/ActivityWatch/aw-server-rust/commit/e1cd761d2f0a9309eb851b59732c2567a7ae2d3a.patch";
-        hash = "sha256-wP+3XZDkr148XY5b8RV3obuLczAFBE3FhaYPqnmmGcU=";
-        includes = [ "aw-server/src/lib.rs" ];
       })
     ];
 
@@ -186,13 +209,7 @@ rec {
       rust-jemalloc-sys
     ];
 
-    postFixup = ''
-      wrapProgram "$out/bin/aw-server" \
-        --prefix XDG_DATA_DIRS : "$out/share"
-
-      mkdir -p "$out/share/aw-server"
-      ln -s "${aw-webui}" "$out/share/aw-server/static"
-    '';
+    env.AW_WEBUI_DIR = aw-webui;
 
     preCheck = ''
       # Fake home folder for tests that use ~/.cache and ~/.local/share
@@ -215,7 +232,9 @@ rec {
 
     src = "${sources}/aw-server-rust/aw-webui";
 
-    npmDepsHash = "sha256-yds2P2PKfTB6yUGnc+P73InV5+MZP9kmz2ZS4CRqlmA=";
+    npmDepsHash = "sha256-fPk7UpKuO3nEN1w+cf9DIZIG1+XRUk6PJfVmtpC30XE=";
+
+    makeCacheWritable = true;
 
     patches = [
       # Hardcode version to avoid the need to have the Git repo available at build time.
@@ -228,7 +247,7 @@ rec {
     installPhase = ''
       runHook preInstall
       mv dist $out
-      cp media/logo/logo.{png,svg} $out/static/
+      mv media/logo/logo.{png,svg} $out
       runHook postInstall
     '';
 
