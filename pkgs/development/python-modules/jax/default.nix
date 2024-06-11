@@ -30,7 +30,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.28";
+  version = "0.4.30";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -40,10 +40,10 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     rev = "refs/tags/jax-v${version}";
-    hash = "sha256-qSHPwi3is6Ts7pz5s4KzQHBMbcjGp+vAOsejW3o36Ek=";
+    hash = "sha256-eg+uP0ZWHG6R+5UGeAcKyg+v150ANQvD31jYtPkcYc8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   # The version is automatically set to ".dev" if this variable is not set.
   # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
@@ -52,7 +52,8 @@ buildPythonPackage rec {
   # jaxlib is _not_ included in propagatedBuildInputs because there are
   # different versions of jaxlib depending on the desired target hardware. The
   # JAX project ships separate wheels for CPU, GPU, and TPU.
-  propagatedBuildInputs = [
+  dependencies = [
+    jaxlib'
     ml-dtypes
     numpy
     opt-einsum
@@ -61,7 +62,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    jaxlib'
     matplotlib
     pytestCheckHook
     pytest-xdist
@@ -157,10 +157,11 @@ buildPythonPackage rec {
   # updater fails to pick the correct branch
   passthru.skipBulkUpdate = true;
 
-  meta = with lib; {
+  meta = {
     description = "Differentiate, compile, and transform Numpy code";
     homepage = "https://github.com/google/jax";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    changelog = "https://github.com/google/jax/releases/tag/jax-v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }
