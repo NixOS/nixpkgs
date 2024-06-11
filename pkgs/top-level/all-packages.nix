@@ -35246,20 +35246,27 @@ with pkgs;
 
   vsce = callPackage ../development/tools/vsce { };
 
-  vscode = callPackage ../applications/editors/vscode/vscode.nix { };
-  vscode-fhs = vscode.fhs;
-  vscode-fhsWithPackages = vscode.fhsWithPackages;
+  inherit ({
+    vscode = callPackage ../applications/editors/vscode/vscode.nix { };
+    vscode-fhs = vscode.fhs;
+    vscode-fhsWithPackages = vscode.fhsWithPackages;
 
-  vscode-with-extensions = callPackage ../applications/editors/vscode/with-extensions.nix { };
+    vscode-with-extensions = callPackage ../applications/editors/vscode/with-extensions.nix { };
 
-  vscode-utils = callPackage ../applications/editors/vscode/extensions/vscode-utils.nix { };
+    vscode-utils = callPackage ../applications/editors/vscode/extensions/vscode-utils.nix { };
 
-  vscode-extensions = recurseIntoAttrs (callPackage ../applications/editors/vscode/extensions { });
+    vscode-extensions = recurseIntoAttrs (callPackage ../applications/editors/vscode/extensions { });
 
-  vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
-  vscode-oss = callPackage ../applications/editors/vscode/vscode-oss.nix { };
-  vscodium-fhs = vscodium.fhs;
-  vscodium-fhsWithPackages = vscodium.fhsWithPackages;
+    vscodium = callPackage ../applications/editors/vscode/vscodium.nix { };
+    vscode-oss = callPackage ../applications/editors/vscode/vscode-oss.nix { };
+    vscodium-fhs = vscodium.fhs;
+    vscodium-fhsWithPackages = vscodium.fhsWithPackages;
+  })
+  vscode vschde-fhs vscode-fhsWithPackages vscode-with-extensions
+  vscode-utils
+  vscode-extensions
+  vscodium vscodium-fhs vscodium-fhsWithPackages
+  vscode-oss;
 
   openvscode-server = callPackage ../servers/openvscode-server {
     nodejs = nodejs_18;
