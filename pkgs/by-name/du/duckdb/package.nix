@@ -141,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       costrouc
       cpcloud
+      paparodeo
     ];
     platforms = platforms.all;
   };
