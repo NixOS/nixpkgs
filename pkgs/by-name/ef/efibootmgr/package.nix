@@ -30,13 +30,14 @@ stdenv.mkDerivation rec {
     "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
   ];
 
-  installFlags = [ "prefix=$(out)" ];
+  installFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
     homepage = "https://github.com/rhboot/efibootmgr";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ getchoo ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/rhboot/efibootmgr/releases/tag/${src.rev}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ getchoo ];
+    platforms = lib.platforms.linux;
   };
 }
