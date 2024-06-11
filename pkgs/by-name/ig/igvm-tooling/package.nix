@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "igvm-tooling";
-  version = "1.5.0";
+  version = "1.5.0-unstable-2024-06-06";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "igvm-tooling";
-    rev = "igvm-${version}";
-    hash = "sha256-13TtiJv2w9WXSW6oPMfo+rRah+Q1wHV14aBaFGfz9CE=";
+    rev = "53656ddde294bbafcae6349b5acfc5da9f7dbb92";
+    hash = "sha256-X9Gi+kTmc/ZcsgbHldEj9zPnOmd5puDD7/+J1s1CVws=";
   };
 
   patches = [
@@ -25,22 +25,6 @@ python3.pkgs.buildPythonApplication rec {
       name = "0001-setup.py-remove-unused-libclang-dependency.patch";
       url = "https://github.com/microsoft/igvm-tooling/commit/7182e925de9b5e9f5c8c3a3ce6e3942a92506064.patch";
       sha256 = "sha256-tcVxcuLxknyEdo2YjeHOqSG9xQna8US+YyvlcfX+Htw=";
-      stripLen = 1;
-    })
-    # write updated acpi files to tempdir (instead of nix store path) at runtime
-    # remove once https://github.com/microsoft/igvm-tooling/pull/54 is merged
-    (fetchpatch {
-      name = "0002-acpi-update-dsl-files-in-tempdir.patch";
-      url = "https://github.com/microsoft/igvm-tooling/commit/20f8d123ec6531d8540074b7df2ee12de60e73b8.patch";
-      sha256 = "sha256-hNfkclxaYViy66TPHqLV3mqD7wqBuBN9MnMLaDOeRNM=";
-      stripLen = 1;
-    })
-    # allow for determinist id block signing
-    # remove once https://github.com/microsoft/igvm-tooling/pull/55 is merged
-    (fetchpatch {
-      name = "0003-add-deterministic-id-block-signature-mode.patch";
-      url = "https://github.com/microsoft/igvm-tooling/commit/03ad7825ade76ac25e308bb85f92e89b732e0bf1.patch";
-      sha256 = "sha256-Y7DFr0KgGtY8KOt6fLWd32sTaig/zHFe7n83+Yb9ls8=";
       stripLen = 1;
     })
   ];
