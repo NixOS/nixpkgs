@@ -525,8 +525,6 @@ with pkgs;
 
   containerlab = callPackage ../tools/networking/containerlab { };
 
-  containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   confetty = callPackage ../applications/misc/confetty { };
@@ -3313,8 +3311,6 @@ with pkgs;
   aws-assume-role = callPackage ../tools/admin/aws-assume-role { };
 
   aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator { };
-
-  aws-env = callPackage ../tools/admin/aws-env { };
 
   aws-google-auth = python3Packages.callPackage ../tools/admin/aws-google-auth { };
 
@@ -13610,8 +13606,6 @@ with pkgs;
     pkgs = pkgs.__splicedPackages;
   });
 
-  tmsu = callPackage ../tools/filesystems/tmsu { };
-
   tncattach = callPackage ../applications/radio/tncattach { };
 
   to-html = callPackage ../tools/text/to-html { };
@@ -14243,8 +14237,6 @@ with pkgs;
   woodpecker-agent = callPackage ../development/tools/continuous-integration/woodpecker/agent.nix { };
 
   woodpecker-cli = callPackage ../development/tools/continuous-integration/woodpecker/cli.nix { };
-
-  woodpecker-pipeline-transform = callPackage ../development/tools/continuous-integration/woodpecker-pipeline-transform { };
 
   woodpecker-plugin-git = callPackage ../development/tools/continuous-integration/woodpecker-plugin-git { };
 

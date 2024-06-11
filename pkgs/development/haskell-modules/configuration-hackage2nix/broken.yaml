@@ -6732,7 +6732,6 @@ broken-packages:
   - yesod-content-pdf # failure in job https://hydra.nixos.org/build/233210723 at 2023-09-02
   - yesod-crud # failure in job https://hydra.nixos.org/build/233218383 at 2023-09-02
   - yesod-crud-persist # failure in job https://hydra.nixos.org/build/233245131 at 2023-09-02
-  - yesod-csp # failure in job https://hydra.nixos.org/build/233207134 at 2023-09-02
   - yesod-datatables # failure in job https://hydra.nixos.org/build/233197763 at 2023-09-02
   - yesod-dsl # failure in job https://hydra.nixos.org/build/233210879 at 2023-09-02
   - yesod-fast-devel # failure in job https://hydra.nixos.org/build/233209381 at 2023-09-02
