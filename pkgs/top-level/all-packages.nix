@@ -4083,6 +4083,7 @@ with pkgs;
   androidndkPkgs_21 = (callPackage ../development/androidndk-pkgs {})."21";
   androidndkPkgs_23b = (callPackage ../development/androidndk-pkgs {})."23b";
   androidndkPkgs_24 = (callPackage ../development/androidndk-pkgs {})."24";
+  androidndkPkgs_25 = (callPackage ../development/androidndk-pkgs {})."25";
 
   androidsdk = androidenv.androidPkgs.androidsdk;
 
