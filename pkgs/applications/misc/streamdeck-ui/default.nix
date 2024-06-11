@@ -122,11 +122,12 @@ python3Packages.buildPythonApplication rec {
     xvfb-run pytest tests
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux compatible UI for the Elgato Stream Deck";
+    downloadPage = "https://github.com/streamdeck-linux-gui/streamdeck-linux-gui/";
     homepage = "https://streamdeck-linux-gui.github.io/streamdeck-linux-gui/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "streamdeck";
-    maintainers = with maintainers; [ majiir ];
+    maintainers = with lib.maintainers; [ majiir ];
   };
 }
