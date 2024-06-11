@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://duckdb.org/";
     license = licenses.mit;
     mainProgram = "duckdb";
-    maintainers = with maintainers; [ costrouc cpcloud ];
+    maintainers = with maintainers; [ costrouc cpcloud paparodeo ];
     platforms = platforms.all;
   };
 })
