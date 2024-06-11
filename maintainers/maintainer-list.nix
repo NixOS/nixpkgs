@@ -4443,6 +4443,12 @@
     github = "d4ilyrun";
     githubId = 34611103;
   };
+  d4rkstar = {
+    name = "Bruno Salzano";
+    email = "d4rkstar@gmail.com";
+    github = "d4rkstar";
+    githubId = 4957015;
+  };
   dadada = {
     name = "dadada";
     email = "dadada@dadada.li";
