@@ -2,7 +2,9 @@
 , llvmPackages, elfutils, bcc
 , libbpf, libbfd, libopcodes
 , cereal, asciidoctor
+, glibc
 , cmake, pkg-config, flex, bison
+, makeWrapper
 , util-linux
 , nixosTests
 }:
@@ -30,6 +32,7 @@ stdenv.mkDerivation rec {
     cmake pkg-config flex bison
     llvmPackages.llvm.dev
     util-linux
+    makeWrapper
   ];
 
   # tests aren't built, due to gtest shenanigans. see:
@@ -48,6 +51,7 @@ stdenv.mkDerivation rec {
   # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
   # not move them to keep `${pkgs.bpftrace}/share/bpftrace/tools/...` working.
   postInstall = ''
+    wrapProgram $out/bin/bpftrace --add-flags "-I ${glibc.dev}/include"
     ln -sr $out/share/bpftrace/tools/*.bt $out/bin/
     # do not use /usr/bin/env for shipped tools
     # If someone can get patchShebangs to work here please fix.
