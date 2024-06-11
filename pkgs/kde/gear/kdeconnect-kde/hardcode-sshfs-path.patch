@@ -1,0 +1,13 @@
+diff --git a/plugins/sftp/mounter.cpp b/plugins/sftp/mounter.cpp
+index 29e94f3b..c71e552f 100644
+--- a/plugins/sftp/mounter.cpp
++++ b/plugins/sftp/mounter.cpp
+@@ -94,7 +94,7 @@ void Mounter::onPacketReceived(const NetworkPacket &np)
+ 
+     QDir().mkpath(m_mountPoint);
+ 
+-    const QString program = QStringLiteral("sshfs");
++    const QString program = QStringLiteral("@sshfs@");
+ 
+     QString path;
+     if (np.has(QStringLiteral("multiPaths")))

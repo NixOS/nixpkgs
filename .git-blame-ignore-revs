@@ -1,0 +1,123 @@
+# This file contains a list of commits that are not likely what you
+# are looking for in a blame, such as mass reformatting or renaming.
+# You can set this file as a default ignore file for blame by running
+# the following command.
+#
+# $ git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# To temporarily not use this file add
+# --ignore-revs-file=""
+# to your blame command.
+#
+# The ignoreRevsFile can't be set globally due to blame failing if the file isn't present.
+# To not have to set the option in every repository it is needed in,
+# save the following script in your path with the name "git-bblame"
+# now you can run
+# $ git bblame $FILE
+# to use the .git-blame-ignore-revs file if it is present.
+#
+# #!/usr/bin/env bash
+# repo_root=$(git rev-parse --show-toplevel)
+# if [[ -e $repo_root/.git-blame-ignore-revs ]]; then
+#     git blame --ignore-revs-file="$repo_root/.git-blame-ignore-revs" $@
+# else
+#     git blame $@
+# fi
+
+
+# nixos/modules/rename: Sort alphabetically
+1f71224fe86605ef4cd23ed327b3da7882dad382
+
+# manual: fix typos
+feddd5e7f8c6f8167b48a077fa2a5394dc008999
+
+# nixos: fix module paths in rename.nix
+d08ede042b74b8199dc748323768227b88efcf7c
+
+# fix indentation in mk-python-derivation.nix
+d1c1a0c656ccd8bd3b25d3c4287f2d075faf3cf3
+
+# fix indentation in meteor default.nix
+a37a6de881ec4c6708e6b88fd16256bbc7f26bbd
+
+# treewide: automatically md-convert option descriptions
+2e751c0772b9d48ff6923569adfa661b030ab6a2
+
+# nixos/*: automatically convert option docs
+087472b1e5230ffc8ba642b1e4f9218adf4634a2
+
+# nixos/*: automatically convert option descriptions
+ef176dcf7e76c3639571d7c6051246c8fbadf12a
+
+# nixos/*: automatically convert option docs to MD
+61e93df1891972bae3e0c97a477bd44e8a477aa0
+
+# nixos/*: convert options with admonitions to MD
+722b99bc0eb57711c0498a86a3f55e6c69cdb05f
+
+# nixos/*: automatically convert option docs
+6039648c50c7c0858b5e506c6298773a98e0f066
+
+# nixos/*: md-convert options with unordered lists
+c915b915b5e466a0b0b2af2906cd4d2380b8a1de
+
+# nixos/*: convert options with listings
+f2ea09ecbe1fa1da32eaa6e036d64ac324a2986f
+
+# nixos/*: convert straggler options to MD
+1d41cff3dc4c8f37bb5841f51fcbff705e169178
+
+# nixos/*: normalize manpage references to single-line form
+423545fe4865d126e86721ba30da116e29c65004
+
+# nixos/documentation: split options doc build
+fc614c37c653637e5475a0b0a987489b4d1f351d
+
+# nixos/*: convert options with admonitions to MD
+722b99bc0eb57711c0498a86a3f55e6c69cdb05f
+
+# nixos/*: convert internal option descriptions to MD
+9547123258f69efd92b54763051d6dc7f3bfcaca
+
+# nixos/*: replace </para><para> with double linebreaks
+694d5b19d30bf66687b42fb77f43ea7cd1002a62
+
+# treewide: add defaultText for options with simple interpolation defaults
+fb0e5be84331188a69b3edd31679ca6576edb75a
+
+# nixos/*: mark pre-existing markdown descriptions as mdDoc
+7e7d68a250f75678451cd44f8c3d585bf750461e
+
+# nixos/*: normalize link format
+3aebb4a2be8821a6d8a695f0908d8567dc00de31
+
+# nixos/*: replace <code> in option docs with <literal>
+16102dce2fbad670bd47dd75c860a8daa5fe47ad
+
+# nixos/*: add trivial defaultText for options with simple defaults
+25124556397ba17bfd70297000270de1e6523b0a
+
+# systemd: rewrite comments
+92dfeb7b3dab820ae307c56c216d175c69ee93cd
+
+# systemd: break too long lines of Nix code
+67643f8ec84bef1482204709073e417c9f07eb87
+
+# {pkgs/development/cuda-modules,pkgs/test/cuda,pkgs/top-level/cuda-packages.nix}: reformat all CUDA files with nixfmt-rfc-style 2023-03-01
+802a1b4d3338f24cbc4efd704616654456d75a94
+
+# postgresql: move packages.nix to ext/default.nix
+719034f6f6749d624faa28dff259309fc0e3e730
+
+# php ecosystem: reformat with nixfmt-rfc-style
+75ae7621330ff8db944ce4dff4374e182d5d151f
+c759efa5e7f825913f9a69ef20f025f50f56dc4d
+
+# pkgs/os-specific/bsd: Reformat with nixfmt-rfc-style 2024-03-01
+3fe3b055adfc020e6a923c466b6bcd978a13069a
+
+# k3s: format with nixfmt-rfc-style
+6cfcd3c75428ede517bc6b15a353d704837a2830
+
+# python3Packages: format with nixfmt
+59b1aef59071cae6e87859dc65de973d2cc595c0

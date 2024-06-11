@@ -1,0 +1,30 @@
+diff --git a/distdir_deps.bzl b/distdir_deps.bzl
+index c7fc4588e4..01e6966fca 100644
+--- a/distdir_deps.bzl
++++ b/distdir_deps.bzl
+@@ -192,6 +192,8@@ DIST_DEPS = {
+         "archive": "a5477045acaa34586420942098f5fecd3570f577.tar.gz",
+         "sha256": "cf7f71eaff90b24c1a28b49645a9ff03a9a6c1e7134291ce70901cb63e7364b5",
+         "strip_prefix": "upb-a5477045acaa34586420942098f5fecd3570f577",
++        "patches": ["//:upb-clang16.patch"],
++        "patch_args": ["-p1"],
+         "urls": [
+             "https://mirror.bazel.build/github.com/protocolbuffers/upb/archive/a5477045acaa34586420942098f5fecd3570f577.tar.gz",
+             "https://github.com/protocolbuffers/upb/archive/a5477045acaa34586420942098f5fecd3570f577.tar.gz",
+diff --git a/upb-clang16.patch b/upb-clang16.patch
+new file mode 100644
+index 0000000000..f81855181f
+--- /dev/null
++++ upb-clang16.patch
+@@ -0,0 +1,10 @@
++--- a/bazel/build_defs.bzl
+++++ b/bazel/build_defs.bzl
++@@ -43,6 +43,7 @@
++     "-Werror=pedantic",
++     "-Wall",
++     "-Wstrict-prototypes",
+++    "-Wno-gnu-offsetof-extensions",
++     # GCC (at least) emits spurious warnings for this that cannot be fixed
++     # without introducing redundant initialization (with runtime cost):
++     #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80635
+

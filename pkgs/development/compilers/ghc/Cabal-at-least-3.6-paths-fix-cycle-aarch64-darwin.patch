@@ -1,0 +1,602 @@
+This patch is based on https://github.com/sternenseemann/cabal/compare/982646d67b95b32813b89ab5d2d2f4d4dc03fb2b..7c49047f253e1f128e2df356400ec5da6f11066b
+and has been postprocessed with `filterdiff --strip=1 --addoldprefix=a/libraries/Cabal/ --addnewprefix=b/libraries/Cabal/`.
+Note that the base for the diff is not the Cabal 3.6.3.0 release tag, but
+982646d67b95b32813b89ab5d2d2f4d4dc03fb2b which is obtained by applying
+https://github.com/haskell/cabal/commit/6c796218c92f93c95e94d5ec2d077f6956f68e98
+on top of said release tag. That patch is applied to all our GHCs in the 9.2 series.
+
+Reasoning and explanation of the patch can be found in the comment in the diff for PathsModule.hs below.
+
+diffCabal/src/Distribution/Simple/Build/PathsModule.hs b/Cabal/src/Distribution/Simple/Build/PathsModule.hs
+index b2be7e1a8..9b63e9850 100644
+--- a/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule.hs
++++ b/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule.hs
+@@ -46,6 +46,7 @@ generatePathsModule pkg_descr lbi clbi = Z.render Z.Z
+     , Z.zIsWindows                  = isWindows
+     , Z.zIsI386                     = buildArch == I386
+     , Z.zIsX8664                    = buildArch == X86_64
++    , Z.zOr                         = (||)
+     , Z.zNot                        = not
+     , Z.zManglePkgName              = showPkgName
+ 
+@@ -56,8 +57,112 @@ generatePathsModule pkg_descr lbi clbi = Z.render Z.Z
+     , Z.zDatadir    = zDatadir
+     , Z.zLibexecdir = zLibexecdir
+     , Z.zSysconfdir = zSysconfdir
++
++    -- Sadly we can't be cleverer about this – we can't have literals in the template
++    , Z.zShouldEmitDataDir    = shouldEmit "DataDir"
++    , Z.zShouldEmitLibDir     = shouldEmit "LibDir"
++    , Z.zShouldEmitDynLibDir  = shouldEmit "DynLibDir"
++    , Z.zShouldEmitLibexecDir = shouldEmit "LibexecDir"
++    , Z.zShouldEmitSysconfDir = shouldEmit "SysconfDir"
++
++    , Z.zWarning           = zWarning
++    , Z.zShouldEmitWarning = zShouldEmitWarning
+     }
+   where
++    -- GHC's NCG backend for aarch64-darwin does not support link-time dead code
++    -- elimination to the extent that NCG does for other targets. Consequently,
++    -- we struggle with unnecessarily retained store path references due to the
++    -- use of `Paths_*` modules – even if `getLibDir` is not used, it'll end up
++    -- in the final library or executables we build.
++    --
++    -- When using a different output for the executables and library, this
++    -- becomes more sinister: The library will contain a reference to the bin
++    -- output and itself due to `getLibDir` and `getBinDir`, but the executables
++    -- will do so, too. Either due to linking dynamically or because the library
++    -- is linked statically into the executable and retains those references.
++    -- Since Nix disallows cyclical references between two outputs, it becomes
++    -- impossible to use the `Paths_*` module and a separate `bin` output for
++    -- aarch64-darwin.
++    --
++    -- The solution we have resorted to for now, is to trim the `Paths_*` module
++    -- dynamically depending on what references *could* be used without causing
++    -- a cyclical reference. That has the effect that any code that would not
++    -- cause a cyclical reference with dead code elimination will compile and
++    -- work for aarch64-darwin. If the code would use a `get*Dir` function that
++    -- has been omitted, this would indicate that the code would have caused a
++    -- cyclical reference anyways.
++    --
++    -- The logic for this makes some pretty big assumptions about installation
++    -- prefixes that probably only hold fully in nixpkgs with
++    -- `haskellPackages.mkDerivation`. Simple uses outside nixpkgs that have
++    -- everything below the same prefix should continue to work as expected,
++    -- though.
++    --
++    -- We assume the following:
++    --
++    -- - flat_prefix is `$out`.
++    -- - flat_libdir etc. are always below `$out`.
++    --
++    -- Since in the normal case due to static linking `$bin` and `$out` will
++    -- have the same references in libraries/executables, we need to either
++    -- prevent usage of `getBinDir` or `getLibDir` to break the cycle in case
++    -- `flat_bindir` is not below `$out`. We have decided to always allow usage
++    -- of `getBinDir`, so `getLibDir` gets dropped if a separate `bin` output is
++    -- used. This has the simple reason that `$out` which contains `flat_libdir`
++    -- tends to be quite big – we would like to have a `bin` output that doesn't
++    -- require keeping that around.
++    pathEmittable :: FilePath -> Bool
++    pathEmittable p
++      -- If the executable installation target is below `$out` the reference
++      -- cycle is within a single output (since libs are installed to `$out`)
++      -- and thus unproblematic. We can use any and all `get*Dir` functions.
++      | flat_prefix `isPrefixOf` flat_bindir = True
++      -- Otherwise, we need to disallow all `get*Dir` functions that would cause
++      -- a reference to `$out` which contains the libraries that would in turn
++      -- reference `$bin`. This always include `flat_libdir` and friends, but
++      -- can also include `flat_datadir` if no separate output for data files is
++      -- used.
++      | otherwise = not (flat_prefix `isPrefixOf` p)
++
++    -- This list maps the "name" of the directory to whether we want to include
++    -- it in the `Paths_*` module or not. `shouldEmit` performs a lookup in this.
++    dirs :: [(String, Bool)]
++    dirs =
++      map
++       (\(name, path) -> (name, pathEmittable path))
++       [ ("LibDir", flat_libdir)
++       , ("DynLibDir", flat_dynlibdir)
++       , ("DataDir", flat_datadir)
++       , ("LibexecDir", flat_libexecdir)
++       , ("SysconfDir", flat_sysconfdir)
++       ]
++
++    shouldEmit :: String -> Bool
++    shouldEmit name =
++      case lookup name dirs of
++        Just b -> b
++        Nothing -> error "panic! BUG in Cabal Paths_ patch for aarch64-darwin, report this at https://github.com/nixos/nixpkgs/issues"
++
++    -- This is a comma separated list of all functions that have been omitted.
++    -- This is included in a GHC warning which will be attached to the `Paths_*`
++    -- module in case we are dropping any `get*Dir` functions that would
++    -- normally exist.
++    --
++    -- TODO: getDataFileName is not accounted for at the moment.
++    omittedFunctions :: String
++    omittedFunctions =
++      intercalate ", "
++      $ map (("get" ++) . fst)
++      $ filter (not . snd) dirs
++
++    zWarning :: String
++    zWarning =
++      show $
++        "The following functions have been omitted by a nixpkgs-specific patch to Cabal: "
++        ++ omittedFunctions
++    zShouldEmitWarning :: Bool
++    zShouldEmitWarning = any (not . snd) dirs
++
+     supports_cpp                 = supports_language_pragma
+     supports_rebindable_syntax   = ghc_newer_than (mkVersion [7,0,1])
+     supports_language_pragma     = ghc_newer_than (mkVersion [6,6,1])
+diffCabal/src/Distribution/Simple/Build/PathsModule/Z.hs b/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
+index 6488ea061..a6cdc8e31 100644
+--- a/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
++++ b/libraries/Cabal/Cabal/src/Distribution/Simple/Build/PathsModule/Z.hs
+@@ -18,6 +18,14 @@ data Z
+          zDatadir :: FilePath,
+          zLibexecdir :: FilePath,
+          zSysconfdir :: FilePath,
++         zShouldEmitLibDir :: Bool,
++         zShouldEmitDynLibDir :: Bool,
++         zShouldEmitLibexecDir :: Bool,
++         zShouldEmitDataDir :: Bool,
++         zShouldEmitSysconfDir :: Bool,
++         zShouldEmitWarning :: Bool,
++         zWarning :: String,
++         zOr :: (Bool -> Bool -> Bool),
+          zNot :: (Bool -> Bool),
+          zManglePkgName :: (PackageName -> String)}
+     deriving Generic
+@@ -45,10 +53,51 @@ render z_root = execWriter $ do
+   tell "{-# OPTIONS_GHC -w #-}\n"
+   tell "module Paths_"
+   tell (zManglePkgName z_root (zPackageName z_root))
+-  tell " (\n"
++  tell "\n"
++  tell "  "
++  if (zShouldEmitWarning z_root)
++  then do
++    tell "{-# WARNING "
++    tell (zWarning z_root)
++    tell " #-}"
++    return ()
++  else do
++    return ()
++  tell "\n"
++  tell "  (\n"
+   tell "    version,\n"
+-  tell "    getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir,\n"
+-  tell "    getDataFileName, getSysconfDir\n"
++  tell "    getBinDir,\n"
++  if (zOr z_root (zNot z_root (zAbsolute z_root)) (zShouldEmitLibDir z_root))
++  then do
++    tell "    getLibDir,\n"
++    return ()
++  else do
++    return ()
++  if (zOr z_root (zNot z_root (zAbsolute z_root)) (zShouldEmitDynLibDir z_root))
++  then do
++    tell "    getDynLibDir,\n"
++    return ()
++  else do
++    return ()
++  if (zOr z_root (zNot z_root (zAbsolute z_root)) (zShouldEmitLibexecDir z_root))
++  then do
++    tell "    getLibexecDir,\n"
++    return ()
++  else do
++    return ()
++  if (zOr z_root (zNot z_root (zAbsolute z_root)) (zShouldEmitDataDir z_root))
++  then do
++    tell "    getDataFileName,\n"
++    tell "    getDataDir,\n"
++    return ()
++  else do
++    return ()
++  if (zOr z_root (zNot z_root (zAbsolute z_root)) (zShouldEmitSysconfDir z_root))
++  then do
++    tell "    getSysconfDir\n"
++    return ()
++  else do
++    return ()
+   tell "  ) where\n"
+   tell "\n"
+   if (zNot z_root (zAbsolute z_root))
+@@ -97,12 +146,15 @@ render z_root = execWriter $ do
+   tell (zVersionDigits z_root)
+   tell " []\n"
+   tell "\n"
+-  tell "getDataFileName :: FilePath -> IO FilePath\n"
+-  tell "getDataFileName name = do\n"
+-  tell "  dir <- getDataDir\n"
+-  tell "  return (dir `joinFileName` name)\n"
+-  tell "\n"
+-  tell "getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath\n"
++  if (zOr z_root (zNot z_root (zAbsolute z_root)) (zShouldEmitDataDir z_root))
++  then do
++    tell "getDataFileName :: FilePath -> IO FilePath\n"
++    tell "getDataFileName name = do\n"
++    tell "  dir <- getDataDir\n"
++    tell "  return (dir `joinFileName` name)\n"
++    return ()
++  else do
++    return ()
+   tell "\n"
+   let
+     z_var0_function_defs = do
+@@ -130,6 +182,7 @@ render z_root = execWriter $ do
+   tell "\n"
+   if (zRelocatable z_root)
+   then do
++    tell "\n"
+     tell "\n"
+     tell "getPrefixDirReloc :: FilePath -> IO FilePath\n"
+     tell "getPrefixDirReloc dirRel = do\n"
+@@ -139,31 +192,37 @@ render z_root = execWriter $ do
+     tell (zBindir z_root)
+     tell ") `joinFileName` dirRel)\n"
+     tell "\n"
++    tell "getBinDir     :: IO FilePath\n"
+     tell "getBinDir     = catchIO (getEnv \""
+     tell (zManglePkgName z_root (zPackageName z_root))
+     tell "_bindir\")     (\\_ -> getPrefixDirReloc $ "
+     tell (zBindir z_root)
+     tell ")\n"
++    tell "getLibDir     :: IO FilePath\n"
+     tell "getLibDir     = catchIO (getEnv \""
+     tell (zManglePkgName z_root (zPackageName z_root))
+     tell "_libdir\")     (\\_ -> getPrefixDirReloc $ "
+     tell (zLibdir z_root)
+     tell ")\n"
++    tell "getDynLibDir  :: IO FilePath\n"
+     tell "getDynLibDir  = catchIO (getEnv \""
+     tell (zManglePkgName z_root (zPackageName z_root))
+     tell "_dynlibdir\")  (\\_ -> getPrefixDirReloc $ "
+     tell (zDynlibdir z_root)
+     tell ")\n"
++    tell "getDataDir    :: IO FilePath\n"
+     tell "getDataDir    = catchIO (getEnv \""
+     tell (zManglePkgName z_root (zPackageName z_root))
+     tell "_datadir\")    (\\_ -> getPrefixDirReloc $ "
+     tell (zDatadir z_root)
+     tell ")\n"
++    tell "getLibexecDir :: IO FilePath\n"
+     tell "getLibexecDir = catchIO (getEnv \""
+     tell (zManglePkgName z_root (zPackageName z_root))
+     tell "_libexecdir\") (\\_ -> getPrefixDirReloc $ "
+     tell (zLibexecdir z_root)
+     tell ")\n"
++    tell "getSysconfDir :: IO FilePath\n"
+     tell "getSysconfDir = catchIO (getEnv \""
+     tell (zManglePkgName z_root (zPackageName z_root))
+     tell "_sysconfdir\") (\\_ -> getPrefixDirReloc $ "
+@@ -177,72 +236,119 @@ render z_root = execWriter $ do
+     if (zAbsolute z_root)
+     then do
+       tell "\n"
+-      tell "bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath\n"
++      tell "bindir     :: FilePath\n"
+       tell "bindir     = "
+       tell (zBindir z_root)
+       tell "\n"
+-      tell "libdir     = "
+-      tell (zLibdir z_root)
+-      tell "\n"
+-      tell "dynlibdir  = "
+-      tell (zDynlibdir z_root)
++      tell "getBinDir     :: IO FilePath\n"
++      tell "getBinDir     = catchIO (getEnv \""
++      tell (zManglePkgName z_root (zPackageName z_root))
++      tell "_bindir\")     (\\_ -> return bindir)\n"
+       tell "\n"
+-      tell "datadir    = "
+-      tell (zDatadir z_root)
++      if (zShouldEmitLibDir z_root)
++      then do
++        tell "libdir     :: FilePath\n"
++        tell "libdir     = "
++        tell (zLibdir z_root)
++        tell "\n"
++        tell "getLibDir     :: IO FilePath\n"
++        tell "getLibDir     = catchIO (getEnv \""
++        tell (zManglePkgName z_root (zPackageName z_root))
++        tell "_libdir\")     (\\_ -> return libdir)\n"
++        return ()
++      else do
++        return ()
+       tell "\n"
+-      tell "libexecdir = "
+-      tell (zLibexecdir z_root)
++      if (zShouldEmitDynLibDir z_root)
++      then do
++        tell "dynlibdir  :: FilePath\n"
++        tell "dynlibdir  = "
++        tell (zDynlibdir z_root)
++        tell "\n"
++        tell "getDynLibDir  :: IO FilePath\n"
++        tell "getDynLibDir  = catchIO (getEnv \""
++        tell (zManglePkgName z_root (zPackageName z_root))
++        tell "_dynlibdir\")  (\\_ -> return dynlibdir)\n"
++        return ()
++      else do
++        return ()
+       tell "\n"
+-      tell "sysconfdir = "
+-      tell (zSysconfdir z_root)
++      if (zShouldEmitDataDir z_root)
++      then do
++        tell "datadir    :: FilePath\n"
++        tell "datadir    = "
++        tell (zDatadir z_root)
++        tell "\n"
++        tell "getDataDir    :: IO FilePath\n"
++        tell "getDataDir    = catchIO (getEnv \""
++        tell (zManglePkgName z_root (zPackageName z_root))
++        tell "_datadir\")    (\\_ -> return datadir)\n"
++        return ()
++      else do
++        return ()
+       tell "\n"
++      if (zShouldEmitLibexecDir z_root)
++      then do
++        tell "libexecdir :: FilePath\n"
++        tell "libexecdir = "
++        tell (zLibexecdir z_root)
++        tell "\n"
++        tell "getLibexecDir :: IO FilePath\n"
++        tell "getLibexecDir = catchIO (getEnv \""
++        tell (zManglePkgName z_root (zPackageName z_root))
++        tell "_libexecdir\") (\\_ -> return libexecdir)\n"
++        return ()
++      else do
++        return ()
+       tell "\n"
+-      tell "getBinDir     = catchIO (getEnv \""
+-      tell (zManglePkgName z_root (zPackageName z_root))
+-      tell "_bindir\")     (\\_ -> return bindir)\n"
+-      tell "getLibDir     = catchIO (getEnv \""
+-      tell (zManglePkgName z_root (zPackageName z_root))
+-      tell "_libdir\")     (\\_ -> return libdir)\n"
+-      tell "getDynLibDir  = catchIO (getEnv \""
+-      tell (zManglePkgName z_root (zPackageName z_root))
+-      tell "_dynlibdir\")  (\\_ -> return dynlibdir)\n"
+-      tell "getDataDir    = catchIO (getEnv \""
+-      tell (zManglePkgName z_root (zPackageName z_root))
+-      tell "_datadir\")    (\\_ -> return datadir)\n"
+-      tell "getLibexecDir = catchIO (getEnv \""
+-      tell (zManglePkgName z_root (zPackageName z_root))
+-      tell "_libexecdir\") (\\_ -> return libexecdir)\n"
+-      tell "getSysconfDir = catchIO (getEnv \""
+-      tell (zManglePkgName z_root (zPackageName z_root))
+-      tell "_sysconfdir\") (\\_ -> return sysconfdir)\n"
++      if (zShouldEmitSysconfDir z_root)
++      then do
++        tell "sysconfdir :: FilePath\n"
++        tell "sysconfdir = "
++        tell (zSysconfdir z_root)
++        tell "\n"
++        tell "getSysconfDir :: IO FilePath\n"
++        tell "getSysconfDir = catchIO (getEnv \""
++        tell (zManglePkgName z_root (zPackageName z_root))
++        tell "_sysconfdir\") (\\_ -> return sysconfdir)\n"
++        return ()
++      else do
++        return ()
+       tell "\n"
+       return ()
+     else do
+       if (zIsWindows z_root)
+       then do
++        tell "\n"
+         tell "\n"
+         tell "prefix :: FilePath\n"
+         tell "prefix = "
+         tell (zPrefix z_root)
+         tell "\n"
+         tell "\n"
++        tell "getBinDir     :: IO FilePath\n"
+         tell "getBinDir     = getPrefixDirRel $ "
+         tell (zBindir z_root)
+         tell "\n"
++        tell "getLibDir     :: IO FilePath\n"
+         tell "getLibDir     = "
+         tell (zLibdir z_root)
+         tell "\n"
++        tell "getDynLibDir  :: IO FilePath\n"
+         tell "getDynLibDir  = "
+         tell (zDynlibdir z_root)
+         tell "\n"
++        tell "getDataDir    :: IO FilePath\n"
+         tell "getDataDir    = catchIO (getEnv \""
+         tell (zManglePkgName z_root (zPackageName z_root))
+         tell "_datadir\")    (\\_ -> "
+         tell (zDatadir z_root)
+         tell ")\n"
++        tell "getLibexecDir :: IO FilePath\n"
+         tell "getLibexecDir = "
+         tell (zLibexecdir z_root)
+         tell "\n"
++        tell "getSysconfDir :: IO FilePath\n"
+         tell "getSysconfDir = "
+         tell (zSysconfdir z_root)
+         tell "\n"
+diffcabal-dev-scripts/src/GenPathsModule.hs b/cabal-dev-scripts/src/GenPathsModule.hs
+index e4b930635..9b978f284 100644
+--- a/libraries/Cabal/cabal-dev-scripts/src/GenPathsModule.hs
++++ b/libraries/Cabal/cabal-dev-scripts/src/GenPathsModule.hs
+@@ -41,6 +41,16 @@ $(capture "decls" [d|
+         , zLibexecdir :: FilePath
+         , zSysconfdir :: FilePath
+ 
++        , zShouldEmitLibDir     :: Bool
++        , zShouldEmitDynLibDir  :: Bool
++        , zShouldEmitLibexecDir :: Bool
++        , zShouldEmitDataDir    :: Bool
++        , zShouldEmitSysconfDir :: Bool
++
++        , zShouldEmitWarning :: Bool
++        , zWarning           :: String
++
++        , zOr                         :: Bool -> Bool -> Bool
+         , zNot                        :: Bool -> Bool
+         , zManglePkgName              :: PackageName -> String
+         }
+difftemplates/Paths_pkg.template.hs b/templates/Paths_pkg.template.hs
+index 6bc6b7875..aa90a9382 100644
+--- a/libraries/Cabal/templates/Paths_pkg.template.hs
++++ b/libraries/Cabal/templates/Paths_pkg.template.hs
+@@ -9,10 +9,31 @@
+ {% endif %}
+ {-# OPTIONS_GHC -fno-warn-missing-import-lists #-}
+ {-# OPTIONS_GHC -w #-}
+-module Paths_{{ manglePkgName packageName }} (
++module Paths_{{ manglePkgName packageName }}
++  {% if shouldEmitWarning %}{-# WARNING {{ warning }} #-}{% endif %}
++  (
+     version,
+-    getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir,
+-    getDataFileName, getSysconfDir
++    getBinDir,
++{# We only care about the absolute case for our emit logic, since only in this
++   case references are incurred. We are not going to hit isWindows and relocatable
++   has no absolute references to begin with.
++#}
++{% if or (not absolute) shouldEmitLibDir %}
++    getLibDir,
++{% endif %}
++{% if or (not absolute) shouldEmitDynLibDir %}
++    getDynLibDir,
++{% endif %}
++{% if or (not absolute) shouldEmitLibexecDir %}
++    getLibexecDir,
++{% endif %}
++{% if or (not absolute) shouldEmitDataDir %}
++    getDataFileName,
++    getDataDir,
++{% endif %}
++{% if or (not absolute) shouldEmitSysconfDir %}
++    getSysconfDir
++{% endif %}
+   ) where
+ 
+ {% if not absolute %}
+@@ -51,12 +72,12 @@ catchIO = Exception.catch
+ version :: Version
+ version = Version {{ versionDigits }} []
+ 
++{% if or (not absolute) shouldEmitDataDir %}
+ getDataFileName :: FilePath -> IO FilePath
+ getDataFileName name = do
+   dir <- getDataDir
+   return (dir `joinFileName` name)
+-
+-getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
++{% endif %}
+ 
+ {% defblock function_defs %}
+ minusFileName :: FilePath -> String -> FilePath
+@@ -85,48 +106,93 @@ splitFileName p = (reverse (path2++drive), reverse fname)
+ 
+ {% if relocatable %}
+ 
++{# Relocatable can not incur any absolute references, so we can ignore it.
++   Additionally, --enable-relocatable is virtually useless in Nix builds
++#}
++
+ getPrefixDirReloc :: FilePath -> IO FilePath
+ getPrefixDirReloc dirRel = do
+   exePath <- getExecutablePath
+   let (dir,_) = splitFileName exePath
+   return ((dir `minusFileName` {{ bindir }}) `joinFileName` dirRel)
+ 
++getBinDir     :: IO FilePath
+ getBinDir     = catchIO (getEnv "{{ manglePkgName packageName }}_bindir")     (\_ -> getPrefixDirReloc $ {{ bindir }})
++getLibDir     :: IO FilePath
+ getLibDir     = catchIO (getEnv "{{ manglePkgName packageName }}_libdir")     (\_ -> getPrefixDirReloc $ {{ libdir }})
++getDynLibDir  :: IO FilePath
+ getDynLibDir  = catchIO (getEnv "{{ manglePkgName packageName }}_dynlibdir")  (\_ -> getPrefixDirReloc $ {{ dynlibdir }})
++getDataDir    :: IO FilePath
+ getDataDir    = catchIO (getEnv "{{ manglePkgName packageName }}_datadir")    (\_ -> getPrefixDirReloc $ {{ datadir }})
++getLibexecDir :: IO FilePath
+ getLibexecDir = catchIO (getEnv "{{ manglePkgName packageName }}_libexecdir") (\_ -> getPrefixDirReloc $ {{ libexecdir }})
++getSysconfDir :: IO FilePath
+ getSysconfDir = catchIO (getEnv "{{ manglePkgName packageName }}_sysconfdir") (\_ -> getPrefixDirReloc $ {{ sysconfdir }})
+ 
+ {% useblock function_defs %}
+ 
+ {% elif absolute %}
+ 
+-bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
++bindir     :: FilePath
+ bindir     = {{ bindir }}
+-libdir     = {{ libdir }}
+-dynlibdir  = {{ dynlibdir }}
+-datadir    = {{ datadir }}
+-libexecdir = {{ libexecdir }}
+-sysconfdir = {{ sysconfdir }}
+-
++getBinDir     :: IO FilePath
+ getBinDir     = catchIO (getEnv "{{ manglePkgName packageName }}_bindir")     (\_ -> return bindir)
++
++{% if shouldEmitLibDir %}
++libdir     :: FilePath
++libdir     = {{ libdir }}
++getLibDir     :: IO FilePath
+ getLibDir     = catchIO (getEnv "{{ manglePkgName packageName }}_libdir")     (\_ -> return libdir)
++{% endif %}
++
++{% if shouldEmitDynLibDir %}
++dynlibdir  :: FilePath
++dynlibdir  = {{ dynlibdir }}
++getDynLibDir  :: IO FilePath
+ getDynLibDir  = catchIO (getEnv "{{ manglePkgName packageName }}_dynlibdir")  (\_ -> return dynlibdir)
++{% endif %}
++
++{% if shouldEmitDataDir %}
++datadir    :: FilePath
++datadir    = {{ datadir }}
++getDataDir    :: IO FilePath
+ getDataDir    = catchIO (getEnv "{{ manglePkgName packageName }}_datadir")    (\_ -> return datadir)
++{% endif %}
++
++{% if shouldEmitLibexecDir %}
++libexecdir :: FilePath
++libexecdir = {{ libexecdir }}
++getLibexecDir :: IO FilePath
+ getLibexecDir = catchIO (getEnv "{{ manglePkgName packageName }}_libexecdir") (\_ -> return libexecdir)
++{% endif %}
++
++{% if shouldEmitSysconfDir %}
++sysconfdir :: FilePath
++sysconfdir = {{ sysconfdir }}
++getSysconfDir :: IO FilePath
+ getSysconfDir = catchIO (getEnv "{{ manglePkgName packageName }}_sysconfdir") (\_ -> return sysconfdir)
++{% endif %}
+ 
+ {% elif isWindows %}
+ 
++{# We are only trying to fix the problem for aarch64-darwin with this patch,
++   so let's ignore Windows which we can reach via pkgsCross, for example.
++#}
++
+ prefix :: FilePath
+ prefix = {{ prefix }}
+ 
++getBinDir     :: IO FilePath
+ getBinDir     = getPrefixDirRel $ {{ bindir }}
++getLibDir     :: IO FilePath
+ getLibDir     = {{ libdir }}
++getDynLibDir  :: IO FilePath
+ getDynLibDir  = {{ dynlibdir }}
++getDataDir    :: IO FilePath
+ getDataDir    = catchIO (getEnv "{{ manglePkgName packageName }}_datadir")    (\_ -> {{ datadir }})
++getLibexecDir :: IO FilePath
+ getLibexecDir = {{ libexecdir }}
++getSysconfDir :: IO FilePath
+ getSysconfDir = {{ sysconfdir }}
+ 
+ getPrefixDirRel :: FilePath -> IO FilePath
