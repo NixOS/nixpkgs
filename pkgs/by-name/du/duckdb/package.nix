@@ -47,12 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = ''
+    cmakeFlagsArray+=( "-DINSTALL_BIN_DIR=$out/bin" )
+    cmakeFlagsArray+=( "-DINSTALL_INCLUDE_DIR=$dev/include" )
+    cmakeFlagsArray+=( "-DINSTALL_LIB_DIR=$lib/lib" )
     cmakeFlagsArray+=( "-DOVERRIDE_GIT_DESCRIBE=v${finalAttrs.version}-0-g$(< .git/HEAD)" )
-  '';
-
-  postInstall = ''
-    mkdir -p $lib
-    mv $out/lib $lib
   '';
 
   doInstallCheck = true;
