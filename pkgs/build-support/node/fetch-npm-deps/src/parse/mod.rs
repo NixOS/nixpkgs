@@ -1,5 +1,6 @@
+use crate::lockfile::NpmPackage;
 use anyhow::{anyhow, bail, Context};
-use lock::UrlOrString;
+use lock::HashCollection;
 use log::{debug, info};
 use rayon::prelude::*;
 use serde_json::{Map, Value};
@@ -22,7 +23,7 @@ pub fn lockfile(
 ) -> anyhow::Result<Vec<Package>> {
     debug!("parsing lockfile with contents:\n{content}");
 
-    let mut packages = lock::packages(content)
+    let mut packages = lock::extract_packages(content)
         .context("failed to extract packages from lockfile")?
         .into_par_iter()
         .map(|p| {
@@ -114,14 +115,11 @@ enum Specifics {
 }
 
 impl Package {
-    fn from_lock(pkg: lock::Package) -> anyhow::Result<Package> {
-        let mut resolved = match pkg
+    fn from_lock(pkg: NpmPackage) -> anyhow::Result<Package> {
+        let mut resolved = pkg
             .resolved
-            .expect("at this point, packages should have URLs")
-        {
-            UrlOrString::Url(u) => u,
-            UrlOrString::String(_) => panic!("at this point, all packages should have URLs"),
-        };
+            .and_then(|url| Url::parse(&url).ok())
+            .expect("at this point, packages should have URLs");
 
         let specifics = match get_hosted_git_url(&resolved)? {
             Some(hosted) => {
@@ -155,13 +153,17 @@ impl Package {
 
                 Specifics::Git { workdir }
             }
-            None => Specifics::Registry {
-                integrity: pkg
-                    .integrity
-                    .expect("non-git dependencies should have associated integrity")
-                    .into_best()
-                    .expect("non-git dependencies should have non-empty associated integrity"),
-            },
+            None => {
+                let hash_collection = HashCollection::from_str(
+                    pkg.integrity
+                        .expect("non-git dependencies should have associated integrity"),
+                )?;
+                Specifics::Registry {
+                    integrity: hash_collection
+                        .into_best()
+                        .expect("non-git dependencies should have non-empty associated integrity"),
+                }
+            }
         };
 
         Ok(Package {
