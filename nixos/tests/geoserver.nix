@@ -25,9 +25,14 @@ in
 
       environment.systemPackages = [
         geoserver
-        geoserverWithImporterExtension
         geoserverWithAllExtensions
       ];
+
+      services.geoserver = {
+        enable = true;
+        package = geoserverWithImporterExtension;
+      };
+      systemd.services.geoserver.wantedBy = lib.mkForce [ ]; # do not start the service at boot
     };
   };
 
@@ -40,7 +45,7 @@ in
     log_file = "./log.txt"
 
     @contextmanager
-    def running_geoserver(pkg):
+    def running_geoserver_pkg(pkg):
       try:
         print(f"Launching geoserver from {pkg}...")
         machine.execute(f"{pkg}/bin/geoserver-startup > {log_file} 2>&1 &")
@@ -51,21 +56,32 @@ in
         # shutdown before launching a new instance.
         machine.execute(f"{pkg}/bin/geoserver-shutdown; sleep 1")
 
+    @contextmanager
+    def running_geoserver_service(service="geoserver"):
+      try:
+        print(f"Launching service {service}...")
+        machine.execute(f"systemctl start {service} > tee {log_file} 2>&1")
+        machine.wait_until_succeeds(f"{curl_cmd} {base_url} 2>&1", timeout=60)
+        yield
+      finally:
+        # We need to wait a little bit to make sure the server is properly
+        # shutdown before launching a new instance.
+        machine.execute(f"systemctl stop {service}; sleep 1")
+
     start_all()
 
-    with running_geoserver("${geoserver}"):
+    with running_geoserver_pkg("${geoserver}"):
       machine.succeed(f"{curl_cmd} {base_url}/ows?service=WMS&version=1.3.0&request=GetCapabilities")
 
       # No extensions yet.
       machine.fail(f"{curl_cmd_rest} {base_url}/rest/imports")
       machine.fail(f"{curl_cmd_rest} {base_url}/rest/monitor/requests.csv")
 
-
-    with running_geoserver("${geoserverWithImporterExtension}"):
+    with running_geoserver_service():
       machine.succeed(f"{curl_cmd_rest} {base_url}/rest/imports")
       machine.fail(f"{curl_cmd_rest} {base_url}/rest/monitor/requests.csv")
 
-    with running_geoserver("${geoserverWithAllExtensions}"):
+    with running_geoserver_pkg("${geoserverWithAllExtensions}"):
       machine.succeed(f"{curl_cmd_rest} {base_url}/rest/imports")
       machine.succeed(f"{curl_cmd_rest} {base_url}/rest/monitor/requests.csv")
       _, stdout = machine.execute(f"cat {log_file}")
