@@ -27,7 +27,7 @@
 let
   inherit (cudaPackages) cudaVersion;
 
-  version = "0.4.28";
+  version = "0.4.30";
 
   inherit (python) pythonVersion;
 
@@ -71,65 +71,65 @@ let
       "3.9-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp39";
-        hash = "sha256-Slbr8FtKTBeRaZ2HTgcvP4CPCYa0AQsU+1SaackMqdw=";
+        hash = "sha256-90prDgnfS14u45nrufDgEZDiboTMsKdY+ttRZBXAfxg=";
       };
       "3.9-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp39";
-        hash = "sha256-sBVi7IrXVxm30DiXUkiel+trTctMjBE75JFjTVKCrTw=";
+        hash = "sha256-PTHgEZHOgFK9YRqvFv+WfY0OwLY/HqSxmQIM7LJI1mc=";
       };
       "3.9-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp39";
-        hash = "sha256-T5jMg3srbG3P4Kt/+esQkxSSCUYRmqOvn6oTlxj/J4c=";
+        hash = "sha256-6joAAF+q++PBixeNO1NCCLO0Ansr5iMCJ+e4fOOZ/Ck=";
       };
 
       "3.10-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp310";
-        hash = "sha256-47zcb45g+FVPQVwU2TATTmAuPKM8OOVGJ0/VRfh1dps=";
+        hash = "sha256-2D8270KkA7v3x/LaUms0uihpiOFw9N9eWLO7c1QXhow=";
       };
       "3.10-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp310";
-        hash = "sha256-8Djmi9ENGjVUcisLvjbmpEg4RDenWqnSg/aW8O2fjAk=";
+        hash = "sha256-S9/aajx6KwzApxMQCesnnpjKSm8lZ5+rtTAt0TWl40k=";
       };
       "3.10-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp310";
-        hash = "sha256-pCHSN/jCXShQFm0zRgPGc925tsJvUrxJZwS4eCKXvWY=";
+        hash = "sha256-xAhW4o8wCTjGgkqxphUWYZPWmX3slGV4gj9tQCrUVOU=";
       };
 
       "3.11-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp311";
-        hash = "sha256-Rc4PPIQM/4I2z/JsN/Jsn/B4aV+T4MFiwyDCgfUEEnU=";
+        hash = "sha256-FrKrGOqQ0uFZQbz0XeN6/C8omgKRKciMjXq6BATdAEM=";
       };
       "3.11-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp311";
-        hash = "sha256-eThX+vN/Nxyv51L+pfyBH0NeQ7j7S1AgWERKf17M+Ck=";
+        hash = "sha256-l0mYzYp4VQQC5sCZNcH42FDK2cwZzNdIi95Ftvf5nBI=";
       };
       "3.11-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp311";
-        hash = "sha256-L/gpDtx7ksfq5SUX9lSSYz4mey6QZ7rT5MMj0hPnfPU=";
+        hash = "sha256-v7XYW2nCnDxugFGg6nFaweUy1uVElMjZw4E9zADerDA=";
       };
 
       "3.12-x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
         dist = "cp312";
-        hash = "sha256-RqGqhX9P7uikP8upXA4Kti1AwmzJcwtsaWVZCLo1n40=";
+        hash = "sha256-xYqAccTgCJgoIRgWn2pal+sVp5wol4WPOnMrF4kcmas=";
       };
       "3.12-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp312";
-        hash = "sha256-jdi//jhTcC9jzZJNoO4lc0pNGc1ckmvgM9dyun0cF10=";
+        hash = "sha256-VwkNM0d/0PDJncaGJ0iC6nXETH1xKuQt0kYLEPiWEx0=";
       };
       "3.12-x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
         dist = "cp312";
-        hash = "sha256-1sCaVFMpciRhrwVuc1FG0sjHTCKsdCaoRetp8ya096A=";
+        hash = "sha256-dwTbWWKzKivjzAcYVDPLvMlO2Q7lDIQCGj+KHs/WbuM=";
       };
     };
 
@@ -144,20 +144,20 @@ let
   # https://github.com/google/jax/issues/12879 as to why this specific URL is the correct index.
   gpuSrcs = {
     "cuda12.2-3.9" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp39-cp39-manylinux2014_x86_64.whl";
-      hash = "sha256-d8LIl22gIvmWfoyKfXKElZJXicPQIZxdS4HumhwQGCw=";
+      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn91-cp39-cp39-manylinux2014_x86_64.whl";
+      hash = "";
     };
     "cuda12.2-3.10" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp310-cp310-manylinux2014_x86_64.whl";
-      hash = "sha256-PXtWv+UEcMWF8LhWe6Z1UGkf14PG3dkJ0Iop0LiimnQ=";
+      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn91-cp310-cp310-manylinux2014_x86_64.whl";
+      hash = "";
     };
     "cuda12.2-3.11" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp311-cp311-manylinux2014_x86_64.whl";
-      hash = "sha256-QO2WSOzmJ48VaCha596mELiOfPsAGLpGctmdzcCHE/o=";
+      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn91-cp311-cp311-manylinux2014_x86_64.whl";
+      hash = "";
     };
     "cuda12.2-3.12" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn89-cp312-cp312-manylinux2014_x86_64.whl";
-      hash = "sha256-ixWMaIChy4Ammsn23/3cCoala0lFibuUxyUr3tjfFKU=";
+      url = "https://storage.googleapis.com/jax-releases/cuda12/jaxlib-${version}+cuda12.cudnn91-cp312-cp312-manylinux2014_x86_64.whl";
+      hash = "";
     };
   };
 in
@@ -205,7 +205,7 @@ buildPythonPackage {
     done
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     absl-py
     flatbuffers
     ml-dtypes
@@ -224,12 +224,12 @@ buildPythonPackage {
 
   inherit (jaxlib-build) pythonImportsCheck;
 
-  meta = with lib; {
+  meta = {
     description = "XLA library for JAX";
     homepage = "https://github.com/google/jax";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ samuela ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ samuela ];
     platforms = [
       "aarch64-darwin"
       "x86_64-linux"
@@ -237,7 +237,7 @@ buildPythonPackage {
     ];
     broken =
       !(cudaSupport -> lib.versionAtLeast cudaVersion "11.1")
-      || !(cudaSupport -> lib.versionAtLeast cudaPackages.cudnn.version "8.2")
+      || !(cudaSupport -> lib.versionAtLeast cudaPackages.cudnn.version "9.1")
       || !(cudaSupport -> stdenv.isLinux)
       || !(cudaSupport -> (gpuSrcs ? "cuda${cudaVersion}-${pythonVersion}"))
       # Fails at pythonImportsCheckPhase:
