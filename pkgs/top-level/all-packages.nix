@@ -35262,7 +35262,7 @@ with pkgs;
     vscodium-fhs = vscodium.fhs;
     vscodium-fhsWithPackages = vscodium.fhsWithPackages;
   })
-  vscode vschde-fhs vscode-fhsWithPackages vscode-with-extensions
+  vscode vscode-fhs vscode-fhsWithPackages vscode-with-extensions
   vscode-utils
   vscode-extensions
   vscodium vscodium-fhs vscodium-fhsWithPackages
