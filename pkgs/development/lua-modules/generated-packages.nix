@@ -1941,16 +1941,16 @@ buildLuarocksPackage {
 luarocks = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl }:
 buildLuarocksPackage {
   pname = "luarocks";
-  version = "3.11.0-1";
+  version = "3.11.1-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/luarocks-3.11.0-1.rockspec";
-    sha256 = "0pi55445dskpw6nhrq52589h4v39fsf23c0kp8d4zg2qaf6y2n38";
+    url    = "mirror://luarocks/luarocks-3.11.1-1.rockspec";
+    sha256 = "sha256-di00mD8txN7rjaVpvxzNbnQsAh6H16zUtJZapH7U4HU=";
   }).outPath;
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
-    rev = "v3.11.0";
-    hash = "sha256-mSwwBuLWoMT38iYaV/BTdDmmBz4heTRJzxBHC0Vrvc4=";
+    rev = "v3.11.1";
+    hash = "sha256-GglygI8HP+aDFEuucOkjQ2Pgfv4+jW+og+2vL3KoZCQ=";
   };
 
 
