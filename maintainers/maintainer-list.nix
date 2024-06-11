@@ -13149,6 +13149,12 @@
       fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94";
     }];
   };
+  mcdonc = {
+    email = "chrism@plope.com";
+    github = "mcdonc";
+    githubId = 125174;
+    name = "Chris McDonough";
+  };
   mcmtroffaes = {
     email = "matthias.troffaes@gmail.com";
     github = "mcmtroffaes";
