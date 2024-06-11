@@ -29,7 +29,7 @@ buildGoModule {
   buildInputs = [ glib cairo gdk-pixbuf gtk3 gnome.adwaita-icon-theme ];
 
   meta = {
-    description = "a safe and secure chat client";
+    description = "Safe and secure chat client";
     mainProgram = "coyim";
     homepage = "https://coy.im/";
     license = lib.licenses.gpl3;
