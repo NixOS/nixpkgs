@@ -19,14 +19,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dune3d";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "dune3d";
     repo = "dune3d";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Z/kdOc/MbnnEyRsel3aZGndTAy1eCdAK0Wdta0HxaE4=";
   };
 
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
 
   env.CASROOT = opencascade-occt;
 
-  meta = with lib; {
+  meta = {
     description = "3D CAD application";
     homepage = "https://dune3d.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ _0x4A6F jue89 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ _0x4A6F jue89 ];
     mainProgram = "dune3d";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
