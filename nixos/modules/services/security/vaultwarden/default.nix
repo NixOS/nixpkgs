@@ -178,16 +178,45 @@ in {
         User = user;
         Group = group;
         EnvironmentFile = [ configFile ] ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = "${vaultwarden}/bin/vaultwarden";
+        ExecStart = lib.getExe vaultwarden;
         LimitNOFILE = "1048576";
-        PrivateTmp = "true";
-        PrivateDevices = "true";
-        ProtectHome = "true";
+        CapabilityBoundingSet = [ "" ];
+        DeviceAllow = [ "" ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "noaccess";
         ProtectSystem = "strict";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
         inherit StateDirectory;
         StateDirectoryMode = "0700";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
         Restart = "always";
+        UMask = "0077";
       };
       wantedBy = [ "multi-user.target" ];
     };
