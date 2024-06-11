@@ -1,5 +1,6 @@
 { inputs, ... }@flakeContext:
 let
+  pkgs = inputs.nixpkgs;
   netboot = { config, lib, pkgs, ... }: {
     imports = [
       ../repo/modules/services/openmesh/xnode/admin.nix
@@ -46,6 +47,7 @@ let
                                 nix.settings.experimental-features = [ "nix-command" "flakes" ];
                                 nix.settings.trusted-users = [ "root" "xnode" "openmesh-xnode-admin" ];
                                 boot.loader.grub.enable=false;
+                                nixpkgs.config.allowUnfree = true;
                                 services.openmesh.xnode.admin = {
                                   enable = true;
                                   remoteDir = "https://dpl-backend-staging.up.railway.app/xnodes/functions";
