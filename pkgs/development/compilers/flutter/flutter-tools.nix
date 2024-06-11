@@ -5,6 +5,7 @@
 , git
 , which
 , dart
+, xcbuild
 , version
 , flutterSrc
 , patches ? [ ]
@@ -30,6 +31,8 @@ buildDartApplication.override { inherit dart; } rec {
   + lib.optionalString stdenv.isDarwin ''
     substituteInPlace lib/src/ios/xcodeproj.dart \
       --replace-fail arm64e arm64
+    substituteInPlace lib/src/ios/plist_parser.dart \
+      --replace-fail '/usr/bin/plutil' '${xcbuild}/bin/plutil'
   '';
 
   # When the JIT snapshot is being built, the application needs to run.
