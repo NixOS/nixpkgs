@@ -10,7 +10,7 @@ prefetch () {
     echo
 }
 
-for py in "39" "310" "311" "312"; do
+for py in "310" "311" "312"; do
     prefetch "$py" "x86_64-linux" "false"
     prefetch "$py" "aarch64-darwin" "false"
     prefetch "$py" "x86_64-darwin" "false"
