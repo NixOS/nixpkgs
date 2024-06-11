@@ -42,7 +42,7 @@ let
       let
         feedstock = fetchFromGitHub {
           owner = "Ondsel-Development";
-          repo = "freecad-feedstock";
+          repo = "ondsel-es-feedstock";
           rev = "386fab80c8aaa3bb1b9454aee8695c959d642bac";
           hash = "sha256-H5LbcK5iXS+QFhMayvCDSfXk2ulc6BJXWVwv97nPH9o=";
           fetchSubmodules = true;
