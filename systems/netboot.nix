@@ -21,7 +21,7 @@ let
           xnode = {
             admin = {
               enable = true;
-              remoteDir = "https://dpl-backend-staging.up.railway.app/xnodes/functions";
+              remoteDir = "http://dpl-staging.openmesh.network/xnodes/functions";
             };
           };
         };
@@ -50,7 +50,7 @@ let
                                 nixpkgs.config.allowUnfree = true;
                                 services.openmesh.xnode.admin = {
                                   enable = true;
-                                  remoteDir = "https://dpl-backend-staging.up.railway.app/xnodes/functions";
+                                  remoteDir = "https://dpl-staging.openmesh.network/xnodes/functions";
                                 };
                                 users.users = {
                                   "xnode" = {
