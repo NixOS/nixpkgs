@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlx42";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "codam-coding-college";
     repo = "MLX42";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-igkTeOnqGYBISzmtDGlDx9cGJjoQ8fzXtVSR9hU4F5E=";
+    hash = "sha256-c4LoTePHhQeZTx33V1K3ZyXmT7vjB6NdkGVAiSuJKfI=";
   };
 
   postPatch = ''
