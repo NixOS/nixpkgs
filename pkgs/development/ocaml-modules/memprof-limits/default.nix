@@ -1,6 +1,6 @@
 { lib, buildDunePackage, fetchFromGitLab, ocaml }:
 
-if (lib.versionOlder ocaml.version "5.0.0") then
+if !(lib.versionOlder ocaml.version "5.0.0") then
   throw "memprof-limits is not available for OCaml ${ocaml.version}"
 else
   buildDunePackage rec {
