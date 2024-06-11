@@ -96,11 +96,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "claws-mail";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "https://claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    hash = "sha256-fIqxcy10GX3wbWGmt+vHxYDs9ukuse9q5bAQdTPxrwc=";
+    hash = "sha256-ldwdiI65FvAoRn+gw8v0W6/2Z4eTt7+zX6u6Ap1YHOE=";
   };
 
   outputs = [ "out" "dev" ];
