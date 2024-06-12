@@ -118,7 +118,7 @@ in
   # to help prevent static Haskell binaries from having erroneous dependencies
   # on GHC.
   #
-  # See https://nixos.org/manual/nixpkgs/unstable/#haskell-packaging-helpers
+  # See https://nixos.org/manual/nixpkgs/stable/#haskell-packaging-helpers
   # or its source doc/languages-frameworks/haskell.section.md
 , disallowGhcReference ? false
 , # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
