@@ -3592,6 +3592,8 @@ self: super: with self; {
 
   dropmqttapi = callPackage ../development/python-modules/dropmqttapi { };
 
+  dscribe  = callPackage ../development/python-modules/dscribe { };
+
   ds-store = callPackage ../development/python-modules/ds-store { };
 
   ds4drv = callPackage ../development/python-modules/ds4drv { };
@@ -7676,6 +7678,8 @@ self: super: with self; {
   modestmaps = callPackage ../development/python-modules/modestmaps { };
 
   mohawk = callPackage ../development/python-modules/mohawk { };
+
+  molbar = callPackage ../development/python-modules/molbar { };
 
   molecule = callPackage ../development/python-modules/molecule { };
 

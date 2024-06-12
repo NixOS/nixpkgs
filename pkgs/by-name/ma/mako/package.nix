@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc
-, systemd, pango, cairo, gdk-pixbuf, jq, bash
-, wayland, wayland-protocols
-, wrapGAppsHook3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, systemd
+, pango
+, cairo
+, gdk-pixbuf
+, jq
+, bash
+, wayland
+, wayland-scanner
+, wayland-protocols
+, wrapGAppsHook3
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mako";
@@ -14,7 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-QtYtondP7E5QXLRnmcaOQlAm9fKXctfjxeUFqK6FnnE=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook3 ];
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook3 wayland-scanner ];
   buildInputs = [ systemd pango cairo gdk-pixbuf wayland ];
 
   mesonFlags = [

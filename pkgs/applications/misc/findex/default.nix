@@ -39,6 +39,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mdgaziur/findex";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.pinkcreeper100 ];
+    maintainers = [];
   };
 }

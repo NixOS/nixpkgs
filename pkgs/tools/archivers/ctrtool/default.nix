@@ -1,25 +1,33 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "ctrtool";
-  version = "0.7";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner  = "jakcron";
     repo   = "Project_CTR";
     rev    = "ctrtool-v${version}";
-    sha256 = "07aayck82w5xcp3si35d7ghybmrbqw91fqqvmbpjrjcixc6m42z7";
+    sha256 = "wjU/DJHrAHE3MSB7vy+swUDVPzw0Jrv4ymOjhfr0BBk=";
   };
 
   sourceRoot = "${src.name}/ctrtool";
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "CXX=${stdenv.cc.targetPrefix}c++"];
   enableParallelBuilding = true;
+
+  preBuild = ''
+  make -j $NIX_BUILD_CORES deps
+  '';
+
+  # workaround for https://github.com/3DSGuy/Project_CTR/issues/145
+  env.NIX_CFLAGS_COMPILE = "-O0";
 
   installPhase = "
     mkdir $out/bin -p
-    cp ctrtool${stdenv.hostPlatform.extensions.executable} $out/bin/
+    cp bin/ctrtool${stdenv.hostPlatform.extensions.executable} $out/bin/
   ";
+
+  passthru.updateScript = gitUpdater { rev-prefix = "ctrtool-v"; };
 
   meta = with lib; {
     license = licenses.mit;
