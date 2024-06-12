@@ -25,6 +25,14 @@ let
         # fails with some assertions
         doCheck = false;
       });
+
+      djangorestframework = prev.djangorestframework.overridePythonAttrs (oldAttrs: rec {
+        version = "3.14.0";
+        src = oldAttrs.src.override {
+          rev = version;
+          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
+        };
+      });
     };
   };
 
