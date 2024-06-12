@@ -56,6 +56,8 @@ let
     functionArgs
     generators
     genList
+    getAttrs
+    getOptionalAttrs
     getExe
     getExe'
     groupBy
@@ -1970,6 +1972,45 @@ runTests {
       a.b = 1;
       a.x = 1;
     };
+  };
+
+  testGetAttrsExample = {
+    expr = [
+      (getAttrs [ "a" "b" ] { a = 1; b = 2; c = 3; })
+    ];
+    expected = [
+      { a = 1; b = 2; }
+    ];
+  };
+
+  testGetAttrsEmptyList = {
+    expr = getAttrs [ ] { a = 1; b = 2; c = 3; };
+    expected = { };
+  };
+
+  testGetAttrsEmpty = {
+    expr = getAttrs [ ] { };
+    expected = { };
+  };
+
+  testGetOptionalAttrsExample = {
+    expr = getOptionalAttrs [ "a" "b" "d" ] { a = 1; b = 2; c = 3; };
+    expected = { a = 1; b = 2; };
+  };
+
+  testGetOptionalAttrsEmptyNames = {
+    expr = getOptionalAttrs [ ] { a = 1; b = 2; c = 3; };
+    expected = { };
+  };
+
+  testGetOptionalAttrsEmptyValues = {
+    expr = getOptionalAttrs [ "a" "b" "d" ] { };
+    expected = { };
+  };
+
+  testGetOptionalAttrsEmpty = {
+    expr = getOptionalAttrs [ ] { };
+    expected = { };
   };
 
   ## Levenshtein distance functions and co.
