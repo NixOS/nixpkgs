@@ -70,17 +70,16 @@ let
       "but they are mutually exclusive; falling back to cpu"
     ])
     (!(config.rocmSupport && config.cudaSupport));
-  validateLinux = api: (lib.warnIfNot stdenv.isLinux
-    "building ollama with `${api}` is only supported on linux; falling back to cpu"
-    stdenv.isLinux);
   shouldEnable = assert accelIsValid;
     mode: fallback:
-      ((acceleration == mode)
-      || (fallback && acceleration == null && validateFallback))
-      && (validateLinux mode);
+      (acceleration == mode)
+      || (fallback && acceleration == null && validateFallback);
 
-  enableRocm = shouldEnable "rocm" config.rocmSupport;
-  enableCuda = shouldEnable "cuda" config.cudaSupport;
+  rocmRequested = shouldEnable "rocm" config.rocmSupport;
+  cudaRequested = shouldEnable "cuda" config.cudaSupport;
+
+  enableRocm = rocmRequested && stdenv.isLinux;
+  enableCuda = cudaRequested && stdenv.isLinux;
 
 
   rocmLibs = [
@@ -209,13 +208,13 @@ goBuild ((lib.optionalAttrs enableRocm {
 
   meta = {
     description = "Get up and running with large language models locally"
-      + lib.optionalString enableRocm ", using ROCm for AMD GPU acceleration"
-      + lib.optionalString enableCuda ", using CUDA for NVIDIA GPU acceleration";
+      + lib.optionalString rocmRequested ", using ROCm for AMD GPU acceleration"
+      + lib.optionalString cudaRequested ", using CUDA for NVIDIA GPU acceleration";
     homepage = "https://github.com/ollama/ollama";
     changelog = "https://github.com/ollama/ollama/releases/tag/v${version}";
     license = licenses.mit;
     platforms =
-      if (enableRocm || enableCuda) then platforms.linux
+      if (rocmRequested || cudaRequested) then platforms.linux
       else platforms.unix;
     mainProgram = "ollama";
     maintainers = with maintainers; [ abysssol dit7ya elohmeier roydubnium ];
