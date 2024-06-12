@@ -996,6 +996,9 @@ mapAliases ({
   oroborus = throw "oroborus was removed, because it was abandoned years ago."; #Added 2023-09-10
   OSCAR = oscar; # Added 2024-06-12
   osxfuse = macfuse-stubs; # Added 2021-03-20
+  OVMF = ovmf; # Added 2024-06-12
+  OVMFFull = ovmfFull; # Added 2024-06-12
+  OVMF-cloud-hypervisor = ovmf-cloud-hypervisor; # Added 2024-06-12
   oxen = throw "'oxen' has been removed, because it was broken, outdated and unmaintained"; # Added 2023-12-09
 
   ### P ###

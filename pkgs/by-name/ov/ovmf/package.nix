@@ -80,7 +80,7 @@ assert msVarsTemplate -> fdSize4MB;
 assert msVarsTemplate -> platformSpecific.${cpuName} ? msVarsArgs;
 
 edk2.mkDerivation projectDscPath (finalAttrs: {
-  pname = "OVMF";
+  pname = "ovmf";
   inherit version;
 
   outputs = [ "out" "fd" ];

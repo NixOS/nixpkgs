@@ -26220,10 +26220,10 @@ with pkgs;
 
   rust-hypervisor-firmware = callPackage ../applications/virtualization/rust-hypervisor-firmware { };
 
-  OVMF = callPackage ../applications/virtualization/OVMF {
+  ovmf = callPackage ../by-name/ov/ovmf/package.nix {
     inherit (python3Packages) pexpect;
   };
-  OVMFFull = callPackage ../applications/virtualization/OVMF {
+  ovmfFull = callPackage ../by-name/ov/ovmf/package.nix {
     inherit (python3Packages) pexpect;
     secureBoot = true;
     httpSupport = true;
