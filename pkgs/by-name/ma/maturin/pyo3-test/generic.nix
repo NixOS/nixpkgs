@@ -1,16 +1,17 @@
 # Derivation prototype, used by maturin and setuptools-rust
 # passthrough tests.
 
-{ lib
-, fetchFromGitHub
-, python
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  python,
+  rustPlatform,
 
-, nativeBuildInputs
+  nativeBuildInputs,
 
-, buildAndTestSubdir ? null
-, format ? "pyproject"
-, preConfigure ? ""
+  buildAndTestSubdir ? null,
+  format ? "pyproject",
+  preConfigure ? "",
 }:
 
 python.pkgs.buildPythonPackage rec {
@@ -24,15 +25,18 @@ python.pkgs.buildPythonPackage rec {
     hash = "sha256-NOMrrfo8WjlPhtGxWUOPJS/UDDdbLQRCXR++Zd6JmIA=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  inherit buildAndTestSubdir format nativeBuildInputs preConfigure;
+  inherit
+    buildAndTestSubdir
+    format
+    nativeBuildInputs
+    preConfigure
+    ;
 
   pythonImportsCheck = [ "word_count" ];
 
