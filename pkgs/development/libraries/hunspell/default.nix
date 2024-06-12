@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
       lgpl21
       mpl11
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }
