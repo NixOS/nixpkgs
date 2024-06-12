@@ -129,9 +129,9 @@ let
   stdenv' =
     if swiftSupport && stdenv.isDarwin && stdenv.isx86_64 then
       stdenv.override (old: {
-        buildPlatform = overrideSDK old.buildPlatform "10.15";
-        hostPlatform = overrideSDK old.hostPlatform "10.15";
-        targetPlatform = overrideSDK old.targetPlatform "10.15";
+        buildPlatform = overrideSDK old.buildPlatform "11.0";
+        hostPlatform = overrideSDK old.hostPlatform "11.0";
+        targetPlatform = overrideSDK old.targetPlatform "11.0";
       })
     else
       stdenv;
