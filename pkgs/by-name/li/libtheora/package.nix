@@ -8,6 +8,7 @@
   libvorbis,
   pkg-config,
   testers,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    validatePkgConfig
   ];
 
   propagatedBuildInputs = [
