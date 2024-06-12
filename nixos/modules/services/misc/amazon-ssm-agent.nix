@@ -28,13 +28,7 @@ in {
 
   options.services.amazon-ssm-agent = {
     enable = mkEnableOption "Amazon SSM agent";
-
-    package = mkOption {
-      type = types.path;
-      description = "The Amazon SSM agent package to use";
-      default = pkgs.amazon-ssm-agent.override { overrideEtc = false; };
-      defaultText = literalExpression "pkgs.amazon-ssm-agent.override { overrideEtc = false; }";
-    };
+    package = mkPackageOption pkgs "amazon-ssm-agent" {};
   };
 
   config = mkIf cfg.enable {
