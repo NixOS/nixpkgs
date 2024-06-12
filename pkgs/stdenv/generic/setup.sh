@@ -291,6 +291,26 @@ concatTo() {
     done
 }
 
+# Separates a list of things by $1 separator.
+# For arrays each item is separated, for strings whitespace is replaced.
+# To be used for partial support of structuredAttrs.
+separateBy() {
+    local sep="$1"
+    local name="$2"
+    local type oldifs
+    if type=$(declare -p "$name" 2> /dev/null); then
+        local -n nameref="$name"
+        case "${type#* }" in
+            -A*|-a*)
+                oldifs="$IFS"; IFS="$sep"
+                echo -n "${namref[*]}"
+                IFS="$oldifs" ;;
+            *)
+                echo -n "${nameref// /${sep}}" ;;
+        esac
+    fi
+}
+
 # Add $1/lib* into rpaths.
 # The function is used in multiple-outputs.sh hook,
 # so it is defined here but tried after the hook.
