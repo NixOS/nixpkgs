@@ -31210,7 +31210,9 @@ with pkgs;
     jdk = callPackage ../development/compilers/jetbrains-jdk {
       jdk = jdk21;
     };
-    jcef = callPackage ../development/compilers/jetbrains-jdk/jcef.nix { };
+    jcef = callPackage ../development/compilers/jetbrains-jdk/jcef.nix {
+      jdk = jdk21;
+    };
   });
 
   jmusicbot = callPackage ../applications/audio/jmusicbot { };
