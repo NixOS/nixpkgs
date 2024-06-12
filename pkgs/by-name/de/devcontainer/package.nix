@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     fixup-yarn-lock
     python3
     makeWrapper
+    nodejs
   ];
 
   buildPhase = ''
