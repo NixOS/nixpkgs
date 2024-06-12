@@ -49,7 +49,7 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
 
   src = null;
 
-  patches = base.patches ++ lib.optional (lib.versionAtLeast info.version "29" && lib.versionOlder info.version "30")
+  patches = base.patches ++ lib.optional (lib.versionOlder info.version "30")
     (substituteAll {
       # disable a component that requires CIPD blobs
       name = "disable-screen-ai.patch";
@@ -172,10 +172,8 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     use_perfetto_client_library = false;
     v8_builtins_profiling_log_file = "";
     enable_dangling_raw_ptr_checks = false;
-  } // lib.optionalAttrs (lib.versionAtLeast info.version "28") {
     dawn_use_built_dxc = false;
     v8_enable_private_mapping_fork_optimization = true;
-  } // lib.optionalAttrs (lib.versionAtLeast info.version "29") {
     v8_expose_public_symbols = true;
   } // {
 
