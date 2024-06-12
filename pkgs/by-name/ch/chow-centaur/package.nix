@@ -2,14 +2,14 @@
 , xcbutilcursor, xcbutilkeysyms, xcbutil, libXrandr, libXinerama, libXcursor
 , alsa-lib, libjack2, lv2, gcc-unwrapped }:
 
-stdenv.mkDerivation rec {
-  pname = "ChowCentaur";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "chow-centaur";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "jatinchowdhury18";
     repo = "KlonCentaur";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0mrzlf4a6f25xd7z9xanpyq7ybb4al01dzpjsgi0jkmlmadyhc4h";
     fetchSubmodules = true;
   };
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ magnetophon ];
   };
-}
+})
