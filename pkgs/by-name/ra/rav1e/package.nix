@@ -11,7 +11,6 @@
   zlib,
   libiconv,
   darwin,
-  buildPackages,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-Db7qb7HBAy6lniIiN07iEzURmbfNtuhmgJRv7OUagUM=";
+    hash = "sha256-Db7qb7HBAy6lniIiN07iEzURmbfNtuhmgJRv7OUagUM=";
   };
 
   cargoHash = "sha256-VyQ6n2kIJ7OjK6Xlf0T0GNsBvgESRETzKZDZzAn8ZuY=";
@@ -56,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fastest and safest AV1 encoder";
     longDescription = ''
       rav1e is an AV1 video encoder. It is designed to eventually cover all use
@@ -66,8 +65,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/xiph/rav1e";
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ getchoo ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "rav1e";
   };
 }
