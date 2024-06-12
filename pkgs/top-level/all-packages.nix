@@ -38521,6 +38521,14 @@ with pkgs;
 
   libpoly = callPackage ../applications/science/logic/poly { };
 
+  prism-model-checker-unwrapped = callPackage ../applications/science/logic/prism-model-checker {
+      java = openjdk17;
+
+    # makefile hardcodes gcc for darwin
+    stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
+  };
+  prism-model-checker = callPackage ../applications/science/logic/prism-model-checker/wrapper.nix {java = openjdk17;};
+
   prooftree = callPackage  ../applications/science/logic/prooftree {
     ocamlPackages = ocaml-ng.ocamlPackages_4_12;
   };
