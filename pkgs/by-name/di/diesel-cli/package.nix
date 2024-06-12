@@ -1,29 +1,29 @@
 {
   lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  installShellFiles,
+  darwin,
+  libiconv,
+  libmysqlclient,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  postgresql,
+  sqlite,
+  testers,
+  zlib,
+  diesel-cli,
   sqliteSupport ? true,
   postgresqlSupport ? true,
   mysqlSupport ? true,
-  rustPlatform,
-  fetchCrate,
-  installShellFiles,
-  darwin,
-  pkg-config,
-  openssl,
-  stdenv,
-  libiconv,
-  sqlite,
-  postgresql,
-  libmysqlclient,
-  zlib,
 }:
-
-assert lib.assertMsg (
-  sqliteSupport == true || postgresqlSupport == true || mysqlSupport == true
-) "support for at least one database must be enabled";
-
-let
-  inherit (lib) optional optionals optionalString;
-in
+assert lib.assertMsg (lib.elem true [
+  postgresqlSupport
+  mysqlSupport
+  sqliteSupport
+]) "support for at least one database must be enabled";
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
@@ -44,37 +44,37 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security
-    ++ optional (stdenv.isDarwin && mysqlSupport) libiconv
-    ++ optional sqliteSupport sqlite
-    ++ optional postgresqlSupport postgresql
-    ++ optionals mysqlSupport [
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security
+    ++ lib.optional (stdenv.isDarwin && mysqlSupport) libiconv
+    ++ lib.optional sqliteSupport sqlite
+    ++ lib.optional postgresqlSupport postgresql
+    ++ lib.optionals mysqlSupport [
       libmysqlclient
       zlib
     ];
 
   buildNoDefaultFeatures = true;
   buildFeatures =
-    optional sqliteSupport "sqlite"
-    ++ optional postgresqlSupport "postgres"
-    ++ optional mysqlSupport "mysql";
+    lib.optional sqliteSupport "sqlite"
+    ++ lib.optional postgresqlSupport "postgres"
+    ++ lib.optional mysqlSupport "mysql";
 
-  checkPhase =
-    ''
-      runHook preCheck
-    ''
-    + optionalString sqliteSupport ''
-      cargo check --features sqlite
-    ''
-    + optionalString postgresqlSupport ''
-      cargo check --features postgres
-    ''
-    + optionalString mysqlSupport ''
-      cargo check --features mysql
-    ''
-    + ''
-      runHook postCheck
-    '';
+  checkFlags = [
+    # all of these require a live database to be running
+    # `DATABASE_URL must be set in order to run tests: NotPresent`
+    "--skip=infer_schema_internals::information_schema::tests::get_primary_keys_only_includes_primary_key"
+    "--skip=infer_schema_internals::information_schema::tests::load_table_names_loads_from_custom_schema"
+    "--skip=infer_schema_internals::information_schema::tests::load_table_names_loads_from_public_schema_if_none_given"
+    "--skip=infer_schema_internals::information_schema::tests::load_table_names_output_is_ordered"
+    "--skip=infer_schema_internals::information_schema::tests::skip_views"
+    "--skip=infer_schema_internals::mysql::test::get_table_data_loads_column_information"
+    "--skip=infer_schema_internals::mysql::test::gets_table_comment"
+    "--skip=infer_schema_internals::pg::test::get_foreign_keys_loads_foreign_keys"
+    "--skip=infer_schema_internals::pg::test::get_foreign_keys_loads_foreign_keys_with_same_name"
+    "--skip=infer_schema_internals::pg::test::get_table_data_loads_column_information"
+    "--skip=infer_schema_internals::pg::test::gets_table_comment"
+  ];
+  cargoCheckFeatures = buildFeatures;
 
   postInstall = ''
     installShellCompletion --cmd diesel \
@@ -85,16 +85,22 @@ rustPlatform.buildRustPackage rec {
 
   # Fix the build with mariadb, which otherwise shows "error adding symbols:
   # DSO missing from command line" errors for libz and libssl.
-  NIX_LDFLAGS = optionalString mysqlSupport "-lz -lssl -lcrypto";
+  env.NIX_LDFLAGS = lib.optionalString mysqlSupport "-lz -lssl -lcrypto";
 
-  meta = with lib; {
+  passthru = {
+    tests.version = testers.testVersion { package = diesel-cli; };
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Database tool for working with Rust projects that use Diesel";
-    homepage = "https://github.com/diesel-rs/diesel/tree/master/diesel_cli";
-    license = with licenses; [
+    homepage = "https://diesel.rs";
+    changelog = "https://github.com/diesel-rs/diesel/releases/tag/v${version}";
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "diesel";
   };
 }
