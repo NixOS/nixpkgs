@@ -68,5 +68,8 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ pstn piegames pimeys ];
     mainProgram = "conduit";
+    knownVulnerabilities = [
+      "Severe security issue fixed in conduit 0.8.0, check https://conduit.rs/changelog/ for further information"
+    ];
   };
 }
