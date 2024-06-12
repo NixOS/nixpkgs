@@ -23,17 +23,19 @@
   darwin,
   makeFontsConf,
   vulkan-loader,
+  nix-update-script,
+  envsubst
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
-  version = "0.137.6";
+  version = "0.138.6";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1shK+Q8LTRaIXDqDLdJVsB4sAg2u5Kz0NXKf5jCniOU=";
+    hash = "sha256-lP5vQXDlkieJFW5LBnCf6DQzkC7iEsTNCA5jujoooHY=";
     fetchSubmodules = true;
   };
 
@@ -41,27 +43,18 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
-      "blade-graphics-0.4.0" = "sha256-w5BTv/40Zy94dmoZUpVVWrhzR2IaGAIJ0Ftsw1v/R9Y=";
+      "blade-graphics-0.4.0" = "sha256-rRuyN4bj6g73rQU6eDRD0MvGL2IyCtrPolitMMWntbI=";
       "font-kit-0.11.0" = "sha256-+4zMzjFyMS60HfLMEXGfXqKn6P+pOngLA45udV09DM8=";
-      "heed-0.20.0-alpha.9" = "sha256-8bzoMmfKS+6AmeTzh0/F7WM9OBdIex+NYFER28bpA/s=";
       "lsp-types-0.95.1" = "sha256-ZWgQH7sUkP51oni2rqYX8Fsme/bGQV1TL5SbmEAhATU=";
       "nvim-rs-0.6.0-pre" = "sha256-bdWWuCsBv01mnPA5e5zRpq48BgOqaqIcAu+b7y1NnM8=";
       "pathfinder_simd-0.5.3" = "sha256-bakBcAQZJdHQPXybe0zoMzE49aOHENQY7/ZWZUMt+pM=";
       "tree-sitter-0.20.100" = "sha256-xZDWAjNIhWC2n39H7jJdKDgyE/J6+MAVSa8dHtZ6CLE=";
-      "tree-sitter-bash-0.20.4" = "sha256-VP7rJfE/k8KV1XN1w5f0YKjCnDMYU1go/up0zj1mabM=";
-      "tree-sitter-cpp-0.20.0" = "sha256-2QYEFkpwcRmh2kf4qEAL2a5lGSa316CetOhF73e7rEM=";
-      "tree-sitter-css-0.19.0" = "sha256-5Qti/bFac2A1PJxqZEOuSLK3GGKYwPDKAp3OOassBxU=";
-      "tree-sitter-elixir-0.1.0" = "sha256-hBHqQ3eBjknRPJjP+lQJU6NPFhUMtiv4FbKsTw28Bog=";
       "tree-sitter-go-0.20.0" = "sha256-/mE21JSa3LWEiOgYPJcq0FYzTbBuNwp9JdZTZqmDIUU=";
-      "tree-sitter-gomod-1.0.2" = "sha256-OPtqXe6OMC9c5dgFH8Msj+6DU01LvLKVbCzGLj0PnLI=";
       "tree-sitter-gowork-0.0.1" = "sha256-lM4L4Ap/c8uCr4xUw9+l/vaGb3FxxnuZI0+xKYFDPVg=";
       "tree-sitter-heex-0.0.1" = "sha256-6LREyZhdTDt3YHVRPDyqCaDXqcsPlHOoMFDb2B3+3xM=";
       "tree-sitter-jsdoc-0.20.0" = "sha256-fKscFhgZ/BQnYnE5EwurFZgiE//O0WagRIHVtDyes/Y=";
-      "tree-sitter-json-0.20.0" = "sha256-fZNftzNavJQPQE4S1VLhRyGQRoJgbWA5xTPa8ZI5UX4=";
       "tree-sitter-markdown-0.0.1" = "sha256-F8VVd7yYa4nCrj/HEC13BTC7lkV3XSb2Z3BNi/VfSbs=";
       "tree-sitter-proto-0.0.2" = "sha256-W0diP2ByAXYrc7Mu/sbqST6lgVIyHeSBmH7/y/X3NhU=";
-      "tree-sitter-typescript-0.20.2" = "sha256-cpOAtfvlffS57BrXaoa2xa9NUYw0AsHxVI8PrcpgZCQ=";
-      "tree-sitter-yaml-0.0.1" = "sha256-S59jLlipBI2kwFuZDMmpv0TOZpGyXpbAizN3yC6wJ5I=";
       "xim-0.4.0" = "sha256-vxu3tjkzGeoRUj7vyP0vDGI7fweX8Drgy9hwOUOEQIA=";
     };
   };
@@ -73,6 +66,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     protobuf
     rustPlatform.bindgenHook
+    envsubst
   ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ];
 
   buildInputs =
@@ -133,11 +127,23 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_open_paths_action"
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(.*)" ];
+  };
+
   postInstall = ''
     mv $out/bin/Zed $out/bin/zed
     install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
     install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
-    install -D ${src}/crates/zed/resources/zed.desktop $out/share/applications/dev.zed.Zed.desktop
+
+    # extracted from https://github.com/zed-industries/zed/blob/5e9f9b4eddd94dbe280d6d1bcd1e3aef46bd8ef8/script/bundle-linux#L95
+    (
+      export DO_STARTUP_NOTIFY="true"
+      export APP_ICON="zed"
+      export APP_NAME="Zed"
+      mkdir -p "$out/share/applications"
+      envsubst < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/zed.desktop"
+    )
   '';
 
   meta = with lib; {
