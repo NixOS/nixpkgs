@@ -131,6 +131,27 @@ let
         '';
       } // extraAttrs);
 
+  testConcatStringsSep = { name, stdenv' }:
+    stdenv'.mkDerivation
+      {
+        inherit name;
+
+        passAsFile = [ "buildCommand" ];
+        buildCommand = ''
+          declare -A associativeArray=(["X"]="Y")
+          [[ $(concatStringsSep ";" associativeArray 2>&1) =~ "trying to use" ]] || (echo "concatStringsSep did not throw concatenating associativeArray" && false)
+
+          string="lorem ipsum dolor sit amet"
+          stringWithSep="$(concatStringsSep ";" string)"
+          [[ "$stringWithSep" == "lorem;ipsum;dolor;sit;amet" ]] || (echo "'\$stringWithSep' was not 'lorem;ipsum;dolor;sit;amet'" && false)
+
+          array=("lorem ipsum" "dolor" "sit amet")
+          arrayWithSep="$(concatStringsSep ";" array)"
+          [[ "$arrayWithSep" == "lorem ipsum;dolor;sit amet" ]] || (echo "'\$arrayWithSep' was not 'lorem ipsum;dolor;sit amet'" && false)
+
+          touch $out
+        '';
+      };
 in
 
 {
@@ -236,6 +257,11 @@ in
     stdenv' = bootStdenv;
   };
 
+  test-concat-strings-sep = testConcatStringsSep {
+    name = "test-concat-strings-sep";
+    stdenv' = bootStdenv;
+  };
+
   test-structured-env-attrset = testEnvAttrset {
     name = "test-structured-env-attrset";
     stdenv' = bootStdenv;
@@ -311,6 +337,11 @@ in
           [[ "''${flagsWithSpaces[3]}" == "d d" ]] || (echo "'\$flagsWithSpaces[3]' was not 'd d'" && false)
         '';
       };
+    };
+
+    test-concat-strings-sep = testConcatStringsSep {
+      name = "test-concat-strings-sep-structuredAttrsByDefault";
+      stdenv' = bootStdenvStructuredAttrsByDefault;
     };
 
     test-golden-example-structuredAttrs =

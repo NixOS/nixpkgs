@@ -357,6 +357,36 @@ concatTo() {
     done
 }
 
+# Concatenate a list of strings ($2) with a separator ($1) between each element.
+# The list can be an indexed array of strings or a single string. A single string
+# is split on spaces and then concatenated with the separator.
+#
+# $ flags="lorem ipsum dolor sit amet"
+# $ concatStringsSep ";" flags
+# lorem;ipsum;dolor;sit;amet
+#
+# $ flags=("lorem ipsum" "dolor" "sit amet")
+# $ concatStringsSep ";" flags
+# lorem ipsum;dolor;sit amet
+concatStringsSep() {
+    local sep="$1"
+    local name="$2"
+    local type oldifs
+    if type=$(declare -p "$name" 2> /dev/null); then
+        local -n nameref="$name"
+        case "${type#* }" in
+            -A*)
+                echo "concatStringsSep(): ERROR: trying to use concatStringsSep on an associative array." >&2
+                return 1 ;;
+            -a*)
+                local IFS="$sep"
+                echo -n "${nameref[*]}" ;;
+            *)
+                echo -n "${nameref// /${sep}}" ;;
+        esac
+    fi
+}
+
 # Add $1/lib* into rpaths.
 # The function is used in multiple-outputs.sh hook,
 # so it is defined here but tried after the hook.
