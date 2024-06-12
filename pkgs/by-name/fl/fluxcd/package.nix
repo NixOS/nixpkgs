@@ -81,6 +81,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       bryanasdev000
       jlesquembre
+      superherointj
     ];
     mainProgram = "flux";
   };
