@@ -13,12 +13,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "CuteMarkEd-NG";
+  pname = "cutemarked-ng";
   version = "unstable-2021-07-29";
 
   src = fetchFromGitHub {
     owner = "Waqar144";
-    repo = pname;
+    repo = "CuteMarkEd-NG";
     rev = "9431ac603cef23d6f29e51e18f1eeee156f5bfb3";
     sha256 = "sha256-w/D4C2ZYgI/7ZCDamTQlhrJ9vtvAMThgM/fopkdKWYc";
   };
