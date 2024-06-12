@@ -78,6 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.xiph.org/xiph/opus/-/releases/v${finalAttrs.version}";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [ ];
+    maintainers = with maintainers; [ getchoo ];
   };
 })
