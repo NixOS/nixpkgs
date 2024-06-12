@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  pkg-config,
   libebml,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "Matroska-Org";
     repo = "libmatroska";
     rev = "release-${version}";
-    sha256 = "sha256-hfu3Q1lIyMlWFWUM2Pu70Hie0rlQmua7Kq8kSIWnfHE=";
+    hash = "sha256-hfu3Q1lIyMlWFWUM2Pu70Hie0rlQmua7Kq8kSIWnfHE=";
   };
 
   nativeBuildInputs = [
@@ -30,11 +30,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX="
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to parse Matroska files";
     homepage = "https://matroska.org/";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ getchoo ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/Matroska-Org/libmatroska/blob/${src.rev}/NEWS.md";
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ getchoo ];
+    platforms = lib.platforms.unix;
   };
 }
