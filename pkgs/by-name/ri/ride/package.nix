@@ -3,6 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchpatch,
   substituteAll,
   jq,
   moreutils,
@@ -10,7 +11,7 @@
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
-  electron_27,
+  electron,
 }:
 
 let
@@ -30,9 +31,6 @@ let
   };
 
   platformInfo = platformInfos.${stdenv.system};
-
-  # Electron 27 is the latest version that works as of RIDE version 4.5.4097
-  electron = electron_27;
 in
 buildNpmPackage rec {
   pname = "ride";
@@ -45,9 +43,15 @@ buildNpmPackage rec {
     hash = "sha256-xR+HVC1JVrPkgPhIJZxdTVG52+QbanmD1c/uO5l84oc=";
   };
 
-  npmDepsHash = "sha256-EG3pZkjDGBI2dDaQZ6351+oU4xfHd6HNB8eD7ErpYIg=";
+  npmDepsHash = "sha256-h+48/9h7/cD8woyA0UCLtzKuE9jCrfpDk6IeoDWnYik=";
 
   patches = [
+    # Adds support for electron versions >=28
+    (fetchpatch {
+      name = "bump-electron-version.patch";
+      url = "https://github.com/Dyalog/ride/commit/de42ebbd5036cfe0c7e6604296e87cc57ac9d365.patch";
+      hash = "sha256-5iKSNcxOOo2fKNvy3Rv+AlH3psYhLWLWUY0l8M6mAD4=";
+    })
     # Fix info in the "about" page, set electron version, set local-cache as zipdir
     (substituteAll {
       src = ./mk.patch;
