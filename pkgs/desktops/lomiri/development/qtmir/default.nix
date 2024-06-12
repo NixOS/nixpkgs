@@ -1,35 +1,36 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, testers
-, cmake
-, cmake-extras
-, pkg-config
-, wrapQtAppsHook
-, gsettings-qt
-, gtest
-, libqtdbustest
-, libqtdbusmock
-, libuuid
-, lomiri-api
-, lomiri-app-launch
-, lomiri-url-dispatcher
-, lttng-ust
-, mir_2_15
-, process-cpp
-, qtbase
-, qtdeclarative
-, qtsensors
-, valgrind
-, protobuf
-, glm
-, boost
-, properties-cpp
-, glib
-, validatePkgConfig
-, wayland
-, xwayland
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  testers,
+  cmake,
+  cmake-extras,
+  pkg-config,
+  wrapQtAppsHook,
+  gsettings-qt,
+  gtest,
+  libqtdbustest,
+  libqtdbusmock,
+  libuuid,
+  lomiri-api,
+  lomiri-app-launch,
+  lomiri-url-dispatcher,
+  lttng-ust,
+  mir_2_15,
+  process-cpp,
+  qtbase,
+  qtdeclarative,
+  qtsensors,
+  valgrind,
+  protobuf,
+  glm,
+  boost,
+  properties-cpp,
+  glib,
+  validatePkgConfig,
+  wayland,
+  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -153,8 +154,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl3Only;
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
-    pkgConfigModules = [
-      "qtmirserver"
-    ];
+    pkgConfigModules = [ "qtmirserver" ];
   };
 })
