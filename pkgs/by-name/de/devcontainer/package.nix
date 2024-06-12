@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchYarnDeps
-, fetchFromGitHub
-, fixup-yarn-lock
-, nodejs
-, python3
-, makeWrapper
-, git
-, docker
-, yarn
-, docker-compose
+{
+  lib,
+  stdenv,
+  fetchYarnDeps,
+  fetchFromGitHub,
+  fixup-yarn-lock,
+  nodejs,
+  python3,
+  makeWrapper,
+  git,
+  docker,
+  yarn,
+  docker-compose,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "devcontainer";
@@ -27,7 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tN7qAvfYmDz5ZtgZL5+ZZtkuxZxvlS9FM3+dGl+daUQ=";
   };
 
-  nativeBuildInputs = [ yarn fixup-yarn-lock python3 makeWrapper ];
+  nativeBuildInputs = [
+    yarn
+    fixup-yarn-lock
+    python3
+    makeWrapper
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -56,7 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     makeWrapper "${nodejs}/bin/node" "$out/bin/devcontainer" \
       --add-flags "$out/libexec/devcontainer.js" \
-      --prefix PATH : ${lib.makeBinPath [ git docker docker-compose ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          git
+          docker
+          docker-compose
+        ]
+      }
   '';
 
   meta = with lib; {
