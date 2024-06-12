@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0-beta.37";
+  version = "2.0.0-beta.39";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.9";
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     owner = "yutto-dev";
     repo = "yutto";
     rev = "v${version}";
-    hash = "sha256-daRuFYfR3FjvhVsQM1FXI19iOH+bukh6WxfH5O+CFk4=";
+    hash = "sha256-WWnoLB7/IaVK2YT0Ax9cS96+klXa3ZGxAxZ34lGPQFA=";
   };
 
   nativeBuildInputs = with python3Packages; [
