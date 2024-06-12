@@ -18,6 +18,7 @@
 , zig_0_12
 , withManpages ? true
 , xwaylandSupport ? true
+, withDebugBuild ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,11 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;
+  dontStrip = withDebugBuild;
 
-  zigBuildFlags = [
+  zigBuildFlags = with lib; [
     "--system"
     "${finalAttrs.deps}"
-  ] ++ lib.optional withManpages "-Dman-pages" ++ lib.optional xwaylandSupport "-Dxwayland";
+  ] ++ optional withManpages "-Dman-pages" ++ optional xwaylandSupport "-Dxwayland" ++ optional withDebugBuild "-Doptimize=Debug";
 
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions
