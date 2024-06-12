@@ -24,6 +24,8 @@ let
     , withNodeJs ? false
     , withPerl ? false
     , rubyEnv ? null
+
+    # wether to create symlinks in $out/bin/vi(m) -> $out/bin/nvim
     , vimAlias ? false
     , viAlias ? false
 
@@ -45,6 +47,8 @@ let
   stdenv.mkDerivation (finalAttrs:
   let
 
+    finalPackdir = neovimUtils.packDir packpathDirs;
+
     rcContent = ''
       ${luaRcContent}
     '' + lib.optionalString (!isNull neovimRcContent) ''
@@ -58,9 +62,10 @@ let
           [
             "--add-flags" ''--cmd "lua ${providerLuaRc}"''
             # (lib.intersperse "|" hostProviderViml)
-          ] ++ lib.optionals (packpathDirs.myNeovimPackages.start != [] || packpathDirs.myNeovimPackages.opt != []) [
-            "--add-flags" ''--cmd "set packpath^=${vimUtils.packDir packpathDirs}"''
-            "--add-flags" ''--cmd "set rtp^=${vimUtils.packDir packpathDirs}"''
+          ]
+          ++ lib.optionals (packpathDirs.myNeovimPackages.start != [] || packpathDirs.myNeovimPackages.opt != []) [
+            "--add-flags" ''--cmd "set packpath^=${finalPackdir}"''
+            "--add-flags" ''--cmd "set rtp^=${finalPackdir}"''
           ]
           ;
 
