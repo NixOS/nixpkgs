@@ -234,7 +234,6 @@ in (chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
   meta = with lib; {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
-    knownVulnerabilities = optional (versionOlder info.version "29") "Electron version ${version} is EOL";
     platforms = lib.platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ yayayayaka teutat3s ];
