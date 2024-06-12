@@ -24894,8 +24894,6 @@ with pkgs;
 
   xavs = callPackage ../development/libraries/xavs { };
 
-  Xaw3d = callPackage ../development/libraries/Xaw3d { };
-
   xbase = callPackage ../development/libraries/xbase { };
 
   xcb-util-cursor = xorg.xcbutilcursor;

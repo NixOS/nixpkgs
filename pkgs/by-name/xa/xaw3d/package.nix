@@ -15,7 +15,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "Xaw3d";
+  pname = "xaw3d";
   version = "1.6.6";
 
   src = fetchurl {
