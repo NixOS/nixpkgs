@@ -7,6 +7,7 @@
   darwin,
   libiconv,
   testers,
+  nix-update-script,
   maturin,
 }:
 
@@ -36,6 +37,8 @@ rustPlatform.buildRustPackage rec {
       version = testers.testVersion { package = maturin; };
       pyo3 = callPackage ./pyo3-test { };
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
