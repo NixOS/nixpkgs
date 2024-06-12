@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  pname = "CoinMP";
+  pname = "coinmp";
   version = "1.8.4";
 
   src = fetchurl {
