@@ -14,13 +14,16 @@
   alsa-lib,
   makeWrapper,
 }:
-stdenv.mkDerivation rec {
+let
+  version = "1.0_beta14";
+in
+stdenv.mkDerivation {
   pname = "sfwbar";
-  version = "1.0_beta13";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "LBCrion";
-    repo = pname;
+    repo = "sfwbar";
     rev = "v${version}";
     hash = "sha256-4brP1SXaWq/L0D87rvlrWhLU1oFPSwNNxBSzRr4jsTM=";
   };
