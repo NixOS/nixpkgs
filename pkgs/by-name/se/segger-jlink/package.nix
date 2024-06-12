@@ -154,6 +154,10 @@ in stdenv.mkDerivation {
     changelog = "https://www.segger.com/downloads/jlink/ReleaseNotes_JLink.html";
     license = licenses.unfree;
     platforms = attrNames supported;
-    maintainers = with maintainers; [ FlorianFranzen stargate01 ];
+    maintainers = with maintainers; [
+      FlorianFranzen
+      h7x4
+      stargate01
+    ];
   };
 }
