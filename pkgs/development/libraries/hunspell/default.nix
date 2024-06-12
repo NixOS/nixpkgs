@@ -1,22 +1,15 @@
 {
   lib,
   stdenv,
+  autoreconfHook,
   fetchFromGitHub,
   ncurses,
   readline,
-  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.2";
   pname = "hunspell";
-
-  src = fetchFromGitHub {
-    owner = "hunspell";
-    repo = "hunspell";
-    rev = "v${version}";
-    sha256 = "sha256-x2FXxnVIqsf5/UEQcvchAndXBv/3mW8Z55djQAFgNA8=";
-  };
+  version = "1.7.2";
 
   outputs = [
     "bin"
@@ -25,17 +18,27 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  buildInputs = [
-    ncurses
-    readline
-  ];
-  nativeBuildInputs = [ autoreconfHook ];
+  src = fetchFromGitHub {
+    owner = "hunspell";
+    repo = "hunspell";
+    tag = "v${version}";
+    hash = "sha256-x2FXxnVIqsf5/UEQcvchAndXBv/3mW8Z55djQAFgNA8=";
+  };
 
   patches = [ ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch ];
 
   postPatch = ''
     patchShebangs tests
   '';
+
+  strictDeps = true;
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = [
+    ncurses
+    readline
+  ];
 
   autoreconfFlags = [ "-vfi" ];
 
@@ -46,8 +49,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
-    homepage = "https://hunspell.sourceforge.net";
+  meta = {
     description = "Spell checker";
     longDescription = ''
       Hunspell is the spell checker of LibreOffice, OpenOffice.org, Mozilla
@@ -69,12 +71,14 @@ stdenv.mkDerivation rec {
             ~/Library/Spelling or /Library/Spelling for spell checking),
         * Delphi, Java (JNA, JNI), Perl, .NET, Python, Ruby ([1], [2]), UNO.
     '';
-    platforms = platforms.all;
-    license = with licenses; [
+    homepage = "https://hunspell.sourceforge.net";
+    license = with lib.licenses; [
       gpl2
       lgpl21
       mpl11
     ];
     maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "hunspell";
+    platforms = lib.platforms.all;
   };
 }
