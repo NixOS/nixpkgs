@@ -31,9 +31,8 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.pyo3 = callPackage ./pyo3-test { };
 
-  meta = with lib; {
+  meta = {
     description = "Build and publish Rust crates Python packages";
-    mainProgram = "maturin";
     longDescription = ''
       Build and publish Rust crates with PyO3, rust-cpython, and
       cffi bindings as well as Rust binaries as Python packages.
@@ -44,10 +43,11 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/PyO3/maturin";
     changelog = "https://github.com/PyO3/maturin/blob/v${version}/Changelog.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "maturin";
   };
 }
