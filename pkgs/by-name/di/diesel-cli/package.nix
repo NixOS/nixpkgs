@@ -94,7 +94,7 @@ rustPlatform.buildRustPackage rec {
       mit
       asl20
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "diesel";
   };
 }
