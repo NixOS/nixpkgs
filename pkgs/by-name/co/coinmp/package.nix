@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch }:
 
-stdenv.mkDerivation rec {
-  pname = "CoinMP";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "coinmp";
   version = "1.8.4";
 
   src = fetchurl {
-    url = "https://www.coin-or.org/download/source/CoinMP/${pname}-${version}.tgz";
+    url = "https://www.coin-or.org/download/source/CoinMP/CoinMP-${finalAttrs.version}.tgz";
     sha256 = "13d3j1sdcjzpijp4qks3n0zibk649ac3hhv88hkk8ffxrc6gnn9l";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.epl10;
   };
-}
+})
