@@ -5551,6 +5551,8 @@ with pkgs;
 
   irpf = callPackage ../applications/finance/irpf { };
 
+  irp-transmogrifier = callPackage ../tools/misc/irp-transmogrifier { };
+
   jellycli = callPackage ../applications/audio/jellycli { };
 
   jellyfin-ffmpeg = callPackage ../development/libraries/jellyfin-ffmpeg { };
