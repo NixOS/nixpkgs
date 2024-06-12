@@ -57,6 +57,22 @@ rustPlatform.buildRustPackage rec {
     lib.optional sqliteSupport "sqlite"
     ++ lib.optional postgresqlSupport "postgres"
     ++ lib.optional mysqlSupport "mysql";
+
+  checkFlags = [
+    # all of these require a live database to be running
+    # `DATABASE_URL must be set in order to run tests: NotPresent`
+    "--skip=infer_schema_internals::information_schema::tests::get_primary_keys_only_includes_primary_key"
+    "--skip=infer_schema_internals::information_schema::tests::load_table_names_loads_from_custom_schema"
+    "--skip=infer_schema_internals::information_schema::tests::load_table_names_loads_from_public_schema_if_none_given"
+    "--skip=infer_schema_internals::information_schema::tests::load_table_names_output_is_ordered"
+    "--skip=infer_schema_internals::information_schema::tests::skip_views"
+    "--skip=infer_schema_internals::mysql::test::get_table_data_loads_column_information"
+    "--skip=infer_schema_internals::mysql::test::gets_table_comment"
+    "--skip=infer_schema_internals::pg::test::get_foreign_keys_loads_foreign_keys"
+    "--skip=infer_schema_internals::pg::test::get_foreign_keys_loads_foreign_keys_with_same_name"
+    "--skip=infer_schema_internals::pg::test::get_table_data_loads_column_information"
+    "--skip=infer_schema_internals::pg::test::gets_table_comment"
+  ];
   cargoCheckFeatures = buildFeatures;
 
   postInstall = ''
