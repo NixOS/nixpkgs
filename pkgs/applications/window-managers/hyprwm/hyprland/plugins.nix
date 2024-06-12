@@ -22,27 +22,27 @@ let
 
   plugins = {
     hy3 = { fetchFromGitHub, cmake, hyprland }:
-      mkHyprlandPlugin hyprland {
+      mkHyprlandPlugin hyprland rec {
         pluginName = "hy3";
-        version = "0.40.0";
+        version = "0.41.0";
 
         src = fetchFromGitHub {
           owner = "outfoxxed";
           repo = "hy3";
-          rev = "hl0.40.0";
-          hash = "sha256-Y9bIML3C5xyKKv+Yel4LUfSkScwGunOVZkg+Z1dPwHI=";
+          rev = "hl${version}";
+          hash = "sha256-gEEWWlQRvejSR2RRg78Lubz6siIgknqj6CslveyyIP4=";
         };
 
         nativeBuildInputs = [ cmake ];
 
         dontStrip = true;
 
-        meta = with lib; {
+        meta = {
           homepage = "https://github.com/outfoxxed/hy3";
           description = "Hyprland plugin for an i3 / sway like manual tiling layout";
-          license = licenses.gpl3;
-          platforms = platforms.linux;
-          maintainers = [ maintainers.aacebedo ];
+          license = lib.licenses.gpl3;
+          platforms = lib.platforms.linux;
+          maintainers = with lib.maintainers; [ aacebedo ];
         };
       };
   };
