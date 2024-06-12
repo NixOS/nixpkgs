@@ -33,7 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   configureFlags = [
+    # Load data from proper global paths
     "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--runstatedir=/run"
+    "--with-sysconfigdir=/etc/default"
+
+    # Install data to proper directories
+    "--with-pkgconfigdir=${placeholder "out"}/lib/pkgconfig"
+    "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
 
     # Cross-compilation hacks
     "--with-libgcrypt-prefix=${lib.getDev libgcrypt}"
@@ -42,9 +50,16 @@ stdenv.mkDerivation (finalAttrs: {
     "x_ac_cv_check_fifo_recvfd=no"
   ];
 
-  preAutoreconf = ''
-    # Remove the install-data stuff, since it tries to write to /var
-    substituteInPlace src/Makefile.am --replace "etc \\" "\\"
+  installFlags = [
+    "localstatedir=${placeholder "out"}/var"
+    "runstatedir=${placeholder "out"}/run"
+    "sysconfdir=${placeholder "out"}/etc"
+    "sysconfigdir=${placeholder "out"}/etc/default"
+  ];
+
+  postInstall = ''
+    # rmdir will notify us if anything new is installed to the directories.
+    rmdir "$out"/{var{/{lib,log}{/munge,},},etc/munge}
   '';
 
   meta = with lib; {
