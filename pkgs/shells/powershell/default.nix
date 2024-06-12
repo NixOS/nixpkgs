@@ -114,8 +114,7 @@ stdenv.mkDerivation rec {
       fi
 
       for platform in ${lib.escapeShellArgs meta.platforms}; do
-        update-source-version "powershell" "0" "${lib.fakeHash}" --source-key="sources.$platform"
-        update-source-version "powershell" "$NEW_VERSION" --source-key="sources.$platform"
+        update-source-version "powershell" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };
