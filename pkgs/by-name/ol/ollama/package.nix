@@ -7,9 +7,7 @@
 , overrideCC
 , makeWrapper
 , stdenv
-, nixosTests
 
-, pkgs
 , cmake
 , gcc12
 , clblast
@@ -19,8 +17,11 @@
 , linuxPackages
 , darwin
 
+, nixosTests
 , testers
 , ollama
+, ollama-rocm
+, ollama-cuda
 
 , config
   # one of `[ null false "rocm" "cuda" ]`
@@ -198,20 +199,24 @@ goBuild ((lib.optionalAttrs enableRocm {
 
   passthru.tests = {
     service = nixosTests.ollama;
-    rocm = pkgs.ollama.override { acceleration = "rocm"; };
-    cuda = pkgs.ollama.override { acceleration = "cuda"; };
     version = testers.testVersion {
       inherit version;
       package = ollama;
     };
+  } // stdenv.isLinux {
+    inherit ollama-rocm ollama-cuda;
   };
 
   meta = {
-    description = "Get up and running with large language models locally";
+    description = "Get up and running with large language models locally"
+      + lib.optionalString enableRocm ", using ROCm for AMD GPU acceleration"
+      + lib.optionalString enableCuda ", using CUDA for NVIDIA GPU acceleration";
     homepage = "https://github.com/ollama/ollama";
     changelog = "https://github.com/ollama/ollama/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms =
+      if (enableRocm || enableCuda) then platforms.linux
+      else platforms.unix;
     mainProgram = "ollama";
     maintainers = with maintainers; [ abysssol dit7ya elohmeier roydubnium ];
   };
