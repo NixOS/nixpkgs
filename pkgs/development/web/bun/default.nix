@@ -12,7 +12,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "1.1.10";
+  version = "1.1.13";
   pname = "bun";
 
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
