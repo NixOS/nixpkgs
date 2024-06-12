@@ -945,13 +945,13 @@ in rec {
     fullName = "English Scientific Jargon";
 
     src1 = fetchurl {
-      url = "http://jpetrie.net/wp-content/uploads/custom_scientific_US.txt";
-      sha256 = "1nf4py2mg0mlv9s5a7had2wn29z2v6bcca0fs6rbpdn4nqc4s7dm";
+      url = "https://web.archive.org/web/20180806094650if_/http://jpetrie.net/wp-content/uploads/custom_scientific_US.txt";
+      hash = "sha256-I5d/jf/5v9Nptu2H9qfvMBzSwJYoQOTEzJfQTxKoWN8=";
     };
 
     src2 = fetchurl {
-      url = "http://jpetrie.net/wp-content/uploads/custom_scientific_UK.txt";
-      sha256 = "0f88il1ds6qazy1ghxviqcwsywrbf6pzl2lmzf4f3qvhdfb6f1y0";
+      url = "https://web.archive.org/web/20180131231829if_/http://jpetrie.net/wp-content/uploads/custom_scientific_UK.txt";
+      hash = "sha256-oT4nUiev5q4QjHeuF8jNVBcyyHE9fdH9+uDMkZsOWp8=";
     };
 
     langInputs = [ en ];
@@ -965,7 +965,9 @@ in rec {
     installPhase = "aspell-install en_US-science en_GB-science";
 
     meta = {
-      homepage = "http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/";
+      homepage = "https://web.archive.org/web/20210425104207/http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/";
+      # no license is given so we have to assume it is unfree
+      license = lib.licenses.unfree;
     };
 
   };
