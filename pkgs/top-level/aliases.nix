@@ -83,6 +83,7 @@ mapAliases ({
   antimicroX = antimicrox; # Added 2021-10-31
   appthreat-depscan = dep-scan; # Added 2024-04-10
   arcanPackages = throw "arcanPackages was removed and its sub-attributes were promoted to top-level"; # Added 2023-11-26
+  ArchiSteamFarm = archisteamfarm; # Added 2024-06-12
   archiveopteryx = throw "archiveopteryx depended on an unsupported version of OpenSSL and was unmaintained"; # Added 2024-01-03
   ardour_6 = throw "ardour_6 has been removed in favor of newer versions"; # Added 2023-10-13
   aria = aria2; # Added 2024-03-26

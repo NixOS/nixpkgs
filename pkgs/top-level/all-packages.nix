@@ -3189,8 +3189,6 @@ with pkgs;
 
   aptly = callPackage ../tools/misc/aptly { };
 
-  ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
-
   archivebox = callPackage ../applications/misc/archivebox { };
 
   archivemount = callPackage ../tools/filesystems/archivemount { };

@@ -9,7 +9,7 @@
 }:
 
 buildDotnetModule rec {
-  pname = "ArchiSteamFarm";
+  pname = "archisteamfarm";
   # nixpkgs-update: no auto update
   version = "6.0.1.24";
 
