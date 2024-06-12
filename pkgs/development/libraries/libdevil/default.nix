@@ -45,10 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    (fetchurl {
-        url = "https://sources.debian.org/data/main/d/devil/1.7.8-10/debian/patches/03_CVE-2009-3994.diff";
-        sha256 = "0qkx2qfv02igbrmsn6z5a3lbrbwjfh3rb0c2sj54wy0j1f775hbc";
-    })
     ./ftbfs-libpng15.patch
     ./il_endian.h.patch
   ];
