@@ -18611,8 +18611,6 @@ with pkgs;
 
   license-scanner = callPackage ../development/tools/license-scanner { };
 
-  Literate = callPackage ../development/tools/literate-programming/Literate { };
-
   md-tangle = callPackage ../development/tools/literate-programming/md-tangle { };
 
   # NOTE: Override and set useIcon = false to use Awk instead of Icon.
