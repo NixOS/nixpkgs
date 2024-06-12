@@ -21656,7 +21656,6 @@ with pkgs;
 
   LAStools = callPackage ../development/libraries/LAStools { };
 
-  LASzip = callPackage ../development/libraries/LASzip { };
   laurel = callPackage ../servers/monitoring/laurel/default.nix { };
 
   lcm = callPackage ../development/libraries/lcm { };
