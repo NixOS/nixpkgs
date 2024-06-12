@@ -151,6 +151,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "J-Link Software and Documentation pack";
     homepage = "https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack";
+    changelog = "https://www.segger.com/downloads/jlink/ReleaseNotes_JLink.html";
     license = licenses.unfree;
     platforms = attrNames supported;
     maintainers = with maintainers; [ FlorianFranzen stargate01 ];
