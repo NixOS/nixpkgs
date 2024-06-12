@@ -56,6 +56,7 @@ in rec {
     changelog = "https://github.com/gabotechs/dep-tree/releases/tag/v${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ birdee ];
     mainProgram = "dep-tree";
   };
 })
