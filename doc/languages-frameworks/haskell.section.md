@@ -934,25 +934,28 @@ for this to work.
   unable to remove the references to the dependency's store path that module
   contains. (See [nixpkgs#164630][164630] for more information.)
 
-  Importing the `Paths_*` module may cause builds to fail with this message:
+  Nixpkgs unstable and releases from 24.11 onwards will verify that such
+  references are eliminated and fail the build if they are not.
+  You can opt in to this new behavior as follows:
+
+  ```nix
+  pkgs.haskell.lib.overrideCabal
+    (pkgs.haskell.lib.justStaticExecutables my-haskell-package)
+    (drv: {
+      disallowGhcReference = true;
+    })
+  ```
+
+  on the package you are statically linking with `justStaticExecutables`.
+  After doing so, importing the `Paths_*` module may cause builds to fail with this message:
 
   ```
   error: output '/nix/store/64k8iw0ryz76qpijsnl9v87fb26v28z8-my-haskell-package-1.0.0.0' is not allowed to refer to the following paths:
            /nix/store/5q5s4a07gaz50h04zpfbda8xjs8wrnhg-ghc-9.6.3
   ```
 
-  If that happens, first disable the check for GHC references and rebuild the
-  derivation:
-
-  ```nix
-  pkgs.haskell.lib.overrideCabal
-    (pkgs.haskell.lib.justStaticExecutables my-haskell-package)
-    (drv: {
-      disallowGhcReference = false;
-    })
-  ```
-
-  Then use `strings` to determine which libraries are responsible:
+  If that happens, temporarily disable the check for GHC references and rebuild the
+  derivation. Then use `strings` to determine which libraries are responsible:
 
   ```
   $ nix-build ...
