@@ -53,5 +53,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ terrorjack ];
     mainProgram = "HentaiAtHome";
+    platforms = jdk.meta.platforms;
   };
 }
