@@ -3,7 +3,7 @@
 , alsa-lib, libjack2, lv2, gcc-unwrapped, curl}:
 
 stdenv.mkDerivation rec {
-  pname = "LibreArp";
+  pname = "librearp";
   version = "2.4";
 
   src = fetchFromGitLab {

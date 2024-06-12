@@ -31192,8 +31192,6 @@ with pkgs;
 
   lemonade = callPackage ../applications/misc/lemonade { };
 
-  LibreArp = callPackage ../applications/audio/LibreArp { };
-
   librespot = callPackage ../applications/audio/librespot {
     withALSA = stdenv.isLinux;
     withPulseAudio = config.pulseaudio or stdenv.isLinux;
