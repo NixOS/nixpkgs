@@ -3,7 +3,7 @@
 , alsa-lib, libjack2, lv2, gcc-unwrapped }:
 
 stdenv.mkDerivation rec {
-  pname = "ChowCentaur";
+  pname = "chow-centaur";
   version = "1.4.0";
 
   src = fetchFromGitHub {

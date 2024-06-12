@@ -29980,7 +29980,7 @@ with pkgs;
 
   cgif = callPackage ../tools/graphics/cgif { };
 
-  ChowCentaur  = callPackage ../applications/audio/ChowCentaur { };
+  ChowCentaur  = callPackage ../applications/audio/chow-centaur { };
 
   ChowKick  = callPackage ../applications/audio/ChowKick { };
 
