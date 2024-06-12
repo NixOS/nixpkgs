@@ -1,6 +1,6 @@
 { lib, stdenv, mkDerivation, fetchFromGitLab, qmake, qtbase, qttools, qtserialport, libGLU }:
 mkDerivation rec {
-  pname = "OSCAR";
+  pname = "oscar";
   version = "1.5.1";
 
   src = fetchFromGitLab {

@@ -39759,7 +39759,7 @@ with pkgs;
 
   opkg-utils = callPackage ../tools/package-management/opkg-utils { };
 
-  OSCAR = qt5.callPackage ../applications/misc/OSCAR { };
+  oscar = qt5.callPackage ../applications/misc/oscar { };
 
   pgmanage = callPackage ../applications/misc/pgmanage { };
 

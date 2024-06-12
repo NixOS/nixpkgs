@@ -994,6 +994,7 @@ mapAliases ({
   onlyoffice-bin_7_2 = throw "onlyoffice-bin_7_2 has been renamed to onlyoffice-bin"; # Added 2024-02-05
   onlyoffice-bin_7_5 = throw "onlyoffice-bin_7_5 has been renamed to onlyoffice-bin_latest (and updated from 7.5.x)"; # Added 2024-02-05
   oroborus = throw "oroborus was removed, because it was abandoned years ago."; #Added 2023-09-10
+  OSCAR = oscar; # Added 2024-06-12
   osxfuse = macfuse-stubs; # Added 2021-03-20
   oxen = throw "'oxen' has been removed, because it was broken, outdated and unmaintained"; # Added 2023-12-09
 
