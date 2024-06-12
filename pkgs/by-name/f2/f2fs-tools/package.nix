@@ -7,6 +7,8 @@
   libselinux,
   libuuid,
   pkg-config,
+  lz4,
+  lzo,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libselinux
     libuuid
+    lz4
+    lzo
   ];
 
   patches = [
