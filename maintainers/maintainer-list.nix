@@ -21619,6 +21619,12 @@
     githubId = 6943308;
     name = "Varun Patro";
   };
+  vasissualiyp = {
+    email = "vaspust@gmail.com";
+    github = "vasissualiyp";
+    githubId = 110242808;
+    name = "Vasilii Pustovoit";
+  };
   vbgl = {
     email = "Vincent.Laporte@gmail.com";
     github = "vbgl";
