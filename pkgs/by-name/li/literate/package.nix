@@ -5,7 +5,7 @@
 }:
 
 buildDubPackage {
-  pname = "Literate";
+  pname = "literate";
   version = "unstable-2021-01-22";
 
   src = fetchFromGitHub {
