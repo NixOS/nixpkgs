@@ -36,7 +36,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "ChowKick";
+  pname = "chow-kick";
   version = "1.1.1";
 
   src = fetchFromGitHub {

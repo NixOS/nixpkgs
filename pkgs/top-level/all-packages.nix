@@ -29982,7 +29982,7 @@ with pkgs;
 
   ChowCentaur  = callPackage ../applications/audio/chow-centaur { };
 
-  ChowKick  = callPackage ../applications/audio/ChowKick { };
+  ChowKick  = callPackage ../applications/audio/chow-kick { };
 
   ChowPhaser  = callPackage ../applications/audio/chow-phaser { };
 
