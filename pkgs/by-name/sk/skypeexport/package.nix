@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost }:
 
 stdenv.mkDerivation rec {
-  pname = "SkypeExport";
+  pname = "skypeexport";
   version = "1.4.0";
 
   src = fetchFromGitHub {
