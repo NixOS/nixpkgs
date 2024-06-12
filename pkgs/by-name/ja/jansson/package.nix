@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "akheron";
     repo = "jansson";
     rev = "v${version}";
-    sha256 = "sha256-FQgy2+g3AyRVJeniqPQj0KNeHgPdza2pmEIXqSyYry4=";
+    hash = "sha256-FQgy2+g3AyRVJeniqPQj0KNeHgPdza2pmEIXqSyYry4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     "-DJANSSON_BUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
   ];
 
-  meta = with lib; {
-    homepage = "https://github.com/akheron/jansson";
+  meta = {
     description = "C library for encoding, decoding and manipulating JSON data";
-    changelog = "https://github.com/akheron/jansson/raw/v${version}/CHANGES";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ getchoo ];
+    homepage = "https://github.com/akheron/jansson";
+    changelog = "https://github.com/akheron/jansson/raw/v${src.rev}/CHANGES";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
+    platforms = lib.platforms.all;
   };
 }
