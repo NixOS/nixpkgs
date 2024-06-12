@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "FIL-plugins";
+  pname = "fil-plugins";
   version = "0.3.0";
 
   src = fetchurl {
