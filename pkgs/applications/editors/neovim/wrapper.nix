@@ -13,6 +13,9 @@
 neovim-unwrapped:
 
 let
+  # inherit interpreter from neovim
+  lua = neovim-unwrapped.lua;
+
   wrapper = {
       extraName ? ""
     # should contain all args but the binary. Can be either a string or list
@@ -61,7 +64,6 @@ let
       # vim accepts a limited number of commands so we join them all
           [
             "--add-flags" ''--cmd "lua ${providerLuaRc}"''
-            # (lib.intersperse "|" hostProviderViml)
           ]
           ++ lib.optionals (packpathDirs.myNeovimPackages.start != [] || packpathDirs.myNeovimPackages.opt != []) [
             "--add-flags" ''--cmd "set packpath^=${finalPackdir}"''
@@ -165,7 +167,17 @@ let
       + ''
         rm $out/bin/nvim
         touch $out/rplugin.vim
-        makeWrapper ${lib.escapeShellArgs finalMakeWrapperArgs} ${wrapperArgsStr}
+
+        echo "Looking for lua dependencies..."
+        source ${lua}/nix-support/utils.sh
+
+        _addToLuaPath "${finalPackdir}"
+
+        echo "LUA_PATH towards the end of packdir: $LUA_PATH"
+
+        makeWrapper ${lib.escapeShellArgs finalMakeWrapperArgs} ${wrapperArgsStr} \
+            --prefix LUA_PATH ';' "$LUA_PATH" \
+            --prefix LUA_CPATH ';' "$LUA_CPATH"
       '';
 
     buildPhase = ''
