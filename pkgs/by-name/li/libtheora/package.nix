@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
+  autoreconfHook,
   libogg,
   libvorbis,
   pkg-config,
-  autoreconfHook,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,15 +14,15 @@ stdenv.mkDerivation rec {
   version = "1.1.1";
 
   src = fetchurl {
-    url = "https://downloads.xiph.org/releases/theora/${pname}-${version}.tar.gz";
-    sha256 = "0swiaj8987n995rc7hw0asvpwhhzpjiws8kr3s6r44bqqib2k5a0";
+    url = "https://downloads.xiph.org/releases/theora/libtheora-${version}.tar.gz";
+    hash = "sha256-QJUpVsR4EZKNHnkizaO8H0J+t1aAw8NySckelJBUkWs=";
   };
 
   patches = [
     # fix error in autoconf scripts
     (fetchpatch {
       url = "https://github.com/xiph/theora/commit/28cc6dbd9b2a141df94f60993256a5fca368fa54.diff";
-      sha256 = "16jqrq4h1b3krj609vbpzd5845cvkbh3mwmjrcdg35m490p19x9k";
+      hash = "sha256-M/UULkiklvEay7LyOuCamxWCSvt37QSMzHOsAAnOWJo=";
     })
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [ ./mingw-remove-export.patch ];
 
@@ -36,19 +36,20 @@ stdenv.mkDerivation rec {
   outputDoc = "devdoc";
 
   nativeBuildInputs = [
-    pkg-config
     autoreconfHook
+    pkg-config
   ];
+
   propagatedBuildInputs = [
     libogg
     libvorbis
   ];
 
-  meta = with lib; {
-    homepage = "https://www.theora.org/";
+  meta = {
     description = "Library for Theora, a free and open video compression format";
-    license = licenses.bsd3;
+    homepage = "https://www.theora.org/";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }
