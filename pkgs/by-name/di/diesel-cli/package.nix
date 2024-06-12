@@ -5,10 +5,10 @@
 , rustPlatform
 , fetchCrate
 , installShellFiles
+, darwin
 , pkg-config
 , openssl
 , stdenv
-, Security
 , libiconv
 , sqlite
 , postgresql
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ optional stdenv.isDarwin Security
+    ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security
     ++ optional (stdenv.isDarwin && mysqlSupport) libiconv
     ++ optional sqliteSupport sqlite
     ++ optional postgresqlSupport postgresql

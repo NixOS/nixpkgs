@@ -4899,10 +4899,6 @@ with pkgs;
 
   dieharder = callPackage ../tools/security/dieharder { };
 
-  diesel-cli = callPackage ../development/tools/diesel-cli {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   digitemp = callPackage ../tools/misc/digitemp { };
 
   dijo = callPackage ../tools/misc/dijo {
