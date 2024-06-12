@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiprand";
-  version = "6.0.2";
+  version = "6.1.1";
 
   outputs = [
     "out"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipRAND";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-uGHzOhUX5JEknVFwhHhWFdPmwLS/TuaXYMeItS7tXIg=";
+    hash = "sha256-TkhAxsKThcvFARS2k2StrPGENfidIMVphkF9U/YhSZw=";
   };
 
   nativeBuildInputs = [
