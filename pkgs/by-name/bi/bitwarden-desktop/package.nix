@@ -3,7 +3,7 @@
 , cargo
 , copyDesktopItems
 , dbus
-, electron_28
+, electron_29
 , fetchFromGitHub
 , glib
 , gnome
@@ -14,7 +14,7 @@
 , makeWrapper
 , moreutils
 , napi-rs-cli
-, nodejs_18
+, nodejs_20
 , patchutils_0_4_2
 , pkg-config
 , python3
@@ -26,16 +26,16 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_28;
+  electron = electron_29;
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.5.0";
+  version = "2024.6.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-ozR46snGD5yl98FslmnTeQmd2on/0bQPEnqJ0t8wx70=";
+    hash = "sha256-qiUUrs23WHE3+KFsWDknuDSA6M3Zwjz9Jdjq6mn5XkE=";
   };
 
   patches = [
@@ -55,12 +55,12 @@ in buildNpmPackage rec {
       | ${moreutils}/bin/sponge apps/desktop/src/package-lock.json
   '';
 
-  nodejs = nodejs_18;
+  nodejs = nodejs_20;
 
   makeCacheWritable = true;
   npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-gprJGOE/uSSM3NHpcbelB7sueObEl4o522WRHIRFmwo=";
+  npmDepsHash = "sha256-Mgd15eFJtWoBqFFCsjmsnlNbcg5NDs1U7DlMkE0hIb8=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -76,7 +76,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-FA7B+bipYSxwIGvn/v9+wG3Km6lrwV58LbxsMlDK8q0=";
+    hash = "sha256-BL+j2hMwb3QGgS29Y6LjqnKscH+tEXMCOyivilHHwVI=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
