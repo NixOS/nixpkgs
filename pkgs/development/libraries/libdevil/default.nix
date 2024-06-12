@@ -45,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    ./ftbfs-libpng15.patch
     ./il_endian.h.patch
   ];
 
