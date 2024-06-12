@@ -1,21 +1,22 @@
 { lib, stdenv, fetchurl, ladspaH
 }:
 
-stdenv.mkDerivation rec {
-  pname = "AMB-plugins";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "amb-plugins";
   version = "0.8.1";
   src = fetchurl {
-    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
+    url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/AMB-plugins-${finalAttrs.version}.tar.bz2";
     sha256 = "0x4blm4visjqj0ndqr0cg776v3b7lvplpc8cgi9n51llhavn0jpl";
   };
 
   buildInputs = [ ladspaH ];
 
-  patchPhase = ''
-    sed -i 's@/usr/bin/install@install@g' Makefile
-    sed -i 's@/bin/rm@rm@g' Makefile
-    sed -i 's@/usr/lib/ladspa@$(out)/lib/ladspa@g' Makefile
-    sed -i 's@g++@$(CXX)@g' Makefile
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail '/usr/bin/install' 'install' \
+      --replace-fail '/bin/rm' 'rm' \
+      --replace-fail '/usr/lib/ladspa' '$(out)/lib/ladspa' \
+      --repalce-fail 'g++' '$(CXX)'
   '';
 
   preInstall="mkdir -p $out/lib/ladspa";
@@ -25,10 +26,9 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Mono and stereo to B-format panning, horizontal rotator, square, hexagon and cube decoders.
     '';
-    version = version;
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/ladspa/index.html";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
   };
-}
+})

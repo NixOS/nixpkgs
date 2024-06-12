@@ -28275,8 +28275,6 @@ with pkgs;
   amarok = libsForQt5.callPackage ../applications/audio/amarok { };
   amarok-kf5 = amarok; # for compatibility
 
-  AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
-
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
 
   androidStudioPackages = recurseIntoAttrs
