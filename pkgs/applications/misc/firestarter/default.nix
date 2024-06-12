@@ -13,6 +13,9 @@
 }:
 
 let
+  inherit (lib.lists) optionals;
+  inherit (lib.strings) cmakeBool cmakeFeature optionalString;
+  inherit (lib.versions) majorMinor;
   inherit (cudaPackages) cudatoolkit;
 
   hwloc = stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +23,7 @@ let
     version = "2.2.0";
 
     src = fetchzip {
-      url = "https://download.open-mpi.org/release/hwloc/v${lib.versions.majorMinor finalAttrs.version}/hwloc-${finalAttrs.version}.tar.gz";
+      url = "https://download.open-mpi.org/release/hwloc/v${majorMinor finalAttrs.version}/hwloc-${finalAttrs.version}.tar.gz";
       sha256 = "1ibw14h9ppg8z3mmkwys8vp699n85kymdz20smjd2iq9b67y80b6";
     };
 
@@ -66,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     git
     pkg-config
-  ] ++ lib.optionals withCuda [
+  ] ++ optionals withCuda [
     autoAddDriverRunpath
   ];
 
@@ -75,22 +78,22 @@ stdenv.mkDerivation (finalAttrs: {
   else
     [ glibc.static ]);
 
-  NIX_LDFLAGS = lib.optionals withCuda [
+  NIX_LDFLAGS = optionals withCuda [
     "-L${cudatoolkit}/lib/stubs"
   ];
 
   cmakeFlags = [
-    "-DFIRESTARTER_BUILD_HWLOC=OFF"
-    "-DCMAKE_C_COMPILER_WORKS=1"
-    "-DCMAKE_CXX_COMPILER_WORKS=1"
-  ] ++ lib.optionals withCuda [
-    "-DFIRESTARTER_BUILD_TYPE=FIRESTARTER_CUDA"
+    (cmakeBool "FIRESTARTER_BUILD_HWLOC" false)
+    (cmakeBool "CMAKE_C_COMPILER_WORKS" true)
+    (cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
+  ] ++ optionals withCuda [
+    (cmakeFeature "FIRESTARTER_BUILD_TYPE" "FIRESTARTER_CUDA")
   ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    cp src/FIRESTARTER${lib.optionalString withCuda "_CUDA"} $out/bin/
+    cp src/FIRESTARTER${optionalString withCuda "_CUDA"} $out/bin/
     runHook postInstall
   '';
 
