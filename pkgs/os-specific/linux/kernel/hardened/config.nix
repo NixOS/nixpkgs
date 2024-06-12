@@ -70,12 +70,22 @@ assert (versionAtLeast version "4.9");
   GCC_PLUGIN_RANDSTRUCT = whenOlder "5.19" yes; # A port of the PaX randstruct plugin
   GCC_PLUGIN_RANDSTRUCT_PERFORMANCE = whenOlder "5.19" yes;
 
+  # Runtime undefined behaviour checks
+  # https://www.kernel.org/doc/html/latest/dev-tools/ubsan.html
+  # https://developers.redhat.com/blog/2014/10/16/gcc-undefined-behavior-sanitizer-ubsan
+  UBSAN      = yes;
+  UBSAN_TRAP = whenAtLeast "5.7" yes;
+  UBSAN_BOUNDS = whenAtLeast "5.7" yes;
+  UBSAN_SANITIZE_ALL = whenOlder "6.9" yes;
+  UBSAN_LOCAL_BOUNDS = option yes; # clang only
+  CFI_CLANG = option yes; # clang only Control Flow Integrity since 6.1
+
   # Same as GCC_PLUGIN_RANDSTRUCT*, but has been renamed to `RANDSTRUCT*` in 5.19.
   RANDSTRUCT = whenAtLeast "5.19" yes;
   RANDSTRUCT_PERFORMANCE = whenAtLeast "5.19" yes;
 
   # Disable various dangerous settings
-  ACPI_CUSTOM_METHOD = no; # Allows writing directly to physical memory
+  ACPI_CUSTOM_METHOD = whenOlder "6.9" no; # Allows writing directly to physical memory
   PROC_KCORE         = no; # Exposes kernel text image layout
   INET_DIAG          = no; # Has been used for heap based attacks in the past
 
