@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "AMB-plugins";
+  pname = "amb-plugins";
   version = "0.8.1";
   src = fetchurl {
     url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
