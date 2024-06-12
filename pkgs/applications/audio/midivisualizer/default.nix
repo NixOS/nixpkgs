@@ -21,7 +21,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "MIDIVisualizer";
+  pname = "midivisualizer";
   version = "7.0";
 
   src = fetchFromGitHub {
