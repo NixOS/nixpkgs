@@ -171,6 +171,13 @@
            then ./docs-sphinx-7-ghc98.patch
            else ./docs-sphinx-7.patch )
         ]
+        ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8") [
+          (fetchpatch {
+            name = "fix-fully_static.patch";
+            url = "https://gitlab.haskell.org/ghc/ghc/-/commit/1bb24432ff77e11a0340a7d8586e151e15bba2a1.diff";
+            hash = "sha256-MpvTmFFsNiPDoOp9BhZyWeapeibQ77zgEV+xzZ1UAXs=";
+          })
+        ]
         ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
           # Prevent the paths module from emitting symbols that we don't use
           # when building with separate outputs.
@@ -556,10 +563,6 @@ stdenv.mkDerivation ({
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
-    # https://github.com/NixOS/nixpkgs/issues/208959
-    broken =
-      (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8")
-      && stdenv.targetPlatform.isStatic;
   };
 
   dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;

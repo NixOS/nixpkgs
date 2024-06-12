@@ -187,17 +187,7 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
-  # FIXME(@sternenseemann): This can be simplified a lot (causing a rebuild)
-  patches = (if lib.versions.majorMinor version == "9.0" then [
-    # Fix docs build with sphinx >= 6.0
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
-    (fetchpatch {
-      name = "ghc-docs-sphinx-6.0.patch";
-      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
-      sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
-    })
-    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-    ./docs-sphinx-7.patch
+  patches = lib.optionals (lib.versionOlder version "9.4") [
     # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
     (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
@@ -205,7 +195,24 @@ stdenv.mkDerivation (rec {
       extraPrefix = "utils/haddock/";
       stripLen = 1;
     })
+  ]
 
+  ++ lib.optionals (lib.versionOlder version "9.4.6") [
+    # Fix docs build with sphinx >= 6.0
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
+    (fetchpatch {
+      name = "ghc-docs-sphinx-6.0.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
+      sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
+    })
+  ]
+
+  ++ [
+    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+    ./docs-sphinx-7.patch
+  ]
+
+  ++ lib.optionals (lib.versionOlder version "9.2.2") [
     # Add flag that fixes C++ exception handling; opt-in. Merged in 9.4 and 9.2.2.
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7423
     (fetchpatch {
@@ -214,60 +221,25 @@ stdenv.mkDerivation (rec {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/c6132c782d974a7701e7f6447bdcd2bf6db4299a.patch?merge_request_iid=7423";
       sha256 = "sha256-b4feGZIaKDj/UKjWTNY6/jH4s2iate0wAgMxG3rAbZI=";
     })
-  ] else if lib.versions.majorMinor version == "9.2" then [
-    # Fix docs build with sphinx >= 6.0
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
-    (fetchpatch {
-      name = "ghc-docs-sphinx-6.0.patch";
-      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
-      sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
-    })
-    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-    ./docs-sphinx-7.patch
-    # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
-      sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
-      extraPrefix = "utils/haddock/";
-      stripLen = 1;
-    })
-    # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
-    # Can be removed if the Cabal library included with ghc backports the linked fix
-    (fetchpatch {
-      url = "https://github.com/haskell/cabal/commit/6c796218c92f93c95e94d5ec2d077f6956f68e98.patch";
-      stripLen = 1;
-      extraPrefix = "libraries/Cabal/";
-      sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
-    })
-  ] else if lib.versions.majorMinor version == "9.4" then [
-    # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
-    # Can be removed if the Cabal library included with ghc backports the linked fix
-    (fetchpatch {
-      url = "https://github.com/haskell/cabal/commit/6c796218c92f93c95e94d5ec2d077f6956f68e98.patch";
-      stripLen = 1;
-      extraPrefix = "libraries/Cabal/";
-      sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
-    })
   ]
-  ++ lib.optionals (version == "9.4.5") [
-    # Fix docs build with sphinx >= 6.0
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
-    (fetchpatch {
-      name = "ghc-docs-sphinx-6.0.patch";
-      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
-      sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
-    })
-  ]
-  ++ [
 
-    # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-    ./docs-sphinx-7.patch
+  ++ lib.optionals (lib.versionAtLeast version "9.2") [
+    # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
+    # Can be removed if the Cabal library included with ghc backports the linked fix
+    (fetchpatch {
+      url = "https://github.com/haskell/cabal/commit/6c796218c92f93c95e94d5ec2d077f6956f68e98.patch";
+      stripLen = 1;
+      extraPrefix = "libraries/Cabal/";
+      sha256 = "sha256-yRQ6YmMiwBwiYseC5BsrEtDgFbWvst+maGgDtdD0vAY=";
+    })
   ]
+
   ++ lib.optionals (version == "9.4.6") [
     # Work around a type not being defined when including Rts.h in bytestring's cbits
     # due to missing feature macros. See https://gitlab.haskell.org/ghc/ghc/-/issues/23810.
     ./9.4.6-bytestring-posix-source.patch
-  ] else [ ])
+  ]
+
   ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
     # Prevent the paths module from emitting symbols that we don't use
     # when building with separate outputs.
@@ -313,12 +285,8 @@ stdenv.mkDerivation (rec {
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
   ''
-  + lib.optionalString (version == "9.0.2" || lib.versionAtLeast version "9.4") ''
-
-  '' + ''
+  + ''
     echo -n "${buildMK}" > mk/build.mk
-  '' + lib.optionalString (lib.versionAtLeast version "9.4") ''
-
   ''
   + lib.optionalString (lib.versionOlder version "9.2" || lib.versionAtLeast version "9.4") ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure

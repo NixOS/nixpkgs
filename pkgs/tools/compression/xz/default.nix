@@ -11,14 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xz";
-  version = "5.4.6"; # Beware of CVE-2024-3094 and related risks!!!
+  version = "5.4.7";
 
   src = fetchurl {
-    url = with finalAttrs;
-      # The original URL has been taken down.
-      # "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.bz2";
-      "mirror://sourceforge/lzmautils/xz-${version}.tar.bz2";
-    sha256 = "sha256-kThRsnTo4dMXgeyUnxwj6NvPDs9uc6JDbcIXad0+b0k=";
+    url = with finalAttrs; "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.xz";
+    hash = "sha256-AWGCxwu1x8nrNGUDDjp/a6ol4XsOjAr+kncuYCGEPOI=";
   };
 
   strictDeps = true;
@@ -46,10 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
 
       set -eu -o pipefail
 
-      # Expect the text in format of '>xz-5.2.6.tar.bz2</a>'
+      # Expect the text in format of '>xz-5.2.6.tar.xz</a>'
       # We pick first match where a stable release goes first.
       new_version="$(curl -s https://tukaani.org/xz/ |
-          pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]bz2</a>' |
+          pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]xz</a>' |
           head -n1)"
       update-source-version ${finalAttrs.pname} "$new_version"
     '';
@@ -60,8 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://tukaani.org/xz/";
+    changelog = "https://github.com/tukaani-project/xz/releases/tag/v${finalAttrs.version}";
     description = "A general-purpose data compression software, successor of LZMA";
-
     longDescription =
       '' XZ Utils is free general-purpose data compression software with high
          compression ratio.  XZ Utils were written for POSIX-like systems,
@@ -75,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
          create 30 % smaller output than gzip and 15 % smaller output than
          bzip2.
       '';
-
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
