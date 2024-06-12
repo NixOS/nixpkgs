@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "CroMagRally";
+  pname = "cro-mag-rally";
   version = "3.0.0-unstable-2023-05-21";
 
   src = fetchFromGitHub {
