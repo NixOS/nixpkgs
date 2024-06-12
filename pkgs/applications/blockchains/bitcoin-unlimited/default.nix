@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bitcoin" + lib.optionalString (!withGui) "d" + "-unlimited";
-  version = "1.10.0.0";
+  version = "2.1.0.0";
 
   src = fetchFromGitLab {
     owner = "bitcoinunlimited";
     repo = "BCHUnlimited";
     rev = "BCHunlimited${version}";
-    sha256 = "sha256-d+giTXq/6HpysRAPT7yOl/B1x4zie9irs4O7cJsBqHg=";
+    sha256 = "sha256-xdss54IHNDxU86RZcPBIsOa9eZ2mZiRbeYm9sfzhuRk=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook python3 ]
@@ -58,7 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bitcoinunlimited.info/";
     maintainers = with maintainers; [ DmitryTsygankov ];
     license = licenses.mit;
-    broken = true;
     platforms = platforms.unix;
   };
 }
