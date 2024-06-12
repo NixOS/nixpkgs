@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   patches = [
-    ./il_endian.h.patch
+    ./0001-il_endian.h-Fix-endian-handling.patch
   ];
 
   enableParallelBuilding = true;
