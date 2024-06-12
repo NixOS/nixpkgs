@@ -44,4 +44,4 @@ buildGoModule {
     platforms = lib.platforms.linux;
     mainProgram = "rdio-scanner";
   };
-};
+}
