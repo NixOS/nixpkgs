@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   libebml,
+  nix-update-script,
   pkg-config,
   testers,
   validatePkgConfig,
@@ -38,6 +39,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests.pkg-config = testers.hasPkgConfigModules { package = libmatroska; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "release-(.*)"
+      ];
+    };
   };
 
   meta = {
