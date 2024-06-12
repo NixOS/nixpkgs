@@ -57,7 +57,7 @@ in {
     php = php.unwrapped;
   };
 
-  inherit (builders.v1) buildComposerProject composerHooks mkComposerRepository;
+  inherit (builders.v1) buildComposerProject buildComposerWithPlugin composerHooks mkComposerRepository;
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent
   # with how buildPecl does it and make the file easier to overview.
@@ -190,6 +190,10 @@ in {
     castor = callPackage ../development/php-packages/castor { };
 
     composer = callPackage ../development/php-packages/composer { };
+
+    composer-local-repo-plugin = callPackage ../development/php-packages/composer-local-repo-plugin { };
+
+    cyclonedx-php-composer = callPackage ../development/php-packages/cyclonedx-php-composer { };
 
     deployer = callPackage ../development/php-packages/deployer { };
 
