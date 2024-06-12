@@ -1011,6 +1011,10 @@
     dependencies = [ self.plenary-nvim ];
   };
 
+  neotest-playwright = super.neotest-playwright.overrideAttrs {
+    dependencies = [ self.telescope-nvim ];
+  };
+
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim nui-nvim ];
   };
