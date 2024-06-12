@@ -89,7 +89,7 @@
   # Whether to use an alternative wrapper, that executes the application DLL using the dotnet runtime from the user environment. `dotnet-runtime` is provided as a default in case no .NET is installed
   # This is useful for .NET tools and applications that may need to run under different .NET runtimes
 , useDotnetFromEnv ? false
-  # Whether to explicitly enable UseAppHost when building. This is redundant if useDotnetFromEnv is enabledz
+  # Whether to explicitly enable UseAppHost when building. This is redundant if useDotnetFromEnv is enabled.
 , useAppHost ? true
   # The dotnet SDK to use.
 , dotnet-sdk ? dotnetCorePackages.sdk_6_0
@@ -107,7 +107,7 @@ let
     then lib.intersectLists args.meta.platforms dotnet-sdk.meta.platforms
     else dotnet-sdk.meta.platforms;
   # Nuget packages provided by the SDK, these get excluded from the generated lockfile
-  sdkExclusions = writeText "${dotnet-sdk.name}-exclusions" (lib.concatStringsSep "\n" (dotnet-sdk.passthru.packages { fetchNuGet = attrs: attrs.pname; }));
+  sdkExclusions = writeText "${dotnet-sdk.name}-exclusions" (lib.concatStringsSep "\n" (dotnet-sdk.passthru.packages_list { fetchNuGet = attrs: attrs.pname; }));
 
   inherit (callPackage ./hooks {
     inherit dotnet-sdk disabledTests nuget-source dotnet-runtime runtimeDeps buildType dontSetNugetSource;

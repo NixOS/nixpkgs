@@ -21,7 +21,10 @@ buildDotnetModule rec {
 
   inherit src dotnet-sdk projectFile testProjectFile dotnetFlags dotnetRestoreFlags enableParallelBuilding;
 
-  nativeBuildInputs = [ dotnetValidateLockfileHook ];
+  nativeBuildInputs = [
+    dotnetValidateLockfileHook
+    (nuget-to-nix.override {inherit dotnet-sdk;})
+    ];
 
   generateLockfile = true;
   dontSetNugetSource = true;
@@ -47,7 +50,7 @@ buildDotnetModule rec {
 
     NUGET_DEPS="$HOME/deps.nix"
     echo "Writing lockfile..."
-    ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget-pkgs" "${sdkExclusions}" > "$NUGET_DEPS"
+    nuget-to-nix "$HOME/nuget-pkgs" "${sdkExclusions}" > "$NUGET_DEPS"
 
     runHook postBuild
   '';
