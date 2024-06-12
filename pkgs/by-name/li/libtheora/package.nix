@@ -7,14 +7,15 @@
   libogg,
   libvorbis,
   pkg-config,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtheora";
   version = "1.1.1";
 
   src = fetchurl {
-    url = "https://downloads.xiph.org/releases/theora/libtheora-${version}.tar.gz";
+    url = "https://downloads.xiph.org/releases/theora/libtheora-${finalAttrs.version}.tar.gz";
     hash = "sha256-QJUpVsR4EZKNHnkizaO8H0J+t1aAw8NySckelJBUkWs=";
   };
 
@@ -45,6 +46,17 @@ stdenv.mkDerivation rec {
     libvorbis
   ];
 
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [
+        "theora"
+        "theoradec"
+        "theoraenc"
+      ];
+    };
+  };
+
   meta = {
     description = "Library for Theora, a free and open video compression format";
     homepage = "https://www.theora.org/";
@@ -52,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})
