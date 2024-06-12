@@ -34513,8 +34513,6 @@ with pkgs;
     pythonBindings = true;
   };
 
-  sublime-music = callPackage ../applications/audio/sublime-music { };
-
   subtitlr = callPackage ../applications/audio/subtitlr { };
 
   subunit = callPackage ../development/libraries/subunit { };
