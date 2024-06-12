@@ -16,15 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/lib/qt-6/plugins/{platformthemes,styles}
-    cp -pr src/qt6gtk2-qtplugin/libqt6gtk2.so $out/lib/qt-6/plugins/platformthemes
-    cp -pr src/qt6gtk2-style/libqt6gtk2-style.so $out/lib/qt-6/plugins/styles
-
-    runHook postInstall
-  '';
+  qmakeFlags = [
+    "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+  ];
 
   meta = {
     description = "GTK+2.0 integration plugins for Qt6";
