@@ -5,7 +5,9 @@
   cmake,
   libebml,
   pkg-config,
+  testers,
   validatePkgConfig,
+  libmatroska,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +36,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=YES" ];
 
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules { package = libmatroska; };
+  };
+
   meta = {
     description = "Library to parse Matroska files";
     homepage = "https://matroska.org/";
@@ -41,5 +47,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ getchoo ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "libmatroska" ];
   };
 }
