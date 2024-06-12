@@ -204,6 +204,7 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
       with subtest("Check that backup exists"):
           server.succeed('[ -d "/var/lib/vaultwarden/backups" ]')
           server.succeed('[ -f "/var/lib/vaultwarden/backups/db.sqlite3" ]')
+          server.succeed('[ -d "/var/lib/vaultwarden/backups/attachments" ]')
     '';
   };
 }
