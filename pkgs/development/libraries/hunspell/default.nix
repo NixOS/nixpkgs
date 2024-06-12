@@ -5,6 +5,7 @@
   autoreconfHook,
   ncurses,
   readline,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +36,11 @@ stdenv.mkDerivation rec {
     ncurses
     readline
   ];
-  nativeBuildInputs = [ autoreconfHook ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    validatePkgConfig
+  ];
 
   autoreconfFlags = [ "-vfi" ];
 
