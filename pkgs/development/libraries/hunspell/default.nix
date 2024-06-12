@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       mpl11
     ];
     maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "hunspell";
     platforms = lib.platforms.all;
     pkgConfigModules = [ "hunspell" ];
   };
