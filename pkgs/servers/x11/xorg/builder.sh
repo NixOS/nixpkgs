@@ -28,7 +28,7 @@ postInstall() {
 }
 
 
-installFlags="appdefaultdir=$out/share/X11/app-defaults $installFlags"
+prependToVar installFlags "appdefaultdir=$out/share/X11/app-defaults"
 
 
 if test -n "$x11BuildHook"; then
