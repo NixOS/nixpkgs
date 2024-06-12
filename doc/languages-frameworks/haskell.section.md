@@ -929,10 +929,12 @@ for this to work.
   Haskell dependencies, but will still link dynamically against libc, GMP and
   other system library dependencies.
 
-  If the library being built or its dependencies use their Cabal-generated
+  If a library or its dependencies use their Cabal-generated
   `Paths_*` module, this may not work as well if GHC's dead code elimination is
   unable to remove the references to the dependency's store path that module
-  contains. (See [nixpkgs#164630][164630] for more information.)
+  contains.
+  As a consequence, an unused reference may be created from the static binary to such a _library_ store path.
+  (See [nixpkgs#164630][164630] for more information.)
 
   Importing the `Paths_*` module may cause builds to fail with this message:
 
