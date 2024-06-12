@@ -18,7 +18,7 @@
 }:
 
 buildDotnetModule rec {
-  pname = "BeatSaberModManager";
+  pname = "beatsabermodmanager";
   version = "0.0.5";
 
   src = fetchFromGitHub {
