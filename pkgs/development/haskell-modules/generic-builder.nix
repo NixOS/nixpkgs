@@ -114,8 +114,9 @@ in
 , disallowedRequisites ? []
   # Whether to allow the produced output to refer to `ghc`.
   #
-  # This is used by `haskell.lib.justStaticExecutables` to help prevent static
-  # Haskell binaries from having erroneous dependencies on GHC.
+  # This can be used in conjunction with `haskell.lib.justStaticExecutables`
+  # to help prevent static Haskell binaries from having erroneous dependencies
+  # on GHC.
   #
   # Generated `Paths_*` modules include paths for the runtime library
   # directory (and similar) of the package being built. If the `Paths_*`
