@@ -4,14 +4,14 @@
 , libsepol, libsysprof-capture, libthai, libxkbcommon, pcre, pkg-config
 , python3, sqlite, stdenv }:
 
-stdenv.mkDerivation rec {
-  pname = "ChowPhaser";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "chow-phaser";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "jatinchowdhury18";
     repo = "ChowPhaser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     sha256 = "sha256-9wo7ZFMruG3QNvlpILSvrFh/Sx6J1qnlWc8+aQyS4tQ=";
   };
@@ -70,7 +70,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jatinchowdhury18/ChowPhaser";
     description = "Phaser effect based loosely on the Schulte Compact Phasing 'A'";
     license = with licenses; [ bsd3 ];
+    mainProgram = "ChowPhaserStereo";
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;
   };
-}
+})
