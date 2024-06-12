@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, ant, jdk, xmlstarlet, axis2, dbus_java }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "DisnixWebService";
+  pname = "disnix-web-service";
   version = "0.10.1";
 
   src = fetchFromGitHub {
