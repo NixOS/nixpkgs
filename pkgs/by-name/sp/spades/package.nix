@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, zlib, bzip2, cmake, python3 }:
 
 stdenv.mkDerivation rec {
-  pname = "SPAdes";
+  pname = "spades";
   version = "3.15.5";
 
   src = fetchurl {
