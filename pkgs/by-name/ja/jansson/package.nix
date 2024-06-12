@@ -12,6 +12,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "jansson";
   version = "2.14";
 
+  outputs = [
+    "dev"
+    "out"
+  ];
+
   src = fetchFromGitHub {
     owner = "akheron";
     repo = "jansson";
