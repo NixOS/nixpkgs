@@ -72,12 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open, royalty-free, highly versatile audio codec";
     homepage = "https://opus-codec.org/";
     changelog = "https://gitlab.xiph.org/xiph/opus/-/releases/v${finalAttrs.version}";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ getchoo ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 })
