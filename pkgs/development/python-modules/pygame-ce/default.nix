@@ -9,6 +9,8 @@
   pkg-config,
   setuptools,
   cython,
+  ninja,
+  meson-python,
 
   AppKit,
   fontconfig,
@@ -21,20 +23,21 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "pygame-ce";
-  version = "2.4.1";
+  version = "2.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pygame-community";
     repo = "pygame-ce";
     rev = "refs/tags/${version}";
-    hash = "sha256-4Ky+QEUsQ0odcwEETk0yGECs7CcJQthhavboOnMDvF8=";
+    hash = "sha256-LVwOAp7ss8TPxJhfqGwOfH9EXNoNBGFpU+4tv4ozpvo=";
     # Unicode file cause different checksums on HFS+ vs. other filesystems
     postFetch = "rm -rf $out/docs/reST";
   };
@@ -62,6 +65,8 @@ buildPythonPackage rec {
 
   postPatch =
     ''
+      substituteInPlace pyproject.toml \
+        --replace-fail ', "sphinx<=7.2.6"' ""
       substituteInPlace buildconfig/config_{unix,darwin}.py \
         --replace-fail 'from distutils' 'from setuptools._distutils'
       substituteInPlace src_py/sysfont.py \
@@ -77,6 +82,8 @@ buildPythonPackage rec {
     pkg-config
     cython
     setuptools
+    ninja
+    meson-python
   ];
 
   buildInputs = [
@@ -90,6 +97,11 @@ buildPythonPackage rec {
     SDL2_mixer
     SDL2_ttf
   ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+
+  nativeCheckInputs = [
+    numpy
+  ];
+
 
   preConfigure = ''
     ${python.pythonOnBuildForHost.interpreter} buildconfig/config.py
@@ -116,7 +128,22 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "pygame" ];
+  pythonImportsCheck = [
+    "pygame"
+    "pygame.camera"
+    "pygame.colordict"
+    "pygame.cursors"
+    "pygame.freetype"
+    "pygame.ftfont"
+    "pygame.locals"
+    "pygame.midi"
+    "pygame.pkgdata"
+    "pygame.sndarray" # requires numpy
+    "pygame.sprite"
+    "pygame.surfarray"
+    "pygame.sysfont"
+    "pygame.version"
+  ];
 
   meta = with lib; {
     description = "Pygame Community Edition (CE) - library for multimedia application built on SDL";
