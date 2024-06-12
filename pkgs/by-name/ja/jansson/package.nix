@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-FQgy2+g3AyRVJeniqPQj0KNeHgPdza2pmEIXqSyYry4=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    validatePkgConfig
+  ];
 
   cmakeFlags = [
     # networkmanager relies on libjansson.so:
