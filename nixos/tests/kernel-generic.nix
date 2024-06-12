@@ -47,6 +47,9 @@ in mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
   passthru = {
     inherit testsForLinuxPackages;
 
+    # Useful for development testing of all Kernel configs without building full Kernel
+    configfiles = mapAttrs (_: lP: lP.kernel.configfile) kernels;
+
     testsForKernel = kernel: testsForLinuxPackages (pkgs.linuxPackagesFor kernel);
   };
 }
