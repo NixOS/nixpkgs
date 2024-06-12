@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests = {
       pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
     };
   };
 
