@@ -2,17 +2,32 @@
   stdenv,
   lib,
   hunspell,
-  makeWrapper,
+  makeBinaryWrapper,
   dicts ? [ ],
 }:
 let
   searchPath = lib.makeSearchPath "share/hunspell" dicts;
 in
 stdenv.mkDerivation {
-  name = (lib.appendToName "with-dicts" hunspell).name;
-  nativeBuildInputs = [ makeWrapper ];
+  inherit (lib.appendToName "with-dicts" hunspell) name;
+
+  nativeBuildInputs = [ makeBinaryWrapper ];
+
   buildCommand = ''
-    makeWrapper ${hunspell.bin}/bin/hunspell $out/bin/hunspell --prefix DICPATH : ${lib.escapeShellArg searchPath}
+    makeWrapper ${lib.getExe hunspell} $out/bin/hunspell \
+      --prefix DICPATH : ${lib.escapeShellArg searchPath}
   '';
-  meta = removeAttrs hunspell.meta [ "outputsToInstall" ];
+
+  meta = {
+    inherit (hunspell.meta)
+      description
+      longDescription
+      homepage
+      changelog
+      license
+      maintainers
+      mainProgram
+      platforms
+      ;
+  };
 }
