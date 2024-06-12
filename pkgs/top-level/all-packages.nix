@@ -812,6 +812,9 @@ with pkgs;
 
   oletools = with python3.pkgs; toPythonApplication oletools;
 
+  ollama-rocm = callPackage ../by-name/ol/ollama/package.nix { acceleration = "rocm"; };
+  ollama-cuda = callPackage ../by-name/ol/ollama/package.nix { acceleration = "cuda"; };
+
   ots = callPackage ../tools/security/ots {  };
 
   credential-detector = callPackage ../tools/security/credential-detector { };
