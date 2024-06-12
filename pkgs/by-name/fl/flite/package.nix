@@ -16,6 +16,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "flite";
   version = "2.2";
 
+  outputs = [
+    "bin"
+    "dev"
+    "lib"
+    "out"
+  ];
+
   src = fetchFromGitHub {
     owner = "festvox";
     repo = "flite";
