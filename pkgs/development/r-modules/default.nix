@@ -386,6 +386,7 @@ let
     imbibe = [ pkgs.zlib.dev ];
     image_CannyEdges = with pkgs; [ fftw.dev libpng.dev ];
     iBMQ = [ pkgs.gsl ];
+    jack = [ pkgs.pkg-config ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
     jqr = [ pkgs.jq.dev ];
@@ -702,6 +703,7 @@ let
     zlib = [ pkgs.zlib.dev ];
     divest = [ pkgs.zlib.dev ];
     hipread = [ pkgs.zlib.dev ];
+    jack = with pkgs; [ gmp.dev mpfr.dev ];
     jackalope = with pkgs; [ zlib.dev xz.dev bzip2.dev ];
     largeList = [ pkgs.zlib.dev ];
     mappoly = [ pkgs.zlib.dev ];
