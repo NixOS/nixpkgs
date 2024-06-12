@@ -25,10 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libebml ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=YES"
-    "-DCMAKE_INSTALL_PREFIX="
-  ];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=YES" ];
 
   meta = {
     description = "Library to parse Matroska files";
