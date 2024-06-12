@@ -7807,8 +7807,6 @@ with pkgs;
 
   expliot = callPackage ../tools/security/expliot { };
 
-  f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
-
   Fabric = with python3Packages; toPythonApplication fabric;
 
   fail2ban = callPackage ../tools/security/fail2ban { };
