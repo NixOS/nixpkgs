@@ -8218,6 +8218,12 @@
     matrix = "@heisfer:matrix.org";
     name = "Heisfer";
   };
+  HeitorAugustoLN = {
+    email = "IAm.HeitorALN@proton.me";
+    github = "HeitorAugustoLN";
+    githubId = 44377258;
+    name = "Heitor Augusto";
+  };
   helium = {
     email = "helium.dev@tuta.io";
     github = "helium18";
