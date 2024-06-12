@@ -14,9 +14,35 @@
 let
   inherit (pkgs) fetchpatch fetchpatch2 lib;
   inherit (lib) throwIfNot versionOlder versions;
-in
 
-with haskellLib;
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    addBuildTool
+    addExtraLibrary
+    addTestToolDepends
+    appendConfigureFlag
+    appendConfigureFlags
+    appendPatch
+    appendPatches
+    disableCabalFlag
+    disableHardening
+    disableLibraryProfiling
+    doCheck
+    doDistribute
+    doHaddock
+    doJailbreak
+    dontCheck
+    dontCheckIf
+    dontDistribute
+    dontHaddock
+    generateOptparseApplicativeCompletions
+    markBroken
+    overrideCabal
+    overrideSrc
+    unmarkBroken
+    ;
+in
 
 self: super: {
   # Make sure that Cabal 3.10.* can be built as-is

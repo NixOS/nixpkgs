@@ -29,9 +29,38 @@
 
 let
   inherit (pkgs) lib;
-in
 
-with haskellLib;
+  inherit (haskellLib)
+    addBuildDepend
+    addBuildDepends
+    addBuildTool
+    addBuildTools
+    addExtraLibraries
+    addExtraLibrary
+    addPkgconfigDepend
+    addTestToolDepend
+    addTestToolDepends
+    appendConfigureFlag
+    appendConfigureFlags
+    appendPatch
+    disableCabalFlag
+    disableHardening
+    disableSharedExecutables
+    doCheck
+    doDistribute
+    doJailbreak
+    dontCheck
+    dontCheckIf
+    enableCabalFlag
+    enableSeparateBinOutput
+    enableSharedExecutables
+    generateOptparseApplicativeCompletions
+    justStaticExecutables
+    markBroken
+    overrideCabal
+    overrideSrc
+    ;
+in
 
 # All of the overrides in this set should look like:
 #
