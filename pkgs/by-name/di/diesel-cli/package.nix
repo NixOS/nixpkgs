@@ -94,7 +94,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Database tool for working with Rust projects that use Diesel";
-    homepage = "https://github.com/diesel-rs/diesel/tree/master/diesel_cli";
+    homepage = "https://diesel.rs";
+    changelog = "https://github.com/diesel-rs/diesel/releases/tag/v${version}";
     license = with lib.licenses; [
       mit
       asl20
