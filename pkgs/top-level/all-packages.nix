@@ -31670,8 +31670,6 @@ with pkgs;
 
   srain = callPackage ../applications/networking/irc/srain { };
 
-  streamdeck-ui = callPackage ../applications/misc/streamdeck-ui { };
-
   super-productivity = callPackage ../applications/office/super-productivity { };
 
   inherit (callPackages ../development/libraries/wlroots {})
