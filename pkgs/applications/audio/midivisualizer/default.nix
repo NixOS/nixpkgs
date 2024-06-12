@@ -20,14 +20,14 @@
 , Kernel
 }:
 
-stdenv.mkDerivation rec {
-  pname = "MIDIVisualizer";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "midivisualizer";
   version = "7.0";
 
   src = fetchFromGitHub {
     owner = "kosua20";
-    repo = pname;
-    rev = "v${version}";
+    repo = "MIDIVisualizer";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-wfPSPH+E9cErVvfJZqHttFtjiUYJopM/u6w6NpRHifE=";
   };
 
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.ericdallo ];
   };
-}
+})
