@@ -3,8 +3,8 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+, darwin
 , libiconv
-, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-EuMPcJAGz564cC9UWrlihBxRUJCtqw4jvP/SQgx2L/0=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
 
   # Requires network access, fails in sandbox.
   doCheck = false;
