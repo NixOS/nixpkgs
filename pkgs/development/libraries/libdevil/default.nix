@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   postPatch = ''
-    for a in test/Makefile.in test/format_test/format_checks.sh.in ; do
+    for a in test/Makefile.am test/format_test/format_checks.sh.in ; do
       substituteInPlace $a \
         --replace /bin/bash ${runtimeShell}
     done
