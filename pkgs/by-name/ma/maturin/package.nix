@@ -6,6 +6,8 @@
   rustPlatform,
   darwin,
   libiconv,
+  testers,
+  maturin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,7 +31,12 @@ rustPlatform.buildRustPackage rec {
   # Requires network access, fails in sandbox.
   doCheck = false;
 
-  passthru.tests.pyo3 = callPackage ./pyo3-test { };
+  passthru = {
+    tests = {
+      version = testers.testVersion { package = maturin; };
+      pyo3 = callPackage ./pyo3-test { };
+    };
+  };
 
   meta = {
     description = "Build and publish Rust crates Python packages";
