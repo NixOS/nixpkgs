@@ -61,7 +61,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/benoitc/gunicorn";
     description = "gunicorn 'Green Unicorn' is a WSGI HTTP Server for UNIX, fast clients and sleepy applications";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "gunicorn";
   };
 }
