@@ -5,6 +5,7 @@
   cmake,
   libebml,
   pkg-config,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    validatePkgConfig
   ];
 
   buildInputs = [ libebml ];
