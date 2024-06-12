@@ -5,9 +5,11 @@
   fetchFromGitHub,
   ncurses,
   readline,
+  testers,
+  validatePkgConfig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hunspell";
   version = "1.7.2";
 
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hunspell";
     repo = "hunspell";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x2FXxnVIqsf5/UEQcvchAndXBv/3mW8Z55djQAFgNA8=";
   };
 
@@ -33,7 +35,10 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    validatePkgConfig
+  ];
 
   buildInputs = [
     ncurses
@@ -48,6 +53,12 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "format" ];
+
+  passthru = {
+    tests = {
+      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+    };
+  };
 
   meta = {
     description = "Spell checker";
@@ -80,5 +91,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "hunspell";
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "hunspell" ];
   };
-}
+})
