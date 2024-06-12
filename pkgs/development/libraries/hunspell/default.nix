@@ -86,7 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
             ~/Library/Spelling or /Library/Spelling for spell checking),
         * Delphi, Java (JNA, JNI), Perl, .NET, Python, Ruby ([1], [2]), UNO.
     '';
-    homepage = "https://hunspell.sourceforge.net";
+    homepage = "http://hunspell.github.io/";
+    changelog = "https://github.com/hunspell/hunspell/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [
       gpl2
       lgpl21
