@@ -25,13 +25,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "moonlight-qt";
-  version = "5.0.1";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0ONjUqpM1tUnyaEnMgVl7ff6pND7kyqouv2mpgteZP0=";
+    sha256 = "sha256-tXlcHQhXnGdZqUlOHPN1f4vaGlF/kGkTybVW/+FMGX8=";
     fetchSubmodules = true;
   };
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     description = "Play your PC games on almost any device";
     homepage = "https://moonlight-stream.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ luc65r zmitchell ];
     platforms = platforms.all;
     mainProgram = "moonlight";
   };

@@ -1,8 +1,10 @@
---- a/app/app.pro	2023-06-24 19:10:00.653377668 +0800
-+++ b/app/app.pro	2023-06-24 19:20:06.632188299 +0800
-@@ -49,19 +49,8 @@
-     INCLUDEPATH += $$PWD/../libs/windows/include
-     LIBS += ws2_32.lib winmm.lib dxva2.lib ole32.lib gdi32.lib user32.lib d3d9.lib dwmapi.lib dbghelp.lib
+diff --git a/app/app.pro b/app/app.pro
+index f8201b53..538cf9b2 100644
+--- a/app/app.pro
++++ b/app/app.pro
+@@ -52,19 +52,8 @@ win32 {
+     # Work around a conflict with math.h inclusion between SDL and Qt 6
+     DEFINES += _USE_MATH_DEFINES
  }
 -macx {
 -    INCLUDEPATH += $$PWD/../libs/mac/include
@@ -21,12 +23,12 @@
      CONFIG += link_pkgconfig
      PKGCONFIG += openssl sdl2 SDL2_ttf opus
  
-@@ -120,13 +109,12 @@
+@@ -152,13 +141,12 @@ win32:!winrt {
      CONFIG += soundio discord-rpc
  }
  macx {
--    LIBS += -lssl -lcrypto -lavcodec.60 -lavutil.58 -lopus -framework SDL2 -framework SDL2_ttf
-     LIBS += -lobjc -framework VideoToolbox -framework AVFoundation -framework CoreVideo -framework CoreGraphics -framework CoreMedia -framework AppKit -framework Metal
+-    LIBS += -lssl -lcrypto -lavcodec.61 -lavutil.59 -lopus -framework SDL2 -framework SDL2_ttf
+     LIBS += -lobjc -framework VideoToolbox -framework AVFoundation -framework CoreVideo -framework CoreGraphics -framework CoreMedia -framework AppKit -framework Metal -framework QuartzCore
  
      # For libsoundio
      LIBS += -framework CoreAudio -framework AudioUnit
