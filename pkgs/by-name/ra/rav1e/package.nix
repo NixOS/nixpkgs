@@ -9,7 +9,7 @@
 , nasm
 , zlib
 , libiconv
-, Security
+, darwin
 , buildPackages
 }:
 
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
-    Security
+    darwin.apple_sdk.frameworks.Security
   ];
 
   # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
