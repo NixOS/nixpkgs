@@ -177,6 +177,7 @@ mapAliases ({
   chia-plotter = throw "chia-plotter has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # Added 2023-11-30
   chkservice = throw "chkservice has been removed from nixpkgs, as it has been deleted upstream"; # Added 2024-01-08
   chocolateDoom = chocolate-doom; # Added 2023-05-01
+  ChowCentaur = chow-centaur; # Added 2024-06-12
   CHOWTapeModel = chow-tape-model; # Added 2024-06-12
   chrome-gnome-shell = gnome-browser-connector; # Added 2022-07-27
   chromiumBeta = throw "'chromiumBeta' has been removed due to the lack of maintenance in nixpkgs. Consider using 'chromium' instead."; # Added 2023-10-18

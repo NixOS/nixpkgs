@@ -29953,8 +29953,6 @@ with pkgs;
 
   cgif = callPackage ../tools/graphics/cgif { };
 
-  ChowCentaur  = callPackage ../applications/audio/ChowCentaur { };
-
   ChowKick  = callPackage ../applications/audio/ChowKick { };
 
   ChowPhaser  = callPackage ../applications/audio/ChowPhaser { };
