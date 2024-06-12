@@ -12,28 +12,12 @@
 }:
 
 let
-  supported = {
-    x86_64-linux = {
-      name = "x86_64";
-      hash = "sha256-UsDP+wMS7ZeWMQBObwv5RxbwuWU8nLnHes7LEXK6imE=";
-    };
-    i686-linux = {
-      name = "i386";
-      hash = "sha256-InNHXWAc6QZEWyEcTTUCRMDsKd0RtR8d7O0clWKuFo8=";
-    };
-    aarch64-linux = {
-      name = "arm64";
-      hash = "sha256-ueIGdqfuIRCuEwaPkgZMgghO9DU11IboLLMryg/mxQ8=";
-    };
-    armv7l-linux = {
-      name = "arm";
-      hash = "sha256-6nTQGQpkbqQntheQqiUAdVS4rp30nl2KRUn5Adsfeoo=";
-    };
-  };
+  source = import ./source.nix;
+  supported = removeAttrs source ["version"];
 
   platform = supported.${stdenv.system} or (throw "unsupported platform ${stdenv.system}");
 
-  version = "796b";
+  inherit (source) version;
 
   url = "https://www.segger.com/downloads/jlink/JLink_Linux_V${version}_${platform.name}.tgz";
 
@@ -217,6 +201,8 @@ in stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.py;
 
   meta = with lib; {
     description = "J-Link Software and Documentation pack";
