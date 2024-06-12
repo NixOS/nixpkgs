@@ -6,11 +6,13 @@
   fetchCrate,
   pkg-config,
   cargo-c,
-  libgit2,
-  nasm,
-  zlib,
-  libiconv,
   darwin,
+  libgit2,
+  libiconv,
+  nasm,
+  testers,
+  zlib,
+  rav1e,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -54,6 +56,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
+
+  passthru = {
+    tests.version = testers.testVersion { package = rav1e; };
+  };
 
   meta = {
     description = "Fastest and safest AV1 encoder";
