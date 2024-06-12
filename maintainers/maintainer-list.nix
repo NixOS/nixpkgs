@@ -20823,6 +20823,12 @@
     githubId = 14172;
     name = "Tim Cuthbertson";
   };
+  timhae = {
+    email = "tim.haering@posteo.net";
+    githubId = 6264882;
+    github = "timhae";
+    name = "Tim Häring";
+  };
   timma = {
     email = "kunduru.it.iitb@gmail.com";
     github = "ktrsoft";
