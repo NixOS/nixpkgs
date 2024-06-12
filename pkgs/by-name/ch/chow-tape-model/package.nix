@@ -40,7 +40,7 @@ let
   stdenv = gcc11Stdenv;
 in
 stdenv.mkDerivation rec {
-  pname = "CHOWTapeModel";
+  pname = "chow-tape-model";
   version = "2.11.4";
 
   src = fetchFromGitHub {
