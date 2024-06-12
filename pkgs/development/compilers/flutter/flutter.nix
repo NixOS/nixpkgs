@@ -9,10 +9,7 @@
 , stdenv
 , callPackage
 , makeWrapper
-, darwin
-, git
-, which
-, jq
+, buildPackages
 , flutterTools ? callPackage ./flutter-tools.nix {
     inherit dart version;
     flutterSrc = src;
@@ -28,9 +25,8 @@ let
       name = "flutter-${version}-unwrapped";
       inherit src patches version;
 
-      buildInputs = [ git ];
-      nativeBuildInputs = [ makeWrapper jq ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+      nativeBuildInputs = with buildPackages; ([ makeWrapper jq git ]
+        ++ lib.optionals stdenv.buildPlatform.isDarwin [ darwin.DarwinTools ]);
 
       preConfigure = ''
         if [ "$(< bin/internal/engine.version)" != '${engineVersion}' ]; then
@@ -110,8 +106,8 @@ let
       '';
 
       doInstallCheck = true;
-      nativeInstallCheckInputs = [ which ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+      nativeInstallCheckInputs = with buildPackages; ([ which ]
+        ++ lib.optionals stdenv.buildPlatform.isDarwin [ darwin.DarwinTools ]);
       installCheckPhase = ''
         runHook preInstallCheck
 
