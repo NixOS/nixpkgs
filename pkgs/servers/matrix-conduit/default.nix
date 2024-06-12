@@ -6,32 +6,33 @@
 , stdenv
 , darwin
 , nixosTests
-, rocksdb_8_3
+, rocksdb
 , rust-jemalloc-sys
 }:
 
-let
-  rocksdb = rocksdb_8_3;
-in
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
     rev = "v${version}";
-    hash = "sha256-TpNssMHvSKcxJMas5lQNWEbIv09u4/niBN2C27Mp0JY=";
+    hash = "sha256-/qKPeE2Ptweaf+rHOvdW0TUDLwN9D93MMgDoU4fTzEA=";
   };
+
+  postPatch = ''
+    substituteInPlace Cargo.toml --replace-fail \
+      'rust-version = "1.78.0"' \
+      'rust-version = "1.77.0"'
+  '';
 
   # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
   # inheritance within Git dependencies, but importCargoLock does.
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "heed-0.10.6" = "sha256-rm02pJ6wGYN4SsAbp85jBVHDQ5ITjZZd+79EC2ubRsY=";
-      "reqwest-0.11.9" = "sha256-wH/q7REnkz30ENBIK5Rlxnc1F6vOyuEANMHFmiVPaGw=";
-      "ruma-0.8.2" = "sha256-GkHLY5unh7uyFNe0RS+3xQ4Ou8qBhzd+kEnCC7xUnMo=";
+      "ruma-0.10.1" = "sha256-I1mTeJLo+pgIqFkn1D2De/oACQPkUELjGdyGf3MVuLQ=";
     };
   };
 
@@ -51,6 +52,7 @@ rustPlatform.buildRustPackage rec {
     rust-jemalloc-sys
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {
