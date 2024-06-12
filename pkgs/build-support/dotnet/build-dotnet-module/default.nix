@@ -70,7 +70,7 @@
 
 # The hash of the generated nix-based lockfile containing all Nuget dependencies. This depends on no floating version ranges being requested upstream, as we cannot deterministically fetch those.
 # If any floating version is requested, an error will be thrown. Note that this option is mutually exclusive with the `nugetDeps` attribute.
-, nugetSha256 ? null
+, lockfileSha256 ? null
 # Don't expose any Nuget source to `dotnet restore`.
 , dontSetNugetSource ? false
 
@@ -99,7 +99,7 @@
 , ... } @ args:
 
 assert projectFile == null -> throw "Defining the `projectFile` attribute is required. This is usually an `.csproj`, or `.sln` file.";
-assert (nugetDeps != null && nugetSha256 != null) -> throw "The attributes `nugetDeps` and 'nugetSha256' are mutually exclusive!";
+assert (nugetDeps != null && lockfileSha256 != null) -> throw "The attributes `nugetDeps` and 'lockfileSha256' are mutually exclusive!";
 
 let
   platforms =
@@ -118,7 +118,7 @@ let
   }) dotnetConfigureHook dotnetValidateLockfileHook dotnetBuildHook dotnetCheckHook dotnetInstallHook dotnetFixupHook;
 
   fetchImpureDeps = callPackage ./fetch-deps.nix {
-    inherit name meta dotnet-sdk nugetSha256 projectFile testProjectFile dotnetFlags dotnetRestoreFlags enableParallelBuilding dotnetValidateLockfileHook sdkExclusions;
+    inherit name meta dotnet-sdk lockfileSha256 projectFile testProjectFile dotnetFlags dotnetRestoreFlags enableParallelBuilding dotnetValidateLockfileHook sdkExclusions;
     src = srcOnly args;
   };
 

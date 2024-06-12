@@ -2,7 +2,7 @@
 , buildDotnetModule
 , dotnetValidateLockfileHook
 , nuget-to-nix
-, nugetSha256
+, lockfileSha256
 
 , src
 , name
@@ -33,8 +33,8 @@ buildDotnetModule rec {
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
   outputHashAlgo = "sha256";
   outputHashMode = "flat";
-  outputHash = if (nugetSha256 != null)
-    then nugetSha256
+  outputHash = if (lockfileSha256 != null)
+    then lockfileSha256
     else ""; # This needs to be set for networking, an empty string prints the "empty hash found" warning
 
   preConfigure = ''
@@ -65,8 +65,8 @@ buildDotnetModule rec {
   '';
 
   # This is the last phase that runs before we error out about the hash being wrong
-  postFixup = lib.optionalString (nugetSha256 == null) ''
-    echo "Please set nugetSha256 to the hash below!"
+  postFixup = lib.optionalString (lockfileSha256 == null) ''
+    echo "Please set lockfileSha256 to the hash below!"
   '';
 
   meta = {
