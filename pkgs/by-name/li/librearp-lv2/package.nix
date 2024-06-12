@@ -2,15 +2,15 @@
 , xcbutilcursor, xcbutilkeysyms, xcbutil, libXrandr, libXinerama, libXcursor
 , alsa-lib, libjack2, lv2, gcc-unwrapped, curl}:
 
-stdenv.mkDerivation rec {
-  pname = "LibreArp";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "librearp-lv2";
   version = "2.4";
 
   src = fetchFromGitLab {
     owner = "LibreArp";
     repo = "LibreArp";
-    rev = version;
-    hash = "sha256-jEpES68NuHhelUq/L46CxEeadk3LbuPZ72JaGDbw8fg=";
+    rev = "${finalAttrs.version}-lv2";
+    hash = "sha256-x+ZPiU/ZFzrXb8szMS9Ts4JEEyXYpM8CLZHT4lNJWY8=";
     fetchSubmodules = true;
   };
 
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/lib/vst3
+    mkdir -p $out/lib/lv2
     cd LibreArp_artefacts/Release
-    cp -r VST3/LibreArp.vst3 $out/lib/vst3
+    cp -r LV2/LibreArp.lv2 $out/lib/lv2
   '';
 
   meta = with lib; {
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ magnetophon ];
   };
-}
+})
