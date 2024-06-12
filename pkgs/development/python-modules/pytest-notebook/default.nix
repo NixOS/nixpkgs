@@ -75,6 +75,8 @@ buildPythonPackage rec {
     "test_run_pass_with_meta"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/chrisjsewell/pytest-notebook/blob/${src.rev}/docs/source/changelog.md";
     description = "Pytest plugin for regression testing and regenerating Jupyter Notebooks";
