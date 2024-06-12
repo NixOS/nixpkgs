@@ -10,7 +10,7 @@
 , curl
 , gdal
 , hdf5-cpp
-, LASzip
+, laszip
 , libe57format
 , libgeotiff
 , libtiff
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     gdal
     hdf5-cpp
-    LASzip
+    laszip
     libgeotiff
     libtiff
     libxml2

@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.2.0";
-  pname = "LASzip";
+  pname = "laszip";
 
   src = fetchFromGitHub {
     owner = "LASzip";
     repo = "LASzip";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-TXzse4oLjNX5R2xDR721iV+gW/rP5z3Zciv4OgxfeqA=";
   };
 
@@ -20,4 +20,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.michelk ];
     platforms = platforms.unix;
   };
-}
+})
