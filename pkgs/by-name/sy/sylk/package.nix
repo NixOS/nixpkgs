@@ -1,7 +1,7 @@
 { appimageTools, fetchurl, lib }:
 
 let
-  pname = "Sylk";
+  pname = "sylk";
   version = "3.0.1";
 in
 
