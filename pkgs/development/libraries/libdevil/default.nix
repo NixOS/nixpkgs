@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, cmake
 , libjpeg
 , libpng
 , libmng
@@ -18,16 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdevil";
-  version = "1.7.8";
+  version = "1.8.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://sourceforge/openil/DevIL-${finalAttrs.version}.tar.gz";
-    sha256 = "1zd850nn7nvkkhasrv7kn17kzgslr5ry933v6db62s4lr0zzlbv8";
+    hash = "sha256-AHWXPufdifBQeHPiWArHgzZFLSnTSgcTSyCPROL+twk=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  sourceRoot = "DevIL/DevIL";
+
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr ]
     ++ lib.optionals withXorg [ libX11 libGL ]
