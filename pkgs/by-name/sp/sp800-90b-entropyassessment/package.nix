@@ -8,14 +8,14 @@
 , mpfr
 }:
 
-stdenv.mkDerivation rec {
-  pname = "SP800-90B_EntropyAssessment";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "sp800-90b-entropyassessment";
   version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "SP800-90B_EntropyAssessment";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KZQ7kC0PbBkjLEQZIqYakQ91OvCxruhdfUwiRHtno3w=";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace "-march=native" ""
   '';
 
-  sourceRoot = "${src.name}/cpp";
+  sourceRoot = "${finalAttrs.src.name}/cpp";
 
   makeFlags = [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.nistSoftware;
     maintainers = with lib.maintainers; [ orichter thillux ];
   };
-}
+})
