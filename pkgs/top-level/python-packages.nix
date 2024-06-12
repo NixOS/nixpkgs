@@ -11562,6 +11562,8 @@ self: super: with self; {
 
   pyopenuv = callPackage ../development/python-modules/pyopenuv { };
 
+  pyopenweathermap = callPackage ../development/python-modules/pyopenweathermap { };
+
   pyopnsense = callPackage ../development/python-modules/pyopnsense { };
 
   pyoppleio = callPackage ../development/python-modules/pyoppleio { };
