@@ -5,13 +5,18 @@
   fetchPypi,
   google-api-python-client,
   google-auth-oauthlib,
+  jsonschema,
   jupyterhub,
   mwoauth,
   pyjwt,
   pytest-asyncio,
   pytestCheckHook,
+  requests,
   requests-mock,
+  ruamel-yaml,
   setuptools,
+  tornado,
+  traitlets,
 }:
 
 buildPythonPackage rec {
@@ -34,8 +39,13 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    jsonschema
     jupyterhub
     pyjwt
+    requests
+    ruamel-yaml
+    tornado
+    traitlets
   ];
 
   passthru.optional-dependencies = {

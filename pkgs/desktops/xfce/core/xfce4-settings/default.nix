@@ -16,15 +16,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.18.4";
+  version = "4.18.6";
 
-  sha256 = "sha256-f6ldTmTSvfRjn6j/LKIoFI3cbYZFtNdnAq3dQewc948=";
-
-  postPatch = ''
-    for f in xfsettingsd/pointers.c dialogs/mouse-settings/main.c; do
-      substituteInPlace $f --replace \"libinput-properties.h\" '<xorg/libinput-properties.h>'
-    done
-  '';
+  sha256 = "sha256-xiu26B3dbWu+/AtF/iUC6Wo2U5ZZyzN9RfdbBaQRJ1M=";
 
   buildInputs = [
     exo
