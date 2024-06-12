@@ -13,14 +13,14 @@
 , liberation_ttf
 }:
 
-stdenv.mkDerivation rec {
-  pname = "ClassiCube";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "classicube";
   version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-7VPn5YXNoAR3ftYMDQuQRqeMCrbyB56ir1sQWBiPWAI=";
   };
 
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      desktopName = pname;
+      name = finalAttrs.pname;
+      desktopName = finalAttrs.pname;
       genericName = "Sandbox Block Game";
       exec = "ClassiCube";
       icon = "CCicon";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     # This changes the hardcoded location
     # to the path of liberation_ttf instead
     substituteInPlace src/Platform_Posix.c \
-      --replace '%NIXPKGS_FONT_PATH%' "${font_path}"
+      --replace '%NIXPKGS_FONT_PATH%' "${finalAttrs.font_path}"
     # ClassiCube's Makefile hardcodes JOBS=1 for some reason,
     # even though it works perfectly well multi-threaded.
     substituteInPlace Makefile \
@@ -99,4 +99,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ _360ied ];
     mainProgram = "ClassiCube";
   };
-}
+})
