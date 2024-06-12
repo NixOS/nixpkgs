@@ -4,6 +4,7 @@
   autoreconfHook,
   fetchFromGitHub,
   ncurses,
+  nix-update-script,
   readline,
   testers,
   validatePkgConfig,
@@ -59,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
       version = testers.testVersion { package = finalAttrs.finalPackage; };
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
