@@ -14128,6 +14128,8 @@ with pkgs;
 
   inherit (openconnectPackages) openconnect openconnect_openssl;
 
+  openconnect-sso = callPackage ../tools/networking/openconnect-sso { };
+
   globalprotect-openconnect = libsForQt5.callPackage ../tools/networking/globalprotect-openconnect { };
 
   ding-libs = callPackage ../tools/misc/ding-libs { };
