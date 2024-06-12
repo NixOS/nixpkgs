@@ -9,6 +9,8 @@
 , libXinerama
 , libXext
 , libXcursor
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    copyDesktopItems
+  ];
   buildInputs = [
     alsa-lib
     freetype
@@ -53,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dt $out/share/ShowMIDI/themes Themes/*
 
+    install -D Design/icon.png $out/share/icons/hicolor/1024x1024/apps/show-midi.png
+
     mkdir -p $out/bin $out/lib/lv2 $out/lib/vst3
     cd Builds/LinuxMakefile/build/
     cp -r ShowMIDI.lv2 $out/lib/lv2
@@ -61,6 +68,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  desktopItems = [(makeDesktopItem {
+    name = "ShowMIDI";
+    exec = finalAttrs.meta.mainProgram;
+    comment = finalAttrs.meta.description;
+    type = "Application";
+    icon = "show-midi";
+    desktopName = "ShowMIDI";
+    categories = [ "Audio" ];
+  })];
 
   # JUCE dlopens these, make sure they are in rpath
   # Otherwise, segfault will happen
