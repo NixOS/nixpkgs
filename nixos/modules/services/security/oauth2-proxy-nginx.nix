@@ -73,6 +73,7 @@ in
       virtualHosts.${cfg.domain}.locations."/oauth2/" = {
         proxyPass = cfg.proxy;
         extraConfig = ''
+          auth_request off;
           proxy_set_header X-Scheme                $scheme;
           proxy_set_header X-Auth-Request-Redirect $scheme://$host$request_uri;
         '';
