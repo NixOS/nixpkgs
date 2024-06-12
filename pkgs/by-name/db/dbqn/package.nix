@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dbqn" + lib.optionalString buildNativeImage "-native";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "BQN";
     rev = "v${version}";
-    sha256 = "1kxzxz2hrd1871281s4rsi569qk314aqfmng9pkqn8gv9nqhmph0";
+    sha256 = "sha256-AUfT7l7zr/pyG63wX8FMej8RUg7tXC1aroCrunjyw/8=";
   };
 
   nativeBuildInputs = [
