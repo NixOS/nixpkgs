@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-Zlb6UCP4aFZOJJNhFQBBrwzst+f37gs1zaCBMTOUgZE=";
   };
 
+  # slight reformatting from https://raw.githubusercontent.com/nilason/macports-ports/7de732656c10e31530622f405f916ba34d7677b3/science/gdcm/files/patch-vtk-930.diff:
+  patches = [ ./vtk-9.3.0.patch ];
+
   cmakeFlags = [
     "-DGDCM_BUILD_APPLICATIONS=ON"
     "-DGDCM_BUILD_SHARED_LIBS=ON"
