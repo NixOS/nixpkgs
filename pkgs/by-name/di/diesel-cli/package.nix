@@ -7,6 +7,7 @@
   darwin,
   libiconv,
   libmysqlclient,
+  nix-update-script,
   openssl,
   pkg-config,
   postgresql,
@@ -88,6 +89,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     tests.version = testers.testVersion { package = diesel-cli; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
