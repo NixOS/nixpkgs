@@ -6,7 +6,7 @@
   fixup-yarn-lock,
   nodejs,
   python3,
-  makeWrapper,
+  makeBinaryWrapper,
   git,
   docker,
   yarn,
@@ -19,12 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "devcontainers";
     repo = "cli";
-    rev = "v${finalAttrs.version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-kO5bRLbHNObDLGURrEgNLK70ml2FVDQioLa8cbBBurk=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-tN7qAvfYmDz5ZtgZL5+ZZtkuxZxvlS9FM3+dGl+daUQ=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarn
     fixup-yarn-lock
     python3
-    makeWrapper
+    makeBinaryWrapper
     nodejs
   ];
 
@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror ${finalAttrs.yarnOfflineCache}
-
     # Without this, yarn will try to download the dependencies
     fixup-yarn-lock yarn.lock
 
@@ -51,17 +50,23 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --offline --frozen-lockfile
     yarn --offline --frozen-lockfile compile-prod
 
-    mkdir -p $out/bin
-    mkdir -p $out/libexec
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/{bin,libexec}
     cp -r dist $out/libexec
     cp devcontainer.js $out/libexec/devcontainer.js
     cp -r node_modules $out/libexec/node_modules
     cp -r $src/scripts $out/libexec/scripts
-    runHook postBuild
+
+    runHook postInstall
   '';
 
   postInstall = ''
-    makeWrapper "${nodejs}/bin/node" "$out/bin/devcontainer" \
+    makeWrapper "${lib.getExe nodejs}" "$out/bin/devcontainer" \
       --add-flags "$out/libexec/devcontainer.js" \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -72,12 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Dev container CLI, run and manage your dev environments via a devcontainer.json";
     homepage = "https://containers.dev/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rucadi ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rucadi ];
+    platforms = lib.platforms.unix;
     mainProgram = "devcontainer";
   };
 })
