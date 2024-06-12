@@ -5,6 +5,7 @@
 , udev
 , config
 , acceptLicense ? config.segger-jlink.acceptLicense or false
+, headless ? false
 , fontconfig
 , xorg
 , makeDesktopItem
@@ -120,10 +121,11 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
+  ] ++ lib.optionals (!headless) [
     copyDesktopItems
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (!headless) [
     qt4-bundled
   ];
 
@@ -135,55 +137,60 @@ in stdenv.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  desktopItems = map (entry:
-    (makeDesktopItem {
-      name = entry;
-      exec = entry;
-      icon = "applications-utilities";
-      desktopName = entry;
-      genericName = "SEGGER ${entry}";
-      categories = [ "Development" ];
-      type = "Application";
-      terminal = false;
-      startupNotify = false;
-    })
-  ) [
-    "JFlash"
-    "JFlashLite"
-    "JFlashSPI"
-    "JLinkConfig"
-    "JLinkGDBServer"
-    "JLinkLicenseManager"
-    "JLinkRTTViewer"
-    "JLinkRegistration"
-    "JLinkRemoteServer"
-    "JLinkSWOViewer"
-    "JLinkUSBWebServer"
-    "JMem"
-  ];
+  desktopItems = lib.optionals (!headless) (
+    map (entry:
+      (makeDesktopItem {
+        name = entry;
+        exec = entry;
+        icon = "applications-utilities";
+        desktopName = entry;
+        genericName = "SEGGER ${entry}";
+        categories = [ "Development" ];
+        type = "Application";
+        terminal = false;
+        startupNotify = false;
+      })
+    ) [
+      "JFlash"
+      "JFlashLite"
+      "JFlashSPI"
+      "JLinkConfig"
+      "JLinkGDBServer"
+      "JLinkLicenseManager"
+      "JLinkRTTViewer"
+      "JLinkRegistration"
+      "JLinkRemoteServer"
+      "JLinkSWOViewer"
+      "JLinkUSBWebServer"
+      "JMem"
+    ]
+  );
 
   installPhase = ''
     runHook preInstall
 
-    # Install binaries and runtime files into /opt/
     mkdir -p $out/opt
-    mv J* ETC GDBServer Firmwares $out/opt
 
-    # Link executables into /bin/
-    mkdir -p $out/bin
-    for binr in $out/opt/*Exe; do
-      binrlink=''${binr#"$out/opt/"}
-      ln -s $binr $out/bin/$binrlink
-      # Create additional symlinks without "Exe" suffix
-      binrlink=''${binrlink/%Exe}
-      ln -s $binr $out/bin/$binrlink
-    done
+    ${lib.optionalString (!headless) ''
+      # Install binaries and runtime files into /opt/
+      mv J* ETC GDBServer Firmwares $out/opt
 
-    # Copy special alias symlinks
-    for slink in $(find $out/opt/. -type l); do
-      cp -P -n $slink $out/bin || true
-      rm $slink
-    done
+      # Link executables into /bin/
+      mkdir -p $out/bin
+      for binr in $out/opt/*Exe; do
+        binrlink=''${binr#"$out/opt/"}
+        ln -s $binr $out/bin/$binrlink
+        # Create additional symlinks without "Exe" suffix
+        binrlink=''${binrlink/%Exe}
+        ln -s $binr $out/bin/$binrlink
+      done
+
+      # Copy special alias symlinks
+      for slink in $(find $out/opt/. -type l); do
+        cp -P -n $slink $out/bin || true
+        rm $slink
+      done
+    ''}
 
     # Install libraries
     install -Dm444 libjlinkarm.so* -t $out/lib
