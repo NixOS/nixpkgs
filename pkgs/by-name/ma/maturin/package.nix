@@ -48,6 +48,6 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
-    maintainers = [ ];
+    maintainers = with maintainers; [ getchoo ];
   };
 }
