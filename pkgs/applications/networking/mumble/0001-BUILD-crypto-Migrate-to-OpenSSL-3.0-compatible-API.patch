@@ -1,0 +1,553 @@
+From f4cea62ed95e4967d8591f25e903f5e8fc2e2a30 Mon Sep 17 00:00:00 2001
+From: Terry Geng <terry@terriex.com>
+Date: Mon, 6 Dec 2021 10:45:11 -0500
+Subject: [PATCH] BUILD(crypto): Migrate to OpenSSL 3.0-compatible API
+
+OpenSSL 3.0 deprecated several low-level APIs and the usage of them
+caused errors/warnings that prevent the binary from being built against
+OpenSSL 3.0.
+Some primitive efforts have been made in #5317 but were incomplete.
+This commit follows https://www.openssl.org/docs/man3.0/man7/migration_guide.html,
+https://code.woboq.org/qt6/qtopcua/src/opcua/x509/qopcuakeypair_openssl.cpp.html,
+and clears all errors/warnings related to the usage of deprecated APIs.
+
+Fixes #5277
+Fixes #4266
+---
+ src/SelfSignedCertificate.cpp | 235 +++++++++++-----------------------
+ src/SelfSignedCertificate.h   |   5 +
+ src/crypto/CryptStateOCB2.cpp |  53 +++++---
+ src/crypto/CryptStateOCB2.h   |   9 +-
+ 4 files changed, 121 insertions(+), 181 deletions(-)
+
+diff --git a/src/SelfSignedCertificate.cpp b/src/SelfSignedCertificate.cpp
+index a77e5fad9..ea0dec4cc 100644
+--- a/src/SelfSignedCertificate.cpp
++++ b/src/SelfSignedCertificate.cpp
+@@ -5,8 +5,6 @@
+ 
+ #include "SelfSignedCertificate.h"
+ 
+-#include <openssl/x509v3.h>
+-
+ #define SSL_STRING(x) QString::fromLatin1(x).toUtf8().data()
+ 
+ static int add_ext(X509 *crt, int nid, char *value) {
+@@ -28,108 +26,86 @@ static int add_ext(X509 *crt, int nid, char *value) {
+ 	return 1;
+ }
+ 
+-bool SelfSignedCertificate::generate(CertificateType certificateType, QString clientCertName, QString clientCertEmail,
+-									 QSslCertificate &qscCert, QSslKey &qskKey) {
+-	bool ok                    = true;
+-	X509 *x509                 = nullptr;
+-	EVP_PKEY *pkey             = nullptr;
+-	RSA *rsa                   = nullptr;
+-	BIGNUM *e                  = nullptr;
+-	X509_NAME *name            = nullptr;
+-	ASN1_INTEGER *serialNumber = nullptr;
+-	ASN1_TIME *notBefore       = nullptr;
+-	ASN1_TIME *notAfter        = nullptr;
+-	QString commonName;
+-	bool isServerCert = certificateType == CertificateTypeServerCertificate;
+-
+-	if (CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ON) == -1) {
+-		ok = false;
+-		goto out;
++EVP_PKEY *SelfSignedCertificate::generate_rsa_keypair() {
++	EVP_PKEY *pkey = EVP_PKEY_new();
++	if (!pkey) {
++		return nullptr;
+ 	}
+ 
+-	x509 = X509_new();
+-	if (!x509) {
+-		ok = false;
+-		goto out;
++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
++	EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, nullptr);
++	if (!ctx) {
++		return nullptr;
+ 	}
+-
+-	pkey = EVP_PKEY_new();
+-	if (!pkey) {
+-		ok = false;
+-		goto out;
++	if (EVP_PKEY_keygen_init(ctx) <= 0) {
++		return nullptr;
+ 	}
+-
+-	rsa = RSA_new();
++	if (EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, 2048) <= 0) {
++		return nullptr;
++	}
++	if (EVP_PKEY_keygen(ctx, &pkey) <= 0) {
++		return nullptr;
++	}
++	EVP_PKEY_CTX_free(ctx);
++#else
++	RSA *rsa  = RSA_new();
++	BIGNUM *e = BN_new();
+ 	if (!rsa) {
+-		ok = false;
+-		goto out;
++		return nullptr;
+ 	}
+-
+-	e = BN_new();
+ 	if (!e) {
+-		ok = false;
+-		goto out;
++		return nullptr;
+ 	}
+ 	if (BN_set_word(e, 65537) == 0) {
+-		ok = false;
+-		goto out;
++		return nullptr;
+ 	}
+-
+ 	if (RSA_generate_key_ex(rsa, 2048, e, nullptr) == 0) {
+-		ok = false;
+-		goto out;
++		return nullptr;
+ 	}
+-
+ 	if (EVP_PKEY_assign_RSA(pkey, rsa) == 0) {
+-		ok = false;
+-		goto out;
++		return nullptr;
+ 	}
++	BN_free(e);
++	RSA_free(rsa);
++#endif
++	return pkey;
++}
+ 
+-	if (X509_set_version(x509, 2) == 0) {
+-		ok = false;
+-		goto out;
++#define CHECK(statement) \
++	if (!(statement)) {  \
++		ok = false;      \
++		goto out;        \
+ 	}
+ 
+-	serialNumber = X509_get_serialNumber(x509);
+-	if (!serialNumber) {
+-		ok = false;
+-		goto out;
+-	}
+-	if (ASN1_INTEGER_set(serialNumber, 1) == 0) {
+-		ok = false;
+-		goto out;
+-	}
+ 
+-	notBefore = X509_get_notBefore(x509);
+-	if (!notBefore) {
+-		ok = false;
+-		goto out;
+-	}
+-	if (!X509_gmtime_adj(notBefore, 0)) {
+-		ok = false;
+-		goto out;
+-	}
++bool SelfSignedCertificate::generate(CertificateType certificateType, QString clientCertName, QString clientCertEmail,
++									 QSslCertificate &qscCert, QSslKey &qskKey) {
++	bool ok                    = true;
++	EVP_PKEY *pkey             = nullptr;
++	X509 *x509                 = nullptr;
++	X509_NAME *name            = nullptr;
++	ASN1_INTEGER *serialNumber = nullptr;
++	ASN1_TIME *notBefore       = nullptr;
++	ASN1_TIME *notAfter        = nullptr;
++	QString commonName;
++	bool isServerCert = certificateType == CertificateTypeServerCertificate;
+ 
+-	notAfter = X509_get_notAfter(x509);
+-	if (!notAfter) {
+-		ok = false;
+-		goto out;
+-	}
+-	if (!X509_gmtime_adj(notAfter, 60 * 60 * 24 * 365 * 20)) {
+-		ok = false;
+-		goto out;
+-	}
++	// In Qt 5.15, a class was added to wrap up the procedures of generating a self-signed certificate.
++	// See https://doc.qt.io/qt-5/qopcuax509certificatesigningrequest.html.
++	// We should consider migrating to this class after switching to Qt 5.15.
+ 
+-	if (X509_set_pubkey(x509, pkey) == 0) {
+-		ok = false;
+-		goto out;
+-	}
++	CHECK(pkey = generate_rsa_keypair());
+ 
+-	name = X509_get_subject_name(x509);
+-	if (!name) {
+-		ok = false;
+-		goto out;
+-	}
++	CHECK(x509 = X509_new());
++	CHECK(X509_set_version(x509, 2));
++	CHECK(serialNumber = X509_get_serialNumber(x509));
++	CHECK(ASN1_INTEGER_set(serialNumber, 1));
++	CHECK(notBefore = X509_get_notBefore(x509));
++	CHECK(X509_gmtime_adj(notBefore, 0));
++	CHECK(notAfter = X509_get_notAfter(x509));
++	CHECK(X509_gmtime_adj(notAfter, 60 * 60 * 24 * 365 * 20))
++	CHECK(X509_set_pubkey(x509, pkey));
++	CHECK(name = X509_get_subject_name(x509));
+ 
+ 	if (isServerCert) {
+ 		commonName = QLatin1String("Murmur Autogenerated Certificate v2");
+@@ -141,120 +117,63 @@ bool SelfSignedCertificate::generate(CertificateType certificateType, QString cl
+ 		}
+ 	}
+ 
+-	if (X509_NAME_add_entry_by_txt(name, "CN", MBSTRING_UTF8,
+-								   reinterpret_cast< unsigned char * >(commonName.toUtf8().data()), -1, -1, 0)
+-		== 0) {
+-		ok = false;
+-		goto out;
+-	}
++	CHECK(X509_NAME_add_entry_by_txt(name, "CN", MBSTRING_UTF8,
++									 reinterpret_cast< unsigned char * >(commonName.toUtf8().data()), -1, -1, 0));
+ 
+-	if (X509_set_issuer_name(x509, name) == 0) {
+-		ok = false;
+-		goto out;
+-	}
++	CHECK(X509_set_issuer_name(x509, name));
+ 
+-	if (add_ext(x509, NID_basic_constraints, SSL_STRING("critical,CA:FALSE")) == 0) {
+-		ok = false;
+-		goto out;
+-	}
++	CHECK(add_ext(x509, NID_basic_constraints, SSL_STRING("critical,CA:FALSE")));
+ 
+ 	if (isServerCert) {
+-		if (add_ext(x509, NID_ext_key_usage, SSL_STRING("serverAuth,clientAuth")) == 0) {
+-			ok = false;
+-			goto out;
+-		}
++		CHECK(add_ext(x509, NID_ext_key_usage, SSL_STRING("serverAuth,clientAuth")))
+ 	} else {
+-		if (add_ext(x509, NID_ext_key_usage, SSL_STRING("clientAuth")) == 0) {
+-			ok = false;
+-			goto out;
+-		}
++		CHECK(add_ext(x509, NID_ext_key_usage, SSL_STRING("clientAuth")));
+ 	}
+ 
+-	if (add_ext(x509, NID_subject_key_identifier, SSL_STRING("hash")) == 0) {
+-		ok = false;
+-		goto out;
+-	}
++	CHECK(add_ext(x509, NID_subject_key_identifier, SSL_STRING("hash")));
+ 
+ 	if (isServerCert) {
+-		if (add_ext(x509, NID_netscape_comment, SSL_STRING("Generated from murmur")) == 0) {
+-			ok = false;
+-			goto out;
+-		}
++		CHECK(add_ext(x509, NID_netscape_comment, SSL_STRING("Generated from murmur")));
+ 	} else {
+-		if (add_ext(x509, NID_netscape_comment, SSL_STRING("Generated by Mumble")) == 0) {
+-			ok = false;
+-			goto out;
+-		}
++		CHECK(add_ext(x509, NID_netscape_comment, SSL_STRING("Generated by Mumble")));
+ 	}
+ 
+ 	if (!isServerCert) {
+ 		if (!clientCertEmail.trimmed().isEmpty()) {
+-			if (add_ext(x509, NID_subject_alt_name,
+-						QString::fromLatin1("email:%1").arg(clientCertEmail).toUtf8().data())
+-				== 0) {
+-				ok = false;
+-				goto out;
+-			}
++			CHECK(add_ext(x509, NID_subject_alt_name,
++						  QString::fromLatin1("email:%1").arg(clientCertEmail).toUtf8().data()));
+ 		}
+ 	}
+ 
+-	if (X509_sign(x509, pkey, EVP_sha1()) == 0) {
+-		ok = false;
+-		goto out;
+-	}
++	CHECK(X509_sign(x509, pkey, EVP_sha1()));
+ 
+ 	{
+ 		QByteArray crt;
+ 		int len = i2d_X509(x509, nullptr);
+-		if (len <= 0) {
+-			ok = false;
+-			goto out;
+-		}
++		CHECK(len > 0);
+ 		crt.resize(len);
+ 
+ 		unsigned char *dptr = reinterpret_cast< unsigned char * >(crt.data());
+-		if (i2d_X509(x509, &dptr) != len) {
+-			ok = false;
+-			goto out;
+-		}
++		CHECK(i2d_X509(x509, &dptr) == len);
+ 
+ 		qscCert = QSslCertificate(crt, QSsl::Der);
+-		if (qscCert.isNull()) {
+-			ok = false;
+-			goto out;
+-		}
++		CHECK(!qscCert.isNull());
+ 	}
+ 
+ 	{
+ 		QByteArray key;
+ 		int len = i2d_PrivateKey(pkey, nullptr);
+-		if (len <= 0) {
+-			ok = false;
+-			goto out;
+-		}
++		CHECK(len > 0);
+ 		key.resize(len);
+ 
+ 		unsigned char *dptr = reinterpret_cast< unsigned char * >(key.data());
+-		if (i2d_PrivateKey(pkey, &dptr) != len) {
+-			ok = false;
+-			goto out;
+-		}
++		CHECK(i2d_PrivateKey(pkey, &dptr) == len);
+ 
+ 		qskKey = QSslKey(key, QSsl::Rsa, QSsl::Der);
+-		if (qskKey.isNull()) {
+-			ok = false;
+-			goto out;
+-		}
++		CHECK(!qskKey.isNull());
+ 	}
+ 
+ out:
+-	if (e) {
+-		BN_free(e);
+-	}
+-	// We only need to free the pkey pointer,
+-	// not the RSA pointer. We have assigned
+-	// our RSA key to pkey, and it will be freed
+-	// once we free pkey.
+ 	if (pkey) {
+ 		EVP_PKEY_free(pkey);
+ 	}
+diff --git a/src/SelfSignedCertificate.h b/src/SelfSignedCertificate.h
+index b85a8752b..7c5f59e9c 100644
+--- a/src/SelfSignedCertificate.h
++++ b/src/SelfSignedCertificate.h
+@@ -6,6 +6,10 @@
+ #ifndef MUMBLE_SELFSIGNEDCERTIFICATE_H_
+ #define MUMBLE_SELFSIGNEDCERTIFICATE_H_
+ 
++#include <openssl/evp.h>
++#include <openssl/rsa.h>
++#include <openssl/x509v3.h>
++
+ #include <QtCore/QString>
+ #include <QtNetwork/QSslCertificate>
+ #include <QtNetwork/QSslKey>
+@@ -16,6 +20,7 @@ class SelfSignedCertificate {
+ private:
+ 	static bool generate(CertificateType certificateType, QString clientCertName, QString clientCertEmail,
+ 						 QSslCertificate &qscCert, QSslKey &qskKey);
++	static EVP_PKEY *generate_rsa_keypair();
+ 
+ public:
+ 	static bool generateMumbleCertificate(QString name, QString email, QSslCertificate &qscCert, QSslKey &qskKey);
+diff --git a/src/crypto/CryptStateOCB2.cpp b/src/crypto/CryptStateOCB2.cpp
+index 2176d6488..640fdedac 100644
+--- a/src/crypto/CryptStateOCB2.cpp
++++ b/src/crypto/CryptStateOCB2.cpp
+@@ -30,7 +30,7 @@
+ #include <cstring>
+ #include <openssl/rand.h>
+ 
+-CryptStateOCB2::CryptStateOCB2() : CryptState() {
++CryptStateOCB2::CryptStateOCB2() : CryptState(), enc_ctx(EVP_CIPHER_CTX_new()), dec_ctx(EVP_CIPHER_CTX_new()) {
+ 	for (int i = 0; i < 0x100; i++)
+ 		decrypt_history[i] = 0;
+ 	memset(raw_key, 0, AES_KEY_SIZE_BYTES);
+@@ -38,6 +38,11 @@ CryptStateOCB2::CryptStateOCB2() : CryptState() {
+ 	memset(decrypt_iv, 0, AES_BLOCK_SIZE);
+ }
+ 
++CryptStateOCB2::~CryptStateOCB2() noexcept {
++	EVP_CIPHER_CTX_free(enc_ctx);
++	EVP_CIPHER_CTX_free(dec_ctx);
++}
++
+ bool CryptStateOCB2::isValid() const {
+ 	return bInit;
+ }
+@@ -46,8 +51,6 @@ void CryptStateOCB2::genKey() {
+ 	CryptographicRandom::fillBuffer(raw_key, AES_KEY_SIZE_BYTES);
+ 	CryptographicRandom::fillBuffer(encrypt_iv, AES_BLOCK_SIZE);
+ 	CryptographicRandom::fillBuffer(decrypt_iv, AES_BLOCK_SIZE);
+-	AES_set_encrypt_key(raw_key, AES_KEY_SIZE_BITS, &encrypt_key);
+-	AES_set_decrypt_key(raw_key, AES_KEY_SIZE_BITS, &decrypt_key);
+ 	bInit = true;
+ }
+ 
+@@ -56,8 +59,6 @@ bool CryptStateOCB2::setKey(const std::string &rkey, const std::string &eiv, con
+ 		memcpy(raw_key, rkey.data(), AES_KEY_SIZE_BYTES);
+ 		memcpy(encrypt_iv, eiv.data(), AES_BLOCK_SIZE);
+ 		memcpy(decrypt_iv, div.data(), AES_BLOCK_SIZE);
+-		AES_set_encrypt_key(raw_key, AES_KEY_SIZE_BITS, &encrypt_key);
+-		AES_set_decrypt_key(raw_key, AES_KEY_SIZE_BITS, &decrypt_key);
+ 		bInit = true;
+ 		return true;
+ 	}
+@@ -256,10 +257,24 @@ static void inline ZERO(keyblock &block) {
+ 		block[i] = 0;
+ }
+ 
+-#define AESencrypt(src, dst, key) \
+-	AES_encrypt(reinterpret_cast< const unsigned char * >(src), reinterpret_cast< unsigned char * >(dst), key);
+-#define AESdecrypt(src, dst, key) \
+-	AES_decrypt(reinterpret_cast< const unsigned char * >(src), reinterpret_cast< unsigned char * >(dst), key);
++#define AESencrypt(src, dst, key)                                                                 \
++	{                                                                                             \
++		int outlen = 0;                                                                           \
++		EVP_EncryptInit_ex(enc_ctx, EVP_aes_128_ecb(), NULL, key, NULL);                          \
++		EVP_CIPHER_CTX_set_padding(enc_ctx, 0);                                                   \
++		EVP_EncryptUpdate(enc_ctx, reinterpret_cast< unsigned char * >(dst), &outlen,             \
++						  reinterpret_cast< const unsigned char * >(src), AES_BLOCK_SIZE);        \
++		EVP_EncryptFinal_ex(enc_ctx, reinterpret_cast< unsigned char * >(dst + outlen), &outlen); \
++	}
++#define AESdecrypt(src, dst, key)                                                                 \
++	{                                                                                             \
++		int outlen = 0;                                                                           \
++		EVP_DecryptInit_ex(dec_ctx, EVP_aes_128_ecb(), NULL, key, NULL);                          \
++		EVP_CIPHER_CTX_set_padding(dec_ctx, 0);                                                   \
++		EVP_DecryptUpdate(dec_ctx, reinterpret_cast< unsigned char * >(dst), &outlen,             \
++						  reinterpret_cast< const unsigned char * >(src), AES_BLOCK_SIZE);        \
++		EVP_DecryptFinal_ex(dec_ctx, reinterpret_cast< unsigned char * >(dst + outlen), &outlen); \
++	}
+ 
+ bool CryptStateOCB2::ocb_encrypt(const unsigned char *plain, unsigned char *encrypted, unsigned int len,
+ 								 const unsigned char *nonce, unsigned char *tag, bool modifyPlainOnXEXStarAttack) {
+@@ -267,7 +282,7 @@ bool CryptStateOCB2::ocb_encrypt(const unsigned char *plain, unsigned char *encr
+ 	bool success = true;
+ 
+ 	// Initialize
+-	AESencrypt(nonce, delta, &encrypt_key);
++	AESencrypt(nonce, delta, raw_key);
+ 	ZERO(checksum);
+ 
+ 	while (len > AES_BLOCK_SIZE) {
+@@ -299,7 +314,7 @@ bool CryptStateOCB2::ocb_encrypt(const unsigned char *plain, unsigned char *encr
+ 		if (flipABit) {
+ 			*reinterpret_cast< unsigned char * >(tmp) ^= 1;
+ 		}
+-		AESencrypt(tmp, tmp, &encrypt_key);
++		AESencrypt(tmp, tmp, raw_key);
+ 		XOR(reinterpret_cast< subblock * >(encrypted), delta, tmp);
+ 		XOR(checksum, checksum, reinterpret_cast< const subblock * >(plain));
+ 		if (flipABit) {
+@@ -315,7 +330,7 @@ bool CryptStateOCB2::ocb_encrypt(const unsigned char *plain, unsigned char *encr
+ 	ZERO(tmp);
+ 	tmp[BLOCKSIZE - 1] = SWAPPED(len * 8);
+ 	XOR(tmp, tmp, delta);
+-	AESencrypt(tmp, pad, &encrypt_key);
++	AESencrypt(tmp, pad, raw_key);
+ 	memcpy(tmp, plain, len);
+ 	memcpy(reinterpret_cast< unsigned char * >(tmp) + len, reinterpret_cast< const unsigned char * >(pad) + len,
+ 		   AES_BLOCK_SIZE - len);
+@@ -325,7 +340,7 @@ bool CryptStateOCB2::ocb_encrypt(const unsigned char *plain, unsigned char *encr
+ 
+ 	S3(delta);
+ 	XOR(tmp, delta, checksum);
+-	AESencrypt(tmp, tag, &encrypt_key);
++	AESencrypt(tmp, tag, raw_key);
+ 
+ 	return success;
+ }
+@@ -336,13 +351,13 @@ bool CryptStateOCB2::ocb_decrypt(const unsigned char *encrypted, unsigned char *
+ 	bool success = true;
+ 
+ 	// Initialize
+-	AESencrypt(nonce, delta, &encrypt_key);
++	AESencrypt(nonce, delta, raw_key);
+ 	ZERO(checksum);
+ 
+ 	while (len > AES_BLOCK_SIZE) {
+ 		S2(delta);
+ 		XOR(tmp, delta, reinterpret_cast< const subblock * >(encrypted));
+-		AESdecrypt(tmp, tmp, &decrypt_key);
++		AESdecrypt(tmp, tmp, raw_key);
+ 		XOR(reinterpret_cast< subblock * >(plain), delta, tmp);
+ 		XOR(checksum, checksum, reinterpret_cast< const subblock * >(plain));
+ 		len -= AES_BLOCK_SIZE;
+@@ -354,7 +369,7 @@ bool CryptStateOCB2::ocb_decrypt(const unsigned char *encrypted, unsigned char *
+ 	ZERO(tmp);
+ 	tmp[BLOCKSIZE - 1] = SWAPPED(len * 8);
+ 	XOR(tmp, tmp, delta);
+-	AESencrypt(tmp, pad, &encrypt_key);
++	AESencrypt(tmp, pad, raw_key);
+ 	memset(tmp, 0, AES_BLOCK_SIZE);
+ 	memcpy(tmp, encrypted, len);
+ 	XOR(tmp, tmp, pad);
+@@ -372,7 +387,7 @@ bool CryptStateOCB2::ocb_decrypt(const unsigned char *encrypted, unsigned char *
+ 
+ 	S3(delta);
+ 	XOR(tmp, delta, checksum);
+-	AESencrypt(tmp, tag, &encrypt_key);
++	AESencrypt(tmp, tag, raw_key);
+ 
+ 	return success;
+ }
+@@ -381,5 +396,5 @@ bool CryptStateOCB2::ocb_decrypt(const unsigned char *encrypted, unsigned char *
+ #undef SHIFTBITS
+ #undef SWAPPED
+ #undef HIGHBIT
+-#undef AES_encrypt
+-#undef AES_decrypt
++#undef AESencrypt
++#undef AESdecrypt
+diff --git a/src/crypto/CryptStateOCB2.h b/src/crypto/CryptStateOCB2.h
+index 53d4b4b6a..cc3f1c0bc 100644
+--- a/src/crypto/CryptStateOCB2.h
++++ b/src/crypto/CryptStateOCB2.h
+@@ -8,8 +8,9 @@
+ 
+ #include "CryptState.h"
+ 
+-#include <openssl/aes.h>
++#include <openssl/evp.h>
+ 
++#define AES_BLOCK_SIZE 16
+ #define AES_KEY_SIZE_BITS 128
+ #define AES_KEY_SIZE_BYTES (AES_KEY_SIZE_BITS / 8)
+ 
+@@ -17,7 +18,7 @@
+ class CryptStateOCB2 : public CryptState {
+ public:
+ 	CryptStateOCB2();
+-	~CryptStateOCB2(){};
++	~CryptStateOCB2() noexcept override;
+ 
+ 	virtual bool isValid() const Q_DECL_OVERRIDE;
+ 	virtual void genKey() Q_DECL_OVERRIDE;
+@@ -43,8 +44,8 @@ private:
+ 	unsigned char decrypt_iv[AES_BLOCK_SIZE];
+ 	unsigned char decrypt_history[0x100];
+ 
+-	AES_KEY encrypt_key;
+-	AES_KEY decrypt_key;
++	EVP_CIPHER_CTX *enc_ctx;
++	EVP_CIPHER_CTX *dec_ctx;
+ };
+ 
+ 
+-- 
+2.38.4
+

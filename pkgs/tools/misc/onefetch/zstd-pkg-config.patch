@@ -1,0 +1,24 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index f6d5b6c..a631bbf 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2544,6 +2544,7 @@ dependencies = [
+  "typetag",
+  "winres",
+  "yaml-rust",
++ "zstd",
+ ]
+ 
+ [[package]]
+diff --git a/Cargo.toml b/Cargo.toml
+index b77f70d..861f1ac 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -65,6 +65,7 @@ tokei = "12.1.2"
+ typetag = "0.2"
+ yaml-rust = "0.4.5"
+ parking_lot = "0.12"
++zstd = { version = "*", features = ["pkg-config"] }
+ 
+ [dev-dependencies]
+ criterion = "0.5.1"

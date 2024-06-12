@@ -1,0 +1,24 @@
+name: "Label PR"
+
+on:
+  pull_request_target:
+    types: [edited, opened, synchronize, reopened]
+
+# WARNING:
+# When extending this action, be aware that $GITHUB_TOKEN allows some write
+# access to the GitHub API. This means that it should not evaluate user input in
+# a way that allows code injection.
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  labels:
+    runs-on: ubuntu-latest
+    if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
+    steps:
+    - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5.0.0
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        sync-labels: true

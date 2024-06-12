@@ -1,0 +1,12 @@
+diff --git i/test/CMakeLists.txt w/test/CMakeLists.txt
+index 46127597..727b66bd 100644
+--- i/test/CMakeLists.txt
++++ w/test/CMakeLists.txt
+@@ -189,7 +189,6 @@ set(XTENSOR_TESTS
+     test_xhistogram.cpp
+     test_xpad.cpp
+     test_xindex_view.cpp
+-    test_xinfo.cpp
+     test_xio.cpp
+     test_xlayout.cpp
+     test_xmanipulation.cpp

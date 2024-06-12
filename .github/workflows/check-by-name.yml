@@ -1,0 +1,123 @@
+# Checks pkgs/by-name (see pkgs/by-name/README.md)
+# using the nixpkgs-check-by-name tool (see https://github.com/NixOS/nixpkgs-check-by-name)
+#
+# When you make changes to this workflow, also update pkgs/test/check-by-name/run-local.sh adequately
+name: Check pkgs/by-name
+
+on:
+  # Using pull_request_target instead of pull_request avoids having to approve first time contributors
+  pull_request_target:
+    # This workflow depends on the base branch of the PR,
+    # but changing the base branch is not included in the default trigger events,
+    # which would be `opened`, `synchronize` or `reopened`.
+    # Instead it causes an `edited` event, so we need to add it explicitly here
+    # While `edited` is also triggered when the PR title/body is changed,
+    # this PR action is fairly quick, and PR's don't get edited that often,
+    # so it shouldn't be a problem
+    # There is a feature request for adding a `base_changed` event:
+    # https://github.com/orgs/community/discussions/35058
+    types: [opened, synchronize, reopened, edited]
+
+permissions: {}
+
+# We don't use a concurrency group here, because the action is triggered quite often (due to the PR edit
+# trigger), and contributers would get notified on any canceled run.
+# There is a feature request for supressing notifications on concurrency-canceled runs:
+# https://github.com/orgs/community/discussions/13015
+
+jobs:
+  check:
+    # This needs to be x86_64-linux, because we depend on the tooling being pre-built in the GitHub releases
+    runs-on: ubuntu-latest
+    # This should take 1 minute at most, but let's be generous.
+    # The default of 6 hours is definitely too long
+    timeout-minutes: 10
+    steps:
+      # This step has to be in this file,
+      # because it's needed to determine which revision of the repository to fetch,
+      # and we can only use other files from the repository once it's fetched.
+      - name: Resolving the merge commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # This checks for mergeability of a pull request as recommended in
+          # https://docs.github.com/en/rest/guides/using-the-rest-api-to-interact-with-your-git-database?apiVersion=2022-11-28#checking-mergeability-of-pull-requests
+
+          # Retry the API query this many times
+          retryCount=5
+          # Start with 5 seconds, but double every retry
+          retryInterval=5
+          while true; do
+            echo "Checking whether the pull request can be merged"
+            prInfo=$(gh api \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /repos/"$GITHUB_REPOSITORY"/pulls/${{ github.event.pull_request.number }})
+            mergeable=$(jq -r .mergeable <<< "$prInfo")
+            mergedSha=$(jq -r .merge_commit_sha <<< "$prInfo")
+
+            if [[ "$mergeable" == "null" ]]; then
+              if (( retryCount == 0 )); then
+                echo "Not retrying anymore, probably GitHub is having internal issues"
+                exit 1
+              else
+                (( retryCount -= 1 )) || true
+
+                # null indicates that GitHub is still computing whether it's mergeable
+                # Wait a couple seconds before trying again
+                echo "GitHub is still computing whether this PR can be merged, waiting $retryInterval seconds before trying again ($retryCount retries left)"
+                sleep "$retryInterval"
+
+                (( retryInterval *= 2 )) || true
+              fi
+            else
+              break
+            fi
+          done
+
+          if [[ "$mergeable" == "true" ]]; then
+            echo "The PR can be merged, checking the merge commit $mergedSha"
+            echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
+          else
+            echo "The PR cannot be merged, it has a merge conflict, skipping the rest.."
+          fi
+      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+        if: env.mergedSha
+        with:
+          # pull_request_target checks out the base branch by default
+          ref: ${{ env.mergedSha }}
+          # Fetches the merge commit and its parents
+          fetch-depth: 2
+      - name: Checking out base branch
+        if: env.mergedSha
+        run: |
+          base=$(mktemp -d)
+          git worktree add "$base" "$(git rev-parse HEAD^1)"
+          echo "base=$base" >> "$GITHUB_ENV"
+      - uses: cachix/install-nix-action@8887e596b4ee1134dae06b98d573bd674693f47c # v26
+        if: env.mergedSha
+      - name: Fetching the pinned tool
+        if: env.mergedSha
+        # Update the pinned version using pkgs/test/check-by-name/update-pinned-tool.sh
+        run: |
+          # The pinned version of the tooling to use
+          toolVersion=$(<pkgs/test/check-by-name/pinned-version.txt)
+          # Fetch the x86_64-linux-specific release artifact containing the Gzipped NAR of the pre-built tool
+          toolPath=$(curl -sSfL https://github.com/NixOS/nixpkgs-check-by-name/releases/download/"$toolVersion"/x86_64-linux.nar.gz \
+            | gzip -cd | nix-store --import | tail -1)
+          # Adds a result symlink as a GC root
+          nix-store --realise "$toolPath" --add-root result
+      - name: Running nixpkgs-check-by-name
+        if: env.mergedSha
+        env:
+          # Force terminal colors to be enabled. The library that
+          # nixpkgs-check-by-name uses respects: https://bixense.com/clicolors/
+          CLICOLOR_FORCE: 1
+        run: |
+          if result/bin/nixpkgs-check-by-name --base "$base" .; then
+            exit 0
+          else
+            exitCode=$?
+            echo "To run locally: ./maintainers/scripts/check-by-name.sh $GITHUB_BASE_REF https://github.com/$GITHUB_REPOSITORY.git"
+            exit "$exitCode"
+          fi
