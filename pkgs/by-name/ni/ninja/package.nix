@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , asciidoc
 , docbook_xml_dtd_45
 , docbook_xsl
@@ -11,17 +10,18 @@
 , re2c
 , buildPackages
 , buildDocs ? true
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ninja";
-  version = "1.11.1";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
-    rev = "v${version}";
-    hash = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RT5u+TDvWxG5EVQEYj931EZyrHUSAqK73OKDAascAwA=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -36,15 +36,6 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     docbook_xsl
     libxslt.bin
-  ];
-
-  patches = lib.optionals stdenv.is32bit [
-    # Otherwise ninja may fail on some files in a larger FS.
-    (fetchpatch {
-      name = "stat64.patch";
-      url = "https://github.com/ninja-build/ninja/commit/7bba11ae704efc84cac5fde5e9be53f653f237d1.diff";
-      hash = "sha256-tINS57xLh1lwnYFWCQs5OudfgtIShaOh5zbmv7w5BnQ=";
-    })
   ];
 
   postPatch = ''
@@ -91,7 +82,9 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {};
+
+  meta = {
     description = "Small build system with a focus on speed";
     mainProgram = "ninja";
     longDescription = ''
@@ -101,8 +94,8 @@ stdenv.mkDerivation rec {
       to run builds as fast as possible.
     '';
     homepage = "https://ninja-build.org/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice bjornfor orivej ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice bjornfor orivej ];
   };
-}
+})

@@ -12,9 +12,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-s/oGv7/0LgNpdGu6dnvvbxDgFDvcvcHL01dSPxhMVWE=";
-  preConfigure = ''
-    cargo metadata --offline
-  '';
 
   nativeBuildInputs = [ installShellFiles ];
 

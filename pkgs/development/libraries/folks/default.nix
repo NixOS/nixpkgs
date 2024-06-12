@@ -90,12 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
   # occur inconsistently
   doCheck = false;
 
-  # Prevents e-d-s add-contacts-stress-test from timing out
-  checkPhase = ''
-    runHook preCheck
-    meson test --timeout-multiplier 4
-    runHook postCheck
-  '';
+  mesonCheckFlags = [
+    # Prevents e-d-s add-contacts-stress-test from timing out
+    "--timeout-multiplier" "4"
+  ];
 
   postPatch = lib.optionalString telepathySupport ''
     patchShebangs tests/tools/manager-file.py

@@ -3,7 +3,6 @@
 , buildPackages
 , buildPlatform
 , pkgsBuildBuild
-, pkgsBuildTarget
 # Channel data:
 , channel, upstream-info
 # Helper functions:
@@ -13,7 +12,6 @@
 , ninja, pkg-config
 , python3, perl
 , which
-, llvmPackages_attrName
 , libuuid
 , overrideCC
 # postPatch:
@@ -132,7 +130,7 @@ let
   # https://github.com/NixOS/nixpkgs/issues/142901
   buildPlatformLlvmStdenv =
     let
-      llvmPackages = pkgsBuildBuild.${llvmPackages_attrName};
+      llvmPackages = pkgsBuildBuild.rustc.llvmPackages;
     in
       overrideCC llvmPackages.stdenv
         (llvmPackages.stdenv.cc.override {
@@ -165,7 +163,7 @@ let
       ninja pkg-config
       python3WithPackages perl
       which
-      buildPackages.${llvmPackages_attrName}.bintools
+      buildPackages.rustc.llvmPackages.bintools
       bison gperf
     ];
 
@@ -261,6 +259,14 @@ let
       # We also need enable_widevine_cdm_component to be false. Unfortunately it isn't exposed as gn
       # flag (declare_args) so we simply hardcode it to false.
       ./patches/widevine-disable-auto-download-allow-bundle.patch
+    ] ++ lib.optionals (versionRange "125" "126") [
+      # Fix building M125 with ninja 1.12. Not needed for M126+.
+      # https://issues.chromium.org/issues/336911498
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5487538
+      (githubPatch {
+        commit = "a976cb05b4024b7a6452d1541378d718cdfe33e6";
+        hash = "sha256-K2PSeJAvhGH2/Yp63/4mJ85NyqXqDDkMWY+ptrpgmOI=";
+      })
     ] ++ [
       # Required to fix the build with a more recent wayland-protocols version
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
@@ -382,8 +388,8 @@ let
     llvmCcAndBintools = symlinkJoin {
       name = "llvmCcAndBintools";
       paths = [
-        pkgsBuildTarget.${llvmPackages_attrName}.llvm
-        pkgsBuildTarget.${llvmPackages_attrName}.stdenv.cc
+        buildPackages.rustc.llvmPackages.llvm
+        buildPackages.rustc.llvmPackages.stdenv.cc
       ];
     };
 

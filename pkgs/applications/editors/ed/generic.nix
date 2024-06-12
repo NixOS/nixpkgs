@@ -13,12 +13,14 @@
 , stdenv
 , fetchurl
 , lzip
+, runtimeShellPackage
 }:
 
 stdenv.mkDerivation {
   inherit pname version src patches;
 
   nativeBuildInputs = [ lzip ];
+  buildInputs = [ runtimeShellPackage ];
 
   configureFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"

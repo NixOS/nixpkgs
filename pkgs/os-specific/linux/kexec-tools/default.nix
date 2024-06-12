@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/6c1192cbf166698932030c2e3de71db1885a572d/srcpkgs/kexec-tools/patches/ppc64-elfv2.patch";
       sha256 = "19wzfwb0azm932v0vhywv4221818qmlmvdfwpvvpfyw4hjsc2s1l";
     })
+    # binutils-2.42 support
+    (fetchpatch {
+      url = "https://github.com/horms/kexec-tools/commit/328de8e00e298f00d7ba6b25dc3950147e9642e6.patch";
+      hash = "sha256-wVQI4oV+hBLq3kGIp2+F5J3f6s/TypDu3Xq583KYc3U=";
+    })
   ];
 
   hardeningDisable = [ "format" "pic" "relro" "pie" ];

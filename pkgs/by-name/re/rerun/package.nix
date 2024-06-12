@@ -78,8 +78,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.isLinux [ (lib.getLib wayland) ];
 
-  env.CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
-
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [
       libxkbcommon
@@ -128,5 +126,8 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with maintainers; [ SomeoneSerge ];
     mainProgram = "rerun";
+    # See comment about wasm32-unknown-unknown in rustc.nix.
+    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+      !stdenv.hostPlatform.gcc.thumb or true;
   };
 }

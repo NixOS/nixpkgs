@@ -39,7 +39,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-zTKO3qyS9qZl3p8yPJO3Eq8YWLwuDYjz9xAEaUcKG4o=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    # https://lists.gnu.org/archive/html/bug-coreutils/2024-05/msg00037.html
+    # This is not precisely the patch provided - this is a diff of the Makefile.in
+    # after the patch was applied and autoreconf was run, since adding autoreconf
+    # here causes infinite recursion.
+    ./fix-mix-flags-deps-libintl.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # https://lists.gnu.org/archive/html/bug-coreutils/2024-03/msg00089.html
     ./fix-test-failure-musl.patch
   ];
@@ -99,13 +105,12 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   nativeBuildInputs = [
-    # autoreconfHook is due to patch, normally only needed for cygwin
-    autoreconfHook
     perl
     xz.bin
   ]
   ++ optionals stdenv.hostPlatform.isCygwin [
     # due to patch
+    autoreconfHook
     texinfo
   ];
 

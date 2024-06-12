@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
     # Allow changing base for paths in pkg-config file as before.
     # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
     ./0001-build-Use-datarootdir-in-Meson-generated-pkg-config-.patch
+
+    ./elogind.patch
   ];
 
   depsBuildBuild = [
@@ -178,6 +180,10 @@ stdenv.mkDerivation rec {
     description = "Toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
+    badPlatforms = [
+      # mandatory libpolkit-gobject shared library
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
     maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
   };
 }

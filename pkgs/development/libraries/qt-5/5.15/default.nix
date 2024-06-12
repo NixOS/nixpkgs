@@ -36,6 +36,14 @@ let
       ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
 
       ./qtbase.patch.d/0014-aarch64-darwin.patch
+
+      # Fix typo that breaks build on Darwin
+      # FIXME: remove this once merged upstream
+      # See: https://invent.kde.org/qt/qt/qtbase/-/merge_requests/325
+      (fetchpatch {
+        url = "https://invent.kde.org/qt/qt/qtbase/-/commit/e84c0df50f51c61aa49b47823582b0f8de406e3d.patch";
+        hash = "sha256-d1RIY03E71aMzOOVtcIaMeariki/72QRekUne6P2D3M=";
+      })
     ] ++ [
       ./qtbase.patch.d/0003-qtbase-mkspecs.patch
       ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
@@ -173,23 +181,11 @@ let
       })
     ];
     qtwebengine = [
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a6f16c6daea3b5a1f7bc9f175d1645922c131563/qt5/qt5-webengine-python3.patch";
-        hash = "sha256-rUSDwTucXVP3Obdck7LRTeKZ+JYQSNhQ7+W31uHZ9yM=";
-      })
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/7ae178a617d1e0eceb742557e63721af949bd28a/qt5/qt5-webengine-chromium-python3.patch";
-        stripLen = 1;
-        extraPrefix = "src/3rdparty/";
-        hash = "sha256-MZGYeMdGzwypfKoSUaa56K3inbcGRx7he/+AFyk5ekA=";
-      })
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/7ae178a617d1e0eceb742557e63721af949bd28a/qt5/qt5-webengine-gcc12.patch";
-        stripLen = 1;
-        extraPrefix = "src/3rdparty/";
-        hash = "sha256-s4GsGMJTBNWw2gTJuIEP3tqT82AmTsR2mbj59m2p6rM=";
-      })
       ./qtwebengine-link-pulseaudio.patch
+      # Fixes Chromium build failure with Ninja 1.12.
+      # See: https://bugreports.qt.io/browse/QTBUG-124375
+      # Backport of: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=a766045f65f934df3b5f1aa63bc86fbb3e003a09
+      ./qtwebengine-ninja-1.12.patch
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
@@ -320,11 +316,6 @@ let
           in if stdenv'.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
         inherit (srcs.qtwebengine) version;
         python = python3;
-        postPatch = ''
-          # update catapult for python3 compatibility
-          rm -r src/3rdparty/chromium/third_party/catapult
-          cp -r ${srcs.catapult} src/3rdparty/chromium/third_party/catapult
-        '';
         inherit (darwin) cctools xnu;
         inherit (darwin.apple_sdk_11_0) libpm libunwind;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
