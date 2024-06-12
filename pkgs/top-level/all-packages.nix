@@ -23311,6 +23311,8 @@ with pkgs;
 
   micropython = callPackage ../development/interpreters/micropython { };
 
+  miden-vm = callPackage ../development/compilers/miden-vm { };
+
   MIDIVisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midi-visualizer {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Carbon CoreAudio CoreMIDI CoreServices Kernel;
   };
