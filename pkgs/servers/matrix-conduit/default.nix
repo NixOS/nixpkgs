@@ -12,21 +12,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
     rev = "v${version}";
-    hash = "sha256-6osKiwEm3H7NR8vuOaD5Jlns5alfgprg+c3D98msxcE=";
+    hash = "sha256-/qKPeE2Ptweaf+rHOvdW0TUDLwN9D93MMgDoU4fTzEA=";
   };
+
+  postPatch = ''
+    substituteInPlace Cargo.toml --replace-fail \
+      'rust-version = "1.78.0"' \
+      'rust-version = "1.77.0"'
+  '';
 
   # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
   # inheritance within Git dependencies, but importCargoLock does.
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ruma-0.9.4" = "sha256-ICz2Mi94XA2os3dTBLWTL4B60Dopw2u0Fq/mM3HoG2A=";
+      "ruma-0.10.1" = "sha256-I1mTeJLo+pgIqFkn1D2De/oACQPkUELjGdyGf3MVuLQ=";
     };
   };
 
@@ -46,6 +52,7 @@ rustPlatform.buildRustPackage rec {
     rust-jemalloc-sys
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   env = {
