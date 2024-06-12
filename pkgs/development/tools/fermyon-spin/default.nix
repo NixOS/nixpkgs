@@ -16,6 +16,8 @@ let
     aarch64-darwin = "macos-aarch64";
   }.${system} or (throw "Unsupported system: ${system}");
 
+  # TODO: It'd be nice to write an update script that would update all of these
+  # hashes together.
   packageHash = {
     x86_64-linux = "sha256-gYHIfvgofT9tKYCchZoRYvioLCtp2wfaOtuVWxTyujM=";
     aarch64-linux = "sha256-zW+aeUc67pa6mQQkfazShHKAvGeucswLK1eRCxzXOJM=";
