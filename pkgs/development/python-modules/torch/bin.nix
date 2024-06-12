@@ -97,6 +97,23 @@ buildPythonPackage {
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
   '';
 
+  # See https://github.com/NixOS/nixpkgs/issues/296179
+  #
+  # This is a quick hack to add `libnvrtc` to the runpath so that torch can find
+  # it when it is needed at runtime.
+  extraRunpaths = lib.optionals stdenv.hostPlatform.isLinux [ "${lib.getLib cudaPackages.cuda_nvrtc}/lib" ];
+  postPhases = lib.optionals stdenv.isLinux [ "postPatchelfPhase" ];
+  postPatchelfPhase = ''
+    while IFS= read -r -d $'\0' elf ; do
+      for extra in $extraRunpaths ; do
+        echo patchelf "$elf" --add-rpath "$extra" >&2
+        patchelf "$elf" --add-rpath "$extra"
+      done
+    done < <(
+      find "''${!outputLib}" "$out" -type f -iname '*.so' -print0
+    )
+  '';
+
   # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
   dontStrip = true;
 

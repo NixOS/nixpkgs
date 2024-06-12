@@ -10,6 +10,7 @@
   renovate,
   testers,
   xcbuild,
+  nixosTests,
 }:
 
 let
@@ -77,11 +78,11 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/{bin,lib/node_modules/renovate}
-    cp -r dist node_modules package.json $out/lib/node_modules/renovate
+    cp -r dist node_modules package.json renovate-schema.json $out/lib/node_modules/renovate
 
     makeWrapper "${lib.getExe nodejs}" "$out/bin/renovate" \
       --add-flags "$out/lib/node_modules/renovate/dist/renovate.js"
-    makeWrapper "${lib.getExe nodejs}" "$out/bin/config-validator" \
+    makeWrapper "${lib.getExe nodejs}" "$out/bin/renovate-config-validator" \
       --add-flags "$out/lib/node_modules/renovate/dist/config-validator.js"
 
     runHook postInstall
@@ -89,6 +90,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     version = testers.testVersion { package = renovate; };
+    vm-test = nixosTests.renovate;
   };
 
   meta = {

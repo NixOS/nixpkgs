@@ -18,6 +18,7 @@ let
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
     inherit version;
+    pname = "linux-${if isLqx then "lqx" else "zen"}";
     modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
     isZen = true;
 

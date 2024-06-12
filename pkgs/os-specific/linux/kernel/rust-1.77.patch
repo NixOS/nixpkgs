@@ -1,13 +1,15 @@
-From d69265b7d756931b2e763a3262f22ba4100895a0 Mon Sep 17 00:00:00 2001
+From b256fc507d4710287b22077834c16d18cee4ab17 Mon Sep 17 00:00:00 2001
 From: Miguel Ojeda <ojeda@kernel.org>
 Date: Sat, 17 Feb 2024 01:27:17 +0100
-Subject: [PATCH] rust: upgrade to Rust 1.77.0
+Subject: [PATCH] rust: upgrade to Rust 1.77.1
 
-This is the next upgrade to the Rust toolchain, from 1.76.0 to 1.77.0
+This is the next upgrade to the Rust toolchain, from 1.76.0 to 1.77.1
 (i.e. the latest) [1].
 
 See the upgrade policy [2] and the comments on the first upgrade in
 commit 3ed03f4da06e ("rust: upgrade to Rust 1.68.2").
+
+# Unstable features
 
 The `offset_of` feature (single-field `offset_of!`) that we were using
 got stabilized in Rust 1.77.0 [3].
@@ -18,15 +20,21 @@ increase the list.
 
 Please see [4] for details.
 
+# Required changes
+
 Rust 1.77.0 merged the `unused_tuple_struct_fields` lint into `dead_code`,
-thus upgrading it from `allow` to `warn` [5]. In turn, this makes `rustc`
-complain about the `ThisModule`'s pointer field being never read. Thus
-locally `allow` it for the moment, since we will have users later on
-(e.g. Binder needs a `as_ptr` method [6]).
+thus upgrading it from `allow` to `warn` [5]. In turn, this made `rustc`
+complain about the `ThisModule`'s pointer field being never read, but
+the previous patch adds the `as_ptr` method to it, needed by Binder [6],
+so that we do not need to locally `allow` it.
+
+# Other changes
 
 Rust 1.77.0 introduces the `--check-cfg` feature [7], for which there
 is a Call for Testing going on [8]. We were requested to test it and
 we found it useful [9] -- we will likely enable it in the future.
+
+# `alloc` upgrade and reviewing
 
 The vast majority of changes are due to our `alloc` fork being upgraded
 at once.
@@ -85,9 +93,12 @@ Link: https://lore.kernel.org/rust-for-linux/20231101-rust-binder-v1-2-08ba9197f
 Link: https://doc.rust-lang.org/nightly/unstable-book/compiler-flags/check-cfg.html [7]
 Link: https://github.com/rust-lang/rfcs/pull/3013#issuecomment-1936648479 [8]
 Link: https://github.com/rust-lang/rust/issues/82450#issuecomment-1947462977 [9]
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Tested-by: Boqun Feng <boqun.feng@gmail.com>
 Link: https://lore.kernel.org/r/20240217002717.57507-1-ojeda@kernel.org
-Link: https://github.com/Rust-for-Linux/linux/commit/d69265b7d756931b2e763a3262f22ba4100895a0
+[ Upgraded to 1.77.1. Removed `allow(dead_code)` thanks to the previous
+  patch. Reworded accordingly. No changes to `alloc` during the beta. ]
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 Signed-off-by: Alyssa Ross <hi@alyssa.is>
 ---
  Documentation/process/changes.rst |   2 +-
@@ -96,15 +107,15 @@ Signed-off-by: Alyssa Ross <hi@alyssa.is>
  rust/alloc/lib.rs                 |   7 +-
  rust/alloc/raw_vec.rs             |  13 ++--
  rust/alloc/slice.rs               |   4 +-
- rust/alloc/vec/into_iter.rs       | 108 +++++++++++++++++++-----------
- rust/alloc/vec/mod.rs             | 101 +++++++++++++++++++---------
- rust/kernel/lib.rs                |   3 +-
+ rust/alloc/vec/into_iter.rs       | 104 +++++++++++++++++++-----------
+ rust/alloc/vec/mod.rs             | 101 ++++++++++++++++++++---------
+ rust/kernel/lib.rs                |   1 -
  scripts/Makefile.build            |   2 +-
  scripts/min-tool-version.sh       |   2 +-
- 11 files changed, 161 insertions(+), 91 deletions(-)
+ 11 files changed, 158 insertions(+), 88 deletions(-)
 
 diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-index 7ef8de58f7f892..879ee628893ae1 100644
+index 7ef8de58f7f8..b5d3107c6734 100644
 --- a/Documentation/process/changes.rst
 +++ b/Documentation/process/changes.rst
 @@ -31,7 +31,7 @@ you probably needn't concern yourself with pcmciautils.
@@ -112,12 +123,12 @@ index 7ef8de58f7f892..879ee628893ae1 100644
  GNU C                  5.1              gcc --version
  Clang/LLVM (optional)  13.0.1           clang --version
 -Rust (optional)        1.76.0           rustc --version
-+Rust (optional)        1.77.0           rustc --version
++Rust (optional)        1.77.1           rustc --version
  bindgen (optional)     0.65.1           bindgen --version
  GNU make               3.82             make --version
  bash                   4.2              bash --version
 diff --git a/rust/alloc/alloc.rs b/rust/alloc/alloc.rs
-index abb791cc23715a..b1204f87227b23 100644
+index abb791cc2371..b1204f87227b 100644
 --- a/rust/alloc/alloc.rs
 +++ b/rust/alloc/alloc.rs
 @@ -5,7 +5,7 @@
@@ -129,7 +140,7 @@ index abb791cc23715a..b1204f87227b23 100644
  
  #[cfg(not(test))]
  use core::ptr::{self, NonNull};
-@@ -210,7 +210,7 @@ impl Global {
+@@ -210,7 +210,7 @@ unsafe fn grow_impl(
                  let new_size = new_layout.size();
  
                  // `realloc` probably checks for `new_size >= old_layout.size()` or something similar.
@@ -138,7 +149,7 @@ index abb791cc23715a..b1204f87227b23 100644
  
                  let raw_ptr = realloc(ptr.as_ptr(), old_layout, new_size);
                  let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;
-@@ -301,7 +301,7 @@ unsafe impl Allocator for Global {
+@@ -301,7 +301,7 @@ unsafe fn shrink(
              // SAFETY: `new_size` is non-zero. Other conditions must be upheld by the caller
              new_size if old_layout.align() == new_layout.align() => unsafe {
                  // `realloc` probably checks for `new_size <= old_layout.size()` or something similar.
@@ -148,7 +159,7 @@ index abb791cc23715a..b1204f87227b23 100644
                  let raw_ptr = realloc(ptr.as_ptr(), old_layout, new_size);
                  let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;
 diff --git a/rust/alloc/boxed.rs b/rust/alloc/boxed.rs
-index c93a22a5c97f14..5fc39dfeb8e7bf 100644
+index c93a22a5c97f..5fc39dfeb8e7 100644
 --- a/rust/alloc/boxed.rs
 +++ b/rust/alloc/boxed.rs
 @@ -26,6 +26,7 @@
@@ -159,7 +170,7 @@ index c93a22a5c97f14..5fc39dfeb8e7bf 100644
  //! #[derive(Debug)]
  //! enum List<T> {
  //!     Cons(T, Box<List<T>>),
-@@ -194,8 +195,7 @@ mod thin;
+@@ -194,8 +195,7 @@
  #[fundamental]
  #[stable(feature = "rust1", since = "1.0.0")]
  // The declaration of the `Box` struct must be kept in sync with the
@@ -170,7 +181,7 @@ index c93a22a5c97f14..5fc39dfeb8e7bf 100644
      T: ?Sized,
      #[unstable(feature = "allocator_api", issue = "32838")] A: Allocator = Global,
 diff --git a/rust/alloc/lib.rs b/rust/alloc/lib.rs
-index 36f79c07559338..39afd55ec0749e 100644
+index 36f79c075593..39afd55ec074 100644
 --- a/rust/alloc/lib.rs
 +++ b/rust/alloc/lib.rs
 @@ -105,7 +105,6 @@
@@ -223,7 +234,7 @@ index 36f79c07559338..39afd55ec0749e 100644
  #![feature(exclusive_range_pattern)]
  #![feature(fundamental)]
 diff --git a/rust/alloc/raw_vec.rs b/rust/alloc/raw_vec.rs
-index 98b6abf30af6e4..1839d1c8ee7a04 100644
+index 98b6abf30af6..1839d1c8ee7a 100644
 --- a/rust/alloc/raw_vec.rs
 +++ b/rust/alloc/raw_vec.rs
 @@ -4,7 +4,7 @@
@@ -235,7 +246,7 @@ index 98b6abf30af6e4..1839d1c8ee7a04 100644
  use core::mem::{self, ManuallyDrop, MaybeUninit, SizedTypeProperties};
  use core::ptr::{self, NonNull, Unique};
  use core::slice;
-@@ -317,7 +317,7 @@ impl<T, A: Allocator> RawVec<T, A> {
+@@ -317,7 +317,7 @@ fn current_memory(&self) -> Option<(NonNull<u8>, Layout)> {
      ///
      /// # Panics
      ///
@@ -244,7 +255,7 @@ index 98b6abf30af6e4..1839d1c8ee7a04 100644
      ///
      /// # Aborts
      ///
-@@ -358,7 +358,7 @@ impl<T, A: Allocator> RawVec<T, A> {
+@@ -358,7 +358,7 @@ pub fn try_reserve(&mut self, len: usize, additional: usize) -> Result<(), TryRe
          }
          unsafe {
              // Inform the optimizer that the reservation has succeeded or wasn't needed
@@ -253,7 +264,7 @@ index 98b6abf30af6e4..1839d1c8ee7a04 100644
          }
          Ok(())
      }
-@@ -381,7 +381,7 @@ impl<T, A: Allocator> RawVec<T, A> {
+@@ -381,7 +381,7 @@ pub fn try_reserve_for_push(&mut self, len: usize) -> Result<(), TryReserveError
      ///
      /// # Panics
      ///
@@ -262,7 +273,7 @@ index 98b6abf30af6e4..1839d1c8ee7a04 100644
      ///
      /// # Aborts
      ///
-@@ -402,7 +402,7 @@ impl<T, A: Allocator> RawVec<T, A> {
+@@ -402,7 +402,7 @@ pub fn try_reserve_exact(
          }
          unsafe {
              // Inform the optimizer that the reservation has succeeded or wasn't needed
@@ -271,7 +282,7 @@ index 98b6abf30af6e4..1839d1c8ee7a04 100644
          }
          Ok(())
      }
-@@ -553,7 +553,7 @@ where
+@@ -553,7 +553,7 @@ fn finish_grow<A>(
          debug_assert_eq!(old_layout.align(), new_layout.align());
          unsafe {
              // The allocator checks for alignment equality
@@ -289,10 +300,10 @@ index 98b6abf30af6e4..1839d1c8ee7a04 100644
  fn alloc_guard(alloc_size: usize) -> Result<(), TryReserveError> {
      if usize::BITS < 64 && alloc_size > isize::MAX as usize {
 diff --git a/rust/alloc/slice.rs b/rust/alloc/slice.rs
-index 1181836da5f462..a36b072c95195f 100644
+index 1181836da5f4..a36b072c9519 100644
 --- a/rust/alloc/slice.rs
 +++ b/rust/alloc/slice.rs
-@@ -53,14 +53,14 @@ pub use core::slice::{from_mut, from_ref};
+@@ -53,14 +53,14 @@
  pub use core::slice::{from_mut_ptr_range, from_ptr_range};
  #[stable(feature = "rust1", since = "1.0.0")]
  pub use core::slice::{from_raw_parts, from_raw_parts_mut};
@@ -310,10 +321,10 @@ index 1181836da5f462..a36b072c95195f 100644
  pub use core::slice::{Iter, IterMut};
  #[stable(feature = "rchunks", since = "1.31.0")]
 diff --git a/rust/alloc/vec/into_iter.rs b/rust/alloc/vec/into_iter.rs
-index 136bfe94af6c83..0f11744c44b34c 100644
+index 136bfe94af6c..0f11744c44b3 100644
 --- a/rust/alloc/vec/into_iter.rs
 +++ b/rust/alloc/vec/into_iter.rs
-@@ -20,6 +20,17 @@ use core::ops::Deref;
+@@ -20,6 +20,17 @@
  use core::ptr::{self, NonNull};
  use core::slice::{self};
  
@@ -357,7 +368,7 @@ index 136bfe94af6c83..0f11744c44b34c 100644
      }
  
      /// Returns the remaining items of this iterator as a mutable slice.
-@@ -99,7 +112,7 @@ impl<T, A: Allocator> IntoIter<T, A> {
+@@ -99,7 +112,7 @@ pub fn allocator(&self) -> &A {
      }
  
      fn as_raw_mut_slice(&mut self) -> *mut [T] {
@@ -366,7 +377,7 @@ index 136bfe94af6c83..0f11744c44b34c 100644
      }
  
      /// Drops remaining elements and relinquishes the backing allocation.
-@@ -126,7 +139,7 @@ impl<T, A: Allocator> IntoIter<T, A> {
+@@ -126,7 +139,7 @@ pub(super) fn forget_allocation_drop_remaining(&mut self) {
          // this creates less assembly
          self.cap = 0;
          self.buf = unsafe { NonNull::new_unchecked(RawVec::NEW.ptr()) };
@@ -375,7 +386,7 @@ index 136bfe94af6c83..0f11744c44b34c 100644
          self.end = self.buf.as_ptr();
  
          // Dropping the remaining elements can panic, so this needs to be
-@@ -138,9 +151,9 @@ impl<T, A: Allocator> IntoIter<T, A> {
+@@ -138,9 +151,9 @@ pub(super) fn forget_allocation_drop_remaining(&mut self) {
  
      /// Forgets to Drop the remaining elements while still allowing the backing allocation to be freed.
      pub(crate) fn forget_remaining_elements(&mut self) {
@@ -387,7 +398,7 @@ index 136bfe94af6c83..0f11744c44b34c 100644
      }
  
      #[cfg(not(no_global_oom_handling))]
-@@ -162,7 +175,7 @@ impl<T, A: Allocator> IntoIter<T, A> {
+@@ -162,7 +175,7 @@ pub(crate) fn into_vecdeque(self) -> VecDeque<T, A> {
                  // say that they're all at the beginning of the "allocation".
                  0..this.len()
              } else {
@@ -406,9 +417,6 @@ index 136bfe94af6c83..0f11744c44b34c 100644
 -            // `ptr` has to stay where it is to remain aligned, so we reduce the length by 1 by
 -            // reducing the `end`.
 -            self.end = self.end.wrapping_byte_sub(1);
--
--            // Make up a value of this ZST.
--            Some(unsafe { mem::zeroed() })
 +        if T::IS_ZST {
 +            if self.ptr.as_ptr() == self.end as *mut _ {
 +                None
@@ -416,7 +424,9 @@ index 136bfe94af6c83..0f11744c44b34c 100644
 +                // `ptr` has to stay where it is to remain aligned, so we reduce the length by 1 by
 +                // reducing the `end`.
 +                self.end = self.end.wrapping_byte_sub(1);
-+
+ 
+-            // Make up a value of this ZST.
+-            Some(unsafe { mem::zeroed() })
 +                // Make up a value of this ZST.
 +                Some(unsafe { mem::zeroed() })
 +            }
@@ -446,7 +456,7 @@ index 136bfe94af6c83..0f11744c44b34c 100644
          };
          (exact, Some(exact))
      }
-@@ -219,7 +238,7 @@ impl<T, A: Allocator> Iterator for IntoIter<T, A> {
+@@ -219,7 +238,7 @@ fn size_hint(&self) -> (usize, Option<usize>) {
      #[inline]
      fn advance_by(&mut self, n: usize) -> Result<(), NonZeroUsize> {
          let step_size = self.len().min(n);
@@ -455,7 +465,7 @@ index 136bfe94af6c83..0f11744c44b34c 100644
          if T::IS_ZST {
              // See `next` for why we sub `end` here.
              self.end = self.end.wrapping_byte_sub(step_size);
-@@ -261,7 +280,7 @@ impl<T, A: Allocator> Iterator for IntoIter<T, A> {
+@@ -261,7 +280,7 @@ fn count(self) -> usize {
              // Safety: `len` indicates that this many elements are available and we just checked that
              // it fits into the array.
              unsafe {
@@ -464,7 +474,7 @@ index 136bfe94af6c83..0f11744c44b34c 100644
                  self.forget_remaining_elements();
                  return Err(array::IntoIter::new_unchecked(raw_ary, 0..len));
              }
-@@ -270,7 +289,7 @@ impl<T, A: Allocator> Iterator for IntoIter<T, A> {
+@@ -270,7 +289,7 @@ fn count(self) -> usize {
          // Safety: `len` is larger than the array size. Copy a fixed amount here to fully initialize
          // the array.
          return unsafe {
@@ -473,7 +483,7 @@ index 136bfe94af6c83..0f11744c44b34c 100644
              self.ptr = self.ptr.add(N);
              Ok(raw_ary.transpose().assume_init())
          };
-@@ -288,7 +307,7 @@ impl<T, A: Allocator> Iterator for IntoIter<T, A> {
+@@ -288,7 +307,7 @@ unsafe fn __iterator_get_unchecked(&mut self, i: usize) -> Self::Item
          // Also note the implementation of `Self: TrustedRandomAccess` requires
          // that `T: Copy` so reading elements from the buffer doesn't invalidate
          // them for `Drop`.
@@ -482,7 +492,7 @@ index 136bfe94af6c83..0f11744c44b34c 100644
      }
  }
  
-@@ -296,18 +315,25 @@ impl<T, A: Allocator> Iterator for IntoIter<T, A> {
+@@ -296,18 +315,25 @@ unsafe fn __iterator_get_unchecked(&mut self, i: usize) -> Self::Item
  impl<T, A: Allocator> DoubleEndedIterator for IntoIter<T, A> {
      #[inline]
      fn next_back(&mut self) -> Option<T> {
@@ -491,16 +501,15 @@ index 136bfe94af6c83..0f11744c44b34c 100644
 -        } else if T::IS_ZST {
 -            // See above for why 'ptr.offset' isn't used
 -            self.end = self.end.wrapping_byte_sub(1);
--
--            // Make up a value of this ZST.
--            Some(unsafe { mem::zeroed() })
 +        if T::IS_ZST {
 +            if self.end as *mut _ == self.ptr.as_ptr() {
 +                None
 +            } else {
 +                // See above for why 'ptr.offset' isn't used
 +                self.end = self.end.wrapping_byte_sub(1);
-+
+ 
+-            // Make up a value of this ZST.
+-            Some(unsafe { mem::zeroed() })
 +                // Make up a value of this ZST.
 +                Some(unsafe { mem::zeroed() })
 +            }
@@ -518,7 +527,7 @@ index 136bfe94af6c83..0f11744c44b34c 100644
          }
      }
  
-@@ -333,7 +359,11 @@ impl<T, A: Allocator> DoubleEndedIterator for IntoIter<T, A> {
+@@ -333,7 +359,11 @@ fn advance_back_by(&mut self, n: usize) -> Result<(), NonZeroUsize> {
  #[stable(feature = "rust1", since = "1.0.0")]
  impl<T, A: Allocator> ExactSizeIterator for IntoIter<T, A> {
      fn is_empty(&self) -> bool {
@@ -532,10 +541,10 @@ index 136bfe94af6c83..0f11744c44b34c 100644
  }
  
 diff --git a/rust/alloc/vec/mod.rs b/rust/alloc/vec/mod.rs
-index 220fb9d6f45b3f..0be27fff4554a1 100644
+index 220fb9d6f45b..0be27fff4554 100644
 --- a/rust/alloc/vec/mod.rs
 +++ b/rust/alloc/vec/mod.rs
-@@ -360,7 +360,7 @@ mod spec_extend;
+@@ -360,7 +360,7 @@
  ///
  /// `vec![x; n]`, `vec![a, b, c, d]`, and
  /// [`Vec::with_capacity(n)`][`Vec::with_capacity`], will all produce a `Vec`
@@ -544,7 +553,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
  /// (as is the case for the [`vec!`] macro), then a `Vec<T>` can be converted to
  /// and from a [`Box<[T]>`][owned slice] without reallocating or moving the elements.
  ///
-@@ -447,7 +447,7 @@ impl<T> Vec<T> {
+@@ -447,7 +447,7 @@ pub const fn new() -> Self {
      ///
      /// # Panics
      ///
@@ -553,7 +562,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
      ///
      /// # Examples
      ///
-@@ -690,7 +690,7 @@ impl<T, A: Allocator> Vec<T, A> {
+@@ -690,7 +690,7 @@ pub const fn new_in(alloc: A) -> Self {
      ///
      /// # Panics
      ///
@@ -562,7 +571,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
      ///
      /// # Examples
      ///
-@@ -1013,7 +1013,7 @@ impl<T, A: Allocator> Vec<T, A> {
+@@ -1013,7 +1013,7 @@ pub fn capacity(&self) -> usize {
      ///
      /// # Panics
      ///
@@ -571,7 +580,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
      ///
      /// # Examples
      ///
-@@ -1043,7 +1043,7 @@ impl<T, A: Allocator> Vec<T, A> {
+@@ -1043,7 +1043,7 @@ pub fn reserve(&mut self, additional: usize) {
      ///
      /// # Panics
      ///
@@ -580,7 +589,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
      ///
      /// # Examples
      ///
-@@ -1140,8 +1140,11 @@ impl<T, A: Allocator> Vec<T, A> {
+@@ -1140,8 +1140,11 @@ pub fn try_reserve_exact(&mut self, additional: usize) -> Result<(), TryReserveE
  
      /// Shrinks the capacity of the vector as much as possible.
      ///
@@ -594,7 +603,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
      ///
      /// # Examples
      ///
-@@ -1191,10 +1194,10 @@ impl<T, A: Allocator> Vec<T, A> {
+@@ -1191,10 +1194,10 @@ pub fn shrink_to(&mut self, min_capacity: usize) {
  
      /// Converts the vector into [`Box<[T]>`][owned slice].
      ///
@@ -607,7 +616,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
      ///
      /// # Examples
      ///
-@@ -2017,7 +2020,7 @@ impl<T, A: Allocator> Vec<T, A> {
+@@ -2017,7 +2020,7 @@ fn drop(&mut self) {
      ///
      /// # Panics
      ///
@@ -616,7 +625,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
      ///
      /// # Examples
      ///
-@@ -2133,7 +2136,7 @@ impl<T, A: Allocator> Vec<T, A> {
+@@ -2133,7 +2136,7 @@ pub fn pop(&mut self) -> Option<T> {
          } else {
              unsafe {
                  self.len -= 1;
@@ -625,7 +634,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
                  Some(ptr::read(self.as_ptr().add(self.len())))
              }
          }
-@@ -2143,7 +2146,7 @@ impl<T, A: Allocator> Vec<T, A> {
+@@ -2143,7 +2146,7 @@ pub fn pop(&mut self) -> Option<T> {
      ///
      /// # Panics
      ///
@@ -634,7 +643,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
      ///
      /// # Examples
      ///
-@@ -2315,6 +2318,12 @@ impl<T, A: Allocator> Vec<T, A> {
+@@ -2315,6 +2318,12 @@ pub fn is_empty(&self) -> bool {
      /// `[at, len)`. After the call, the original vector will be left containing
      /// the elements `[0, at)` with its previous capacity unchanged.
      ///
@@ -647,7 +656,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
      /// # Panics
      ///
      /// Panics if `at > len`.
-@@ -2346,14 +2355,6 @@ impl<T, A: Allocator> Vec<T, A> {
+@@ -2346,14 +2355,6 @@ fn assert_failed(at: usize, len: usize) -> ! {
              assert_failed(at, self.len());
          }
  
@@ -662,7 +671,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
          let other_len = self.len - at;
          let mut other = Vec::with_capacity_in(other_len, self.allocator().clone());
  
-@@ -3027,6 +3028,50 @@ impl<T, I: SliceIndex<[T]>, A: Allocator> IndexMut<I> for Vec<T, A> {
+@@ -3027,6 +3028,50 @@ fn index_mut(&mut self, index: I) -> &mut Self::Output {
      }
  }
  
@@ -713,7 +722,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
  #[cfg(not(no_global_oom_handling))]
  #[stable(feature = "rust1", since = "1.0.0")]
  impl<T> FromIterator<T> for Vec<T> {
-@@ -3069,14 +3114,8 @@ impl<T, A: Allocator> IntoIterator for Vec<T, A> {
+@@ -3069,14 +3114,8 @@ fn into_iter(self) -> Self::IntoIter {
                  begin.add(me.len()) as *const T
              };
              let cap = me.buf.capacity();
@@ -730,7 +739,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
          }
      }
  }
-@@ -3598,8 +3637,10 @@ impl<T, A: Allocator> From<Box<[T], A>> for Vec<T, A> {
+@@ -3598,8 +3637,10 @@ fn from(s: Box<[T], A>) -> Self {
  impl<T, A: Allocator> From<Vec<T, A>> for Box<[T], A> {
      /// Convert a vector into a boxed slice.
      ///
@@ -744,7 +753,7 @@ index 220fb9d6f45b3f..0be27fff4554a1 100644
      /// # Examples
      ///
 diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index be68d5e567b1a1..71f95e5aa09abd 100644
+index 6858e2f8a3ed..9e9b245ebab5 100644
 --- a/rust/kernel/lib.rs
 +++ b/rust/kernel/lib.rs
 @@ -16,7 +16,6 @@
@@ -755,17 +764,8 @@ index be68d5e567b1a1..71f95e5aa09abd 100644
  #![feature(receiver_trait)]
  #![feature(unsize)]
  
-@@ -78,7 +77,7 @@ pub trait Module: Sized + Sync {
- /// Equivalent to `THIS_MODULE` in the C API.
- ///
- /// C header: [`include/linux/export.h`](srctree/include/linux/export.h)
--pub struct ThisModule(*mut bindings::module);
-+pub struct ThisModule(#[allow(dead_code)] *mut bindings::module);
- 
- // SAFETY: `THIS_MODULE` may be used from all threads within a module.
- unsafe impl Sync for ThisModule {}
 diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index baf86c0880b6d7..367cfeea74c5f5 100644
+index 533a7799fdfe..5a6ab6d965bc 100644
 --- a/scripts/Makefile.build
 +++ b/scripts/Makefile.build
 @@ -263,7 +263,7 @@ $(obj)/%.lst: $(src)/%.c FORCE
@@ -778,7 +778,7 @@ index baf86c0880b6d7..367cfeea74c5f5 100644
  # `--out-dir` is required to avoid temporaries being created by `rustc` in the
  # current working directory, which may be not accessible in the out-of-tree
 diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
-index 5927cc6b7de338..cc5141b67b4a71 100755
+index 5927cc6b7de3..6086e00e640e 100755
 --- a/scripts/min-tool-version.sh
 +++ b/scripts/min-tool-version.sh
 @@ -33,7 +33,7 @@ llvm)
@@ -786,7 +786,10 @@ index 5927cc6b7de338..cc5141b67b4a71 100755
  	;;
  rustc)
 -	echo 1.76.0
-+	echo 1.77.0
++	echo 1.77.1
  	;;
  bindgen)
  	echo 0.65.1
+-- 
+2.44.0
+

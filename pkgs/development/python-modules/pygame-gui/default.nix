@@ -2,6 +2,7 @@
   lib,
   pkgs,
   buildPythonPackage,
+  nix-update-script,
   fetchFromGitHub,
   setuptools,
   pygame-ce,
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pygame-gui";
-  version = "0610";
+  version = "0611";
   pyproject = true;
   # nixpkgs-update: no auto update
 
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "MyreMylar";
     repo = "pygame_gui";
     rev = "refs/tags/v_${version}";
-    hash = "sha256-PVNi/I174AyEEjc+N2UGtgOYSGAgVQbqrKkWZnjOxFY=";
+    hash = "sha256-bibw6RUQKsOsaISunVEdQCT39KnXJ2VKVrAqsPS+Lu8=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -55,6 +56,10 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [ "tests/test_performance/test_text_performance.py" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v_(.*)" ];
+  };
 
   meta = with lib; {
     description = "GUI system for pygame";

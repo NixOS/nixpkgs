@@ -4,6 +4,10 @@
   fetchPypi,
   flit-core,
   pythonOlder,
+
+  # reverse dependencies
+  mashumaro,
+  pydantic,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +30,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "typing_extensions" ];
+
+  passthru.tests = {
+    inherit mashumaro pydantic;
+  };
 
   meta = with lib; {
     description = "Backported and Experimental Type Hints for Python";

@@ -47,11 +47,6 @@ rustPlatform.buildRustPackage rec {
     sed -i "#/bin/celeste#d" justfile
   '';
 
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo update --offline
-  '';
-
   RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [

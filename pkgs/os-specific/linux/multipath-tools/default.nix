@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
     # Backport build fix for musl libc 1.2.5
     (fetchpatch {
       url = "https://github.com/openSUSE/multipath-tools/commit/e5004de8296cd596aeeac0a61b901e98cf7a69d2.patch";
-      hash = "sha256-ZvNFVphB9f+S/XMxktR6P/YYSTLeJXEsj4XrAnw6GUI=";
-      excludes = ["tests/util.c"];
+      hash = "sha256-3Qt8zfrWi9aOdqMObZQaNAaXDmjhvSYrXK7qycC9L1Q=";
     })
   ];
 
@@ -46,16 +45,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace multipathd/multipathd.service.in \
       --replace-fail /sbin/multipathd "$out/bin/multipathd"
-
-    sed -i -re '
-      s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
-    ' libmultipath/defaults.h
-    sed -i -e 's,\$(DESTDIR)/\(usr/\)\?,$(prefix)/,g' \
-      kpartx/Makefile libmpathpersist/Makefile
-    sed -i -e "s,GZIP,GZ," \
-      $(find * -name Makefile\*)
-
-    sed '1i#include <assert.h>' -i tests/{util,vpd}.c
   '';
 
   nativeBuildInputs = [

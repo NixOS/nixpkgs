@@ -16,11 +16,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rVJAaeg27SdM8cTx12rKLIGEYtXUhLHXUYpT78oVNlo=";
 
-  # Cargo.lock is outdated.
-  preConfigure = ''
-    cargo update --offline
-  '';
-
   postInstall = "make PREFIX=$out copy-data";
 
   meta = with lib; {

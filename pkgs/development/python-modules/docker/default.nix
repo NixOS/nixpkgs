@@ -2,12 +2,12 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
 
   # dependencies
   packaging,
@@ -24,29 +24,32 @@
 
 buildPythonPackage rec {
   pname = "docker";
-  version = "7.0.0";
-  format = "pyproject";
+  version = "7.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Mjc2+5LNlBj8XnEzvJU+EanaBPRIP4KLUn21U/Hn5aM=";
+  src = fetchFromGitHub {
+    owner = "docker";
+    repo = "docker-py";
+    rev = "refs/tags/${version}";
+    hash = "sha256-sk6TZLek+fRkKq7kG9g6cR9lvfPC8v8qUXKb7Tq4pLU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     requests
     urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ssh = [ paramiko ];
+    tls = [];
     websockets = [ websocket-client ];
   };
 
@@ -54,7 +57,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "tests/unit" ];
 

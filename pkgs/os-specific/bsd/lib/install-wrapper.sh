@@ -14,7 +14,6 @@ while (( $# )); do
   case $1 in
     -C) ;;
     -o | -g) shift ;;
-    -s) ;;
     -m | -l)
       # handle next arg so not counted as path arg
       args+=("$1" "$2")

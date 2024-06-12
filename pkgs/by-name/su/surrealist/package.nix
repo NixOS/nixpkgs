@@ -81,7 +81,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ];
 
     postBuild = ''
-      CC=clang CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER=lld cargo build \
+      CC=clang cargo build \
         --target wasm32-unknown-unknown \
         --release
 
@@ -166,5 +166,8 @@ in stdenv.mkDerivation (finalAttrs: {
     mainProgram = "surrealist";
     maintainers = with maintainers; [ frankp ];
     platforms = platforms.linux;
+    # See comment about wasm32-unknown-unknown in rustc.nix.
+    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+      !stdenv.hostPlatform.gcc.thumb or true;
   };
 })

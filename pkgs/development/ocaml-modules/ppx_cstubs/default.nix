@@ -1,4 +1,5 @@
 { lib
+, ocaml
 , fetchFromGitHub
 , buildDunePackage
 , bigarray-compat
@@ -11,6 +12,9 @@
 , re
 , findlib
 }:
+
+lib.throwIf (lib.versionAtLeast ocaml.version "5.2")
+  "ppx_cstubs is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "ppx_cstubs";

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.6.1";
+  version = "2024.6.2";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -3210,7 +3210,8 @@
       pyopenuv
     ];
     "openweathermap" = ps: with ps; [
-    ]; # missing inputs: pyopenweathermap
+      pyopenweathermap
+    ];
     "opnsense" = ps: with ps; [
       pyopnsense
     ];
@@ -4762,7 +4763,7 @@
       unifiled
     ];
     "unifiprotect" = ps: with ps; [
-      pyunifiprotect
+      uiprotect
       unifi-discovery
     ];
     "universal" = ps: with ps; [
@@ -5724,6 +5725,7 @@
     "opensky"
     "opentherm_gw"
     "openuv"
+    "openweathermap"
     "opnsense"
     "opower"
     "oralb"
