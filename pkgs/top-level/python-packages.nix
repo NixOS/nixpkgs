@@ -14452,6 +14452,8 @@ self: super: with self; {
 
   sphinxemoji = callPackage ../development/python-modules/sphinxemoji { };
 
+  sphinx-immaterial = callPackage ../development/python-modules/sphinx-immaterial { };
+
   sphinx-inline-tabs = callPackage ../development/python-modules/sphinx-inline-tabs { };
 
   sphinx-issues = callPackage ../development/python-modules/sphinx-issues { };
