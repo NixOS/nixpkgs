@@ -259,6 +259,14 @@ let
       # We also need enable_widevine_cdm_component to be false. Unfortunately it isn't exposed as gn
       # flag (declare_args) so we simply hardcode it to false.
       ./patches/widevine-disable-auto-download-allow-bundle.patch
+    ] ++ lib.optionals (versionRange "125" "126") [
+      # Fix building M125 with ninja 1.12. Not needed for M126+.
+      # https://issues.chromium.org/issues/336911498
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5487538
+      (githubPatch {
+        commit = "a976cb05b4024b7a6452d1541378d718cdfe33e6";
+        hash = "sha256-K2PSeJAvhGH2/Yp63/4mJ85NyqXqDDkMWY+ptrpgmOI=";
+      })
     ] ++ [
       # Required to fix the build with a more recent wayland-protocols version
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
