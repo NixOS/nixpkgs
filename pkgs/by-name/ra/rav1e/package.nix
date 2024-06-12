@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/xiph/rav1e";
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with maintainers; [ getchoo ];
     mainProgram = "rav1e";
   };
 }
