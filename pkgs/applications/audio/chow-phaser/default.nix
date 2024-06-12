@@ -5,7 +5,7 @@
 , python3, sqlite, stdenv }:
 
 stdenv.mkDerivation rec {
-  pname = "ChowPhaser";
+  pname = "chow-phaser";
   version = "1.1.1";
 
   src = fetchFromGitHub {
