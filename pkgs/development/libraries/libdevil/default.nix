@@ -41,14 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-register";
 
   preConfigure = ''
-    sed -i 's, -std=gnu99,,g' configure
     sed -i 's,malloc.h,stdlib.h,g' src-ILU/ilur/ilur.c
-  '' + lib.optionalString stdenv.cc.isClang ''
-    sed -i 's/libIL_la_CXXFLAGS = $(AM_CFLAGS)/libIL_la_CXXFLAGS =/g' lib/Makefile.in
-  '';
-
-  postConfigure = ''
-    sed -i '/RESTRICT_KEYWORD/d' include/IL/config.h
   '';
 
   patches = [
