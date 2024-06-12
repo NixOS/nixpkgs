@@ -1,5 +1,19 @@
 { pkgs, haskellLib }:
 
+let
+  inherit (pkgs) lib;
+  inherit (lib.strings) hasSuffix removeSuffix;
+
+  pathsByName =
+    lib.concatMapAttrs
+      (name: type:
+        lib.optionalAttrs (type == "regular" && hasSuffix ".nix" name) {
+          ${removeSuffix ".nix" name} = ./replacements-by-name + "/${name}";
+        }
+      )
+      (builtins.readDir ./replacements-by-name);
+in
+
 # EXTRA HASKELL PACKAGES NOT ON HACKAGE
 #
 # This file should only contain packages that are not in ./hackage-packages.nix.
@@ -42,3 +56,4 @@ self: super: {
   hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
 
 }
+// lib.mapAttrs (_name: path: self.callPackage path {}) pathsByName
