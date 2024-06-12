@@ -267,7 +267,7 @@ buildStdenv.mkDerivation {
       hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
   ]
-  ++ lib.optionals (lib.versionOlder version "125") [
+  ++ lib.optionals (lib.versionOlder version "115.12") [
     ./rust-1.78.patch
   ]
   ++ extraPatches;

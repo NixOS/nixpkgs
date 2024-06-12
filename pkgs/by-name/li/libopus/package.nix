@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, gitUpdater
-, meson
-, python3
-, ninja
-, fixedPoint ? false
-, withCustomModes ? true
-, withIntrinsics ? stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isx86
-, withAsm ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gitUpdater,
+  meson,
+  python3,
+  ninja,
+  fixedPoint ? false,
+  withCustomModes ? true,
+  withIntrinsics ? stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isx86,
+  withAsm ? false,
 
-# tests
-, ffmpeg-headless
-, testers
+  # tests
+  ffmpeg-headless,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs meson/
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -68,12 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open, royalty-free, highly versatile audio codec";
     homepage = "https://opus-codec.org/";
     changelog = "https://gitlab.xiph.org/xiph/opus/-/releases/v${finalAttrs.version}";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ getchoo jopejoe1 ];
   };
 })
