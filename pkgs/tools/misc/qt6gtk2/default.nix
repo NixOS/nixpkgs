@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, gtk2, pkg-config, qmake, qtbase }:
+{ fetchFromGitHub, lib, stdenv, gtk2, pkg-config, qmake, qtbase, unstableGitUpdater }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qt6gtk2";
@@ -19,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   qmakeFlags = [
     "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "GTK+2.0 integration plugins for Qt6";
