@@ -111,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) pnpmDeps;
+    tests.misskey = nixosTests.misskey;
   };
 
   meta = {
