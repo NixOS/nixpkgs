@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
   pname = "libmatroska";
   version = "1.7.1";
 
+  outputs = [
+    "dev"
+    "out"
+  ];
+
   src = fetchFromGitHub {
     owner = "Matroska-Org";
     repo = "libmatroska";
