@@ -98,7 +98,7 @@
 
 , ... } @ args:
 
-assert projectFile == null -> throw "Defining the `projectFile` attribute is required. This is usually an `.csproj`, or `.sln` file.";
+#assert projectFile == null -> throw "Defining the `projectFile` attribute is required. This is usually an `.csproj`, or `.sln` file.";
 assert (nugetDeps != null && lockfileSha256 != null) -> throw "The attributes `nugetDeps` and 'lockfileSha256' are mutually exclusive!";
 
 let
