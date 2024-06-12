@@ -22562,8 +22562,6 @@ with pkgs;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  libmatroska = callPackage ../development/libraries/libmatroska { };
-
   libmd = callPackage ../development/libraries/libmd { };
 
   libmemcached = callPackage ../development/libraries/libmemcached { };
