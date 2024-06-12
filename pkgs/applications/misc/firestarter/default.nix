@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , fetchzip
-, addDriverRunpath
+, autoAddDriverRunpath
 , cmake
 , glibc_multi
 , glibc
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     git
     pkg-config
   ] ++ lib.optionals withCuda [
-    addDriverRunpath
+    autoAddDriverRunpath
   ];
 
   buildInputs = [ hwloc ] ++ (if withCuda then
@@ -92,10 +92,6 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     cp src/FIRESTARTER${lib.optionalString withCuda "_CUDA"} $out/bin/
     runHook postInstall
-  '';
-
-  postFixup = lib.optionalString withCuda ''
-    addDriverRunpath $out/bin/FIRESTARTER_CUDA
   '';
 
   meta = with lib; {
