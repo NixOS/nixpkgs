@@ -75,6 +75,18 @@ final: prev:
     meta.homepage = "https://github.com/whonore/Coqtail/";
   };
 
+  cord-nvim = buildVimPlugin {
+    pname = "cord.nvim";
+    version = "2024-06-13";
+    src = fetchFromGitHub {
+      owner = "vyfor";
+      repo = "cord.nvim";
+      rev = "cf0af0fc9b8e218afd8c4928ae2e711ce455181b";
+      sha256 = "0hwiq0wwra624wnif9pw1pg96p9rh475lp3qccq9z1a6aak3izhj";
+    };
+    meta.homepage = "https://github.com/vyfor/cord.nvim";
+  };
+
   DoxygenToolkit-vim = buildVimPlugin {
     pname = "DoxygenToolkit.vim";
     version = "2010-11-06";
