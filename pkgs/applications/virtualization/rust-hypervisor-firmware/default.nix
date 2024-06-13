@@ -17,8 +17,8 @@ let
   cross = import ../../../.. {
     system = hostPlatform.system;
     crossSystem = lib.systems.examples."${arch}-embedded" // {
-      rustc.config = "${arch}-unknown-none";
-      rustc.platform = lib.importJSON target;
+      rust.rustcTarget = "${arch}-unknown-none";
+      rust.platform = lib.importJSON target;
     };
   };
 
