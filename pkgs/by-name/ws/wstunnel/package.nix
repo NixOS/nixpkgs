@@ -1,6 +1,8 @@
-{ fetchFromGitHub
+{ lib
+, fetchFromGitHub
 , rustPlatform
-, lib
+, testers
+, wstunnel
 }:
 
 let
@@ -25,22 +27,12 @@ rustPlatform.buildRustPackage {
     "--skip=tcp::tests::test_proxy_connection"
   ];
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    actual="$($out/bin/wstunnel --version)"
-    expected="${pname} ${version}"
-    echo "Check that 'wstunnel --version' returns: $expected"
-    if [[ "$actual" != "$expected" ]]; then
-      echo "'wstunnel --version' returned: $actual"
-      exit 1
-    fi
-    runHook postInstallCheck
-  '';
+  passthru.tests.version = testers.testVersion { package = wstunnel; };
 
   meta = {
     description = "Tunnel all your traffic over Websocket or HTTP2 - Bypass firewalls/DPI";
     homepage = "https://github.com/erebe/wstunnel";
+    changelog = "https://github.com/erebe/wstunnel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rvdp neverbehave ];
     mainProgram = "wstunnel";
