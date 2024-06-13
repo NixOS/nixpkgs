@@ -30,7 +30,8 @@ buildGoModule {
   sourceRoot = "${src.name}/server";
   vendorHash = "sha256-Dvb8g+XtMcI9bbB83AZ94UI54L10jmBnXYrgzGe9200=";
   postUnpack = ''
-    cp -r ${rdio-scanner-client}/webapp .
+    chmod ugo+w /build/source/server
+    cp -r ${rdio-scanner-client}/webapp /build/source/server
   '';
   postInstall = ''
     mv $out/bin/server $out/bin/rdio-scanner
