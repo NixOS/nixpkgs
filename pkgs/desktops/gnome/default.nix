@@ -241,8 +241,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   metacity = callPackage ./misc/metacity { };
 
-  nautilus-python = callPackage ./misc/nautilus-python { };
-
   gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant2; };
 
   pomodoro = callPackage ./misc/pomodoro { };
@@ -258,6 +256,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
   gnome-user-share = lib.warn "The ‘gnome.gnome-user-share’ was moved to top-level. Please use ‘pkgs.gnome-user-share’ directly." pkgs.gnome-user-share; # Added on 2024-06-13.
   nautilus = lib.warn "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly." pkgs.nautilus; # Added on 2024-06-13.
+  nautilus-python = lib.warn "The ‘gnome.nautilus-python’ was moved to top-level. Please use ‘pkgs.nautilus-python’ directly." pkgs.nautilus-python; # Added on 2024-06-13.
 
 #### Removals
   anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16
