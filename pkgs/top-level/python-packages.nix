@@ -4195,6 +4195,8 @@ self: super: with self; {
     inherit (self) python;
   });
 
+  fastkml = callPackage ../development/python-modules/fastkml { };
+
   fastnumbers = callPackage ../development/python-modules/fastnumbers { };
 
   fastparquet = callPackage ../development/python-modules/fastparquet { };
