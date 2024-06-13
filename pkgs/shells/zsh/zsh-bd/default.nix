@@ -15,10 +15,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/share/zsh-bd
-    cp {.,$out/share/zsh-bd}/bd.zsh
-    cd $out/share/zsh-bd
-    ln -s bd{,.plugin}.zsh
+    install -D bd.zsh \
+      $out/share/plugins/zsh-bd/bd.zsh
+    ln -s $out/share/plugins/zsh-bd/bd.zsh \
+      $out/share/plugins/zsh-db/bd.plugin.zsh
+    ln -s $out/share/plugins/zsh-bd \
+      $out/share/zsh-bd
   '';
 
   meta = {
