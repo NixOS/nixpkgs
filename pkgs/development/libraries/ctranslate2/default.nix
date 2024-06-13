@@ -20,7 +20,7 @@
 }:
 
 let
-  cmakeBool = b: if b then "ON" else "OFF";
+  inherit (lib.strings) cmakeBool cmakeFeature;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
@@ -44,15 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
     # https://opennmt.net/CTranslate2/installation.html#build-options
     # https://github.com/OpenNMT/CTranslate2/blob/54810350e662ebdb01ecbf8e4a746f02aeff1dd7/python/tools/prepare_build_environment_linux.sh#L53
     # https://github.com/OpenNMT/CTranslate2/blob/59d223abcc7e636c1c2956e62482bc3299cc7766/python/tools/prepare_build_environment_macos.sh#L12
-    "-DOPENMP_RUNTIME=COMP"
-    "-DWITH_CUDA=${cmakeBool withCUDA}"
-    "-DWITH_CUDNN=${cmakeBool withCuDNN}"
-    "-DWITH_DNNL=${cmakeBool withOneDNN}"
-    "-DWITH_OPENBLAS=${cmakeBool withOpenblas}"
-    "-DWITH_RUY=${cmakeBool withRuy}"
-    "-DWITH_MKL=${cmakeBool withMkl}"
-  ]
-  ++ lib.optional stdenv.isDarwin "-DWITH_ACCELERATE=ON";
+    (cmakeFeature "OPENMP_RUNTIME" "COMP")
+    (cmakeBool "WITH_CUDA" withCUDA)
+    (cmakeBool "WITH_CUDNN" withCuDNN)
+    (cmakeBool "WITH_DNNL" withOneDNN)
+    (cmakeBool "WITH_OPENBLAS" withOpenblas)
+    (cmakeBool "WITH_RUY" withRuy)
+    (cmakeBool "WITH_MKL" withMkl)
+    (cmakeBool "WITH_ACCELERATE" stdenv.isDarwin)
+  ];
 
   buildInputs = lib.optionals withMkl [
     mkl
