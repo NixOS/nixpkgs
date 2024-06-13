@@ -31396,8 +31396,6 @@ with pkgs;
 
   gtklock-userinfo-module = callPackage ../tools/wayland/gtklock/userinfo-module.nix { };
 
-  guardian-agent = callPackage ../tools/networking/guardian-agent { };
-
   gv = callPackage ../applications/misc/gv { };
 
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
