@@ -232,9 +232,9 @@
   };
   connectedvmware = mkAzExtension rec {
     pname = "connectedvmware";
-    version = "1.0.1";
+    version = "1.1.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/connectedvmware-${version}-py2.py3-none-any.whl";
-    sha256 = "92bcb19c2d19f7e5cf3e8527894324937380b831de19845cf4d382092c5dff39";
+    sha256 = "d2122c64426853a4b3b766160f6291f29aed66d9aa266585c73d63305ed4d22b";
     description = "Microsoft Azure Command-Line Tools Connectedvmware Extension";
   };
   connection-monitor-preview = mkAzExtension rec {
