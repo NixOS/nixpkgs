@@ -1,8 +1,8 @@
-/*
+/**
   A basic documentation generating module.
   Declares and defines a `docs` option, suitable for making assertions about
   the extraction "phase" of documentation generation.
- */
+*/
 { lib, options, ... }:
 
 let
