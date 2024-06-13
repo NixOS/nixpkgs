@@ -26,10 +26,7 @@
 }@inputs:
 
 let
-  pname = "faiss";
-  version = "1.8.0";
-
-  inherit (cudaPackages) flags backendStdenv;
+  inherit (cudaPackages) backendStdenv flags;
 
   stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
 
@@ -43,8 +40,9 @@ let
     (cudaPackages.cuda_profiler_api or cudaPackages.cuda_nvprof)
   ];
 in
-stdenv.mkDerivation {
-  inherit pname version;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "faiss";
+  version = "1.8.0";
 
   outputs = [
     "out"
@@ -53,8 +51,8 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
-    repo = pname;
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nS8nhkNGGb2oAJKfr/MIAZjAwMxBGbNd16/CkEtv67I=";
   };
 
@@ -131,7 +129,7 @@ stdenv.mkDerivation {
 
     tests = {
       runDemos =
-        runCommand "${pname}-run-demos" { buildInputs = [ faiss.demos ]; }
+        runCommand "${finalAttrs.pname}-run-demos" { buildInputs = [ faiss.demos ]; }
           # There are more demos, we run just the one that documentation mentions
           ''
             demo_ivfpq_indexing && touch $out
@@ -151,4 +149,4 @@ stdenv.mkDerivation {
     # error: use of undeclared identifier 'SWIGTYPE_p_long'
     broken = stdenv.isDarwin;
   };
-}
+})
