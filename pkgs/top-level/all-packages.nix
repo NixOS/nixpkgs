@@ -6250,6 +6250,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
+  tickets-rs = callPackage ../servers/tickets-rs {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
   rsbep = callPackage ../tools/backup/rsbep { };
 
   rsbkb = callPackage ../tools/text/rsbkb { };
