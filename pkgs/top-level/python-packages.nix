@@ -1906,6 +1906,8 @@ self: super: with self; {
 
   camel-converter = callPackage ../development/python-modules/camel-converter { };
 
+  camply = callPackage ../development/python-modules/camply { };
+
   can = callPackage ../development/python-modules/can { };
 
   canals = callPackage ../development/python-modules/canals { };
