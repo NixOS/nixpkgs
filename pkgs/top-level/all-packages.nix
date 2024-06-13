@@ -6117,9 +6117,7 @@ with pkgs;
 
   pn = callPackage ../tools/text/pn { };
 
-  pocket-casts = callPackage ../applications/audio/pocket-casts {
-    electron = electron_27;
-  };
+  pocket-casts = callPackage ../applications/audio/pocket-casts { };
 
   portal = callPackage ../tools/misc/portal { };
 
