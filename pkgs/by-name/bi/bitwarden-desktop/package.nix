@@ -24,7 +24,7 @@
 }:
 
 let
-  description = "A secure and free password manager for all of your devices";
+  description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
   electron = electron_28;
 in buildNpmPackage rec {
@@ -159,7 +159,7 @@ in buildNpmPackage rec {
     cp -r locales resources{,.pak} $out/opt/Bitwarden
     popd
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/bitwarden" \
+    makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
       --add-flags $out/opt/Bitwarden/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --set-default ELECTRON_IS_DEV 0 \
