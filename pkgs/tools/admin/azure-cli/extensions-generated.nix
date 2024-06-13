@@ -974,9 +974,9 @@
   };
   traffic-collector = mkAzExtension rec {
     pname = "traffic-collector";
-    version = "0.1.2";
+    version = "0.1.3";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/traffic_collector-${version}-py3-none-any.whl";
-    sha256 = "98bda4d9a9233efb0ae1c5fae1a6c2a42942e8a71b0ebf19d3a7193548b13ff2";
+    sha256 = "a144a4fda3bce84db22277bd8611084ae1ae39e0bb8c7b50619ec378711f57ba";
     description = "Microsoft Azure Command-Line Tools TrafficCollector Extension";
   };
   trustedsigning = mkAzExtension rec {
