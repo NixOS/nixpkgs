@@ -855,9 +855,9 @@
   };
   self-help = mkAzExtension rec {
     pname = "self-help";
-    version = "0.3.0";
+    version = "0.4.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/self_help-${version}-py3-none-any.whl";
-    sha256 = "0545610ee482069ad89c3fcc342e3d94f72b4d5eb139312c778501c843e8216d";
+    sha256 = "8c903aaf10d6cb61e6455f6010deeeb496d1e23d6876662089266a49403586b6";
     description = "Microsoft Azure Command-Line Tools SelfHelp Extension";
   };
   sentinel = mkAzExtension rec {
