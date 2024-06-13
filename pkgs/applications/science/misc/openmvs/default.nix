@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cdcseacave";
     repo = "openmvs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
+    hash = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
     fetchSubmodules = true;
   };
 
