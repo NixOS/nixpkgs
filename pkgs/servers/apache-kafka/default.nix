@@ -9,9 +9,9 @@ let
       jre = jdk17_headless;
     };
     "3_6" = {
-      kafkaVersion = "3.6.1";
+      kafkaVersion = "3.6.2";
       scalaVersion = "2.13";
-      sha256 = "sha256-49tWjH+PzMf5gep7CUQmiukxBZLHPuDrV56/2/zy08o=";
+      sha256 = "sha256-wxfkf3cUHTFG6VY9nLodZIbIHmcLIR7OasRqn3Lkqqw=";
       jre = jdk17_headless;
     };
     "3_5" = {
