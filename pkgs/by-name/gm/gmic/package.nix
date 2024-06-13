@@ -99,11 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
       fi
 
       for component in src gmic_stdlib; do
-          # The script will not perform an update when the version attribute is
-          # up to date from previous platform run; we need to clear it before
-          # each run
-          update-source-version "--source-key=$component" "gmic" 0 "${lib.fakeHash}"
-          update-source-version "--source-key=$component" "gmic" $latestVersion
+          update-source-version "--source-key=$component" "gmic" $latestVersion --ignore-same-version
       done
     '';
   };

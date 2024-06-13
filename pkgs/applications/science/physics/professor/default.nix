@@ -1,23 +1,51 @@
-{ lib, stdenv, fetchurl, eigen, makeWrapper, python3 }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, eigen
+, makeWrapper
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "professor";
-  version = "2.3.3";
+  version = "2.4.2";
 
-  src = fetchurl {
-    name = "Professor-${version}.tar.gz";
-    url = "https://professor.hepforge.org/downloads/?f=Professor-${version}.tar.gz";
-    sha256 = "17q026r2fpfxzf74d1013ksy3a9m57rcr2q164n9x02ci40bmib0";
+  src = fetchFromGitLab {
+    owner = "hepcedar";
+    repo = "professor";
+    rev = "refs/tags/professor-2.4.2";
+    hash = "sha256-z2Ub7SUTz4Hj3ajnzOV/QXZ+cH2v6zJv9UZM2M2y1Hg=";
+    # workaround unpacking to case-sensitive filesystems
+    postFetch = ''
+      rm -rf $out/[Dd]ocker
+    '';
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = ''
     substituteInPlace Makefile \
-      --replace '-shared -o' '-shared -install_name "$(out)/$@" -o'
+      --replace-fail 'pip install ' 'pip install --prefix $(out) '
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile \
+      --replace-fail '-shared -o' '-shared -install_name "$(out)/$@" -o'
   '';
 
-  nativeBuildInputs = [ python3.pkgs.cython makeWrapper ];
-  buildInputs = [ python3 eigen ];
-  propagatedBuildInputs = with python3.pkgs; [ iminuit numpy matplotlib yoda ];
+  nativeBuildInputs = [
+    python3.pkgs.cython
+    python3.pkgs.pip
+    python3.pkgs.setuptools
+    python3.pkgs.wheel
+    makeWrapper
+  ];
+  buildInputs = [
+    python3
+    eigen
+  ];
+  propagatedBuildInputs = with python3.pkgs; [
+    iminuit
+    numpy
+    matplotlib
+    yoda
+  ];
 
   CPPFLAGS = [ "-I${eigen}/include/eigen3" ];
   PREFIX = placeholder "out";
@@ -34,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tuning tool for Monte Carlo event generators";
     homepage = "https://professor.hepforge.org/";
-    license = licenses.unfree; # no license specified
+    license = licenses.gpl3Only;
     maintainers = [ maintainers.veprbl ];
     platforms = platforms.unix;
   };
