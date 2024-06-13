@@ -8808,6 +8808,8 @@ self: super: with self; {
 
   nclib = callPackage ../development/python-modules/nclib { };
 
+  pynco = callPackage ../development/python-modules/pynco { };
+
   ndeflib = callPackage ../development/python-modules/ndeflib { };
 
   ndg-httpsclient = callPackage ../development/python-modules/ndg-httpsclient { };
