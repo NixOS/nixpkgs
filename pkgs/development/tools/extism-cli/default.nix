@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "extism-cli";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "extism";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t0SbjTuM298Cka2zhavR6bOGDriz2XUGcfAy25se7M4=";
+    hash = "sha256-b+X0pFrKhcfzucUM8akV061zslkdF1Jc9X1aqCqXagU=";
   };
 
   vendorHash = "sha256-5QSZDPRMlLVyOQGCSxNC5BBiuegschkHA0sWvOVAODI=";
