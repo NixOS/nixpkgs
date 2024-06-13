@@ -38303,6 +38303,8 @@ with pkgs;
 
   fasthenry = callPackage ../applications/science/physics/fasthenry { };
 
+  freefem = callPackage ../applications/science/physics/freefem {};
+
   mcfm = callPackage ../applications/science/physics/MCFM {
     stdenv = gccStdenv;
     lhapdf = lhapdf.override { stdenv = gccStdenv; python = null; };
