@@ -17,14 +17,7 @@
 , pkg-config
 , stdenv
 , vcg
-, zstd
 }:
-
-let
-  boostWithZstd = boost.overrideAttrs (old: {
-    buildInputs = old.buildInputs ++ [ zstd ];
-  });
-in
 stdenv.mkDerivation rec {
   version = "2.2.0";
   pname = "openmvs";
@@ -41,7 +34,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optional (!stdenv.isx86_64) "-DOpenMVS_USE_SSE=OFF";
 
   buildInputs = [
-    boostWithZstd
+    boost
     breakpad
     ceres-solver
     cgal
