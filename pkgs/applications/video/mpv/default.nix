@@ -121,10 +121,7 @@ let
 
   overrideSDK =
     platform: version:
-    platform
-    // lib.optionalAttrs (platform ? darwinMinVersion) {
-      darwinMinVersion = version;
-    };
+    platform // lib.optionalAttrs (platform ? darwinMinVersion) { darwinMinVersion = version; };
 
   stdenv' =
     if swiftSupport && stdenv.isDarwin && stdenv.isx86_64 then
@@ -357,9 +354,7 @@ stdenv'.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) mpv;
 
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
         moduleNames = [ "mpv" ];
