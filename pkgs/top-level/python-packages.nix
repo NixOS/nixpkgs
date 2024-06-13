@@ -7051,6 +7051,8 @@ self: super: with self; {
 
   loguru = callPackage ../development/python-modules/loguru { };
 
+  loguru-logging-intercept = callPackage ../development/python-modules/loguru-logging-intercept { };
+
   logutils = callPackage ../development/python-modules/logutils {
     redis-server = pkgs.redis;
   };
