@@ -1,23 +1,67 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
+, ninja
+, boost
 }:
 
+let
+  tomlSpecRepo = fetchFromGitHub {
+    owner = "toml-lang";
+    repo = "toml";
+    rev = "v0.5.0";
+    hash = "sha256-qKNoUlZn8jlPSugy4NckLUNYDiT1uMKcNLxbgaXVYco=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "toml11";
-  version = "3.7.1";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "ToruNiina";
     repo = "toml11";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HnhXBvIjo1JXhp+hUQvjs83t5IBVbNN6o3ZGhB4WESQ=";
+    hash = "sha256-XgpsCv38J9k8Tsq71UdZpuhaVHK3/60IQycs9CeLssA=";
   };
+
+  patches = [
+    # remove the requirement of setting CXX_STANDARD -- see https://github.com/ToruNiina/toml11/issues/241
+    # (couldn't apply the commit that closed that issue because it came right after a cmake refactor,
+    # so revert the commit that introduced the problematic behavior instead)
+    (fetchpatch {
+      name = "remove-cxx-standard-requirement.patch";
+      url = "https://github.com/ToruNiina/toml11/commit/4c4e82866ecd042856b7123a83f80c0ad80a5e13.patch";
+      revert = true;
+      hash = "sha256-G+B4GibUvpSwosKxUa8UtQ6h3wNXAHnZySPkQoXGSTI=";
+    })
+
+    # toml11 emits some warnings on some systems when compiled with the flags that the tests set, so instead of patching
+    # out the causes of the warnings, let's go the easy route and stop setting -Werror
+    ./disable-werror-in-tests.patch
+  ];
+
+  postPatch = ''
+    mkdir -p build/tests
+    ln -s ${tomlSpecRepo} build/tests/toml
+  '';
 
   nativeBuildInputs = [
     cmake
+    ninja
   ];
+
+  checkInputs = [
+    boost
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "toml11_BUILD_TEST" finalAttrs.doCheck)
+    (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
+  ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/ToruNiina/toml11";
@@ -40,8 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
         and Windows.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres winter ];
     platforms = platforms.unix;
   };
 })
-# TODO [ AndersonTorres ]: tests
