@@ -43,7 +43,6 @@ buildPythonPackage rec {
 
   build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
