@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "kitty-themes";
-  version = "0-unstable-2024-05-28";
+  version = "0-unstable-2024-06-12";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty-themes";
-    rev = "891ca835de3112e69f1dfc87fd6cfab354a30f25";
-    hash = "sha256-Ah5qR5tMy1JlmT4rgYdHags4ZuuAOz1wzoByjo8T8TI=";
+    rev = "9589f0dffc817d6e8b86a5b2dc56d7c3db201a9b";
+    hash = "sha256-8bZkYFb/HOIg2Uk7b/Apn30AAlRF0ztLh27AUlHW6Wk=";
   };
 
   dontConfigure = true;
