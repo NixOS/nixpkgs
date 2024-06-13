@@ -56,7 +56,7 @@ let
         Type = "notify";
         NotifyAccess = "all"; #may not do anything...
       };
-      unitConfig.RequiresMountsFor = "/var/lib/samba";
+      unitConfig.RequiresMountsFor = [ "/var/lib/samba" ];
 
       restartTriggers = [ configFile ];
     };
