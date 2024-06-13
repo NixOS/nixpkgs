@@ -16,20 +16,20 @@
 let
   inherit (lib.lists) optionals;
   inherit (lib.strings) cmakeBool cmakeFeature optionalString;
-  inherit (cudaPackages) cuda_cudart cuda_nvcc cudaOlder libcublas libcurand;
+  inherit (cudaPackages) cuda_cudart cuda_nvcc cudaOlder libcublas libcufft libcurand;
   hwloc = pkgs.hwloc.overrideAttrs (prevAttrs: {
     configureFlags = prevAttrs.configureFlags ++ [ "--enable-static" ];
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "firestarter";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "tud-zih-energy";
     repo = "FIRESTARTER";
     rev = "v${finalAttrs.version}";
-    sha256 = "1ik6j1lw5nldj4i3lllrywqg54m9i2vxkxsb2zr4q0d2rfywhn23";
+    hash = "sha256-LblbOg8btbdOnda0jFWasmslgdyPvffJWR4k34mff1A=";
     fetchSubmodules = true;
   };
 
@@ -42,9 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ hwloc ]
     ++ optionals (!withCuda) [ glibc.static ]
-    ++ optionals withCuda [ glibc_multi cuda_cudart libcublas libcurand ];
-
-  cudaEnableCmakeFindCudaToolkitSupport = withCuda;
+    ++ optionals withCuda [ glibc_multi cuda_cudart libcufft libcublas libcurand ];
 
   cmakeFlags = [
     (cmakeBool "FIRESTARTER_BUILD_HWLOC" false)
