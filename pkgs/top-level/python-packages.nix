@@ -11205,6 +11205,8 @@ self: super: with self; {
 
   pygdbmi = callPackage ../development/python-modules/pygdbmi { };
 
+  pygeoif_0_7 = callPackage ../development/python-modules/pygeoif/0.7.nix { };
+
   pygeoip = callPackage ../development/python-modules/pygeoip { };
 
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
