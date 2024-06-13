@@ -29,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     git
     pkg-config
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -39,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
   ];
 
-  propagatedBuildInputs = [ qt6.wrapQtAppsHook ];
 
   prePatch = ''
     substituteInPlace src/util/System.cpp \
