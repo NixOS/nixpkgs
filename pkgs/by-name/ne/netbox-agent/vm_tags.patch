@@ -1,0 +1,53 @@
+From c9a57de843e301483a0d3030aca475697026afea Mon Sep 17 00:00:00 2001
+From: sinavir <sinavir@sinavir.fr>
+Date: Thu, 28 Mar 2024 12:07:17 +0100
+Subject: [PATCH] fix: vm tags
+
+---
+ netbox_agent/virtualmachine.py | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/netbox_agent/virtualmachine.py b/netbox_agent/virtualmachine.py
+index b32d3bd..3b3f89c 100644
+--- a/netbox_agent/virtualmachine.py
++++ b/netbox_agent/virtualmachine.py
+@@ -42,8 +42,7 @@ def __init__(self, dmi=None):
+         self.device_platform = get_device_platform(config.device.platform)
+ 
+         self.tags = list(set(config.device.tags.split(','))) if config.device.tags else []
+-        if self.tags and len(self.tags):
+-            create_netbox_tags(self.tags)
++        self.nb_tags = create_netbox_tags(self.tags)
+ 
+     def get_memory(self):
+         mem_bytes = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')  # e.g. 4015976448
+@@ -107,7 +106,7 @@ def netbox_create_or_update(self, config):
+                 vcpus=vcpus,
+                 memory=memory,
+                 tenant=tenant.id if tenant else None,
+-                tags=self.tags,
++                tags=[{'name': x} for x in self.tags],
+             )
+             created = True
+ 
+@@ -121,9 +120,18 @@ def netbox_create_or_update(self, config):
+             if vm.memory != memory:
+                 vm.memory = memory
+                 updated += 1
+-            if sorted(set(vm.tags)) != sorted(set(self.tags)):
+-                vm.tags = self.tags
++
++            vm_tags = sorted(set([x.name for x in vm.tags]))
++            tags = sorted(set(self.tags))
++            if vm_tags != tags:
++                new_tags_ids = [x.id for x in self.nb_tags]
++                if not config.preserve_tags:
++                    vm.tags = new_tags_ids
++                else:
++                    vm_tags_ids = [x.id for x in vm.tags]
++                    vm.tags = sorted(set(new_tags_ids + vm_tags_ids))
+                 updated += 1
++
+             if vm.platform != self.device_platform:
+                 vm.platform = self.device_platform
+                 updated += 1

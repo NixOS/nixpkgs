@@ -1,0 +1,87 @@
+From 116334be2f4bdae996a0d8dc623ae6e24d20e8aa Mon Sep 17 00:00:00 2001
+From: sinavir <sinavir@sinavir.fr>
+Date: Sat, 23 Mar 2024 01:45:20 +0100
+Subject: [PATCH 1/2] fix: make lshw props finding more resilient
+
+---
+ netbox_agent/lshw.py | 25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
+
+diff --git a/netbox_agent/lshw.py b/netbox_agent/lshw.py
+index e88993c..c79f95e 100644
+--- a/netbox_agent/lshw.py
++++ b/netbox_agent/lshw.py
+@@ -88,9 +88,9 @@ def find_network(self, obj):
+             "name": obj.get("logicalname", unkn_name),
+             "macaddress": obj.get("serial", ""),
+             "serial": obj.get("serial", ""),
+-            "product": obj["product"],
+-            "vendor": obj["vendor"],
+-            "description": obj["description"],
++            "product": obj.get("product", "Unknown NIC"),
++            "vendor": obj.get("vendor", "Unknown"),
++            "description": obj.get("description", ""),
+         })
+ 
+     def find_storage(self, obj):
+@@ -135,10 +135,10 @@ def find_storage(self, obj):
+     def find_cpus(self, obj):
+         if "product" in obj:
+             self.cpus.append({
+-                "product": obj["product"],
+-                "vendor": obj["vendor"],
+-                "description": obj["description"],
+-                "location": obj["slot"],
++                "product": obj.get("product", "Unknown CPU"),
++                "vendor": obj.get("vendor", "Unknown vendor"),
++                "description": obj.get("description", ""),
++                "location": obj.get("slot", ""),
+             })
+ 
+     def find_memories(self, obj):
+@@ -162,11 +162,12 @@ def find_memories(self, obj):
+ 
+     def find_gpus(self, obj):
+         if "product" in obj:
+-            self.gpus.append({
+-                "product": obj["product"],
+-                "vendor": obj["vendor"],
+-                "description": obj["description"],
+-            })
++            infos = {
++                "product": obj.get("product", "Unknown GPU"),
++                "vendor": obj.get("vendor", "Unknown"),
++                "description": obj.get("description", ""),
++            }
++            self.gpus.append(infos)
+ 
+     def walk_bridge(self, obj):
+         if "children" not in obj:
+
+From f512e7a0a971013eb49f233c72963fd54a78c8ca Mon Sep 17 00:00:00 2001
+From: sinavir <sinavir@sinavir.fr>
+Date: Wed, 27 Mar 2024 18:49:05 +0100
+Subject: [PATCH 2/2] fix: replace list.push by list.append
+
+---
+ netbox_agent/lshw.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/netbox_agent/lshw.py b/netbox_agent/lshw.py
+index c79f95e..876df97 100644
+--- a/netbox_agent/lshw.py
++++ b/netbox_agent/lshw.py
+@@ -77,11 +77,11 @@ def find_network(self, obj):
+             # newer versions of lshw can return a list of names, see issue #227
+             if not isinstance(i["name"], list):
+                 if i["name"].startswith("unknown"):
+-                    unkn_intfs.push(i)
++                    unkn_intfs.append(i)
+             else:
+                 for j in i["name"]:
+                     if j.startswith("unknown"):
+-                        unkn_intfs.push(j)
++                        unkn_intfs.append(j)
+                         
+         unkn_name = "unknown{}".format(len(unkn_intfs))
+         self.interfaces.append({
