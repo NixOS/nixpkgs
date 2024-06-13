@@ -14,12 +14,6 @@ let
       sha256 = "sha256-wxfkf3cUHTFG6VY9nLodZIbIHmcLIR7OasRqn3Lkqqw=";
       jre = jdk17_headless;
     };
-    "3_5" = {
-      kafkaVersion = "3.5.2";
-      scalaVersion = "2.13";
-      sha256 = "sha256-vBryxHFLPFB8qpFFkMKOeBX2Zxp0MkvEd+HIOohUg8M=";
-      jre = jdk17_headless;
-    };
   };
 
   build = versionInfo: with versionInfo; stdenv.mkDerivation rec {
