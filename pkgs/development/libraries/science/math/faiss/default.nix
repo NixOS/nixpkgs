@@ -25,10 +25,7 @@
 }@inputs:
 
 let
-  pname = "faiss";
-  version = "1.7.4";
-
-  inherit (cudaPackages) flags backendStdenv;
+  inherit (cudaPackages) backendStdenv flags;
 
   stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
 
@@ -42,15 +39,16 @@ let
     (cudaPackages.cuda_profiler_api or cudaPackages.cuda_nvprof)
   ];
 in
-stdenv.mkDerivation {
-  inherit pname version;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "faiss";
+  version = "1.7.4";
 
   outputs = [ "out" "demos" ];
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
-    repo = pname;
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WSce9X6sLZmGM5F0ZkK54VqpIy8u1VB0e9/l78co29M=";
   };
 
@@ -134,7 +132,7 @@ stdenv.mkDerivation {
     inherit cudaSupport cudaPackages pythonSupport;
 
     tests = {
-      runDemos = runCommand "${pname}-run-demos"
+      runDemos = runCommand "${finalAttrs.pname}-run-demos"
         { buildInputs = [ faiss.demos ]; }
         # There are more demos, we run just the one that documentation mentions
         ''
@@ -153,4 +151,4 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     maintainers = with maintainers; [ SomeoneSerge ];
   };
-}
+})
