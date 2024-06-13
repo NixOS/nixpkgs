@@ -916,6 +916,13 @@
     sha256 = "fb1dcd876fc2d829cc7a1cc545e9445364d43357d888bb3deeb36a716b805717";
     description = "Microsoft Azure Command-Line Tools Staticwebapp Extension";
   };
+  storage-actions = mkAzExtension rec {
+    pname = "storage-actions";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/storage_actions-${version}-py3-none-any.whl";
+    sha256 = "07c5be256edbbe2c81d839e4c6d3d917a56b93921515028cf962393e1176331b";
+    description = "Microsoft Azure Command-Line Tools StorageActions Extension";
+  };
   storage-blob-preview = mkAzExtension rec {
     pname = "storage-blob-preview";
     version = "0.7.2";
