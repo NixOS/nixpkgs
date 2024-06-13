@@ -2,13 +2,13 @@
 , stdenv
 , lib
 , fetchFromGitHub
-, fetchzip
 , autoAddDriverRunpath
 , cmake
 , glibc_multi
 , glibc
 , git
 , pkg-config
+, pkgs
 , cudaPackages ? {}
 , withCuda ? config.cudaSupport
 }:
@@ -16,43 +16,10 @@
 let
   inherit (lib.lists) optionals;
   inherit (lib.strings) cmakeBool cmakeFeature optionalString;
-  inherit (lib.versions) majorMinor;
   inherit (cudaPackages) cuda_cudart cuda_nvcc cudaOlder libcublas libcurand;
-
-  hwloc = stdenv.mkDerivation (finalAttrs: {
-    pname = "hwloc";
-    version = "2.2.0";
-
-    src = fetchzip {
-      url = "https://download.open-mpi.org/release/hwloc/v${majorMinor finalAttrs.version}/hwloc-${finalAttrs.version}.tar.gz";
-      sha256 = "1ibw14h9ppg8z3mmkwys8vp699n85kymdz20smjd2iq9b67y80b6";
-    };
-
-    configureFlags = [
-      "--enable-static"
-      "--disable-libudev"
-      "--disable-shared"
-      "--disable-doxygen"
-      "--disable-libxml2"
-      "--disable-cairo"
-      "--disable-io"
-      "--disable-pci"
-      "--disable-opencl"
-      "--disable-cuda"
-      "--disable-nvml"
-      "--disable-gl"
-      "--disable-libudev"
-      "--disable-plugin-dlopen"
-      "--disable-plugin-ltdl"
-    ];
-
-    nativeBuildInputs = [ pkg-config ];
-
-    enableParallelBuilding = true;
-
-    outputs = [ "out" "lib" "dev" "doc" "man" ];
+  hwloc = pkgs.hwloc.overrideAttrs (prevAttrs: {
+    configureFlags = prevAttrs.configureFlags ++ [ "--enable-static" ];
   });
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "firestarter";
