@@ -63,6 +63,8 @@ let
 
     formula1 = callPackage ../applications/video/kodi/addons/formula1 { };
 
+    horus = callPackage ../applications/video/kodi/addons/horus { };
+
     iagl = callPackage ../applications/video/kodi/addons/iagl { };
 
     invidious = callPackage ../applications/video/kodi/addons/invidious { };
