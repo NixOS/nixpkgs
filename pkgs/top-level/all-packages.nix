@@ -34555,8 +34555,6 @@ with pkgs;
 
   stc-cli = callPackage ../applications/networking/stc-cli { };
 
-  syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
-
   syncthingtray = kdePackages.callPackage ../applications/misc/syncthingtray {
     # renamed in KF5 -> KF6
     plasma-framework = kdePackages.libplasma;
