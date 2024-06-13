@@ -17957,9 +17957,10 @@ with pkgs;
 
   inherit (callPackages ../servers/apache-kafka { })
     apacheKafka_3_5
-    apacheKafka_3_6;
+    apacheKafka_3_6
+    apacheKafka_3_7;
 
-  apacheKafka = apacheKafka_3_6;
+  apacheKafka = apacheKafka_3_7;
 
   apng2gif = callPackage ../tools/graphics/apng2gif { };
 
