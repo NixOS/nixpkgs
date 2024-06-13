@@ -17,6 +17,7 @@
 , pythonImportsCheckHook
 , pythonNamespacesHook
 , pythonOutputDistHook
+, pythonRelaxDepsHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
 , pythonRuntimeDepsCheckHook
@@ -213,7 +214,11 @@ let
 
   isBootstrapPackage = isBootstrapInstallPackage || isBootstrapPackage' (attrs.pname or null);
 
+  isNonEmptyList = v: builtins.isList v && builtins.length v > 0;
+
   isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
+
+  isTrue = v: builtins.isBool v && v;
 
   passthru =
     attrs.passthru or { }
@@ -290,6 +295,11 @@ let
     ] ++ optionals (python.pythonAtLeast "3.3") [
       # Optionally enforce PEP420 for python3
       pythonNamespacesHook
+    ] ++ lib.optionals (
+      isTrue (attrs.pythonRelaxDeps or false) || isNonEmptyList (attrs.pythonRelaxDeps or []) ||
+      isTrue (attrs.pythonRemoveDeps or false) || isNonEmptyList (attrs.pythonRemoveDeps or [])
+    ) [
+      pythonRelaxDepsHook
     ] ++ optionals withDistOutput [
       pythonOutputDistHook
     ] ++ nativeBuildInputs ++ build-system;
