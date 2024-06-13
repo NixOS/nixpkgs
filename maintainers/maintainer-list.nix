@@ -19275,6 +19275,11 @@
     githubId = 106779009;
     name = "Slambert";
   };
+  slashformotion = {
+    github = "slashformotion";
+    githubId = 45801817;
+    name = "slashformotion";
+  };
   slbtty = {
     email = "shenlebantongying@gmail.com";
     github = "shenlebantongying";
