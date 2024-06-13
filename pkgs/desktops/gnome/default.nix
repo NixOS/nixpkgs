@@ -26,8 +26,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   epiphany = callPackage ./core/epiphany { };
 
-  evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
-
   evolution-data-server = callPackage ./core/evolution-data-server { };
 
   gdm = callPackage ./core/gdm { };
@@ -249,6 +247,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gedit = throw "The ‘gnome.gedit’ alias was removed. Please use ‘pkgs.gedit’ directly."; # converted to throw on 2023-12-27
   gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
 
+  evince = lib.warn "The ‘gnome.evince’ was moved to top-level. Please use ‘pkgs.evince’ directly." pkgs.evince; # Added on 2024-06-13.
   file-roller = lib.warn "The ‘gnome.file-roller’ was moved to top-level. Please use ‘pkgs.file-roller’ directly." pkgs.file-roller; # Added on 2024-06-13.
   gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
   gnome-terminal = lib.warn "The ‘gnome.gnome-terminal’ was moved to top-level. Please use ‘pkgs.gnome-terminal’ directly." pkgs.gnome-terminal; # Added on 2024-06-13.

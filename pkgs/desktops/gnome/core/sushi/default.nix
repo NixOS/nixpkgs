@@ -4,6 +4,7 @@
 , meson
 , gettext
 , gobject-introspection
+, evince
 , glib
 , gnome
 , gtksourceview4
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    gnome.evince
+    evince
     icu
     harfbuzz
     gjs

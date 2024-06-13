@@ -234,7 +234,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-screenshot-tool = throw "The ‘pantheon.elementary-screenshot-tool’ alias was removed on 2022-02-02, please use ‘pantheon.elementary-screenshot’ directly."; # added 2021-07-21
 
-  evince = pkgs.gnome.evince; # added 2022-03-18
+  evince = pkgs.evince; # added 2022-03-18
 
   extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
 
