@@ -7,7 +7,7 @@
 , python3
 , giflib
 , darwin
-, ghostscript
+, ghostscript_headless
 , imagemagickBig
 , jbig2enc
 , optipng
@@ -67,7 +67,7 @@ let
 
 
   path = lib.makeBinPath [
-    ghostscript
+    ghostscript_headless
     imagemagickBig
     jbig2enc
     optipng
