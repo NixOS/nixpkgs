@@ -61,6 +61,8 @@ let
 
     controller-topology-project = callPackage ../applications/video/kodi/addons/controller-topology-project { };
 
+    formula1 = callPackage ../applications/video/kodi/addons/formula1 { };
+
     iagl = callPackage ../applications/video/kodi/addons/iagl { };
 
     invidious = callPackage ../applications/video/kodi/addons/invidious { };
