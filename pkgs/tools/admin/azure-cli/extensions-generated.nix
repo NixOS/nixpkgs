@@ -302,9 +302,9 @@
   };
   datafactory = mkAzExtension rec {
     pname = "datafactory";
-    version = "1.0.0";
+    version = "1.0.2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/datafactory-${version}-py3-none-any.whl";
-    sha256 = "30941f7e2c093f040c958db024367b750068a5181554b23f7403f4522375c41e";
+    sha256 = "ea134e2963b7cdf2bcbd50244a6f1a411da77bd4db7e42c8c8f9651638c82ac7";
     description = "Microsoft Azure Command-Line Tools DataFactoryManagementClient Extension";
   };
   datamigration = mkAzExtension rec {
