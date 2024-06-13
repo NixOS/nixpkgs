@@ -2,11 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "kvmtool";
-  version = "unstable-2023-07-12";
+  version = "unstable-2024-06-14";
 
-  src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/snapshot/kvmtool-106e2ea7756d980454d68631b87d5e25ba4e4881.tar.gz";
-    hash = "sha256-wpc5DfHnui0lBVH4uOq6a7pXVUZStjNLRvauu6QpRvE=";
+  src = fetchGit {
+    url = "https://github.com/kvmtool/kvmtool.git";
+    ref = "master";
+    rev = "da4cfc3e540341b84c4bbad705b5a15865bc1f80";
   };
 
   patches = [ ./strlcpy-glibc-2.38-fix.patch ];
