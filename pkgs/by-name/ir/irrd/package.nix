@@ -43,26 +43,40 @@ in
 
 py.pkgs.buildPythonPackage rec {
   pname = "irrd";
-  version = "4.4.2";
+  version = "4.4.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "irrdnet";
     repo = "irrd";
     rev = "v${version}";
-    hash = "sha256-vZSuBP44ZvN0mu2frcaQNZN/ilvKWIY9ETnrStzSnG0=";
+    hash = "sha256-UIOKXU92JEOeVdpYLNmDBtLn0u3LMdKItcn9bFd9u8g=";
   };
+
   patches = [
-    # replace poetry dependency with poetry-core
-    # https://github.com/irrdnet/irrd/pull/884
+    # starlette 0.37.2 reverted the behaviour change which this adjusted to
     (fetchpatch {
-      url = "https://github.com/irrdnet/irrd/commit/4fb6e9b50d65729aff2d0a94c2e9b4e2daadea85.patch";
-      hash = "sha256-DcE6VZfJkbHnPiEdYDpXea7S/8P0SmdvvJ42hywnpf0=";
+      url = "https://github.com/irrdnet/irrd/commit/43e26647e18f8ff3459bbf89ffbff329a0f1eed5.patch";
+      revert = true;
+      hash = "sha256-G216rHfWMZIl9GuXBz6mjHCIm3zrfDDLSmHQK/HkkzQ=";
+    })
+    # Backport build fix for webauthn 2.1
+    (fetchpatch {
+      url = "https://github.com/irrdnet/irrd/commit/20b771e1ee564f38e739fdb0a2a79c10319f638f.patch";
+      hash = "sha256-PtNdhSoFPT1kt71kFsySp/VnUpUdO23Gu9FKknHLph8=";
+      includes = ["irrd/webui/auth/endpoints_mfa.py"];
     })
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail psycopg2-binary psycopg2
+  '';
+  pythonRelaxDeps = true;
+
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [
@@ -75,6 +89,7 @@ py.pkgs.buildPythonPackage rec {
     pytest-freezegun
     pytestCheckHook
     smtpdfix
+    httpx
   ]);
 
   propagatedBuildInputs = with py.pkgs; [
@@ -119,6 +134,7 @@ py.pkgs.buildPythonPackage rec {
     asgi-logger
     wtforms-bootstrap5
     email-validator
+    jinja2
   ] ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
   preCheck = ''
@@ -157,7 +173,6 @@ py.pkgs.buildPythonPackage rec {
     license = licenses.mit;
     homepage = "https://github.com/irrdnet/irrd";
     maintainers = teams.wdz.members;
-    broken = true; # last successful build 2023-10-21
   };
 }
 
