@@ -1,5 +1,6 @@
 name,rockspec,ref,server,version,luaversion,maintainers
 alt-getopt,,,,,,arobyn
+ansicolors,,,,,,Freed-Wu
 bit32,,,,5.3.0-1,5.1,lblasc
 argparse,,,,,,
 basexx,,,,,,
