@@ -97,7 +97,7 @@ in {
       '';
 
       outputHashMode = "recursive";
-    } // hash_ // (removeAttrs args ["src" "name" "hash" "sha256"]));
+    } // hash_ // (removeAttrs args (["name" "hash" "sha256"] ++ (lib.optional (src == null) "src"))));
 
   in lib.setFunctionArgs f (lib.functionArgs f) // {
     inherit tests;
