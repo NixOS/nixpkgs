@@ -988,9 +988,9 @@
   };
   virtual-network-manager = mkAzExtension rec {
     pname = "virtual-network-manager";
-    version = "1.0.1";
+    version = "1.2.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/virtual_network_manager-${version}-py3-none-any.whl";
-    sha256 = "a18581c625791fb29736e7ec1b9e18d4a00f3765a8600192e10c892fd27b7ba1";
+    sha256 = "7f9f239fd7904645beacc2b738dd4660fb36779966e9b2331c43826e37564793";
     description = "Microsoft Azure Command-Line Tools NetworkManagementClient Extension";
   };
   virtual-network-tap = mkAzExtension rec {
