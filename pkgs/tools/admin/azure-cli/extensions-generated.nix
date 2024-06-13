@@ -57,9 +57,9 @@
   };
   aks-preview = mkAzExtension rec {
     pname = "aks-preview";
-    version = "3.0.0b9";
+    version = "5.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/aks_preview-${version}-py2.py3-none-any.whl";
-    sha256 = "3d5e43cd1b92ef9abe959fd2aea3e3c66dbebe2cd22df6fdb8abcf7b6682bbd9";
+    sha256 = "2c0a6b1a952b30f10f36f744e214a03774016fe7834038b917b8bc0ef03ce0c9";
     description = "Provides a preview for upcoming AKS features";
   };
   akshybrid = mkAzExtension rec {
