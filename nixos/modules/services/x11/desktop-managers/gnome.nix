@@ -415,7 +415,7 @@ in
             gnome-system-monitor
             gnome-weather
             pkgs.loupe
-            nautilus
+            pkgs.nautilus
             pkgs.gnome-connections
             simple-scan
             pkgs.snapshot

@@ -120,7 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "nautilus";
-      attrPath = "gnome.nautilus";
     };
   };
 

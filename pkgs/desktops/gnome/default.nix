@@ -96,8 +96,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   # Needed for elementary's gala, wingpanel and greeter until support for higher versions is provided
   mutter43 = callPackage ./core/mutter/43 { };
 
-  nautilus = callPackage ./core/nautilus { };
-
   networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
     withGnome = true;
   };
@@ -259,6 +257,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
   gnome-user-share = lib.warn "The ‘gnome.gnome-user-share’ was moved to top-level. Please use ‘pkgs.gnome-user-share’ directly." pkgs.gnome-user-share; # Added on 2024-06-13.
+  nautilus = lib.warn "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly." pkgs.nautilus; # Added on 2024-06-13.
 
 #### Removals
   anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16
