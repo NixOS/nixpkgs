@@ -1,26 +1,32 @@
-{ stdenv
-, lib
-, substituteAll
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_412
-, python3
-, nautilus
-, gnome
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_412,
+  python3,
+  nautilus,
+  gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:{
   pname = "nautilus-python";
   version = "4.0.1";
 
-  outputs = [ "out" "dev" "doc" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "devdoc"
+  ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/nautilus-python/${lib.versions.majorMinor version}/nautilus-python-${version}.tar.xz";
+    url = "mirror://gnome/sources/nautilus-python/${lib.versions.majorMinor finalAttrs.version}/nautilus-python-${finalAttrs.version}.tar.xz";
     hash = "sha256-/EnBBPsyoK0ZWmawE2eEzRnRDYs+jVnV7n9z6PlOko8=";
   };
 
@@ -51,7 +57,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "nautilus-python";
     };
   };
 
@@ -62,4 +68,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})
