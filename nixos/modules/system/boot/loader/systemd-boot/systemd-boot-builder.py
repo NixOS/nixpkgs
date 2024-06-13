@@ -47,6 +47,7 @@ class BootSpec:
     toplevel: str
     specialisations: dict[str, "BootSpec"]
     sortKey: str  # noqa: N815
+    devicetree: str | None = None  # noqa: N815
     initrdSecrets: str | None = None  # noqa: N815
 
 @dataclass
@@ -84,6 +85,7 @@ class DiskEntry:
     kernel_params: str | None
     machine_id: str | None
     sort_key: str
+    devicetree: str | None
 
     @classmethod
     def from_path(cls: Type["DiskEntry"], path: Path) -> "DiskEntry":
@@ -108,7 +110,9 @@ class DiskEntry:
             initrd=entry_map["initrd"],
             kernel_params=entry_map.get("options"),
             machine_id=entry_map.get("machine-id"),
-            sort_key=entry_map.get("sort_key", "nixos"))
+            sort_key=entry_map.get("sort_key", "nixos"),
+            devicetree=entry_map.get("devicetree"),
+        )
         return disk_entry
 
     def write(self, sorted_first: str) -> None:
@@ -127,7 +131,8 @@ class DiskEntry:
                 f"initrd  {self.initrd}",
                 f"options {self.kernel_params}" if self.kernel_params is not None else None,
                 f"machine-id {self.machine_id}" if self.machine_id is not None else None,
-                f"sort-key {default_sort_key if self.default else self.sort_key}"
+                f"sort-key {default_sort_key if self.default else self.sort_key}",
+                f"devicetree {self.devicetree}" if self.devicetree is not None else None,
             ]
 
             f.write("\n".join(filter(None, boot_entry)))
@@ -233,10 +238,12 @@ def bootspec_from_json(bootspec_json: dict[str, Any]) -> BootSpec:
     specialisations = {k: bootspec_from_json(v) for k, v in specialisations.items()}
     systemdBootExtension = bootspec_json.get('org.nixos.systemd-boot', {})
     sortKey = systemdBootExtension.get('sortKey', 'nixos')
+    devicetree = systemdBootExtension.get('devicetree')
     return BootSpec(
         **bootspec_json['org.nixos.bootspec.v1'],
         specialisations=specialisations,
-        sortKey=sortKey
+        sortKey=sortKey,
+        devicetree=devicetree,
     )
 
 
@@ -261,6 +268,7 @@ def write_entry(profile: str | None,
         bootspec = bootspec.specialisations[specialisation]
     kernel = copy_from_file(bootspec.kernel)
     initrd = copy_from_file(bootspec.initrd)
+    devicetree = copy_from_file(bootspec.devicetree) if bootspec.devicetree is not None else None
 
     title = "{name}{profile}{specialisation}".format(
         name=DISTRO_NAME,
@@ -303,6 +311,7 @@ def write_entry(profile: str | None,
         machine_id=machine_id,
         description=f"Generation {generation} {bootspec.label}, built on {build_date}",
         sort_key=bootspec.sortKey,
+        devicetree=devicetree,
         default=current
     ).write(sorted_first)
 
