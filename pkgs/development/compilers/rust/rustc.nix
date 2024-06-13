@@ -167,6 +167,8 @@ in stdenv.mkDerivation (finalAttrs: {
     "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.isMusl [
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
+  ] ++ optionals stdenv.targetPlatform.isWasi [
+    "${setTarget}.wasi-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
     "--disable-docs"
   ] ++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
@@ -262,7 +264,7 @@ in stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ openssl ]
     ++ optionals stdenv.hostPlatform.isDarwin [ libiconv Security zlib ]
     ++ optional (!withBundledLLVM) llvmShared.lib
-    ++ optional (useLLVM && !withBundledLLVM) [
+    ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isWasi) [
       llvmPackages.libunwind
       # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
       (runCommandLocal "libunwind-libgcc" {} ''
