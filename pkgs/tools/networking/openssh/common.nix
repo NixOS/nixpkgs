@@ -114,7 +114,7 @@ stdenv.mkDerivation {
   doCheck = true;
   enableParallelChecking = false;
   nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.isDarwin) hostname;
-  preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  preCheck = lib.optionalString (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     # construct a dummy HOME
     export HOME=$(realpath ../dummy-home)
     mkdir -p ~/.ssh

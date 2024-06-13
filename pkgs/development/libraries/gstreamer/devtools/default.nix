@@ -12,7 +12,7 @@
 , gobject-introspection
 , json-glib
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+, enableDocumentation ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform), hotdoc
 }:
 
 stdenv.mkDerivation rec {

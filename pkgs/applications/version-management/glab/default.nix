@@ -28,7 +28,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     make manpage
     installManPage share/man/man1/*
     installShellCompletion --cmd glab \

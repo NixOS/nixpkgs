@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config gettext glib gobject-introspection ];
   buildInputs = [ libxml2 glib ];
 
-  mesonFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  mesonFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "-Dintrospection=false"
   ];
 

@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
        "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
     (lib.enableFeature translateManpages "poman")
     "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+  ] ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
   ;
 

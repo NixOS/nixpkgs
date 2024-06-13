@@ -11,7 +11,7 @@
 , withTests ? stdenv.isLinux
 , libffi
 , epoll-shim
-, withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
+, withDocumentation ? withLibraries && (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
 , graphviz-nox
 , doxygen
 , libxslt
@@ -30,7 +30,7 @@ assert withDocumentation -> withLibraries;
 assert withTests -> withLibraries;
 
 let
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+  isCross = (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland";

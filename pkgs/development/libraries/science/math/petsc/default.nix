@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   configureScript = "python ./configure";
 
   enableParallelBuilding = true;
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 
   meta = with lib; {
     description = "Portable Extensible Toolkit for Scientific computation";

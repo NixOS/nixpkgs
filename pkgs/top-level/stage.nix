@@ -210,7 +210,7 @@ let
       overlays = [ (self': super': {
         pkgsMusl = super';
       })] ++ overlays;
-      ${if stdenv.hostPlatform == stdenv.buildPlatform
+      ${if (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
         then "localSystem" else "crossSystem"} = {
         parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
       };
@@ -222,7 +222,7 @@ let
       overlays = [ (self': super': {
         pkgsi686Linux = super';
       })] ++ overlays;
-      ${if stdenv.hostPlatform == stdenv.buildPlatform
+      ${if (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
         then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.i686;

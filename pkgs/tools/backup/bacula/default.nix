@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "--with-logdir=/var/log/bacula"
     "--with-working-dir=/var/lib/bacula"
     "--mandir=\${out}/share/man"
-  ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
+  ] ++ lib.optional (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
 
   installFlags = [
     "logdir=\${out}/logdir"

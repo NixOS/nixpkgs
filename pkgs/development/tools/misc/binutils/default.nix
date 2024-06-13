@@ -236,7 +236,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   # Break dependency on pkgsBuildBuild.gcc when building a cross-binutils
-  stripDebugList = if stdenv.hostPlatform != stdenv.targetPlatform then "bin lib ${stdenv.hostPlatform.config}" else null;
+  stripDebugList = if (!lib.systems.equals stdenv.hostPlatform stdenv.targetPlatform) then "bin lib ${stdenv.hostPlatform.config}" else null;
 
   # INFO: Otherwise it fails with:
   # `./sanity.sh: line 36: $out/bin/size: not found`

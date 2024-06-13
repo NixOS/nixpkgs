@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       configureFlagsArray+=("--with-installbuilddir=$dev/share/build")
     '';
 
-  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     # For cross builds, provide answers to the configure time tests.
     # These answers are valid on x86_64-linux and aarch64-linux.
     "ac_cv_file__dev_zero=yes"

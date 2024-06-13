@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ perl zlib bzip2 popt ];
 
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
+  dontStrip = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 
   meta = with lib; {
     description = "Implementation of the rsync remote-delta algorithm";

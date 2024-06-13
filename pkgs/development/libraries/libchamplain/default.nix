@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "0.12.21";
 
   outputs = [ "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+    ++ lib.optionals (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     vala
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+  ] ++ lib.optionals (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    (lib.mesonBool "gtk_doc" (stdenv.buildPlatform == stdenv.hostPlatform))
+    (lib.mesonBool "gtk_doc" (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform))
     "-Dvapi=true"
     (lib.mesonBool "libsoup3" withLibsoup3)
   ];

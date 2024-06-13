@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-glibtest"
     "--disable-introspection"
     "--disable-visibility"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "ac_cv_path_GTK_UPDATE_ICON_CACHE=${buildPackages.gtk2}/bin/gtk-update-icon-cache"
     "ac_cv_path_GDK_PIXBUF_CSOURCE=${buildPackages.gdk-pixbuf.dev}/bin/gdk-pixbuf-csource"
   ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ alsa-lib fftw libjack2 libsamplerate libsndfile ];
 
   strictDeps = true;
-  wafFlags = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--disable-tests";
+  wafFlags = lib.optional (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) "--disable-tests";
 
   postPatch = ''
     # U was removed in python 3.11 because it had no effect

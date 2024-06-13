@@ -284,7 +284,7 @@ let
         }
       else
         pypaInstallHook
-    )] ++ optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    )] ++ optionals (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
       # This is a test, however, it should be ran independent of the checkPhase and checkInputs
       pythonImportsCheckHook
     ] ++ optionals (python.pythonAtLeast "3.3") [

@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ boost lua protobuf_21 rapidjson shapelib sqlite zlib ];
 
-  cmakeFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+  cmakeFlags = lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
     (lib.cmakeFeature "PROTOBUF_PROTOC_EXECUTABLE" "${buildPackages.protobuf}/bin/protoc");
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DTM_VERSION=${finalAttrs.version}" ];

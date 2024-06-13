@@ -10,7 +10,7 @@
 , gettext
 , libav
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+, enableDocumentation ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform), hotdoc
 }:
 
 # Note that since gst-libav-1.6, libav is actually ffmpeg. See

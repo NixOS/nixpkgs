@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       else
         "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
       }"
-    (lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform)
+    (lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
       "XSLTPROC=${buildPackages.libxslt}/bin/xsltproc")
   ];
 

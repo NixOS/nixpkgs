@@ -132,7 +132,7 @@ stdenv.mkDerivation ({
     ''
     # FIXME: find a solution for infinite recursion in cross builds.
     # For now it's hopefully acceptable that IDN from libc doesn't reliably work.
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    + lib.optionalString (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
 
       # Ensure that libidn2 is found.
       patch -p 1 <<EOF
@@ -164,7 +164,7 @@ stdenv.mkDerivation ({
       "--enable-cet${if builtins.isString enableCET then "=${enableCET}"  else ""}"
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.10.0" # RHEL 7 and derivatives, seems oldest still supported kernel
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
       (lib.flip lib.withFeature "fp"
          (stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
       "--with-__thread"
@@ -240,7 +240,7 @@ stdenv.mkDerivation ({
     }
 
 
-  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  '' + lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
     cat > config.cache << "EOF"

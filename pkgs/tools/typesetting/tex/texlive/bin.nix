@@ -81,7 +81,7 @@ let
       # see "from TL tree" vs. "Using installed"  in configure output
       "zziplib" "mpfr" "gmp"
       "pixman" "potrace" "gd" "freetype2" "libpng" "libpaper" "zlib"
-    ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    ] ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
       "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc";
 
     # move binaries to corresponding split outputs, based on content of texlive.tlpdb

@@ -66,7 +66,7 @@ assert (hash == null) -> (src != null);
   xz,
   nixosTests,
 
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  enableDocumentation ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform),
   enableStatic ? stdenv.hostPlatform.isStatic,
   withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin),
   aws-sdk-cpp,

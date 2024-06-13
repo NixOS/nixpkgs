@@ -11,7 +11,7 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+  targetPrefix = lib.optionalString (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
                                         (stdenv.targetPlatform.config + "-");
 
   # Bootstrap `fetchurl` needed to build SDK packages without causing an infinite recursion.
@@ -89,7 +89,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   binutils = pkgs.wrapBintoolsWith {
     libc =
-      if stdenv.targetPlatform != stdenv.hostPlatform
+      if (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
       then pkgs.libcCross
       else pkgs.stdenv.cc.libc;
     bintools = self.binutils-unwrapped;
@@ -103,7 +103,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   binutilsDualAs = pkgs.wrapBintoolsWith {
     libc =
-      if stdenv.targetPlatform != stdenv.hostPlatform
+      if (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
       then pkgs.libcCross
       else pkgs.stdenv.cc.libc;
     bintools = self.binutilsDualAs-unwrapped;

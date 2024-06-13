@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   # Too red; 8bit support for fixing https://github.com/NixOS/nixpkgs/issues/275220
   configureFlags = [ "--disable-modern-top" "--enable-watch8bit" ]
     ++ lib.optional withSystemd "--with-systemd"
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ];

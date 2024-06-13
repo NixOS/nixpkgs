@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     # do the same.
     "--without-bash-malloc"
     (if interactive then "--with-installed-readline" else "--disable-readline")
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     "bash_cv_job_control_missing=nomissing"
     "bash_cv_sys_named_pipes=nomissing"
     "bash_cv_getcwd_malloc=yes"

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ]
   # `help2man' wants to run Zile, which won't work when the
   # newly-produced binary can't be run at build-time.
-  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) help2man;
+  ++ lib.optional (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) help2man;
 
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.

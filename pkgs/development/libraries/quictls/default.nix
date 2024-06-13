@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       then "./Configure linux-mips64"
       else throw "unsupported ABI for ${stdenv.hostPlatform.system}";
   }.${stdenv.hostPlatform.system} or (
-    if stdenv.hostPlatform == stdenv.buildPlatform
+    if (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
     then "./config"
     else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64
     then "./Configure BSD-x86_64"

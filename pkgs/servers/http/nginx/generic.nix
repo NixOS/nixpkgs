@@ -155,7 +155,7 @@ stdenv.mkDerivation {
       '';
     })
     ./nix-skip-check-logs-path.patch
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/102-sizeof_test_fix.patch";
       sha256 = "0i2k30ac8d7inj9l6bl0684kjglam2f68z8lf3xggcc2i5wzhh8a";

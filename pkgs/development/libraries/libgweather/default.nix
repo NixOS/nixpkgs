@@ -16,7 +16,7 @@
 , geocode-glib_2
 , vala
 , gnome
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
+, withIntrospection ? (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
 }:
 
 stdenv.mkDerivation rec {

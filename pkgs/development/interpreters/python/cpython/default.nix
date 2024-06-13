@@ -156,7 +156,7 @@ let
     autoconf-archive # needed for AX_CHECK_COMPILE_FLAG
     autoreconfHook
     pkg-config
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonOnBuildForHost
   ] ++ optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
@@ -198,7 +198,7 @@ let
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
-  pythonOnBuildForHostInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
+  pythonOnBuildForHostInterpreter = if (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) then
     "$out/bin/python"
   else pythonOnBuildForHost.interpreter;
 
@@ -422,7 +422,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (libxcrypt != null) [
     "CFLAGS=-I${libxcrypt}/include"
     "LIBS=-L${libxcrypt}/lib"
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
     "ac_cv_little_endian_double=yes"
@@ -596,7 +596,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     linkDLLsInfolder $out/lib/python*/lib-dynload/
   '';
 
-  preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preFixup = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     # Ensure patch-shebangs uses shebangs of host interpreter.
     export PATH=${lib.makeBinPath [ "$out" ]}:$PATH
   '';
@@ -613,7 +613,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   # explicitly specify in our configure flags above.
   disallowedReferences = lib.optionals (openssl != null && !static && !enableFramework) [
     openssl.dev
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
     pythonOnBuildForHost buildPackages.bash

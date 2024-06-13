@@ -6,7 +6,7 @@
 # Run time
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, xz, dejagnu, sourceHighlight, libiconv
 
-, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
+, pythonSupport ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) && !stdenv.hostPlatform.isCygwin, python3 ? null
 , enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
 , guile ? null
 , hostCpuOnly ? false
@@ -22,7 +22,7 @@
 
 let
   basename = "gdb";
-  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+  targetPrefix = lib.optionalString (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
                  "${stdenv.targetPlatform.config}-";
 in
 

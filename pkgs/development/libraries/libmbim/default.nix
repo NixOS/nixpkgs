@@ -11,7 +11,7 @@
 , bash
 , buildPackages
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, withDocs ? stdenv.hostPlatform == stdenv.buildPlatform
+, withDocs ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
 , gobject-introspection
 }:
 

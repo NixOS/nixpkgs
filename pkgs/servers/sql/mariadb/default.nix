@@ -22,7 +22,7 @@ let
     }:
 
   let
-    isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+    isCross = (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
 
     libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 

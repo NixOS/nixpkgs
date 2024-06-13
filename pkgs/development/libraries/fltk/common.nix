@@ -37,7 +37,7 @@
 , doxygen
 , graphviz
 
-, withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, withExamples ? (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
 , withShared ? true
 }:
 

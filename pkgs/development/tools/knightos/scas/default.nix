@@ -1,7 +1,7 @@
 { fetchFromGitHub, lib, stdenv, cmake, buildPackages, asciidoc, libxslt }:
 
 let
-  isCrossCompiling = stdenv.hostPlatform != stdenv.buildPlatform;
+  isCrossCompiling = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 in
 
 stdenv.mkDerivation rec {

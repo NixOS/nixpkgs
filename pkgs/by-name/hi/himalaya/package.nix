@@ -5,8 +5,8 @@
 , pkg-config
 , darwin
 , installShellFiles
-, installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
-, installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
+, installShellCompletions ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
+, installManPages ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
 , notmuch
 , gpgme
 , buildNoDefaultFeatures ? false

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     libgudev
   ];
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform
+  doCheck = (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
             && lib.meta.availableOn stdenv.hostPlatform valgrind
             && !stdenv.hostPlatform.isPower  # one test times out
   ;

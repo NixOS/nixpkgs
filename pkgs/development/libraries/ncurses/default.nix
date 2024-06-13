@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
         "/usr/share/terminfo" # upstream default, probably all FHS-based distros
         "/run/current-system/sw/share/terminfo" # NixOS
       ]}"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "--with-build-cc=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
   ] ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") [
       # lld17+ passes `--no-undefined-version` by default and makes this a hard
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
     pkg-config
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
    # for `tic`, build already depends on for build `cc` so it's weird the build doesn't just build `tic`.
     ncurses
   ];

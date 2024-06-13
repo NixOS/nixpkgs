@@ -64,7 +64,7 @@ let
     meta.license = lib.licenses.unfree;
   } else null;
 
-  crossBuild = stdenv.hostPlatform != stdenv.buildPlatform;
+  crossBuild = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 
 in
 

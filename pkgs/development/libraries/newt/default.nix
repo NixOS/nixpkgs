@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "--disable-nls"
   ];
 
-  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  makeFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 

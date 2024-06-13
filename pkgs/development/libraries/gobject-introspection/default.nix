@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     (buildPackages.python3.withPackages pythonModules)
     finalAttrs.setupHook # move .gir files
     # can't use canExecute, we need prebuilt when cross
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
 
   buildInputs = [
     (python3.withPackages pythonModules)
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "--datadir=${placeholder "dev"}/share"
     "-Dcairo=disabled"
-    "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
+    "-Dgtk_doc=${lib.boolToString (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)}"
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     "-Dgi_cross_ldd_wrapper=${substituteAll {
       name = "g-ir-scanner-lddwrapper";
@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     }}"
     "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
     # can't use canExecute, we need prebuilt when cross
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "-Dgi_cross_use_prebuilt_gi=true"
   ];
 
@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tools/*
   '';
 
-  postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     cp -r ${buildPackages.gobject-introspection-unwrapped.devdoc} $devdoc
     # these are uncompiled c and header files which aren't installed when cross-compiling because
     # code that installs them is in tests/meson.build which is only run when not cross-compiling

@@ -14,7 +14,7 @@ let
   inherit (stdenv) isDarwin;
 
   malloc0ReturnsNullCrossFlag = lib.optional
-    (stdenv.hostPlatform != stdenv.buildPlatform)
+    (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
     "--enable-malloc0returnsnull";
 
   addMainProgram = pkg: { mainProgram ? pkg.pname }: pkg.overrideAttrs (attrs: {
@@ -241,7 +241,7 @@ self: super:
     buildInputs = attrs.buildInputs ++ [ libxcrypt ];
     configureFlags = attrs.configureFlags or [] ++ [
       "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
-    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
       # checking for /dev/urandom... configure: error: cannot check for file existence when cross compiling
       [ "ac_cv_file__dev_urandom=true" "ac_cv_file__dev_random=true" ];
     meta = attrs.meta // { mainProgram = "xdm"; };
@@ -323,7 +323,7 @@ self: super:
   libXi = super.libXi.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" "doc" ];
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libXfixes xorg.libXext ];
-    configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    configureFlags = lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
       "xorg_cv_malloc0_returns_null=no"
     ] ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
   });

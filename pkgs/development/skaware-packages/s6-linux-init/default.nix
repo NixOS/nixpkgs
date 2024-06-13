@@ -33,7 +33,7 @@ skawarePackages.buildPackage {
   ];
 
   # See ../s6-rc/default.nix for an explanation
-  postConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
+  postConfigure = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.targetPlatform) ''
     substituteInPlace src/init/s6-linux-init-maker.c \
         --replace-fail '<execline/config.h>' '"${targetPackages.execline.dev}/include/execline/config.h"' \
         --replace-fail '<s6/config.h>' '"${targetPackages.s6.dev}/include/s6/config.h"' \

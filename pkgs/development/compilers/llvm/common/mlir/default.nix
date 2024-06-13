@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     "-DLLVM_ENABLE_PIC=OFF"
     "-DLLVM_BUILD_STATIC=ON"
     "-DLLVM_LINK_LLVM_DYLIB=OFF"
-  ] ++ lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
+  ] ++ lib.optionals ((!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     "-DMLIR_TABLEGEN_EXE=${buildLlvmTools.mlir}/bin/mlir-tblgen"
   ];

@@ -14,7 +14,7 @@
 }:
 
 # Prebuilt only does native
-assert stdenv.targetPlatform == stdenv.hostPlatform;
+assert (lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform);
 
 let
   downloadsUrl = "https://downloads.haskell.org/ghc";

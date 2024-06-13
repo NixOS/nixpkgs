@@ -48,7 +48,7 @@ skawarePackages.buildPackage {
   # only time hostPlatform != targetPlatform.  When that happens we
   # modify s6-rc-compile to use the configuration headers for the
   # system we're cross-compiling for.
-  postConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
+  postConfigure = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.targetPlatform) ''
     substituteInPlace src/s6-rc/s6-rc-compile.c \
         --replace-fail '<execline/config.h>' '"${targetPackages.execline.dev}/include/execline/config.h"' \
         --replace-fail '<s6/config.h>' '"${targetPackages.s6.dev}/include/s6/config.h"' \

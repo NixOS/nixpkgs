@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     patchShebangs separated_to_hash.pl
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
     for f in $out/bin/*; do
       substituteInPlace $f --replace "${buildPackages.perl}" "${perl}"
     done

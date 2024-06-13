@@ -55,7 +55,7 @@
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
+  enableRelocatedStaticLibs ? (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
 
 , enableProfiledLibs ? true
 
@@ -544,7 +544,7 @@ stdenv.mkDerivation ({
 
     # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
     # so haddock isn't available for GHC cross-compilers. Can we fix that?
-    hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
+    hasHaddock = (lib.systems.equals stdenv.hostPlatform stdenv.targetPlatform);
   };
 
   meta = {

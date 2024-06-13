@@ -24,7 +24,7 @@
 , langObjC
 , langObjCpp
 , langJit
-, disableBootstrap ? stdenv.targetPlatform != stdenv.hostPlatform
+, disableBootstrap ? (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
 }:
 
 assert !enablePlugin -> disableGdbPlugin;
@@ -50,7 +50,7 @@ let
   crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
 
-  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+  targetPrefix = lib.optionalString (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
                   "${stdenv.targetPlatform.config}-";
 
   crossConfigureFlags =

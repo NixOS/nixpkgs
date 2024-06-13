@@ -57,7 +57,7 @@ qtModule ({
   pname = "qtwebengine";
   nativeBuildInputs = [
     bison flex git gperf ninja pkg-config (python.withPackages(ps: [ ps.html5lib ])) which gn nodejs
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     perl
     lndir (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtbase)
     pkgsBuildBuild.pkg-config
@@ -135,7 +135,7 @@ qtModule ({
   env = {
     NIX_CFLAGS_COMPILE =
       toString (
-        lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+        lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
           "-w "
         ] ++ lib.optionals stdenv.cc.isGNU [
           # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
@@ -147,7 +147,7 @@ qtModule ({
         ] ++ lib.optionals stdenv.cc.isClang [
           "-Wno-elaborated-enum-base"
         ]);
-  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  } // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) {
     NIX_CFLAGS_LINK = "-Wl,--no-warn-search-mismatch";
     "NIX_CFLAGS_LINK_${buildPackages.stdenv.cc.suffixSalt}" = "-Wl,--no-warn-search-mismatch";
   };
@@ -158,7 +158,7 @@ qtModule ({
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
-  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  '' + lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     export QMAKE_CC=$CC
     export QMAKE_CXX=$CXX
     export QMAKE_LINK=$CXX
@@ -166,7 +166,7 @@ qtModule ({
   '';
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
-    ++ lib.optional (pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform) "-webengine-webrtc-pipewire"
+    ++ lib.optional (pipewireSupport && (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)) "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
@@ -264,7 +264,7 @@ qtModule ({
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
 
-  postInstall = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
     mkdir -p $out/libexec
   '' + lib.optionalString stdenv.isLinux ''
     cat > $out/libexec/qt.conf <<EOF
@@ -300,7 +300,7 @@ qtModule ({
     timeout = 24 * 3600;
   };
 
-} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+} // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) {
   configurePlatforms = [ ];
   # to get progress output in `nix-build` and `nix build -L`
   preBuild = ''

@@ -28,7 +28,7 @@
 assert (enableCrypt -> (libxcrypt != null));
 
 let
-  crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
+  crossCompiling = (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
@@ -235,7 +235,7 @@ stdenv.mkDerivation (rec {
     priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     mainProgram = "perl";
   };
-} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
+} // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) rec {
   crossVersion = "84db4c71ae3d3b01fb2966cd15a060a7be334710"; # Nov 29, 2023
 
   perl-cross-src = fetchFromGitHub {

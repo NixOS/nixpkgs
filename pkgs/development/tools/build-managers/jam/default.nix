@@ -20,7 +20,7 @@ let
     # host platform. This looks a little ridiculous because the vast majority of
     # build tools don't embed target-specific information into their binary, but
     # in this case we behave more like a compiler than a make(1)-alike.
-    postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) ''
+    postPatch = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.targetPlatform) ''
       cat >>jam.h <<EOF
       #undef OSMAJOR
       #undef OSMINOR

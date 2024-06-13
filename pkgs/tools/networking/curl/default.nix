@@ -11,7 +11,7 @@
     # the "mig" tool does not configure its compiler correctly. This could be
     # fixed in mig, but losing gss support on cross compilation to darwin is
     # not worth the effort.
-    !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
+    !(isDarwin && (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform))
   ), libkrb5
 , http2Support ? true, nghttp2
 , http3Support ? false, nghttp3, ngtcp2
@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
        # For the 'urandom', maybe it should be a cross-system option
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
        "--with-random=/dev/urandom"
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--disable-shared"

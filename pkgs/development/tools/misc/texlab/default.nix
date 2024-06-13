@@ -11,7 +11,7 @@
 }:
 
 let
-  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+  isCross = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 in
 rustPlatform.buildRustPackage rec {
   pname = "texlab";

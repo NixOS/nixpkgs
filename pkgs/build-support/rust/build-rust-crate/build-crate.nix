@@ -19,7 +19,7 @@
         "--remap-path-prefix=$NIX_BUILD_TOP=/"
         (mkRustcDepArgs dependencies crateRenames)
         (mkRustcFeatureArgs crateFeatures)
-      ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
         "--target" stdenv.hostPlatform.rust.rustcTargetSpec
       ] ++ lib.optionals (needUnstableCLI dependencies) [
         "-Z" "unstable-options"

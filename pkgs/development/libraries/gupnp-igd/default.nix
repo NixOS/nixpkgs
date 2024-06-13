@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   version = "1.2.0";
 
   outputs = [ "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+    ++ lib.optionals (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dgtk_doc=${lib.boolToString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)}"
+    "-Dintrospection=${lib.boolToString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)}"
   ];
 
   # Seems to get stuck sometimes.

@@ -89,7 +89,7 @@ let
         powerpc64-linux = "./Configure linux-ppc64";
         riscv64-linux = "./Configure linux64-riscv64";
       }.${stdenv.hostPlatform.system} or (
-        if stdenv.hostPlatform == stdenv.buildPlatform
+        if (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
           then "./config"
         else if stdenv.hostPlatform.isBSD
           then if stdenv.hostPlatform.isx86_64 then "./Configure BSD-x86_64"

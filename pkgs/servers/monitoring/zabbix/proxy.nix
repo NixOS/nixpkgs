@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, libevent, libiconv, openssl, pcre, zlib
 , odbcSupport ? true, unixODBC
-, snmpSupport ? stdenv.buildPlatform == stdenv.hostPlatform, net-snmp
+, snmpSupport ? (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform), net-snmp
 , sshSupport ? true, libssh2
 , sqliteSupport ? false, sqlite
 , mysqlSupport ? false, libmysqlclient

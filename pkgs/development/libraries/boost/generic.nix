@@ -13,7 +13,7 @@
 , enableStatic ? !enableShared
 , enablePython ? false
 , enableNumpy ? false
-, enableIcu ? stdenv.hostPlatform == stdenv.buildPlatform
+, enableIcu ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
 , boostBuildPatches ? []
@@ -50,7 +50,7 @@ let
   # To avoid library name collisions
   layout = if taggedLayout then "tagged" else "system";
 
-  needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || (stdenv.isDarwin && enableShared);
+  needUserConfig = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) || useMpi || (stdenv.isDarwin && enableShared);
 
   b2Args = lib.concatStringsSep " " ([
     "--includedir=$dev/include"
@@ -187,7 +187,7 @@ stdenv.mkDerivation {
   # uniform way for clang and gcc (which works thanks to our cc-wrapper).
   # We pass toolset later which will make b2 invoke everything in the right
   # way -- the other toolset in user-config.jam will be ignored.
-  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  + lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     cat << EOF >> user-config.jam
     using gcc : cross : ${stdenv.cc.targetPrefix}c++
       : <archiver>$AR

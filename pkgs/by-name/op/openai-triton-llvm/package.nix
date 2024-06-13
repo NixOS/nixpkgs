@@ -42,7 +42,7 @@ let
     then python3Packages.python.withPackages (p: with p; [ psutil pygments pyyaml ])
     else python3Packages.python;
 
-  isNative = stdenv.hostPlatform == stdenv.buildPlatform;
+  isNative = (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 in stdenv.mkDerivation (finalAttrs: {
   pname = "openai-triton-llvm";
   version = "17.0.0-c5dede880d17";

@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" "man" ]
     ++ lib.optional withIntrospection "devdoc"
-    ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
+    ++ lib.optional (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) "installedTests";
 
   src = let
     inherit (finalAttrs) pname version;

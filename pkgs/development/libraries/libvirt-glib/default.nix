@@ -12,7 +12,7 @@
 , buildPackages
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , gobject-introspection
-, withDocs ? stdenv.hostPlatform == stdenv.buildPlatform
+, withDocs ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
 , gtk-doc
 , docbook-xsl-nons
 }:

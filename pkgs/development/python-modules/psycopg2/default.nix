@@ -61,7 +61,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psycopg2" ];
 
-  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  disallowedReferences = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     buildPackages.postgresql
   ];
 

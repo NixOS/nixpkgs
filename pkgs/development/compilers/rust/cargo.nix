@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage.override {
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
     # https://github.com/alexcrichton/nghttp2-rs/issues/2
-    broken = stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform;
+    broken = stdenv.hostPlatform.isx86 && (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
   };
 }
 // lib.optionalAttrs (stdenv.buildPlatform.rust.rustcTarget != stdenv.hostPlatform.rust.rustcTarget) {

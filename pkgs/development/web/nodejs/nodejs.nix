@@ -14,7 +14,7 @@
 let
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
-  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+  isCross = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 
   majorVersion = lib.versions.major version;
   minorVersion = lib.versions.minor version;

@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/busybox/0002-nslookup-sanitize-all-printed-strings-with-printable.patch?id=ed92963eb55bbc8d938097b9ccb3e221a94653f4";
       sha256 = "sha256-vl1wPbsHtXY9naajjnTicQ7Uj3N+EQ8pRNnrdsiow+w=";
     })
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
+  ] ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ./clang-cross.patch;
 
   separateDebugInfo = true;
 

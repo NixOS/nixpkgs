@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "--with-ssl-lib-dir=${lib.getLib openssl}/lib"
   ] else [
     "--without-ssl"
-  ]) ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ]) ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     # will need to check both these are true for musl
     "libmonit_cv_setjmp_available=yes"
     "libmonit_cv_vsnprintf_c99_conformant=yes"

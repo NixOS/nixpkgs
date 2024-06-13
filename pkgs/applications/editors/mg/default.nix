@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-88FrXN7h5uRLY8YMKSzUjBF4n18DEiiiDyoYr+7qXdQ=";
   };
 
-  postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  postPatch = lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
     substituteInPlace configure --replace "./conftest" "echo"
   '';
 

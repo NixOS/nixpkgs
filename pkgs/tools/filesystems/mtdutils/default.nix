@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "AR:=$(AR)"
   ];
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 
   outputs = [ "out" "dev" ];
 

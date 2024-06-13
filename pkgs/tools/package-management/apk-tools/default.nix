@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitLab, pkg-config, scdoc, openssl, zlib
-, luaSupport ? stdenv.hostPlatform == stdenv.buildPlatform, lua
+, luaSupport ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform), lua
 }:
 
 stdenv.mkDerivation rec {

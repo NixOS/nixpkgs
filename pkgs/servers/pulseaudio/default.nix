@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "doxygen" false)
     (lib.mesonEnable "elogind" false)
     # gsettings does not support cross-compilation
-    (lib.mesonEnable "gsettings" (stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)))
+    (lib.mesonEnable "gsettings" (stdenv.isLinux && (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)))
     (lib.mesonEnable "gstreamer" false)
     (lib.mesonEnable "gtk" false)
     (lib.mesonEnable "jack" (jackaudioSupport && !libOnly))
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     cp config.h $dev/include/pulse
   '';
 
-  preFixup = lib.optionalString (stdenv.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
+  preFixup = lib.optionalString (stdenv.isLinux  && (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)) ''
     wrapProgram $out/libexec/pulse/gsettings-helper \
      --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"

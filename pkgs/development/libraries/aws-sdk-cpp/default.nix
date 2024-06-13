@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
   ] ++ lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "-DENABLE_TESTING=OFF"
     "-DCURL_HAS_H2=1"
     "-DCURL_HAS_TLS_PROXY=1"

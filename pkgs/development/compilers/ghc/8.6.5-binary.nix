@@ -7,7 +7,7 @@
 }:
 
 # Prebuilt only does native
-assert stdenv.targetPlatform == stdenv.hostPlatform;
+assert (lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform);
 
 let
   useLLVM = !(stdenv.targetPlatform.isx86

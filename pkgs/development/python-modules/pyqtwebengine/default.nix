@@ -55,8 +55,8 @@ buildPythonPackage (
         pkg-config
         qmake
       ]
-      ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ sip ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      ++ lib.optionals (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [ sip ]
+      ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
         python.pythonOnBuildForHost.pkgs.sip
       ]
       ++ [
@@ -66,7 +66,7 @@ buildPythonPackage (
         pyqt-builder
         pythonPackages.setuptools
       ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qtdeclarative ]
+      ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [ qtdeclarative ]
       ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
 
     buildInputs =
@@ -76,7 +76,7 @@ buildPythonPackage (
         qtsvg
         qtwebengine
       ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
         qtwebchannel
         qtdeclarative
       ];
@@ -109,7 +109,7 @@ buildPythonPackage (
       hydraPlatforms = lib.lists.intersectLists qtwebengine.meta.platforms platforms.mesaPlatforms;
     };
   }
-  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) {
     # TODO: figure out why the env hooks aren't adding these inclusions automatically
     env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
       "-I${lib.getDev qtbase}/include/QtPrintSupport/"

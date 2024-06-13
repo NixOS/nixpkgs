@@ -9395,7 +9395,7 @@ with self; {
       hash = "sha256-TH1g4m2iwH8Fik40UCHpJQUnOzPJVCIVl34IRhHwns8=";
     };
     buildInputs = [ FCGIClient ];
-    postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    postPatch = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
       sed -i '/use IO::File/d' Makefile.PL
     '';
     meta = {
@@ -13360,7 +13360,7 @@ with self; {
       hash = "sha256-34tRQ9mn3pnEe1XxoXC9H2n3EZNcGGptwKtW3QV1jjU=";
     };
     # Do not abort cross-compilation on failure to load native JSON module into host perl
-    preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    preConfigure = lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
       substituteInPlace Makefile.PL --replace "exit 0;" ""
     '';
     buildInputs = [ TestPod ];
@@ -14690,7 +14690,7 @@ with self; {
       export NO_NETWORK_TESTING=1
     '';
     # support cross-compilation by avoiding using `has_module` which does not work in miniperl (it requires B native module)
-    postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    postPatch = lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
       substituteInPlace Makefile.PL --replace 'if has_module' 'if 0; #'
     '';
     doCheck = !stdenv.isDarwin;
@@ -16035,11 +16035,11 @@ with self; {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4234.tar.gz";
       hash = "sha256-Zq6sYSdBi+XkcerTdEZIx2a9AUgoJcW2ZlJnXyvIao8=";
     };
-    postConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    postConfigure = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
       # for unknown reason, the first run of Build fails
       ./Build || true
     '';
-    postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    postPatch = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
       # remove version check since miniperl uses a stub of File::Temp, which do not provide a version:
       # https://github.com/arsv/perl-cross/blob/master/cnf/stub/File/Temp.pm
       sed -i '/File::Temp/d' \
@@ -24274,7 +24274,7 @@ with self; {
   };
 
   TermReadKey = let
-    cross = stdenv.hostPlatform != stdenv.buildPlatform;
+    cross = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
   in buildPerlPackage {
     pname = "TermReadKey";
     version = "2.38";
@@ -28660,7 +28660,7 @@ with self; {
       hash = "sha256-0zEzJJHFHMz7TLlP/ET5zXM3jmGEmNSjffngQ2YcUV0=";
     };
     patches = [ ../development/perl-modules/xml-parser-0001-HACK-Assumes-Expat-paths-are-good.patch ];
-    postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    postPatch = lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
       substituteInPlace Expat/Makefile.PL --replace 'use English;' '#'
     '' + lib.optionalString stdenv.isCygwin ''
       sed -i"" -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm

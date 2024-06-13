@@ -36,7 +36,7 @@ mkDerivation {
     makeMinimal
     mandoc
     groff
-    (if stdenv.hostPlatform == stdenv.buildPlatform then boot-install else install)
+    (if (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) then boot-install else install)
   ];
   skipIncludesPhase = true;
   buildInputs = compatIfNeeded ++ [
@@ -49,7 +49,7 @@ mkDerivation {
       "MK_WERROR=no"
       "TESTSDIR=${builtins.placeholder "test"}"
     ]
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    ++ lib.optionals (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
       "BOOTSTRAPPING=1"
       "INSTALL=boot-install"
     ];

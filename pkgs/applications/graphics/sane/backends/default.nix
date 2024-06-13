@@ -83,7 +83,7 @@ stdenv.mkDerivation {
 
   # autoconf check for HAVE_MMAP is never set on cross compilation.
   # The pieusb backend fails compilation if HAVE_MMAP is not set.
-  buildFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "CFLAGS=-DHAVE_MMAP=${if stdenv.hostPlatform.isLinux then "1" else "0"}" ];
+  buildFlags = lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [ "CFLAGS=-DHAVE_MMAP=${if stdenv.hostPlatform.isLinux then "1" else "0"}" ];
 
   postInstall = let
 

@@ -224,7 +224,7 @@ let
     # was clobbering the PATH. It probably needs to be fixed at a lower level.
     preConfigure = ''
       patchShebangs ./build_tools/git_version_gen.sh
-    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    '' + lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
       export CMAKE_PREFIX_PATH=
     '';
 

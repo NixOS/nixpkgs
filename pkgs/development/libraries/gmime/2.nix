@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib zlib libgpg-error ];
   configureFlags = [
     "--enable-introspection=yes"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "ac_cv_have_iconv_detect_h=yes" ];
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [ "ac_cv_have_iconv_detect_h=yes" ];
 
   postPatch = ''
     substituteInPlace tests/testsuite.c \
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace /bin/mkdir mkdir
   '';
 
-  preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  preConfigure = lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
     cp ${if stdenv.hostPlatform.isMusl then ./musl-iconv-detect.h else ./iconv-detect.h} ./iconv-detect.h
   '';
 

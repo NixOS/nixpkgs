@@ -2,7 +2,7 @@
 , testers
 }:
 
-assert stdenv.hostPlatform == stdenv.buildPlatform -> zlib != null;
+assert (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) -> zlib != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpng";

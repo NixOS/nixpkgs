@@ -31,7 +31,7 @@
 , doCheck ? !stdenv.isAarch32 && (if lib.versionOlder release_version "15" then stdenv.isLinux else true)
   && (!stdenv.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
   && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
-  && (stdenv.hostPlatform == stdenv.buildPlatform)
+  && (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 , enablePFM ? stdenv.isLinux /* PFM only supports Linux */
@@ -118,7 +118,7 @@ stdenv.mkDerivation (rec {
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
 
-  propagatedBuildInputs = (lib.optional (lib.versionAtLeast release_version "14" || stdenv.buildPlatform == stdenv.hostPlatform) ncurses)
+  propagatedBuildInputs = (lib.optional (lib.versionAtLeast release_version "14" || (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)) ncurses)
     ++ [ zlib ];
 
   postPatch = optionalString stdenv.isDarwin (''
@@ -365,7 +365,7 @@ stdenv.mkDerivation (rec {
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
+  ] ++ optionals ((!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (
@@ -417,7 +417,7 @@ stdenv.mkDerivation (rec {
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   ''
-  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  + optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '';
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # Let's assume that fnmatch works for cross-compilation, otherwise it gives an error:
   # undefined reference to `rpl_fnmatch'.
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  configureFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "ac_cv_func_fnmatch_works=yes"
   ];
 

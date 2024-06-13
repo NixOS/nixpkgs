@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_TESTS=${if doCheck then "ON" else "OFF"}"
   ];
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
   nativeCheckInputs = [ check ];
 
   meta = with lib; {

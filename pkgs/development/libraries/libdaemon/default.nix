@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patches = [ ./fix-includes.patch ];
 
   configureFlags = [ "--disable-lynx" ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+    ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
     [ # Can't run this test while cross-compiling
       "ac_cv_func_setpgrp_void=yes"
     ];

@@ -1,7 +1,7 @@
 { lib, runCommand, stdenv, llvm, lld, version, release_version }:
 
 let
-  targetPrefix = lib.optionalString (stdenv.hostPlatform != stdenv.targetPlatform) "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.targetPlatform) "${stdenv.targetPlatform.config}-";
 in
 runCommand "llvm-binutils-${version}"
 {

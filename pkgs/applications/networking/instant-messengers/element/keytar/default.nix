@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postPatch = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     pkg-config() { "''${PKG_CONFIG}" "$@"; }
     export -f pkg-config
   '';

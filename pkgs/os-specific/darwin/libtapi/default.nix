@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Also means we don't have to manually fix the result with install_name_tool.
   patches = [
     ./disable-rpath.patch
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     # TODO: make unconditional and rebuild the world
     # TODO: send upstream
     ./native-clang-tblgen.patch
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ ncurses ];
 
   cmakeFlags = [ "-DLLVM_INCLUDE_TESTS=OFF" ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
       "-DCMAKE_CROSSCOMPILING=True"
       # This package could probably have a llvm_6 llvm-tblgen and clang-tblgen
       # provided to reduce some building. This package seems intended to

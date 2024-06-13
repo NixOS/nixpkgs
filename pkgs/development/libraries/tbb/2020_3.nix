@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = lib.optionals stdenv.cc.isClang [
     "compiler=clang"
-  ] ++ (lib.optional (stdenv.buildPlatform != stdenv.hostPlatform)
+  ] ++ (lib.optional (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
     (if stdenv.hostPlatform.isAarch64 then "arch=arm64"
     else if stdenv.hostPlatform.isx86_64 then "arch=intel64"
     else if stdenv.hostPlatform.isi686 then "arch=ia32"

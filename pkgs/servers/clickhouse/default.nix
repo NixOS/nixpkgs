@@ -216,6 +216,6 @@ in mkDerivation rec {
 
     # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
     platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
+    broken = (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
   };
 }

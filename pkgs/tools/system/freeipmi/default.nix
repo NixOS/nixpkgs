@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libgcrypt readline libgpg-error ];
 
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+  configureFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
     [ "ac_cv_file__dev_urandom=true" "ac_cv_file__dev_random=true" ];
 
   doCheck = true;

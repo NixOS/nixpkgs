@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7izs2C5/czec0Dt3apL8s7luARAlw4PfUFy9Xsxb0zw=";
   };
 
-  depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
+  depsBuildBuild = optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
   buildInputs = [
     libxcrypt
   ] ++ optionals stdenv.isDarwin [

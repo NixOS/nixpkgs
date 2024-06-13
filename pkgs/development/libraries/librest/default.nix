@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
-  ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+  ] ++ lib.optionals (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_412
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    (lib.enableFeature (stdenv.hostPlatform == stdenv.buildPlatform) "gtk-doc")
+    (lib.enableFeature (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) "gtk-doc")
     # Remove when https://gitlab.gnome.org/GNOME/librest/merge_requests/2 is merged.
     "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt"
   ];

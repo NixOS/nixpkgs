@@ -33,7 +33,7 @@
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
+  enableRelocatedStaticLibs ? (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
 
 , enableProfiledLibs ? true
 
@@ -46,7 +46,7 @@
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
-  ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+  ghcFlavour ? lib.optionalString (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
     (if useLLVM then "perf-cross" else "perf-cross-ncg")
 
 , #  Whether to build sphinx documentation.
@@ -58,7 +58,7 @@
 
 , enableHaddockProgram ?
     # Disabled for cross; see note [HADDOCK_DOCS].
-    (stdenv.targetPlatform == stdenv.hostPlatform)
+    (lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
@@ -69,7 +69,7 @@ assert !enableNativeBignum -> gmp != null;
 
 # Cross cannot currently build the `haddock` program for silly reasons,
 # see note [HADDOCK_DOCS].
-assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
+assert (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform) -> !enableHaddockProgram;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;

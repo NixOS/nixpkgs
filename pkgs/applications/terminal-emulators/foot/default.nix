@@ -84,7 +84,7 @@ let
 
   # PGO only makes sense if we are not cross compiling and
   # using a compiler which foot's PGO build supports (clang or gcc)
-  doPgo = allowPgo && (stdenv.hostPlatform == stdenv.buildPlatform)
+  doPgo = allowPgo && (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
     && compilerName != "unknown";
 
   terminfoDir = "${placeholder "terminfo"}/share/terminfo";

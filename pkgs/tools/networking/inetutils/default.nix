@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   # https://lists.gnu.org/archive/html/bug-sed/2017-01/msg00001.html
   # https://git.congatec.com/yocto/meta-openembedded/blob/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3/meta-networking/recipes-connectivity/inetutils/inetutils_1.9.1.bb#L44
   preConfigure = let
-    isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+    isCross = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
   in lib.optionalString isCross ''
     export HELP2MAN=true
   '';

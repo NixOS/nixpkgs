@@ -29,7 +29,7 @@ let
     cmake = 'cmake'
   '';
 
-  crossFlags = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
+  crossFlags = optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
 
   makeMesonFlags = { mesonFlags ? [], ... }: crossFlags ++ mesonFlags;
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-L8jr1+SJWsCizkPXC8VKDy2eVa7/FpqdB8SkBYq6vwc=";
   };
 
-  outputs = [ "out" "man" "dev" ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
+  outputs = [ "out" "man" "dev" ] ++ lib.optional (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) "devdoc";
 
   patches = [
     (substituteAll {
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
-    (lib.enableFeature (stdenv.buildPlatform == stdenv.hostPlatform) "gtk-doc")
+    (lib.enableFeature (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) "gtk-doc")
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"

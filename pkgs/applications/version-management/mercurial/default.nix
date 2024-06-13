@@ -133,7 +133,7 @@ let
     requiredSystemFeatures = [ "big-parallel" ];
 
     # Don't run tests if not-Linux or if cross-compiling.
-    meta.broken = !stdenv.hostPlatform.isLinux || stdenv.buildPlatform != stdenv.hostPlatform;
+    meta.broken = !stdenv.hostPlatform.isLinux || (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
   } ''
     addToSearchPathWithCustomDelimiter : PYTHONPATH "${mercurial}/${python.sitePackages}"
 

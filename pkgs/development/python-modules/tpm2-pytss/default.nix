@@ -22,7 +22,7 @@
 }:
 
 let
-  isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
+  isCross = (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
 in
 buildPythonPackage rec {
   pname = "tpm2-pytss";

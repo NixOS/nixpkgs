@@ -11,7 +11,7 @@
 # Enabling python support while cross compiling would be possible, but the
 # configure script tries executing python to gather info instead of relying on
 # python3-config exclusively
-, enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
+, enablePython ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform),
 }:
 
 stdenv.mkDerivation (finalAttrs: {

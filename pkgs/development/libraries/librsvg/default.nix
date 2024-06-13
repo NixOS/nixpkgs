@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     "--enable-always-build-tests"
   ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTarget}";
+    ++ lib.optional (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTarget}";
 
   doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
 
@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # 'error: linker `cc` not found' when cross-compiling
     export RUSTFLAGS="-Clinker=$CC"
-  '' + lib.optionalString ((stdenv.buildPlatform != stdenv.hostPlatform) && (stdenv.hostPlatform.emulatorAvailable buildPackages)) ''
+  '' + lib.optionalString ((!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) && (stdenv.hostPlatform.emulatorAvailable buildPackages)) ''
     # the replacement is the native conditional
     substituteInPlace gdk-pixbuf-loader/Makefile \
       --replace 'RUN_QUERY_LOADER_TEST = false' 'RUN_QUERY_LOADER_TEST = test -z "$(DESTDIR)"' \

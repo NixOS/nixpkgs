@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ SDL glib ];
 
-  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     # Remove once "sdl-cross-prereq.patch" patch above is removed.
     "--disable-lv-tool"
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [

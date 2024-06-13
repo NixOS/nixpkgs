@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ m4 ];
 
-  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preConfigure = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     ac_cv_func_malloc_0_nonnull=yes
     ac_cv_func_realloc_0_nonnull=yes
   '';

@@ -15,7 +15,7 @@
 , perlPackages
 , pythonBindings ? true
 , tclBindings ? true
-, perlBindings ? stdenv.buildPlatform == stdenv.hostPlatform
+, perlBindings ? (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
 , buildPackages
 }:
 

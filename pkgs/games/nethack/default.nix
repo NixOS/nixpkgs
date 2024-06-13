@@ -77,7 +77,7 @@ in stdenv.mkDerivation rec {
       -e 's,moc-qt4,moc,' \
       -i sys/unix/hints/linux-qt4
     ''}
-    ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+    ${lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
     # If we're cross-compiling, replace the paths to the data generation tools
     # with the ones from the build platform's nethack package, since we can't
     # run the ones we've built here.

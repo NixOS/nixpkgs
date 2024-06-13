@@ -133,7 +133,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   patches = cargoPatches ++ patches;
 
   PKG_CONFIG_ALLOW_CROSS =
-    if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
+    if (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) then 1 else 0;
 
   postUnpack = ''
     eval "$cargoDepsHook"

@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
     (enableFeature (experimentalSpatialSvcSupport ||
                     experimentalFpMbStatsSupport ||
                     experimentalEmulateHardwareSupport) "experimental")
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     "--enable-external-build"
     # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
     # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure

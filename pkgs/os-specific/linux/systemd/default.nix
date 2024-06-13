@@ -860,7 +860,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/ukify --prefix PATH : ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }:${placeholder "out"}/lib/systemd
   '';
 
-  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+  disallowedReferences = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
     # 'or p' is for manually specified buildPackages as they dont have __spliced
     (builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs);
 

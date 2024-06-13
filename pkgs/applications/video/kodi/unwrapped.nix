@@ -205,7 +205,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
     preConfigure = ''
       cmakeFlagsArray+=("-DCORE_PLATFORM_NAME=${lib.concatStringsSep " " kodi_platforms}")
-    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    '' + lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
       # Need these tools on the build system when cross compiling,
       # hacky, but have found no other way.
       CXX=$CXX_FOR_BUILD LD=ld make -C tools/depends/native/JsonSchemaBuilder

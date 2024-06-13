@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
     "--without-ldb-lmdb"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     "--cross-compile"
     "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];

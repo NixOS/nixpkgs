@@ -40,7 +40,7 @@
 , glib
 , testers
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, enableDocumentation ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
 , hotdoc
 }:
 
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
     (lib.mesonEnable "doc" enableDocumentation)
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "-Dtests=disabled"
   ]
   ++ lib.optional (!enableX11) "-Dx11=disabled"

@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage {
   '';
 
   doCheck = stdenv.hostPlatform.isLinux
-          && (stdenv.hostPlatform == stdenv.buildPlatform);
+          && (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 
   passthru.tests.version = testers.testVersion {
     package = czkawka;

@@ -22,7 +22,7 @@ buildGoModule rec {
     $out/bin/k6 version | grep ${version} > /dev/null
   '';
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     installShellCompletion --cmd k6 \
       --bash <($out/bin/k6 completion bash) \
       --fish <($out/bin/k6 completion fish) \

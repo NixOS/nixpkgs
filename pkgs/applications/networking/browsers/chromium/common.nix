@@ -415,7 +415,7 @@ let
       host_toolchain = "//build/toolchain/linux/unbundle:default";
       # We only build those specific toolchains when we cross-compile, as native non-cross-compilations would otherwise
       # end up building much more things than they need to (roughtly double the build steps and time/compute):
-    } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    } // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) {
       host_toolchain = "//build/toolchain/linux/unbundle:host";
       v8_snapshot_toolchain = "//build/toolchain/linux/unbundle:host";
     } // {

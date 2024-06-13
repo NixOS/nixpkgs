@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   configureFlags = []
        # Configure check for dynamic lib support is broken, see
        # http://lists.uclibc.org/pipermail/uclibc-cvs/2005-August/019383.html
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "mr_cv_target_elf=yes"
+    ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) "mr_cv_target_elf=yes"
        # Libelf's custom NLS macros fail to determine the catalog file extension
        # on Darwin, so disable NLS for now.
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-nls";

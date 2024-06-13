@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "--enable-talloc-compat1"
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     "--cross-compile"
     "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];

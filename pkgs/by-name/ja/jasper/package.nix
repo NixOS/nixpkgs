@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     # The value of __STDC_VERSION__ cannot be automatically determined when
     # cross-compiling.
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
+    broken = (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
   };
 })
 # TODO: investigate opengl support

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     [ "--enable-gpl" ]
     ++
     # cross compiles correctly but needs the following
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
+    lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [ "--disable-tool-name-check" ]
     ++
     # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
     lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "--disable-seccomp" ]

@@ -187,7 +187,7 @@ let
       eggUnpackHook eggBuildHook eggInstallHook
     ] ++ lib.optionals (format != "other") [(
       pipInstallHook
-    )] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    )] ++ lib.optionals (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
       # This is a test, however, it should be ran independent of the checkPhase and checkInputs
       pythonImportsCheckHook
     ] ++ lib.optionals withDistOutput [

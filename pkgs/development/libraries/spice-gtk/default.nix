@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.six
     vala
     wrapGAppsHook3
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     mesonEmulatorHook
   ] ++ lib.optionals stdenv.isLinux [
     wayland-scanner

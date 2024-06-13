@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       "--enable-introspection=yes"
       "--enable-vala=yes"
     ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "ac_cv_have_iconv_detect_h=yes" ];
+    ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [ "ac_cv_have_iconv_detect_h=yes" ];
 
   postPatch =
     ''
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       PKG_CONFIG_VAPIGEN_VAPIGEN="$(type -p vapigen)"
       export PKG_CONFIG_VAPIGEN_VAPIGEN
     ''
-    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    + lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
       cp ${
         if stdenv.hostPlatform.isMusl then ./musl-iconv-detect.h else ./iconv-detect.h
       } ./iconv-detect.h

@@ -93,15 +93,15 @@ let
       } (if !hasTests then ''
           ${lib.concatMapStringsSep "\n" (binary:
             # Can't actually run the binary when cross-compiling
-            (lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "type ") + binary
+            (lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) "type ") + binary
           ) binaries}
           ${lib.optionalString isLib ''
               test -e ${crate}/lib/*.rlib || exit 1
-              ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "test -x "} \
+              ${lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) "test -x "} \
                 ${libTestBinary}/bin/run-test-${crateName}
           ''}
           touch $out
-        '' else if stdenv.hostPlatform == stdenv.buildPlatform then ''
+        '' else if (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) then ''
           for file in ${crate}/tests/*; do
             $file 2>&1 >> $out
           done
@@ -630,7 +630,7 @@ let
       pkg = brotliCrates.brotli_2_5_0 {};
     in runCommand "run-brotli-test-cmd" {
       nativeBuildInputs = [ pkg ];
-    } (if stdenv.hostPlatform == stdenv.buildPlatform then ''
+    } (if (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) then ''
       ${pkg}/bin/brotli -c ${pkg}/bin/brotli > /dev/null && touch $out
     '' else ''
       test -x '${pkg}/bin/brotli' && touch $out
@@ -654,7 +654,7 @@ let
       pkg = rcgenCrates.rootCrate.build;
     in runCommand "run-rcgen-test-cmd" {
       nativeBuildInputs = [ pkg ];
-    } (if stdenv.hostPlatform == stdenv.buildPlatform then ''
+    } (if (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) then ''
       ${pkg}/bin/rcgen && touch $out
     '' else ''
       test -x '${pkg}/bin/rcgen' && touch $out

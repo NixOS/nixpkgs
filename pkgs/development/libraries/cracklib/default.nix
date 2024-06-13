@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-yosEmjwtOyIloejRXWE3mOvHSOOVA4jtomlN5Qe6YCA=";
   };
 
-  nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.cracklib;
+  nativeBuildInputs = lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) buildPackages.cracklib;
   buildInputs = [ zlib gettext ];
 
-  postPatch = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postPatch = lib.optionalString (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     chmod +x util/cracklib-format
     patchShebangs util
 

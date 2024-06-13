@@ -57,7 +57,7 @@ let
 
     strictDeps = true;
 
-    depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    depsBuildBuild = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
       buildPackages.stdenv.cc
     ];
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags =
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "ac_cv_func_malloc_0_nonnull=yes" ];
+    lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [ "ac_cv_func_malloc_0_nonnull=yes" ];
 
   patches = [
     ./fedora-fixes.patch

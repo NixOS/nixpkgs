@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, ncurses, buildPackages }:
 
 let
-  isCrossCompiling = stdenv.hostPlatform != stdenv.buildPlatform;
+  isCrossCompiling = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 in
 
 stdenv.mkDerivation rec {

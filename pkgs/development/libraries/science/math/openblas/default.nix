@@ -206,15 +206,15 @@ stdenv.mkDerivation rec {
     INTERFACE64 = blas64;
     NO_STATIC = !enableStatic;
     NO_SHARED = !enableShared;
-    CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
+    CROSS = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
     HOSTCC = "cc";
     # Makefile.system only checks defined status
     # This seems to be a bug in the openblas Makefile:
     # on x86_64 it expects NO_BINARY_MODE=
     # but on aarch64 it expects NO_BINARY_MODE=0
     NO_BINARY_MODE = if stdenv.isx86_64
-        then toString (stdenv.hostPlatform != stdenv.buildPlatform)
-        else stdenv.hostPlatform != stdenv.buildPlatform;
+        then toString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
+        else (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
     # This disables automatic build job count detection (which honours neither enableParallelBuilding nor NIX_BUILD_CORES)
     # and uses the main make invocation's job count, falling back to 1 if no parallelism is used.
     # https://github.com/OpenMathLib/OpenBLAS/blob/v0.3.20/getarch.c#L1781-L1792

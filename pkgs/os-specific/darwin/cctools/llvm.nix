@@ -1,7 +1,7 @@
 # Create a cctools-compatible bintools that uses equivalent tools from LLVM in place of the ones
 # from cctools when possible.
 
-{ lib, stdenv, makeWrapper, cctools-port, llvmPackages, enableManpages ? stdenv.targetPlatform == stdenv.hostPlatform }:
+{ lib, stdenv, makeWrapper, cctools-port, llvmPackages, enableManpages ? (lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform) }:
 
 let
   inherit (stdenv) targetPlatform hostPlatform;

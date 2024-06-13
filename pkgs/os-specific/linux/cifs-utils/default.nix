@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libkrb5 keyutils pam talloc python3 ];
 
-  configureFlags = [ "ROOTSBINDIR=$(out)/sbin" ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = [ "ROOTSBINDIR=$(out)/sbin" ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     # AC_FUNC_MALLOC is broken on cross builds.
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"

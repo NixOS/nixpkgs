@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preConfigure = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     # Ignore gettext in cmake_prefix_path so that find_program doesn't
     # pick up the wrong gettext. TODO: Find a better solution for
     # this, maybe make cmake not look up executables in

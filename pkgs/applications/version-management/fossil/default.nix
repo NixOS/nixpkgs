@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 
   configureFlags =
     lib.optional (!withInternalSqlite) "--disable-internal-sqlite"

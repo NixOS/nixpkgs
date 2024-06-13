@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "LINKER_OPTIONS=-headerpad_max_install_names"
     "POSTINSTALL_PROGRAM=install_name_tool"
-  ]) ++ (lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ]) ++ (lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     "HOSTSYSTEM=${stdenv.hostPlatform.config}"
     "TARGET_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "TARGET_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"

@@ -13,7 +13,7 @@ in
 appleDerivation {
   nativeBuildInputs = [ python3 ];
 
-  depsBuildBuild = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
+  depsBuildBuild = lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [ buildPackages.stdenv.cc ];
 
   postPatch = ''
     substituteInPlace makefile \
@@ -38,7 +38,7 @@ appleDerivation {
       --replace "&TestMailFilterCSS" "NULL"
 
     patchShebangs icuSources
-  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  '' + lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
 
     # This looks like a bug in the makefile. It defines ENV_BUILDHOST to
     # propagate the correct value of CC, CXX, etc, but has the following double
@@ -64,7 +64,7 @@ appleDerivation {
     "MAC_OS_X_VERSION_MIN_REQUIRED=${formatVersionNumeric stdenv.hostPlatform.darwinMinVersion}"
     "ICU_TARGET_VERSION=-m${stdenv.hostPlatform.darwinPlatform}-version-min=${stdenv.hostPlatform.darwinMinVersion}"
   ]
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "CROSS_BUILD=YES"
     "BUILD_TYPE="
     "RC_ARCHS=${stdenv.hostPlatform.darwinArch}"

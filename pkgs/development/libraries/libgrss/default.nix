@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+  ] ++ lib.optionals (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "--enable-gtk-doc"
   ];
 

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     # comparison operators and conversion functions between
     # std::basic_string<..., Json::SecureAllocator<char>> vs.
     # std::basic_string<..., [default allocator]>
-    ++ lib.optional ((stdenv.buildPlatform != stdenv.hostPlatform) || secureMemory) "-DJSONCPP_WITH_TESTS=OFF";
+    ++ lib.optional ((!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) || secureMemory) "-DJSONCPP_WITH_TESTS=OFF";
 
   meta = with lib; {
     homepage = "https://github.com/open-source-parsers/jsoncpp";

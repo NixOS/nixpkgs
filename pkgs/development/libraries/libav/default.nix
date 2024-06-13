@@ -77,7 +77,7 @@ let
       (enableFeature vaapiSupport "vaapi")
       (enableFeature vdpauSupport "vdpau")
       (enableFeature freetypeSupport "libfreetype")
-    ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ] ++ optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
     ];

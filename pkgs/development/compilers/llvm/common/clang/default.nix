@@ -60,7 +60,7 @@ let
       "-DSPHINX_OUTPUT_MAN=ON"
       "-DSPHINX_OUTPUT_HTML=OFF"
       "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
+    ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ([
       "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
       "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
     ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
@@ -196,7 +196,7 @@ let
       '';
     })
   // (lib.optionalAttrs (lib.versionAtLeast release_version "15") {
-    env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    env = lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) {
       # The following warning is triggered with (at least) gcc >=
       # 12, but appears to occur only for cross compiles.
       NIX_CFLAGS_COMPILE = "-Wno-maybe-uninitialized";

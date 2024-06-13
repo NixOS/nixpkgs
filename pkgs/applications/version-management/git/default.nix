@@ -5,7 +5,7 @@
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport ? false, subversionClient, perlLibs, smtpPerlLibs
-, perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, perlSupport ? (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
 , nlsSupport ? true
 , osxkeychainSupport ? stdenv.isDarwin
 , guiSupport ? false
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "ac_cv_prog_CURL_CONFIG=${lib.getDev curl}/bin/curl-config"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "ac_cv_fread_reads_directories=yes"
     "ac_cv_snprintf_returns_bogus=no"
     "ac_cv_iconv_omits_bom=no"
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # Git does not allow setting a shell separately for building and run-time.
   # Therefore lets leave it at the default /bin/sh when cross-compiling
-  ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "SHELL_PATH=${stdenv.shell}"
+  ++ lib.optional (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) "SHELL_PATH=${stdenv.shell}"
   ++ (if perlSupport then ["PERL_PATH=${perlPackages.perl}/bin/perl"] else ["NO_PERL=1"])
   ++ (if pythonSupport then ["PYTHON_PATH=${python3}/bin/python"] else ["NO_PYTHON=1"])
   ++ lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
@@ -122,9 +122,9 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
   ++ lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent"
-  ++ lib.optional (stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform != stdenv.buildPlatform) "uname_S=FreeBSD";
+  ++ lib.optional (stdenv.hostPlatform.isFreeBSD && (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)) "uname_S=FreeBSD";
 
-  disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  disallowedReferences = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     stdenv.shellPackage
   ];
 

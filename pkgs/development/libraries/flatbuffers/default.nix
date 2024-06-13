@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "-DFLATBUFFERS_OSX_BUILD_UNIVERSAL=OFF"
   ];
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
   checkTarget = "test";
 
   meta = with lib; {

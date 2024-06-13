@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ]
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
+    ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) file;
   buildInputs = [ zlib ]
     ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 

@@ -14,7 +14,7 @@
 
 let
   inherit (lib) getDev getLib optional optionals optionalString;
-  crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
+  crossBuildTools = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 in
 
 stdenv.mkDerivation {

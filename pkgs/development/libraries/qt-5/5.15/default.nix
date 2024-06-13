@@ -350,7 +350,7 @@ let
 
       qmake = callPackage ({ qtbase }: makeSetupHook {
         name = "qmake-hook";
-        ${if stdenv.buildPlatform == stdenv.hostPlatform
+        ${if (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
           then "propagatedBuildInputs"
           else "depsTargetTargetPropagated"} = [ qtbase.dev ];
         substitutions = {
@@ -380,7 +380,7 @@ let
     # qttranslations causes eval-time infinite recursion when
     # cross-compiling; disabled for now.
     qttranslations =
-      if stdenv.buildPlatform == stdenv.hostPlatform
+      if (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
       then bootstrapScope.qttranslations
       else null;
   });

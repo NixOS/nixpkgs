@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "1.4.1";
 
   outputs = [ "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+    ++ lib.optionals (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -51,14 +51,14 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dgtk_doc=${lib.boolToString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)}"
     "-Dsniffer=false"
   ];
 
   # Bail out! GLib-GIO-FATAL-CRITICAL: g_inet_address_to_string: assertion 'G_IS_INET_ADDRESS (address)' failed
   doCheck = !stdenv.isDarwin;
 
-  postFixup = lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+  postFixup = lib.optionalString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
     # Move developer documentation to devdoc output.
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \

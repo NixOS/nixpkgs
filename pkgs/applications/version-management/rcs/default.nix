@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   DIFF3 = "${diffutils}/bin/diff3";
 
   disallowedReferences =
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+    lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
       [ buildPackages.diffutils buildPackages.ed ];
 
   env.NIX_CFLAGS_COMPILE = "-std=c99";

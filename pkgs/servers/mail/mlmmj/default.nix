@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sghqvwizvm1a9w56r34qy5njaq1c26bagj85r60h32gh3fx02bn";
   };
 
-  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     # AC_FUNC_MALLOC is broken on cross builds.
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"

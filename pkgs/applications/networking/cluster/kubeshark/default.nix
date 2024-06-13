@@ -29,7 +29,7 @@ buildGoModule rec {
   '';
   doCheck = true;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     installShellCompletion --cmd kubeshark \
       --bash <($out/bin/kubeshark completion bash) \
       --fish <($out/bin/kubeshark completion fish) \

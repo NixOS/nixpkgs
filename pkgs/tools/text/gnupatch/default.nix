@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     "ac_cv_func_strnlen_working=yes"
   ];
 

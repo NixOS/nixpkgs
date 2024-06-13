@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     "--libexecdir=${placeholder "bin"}/libexec"
   ];
 
-  doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = testsSupport && (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 
   postPatch = ''
     patchShebangs \

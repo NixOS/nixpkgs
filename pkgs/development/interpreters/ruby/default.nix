@@ -56,7 +56,7 @@ let
           docSupport = false;
           rubygemsSupport = false;
         }
-      , useBaseRuby ? stdenv.hostPlatform != stdenv.buildPlatform
+      , useBaseRuby ? (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
       }:
       stdenv.mkDerivation ( finalAttrs: {
         pname = "ruby";

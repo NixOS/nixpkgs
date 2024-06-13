@@ -9,7 +9,7 @@
 }:
 
 let
-  isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
+  isCross = (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
   configParser = ''
     function parseconfig {
         set -x

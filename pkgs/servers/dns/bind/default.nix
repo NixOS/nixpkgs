@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "--without-lmdb"
     "--with-libidn2"
   ] ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+  ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev

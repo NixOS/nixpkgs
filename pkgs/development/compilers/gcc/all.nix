@@ -24,8 +24,8 @@ let
         inherit majorMinorVersion;
         reproducibleBuild = true;
         profiledCompiler = false;
-        libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then args.libcCross else null;
-        threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+        libcCross = if (!lib.systems.equals stdenv.targetPlatform stdenv.buildPlatform) then args.libcCross else null;
+        threadsCross = if (!lib.systems.equals stdenv.targetPlatform stdenv.buildPlatform) then threadsCross else { };
         isl = if       stdenv.isDarwin then null
               else if    atLeast "9"   then isl_0_20
               else if    atLeast "7"   then isl_0_17
@@ -41,7 +41,7 @@ let
                 else          /* 4.8 */    cloog;
       } // lib.optionalAttrs (atLeast "6" && !(atLeast "9")) {
         # gcc 10 is too strict to cross compile gcc <= 8
-        stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
+        stdenv = if (!lib.systems.equals stdenv.targetPlatform stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
       })));
     in
       lib.nameValuePair attrName pkg;

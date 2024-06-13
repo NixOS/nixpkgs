@@ -18,7 +18,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     # Mangal creates a config file in the folder ~/.config/mangal and fails if not possible
     export MANGAL_CONFIG_PATH=`mktemp -d`
     installShellCompletion --cmd mangal \

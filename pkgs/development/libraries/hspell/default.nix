@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   patches = [./remove-shared-library-checks.patch];
   postPatch = "patchShebangs .";
-  preBuild = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preBuild = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     make CC=${buildPackages.stdenv.cc}/bin/cc find_sizes
     mv find_sizes find_sizes_build
     make clean

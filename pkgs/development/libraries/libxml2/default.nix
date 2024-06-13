@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   enableParallelBuilding = true;
 
   doCheck =
-    (stdenv.hostPlatform == stdenv.buildPlatform) &&
+    (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) &&
     stdenv.hostPlatform.libc != "musl";
   preCheck = lib.optional stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"

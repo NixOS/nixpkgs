@@ -4,7 +4,7 @@ let
   inherit (lib) findFirst isString optional optionals;
 
   cmakeFlags' =
-    optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
+    optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ([
       "-DCMAKE_SYSTEM_NAME=${findFirst isString "Generic" (optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
     ] ++ optionals (stdenv.hostPlatform.uname.processor != null) [
       "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"

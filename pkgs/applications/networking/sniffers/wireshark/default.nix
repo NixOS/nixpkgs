@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     ./patches/lookup-dumpcap-in-path.patch
   ];
 
-  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  depsBuildBuild = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     buildPackages.stdenv.cc
   ];
 
@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
     "-DLEMON_C_COMPILER=cc"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "-DHAVE_C99_VSNPRINTF_EXITCODE__TRYRUN_OUTPUT="
     "-DHAVE_C99_VSNPRINTF_EXITCODE=0"
   ];

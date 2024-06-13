@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" "info" "doc" ]
     # configure: WARNING: cannot generate manual pages while cross compiling
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ "man" ];
+    ++ lib.optionals (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [ "man" ];
 
   src = fetchFromGitHub {
     owner = "liblouis";

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "1.4.4";
 
   outputs = [ "out" "dev" ]
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+    ++ lib.optionals (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dgtk_doc=${lib.boolToString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)}"
   ];
 
   # Bail out! ERROR:../tests/test-bugs.c:168:test_on_timeout: code should not be reached

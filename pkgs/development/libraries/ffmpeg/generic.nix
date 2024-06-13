@@ -37,7 +37,7 @@
 , withAom ? withFullDeps # AV1 reference encoder
 , withAppKit ? withHeadlessDeps && stdenv.isDarwin # Apple AppKit framework
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
-, withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
+, withAss ? withHeadlessDeps && (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) # (Advanced) SubStation Alpha subtitle rendering
 , withAudioToolbox ? withHeadlessDeps && stdenv.isDarwin # Apple AudioToolbox
 , withAvFoundation ? withHeadlessDeps && stdenv.isDarwin # Apple AVFoundation framework
 , withAvisynth ? withFullDeps # AviSynth script files reading
@@ -116,7 +116,7 @@
 , withVoAmrwbenc ? withFullDeps && withVersion3 # AMR-WB encoder
 , withVorbis ? withHeadlessDeps # Vorbis de/encoding, native encoder exists
 , withVpl ? false # Hardware acceleration via intel libvpl
-, withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform # VP8 & VP9 de/encoding
+, withVpx ? withHeadlessDeps && (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) # VP8 & VP9 de/encoding
 , withVulkan ? withSmallDeps && !stdenv.isDarwin
 , withWebp ? withFullDeps # WebP encoder
 , withX264 ? withHeadlessDeps && withGPL # H.264/AVC encoder
@@ -682,7 +682,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withOptimisations "optimizations")
     (enableFeature withExtraWarnings "extra-warnings")
     (enableFeature withStripping "stripping")
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     "--enable-cross-compile"
     "--host-cc=${buildPackages.stdenv.cc}/bin/cc"
@@ -697,7 +697,7 @@ stdenv.mkDerivation (finalAttrs: {
   # such references except for data.
   postConfigure = let
     toStrip = map placeholder (lib.remove "data" finalAttrs.outputs) # We want to keep references to the data dir.
-      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc;
+      ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) buildPackages.stdenv.cc;
   in
     "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
 
@@ -803,7 +803,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [ "all" ]
     ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 
   # Fails with SIGABRT otherwise FIXME: Why?
   checkPhase = let

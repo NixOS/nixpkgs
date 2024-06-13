@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   configureFlags = [
     "--enable-multibyte"
     "--enable-nls"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
+  ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ([
     "vim_cv_toupper_broken=no"
     "--with-tlib=ncurses"
     "vim_cv_terminfo=yes"

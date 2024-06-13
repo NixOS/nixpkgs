@@ -80,7 +80,7 @@ in stdenv.mkDerivation {
 
   buildFlags = [ "all" "selftest" ];
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
   checkPhase = ''
     runHook preCheck
     ./zerotier-selftest

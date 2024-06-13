@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin || stdenv.buildPlatform != stdenv.hostPlatform;
+    broken = stdenv.isDarwin || (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";

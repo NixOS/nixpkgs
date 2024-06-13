@@ -38,7 +38,7 @@ builder rec {
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+  ] ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
     pkgsBuildBuild.guile_3_0;
   nativeBuildInputs = [
     makeWrapper
@@ -70,7 +70,7 @@ builder rec {
   # https://git.savannah.gnu.org/cgit/guix.git/tree/gnu/packages/guile.scm?h=a39207f7afd977e4e4299c6f0bb34bcb6d153818#n405
   # starting with Guile 3.0.8, parallel builds can be done
   # bit-reproducibly as long as we're not cross-compiling
-  enableParallelBuilding = stdenv.buildPlatform == stdenv.hostPlatform;
+  enableParallelBuilding = (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
 
   patches = [
     ./eai_system.patch

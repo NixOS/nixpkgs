@@ -221,7 +221,7 @@ let
         echo "Building subPackage $pkg"
         buildGoDir install "$pkg"
       done
-    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    '' + lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
       # normalize cross-compiled builds w.r.t. native builds
       (
         dir=$NIX_BUILD_TOP/go/bin/${go.GOOS}_${go.GOARCH}

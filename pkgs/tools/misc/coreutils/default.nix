@@ -28,7 +28,7 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 
 let
   inherit (lib) concatStringsSep isString optional optionals optionalString;
-  isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
+  isCross = (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");

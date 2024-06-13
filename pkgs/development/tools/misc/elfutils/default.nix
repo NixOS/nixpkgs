@@ -85,9 +85,9 @@ stdenv.mkDerivation rec {
     !stdenv.hostPlatform.isMusl
     # Test suite tries using `uname` to determine whether certain tests
     # can be executed, so we need to match build and host platform exactly.
-    && (stdenv.hostPlatform == stdenv.buildPlatform);
+    && (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
   doInstallCheck = !stdenv.hostPlatform.isMusl
-    && (stdenv.hostPlatform == stdenv.buildPlatform);
+    && (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform);
 
   passthru.updateScript = gitUpdater {
     url = "https://sourceware.org/git/elfutils.git";

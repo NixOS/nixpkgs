@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = with perlPackages; [ perl XMLParser ];
   propagatedBuildInputs = [ gettext ] ++ (with perlPackages; [ perl XMLParser ]);
 
-  postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     for f in $out/bin/*; do
       substituteInPlace $f --replace "${buildPackages.perl}" "${perlPackages.perl}"
     done

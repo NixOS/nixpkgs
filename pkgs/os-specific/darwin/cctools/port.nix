@@ -11,7 +11,7 @@ let
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
   targetPrefix = lib.optionalString
-    (stdenv.targetPlatform != stdenv.hostPlatform)
+    (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
     "${stdenv.targetPlatform.config}-";
 in
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
 
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
   configurePlatforms = [ "build" "host" ]
-    ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    ++ lib.optional (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform) "target";
   configureFlags = [ "--disable-clang-as" ]
     ++ lib.optionals enableTapiSupport [
       "--enable-tapi-support"

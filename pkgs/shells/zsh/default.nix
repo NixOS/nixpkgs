@@ -109,7 +109,7 @@ else
   fi
 fi
 EOF
-    ${if stdenv.hostPlatform == stdenv.buildPlatform then ''
+    ${if (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) then ''
       $out/bin/zsh -c "zcompile $out/etc/zshenv"
     '' else ''
       ${lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zshenv"

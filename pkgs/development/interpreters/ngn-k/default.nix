@@ -3,7 +3,7 @@
 , stdenvNoLibs
 , fetchFromGitea
 , runtimeShell
-, doCheck ? withLibc && stdenv.hostPlatform == stdenv.buildPlatform
+, doCheck ? withLibc && (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
 , withLibc ? true
 }:
 

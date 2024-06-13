@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  postPatch = lib.optionalString (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
     substituteInPlace configure --replace "./conftest" "echo"
   '';
 

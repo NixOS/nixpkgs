@@ -21,7 +21,7 @@
 , libGLSupported ? !stdenv.isDarwin
 , libGL
   # qmake detection for libmysqlclient does not seem to work when cross compiling
-, mysqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform
+, mysqlSupport ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
 , libmysqlclient
 , buildExamples ? false
 , buildTests ? false
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: ({
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  } // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) {
     # `qtbase` expects to find `cc` (with no prefix) in the
     # `$PATH`, so the following is needed even if
     # `stdenv.buildPlatform.canExecute stdenv.hostPlatform`
@@ -208,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: ({
   env = {
     NIX_CFLAGS_COMPILE = toString ([
       "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
-    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
       "-Wno-warn=free-nonheap-object"
       "-Wno-free-nonheap-object"
       "-w"
@@ -226,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: ({
       ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
       ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
     ] ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC");
-  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  } // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) {
     NIX_CFLAGS_COMPILE_FOR_BUILD = toString ([
       "-Wno-warn=free-nonheap-object"
       "-Wno-free-nonheap-object"
@@ -241,7 +241,7 @@ stdenv.mkDerivation (finalAttrs: ({
   # To prevent these failures, we need to override PostgreSQL detection.
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
-  } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+  } // lib.optionalAttrs (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) {
   configurePlatforms = [ ];
   } // {
   # TODO Remove obsolete and useless flags once the build will be totally mastered
@@ -270,7 +270,7 @@ stdenv.mkDerivation (finalAttrs: ({
     "-L" "${icu.out}/lib"
     "-I" "${icu.dev}/include"
     "-pch"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     "-device ${qtPlatformCross stdenv.hostPlatform}"
     "-device-option CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ]
@@ -278,7 +278,7 @@ stdenv.mkDerivation (finalAttrs: ({
   ++ lib.optionals developerBuild [
     "-developer-build"
     "-no-warnings-are-errors"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "-no-warnings-are-errors"
   ] ++ (if (!stdenv.hostPlatform.isx86_64) then [
     "-no-sse2"

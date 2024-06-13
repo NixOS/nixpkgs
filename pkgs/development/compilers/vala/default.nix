@@ -44,7 +44,7 @@ let
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
     # when cross-compiling ./compiler/valac is valac for host
     # so add the build vala in nativeBuildInputs
-    preBuild       = lib.optionalString (disableGraphviz && (stdenv.buildPlatform == stdenv.hostPlatform)) "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+    preBuild       = lib.optionalString (disableGraphviz && (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)) "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
     outputs = [ "out" "devdoc" ];
 
@@ -52,7 +52,7 @@ let
       pkg-config flex bison libxslt gobject-introspection
     ] ++ lib.optional (stdenv.isDarwin) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ vala ]
+      ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [ vala ]
       ++ extraNativeBuildInputs;
 
     buildInputs = [

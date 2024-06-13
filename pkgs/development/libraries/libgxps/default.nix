@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Denable-test=false"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "-Ddisable-introspection=true"
   ];
 

@@ -34,7 +34,7 @@
 , gnome
 , gsettings-desktop-schemas
 , sassc
-, trackerSupport ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
+, trackerSupport ? stdenv.isLinux && (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
@@ -215,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     for f in $dev/bin/gtk-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
-  '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+  '' + lib.optionalString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
     GTK_PATH="''${out:?}/lib/gtk-3.0/3.0.0/immodules/" ''${dev:?}/bin/gtk-query-immodules-3.0 > "''${out:?}/lib/gtk-3.0/3.0.0/immodules.cache"
   '';
 

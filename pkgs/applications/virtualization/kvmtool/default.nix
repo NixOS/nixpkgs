@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     "prefix=${placeholder "out"}"
   ] ++ lib.optionals stdenv.hostPlatform.isAarch64 ([
     "LIBFDT_DIR=${dtc}/lib"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "CROSS_COMPILE=aarch64-unknown-linux-gnu-"
     "ARCH=arm64"
   ]);

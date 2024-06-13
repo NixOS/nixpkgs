@@ -5,7 +5,7 @@
 }:
 
 let
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+  isCross = (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform);
 
   # Pass the "wrong" C compiler rather than none at all so packages that just
   # use the C preproccessor still work, see

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ];
 
-  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "ac_cv_linux_vers=2";
+  configureFlags = lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) "ac_cv_linux_vers=2";
 
   meta = with lib; {
     description = "Network sniffer";

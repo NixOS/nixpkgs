@@ -266,7 +266,7 @@ let
       # resulting LLVM IR isn't platform-independent this doesn't give you much.
       # In fact, I tried to test the result in a VM-test, but as soon as JIT was used to optimize
       # a query, postgres would coredump with `Illegal instruction`.
-      broken = (jitSupport && stdenv.hostPlatform != stdenv.buildPlatform)
+      broken = (jitSupport && (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform))
         # Allmost all tests fail FATAL errors for v12 and v13
         || (jitSupport && stdenv.hostPlatform.isMusl && olderThan "14");
     };

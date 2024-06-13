@@ -49,7 +49,7 @@
 , glib
 , openssl
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+, enableDocumentation ? (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform), hotdoc
 }:
 
 # MMAL is not supported on aarch64, see:

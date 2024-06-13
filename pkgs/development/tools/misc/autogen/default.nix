@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     which pkg-config perl autoreconfHook/*patches applied*/
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     # autogen needs a build autogen when cross-compiling
     buildPackages.buildPackages.autogen buildPackages.texinfo
   ];
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     # Debian: https://salsa.debian.org/debian/autogen/-/blob/master/debian/rules#L21
     "--enable-timeout=78"
     "CFLAGS=-D_FILE_OFFSET_BITS=64"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) [
     # the configure check for regcomp wants to run a host program
     "libopts_cv_with_libregex=yes"
     #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"

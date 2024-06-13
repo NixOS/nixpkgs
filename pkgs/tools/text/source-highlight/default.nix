@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # source-highlight uses it's own binary to generate documentation.
   # During cross-compilation, that binary was built for the target
   # platform architecture, so it can't run on the build host.
-  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postPatch = lib.optionalString (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) ''
     substituteInPlace Makefile.in --replace "src doc tests" "src tests"
   '';
 

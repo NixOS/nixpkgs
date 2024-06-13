@@ -4,7 +4,7 @@
 , enableDarwinABICompat ? false
 }:
 
-# assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
+# assert !stdenv.hostPlatform.isLinux || (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform); # TODO: improve on cross
 
 stdenv.mkDerivation rec {
   pname = "libiconv";

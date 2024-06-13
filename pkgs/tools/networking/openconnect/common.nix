@@ -15,7 +15,7 @@
 , zlib
 , vpnc-scripts
 , PCSC
-, useDefaultExternalBrowser ? stdenv.isLinux && stdenv.buildPlatform == stdenv.hostPlatform # xdg-utils doesn't cross-compile
+, useDefaultExternalBrowser ? stdenv.isLinux && (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) # xdg-utils doesn't cross-compile
 , xdg-utils
 , autoreconfHook
 }:

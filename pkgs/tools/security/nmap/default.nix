@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     install -m 444 -D nselib/data/passwords.lst $out/share/wordlists/nmap.lst
   '';
 
-  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  makeFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
     "AR=${stdenv.cc.bintools.targetPrefix}ar"
     "RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib"
     "CC=${stdenv.cc.targetPrefix}gcc"

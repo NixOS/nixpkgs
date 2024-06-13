@@ -72,7 +72,7 @@ in
 , util-linuxMinimal
 , xz
 
-, enableDocumentation ? !atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
+, enableDocumentation ? !atLeast24 || (lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform)
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
@@ -219,7 +219,7 @@ self = stdenv.mkDerivation {
     # old style or LTO builds will run their linking on only one thread, which takes forever.
     "--jobserver-style=pipe"
     "profiledir=$(out)/etc/profile.d"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
+  ] ++ lib.optional (!lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
