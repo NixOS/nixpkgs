@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "Intel Media SDK";
     mainProgram = "mfx-tracer-config";
     license = licenses.mit;
-    maintainers = with maintainers; [ midchildan ];
+    maintainers = with maintainers; [ midchildan pjungkamp ];
     platforms = [ "x86_64-linux" ];
   };
 }

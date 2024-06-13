@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     # CMake adds x86 specific compiler flags in <source>/builder/FindGlobals.cmake
     # NOTE: https://github.com/oneapi-src/oneVPL-intel-gpu/issues/303
     broken = !stdenv.hostPlatform.isx86;
-    maintainers = [ lib.maintainers.evanrichter ];
+    maintainers = with lib.maintainers; [ evanrichter pjungkamp ];
   };
 }
