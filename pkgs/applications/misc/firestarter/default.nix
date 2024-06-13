@@ -1,4 +1,5 @@
-{ stdenv
+{ config
+, stdenv
 , lib
 , fetchFromGitHub
 , fetchzip
@@ -9,14 +10,14 @@
 , git
 , pkg-config
 , cudaPackages ? {}
-, withCuda ? false
+, withCuda ? config.cudaSupport
 }:
 
 let
   inherit (lib.lists) optionals;
   inherit (lib.strings) cmakeBool cmakeFeature optionalString;
   inherit (lib.versions) majorMinor;
-  inherit (cudaPackages) cudatoolkit;
+  inherit (cudaPackages) cuda_cudart cuda_nvcc cudaOlder libcublas libcurand;
 
   hwloc = stdenv.mkDerivation (finalAttrs: {
     pname = "hwloc";
@@ -69,18 +70,14 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     git
     pkg-config
-  ] ++ optionals withCuda [
-    autoAddDriverRunpath
-  ];
+  ] ++ optionals withCuda [ autoAddDriverRunpath cuda_nvcc ];
 
-  buildInputs = [ hwloc ] ++ (if withCuda then
-    [ glibc_multi cudatoolkit ]
-  else
-    [ glibc.static ]);
+  buildInputs =
+    [ hwloc ]
+    ++ optionals (!withCuda) [ glibc.static ]
+    ++ optionals withCuda [ glibc_multi cuda_cudart libcublas libcurand ];
 
-  NIX_LDFLAGS = optionals withCuda [
-    "-L${cudatoolkit}/lib/stubs"
-  ];
+  cudaEnableCmakeFindCudaToolkitSupport = withCuda;
 
   cmakeFlags = [
     (cmakeBool "FIRESTARTER_BUILD_HWLOC" false)
@@ -98,7 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken =
+      (stdenv.isLinux && stdenv.isAarch64) ||
+      # Depends on CUDA redistributables, only available from 11.4.
+      (withCuda && cudaOlder "11.4");
     homepage = "https://tu-dresden.de/zih/forschung/projekte/firestarter";
     description = "Processor Stress Test Utility";
     platforms = platforms.linux;
