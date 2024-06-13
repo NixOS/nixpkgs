@@ -39137,6 +39137,8 @@ with pkgs;
 
   darling-dmg = callPackage ../tools/filesystems/darling-dmg { };
 
+  dbxfs = callPackage ../tools/filesystems/dbxfs { };
+
   depotdownloader = callPackage ../tools/misc/depotdownloader { };
 
   dbacl = callPackage ../tools/misc/dbacl { };
