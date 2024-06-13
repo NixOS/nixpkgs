@@ -487,7 +487,6 @@ in
         pkgs.gnome-tecla
         pkgs.gnome-weather
         pkgs.loupe
-        pkgs.nautilus
         pkgs.papers
         pkgs.gnome-connections
         pkgs.showtime
@@ -501,6 +500,7 @@ in
       # enable that program module if the package hasn't been excluded
       # through `environment.gnome.excludePackages`
       programs.gnome-disks.enable = notExcluded pkgs.gnome-disk-utility;
+      programs.nautilus.enable = notExcluded pkgs.nautilus;
       programs.seahorse.enable = notExcluded pkgs.seahorse;
       services.gnome.sushi.enable = notExcluded pkgs.sushi;
 
@@ -514,16 +514,8 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Let nautilus find extensions
-      # TODO: Create nautilus-with-extensions package
-      environment.sessionVariables.NAUTILUS_4_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-4";
-
       # Override default mimeapps for nautilus
       environment.sessionVariables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
-
-      environment.pathsToLink = [
-        "/share/nautilus-python/extensions"
-      ];
     })
 
     (lib.mkIf serviceCfg.games.enable {
