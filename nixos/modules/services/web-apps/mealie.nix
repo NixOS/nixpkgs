@@ -2,6 +2,9 @@
 let
   cfg = config.services.mealie;
   pkg = cfg.package;
+
+  # The directory where mealie user data is stored.
+  mealieDataDir = "/var/lib/mealie";
 in
 {
   options.services.mealie = {
@@ -112,8 +115,8 @@ in
         ALEMBIC_CONFIG_FILE = "${pkg}/config/alembic.ini";
         API_PORT = toString cfg.port;
         BASE_URL = "http://localhost:${cfg.port}";
-        DATA_DIR = "/var/lib/mealie";
-        CRF_MODEL_PATH = "/var/lib/mealie/model.crfmodel";
+        DATA_DIR = mealieDataDir;
+        CRF_MODEL_PATH = "${mealieDataDir}/model.crfmodel";
       } // (builtins.mapAttrs (_: val: toString val) cfg.settings);
 
       serviceConfig = {
@@ -131,7 +134,7 @@ in
         #
         # Also, unset the state directory, as mealie won't be writing to it when
         # a custom data directory is in use.
-        // lib.mkIf (environment.DATA_DIR != "/var/lib/mealie") {
+        // lib.mkIf (environment.DATA_DIR != mealieDataDir) {
           ReadWritePaths = [ environment.DATA_DIR ];
           StateDirectory = null;
         };
