@@ -30402,7 +30402,6 @@ with pkgs;
 
   keeweb = callPackage ../applications/misc/keeweb { };
 
-  evolution-data-server = gnome.evolution-data-server;
   evolution-data-server-gtk4 = evolution-data-server.override { withGtk3 = false; withGtk4 = true; };
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
