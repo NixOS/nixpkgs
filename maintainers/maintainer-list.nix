@@ -21229,6 +21229,13 @@
     github = "Trundle";
     githubId = 332418;
   };
+  trungtruong1 = {
+    name = "Truong Huy Trung";
+    email = "truonghuytrung2001@gmail.com";
+    matrix = "@trungtruong1:mtrx.nz";
+    github = "trungtruong1";
+    githubId = 108263341;
+  };
   tsandrini = {
     email = "tomas.sandrini@seznam.cz";
     name = "Tomáš Sandrini";
