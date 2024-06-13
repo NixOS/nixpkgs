@@ -80,6 +80,7 @@ clangStdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       artturin
       johnrtitor
+      diniamo
     ];
     mainProgram = "ananicy-cpp";
   };
