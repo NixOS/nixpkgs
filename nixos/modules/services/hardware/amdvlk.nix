@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.hardware.amdgpu.amdvlk;
+  cfg = config.hardware.amdvlk;
 in {
-  options.hardware.amdgpu.amdvlk = {
+  options.hardware.amdvlk = {
     enable = lib.mkEnableOption "AMDVLK Vulkan driver";
 
     package = lib.mkPackageOption pkgs "amdvlk" { };
