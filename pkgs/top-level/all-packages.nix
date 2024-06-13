@@ -15199,6 +15199,8 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+  chaos-lang = callPackage ../development/compilers/chaos { };
+
   chez = callPackage ../development/compilers/chez {
     inherit (darwin) cctools;
   };
