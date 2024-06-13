@@ -1,28 +1,34 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, vulkan-headers
-, libsForQt5
-, SDL2
-, SDL2_ttf
-, libva
-, libvdpau
-, libxkbcommon
-, alsa-lib
-, libpulseaudio
-, openssl
-, libopus
-, ffmpeg
-, libplacebo
-, wayland
-, darwin
-, overrideSDK
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  darwin,
+  overrideSDK,
+  libsForQt5,
+  pkg-config,
+  vulkan-headers,
+  SDL2,
+  SDL2_ttf,
+  ffmpeg,
+  libopus,
+  libplacebo,
+  openssl,
+  alsa-lib,
+  libpulseaudio,
+  libva,
+  libvdpau,
+  libxkbcommon,
+  wayland,
 }:
 
 let
-  inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation AppKit AudioUnit VideoToolbox;
+  inherit (darwin.apple_sdk_11_0.frameworks)
+    AVFoundation
+    AppKit
+    AudioUnit
+    VideoToolbox
+    ;
   stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 
@@ -53,35 +59,36 @@ stdenv'.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    libsForQt5.qmake
     libsForQt5.wrapQtAppsHook
     pkg-config
-    libsForQt5.qmake
     vulkan-headers
   ];
 
-  buildInputs = [
-    libsForQt5.qtquickcontrols2
-    (SDL2.override {
-      drmSupport = stdenv.isLinux;
-    })
-    SDL2_ttf
-    openssl
-    libopus
-    ffmpeg
-    libplacebo
-  ] ++ lib.optionals stdenv.isLinux [
-    libva
-    libvdpau
-    libxkbcommon
-    alsa-lib
-    libpulseaudio
-    wayland
-  ] ++ lib.optionals stdenv.isDarwin [
-    AVFoundation
-    AppKit
-    AudioUnit
-    VideoToolbox
-  ];
+  buildInputs =
+    [
+      (SDL2.override { drmSupport = stdenv.isLinux; })
+      SDL2_ttf
+      ffmpeg
+      libopus
+      libplacebo
+      libsForQt5.qtquickcontrols2
+      openssl
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      alsa-lib
+      libpulseaudio
+      libva
+      libvdpau
+      libxkbcommon
+      wayland
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AVFoundation
+      AppKit
+      AudioUnit
+      VideoToolbox
+    ];
 
   qmakeFlags = [ "CONFIG+=disable-prebuilts" ];
 
@@ -95,7 +102,10 @@ stdenv'.mkDerivation rec {
     description = "Play your PC games on almost any device";
     homepage = "https://moonlight-stream.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ luc65r zmitchell ];
+    maintainers = with maintainers; [
+      luc65r
+      zmitchell
+    ];
     platforms = platforms.all;
     mainProgram = "moonlight";
   };
