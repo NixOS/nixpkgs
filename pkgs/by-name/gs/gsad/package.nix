@@ -79,35 +79,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DGVMD_RUN_DIR=run/gvmd"
-    "-DGSAD_RUN_DIR=run/gsad"
-    "-DGSAD_DATA_DIR=share/gvm/gsad"
-    "-DGSAD_CONFIG_DATA=etc/gvm"
-    "-DLOGROTATE_DIR=etc/logrotate.d"
     "-DSYSCONFDIR=etc"
-    "-DBINDIR=bin"
-    "-DSBINDIR=sbin"
-    "-DLIBDIR=lib"
-    "-DLOCALSTATEDIR=var"
-    "-DINCLUDEDIR=include"
-    "-DDATADIR=share"
-    "-DGVM_SYSCONF_DIR=etc/gvm"
-    "-DGVM_DATA_DIR=share/gvm"
-    "-DGVMD_DATA_DIR=share/gvmd"
-    "-DGVM_STATE_DIR=var/lib/gvm"
-    "-DGVMD_STATE_DIR=var/lib/gvm/gvmd"
-    "-DGVM_LOG_DIR=var/log/gvm"
-    "-DGVM_SCAP_RES_DIR=share/gvm/scap"
-    "-DGVM_CERT_RES_DIR=share/gvm/cert"
-    "-DGVM_CA_DIR=var/lib/gvm/gvmd/trusted_certs"
-    "-DGVM_LIB_INSTALL_DIR=lib"
-    "-DGVM_SCANNER_CERTIFICATE=var/lib/CA/servercert.pem"
-    "-DGVM_SCANNER_KEY=var/lib/private/CA/serverkey.pem"
-    "-DGVM_CLIENT_CERTIFICATE=var/lib/CA/clientcert.pem"
-    "-DGVM_CLIENT_KEY=var/lib/private/CA/clientkey.pem"
-    "-DGVM_CA_CERTIFICATE=var/lib/CA/cacert.pem"
-    "-DGVMD_RUN_DIR=run/gvmd"
-    "-DGSAD_PID_PATH=run/gvmd/gsad.pid"
   ];
 
   configurePhase = ''
@@ -116,9 +88,6 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    mkdir -p $out/etc/gvm
-    mkdir -p $out/run/gvmd/gvmd.pid
-    mkdir -p $out/run/gsad
     mkdir -p \
       $out/var/log/gvm \
       $out/var/lib/openvas/plugins \
@@ -128,7 +97,9 @@ stdenv.mkDerivation rec {
       $out/var/lib/gvm/CA \
       $out/var/lib/gvm/private/CA \
       $out/var/lib/gvm/data-objects \
-      $out/var/lib/gvm/feed-update.lock
+      $out/var/lib/gvm/feed-update.lock \
+      $out/run/gvmd \
+      $out/run/gsad/gsad.pid
     installManPage $src2/doc/gsad.8
   '';
 
