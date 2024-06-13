@@ -4,6 +4,7 @@
 , gitlabEnterprise ? false, callPackage, yarn
 , fixup-yarn-lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 , cargo, rustc, rustPlatform
+, icu, zlib, which
 }:
 
 let
@@ -49,7 +50,7 @@ let
                 cp Cargo.lock $out
               '';
             };
-            hash = "sha256-7q2xWAsFkXHxkYNzIjPwJRy72xMXF278cpVzqGLt/9Y=";
+            hash = "sha256-SncgYYnoSaWA4kQWonoXXbSMu1mnwTyhdLXFagqgH+o=";
           };
 
           dontBuild = false;
@@ -73,6 +74,9 @@ let
             mv -v $GEM_HOME/gems/${attrs.gemName}-${attrs.version}/lib/{glfm_markdown/glfm_markdown.so,}
             find $out -type f -name .rustc_info.json -delete
           '';
+        };
+        static_holmes = attrs: {
+          buildInputs = [ which icu zlib ];
         };
       };
     groups = [
