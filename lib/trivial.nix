@@ -623,6 +623,37 @@ in {
   /**
     Reads a JSON file.
 
+    # Examples
+    :::{.example}
+    ## `lib.trivial.importJSON` usage example
+
+    example.json
+    ```json
+    {
+      "title": "Example JSON",
+      "hello": {
+        "world": "foo",
+        "bar": {
+          "foobar": true
+        }
+      }
+    }
+    ```
+
+    ```nix
+    importJSON ./example.json
+    => {
+      title = "Example JSON";
+      hello = {
+        world = "foo";
+        bar = {
+          foobar = true;
+        };
+      };
+    }
+    ```
+
+    :::
 
     # Inputs
 
@@ -642,6 +673,35 @@ in {
   /**
     Reads a TOML file.
 
+    # Examples
+    :::{.example}
+    ## `lib.trivial.importTOML` usage example
+
+    example.toml
+    ```toml
+    title = "TOML Example"
+
+    [hello]
+    world = "foo"
+
+    [hello.bar]
+    foobar = true
+    ```
+
+    ```nix
+    importTOML ./example.toml
+    => {
+      title = "TOML Example";
+      hello = {
+        world = "foo";
+        bar = {
+          foobar = true;
+        };
+      };
+    }
+    ```
+
+    :::
 
     # Inputs
 
