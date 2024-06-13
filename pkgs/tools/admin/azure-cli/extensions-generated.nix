@@ -99,9 +99,9 @@
   };
   apic-extension = mkAzExtension rec {
     pname = "apic-extension";
-    version = "1.0.0b4";
+    version = "1.0.0b5";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/apic_extension-${version}-py3-none-any.whl";
-    sha256 = "67294fd30190b66b339c8d550e58e1401117b313bea638fb0c126dec26249408";
+    sha256 = "fbca1f8446013142d676159b8292fd7c2d3175f39e1baeb5c4d13f9637003254";
     description = "Microsoft Azure Command-Line Tools ApicExtension Extension";
   };
   appservice-kube = mkAzExtension rec {
