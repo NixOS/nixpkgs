@@ -39802,7 +39802,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreFoundation Security;
   };
 
-  pounce = callPackage ../servers/pounce { };
+  inherit (callPackage ../servers/pounce { })
+    pounce pounce-extra;
 
   pt = callPackage ../applications/misc/pt { };
 
