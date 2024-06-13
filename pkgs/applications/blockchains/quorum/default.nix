@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "quorum";
-  version = "24.4.0";
+  version = "24.4.1";
 
   src = fetchFromGitHub {
     owner = "Consensys";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vQyKguoSUU6Drkg8XqWtK8Ow/B9dqDKkKq6yeDQk1c0=";
+    hash = "sha256-pW8I4ivcKo6dsa8rQVKU6nUZuKxaki/7cMDKwEsSzNw=";
   };
 
   vendorHash = "sha256-YK2zpQz4pAFyA+aHOn6Nx0htl5SJ2HNC+TDV1RdLQJk=";

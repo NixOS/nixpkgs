@@ -12590,6 +12590,15 @@
     githubId = 2321672;
     name = "Makise Kurisu";
   };
+  Makuru = {
+    email = "makuru@makuru.org";
+    github = "makuru-dd";
+    githubId = 58048293;
+    name = "Makuru";
+    keys = [{
+      fingerprint = "5B22 7123 362F DEF1 8F79  BF2B 4792 3A0F EEB5 51C7";
+    }];
+  };
   malbarbo = {
     email = "malbarbo@gmail.com";
     github = "malbarbo";
@@ -21138,6 +21147,12 @@
     matrix = "@tpw_rules:matrix.org";
     github = "tpwrules";
     githubId = 208010;
+  };
+  traverseda = {
+    email = "traverse.da@gmail.com";
+    github = "traverseda";
+    githubId = 2125828;
+    name = "Alex Davies";
   };
   travisbhartwell = {
     email = "nafai@travishartwell.net";

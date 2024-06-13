@@ -9220,8 +9220,6 @@ with pkgs;
 
   iroh = callPackage ../applications/networking/iroh { };
 
-  irrd = callPackage ../servers/misc/irrd { };
-
   ised = callPackage ../tools/misc/ised { };
 
   isl = isl_0_20;
@@ -14257,8 +14255,6 @@ with pkgs;
   write-good = callPackage ../tools/text/write-good { };
 
   wsmancli = callPackage ../tools/system/wsmancli { };
-
-  wstunnel = haskell.lib.compose.justStaticExecutables haskellPackages.wstunnel;
 
   wolfebin = callPackage ../tools/networking/wolfebin { };
 
