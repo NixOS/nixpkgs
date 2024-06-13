@@ -5,6 +5,7 @@
 , wrapQtAppsHook
 , pkg-config
 , qmake
+, vulkan-headers
 , qtquickcontrols2
 , SDL2
 , SDL2_ttf
@@ -16,6 +17,7 @@
 , openssl
 , libopus
 , ffmpeg
+, libplacebo
 , wayland
 , darwin
 }:
@@ -54,6 +56,7 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
     pkg-config
     qmake
+    vulkan-headers
   ];
 
   buildInputs = [
@@ -63,6 +66,7 @@ stdenv.mkDerivation rec {
     openssl
     libopus
     ffmpeg
+    libplacebo
   ] ++ lib.optionals stdenv.isLinux [
     libva
     libvdpau
