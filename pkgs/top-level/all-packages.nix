@@ -31201,9 +31201,7 @@ with pkgs;
 
   gnomecast = callPackage ../applications/video/gnomecast { };
 
-  gnome-recipes = callPackage ../applications/misc/gnome-recipes {
-    inherit (gnome) gnome-autoar;
-  };
+  gnome-recipes = callPackage ../applications/misc/gnome-recipes { };
 
   gollum = callPackage ../applications/misc/gollum { };
 

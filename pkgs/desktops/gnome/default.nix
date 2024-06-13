@@ -251,8 +251,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   pomodoro = callPackage ./misc/pomodoro { };
 
-  gnome-autoar = callPackage ./misc/gnome-autoar { };
-
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 }) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
@@ -260,6 +258,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gedit = throw "The ‘gnome.gedit’ alias was removed. Please use ‘pkgs.gedit’ directly."; # converted to throw on 2023-12-27
   gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
+
+  gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
 
 #### Removals
   anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16

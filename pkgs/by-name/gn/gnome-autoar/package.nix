@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-autoar";
-      attrPath = "gnome.gnome-autoar";
     };
   };
 
