@@ -351,9 +351,9 @@
   };
   devcenter = mkAzExtension rec {
     pname = "devcenter";
-    version = "5.0.1";
+    version = "6.0.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/devcenter-${version}-py3-none-any.whl";
-    sha256 = "f90caa530ef9a11d0e4706b94a860edca419205d4a528dab72859dd6d7870b9c";
+    sha256 = "25e3dcdc9cb83243ceb2ed6a6dedc227953c06cb610ba95c84ddec0f7503224f";
     description = "Microsoft Azure Command-Line Tools DevCenter Extension";
   };
   diskpool = mkAzExtension rec {
