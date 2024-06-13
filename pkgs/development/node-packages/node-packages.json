@@ -124,6 +124,7 @@
 , "graphql-language-service-cli"
 , "grunt-cli"
 , "makam"
+, "md-to-pdf"
 , "meshcommander"
 , "gulp"
 , "gulp-cli"
