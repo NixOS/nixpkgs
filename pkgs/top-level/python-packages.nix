@@ -4614,6 +4614,8 @@ self: super: with self; {
 
   fs = callPackage ../development/python-modules/fs { };
 
+  fs_filepicker = callPackage ../development/python-modules/fs_filepicker { };
+
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
   fschat = callPackage ../development/python-modules/fschat { };
