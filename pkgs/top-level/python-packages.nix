@@ -14074,6 +14074,8 @@ self: super: with self; {
 
   skyfield = callPackage ../development/python-modules/skyfield { };
 
+  skyfield-data = callPackage ../development/python-modules/skyfield-data { };
+
   skytemple-dtef = callPackage ../development/python-modules/skytemple-dtef { };
 
   skytemple-eventserver = callPackage ../development/python-modules/skytemple-eventserver { };
