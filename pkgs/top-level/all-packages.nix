@@ -33210,6 +33210,8 @@ with pkgs;
 
   tcping-go = callPackage ../applications/networking/tcping-go { };
 
+  technic-launcher = callPackage ../games/technic-launcher { };
+
   librep = callPackage ../development/libraries/librep { };
 
   rep-gtk = callPackage ../development/libraries/rep-gtk { };
