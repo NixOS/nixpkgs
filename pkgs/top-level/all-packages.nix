@@ -32024,6 +32024,11 @@ with pkgs;
   });
   libreoffice-still-unwrapped = libreoffice-still.unwrapped;
 
+  libreoffice-collabora = callPackage ../applications/office/libreoffice {
+    variant = "collabora";
+    withFonts = true;
+  };
+
   libresprite = callPackage ../applications/editors/libresprite {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
   };
