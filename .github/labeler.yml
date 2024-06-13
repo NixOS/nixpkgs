@@ -145,6 +145,12 @@
       - any-glob-to-any-file:
         - lib/**
 
+"6.topic: llvm/clang":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - pkgs/development/compilers/llvm/*
+
 "6.topic: lua":
   - any:
     - changed-files:
