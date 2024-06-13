@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     homepage = "https://whalebird.social";
     changelog = "https://github.com/h3poteto/whalebird-desktop/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang colinsane weathercold ];
+    maintainers = with maintainers; [ wolfangaukang weathercold ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
