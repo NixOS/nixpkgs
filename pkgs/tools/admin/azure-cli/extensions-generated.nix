@@ -463,9 +463,9 @@
   };
   front-door = mkAzExtension rec {
     pname = "front-door";
-    version = "1.0.17";
+    version = "1.1.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/front_door-${version}-py3-none-any.whl";
-    sha256 = "20996a4d864963451572b71fecf4906f3e7fe8f403a651a1d1e98363df63d095";
+    sha256 = "3f3dd05dd0fce357dd0c7c6ba886a7f1bb37096a0d2d5dc0decf057431819ea4";
     description = "Manage networking Front Doors";
   };
   fzf = mkAzExtension rec {
