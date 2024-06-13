@@ -22,14 +22,14 @@
 let
   cmakeBool = b: if b then "ON" else "OFF";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
   version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ApmGto9RzT8t49bsZVwk8aQnIau9sQyFvt9qnWKUGAE=";
     fetchSubmodules = true;
   };
@@ -86,11 +86,11 @@ stdenv.mkDerivation rec {
     description = "Fast inference engine for Transformer models";
     mainProgram = "ct2-translator";
     homepage = "https://github.com/OpenNMT/CTranslate2";
-    changelog = "https://github.com/OpenNMT/CTranslate2/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/OpenNMT/CTranslate2/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa misuzu ];
     broken =
       (lib.versionOlder cudaPackages.cudaVersion "11.4")
       || !(withCuDNN -> withCUDA);
   };
-}
+})
