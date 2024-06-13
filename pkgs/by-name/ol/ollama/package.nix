@@ -31,13 +31,13 @@
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.1.42";
+  version = "0.1.43";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-lmnfFJBPgjaCdxkMALNQigrtD/V2T3Vs1GEKvRCgWaM=";
+    hash = "sha256-+WCyRZPm4EyLH68uXDUJEW76v6FXq2WS5fqt4momKDA=";
     fetchSubmodules = true;
   };
 
@@ -197,12 +197,13 @@ goBuild ((lib.optionalAttrs enableRocm {
   ];
 
   passthru.tests = {
+    inherit ollama;
     service = nixosTests.ollama;
     version = testers.testVersion {
       inherit version;
       package = ollama;
     };
-  } // stdenv.isLinux {
+  } // lib.optionalAttrs stdenv.isLinux {
     inherit ollama-rocm ollama-cuda;
   };
 
