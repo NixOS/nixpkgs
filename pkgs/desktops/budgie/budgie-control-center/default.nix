@@ -19,6 +19,7 @@
 , glibc
 , gnome
 , gnome-desktop
+, gnome-user-share
 , gsettings-desktop-schemas
 , gsound
 , gtk3
@@ -106,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome.gnome-bluetooth_1_0
     gnome.gnome-remote-desktop
     gnome.gnome-settings-daemon
-    gnome.gnome-user-share
+    gnome-user-share
     gnome.mutter
     gsettings-desktop-schemas
     gsound

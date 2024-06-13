@@ -85,8 +85,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-themes-extra = callPackage ./core/gnome-themes-extra { };
 
-  gnome-user-share = callPackage ./core/gnome-user-share { };
-
   gucharmap = callPackage ./core/gucharmap { };
 
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
@@ -260,6 +258,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
 
   gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
+  gnome-user-share = lib.warn "The ‘gnome.gnome-user-share’ was moved to top-level. Please use ‘pkgs.gnome-user-share’ directly." pkgs.gnome-user-share; # Added on 2024-06-13.
 
 #### Removals
   anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16

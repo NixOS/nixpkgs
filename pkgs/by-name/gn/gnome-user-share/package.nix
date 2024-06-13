@@ -59,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-user-share";
-      attrPath = "gnome.gnome-user-share";
     };
   };
 
