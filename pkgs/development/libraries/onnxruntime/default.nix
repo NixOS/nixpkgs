@@ -28,8 +28,6 @@
 
 
 let
-  version = "1.18.1";
-
   abseil-cpp = abseil-cpp_202401;
 
   stdenv = throw "Use effectiveStdenv instead";
@@ -87,14 +85,14 @@ let
     hash = "sha256-mpaiCxiYR1WaSSkcEPTzvcREenJWklD+HRdTT5/pD54=";
  };
 in
-effectiveStdenv.mkDerivation rec {
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  inherit version;
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-+zWtbLKekGhwdBU3bm1u2F7rYejQ62epE+HcHj05/8A=";
     fetchSubmodules = true;
   };
@@ -194,7 +192,7 @@ effectiveStdenv.mkDerivation rec {
     "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
     "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
-    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
+    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" finalAttrs.doCheck)
     "-Donnxruntime_ENABLE_LTO=ON"
     "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
@@ -261,10 +259,10 @@ effectiveStdenv.mkDerivation rec {
       compatibility.
     '';
     homepage = "https://github.com/microsoft/onnxruntime";
-    changelog = "https://github.com/microsoft/onnxruntime/releases/tag/v${version}";
+    changelog = "https://github.com/microsoft/onnxruntime/releases/tag/v${finalAttrs.version}";
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ puffnfresh ck3d cbourjau ];
   };
-}
+})
