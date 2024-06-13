@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,12 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "altgraph" ];
+
+  propagatedBuildInputs = [
+    # setuptools in propagatedBuildInputs is intentional
+    # https://github.com/ronaldoussoren/altgraph/issues/21
+    setuptools
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/ronaldoussoren/altgraph/tags${version}";
