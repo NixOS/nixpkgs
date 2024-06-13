@@ -27,7 +27,7 @@ let
   }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
   meta = {
-    description = "An open source file manager, powered by a virtual distributed filesystem";
+    description = "Open source file manager, powered by a virtual distributed filesystem";
     homepage = "https://www.spacedrive.com";
     changelog = "https://github.com/spacedriveapp/spacedrive/releases/tag/${version}";
     platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];

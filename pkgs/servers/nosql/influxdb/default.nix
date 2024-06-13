@@ -81,7 +81,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) influxdb; };
 
   meta = with lib; {
-    description = "An open-source distributed time series database";
+    description = "Open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
     maintainers = with maintainers; [ offline zimbatm ];

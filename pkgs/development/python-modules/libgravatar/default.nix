@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "libgravatar" ];
 
   meta = with lib; {
-    description = "A library that provides a Python 3 interface for the Gravatar API";
+    description = "Library that provides a Python 3 interface for the Gravatar API";
     homepage = "https://github.com/pabluk/libgravatar";
     changelog = "https://github.com/pabluk/libgravatar/releases/tag/${version}";
     license = licenses.gpl3Plus;

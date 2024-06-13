@@ -34,7 +34,7 @@ buildHomeAssistantComponent rec {
 
   meta = with lib; {
     changelog = "https://github.com/al-one/hass-xiaomi-miot/releases/tag/${version}";
-    description = "Automatic integrate all Xiaomi devices to HomeAssistant via miot-spec, support Wi-Fi, BLE, ZigBee devices.";
+    description = "Automatic integrate all Xiaomi devices to HomeAssistant via miot-spec, support Wi-Fi, BLE, ZigBee devices";
     homepage = "https://github.com/al-one/hass-xiaomi-miot";
     maintainers = with maintainers; [ azuwis ];
     license = licenses.asl20;

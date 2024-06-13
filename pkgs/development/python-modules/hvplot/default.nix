@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hvplot.pandas" ];
 
   meta = with lib; {
-    description = "A high-level plotting API for the PyData ecosystem built on HoloViews";
+    description = "High-level plotting API for the PyData ecosystem built on HoloViews";
     homepage = "https://hvplot.pyviz.org";
     changelog = "https://github.com/holoviz/hvplot/releases/tag/v${version}";
     license = licenses.bsd3;

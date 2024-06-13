@@ -23,7 +23,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nocasedict" ];
 
   meta = with lib; {
-    description = "A case-insensitive ordered dictionary for Python";
+    description = "Case-insensitive ordered dictionary for Python";
     homepage = "https://github.com/pywbem/nocasedict";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ freezeboy ];

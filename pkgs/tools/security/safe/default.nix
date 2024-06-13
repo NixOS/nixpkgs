@@ -23,7 +23,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A Vault CLI";
+    description = "Vault CLI";
     mainProgram = "safe";
     homepage = "https://github.com/starkandwayne/safe";
     license = licenses.mit;

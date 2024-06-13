@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A tiny monitor calibration loader for X and MS-Windows";
+    description = "Tiny monitor calibration loader for X and MS-Windows";
     license = licenses.gpl2Plus;
     maintainers = [];
     platforms = platforms.linux;

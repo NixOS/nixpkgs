@@ -46,6 +46,8 @@ buildPythonPackage rec {
     "test_migrations_plugin"
     "func_noerror_model_unicode_lambda"
     "test_linter_should_be_pickleable_with_pylint_django_plugin_installed"
+    "func_noerror_model_fields"
+    "func_noerror_form_fields"
   ];
 
   pythonImportsCheck = [ "pylint_django" ];

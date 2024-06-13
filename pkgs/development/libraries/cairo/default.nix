@@ -92,7 +92,7 @@ in {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "A 2D graphics library with support for multiple output devices";
+    description = "2D graphics library with support for multiple output devices";
     mainProgram = "cairo-trace";
     longDescription = ''
       Cairo is a 2D graphics library with support for multiple output

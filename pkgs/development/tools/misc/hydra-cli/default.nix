@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A client for the Hydra CI";
+    description = "Client for the Hydra CI";
     mainProgram = "hydra-cli";
     homepage = "https://github.com/nlewo/hydra-cli";
     license = with licenses; [ mit ];

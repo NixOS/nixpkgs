@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/wfxr/forgit";
-    description = "A utility tool powered by fzf for using git interactively";
+    description = "Utility tool powered by fzf for using git interactively";
     mainProgram = "git-forgit";
     license = licenses.mit;
     maintainers = with maintainers; [ deejayem ];

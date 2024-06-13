@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A highly accurate clone of the classic ProTracker 2.3D software for Amiga";
+    description = "Highly accurate clone of the classic ProTracker 2.3D software for Amiga";
     homepage = "https://16-bits.org/pt2.php";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];

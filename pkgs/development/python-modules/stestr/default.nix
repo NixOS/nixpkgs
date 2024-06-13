@@ -56,7 +56,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "stestr" ];
 
   meta = with lib; {
-    description = "A parallel Python test runner built around subunit";
+    description = "Parallel Python test runner built around subunit";
     mainProgram = "stestr";
     homepage = "https://github.com/mtreinish/stestr";
     license = licenses.asl20;

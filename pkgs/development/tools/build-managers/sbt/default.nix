@@ -39,9 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -ra . $out/share/sbt
     ln -sT ../share/sbt/bin/sbt $out/bin/sbt
     ln -sT ../share/sbt/bin/sbtn-${
-      if (stdenv.hostPlatform.isAarch64) then "aarch64" else "x86_64"
-    }-${
-      if (stdenv.isDarwin) then "apple-darwin" else "pc-linux"
+      if (stdenv.isDarwin) then "universal-apple-darwin"
+      else if (stdenv.hostPlatform.isAarch64) then "aarch64-pc-linux"
+      else "x86_64-pc-linux"
     } $out/bin/sbtn
 
     runHook postInstall
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       binaryBytecode
       binaryNativeCode
     ];
-    description = "A build tool for Scala, Java and more";
+    description = "Build tool for Scala, Java and more";
     maintainers = with maintainers; [ nequissimus kashw2 ];
     platforms = platforms.unix;
   };

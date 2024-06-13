@@ -195,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   meta = with lib; {
-    description = "A Remote Desktop Protocol Client";
+    description = "Remote Desktop Protocol Client";
     longDescription = ''
       FreeRDP is a client-side implementation of the Remote Desktop Protocol (RDP)
       following the Microsoft Open Specifications.

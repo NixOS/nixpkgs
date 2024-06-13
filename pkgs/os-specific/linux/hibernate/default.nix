@@ -32,7 +32,7 @@ in
     '';
 
     meta = {
-      description = "The `hibernate' script for swsusp and Tux-on-Ice";
+      description = "`hibernate' script for swsusp and Tux-on-Ice";
       mainProgram = "hibernate";
       longDescription = ''
         This package provides the `hibernate' script, a command-line utility

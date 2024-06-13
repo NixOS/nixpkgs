@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A video wallpaper program for wlroots based wayland compositors";
+    description = "Video wallpaper program for wlroots based wayland compositors";
     homepage = "https://github.com/GhostNaN/mpvpaper";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

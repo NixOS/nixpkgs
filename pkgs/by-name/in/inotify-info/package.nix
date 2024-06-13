@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Easily track down the number of inotify watches, instances, and which files are being watched.";
+    description = "Easily track down the number of inotify watches, instances, and which files are being watched";
     homepage = "https://github.com/mikesart/inotify-info";
     license = licenses.mit;
     mainProgram = "inotify-info";

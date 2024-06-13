@@ -73,7 +73,7 @@ let
     '';
 
     meta = with lib; {
-      description = "A Clojure babushka for the grey areas of Bash";
+      description = "Clojure babushka for the grey areas of Bash";
       longDescription = ''
         The main idea behind babashka is to leverage Clojure in places where you
         would be using bash otherwise.

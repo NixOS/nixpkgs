@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A package add built-in support for quaternions to numpy";
+    description = "Package add built-in support for quaternions to numpy";
     homepage = "https://github.com/moble/quaternion";
     license = licenses.mit;
     maintainers = [ maintainers.ocfox ];

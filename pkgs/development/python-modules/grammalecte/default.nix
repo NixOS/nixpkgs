@@ -29,7 +29,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   meta = {
-    description = "An open source grammar and typographic corrector for the French language";
+    description = "Open source grammar and typographic corrector for the French language";
     homepage = "https://grammalecte.net";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ apeyroux ];

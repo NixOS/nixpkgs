@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A better pywal";
+    description = "Better pywal";
     homepage = "https://codeberg.org/explosion-mental/wallust";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onemoresuza iynaix ];

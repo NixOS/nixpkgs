@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/FineFindus/Hieroglyphic/releases/tag/v${finalAttrs.version}";
-    description = "A tool based on detexify for finding LaTeX symbols from drawings";
+    description = "Tool based on detexify for finding LaTeX symbols from drawings";
     homepage = "https://apps.gnome.org/en/Hieroglyphic/";
     license = lib.licenses.gpl3Only;
     mainProgram = "hieroglyphic";

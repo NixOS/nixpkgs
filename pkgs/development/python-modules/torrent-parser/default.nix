@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "torrent_parser" ];
 
   meta = {
-    description = "A .torrent file parser and creator for both Python 2 and 3";
+    description = ".torrent file parser and creator for both Python 2 and 3";
     mainProgram = "pytp";
     homepage = "https://github.com/7sDream/torrent_parser";
     changelog = "https://github.com/7sDream/torrent_parser/blob/${src.rev}/CHANGELOG.md";

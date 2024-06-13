@@ -29,7 +29,7 @@ cargoNextestHook() {
     fi
 
     argstr="${cargoCheckProfileFlag} ${cargoCheckNoDefaultFeaturesFlag} ${cargoCheckFeaturesFlag}
-        --target @rustHostPlatformSpec@ --frozen ${cargoTestFlags}"
+        --target @rustHostPlatformSpec@ --offline ${cargoTestFlags}"
 
     (
         set -x

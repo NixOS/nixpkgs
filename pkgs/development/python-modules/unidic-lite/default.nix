@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "unidic_lite" ];
 
   meta = with lib; {
-    description = "A small version of UniDic";
+    description = "Small version of UniDic";
     homepage = "https://github.com/polm/unidic-lite";
     license = licenses.mit;
     maintainers = teams.tts.members;

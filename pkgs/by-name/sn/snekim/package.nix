@@ -24,7 +24,7 @@ buildNimPackage (finalAttrs: {
 
   meta = {
     homepage = "https://codeberg.org/annaaurora/snekim";
-    description = "A simple implementation of the classic snake game";
+    description = "Simple implementation of the classic snake game";
     mainProgram = "snekim";
     license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.annaaurora ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     mainProgram = "maim";
     inherit (src.meta) homepage;
-    description = "A command-line screenshot utility";
+    description = "Command-line screenshot utility";
     longDescription = ''
       maim (make image) takes screenshots of your desktop. It has options to
       take only a region, and relies on slop to query for regions. maim is

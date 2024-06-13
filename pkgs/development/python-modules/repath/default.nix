@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "repath" ];
 
   meta = {
-    description = "A port of the node module path-to-regexp to Python";
+    description = "Port of the node module path-to-regexp to Python";
     homepage = "https://github.com/nickcoutsos/python-repath";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.heyimnova ];

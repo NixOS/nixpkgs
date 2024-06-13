@@ -85,7 +85,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "The python library for the fast Cross-Platform Package Manager";
+    description = "Python library for the fast Cross-Platform Package Manager";
     homepage = "https://github.com/mamba-org/mamba";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.ericthemagician ];

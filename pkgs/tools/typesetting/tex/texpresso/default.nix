@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit (src.meta) homepage;
-    description = "Live rendering and error reporting for LaTeX.";
+    description = "Live rendering and error reporting for LaTeX";
     maintainers = with lib.maintainers; [ nickhu ];
     license = lib.licenses.mit;
   };

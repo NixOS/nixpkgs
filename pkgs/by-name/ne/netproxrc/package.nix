@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-LWNn5qp+Z/M9xTtOZ5RDHq1QEFK/Y2XgBi7H5S7Z7XE=";
 
   meta = with lib; {
-    description = "A HTTP proxy injecting credentials from a .netrc file";
+    description = "HTTP proxy injecting credentials from a .netrc file";
     mainProgram = "netproxrc";
     homepage = "https://github.com/timbertson/netproxrc";
     license = licenses.mit;

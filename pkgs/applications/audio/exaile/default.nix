@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.exaile.org/";
-    description = "A music player with a simple interface and powerful music management capabilities";
+    description = "Music player with a simple interface and powerful music management capabilities";
     mainProgram = "exaile";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ryneeverett ];

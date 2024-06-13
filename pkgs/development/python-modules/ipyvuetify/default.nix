@@ -47,7 +47,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ipyvuetify" ];
 
   meta = with lib; {
-    description = "Jupyter widgets based on Vuetify UI Components.";
+    description = "Jupyter widgets based on Vuetify UI Components";
     homepage = "https://github.com/mariobuikhuizen/ipyvuetify";
     license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];

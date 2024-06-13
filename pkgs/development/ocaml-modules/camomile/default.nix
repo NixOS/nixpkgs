@@ -52,6 +52,6 @@ buildDunePackage (params."${version}" // {
     homepage = "https://github.com/ocaml-community/Camomile";
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.lgpl21;
-    description = "A Unicode library for OCaml";
+    description = "Unicode library for OCaml";
   };
 })

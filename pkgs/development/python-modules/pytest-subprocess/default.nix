@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-W ignore::DeprecationWarning" ];
 
   meta = with lib; {
-    description = "A plugin to fake subprocess for pytest";
+    description = "Plugin to fake subprocess for pytest";
     homepage = "https://github.com/aklajnert/pytest-subprocess";
     changelog = "https://github.com/aklajnert/pytest-subprocess/blob/${version}/HISTORY.rst";
     license = licenses.mit;

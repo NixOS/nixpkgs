@@ -14,7 +14,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ colorama veryprettytable pyperclip ];
 
   meta = with lib; {
-    description = "A command line interface for The Pirate Bay";
+    description = "Command line interface for The Pirate Bay";
     mainProgram = "pirate-get";
     homepage = "https://github.com/vikstrous/pirate-get";
     license = licenses.gpl3Plus;

@@ -6,7 +6,7 @@ in
 {
   options = {
     services.photonvision = {
-      enable = lib.mkEnableOption "Enable PhotonVision";
+      enable = lib.mkEnableOption "PhotonVision";
 
       package = lib.mkPackageOption pkgs "photonvision" {};
 

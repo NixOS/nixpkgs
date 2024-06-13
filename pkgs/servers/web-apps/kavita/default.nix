@@ -87,7 +87,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A fast, feature rich, cross platform reading server";
+    description = "Fast, feature rich, cross platform reading server";
     homepage = "https://kavitareader.com";
     changelog = "https://github.com/kareadita/kavita/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;

@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "7.2.0";
-  disabled = pythonOlder "3.8";
+  version = "7.2.1";
+  pyproject = true;
 
-  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NKK6SwitXRnskw23SE+3l0aheEvp4aX4IY+a+GVqFB8=";
+    hash = "sha256-Qoe22ll0CzIXPQHWQfdj0pL0nDDnpRuJxGuoRzEmNB4=";
   };
 
   postPatch = ''
@@ -32,13 +32,13 @@ buildPythonPackage rec {
       --replace "timeout = 300" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatchling
     jupyterlab
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jupyter-server
     jupyterlab
     jupyterlab-server

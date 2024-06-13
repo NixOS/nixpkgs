@@ -14,7 +14,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/JonnyHaystack/i3-resurrect";
-    description = "A simple but flexible solution to saving and restoring i3 workspaces";
+    description = "Simple but flexible solution to saving and restoring i3 workspaces";
     mainProgram = "i3-resurrect";
     license = licenses.gpl3;
     platforms= platforms.linux;

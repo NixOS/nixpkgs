@@ -67,7 +67,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Universal payment handling for Django.";
+    description = "Universal payment handling for Django";
     homepage = "https://github.com/jazzband/django-payments/";
     changelog = "https://github.com/jazzband/django-payments/releases/tag/v${version}";
     license = licenses.bsd3;

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-HTfRWvE3m7XZhZDj5bEkrQI3pD6GNiKd2gJtMjRQ8Rw=";
 
   meta = with lib; {
-    description = "A river-status client written in Rust";
+    description = "River-status client written in Rust";
     homepage = "https://gitlab.com/snakedye/ristate";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];

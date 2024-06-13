@@ -26,7 +26,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A powerful, fast and reliable backup & sync tool";
+    description = "Powerful, fast and reliable backup & sync tool";
     longDescription = ''
       luckyBackup is an application for data back-up and synchronization
       powered by the rsync tool.

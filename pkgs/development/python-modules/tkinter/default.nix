@@ -30,7 +30,7 @@ buildPythonPackage {
 
   meta = py.meta // {
     # Based on first sentence from https://docs.python.org/3/library/tkinter.html
-    description = "The standard Python interface to the Tcl/Tk GUI toolkit";
+    description = "Standard Python interface to the Tcl/Tk GUI toolkit";
     longDescription = ''
       The tkinter package (“Tk interface”) is the standard Python interface to
       the Tcl/Tk GUI toolkit. Both Tk and tkinter are available on most Unix

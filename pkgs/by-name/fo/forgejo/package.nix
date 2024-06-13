@@ -51,7 +51,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-8qMpnGL5GXJuxOpxh9a1Bcxd7tVweUKwbun8UBxCfQA=";
 
-  subPackages = [ "." ];
+  subPackages = [ "." "contrib/environment-to-ini" ];
 
   outputs = [ "out" "data" ];
 
@@ -115,7 +115,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "A self-hosted lightweight software forge";
+    description = "Self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
     license = lib.licenses.mit;

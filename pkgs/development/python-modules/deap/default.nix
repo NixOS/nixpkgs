@@ -24,7 +24,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A novel evolutionary computation framework for rapid prototyping and testing of ideas";
+    description = "Novel evolutionary computation framework for rapid prototyping and testing of ideas";
     homepage = "https://github.com/DEAP/deap";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [

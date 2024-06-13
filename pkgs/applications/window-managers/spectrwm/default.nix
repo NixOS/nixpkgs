@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "A tiling window manager";
+    description = "Tiling window manager";
     homepage    = "https://github.com/conformal/spectrwm";
     maintainers = with maintainers; [ rake5k ];
     license     = licenses.isc;

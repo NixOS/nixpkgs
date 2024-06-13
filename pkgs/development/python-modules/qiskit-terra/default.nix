@@ -214,7 +214,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Provides the foundations for Qiskit.";
+    description = "Provides the foundations for Qiskit";
     longDescription = ''
       Allows the user to write quantum circuits easily, and takes care of the constraints of real hardware.
     '';

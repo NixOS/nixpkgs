@@ -16,7 +16,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
   meta = with lib; {
-    description = "A tool to generate images of code and terminal output";
+    description = "Tool to generate images of code and terminal output";
     mainProgram = "freeze";
     homepage = "https://github.com/charmbracelet/freeze";
     changelog = "https://github.com/charmbracelet/freeze/releases/tag/v${version}";

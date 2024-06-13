@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    description = "A C++ library for arithmetic and algebraic computations";
+    description = "C++ library for arithmetic and algebraic computations";
     mainProgram = "givaro-config";
     license = lib.licenses.cecill-b;
     maintainers = [lib.maintainers.raskin];

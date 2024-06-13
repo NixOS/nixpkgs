@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   postPatch = "sed -i \"s:/usr/local:$out:\" config.mk";
 
   meta = with lib; {
-    description = "A menu utility for X";
+    description = "Menu utility for X";
     homepage = "https://github.com/phillbush/xmenu";
     license = licenses.mit;
     maintainers = with maintainers; [ neonfuz ];

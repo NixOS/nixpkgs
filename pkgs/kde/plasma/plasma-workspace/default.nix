@@ -31,6 +31,11 @@ mkKdeDerivation {
     })
   ];
 
+  postInstall = ''
+    # Prevent patching this shell file, it only is used by sourcing it from /bin/sh.
+    chmod -x $out/libexec/plasma-sourceenv.sh
+  '';
+
   extraNativeBuildInputs = [pkg-config spirv-tools];
   extraBuildInputs = [
     qtsvg

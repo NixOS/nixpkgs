@@ -38,7 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nosetimer" ];
 
   meta = with lib; {
-    description = "A timer plugin for nosetests";
+    description = "Timer plugin for nosetests";
     homepage = "https://github.com/mahmoudimus/nose-timer";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];

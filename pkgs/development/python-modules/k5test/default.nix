@@ -44,6 +44,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/pythongssapi/k5test/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    broken = stdenv.isDarwin;
   };
 }

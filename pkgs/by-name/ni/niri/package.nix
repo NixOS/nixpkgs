@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A scrollable-tiling Wayland compositor";
+    description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ iogamaster foo-dogsquared sodiboo ];

@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/betamax/serializers";
-    description = "A set of third-party serializers for Betamax";
+    description = "Set of third-party serializers for Betamax";
     license = licenses.asl20;
   };
 }

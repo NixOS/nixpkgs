@@ -24,7 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/fgrosse/prox";
-    description = "A process runner for Procfile-based applications ";
+    description = "Process runner for Procfile-based applications ";
     mainProgram = "prox";
     license = licenses.bsd2;
     maintainers = with maintainers; [ lucperkins ];

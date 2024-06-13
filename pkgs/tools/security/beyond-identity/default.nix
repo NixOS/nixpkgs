@@ -68,8 +68,7 @@ let
   };
 # /usr/bin/pkcheck is hardcoded in binary - we need FHS
 in buildFHSEnv {
-   inherit meta;
-   name = pname;
+   inherit pname version meta;
 
    targetPkgs = pkgs: [
      beyond-identity

@@ -60,7 +60,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/quarkslab/kdigger";
     changelog = "https://github.com/quarkslab/kdigger/releases/tag/v${version}";
-    description = "An in-pod context discovery tool for Kubernetes penetration testing";
+    description = "In-pod context discovery tool for Kubernetes penetration testing";
     mainProgram = "kdigger";
     longDescription = ''
       kdigger, short for "Kubernetes digger", is a context discovery tool for

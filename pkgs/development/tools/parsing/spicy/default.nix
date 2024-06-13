@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/zeek/spicy";
-    description = "A C++ parser generator for dissecting protocols & files";
+    description = "C++ parser generator for dissecting protocols & files";
     longDescription = ''
       Spicy is a parser generator that makes it easy to create robust C++
       parsers for network protocols, file formats, and more. Spicy is a bit

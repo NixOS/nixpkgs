@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://xalan.apache.org/";
-    description = "A XSLT processor for transforming XML documents";
+    description = "XSLT processor for transforming XML documents";
     mainProgram = "Xalan";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

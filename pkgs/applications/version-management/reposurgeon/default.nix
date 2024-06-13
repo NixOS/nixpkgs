@@ -26,7 +26,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "A tool for editing version-control repository history";
+    description = "Tool for editing version-control repository history";
     license = lib.licenses.bsd3;
     homepage = "http://www.catb.org/esr/reposurgeon/";
     maintainers = with lib.maintainers; [ dfoxfranke ];

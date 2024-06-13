@@ -40,7 +40,7 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A jsonschema CLI and pre-commit hook";
+    description = "Jsonschema CLI and pre-commit hook";
     mainProgram = "check-jsonschema";
     homepage = "https://github.com/python-jsonschema/check-jsonschema";
     changelog = "https://github.com/python-jsonschema/check-jsonschema/blob/${version}/CHANGELOG.rst";

@@ -137,7 +137,7 @@ in
   passthru.tests = nixosTests.input-remapper;
 
   meta = with lib; {
-    description = "An easy to use tool to change the mapping of your input device buttons";
+    description = "Easy to use tool to change the mapping of your input device buttons";
     homepage = "https://github.com/sezanzeb/input-remapper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

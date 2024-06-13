@@ -184,17 +184,14 @@ stdenv.mkDerivation (finalAttrs: {
       )"
 
       for variant in gtk3 gtk2; do
-        # The script will not perform an update when the version attribute is up to date from previous platform run
-        # We need to clear it before each run
-        update-source-version palemoon-bin 0 "${lib.fakeHash}" --source-key="sources.$variant"
-        update-source-version palemoon-bin "$version" --source-key="sources.$variant"
+        update-source-version palemoon-bin "$version" --ignore-same-version --source-key="sources.$variant"
       done
     '';
   };
 
   meta = with lib; {
     homepage = "https://www.palemoon.org/";
-    description = "An Open Source, Goanna-based web browser focusing on efficiency and customization";
+    description = "Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.

@@ -1,5 +1,6 @@
 name,rockspec,ref,server,version,luaversion,maintainers
 alt-getopt,,,,,,arobyn
+ansicolors,,,,,,Freed-Wu
 bit32,,,,5.3.0-1,5.1,lblasc
 argparse,,,,,,
 basexx,,,,,,
@@ -76,7 +77,9 @@ lualdap,,,,,,aanderse
 lualogging,,,,,,
 luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc
+luaprompt,,,,,,Freed-Wu
 luarepl,,,,,,
+luarocks,,,,,,mrcjkb teto
 luarocks-build-rust-mlua,,,,,,mrcjkb
 luarocks-build-treesitter-parser,,,,,,mrcjkb
 luasec,,,,,,flosse

@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A style to bend Qt applications to look like they belong into GNOME Shell";
+    description = "Style to bend Qt applications to look like they belong into GNOME Shell";
     homepage = "https://github.com/FedoraQt/adwaita-qt";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];

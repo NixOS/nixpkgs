@@ -59,7 +59,7 @@ import ./generic.nix (
 
     meta = with lib; {
       homepage = "https://python-pillow.org/";
-      description = "The friendly PIL fork (Python Imaging Library)";
+      description = "Friendly PIL fork (Python Imaging Library)";
       longDescription = ''
         The Python Imaging Library (PIL) adds image processing
         capabilities to your Python interpreter.  This library

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sendfile" ];
 
   meta = with lib; {
-    description = "A Python interface to sendfile(2)";
+    description = "Python interface to sendfile(2)";
     homepage = "https://github.com/giampaolo/pysendfile";
     changelog = "https://github.com/giampaolo/pysendfile/blob/release-${version}/HISTORY.rst";
     license = licenses.mit;

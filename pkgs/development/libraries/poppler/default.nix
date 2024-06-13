@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   meta = with lib; {
     homepage = "https://poppler.freedesktop.org/";
     changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${version}/NEWS";
-    description = "A PDF rendering library";
+    description = "PDF rendering library";
     longDescription = ''
       Poppler is a PDF rendering library based on the xpdf-3.0 code base. In
       addition it provides a number of tools that can be installed separately.

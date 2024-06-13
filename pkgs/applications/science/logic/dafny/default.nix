@@ -56,7 +56,7 @@ buildDotnetModule rec {
   '';
 
   meta = with lib; {
-    description = "A programming language with built-in specification constructs";
+    description = "Programming language with built-in specification constructs";
     homepage = "https://research.microsoft.com/dafny";
     maintainers = with maintainers; [ layus ];
     license = licenses.mit;

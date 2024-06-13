@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/g0hl1n/xprintidle";
-    description = "A utility that queries the X server for the user's idle time and prints it to stdout";
+    description = "Utility that queries the X server for the user's idle time and prints it to stdout";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.linux;

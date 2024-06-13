@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-ps/";
-    description = "A zathura PS plugin";
+    description = "Zathura PS plugin";
     longDescription = ''
       The zathura-ps plugin adds PS support to zathura by using the
       libspectre library.

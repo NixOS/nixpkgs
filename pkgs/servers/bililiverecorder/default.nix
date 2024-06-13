@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A convenient free open source bilibili live recording tool";
+    description = "Convenient free open source bilibili live recording tool";
     homepage = "https://rec.danmuji.org/";
     changelog = "https://github.com/BililiveRecorder/BililiveRecorder/releases/tag/${version}";
     mainProgram = "BililiveRecorder";

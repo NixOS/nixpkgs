@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     changelog = "https://sourcery.ai/changelog/";
-    description = "An AI-powered code review and pair programming tool for Python";
+    description = "AI-powered code review and pair programming tool for Python";
     downloadPage = "https://pypi.org/project/sourcery/";
     homepage = "https://sourcery.ai";
     license = lib.licenses.unfree;

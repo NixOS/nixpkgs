@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://pypi.org/project/pyptlib/";
-    description = "A python implementation of the Pluggable Transports for Circumvention specification for Tor";
+    description = "Python implementation of the Pluggable Transports for Circumvention specification for Tor";
     license = licenses.bsd2;
   };
 }

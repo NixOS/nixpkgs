@@ -40,7 +40,7 @@
 , lomiri-notifications
 , lomiri-thumbnailer
 , maliit-keyboard
-, mir
+, mir_2_15
 , nixos-icons
 , pam
 , pkg-config
@@ -117,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     ./9901-lomiri-Disable-Wizard.patch
+    ./9902-lomiri-Check-NIXOS_XKB_LAYOUTS.patch
   ];
 
   postPatch = ''
@@ -190,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-system-settings-unwrapped
     lomiri-ui-toolkit
     maliit-keyboard
-    mir
+    mir_2_15
     pam
     properties-cpp
     protobuf

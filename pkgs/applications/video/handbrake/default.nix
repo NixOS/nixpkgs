@@ -106,12 +106,10 @@ let
   # base ffmpeg version is specified in:
   # https://github.com/HandBrake/HandBrake/blob/master/contrib/ffmpeg/module.defs
   ffmpeg-version = "7.0";
-  ffmpeg-hb = ffmpeg_7-full.overrideAttrs (old: {
+  ffmpeg-hb = (ffmpeg_7-full.override {
     version = ffmpeg-version;
-    src = fetchurl {
-      url = "https://www.ffmpeg.org/releases/ffmpeg-${ffmpeg-version}.tar.bz2";
-      hash = "sha256-ok2QdL9VI6Zaqp570Cr+QQnOedab130QT+09q0uTTXo=";
-    };
+    hash = "sha256-RdDfv+0y90XpgjIRvTjsemKyGunzDbsh4j4WiE9rfyM=";
+  }).overrideAttrs (old: {
     patches = (old.patches or [ ]) ++ [
       "${src}/contrib/ffmpeg/A01-mov-read-name-track-tag-written-by-movenc.patch"
       "${src}/contrib/ffmpeg/A02-movenc-write-3gpp-track-titl-tag.patch"
@@ -319,7 +317,7 @@ let
 
     meta = with lib; {
       homepage = "https://handbrake.fr/";
-      description = "A tool for converting video files and ripping DVDs";
+      description = "Tool for converting video files and ripping DVDs";
       longDescription = ''
         Tool for converting and remuxing video files
         into selection of modern and widely supported codecs

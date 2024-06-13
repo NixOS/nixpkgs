@@ -130,7 +130,7 @@ makePackage {
   meta = with lib; {
     homepage = "https://openjdk.org/projects/openjfx/";
     license = licenses.gpl2Classpath;
-    description = "The next-generation Java client toolkit";
+    description = "Next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
   };

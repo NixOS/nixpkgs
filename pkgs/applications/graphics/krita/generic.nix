@@ -73,7 +73,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A free and open source painting application";
+    description = "Free and open source painting application";
     homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar sifmelcara nek0 ];
     mainProgram = "krita";

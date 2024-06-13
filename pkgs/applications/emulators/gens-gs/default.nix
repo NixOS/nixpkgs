@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://segaretro.org/Gens/GS";
-    description = "A Genesis/Mega Drive emulator";
+    description = "Genesis/Mega Drive emulator";
     platforms = [ "i686-linux" ];
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.eelco ];

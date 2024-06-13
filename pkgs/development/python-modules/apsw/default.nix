@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "apsw";
-  version = "3.45.3.0";
+  version = "3.46.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "rogerbinns";
     repo = "apsw";
     rev = "refs/tags/${version}";
-    hash = "sha256-7z9JXJn2a6RJAc+7KrkzzScrNmbb06ud6L1rBinzkP8=";
+    hash = "sha256-x1nG13RDJ5fZ3Eds7yYKcFQ3B+5YKxvMvXrAbXw4bSc=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/rogerbinns/apsw/blob/${src.rev}/doc/changes.rst";
-    description = "A Python wrapper for the SQLite embedded relational database engine";
+    description = "Python wrapper for the SQLite embedded relational database engine";
     homepage = "https://github.com/rogerbinns/apsw";
     license = licenses.zlib;
     maintainers = with maintainers; [ gador ];

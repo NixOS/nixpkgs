@@ -36,7 +36,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A modern tool for managing database schemas";
+    description = "Modern tool for managing database schemas";
     homepage = "https://atlasgo.io/";
     changelog = "https://github.com/ariga/atlas/releases/tag/v${version}";
     license = licenses.asl20;

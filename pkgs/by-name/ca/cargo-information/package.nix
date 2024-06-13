@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A cargo subcommand to show information about crates";
+    description = "Cargo subcommand to show information about crates";
     mainProgram = "cargo-info";
     homepage = "https://github.com/hi-rustin/cargo-information";
     changelog = "https://github.com/hi-rustin/cargo-information/blob/v${src.rev}/CHANGELOG.md";

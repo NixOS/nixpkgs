@@ -1,0 +1,17 @@
+diff --git a/src/glx/glxext.c b/src/glx/glxext.c
+index 8770863eb7c..537f0af112c 100644
+--- a/src/glx/glxext.c
++++ b/src/glx/glxext.c
+@@ -886,10 +886,11 @@ __glXInitialize(Display * dpy)
+    Bool zink = False;
+    Bool try_zink = False;
+ 
++   const char *env = getenv("MESA_LOADER_DRIVER_OVERRIDE");
++
+ #if defined(GLX_DIRECT_RENDERING) && (!defined(GLX_USE_APPLEGL) || defined(GLX_USE_APPLE))
+    Bool glx_direct = !debug_get_bool_option("LIBGL_ALWAYS_INDIRECT", false);
+    Bool glx_accel = !debug_get_bool_option("LIBGL_ALWAYS_SOFTWARE", false);
+-   const char *env = getenv("MESA_LOADER_DRIVER_OVERRIDE");
+ 
+    zink = env && !strcmp(env, "zink");
+    try_zink = False;

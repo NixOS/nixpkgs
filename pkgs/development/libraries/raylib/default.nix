@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "A simple and easy-to-use library to enjoy videogames programming";
+    description = "Simple and easy-to-use library to enjoy videogames programming";
     homepage = "https://www.raylib.com/";
     license = licenses.zlib;
     maintainers = with maintainers; [ adamlwgriffiths ];

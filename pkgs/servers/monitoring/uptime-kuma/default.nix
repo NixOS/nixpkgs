@@ -39,7 +39,7 @@ buildNpmPackage rec {
   passthru.tests.uptime-kuma = nixosTests.uptime-kuma;
 
   meta = with lib; {
-    description = "A fancy self-hosted monitoring tool";
+    description = "Fancy self-hosted monitoring tool";
     mainProgram = "uptime-kuma-server";
     homepage = "https://github.com/louislam/uptime-kuma";
     changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${version}";

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://premake.github.io";
-    description = "A simple build configuration and project generation tool using lua";
+    description = "Simple build configuration and project generation tool using lua";
     mainProgram = "premake5";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.darwin ++ lib.platforms.linux;

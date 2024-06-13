@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-screensaver";
-    description = "The Cinnamon screen locker and screensaver program";
+    description = "Cinnamon screen locker and screensaver program";
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

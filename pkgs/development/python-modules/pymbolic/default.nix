@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymbolic" ];
 
   meta = with lib; {
-    description = "A package for symbolic computation";
+    description = "Package for symbolic computation";
     homepage = "https://documen.tician.de/pymbolic/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "VERSION=$(version)" ];
 
   meta = with lib; {
-    description = "A program to generate and execute DesktopEntry files of the Application type";
+    description = "Program to generate and execute DesktopEntry files of the Application type";
     homepage = "https://github.com/jceb/dex";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;

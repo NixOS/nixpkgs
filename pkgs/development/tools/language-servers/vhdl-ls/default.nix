@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "A fast VHDL language server";
+    description = "Fast VHDL language server";
     homepage = "https://github.com/VHDL-LS/rust_hdl";
     license = lib.licenses.mpl20;
     mainProgram = "vhdl_ls";

@@ -58,14 +58,14 @@ let
 
     mkdir $out/plugins
     ${lib.optionalString (plugins != { }) ''
-        ${lib.concatMapStringsSep
+        ${lib.concatStringsSep
         "\n"
         (lib.mapAttrsToList (name: value: "ln -s ${value} $out/plugins/${name}") plugins)}
     ''}
 
     mkdir $out/flavors
     ${lib.optionalString (flavors != { }) ''
-        ${lib.concatMapStringsSep
+        ${lib.concatStringsSep
         "\n"
         (lib.mapAttrsToList (name: value: "ln -s ${value} $out/flavors/${name}") flavors)}
     ''}

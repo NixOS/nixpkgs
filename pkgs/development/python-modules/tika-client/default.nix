@@ -32,7 +32,7 @@ buildPythonPackage rec {
   doChecks = false;
 
   meta = with lib; {
-    description = "A modern Python REST client for Apache Tika server";
+    description = "Modern Python REST client for Apache Tika server";
     homepage = "https://github.com/stumpylog/tika-client";
     changelog = "https://github.com/stumpylog/tika-client/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;

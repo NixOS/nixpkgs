@@ -93,7 +93,7 @@ buildDotnetModule {
 
   meta = with lib; {
     homepage = "https://github.com/AM2R-Community-Developers/AM2RLauncher";
-    description = "A front-end for dealing with AM2R updates and mods";
+    description = "Front-end for dealing with AM2R updates and mods";
     longDescription = ''
       A front-end application that simplifies installing the latest
       AM2R-Community-Updates, creating APKs for Android use, as well as Mods for

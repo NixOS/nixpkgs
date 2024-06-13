@@ -39,7 +39,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A tool to reason about Odoo addons manifests";
+    description = "Tool to reason about Odoo addons manifests";
     homepage = "https://github.com/acsone/manifestoo";
     license = licenses.mit;
     maintainers = with maintainers; [ yajo ];

@@ -54,13 +54,15 @@
 , vimPlugins
 , vimUtils
 , yajl
+, zip
+, unzip
 , zlib
 , zziplib
 }:
 
 final: prev:
 let
-  inherit (prev) luaOlder luaAtLeast lua isLuaJIT;
+  inherit (prev) luaOlder luaAtLeast lua isLuaJIT isLua51;
 in
 {
   argparse = prev.argparse.overrideAttrs(oa: {
@@ -407,6 +409,40 @@ in
     ];
   });
 
+  luaprompt = prev.luaprompt.overrideAttrs (_: {
+    externalDeps = [
+      { name = "READLINE"; dep = readline; }
+      { name = "HISTORY"; dep = readline; }
+    ];
+  });
+
+  # As a nix user, use this derivation instead of "luarocks_bootstrap"
+  luarocks = prev.luarocks.overrideAttrs (oa: {
+
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ installShellFiles lua unzip ];
+    # cmake is just to compile packages with "cmake" buildType, not luarocks itself
+    dontUseCmakeConfigure = true;
+
+    propagatedBuildInputs = [ zip unzip cmake ];
+
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd luarocks \
+        --bash <($out/bin/luarocks completion bash) \
+        --fish <($out/bin/luarocks completion fish) \
+        --zsh <($out/bin/luarocks completion zsh)
+
+      installShellCompletion --cmd luarocks-admin \
+        --bash <($out/bin/luarocks-admin completion bash) \
+        --fish <($out/bin/luarocks-admin completion fish) \
+        --zsh <($out/bin/luarocks-admin completion zsh)
+    '';
+
+    meta = oa.meta // {
+      mainProgram = "luarocks";
+    };
+
+  });
+
   luasec = prev.luasec.overrideAttrs (oa: {
     externalDeps = [
       { name = "OPENSSL"; dep = openssl; }
@@ -492,6 +528,28 @@ in
       broken = luaOlder "5.1" || (luaAtLeast "5.4");
       platforms = lib.platforms.linux;
     };
+  });
+
+  neotest  = prev.neotest.overrideAttrs(oa: {
+    # A few tests fail for strange reasons on darwin
+    doCheck = !stdenv.isDarwin;
+    nativeCheckInputs = oa.nativeCheckInputs ++ [
+      final.nlua final.busted neovim-unwrapped
+    ];
+
+    # stick to neovim's lua version else loading shared libraries fail
+    meta = oa.meta // { broken = !isLua51; };
+
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      export LUA_PATH="./lua/?.lua;./lua/?/init.lua;$LUA_PATH"
+      nvim --headless -i NONE \
+        --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
+        -c "PlenaryBustedDirectory tests/ {}"
+
+      runHook postCheck
+      '';
   });
 
   haskell-tools-nvim  = prev.haskell-tools-nvim.overrideAttrs(oa: {

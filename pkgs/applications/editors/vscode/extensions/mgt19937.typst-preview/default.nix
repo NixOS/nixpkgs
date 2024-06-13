@@ -12,8 +12,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "typst-preview";
     publisher = "mgt19937";
-    version = "0.11.6";
-    hash = "sha256-8//6eUzMg5AX9NNQm5mzNGlOG50Cxl0Rt1+dPq0J2DU=";
+    version = "0.11.7";
+    hash = "sha256-70dVGoSBDKCtvn7xiC/gAh4OQ8nNDiI/M900r2zlOfU=";
   };
 
   buildInputs = [ typst-preview ];

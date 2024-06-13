@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A GTK theme based on the Nightfox colour palette";
+    description = "GTK theme based on the Nightfox colour palette";
     homepage = "https://github.com/Fausto-Korpsvart/Nightfox-GTK-Theme";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ d3vil0p3r ];

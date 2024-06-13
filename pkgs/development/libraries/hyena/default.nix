@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/Archive/hyena";
-    description = "A C# library which contains a hodge-podge of random stuff";
+    description = "C# library which contains a hodge-podge of random stuff";
     longDescription = ''
       Hyena is a C# library used to make awesome applications. It contains a lot of random things,
       including useful data structures, a Sqlite-based db layer, cool widgets, a JSON library,

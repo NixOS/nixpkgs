@@ -32,15 +32,16 @@
 , systemd
 , xdg-utils
 , xorg
+, libGL
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tidal-hifi";
-  version = "5.13.0";
+  version = "5.13.1";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
-    sha256 = "sha256-d7JAvpZKdhG9BzCdfwyPlmXcqE49heVLskusaB0uOhg=";
+    sha256 = "sha256-TnvVm0qjm41if90+f9YtO8wR6NYg6oUZbZd0RiUU33M=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
@@ -84,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXScrnSaver
     xorg.libxshmfence
     xorg.libXtst
+    libGL
   ];
 
   runtimeDependencies =
@@ -113,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${finalAttrs.version}";
-    description = "The web version of Tidal running in electron with hifi support thanks to widevine";
+    description = "Web version of Tidal running in electron with hifi support thanks to widevine";
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ qbit spikespaz ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "precice";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "precice";
     rev = "v${version}";
-    hash = "sha256-AkIyrjL4OSqX6B1tt1QFopuwnkQaTtb4LmIssY3d3fQ=";
+    hash = "sha256-KpmcQj8cv5V5OXCMhe2KLTsqUzKWtTeQyP+zg+Y+yd0=";
   };
 
   cmakeFlags = [

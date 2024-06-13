@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/collective/icalendar/blob/v${version}/CHANGES.rst";
-    description = "A parser/generator of iCalendar files";
+    description = "Parser/generator of iCalendar files";
     mainProgram = "icalendar";
     homepage = "https://github.com/collective/icalendar";
     license = licenses.bsd2;

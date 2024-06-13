@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = stdenv.isDarwin;
 
   meta = with lib; {
-    description = "A database modeling tool for PostgreSQL";
+    description = "Database modeling tool for PostgreSQL";
     homepage = "https://pgmodeler.io/";
     license = licenses.gpl3;
     maintainers = [ maintainers.esclear ];

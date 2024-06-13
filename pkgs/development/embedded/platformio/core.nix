@@ -199,7 +199,7 @@ with python3Packages; buildPythonApplication rec {
 
   meta = with lib; {
     changelog = "https://github.com/platformio/platformio-core/releases/tag/v${version}";
-    description = "An open source ecosystem for IoT development";
+    description = "Open source ecosystem for IoT development";
     downloadPage = "https://github.com/platformio/platformio-core";
     homepage = "https://platformio.org";
     license = licenses.asl20;

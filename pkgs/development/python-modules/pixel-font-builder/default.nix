@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pixel-font-builder";
-  version = "0.0.24";
+  version = "0.0.25";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pixel_font_builder";
     inherit version;
-    hash = "sha256-hBlTTIPx4TRgeXapVnSaKPUwseR3uYT0gcgKLGmmSZI=";
+    hash = "sha256-66mGZ7q64z+tTJSSveD7UCkTq7YXgsHTM25MqUSLfvM=";
   };
 
   pythonRelaxDeps = [ "fonttools" ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/TakWolf/pixel-font-builder";
-    description = "A library that helps create pixel style fonts";
+    description = "Library that helps create pixel style fonts";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ h7x4 ];

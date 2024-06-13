@@ -31,6 +31,28 @@ buildLuarocksPackage {
   };
 }) {};
 
+ansicolors = callPackage({ buildLuarocksPackage, fetchurl, luaOlder }:
+buildLuarocksPackage {
+  pname = "ansicolors";
+  version = "1.0.2-3";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/ansicolors-1.0.2-3.rockspec";
+    sha256 = "19y962xdx5ldl3596ywdl7n825dffz9al6j6rx6pbgmhb7pi8s5v";
+  }).outPath;
+  src = fetchurl {
+    url    = "https://github.com/kikito/ansicolors.lua/archive/v1.0.2.tar.gz";
+    sha256 = "0r4xi57njldmar9pn77l0vr5701rpmilrm51spv45lz0q9js8xps";
+  };
+
+  disabled = luaOlder "5.1";
+
+  meta = {
+    homepage = "https://github.com/kikito/ansicolors.lua";
+    description = "Library for color Manipulation.";
+    license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+  };
+}) {};
+
 argparse = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaAtLeast, luaOlder }:
 buildLuarocksPackage {
   pname = "argparse";
@@ -1867,6 +1889,31 @@ buildLuarocksPackage {
   };
 }) {};
 
+luaprompt = callPackage({ argparse, buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder }:
+buildLuarocksPackage {
+  pname = "luaprompt";
+  version = "0.8-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luaprompt-0.8-1.rockspec";
+    sha256 = "17v7yqkvm4rxszqvqk3f6a6vqysh80p18l1ryif79bc7ic948br4";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "dpapavas";
+    repo = "luaprompt";
+    rev = "v0.8";
+    hash = "sha256-GdI5sj7FBeb9q23oxVOzT+yVhMYTnggaN8Xt/z/2xZo=";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ argparse ];
+
+  meta = {
+    homepage = "https://github.com/dpapavas/luaprompt";
+    description = "A Lua command prompt with pretty-printing and auto-completion";
+    license.fullName = "MIT/X11";
+  };
+}) {};
+
 luaposix = callPackage({ bit32, buildLuarocksPackage, fetchurl, fetchzip, luaAtLeast, luaOlder }:
 buildLuarocksPackage {
   pname = "luaposix";
@@ -1910,6 +1957,30 @@ buildLuarocksPackage {
     homepage = "https://github.com/hoelzro/lua-repl";
     description = "A reusable REPL component for Lua, written in Lua";
     license.fullName = "MIT/X11";
+  };
+}) {};
+
+luarocks = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl }:
+buildLuarocksPackage {
+  pname = "luarocks";
+  version = "3.11.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luarocks-3.11.0-1.rockspec";
+    sha256 = "0pi55445dskpw6nhrq52589h4v39fsf23c0kp8d4zg2qaf6y2n38";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "luarocks";
+    repo = "luarocks";
+    rev = "v3.11.0";
+    hash = "sha256-mSwwBuLWoMT38iYaV/BTdDmmBz4heTRJzxBHC0Vrvc4=";
+  };
+
+
+  meta = {
+    homepage = "http://www.luarocks.org";
+    description = "A package manager for Lua modules.";
+    maintainers = with lib.maintainers; [ mrcjkb teto ];
+    license.fullName = "MIT";
   };
 }) {};
 

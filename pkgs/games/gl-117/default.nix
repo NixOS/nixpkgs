@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libGLU libGL SDL freeglut SDL_mixer libtool ];
 
   meta = with lib; {
-    description = "An air combat simulator";
+    description = "Air combat simulator";
     mainProgram = "gl-117";
     homepage = "https://sourceforge.net/projects/gl-117";
     maintainers = with maintainers; [ raskin ];

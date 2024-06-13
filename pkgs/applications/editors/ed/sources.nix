@@ -4,7 +4,7 @@
 
 let
   meta = {
-    description = "The GNU implementation of the standard Unix editor";
+    description = "GNU implementation of the standard Unix editor";
     longDescription = ''
       GNU ed is a line-oriented text editor. It is used to create, display,
       modify and otherwise manipulate text files, both interactively and via

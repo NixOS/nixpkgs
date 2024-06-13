@@ -24,7 +24,7 @@ buildNpmPackage rec {
 
   meta = {
     changelog = "https://github.com/DavidAnson/markdownlint-cli2/blob/${src.rev}/CHANGELOG.md";
-    description = "A fast, flexible, configuration-based command-line interface for linting Markdown/CommonMark files with the markdownlint library";
+    description = "Fast, flexible, configuration-based command-line interface for linting Markdown/CommonMark files with the markdownlint library";
     homepage = "https://github.com/DavidAnson/markdownlint-cli2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];

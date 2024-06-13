@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib bzip2 libmcrypt libmhash ];
 
   meta = with lib; {
-    description = "A small library to encapsulate data in an encrypted structure";
+    description = "Small library to encapsulate data in an encrypted structure";
     homepage = "https://libgringotts.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

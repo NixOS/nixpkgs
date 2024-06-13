@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A command-line shell like fish, but POSIX compatible";
+    description = "Command-line shell like fish, but POSIX compatible";
     mainProgram = "nsh";
     homepage = "https://github.com/nuta/nsh";
     changelog = "https://github.com/nuta/nsh/raw/v${version}/docs/changelog.md";

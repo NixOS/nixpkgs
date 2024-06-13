@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils";
-  version = "8.2.4";
+  version = "9.0.1";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7PVTf+q5JkG5nXSC9VHyGV06W9NKzvnVK/v/NTpgc5c=";
+    hash = "sha256-0PTbD70VHAzxb4SusqUA9ulQCXMlRvRNr6uNIEm7uAU=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -124,11 +124,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Cocoa clipboard support only works on macOS 10.14+
     ./revert-ui-cocoa-add-clipboard-support.patch
     # Standard about panel requires AppKit and macOS 10.13+
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/99eb313ddbbcf73c1adcdadceba1423b691c6d05.diff";
-      sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
-      revert = true;
-    })
+    ./revert-ui-cocoa-use-the-standard-about-panel.patch
+    # Safe area insets require macOS 11+
+    ./remove-ui-cocoa-use-safe-area-insets.patch
     # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
     (fetchpatch {
       url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
@@ -239,6 +237,10 @@ stdenv.mkDerivation (finalAttrs: {
     # get-fsinfo attempts to access block devices, disallowed by sandbox
     sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
       ../tests/unit/test-qga.c
+
+    # xattrs are not allowed in the sandbox
+    substituteInPlace ../tests/qtest/virtio-9p-test.c \
+      --replace-fail mapped-xattr mapped-file
   '' + lib.optionalString stdenv.isDarwin ''
     # skip test that stalls on darwin, perhaps due to subtle differences
     # in fifo behaviour
@@ -270,7 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.qemu.org/";
-    description = "A generic and open source machine emulator and virtualizer";
+    description = "Generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco qyliss ];
     platforms = platforms.unix;

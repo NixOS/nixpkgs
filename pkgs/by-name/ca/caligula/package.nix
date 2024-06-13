@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   RUSTFLAGS = "--cfg tracing_unstable";
 
   meta = with lib; {
-    description = "A user-friendly, lightweight TUI for disk imaging";
+    description = "User-friendly, lightweight TUI for disk imaging";
     homepage = "https://github.com/ifd3f/caligula/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ifd3f sodiboo ];

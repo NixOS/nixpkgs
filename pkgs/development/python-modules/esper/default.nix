@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "esper" ];
 
   meta = {
-    description = "An ECS (Entity Component System) for Python";
+    description = "ECS (Entity Component System) for Python";
     homepage = "https://github.com/benmoran56/esper";
     changelog = "https://github.com/benmoran56/esper/blob/${src.rev}/RELEASE_NOTES";
     license = lib.licenses.mit;

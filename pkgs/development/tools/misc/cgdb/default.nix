@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses readline flex texinfo ];
 
   meta = with lib; {
-    description = "A curses interface to gdb";
+    description = "Curses interface to gdb";
     mainProgram = "cgdb";
 
     homepage = "https://cgdb.github.io/";

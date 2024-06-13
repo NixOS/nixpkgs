@@ -107,7 +107,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "A bug and style checker for Python";
+    description = "Bug and style checker for Python";
     homepage = "https://pylint.readthedocs.io/en/stable/";
     changelog = "https://github.com/pylint-dev/pylint/releases/tag/v${version}";
     longDescription = ''

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "The library for the fast Cross-Platform Package Manager";
+    description = "Library for the fast Cross-Platform Package Manager";
     homepage = "https://github.com/mamba-org/mamba";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;

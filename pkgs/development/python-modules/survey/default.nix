@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "survey" ];
 
   meta = with lib; {
-    description = "A simple library for creating beautiful interactive prompts";
+    description = "Simple library for creating beautiful interactive prompts";
     homepage = "https://github.com/Exahilosys/survey";
     changelog = "https://github.com/Exahilosys/survey/releases/tag/v${version}";
     license = licenses.mit;

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tulip";
-  version = "5.7.3";
+  version = "5.7.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/auber/tulip-${version}_src.tar.gz";
-    hash = "sha256-arpC+FsDYGMf47phtSzyjjvDg/UYZS+akOe5CYfajdU=";
+    hash = "sha256-7z21WkPi1v2AGishDmXZPAedMjgXPRnpUiHTzEnc5LY=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ]
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    description = "A visualization framework for the analysis and visualization of relational data";
+    description = "Visualization framework for the analysis and visualization of relational data";
 
     longDescription =
       '' Tulip is an information visualization framework dedicated to the

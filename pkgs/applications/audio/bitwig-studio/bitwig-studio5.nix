@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A digital audio workstation";
+    description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
       production, performance and DJing, with a focus on flexible

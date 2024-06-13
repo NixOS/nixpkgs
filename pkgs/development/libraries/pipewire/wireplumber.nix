@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A modular session / policy manager for PipeWire";
+    description = "Modular session / policy manager for PipeWire";
     homepage = "https://pipewire.org";
     license = licenses.mit;
     platforms = platforms.linux;

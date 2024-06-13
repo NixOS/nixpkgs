@@ -235,7 +235,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://root.cern/";
-    description = "A data analysis framework";
+    description = "Data analysis framework";
     platforms = platforms.unix;
     maintainers = [ maintainers.guitargeek maintainers.veprbl ];
     license = licenses.lgpl21;

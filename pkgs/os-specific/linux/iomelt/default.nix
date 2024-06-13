@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A simple yet effective way to benchmark disk IO in Linux systems";
+    description = "Simple yet effective way to benchmark disk IO in Linux systems";
     homepage = "https://github.com/camposr/iomelt";
     maintainers = with maintainers; [ raspher ];
     license = licenses.artistic2;

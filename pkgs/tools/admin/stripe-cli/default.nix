@@ -60,7 +60,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://stripe.com/docs/stripe-cli";
     changelog = "https://github.com/stripe/stripe-cli/releases/tag/v${version}";
-    description = "A command-line tool for Stripe";
+    description = "Command-line tool for Stripe";
     longDescription = ''
       The Stripe CLI helps you build, test, and manage your Stripe integration
       right from the terminal.

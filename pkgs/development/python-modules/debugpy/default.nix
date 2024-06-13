@@ -133,7 +133,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "debugpy" ];
 
   meta = with lib; {
-    description = "An implementation of the Debug Adapter Protocol for Python";
+    description = "Implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
     changelog = "https://github.com/microsoft/debugpy/releases/tag/v${version}";
     license = licenses.mit;

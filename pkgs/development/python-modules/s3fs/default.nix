@@ -41,7 +41,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "s3fs" ];
 
   meta = with lib; {
-    description = "A Pythonic file interface for S3";
+    description = "Pythonic file interface for S3";
     homepage = "https://github.com/fsspec/s3fs";
     changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;

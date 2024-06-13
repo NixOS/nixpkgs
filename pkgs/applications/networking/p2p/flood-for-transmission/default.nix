@@ -26,7 +26,7 @@ buildNpmPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Flood clone for Transmission";
+    description = "Flood clone for Transmission";
     homepage = "https://github.com/johman10/flood-for-transmission";
     maintainers = with maintainers; [ al3xtjames ];
     license = licenses.gpl3Only;

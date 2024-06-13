@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     sha256 = sourceSha256;
   };
 
-  patches = [
+  patches = lib.optionals (lib.versionOlder version "5.4") [
     (fetchpatch {
       name = "fix-gcc13-build";
       url = "https://github.com/InsightSoftwareConsortium/ITK/commit/9a719a0d2f5f489eeb9351b0ef913c3693147a4f.patch";

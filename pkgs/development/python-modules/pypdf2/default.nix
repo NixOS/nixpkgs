@@ -1,18 +1,17 @@
 {
-  lib,
   buildPythonPackage,
   fetchPypi,
   flit-core,
+  lib,
   pythonOlder,
   typing-extensions,
-  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pypdf2";
   version = "3.0.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyPDF2";
@@ -22,14 +21,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies = lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  # no test
+  doCheck = false;
 
   pythonImportsCheck = [ "PyPDF2" ];
 
   meta = with lib; {
-    description = "A Pure-Python library built as a PDF toolkit";
+    description = "Pure-Python library built as a PDF toolkit";
     homepage = "https://pypdf2.readthedocs.io/";
     changelog = "https://github.com/py-pdf/PyPDF2/raw/${version}/CHANGELOG.md";
     license = licenses.bsd3;

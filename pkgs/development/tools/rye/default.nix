@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A tool to easily manage python dependencies and environments";
+    description = "Tool to easily manage python dependencies and environments";
     homepage = "https://github.com/mitsuhiko/rye";
     changelog = "https://github.com/mitsuhiko/rye/releases/tag/${version}";
     license = licenses.mit;

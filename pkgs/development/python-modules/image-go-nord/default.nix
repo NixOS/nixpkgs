@@ -25,7 +25,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A tool that can convert rgb images to nordtheme palette";
+    description = "Tool that can convert rgb images to nordtheme palette";
     homepage = "https://github.com/Schrodinger-Hat/ImageGoNord-pip";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];

@@ -65,7 +65,7 @@ stdenv.mkDerivation {
 
   meta = {
     isIbusEngine = true;
-    description = "An IBus engine for users of the Cangjie and Quick input methods";
+    description = "IBus engine for users of the Cangjie and Quick input methods";
     mainProgram = "ibus-setup-cangjie";
     homepage = "https://github.com/Cangjians/ibus-cangjie";
     license = lib.licenses.gpl3Plus;

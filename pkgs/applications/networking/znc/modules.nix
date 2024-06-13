@@ -34,7 +34,7 @@ in
     };
 
     meta = with lib; {
-      description = "Request backlog for IRC channels.";
+      description = "Request backlog for IRC channels";
       homepage = "https://github.com/fruitiex/znc-backlog/";
       license = licenses.asl20;
       maintainers = [ ];
@@ -154,7 +154,7 @@ in
     };
 
     meta = with lib; {
-      description = "An advanced playback module for ZNC";
+      description = "Advanced playback module for ZNC";
       homepage = "https://github.com/jpnurmi/znc-playback";
       license = licenses.asl20;
       maintainers = with maintainers; [ hrdinka ];

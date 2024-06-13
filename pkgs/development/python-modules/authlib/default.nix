@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "authlib";
-  version = "1.3.0";
+  version = "1.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "lepture";
     repo = "authlib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XHzABjGpZN6ilYuBYyGF3Xy/+AT2DXick8/A4JkyWBA=";
+    hash = "sha256-5AZca4APi2gLwj/AHtXOPzIFnJkCmK9mDV0bAAvIx8A=";
   };
 
   propagatedBuildInputs = [

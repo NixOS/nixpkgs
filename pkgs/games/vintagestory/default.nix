@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An in-development indie sandbox game about innovation and exploration";
+    description = "In-development indie sandbox game about innovation and exploration";
     homepage = "https://www.vintagestory.at/";
     license = licenses.unfree;
     maintainers = with maintainers; [ artturin gigglesquid ];

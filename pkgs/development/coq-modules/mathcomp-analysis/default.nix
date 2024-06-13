@@ -9,6 +9,8 @@ let
   repo  = "analysis";
   owner = "math-comp";
 
+  release."1.2.0".sha256 = "sha256-w6BivDM4dF4Iv4rUTy++2feweNtMAJxgGExPfYGhXxo=";
+  release."1.1.0".sha256 = "sha256-wl4kZf4mh9zbFfGcqaFEgWRyp0Bj511F505mYodpS6o=";
   release."1.0.0".sha256 = "sha256-KiXyaWB4zQ3NuXadq4BSWfoN1cIo1xiLVSN6nW03tC4=";
   release."0.7.0".sha256 = "sha256-JwkyetXrFsFHqz8KY3QBpHsrkhmEFnrCGuKztcoen60=";
   release."0.6.7".sha256 = "sha256-3i2PBMEwihwgwUmnS0cmrZ8s+aLPFVq/vo0aXMUaUyA=";
@@ -29,7 +31,7 @@ let
   release."0.2.3".sha256 = "0p9mr8g1qma6h10qf7014dv98ln90dfkwn76ynagpww7qap8s966";
 
   defaultVersion = with versions; lib.switch [ coq.version mathcomp.version ]  [
-      { cases = [ (range "8.17" "8.19") (range "2.0.0" "2.2.0") ]; out = "1.0.0"; }
+      { cases = [ (range "8.17" "8.19") (range "2.0.0" "2.2.0") ]; out = "1.1.0"; }
       { cases = [ (range "8.17" "8.19") (range "1.17.0" "1.19.0") ]; out = "0.7.0"; }
       { cases = [ (range "8.17" "8.18") (range "1.15.0" "1.18.0") ]; out = "0.6.7"; }
       { cases = [ (range "8.17" "8.18") (range "1.15.0" "1.18.0") ]; out = "0.6.6"; }

@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.thimeo.com/stereo-tool/";
-    description = "Stereo Tool is a software-based audio processor which offers outstanding audio quality and comes with many unique features.";
+    description = "Stereo Tool is a software-based audio processor which offers outstanding audio quality and comes with many unique features";
     license = licenses.unfree;
     mainProgram = "stereo_tool_gui";
     platforms = [ "aarch64-linux" "aarch32-linux" "x86_64-linux" "i686-linux" ];

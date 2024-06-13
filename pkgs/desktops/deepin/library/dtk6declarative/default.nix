@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" "doc" ];
 
   meta = {
-    description = "A widget development toolkit based on QtQuick/QtQml";
+    description = "Widget development toolkit based on QtQuick/QtQml";
     mainProgram = "dtk-exhibition";
     homepage = "https://github.com/linuxdeepin/dtk6declarative";
     license = lib.licenses.lgpl3Plus;

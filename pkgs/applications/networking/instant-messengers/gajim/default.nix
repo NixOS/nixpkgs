@@ -21,11 +21,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.8.4";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-WPzth7HOAbPVJpvN8zSZJGUzsBtACNlwHrHhDPlOScU=";
+    hash = "sha256-eiRLQZr60BvjqqnoYEY+LswgW6e+S9mTLvBKVCXrCzI=";
   };
 
   format = "pyproject";
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools packaging gssapi
-    omemo-dr qrcode
+    omemo-dr qrcode sqlalchemy emoji
   ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
     ++ lib.optional enableRST docutils
     ++ extraPythonPackages python3.pkgs;

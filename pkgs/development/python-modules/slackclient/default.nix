@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "slackclient";
-  version = "3.27.2";
+  version = "3.28.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1I08OUseiwCN9vUd56f9IFzCSB9kGjTLojyWm2dIimE=";
+    hash = "sha256-rsJLjqP1XT1JkFz3iQovF58XdkmVcL+jfjiiI9SqonE=";
   };
 
   propagatedBuildInputs = [
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "slack" ];
 
   meta = with lib; {
-    description = "A client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API";
+    description = "Client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API";
     homepage = "https://github.com/slackapi/python-slackclient";
     changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/v${version}";
     license = licenses.mit;

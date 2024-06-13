@@ -191,7 +191,7 @@ python3Packages.buildPythonApplication {
   passthru.isl = isl;
 
   meta = with lib; {
-    description = "A Scalable, User-Friendly Source Control System";
+    description = "Scalable, User-Friendly Source Control System";
     homepage = "https://sapling-scm.com";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ pbar thoughtpolice ];

@@ -6,8 +6,8 @@
 # Client | clat    Address: 192.0.0.1/32  (configured via clatd)
 #        |         Route:   default
 #        |
-#        | eth1    Address: 2001:db8::2/64
-#        |  |      Route:   default via 2001:db8::1
+#        | eth1    Address: Assigned via SLAAC within 2001:db8::/64
+#        |  |      Route:   default via IPv6LL address
 #        +--|---
 #           | VLAN 3
 #        +--|---
@@ -31,7 +31,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 {
   name = "clatd";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ hax404 ];
+    maintainers = [ hax404 jmbaur ];
   };
 
   nodes = {
@@ -66,18 +66,19 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     };
 
     # The router is configured with static IPv4 addresses towards the server
-    # and IPv6 addresses towards the client. For NAT64, the Well-Known prefix
-    # 64:ff9b::/96 is used. NAT64 is done with TAYGA which provides the
-    # tun-interface nat64 and does the translation over it. The IPv6 packets
-    # are sent to this interfaces and received as IPv4 packets and vice versa.
-    # As TAYGA only translates IPv6 addresses to dedicated IPv4 addresses, it
-    # needs a pool of IPv4 addresses which must be at least as big as the
-    # expected amount of clients. In this test, the packets from the pool are
-    # directly routed towards the client. In normal cases, there would be a
-    # second source NAT44 to map all clients behind one IPv4 address.
+    # and IPv6 addresses towards the client. DNS64 is exposed towards the
+    # client so clatd is able to auto-discover the PLAT prefix. For NAT64, the
+    # Well-Known prefix 64:ff9b::/96 is used. NAT64 is done with TAYGA which
+    # provides the tun-interface nat64 and does the translation over it. The
+    # IPv6 packets are sent to this interfaces and received as IPv4 packets and
+    # vice versa. As TAYGA only translates IPv6 addresses to dedicated IPv4
+    # addresses, it needs a pool of IPv4 addresses which must be at least as
+    # big as the expected amount of clients. In this test, the packets from the
+    # pool are directly routed towards the client. In normal cases, there would
+    # be a second source NAT44 to map all clients behind one IPv4 address.
     router = {
       boot.kernel.sysctl = {
-        "net.ipv4.ip_forward" = 1;
+        "net.ipv4.conf.all.forwarding" = 1;
         "net.ipv6.conf.all.forwarding" = 1;
       };
 
@@ -100,6 +101,36 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             addresses = [ { address = "2001:db8::1"; prefixLength = 64; } ];
           };
         };
+      };
+
+      systemd.network.networks."40-eth2" = {
+        networkConfig.IPv6SendRA = true;
+        ipv6Prefixes = [ { Prefix = "2001:db8::/64"; } ];
+        ipv6PREF64Prefixes = [ { Prefix = "64:ff9b::/96"; } ];
+        ipv6SendRAConfig = {
+          EmitDNS = true;
+          DNS = "_link_local";
+        };
+      };
+
+      services.resolved.extraConfig = ''
+        DNSStubListener=no
+      '';
+
+      networking.extraHosts = ''
+        192.0.0.171 ipv4only.arpa
+        192.0.0.170 ipv4only.arpa
+      '';
+
+      services.coredns = {
+        enable = true;
+        config = ''
+          .:53 {
+            bind ::
+            hosts /etc/hosts
+            dns64 64:ff9b::/96
+          }
+        '';
       };
 
       services.tayga = {
@@ -127,10 +158,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       };
     };
 
-    # The client is configured with static IPv6 addresses. It has also a static
-    # default route towards the router. To reach the IPv4-only server, the
-    # client starts the clat daemon which starts and configures the local
-    # IPv4 -> IPv6 translation via Tayga.
+    # The client uses SLAAC to assign IPv6 addresses. To reach the IPv4-only
+    # server, the client starts the clat daemon which starts and configures the
+    # local IPv4 -> IPv6 translation via Tayga after discovering the PLAT
+    # prefix via DNS64.
     client = {
       virtualisation.vlans = [
         3 # towards router
@@ -145,25 +176,36 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         enable = true;
         networks."vlan1" = {
           matchConfig.Name = "eth1";
-          address = [
-            "2001:db8::2/64"
-          ];
-          routes = [
-            { Destination = "::/0"; Gateway = "2001:db8::1"; }
-          ];
+
+          # NOTE: clatd does not actually use the PREF64 prefix discovered by
+          # systemd-networkd (nor does systemd-networkd do anything with it,
+          # yet), but we set this to confirm it works. See the test script
+          # below.
+          ipv6AcceptRAConfig.UsePREF64 = true;
         };
       };
 
       services.clatd = {
         enable = true;
-        settings.plat-prefix = "64:ff9b::/96";
+        # NOTE: Perl's Net::DNS resolver does not seem to work well querying
+        # for AAAA records to systemd-resolved's default IPv4 bind address
+        # (127.0.0.53), so we add an IPv6 listener address to systemd-resolved
+        # and tell clatd to use that instead.
+        settings.dns64-servers = "::1";
       };
+
+      # Allow clatd to find dns server. See comment above.
+      services.resolved.extraConfig = ''
+        DNSStubListenerExtra=::1
+      '';
 
       environment.systemPackages = [ pkgs.mtr ];
     };
   };
 
   testScript = ''
+    import json
+
     start_all()
 
     # wait for all machines to start up
@@ -177,6 +219,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       client.wait_until_succeeds(
         'journalctl -u clatd -e | grep -q "Starting up TAYGA, using config file"'
       )
+
+    with subtest("networkd exports PREF64 prefix"):
+      assert json.loads(client.succeed("networkctl status eth1 --json=short"))[
+          "NDisc"
+      ]["PREF64"][0]["Prefix"] == [0x0, 0x64, 0xFF, 0x9B] + ([0] * 12)
 
     with subtest("Test ICMP"):
       client.wait_until_succeeds("ping -c 3 100.64.0.2 >&2")

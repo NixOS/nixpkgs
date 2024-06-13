@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "klaus";
-  version = "2.0.3";
+  version = "3.0.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jonashaag";
     repo = pname;
     rev = version;
-    hash = "sha256-VAwIdmwdo/Rim2sVlR605Wo5/zkNOMiGkh40qLrENmU=";
+    hash = "sha256-BcLlvZ9Ip3laL0cLkqK+mhB+S7ubB4TuZ0VKXOOX3oA=";
   };
 
   prePatch = ''
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The first Git web viewer that Just Works";
+    description = "First Git web viewer that Just Works";
     mainProgram = "klaus";
     homepage = "https://github.com/jonashaag/klaus";
     license = licenses.isc;

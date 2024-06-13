@@ -25,7 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/humio/cli";
-    description = "A CLI for managing and sending data to Humio";
+    description = "CLI for managing and sending data to Humio";
     license = licenses.asl20;
     maintainers = with maintainers; [ lucperkins ];
     mainProgram = "humioctl";

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://buck.build/";
-    description = "A high-performance build tool";
+    description = "High-performance build tool";
     mainProgram = "buck";
     maintainers = [ maintainers.jgertm ];
     license = licenses.asl20;

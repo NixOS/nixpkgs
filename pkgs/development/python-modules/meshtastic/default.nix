@@ -4,6 +4,7 @@
   buildPythonPackage,
   dotmap,
   fetchFromGitHub,
+  packaging,
   pexpect,
   protobuf,
   pygatt,
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   dependencies = [
     bleak
     dotmap
+    packaging
     pexpect
     protobuf
     pygatt

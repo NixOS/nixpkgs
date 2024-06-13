@@ -55,7 +55,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lacuscore" ];
 
   meta = with lib; {
-    description = "The modulable part of Lacus";
+    description = "Modulable part of Lacus";
     homepage = "https://github.com/ail-project/LacusCore";
     changelog = "https://github.com/ail-project/LacusCore/releases/tag/v${version}";
     license = licenses.bsd3;

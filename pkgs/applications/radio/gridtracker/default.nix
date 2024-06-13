@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "An amateur radio companion to WSJT-X or JTDX";
+    description = "Amateur radio companion to WSJT-X or JTDX";
     mainProgram = "gridtracker";
     longDescription = ''
       GridTracker listens to traffic from WSJT-X/JTDX, displays it on a map,

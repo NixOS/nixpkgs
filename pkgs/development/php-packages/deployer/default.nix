@@ -19,7 +19,7 @@ php.buildComposerProject (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/deployphp/deployer/releases/tag/v${finalAttrs.version}";
-    description = "The PHP deployment tool with support for popular frameworks out of the box";
+    description = "PHP deployment tool with support for popular frameworks out of the box";
     homepage = "https://deployer.org/";
     license = lib.licenses.mit;
     mainProgram = "dep";

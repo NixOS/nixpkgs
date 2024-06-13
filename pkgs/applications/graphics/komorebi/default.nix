@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   passthru.tests.version = testers.testVersion { package = komorebi; };
 
   meta = with lib; {
-    description = "A beautiful and customizable wallpaper manager for Linux";
+    description = "Beautiful and customizable wallpaper manager for Linux";
     homepage = "https://github.com/Komorebi-Fork/komorebi";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kranzes ];

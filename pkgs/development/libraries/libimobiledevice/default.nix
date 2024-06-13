@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/libimobiledevice";
-    description = "A software library that talks the protocols to support iPhone®, iPod Touch® and iPad® devices on Linux";
+    description = "Software library that talks the protocols to support iPhone®, iPod Touch® and iPad® devices on Linux";
     longDescription = ''
       libimobiledevice is a software library that talks the protocols to support
       iPhone®, iPod Touch® and iPad® devices on Linux. Unlike other projects, it

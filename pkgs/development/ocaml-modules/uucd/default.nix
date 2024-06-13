@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ xmlm ];
 
   meta = with lib; {
-    description = "An OCaml module to decode the data of the Unicode character database from its XML representation";
+    description = "OCaml module to decode the data of the Unicode character database from its XML representation";
     homepage = webpage;
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.vbgl ];

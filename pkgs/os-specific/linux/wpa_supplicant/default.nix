@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://w1.fi/wpa_supplicant/";
-    description = "A tool for connecting to WPA and WPA2-protected wireless networks";
+    description = "Tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marcweber ma27 ];
     platforms = platforms.linux;

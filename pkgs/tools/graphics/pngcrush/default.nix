@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://pmt.sourceforge.net/pngcrush";
-    description = "A PNG optimizer";
+    description = "PNG optimizer";
     license = lib.licenses.free;
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "pngcrush";

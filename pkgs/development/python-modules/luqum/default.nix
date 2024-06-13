@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A lucene query parser generating ElasticSearch queries";
+    description = "Lucene query parser generating ElasticSearch queries";
     homepage = "https://github.com/jurismarches/luqum";
     changelog = "https://github.com/jurismarches/luqum/releases/tag/${version}";
     license = licenses.asl20;

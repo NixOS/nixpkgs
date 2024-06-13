@@ -41,7 +41,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "The official Twitch CLI to make developing on Twitch easier";
+    description = "Official Twitch CLI to make developing on Twitch easier";
     mainProgram = "twitch-cli";
     homepage = "https://github.com/twitchdev/twitch-cli";
     license = licenses.asl20;

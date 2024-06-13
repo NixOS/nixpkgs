@@ -24,23 +24,8 @@ function get_hash() {
     nix hash to-sri "sha256:$pkg_hash"
 }
 
-# aarch64-darwin
-# reset version first so that all platforms are always updated and in sync
-update-source-version recyclarr 0 "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" --system="aarch64-darwin"
-update-source-version recyclarr "$latestVersion" $(get_hash osx arm64 "$latestVersion") --system="aarch64-darwin"
-
-# x86_64-darwin
-# reset version first so that all platforms are always updated and in sync
-update-source-version recyclarr 0 "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" --system="x86_64-darwin"
-update-source-version recyclarr "$latestVersion" $(get_hash osx x64 "$latestVersion") --system="x86_64-darwin"
-
-# aarch64-linux
-# reset version first so that all platforms are always updated and in sync
-update-source-version recyclarr 0 "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" --system="aarch64-linux"
-update-source-version recyclarr "$latestVersion" $(get_hash linux arm64 "$latestVersion") --system="aarch64-linux"
-
-# x86_64-linux
-# reset version first so that all platforms are always updated and in sync
-update-source-version recyclarr 0 "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" --system="x86_64-linux"
-update-source-version recyclarr "$latestVersion" $(get_hash linux x64 "$latestVersion") --system="x86_64-linux"
+update-source-version recyclarr "$latestVersion" $(get_hash osx arm64 "$latestVersion") --system="aarch64-darwin" --ignore-same-version
+update-source-version recyclarr "$latestVersion" $(get_hash osx x64 "$latestVersion") --system="x86_64-darwin" --ignore-same-version
+update-source-version recyclarr "$latestVersion" $(get_hash linux arm64 "$latestVersion") --system="aarch64-linux" --ignore-same-version
+update-source-version recyclarr "$latestVersion" $(get_hash linux x64 "$latestVersion") --system="x86_64-linux" --ignore-same-version
 

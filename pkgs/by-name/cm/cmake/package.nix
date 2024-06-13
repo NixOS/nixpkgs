@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, substituteAll
 , buildPackages
 , bzip2
 , curlMinimal
@@ -47,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.29.2";
+  version = "3.29.3";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-NttLaSaqt0G6bksuotmckZMiITIwi03IJNQSPLcwNS4=";
+    hash = "sha256-JSruFEjUnKoElU/V4n0YndUVcFVzE+eygWNnFqI4vMs=";
   };
 
   patches = [
@@ -66,7 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
   ++ lib.optional (stdenv.isDarwin && isMinimalBuild) ./005-remove-systemconfiguration-dep.diff
   # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
-  ++ lib.optional stdenv.isDarwin ./006-darwin-always-set-runtime-c-flag.diff;
+  ++ lib.optional stdenv.isDarwin ./006-darwin-always-set-runtime-c-flag.diff
+  # On platforms where ps is not part of stdenv, patch the invocation of ps to use an absolute path.
+  ++ lib.optional (stdenv.isDarwin || stdenv.isFreeBSD) (
+    substituteAll {
+      src = ./007-darwin-bsd-ps-abspath.diff;
+      ps = lib.getExe ps;
+    });
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
   separateDebugInfo = true;
@@ -100,8 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional qt5UI qtbase
   ++ lib.optional stdenv.isDarwin CoreServices
   ++ lib.optional (stdenv.isDarwin && !isMinimalBuild) SystemConfiguration;
-
-  propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
 
   preConfigure = ''
     fixCmakeFiles .

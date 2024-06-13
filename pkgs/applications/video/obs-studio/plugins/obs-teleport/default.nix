@@ -45,7 +45,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An OBS Studio plugin for an open NDI-like replacement";
+    description = "OBS Studio plugin for an open NDI-like replacement";
     homepage = "https://github.com/fzwoch/obs-teleport";
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;

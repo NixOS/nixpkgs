@@ -81,7 +81,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
+    description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
     changelog = "https://github.com/py-pdf/pypdf/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;

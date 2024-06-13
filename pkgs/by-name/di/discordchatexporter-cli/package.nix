@@ -35,7 +35,7 @@ buildDotnetModule rec {
   };
 
   meta = with lib; {
-    description = "A tool to export Discord chat logs to a file";
+    description = "Tool to export Discord chat logs to a file";
     homepage = "https://github.com/Tyrrrz/DiscordChatExporter";
     license = licenses.gpl3Plus;
     changelog = "https://github.com/Tyrrrz/DiscordChatExporter/blob/${version}/Changelog.md";

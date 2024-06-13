@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "wayback_machine_archiver" ];
 
   meta = with lib; {
-    description = "A Python script to submit web pages to the Wayback Machine for archiving";
+    description = "Python script to submit web pages to the Wayback Machine for archiving";
     homepage = "https://github.com/agude/wayback-machine-archiver";
     license = licenses.mit;
     maintainers = with maintainers; [ dandellion ];

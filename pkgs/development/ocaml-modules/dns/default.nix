@@ -33,7 +33,7 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
 
   meta = {
-    description = "An Domain Name System (DNS) library";
+    description = "Domain Name System (DNS) library";
     homepage = "https://github.com/mirage/ocaml-dns";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];

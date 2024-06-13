@@ -19,6 +19,7 @@ dotnet.section.md
 emscripten.section.md
 gnome.section.md
 go.section.md
+hare.section.md
 haskell.section.md
 hy.section.md
 idris.section.md

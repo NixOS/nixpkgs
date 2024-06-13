@@ -1,29 +1,30 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, autoPatchelfHook
-, zlib
-, libgcc
-, fontconfig
-, libX11
-, lttng-ust
-, icu
-, libICE
-, libSM
-, libXcursor
-, openssl
-, imagemagick
-, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  zlib,
+  libgcc,
+  fontconfig,
+  libX11,
+  lttng-ust,
+  icu,
+  libICE,
+  libSM,
+  libXcursor,
+  openssl,
+  imagemagick,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lunacy";
-  version = "9.6.1";
+  version = "9.6.2";
 
   src = fetchurl {
     url = "https://lcdn.icons8.com/setup/Lunacy_${finalAttrs.version}.deb";
-    hash = "sha256-w7qw5HyJcEjeujz54bTkkofmzacIBLYqJvVuldvbytE=";
+    hash = "sha256-iTne+vUnv+O/+QUKgSUr+ACdZpXrvRQkZmqghJH1fDw=";
   };
 
   unpackCmd = ''
@@ -52,16 +53,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # adds to the RPATHS of all shared objects (exe and libs)
-  appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [
-    icu
-    openssl
-    stdenv.cc.libc
-    stdenv.cc.cc
-  ] ++ [
-    # technically, this should be in runtimeDependencies but will not work as
-    # "lib" is appended to all elements in the array
-    "${placeholder "out"}/lib/lunacy"
-  ];
+  appendRunpaths =
+    map (pkg: (lib.getLib pkg) + "/lib") [
+      icu
+      openssl
+      stdenv.cc.libc
+      stdenv.cc.cc
+    ]
+    ++ [
+      # technically, this should be in runtimeDependencies but will not work as
+      # "lib" is appended to all elements in the array
+      "${placeholder "out"}/lib/lunacy"
+    ];
 
   # will add to the RPATH of executable only
   runtimeDependencies = [
@@ -91,8 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     substituteInPlace $out/share/applications/lunacy.desktop \
-      --replace "Exec=/opt/icons8/lunacy/Lunacy" "Exec=lunacy" \
-      --replace "Icon=/opt/icons8/lunacy/Assets/LunacyLogo.png" "Icon=lunacy"
+      --replace-fail "Exec=/opt/icons8/lunacy/Lunacy" "Exec=lunacy" \
+      --replace-fail "Icon=/opt/icons8/lunacy/Assets/LunacyLogo.png" "Icon=lunacy"
   '';
 
   postFixup = ''
@@ -102,15 +105,17 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper "$out/lib/lunacy/Lunacy" "$out/bin/lunacy"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free design software that keeps your flow with AI tools and built-in graphics";
     homepage = "https://icons8.com/lunacy";
     changelog = "https://lunacy.docs.icons8.com/release-notes/";
-    license = licenses.unfree;
-    maintainers = [ maintainers.eliandoran ];
-    platforms = platforms.linux;
-    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
+      eliandoran
+      luftmensch-luftmensch
+    ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     mainProgram = "lunacy";
   };
-
 })

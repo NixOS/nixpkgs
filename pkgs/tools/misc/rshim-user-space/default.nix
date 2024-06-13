@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rshim-user-space";
-  version = "2.0.20";
+  version = "2.0.32";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = pname;
     rev = "rshim-${version}";
-    hash = "sha256-zm1cMTna9o8edl0M7tjUhbnElbUkQZSkh3KOI6tbE6I=";
+    hash = "sha256-GF7cKIf72EYRBRb6d3IWONE7YJwohTLKF1RGdDMTG6c=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
     libusb1
     fuse
   ];
+
+  prePatch = ''
+    patchShebangs scripts/bfb-install
+  '';
 
   strictDeps = true;
 

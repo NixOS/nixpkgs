@@ -21,7 +21,7 @@ buildPythonPackage {
 
   meta = {
     homepage = "https://github.com/agramfort/tempita";
-    description = "A very small text templating language";
+    description = "Very small text templating language";
     license = lib.licenses.mit;
   };
 }

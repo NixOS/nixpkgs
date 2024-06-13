@@ -1,9 +1,10 @@
 { lib, stdenv
 , fetchFromGitLab
+, callPackage
 
 , cmake
 , ninja
-, mbedtls_2
+, mbedtls
 , libxcrypt
 
 , enableCache     ? true     # Internal cache support.
@@ -16,19 +17,19 @@
 , enableToolkit   ? true     # The URL Toolkit.
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hiawatha";
-  version = "10.11";
+  version = "11.5";
 
   src = fetchFromGitLab {
     owner = "hsleisink";
     repo = "hiawatha";
-    rev = "v${version}";
-    sha256 = "10a7dqj37zrbmgnhwsw0mqm5x25kasl8p95g01rzakviwxkdrkid";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kswVBVL/QUQmCwH74qWwSwLz4uwDymuHIr8NokrrgEM=";
   };
 
   nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ mbedtls_2 libxcrypt ] ++ lib.optionals enableXslt [ libxslt libxml2 ];
+  buildInputs = [ mbedtls libxcrypt ] ++ lib.optionals enableXslt [ libxslt libxml2 ];
 
   prePatch = ''
     substituteInPlace CMakeLists.txt --replace SETUID ""
@@ -46,12 +47,18 @@ stdenv.mkDerivation rec {
     ( if enableToolkit   then "-DENABLE_TOOLKIT=on"     else "-DENABLE_TOOLKIT=off"     )
   ];
 
+  passthru.tests.serve-static-files = callPackage ./test.nix {
+    hiawatha = finalAttrs.finalPackage;
+    inherit enableTls;
+  };
+
   meta = with lib; {
-    homepage = "https://www.hiawatha-webserver.org";
-    description = "An advanced and secure webserver";
+    homepage = "https://hiawatha.leisink.net/";
+    description = "Advanced and secure webserver";
     license = licenses.gpl2Only;
     platforms = platforms.unix;    # "Hiawatha runs perfectly on Linux, BSD and MacOS X"
+    mainProgram = "hiawatha";
     maintainers = [];
   };
 
-}
+})

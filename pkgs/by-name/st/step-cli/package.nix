@@ -30,7 +30,7 @@ in
     vendorHash = "sha256-Z6wrWkyAGi01gH7+v2+VkyqRNqDwLFVwXm/1FIMzURg=";
 
     meta = {
-      description = "A zero trust swiss army knife for working with X509, OAuth, JWT, OATH OTP, etc";
+      description = "Zero trust swiss army knife for working with X509, OAuth, JWT, OATH OTP, etc";
       homepage = "https://smallstep.com/cli/";
       changelog = "https://github.com/smallstep/cli/blob/v${version}/CHANGELOG.md";
       license = lib.licenses.asl20;

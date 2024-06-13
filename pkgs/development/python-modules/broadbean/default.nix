@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://qcodes.github.io/broadbean";
-    description = "A library for making pulses that can be leveraged with QCoDeS";
+    description = "Library for making pulses that can be leveraged with QCoDeS";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ evilmav ];
   };

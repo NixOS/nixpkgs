@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/skywind3000/z.lua";
-    description = "A new cd command that helps you navigate faster by learning your habits";
+    description = "New cd command that helps you navigate faster by learning your habits";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
     mainProgram = "z.lua";

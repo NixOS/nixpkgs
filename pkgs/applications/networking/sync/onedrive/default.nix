@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A complete tool to interact with OneDrive on Linux";
+    description = "Complete tool to interact with OneDrive on Linux";
     mainProgram = "onedrive";
     homepage = "https://github.com/abraunegg/onedrive";
     license = licenses.gpl3Only;

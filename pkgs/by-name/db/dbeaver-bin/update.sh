@@ -20,6 +20,5 @@ do
     prefetch=$(nix-prefetch-url "https://github.com/dbeaver/dbeaver/releases/download/$latestVersion/dbeaver-ce-$latestVersion-$2")
     hash=$(nix-hash --type sha256 --to-sri $prefetch)
 
-    update-source-version dbeaver-bin 0 "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" --system=$1
-    update-source-version dbeaver-bin $latestVersion $hash --system=$1
+    update-source-version dbeaver-bin $latestVersion $hash --system=$1 --ignore-same-version
 done

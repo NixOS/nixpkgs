@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "chatgpt";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PwC/LyWGgFdj1aye8A/W9wc78z9mEbvz4DNsB0eHtl0=";
+    hash = "sha256-+U5fDG/t1x7F4h+D3rVdgvYICoQDH7dd5GUNOCkXw/Q=";
   };
 
-  vendorHash = "sha256-hmg301m4Zn7BzlOJ6VVySkxwFt7CDT7MS9EH1JqeW/E=";
+  vendorHash = "sha256-/bL9RRqNlKLqZSaym9y5A+RUDrHpv7GBR6ubZkZMPS4=";
 
   subPackages = [ "cmd/chatgpt" ];
 

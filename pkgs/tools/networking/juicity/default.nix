@@ -39,7 +39,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/juicity/juicity";
-    description = "A quic-based proxy protocol";
+    description = "Quic-based proxy protocol";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ oluceps ];
   };

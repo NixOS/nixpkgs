@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool to investigate the history of source code";
+    description = "Tool to investigate the history of source code";
     homepage = "https://www.syntevo.com/deepgit";
     changelog = "https://www.syntevo.com/deepgit/changelog.txt";
     license = licenses.unfree;

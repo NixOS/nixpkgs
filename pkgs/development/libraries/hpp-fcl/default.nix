@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
 
   meta = with lib; {
-    description = "An extension of the Flexible Collision Library";
+    description = "Extension of the Flexible Collision Library";
     homepage = "https://github.com/humanoid-path-planner/hpp-fcl";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nim65s ];

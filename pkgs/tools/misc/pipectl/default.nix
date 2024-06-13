@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/Ferdi265/pipectl";
     license = licenses.gpl3;
-    description = "a simple named pipe management utility";
+    description = "Simple named pipe management utility";
     maintainers = with maintainers; [ synthetica ];
     mainProgram = "pipectl";
   };

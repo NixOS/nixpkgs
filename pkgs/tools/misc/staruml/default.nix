@@ -24,12 +24,12 @@ let
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.1.0";
+  version = "6.1.1";
   pname = "staruml";
 
   src = fetchurl {
       url = "https://files.staruml.io/releases-v6/StarUML_${finalAttrs.version}_amd64.deb";
-      sha256 = "sha256-ULdrAQCiQlTN+aRhETj+ASMKkKctFgC2AfvUHGc6stU=";
+      sha256 = "sha256-AtWzGEegKUDeNLhklm74JNQQqBzdOE4MUYBFp9ubd2A=";
     };
 
   nativeBuildInputs = [ wrapGAppsHook3 dpkg ];
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A sophisticated software modeler";
+    description = "Sophisticated software modeler";
     homepage = "https://staruml.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;

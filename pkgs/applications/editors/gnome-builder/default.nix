@@ -158,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "An IDE for writing GNOME-based software";
+    description = "IDE for writing GNOME-based software";
     longDescription = ''
       Global search, auto-completion, source code map, documentation
       reference, and other features expected in an IDE, but with a focus

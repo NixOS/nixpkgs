@@ -19,7 +19,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    description = "Bisect_ppx is a code coverage tool for OCaml and Reason. It helps you test thoroughly by showing what's not tested.";
+    description = "Bisect_ppx is a code coverage tool for OCaml and Reason. It helps you test thoroughly by showing what's not tested";
     homepage = "https://github.com/aantron/bisect_ppx";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A very fast tar like tape archiver with improved functionality";
+    description = "Very fast tar like tape archiver with improved functionality";
     longDescription = ''
       Star archives and extracts multiple files to and from a single file called a tarfile.
       A tarfile is usually a magnetic tape, but it can be any file.

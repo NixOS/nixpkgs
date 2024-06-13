@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "An industrial-grade brainfuck compiler";
+    description = "Industrial-grade brainfuck compiler";
     mainProgram = "bfc";
     homepage = "https://bfc.wilfred.me.uk";
     license = licenses.gpl2Plus;

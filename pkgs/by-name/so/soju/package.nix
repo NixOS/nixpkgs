@@ -39,7 +39,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A user-friendly IRC bouncer";
+    description = "User-friendly IRC bouncer";
     longDescription = ''
       soju is a user-friendly IRC bouncer. soju connects to upstream IRC servers
       on behalf of the user to provide extra functionality. soju supports many

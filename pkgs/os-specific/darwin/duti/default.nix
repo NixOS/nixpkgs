@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A command-line tool to select default applications for document types and URL schemes on Mac OS X";
+    description = "Command-line tool to select default applications for document types and URL schemes on Mac OS X";
     longDescription = ''
       duti is a command-line utility capable of setting default applications for
       various document types on Mac OS X, using Apple's Uniform Type Identifiers. A

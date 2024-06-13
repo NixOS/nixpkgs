@@ -27,7 +27,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
-    description = "A python package for server applications to retrieve client's IP address";
+    description = "Python package for server applications to retrieve client's IP address";
     homepage = "https://github.com/un33k/python-ipware";
     changelog = "https://github.com/un33k/python-ipware/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

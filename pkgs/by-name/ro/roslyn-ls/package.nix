@@ -80,7 +80,7 @@ buildDotnetModule rec {
 
   meta = {
     homepage = "https://github.com/dotnet/vscode-csharp";
-    description = "The language server behind C# Dev Kit for Visual Studio Code";
+    description = "Language server behind C# Dev Kit for Visual Studio Code";
     changelog = "https://github.com/dotnet/vscode-csharp/releases/tag/v${vsVersion}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];

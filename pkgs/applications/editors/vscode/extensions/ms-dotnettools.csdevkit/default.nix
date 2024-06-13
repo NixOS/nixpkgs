@@ -116,7 +116,7 @@ buildVscodeMarketplaceExtension {
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/ms-dotnettools.csdevkit/changelog";
-    description = "The official Visual Studio Code extension for C# from Microsoft";
+    description = "Official Visual Studio Code extension for C# from Microsoft";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.ggg ];

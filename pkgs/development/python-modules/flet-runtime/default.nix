@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
-    description = "A base package for Flet desktop and Flet mobile";
+    description = "Base package for Flet desktop and Flet mobile";
     homepage = "https://flet.dev/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lucasew ];

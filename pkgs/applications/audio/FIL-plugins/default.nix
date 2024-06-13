@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "a four-band parametric equaliser, which has the nice property of being stable even while parameters are being changed";
+    description = "Four-band parametric equaliser, which has the nice property of being stable even while parameters are being changed";
     longDescription = ''
       Each section has an active/bypass switch, frequency, bandwidth and gain controls.
       There is also a global bypass switch and gain control.

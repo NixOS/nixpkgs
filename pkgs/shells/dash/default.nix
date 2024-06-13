@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";
-    description = "A POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
+    description = "POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
     platforms = platforms.unix;
     license = with licenses; [ bsd3 gpl2Plus ];
     mainProgram = "dash";

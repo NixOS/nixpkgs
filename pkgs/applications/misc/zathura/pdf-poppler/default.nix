@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-pdf-poppler/";
-    description = "A zathura PDF plugin (poppler)";
+    description = "Zathura PDF plugin (poppler)";
     longDescription = ''
       The zathura-pdf-poppler plugin adds PDF support to zathura by
       using the poppler rendering library.

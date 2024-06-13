@@ -17,7 +17,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "0.18.0";
+  version = "0.18.1";
 in
 buildPythonPackage {
   inherit version;
@@ -44,7 +44,7 @@ buildPythonPackage {
     addOpenGLRunpath
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pillow
     torch-bin
   ];
@@ -58,20 +58,20 @@ buildPythonPackage {
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch vision library";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
-    license = licenses.bsd3;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-darwin"
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [ junjihashimoto ];
   };
 }

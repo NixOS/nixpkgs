@@ -30,7 +30,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A physics-based game vaguely similar to Incredible Machine";
+    description = "Physics-based game vaguely similar to Incredible Machine";
     mainProgram = "tbe";
     homepage = "http://the-butterfly-effect.org/";
     maintainers = [ maintainers.raskin ];

@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library to delight your users with fancy features";
+    description = "Library to delight your users with fancy features";
     mainProgram = "dazzle-list-counters";
     longDescription = ''
       The libdazzle library is a companion library to GObject and GTK. It

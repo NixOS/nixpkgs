@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://apps.kde.org/subtitlecomposer";
-    description = "An open source text-based subtitle editor";
+    description = "Open source text-based subtitle editor";
     longDescription = ''
       An open source text-based subtitle editor that supports basic and
       advanced editing operations, aiming to become an improved version of

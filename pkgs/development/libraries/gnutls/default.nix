@@ -174,7 +174,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The GNU Transport Layer Security Library";
+    description = "GNU Transport Layer Security Library";
 
     longDescription = ''
       GnuTLS is a project that aims to develop a library which

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # test result: FAILED. 5 passed; 3 failed;
 
   meta = with lib; {
-    description = "A super powered replacement for GNU Stow";
+    description = "Super powered replacement for GNU Stow";
     homepage = "https://github.com/RaphGL/Tuckr";
     changelog = "https://github.com/RaphGL/Tuckr/releases/tag/${version}";
     license = licenses.gpl3Plus;

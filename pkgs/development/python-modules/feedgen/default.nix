@@ -25,7 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Python module to generate ATOM feeds, RSS feeds and Podcasts.";
+    description = "Python module to generate ATOM feeds, RSS feeds and Podcasts";
     downloadPage = "https://github.com/lkiesow/python-feedgen/releases";
     homepage = "https://github.com/lkiesow/python-feedgen";
     license = with licenses; [

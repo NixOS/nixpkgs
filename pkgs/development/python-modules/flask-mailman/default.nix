@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/waynerv/flask-mailman";
-    description = "Flask extension providing simple email sending capabilities.";
+    description = "Flask extension providing simple email sending capabilities";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gador ];
   };

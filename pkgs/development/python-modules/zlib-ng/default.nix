@@ -56,7 +56,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A drop-in replacement for Python's zlib and gzip modules using zlib-ng";
+    description = "Drop-in replacement for Python's zlib and gzip modules using zlib-ng";
     homepage = "https://github.com/pycompression/python-zlib-ng";
     changelog = "https://github.com/pycompression/python-zlib-ng/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.psfl;

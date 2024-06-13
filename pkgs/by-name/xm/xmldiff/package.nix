@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication {
 
   meta = {
     homepage = "https://xmldiff.readthedocs.io/en/stable/";
-    description = "A library and command line utility for diffing xml";
+    description = "Library and command line utility for diffing xml";
     longDescription = ''
       xmldiff is a library and a command-line utility for making diffs out of
       XML. This may seem like something that doesn't need a dedicated utility,

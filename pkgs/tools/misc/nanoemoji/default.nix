@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A wee tool to build color fonts";
+    description = "Wee tool to build color fonts";
     homepage = "https://github.com/googlefonts/nanoemoji";
     license = licenses.asl20;
     maintainers = with maintainers; [ _999eagle ];

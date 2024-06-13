@@ -29,7 +29,7 @@ appimageTools.wrapType2 rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "Free Minecraft client with mods, cosmetics, and performance boost.";
+    description = "Free Minecraft client with mods, cosmetics, and performance boost";
     homepage = "https://www.lunarclient.com/";
     license = with licenses; [ unfree ];
     mainProgram = "lunar-client";

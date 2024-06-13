@@ -47,7 +47,7 @@ buildGoModule rec {
 
   meta = with lib; {
     changelog = "https://github.com/DeedleFake/trayscale/releases/tag/${version}";
-    description = "An unofficial GUI wrapper around the Tailscale CLI client";
+    description = "Unofficial GUI wrapper around the Tailscale CLI client";
     homepage = "https://github.com/DeedleFake/trayscale";
     license = licenses.mit;
     maintainers = with maintainers; [ patka ];

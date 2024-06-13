@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "MeCab" ];
 
   meta = with lib; {
-    description = "A python wrapper for mecab: Morphological Analysis engine";
+    description = "Python wrapper for mecab: Morphological Analysis engine";
     homepage = "https://github.com/SamuraiT/mecab-python3";
     changelog = "https://github.com/SamuraiT/mecab-python3/releases/tag/v${version}";
     license = with licenses; [

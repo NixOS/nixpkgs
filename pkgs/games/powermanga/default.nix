@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://linux.tlk.fr/games/Powermanga/";
     downloadPage = "https://linux.tlk.fr/games/Powermanga/download/";
-    description = "An arcade 2D shoot-em-up game";
+    description = "Arcade 2D shoot-em-up game";
     mainProgram = "powermanga";
     longDescription = ''
       Powermanga is an arcade 2D shoot-em-up game with 41 levels and more than

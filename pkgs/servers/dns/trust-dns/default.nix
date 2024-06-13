@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Rust based DNS client, server, and resolver";
+    description = "Rust based DNS client, server, and resolver";
     homepage = "https://trust-dns.org/";
     maintainers = with maintainers; [ colinsane ];
     platforms = platforms.linux;

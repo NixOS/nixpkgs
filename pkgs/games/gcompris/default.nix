@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   meta = with lib; {
-    description = "A high quality educational software suite, including a large number of activities for children aged 2 to 10";
+    description = "High quality educational software suite, including a large number of activities for children aged 2 to 10";
     homepage = "https://gcompris.net/";
     license = licenses.gpl3Plus;
     mainProgram = "gcompris-qt";

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--external=y" ];
 
   meta = with lib; {
-    description = "A cross-platform build utility based on Lua";
+    description = "Cross-platform build utility based on Lua";
     homepage = "https://xmake.io";
     license = licenses.asl20;
     platforms = lua.meta.platforms;

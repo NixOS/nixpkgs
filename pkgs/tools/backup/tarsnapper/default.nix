@@ -37,14 +37,19 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    nose
+    pynose
   ];
 
   # Remove standard module argparse from requirements
   pythonRemoveDeps = [ "argparse" ];
 
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ tarsnap ]}" ];
+
+  checkPhase = ''
+    runHook preCheck
+    nosetests tests
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "tarsnapper" ];
 

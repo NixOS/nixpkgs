@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ inetutils ];
 
   meta = {
-    description = "An open source small-footprint implementation of the Tcl programming language";
+    description = "Open source small-footprint implementation of the Tcl programming language";
     homepage = "http://jim.tcl.tk/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;

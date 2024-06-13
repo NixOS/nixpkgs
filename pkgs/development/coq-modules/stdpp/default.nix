@@ -29,7 +29,7 @@ mkCoqDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An extended “Standard Library” for Coq";
+    description = "Extended “Standard Library” for Coq";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl maintainers.ineol ];
   };

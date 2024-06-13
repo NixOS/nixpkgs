@@ -22,7 +22,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pretalx_public_voting" ];
 
   meta = {
-    description = "A public voting plugin for pretalx";
+    description = "Public voting plugin for pretalx";
     homepage = "https://github.com/pretalx/pretalx-public-voting";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ wegank ];

@@ -3,6 +3,7 @@
 , gettext
 , python3
 , fetchFromGitHub
+, fetchpatch2
 , plugins ? [ ]
 , nixosTests
 }:
@@ -70,6 +71,15 @@ python.pkgs.buildPythonApplication rec {
     "static"
   ];
 
+  patches = [
+    (fetchpatch2 {
+      # Backport support for Djangorestframework 3.15.x
+      name = "pretalx-drf-3.15.patch";
+      url = "https://github.com/pretalx/pretalx/commit/43a0416c6968d64ea57720abdb82f482940b11f8.patch";
+      hash = "sha256-Iw1xVF7j7c712kwIk1SMbQSF0ixMUZr1BJib3KAb2HY=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace src/pretalx/common/management/commands/rebuild.py \
       --replace 'subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)' ""
@@ -92,10 +102,12 @@ python.pkgs.buildPythonApplication rec {
     "django-csp"
     "django-filter"
     "django-hierarkey"
+    "djangorestframework"
     "markdown"
     "pillow"
     "python-dateutil"
     "reportlab"
+    "requests"
     "rules"
   ];
 

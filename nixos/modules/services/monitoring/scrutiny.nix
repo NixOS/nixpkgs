@@ -140,8 +140,8 @@ in
 
             options.api.endpoint = mkOption {
               type = str;
-              default = "http://localhost:${toString cfg.settings.web.listen.port}";
-              defaultText = literalExpression ''"http://localhost:''${config.services.scrutiny.settings.web.listen.port}"'';
+              default = "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}";
+              defaultText = literalExpression ''"http://''${config.services.scrutiny.settings.web.listen.host}:''${config.services.scrutiny.settings.web.listen.port}"'';
               description = "Scrutiny app API endpoint for sending metrics to.";
             };
 

@@ -19,7 +19,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   meta = with lib; {
-    description = "A utility to generate documentation from Terraform modules in various output formats";
+    description = "Utility to generate documentation from Terraform modules in various output formats";
     mainProgram = "terraform-docs";
     homepage = "https://github.com/terraform-docs/terraform-docs/";
     license = licenses.mit;

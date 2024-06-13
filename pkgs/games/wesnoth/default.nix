@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
 
   meta = with lib; {
-    description = "The Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
+    description = "Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
     longDescription = ''
       The Battle for Wesnoth is a Free, turn-based tactical strategy
       game with a high fantasy theme, featuring both single-player, and

@@ -102,7 +102,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
       builtins.replaceStrings [ "." ] [ "_" ] version
     }";
-    description = "The Database Toolkit for Python";
+    description = "Database Toolkit for Python";
     homepage = "https://github.com/sqlalchemy/sqlalchemy";
     license = licenses.mit;
   };

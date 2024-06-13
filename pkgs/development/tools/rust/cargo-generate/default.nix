@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool to generate a new Rust project by leveraging a pre-existing git repository as a template";
+    description = "Tool to generate a new Rust project by leveraging a pre-existing git repository as a template";
     mainProgram = "cargo-generate";
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";

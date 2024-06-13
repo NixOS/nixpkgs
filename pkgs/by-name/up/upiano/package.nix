@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A Piano in your terminal";
+    description = "Piano in your terminal";
     homepage = "https://github.com/eliasdorneles/upiano";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

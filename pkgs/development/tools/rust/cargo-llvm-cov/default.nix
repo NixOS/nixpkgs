@@ -26,7 +26,7 @@
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.6.9";
+  version = "0.6.10";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
@@ -37,7 +37,7 @@ let
   cargoLock = fetchurl {
     name = "Cargo.lock";
     url = "https://crates.io/api/v1/crates/${pname}/${version}/download";
-    sha256 = "sha256-r4C7z2/z4OVEf+IhFe061E7FzSx0VzADmg56Lb+DO/g=";
+    sha256 = "sha256-mlmvM/7FQkhSjLtueEJqZU3D86lL8Kf1EFXiY1+b/Oo=";
     downloadToTemp = true;
     postFetch = ''
       tar xzf $downloadedFile ${pname}-${version}/Cargo.lock
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage {
     inherit owner;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fZrYmsulKOvgW/WtsYL7r4Cby+m9ShgXozxj1ZQ5ZAY=";
+    sha256 = "sha256-yF4i1V50TpR3pEqHQfAK4VTUW+GmT+XU6WVTWMzCUwo=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage {
     cp ${cargoLock} source/Cargo.lock
   '';
 
-  cargoSha256 = "sha256-pfNb5P3IG1fQdhiQE3FGW8s4Rt2YyLxTejuzs3nqZUU=";
+  cargoSha256 = "sha256-6VQEu38g5a8bfbs8P/nOa3Zg2bSYnEOClzoMF95LAHI=";
 
   # `cargo-llvm-cov` reads these environment variables to find these binaries,
   # which are needed to run the tests

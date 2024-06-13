@@ -20,7 +20,7 @@
   propagatedBuildInputs = [ mathcomp-analysis ];
 
   meta = with lib; {
-    description = "A Coq formalization of information theory and linear error-correcting codes";
+    description = "Coq formalization of information theory and linear error-correcting codes";
     license = licenses.lgpl21Plus;
   };
 }).overrideAttrs (o: {

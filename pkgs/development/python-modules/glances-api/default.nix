@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "glances-api";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-glances-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-BME73/xhNo+KmR5Fd/cFXieZ7fVTFukRg6Wkcw6r2cc=";
+    hash = "sha256-QAnwFX53jf7yWWa308/XTARNw5Qeo9K2zfD+6+HiFuM=";
   };
 
   build-system = [ poetry-core ];

@@ -121,14 +121,13 @@ stdenv'.mkDerivation (finalAttrs: {
           exit 0
       fi
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        update-source-version "yabai" "0" "${lib.fakeHash}" --source-key="sources.$platform"
-        update-source-version "yabai" "$NEW_VERSION" --source-key="sources.$platform"
+        update-source-version "yabai" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };
 
   meta = {
-    description = "A tiling window manager for macOS based on binary space partitioning";
+    description = "Tiling window manager for macOS based on binary space partitioning";
     longDescription = ''
       yabai is a window management utility that is designed to work as an extension to the built-in
       window manager of macOS. yabai allows you to control your windows, spaces and displays freely

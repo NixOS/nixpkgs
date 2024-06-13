@@ -44,7 +44,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://restic.net";
     changelog = "https://github.com/restic/restic/blob/${src.rev}/CHANGELOG.md";
-    description = "A backup program that is fast, efficient and secure";
+    description = "Backup program that is fast, efficient and secure";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;
     maintainers = [ maintainers.mbrgm maintainers.dotlambda ];

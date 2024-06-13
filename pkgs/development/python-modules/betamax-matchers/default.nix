@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/sigmavirus24/betamax_matchers";
-    description = "A group of experimental matchers for Betamax";
+    description = "Group of experimental matchers for Betamax";
     license = licenses.asl20;
     maintainers = with maintainers; [ pSub ];
   };

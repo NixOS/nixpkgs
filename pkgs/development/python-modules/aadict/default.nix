@@ -26,7 +26,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aadict" ];
 
   meta = with lib; {
-    description = "An auto-attribute dict (and a couple of other useful dict functions)";
+    description = "Auto-attribute dict (and a couple of other useful dict functions)";
     homepage = "https://github.com/metagriffin/aadict";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ glittershark ];

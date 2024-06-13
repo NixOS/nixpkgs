@@ -715,6 +715,10 @@ in
 
     assertions = [{ assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}
+                  { assertion = (builtins.match "(.*\n)?(\t )*[Kk][Ee][Rr][Bb][Ee][Rr][Oo][Ss][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}") != null -> cfgc.package.withKerberos;
+                    message = "cannot enable Kerberos authentication without using a package with Kerberos support";}
+                  { assertion = (builtins.match "(.*\n)?(\t )*[Gg][Ss][Ss][Aa][Pp][Ii][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}") != null -> cfgc.package.withKerberos;
+                    message = "cannot enable GSSAPI authentication without using a package with Kerberos support";}
                   (let
                     duplicates =
                       # Filter out the groups with more than 1 element

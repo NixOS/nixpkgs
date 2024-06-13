@@ -55,7 +55,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "An async redis client with support for redis server, cluster & sentinel";
+    description = "Async redis client with support for redis server, cluster & sentinel";
     homepage = "https://github.com/alisaifee/coredis";
     changelog = "https://github.com/alisaifee/coredis/blob/${src.rev}/HISTORY.rst";
     license = licenses.mit;

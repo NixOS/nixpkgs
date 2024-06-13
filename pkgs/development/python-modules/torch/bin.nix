@@ -27,7 +27,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.3.0";
+  version = "2.3.1";
 in
 buildPythonPackage {
   inherit version;
@@ -75,7 +75,7 @@ buildPythonPackage {
     "libcuda.so.1"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     future
     numpy
     pyyaml
@@ -97,12 +97,29 @@ buildPythonPackage {
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
   '';
 
+  # See https://github.com/NixOS/nixpkgs/issues/296179
+  #
+  # This is a quick hack to add `libnvrtc` to the runpath so that torch can find
+  # it when it is needed at runtime.
+  extraRunpaths = lib.optionals stdenv.hostPlatform.isLinux [ "${lib.getLib cudaPackages.cuda_nvrtc}/lib" ];
+  postPhases = lib.optionals stdenv.isLinux [ "postPatchelfPhase" ];
+  postPatchelfPhase = ''
+    while IFS= read -r -d $'\0' elf ; do
+      for extra in $extraRunpaths ; do
+        echo patchelf "$elf" --add-rpath "$extra" >&2
+        patchelf "$elf" --add-rpath "$extra"
+      done
+    done < <(
+      find "''${!outputLib}" "$out" -type f -iname '*.so' -print0
+    )
+  '';
+
   # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
   dontStrip = true;
 
   pythonImportsCheck = [ "torch" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
@@ -111,18 +128,18 @@ buildPythonPackage {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     # torch's license is BSD3.
     # torch-bin used to vendor CUDA. It still links against CUDA and MKL.
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       issl
       unfreeRedistributable
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
       "x86_64-linux"
     ];
     hydraPlatforms = [ ]; # output size 3.2G on 1.11.0
-    maintainers = with maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [ junjihashimoto ];
   };
 }

@@ -17,7 +17,7 @@ mkDerivation rec {
   buildInputs = [ libjack2 alsa-lib liblo libsndfile lv2 qtbase rubberband ];
 
   meta = with lib; {
-    description = "An old-school all-digital polyphonic sampler synthesizer with stereo fx";
+    description = "Old-school all-digital polyphonic sampler synthesizer with stereo fx";
     mainProgram = "samplv1_jack";
     homepage = "http://samplv1.sourceforge.net/";
     license = licenses.gpl2Plus;

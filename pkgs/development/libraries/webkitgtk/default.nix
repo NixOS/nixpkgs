@@ -48,6 +48,8 @@
 , lcms2
 , libmanette
 , geoclue2
+, flite
+, openssl
 , sqlite
 , gst-plugins-base
 , gst-plugins-bad
@@ -62,6 +64,7 @@
 , unifdef
 , addOpenGLRunpath
 , enableGeoLocation ? true
+, enableExperimental ? false
 , withLibsecret ? true
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , testers
@@ -165,6 +168,9 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
+  ] ++ lib.optionals enableExperimental [
+    flite
+    openssl
   ] ++ lib.optionals withLibsecret [
     libsecret
   ] ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
@@ -184,6 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
     "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
+    "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
   ] ++ lib.optionals stdenv.isLinux [
     # Have to be explicitly specified when cross.
     # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353

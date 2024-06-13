@@ -3,33 +3,40 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  pythonRelaxDepsHook,
   iso4217,
-  pytest-asyncio,
   pythonOlder,
   pytz,
 }:
 
 buildPythonPackage rec {
   pname = "pyefergy";
-  version = "22.1.1";
-  format = "setuptools";
+  version = "22.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tkdrob";
-    repo = pname;
-    rev = version;
-    hash = "sha256-AdoM+PcVoajxhnEfkyN9UuNufChu8XGmZDLNC3mjrps=";
+    repo = "pyefergy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4M3r/+C42X95/7BGZAJbkXKKFEkGzLlvX0Ynv+eL8qc=";
   };
 
-  postPatch = ''
-    # setuptools.extern.packaging.version.InvalidVersion: Invalid version: 'master'
-    substituteInPlace setup.py \
-      --replace 'version="master",' 'version="${version}",'
-  '';
+  build-system = [
+    poetry-core
+    poetry-dynamic-versioning
+    pythonRelaxDepsHook
+  ];
 
-  propagatedBuildInputs = [
+  pythonRemoveDeps = [
+    "codecov"
+    "types-pytz"
+  ];
+
+  dependencies = [
     aiohttp
     iso4217
     pytz
@@ -41,6 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyefergy" ];
 
   meta = with lib; {
+    changelog = "https://github.com/tkdrob/pyefergy/releases/tag/v${version}";
     description = "Python API library for Efergy energy meters";
     homepage = "https://github.com/tkdrob/pyefergy";
     license = with licenses; [ mit ];

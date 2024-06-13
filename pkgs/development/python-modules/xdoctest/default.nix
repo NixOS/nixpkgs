@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "xdoctest" ];
 
   meta = with lib; {
-    description = "A rewrite of Python's builtin doctest module (with pytest plugin integration) with AST instead of REGEX";
+    description = "Rewrite of Python's builtin doctest module (with pytest plugin integration) with AST instead of REGEX";
     homepage = "https://github.com/Erotemic/xdoctest";
     changelog = "https://github.com/Erotemic/xdoctest/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

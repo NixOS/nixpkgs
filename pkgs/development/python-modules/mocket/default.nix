@@ -103,7 +103,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
-    description = "A socket mock framework for all kinds of sockets including web-clients";
+    description = "Socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

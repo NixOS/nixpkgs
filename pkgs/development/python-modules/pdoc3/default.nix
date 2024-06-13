@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Auto-generate API documentation for Python projects.";
+    description = "Auto-generate API documentation for Python projects";
     homepage = "https://pdoc3.github.io/pdoc/";
     license = with licenses; [ agpl3Plus ];
     maintainers = with maintainers; [ catern ];

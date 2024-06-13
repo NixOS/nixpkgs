@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A replacement of GNU Stow written in C++";
+    description = "Replacement of GNU Stow written in C++";
     homepage = "https://github.com/majorkingleo/xstow";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ nzbr ];

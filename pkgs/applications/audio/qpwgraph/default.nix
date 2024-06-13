@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [ "-DCONFIG_WAYLAND=ON" ];
 
   meta = with lib; {
-    description = "Qt graph manager for PipeWire, similar to QjackCtl.";
+    description = "Qt graph manager for PipeWire, similar to QjackCtl";
     longDescription = ''
       qpwgraph is a graph manager dedicated for PipeWire,
       using the Qt C++ framework, based and pretty much like

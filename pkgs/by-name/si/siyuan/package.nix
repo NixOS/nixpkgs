@@ -90,7 +90,7 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    description = "A privacy-first personal knowledge management system that supports complete offline usage, as well as end-to-end encrypted data sync";
+    description = "Privacy-first personal knowledge management system that supports complete offline usage, as well as end-to-end encrypted data sync";
     homepage = "https://b3log.org/siyuan/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "siyuan";

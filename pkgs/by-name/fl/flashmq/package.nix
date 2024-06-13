@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flashmq";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "halfgaar";
     repo = "FlashMQ";
     rev = "v${version}";
-    hash = "sha256-ZKDoh2eZDs7iQpfsvfsG7ic+A8NG+UUGgq9l2tmfhVI=";
+    hash = "sha256-rOhH3mRPW4LweQmzztr6/xGqSfo02nFBWrAVd0/oQGA=";
   };
 
   nativeBuildInputs = [ cmake installShellFiles ];

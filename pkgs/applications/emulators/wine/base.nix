@@ -193,7 +193,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
       fromSource
       binaryNativeCode  # mono, gecko
     ];
-    description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
+    description = "Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
     inherit badPlatforms platforms;
     maintainers = with lib.maintainers; [ avnik raskin bendlas jmc-figueira reckenrode ];
     inherit mainProgram;

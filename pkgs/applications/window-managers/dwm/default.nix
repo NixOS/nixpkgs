@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://dwm.suckless.org/";
-    description = "An extremely fast, small, and dynamic window manager for X";
+    description = "Extremely fast, small, and dynamic window manager for X";
     longDescription = ''
       dwm is a dynamic window manager for X. It manages windows in tiled,
       monocle and floating layouts. All of the layouts can be applied

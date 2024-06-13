@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A variable font from GitHub";
+    description = "Variable font from GitHub";
     homepage = "https://github.com/github/hubot-sans";
     changelog = "https://github.com/github/hubot-sans/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.ofl;

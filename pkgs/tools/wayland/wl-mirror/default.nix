@@ -28,13 +28,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "wl-mirror";
-  version = "0.16.2";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
     rev = "v${version}";
-    hash = "sha256-srGqMqkkdJzcxN2sNToqDw/6B4OirlmKW1MXt1Nmvsk=";
+    hash = "sha256-/ZxTFr5Mmg1UoJikweGJThREgutKCF0C5IwxEZ3bv7Q=";
   };
 
   strictDeps = true;
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/Ferdi265/wl-mirror";
-    description = "A simple Wayland output mirror client";
+    description = "Simple Wayland output mirror client";
     license = licenses.gpl3;
     maintainers = with maintainers; [ synthetica ];
     platforms = platforms.linux;

@@ -120,7 +120,7 @@ in buildGoModule {
   passthru.tests = { inherit (nixosTests) influxdb2; };
 
   meta = with lib; {
-    description = "An open-source distributed time series database";
+    description = "Open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
     maintainers = with maintainers; [ abbradar ];

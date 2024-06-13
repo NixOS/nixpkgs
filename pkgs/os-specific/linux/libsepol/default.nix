@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, flex }:
+{ lib, stdenv, fetchurl, flex }:
 
 stdenv.mkDerivation rec {
   pname = "libsepol";

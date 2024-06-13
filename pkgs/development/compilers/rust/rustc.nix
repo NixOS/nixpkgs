@@ -103,7 +103,9 @@ in stdenv.mkDerivation (finalAttrs: {
       stdenv.targetPlatform.rust.rustcTargetSpec
 
     # Other targets that don't need any extra dependencies to build.
-    ] ++ optionals (!fastCross) [
+    # Temporarily broken if some global compiler flags are set:
+    # https://github.com/NixOS/nixpkgs/pull/317273
+    ] ++ optionals (!fastCross && !lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] && stdenv.hostPlatform.gcc.thumb or true) [
       "wasm32-unknown-unknown"
 
     # (build!=target): When cross-building a compiler we need to add
@@ -139,6 +141,10 @@ in stdenv.mkDerivation (finalAttrs: {
     "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost.dev}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget.dev}/bin/llvm-config"
+  ] ++ optionals fastCross [
+    # Since fastCross only builds std, it doesn't make sense (and
+    # doesn't work) to build a linker.
+    "--disable-llvm-bitcode-linker"
   ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
     "--enable-profiler" # build libprofiler_builtins
   ] ++ optionals stdenv.buildPlatform.isMusl [
@@ -191,6 +197,12 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs src/etc
+
+    # rust-lld is the name rustup uses for its bundled lld, so that it
+    # doesn't conflict with any system lld.  This is not an
+    # appropriate default for Nixpkgs, where there is no rust-lld.
+    substituteInPlace compiler/rustc_target/src/spec/*/*.rs \
+      --replace-quiet '"rust-lld"' '"lld"'
 
     ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
 
@@ -267,7 +279,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.rust-lang.org/";
-    description = "A safe, concurrent, practical language";
+    description = "Safe, concurrent, practical language";
     maintainers = with maintainers; [ havvy ] ++ teams.rust.members;
     license = [ licenses.mit licenses.asl20 ];
     platforms = [

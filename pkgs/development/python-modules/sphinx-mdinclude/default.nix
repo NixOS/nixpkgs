@@ -40,7 +40,7 @@ buildPythonPackage rec {
     broken = true; # https://github.com/omnilib/sphinx-mdinclude/issues/22
     homepage = "https://github.com/omnilib/sphinx-mdinclude";
     changelog = "https://github.com/omnilib/sphinx-mdinclude/blob/v${version}/CHANGELOG.md";
-    description = "Sphinx extension for including or writing pages in Markdown format.";
+    description = "Sphinx extension for including or writing pages in Markdown format";
     longDescription = ''
       A simple Sphinx extension that enables including Markdown documents from within
       reStructuredText.

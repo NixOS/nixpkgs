@@ -266,7 +266,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = with lib; {
-    description = "A cross-language development platform for in-memory data";
+    description = "Cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     license = licenses.asl20;
     platforms = platforms.unix;

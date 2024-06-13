@@ -2,6 +2,7 @@
 , stdenv
 , mkDerivation
 , fetchurl
+, fetchpatch
 , fetchFromGitHub
 , makeDesktopItem
 , copyDesktopItems
@@ -37,7 +38,7 @@
 
 let
   pname = "RStudio";
-  version = "2023.12.1+402";
+  version = "2024.04.1+748";
   RSTUDIO_VERSION_MAJOR = lib.versions.major version;
   RSTUDIO_VERSION_MINOR = lib.versions.minor version;
   RSTUDIO_VERSION_PATCH = lib.versions.patch version;
@@ -48,8 +49,8 @@ let
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
-    rev = version;
-    hash = "sha256-ecMzkpHazg8jEBz9wh8hqRX2UdziOC8b6F+3xxdugy0=";
+    rev = "v" + version;
+    hash = "sha256-fzxbhN9NdM0E2rxezj2BMEZ8obUbX0Zw8haDNmfAkWs=";
   };
 
   mathJaxSrc = fetchurl {
@@ -60,8 +61,8 @@ let
   rsconnectSrc = fetchFromGitHub {
     owner = "rstudio";
     repo = "rsconnect";
-    rev = "v1.2.0";
-    hash = "sha256-ghRz4Frd+I9ShRNNOE/kdk9KjRCj0Z1mPnThueriiUY=";
+    rev = "v1.2.2";
+    hash = "sha256-wvM9Bm7Nb6yU9z0o+uF5lB2kdgjOW5wZSk6y48NPF2U=";
   };
 
   # Ideally, rev should match the rstudio release name.
@@ -116,6 +117,7 @@ in
       "-DRSTUDIO_USE_SYSTEM_SOCI=ON"
       "-DRSTUDIO_USE_SYSTEM_BOOST=ON"
       "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON"
+      "-DRSTUDIO_DISABLE_CHECK_FOR_UPDATES=ON"
       "-DQUARTO_ENABLED=TRUE"
       "-DPANDOC_VERSION=${pandoc.version}"
       "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
@@ -132,6 +134,13 @@ in
       ./pandoc-nix-path.patch
       ./use-system-quarto.patch
       ./ignore-etc-os-release.patch
+
+      (fetchpatch {
+        name = "use-system-yaml-patch";
+        url = "https://github.com/rstudio/rstudio/commit/04de8ca8b83dcc7fee9fd65e6ef58c372489d5ef.patch";
+        hash = "sha256-FHSSOPsw6AAYBj/fgNT6idyxvRj3SG+fbla0UDjug1Y=";
+      })
+
     ];
 
     postPatch = ''
@@ -179,6 +188,11 @@ in
       done
 
       unzip -q ${mathJaxSrc} -d dependencies/mathjax-27
+
+     # As of Chocolate Cosmos, node 18.19.1 is used for runtime
+     # 18.18.2 is still used for build
+     # see https://github.com/rstudio/rstudio/commit/facb5cf1ab38fe77813aaf36590804e4f865d780
+     mkdir -p dependencies/common/node/18.19.1
 
       mkdir -p dependencies/pandoc/${pandoc.version}
       cp ${pandoc}/bin/pandoc dependencies/pandoc/${pandoc.version}/pandoc

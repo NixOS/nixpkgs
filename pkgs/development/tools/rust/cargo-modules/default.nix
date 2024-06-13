@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A cargo plugin for showing a tree-like overview of a crate's modules";
+    description = "Cargo plugin for showing a tree-like overview of a crate's modules";
     mainProgram = "cargo-modules";
     homepage = "https://github.com/regexident/cargo-modules";
     changelog = "https://github.com/regexident/cargo-modules/blob/${version}/CHANGELOG.md";

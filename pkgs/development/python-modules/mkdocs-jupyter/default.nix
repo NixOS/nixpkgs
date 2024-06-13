@@ -53,6 +53,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_jupyter" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Use Jupyter Notebook in mkdocs";
     homepage = "https://github.com/danielfrg/mkdocs-jupyter";

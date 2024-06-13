@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.14.0";
+  version = "2.14.1";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-ZZFUzqUSCDQ0/XyTt/4Il696L9C53UdJKCtC6qxK5nc=";
+    hash = "sha256-ElWNFY7HoGU7+WzCcrx6154BJ9UDuYLtFEOZNGaU9yY=";
   };
 
   nativeBuildInputs = [
@@ -125,7 +125,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/jupyter-server/jupyter_server/blob/v${version}/CHANGELOG.md";
-    description = "The backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications";
+    description = "Backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications";
     mainProgram = "jupyter-server";
     homepage = "https://github.com/jupyter-server/jupyter_server";
     license = licenses.bsdOriginal;

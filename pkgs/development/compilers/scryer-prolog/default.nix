@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   CARGO_FEATURE_USE_SYSTEM_LIBS = true;
 
   meta = with lib; {
-    description = "A modern Prolog implementation written mostly in Rust";
+    description = "Modern Prolog implementation written mostly in Rust";
     mainProgram = "scryer-prolog";
     homepage = "https://github.com/mthom/scryer-prolog";
     license = with licenses; [ bsd3 ];

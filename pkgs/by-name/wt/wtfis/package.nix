@@ -5,12 +5,12 @@
 
 let
   pname = "wtfis";
-  version = "0.9.1";
+  version = "0.10.0";
   src = fetchFromGitHub {
     owner = "pirxthepilot";
     repo = "wtfis";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nVcF7mPoWL5PNLh0W4FBPE7WVU72FidHpBZqMNl+Fd4=";
+    hash = "sha256-5mvbwIKnCk8mbjVJAmUwV1zKzGk8HVVZLiUVQXRvczA=";
   };
 in python3.pkgs.buildPythonApplication {
   inherit pname version src;

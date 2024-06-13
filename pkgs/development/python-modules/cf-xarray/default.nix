@@ -67,7 +67,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "An accessor for xarray objects that interprets CF attributes";
+    description = "Accessor for xarray objects that interprets CF attributes";
     homepage = "https://github.com/xarray-contrib/cf-xarray";
     changelog = "https://github.com/xarray-contrib/cf-xarray/releases/tag/v${version}";
     license = licenses.asl20;

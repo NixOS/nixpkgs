@@ -47,7 +47,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A client tool to help manage KubeArmor";
+    description = "Client tool to help manage KubeArmor";
     mainProgram = "karmor";
     homepage = "https://kubearmor.io";
     changelog = "https://github.com/kubearmor/kubearmor-client/releases/v${version}";

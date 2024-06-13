@@ -12,7 +12,7 @@
         "new": "vim-fern"
     },
     "gina-vim": {
-        "date": "2024-05-28",
+        "date": "2024-06-11",
         "new": "vim-gina"
     },
     "gist-vim": {
@@ -60,7 +60,7 @@
         "new": "vim-suda"
     },
     "vim-fsharp": {
-        "date": "2024-05-28",
+        "date": "2024-06-11",
         "new": "zarchive-vim-fsharp"
     },
     "vim-jade": {

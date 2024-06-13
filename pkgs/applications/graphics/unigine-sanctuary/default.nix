@@ -88,7 +88,7 @@ stdenv.mkDerivation rec{
   dontUnpack = true;
 
   meta = {
-    description = "The Unigine Heaven GPU benchmarking tool";
+    description = "Unigine Heaven GPU benchmarking tool";
     homepage = "https://benchmark.unigine.com/sanctuary";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;

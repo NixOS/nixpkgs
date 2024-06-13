@@ -53,7 +53,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A set of scripts and modules for freezing Python scripts into executables";
+    description = "Set of scripts and modules for freezing Python scripts into executables";
     homepage = "https://marcelotduarte.github.io/cx_Freeze/";
     changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${version}";
     license = licenses.psfl;

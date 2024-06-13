@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://nilearn.github.io";
-    description = "A module for statistical learning on neuroimaging data";
+    description = "Module for statistical learning on neuroimaging data";
     changelog = "https://github.com/nilearn/nilearn/releases/tag/${version}";
     license = licenses.bsd3;
   };

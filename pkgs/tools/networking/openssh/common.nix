@@ -22,7 +22,7 @@
 , pam
 , libredirect
 , etcDir ? null
-, withKerberos ? true
+, withKerberos ? false
 , withLdns ? true
 , libkrb5
 , libfido2
@@ -177,13 +177,16 @@ stdenv.mkDerivation {
     "sysconfdir=\${out}/etc/ssh"
   ];
 
-  passthru.tests = {
-    borgbackup-integration = nixosTests.borgbackup;
-    openssh = nixosTests.openssh;
+  passthru = {
+    inherit withKerberos;
+    tests = {
+      borgbackup-integration = nixosTests.borgbackup;
+      openssh = nixosTests.openssh;
+    };
   };
 
   meta = with lib; {
-    description = "An implementation of the SSH protocol${extraDesc}";
+    description = "Implementation of the SSH protocol${extraDesc}";
     homepage = "https://www.openssh.com/";
     changelog = "https://www.openssh.com/releasenotes.html";
     license = licenses.bsd2;

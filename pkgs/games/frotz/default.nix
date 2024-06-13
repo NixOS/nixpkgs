@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://davidgriffith.gitlab.io/frotz/";
     changelog = "https://gitlab.com/DavidGriffith/frotz/-/raw/${version}/NEWS";
-    description = "A z-machine interpreter for Infocom games and other interactive fiction";
+    description = "Z-machine interpreter for Infocom games and other interactive fiction";
     mainProgram = "frotz";
     platforms = platforms.unix;
     maintainers = with maintainers; [ nicknovitski ddelabru ];

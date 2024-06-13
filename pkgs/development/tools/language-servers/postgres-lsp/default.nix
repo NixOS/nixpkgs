@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   RUSTC_BOOTSTRAP = 1; # We need rust unstable features
 
   meta = with lib; {
-    description = "A Language Server for Postgres";
+    description = "Language Server for Postgres";
     homepage = "https://github.com/supabase/postgres_lsp";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

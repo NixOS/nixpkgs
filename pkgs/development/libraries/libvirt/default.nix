@@ -387,7 +387,7 @@ stdenv.mkDerivation rec {
   passthru.tests.libvirtd = nixosTests.libvirtd;
 
   meta = with lib; {
-    description = "A toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
+    description = "Toolkit to interact with the virtualization capabilities of recent versions of Linux and other OSes";
     homepage = "https://libvirt.org/";
     changelog = "https://gitlab.com/libvirt/libvirt/-/raw/v${version}/NEWS.rst";
     license = licenses.lgpl2Plus;

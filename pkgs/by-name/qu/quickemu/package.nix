@@ -1,32 +1,34 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, makeWrapper
-, cdrtools
-, curl
-, gawk
-, gnugrep
-, gnused
-, jq
-, ncurses
-, pciutils
-, procps
-, python3
-, qemu
-, socat
-, spice-gtk
-, swtpm
-, usbutils
-, util-linux
-, unzip
-, xdg-user-dirs
-, xrandr
-, zsync
-, OVMF
-, OVMFFull
-, quickemu
-, testers
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  makeWrapper,
+  cdrtools,
+  curl,
+  gawk,
+  gnugrep,
+  gnused,
+  jq,
+  ncurses,
+  pciutils,
+  procps,
+  python3,
+  qemu,
+  socat,
+  spice-gtk,
+  swtpm,
+  usbutils,
+  util-linux,
+  unzip,
+  xdg-user-dirs,
+  xrandr,
+  zsync,
+  OVMF,
+  OVMFFull,
+  quickemu,
+  testers,
+  installShellFiles,
+  fetchpatch2,
 }:
 let
   runtimePaths = [
@@ -52,7 +54,7 @@ let
   ];
 in
 
-stdenv.mkDerivation (finalAttrs : {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
   version = "4.9.4";
 
@@ -72,7 +74,20 @@ stdenv.mkDerivation (finalAttrs : {
       quickemu
   '';
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  patches = [
+    # reduces windows vm ram requirements to 4G, to match microsoft recommendations
+    # TODO: remove on next release
+    (fetchpatch2 {
+      name = "decrease-windows-ram-requirements.patch";
+      url = "https://github.com/quickemu-project/quickemu/commit/f51697593a4650c5486661292e2febe1d16f8c71.patch";
+      hash = "sha256-J5hIvQGtkufOcjk2FZN65iox/W2zkLlg+Veg9TF11Fs=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -98,6 +113,9 @@ stdenv.mkDerivation (finalAttrs : {
     homepage = "https://github.com/quickemu-project/quickemu";
     mainProgram = "quickemu";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fedx-sudo flexiondotorg ];
+    maintainers = with lib.maintainers; [
+      fedx-sudo
+      flexiondotorg
+    ];
   };
 })

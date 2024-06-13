@@ -56,7 +56,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "qgrid" ];
 
   meta = {
-    description = "An interactive grid for sorting, filtering, and editing DataFrames in Jupyter notebooks";
+    description = "Interactive grid for sorting, filtering, and editing DataFrames in Jupyter notebooks";
     homepage = "https://github.com/quantopian/qgrid";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];

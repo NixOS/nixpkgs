@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A C++ framework for property based testing inspired by QuickCheck";
+    description = "C++ framework for property based testing inspired by QuickCheck";
     inherit (finalAttrs.src.meta) homepage;
     maintainers = with maintainers; [ ];
     license = licenses.bsd2;

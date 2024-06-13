@@ -1,4 +1,4 @@
-{ stdenv, runCommand, lib, fetchFromGitHub, fetchpatch, cmake, flex, bison, systemd
+{ stdenv, runCommand, lib, fetchFromGitHub, cmake, flex, bison, systemd
 , boost, openssl, patchelf, mariadb-connector-c, postgresql, zlib, tzdata
 # Databases
 , withMysql ? true, withPostgresql ? false

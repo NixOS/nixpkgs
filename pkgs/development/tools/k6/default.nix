@@ -30,7 +30,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A modern load testing tool, using Go and JavaScript";
+    description = "Modern load testing tool, using Go and JavaScript";
     mainProgram = "k6";
     homepage = "https://k6.io/";
     changelog = "https://github.com/grafana/k6/releases/tag/v${version}";

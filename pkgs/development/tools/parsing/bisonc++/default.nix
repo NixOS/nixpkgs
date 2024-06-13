@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A parser generator like bison, but it generates C++ code";
+    description = "Parser generator like bison, but it generates C++ code";
     mainProgram = "bisonc++";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];

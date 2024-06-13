@@ -41,7 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "A fast version of fnv1a";
+    description = "Fast version of fnv1a";
     homepage = "https://github.com/bdraco/fnv-hash-fast";
     changelog = "https://github.com/bdraco/fnv-hash-fast/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

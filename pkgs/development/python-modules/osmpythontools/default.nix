@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A library to access OpenStreetMap-related services";
+    description = "Library to access OpenStreetMap-related services";
     longDescription = ''
       The python package OSMPythonTools provides easy access to
       OpenStreetMap-related services, among them an Overpass endpoint,

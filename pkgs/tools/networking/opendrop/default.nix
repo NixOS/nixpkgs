@@ -53,7 +53,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "An open Apple AirDrop implementation written in Python";
+    description = "Open Apple AirDrop implementation written in Python";
     homepage = "https://owlink.org/";
     changelog = "https://github.com/seemoo-lab/opendrop/releases/tag/${src.rev}";
     license = licenses.gpl3Only;

@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "A client for the Music Player Daemon (originally named mpdevil)";
+    description = "Client for the Music Player Daemon (originally named mpdevil)";
     homepage = "https://github.com/SoongNoonien/plattenalbum";
     changelog = "https://github.com/SoongNoonien/plattenalbum/releases/tag/v${version}";
     license = with lib.licenses; [

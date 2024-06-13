@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A tool for displaying SIP calls message flows from terminal";
+    description = "Tool for displaying SIP calls message flows from terminal";
     mainProgram = "sngrep";
     homepage = "https://github.com/irontec/sngrep";
     license = licenses.gpl3Plus;

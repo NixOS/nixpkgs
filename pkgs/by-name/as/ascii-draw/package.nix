@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "An app to draw diagrams or anything using only ASCII";
+    description = "App to draw diagrams or anything using only ASCII";
     homepage = "https://github.com/Nokse22/ascii-draw";
     license = lib.licenses.gpl3Plus;
     mainProgram = "ascii-draw";

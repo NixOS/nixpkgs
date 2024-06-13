@@ -65,7 +65,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
+    description = "JAX library based around a simple idea: represent parameterised functions (such as neural networks) as PyTrees";
     changelog = "https://github.com/patrick-kidger/equinox/releases/tag/v${version}";
     homepage = "https://github.com/patrick-kidger/equinox";
     license = licenses.asl20;

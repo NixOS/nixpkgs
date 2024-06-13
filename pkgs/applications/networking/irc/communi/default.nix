@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple and elegant cross-platform IRC client";
+    description = "Simple and elegant cross-platform IRC client";
     mainProgram = "communi";
     homepage = "https://github.com/communi/communi-desktop";
     license = licenses.bsd3;

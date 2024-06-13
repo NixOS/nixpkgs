@@ -88,7 +88,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ipfshttpclient" ];
 
   meta = with lib; {
-    description = "A python client library for the IPFS API";
+    description = "Python client library for the IPFS API";
     homepage = "https://github.com/ipfs-shipyard/py-ipfs-http-client";
     license = licenses.mit;
     maintainers = with maintainers; [

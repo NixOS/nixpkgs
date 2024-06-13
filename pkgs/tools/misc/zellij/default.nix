@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion { package = zellij; };
 
   meta = with lib; {
-    description = "A terminal workspace with batteries included";
+    description = "Terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
     changelog = "https://github.com/zellij-org/zellij/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];

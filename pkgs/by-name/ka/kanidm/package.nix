@@ -20,16 +20,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-nDAHlpQefCbmz4jw/1cDGQWkfvn/vIqpsOCPjn6yQ6s=";
+    hash = "sha256-J02IbAY5lyoMaq6wJiHizqeFBd5hB6id2YMPxlPsASM=";
   };
 
-  cargoHash = "sha256-+lKWpBz9e4DFVg+A2wH17hHg9HPZNKmM4pM7KMndQ8U=";
+  cargoHash = "sha256-JuTKHXpEhWga2vAZhCpyPFy4w6+9UaasD70oBcrr0Rw=";
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 
@@ -96,7 +96,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
-    description = "A simple, secure and fast identity management platform";
+    description = "Simple, secure and fast identity management platform";
     homepage = "https://github.com/kanidm/kanidm";
     license = licenses.mpl20;
     platforms = platforms.linux;

@@ -20,7 +20,7 @@ buildGoModule rec {
     maintainers = with maintainers; [ abbradar ];
     license = licenses.mit;
     platforms = platforms.linux;
-    description = "A simple file server for handling XMPP http_upload requests";
+    description = "Simple file server for handling XMPP http_upload requests";
     mainProgram = "prosody-filer";
   };
 }

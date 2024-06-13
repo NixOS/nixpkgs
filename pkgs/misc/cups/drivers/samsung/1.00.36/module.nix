@@ -22,7 +22,7 @@ let
 in {
   options = {
     services.samsung-unified-linux-driver_1_00_36 = {
-      enable = mkEnableOption "enable samsung-unified-linux-driver_1_00_36";
+      enable = mkEnableOption "samsung-unified-linux-driver_1_00_36";
     };
   };
   config = mkIf cfg.enable {

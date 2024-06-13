@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A SDR transceiver for radios that use the Hermes protocol";
+    description = "SDR transceiver for radios that use the Hermes protocol";
     longDescription = ''
       QUISK is a Software Defined Radio (SDR) transceiver. You supply radio
       hardware that converts signals at the antenna to complex (I/Q) data at an

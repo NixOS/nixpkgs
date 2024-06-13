@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
      beautifulsoup4 keyring requests-kerberos kerberos lxml ];
 
   meta = with lib; {
-    description = "A status monitor for the desktop";
+    description = "Status monitor for the desktop";
     homepage = "https://nagstamon.ifw-dresden.de/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];

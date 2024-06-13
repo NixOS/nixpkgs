@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://gtklp.sirtobi.com";
-    description = "A GTK-based graphical frontend for CUPS";
+    description = "GTK-based graphical frontend for CUPS";
     license = with lib.licenses; [ gpl2Only ];
     mainProgram = "gtklp";
     maintainers = with lib.maintainers; [ AndersonTorres ];

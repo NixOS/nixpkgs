@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" ];
 
   meta = {
-    description = "A tool for validating and repairing MPEG audio streams";
+    description = "Tool for validating and repairing MPEG audio streams";
     longDescription = ''
       MP3val is a small, high-speed, free software tool for checking MPEG audio
       files' integrity. It can be useful for finding corrupted files (e.g.

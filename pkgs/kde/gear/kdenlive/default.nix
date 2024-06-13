@@ -4,6 +4,7 @@
   qtsvg,
   qtmultimedia,
   qtnetworkauth,
+  qqc2-desktop-style,
   ffmpeg-full,
   mediainfo,
   mlt,
@@ -28,6 +29,8 @@ mkKdeDerivation {
     qtsvg
     qtmultimedia
     qtnetworkauth
+
+    qqc2-desktop-style
 
     mlt
     shared-mime-info

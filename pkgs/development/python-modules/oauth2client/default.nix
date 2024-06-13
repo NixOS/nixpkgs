@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A client library for OAuth 2.0";
+    description = "Client library for OAuth 2.0";
     homepage = "https://github.com/google/oauth2client/";
     license = licenses.bsd2;
   };

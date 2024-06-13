@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.10.33";
+  version = "0.10.37";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-zIAf6lD9XFmrAgvVmIY+tXLn4FmkkdimjVCWasK7OCc=";
+    sha256 = "sha256-WcX/H0zGXbkf5mM5Xq07UuQixUCCUXRPmBVrf3V4TEM=";
   };
-  vendorHash = "sha256-ji9TpUcq0aUAn5vV5dnaC15i0Uli2Qsz/BrOKB3/Rl4=";
+  vendorHash = "sha256-bLSj4/+7h0uHdR956VL4iLqRddKV5Ac+FIL1zJxPCW8=";
 
   ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
 
@@ -25,7 +25,8 @@ buildGoModule rec {
     unset subPackages
 
     # remove tests that require networking
-    rm cmd/infracost/{breakdown,diff,hcl,run}_test.go
+    rm cmd/infracost/{breakdown,comment,diff,hcl,run,upload}_test.go
+    rm cmd/infracost/comment_{azure_repos,bitbucket,github,gitlab}_test.go
   '';
 
   checkFlags = [

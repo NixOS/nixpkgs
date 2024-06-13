@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withUdisks "USE_UDISKS2=yes";
 
   meta = with lib; {
-    description = "A very minimal GUI app that can write compressed disk images to USB drives";
+    description = "Very minimal GUI app that can write compressed disk images to USB drives";
     homepage = "https://gitlab.com/bztsrc/usbimager";
     license = licenses.mit;
     maintainers = with maintainers; [ vdot0x23 ];

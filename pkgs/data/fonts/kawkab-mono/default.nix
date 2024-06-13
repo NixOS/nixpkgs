@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "An arab fixed-width font";
+    description = "Arab fixed-width font";
     homepage = "https://makkuk.com/kawkab-mono/";
     license = lib.licenses.ofl;
   };

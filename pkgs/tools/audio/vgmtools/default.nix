@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/vgmrips/vgmtools";
-    description = "A collection of tools for the VGM file format";
+    description = "Collection of tools for the VGM file format";
     license = licenses.gpl2Only; # Not clarified whether Only or Plus
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;

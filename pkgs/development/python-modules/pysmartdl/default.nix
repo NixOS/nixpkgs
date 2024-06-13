@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/iTaybb/pySmartDL";
-    description = "A Smart Download Manager for Python";
+    description = "Smart Download Manager for Python";
     changelog = "https://github.com/iTaybb/pySmartDL/blob/${src.rev}/ChangeLog.txt";
     license = licenses.unlicense;
     maintainers = with maintainers; [ ];

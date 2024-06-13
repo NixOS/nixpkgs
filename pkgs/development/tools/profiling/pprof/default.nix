@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-bQyloQPfweK4PlrkO1IcCFjyctj99e8C9mQbCj+HCXQ=";
 
   meta = with lib; {
-    description = "A tool for visualization and analysis of profiling data";
+    description = "Tool for visualization and analysis of profiling data";
     homepage = "https://github.com/google/pprof";
     license = licenses.asl20;
     longDescription = ''

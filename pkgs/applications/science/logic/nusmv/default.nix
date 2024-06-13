@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A new symbolic model checker for the analysis of synchronous finite-state and infinite-state systems";
+    description = "New symbolic model checker for the analysis of synchronous finite-state and infinite-state systems";
     homepage = "https://nuxmv.fbk.eu/pmwiki.php";
     maintainers = with maintainers; [ mgttlinger ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

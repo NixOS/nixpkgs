@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   };
 
   meta = with lib; {
-    description = "Create and manage multiple choice questionnaires with automated marking.";
+    description = "Create and manage multiple choice questionnaires with automated marking";
     mainProgram = "auto-multiple-choice";
     longDescription = ''
       Create, manage and mark multiple-choice questionnaires.

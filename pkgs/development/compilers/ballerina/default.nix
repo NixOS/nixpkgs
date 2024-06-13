@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An open-source programming language for the cloud";
+    description = "Open-source programming language for the cloud";
     mainProgram = "bal";
     license = licenses.asl20;
     platforms = openjdk.meta.platforms;

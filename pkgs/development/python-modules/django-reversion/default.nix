@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "reversion" ];
 
   meta = with lib; {
-    description = "An extension to the Django web framework that provides comprehensive version control facilities";
+    description = "Extension to the Django web framework that provides comprehensive version control facilities";
     homepage = "https://github.com/etianen/django-reversion";
     changelog = "https://github.com/etianen/django-reversion/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;

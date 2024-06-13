@@ -177,7 +177,7 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A full-text search tool";
+    description = "Full-text search tool";
     longDescription = ''
       Recoll is an Xapian frontend that can search through files, archive
       members, email attachments.

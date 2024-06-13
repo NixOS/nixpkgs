@@ -24,7 +24,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "A self-hosted BitTorrent indexer, DHT crawler, and torrent search engine";
+    description = "Self-hosted BitTorrent indexer, DHT crawler, and torrent search engine";
     longDescription = ''
       A self-hosted BitTorrent indexer, DHT crawler, content classifier and torrent search engine with web UI, GraphQL API and Servarr stack integration.
     '';

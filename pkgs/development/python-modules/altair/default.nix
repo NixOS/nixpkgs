@@ -68,7 +68,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A declarative statistical visualization library for Python.";
+    description = "Declarative statistical visualization library for Python";
     homepage = "https://altair-viz.github.io";
     downloadPage = "https://github.com/altair-viz/altair";
     changelog = "https://altair-viz.github.io/releases/changes.html";

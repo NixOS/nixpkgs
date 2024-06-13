@@ -28,7 +28,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://termshark.io/";
-    description = "A terminal UI for wireshark-cli, inspired by Wireshark";
+    description = "Terminal UI for wireshark-cli, inspired by Wireshark";
     mainProgram = "termshark";
     license = licenses.mit;
     maintainers = with maintainers; [ winpat ];

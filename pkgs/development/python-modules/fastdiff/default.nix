@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fastdiff" ];
 
   meta = with lib; {
-    description = "A fast native implementation of diff algorithm with a pure Python fallback";
+    description = "Fast native implementation of diff algorithm with a pure Python fallback";
     homepage = "https://github.com/syrusakbary/fastdiff";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

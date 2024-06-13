@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A FOSS License management tool for your projects";
+    description = "FOSS License management tool for your projects";
     homepage = "https://github.com/chasinglogic/licensure";
     license = licenses.gpl3Plus;
     mainProgram = "licensure";

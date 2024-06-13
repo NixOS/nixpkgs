@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (! buildAudaciousPlugin) "-DBUILD_AUDACIOUS=OFF";
 
   meta = with lib; {
-    description = "A library for playback of various streamed audio formats used in video games";
+    description = "Library for playback of various streamed audio formats used in video games";
     homepage    = "https://vgmstream.org";
     maintainers = with maintainers; [ zane ];
     license     = with licenses; isc;

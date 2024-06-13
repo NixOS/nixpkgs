@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple VTE-based terminal";
+    description = "Simple VTE-based terminal";
     license = licenses.lgpl2Plus;
     homepage = "https://github.com/thestinger/termite/";
     maintainers = with maintainers; [ koral ];

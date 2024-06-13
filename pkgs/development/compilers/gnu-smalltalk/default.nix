@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A free implementation of the Smalltalk-80 language";
+    description = "Free implementation of the Smalltalk-80 language";
     longDescription = ''
       GNU Smalltalk is a free implementation of the Smalltalk-80 language. It
       runs on most POSIX compatible operating systems (including GNU/Linux, of

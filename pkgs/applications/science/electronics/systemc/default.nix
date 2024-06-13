@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = with lib; {
-    description = "The language for System-level design, modeling and verification";
+    description = "Language for System-level design, modeling and verification";
     homepage    = "https://systemc.org/";
     license     = licenses.asl20;
     platforms   = platforms.unix;

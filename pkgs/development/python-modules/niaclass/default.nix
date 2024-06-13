@@ -52,7 +52,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "niaclass" ];
 
   meta = with lib; {
-    description = "A framework for solving classification tasks using Nature-inspired algorithms";
+    description = "Framework for solving classification tasks using Nature-inspired algorithms";
     homepage = "https://github.com/lukapecnik/NiaClass";
     changelog = "https://github.com/lukapecnik/NiaClass/releases/tag/${version}";
     license = licenses.mit;

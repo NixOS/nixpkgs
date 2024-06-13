@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A cargo command for the shuttle platform";
+    description = "Cargo command for the shuttle platform";
     mainProgram = "cargo-shuttle";
     homepage = "https://shuttle.rs";
     changelog = "https://github.com/shuttle-hq/shuttle/releases/tag/${src.rev}";

@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/lsd-rs/lsd";
-    description = "The next gen ls command";
+    description = "Next gen ls command";
     license = licenses.asl20;
     maintainers = with maintainers; [ zowoq SuperSandro2000 ];
     mainProgram = "lsd";

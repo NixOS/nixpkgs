@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A SID player using libsidplayfp";
+    description = "SID player using libsidplayfp";
     homepage = "https://github.com/libsidplayfp/sidplayfp";
     license = with licenses; [ gpl2Plus ];
     mainProgram = "sidplayfp";

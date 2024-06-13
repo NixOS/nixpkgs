@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Create a windows version-file from a simple YAML file that can be used by PyInstaller.";
+    description = "Create a windows version-file from a simple YAML file that can be used by PyInstaller";
     mainProgram = "create-version-file";
     homepage = "https://pypi.org/project/pyinstaller-versionfile/";
     license = lib.licenses.mit;

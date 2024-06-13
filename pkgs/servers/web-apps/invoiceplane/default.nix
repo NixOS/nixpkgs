@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, writeText, unzip, nixosTests, fetchpatch }:
+{ lib, stdenv, fetchurl, unzip, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "invoiceplane";

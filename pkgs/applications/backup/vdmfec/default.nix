@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A program that adds error correction blocks";
+    description = "Program that adds error correction blocks";
     homepage = "http://members.tripod.com/professor_tom/archives/index.html";
     maintainers = [ maintainers.ar1a ];
     license = with licenses; [ gpl2 /* for vdmfec */ bsd2 /* for fec */ ];

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/iputils/iputils";
     changelog = "https://github.com/iputils/iputils/releases/tag/${version}";
-    description = "A set of small useful utilities for Linux networking";
+    description = "Set of small useful utilities for Linux networking";
     longDescription = ''
       A set of small useful utilities for Linux networking including:
 

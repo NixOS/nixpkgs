@@ -1,33 +1,34 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   buildPythonPackage,
+  fetchFromGitHub,
+  ncurses,
   poetry-core,
+  procps,
   pytest-rerunfailures,
   pytestCheckHook,
-  procps,
   tmux,
-  ncurses,
 }:
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.36.0";
+  version = "0.37.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
-    repo = pname;
+    repo = "libtmux";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oJ2IGaPFMKA/amUEPZi1UO9vZtjPNQg3SIFjQWzUeSE=";
+    hash = "sha256-I0E6zkfQ6mx2svCaXEgKPhrrog3iLgXZ4E3CMMxPkIA=";
   };
 
   postPatch = ''
-    sed -i '/addopts/d' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail '"--doctest-docutils-modules",' ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     procps
@@ -53,7 +54,6 @@ buildPythonPackage rec {
 
   disabledTestPaths = lib.optionals stdenv.isDarwin [
     "tests/test_test.py"
-    "tests/legacy_api/test_test.py"
   ];
 
   pythonImportsCheck = [ "libtmux" ];

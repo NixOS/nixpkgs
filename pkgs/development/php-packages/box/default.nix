@@ -19,7 +19,7 @@ php82.buildComposerProject (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/box-project/box/releases/tag/${finalAttrs.version}";
-    description = "An application for building and managing Phars";
+    description = "Application for building and managing Phars";
     homepage = "https://github.com/box-project/box";
     license = lib.licenses.mit;
     mainProgram = "box";

@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
   passthru.tests = nixosTests.keepassxc;
 
   meta = with lib; {
-    description = "Offline password manager with many features.";
+    description = "Offline password manager with many features";
     longDescription = ''
       A community fork of KeePassX, which is itself a port of KeePass Password Safe.
       The goal is to extend and improve KeePassX with new features and bugfixes,

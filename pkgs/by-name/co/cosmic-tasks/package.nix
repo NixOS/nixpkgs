@@ -91,7 +91,7 @@ in rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple task management application for the COSMIC desktop";
+    description = "Simple task management application for the COSMIC desktop";
     homepage = "https://github.com/edfloreshz/cosmic-tasks";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ GaetanLepage ];

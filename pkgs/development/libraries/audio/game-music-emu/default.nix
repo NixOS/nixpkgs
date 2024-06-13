@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://bitbucket.org/mpyne/game-music-emu/wiki/Home";
-    description = "A collection of video game music file emulators";
+    description = "Collection of video game music file emulators";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ luc65r lheckemann ];

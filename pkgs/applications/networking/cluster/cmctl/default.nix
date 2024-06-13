@@ -49,7 +49,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A CLI tool for managing cert-manager service on Kubernetes clusters";
+    description = "CLI tool for managing cert-manager service on Kubernetes clusters";
     mainProgram = "cmctl";
     longDescription = ''
       cert-manager adds certificates and certificate issuers as resource types

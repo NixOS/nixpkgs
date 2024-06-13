@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   dontCargoInstall = true;
 
   meta = with lib; {
-    description = "A userspace daemon written in Rust that implements an analogue of the Texas Instruments Smart Amp speaker protection model";
+    description = "Userspace daemon written in Rust that implements an analogue of the Texas Instruments Smart Amp speaker protection model";
     mainProgram = "speakersafetyd";
     homepage = "https://github.com/AsahiLinux/speakersafetyd";
     maintainers = with maintainers; [ yuka ];

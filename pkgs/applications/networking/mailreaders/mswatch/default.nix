@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "A command-line Linux utility that efficiently directs mail synchronization between a pair of mailboxes";
+    description = "Command-line Linux utility that efficiently directs mail synchronization between a pair of mailboxes";
     homepage = "https://mswatch.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

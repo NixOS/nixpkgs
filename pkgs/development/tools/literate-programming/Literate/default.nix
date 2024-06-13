@@ -31,7 +31,7 @@ buildDubPackage {
   '';
 
   meta = {
-    description = "A literate programming tool for any language";
+    description = "Literate programming tool for any language";
     homepage = "https://zyedidia.github.io/literate/";
     license = lib.licenses.mit;
     mainProgram = "lit";

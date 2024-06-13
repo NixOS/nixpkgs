@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
-    description = "A cross-platform G-Code sender for GRBL, Smoothieware, TinyG and G2core";
+    description = "Cross-platform G-Code sender for GRBL, Smoothieware, TinyG and G2core";
     homepage = "https://github.com/winder/Universal-G-Code-Sender";
     maintainers = with maintainers; [ matthewcroughan ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

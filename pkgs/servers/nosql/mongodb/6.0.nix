@@ -1,4 +1,7 @@
-{ stdenv, callPackage, lib, fetchpatch, sasl, boost, Security, CoreFoundation, cctools }:
+{ stdenv, callPackage, lib, fetchpatch
+, sasl, boost, Security, CoreFoundation, cctools
+, avxSupport ? stdenv.hostPlatform.avxSupport
+}:
 
 let
   buildMongoDB = callPackage ./mongodb.nix {
@@ -6,6 +9,7 @@ let
   };
 in
 buildMongoDB {
+  inherit avxSupport;
   version = "6.0.15";
   sha256 = "sha256-DX1wbrDx1/JrEHbzNaXC4Hqq7MrLqz+JZgG98beyVds=";
   patches = [

@@ -100,7 +100,7 @@ python3.pkgs.buildPythonApplication {
 
   meta =  {
     homepage = "https://xon.sh/";
-    description = "A Python-ish, BASHwards-compatible shell";
+    description = "Python-ish, BASHwards-compatible shell";
     changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ AndersonTorres ];

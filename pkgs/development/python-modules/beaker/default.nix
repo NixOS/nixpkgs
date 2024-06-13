@@ -72,7 +72,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "A Session and Caching library with WSGI Middleware";
+    description = "Session and Caching library with WSGI Middleware";
     homepage = "https://github.com/bbangert/beaker";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ domenkozar ];

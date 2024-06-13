@@ -147,7 +147,7 @@ let
 
     meta = llvm_meta // {
       homepage = "https://clang.llvm.org/";
-      description = "A C language family frontend for LLVM";
+      description = "C language family frontend for LLVM";
       longDescription = ''
         The Clang project provides a language front-end and tooling
         infrastructure for languages in the C language family (C, C++, Objective

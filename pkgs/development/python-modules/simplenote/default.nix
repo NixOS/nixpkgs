@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ ];
 
   meta = with lib; {
-    description = "A python library for the simplenote.com web service";
+    description = "Python library for the simplenote.com web service";
     homepage = "http://readthedocs.org/docs/simplenotepy/en/latest/api.html";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

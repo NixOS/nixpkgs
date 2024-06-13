@@ -128,7 +128,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "The GUI for MongoDB";
+    description = "GUI for MongoDB";
     maintainers = with maintainers; [ bryanasdev000 ];
     homepage = "https://github.com/mongodb-js/compass";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

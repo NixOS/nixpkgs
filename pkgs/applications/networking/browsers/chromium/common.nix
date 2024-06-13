@@ -3,7 +3,6 @@
 , buildPackages
 , buildPlatform
 , pkgsBuildBuild
-, pkgsBuildTarget
 # Channel data:
 , channel, upstream-info
 # Helper functions:
@@ -13,7 +12,6 @@
 , ninja, pkg-config
 , python3, perl
 , which
-, llvmPackages_attrName
 , libuuid
 , overrideCC
 # postPatch:
@@ -132,7 +130,7 @@ let
   # https://github.com/NixOS/nixpkgs/issues/142901
   buildPlatformLlvmStdenv =
     let
-      llvmPackages = pkgsBuildBuild.${llvmPackages_attrName};
+      llvmPackages = pkgsBuildBuild.rustc.llvmPackages;
     in
       overrideCC llvmPackages.stdenv
         (llvmPackages.stdenv.cc.override {
@@ -165,7 +163,7 @@ let
       ninja pkg-config
       python3WithPackages perl
       which
-      buildPackages.${llvmPackages_attrName}.bintools
+      buildPackages.rustc.llvmPackages.bintools
       bison gperf
     ];
 
@@ -261,6 +259,14 @@ let
       # We also need enable_widevine_cdm_component to be false. Unfortunately it isn't exposed as gn
       # flag (declare_args) so we simply hardcode it to false.
       ./patches/widevine-disable-auto-download-allow-bundle.patch
+    ] ++ lib.optionals (versionRange "125" "126") [
+      # Fix building M125 with ninja 1.12. Not needed for M126+.
+      # https://issues.chromium.org/issues/336911498
+      # https://chromium-review.googlesource.com/c/chromium/src/+/5487538
+      (githubPatch {
+        commit = "a976cb05b4024b7a6452d1541378d718cdfe33e6";
+        hash = "sha256-K2PSeJAvhGH2/Yp63/4mJ85NyqXqDDkMWY+ptrpgmOI=";
+      })
     ] ++ [
       # Required to fix the build with a more recent wayland-protocols version
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
@@ -269,28 +275,23 @@ let
       # Chromium reads initial_preferences from its own executable directory
       # This patch modifies it to read /etc/chromium/initial_preferences
       ./patches/chromium-initial-prefs.patch
-    ] ++ lib.optionals (chromiumVersionAtLeast "120") [
-      # We need to revert this patch to build M120+ with LLVM 17:
+    ] ++ lib.optionals (versionRange "120" "126") [
+      # Partial revert to build M120+ with LLVM 17:
+      # https://github.com/chromium/chromium/commit/02b6456643700771597c00741937e22068b0f956
+      # https://github.com/chromium/chromium/commit/69736ffe943ff996d4a88d15eb30103a8c854e29
       ./patches/chromium-120-llvm-17.patch
-    ] ++ lib.optionals (!chromiumVersionAtLeast "119.0.6024.0") [
-      # Fix build with at-spi2-core ≥ 2.49
-      # This version is still needed for electron.
-      (githubPatch {
-        commit = "fc09363b2278893790d131c72a4ed96ec9837624";
-        hash = "sha256-l60Npgs/+0ozzuKWjwiHUUV6z59ObUjAPTfXN7eXpzw=";
-      })
-    ] ++ lib.optionals (!chromiumVersionAtLeast "121.0.6104.0") [
-      # Fix build with at-spi2-core ≥ 2.49
-      # https://chromium-review.googlesource.com/c/chromium/src/+/5001687
-      (githubPatch {
-        commit = "b9bef8e9555645fc91fab705bec697214a39dbc1";
-        hash = "sha256-CJ1v/qc8+nwaHQR9xsx08EEcuVRbyBfCZCm/G7hRY+4=";
-      })
-    ] ++ lib.optionals (chromiumVersionAtLeast "121") [
+    ] ++ lib.optionals (chromiumVersionAtLeast "126") [
+      # Rebased variant of patch right above to build M126+ with LLVM 17.
+      # staging-next will bump LLVM to 18, so we will be able to drop this soon.
+      ./patches/chromium-126-llvm-17.patch
+    ] ++ lib.optionals (versionRange "121" "126") [
       # M121 is the first version to require the new rust toolchain.
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
       ./patches/chromium-121-rust.patch
+    ] ++ lib.optionals (chromiumVersionAtLeast "126") [
+      # Rebased variant of patch right above to build M126+ with our rust and our clang.
+      ./patches/chromium-126-rust.patch
     ];
 
     postPatch = ''
@@ -382,8 +383,8 @@ let
     llvmCcAndBintools = symlinkJoin {
       name = "llvmCcAndBintools";
       paths = [
-        pkgsBuildTarget.${llvmPackages_attrName}.llvm
-        pkgsBuildTarget.${llvmPackages_attrName}.stdenv.cc
+        buildPackages.rustc.llvmPackages.llvm
+        buildPackages.rustc.llvmPackages.stdenv.cc
       ];
     };
 
@@ -461,10 +462,6 @@ let
       use_system_libffi = true;
       # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
       rust_sysroot_absolute = "${buildPackages.rustc}";
-      # Rust is enabled for M121+, see next section:
-      enable_rust = false;
-    } // lib.optionalAttrs (chromiumVersionAtLeast "121") {
-      # M121 the first version to actually require a functioning rust toolchain
       enable_rust = true;
       # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
       # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
@@ -483,10 +480,12 @@ let
     } // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
     // (extraAttrs.gnFlags or {}));
 
-    # We cannot use chromiumVersionAtLeast in mkDerivation's env attrset due
-    # to infinite recursion when chromium.override is used (e.g. electron).
-    # To work aroud this, we use export in the preConfigure phase.
-    preConfigure = lib.optionalString (chromiumVersionAtLeast "121") ''
+    # TODO: Migrate this to env.RUSTC_BOOTSTRAP next mass-rebuild.
+    # Chromium expects nightly/bleeding edge rustc features to be available.
+    # Our rustc in nixpkgs follows stable, but since bootstrapping rustc requires
+    # nightly features too, we can (ab-)use RUSTC_BOOTSTRAP here as well to
+    # enable those features in our stable builds.
+    preConfigure = ''
       export RUSTC_BOOTSTRAP=1
     '';
 

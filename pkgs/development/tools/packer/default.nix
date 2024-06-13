@@ -28,7 +28,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool for creating identical machine images for multiple platforms from a single source configuration";
+    description = "Tool for creating identical machine images for multiple platforms from a single source configuration";
     homepage    = "https://www.packer.io";
     license     = licenses.bsl11;
     maintainers = with maintainers; [ zimbatm ma27 techknowlogick qjoly ];

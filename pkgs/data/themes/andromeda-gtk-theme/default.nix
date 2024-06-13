@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An elegant dark theme for gnome, mate, budgie, cinnamon, xfce";
+    description = "Elegant dark theme for gnome, mate, budgie, cinnamon, xfce";
     homepage = "https://github.com/EliverLara/Andromeda-gtk";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

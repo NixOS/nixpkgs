@@ -11,7 +11,7 @@ buildDunePackage {
   propagatedBuildInputs = [ nottui ];
 
   meta = with lib; {
-    description = "A pretty-printer based on PPrint rendering UIs";
+    description = "Pretty-printer based on PPrint rendering UIs";
     license = licenses.mit;
     maintainers = [ maintainers.alizter ];
     homepage = "https://github.com/let-def/lwd";

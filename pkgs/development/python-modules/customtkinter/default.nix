@@ -34,7 +34,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "customtkinter" ];
 
   meta = {
-    description = "A modern and customizable python UI-library based on Tkinter";
+    description = "Modern and customizable python UI-library based on Tkinter";
     homepage = "https://github.com/TomSchimansky/CustomTkinter";
     license = lib.licenses.mit;
     longDescription = ''

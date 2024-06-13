@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/jpvanhal/inflection";
-    description = "A port of Ruby on Rails inflector to Python";
+    description = "Port of Ruby on Rails inflector to Python";
     maintainers = with lib.maintainers; [
       NikolaMandic
       ilya-kolpakov

@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://mise.jdx.dev";
-    description = "The front-end to your dev env";
+    description = "Front-end to your dev env";
     changelog = "https://github.com/jdx/mise/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];

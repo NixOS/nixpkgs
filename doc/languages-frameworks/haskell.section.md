@@ -923,14 +923,61 @@ for this to work.
 
 `justStaticExecutables drv`
 : Only build and install the executables produced by `drv`, removing everything
-that may refer to other Haskell packages' store paths (like libraries and
-documentation). This dramatically reduces the closure size of the resulting
-derivation. Note that the executables are only statically linked against their
-Haskell dependencies, but will still link dynamically against libc, GMP and
-other system library dependencies. If dependencies use their Cabal-generated
-`Paths_*` module, this may not work as well if GHC's dead code elimination
-is unable to remove the references to the dependency's store path that module
-contains.
+  that may refer to other Haskell packages' store paths (like libraries and
+  documentation). This dramatically reduces the closure size of the resulting
+  derivation. Note that the executables are only statically linked against their
+  Haskell dependencies, but will still link dynamically against libc, GMP and
+  other system library dependencies.
+
+  If a library or its dependencies use their Cabal-generated
+  `Paths_*` module, this may not work as well if GHC's dead code elimination is
+  unable to remove the references to the dependency's store path that module
+  contains.
+  As a consequence, an unused reference may be created from the static binary to such a _library_ store path.
+  (See [nixpkgs#164630][164630] for more information.)
+
+  Importing the `Paths_*` module may cause builds to fail with this message:
+
+  ```
+  error: output '/nix/store/64k8iw0ryz76qpijsnl9v87fb26v28z8-my-haskell-package-1.0.0.0' is not allowed to refer to the following paths:
+           /nix/store/5q5s4a07gaz50h04zpfbda8xjs8wrnhg-ghc-9.6.3
+  ```
+
+  If that happens, first disable the check for GHC references and rebuild the
+  derivation:
+
+  ```nix
+  pkgs.haskell.lib.overrideCabal
+    (pkgs.haskell.lib.justStaticExecutables my-haskell-package)
+    (drv: {
+      disallowGhcReference = false;
+    })
+  ```
+
+  Then use `strings` to determine which libraries are responsible:
+
+  ```
+  $ nix-build ...
+  $ strings result/bin/my-haskell-binary | grep /nix/store/
+  ...
+  /nix/store/n7ciwdlg8yyxdhbrgd6yc2d8ypnwpmgq-hs-opentelemetry-sdk-0.0.3.6/bin
+  ...
+  ```
+
+  Finally, use `remove-references-to` to delete those store paths from the produced output:
+
+  ```nix
+  pkgs.haskell.lib.overrideCabal
+    (pkgs.haskell.lib.justStaticExecutables my-haskell-package)
+    (drv: {
+      postInstall = ''
+        ${drv.postInstall or ""}
+        remove-references-to -t ${pkgs.haskellPackages.hs-opentelemetry-sdk}
+      '';
+    })
+  ```
+
+[164630]: https://github.com/NixOS/nixpkgs/issues/164630
 
 `enableSeparateBinOutput drv`
 : Install executables produced by `drv` to a separate `bin` output. This

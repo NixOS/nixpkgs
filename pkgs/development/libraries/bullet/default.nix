@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=argument-outside-range -Wno-error=c++11-narrowing";
 
   meta = with lib; {
-    description = "A professional free 3D Game Multiphysics Library";
+    description = "Professional free 3D Game Multiphysics Library";
     longDescription = ''
       Bullet 3D Game Multiphysics Library provides state of the art collision
       detection, soft body and rigid body dynamics.

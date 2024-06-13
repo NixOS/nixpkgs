@@ -21,7 +21,7 @@ melpaBuild rec {
 
   meta = {
     homepage = "https://github.com/devonsparks/wat-mode";
-    description = "An Emacs major mode for WebAssembly's text format";
+    description = "Emacs major mode for WebAssembly's text format";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nagy ];
   };

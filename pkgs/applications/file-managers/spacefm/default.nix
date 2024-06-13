@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   # Revert when libplist builds again…
 
   meta = with lib;  {
-    description = "A multi-panel tabbed file manager";
+    description = "Multi-panel tabbed file manager";
     longDescription = ''
       Multi-panel tabbed file and desktop manager for Linux
       with built-in VFS, udev- or HAL-based device manager,

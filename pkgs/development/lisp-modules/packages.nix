@@ -108,18 +108,7 @@ let
     ];
   };
 
-  jzon = build-asdf-system {
-    src = pkgs.fetchzip {
-      url = "https://github.com/Zulu-Inuoe/jzon/archive/6b201d4208ac3f9721c461105b282c94139bed29.tar.gz";
-      sha256 = "01d4a78pjb1amx5amdb966qwwk9vblysm1li94n3g26mxy5zc2k3";
-    };
-    version = "0.0.0-20210905-6b201d4208";
-    pname = "jzon";
-    lispLibs = [
-      super.closer-mop
-    ];
-    systems = [ "com.inuoe.jzon" ];
-  };
+  jzon = super.com_dot_inuoe_dot_jzon;
 
   cl-notify = build-asdf-system {
     pname = "cl-notify";

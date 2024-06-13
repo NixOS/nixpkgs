@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-Cvtg9msoYkIIlaUw4hxWy2wSrE1uORR/2R2Geq4SI4w=";
 
   meta = with lib; {
-    description = "A simple and pretty alternative to strace";
+    description = "Simple and pretty alternative to strace";
     mainProgram = "lurk";
     homepage = "https://github.com/jakwai01/lurk";
     changelog = "https://github.com/jakwai01/lurk/releases/tag/${src.rev}";

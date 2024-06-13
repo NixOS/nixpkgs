@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://nongnu.org/txr";
-    description = "An Original, New Programming Language for Convenient Data Munging";
+    description = "Original, New Programming Language for Convenient Data Munging";
     longDescription = ''
       TXR is a general-purpose, multi-paradigm programming language. It
       comprises two languages integrated into a single tool: a text scanning and

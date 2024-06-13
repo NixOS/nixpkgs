@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A free software implementation of Symantec's VIP Access application and protocol";
+    description = "Free software implementation of Symantec's VIP Access application and protocol";
     mainProgram = "vipaccess";
     homepage = "https://github.com/dlenski/python-vipaccess";
     license = licenses.asl20;

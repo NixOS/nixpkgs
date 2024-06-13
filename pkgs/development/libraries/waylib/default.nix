@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" "bin" ];
 
   meta = {
-    description = "A wrapper for wlroots based on Qt";
+    description = "Wrapper for wlroots based on Qt";
     homepage = "https://github.com/vioken/waylib";
     license = with lib.licenses; [ gpl3Only lgpl3Only asl20 ];
     outputsToInstall = [ "out" ];

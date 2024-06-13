@@ -30,7 +30,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "An entity framework for Go";
+    description = "Entity framework for Go";
     homepage = "https://entgo.io/";
     changelog = "https://github.com/ent/ent/releases/tag/v${version}";
     downloadPage = "https://github.com/ent/ent";

@@ -120,12 +120,14 @@ in {
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
           ];
           settings = {
-            # Must not specify the OpenSSL provided algorithms.
-            Ciphers = [ "chacha20-poly1305@openssh.com" ];
-            KexAlgorithms = [
-              "curve25519-sha256"
-              "curve25519-sha256@libssh.org"
-            ];
+            # Since this test is against an OpenSSH-without-OpenSSL,
+            # we have to override NixOS's defaults ciphers (which require OpenSSL)
+            # and instead set these to null, which will mean OpenSSH uses its defaults.
+            # Expectedly, OpenSSH's defaults don't require OpenSSL when it's compiled
+            # without OpenSSL.
+            Ciphers = null;
+            KexAlgorithms = null;
+            Macs = null;
           };
         };
         users.users.root.openssh.authorizedKeys.keys = [

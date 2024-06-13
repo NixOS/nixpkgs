@@ -191,7 +191,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
 ### Passthru outputs {#ssec-pkgs-dockerTools-buildImage-passthru-outputs}
 
-`buildImage` defines a few [`passthru`](#var-stdenv-passthru) attributes:
+`buildImage` defines a few [`passthru`](#chap-passthru) attributes:
 
 `buildArgs` (Attribute Set)
 
@@ -576,13 +576,13 @@ This allows the function to produce reproducible images.
 
 `passthru` (Attribute Set; _optional_)
 
-: Use this to pass any attributes as [passthru](#var-stdenv-passthru) for the resulting derivation.
+: Use this to pass any attributes as [`passthru`](#chap-passthru) for the resulting derivation.
 
   _Default value:_ `{}`
 
 ### Passthru outputs {#ssec-pkgs-dockerTools-streamLayeredImage-passthru-outputs}
 
-`streamLayeredImage` also defines its own [`passthru`](#var-stdenv-passthru) attributes:
+`streamLayeredImage` also defines its own [`passthru`](#chap-passthru) attributes:
 
 `imageTag` (String)
 

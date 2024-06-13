@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/babelfish";
-    description = "A module to work with countries and languages";
+    description = "Module to work with countries and languages";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

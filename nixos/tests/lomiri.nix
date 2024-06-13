@@ -268,7 +268,7 @@ in {
         machine.screenshot("settings_content-hub_peers")
 
         # Select Morph as content source
-        mouse_click(300, 100)
+        mouse_click(370, 100)
 
         # Expect Morph to be brought into the foreground, with its Downloads page open
         machine.wait_for_text("No downloads")

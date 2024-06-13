@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/kaizendorks/pymongo_inmemory";
-    description = "A mongo mocking library with an ephemeral MongoDB running in memory";
+    description = "Mongo mocking library with an ephemeral MongoDB running in memory";
     maintainers = with lib.maintainers; [ pbsds ];
     license = lib.licenses.mit;
   };

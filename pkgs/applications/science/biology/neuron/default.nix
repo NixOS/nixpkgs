@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , readline
 , xorg
 , mpi
@@ -17,11 +17,13 @@
 , useCore ? false
 , useRx3d ? false
 }:
-
-
-stdenv.mkDerivation rec {
+let
+  inherit (lib.lists) optionals;
+  inherit (lib.strings) cmakeBool;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "neuron";
-  version = "8.2.3";
+  version = "8.2.4";
 
   # format is for pythonModule conversion
   format = "other";
@@ -31,10 +33,10 @@ stdenv.mkDerivation rec {
     bison
     flex
     git
-  ] ++ lib.optionals useCore [ perl gsl ]
-  ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+  ] ++ optionals useCore [ perl gsl ]
+  ++ optionals stdenv.isDarwin [ xcbuild ];
 
-  buildInputs = lib.optionals useIv [
+  buildInputs = optionals useIv [
     xorg.libX11.dev
     xorg.libXcomposite.dev
     xorg.libXext.dev
@@ -47,28 +49,29 @@ stdenv.mkDerivation rec {
     python3.pkgs.setuptools
     python3.pkgs.scikit-build
     python3.pkgs.matplotlib
-  ] ++ lib.optionals useMpi [
+  ] ++ optionals useMpi [
     mpi
-  ] ++ lib.optionals useMpi [
+  ] ++ optionals useMpi [
     python3.pkgs.mpi4py
-  ] ++ lib.optionals useRx3d [
-    python3.pkgs.cython
+  ] ++ optionals useRx3d [
+    python3.pkgs.cython_0 # NOTE: cython<3 is required as of 8.2.4
     python3.pkgs.numpy
   ];
-
-  patches = [ ./neuron_darwin_rpath.patch ];
 
   # Patch build shells for cmake (bin, src, cmake) and submodules (external)
   postPatch = ''
     patchShebangs ./bin ./src ./external ./cmake
-    sed -e 's#DESTDIR =#DESTDIR = '"$out"'#' -i external/coreneuron/extra/nrnivmodl_core_makefile.in
+    substituteInPlace external/coreneuron/extra/nrnivmodl_core_makefile.in \
+      --replace-fail \
+        "DESTDIR =" \
+        "DESTDIR = $out"
   '';
 
   cmakeFlags = [
-    "-DNRN_ENABLE_INTERVIEWS=${if useIv then "ON" else "OFF"}"
-    "-DNRN_ENABLE_MPI=${if useMpi then "ON" else "OFF"}"
-    "-DNRN_ENABLE_CORENEURON=${if useCore then "ON" else "OFF"}"
-    "-DNRN_ENABLE_RX3D=${if useRx3d then "ON" else "OFF"}"
+    (cmakeBool "NRN_ENABLE_INTERVIEWS" useIv)
+    (cmakeBool "NRN_ENABLE_MPI" useMpi)
+    (cmakeBool "NRN_ENABLE_CORENEURON" useCore)
+    (cmakeBool "NRN_ENABLE_RX3D" useRx3d)
   ];
 
   postInstall = ''
@@ -81,9 +84,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  src = fetchurl {
-    url = "https://github.com/neuronsimulator/nrn/releases/download/${version}/full-src-package-${version}.tar.gz";
-    sha256 = "sha256-k8+71BRfh+a73sZho6v0QFRxVmrfx6jqrgaqammdtDI=";
+  src = fetchFromGitHub {
+    owner = "neuronsimulator";
+    repo = "nrn";
+    rev = finalAttrs.version;
+    fetchSubmodules = true;
+    hash = "sha256-KsULc+LHoWmrkGYebpoUot6DhStKidbLQf5a3S+pi4s=";
   };
 
   meta = with lib; {
@@ -101,4 +107,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ adev davidcromp ];
     platforms = platforms.all;
   };
-}
+})

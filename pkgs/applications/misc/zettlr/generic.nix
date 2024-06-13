@@ -29,7 +29,7 @@ appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
-    description = "A markdown editor for writing academic texts and taking notes";
+    description = "Markdown editor for writing academic texts and taking notes";
     homepage = "https://www.zettlr.com";
     platforms = [ "x86_64-linux" ];
     license = licenses.gpl3;

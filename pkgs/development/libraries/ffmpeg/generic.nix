@@ -465,7 +465,7 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
       }
     ])
-    ++ (lib.optionals (lib.versionAtLeast version "7.0") [
+    ++ (lib.optionals (lib.versionAtLeast version "7.0" && lib.versionOlder version "7.0.1") [
       {
         # Will likely be obsolete in >7.0
         name = "fate_avoid_dependency_on_samples";
@@ -850,7 +850,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "A complete, cross-platform solution to record, convert and stream audio and video";
+    description = "Complete, cross-platform solution to record, convert and stream audio and video";
     homepage = "https://www.ffmpeg.org/";
     changelog = "https://github.com/FFmpeg/FFmpeg/blob/n${version}/Changelog";
     longDescription = ''

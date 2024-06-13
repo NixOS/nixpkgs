@@ -19,14 +19,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-r9CAWirQgafK/y71vABM46AUe1OAFejsqWY0FxaxJg4=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/fwupd/fwupd-efi/commit/26c6ec5c1e7765fb5dc6a4df511ab21ee6c6e67a.patch";
-      revert = true;
-      hash = "sha256-vTdYExd7OlrrZ/LhlEO1zcvpKzeT5OeOeosD8/LUkMg=";
-    })
-  ];
-
   nativeBuildInputs = [
     meson
     ninja

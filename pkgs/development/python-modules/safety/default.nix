@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.2.0";
+  version = "3.2.2";
 
   disabled = pythonOlder "3.7";
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-i9XKtfPYphzg6m6Y8mfBAG0FYJfEXGRP7nr+/31ZScE=";
+    hash = "sha256-KlhnAEqh487ckAAKtyb9rSzgrheYY8GxaX1+je0bjNs=";
   };
 
   postPatch = ''

@@ -62,7 +62,7 @@ let
     ]) etc'}
   '';
 
-  etcHardlinks = filter (f: f.mode != "symlink") etc';
+  etcHardlinks = filter (f: f.mode != "symlink" && f.mode != "direct-symlink") etc';
 
   build-composefs-dump = pkgs.runCommand "build-composefs-dump.py"
     {

@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/zigpy/zigpy-xbee/releases/tag/${version}";
-    description = "A library which communicates with XBee radios for zigpy";
+    description = "Library which communicates with XBee radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-xbee";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mvnetbiz ];

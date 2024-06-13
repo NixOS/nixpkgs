@@ -36,7 +36,7 @@ in rec {
 
     meta = with lib;
       metaCommon // {
-        description = "A modern asynchronous DNS API";
+        description = "Modern asynchronous DNS API";
         longDescription = ''
           getdns is an implementation of a modern asynchronous DNS API; the
           specification was originally edited by Paul Hoffman. It is intended to make all
@@ -77,7 +77,7 @@ in rec {
 
     meta = with lib;
       metaCommon // {
-        description = "A local DNS Privacy stub resolver (using DNS-over-TLS)";
+        description = "Local DNS Privacy stub resolver (using DNS-over-TLS)";
         mainProgram = "stubby";
         longDescription = ''
           Stubby is an application that acts as a local DNS Privacy stub

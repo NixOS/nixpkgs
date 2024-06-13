@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
     rev = "v${version}";
-    hash = "sha256-GU1PG5ciUqbRlAveq2ouqnBYIBEdMSSM0H/1eHL+zlo=";
+    hash = "sha256-gjuQ7sp6/GeKSqyyicOtH5Q/1xRy/7cta4KKMn2cfzQ=";
   };
 
-  vendorHash = "sha256-0OZtKIDdEnQLnSj109EpGvaZvMIy7gPAZ+weHzYKGSg=";
+  vendorHash = "sha256-FsFignBh669E60S8l8siQHLzeSfB5X/XOHBXPMDX3Cg=";
 
   subPackages = [ "cmd/*" ];
 
@@ -46,7 +46,7 @@ buildGoModule rec {
   };
 
   meta = with lib;  {
-    description = "A data constraint language which aims to simplify tasks involving defining and using data";
+    description = "Data constraint language which aims to simplify tasks involving defining and using data";
     homepage = "https://cuelang.org/";
     license = lib.licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];

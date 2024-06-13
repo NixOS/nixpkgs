@@ -70,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
   strictDeps = false;
 
   meta = with lib; {
-    description = "A new GNOME web browser";
+    description = "New GNOME web browser";
     mainProgram = "eolie";
     homepage = "https://gitlab.gnome.org/World/eolie";
     license  = licenses.gpl3Plus;

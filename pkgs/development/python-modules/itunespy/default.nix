@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "itunespy" ];
 
   meta = with lib; {
-    description = "A simple library to fetch data from the iTunes Store API";
+    description = "Simple library to fetch data from the iTunes Store API";
     homepage = "https://github.com/sleepyfran/itunespy";
     license = licenses.mit;
     maintainers = with maintainers; [ j0hax ];

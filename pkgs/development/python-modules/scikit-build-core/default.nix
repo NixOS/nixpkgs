@@ -85,7 +85,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "scikit_build_core" ];
 
   meta = with lib; {
-    description = "A next generation Python CMake adaptor and Python API for plugins";
+    description = "Next generation Python CMake adaptor and Python API for plugins";
     homepage = "https://github.com/scikit-build/scikit-build-core";
     changelog = "https://github.com/scikit-build/scikit-build-core/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

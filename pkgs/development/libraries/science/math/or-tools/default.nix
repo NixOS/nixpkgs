@@ -2,6 +2,7 @@
 , bzip2
 , cbc
 , cmake
+, DarwinTools # sw_vers
 , eigen
 , ensureNewerSourcesForZipFilesHook
 , fetchFromGitHub
@@ -72,6 +73,8 @@ stdenv.mkDerivation rec {
     python.pythonOnBuildForHost
     swig4
     unzip
+  ] ++ lib.optionals stdenv.isDarwin [
+    DarwinTools
   ] ++ (with python.pythonOnBuildForHost.pkgs; [
     pip
     mypy-protobuf

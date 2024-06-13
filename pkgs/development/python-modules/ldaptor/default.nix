@@ -43,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Pure-Python Twisted library for LDAP";
+    description = "Pure-Python Twisted library for LDAP";
     homepage = "https://github.com/twisted/ldaptor";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

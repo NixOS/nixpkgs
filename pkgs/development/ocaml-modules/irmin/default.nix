@@ -38,6 +38,6 @@ buildDunePackage {
   doCheck = true;
 
   meta = ppx_irmin.meta // {
-    description = "A distributed database built on the same principles as Git";
+    description = "Distributed database built on the same principles as Git";
   };
 }

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   doCheck = (!stdenv.isDarwin);
 
   meta = with lib; {
-    description = "A gpodder.net client library";
+    description = "Gpodder.net client library";
     longDescription = ''
       The mygpoclient library allows developers to utilize a Pythonic interface
       to the gpodder.net web services.

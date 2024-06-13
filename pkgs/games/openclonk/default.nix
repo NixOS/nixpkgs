@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, fetchDebianPatch, fetchpatch, cmake, pkg-config
+{ lib, stdenv, fetchurl, fetchFromGitHub, fetchDebianPatch, cmake, pkg-config
 , SDL2, libvorbis, libogg, libjpeg, libpng, freetype, glew, tinyxml, openal, libepoxy
 , curl
 , freealut, readline, libb2, gcc-unwrapped

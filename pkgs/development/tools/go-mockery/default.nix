@@ -61,7 +61,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/vektra/mockery";
-    description = "A mock code autogenerator for Golang";
+    description = "Mock code autogenerator for Golang";
     maintainers = with maintainers; [ fbrs ];
     mainProgram = "mockery";
     license = licenses.bsd3;

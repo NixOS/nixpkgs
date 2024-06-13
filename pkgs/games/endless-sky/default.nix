@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   prefixKey = "PREFIX=";
 
   meta = with lib; {
-    description = "A sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
+    description = "Sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
     mainProgram = "endless-sky";
     homepage = "https://endless-sky.github.io/";
     license = with licenses; [

@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/brouberol/contexttimer";
-    description = "A timer as a context manager";
+    description = "Timer as a context manager";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ atila ];
   };

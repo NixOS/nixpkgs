@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Fast and Free C++ Library for Creating, Parsing an Manipulating PDF Files and Streams";
+    description = "Fast and Free C++ Library for Creating, Parsing an Manipulating PDF Files and Streams";
     homepage = "https://www.pdfhummus.com";
     license = licenses.asl20;
     platforms = platforms.linux;

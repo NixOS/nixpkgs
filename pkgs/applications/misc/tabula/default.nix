@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
 
   meta = with lib; {
-    description = "A tool for liberating data tables locked inside PDF files";
+    description = "Tool for liberating data tables locked inside PDF files";
     longDescription = ''
       If you’ve ever tried to do anything with data provided to you in PDFs, you
       know how painful it is — there's no easy way to copy-and-paste rows of data

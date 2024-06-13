@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.jdk = jdk;
 
   meta = with lib; {
-    description = "A Lisp dialect for the JVM";
+    description = "Lisp dialect for the JVM";
     homepage = "https://clojure.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;

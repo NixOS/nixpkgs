@@ -67,7 +67,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "The Operator Splitting QP Solver";
+    description = "Operator Splitting QP Solver";
     longDescription = ''
       Numerical optimization package for solving problems in the form
         minimize        0.5 x' P x + q' x

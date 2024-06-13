@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A library to handle keyboard descriptions";
+    description = "Library to handle keyboard descriptions";
     longDescription = ''
       libxkbcommon is a keyboard keymap compiler and support library which
       processes a reduced subset of keymaps as defined by the XKB (X Keyboard

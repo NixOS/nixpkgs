@@ -40,6 +40,7 @@ let
       };
       argsOverride = {
         inherit version;
+        pname = "linux-hardened";
         modDirVersion = modDirVersion' + kernelPatches.hardened.${kernel.meta.branch}.extra;
         src = fetchurl {
           url = "mirror://kernel/linux/kernel/v${major}.x/linux-${version}.tar.xz";
@@ -193,6 +194,7 @@ in {
         kernelPatches.rust_1_75
         kernelPatches.rust_1_76
         kernelPatches.rust_1_77-6_8
+        kernelPatches.rust_1_78
       ];
     };
 
@@ -213,6 +215,7 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
+          kernelPatches.rust_1_78
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -588,6 +591,8 @@ in {
     qc71_laptop = callPackage ../os-specific/linux/qc71_laptop { };
 
     hid-ite8291r3 = callPackage ../os-specific/linux/hid-ite8291r3 { };
+
+    hid-t150 = callPackage ../os-specific/linux/hid-t150 { };
 
     hid-tmff2 = callPackage ../os-specific/linux/hid-tmff2 { };
 

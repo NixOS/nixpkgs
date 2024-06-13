@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-3kURSzwzM4QPCbb8C1vRb6Mr46XKNyZF0sAze5Z9xsg=";
 
   meta = with lib; {
-    description = "A website link checker which scrapes and inspects all pages in a website recursively";
+    description = "Website link checker which scrapes and inspects all pages in a website recursively";
     homepage = "https://github.com/raviqqe/muffet";
     changelog = "https://github.com/raviqqe/muffet/releases/tag/v${version}";
     license = licenses.mit;

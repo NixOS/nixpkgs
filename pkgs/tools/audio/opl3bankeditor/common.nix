@@ -59,7 +59,7 @@ mkDerivation rec {
 
   meta = with lib; {
     inherit mainProgram;
-    description = "A small cross-platform editor of the ${chip} FM banks of different formats";
+    description = "Small cross-platform editor of the ${chip} FM banks of different formats";
     homepage = src.meta.homepage;
     license = licenses.gpl3Plus;
     platforms = platforms.all;

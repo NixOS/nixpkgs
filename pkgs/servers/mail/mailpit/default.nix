@@ -72,7 +72,7 @@ buildGoModule {
   };
 
   meta = with lib; {
-    description = "An email and SMTP testing tool with API for developers";
+    description = "Email and SMTP testing tool with API for developers";
     homepage = "https://github.com/axllent/mailpit";
     changelog = "https://github.com/axllent/mailpit/releases/tag/v${version}";
     maintainers = with maintainers; [ stephank ];

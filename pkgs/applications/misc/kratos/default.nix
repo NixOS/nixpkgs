@@ -6,7 +6,7 @@
 }:
 let
   pname = "kratos";
-  version = "1.1.0";
+  version = "1.2.0";
 in
 buildGoModule {
   inherit pname version;
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "ory";
     repo = "kratos";
     rev = "v${version}";
-    hash = "sha256-zrII2lpffZkwFauPAilh1QaqRKvpj1mlHZA7in1ljYg=";
+    hash = "sha256-KqF6DYrEsmPj2PtI2+5ztE0m9uBO1gpNlvdo+Aw6REA=";
   };
 
-  vendorHash = "sha256-TSB7jCPOVwub+ZQaaUSmsz/R4HAfmnWb0wTf2w4aeuk=";
+  vendorHash = "sha256-6gJf+8AKjV83MTF0rC8OxDwkwGx4CJg7SdfNgcja8QY=";
 
   subPackages = [ "." ];
 
@@ -47,7 +47,7 @@ buildGoModule {
 
   meta = {
     mainProgram = "kratos";
-    description = "An API-first Identity and User Management system that is built according to cloud architecture best practices";
+    description = "API-first Identity and User Management system that is built according to cloud architecture best practices";
     homepage = "https://www.ory.sh/kratos/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mrmebelman ];

@@ -155,7 +155,7 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A freeware web browser developed by Google";
+    description = "Freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

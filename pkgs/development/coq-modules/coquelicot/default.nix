@@ -29,7 +29,7 @@ mkCoqDerivation {
 
   meta =  with lib; {
     homepage = "http://coquelicot.saclay.inria.fr/";
-    description = "A Coq library for Reals";
+    description = "Coq library for Reals";
     license = licenses.lgpl3;
     maintainers = [ maintainers.vbgl ];
   };

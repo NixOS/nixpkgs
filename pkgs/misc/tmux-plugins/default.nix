@@ -207,7 +207,7 @@ in rec {
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
-      description = "A feature packed Dracula theme for tmux!";
+      description = "Feature packed Dracula theme for tmux!";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ ethancedwards8 ];
@@ -816,6 +816,25 @@ in rec {
       repo = "tmux-yank";
       rev = "1b1a436e19f095ae8f825243dbe29800a8acd25c";
       sha256 = "hRvkBf+YrWycecnDixAsD4CAHg3KsioomfJ/nLl5Zgs=";
+    };
+  };
+
+  tmux-nova = mkTmuxPlugin rec {
+    pluginName = "tmux-nova";
+    rtpFilePath = "nova.tmux";
+    version = "1.2.0";
+    src = fetchFromGitHub {
+      owner = "o0th";
+      repo = "tmux-nova";
+      rev = "v${version}";
+      sha256 = "16llz3nlyw88lyd8mmj27i0ncyhpfjj5c1yikngf7nxcqsbjmcnh";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/o0th/tmux-nova";
+      description = "tmux-nova theme";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ o0th ];
     };
   };
 }

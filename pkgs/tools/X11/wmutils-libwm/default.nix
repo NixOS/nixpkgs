@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A small library for X window manipulation";
+    description = "Small library for X window manipulation";
     homepage = "https://github.com/wmutils/libwm";
     license = licenses.isc;
     maintainers = with maintainers; [ bhougland ];

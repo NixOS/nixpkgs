@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A GCC wrapper that makes it easy to embed secure computation protocols inside regular C programs";
+    description = "GCC wrapper that makes it easy to embed secure computation protocols inside regular C programs";
     license = lib.licenses.bsd3;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

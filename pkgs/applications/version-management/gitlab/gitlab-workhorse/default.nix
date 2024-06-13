@@ -5,7 +5,7 @@ in
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "16.10.6";
+  version = "16.11.4";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
@@ -17,10 +17,11 @@ buildGoModule rec {
 
   sourceRoot = "${src.name}/workhorse";
 
-  vendorHash = "sha256-bbKX22Tb2pM+Wnyl1ojdA1nmT40Z5R99mDP1hLD+lco=";
+  vendorHash = "sha256-44EtpjYsxYqDH035/ruPfshfejiO011HybKD2inp8bU=";
   buildInputs = [ git ];
   ldflags = [ "-X main.Version=${version}" ];
   doCheck = false;
+  prodyVendor = true;
 
   meta = with lib; {
     homepage = "http://www.gitlab.com/";

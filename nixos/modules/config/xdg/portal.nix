@@ -96,7 +96,7 @@ in
         Sets which portal backend should be used to provide the implementation
         for the requested interface. For details check {manpage}`portals.conf(5)`.
 
-        Configs will be linked to `/etx/xdg/xdg-desktop-portal/` with the name `$desktop-portals.conf`
+        Configs will be linked to `/etc/xdg/xdg-desktop-portal/` with the name `$desktop-portals.conf`
         for `xdg.portal.config.$desktop` and `portals.conf` for `xdg.portal.config.common`
         as an exception.
       '';

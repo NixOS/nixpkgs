@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A knowledge management meta-framework for geeks";
+    description = "Knowledge management meta-framework for geeks";
     homepage = "https://github.com/phodal/quake";
     license = licenses.mit;
     maintainers = [ maintainers.elliot ];

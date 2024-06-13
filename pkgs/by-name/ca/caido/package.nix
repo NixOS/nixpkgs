@@ -28,7 +28,7 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "A lightweight web security auditing toolkit";
+    description = "Lightweight web security auditing toolkit";
     homepage = "https://caido.io/";
     changelog = "https://github.com/caido/caido/releases/tag/v${version}";
     license = licenses.unfree;

@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , lib
 , python3
 , meson
@@ -18,23 +17,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bitwuzla";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "bitwuzla";
     repo = "bitwuzla";
     rev = finalAttrs.version;
-    hash = "sha256-ZEdV4ml1LwrYwscgOcL2gLx/ijPYqRktXMQH/Njh8OI=";
+    hash = "sha256-/izxmN+zlrXsY6g6TRC1QqsLqltvrmZquXRd6h8RLRc=";
   };
-
-  patches = [
-    # fix parser on aarch64
-    # remove on next release
-    (fetchpatch {
-      url = "https://github.com/bitwuzla/bitwuzla/commit/4d914aa5ec34076c37749f0cf6dce976ea510386.patch";
-      hash = "sha256-gp+HEamOySjPXCC39tt5DIMdQqEew26a+M15sNdCmTM=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -62,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.hostPlatform.isLinux;
 
   meta = {
-    description = "A SMT solver for fixed-size bit-vectors, floating-point arithmetic, arrays, and uninterpreted functions";
+    description = "SMT solver for fixed-size bit-vectors, floating-point arithmetic, arrays, and uninterpreted functions";
     mainProgram = "bitwuzla";
     homepage = "https://bitwuzla.github.io";
     license = lib.licenses.mit;

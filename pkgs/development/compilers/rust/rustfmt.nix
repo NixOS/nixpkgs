@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   CFG_RELEASE_CHANNEL = if asNightly then "nightly" else "stable";
 
   meta = with lib; {
-    description = "A tool for formatting Rust code according to style guidelines";
+    description = "Tool for formatting Rust code according to style guidelines";
     homepage = "https://github.com/rust-lang-nursery/rustfmt";
     license = with licenses; [ mit asl20 ];
     mainProgram = "rustfmt";

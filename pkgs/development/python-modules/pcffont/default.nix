@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pcffont";
-  version = "0.0.13";
+  version = "0.0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "pcffont";
     rev = "refs/tags/${version}";
-    hash = "sha256-DbPcE2Bx+V90s7P3Gq+Uz3iQNidwbNlp7zln8ykL7Sg=";
+    hash = "sha256-UIRhUlsRd3ICdLAjUasQ1NX5NofSKCEqa8cf1c1voGM=";
   };
 
   build-system = [ hatchling ];

@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config gettext ];
 
   meta = with lib; {
-    description = "An interface to banking tasks, file formats and country information";
+    description = "Interface to banking tasks, file formats and country information";
     homepage = "https://www.aquamaniac.de/rdm/";
     hydraPlatforms = [];
     license = licenses.gpl2Plus;

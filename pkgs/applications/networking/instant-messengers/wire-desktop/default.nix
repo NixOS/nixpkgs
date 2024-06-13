@@ -42,7 +42,7 @@ let
   }.${system} or throwSystem;
 
   meta = with lib; {
-    description = "A modern, secure messenger for everyone";
+    description = "Modern, secure messenger for everyone";
     longDescription = ''
       Wire Personal is a secure, privacy-friendly messenger. It combines useful
       and fun features, audited security, and a beautiful, distinct user

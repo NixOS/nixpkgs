@@ -12,6 +12,7 @@
   setuptools,
   wrapGAppsNoGuiHook,
   notify2,
+  glib
 }:
 
 let
@@ -32,13 +33,16 @@ buildPythonPackage (common // {
       --replace-fail "plugdev" "openrazer"
   '';
 
-  nativeBuildInputs = [ setuptools wrapGAppsNoGuiHook ];
+  nativeBuildInputs = [ setuptools wrapGAppsNoGuiHook gobject-introspection ];
+
+  buildInputs = [
+    glib
+    gtk3
+  ];
 
   propagatedBuildInputs = [
     daemonize
     dbus-python
-    gobject-introspection
-    gtk3
     pygobject3
     pyudev
     setproctitle
@@ -59,7 +63,7 @@ buildPythonPackage (common // {
   '';
 
   meta = common.meta // {
-    description = "An entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
+    description = "Entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
     mainProgram = "openrazer-daemon";
   };
 })

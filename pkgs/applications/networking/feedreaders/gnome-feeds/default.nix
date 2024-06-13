@@ -77,7 +77,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "An RSS/Atom feed reader for GNOME";
+    description = "RSS/Atom feed reader for GNOME";
     mainProgram = "gfeeds";
     homepage = "https://gitlab.gnome.org/World/gfeeds";
     license = licenses.gpl3Plus;

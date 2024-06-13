@@ -255,13 +255,10 @@ in
         {
           description = "Set up the state directory for FreshRSS before use";
           wantedBy = [ "multi-user.target" ];
-          serviceConfig = defaultServiceConfig //{
-            Type = "oneshot";
-            User = "freshrss";
-            Group = "freshrss";
-            StateDirectory = "freshrss";
-            WorkingDirectory = cfg.package;
+          serviceConfig = defaultServiceConfig // {
+            RemainAfterExit = true;
           };
+          restartIfChanged = true;
           environment = {
             DATA_PATH = cfg.dataDir;
           };
@@ -299,7 +296,7 @@ in
         environment = {
           DATA_PATH = cfg.dataDir;
         };
-        serviceConfig = defaultServiceConfig //{
+        serviceConfig = defaultServiceConfig // {
           ExecStart = "${cfg.package}/app/actualize_script.php";
         };
       };

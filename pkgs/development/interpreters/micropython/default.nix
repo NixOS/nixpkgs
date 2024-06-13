@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A lean and efficient Python implementation for microcontrollers and constrained systems";
+    description = "Lean and efficient Python implementation for microcontrollers and constrained systems";
     homepage = "https://micropython.org";
     platforms = platforms.unix;
     license = licenses.mit;

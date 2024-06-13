@@ -21,7 +21,7 @@ trivialBuild rec {
   '';
 
   meta = with lib; {
-    description = "An Emacs major mode for editing Jam files";
+    description = "Emacs major mode for editing Jam files";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qyliss ];
     platforms = platforms.all;

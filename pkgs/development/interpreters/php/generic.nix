@@ -346,7 +346,7 @@ let
           };
 
           meta = with lib; {
-            description = "An HTML-embedded scripting language";
+            description = "HTML-embedded scripting language";
             homepage = "https://www.php.net/";
             license = licenses.php301;
             mainProgram = "php";

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     changelog = "https://github.com/containers/conmon/releases/tag/${src.rev}";
     homepage = "https://github.com/containers/conmon";
-    description = "An OCI container runtime monitor";
+    description = "OCI container runtime monitor";
     license = licenses.asl20;
     maintainers = with maintainers; [ ] ++ teams.podman.members;
     platforms = platforms.linux;

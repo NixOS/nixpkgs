@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   meta = {
-    description = "A tool to scribble over X windows";
+    description = "Tool to scribble over X windows";
     license = lib.licenses.gpl2Plus ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

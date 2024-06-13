@@ -24,7 +24,7 @@ crystal.buildCrystalPackage rec {
   };
 
   meta = with lib; {
-    description = "A CLI tool for publishing to and consuming from AMQP servers";
+    description = "CLI tool for publishing to and consuming from AMQP servers";
     mainProgram = "amqpcat";
     homepage = "https://github.com/cloudamqp/amqpcat";
     license = licenses.mit;

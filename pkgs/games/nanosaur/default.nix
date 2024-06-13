@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A port of Nanosaur, a 1998 Macintosh game by Pangea Software, for modern operating systems";
+    description = "Port of Nanosaur, a 1998 Macintosh game by Pangea Software, for modern operating systems";
     longDescription = ''
       Nanosaur is a 1998 Macintosh game by Pangea Software.
       In it, you’re a cybernetic dinosaur from the future who’s sent back in time 20 minutes before a giant asteroid hits the Earth.

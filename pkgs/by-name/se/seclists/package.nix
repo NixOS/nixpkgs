@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A collection of multiple types of lists used during security assessments, collected in one place";
+    description = "Collection of multiple types of lists used during security assessments, collected in one place";
     homepage = "https://github.com/danielmiessler/seclists";
     license = licenses.mit;
     maintainers = with maintainers; [ tochiaha janik pamplemousse ];

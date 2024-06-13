@@ -4,7 +4,7 @@
   fetchurl,
   autoPatchelfHook,
   dpkg,
-  makeBinaryWrapper,
+  makeShellWrapper,
   wrapGAppsHook3,
   alsa-lib,
   at-spi2-atk,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    makeBinaryWrapper
+    makeShellWrapper
     wrapGAppsHook3
   ];
 
@@ -120,8 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R "usr/share" "$out/share"
     chmod -R g-w "$out"
 
-    # Wrap the startup command
-    makeBinaryWrapper $out/opt/GoofCord/goofcord $out/bin/goofcord \
+    # use makeShellWrapper (instead of the makeBinaryWrapper provided by wrapGAppsHook3) for proper shell variable expansion
+    # see https://github.com/NixOS/nixpkgs/issues/172583
+    makeShellWrapper $out/opt/GoofCord/goofcord $out/bin/goofcord \
       "''${gappsWrapperArgs[@]}" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer}}" \

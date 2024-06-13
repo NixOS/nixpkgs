@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A C interpreter and API explorer";
+    description = "C interpreter and API explorer";
     mainProgram = "bic";
     longDescription = ''
       bic This a project that allows developers to explore and test C-APIs using a

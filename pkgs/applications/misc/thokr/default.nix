@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-gEpmXyLmw6bX3enA3gNVtXNMlkQl6J/8AwJQSY0RtFw=";
 
   meta = with lib; {
-    description = "A typing tui with visualized results and historical logging";
+    description = "Typing tui with visualized results and historical logging";
     homepage = "https://github.com/thatvegandev/thokr";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

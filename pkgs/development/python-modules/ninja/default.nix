@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A small build system with a focus on speed";
+    description = "Small build system with a focus on speed";
     mainProgram = "ninja";
     longDescription = ''
       This is a stub of the ninja package on PyPI that uses the ninja program

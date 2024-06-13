@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The tuned OpenCL BLAS library";
+    description = "Tuned OpenCL BLAS library";
     homepage = "https://github.com/CNugteren/CLBlast";
     license = licenses.asl20;
     maintainers = with maintainers; [ Tungsten842 ];

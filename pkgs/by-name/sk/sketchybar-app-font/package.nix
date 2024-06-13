@@ -73,14 +73,13 @@ lib.checkListOfEnum "sketchybar-app-font: artifacts" artifacts artifactList
             exit 0
         fi
         for artifact in ${lib.escapeShellArgs (lib.mapAttrsToList(a: _: a) finalAttrs.passthru.sources)}; do
-          update-source-version "sketchybar-app-font" "0" "${lib.fakeHash}" --source-key="sources.$artifact"
-          update-source-version "sketchybar-app-font" "$NEW_VERSION" --source-key="sources.$artifact"
+          update-source-version "sketchybar-app-font" "$NEW_VERSION" --ignore-same-version --source-key="sources.$artifact"
         done
       '';
     };
 
     meta = {
-      description = "A ligature-based symbol font and a mapping function for sketchybar";
+      description = "Ligature-based symbol font and a mapping function for sketchybar";
       longDescription = ''
         A ligature-based symbol font and a mapping function for sketchybar, inspired by simple-bar's usage of community-contributed minimalistic app icons.
       '';

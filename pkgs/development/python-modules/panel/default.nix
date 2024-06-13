@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "1.4.3";
+  version = "1.4.4";
 
   format = "wheel";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # tries to fetch even more artifacts
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-iIBQ9UEcmO6q3bS2faFK7tY4mPVaoIWS7bMzKLzkfWw=";
+    hash = "sha256-tJu5Z2VnsMBzC/aTSMBXJHCAgRrsVjZN1Pz7qA5eCaA=";
     dist = "py3";
     python = "py3";
   };
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A high level dashboarding library for python visualization libraries";
+    description = "High level dashboarding library for python visualization libraries";
     mainProgram = "panel";
     homepage = "https://github.com/holoviz/panel";
     changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";

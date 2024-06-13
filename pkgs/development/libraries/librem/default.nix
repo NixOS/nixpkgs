@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ;
   enableParallelBuilding = true;
   meta = {
-    description = "A library for real-time audio and video processing";
+    description = "Library for real-time audio and video processing";
     homepage = "https://github.com/baresip/rem";
     maintainers = with lib.maintainers; [ elohmeier raskin ];
     license = lib.licenses.bsd3;

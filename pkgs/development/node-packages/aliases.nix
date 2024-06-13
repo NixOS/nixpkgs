@@ -57,6 +57,7 @@ mapAliases {
   inherit (pkgs) asar; # added 2023-08-26
   inherit (pkgs) aws-azure-login; # added 2023-09-30
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
+  inherit (pkgs) bash-language-server; # added 2024-06-07
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
   inherit (pkgs) btc-rpc-explorer; # added 2023-08-17

@@ -117,7 +117,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.postfix.org/";
     changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
-    description = "A fast, easy to administer, and secure mail server";
+    description = "Fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin dotlambda lewo ];

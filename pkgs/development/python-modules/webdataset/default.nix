@@ -85,7 +85,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "A high-performance Python-based I/O system for large (and small) deep learning problems, with strong support for PyTorch";
+    description = "High-performance Python-based I/O system for large (and small) deep learning problems, with strong support for PyTorch";
     mainProgram = "widsindex";
     homepage = "https://github.com/webdataset/webdataset";
     changelog = "https://github.com/webdataset/webdataset/releases/tag/${version}";

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cairo pango wayland libxkbcommon wayland-protocols scdoc ];
 
   meta = with lib; {
-    description = "An efficient dynamic menu for Sway and wlroots based Wayland compositors";
+    description = "Efficient dynamic menu for Sway and wlroots based Wayland compositors";
     homepage = "https://git.sr.ht/~adnano/wmenu";
     license = licenses.mit;
     platforms = platforms.linux;

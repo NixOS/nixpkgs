@@ -27,7 +27,7 @@ let
   };
 
   meta = with lib; {
-    description = "An open source note taking and to-do application with synchronisation capabilities";
+    description = "Open source note taking and to-do application with synchronisation capabilities";
     mainProgram = "joplin-desktop";
     longDescription = ''
       Joplin is a free, open source note taking and to-do application, which can

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ]);
 
   meta = with lib; {
-    description = "A library to import various 3D model formats";
+    description = "Library to import various 3D model formats";
     mainProgram = "assimp";
     homepage = "https://www.assimp.org/";
     license = licenses.bsd3;

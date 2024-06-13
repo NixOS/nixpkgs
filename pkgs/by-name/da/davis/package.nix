@@ -28,7 +28,7 @@ php.buildComposerProject (finalAttrs: {
   meta = {
     changelog = "https://github.com/tchapi/davis/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/tchapi/davis";
-    description = "A simple CardDav and CalDav server inspired by Baïkal";
+    description = "Simple CardDav and CalDav server inspired by Baïkal";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ramblurr ];
   };

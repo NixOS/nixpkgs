@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-NQYIq9Wc2mtUGeS3Iv2e0nfQkvcX6hOxZ6FHVcHD5cs=";
 
   meta = with lib; {
-    description = "A formatter for the leptos view! macro";
+    description = "Formatter for the leptos view! macro";
     mainProgram = "leptosfmt";
     homepage = "https://github.com/bram209/leptosfmt";
     changelog = "https://github.com/bram209/leptosfmt/blob/${src.rev}/CHANGELOG.md";

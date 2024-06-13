@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     inherit (finalAttrs.src.meta) homepage;
-    description = "A blazing fast wayland wallpaper utility";
+    description = "Blazing fast wayland wallpaper utility";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wozeparrot fufexan ];
     inherit (wayland.meta) platforms;

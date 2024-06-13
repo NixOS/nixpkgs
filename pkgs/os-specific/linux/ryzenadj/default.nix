@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Adjust power management settings for Ryzen Mobile Processors.";
+    description = "Adjust power management settings for Ryzen Mobile Processors";
     mainProgram = "ryzenadj";
     homepage = "https://github.com/FlyGoat/RyzenAdj";
     license = licenses.lgpl3Only;

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libphonenumber icu protobuf ];
 
   meta = with lib; {
-    description = "A libphonenumber command-line wrapper";
+    description = "Libphonenumber command-line wrapper";
     mainProgram = "pn";
     homepage = "https://github.com/Orange-OpenSource/pn";
     license = licenses.asl20;

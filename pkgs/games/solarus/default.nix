@@ -28,7 +28,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Zelda-like ARPG game engine";
+    description = "Zelda-like ARPG game engine";
     longDescription = ''
       Solarus is a game engine for Zelda-like ARPG games written in lua.
       Many full-fledged games have been writen for the engine.

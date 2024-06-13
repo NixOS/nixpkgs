@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyschemes" ];
 
   meta = with lib; {
-    description = "A library for validating data structures in Python";
+    description = "Library for validating data structures in Python";
     homepage = "https://github.com/spy16/pyschemes";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ gador ];

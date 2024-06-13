@@ -52,7 +52,7 @@ buildGoModule rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A simple tunnel written in golang";
+    description = "Simple tunnel written in golang";
     homepage = "https://github.com/ginuerzh/gost";
     license = licenses.mit;
     maintainers = with maintainers; [ pmy ];

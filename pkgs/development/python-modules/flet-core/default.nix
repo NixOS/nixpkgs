@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
-    description = "The library is the foundation of Flet framework and is not intended to be used directly";
+    description = "Library is the foundation of Flet framework and is not intended to be used directly";
     homepage = "https://flet.dev/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

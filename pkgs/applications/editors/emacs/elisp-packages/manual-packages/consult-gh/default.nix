@@ -45,7 +45,7 @@ melpaBuild {
 
   meta = {
     homepage = "https://github.com/armindarvish/consult-gh";
-    description = "A GitHub CLI client inside GNU Emacs using Consult";
+    description = "GitHub CLI client inside GNU Emacs using Consult";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };

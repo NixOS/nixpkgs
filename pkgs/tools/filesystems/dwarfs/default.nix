@@ -96,7 +96,7 @@ stdenv.mkDerivation {
   GTEST_FILTER = "-dwarfs/tools_test.end_to_end/*:dwarfs/tools_test.mutating_ops/*";
 
   meta = {
-    description = "A fast high compression read-only file system";
+    description = "Fast high compression read-only file system";
     homepage = "https://github.com/mhx/dwarfs";
     changelog = "https://github.com/mhx/dwarfs/blob/v${version}/CHANGES.md";
     license = lib.licenses.gpl3Plus;

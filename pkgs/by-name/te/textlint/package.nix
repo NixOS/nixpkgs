@@ -126,7 +126,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    description = "The pluggable natural language linter for text and markdown";
+    description = "Pluggable natural language linter for text and markdown";
     homepage = "https://github.com/textlint/textlint";
     changelog = "https://github.com/textlint/textlint/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;

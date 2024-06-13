@@ -213,7 +213,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A general-purpose library for parallel and massively-parallel computations";
+    description = "General-purpose library for parallel and massively-parallel computations";
     longDescription = ''
       A general-purpose library that simplifies the process of developing software that targets parallel and massively-parallel architectures including CPUs, GPUs, and other hardware acceleration devices.";
     '';

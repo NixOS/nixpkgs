@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A free, open-source tool for programming your amateur radio";
+    description = "Free, open-source tool for programming your amateur radio";
     homepage = "https://chirp.danplanet.com/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.emantor ];

@@ -36,7 +36,7 @@ mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A screen recorder for Linux";
+    description = "Screen recorder for Linux";
     homepage = "https://www.maartenbaert.be/simplescreenrecorder";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

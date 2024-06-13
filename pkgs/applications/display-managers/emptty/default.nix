@@ -8,18 +8,18 @@
 
 buildGoModule rec {
   pname = "emptty";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "tvrzna";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-64Ta0k4TzJcQC+RDybHzFUj96ZSRUOeYQ2U9KFjDXjk=";
+    hash = "sha256-9qNAQBmcFKPpJ+AqfOy3emA1fvqI/XaT39KwI5fpXHU=";
   };
 
   buildInputs = [ pam libX11 ];
 
-  vendorHash = "sha256-tviPb05puHvBdDkSsRrBExUVxQy+DzmkjB+W9W2CG4M=";
+  vendorHash = "sha256-PLyemAUcCz9H7+nAxftki3G7rQoEeyPzY3YUEj2RFn4=";
 
   meta = with lib; {
     description = "Dead simple CLI Display Manager on TTY";

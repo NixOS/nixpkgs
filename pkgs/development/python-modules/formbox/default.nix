@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "formbox" ];
 
   meta = with lib; {
-    description = "A script to format mbox as HTML/XML";
+    description = "Script to format mbox as HTML/XML";
     mainProgram = "formbox";
     homepage = "https://trong.loang.net/~cnx/formbox";
     license = licenses.agpl3Plus;

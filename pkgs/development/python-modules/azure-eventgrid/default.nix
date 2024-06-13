@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "azure.eventgrid" ];
 
   meta = with lib; {
-    description = "A fully-managed intelligent event routing service that allows for uniform event consumption using a publish-subscribe model";
+    description = "Fully-managed intelligent event routing service that allows for uniform event consumption using a publish-subscribe model";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/eventgrid/azure-eventgrid";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-eventgrid_${version}/sdk/eventgrid/azure-eventgrid/CHANGELOG.md";
     license = licenses.mit;

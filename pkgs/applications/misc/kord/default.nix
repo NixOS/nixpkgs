@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioUnit ];
 
   meta = with lib; {
-    description = "A music theory binary and library for Rust";
+    description = "Music theory binary and library for Rust";
     homepage = "https://github.com/twitchax/kord";
     maintainers = with maintainers; [ kidsan ];
     license = with licenses; [ mit ];

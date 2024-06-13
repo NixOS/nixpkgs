@@ -46,7 +46,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "requests_kerberos" ];
 
   meta = with lib; {
-    description = "An authentication handler for using Kerberos with Python Requests";
+    description = "Authentication handler for using Kerberos with Python Requests";
     homepage = "https://github.com/requests/requests-kerberos";
     license = licenses.isc;
     maintainers = with maintainers; [ catern ];

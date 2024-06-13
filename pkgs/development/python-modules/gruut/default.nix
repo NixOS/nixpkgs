@@ -96,7 +96,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gruut" ];
 
   meta = with lib; {
-    description = "A tokenizer, text cleaner, and phonemizer for many human languages";
+    description = "Tokenizer, text cleaner, and phonemizer for many human languages";
     mainProgram = "gruut";
     homepage = "https://github.com/rhasspy/gruut";
     license = licenses.mit;

@@ -32,7 +32,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool for managing Kubernetes resources as code";
+    description = "Tool for managing Kubernetes resources as code";
     mainProgram = "kubecfg";
     homepage = "https://github.com/kubecfg/kubecfg";
     changelog = "https://github.com/kubecfg/kubecfg/releases/tag/v${version}";

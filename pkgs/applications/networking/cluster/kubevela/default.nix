@@ -54,7 +54,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An application delivery platform to deploy and operate applications in hybrid, multi-cloud environments";
+    description = "Application delivery platform to deploy and operate applications in hybrid, multi-cloud environments";
     downloadPage = "https://github.com/kubevela/kubevela";
     homepage = "https://kubevela.io/";
     license = lib.licenses.asl20;

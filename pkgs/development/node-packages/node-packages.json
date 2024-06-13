@@ -25,7 +25,6 @@
 , "auto-changelog"
 , "aws-cdk"
 , "awesome-lint"
-, "bash-language-server"
 , "bower"
 , "bower2nix"
 , "browserify"
@@ -184,7 +183,6 @@
 , "patch-package"
 , "peerflix"
 , "peerflix-server"
-, {"pgrok-build-deps": "../../tools/networking/pgrok/build-deps"}
 , "pnpm"
 , "poor-mans-t-sql-formatter-cli"
 , "postcss"

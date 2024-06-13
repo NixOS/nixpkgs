@@ -5,7 +5,7 @@ skawarePackages.buildPackage {
   version = "2.3.7.1";
   sha256 = "zwJYV07H1itlTgwq14r0x9Z6xMnLN/eBSA9ZflSzD20=";
 
-  description = "A suite of DNS client programs and libraries for Unix systems";
+  description = "Suite of DNS client programs and libraries for Unix systems";
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 

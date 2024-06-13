@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/properties-cpp";
-    description = "A very simple convenience library for handling properties and signals in C++11";
+    description = "Very simple convenience library for handling properties and signals in C++11";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.linux;

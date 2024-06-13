@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/matthew-brett/grin";
-    description = "A grep program configured the way I like it";
+    description = "Grep program configured the way I like it";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.sjagoe ];
   };

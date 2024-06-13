@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "The BGP swiss army knife of networking";
+    description = "BGP swiss army knife of networking";
     homepage = "https://github.com/Exa-Networks/exabgp";
     changelog = "https://github.com/Exa-Networks/exabgp/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.bsd3;

@@ -89,7 +89,7 @@ let
     };
 
     meta = with lib; {
-      description = "A fast, lightweight SCM system for very large distributed projects";
+      description = "Fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
       changelog = "https://wiki.mercurial-scm.org/Release${versions.majorMinor version}";

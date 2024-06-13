@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fzf" ];
 
   meta = with lib; {
-    description = "A Pythonic Fzf Wrapper";
+    description = "Pythonic Fzf Wrapper";
     downloadPage = "https://github.com/justfoolingaround/fzf.py";
     homepage = "https://pypi.org/project/krfzf-py/";
     license = licenses.gpl3Only;

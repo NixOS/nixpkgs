@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "supervisor" ];
 
   meta = with lib; {
-    description = "A system for controlling process state under UNIX";
+    description = "System for controlling process state under UNIX";
     homepage = "http://supervisord.org/";
     changelog = "https://github.com/Supervisor/supervisor/blob/${version}/CHANGES.rst";
     license = licenses.free; # http://www.repoze.org/LICENSE.txt

@@ -9,7 +9,6 @@
 , libdrm
 , libevent
 , libyaml
-, lttng-ust
 , gst_all_1
 , gtest
 , graphviz
@@ -17,6 +16,8 @@
 , python3
 , python3Packages
 , systemd # for libudev
+, withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust
+, lttng-ust # withTracing
 , withQcam ? false
 , qt5 # withQcam
 , libtiff # withQcam
@@ -67,14 +68,12 @@ stdenv.mkDerivation rec {
     # hotplugging
     systemd
 
-    # lttng tracing
-    lttng-ust
-
     # yamlparser
     libyaml
 
     gtest
-  ] ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
+  ] ++ lib.optionals withTracing [ lttng-ust ]
+    ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
 
   nativeBuildInputs = [
     meson
@@ -92,7 +91,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dv4l2=true"
-    "-Dqcam=${if withQcam then "enabled" else "disabled"}"
+    (lib.mesonEnable "tracing" withTracing)
+    (lib.mesonEnable "qcam" withQcam)
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   meta = with lib; {
-    description = "An open source camera stack and framework for Linux, Android, and ChromeOS";
+    description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ citadelcore ];

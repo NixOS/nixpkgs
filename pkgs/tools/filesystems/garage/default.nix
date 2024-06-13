@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitea
-, fetchpatch
 , openssl
 , pkg-config
 , protobuf

@@ -6,13 +6,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pyradio";
-  version = "0.9.3.7";
+  version = "0.9.3.9";
 
   src = fetchFromGitHub {
     owner = "coderholic";
     repo = "pyradio";
     rev = "refs/tags/${version}";
-    hash = "sha256-NwDVytD6nIM++ixGmLh02FIE+hLKHBwwD3aEAXVZn7I=";
+    hash = "sha256-EoHCOg4nPkKRSFX/3AUKJaXzS6J1quwtv+mKeKBu5Ns=";
   };
 
   nativeBuildInputs = [

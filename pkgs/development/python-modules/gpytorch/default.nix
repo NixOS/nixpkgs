@@ -50,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
+    description = "Highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
     homepage = "https://gpytorch.ai";
     license = licenses.mit;
     maintainers = with maintainers; [ veprbl ];

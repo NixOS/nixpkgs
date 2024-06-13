@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "The INTERLIS Compiler";
+    description = "INTERLIS Compiler";
     longDescription = ''
       Checks the syntactical correctness of an INTERLIS data model.
     '';

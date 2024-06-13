@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "The GNOME Terminal Emulator";
+    description = "GNOME Terminal Emulator";
     mainProgram = "gnome-terminal";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-terminal";
     platforms = platforms.linux;

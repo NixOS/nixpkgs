@@ -46,7 +46,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cssutils" ];
 
   meta = with lib; {
-    description = "A CSS Cascading Style Sheets library for Python";
+    description = "CSS Cascading Style Sheets library for Python";
     homepage = "https://github.com/jaraco/cssutils";
     changelog = "https://github.com/jaraco/cssutils/blob/${src.rev}/NEWS.rst";
     license = licenses.lgpl3Plus;

@@ -61,7 +61,7 @@ stdenv.mkDerivation {
   buildInputs = [ perl libicns imagemagick ];
 
   meta = {
-    description = "An integrated development environment for Java, C, C++ and PHP";
+    description = "Integrated development environment for Java, C, C++ and PHP";
     homepage = "https://netbeans.apache.org/";
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [

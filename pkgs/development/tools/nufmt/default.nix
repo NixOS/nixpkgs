@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-16Z20opeZpoa7h258um+grL3ktPmY4P0M/tqMTr5hYc=";
 
   meta = with lib; {
-    description = "The nushell formatter";
+    description = "Nushell formatter";
     homepage = "https://github.com/nushell/nufmt";
     license = licenses.mit;
     maintainers = with maintainers; [iogamaster];

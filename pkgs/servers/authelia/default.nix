@@ -62,7 +62,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://www.authelia.com/";
     changelog = "https://github.com/authelia/authelia/releases/tag/v${version}";
-    description = "A Single Sign-On Multi-Factor portal for web apps";
+    description = "Single Sign-On Multi-Factor portal for web apps";
     longDescription = ''
       Authelia is an open-source authentication and authorization server
       providing two-factor authentication and single sign-on (SSO) for your

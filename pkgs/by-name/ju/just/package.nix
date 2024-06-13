@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+, bashInteractive
 , coreutils
 , installShellFiles
 , libiconv
@@ -11,17 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.26.0";
+  version = "1.28.0";
   outputs = [ "out" "man" "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-jPVvKxTHTOFkjpTsnjy9/IxQtHLgv1fInKA6knKUmu8=";
+    hash = "sha256-GdDpFY9xdjA60zr+i5O9wBWF682tvi4N/pxEob5tYoA=";
   };
 
-  cargoHash = "sha256-ssZ5JxOd0XVs4hsvnSz1IvtKE7ftEKX3nN2B8SsMesw=";
+  cargoHash = "sha256-Cvl4EY57TanJK1XGVahPHGtuEAIR44qwGEPDkXfgw5I=";
 
   nativeBuildInputs = [ installShellFiles mdbook ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
@@ -42,10 +43,26 @@ rustPlatform.buildRustPackage rec {
 
     # Return unchanged string.rs
     cp $TMPDIR/string.rs tests/string.rs
+
+    # For shell completion tests
+    export PATH=${bashInteractive}/bin:$PATH
+    patchShebangs tests
   '';
+
+  patches = [
+    ./fix-just-path-in-tests.patch
+  ];
 
   postBuild = ''
     cargo run --package generate-book
+
+    mkdir -p completions man
+
+    cargo run -- --man > man/just.1
+
+    for shell in bash fish zsh; do
+        cargo run -- --completions $shell > completions/just.$shell
+    done
 
     # No linkcheck in sandbox
     echo 'optional = true' >> book/en/book.toml
@@ -54,10 +71,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkFlags = [
-    "--skip=edit" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
-    "--skip=run_shebang" # test case very rarely fails with "Text file busy"
-    "--skip=invoke_error_function" # wants JUST_CHOOSER to be fzf
+    "--skip=backticks::trailing_newlines_are_stripped" # Wants to use python3 as alternate shell
+    "--skip=choose::invoke_error_function" # wants JUST_CHOOSER to be fzf
     "--skip=choose::default" # symlinks cat->fzf which fails as coreutils doesn't understand name
+    "--skip=config::tests::show_arguments" # interferes with JUST_CHOOSER being set
+    "--skip=edit::editor_precedence" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
+    "--skip=shebang::run_shebang" # test case very rarely fails with "Text file busy"
   ];
 
   postInstall = ''
@@ -78,7 +97,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/casey/just";
     changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
-    description = "A handy way to save and run project-specific commands";
+    description = "Handy way to save and run project-specific commands";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd jk adamcstephens ];
     mainProgram = "just";

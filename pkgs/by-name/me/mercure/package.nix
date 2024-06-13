@@ -42,7 +42,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "An open, easy, fast, reliable and battery-efficient solution for real-time communications";
+    description = "Open, easy, fast, reliable and battery-efficient solution for real-time communications";
     homepage = "https://github.com/dunglas/mercure";
     changelog = "https://github.com/dunglas/mercure/releases/tag/v${version}";
     license = licenses.agpl3Only;

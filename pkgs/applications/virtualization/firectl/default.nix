@@ -19,7 +19,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A command-line tool to run Firecracker microVMs";
+    description = "Command-line tool to run Firecracker microVMs";
     homepage = "https://github.com/firecracker-microvm/firectl";
     license = licenses.asl20;
     platforms = platforms.linux;

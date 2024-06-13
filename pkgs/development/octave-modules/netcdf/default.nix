@@ -21,6 +21,6 @@ buildOctavePackage rec {
     homepage = "https://octave.sourceforge.io/netcdf/index.html";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ KarlJoad ];
-    description = "A NetCDF interface for Octave";
+    description = "NetCDF interface for Octave";
   };
 }

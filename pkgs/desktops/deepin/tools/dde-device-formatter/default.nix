@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A simple graphical interface for creating file system in a block device";
+    description = "Simple graphical interface for creating file system in a block device";
     mainProgram = "dde-device-formatter";
     homepage = "https://github.com/linuxdeepin/dde-device-formatter";
     license = licenses.gpl3Plus;

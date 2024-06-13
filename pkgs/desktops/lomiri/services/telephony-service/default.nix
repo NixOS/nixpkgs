@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitLab
 , fetchpatch
-, fetchpatch2
 , gitUpdater
 , nixosTests
 , ayatana-indicator-messages
@@ -20,7 +19,6 @@
 , libphonenumber
 , libpulseaudio
 , libusermetrics
-, lomiri-ui-toolkit
 , lomiri-url-dispatcher
 , makeWrapper
 , pkg-config

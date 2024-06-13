@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ talyz ];
     license = licenses.mit;
-    description = "A helper program which receives incoming mail for Discourse";
+    description = "Helper program which receives incoming mail for Discourse";
   };
 
 }

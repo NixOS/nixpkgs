@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 ];
 
   meta = {
-    description = "A very flexible theme engine";
+    description = "Very flexible theme engine";
     homepage = "https://gitlab.gnome.org/Archive/murrine";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;

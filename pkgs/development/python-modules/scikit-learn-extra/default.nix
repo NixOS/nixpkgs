@@ -62,7 +62,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A set of tools for scikit-learn";
+    description = "Set of tools for scikit-learn";
     homepage = "https://github.com/scikit-learn-contrib/scikit-learn-extra";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yl3dy ];

@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "iminuit";
-  version = "2.25.2";
+  version = "2.26.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O/ihuWhlpgzt8pE19P6uCfp8ZiN9KfaN7WTpeoI6mz4=";
+    hash = "sha256-pRIz+/HC4AiqWE+e6mW2ww7VZiTk3qXU5TNwzNhMm04=";
   };
 
   nativeBuildInputs = [

@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit setupHooks; };
 
   meta = {
-    description = "An iconv(3) implementation";
+    description = "Iconv(3) implementation";
 
     longDescription = ''
       Some programs, like mailers and web browsers, must be able to convert

@@ -374,6 +374,7 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
 * `meta.description` must:
   * Be short, just one sentence.
   * Be capitalized.
+  * Not start with the definite or an indefinite article.
   * Not start with the package name.
     * More generally, it should not refer to the package name.
   * Not end with a period (or any punctuation for that matter).
@@ -459,7 +460,10 @@ Examples going from bad to best practices:
 
 ## Patches
 
-Patches available online should be retrieved using `fetchpatch`.
+Sometimes, changes are needed to the source to allow building a derivation in nixpkgs, or to get earlier access to an upstream fix or improvement.
+When using the `patches` parameter to `mkDerivation`, make sure the patch name clearly describes the reason for the patch, or add a comment.
+
+Patches already merged upstream or published elsewhere should be retrieved using `fetchpatch`.
 
 ```nix
 {
@@ -473,7 +477,9 @@ Patches available online should be retrieved using `fetchpatch`.
 }
 ```
 
-Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the interest of keeping our maintenance burden to a minimum, only patches that are unique to `nixpkgs` should be added in this way.
+Otherwise, you can add a `.patch` file to the `nixpkgs` repository.
+In the interest of keeping our maintenance burden and the size of nixpkgs to a minimum, only do this for patches that are unique to `nixpkgs` or that have been proposed upstream but are not merged yet, cannot be easily fetched or have a high chance to disappear in the future due to unstable or unreliable URLs.
+The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
 
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
 
@@ -593,6 +599,34 @@ buildGoModule rec {
 }
 ```
 
+Any derivaton can be specified as a test, even if it's in a different file.
+Such a derivaton that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
+
+In the following example, `(my-package.overrideAttrs f).passthru.tests` will work as expected, as long as the definition of `tests` does not rely on the original `my-package` or overrides all occurrences of `my-package`:
+
+```nix
+# my-package/default.nix
+{ stdenv, callPackage }:
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+  passthru.tests.example = callPackage ./example.nix { my-package = finalAttrs.finalPackage; };
+})
+```
+
+```nix
+# my-package/example.nix
+{ runCommand, lib, my-package, ... }:
+runCommand "my-package-test" {
+  nativeBuildInputs = [ my-package ];
+  src = lib.sources.sourcesByRegex ./. [ ".*.in" ".*.expected" ];
+} ''
+  my-package --help
+  my-package <example.in >example.actual
+  diff -U3 --color=auto example.expected example.actual
+  mkdir $out
+''
+```
+
 ### Writing larger package tests
 [larger-package-tests]: #writing-larger-package-tests
 
@@ -677,6 +711,152 @@ stdenv.mkDerivation {
   # ...
 }
 ```
+
+## Automatic package updates
+[automatic-package-updates]: #automatic-package-updates
+
+Nixpkgs periodically tries to update all packages that have a `passthru.updateScript` attribute.
+
+> [!Note]
+> A common pattern is to use the [`nix-update-script`](../pkgs/common-updater/nix-update.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
+>
+> ```nix
+> { stdenv, nix-update-script }:
+> stdenv.mkDerivation {
+>   # ...
+>   passthru.updateScript = nix-update-script { };
+> }
+> ```
+>
+> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://ryantm.github.io/nixpkgs-update) when a new version is released.
+> The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set.
+> While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
+
+The `passthru.updateScript` attribute can contain one of the following:
+
+- an executable file, either on the file system:
+
+  ```nix
+  { stdenv }:
+  stdenv.mkDerivation {
+    # ...
+    passthru.updateScript = ./update.sh;
+  }
+  ```
+
+  or inside the expression itself:
+
+  ```nix
+  { stdenv, writeScript }:
+  stdenv.mkDerivation {
+    # ...
+    passthru.updateScript = writeScript "update-zoom-us" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
+
+      set -eu -o pipefail
+
+      version="$(curl -sI https://zoom.us/client/latest/zoom_x86_64.tar.xz | grep -Fi 'Location:' | pcre2grep -o1 '/(([0-9]\.?)+)/')"
+      update-source-version zoom-us "$version"
+    '';
+  }
+  ```
+
+- a list, a script file followed by arguments to be passed to it:
+
+  ```nix
+  { stdenv }:
+  stdenv.mkDerivation {
+    # ...
+    passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
+  }
+  ```
+
+- an attribute set containing:
+  - `command`
+
+    A string or list in the [format expected by `passthru.updateScript`][automatic-package-updates]
+
+  - `attrPath` (optional)
+
+    A string containing the canonical attribute path for the package.
+
+    If present, it will be passed to the update script instead of the attribute path on which the package was discovered during Nixpkgs traversal.
+
+  - `supportedFeatures` (optional)
+
+    A list of the [extra features the script supports][supported-features].
+
+    ```nix
+    { stdenv }:
+    stdenv.mkDerivation rec {
+      pname = "my-package";
+      # ...
+      passthru.updateScript = {
+        command = [ ../../update.sh pname ];
+        attrPath = pname;
+        supportedFeatures = [ /* ... */ ];
+      };
+    }
+    ```
+
+### How are update scripts executed?
+
+Update scripts are to be invoked by the [automatic package update script](../maintainers/scripts/update.nix).
+You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs repository for information on how to use it.
+`update.nix` offers several modes for selecting packages to update, and it will execute update scripts for all matched packages that have an `updateScript` attribute.
+
+Each update script will be passed the following environment variables:
+
+- [`UPDATE_NIX_NAME`] – content of the `name` attribute of the updated package
+- [`UPDATE_NIX_PNAME`] – content of the `pname` attribute of the updated package
+- [`UPDATE_NIX_OLD_VERSION`] – content of the `version` attribute of the updated package
+- [`UPDATE_NIX_ATTR_PATH`] – attribute path the `update.nix` discovered the package on (or the package's specified `attrPath` when available). Example: `pantheon.elementary-terminal`
+
+> [!Note]
+> An update script will be usually run from the root of the Nixpkgs repository, but you should not rely on that.
+> Also note that `update.nix` executes update scripts in parallel by default, so you should avoid running `git commit` or any other commands that cannot handle that.
+
+While update scripts should not create commits themselves, `update.nix` supports automatically creating commits when running it with `--argstr commit true`.
+If you need to customize commit message, you can have the update script implement the `commit` feature.
+
+### Supported features
+[update-script-supported-features]: #supported-features
+
+- `commit`
+
+  This feature allows update scripts to *ask* `update.nix` to create Git commits.
+
+  When support of this feature is declared, whenever the update script exits with `0` return status, it is expected to print a JSON list containing an object described below for each updated attribute to standard output.
+  Example:
+
+  ```json
+  [
+    {
+      "attrPath": "volume_key",
+      "oldVersion": "0.3.11",
+      "newVersion": "0.3.12",
+      "files": [
+        "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
+      ]
+    }
+  ]
+  ```
+  :::
+
+  When `update.nix` is run with `--argstr commit true`, it will create a separate commit for each of the objects.
+  An empty list can be returned when the script did not update any files; for example, when the package is already at the latest version.
+
+  The commit object contains the following values:
+
+  - `attrPath` – a string containing the attribute path
+  - `oldVersion` – a string containing the old version
+  - `newVersion` – a string containing the new version
+  - `files` – a non-empty list of file paths (as strings) to add to the commit
+  - `commitBody` (optional) – a string with extra content to be appended to the default commit message (useful for adding changelog links)
+  - `commitMessage` (optional) – a string to use instead of the default commit message
+
+  If the returned list contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
 
 ## Reviewing contributions
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses postgresql ];
 
   meta = with lib; {
-    description = "A 'top' like tool for PostgreSQL";
+    description = "'top' like tool for PostgreSQL";
     longDescription = ''
       pg_top allows you to:
        * View currently running SQL statement of a process.

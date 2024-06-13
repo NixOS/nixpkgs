@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubectl-gadget";
-  version = "0.28.1";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "inspektor-gadget";
     repo = "inspektor-gadget";
     rev = "v${version}";
-    hash = "sha256-+eysHATyAdCN6HVPN2bgc/ICo+XXaef0H0UDW2xCcjc=";
+    hash = "sha256-5lXM7SuQvjQYWWbtRVJrdYBRbHFs1Ha9hQLDweaTKQ4=";
   };
 
-  vendorHash = "sha256-0XByai7fEnkmEEkH1koVM1+z3UNFLbsUCK3sP4KBe+A=";
+  vendorHash = "sha256-Fc3WLeEqH2CK6b4jWqcxCBYl2ST6scjjNA1/Rl3Go1o=";
 
   CGO_ENABLED = 0;
 
@@ -29,7 +29,7 @@ buildGoModule rec {
   subPackages = [ "cmd/kubectl-gadget" ];
 
   meta = with lib; {
-    description = "A collection of gadgets for troubleshooting Kubernetes applications using eBPF";
+    description = "Collection of gadgets for troubleshooting Kubernetes applications using eBPF";
     mainProgram = "kubectl-gadget";
     homepage = "https://inspektor-gadget.io";
     license = licenses.asl20;

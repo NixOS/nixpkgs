@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pkutils" ];
 
   meta = with lib; {
-    description = "A Python packaging utility library";
+    description = "Python packaging utility library";
     homepage = "https://github.com/reubano/pkutils/";
     license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];

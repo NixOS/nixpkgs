@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.contenttype";
-    description = "A utility module for content-type (MIME type) handling";
+    description = "Utility module for content-type (MIME type) handling";
     changelog = "https://github.com/zopefoundation/zope.contenttype/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
     maintainers = with maintainers; [ goibhniu ];

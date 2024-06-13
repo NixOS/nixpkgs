@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-e8lu839kthncvCVlg13ZWNUwYGgGVgXZWJlHufubNA8=";
 
   meta = with lib; {
-    description = "A library and cli tool for working with scoped CSS in rust";
+    description = "Library and cli tool for working with scoped CSS in rust";
     mainProgram = "stylance";
     homepage = "https://github.com/basro/stylance-rs";
     changelog = "https://github.com/basro/stylance-rs/blob/v${version}/CHANGELOG.md";

@@ -22,7 +22,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A CLI utility to recursively crawl webpages";
+    description = "CLI utility to recursively crawl webpages";
     homepage = "https://github.com/hueristiq/xcrawl3r";
     changelog = "https://github.com/hueristiq/xcrawl3r/releases/tag/${version}";
     license = licenses.mit;

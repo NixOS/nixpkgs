@@ -23,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = {
-    description = "An AST-based Python refactoring library";
+    description = "AST-based Python refactoring library";
     homepage = "https://github.com/google/pasta";
     # Usually the tag message contains a one-line summary of the changes.
     changelog = "https://github.com/google/pasta/releases/tag/v${version}";

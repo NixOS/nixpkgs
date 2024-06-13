@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/guile-lib/";
-    description = "A collection of useful Guile Scheme modules";
+    description = "Collection of useful Guile Scheme modules";
     longDescription = ''
       guile-lib is intended as an accumulation place for pure-scheme Guile
       modules, allowing for people to cooperate integrating their generic Guile

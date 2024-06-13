@@ -14,7 +14,7 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
-    description = "An old-school drum-kit sampler synthesizer with stereo fx";
+    description = "Old-school drum-kit sampler synthesizer with stereo fx";
     mainProgram = "drumkv1_jack";
     homepage = "http://drumkv1.sourceforge.net/";
     license = licenses.gpl2Plus;

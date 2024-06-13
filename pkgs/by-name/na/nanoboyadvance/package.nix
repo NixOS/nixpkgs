@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A cycle-accurate Nintendo Game Boy Advance emulator";
+    description = "Cycle-accurate Nintendo Game Boy Advance emulator";
     homepage = "https://github.com/nba-emu/NanoBoyAdvance";
     license = lib.licenses.gpl3Plus;
     mainProgram = "NanoBoyAdvance";

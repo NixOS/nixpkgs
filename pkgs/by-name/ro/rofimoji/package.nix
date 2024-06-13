@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A simple emoji and character picker for rofi";
+    description = "Simple emoji and character picker for rofi";
     mainProgram = "rofimoji";
     homepage = "https://github.com/fdw/rofimoji";
     changelog = "https://github.com/fdw/rofimoji/blob/${src.rev}/CHANGELOG.md";

@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p" "libsignal-ffi" ];
 
   meta = with lib; {
-    description = "A C ABI library which exposes Signal protocol logic";
+    description = "C ABI library which exposes Signal protocol logic";
     homepage = "https://github.com/signalapp/libsignal";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ niklaskorz ];

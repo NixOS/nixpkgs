@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://legacy.imagemagick.org/";
     changelog = "https://legacy.imagemagick.org/script/changelog.php";
-    description = "A software suite to create, edit, compose, or convert bitmap images";
+    description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];

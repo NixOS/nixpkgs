@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   passthru.tests.test = nixosTests.terminal-emulators.lxterminal;
 
   meta = {
-    description = "The standard terminal emulator of LXDE";
+    description = "Standard terminal emulator of LXDE";
     longDescription = ''
       LXTerminal is the standard terminal emulator of LXDE. The terminal is a
       desktop-independent VTE-based terminal emulator for LXDE without any

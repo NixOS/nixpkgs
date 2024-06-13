@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/akuukis/beancount_share";
-    description = "A beancount plugin to share expenses with external partners within one ledger";
+    description = "Beancount plugin to share expenses with external partners within one ledger";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ matthiasbeyer ];
   };

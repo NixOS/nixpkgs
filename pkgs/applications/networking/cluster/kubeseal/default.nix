@@ -18,7 +18,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
 
   meta = with lib; {
-    description = "A Kubernetes controller and tool for one-way encrypted Secrets";
+    description = "Kubernetes controller and tool for one-way encrypted Secrets";
     mainProgram = "kubeseal";
     homepage = "https://github.com/bitnami-labs/sealed-secrets";
     changelog = "https://github.com/bitnami-labs/sealed-secrets/blob/v${version}/RELEASE-NOTES.md";

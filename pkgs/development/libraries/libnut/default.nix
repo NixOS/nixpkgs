@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A library to read/write the NUT video container format";
+    description = "Library to read/write the NUT video container format";
     homepage = "https://git.ffmpeg.org/gitweb/nut.git";
     license = licenses.mit;
     maintainers = with maintainers; [quag];

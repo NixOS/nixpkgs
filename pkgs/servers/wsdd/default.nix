@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/christgau/wsdd";
-    description = "A Web Service Discovery (WSD) host daemon for SMB/Samba";
+    description = "Web Service Discovery (WSD) host daemon for SMB/Samba";
     maintainers = with maintainers; [ izorkin ];
     license = licenses.mit;
     platforms = platforms.all;

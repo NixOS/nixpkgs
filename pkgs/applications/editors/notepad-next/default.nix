@@ -34,7 +34,7 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/dail8859/NotepadNext";
-    description = "A cross-platform, reimplementation of Notepad++";
+    description = "Cross-platform, reimplementation of Notepad++";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.sebtm ];

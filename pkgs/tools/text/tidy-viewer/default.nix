@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A cross-platform CLI csv pretty printer that uses column styling to maximize viewer enjoyment";
+    description = "Cross-platform CLI csv pretty printer that uses column styling to maximize viewer enjoyment";
     mainProgram = "tidy-viewer";
     homepage = "https://github.com/alexhallam/tv";
     changelog = "https://github.com/alexhallam/tv/blob/${version}/CHANGELOG.md";

@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   meta = {
-    description = "A fork of GNOME Control Center for the Budgie 10 Series";
+    description = "Fork of GNOME Control Center for the Budgie 10 Series";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-control-center";
     mainProgram = "budgie-control-center";
     platforms = lib.platforms.linux;

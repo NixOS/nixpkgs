@@ -37,7 +37,7 @@ buildPythonPackage {
   '';
 
   meta = with lib; {
-    description = "A tool to generate native build files";
+    description = "Tool to generate native build files";
     mainProgram = "gyp";
     homepage = "https://gyp.gsrc.io";
     license = licenses.bsd3;

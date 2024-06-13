@@ -20,7 +20,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A high-performance HTTP benchmarking tool that includes a real-time web UI and terminal display";
+    description = "High-performance HTTP benchmarking tool that includes a real-time web UI and terminal display";
     homepage = "https://github.com/six-ddc/plow";
     changelog = "https://github.com/six-ddc/plow/releases/tag/v${version}";
     license = licenses.asl20;

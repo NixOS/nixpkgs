@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
   nativeBuildInputs = [ pkg-config ];
 
   meta = {
-    description = "A dynamic real-time view of running eBPF programs";
+    description = "Dynamic real-time view of running eBPF programs";
     homepage = "https://github.com/Netflix/bpftop";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [

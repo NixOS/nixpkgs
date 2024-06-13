@@ -50,7 +50,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The Vanilla OS package manager";
+    description = "Vanilla OS package manager";
     homepage = "https://github.com/Vanilla-OS/apx";
     changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${version}";
     license = licenses.gpl3Only;

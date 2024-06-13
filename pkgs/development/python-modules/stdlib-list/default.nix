@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/pypi/stdlib-list/releases/tag/v${version}";
-    description = "A list of Python Standard Libraries";
+    description = "List of Python Standard Libraries";
     homepage = "https://github.com/jackmaney/python-stdlib-list";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

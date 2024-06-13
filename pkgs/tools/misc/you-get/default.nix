@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A tiny command line utility to download media contents from the web";
+    description = "Tiny command line utility to download media contents from the web";
     homepage = "https://you-get.org";
     changelog = "https://github.com/soimort/you-get/raw/v${version}/CHANGELOG.rst";
     license = licenses.mit;

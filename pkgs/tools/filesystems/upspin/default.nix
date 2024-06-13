@@ -17,7 +17,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A global name space for storing data akin to a filesystem";
+    description = "Global name space for storing data akin to a filesystem";
     homepage = "https://upspin.io";
     license = licenses.bsd3;
     maintainers = with maintainers; [ orthros ];

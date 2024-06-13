@@ -45,7 +45,7 @@ buildPythonPackage {
 
   meta = with lib; {
     homepage = "https://github.com/albarji/proxTV";
-    description = "A toolbox for fast Total Variation proximity operators";
+    description = "Toolbox for fast Total Variation proximity operators";
     license = licenses.bsd2;
     maintainers = with maintainers; [ multun ];
   };

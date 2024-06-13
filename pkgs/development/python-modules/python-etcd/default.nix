@@ -38,7 +38,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A python client for Etcd";
+    description = "Python client for Etcd";
     homepage = "https://github.com/jplana/python-etcd";
     license = licenses.mit;
   };

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "mujoco";
-  version = "3.1.5";
+  inherit (mujoco) version;
 
   pyproject = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   # in the project's CI.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kJm6YAE0HMnji3uUuO96ZzRsdjj6PpT1IHQ6NXiR8pY=";
+    hash = "sha256-fPiIdSbwcedBHcAs4c1mXjm0tgg/3/Sf4TSKgtIxRlE=";
   };
 
   nativeBuildInputs = [
@@ -82,11 +82,14 @@ buildPythonPackage rec {
       ''
     );
 
-  meta = with lib; {
-    description = "Python bindings for MuJoCo: a general purpose physics simulator.";
+  meta = {
+    description = "Python bindings for MuJoCo: a general purpose physics simulator";
     homepage = "https://mujoco.org/";
     changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tmplt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      tmplt
+    ];
   };
 }

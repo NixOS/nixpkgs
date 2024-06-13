@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.3.0";
+  version = "2.3.1";
   format = "wheel";
 
   src =
@@ -68,20 +68,20 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "torchaudio" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch audio library";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
-    license = licenses.bsd3;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [ junjihashimoto ];
   };
 }

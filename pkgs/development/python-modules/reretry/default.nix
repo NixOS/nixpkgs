@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "An easy to use retry decorator.";
+    description = "Easy to use retry decorator";
     homepage = "https://github.com/leshchenko1979/reretry";
     license = licenses.asl20;
     maintainers = with maintainers; [ renatoGarcia ];

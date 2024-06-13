@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   meta = with lib; {
-    description = "Buzztrax is a modular music composer for Linux.";
+    description = "Buzztrax is a modular music composer for Linux";
     homepage = "https://www.buzztrax.org/";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.bendlas ];

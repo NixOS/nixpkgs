@@ -21,7 +21,7 @@ godot3.overrideAttrs (self: base: {
   nugetSource =
     mkNugetSource {
       name = "${self.pname}-nuget-source";
-      description = "A Nuget source with dependencies for ${self.pname}";
+      description = "Nuget source with dependencies for ${self.pname}";
       deps = [ self.nugetDeps ];
     };
 

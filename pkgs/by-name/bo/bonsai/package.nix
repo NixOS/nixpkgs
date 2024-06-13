@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, gitUpdater
-, hare
-, hareThirdParty
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  gitUpdater,
+  hareHook,
+  hareThirdParty,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,30 +19,18 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    hare
+    hareHook
     hareThirdParty.hare-ev
     hareThirdParty.hare-json
   ];
 
-  makeFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
-    "HARECACHE=.harecache"
-    "HAREFLAGS=-qa${stdenv.hostPlatform.uname.processor}"
-  ];
+  makeFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace 'hare build' 'hare build $(HAREFLAGS)' \
-      --replace 'hare test' 'hare test $(HAREFLAGS)'
-  '';
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Finite State Machine structured as a tree";

@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "typesystem" ];
 
   meta = with lib; {
-    description = "A type system library for Python";
+    description = "Type system library for Python";
     homepage = "https://github.com/encode/typesystem";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

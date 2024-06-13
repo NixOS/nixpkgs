@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "socks" ];
 
   meta = with lib; {
-    description = "An RPKI Validator written in Rust";
+    description = "RPKI Validator written in Rust";
     homepage = "https://github.com/NLnetLabs/routinator";
     changelog = "https://github.com/NLnetLabs/routinator/blob/v${version}/Changelog.md";
     license = licenses.bsd3;

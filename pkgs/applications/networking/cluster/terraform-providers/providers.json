@@ -508,6 +508,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
+  "harbor": {
+    "hash": "sha256-Pv4Eoswmx+FVVq6jqP69bCMrUmt5persxdrtvY9N79I=",
+    "homepage": "https://registry.terraform.io/providers/goharbor/harbor",
+    "owner": "goharbor",
+    "repo": "terraform-provider-harbor",
+    "rev": "v3.10.10",
+    "spdx": "MIT",
+    "vendorHash": "sha256-1zaC82m8ylkz4lSocDVoXjF6yWWEL4He0lIKXs/7VtE="
+  },
   "hcloud": {
     "hash": "sha256-D7RBrpOxfSfeip7z+mAkWBjSTVnnM/MfN7Qvl/E+nA0=",
     "homepage": "https://registry.terraform.io/providers/hetznercloud/hcloud",

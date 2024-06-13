@@ -86,7 +86,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/Theano/libgpuarray";
-    description = "Library to manipulate tensors on GPU.";
+    description = "Library to manipulate tensors on GPU";
     license = licenses.free;
     maintainers = with maintainers; [ artuuge ];
     platforms = platforms.unix;

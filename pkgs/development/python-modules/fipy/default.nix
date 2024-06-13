@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://www.ctcms.nist.gov/fipy/";
-    description = "A Finite Volume PDE Solver Using Python";
+    description = "Finite Volume PDE Solver Using Python";
     changelog = "https://github.com/usnistgov/fipy/blob/${version}/CHANGELOG.rst";
     license = licenses.free;
     maintainers = with maintainers; [ wd15 ];

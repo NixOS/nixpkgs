@@ -18,13 +18,13 @@
 }@inputs:
 (if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
   pname = "dlib";
-  version = "19.24.2";
+  version = "19.24.4";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     rev = "v${version}";
-    sha256 = "sha256-Z1fScuaIHjj2L1uqLIvsZ7ARKNjM+iaA8SAtWUTPFZk=";
+    sha256 = "sha256-1A/9u+ThtUtmmSwnFSn8S65Yavucl2X+o3bNYgew0Oc=";
   };
 
   postPatch = ''
@@ -81,7 +81,7 @@
   };
 
   meta = with lib; {
-    description = "A general purpose cross-platform C++ machine learning library";
+    description = "General purpose cross-platform C++ machine learning library";
     homepage = "http://www.dlib.net";
     license = licenses.boost;
     maintainers = with maintainers; [ christopherpoole ];

@@ -4,13 +4,16 @@
   pythonOlder,
   hatchling,
   opentelemetry-api,
+  opentelemetry-instrumentation,
   pytestCheckHook,
 }:
 
 buildPythonPackage {
   inherit (opentelemetry-api) src;
   pname = "opentelemetry-semantic-conventions";
-  version = "0.44b0";
+  # This package is in the same repository as `opentelemetry-api`,
+  # but its version is synchronized with `opentelemetry-instrumentation` in another repository.
+  version = opentelemetry-instrumentation.version;
   pyproject = true;
 
   disabled = pythonOlder "3.8";

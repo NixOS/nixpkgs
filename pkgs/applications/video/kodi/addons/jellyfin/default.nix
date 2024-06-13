@@ -43,7 +43,7 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://jellyfin.org/";
-    description = "A whole new way to manage and view your media library";
+    description = "Whole new way to manage and view your media library";
     license = licenses.gpl3Only;
     maintainers = teams.kodi.members;
   };

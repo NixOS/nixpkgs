@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The v2 fork of the Open Watcom suite of compilers and tools";
+    description = "V2 fork of the Open Watcom suite of compilers and tools";
     longDescription = ''
       A fork of Open Watcom: A C/C++/Fortran compiler and assembler suite
       targeting a multitude of architectures (x86, IA-32, Alpha AXP, MIPS,

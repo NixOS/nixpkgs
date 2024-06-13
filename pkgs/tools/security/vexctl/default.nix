@@ -62,7 +62,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/chainguard-dev/vex/";
-    description = "A tool to attest VEX impact statements";
+    description = "Tool to attest VEX impact statements";
     mainProgram = "vexctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];

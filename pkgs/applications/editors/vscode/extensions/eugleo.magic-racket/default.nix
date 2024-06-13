@@ -24,7 +24,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   '';
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/evzen-wybitul.magic-racket/changelog";
-    description = "The best coding experience for Racket in VS Code";
+    description = "Best coding experience for Racket in VS Code";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=evzen-wybitul.magic-racket";
     homepage = "https://github.com/Eugleo/magic-racket";
     license = lib.licenses.agpl3Only;

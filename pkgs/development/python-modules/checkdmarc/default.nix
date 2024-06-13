@@ -58,7 +58,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A parser for SPF and DMARC DNS records";
+    description = "Parser for SPF and DMARC DNS records";
     mainProgram = "checkdmarc";
     homepage = "https://github.com/domainaware/checkdmarc";
     changelog = "https://github.com/domainaware/checkdmarc/blob/${version}/CHANGELOG.md";

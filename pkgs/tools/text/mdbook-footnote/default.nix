@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {
-    description = "A preprocessor for mdbook to support the inclusion of automatically numbered footnotes";
+    description = "Preprocessor for mdbook to support the inclusion of automatically numbered footnotes";
     mainProgram = "mdbook-footnote";
     homepage = "https://github.com/daviddrysdale/mdbook-footnote";
     license = licenses.asl20;

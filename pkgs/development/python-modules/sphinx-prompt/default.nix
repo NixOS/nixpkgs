@@ -58,7 +58,7 @@ buildPythonPackage rec {
   passthru.skipBulkUpdate = true;
 
   meta = with lib; {
-    description = "A sphinx extension for creating unselectable prompt";
+    description = "Sphinx extension for creating unselectable prompt";
     homepage = "https://github.com/sbrunner/sphinx-prompt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kaction ];

@@ -57,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A performant, memory-efficient checkpointing library for PyTorch applications, designed with large, complex distributed workloads in mind";
+    description = "Performant, memory-efficient checkpointing library for PyTorch applications, designed with large, complex distributed workloads in mind";
     homepage = "https://github.com/pytorch/torchsnapshot/";
     changelog = "https://github.com/pytorch/torchsnapshot/releases/tag/${version}";
     license = licenses.bsd3;

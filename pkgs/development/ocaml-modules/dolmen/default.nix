@@ -23,7 +23,7 @@ buildDunePackage rec {
   checkInputs = [ qcheck ];
 
   meta = {
-    description = "An OCaml library providing clean and flexible parsers for input languages";
+    description = "OCaml library providing clean and flexible parsers for input languages";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/Gbury/dolmen";

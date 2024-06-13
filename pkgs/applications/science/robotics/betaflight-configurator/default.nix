@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Betaflight flight control system configuration tool";
+    description = "Betaflight flight control system configuration tool";
     mainProgram = "betaflight-configurator";
     longDescription = ''
       A crossplatform configuration tool for the Betaflight flight control system.

@@ -30,7 +30,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Keep your git workflow clean without headache.";
+    description = "Keep your git workflow clean without headache";
     longDescription = ''
       turbogit (tug) is a cli tool built to help you deal with your day-to-day git work.
       turbogit enforces convention (e.g. The Conventional Commits) but tries to keep things simple and invisible for you.

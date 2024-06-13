@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A library for playing tracker music module files";
+    description = "Library for playing tracker music module files";
     mainProgram = "libmikmod-config";
     homepage    = "https://mikmod.shlomifish.org/";
     license     = licenses.lgpl2Plus;

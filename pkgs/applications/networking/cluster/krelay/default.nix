@@ -22,7 +22,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A drop-in replacement for `kubectl port-forward` with some enhanced features";
+    description = "Drop-in replacement for `kubectl port-forward` with some enhanced features";
     homepage = "https://github.com/knight42/krelay";
     changelog = "https://github.com/knight42/krelay/releases/tag/v${version}";
     license = licenses.mit;

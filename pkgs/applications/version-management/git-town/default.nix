@@ -48,9 +48,9 @@ buildGoModule rec {
 
   postInstall = ''
     installShellCompletion --cmd git-town \
-      --bash <($out/bin/git-town completion bash) \
-      --fish <($out/bin/git-town completion fish) \
-      --zsh <($out/bin/git-town completion zsh)
+      --bash <($out/bin/git-town completions bash) \
+      --fish <($out/bin/git-town completions fish) \
+      --zsh <($out/bin/git-town completions zsh)
 
     wrapProgram $out/bin/git-town --prefix PATH : ${lib.makeBinPath [ git ]}
   '';

@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/allefeld/pytikz";
-    description = "A Python interface to TikZ";
+    description = "Python interface to TikZ";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pbsds ];
     broken = stdenv.isDarwin;

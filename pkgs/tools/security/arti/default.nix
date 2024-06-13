@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [ "--package" "arti" ];
 
   meta = with lib; {
-    description = "An implementation of Tor in Rust";
+    description = "Implementation of Tor in Rust";
     mainProgram = "arti";
     homepage = "https://arti.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/${src.rev}/CHANGELOG.md";

@@ -177,7 +177,9 @@
           # These cause problems as they're not eliminated by GHC's dead code
           # elimination on aarch64-darwin. (see
           # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-          ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+          (if lib.versionOlder version "9.10"
+           then ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+           else ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch)
         ]
         # Prevents passing --hyperlinked-source to haddock. This is a custom
         # workaround as we wait for this to be configurable via userSettings or
@@ -425,8 +427,8 @@ stdenv.mkDerivation ({
     "--disable-large-address-space"
   ] ++ lib.optionals enableDwarf [
     "--enable-dwarf-unwind"
-    "--with-libdw-includes=${lib.getDev elfutils}/include"
-    "--with-libdw-libraries=${lib.getLib elfutils}/lib"
+    "--with-libdw-includes=${lib.getDev targetPackages.elfutils}/include"
+    "--with-libdw-libraries=${lib.getLib targetPackages.elfutils}/lib"
   ] ++ lib.optionals targetPlatform.isDarwin [
     # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
     # but it doesn’t currently work because Cabal never uses `-L` on Darwin. See:
@@ -547,7 +549,7 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = "http://haskell.org/ghc";
-    description = "The Glasgow Haskell Compiler";
+    description = "Glasgow Haskell Compiler";
     maintainers = with lib.maintainers; [
       guibou
     ] ++ lib.teams.haskell.members;

@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Simple integration of Flask and WTForms.";
+    description = "Simple integration of Flask and WTForms";
     license = licenses.bsd3;
     maintainers = with maintainers; [
       mic92

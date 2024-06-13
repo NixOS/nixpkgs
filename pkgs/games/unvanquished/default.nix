@@ -2,7 +2,6 @@
 , stdenv
 , fetchzip
 , fetchFromGitHub
-, fetchpatch
 , SDL2
 , buildFHSEnv
 , cmake
@@ -220,7 +219,7 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = "https://unvanquished.net/";
     downloadPage = "https://unvanquished.net/download/";
-    description = "A fast paced, first person strategy game";
+    description = "Fast paced, first person strategy game";
     # don't replace the following lib.licenses.zlib with just "zlib",
     # or you would end up with the package instead
     license = with lib.licenses; [

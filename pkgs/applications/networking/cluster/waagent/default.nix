@@ -14,12 +14,12 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "waagent";
-  version = "2.10.0.8";
+  version = "2.11.1.4";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Ilm29z+BJToVxdJTUAZO3Lr2DyOIvK6GW79GxAmfeM4=";
+    sha256 = "sha256-5V9js9gGkIsdGYrQQK/V6tPfL9lh2Cht4llOKBVTyOM=";
   };
   patches = [
     # Suppress the following error when waagent tries to configure sshd:
@@ -64,7 +64,7 @@ python.pkgs.buildPythonApplication rec {
   dontWrapPythonPrograms = false;
 
   meta = {
-    description = "The Microsoft Azure Linux Agent (waagent)";
+    description = "Microsoft Azure Linux Agent (waagent)";
     mainProgram = "waagent";
     longDescription = ''
       The Microsoft Azure Linux Agent (waagent)

@@ -38,7 +38,7 @@ in appimageTools.wrapType2 rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "A graphical configurator for Kaleidoscope-powered keyboards";
+    description = "Graphical configurator for Kaleidoscope-powered keyboards";
     homepage = "https://github.com/keyboardio/Chrysalis";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aw eclairevoyant nshalman ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wiki.crosswire.org/BibleSync";
-    description = "A multicast protocol to Bible software shared conavigation";
+    description = "Multicast protocol to Bible software shared conavigation";
     longDescription = ''
       BibleSync is a multicast protocol to support Bible software shared
       co-navigation. It uses LAN multicast in either a personal/small team

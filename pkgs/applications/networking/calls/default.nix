@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A phone dialer and call handler";
+    description = "Phone dialer and call handler";
     longDescription = "GNOME Calls is a phone dialer and call handler. Setting NixOS option `programs.calls.enable = true` is recommended.";
     homepage = "https://gitlab.gnome.org/GNOME/calls";
     license = licenses.gpl3Plus;

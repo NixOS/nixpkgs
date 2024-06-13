@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, file, zlib, libgnurx
+, updateAutotoolsGnuConfigScriptsHook
 , testers
 }:
 
@@ -30,7 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   enableParallelBuilding = true;
 
-  nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ]
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
   buildInputs = [ zlib ]
     ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
@@ -43,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://darwinsys.com/file";
-    description = "A program that shows the type of files";
+    description = "Program that shows the type of files";
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.bsd2;
     pkgConfigModules = [ "libmagic" ];

@@ -1,9 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, autoconf
-, automake
-, libtool
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jnv";
@@ -17,13 +14,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-qpVRq6RbrDZDSJkLQ5Au9j2mWXp3gn7QBe3nRmIVK8c=";
-
-  nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    rustPlatform.bindgenHook
-  ];
 
   meta = with lib; {
     description = "Interactive JSON filter using jq";

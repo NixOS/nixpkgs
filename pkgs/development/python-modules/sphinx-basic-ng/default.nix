@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sphinx_basic_ng" ];
 
   meta = with lib; {
-    description = "A modernised skeleton for Sphinx themes";
+    description = "Modernised skeleton for Sphinx themes";
     homepage = "https://sphinx-basic-ng.readthedocs.io/en/latest/";
     license = licenses.mit;
     maintainers = with maintainers; [ Luflosi ];

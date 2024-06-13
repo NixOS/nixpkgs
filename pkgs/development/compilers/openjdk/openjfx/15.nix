@@ -119,7 +119,7 @@ in makePackage {
   meta = with lib; {
     homepage = "http://openjdk.java.net/projects/openjfx/";
     license = licenses.gpl2;
-    description = "The next-generation Java client toolkit";
+    description = "Next-generation Java client toolkit";
     maintainers = with maintainers; [ abbradar ];
     knownVulnerabilities = [
       "This OpenJFX version has reached its end of life."

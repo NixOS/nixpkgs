@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Spotify downloader written in rust";
+    description = "Spotify downloader written in rust";
     homepage = "https://github.com/oSumAtrIX/DownOnSpot";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

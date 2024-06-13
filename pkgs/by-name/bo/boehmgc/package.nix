@@ -50,8 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
       "CFLAGS_EXTRA=-DNO_SOFT_VDB"
     ];
 
-  # `gctest` fails under emulation on aarch64-darwin
-  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
+  # `gctest` fails under x86_64 emulation on aarch64-darwin
+  # and also on aarch64-linux (qemu-user)
+  doCheck = !((stdenv.isDarwin && stdenv.isx86_64) || (stdenv.isLinux && stdenv.isAarch64));
 
   enableParallelBuilding = true;
 
@@ -59,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://hboehm.info/gc/";
-    description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
+    description = "Boehm-Demers-Weiser conservative garbage collector for C and C++";
     longDescription = ''
       The Boehm-Demers-Weiser conservative garbage collector can be used as a
       garbage collecting replacement for C malloc or C++ new.  It allows you

@@ -74,7 +74,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A PDF generator using HTML and CSS";
+    description = "PDF generator using HTML and CSS";
     homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
     changelog = "https://github.com/xhtml2pdf/xhtml2pdf/releases/tag/v${version}";
     license = licenses.asl20;

@@ -108,7 +108,7 @@ stdenv.mkDerivation {
 
   meta = {
     changelog = "https://jasp-stats.org/release-notes";
-    description = "A complete statistical package for both Bayesian and Frequentist statistical methods";
+    description = "Complete statistical package for both Bayesian and Frequentist statistical methods";
     homepage = "https://github.com/jasp-stats/jasp-desktop";
     license = lib.licenses.agpl3Plus;
     mainProgram = "JASP";

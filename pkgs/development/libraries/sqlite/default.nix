@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, zlib, readline, ncurses
+, updateAutotoolsGnuConfigScriptsHook
 
 # for tests
 , python3Packages, sqldiff, sqlite-analyzer, tracker
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ];
   separateDebugInfo = stdenv.isLinux;
 
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ zlib ] ++ lib.optionals interactive [ readline ncurses ];
 
   # required for aarch64 but applied for all arches for simplicity
@@ -100,7 +102,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
-    description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
+    description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
     license = licenses.publicDomain;

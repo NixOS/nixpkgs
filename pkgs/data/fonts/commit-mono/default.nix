@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An anonymous and neutral programming typeface focused on creating a better reading experience";
+    description = "Anonymous and neutral programming typeface focused on creating a better reading experience";
     homepage = "https://commitmono.com/";
     license = licenses.ofl;
     maintainers = [ maintainers.yoavlavi ];

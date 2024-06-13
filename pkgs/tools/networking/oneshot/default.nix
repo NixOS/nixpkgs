@@ -41,7 +41,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A first-come first-served single-fire HTTP server";
+    description = "First-come first-served single-fire HTTP server";
     homepage = "https://www.oneshot.uno/";
     license = licenses.mit;
     maintainers = with maintainers; [ milibopp ];

@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A hardware-accelerated GPU terminal emulator powered by WebGPU";
+    description = "Hardware-accelerated GPU terminal emulator powered by WebGPU";
     homepage = "https://raphamorim.io/rio";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tornax otavio oluceps ];

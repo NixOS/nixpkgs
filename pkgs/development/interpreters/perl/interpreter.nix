@@ -228,7 +228,7 @@ stdenv.mkDerivation (rec {
 
   meta = with lib; {
     homepage = "https://www.perl.org/";
-    description = "The standard implementation of the Perl 5 programming language";
+    description = "Standard implementation of the Perl 5 programming language";
     license = licenses.artistic1;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;

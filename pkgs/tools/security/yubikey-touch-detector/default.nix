@@ -30,7 +30,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool to detect when your YubiKey is waiting for a touch";
+    description = "Tool to detect when your YubiKey is waiting for a touch";
     homepage = "https://github.com/maximbaz/yubikey-touch-detector";
     maintainers = with maintainers; [ sumnerevans ];
     license = with licenses; [ bsd2 isc ];

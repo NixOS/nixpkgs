@@ -29,7 +29,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "The easiest and quickest way to run mock APIs locally";
+    description = "Easiest and quickest way to run mock APIs locally";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     homepage = "https://mockoon.com";
     license = licenses.mit;

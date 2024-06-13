@@ -22,7 +22,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A daemon for responding to AWS AutoScaling Lifecycle Hooks";
+    description = "Daemon for responding to AWS AutoScaling Lifecycle Hooks";
     homepage = "https://github.com/buildkite/lifecycled/";
     license = licenses.mit;
     maintainers = with maintainers; [ cole-h grahamc ];

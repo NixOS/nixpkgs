@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     mainProgram = "loco";
-    description = "Loco CLI is a powerful command-line tool designed to streamline the process of generating Loco websites.";
+    description = "Loco CLI is a powerful command-line tool designed to streamline the process of generating Loco websites";
     homepage = "https://loco.rs";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ sebrut ];

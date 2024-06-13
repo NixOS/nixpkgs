@@ -23,7 +23,7 @@ buildGraalvmNativeImage rec {
   '';
 
   meta = with lib; {
-    description = "A linter for Clojure code that sparks joy";
+    description = "Linter for Clojure code that sparks joy";
     homepage = "https://github.com/clj-kondo/clj-kondo";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;

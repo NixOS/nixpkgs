@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Linter component for Isabelle.";
+    description = "Linter component for Isabelle";
     homepage = "https://github.com/isabelle-prover/isabelle-linter";
     maintainers = with maintainers; [ jvanbruegge ];
     license = licenses.mit;

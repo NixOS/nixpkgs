@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://relatorio.tryton.org/";
     changelog = "https://hg.tryton.org/relatorio/file/${version}/CHANGELOG";
-    description = "A templating library able to output odt and pdf files";
+    description = "Templating library able to output odt and pdf files";
     mainProgram = "relatorio-render";
     maintainers = with lib.maintainers; [ johbo ];
     license = lib.licenses.gpl2Plus;

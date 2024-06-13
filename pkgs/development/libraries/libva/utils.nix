@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdrm libva libX11 libXext libXfixes wayland ];
 
   meta = with lib; {
-    description = "A collection of utilities and examples for VA-API";
+    description = "Collection of utilities and examples for VA-API";
     longDescription = ''
       libva-utils is a collection of utilities and examples to exercise VA-API
       in accordance with the libva project.

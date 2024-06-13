@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://git.madhouse-project.org/algernon/riemann-c-client";
-    description = "A C client library for the Riemann monitoring system";
+    description = "C client library for the Riemann monitoring system";
     mainProgram = "riemann-client";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ pradeepchhetri ];

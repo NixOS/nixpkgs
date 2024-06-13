@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 rec {
-  version = "9.1.0377";
+  version = "9.1.0412";
 
   outputs = [ "out" "xxd" ];
 
@@ -8,7 +8,7 @@ rec {
     owner = "vim";
     repo = "vim";
     rev = "v${version}";
-    hash = "sha256-cfN/QbnpWIQmLtpXWPc1JnaaX+J10ietObN/B9lE1F0=";
+    hash = "sha256-uLdXFZ8eW+iMXrvkaEkArZmRfAiyORaEZxFFPt0TrdI=";
   };
 
   enableParallelBuilding = true;
@@ -33,7 +33,7 @@ rec {
   '';
 
   meta = with lib; {
-    description = "The most popular clone of the VI editor";
+    description = "Most popular clone of the VI editor";
     homepage    = "http://www.vim.org";
     license     = licenses.vim;
     maintainers = with maintainers; [ das_j equirosa philiptaron ];

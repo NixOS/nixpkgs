@@ -968,6 +968,35 @@ rec {
     };
   };
 
+  /* ROMANIAN */
+  ro_RO = ro-ro;
+  ro-ro = mkDict rec {
+    pname = "hunspell-dict-ro-ro";
+    version = "3.3.10";
+    shortName = "ro-ro";
+    dictFileName = "ro_RO";
+    fileName = "${dictFileName}.${version}.zip";
+    shortDescription = "Romanian (Romania)";
+    readmeFile = "README";
+
+    src = fetchurl {
+      url = "https://downloads.sourceforge.net/rospell/${fileName}";
+      hash = "sha256-fxKNZOoGyeZxHDCxGMCv7vsBTY8zyS2szfRVq6LQRRk=";
+    };
+
+    nativeBuildInputs = [ unzip ];
+    unpackCmd = ''
+      unzip $src ${dictFileName}.aff ${dictFileName}.dic ${readmeFile} -d ${dictFileName}
+    '';
+
+    meta = {
+      description = "Hunspell dictionary for ${shortDescription} from rospell";
+      homepage = "https://sourceforge.net/projects/rospell/";
+      license = with lib.licenses; [ gpl2Only ];
+      maintainers = with lib.maintainers; [ Andy3153 ];
+    };
+  };
+
   /* Turkish */
   tr_TR = tr-tr;
   tr-tr = mkDict rec {

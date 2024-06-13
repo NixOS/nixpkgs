@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     changelog = "https://github.com/typst/typst/releases/tag/${src.rev}";
-    description = "A new markup-based typesetting system that is powerful and easy to learn";
+    description = "New markup-based typesetting system that is powerful and easy to learn";
     homepage = "https://github.com/typst/typst";
     license = lib.licenses.asl20;
     mainProgram = "typst";

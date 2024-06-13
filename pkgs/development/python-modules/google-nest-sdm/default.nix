@@ -7,7 +7,7 @@
   google-auth,
   google-auth-oauthlib,
   google-cloud-pubsub,
-  pydantic,
+  mashumaro,
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "google-nest-sdm";
-  version = "3.0.4";
+  version = "4.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "python-google-nest-sdm";
     rev = "refs/tags/${version}";
-    hash = "sha256-zYHrS9y15dcyDhOoky7sB2BYkpTL3PoyNbNewKKl19E=";
+    hash = "sha256-SA2PlHiqvvbXmCg0WqehLDiIGEMDbzwbzbCX1klMHis=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     google-auth
     google-auth-oauthlib
     google-cloud-pubsub
-    pydantic
+    mashumaro
     requests-oauthlib
   ];
 

@@ -112,7 +112,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An interpreter and a prover for a Lisp dialect";
+    description = "Interpreter and a prover for a Lisp dialect";
     mainProgram = "acl2";
     longDescription = ''
       ACL2 is a logic and programming language in which you can model computer

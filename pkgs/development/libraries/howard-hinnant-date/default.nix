@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     license = licenses.mit;
-    description = "A date and time library based on the C++11/14/17 <chrono> header";
+    description = "Date and time library based on the C++11/14/17 <chrono> header";
     homepage = "https://github.com/HowardHinnant/date";
     platforms = platforms.unix;
     maintainers = with maintainers; [ r-burns ];

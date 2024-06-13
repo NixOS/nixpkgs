@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/gentilkiwi/mimikatz";
-    description = "A little tool to play with Windows security";
+    description = "Little tool to play with Windows security";
     license = with lib.licenses; [ cc-by-40 ];
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.all;

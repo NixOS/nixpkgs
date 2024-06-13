@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "A fast, compressed, persistent binary data store library for C";
+    description = "Fast, compressed, persistent binary data store library for C";
     homepage = "https://www.blosc.org";
     changelog = "https://github.com/Blosc/c-blosc2/releases/tag/v${finalAttrs.version}";
     pkgConfigModules = [

@@ -33,7 +33,7 @@ buildGo121Module rec {
   '';
 
   meta = with lib; {
-    description = "A distributed POSIX file system built on top of Redis and S3";
+    description = "Distributed POSIX file system built on top of Redis and S3";
     homepage = "https://www.juicefs.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];

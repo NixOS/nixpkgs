@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A collection of GStreamer effects to be used in different GNOME Modules";
+    description = "Collection of GStreamer effects to be used in different GNOME Modules";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-video-effects";
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

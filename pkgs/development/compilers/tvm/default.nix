@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://tvm.apache.org/";
-    description = "An End to End Deep Learning Compiler Stack for CPUs, GPUs and accelerators";
+    description = "End to End Deep Learning Compiler Stack for CPUs, GPUs and accelerators";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ adelbertc ];

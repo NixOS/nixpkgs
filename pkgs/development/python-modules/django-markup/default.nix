@@ -61,7 +61,7 @@ buildPythonPackage rec {
   env.DJANGO_SETTINGS_MODULE = "django_markup.tests";
 
   meta = with lib; {
-    description = "Generic Django application to convert text with specific markup to html.";
+    description = "Generic Django application to convert text with specific markup to html";
     homepage = "https://github.com/bartTC/django-markup";
     changelog = "https://github.com/bartTC/django-markup/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;

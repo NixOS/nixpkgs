@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication {
 
   meta = with lib; {
     homepage = "https://github.com/knadh/git-bars";
-    description = "A utility for visualising git commit activity as bars on the terminal";
+    description = "Utility for visualising git commit activity as bars on the terminal";
     license = licenses.mit;
     maintainers = [ maintainers.matthiasbeyer ];
     mainProgram = "git-bars";

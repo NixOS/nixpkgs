@@ -35,7 +35,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Instant, easy, predictable shells and containers.";
+    description = "Instant, easy, predictable shells and containers";
     homepage = "https://www.jetpack.io/devbox";
     license = licenses.asl20;
     maintainers = with maintainers; [ urandom lagoja ];

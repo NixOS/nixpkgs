@@ -54,7 +54,7 @@ rec {
     inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
   };
 
-  luarocks = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
+  luarocks_bootstrap = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
 
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });
@@ -197,7 +197,7 @@ rec {
     '';
 
     meta = with lib; {
-      description = "A modular widget library for the awesome window manager";
+      description = "Modular widget library for the awesome window manager";
       homepage = "https://vicious.rtfd.io";
       changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
       license = licenses.gpl2Plus;

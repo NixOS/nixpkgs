@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A software KVM switch for sharing a mouse and keyboard with multiple hosts through the network";
+    description = "Software KVM switch for sharing a mouse and keyboard with multiple hosts through the network";
     homepage = "https://github.com/feschber/lan-mouse";
     changelog = "https://github.com/feschber/lan-mouse/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;

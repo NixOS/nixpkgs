@@ -64,7 +64,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "internetarchive" ];
 
   meta = with lib; {
-    description = "A Python and Command-Line Interface to Archive.org";
+    description = "Python and Command-Line Interface to Archive.org";
     homepage = "https://github.com/jjjake/internetarchive";
     changelog = "https://github.com/jjjake/internetarchive/blob/v${version}/HISTORY.rst";
     license = licenses.agpl3Plus;

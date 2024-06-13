@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A (h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs";
+    description = "(h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs";
     longDescription = ''
       Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD, Adreno, Intel and NVIDIA GPUs.
       It can handle multiple GPUs and print information about them in a htop familiar way.

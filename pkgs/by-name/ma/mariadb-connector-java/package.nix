@@ -17,8 +17,7 @@ maven.buildMavenPackage rec {
 
   mvnHash = "sha256-7O+G5HT6mtp12zWL3Gn12KPVUwp3GMaWGvXX6Sg1+6k=";
 
-  # Disable tests because they require networking
-  mvnParameters = "-DskipTests";
+  doCheck = false; # Requires networking
 
   installPhase = ''
     runHook preInstall

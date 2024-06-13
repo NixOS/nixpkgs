@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "laundrify-aio";
-  version = "1.1.2";
+  version = "1.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "laundrify";
     repo = "laundrify-pypi";
     rev = "v${version}";
-    hash = "sha256-+dTvYn4hux3Y19kWZwxhdkBARmfD8SuNlYWM/ET9K2M=";
+    hash = "sha256-mIdw2167H4Ume/DqV+fjRiBrph+8Jj5EEUALDDj4ah8=";
   };
 
   propagatedBuildInputs = [

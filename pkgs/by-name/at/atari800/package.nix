@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://atari800.github.io/";
-    description = "An Atari 8-bit emulator";
+    description = "Atari 8-bit emulator";
     longDescription = ''
       Atari800 is the emulator of Atari 8-bit computer systems and 5200 game
       console for Unix, Linux, Amiga, MS-DOS, Atari TT/Falcon, MS-Windows, MS

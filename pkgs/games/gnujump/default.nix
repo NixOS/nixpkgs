@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://jump.gnu.sinusoid.es/index.php?title=Main_Page";
-    description = "A clone of the simple yet addictive game Xjump";
+    description = "Clone of the simple yet addictive game Xjump";
     mainProgram = "gnujump";
     longDescription = ''
       The goal in this game is to jump to the next floor trying not to fall

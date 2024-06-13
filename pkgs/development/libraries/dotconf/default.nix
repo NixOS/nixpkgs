@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ];
 
   meta = with lib; {
-    description = "A configuration parser library";
+    description = "Configuration parser library";
     maintainers = with maintainers; [ pSub ];
     homepage = "https://github.com/williamh/dotconf";
     license = licenses.lgpl21Plus;

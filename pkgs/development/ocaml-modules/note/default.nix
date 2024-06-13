@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://erratique.ch/software/note";
-    description = "An OCaml module for functional reactive programming";
+    description = "OCaml module for functional reactive programming";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;

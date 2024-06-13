@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     mainProgram = "com.vysp3r.ProtonPlus";
-    description = "A simple Wine and Proton-based compatibility tools manager";
+    description = "Simple Wine and Proton-based compatibility tools manager";
     homepage = "https://github.com/Vysp3r/ProtonPlus";
     changelog = "https://github.com/Vysp3r/ProtonPlus/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl3Only;

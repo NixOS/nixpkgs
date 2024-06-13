@@ -22,7 +22,7 @@ in skawarePackages.buildPackage {
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 
-  description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
+  description = "Small scripting language, to be used in place of a shell in non-interactive scripts";
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 

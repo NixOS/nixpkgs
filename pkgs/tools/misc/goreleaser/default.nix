@@ -9,16 +9,16 @@
 }:
 buildGoModule rec {
   pname = "goreleaser";
-  version = "1.26.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/vRN3JcfAK0p9y4kusQooziozG7Wn40b4XjsXe+fE7E=";
+    hash = "sha256-GC9jT0vEokezBeCUSvSal7mcExiPgGcTHmP94A1cEPE=";
   };
 
-  vendorHash = "sha256-1tJksVsGEWVd2wjic4k8ow+/Is9GaCnBMg0UAJzwpkA=";
+  vendorHash = "sha256-0EO99dUNdIEQt8iswPOvHFt/+XeihhJRhJIt2bC9Zp0=";
 
   ldflags =
     [ "-s" "-w" "-X main.version=${version}" "-X main.builtBy=nixpkgs" ];

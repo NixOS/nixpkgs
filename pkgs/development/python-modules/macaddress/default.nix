@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/mentalisttraceur/python-macaddress";
-    description = "A module for handling hardware identifiers like MAC addresses";
+    description = "Module for handling hardware identifiers like MAC addresses";
     license = licenses.bsd0;
     maintainers = with maintainers; [ netali ];
   };

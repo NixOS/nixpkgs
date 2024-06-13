@@ -1,9 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
-, patchelf
-, freetype
 , libusb-compat-0_1
 }:
 let
@@ -48,7 +45,7 @@ let
     enableParallelBuilding = true;
 
     meta = {
-      description = "A small graphics library optimised for drawing on an LCD";
+      description = "Small graphics library optimised for drawing on an LCD";
       inherit license maintainers;
     };
   };
@@ -86,7 +83,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "A daemon that makes it possible to use the Logitech keyboard G-Buttons and draw on various Logitech LCDs";
+    description = "Daemon that makes it possible to use the Logitech keyboard G-Buttons and draw on various Logitech LCDs";
     mainProgram = "g15daemon";
     inherit license maintainers;
   };

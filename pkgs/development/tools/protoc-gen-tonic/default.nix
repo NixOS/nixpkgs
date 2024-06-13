@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-FrkvL/uJitMkSyOytVSmlwr26yMVM12S2n+EaSw11CE=";
 
   meta = with lib; {
-    description = "A protoc plugin that generates Tonic gRPC server and client code using the Prost code generation engine";
+    description = "Protoc plugin that generates Tonic gRPC server and client code using the Prost code generation engine";
     mainProgram = "protoc-gen-tonic";
     homepage = "https://github.com/neoeinstein/protoc-gen-prost";
     changelog = "https://github.com/neoeinstein/protoc-gen-prost/blob/main/CHANGELOG.md";

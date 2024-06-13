@@ -1,13 +1,15 @@
-{ lib, stdenv, buildPackages, fetchurl, pciutils
-, gitUpdater }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, pciutils
+, gitUpdater, fwupd-efi, ipxe, refind, syslinux }:
 
 stdenv.mkDerivation rec {
   pname = "gnu-efi";
-  version = "3.0.15";
+  version = "3.0.18";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/gnu-efi/${pname}-${version}.tar.bz2";
-    hash = "sha256-kxole5xcG6Zf9Rnxg3PEOKJoJfLbeGaxY+ltGxaPIOo=";
+  src = fetchFromGitHub {
+    owner = "ncroxon";
+    repo = "gnu-efi";
+    rev = version;
+    hash = "sha256-xtiKglLXm9m4li/8tqbOsyM6ThwGhyu/g4kw5sC4URY=";
   };
 
   buildInputs = [ pciutils ];
@@ -25,9 +27,14 @@ stdenv.mkDerivation rec {
       --replace "-Werror" ""
   '';
 
-  passthru.updateScript = gitUpdater {
-    # No nicer place to find latest release.
-    url = "https://git.code.sf.net/p/gnu-efi/code";
+  passthru = {
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://git.code.sf.net/p/gnu-efi/code";
+    };
+    tests = {
+      inherit fwupd-efi ipxe refind syslinux;
+    };
   };
 
   meta = with lib; {

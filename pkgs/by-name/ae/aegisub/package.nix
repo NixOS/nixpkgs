@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/wangqr/Aegisub";
-    description = "An advanced subtitle editor; wangqr's fork";
+    description = "Advanced subtitle editor; wangqr's fork";
     longDescription = ''
       Aegisub is a free, cross-platform open source tool for creating and
       modifying subtitles. Aegisub makes it quick and easy to time subtitles to

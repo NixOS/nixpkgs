@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   passthru.tests.basic-nixos-module-functionality = nixosTests.cage;
 
   meta = with lib; {
-    description = "A Wayland kiosk that runs a single, maximized application";
+    description = "Wayland kiosk that runs a single, maximized application";
     homepage    = "https://www.hjdskes.nl/projects/cage/";
     license     = licenses.mit;
     platforms   = platforms.linux;

@@ -41,7 +41,7 @@ makeSetupHook {
   };
 
   meta = {
-    description = "A setup hook for using the Zig compiler in Nixpkgs";
+    description = "Setup hook for using the Zig compiler in Nixpkgs";
     inherit (zig.meta) maintainers platforms broken;
   };
 } ./setup-hook.sh

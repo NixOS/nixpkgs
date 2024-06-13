@@ -34,7 +34,7 @@ buildPerlPackage rec {
   };
 
   meta = {
-    description = "A tool to read, write and edit EXIF meta information";
+    description = "Tool to read, write and edit EXIF meta information";
     longDescription = ''
       ExifTool is a platform-independent Perl library plus a command-line
       application for reading, writing and editing meta information in a wide

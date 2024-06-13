@@ -108,12 +108,12 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   disallowedReferences = [ SKIA_SOURCE_DIR ];
 
   meta = with lib; {
-    description = "This is a simple graphical user interface for Neovim.";
+    description = "This is a simple graphical user interface for Neovim";
     mainProgram = "neovide";
     homepage = "https://github.com/neovide/neovide";
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.all;
+    platforms = platforms.linux ++ [ "aarch64-darwin" ];
   };
 }

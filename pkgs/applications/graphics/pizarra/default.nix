@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple blackboard written in GTK";
+    description = "Simple blackboard written in GTK";
     mainProgram = "pizarra";
     longDescription = ''
       A simple endless blackboard.

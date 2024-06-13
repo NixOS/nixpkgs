@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A caching front-end based on the Dogpile lock";
+    description = "Caching front-end based on the Dogpile lock";
     homepage = "https://github.com/sqlalchemy/dogpile.cache";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

@@ -84,7 +84,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/ReFirmLabs/binwalk";
-    description = "A tool for searching a given binary image for embedded files";
+    description = "Tool for searching a given binary image for embedded files";
     mainProgram = "binwalk";
     maintainers = [ maintainers.koral ];
     license = licenses.mit;

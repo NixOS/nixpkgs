@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A Gtk theme based on the Gruvbox colour pallete";
+    description = "Gtk theme based on the Gruvbox colour pallete";
     homepage = "https://www.pling.com/p/1681313/";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

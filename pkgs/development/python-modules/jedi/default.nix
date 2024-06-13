@@ -55,7 +55,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "An autocompletion tool for Python that can be used for text editors";
+    description = "Autocompletion tool for Python that can be used for text editors";
     homepage = "https://github.com/davidhalter/jedi";
     changelog = "https://github.com/davidhalter/jedi/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;

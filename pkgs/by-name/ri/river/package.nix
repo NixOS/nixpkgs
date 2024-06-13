@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://codeberg.org/river/river";
-    description = "A dynamic tiling wayland compositor";
+    description = "Dynamic tiling wayland compositor";
     longDescription = ''
       River is a dynamic tiling Wayland compositor with flexible runtime
       configuration.

@@ -12,7 +12,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ seq ];
 
   meta = with lib; {
-    description = "An optimized parsing and printing library for the JSON format";
+    description = "Optimized parsing and printing library for the JSON format";
     homepage = "https://github.com/ocaml-community/${pname}";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];

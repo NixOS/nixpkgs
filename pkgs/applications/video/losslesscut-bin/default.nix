@@ -8,7 +8,7 @@ let
   pname = "losslesscut";
   version = "3.58.0";
   metaCommon = with lib; {
-    description = "The swiss army knife of lossless video/audio editing";
+    description = "Swiss army knife of lossless video/audio editing";
     homepage = "https://mifi.no/losslesscut/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ShamrockLee ];

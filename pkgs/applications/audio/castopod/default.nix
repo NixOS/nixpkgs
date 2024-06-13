@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "An open-source hosting platform made for podcasters who want to engage and interact with their audience";
+    description = "Open-source hosting platform made for podcasters who want to engage and interact with their audience";
     homepage = "https://castopod.org";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ alexoundos ];

@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jupyter_cache" ];
 
   meta = with lib; {
-    description = "A defined interface for working with a cache of jupyter notebooks";
+    description = "Defined interface for working with a cache of jupyter notebooks";
     mainProgram = "jcache";
     homepage = "https://github.com/executablebooks/jupyter-cache";
     changelog = "https://github.com/executablebooks/jupyter-cache/blob/v${version}/CHANGELOG.md";

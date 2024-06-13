@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ yaml-cpp ] ++ lib.optional smartSupport libatasmart;
 
   meta = {
-    description = "A simple, lightweight fan control program";
+    description = "Simple, lightweight fan control program";
     longDescription = ''
       Thinkfan is a minimalist fan control program. Originally designed
       specifically for IBM/Lenovo Thinkpads, it now supports any kind of

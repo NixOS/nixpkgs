@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "rtp" ];
 
   meta = with lib; {
-    description = "A library for decoding/encoding rtp packets";
+    description = "Library for decoding/encoding rtp packets";
     homepage = "https://github.com/bbc/rd-apmm-python-lib-rtp";
     license = licenses.asl20;
     maintainers = with maintainers; [ fleaz ];

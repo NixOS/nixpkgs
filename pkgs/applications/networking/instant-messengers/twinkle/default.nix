@@ -62,7 +62,7 @@ mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://github.com/LubosD/twinkle/blob/${version}/NEWS";
-    description = "A SIP-based VoIP client";
+    description = "SIP-based VoIP client";
     homepage = "http://twinkle.dolezel.info/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.mkg20001 ];

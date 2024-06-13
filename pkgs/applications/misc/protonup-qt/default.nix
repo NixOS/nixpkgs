@@ -24,7 +24,7 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     homepage = "https://davidotek.github.io/protonup-qt/";
-    description = "Install and manage Proton-GE and Luxtorpeda for Steam and Wine-GE for Lutris with this graphical user interface.";
+    description = "Install and manage Proton-GE and Luxtorpeda for Steam and Wine-GE for Lutris with this graphical user interface";
     license = licenses.gpl3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "protonup-qt";

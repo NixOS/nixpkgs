@@ -33,7 +33,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "zcbor" ];
 
   meta = with lib; {
-    description = "A low footprint CBOR library in the C language (C++ compatible), tailored for use in microcontrollers";
+    description = "Low footprint CBOR library in the C language (C++ compatible), tailored for use in microcontrollers";
     mainProgram = "zcbor";
     homepage = "https://pypi.org/project/zcbor/";
     changelog = "https://github.com/NordicSemiconductor/zcbor/releases/tag/${version}";

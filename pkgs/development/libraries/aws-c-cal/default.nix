@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-cal";
-  version = "0.6.12";
+  version = "0.6.15";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-aegK01wYdOc6RGNVf/dZKn1HkqQr+yEblcu6hnlMZE4=";
+    hash = "sha256-RrUJz3IqwbBJ8NuJTIWqK33FlJHolcaid55PT2EhO24=";
   };
 
   patches = [

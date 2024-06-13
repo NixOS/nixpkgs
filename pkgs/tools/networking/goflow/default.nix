@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-fOlfVI8v7KqNSRhAPlZBSHKfZRlCbCgjnMV/6bsqDhg=";
 
   meta = with lib; {
-    description = "A NetFlow/IPFIX/sFlow collector in Go";
+    description = "NetFlow/IPFIX/sFlow collector in Go";
     homepage = "https://github.com/cloudflare/goflow";
     license = licenses.bsd3;
     maintainers = with maintainers; [ heph2 ];

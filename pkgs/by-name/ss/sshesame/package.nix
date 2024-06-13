@@ -24,7 +24,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "An easy to set up and use SSH honeypot";
+    description = "Easy to set up and use SSH honeypot";
     longDescription = ''
       A fake SSH server that lets anyone in and logs their activity.
       sshesame accepts and logs SSH connections and activity (channels, requests),

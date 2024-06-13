@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/natecraddock/zf";
-    description = "A commandline fuzzy finder that prioritizes matches on filenames";
+    description = "Commandline fuzzy finder that prioritizes matches on filenames";
     changelog = "https://github.com/natecraddock/zf/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

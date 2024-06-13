@@ -25,7 +25,7 @@ tcl.mkTclDerivation {
 
   meta = with lib; {
     homepage = "https://wapp.tcl-lang.org/home/doc/trunk/README.md";
-    description = "A framework for writing web applications in Tcl";
+    description = "Framework for writing web applications in Tcl";
     license = licenses.bsd2;
     maintainers = with maintainers; [ nat-418 ];
   };

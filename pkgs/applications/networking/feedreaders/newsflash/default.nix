@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { rev-prefix = "v."; };
 
   meta = with lib; {
-    description = "A modern feed reader designed for the GNOME desktop";
+    description = "Modern feed reader designed for the GNOME desktop";
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [

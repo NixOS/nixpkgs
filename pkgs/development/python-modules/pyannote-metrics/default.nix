@@ -57,7 +57,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyannote.metrics" ];
 
   meta = with lib; {
-    description = "A toolkit for reproducible evaluation, diagnostic, and error analysis of speaker diarization systems";
+    description = "Toolkit for reproducible evaluation, diagnostic, and error analysis of speaker diarization systems";
     homepage = "https://github.com/pyannote/pyannote-metrics";
     changelog = "http://pyannote.github.io/pyannote-metrics/changelog.html";
     license = licenses.mit;

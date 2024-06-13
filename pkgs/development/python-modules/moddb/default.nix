@@ -37,7 +37,7 @@ buildPythonPackage rec {
   doCheck = false; # Tests try to access the internet.
 
   meta = with lib; {
-    description = "A Python scrapper to access ModDB mods, games and more as objects";
+    description = "Python scrapper to access ModDB mods, games and more as objects";
     homepage = "https://github.com/ClementJ18/moddb";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];

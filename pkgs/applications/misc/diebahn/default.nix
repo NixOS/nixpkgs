@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://gitlab.com/schmiddi-on-mobile/railway/-/blob/${src.rev}/CHANGELOG.md";
-    description = "Travel with all your train information in one place. Also known as Railway.";
+    description = "Travel with all your train information in one place. Also known as Railway";
     homepage = "https://gitlab.com/schmiddi-on-mobile/railway";
     license = lib.licenses.gpl3Plus;
     mainProgram = "diebahn";

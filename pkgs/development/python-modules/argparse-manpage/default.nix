@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "argparse-manpage";
-  version = "4.5";
+  version = "4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praiskup";
     repo = "argparse-manpage";
-    rev = "v${version}";
-    hash = "sha256-9lriW+Yx/6ysoumloQglDm5JEcKNUWm422B3P6IE/EE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2GJDFLCaPTb8sQCAv9qZ+pIysFE7IaKh9co3Mb8Dutc=";
   };
 
   nativeBuildInputs = [

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lsof-org/lsof";
-    description = "A tool to list open files";
+    description = "Tool to list open files";
     mainProgram = "lsof";
     longDescription = ''
       List open files. Can show what process has opened some file,

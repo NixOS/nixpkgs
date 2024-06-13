@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "kaniko";
-  version = "1.23.0";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "kaniko";
     rev = "v${version}";
-    hash = "sha256-HHnPO2ItQKtodTxdZzxVU9GS45cd6fnlY8PLTTfqCVg=";
+    hash = "sha256-0FHhyUPZFddruZ3YV5SYB0b/bb0C+IVQpgIRaCoA1z8=";
   };
 
   vendorHash = null;
@@ -43,7 +43,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "A tool to build container images from a Dockerfile, inside a container or Kubernetes cluster";
+    description = "Tool to build container images from a Dockerfile, inside a container or Kubernetes cluster";
     homepage = "https://github.com/GoogleContainerTools/kaniko";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;

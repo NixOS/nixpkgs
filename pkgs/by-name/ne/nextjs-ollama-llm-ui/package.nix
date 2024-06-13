@@ -90,7 +90,7 @@ buildNpmPackage {
   };
 
   meta = {
-    description = "Simple chat web interface for Ollama LLMs.";
+    description = "Simple chat web interface for Ollama LLMs";
     changelog = "https://github.com/jakobhoeg/nextjs-ollama-llm-ui/releases/tag/v${version}";
     mainProgram = "nextjs-ollama-llm-ui";
     homepage = "https://github.com/jakobhoeg/nextjs-ollama-llm-ui";

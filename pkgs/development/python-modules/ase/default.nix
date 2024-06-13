@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchPypi,
   buildPythonPackage,
   isPy27,
@@ -11,6 +12,7 @@
   flask,
   pillow,
   psycopg2,
+  tkinter,
   pytestCheckHook,
   pytest-mock,
   pytest-xdist,
@@ -37,6 +39,8 @@ buildPythonPackage rec {
     flask
     pillow
     psycopg2
+  ] ++ lib.optionals stdenv.isDarwin [
+    tkinter
   ];
 
   nativeCheckInputs = [

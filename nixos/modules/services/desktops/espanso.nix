@@ -15,7 +15,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.espanso.package = mkIf cfg.wayland pkgs.espanso-wayland;
     systemd.user.services.espanso = {
       description = "Espanso daemon";
       serviceConfig = {

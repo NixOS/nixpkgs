@@ -1,13 +1,10 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch,
   writeText,
   setuptools,
-  wheel,
   filelock,
   huggingface-hub,
   importlib-metadata,
@@ -38,11 +35,12 @@
   torchsde,
   transformers,
   pythonAtLeast,
+  diffusers,
 }:
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.27.2";
+  version = "0.28.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -51,29 +49,10 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "diffusers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aRnbU3jN40xaCsoMFyRt1XB+hyIYMJP2b/T1yZho90c=";
+    hash = "sha256-q1Y7YJSTVkPZF7KeHdOwO7XgTDBvFGioLR57adc1P+o=";
   };
 
-  patches = [
-    # fix python3.12 build
-    (fetchpatch {
-      # https://github.com/huggingface/diffusers/pull/7455
-      name = "001-remove-distutils.patch";
-      url = "https://github.com/huggingface/diffusers/compare/363699044e365ef977a7646b500402fa585e1b6b...3c67864c5acb30413911730b1ed4a9ad47c0a15c.patch";
-      hash = "sha256-Qyvyp1GyTVXN+A+lA1r2hf887ubTtaUknbKd4r46NZQ=";
-    })
-    (fetchpatch {
-      # https://github.com/huggingface/diffusers/pull/7461
-      name = "002-fix-removed-distutils.patch";
-      url = "https://github.com/huggingface/diffusers/commit/efbbbc38e436a1abb1df41a6eccfd6f9f0333f97.patch";
-      hash = "sha256-scdtpX1RYFFEDHcaMb+gDZSsPafkvnIO/wQlpzrQhLA=";
-    })
-  ];
-
-  build-system = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     filelock
@@ -108,8 +87,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "diffusers" ];
 
-  # tests crash due to torch segmentation fault
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  # it takes a few hours
+  doCheck = false;
+
+  passthru.tests.pytest = diffusers.overridePythonAttrs { doCheck = true; };
 
   nativeCheckInputs = [
     parameterized

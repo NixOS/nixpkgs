@@ -170,7 +170,7 @@ let
     };
 
     meta = with lib; {
-      description = "A special build of curl that can impersonate Chrome & Firefox";
+      description = "Special build of curl that can impersonate Chrome & Firefox";
       homepage = "https://github.com/lwthiker/curl-impersonate";
       license = with licenses; [ curl mit ];
       maintainers = with maintainers; [ deliciouslytyped lilyinstarlight ];

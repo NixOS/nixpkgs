@@ -26,7 +26,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "A feature-rich GraphQL Client IDE";
+    description = "Feature-rich GraphQL Client IDE";
     mainProgram = "altair";
     homepage = "https://github.com/imolorhe/altair";
     license = licenses.mit;

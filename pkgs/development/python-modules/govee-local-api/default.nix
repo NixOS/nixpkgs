@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   poetry-core,
   pytestCheckHook,
   pythonOlder,
@@ -10,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "govee-local-api";
-  version = "1.4.5";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,16 +18,8 @@ buildPythonPackage rec {
     owner = "Galorhallen";
     repo = "govee-local-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kmIuo/e3eLJTgmI+2Oq9Y0jov/133jXwgoBayGv33r4=";
+    hash = "sha256-L9c/58B50E5Kk44j9tvtDZ0+ncJZ4KubTz/U9FI71+E=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # configure pep517 build-backend
-      url = "https://github.com/Galorhallen/govee-local-api/commit/897a21ae723ff94343bbf4ba1541e3a1d3e03c94.patch";
-      hash = "sha256-/d5jGKGME768Ar+WWWQUByHJPGB31OHShI4oLjcMUIU=";
-    })
-  ];
 
   build-system = [ poetry-core ];
 

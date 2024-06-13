@@ -74,7 +74,7 @@ buildPythonPackage rec {
       replaceStrings [ "." ] [ "-" ] version
     }";
     homepage = "https://flask.palletsprojects.com/";
-    description = "The Python micro framework for building web applications";
+    description = "Python micro framework for building web applications";
     mainProgram = "flask";
     longDescription = ''
       Flask is a lightweight WSGI web application framework. It is

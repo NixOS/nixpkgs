@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://libzip.org/";
-    description = "A C library for reading, creating and modifying zip archives";
+    description = "C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
     pkgConfigModules = [ "libzip" ];
     platforms = platforms.unix;

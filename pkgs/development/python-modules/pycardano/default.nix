@@ -69,7 +69,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pycardano" ];
 
   meta = with lib; {
-    description = "A lightweight Cardano library in Python";
+    description = "Lightweight Cardano library in Python";
     homepage = "https://github.com/Python-Cardano/pycardano";
     license = licenses.mit;
     maintainers = with maintainers; [ t4ccer ];

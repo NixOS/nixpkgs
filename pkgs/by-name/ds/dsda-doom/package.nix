@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/kraflab/dsda-doom";
-    description = "An advanced Doom source port with a focus on speedrunning, successor of PrBoom+";
+    description = "Advanced Doom source port with a focus on speedrunning, successor of PrBoom+";
     mainProgram = "dsda-doom";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

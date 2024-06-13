@@ -392,8 +392,6 @@ in {
   testScript = { nodes, ... }:
     let
       caDomain = nodes.acme.test-support.acme.caDomain;
-      newServerSystem = nodes.webserver.config.system.build.toplevel;
-      switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
     in
     # Note, wait_for_unit does not work for oneshot services that do not have RemainAfterExit=true,
     # this is because a oneshot goes from inactive => activating => inactive, and never
@@ -544,6 +542,12 @@ in {
           webserver.wait_for_unit("acme-finished-http.example.test.target")
           check_fullchain(webserver, "http.example.test")
           check_issuer(webserver, "http.example.test", "pebble")
+
+      # Perform account hash test
+      with subtest("Assert that account hash didn't unexpected change"):
+          hash = webserver.succeed("ls /var/lib/acme/.lego/accounts/")
+          print("Account hash: " + hash)
+          assert hash.strip() == "d590213ed52603e9128d"
 
       # Perform renewal test
       with subtest("Can renew certificates when they expire"):

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/ARM-software/astc-encoder";
-    description = "An encoder for the ASTC texture compression format";
+    description = "Encoder for the ASTC texture compression format";
     longDescription = ''
       The Adaptive Scalable Texture Compression (ASTC) format is
       widely supported by mobile and desktop graphics hardware and

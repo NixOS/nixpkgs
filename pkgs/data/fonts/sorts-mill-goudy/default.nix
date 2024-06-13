@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A ‘revival’ of Goudy Oldstyle and Italic";
+    description = "‘revival’ of Goudy Oldstyle and Italic";
     longDescription = ''
       A 'revival' of Goudy Oldstyle and Italic, with features including small
       capitals (in the roman only), oldstyle and lining figures, superscripts

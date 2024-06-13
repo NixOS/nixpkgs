@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ dbus ];
 
   meta = with lib; {
-    description = "An interruption-free notification system for Linux";
+    description = "Interruption-free notification system for Linux";
     homepage = "https://github.com/ellsclytn/nofi/";
     changelog = "https://github.com/ellsclytn/nofi/raw/v${version}/CHANGELOG.md";
     license = [ licenses.asl20 /* or */ licenses.mit ];

@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A collection of injectable files, designed to be used in a pentest when SQL injection flaws are found and are in multiple languages for different environments";
+    description = "Collection of injectable files, designed to be used in a pentest when SQL injection flaws are found and are in multiple languages for different environments";
     homepage = "https://github.com/junk13/laudanum";
     maintainers = with maintainers; [ d3vil0p3r ];
     platforms = platforms.all;

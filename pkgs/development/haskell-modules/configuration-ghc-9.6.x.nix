@@ -69,6 +69,9 @@ self: super: {
   # https://github.com/mokus0/th-extras/pull/21
   th-extras = doJailbreak super.th-extras;
 
+  # not in Stackage, needs to match ghc-lib
+  ghc-tags = doDistribute self.ghc-tags_1_7;
+
   #
   # Too strict bounds without upstream fix
   #

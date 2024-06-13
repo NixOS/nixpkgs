@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A GObject based library for handling and rendering XPS documents";
+    description = "GObject based library for handling and rendering XPS documents";
     homepage = "https://gitlab.gnome.org/GNOME/libgxps";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://lgames.sourceforge.io/LBreakoutHD/";
-    description = "A widescreen Breakout clone";
+    description = "Widescreen Breakout clone";
     license = lib.licenses.gpl2Plus;
     mainProgram = "lbreakouthd";
     maintainers = with lib.maintainers; [ AndersonTorres ];

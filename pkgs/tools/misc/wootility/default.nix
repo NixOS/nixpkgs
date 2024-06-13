@@ -29,7 +29,7 @@ appimageTools.wrapType2 rec {
 
   meta = with lib; {
     homepage = "https://wooting.io/wootility";
-    description = "A customization and management software for Wooting keyboards";
+    description = "Customization and management software for Wooting keyboards";
     platforms = [ "x86_64-linux" ];
     license = "unknown";
     maintainers = with maintainers; [ davidtwco ];

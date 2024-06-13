@@ -1,11 +1,22 @@
-{ lib, stdenv, runCommand, fetchzip, fetchurl, fetchFromGitHub
-, cmake, pkg-config, zlib, libpng, makeWrapper
+{ lib
+, stdenv
+, runCommand
+, fetchzip
+, fetchurl
+, fetchFromGitHub
+, cmake
+, jbig2dec
+, libjpeg_turbo
+, libpng
+, makeWrapper
+, pkg-config
+, zlib
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
-, enableMuPDF ? true, mupdf_1_17
+, enableMuPDF ? true, mupdf
 , enableDJVU ? true, djvulibre
 , enableGOCR ? false, gocr # Disabled by default due to crashes
-, enableTesseract ? true, leptonica, tesseract4
+, enableTesseract ? true, leptonica, tesseract
 }:
 
 # k2pdfopt is a pain to package. It requires modified versions of mupdf,
@@ -50,10 +61,10 @@ let
   '';
 
   pname = "k2pdfopt";
-  version = "2.53";
+  version = "2.55";
   k2pdfopt_src = fetchzip {
     url = "http://www.willus.com/${pname}/src/${pname}_v${version}_src.zip";
-    sha256 = "1fna8bg3pascjfc3hmc6xn0xi2yh7f1qp0d344mw9hqanbnykyy8";
+    hash = "sha256-orQNDXQkkcCtlA8wndss6SiJk4+ImiFCG8XRLEg963k=";
   };
 in stdenv.mkDerivation rec {
   inherit pname version;
@@ -79,15 +90,15 @@ in stdenv.mkDerivation rec {
     mupdf_patch = mkPatch {
       name = "mupdf";
       src = fetchurl {
-        url = "https://mupdf.com/downloads/archive/mupdf-1.17.0-source.tar.gz";
-        sha256 = "13nl9nrcx2awz9l83mlv2psi1lmn3hdnfwxvwgwiwbxlkjl3zqq0";
+        url = "https://mupdf.com/downloads/archive/mupdf-1.23.7-source.tar.gz";
+        hash = "sha256-NaVJM/QA6JZnoImkJfHGXNadRiOU/tnAZ558Uu+6pWg=";
       };
       patchCommands = ''
         cp ${k2pdfopt_src}/mupdf_mod/{filter-basic,font,stext-device,string}.c ./source/fitz/
         cp ${k2pdfopt_src}/mupdf_mod/pdf-* ./source/pdf/
       '';
     };
-    mupdf_modded = mupdf_1_17.overrideAttrs ({ patches ? [], ... }: {
+    mupdf_modded = mupdf.overrideAttrs ({ patches ? [], ... }: {
       patches = patches ++ [ mupdf_patch ];
       # This function is missing in font.c, see font-win32.c
       postPatch = ''
@@ -98,8 +109,8 @@ in stdenv.mkDerivation rec {
     leptonica_patch = mkPatch {
       name = "leptonica";
       src = fetchurl {
-        url = "http://www.leptonica.org/source/leptonica-1.79.0.tar.gz";
-        sha256 = "1n004gv1dj3pq1fcnfdclvvx5nang80336aa67nvs3nnqp4ncn84";
+        url = "http://www.leptonica.org/source/leptonica-1.83.0.tar.gz";
+        hash = "sha256-IGWR3VjPhO84CDba0TO1jJ0a+SSR9amCXDRqFiBEvP4=";
       };
       patchCommands = "cp -r ${k2pdfopt_src}/leptonica_mod/. ./src/";
     };
@@ -112,12 +123,16 @@ in stdenv.mkDerivation rec {
       src = fetchFromGitHub {
         owner = "tesseract-ocr";
         repo = "tesseract";
-        rev = "4.1.1";
-        sha256 = "1ca27zbjpx35nxh9fha410z3jskwyj06i5hqiqdc08s2d7kdivwn";
+        rev = "5.3.3";
+        hash = "sha256-/aGzwm2+0y8fheOnRi/OJXZy3o0xjY1cCq+B3GTzfos=";
       };
       patchCommands = ''
-        cp ${k2pdfopt_src}/tesseract_mod/{baseapi,tesscapi,tesseract}.* src/api/
+        cp ${k2pdfopt_src}/tesseract_mod/tesseract.* include/tesseract/
+        cp ${k2pdfopt_src}/tesseract_mod/tesseract/baseapi.h include/tesseract/
+        cp ${k2pdfopt_src}/tesseract_mod/{baseapi,config_auto,tesscapi,tesseract}.* src/api/
+        cp ${k2pdfopt_src}/tesseract_mod/tesseract/baseapi.h src/api/
         cp ${k2pdfopt_src}/tesseract_mod/{tesscapi,tessedit,tesseract}.* src/ccmain/
+        cp ${k2pdfopt_src}/tesseract_mod/tesseract/baseapi.h src/ccmain/
         cp ${k2pdfopt_src}/tesseract_mod/dotproduct{avx,fma,sse}.* src/arch/
         cp ${k2pdfopt_src}/tesseract_mod/{intsimdmatrixsse,simddetect}.* src/arch/
         cp ${k2pdfopt_src}/tesseract_mod/{errcode,genericvector,mainblk,params,serialis,tessdatamanager,tess_version,tprintf,unicharset}.* src/ccutil/
@@ -125,19 +140,21 @@ in stdenv.mkDerivation rec {
         cp ${k2pdfopt_src}/tesseract_mod/openclwrapper.* src/opencl/
       '';
     };
-    tesseract_modded = tesseract4.override {
-      tesseractBase = tesseract4.tesseractBase.overrideAttrs ({ patches ? [], ... }: {
+    tesseract_modded = tesseract.override {
+      tesseractBase = tesseract.tesseractBase.overrideAttrs ({ patches ? [], ... }: {
         patches = patches ++ [ tesseract_patch ];
         # Additional compilation fixes
         postPatch = ''
-          echo libtesseract_api_la_SOURCES += tesscapi.cpp >> src/api/Makefile.am
+          echo libtesseract_la_SOURCES += src/api/tesscapi.cpp >> Makefile.am
           substituteInPlace src/api/tesseract.h \
+            --replace "#include <leptonica.h>" "//#include <leptonica.h>"
+          substituteInPlace include/tesseract/tesseract.h \
             --replace "#include <leptonica.h>" "//#include <leptonica.h>"
         '';
       });
     };
   in
-    [ zlib libpng ] ++
+    [ jbig2dec libjpeg_turbo libpng zlib ] ++
     lib.optional enableGSL gsl ++
     lib.optional enableGhostScript ghostscript ++
     lib.optional enableMuPDF mupdf_modded ++
@@ -156,12 +173,13 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = lib.optionalString enableTesseract ''
-    wrapProgram $out/bin/k2pdfopt --set-default TESSDATA_PREFIX ${tesseract4}/share/tessdata
+    wrapProgram $out/bin/k2pdfopt --set-default TESSDATA_PREFIX ${tesseract}/share/tessdata
   '';
 
   meta = with lib; {
     description = "Optimizes PDF/DJVU files for mobile e-readers (e.g. the Kindle) and smartphones";
     homepage = "http://www.willus.com/k2pdfopt";
+    changelog = "https://www.willus.com/k2pdfopt/k2pdfopt_version.txt";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bosu danielfullmer ];

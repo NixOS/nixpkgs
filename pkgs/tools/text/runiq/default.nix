@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "An efficient way to filter duplicate lines from input, à la uniq";
+    description = "Efficient way to filter duplicate lines from input, à la uniq";
     mainProgram = "runiq";
     homepage = "https://github.com/whitfin/runiq";
     license = licenses.mit;

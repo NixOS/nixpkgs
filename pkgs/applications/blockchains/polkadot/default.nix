@@ -82,8 +82,6 @@ rustPlatform.buildRustPackage rec {
   # available for `rustc-wasm32`
   WASM_BUILD_STD = 0;
 
-  # NOTE: we need to force lld otherwise rust-lld is not found for wasm32 target
-  CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
   OPENSSL_NO_VENDOR = 1;
   PROTOC = "${protobuf}/bin/protoc";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
@@ -93,6 +91,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://polkadot.network";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ akru andresilva FlorianFranzen RaghavSood ];
-    platforms = platforms.unix;
+    # See Iso::from_arch in src/isa/mod.rs in cranelift-codegen-meta.
+    platforms = intersectLists platforms.unix (platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86);
+    # See comment about wasm32-unknown-unknown in rustc.nix.
+    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+      !stdenv.hostPlatform.gcc.thumb or true;
   };
 }

@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/libxslt";
-    description = "A C library and tools to do XSL transformations";
+    description = "C library and tools to do XSL transformations";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ eelco jtojnar ];

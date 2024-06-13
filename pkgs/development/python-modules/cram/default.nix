@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "A simple testing framework for command line applications";
+    description = "Simple testing framework for command line applications";
     mainProgram = "cram";
     homepage = "https://bitheap.org/cram/";
     license = lib.licenses.gpl2Plus;

@@ -26,7 +26,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://onsi.github.io/ginkgo/";
     changelog = "https://github.com/onsi/ginkgo/blob/master/CHANGELOG.md";
-    description = "A Modern Testing Framework for Go";
+    description = "Modern Testing Framework for Go";
     mainProgram = "ginkgo";
     longDescription = ''
       Ginkgo is a testing framework for Go designed to help you write expressive

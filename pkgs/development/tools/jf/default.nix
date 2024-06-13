@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A small utility to safely format and print JSON objects in the commandline";
+    description = "Small utility to safely format and print JSON objects in the commandline";
     mainProgram = "jf";
     homepage = "https://github.com/sayanarijit/jf";
     license = licenses.mit;

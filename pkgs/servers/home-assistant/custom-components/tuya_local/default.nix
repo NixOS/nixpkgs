@@ -4,21 +4,25 @@
 
 # dependencies
 , tinytuya
+, tuya-device-sharing-sdk
 }:
 
 buildHomeAssistantComponent rec {
   owner = "make-all";
   domain = "tuya_local";
-  version = "2024.5.2";
+  version = "2024.6.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "tuya-local";
     rev = "refs/tags/${version}";
-    hash = "sha256-If5SLLizagolXF5Y43UQK5IZ9oB1lQJVjTorgmtRXtg=";
+    hash = "sha256-OLR/KFoXKqL7r7S97VpyoVHdbLfOyWU50aK6c0QhqyE=";
   };
 
-  dependencies = [ tinytuya ];
+  dependencies = [
+    tinytuya
+    tuya-device-sharing-sdk
+  ];
 
   meta = with lib; {
     description = "Local support for Tuya devices in Home Assistant";

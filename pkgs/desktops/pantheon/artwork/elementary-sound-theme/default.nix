@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A set of system sounds for elementary";
+    description = "Set of system sounds for elementary";
     homepage = "https://github.com/elementary/sound-theme";
     license = licenses.unlicense;
     platforms = platforms.linux;

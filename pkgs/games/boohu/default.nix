@@ -14,7 +14,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A new coffee-break roguelike game";
+    description = "New coffee-break roguelike game";
     mainProgram = "boohu";
     longDescription = ''
       Break Out Of Hareka's Underground (Boohu) is a roguelike game mainly

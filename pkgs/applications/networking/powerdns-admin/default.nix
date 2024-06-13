@@ -129,7 +129,7 @@ in stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "A PowerDNS web interface with advanced features";
+    description = "PowerDNS web interface with advanced features";
     mainProgram = "powerdns-admin";
     homepage = "https://github.com/PowerDNS-Admin/PowerDNS-Admin";
     license = licenses.mit;

@@ -26,7 +26,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    description = "A Prometheus exporter for Minio cloud storage server";
+    description = "Prometheus exporter for Minio cloud storage server";
     mainProgram = "minio-exporter";
     homepage = "https://github.com/joe-pll/minio-exporter";
     license = licenses.asl20;

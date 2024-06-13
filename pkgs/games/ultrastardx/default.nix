@@ -1,7 +1,6 @@
 { lib, stdenv
 , autoreconfHook
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , lua
 , fpc

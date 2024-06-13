@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlx42";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "codam-coding-college";
     repo = "MLX42";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-igkTeOnqGYBISzmtDGlDx9cGJjoQ8fzXtVSR9hU4F5E=";
+    hash = "sha256-c4LoTePHhQeZTx33V1K3ZyXmT7vjB6NdkGVAiSuJKfI=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/codam-coding-college/MLX42/releases/tag/${finalAttrs.src.rev}";
-    description = "A simple cross-platform graphics library that uses GLFW and OpenGL";
+    description = "Simple cross-platform graphics library that uses GLFW and OpenGL";
     homepage = "https://github.com/codam-coding-college/MLX42";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ tomasajt ];

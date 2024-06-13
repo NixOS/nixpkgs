@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Cargo subcommand for watching over Cargo project's source";
+    description = "Cargo subcommand for watching over Cargo project's source";
     mainProgram = "cargo-watch";
     homepage = "https://github.com/watchexec/cargo-watch";
     license = licenses.cc0;

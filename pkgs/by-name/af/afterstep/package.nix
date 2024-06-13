@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.afterstep.org/";
-    description = "A NEXTStep-inspired window manager";
+    description = "NEXTStep-inspired window manager";
     longDescription = ''
       AfterStep is a window manager for the Unix X Window System. Originally
       based on the look and feel of the NeXTStep interface, it provides end

@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A cross-platform graphical process/system monitor with a customizable interface";
+    description = "Cross-platform graphical process/system monitor with a customizable interface";
     homepage = "https://github.com/ClementTsang/bottom";
     changelog = "https://github.com/ClementTsang/bottom/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

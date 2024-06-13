@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/tkarabela/pysubs2";
-    description = "A Python library for editing subtitle files";
+    description = "Python library for editing subtitle files";
     mainProgram = "pysubs2";
     license = licenses.mit;
     maintainers = with maintainers; [ Benjamin-L ];
