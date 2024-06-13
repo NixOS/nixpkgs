@@ -1048,6 +1048,13 @@
     nvimRequireCheck = "dapui";
   };
 
+  nvim-genghis = super.nvim-genghis.overrideAttrs {
+    dependencies = [ self.dressing-nvim ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "genghis";
+  };
+
   nvim-lsputils = super.nvim-lsputils.overrideAttrs {
     dependencies = with self; [ popfix ];
   };
