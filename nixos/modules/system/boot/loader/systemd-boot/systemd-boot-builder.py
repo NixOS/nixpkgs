@@ -22,6 +22,7 @@ LOADER_CONF = f"{EFI_SYS_MOUNT_POINT}/loader/loader.conf"  # Always stored on th
 NIXOS_DIR = "@nixosDir@"
 TIMEOUT = "@timeout@"
 EDITOR = "@editor@" == "1"
+INSTALL_DEVICE_TREE = "@installDeviceTree@" == "1"
 CONSOLE_MODE = "@consoleMode@"
 BOOTSPEC_TOOLS = "@bootspecTools@"
 DISTRO_NAME = "@distroName@"
@@ -44,6 +45,7 @@ class BootSpec:
     toplevel: str
     specialisations: Dict[str, "BootSpec"]
     sortKey: str
+    devicetree: str | None = None
     initrdSecrets: str | None = None
 
 
@@ -127,10 +129,12 @@ def bootspec_from_json(bootspec_json: Dict) -> BootSpec:
     specialisations = {k: bootspec_from_json(v) for k, v in specialisations.items()}
     systemdBootExtension = bootspec_json.get('org.nixos.systemd-boot', {})
     sortKey = systemdBootExtension.get('sortKey', 'nixos')
+    devicetree = systemdBootExtension.get('devicetree')
     return BootSpec(
         **bootspec_json['org.nixos.bootspec.v1'],
         specialisations=specialisations,
-        sortKey=sortKey
+        sortKey=sortKey,
+        devicetree=devicetree,
     )
 
 
@@ -149,6 +153,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
         bootspec = bootspec.specialisations[specialisation]
     kernel = copy_from_file(bootspec.kernel)
     initrd = copy_from_file(bootspec.initrd)
+    devicetree = copy_from_file(bootspec.devicetree) if bootspec.devicetree is not None else None
 
     title = "{name}{profile}{specialisation}".format(
         name=DISTRO_NAME,
@@ -184,6 +189,8 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
                     initrd=initrd,
                     kernel_params=kernel_params,
                     description=f"{bootspec.label}, built on {build_date}"))
+        if INSTALL_DEVICE_TREE and devicetree is not None:
+            f.write("devicetree %s\n" % devicetree)
         if machine_id is not None:
             f.write("machine-id %s\n" % machine_id)
         f.flush()
