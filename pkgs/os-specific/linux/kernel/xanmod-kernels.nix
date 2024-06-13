@@ -46,6 +46,14 @@ let
       HZ = freeform "250";
       HZ_250 = yes;
       HZ_1000 = no;
+
+      # RCU_BOOST and RCU_EXP_KTHREAD
+      RCU_EXPERT = yes;
+      RCU_FANOUT = freeform "64";
+      RCU_FANOUT_LEAF = freeform "16";
+      RCU_BOOST = yes;
+      RCU_BOOST_DELAY = freeform "0";
+      RCU_EXP_KTHREAD = yes;
     };
 
     extraMeta = {
