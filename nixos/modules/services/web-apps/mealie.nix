@@ -33,6 +33,9 @@ in
         permissions and then leave this option as the default value. That user,
         with a stable UID, will then be used and systemd will not dynamically
         generate a new one.
+
+        To reduce confusion, if a custom `DATA_DIR` is configured, then a user
+        with the same name as this option's value MUST exist.
       '';
       example = lib.literalExpression ''
         {
@@ -139,5 +142,29 @@ in
           StateDirectory = null;
         };
     };
+
+    assertions = [
+      {
+        # Assert that a dynamic user is not in use if a custom data directory is
+        # set. This is to help users avoid setting a custom data directory which
+        # the user that mealie is running as cannot write to.
+        assertion = (
+          config.systemd.services.mealie.environment.DATA_DIR == mealieDataDir
+          || config.users.users ? ${cfg.user}
+        );
+        description = ''
+          When a custom data directory is in use (through the `DATA_DIR`
+          environment variable), the `user` option must be set to a system user
+          that actually exists. Otherwise, systemd will dynamically create a user,
+          and it is unlikely that this user will have the appropriate read/write
+          permissions for the custom data directory.
+
+          Please create a user named "${cfg.user}" and give them read/write
+          permissions for the configured mealie data directory.
+
+          See the description of the `user` option for more information.
+        '';
+      }
+    ];
   };
 }
