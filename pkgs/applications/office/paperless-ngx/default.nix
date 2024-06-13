@@ -7,7 +7,7 @@
 , python3
 , giflib
 , darwin
-, ghostscript
+, ghostscript_headless
 , imagemagickBig
 , jbig2enc
 , optipng
@@ -57,13 +57,17 @@ let
           rev = version;
           hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
         };
+        nativeCheckInputs = with prev; [
+          pytest7CheckHook
+          pytest-django
+        ];
       });
     };
   };
 
 
   path = lib.makeBinPath [
-    ghostscript
+    ghostscript_headless
     imagemagickBig
     jbig2enc
     optipng

@@ -44,13 +44,13 @@ python3.pkgs.buildPythonApplication rec {
   inherit pname version src;
   pyproject = true;
 
-  # The custom hook tries to run `npm install` in `buildPhase`.
-  # We don't have to worry, as node dependencies are managed by `frontend` drv.
+  # Not force-including the frontend build directory as frontend is managed by the `frontend` derivation above.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '[tool.hatch.build.hooks.custom]' "" \
       --replace-fail ', build = "open_webui/frontend"' ""
   '';
+
+  env.HATCH_BUILD_NO_HOOKS = true;
 
   pythonRelaxDeps = true;
 
@@ -115,17 +115,13 @@ python3.pkgs.buildPythonApplication rec {
     youtube-transcript-api
   ];
 
-  build-system = with python3.pkgs; [
-    hatchling
-    pythonRelaxDepsHook
-  ];
+  build-system = with python3.pkgs; [ hatchling ];
+
+  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
 
   pythonImportsCheck = [ "open_webui" ];
 
-  postInstall = ''
-    wrapProgram $out/bin/open-webui \
-      --set FRONTEND_BUILD_DIR "${frontend}/share/open-webui"
-  '';
+  makeWrapperArgs = [ "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui" ];
 
   passthru.tests = {
     inherit (nixosTests) open-webui;
