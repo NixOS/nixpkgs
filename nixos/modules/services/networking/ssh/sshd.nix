@@ -419,9 +419,6 @@ in
               type = types.nullOr (types.listOf types.str);
               default = [
                 "sntrup761x25519-sha512@openssh.com"
-                "curve25519-sha256"
-                "curve25519-sha256@libssh.org"
-                "diffie-hellman-group-exchange-sha256"
               ];
               description = ''
                 Allowed key exchange algorithms
