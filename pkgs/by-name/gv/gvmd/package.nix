@@ -79,36 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DSYSCONFDIR=etc"
-    "-DSBINDIR=sbin"
-    "-DLIBDIR=lib"
-    "-DBINDIR=bin"
-    "-DLOCALSTATEDIR=var"
-    "-DINCLUDEDIR=include"
-    "-DDATADIR=share"
-    "-DGVM_SYSCONF_DIR=etc/gvm"
-    "-DGVM_DATA_DIR=share/gvm"
-    "-DGVMD_DATA_DIR=share/gvmd"
-    "-DGVM_STATE_DIR=var/lib/gvm"
-    "-DGVMD_STATE_DIR=var/lib/gvm/gvmd"
-    "-DGVM_LOG_DIR=var/log/gvm"
-    "-DGVM_SCAP_RES_DIR=share/gvm/scap"
-    "-DGVM_CERT_RES_DIR=share/gvm/cert"
-    "-DGVM_CA_DIR=var/lib/gvm/gvmd/trusted_certs"
-    "-DGVM_LIB_INSTALL_DIR=lib"
-    "-DGVM_SCANNER_CERTIFICATE=var/lib/CA/servercert.pem"
-    "-DGVM_SCANNER_KEY=var/lib/private/CA/serverkey.pem"
-    "-DGVM_CLIENT_CERTIFICATE=var/lib/CA/clientcert.pem"
-    "-DGVM_CLIENT_KEY=var/lib/private/CA/clientkey.pem"
-    "-DGVM_CA_CERTIFICATE=var/lib/CA/cacert.pem"
-    "-DGVMD_RUN_DIR=run/gvmd"
-    "-DGVMD_PID_PATH=run/gvmd/gvmd.pid"
-    "-DGVM_FEED_LOCK_PATH=var/lib/gvm/feed-update.lock"
-    "-DGVM_NVT_DIR=var/lib/openvas/plugins"
-    "-DDATA_OBJECTS_FEED_DIR=var/lib/gvm/data-objects"
-    "-DGVMD_FEED_DIR=var/lib/gvm/data-objects/gvmd/22.04"
-    "-DGVM_CERT_DATA_DIR=var/lib/gvm/cert-data"
-    "-DSYSTEMD_SERVICE_DIR=lib/systemd/system"
-    "-DGVM_SCAP_DATA_DIR=var/lib/gvm/scap-data"
   ];
 
   postBuilPhase = ''
@@ -118,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     installManPage $src/doc/gvm-manage-certs.1
     installManPage $src/doc/gvmd.8
-    mkdir -p $out/run/gvmd/gvmd.pid
     mkdir -p \
       $out/var/log/gvm \
       $out/var/lib/openvas/plugins \
@@ -128,7 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
       $out/var/lib/gvm/CA \
       $out/var/lib/gvm/private/CA \
       $out/var/lib/gvm/data-objects \
-      $out/var/lib/gvm/feed-update.lock
+      $out/var/lib/gvm/feed-update.lock \
+      $out/run/gvmd/gvmd.pid
   '';
 
     meta = with lib; {
