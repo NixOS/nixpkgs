@@ -67,6 +67,7 @@ let
       (fetchNuGet { pname = "Microsoft.NETCore.App.Crossgen2.linux-x64"; version = "9.0.0-preview.4.24266.19"; sha256 = "0w70251ril85hk5gyxflmkacy53zscpnnzvj145iz23j3gz392z9"; })
       (fetchNuGet { pname = "Microsoft.NETCore.App.Crossgen2.osx-x64"; version = "9.0.0-preview.4.24266.19"; sha256 = "0yh1s8ydnf0h7vyfpbp571pcmk53357x4f2lg277s112nygvq1c2"; })
       (fetchNuGet { pname = "Microsoft.NETCore.App.Crossgen2.osx-arm64"; version = "9.0.0-preview.4.24266.19"; sha256 = "1q9gizqsyn6viqby3c0f8l4fmv2hiy2kh17g2kbf1krsp6wcxwmv"; })
+      (fetchNuGet { pname = "Microsoft.DotNet.ILCompiler"; version = "9.0.0-preview.4.24266.19"; sha256 = "0b95ch0wy4bf11cay6lbc1d6xakxkyjlhxz81bra4b3gd17ci5cr"; })
       (fetchNuGet { pname = "runtime.linux-arm64.Microsoft.DotNet.ILCompiler"; version = "9.0.0-preview.4.24266.19"; sha256 = "0d59q4yc9hbzmpighh9dbpcalrbwwgmzfanvz6sgfr4536pnrb14"; })
       (fetchNuGet { pname = "runtime.linux-musl-arm64.Microsoft.DotNet.ILCompiler"; version = "9.0.0-preview.4.24266.19"; sha256 = "1vza6ylc64pr7ahyh16q8q8ia5q30pm4k02ni9vlb1wcxawmz29c"; })
       (fetchNuGet { pname = "runtime.linux-musl-x64.Microsoft.DotNet.ILCompiler"; version = "9.0.0-preview.4.24266.19"; sha256 = "03aicxklpi081lm7xnwaii37dfyiy8q9aap77lr92argz5hdf7wk"; })
