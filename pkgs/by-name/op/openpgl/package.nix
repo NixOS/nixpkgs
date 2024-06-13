@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openpgl";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "OpenPathGuidingLibrary";
     repo = "openpgl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dbHmGGiHQkU0KPpQYpY/o0uCWdb3L5namETdOcOREgs=";
+    hash = "sha256-WZ3CveJnGpwlfTp4XBTv6HiCbuLLHllS9uTiZ6fTnSU=";
   };
 
   nativeBuildInputs = [
