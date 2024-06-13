@@ -2,11 +2,9 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
-, wrapQtAppsHook
 , pkg-config
-, qmake
 , vulkan-headers
-, qtquickcontrols2
+, libsForQt5
 , SDL2
 , SDL2_ttf
 , libva
@@ -20,13 +18,15 @@
 , libplacebo
 , wayland
 , darwin
+, overrideSDK
 }:
 
 let
   inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation AppKit AudioUnit VideoToolbox;
+  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "moonlight-qt";
   version = "6.0.0";
 
@@ -53,15 +53,17 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     pkg-config
-    qmake
+    libsForQt5.qmake
     vulkan-headers
   ];
 
   buildInputs = [
-    qtquickcontrols2
-    SDL2
+    libsForQt5.qtquickcontrols2
+    (SDL2.override {
+      drmSupport = stdenv.isLinux;
+    })
     SDL2_ttf
     openssl
     libopus
