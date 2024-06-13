@@ -29587,8 +29587,6 @@ with pkgs;
 
   asap = callPackage ../tools/audio/asap { };
 
-  aseprite = callPackage ../applications/editors/aseprite { };
-
   assign-lb-ip = callPackage ../applications/networking/cluster/assign-lb-ip { };
 
   astroid = callPackage ../applications/networking/mailreaders/astroid {
