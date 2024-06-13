@@ -1,26 +1,40 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
-with lib;
+let
+  cfg = config.xdg.autostart;
+in
 {
   meta = {
-    maintainers = teams.freedesktop.members;
+    maintainers = lib.teams.freedesktop.members;
   };
 
   options = {
-    xdg.autostart.enable = mkOption {
-      type = types.bool;
+    xdg.autostart.enable = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to install files to support the
         [XDG Autostart specification](https://specifications.freedesktop.org/autostart-spec/autostart-spec-latest.html).
       '';
     };
+    xdg.autostart.packages = lib.mkOption {
+      type = with lib.types; listOf package;
+      default = [ ];
+      description = lib.mdDoc ''
+        Autostart applications.
+      '';
+    };
   };
 
-  config = mkIf config.xdg.autostart.enable {
+  config = lib.mkIf cfg.enable {
     environment.pathsToLink = [
       "/etc/xdg/autostart"
     ];
+    environment.etc = lib.mkIf (cfg.packages != [ ]) {
+      "xdg/autostart".source = pkgs.symlinkJoin {
+        name = "autostart";
+        paths = map (p: "${p}/share/applications") cfg.packages;
+      };
+    };
   };
-
 }
