@@ -31,7 +31,6 @@
 , sox
 , fdk-aac-encoder
 }:
-
 stdenv.mkDerivation rec {
   pname = "trunk-recorder";
   version = "4.7.1";
