@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "quakespasm";
-  version = "0.96.0";
+  version = "0.96.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/quakespasm/quakespasm-${version}.tar.gz";
-    sha256 = "sha256-Sa4lLALB3xpMGVjpKnzGl1OBEJcLOHDcFGEFsO0wwOw=";
+    sha256 = "sha256-vIZtk3ee44a1cbDnZzKjUpNmfgGWTprqFoh70QJHJUM=";
   };
 
   sourceRoot = "${pname}-${version}/Quake";
