@@ -164,6 +164,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [
       orivej
+      vigress8
     ];
     platforms = lib.platforms.linux;
   };
