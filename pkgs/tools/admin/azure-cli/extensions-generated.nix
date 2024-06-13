@@ -960,9 +960,9 @@
   };
   support = mkAzExtension rec {
     pname = "support";
-    version = "1.0.4";
+    version = "2.0.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/support-${version}-py2.py3-none-any.whl";
-    sha256 = "ac554e2b6362a9a6ff8e03000730df31dd72781aba8bbdcf05ceb44ce1b680a0";
+    sha256 = "5dde97f8fb12eaa258530f68ec2cae00a957f30479835e9f5ed057940312741a";
     description = "Microsoft Azure Command-Line Tools Support Extension";
   };
   timeseriesinsights = mkAzExtension rec {
