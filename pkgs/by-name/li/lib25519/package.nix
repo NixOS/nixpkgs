@@ -19,6 +19,10 @@ stdenv.mkDerivation (prev: {
     patchShebangs configure
     patchShebangs scripts-build
   '';
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/lib25519-test
+  '';
 
   # NOTE: librandombytes uses a custom Python `./configure`: it does not expect standard
   # autoconfig --build --host etc. arguments: disable
