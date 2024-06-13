@@ -285,7 +285,7 @@ in
 
     (mkIf serviceCfg.apps.enable {
       programs.evince.enable = mkDefault (notExcluded pkgs.gnome.evince);
-      programs.file-roller.enable = mkDefault (notExcluded pkgs.gnome.file-roller);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
       environment.systemPackages = utils.removePackagesByName ([
         pkgs.gnome.gnome-font-viewer

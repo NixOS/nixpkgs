@@ -64,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "file-roller";
-      attrPath = "gnome.file-roller";
     };
   };
 

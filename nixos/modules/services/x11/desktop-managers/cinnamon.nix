@@ -231,7 +231,7 @@ in
     (mkIf serviceCfg.apps.enable {
       programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome.gnome-disk-utility);
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
-      programs.file-roller.enable = mkDefault (notExcluded pkgs.gnome.file-roller);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
       environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps

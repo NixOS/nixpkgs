@@ -103,9 +103,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-shortcut-overlay = callPackage ./desktop/elementary-shortcut-overlay { };
 
-  file-roller-contract = callPackage ./desktop/file-roller-contract {
-    inherit (gnome) file-roller;
-  };
+  file-roller-contract = callPackage ./desktop/file-roller-contract { };
 
   gala = callPackage ./desktop/gala { };
 
@@ -240,7 +238,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
 
-  file-roller = pkgs.gnome.file-roller; # added 2022-03-12
+  file-roller = pkgs.file-roller; # added 2022-03-12
 
   gnome-bluetooth-contract = throw "pantheon.gnome-bluetooth-contract has been removed, abandoned by upstream."; # added 2022-06-30
 
