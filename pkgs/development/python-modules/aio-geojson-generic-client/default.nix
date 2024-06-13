@@ -31,7 +31,6 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
