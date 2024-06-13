@@ -316,9 +316,9 @@
   };
   dataprotection = mkAzExtension rec {
     pname = "dataprotection";
-    version = "1.1.0";
+    version = "1.5.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/dataprotection-${version}-py3-none-any.whl";
-    sha256 = "bb3774425d586d03b4e26ffa0021c0024b79227963ec003430e9cd6beaa2cac7";
+    sha256 = "5d756d16607364bb98325d2f63580f115a9f8a6bf9c9a74d55c2af2d9a485833";
     description = "Microsoft Azure Command-Line Tools DataProtectionClient Extension";
   };
   datashare = mkAzExtension rec {
