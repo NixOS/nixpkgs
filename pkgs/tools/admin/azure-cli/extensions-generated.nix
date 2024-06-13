@@ -673,9 +673,9 @@
   };
   monitor-control-service = mkAzExtension rec {
     pname = "monitor-control-service";
-    version = "1.0.1";
+    version = "1.0.2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/monitor_control_service-${version}-py3-none-any.whl";
-    sha256 = "66475eb79c577ea566c74f986b9ef6af936580beb02dde622701370323d430a3";
+    sha256 = "e0a271c65997120e0022baf51e63c2feec4df3235258a6243a60ff069315b84a";
     description = "Microsoft Azure Command-Line Tools MonitorClient Extension";
   };
   network-analytics = mkAzExtension rec {
