@@ -59,7 +59,7 @@ rec {
 
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
-    rustc.config = "armv7-linux-androideabi";
+    rust.rustcTarget = "armv7-linux-androideabi";
     sdkVer = "28";
     ndkVer = "24";
     useAndroidPrebuilt = true;
@@ -67,7 +67,7 @@ rec {
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
-    rustc.config = "aarch64-linux-android";
+    rust.rustcTarget = "aarch64-linux-android";
     sdkVer = "28";
     ndkVer = "24";
     useAndroidPrebuilt = true;
@@ -207,7 +207,7 @@ rec {
   aarch64-embedded = {
     config = "aarch64-none-elf";
     libc = "newlib";
-    rustc.config = "aarch64-unknown-none";
+    rust.rustcTarget = "aarch64-unknown-none";
   };
 
   aarch64be-embedded = {
