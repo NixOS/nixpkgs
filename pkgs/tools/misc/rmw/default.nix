@@ -4,19 +4,19 @@
 , meson
 , ninja
 , pkg-config
+, canfigger
 , ncurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "rmw";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "theimpossibleastronaut";
     repo = "rmw";
     rev = "v${version}";
-    hash = "sha256-rfJdJHSkusZj/PN74KgV5i36YC0YRZmIfRdvkUNoKEM=";
-    fetchSubmodules = true;
+    hash = "sha256-5/oOV0FAXo/QchoIF/hwCwaNVBwsTyDSe65UE3/03PQ=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    canfigger
     ncurses
   ];
 
