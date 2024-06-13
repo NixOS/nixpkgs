@@ -35,16 +35,8 @@ stdenv.mkDerivation rec {
     install -m644 MediathekView.jar $out/lib
     install -m644 MediathekView.svg $out/share/pixmaps
 
-    makeWrapper ${jre}/bin/java $out/bin/mediathek \
-      --add-flags "${jvmArgs} -jar $out/lib/MediathekView.jar" \
-      --suffix LD_LIBRARY_PATH : "${libraryPath}"
-
     makeWrapper ${jre}/bin/java $out/bin/MediathekView \
       --add-flags "${jvmArgs} -jar $out/lib/MediathekView.jar" \
-      --suffix LD_LIBRARY_PATH : "${libraryPath}"
-
-    makeWrapper ${jre}/bin/java $out/bin/MediathekView_ipv4 \
-      --add-flags "${jvmArgs} -Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar" \
       --suffix LD_LIBRARY_PATH : "${libraryPath}"
 
     runHook postInstall
@@ -52,7 +44,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = makeDesktopItem {
     name = "MediathekView";
-    exec = "mediathek";
+    exec = "MediathekView";
     icon = "MediathekView";
     desktopName = "MediathekView";
     comment = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
@@ -66,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mediathekview.de/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3Plus;
-    mainProgram = "mediathek";
+    mainProgram = "MediathekView";
     maintainers = with maintainers; [ moredread ];
     platforms = platforms.all;
   };
