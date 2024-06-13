@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # SSE is enabled by default
-  cmakeFlags = lib.optional (!stdenv.isx86_64) "-DOpenMVS_USE_SSE=OFF";
+  cmakeFlags = [ (lib.cmakeBool "OpenMVS_USE_SSE" stdenv.isx86_64) ];
 
   buildInputs = [
     boost
