@@ -202,7 +202,7 @@ goBuild ((lib.optionalAttrs enableRocm {
       inherit version;
       package = ollama;
     };
-  } // stdenv.isLinux {
+  } // lib.optionalAttrs stdenv.isLinux {
     inherit ollama-rocm ollama-cuda;
   };
 
