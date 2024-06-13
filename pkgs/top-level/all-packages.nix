@@ -36973,6 +36973,8 @@ with pkgs;
 
   opensoldat = callPackage ../games/opensoldat { };
 
+  overgrowth = callPackage ../games/overgrowth { };
+
   portmod = callPackage ../games/portmod { };
 
   tr-patcher = callPackage ../games/tr-patcher { };
