@@ -12,34 +12,34 @@
 , blas
 , swig
 , addOpenGLRunpath
-, optLevel ? let
-    optLevels =
-      lib.optionals stdenv.hostPlatform.avx2Support [ "avx2" ]
-      ++ lib.optionals stdenv.hostPlatform.sse4_1Support [ "sse4" ]
-      ++ [ "generic" ];
-  in
-  # Choose the maximum available optimization level
-  builtins.head optLevels
+, optLevel ? null
 , faiss # To run demos in the tests
 , runCommand
 }@inputs:
 
 let
-  inherit (cudaPackages) backendStdenv flags;
+  inherit (lib.strings) cmakeBool cmakeFeature;
 
-  stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
+  inherit (cudaPackages.flags) cmakeCudaArchitecturesString;
 
-  cudaComponents = with cudaPackages; [
-    cuda_cudart # cuda_runtime.h
-    libcublas
-    libcurand
-    cuda_cccl
+  stdenv = builtins.throw "Use effectiveStdenv instead of stdenv in this derivation.";
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
-    # cuda_profiler_api.h
-    (cudaPackages.cuda_profiler_api or cudaPackages.cuda_nvprof)
-  ];
+  optLevel = builtins.throw "Use effectiveOptLevel instead of optLevel in this derivation.";
+  effectiveOptLevel =
+    if inputs.optLevel or null != null then
+      inputs.optLevel
+    else
+      let
+        optLevels =
+          lib.optionals effectiveStdenv.hostPlatform.avx2Support [ "avx2" ]
+          ++ lib.optionals effectiveStdenv.hostPlatform.sse4_1Support [ "sse4" ]
+          ++ [ "generic" ];
+      in
+      # Choose the maximum available optimization level
+      builtins.head optLevels;
 in
-stdenv.mkDerivation (finalAttrs: {
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "faiss";
   version = "1.7.4";
 
@@ -68,9 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
     pythonPackages.setuptools
     pythonPackages.pip
     pythonPackages.wheel
-  ] ++ lib.optionals stdenv.cc.isClang [
+  ] ++ lib.optionals effectiveStdenv.cc.isClang [
     llvmPackages.openmp
-  ] ++ lib.optionals cudaSupport cudaComponents;
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.libcublas
+    cudaPackages.libcurand # <curand_kernel.h>
+  ] ++ lib.optionals (cudaSupport && cudaPackages ? cuda_profiler_api) [
+    cudaPackages.cuda_profiler_api # cuda_profiler_api.h
+  ] ++ lib.optionals (cudaSupport && !(cudaPackages ? cuda_profiler_api)) [
+    cudaPackages.cuda_nvprof # cuda_profiler_api.h
+  ];
 
   propagatedBuildInputs = lib.optionals pythonSupport [
     pythonPackages.numpy
@@ -89,11 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DFAISS_ENABLE_GPU=${if cudaSupport then "ON" else "OFF"}"
-    "-DFAISS_ENABLE_PYTHON=${if pythonSupport then "ON" else "OFF"}"
-    "-DFAISS_OPT_LEVEL=${optLevel}"
+    (cmakeBool "FAISS_ENABLE_GPU" cudaSupport)
+    (cmakeBool "FAISS_ENABLE_PYTHON" pythonSupport)
+    (cmakeFeature "FAISS_OPT_LEVEL" effectiveOptLevel)
   ] ++ lib.optionals cudaSupport [
-    "-DCMAKE_CUDA_ARCHITECTURES=${flags.cmakeCudaArchitecturesString}"
+    (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
   ];
 
   buildFlags = [
