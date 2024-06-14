@@ -9,21 +9,29 @@
 , binutils
 , cairo
 , epoll-shim
+, expat
+, fribidi
 , git
 , hyprcursor
 , hyprland-protocols
 , hyprlang
+, hyprutils
 , hyprwayland-scanner
 , jq
 , libGL
 , libdrm
+, libdatrie
 , libexecinfo
 , libinput
+, libselinux
+, libsepol
+, libthai
 , libuuid
 , libxkbcommon
 , mesa
 , pango
 , pciutils
+, pcre2
 , pkgconf
 , python3
 , systemd
@@ -56,19 +64,22 @@ assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been remov
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.40.0-unstable-2024-05-05";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     fetchSubmodules = true;
-    rev = "f15513309b24790099d42974274eb23f66f7c985";
-    hash = "sha256-zKOfgXPTlRqCR+EME4qjN9rgAnC3viI5KWx10dhKszw=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-hLnnNBWP1Qjs1I3fndMgp8rbWJruxdnGTq77A4Rv4R4=";
   };
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
     sed -i "s#/usr#$out#" src/render/OpenGL.cpp
+
+    # Remove extra @PREFIX@ to fix pkg-config paths
+    sed -i "s#@PREFIX@/##g" hyprland.pc.in
   '';
 
   # variables used by generateVersion.sh script, and shown in `hyprctl version`
@@ -106,13 +117,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
+    expat
+    fribidi
     git
-    hyprcursor
+    hyprcursor.dev
     hyprland-protocols
     hyprlang
+    hyprutils
     libGL
+    libdatrie
     libdrm
     libinput
+    libselinux
+    libsepol
+    libthai
     libuuid
     libxkbcommon
     mesa
@@ -120,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     pango
     pciutils
+    pcre2
     tomlplusplus
     # for subproject wlroots-hyprland
     seatd
@@ -162,11 +181,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hyprwm/Hyprland";
     description = "Dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wozeparrot fufexan ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      wozeparrot
+      fufexan
+    ];
     mainProgram = "Hyprland";
     platforms = lib.platforms.linux;
   };
