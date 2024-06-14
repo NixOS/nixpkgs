@@ -9,16 +9,7 @@
   cudaPackages,
   cudnn ? null,
   autoAddDriverRunpath,
-  effectiveMagma ?
-    if cudaSupport then
-      magma-cuda-static
-    else if rocmSupport then
-      magma-hip
-    else
-      magma,
   magma,
-  magma-hip,
-  magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
   useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
   MPISupport ? false,
@@ -536,7 +527,7 @@ buildPythonPackage rec {
     ]
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals rocmSupport [ rocmPackages.llvm.openmp ]
-    ++ optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
+    ++ optionals (cudaSupport || rocmSupport) [ magma ]
     ++ optionals isLinux [ numactl ]
     ++ optionals isDarwin [
       Accelerate

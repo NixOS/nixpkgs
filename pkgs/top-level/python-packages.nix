@@ -15382,6 +15382,7 @@ self: super: with self; {
   toposort = callPackage ../development/python-modules/toposort { };
 
   torch = callPackage ../development/python-modules/torch rec {
+    inherit (pkgs.config) cudaSupport rocmSupport;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
 
@@ -15401,6 +15402,13 @@ self: super: with self; {
         cudaPackages.cudnn_8_9 or null
       else
         null;
+    magma =
+      if cudaSupport then
+        pkgs.magma-cuda-static
+      else if rocmSupport then
+        pkgs.magma-hip
+      else
+        pkgs.magma;
     rocmPackages = pkgs.rocmPackages_5;
   };
 
