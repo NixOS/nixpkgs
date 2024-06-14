@@ -568,7 +568,7 @@ in {
       buildHaskellPackages = ghc.bootPkgs;
       ghc = bh.compiler.ghcjs810;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs-8.x.nix { };
     };
 
     # The integer-simple attribute set contains package sets for all the GHC compilers

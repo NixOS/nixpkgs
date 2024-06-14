@@ -7,6 +7,13 @@
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 
+  # Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
+  # ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
+  # (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
+  # backend. The latter is a normal cross compilation backend and needs little
+  # special accommodation.
+  outputsJS = ghc.isGhcjs or false || stdenv.hostPlatform.isGhcjs;
+
   # Pass the "wrong" C compiler rather than none at all so packages that just
   # use the C preproccessor still work, see
   # https://github.com/haskell/cabal/issues/6466 for details.
@@ -19,15 +26,11 @@ let
     fetchurl removeReferencesTo
     pkg-config coreutils gnugrep glibcLocales
     emscripten;
+
 in
 
 { pname
-# Note that ghc.isGhcjs != stdenv.hostPlatform.isGhcjs.
-# ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
-# (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
-# backend. The latter is a normal cross compilation backend and needs little
-# special accommodation.
-, dontStrip ? (ghc.isGhcjs or false || stdenv.hostPlatform.isGhcjs)
+, dontStrip ? outputsJS
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
@@ -44,7 +47,7 @@ in
 , doHaddockQuickjump ? doHoogle
 , doInstallIntermediates ? false
 , editedCabalFile ? null
-, enableLibraryProfiling ? !(ghc.isGhcjs or false)
+, enableLibraryProfiling ? !outputsJS
 , enableExecutableProfiling ? false
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling

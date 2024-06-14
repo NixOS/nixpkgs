@@ -274,12 +274,6 @@ self: super: {
     sha256 = "1c7knpvxr7p8c159jkyk6w29653z5yzgjjqj11130bbb8mk9qhq7";
   }) super.c2hsc;
 
-  # Some Hackage packages reference this attribute, which exists only in the
-  # GHCJS package set. We provide a dummy version here to fix potential
-  # evaluation errors.
-  ghcjs-base = null;
-  ghcjs-prim = null;
-
   ghc-debug-client = doJailbreak super.ghc-debug-client;
 
   # Test failure.  Tests also disabled in Stackage:
