@@ -14,7 +14,7 @@
 }:
 
 let
-  version = "1.0.1";
+  version = "1.0.2";
 in
 buildNpmPackage {
   pname = "nextjs-ollama-llm-ui";
@@ -23,21 +23,16 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "jakobhoeg";
     repo = "nextjs-ollama-llm-ui";
-    rev = "v${version}";
-    hash = "sha256-pZJgiopm0VGwaZxsNcyRawevvzEcK1j5WhngX1Pn6YE=";
+    # rev = "v${version}";
+    rev = "9199e669e12b02a2b5f77b6aad25c10ff15945cb";
+    hash = "sha256-tPLDj+bh+qEZI9v4gQzKfW1gKBN+cKrhhNb2r9Zg31g=";
   };
-  npmDepsHash = "sha256-wtHOW0CyEOszgiZwDkF2/cSxbw6WFRLbhDnd2FlY70E=";
+  npmDepsHash = "sha256-8VRBUNUDwSQYhRJjqaKP/RwUgFKKoiQUPjGDFw37Wd4=";
 
   patches = [
-    # Update to a newer nextjs version that buildNpmPackage is able to build.
-    # Remove at nextjs update.
-    ./0001-update-nextjs.patch
     # nextjs tries to download google fonts from the internet during buildPhase and fails in Nix sandbox.
     # We patch the code to expect a local font from src/app/Inter.ttf that we load from Nixpkgs in preBuild phase.
-    ./0002-use-local-google-fonts.patch
-    # Modify next.config.js to produce a production "standalone" output at .next/standalone.
-    # This output is easy to package with Nix and run with "node .next/standalone/server.js" later.
-    ./0003-add-standalone-output.patch
+    ./0001-use-local-google-fonts.patch
   ];
 
   # Adjust buildNpmPackage phases with nextjs quirk workarounds.
