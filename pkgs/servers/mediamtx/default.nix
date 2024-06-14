@@ -7,8 +7,8 @@
 
 let
   hlsJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.5.8/dist/hls.min.js";
-    hash = "sha256-KG8Cm0dAsFbrBHuMi9c+bMocpSvWWK4c9aWH9LGfDY4=";
+    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.5.11/dist/hls.min.js";
+    hash = "sha256-N10eCJk75KlKpHVXtwgC7vBDrU5b7ZQng9o/QK93m2w=";
   };
 in
 buildGoModule rec {
