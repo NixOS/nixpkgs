@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonAtLeast,
-  pythonRelaxDepsHook,
 
   # build-system
   hatchling,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     hatchling
     hatch-vcs
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [ "fixtures" ];

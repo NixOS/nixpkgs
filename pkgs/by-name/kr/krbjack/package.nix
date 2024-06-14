@@ -23,7 +23,6 @@ python3.pkgs.buildPythonApplication rec {
     poetry-core
   ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     colorama

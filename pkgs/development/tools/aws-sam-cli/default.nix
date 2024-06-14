@@ -23,7 +23,6 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   build-system = with python3.pkgs; [
-    pythonRelaxDepsHook
     setuptools
   ];
 

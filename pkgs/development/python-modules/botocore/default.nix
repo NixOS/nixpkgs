@@ -8,7 +8,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   urllib3,
 }:
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "urllib3" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

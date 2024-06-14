@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   hostPlatform,
   fetchFromGitHub,
   # build dependencies
@@ -38,7 +37,6 @@ buildPythonPackage rec {
     hash = "sha256-LdoBlR5EFYd2mQIjOgp1MH3w6osfRfurPq+N5Y1iaFw=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     hatchling

@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   pythonOlder,
-  pythonRelaxDepsHook,
   numpy,
   wheel,
   werkzeug,
@@ -35,7 +34,6 @@ buildPythonPackage rec {
     hash = "sha256-nytOfa2GZnYVwOXNBy8eqEA/wDKimfAHLW90hVd1zEU=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [
     "google-auth-oauthlib"

@@ -11,7 +11,6 @@
   packaging,
   psutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   setuptools,
   setuptools-scm,
@@ -45,7 +44,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     versioneer

@@ -16,7 +16,6 @@
   pysocks,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   tzlocal,
   waitress,
@@ -50,7 +49,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

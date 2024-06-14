@@ -16,7 +16,6 @@
   glibcLocales,
   llvmPackages,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pytest-xdist,
   pillow,
   joblib,
@@ -50,7 +49,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gfortran
-    pythonRelaxDepsHook
   ];
 
   build-system = [

@@ -8,7 +8,6 @@
 
   # build
   setuptools,
-  pythonRelaxDepsHook,
 
   # propagates
   aiohttp,
@@ -83,7 +82,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "home-assistant-chip-clusters" ];

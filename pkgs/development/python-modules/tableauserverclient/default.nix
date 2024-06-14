@@ -6,7 +6,6 @@
   packaging,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   requests-mock,
   setuptools,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
     versioneer
   ];
 

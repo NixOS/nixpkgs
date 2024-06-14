@@ -16,7 +16,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "nvidia-ml-py" ];
 
-  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3Packages; [
     cachetools

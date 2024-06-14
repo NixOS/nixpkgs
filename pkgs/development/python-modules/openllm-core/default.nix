@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
   accelerate,
   attrs,
   bitsandbytes,
@@ -39,7 +38,6 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/openllm-core";
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

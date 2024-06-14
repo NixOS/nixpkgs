@@ -18,7 +18,6 @@
   pytest-regressions,
   sphinx-pytest,
   pytestCheckHook,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -45,7 +44,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

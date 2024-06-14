@@ -5,7 +5,6 @@
   packaging,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   scapy,
   setuptools,
 }:

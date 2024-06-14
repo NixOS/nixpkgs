@@ -14,7 +14,6 @@
   pyarrow,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   typing-extensions,
   uproot,
 }:
@@ -38,7 +37,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     hatch-vcs
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

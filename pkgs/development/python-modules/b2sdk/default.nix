@@ -13,7 +13,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   tqdm,
   typing-extensions,
@@ -35,7 +34,6 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [ "setuptools" ];
 

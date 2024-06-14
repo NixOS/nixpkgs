@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   # Python deps
   blockfrost-python,
   cachetools,
@@ -45,7 +44,6 @@ buildPythonPackage rec {
     hash = "sha256-LP/W8IC2del476fGFq10VMWwMrbAoCCcZOngA8unBM0=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     blockfrost-python

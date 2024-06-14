@@ -6,7 +6,6 @@
   dbt-postgres,
   fetchFromGitHub,
   hatchling,
-  pythonRelaxDepsHook,
   hypothesis,
   importlib-metadata,
   jinja2,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
 
   build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

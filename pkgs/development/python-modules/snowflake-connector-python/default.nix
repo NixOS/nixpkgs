@@ -19,7 +19,6 @@
   pyjwt,
   pyopenssl,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   requests,
   setuptools,
@@ -47,7 +46,6 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     asn1crypto

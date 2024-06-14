@@ -9,7 +9,6 @@
   libnotify,
   which,
   poetry-core,
-  pythonRelaxDepsHook,
   jeepney,
   loguru,
   pytest,
@@ -50,7 +49,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "loguru" ];

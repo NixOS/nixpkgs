@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   setuptools,
   glfw,
   moderngl,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pillow" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

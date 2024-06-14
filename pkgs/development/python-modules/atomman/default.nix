@@ -20,7 +20,6 @@
   toolz,
   wheel,
   xmltodict,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage {
@@ -37,7 +36,6 @@ buildPythonPackage {
     hash = "sha256-WfB+OY61IPprT6OCVHl8VA60p7lLVkRGuyYX+nm7bbA=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     setuptools

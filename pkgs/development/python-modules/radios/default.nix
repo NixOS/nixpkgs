@@ -4,7 +4,6 @@
   pythonOlder,
   fetchFromGitHub,
   poetry-core,
-  pythonRelaxDepsHook,
   aiodns,
   aiohttp,
   awesomeversion,
@@ -41,7 +40,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "pycountry" ];

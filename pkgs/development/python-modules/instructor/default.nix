@@ -15,7 +15,6 @@
   diskcache,
   redis,
   pythonOlder,
-  pythonRelaxDepsHook,
   rich,
   tenacity,
   typer,
@@ -42,7 +41,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     aiohttp

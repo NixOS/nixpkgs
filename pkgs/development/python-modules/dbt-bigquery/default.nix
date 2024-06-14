@@ -9,7 +9,6 @@
   google-cloud-storage,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   urllib3,
 }:
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "agate" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

@@ -33,7 +33,6 @@
   pytestCheckHook,
   python,
   python-dateutil,
-  pythonRelaxDepsHook,
   pytz,
   pyyaml,
   regex,
@@ -96,7 +95,6 @@ buildPythonPackage rec {
     cython
     grpcio-tools
     mypy-protobuf
-    pythonRelaxDepsHook
     setuptools
   ];
 

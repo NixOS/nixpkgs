@@ -52,7 +52,6 @@ ps.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    ps.pythonRelaxDepsHook
     ps.hatchling
     ps.babel
   ];

@@ -22,7 +22,6 @@
   pytestCheckHook,
   python,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   setuptools,
   spacy-legacy,
@@ -58,7 +57,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     cython_0
   ];
 

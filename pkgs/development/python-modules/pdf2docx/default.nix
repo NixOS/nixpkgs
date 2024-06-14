@@ -4,7 +4,6 @@
   fetchFromGitHub,
   python,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   imagemagick,
   pip,
   pytestCheckHook,
@@ -33,7 +32,6 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     pip
-    pythonRelaxDepsHook
     imagemagick
   ];
 

@@ -29,7 +29,6 @@
   protobuf,
   pytestCheckHook,
   pytest-xdist,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   requests-mock,
@@ -96,7 +95,6 @@ buildPythonPackage rec {
   ];
   nativeBuildInputs = [
     installShellFiles
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

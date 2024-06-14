@@ -50,7 +50,6 @@ with python3Packages; buildPythonApplication rec {
 
   nativeBuildInputs = [
     installShellFiles
-    pythonRelaxDepsHook
     setuptools
   ];
 

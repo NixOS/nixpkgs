@@ -4,7 +4,6 @@
   pythonOlder,
   fetchFromGitHub,
   hatchling,
-  pythonRelaxDepsHook,
   numpy,
   typeguard,
   typing-extensions,
@@ -35,7 +34,6 @@ let
 
     nativeBuildInputs = [
       hatchling
-      pythonRelaxDepsHook
     ];
 
     propagatedBuildInputs = [

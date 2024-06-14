@@ -5,7 +5,6 @@
   huggingface-hub,
   loguru,
   pythonOlder,
-  pythonRelaxDepsHook,
   poetry-core,
   onnx,
   onnxruntime,
@@ -31,7 +30,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     huggingface-hub

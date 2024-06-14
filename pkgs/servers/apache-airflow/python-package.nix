@@ -61,7 +61,6 @@
 , python-slugify
 , python3-openid
 , pythonOlder
-, pythonRelaxDepsHook
 , pyyaml
 , rich
 , rich-argparse
@@ -227,7 +226,6 @@ buildPythonPackage rec {
 
   buildInputs = [
     airflow-frontend
-    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [

@@ -15,7 +15,6 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   rich,
   setuptools-scm,
@@ -40,7 +39,6 @@ buildPythonPackage rec {
 
   build-system = [
     jaxlib
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 
