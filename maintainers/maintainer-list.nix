@@ -21212,9 +21212,9 @@
   tri-ler = {
     github = "tri-ler";
     githubId = 47867303;
-    email = "tylerh689@gmail.com"
-    name = "Tyler Hong"
-  }
+    email = "tylerh689@gmail.com";
+    name = "Tyler Hong";
+  };
   trino = {
     email = "muehlhans.hubert@ekodia.de";
     github = "hmuehlhans";
