@@ -1,9 +1,12 @@
-{ lib
-, go
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, installShellFiles
+{
+  lib,
+  go,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  installShellFiles,
+  testers,
+  updatecli,
 }:
 
 buildGoModule rec {
@@ -12,7 +15,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "updatecli";
-    repo = pname;
+    repo = "updatecli";
     rev = "v${version}";
     hash = "sha256-VpMi+r7QUSD99PRzbTeIxXn1O9GdfHNJM1F0OBzvNmc=";
   };
@@ -32,7 +35,13 @@ buildGoModule rec {
     "-X github.com/updatecli/updatecli/pkg/core/version.Version=${version}"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = updatecli;
+      command = "updatecli version";
+    };
+  };
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -52,7 +61,7 @@ buildGoModule rec {
       Updatecli is a command-line tool used to define and apply update strategies.
     '';
     homepage = "https://www.updatecli.io";
-    changelog = "https://github.com/updatecli/updatecli/releases/tag/v${version}";
+    changelog = "https://github.com/updatecli/updatecli/releases/tag/${src.rev}";
     license = licenses.asl20;
     mainProgram = "updatecli";
     maintainers = with maintainers; [ croissong ];

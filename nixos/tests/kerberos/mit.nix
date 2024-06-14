@@ -4,7 +4,7 @@ import ../make-test-python.nix ({pkgs, ...}: {
   nodes.machine = { config, libs, pkgs, ...}:
   { services.kerberos_server =
     { enable = true;
-      realms = {
+      settings.realms = {
         "FOO.BAR".acl = [{principal = "admin"; access = ["add" "cpw"];}];
       };
     };
