@@ -1,0 +1,18 @@
+{
+  "version": "v0.26.1",
+  "url": "https://github.com/stashapp/stash",
+  "sources": {
+    "x86_64-linux": {
+      "name": "stash-linux",
+      "hash": "sha256-Z+Zd3WXMABa8MmpX4xGdHavre5nzYkg5Ok+0b8dM1N4="
+    },
+    "aarch64-linux": {
+      "name": "stash-linux-arm64v8",
+      "hash": "sha256-5e2r/qZXD0nCuw+jPDb9LWGclFWpxHIrJsoLjbBvogg="
+    },
+    "x86_64-darwin": {
+      "name": "stash-macos",
+      "hash": "sha256-jJPsjVLneqmtZduiUjM1nPX7t39cH/UWTXve68EC4Jw="
+    }
+  }
+}

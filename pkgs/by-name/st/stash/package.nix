@@ -4,30 +4,17 @@
   fetchurl,
 }:
 let
-
-  version = "0.26.1";
-
-  sources = {
-    x86_64-linux = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-linux";
-      hash = "sha256-Z+Zd3WXMABa8MmpX4xGdHavre5nzYkg5Ok+0b8dM1N4=";
-    };
-    aarch64-linux = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-linux-arm64v8";
-      hash = "sha256-5e2r/qZXD0nCuw+jPDb9LWGclFWpxHIrJsoLjbBvogg=";
-    };
-    x86_64-darwin = {
-      url = "https://github.com/stashapp/stash/releases/download/v${version}/stash-macos";
-      hash = "sha256-jJPsjVLneqmtZduiUjM1nPX7t39cH/UWTXve68EC4Jw=";
-    };
-  };
+  inherit (lib.importJSON ./version.json) url version sources;
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   pname = "stash";
 
-  src = fetchurl { inherit (sources.${stdenv.system}) url hash; };
+  src = fetchurl {
+    inherit (sources.${stdenv.system}) hash;
+    url = "${url}/releases/download/${version}/${sources.${stdenv.system}.name}";
+  };
 
   dontUnpack = true;
 
