@@ -388,6 +388,27 @@ in
     };
   };
 
+  prusaslicerthumbnails = buildPlugin rec {
+    pname = "prusaslicerthumbnails";
+    version = "1.0.7";
+
+    src = fetchFromGitHub {
+      owner = "jneilliii";
+      repo = "OctoPrint-PrusaSlicerThumbnails";
+      rev = version;
+      sha256 = "sha256-waNCTjAZwdBfhHyJCG2La7KTnJ8MDVuX1JLetFB5bS4=";
+    };
+
+    propagatedBuildInputs = with super; [ psutil  ];
+
+    meta = with lib; {
+      description = "Plugin that extracts thumbnails from uploaded gcode files sliced by PrusaSlicer";
+      homepage = "https://github.com/jneilliii/OctoPrint-PrusaSlicerThumbnails";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
   psucontrol = buildPlugin rec {
     pname = "psucontrol";
     version = "1.0.6";
