@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "twitch-tui";
-  version = "2.6.10";
+  version = "2.6.11";
 
   src = fetchFromGitHub {
     owner = "Xithrius";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-RJ/+yXbCS8DkdvblBYlxE4sStpTQcGQZXWAApdL7/2o=";
+    hash = "sha256-3Ibf9UULQ0NQ6+oVvLVxUsSSaQ4ilxLehBPZhkrzILQ=";
   };
 
-  cargoHash = "sha256-lI0HR0iNA2C0kf+oBLxxjcOhsf70wCo3tKPMAC76EZM=";
+  cargoHash = "sha256-GK9P+IytkfhfogvPLuYF9+ngs2vr6Quv+v+Rai2cgx8=";
 
   nativeBuildInputs = [
     pkg-config

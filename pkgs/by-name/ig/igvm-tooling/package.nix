@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ acpica-tools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = (with python3.pkgs; [
     setuptools
     ecdsa
     cstruct
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     pytest
     cached-property
     frozendict
-  ] ++ [
+  ]) ++ [
     acpica-tools
     which
   ];
@@ -62,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "IGVM Image Generator";
     homepage = "https://github.com/microsoft/igvm-tooling";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.malt3 ];
+    maintainers = with lib.maintainers; [ malt3 katexochen ];
     changelog = "https://github.com/microsoft/igvm-tooling/releases/tag/igvm-${version}";
     mainProgram = "igvmgen";
     platforms = lib.platforms.all;

@@ -21,20 +21,20 @@ in
 
 buildGoModule rec {
   pname = "evcc";
-  version = "0.126.5";
+  version = "0.127.0";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-hw8DImLXFwTEAyPEFUVnyNPXrQTfEk7OOk+w/izJz9s=";
+    hash = "sha256-Kvpi9HE7dr3StLEihJDF5z1fQELsOv0/5jLLmEEtOJ8=";
   };
 
-  vendorHash = "sha256-gfKJiZ7wSFWEEB/UCAbH18jdZdgG/58q3Yj0FQqMH8E=";
+  vendorHash = "sha256-MdfLJpPEi6Cr34W6eJSraKJwBPtR66HM2tJIbPE9mZs=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-ghDLmsmcG+qDItiqaZy8MTYw/AU58bZfUzYY32XKNyk=";
+    hash = "sha256-6Dxf32myqRbKIlYFcQhkuqZVz+lVvmeJ5lqiWPCQAzA=";
   };
 
   nativeBuildInputs = [

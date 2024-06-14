@@ -24,7 +24,7 @@ buildGoModule rec {
     description = "Open-source, cloud-native, distributed, MySQL-Compatible database for elastic scale and real-time analytics";
     homepage = "https://pingcap.com";
     license = licenses.asl20;
-    maintainers = [];
+    maintainers = with maintainers; [ Makuru ];
     mainProgram = "tidb-server";
   };
 }

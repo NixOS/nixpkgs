@@ -25,7 +25,6 @@
 , "auto-changelog"
 , "aws-cdk"
 , "awesome-lint"
-, "bash-language-server"
 , "bower"
 , "bower2nix"
 , "browserify"
