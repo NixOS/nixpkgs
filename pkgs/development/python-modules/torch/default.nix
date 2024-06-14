@@ -88,6 +88,7 @@
 let
   inherit (lib.attrsets) optionalAttrs;
   inherit (lib.lists)
+    concatMap
     intersectLists
     map
     optionals
@@ -112,7 +113,68 @@ let
     ;
   inherit (stdenv.hostPlatform) darwinSdkVersion;
 
-  inherit (cudaPackages) cudaFlags nccl;
+  inherit (cudaPackages)
+    cuda_cccl
+    cuda_cudart
+    cuda_cupti
+    cuda_nvcc
+    cuda_nvml_dev
+    cuda_nvprof
+    cuda_nvrtc
+    cuda_nvtx
+    cuda_profiler_api
+    cudaAtLeast
+    cudaFlags
+    cudaMajorMinorVersion
+    cudaOlder
+    libcublas
+    libcufft
+    libcurand
+    libcusolver
+    libcusparse
+    nccl
+    ;
+
+  cudaBuildInputs =
+    let
+      # NOTE: Reminder that due to the way cudaPackages are created, lib.getOutput and friends don't work.
+      # As such, we need to create our own functions to get the dev and lib outputs.
+      getDevAndLib = pkg: [
+        pkg.dev
+        pkg.lib
+      ];
+      getDev = pkg: pkg.dev;
+    in
+    # Need full output for cuda_runtime.h, libcuda.so, and libcuda.a
+    [ cuda_cudart ]
+    # Packages we need both dev and lib from
+    ++ concatMap getDevAndLib (
+      [
+        cuda_cupti # For kineto
+        cuda_nvrtc
+        cuda_nvtx # -llibNVToolsExt
+        libcublas
+        libcufft
+        libcurand
+        libcusolver
+        libcusparse
+      ]
+      ++ optionals (cudnn != null) [ cudnn ]
+    )
+    # Packages we only need dev from
+    ++ map getDev (
+      [
+        cuda_cccl # <thrust/*>
+        cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildinputs, it's needed here too
+        cuda_nvml_dev # <nvml.h>
+      ]
+      # nccl.dev output provides nccl.h AND a static copy of NCCL!
+      ++ optionals useSystemNccl [ nccl ]
+      # Prior to CUDA 11.8, cuda_nvprof provides <cuda_profiler_api.h>
+      ++ optionals (cudaOlder "11.8") [ cuda_nvprof ]
+      # After CUDA 11.8, cuda_profiler_api provides <cuda_profiler_api.h>
+      ++ optionals (cudaAtLeast "11.8") [ cuda_profiler_api ]
+    );
 
   rocmPackages = rocmPackages_5;
 
@@ -213,7 +275,6 @@ let
     # All of these predicates have a `cudaSupport &&` prefix, so we factor it out.
     optionalAttrs cudaSupport (
       let
-        inherit (cudaPackages) cudaMajorMinorVersion;
         cudnnMajorMinorVersion = majorMinor cudnn.version;
         isCuda11_8 = cudaMajorMinorVersion == "11.8";
         isCuda12_1 = cudaMajorMinorVersion == "12.1";
@@ -331,8 +392,8 @@ buildPythonPackage rec {
   preConfigure =
     optionalString cudaSupport ''
       export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
-      export CUPTI_INCLUDE_DIR=${cudaPackages.cuda_cupti.dev}/include
-      export CUPTI_LIBRARY_DIR=${cudaPackages.cuda_cupti.lib}/lib
+      export CUPTI_INCLUDE_DIR=${cuda_cupti.dev}/include
+      export CUPTI_LIBRARY_DIR=${cuda_cupti.lib}/lib
     ''
     + optionalString (cudaSupport && cudnn != null) ''
       export CUDNN_INCLUDE_DIR=${cudnn.dev}/include
@@ -466,7 +527,7 @@ buildPythonPackage rec {
     ]
     ++ optionals cudaSupport [
       autoAddDriverRunpath
-      cudaPackages.cuda_nvcc
+      cuda_nvcc
     ]
     ++ optionals rocmSupport [ rocmtoolkit_joined ];
 
@@ -475,47 +536,7 @@ buildPythonPackage rec {
       blas
       blas.provider
     ]
-    ++ optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cccl.dev # <thrust/*>
-        cuda_cudart.dev # cuda_runtime.h and libraries
-        cuda_cudart.lib
-        cuda_cudart.static
-        cuda_cupti.dev # For kineto
-        cuda_cupti.lib # For kineto
-        cuda_nvcc.dev # crt/host_config.h; even though we include this in nativeBuildinputs, it's needed here too
-        cuda_nvml_dev.dev # <nvml.h>
-        cuda_nvrtc.dev
-        cuda_nvrtc.lib
-        cuda_nvtx.dev
-        cuda_nvtx.lib # -llibNVToolsExt
-        libcublas.dev
-        libcublas.lib
-        libcufft.dev
-        libcufft.lib
-        libcurand.dev
-        libcurand.lib
-        libcusolver.dev
-        libcusolver.lib
-        libcusparse.dev
-        libcusparse.lib
-      ]
-      ++ optionals (cudnn != null) [
-        cudnn.dev
-        cudnn.lib
-      ]
-      ++ optionals useSystemNccl [
-        # Some platforms do not support NCCL (i.e., Jetson)
-        nccl.dev # Provides nccl.h AND a static copy of NCCL!
-      ]
-      ++ optionals (versionOlder cudaVersion "11.8") [
-        cuda_nvprof.dev # <cuda_profiler_api.h>
-      ]
-      ++ optionals (versionAtLeast cudaVersion "11.8") [
-        cuda_profiler_api.dev # <cuda_profiler_api.h>
-      ]
-    )
+    ++ optionals cudaSupport cudaBuildInputs
     ++ optionals rocmSupport [ rocmPackages.llvm.openmp ]
     ++ optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
     ++ optionals isLinux [ numactl ]
@@ -645,7 +666,7 @@ buildPythonPackage rec {
   #
   # This is a quick hack to add `libnvrtc` to the runpath so that torch can find
   # it when it is needed at runtime.
-  extraRunpaths = optionals cudaSupport [ "${cudaPackages.cuda_nvrtc.lib}/lib" ];
+  extraRunpaths = optionals cudaSupport [ "${cuda_nvrtc.lib}/lib" ];
   postPhases = optionals isLinux [ "postPatchelfPhase" ];
   postPatchelfPhase = ''
     while IFS= read -r -d $'\0' elf ; do
