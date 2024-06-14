@@ -85,6 +85,8 @@ in
     environment.systemPackages = [ cfg.package editorScript ];
 
     environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "emacseditor");
+
+    environment.pathsToLink = [ "/share/emacs" ];
   };
 
   meta.doc = ./emacs.md;

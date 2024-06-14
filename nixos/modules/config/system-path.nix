@@ -151,7 +151,6 @@ in
         "/etc/gtk-3.0"
         "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
-        "/share/emacs"
         "/share/hunspell"
         "/share/org"
         "/share/themes"
