@@ -271,6 +271,27 @@ in
     };
   };
 
+    mqttchambertemperature = buildPlugin rec {
+    pname = "mqttchambertemperature";
+    version = "0.0.3";
+
+    src = fetchFromGitHub {
+      owner = "synman";
+      repo = "OctoPrint-MqttChamberTemperature";
+      rev = version;
+      sha256 = "sha256-CvNpi8HcBBUfCs3X8yflbhe0YCU0kW3u2ADSro/qnuI=";
+    };
+
+    propagatedBuildInputs = with super; [ jsonpath-ng ];
+
+    meta = with lib; {
+      description = "Enables Chamber temperature reporting via subscribing to an MQTT topic";
+      homepage = "https://github.com/synman/OctoPrint-MqttChamberTemperature";
+      license = licenses.wtfpl;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
   printtimegenius = buildPlugin rec {
     pname = "printtimegenius";
     version = "2.3.3";
