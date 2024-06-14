@@ -46,7 +46,8 @@ let
     Type = "oneshot";
     User = user;
     Group = group;
-    StateDirectory = "${removePrefix "/var/lib/" cfg.dataDir}";
+    StateDirectory = "firefly-iii";
+    ReadWritePaths = [cfg.dataDir];
     WorkingDirectory = cfg.package;
     PrivateTmp = true;
     PrivateDevices = true;
