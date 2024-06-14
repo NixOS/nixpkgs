@@ -153,7 +153,6 @@ in
         "/sbin"
         "/share/emacs"
         "/share/hunspell"
-        "/share/nano"
         "/share/org"
         "/share/themes"
         "/share/vim-plugins"
