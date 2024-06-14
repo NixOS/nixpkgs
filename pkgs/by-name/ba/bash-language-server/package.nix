@@ -5,6 +5,7 @@
 , nodejs
 , npmHooks
 , makeBinaryWrapper
+, shellcheck
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Create the executable, based upon what happens in npmHooks.npmInstallHook
     makeWrapper ${lib.getExe nodejs} $out/bin/bash-language-server \
+      --prefix PATH : ${lib.makeBinPath [ shellcheck ]} \
       --inherit-argv0 \
       --add-flags $out/lib/bash-language-server/out/cli.js
 
