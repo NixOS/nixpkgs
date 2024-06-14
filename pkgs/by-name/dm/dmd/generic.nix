@@ -208,6 +208,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   disallowedReferences = [ dmdBootstrap ];
 
+  passthru = {
+    inherit dmdBootstrap;
+  };
+
   meta = with lib; {
     description = "Official reference compiler for the D language";
     homepage = "https://dlang.org/";
