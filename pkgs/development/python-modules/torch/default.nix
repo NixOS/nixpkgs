@@ -8,16 +8,7 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages,
   autoAddDriverRunpath,
-  effectiveMagma ?
-    if cudaSupport then
-      magma-cuda-static
-    else if rocmSupport then
-      magma-hip
-    else
-      magma,
   magma,
-  magma-hip,
-  magma-cuda-static,
   # Use the system NCCL as long as we're targeting CUDA on a supported platform.
   useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
   MPISupport ? false,
@@ -200,10 +191,6 @@ let
         "11"
         "12"
       ]);
-    "MPI cudatoolkit does not match cudaPackages.cudatoolkit" =
-      MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
-    "Magma cudaPackages does not match cudaPackages" =
-      cudaSupport && (effectiveMagma.cudaPackages != cudaPackages);
     "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" = rocmSupport;
   };
 in
@@ -476,7 +463,7 @@ buildPythonPackage rec {
       ]
     )
     ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
-    ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
+    ++ lib.optionals (cudaSupport || rocmSupport) [ magma ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
     ++ lib.optionals stdenv.isDarwin [
       Accelerate
