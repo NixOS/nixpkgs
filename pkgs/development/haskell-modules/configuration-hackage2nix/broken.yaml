@@ -1995,7 +1995,6 @@ broken-packages:
   - ghc-internal # failure in job https://hydra.nixos.org/build/260723678 at 2024-05-25
   - ghcitui # failure in job https://hydra.nixos.org/build/252737339 at 2024-03-16
   - ghcjs-base-stub # timeout
-  - ghcjs-dom-javascript # failure in job https://hydra.nixos.org/build/255688382 at 2024-04-16
   - ghcjs-dom-jsffi # failure in job https://hydra.nixos.org/build/233215225 at 2023-09-02
   - ghcjs-fetch # timeout
   - ghcjs-promise # failure in job https://hydra.nixos.org/build/233243985 at 2023-09-02
