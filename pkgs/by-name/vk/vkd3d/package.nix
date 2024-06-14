@@ -1,26 +1,63 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, wine, flex, bison
-, vulkan-headers, spirv-headers, vulkan-loader }:
+{
+  lib,
+  autoreconfHook,
+  bison,
+  fetchFromGitLab,
+  flex,
+  pkg-config,
+  spirv-headers,
+  stdenv,
+  vulkan-headers,
+  vulkan-loader,
+  wine,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vkd3d";
   version = "1.10";
-
-  nativeBuildInputs = [ autoreconfHook pkg-config wine flex bison ];
-  buildInputs = [ vulkan-loader vulkan-headers spirv-headers ];
 
   src = fetchFromGitLab {
     domain = "gitlab.winehq.org";
     owner = "wine";
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-/5tc8agqpRbFRnfv8O1fBo2SPNOuO6exs0BZ9MnOTA0=";
+    repo = "vkd3d";
+    rev = "vkd3d-${finalAttrs.version}";
+    hash = "sha256-/5tc8agqpRbFRnfv8O1fBo2SPNOuO6exs0BZ9MnOTA0=";
   };
 
-  meta = with lib; {
+  outputs = [ "out" "dev" "lib" ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+    pkg-config
+    wine
+  ];
+
+  buildInputs = [
+    spirv-headers
+    vulkan-headers
+    vulkan-loader
+  ];
+
+  strictDeps = true;
+
+  meta = {
     homepage = "https://gitlab.winehq.org/wine/vkd3d";
-    description = "3D graphics library with an API very similar, but not identical, to Direct3D 12";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ expipiplus1 ];
-    platforms = platforms.all;
+    description = "Direct3D to Vulkan translation library";
+    longDescription = ''
+      Vkd3d is a 3D graphics library built on top of Vulkan. It has an API very
+      similar, but not identical, to Direct3D 12.
+
+      Vkd3d can be used by projects that target Direct3D 12 as a drop-in
+      replacement at build-time with some modest source modifications.
+
+      If vkd3d is available when building Wine, then Wine will use it to support
+      Direct3D 12 applications.
+    '';
+    license = with lib.licenses; [ lgpl21Plus ];
+    mainProgram = "vkd3d-compiler";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (wine.meta) platforms;
   };
-}
+})
