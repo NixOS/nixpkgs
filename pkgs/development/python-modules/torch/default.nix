@@ -81,7 +81,7 @@
 
   # ROCm dependencies
   rocmSupport ? config.rocmSupport,
-  rocmPackages_5,
+  rocmPackages,
   gpuTargets ? [ ],
 }:
 
@@ -175,8 +175,6 @@ let
       # After CUDA 11.8, cuda_profiler_api provides <cuda_profiler_api.h>
       ++ optionals (cudaAtLeast "11.8") [ cuda_profiler_api ]
     );
-
-  rocmPackages = rocmPackages_5;
 
   setBool = v: if v then "1" else "0";
 

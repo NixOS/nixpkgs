@@ -15401,6 +15401,7 @@ self: super: with self; {
         cudaPackages.cudnn_8_9 or null
       else
         null;
+    rocmPackages = pkgs.rocmPackages_5;
   };
 
   torch-audiomentations = callPackage ../development/python-modules/torch-audiomentations { };
