@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , nix-update-script
 , stdenv
+, fetchurl
 
 , git
 , openssl
@@ -18,11 +19,13 @@
 
 , rocmSupport ? config.rocmSupport
 
+, vulkanSupport ? false
+
 , darwin
 , metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
 
-  # one of [ null "cpu" "rocm" "cuda" "metal" ];
-, acceleration ? null
+  # one of [ null "cpu" "vulkan" "rocm" "cuda" "metal" ];
+, acceleration ? "vulkan"
 }:
 
 let
@@ -38,18 +41,20 @@ let
   availableAccelerations = flatten [
     (optional cudaSupport "cuda")
     (optional rocmSupport "rocm")
+    (optional vulkanSupport "vulkan")
     (optional metalSupport "metal")
   ];
 
-  warnIfMultipleAccelerationMethods = configured: (let
-    len = builtins.length configured;
-    result = if len == 0 then "cpu" else (builtins.head configured);
-  in
+  warnIfMultipleAccelerationMethods = configured: (
+    let
+      len = builtins.length configured;
+      result = if len == 0 then "cpu" else (builtins.head configured);
+    in
     lib.warnIf (len > 1) ''
       building tabby with multiple acceleration methods enabled is not
       supported; falling back to `${result}`
     ''
-    result
+      result
   );
 
   # If user did not not override the acceleration attribute, then try to use one of
@@ -66,12 +71,13 @@ let
     "building tabby with `${api}` is only supported on Darwin-aarch64; falling back to cpu"
     (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64));
 
-  validAccel = lib.assertOneOf "tabby.featureDevice" featureDevice [ "cpu" "rocm" "cuda" "metal" ];
+  validAccel = lib.assertOneOf "tabby.featureDevice" featureDevice [ "cpu" "rocm" "cuda" "vulkan" "metal" ];
 
   # TODO(ghthor): there is a bug here where featureDevice could be cuda, but enableCuda is false
   #  The would result in a startup failure of the service module.
   enableRocm = validAccel && (featureDevice == "rocm") && (warnIfNotLinux "rocm");
   enableCuda = validAccel && (featureDevice == "cuda") && (warnIfNotLinux "cuda");
+  enableVulkan = validAccel && (featureDevice == "vulkan") && (warnIfNotLinux "vulkan");
   enableMetal = validAccel && (featureDevice == "metal") && (warnIfNotDarwinAarch64 "metal");
 
   # We have to use override here because tabby doesn't actually tell llama-cpp
@@ -80,10 +86,19 @@ let
   #
   # See: https://github.com/TabbyML/tabby/blob/v0.11.1/crates/llama-cpp-bindings/include/engine.h#L20
   #
-  llamaccpPackage = llama-cpp.override {
+  llamacppPackage = (llama-cpp.override {
     rocmSupport = enableRocm;
     cudaSupport = enableCuda;
     metalSupport = enableMetal;
+    vulkanSupport = enableVulkan;
+  }).overrideAttrs {
+    version = "2717";
+    src = fetchFromGitHub {
+      owner = "ggerganov";
+      repo = "llama.cpp";
+      rev = "refs/tags/b2717";
+      hash = "sha256-qqmSGOQoZy1JquZtgLPi2SoJ5hkLQcLBj6QldICLZIA=";
+    };
   };
 
   # TODO(ghthor): some of this can be removed
@@ -96,8 +111,9 @@ let
   ]
   ++ optionals enableMetal [ Metal MetalKit ]);
 
-  cudaBuildInputs = [ llamaccpPackage ];
-  rocmBuildInputs = [ llamaccpPackage ];
+  cudaBuildInputs = [ llamacppPackage ];
+  rocmBuildInputs = [ llamacppPackage ];
+  vulkanBuildInputs = [ llamacppPackage ];
 
 in
 rustPlatform.buildRustPackage {
@@ -113,7 +129,10 @@ rustPlatform.buildRustPackage {
   };
 
   cargoLock = {
-    lockFile = ./Cargo.lock;
+    lockFile = fetchurl {
+      url = "https://raw.githubusercontent.com/TabbyML/tabby/v${version}/Cargo.lock";
+      hash = "sha256-fePXAEypmcaAEih6geKonl14mnUNGsf1ofjILoJ2UrQ=";
+    };
     outputHashes = {
       "apalis-0.5.1" = "sha256-hGvVuSy32lSTR5DJdiyf8q1sXbIeuLSGrtyq6m2QlUQ=";
       "tree-sitter-c-0.20.6" = "sha256-Etl4s29YSOxiqPo4Z49N6zIYqNpIsdk/Qd0jR8jdvW4=";
@@ -130,6 +149,8 @@ rustPlatform.buildRustPackage {
     "--features" "rocm"
   ] ++ optionals enableCuda [
     "--features" "cuda"
+  ] ++ optionals enableVulkan [
+    "--features vulkan"
   ];
 
   OPENSSL_NO_VENDOR = 1;
@@ -146,9 +167,10 @@ rustPlatform.buildRustPackage {
   ++ optionals stdenv.hostPlatform.isDarwin darwinBuildInputs
   ++ optionals enableCuda cudaBuildInputs
   ++ optionals enableRocm rocmBuildInputs
+  ++ optionals enableVulkan vulkanBuildInputs
   ;
 
-  env.LLAMA_CPP_LIB = "${lib.getLib llamaccpPackage}/lib";
+  env.LLAMA_CPP_LIB = "${lib.getLib llamacppPackage}/lib";
   patches = [ ./0001-nix-build-use-nix-native-llama-cpp-package.patch ];
 
   # Fails with:
@@ -156,6 +178,12 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   passthru.updateScript = nix-update-script { };
+
+  postPatch = ''
+    [ -f  crates/tabby-inference/src/chat.rs ] || exit 1
+    sed -i 's|default = "0.1"|default = "0.75"|g' crates/tabby-inference/src/chat.rs
+    sed -i 's|default = "0.1"|default = "0.4"|g' crates/tabby-inference/src/lib.rs
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/TabbyML/tabby";
