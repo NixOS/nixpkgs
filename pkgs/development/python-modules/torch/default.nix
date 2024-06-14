@@ -7,6 +7,7 @@
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
+  cudnn ? null,
   autoAddDriverRunpath,
   effectiveMagma ?
     if cudaSupport then
@@ -91,7 +92,7 @@ let
     strings
     trivial
     ;
-  inherit (cudaPackages) cudaFlags cudnn nccl;
+  inherit (cudaPackages) cudaFlags nccl;
 
   rocmPackages = rocmPackages_5;
 
@@ -188,18 +189,33 @@ let
     '';
   };
 
-  brokenConditions = attrsets.filterAttrs (_: cond: cond) {
-    "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
-    "CUDA is not targeting Linux" = cudaSupport && !stdenv.isLinux;
-    "Unsupported CUDA version" =
-      cudaSupport
-      && !(builtins.elem cudaPackages.cudaMajorVersion [
-        "11"
-        "12"
-      ]);
-    "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" =
-      rocmSupport;
-  };
+  brokenConditions =
+    # All of these predicates have a `cudaSupport &&` prefix, so we factor it out.
+    attrsets.optionalAttrs cudaSupport (
+      let
+        inherit (lib.versions) majorMinor;
+        inherit (cudaPackages) cudaMajorMinorVersion;
+        cudnnMajorMinorVersion = majorMinor cudnn.version;
+        isCuda11_8 = cudaMajorMinorVersion == "11.8";
+        isCuda12_1 = cudaMajorMinorVersion == "12.1";
+        isCudnn8_7 = cudnnMajorMinorVersion == "8.7";
+        isCudnn8_9 = cudnnMajorMinorVersion == "8.9";
+      in
+      {
+        "CUDA and ROCm are mutually exclusive" = rocmSupport;
+        "CUDA is not targeting Linux" = !stdenv.isLinux;
+
+        # NOTE: Make sure to update python-packages.nix when updating Torch to a new version!
+        "Unsupported CUDA version" = !(isCuda11_8 || isCuda12_1);
+        "Unsupported CUDNN version" =
+          (cudnn != null) && !((isCudnn8_7 && isCuda11_8) || (isCudnn8_9 && isCuda12_1));
+      }
+    )
+    # All of these predicates have a `rocmSupport &&` prefix, so we factor it out.
+    // attrsets.optionalAttrs rocmSupport {
+      "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" =
+        true;
+    };
 in
 buildPythonPackage rec {
   pname = "torch";
@@ -297,7 +313,7 @@ buildPythonPackage rec {
       export CUPTI_INCLUDE_DIR=${cudaPackages.cuda_cupti.dev}/include
       export CUPTI_LIBRARY_DIR=${cudaPackages.cuda_cupti.lib}/lib
     ''
-    + lib.optionalString (cudaSupport && cudaPackages ? cudnn) ''
+    + lib.optionalString (cudaSupport && cudnn != null) ''
       export CUDNN_INCLUDE_DIR=${cudnn.dev}/include
       export CUDNN_LIB_DIR=${cudnn.lib}/lib
     ''
@@ -469,7 +485,7 @@ buildPythonPackage rec {
         libcusparse.dev
         libcusparse.lib
       ]
-      ++ lists.optionals (cudaPackages ? cudnn) [
+      ++ lists.optionals (cudnn != null) [
         cudnn.dev
         cudnn.lib
       ]
@@ -633,6 +649,7 @@ buildPythonPackage rec {
     inherit
       cudaSupport
       cudaPackages
+      cudnn
       rocmSupport
       rocmPackages
       ;

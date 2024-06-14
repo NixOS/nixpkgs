@@ -15381,9 +15381,26 @@ self: super: with self; {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
-  torch = callPackage ../development/python-modules/torch {
+  torch = callPackage ../development/python-modules/torch rec {
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
+
+    # See CUDA support here:
+    # https://github.com/pytorch/builder/blob/main/CUDA_UPGRADE_GUIDE.MD#a-currently-supported-cuda-and-cudnn-libraries
+    # https://pytorch.org/get-started/locally/
+    # Also see: https://github.com/NixOS/nixpkgs/issues/294111
+    cudaPackages = pkgs.cudaPackages_12_1;
+    # CuDNN isn't available on every supported platform for every CUDA version.
+    cudnn =
+      let
+        inherit (cudaPackages) cudaMajorMinorVersion;
+      in
+      if cudaMajorMinorVersion == "11.8" then
+        cudaPackages.cudnn_8_7 or null
+      else if cudaMajorMinorVersion == "12.1" then
+        cudaPackages.cudnn_8_9 or null
+      else
+        null;
   };
 
   torch-audiomentations = callPackage ../development/python-modules/torch-audiomentations { };
