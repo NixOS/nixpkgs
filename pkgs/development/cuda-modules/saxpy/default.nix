@@ -18,12 +18,19 @@ let
     setupCudaHook
     ;
   inherit (lib) getDev getLib getOutput;
+  fs = lib.fileset;
 in
 backendStdenv.mkDerivation {
   pname = "saxpy";
   version = "unstable-2023-07-11";
 
-  src = ./.;
+  src = fs.toSource {
+    root = ./.;
+    fileset = fs.unions [
+      ./CMakeLists.txt
+      ./saxpy.cu
+    ];
+  };
 
   __structuredAttrs = true;
   strictDeps = true;
