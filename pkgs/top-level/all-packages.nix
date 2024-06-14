@@ -1962,7 +1962,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Security;
   };
 
-  oama = (haskellPackages.callPackage ../tools/misc/oama { }).overrideScope (final: prev: {
+  oama = (haskellPackages.callPackage ../by-name/oa/oama/package.nix { }).overrideScope (final: prev: {
     # Dependency twain requires an older version of http2, and we cannot mix
     # versions of transitive dependencies.
     http2 = final.http2_3_0_3;
