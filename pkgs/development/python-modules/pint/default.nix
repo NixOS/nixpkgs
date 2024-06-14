@@ -47,15 +47,18 @@ buildPythonPackage rec {
     flexcache
     flexparser
     typing-extensions
+    # Both uncertainties and numpy are not necessarily needed for every
+    # function of pint, but needed for the pint-convert executable which we
+    # necessarily distribute with this package as it is.
+    uncertainties
+    numpy
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-subtests
     pytest-benchmark
-    numpy
     matplotlib
-    uncertainties
   ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];
