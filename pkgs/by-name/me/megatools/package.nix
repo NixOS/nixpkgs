@@ -1,32 +1,35 @@
-{ lib
-, stdenv
-, fetchgit
-, asciidoc
-, docbook_xml_dtd_45
-, docbook2x
-, libxml2
-, meson
-, ninja
-, pkg-config
-, curl
-, glib
-, fuse
+{
+  lib,
+  asciidoc,
+  curl,
+  docbook2x,
+  docbook_xml_dtd_45,
+  fetchgit,
+  fuse,
+  glib,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "megatools";
   version = "1.11.0";
 
   src = fetchgit {
     url = "https://megous.com/git/megatools";
-    rev = version;
-    sha256 = "sha256-Q9hMJBQBenufubbmeAw8Q8w+Oo+UcZLWathKNDwTv3s=";
+    rev = finalAttrs.version;
+    hash = "sha256-Q9hMJBQBenufubbmeAw8Q8w+Oo+UcZLWathKNDwTv3s=";
   };
+
+  outputs = [ "out" "doc" "man" ];
 
   nativeBuildInputs = [
     asciidoc
-    docbook_xml_dtd_45
     docbook2x
+    docbook_xml_dtd_45
     libxml2
     meson
     ninja
@@ -36,16 +39,21 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     glib
-  ] ++ lib.optionals stdenv.isLinux [ fuse ];
+  ] ++ lib.optionals stdenv.isLinux [
+    fuse
+  ];
 
   enableParallelBuilding = true;
+
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Command line client for Mega.co.nz";
     homepage = "https://megatools.megous.com/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "megatools";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
 }
+)
