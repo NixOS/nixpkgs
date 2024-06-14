@@ -77,9 +77,13 @@ stdenv.mkDerivation {
   };
   passthru.scripts = [ "foo.py" "bar.lua" ];
   installPhase = ''
+    runHook preInstall
+
     mkdir $out/share
     cp foo.py $out/share
     cp bar.lua $out/share
+
+    runHook postInstall
   '';
 }
 ```

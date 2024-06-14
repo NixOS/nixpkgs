@@ -112,6 +112,8 @@ in pkgs.stdenv.mkDerivation {
       [ pythonInterpreterTable ]
       (readFile ./languages-frameworks/python.section.md);
   in ''
+    runHook preBuild
+
     cp ${builtins.toFile "python.section.md" pythonSection} ./languages-frameworks/python.section.md
 
     cat \
@@ -145,9 +147,13 @@ in pkgs.stdenv.mkDerivation {
       --section-toc-depth 1 \
       manual.md \
       out/index.html
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     dest="$out/${common.outputPath}"
     mkdir -p "$(dirname "$dest")"
     mv out "$dest"
@@ -158,6 +164,8 @@ in pkgs.stdenv.mkDerivation {
     mkdir -p $out/nix-support/
     echo "doc manual $dest ${common.indexPath}" >> $out/nix-support/hydra-build-products
     echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
+
+    runHook postInstall
   '';
 
   passthru.tests.manpage-urls = with pkgs; testers.invalidateFetcherByDrvHash

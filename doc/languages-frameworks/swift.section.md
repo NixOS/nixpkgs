@@ -94,15 +94,25 @@ stdenv.mkDerivation rec {
 
   # The helper provides a configure snippet that will prepare all dependencies
   # in the correct place, where SwiftPM expects them.
-  configurePhase = generated.configure;
+  configurePhase = ''
+    runHook preConfigure
+
+    ${generated.configure}
+
+    runHook postConfigure
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     # This is a special function that invokes swiftpm to find the location
     # of the binaries it produced.
     binPath="$(swiftpmBinPath)"
     # Now perform any installation steps.
     mkdir -p $out/bin
     cp $binPath/myproject $out/bin/
+
+    runHook postInstall
   '';
 }
 ```
@@ -155,11 +165,17 @@ with a writable copy:
 
 ```nix
 {
-  configurePhase = generated.configure ++ ''
+  configurePhase = ''
+    runHook preConfigure
+
+    ${generated.configure}
+
     # Replace the dependency symlink with a writable copy.
     swiftpmMakeMutable swift-crypto
     # Now apply a patch.
     patch -p1 -d .build/checkouts/swift-crypto -i ${./some-fix.patch}
+
+    runHook postConfigure
   '';
 }
 ```

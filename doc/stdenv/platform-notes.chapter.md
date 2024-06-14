@@ -11,7 +11,11 @@ Some common issues when packaging software for Darwin:
     name = "libfoo-1.2.3";
     # ...
     buildPhase = ''
+      runHook preBuild
+
       $CC -o hello hello.c
+
+      runHook postBuild
     '';
   }
   ```

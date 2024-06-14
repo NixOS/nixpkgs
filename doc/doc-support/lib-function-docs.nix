@@ -13,6 +13,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ nixdoc ];
   installPhase = ''
+    runHook preInstall
+
     function docgen {
       name=$1
       baseName=$2
@@ -37,5 +39,7 @@ stdenv.mkDerivation {
     '') libsets}
 
     echo '```' >> "$out/index.md"
+
+    runHook postInstall
   '';
 }

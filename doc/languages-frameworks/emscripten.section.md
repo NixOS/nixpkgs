@@ -58,10 +58,18 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
   dontStrip = true;
   outputs = [ "out" ];
   buildPhase = ''
+    runHook preBuild
+
     emmake make
+
+    runHook postBuild
   '';
   installPhase = ''
+    runHook postInstall
+
     emmake make install
+
+    runHook postInstall
   '';
   checkPhase = ''
     echo "================= testing zlib using node ================="
@@ -113,6 +121,8 @@ pkgs.buildEmscriptenPackage rec {
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     rm -f fastXmlLint.js*
     # a fix for ERROR:root:For asm.js, TOTAL_MEMORY must be a multiple of 16MB, was 234217728
     # https://gitlab.com/odfplugfest/xmlmirror/issues/8
@@ -122,16 +132,24 @@ pkgs.buildEmscriptenPackage rec {
     sed -e "s/\$(JSONC_LDFLAGS) \$(ZLIB_LDFLAGS) \$(LIBXML20_LDFLAGS)/\$(JSONC_LDFLAGS) \$(LIBXML20_LDFLAGS) \$(ZLIB_LDFLAGS) /g" -i Makefile.emEnv
     # https://gitlab.com/odfplugfest/xmlmirror/issues/11
     sed -e "s/-o fastXmlLint.js/-s EXTRA_EXPORTED_RUNTIME_METHODS='[\"ccall\", \"cwrap\"]' -o fastXmlLint.js/g" -i Makefile.emEnv
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
     HOME=$TMPDIR
+    runHook preBuild
+
     make -f Makefile.emEnv
+
+    runHook postBuild
   '';
 
   outputs = [ "out" "doc" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share
     mkdir -p $doc/share/${name}
 
@@ -145,6 +163,8 @@ pkgs.buildEmscriptenPackage rec {
     cp *.json $out/share
     cp *.rng $out/share
     cp README.md $doc/share/${name}
+
+    runHook postInstall
   '';
   checkPhase = ''
 
