@@ -2,8 +2,6 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (pkgs) alsa-utils;
-
   cfg = config.hardware.alsa;
 
   pulseaudioEnabled = config.hardware.pulseaudio.enable;
@@ -29,6 +27,8 @@ in
       enable = lib.mkEnableOption "ALSA sound";
 
       enableOSSEmulation = lib.mkEnableOption "ALSA OSS emulation (with certain cards sound mixing may not work!)";
+
+      package = lib.mkPackageOption pkgs "alsa-utils" { };
 
       extraConfig = lib.mkOption {
         type = lib.types.lines;
@@ -80,13 +80,13 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ alsa-utils ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.etc = lib.mkIf (!pulseaudioEnabled && cfg.extraConfig != "")
       { "asound.conf".text = cfg.extraConfig; };
 
     # ALSA provides a udev rule for restoring volume settings.
-    services.udev.packages = [ alsa-utils ];
+    services.udev.packages = [ cfg.package ];
 
     boot.kernelModules = lib.optional cfg.enableOSSEmulation "snd_pcm_oss";
 
@@ -99,8 +99,8 @@ in
           Type = "oneshot";
           RemainAfterExit = true;
           ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/alsa";
-          ExecStart = "${alsa-utils}/sbin/alsactl restore --ignore";
-          ExecStop = "${alsa-utils}/sbin/alsactl store --ignore";
+          ExecStart = "${cfg.package}/sbin/alsactl restore --ignore";
+          ExecStop = "${cfg.package}/sbin/alsactl store --ignore";
         };
       };
 
@@ -108,16 +108,16 @@ in
       enable = true;
       bindings = [
         # "Mute" media key
-        { keys = [ 113 ]; events = [ "key" ];       command = "${alsa-utils}/bin/amixer -q set Master toggle"; }
+        { keys = [ 113 ]; events = [ "key" ];       command = "${cfg.package}/bin/amixer -q set Master toggle"; }
 
         # "Lower Volume" media key
-        { keys = [ 114 ]; events = [ "key" "rep" ]; command = "${alsa-utils}/bin/amixer -q set Master ${cfg.mediaKeys.volumeStep}- unmute"; }
+        { keys = [ 114 ]; events = [ "key" "rep" ]; command = "${cfg.package}/bin/amixer -q set Master ${cfg.mediaKeys.volumeStep}- unmute"; }
 
         # "Raise Volume" media key
-        { keys = [ 115 ]; events = [ "key" "rep" ]; command = "${alsa-utils}/bin/amixer -q set Master ${cfg.mediaKeys.volumeStep}+ unmute"; }
+        { keys = [ 115 ]; events = [ "key" "rep" ]; command = "${cfg.package}/bin/amixer -q set Master ${cfg.mediaKeys.volumeStep}+ unmute"; }
 
         # "Mic Mute" media key
-        { keys = [ 190 ]; events = [ "key" ];       command = "${alsa-utils}/bin/amixer -q set Capture toggle"; }
+        { keys = [ 190 ]; events = [ "key" ];       command = "${cfg.package}/bin/amixer -q set Capture toggle"; }
       ];
     };
 
