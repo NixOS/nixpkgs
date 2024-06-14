@@ -8,6 +8,7 @@
 , postgresql
 , openssl
 , libyaml
+, darwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,17 +22,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-UoNzgTWPyDoa3hLh9z/aw78lmGcA/ujihUuXnKKqtPc=";
   };
 
+  # optional only to avoid linux rebuild
+  patches = lib.optionals stdenv.isDarwin [ ./macos-11-sdk-compat.patch ];
+
   nativeBuildInputs = [ cmake flex bison ];
 
   buildInputs = [ openssl libyaml postgresql ]
-    ++ lib.optionals stdenv.isLinux [ systemd ];
+    ++ lib.optionals stdenv.isLinux [ systemd ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.IOKit darwin.apple_sdk_11_0.frameworks.Foundation ];
 
   cmakeFlags = [
     "-DFLB_RELEASE=ON"
     "-DFLB_METRICS=ON"
     "-DFLB_HTTP_SERVER=ON"
     "-DFLB_OUT_PGSQL=ON"
-  ];
+  ]
+  ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13" ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     # Used by the embedded luajit, but is not predefined on older mac SDKs.
