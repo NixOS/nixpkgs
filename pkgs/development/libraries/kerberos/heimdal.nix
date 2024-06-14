@@ -89,6 +89,8 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = [
+    "--with-hdbdir=/var/lib/heimdal"
+
     "--with-libedit-include=${libedit.dev}/include"
     "--with-libedit-lib=${libedit}/lib"
     "--with-berkeley-db-include=${db.dev}/include"
