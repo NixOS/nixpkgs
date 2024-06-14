@@ -2,10 +2,14 @@
 , stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , Foundation
 , abseil-cpp
 , cmake
 , eigen
+, flatbuffers
+, gbenchmark
+, glibcLocales
 , gtest
 , libpng
 , nlohmann_json
@@ -24,7 +28,7 @@
 
 
 let
-  version = "1.16.3";
+  version = "1.18.0";
 
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
@@ -37,15 +41,15 @@ let
   howard-hinnant-date = fetchFromGitHub {
     owner = "HowardHinnant";
     repo = "date";
-    rev = "v2.4.1";
-    sha256 = "sha256-BYL7wxsYRI45l8C3VwxYIIocn5TzJnBtU0UZ9pHwwZw=";
+    rev = "v3.0.1";
+    sha256 = "sha256-ZSjeJKAcT7mPym/4ViDvIR9nFMQEBCSUtPEuMO27Z+I=";
   };
 
   mp11 = fetchFromGitHub {
     owner = "boostorg";
     repo = "mp11";
-    rev = "boost-1.79.0";
-    hash = "sha256-ZxgPDLvpISrjpEHKpLGBowRKGfSwTf6TBfJD18yw+LM=";
+    rev = "boost-1.82.0";
+    hash = "sha256-cLPvjkf2Au+B19PJNrUkTW/VPxybi1MpPxnIl4oo4/o=";
   };
 
   safeint = fetchFromGitHub {
@@ -59,30 +63,38 @@ let
     owner = "pytorch";
     repo = "cpuinfo";
     # There are no tags in the repository
-    rev = "5916273f79a21551890fd3d56fc5375a78d1598d";
-    hash = "sha256-nXBnloVTuB+AVX59VDU/Wc+Dsx94o92YQuHp3jowx2A=";
+    rev = "3c8b1533ac03dd6531ab6e7b9245d488f13a82a5";
+    hash = "sha256-eshoHmGiu5k0XE/A1SWf7OvBj7/YD9JNSZgoyGzGcLA=";
   };
 
-  flatbuffers = fetchFromGitHub {
-    owner = "google";
-    repo = "flatbuffers";
-    rev = "v1.12.0";
-    hash = "sha256-L1B5Y/c897Jg9fGwT2J3+vaXsZ+lfXnskp8Gto1p/Tg=";
+  pytorch_clog = effectiveStdenv.mkDerivation {
+    pname = "clog";
+    version = "3c8b153";
+    src = "${pytorch_cpuinfo}/deps/clog";
+
+    nativeBuildInputs = [ cmake gbenchmark gtest ];
+    cmakeFlags = [
+      "-DUSE_SYSTEM_GOOGLEBENCHMARK=ON"
+      "-DUSE_SYSTEM_GOOGLETEST=ON"
+      "-DUSE_SYSTEM_LIBS=ON"
+      # 'clog' tests set 'CXX_STANDARD 11'; this conflicts with our 'gtest'.
+      "-DCLOG_BUILD_TESTS=OFF"
+    ];
   };
 
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
-    rev = "refs/tags/v1.14.1";
-    hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
+    rev = "refs/tags/v1.16.1";
+    hash = "sha256-I1wwfn91hdH3jORIKny0Xc73qW2P04MjkVCgcaNnQUE=";
   };
 
    cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    rev = "v3.0.0";
-    sha256 = "sha256-YPD5Sy6SvByjIcGtgeGH80TEKg2BtqJWSg46RvnJChY=";
-   };
+    rev = "v3.1.0";
+    hash = "sha256-mpaiCxiYR1WaSSkcEPTzvcREenJWklD+HRdTT5/pD54=";
+ };
 in
 effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
@@ -92,7 +104,7 @@ effectiveStdenv.mkDerivation rec {
     owner = "microsoft";
     repo = "onnxruntime";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bTW9Pc3rvH+c8VIlDDEtAXyA3sajVyY5Aqr6+SxaMF4=";
+    hash = "sha256-kYjrHxmJrD2yBftyWWqKDUjgMk1tpYxJIgFMHKi/JTI=";
     fetchSubmodules = true;
   };
 
@@ -105,6 +117,16 @@ effectiveStdenv.mkDerivation rec {
     # - use MakeAvailable instead of the low-level Populate,
     # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
     ./0001-eigen-allow-dependency-injection.patch
+    # Incorporate a patch that has landed upstream which exposes new
+    # 'abseil-cpp' libraries & modifies the 're2' CMakeLists to fix a
+    # configuration error that around missing 'gmock' exports.
+    #
+    # This can be dropped once 'onnxruntime' cuts a new release & we update.
+    (fetchpatch {
+      name = "re2-abseil-update-fix";
+      url = "https://github.com/microsoft/onnxruntime/commit/b522df0ae477e59f60acbe6c92c8a64eda96cace.patch";
+      hash = "sha256-H8MfvOiwwmqpWYa+QB3VE+xz7PUR0aPy8bnQehWmpdA=";
+    })
   ] ++ lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
@@ -128,10 +150,12 @@ effectiveStdenv.mkDerivation rec {
 
   buildInputs = [
     eigen
+    glibcLocales
     libpng
-    zlib
     nlohmann_json
     microsoft-gsl
+    pytorch_clog
+    zlib
   ] ++ lib.optionals pythonSupport (with python3Packages; [
     numpy
     pybind11
@@ -171,7 +195,8 @@ effectiveStdenv.mkDerivation rec {
     "-DFETCHCONTENT_QUIET=OFF"
     "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
     "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
-    "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers}"
+    "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=${gtest.src}"
     "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
     "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
     "-DFETCHCONTENT_SOURCE_DIR_ONNX=${onnx}"
