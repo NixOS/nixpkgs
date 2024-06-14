@@ -6,4 +6,4 @@ graphical stuff. It's a very short file that enables
 [](#opt-i18n.supportedLocales) to
 only support the user-selected locale,
 [disables packages' documentation](#opt-documentation.enable),
-and [disables sound](#opt-sound.enable).
+and [disables ALSA](#opt-hardware.alsa.enable).

@@ -83,7 +83,7 @@ in
 
           See {command}`actkbd` {file}`README` for documentation.
 
-          The example shows a piece of what {option}`sound.mediaKeys.enable` does when enabled.
+          The example shows a piece of what {option}`hardware.alsa.mediaKeys.enable` does when enabled.
         '';
       };
 

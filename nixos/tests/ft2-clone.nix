@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       ./common/x11.nix
     ];
 
-    sound.enable = true;
+    hardware.alsa.enable = true;
     environment.systemPackages = [ pkgs.ft2-clone ];
   };
 
