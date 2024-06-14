@@ -18996,6 +18996,12 @@
     githubId = 2666479;
     name = "Y Nguyen";
   };
+  supercoolspy = {
+    email = "nix@cosmics.dev";
+    github = "supercoolspy";
+    githubId = 66487448;
+    name = "Spy";
+  };
   superherointj = {
     email = "sergiomarcelo@yandex.com";
     github = "superherointj";
