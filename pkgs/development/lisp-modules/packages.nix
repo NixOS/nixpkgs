@@ -882,6 +882,17 @@ let
     meta.mainProgram = "qlot";
   };
 
+  misc-extensions = super.misc-extensions.overrideLispAttrs (old: rec {
+    version = "4.0.3";
+    src = pkgs.fetchFromGitLab {
+      domain = "gitlab.common-lisp.net";
+      owner = "misc-extensions";
+      repo = "misc-extensions";
+      rev = "v${version}";
+      hash = "sha256-bDNI4mIaNw/rf7ZwvwolKo6+mUUxsgubGUd/988sHAo=";
+    };
+  });
+
   });
 
 in packages
