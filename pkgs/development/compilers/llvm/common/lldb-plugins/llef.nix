@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "llef";
-  version = "unstable-2023-10-18";
+  version = "1.0.0-unstable-2024-05-01";
 
   src = fetchFromGitHub {
     owner = "foundryzero";
     repo = "llef";
-    rev = "629bd75f44c356f7a3576a6436d3919ce111240d";
-    hash = "sha256-JtCHG89s436Di/6+V7Le4CZnkIPh/RYIllfXEO/B7+8";
+    rev = "f1ebcd4279c697a853cde2f6f0d623bbb4949cd2";
+    hash = "sha256-JibvFOSHp6FYIohsF+aO7+SVLIw0F87hLqSFmh53Q5I=";
   };
 
   dontBuild = true;
