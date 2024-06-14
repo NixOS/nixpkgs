@@ -34,16 +34,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     btrfs-progs
+    coreutils
     qt6.qtbase
     qt6.qtsvg
     qt6.qttools
     qt6.qtwayland
-  ];
+    util-linux
+  ] ++ lib.optionals enableSnapper [ snapper ];
 
 
   prePatch = ''
     substituteInPlace src/util/System.cpp \
       --replace '/bin/bash' "${lib.getExe bash}"
+
+    substituteInPlace src/main.cpp \
+      --replace-fail 'if (!qEnvironmentVariableIsEmpty("DISPLAY"))' ' if(!qEnvironmentVariableIsEmpty("DISPLAY") || !qEnvironmentVariableIsEmpty("WAYLAND_DISPLAY"))'
   ''
   + lib.optionalString enableSnapper ''
     substituteInPlace src/main.cpp \
