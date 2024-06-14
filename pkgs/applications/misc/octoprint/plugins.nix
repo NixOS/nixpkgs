@@ -311,6 +311,32 @@ in
     };
   };
 
+  obico = buildPlugin rec {
+    pname = "obico";
+    version = "2.5.0";
+
+    src = fetchFromGitHub {
+      owner = "TheSpaghettiDetective";
+      repo = "OctoPrint-Obico";
+      rev = version;
+      sha256 = "sha256-cAUXe/lRTqYuWnrRiNDuDjcayL5yV9/PtTd9oeSC8KA=";
+    };
+
+    propagatedBuildInputs = with super; [
+      backoff
+      sentry-sdk
+      bson
+      distro
+    ];
+
+    meta = with lib; {
+      description = "Monitor Octoprint-connected printers with Obico";
+      homepage = "https://www.obico.io/";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
   printtimegenius = buildPlugin rec {
     pname = "printtimegenius";
     version = "2.3.3";
