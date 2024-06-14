@@ -374,52 +374,15 @@ buildPythonPackage rec {
       inline void *aligned_alloc(size_t align, size_t size)'
     '';
 
-  # NOTE(@connorbaker): Though we do not disable Gloo or MPI when building with CUDA support, caution should be taken
-  # when using the different backends. Gloo's GPU support isn't great, and MPI and CUDA can't be used at the same time
-  # without extreme care to ensure they don't lock each other out of shared resources.
-  # For more, see https://github.com/open-mpi/ompi/issues/7733#issuecomment-629806195.
-  preConfigure =
-    optionalString cudaSupport ''
-      export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
-      export CUPTI_INCLUDE_DIR=${cuda_cupti.dev}/include
-      export CUPTI_LIBRARY_DIR=${cuda_cupti.lib}/lib
-    ''
-    + optionalString (cudaSupport && cudnn != null) ''
-      export CUDNN_INCLUDE_DIR=${cudnn.dev}/include
-      export CUDNN_LIB_DIR=${cudnn.lib}/lib
-    ''
-    + optionalString rocmSupport ''
-      export ROCM_PATH=${rocmtoolkit_joined}
-      export ROCM_SOURCE_DIR=${rocmtoolkit_joined}
-      export PYTORCH_ROCM_ARCH="${gpuTargetString}"
-      export CMAKE_CXX_FLAGS="-I${rocmtoolkit_joined}/include -I${rocmtoolkit_joined}/include/rocblas"
-      python tools/amd_build/build_amd.py
-    '';
+  preConfigure = optionalString rocmSupport ''
+    python tools/amd_build/build_amd.py
+  '';
 
   # Use pytorch's custom configurations
   dontUseCmakeConfigure = true;
 
   # causes possible redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
-
-  BUILD_NAMEDTENSOR = setBool true;
-  BUILD_DOCS = setBool buildDocs;
-
-  # We only do an imports check, so do not build tests either.
-  BUILD_TEST = setBool false;
-
-  # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
-  # it by default. PyTorch currently uses its own vendored version
-  # of oneDNN through Intel iDeep.
-  USE_MKLDNN = setBool mklDnnSupport;
-  USE_MKLDNN_CBLAS = setBool mklDnnSupport;
-
-  # Avoid using pybind11 from git submodule
-  # Also avoids pytorch exporting the headers of pybind11
-  USE_SYSTEM_PYBIND11 = true;
-
-  # NB technical debt: building without NNPACK as workaround for missing `six`
-  USE_NNPACK = 0;
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
@@ -442,68 +405,109 @@ buildPythonPackage rec {
     done
   '';
 
-  # Override the (weirdly) wrong version set by default. See
-  # https://github.com/NixOS/nixpkgs/pull/52437#issuecomment-449718038
-  # https://github.com/pytorch/pytorch/blob/v1.0.0/setup.py#L267
-  PYTORCH_BUILD_VERSION = version;
-  PYTORCH_BUILD_NUMBER = 0;
+  # PyTorch doesn't use CMake to get variables -- instead, its setup.py has a bunch of known environment variables
+  # that it captures and uses to configure the build. We need to set these variables in the environment before
+  # running the build.
+  env =
+    {
+      # Pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
+      # https://github.com/pytorch/pytorch/blob/v1.11.0/setup.py#L17
+      NIX_CFLAGS_COMPILE = toString (
+        [
+          "-Wno-unused-command-line-argument"
+          "-Wno-uninitialized"
+          "-Wno-array-bounds"
+          "-Wno-free-nonheap-object"
+          "-Wno-unused-result"
+        ]
+        # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
+        # (upstream seems to have fixed this in the wrong place?)
+        # https://github.com/intel/mkl-dnn/commit/8134d346cdb7fe1695a2aa55771071d455fae0bc
+        # https://github.com/pytorch/pytorch/issues/22346
+        ++ optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ]
+        # Suppress gcc regression: avx512 math function raises uninitialized variable warning
+        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105593
+        # See also: Fails to compile with GCC 12.1.0 https://github.com/pytorch/pytorch/issues/77939
+        ++ optionals (cc.isGNU && versionAtLeast cc.version "12.0.0") [
+          "-Wno-error=maybe-uninitialized"
+          "-Wno-error=uninitialized"
+        ]
+        # Since pytorch 2.0:
+        # gcc-12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:33: error: ‘void operator delete(void*, std::size_t)’
+        # ... called on pointer ‘<unknown>’ with nonzero offset [1, 9223372036854775800] [-Werror=free-nonheap-object]
+        ++ optionals (cc.isGNU && major cc.version == "12") [ "-Wno-error=free-nonheap-object" ]
+        # .../source/torch/csrc/autograd/generated/python_functions_0.cpp:85:3:
+        # error: cast from ... to ... converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+        ++ optionals (cc.isClang && versionAtLeast cc.version "16") [
+          "-Wno-error=cast-function-type-strict"
+          # Suppresses the most spammy warnings.
+          # This is mainly to fix https://github.com/NixOS/nixpkgs/issues/266895.
+        ]
+        ++ optionals rocmSupport [
+          "-Wno-#warnings"
+          "-Wno-cpp"
+          "-Wno-unknown-warning-option"
+          "-Wno-ignored-attributes"
+          "-Wno-deprecated-declarations"
+          "-Wno-defaulted-function-deleted"
+          "-Wno-pass-failed"
+        ]
+        ++ optionals cc.isGNU [
+          "-Wno-maybe-uninitialized"
+          "-Wno-stringop-overflow"
+        ]
+      );
 
-  # In-tree builds of NCCL are not supported.
-  # Use NCCL when cudaSupport is enabled and nccl is available.
-  USE_NCCL = setBool useSystemNccl;
-  USE_SYSTEM_NCCL = USE_NCCL;
-  USE_STATIC_NCCL = USE_NCCL;
+      # Override the (weirdly) wrong version set by default. See
+      # https://github.com/NixOS/nixpkgs/pull/52437#issuecomment-449718038
+      # https://github.com/pytorch/pytorch/blob/v1.0.0/setup.py#L267
+      PYTORCH_BUILD_VERSION = version;
+      PYTORCH_BUILD_NUMBER = "0";
 
-  # Suppress a weird warning in mkl-dnn, part of ideep in pytorch
-  # (upstream seems to have fixed this in the wrong place?)
-  # https://github.com/intel/mkl-dnn/commit/8134d346cdb7fe1695a2aa55771071d455fae0bc
-  # https://github.com/pytorch/pytorch/issues/22346
-  #
-  # Also of interest: pytorch ignores CXXFLAGS uses CFLAGS for both C and C++:
-  # https://github.com/pytorch/pytorch/blob/v1.11.0/setup.py#L17
-  env.NIX_CFLAGS_COMPILE = toString (
-    (
-      optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ]
-      # Suppress gcc regression: avx512 math function raises uninitialized variable warning
-      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105593
-      # See also: Fails to compile with GCC 12.1.0 https://github.com/pytorch/pytorch/issues/77939
-      ++ optionals (cc.isGNU && versionAtLeast cc.version "12.0.0") [
-        "-Wno-error=maybe-uninitialized"
-        "-Wno-error=uninitialized"
-      ]
-      # Since pytorch 2.0:
-      # gcc-12.2.0/include/c++/12.2.0/bits/new_allocator.h:158:33: error: ‘void operator delete(void*, std::size_t)’
-      # ... called on pointer ‘<unknown>’ with nonzero offset [1, 9223372036854775800] [-Werror=free-nonheap-object]
-      ++ optionals (cc.isGNU && major cc.version == "12") [ "-Wno-error=free-nonheap-object" ]
-      # .../source/torch/csrc/autograd/generated/python_functions_0.cpp:85:3:
-      # error: cast from ... to ... converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-      ++ optionals (cc.isClang && versionAtLeast cc.version "16") [
-        "-Wno-error=cast-function-type-strict"
-        # Suppresses the most spammy warnings.
-        # This is mainly to fix https://github.com/NixOS/nixpkgs/issues/266895.
-      ]
-      ++ optionals rocmSupport [
-        "-Wno-#warnings"
-        "-Wno-cpp"
-        "-Wno-unknown-warning-option"
-        "-Wno-ignored-attributes"
-        "-Wno-deprecated-declarations"
-        "-Wno-defaulted-function-deleted"
-        "-Wno-pass-failed"
-      ]
-      ++ [
-        "-Wno-unused-command-line-argument"
-        "-Wno-uninitialized"
-        "-Wno-array-bounds"
-        "-Wno-free-nonheap-object"
-        "-Wno-unused-result"
-      ]
-      ++ optionals cc.isGNU [
-        "-Wno-maybe-uninitialized"
-        "-Wno-stringop-overflow"
-      ]
-    )
-  );
+      BUILD_NAMEDTENSOR = setBool true;
+      BUILD_DOCS = setBool buildDocs;
+
+      # We only do an imports check, so do not build tests either.
+      BUILD_TEST = setBool false;
+
+      # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
+      # it by default. PyTorch currently uses its own vendored version
+      # of oneDNN through Intel iDeep.
+      USE_MKLDNN = setBool mklDnnSupport;
+      USE_MKLDNN_CBLAS = env.USE_MKLDNN;
+
+      # Avoid using pybind11 from git submodule
+      # Also avoids pytorch exporting the headers of pybind11
+      USE_SYSTEM_PYBIND11 = setBool true;
+
+      # NB technical debt: building without NNPACK as workaround for missing `six`
+      USE_NNPACK = setBool false;
+
+      # In-tree builds of NCCL are not supported.
+      # Use NCCL when cudaSupport is enabled and nccl is available.
+      USE_NCCL = setBool useSystemNccl;
+      USE_SYSTEM_NCCL = env.USE_NCCL;
+      USE_STATIC_NCCL = env.USE_NCCL;
+    }
+    // optionalAttrs cudaSupport {
+      # NOTE(@connorbaker): Though we do not disable Gloo or MPI when building with CUDA support, caution should be taken
+      # when using the different backends. Gloo's GPU support isn't great, and MPI and CUDA can't be used at the same
+      # time without extreme care to ensure they don't lock each other out of shared resources.
+      # For more, see https://github.com/open-mpi/ompi/issues/7733#issuecomment-629806195.
+      TORCH_CUDA_ARCH_LIST = gpuTargetString;
+      CUPTI_INCLUDE_DIR = "${cuda_cupti.dev}/include";
+      CUPTI_LIBRARY_DIR = "${cuda_cupti.lib}/lib";
+    }
+    // optionalAttrs (cudaSupport && cudnn != null) {
+      CUDNN_INCLUDE_DIR = "${cudnn.dev}/include";
+      CUDNN_LIB_DIR = "${cudnn.lib}/lib";
+    }
+    // optionalAttrs rocmSupport {
+      ROCM_PATH = "${rocmtoolkit_joined}";
+      ROCM_SOURCE_DIR = env.ROCM_PATH;
+      PYTORCH_ROCM_ARCH = gpuTargetString;
+      CMAKE_CXX_FLAGS = "-I${rocmtoolkit_joined}/include -I${rocmtoolkit_joined}/include/rocblas";
+    };
 
   nativeBuildInputs =
     [
