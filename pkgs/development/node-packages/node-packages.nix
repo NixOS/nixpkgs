@@ -65546,61 +65546,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  bash-language-server = nodeEnv.buildNodePackage {
-    name = "bash-language-server";
-    packageName = "bash-language-server";
-    version = "5.3.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/bash-language-server/-/bash-language-server-5.3.4.tgz";
-      sha512 = "9GEzJVOOyU7ZQbDI/uFc8N9FGuun6UZv1qB9bNUbehIb1gA4pOpkIYtqtfSq0XQSO25hMp8d/tzsmFJmeX+dQg==";
-    };
-    dependencies = [
-      sources."@nodelib/fs.scandir-2.1.5"
-      sources."@nodelib/fs.stat-2.0.5"
-      sources."@nodelib/fs.walk-1.2.8"
-      sources."braces-3.0.3"
-      sources."domino-2.1.6"
-      sources."encoding-0.1.13"
-      sources."fast-glob-3.3.2"
-      sources."fastq-1.17.1"
-      sources."fill-range-7.1.1"
-      sources."fuzzy-search-3.2.1"
-      sources."glob-parent-5.1.2"
-      sources."iconv-lite-0.6.3"
-      sources."is-extglob-2.1.1"
-      sources."is-glob-4.0.3"
-      sources."is-number-7.0.0"
-      sources."merge2-1.4.1"
-      sources."micromatch-4.0.7"
-      sources."node-fetch-2.7.0"
-      sources."picomatch-2.3.1"
-      sources."queue-microtask-1.2.3"
-      sources."reusify-1.0.4"
-      sources."run-parallel-1.2.0"
-      sources."safer-buffer-2.1.2"
-      sources."to-regex-range-5.0.1"
-      sources."tr46-0.0.3"
-      sources."turndown-7.1.3"
-      sources."vscode-jsonrpc-8.0.2"
-      sources."vscode-languageserver-8.0.2"
-      sources."vscode-languageserver-protocol-3.17.2"
-      sources."vscode-languageserver-textdocument-1.0.11"
-      sources."vscode-languageserver-types-3.17.2"
-      sources."web-tree-sitter-0.22.5"
-      sources."webidl-conversions-3.0.1"
-      sources."whatwg-url-5.0.0"
-      sources."zod-3.22.4"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A language server for Bash";
-      homepage = "https://github.com/bash-lsp/bash-language-server#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   bower = nodeEnv.buildNodePackage {
     name = "bower";
     packageName = "bower";

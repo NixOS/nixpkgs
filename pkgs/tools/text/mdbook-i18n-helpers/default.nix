@@ -5,17 +5,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-i18n-helpers";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mdbook-i18n-helpers";
     # TODO fix once upstream uses semver for tags again
     rev = "refs/tags/mdbook-i18n-helpers-${version}";
-    hash = "sha256-5DfQCkNilRB309BXQ/DWrSMX+A64uiZ2CZxPZ0krtys=";
+    hash = "sha256-nIavOBWPyCmCLwPcDbjjG1sa71HObGnhms9sSCAR2iA=";
   };
 
-  cargoHash = "sha256-BrbEW5PD7n9KDaBUjdF60nto6mcfdQ0OUDKcnRH23DA=";
+  cargoHash = "sha256-bBUgsZHvJPwsdM3DjhaoAvIkPXQ6gzPOdfcE5rAnMQk=";
 
   meta = with lib; {
     description = "Helpers for a mdbook i18n workflow based on Gettext";

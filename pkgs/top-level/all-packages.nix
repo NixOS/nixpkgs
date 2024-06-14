@@ -6218,10 +6218,6 @@ with pkgs;
     rainloop-community
     rainloop-standard;
 
-  rav1e = callPackage ../tools/video/rav1e {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   raven-reader = callPackage ../applications/networking/newsreaders/raven-reader { };
 
   razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
@@ -29006,6 +29002,10 @@ with pkgs;
 
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
 
+  ricochet-refresh = callPackage ../by-name/ri/ricochet-refresh/package.nix {
+    protobuf = protobuf_21; # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
+  };
+
   rime-data = callPackage ../data/misc/rime-data { };
 
   roapi-http = callPackage ../servers/roapi/http.nix { };
@@ -32235,8 +32235,6 @@ with pkgs;
   kube-capacity = callPackage ../applications/networking/cluster/kube-capacity { };
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
-
-  fluxcd = callPackage ../applications/networking/cluster/fluxcd { };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
@@ -36196,7 +36194,9 @@ with pkgs;
 
   colobot = callPackage ../games/colobot { };
 
-  corsix-th = callPackage ../games/corsix-th { };
+  corsix-th = callPackage ../games/corsix-th {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreVideo;
+  };
 
   enigma = callPackage ../games/enigma { };
 

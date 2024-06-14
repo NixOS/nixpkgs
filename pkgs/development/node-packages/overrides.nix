@@ -40,14 +40,6 @@ final: prev: {
     };
   };
 
-  bash-language-server = prev.bash-language-server.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/bash-language-server" \
-        --prefix PATH : ${lib.makeBinPath [ pkgs.shellcheck ]}
-    '';
-  };
-
   bower2nix = prev.bower2nix.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''

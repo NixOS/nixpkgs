@@ -1,16 +1,18 @@
-{ lib
-, rust
-, stdenv
-, rustPlatform
-, fetchCrate
-, pkg-config
-, cargo-c
-, libgit2
-, nasm
-, zlib
-, libiconv
-, Security
-, buildPackages
+{
+  lib,
+  rust,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  cargo-c,
+  darwin,
+  libgit2,
+  libiconv,
+  nasm,
+  testers,
+  zlib,
+  rav1e,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,21 +21,25 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-Db7qb7HBAy6lniIiN07iEzURmbfNtuhmgJRv7OUagUM=";
+    hash = "sha256-Db7qb7HBAy6lniIiN07iEzURmbfNtuhmgJRv7OUagUM=";
   };
 
   cargoHash = "sha256-VyQ6n2kIJ7OjK6Xlf0T0GNsBvgESRETzKZDZzAn8ZuY=";
 
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ cargo-c libgit2 nasm ];
-
-  buildInputs = [
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
+  nativeBuildInputs = [
+    cargo-c
+    libgit2
+    nasm
   ];
+
+  buildInputs =
+    [ zlib ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
   # and linking it with cctools ld64.
@@ -43,7 +49,7 @@ rustPlatform.buildRustPackage rec {
 
   checkType = "debug";
 
-  postBuild =  ''
+  postBuild = ''
     ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
@@ -51,7 +57,11 @@ rustPlatform.buildRustPackage rec {
     ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
-  meta = with lib; {
+  passthru = {
+    tests.version = testers.testVersion { package = rav1e; };
+  };
+
+  meta = {
     description = "Fastest and safest AV1 encoder";
     longDescription = ''
       rav1e is an AV1 video encoder. It is designed to eventually cover all use
@@ -61,8 +71,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/xiph/rav1e";
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = [ ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "rav1e";
   };
 }

@@ -56,6 +56,7 @@ in
       services.displayManager.sessionPackages = [ cfg.package ];
 
       xdg.portal = {
+        enable = true;
         extraPortals = [ cfg.portalPackage ];
         configPackages = lib.mkDefault [ cfg.package ];
       };
@@ -70,7 +71,7 @@ in
     (import ./wayland-session.nix {
       inherit lib pkgs;
       enableXWayland = cfg.xwayland.enable;
-      enableWlrPortal = false; # Hyprland has its own portal, wlr is not needed
+      enableWlrPortal = lib.mkDefault false; # Hyprland has its own portal, wlr is not needed
     })
   ]);
 

@@ -586,10 +586,10 @@ with self; {
 
   AnyEventI3 = buildPerlPackage {
     pname = "AnyEvent-I3";
-    version = "0.17";
+    version = "0.19";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSTPLBG/AnyEvent-I3-0.17.tar.gz";
-      hash = "sha256-U4LJhMnxODlfKfDACvgaoMj0t2VYIFXHPt5LE/BKbWM=";
+      url = "mirror://cpan/authors/id/M/MS/MSTPLBG/AnyEvent-I3-0.19.tar.gz";
+      hash = "sha256-G807YNs9VWAUjeeRNT6K8RciZPWoXncZe5/8BB2sSDo=";
     };
     propagatedBuildInputs = [ AnyEvent JSONXS ];
     meta = {

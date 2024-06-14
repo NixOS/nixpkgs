@@ -4368,7 +4368,7 @@ checksum = "a183cf7feeba97b4dd1c0d46788634f6221d87fa961b305bed08c851829efcc0"
 
 [[package]]
 name = "uv"
-version = "0.2.10"
+version = "0.2.11"
 dependencies = [
  "anstream",
  "anyhow",
@@ -4404,7 +4404,6 @@ dependencies = [
  "rustc-hash",
  "serde",
  "serde_json",
- "tempfile",
  "textwrap",
  "thiserror",
  "tikv-jemallocator",
@@ -4545,7 +4544,6 @@ dependencies = [
  "serde",
  "serde_json",
  "sys-info",
- "tempfile",
  "thiserror",
  "tl",
  "tokio",
@@ -4682,6 +4680,7 @@ dependencies = [
  "tokio",
  "tokio-util",
  "toml",
+ "toml_edit",
  "tracing",
  "url",
  "uv-cache",
@@ -4962,7 +4961,7 @@ dependencies = [
 
 [[package]]
 name = "uv-version"
-version = "0.2.10"
+version = "0.2.11"
 
 [[package]]
 name = "uv-virtualenv"

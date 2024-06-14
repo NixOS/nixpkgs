@@ -50,7 +50,10 @@ stdenv.mkDerivation rec {
     desktopName = "IDA Free";
     genericName = "Interactive Disassembler";
     categories = [ "Development" ];
+    startupWMClass = "IDA";
   };
+
+  desktopItems = [ desktopItem ];
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems autoPatchelfHook libsForQt5.wrapQtAppsHook ];
 

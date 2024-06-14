@@ -38,10 +38,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-RX3RZ0Mcyda7C7im1r4QgUxTnp95nfpGgQ2HRxr0s64=";
   };
 
-  patches = [(fetchpatch {
-    url = "https://github.com/tmux/tmux/commit/2d1afa0e62a24aa7c53ce4fb6f1e35e29d01a904.diff";
-    hash = "sha256-mDt5wy570qrUc0clGa3GhZFTKgL0sfnQcWJEJBKAbKs=";
-  })];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/tmux/tmux/commit/2d1afa0e62a24aa7c53ce4fb6f1e35e29d01a904.diff";
+      hash = "sha256-mDt5wy570qrUc0clGa3GhZFTKgL0sfnQcWJEJBKAbKs=";
+    })
+    # this patch is designed for android but FreeBSD exhibits the same error for the same reason
+    (fetchpatch {
+      url = "https://github.com/tmux/tmux/commit/4f5a944ae3e8f7a230054b6c0b26f423fa738e71.patch";
+      hash = "sha256-HlUeU5ZicPe7Ya8A1HpunxfVOE2BF6jOHq3ZqTuU5RE=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
