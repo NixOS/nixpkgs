@@ -193,7 +193,7 @@ let
       ];
       ptx = map (x: "${x}+PTX") real;
     in
-    real ++ ptx;
+    real ++ optionals cudaFlags.enableForwardCompat ptx;
 
   # NOTE: The lists.subtractLists function is perhaps a bit unintuitive. It subtracts the elements
   #   of the first list *from* the second list. That means:
