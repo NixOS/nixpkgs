@@ -3446,7 +3446,6 @@ broken-packages:
   - lenz-template # failure in job https://hydra.nixos.org/build/233206822 at 2023-09-02
   - less-arbitrary # failure in job https://hydra.nixos.org/build/233231412 at 2023-09-02
   - Level0 # failure in job https://hydra.nixos.org/build/233220758 at 2023-09-02
-  - leveldb-haskell # failure in job https://hydra.nixos.org/build/252739424 at 2024-03-16
   - level-monad # failure in job https://hydra.nixos.org/build/233257036 at 2023-09-02
   - levmar # failure in job https://hydra.nixos.org/build/233254731 at 2023-09-02
   - lfst # failure in job https://hydra.nixos.org/build/233240622 at 2023-09-02
@@ -5184,7 +5183,6 @@ broken-packages:
   - scale # failure in job https://hydra.nixos.org/build/233222189 at 2023-09-02
   - scaleimage # failure in job https://hydra.nixos.org/build/233240688 at 2023-09-02
   - scalendar # failure in job https://hydra.nixos.org/build/233206581 at 2023-09-02
-  - scat # failure in job https://hydra.nixos.org/build/252730427 at 2024-03-16
   - scc # failure in job https://hydra.nixos.org/build/233247446 at 2023-09-02
   - scgi # failure in job https://hydra.nixos.org/build/233247314 at 2023-09-02
   - schedevr # failure in job https://hydra.nixos.org/build/233240124 at 2023-09-02
@@ -5240,7 +5238,6 @@ broken-packages:
   - secure-sockets # failure in job https://hydra.nixos.org/build/233254170 at 2023-09-02
   - secureUDP # failure in job https://hydra.nixos.org/build/233215410 at 2023-09-02
   - SegmentTree # failure in job https://hydra.nixos.org/build/233216161 at 2023-09-02
-  - selda # failure in job https://hydra.nixos.org/build/252735635 at 2024-03-16
   - selda-postgresql # failure in job https://hydra.nixos.org/build/245539286 at 2024-01-02
   - selectors # failure in job https://hydra.nixos.org/build/233227433 at 2023-09-02
   - selenium # failure in job https://hydra.nixos.org/build/233214276 at 2023-09-02
