@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./hardcode-paths.patch;
       catchsegv = "${glibc.bin}/bin/catchsegv";
-      bash = "${bash}/bin/bash";
+      bash = lib.getExe bash;
       cp = "${coreutils}/bin/cp";
       dd = "${coreutils}/bin/dd";
       ls = "${coreutils}/bin/ls";
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm = "${coreutils}/bin/rm";
       rmdir = "${coreutils}/bin/rmdir";
       stat = "${coreutils}/bin/stat";
-      sudo = "${sudo}/bin/sudo";
+      sudo = lib.getExe sudo;
     })
 
     # Fix swig not being able to find headers

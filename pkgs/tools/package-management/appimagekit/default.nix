@@ -101,7 +101,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/lib/appimagekit
-    cp "${squashfsTools}/bin/mksquashfs" "$out/lib/appimagekit/"
+    cp "${lib.getExe squashfsTools}" "$out/lib/appimagekit/"
     cp "${desktop-file-utils}/bin/desktop-file-validate" "$out/bin"
 
     wrapProgram "$out/bin/appimagetool" \

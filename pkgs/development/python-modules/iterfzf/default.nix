@@ -31,7 +31,7 @@ buildPythonPackage rec {
       --replace-fail 'build-backend = "build_dist"' '# build-backend = "build_dist"'
 
     substituteInPlace iterfzf/test_iterfzf.py \
-      --replace-fail 'executable="fzf"' 'executable="${fzf}/bin/fzf"'
+      --replace-fail 'executable="fzf"' 'executable="${lib.getExe fzf}"'
   '';
 
   build-system = [

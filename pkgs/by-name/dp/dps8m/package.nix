@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   env = {
     ENV = "${coreutils-full}/bin/env";
-    GREP = "${gnugrep}/bin/grep";
-    SED = "${gnused}/bin/sed";
+    GREP = lib.getExe gnugrep;
+    SED = lib.getExe gnused;
     PREFIX = placeholder "out";
   };
 

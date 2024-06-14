@@ -67,7 +67,7 @@ stdenv.mkDerivation {
     substituteInPlace $out/tools/cli/main.js \
       --replace "@INTERPRETER@" "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --replace "@RPATH@" "${lib.makeLibraryPath [ stdenv.cc.cc zlib curl xz ]}" \
-      --replace "@PATCHELF@" "${patchelf}/bin/patchelf"
+      --replace "@PATCHELF@" "${lib.getExe patchelf}"
 
     # Patch node.
     patchelf \

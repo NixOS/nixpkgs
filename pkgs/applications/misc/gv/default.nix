@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed 's|\<gs\>|${ghostscriptX}/bin/gs|g' -i "src/"*.in
-    sed 's|"gs"|"${ghostscriptX}/bin/gs"|g' -i "src/"*.c
+    sed 's|"gs"|"${lib.getExe ghostscriptX}"|g' -i "src/"*.c
   '';
 
   doCheck = true;

@@ -58,8 +58,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     ''
   ;
 
-  SKIA_GN_COMMAND = "${gn}/bin/gn";
-  SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
+  SKIA_GN_COMMAND = lib.getExe gn;
+  SKIA_NINJA_COMMAND = lib.getExe ninja;
 
   nativeBuildInputs = [
     makeWrapper

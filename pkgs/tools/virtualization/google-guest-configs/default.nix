@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substitute ${./fix-paths.patch} fix-paths.patch \
       --subst-var out \
-      --subst-var-by nvme "${nvme-cli}/bin/nvme" \
+      --subst-var-by nvme "${lib.getExe nvme-cli}" \
       --subst-var-by sh "${stdenv.shell}" \
       --subst-var-by umount "${util-linux}/bin/umount" \
       --subst-var-by logger "${util-linux}/bin/logger"

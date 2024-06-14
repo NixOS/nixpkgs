@@ -27,13 +27,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   installPhase =
-    let unwrapped-bin = "${babashka-unwrapped}/bin/bb"; in
+    let unwrapped-bin = lib.getExe babashka-unwrapped; in
     ''
       mkdir -p $out/clojure_tools
       ln -s -t $out/clojure_tools ${clojureToolsBabashka}/*.edn
       ln -s -t $out/clojure_tools ${clojureToolsBabashka}/libexec/*
 
-      makeWrapper "${babashka-unwrapped}/bin/bb" "$out/bin/bb" \
+      makeWrapper "${lib.getExe babashka-unwrapped}" "$out/bin/bb" \
         --inherit-argv0 \
         --set-default DEPS_CLJ_TOOLS_DIR $out/clojure_tools \
         --set-default JAVA_HOME ${jdkBabashka}
@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '' +
     lib.optionalString withRlwrap ''
       substituteInPlace $out/bin/bb \
-        --replace '"${unwrapped-bin}"' '"${rlwrap}/bin/rlwrap" "${unwrapped-bin}"'
+        --replace '"${unwrapped-bin}"' '"${lib.getExe rlwrap}" "${unwrapped-bin}"'
     '';
 
   installCheckPhase = ''

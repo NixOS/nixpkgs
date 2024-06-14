@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/sonarr-${version}}
     cp -r * $out/share/sonarr-${version}/.
 
-    makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/NzbDrone \
+    makeWrapper "${lib.getExe dotnet-runtime}" $out/bin/NzbDrone \
       --add-flags "$out/share/sonarr-${version}/Sonarr.dll" \
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite openssl icu zlib ]}

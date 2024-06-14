@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/deco --replace "/usr/bin/env scsh" "${scsh}/bin/scsh"
-    substituteInPlace $out/bin/deco --replace "feh" "${feh}/bin/feh"
-    substituteInPlace $out/bin/deco --replace "xdpyinfo" "${xorg.xdpyinfo}/bin/xdpyinfo"
+    substituteInPlace $out/bin/deco --replace "/usr/bin/env scsh" "${lib.getExe scsh}"
+    substituteInPlace $out/bin/deco --replace "feh" "${lib.getExe feh}"
+    substituteInPlace $out/bin/deco --replace "xdpyinfo" "${lib.getExe xorg.xdpyinfo}"
   '';
 
   meta = with lib; {

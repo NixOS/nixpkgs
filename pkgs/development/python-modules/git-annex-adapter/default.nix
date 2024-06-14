@@ -45,7 +45,7 @@ buildPythonPackage rec {
     })
     (substituteAll {
       src = ./git-annex-path.patch;
-      gitAnnex = "${git-annex}/bin/git-annex";
+      gitAnnex = lib.getExe git-annex;
     })
   ];
 

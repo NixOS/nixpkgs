@@ -38,11 +38,11 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py --replace 'lark-parser == 0.8.*' 'lark'
     substituteInPlace dragonfly/actions/keyboard/_x11_xdotool.py \
-      --replace 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"'
+      --replace 'xdotool = "xdotool"'${" "}'xdotool = "${lib.getExe xdotool}"'
     substituteInPlace dragonfly/windows/x11_window.py \
-      --replace 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"' \
-      --replace 'xprop = "xprop"'${" "}'xprop = "${xorg.xprop}/bin/xprop"' \
-      --replace 'wmctrl = "wmctrl"'${" "}'wmctrl = "${wmctrl}/bin/wmctrl"'
+      --replace 'xdotool = "xdotool"'${" "}'xdotool = "${lib.getExe xdotool}"' \
+      --replace 'xprop = "xprop"'${" "}'xprop = "${lib.getExe xorg.xprop}"' \
+      --replace 'wmctrl = "wmctrl"'${" "}'wmctrl = "${lib.getExe wmctrl}"'
   '';
 
   propagatedBuildInputs = [

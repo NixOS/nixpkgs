@@ -24,7 +24,7 @@ mkDerivation rec {
   postPatch = ''
   substituteInPlace youtube_dl.cpp \
     --replace 'QString YoutubeDl::path = QString();' \
-              'QString YoutubeDl::path = QString("${yt-dlp}/bin/yt-dlp");'
+              'QString YoutubeDl::path = QString("${lib.getExe yt-dlp}");'
   '' + lib.optionalString (ffmpeg != null) ''
   substituteInPlace converter_ffmpeg.cpp \
     --replace '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \

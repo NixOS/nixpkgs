@@ -100,8 +100,8 @@ stdenv.mkDerivation (overridable // {
   DEBUG = if enableDebugInfo then 1 else 0; # for Rebar3 compilation
   # The API with `mix local.rebar rebar path` makes a copy of the binary
   # some older dependencies still use rebar.
-  MIX_REBAR = "${rebar}/bin/rebar";
-  MIX_REBAR3 = "${rebar3}/bin/rebar3";
+  MIX_REBAR = lib.getExe rebar;
+  MIX_REBAR3 = lib.getExe rebar3;
 
   ERL_COMPILER_OPTIONS =
     let

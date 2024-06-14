@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation {
     asar extract "$out/opt/${pname}/app.asar" "$out/opt/${pname}/app.asar.unpacked"
     rm           "$out/opt/${pname}/app.asar"
 
-    makeWrapper "${electron}/bin/electron" "$out/bin/${pname}" \
+    makeWrapper "${lib.getExe electron}" "$out/bin/${pname}" \
       --add-flags "$out/opt/${pname}/app.asar.unpacked" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --set-default ELECTRON_IS_DEV 0 \

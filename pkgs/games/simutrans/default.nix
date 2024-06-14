@@ -76,7 +76,7 @@ let
       in ''
         mkdir -p "$out/share/simutrans/${pakName}"
         cd "$out/share/simutrans/${pakName}"
-        "${unzip}/bin/unzip" "${src}"
+        "${lib.getExe unzip}" "${src}"
         chmod -R +w . # some zipfiles need that
 
         set +o pipefail # no idea why it's needed

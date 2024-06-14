@@ -31,7 +31,7 @@ in
 
     buildAndTestSubdir = "server";
 
-    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC = lib.getExe protobuf;
 
     nativeBuildInputs = [ rustfmt rustPlatform.bindgenHook ];
 
@@ -47,7 +47,7 @@ in
 
     cargoSha256 = "sha256-pxan6W/CEsOxv8DbbytEBuIqxWn/C4qT4ze/RnvESOM=";
 
-    PROTOC = "${protobuf}/bin/protoc";
+    PROTOC = lib.getExe protobuf;
 
     nativeBuildInputs = [ rustfmt rustPlatform.bindgenHook ];
 

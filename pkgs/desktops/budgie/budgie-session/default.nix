@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./fix-paths.patch;
       gsettings = "${glib.bin}/bin/gsettings";
       dbusLaunch = "${dbus.lib}/bin/dbus-launch";
-      bash = "${bash}/bin/bash";
+      bash = lib.getExe bash;
     })
   ];
 

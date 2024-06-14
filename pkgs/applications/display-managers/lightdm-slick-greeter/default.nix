@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/slick-greeter.vala \
-      --replace-fail "/usr/bin/numlockx" "${numlockx}/bin/numlockx" \
+      --replace-fail "/usr/bin/numlockx" "${lib.getExe numlockx}" \
       --replace-fail "/usr/share/xsessions/" "/run/current-system/sw/share/xsessions/" \
       --replace-fail "/usr/share/wayland-sessions/" "/run/current-system/sw/share/wayland-sessions/" \
       --replace-fail "/usr/bin/slick-greeter" "${placeholder "out"}/bin/slick-greeter"

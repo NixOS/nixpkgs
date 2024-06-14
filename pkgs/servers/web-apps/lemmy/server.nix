@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
   OPENSSL_INCLUDE_DIR = "${openssl.dev}/include";
 
-  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC = lib.getExe protobuf;
   PROTOC_INCLUDE = "${protobuf}/include";
   nativeBuildInputs = [ protobuf rustfmt ];
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     #define _PATH_SENDMAIL "${sendmailPath}"
 
     #undef _PATH_VI
-    #define _PATH_VI "${vim}/bin/vim"
+    #define _PATH_VI "${lib.getExe vim}"
 
     #undef _PATH_DEFPATH
     #define _PATH_DEFPATH "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin"

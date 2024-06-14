@@ -23,7 +23,7 @@ buildGoModule rec {
   patches = [
     (substituteAll {
       src = ./fix-paths-keybase.patch;
-      gpg = "${gnupg}/bin/gpg";
+      gpg = lib.getExe gnupg;
       gpg2 = "${gnupg}/bin/gpg2";
     })
   ];

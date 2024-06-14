@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pywal/backends/wal.py --subst-var-by convert "${imagemagick}/bin/convert"
-    substituteInPlace pywal/wallpaper.py --subst-var-by feh "${feh}/bin/feh"
+    substituteInPlace pywal/wallpaper.py --subst-var-by feh "${lib.getExe feh}"
   '';
 
   # Invalid syntax

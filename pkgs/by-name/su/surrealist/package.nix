@@ -103,7 +103,7 @@ in stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-3x/GKgVX0mnxTZmINe/qTtr/vI0h5IqPYt9N0l/VGzg=";
     };
 
-    ESBUILD_BINARY_PATH = "${lib.getExe esbuild-18-20}";
+    ESBUILD_BINARY_PATH = lib.getExe esbuild-18-20;
 
     nativeBuildInputs = [ nodejs pnpm.configHook ];
 

@@ -378,7 +378,7 @@ dvipng = stdenv.mkDerivation {
   configureFlags = common.configureFlags
     ++ [ "--with-system-kpathsea" "--with-gs=yes" "--disable-debug" ];
 
-  GS="${ghostscript}/bin/gs";
+  GS="${lib.getExe ghostscript}";
 
   enableParallelBuilding = true;
 };

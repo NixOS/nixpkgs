@@ -37,14 +37,14 @@ buildPythonPackage rec {
       (substituteAll {
         src = ./linux-paths.patch;
         aplay = "${alsa-utils}/bin/aplay";
-        notifysend = "${libnotify}/bin/notify-send";
+        notifysend = lib.getExe libnotify;
       })
     ]
     ++ lib.optionals stdenv.isDarwin [
       # hardcode path to which
       (substituteAll {
         src = ./darwin-paths.patch;
-        which = "${which}/bin/which";
+        which = lib.getExe which;
       })
     ];
 

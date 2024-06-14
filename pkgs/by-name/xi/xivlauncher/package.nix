@@ -31,7 +31,7 @@ in
 
     postPatch = ''
       substituteInPlace lib/FFXIVQuickLauncher/src/XIVLauncher.Common/Game/Patch/Acquisition/Aria/AriaHttpPatchAcquisition.cs \
-        --replace 'ariaPath = "aria2c"' 'ariaPath = "${aria2}/bin/aria2c"'
+        --replace 'ariaPath = "aria2c"' 'ariaPath = "${lib.getExe aria2}"'
     '';
 
     postInstall = ''

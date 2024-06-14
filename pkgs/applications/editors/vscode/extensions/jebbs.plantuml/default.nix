@@ -19,7 +19,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   ];
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."plantuml.java".default = "${plantuml}/bin/plantuml"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."plantuml.java".default = "${lib.getExe plantuml}"' package.json | sponge package.json
   '';
 
   meta = {

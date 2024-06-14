@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     substituteInPlace fullscreen \
-      --replace "wmctrl" "${wmctrl}/bin/wmctrl"
+      --replace "wmctrl" "${lib.getExe wmctrl}"
 
     mkdir -p $out/lib/urxvt/perl
     cp fullscreen $out/lib/urxvt/perl

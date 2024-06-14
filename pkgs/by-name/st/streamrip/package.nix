@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
     sed -i 's#pytest-asyncio = ".*"#pytest-asyncio = "*"#' pyproject.toml
     sed -i 's#tomlkit = ".*"#tomlkit = "*"#' pyproject.toml
 
-    sed -i 's#"ffmpeg"#"${lib.getBin ffmpeg}/bin/ffmpeg"#g' streamrip/client/downloadable.py
+    sed -i 's#"ffmpeg"#"${lib.getExe ffmpeg}"#g' streamrip/client/downloadable.py
   '';
 
   preCheck = ''

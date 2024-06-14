@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-f6iA/nHpKnm3BALoQq8SzdcSzJLCFSferEf69SpgD2Y=";
   };
 
-  server = "${caddy}/bin/caddy";
-  linkcheck = "${linkchecker}/bin/linkchecker";
+  server = lib.getExe caddy;
+  linkcheck = lib.getExe linkchecker;
 
   nativeBuildInputs = [ asciidoctor ];
 

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # Fixes /usr/bin/file: No such file or directory
   preConfigure = ''
     substituteInPlace configure \
-      --replace "/usr/bin/file" "${file}/bin/file"
+      --replace "/usr/bin/file" "${lib.getExe file}"
   '';
 
   # remove forbidden references to $TMPDIR

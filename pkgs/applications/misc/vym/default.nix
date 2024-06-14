@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (substituteAll {
       src = ./000-fix-zip-paths.diff;
-      zipPath = "${zip}/bin/zip";
-      unzipPath = "${unzip}/bin/unzip";
+      zipPath = lib.getExe zip;
+      unzipPath = lib.getExe unzip;
     })
   ];
 

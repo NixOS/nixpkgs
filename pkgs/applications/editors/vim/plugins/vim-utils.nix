@@ -365,7 +365,7 @@ rec {
       name = "vim-gen-doc-hook";
       propagatedBuildInputs = [ vim ];
       substitutions = {
-        vimBinary = "${vim}/bin/vim";
+        vimBinary = lib.getExe vim;
         inherit rtpPath;
       };
     } ./vim-gen-doc-hook.sh) {};
@@ -375,7 +375,7 @@ rec {
       name = "vim-command-check-hook";
       propagatedBuildInputs = [ neovim-unwrapped ];
       substitutions = {
-        vimBinary = "${neovim-unwrapped}/bin/nvim";
+        vimBinary = lib.getExe neovim-unwrapped;
         inherit rtpPath;
       };
     } ./vim-command-check-hook.sh) {};
@@ -385,7 +385,7 @@ rec {
       name = "neovim-require-check-hook";
       propagatedBuildInputs = [ neovim-unwrapped ];
       substitutions = {
-        nvimBinary = "${neovim-unwrapped}/bin/nvim";
+        nvimBinary = lib.getExe neovim-unwrapped;
         inherit rtpPath;
       };
     } ./neovim-require-check-hook.sh) {};

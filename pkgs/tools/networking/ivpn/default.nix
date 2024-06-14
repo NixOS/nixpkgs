@@ -58,7 +58,7 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
     postPatch = ''
       substituteInPlace daemon/service/platform/platform_linux.go \
         --replace 'openVpnBinaryPath = "/usr/sbin/openvpn"' \
-        'openVpnBinaryPath = "${openvpn}/bin/openvpn"' \
+        'openVpnBinaryPath = "${lib.getExe openvpn}"' \
         --replace 'routeCommand = "/sbin/ip route"' \
         'routeCommand = "${iproute2}/bin/ip route"'
 
@@ -73,9 +73,9 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
         --replace 'wgBinaryPath = path.Join(installDir, "wireguard-tools/wg-quick")' \
         'wgBinaryPath = "${wireguard-tools}/bin/wg-quick"' \
         --replace 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \
-        'wgToolBinaryPath = "${wireguard-tools}/bin/wg"' \
+        'wgToolBinaryPath = "${lib.getExe wireguard-tools}"' \
         --replace 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
-        'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"'
+        'dnscryptproxyBinPath = "${lib.getExe dnscrypt-proxy}"'
     '';
 
     postFixup = ''

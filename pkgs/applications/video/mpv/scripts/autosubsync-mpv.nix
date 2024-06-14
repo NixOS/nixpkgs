@@ -20,7 +20,7 @@ buildLua {
   patchPhase = ''
     runHook prePatch
     substituteInPlace autosubsync.lua                                            \
-      --replace-warn 'alass_path = ""' 'alass_path = "${alass}/bin/alass-cli"'   \
+      --replace-warn 'alass_path = ""' 'alass_path = "${lib.getExe alass}"'   \
       --replace-warn 'audio_subsync_tool = "ask"' 'audio_subsync_tool = "alass"' \
       --replace-warn 'altsub_subsync_tool = "ask"' 'altsub_subsync_tool = "alass"'
     runHook postPatch

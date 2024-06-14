@@ -1,8 +1,8 @@
-{ runCommand, kubo }:
+{ lib, runCommand, kubo }:
 
 runCommand "kubo-test-repoVersion" { } ''
   export IPFS_PATH="$TMPDIR"
-  "${kubo}/bin/ipfs" init --empty-repo
+  "${lib.getExe kubo}" init --empty-repo
   declared_repo_version='${kubo.repoVersion}'
   actual_repo_version="$(cat "$IPFS_PATH/version")"
   if [ "$declared_repo_version" != "$actual_repo_version" ]; then

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace scripts/mosh.pl \
-      --subst-var-by ssh "${openssh}/bin/ssh" \
+      --subst-var-by ssh "${lib.getExe openssh}" \
       --subst-var-by mosh-client "$out/bin/mosh-client"
   '';
 

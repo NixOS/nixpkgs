@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      task = "${taskwarrior}/bin/task";
+      task = lib.getExe taskwarrior;
       shell = runtimeShell;
     })
   ];

@@ -81,8 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./fix-paths.patch;
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
-      tecla = "${lib.getBin gnome-tecla}/bin/tecla";
-      unzip = "${lib.getBin unzip}/bin/unzip";
+      tecla = lib.getExe gnome-tecla;
+      unzip = lib.getExe unzip;
     })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection

@@ -31,7 +31,7 @@ let
       {
         displayName = "C++" + versionSuffix;
         argv = [
-          "${xeus-cling}/bin/xcpp"
+          "${lib.getExe xeus-cling}"
         ]
         ++ cling.flags
         ++ [

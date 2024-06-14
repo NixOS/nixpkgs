@@ -20,7 +20,7 @@ perlPackages.buildPerlPackage rec {
   patches = [
     (substituteAll {
       src = ./hardcode-deps.patch;
-      gs = "${ghostscript}/bin/gs";
+      gs = lib.getExe ghostscript;
       # bbox cannot be substituted here because substituteAll doesn't know what
       # will be the $out path of the main derivation
     })

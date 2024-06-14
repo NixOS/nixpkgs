@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-NjNfMyNEliyJQuwWJ/owyKOz+P5gT8Ov0w298I6A/Bk=";
 
   # needed for internal protobuf c wrapper library
-  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC = lib.getExe protobuf;
   PROTOC_INCLUDE = "${protobuf}/include";
 
   nativeBuildInputs = [ makeWrapper ];

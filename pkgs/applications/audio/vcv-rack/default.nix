@@ -173,7 +173,7 @@ stdenv.mkDerivation rec {
 
     # Fix reference to zenity
     substituteInPlace dep/osdialog/osdialog_zenity.c \
-      --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${gnome.zenity}/bin/zenity"'
+      --replace 'zenityBin[] = "zenity"' 'zenityBin[] = "${lib.getExe gnome.zenity}"'
   '';
 
   nativeBuildInputs = [

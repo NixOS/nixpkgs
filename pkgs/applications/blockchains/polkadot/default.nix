@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage rec {
   WASM_BUILD_STD = 0;
 
   OPENSSL_NO_VENDOR = 1;
-  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC = lib.getExe protobuf;
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   meta = with lib; {

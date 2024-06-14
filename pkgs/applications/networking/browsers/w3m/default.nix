@@ -33,8 +33,8 @@ in stdenv.mkDerivation rec {
 
   # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
   # the correct paths.
-  PERL = "${perl}/bin/perl";
-  MAN = "${man}/bin/man";
+  PERL = lib.getExe perl;
+  MAN = lib.getExe man;
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 

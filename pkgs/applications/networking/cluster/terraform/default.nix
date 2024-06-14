@@ -146,7 +146,7 @@ let
 
               # Create a wrapper for terraform to point it to the plugins dir.
               mkdir -p $out/bin/
-              makeWrapper "${terraform}/bin/terraform" "$out/bin/terraform" \
+              makeWrapper "${lib.getExe terraform}" "$out/bin/terraform" \
                 --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
                 --prefix PATH : "${lib.makeBinPath wrapperInputs}"
             '';

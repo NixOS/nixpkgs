@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace debmany/debmany \
-      --replace "/usr/bin/dialog" "${dialog}/bin/dialog" \
+      --replace "/usr/bin/dialog" "${lib.getExe dialog}" \
       --replace "/usr/bin/whiptail" "${python3.pkgs.snack}/bin/whiptail"
 
     substituteInPlace dman \
-      --replace "curl" "${curl}/bin/curl"
+      --replace "curl" "${lib.getExe curl}"
   '';
 
   nativeBuildInputs = [

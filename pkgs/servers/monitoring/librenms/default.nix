@@ -70,7 +70,7 @@ in phpPackage.buildComposerProject rec {
       --replace '"default": "traceroute",' '"default": "/run/wrappers/bin/traceroute",' \
       --replace '"default": "/usr/bin/dot",' '"default": "${graphviz}/bin/dot",' \
       --replace '"default": "/usr/bin/ipmitool",' '"default": "${ipmitool}/bin/ipmitool",' \
-      --replace '"default": "/usr/bin/mtr",' '"default": "${mtr}/bin/mtr",' \
+      --replace '"default": "/usr/bin/mtr",' '"default": "${lib.getExe mtr}",' \
       --replace '"default": "/usr/bin/nfdump",' '"default": "${nfdump}/bin/nfdump",' \
       --replace '"default": "/usr/bin/nmap",' '"default": "${nmap}/bin/nmap",' \
       --replace '"default": "/usr/bin/sfdp",' '"default": "${graphviz}/bin/sfdp",' \
@@ -79,9 +79,9 @@ in phpPackage.buildComposerProject rec {
       --replace '"default": "/usr/bin/snmptranslate",' '"default": "${net-snmp}/bin/snmptranslate",' \
       --replace '"default": "/usr/bin/snmpwalk",' '"default": "${net-snmp}/bin/snmpwalk",' \
       --replace '"default": "/usr/bin/virsh",' '"default": "${libvirt}/bin/virsh",' \
-      --replace '"default": "/usr/bin/whois",' '"default": "${whois}/bin/whois",' \
+      --replace '"default": "/usr/bin/whois",' '"default": "${lib.getExe whois}",' \
       --replace '"default": "/usr/lib/nagios/plugins",' '"default": "${monitoring-plugins}/libexec",' \
-      --replace '"default": "/usr/sbin/sendmail",' '"default": "${system-sendmail}/bin/sendmail",'
+      --replace '"default": "/usr/sbin/sendmail",' '"default": "${lib.getExe system-sendmail}",'
 
     substituteInPlace $out/LibreNMS/wrapper.py --replace '/usr/bin/env php' '${phpPackage}/bin/php'
     substituteInPlace $out/LibreNMS/__init__.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'

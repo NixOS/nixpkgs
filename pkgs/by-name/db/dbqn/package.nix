@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/${pname}
     mv BQN.jar $out/share/${pname}/
 
-    makeWrapper "${lib.getBin jdk}/bin/java" "$out/bin/dbqn" \
+    makeWrapper "${lib.getExe jdk}" "$out/bin/dbqn" \
       --add-flags "-jar $out/share/${pname}/BQN.jar"
   '') + ''
     ln -s $out/bin/dbqn $out/bin/bqn

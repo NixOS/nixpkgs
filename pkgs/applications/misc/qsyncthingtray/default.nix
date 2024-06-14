@@ -33,13 +33,13 @@ mkDerivation rec {
   postPatch = ''
     ${lib.optionalString stdenv.isLinux ''
       substituteInPlace includes/platforms/linux/posixUtils.hpp \
-        --replace '"/usr/local/bin/syncthing"'         '"${syncthing}/bin/syncthing"' \
+        --replace '"/usr/local/bin/syncthing"'         '"${lib.getExe syncthing}"' \
         --replace '"pgrep -x'                          '"${procps}/bin/pgrep -x'
     ''}
 
     ${lib.optionalString stdenv.isDarwin ''
       substituteInPlace includes/platforms/darwin/macUtils.hpp \
-        --replace '"/usr/local/bin/syncthing"'         '"${syncthing}/bin/syncthing"'
+        --replace '"/usr/local/bin/syncthing"'         '"${lib.getExe syncthing}"'
     ''}
   '';
 

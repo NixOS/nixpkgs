@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/${pname}
     mv APL.jar $out/share/${pname}/
 
-    makeWrapper "${lib.getBin jdk}/bin/java" "$out/bin/dapl" \
+    makeWrapper "${lib.getExe jdk}" "$out/bin/dapl" \
       --add-flags "-jar $out/share/${pname}/APL.jar"
   '') + ''
     ln -s $out/bin/dapl $out/bin/apl

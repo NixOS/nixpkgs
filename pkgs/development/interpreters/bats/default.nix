@@ -51,7 +51,7 @@ resholve.mkDerivation rec {
         "libexec/bats-core/*"
         "lib/bats-core/*"
       ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = [
         bash
         coreutils
@@ -99,8 +99,8 @@ resholve.mkDerivation rec {
         "$BATS_TEST_NAME" = true;
         "${placeholder "out"}/libexec/bats-core/bats-exec-test" = true;
         "$BATS_LINE_REFERENCE_FORMAT" = "comma_line";
-        "$BATS_LOCKING_IMPLEMENTATION" = "${flock}/bin/flock";
-        "$parallel_binary_name" = "${parallel}/bin/parallel";
+        "$BATS_LOCKING_IMPLEMENTATION" = lib.getExe flock;
+        "$parallel_binary_name" = lib.getExe parallel;
         "${placeholder "out"}/libexec/bats-core/bats-preprocess" = true;
       };
       execer = [
@@ -213,7 +213,7 @@ resholve.mkDerivation rec {
 
         # test generates file with absolute shebang dynamically
         substituteInPlace test/install.bats --replace \
-          "/usr/bin/env bash" "${bash}/bin/bash"
+          "/usr/bin/env bash" "${lib.getExe bash}"
 
         ${bats}/bin/bats test
         touch $out

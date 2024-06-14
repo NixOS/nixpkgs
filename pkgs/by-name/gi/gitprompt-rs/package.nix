@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
 
   postPatch = ''
     substituteInPlace src/main.rs \
-      --replace 'Command::new("git")' 'Command::new("${git}/bin/git")'
+      --replace 'Command::new("git")' 'Command::new("${lib.getExe git}")'
   '';
 
   meta = {

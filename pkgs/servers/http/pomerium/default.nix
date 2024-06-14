@@ -67,7 +67,7 @@ buildGoModule rec {
         ProjectURL = "github.com/pomerium/pomerium";
       };
       "github.com/pomerium/pomerium/pkg/envoy" = {
-        OverrideEnvoyPath = "${envoy}/bin/envoy";
+        OverrideEnvoyPath = lib.getExe envoy;
       };
     };
     concatStringsSpace = list: concatStringsSep " " list;

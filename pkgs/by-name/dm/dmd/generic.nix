@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
     rm dmd/compiler/test/dshell/test6952.d
   '' + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
-    substituteInPlace dmd/compiler/test/dshell/test6952.d --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+    substituteInPlace dmd/compiler/test/dshell/test6952.d --replace-fail "/usr/bin/env bash" "${lib.getExe bash}"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
   '' + lib.optionalString stdenv.isDarwin ''

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # for dlopen-ing
   postPatch = ''
     substituteInPlace lib/libstuff/x11/xft.c --replace "libXft.so" "$(pkg-config --variable=libdir xft)/libXft.so.2"
-    substituteInPlace cmd/wmii.sh.sh --replace "\$(which which)" "${which}/bin/which"
+    substituteInPlace cmd/wmii.sh.sh --replace "\$(which which)" "${lib.getExe which}"
   '';
 
   postConfigure = ''

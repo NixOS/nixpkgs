@@ -495,7 +495,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "version-tag" version)
     (lib.mesonOption "mode" "release")
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
-    (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
+    (lib.mesonOption "debug-shell" "${lib.getExe bashInteractive}")
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     # Use cgroupsv2. This is already the upstream default, but better be explicit.
     (lib.mesonOption "default-hierarchy" "unified")
@@ -657,7 +657,7 @@ stdenv.mkDerivation (finalAttrs: {
       binaryReplacements = [
         {
           search = "/usr/bin/getent";
-          replacement = "${getent}/bin/getent";
+          replacement = lib.getExe getent;
           where = [ "src/nspawn/nspawn-setuid.c" ];
         }
         {
@@ -769,7 +769,7 @@ stdenv.mkDerivation (finalAttrs: {
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
 
       substituteInPlace src/import/pull-tar.c \
-        --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${gnutar}/bin/tar"'
+        --replace 'wait_for_terminate_and_check("tar"' 'wait_for_terminate_and_check("${lib.getExe gnutar}"'
     '';
 
   # These defines are overridden by CFLAGS and would trigger annoying

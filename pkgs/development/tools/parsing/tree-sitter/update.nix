@@ -462,7 +462,7 @@ let
   updateImpl = passArgs "updateImpl-with-args"
     {
       binaries = {
-        curl = "${curl}/bin/curl";
+        curl = lib.getExe curl;
         nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
         printf = "${coreutils}/bin/printf";
       };

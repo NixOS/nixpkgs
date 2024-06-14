@@ -38,7 +38,7 @@ mkDerivation rec {
 
   postPatch = ''
     sed -i 's,/python''${PYTHON_VERSION_MAJOR}/dist-packages,/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages,g' CMakeLists.txt
-    sed -i 's, executable_name = .*, executable_name = "${curaengine}/bin/CuraEngine",' plugins/CuraEngineBackend/CuraEngineBackend.py
+    sed -i 's, executable_name = .*, executable_name = "${lib.getExe curaengine}",' plugins/CuraEngineBackend/CuraEngineBackend.py
   '';
 
   postInstall = ''

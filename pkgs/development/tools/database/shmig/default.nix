@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     substituteInPlace shmig \
       --replace "\`which mysql\`" "${lib.optionalString withMySQL "${mariadb.client}/bin/mysql"}" \
       --replace "\`which psql\`" "${lib.optionalString withPSQL "${postgresql}/bin/psql"}" \
-      --replace "\`which sqlite3\`" "${lib.optionalString withSQLite "${sqlite}/bin/sqlite3"}" \
+      --replace "\`which sqlite3\`" "${lib.optionalString withSQLite "${lib.getExe sqlite}"}" \
       --replace "awk" "${gawk}/bin/awk" \
-      --replace "grep" "${gnugrep}/bin/grep" \
-      --replace "find" "${findutils}/bin/find" \
-      --replace "sed" "${gnused}/bin/sed"
+      --replace "grep" "${lib.getExe gnugrep}" \
+      --replace "find" "${lib.getExe findutils}" \
+      --replace "sed" "${lib.getExe gnused}"
   '';
 
   preBuild = ''

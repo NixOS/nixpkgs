@@ -44,8 +44,8 @@ buildPythonPackage rec {
       (substituteAll (
         {
           src = ./paths.patch;
-          exiftool = "${exiftool}/bin/exiftool";
-          ffmpeg = "${ffmpeg}/bin/ffmpeg";
+          exiftool = lib.getExe exiftool;
+          ffmpeg = lib.getExe ffmpeg;
         }
         // lib.optionalAttrs dolphinIntegration { kdialog = "${plasma5Packages.kdialog}/bin/kdialog"; }
       ))
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       (substituteAll {
         src = ./bubblewrap-path.patch;
-        bwrap = "${bubblewrap}/bin/bwrap";
+        bwrap = lib.getExe bubblewrap;
       })
     ];
 

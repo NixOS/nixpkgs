@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     rm -r work; ln -sf /run/atlassian-jira/work/ .
     rm -r temp; ln -sf /run/atlassian-jira/temp/ .
     substituteInPlace bin/check-java.sh \
-      --replace "awk" "${gawk}/bin/gawk"
+      --replace "awk" "${lib.getExe gawk}"
   '' + lib.optionalString enableSSO ''
     substituteInPlace atlassian-jira/WEB-INF/classes/seraph-config.xml \
       --replace com.atlassian.jira.security.login.JiraSeraphAuthenticator \

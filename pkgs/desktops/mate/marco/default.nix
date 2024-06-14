@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/core/util.c \
-      --replace-fail 'argvl[i++] = "zenity"' 'argvl[i++] = "${gnome.zenity}/bin/zenity"'
+      --replace-fail 'argvl[i++] = "zenity"' 'argvl[i++] = "${lib.getExe gnome.zenity}"'
   '';
 
   env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";

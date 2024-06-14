@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     (substituteAll {
       src = ./fix-paths.patch;
       cat = "${coreutils}/bin/cat";
-      lsof = "${lsof}/bin/lsof";
+      lsof = lib.getExe lsof;
       pgrep = "${procps}/bin/pgrep";
       xkbcomp = "${xkbcomp}/bin/xkbcomp";
     })

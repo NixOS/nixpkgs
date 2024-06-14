@@ -76,7 +76,7 @@ let
     # wrapper with most arguments we need, excluding those that cause problems to
     # generate rplugin.vim, but still required for the final wrapper.
     finalMakeWrapperArgs =
-      [ "${neovim-unwrapped}/bin/nvim" "${placeholder "out"}/bin/nvim" ]
+      [ "${lib.getExe neovim-unwrapped}" "${placeholder "out"}/bin/nvim" ]
       ++ [ "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim" ]
       ++ lib.optionals finalAttrs.wrapRc [ "--add-flags" "-u ${writeText "init.lua" rcContent}" ]
       ++ finalAttrs.generatedWrapperArgs
@@ -125,7 +125,7 @@ let
       ''
       + lib.optionalString (manifestRc != null) (let
         manifestWrapperArgs =
-          [ "${neovim-unwrapped}/bin/nvim" "${placeholder "out"}/bin/nvim-wrapper" ] ++ finalAttrs.generatedWrapperArgs;
+          [ "${lib.getExe neovim-unwrapped}" "${placeholder "out"}/bin/nvim-wrapper" ] ++ finalAttrs.generatedWrapperArgs;
       in ''
         echo "Generating remote plugin manifest"
         export NVIM_RPLUGIN_MANIFEST=$out/rplugin.vim

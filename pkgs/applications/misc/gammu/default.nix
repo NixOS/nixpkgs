@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ./systemd.patch
     (substituteAll {
       src = ./gammu-config-dialog.patch;
-      dialog = "${dialog}/bin/dialog";
+      dialog = lib.getExe dialog;
     })
   ];
 

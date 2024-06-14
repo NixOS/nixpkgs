@@ -76,7 +76,7 @@ buildPythonPackage rec {
     nccl
   ];
 
-  NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
+  NVCC = lib.getExe cudaPackages.cuda_nvcc; # FIXME: splicing/buildPackages
   CUDA_PATH = "${cudatoolkit-joined}";
   LDFLAGS = "-L${cudaPackages.cuda_cudart}/lib/stubs";
 

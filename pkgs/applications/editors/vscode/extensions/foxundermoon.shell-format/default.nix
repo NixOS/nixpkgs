@@ -21,7 +21,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."shellformat.path".default = "${shfmt}/bin/shfmt"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."shellformat.path".default = "${lib.getExe shfmt}"' package.json | sponge package.json
   '';
 
   meta = {

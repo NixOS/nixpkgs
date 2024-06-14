@@ -33,7 +33,7 @@ in {
     cp -r ./resources/* -t $out/lib/
     cp LICENSE* $out/
     install -Dm644 ${icon} $out/share/pixmaps/affine.png
-    makeWrapper "${electron}/bin/electron" $out/bin/affine \
+    makeWrapper "${lib.getExe electron}" $out/bin/affine \
       --inherit-argv0 \
       --add-flags $out/lib/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \

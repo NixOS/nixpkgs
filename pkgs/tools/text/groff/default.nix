@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
       --replace "@PNMTOPS_NOSETPAGE@" "${lib.getBin netpbm}/bin/pnmtops -nosetpage"
   '' + lib.optionalString (enableGhostscript || enableHtml) ''
     substituteInPlace contrib/pdfmark/pdfroff.sh \
-      --replace '$GROFF_GHOSTSCRIPT_INTERPRETER' "${lib.getBin ghostscript}/bin/gs" \
-      --replace '$GROFF_AWK_INTERPRETER' "${lib.getBin gawk}/bin/gawk"
+      --replace '$GROFF_GHOSTSCRIPT_INTERPRETER' "${lib.getExe ghostscript}" \
+      --replace '$GROFF_AWK_INTERPRETER' "${lib.getExe gawk}"
   '';
 
   strictDeps = true;

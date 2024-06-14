@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     substituteInPlace src/git.rs \
         --replace 'std::process::Command::new("git")' \
-        'std::process::Command::new("${git}/bin/git")'
+        'std::process::Command::new("${lib.getExe git}")'
     substituteInPlace tests/lib.rs \
         --replace 'std::process::Command::new("git")' \
-        'std::process::Command::new("${git}/bin/git")'
+        'std::process::Command::new("${lib.getExe git}")'
   '';
 
   meta = with lib; {

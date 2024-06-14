@@ -113,7 +113,7 @@ rustPlatform.buildRustPackage {
 
   postPatch = ''
     substituteInPlace windmill-worker/src/bash_executor.rs \
-      --replace '"/bin/bash"' '"${bash}/bin/bash"'
+      --replace '"/bin/bash"' '"${lib.getExe bash}"'
 
     substituteInPlace windmill-api/src/lib.rs \
       --replace 'unknown-version' 'v${version}'
@@ -154,9 +154,9 @@ rustPlatform.buildRustPackage {
       --prefix PATH : ${lib.makeBinPath [go pythonEnv deno nsjail bash]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [stdenv.cc.cc.lib]} \
       --set PYTHON_PATH "${pythonEnv}/bin/python3" \
-      --set GO_PATH "${go}/bin/go" \
-      --set DENO_PATH "${deno}/bin/deno" \
-      --set NSJAIL_PATH "${nsjail}/bin/nsjail"
+      --set GO_PATH "${lib.getExe go}" \
+      --set DENO_PATH "${lib.getExe deno}" \
+      --set NSJAIL_PATH "${lib.getExe nsjail}"
   '';
 
   meta = {

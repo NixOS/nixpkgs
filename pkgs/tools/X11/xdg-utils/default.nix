@@ -36,7 +36,7 @@ let
   solutions = [
     {
       scripts = [ "bin/xdg-desktop-icon" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [ xdg-user-dirs ];
       execer = [
         "cannot:${xdg-user-dirs}/bin/xdg-user-dir"
@@ -52,7 +52,7 @@ let
 
     {
       scripts = [ "bin/xdg-desktop-menu" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [ gawk ];
       fake.external = commonFakes;
       keep."$KDE_SESSION_VERSION" = true;
@@ -61,7 +61,7 @@ let
 
     {
       scripts = [ "bin/xdg-email" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [ gawk glib.bin "${placeholder "out"}/bin" ];
       execer = [
         "cannot:${placeholder "out"}/bin/xdg-mime"
@@ -89,7 +89,7 @@ let
 
     {
       scripts = [ "bin/xdg-icon-resource" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps;
       fake.external = commonFakes;
       keep."$KDE_SESSION_VERSION" = true;
@@ -98,7 +98,7 @@ let
 
     {
       scripts = [ "bin/xdg-mime" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [ file gawk ];
       # These are desktop-specific, so we don't want xdg-utils to be able to
       # call them when in a different setup.
@@ -130,7 +130,7 @@ let
 
     {
       scripts = [ "bin/xdg-open" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [ nettools glib.bin "${placeholder "out"}/bin" ];
       execer = [
         "cannot:${placeholder "out"}/bin/xdg-mime"
@@ -166,7 +166,7 @@ let
 
     {
       scripts = [ "bin/xdg-screensaver" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [ nettools perl procmail procps ];
       # These are desktop-specific, so we don't want xdg-utils to be able to
       # call them when in a different setup.
@@ -193,7 +193,7 @@ let
 
     {
       scripts = [ "bin/xdg-settings" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [ jq "${placeholder "out"}/bin" ];
       execer = [
         "cannot:${placeholder "out"}/bin/xdg-mime"
@@ -220,7 +220,7 @@ let
 
     {
       scripts = [ "bin/xdg-terminal" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = commonDeps ++ [ bash glib.bin which ];
       fake.external = commonFakes ++ [
         "gconftool-2"    # GNOME

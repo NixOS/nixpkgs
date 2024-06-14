@@ -27,7 +27,7 @@ buildPythonPackage rec {
     for file in $(find google_compute_engine -type f); do
       substituteInPlace "$file" \
         --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl" \
-        --replace /bin/bash "${bashInteractive}/bin/bash" \
+        --replace /bin/bash "${lib.getExe bashInteractive}" \
         --replace /sbin/hwclock "${util-linux}/bin/hwclock"
       # SELinux tool ???  /sbin/restorecon
     done

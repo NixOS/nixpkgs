@@ -63,14 +63,14 @@ in stdenv.mkDerivation (finalAttrs: {
     # Hardcode paths
     (substituteAll {
       src = ./fix-paths.patch;
-      brz = "${breezy}/bin/brz";
+      brz = lib.getExe breezy;
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
-      tar = "${gnutar}/bin/tar";
-      unzip = "${unzip}/bin/unzip";
+      tar = lib.getExe gnutar;
+      unzip = lib.getExe unzip;
       rpm2cpio = "${rpm}/bin/rpm2cpio";
-      cpio = "${cpio}/bin/cpio";
-      git = "${gitMinimal}/bin/git";
+      cpio = lib.getExe cpio;
+      git = lib.getExe gitMinimal;
       rofilesfuse = "${ostree}/bin/rofiles-fuse";
       strip = "${binutils}/bin/strip";
       eustrip = "${elfutils}/bin/eu-strip";

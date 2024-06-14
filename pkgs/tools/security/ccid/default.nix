@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     install -Dm 0444 -t $out/lib/udev/rules.d src/92_pcscd_ccid.rules
     substituteInPlace $out/lib/udev/rules.d/92_pcscd_ccid.rules \
-      --replace "/usr/sbin/pcscd" "${pcsclite}/bin/pcscd"
+      --replace "/usr/sbin/pcscd" "${lib.getExe pcsclite}"
   '';
 
   # The resulting shared object ends up outside of the default paths which are

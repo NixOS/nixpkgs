@@ -19,7 +19,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   ];
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration.properties."nixpkgs-fmt.path".default = "${nixpkgs-fmt}/bin/nixpkgs-fmt"' package.json | sponge package.json
+    jq '.contributes.configuration.properties."nixpkgs-fmt.path".default = "${lib.getExe nixpkgs-fmt}"' package.json | sponge package.json
   '';
   meta = {
     license = lib.licenses.mit;

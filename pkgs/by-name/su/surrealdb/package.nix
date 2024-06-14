@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC = lib.getExe protobuf;
   PROTOC_INCLUDE = "${protobuf}/include";
 
   ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";

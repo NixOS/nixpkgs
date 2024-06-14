@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       --replace "PREFIX=." "PREFIX=$out"
     substituteInPlace snis_text_to_speech.sh \
       --replace "pico2wave" "${sox}/bin/pico2wave" \
-      --replace "espeak" "${espeak-classic}/bin/espeak" \
+      --replace "espeak" "${lib.getExe espeak-classic}" \
       --replace "play" "${sox}/bin/play" \
       --replace "aplay" "${alsa-utils}/bin/aplay" \
       --replace "/bin/rm" "${coreutils}/bin/rm"

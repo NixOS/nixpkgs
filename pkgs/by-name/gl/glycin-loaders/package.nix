@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     glycinPathsPatch = substituteAll {
       src = ./fix-glycin-paths.patch;
-      bwrap = "${bubblewrap}/bin/bwrap";
+      bwrap = lib.getExe bubblewrap;
     };
   };
 

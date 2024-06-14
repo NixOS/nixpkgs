@@ -250,7 +250,7 @@ in
     preConfigure = ''
       # PrintTimeGenius ships with marlin-calc binaries for multiple architectures
       rm */analyzers/marlin-calc*
-      sed 's@"{}.{}".format(binary_base_name, machine)@"${marlin-calc}/bin/marlin-calc"@' -i */analyzers/analyze_progress.py
+      sed 's@"{}.{}".format(binary_base_name, machine)@"${lib.getExe marlin-calc}"@' -i */analyzers/analyze_progress.py
     '';
 
     meta = with lib; {

@@ -596,7 +596,7 @@ in python.pkgs.buildPythonApplication rec {
     # Patch path to ffmpeg binary
     (substituteAll {
       src = ./patches/ffmpeg-path.patch;
-      ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
+      ffmpeg = lib.getExe ffmpeg-headless;
     })
   ];
 

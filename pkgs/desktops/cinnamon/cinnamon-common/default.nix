@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
       substituteInPlace ./bin/Spices.py                   --replace "subprocess.run(['/usr/bin/" "subprocess.run(['" \
                                                           --replace 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
                                                           --replace "msgfmt" "${gettext}/bin/msgfmt"
-      substituteInPlace ./modules/cs_info.py              --replace "lspci" "${pciutils}/bin/lspci"
+      substituteInPlace ./modules/cs_info.py              --replace "lspci" "${lib.getExe pciutils}"
       substituteInPlace ./modules/cs_themes.py            --replace "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
     popd
 

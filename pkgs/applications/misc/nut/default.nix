@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/systemd/system-shutdown/nutshutdown \
-      --replace /bin/sed "${gnused}/bin/sed" \
+      --replace /bin/sed "${lib.getExe gnused}" \
       --replace /bin/sleep "${coreutils}/bin/sleep" \
       --replace /bin/systemctl "${systemd}/bin/systemctl"
 

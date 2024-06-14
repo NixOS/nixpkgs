@@ -14,7 +14,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   postPatch = ''
     substituteInPlace extension.js \
-      --replace-fail '"xsel"' '"${xsel}/bin/xsel"'
+      --replace-fail '"xsel"' '"${lib.getExe xsel}"'
   '';
 
   meta = {

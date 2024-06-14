@@ -1,7 +1,7 @@
 { lib, stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, xterm, xcbuild, makeWrapper
 , quartz-wm, fontconfig, xlsfonts, xfontsel
 , ttf_bitstream_vera, freefont_ttf, liberation_ttf
-, shell ? "${bashInteractive}/bin/bash"
+, shell ? "${lib.getExe bashInteractive}"
 , unfreeFonts ? false
 , extraFontDirs ? []
 }:
@@ -148,7 +148,7 @@ in stdenv.mkDerivation {
     cp ${./10-fontdir.sh} $out/etc/X11/xinit/xinitrc.d/10-fontdir.sh
     substituteInPlace $out/etc/X11/xinit/xinitrc.d/10-fontdir.sh \
       --subst-var-by "SYSTEM_FONTS" "${fonts}/share/X11-fonts/" \
-      --subst-var-by "XSET"         "${xorg.xset}/bin/xset"
+      --subst-var-by "XSET"         "${lib.getExe xorg.xset}"
 
     cp ${./98-user.sh} $out/etc/X11/xinit/xinitrc.d/98-user.sh
 

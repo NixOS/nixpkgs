@@ -45,11 +45,11 @@ rustPlatform.buildRustPackage rec {
       ./test/cwd/.mise/tasks/filetask
 
     substituteInPlace ./src/env_diff.rs \
-      --replace '"bash"' '"${bash}/bin/bash"'
+      --replace '"bash"' '"${lib.getExe bash}"'
 
     substituteInPlace ./src/cli/direnv/exec.rs \
       --replace '"env"' '"${coreutils}/bin/env"' \
-      --replace 'cmd!("direnv"' 'cmd!("${direnv}/bin/direnv"'
+      --replace 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
   '';
 
   checkFlags = [

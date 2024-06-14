@@ -49,8 +49,8 @@ let
       # Replace LLVM_BINDIR with a non-existing path to give a hard error when it's used.
       substituteInPlace src/afl-cc.c \
         --replace "CLANGPP_BIN" '"${clang}/bin/clang++"' \
-        --replace "CLANG_BIN" '"${clang}/bin/clang"' \
-        --replace '"gcc"' '"${gcc}/bin/gcc"' \
+        --replace "CLANG_BIN" '"${lib.getExe clang}"' \
+        --replace '"gcc"' '"${lib.getExe gcc}"' \
         --replace '"g++"' '"${gcc}/bin/g++"' \
         --replace 'getenv("AFL_PATH")' "(getenv(\"AFL_PATH\") ? getenv(\"AFL_PATH\") : \"$out/lib/afl\")"
 
@@ -63,7 +63,7 @@ let
         --replace 'LLVM_BINDIR = ' 'LLVM_BINDIR = ${clang}/bin/'
 
       substituteInPlace GNUmakefile.llvm \
-        --replace "\$(LLVM_BINDIR)/clang" "${clang}/bin/clang"
+        --replace "\$(LLVM_BINDIR)/clang" "${lib.getExe clang}"
     '';
 
     env.NIX_CFLAGS_COMPILE = toString [

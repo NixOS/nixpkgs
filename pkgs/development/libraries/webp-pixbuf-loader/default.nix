@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     # It assumes gdk-pixbuf-thumbnailer can find the webp loader in the loaders.cache referenced by environment variable, breaking containment.
     # So we replace it with a wrapped executable.
     mkdir -p "$out/bin"
-    makeWrapper "${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer" "$out/libexec/gdk-pixbuf-thumbnailer-webp" \
+    makeWrapper "${lib.getExe gdk-pixbuf}" "$out/libexec/gdk-pixbuf-thumbnailer-webp" \
       --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
   '';
 

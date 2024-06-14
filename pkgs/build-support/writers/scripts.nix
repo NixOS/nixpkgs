@@ -186,8 +186,8 @@ rec {
   #     ''
   writeBash = name: argsOrScript:
     if lib.isAttrs argsOrScript && ! lib.isDerivation argsOrScript
-    then makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.bash}"; }) name
-    else makeScriptWriter { interpreter = "${lib.getExe pkgs.bash}"; } name argsOrScript;
+    then makeScriptWriter (argsOrScript // { interpreter = lib.getExe pkgs.bash; }) name
+    else makeScriptWriter { interpreter = lib.getExe pkgs.bash; } name argsOrScript;
 
   # Like writeScriptBin but the first line is a shebang to bash
   #
@@ -232,8 +232,8 @@ rec {
   #     ''
   writeDash = name: argsOrScript:
     if lib.isAttrs argsOrScript && ! lib.isDerivation argsOrScript
-    then makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.dash}"; }) name
-    else makeScriptWriter { interpreter = "${lib.getExe pkgs.dash}"; } name argsOrScript;
+    then makeScriptWriter (argsOrScript // { interpreter = lib.getExe pkgs.dash; }) name
+    else makeScriptWriter { interpreter = lib.getExe pkgs.dash; } name argsOrScript;
 
   # Like writeScriptBin but the first line is a shebang to dash
   #
@@ -539,7 +539,7 @@ rec {
     makeScriptWriter (
       (builtins.removeAttrs args ["libraries"])
       // {
-        interpreter = "${lib.getExe (pkgs.perl.withPackages (p: libraries))}";
+        interpreter = lib.getExe (pkgs.perl.withPackages (p: libraries));
       }
     ) name;
 

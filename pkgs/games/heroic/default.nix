@@ -92,13 +92,13 @@ in stdenv.mkDerivation rec {
     rm -rf "$out/share/${appName}/public/bin" "$out/share/${appName}/build/bin"
     mkdir -p "$out/share/${appName}/build/bin/${binPlatform}"
     ln -s \
-      "${gogdl}/bin/gogdl" \
-      "${legendary-gl}/bin/legendary" \
-      "${nile}/bin/nile" \
-      "${lib.optionalString stdenv.isLinux "${vulkan-helper}/bin/vulkan-helper"}" \
+      "${lib.getExe gogdl}" \
+      "${lib.getExe legendary-gl}" \
+      "${lib.getExe nile}" \
+      "${lib.optionalString stdenv.isLinux "${lib.getExe vulkan-helper}"}" \
       "$out/share/${appName}/build/bin/${binPlatform}"
 
-    makeWrapper "${electron}/bin/electron" "$out/bin/heroic" \
+    makeWrapper "${lib.getExe electron}" "$out/bin/heroic" \
       --inherit-argv0 \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/share/${appName} \

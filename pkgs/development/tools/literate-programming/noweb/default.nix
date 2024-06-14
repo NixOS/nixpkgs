@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
         # NOTE: substituteInPlace breaks Icon binaries, so make sure the script
         #       uses (n)awk before calling.
         if grep -q nawk "$f"; then
-            substituteInPlace "$f" --replace "nawk" "${nawk}/bin/nawk"
+            substituteInPlace "$f" --replace "nawk" "${lib.getExe nawk}"
         fi
     done
 

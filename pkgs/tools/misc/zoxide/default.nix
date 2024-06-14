@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = lib.optionalString withFzf ''
     substituteInPlace src/util.rs \
-      --replace '"fzf"' '"${fzf}/bin/fzf"'
+      --replace '"fzf"' '"${lib.getExe fzf}"'
   '';
 
   cargoHash = "sha256-t6GVoMBCD0s36GhtqJu9Z2bwwq5P+beEObG+gSC+QUw=";

@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ nix-eval-jobs ];
 
-  NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
+  NIX_EVAL_JOBS = lib.getExe nix-eval-jobs;
 
   postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     installShellCompletion --cmd colmena \

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    substituteInPlace tools/insert-file-as-string.pl --replace "/usr/bin/perl" "${perl}/bin/perl"
+    substituteInPlace tools/insert-file-as-string.pl --replace "/usr/bin/perl" "${lib.getExe perl}"
     substituteInPlace Makefile --replace "docs" ""  # docs target wants to download from network
   '';
 

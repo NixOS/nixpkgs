@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      xprop = "${xorg.xprop}/bin/xprop";
-      xwininfo = "${xorg.xwininfo}/bin/xwininfo";
+      xprop = lib.getExe xorg.xprop;
+      xwininfo = lib.getExe xorg.xwininfo;
     })
   ];
 

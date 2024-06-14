@@ -19,7 +19,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   ];
   postInstall = ''
     cd "$out/$installPrefix"
-    jq '.contributes.configuration[0].properties."calva.clojureLspPath".default = "${clojure-lsp}/bin/clojure-lsp"' package.json | sponge package.json
+    jq '.contributes.configuration[0].properties."calva.clojureLspPath".default = "${lib.getExe clojure-lsp}"' package.json | sponge package.json
   '';
   meta = {
     license = lib.licenses.mit;

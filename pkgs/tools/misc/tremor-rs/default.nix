@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = 1;
 
   # needed for internal protobuf c wrapper library
-  PROTOC = "${protobuf}/bin/protoc";
+  PROTOC = lib.getExe protobuf;
   PROTOC_INCLUDE = "${protobuf}/include";
 
   env = lib.optionalAttrs (stdenv.system == "x86_64-darwin") {

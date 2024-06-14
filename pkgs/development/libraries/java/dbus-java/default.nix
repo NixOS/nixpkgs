@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cyaxd8x6sxmi6pklkkx45j311a6w51fxl4jc5j3inc4cailwh5y";
   };
   JAVA_HOME=jdk8;
-  JAVA="${jdk8}/bin/java";
+  JAVA="${lib.getExe jdk8}";
   PREFIX="\${out}";
   JAVAUNIXLIBDIR="${libmatthew_java}/lib/jni";
   JAVAUNIXJARDIR="${libmatthew_java}/share/java";

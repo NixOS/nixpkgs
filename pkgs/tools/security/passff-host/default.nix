@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "VERSION=${version}" ];
 
   patchPhase = ''
-    sed -i 's#COMMAND = "pass"#COMMAND = "${pass}/bin/pass"#' src/passff.py
+    sed -i 's#COMMAND = "pass"#COMMAND = "${lib.getExe pass}"#' src/passff.py
   '';
 
   installPhase = ''
