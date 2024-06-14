@@ -98,7 +98,7 @@ let
 
   setBool = v: if v then "1" else "0";
 
-  # https://github.com/pytorch/pytorch/blob/v2.0.1/torch/utils/cpp_extension.py#L1744
+  # https://github.com/pytorch/pytorch/blob/v2.3.1/torch/utils/cpp_extension.py#L1955-L1956
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -118,6 +118,7 @@ let
         "8.7"
         "8.9"
         "9.0"
+        "9.0a"
       ];
       ptx = lists.map (x: "${x}+PTX") real;
     in
