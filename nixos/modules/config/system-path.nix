@@ -154,7 +154,6 @@ in
         "/share/hunspell"
         "/share/org"
         "/share/themes"
-        "/share/vim-plugins"
         "/share/vulkan"
         "/share/kservices5"
         "/share/kservicetypes5"
