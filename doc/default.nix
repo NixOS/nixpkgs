@@ -2,6 +2,7 @@
 let
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
+  fs = lib.fileset;
 
   common = import ./common.nix;
 
@@ -99,7 +100,19 @@ in pkgs.stdenv.mkDerivation {
     nixos-render-docs
   ];
 
-  src = ./.;
+  src = fs.toSource {
+    root = ./.;
+    fileset = fs.unions [
+      (fs.fileFilter (file:
+        file.hasExt "md"
+        || file.hasExt "md.in"
+      ) ./.)
+      ./style.css
+      ./anchor-use.js
+      ./anchor.min.js
+      ./manpage-urls.json
+    ];
+  };
 
   postPatch = ''
     ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json
