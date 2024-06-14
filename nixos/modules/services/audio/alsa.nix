@@ -1,8 +1,6 @@
 # ALSA sound support.
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   inherit (pkgs) alsa-utils;
 
@@ -14,12 +12,12 @@ in
 
 {
   imports = [
-    (mkRenamedOptionModule [ "sound" "enable" ] [ "hardware" "alsa" "enable" ])
-    (mkRenamedOptionModule [ "sound" "enableOSSEmulation" ] [ "hardware" "alsa" "enableOSSEmulation" ])
-    (mkRenamedOptionModule [ "sound" "extraConfig" ] [ "hardware" "alsa" "extraConfig" ])
-    (mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "hardware" "alsa" "mediaKeys" "enable" ])
-    (mkRenamedOptionModule [ "sound" "mediaKeys" "enable" ] [ "hardware" "alsa" "mediaKeys" "enable" ])
-    (mkRenamedOptionModule [ "sound" "mediaKeys" "volumeStep" ] [ "hardware" "alsa" "mediaKeys" "volumeStep" ])
+    (lib.mkRenamedOptionModule [ "sound" "enable" ] [ "hardware" "alsa" "enable" ])
+    (lib.mkRenamedOptionModule [ "sound" "enableOSSEmulation" ] [ "hardware" "alsa" "enableOSSEmulation" ])
+    (lib.mkRenamedOptionModule [ "sound" "extraConfig" ] [ "hardware" "alsa" "extraConfig" ])
+    (lib.mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "hardware" "alsa" "mediaKeys" "enable" ])
+    (lib.mkRenamedOptionModule [ "sound" "mediaKeys" "enable" ] [ "hardware" "alsa" "mediaKeys" "enable" ])
+    (lib.mkRenamedOptionModule [ "sound" "mediaKeys" "volumeStep" ] [ "hardware" "alsa" "mediaKeys" "volumeStep" ])
   ];
 
   ###### interface
@@ -28,24 +26,12 @@ in
 
     hardware.alsa = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable ALSA sound.
-        '';
-      };
+      enable = lib.mkEnableOption "ALSA sound";
 
-      enableOSSEmulation = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable ALSA OSS emulation (with certain cards sound mixing may not work!).
-        '';
-      };
+      enableOSSEmulation = lib.mkEnableOption "ALSA OSS emulation (with certain cards sound mixing may not work!)";
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           defaults.pcm.!card 3
@@ -57,8 +43,8 @@ in
 
       mediaKeys = {
 
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether to enable volume and capture control with keyboard media keys.
@@ -72,8 +58,8 @@ in
           '';
         };
 
-        volumeStep = mkOption {
-          type = types.str;
+        volumeStep = lib.mkOption {
+          type = lib.types.str;
           default = "1";
           example = "1%";
           description = ''
@@ -92,17 +78,17 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ alsa-utils ];
 
-    environment.etc = mkIf (!pulseaudioEnabled && cfg.extraConfig != "")
+    environment.etc = lib.mkIf (!pulseaudioEnabled && cfg.extraConfig != "")
       { "asound.conf".text = cfg.extraConfig; };
 
     # ALSA provides a udev rule for restoring volume settings.
     services.udev.packages = [ alsa-utils ];
 
-    boot.kernelModules = optional cfg.enableOSSEmulation "snd_pcm_oss";
+    boot.kernelModules = lib.optional cfg.enableOSSEmulation "snd_pcm_oss";
 
     systemd.services.alsa-store =
       { description = "Store Sound Card State";
@@ -118,7 +104,7 @@ in
         };
       };
 
-    services.actkbd = mkIf cfg.mediaKeys.enable {
+    services.actkbd = lib.mkIf cfg.mediaKeys.enable {
       enable = true;
       bindings = [
         # "Mute" media key
