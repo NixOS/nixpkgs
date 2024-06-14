@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "survey";
-  version = "5.3.0";
+  version = "5.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jMTtsrEdt3NPy8NfeNPX4YNwjH2gaQfO89Iag/MBS+A=";
+    hash = "sha256-uNx8Ij28Li9QQjq/S6OP5kft2K8pDu2NyBK6BP/xcw8=";
   };
 
   build-system = [
