@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "megatools";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchgit {
     url = "https://megous.com/git/megatools";
     rev = finalAttrs.version;
-    hash = "sha256-Q9hMJBQBenufubbmeAw8Q8w+Oo+UcZLWathKNDwTv3s=";
+    hash = "sha256-AdvQqaRTsKTqdfNfFiWtA9mIPVGuui+Ru9TUARVG0+Q=";
   };
 
   outputs = [ "out" "doc" "man" ];
