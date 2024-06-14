@@ -356,6 +356,12 @@ rec {
     useLLVM = true;
   };
 
+  wasm32-unknown-none = {
+    config = "wasm32-unknown-none";
+    rust.rustcTarget = "wasm32-unknown-unknown";
+    useLLVM = true;
+  };
+
   # Ghcjs
   ghcjs = {
     # This triple is special to GHC/Cabal/GHCJS and not recognized by autotools
