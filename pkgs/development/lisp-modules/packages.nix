@@ -419,8 +419,8 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "andy128k";
           repo = "cl-gobject-introspection";
-          rev = "83beec4492948b52aae4d4152200de5d5c7ac3e9";
-          sha256 = "sha256-g/FwWE+Rzmzm5Y+irvd1AJodbp6kPHJIFOFDPhaRlXc=";
+          rev = "4908a84c16349929b309c50409815ff81fb9b3c4";
+          sha256 = "sha256-krVU5TQsVAbglxXMq29WJriWBIgQDLy1iCvB5iNziEc=";
         };}))
       (cl-webkit2.overrideAttrs (final: prev: {
         src = pkgs.fetchFromGitHub {
