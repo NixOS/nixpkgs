@@ -47,6 +47,9 @@
 , hidpiXWayland ? false
 , enableNvidiaPatches ? false
 }:
+let
+  info = builtins.fromJSON (builtins.readFile ./info.json);
+in
 assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
 assert lib.assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
 assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
@@ -68,9 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "s#/usr#$out#" src/render/OpenGL.cpp
   '';
 
-  # used by version.sh
-  DATE = "2024-05-05";
-  HASH = finalAttrs.src.rev;
+  # variables used by generateVersion.sh script, and shown in `hyprctl version`
+  BRANCH = info.branch;
+  COMMITS = info.commit_hash;
+  DATE = info.date;
+  DIRTY = "";
+  HASH = info.commit_hash;
+  MESSAGE = info.commit_message;
+  TAG = info.tag;
 
   depsBuildBuild = [
     # to find wayland-scanner when cross-compiling
@@ -151,6 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.providedSessions = [ "hyprland" ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://github.com/hyprwm/Hyprland";
