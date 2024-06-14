@@ -16545,7 +16545,9 @@ with pkgs;
 
   makeRustPlatform = callPackage ../development/compilers/rust/make-rust-platform.nix { };
 
-  buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
+  buildRustCrate = callPackage ../build-support/rust/build-rust-crate ({ } // lib.optionalAttrs (stdenv.hostPlatform.libc == null) {
+    stdenv = stdenvNoCC; # Some build targets without libc will fail to evaluate with a normal stdenv.
+  });
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
 
   cargo2junit = callPackage ../development/tools/rust/cargo2junit { };
