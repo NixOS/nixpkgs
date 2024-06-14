@@ -536,6 +536,25 @@ in
     };
   };
 
+  timelapsepurger = buildPlugin rec {
+    pname = "firmwareupdater";
+    version = "0.1.4";
+
+    src = fetchFromGitHub {
+      owner = "jneilliii";
+      repo = "OctoPrint-TimelapsePurger";
+      rev = version;
+      sha256 = "sha256-XS4m4KByScGTPfVE4kuRLw829gNE2CdM0RyhRqGGxyw=";
+    };
+
+    meta = with lib; {
+      description = "Automatically deletes timelapses that are older than configured timeframe";
+      homepage = "https://github.com/jneilliii/OctoPrint-TimelapsePurger";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
   titlestatus = buildPlugin rec {
     pname = "titlestatus";
     version = "0.0.5";
