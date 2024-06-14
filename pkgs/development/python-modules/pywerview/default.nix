@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pywerview";
-  version = "0.6";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "the-useless-one";
     repo = "pywerview";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WZE6qWq9v4A78YELMEcbgyufBRrVFRTqlhGmknpKn1Y=";
+    hash = "sha256-hsilBqk73txYIlgRtbn/l/kWORMGft7ne5BffchDLPc=";
   };
 
   nativeBuildInputs = [ setuptools ];
