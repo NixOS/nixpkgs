@@ -464,13 +464,10 @@ buildPythonPackage rec {
       pythonRelaxDepsHook
       removeReferencesTo
     ]
-    ++ optionals cudaSupport (
-      with cudaPackages;
-      [
-        autoAddDriverRunpath
-        cuda_nvcc
-      ]
-    )
+    ++ optionals cudaSupport [
+      autoAddDriverRunpath
+      cudaPackages.cuda_nvcc
+    ]
     ++ optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs =
