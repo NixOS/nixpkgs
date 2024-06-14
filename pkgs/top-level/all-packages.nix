@@ -32240,8 +32240,6 @@ with pkgs;
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
 
-  fluxcd = callPackage ../applications/networking/cluster/fluxcd { };
-
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
   linkerd_edge = callPackage ../applications/networking/cluster/linkerd/edge.nix { };
   linkerd_stable = linkerd;
