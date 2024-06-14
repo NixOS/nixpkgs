@@ -24,7 +24,6 @@
 , openvr
 , stb
 , wlroots
-, libliftoff
 , libdecor
 , libdisplay-info
 , lib
@@ -55,9 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Unvendor dependencies
-    ./use-pkgconfig.patch
-
     # Make it look for shaders in the right place
     ./shaders-path.patch
   ];
@@ -116,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     libavif
     libdrm
     libei
-    libliftoff
     SDL2
     libdecor
     libinput
