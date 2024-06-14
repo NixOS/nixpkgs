@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-eventgrid";
-  version = "4.19.0";
+  version = "4.20.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-a9fVQBbMo6Zwdp6WTYKiQBlqJcQRs+nxqKqBVcPbBew=";
+    hash = "sha256-we2rkHabxOei+wogN88EVXVNUK95NnTAiz/sIpMkjEw=";
   };
 
   build-system = [ setuptools ];
