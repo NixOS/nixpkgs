@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
 
     # Create static gzip and brotli files
     fd -e css -e eot -e html -e js -e json -e svg -e webmanifest -e xlf \
-      --type file --search-path $out/client/dist \
+      --type file --search-path $out/client/dist --threads $NIX_BUILD_CORES \
       --exec gzip -9 -n -c {} > {}.gz \;\
       --exec brotli --best -f {} -o {}.br
   '';
