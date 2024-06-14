@@ -172,6 +172,27 @@ in
     };
   };
 
+  firmwareupdater = buildPlugin rec {
+    pname = "firmwareupdater";
+    version = "1.14.0";
+
+    src = fetchFromGitHub {
+      owner = "OctoPrint";
+      repo = "OctoPrint-FirmwareUpdater";
+      rev = version;
+      sha256 = "sha256-CUNjM/IJJS/lqccZ2B0mDOzv3k8AgmDreA/X9wNJ7iY=";
+    };
+
+    propagatedBuildInputs = with super; [ pyserial  ];
+
+    meta = with lib; {
+      description = "Printer Firmware Updater";
+      homepage = "https://github.com/OctoPrint/OctoPrint-FirmwareUpdater";
+      license = licenses.agpl3Only;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
   gcodeeditor = buildPlugin rec {
     pname = "gcodeeditor";
     version = "0.2.12";
