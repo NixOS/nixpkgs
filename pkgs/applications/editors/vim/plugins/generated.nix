@@ -17456,4 +17456,17 @@ final: prev:
   };
 
 
+  nvim-genghis = buildVimPlugin {
+    pname = "nvim-genghis";
+    version = "2024-05-21";
+    src = fetchFromGitHub {
+      owner = "chrisgrieser";
+      repo = "nvim-genghis";
+      rev = "7ed82d0d0513946bbc678f326e5750c79a942351";
+      sha256 = "sha256-R3YHrcpRJ8bbVctKTWQbouyCYcbKpQ2Sz6NWDOkqLYI=";
+    };
+    meta.homepage = "https://github.com/chrisgrieser/nvim-genghis";
+  };
+
+
 }
