@@ -23,7 +23,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3Packages; [

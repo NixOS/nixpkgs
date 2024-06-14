@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  pythonRelaxDepsHook,
   sphinx,
   beautifulsoup4,
   sphinx-basic-ng,
@@ -23,7 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-NUi+LO9Foy+M3AJy1BX8s+X6ag603f4h3z7PH+RaE88=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "sphinx" ];
 

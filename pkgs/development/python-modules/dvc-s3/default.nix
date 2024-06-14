@@ -6,7 +6,6 @@
   dvc-objects,
   fetchPypi,
   flatten-dict,
-  pythonRelaxDepsHook,
   s3fs,
   setuptools-scm,
 }:
@@ -31,7 +30,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

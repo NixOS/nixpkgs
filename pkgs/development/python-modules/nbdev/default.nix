@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   setuptools,
   ipywidgets,
   fastcore,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-MntVdZ6LazdFCm+h5FaTxvzEwCtoJjrW/EJPTt2fdnU=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "ipywidgets" ];
 

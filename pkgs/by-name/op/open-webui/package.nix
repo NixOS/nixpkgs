@@ -117,7 +117,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ hatchling ];
 
-  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
 
   pythonImportsCheck = [ "open_webui" ];
 

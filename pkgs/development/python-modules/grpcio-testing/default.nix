@@ -5,7 +5,6 @@
   grpcio,
   protobuf,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 

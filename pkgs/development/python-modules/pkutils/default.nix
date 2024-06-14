@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nose3,
   pythonOlder,
-  pythonRelaxDepsHook,
   semver,
 }:
 
@@ -24,7 +23,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "semver" ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [ semver ];
 

@@ -12,7 +12,6 @@
   pyarrow,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   sqlalchemy,
   thrift,
 }:
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

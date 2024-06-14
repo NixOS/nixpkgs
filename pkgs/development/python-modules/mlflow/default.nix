@@ -23,7 +23,6 @@
   protobuf,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyarrow,
   pytz,
   pyyaml,
@@ -53,7 +52,6 @@ buildPythonPackage rec {
   # This seems quite unprincipled especially with tests not being enabled,
   # but not mlflow has a 'skinny' install option which does not require `shap`.
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
   pythonRemoveDeps = [ "shap" ];

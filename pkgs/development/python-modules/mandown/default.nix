@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonRelaxDepsHook,
   beautifulsoup4,
   comicon,
   feedparser,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

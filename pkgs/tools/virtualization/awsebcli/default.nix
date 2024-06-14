@@ -35,7 +35,6 @@ localPython.pkgs.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = with localPython.pkgs; [
-    pythonRelaxDepsHook
   ];
 
   buildInputs = [

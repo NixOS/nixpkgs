@@ -15,7 +15,6 @@
   pytestCheckHook,
   pytest-dependency,
   pytest-mock,
-  pythonRelaxDepsHook,
   pyudev,
   pyusb,
   pyyaml,
@@ -38,7 +37,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     wheel

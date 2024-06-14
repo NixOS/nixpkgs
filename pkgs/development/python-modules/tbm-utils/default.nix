@@ -10,7 +10,6 @@
   pprintpp,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   wrapt,
 }:
 
@@ -52,7 +51,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     attrs

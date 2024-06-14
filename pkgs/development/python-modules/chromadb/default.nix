@@ -32,7 +32,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   rustc,
@@ -74,7 +73,6 @@ buildPythonPackage rec {
     cargo
     pkg-config
     protobuf
-    pythonRelaxDepsHook
     rustc
     rustPlatform.cargoSetupHook
     setuptools

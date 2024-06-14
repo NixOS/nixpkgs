@@ -13,7 +13,6 @@
   pytestCheckHook,
   python-slugify,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   universal-silabs-flasher,
   wheel,
@@ -51,7 +50,6 @@ buildPythonPackage rec {
     "zha-quirks"
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     setuptools

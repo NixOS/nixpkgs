@@ -21,7 +21,6 @@
   protobuf,
   python3,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   pyyaml,
   requests,
@@ -59,7 +58,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

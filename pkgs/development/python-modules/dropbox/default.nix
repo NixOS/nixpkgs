@@ -12,7 +12,6 @@
   pytestCheckHook,
   sphinxHook,
   sphinx-rtd-theme,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -60,7 +59,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     sphinxHook
     sphinx-rtd-theme
-    pythonRelaxDepsHook
   ];
 
   # Version 12.0.0 re-introduced Python 2 support and set some very restrictive version bounds

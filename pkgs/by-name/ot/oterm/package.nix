@@ -27,7 +27,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ poetry-core ];
 
-  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3Packages; [
     aiohttp

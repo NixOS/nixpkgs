@@ -41,7 +41,6 @@
   python-jose,
   python-multipart,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   rich,
   schedule,
@@ -90,7 +89,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     httpx

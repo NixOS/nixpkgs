@@ -6,7 +6,6 @@
   buildPythonPackage,
   chardet,
   copyDesktopItems,
-  pythonRelaxDepsHook,
   cython,
   catboost,
   xgboost,
@@ -74,7 +73,6 @@ let
 
     nativeBuildInputs = [
       copyDesktopItems
-      pythonRelaxDepsHook
       oldest-supported-numpy
       cython
       qt5.wrapQtAppsHook

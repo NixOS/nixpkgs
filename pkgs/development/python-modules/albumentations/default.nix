@@ -13,7 +13,6 @@
   pydantic,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   torch,
   torchvision,
   typing-extensions,
@@ -33,7 +32,6 @@ buildPythonPackage rec {
     hash = "sha256-7t1+22zzFtkZaAyOo6xjk+MXT9N44PmQ/NRRfvLeRVk=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRemoveDeps = [
     "opencv-python"

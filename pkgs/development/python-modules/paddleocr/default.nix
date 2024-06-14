@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   fetchFromGitHub,
   attrdict,
   beautifulsoup4,
@@ -55,7 +54,6 @@ buildPythonPackage {
     ./remove-import-imaug.patch
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   # trying to relax only pymupdf makes the whole build fail
   pythonRelaxDeps = true;
   pythonRemoveDeps = [

@@ -28,7 +28,6 @@
   opensearch-py,
   publicsuffixlist,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   tqdm,
   xmltodict,
@@ -54,7 +53,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

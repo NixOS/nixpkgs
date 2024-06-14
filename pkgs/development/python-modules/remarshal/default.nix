@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
 
   # build deps
   poetry-core,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "pytest" ];

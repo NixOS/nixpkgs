@@ -8,7 +8,6 @@
   syrupy,
   pillow,
   rich,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +32,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

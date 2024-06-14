@@ -5,7 +5,6 @@
   fetchFromGitHub,
   deprecation,
   poetry-core,
-  pythonRelaxDepsHook,
   async-timeout,
   cloudevents,
   fastapi,
@@ -56,7 +55,6 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     async-timeout

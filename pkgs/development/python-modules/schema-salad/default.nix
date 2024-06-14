@@ -9,7 +9,6 @@
   mypy,
   mypy-extensions,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
   rdflib,
   requests,

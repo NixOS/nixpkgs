@@ -36,7 +36,6 @@
   pygtrie,
   pyparsing,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   rich,
   ruamel-yaml,
@@ -84,7 +83,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies =
     [

@@ -8,7 +8,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   typeguard,
   websockets,
 }:
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

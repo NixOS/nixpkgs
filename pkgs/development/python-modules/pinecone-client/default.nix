@@ -8,7 +8,6 @@
   poetry-core,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   setuptools,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "urllib3" ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     setuptools

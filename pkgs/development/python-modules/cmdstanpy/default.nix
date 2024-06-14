@@ -5,7 +5,6 @@
   fetchpatch,
   substituteAll,
   cmdstan,
-  pythonRelaxDepsHook,
   setuptools,
   pandas,
   numpy,
@@ -47,7 +46,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

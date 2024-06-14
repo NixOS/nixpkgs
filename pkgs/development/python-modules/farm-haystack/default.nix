@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   hatchling,
   boilerpy3,
   events,
@@ -104,7 +103,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [

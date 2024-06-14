@@ -12,7 +12,6 @@
   setuptools,
   setuptools-scm,
   playwright-driver,
-  pythonRelaxDepsHook,
 }:
 
 let
@@ -72,7 +71,6 @@ buildPythonPackage rec {
     git
     setuptools-scm
     setuptools
-    pythonRelaxDepsHook
   ] ++ lib.optionals stdenv.isLinux [ auditwheel ];
 
   pythonRelaxDeps = [ "pyee" ];

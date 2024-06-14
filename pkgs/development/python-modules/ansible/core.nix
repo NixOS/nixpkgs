@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  pythonRelaxDepsHook,
   installShellFiles,
   docutils,
   ansible,
@@ -51,7 +50,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     installShellFiles
     docutils
-  ] ++ lib.optionals (pythonOlder "3.10") [ pythonRelaxDepsHook ];
+  ];
 
   propagatedBuildInputs =
     [

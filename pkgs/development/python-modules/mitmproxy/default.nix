@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
-  pythonRelaxDepsHook,
   # Mitmproxy requirements
   aioquic,
   asgiref,
@@ -58,7 +57,6 @@ buildPythonPackage rec {
     hash = "sha256-rIyRY1FolbdoaI4OgFG7D2/mot8NiRHalgittPzledw=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [
     "aioquic"

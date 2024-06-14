@@ -16,7 +16,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   setuptools,
   shapely,
@@ -49,7 +48,6 @@ buildPythonPackage rec {
       --replace-fail "pytest_plugins" "_pytest_plugins"
   '';
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "python-dateutil" ];
 

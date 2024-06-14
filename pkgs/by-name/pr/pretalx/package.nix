@@ -91,7 +91,6 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
   ] ++ (with python.pkgs; [
-    pythonRelaxDepsHook
     setuptools
   ]);
 

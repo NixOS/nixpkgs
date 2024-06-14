@@ -7,7 +7,6 @@
   python-engineio,
   python-socketio,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +28,6 @@ buildPythonPackage rec {
     "python-socketio"
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     aiohttp

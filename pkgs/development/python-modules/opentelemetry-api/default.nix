@@ -9,7 +9,6 @@
   opentelemetry-test-utils,
   setuptools,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   writeScript,
 }:
 
@@ -31,7 +30,6 @@ let
 
     sourceRoot = "${src.name}/opentelemetry-api";
 
-    nativeBuildInputs = [ pythonRelaxDepsHook ];
 
     build-system = [ hatchling ];
 

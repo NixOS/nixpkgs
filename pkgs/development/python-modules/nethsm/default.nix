@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   flit-core,
   certifi,
   cryptography,
@@ -35,7 +34,6 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     flit-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;

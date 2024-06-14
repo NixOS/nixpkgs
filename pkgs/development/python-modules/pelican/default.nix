@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
 
   # build-system
   pdm-backend,
@@ -61,7 +60,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pdm-backend
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "unidecode" ];

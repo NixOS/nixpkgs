@@ -5,7 +5,6 @@
   pythonOlder,
 
   hatchling,
-  pythonRelaxDepsHook,
   manim,
   ffmpeg,
 
@@ -49,7 +48,6 @@ buildPythonPackage rec {
 
   build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [ "opencv-python" ];

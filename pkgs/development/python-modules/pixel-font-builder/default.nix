@@ -12,7 +12,6 @@
   fonttools,
   pypng,
   pcffont,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "fonttools" ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     hatch-vcs

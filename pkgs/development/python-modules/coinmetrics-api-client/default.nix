@@ -9,7 +9,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   tqdm,
   typer,
@@ -35,7 +34,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

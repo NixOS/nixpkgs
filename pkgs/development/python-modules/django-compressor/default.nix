@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
 
   # build-system
   setuptools,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

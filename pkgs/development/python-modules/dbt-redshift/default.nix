@@ -8,7 +8,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   redshift-connector,
   setuptools,
 }:
@@ -32,7 +31,6 @@ buildPythonPackage rec {
     "redshift-connector"
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ setuptools ];
 

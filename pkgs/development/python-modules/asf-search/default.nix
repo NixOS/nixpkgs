@@ -9,7 +9,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   remotezip,
   requests-mock,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     dateparser

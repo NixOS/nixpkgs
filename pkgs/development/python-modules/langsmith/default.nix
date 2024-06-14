@@ -15,7 +15,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   uvicorn,
 }:
@@ -40,7 +39,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

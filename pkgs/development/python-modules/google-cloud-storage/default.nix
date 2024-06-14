@@ -12,7 +12,6 @@
   protobuf,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   setuptools,
 }:
@@ -30,7 +29,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

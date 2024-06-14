@@ -10,7 +10,6 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   requests-oauthlib,
@@ -42,7 +41,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "urllib3" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

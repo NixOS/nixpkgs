@@ -7,7 +7,6 @@
   numba,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +28,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pythonRelaxDepsHook
   ];
   pythonRelaxDeps = [
     "scipy"

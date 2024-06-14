@@ -30,7 +30,6 @@
   dissect-xfs,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   setuptools-scm,
 }:
@@ -56,7 +55,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     dissect-archive
