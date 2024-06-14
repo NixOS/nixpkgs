@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildPythonPackage,
   python,
   config,
@@ -311,7 +312,21 @@ buildPythonPackage rec {
   };
 
   patches =
-    optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
+    optionals cudaSupport [
+      ./fix-cmake-cuda-toolkit.patch
+      # TODO: Revisit this patch after the release following 2.3.1.
+      (fetchpatch {
+        name = "fix-cmake-regex-to-match-newly-introduced-9.0a-architecture.patch";
+        url = "https://github.com/pytorch/pytorch/pull/123243/commits/fb8cd2dbf4816b697580dfa888d0484c1c1c8df7.patch";
+        hash = "sha256-7TZkYFV7g1bU/VcmNADAK9Rd5rWsAevc6cxYPvmF5ds=";
+      })
+      # TODO: Revisit this patch after the release following 2.3.1.
+      (fetchpatch {
+        name = "allow-building-for-sm90a.patch";
+        url = "https://github.com/pytorch/pytorch/pull/125523/commits/451ad6129aedd90afdbe6885d497ab13ec359730.patch";
+        hash = "sha256-ePhWJlA49zdkTrpL/QDdecH82O9VXpaAXDciaaP4rf0=";
+      })
+    ]
     ++ optionals (isDarwin && isx86_64) [
       # pthreadpool added support for Grand Central Dispatch in April
       # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
@@ -358,11 +373,11 @@ buildPythonPackage rec {
           'message(FATAL_ERROR "Found NCCL header version and library version' \
           'message(WARNING "Found NCCL header version and library version'
     ''
-    # Remove PyTorch's FindCUDAToolkit.cmake and to use CMake's default.
-    # We do not remove the entirety of cmake/Modules_CUDA_fix because we need FindCUDNN.cmake.
+    # Remove PyTorch's FindCUDAToolkit.cmake and use CMake's default.
+    # NOTE: We do not remove cmake/Modules_CUDA_fix/upstream because PyTorch has patched CMakes FindCUDA.cmake to
+    #   allow building with newer architectures (like sm_90a) and we want to keep that.
     + optionalString cudaSupport ''
       rm cmake/Modules/FindCUDAToolkit.cmake
-      rm -rf cmake/Modules_CUDA_fix/{upstream,FindCUDA.cmake}
     ''
     # error: no member named 'aligned_alloc' in the global namespace; did you mean simply 'aligned_alloc'
     # This lib overrided aligned_alloc hence the error message. Tltr: his function is linkable but not in header.
