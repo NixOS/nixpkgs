@@ -4,6 +4,7 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
+  mbedtls_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ mbedtls_2 ];
+
+  cmakeFlags = [ (lib.cmakeBool "WITH_MBEDTLS" true) ];
+
+  env.NIX_LDFLAGS = "-lmbedcrypto -lmbedx509 -lmbedtls";
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
