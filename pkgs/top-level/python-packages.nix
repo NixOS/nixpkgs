@@ -15409,6 +15409,7 @@ self: super: with self; {
         pkgs.magma-hip
       else
         pkgs.magma;
+    openai-triton = self.openai-triton.override { inherit cudaSupport; };
     rocmPackages = pkgs.rocmPackages_5;
   };
 
@@ -15423,7 +15424,6 @@ self: super: with self; {
   torchsnapshot = callPackage ../development/python-modules/torchsnapshot { };
 
   torchWithCuda = self.torch.override {
-    openai-triton = self.openai-triton-cuda;
     cudaSupport = true;
     rocmSupport = false;
   };
@@ -15433,7 +15433,6 @@ self: super: with self; {
   };
 
   torchWithRocm = self.torch.override {
-    openai-triton = self.openai-triton-no-cuda;
     rocmSupport = true;
     cudaSupport = false;
   };
