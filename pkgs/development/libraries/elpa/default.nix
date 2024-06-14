@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mpi blas lapack scalapack ]
     ++ lib.optionals enableCuda [
+      cudaPackages.cuda_cccl.dev # <nv/target> required by the fp16 headers in cudart
       cudaPackages.cuda_cudart
       cudaPackages.libcublas
     ];

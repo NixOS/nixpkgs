@@ -149,6 +149,8 @@ stdenv.mkDerivation rec {
     mainProgram = "lightgbm";
     homepage = "https://github.com/microsoft/LightGBM";
     license = licenses.mit;
+    # Unfortunately, lightgbm doesn't compile when CUDA support is enabled.
+    broken = cudaSupport;
     platforms = platforms.unix;
     maintainers = with maintainers; [ nviets ];
   };

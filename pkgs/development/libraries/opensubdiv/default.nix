@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   # https://github.com/PixarAnimationStudios/OpenSubdiv/blob/7d0ab5530feef693ac0a920585b5c663b80773b3/CMakeLists.txt#L602
   preConfigure = lib.optionalString cudaSupport ''
     cmakeFlagsArray+=(
-      -DOSD_CUDA_NVCC_FLAGS="${lib.concatStringsSep " " cudaPackages.cudaFlags.gencode}"
+      -DOSD_CUDA_NVCC_FLAGS="${cudaPackages.cudaFlags.gencodeString}"
     )
   '';
 

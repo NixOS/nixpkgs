@@ -1872,16 +1872,6 @@ self: super: with self; {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
-  caffe = toPythonModule (pkgs.caffe.override {
-    pythonSupport = true;
-    inherit (self) python numpy boost;
-  });
-
-  caffeWithCuda = toPythonModule (pkgs.caffeWithCuda.override {
-    pythonSupport = true;
-    inherit (self) python numpy boost;
-  });
-
   caio = callPackage ../development/python-modules/caio { };
 
   cairocffi = callPackage ../development/python-modules/cairocffi { };
@@ -2645,8 +2635,7 @@ self: super: with self; {
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
-  # cupy 12.2.0 possibly incompatible with cutensor 2.0 that comes with cudaPackages_12
-  cupy = callPackage ../development/python-modules/cupy { cudaPackages = pkgs.cudaPackages_11; };
+  cupy = callPackage ../development/python-modules/cupy { cudaPackages = pkgs.cudaPackages_12_4; };
 
   curio = callPackage ../development/python-modules/curio { };
 
@@ -6055,6 +6044,8 @@ self: super: with self; {
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
     inherit (pkgs.config) cudaSupport;
+    # NOTE: Most recently supported version of CUDA is 12.2.
+    cudaPackages = pkgs.cudaPackages_12_2;
   };
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib rec {
@@ -15321,9 +15312,19 @@ self: super: with self; {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
-  torch = callPackage ../development/python-modules/torch {
+  torch = callPackage ../development/python-modules/torch rec {
+    inherit (pkgs.config) cudaSupport rocmSupport;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
+    cudaPackages = pkgs.cudaPackages_12_1;
+    magma =
+      if cudaSupport then
+        pkgs.magma-cuda-static
+      else if rocmSupport then
+        pkgs.magma-hip
+      else
+        pkgs.magma;
+    openai-triton = self.openai-triton.override { inherit cudaSupport; };
   };
 
   torch-audiomentations = callPackage ../development/python-modules/torch-audiomentations { };
@@ -15337,7 +15338,6 @@ self: super: with self; {
   torchsnapshot = callPackage ../development/python-modules/torchsnapshot { };
 
   torchWithCuda = self.torch.override {
-    openai-triton = self.openai-triton-cuda;
     cudaSupport = true;
     rocmSupport = false;
   };
@@ -15347,7 +15347,6 @@ self: super: with self; {
   };
 
   torchWithRocm = self.torch.override {
-    openai-triton = self.openai-triton-no-cuda;
     rocmSupport = true;
     cudaSupport = false;
   };

@@ -1,4 +1,5 @@
-{ lib
+{ config
+, lib
 , stdenv
 , fetchurl
 , darwin
@@ -85,7 +86,7 @@ stdenv.mkDerivation rec {
   configureScript = "python ./configure";
 
   enableParallelBuilding = true;
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && !config.cudaSupport;
 
   meta = with lib; {
     description = "Portable Extensible Toolkit for Scientific computation";

@@ -48,7 +48,6 @@ let
 
   jobs = (mapTestOn ({
     # Packages to evaluate
-    python3.pkgs.caffeWithCuda = linux;
     python3.pkgs.jaxlibWithCuda = linux;
     python3.pkgs.libgpuarray = linux;
     python3.pkgs.tensorflowWithCuda = linux;

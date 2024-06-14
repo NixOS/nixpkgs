@@ -57,7 +57,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     python311Packages.wrapPython
-  ];
+  ] ++ lib.optionals cublasSupport [ cudaPackages.cuda_nvcc ];
 
   pythonInputs = builtins.attrValues { inherit (python311Packages) tkinter customtkinter packaging; };
 
@@ -78,7 +78,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals openblasSupport [ openblas ]
     ++ lib.optionals cublasSupport [
       cudaPackages.libcublas
-      cudaPackages.cuda_nvcc
       cudaPackages.cuda_cudart
       cudaPackages.cuda_cccl
     ]
@@ -103,10 +102,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "-framework Metal"
   ];
 
-  env.NIX_LDFLAGS = lib.concatStringsSep " " (finalAttrs.darwinLdFlags ++ finalAttrs.metalLdFlags);
-
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString (march != "") "-march=${march}" + lib.optionalString (mtune != "") "-mtune=${mtune}";
+  env = {
+    NIX_LDFLAGS = lib.concatStringsSep " " (finalAttrs.darwinLdFlags ++ finalAttrs.metalLdFlags);
+    NIX_CFLAGS_COMPILE =
+      lib.optionalString (march != "") "-march=${march}"
+      + lib.optionalString (mtune != "") "-mtune=${mtune}";
+  };
 
   makeFlags = [
     (makeBool "LLAMA_OPENBLAS" openblasSupport)

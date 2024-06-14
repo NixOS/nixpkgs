@@ -53,18 +53,13 @@ stdenv.mkDerivation rec {
 
   ] ++ lib.optionals enableRocm rocmList;
 
-  LDFLAGS = lib.optionals enableCuda [
-    # Fake libnvidia-ml.so (the real one is deployed impurely)
-    "-L${cudaPackages.cuda_nvml_dev}/lib/stubs"
-  ];
-
   configureFlags = [
     "--with-rdmacm=${lib.getDev rdma-core}"
     "--with-dc"
     "--with-rc"
     "--with-dm"
     "--with-verbs=${lib.getDev rdma-core}"
-  ] ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart}" ]
+  ] ++ lib.optionals enableCuda [ "--with-cuda=${cudaPackages.cuda_cudart.stubs}" ]
   ++ lib.optional enableRocm "--with-rocm=${rocm}";
 
   postInstall = ''

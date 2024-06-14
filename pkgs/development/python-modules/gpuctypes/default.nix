@@ -38,13 +38,13 @@ buildPythonPackage rec {
       inherit (addDriverRunpath) driverLink;
       libnvrtc =
         if cudaSupport then
-          "${lib.getLib cudaPackages.cuda_nvrtc}/lib/libnvrtc.so"
+          "${cudaPackages.cuda_nvrtc.lib}/lib/libnvrtc.so"
         else
           "Please import nixpkgs with `config.cudaSupport = true`";
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   postPatch =
     ''
@@ -67,6 +67,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  checkInputs = lib.optionals (cudaSupport && !testCudaRuntime) [ cudaPackages.cuda_cudart.stubs ];
+
   disabledTestPaths =
     lib.optionals (!testOpenclRuntime) [ "test/test_opencl.py" ]
     ++ lib.optionals (!rocmSupport) [ "test/test_hip.py" ]
@@ -74,15 +76,9 @@ buildPythonPackage rec {
 
   # Require GPU access to run (not available in the sandbox)
   pytestFlagsArray =
-    lib.optionals (!testCudaRuntime) [
-      "-k"
-      "'not TestCUDADevice'"
-    ]
-    ++ lib.optionals (!testRocmRuntime) [
-      "-k"
-      "'not TestHIPDevice'"
-    ]
-    ++ lib.optionals (testCudaRuntime || testOpenclRuntime || testRocmRuntime) [ "-v" ];
+    [ "-v" ]
+    ++ lib.optionals (!testCudaRuntime) [ "--deselect=test/test_cuda.py::TestCUDADevice" ]
+    ++ lib.optionals (!testRocmRuntime) [ "--deselect=test/test_hip.py::TestHIPDevice" ];
 
   # Running these tests requires special configuration on the builder.
   # e.g. https://github.com/NixOS/nixpkgs/pull/256230 implements a nix
@@ -104,10 +100,6 @@ buildPythonPackage rec {
       testRocmRuntime = true;
     };
   };
-
-  preCheck = lib.optionalString (cudaSupport && !testCudaRuntime) ''
-    addToSearchPath LD_LIBRARY_PATH ${lib.getLib cudaPackages.cuda_cudart}/lib/stubs
-  '';
 
   # If neither rocmSupport or cudaSupport is enabled, no tests are selected
   dontUsePytestCheck = !(rocmSupport || cudaSupport) && (!testOpenclRuntime);

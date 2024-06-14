@@ -12,7 +12,6 @@
   torch,
 
   cudaSupport ? torch.cudaSupport,
-  cudaPackages,
   rocmSupport ? torch.rocmSupport,
   rocmPackages,
 
@@ -20,6 +19,7 @@
 }:
 
 let
+  inherit (torch.passthru) cudaPackages;
   # TODO: Reuse one defined in torch?
   # Some of those dependencies are probbly not required,
   # but it breaks when the store path is different between torch and torchaudio
@@ -96,6 +96,8 @@ buildPythonPackage rec {
         --replace "/.info/version-dev" "/.info/version"
     '';
 
+  # NOTE: Ignore the CMake output about building with cuDNN or cuSPARSELt; that's due to re-use of PyTorch's CMake
+  # files. PyTorch Audio doesn't use cuDNN or cuSPARSELt: https://github.com/pytorch/audio/issues/3472.
   env = {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
   };

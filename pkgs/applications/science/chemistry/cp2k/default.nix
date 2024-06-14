@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional enableElpa elpa
   ++ lib.optionals (gpuBackend == "cuda") [
+    cudaPackages.cuda_cccl.dev # <nv/target>
     cudaPackages.cuda_cudart
     cudaPackages.libcublas
     cudaPackages.cuda_nvrtc
@@ -177,7 +178,7 @@ stdenv.mkDerivation rec {
                  -lz -ldl ${lib.optionalString (mpi.pname == "openmpi") "$(mpicxx --showme:link)"} \
                  -lplumed -lhdf5_fortran -lhdf5_hl -lhdf5 -lgsl -lsirius -lspla -lspfft -lvdwxc \
                  ${lib.strings.optionalString (gpuBackend == "cuda") ''
-                   -L${cudaPackages.cuda_cudart}/lib/stubs/ \
+                   -L${cudaPackages.cuda_cudart.stubs}/lib/stubs/ \
                    -lcudart -lnvrtc -lcuda -lcublas
                    ''
                  } \

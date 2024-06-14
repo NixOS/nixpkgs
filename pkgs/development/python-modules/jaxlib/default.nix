@@ -86,7 +86,9 @@ let
     paths = with cudaPackages; [
       cuda_cudart.lib # libcudart.so
       cuda_cudart.static # libcudart_static.a
+      cuda_cudart.stubs # libcuda.so
       cuda_cupti.lib # libcupti.so
+      cudnn.lib # libcudnn.so
       libcublas.lib # libcublas.so
       libcufft.lib # libcufft.so
       libcurand.lib # libcurand.so
@@ -108,8 +110,9 @@ let
       cuda_cudart.dev # cuda.h
       cuda_cupti.dev # cupti.h
       cuda_nvcc.dev # See https://github.com/google/jax/issues/19811
-      cuda_nvml_dev # nvml.h
+      cuda_nvml_dev.dev # nvml.h
       cuda_nvtx.dev # nvToolsExt.h
+      cudnn.dev # cudnn.h
       libcublas.dev # cublas_api.h
       libcufft.dev # cufft.h
       libcurand.dev # curand.h
@@ -308,8 +311,8 @@ let
       + lib.optionalString cudaSupport ''
         build --config=cuda
         build --action_env CUDA_TOOLKIT_PATH="${cuda_build_deps_joined}"
-        build --action_env CUDNN_INSTALL_PATH="${cudnn}"
-        build --action_env TF_CUDA_PATHS="${cuda_build_deps_joined},${cudnn},${nccl}"
+        build --action_env CUDNN_INSTALL_PATH="${cuda_build_deps_joined}"
+        build --action_env TF_CUDA_PATHS="${cuda_build_deps_joined},${nccl}"
         build --action_env TF_CUDA_VERSION="${lib.versions.majorMinor cudaVersion}"
         build --action_env TF_CUDNN_VERSION="${lib.versions.major cudnn.version}"
         build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${builtins.concatStringsSep "," cudaFlags.realArches}"
@@ -437,7 +440,6 @@ buildPythonPackage {
       patchelf --add-rpath "${
         lib.makeLibraryPath [
           cuda_libs_joined
-          cudnn
           nccl
         ]
       }" "$lib"

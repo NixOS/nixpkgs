@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     libosmium
     nlohmann_json
-    opencv
+    (lib.getOutput "cxxdev" opencv)
     postgresql
     potrace
     proj

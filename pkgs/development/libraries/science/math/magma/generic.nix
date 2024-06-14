@@ -41,8 +41,8 @@ let
     then cudaPackages_11
     else cudaPackages;
 
-  inherit (effectiveCudaPackages) cudaAtLeast cudaFlags cudaOlder;
-  inherit (cudaFlags) cudaCapabilities;
+  inherit (effectiveCudaPackages) cudaAtLeast cudaOlder;
+  inherit (effectiveCudaPackages.cudaFlags) cmakeCudaArchitecturesString cudaCapabilities dropDot;
 
   # move to newer ROCm version once supported
   rocmPackages = rocmPackages_5;
@@ -83,13 +83,13 @@ let
       throw "No GPU targets specified"
   );
 
-  # E.g. [ "80" "86" "90" ]
-  cudaArchitectures = (builtins.map cudaFlags.dropDot cudaCapabilities);
-
-  cudaArchitecturesString = strings.concatStringsSep ";" cudaArchitectures;
   minArch =
     let
-      minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
+      minArch' = trivial.pipe cudaCapabilities [
+        (builtins.map dropDot)
+        (builtins.sort strings.versionOlder)
+        builtins.head
+      ];
     in
     # "75" -> "750"  Cf. https://bitbucket.org/icl/magma/src/f4ec79e2c13a2347eff8a77a3be6f83bc2daec20/CMakeLists.txt#lines-273
     "${minArch'}0";
@@ -99,6 +99,8 @@ in
 assert (builtins.match "[^[:space:]]*" gpuTargetString) != null;
 
 stdenv.mkDerivation {
+  strictDeps = true;
+
   pname = "magma";
   inherit version;
 
@@ -169,7 +171,7 @@ stdenv.mkDerivation {
     (strings.cmakeFeature "CMAKE_CXX_FLAGS" "-DADD_")
     (strings.cmakeFeature "FORTRAN_CONVENTION" "-DADD_")
   ] ++ lists.optionals cudaSupport [
-    (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+    (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
     (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
   ] ++ lists.optionals rocmSupport [
     (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")

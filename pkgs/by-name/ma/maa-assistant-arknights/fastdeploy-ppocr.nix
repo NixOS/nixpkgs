@@ -1,7 +1,6 @@
 {
   stdenv,
   config,
-  pkgs,
   lib,
   fetchFromGitHub,
   cmake,
@@ -9,15 +8,12 @@
   onnxruntime,
   opencv,
   cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
 }@inputs:
 
 let
+  inherit (opencv.passthru) cudaPackages;
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
-  cudaCapabilities = cudaPackages.cudaFlags.cudaCapabilities;
-  # E.g. [ "80" "86" "90" ]
-  cudaArchitectures = (builtins.map cudaPackages.cudaFlags.dropDot cudaCapabilities);
-  cudaArchitecturesString = lib.strings.concatStringsSep ";" cudaArchitectures;
+  inherit (cudaPackages.cudaFlags) cmakeCudaArchitecturesString;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "fastdeploy-ppocr";
@@ -59,14 +55,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       ]
     );
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "CMAKE_BUILD_TYPE" "None")
-      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-    ]
-    ++ lib.optionals cudaSupport [
-      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "None")
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+  ] ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
+  ];
 
   postInstall = ''
     mkdir $cmake

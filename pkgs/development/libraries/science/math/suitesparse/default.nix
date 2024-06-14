@@ -61,10 +61,6 @@ stdenv.mkDerivation rec {
     "MY_METIS_LIB=-lmetis"
   ] ++ lib.optionals blas.isILP64 [
     "CFLAGS=-DBLAS64"
-  ] ++ lib.optionals enableCuda [
-    "CUDA_PATH=${cudaPackages.cuda_nvcc}"
-    "CUDART_LIB=${cudaPackages.cuda_cudart.lib}/lib/libcudart.so"
-    "CUBLAS_LIB=${cudaPackages.libcublas.lib}/lib/libcublas.so"
   ] ++ lib.optionals stdenv.isDarwin [
     # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
     # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.13.0/SuiteSparse_config/SuiteSparse_config.mk#L368

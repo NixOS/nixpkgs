@@ -31,9 +31,6 @@
 , enblend-enfuse
 , hugin
 , gnumake
-
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
 }:
 
 stdenv.mkDerivation rec {
@@ -56,9 +53,7 @@ stdenv.mkDerivation rec {
     libsForQt5.kdoctools
     libsForQt5.wrapQtAppsHook
     wrapGAppsHook3
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_nvcc
-  ]);
+  ];
 
   buildInputs = [
     bison
@@ -77,7 +72,7 @@ stdenv.mkDerivation rec {
     libusb1
     libGL
     libGLU
-    opencv
+    (lib.getOutput "cxxdev" opencv)
     pcre
     x265
     jasper
@@ -107,8 +102,6 @@ stdenv.mkDerivation rec {
     marble
     oxygen
     threadweaver
-  ]) ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart
   ]);
 
   postPatch = ''

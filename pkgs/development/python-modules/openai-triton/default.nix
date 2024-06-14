@@ -28,7 +28,7 @@
 }:
 
 let
-  ptxas = "${cudaPackages.cuda_nvcc}/bin/ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
+  ptxas = "${cudaPackages.cuda_nvcc.bin}/bin/ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
 in
 buildPythonPackage rec {
   pname = "triton";
@@ -96,7 +96,7 @@ buildPythonPackage rec {
       new = [
         "-lcuda"
         "-L${addOpenGLRunpath.driverLink}"
-        "-L${cudaPackages.cuda_cudart}/lib/stubs/"
+        "-L${cudaPackages.cuda_cudart.stubs}/lib/stubs/"
       ];
 
       quote = x: ''"${x}"'';

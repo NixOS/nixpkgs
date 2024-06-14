@@ -4,40 +4,30 @@
   autoAddDriverRunpath,
   buildPythonPackage,
   autoPatchelfHook,
-  unzip,
   cudaPackages,
 }:
 
 let
-  pyVersion = "${lib.versions.major python.version}${lib.versions.minor python.version}";
+  pyVersion = lib.versions.majorMinor python.version;
+  version = cudaPackages.utils.majorMinorPatch cudaPackages.tensorrt.version;
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tensorrt";
-  version = lib.optionalString (cudaPackages ? tensorrt) cudaPackages.tensorrt.version;
+  inherit version;
 
-  src = cudaPackages.tensorrt.src;
+  src = "${cudaPackages.tensorrt.python}/python/tensorrt-${version}-cp${pyVersion}-none-linux_x86_64.whl";
 
   format = "wheel";
-  # We unpack the wheel ourselves because of the odd packaging.
-  dontUseWheelUnpack = true;
 
   nativeBuildInputs = [
-    unzip
     autoPatchelfHook
     autoAddDriverRunpath
   ];
 
-  preUnpack = ''
-    mkdir -p dist
-    tar --strip-components=2 -xf "$src" --directory=dist \
-      "TensorRT-${version}/python/tensorrt-${version}-cp${pyVersion}-none-linux_x86_64.whl"
-  '';
-
-  sourceRoot = ".";
-
   buildInputs = [
-    cudaPackages.cudnn
-    cudaPackages.tensorrt
+    cudaPackages.tensorrt.lib
+    # NOTE: Make sure to use the version of CUDNN which satisfies the requirements of TensorRT.
+    cudaPackages.tensorrt.passthru.cudnn.lib
   ];
 
   pythonImportsCheck = [ "tensorrt" ];
@@ -48,6 +38,6 @@ buildPythonPackage rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ aidalgol ];
-    broken = !(cudaPackages ? tensorrt) || !(cudaPackages ? cudnn);
+    broken = !(cudaPackages ? tensorrt);
   };
 }

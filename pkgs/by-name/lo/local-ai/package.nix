@@ -60,7 +60,7 @@ let
     else if with_clblas then "clblas"
     else "";
 
-  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart cudatoolkit;
+  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart;
 
   go-llama = effectiveStdenv.mkDerivation {
     name = "go-llama";
@@ -78,12 +78,11 @@ let
 
     buildInputs = [ ]
       ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
+      ++ lib.optionals with_cublas [ cuda_cudart libcublas ]
       ++ lib.optionals with_openblas [ openblas.dev ];
 
     nativeBuildInputs = [ cmake ]
-      # backward compatiblity with nixos-23.11
-      # use cuda_nvcc after release of nixos-24.05
-      ++ lib.optionals with_cublas [ cudatoolkit ];
+      ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     dontUseCmakeConfigure = true;
 
@@ -310,8 +309,15 @@ let
     };
     buildFlags = [ "libstablediffusion.a" ];
     dontUseCmakeConfigure = true;
+    # Borrow from the CUDA setup hook to set the CMake flags needed by the Makefile
+    postPatch = ''
+      substituteInPlace Makefile \
+        --replace-fail \
+          'cmake ' \
+          'cmake -DCUDA_TOOLKIT_ROOT_DIR="$(CUDAToolkit_ROOT)" '
+    '';
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ opencv ];
+    buildInputs = [ (lib.getOutput "cxxdev" opencv) ];
     env.NIX_CFLAGS_COMPILE = " -isystem ${opencv}/include/opencv4";
     installPhase = ''
       mkdir $out
@@ -411,8 +417,8 @@ let
       cp ${llama-cpp-grpc}/bin/*grpc-server backend-assets/grpc/llama-cpp
     '';
 
-    buildInputs = [ ]
-      ++ lib.optionals with_cublas [ libcublas ]
+    buildInputs = [ (lib.getOutput "cxxdev" opencv) ]
+      ++ lib.optionals with_cublas [ cuda_cudart libcublas ]
       ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
       ++ lib.optionals with_openblas [ openblas.dev ]
       ++ lib.optionals with_stablediffusion go-stable-diffusion.buildInputs
@@ -444,7 +450,6 @@ let
       "VERSION=v${version}"
       "BUILD_TYPE=${BUILD_TYPE}"
     ]
-    ++ lib.optional with_cublas "CUDA_LIBPATH=${cuda_cudart}/lib"
     ++ lib.optional with_tts "PIPER_CGO_CXXFLAGS=-DSPDLOG_FMT_EXTERNAL=1";
 
     buildPhase = ''
@@ -481,7 +486,7 @@ let
     postFixup =
       let
         LD_LIBRARY_PATH = [ ]
-          ++ lib.optionals with_cublas [ (lib.getLib libcublas) cuda_cudart addDriverRunpath.driverLink ]
+          ++ lib.optionals with_cublas [ libcublas.lib cuda_cudart.lib addDriverRunpath.driverLink ]
           ++ lib.optionals with_clblas [ clblast ocl-icd ]
           ++ lib.optionals with_openblas [ openblas ]
           ++ lib.optionals with_tts [ piper-phonemize ];

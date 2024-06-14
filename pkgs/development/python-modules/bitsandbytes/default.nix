@@ -2,47 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
   pythonOlder,
-  setuptools,
-  wheel,
-  torch,
+  stdenv,
+  cmake,
+  numpy,
   scipy,
-  symlinkJoin,
+  setuptools,
+  torch,
+  wheel,
 }:
 
 let
   pname = "bitsandbytes";
-  version = "0.42.0";
+  version = "0.43.1";
 
-  inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  inherit (cudaPackages) backendStdenv cudaVersion;
-
-  # NOTE: torchvision doesn't use cudnn; torch does!
-  #   For this reason it is not included.
-  cuda-common-redist = with cudaPackages; [
-    cuda_cccl # <thrust/*>
-    libcublas # cublas_v2.h
+  inherit (torch) cudaSupport;
+  inherit (torch.cudaPackages)
+    cuda_cccl
+    cuda_cudart
+    cuda_nvcc
+    cudaFlags
+    libcublas
     libcurand
-    libcusolver # cusolverDn.h
-    libcusparse # cusparse.h
-  ];
-
-  cuda-native-redist = symlinkJoin {
-    name = "cuda-native-redist-${cudaVersion}";
-    paths =
-      with cudaPackages;
-      [
-        cuda_cudart # cuda_runtime.h cuda_runtime_api.h
-        cuda_nvcc
-      ]
-      ++ cuda-common-redist;
-  };
-
-  cuda-redist = symlinkJoin {
-    name = "cuda-redist-${cudaVersion}";
-    paths = cuda-common-redist;
-  };
+    libcusolver
+    libcusparse
+    ;
+  inherit (lib.lists) optionals;
+  inherit (lib.strings) cmakeFeature;
 in
 buildPythonPackage {
   inherit pname version;
@@ -54,48 +40,59 @@ buildPythonPackage {
     owner = "TimDettmers";
     repo = "bitsandbytes";
     rev = "refs/tags/${version}";
-    hash = "sha256-PZxsFJ6WpfeQqRQrRRBZfZfNY6/TfJFLBeknX24OXcU=";
+    hash = "sha256-GFbFKPdV96DXPA+PZO4h0zdBclN670fb0PGv4QPHWHU=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace Makefile --replace "/usr/bin/g++" "g++" --replace "lib64" "lib"
-      substituteInPlace bitsandbytes/cuda_setup/main.py  \
-        --replace "binary_path = package_dir / self.binary_name"  \
-                  "binary_path = Path('$out/${python.sitePackages}/${pname}')/self.binary_name"
-    ''
-    + lib.optionalString torch.cudaSupport ''
-      substituteInPlace bitsandbytes/cuda_setup/main.py  \
-        --replace "/usr/local/cuda/lib64" "${cuda-native-redist}/lib"
-    '';
+  cmakeFlags =
+    [
+      (cmakeFeature "COMPUTE_BACKEND" (
+        if cudaSupport then
+          "cuda"
+        else if stdenv.isDarwin then
+          "mps"
+        else
+          "cpu"
+      ))
+    ]
+    ++ optionals cudaSupport [
+      (cmakeFeature "COMPUTE_CAPABILITY" cudaFlags.cmakeCudaArchitecturesString)
+    ];
 
-  CUDA_HOME = "${cuda-native-redist}";
+  # Ensure the generated CMake files are executed in a build before the Python hooks take over packaging.
+  preBuild = ''
+    make -j $NIX_BUILD_CORES
+  '';
 
-  preBuild =
-    if torch.cudaSupport then
-      with torch.cudaPackages;
-      let
-        cudaVersion = lib.concatStrings (lib.splitVersion torch.cudaPackages.cudaMajorMinorVersion);
-      in
-      ''make CUDA_VERSION=${cudaVersion} cuda${cudaMajorVersion}x''
-    else
-      ''make CUDA_VERSION=CPU cpuonly'';
+  dontUseCmakeBuildDir = true;
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
-  ] ++ lib.optionals torch.cudaSupport [ cuda-native-redist ];
+  ];
 
-  buildInputs = lib.optionals torch.cudaSupport [ cuda-redist ];
+  nativeBuildInputs = [ cmake ] ++ optionals cudaSupport [ cuda_nvcc ];
 
-  propagatedBuildInputs = [
-    scipy
+  buildInputs = optionals cudaSupport [
+    cuda_cudart # cuda_runtime.h
+    cuda_cccl # <thrust/*>
+    libcublas # cublas_v2.h
+    libcurand
+    libcusolver # cusolverDn.h
+    libcusparse # cusparse.h
+  ];
+
+  dependencies = [
+    numpy
     torch
   ];
 
+  nativeCheckInputs = [ scipy ];
+
   doCheck = false; # tests require CUDA and also GPU access
 
-  pythonImportsCheck = [ "bitsandbytes" ];
+  # Don't check for Python import when building with CUDA support, as it requires access to the GPU:
+  # https://github.com/TimDettmers/bitsandbytes/blob/4a6fb352cfb90b17820391f0db18aeda98774f0a/bitsandbytes/cuda_specs.py#L33-L35
+  pythonImportsCheck = optionals (!cudaSupport) [ "bitsandbytes" ];
 
   meta = with lib; {
     description = "8-bit CUDA functions for PyTorch";

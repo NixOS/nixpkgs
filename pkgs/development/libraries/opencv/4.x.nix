@@ -246,7 +246,7 @@ let
   #https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
 
-  inherit (cudaPackages) cudaFlags cudaVersion;
+  inherit (cudaPackages) cudaFlags;
   inherit (cudaFlags) cudaCapabilities;
 
 in
@@ -372,28 +372,19 @@ effectiveStdenv.mkDerivation {
     doxygen
     graphviz-nox
   ] ++ lib.optionals enableCuda (with cudaPackages; [
-    cuda_cudart.lib
-    cuda_cudart.dev
     cuda_cccl.dev # <thrust/*>
-    libnpp.dev # npp.h
-    libnpp.lib
-    libnpp.static
+    cuda_cudart # <cuda_runtime_api.h> -lcudart
+    libnpp # npp.h -lnpp
     nvidia-optical-flow-sdk
   ] ++ lib.optionals enableCublas [
-    # May start using the default $out instead once
-    # https://github.com/NixOS/nixpkgs/issues/271792
-    # has been addressed
-    libcublas.static
-    libcublas.lib
-    libcublas.dev # cublas_v2.h
+    libcublas # <cublas_v2.h> -lcublas
   ] ++ lib.optionals enableCudnn [
-    cudnn.dev # cudnn.h
-    cudnn.lib
-    cudnn.static
+    # NOTE: As of version 4.9, OpenCV does not support CUDNN 9.x.
+    # See: https://github.com/opencv/opencv/pull/25412
+    # Revisit when updating to OpenCV 4.10.
+    cudnn_8 # <cudnn.h> -lcudnn
   ] ++ lib.optionals enableCufft [
-    libcufft.dev # cufft.h
-    libcufft.lib
-    libcufft.static
+    libcufft # <cufft.h> -lcufft
   ]);
 
   propagatedBuildInputs = lib.optionals enablePython [ pythonPackages.numpy ];
@@ -521,7 +512,7 @@ effectiveStdenv.mkDerivation {
   # see https://github.com/NixOS/nixpkgs/issues/276691
   + lib.optionalString (!enableCuda) ''
     mkdir -p "$cxxdev/nix-support"
-    echo "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
+    printWords "''${!outputDev}" >> "$cxxdev/nix-support/propagated-build-inputs"
   ''
   # install python distribution information, so other packages can `import opencv`
   + lib.optionalString enablePython ''
@@ -541,6 +532,8 @@ effectiveStdenv.mkDerivation {
 
   passthru = {
     cudaSupport = enableCuda;
+    # OpenCV's OpenCVConfig.cmake requires consumers to use the same version of CUDA.
+    inherit cudaPackages;
 
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
