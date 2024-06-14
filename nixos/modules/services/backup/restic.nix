@@ -263,6 +263,15 @@ in
             having to manually specify most options.
           '';
         };
+
+        privateTmp = mkOption {
+          type = types.bool;
+          description = ''
+            Set the `PrivateTmp` option for the systemd-service. Set to false if
+            you need sockets or other files from global /tmp.
+          '';
+          default = true;
+        };
       };
     }));
     default = { };
@@ -290,24 +299,26 @@ in
   };
 
   config = {
-    assertions = mapAttrsToList (n: v: {
-      assertion = (v.repository == null) != (v.repositoryFile == null);
-      message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
-    }) config.services.restic.backups;
+    assertions = mapAttrsToList
+      (n: v: {
+        assertion = (v.repository == null) != (v.repositoryFile == null);
+        message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
+      })
+      config.services.restic.backups;
     systemd.services =
       mapAttrs'
         (name: backup:
           let
             extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
             resticCmd = "${backup.package}/bin/restic${extraOptions}";
-            excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
+            excludeFlags = optional (backup.exclude != [ ]) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
-            doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
+            doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != [ ]);
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
               (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
             ];
             checkCmd = optionals backup.runCheck [
-                (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
+              (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
             rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
@@ -345,7 +356,7 @@ in
               RuntimeDirectory = "restic-backups-${name}";
               CacheDirectory = "restic-backups-${name}";
               CacheDirectoryMode = "0700";
-              PrivateTmp = true;
+              PrivateTmp = backup.privateTmp;
             } // optionalAttrs (backup.environmentFile != null) {
               EnvironmentFile = backup.environmentFile;
             };
@@ -385,21 +396,25 @@ in
         (filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 
     # generate wrapper scripts, as described in the createWrapper option
-    environment.systemPackages = lib.mapAttrsToList (name: backup: let
-      extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-      resticCmd = "${backup.package}/bin/restic${extraOptions}";
-    in pkgs.writeShellScriptBin "restic-${name}" ''
-      set -a  # automatically export variables
-      ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
-      # set same environment variables as the systemd service
-      ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
-        (lib.filterAttrs (n: v: v != null && n != "PATH"))
-        (lib.mapAttrsToList (n: v: "${n}=${v}"))
-        (lib.concatStringsSep "\n")
-      ]}
-      PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
+    environment.systemPackages = lib.mapAttrsToList
+      (name: backup:
+        let
+          extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
+          resticCmd = "${backup.package}/bin/restic${extraOptions}";
+        in
+        pkgs.writeShellScriptBin "restic-${name}" ''
+          set -a  # automatically export variables
+          ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
+          # set same environment variables as the systemd service
+          ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
+            (lib.filterAttrs (n: v: v != null && n != "PATH"))
+            (lib.mapAttrsToList (n: v: "${n}=${v}"))
+            (lib.concatStringsSep "\n")
+          ]}
+          PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 
-      exec ${resticCmd} $@
-    '') (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
+          exec ${resticCmd} $@
+        '')
+      (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
   };
 }
