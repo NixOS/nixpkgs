@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,13 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
                     -t $doc/share/doc/jwasm/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Baron-von-Riedesel/JWasm/";
     description = "MASM-compatible x86 assembler";
-    changelog = "https://github.com/Baron-von-Riedesel/JWasm/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/Baron-von-Riedesel/JWasm/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
 })
