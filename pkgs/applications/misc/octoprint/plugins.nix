@@ -337,6 +337,27 @@ in
     };
   };
 
+  octopod = buildPlugin rec {
+    pname = "octopod";
+    version = "0.3.16";
+
+    src = fetchFromGitHub {
+      owner = "gdombiak";
+      repo = "OctoPrint-OctoPod";
+      rev = version;
+      sha256 = "sha256-9QKC1MsYO3XihOTAijJUv5i20iMSQHOHPfLiYPV5y8s=";
+    };
+
+    propagatedBuildInputs = with super; [ pillow ];
+
+    meta = with lib; {
+      description = "OctoPod extension for OctoPrint";
+      homepage = "https://github.com/gdombiak/OctoPrint-OctoPod";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ tri-ler ];
+    };
+  };
+
   printtimegenius = buildPlugin rec {
     pname = "printtimegenius";
     version = "2.3.3";
