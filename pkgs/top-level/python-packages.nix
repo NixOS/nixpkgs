@@ -4434,6 +4434,8 @@ self: super: with self; {
 
   flexcache = callPackage ../development/python-modules/flexcache { };
 
+  flexparser = callPackage ../development/python-modules/flexparser { };
+
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
