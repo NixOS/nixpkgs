@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       screencast hardware data with the highest resolution and FPS possible.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tfc ];
+    maintainers = with maintainers; [ tfc matthewcroughan ];
     platforms = platforms.linux;
   };
 }
