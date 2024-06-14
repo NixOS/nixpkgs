@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pdfplumber";
-  version = "0.11.0";
+  version = "0.11.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "jsvine";
     repo = "pdfplumber";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sjiCxE2WcvBASANCeookNn1n9M+mY0/8QGOCen+pzqM=";
+    hash = "sha256-5A1hjmC6GCS0Uqq5AiCEGqDTwASbJBX0pJGNNyvP3+4=";
   };
 
   postPatch = ''
