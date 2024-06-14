@@ -320,7 +320,7 @@ in
       sha256 = "sha256-cAUXe/lRTqYuWnrRiNDuDjcayL5yV9/PtTd9oeSC8KA=";
     };
 
-    propagatedBuildInputs = with super; [ 
+    propagatedBuildInputs = with super; [
       backoff
       sentry-sdk
       bson
