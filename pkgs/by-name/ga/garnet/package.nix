@@ -26,8 +26,7 @@ buildDotnetModule rec {
     "net8.0"
   ];
 
-  meta = with lib; {
-    mainProgram = "GarnetServer";
+  meta = {
     description = "Remote cache-store from Microsoft Research";
     longDescription = ''
       A remote cache-store that offers strong performance, scalability,
@@ -36,7 +35,8 @@ buildDotnetModule rec {
     '';
     homepage = "https://microsoft.github.io/garnet/";
     changelog = "https://github.com/microsoft/garnet/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ getchoo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "GarnetServer";
   };
 }
