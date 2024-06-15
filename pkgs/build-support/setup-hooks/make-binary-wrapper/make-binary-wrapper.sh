@@ -48,6 +48,7 @@ makeBinaryWrapper() {
 
     makeDocumentedCWrapper "$original" "$@" | \
       @cc@ \
+        @maybeStaticFlag@ \
         -Wall -Werror -Wpedantic \
         -Wno-overlength-strings \
         -Os \
