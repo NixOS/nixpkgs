@@ -71,6 +71,7 @@ in
 
           [0]: https://aria2.github.io/manual/en/html/aria2c.html#synopsis
         '';
+        default = { };
         type = lib.types.submodule {
           freeformType = with lib.types; attrsOf (oneOf [ bool int float singleLineStr ]);
           options = {
