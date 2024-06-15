@@ -31183,9 +31183,16 @@ with pkgs;
     vmopts = config.jetbrains.vmopts or null;
     jdk = jetbrains.jdk;
   }) // {
-    jdk-no-jcef = callPackage ../development/compilers/jetbrains-jdk { withJcef = false; };
-    jdk = callPackage ../development/compilers/jetbrains-jdk {  };
-    jcef = callPackage ../development/compilers/jetbrains-jdk/jcef.nix { };
+    jdk-no-jcef = callPackage ../development/compilers/jetbrains-jdk {
+      jdk = jdk21;
+      withJcef = false;
+    };
+    jdk = callPackage ../development/compilers/jetbrains-jdk {
+      jdk = jdk21;
+    };
+    jcef = callPackage ../development/compilers/jetbrains-jdk/jcef.nix {
+      jdk = jdk21;
+    };
   });
 
   jmusicbot = callPackage ../applications/audio/jmusicbot { };
