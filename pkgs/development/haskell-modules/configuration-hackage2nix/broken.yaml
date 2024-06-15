@@ -2896,7 +2896,6 @@ broken-packages:
   - HTicTacToe # failure in job https://hydra.nixos.org/build/233235397 at 2023-09-02
   - htiled # failure in job https://hydra.nixos.org/build/233219305 at 2023-09-02
   - htlset # failure in job https://hydra.nixos.org/build/233203886 at 2023-09-02
-  - html-parse # failure in job https://hydra.nixos.org/build/233241759 at 2023-09-02
   - html-rules # failure in job https://hydra.nixos.org/build/233200615 at 2023-09-02
   - html-tokenizer # failure in job https://hydra.nixos.org/build/233243581 at 2023-09-02
   - htoml # failure in job https://hydra.nixos.org/build/233246670 at 2023-09-02
