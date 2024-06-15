@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = [./update.py (toString ./version.json)];
+
   meta = with lib; {
     description = "Stash is a self-hosted porn app";
     homepage = "https://github.com/stashapp/stash";
