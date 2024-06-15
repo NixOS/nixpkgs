@@ -28,7 +28,13 @@ let
       hash = "sha256-RXytujvx/23Z24TWpvnHdjJ4/dXqjs5uiavUmukaD9A=";
     };
 
-    patches = [ ./01-remove-benchmark-flags.patch ];
+    patches = [
+      ./01-remove-benchmark-flags.patch
+
+      # Fix missing recursive_guard paramter value on 3.12.4 and newer, based on
+      # https://github.com/pydantic/pydantic-core/commit/d7946da7455fc269f69d6ae01abe2ba61266a0f2
+      ./python3.12.4-compat.patch
+    ];
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
