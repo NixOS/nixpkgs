@@ -8,6 +8,7 @@
 , writeShellScriptBin
 , makeWrapper
 , copyDesktopItems
+, giflib
 , makeDesktopItem
 , pkg-config
 , pixman
@@ -57,6 +58,7 @@ buildNpmPackage' rec {
     pango
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreText
+    giflib
   ];
 
   desktopItems = [
