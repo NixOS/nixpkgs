@@ -2,17 +2,16 @@
   lib,
   buildDotnetModule,
   fetchFromGitHub,
-  garnet,
   dotnetCorePackages,
 }:
-buildDotnetModule {
+buildDotnetModule rec {
   pname = "garnet";
   version = "1.0.13";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "garnet";
-    rev = "v${garnet.version}";
+    rev = "v${version}";
     hash = "sha256-mAZBYVOAbVPKcOpt+vA4uEK+xEx4qXPnAthsPsxiXkw=";
   };
 
@@ -36,7 +35,7 @@ buildDotnetModule {
       and compatibility with existing Redis clients
     '';
     homepage = "https://microsoft.github.io/garnet/";
-    changelog = "https://github.com/microsoft/garnet/releases/tag/v${garnet.version}";
+    changelog = "https://github.com/microsoft/garnet/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ getchoo ];
   };
