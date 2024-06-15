@@ -15,7 +15,13 @@ let
     exec = "unciv";
     comment = "An open-source Android/Desktop remake of Civ V";
     desktopName = "Unciv";
+    icon = "unciv";
     categories = [ "Game" ];
+  };
+
+  desktopIcon = fetchurl {
+    url = "https://github.com/yairm210/Unciv/blob/4.11.16/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
+    hash = "sha256-Zuz+HGfxjGviGBKTiHdIFXF8UMRLEIfM8f+LIB/xonk=";
   };
 
   envLibPath = lib.makeLibraryPath (lib.optionals stdenv.isLinux [
@@ -45,6 +51,8 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${envLibPath}" \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
       --add-flags "-jar ${src}"
+
+    install -Dm444 ${desktopIcon} $out/share/icons/hicolor/512x512/apps/unciv.png
 
     runHook postInstall
   '';

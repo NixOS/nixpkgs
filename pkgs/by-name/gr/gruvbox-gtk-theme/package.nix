@@ -1,27 +1,24 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gnome-themes-extra
-, gtk-engine-murrine
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gnome-themes-extra,
+  gtk-engine-murrine,
 }:
 stdenvNoCC.mkDerivation {
   pname = "gruvbox-gtk-theme";
-  version = "unstable-2023-05-28";
+  version = "0-unstable-2024-06-12";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Gruvbox-GTK-Theme";
-    rev = "c0b7fb501938241a3b6b5734f8cb1f0982edc6b4";
-    hash = "sha256-Y+6HuWaVkNqlYc+w5wLkS2LpKcDtpeOpdHnqBmShm5Q=";
+    rev = "1a0f6672283e1846ec307addd4647f2daad29402";
+    hash = "sha256-bbL4bHAdkmReogUQML9sMpSallZ7wrgbK3R64xiAYRo=";
   };
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  buildInputs = [
-    gnome-themes-extra
-  ];
+  buildInputs = [ gnome-themes-extra ];
 
   dontBuild = true;
 
@@ -32,11 +29,14 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gtk theme based on the Gruvbox colour pallete";
     homepage = "https://www.pling.com/p/1681313/";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.math-42 ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      luftmensch-luftmensch
+      math-42
+    ];
   };
 }

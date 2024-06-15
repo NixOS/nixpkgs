@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-qtz8/vO6LJ19NcuFf9p3DWNy41kkoBWlgZGChlnTOvI=";
+    hash = "sha256-T1boMqzAGMjUD62ZAlWNOe3xUx5H5ZwpR7MNipy/LKA=";
   };
 
   nativeBuildInputs = [
@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
     # We make bubblewrap mode always available since
     # landlock mode is not supported in old kernels.
     substituteInPlace src/warpinator-launch.py \
-      --replace '"/bin/python3"' '"${pythonEnv.interpreter}"' \
-      --replace "/bin/bwrap" "${bubblewrap}/bin/bwrap" \
-      --replace 'GLib.find_program_in_path("bwrap")' "True"
+      --replace-fail '"/usr/bin/python3"' '"${pythonEnv.interpreter}"' \
+      --replace-fail "/usr/bin/bwrap" "${bubblewrap}/bin/bwrap" \
+      --replace-fail 'GLib.find_program_in_path("bwrap")' "True"
   '';
 
   passthru.updateScript = gitUpdater {

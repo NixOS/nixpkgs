@@ -7,20 +7,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rcp";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${version}";
-    hash = "sha256-e6m3E1R7o4X9cPEy/ayUIsK0xhRaVsAFDAwObJrDJPA=";
+    hash = "sha256-nNMcZyJAvqxVSoytmfSqsfk1yVzzZ5aIOj72L+jFAAM=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     IOKit
   ]);
 
-  cargoHash = "sha256-croFSe37yQa9LijaNxKHrZlcJdExz9SweOoG21PPn9E=";
+  cargoHash = "sha256-3+w+pTws8WjrUqIWYGbE2V438mVUUyrjBH9mHI8uRMQ=";
 
   RUSTFLAGS = "--cfg tokio_unstable";
 

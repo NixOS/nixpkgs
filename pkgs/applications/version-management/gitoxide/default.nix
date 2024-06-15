@@ -16,6 +16,7 @@
 let
   canRunCmd = stdenv.hostPlatform.emulatorAvailable buildPackages;
   gix = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/gix";
+  ein = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/ein";
 in rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
   version = "0.36.0";
@@ -40,6 +41,11 @@ in rustPlatform.buildRustPackage rec {
       --bash <(${gix} completions --shell bash) \
       --fish <(${gix} completions --shell fish) \
       --zsh <(${gix} completions --shell zsh)
+
+    installShellCompletion --cmd ein \
+      --bash <(${ein} completions --shell bash) \
+      --fish <(${ein} completions --shell fish) \
+      --zsh <(${ein} completions --shell zsh)
   '';
 
   # Needed to get openssl-sys to use pkg-config.
