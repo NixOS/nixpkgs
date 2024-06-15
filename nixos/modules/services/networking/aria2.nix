@@ -7,12 +7,6 @@ let
   defaultRpcListenPort = 6800;
   defaultDir = "${homeDir}/Downloads";
 
-  rangesToStringList = map (x:
-    if x.from == x.to
-    then builtins.toString x.from
-    else builtins.toString x.from + "-" + builtins.toString x.to
-  );
-
   portRangesToString = ranges: lib.concatStringsSep "," (map
     (x:
       if x.from == x.to
