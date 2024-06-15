@@ -15891,8 +15891,6 @@ with pkgs;
     withQt = true;
   };
 
-  lessc = nodePackages.less;
-
   liquibase = callPackage ../development/tools/database/liquibase { };
 
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
