@@ -22,7 +22,10 @@ buildDotnetModule {
   dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 sdk_8_0 ];
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  dotnetInstallFlags = ["-f" "net8.0"];
+  dotnetInstallFlags = [
+    "-f"
+    "net8.0"
+  ];
 
   meta = with lib; {
     mainProgram = "GarnetServer";
@@ -35,6 +38,6 @@ buildDotnetModule {
     homepage = "https://microsoft.github.io/garnet/";
     changelog = "https://github.com/microsoft/garnet/releases/tag/v${garnet.version}";
     license = licenses.mit;
-    maintainers = with maintainers; [getchoo];
+    maintainers = with maintainers; [ getchoo ];
   };
 }
