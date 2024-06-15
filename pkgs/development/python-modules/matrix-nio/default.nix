@@ -112,7 +112,6 @@ buildPythonPackage rec {
     license = licenses.isc;
     maintainers = with maintainers; [
       tilpner
-      emily
       symphorien
     ];
   };

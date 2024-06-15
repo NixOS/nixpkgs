@@ -99,6 +99,6 @@ in buildPythonPackage {
     homepage = "https://github.com/poljar/weechat-matrix";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ tilpner emily ];
+    maintainers = with maintainers; [ tilpner ];
   };
 }

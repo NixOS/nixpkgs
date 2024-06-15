@@ -55,6 +55,6 @@ callPackage ../nginx/generic.nix args rec {
     homepage = "https://openresty.org";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ thoughtpolice lblasc emily ];
+    maintainers = with lib.maintainers; [ thoughtpolice lblasc ];
   };
 }
