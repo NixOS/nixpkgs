@@ -5916,8 +5916,6 @@ with pkgs;
 
   nsz = with python3.pkgs; toPythonApplication nsz;
 
-  nwipe = callPackage ../tools/security/nwipe { };
-
   nx2elf = callPackage ../tools/compression/nx2elf { };
 
   nx-libs = callPackage ../tools/X11/nx-libs { };
