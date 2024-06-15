@@ -300,6 +300,7 @@ sdk_packages () {
     if ! version_older "$version" "8"; then
         pkgs+=(
             "Microsoft.NET.ILLink.Tasks"
+            "runtime.osx-arm64.Microsoft.DotNet.ILCompiler"
         )
     fi
 

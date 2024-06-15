@@ -52,7 +52,8 @@ let
   sigtool = callPackage ./sigtool.nix {};
   signAppHost = callPackage ./sign-apphost.nix {};
 
-  hasILCompiler = lib.versionAtLeast version "7";
+  hasILCompiler =
+    lib.versionAtLeast version (if targetRid == "osx-arm64" then "8" else "7");
 
   extraTargets = writeText "extra.targets" (''
     <Project>

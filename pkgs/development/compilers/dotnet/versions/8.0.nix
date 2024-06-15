@@ -112,6 +112,7 @@ let
       (fetchNuGet { pname = "runtime.win-arm64.Microsoft.DotNet.ILCompiler"; version = "8.0.6"; sha256 = "0cqm5183as2m3nsl9as00qm9928bani6gflndg0fv73r799k5raz"; })
       (fetchNuGet { pname = "runtime.win-x64.Microsoft.DotNet.ILCompiler"; version = "8.0.6"; sha256 = "0yjji845ngsaqxyg2cmngj3vba8v4wyriv0qz4hgn1wbrramml6b"; })
       (fetchNuGet { pname = "Microsoft.NET.ILLink.Tasks"; version = "8.0.6"; sha256 = "0slfrm65izibsxg505vr8m4k6n2a2kl4iqyyr9xkgr8541g7rrs5"; })
+      (fetchNuGet { pname = "runtime.osx-arm64.Microsoft.DotNet.ILCompiler"; version = "8.0.6"; sha256 = "07y19lzkfr0i122gqbvfwi87jipjvrw4wrm68z01k4k0yh0mk1lj"; })
   ];
 in rec {
   release_8_0 = "8.0.6";
