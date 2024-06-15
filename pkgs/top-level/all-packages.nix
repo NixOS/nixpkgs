@@ -17561,6 +17561,8 @@ with pkgs;
 
   solargraph = rubyPackages.solargraph;
 
+  standardrb = rubyPackages.standard;
+
   rbenv = callPackage ../development/ruby-modules/rbenv { };
 
   rubyfmt = darwin.apple_sdk_11_0.callPackage ../development/tools/rubyfmt {
