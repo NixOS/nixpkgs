@@ -53,4 +53,7 @@ in stdenv.mkDerivation {
     (lib.mesonEnable "glvnd" false)
     (lib.mesonEnable "shared-glapi" true)
   ];
+
+  # Don't need this on Darwin.
+  passthru.llvmpipeHook = null;
 }

@@ -152,10 +152,11 @@ clangStdenv.mkDerivation rec {
 
   doCheck = true;
 
+  nativeCheckInputs = [
+    mesa.llvmpipeHook
+  ];
+
   checkPhase = ''
-    # for running mesa llvmpipe
-    export LIBGL_DRIVERS_PATH=${mesa.drivers}/lib/dri
-    export __EGL_VENDOR_LIBRARY_FILENAMES=${mesa.drivers}/share/glvnd/egl_vendor.d/50_mesa.json
     # some fontconfig issues cause pdf output to have wrong font
     ctest -j$NIX_BUILD_CORES -E pdfexporttest.\*
   '';
