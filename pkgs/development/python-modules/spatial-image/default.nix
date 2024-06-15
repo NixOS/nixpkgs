@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "spatial-image";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "spatial-image";
     repo = "spatial-image";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nCsxPhIgGmZZntYbhQ3KnzptcKdN288eNixbQDgECSQ=";
+    hash = "sha256-yIAqHhq2naTA8PdLOdrNSrhEOhRwlFD6x9dH4xDVt9Y=";
   };
 
   nativeBuildInputs = [ flit-core ];

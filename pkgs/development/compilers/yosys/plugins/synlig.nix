@@ -97,5 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     license     = licenses.asl20;
     maintainers = with maintainers; [ hzeller ];
     platforms   = platforms.all;
+    broken      = versionAtLeast yosys.version "0.39";
   };
 })
