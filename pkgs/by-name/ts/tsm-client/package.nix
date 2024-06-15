@@ -102,11 +102,11 @@ let
     in
       "https://public.dhe.ibm.com/storage/tivoli-storage-management/${if fixup=="0" then "maintenance" else "patches"}/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
 
-  unwrapped = stdenv.mkDerivation rec {
-    name = "tsm-client-${version}-unwrapped";
+  unwrapped = stdenv.mkDerivation (finalAttrs: {
+    name = "tsm-client-${finalAttrs.version}-unwrapped";
     version = "8.1.22.0";
     src = fetchurl {
-      url = mkSrcUrl version;
+      url = mkSrcUrl finalAttrs.version;
       hash = "sha512-tsmrnZ0zoGCmpp9ey2K6ad8tMVBgB+lYMTx7YgVOSXNeiGT76fUYdr9DmO+PEsj+J/Pg/skd7ywqsBbjQT+eiw==";
     };
     inherit meta passthru;
@@ -162,7 +162,7 @@ let
         ln --symbolic --force --no-target-directory "$out$(readlink "$link")" "$link"
       done
     '';
-  };
+  });
 
   binPath = lib.makeBinPath ([ acl gnugrep procps ]
     ++ lib.optional enableGui jdk8);
