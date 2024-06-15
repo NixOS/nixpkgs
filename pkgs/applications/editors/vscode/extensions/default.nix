@@ -1291,7 +1291,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=discloud.discloud";
           homepage = "https://github.com/discloud/vscode-discloud";
           license = lib.licenses.asl20;
-          maintainers = [ lib.maintainers.astindev ];
+          maintainers = [ lib.maintainers.diogomdp ];
         };
       };
 
