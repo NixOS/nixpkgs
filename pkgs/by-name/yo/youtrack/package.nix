@@ -1,12 +1,12 @@
-{ lib, stdenvNoCC, fetchzip, makeBinaryWrapper, jdk17_headless, gawk, statePath ? "/var/lib/youtrack" }:
+{ lib, stdenvNoCC, fetchzip, makeBinaryWrapper, jdk21_headless, gawk, statePath ? "/var/lib/youtrack" }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "youtrack";
-  version = "2024.1.32323";
+  version = "2024.2.34646";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/charisma/youtrack-${finalAttrs.version}.zip";
-    hash = "sha256-eBjh0jp2Pb40IkjKZSBiaPWh5xXXRYUVjgmoVGrVLrg=";
+    hash = "sha256-9htjtB1TC+p+eETsXH5B36NKnZsFA/Og/PIW9gHQefc=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r * $out
     makeWrapper $out/bin/youtrack.sh $out/bin/youtrack \
       --prefix PATH : "${lib.makeBinPath [ gawk ]}" \
-      --set JRE_HOME ${jdk17_headless}
+      --set JRE_HOME ${jdk21_headless}
     rm -rf $out/internal/java
     mv $out/conf $out/conf.orig
     ln -s ${statePath}/backups $out/backups

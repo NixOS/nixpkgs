@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cimg";
-  version = "3.3.6";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "GreycLab";
     repo = "CImg";
     rev = "v.${finalAttrs.version}";
-    hash = "sha256-yNIHCEiLvoNNsYisAKo/jj6Q2mLrLMttZyj2XzrWFU4=";
+    hash = "sha256-IHWBvPEl0RN/0j8FaeAhlzWPeitC3bBgUCAj49aPLpw=";
   };
 
   outputs = [ "out" "doc" ];
