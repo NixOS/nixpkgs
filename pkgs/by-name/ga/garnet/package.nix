@@ -3,6 +3,7 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
+  nix-update-script,
 }:
 buildDotnetModule rec {
   pname = "garnet";
@@ -25,6 +26,10 @@ buildDotnetModule rec {
     "-f"
     "net8.0"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Remote cache-store from Microsoft Research";
