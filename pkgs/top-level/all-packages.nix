@@ -17877,6 +17877,12 @@ with pkgs;
 
   apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
 
+  inav-configurator = callPackage ../applications/science/robotics/inav-configurator {
+    version = "5.1.0";
+    hash = "sha256-ZvZxQICa5fnJBTx0aW/hqQCuhQW9MkcVa2sOjPYaPXM=";
+    packed = true;
+  };
+
   ### MISC
 
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
