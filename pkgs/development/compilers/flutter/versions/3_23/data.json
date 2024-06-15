@@ -2,6 +2,9 @@
   "version": "3.23.0-0.1.pre",
   "engineVersion": "bb10c5466638e963479ba5e64e601e42d1a43447",
   "channel": "beta",
+  "engineHashes": {
+    "aarch64-linux": "sha256-WHWxYOHd3jxE5CQNt0+9qxlsCLK5y9iJsVERtJ4Ylbk="
+  },
   "dartVersion": "3.5.0-180.3.beta",
   "dartHash": {
     "x86_64-linux": "sha256-DXGyUTu9I602lLnDz9BKLfHEAeaMKtbZjxgmPPSTEv0=",
