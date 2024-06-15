@@ -1,13 +1,13 @@
-{ stdenv, fetchzip, lib, dtc }:
+{ stdenv, fetchgit, lib, dtc }:
 
 stdenv.mkDerivation {
   pname = "kvmtool";
   version = "unstable-2024-06-14";
 
-  src = fetchGit {
+  src = fetchgit {
     url = "https://github.com/kvmtool/kvmtool.git";
-    ref = "master";
     rev = "da4cfc3e540341b84c4bbad705b5a15865bc1f80";
+    hash = "sha256-05tNsZauOXe1L1y1YchzvLZm3xOctPJhHCjyAyRnwy4=";
   };
 
   patches = [ ./strlcpy-glibc-2.38-fix.patch ];
