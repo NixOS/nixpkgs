@@ -3,6 +3,7 @@
 , rustPlatform
 , testers
 , wstunnel
+, nixosTests
 }:
 
 let
@@ -27,7 +28,10 @@ rustPlatform.buildRustPackage {
     "--skip=tcp::tests::test_proxy_connection"
   ];
 
-  passthru.tests.version = testers.testVersion { package = wstunnel; };
+  passthru.tests = {
+    version = testers.testVersion { package = wstunnel; };
+    nixosTest = nixosTests.wstunnel;
+  };
 
   meta = {
     description = "Tunnel all your traffic over Websocket or HTTP2 - Bypass firewalls/DPI";

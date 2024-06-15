@@ -277,7 +277,7 @@ let
         environment.RUST_LOG = serverCfg.loggingLevel;
 
         serviceConfig = {
-          Type = "simple";
+          Type = "exec";
           EnvironmentFile =
             lib.optional (serverCfg.environmentFile != null) serverCfg.environmentFile;
           DynamicUser = true;
@@ -334,7 +334,7 @@ let
       environment.RUST_LOG = clientCfg.loggingLevel;
 
       serviceConfig = {
-        Type = "simple";
+        Type = "exec";
         EnvironmentFile =
           lib.optional (clientCfg.environmentFile != null) clientCfg.environmentFile;
         DynamicUser = true;
