@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "subtitlecomposer";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "multimedia";
     repo = "subtitlecomposer";
     rev = "v${version}";
-    hash = "sha256-RKS3VTtpxnox0hzessMHmoGPpT+Ho0b3fxtQMGw9OrM=";
+    hash = "sha256-5RBrxOy1EIgDLb21r1y+Pou8d/j05a1YYMRJh1n8vSA=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules libsForQt5.wrapQtAppsHook ];
