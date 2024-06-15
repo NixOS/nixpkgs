@@ -38983,6 +38983,10 @@ with pkgs;
 
   emuflight-configurator = callPackage ../applications/science/robotics/emuflight-configurator { };
 
+  inav-configurator7 = callPackage ../applications/science/robotics/inav-configurator {
+    version = "7.1.1";
+    hash = "sha256-lKQ/qkePKlAIrqQ4CNvTb4ccNh36p3tZr118W23ueLo=";
+  };
   inav-configurator = callPackage ../applications/science/robotics/inav-configurator {
     version = "5.1.0";
     hash = "sha256-ZvZxQICa5fnJBTx0aW/hqQCuhQW9MkcVa2sOjPYaPXM=";
