@@ -1,0 +1,28 @@
+diff --git a/src/data/debuggers/internal/gdbrc b/src/data/debuggers/internal/gdbrc
+index 0d163d43..8e2f85f1 100644
+--- a/src/data/debuggers/internal/gdbrc
++++ b/src/data/debuggers/internal/gdbrc
+@@ -73,17 +73,18 @@ Name[wa]=gdb
+ Name[x-test]=xxgdbxx
+ Name[zh_CN]=gdb
+ Name[zh_TW]=gdb
+-TryExec=gdb
++TryExec=@gdb@
++CodeName=gdb
+ Backends=KCrash|coredump-core
+ 
+ [KCrash]
+-Exec=gdb -nw -n -batch -x %preamblefile -x %tempfile -p %pid %execpath
+-ExecWithSymbolResolution=gdb -nw -n -batch --init-eval-command='set debuginfod enabled on' -x %preamblefile -x %tempfile -p %pid %execpath
++Exec=@gdb@ -nw -n -batch -x %preamblefile -x %tempfile -p %pid %execpath
++ExecWithSymbolResolution=@gdb@ -nw -n -batch --init-eval-command='set debuginfod enabled on' -x %preamblefile -x %tempfile -p %pid %execpath
+ PreambleCommands=set width 200\nset backtrace limit 128\nsource %drkonqi_datadir/python/gdb_preamble/preamble.py\npy print_preamble()
+ BatchCommands=thread\nthread apply all bt
+ 
+ [coredump-core]
+-Exec=gdb --nw --nx --batch --command=%preamblefile --command=%tempfile --core=%corefile %execpath
+-ExecWithSymbolResolution=gdb --nw --nx --batch --init-eval-command='set debuginfod enabled on' --command=%preamblefile --command=%tempfile --core=%corefile %execpath
++Exec=@gdb@ --nw --nx --batch --command=%preamblefile --command=%tempfile --core=%corefile %execpath
++ExecWithSymbolResolution=@gdb@ --nw --nx --batch --init-eval-command='set debuginfod enabled on' --command=%preamblefile --command=%tempfile --core=%corefile %execpath
+ PreambleCommands=set width 200\nset backtrace limit 128\nsource %drkonqi_datadir/python/gdb_preamble/preamble.py\npy print_preamble()
+ BatchCommands=thread\nthread apply all bt

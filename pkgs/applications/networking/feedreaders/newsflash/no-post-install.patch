@@ -1,0 +1,15 @@
+diff --git a/meson.build b/meson.build
+index e554ddd7..55a5048a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -56,10 +56,3 @@ meson.add_dist_script(
+ subdir('data')
+ subdir('po')
+ subdir('src')
+-
+-gnome.post_install(
+-  gtk_update_icon_cache: true,
+-  glib_compile_schemas: false,
+-  update_desktop_database: true,
+-)
+-

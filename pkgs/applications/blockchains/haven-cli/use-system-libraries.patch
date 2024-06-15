@@ -1,0 +1,94 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fb71d2d..3a710a4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -364,10 +364,10 @@ if(NOT MANUAL_SUBMODULES)
+     endfunction ()
+     
+     message(STATUS "Checking submodules")
+-    check_submodule(external/miniupnp)
+-    check_submodule(external/rapidjson)
++    # check_submodule(external/miniupnp)
++    # check_submodule(external/rapidjson)
+     check_submodule(external/trezor-common)
+-    check_submodule(external/randomx)
++    # check_submodule(external/randomx)
+     check_submodule(external/supercop)
+   endif()
+ endif()
+ 
+@@ -300,7 +300,8 @@ endif()
+ # elseif(CMAKE_SYSTEM_NAME MATCHES ".*BSDI.*")
+ #   set(BSDI TRUE)
+ 
+-include_directories(external/rapidjson/include external/easylogging++ src contrib/epee/include external)
++include_directories(external/easylogging++ src contrib/epee/include external)
++#include_directories(external/rapidjson/include external/easylogging++ src contrib/epee/include external)
+ 
+ if(APPLE)
+   include_directories(SYSTEM /usr/include/malloc)
+diff --git a/cmake/FindMiniupnpc.cmake b/cmake/FindMiniupnpc.cmake
+index ad2004a..7f4bb68 100644
+--- a/cmake/FindMiniupnpc.cmake
++++ b/cmake/FindMiniupnpc.cmake
+@@ -37,7 +37,7 @@ set(MINIUPNP_STATIC_LIBRARIES ${MINIUPNP_STATIC_LIBRARY})
+ 
+ include(FindPackageHandleStandardArgs)
+ find_package_handle_standard_args(
+-  MiniUPnPc DEFAULT_MSG
++  Miniupnpc DEFAULT_MSG
+   MINIUPNP_INCLUDE_DIR
+   MINIUPNP_LIBRARY
+ )
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index 71b165f..10189ce 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -37,21 +37,9 @@
+ 
+ find_package(Miniupnpc REQUIRED)
+ 
+-message(STATUS "Using in-tree miniupnpc")
+-set(UPNPC_NO_INSTALL TRUE CACHE BOOL "Disable miniupnp installation" FORCE)
+-add_subdirectory(miniupnp/miniupnpc)
+-set_property(TARGET libminiupnpc-static PROPERTY FOLDER "external")
+-set_property(TARGET libminiupnpc-static PROPERTY POSITION_INDEPENDENT_CODE ON)
+-if(MSVC)
+-  set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -wd4244 -wd4267")
+-elseif(NOT MSVC)
+-  set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -Wno-undef -Wno-unused-result -Wno-unused-value")
+-endif()
+-if(CMAKE_SYSTEM_NAME MATCHES "NetBSD")
+-	set_property(TARGET libminiupnpc-static APPEND_STRING PROPERTY COMPILE_FLAGS " -D_NETBSD_SOURCE")
+-endif()
+-
+-set(UPNP_LIBRARIES "libminiupnpc-static" PARENT_SCOPE)
++set(UPNP_STATIC false PARENT_SCOPE)
++set(UPNP_INCLUDE ${MINIUPNP_INCLUDE_DIR} PARENT_SCOPE)
++set(UPNP_LIBRARIES ${MINIUPNP_LIBRARY} PARENT_SCOPE)
+ 
+ find_package(Unbound)
+ 
+@@ -69,5 +69,4 @@ endif()
+ 
+ add_subdirectory(db_drivers)
+ add_subdirectory(easylogging++)
+ add_subdirectory(qrcodegen)
+-add_subdirectory(randomx EXCLUDE_FROM_ALL)
+diff --git a/src/p2p/net_node.inl b/src/p2p/net_node.inl
+index c626e22..be570ed 100644
+--- a/src/p2p/net_node.inl
++++ b/src/p2p/net_node.inl
+@@ -60,9 +60,9 @@
+ #include "cryptonote_core/cryptonote_core.h"
+ #include "net/parse.h"
+ 
+-#include <miniupnp/miniupnpc/miniupnpc.h>
+-#include <miniupnp/miniupnpc/upnpcommands.h>
+-#include <miniupnp/miniupnpc/upnperrors.h>
++#include <miniupnpc/miniupnpc.h>
++#include <miniupnpc/upnpcommands.h>
++#include <miniupnpc/upnperrors.h>
+ 
+ #undef MONERO_DEFAULT_LOG_CATEGORY
+ #define MONERO_DEFAULT_LOG_CATEGORY "net.p2p"

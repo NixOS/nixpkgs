@@ -1,0 +1,25 @@
+From 7f5a652150aef9c098d2d5d4bc4f6d497609c47c Mon Sep 17 00:00:00 2001
+From: john johnstone <jjohnstone@riseup.net>
+Date: Sat, 11 Mar 2023 22:29:18 +0000
+Subject: [PATCH] plugin install dir patch for nix
+
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 31d96d0..a7a589d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -54,7 +54,7 @@ dnl ---------------------------------------------------------------------
+ PKG_CHECK_MODULES([glib],     [glib-2.0 >= 2.40 gio-unix-2.0 gmodule-2.0])
+ PKG_CHECK_MODULES([rofi],     [rofi])
+ 
+-[rofi_PLUGIN_INSTALL_DIR]="`$PKG_CONFIG --variable=pluginsdir rofi`"
++[rofi_PLUGIN_INSTALL_DIR]="`echo $out/lib/rofi`"
+ AC_SUBST([rofi_PLUGIN_INSTALL_DIR])
+ 
+ LT_INIT([disable-static])
+-- 
+2.39.2
+
