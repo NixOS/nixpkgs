@@ -18,6 +18,6 @@ with lib;
   };
 
   config = mkIf config.fonts.enableGhostscriptFonts {
-    fonts.packages = [ "${pkgs.ghostscript}/share/ghostscript/fonts" ];
+    fonts.packages = [ pkgs.ghostscript.fonts ];
   };
 }

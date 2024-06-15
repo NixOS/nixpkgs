@@ -127,7 +127,7 @@ python3Packages.buildPythonApplication {
       -e s,/usr/bin/perl,${perl}/bin/perl,g \
       -e s,/usr/bin/file,${file}/bin/file,g \
       -e s,/usr/bin/gs,${ghostscript}/bin/gs,g \
-      -e s,/usr/share/cups/fonts,${ghostscript}/share/ghostscript/fonts,g \
+      -e s,/usr/share/cups/fonts,${ghostscript.fonts}/share/fonts,g \
       -e "s,ExecStart=/usr/bin/python /usr/bin/hp-config_usb_printer,ExecStart=$out/bin/hp-config_usb_printer,g" \
       -e s,Exec=/usr/bin/hp-uiscan,Exec=hp-uiscan,g \
       -e s,Icon=/usr/share/icons/Humanity/devices/48/printer.svg,Icon=printer,g \
