@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "marshmallow";
-  version = "3.21.1";
+  version = "3.21.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "marshmallow-code";
     repo = "marshmallow";
     rev = "refs/tags/${version}";
-    hash = "sha256-KhXasYKooZRokRoFlWKOaQzSUe6tXDtUlrf65eGGUi8=";
+    hash = "sha256-WgquzbhNERq6+0wEgpsUXf2zOOVPxK1ICkX5ElVCYP0=";
   };
 
   nativeBuildInputs = [ flit-core ];
