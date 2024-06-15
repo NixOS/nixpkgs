@@ -111,7 +111,7 @@ def get_artifact_hashes(flutter_compact_version):
     return result_dict
 
 
-def get_dart_hashes(dart_version):
+def get_dart_hashes(dart_version, channel):
     platforms = [
         "x86_64-linux",
         "aarch64-linux",
@@ -122,6 +122,7 @@ def get_dart_hashes(dart_version):
         code = load_code(
             "get-dart-hashes.nix",
             dart_version=dart_version,
+            channel=channel,
             platform=platform)
         stderr = nix_build_to_fail(code)
 
@@ -177,6 +178,7 @@ def get_pubspec_lock(flutter_compact_version, flutter_src):
 def write_data(
         nixpkgs_flutter_version_directory,
         flutter_version,
+        channel,
         engine_hash,
         dart_version,
         dart_hash,
@@ -187,6 +189,7 @@ def write_data(
         f.write(json.dumps({
             "version": flutter_version,
             "engineVersion": engine_hash,
+            "channel": channel,
             "dartVersion": dart_version,
             "dartHash": dart_hash,
             "flutterHash": flutter_hash,
@@ -229,18 +232,21 @@ def update_all_packages():
 # Finds Flutter version, Dart version, and Engine hash.
 # If the Flutter version is given, it uses that. Otherwise finds the
 # latest stable Flutter version.
-def find_versions(flutter_version=None):
+def find_versions(flutter_version=None, channel=None):
     engine_hash = None
     dart_version = None
 
     releases = json.load(urllib.request.urlopen(
         "https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json"))
 
+    if not channel:
+        channel = 'stable'
+
     if not flutter_version:
-        stable_hash = releases['current_release']['stable']
+        hash = releases['current_release'][channel]
         release = next(
             filter(
-                lambda release: release['hash'] == stable_hash,
+                lambda release: release['hash'] == hash,
                 releases['releases']))
         flutter_version = release['version']
 
@@ -265,21 +271,25 @@ def find_versions(flutter_version=None):
             filter(
                 lambda release: release['version'] == flutter_version,
                 releases['releases']))['dart_sdk_version']
+
+        if " " in dart_version:
+            dart_version = dart_version.split(' ')[2][:-1]
     except StopIteration:
         exit(
             f"Couldn't find Dart version for Flutter version: {flutter_version}")
 
-    return (flutter_version, engine_hash, dart_version)
+    return (flutter_version, engine_hash, dart_version, channel)
 
 
 def main():
     parser = argparse.ArgumentParser(description='Update Flutter in Nixpkgs')
     parser.add_argument('--version', type=str, help='Specify Flutter version')
+    parser.add_argument('--channel', type=str, help='Specify Flutter release channel')
     parser.add_argument('--artifact-hashes', action='store_true',
                         help='Whether to get artifact hashes')
     args = parser.parse_args()
 
-    (flutter_version, engine_hash, dart_version) = find_versions(args.version)
+    (flutter_version, engine_hash, dart_version, channel) = find_versions(args.version, args.channel)
 
     flutter_compact_version = '_'.join(flutter_version.split('.')[:2])
 
@@ -291,11 +301,11 @@ def main():
             "\n")
         return
 
-    print(f"Flutter version: {flutter_version} ({flutter_compact_version})")
+    print(f"Flutter version: {flutter_version} ({flutter_compact_version}) on ({channel})")
     print(f"Engine hash: {engine_hash}")
     print(f"Dart version: {dart_version}")
 
-    dart_hash = get_dart_hashes(dart_version)
+    dart_hash = get_dart_hashes(dart_version, channel)
     (flutter_hash, flutter_src) = get_flutter_hash_and_src(flutter_version)
 
     nixpkgs_flutter_version_directory = f"{NIXPKGS_ROOT}/pkgs/development/compilers/flutter/versions/{flutter_compact_version}"
@@ -309,6 +319,7 @@ def main():
     common_data_args = {
         "nixpkgs_flutter_version_directory": nixpkgs_flutter_version_directory,
         "flutter_version": flutter_version,
+        "channel": channel,
         "dart_version": dart_version,
         "engine_hash": engine_hash,
         "flutter_hash": flutter_hash,
