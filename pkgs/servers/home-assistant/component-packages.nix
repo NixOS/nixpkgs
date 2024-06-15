@@ -3138,8 +3138,9 @@
       hassil
       home-assistant-intents
       mutagen
+      ollama
       webrtc-noise-gain
-    ]; # missing inputs: ollama-hass
+    ];
     "ombi" = ps: with ps; [
       pyombi
     ];
@@ -5708,6 +5709,7 @@
     "nx584"
     "obihai"
     "octoprint"
+    "ollama"
     "omnilogic"
     "onboarding"
     "oncue"
