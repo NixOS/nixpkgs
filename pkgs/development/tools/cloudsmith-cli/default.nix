@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloudsmith-cli";
-  version = "1.2.3";
+  version = "1.2.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cloudsmith-io";
     repo = "cloudsmith-cli";
-    rev = "v${version}";
-    hash = "sha256-a4hLx+INdFq6Ux3XkI5GWgAiGLHCoDA+MP2FNY3E6WA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-UzyfOmjJzYEJYA6c4kn5XCvRVIMuiIpiq0kH9UhBwmo=";
   };
 
   patches = [
