@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  gitUpdater,
   autoreconfHook,
   pkg-config,
   glib,
@@ -41,6 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     # while cross compiling.
     (lib.enableFeature (stdenv.hostPlatform == stdenv.buildPlatform) "debug-info")
   ];
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.efficios.com/babeltrace.git";
+    rev-prefix = "v";
+    # Versions 2.x are packaged independently as babeltrace2
+    ignoredVersions = "^[^1]";
+  };
 
   meta = {
     description = "Command-line tool and library to read and convert LTTng tracefiles";
