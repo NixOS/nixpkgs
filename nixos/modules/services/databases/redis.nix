@@ -10,15 +10,18 @@ let
     else if value == false then "no"
     else generators.mkValueStringDefault { } value;
 
-  redisConfig = settings: pkgs.writeText "redis.conf" (generators.toKeyValue {
-    listsAsDuplicateKeys = true;
-    mkKeyValue = generators.mkKeyValueDefault { inherit mkValueString; } " ";
-  } settings);
+  redisConfig = settings: pkgs.writeText "redis.conf" (generators.toKeyValue
+    {
+      listsAsDuplicateKeys = true;
+      mkKeyValue = generators.mkKeyValueDefault { inherit mkValueString; } " ";
+    }
+    settings);
 
-  redisName = name: "redis" + optionalString (name != "") ("-"+name);
+  redisName = name: "redis" + optionalString (name != "") ("-" + name);
   enabledServers = filterAttrs (name: conf: conf.enable) config.services.redis.servers;
 
-in {
+in
+{
   imports = [
     (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")
     (mkRemovedOptionModule [ "services" "redis" "dbpath" ] "The redis module now uses /var/lib/redis as data directory.")
@@ -26,27 +29,27 @@ in {
     (mkRemovedOptionModule [ "services" "redis" "appendOnlyFilename" ] "This option was never used.")
     (mkRemovedOptionModule [ "services" "redis" "pidFile" ] "This option was removed.")
     (mkRemovedOptionModule [ "services" "redis" "extraConfig" ] "Use services.redis.servers.*.settings instead.")
-    (mkRenamedOptionModule [ "services" "redis" "enable"] [ "services" "redis" "servers" "" "enable" ])
-    (mkRenamedOptionModule [ "services" "redis" "port"] [ "services" "redis" "servers" "" "port" ])
-    (mkRenamedOptionModule [ "services" "redis" "openFirewall"] [ "services" "redis" "servers" "" "openFirewall" ])
-    (mkRenamedOptionModule [ "services" "redis" "bind"] [ "services" "redis" "servers" "" "bind" ])
-    (mkRenamedOptionModule [ "services" "redis" "unixSocket"] [ "services" "redis" "servers" "" "unixSocket" ])
-    (mkRenamedOptionModule [ "services" "redis" "unixSocketPerm"] [ "services" "redis" "servers" "" "unixSocketPerm" ])
-    (mkRenamedOptionModule [ "services" "redis" "logLevel"] [ "services" "redis" "servers" "" "logLevel" ])
-    (mkRenamedOptionModule [ "services" "redis" "logfile"] [ "services" "redis" "servers" "" "logfile" ])
-    (mkRenamedOptionModule [ "services" "redis" "syslog"] [ "services" "redis" "servers" "" "syslog" ])
-    (mkRenamedOptionModule [ "services" "redis" "databases"] [ "services" "redis" "servers" "" "databases" ])
-    (mkRenamedOptionModule [ "services" "redis" "maxclients"] [ "services" "redis" "servers" "" "maxclients" ])
-    (mkRenamedOptionModule [ "services" "redis" "save"] [ "services" "redis" "servers" "" "save" ])
-    (mkRenamedOptionModule [ "services" "redis" "slaveOf"] [ "services" "redis" "servers" "" "slaveOf" ])
-    (mkRenamedOptionModule [ "services" "redis" "masterAuth"] [ "services" "redis" "servers" "" "masterAuth" ])
-    (mkRenamedOptionModule [ "services" "redis" "requirePass"] [ "services" "redis" "servers" "" "requirePass" ])
-    (mkRenamedOptionModule [ "services" "redis" "requirePassFile"] [ "services" "redis" "servers" "" "requirePassFile" ])
-    (mkRenamedOptionModule [ "services" "redis" "appendOnly"] [ "services" "redis" "servers" "" "appendOnly" ])
-    (mkRenamedOptionModule [ "services" "redis" "appendFsync"] [ "services" "redis" "servers" "" "appendFsync" ])
-    (mkRenamedOptionModule [ "services" "redis" "slowLogLogSlowerThan"] [ "services" "redis" "servers" "" "slowLogLogSlowerThan" ])
-    (mkRenamedOptionModule [ "services" "redis" "slowLogMaxLen"] [ "services" "redis" "servers" "" "slowLogMaxLen" ])
-    (mkRenamedOptionModule [ "services" "redis" "settings"] [ "services" "redis" "servers" "" "settings" ])
+    (mkRenamedOptionModule [ "services" "redis" "enable" ] [ "services" "redis" "servers" "" "enable" ])
+    (mkRenamedOptionModule [ "services" "redis" "port" ] [ "services" "redis" "servers" "" "port" ])
+    (mkRenamedOptionModule [ "services" "redis" "openFirewall" ] [ "services" "redis" "servers" "" "openFirewall" ])
+    (mkRenamedOptionModule [ "services" "redis" "bind" ] [ "services" "redis" "servers" "" "bind" ])
+    (mkRenamedOptionModule [ "services" "redis" "unixSocket" ] [ "services" "redis" "servers" "" "unixSocket" ])
+    (mkRenamedOptionModule [ "services" "redis" "unixSocketPerm" ] [ "services" "redis" "servers" "" "unixSocketPerm" ])
+    (mkRenamedOptionModule [ "services" "redis" "logLevel" ] [ "services" "redis" "servers" "" "logLevel" ])
+    (mkRenamedOptionModule [ "services" "redis" "logfile" ] [ "services" "redis" "servers" "" "logfile" ])
+    (mkRenamedOptionModule [ "services" "redis" "syslog" ] [ "services" "redis" "servers" "" "syslog" ])
+    (mkRenamedOptionModule [ "services" "redis" "databases" ] [ "services" "redis" "servers" "" "databases" ])
+    (mkRenamedOptionModule [ "services" "redis" "maxclients" ] [ "services" "redis" "servers" "" "maxclients" ])
+    (mkRenamedOptionModule [ "services" "redis" "save" ] [ "services" "redis" "servers" "" "save" ])
+    (mkRenamedOptionModule [ "services" "redis" "slaveOf" ] [ "services" "redis" "servers" "" "slaveOf" ])
+    (mkRenamedOptionModule [ "services" "redis" "masterAuth" ] [ "services" "redis" "servers" "" "masterAuth" ])
+    (mkRenamedOptionModule [ "services" "redis" "requirePass" ] [ "services" "redis" "servers" "" "requirePass" ])
+    (mkRenamedOptionModule [ "services" "redis" "requirePassFile" ] [ "services" "redis" "servers" "" "requirePassFile" ])
+    (mkRenamedOptionModule [ "services" "redis" "appendOnly" ] [ "services" "redis" "servers" "" "appendOnly" ])
+    (mkRenamedOptionModule [ "services" "redis" "appendFsync" ] [ "services" "redis" "servers" "" "appendFsync" ])
+    (mkRenamedOptionModule [ "services" "redis" "slowLogLogSlowerThan" ] [ "services" "redis" "servers" "" "slowLogLogSlowerThan" ])
+    (mkRenamedOptionModule [ "services" "redis" "slowLogMaxLen" ] [ "services" "redis" "servers" "" "slowLogMaxLen" ])
+    (mkRenamedOptionModule [ "services" "redis" "settings" ] [ "services" "redis" "servers" "" "settings" ])
   ];
 
   ###### interface
@@ -102,7 +105,7 @@ in {
 
             extraParams = mkOption {
               type = with types; listOf str;
-              default = [];
+              default = [ ];
               description = "Extra parameters to append to redis-server invocation";
               example = [ "--sentinel" ];
             };
@@ -167,7 +170,7 @@ in {
 
             save = mkOption {
               type = with types; listOf (listOf int);
-              default = [ [900 1] [300 10] [60 10000] ];
+              default = [ [ 900 1 ] [ 300 10 ] [ 60 10000 ] ];
               description = ''
                 The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.
 
@@ -251,7 +254,7 @@ in {
             settings = mkOption {
               # TODO: this should be converted to freeformType
               type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
-              default = {};
+              default = { };
               description = ''
                 Redis configuration. Refer to
                 <https://redis.io/topics/config>
@@ -271,11 +274,13 @@ in {
               supervised = "systemd";
               loglevel = config.logLevel;
               syslog-enabled = config.syslog;
-              save = if config.save == []
+              save =
+                if config.save == [ ]
                 then ''""'' # Disable saving with `save = ""`
-                else map
-                  (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}")
-                  config.save;
+                else
+                  map
+                    (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}")
+                    config.save;
               dbfilename = "dump.rdb";
               dir = "/var/lib/${redisName name}";
               appendfsync = config.appendFsync;
@@ -293,7 +298,7 @@ in {
           ];
         }));
         description = "Configuration of multiple `redis-server` instances.";
-        default = {};
+        default = { };
       };
     };
 
@@ -302,104 +307,116 @@ in {
 
   ###### implementation
 
-  config = mkIf (enabledServers != {}) {
+  config = mkIf (enabledServers != { }) {
 
-    assertions = attrValues (mapAttrs (name: conf: {
-      assertion = conf.requirePass != null -> conf.requirePassFile == null;
-      message = ''
-        You can only set one services.redis.servers.${name}.requirePass
-        or services.redis.servers.${name}.requirePassFile
-      '';
-    }) enabledServers);
+    assertions = attrValues (mapAttrs
+      (name: conf: {
+        assertion = conf.requirePass != null -> conf.requirePassFile == null;
+        message = ''
+          You can only set one services.redis.servers.${name}.requirePass
+          or services.redis.servers.${name}.requirePassFile
+        '';
+      })
+      enabledServers);
 
     boot.kernel.sysctl = mkIf cfg.vmOverCommit {
       "vm.overcommit_memory" = "1";
     };
 
-    networking.firewall.allowedTCPPorts = concatMap (conf:
-      optional conf.openFirewall conf.port
-    ) (attrValues enabledServers);
+    networking.firewall.allowedTCPPorts = concatMap
+      (conf:
+        optional conf.openFirewall conf.port
+      )
+      (attrValues enabledServers);
 
     environment.systemPackages = [ cfg.package ];
 
-    users.users = mapAttrs' (name: conf: nameValuePair (redisName name) {
-      description = "System user for the redis-server instance ${name}";
-      isSystemUser = true;
-      group = redisName name;
-    }) enabledServers;
-    users.groups = mapAttrs' (name: conf: nameValuePair (redisName name) {
-    }) enabledServers;
+    users.users = mapAttrs'
+      (name: conf: nameValuePair (redisName name) {
+        description = "System user for the redis-server instance ${name}";
+        isSystemUser = true;
+        group = redisName name;
+      })
+      enabledServers;
+    users.groups = mapAttrs'
+      (name: conf: nameValuePair (redisName name) { })
+      enabledServers;
 
-    systemd.services = mapAttrs' (name: conf: nameValuePair (redisName name) {
-      description = "Redis Server - ${redisName name}";
+    systemd.services = mapAttrs'
+      (name: conf: nameValuePair (redisName name) {
+        description = "Redis Server - ${redisName name}";
 
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/${cfg.package.serverBin or "redis-server"} /var/lib/${redisName name}/redis.conf ${escapeShellArgs conf.extraParams}";
-        ExecStartPre = "+"+pkgs.writeShellScript "${redisName name}-prep-conf" (let
-          redisConfVar = "/var/lib/${redisName name}/redis.conf";
-          redisConfRun = "/run/${redisName name}/nixos.conf";
-          redisConfStore = redisConfig conf.settings;
-        in ''
-          touch "${redisConfVar}" "${redisConfRun}"
-          chown '${conf.user}' "${redisConfVar}" "${redisConfRun}"
-          chmod 0600 "${redisConfVar}" "${redisConfRun}"
-          if [ ! -s ${redisConfVar} ]; then
-            echo 'include "${redisConfRun}"' > "${redisConfVar}"
-          fi
-          echo 'include "${redisConfStore}"' > "${redisConfRun}"
-          ${optionalString (conf.requirePassFile != null) ''
-            {
-              echo -n "requirepass "
-              cat ${escapeShellArg conf.requirePassFile}
-            } >> "${redisConfRun}"
-          ''}
-        '');
-        Type = "notify";
-        # User and group
-        User = conf.user;
-        Group = conf.user;
-        # Runtime directory and mode
-        RuntimeDirectory = redisName name;
-        RuntimeDirectoryMode = "0750";
-        # State directory and mode
-        StateDirectory = redisName name;
-        StateDirectoryMode = "0700";
-        # Access write directories
-        UMask = "0077";
-        # Capabilities
-        CapabilityBoundingSet = "";
-        # Security
-        NoNewPrivileges = true;
-        # Process Properties
-        LimitNOFILE = mkDefault "${toString (conf.maxclients + 32)}";
-        # Sandboxing
-        ProtectSystem = "strict";
-        ProtectHome = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        PrivateUsers = true;
-        ProtectClock = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-        RestrictNamespaces = true;
-        LockPersonality = true;
-        # we need to disable MemoryDenyWriteExecute for keydb
-        MemoryDenyWriteExecute = cfg.package.pname != "keydb";
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        PrivateMounts = true;
-        # System Call Filtering
-        SystemCallArchitectures = "native";
-        SystemCallFilter = "~@cpu-emulation @debug @keyring @memlock @mount @obsolete @privileged @resources @setuid";
-      };
-    }) enabledServers;
+        serviceConfig = {
+          ExecStart = "${cfg.package}/bin/${cfg.package.serverBin or "redis-server"} /var/lib/${redisName name}/redis.conf ${escapeShellArgs conf.extraParams}";
+          ExecStartPre = "+" + pkgs.writeShellScript "${redisName name}-prep-conf" (
+            let
+              redisConfVar = "/var/lib/${redisName name}/redis.conf";
+              redisConfRun = "/run/${redisName name}/nixos.conf";
+              redisConfStore = redisConfig conf.settings;
+            in
+            ''
+              touch "${redisConfVar}" "${redisConfRun}"
+              chown '${conf.user}' "${redisConfVar}" "${redisConfRun}"
+              chmod 0600 "${redisConfVar}" "${redisConfRun}"
+              if [ ! -s ${redisConfVar} ]; then
+                echo 'include "${redisConfRun}"' > "${redisConfVar}"
+              fi
+              echo 'include "${redisConfStore}"' > "${redisConfRun}"
+              ${optionalString (conf.requirePassFile != null) ''
+                {
+                  echo -n "requirepass "
+                  cat ${escapeShellArg conf.requirePassFile}
+                } >> "${redisConfRun}"
+              ''}
+            ''
+          );
+          Type = "notify";
+          # User and group
+          User = conf.user;
+          Group = conf.user;
+          # Runtime directory and mode
+          RuntimeDirectory = redisName name;
+          RuntimeDirectoryMode = "0750";
+          # State directory and mode
+          StateDirectory = redisName name;
+          StateDirectoryMode = "0700";
+          # Access write directories
+          UMask = "0077";
+          # Capabilities
+          CapabilityBoundingSet = "";
+          # Security
+          NoNewPrivileges = true;
+          # Process Properties
+          LimitNOFILE = mkDefault "${toString (conf.maxclients + 32)}";
+          # Sandboxing
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateUsers = true;
+          ProtectClock = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectControlGroups = true;
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+          RestrictNamespaces = true;
+          LockPersonality = true;
+          # we need to disable MemoryDenyWriteExecute for keydb
+          MemoryDenyWriteExecute = cfg.package.pname != "keydb";
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          PrivateMounts = true;
+          # System Call Filtering
+          SystemCallArchitectures = "native";
+          SystemCallFilter = "~@cpu-emulation @debug @keyring @memlock @mount @obsolete @privileged @resources @setuid";
+        };
+      })
+      enabledServers;
 
   };
 }
