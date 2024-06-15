@@ -392,10 +392,16 @@ if [[ -n $flake ]]; then
     fi
     if [[ -z $flakeAttr ]]; then
         hostname="$(targetHostCmd cat /proc/sys/kernel/hostname)"
+        domainname="$(targetHostCmd cat /proc/sys/kernel/domainname)"
         if [[ -z $hostname ]]; then
             hostname=default
         fi
-        flakeAttr="nixosConfigurations.\"$hostname\""
+        if [[ -n $domainname ]]; then
+            fqdn="${hostname}.${domainname}"
+            flakeAttr="nixosConfigurations.\"$fqdn\""
+        else
+            flakeAttr="nixosConfigurations.\"$hostname\""
+        fi
     else
         flakeAttr="nixosConfigurations.\"$flakeAttr\""
     fi
