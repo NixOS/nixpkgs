@@ -10,6 +10,10 @@
 , hicolor-icon-theme
 , pkg-config
 , tbb
+
+, withWayland ? stdenv.isLinux
+, libxkbcommon
+, wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +37,9 @@ stdenv.mkDerivation rec {
     capstone
     freetype
     glfw
+  ] ++ lib.optionals (stdenv.isLinux && withWayland) [
+    libxkbcommon
+    wayland
   ] ++ lib.optionals stdenv.isLinux [
     dbus
     hicolor-icon-theme
@@ -60,7 +67,8 @@ stdenv.mkDerivation rec {
     make -j $NIX_BUILD_CORES -C csvexport/build/unix release
     make -j $NIX_BUILD_CORES -C import-chrome/build/unix release
     make -j $NIX_BUILD_CORES -C library/unix release
-    make -j $NIX_BUILD_CORES -C profiler/build/unix release LEGACY=1
+    make -j $NIX_BUILD_CORES -C profiler/build/unix release \
+      ${lib.optionalString (stdenv.isLinux && !withWayland) "LEGACY=1"}
     make -j $NIX_BUILD_CORES -C update/build/unix release
 
     runHook postBuild
