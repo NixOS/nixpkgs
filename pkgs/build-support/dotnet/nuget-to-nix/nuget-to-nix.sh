@@ -56,11 +56,12 @@ for package in *; do
       continue
     fi
 
-    used_source="$(jq -r '.source' "$version"/.nupkg.metadata)"
+    # packages in the nix store should have an empty metadata file
+    used_source="$(jq -r 'if has("source") then .source else "" end' "$version"/.nupkg.metadata)"
     found=false
 
-    if [[ -d "$used_source" ]]; then
-        continue
+    if [[ -z "$used_source" || -d "$used_source" ]]; then
+      continue
     fi
 
     for source in "${remote_sources[@]}"; do

@@ -891,7 +891,7 @@ with pkgs;
   buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
   mkNugetSource = callPackage ../build-support/dotnet/make-nuget-source { };
-  mkNugetDeps = callPackage ../build-support/dotnet/make-nuget-deps { };
+  mkNugetDeps = (newScope dotnetCorePackages) ../build-support/dotnet/make-nuget-deps { };
 
   buildDotnetGlobalTool = callPackage ../build-support/dotnet/build-dotnet-global-tool { };
 
