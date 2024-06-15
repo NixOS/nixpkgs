@@ -18299,7 +18299,7 @@ with pkgs;
 
   apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
 
-  betaflight-configurator = callPackage ../by-name/be/betaflight-configurator/package.nix {
+  betaflight-configurator10_10 = callPackage ../by-name/be/betaflight-configurator/package.nix {
     version = "10.10.0";
     sha256 = "sha256-UB5Vr5wyCUZbOaQNckJQ1tAXwh8VSLNI1IgTiJzxV08";
   };
