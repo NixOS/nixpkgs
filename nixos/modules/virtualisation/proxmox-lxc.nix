@@ -63,6 +63,14 @@ with lib;
         hostName = mkIf (!cfg.manageHostName) (mkForce "");
       };
 
+      # unprivileged LXCs can't set net.ipv4.ping_group_range
+      security.wrappers.ping = mkIf (!cfg.privileged) {
+        owner = "root";
+        group = "root";
+        capabilities = "cap_net_raw+p";
+        source = "${pkgs.iputils.out}/bin/ping";
+      };
+
       services.openssh = {
         enable = mkDefault true;
         startWhenNeeded = mkDefault true;
