@@ -96,10 +96,14 @@ in rec {
 
     This produces lore for the derivation (via lore.callback) and
     appends any lore that the derivation itself wrote to nix-support
-    or which was overridden in drv.binlore (passthru).
+    or which was overridden in drv.binlore.<outputName> (passthru).
+
+    > *Note*: Since the passthru is attached to all outputs, binlore
+    > is an attrset namespaced by outputName to support packages with
+    > executables in more than one output.
 
     Since the last entry wins, the effective priority is:
-    drv.binlore > $drv/nix-support > lore generated here by callback
+    drv.binlore.<outputName> > $drv/nix-support > lore generated here by callback
   */
   make = lore: drv: runCommand "${drv.name}-binlore" {
       drv = drv;
@@ -109,15 +113,15 @@ in rec {
 
     ${lore.callback lore drv}
     '' +
-    # append lore from package's $out and drv.binlore (last entry wins)
+    # append lore from package's $out and drv.binlore.${drv.outputName} (last entry wins)
     ''
     for lore_type in ${builtins.toString lore.types}; do
       if [[ -f "${drv}/nix-support/$lore_type" ]]; then
         cat "${drv}/nix-support/$lore_type" >> "$out/$lore_type"
       fi
-      '' + lib.optionalString (builtins.hasAttr "binlore" drv) ''
-      if [[ -f "${drv.binlore}/$lore_type" ]]; then
-        cat "${drv.binlore}/$lore_type" >> "$out/$lore_type"
+      '' + lib.optionalString (builtins.hasAttr "binlore" drv && builtins.hasAttr drv.outputName drv.binlore) ''
+      if [[ -f "${drv.binlore."${drv.outputName}"}/$lore_type" ]]; then
+        cat "${drv.binlore."${drv.outputName}"}/$lore_type" >> "$out/$lore_type"
       fi
       '' + ''
     done
@@ -128,11 +132,16 @@ in rec {
   /*
     Utility function for creating override lore for drv.
 
-    In the normal case, we attach this lore to `drv.passthru.binlore`.
+    We normally attach this lore to `drv.passthru.binlore.<outputName>`.
 
-    > *Note*: We can reconsider the passthru attr name if someone adds
-    > a new lore provider. We settled on `.binlore` for now to make it
-    > easier for people to figure out what this is for.
+    > *Notes*:
+    > - Since the passthru is attached to all outputs, binlore is an
+    >   attrset namespaced by outputName to support packages with
+    >   executables in more than one output. You'll generally just use
+    >   `out` or `bin`.
+    > - We can reconsider the passthru attr name if someone adds
+    >   a new lore provider. We settled on `.binlore` for now to make it
+    >   easier for people to figure out what this is for.
 
     The lore argument should be a Shell script (string) that generates
     the necessary lore. You can use arbitrary Shell, but this function
@@ -148,20 +157,20 @@ in rec {
 
     Here's a very general example of both functions:
 
-    passthru.binlore = (binlore.synthesize finalAttrs.finalPackage ''
+    passthru.binlore.out = binlore.synthesize finalAttrs.finalPackage ''
       execer can bin/hello bin/{a,b,c}
       wrapper bin/hello bin/.hello-wrapped
-    '');
+    '';
 
     And here's a specific example of how pathname expansion enables us
     to express lore for the single-binary variant of coreutils while
     being both explicit and (somewhat) efficient:
 
     passthru = {} // optionalAttrs (singleBinary != false) {
-      binlore = (binlore.synthesize coreutils ''
+      binlore.out = binlore.synthesize coreutils ''
         execer can bin/{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
         execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
-      '');
+      '';
     };
 
     Caution: Be thoughtful about using a bare wildcard (*) glob here.
@@ -170,7 +179,7 @@ in rec {
     glob can match new executables added in future package versions
     before anyone can audit them.
   */
-  synthesize = drv: lore: runCommand "${drv.name}-lore-override" {
+  synthesize = drv: loreSynthesizingScript: runCommand "${drv.name}-lore-override" {
     drv = drv;
   } (''
     execer(){
@@ -179,7 +188,7 @@ in rec {
       shift
 
       for path in "$@"; do
-        if [[ -e "$PWD/$path" ]]; then
+        if [[ -f "$PWD/$path" ]]; then
           echo "$verdict:$PWD/$path"
         else
           echo "error: Tried to synthesize execer lore for missing file: $PWD/$path" >&2
@@ -192,12 +201,12 @@ in rec {
       local wrapper="$1"
       local original="$2"
 
-      if [[ ! -e "$wrapper" ]]; then
+      if [[ ! -f "$wrapper" ]]; then
         echo "error: Tried to synthesize wrapper lore for missing wrapper: $PWD/$wrapper" >&2
         exit 2
       fi
 
-      if [[ ! -e "$original" ]]; then
+      if [[ ! -f "$original" ]]; then
         echo "error: Tried to synthesize wrapper lore for missing original: $PWD/$original" >&2
         exit 2
       fi
@@ -211,5 +220,5 @@ in rec {
     # lore override commands are relative to the drv root
     cd $drv
 
-  '' + lore);
+  '' + loreSynthesizingScript);
 }

@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ e2fsprogs openldap ];
 
-  passthru.binlore = (binlore.synthesize linuxquota ''
+  passthru.binlore.out = binlore.synthesize linuxquota ''
     execer cannot bin/quota
-  '');
+  '';
 
   meta = with lib; {
     description = "Tools to manage kernel-level quotas in Linux";

@@ -31,7 +31,7 @@ let
         platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
       };
       passthru = { inherit provider; } // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
-        binlore = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
+        binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
       };
       preferLocalBuild = true;
     } ''
