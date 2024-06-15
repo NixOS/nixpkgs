@@ -6577,12 +6577,12 @@ final: prev:
 
   neogit = buildVimPlugin {
     pname = "neogit";
-    version = "2024-05-16";
+    version = "v0.0.1"; # manually pinned on 24.05; the latest neovim 0.9.5 compatible version
     src = fetchFromGitHub {
       owner = "NeogitOrg";
       repo = "neogit";
-      rev = "9040f6face04f93e6903f25f038d67550fc9027b";
-      sha256 = "1sdkn3aapqd5kgbgm1gyam7fc46xzvq4f2ivayrdx9jln61pp8y5";
+      rev = "v0.0.1";
+      hash = "sha256-xncUButV2/FSOPNolbrZuPPSC1FOtgrlZBwzHHPKCTo=";
     };
     meta.homepage = "https://github.com/NeogitOrg/neogit/";
   };
