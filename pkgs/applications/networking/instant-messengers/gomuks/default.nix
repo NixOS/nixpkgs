@@ -53,6 +53,6 @@ buildGoModule rec {
     description = "A terminal based Matrix client written in Go";
     mainProgram = "gomuks";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ chvp emily ];
+    maintainers = with maintainers; [ chvp ];
   };
 }
