@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchzip, makeBinaryWrapper, jdk17_headless, gawk, statePath ? "/var/lib/youtrack" }:
+{ lib, stdenvNoCC, fetchzip, makeBinaryWrapper, jdk21_headless, gawk, statePath ? "/var/lib/youtrack" }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "youtrack";
@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r * $out
     makeWrapper $out/bin/youtrack.sh $out/bin/youtrack \
       --prefix PATH : "${lib.makeBinPath [ gawk ]}" \
-      --set JRE_HOME ${jdk17_headless}
+      --set JRE_HOME ${jdk21_headless}
     rm -rf $out/internal/java
     mv $out/conf $out/conf.orig
     ln -s ${statePath}/backups $out/backups
