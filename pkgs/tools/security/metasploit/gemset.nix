@@ -9,6 +9,16 @@
     };
     version = "2.1.0";
   };
+  abbrev = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0hj2qyx7rzpc7awhvqlm597x7qdxwi4kkml4aqnp5jylmsm4w6xd";
+      type = "gem";
+    };
+    version = "0.1.2";
+  };
   actionpack = {
     groups = ["default"];
     platforms = [];
@@ -319,6 +329,16 @@
     };
     version = "1.0.6";
   };
+  csv = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0zfn40dvgjk1xv1z8l11hr9jfg3jncwsc9yhzsz4l4rivkpivg8b";
+      type = "gem";
+    };
+    version = "3.3.0";
+  };
   daemons = {
     groups = ["default"];
     platforms = [];
@@ -358,6 +378,16 @@
       type = "gem";
     };
     version = "0.6.20240107";
+  };
+  drb = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0h5kbj9hvg5hb3c7l425zpds0vb42phvln2knab8nmazg2zp5m79";
+      type = "gem";
+    };
+    version = "2.2.1";
   };
   ed25519 = {
     groups = ["default"];
@@ -478,6 +508,16 @@
       type = "gem";
     };
     version = "0.2.0";
+  };
+  getoptlong = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "198vy9dxyzibqdbw9jg8p2ljj9iknkyiqlyl229vz55rjxrz08zx";
+      type = "gem";
+    };
+    version = "0.2.1";
   };
   gssapi = {
     groups = ["default"];
@@ -684,12 +724,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "4248753964d0fe0e89bf84cf2b8c8c4871009a96";
-      sha256 = "15rparliwh3b44gc0b7wamqwk7grslgkrk57khdpsz7pn5p49jy0";
+      rev = "0dae49af4bc85231052e15fc97f8bfbf9ec56cf3";
+      sha256 = "1v19fvnw9f6l9qssl2434brqf086nymnpkx1llbkkbr4a3l3w2pm";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.4.12";
+    version = "6.4.13";
   };
   metasploit-model = {
     groups = ["default"];
@@ -800,6 +840,16 @@
       type = "gem";
     };
     version = "3.0.0";
+  };
+  mutex_m = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1ma093ayps1m92q845hmpk0dmadicvifkbf05rpq9pifhin0rvxn";
+      type = "gem";
+    };
+    version = "0.2.0";
   };
   nessus_rest = {
     groups = ["default"];
