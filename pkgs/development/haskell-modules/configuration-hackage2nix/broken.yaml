@@ -5339,7 +5339,6 @@ broken-packages:
   - sessions # failure in job https://hydra.nixos.org/build/233214614 at 2023-09-02
   - sessiontypes # failure in job https://hydra.nixos.org/build/233224975 at 2023-09-02
   - setdown # failure in job https://hydra.nixos.org/build/241521053 at 2023-12-03
-  - set-extra # failure in job https://hydra.nixos.org/build/252738545 at 2024-03-16
   - setgame # failure in job https://hydra.nixos.org/build/233218664 at 2023-09-02
   - set-of # failure in job https://hydra.nixos.org/build/233202960 at 2023-09-02
   - setoid # failure in job https://hydra.nixos.org/build/233213744 at 2023-09-02
