@@ -113,6 +113,7 @@ mapAliases {
   karma = pkgs.karma-runner; # added 2023-07-29
   leetcode-cli = vsc-leetcode-cli; # added 2023-08-31
   less = pkgs.less-css; # added 2024-06-15
+  less-plugin-clean-css = pkgs.less-css.plugins.clean-css; # added 2024-06-15
   manta = pkgs.node-manta; # Added 2023-05-06
   inherit (pkgs) markdown-link-check; # added 2024-06-28
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
