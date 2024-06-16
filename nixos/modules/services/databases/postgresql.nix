@@ -575,7 +575,7 @@ in
             fi
           '' + optionalString (cfg.ensureDatabases != []) ''
             ${concatMapStrings (database: ''
-              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
+              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'ALTER DATABASE template1 REFRESH COLLATION VERSION' -c 'CREATE DATABASE "${database}"'
             '') cfg.ensureDatabases}
           '' + ''
             ${
