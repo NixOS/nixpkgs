@@ -33049,8 +33049,6 @@ with pkgs;
 
   nwg-menu = callPackage ../applications/misc/nwg-menu { };
 
-  nwg-panel = callPackage ../applications/misc/nwg-panel { };
-
   nwg-wrapper = callPackage ../applications/misc/nwg-wrapper { };
 
   ocm = callPackage ../applications/networking/cluster/ocm { };
