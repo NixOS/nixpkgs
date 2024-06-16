@@ -129,6 +129,7 @@ llvmPackages.stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    mainProgram = "klee";
     description = "Symbolic virtual machine built on top of LLVM";
     longDescription = ''
       KLEE is a symbolic virtual machine built on top of the LLVM compiler
