@@ -38018,6 +38018,8 @@ with pkgs;
 
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
+  baikal = callPackage ../servers/web-apps/baikal { };
+
   blas = callPackage ../build-support/alternatives/blas { };
 
   blas-ilp64 = blas.override { isILP64 = true; };
