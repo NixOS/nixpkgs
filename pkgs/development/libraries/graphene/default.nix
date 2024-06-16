@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Thin layer of graphic data types";
+    description = "A thin layer of graphic data types";
     homepage = "https://github.com/ebassi/graphene";
     license = licenses.mit;
     maintainers = teams.gnome.members ++ (with maintainers; [ ]);

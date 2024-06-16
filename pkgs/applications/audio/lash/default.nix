@@ -27,7 +27,7 @@ stdenv.mkDerivation  rec {
   '';
 
   meta = with lib; {
-    description = "Linux Audio Session Handler";
+    description = "A Linux Audio Session Handler";
     longDescription = ''
       Session management system for GNU/Linux audio applications.
     '';

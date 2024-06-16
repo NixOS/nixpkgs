@@ -36,7 +36,7 @@ python3Packages.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Ansible execution environment builder";
+    description = "An Ansible execution environment builder";
     homepage = "https://ansible-builder.readthedocs.io/en/stable/";
     license = licenses.asl20;
     maintainers = with maintainers; [ melkor333 ];

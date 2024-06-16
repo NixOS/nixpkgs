@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   postFixup = "wrapPythonPrograms";
 
   meta = with lib; {
-    description = "Streaming protocol for test results";
+    description = "A streaming protocol for test results";
     mainProgram = "subunit-diff";
     homepage = "https://launchpad.net/subunit";
     license = licenses.asl20;

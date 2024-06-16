@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = lib.platforms.unix;
-    description = "Apple's compressed dmg to standard (hfsplus) image disk file convert tool";
+    description = "An Apple's compressed dmg to standard (hfsplus) image disk file convert tool";
     license = lib.licenses.gpl3;
   };
 }

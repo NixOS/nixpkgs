@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "toposort" ];
 
   meta = with lib; {
-    description = "Topological sort algorithm";
+    description = "A topological sort algorithm";
     homepage = "https://pypi.python.org/pypi/toposort/";
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;

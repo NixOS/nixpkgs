@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withPython python3;
 
   meta = with lib; {
-    description = "Free, open source raytracer";
+    description = "A free, open source raytracer";
     downloadPage = "https://github.com/YafaRay/libYafaRay";
     homepage = "http://www.yafaray.org";
     maintainers = with maintainers; [ hodapp ];

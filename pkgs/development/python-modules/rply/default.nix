@@ -31,7 +31,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Python Lex/Yacc that works with RPython";
+    description = "A python Lex/Yacc that works with RPython";
     homepage = "https://github.com/alex/rply";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nixy ];

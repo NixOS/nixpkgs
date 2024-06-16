@@ -25,7 +25,7 @@ buildDunePackage rec {
   ];
 
   meta = {
-    description = "Date calculation library";
+    description = "A date calculation library";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.niols ];
     homepage = "https://github.com/catalalang/dates-calc";

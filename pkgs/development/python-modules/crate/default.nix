@@ -74,7 +74,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/crate/crate-python";
-    description = "Python client library for CrateDB";
+    description = "A Python client library for CrateDB";
     changelog = "https://github.com/crate/crate-python/blob/${version}/CHANGES.txt";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];

@@ -71,7 +71,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "wagtail" ];
 
   meta = with lib; {
-    description = "Django content management system focused on flexibility and user experience";
+    description = "A Django content management system focused on flexibility and user experience";
     mainProgram = "wagtail";
     homepage = "https://github.com/wagtail/wagtail";
     changelog = "https://github.com/wagtail/wagtail/blob/v${version}/CHANGELOG.txt";

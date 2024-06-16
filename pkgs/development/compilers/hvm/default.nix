@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "Massively parallel, optimal functional runtime in Rust";
+    description = "A massively parallel, optimal functional runtime in Rust";
     mainProgram = "hvm";
     homepage = "https://github.com/higherorderco/hvm";
     license = licenses.asl20;

@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
 
   meta = with lib; {
-    description = "Command-line utility to compute and check subresource integrity hashes";
+    description = "A command-line utility to compute and check subresource integrity hashes";
     homepage = "https://github.com/zkat/srisum-rs";
     changelog = "https://github.com/zkat/srisum-rs/raw/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];

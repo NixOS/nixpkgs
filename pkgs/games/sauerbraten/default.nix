@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Free multiplayer & singleplayer first person shooter, the successor of the Cube FPS";
+    description = "A free multiplayer & singleplayer first person shooter, the successor of the Cube FPS";
     homepage = "http://sauerbraten.org";
     maintainers = with maintainers; [ raskin ajs124 ];
     mainProgram = "sauerbraten_client";

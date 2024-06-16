@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Variable font from GitHub";
+    description = "A variable font from GitHub";
     homepage = "https://github.com/mona-sans";
     changelog = "https://github.com/github/mona-sans/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.ofl;

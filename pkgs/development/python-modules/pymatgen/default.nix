@@ -107,7 +107,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymatgen" ];
 
   meta = with lib; {
-    description = "Robust materials analysis code that defines core object representations for structures and molecules";
+    description = "A robust materials analysis code that defines core object representations for structures and molecules";
     homepage = "https://pymatgen.org/";
     changelog = "https://github.com/materialsproject/pymatgen/releases/tag/v${version}";
     license = licenses.mit;

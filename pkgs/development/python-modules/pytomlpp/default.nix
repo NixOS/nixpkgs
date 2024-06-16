@@ -55,7 +55,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytomlpp" ];
 
   meta = with lib; {
-    description = "Python wrapper for tomlplusplus";
+    description = "A python wrapper for tomlplusplus";
     homepage = "https://github.com/bobfang1992/pytomlpp";
     license = licenses.mit;
     maintainers = with maintainers; [ evils ];

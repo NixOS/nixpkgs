@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "SSLv3/TLS network protocol analyzer";
+    description = "An SSLv3/TLS network protocol analyzer";
     homepage = "https://ssldump.sourceforge.net";
     license = "BSD-style";
     maintainers = with maintainers; [ aycanirican ];

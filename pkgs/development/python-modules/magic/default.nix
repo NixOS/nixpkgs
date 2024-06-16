@@ -22,7 +22,7 @@ buildPythonPackage {
   doCheck = false;
 
   meta = with lib; {
-    description = "Python wrapper around libmagic";
+    description = "A Python wrapper around libmagic";
     homepage = "http://www.darwinsys.com/file/";
     license = licenses.lgpl2;
   };

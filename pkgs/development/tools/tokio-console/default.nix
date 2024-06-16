@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Debugger for asynchronous Rust code";
+    description = "A debugger for asynchronous Rust code";
     homepage = "https://github.com/tokio-rs/console";
     mainProgram = "tokio-console";
     license = with licenses; [ mit ];

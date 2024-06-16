@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://github.com/nobbz/nix-janitor";
     changelog = "https://github.com/NobbZ/nix-janitor/blob/${version}/CHANGELOG.md";
-    description = "Tool to clean up old profile generations";
+    description = "A tool to clean up old profile generations";
     mainProgram = "janitor";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;

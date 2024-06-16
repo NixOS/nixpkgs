@@ -22,7 +22,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "Make/Rake-like Build Tool Using Go";
+    description = "A Make/Rake-like Build Tool Using Go";
     mainProgram = "mage";
     homepage = "https://magefile.org/";
     license = licenses.asl20;

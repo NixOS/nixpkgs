@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "rich_pixels" ];
 
   meta = with lib; {
-    description = "Rich-compatible library for writing pixel images and ASCII art to the terminal";
+    description = "A Rich-compatible library for writing pixel images and ASCII art to the terminal";
     homepage = "https://github.com/darrenburns/rich-pixels";
     changelog = "https://github.com/darrenburns/rich-pixels/releases/tag/${src.rev}";
     license = licenses.mit;

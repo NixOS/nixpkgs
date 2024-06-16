@@ -39,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Tool for checking that Robot Framework test cases have expected statuses and log messages";
+    description = "A tool for checking that Robot Framework test cases have expected statuses and log messages";
     homepage = "https://github.com/robotframework/statuschecker";
     license = licenses.asl20;
     maintainers = [ ];

@@ -34,7 +34,7 @@ mkCoqDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Survey of programming language semantics styles in Coq";
+    description = "A survey of programming language semantics styles in Coq";
     longDescription = ''
       A survey of semantics styles in Coq, from natural semantics through
       structural operational, axiomatic, and denotational semantics, to

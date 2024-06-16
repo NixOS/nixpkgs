@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     license = licenses.mit;
-    description = "Tool to extract data from a 3ds rom";
+    description = "A tool to extract data from a 3ds rom";
     platforms = platforms.linux;
     maintainers = [ maintainers.marius851000 ];
     mainProgram = "ctrtool";

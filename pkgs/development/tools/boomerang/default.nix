@@ -32,7 +32,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/BoomerangDecompiler/boomerang";
     license = licenses.bsd3;
-    description = "General, open source, retargetable decompiler";
+    description = "A general, open source, retargetable decompiler";
     maintainers = with maintainers; [ dtzWill ];
   };
 }

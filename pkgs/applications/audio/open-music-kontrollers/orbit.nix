@@ -8,5 +8,5 @@ callPackage ./generic.nix (args // rec {
 
   additionalBuildInputs = [ zlib ];
 
-  description = "LV2 time event manipulation plugin bundle";
+  description = "An LV2 time event manipulation plugin bundle";
 })

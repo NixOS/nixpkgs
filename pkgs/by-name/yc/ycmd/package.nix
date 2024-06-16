@@ -95,7 +95,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Code-completion and comprehension server";
+    description = "A code-completion and comprehension server";
     mainProgram = "ycmd";
     homepage = "https://github.com/ycm-core/ycmd";
     license = licenses.gpl3;

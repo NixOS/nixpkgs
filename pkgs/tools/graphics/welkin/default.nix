@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "RDF visualizer";
+    description = "An RDF visualizer";
     maintainers = with lib.maintainers; [
       raskin
     ];

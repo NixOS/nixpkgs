@@ -108,7 +108,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Symbolic virtual machine built on top of LLVM";
+    description = "A symbolic virtual machine built on top of LLVM";
     longDescription = ''
       KLEE is a symbolic virtual machine built on top of the LLVM compiler
       infrastructure. Currently, there are two primary components:

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Hierarchical matrix C/C++ library";
+    description = "A hierarchical matrix C/C++ library";
     homepage = "https://github.com/jeromerobert/hmat-oss";
     license = licenses.gpl2;
     platforms = platforms.unix;

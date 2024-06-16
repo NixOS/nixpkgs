@@ -59,7 +59,7 @@ let
 
     meta = with lib; {
       homepage = "https://pydoit.org/";
-      description = "Task management & automation tool";
+      description = "A task management & automation tool";
       mainProgram = "doit";
       license = licenses.mit;
       longDescription = ''

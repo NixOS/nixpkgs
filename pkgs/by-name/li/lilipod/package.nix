@@ -52,7 +52,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "Very simple (as in few features) container and image manager";
+    description = "A very simple (as in few features) container and image manager";
     longDescription = ''
       Lilipod is a very simple container manager with minimal features to:
 

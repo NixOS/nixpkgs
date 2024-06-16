@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Collection of optimised low-level functions targeting storage applications";
+    description = "A collection of optimised low-level functions targeting storage applications";
     mainProgram = "igzip";
     license = licenses.bsd3;
     homepage = "https://github.com/intel/isa-l";

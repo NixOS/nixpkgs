@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "GPU powered browserless markdown viewer";
+    description = "A GPU powered browserless markdown viewer";
     homepage = "https://github.com/trimental/inlyne";
     changelog = "https://github.com/trimental/inlyne/releases/tag/${src.rev}";
     license = licenses.mit;

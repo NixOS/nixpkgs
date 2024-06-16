@@ -57,7 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "https://www.etebase.com/";
-    description = "Python client library for Etebase";
+    description = "A Python client library for Etebase";
     license = licenses.bsd3;
     maintainers = with maintainers; [ _3699n ];
   };

@@ -110,7 +110,7 @@ with self; {
     doCheck = false;
 
     meta = {
-      description = "Grep-like tool tailored to working with large trees of source code";
+      description = "A grep-like tool tailored to working with large trees of source code";
       homepage = "https://beyondgrep.com";
       license = with lib.licenses; [ artistic2 ];
     };
@@ -183,7 +183,7 @@ with self; {
       hash = "sha256-qvSEZ3Zd7qbkgFS8fUPkbk1Ay82hZVLGKdN74Jgokwk=";
     };
     meta = {
-      description = "Module for merging hierarchies using the C3 algorithm";
+      description = "A module for merging hierarchies using the C3 algorithm";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -256,7 +256,7 @@ with self; {
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ AlienBuild ArchiveExtract CaptureTiny Filechdir PathTiny ShellConfigGenerate ShellGuess SortVersions URI ];
     meta = {
-      description = "Module::Build subclass for building Alien:: modules and their libraries";
+      description = "A Module::Build subclass for building Alien:: modules and their libraries";
       homepage = "https://metacpan.org/pod/Alien::Base::ModuleBuild";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -607,7 +607,7 @@ with self; {
     };
     propagatedBuildInputs = [ AnyEvent ObjectEvent commonsense ];
     meta = {
-      description = "Event based IRC protocol client API";
+      description = "An event based IRC protocol client API";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -622,7 +622,7 @@ with self; {
     buildInputs = [ FileShareDirInstall TestException ];
     propagatedBuildInputs = [ AnyEvent DevelGlobalDestruction FileShareDir ListMoreUtils NetAMQP Readonly namespaceclean ];
     meta = {
-      description = "Asynchronous and multi channel Perl AMQP client";
+      description = "An asynchronous and multi channel Perl AMQP client";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -729,7 +729,7 @@ with self; {
     };
     buildInputs = [ TestDeep TestException ];
     meta = {
-      description = "Persistence framework for session data";
+      description = "A persistence framework for session data";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -815,7 +815,7 @@ with self; {
     };
     buildInputs = [ TestPod ];
     meta = {
-      description = "Bundle of Perl5 modules for reading configuration files and parsing command line arguments";
+      description = "A bundle of Perl5 modules for reading configuration files and parsing command line arguments";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -872,7 +872,7 @@ with self; {
       shortenPerlShebang $out/bin/cpm
     '';
     meta = {
-      description = "Fast CPAN module installer";
+      description = "A fast CPAN module installer";
       homepage = "https://github.com/skaji/cpm";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.zakame ];
@@ -918,7 +918,7 @@ with self; {
       rm $out/bin/wxchordpro # Wx not supported on darwin
     '';
     meta = {
-      description = "Lyrics and chords formatting program";
+      description = "A lyrics and chords formatting program";
       homepage = "https://www.chordpro.org";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "chordpro";
@@ -1076,7 +1076,7 @@ with self; {
     propagatedBuildInputs = [ ArchiveLibarchive Filechdir PathTiny RefUtil ];
     meta = {
       homepage = "https://metacpan.org/pod/Archive::Libarchive::Extract";
-      description = "Archive extracting mechanism (using libarchive)";
+      description = "An archive extracting mechanism (using libarchive)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ tomasajt ];
     };
@@ -1140,7 +1140,7 @@ with self; {
     buildInputs = [ TestDeep TestSpec TestTrap ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
     meta = {
-      description = "Simple limitable FIFO array, with sum and average methods";
+      description = "A Simple limitable FIFO array, with sum and average methods";
       homepage = "https://github.com/dwburke/perl-Array-FIFO";
       license = with lib.licenses; [ artistic2 ];
     };
@@ -1493,7 +1493,7 @@ with self; {
     buildInputs = [ TestNoWarnings ];
     propagatedBuildInputs = [ UnicodeStringprep ];
     meta = {
-      description = "Stringprep Profile for User Names and Passwords (RFC 4013)";
+      description = "A Stringprep Profile for User Names and Passwords (RFC 4013)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
     };
@@ -2106,7 +2106,7 @@ with self; {
       hash = "sha256-A9lntfgoRpCRN9WrmYSsVwrBCkQB4MYC89IgjEZayYI=";
     };
     meta = {
-      description = "Tiny Perl extension to generate cryptographically-secure random bytes";
+      description = "A tiny Perl extension to generate cryptographically-secure random bytes";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
     };
@@ -2209,7 +2209,7 @@ with self; {
       hash = "sha256-Tni35N0jG1VxpIzQ7htjlT9eNHkMnQIOFZWnx9Crvkk=";
     };
     meta = {
-      description = "Lightweight cache with timed expiration";
+      description = "A lightweight cache with timed expiration";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -2310,7 +2310,7 @@ with self; {
     };
     propagatedBuildInputs = [ HTMLTiny LWP ];
     meta = {
-      description = "Perl implementation of the reCAPTCHA API";
+      description = "A Perl implementation of the reCAPTCHA API";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -2788,7 +2788,7 @@ with self; {
     buildInputs = [ HTTPMessage Plack SubOverride TestDeep ];
     propagatedBuildInputs = [ CatalystRuntime Moose PrometheusTiny PrometheusTinyShared ];
     meta = {
-      description = "Tiny Prometheus client";
+      description = "A tiny Prometheus client";
       homepage = "https://github.com/robn/Prometheus-Tiny";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -2947,7 +2947,7 @@ with self; {
     };
     buildInputs = [ CatalystRuntime TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst TextCSV XMLSimple ];
     meta = {
-      description = "View module to help in the convenience of downloading data into many supportable formats";
+      description = "A view module to help in the convenience of downloading data into many supportable formats";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3068,7 +3068,7 @@ with self; {
     propagatedBuildInputs = [ AnyURIEscape AppCmd CGIExpand ConfigOnion CpanelJSONXS DataCompare DataUtil IOHandleUtil LWP ListMoreUtils LogAny MIMETypes ModuleInfo MooXAliases ParserMGC PathIteratorRule PathTiny StringCamelCase TextCSV TextHogan Throwable TryTinyByClass URITemplate UUIDTiny YAMLLibYAML namespaceclean ];
     buildInputs = [ LogAnyAdapterLog4perl LogLog4perl TestDeep TestException TestLWPUserAgent TestPod ];
     meta = {
-      description = "Data toolkit";
+      description = "A data toolkit";
       homepage = "https://github.com/LibreCat/Catmandu";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "catmandu";
@@ -3218,7 +3218,7 @@ with self; {
       hash = "sha256-uU1QghsCYR2m7lQjGTFFB4xNuygvKxYqSw1YCUmXvEc=";
     };
     meta = {
-      description = "Lightweight CGI form processing package";
+      description = "A lightweight CGI form processing package";
       homepage = "https://github.com/JerilynFranz/perl-CGI-Minimal";
       license = with lib.licenses; [ mit ];
     };
@@ -3261,7 +3261,7 @@ with self; {
     };
     buildInputs = [ TestException TestNoWarnings ];
     meta = {
-      description = "Simple totally OO CGI interface that is CGI.pm compliant";
+      description = "A Simple totally OO CGI interface that is CGI.pm compliant";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3309,7 +3309,7 @@ with self; {
     buildInputs = [ TestWarn ];
     propagatedBuildInputs = [ GD GraphicsToolkitColor ];
     meta = {
-      description = "Series of charting modules";
+      description = "A series of charting modules";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3422,7 +3422,7 @@ with self; {
       hash = "sha256-dbO47I7+aHZ3tj8KEO75ZuAfYHNcVmVs51y7RMq6M1o=";
     };
     meta = {
-      description = "Minimalistic variant of Class::Accessor";
+      description = "A minimalistic variant of Class::Accessor";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3463,7 +3463,7 @@ with self; {
     };
     propagatedBuildInputs = [ AlgorithmC3 ];
     meta = {
-      description = "Pragma to use the C3 method resolution order algorithm";
+      description = "A pragma to use the C3 method resolution order algorithm";
       homepage = "https://metacpan.org/release/Class-C3";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -3685,7 +3685,7 @@ with self; {
       hash = "sha256-p1KK8in6OhIF3NJakd59dKxvp9lSgbmTtV6Lb0+HuZE=";
     };
     meta = {
-      description = "Set of modules to make the module developement easier";
+      description = "A set of modules to make the module developement easier";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3700,7 +3700,7 @@ with self; {
     # Remove unnecessary, non-autoconf, configure script.
     prePatch = "rm configure";
     meta = {
-      description = "Module for creating generic methods";
+      description = "A module for creating generic methods";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3786,7 +3786,7 @@ with self; {
       hash = "sha256-3JoR4Nq1bcIg3qjJT+PEfbXn3Xwe0E3IF4qlu3v7vM4=";
     };
     meta = {
-      description = "Minimal lightweight exception class";
+      description = "A minimal lightweight exception class";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3815,7 +3815,7 @@ with self; {
     buildInputs = [ TestFatal TestNeeds ];
     propagatedBuildInputs = [ DataOptList PackageStash ];
     meta = {
-      description = "Working (require \"Class::Name\") and more";
+      description = "A working (require \"Class::Name\") and more";
       homepage = "https://github.com/moose/Class-Load";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4059,7 +4059,7 @@ with self; {
     buildInputs = [ TestMost TestWarn TestException TestDeep TestDifferences ModulePluggable ];
     propagatedBuildInputs = [ ClassAccessor ClassDataInheritable ];
     meta = {
-      description = "Easy-to-use and comprehensive named-color library";
+      description = "An easy-to-use and comprehensive named-color library";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -4241,7 +4241,7 @@ with self; {
     };
     propagatedBuildInputs = [ CaptureTiny ];
     meta = {
-      description = "Module to implement some of AutoConf macros in pure perl";
+      description = "A module to implement some of AutoConf macros in pure perl";
       homepage = "https://metacpan.org/release/Config-AutoConf";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4283,7 +4283,7 @@ with self; {
       hash = "sha256-qLOjosnIxDuS3EAb8nCdZRTxW0Z/1PcsSNNWM1dx1uM=";
     };
     meta = {
-      description = "Grammar-based, user-friendly config parser";
+      description = "A grammar-based, user-friendly config parser";
       homepage = "https://github.com/schweikert/Config-Grammar";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4329,7 +4329,7 @@ with self; {
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
-      description = "Module for reading .ini-style configuration files";
+      description = "A module for reading .ini-style configuration files";
       homepage = "https://metacpan.org/release/Config-IniFiles";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = teams.deshaw.members;
@@ -4391,7 +4391,7 @@ with self; {
     };
     propagatedBuildInputs = [ ConfigINI ConfigMVP ];
     meta = {
-      description = "MVP config reader for .ini files";
+      description = "An MVP config reader for .ini files";
       homepage = "https://github.com/rjbs/Config-MVP-Reader-INI";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4486,7 +4486,7 @@ with self; {
       rm t/01-builtin-password-scheme.t
     '';
     meta = {
-      description = "Generic connection to a hierarchical-structured data set";
+      description = "A generic connection to a hierarchical-structured data set";
       homepage = "https://github.com/whiterabbitsecurity/connector";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -5135,7 +5135,7 @@ with self; {
     '';
 
     meta = {
-      description = "Secure memorable password generator";
+      description = "A secure memorable password generator";
       homepage = "http://www.bartb.ie/hsxkpasswd";
       license = with lib.licenses; [ bsd2 ];
       maintainers = [ maintainers.dannixon ];
@@ -5182,7 +5182,7 @@ with self; {
     };
     propagatedBuildInputs = [ CryptURandom ];
     meta = {
-      description = "Module for managing passwords in a cryptographically agile manner";
+      description = "A module for managing passwords in a cryptographically agile manner";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -5196,7 +5196,7 @@ with self; {
     };
     propagatedBuildInputs = with perlPackages; [ CryptArgon2 CryptPassphrase ];
     meta = {
-      description = "Argon2 encoder for Crypt::Passphrase";
+      description = "An Argon2 encoder for Crypt::Passphrase";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -5210,7 +5210,7 @@ with self; {
     };
     propagatedBuildInputs = [ CryptBcrypt CryptPassphrase ];
     meta = {
-      description = "Bcrypt encoder for Crypt::Passphrase";
+      description = "A bcrypt encoder for Crypt::Passphrase";
       homepage = "https://github.com/Leont/crypt-passphrase-bcrypt";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -5754,7 +5754,7 @@ with self; {
     };
     propagatedBuildInputs = [ Curses TermReadKey ];
     meta = {
-      description = "Curses based OO user interface framework";
+      description = "A curses based OO user interface framework";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -5840,7 +5840,7 @@ with self; {
     };
     propagatedBuildInputs = [ DataIEEE754 DevelStackTrace ScalarType StringBinaryInterpolation TestDifferences TestException ];
     meta = {
-      description = "Compact Read Only Database that consumes very little memory";
+      description = "A Compact Read Only Database that consumes very little memory";
       license = with lib.licenses; [ artistic1 gpl2Only ];
     };
   };
@@ -6053,7 +6053,7 @@ with self; {
     };
     buildInputs = [ ModuleBuildXSUtil TestRequires ];
     meta = {
-      description = "Grep-like program for searching source code";
+      description = "A grep-like program for searching source code";
       homepage = "https://github.com/msgpack/msgpack-perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
@@ -6333,7 +6333,7 @@ with self; {
     buildInputs = [ HashUtilFieldHashCompat ModuleBuildXSUtil ScopeGuard TestException ];
     perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
-      description = "Selection of utilities for data and data types";
+      description = "A selection of utilities for data and data types";
       homepage = "https://github.com/gfx/Perl-Data-Util";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.DataUtil.x86_64-darwin
@@ -6518,7 +6518,7 @@ with self; {
       hash = "sha256-KaGSYxTOFoGjEtYVXClZDHcd2s+Rt0hYc85EnvIJ3QQ=";
     };
     meta = {
-      description = "Simple date object";
+      description = "A simple date object";
       license = with lib.licenses; [ artistic1 gpl2Plus ];
     };
   };
@@ -6533,7 +6533,7 @@ with self; {
     buildInputs = [ CPANMetaCheck TestFatal TestWarnings TestWithoutModule ];
     propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ];
     meta = {
-      description = "Date and time object for Perl";
+      description = "A date and time object for Perl";
       homepage = "https://metacpan.org/release/DateTime";
       license = with lib.licenses; [ artistic2 ];
     };
@@ -6875,7 +6875,7 @@ with self; {
     };
     propagatedBuildInputs = [ ClassISA DevelStackTrace StringUtil TermReadKey TextTabularDisplay TieIxHash ];
     meta = {
-      description = "Collection of handy debugging routines for displaying the values of variables with a minimum of coding";
+      description = "A collection of handy debugging routines for displaying the values of variables with a minimum of coding";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -6975,7 +6975,7 @@ with self; {
     };
     propagatedBuildInputs = [ DevelCheckOS DevelHide TestException TestTime ];
     meta = {
-      description = "Framework for managing deprecations";
+      description = "A framework for managing deprecations";
       homepage = "https://github.com/DrHyde/perl-modules-Devel-Deprecations-Environmental";
       license = with lib.licenses; [ gpl2Only artistic1 ];
     };
@@ -7563,7 +7563,7 @@ with self; {
     };
     buildInputs = [ TestDeep TestException TestPod TestPodCoverage TestWarn ];
     meta = {
-      description = "Pure perl multi-level hash/array DBM that supports transactions";
+      description = "A pure perl multi-level hash/array DBM that supports transactions";
       homepage = "https://github.com/robkinyon/dbm-deep";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7781,7 +7781,7 @@ with self; {
       hash = "sha256-zTwD7VR9PULGH6WBTJgpYTk5LnlxwJLgmkMfLJ9daFU=";
     };
     meta = {
-      description = "Object representing a stack trace";
+      description = "An object representing a stack trace";
       homepage = "https://metacpan.org/release/Devel-StackTrace";
       license = with lib.licenses; [ artistic2 ];
     };
@@ -7988,7 +7988,7 @@ with self; {
       hash = "sha256-4lGlGrx9m6PnCPc8KqII4J1HoMUo1iVHEPp4zI1ohbU=";
     };
     meta = {
-      description = "__DIR__ constant for the directory your source file is in";
+      description = "A __DIR__ constant for the directory your source file is in";
       homepage = "https://github.com/mauke/Dir-Self";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -8564,7 +8564,7 @@ with self; {
     };
     buildInputs = [ CaptureTiny ];
     meta = {
-      description = "Unified interface to MIME encoding and decoding";
+      description = "A unified interface to MIME encoding and decoding";
       homepage = "https://github.com/rjbs/Email-MIME-Encodings";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -8597,7 +8597,7 @@ with self; {
     preCheck = "rm t/internals.t t/plain_jpeg_attached.t"; # these tests expect EmailMIME version 1.946 and fail with 1.949 (the output difference in benign)
     meta = {
       homepage = "https://www.matijs.net/software/msgconv/";
-      description = ".MSG to mbox converter";
+      description = "A .MSG to mbox converter";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ peterhoeg ];
       mainProgram = "msgconvert";
@@ -8621,7 +8621,7 @@ with self; {
       shortenPerlShebang util/sendmail
     '';
     meta = {
-      description = "Library for sending email";
+      description = "A library for sending email";
       homepage = "https://github.com/rjbs/Email-Sender";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -8652,7 +8652,7 @@ with self; {
     buildInputs = [ Moo TestFatal ];
     propagatedBuildInputs = [ EmailMIME EmailSender ModuleRuntime ParamsUtil ];
     meta = {
-      description = "More casual approach to creating and sending Email:: emails";
+      description = "A more casual approach to creating and sending Email:: emails";
       homepage = "https://github.com/rjbs/Email-Stuffer";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ sgo ];
@@ -8728,7 +8728,7 @@ with self; {
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     meta = {
-      description = "Encode::Encoding subclass that detects the encoding of data";
+      description = "An Encode::Encoding subclass that detects the encoding of data";
       license = with lib.licenses; [ mpl11 gpl2Plus lgpl2Plus ]; # taken from fedora
     };
   };
@@ -9007,7 +9007,7 @@ with self; {
     };
     propagatedBuildInputs = [ ClassDataInheritable DevelStackTrace ];
     meta = {
-      description = "Exception Object Class";
+      description = "An Exception Object Class";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -9079,7 +9079,7 @@ with self; {
       hash = "sha256-byleLL/7HbwVvbna3DQWccHgzSvfLTErF1Jic8MiY40=";
     };
     meta = {
-      description = "Exporter with the features of Sub::Exporter but only core dependencies";
+      description = "An exporter with the features of Sub::Exporter but only core dependencies";
       homepage = "https://metacpan.org/release/Exporter-Tiny";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -9135,7 +9135,7 @@ with self; {
       hash = "sha256-rlEE9jRlDc6KebftE/tZ1no5whOmd2z9qj7nSeYvGow=";
     };
     meta = {
-      description = "Wrapper for perl's configuration";
+      description = "A wrapper for perl's configuration";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -9196,7 +9196,7 @@ with self; {
     buildInputs = [ pkgs.gfortran ];
     propagatedBuildInputs = [ FileWhich ];
     meta = {
-      description = "Simple interface to F77 libs";
+      description = "A simple interface to F77 libs";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -9251,7 +9251,7 @@ with self; {
     };
     perlPreHook = "export LD=$CC";
     meta = {
-      description = "Tool to build C libraries";
+      description = "A tool to build C libraries";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -9338,7 +9338,7 @@ with self; {
       hash = "sha256-Pfr1g36/3AB4lb/KhMPC521Ymn0zZADo37MkPYGCFd4=";
     };
     meta = {
-      description = "Set of useful typemaps";
+      description = "A set of useful typemaps";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -9428,7 +9428,7 @@ with self; {
       hash = "sha256-4clYwEJCehdeBR4ACPICXo7IBhPTx3UFl7+OUpsEQg4=";
     };
     meta = {
-      description = "Perl-based FastCGI process manager";
+      description = "A perl-based FastCGI process manager";
       license = with lib.licenses; [ gpl2Plus ];
     };
   };
@@ -9586,7 +9586,7 @@ with self; {
       hash = "sha256-Mev5Et9I1daB3vdLmIDXix86ykNRoO0f41cLjgOvbHk=";
     };
     meta = {
-      description = "More sensible way to change directories";
+      description = "A more sensible way to change directories";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -9760,7 +9760,7 @@ with self; {
     buildInputs = [ FileTreeCreate TestFile ];
     propagatedBuildInputs = [ ClassXSAccessor ];
     meta = {
-      description = "Object oriented File::Find replacement";
+      description = "An object oriented File::Find replacement";
       homepage = "https://metacpan.org/release/File-Find-Object";
       license = with lib.licenses; [ artistic2 ];
     };
@@ -10267,7 +10267,7 @@ with self; {
     };
     buildInputs = [ TestWarnings ];
     meta = {
-      description = "Simple, sane and efficient module to slurp a file";
+      description = "A simple, sane and efficient module to slurp a file";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -10280,7 +10280,7 @@ with self; {
       hash = "sha256-RSmVvuq/DpI+Zf3GJ6cl27EsnhDADYAYwW0QumJ1fx4=";
     };
     meta = {
-      description = "Simple, sane and efficient file slurper [DISCOURAGED]";
+      description = "A simple, sane and efficient file slurper [DISCOURAGED]";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -10602,7 +10602,7 @@ with self; {
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ Future ];
     meta = {
-      description = "FIFO queue of values that uses L<Future>s";
+      description = "A FIFO queue of values that uses L<Future>s";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -10822,7 +10822,7 @@ with self; {
     propagatedBuildInputs = [ ArchiveExtract ConfigGitLike DataStreamBulk DateTime FileFindRule IODigest MooseXStrictConstructor MooseXTypesPathClass ];
     doCheck = false;
     meta = {
-      description = "Pure Perl interface to Git repositories";
+      description = "A Pure Perl interface to Git repositories";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -11374,7 +11374,7 @@ with self; {
     };
     propagatedBuildInputs = [ Gtk3 ];
     meta = {
-      description = "Simple interface to Gtk3's complex MVC list widget";
+      description = "A simple interface to Gtk3's complex MVC list widget";
       homepage = "https://github.com/soig/Gtk3-SimpleList";
       license = with lib.licenses; [ lgpl21Plus ];
     };
@@ -11428,7 +11428,7 @@ with self; {
       shortenPerlShebang $out/bin/hailo
     '';
     meta = {
-      description = "Pluggable Markov engine analogous to MegaHAL";
+      description = "A pluggable Markov engine analogous to MegaHAL";
       homepage = "https://hailo.org";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "hailo";
@@ -11538,7 +11538,7 @@ with self; {
     buildInputs = [ TestDeep TestFailWarnings TestFatal ];
     meta = {
       homepage = "https://github.com/dagolden/Hash-Ordered";
-      description = "Fast, pure-Perl ordered hash class";
+      description = "A fast, pure-Perl ordered hash class";
       license = lib.licenses.asl20;
     };
   };
@@ -12151,7 +12151,7 @@ with self; {
     # Broken on Hydra since 2021-06-17: https://hydra.nixos.org/build/146507373
     doCheck = false;
     meta = {
-      description = "Minimalist HTTP user agent cookie jar";
+      description = "A minimalist HTTP user agent cookie jar";
       homepage = "https://github.com/dagolden/HTTP-CookieJar";
       license = with lib.licenses; [ asl20 ];
     };
@@ -12182,7 +12182,7 @@ with self; {
     buildInputs = [ ModuleBuildTiny TestNeeds ];
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
-      description = "Simple http server class";
+      description = "A simple http server class";
       homepage = "https://github.com/libwww-perl/HTTP-Daemon";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -12257,7 +12257,7 @@ with self; {
       hash = "sha256-qeAP/7PYmRoUqq/dxh1tFoxP8U4xSuPbstTaMAjXRu8=";
     };
     meta = {
-      description = "XS extension for processing HTTP headers";
+      description = "An XS extension for processing HTTP headers";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       broken =
         stdenv.isi686 # loadable library and perl binaries are mismatched (got handshake key 0x7d40080, needed 0x7dc0080)
@@ -12347,7 +12347,7 @@ with self; {
       hash = "sha256-eU5oM+MmsQ0kNp+c2/wWZxBe9lkej0HlYaPUGnAnqAk=";
     };
     meta = {
-      description = "Fast, primitive HTTP request parser";
+      description = "A fast, primitive HTTP request parser";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -12363,7 +12363,7 @@ with self; {
     # tests fail because they require network access
     doCheck = false;
     meta = {
-      description = "Pure Perl HTTP proxy";
+      description = "A pure Perl HTTP proxy";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -12435,7 +12435,7 @@ with self; {
     };
     propagatedBuildInputs = [ HTMLMason HTTPServerSimple HookLexWrap ];
     meta = {
-      description = "Simple mason server";
+      description = "A simple mason server";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -12601,7 +12601,7 @@ with self; {
     };
     buildInputs = [ ModuleBuild ];
     meta = {
-      description = "Library to extract height/width from images";
+      description = "A library to extract height/width from images";
       homepage = "https://search.cpan.org/dist/Image-Size";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "imgsize";
@@ -14184,7 +14184,7 @@ with self; {
     };
     buildInputs = [ TestInter ];
     meta = {
-      description = "Distribution of modules to handle locale codes";
+      description = "A distribution of modules to handle locale codes";
       homepage = "https://github.com/SBECK-github/Locale-Codes";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -14509,7 +14509,7 @@ with self; {
       hash = "sha256-6JEdM4ePoWmeQ+jQpU7V1WEEA4Z/9cM5+TQQPRfsZLA=";
     };
     meta = {
-      description = "Lightweight, flexible logging framework";
+      description = "A lightweight, flexible logging framework";
       homepage = "https://metacpan.org/release/Log-ger";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
@@ -14625,7 +14625,7 @@ with self; {
     buildInputs = [ TestDeep TestFatal ];
     propagatedBuildInputs = [ LogDispatchArray StringFlogger SubExporterGlobExporter ];
     meta = {
-      description = "Simple wrapper around Log::Dispatch";
+      description = "A simple wrapper around Log::Dispatch";
       homepage = "https://github.com/rjbs/Log-Dispatchouli";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -14818,7 +14818,7 @@ with self; {
     };
     propagatedBuildInputs = [ LWP ];
     meta = {
-      description = "Virtual browser that retries errors";
+      description = "A virtual browser that retries errors";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -14982,7 +14982,7 @@ with self; {
     buildInputs = [ FileSlurper TestCompile TestPod TestPodCoverage TextDiff UNIVERSALrequire URI ];
     propagatedBuildInputs = [ FileHandleUnget ];
     meta = {
-      description = "Fast and simple mbox folder reader";
+      description = "A fast and simple mbox folder reader";
       homepage = "https://github.com/coppit/mail-mbox-messageparser";
       license = with lib.licenses; [ gpl2Only ];
       maintainers = with maintainers; [ romildo ];
@@ -15029,7 +15029,7 @@ with self; {
     };
     propagatedBuildInputs = [ ParseRecDescent ];
     meta = {
-      description = "IMAP Client API";
+      description = "An IMAP Client API";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -15112,7 +15112,7 @@ with self; {
 
     doCheck = false; # The main test performs network access
     meta = {
-      description = "Object-oriented implementation of Sender Policy Framework";
+      description = "An object-oriented implementation of Sender Policy Framework";
       license = with lib.licenses; [ bsd3 ];
       mainProgram = "spfquery";
     };
@@ -15659,7 +15659,7 @@ with self; {
     };
     propagatedBuildInputs = [ CPANCommonIndex CPANMetaCheck CaptureTiny ExtUtilsHelpers ExtUtilsInstallPaths Filepushd HTTPTinyish ModuleCPANfile ParsePMFile StringShellQuote Win32ShellQuote locallib ];
     meta = {
-      description = "CPAN client";
+      description = "A CPAN client";
       homepage = "https://github.com/miyagawa/cpanminus";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -15712,7 +15712,7 @@ with self; {
     buildInputs = [ LWPProtocolHttps TestFatal TestNeeds ];
     propagatedBuildInputs = [ IOSocketSSL JSONMaybeXS Moo RefUtil SafeIsa TypeTiny URI ];
     meta = {
-      description = "Comprehensive, DWIM-featured client to the MetaCPAN API";
+      description = "A comprehensive, DWIM-featured client to the MetaCPAN API";
       homepage = "https://github.com/metacpan/metacpan-client";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ sgo ];
@@ -15763,7 +15763,7 @@ with self; {
 
     meta = {
       homepage = "https://www.mhonarc.org/";
-      description = "Mail-to-HTML converter";
+      description = "A mail-to-HTML converter";
       mainProgram = "mhonarc";
       license = with lib.licenses; [ gpl2Only ];
     };
@@ -15880,7 +15880,7 @@ with self; {
     };
     propagatedBuildInputs = [ Mojolicious YAMLLibYAML ];
     meta = {
-      description = "High performance job queue for Perl";
+      description = "A high performance job queue for Perl";
       homepage = "https://github.com/mojolicious/minion";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
@@ -16065,7 +16065,7 @@ with self; {
     };
     doCheck = false;
     meta = {
-      description = "Collection of modules removed from Module-Build";
+      description = "A collection of modules removed from Module-Build";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -16127,7 +16127,7 @@ with self; {
     buildInputs = [ FileShareDir ];
     propagatedBuildInputs = [ ExtUtilsHelpers ExtUtilsInstallPaths ];
     meta = {
-      description = "Tiny replacement for Module::Build";
+      description = "A tiny replacement for Module::Build";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -16157,7 +16157,7 @@ with self; {
     propagatedBuildInputs = [ DevelCheckCompiler ];
     perlPreHook = "export LD=$CC";
     meta = {
-      description = "Module::Build class for building XS modules";
+      description = "A Module::Build class for building XS modules";
       homepage = "https://github.com/hideo55/Module-Build-XSUtil";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -16335,7 +16335,7 @@ with self; {
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ ModuleInstall ];
     meta = {
-      description = "Module::Install extension to include GitHub meta information in META.yml";
+      description = "A Module::Install extension to include GitHub meta information in META.yml";
       homepage = "https://github.com/bingos/module-install-githubmeta";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
@@ -16352,7 +16352,7 @@ with self; {
     buildInputs = [ TestInDistDir ];
     propagatedBuildInputs = [ CaptureTiny IOAll ModuleInstall PodMarkdown ];
     meta = {
-      description = "Module::Install extension to automatically convert POD to a README";
+      description = "A Module::Install extension to automatically convert POD to a README";
       homepage = "https://github.com/bingos/module-install-readmefrompod";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
@@ -16752,7 +16752,7 @@ with self; {
     };
     propagatedBuildInputs = [ Mojolicious ];
     meta = {
-      description = "Plugin for enabling a Mojolicious app to log to syslog";
+      description = "A plugin for enabling a Mojolicious app to log to syslog";
       homepage = "https://github.com/jhthorsen/mojolicious-plugin-syslog";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
@@ -16834,7 +16834,7 @@ with self; {
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ CryptOpenSSLRSA CryptOpenSSLX509 DataGUID Mojolicious XMLCanonicalizeXML ];
     meta = {
-      description = "SAML2 toolkit using the Mojo toolkit";
+      description = "A SAML2 toolkit using the Mojo toolkit";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
     };
@@ -16850,7 +16850,7 @@ with self; {
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ DBDSQLite Mojolicious SQLAbstractPg URIdb URI ];
     meta = {
-      description = "Tiny Mojolicious wrapper for SQLite";
+      description = "A tiny Mojolicious wrapper for SQLite";
       homepage = "https://github.com/Grinnz/Mojo-SQLite";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
@@ -17039,7 +17039,7 @@ with self; {
       export LD=$CC
     '';
     meta = {
-      description = "Postmodern object system for Perl 5";
+      description = "A postmodern object system for Perl 5";
       homepage = "http://moose.perl.org";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.eelco ];
@@ -17260,7 +17260,7 @@ with self; {
     buildInputs = [ Moose TestDeepJSON TestWithoutModule DigestHMAC MooseXTypes ];
     propagatedBuildInputs = [ JSON MooseXRoleParameterized MooseXStorage namespaceautoclean ];
     meta = {
-      description = "Format role for MooseX::Storage using JSON.pm";
+      description = "A format role for MooseX::Storage using JSON.pm";
       homepage = "https://github.com/rjbs/MooseX-Storage-Format-JSONpm";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -17337,7 +17337,7 @@ with self; {
     };
     propagatedBuildInputs = [ ConfigAny MouseXConfigFromFile ];
     meta = {
-      description = "Mouse role for setting attributes from a simple configfile";
+      description = "A Mouse role for setting attributes from a simple configfile";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -17445,7 +17445,7 @@ with self; {
     buildInputs = [ TestUseAllModules ];
     propagatedBuildInputs = [ MouseXTypesPathClass ];
     meta = {
-      description = "Abstract Mouse role for setting attributes from a configfile";
+      description = "An abstract Mouse role for setting attributes from a configfile";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -17463,7 +17463,7 @@ with self; {
     buildInputs = [ ModuleBuildTiny MouseXConfigFromFile MouseXSimpleConfig TestException TestWarn ];
     propagatedBuildInputs = [ GetoptLongDescriptive Mouse ];
     meta = {
-      description = "Mouse role for processing command line options";
+      description = "A Mouse role for processing command line options";
       homepage = "https://github.com/gfx/mousex-getopt";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -17524,7 +17524,7 @@ with self; {
     buildInputs = [ ModuleBuildTiny TestDeep TestFatal TestRequires TestWithoutModule ];
     propagatedBuildInputs = [ MooseXTypesPathTiny ];
     meta = {
-      description = "Abstract Moose role for setting attributes from a configfile";
+      description = "An abstract Moose role for setting attributes from a configfile";
       homepage = "https://github.com/moose/MooseX-ConfigFromFile";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -17571,7 +17571,7 @@ with self; {
     buildInputs = [ ModuleBuildTiny MooseXStrictConstructor PathTiny TestDeep TestFatal TestNeeds TestTrap TestWarnings ];
     propagatedBuildInputs = [ GetoptLongDescriptive MooseXRoleParameterized ];
     meta = {
-      description = "Moose role for processing command line options";
+      description = "A Moose role for processing command line options";
       homepage = "https://github.com/moose/MooseX-Getopt";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -17710,7 +17710,7 @@ with self; {
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ DevelCaller Moose ParamsValidate ];
     meta = {
-      description = "Extension of Params::Validate using Moose's types";
+      description = "An extension of Params::Validate using Moose's types";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -17817,7 +17817,7 @@ with self; {
     buildInputs = [ TestDeep TestDeepType TestFatal TestNeeds TestDeepJSON TestWithoutModule DigestHMAC MooseXTypes ];
     propagatedBuildInputs = [ ModuleRuntime Moose MooseXRoleParameterized PodCoverage StringRewritePrefix namespaceautoclean IOStringy JSON JSONXS JSONMaybeXS CpanelJSONXS YAML YAMLOld YAMLTiny YAMLLibYAML YAMLSyck ];
     meta = {
-      description = "Serialization framework for Moose classes";
+      description = "A serialization framework for Moose classes";
       homepage = "https://github.com/moose/MooseX-Storage";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -17896,7 +17896,7 @@ with self; {
     buildInputs = [ ModuleBuildTiny TestDeep TestWarnings ];
     propagatedBuildInputs = [ MooseXTypes ];
     meta = {
-      description = "Library of commonly used type constraints";
+      description = "A library of commonly used type constraints";
       homepage = "https://github.com/moose/MooseX-Types-Common";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -17960,7 +17960,7 @@ with self; {
     propagatedBuildInputs = [ MooseXTypes PathClass ];
     buildInputs = [ ModuleBuildTiny TestNeeds ];
     meta = {
-      description = "Path::Class type library for Moose";
+      description = "A Path::Class type library for Moose";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -18234,7 +18234,7 @@ with self; {
     };
     propagatedBuildInputs = [ YAMLLibYAML ];
     meta = {
-      description = "Simple Mustache Renderer";
+      description = "A simple Mustache Renderer";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -18988,7 +18988,7 @@ with self; {
     buildInputs = [ TestWarn ];
     propagatedBuildInputs = [ ClassAccessor ClassDataInheritable DigestHMAC DigestSHA1 LWP ];
     meta = {
-      description = "Implementation of the OAuth protocol";
+      description = "An implementation of the OAuth protocol";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -19109,7 +19109,7 @@ with self; {
     };
     propagatedBuildInputs = [ Coro NetServer ];
     meta = {
-      description = "Co-operative multithreaded server using Coro";
+      description = "A co-operative multithreaded server using Coro";
       license = with lib.licenses; [ mit ];
     };
   };
@@ -19127,7 +19127,7 @@ with self; {
     buildInputs = [ ModuleInstall ];
     propagatedBuildInputs = [ NetServer ServerStarter ];
     meta = {
-      description = "Hot-deployable variant of Net::Server::PreFork";
+      description = "A hot-deployable variant of Net::Server::PreFork";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -19155,7 +19155,7 @@ with self; {
     };
     propagatedBuildInputs = [ DigestHMAC IOSocketSSL ];
     meta = {
-      description = "SMTP client supporting TLS and AUTH";
+      description = "An SMTP client supporting TLS and AUTH";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -19169,7 +19169,7 @@ with self; {
     };
     propagatedBuildInputs = [ DigestHMAC IOSocketSSL ];
     meta = {
-      description = "SMTP client supporting TLS and AUTH (DEPRECATED, use Net::SMTPS instead)";
+      description = "An SMTP client supporting TLS and AUTH (DEPRECATED, use Net::SMTPS instead)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -19297,7 +19297,7 @@ with self; {
     propagatedBuildInputs = [ JSON LWPProtocolHttps ];
     doCheck = false;
     meta = {
-      description = "Perl API library for the Twitter API";
+      description = "A perl API library for the Twitter API";
       homepage = "https://github.com/semifor/net-twitter-lite";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -19449,7 +19449,7 @@ with self; {
     };
     propagatedBuildInputs = [ DigestHMAC ];
     meta = {
-      description = "NTLM authentication module";
+      description = "An NTLM authentication module";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.pSub ];
     };
@@ -19477,7 +19477,7 @@ with self; {
     };
     propagatedBuildInputs = [ AnyEvent commonsense ];
     meta = {
-      description = "Class that provides an event callback interface";
+      description = "A class that provides an event callback interface";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -19507,7 +19507,7 @@ with self; {
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     propagatedBuildInputs = [ XSParseKeyword XSParseSublike ];
     meta = {
-      description = "Simple syntax for lexical field-based objects";
+      description = "A simple syntax for lexical field-based objects";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.zakame ];
     };
@@ -19578,7 +19578,7 @@ with self; {
     };
     propagatedBuildInputs = [ MojoliciousPluginOpenAPI ];
     meta = {
-      description = "Client for talking to an Open API powered server";
+      description = "A client for talking to an Open API powered server";
       homepage = "https://github.com/jhthorsen/openapi-client";
       license = with lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.sgo ];
@@ -19803,7 +19803,7 @@ with self; {
     buildInputs = [ TestWarn ];
     propagatedBuildInputs = [ Moo ];
     meta = {
-      description = "Simple parallel processing fork manager";
+      description = "A simple parallel processing fork manager";
       homepage = "https://github.com/dluxhu/perl-parallel-forkmanager";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -19851,7 +19851,7 @@ with self; {
     buildInputs = [ TestRequires TestSharedFork ];
     propagatedBuildInputs = [ ClassAccessorLite ListMoreUtils ProcWait3 ScopeGuard SignalMask ];
     meta = {
-      description = "Simple prefork server framework";
+      description = "A simple prefork server framework";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -20043,7 +20043,7 @@ with self; {
       hash = "sha256-RXsJiX8304pwVPlWMkc2VCf+JBAWIu1MfwVHI6RbWNU=";
     };
     meta = {
-      description = "Parser for the IRC protocol";
+      description = "A parser for the IRC protocol";
       homepage = "https://github.com/bingos/parse-irc";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ sgo ];
@@ -20564,7 +20564,7 @@ with self; {
     };
     buildInputs = [ ModuleBuildTiny TestSharedFork TestTCP ];
     meta = {
-      description = "PerlIO layer that adds read & write timeout to a handle";
+      description = "A PerlIO layer that adds read & write timeout to a handle";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -21193,7 +21193,7 @@ with self; {
     };
     buildInputs = [ HTTPMessage Plack TestException TestWarn ];
     meta = {
-      description = "Tiny Prometheus client";
+      description = "A tiny Prometheus client";
       homepage = "https://github.com/robn/Prometheus-Tiny";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -21209,7 +21209,7 @@ with self; {
     buildInputs = [ DataRandom HTTPMessage Plack TestDifferences TestException TestWarn ];
     propagatedBuildInputs = [ HashSharedMem JSONXS PrometheusTiny ];
     meta = {
-      description = "Tiny Prometheus client with a shared database behind it";
+      description = "A tiny Prometheus client with a shared database behind it";
       homepage = "https://github.com/robn/Prometheus-Tiny-Shared";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -21341,7 +21341,7 @@ with self; {
     buildInputs = [ TryTiny ];
     propagatedBuildInputs = [ GetoptLongDescriptive ModulePath Moo ParamsUtil PPI StringRewritePrefix TypeTiny namespaceautoclean ];
     meta = {
-      description = "Tool to scan your Perl code for its prerequisites";
+      description = "A tool to scan your Perl code for its prerequisites";
       homepage = "https://github.com/rjbs/Perl-PrereqScanner";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "scan-perl-prereqs";
@@ -21358,7 +21358,7 @@ with self; {
     propagatedBuildInputs = [ DataDump ModuleCPANfile ModuleFind RegexpTrie URIcpan ];
     buildInputs = [ ExtUtilsMakeMakerCPANfile ParseDistname TestFailWarnings TestUseAllModules ];
     meta = {
-      description = "Tool to scan your Perl code for its prerequisites";
+      description = "A tool to scan your Perl code for its prerequisites";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "scan-perl-prereqs-nqlite";
     };
@@ -21388,7 +21388,7 @@ with self; {
     };
     propagatedBuildInputs = [ IOString TaskWeaken PodParser ];
     meta = {
-      description = "Abstract, tree-based interface to perl POD documents";
+      description = "An abstract, tree-based interface to perl POD documents";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "paf";
     };
@@ -21464,7 +21464,7 @@ with self; {
     buildInputs = [ TestDifferences ];
     propagatedBuildInputs = [ PPI PodElemental ];
     meta = {
-      description = "Thing that takes a string of Perl and rewrites its documentation";
+      description = "A thing that takes a string of Perl and rewrites its documentation";
       homepage = "https://github.com/rjbs/Pod-Elemental-PerlMunger";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -21693,7 +21693,7 @@ with self; {
     propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny PodParser ];
     buildInputs = [ FileShareDirInstall TestDeep ];
     meta = {
-      description = "Formatter for spellchecking Pod";
+      description = "A formatter for spellchecking Pod";
       homepage = "https://github.com/perl-pod/Pod-Spell";
       license = with lib.licenses; [ artistic2 ];
       mainProgram = "podspell";
@@ -21724,7 +21724,7 @@ with self; {
     propagatedBuildInputs = [ EncodeNewlines IOString PodWrap TextGlob ];
     buildInputs = [ TestCmd ];
     meta = {
-      description = "Reformatting Pod Processor";
+      description = "A reformatting Pod Processor";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "podtidy";
     };
@@ -22034,7 +22034,7 @@ with self; {
     };
     propagatedBuildInputs = [ LWPProtocolHttps ];
     meta = {
-      description = "Simple client for interacting with RESTful http/https resources";
+      description = "A simple client for interacting with RESTful http/https resources";
       homepage = "https://github.com/milescrawford/cpan-rest-client";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -22107,7 +22107,7 @@ with self; {
     };
     propagatedBuildInputs = [ MooseXRoleParameterized StringErrf ];
     meta = {
-      description = "Thing with a message method";
+      description = "A thing with a message method";
       homepage = "https://github.com/rjbs/Role-HasMessage";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -22138,7 +22138,7 @@ with self; {
     };
     propagatedBuildInputs = [ Moose ];
     meta = {
-      description = "Thing you can identify somehow";
+      description = "A thing you can identify somehow";
       homepage = "https://github.com/rjbs/Role-Identifiable";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -22166,7 +22166,7 @@ with self; {
     };
     propagatedBuildInputs = [ AnyEvent DataSExpression ];
     meta = {
-      description = "Asynchronous Remote Procedure Stack";
+      description = "An Asynchronous Remote Procedure Stack";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -22198,7 +22198,7 @@ with self; {
     propagatedBuildInputs = [ locallib ];
     doCheck = false; /* creates files in HOME */
     meta = {
-      description = "Simple pure perl RSS parser";
+      description = "A simple pure perl RSS parser";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -22422,7 +22422,7 @@ with self; {
     buildInputs = [ TestRequires TestSharedFork TestTCP ];
     doCheck = false; # Tests are slow and unstable
     meta = {
-      description = "Superdaemon for hot-deploying server programs";
+      description = "A superdaemon for hot-deploying server programs";
       homepage = "https://github.com/kazuho/p5-Server-Starter";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "start_server";
@@ -22660,7 +22660,7 @@ with self; {
       hash = "sha256-v18zB0BuviWBI38CWYLoyE9vZiXdd05FfAP4mU79Lqo=";
     };
     meta = {
-      description = "Perl 5 module for sorting of revision-like numbers";
+      description = "A perl 5 module for sorting of revision-like numbers";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -22871,7 +22871,7 @@ with self; {
       hash = "sha256-+qhpvEJlc2QVNqCfU1AuVA1ePjrWp6oaxiXT9pdrQuE=";
     };
     meta = {
-      description = "Simple SQL tokenizer";
+      description = "A simple SQL tokenizer";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -22943,7 +22943,7 @@ with self; {
     propagatedBuildInputs = [ ParallelPrefork Plack ServerStarter ];
     doCheck = !stdenv.isDarwin;
     meta = {
-      description = "Simple, high-performance PSGI/Plack HTTP server";
+      description = "A simple, high-performance PSGI/Plack HTTP server";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -22980,7 +22980,7 @@ with self; {
     };
     propagatedBuildInputs = [ NumberFormat ];
     meta = {
-      description = "Collection of very basic statistics modules";
+      description = "A collection of very basic statistics modules";
       license = with lib.licenses; [ lgpl2Only ];
     };
   };
@@ -23179,7 +23179,7 @@ with self; {
     buildInputs = [ JSONMaybeXS TimeDate ];
     propagatedBuildInputs = [ StringFormatter ];
     meta = {
-      description = "Simple sprintf-like dialect";
+      description = "A simple sprintf-like dialect";
       homepage = "https://github.com/rjbs/String-Errf";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -23406,7 +23406,7 @@ with self; {
     };
     propagatedBuildInputs = [ SubExporter ];
     meta = {
-      description = "Module for when strings are too long to be displayed in...";
+      description = "A module for when strings are too long to be displayed in...";
       homepage = "https://github.com/rjbs/String-Truncate";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -23467,7 +23467,7 @@ with self; {
     };
     propagatedBuildInputs = [ DataOptList ];
     meta = {
-      description = "Sophisticated exporter for custom-built routines";
+      description = "A sophisticated exporter for custom-built routines";
       homepage = "https://github.com/rjbs/Sub-Exporter";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -23656,7 +23656,7 @@ with self; {
     };
     propagatedBuildInputs = [ (pkgs.subversionClient.override { inherit perl; }) ];
     meta = {
-      description = "Simple interface to subversion's editor interface";
+      description = "A simple interface to subversion's editor interface";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -23701,7 +23701,7 @@ with self; {
     };
     doCheck = false;                             # FIXME: 2/293 test failures
     meta = {
-      description = "Switch statement for Perl, do not use if you can use given/when";
+      description = "A switch statement for Perl, do not use if you can use given/when";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -23790,7 +23790,7 @@ with self; {
     propagatedBuildInputs = [ XSParseKeyword ];
     perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
     meta = {
-      description = "Try/catch/finally syntax for perl";
+      description = "A try/catch/finally syntax for perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.zakame ];
     };
@@ -24298,7 +24298,7 @@ with self; {
       perl.perlOnBuild.pkgs.TermReadKey
     ];
     meta = {
-      description = "Perl module for simple terminal control";
+      description = "A perl module for simple terminal control";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -24346,7 +24346,7 @@ with self; {
     outputs = [ "out" ];
 
     meta = {
-      description = "Term::ReadLine driver based on Term::ReadLine::Perl, with special features for microblogging and the TTYtter client (q.v)";
+      description = "A Term::ReadLine driver based on Term::ReadLine::Perl, with special features for microblogging and the TTYtter client (q.v)";
       homepage = "https://www.floodgap.com/software/ttytter";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -24378,7 +24378,7 @@ with self; {
     propagatedBuildInputs = [ TermReadKey TextAutoformat ];
     meta = {
       homepage = "https://metacpan.org/release/Term-Shell";
-      description = "Simple command-line shell framework";
+      description = "A simple command-line shell framework";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -24391,7 +24391,7 @@ with self; {
       hash = "sha256-MnnAHHYiczXu/wkDKkD0sCsoUVGzV2wEys0VvgWUK9s=";
     };
     meta = {
-      description = "Fully-featured shell-like command line environment";
+      description = "A fully-featured shell-like command line environment";
       license = with lib.licenses; [ mit ];
     };
   };
@@ -24472,7 +24472,7 @@ with self; {
       hash = "sha256-+VTgMQlB1FwPw+tKQPXToA1oEZ4nfTA6HmrxHe1vvZQ=";
     };
     meta = {
-      description = "Class to emulate a DEC VT102 terminal";
+      description = "A class to emulate a DEC VT102 terminal";
       license = with lib.licenses; [ artistic2 ];
     };
   };
@@ -24486,7 +24486,7 @@ with self; {
     };
     propagatedBuildInputs = [ TermVT102 ];
     meta = {
-      description = "Term::VT102 that grows automatically to accommodate whatever you print to it";
+      description = "A Term::VT102 that grows automatically to accommodate whatever you print to it";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -24521,7 +24521,7 @@ with self; {
 
     propagatedBuildInputs = [ DataUUID Importer LongJump ScopeGuard TermTable Test2PluginMemUsage Test2PluginUUID Test2Suite YAMLTiny gotofile ];
     meta = {
-      description = "New and improved test harness with better Test2 integration";
+      description = "A new and improved test harness with better Test2 integration";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "yath";
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Test2Harness.x86_64-darwin
@@ -24661,7 +24661,7 @@ with self; {
     };
     propagatedBuildInputs = [ LogTrace ];
     meta = {
-      description = "Simple set of building blocks for both unit and runtime testing";
+      description = "A simple set of building blocks for both unit and runtime testing";
       license = with lib.licenses; [ gpl2Only ];
     };
   };
@@ -24692,7 +24692,7 @@ with self; {
     propagatedBuildInputs = [ Spiffy ];
     buildInputs = [ AlgorithmDiff TextDiff ];
     meta = {
-      description = "Data Driven Testing Framework";
+      description = "A Data Driven Testing Framework";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -24898,7 +24898,7 @@ with self; {
     buildInputs = [ TestFatal TestNeeds ];
     propagatedBuildInputs = [ TestDeep TryTiny ];
     meta = {
-      description = "Test::Deep plugin for validating type constraints";
+      description = "A Test::Deep plugin for validating type constraints";
       homepage = "https://github.com/karenetheridge/Test-Deep-Type";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -25029,7 +25029,7 @@ with self; {
     propagatedBuildInputs = [ HTTPDaemon Plack ];
     buildInputs = [ LWP ModuleBuildTiny TestException TestSharedFork TestTCP TestUseAllModules ];
     meta = {
-      description = "Fake HTTP server";
+      description = "A fake HTTP server";
       homepage = "https://github.com/masaki/Test-Fake-HTTPD";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -25246,7 +25246,7 @@ with self; {
     propagatedBuildInputs = [ LWP SafeIsa namespaceclean ];
     buildInputs = [ PathTiny Plack TestDeep TestFatal TestNeeds TestRequiresInternet TestWarnings ];
     meta = {
-      description = "LWP::UserAgent suitable for simulating and testing network calls";
+      description = "A LWP::UserAgent suitable for simulating and testing network calls";
       homepage = "https://github.com/karenetheridge/Test-LWP-UserAgent";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -25894,7 +25894,7 @@ with self; {
     moreInputs = [ TestTrap ]; # Added because tests were failing without it
     doCheck=true;
     meta = {
-      description = "Test::Run plugin that";
+      description = "A Test::Run plugin that";
       homepage = "https://web-cpan.shlomifish.org/modules/Test-Run";
       license = with lib.licenses; [ mit ];
     };
@@ -26405,7 +26405,7 @@ with self; {
       hash = "sha256-qhuFhBz5/G/jODZrvIcKTpMEonZB5j+Sof2Wvujr9kw=";
     };
     meta = {
-      description = "Implementation of the Brew edit distance";
+      description = "An implementation of the Brew edit distance";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -27166,7 +27166,7 @@ with self; {
     };
     propagatedBuildInputs = [ DevelStackTrace Moo ];
     meta = {
-      description = "Role for classes that can be thrown";
+      description = "A role for classes that can be thrown";
       homepage = "https://github.com/rjbs/Throwable";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -27181,7 +27181,7 @@ with self; {
     };
     propagatedBuildInputs = [ ClassVirtual enum ];
     meta = {
-      description = "Least-Recently Used cache";
+      description = "A Least-Recently Used cache";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -27469,7 +27469,7 @@ with self; {
       hash = "sha256-0H+lgFKb6sapyCdMa/IgtMOq3mhd9lwWadUzOb9u8eg=";
     };
     meta = {
-      description = "Perl module to deal with time periods";
+      description = "A Perl module to deal with time periods";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.winpat ];
     };
@@ -27524,7 +27524,7 @@ with self; {
     buildInputs = [ Tk ];
     doCheck = false;            # Expects working X11.
     meta = {
-      description = "Toolbar widget for Perl/Tk";
+      description = "A toolbar widget for Perl/Tk";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -27538,7 +27538,7 @@ with self; {
     };
     propagatedBuildInputs = [ FileSlurpTiny ];
     meta = {
-      description = "N-ary tree";
+      description = "An N-ary tree";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -27552,7 +27552,7 @@ with self; {
     };
     buildInputs = [ TestException ];
     meta = {
-      description = "Simple tree object";
+      description = "A simple tree object";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -27567,7 +27567,7 @@ with self; {
     propagatedBuildInputs = [ TreeSimple ];
     buildInputs = [ TestException ];
     meta = {
-      description = "Factory object for dispensing Visitor objects";
+      description = "A factory object for dispensing Visitor objects";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -28231,7 +28231,7 @@ with self; {
       hash = "sha256-tOR0C41Mt4NZEnPGNr1oMEiS4o2J6Iq/knOx3hf1Uvc=";
     };
     meta = {
-      description = "Generalisation of wantarray";
+      description = "A generalisation of wantarray";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -28437,7 +28437,7 @@ with self; {
     };
     propagatedBuildInputs = [ XMLParser ];
     meta = {
-      description = "Perl module for parsing XML encoding maps";
+      description = "A perl module for parsing XML encoding maps";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -28605,7 +28605,7 @@ with self; {
     };
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
-      description = "API for simple XML files";
+      description = "An API for simple XML files";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -28647,7 +28647,7 @@ with self; {
       hash = "sha256-R+mVhZ+N0EE6o/ItNQxKYtplLoVCZ6oFhq5USuK65e8=";
     };
     meta = {
-      description = "Simple generic namespace processor";
+      description = "A simple generic namespace processor";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -28668,7 +28668,7 @@ with self; {
     makeMakerFlags = [ "EXPATLIBPATH=${pkgs.expat.out}/lib" "EXPATINCPATH=${pkgs.expat.dev}/include" ];
     propagatedBuildInputs = [ LWP ];
     meta = {
-      description = "Perl module for parsing XML documents";
+      description = "A perl module for parsing XML documents";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -28711,7 +28711,7 @@ with self; {
       hash = "sha256-0v57y70L66FET0pzNAHnuKpSgvrUJm1Cc13XRYKy4mQ=";
     };
     meta = {
-      description = "Re-usable XPath engine for DOM-like trees";
+      description = "A re-usable XPath engine for DOM-like trees";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -28859,7 +28859,7 @@ with self; {
     };
     propagatedBuildInputs = [ XMLSAXExpat ];
     meta = {
-      description = "API for simple XML files";
+      description = "An API for simple XML files";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -28906,7 +28906,7 @@ with self; {
     propagatedBuildInputs = [ XMLParser ];
     doCheck = false;  # requires lots of extra packages
     meta = {
-      description = "Perl module for processing huge XML documents in tree mode";
+      description = "A Perl module for processing huge XML documents in tree mode";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "xml_grep";
     };
@@ -29114,7 +29114,7 @@ with self; {
     buildInputs = [ NetHTTP TestFailWarnings TestFatal ];
     propagatedBuildInputs = [ HTTPHeadersActionPack HTTPMessage HashMultiValue IOHandleUtil ModuleRuntime Plack SubExporter TryTiny ];
     meta = {
-      description = "Perl port of Webmachine";
+      description = "A Perl port of Webmachine";
       homepage = "https://metacpan.org/release/Web-Machine";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -29204,7 +29204,7 @@ with self; {
     propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketINET6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP NetIPXS Readonly TextCSV ZonemasterLDNS libintl-perl ];
 
     meta = {
-      description = "Tool to check the quality of a DNS zone";
+      description = "A tool to check the quality of a DNS zone";
       license = with lib.licenses; [ bsd3 ];
     };
   };

@@ -32,7 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Implementation of a multiset";
+    description = "An implementation of a multiset";
     homepage = "https://github.com/wheerd/multiset";
     license = licenses.mit;
     maintainers = [ ];

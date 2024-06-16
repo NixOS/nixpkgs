@@ -27,7 +27,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [ ssreflect equations ];
 
   meta = {
-    description = "Formalization of category theory in Coq for personal study and practical work";
+    description = "A formalization of category theory in Coq for personal study and practical work";
     maintainers = with lib.maintainers; [ jwiegley ];
   };
 }

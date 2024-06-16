@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "localzone" ];
 
   meta = with lib; {
-    description = "Simple DNS library for managing zone files";
+    description = "A simple DNS library for managing zone files";
     homepage = "https://localzone.iomaestro.com";
     changelog = "https://github.com/ags-slc/localzone/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;

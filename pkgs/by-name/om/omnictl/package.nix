@@ -31,7 +31,7 @@ buildGoModule rec {
   doCheck = false; # no tests
 
   meta = with lib; {
-    description = "CLI for the Sidero Omni Kubernetes management platform";
+    description = "A CLI for the Sidero Omni Kubernetes management platform";
     mainProgram = "omnictl";
     homepage = "https://omni.siderolabs.com/";
     license = licenses.bsl11;

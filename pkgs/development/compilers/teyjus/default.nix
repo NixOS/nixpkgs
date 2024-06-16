@@ -20,7 +20,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "Efficient implementation of the Lambda Prolog language";
+    description = "An efficient implementation of the Lambda Prolog language";
     homepage = "https://github.com/teyjus/teyjus";
     changelog = "https://github.com/teyjus/teyjus/releases/tag/v${version}";
     license = lib.licenses.gpl3;

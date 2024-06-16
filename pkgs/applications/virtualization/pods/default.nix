@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Podman desktop application";
+    description = "A podman desktop application";
     homepage = "https://github.com/marhkb/pods";
     changelog = "https://github.com/marhkb/pods/releases/tag/v${version}";
     license = licenses.gpl3Only;

@@ -28,7 +28,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "CLI to provide enhanced history for your ZSH shell";
+    description = "A CLI to provide enhanced history for your ZSH shell";
     homepage = "https://github.com/b4b4r07/history";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

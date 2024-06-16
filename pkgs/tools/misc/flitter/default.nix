@@ -51,7 +51,7 @@ ocamlPackages.buildDunePackage {
   '';
 
   meta = with lib; {
-    description = "Livesplit-inspired speedrunning split timer for Linux/macOS terminal";
+    description = "A Livesplit-inspired speedrunning split timer for Linux/macOS terminal";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
     homepage = "https://github.com/alexozer/flitter";

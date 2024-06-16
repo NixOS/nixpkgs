@@ -60,7 +60,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     changelog = "https://github.com/kitao/pyxel/tree/${src.rev}/CHANGELOG.md";
-    description = "Retro game engine for Python";
+    description = "A retro game engine for Python";
     homepage = "https://github.com/kitao/pyxel";
     license = lib.licenses.mit;
     mainProgram = "pyxel";

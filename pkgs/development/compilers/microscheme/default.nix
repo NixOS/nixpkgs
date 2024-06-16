@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ryansuchocki.github.io/microscheme/";
-    description = "Scheme subset for Atmel microcontrollers";
+    description = "A Scheme subset for Atmel microcontrollers";
     mainProgram = "microscheme";
     longDescription = ''
       Microscheme is a Scheme subset/variant designed for Atmel

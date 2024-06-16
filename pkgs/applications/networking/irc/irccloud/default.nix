@@ -27,7 +27,7 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "Desktop client for IRCCloud";
+    description = "A desktop client for IRCCloud";
     mainProgram = "irccloud";
     homepage = "https://www.irccloud.com";
     license = licenses.asl20;

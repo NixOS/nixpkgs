@@ -15,7 +15,7 @@ mkDerivation {
   buildInputs = [ libkdegames kio ktextwidgets ];
   meta = {
     homepage = "https://apps.kde.org/palapeli/";
-    description = "Single-player jigsaw puzzle game";
+    description = "A single-player jigsaw puzzle game";
     mainProgram = "palapeli";
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ harrisonthorne ];

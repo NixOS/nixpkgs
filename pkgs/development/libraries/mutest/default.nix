@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/ebassi/mutest";
-    description = "BDD testing framework for C, inspired by Mocha";
+    description = "A BDD testing framework for C, inspired by Mocha";
     license = licenses.mit;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.all;

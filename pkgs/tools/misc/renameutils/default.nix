@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.nongnu.org/renameutils/";
-    description = "Set of programs to make renaming of files faster";
+    description = "A set of programs to make renaming of files faster";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
   };

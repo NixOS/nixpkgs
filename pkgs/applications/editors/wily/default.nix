@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Emulation of ACME";
+    description = "An emulation of ACME";
     homepage = "http://wily.sourceforge.net";
     license = licenses.artistic1;
     maintainers = [ maintainers.vrthra ];

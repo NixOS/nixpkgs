@@ -35,7 +35,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "Command line tool for DigitalOcean services";
+    description = "A command line tool for DigitalOcean services";
     mainProgram = "doctl";
     homepage = "https://github.com/digitalocean/doctl";
     license = licenses.asl20;

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Tool for Building Expert Systems";
+    description = "A Tool for Building Expert Systems";
     mainProgram = "clips";
     homepage = "http://www.clipsrules.net/";
     longDescription = ''

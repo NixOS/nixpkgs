@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Editor for drawing figures";
+    description = "An editor for drawing figures";
     homepage = "http://ipe.otfried.org"; # https not available
     license = licenses.gpl3Plus;
     longDescription = ''

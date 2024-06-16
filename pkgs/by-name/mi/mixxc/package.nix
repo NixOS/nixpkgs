@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "Minimalistic and customizable volume mixer";
+    description = "A minimalistic and customizable volume mixer";
     homepage = "https://github.com/Elvyria/mixxc";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ daru-san ];

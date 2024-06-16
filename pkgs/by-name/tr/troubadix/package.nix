@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "Linting tool for NASL files";
+    description = "A linting tool for NASL files";
     homepage = "https://github.com/greenbone/troubadix";
     changelog = "https://github.com/greenbone/troubadix/releases/tag/v${version}";
     license = licenses.gpl3Only;

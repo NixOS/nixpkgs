@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Simple, graphical serial port terminal emulator";
+    description = "A simple, graphical serial port terminal emulator";
     homepage = "https://github.com/wvdakker/gtkterm";
     license = licenses.gpl3Plus;
     longDescription = ''

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Module provides basic functions for parsing mime-type names and matching them against a list of media-ranges";
+    description = "A module provides basic functions for parsing mime-type names and matching them against a list of media-ranges";
     homepage = "https://github.com/dbtsai/python-mimeparse";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

@@ -46,7 +46,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "camelot" ];
 
   meta = with lib; {
-    description = "Python library to extract tabular data from PDFs";
+    description = "A Python library to extract tabular data from PDFs";
     mainProgram = "camelot";
     homepage = "http://camelot-py.readthedocs.io";
     changelog = "https://github.com/camelot-dev/camelot/blob/v${version}/HISTORY.md";

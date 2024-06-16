@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "Vector and matrix math library implemented using C++ templates";
+    description = "A vector and matrix math library implemented using C++ templates";
 
     longDescription = ''vmmlib is a vector and matrix math library implemented
             using C++ templates. Its basic functionality includes a vector

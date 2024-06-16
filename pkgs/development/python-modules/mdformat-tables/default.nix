@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mdformat_tables" ];
 
   meta = with lib; {
-    description = "Mdformat plugin for rendering tables";
+    description = "An mdformat plugin for rendering tables";
     homepage = "https://github.com/executablebooks/mdformat-tables";
     license = licenses.mit;
     maintainers = with maintainers; [

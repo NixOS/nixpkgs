@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Webfont family optimized for body text";
+    description = "A webfont family optimized for body text";
     longDescription = ''
       Libre Baskerville is a webfont family optimized for body text. It's Based
       on 1941 ATF Baskerville Specimens but it has a taller x-height, wider

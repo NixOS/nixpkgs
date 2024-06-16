@@ -12,6 +12,6 @@ buildDunePackage {
   doCheck = true;
 
   meta = qcheck-multicoretests-util.meta // {
-    description = "Multicore testing library for OCaml";
+    description = "A multicore testing library for OCaml";
   };
 }

@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Library that provides automatic proxy configuration management";
+    description = "A library that provides automatic proxy configuration management";
     homepage = "https://libproxy.github.io/libproxy/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux ++ platforms.darwin;

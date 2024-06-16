@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Usenet/BitTorrent ebook downloader";
+    description = "A Usenet/BitTorrent ebook downloader";
     homepage = "https://readarr.com";
     license = licenses.gpl3;
     maintainers = [ maintainers.jocelynthode ];

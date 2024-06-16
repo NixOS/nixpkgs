@@ -249,7 +249,7 @@ let
 
       meta = with lib; {
         inherit (binary.meta) platforms;
-        description = "Compiled language with Ruby like syntax and type inference";
+        description = "A compiled language with Ruby like syntax and type inference";
         mainProgram = "crystal";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;

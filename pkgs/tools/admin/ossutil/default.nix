@@ -17,7 +17,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "User friendly command line tool to access Alibaba Cloud OSS";
+    description = "A user friendly command line tool to access Alibaba Cloud OSS";
     homepage = "https://github.com/aliyun/ossutil";
     changelog = "https://github.com/aliyun/ossutil/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

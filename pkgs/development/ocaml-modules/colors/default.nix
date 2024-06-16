@@ -26,7 +26,7 @@ buildDunePackage rec {
   ];
 
   meta = {
-    description = "Pure OCaml library for manipulating colors across color spaces";
+    description = "A pure OCaml library for manipulating colors across color spaces";
     homepage = "https://github.com/leostera/colors";
     changelog = "https://github.com/leostera/colors/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;

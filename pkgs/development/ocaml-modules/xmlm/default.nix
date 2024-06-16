@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) buildPhase installPhase;
 
   meta = with lib; {
-    description = "OCaml streaming codec to decode and encode the XML data format";
+    description = "An OCaml streaming codec to decode and encode the XML data format";
     homepage = webpage;
     license = licenses.isc;
     maintainers = [ maintainers.vbgl ];

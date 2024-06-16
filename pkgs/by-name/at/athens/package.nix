@@ -33,7 +33,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "Go module datastore and proxy";
+    description = "A Go module datastore and proxy";
     homepage = "https://github.com/gomods/athens";
     changelog = "https://github.com/gomods/athens/releases/tag/v${version}";
     license = licenses.mit;

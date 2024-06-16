@@ -15,7 +15,7 @@ buildFishPlugin {
   };
 
   meta = with lib; {
-    description = "Powerline-style, Git-aware fish theme optimized for awesome (fork of bobthefish)";
+    description = "A Powerline-style, Git-aware fish theme optimized for awesome (fork of bobthefish)";
     homepage = "https://github.com/Scrumplex/bobthefisher";
     license = licenses.mit;
     maintainers = with maintainers; [ Scrumplex ];

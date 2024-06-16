@@ -26,7 +26,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Scss compiler for Python";
+    description = "A Scss compiler for Python";
     homepage = "https://pyscss.readthedocs.org/en/latest/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Experimental GNU make clone";
+    description = "An experimental GNU make clone";
     mainProgram = "ckati";
     homepage = "https://github.com/google/kati";
     platforms = platforms.all;

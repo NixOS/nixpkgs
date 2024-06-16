@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "Fast K Nearest Neighbor library for low-dimensional spaces";
+    description = "A fast K Nearest Neighbor library for low-dimensional spaces";
     license = licenses.bsd3;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ cryptix ];

@@ -41,7 +41,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://zrepl.github.io/";
-    description = "One-stop, integrated solution for ZFS replication";
+    description = "A one-stop, integrated solution for ZFS replication";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ cole-h mdlayher ];

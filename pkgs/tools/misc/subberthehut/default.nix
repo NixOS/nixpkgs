@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/mus65/subberthehut";
-    description = "OpenSubtitles.org downloader";
+    description = "An OpenSubtitles.org downloader";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jqueiroz ];

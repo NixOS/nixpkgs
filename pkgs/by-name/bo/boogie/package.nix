@@ -41,7 +41,7 @@ buildDotnetModule rec {
   '';
 
   meta = with lib; {
-    description = "Intermediate verification language";
+    description = "An intermediate verification language";
     homepage = "https://github.com/boogie-org/boogie";
     longDescription = ''
       Boogie is an intermediate verification language (IVL), intended as a

@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyee" ];
 
   meta = with lib; {
-    description = "Port of Node.js's EventEmitter to Python";
+    description = "A port of Node.js's EventEmitter to Python";
     homepage = "https://github.com/jfhbrook/pyee";
     license = licenses.mit;
     maintainers = with maintainers; [ kmein ];

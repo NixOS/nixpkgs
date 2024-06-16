@@ -27,7 +27,7 @@ buildFHSEnv {
   # multiPkgs = pio-pkgs;
 
   meta = with lib; {
-    description = "Open source ecosystem for IoT development";
+    description = "An open source ecosystem for IoT development";
     homepage = "https://platformio.org";
     maintainers = with maintainers; [ mog ];
     license = licenses.asl20;

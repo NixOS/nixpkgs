@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with lib; {
-    description = "High-tech ttyrec player for Unix";
+    description = "A high-tech ttyrec player for Unix";
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/ipbt/";
     license = licenses.mit;
     maintainers = [ maintainers.tckmn ];

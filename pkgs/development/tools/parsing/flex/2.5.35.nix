@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     branch = "2.5.35";
     homepage = "https://flex.sourceforge.net/";
-    description = "Fast lexical analyser generator";
+    description = "A fast lexical analyser generator";
     mainProgram = "flex";
     license = licenses.bsd2;
     platforms = platforms.unix;

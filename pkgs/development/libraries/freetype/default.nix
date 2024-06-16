@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Font rendering engine";
+    description = "A font rendering engine";
     mainProgram = "freetype-config";
     longDescription = ''
       FreeType is a portable and efficient library for rendering fonts. It

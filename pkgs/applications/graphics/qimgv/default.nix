@@ -54,7 +54,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Qt5 image viewer with optional video support";
+    description = "A Qt5 image viewer with optional video support";
     mainProgram = "qimgv";
     homepage = "https://github.com/easymodo/qimgv";
     license = licenses.gpl3;

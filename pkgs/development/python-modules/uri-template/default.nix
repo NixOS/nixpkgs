@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "uri_template" ];
 
   meta = with lib; {
-    description = "Implementation of RFC 6570 URI Templates";
+    description = "An implementation of RFC 6570 URI Templates";
     homepage = "https://github.com/plinss/uri_template/";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

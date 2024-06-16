@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
-    description = "Implementation of the pic little language for creating drawings";
+    description = "An implementation of the pic little language for creating drawings";
     homepage = "https://ece.uwaterloo.ca/~aplevich/dpic/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ aespinosa ];

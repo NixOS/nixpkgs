@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Program to help create and publish crosswords";
+    description = "A program to help create and publish crosswords";
     homepage = "https://www.quinapalus.com/qxw.html";
     license = licenses.gpl2;
     maintainers = [ maintainers.tckmn ];

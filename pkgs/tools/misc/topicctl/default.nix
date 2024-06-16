@@ -23,7 +23,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Tool for easy, declarative management of Kafka topics";
+    description = "A tool for easy, declarative management of Kafka topics";
     inherit (src.meta) homepage;
     license = licenses.mit;
     maintainers = with maintainers; [ eskytthe srhb ];

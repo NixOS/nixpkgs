@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) buildPhase installPhase;
 
   meta = {
-    description = "OCaml module for handling file system paths with POSIX and Windows conventions";
+    description = "An OCaml module for handling file system paths with POSIX and Windows conventions";
     homepage = "https://erratique.ch/software/fpath";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];

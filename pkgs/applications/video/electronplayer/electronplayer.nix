@@ -21,7 +21,7 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "Electron based web video services player";
+    description = "An electron based web video services player";
     mainProgram = "electronplayer";
     homepage = "https://github.com/oscartbeaumont/ElectronPlayer";
     license = licenses.mit;

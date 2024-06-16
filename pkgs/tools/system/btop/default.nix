@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Monitor of resources";
+    description = "A monitor of resources";
     homepage = "https://github.com/aristocratos/btop";
     changelog = "https://github.com/aristocratos/btop/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;

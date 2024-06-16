@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
      '';
 
   meta = with lib; {
-    description = "Libre cross-platform disassembler";
+    description = "A libre cross-platform disassembler";
     longDescription = ''
       Panopticon is a cross platform disassembler for reverse
       engineering written in Rust. It can disassemble AMD64,

@@ -51,7 +51,7 @@
     [ mathcomp.ssreflect mathcomp.algebra mathcomp-finmap mathcomp.fingroup mathcomp-bigenough ];
 
   meta = {
-    description = "Coq/SSReflect Library for Monoidal Rings and Multinomials";
+    description = "A Coq/SSReflect Library for Monoidal Rings and Multinomials";
     license = lib.licenses.cecill-c;
   };
 }

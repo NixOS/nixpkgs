@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = null;
 
   meta = with lib; {
-    description = "SMS alerting tool for Prometheus's Alertmanager";
+    description = "An SMS alerting tool for Prometheus's Alertmanager";
     mainProgram = "sachet";
     homepage = "https://github.com/messagebird/sachet";
     license = licenses.bsd2;

@@ -54,7 +54,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ml_dtypes" ];
 
   meta = with lib; {
-    description = "Stand-alone implementation of several NumPy dtype extensions used in machine learning libraries";
+    description = "A stand-alone implementation of several NumPy dtype extensions used in machine learning libraries";
     homepage = "https://github.com/jax-ml/ml_dtypes";
     changelog = "https://github.com/jax-ml/ml_dtypes/releases/tag/v${version}";
     license = licenses.asl20;

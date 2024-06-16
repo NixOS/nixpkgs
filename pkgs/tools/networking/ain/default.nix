@@ -23,7 +23,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "HTTP API client for the terminal";
+    description = "A HTTP API client for the terminal";
     homepage = "https://github.com/jonaslu/ain";
     changelog = "https://github.com/jonaslu/ain/releases/tag/${src.rev}";
     license = licenses.mit;

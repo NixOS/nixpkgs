@@ -97,7 +97,7 @@ let
       passthru.tests.tinywl = nixosTests.tinywl;
 
       meta = {
-        description = "Modular Wayland compositor library";
+        description = "A modular Wayland compositor library";
         longDescription = ''
           Pluggable, composable, unopinionated modules for building a Wayland
           compositor; or about 50,000 lines of code you were going to write anyway.

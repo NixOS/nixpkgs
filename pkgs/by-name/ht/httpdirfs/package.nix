@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/fangfufu/httpdirfs/releases/tag/${finalAttrs.version}";
-    description = "FUSE filesystem for HTTP directory listings";
+    description = "A FUSE filesystem for HTTP directory listings";
     homepage = "https://github.com/fangfufu/httpdirfs";
     license = lib.licenses.gpl3Only;
     mainProgram = "httpdirfs";

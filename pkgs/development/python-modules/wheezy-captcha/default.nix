@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://wheezycaptcha.readthedocs.io/en/latest/";
-    description = "Lightweight CAPTCHA library";
+    description = "A lightweight CAPTCHA library";
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];
   };

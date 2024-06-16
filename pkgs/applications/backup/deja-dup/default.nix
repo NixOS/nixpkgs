@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "Simple backup tool";
+    description = "A simple backup tool";
     longDescription = ''
       Déjà Dup is a simple backup tool. It hides the complexity \
       of backing up the Right Way (encrypted, off-site, and regular) \

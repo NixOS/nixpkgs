@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Clean fixed width TTF font";
+    description = "A clean fixed width TTF font";
     longDescription = ''
       Monospaced bitmap font designed for long work with computers
       (TTF version, mainly for Java applications)

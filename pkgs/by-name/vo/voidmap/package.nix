@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
-    description = "Terminal-based personal organizer";
+    description = "A terminal-based personal organizer";
     homepage = "https://github.com/void-rs/void";
     license = lib.licenses.gpl3Only;
     mainProgram = "void";

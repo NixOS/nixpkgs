@@ -17,7 +17,7 @@ buildDunePackage {
   doCheck = false;
 
   meta = {
-    description = "Happy-eyeballs integration into mimic";
+    description = "A happy-eyeballs integration into mimic";
     maintainers = [ lib.maintainers.ulrikstrid ];
     inherit (mimic.meta) license homepage;
   };

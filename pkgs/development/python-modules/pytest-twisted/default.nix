@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_twisted" ];
 
   meta = with lib; {
-    description = "Twisted plugin for py.test";
+    description = "A twisted plugin for py.test";
     homepage = "https://github.com/pytest-dev/pytest-twisted";
     license = licenses.bsd3;
     maintainers = [ ];

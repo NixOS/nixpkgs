@@ -28,6 +28,6 @@ buildDunePackage {
   ];
 
   meta = conduit-lwt.meta // {
-    description = "Network connection establishment library for Lwt_unix";
+    description = "A network connection establishment library for Lwt_unix";
   };
 }

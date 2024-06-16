@@ -11,7 +11,7 @@ alephone.makeWrapper rec {
   };
 
   meta = {
-    description = "35-level single player major Marathon conversion";
+    description = "A 35-level single player major Marathon conversion";
     homepage = "http://www.simplici7y.com/items/marathon-phoenix-2";
   };
 

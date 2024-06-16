@@ -12,7 +12,7 @@ buildDunePackage rec {
   buildInputs = [ menhirLib menhirSdk ];
 
   meta = menhirSdk.meta // {
-    description = "LR(1) parser generator for OCaml";
+    description = "A LR(1) parser generator for OCaml";
     mainProgram = "menhir";
   };
 }

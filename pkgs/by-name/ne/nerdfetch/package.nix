@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = with lib;{
-    description = "POSIX *nix (Linux, macOS, Android, *BSD, etc) fetch script using Nerdfonts";
+    description = "A POSIX *nix (Linux, macOS, Android, *BSD, etc) fetch script using Nerdfonts";
     homepage = "https://github.com/ThatOneCalculator/NerdFetch";
     maintainers = with maintainers; [ ByteSudoer ];
     license = licenses.mit;

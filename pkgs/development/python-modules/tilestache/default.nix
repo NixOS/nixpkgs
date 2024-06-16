@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Tile server for rendered geographic data";
+    description = "A tile server for rendered geographic data";
     homepage = "http://tilestache.org";
     license = licenses.bsd3;
   };

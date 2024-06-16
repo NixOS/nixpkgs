@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/AIGMix/AIGPY";
-    description = "Python library with miscellaneous tools";
+    description = "A python library with miscellaneous tools";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.misterio77 ];
     platforms = lib.platforms.all;

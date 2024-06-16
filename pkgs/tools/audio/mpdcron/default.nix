@@ -51,7 +51,7 @@ in stdenv.mkDerivation {
   configureFlags = [ "--enable-gmodule" "--with-standard-modules=all" ];
 
   meta = with lib; {
-    description = "Cron like daemon for mpd";
+    description = "A cron like daemon for mpd";
     homepage    = "http://alip.github.io/mpdcron/";
     license     = licenses.gpl2Plus;
     platforms   = platforms.unix;

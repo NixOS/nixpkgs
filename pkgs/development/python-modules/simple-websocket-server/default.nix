@@ -18,7 +18,7 @@ buildPythonPackage {
   doCheck = false; # no tests
 
   meta = with lib; {
-    description = "Python based websocket server that is simple and easy to use";
+    description = "A python based websocket server that is simple and easy to use";
     homepage = "https://github.com/dpallot/simple-websocket-server/";
     license = licenses.mit;
     maintainers = with maintainers; [ rvolosatovs ];

@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://hiawatha.leisink.net/";
-    description = "Advanced and secure webserver";
+    description = "An Advanced and secure webserver";
     license = licenses.gpl2Only;
     platforms = platforms.unix;    # "Hiawatha runs perfectly on Linux, BSD and MacOS X"
     mainProgram = "hiawatha";

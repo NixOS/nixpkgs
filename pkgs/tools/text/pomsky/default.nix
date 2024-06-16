@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Portable, modern regular expression language";
+    description = "A portable, modern regular expression language";
     mainProgram = "pomsky";
     homepage = "https://pomsky-lang.org";
     changelog = "https://github.com/pomsky-lang/pomsky/blob/v${version}/CHANGELOG.md";

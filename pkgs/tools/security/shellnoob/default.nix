@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Shellcode writing toolkit";
+    description = "A shellcode writing toolkit";
     homepage = "https://github.com/reyammer/shellnoob";
     mainProgram = "snoob";
     license = licenses.mit;

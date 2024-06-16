@@ -510,7 +510,7 @@ in
   fuse = mkLibretroCore {
     core = "fuse";
     meta = {
-      description = "Port of the Fuse Unix Spectrum Emulator to libretro";
+      description = "A port of the Fuse Unix Spectrum Emulator to libretro";
       license = lib.licenses.gpl3Only;
     };
   };

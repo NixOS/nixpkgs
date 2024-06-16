@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/hlissner/zsh-autopair";
-    description = "Plugin that auto-closes, deletes and skips over matching delimiters in zsh intelligently";
+    description = "A plugin that auto-closes, deletes and skips over matching delimiters in zsh intelligently";
     license = licenses.mit;
     maintainers = with maintainers; [ _0qq ];
     platforms = platforms.all;

@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     homepage = "https://github.com/Kingtous/RustPlayer";
-    description = "Local audio player and network m3u8 radio player using a terminal interface";
+    description = "A local audio player and network m3u8 radio player using a terminal interface";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ oluceps ];
     platforms = platforms.unix;

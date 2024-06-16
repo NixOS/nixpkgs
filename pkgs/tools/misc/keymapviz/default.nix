@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [ regex ];
 
   meta = with lib; {
-    description = "Qmk keymap.c visualizer";
+    description = "A qmk keymap.c visualizer";
     homepage = "https://github.com/yskoht/keymapviz";
     license = licenses.mit;
     maintainers = with maintainers; [ lom ];

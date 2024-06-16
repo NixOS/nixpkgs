@@ -23,7 +23,7 @@ mkCoqDerivation {
   mlPlugin = true;
 
   meta = with lib; {
-    description = "Coq plugin providing an extensible tactic similar to first";
+    description = "A Coq plugin providing an extensible tactic similar to first";
     maintainers = with maintainers; [ siraben ];
     license = licenses.mit;
     platforms = platforms.unix;

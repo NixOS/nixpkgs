@@ -17,7 +17,7 @@ bundlerApp {
   };
 
   meta = with lib; {
-    description = "Faster Asciidoc processor written in Ruby";
+    description = "A faster Asciidoc processor written in Ruby";
     homepage = "https://asciidoctor.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ gpyh nicknovitski ];

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Tool for measuring energy consumption of Intel CPUs";
+    description = "A tool for measuring energy consumption of Intel CPUs";
     homepage = "https://github.com/sosy-lab/cpu-energy-meter";
     changelog = "https://github.com/sosy-lab/cpu-energy-meter/blob/main/CHANGELOG.md";
     maintainers = with maintainers; [ lorenzleutgeb ];

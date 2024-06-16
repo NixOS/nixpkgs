@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/sjaehn/BChoppr";
-    description = "Audio stream chopping LV2 plugin";
+    description = "An audio stream chopping LV2 plugin";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "OpenCL device simulator and debugger";
+    description = "An OpenCL device simulator and debugger";
     homepage = "https://github.com/jrprice/oclgrind";
     license = licenses.bsd3;
     platforms = platforms.linux;

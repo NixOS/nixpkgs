@@ -27,7 +27,7 @@ buildHomeAssistantComponent rec {
 
   meta = with lib; {
     changelog = "https://github.com/astrandb/miele/releases/tag/v${version}";
-    description = "Modern integration for Miele devices in Home Assistant";
+    description = "A modern integration for Miele devices in Home Assistant";
     homepage = "https://github.com/astrandb/miele";
     maintainers = with maintainers; [jamiemagee];
     license = licenses.mit;

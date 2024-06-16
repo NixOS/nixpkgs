@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Tool to unpack installers created by Inno Setup";
+    description = "A tool to unpack installers created by Inno Setup";
     homepage = "https://constexpr.org/innoextract/";
     license = licenses.zlib;
     maintainers = with maintainers; [ abbradar ];

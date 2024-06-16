@@ -38,7 +38,7 @@ mkDerivation {
   ];
 
   meta = with lib; {
-    description = "Offline reader for Web content";
+    description = "An offline reader for Web content";
     mainProgram = "kiwix-desktop";
     homepage = "https://kiwix.org";
     license = licenses.gpl3Plus;

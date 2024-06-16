@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Program used to control monitor parameters by software";
+    description = "A program used to control monitor parameters by software";
     homepage = "https://github.com/ddccontrol/ddccontrol";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

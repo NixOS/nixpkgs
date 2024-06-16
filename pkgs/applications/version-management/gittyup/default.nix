@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Graphical Git client designed to help you understand and manage your source code history";
+    description = "A graphical Git client designed to help you understand and manage your source code history";
     homepage = "https://murmele.github.io/Gittyup";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ];

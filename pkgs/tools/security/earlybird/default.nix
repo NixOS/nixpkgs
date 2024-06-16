@@ -19,7 +19,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Sensitive data detection tool capable of scanning source code repositories for passwords, key files, and more";
+    description = "A sensitive data detection tool capable of scanning source code repositories for passwords, key files, and more";
     mainProgram = "earlybird";
     homepage = "https://github.com/americanexpress/earlybird";
     changelog = "https://github.com/americanexpress/earlybird/releases/tag/v${version}";

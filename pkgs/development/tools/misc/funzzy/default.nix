@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "Lightweight watcher";
+    description = "A lightweight watcher";
     homepage = "https://github.com/cristianoliveira/funzzy";
     changelog = "https://github.com/cristianoliveira/funzzy/releases/tag/${src.rev}";
     license = licenses.mit;

@@ -30,7 +30,7 @@ EOF
 
   meta = with lib; {
     homepage = "https://github.com/ebzzry/emem";
-    description = "Trivial Markdown to HTML converter";
+    description = "A trivial Markdown to HTML converter";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
     maintainers = [ maintainers.ebzzry ];

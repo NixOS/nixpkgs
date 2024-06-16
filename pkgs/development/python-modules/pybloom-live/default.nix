@@ -38,7 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pybloom_live" ];
 
   meta = with lib; {
-    description = "Probabilistic data structure";
+    description = "A Probabilistic data structure";
     homepage = "https://github.com/joseph-fox/python-bloomfilter";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Flat and light theme with a modern look";
+    description = "A flat and light theme with a modern look";
     homepage = "https://github.com/EliverLara/${themeName}";
     license = licenses.gpl3;
     platforms = platforms.all;

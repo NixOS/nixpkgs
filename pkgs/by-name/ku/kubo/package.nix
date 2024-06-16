@@ -57,7 +57,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "IPFS implementation in Go";
+    description = "An IPFS implementation in Go";
     homepage = "https://ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;

@@ -26,7 +26,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "File information tool from the C Suite";
+    description = "A file information tool from the C Suite";
     mainProgram = "coreinfo";
     homepage = "https://gitlab.com/cubocore/coreapps/coreinfo";
     license = licenses.gpl3Plus;

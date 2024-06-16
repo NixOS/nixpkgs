@@ -92,7 +92,7 @@ mkDerivation {
   qtWrapperArgs = [''--prefix PATH : "${lib.makeBinPath [ akonadi kdepim-runtime akonadi-search ]}"''];
 
   meta = with lib; {
-    description = "Calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)";
+    description = "A calendar application using Akonadi to sync with external services (Nextcloud, GMail, ...)";
     homepage = "https://invent.kde.org/pim/merkuro";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Thra11 ];

@@ -28,7 +28,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/controlplaneio/netassert";
     changelog = "https://github.com/controlplaneio/netassert/blob/${src.rev}/CHANGELOG.md";
-    description = "Command line utility to test network connectivity between kubernetes objects";
+    description = "A command line utility to test network connectivity between kubernetes objects";
     longDescription = ''
       NetAssert is a command line utility to test network connectivity between kubernetes objects.
       It currently supports Deployment, Pod, Statefulset and Daemonset.

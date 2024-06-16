@@ -55,7 +55,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Password hashing library for Python";
+    description = "A password hashing library for Python";
     homepage = "https://foss.heptapod.net/python-libs/passlib";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ ];

@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/the-cavalry/light-locker";
-    description = "Simple session-locker for LightDM";
+    description = "A simple session-locker for LightDM";
     longDescription = ''
       A simple locker (forked from gnome-screensaver) that aims to
       have simple, sane, secure defaults and be well integrated with

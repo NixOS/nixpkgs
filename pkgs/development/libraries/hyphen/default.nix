@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Text hyphenation library";
+    description = "A text hyphenation library";
     mainProgram = "substrings.pl";
     homepage = "https://sourceforge.net/projects/hunspell/files/Hyphen/";
     platforms = platforms.all;

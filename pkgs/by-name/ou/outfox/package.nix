@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Rhythm game engine forked from StepMania";
+    description = "A rhythm game engine forked from StepMania";
     homepage = "https://projectoutfox.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;

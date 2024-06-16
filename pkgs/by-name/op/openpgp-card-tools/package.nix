@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Tool for inspecting and configuring OpenPGP cards";
+    description = "A tool for inspecting and configuring OpenPGP cards";
     homepage = "https://codeberg.org/openpgp-card/openpgp-card-tools";
     license = with licenses ;[ asl20 /* OR */ mit ];
     maintainers = with maintainers; [ nickcao ];

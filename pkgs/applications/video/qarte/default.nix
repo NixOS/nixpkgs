@@ -38,7 +38,7 @@ in mkDerivation {
 
   meta = with lib; {
     homepage = "https://launchpad.net/qarte";
-    description = "Recorder for Arte TV Guide and Arte Concert";
+    description = "A recorder for Arte TV Guide and Arte Concert";
     license = licenses.gpl3;
     maintainers = with maintainers; [ vbgl ];
     platforms = platforms.linux;

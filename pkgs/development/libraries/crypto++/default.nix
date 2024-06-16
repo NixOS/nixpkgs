@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "LDCONF=true" ];
 
   meta = with lib; {
-    description = "Free C++ class library of cryptographic schemes";
+    description = "A free C++ class library of cryptographic schemes";
     homepage = "https://cryptopp.com/";
     changelog = [
       "https://raw.githubusercontent.com/weidai11/cryptopp/CRYPTOPP_${underscoredVersion}/History.txt"

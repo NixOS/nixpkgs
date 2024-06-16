@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Simple compiled programming language";
+    description = "A simple compiled programming language";
     mainProgram = "paco";
     homepage = "https://github.com/pacolang/paco";
     license = licenses.mit;

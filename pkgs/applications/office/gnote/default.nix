@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnote";
-    description = "Note taking application";
+    description = "A note taking application";
     mainProgram = "gnote";
     maintainers = with maintainers; [ jfvillablanca ];
     license = licenses.gpl3Only;

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Toolbox designed to speak the many languages of chemical data";
+    description = "A toolbox designed to speak the many languages of chemical data";
     homepage = "http://openbabel.org";
     platforms = platforms.all;
     license = licenses.gpl2Plus;

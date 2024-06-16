@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "D-Bus API for the dLeyna services";
+    description = "A D-Bus API for the dLeyna services";
     homepage = "https://github.com/phako/dleyna-connector-dbus";
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

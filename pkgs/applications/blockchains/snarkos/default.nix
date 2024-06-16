@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
 
   meta = with lib; {
-    description = "Decentralized Operating System for Zero-Knowledge Applications";
+    description = "A Decentralized Operating System for Zero-Knowledge Applications";
     homepage = "https://snarkos.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];

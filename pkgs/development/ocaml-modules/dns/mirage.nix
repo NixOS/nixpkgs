@@ -14,6 +14,6 @@ buildDunePackage {
   ];
 
   meta = dns.meta // {
-    description = "Opinionated Domain Name System (DNS) library";
+    description = "An opinionated Domain Name System (DNS) library";
   };
 }

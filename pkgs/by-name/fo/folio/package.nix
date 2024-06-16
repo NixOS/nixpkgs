@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Beautiful markdown note-taking app for GNOME (forked from Paper)";
+    description = "A beautiful markdown note-taking app for GNOME (forked from Paper)";
     homepage = "https://github.com/toolstack/Folio";
     license = licenses.gpl3Only;
     mainProgram = "com.toolstack.Folio";

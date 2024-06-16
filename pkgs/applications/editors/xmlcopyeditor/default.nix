@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Fast, free, validating XML editor";
+    description = "A fast, free, validating XML editor";
     homepage = "https://xml-copy-editor.sourceforge.io/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

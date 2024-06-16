@@ -22,7 +22,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage    = "http://speedcrunch.org";
     license     = licenses.gpl2Plus;
-    description = "Fast power user calculator";
+    description = "A fast power user calculator";
     mainProgram = "speedcrunch";
     longDescription = ''
       SpeedCrunch is a fast, high precision and powerful desktop calculator.

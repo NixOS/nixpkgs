@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "GUI for Linux perf";
+    description = "A GUI for Linux perf";
     mainProgram = "hotspot";
     longDescription = ''
       hotspot is a GUI replacement for `perf report`.

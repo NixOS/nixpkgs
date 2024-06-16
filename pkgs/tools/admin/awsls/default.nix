@@ -20,7 +20,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "List command for AWS resources";
+    description = "A list command for AWS resources";
     homepage = "https://github.com/jckuester/awsls";
     license = licenses.mit;
     maintainers = [ maintainers.markus1189 ];

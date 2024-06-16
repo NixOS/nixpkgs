@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://himitsustore.org/";
-    description = "Secret storage manager";
+    description = "A secret storage manager";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ auchter ];
     inherit (hareHook.meta) platforms badPlatforms;

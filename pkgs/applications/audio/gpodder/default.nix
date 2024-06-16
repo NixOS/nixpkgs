@@ -87,7 +87,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = gitUpdater {};
 
   meta = with lib; {
-    description = "Podcatcher written in python";
+    description = "A podcatcher written in python";
     longDescription = ''
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.

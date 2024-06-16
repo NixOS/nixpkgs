@@ -19,6 +19,6 @@ buildDunePackage {
   propagatedBuildInputs = [ containers ];
 
   meta = containers.meta // {
-    description = "Set of advanced datatypes for containers";
+    description = "A set of advanced datatypes for containers";
   };
 }

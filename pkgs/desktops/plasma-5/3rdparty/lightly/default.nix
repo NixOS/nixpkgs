@@ -37,7 +37,7 @@ mkDerivation rec{
   ];
 
   meta = with lib; {
-    description = "Modern style for qt applications";
+    description = "A modern style for qt applications";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ pasqui23 ];
     homepage = "https://github.com/Luwx/Lightly/";

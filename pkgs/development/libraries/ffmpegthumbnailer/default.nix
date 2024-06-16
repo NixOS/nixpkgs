@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Lightweight video thumbnailer";
+    description = "A lightweight video thumbnailer";
     longDescription = "FFmpegthumbnailer is a lightweight video
         thumbnailer that can be used by file managers to create thumbnails
         for your video files. The thumbnailer uses ffmpeg to decode frames

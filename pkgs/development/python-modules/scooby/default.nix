@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/banesullivan/scooby/releases/tag/v${version}";
-    description = "Lightweight tool for reporting Python package versions and hardware resources";
+    description = "A lightweight tool for reporting Python package versions and hardware resources";
     mainProgram = "scooby";
     homepage = "https://github.com/banesullivan/scooby";
     license = licenses.mit;

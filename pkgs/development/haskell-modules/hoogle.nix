@@ -118,7 +118,7 @@ buildPackages.stdenv.mkDerivation {
   };
 
   meta = {
-    description = "Local Hoogle database";
+    description = "A local Hoogle database";
     platforms = ghc.meta.platforms;
     hydraPlatforms = with lib.platforms; none;
     maintainers = with lib.maintainers; [ ttuegel ];

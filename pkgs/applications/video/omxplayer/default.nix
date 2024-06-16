@@ -64,7 +64,7 @@ let
 
     meta = {
       homepage = "http://www.ffmpeg.org/";
-      description = "Complete, cross-platform solution to record, convert and stream audio and video";
+      description = "A complete, cross-platform solution to record, convert and stream audio and video";
     };
   };
 in

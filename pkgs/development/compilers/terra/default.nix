@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Low-level counterpart to Lua";
+    description = "A low-level counterpart to Lua";
     homepage = "https://terralang.org/";
     platforms = platforms.all;
     maintainers = with maintainers; [ jb55 seylerius thoughtpolice elliottslaughter ];

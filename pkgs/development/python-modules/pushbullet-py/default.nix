@@ -49,7 +49,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "Simple python client for pushbullet.com";
+    description = "A simple python client for pushbullet.com";
     homepage = "https://github.com/randomchars/pushbullet.py";
     license = licenses.mit;
   };

@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Password database utility";
+    description = "A password database utility";
     longDescription = ''
       Password Safe is a password database utility. Like many other
       such products, commercial and otherwise, it stores your

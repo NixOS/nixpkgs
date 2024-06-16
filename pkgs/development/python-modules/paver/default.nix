@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python-based build/distribution/deployment scripting tool";
+    description = "A Python-based build/distribution/deployment scripting tool";
     mainProgram = "paver";
     homepage = "https://github.com/paver/paver";
     license = licenses.bsd3;

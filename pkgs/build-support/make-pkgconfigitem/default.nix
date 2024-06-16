@@ -4,7 +4,7 @@
 { name # The name of the pc file
   # keywords
   # provide a default description for convenience. it's not important but still required by pkg-config.
-, description ? "Pkg-config file for ${name}"
+, description ? "A pkg-config file for ${name}"
 , url ? ""
 , version ? ""
 , requires ? [ ]

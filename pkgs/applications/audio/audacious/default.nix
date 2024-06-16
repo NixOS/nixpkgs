@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Lightweight and versatile audio player";
+    description = "A lightweight and versatile audio player";
     homepage = "https://audacious-media-player.org/";
     maintainers = with maintainers; [ eelco ramkromberg ttuegel thiagokokada ];
     platforms = with platforms; linux;

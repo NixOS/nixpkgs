@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Pickled object field for Django";
+    description = "A pickled object field for Django";
     homepage = "https://github.com/gintas/django-picklefield";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

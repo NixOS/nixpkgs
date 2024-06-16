@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = lib.optional withLsp "lsp";
 
   meta = with lib; {
-    description = "TOML toolkit written in Rust";
+    description = "A TOML toolkit written in Rust";
     homepage = "https://taplo.tamasfe.dev";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

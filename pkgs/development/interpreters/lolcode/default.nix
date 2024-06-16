@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://lolcode.org";
-    description = "Esoteric programming language";
+    description = "An esoteric programming language";
     longDescription = ''
       LOLCODE is a funny esoteric  programming language, a bit Pascal-like,
       whose keywords are LOLspeak.

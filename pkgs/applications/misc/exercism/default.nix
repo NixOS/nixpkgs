@@ -21,7 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
    inherit (src.meta) homepage;
-   description = "Go based command line tool for exercism.io";
+   description = "A Go based command line tool for exercism.io";
    license     = licenses.mit;
    maintainers = [ maintainers.rbasso maintainers.nobbz ];
    mainProgram = "exercism";

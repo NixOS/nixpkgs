@@ -68,7 +68,7 @@ buildPythonApplication rec {
   passthru.tests = { inherit (nixosTests) isso; };
 
   meta = with lib; {
-    description = "Commenting server similar to Disqus";
+    description = "A commenting server similar to Disqus";
     mainProgram = "isso";
     homepage = "https://posativ.org/isso/";
     license = licenses.mit;

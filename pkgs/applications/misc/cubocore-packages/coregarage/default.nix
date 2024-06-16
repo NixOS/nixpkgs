@@ -25,7 +25,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Settings manager for the C Suite";
+    description = "A settings manager for the C Suite";
     mainProgram = "coregarage";
     homepage = "https://gitlab.com/cubocore/coreapps/coregarage";
     license = licenses.gpl3Plus;

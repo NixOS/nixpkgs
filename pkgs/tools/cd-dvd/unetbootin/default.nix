@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Tool to create bootable live USB drives from ISO images";
+    description = "A tool to create bootable live USB drives from ISO images";
     homepage = "https://unetbootin.github.io/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ebzzry ];

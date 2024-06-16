@@ -12,7 +12,7 @@ bundlerApp rec {
 
   meta = with lib; {
     homepage = "https://github.com/pedrozath/coltrane";
-    description = "Music calculation library/CLI";
+    description = "A music calculation library/CLI";
     longDescription = ''
       coltrane allows to search for Notes, Chords, Scales for
       guitar, bass, piano and ukelele

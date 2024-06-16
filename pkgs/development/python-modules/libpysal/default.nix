@@ -78,7 +78,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "libpysal" ];
 
   meta = {
-    description = "Library of spatial analysis functions";
+    description = "A library of spatial analysis functions";
     homepage = "https://pysal.org/libpysal/";
     license = lib.licenses.bsd3;
     maintainers = lib.teams.geospatial.members;

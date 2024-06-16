@@ -103,7 +103,7 @@ mkDerivationWith buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Fast, interactive, multi-dimensional image viewer";
+    description = "A fast, interactive, multi-dimensional image viewer";
     homepage = "https://github.com/napari/napari";
     changelog = "https://github.com/napari/napari/releases/tag/v${version}";
     license = licenses.bsd3;

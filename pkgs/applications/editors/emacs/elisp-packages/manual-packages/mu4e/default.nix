@@ -28,6 +28,6 @@ elpaBuild {
   '';
 
   meta = mu.meta // {
-    description = "Full-featured e-mail client";
+    description = "A full-featured e-mail client";
   };
 }

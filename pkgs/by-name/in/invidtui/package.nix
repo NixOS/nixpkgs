@@ -24,7 +24,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://darkhz.github.io/invidtui/";
-    description = "Invidious TUI client";
+    description = "An invidious TUI client";
     license = licenses.mit;
     maintainers = with maintainers; [ rettetdemdativ ];
     mainProgram = "invidtui";

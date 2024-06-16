@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Break time reminder app";
+    description = "A break time reminder app";
     longDescription = ''
       stretchly is a cross-platform electron app that reminds you to take
       breaks when working on your computer. By default, it runs in your tray

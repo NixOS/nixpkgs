@@ -169,7 +169,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "GraphQL library for Python that leverages type annotations";
+    description = "A GraphQL library for Python that leverages type annotations";
     homepage = "https://strawberry.rocks";
     changelog = "https://github.com/strawberry-graphql/strawberry/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -62,7 +62,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "GUI system for pygame";
+    description = "A GUI system for pygame";
     homepage = "https://github.com/MyreMylar/pygame_gui";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [

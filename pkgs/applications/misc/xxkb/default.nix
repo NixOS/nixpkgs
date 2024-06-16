@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install.man" ];
 
   meta = with lib; {
-    description = "Keyboard layout indicator and switcher";
+    description = "A keyboard layout indicator and switcher";
     homepage = "http://xxkb.sourceforge.net/";
     license = licenses.artistic2;
     maintainers = with maintainers; [ rasendubi ];

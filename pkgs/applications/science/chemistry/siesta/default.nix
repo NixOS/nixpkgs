@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "First-principles materials simulation code using DFT";
+    description = "A first-principles materials simulation code using DFT";
     mainProgram = "siesta";
     longDescription = ''
          SIESTA is both a method and its computer program

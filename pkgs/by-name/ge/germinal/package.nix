@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.test = nixosTests.terminal-emulators.germinal;
 
   meta = {
-    description = "Minimal terminal emulator";
+    description = "A minimal terminal emulator";
     homepage = "https://github.com/Keruspe/Germinal";
     license = lib.licenses.gpl3Plus;
     mainProgram = "germinal";

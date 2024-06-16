@@ -30,6 +30,6 @@ buildDunePackage {
   ];
 
   meta = letsencrypt.meta // {
-    description = "DNS solver for the ACME implementation in OCaml";
+    description = "A DNS solver for the ACME implementation in OCaml";
   };
 }

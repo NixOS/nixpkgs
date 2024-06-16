@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://sourceware.org/cygwin-apps/setup.html";
-    description = "Tool for installing Cygwin";
+    description = "A tool for installing Cygwin";
     license = licenses.gpl2Plus;
   };
 }

@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/TakWolf/bdffont";
-    description = "Library for manipulating .bdf format fonts";
+    description = "A library for manipulating .bdf format fonts";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ h7x4 ];

@@ -38,7 +38,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "Flexible commandline tool for template rendering";
+    description = "A flexible commandline tool for template rendering";
     mainProgram = "gomplate";
     homepage = "https://gomplate.ca/";
     changelog = "https://github.com/hairyhenderson/gomplate/releases/tag/v${version}";

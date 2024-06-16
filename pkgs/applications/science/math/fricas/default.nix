@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://fricas.github.io";
-    description = "Advanced computer algebra system";
+    description = "An advanced computer algebra system";
     license = lib.licenses.bsd3;
 
     platforms = lib.platforms.linux;

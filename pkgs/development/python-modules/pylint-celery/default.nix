@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Pylint plugin to analyze Celery applications";
+    description = "A Pylint plugin to analyze Celery applications";
     homepage = "https://github.com/PyCQA/pylint-celery";
     license = licenses.gpl2;
     maintainers = with maintainers; [ kamadorueda ];

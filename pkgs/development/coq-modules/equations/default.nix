@@ -68,7 +68,7 @@
 
   meta = with lib; {
     homepage = "https://mattam82.github.io/Coq-Equations/";
-    description = "Plugin for Coq to add dependent pattern-matching";
+    description = "A plugin for Coq to add dependent pattern-matching";
     maintainers = with maintainers; [ jwiegley ];
   };
 }).overrideAttrs (o: {

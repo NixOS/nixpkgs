@@ -19,7 +19,7 @@ buildNpmPackage {
   dontNpmBuild = true;
 
   meta = with lib; {
-    description = "CLI tool for leetcode.com";
+    description = "A CLI tool for leetcode.com";
     homepage = "https://github.com/leetcode-tools/leetcode-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];

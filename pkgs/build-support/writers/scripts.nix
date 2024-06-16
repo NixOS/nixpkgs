@@ -635,7 +635,7 @@ rec {
 
     nuget-source = mkNugetSource {
       name = "${fname}-nuget-source";
-      description = "Nuget source with the dependencies for ${fname}";
+      description = "A Nuget source with the dependencies for ${fname}";
       deps = [ _nugetDeps ];
     };
 

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Database of common MIME types";
+    description = "A database of common MIME types";
     homepage = "http://freedesktop.org/wiki/Software/shared-mime-info";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

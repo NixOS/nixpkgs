@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "CAD tool for extracting bits from Mask ROM photographs";
+    description = "A CAD tool for extracting bits from Mask ROM photographs";
     homepage = "https://github.com/travisgoodspeed/maskromtool";
     license = [
       lib.licenses.beerware

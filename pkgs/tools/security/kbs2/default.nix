@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Secret manager backed by age";
+    description = "A secret manager backed by age";
     mainProgram = "kbs2";
     homepage = "https://github.com/woodruffw/kbs2";
     changelog = "https://github.com/woodruffw/kbs2/blob/v${version}/CHANGELOG.md";

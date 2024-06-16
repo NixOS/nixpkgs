@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Client for the MANAGESIEVE Protocol";
+    description = "A client for the MANAGESIEVE Protocol";
     longDescription = ''
       This is sieve-connect. A client for the ManageSieve protocol,
       as specifed in RFC 5804. Historically, this was MANAGESIEVE as

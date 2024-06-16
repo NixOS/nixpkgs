@@ -70,7 +70,7 @@ stdenv.mkDerivation {
   passthru.tests.keyd = nixosTests.keyd;
 
   meta = with lib; {
-    description = "Key remapping daemon for Linux";
+    description = "A key remapping daemon for Linux";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;

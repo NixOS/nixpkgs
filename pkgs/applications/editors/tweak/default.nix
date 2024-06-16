@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC:=$(CC)" "LINK:=$(CC)" ];
 
   meta = with lib; {
-    description = "Efficient hex editor";
+    description = "An efficient hex editor";
     homepage = "http://www.chiark.greenend.org.uk/~sgtatham/tweak";
     license = licenses.mit;
     platforms = platforms.unix;

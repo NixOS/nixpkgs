@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Open-Source subdivision surface library";
+    description = "An Open-Source subdivision surface library";
     homepage = "http://graphics.pixar.com/opensubdiv";
     broken = openclSupport && cudaSupport;
     platforms = lib.platforms.unix;

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec{
     ++ lib.optional idnSupport libidn;
 
   meta = with lib; {
-    description = "Portable high-level Jabber/XMPP library for C++";
+    description = "A portable high-level Jabber/XMPP library for C++";
     mainProgram = "gloox-config";
     homepage = "http://camaya.net/gloox";
     license = licenses.gpl3;

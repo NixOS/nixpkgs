@@ -15,7 +15,7 @@ buildPythonApplication rec {
   checkPhase = "nosetests";
 
   meta = with lib; {
-    description = "Importer and exporter for MBTiles";
+    description = "An importer and exporter for MBTiles";
     mainProgram = "mb-util";
     homepage = "https://github.com/mapbox/mbutil";
     license = licenses.bsd3;

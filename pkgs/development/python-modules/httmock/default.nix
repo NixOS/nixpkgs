@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "httmock" ];
 
   meta = with lib; {
-    description = "Mocking library for requests";
+    description = "A mocking library for requests";
     homepage = "https://github.com/patrys/httmock";
     license = licenses.asl20;
     maintainers = with maintainers; [ nyanloutre ];

@@ -37,7 +37,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Plugin for writing svg files from napari";
+    description = "A plugin for writing svg files from napari";
     homepage = "https://github.com/napari/napari-svg";
     changelog = "https://github.com/napari/napari-svg/releases/tag/v${version}";
     license = licenses.bsd3;

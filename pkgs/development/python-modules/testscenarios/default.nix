@@ -49,7 +49,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Pyunit extension for dependency injection";
+    description = "A pyunit extension for dependency injection";
     homepage = "https://github.com/testing-cabal/testscenarios";
     license = licenses.asl20;
   };

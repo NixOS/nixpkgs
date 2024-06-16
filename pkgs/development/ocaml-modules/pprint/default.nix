@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "OCaml library for pretty-printing textual documents";
+    description = "An OCaml library for pretty-printing textual documents";
     license = licenses.lgpl2Only;
     maintainers = [ maintainers.vbgl ];
   };

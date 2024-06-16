@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/tox-dev/tox/releases/tag/${version}";
-    description = "Generic virtualenv management and test command line tool";
+    description = "A generic virtualenv management and test command line tool";
     mainProgram = "tox";
     homepage = "https://github.com/tox-dev/tox";
     license = licenses.mit;

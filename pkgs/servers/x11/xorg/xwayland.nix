@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "X server for interfacing X11 apps with the Wayland protocol";
+    description = "An X server for interfacing X11 apps with the Wayland protocol";
     homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
     mainProgram = "Xwayland";

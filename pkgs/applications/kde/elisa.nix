@@ -41,7 +41,7 @@ mkDerivation {
 
   meta = with lib; {
     homepage = "https://apps.kde.org/elisa/";
-    description = "Simple media player for KDE";
+    description = "A simple media player for KDE";
     mainProgram = "elisa";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];

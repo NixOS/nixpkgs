@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Free/open-source library for quantitative finance";
+    description = "A free/open-source library for quantitative finance";
     homepage = "https://quantlib.org";
     platforms = platforms.unix;
     license = licenses.bsd3;

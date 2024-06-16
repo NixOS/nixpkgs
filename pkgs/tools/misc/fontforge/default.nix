@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "Font editor";
+    description = "A font editor";
     homepage = "https://fontforge.github.io";
     platforms = platforms.all;
     license = licenses.bsd3;

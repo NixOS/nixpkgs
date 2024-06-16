@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "JMESPath implementation in Go";
+    description = "A JMESPath implementation in Go";
     homepage = "https://github.com/jmespath/go-jmespath";
     license = licenses.asl20;
     maintainers = with maintainers; [ cransom ];

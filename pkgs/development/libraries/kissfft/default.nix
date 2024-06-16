@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Mixed-radix Fast Fourier Transform based up on the KISS principle";
+    description = "A mixed-radix Fast Fourier Transform based up on the KISS principle";
     homepage = "https://github.com/mborgerding/kissfft";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];

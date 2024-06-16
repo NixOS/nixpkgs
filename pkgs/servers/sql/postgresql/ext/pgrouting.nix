@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "PostgreSQL/PostGIS extension that provides geospatial routing functionality";
+    description = "A PostgreSQL/PostGIS extension that provides geospatial routing functionality";
     homepage    = "https://pgrouting.org/";
     changelog   = "https://github.com/pgRouting/pgrouting/releases/tag/v${version}";
     maintainers = with maintainers; teams.geospatial.members ++ [ steve-chavez ];

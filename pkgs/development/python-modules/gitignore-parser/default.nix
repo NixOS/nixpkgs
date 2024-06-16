@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gitignore_parser" ];
 
   meta = with lib; {
-    description = "Spec-compliant gitignore parser";
+    description = "A spec-compliant gitignore parser";
     homepage = "https://github.com/mherrmann/gitignore_parser";
     changelog = "https://github.com/mherrmann/gitignore_parser/releases/tag/v${version}";
     license = licenses.mit;

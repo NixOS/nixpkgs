@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "DVD authoring program for personal computers";
+    description = "a DVD authoring program for personal computers";
     homepage = "https://www.bombono.org/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ symphorien ];

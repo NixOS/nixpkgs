@@ -16,7 +16,7 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
-    description = "MIDI network gateway application that sends and receives MIDI data (ALSA Sequencer and/or JACK MIDI) over the network";
+    description = "A MIDI network gateway application that sends and receives MIDI data (ALSA Sequencer and/or JACK MIDI) over the network";
     mainProgram = "qmidinet";
     homepage = "http://qmidinet.sourceforge.net/";
     license = licenses.gpl2Plus;

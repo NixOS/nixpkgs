@@ -23,7 +23,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Simple future-based async library for python";
+    description = "A simple future-based async library for python";
     homepage = "https://github.com/google/duet";
     maintainers = with maintainers; [ drewrisinger ];
   };

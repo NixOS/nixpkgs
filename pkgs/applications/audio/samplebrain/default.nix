@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Custom sample mashing app";
+    description = "A custom sample mashing app";
     mainProgram = "samplebrain";
     homepage = "https://thentrythis.org/projects/samplebrain";
     changelog = "https://gitlab.com/then-try-this/samplebrain/-/releases/v${version}_release";

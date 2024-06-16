@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   checkTarget = "check";
 
   meta = with lib; {
-    description = "Intelligent predictive text entry system";
+    description = "An intelligent predictive text entry system";
     homepage = "https://presage.sourceforge.io/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dotlambda ];

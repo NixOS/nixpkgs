@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "Tool for reliably tunneling TCP connections over ICMP echo request and reply packets";
+    description = "A tool for reliably tunneling TCP connections over ICMP echo request and reply packets";
     homepage = "https://www.cs.uit.no/~daniels/PingTunnel";
     license = licenses.bsd3;
     mainProgram = "ptunnel";

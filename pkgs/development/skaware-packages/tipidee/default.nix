@@ -5,7 +5,7 @@ skawarePackages.buildPackage {
   version = "0.0.5.0";
   sha256 = "2ekfxxmHmkPVQym5mwLGZJxU5Cjne8lqBXNQa1K/FCI=";
 
-  description = "HTTP 1.1 webserver, serving static files and CGI/NPH";
+  description = "A HTTP 1.1 webserver, serving static files and CGI/NPH";
 
   outputs = [ "bin" "lib" "out" "dev" "doc" ];
 

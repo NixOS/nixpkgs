@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
-    description = "Dynamic terminal window manager";
+    description = "A dynamic terminal window manager";
     homepage = "https://www.a4term.com/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onemoresuza ];

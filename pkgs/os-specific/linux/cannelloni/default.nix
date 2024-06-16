@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "SocketCAN over Ethernet tunnel";
+    description = "A SocketCAN over Ethernet tunnel";
     mainProgram = "cannelloni";
     homepage = "https://github.com/mguentner/cannelloni";
     platforms = platforms.linux;

@@ -27,7 +27,7 @@ mkDerivation rec {
   ] ;
 
   meta = with lib; {
-    description = "Open-source Sega Saturn emulator";
+    description = "An open-source Sega Saturn emulator";
     mainProgram = "yabause";
     homepage = "https://yabause.org/";
     license = licenses.gpl2Plus;

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   qmakeFlags = [ "KLog.pro" ];
 
   meta = with lib; {
-    description = "Multiplatform free hamradio logger";
+    description = "A multiplatform free hamradio logger";
     mainProgram = "klog";
     longDescription = ''
       KLog provides QSO management, useful QSL management DX-Cluster client, DXCC management,

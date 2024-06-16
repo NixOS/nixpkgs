@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-nls";
 
   meta = with lib; {
-    description = "Ncurses based sudoku game";
+    description = "An ncurses based sudoku game";
     mainProgram = "nudoku";
     homepage = "http://jubalh.github.io/nudoku/";
     license = licenses.gpl3;

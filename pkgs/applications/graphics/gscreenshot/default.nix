@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
   patches = [ ./0001-Changing-paths-to-be-nix-compatible.patch ];
 
   meta = {
-    description = "Screenshot frontend (CLI and GUI) for a variety of screenshot backends";
+    description = "A screenshot frontend (CLI and GUI) for a variety of screenshot backends";
 
     longDescription = ''
       gscreenshot provides a common frontend and expanded functionality to a

@@ -25,7 +25,7 @@ perlPackages.buildPerlPackage {
   '';
 
   meta = with lib; {
-    description = "Sentence based license detector";
+    description = "A sentence based license detector";
     mainProgram = "ninka";
     homepage = "http://ninka.turingmachine.org/";
     license = licenses.gpl2;

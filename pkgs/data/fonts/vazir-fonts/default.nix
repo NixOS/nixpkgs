@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/vazir-font";
-    description = "Persian (Farsi) Font - قلم (فونت) فارسی وزیر";
+    description = "A Persian (Farsi) Font - قلم (فونت) فارسی وزیر";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ ];

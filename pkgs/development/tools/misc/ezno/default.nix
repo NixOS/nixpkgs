@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--bin" "ezno" ];
 
   meta = with lib; {
-    description = "JavaScript compiler and TypeScript checker with a focus on static analysis and runtime performance";
+    description = "A JavaScript compiler and TypeScript checker with a focus on static analysis and runtime performance";
     mainProgram = "ezno";
     homepage = "https://github.com/kaleidawave/ezno";
     changelog = "https://github.com/kaleidawave/ezno/releases/tag/${src.rev}";

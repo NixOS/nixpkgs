@@ -30,7 +30,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pybtex_docutils" ];
 
   meta = with lib; {
-    description = "Docutils backend for pybtex";
+    description = "A docutils backend for pybtex";
     homepage = "https://github.com/mcmtroffaes/pybtex-docutils";
     license = licenses.mit;
   };

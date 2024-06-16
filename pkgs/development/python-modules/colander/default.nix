@@ -34,7 +34,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    description = "Simple schema-based serialization and deserialization library";
+    description = "A simple schema-based serialization and deserialization library";
     homepage = "https://github.com/Pylons/colander";
     license = licenses.free; # http://repoze.org/LICENSE.txt
     maintainers = with maintainers; [ domenkozar ];

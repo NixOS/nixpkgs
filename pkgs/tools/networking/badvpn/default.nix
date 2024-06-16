@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Set of network-related (mostly VPN-related) tools";
+    description = "A set of network-related (mostly VPN-related) tools";
     license = licenses.bsd3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

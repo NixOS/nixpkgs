@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/clarketm/mergedeep";
-    description = "Deep merge function for python";
+    description = "A deep merge function for python";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };

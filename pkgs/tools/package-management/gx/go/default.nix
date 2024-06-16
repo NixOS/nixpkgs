@@ -16,7 +16,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Tool for importing go packages into gx";
+    description = "A tool for importing go packages into gx";
     mainProgram = "gx-go";
     homepage = "https://github.com/whyrusleeping/gx-go";
     license = licenses.mit;

@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sphinxarg" ];
 
   meta = {
-    description = "Sphinx extension that automatically documents argparse commands and options";
+    description = "A sphinx extension that automatically documents argparse commands and options";
     homepage = "https://github.com/ashb/sphinx-argparse";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ clacke ];

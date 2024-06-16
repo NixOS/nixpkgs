@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Adaptive Digital Sound Processor";
+    description = "An Adaptive Digital Sound Processor";
     homepage = "https://github.com/Audio4Linux/Viper4Linux";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];

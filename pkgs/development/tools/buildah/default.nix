@@ -69,7 +69,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "Tool which facilitates building OCI images";
+    description = "A tool which facilitates building OCI images";
     mainProgram = "buildah";
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";

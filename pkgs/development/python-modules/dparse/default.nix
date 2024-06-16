@@ -52,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Parser for Python dependency files";
+    description = "A parser for Python dependency files";
     homepage = "https://github.com/pyupio/dparse";
     changelog = "https://github.com/pyupio/dparse/blob/${version}/HISTORY.rst";
     license = licenses.mit;

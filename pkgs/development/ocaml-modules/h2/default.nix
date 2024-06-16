@@ -50,6 +50,6 @@ buildDunePackage rec {
   ];
 
   meta = hpack.meta // {
-    description = "High-performance, memory-efficient, and scalable HTTP/2 library for OCaml";
+    description = "A high-performance, memory-efficient, and scalable HTTP/2 library for OCaml";
   };
 }

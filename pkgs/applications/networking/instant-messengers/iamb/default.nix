@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Matrix client for Vim addicts";
+    description = "A Matrix client for Vim addicts";
     mainProgram = "iamb";
     homepage = "https://github.com/ulyssa/iamb";
     changelog = "https://github.com/ulyssa/iamb/releases/tag/${src.rev}";

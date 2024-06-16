@@ -119,7 +119,7 @@ let
   # contains the actual package dependencies
   dependenciesSource = mkNugetSource {
     name = "${name}-dependencies-source";
-    description = "Nuget source with the dependencies for ${name}";
+    description = "A Nuget source with the dependencies for ${name}";
     deps = [ _nugetDeps ] ++ lib.optional (localDeps != null) localDeps;
   };
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "C library implementing the Cangjie input method";
+    description = "A C library implementing the Cangjie input method";
     longDescription = ''
       libcangjie is a library implementing the Cangjie input method.
     '';

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Python library that extends setuptools for binary extensions";
+    description = "A python library that extends setuptools for binary extensions";
     homepage = "https://github.com/getsentry/milksnake";
     license = licenses.asl20;
     maintainers = with maintainers; [ matthiasbeyer ];

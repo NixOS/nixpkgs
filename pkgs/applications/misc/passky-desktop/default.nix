@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Simple, modern, lightweight, open source and secure password manager";
+    description = "A simple, modern, lightweight, open source and secure password manager";
     homepage = "https://passky.org";
     downloadPage = "https://github.com/Rabbit-Company/Passky-Desktop/releases";
     changelog = "https://github.com/Rabbit-Company/Passky-Desktop/releases/tag/v${version}";

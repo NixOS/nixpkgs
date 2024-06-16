@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://dune.build/";
-    description = "Composable build system";
+    description = "A composable build system";
     maintainers = [ maintainers.vbgl ];
     license = licenses.mit;
     inherit (ocaml.meta) platforms;

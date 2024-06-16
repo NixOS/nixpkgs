@@ -27,7 +27,7 @@ mkCoqDerivation rec {
   meta =  with lib; {
     homepage = "http://c-corn.github.io/";
     license = licenses.gpl2;
-    description = "Coq library for constructive analysis";
+    description = "A Coq library for constructive analysis";
     maintainers = [ maintainers.vbgl ];
   };
 }

@@ -57,7 +57,7 @@ buildEnv {
 
   meta = {
     inherit mainProgram;
-    description = "Opinionated wrapper for Dwarf Fortress";
+    description = "An opinionated wrapper for Dwarf Fortress";
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;
     platforms = platforms.all;

@@ -72,7 +72,7 @@ buildNpmPackage rec {
   '';
 
   meta = {
-    description = "Modern GUI video and audio downloader";
+    description = "A modern GUI video and audio downloader";
     homepage = "https://github.com/aandrew-me/ytDownloader";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ chewblacka ];

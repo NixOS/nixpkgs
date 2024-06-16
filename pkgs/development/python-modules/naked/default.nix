@@ -102,7 +102,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "Naked" ];
 
   meta = with lib; {
-    description = "Python command line application framework";
+    description = "A Python command line application framework";
     homepage = "https://github.com/chrissimpkins/naked";
     downloadPage = "https://github.com/chrissimpkins/naked/tags";
     license = licenses.mit;

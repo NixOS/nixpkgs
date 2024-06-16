@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Free software metronome and tempo measurement tool";
+    description = "A free software metronome and tempo measurement tool";
     homepage = "https://gitlab.gnome.org/dqpb/gmetronome";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

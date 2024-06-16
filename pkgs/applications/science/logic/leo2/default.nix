@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "High-performance typed higher order prover";
+    description = "A high-performance typed higher order prover";
     mainProgram = "leo";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;

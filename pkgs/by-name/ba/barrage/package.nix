@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://lgames.sourceforge.io/Barrage/";
-    description = "Destructive action game";
+    description = "A destructive action game";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "barrage";
     maintainers = with lib.maintainers; [ AndersonTorres ];

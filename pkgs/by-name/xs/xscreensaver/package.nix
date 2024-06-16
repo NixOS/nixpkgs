@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.jwz.org/xscreensaver/";
-    description = "Set of screensavers";
+    description = "A set of screensavers";
     downloadPage = "https://www.jwz.org/xscreensaver/download.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ raskin AndersonTorres ];

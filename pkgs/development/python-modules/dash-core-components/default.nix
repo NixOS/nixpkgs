@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Dash component starter pack";
+    description = "A dash component starter pack";
     homepage = "https://dash.plot.ly/dash-core-components";
     license = licenses.mit;
     maintainers = [ maintainers.antoinerg ];

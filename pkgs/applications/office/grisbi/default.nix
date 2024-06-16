@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Personnal accounting application";
+    description = "A personnal accounting application";
     mainProgram = "grisbi";
     longDescription = ''
       Grisbi is an application written by French developers, so it perfectly

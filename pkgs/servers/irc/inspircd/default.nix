@@ -204,7 +204,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "Modular C++ IRC server";
+    description = "A modular C++ IRC server";
     license = [ lib.licenses.gpl2Only ]
       ++ lib.concatMap getLicenses extraInputs
       ++ lib.optionals (anyMembers extraModules libcModules) (getLicenses stdenv.cc.libc)

@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Program that compares two Nix expressions and determines which attributes changed";
+    description = "A program that compares two Nix expressions and determines which attributes changed";
     homepage = "https://github.com/FRidh/niff";
     license = lib.licenses.mit;
     mainProgram = "niff";

@@ -34,7 +34,7 @@ stdenv.mkDerivation  rec {
   '';
 
   meta = with lib; {
-    description = "Modular audio processing system using JACK and LV2 or LADSPA plugins";
+    description = "A modular audio processing system using JACK and LV2 or LADSPA plugins";
     homepage = "http://drobilla.net/software/ingen";
     license = licenses.agpl3Plus;
     maintainers = [ maintainers.goibhniu ];

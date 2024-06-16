@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "2D and 3D geometric modelling programming language for creating art with maths";
+    description = "A 2D and 3D geometric modelling programming language for creating art with maths";
     homepage = "https://github.com/curv3d/curv";
     license = licenses.asl20;
     platforms = platforms.all;

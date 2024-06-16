@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     gspell webkitgtk libgringotts ];
 
   meta = with lib; {
-    description = "Handy personal organizer";
+    description = "A handy personal organizer";
     mainProgram = "osmo";
     homepage = "https://clayo.org/osmo/";
     license = licenses.gpl2;

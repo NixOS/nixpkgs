@@ -49,7 +49,7 @@ mkDerivation {
   dontPatchELF = true;
 
   meta = with lib; {
-    description = "Tool to edit resource files (BRF)";
+    description = "A tool to edit resource files (BRF)";
     mainProgram = "openBrf";
     homepage = "https://github.com/cfcohen/openbrf";
     maintainers = with lib.maintainers; [ abbradar ];

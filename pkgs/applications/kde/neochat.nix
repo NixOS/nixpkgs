@@ -66,7 +66,7 @@ mkDerivation {
   ];
 
   meta = with lib; {
-    description = "Client for matrix, the decentralized communication protocol";
+    description = "A client for matrix, the decentralized communication protocol";
     mainProgram = "neochat";
     homepage = "https://apps.kde.org/en/neochat";
     license = licenses.gpl3Only;

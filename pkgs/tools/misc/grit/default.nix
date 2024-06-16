@@ -15,7 +15,7 @@ buildGoModule rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "Multitree-based personal task manager";
+    description = "A multitree-based personal task manager";
     homepage = "https://github.com/climech/grit";
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];

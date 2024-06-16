@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Community-lead fork of the minimalist roguelike game Brogue";
+    description = "A community-lead fork of the minimalist roguelike game Brogue";
     mainProgram = "brogue-ce";
     homepage = "https://github.com/tmewett/BrogueCE";
     license = licenses.agpl3Plus;

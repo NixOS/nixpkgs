@@ -84,7 +84,7 @@ in python.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Utility for sending notifications, on demand and when commands finish";
+    description = "A utility for sending notifications, on demand and when commands finish";
     homepage = "http://ntfy.rtfd.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kamilchm ];

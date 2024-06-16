@@ -36,7 +36,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [ mathcomp.ssreflect ];
 
   meta = {
-    description = "Finset and finmap library";
+    description = "A finset and finmap library";
     license = lib.licenses.cecill-b;
   };
 }

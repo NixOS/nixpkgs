@@ -113,7 +113,7 @@ let
         };
 
         meta = with lib; {
-          description = "Real-time web analytics application";
+          description = "A real-time web analytics application";
           mainProgram = "matomo-console";
           license = licenses.gpl3Plus;
           homepage = "https://matomo.org/";

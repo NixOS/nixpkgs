@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     homepage = "https://github.com/9999years/git-gr";
-    description = "Gerrit CLI client";
+    description = "A Gerrit CLI client";
     license = [ licenses.mit ];
     maintainers = [ maintainers._9999years ];
     mainProgram = "git-gr";

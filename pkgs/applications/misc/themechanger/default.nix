@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/ALEX11BR/ThemeChanger";
-    description = "Theme changing utility for Linux";
+    description = "A theme changing utility for Linux";
     mainProgram = "themechanger";
     longDescription = ''
       This app is a theme changing utility for Linux, BSDs, and whatnots.

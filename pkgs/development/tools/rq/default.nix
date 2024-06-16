@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   VERGEN_SEMVER = version;
 
   meta = with lib; {
-    description = "Tool for doing record analysis and transformation";
+    description = "A tool for doing record analysis and transformation";
     mainProgram = "rq";
     homepage = "https://github.com/dflemstr/rq";
     license = with licenses; [ asl20 ];

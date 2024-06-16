@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.tracebox.org/";
-    description = "Middlebox detection tool";
+    description = "A middlebox detection tool";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ck3d ];
     platforms = platforms.linux;

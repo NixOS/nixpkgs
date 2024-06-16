@@ -79,7 +79,7 @@ lib.checkListOfEnum "sketchybar-app-font: artifacts" artifacts artifactList
     };
 
     meta = {
-      description = "Ligature-based symbol font and a mapping function for sketchybar";
+      description = "A ligature-based symbol font and a mapping function for sketchybar";
       longDescription = ''
         A ligature-based symbol font and a mapping function for sketchybar, inspired by simple-bar's usage of community-contributed minimalistic app icons.
       '';

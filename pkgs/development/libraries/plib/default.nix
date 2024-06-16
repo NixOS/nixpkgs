@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "Suite of portable game libraries";
+    description = "A suite of portable game libraries";
 
     longDescription = ''
       PLIB includes sound effects, music, a complete 3D engine, font

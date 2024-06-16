@@ -33,7 +33,7 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
-    description = "Pytest plugin for parallel and concurrent testing";
+    description = "A pytest plugin for parallel and concurrent testing";
     homepage = "https://github.com/kevlened/pytest-parallelt";
     changelog = "https://github.com/kevlened/pytest-parallel/releases/tag/${version}";
     license = licenses.mit;

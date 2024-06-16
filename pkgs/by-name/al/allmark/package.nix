@@ -26,7 +26,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "Cross-platform markdown web server";
+    description = "A cross-platform markdown web server";
     homepage = "https://github.com/andreaskoch/allmark";
     changelog = "https://github.com/andreaskoch/allmark/-/releases/v${version}";
     license = lib.licenses.bsd3;

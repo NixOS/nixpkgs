@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Utility to uncompress ECM files to BIN CD format";
+    description = "A utility to uncompress ECM files to BIN CD format";
     homepage = "https://github.com/alucryd/ecm-tools";
     license = lib.licenses.gpl3Plus;
     mainProgram = "bin2ecm";

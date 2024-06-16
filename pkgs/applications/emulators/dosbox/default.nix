@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.dosbox.com/";
-    description = "DOS emulator";
+    description = "A DOS emulator";
     longDescription = ''
       DOSBox is an emulator that recreates a MS-DOS compatible environment
       (complete with Sound, Input, Graphics and even basic networking). This

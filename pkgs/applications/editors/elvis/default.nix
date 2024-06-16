@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://elvis.the-little-red-haired-girl.org/";
-    description = "Vi clone for Unix and other operating systems";
+    description = "A vi clone for Unix and other operating systems";
     license = lib.licenses.free;
   };
 }

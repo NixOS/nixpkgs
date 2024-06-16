@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://man-db.nongnu.org";
-    description = "Implementation of the standard Unix documentation system accessed using the man command";
+    description = "An implementation of the standard Unix documentation system accessed using the man command";
     license = licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "man";

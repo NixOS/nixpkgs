@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication {
 
   meta = with lib; {
     homepage = "https://github.com/sdushantha/fileinfo";
-    description = "File extension metadata lookup tool";
+    description = "A file extension metadata lookup tool";
     license = licenses.mit;
     maintainers = with maintainers; [ h7x4 ];
     mainProgram = "fileinfo";

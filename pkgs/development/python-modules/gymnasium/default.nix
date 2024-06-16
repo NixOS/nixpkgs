@@ -80,7 +80,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Standard API for reinforcement learning and a diverse set of reference environments (formerly Gym)";
+    description = "A standard API for reinforcement learning and a diverse set of reference environments (formerly Gym)";
     homepage = "https://github.com/Farama-Foundation/Gymnasium";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];

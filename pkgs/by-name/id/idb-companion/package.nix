@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Powerful command line tool for automating iOS simulators and devices";
+    description = "A powerful command line tool for automating iOS simulators and devices";
     homepage = "https://github.com/facebook/idb";
     license = licenses.mit;
     platforms = platforms.darwin;

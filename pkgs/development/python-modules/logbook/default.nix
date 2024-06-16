@@ -65,7 +65,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Logging replacement for Python";
+    description = "A logging replacement for Python";
     homepage = "https://logbook.readthedocs.io/";
     changelog = "https://github.com/getlogbook/logbook/blob/${version}/CHANGES";
     license = licenses.bsd3;

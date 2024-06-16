@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Utility to change wallpaper based on local weather, sunrise and sunset times";
+    description = "A utility to change wallpaper based on local weather, sunrise and sunset times";
     homepage = "https://github.com/hexive/sunpaper";
     license = lib.licenses.asl20;
     mainProgram = "sunpaper";

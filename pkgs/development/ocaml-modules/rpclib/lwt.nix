@@ -18,6 +18,6 @@ buildDunePackage {
   doCheck = true;
 
   meta = rpclib.meta // {
-    description = "Library to deal with RPCs in OCaml - Lwt interface";
+    description = "A library to deal with RPCs in OCaml - Lwt interface";
   };
 }

@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Runner for `mdbooks` to keep your documentation tested";
+    description = "A runner for `mdbooks` to keep your documentation tested";
     mainProgram = "termbook";
     homepage = "https://github.com/Byron/termbook/";
     changelog = "https://github.com/Byron/termbook/blob/${src.rev}/CHANGELOG.md";

@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://rbspy.github.io/";
-    description = "Sampling CPU Profiler for Ruby";
+    description = "A Sampling CPU Profiler for Ruby";
     mainProgram = "rbspy";
     changelog = "https://github.com/rbspy/rbspy/releases/tag/v${version}";
     license = licenses.mit;

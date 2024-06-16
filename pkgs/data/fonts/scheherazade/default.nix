@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://software.sil.org/scheherazade/";
-    description = "Font designed in a similar style to traditional Naskh typefaces";
+    description = "A font designed in a similar style to traditional Naskh typefaces";
     longDescription = ''
 
       Scheherazade${lib.optionalString new " New"}, named after the heroine of

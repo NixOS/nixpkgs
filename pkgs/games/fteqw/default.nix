@@ -54,7 +54,7 @@
         --add-needed ${vulkan-loader}/lib/libvulkan.so
     '';
 
-    description = "Hybrid and versatile game engine";
+    description = "A hybrid and versatile game engine";
   } // attrs);
 
   fteqw-dedicated = import ./generic.nix (rec {

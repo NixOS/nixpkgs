@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "recommonmark" ];
 
   meta = {
-    description = "Docutils-compatibility bridge to CommonMark";
+    description = "A docutils-compatibility bridge to CommonMark";
     homepage = "https://github.com/rtfd/recommonmark";
     license = lib.licenses.mit;
   };

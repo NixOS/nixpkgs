@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Random number generator daemon";
+    description = "A random number generator daemon";
     homepage = "https://github.com/nhorman/rng-tools";
     changelog = "https://github.com/nhorman/rng-tools/releases/tag/v${version}";
     license = licenses.gpl2Plus;

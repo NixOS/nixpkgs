@@ -46,7 +46,7 @@ mkYarnPackage rec {
 
   meta = {
     changelog = "https://github.com/react-static/react-static/blob/${src.rev}/CHANGELOG.md";
-    description = "Progressive static site generator for React";
+    description = "A progressive static site generator for React";
     homepage = "https://github.com/react-static/react-static";
     license = lib.licenses.mit;
     mainProgram = "react-static";

@@ -73,7 +73,7 @@ let
     doCheck = false;
 
     meta = {
-      description = "Self contained toolkit for creating, editing, and previewing TPSE files";
+      description = "A self contained toolkit for creating, editing, and previewing TPSE files";
       homepage = "https://gitlab.com/UniQMG/tpsecore";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [ huantian wackbyte ];

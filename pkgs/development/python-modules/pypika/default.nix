@@ -25,7 +25,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python SQL query builder";
+    description = "A python SQL query builder";
     homepage = "https://github.com/kayak/pypika";
     license = licenses.asl20;
     maintainers = with maintainers; [ blaggacao ];

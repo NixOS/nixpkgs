@@ -21,7 +21,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Tool to detect silent data corruption";
+    description = "A tool to detect silent data corruption";
     mainProgram = "cshatag";
     homepage = "https://github.com/rfjakob/cshatag";
     license = licenses.mit;

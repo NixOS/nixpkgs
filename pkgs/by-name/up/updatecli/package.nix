@@ -56,7 +56,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Declarative Dependency Management tool";
+    description = "A Declarative Dependency Management tool";
     longDescription = ''
       Updatecli is a command-line tool used to define and apply update strategies.
     '';

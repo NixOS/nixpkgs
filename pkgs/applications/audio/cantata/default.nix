@@ -110,7 +110,7 @@ mkDerivation rec {
   cmakeFlags = lib.flatten (map (e: map (f: fstat e.enable f) e.names) options);
 
   meta = with lib; {
-    description = "Graphical client for MPD";
+    description = "A graphical client for MPD";
     mainProgram = "cantata";
     homepage = "https://github.com/cdrummond/cantata";
     license = licenses.gpl3Only;

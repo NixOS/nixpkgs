@@ -24,7 +24,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytest ];
 
   meta = {
-    description = "Python library for control flow programming";
+    description = "A Python library for control flow programming";
     homepage = "https://github.com/logpy/strategies";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ suhr ];

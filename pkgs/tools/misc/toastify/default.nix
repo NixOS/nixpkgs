@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Commandline tool that shows desktop notifications using notify-rust";
+    description = "A commandline tool that shows desktop notifications using notify-rust";
     homepage = "https://github.com/hoodie/toastify";
     changelog = "https://github.com/hoodie/toastify/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

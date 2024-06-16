@@ -18,7 +18,7 @@
 
   meta = with lib; {
     homepage = "http://www.chargueraud.org/softs/tlc/";
-    description = "Non-constructive library for Coq";
+    description = "A non-constructive library for Coq";
     license = licenses.free;
     maintainers = [ maintainers.vbgl ];
   };

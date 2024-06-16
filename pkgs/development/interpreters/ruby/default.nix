@@ -264,7 +264,7 @@ let
           ++ op useBaseRuby baseRuby;
 
         meta = with lib; {
-          description = "Object-oriented language for quick and easy programming";
+          description = "An object-oriented language for quick and easy programming";
           homepage    = "https://www.ruby-lang.org/";
           license     = licenses.ruby;
           maintainers = with maintainers; [ vrthra manveru ];

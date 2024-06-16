@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Chiptune tracker";
+    description = "A chiptune tracker";
     homepage = "https://kometbomb.github.io/klystrack";
     license = licenses.mit;
     maintainers = with maintainers; [ suhr ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ sqlite glib curl ];
 
   meta = with lib; {
-    description = "Music related metadata searchengine";
+    description = "A music related metadata searchengine";
     homepage = "https://github.com/sahib/glyr";
     license = licenses.lgpl3;
     maintainers = [ maintainers.sternenseemann ];

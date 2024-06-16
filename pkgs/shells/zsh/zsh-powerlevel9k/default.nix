@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Beautiful theme for zsh";
+    description = "A beautiful theme for zsh";
     longDescription = ''
       To make use of this derivation, use
       `programs.zsh.promptInit = "source ''${pkgs.zsh-powerlevel9k}/share/zsh-powerlevel9k/powerlevel9k.zsh-theme";`

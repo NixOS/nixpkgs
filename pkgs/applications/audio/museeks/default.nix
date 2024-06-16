@@ -27,7 +27,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "Simple, clean and cross-platform music player";
+    description = "A simple, clean and cross-platform music player";
     homepage = "https://github.com/martpie/museeks";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];

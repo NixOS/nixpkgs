@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-djvu/";
-    description = "Zathura DJVU plugin";
+    description = "A zathura DJVU plugin";
     longDescription = ''
       The zathura-djvu plugin adds DjVu support to zathura by using the
       djvulibre library.

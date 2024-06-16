@@ -26,7 +26,7 @@ ocamlPackages.buildDunePackage rec {
   ];
 
   meta = with lib; {
-    description = "Small script to submit to Gradescope via GitHub";
+    description = "A small script to submit to Gradescope via GitHub";
     homepage = "https://github.com/nmittu/gradescope-submit";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

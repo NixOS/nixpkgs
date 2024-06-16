@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Customized version of Source Code Pro";
+    description = "A customized version of Source Code Pro";
     longDescription = ''
       Office Code Pro is a customized version of Source Code Pro, the monospaced
       sans serif originally created by Paul D. Hunt for Adobe Systems

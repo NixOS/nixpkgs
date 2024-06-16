@@ -51,7 +51,7 @@ buildPythonApplication rec {
   doCheck = false; # no tests
 
   meta = with lib; {
-    description = "Smart, quick launcher";
+    description = "A smart, quick launcher";
     homepage    = "https://kupferlauncher.github.io/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ cobbal ];

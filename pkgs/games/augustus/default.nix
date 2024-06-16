@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL2 SDL2_mixer libpng ];
 
   meta = with lib; {
-    description = "Open source re-implementation of Caesar III. Fork of Julius incorporating gameplay changes";
+    description = "An open source re-implementation of Caesar III. Fork of Julius incorporating gameplay changes";
     mainProgram = "augustus";
     homepage = "https://github.com/Keriew/augustus";
     license = licenses.agpl3Only;

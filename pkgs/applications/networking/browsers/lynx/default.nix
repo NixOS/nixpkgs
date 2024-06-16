@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Text-mode web browser";
+    description = "A text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
     mainProgram = "lynx";
     maintainers = with maintainers; [ ];

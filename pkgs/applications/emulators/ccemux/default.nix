@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Modular ComputerCraft emulator";
+    description = "A modular ComputerCraft emulator";
     homepage = "https://github.com/CCEmuX/CCEmuX";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;

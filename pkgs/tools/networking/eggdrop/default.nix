@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     homepage = "https://www.eggheads.org";
-    description = "Internet Relay Chat (IRC) bot";
+    description = "An Internet Relay Chat (IRC) bot";
   };
 }

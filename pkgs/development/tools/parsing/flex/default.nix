@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/westes/flex";
-    description = "Fast lexical analyser generator";
+    description = "A fast lexical analyser generator";
     license = licenses.bsd2;
     platforms = platforms.unix;
   };

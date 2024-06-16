@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "PICO-8 platformer about climbing a mountain, made in four days${lib.optionalString practiceMod " (Practice Mod)"}";
+    description = "A PICO-8 platformer about climbing a mountain, made in four days${lib.optionalString practiceMod " (Practice Mod)"}";
     homepage = "https://celesteclassic.github.io/";
     license = licenses.unfree;
     platforms = platforms.linux;

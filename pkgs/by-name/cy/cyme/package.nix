@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/tuna-f1sh/cyme";
-    description = "Modern cross-platform lsusb";
+    description = "A modern cross-platform lsusb";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ h7x4 ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   # See the guide for more information: https://nixos.org/nixpkgs/manual/#chap-meta
   meta = with lib; {
-    description = "Recursive subclass of ChainMap";
+    description = "A recursive subclass of ChainMap";
     homepage = "https://github.com/neutrinoceros/deep-chainmap";
     license = licenses.mit;
     maintainers = with maintainers; [ rehno-lindeque ];

@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/enkore/i3pystatus";
-    description = "Complete replacement for i3status";
+    description = "A complete replacement for i3status";
     longDescription = ''
       i3pystatus is a growing collection of python scripts for status output compatible
       to i3status / i3bar of the i3 window manager.

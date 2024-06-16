@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
                    lib.optionals onlyQOS [ "--disable-firehol" ];
 
   meta = with lib; {
-    description = "Firewall for humans";
+    description = "A firewall for humans";
     longDescription = ''
       FireHOL, an iptables stateful packet filtering firewall for humans!
       FireQOS, a TC based bandwidth shaper for humans!

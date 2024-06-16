@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage    = "https://log4cpp.sourceforge.net/";
-    description = "Logging framework for C++ patterned after Apache log4j";
+    description = "A logging framework for C++ patterned after Apache log4j";
     mainProgram = "log4cpp-config";
     license     = licenses.lgpl21Plus;
     platforms   = platforms.unix;

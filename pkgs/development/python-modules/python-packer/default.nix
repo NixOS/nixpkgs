@@ -28,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Interface for packer.io";
+    description = "An interface for packer.io";
     homepage = "https://github.com/nir0s/python-packer";
     license = licenses.asl20;
     maintainers = with maintainers; [ psyanticy ];

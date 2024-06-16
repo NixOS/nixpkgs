@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://fvwm.org";
-    description = "Multiple large virtual desktop window manager";
+    description = "A multiple large virtual desktop window manager";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ edanaher ];

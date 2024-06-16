@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "SVG Optimizer / Cleaner ";
+    description = "An SVG Optimizer / Cleaner ";
     mainProgram = "scour";
     homepage = "https://github.com/scour-project/scour";
     license = licenses.asl20;

@@ -25,7 +25,7 @@ appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
-    description = "Visual IDE for React";
+    description = "A visual IDE for React";
     homepage = "https://www.codux.com";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];

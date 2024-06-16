@@ -20,7 +20,7 @@ buildDunePackage rec {
   ];
 
   meta = {
-    description = "Simple event library";
+    description = "A simple event library";
     homepage = "https://github.com/gares/sel/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ]);
 
   meta = {
-    description = "Open source full text search server";
+    description = "An open source full text search server";
     homepage    = "http://sphinxsearch.com";
     license     = lib.licenses.gpl2Plus;
     platforms   = lib.platforms.all;

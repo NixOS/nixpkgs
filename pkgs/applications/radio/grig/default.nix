@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ hamlib_4 gtk2 ];
 
   meta = with lib; {
-    description = "Simple Ham Radio control (CAT) program based on Hamlib";
+    description = "A simple Ham Radio control (CAT) program based on Hamlib";
     mainProgram = "grig";
     longDescription = ''
       Grig is a graphical user interface for the Ham Radio Control Libraries.

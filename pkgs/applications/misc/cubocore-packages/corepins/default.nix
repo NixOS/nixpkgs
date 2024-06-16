@@ -23,7 +23,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Bookmarking app from the C Suite";
+    description = "A bookmarking app from the C Suite";
     mainProgram = "corepins";
     homepage = "https://gitlab.com/cubocore/coreapps/corepins";
     license = licenses.gpl3Plus;

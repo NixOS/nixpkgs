@@ -14,7 +14,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Stealth coffee-break roguelike game";
+    description = "A stealth coffee-break roguelike game";
     mainProgram = "harmonist";
     longDescription = ''
       Harmonist is a stealth coffee-break roguelike game. The game has a heavy

@@ -30,7 +30,7 @@ mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [ libselinux libsepol util-linux ];
 
   meta = with lib; {
-    description = "Qt wrapper around PolKit";
+    description = "A Qt wrapper around PolKit";
     maintainers = with maintainers; [ ttuegel ];
     platforms = platforms.linux;
   };

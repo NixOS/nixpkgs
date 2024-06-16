@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Tool used to develop Polylith based architectures in Clojure";
+    description = "A tool used to develop Polylith based architectures in Clojure";
     mainProgram = "poly";
     homepage = "https://github.com/polyfy/polylith";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Package for Analyzing Lattice Polytopes";
+    description = "A Package for Analyzing Lattice Polytopes";
     longDescription = ''
       A Package for Analyzing Lattice Polytopes (PALP) is a set of C
       programs for calculations with lattice polytopes and applications to

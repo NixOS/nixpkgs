@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Small INI library for Python";
+    description = "A small INI library for Python";
     homepage = "https://github.com/mitsuhiko/python-inifile";
     license = licenses.bsd0;
     maintainers = with maintainers; [ ];

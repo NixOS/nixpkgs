@@ -23,7 +23,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "File finder utility from the C Suite";
+    description = "A file finder utility from the C Suite";
     mainProgram = "corehunt";
     homepage = "https://gitlab.com/cubocore/coreapps/corehunt";
     license = licenses.gpl3Only;

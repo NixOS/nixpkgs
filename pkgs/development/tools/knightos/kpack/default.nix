@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage    = "https://knightos.org/";
-    description = "Tool to create or extract KnightOS packages";
+    description = "A tool to create or extract KnightOS packages";
     mainProgram = "kpack";
     license     = licenses.lgpl2Only;
     maintainers = with maintainers; [ siraben ];

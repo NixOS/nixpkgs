@@ -14,6 +14,6 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = pbrt.meta // {
-    description = "Protobuf Compiler for OCaml";
+    description = "A Protobuf Compiler for OCaml";
   };
 }

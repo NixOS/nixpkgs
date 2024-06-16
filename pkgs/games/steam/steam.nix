@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Digital distribution platform";
+    description = "A digital distribution platform";
     longDescription = ''
       Steam is a video game digital distribution service and storefront from Valve.
 

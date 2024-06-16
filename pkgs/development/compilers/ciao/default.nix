@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ciao-lang.org/";
-    description = "General purpose, multi-paradigm programming language in the Prolog family";
+    description = "A general purpose, multi-paradigm programming language in the Prolog family";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ suhr ];
     platforms = platforms.unix;

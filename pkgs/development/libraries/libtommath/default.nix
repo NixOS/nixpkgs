@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.libtom.net/LibTomMath/";
-    description = "Library for integer-based number-theoretic applications";
+    description = "A library for integer-based number-theoretic applications";
     license = with licenses; [ publicDomain wtfpl ];
     platforms = platforms.unix;
   };

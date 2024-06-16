@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = with lib; {
-    description = "High performance templating engine";
+    description = "A high performance templating engine";
     homepage = "https://ctpp.havoc.ru/";
     maintainers = [ maintainers.robbinch ];
     platforms = platforms.linux;

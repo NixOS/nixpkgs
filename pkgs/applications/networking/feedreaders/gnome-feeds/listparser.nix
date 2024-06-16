@@ -22,7 +22,7 @@ python3.pkgs.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Parser for subscription lists";
+    description = "A parser for subscription lists";
     homepage = "https://github.com/kurtmckee/listparser";
     license = licenses.lgpl3Plus;
     maintainers = [

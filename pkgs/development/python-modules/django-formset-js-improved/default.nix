@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false; # no tests
 
   meta = with lib; {
-    description = "Wrapper for a JavaScript formset helper";
+    description = "A wrapper for a JavaScript formset helper";
     homepage = "https://github.com/pretix/django-formset-js";
     license = licenses.bsd2;
     maintainers = with maintainers; [ hexa ];

@@ -44,7 +44,7 @@ buildPythonPackage {
   passthru.updateScript = unstableGitUpdater {};
 
   meta = with lib; {
-    description = "NixOps plugin supporting Hetzner Cloud deployments";
+    description = "A NixOps plugin supporting Hetzner Cloud deployments";
     homepage = "https://github.com/lukebfox/nixops-hetznercloud";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ lukebfox ];

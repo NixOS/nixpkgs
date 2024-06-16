@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://lxgw.github.io/";
-    description = "Open-source Chinese font derived from Fontworks' Klee One";
+    description = "An open-source Chinese font derived from Fontworks' Klee One";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ elliot ];

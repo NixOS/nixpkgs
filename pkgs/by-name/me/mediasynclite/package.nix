@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Linux-native graphical uploader for iBroadcast";
+    description = "A Linux-native graphical uploader for iBroadcast";
     downloadPage = "https://github.com/tobz619/MediaSyncLiteLinuxNix";
     homepage = "https://github.com/iBroadcastMediaServices/MediaSyncLiteLinux";
     license = licenses.gpl3Only;

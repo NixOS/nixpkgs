@@ -40,7 +40,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/grc.html";
-    description = "Generic text colouriser";
+    description = "A generic text colouriser";
     longDescription = ''
       Generic Colouriser is yet another colouriser (written in Python) for
       beautifying your logfiles or output of commands.

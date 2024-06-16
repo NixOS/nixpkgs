@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://dune.build/";
-    description = "Composable build system";
+    description = "A composable build system";
     mainProgram = "dune";
     changelog = "https://github.com/ocaml/dune/raw/${version}/CHANGES.md";
     maintainers = [ lib.maintainers.vbgl ];

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Static analysis tool to find bugs in Java programs automatically";
+    description = "A static analysis tool to find bugs in Java programs automatically";
     homepage = "https://findbugs.sourceforge.net/";
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;

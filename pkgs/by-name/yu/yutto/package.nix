@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "Bilibili downloader";
+    description = "A Bilibili downloader";
     homepage = "https://github.com/yutto-dev/yutto";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ linsui ];

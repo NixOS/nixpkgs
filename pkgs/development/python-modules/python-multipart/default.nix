@@ -50,7 +50,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Streaming multipart parser for Python";
+    description = "A streaming multipart parser for Python";
     homepage = "https://github.com/andrew-d/python-multipart";
     license = licenses.asl20;
     maintainers = with maintainers; [ ris ];

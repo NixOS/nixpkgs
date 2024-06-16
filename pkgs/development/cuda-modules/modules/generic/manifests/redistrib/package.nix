@@ -3,7 +3,7 @@ let
   inherit (lib) options types;
 in
 options.mkOption {
-  description = "Package in the manifest";
+  description = "A package in the manifest";
   example = (import ./release.nix { inherit lib; }).linux-x86_64;
   type = types.submodule {
     options = {

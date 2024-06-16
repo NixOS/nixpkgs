@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/bbidulock/xdg-launch";
-    description = "Command line XDG compliant launcher and tools";
+    description = "A command line XDG compliant launcher and tools";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.ck3d ];

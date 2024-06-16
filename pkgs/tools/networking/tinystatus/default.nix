@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Static HTML status page generator written in pure shell";
+    description = "A static HTML status page generator written in pure shell";
     mainProgram = "tinystatus";
     homepage = "https://github.com/bderenzo/tinystatus";
     license = licenses.mit;

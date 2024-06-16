@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Relaxing mix of Vi and ACME";
+    description = "A relaxing mix of Vi and ACME";
     homepage = "https://c9x.me/edit";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ AndersonTorres vrthra ];

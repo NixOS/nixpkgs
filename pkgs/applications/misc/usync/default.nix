@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/ebzzry/usync";
-    description = "Simple site-to-site synchronization tool";
+    description = "A simple site-to-site synchronization tool";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;

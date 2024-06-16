@@ -13,7 +13,7 @@ runCommand name {
   };
 
   meta = with lib; {
-    description = "Convenient wrapper for the systemctl commands, borrow from Ubuntu";
+    description = "A convenient wrapper for the systemctl commands, borrow from Ubuntu";
     mainProgram = "service";
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;

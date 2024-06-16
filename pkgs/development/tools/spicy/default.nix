@@ -16,7 +16,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Nintendo 64 segment assembler";
+    description = "A Nintendo 64 segment assembler";
     longDescription = ''
       An open-source version of the Nintendo64 sdk's mild.exe. Assembles
       segments into an n64-compatible rom.

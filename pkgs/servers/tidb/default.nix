@@ -21,7 +21,7 @@ buildGoModule rec {
   subPackages = [ "cmd/tidb-server" ];
 
   meta = with lib; {
-    description = "Open-source, cloud-native, distributed, MySQL-Compatible database for elastic scale and real-time analytics";
+    description = "An open-source, cloud-native, distributed, MySQL-Compatible database for elastic scale and real-time analytics";
     homepage = "https://pingcap.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ Makuru ];

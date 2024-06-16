@@ -32,7 +32,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    description = "Simple protocol dispatcher";
+    description = "A simple protocol dispatcher";
     license = licenses.isc;
     homepage = "https://github.com/mirage/ocaml-git";
     maintainers = [ maintainers.sternenseemann ];

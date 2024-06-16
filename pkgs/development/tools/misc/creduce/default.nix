@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "C program reducer";
+    description = "A C program reducer";
     mainProgram = "creduce";
     homepage = "https://embed.cs.utah.edu/creduce";
     # Officially, the license is: https://github.com/csmith-project/creduce/blob/master/COPYING

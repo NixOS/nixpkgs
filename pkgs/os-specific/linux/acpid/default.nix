@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/acpid2/";
-    description = "Daemon for delivering ACPI events to userspace programs";
+    description = "A daemon for delivering ACPI events to userspace programs";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

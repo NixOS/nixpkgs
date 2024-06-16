@@ -27,7 +27,7 @@ buildEnv {
   paths = [ script ];
 
   meta = with lib; {
-    description = "Multi-platform, open source, java-based legends viewer for dwarf fortress";
+    description = "A multi-platform, open source, java-based legends viewer for dwarf fortress";
     maintainers = with maintainers; [ Baughn ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;

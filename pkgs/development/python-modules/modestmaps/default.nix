@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pillow ];
 
   meta = with lib; {
-    description = "Library for building interactive maps";
+    description = "A library for building interactive maps";
     homepage = "http://modestmaps.com";
     license = licenses.bsd3;
   };

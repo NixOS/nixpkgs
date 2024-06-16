@@ -21,7 +21,7 @@ python.pkgs.buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Module for monitoring memory usage of a process";
+    description = "A module for monitoring memory usage of a process";
     mainProgram = "mprof";
     longDescription = ''
       This is a python module for monitoring memory consumption of a process as

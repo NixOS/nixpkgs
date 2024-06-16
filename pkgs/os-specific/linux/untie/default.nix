@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "Tool to run processes untied from some of the namespaces";
+    description = "A tool to run processes untied from some of the namespaces";
     mainProgram = "untie";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

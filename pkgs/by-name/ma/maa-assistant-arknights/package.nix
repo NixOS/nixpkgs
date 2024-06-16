@@ -79,7 +79,7 @@ in
   '';
 
   meta = with lib; {
-    description = "Arknights assistant";
+    description = "An Arknights assistant";
     homepage = "https://github.com/MaaAssistantArknights/MaaAssistantArknights";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ Cryolitia ];

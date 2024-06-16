@@ -19,7 +19,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [ mathcomp.ssreflect ];
 
   meta = {
-    description = "Small library to do epsilon - N reasonning";
+    description = "A small library to do epsilon - N reasonning";
     license = lib.licenses.cecill-b;
   };
 }

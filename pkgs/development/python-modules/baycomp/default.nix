@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "baycomp" ];
 
   meta = {
-    description = "Library for Bayesian comparison of classifiers";
+    description = "A library for Bayesian comparison of classifiers";
     homepage = "https://github.com/janezd/baycomp";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.lucasew ];

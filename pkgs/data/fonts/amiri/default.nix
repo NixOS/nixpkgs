@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Classical Arabic typeface in Naskh style";
+    description = "A classical Arabic typeface in Naskh style";
     homepage = "https://www.amirifont.org/";
     license = licenses.ofl;
     maintainers = [ maintainers.vbgl ];

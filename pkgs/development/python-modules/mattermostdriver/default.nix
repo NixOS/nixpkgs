@@ -30,7 +30,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Python Mattermost Driver";
+    description = "A Python Mattermost Driver";
     homepage = "https://github.com/Vaelor/python-mattermost-driver";
     license = licenses.mit;
     maintainers = with maintainers; [ globin ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   preConfigure = "sh bootstrap.sh";
 
   meta = with lib; {
-    description = "Rule-based tokenizer for natural language";
+    description = "A rule-based tokenizer for natural language";
     homepage    = "https://languagemachines.github.io/ucto/";
     license     = licenses.gpl3;
     platforms   = platforms.all;

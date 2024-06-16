@@ -15,6 +15,6 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = seclists.meta // {
-    description = "Famous wordlist often used for brute force attacks";
+    description = "A famous wordlist often used for brute force attacks";
   };
 }

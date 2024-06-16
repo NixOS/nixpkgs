@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "Simple HTTP benchmarking tool";
+    description = "A simple HTTP benchmarking tool";
     homepage = "http://www.hping.org/wbox/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;

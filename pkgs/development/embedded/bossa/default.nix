@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
+    description = "A flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
     longDescription = ''
       BOSSA is a flash programming utility for Atmel's SAM family of
       flash-based ARM microcontrollers. The motivation behind BOSSA is

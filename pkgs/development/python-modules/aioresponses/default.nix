@@ -49,7 +49,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Helper to mock/fake web requests in python aiohttp package";
+    description = "A helper to mock/fake web requests in python aiohttp package";
     homepage = "https://github.com/pnuckowski/aioresponses";
     license = lib.licenses.mit;
   };

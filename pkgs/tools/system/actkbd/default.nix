@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Keyboard shortcut daemon";
+    description = "A keyboard shortcut daemon";
     longDescription = ''
       actkbd is a simple daemon that binds actions to keyboard events
       directly on evdev interface (that is, no X11 required). It

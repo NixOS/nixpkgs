@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ];
 
   meta = with lib; {
-    description = "Plugin SDK for virtual instruments";
+    description = "A plugin SDK for virtual instruments";
     maintainers = with maintainers;
     [
       raskin

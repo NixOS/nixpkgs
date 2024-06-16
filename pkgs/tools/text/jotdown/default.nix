@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-bkMJ7ApM+GsshwIFuYsH19CnU6ebq0GfwQvVp9QD46A=";
 
   meta = with lib; {
-    description = "Minimal Djot CLI";
+    description = "A minimal Djot CLI";
     mainProgram = "jotdown";
     homepage = "https://github.com/hellux/jotdown";
     changelog = "https://github.com/hellux/jotdown/blob/${src.rev}/CHANGELOG.md";

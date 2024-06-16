@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   meta = with lib; {
-    description = "C++ header-only HTTP/HTTPS server and client library";
+    description = "A C++ header-only HTTP/HTTPS server and client library";
     homepage = "https://github.com/yhirose/cpp-httplib";
     changelog = "https://github.com/yhirose/cpp-httplib/releases/tag/v${version}";
     maintainers = with maintainers; [ aidalgol ];

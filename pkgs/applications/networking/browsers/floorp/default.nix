@@ -41,7 +41,7 @@
   updateScript = ./update.sh;
 
   meta = {
-    description = "Fork of Firefox, focused on keeping the Open, Private and Sustainable Web alive, built in Japan";
+    description = "A fork of Firefox, focused on keeping the Open, Private and Sustainable Web alive, built in Japan";
     homepage = "https://floorp.app/";
     maintainers = with lib.maintainers; [ christoph-heiss ];
     platforms = lib.platforms.unix;

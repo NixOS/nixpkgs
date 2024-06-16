@@ -50,7 +50,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Little library for sweet and creamy print debugging";
+    description = "A little library for sweet and creamy print debugging";
     homepage = "https://github.com/gruns/icecream";
     license = licenses.mit;
     maintainers = with maintainers; [ renatoGarcia ];

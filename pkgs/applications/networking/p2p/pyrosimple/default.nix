@@ -60,7 +60,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "RTorrent client";
+    description = "A rTorrent client";
     homepage = "https://kannibalox.github.io/pyrosimple/";
     changelog = "https://github.com/kannibalox/pyrosimple/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;

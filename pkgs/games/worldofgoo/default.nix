@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Physics based puzzle game";
+    description = "A physics based puzzle game";
     longDescription = ''
       World of Goo is a physics based puzzle / construction game. The millions of Goo
       Balls who live in the beautiful World of Goo don't know that they are in a

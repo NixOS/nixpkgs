@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Database of graphs";
+    description = "A database of graphs";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = teams.sage.members;

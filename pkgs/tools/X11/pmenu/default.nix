@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Pie-menu tool";
+    description = "A pie-menu tool";
     homepage = "https://github.com/phillbush/pmenu";
     license = lib.licenses.mit;
     longDescription = ''

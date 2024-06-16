@@ -90,7 +90,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "Unladen web framework for building APIs and app backends";
+    description = "An unladen web framework for building APIs and app backends";
     homepage = "https://falconframework.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ desiderius ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    description = "GTK front-end for command line archiving tools";
+    description = "A GTK front-end for command line archiving tools";
     maintainers = [ lib.maintainers.domenkozar ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;

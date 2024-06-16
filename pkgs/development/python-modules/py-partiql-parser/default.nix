@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "py_partiql_parser" ];
 
   meta = with lib; {
-    description = "Tokenizer/parser/executor for the PartiQL-language";
+    description = "A tokenizer/parser/executor for the PartiQL-language";
     homepage = "https://github.com/getmoto/py-partiql-parser";
     changelog = "https://github.com/getmoto/py-partiql-parser/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

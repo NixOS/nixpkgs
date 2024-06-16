@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     '';
 
   meta = {
-    description = "JSON5 formatter";
+    description = "A JSON5 formatter";
     homepage = "https://github.com/google/json5format";
     license = lib.licenses.bsd3;
     mainProgram = "formatjson5";

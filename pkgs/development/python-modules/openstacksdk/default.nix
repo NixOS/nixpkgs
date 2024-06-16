@@ -55,7 +55,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "openstack" ];
 
   meta = with lib; {
-    description = "SDK for building applications to work with OpenStack";
+    description = "An SDK for building applications to work with OpenStack";
     mainProgram = "openstack-inventory";
     homepage = "https://github.com/openstack/openstacksdk";
     license = licenses.asl20;

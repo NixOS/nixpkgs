@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   RUSTC_BOOTSTRAP = true;
 
   meta = with lib; {
-    description = "Functional programming language and proof assistant";
+    description = "A functional programming language and proof assistant";
     mainProgram = "kind2";
     homepage = "https://github.com/higherorderco/kind";
     license = licenses.mit;

@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/hyprwm/hyprwayland-scanner";
-    description = "Hyprland version of wayland-scanner in and for C++";
+    description = "A Hyprland version of wayland-scanner in and for C++";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fufexan ];
     mainProgram = "hyprwayland-scanner";

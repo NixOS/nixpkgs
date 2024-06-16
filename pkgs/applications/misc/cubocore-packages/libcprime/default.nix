@@ -35,7 +35,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Library for bookmarking, saving recent activites, managing settings of C-Suite";
+    description = "A library for bookmarking, saving recent activites, managing settings of C-Suite";
     homepage = "https://gitlab.com/cubocore/coreapps/libcprime";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dan4ik605743 ];

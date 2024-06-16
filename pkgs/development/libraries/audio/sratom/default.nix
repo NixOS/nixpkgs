@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://drobilla.net/software/sratom";
-    description = "Library for serialising LV2 atoms to/from RDF";
+    description = "A library for serialising LV2 atoms to/from RDF";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.unix;

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://logging.apache.org/log4cxx/index.html";
-    description = "Logging framework for C++ patterned after Apache log4j";
+    description = "A logging framework for C++ patterned after Apache log4j";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };

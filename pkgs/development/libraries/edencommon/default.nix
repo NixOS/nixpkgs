@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Shared library for Meta's source control filesystem tools (EdenFS and Watchman)";
+    description = "A shared library for Meta's source control filesystem tools (EdenFS and Watchman)";
     homepage = "https://github.com/facebookexperimental/edencommon";
     license = licenses.mit;
     platforms = platforms.unix;

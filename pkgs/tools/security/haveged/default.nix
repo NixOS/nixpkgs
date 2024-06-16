@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "Simple entropy daemon";
+    description = "A simple entropy daemon";
     mainProgram = "haveged";
     longDescription = ''
       The haveged project is an attempt to provide an easy-to-use, unpredictable

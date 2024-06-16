@@ -58,7 +58,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Low-level interface to a growing number of Amazon Web Services";
+    description = "A low-level interface to a growing number of Amazon Web Services";
     homepage = "https://github.com/boto/botocore";
     changelog = "https://github.com/boto/botocore/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;

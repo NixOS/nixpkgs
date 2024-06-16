@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/LedgerHQ/ledgerctl";
-    description = "Library to control Ledger devices";
+    description = "A library to control Ledger devices";
     mainProgram = "ledgerctl";
     license = licenses.mit;
     maintainers = with maintainers; [

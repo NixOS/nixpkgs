@@ -18,7 +18,7 @@ build-idris-package  {
   };
 
   meta = {
-    description = "Simple TAP producer and consumer/reporter for Idris";
+    description = "A simple TAP producer and consumer/reporter for Idris";
     homepage = "https://github.com/ostera/tap-idris";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];

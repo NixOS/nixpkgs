@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://chessdb.sourceforge.net/";
-    description = "Free chess database";
+    description = "A free chess database";
     platforms = lib.platforms.linux;
   };
 }

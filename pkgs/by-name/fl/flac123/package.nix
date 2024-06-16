@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/flac123/flac123";
-    description = "Command-line program for playing FLAC audio files";
+    description = "A command-line program for playing FLAC audio files";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ kiike ];
     mainProgram = "flac123";

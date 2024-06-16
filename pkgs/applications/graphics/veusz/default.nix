@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Scientific plotting and graphing program with a GUI";
+    description = "A scientific plotting and graphing program with a GUI";
     mainProgram = "veusz";
     homepage = "https://veusz.github.io/";
     license = licenses.gpl2Plus;

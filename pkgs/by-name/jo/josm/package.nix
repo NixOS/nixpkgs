@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "Extensible editor for OpenStreetMap";
+    description = "An extensible editor for OpenStreetMap";
     homepage = "https://josm.openstreetmap.de/";
     changelog = "https://josm.openstreetmap.de/wiki/Changelog";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   CFLAGS = "-std=c99";
 
   meta = with lib; {
-    description = "Console front-end for Pandora.com";
+    description = "A console front-end for Pandora.com";
     homepage = "https://6xq.net/pianobar/";
     platforms = platforms.unix;
     license = licenses.mit; # expat version

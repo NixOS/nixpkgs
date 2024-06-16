@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/qwerasd205/PixelCode";
-    description = "Pixel font designed to actually be good for programming";
+    description = "A pixel font designed to actually be good for programming";
     license = licenses.ofl;
     maintainers = with maintainers; [ mattpolzin ];
   };

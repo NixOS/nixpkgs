@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "X-cursor theme inspired by macOS and based on KDE Breeze";
+    description = "An x-cursor theme inspired by macOS and based on KDE Breeze";
     homepage = "https://github.com/keeferrourke/capitaine-cursors";
     license = licenses.lgpl3;
     platforms = platforms.linux;

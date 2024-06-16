@@ -55,7 +55,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Small helper library that adds some YAML capabilities to pydantic";
+    description = "A small helper library that adds some YAML capabilities to pydantic";
     homepage = "https://github.com/NowanIlfideme/pydantic-yaml";
     changelog = "https://github.com/NowanIlfideme/pydantic-yaml/releases/tag/v${version}";
     license = lib.licenses.mit;

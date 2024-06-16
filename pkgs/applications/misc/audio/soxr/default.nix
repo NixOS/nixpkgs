@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "Audio resampling library";
+    description = "An audio resampling library";
     homepage = "https://soxr.sourceforge.net";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix ++ platforms.windows;

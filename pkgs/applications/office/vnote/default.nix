@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://vnotex.github.io/vnote";
-    description = "Pleasant note-taking platform";
+    description = "A pleasant note-taking platform";
     mainProgram = "vnote";
     changelog = "https://github.com/vnotex/vnote/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.lgpl3Plus;

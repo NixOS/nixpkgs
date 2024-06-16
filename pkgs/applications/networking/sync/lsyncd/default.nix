@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/axkibe/lsyncd";
-    description = "Utility that synchronizes local directories with remote targets";
+    description = "A utility that synchronizes local directories with remote targets";
     mainProgram = "lsyncd";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

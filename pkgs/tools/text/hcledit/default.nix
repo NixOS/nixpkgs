@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-huDM8kPA6vQcoJTxiWzVFZKHrTKw1ip32hMZJYZM0og=";
 
   meta = with lib; {
-    description = "Command line editor for HCL";
+    description = "A command line editor for HCL";
     mainProgram = "hcledit";
     homepage = "https://github.com/minamijoyo/hcledit";
     license = licenses.mit;

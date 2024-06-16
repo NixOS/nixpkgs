@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Resource Compiler in a Single CMake Script";
+    description = "A Resource Compiler in a Single CMake Script";
     homepage = "https://github.com/vector-of-bool/cmrc";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ guekka ];

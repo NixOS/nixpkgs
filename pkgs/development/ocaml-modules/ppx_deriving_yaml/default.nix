@@ -20,7 +20,7 @@ buildDunePackage rec {
   nativeCheckInputs = [ mdx.bin ];
 
   meta = {
-    description = "YAML codec generator for OCaml";
+    description = "A YAML codec generator for OCaml";
     homepage = "https://github.com/patricoferris/ppx_deriving_yaml";
     license = lib.licenses.isc;
     maintainers = [ ];

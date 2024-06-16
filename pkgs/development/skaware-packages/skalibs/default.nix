@@ -9,7 +9,7 @@ skawarePackages.buildPackage {
   version = "2.14.2.0";
   sha256 = "sha256-3f7Fcw5bLxnQOB7Pf3lrOabkcyNr2grY03dqP+ewfkM=";
 
-  description = "Set of general-purpose C programming libraries";
+  description = "A set of general-purpose C programming libraries";
 
   outputs = [ "lib" "dev" "doc" "out" ];
 

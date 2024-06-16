@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Random Number Generator test suite";
+    description = "A Random Number Generator test suite";
     mainProgram = "dieharder";
     homepage = "https://webhome.phy.duke.edu/~rgb/General/dieharder.php";
     license = licenses.gpl2Plus;

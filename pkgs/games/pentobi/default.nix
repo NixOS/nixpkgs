@@ -29,7 +29,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Computer opponent for the board game Blokus";
+    description = "A computer opponent for the board game Blokus";
     homepage = "https://pentobi.sourceforge.io";
     license = licenses.gpl3Plus;
     maintainers = [ ];

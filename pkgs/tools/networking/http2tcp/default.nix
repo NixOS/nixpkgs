@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     maintainers = with maintainers; [ clkamp ];
-    description = "Tool for tunneling TCP connections via HTTP GET requests";
+    description = "A tool for tunneling TCP connections via HTTP GET requests";
     longDescription = ''
       The http2tcp tools allow to tunnel tcp connections (presumably
       ssh) via syntactically correct http requests. It is designed to

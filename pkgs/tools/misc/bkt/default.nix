@@ -16,7 +16,7 @@
   cargoHash = "sha256-Pl+a+ZpxaguRloH8R7x4FmYpTwTUwFrYy7AS/5K3L+8=";
 
   meta = {
-    description = "Subprocess caching utility";
+    description = "A subprocess caching utility";
     homepage = "https://github.com/dimo414/bkt";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mangoiv ];

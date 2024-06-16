@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Python library for parsing and creating TOML";
+    description = "a Python library for parsing and creating TOML";
     homepage = "https://github.com/uiri/toml";
     license = licenses.mit;
     maintainers = with maintainers; [ twey ];

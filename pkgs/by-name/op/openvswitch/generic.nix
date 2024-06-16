@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";
-    description = "Multilayer virtual switch";
+    description = "A multilayer virtual switch";
     longDescription = ''
       Open vSwitch is a production quality, multilayer virtual switch
       licensed under the open source Apache 2.0 license. It is

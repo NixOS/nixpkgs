@@ -60,7 +60,7 @@ buildPerlPackage rec {
   doInstallCheck = true;
 
   meta = with lib; {
-    description = "Perl module for stripping bits of non-deterministic information";
+    description = "A Perl module for stripping bits of non-deterministic information";
     mainProgram = "strip-nondeterminism";
     homepage = "https://reproducible-builds.org/";
     license = licenses.gpl3Only;

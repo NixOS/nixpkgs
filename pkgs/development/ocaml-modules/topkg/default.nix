@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://erratique.ch/software/topkg";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
-    description = "Packager for distributing OCaml software";
+    description = "A packager for distributing OCaml software";
     inherit (ocaml.meta) platforms;
   };
 }

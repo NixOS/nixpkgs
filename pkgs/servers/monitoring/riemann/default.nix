@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://riemann.io/";
-    description = "Network monitoring system";
+    description = "A network monitoring system";
     mainProgram = "riemann";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;

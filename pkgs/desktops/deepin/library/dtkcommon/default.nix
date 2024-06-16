@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "Public project for building DTK Library";
+    description = "A public project for building DTK Library";
     homepage = "https://github.com/linuxdeepin/dtkcommon";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

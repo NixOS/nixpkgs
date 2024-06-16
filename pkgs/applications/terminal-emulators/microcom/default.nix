@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline ];
 
   meta = with lib; {
-    description = "Minimalistic terminal program for communicating
+    description = "A minimalistic terminal program for communicating
     with devices over a serial connection";
     inherit (src.meta) homepage;
     license = licenses.gpl2;

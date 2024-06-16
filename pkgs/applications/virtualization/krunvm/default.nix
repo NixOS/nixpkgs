@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "CLI-based utility for creating microVMs from OCI images";
+    description = "A CLI-based utility for creating microVMs from OCI images";
     homepage = "https://github.com/containers/krunvm";
     license = licenses.asl20;
     maintainers = with maintainers; [ nickcao ];

@@ -120,7 +120,7 @@ let
       runHook postCheck
     '';
     meta = {
-      description = "Domain-specific language for finite element variational forms";
+      description = "A domain-specific language for finite element variational forms";
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;
@@ -155,7 +155,7 @@ let
       runHook postCheck
     '';
     meta = {
-      description = "Compiler for finite element variational forms";
+      description = "A compiler for finite element variational forms";
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;

@@ -35,7 +35,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ptpython" ];
 
   meta = with lib; {
-    description = "Advanced Python REPL";
+    description = "An advanced Python REPL";
     homepage = "https://github.com/prompt-toolkit/ptpython";
     changelog = "https://github.com/prompt-toolkit/ptpython/blob/${version}/CHANGELOG";
     license = licenses.bsd3;

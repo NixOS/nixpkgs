@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "Formatter for reStructuredText";
+    description = "A formatter for reStructuredText";
     homepage = "https://github.com/dzhu/rstfmt";
     changelog = "https://github.com/dzhu/rstfmt/releases/tag/v${version}";
     license = licenses.mit;

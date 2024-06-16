@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Simple formatter designed for elementary OS";
+    description = "A simple formatter designed for elementary OS";
     homepage = "https://github.com/Djaler/Formatter";
     maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;

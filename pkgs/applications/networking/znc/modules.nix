@@ -154,7 +154,7 @@ in
     };
 
     meta = with lib; {
-      description = "Advanced playback module for ZNC";
+      description = "An advanced playback module for ZNC";
       homepage = "https://github.com/jpnurmi/znc-playback";
       license = licenses.asl20;
       maintainers = with maintainers; [ hrdinka ];

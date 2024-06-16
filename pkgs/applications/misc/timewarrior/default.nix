@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Command-line time tracker";
+    description = "A command-line time tracker";
     homepage = "https://timewarrior.net";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer mrVanDalo ];

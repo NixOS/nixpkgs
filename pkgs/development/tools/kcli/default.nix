@@ -16,7 +16,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   meta = with lib; {
-    description = "Kafka command line browser";
+    description = "A kafka command line browser";
     homepage = "https://github.com/cswank/kcli";
     license = licenses.mit;
     maintainers = with maintainers; [ cswank ];

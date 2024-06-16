@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Workbench for high-assurance and high-speed cryptography";
+    description = "A workbench for high-assurance and high-speed cryptography";
     homepage = "https://github.com/jasmin-lang/jasmin/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];

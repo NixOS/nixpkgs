@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Physics-based puzzle game";
+    description = "A physics-based puzzle game";
     mainProgram = "soi";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
-    description = "Gemini client";
+    description = "A Gemini client";
     homepage = "https://git.sr.ht/~sircmpwn/gmni";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ bsima jb55 ];

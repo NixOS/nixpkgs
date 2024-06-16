@@ -34,7 +34,7 @@ in mkDerivation rec {
   NIX_LDFLAGS = "-ltag";
 
   meta = with lib; {
-    description = "Powerful batch renamer for KDE";
+    description = "A powerful batch renamer for KDE";
     mainProgram = "krename";
     homepage = "https://kde.org/applications/utilities/krename/";
     license = licenses.gpl2;

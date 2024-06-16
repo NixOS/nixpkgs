@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Fast PBKDF2-HMAC-{SHA1,SHA256,SHA512} implementation in C";
+    description = "A fast PBKDF2-HMAC-{SHA1,SHA256,SHA512} implementation in C";
     homepage = "https://github.com/ctz/fastpbkdf2";
     license = licenses.cc0;
     maintainers = with maintainers; [ ledif ];

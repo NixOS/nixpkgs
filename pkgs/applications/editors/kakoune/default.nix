@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://kakoune.org/";
-    description = "Vim inspired text editor";
+    description = "A vim inspired text editor";
     license = licenses.publicDomain;
     mainProgram = "kak";
     maintainers = with maintainers; [ vrthra ];

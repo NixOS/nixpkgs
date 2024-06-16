@@ -27,7 +27,7 @@ buildNpmPackage rec {
   '';
 
   meta = with lib; {
-    description = "Node.js-based server to run Zotero translators";
+    description = "A Node.js-based server to run Zotero translators";
     homepage = "https://github.com/zotero/translation-server";
     license = licenses.agpl3Only;
     maintainers = [ ];

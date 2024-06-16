@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "supervise_api" ];
 
   meta = {
-    description = "API for running processes safely and securely";
+    description = "An API for running processes safely and securely";
     homepage = "https://github.com/catern/supervise";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

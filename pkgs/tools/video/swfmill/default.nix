@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${libxml2.dev}/include/libxml2";
 
   meta = {
-    description = "Xml2swf and swf2xml processor with import functionalities";
+    description = "An xml2swf and swf2xml processor with import functionalities";
     homepage = "http://swfmill.org";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;

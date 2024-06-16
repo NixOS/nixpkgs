@@ -35,7 +35,7 @@ buildGoModule rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "Prometheus exporter for Postfix";
+    description = "A Prometheus exporter for Postfix";
     mainProgram = "postfix_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ willibutz globin ];

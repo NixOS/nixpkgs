@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "Fast, customizable, and easy to use JavaScript and TypeScript linter";
+    description = "A fast, customizable, and easy to use JavaScript and TypeScript linter";
     homepage = "https://rslint.org";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

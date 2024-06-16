@@ -19,7 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://nsq.io/";
-    description = "Realtime distributed messaging platform";
+    description = "A realtime distributed messaging platform";
     changelog = "https://github.com/nsqio/nsq/raw/v${version}/ChangeLog.md";
     license = licenses.mit;
   };

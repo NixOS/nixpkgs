@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Simple, extensible literate-programming tool";
+    description = "A simple, extensible literate-programming tool";
     homepage = "https://www.cs.tufts.edu/~nr/noweb";
     license = licenses.bsd2;
     maintainers = with maintainers; [ yurrriq ];

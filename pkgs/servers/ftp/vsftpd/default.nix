@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Very secure FTP daemon";
+    description = "A very secure FTP daemon";
     mainProgram = "vsftpd";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];

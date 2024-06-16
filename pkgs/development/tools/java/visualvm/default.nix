@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Visual interface for viewing information about Java applications";
+    description = "A visual interface for viewing information about Java applications";
     mainProgram = "visualvm";
     longDescription = ''
       VisualVM is a visual tool integrating several commandline JDK

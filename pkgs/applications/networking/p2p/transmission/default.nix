@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Fast, easy and free BitTorrent client";
+    description = "A fast, easy and free BitTorrent client";
     mainProgram = if enableQt then "transmission-qt" else if enableGTK3 then "transmission-gtk" else "transmission-cli";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface

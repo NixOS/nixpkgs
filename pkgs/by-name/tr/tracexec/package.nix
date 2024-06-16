@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     changelog = "https://github.com/kxxt/tracexec/blob/v${version}/CHANGELOG.md";
-    description = "Small utility for tracing execve{,at} and pre-exec behavior";
+    description = "A small utility for tracing execve{,at} and pre-exec behavior";
     homepage = "https://github.com/kxxt/tracexec";
     license = lib.licenses.gpl2Plus;
     mainProgram = "tracexec";

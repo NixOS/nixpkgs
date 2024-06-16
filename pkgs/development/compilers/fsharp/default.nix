@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
-    description = "Functional CLI language";
+    description = "A functional CLI language";
     homepage = "https://fsharp.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thoughtpolice raskin ];

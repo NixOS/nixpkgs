@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   enableParallelInstalling = false;
 
   meta = with lib; {
-    description = "Clean fixed width font";
+    description = "A clean fixed width font";
     longDescription = ''
       Terminus Font is designed for long (8 and more hours per day) work
       with computers. Version 4.30 contains 850 characters, covers about

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "XMPP (Jabber) client library for instant messaging and presence";
+    description = "A XMPP (Jabber) client library for instant messaging and presence";
     homepage = "http://www.igniterealtime.org/projects/smack/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = lib.platforms.unix;

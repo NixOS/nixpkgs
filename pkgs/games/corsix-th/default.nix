@@ -68,7 +68,7 @@ stdenv.mkDerivation(finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Reimplementation of the 1997 Bullfrog business sim Theme Hospital";
+    description = "A reimplementation of the 1997 Bullfrog business sim Theme Hospital";
     mainProgram = "corsix-th";
     homepage = "https://corsixth.com/";
     license = licenses.mit;

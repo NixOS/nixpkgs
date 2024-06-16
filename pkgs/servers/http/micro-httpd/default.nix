@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage    = "http://acme.com/software/micro_httpd/";
-    description = "Really small HTTP server";
+    description = "A really small HTTP server";
     license     = licenses.bsd2;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ copumpkin ];

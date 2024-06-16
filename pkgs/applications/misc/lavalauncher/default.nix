@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://git.sr.ht/~leon_plickat/lavalauncher";
-    description = "Simple launcher panel for Wayland desktops";
+    description = "A simple launcher panel for Wayland desktops";
     longDescription = ''
       LavaLauncher is a simple launcher panel for Wayland desktops.
 

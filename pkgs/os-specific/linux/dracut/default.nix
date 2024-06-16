@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/dracutdevs/dracut/wiki";
-    description = "Event driven initramfs infrastructure";
+    description = "An event driven initramfs infrastructure";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lilyinstarlight ];
     platforms = platforms.linux;

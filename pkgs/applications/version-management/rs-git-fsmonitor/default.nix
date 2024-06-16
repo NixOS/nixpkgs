@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Fast git core.fsmonitor hook written in Rust";
+    description = "A fast git core.fsmonitor hook written in Rust";
     homepage = "https://github.com/jgavris/rs-git-fsmonitor";
     license = licenses.mit;
     maintainers = [ ];

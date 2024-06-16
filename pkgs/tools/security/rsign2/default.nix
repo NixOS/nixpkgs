@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-xqNFJFNV9mIVxzyQvhv5QwHVcXLuH76VYFAsgp5hW+w=";
 
   meta = with lib; {
-    description = "Command-line tool to sign files and verify signatures";
+    description = "A command-line tool to sign files and verify signatures";
     homepage = "https://github.com/jedisct1/rsign2";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

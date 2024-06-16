@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Time tracking app";
+    description = "A time tracking app";
     mainProgram = "gtimelog";
     longDescription = ''
       GTimeLog is a small time tracking application for GNOME.

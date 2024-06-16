@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/Anorov/cloudflare-scrape";
-    description = "Python module to bypass Cloudflare's anti-bot page";
+    description = "A Python module to bypass Cloudflare's anti-bot page";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];

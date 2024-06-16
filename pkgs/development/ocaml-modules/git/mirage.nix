@@ -91,6 +91,6 @@ buildDunePackage {
   ];
 
   meta = git.meta // {
-    description = "Package to use ocaml-git with MirageOS backend";
+    description = "A package to use ocaml-git with MirageOS backend";
   };
 }

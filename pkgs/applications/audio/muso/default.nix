@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "Automatic music sorter (based on ID3 tags)";
+    description = "An automatic music sorter (based on ID3 tags)";
     mainProgram = "muso";
     homepage = "https://github.com/quebin31/muso";
     license = with licenses; [ gpl3Plus ];

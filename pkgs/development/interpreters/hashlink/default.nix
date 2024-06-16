@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Virtual machine for Haxe";
+    description = "A virtual machine for Haxe";
     mainProgram = "hl";
     homepage = "https://hashlink.haxe.org/";
     license = licenses.mit;

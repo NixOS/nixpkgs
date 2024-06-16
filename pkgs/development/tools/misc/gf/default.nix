@@ -55,7 +55,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "GDB Frontend";
+    description = "A GDB Frontend";
     homepage = "https://github.com/nakst/gf";
     license = licenses.mit;
     platforms = platforms.linux;

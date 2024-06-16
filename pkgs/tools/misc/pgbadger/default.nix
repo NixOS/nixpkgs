@@ -64,7 +64,7 @@ buildPerlPackage rec {
 
   meta = {
     homepage = "https://github.com/darold/pgbadger";
-    description = "Fast PostgreSQL Log Analyzer";
+    description = "A fast PostgreSQL Log Analyzer";
     changelog = "https://github.com/darold/pgbadger/raw/v${version}/ChangeLog";
     license = lib.licenses.postgresql;
     maintainers = lib.teams.determinatesystems.members;

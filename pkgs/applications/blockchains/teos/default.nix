@@ -49,7 +49,7 @@ in
     __darwinAllowLocalNetworking = true;
 
     meta = meta // {
-      description = "Lightning watchtower compliant with BOLT13, written in Rust";
+      description = "A Lightning watchtower compliant with BOLT13, written in Rust";
     };
   };
 
@@ -78,7 +78,7 @@ in
     __darwinAllowLocalNetworking = true;
 
     meta = meta // {
-      description = "Lightning watchtower plugin for clightning";
+      description = "A Lightning watchtower plugin for clightning";
       mainProgram = "watchtower-client";
     };
   };

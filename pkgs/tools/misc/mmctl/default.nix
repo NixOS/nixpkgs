@@ -6,7 +6,7 @@ mattermost.overrideAttrs (o: {
   subPackages = [ "cmd/mmctl" ];
 
   meta = o.meta // {
-    description = "Remote CLI tool for Mattermost";
+    description = "A remote CLI tool for Mattermost";
     mainProgram = "mmctl";
   };
 })

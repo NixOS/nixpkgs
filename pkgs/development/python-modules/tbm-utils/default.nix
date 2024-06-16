@@ -80,7 +80,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tbm_utils" ];
 
   meta = with lib; {
-    description = "Commonly-used set of utilities";
+    description = "A commonly-used set of utilities";
     homepage = "https://github.com/thebigmunch/tbm-utils";
     changelog = "https://github.com/thebigmunch/tbm-utils/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

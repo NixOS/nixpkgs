@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Lightweight Wayland notification daemon";
+    description = "A lightweight Wayland notification daemon";
     homepage = "https://wayland.emersion.fr/mako/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dywedir synthetica ];

@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "overly" ];
 
   meta = {
-    description = "Overly configurable http server for client testing";
+    description = "An overly configurable http server for client testing";
     homepage = "https://github.com/theelous3/overly";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];

@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Ruby autoformatter";
+    description = "A Ruby autoformatter";
     homepage = "https://github.com/fables-tales/rubyfmt";
     license = licenses.mit;
     maintainers = with maintainers; [ bobvanderlinden ];

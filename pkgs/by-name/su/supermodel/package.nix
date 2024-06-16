@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Sega Model 3 Arcade Emulator";
+    description = "A Sega Model 3 Arcade Emulator";
     homepage = "https://github.com/trzy/supermodel";
     license = lib.licenses.gpl3;
     longDescription = ''

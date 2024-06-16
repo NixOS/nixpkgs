@@ -144,7 +144,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "2D animation program";
+    description = "A 2D animation program";
     homepage = "http://www.synfig.org";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];

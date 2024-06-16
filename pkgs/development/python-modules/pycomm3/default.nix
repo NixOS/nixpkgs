@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python Ethernet/IP library for communicating with Allen-Bradley PLCs";
+    description = "A Python Ethernet/IP library for communicating with Allen-Bradley PLCs";
     homepage = "https://github.com/ottowayi/pycomm3";
     changelog = "https://github.com/ottowayi/pycomm3/releases/tag/v${version}";
     license = licenses.mit;

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit dataDir; };
 
   meta = with lib; {
-    description = "API for GeoIP/Geolocation databases";
+    description = "An API for GeoIP/Geolocation databases";
     maintainers = with maintainers; [ thoughtpolice raskin ];
     license = licenses.lgpl21;
     platforms = platforms.unix;

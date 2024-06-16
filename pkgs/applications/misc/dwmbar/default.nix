@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/thytom/dwmbar";
-    description = "Modular Status Bar for dwm";
+    description = "A Modular Status Bar for dwm";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ baitinq ];
     platforms = platforms.linux;

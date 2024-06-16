@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Open-source artillery shooter";
+    description = "An open-source artillery shooter";
     mainProgram = "hase";
     longDescription = ''
       Hase is an open source gravity based artillery shooter. It is similar to

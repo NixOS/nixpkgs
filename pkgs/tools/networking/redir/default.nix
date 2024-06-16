@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = {
-    description = "TCP port redirector for UNIX";
+    description = "A TCP port redirector for UNIX";
     homepage = "https://github.com/troglobit/redir";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ];

@@ -85,7 +85,7 @@ in stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Free fast-paced first-person shooter";
+    description = "A free fast-paced first-person shooter";
     homepage = "http://www.alientrap.org/games/nexuiz";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

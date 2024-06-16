@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";
+    description = "A fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";
     homepage = "https://github.com/stack-of-tasks/pinocchio";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ nim65s wegank ];

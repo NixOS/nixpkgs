@@ -66,7 +66,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Web framework and asynchronous networking library";
+    description = "A web framework and asynchronous networking library";
     homepage = "https://www.tornadoweb.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

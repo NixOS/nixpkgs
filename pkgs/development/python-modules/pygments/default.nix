@@ -48,7 +48,7 @@ let
     meta = with lib; {
       changelog = "https://github.com/pygments/pygments/releases/tag/${version}";
       homepage = "https://pygments.org/";
-      description = "Generic syntax highlighter";
+      description = "A generic syntax highlighter";
       mainProgram = "pygmentize";
       license = licenses.bsd2;
       maintainers = with maintainers; [ ];

@@ -15,6 +15,6 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = ipaddr.meta // {
-    description = "Library for manipulation of IP address representations usnig sexp";
+    description = "A library for manipulation of IP address representations usnig sexp";
   };
 }

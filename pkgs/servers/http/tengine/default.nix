@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "Web server based on Nginx and has many advanced features, originated by Taobao";
+    description = "A web server based on Nginx and has many advanced features, originated by Taobao";
     mainProgram = "nginx";
     homepage    = "https://tengine.taobao.org";
     license     = licenses.bsd2;

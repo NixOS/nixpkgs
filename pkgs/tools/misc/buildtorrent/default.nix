@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Simple commandline torrent creator";
+    description = "A simple commandline torrent creator";
     homepage = "https://mathr.co.uk/blog/torrent.html";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

@@ -74,7 +74,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/RogerCrocker/BadaBib";
-    description = "Simple BibTeX Viewer and Editor";
+    description = "A simple BibTeX Viewer and Editor";
     mainProgram = "badabib";
     maintainers = [ maintainers.Cogitri ];
     license = licenses.gpl3Plus;

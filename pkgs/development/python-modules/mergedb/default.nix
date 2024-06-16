@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mergedb" ];
 
   meta = with lib; {
-    description = "Tool/library for deep merging YAML files";
+    description = "A tool/library for deep merging YAML files";
     mainProgram = "mergedb";
     homepage = "https://github.com/graysonhead/mergedb";
     license = licenses.gpl3Only;

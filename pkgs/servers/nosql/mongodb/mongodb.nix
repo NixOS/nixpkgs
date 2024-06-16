@@ -175,7 +175,7 @@ in stdenv.mkDerivation rec {
   hardeningEnable = [ "pie" ];
 
   meta = {
-    description = "Scalable, high-performance, open source NoSQL database";
+    description = "A scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
     inherit license;
 

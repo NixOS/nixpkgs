@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   inherit (topkg) installPhase;
 
   meta = with lib; {
-    description = "OCaml module for normalizing Unicode text";
+    description = "An OCaml module for normalizing Unicode text";
     homepage = webpage;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];

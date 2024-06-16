@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "VNC server library";
+    description = "A VNC server library";
     longDescription = ''
       This is a liberally licensed VNC server library that's intended to be
       fast and neat. Goals:

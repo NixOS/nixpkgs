@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Programming font based on the typeface used in Minecraft";
+    description = "A programming font based on the typeface used in Minecraft";
     homepage = "https://github.com/IdreesInc/Monocraft";
     license = licenses.ofl;
     platforms = platforms.all;

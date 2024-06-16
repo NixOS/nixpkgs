@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/georgewhewell/undervolt/";
-    description = "Program for undervolting Intel CPUs on Linux";
+    description = "A program for undervolting Intel CPUs on Linux";
     mainProgram = "undervolt";
 
     longDescription = ''

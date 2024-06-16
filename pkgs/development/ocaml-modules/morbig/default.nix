@@ -28,7 +28,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/colis-anr/${pname}";
-    description = "Static parser for POSIX Shell";
+    description = "A static parser for POSIX Shell";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ niols ];
   };

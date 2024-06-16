@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gdbm glib ];
 
   meta = {
-    description = "Collection of tools to edit SKK dictionaries";
+    description = "A collection of tools to edit SKK dictionaries";
     longDescription = ''
       This package provides a collection of tools to manipulate
       (merge, sort etc.) the dictionaries formatted for SKK Japanese

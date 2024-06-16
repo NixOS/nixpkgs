@@ -8,7 +8,7 @@ bundlerApp {
   passthru.updateScript = bundlerUpdateScript "vimgolf";
 
   meta = with lib; {
-    description = "Game that tests Vim efficiency";
+    description = "A game that tests Vim efficiency";
     homepage = "https://vimgolf.com";
     license = licenses.mit;
     maintainers = with maintainers; [ leungbk ];

@@ -10,6 +10,6 @@ buildDunePackage {
   propagatedBuildInputs = [ dolmen dolmen_type gen pp_loc ];
 
   meta = dolmen.meta // {
-    description = "Tool library for automated deduction tools";
+    description = "A tool library for automated deduction tools";
   };
 }

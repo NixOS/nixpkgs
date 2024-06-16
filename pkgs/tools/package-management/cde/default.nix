@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/usnistgov/corr-CDE";
-    description = "Packaging tool for building portable packages";
+    description = "A packaging tool for building portable packages";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.rlupton20 ];
     platforms = platforms.linux;

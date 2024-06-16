@@ -209,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Small library to render SVG images to Cairo surfaces";
+    description = "A small library to render SVG images to Cairo surfaces";
     homepage = "https://gitlab.gnome.org/GNOME/librsvg";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;

@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Flow state reader in the terminal";
+    description = "A flow state reader in the terminal";
     homepage = "https://github.com/thatvegandev/fsrx";
     license = licenses.mit;
     maintainers = with maintainers; [ MoritzBoehme ];

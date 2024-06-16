@@ -29,7 +29,7 @@ let common = { version, hash, jdk ? jdk11_headless, tests }:
     passthru = { inherit tests; };
 
     meta = with lib; {
-      description = "Distributed, scalable, big data store";
+      description = "A distributed, scalable, big data store";
       homepage = "https://hbase.apache.org";
       license = licenses.asl20;
       maintainers = with lib.maintainers; [ illustris ];

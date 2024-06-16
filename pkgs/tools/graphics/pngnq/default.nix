@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://pngnq.sourceforge.net/";
-    description = "PNG quantizer";
+    description = "A PNG quantizer";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

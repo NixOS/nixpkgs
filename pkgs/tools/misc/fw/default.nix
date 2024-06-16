@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Workspace productivity booster";
+    description = "A workspace productivity booster";
     homepage = "https://github.com/brocode/fw";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ figsoda ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   passthru.tests = { qboot = nixosTests.qboot; };
 
   meta = {
-    description = "Simple x86 firmware for booting Linux";
+    description = "A simple x86 firmware for booting Linux";
     homepage = "https://github.com/bonzini/qboot";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ ];

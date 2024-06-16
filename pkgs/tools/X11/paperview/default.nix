@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "High performance X11 animated wallpaper setter";
+    description = "A high performance X11 animated wallpaper setter";
     homepage = "https://github.com/glouw/paperview";
     platforms = platforms.linux;
     license = with licenses; [ mit ];

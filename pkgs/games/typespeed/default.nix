@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   meta = with lib; {
-    description = "Curses based typing game";
+    description = "A curses based typing game";
     mainProgram = "typespeed";
     homepage = "https://typespeed.sourceforge.net/";
     license = licenses.gpl2;

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://chocolate-doom.org/";
-    description = "Doom source port that accurately reproduces the experience of Doom as it was played in the 1990s";
+    description = "A Doom source port that accurately reproduces the experience of Doom as it was played in the 1990s";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     hydraPlatforms = lib.platforms.linux; # darwin times out

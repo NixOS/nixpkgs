@@ -30,7 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/alecthomas/chroma";
-    description = "General purpose syntax highlighter in pure Go";
+    description = "A general purpose syntax highlighter in pure Go";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
     mainProgram = "chroma";

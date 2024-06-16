@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "C++ library for Quadratic Programming";
+    description = "A C++ library for Quadratic Programming";
     longDescription = ''
       QuadProg++ is a C++ library for Quadratic Programming which implements
       the Goldfarb-Idnani active-set dual method.

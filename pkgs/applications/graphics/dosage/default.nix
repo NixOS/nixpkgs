@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    description = "Comic strip downloader and archiver";
+    description = "A comic strip downloader and archiver";
     mainProgram = "dosage";
     homepage = "https://dosage.rocks/";
     license = lib.licenses.mit;

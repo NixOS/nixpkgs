@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Cross-platform multimedia library";
+    description = "A cross-platform multimedia library";
     mainProgram = "sdl-config";
     homepage    = "http://www.libsdl.org/";
     maintainers = with maintainers; [ lovek323 ];

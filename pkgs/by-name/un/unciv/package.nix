@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
-    description = "Open-source Android/Desktop remake of Civ V";
+    description = "An open-source Android/Desktop remake of Civ V";
     mainProgram = "unciv";
     homepage = "https://github.com/yairm210/Unciv";
     maintainers = with maintainers; [ tex ];

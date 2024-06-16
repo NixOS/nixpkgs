@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.epl10;
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    description = "Mixed integer programming solver";
+    description = "A mixed integer programming solver";
   };
 }

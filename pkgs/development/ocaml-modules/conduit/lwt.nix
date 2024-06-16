@@ -9,6 +9,6 @@ buildDunePackage {
   propagatedBuildInputs = [ conduit lwt sexplib ];
 
   meta = conduit.meta // {
-    description = "Network connection establishment library for Lwt";
+    description = "A network connection establishment library for Lwt";
   };
 }

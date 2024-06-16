@@ -33,7 +33,7 @@ buildPythonPackage {
   doCheck = false;
 
   meta = with lib; {
-    description = "Waitress WSGI server serving django";
+    description = "A waitress WSGI server serving django";
     mainProgram = "waitress-serve-django";
     license = licenses.mit;
     maintainers = with maintainers; [ basvandijk ];

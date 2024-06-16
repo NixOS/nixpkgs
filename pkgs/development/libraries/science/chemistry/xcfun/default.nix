@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DXCFUN_MAX_ORDER=3" ];
 
   meta = with lib; {
-    description = "Library of exchange-correlation functionals with arbitrary-order derivatives";
+    description = "A library of exchange-correlation functionals with arbitrary-order derivatives";
     homepage = "https://github.com/dftlibs/xcfun";
     license = licenses.mpl20;
     platforms = platforms.unix;

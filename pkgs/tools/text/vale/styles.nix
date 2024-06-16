@@ -40,7 +40,7 @@ in
       hash = "sha256-mfeMa+KlkqwyS+h+oo5p5+P2bsmZ0BOph2nbQiaoNqM=";
     };
     meta = {
-      description = "Vale-compatible implementation of the guidelines enforced by the alex linter";
+      description = "A Vale-compatible implementation of the guidelines enforced by the alex linter";
       homepage = "https://github.com/errata-ai/alex";
       license = lib.licenses.mit;
     };
@@ -56,7 +56,7 @@ in
       hash = "sha256-jSmfUgzlIbDVh2zLtnTNpM/z6dHMp358F9adLZ5+qcw=";
     };
     meta = {
-      description = "Vale-compatible implementation of the Google Developer Documentation Style Guide";
+      description = "A Vale-compatible implementation of the Google Developer Documentation Style Guide";
       homepage = "https://github.com/errata-ai/Google";
       license = lib.licenses.mit;
     };
@@ -72,7 +72,7 @@ in
       hash = "sha256-zRz5ThOg5RLTZj3dYPe0PDvOF5DjO31lduSpi2Us87U=";
     };
     meta = {
-      description = "Vale-compatible implementation of the Joblint linter";
+      description = "A Vale-compatible implementation of the Joblint linter";
       homepage = "https://github.com/errata-ai/Joblint";
       license = lib.licenses.mit;
     };
@@ -88,7 +88,7 @@ in
       hash = "sha256-4j05bIGAVEy6untUqtrUxdLKlhyOcJsbcsow8OxRp1A=";
     };
     meta = {
-      description = "Vale-compatible implementation of the Microsoft Writing Style Guide";
+      description = "A Vale-compatible implementation of the Microsoft Writing Style Guide";
       homepage = "https://github.com/errata-ai/Microsoft";
       license = lib.licenses.mit;
     };
@@ -104,7 +104,7 @@ in
       hash = "sha256-ryKJDX1JrvDWVKLC5qQGctweDf74yuwEXxl/IqumM4s=";
     };
     meta = {
-      description = "Vale-compatible implementation of Python's proselint linter";
+      description = "A Vale-compatible implementation of Python's proselint linter";
       homepage = "https://github.com/errata-ai/proselint";
       license = lib.licenses.bsd3;
     };
@@ -136,7 +136,7 @@ in
       hash = "sha256-W/eHlXklAVlAnY8nLPi/SIKsg8UUnH8UkH99BDo5yKk=";
     };
     meta = {
-      description = "Vale-compatible implementation of the write-good linter";
+      description = "A Vale-compatible implementation of the write-good linter";
       homepage = "https://github.com/errata-ai/write-good";
       license = lib.licenses.mit;
     };

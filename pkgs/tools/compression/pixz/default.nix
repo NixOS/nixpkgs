@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Parallel compressor/decompressor for xz format";
+    description = "A parallel compressor/decompressor for xz format";
     license = licenses.bsd2;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;

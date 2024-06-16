@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/martijnboland/moped";
-    description = "Web client for Mopidy";
+    description = "A web client for Mopidy";
     license = licenses.mit;
     maintainers = [];
     hydraPlatforms = [];

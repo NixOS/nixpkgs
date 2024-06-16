@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals supportCompressedPackets [ zlib bzip2 ];
 
   meta = with lib; {
-    description = "PGP packet visualizer";
+    description = "A PGP packet visualizer";
     mainProgram = "pgpdump";
     longDescription = ''
       pgpdump is a PGP packet visualizer which displays the packet format of

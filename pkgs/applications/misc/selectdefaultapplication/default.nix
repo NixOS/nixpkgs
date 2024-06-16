@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Very simple application that lets you define default applications on Linux in a sane way";
+    description = "A very simple application that lets you define default applications on Linux in a sane way";
     mainProgram = "selectdefaultapplication";
     homepage = "https://github.com/sandsmark/selectdefaultapplication";
     maintainers = with maintainers; [ nsnelson ];

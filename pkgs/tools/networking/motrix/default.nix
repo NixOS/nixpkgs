@@ -27,7 +27,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "Full-featured download manager";
+    description = "A full-featured download manager";
     homepage = "https://motrix.app";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];

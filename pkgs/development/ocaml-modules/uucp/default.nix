@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   checkInputs = [ uucd ];
 
   meta = with lib; {
-    description = "OCaml library providing efficient access to a selection of character properties of the Unicode character database";
+    description = "An OCaml library providing efficient access to a selection of character properties of the Unicode character database";
     homepage = webpage;
     inherit (ocaml.meta) platforms;
     license = licenses.bsd3;

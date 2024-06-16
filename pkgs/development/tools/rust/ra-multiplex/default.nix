@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "Multiplexer for rust-analyzer";
+    description = "A multiplexer for rust-analyzer";
     mainProgram = "ra-multiplex";
     homepage = "https://github.com/pr2502/ra-multiplex";
     license = with licenses; [ mit ];

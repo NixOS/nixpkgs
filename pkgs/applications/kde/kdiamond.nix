@@ -4,7 +4,7 @@ mkDerivation {
   pname = "kdiamond";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.kdiamond";
-    description = "Single player puzzle game";
+    description = "A single player puzzle game";
     mainProgram = "kdiamond";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;

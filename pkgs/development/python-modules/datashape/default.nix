@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/ContinuumIO/datashape";
-    description = "Data description language";
+    description = "A data description language";
     license = lib.licenses.bsd2;
   };
 }

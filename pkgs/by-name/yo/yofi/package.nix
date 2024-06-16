@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
-    description = "Minimalist app launcher in Rust";
+    description = "A minimalist app launcher in Rust";
     homepage = "https://github.com/l4l/yofi";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

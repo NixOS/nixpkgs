@@ -41,7 +41,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Diff tool for YAML files, and sometimes JSON";
+    description = "A diff tool for YAML files, and sometimes JSON";
     mainProgram = "dyff";
     longDescription = ''
       dyff is inspired by the way the old BOSH v1 deployment output reported

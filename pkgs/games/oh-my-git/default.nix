@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ohmygit.org/";
-    description = "Interactive Git learning game";
+    description = "An interactive Git learning game";
     mainProgram = "oh-my-git";
     license = with licenses; [ blueOak100 ];
     platforms   = [ "x86_64-linux" ];

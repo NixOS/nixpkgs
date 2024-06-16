@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Patcher for IPS and BPS files";
+    description = "A patcher for IPS and BPS files";
     homepage = "https://github.com/Alcaro/Flips";
     license = licenses.gpl3Plus;
     maintainers = [ ];

@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/ArtsyMacaw/wlogout";
-    description = "Wayland based logout menu";
+    description = "A wayland based logout menu";
     changelog = "https://github.com/ArtsyMacaw/wlogout/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ mit ];
     mainProgram = "wlogout";

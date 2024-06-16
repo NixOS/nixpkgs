@@ -106,7 +106,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Distributed filesystem";
+    description = "A distributed filesystem";
     maintainers = with lib.maintainers; [ raskin matejc ];
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;

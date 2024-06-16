@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Simple, focused eBook reader";
+    description = "A simple, focused eBook reader";
     mainProgram = "com.github.babluboy.bookworm";
     longDescription = ''
       Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.

@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Programmer's text editor written in Java";
+    description = "A programmer's text editor written in Java";
     homepage = "http://www.jedit.org";
     license = lib.licenses.gpl2Only;
     mainProgram = "jedit";

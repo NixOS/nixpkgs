@@ -58,7 +58,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "MySQL driver";
+    description = "A MySQL driver";
     longDescription = ''
       A MySQL driver that does not depend on MySQL C client libraries and
       implements the DB API v2.0 specification.

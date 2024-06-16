@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     mainProgram = "pypr";
-    description = "Hyperland plugin system";
+    description = "An hyperland plugin system";
     homepage = "https://github.com/hyprland-community/pyprland";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

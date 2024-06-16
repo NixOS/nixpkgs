@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   meta = with lib; {
-    description = "Tiling window manager";
+    description = "A tiling window manager";
     homepage    = "https://i3wm.org";
     maintainers = with maintainers; [ modulistic fpletz ];
     mainProgram = "i3";

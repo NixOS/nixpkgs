@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description = "Modern shell written in Rust";
+    description = "A modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne johntitor joaquintrinanes ];

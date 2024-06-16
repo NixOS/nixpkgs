@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Prover for satisfiability modulo theory (SMT)";
+    description = "A prover for satisfiability modulo theory (SMT)";
     mainProgram = "cvc3";
     maintainers = with maintainers;
       [ raskin ];

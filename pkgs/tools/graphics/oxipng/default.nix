@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/shssoichiro/oxipng";
-    description = "Multithreaded lossless PNG compression optimizer";
+    description = "A multithreaded lossless PNG compression optimizer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dywedir ];
     mainProgram = "oxipng";

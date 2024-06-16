@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   pathsToLink = [ "/etc/xdg/peruse.knsrc" ];
 
   meta = with lib; {
-    description = "Comic book reader";
+    description = "A comic book reader";
     homepage = "https://peruse.kde.org";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];

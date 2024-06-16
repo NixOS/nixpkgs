@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   meta = with lib; {
-    description = "Utility that makes sweeping changes to large, shared code bases";
+    description = "A utility that makes sweeping changes to large, shared code bases";
     mainProgram = "fastmod";
     homepage = "https://github.com/facebookincubator/fastmod";
     license = licenses.asl20;

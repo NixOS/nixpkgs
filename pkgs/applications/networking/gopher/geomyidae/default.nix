@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "Gopher daemon for Linux/BSD";
+    description = "A gopher daemon for Linux/BSD";
     mainProgram = "geomyidae";
     homepage = "gopher://bitreich.org/1/scm/geomyidae";
     license = licenses.mit;

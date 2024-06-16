@@ -44,7 +44,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cached_property" ];
 
   meta = with lib; {
-    description = "Decorator for caching properties in classes";
+    description = "A decorator for caching properties in classes";
     homepage = "https://github.com/pydanny/cached-property";
     changelog = "https://github.com/pydanny/cached-property/releases/tag/${version}";
     license = licenses.bsd3;

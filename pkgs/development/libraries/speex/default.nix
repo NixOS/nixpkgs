@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.speex.org/";
-    description = "Open Source/Free Software patent-free audio compression format designed for speech";
+    description = "An Open Source/Free Software patent-free audio compression format designed for speech";
     license = licenses.bsd3;
     platforms = platforms.unix ++ platforms.windows;
   };

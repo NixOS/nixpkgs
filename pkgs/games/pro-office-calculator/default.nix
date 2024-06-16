@@ -15,7 +15,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "Completely normal office calculator";
+    description = "A completely normal office calculator";
     mainProgram = "procalc";
     homepage = "https://proofficecalculator.com/";
     maintainers = [ maintainers.pmiddend ];
