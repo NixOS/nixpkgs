@@ -136,6 +136,7 @@ mkCommon type rec {
 
   passthru = {
     inherit icu;
+    packages_list = packages;
   } // lib.optionalAttrs (type == "sdk") {
     packages = mkNugetDeps {
       name = "${pname}-${version}-deps";

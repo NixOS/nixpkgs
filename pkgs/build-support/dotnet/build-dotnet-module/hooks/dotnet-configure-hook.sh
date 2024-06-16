@@ -13,16 +13,27 @@ dotnetConfigureHook() {
         local -r parallelFlag="--disable-parallel"
     fi
 
+    if [ -z "${dontSetNugetSource-}" ]; then
+        nugetSourceFlag="--source @nugetSource@/lib"
+    fi
+
+    if [ "${generateLockfile-}" ]; then
+        lockfilePath="$HOME/lockfile.json"
+        lockfileFlag="--use-lock-file --lock-file-path ${lockfilePath}"
+    fi
+
     dotnetRestore() {
         local -r project="${1-}"
         dotnet restore ${project-} \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
             --runtime "@runtimeId@" \
-            --source "@nugetSource@/lib" \
+            ${nugetSourceFlag-} \
+            ${lockfileFlag-} \
             ${parallelFlag-} \
             ${dotnetRestoreFlags[@]} \
             ${dotnetFlags[@]}
+
     }
 
     # Generate a NuGet.config file to make sure everything,
@@ -43,7 +54,7 @@ EOF
     find -name paket.dependencies -exec sed -i 's+source .*+source @nugetSource@/lib+g' {} \;
     find -name paket.lock -exec sed -i 's+remote:.*+remote: @nugetSource@/lib+g' {} \;
 
-    dotnet tool restore --add-source "@nugetSource@/lib"
+    #dotnet tool restore --add-source "@nugetSource@/lib"
 
     (( "${#projectFile[@]}" == 0 )) && dotnetRestore
 

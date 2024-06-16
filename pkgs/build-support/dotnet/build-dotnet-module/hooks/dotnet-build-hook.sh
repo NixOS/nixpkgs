@@ -46,6 +46,7 @@ dotnetBuildHook() {
             -p:BuildInParallel=$parallelBuildFlag \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
+            -p:UseAppHost=true \
             --configuration "@buildType@" \
             --no-restore \
             ${versionFlags[@]} \

@@ -25,8 +25,8 @@ buildDotnetModule rec {
   propagatedBuildInputs = [ sqlite ];
 
   projectFile = "Jellyfin.Server/Jellyfin.Server.csproj";
+  lockfileSha256 = "sha256-riWeRMwcn6D8wFpgQD02Cs7/RrP6Y99lM8bH6hM7lco=";
   executables = [ "jellyfin" ];
-  nugetDeps = ./nuget-deps.nix;
   runtimeDeps = [
     jellyfin-ffmpeg
     fontconfig
