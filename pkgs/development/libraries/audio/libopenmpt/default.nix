@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libopenmpt";
-  version = "0.7.7";
+  version = "0.7.8";
 
   outputs = [ "out" "dev" "bin" ];
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
-    hash = "sha256-WMaiiXISaCim9ljghK7nqo+L/bdaC9DjRcf/Km2e8Iw=";
+    hash = "sha256-h3eMgEaiJsbL+xFPTI4+J8Eht7PczOXLfeRYmSUCdMw=";
   };
 
   enableParallelBuilding = true;
