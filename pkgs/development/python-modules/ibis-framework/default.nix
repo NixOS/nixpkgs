@@ -134,29 +134,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # breakage from sqlalchemy2 truediv changes
-    "test_tpc_h17"
     # tries to download duckdb extensions
     "test_attach_sqlite"
     "test_connect_extensions"
     "test_load_extension"
     "test_read_sqlite"
     "test_register_sqlite"
-    # duckdb does not respect sample_size=2 (reads 3 lines of csv).
-    "test_csv_reregister_schema"
-    # duckdb fails with:
-    # "This function can not be called with an active transaction!, commit or abort the existing one first"
-    "test_vectorized_udf"
+    # requires network connection
     "test_s3_403_fallback"
-    "test_map_merge_udf"
-    "test_udf"
-    "test_map_udf"
-    # DataFusion error
-    "datafusion"
-    # pluggy.PluggyTeardownRaisedWarning
-    "test_repr_png_is_not_none_in_not_interactive"
-    "test_interval_arithmetic"
-
     # requires pytest 8.2+
     "test_roundtrip_delta"
   ];
