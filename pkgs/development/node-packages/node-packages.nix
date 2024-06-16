@@ -69136,28 +69136,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  less-plugin-clean-css = nodeEnv.buildNodePackage {
-    name = "less-plugin-clean-css";
-    packageName = "less-plugin-clean-css";
-    version = "1.6.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/less-plugin-clean-css/-/less-plugin-clean-css-1.6.0.tgz";
-      sha512 = "jwXX6WlXT57OVCXa5oBJBaJq1b4s1BOKeEEoAL2UTeEitogQWfTcBbLT/vow9pl0N0MXV8Mb4KyhTGG0YbEKyQ==";
-    };
-    dependencies = [
-      sources."clean-css-5.3.3"
-      sources."source-map-0.6.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "clean-css plugin for less.js";
-      homepage = "https://lesscss.org";
-      license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   live-server = nodeEnv.buildNodePackage {
     name = "live-server";
     packageName = "live-server";
