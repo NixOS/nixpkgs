@@ -9,7 +9,7 @@ while ! test -f flake.nix; do cd .. ; done
 NIXPKGS_DIR="$PWD"
 
 latest_commit="$(
-  curl https://api.github.com/repos/less/less-plugin-clean-css/branches/master \
+  curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} https://api.github.com/repos/less/less-plugin-clean-css/branches/master \
   | jq -r .commit.sha
 )"
 
