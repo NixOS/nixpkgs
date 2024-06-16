@@ -79,7 +79,7 @@ Wine, you should also set the following:
 
 ```nix
 {
-  hardware.opengl.driSupport32Bit = true;
+  hardware.graphics.enable32Bit = true;
 }
 ```
 

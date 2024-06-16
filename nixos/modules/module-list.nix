@@ -67,6 +67,7 @@
   ./hardware/gkraken.nix
   ./hardware/glasgow.nix
   ./hardware/gpgsmartcards.nix
+  ./hardware/graphics.nix
   ./hardware/hackrf.nix
   ./hardware/i2c.nix
   ./hardware/infiniband.nix
@@ -84,7 +85,6 @@
   ./hardware/new-lg4ff.nix
   ./hardware/nitrokey.nix
   ./hardware/onlykey/default.nix
-  ./hardware/opengl.nix
   ./hardware/openrazer.nix
   ./hardware/opentabletdriver.nix
   ./hardware/pcmcia.nix

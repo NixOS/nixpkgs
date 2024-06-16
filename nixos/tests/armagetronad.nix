@@ -12,7 +12,7 @@ let
     { pkgs, ... }:
 
     { imports = [ ./common/user-account.nix ./common/x11.nix ];
-      hardware.opengl.driSupport = true;
+      hardware.graphics.enable = true;
       virtualisation.memorySize = 256;
       environment = {
         systemPackages = [ pkgs.armagetronad ];
