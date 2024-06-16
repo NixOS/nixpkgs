@@ -1,14 +1,14 @@
 { lib, fetchFromGitHub, kernel, unstableGitUpdater }:
 kernel.stdenv.mkDerivation {
   pname = "rust-out-of-tree-module";
-  version = "0-unstable-2023-08-29";
+  version = "0-unstable-2024-05-06";
 
   src = fetchFromGitHub {
     owner = "Rust-for-linux";
     repo = "rust-out-of-tree-module";
 
-    rev = "7addf9dafba795524f6179a557f7272ecbe1b165";
-    hash = "sha256-Bj7WonZ499W/FajbxjM7yBkU9iTxTW7CrRbCSzWbsSc=";
+    rev = "9872947486bb8f60b0d11db15d546a3d06156ec5";
+    hash = "sha256-TzCySY7uQac98dU+Nu5dC4Usm7oG0iIdZZmZgAOpni4=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
