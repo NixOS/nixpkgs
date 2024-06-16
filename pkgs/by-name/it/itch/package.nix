@@ -86,6 +86,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Best way to play itch.io games";
     homepage = "https://github.com/itchio/itch";
+    changelog = "https://github.com/itchio/itch/releases/tag/v${version}-canary";
     license = licenses.mit;
     platforms = platforms.linux;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];

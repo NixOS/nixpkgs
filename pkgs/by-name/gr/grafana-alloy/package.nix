@@ -120,7 +120,8 @@ buildGoModule rec {
     mainProgram = "alloy";
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/alloy";
+    changelog = "https://github.com/grafana/alloy/blob/${src.rev}/CHANGELOG.md";
     maintainers = with maintainers; [ azahi flokli emilylange hbjydev ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

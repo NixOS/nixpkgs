@@ -81,6 +81,7 @@ buildDotnetModule {
   meta = {
     description = "Live controller viewer for Nintendo consoles as well as many other retro consoles and computers";
     homepage = "https://retro-spy.com/";
+    changelog = "https://github.com/retrospy/RetroSpy/releases/tag/${src.rev}";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.naxdy ];
     platforms = lib.platforms.linux;

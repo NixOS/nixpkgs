@@ -23,6 +23,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Cross-platform, efficient, customizable, and robust asynchronous HTTP/WebSocket server C++14 library";
     homepage = "https://github.com/Stiffstream/restinio";
+    changelog = "https://github.com/Stiffstream/restinio/releases/tag/v.${version}";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

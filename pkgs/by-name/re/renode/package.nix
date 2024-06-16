@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Virtual development framework for complex embedded systems";
     homepage = "https://renode.io";
+    changelog = "https://github.com/renode/renode/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ otavio ];
     platforms = [ "x86_64-linux" ];

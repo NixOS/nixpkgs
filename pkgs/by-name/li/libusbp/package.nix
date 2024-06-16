@@ -30,6 +30,7 @@ stdenv.mkDerivation(finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/pololu/libusbp";
+    changelog = "https://github.com/pololu/libusbp/blob/${finalAttrs.src.rev}/README.md#version-history";
     description = "Pololu USB Library (also known as libusbp)";
     longDescription = ''
       libusbp is a cross-platform C library for accessing USB devices
