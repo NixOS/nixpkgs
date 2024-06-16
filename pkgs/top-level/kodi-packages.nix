@@ -61,6 +61,8 @@ let
 
     controller-topology-project = callPackage ../applications/video/kodi/addons/controller-topology-project { };
 
+    formula1 = callPackage ../applications/video/kodi/addons/formula1 { };
+
     iagl = callPackage ../applications/video/kodi/addons/iagl { };
 
     invidious = callPackage ../applications/video/kodi/addons/invidious { };
@@ -119,6 +121,8 @@ let
 
     osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
+    upnext = callPackage ../applications/video/kodi/addons/upnext { };
+
     vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
 
     vfs-rar = callPackage ../applications/video/kodi/addons/vfs-rar { };
@@ -175,6 +179,8 @@ let
 
     myconnpy = callPackage ../applications/video/kodi/addons/myconnpy { };
 
+    plugin-cache = callPackage ../applications/video/kodi/addons/plugin-cache { };
+
     requests = callPackage ../applications/video/kodi/addons/requests { };
 
     requests-cache = callPackage ../applications/video/kodi/addons/requests-cache { };
@@ -184,6 +190,8 @@ let
     sendtokodi = callPackage ../applications/video/kodi/addons/sendtokodi { };
 
     signals = callPackage ../applications/video/kodi/addons/signals { };
+
+    simplecache = callPackage ../applications/video/kodi/addons/simplecache { };
 
     simplejson = callPackage ../applications/video/kodi/addons/simplejson { };
 

@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram $out/bin/gnirehtet \
     --set GNIREHTET_APK ${apk}/gnirehtet.apk \
-    --set ADB ${androidenv.androidPkgs_9_0.platform-tools}/bin/adb
+    --set ADB ${androidenv.androidPkgs.platform-tools}/bin/adb
   '';
 
   meta = with lib; {
