@@ -15346,6 +15346,12 @@
       fingerprint = "D5E4 A51D F8D2 55B9 FAC6  A9BB 2F96 07F0 9B36 0F2D";
     }];
   };
+  obreitwi = {
+    email = "oliver@breitwieser.eu";
+    github = "obreitwi";
+    githubId = 123140;
+    name = "Oliver Breitwieser";
+  };
   obsidian-systems-maintenance = {
     name = "Obsidian Systems Maintenance";
     email = "maintainer@obsidian.systems";
