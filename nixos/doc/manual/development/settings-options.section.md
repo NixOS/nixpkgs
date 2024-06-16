@@ -207,6 +207,68 @@ have a predefined type and string generator already declared under
       you will want to either use an alternative validator
       or set `doCheck = false` in the format options.
 
+`pkgs.formats.libconfig` { *`generator`* ? `<derivation>`, *`validator`* ? `<derivation>` }
+
+:  A function taking an attribute set with values
+
+    `generator`
+
+    :   A derivation used for converting the JSON output
+        from the nix settings into libconfig. This might be
+        useful if your libconfig variant is slightly different
+        from the original one, or for testing purposes.
+
+    `validator`
+
+    :   A derivation used for verifying that the libconfig
+        output is correct and parsable. This might be
+        useful if your libconfig variant is slightly different
+        from the original one, or for testing purposes.
+
+    It returns an attrset with a `type`, `generate` function,
+    and a `lib` attset, as specified [below](#pkgs-formats-result).
+    Some of the lib functions will be best understood if you have
+    read the reference specification. You can find this
+    specification here:
+
+    <https://hyperrealm.github.io/libconfig/libconfig_manual.html#Configuration-Files>
+
+    Inside of `lib`, you will find these functions
+
+    `mkHex`, `mkOctal`, `mkFloat`
+
+    :   Use these to specify numbers in other formats.
+
+        `Example usage:`
+
+        ```nix
+          let
+            format = pkgs.formats.libconfig { };
+          in {
+            myHexValue = format.lib.mkHex "0x1FC3";
+            myOctalValue = format.lib.mkOctal "0027";
+            myFloatValue = format.lib.mkFloat "1.2E-3";
+          }
+        ```
+
+    `mkArray`, `mkList`
+
+    :   Use these to differentiate between whether
+        a nix list should be considered as a libconfig
+        array or a libconfig list. See the upstream
+        documentation for the semantics behind these types.
+
+        `Example usage:`
+
+        ```nix
+          let
+            format = pkgs.formats.libconfig { };
+          in {
+            myList = format.lib.mkList [ "foo" 1 true ];
+            myArray = format.lib.mkArray [ 1 2 3 ];
+          }
+        ```
+
 `pkgs.formats.json` { }
 
 :   A function taking an empty attribute set (for future extensibility)
