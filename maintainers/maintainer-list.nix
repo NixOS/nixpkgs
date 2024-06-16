@@ -15240,6 +15240,12 @@
     githubId = 920910;
     name = "peelz";
   };
+  peigongdsd = {
+    email = "peigong2013@outlook.com";
+    github = "peigongdsd";
+    githubId = 51317171;
+    name = "Peilin Lee";
+  };
   pelme = {
     email = "andreas@pelme.se";
     github = "pelme";
