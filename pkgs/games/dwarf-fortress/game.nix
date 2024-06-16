@@ -2,8 +2,6 @@
 , lib
 , fetchurl
 , SDL
-, SDL_image
-, SDL_ttf
 , SDL2
 , SDL2_image
 , SDL2_mixer
