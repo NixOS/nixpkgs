@@ -2608,6 +2608,22 @@ let
         };
       };
 
+      lapo.asn1js = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "asn1js";
+          publisher = "lapo";
+          version = "0.1.4";
+          hash = "sha256-utbIKlwNHnJZj/51f8hEDmUA/A26De/gY73iT4tXKRU=";
+        };
+        meta = {
+          description = "Decode ASN.1 content inside VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=lapo.asn1js";
+          homepage = "https://github.com/lapo-luchini/vscode-asn1js";
+          maintainers = with lib.maintainers; [ katexochen ];
+          license = lib.licenses.isc;
+        };
+      };
+
       llvm-org.lldb-vscode = llvmPackages.lldb;
 
       llvm-vs-code-extensions.vscode-clangd = buildVscodeMarketplaceExtension {
