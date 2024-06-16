@@ -7,14 +7,14 @@
 , llvmPackages
 }:
 
-stdenv.mkDerivation rec {
-  pname = "COSTA";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "costa";
   version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
-    repo = pname;
-    rev = "v${version}";
+    repo = "COSTA";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jiAyZXC7wiuEnOLsQFFLxhN3AsGXN09q/gHC2Hrb2gg=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.sheepforce ];
   };
-}
+})

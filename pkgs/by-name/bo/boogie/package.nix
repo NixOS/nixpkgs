@@ -1,7 +1,7 @@
 { lib, buildDotnetModule, fetchFromGitHub, z3 }:
 
 buildDotnetModule rec {
-  pname = "Boogie";
+  pname = "boogie";
   version = "3.1.6";
 
   src = fetchFromGitHub {

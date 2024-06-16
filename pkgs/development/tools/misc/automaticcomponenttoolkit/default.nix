@@ -1,13 +1,13 @@
 { stdenv, lib, fetchFromGitHub, go }:
 
-stdenv.mkDerivation rec {
-  pname = "AutomaticComponentToolkit";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "automaticcomponenttoolkit";
   version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Autodesk";
-    repo = pname;
-    rev = "v${version}";
+    repo = "AutomaticComponentToolkit";
+    rev = "v${finalAttrs.version}";
     sha256 = "1r0sbw82cf9dbcj3vgnbd4sc1lklzvijic2z5wgkvs21azcm0yzh";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;
   };
-}
+})

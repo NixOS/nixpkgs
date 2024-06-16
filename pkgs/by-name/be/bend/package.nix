@@ -7,7 +7,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "Bend";
+  pname = "bend";
   version = "0.2.22";
 
   src = fetchFromGitHub {
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "Bend is a massively parallel, high-level programming language";
+    description = "Massively parallel, high-level programming language";
     homepage = "https://higherorderco.com/";
     license = lib.licenses.asl20;
     mainProgram = "bend";

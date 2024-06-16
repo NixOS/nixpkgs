@@ -1,14 +1,14 @@
 { lib, stdenv, fetchurl, unzip, xorg, libGLU, libGL }:
 
-stdenv.mkDerivation rec {
-  pname = "AntTweakBar";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "anttweakbar";
   version = "1.16";
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [ xorg.libX11 libGLU libGL ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/anttweakbar/AntTweakBar_${lib.replaceStrings ["."] [""] version}.zip";
+    url = "mirror://sourceforge/project/anttweakbar/AntTweakBar_${lib.replaceStrings ["."] [""] finalAttrs.version}.zip";
     sha256 = "0z3frxpzf54cjs07m6kg09p7nljhr7140f4pznwi7srwq4cvgkpv";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.razvan ];
     platforms = lib.platforms.linux;
   };
-}
+})

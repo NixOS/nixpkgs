@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "BoCA";
+  pname = "boca";
   version = "1.0.7";
 
   src = fetchFromGitHub {

@@ -3193,8 +3193,6 @@ with pkgs;
 
   aptly = callPackage ../tools/misc/aptly { };
 
-  ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
-
   archivebox = callPackage ../applications/misc/archivebox { };
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
@@ -4196,8 +4194,6 @@ with pkgs;
   bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
 
   beats = callPackage ../tools/misc/beats { };
-
-  BeatSaberModManager = callPackage ../games/BeatSaberModManager/default.nix { };
 
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
     inherit (plasma5Packages) breeze-icons;
@@ -13329,8 +13325,6 @@ with pkgs;
 
   systrayhelper = callPackage ../tools/misc/systrayhelper { };
 
-  Sylk = callPackage ../applications/networking/Sylk { };
-
   privoxy = callPackage ../tools/networking/privoxy {
     w3m = w3m-batch;
   };
@@ -18611,8 +18605,6 @@ with pkgs;
 
   license-scanner = callPackage ../development/tools/license-scanner { };
 
-  Literate = callPackage ../development/tools/literate-programming/Literate { };
-
   md-tangle = callPackage ../development/tools/literate-programming/md-tangle { };
 
   # NOTE: Override and set useIcon = false to use Awk instead of Icon.
@@ -20333,8 +20325,6 @@ with pkgs;
 
   soxt = callPackage ../development/libraries/soxt { };
 
-  CoinMP = callPackage ../development/libraries/CoinMP { };
-
   coinlive = callPackage ../tools/misc/coinlive {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -21647,9 +21637,6 @@ with pkgs;
   lasso = callPackage ../development/libraries/lasso { };
 
   LAStools = callPackage ../development/libraries/LAStools { };
-
-  LASzip = callPackage ../development/libraries/LASzip { };
-  LASzip2 = callPackage ../development/libraries/LASzip/LASzip2.nix { };
 
   laurel = callPackage ../servers/monitoring/laurel/default.nix { };
 
@@ -23296,7 +23283,7 @@ with pkgs;
 
   micropython = callPackage ../development/interpreters/micropython { };
 
-  MIDIVisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midi-visualizer {
+  midivisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midivisualizer {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Carbon CoreAudio CoreMIDI CoreServices Kernel;
   };
 
@@ -24891,8 +24878,6 @@ with pkgs;
 
   xavs = callPackage ../development/libraries/xavs { };
 
-  Xaw3d = callPackage ../development/libraries/Xaw3d { };
-
   xbase = callPackage ../development/libraries/xbase { };
 
   xcb-util-cursor = xorg.xcbutilcursor;
@@ -26223,10 +26208,10 @@ with pkgs;
 
   rust-hypervisor-firmware = callPackage ../applications/virtualization/rust-hypervisor-firmware { };
 
-  OVMF = callPackage ../applications/virtualization/OVMF {
+  ovmf = callPackage ../by-name/ov/ovmf/package.nix {
     inherit (python3Packages) pexpect;
   };
-  OVMFFull = callPackage ../applications/virtualization/OVMF {
+  ovmfFull = callPackage ../by-name/ov/ovmf/package.nix {
     inherit (python3Packages) pexpect;
     secureBoot = true;
     httpSupport = true;
@@ -29508,8 +29493,6 @@ with pkgs;
   amarok = libsForQt5.callPackage ../applications/audio/amarok { };
   amarok-kf5 = amarok; # for compatibility
 
-  AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
-
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
 
   androidStudioPackages = recurseIntoAttrs
@@ -29974,13 +29957,11 @@ with pkgs;
 
   cgif = callPackage ../tools/graphics/cgif { };
 
-  ChowCentaur  = callPackage ../applications/audio/ChowCentaur { };
+  ChowCentaur  = callPackage ../applications/audio/chow-centaur { };
 
-  ChowKick  = callPackage ../applications/audio/ChowKick { };
+  ChowKick  = callPackage ../applications/audio/chow-kick { };
 
-  ChowPhaser  = callPackage ../applications/audio/ChowPhaser { };
-
-  CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
+  ChowPhaser  = callPackage ../applications/audio/chow-phaser { };
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
@@ -30598,8 +30579,6 @@ with pkgs;
 
   fig2dev = callPackage ../applications/graphics/fig2dev { };
 
-  FIL-plugins = callPackage ../applications/audio/FIL-plugins { };
-
   finalfrontier = callPackage ../applications/science/machine-learning/finalfrontier {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -31201,10 +31180,6 @@ with pkgs;
   junction = callPackage ../applications/misc/junction { };
 
   lemonade = callPackage ../applications/misc/lemonade { };
-
-  LibreArp = callPackage ../applications/audio/LibreArp { };
-
-  LibreArp-lv2 = callPackage ../applications/audio/LibreArp/lv2.nix { };
 
   librespot = callPackage ../applications/audio/librespot {
     withALSA = stdenv.isLinux;
@@ -34219,8 +34194,6 @@ with pkgs;
   };
 
   skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
-
-  SkypeExport = callPackage ../applications/networking/instant-messengers/SkypeExport { };
 
   slingshot = callPackage ../tools/misc/slingshot { };
 
@@ -37957,8 +37930,6 @@ with pkgs;
 
   seaview = callPackage ../applications/science/biology/seaview { };
 
-  SPAdes = callPackage ../applications/science/biology/spades { };
-
   svaba = callPackage ../applications/science/biology/svaba { };
 
   tandem-aligner = callPackage ../applications/science/biology/tandem-aligner { };
@@ -39276,8 +39247,6 @@ with pkgs;
 
   velero = callPackage ../applications/networking/cluster/velero { };
 
-  HentaiAtHome = callPackage ../applications/misc/HentaiAtHome { };
-
   hplip = callPackage ../misc/drivers/hplip { };
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
@@ -39717,7 +39686,7 @@ with pkgs;
 
   disnixos = callPackage ../tools/package-management/disnix/disnixos { };
 
-  DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService {
+  disnix-web-service = callPackage ../by-name/di/disnix-web-service/package.nix {
     jdk = jdk8;
   };
 
@@ -39759,8 +39728,6 @@ with pkgs;
 
   sndio = callPackage ../misc/sndio { };
 
-  SP800-90B_EntropyAssessment = callPackage ../tools/misc/SP800-90B_EntropyAssessment { };
-
   sticky = callPackage ../applications/misc/sticky { };
 
   stork = darwin.apple_sdk_11_0.callPackage ../applications/misc/stork {
@@ -39775,7 +39742,7 @@ with pkgs;
 
   opkg-utils = callPackage ../tools/package-management/opkg-utils { };
 
-  OSCAR = qt5.callPackage ../applications/misc/OSCAR { };
+  oscar = qt5.callPackage ../applications/misc/oscar { };
 
   pgmanage = callPackage ../applications/misc/pgmanage { };
 

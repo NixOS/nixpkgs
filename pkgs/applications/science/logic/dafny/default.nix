@@ -7,7 +7,7 @@
 }:
 
 buildDotnetModule rec {
-  pname = "Dafny";
+  pname = "dafny";
   version = "4.6.0";
 
   src = fetchFromGitHub {

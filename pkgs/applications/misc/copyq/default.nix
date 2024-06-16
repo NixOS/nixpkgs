@@ -15,14 +15,14 @@
 , kdePackages
 }:
 
-stdenv.mkDerivation rec {
-  pname = "CopyQ";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "copyq";
   version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Ewunl4k9f0aDjilhKAsVxwR3S6uSZ1xwtu6ccNsNOgk=";
   };
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "copyq";
   };
-}
+})

@@ -10,21 +10,21 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
-  pname = "Archi";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "archi";
   version = "5.3.0";
 
   src = {
     "x86_64-linux" = fetchurl {
-      url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Linux64-${version}.tgz";
+      url = "https://www.archimatetool.com/downloads/archi/${finalAttrs.version}/Archi-Linux64-${finalAttrs.version}.tgz";
       hash = "sha256-ngO3YFCChsnefxdxtR00Dy736K2GYnTEYI4vKWLnPsw=";
     };
     "x86_64-darwin" = fetchurl {
-      url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Mac-${version}.dmg";
+      url = "https://www.archimatetool.com/downloads/archi/${finalAttrs.version}/Archi-Mac-${finalAttrs.version}.dmg";
       hash = "sha256-dL1c7IrbDMY/WbijQh1dCmCrRQQhj4fjGN+6m19OjO0=";
     };
     "aarch64-darwin" = fetchurl {
-      url = "https://www.archimatetool.com/downloads/archi/${version}/Archi-Mac-Silicon-${version}.dmg";
+      url = "https://www.archimatetool.com/downloads/archi/${finalAttrs.version}/Archi-Mac-Silicon-${finalAttrs.version}.dmg";
       hash = "sha256-iczIUm1LCAjYKOyHXbFCgb+zoUxxATSOVkB8Ldk7pxQ=";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ earldouglas paumr ];
     mainProgram = "Archi";
   };
-}
+})

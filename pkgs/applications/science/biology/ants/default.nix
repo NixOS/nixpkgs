@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ANTs";
+  pname = "ants";
   version = "2.5.2";
 
   src = fetchFromGitHub {
