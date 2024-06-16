@@ -216,7 +216,6 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
-          kernelPatches.rust_1_78
         ];
       };
       latest = packageAliases.linux_latest.kernel;
