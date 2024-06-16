@@ -3,49 +3,42 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  poetry-core,
-  pytestCheckHook,
-  syrupy,
+  hatchling,
   pillow,
-  rich,
+  pytestCheckHook,
+  pythonOlder,
   pythonRelaxDepsHook,
+  rich,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "rich-pixels";
-  version = "2.2.0";
-  format = "pyproject";
+  version = "3.0.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "rich-pixels";
-    rev = version;
-    hash = "sha256-fbpnHEfBPWLSYhgETqKbdmmzt7Lu/4oKgetjgNvv04c=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Sqs0DOyxJBfZmm/SVSTMSmaaeRlusiSp6VBnJjKYjgQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-version.patch";
-      url = "https://github.com/darrenburns/rich-pixels/commit/ff1cc3fef789321831f29e9bf282ae6b337eddb2.patch";
-      hash = "sha256-58ZHBNg1RCuOfuE034qF1SbAgoiWMNlSG3c5pCSLUyI=";
-    })
-  ];
+  pythonRelaxDeps = [ "pillow" ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ hatchling ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = [ syrupy ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     pillow
     rich
   ];
 
-  pythonRelaxDeps = [ "pillow" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    syrupy
+  ];
 
   pythonImportsCheck = [ "rich_pixels" ];
 
