@@ -220,10 +220,16 @@ self: super: {
   fused-effects-random = doJailbreak super.fused-effects-random;
   fused-effects-readline = doJailbreak super.fused-effects-readline;
 
-  # fix tests failure for base≥4.15 (https://github.com/kim/leveldb-haskell/pull/41)
-  leveldb-haskell = appendPatch (fetchpatch {
-    url = "https://github.com/kim/leveldb-haskell/commit/f5249081f589233890ddb1945ec548ca9fb717cf.patch";
-    sha256 = "14gllipl28lqry73c5dnclsskzk1bsrrgazibl4lkl8z98j2csjb";
+  leveldb-haskell = overrideCabal (drv: {
+    version = "2024-05-05-unstable";
+    # Fix tests on mtl ≥ 2.3
+    # https://github.com/kim/leveldb-haskell/pull/42
+    src = pkgs.fetchFromGitHub {
+      owner = "kim";
+      repo = "leveldb-haskell";
+      rev = "3a505f3a7de0f5d14463538d7c2c9a9881a60eb9";
+      sha256 = "sha256-okUn5ZuWcj8vPr0GWXvO1LygNCrDfttkDaUoOt+FLA0=";
+    };
   }) super.leveldb-haskell;
 
   # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
@@ -964,12 +970,12 @@ self: super: {
   # See https://github.com/valderman/selda/issues/187
   inherit (let
     mkSeldaPackage = name: overrideCabal (drv: {
-      version = "2023-02-05-unstable";
+      version = "2024-05-05-unstable";
       src = pkgs.fetchFromGitHub {
         owner = "valderman";
         repo = "selda";
-        rev = "ab9619db13b93867d1a244441bb4de03d3e1dadb";
-        hash = "sha256-P0nqAYzbeTyEEgzMij/3mKcs++/p/Wgc7Y6bDudXt2U=";
+        rev = "50c3ba5c5da72bb758a4112363ba2fe1c0e968ea";
+        hash = "sha256-LEAJsSsDL0mmVHntnI16fH8m5DmePfcU0hFw9ErqTgQ=";
       } + "/${name}";
     }) super.${name};
   in
@@ -1360,18 +1366,17 @@ self: super: {
     '';
   }) super.PortMidi;
 
-  # Fix for base >= 4.11
   scat = overrideCabal (drv: {
     patches = [
-      # Fix build with base >= 4.11
+      # Fix build with base >= 4.11 (https://github.com/redelmann/scat/pull/6)
       (fetchpatch {
         url = "https://github.com/redelmann/scat/commit/429f22944b7634b8789cb3805292bcc2b23e3e9f.diff";
         hash = "sha256-FLr1KfBaSYzI6MiZIBY1CkgAb5sThvvgjrSAN8EV0h4=";
       })
-      # Fix build with vector >= 0.13
+      # Fix build with vector >= 0.13, mtl >= 2.3 (https://github.com/redelmann/scat/pull/8)
       (fetchpatch {
-        url = "https://github.com/redelmann/scat/commit/e21cc9c17b5b605b5bc0aacad66d44bbe0beb8c4.diff";
-        hash = "sha256-MifHb2EKZx8skOcs+2t54CzxAS4PaEC0OTEfq4yVXzk=";
+        url = "https://github.com/redelmann/scat/compare/e8e064f7e6a152fe25a6ccd743573a16974239d0..c6a3636548d628f32d8edc73a333188ce24141a7.patch";
+        hash = "sha256-BU4MUn/TnZHpZBlX1vDHE7QZva5yhlLTb8zwpx7UScI";
       })
     ];
   }) super.scat;

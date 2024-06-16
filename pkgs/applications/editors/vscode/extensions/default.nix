@@ -505,8 +505,8 @@ let
         mktplcRef = {
           name = "vscode-bazel";
           publisher = "bazelbuild";
-          version = "0.7.0";
-          sha256 = "05wvih09184bsp4rv2m55z0sasra2qrvch5m3bkbrjq7rcqgibgx";
+          version = "0.10.0";
+          sha256 = "sha256-8SUOzsUmfgt9fAy037qLVNrGJPvTnIeMNz2tbN5psbs=";
         };
         meta = {
           description = "Bazel support for Visual Studio Code";

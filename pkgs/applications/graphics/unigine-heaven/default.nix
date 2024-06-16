@@ -104,5 +104,6 @@ stdenv.mkDerivation
       license = lib.licenses.unfree;
       maintainers = [ lib.maintainers.BarinovMaxim ];
       platforms = [ "x86_64-linux" "i686-linux" ];
+      mainProgram = "heaven";
     };
 }

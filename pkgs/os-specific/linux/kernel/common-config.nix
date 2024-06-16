@@ -441,7 +441,8 @@ let
       # (stable) amdgpu support for bonaire and newer chipsets
       DRM_AMDGPU_CIK = yes;
       # Allow device firmware updates
-      DRM_DP_AUX_CHARDEV = yes;
+      DRM_DP_AUX_CHARDEV = whenOlder "6.10" yes;
+      DRM_DISPLAY_DP_AUX_CHARDEV = whenAtLeast "6.10" yes;
       # amdgpu display core (DC) support
       DRM_AMD_DC_DCN1_0 = whenOlder "5.6" yes;
       DRM_AMD_DC_DCN2_0 = whenBetween "5.3" "5.6" yes;
@@ -470,7 +471,8 @@ let
       MEDIA_CEC_RC = whenAtLeast "5.10" yes;
 
       # Enable CEC over DisplayPort
-      DRM_DP_CEC = yes;
+      DRM_DP_CEC = whenOlder "6.10" yes;
+      DRM_DISPLAY_DP_AUX_CEC = whenAtLeast "6.10" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = yes;
@@ -927,8 +929,10 @@ let
       # i686 issues: https://github.com/NixOS/nixpkgs/pull/117961#issuecomment-812106375
       useZstd = stdenv.buildPlatform.is64bit && versionAtLeast version "5.9";
     in {
-      KERNEL_XZ            = mkIf (!useZstd) yes;
-      KERNEL_ZSTD          = mkIf useZstd yes;
+      # stdenv.hostPlatform.linux-kernel.target assumes uncompressed on RISC-V.
+      KERNEL_UNCOMPRESSED  = mkIf stdenv.hostPlatform.isRiscV yes;
+      KERNEL_XZ            = mkIf (!stdenv.hostPlatform.isRiscV && !useZstd) yes;
+      KERNEL_ZSTD          = mkIf (!stdenv.hostPlatform.isRiscV && useZstd) yes;
 
       HID_BATTERY_STRENGTH = yes;
       # enabled by default in x86_64 but not arm64, so we do that here
