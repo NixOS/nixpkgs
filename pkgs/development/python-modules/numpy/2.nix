@@ -139,7 +139,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests =
-    lib.optionals pythonAtLeast "3.13" [
+    lib.optionals (pythonAtLeast "3.13") [
       # https://github.com/numpy/numpy/issues/26713
       "test_iter_refcount"
     ]
