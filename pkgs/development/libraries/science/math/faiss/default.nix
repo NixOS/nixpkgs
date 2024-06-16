@@ -101,26 +101,38 @@ stdenv.mkDerivation {
   # pip wheel->pip install commands copied over from opencv4
 
   buildPhase = ''
-    make -j faiss
-    make demo_ivfpq_indexing
-  '' + lib.optionalString pythonSupport ''
-    make -j swigfaiss
-    (cd faiss/python &&
-     python -m pip wheel --verbose --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .)
+    runHook preBuild
+
+    make -j $NIX_BUILD_CORES faiss
+    make -j $NIX_BUILD_CORES demo_ivfpq_indexing
+    ${lib.optionalString pythonSupport ''
+      make -j swigfaiss
+      (cd faiss/python &&
+      python -m pip wheel --verbose --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .)
+    ''}
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    make install
+    runHook preInstall
+
+    make -j $NIX_BUILD_CORES install
     mkdir -p $demos/bin
     cp ./demos/demo_ivfpq_indexing $demos/bin/
-  '' + lib.optionalString pythonSupport ''
-    mkdir -p $out/${pythonPackages.python.sitePackages}
-    (cd faiss/python && python -m pip install dist/*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache)
+    ${lib.optionalString pythonSupport ''
+      mkdir -p $out/${pythonPackages.python.sitePackages}
+      (cd faiss/python && python -m pip install dist/*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache)
+    ''}
+
+    runHook postInstall
   '';
 
   fixupPhase = lib.optionalString (pythonSupport && cudaSupport) ''
+    runHook preFixup
     addOpenGLRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
     addOpenGLRunpath $demos/bin/*
+    runHook postFixup
   '';
 
   # Need buildPythonPackage for this one
