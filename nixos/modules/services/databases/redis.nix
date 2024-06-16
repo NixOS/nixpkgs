@@ -19,6 +19,7 @@ let
 
   redisName = name: "redis" + optionalString (name != "") ("-" + name);
   enabledServers = filterAttrs (name: conf: conf.enable) config.services.redis.servers;
+  specialStatedirServers = filterAttrs (name: conf: conf.dir != "/var/lib/${redisName name}") enabledServers;
 
 in
 {
@@ -168,6 +169,22 @@ in
               description = "Set the max number of connected clients at the same time.";
             };
 
+            dir = mkOption {
+              type = types.path;
+              default = "/var/lib/${redisName name}";
+              defaultText = literalExpression ''
+                if name == "" then "/var/lib/redis" else "/var/lib/redis-''${name}"
+              '';
+              description = ''
+                The working directory.
+
+                this is where DB will be written , with the filename specified
+                inside 'dbfilename' configuration directive.
+
+                Folder where the Append Only File will also be created.
+              '';
+            };
+
             save = mkOption {
               type = with types; listOf (listOf int);
               default = [ [ 900 1 ] [ 300 10 ] [ 60 10000 ] ];
@@ -269,7 +286,7 @@ in
           };
           config.settings = mkMerge [
             {
-              inherit (config) port logfile databases maxclients appendOnly;
+              inherit (config) port logfile databases maxclients appendOnly dir;
               daemonize = false;
               supervised = "systemd";
               loglevel = config.logLevel;
@@ -282,7 +299,6 @@ in
                     (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}")
                     config.save;
               dbfilename = "dump.rdb";
-              dir = "/var/lib/${redisName name}";
               appendfsync = config.appendFsync;
               slowlog-log-slower-than = config.slowLogLogSlowerThan;
               slowlog-max-len = config.slowLogMaxLen;
@@ -342,81 +358,109 @@ in
       (name: conf: nameValuePair (redisName name) { })
       enabledServers;
 
-    systemd.services = mapAttrs'
-      (name: conf: nameValuePair (redisName name) {
-        description = "Redis Server - ${redisName name}";
+    systemd.services =
+      let
+        stateService = mapAttrs'
+          (name: conf: nameValuePair "${redisName name}-state" {
+            description = "Redis Server - ${redisName name} - State folder";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+            requiredBy = [ "${redisName name}.service" ];
+            before = [ "${redisName name}.service" ];
 
-        serviceConfig = {
-          ExecStart = "${cfg.package}/bin/${cfg.package.serverBin or "redis-server"} /var/lib/${redisName name}/redis.conf ${escapeShellArgs conf.extraParams}";
-          ExecStartPre = "+" + pkgs.writeShellScript "${redisName name}-prep-conf" (
-            let
-              redisConfVar = "/var/lib/${redisName name}/redis.conf";
-              redisConfRun = "/run/${redisName name}/nixos.conf";
-              redisConfStore = redisConfig conf.settings;
-            in
-            ''
-              touch "${redisConfVar}" "${redisConfRun}"
-              chown '${conf.user}' "${redisConfVar}" "${redisConfRun}"
-              chmod 0600 "${redisConfVar}" "${redisConfRun}"
-              if [ ! -s ${redisConfVar} ]; then
-                echo 'include "${redisConfRun}"' > "${redisConfVar}"
-              fi
-              echo 'include "${redisConfStore}"' > "${redisConfRun}"
-              ${optionalString (conf.requirePassFile != null) ''
-                {
-                  echo -n "requirepass "
-                  cat ${escapeShellArg conf.requirePassFile}
-                } >> "${redisConfRun}"
-              ''}
-            ''
-          );
-          Type = "notify";
-          # User and group
-          User = conf.user;
-          Group = conf.user;
-          # Runtime directory and mode
-          RuntimeDirectory = redisName name;
-          RuntimeDirectoryMode = "0750";
-          # State directory and mode
-          StateDirectory = redisName name;
-          StateDirectoryMode = "0700";
-          # Access write directories
-          UMask = "0077";
-          # Capabilities
-          CapabilityBoundingSet = "";
-          # Security
-          NoNewPrivileges = true;
-          # Process Properties
-          LimitNOFILE = mkDefault "${toString (conf.maxclients + 32)}";
-          # Sandboxing
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          PrivateTmp = true;
-          PrivateDevices = true;
-          PrivateUsers = true;
-          ProtectClock = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectControlGroups = true;
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-          RestrictNamespaces = true;
-          LockPersonality = true;
-          # we need to disable MemoryDenyWriteExecute for keydb
-          MemoryDenyWriteExecute = cfg.package.pname != "keydb";
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          PrivateMounts = true;
-          # System Call Filtering
-          SystemCallArchitectures = "native";
-          SystemCallFilter = "~@cpu-emulation @debug @keyring @memlock @mount @obsolete @privileged @resources @setuid";
-        };
-      })
-      enabledServers;
+            serviceConfig = {
+              Type = "oneshot";
+              ExecStart = pkgs.writeShellScript "${redisName name}-state-folder" ''
+                user=${escapeShellArg conf.user}
+                state_folder=${escapeShellArg conf.dir}
+                if ! [ -d "$state_folder" ]; then
+                    mkdir -p "$state_folder"
+                    chown "$user:$user" "$state_folder"
+                    chmod 0700 "$state_folder"
+                fi
+              '';
+            };
+          })
+          specialStatedirServers;
 
+        serverService = mapAttrs'
+          (name: conf: nameValuePair (redisName name) {
+            description = "Redis Server - ${redisName name}";
+
+            wantedBy = [ "multi-user.target" ];
+            after = [ "network.target" ];
+
+            serviceConfig = {
+              ExecStart = "${cfg.package}/bin/${cfg.package.serverBin or "redis-server"} ${conf.dir}/redis.conf ${escapeShellArgs conf.extraParams}";
+              ExecStartPre = "+" + pkgs.writeShellScript "${redisName name}-prep-conf" (
+                let
+                  redisConfVar = "${conf.dir}/redis.conf";
+                  redisConfRun = "/run/${redisName name}/nixos.conf";
+                  redisConfStore = redisConfig conf.settings;
+                in
+                ''
+                  touch "${redisConfVar}" "${redisConfRun}"
+                  chown '${conf.user}' "${redisConfVar}" "${redisConfRun}"
+                  chmod 0600 "${redisConfVar}" "${redisConfRun}"
+                  if [ ! -s ${redisConfVar} ]; then
+                    echo 'include "${redisConfRun}"' > "${redisConfVar}"
+                  fi
+                  echo 'include "${redisConfStore}"' > "${redisConfRun}"
+                  ${optionalString (conf.requirePassFile != null) ''
+                    {
+                      echo -n "requirepass "
+                      cat ${escapeShellArg conf.requirePassFile}
+                    } >> "${redisConfRun}"
+                  ''}
+                ''
+              );
+              Type = "notify";
+              # User and group
+              User = conf.user;
+              Group = conf.user;
+              # Runtime directory and mode
+              RuntimeDirectory = redisName name;
+              RuntimeDirectoryMode = "0750";
+              # State directory and mode
+              StateDirectoryMode = "0700";
+              # Access write directories
+              UMask = "0077";
+              # Capabilities
+              CapabilityBoundingSet = "";
+              # Security
+              NoNewPrivileges = true;
+              # Process Properties
+              LimitNOFILE = mkDefault "${toString (conf.maxclients + 32)}";
+              # Sandboxing
+              ProtectSystem = "strict";
+              ProtectHome = true;
+              PrivateTmp = true;
+              PrivateDevices = true;
+              PrivateUsers = true;
+              ProtectClock = true;
+              ProtectHostname = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectControlGroups = true;
+              RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+              RestrictNamespaces = true;
+              LockPersonality = true;
+              # we need to disable MemoryDenyWriteExecute for keydb
+              MemoryDenyWriteExecute = cfg.package.pname != "keydb";
+              RestrictRealtime = true;
+              RestrictSUIDSGID = true;
+              PrivateMounts = true;
+              # System Call Filtering
+              SystemCallArchitectures = "native";
+              SystemCallFilter = "~@cpu-emulation @debug @keyring @memlock @mount @obsolete @privileged @resources @setuid";
+            } // (
+              if conf.dir == "/var/lib/${redisName name}"
+              then { StateDirectory = redisName name; }
+              else { ReadWritePaths = conf.dir; }
+            );
+          })
+          enabledServers;
+      in
+      stateService // serverService;
   };
 }
