@@ -18,6 +18,10 @@ buildDotnetModule rec {
     hash = "sha256-7yEsxKUG2jhki1u5CObdjN4JMnEcAYR+SoGPaNJ+9Fs=";
   };
 
+  postPatch = ''
+    substituteInPlace src/Directory.Build.props --replace-fail "<TreatWarningsAsErrors>true</TreatWarningsAsErrors>" ""
+  '';
+
   projectFile = "src/Bicep.Cli/Bicep.Cli.csproj";
 
   nugetDeps = ./deps.nix;
