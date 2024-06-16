@@ -182,7 +182,10 @@ buildGoModule rec {
     # which occupies more than 31 bits of address space.
     broken = stdenv.hostPlatform.parsed.cpu.bits < 64 ||
       # See comment about wasm32-unknown-unknown in rustc.nix.
-      lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
-      !stdenv.hostPlatform.gcc.thumb or true;
+      # version 15 is the first that starts to use wasm
+      (lib.versionAtLeast version "15") && (
+        lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+        !stdenv.hostPlatform.gcc.thumb or true
+      );
   };
 }
