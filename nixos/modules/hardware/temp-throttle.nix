@@ -19,20 +19,18 @@ in {
     mkOption = lib.mkOption;
     nullOr = lib.types.nullOr;
     str = lib.types.str;
-    int = lib.types.int;
+#    int = lib.types.int;
     uint = lib.types.ints.unsigned;
   in {
     enable = lib.mkEnableOption "Whether to enable temp-throttle service";
     package = lib.mkPackageOption pkgs "temp-throttle" { };
     max_temp = mkOption {
       type = uint;
-#      type = int;
       default = 80;
       description = "Maximum desired temperature in Celcius";
     };
     interval = mkOption {
       type = uint;
-#      type = int;
       default = 3;
       description = "Seconds between checking temperature. Default 3";
     };
