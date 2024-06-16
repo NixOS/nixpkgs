@@ -1917,12 +1917,6 @@
     githubId = 7745457;
     name = "Astavie";
   };
-  astindev = {
-    email = "astindev@pm.me";
-    github = "astindev";
-    githubId = 52360869;
-    name = "Astin";
-  };
   astro = {
     email = "astro@spaceboyz.net";
     github = "astro";
@@ -5234,6 +5228,12 @@
     github = "diniamo";
     githubId = 55629891;
   };
+  diogomdp = {
+    email = "me@diogodp.dev";
+    github = "diogomdp";
+    githubId = 52360869;
+    name = "Diogo";
+  };
   diogotcorreia = {
     name = "Diogo Correia";
     email = "me@diogotc.com";
@@ -7153,6 +7153,13 @@
     github = "fsagbuya";
     githubId = 77672306;
     name = "Florian Agbuya";
+  };
+  fsnkty = {
+    name = "fsnkty";
+    github = "fsnkty";
+    githubId = 153512689;
+    email = "fsnkty@shimeji.cafe";
+    matrix = "@nuko:shimeji.cafe";
   };
   fstamour = {
     email = "fr.st-amour@gmail.com";
@@ -15238,13 +15245,6 @@
     matrix = "@numkem:matrix.org";
     github = "numkem";
     githubId = 332423;
-  };
-  nu-nu-ko = {
-    email = "nuko@shimeji.cafe";
-    matrix = "@nuko:shimeji.cafe";
-    github = "nu-nu-ko";
-    githubId = 153512689;
-    name = "nuko";
   };
   nviets = {
     email = "nathan.g.viets@gmail.com";

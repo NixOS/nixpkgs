@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.117.0";
+  version = "1.119.0";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.8";
@@ -19,12 +19,15 @@ python3.pkgs.buildPythonApplication rec {
     owner = "aws";
     repo = "aws-sam-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EXwR1bOaz2//pP3evOWF3XPUgIzbSEYqW4djyPkX8nQ=";
+    hash = "sha256-0H1C2z01nwJtlSNjTCi2bH6ExBnmn8xNXD/jzYFxvCs=";
   };
 
   build-system = with python3.pkgs; [
-    pythonRelaxDepsHook
     setuptools
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -36,10 +39,12 @@ python3.pkgs.buildPythonApplication rec {
     "docker"
     "jsonschema"
     "pyopenssl"
+    "requests"
     "rich"
     "ruamel-yaml"
     "tomlkit"
     "tzlocal"
+    "watchdog"
   ];
 
   dependencies = with python3.pkgs; [

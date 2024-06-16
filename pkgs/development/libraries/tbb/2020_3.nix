@@ -60,6 +60,9 @@ stdenv.mkDerivation rec {
     else if stdenv.hostPlatform.isi686 then "arch=ia32"
     else throw "Unsupported cross architecture"));
 
+  # Fix undefined reference errors with version script under LLVM.
+  NIX_LDFLAGS = lib.optionalString (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") "--undefined-version";
+
   enableParallelBuilding = true;
 
   installPhase = ''

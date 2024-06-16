@@ -15,6 +15,7 @@
   flask,
   freezegun,
   graphql-core,
+  inline-snapshot,
   libcst,
   opentelemetry-api,
   opentelemetry-sdk,
@@ -43,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.230.0";
+  version = "0.235.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -52,7 +53,7 @@ buildPythonPackage rec {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
-    hash = "sha256-jhInHoOvPGIEoSddv8+30gY38L6XR5OEATUTdrHbNpA=";
+    hash = "sha256-M9GwddyLfwGhA1z+imEOiNrXYFM2gFT9IcFf/8cRHAE=";
   };
 
   patches = [
@@ -66,7 +67,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--emoji --mypy-ini-file=mypy.ini" "" \
+      --replace-fail "--emoji" "" \
   '';
 
   build-system = [ poetry-core ];
@@ -138,6 +139,7 @@ buildPythonPackage rec {
     daphne
     email-validator
     freezegun
+    inline-snapshot
     pytest-asyncio
     pytest-emoji
     pytest-mock
@@ -154,7 +156,6 @@ buildPythonPackage rec {
     "tests/django/test_dataloaders.py"
     "tests/exceptions/"
     "tests/http/"
-    "tests/mypy/test_plugin.py" # avoid dependency on mypy
     "tests/schema/extensions/"
     "tests/schema/test_dataloaders.py"
     "tests/schema/test_lazy/"

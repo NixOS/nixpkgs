@@ -1,6 +1,11 @@
 {
   "version": "3.22.2",
   "engineVersion": "edd8546116457bdf1c5bdfb13ecb9463d2bb5ed4",
+  "channel": "stable",
+  "engineHashes": {
+    "aarch64-linux": "sha256-xPVhLxO9AgXC2+Hwm1lWRfNZhLwZHdKW92WXgv3ImZk=",
+    "x86_64-linux": "sha256-klODJpmlWynYx+MqqGGeTzzPtmQTEUV47hnzjIVDCK8="
+  },
   "dartVersion": "3.4.3",
   "dartHash": {
     "x86_64-linux": "sha256-wDIdoWoKlutP8kixd12Lppzv2aYeiTJ1A1Sy6lguXgg=",

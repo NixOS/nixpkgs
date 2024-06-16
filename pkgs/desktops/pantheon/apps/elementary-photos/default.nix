@@ -1,17 +1,16 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
 , pkg-config
 , vala
-, desktop-file-utils
 , gtk3
 , libexif
 , libgee
 , libhandy
+, libportal-gtk3
 , geocode-glib_2
 , gexiv2
 , libgphoto2
@@ -22,50 +21,21 @@
 , sqlite
 , python3
 , libwebp
-, appstream
 , wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.8.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "photos";
     rev = version;
-    sha256 = "sha256-VhJggQMy1vk21zNA5pR4uAPGCwnIxLUHVO58AZs+h6s=";
+    sha256 = "sha256-EULNLtoZ8M68cp1DT11G6O2TONH/0DXWNX0k4AUqa/w=";
   };
 
-  patches = [
-    # The following 5 patches allow building this without webkit2gtk-4.0.
-    # https://github.com/elementary/photos/pull/743, https://github.com/elementary/photos/pull/746
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/c48f49869bbf44aa37e64c0c1e25aff887783a02.patch";
-      hash = "sha256-CeKRONVevJqVEIchgxyPqnM16Y2zUJ1+wnL2jLdJqec=";
-    })
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/d7a8265ecb562e439d003b61b0823de8348fb10d.patch";
-      hash = "sha256-6M3t0l8BUhoaowUSfaiz6xjQBHliO13i+qi5cgfEY04=";
-    })
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/d8e13e8e803ed7ab1bd23527866567d998744f57.patch";
-      hash = "sha256-BGBDIHR5iYtd+rJG9sur1oWa4FK/lF0vLdjyPbyNbdU=";
-    })
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/075f983a65e9c6d4e80ee07f0c05309badef526a.patch";
-      excludes = [ ".github/workflows/ci.yml" ];
-      hash = "sha256-QOtssVwwHxFdtfhcVyaN33LMZdOkg/DoAC+UAbrkmDk=";
-    })
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/ea11cf23db6945df6cc3495fd698456054389371.patch";
-      hash = "sha256-4a/CRx7Dmyyda6SUr0QF++R73v7FBzjXfyxvspynnG0=";
-    })
-  ];
-
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
     meson
     ninja
     pkg-config
@@ -84,6 +54,7 @@ stdenv.mkDerivation rec {
     libgphoto2
     libgudev
     libhandy
+    libportal-gtk3
     libraw
     libwebp
     sqlite

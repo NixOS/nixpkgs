@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/horms/kexec-tools/commit/328de8e00e298f00d7ba6b25dc3950147e9642e6.patch";
       hash = "sha256-wVQI4oV+hBLq3kGIp2+F5J3f6s/TypDu3Xq583KYc3U=";
     })
-  ];
+  ] ++ lib.optional (stdenv.hostPlatform.useLLVM or false) ./fix-purgatory-llvm-libunwind.patch;
 
   hardeningDisable = [ "format" "pic" "relro" "pie" ];
 

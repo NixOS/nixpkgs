@@ -93,6 +93,8 @@ let
 
       mkdir -p $lib/lib/clang
       mv $lib/lib/17 $lib/lib/clang/17
+    '') + (lib.optionalString (lib.versionAtLeast release_version "19") ''
+      mv $out/lib/clang $lib/lib/clang
     '') + ''
 
       # Move libclang to 'lib' output
