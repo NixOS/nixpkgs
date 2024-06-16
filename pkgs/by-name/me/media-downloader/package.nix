@@ -3,10 +3,9 @@
 , fetchFromGitHub
 , ffmpeg
 , lib
+, libsForQt5
 , python3
-, qtbase
 , stdenv
-, wrapQtAppsHook
 , yt-dlp
 }:
 
@@ -23,11 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
   ];
 
   qtWrapperArgs = [
