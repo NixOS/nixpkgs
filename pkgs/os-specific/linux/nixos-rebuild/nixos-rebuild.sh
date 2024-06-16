@@ -490,31 +490,35 @@ prebuiltNix() {
     fi
 }
 
-if [[ -n $buildNix && -z $flake ]]; then
-    log "building Nix..."
+getNixDrv() {
     nixDrv=
-    if ! nixDrv="$(runCmd nix-instantiate '<nixpkgs/nixos>' --add-root "$tmpDir/nix.drv" --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then
-        if ! nixDrv="$(runCmd nix-instantiate '<nixpkgs>' --add-root "$tmpDir/nix.drv" --indirect -A nix "${extraBuildFlags[@]}")"; then
-            if ! nixStorePath="$(runCmd nix-instantiate --eval '<nixpkgs/nixos/modules/installer/tools/nix-fallback-paths.nix>' -A "$(nixSystem)" | sed -e 's/^"//' -e 's/"$//')"; then
-                nixStorePath="$(prebuiltNix "$(uname -m)")"
-            fi
-            if ! runCmd nix-store -r "$nixStorePath" --add-root "${tmpDir}/nix" --indirect \
-                --option extra-binary-caches https://cache.nixos.org/; then
-                log "warning: don't know how to get latest Nix"
-            fi
-            # Older version of nix-store -r don't support --add-root.
-            [ -e "$tmpDir/nix" ] || ln -sf "$nixStorePath" "$tmpDir/nix"
-            if [ -n "$buildHost" ]; then
-                remoteNixStorePath="$(runCmd prebuiltNix "$(buildHostCmd uname -m)")"
-                remoteNix="$remoteNixStorePath/bin"
-                if ! buildHostCmd nix-store -r "$remoteNixStorePath" \
-                  --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
-                    remoteNix=
-                    log "warning: don't know how to get latest Nix"
-                fi
-            fi
+
+    if nixDrv="$(runCmd nix-instantiate '<nixpkgs/nixos>' --add-root "$tmpDir/nix.drv" --indirect -A config.nix.package.out "${extraBuildFlags[@]}")"; then return; fi
+    if nixDrv="$(runCmd nix-instantiate '<nixpkgs>' --add-root "$tmpDir/nix.drv" --indirect -A nix "${extraBuildFlags[@]}")"; then return; fi
+
+    if ! nixStorePath="$(runCmd nix-instantiate --eval '<nixpkgs/nixos/modules/installer/tools/nix-fallback-paths.nix>' -A "$(nixSystem)" | sed -e 's/^"//' -e 's/"$//')"; then
+        nixStorePath="$(prebuiltNix "$(uname -m)")"
+    fi
+    if ! runCmd nix-store -r "$nixStorePath" --add-root "${tmpDir}/nix" --indirect \
+        --option extra-binary-caches https://cache.nixos.org/; then
+        log "warning: don't know how to get latest Nix"
+    fi
+    # Older version of nix-store -r don't support --add-root.
+    [ -e "$tmpDir/nix" ] || ln -sf "$nixStorePath" "$tmpDir/nix"
+    if [ -n "$buildHost" ]; then
+        remoteNixStorePath="$(runCmd prebuiltNix "$(buildHostCmd uname -m)")"
+        remoteNix="$remoteNixStorePath/bin"
+        if ! buildHostCmd nix-store -r "$remoteNixStorePath" \
+          --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
+            remoteNix=
+            log "warning: don't know how to get latest Nix"
         fi
     fi
+}
+
+if [[ -n $buildNix && -z $flake ]]; then
+    log "building Nix..."
+    getNixDrv
     if [ -a "$nixDrv" ]; then
         nix-store -r "$nixDrv"'!'"out" --add-root "$tmpDir/nix" --indirect >/dev/null
         if [ -n "$buildHost" ]; then
