@@ -23,7 +23,13 @@ let
       configEnv = lib.concatMapAttrs (name: value: lib.optionalAttrs (value != null) {
         ${nameToEnvVar name} = if lib.isBool value then lib.boolToString value else toString value;
       }) cfg.config;
-    in { DATA_FOLDER = "/var/lib/bitwarden_rs"; } // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
+    in {
+      DATA_FOLDER = (
+        if lib.versionAtLeast config.system.stateVersion "24.05"
+        then "/var/lib/vaultwarden"
+        else "/var/lib/bitwarden_rs"
+      );
+      } // lib.optionalAttrs (!(configEnv ? WEB_VAULT_ENABLED) || configEnv.WEB_VAULT_ENABLED == "true") {
       WEB_VAULT_FOLDER = "${cfg.webVaultPackage}/share/vaultwarden/vault";
     } // configEnv;
 
@@ -183,8 +189,37 @@ in {
         ProtectHome = "true";
         ProtectSystem = "strict";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        StateDirectory = "bitwarden_rs";
+        StateDirectory = (
+          if lib.versionAtLeast config.system.stateVersion "24.05"
+          then "vaultwarden"
+          else "bitwarden_rs"
+        );
         StateDirectoryMode = "0700";
+        RemoveIPC = true;
+        NoNewPrivileges = true;
+        CapabilityBoundingSet = "";
+        SystemCallFilter = [ "@system-service" ];
+        ProtectProc = "invisible";
+        ProtectClock = true;
+        ProcSubset = "pid";
+        PrivateUsers = true;
+        ProtectHostname = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
+        LockPersonality = true;
+        RestrictNamespaces = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        SystemCallArchitectures = "native";
+        MemoryDenyWriteExecute = true;
+        RestrictSUIDSGID = true;
+        RestrictRealtime = true;
         Restart = "always";
       };
       wantedBy = [ "multi-user.target" ];
@@ -193,7 +228,7 @@ in {
     systemd.services.backup-vaultwarden = lib.mkIf (cfg.backupDir != null) {
       description = "Backup vaultwarden";
       environment = {
-        DATA_FOLDER = "/var/lib/bitwarden_rs";
+        inherit (configEnv) DATA_FOLDER;
         BACKUP_FOLDER = cfg.backupDir;
       };
       path = with pkgs; [ sqlite ];
@@ -205,6 +240,27 @@ in {
         User = lib.mkDefault user;
         Group = lib.mkDefault group;
         ExecStart = "${pkgs.bash}/bin/bash ${./backup.sh}";
+        ReadOnlyDirectories = lib.mkIf (!lib.hasPrefix configEnv.DATA_FOLDER cfg.backupDir) [ configEnv.DATA_FOLDER ];
+        ReadWriteDirectories = [ "-${cfg.backupDir}" ];
+
+        # Hardening
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateNetwork = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
       };
       wantedBy = [ "multi-user.target" ];
     };
