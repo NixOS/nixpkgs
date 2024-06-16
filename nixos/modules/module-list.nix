@@ -103,7 +103,6 @@
   ./hardware/uni-sync.nix
   ./hardware/usb-modeswitch.nix
   ./hardware/usb-storage.nix
-  ./hardware/video/amdgpu-pro.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/capture/mwprocapture.nix
   ./hardware/video/displaylink.nix

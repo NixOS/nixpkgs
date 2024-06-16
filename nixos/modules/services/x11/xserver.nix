@@ -302,7 +302,7 @@ in
         default = [ "modesetting" "fbdev" ];
         example = [
           "nvidia"
-          "amdgpu-pro"
+          "amdgpu"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
         relatedPackages = concatLists
