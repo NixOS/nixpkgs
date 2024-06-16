@@ -179,6 +179,8 @@ let
 
     myconnpy = callPackage ../applications/video/kodi/addons/myconnpy { };
 
+    plugin-cache = callPackage ../applications/video/kodi/addons/plugin-cache { };
+
     requests = callPackage ../applications/video/kodi/addons/requests { };
 
     requests-cache = callPackage ../applications/video/kodi/addons/requests-cache { };
