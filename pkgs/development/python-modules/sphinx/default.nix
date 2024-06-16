@@ -4,6 +4,7 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
   isPyPy,
 
   # build-system
@@ -56,6 +57,14 @@ buildPythonPackage rec {
     '';
     hash = "sha256-XGGRWEvd1SbQsK8W5yxDzBd5hlvXcDzr8t5Qa6skH/M=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "python-3.13-compat.patch";
+      url = "https://github.com/sphinx-doc/sphinx/commit/3496de62b743942115acb486cf35dfcc102586c3.patch";
+      hash = "sha256-5VBPOQeGyj3a8VBq4hc9S/eKaeVZeGCTNislwgsauZo=";
+    })
+  ];
 
   build-system = [ flit-core ];
 
