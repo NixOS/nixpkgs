@@ -26,7 +26,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "GitLab Docker toolset to pack, ship, store, and deliver content";
+    description = "The GitLab Docker toolset to pack, ship, store, and deliver content";
     license = licenses.asl20;
     maintainers = with maintainers; [ yayayayaka xanderio ];
     platforms = platforms.unix;

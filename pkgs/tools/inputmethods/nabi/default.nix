@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 libhangul ];
 
   meta = with lib; {
-    description = "Easy Hangul XIM";
+    description = "The Easy Hangul XIM";
     mainProgram = "nabi";
     homepage = "https://github.com/choehwanjin/nabi";
     license = licenses.gpl2Plus;

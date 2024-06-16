@@ -19,7 +19,7 @@ buildFishPlugin rec {
   '';
 
   meta = with lib; {
-    description = "Ultimate Fish prompt";
+    description = "The ultimate Fish prompt";
     homepage = "https://github.com/IlanCosman/tide";
     license = licenses.mit;
     maintainers = [ maintainers.jocelynthode ];

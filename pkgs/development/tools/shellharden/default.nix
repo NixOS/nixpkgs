@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   postPatch = "patchShebangs moduletests/run";
 
   meta = with lib; {
-    description = "Corrective bash syntax highlighter";
+    description = "The corrective bash syntax highlighter";
     mainProgram = "shellharden";
     longDescription = ''
       Shellharden is a syntax highlighter and a tool to semi-automate the

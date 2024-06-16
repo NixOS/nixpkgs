@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-notificationd";
-    description = "LXQt notification daemon";
+    description = "The LXQt notification daemon";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.lxqt.members;

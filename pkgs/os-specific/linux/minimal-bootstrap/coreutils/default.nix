@@ -80,7 +80,7 @@ kaem.runCommand "${pname}-${version}" {
   ];
 
   meta = with lib; {
-    description = "GNU Core Utilities";
+    description = "The GNU Core Utilities";
     homepage = "https://www.gnu.org/software/coreutils";
     license = licenses.gpl3Plus;
     maintainers = teams.minimal-bootstrap.members;

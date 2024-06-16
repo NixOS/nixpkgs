@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Linux sources and UVC firmwares for The Imaging Source cameras";
+    description = "The Linux sources and UVC firmwares for The Imaging Source cameras";
     homepage = "https://github.com/TheImagingSource/tiscamera";
     license = with licenses; [ asl20 ];
     platforms = platforms.linux;

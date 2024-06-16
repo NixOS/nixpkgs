@@ -106,7 +106,7 @@ let
     dontStrip = debug;
 
     meta = with lib; {
-      description = "Interactive C++ Interpreter";
+      description = "The Interactive C++ Interpreter";
       mainProgram = "cling";
       homepage = "https://root.cern/cling/";
       license = with licenses; [ lgpl21 ncsa ];

@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "GTK icon theme for tauOS";
+    description = "The GTK icon theme for tauOS";
     homepage = "https://github.com/tau-OS/tau-hydrogen";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

@@ -34,6 +34,6 @@ buildDunePackage rec {
   '';
 
   meta = mirage-runtime.meta // {
-    description = "MirageOS library operating system";
+    description = "The MirageOS library operating system";
   };
 }

@@ -85,7 +85,7 @@ buildPythonPackage rec {
       lib.replaceStrings [ "." ] [ "-" ] version
     }";
     homepage = "https://palletsprojects.com/p/werkzeug/";
-    description = "Comprehensive WSGI web application library";
+    description = "The comprehensive WSGI web application library";
     longDescription = ''
       Werkzeug is a comprehensive WSGI web application library. It
       began as a simple collection of various utilities for WSGI

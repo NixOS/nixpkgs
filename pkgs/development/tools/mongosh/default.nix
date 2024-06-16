@@ -36,7 +36,7 @@ buildNpmPackage {
 
   meta = with lib; {
     homepage = "https://www.mongodb.com/try/download/shell";
-    description = "MongoDB Shell";
+    description = "The MongoDB Shell";
     maintainers = with maintainers; [ aaronjheng ];
     license = licenses.asl20;
     mainProgram = "mongosh";

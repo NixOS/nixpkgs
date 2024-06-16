@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     mainProgram = "svix-server";
-    description = "Enterprise-ready webhooks service";
+    description = "The enterprise-ready webhooks service";
     homepage = "https://github.com/svix/svix-webhooks";
     changelog =
       "https://github.com/svix/svix-webhooks/releases/tag/v${version}";

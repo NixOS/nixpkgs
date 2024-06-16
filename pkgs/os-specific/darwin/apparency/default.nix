@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "App That Opens Apps";
+    description = "The App That Opens Apps";
     homepage = "https://www.mothersruin.com/software/Apparency/";
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ Enzime ];

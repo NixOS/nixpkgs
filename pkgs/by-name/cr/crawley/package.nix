@@ -28,7 +28,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Unix-way web crawler";
+    description = "The unix-way web crawler";
     homepage = "https://github.com/s0rg/crawley";
     license = licenses.mit;
     maintainers = with maintainers; [ ltstf1re ];

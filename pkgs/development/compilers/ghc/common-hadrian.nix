@@ -549,7 +549,7 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = "http://haskell.org/ghc";
-    description = "Glasgow Haskell Compiler";
+    description = "The Glasgow Haskell Compiler";
     maintainers = with lib.maintainers; [
       guibou
     ] ++ lib.teams.haskell.members;

@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Banana Cursor";
+    description = "The Banana Cursor";
     homepage = "https://github.com/ful1e5/banana-cursor";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ getpsyched yrd ];

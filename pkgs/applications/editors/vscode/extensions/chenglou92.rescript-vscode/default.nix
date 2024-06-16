@@ -29,7 +29,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   '';
 
   meta = {
-    description = "Official VSCode plugin for ReScript";
+    description = "The official VSCode plugin for ReScript";
     homepage = "https://github.com/rescript-lang/rescript-vscode";
     maintainers = [
       lib.maintainers.dlip

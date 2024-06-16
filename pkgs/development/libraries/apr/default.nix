@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://apr.apache.org/";
-    description = "Apache Portable Runtime library";
+    description = "The Apache Portable Runtime library";
     mainProgram = "apr-1-config";
     platforms = platforms.all;
     license = licenses.asl20;

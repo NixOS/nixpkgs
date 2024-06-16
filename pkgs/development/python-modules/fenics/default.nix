@@ -241,7 +241,7 @@ let
       make runtests
     '';
     meta = {
-      description = "FEniCS Problem Solving Environment in Python and C++";
+      description = "The FEniCS Problem Solving Environment in Python and C++";
       homepage = "https://fenicsproject.org/";
       license = lib.licenses.lgpl3;
     };

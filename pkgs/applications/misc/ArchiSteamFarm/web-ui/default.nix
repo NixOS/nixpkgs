@@ -25,7 +25,7 @@ buildNpmPackage rec {
   '';
 
   meta = with lib; {
-    description = "Official web interface for ASF";
+    description = "The official web interface for ASF";
     license = licenses.asl20;
     homepage = "https://github.com/JustArchiNET/ASF-ui";
     inherit (ArchiSteamFarm.meta) maintainers platforms;

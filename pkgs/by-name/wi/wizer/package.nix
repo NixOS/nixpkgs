@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "WebAssembly pre-initializer";
+    description = "The WebAssembly pre-initializer";
     mainProgram = "wizer";
     homepage = "https://github.com/bytecodealliance/wizer";
     license = licenses.asl20;

@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
-    description = "MATE panel";
+    description = "The MATE panel";
     homepage = "https://github.com/mate-desktop/mate-panel";
     license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
     platforms = platforms.unix;

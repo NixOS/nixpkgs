@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Nice and Friendly Decoder";
+    description = "The Nice and Friendly Decoder";
     homepage = "http://www.fpx.de/fp/Software/UUDeview/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ woffs ];

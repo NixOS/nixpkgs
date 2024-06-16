@@ -98,7 +98,7 @@ stdenv.mkDerivation
 
   meta =
     {
-      description = "Unigine Heaven GPU benchmarking tool";
+      description = "The Unigine Heaven GPU benchmarking tool";
       homepage = "https://benchmark.unigine.com/heaven";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = lib.licenses.unfree;

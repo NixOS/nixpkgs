@@ -18,7 +18,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
-    description = "Fastest shell plugin manager";
+    description = "The fastest shell plugin manager";
     mainProgram = "antibody";
     homepage = "https://github.com/getantibody/antibody";
     license = licenses.mit;

@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    description = "Client of the Tryton application platform";
+    description = "The client of the Tryton application platform";
     mainProgram = "tryton";
     longDescription = ''
       The client for Tryton, a three-tier high-level general purpose

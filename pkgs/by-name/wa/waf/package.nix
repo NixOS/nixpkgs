@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://waf.io";
-    description = "Meta build system";
+    description = "The meta build system";
     changelog  = "https://gitlab.com/ita1024/waf/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.bsd3;
     mainProgram = "waf";

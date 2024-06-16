@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
 
   meta = with lib; {
-    description = "Python backend for omniorb";
+    description = "The python backend for omniorb";
     homepage = "http://omniorb.sourceforge.net";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ nim65s ];

@@ -31,7 +31,7 @@ mkCoqDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Coq development of the Iris Project";
+    description = "The Coq development of the Iris Project";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl maintainers.ineol ];
   };

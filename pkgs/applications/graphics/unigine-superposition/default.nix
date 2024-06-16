@@ -137,7 +137,7 @@ buildFHSEnv {
   '';
 
   meta = {
-    description = "Unigine Superposition GPU benchmarking tool";
+    description = "The Unigine Superposition GPU benchmarking tool";
     homepage = "https://benchmark.unigine.com/superposition";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;

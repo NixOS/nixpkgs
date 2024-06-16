@@ -57,7 +57,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pinecone" ];
 
   meta = with lib; {
-    description = "Pinecone python client";
+    description = "The Pinecone python client";
     homepage = "https://www.pinecone.io/";
     changelog = "https://github.com/pinecone-io/pinecone-python-client/releases/tag/v${version}";
     license = licenses.mit;

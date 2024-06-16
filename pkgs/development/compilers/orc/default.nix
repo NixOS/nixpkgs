@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Oil Runtime Compiler";
+    description = "The Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
     changelog = "https://cgit.freedesktop.org/gstreamer/orc/plain/RELEASE?h=${version}";
     # The source code implementing the Marsenne Twister algorithm is licensed

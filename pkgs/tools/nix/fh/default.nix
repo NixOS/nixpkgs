@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "Official FlakeHub CLI";
+    description = "The official FlakeHub CLI";
     homepage = "https://github.com/DeterminateSystems/fh";
     changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${src.rev}";
     license = licenses.asl20;

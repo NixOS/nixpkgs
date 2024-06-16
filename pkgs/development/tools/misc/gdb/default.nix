@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     mainProgram = "gdb";
 
-    description = "GNU Project debugger";
+    description = "The GNU Project debugger";
 
     longDescription = ''
       GDB, the GNU Project debugger, allows you to see what is going

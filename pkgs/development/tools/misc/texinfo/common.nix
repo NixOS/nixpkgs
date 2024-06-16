@@ -85,7 +85,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "GNU documentation system";
+    description = "The GNU documentation system";
     homepage = "https://www.gnu.org/software/texinfo/";
     changelog = "https://git.savannah.gnu.org/cgit/texinfo.git/plain/NEWS";
     license = licenses.gpl3Plus;

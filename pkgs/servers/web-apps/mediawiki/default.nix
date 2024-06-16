@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Collaborative editing software that runs Wikipedia";
+    description = "The collaborative editing software that runs Wikipedia";
     license = licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
     platforms = platforms.all;

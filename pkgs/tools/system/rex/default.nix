@@ -88,7 +88,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = {
     homepage = "https://www.rexify.org";
-    description = "Friendly automation framework";
+    description = "The friendly automation framework";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qbit ];
   };

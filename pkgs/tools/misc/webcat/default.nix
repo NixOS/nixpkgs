@@ -22,7 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://rumpelsepp.org/blog/ssh-through-websocket/";
-    description = "Lightweight swiss army knife for websockets";
+    description = "The lightweight swiss army knife for websockets";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ montag451 ];
     mainProgram = "webcat";

@@ -22,7 +22,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Database client every command line junkie deserves";
+    description = "The database client every command line junkie deserves";
     homepage = "https://github.com/danvergara/dblab";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];

@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "Free font classic";
+    description = "The free font classic";
     maintainers = with lib.maintainers; [ mt-caret ];
     platforms = with lib.platforms; all;
     homepage = "https://yanone.de/fonts/kaffeesatz/";

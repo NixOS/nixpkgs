@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Persistent Homology Software";
+    description = "The Persistent Homology Software";
     mainProgram = "perseus";
     longDescription = ''
       Persistent homology - or simply, persistence - is an algebraic

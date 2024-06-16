@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprcursor";
-    description = "Hyprland cursor format, library and utilities";
+    description = "The hyprland cursor format, library and utilities";
     changelog = "https://github.com/hyprwm/hyprcursor/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ iynaix ];

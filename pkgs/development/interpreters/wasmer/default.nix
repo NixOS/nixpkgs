@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Universal WebAssembly Runtime";
+    description = "The Universal WebAssembly Runtime";
     mainProgram = "wasmer";
     longDescription = ''
       Wasmer is a standalone WebAssembly runtime for running WebAssembly outside

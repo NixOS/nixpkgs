@@ -16,7 +16,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "Fastest and most interactive terminal based UI application for tracking cryptocurrencies";
+    description = "The fastest and most interactive terminal based UI application for tracking cryptocurrencies";
     longDescription = ''
       cointop is a fast and lightweight interactive terminal based UI
       application for tracking and monitoring cryptocurrency coin stats in

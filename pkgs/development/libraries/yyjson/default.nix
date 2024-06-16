@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Fastest JSON library in C";
+    description = "The fastest JSON library in C";
     homepage = "https://github.com/ibireme/yyjson";
     changelog = "https://github.com/ibireme/yyjson/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;

@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/fastai/fastai";
-    description = "Fastai deep learning library";
+    description = "The fastai deep learning library";
     mainProgram = "configure_accelerate";
     changelog = "https://github.com/fastai/fastai/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

@@ -263,7 +263,7 @@ let
       sdk = androidSdk;
     };
     meta = with lib; {
-      description = "Official IDE for Android (${channel} channel)";
+      description = "The Official IDE for Android (${channel} channel)";
       longDescription = ''
         Android Studio is the official IDE for Android app development, based on
         IntelliJ IDEA.

@@ -11,23 +11,23 @@ options.mkOption {
     freeformType = types.attrsOf Package.type;
     options = {
       name = options.mkOption {
-        description = "Full name of the package";
+        description = "The full name of the package";
         example = "CXX Core Compute Libraries";
         type = types.str;
       };
       license = options.mkOption {
-        description = "License of the package";
+        description = "The license of the package";
         example = "CUDA Toolkit";
         type = types.str;
       };
       license_path = options.mkOption {
-        description = "Path to the license of the package";
+        description = "The path to the license of the package";
         example = "cuda_cccl/LICENSE.txt";
         default = null;
         type = types.nullOr types.str;
       };
       version = options.mkOption {
-        description = "Version of the package";
+        description = "The version of the package";
         example = "11.5.62";
         type = types.str;
       };

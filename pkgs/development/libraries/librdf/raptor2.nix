@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 libxslt ];
 
   meta = {
-    description = "RDF Parser Toolkit";
+    description = "The RDF Parser Toolkit";
     mainProgram = "rapper";
     homepage = "https://librdf.org/raptor";
     license = with lib.licenses; [ lgpl21 asl20 ];

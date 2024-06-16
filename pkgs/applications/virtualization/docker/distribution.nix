@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
 
   meta = with lib; {
-    description = "Docker toolset to pack, ship, store, and deliver content";
+    description = "The Docker toolset to pack, ship, store, and deliver content";
     license = licenses.asl20;
     maintainers = [];
     platforms = platforms.unix;

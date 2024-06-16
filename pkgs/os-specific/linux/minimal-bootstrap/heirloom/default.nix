@@ -92,7 +92,7 @@ bash.runCommand "${pname}-${version}" {
     '';
 
   meta = with lib; {
-    description = "Heirloom Toolchest is a collection of standard Unix utilities";
+    description = "The Heirloom Toolchest is a collection of standard Unix utilities";
     homepage = "https://heirloom.sourceforge.net/tools.html";
     license = with licenses; [
       # All licenses according to LICENSE/

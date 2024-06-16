@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/powerline/powerline";
-    description = "Ultimate statusline/prompt utility";
+    description = "The ultimate statusline/prompt utility";
     license = lib.licenses.mit;
   };
 }

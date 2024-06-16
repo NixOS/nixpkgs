@@ -49,7 +49,7 @@ let
       '';
 
       meta = with lib; {
-        description = "Tcl scripting language";
+        description = "The Tcl scripting language";
         homepage = "https://www.tcl.tk/";
         license = licenses.tcltk;
         platforms = platforms.all;

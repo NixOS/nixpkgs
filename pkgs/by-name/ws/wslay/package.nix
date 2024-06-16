@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://tatsuhiro-t.github.io/wslay/";
-    description = "WebSocket library in C";
+    description = "The WebSocket library in C";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ pingiun ];
     platforms = platforms.unix;

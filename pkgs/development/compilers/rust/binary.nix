@@ -73,7 +73,7 @@ rec {
     meta = with lib; {
       homepage = "https://doc.rust-lang.org/cargo/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      description = "Rust package manager";
+      description = "The Rust package manager";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };

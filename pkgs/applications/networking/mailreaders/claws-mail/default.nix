@@ -152,7 +152,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "User-friendly, lightweight, and fast email client";
+    description = "The user-friendly, lightweight, and fast email client";
     mainProgram = "claws-mail";
     homepage = "https://www.claws-mail.org/";
     license = licenses.gpl3Plus;

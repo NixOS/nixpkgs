@@ -49,7 +49,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "Jupyter Notebook format";
+    description = "The Jupyter Notebook format";
     mainProgram = "jupyter-trust";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;

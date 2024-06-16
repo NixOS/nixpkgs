@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Parma Polyhedra Library";
+    description = "The Parma Polyhedra Library";
 
     longDescription = ''
       The Parma Polyhedra Library (PPL) provides numerical abstractions

@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Uncompromising Nix Code Formatter";
+    description = "The Uncompromising Nix Code Formatter";
     homepage = "https://github.com/kamadorueda/alejandra";
     changelog = "https://github.com/kamadorueda/alejandra/blob/${version}/CHANGELOG.md";
     license = licenses.unlicense;

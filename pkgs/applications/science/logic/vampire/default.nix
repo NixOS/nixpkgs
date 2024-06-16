@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://vprover.github.io/";
-    description = "Vampire Theorem Prover";
+    description = "The Vampire Theorem Prover";
     mainProgram = "vampire";
     platforms = platforms.unix;
     license = licenses.bsd3;

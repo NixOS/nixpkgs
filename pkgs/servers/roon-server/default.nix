@@ -88,7 +88,7 @@ stdenv.mkDerivation {
     '';
 
   meta = with lib; {
-    description = "Music player for music lovers";
+    description = "The music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

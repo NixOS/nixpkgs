@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
-    description = "MATE Power Manager";
+    description = "The MATE Power Manager";
     homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus fdl11Plus ];
     platforms = platforms.unix;

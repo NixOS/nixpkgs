@@ -76,7 +76,7 @@ pythonPackages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://picard.musicbrainz.org";
     changelog = "https://picard.musicbrainz.org/changelog";
-    description = "Official MusicBrainz tagger";
+    description = "The official MusicBrainz tagger";
     mainProgram = "picard";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   configureFlags = lib.optionals (localStateDir != null) ["--localstatedir=${localStateDir}"];
 
   meta = with lib; {
-    description = "Falling tower game";
+    description = "The falling tower game";
     mainProgram = "xjump";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pmeunier ];

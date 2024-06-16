@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Emuflight flight control system configuration tool";
+    description = "The Emuflight flight control system configuration tool";
     mainProgram = "emuflight-configurator";
     longDescription = ''
       A crossplatform configuration tool for the Emuflight flight control system.

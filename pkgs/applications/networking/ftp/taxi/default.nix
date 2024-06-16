@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/Alecaddd/taxi";
-    description = "FTP Client that drives you anywhere";
+    description = "The FTP Client that drives you anywhere";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ] ++ teams.pantheon.members;
     platforms = platforms.linux;

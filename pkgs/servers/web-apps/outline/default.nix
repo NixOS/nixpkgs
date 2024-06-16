@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
+    description = "The fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
     license = licenses.bsl11;

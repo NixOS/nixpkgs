@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DESTDIR=" "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
 
   meta = with lib; {
-    description = "Advanced terminal calculator";
+    description = "The advanced terminal calculator";
     longDescription = ''
       Quich is a compact, fast, powerful and useful calculator for your terminal
       with numerous features, supporting Windows and Linux Systems,

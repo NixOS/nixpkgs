@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ailment" ];
 
   meta = with lib; {
-    description = "Angr Intermediate Language";
+    description = "The angr Intermediate Language";
     homepage = "https://github.com/angr/ailment";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];

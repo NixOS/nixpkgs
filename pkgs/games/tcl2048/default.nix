@@ -19,7 +19,7 @@ tcl.mkTclDerivation rec {
 
   meta = {
     homepage = "https://github.com/dbohdan/2048.tcl";
-    description = "Game of 2048 implemented in Tcl";
+    description = "The game of 2048 implemented in Tcl";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dbohdan ];
     mainProgram = "2048";

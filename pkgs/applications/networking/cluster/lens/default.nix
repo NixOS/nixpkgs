@@ -28,7 +28,7 @@ let
   };
 
   meta = with lib; {
-    description = "Kubernetes IDE";
+    description = "The Kubernetes IDE";
     homepage = "https://k8slens.dev/";
     license = licenses.lens;
     maintainers = with maintainers; [ dbirks RossComputerGuy starkca90 ];

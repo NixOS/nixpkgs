@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "https://strlen.com/lobster/";
-    description = "Lobster programming language";
+    description = "The Lobster programming language";
     mainProgram = "lobster";
     longDescription = ''
       Lobster is a programming language that tries to combine the advantages of

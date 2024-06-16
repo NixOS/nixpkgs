@@ -183,7 +183,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/coreutils/";
-    description = "GNU Core Utilities";
+    description = "The GNU Core Utilities";
     longDescription = ''
       The GNU Core Utilities are the basic file, shell and text manipulation
       utilities of the GNU operating system. These are the core utilities which

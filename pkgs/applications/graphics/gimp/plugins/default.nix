@@ -147,7 +147,7 @@ in
     };
 
     meta = with lib; {
-      description = "GIMP Animation Package";
+      description = "The GIMP Animation Package";
       homepage = "https://www.gimp.org";
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
       # falls inside "free".

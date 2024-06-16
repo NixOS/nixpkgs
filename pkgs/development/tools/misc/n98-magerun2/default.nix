@@ -18,7 +18,7 @@ php.buildComposerProject (finalAttrs: {
 
   meta = {
     changelog = "https://magerun.net/category/magerun/";
-    description = "Swiss army knife for Magento2 developers";
+    description = "The swiss army knife for Magento2 developers";
     homepage = "https://magerun.net/";
     license = lib.licenses.mit;
     mainProgram = "n98-magerun2";

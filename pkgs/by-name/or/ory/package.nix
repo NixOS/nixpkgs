@@ -35,7 +35,7 @@ buildGoModule rec {
 
   meta = with lib; {
     mainProgram = "ory";
-    description = "Ory CLI";
+    description = "The Ory CLI";
     homepage = "https://www.ory.sh/cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ luleyleo nicolas-goudry ];

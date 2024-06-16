@@ -21,7 +21,7 @@ let
   };
 
   meta = with lib; {
-    description = "Authentication glue you need";
+    description = "The authentication glue you need";
     changelog = "https://github.com/goauthentik/authentik/releases/tag/version%2F${version}";
     homepage = "https://goauthentik.io/";
     license = licenses.mit;

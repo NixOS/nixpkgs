@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ parted util-linux ];
 
   meta = with lib; {
-    description = "FAT16/FAT32 non-destructive resizer";
+    description = "The FAT16/FAT32 non-destructive resizer";
     homepage = "https://github.com/ya-mouse/fatresize";
     platforms = platforms.linux;
     license = licenses.gpl3;
