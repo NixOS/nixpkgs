@@ -6,13 +6,13 @@
 }:
 crystal.buildCrystalPackage rec {
   pname = "gi-crystal";
-  version = "0.22.2";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "hugopl";
     repo = "gi-crystal";
     rev = "v${version}";
-    hash = "sha256-JfBbKqobikpTGMryeO86zZ46EbOHybem+Cc5FZEL6i4=";
+    hash = "sha256-cwa+2e8y1V40bMWe0qxNkc/BHJDeo9Xx9yEKOtwq0vc=";
   };
 
   # Make sure gi-crystal picks up the name of the so or dylib and not the leading nix store path
