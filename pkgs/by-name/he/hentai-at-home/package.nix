@@ -9,7 +9,7 @@
 ,
 }:
 stdenvNoCC.mkDerivation rec {
-  pname = "HentaiAtHome";
+  pname = "hentai-at-home";
   version = "1.6.3";
 
   src = fetchzip {
