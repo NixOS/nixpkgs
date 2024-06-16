@@ -1,12 +1,13 @@
-{ aria2
-, cmake
-, fetchFromGitHub
-, ffmpeg
-, lib
-, libsForQt5
-, python3
-, stdenv
-, yt-dlp
+{
+  aria2,
+  cmake,
+  fetchFromGitHub,
+  ffmpeg,
+  lib,
+  libsForQt5,
+  python3,
+  stdenv,
+  yt-dlp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,17 +26,17 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    libsForQt5.qtbase
-  ];
+  buildInputs = [ libsForQt5.qtbase ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [
+    "--prefix PATH : ${
+      lib.makeBinPath [
         aria2
         ffmpeg
         python3
         yt-dlp
-      ]}"
+      ]
+    }"
   ];
 
   meta = {
