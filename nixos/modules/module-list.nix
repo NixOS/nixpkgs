@@ -110,6 +110,7 @@
   ./hardware/video/nvidia.nix
   ./hardware/video/switcheroo-control.nix
   ./hardware/video/uvcvideo/default.nix
+  ./hardware/video/virtualbox.nix
   ./hardware/video/webcam/facetimehd.nix
   ./hardware/video/webcam/ipu6.nix
   ./hardware/wooting.nix

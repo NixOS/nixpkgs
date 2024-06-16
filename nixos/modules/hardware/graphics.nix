@@ -2,10 +2,6 @@
 let
   cfg = config.hardware.graphics;
 
-  kernelPackages = config.boot.kernelPackages;
-
-  videoDrivers = config.services.xserver.videoDrivers;
-
   driversEnv = pkgs.buildEnv {
     name = "graphics-drivers";
     paths = [ cfg.package ] ++ cfg.extraPackages;
@@ -126,7 +122,5 @@ in
 
     hardware.graphics.package = lib.mkDefault pkgs.mesa.drivers;
     hardware.graphics.package32 = lib.mkDefault pkgs.pkgsi686Linux.mesa.drivers;
-
-    boot.extraModulePackages = lib.optional (lib.elem "virtualbox" videoDrivers) kernelPackages.virtualboxGuestAdditions;
   };
 }
