@@ -22,6 +22,7 @@
   python,
   scipy,
   sparsehash,
+  gitUpdater,
 }:
 
 let
@@ -87,6 +88,11 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   pythonImportsCheck = [ "graph_tool" ];
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.skewed.de/count0/graph-tool";
+    rev-prefix = "release-";
+  };
 
   meta = {
     description = "Python module for manipulation and statistical analysis of graphs";
