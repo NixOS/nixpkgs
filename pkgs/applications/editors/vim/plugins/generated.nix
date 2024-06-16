@@ -5915,6 +5915,18 @@ final: prev:
     meta.homepage = "https://github.com/mkasa/lushtags/";
   };
 
+  lz-n = buildNeovimPlugin {
+    pname = "lz.n";
+    version = "2024-06-16";
+    src = fetchFromGitHub {
+      owner = "nvim-neorocks";
+      repo = "lz.n";
+      rev = "ffd6633cbe2145177bd522fa340104fa44afbc1c";
+      sha256 = "sha256-aV+m4+8oWwIPTQhilXfHOUyYqQGl4NRnk7HvEQYMp0Y=";
+    };
+    meta.homepage = "https://github.com/nvim-neorocks/lz.n/";
+  };
+
   magma-nvim-goose = buildVimPlugin {
     pname = "magma-nvim-goose";
     version = "2023-07-04";
