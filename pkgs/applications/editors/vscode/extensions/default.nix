@@ -4861,6 +4861,22 @@ let
         };
       };
 
+      zaaack.markdown-editor = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-editor";
+          publisher = "zaaack";
+          version = "0.1.10";
+          hash = "sha256-K1nczR059BsiHpT1xdtJjpFLl5krt4H9+CrEsIycq9U=";
+        };
+        meta = {
+          description = "Visual Studio Code extension for WYSIWYG markdown editing";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=zaaack.markdown-editor";
+          homepage = "https://github.com/zaaack/vscode-markdown-editor";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.pandapip1 ];
+        };
+      };
+
       zainchen.json = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "json";
