@@ -17,7 +17,7 @@ buildNpmPackage {
       hash = "sha256-hBJGLNNjcGRhYOFlLm/RL0po+70tEeJtR6Y/CfacPAI=";
     })
   ];
-  npmDepsHash = "sha256-tqhp3jDb1xtyV/n9kJtzkiznLQfqeYWeZiTnTVV0ibE=";
+  npmDepsHash = "sha256-otAes6GkqoAVvfeWhWgyY4IVZIZxw3WtkrVdEWIk1Lk=";
   makeCacheWritable = true;
   npmRebuildFlags = [ "--ignore-scripts" ];
   installPhase = ''
