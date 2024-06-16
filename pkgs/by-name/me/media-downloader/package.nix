@@ -21,6 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ykPYxRgzKZrA0KwS1FoxZOkSL+7TbLgy0yLfs7Iqpf4=";
   };
 
+  # Disable automatically updating extensions when starting the program because this will
+  # invalidate the dependence on extensions and may cause potential security issues
+  # Can still be enabled in Configure > Actions At Startup
+  postPatch = ''
+    substituteInPlace src/settings.cpp \
+      --replace-fail '"ShowVersionInfoAndAutoDownloadUpdates",true' '"ShowVersionInfoAndAutoDownloadUpdates",false' \
+  '';
+
   nativeBuildInputs = [
     cmake
     libsForQt5.wrapQtAppsHook
