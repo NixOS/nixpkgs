@@ -20,6 +20,6 @@ appimageTools.wrapType2 rec {
     mainProgram = "Sylk";
     maintainers = with lib.maintainers; [ zimbatm ];
     platforms = [ "i386-linux" "x86_64-linux" ];
-    sourceProvenance = lib.sourceTypes.binaryNativeCode;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
