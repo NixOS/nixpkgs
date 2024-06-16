@@ -1,6 +1,6 @@
 { wsjtx, fetchgit, qt5, lib }:
 wsjtx.overrideAttrs (old: {
-  name = "jtdx";
+  pname = "jtdx";
   version = "unstable-2022-03-01";
   src = fetchgit {
     url = "https://github.com/jtdx-project/jtdx.git";
