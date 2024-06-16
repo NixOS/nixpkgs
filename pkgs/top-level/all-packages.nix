@@ -4197,8 +4197,6 @@ with pkgs;
 
   beats = callPackage ../tools/misc/beats { };
 
-  BeatSaberModManager = callPackage ../games/BeatSaberModManager/default.nix { };
-
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
