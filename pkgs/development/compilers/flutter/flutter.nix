@@ -1,5 +1,10 @@
-{ version
+{ useNixpkgsEngine ? false
+, version
 , engineVersion
+, engineHashes ? {}
+, engineUrl ? "https://github.com/flutter/engine.git@${engineVersion}"
+, enginePatches ? []
+, engineRuntimeModes ? [ "release" "debug" ]
 , patches
 , channel
 , dart
@@ -21,9 +26,20 @@
     inherit pubspecLock;
     systemPlatform = stdenv.hostPlatform.system;
   }
-}:
+}@args:
 
 let
+  engine = if args.useNixpkgsEngine or false then
+    callPackage ./engine/default.nix {
+      dartSdkVersion = dart.version;
+      flutterVersion = version;
+      version = engineVersion;
+      hashes = engineHashes;
+      url = engineUrl;
+      patches = enginePatches;
+      runtimeModes = engineRuntimeModes;
+    } else null;
+
   unwrapped =
     stdenv.mkDerivation {
       name = "flutter-${version}-unwrapped";
@@ -125,12 +141,15 @@ let
       '';
 
       passthru = {
+        # TODO: rely on engine.version instead of engineVersion
         inherit dart engineVersion artifactHashes channel;
         tools = flutterTools;
         # The derivation containing the original Flutter SDK files.
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
         sdk = unwrapped;
+      } // lib.optionalAttrs (engine != null && engine.meta.available) {
+        inherit engine;
       };
 
       meta = with lib; {

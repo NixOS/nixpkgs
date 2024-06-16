@@ -25,7 +25,8 @@ in {
 
       tar --strip-components=1 -xf ${yarnpkg-lockfile-tar} package/index.js
       mv index.js $out/libexec/yarnpkg-lockfile.js
-      cp ${./.}/common.js ${./.}/index.js $out/libexec/
+      cp ${./common.js} $out/libexec/common.js
+      cp ${./index.js} $out/libexec/index.js
 
       patchShebangs $out/libexec
       makeWrapper $out/libexec/index.js $out/bin/prefetch-yarn-deps \
@@ -53,7 +54,8 @@ in {
 
       tar --strip-components=1 -xf ${yarnpkg-lockfile-tar} package/index.js
       mv index.js $out/libexec/yarnpkg-lockfile.js
-      cp ${./.}/common.js ${./.}/fixup.js $out/libexec/
+      cp ${./common.js} $out/libexec/common.js
+      cp ${./fixup.js} $out/libexec/fixup.js
 
       patchShebangs $out/libexec
       makeWrapper $out/libexec/fixup.js $out/bin/fixup-yarn-lock
@@ -97,7 +99,7 @@ in {
       '';
 
       outputHashMode = "recursive";
-    } // hash_ // (removeAttrs args ["src" "name" "hash" "sha256"]));
+    } // hash_ // (removeAttrs args (["name" "hash" "sha256"] ++ (lib.optional (src == null) "src"))));
 
   in lib.setFunctionArgs f (lib.functionArgs f) // {
     inherit tests;
