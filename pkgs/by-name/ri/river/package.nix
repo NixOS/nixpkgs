@@ -15,14 +15,14 @@
 , wayland-protocols
 , wlroots_0_17
 , xwayland
-, zig_0_12
+, zig_0_13
 , withManpages ? true
 , xwaylandSupport ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.2";
+  version = "0.3.3";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-I09cR5aN7qXOzV9HDXaL4TjoeJcVa0Ch00zxOJokdDE=";
+    hash = "sha256-DYaxtYJLZQqE2SyPfWec/zXsZKRnxK2QNgOkM7GJkLI=";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wayland
     xwayland
-    zig_0_12.hook
+    zig_0_13.hook
   ]
   ++ lib.optional withManpages scdoc;
 
