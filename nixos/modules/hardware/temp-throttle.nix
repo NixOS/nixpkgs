@@ -58,9 +58,6 @@ in
     systemd.services.temp-throttle = {
       description = "Linux shell script for throttling system CPU frequency based on a desired maximum temperature";
       wantedBy = [ "basic.target" ];
-      path = [
-        pkgs.bash
-      ];
       serviceConfig = with builtins; {
         ExecStart = "${cfg.package}/bin/temp-throttle -c " +
           toFile "temp-throttle.conf" configFile;
