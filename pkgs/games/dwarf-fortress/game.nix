@@ -2,6 +2,8 @@
 , lib
 , fetchurl
 , SDL
+, SDL_image
+, SDL_ttf
 , SDL2
 , SDL2_image
 , SDL2_mixer
@@ -119,7 +121,7 @@ stdenv.mkDerivation {
     [ -f $out/run_df ] && chmod +x $out/run_df
 
     # We don't need any of these since they will just break autoPatchelf on <version 50.
-    [ -d $out/libs ] && rm -rf $out/libs/*.so $out/libs/*.so.* $out/libs/*.dylib $out/libs/*.framework
+    [ -d $out/libs ] && rm -rf $out/libs/*.so $out/libs/*.so.* $out/libs/*.dylib
 
     # Store the original hash
     md5sum $exe | awk '{ print $1 }' > $out/hash.md5.orig
@@ -132,6 +134,7 @@ stdenv.mkDerivation {
 
     ln -s ${getLib ncurses}/lib/libncurses.dylib $out/libs
     ln -s ${getLib gcc.cc}/lib/libstdc++.6.dylib $out/libs
+    ln -s ${getLib gcc.cc}/lib/libgcc_s.1.dylib $out/libs
     ln -s ${getLib fmodex}/lib/libfmodex.dylib $out/libs
 
     install_name_tool \
