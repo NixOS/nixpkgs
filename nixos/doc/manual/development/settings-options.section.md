@@ -269,6 +269,14 @@ have a predefined type and string generator already declared under
           }
         ```
 
+    `Implementation notes:`
+
+    - Since libconfig does not allow setting names to start with an underscore,
+      this is used as a prefix for both special types and include directives.
+
+    - The difference between 32bit and 64bit values became optional in libconfig
+      1.5, so we assume 64bit values for all numbers.
+
 `pkgs.formats.json` { }
 
 :   A function taking an empty attribute set (for future extensibility)
