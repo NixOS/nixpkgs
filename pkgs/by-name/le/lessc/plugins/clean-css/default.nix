@@ -5,7 +5,6 @@
   testers,
   runCommand,
   writeText,
-  symlinkJoin,
   lessc,
 }:
 
@@ -35,15 +34,7 @@ buildNpmPackage {
         actual =
           runCommand "actual"
             {
-              nativeBuildInputs = [
-                (symlinkJoin {
-                  name = "less-css-with-plugins";
-                  paths = [
-                    lessc
-                    lessc.plugins.clean-css
-                  ];
-                })
-              ];
+              nativeBuildInputs = [ (lessc.withPlugins (p: [ p.clean-css ])) ];
               base = writeText "base" ''
                 @color: red;
                 body {
@@ -52,10 +43,6 @@ buildNpmPackage {
                   }
                 }
               '';
-              NODE_PATH = lib.concatMapStringsSep ":" (pkg: "${pkg}/lib/node_modules") [
-                lessc
-                lessc.plugins.clean-css
-              ];
             }
             ''
               lessc $base --clean-css="--s1 --advanced" > $out
