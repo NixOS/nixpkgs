@@ -147,7 +147,7 @@ in
       --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
       '' + lib.optionalString (flutter ? engine && flutter.engine.meta.available) ''
         --set-default FLUTTER_ENGINE "${flutter.engine}" \
-        --add-flags "--local-engine-host host_${flutter.engine.runtimeMode}${lib.optionalString (!flutter.engine.isOptimized) "_unopt"}" \
+        --add-flags "--local-engine-host ${flutter.engine.outName}" \
       '' + '' --suffix PATH : '${lib.makeBinPath (tools ++ buildTools)}' \
       --suffix PKG_CONFIG_PATH : "$FLUTTER_PKG_CONFIG_PATH" \
       --suffix LIBRARY_PATH : '${lib.makeLibraryPath appStaticBuildDeps}' \

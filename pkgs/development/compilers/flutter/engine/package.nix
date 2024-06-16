@@ -56,6 +56,8 @@ let
       url
       ;
   };
+
+  outName = "host_$runtimeMode${lib.optionalString (!isOptimized) "_unopt --unoptimized"}";
 in
 stdenv.mkDerivation {
   pname = "flutter-engine-${runtimeMode}${lib.optionalString (!isOptimized) "-unopt"}";
@@ -65,7 +67,8 @@ stdenv.mkDerivation {
     patches
     isOptimized
     dartSdkVersion
-    src;
+    src
+    outName;
 
   toolchain = symlinkJoin {
     name = "flutter-engine-toolchain-${version}";
@@ -107,8 +110,11 @@ stdenv.mkDerivation {
         stdenv.cc.libc_lib
       ];
 
+    # Needed due to Flutter expecting everything to be relative to $out
+    # and not true absolute path (ie relative to "/").
     postBuild = ''
-      ln -s /nix $out/nix
+      mkdir -p $(dirname $(dirname "$out/$out"))
+      ln -s $(dirname "$out") $out/$(dirname "$out")
     '';
   };
 
@@ -250,7 +256,7 @@ stdenv.mkDerivation {
         --runtime-mode $runtimeMode \
         --out-dir $out \
         --target-sysroot $toolchain \
-        --target-dir host_$runtimeMode${lib.optionalString (!isOptimized) "_unopt --unoptimized"} \
+        --target-dir $outName \
         --verbose
 
       runHook postConfigure
@@ -261,22 +267,16 @@ stdenv.mkDerivation {
 
     export TERM=dumb
     for tool in flatc scenec gen_snapshot dart impellerc shader_archiver gen_snapshot_product; do
-      ninja -C $out/out/host_$runtimeMode${
-        lib.optionalString (!isOptimized) "_unopt"
-      } -j$NIX_BUILD_CORES $tool
+      ninja -C $out/out/$outName -j$NIX_BUILD_CORES $tool
       ${lib.optionalString (stdenv.isLinux) ''
-        patchelf $out/out/host_$runtimeMode${
-          lib.optionalString (!isOptimized) "_unopt"
-        }/$tool --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)
+        patchelf $out/out/$outName/$tool --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)
       ''}
     done
 
-    ninja -C $out/out/host_$runtimeMode${lib.optionalString (!isOptimized) "_unopt"} -j$NIX_BUILD_CORES
+    ninja -C $out/out/$outName -j$NIX_BUILD_CORES
 
     ${lib.optionalString (stdenv.isLinux) ''
-      patchelf $out/out/host_$runtimeMode${
-        lib.optionalString (!isOptimized) "_unopt"
-      }/dart-sdk/bin/dartaotruntime \
+      patchelf $out/out/$outName/dart-sdk/bin/dartaotruntime \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)
     ''}
 

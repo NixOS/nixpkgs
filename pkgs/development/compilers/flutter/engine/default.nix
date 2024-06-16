@@ -10,10 +10,12 @@
   isOptimized ? true,
   lib,
   stdenv,
-}:
+  mainRuntimeMode ? null,
+  altRuntimeMode ? null,
+}@args:
 let
-  mainRuntimeMode = builtins.elemAt runtimeModes 0;
-  altRuntimeMode = builtins.elemAt runtimeModes 1;
+  mainRuntimeMode = args.mainRuntimeMode or builtins.elemAt runtimeModes 0;
+  altRuntimeMode = args.altRuntimeMode or builtins.elemAt runtimeModes 1;
 
   runtimeModesBuilds = lib.genAttrs runtimeModes (
     runtimeMode:
@@ -42,7 +44,7 @@ stdenv.mkDerivation (
       dartSdkVersion
       isOptimized
       runtimeMode
-      ;
+      outName;
     inherit altRuntimeMode;
 
     dontUnpack = true;
@@ -61,9 +63,7 @@ stdenv.mkDerivation (
         runtimeMode:
         let
           runtimeModeBuild = runtimeModesBuilds.${runtimeMode};
-          runtimeModeOut = "host_${runtimeMode}${
-            lib.optionalString (!runtimeModeBuild.isOptimized) "_unopt"
-          }";
+          runtimeModeOut = runtimeModeBuild.outName;
         in
         ''
           ln -sf ${runtimeModeBuild}/out/${runtimeModeOut} $out/out/${runtimeModeOut}
