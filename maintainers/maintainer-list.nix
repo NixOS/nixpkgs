@@ -4041,7 +4041,7 @@
   };
   coffeeispower = {
     email = "tiagodinis33@proton.me";
-    github = "coffee-is-power";
+    github = "coffeeispower";
     name = "Tiago Dinis";
     githubId = 92828847;
   };
