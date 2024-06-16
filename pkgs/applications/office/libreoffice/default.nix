@@ -47,7 +47,7 @@
 , libGLU
 , libGL
 , bsh
-, CoinMP
+, coinmp
 , libwps
 , libabw
 , libargon2
@@ -288,7 +288,7 @@ in stdenv.mkDerivation (finalAttrs: {
     # See: https://www.mail-archive.com/libreoffice@lists.freedesktop.org/msg334080.html
     (libpng.override { apngSupport = false; })
     perlPackages.ArchiveZip
-    CoinMP
+    coinmp
     perlPackages.IOCompress
     abseil-cpp
     ant

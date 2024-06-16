@@ -33,7 +33,7 @@ let
     .${targetPlatform.system} or (throw "${targetPlatform.system} is unsupported.");
 in
 stdenv.mkDerivation (finalAttrs: {
-  name = "bombsquad";
+  pname = "bombsquad";
   version = "1.7.35";
   sourceRoot = ".";
   src = fetchurl {

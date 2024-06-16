@@ -85,7 +85,7 @@ let
   rocmLibs = [
     rocmPackages.clr
     rocmPackages.hipblas
-    (rocmPackages.rocblas.override { tensileSepArch = true; tensileLazyLib = true; })
+    rocmPackages.rocblas
     rocmPackages.rocsolver
     rocmPackages.rocsparse
     rocmPackages.rocm-device-libs
