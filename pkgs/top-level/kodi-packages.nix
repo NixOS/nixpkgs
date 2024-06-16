@@ -191,6 +191,8 @@ let
 
     signals = callPackage ../applications/video/kodi/addons/signals { };
 
+    simplecache = callPackage ../applications/video/kodi/addons/simplecache { };
+
     simplejson = callPackage ../applications/video/kodi/addons/simplejson { };
 
     six = callPackage ../applications/video/kodi/addons/six { };
