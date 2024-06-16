@@ -151,5 +151,9 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
+    knownVulnerabilities = [
+      "Forgejo v1.20.x is EOL"
+      "OAuth2 implementation does not always require authentication for public clients"
+    ];
   };
 }
