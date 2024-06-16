@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  callPackage,
   testers,
   runCommand,
   writeText,
@@ -33,6 +34,7 @@ buildNpmPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    plugins = callPackage ./plugins { };
     tests = {
       version = testers.testVersion { package = lessc; };
 
