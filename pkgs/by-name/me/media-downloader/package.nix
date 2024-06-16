@@ -57,7 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/mhogomchungu/media-downloader";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ zendo ];
+    maintainers = with lib.maintainers; [
+      zendo
+      aleksana
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "media-downloader";
   };
