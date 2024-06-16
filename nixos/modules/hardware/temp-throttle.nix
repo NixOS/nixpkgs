@@ -11,7 +11,7 @@ let
   ;
 in
 {
-  options = 
+  options =
   let
     mkOption = lib.mkOption;
     nullOr = lib.types.nullOr;
@@ -62,7 +62,7 @@ in
         pkgs.bash
       ];
       serviceConfig = with builtins; {
-        ExecStart = "${cfg.package}/bin/temp-throttle -c " + 
+        ExecStart = "${cfg.package}/bin/temp-throttle -c " +
           toFile "temp-throttle.conf" configFile;
         Type = "simple";
       };
