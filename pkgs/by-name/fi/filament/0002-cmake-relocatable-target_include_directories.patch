@@ -1,0 +1,490 @@
+From 9846c94c84c9986855e785833a4d5f8803abd043 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Sat, 15 Jun 2024 23:33:27 +0000
+Subject: [PATCH 2/2] cmake: relocatable target_include_directories()
+
+---
+ libs/bluegl/CMakeLists.txt       |  4 ++--
+ libs/bluevk/CMakeLists.txt       |  4 ++--
+ libs/camutils/CMakeLists.txt     |  4 ++--
+ libs/filabridge/CMakeLists.txt   |  4 ++--
+ libs/filaflat/CMakeLists.txt     |  4 ++--
+ libs/filagui/CMakeLists.txt      |  4 ++--
+ libs/filamat/CMakeLists.txt      |  4 ++--
+ libs/filamentapp/CMakeLists.txt  |  4 ++--
+ libs/filameshio/CMakeLists.txt   |  4 ++--
+ libs/geometry/CMakeLists.txt     |  4 ++--
+ libs/gltfio/CMakeLists.txt       |  8 ++++----
+ libs/ibl/CMakeLists.txt          |  6 +++---
+ libs/iblprefilter/CMakeLists.txt |  4 ++--
+ libs/image/CMakeLists.txt        |  4 ++--
+ libs/imageio/CMakeLists.txt      | 14 +++++++-------
+ libs/ktxreader/CMakeLists.txt    |  4 ++--
+ libs/matdbg/CMakeLists.txt       |  4 ++--
+ libs/math/CMakeLists.txt         |  4 ++--
+ libs/mathio/CMakeLists.txt       |  4 ++--
+ libs/uberz/CMakeLists.txt        |  4 ++--
+ libs/utils/CMakeLists.txt        |  4 ++--
+ libs/viewer/CMakeLists.txt       |  2 +-
+ 22 files changed, 51 insertions(+), 51 deletions(-)
+
+diff --git a/libs/bluegl/CMakeLists.txt b/libs/bluegl/CMakeLists.txt
+index 02a3676c9..0e9880b72 100644
+--- a/libs/bluegl/CMakeLists.txt
++++ b/libs/bluegl/CMakeLists.txt
+@@ -45,13 +45,13 @@ else()
+ endif()
+ 
+ # specify where our headers are
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ # we're building a library
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ 
+ # specify where the public headers of this library are
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ if (WIN32)
+diff --git a/libs/bluevk/CMakeLists.txt b/libs/bluevk/CMakeLists.txt
+index bc5986e64..2eb626612 100644
+--- a/libs/bluevk/CMakeLists.txt
++++ b/libs/bluevk/CMakeLists.txt
+@@ -19,13 +19,13 @@ else()
+     message(FATAL_ERROR "Platform not supported. BlueVK supports Linux, Android, MacOS X, and Windows.")
+ endif()
+ 
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ 
+ target_link_libraries(${TARGET} utils math)
+ 
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ # test_bluevk is not supported on mobile or Windows
+diff --git a/libs/camutils/CMakeLists.txt b/libs/camutils/CMakeLists.txt
+index 97ed05f74..7097a4c87 100644
+--- a/libs/camutils/CMakeLists.txt
++++ b/libs/camutils/CMakeLists.txt
+@@ -24,13 +24,13 @@ set(SRCS
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ 
+ target_link_libraries(${TARGET} PUBLIC math)
+ 
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ # ==================================================================================================
+diff --git a/libs/filabridge/CMakeLists.txt b/libs/filabridge/CMakeLists.txt
+index 515103320..06e5f961e 100644
+--- a/libs/filabridge/CMakeLists.txt
++++ b/libs/filabridge/CMakeLists.txt
+@@ -18,10 +18,10 @@ set(SRCS
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ target_link_libraries(${TARGET} utils)
+diff --git a/libs/filaflat/CMakeLists.txt b/libs/filaflat/CMakeLists.txt
+index 378c31c8a..d6b586403 100644
+--- a/libs/filaflat/CMakeLists.txt
++++ b/libs/filaflat/CMakeLists.txt
+@@ -18,10 +18,10 @@ set(SRCS
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} ${HDRS} ${SRCS})
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ target_link_libraries(${TARGET} filabridge utils)
+diff --git a/libs/filagui/CMakeLists.txt b/libs/filagui/CMakeLists.txt
+index 55f3d867f..395f287ac 100644
+--- a/libs/filagui/CMakeLists.txt
++++ b/libs/filagui/CMakeLists.txt
+@@ -81,14 +81,14 @@ list(APPEND RESGEN_SOURCE ${DUMMY_SRC})
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ include_directories(${GENERATION_ROOT})
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS} ${RESGEN_SOURCE})
+ 
+ target_link_libraries(${TARGET} PUBLIC imgui filament)
+ 
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ # ==================================================================================================
+diff --git a/libs/filamat/CMakeLists.txt b/libs/filamat/CMakeLists.txt
+index 2fc20d7e9..40dbf1935 100644
+--- a/libs/filamat/CMakeLists.txt
++++ b/libs/filamat/CMakeLists.txt
+@@ -77,12 +77,12 @@ set(SRCS
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ include_directories(${CMAKE_BINARY_DIR})
+ 
+ # Filamat
+ add_library(${TARGET} STATIC ${HDRS} ${PRIVATE_HDRS} ${SRCS})
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ target_link_libraries(${TARGET} shaders filabridge utils smol-v)
+ 
+diff --git a/libs/filamentapp/CMakeLists.txt b/libs/filamentapp/CMakeLists.txt
+index 2e0e95b7d..625d23248 100644
+--- a/libs/filamentapp/CMakeLists.txt
++++ b/libs/filamentapp/CMakeLists.txt
+@@ -136,13 +136,13 @@ set_target_properties(filamentapp-resources PROPERTIES FOLDER Samples/Resources)
+ # Include and target definitions
+ # ==================================================================================================
+ 
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ 
+ target_link_libraries(${TARGET} PUBLIC ${LIBS} filamentapp-resources)
+ 
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ target_include_directories(${TARGET} PRIVATE ${GENERATION_ROOT})
+ 
+diff --git a/libs/filameshio/CMakeLists.txt b/libs/filameshio/CMakeLists.txt
+index 61847cd51..df1c7c6fa 100644
+--- a/libs/filameshio/CMakeLists.txt
++++ b/libs/filameshio/CMakeLists.txt
+@@ -18,9 +18,9 @@ set(SRCS src/MeshReader.cpp)
+ # ==================================================================================================
+ # Includes and target definition
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ target_link_libraries(${TARGET}
+     PRIVATE meshoptimizer
+diff --git a/libs/geometry/CMakeLists.txt b/libs/geometry/CMakeLists.txt
+index aa9b5b1db..9393748a3 100644
+--- a/libs/geometry/CMakeLists.txt
++++ b/libs/geometry/CMakeLists.txt
+@@ -23,7 +23,7 @@ set(SRCS
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ 
+@@ -35,7 +35,7 @@ set(GEOMETRY_DEPS
+ target_link_libraries(${TARGET} PUBLIC math utils)
+ target_link_libraries(${TARGET} PRIVATE ${GEOMETRY_DEPS})
+ 
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ # ==================================================================================================
+diff --git a/libs/gltfio/CMakeLists.txt b/libs/gltfio/CMakeLists.txt
+index 4d383dc8b..72ad8c9ab 100644
+--- a/libs/gltfio/CMakeLists.txt
++++ b/libs/gltfio/CMakeLists.txt
+@@ -171,19 +171,19 @@ set(DUMMY_SRC "${RESOURCE_DIR}/dummy.c")
+ add_custom_command(OUTPUT ${DUMMY_SRC} COMMAND echo "//" > ${DUMMY_SRC})
+ 
+ add_library(uberarchive ${DUMMY_SRC} ${RESGEN_SOURCE})
+-target_include_directories(uberarchive PUBLIC ${RESOURCE_DIR})
++target_include_directories(uberarchive PUBLIC $<BUILD_INTERFACE:${RESOURCE_DIR}>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(uberarchive PROPERTIES FOLDER Libs)
+ 
+ # ==================================================================================================
+ # Build the "core" library (no filamat)
+ # ==================================================================================================
+ 
+-include_directories(${PUBLIC_HDR_DIR} ${RESOURCE_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}> $<BUILD_INTERFACE:${RESOURCE_DIR}>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ link_libraries(math utils filament cgltf stb ktxreader geometry tsl uberzlib)
+ 
+ add_library(gltfio_core STATIC ${PUBLIC_HDRS} ${SRCS})
+ 
+-target_include_directories(gltfio_core PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(gltfio_core PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(gltfio_core PROPERTIES FOLDER Libs)
+ 
+ target_compile_definitions(gltfio_core PUBLIC -DGLTFIO_DRACO_SUPPORTED=1)
+@@ -205,7 +205,7 @@ if (NOT WEBGL AND NOT ANDROID AND NOT IOS)
+     # ==================================================================================================
+     add_library(${TARGET} STATIC ${PUBLIC_HDRS} src/JitShaderProvider.cpp)
+     target_link_libraries(${TARGET} PUBLIC filamat gltfio_core)
+-    target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++    target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+     set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+     if (NOT MSVC)
+         target_compile_options(${TARGET} PRIVATE -Wno-deprecated-register)
+diff --git a/libs/ibl/CMakeLists.txt b/libs/ibl/CMakeLists.txt
+index 7027e6e91..bdb36af4d 100644
+--- a/libs/ibl/CMakeLists.txt
++++ b/libs/ibl/CMakeLists.txt
+@@ -31,16 +31,16 @@ set(SRCS
+ # ==================================================================================================
+ # Target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} ${PUBLIC_HDRS} ${PRIVATE_HDRS} ${SRCS})
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ target_link_libraries(${TARGET} math utils)
+ 
+ add_library(${TARGET}-lite ${PUBLIC_HDRS} ${PRIVATE_HDRS} ${SRCS})
+ target_compile_definitions(${TARGET}-lite PUBLIC -DFILAMENT_IBL_LITE=1)
+-target_include_directories(${TARGET}-lite PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET}-lite PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET}-lite PROPERTIES FOLDER Libs)
+ target_link_libraries(${TARGET}-lite math utils)
+ 
+diff --git a/libs/iblprefilter/CMakeLists.txt b/libs/iblprefilter/CMakeLists.txt
+index 23de8317b..cfe2fa673 100644
+--- a/libs/iblprefilter/CMakeLists.txt
++++ b/libs/iblprefilter/CMakeLists.txt
+@@ -79,7 +79,7 @@ endif()
+ # Includes & target definition
+ # ==================================================================================================
+ # specify where our headers are
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ include_directories(${GENERATION_ROOT})
+ include_directories(src)
+ 
+@@ -87,7 +87,7 @@ include_directories(src)
+ add_library(${TARGET} STATIC ${PRIVATE_HDRS} ${PUBLIC_HDRS} ${SRCS})
+ 
+ # specify where the public headers of this library are
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ # ==================================================================================================
+diff --git a/libs/image/CMakeLists.txt b/libs/image/CMakeLists.txt
+index ffb26a094..cbda74d74 100644
+--- a/libs/image/CMakeLists.txt
++++ b/libs/image/CMakeLists.txt
+@@ -25,13 +25,13 @@ set(SRCS
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ 
+ target_link_libraries(${TARGET} PUBLIC math utils)
+ 
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ # ==================================================================================================
+diff --git a/libs/imageio/CMakeLists.txt b/libs/imageio/CMakeLists.txt
+index 47544655b..d813ef462 100644
+--- a/libs/imageio/CMakeLists.txt
++++ b/libs/imageio/CMakeLists.txt
+@@ -8,11 +8,11 @@ set(PUBLIC_HDR_DIR include)
+ # Sources and headers
+ # ==================================================================================================
+ set(PUBLIC_HDRS
+-        include/imageio/BasisEncoder.h
+-        include/imageio/HDRDecoder.h
+-        include/imageio/ImageDecoder.h
+-        include/imageio/ImageDiffer.h
+-        include/imageio/ImageEncoder.h
++        $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>/imageio/BasisEncoder.h
++        $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>/imageio/HDRDecoder.h
++        $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>/imageio/ImageDecoder.h
++        $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>/imageio/ImageDiffer.h
++        $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>/imageio/ImageEncoder.h
+ )
+ 
+ set(SRCS
+@@ -26,11 +26,11 @@ set(SRCS
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ 
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ target_link_libraries(${TARGET} PUBLIC image math png tinyexr utils z basis_encoder)
+diff --git a/libs/ktxreader/CMakeLists.txt b/libs/ktxreader/CMakeLists.txt
+index 83a630ade..c3ecd3160 100644
+--- a/libs/ktxreader/CMakeLists.txt
++++ b/libs/ktxreader/CMakeLists.txt
+@@ -20,13 +20,13 @@ set(SRCS
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ 
+ target_link_libraries(${TARGET} PUBLIC utils image filament basis_transcoder)
+ 
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ # ==================================================================================================
+diff --git a/libs/matdbg/CMakeLists.txt b/libs/matdbg/CMakeLists.txt
+index e58058548..05815da2e 100644
+--- a/libs/matdbg/CMakeLists.txt
++++ b/libs/matdbg/CMakeLists.txt
+@@ -68,7 +68,7 @@ set_target_properties(matdbg_resources PROPERTIES FOLDER Libs)
+ # Include and target definitions
+ # ==================================================================================================
+ 
+-include_directories(${PUBLIC_HDR_DIR} ${RESOURCE_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}> ${RESOURCE_DIR})
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ 
+@@ -88,7 +88,7 @@ target_link_libraries(${TARGET} PUBLIC
+ 
+ target_include_directories(${TARGET} PRIVATE ${filamat_SOURCE_DIR}/src)
+ 
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ # ==================================================================================================
+diff --git a/libs/math/CMakeLists.txt b/libs/math/CMakeLists.txt
+index 838aa2d53..52ad60c8d 100644
+--- a/libs/math/CMakeLists.txt
++++ b/libs/math/CMakeLists.txt
+@@ -37,11 +37,11 @@ set(SRCS src/dummy.cpp)
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ target_compile_options(${TARGET} PRIVATE ${OPTIMIZATION_FLAGS})
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ # ==================================================================================================
+diff --git a/libs/mathio/CMakeLists.txt b/libs/mathio/CMakeLists.txt
+index 4ad5126fc..d612e27d8 100644
+--- a/libs/mathio/CMakeLists.txt
++++ b/libs/mathio/CMakeLists.txt
+@@ -16,11 +16,11 @@ set(SRCS src/ostream.cpp)
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ target_compile_options(${TARGET} PRIVATE ${OPTIMIZATION_FLAGS})
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ target_link_libraries(${TARGET} PRIVATE math)
+ 
+diff --git a/libs/uberz/CMakeLists.txt b/libs/uberz/CMakeLists.txt
+index e73e724d3..bee0ac639 100644
+--- a/libs/uberz/CMakeLists.txt
++++ b/libs/uberz/CMakeLists.txt
+@@ -21,13 +21,13 @@ set(SRCS
+ # ==================================================================================================
+ # Include and target definitions
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ 
+ target_link_libraries(${TARGET} PUBLIC math utils filabridge zstd)
+ 
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ # ==================================================================================================
+diff --git a/libs/utils/CMakeLists.txt b/libs/utils/CMakeLists.txt
+index d2f96fe6c..b3fec04af 100644
+--- a/libs/utils/CMakeLists.txt
++++ b/libs/utils/CMakeLists.txt
+@@ -100,10 +100,10 @@ endif()
+ # ==================================================================================================
+ # Includes and target definition
+ # ==================================================================================================
+-include_directories(${PUBLIC_HDR_DIR})
++include_directories($<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ 
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ target_link_libraries(${TARGET} PUBLIC tsl)
+ 
+diff --git a/libs/viewer/CMakeLists.txt b/libs/viewer/CMakeLists.txt
+index cfc969988..c4b483339 100644
+--- a/libs/viewer/CMakeLists.txt
++++ b/libs/viewer/CMakeLists.txt
+@@ -31,7 +31,7 @@ set(SRCS
+ # ==================================================================================================
+ add_library(${TARGET} STATIC ${PUBLIC_HDRS} ${SRCS})
+ target_link_libraries(${TARGET} PUBLIC imgui filament gltfio_core filagui jsmn civetweb)
+-target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIR})
++target_include_directories(${TARGET} PUBLIC $<BUILD_INTERFACE:include>$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+ set_target_properties(${TARGET} PROPERTIES FOLDER Libs)
+ 
+ if (FILAMENT_SAMPLES_STEREO_TYPE STREQUAL "instanced")
+-- 
+2.44.0
+
