@@ -35,6 +35,8 @@ buildNpmPackage rec {
   passthru = {
     updateScript = nix-update-script { };
     plugins = callPackage ./plugins { };
+    wrapper = callPackage ./wrapper { };
+    withPlugins = fn: lessc.wrapper.override { plugins = fn lessc.plugins; };
     tests = {
       version = testers.testVersion { package = lessc; };
 
