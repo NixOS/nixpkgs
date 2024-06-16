@@ -305,6 +305,8 @@ let
         ../common/compiler-rt/armv6-mcr-dmb.patch
         ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
         ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+        # Fix build with clang 18 due to https://github.com/llvm/llvm-project/commit/d506aa4edfa66074db3dc1fa84da9d9c80d71500.
+        ../12/compiler-rt/clang18-compat.patch
       ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
@@ -327,6 +329,8 @@ let
         ../common/compiler-rt/armv6-mcr-dmb.patch
         ../common/compiler-rt/armv6-sync-ops-no-thumb.patch
         ../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+        # Fix build with clang 18 due to https://github.com/llvm/llvm-project/commit/d506aa4edfa66074db3dc1fa84da9d9c80d71500.
+        ../12/compiler-rt/clang18-compat.patch
       ];
       inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
