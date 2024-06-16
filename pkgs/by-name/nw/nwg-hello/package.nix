@@ -58,6 +58,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/nwg-piotr/nwg-hello";
+    changelog = "https://github.com/nwg-piotr/nwg-hello/releases/tag/v${version}";
     description = "GTK3-based greeter for the greetd daemon, written in python";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

@@ -39,6 +39,7 @@ python3.pkgs.buildPythonPackage {
 
   meta = {
     homepage = "https://github.com/Skydio/revup";
+    changelog = "https://github.com/Skydio/revup/releases/tag/v${version}";
     description = " Revolutionary github tools";
     longDescription = ''
       Revup provides command-line tools that allow developers to iterate faster
