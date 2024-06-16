@@ -5,6 +5,7 @@
 , alsa-lib
 , autoreconfHook
 , avahi
+, curl
 , dbus
 , faad2
 , fetchpatch
@@ -15,6 +16,7 @@
 , freefont_ttf
 , freetype
 , fribidi
+, genericUpdater
 , gnutls
 , libSM
 , libXext
@@ -78,6 +80,7 @@
 , wayland
 , wayland-protocols
 , wrapGAppsHook3
+, writeShellScript
 , xcbutilkeysyms
 , zlib
 
@@ -288,6 +291,12 @@ stdenv.mkDerivation (finalAttrs: {
   '' + optionalString withQt5 ''
     remove-references-to -t "${libsForQt5.qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
+
+  passthru.updateScript = genericUpdater {
+    versionLister = writeShellScript "vlc-versionLister" ''
+      ${curl}/bin/curl -s https://get.videolan.org/vlc/ | sed -En 's/^.*href="([0-9]+(\.[0-9]+)+)\/".*$/\1/p'
+    '';
+  };
 
   meta = {
     description = "Cross-platform media player and streaming server";
