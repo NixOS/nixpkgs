@@ -2395,6 +2395,17 @@
     };
     meta.homepage = "https://github.com/indoorvivants/tree-sitter-smithy";
   };
+  sml = buildGrammar {
+    language = "sml";
+    version = "0.0.0+rev=ec1d786";
+    src = fetchFromGitHub {
+      owner = "stonebuddha";
+      repo = "tree-sitter-sml";
+      rev = "ec1d78668f160731a818f9b6c75c41ad5fd4e67c";
+      hash = "sha256-bp7Rmrk7iqgBsLBYTDc28T+A6mcSD/Z+0SywzAmeJhw=";
+    };
+    meta.homepage = "https://github.com/stonebuddha/tree-sitter-sml";
+  };
   snakemake = buildGrammar {
     language = "snakemake";
     version = "0.0.0+rev=ba1b386";
