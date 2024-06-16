@@ -7,7 +7,7 @@ buildNpmPackage {
     owner = "webtorrent";
     repo = "webtorrent-desktop";
     rev = "ac7f16e71c96c5ad670bfcb8728df5af78ae21a1";
-    sha256 = "";
+    sha256 = "sha256-UEN5NhLVSQEO8rsiTW1hJPjNFL9KobW/Bho98FzKaf4=";
   };
   patches = [
     # startup fix
