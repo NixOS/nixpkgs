@@ -34,6 +34,8 @@ buildNpmPackage rec {
   passthru = {
     updateScript = ./update.sh;
     plugins = callPackage ./plugins { };
+    wrapper = callPackage ./wrapper { };
+    withPlugins = fn: less-css.wrapper.override { plugins = fn less-css.plugins; };
     tests = {
       version = testers.testVersion { package = less-css; };
 
