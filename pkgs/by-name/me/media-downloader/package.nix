@@ -1,6 +1,13 @@
 {
   aria2,
   cmake,
+  # https://github.com/mhogomchungu/media-downloader?tab=readme-ov-file#extensions
+  extraPackages ? [
+    aria2
+    yt-dlp
+    ffmpeg
+    python3
+  ],
   fetchFromGitHub,
   ffmpeg,
   lib,
@@ -36,19 +43,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libsForQt5.qtbase ];
 
-  qtWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        aria2
-        ffmpeg
-        python3
-        yt-dlp
-      ]
-    }"
-  ];
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath extraPackages}" ];
 
   meta = {
     description = "Qt/C++ GUI front end for yt-dlp and others";
+    longDescription = ''
+      Media Downloader is a GUI front end to yt-dlp, youtube-dl, gallery-dl,
+      lux, you-get, svtplay-dl, aria2c, wget and safari books.
+
+      Read https://github.com/mhogomchungu/media-downloader/wiki/Extensions
+      for further information. We have packaged most of them, and they can
+      be added by overriding `extraPackages`.
+    '';
     homepage = "https://github.com/mhogomchungu/media-downloader";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ zendo ];
