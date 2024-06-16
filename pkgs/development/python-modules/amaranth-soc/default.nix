@@ -38,7 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/amaranth-lang/amaranth-soc";
     license = licenses.bsd2;
     maintainers = with maintainers; [
-      emily
       thoughtpolice
       pbsds
     ];
