@@ -13933,6 +13933,12 @@
     githubId = 7831184;
     name = "John Mercier";
   };
+  modderme123 = {
+    email = "modderme123@gmail.com";
+    github = "modderme123";
+    githubId = 14153763;
+    name = "modderme123";
+  };
   modulistic = {
     email = "modulistic@gmail.com";
     github = "modulistic";
