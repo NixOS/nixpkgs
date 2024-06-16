@@ -198,7 +198,7 @@ rebasing, care must be taken to include only the intended changes, otherwise
 many CODEOWNERS will be inadvertently requested for review. To achieve this,
 rebasing should not be performed directly on the target branch, but on the merge
 base between the current and target branch. As an additional precautionary measure,
-you should temporarily mark the PR as draft for the duration of the operation.
+**you should temporarily mark the PR as draft for the duration of the operation**.
 This reduces the probability of mass-pinging people. (OfBorg might still
 request a couple of persons for reviews though.)
 
