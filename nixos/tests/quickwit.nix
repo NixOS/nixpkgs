@@ -24,6 +24,9 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       "journalctl -o cat -u quickwit.service | grep 'transitioned to ready state'"
     )
 
+    with subtest("verify UI installed"):
+      machine.succeed("curl -sSf http://127.0.0.1:7280/ui/")
+
     quickwit.log(quickwit.succeed(
       "systemd-analyze security quickwit.service | grep -v '✓'"
     ))
