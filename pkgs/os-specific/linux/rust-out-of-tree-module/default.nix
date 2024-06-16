@@ -1,6 +1,7 @@
-{ lib, fetchFromGitHub, kernel }:
+{ lib, fetchFromGitHub, kernel, unstableGitUpdater }:
 kernel.stdenv.mkDerivation {
-  name = "rust-out-of-tree-module";
+  pname = "rust-out-of-tree-module";
+  version = "0-unstable-2023-08-29";
 
   src = fetchFromGitHub {
     owner = "Rust-for-linux";
@@ -15,6 +16,8 @@ kernel.stdenv.mkDerivation {
 
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     broken = !kernel.withRust;
