@@ -199,6 +199,14 @@ have a predefined type and string generator already declared under
           }
         ```
 
+    `Implementation notes:`
+
+    - classpath includes are not implemented in pyhocon,
+      which is used for validating the HOCON output. This
+      means that if you are using classpath includes,
+      you will want to either use an alternative validator
+      or set `doCheck = false` in the format options.
+
 `pkgs.formats.json` { }
 
 :   A function taking an empty attribute set (for future extensibility)
