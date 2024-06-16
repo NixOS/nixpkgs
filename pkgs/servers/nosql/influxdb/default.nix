@@ -23,6 +23,7 @@ let
         excludes = [ ];
         hash = "sha256-6LOTgbOCfETNTmshyXgtDZf9y4t/2iqRuVPkz9dYPHc=";
       })
+      ../influxdb2/fix-unsigned-char.patch
     ];
     sourceRoot = "${src.name}/libflux";
     cargoHash = "sha256-O+t4f4P5291BuyARH6Xf3LejMFEQEBv+qKtyjHRhclA=";
