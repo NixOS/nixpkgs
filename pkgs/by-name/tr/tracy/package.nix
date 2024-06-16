@@ -25,8 +25,11 @@
   wayland-protocols,
 }:
 
+assert withGtkFileSelector -> stdenv.isLinux;
+assert withWayland -> stdenv.isLinux;
+
 stdenv.mkDerivation rec {
-  pname = "tracy";
+  pname = if withWayland then "tracy-wayland" else "tracy-glfw";
   version = "0.11.1";
 
   src = fetchFromGitHub {
