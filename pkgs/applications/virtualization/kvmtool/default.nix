@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     description = "Lightweight tool for hosting KVM guests";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/tree/README";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ astro mfrw ];
+    maintainers = with maintainers; [ astro mfrw peigongdsd ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "lkvm";
   };
