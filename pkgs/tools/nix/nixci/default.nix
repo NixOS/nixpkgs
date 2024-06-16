@@ -12,15 +12,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nixci";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchCrate {
     inherit version;
     pname = "nixci";
-    hash = "sha256-JC1LUny8UKflANlcx6Hcgx39CRry+ossnp/RQK36oaI=";
+    hash = "sha256-XbPXS29zqg+pOs/JRRB2bRPdMTDy/oKLM41UomSZTN0=";
   };
 
-  cargoHash = "sha256-pYPzM7QlQ2EXwrvuXMa1qs0m7cmumh1iPesgJZ0H2kg=";
+  cargoHash = "sha256-+ed/XsEAwp7bsZOb+bOailpgSFnKvwoHR0QptnGeulk=";
 
   nativeBuildInputs = [ pkg-config ];
 
