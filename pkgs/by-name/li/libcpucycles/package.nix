@@ -46,10 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
       imadnyc
       jleightcap
     ];
-    # list of architectures it supports, but currentlly untested with nix https://cpucycles.cr.yp.to/libcpucycles-20240318/cpucycles/options.html
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ] ++ lib.platforms.darwin;
+    inherit (librandombytes.meta) platforms;
   };
 })
