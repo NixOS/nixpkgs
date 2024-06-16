@@ -34218,8 +34218,6 @@ with pkgs;
 
   skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
 
-  SkypeExport = callPackage ../applications/networking/instant-messengers/SkypeExport { };
-
   slingshot = callPackage ../tools/misc/slingshot { };
 
   slop = callPackage ../tools/misc/slop { };
