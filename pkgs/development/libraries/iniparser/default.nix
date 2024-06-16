@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchFromGitHub
-, substituteAll
-, symlinkJoin
-, cmake
-, doxygen
-, ruby
-, validatePkgConfig
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  substituteAll,
+  symlinkJoin,
+  cmake,
+  doxygen,
+  ruby,
+  validatePkgConfig,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,11 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [ cmake doxygen validatePkgConfig ] ++ lib.optionals finalAttrs.doCheck [ ruby ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    validatePkgConfig
+  ] ++ lib.optionals finalAttrs.doCheck [ ruby ];
 
-  cmakeFlags = [
-    "-DBUILD_TESTING=${if finalAttrs.doCheck then "ON" else "OFF"}"
-  ];
+  cmakeFlags = [ "-DBUILD_TESTING=${if finalAttrs.doCheck then "ON" else "OFF"}" ];
 
   doCheck = false;
 
@@ -57,7 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    iniparser-with-tests = finalAttrs.overrideAttrs (_: { doCheck = true; });
+    iniparser-with-tests = finalAttrs.overrideAttrs (_: {
+      doCheck = true;
+    });
   };
 
   meta = with lib; {
