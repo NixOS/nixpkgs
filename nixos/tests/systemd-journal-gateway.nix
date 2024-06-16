@@ -43,7 +43,6 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
 
     def copy_pem(file: str):
       machine.copy_from_host(source=f"{tmpdir}/{file}", target=f"/run/secrets/{file}")
-      machine.succeed(f"chmod 644 /run/secrets/{file}")
 
     with subtest("Copying keys and certificates"):
       machine.succeed("mkdir -p /run/secrets/{client,server}")
