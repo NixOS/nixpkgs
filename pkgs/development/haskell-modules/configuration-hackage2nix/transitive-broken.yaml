@@ -665,7 +665,6 @@ dont-distribute-packages:
  - bip32
  - birch-beer
  - bird
- - bisc
  - biscuit-servant
  - bishbosh
  - bit-array
@@ -3569,8 +3568,6 @@ dont-distribute-packages:
  - secrm
  - sednaDBXML
  - seitz-symbol
- - selda-json
- - selda-sqlite
  - selenium-server
  - semantic-source
  - semantic-version
