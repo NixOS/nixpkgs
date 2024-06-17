@@ -7795,6 +7795,12 @@
     githubId = 6578603;
     name = "Jonas Rembser";
   };
+  gungun974 = {
+    email = "xfelix974@gmail.com";
+    name = "Gungun974";
+    github = "gungun974";
+    githubId = 5224459;
+  };
   guserav = {
     github = "guserav";
     githubId = 28863828;
