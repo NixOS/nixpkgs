@@ -1,0 +1,25 @@
+From f5afa1c4c47db3ea3b24f9eb33a4efceafa10e3e Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Mon, 17 Jun 2024 02:54:29 +0000
+Subject: [PATCH] cmake: correct msgpack package name
+
+---
+ 3rdparty/find_dependencies.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/3rdparty/find_dependencies.cmake b/3rdparty/find_dependencies.cmake
+index 45555b83a..40266805d 100644
+--- a/3rdparty/find_dependencies.cmake
++++ b/3rdparty/find_dependencies.cmake
+@@ -1446,7 +1446,7 @@ endif()
+ # msgpack
+ if(USE_SYSTEM_MSGPACK)
+     open3d_find_package_3rdparty_library(3rdparty_msgpack
+-        PACKAGE msgpack-cxx
++        PACKAGE msgpack
+         TARGETS msgpack-cxx
+     )
+     if(NOT 3rdparty_msgpack_FOUND)
+-- 
+2.44.0
+

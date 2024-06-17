@@ -30,20 +30,14 @@ clangStdenv.mkDerivation rec {
     hash = "sha256-hKyyYSGvQnaS8vnYkm92PiSeMvjcIXza11ZvymhC+zk=";
   };
 
-  patches = [ ./0002-cmake-relocatable-target_include_directories.patch ];
-
+  # If you wish to un-vendor e.g. spirv-*, you could add extra find_package()s
+  # and ALIAS libs here, so as to match the phony targets declared in  third_party/:
   extraFindPackages = ''
     find_package(tsl-robin-map REQUIRED GLOBAL)
     add_library(tsl ALIAS tsl::robin_map)
 
     find_package(draco REQUIRED GLOBAL)
     add_library(dracodec ALIAS draco::draco_static)
-
-    # find_package(SPIRV-Tools REQUIRED GLOBAL)
-    # find_package(spirv_cross_core REQUIRED GLOBAL)
-    # find_package(spirv_cross_glsl REQUIRED GLOBAL)
-    # find_package(spirv_cross_msl REQUIRED GLOBAL)
-    # find_package(glslang REQUIRED GLOBAL)
   '';
 
   postPatch = ''
@@ -56,14 +50,19 @@ clangStdenv.mkDerivation rec {
     # out of the box with out buildInputs simply because the sonames match
     sed -i 's/^.*add_subdirectory.*EXTERNAL.*\(${
       lib.concatStringsSep "\\|" [
+        "draco"
+        "robin-map"
+
+        # They vendor an outdated imgui with different interfaces,
+        # so we can't use ours:
+        # "imgui"
+
+        "libgtest"
+
+        # Failed to un-vendor for various reasons:
         # "assimp"
         # "stb"
-        "draco"
         # "meshoptimizer"
-        "robin-map"
-        # They vendor an outdated imgui with different interfaces
-        # "imgui"
-        "libgtest"
         # "spirv-tools"
         # "glslang"
         # "spirv-cross"
@@ -88,29 +87,7 @@ clangStdenv.mkDerivation rec {
 
     # Otherwise CMake fails to execute build/linux/combine-static-libs.sh
     patchShebangs .
-
-    while IFS= read -r -d $'\0' path ; do
-      sed -i "s/$installTargetsPattern/\1 EXPORT filament_target /" "$path"
-    done < <( find libs/ -iname CMakeLists.txt -print0 )
-
-    grep "install(TARGETS" $(find -iname CMakeLists.txt)
-
-    cat << \EOF >> CMakeLists.txt
-      include(CMakePackageConfigHelpers)
-      configure_package_config_file(filament-config.cmake.in filament-config.cmake INSTALL_DESTINATION ''${CMAKE_INSTALL_LIBDIR}/cmake/filament)
-      install(
-        EXPORT filament_target FILE filament-targets.cmake
-        DESTINATION ''${CMAKE_INSTALL_LIBDIR}/cmake/''${PROJECT_NAME})
-    EOF
-    cat << \EOF >> filament-config.cmake.in
-    include("''${CMAKE_CURRENT_LIST_DIR}/imgui-targets.cmake")
-    EOF
-
-    cat libs/filameshio/CMakeLists.txt
   '';
-
-  # installTargetsPattern = ''\(install(TARGETS[[:space:]]\+\([$][^$)[:space:]]\+\|[^)A-Z]\+\)\+[^)A-Z]*\)'';
-  installTargetsPattern = ''\(install(TARGETS[[:space:]]\+\([$][{]\?[^$)[:space:]]\+[}]\?[^[:space:])]*\|[^$}{)A-Z]\+\)[[:space:]]*\)'';
 
   nativeBuildInputs = [
     cmake
@@ -120,15 +97,15 @@ clangStdenv.mkDerivation rec {
   ];
   buildInputs =
     [
-      spirv-headers
-      glslang
       # assimp
-      stb
       draco
+      glslang
       gtest
-      robin-map
-      meshoptimizer
       # imgui
+      meshoptimizer
+      robin-map
+      spirv-headers
+      stb
     ]
     ++ lib.optionals clangStdenv.hostPlatform.isLinux [
       libGL

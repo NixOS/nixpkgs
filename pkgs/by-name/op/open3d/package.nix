@@ -25,6 +25,7 @@
   libz,
   liblzf,
   msgpack,
+  fmt,
   nanoflann,
   boringssl,
   qhull,
@@ -52,6 +53,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-VMykWYfWUzhG+Db1I/9D1GTKd3OzmSXvwzXwaZnu8uI=";
   };
 
+  patches = [ ./0001-cmake-correct-msgpack-package-name.patch ];
+
   postPatch = ''
     substituteInPlace "cmake/Open3DFetchISPCCompiler.cmake" \
       --replace-fail \
@@ -64,7 +67,15 @@ stdenv.mkDerivation rec {
     find_package(jsoncpp REQUIRED)
     add_library(jsoncpp ALIAS jsoncpp_lib)
     EOF
+
+    rm -rf build/filament
+    mkdir -p cmake/
+    cp ${./Findfilament.cmake} ./cmake/Findfilament.cmake
+    cp ${./Findliblzf.cmake} ./cmake/Findliblzf.cmake
+    addToSearchPath CMAKE_MODULE_PATH $PWD/cmake
   '';
+
+  cmakeBuildDir = "builddir"; # build/ is checked in git
 
   nativeBuildInputs = [
     cmake
@@ -73,35 +84,36 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    jsoncpp
     assimp
     blas
+    boringssl
     curl
+    draco.tinygltf
     eigen
     embree
+    filament
+    fmt
     glew
     glfw3
     imgui
+    jsoncpp
     libjpeg
     libjpeg_turbo
+    liblzf
     libpng
+    libz
     msgpack
     nanoflann
-    boringssl
     qhull
     tbb
-    draco # tinygltf
     vtk
     vulkan-headers
     vulkan-loader
     xorg.libX11
-    xorg.libXrandr
-    xorg.libXinerama
     xorg.libXcursor
+    xorg.libXinerama
+    xorg.libXrandr
     zeromq
-    libz
-    liblzf
-    filament
   ] ++ lib.optionals cudaSupport [ stdgpu ];
 
   preConfigure = ''
@@ -120,7 +132,7 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "BORINGSSL_ROOT_DIR" "${lib.getDev boringssl}")
 
     # Doesn't seem to generate a `*Config.cmake` file
-    (lib.cmakeFeature "filament_DIR" "${lib.getDev filament}")
+    (lib.cmakeFeature "filament_DIR" "${lib.getDev filament}/share/cmake")
   ];
 
   meta = {
