@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "branca";
-  version = "0.7.2";
+  version = "0.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "python-visualization";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ipu0JZIx/YgR7F5Z7sl/9YEEHkyiDllR5dHko7AlSe8=";
+    hash = "sha256-9imrW4u2Ea1q7VKgk6Vs8y2OiSzAPr3W6471pi/gVm4=";
   };
 
   postPatch = ''
