@@ -50,8 +50,8 @@ let
         changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
         license = lib.licenses.mit;
         sourceProvenance = [ lib.sourceTypes.fromSource ];
-      };
-    } // (removeAttrs args [ "url" "sha256" "description" ]));
+      } // args.meta or { };
+    } // (removeAttrs args [ "url" "sha256" "description" "meta" ]));
 
   extensions =
     callPackages ./extensions-generated.nix { inherit mkAzExtension; }
