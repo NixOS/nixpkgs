@@ -650,6 +650,24 @@ package-maintainers:
     - nix-tree
   zowoq:
     - ShellCheck
+  mpscholten:
+    - ihp-hsx
+    - push-notify-apn
+    - hs-pkpass
+    - raven-haskell
+    - stripe-concepts
+    - stripe-signature
+    - http2-client
+    - zip
+    - currencies
+    - string-random
+    - inflections
+    - pcre-heavy
+    - mmark
+    - mmark-ext
+    - typerep-map
+    - minio-hs
+    - smtp-mail
 
 unsupported-platforms:
   Allure:                                       [ platforms.darwin ]
