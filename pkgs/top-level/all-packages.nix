@@ -35655,8 +35655,6 @@ with pkgs;
 
   xmobar = haskellPackages.xmobar.bin;
 
-  xmonad-log = callPackage ../tools/misc/xmonad-log { };
-
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
     packages = _: [ haskellPackages.xmonad-contrib ];
