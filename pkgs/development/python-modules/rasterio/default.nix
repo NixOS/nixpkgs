@@ -99,6 +99,12 @@ buildPythonPackage rec {
   disabledTests = [
     # flaky
     "test_outer_boundless_pixel_fidelity"
+
+    # Failing with GDAL 3.9.
+    # Fixed in https://github.com/rasterio/rasterio/commit/24d0845e576158217f6541c3c81b163d873a994d
+    # Re-enable in next rasterio update.
+    "test_create_sidecar_mask"
+    "test_update_tags"
   ] ++ lib.optionals stdenv.isDarwin [ "test_reproject_error_propagation" ];
 
   pythonImportsCheck = [ "rasterio" ];
