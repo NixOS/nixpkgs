@@ -1,6 +1,6 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
-, fetchurl, file, python3
+, runCommandLocal, fetchurl, file, python3
 , darwin, cargo, cmake, rustc, rustfmt
 , pkg-config, openssl, xz
 , libiconv
@@ -24,6 +24,7 @@
 let
   inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
+  useLLVM = stdenv.targetPlatform.useLLVM or false;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "${targetPackages.stdenv.cc.targetPrefix}rustc";
   inherit version;
@@ -58,7 +59,8 @@ in stdenv.mkDerivation (finalAttrs: {
 
   NIX_LDFLAGS = toString (
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
-       optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
+       optional (stdenv.isLinux && !withBundledLLVM && !useLLVM) "--push-state --as-needed -lstdc++ --pop-state"
+    ++ optional (stdenv.isLinux && !withBundledLLVM && useLLVM) "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
     ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
 
@@ -158,6 +160,10 @@ in stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"
+  ] ++ optionals useLLVM [
+    # https://github.com/NixOS/nixpkgs/issues/311930
+    "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
+    "--enable-use-libcxx"
   ];
 
   # if we already have a rust compiler for build just compile the target std
@@ -182,6 +188,7 @@ in stdenv.mkDerivation (finalAttrs: {
     python ./x.py --keep-stage=0 --stage=1 install library/std
     mkdir -v $out/bin $doc $man
     ln -s ${rustc.unwrapped}/bin/{rustc,rustdoc} $out/bin
+    rm -rf -v $out/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec}
     ln -s ${rustc.unwrapped}/lib/rustlib/{manifest-rust-std-,}${stdenv.hostPlatform.rust.rustcTargetSpec} $out/lib/rustlib/
     echo rust-std-${stdenv.hostPlatform.rust.rustcTargetSpec} >> $out/lib/rustlib/components
     lndir ${rustc.doc} $doc
@@ -236,7 +243,16 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ openssl ]
     ++ optionals stdenv.isDarwin [ libiconv Security ]
-    ++ optional (!withBundledLLVM) llvmShared;
+    ++ optional (!withBundledLLVM) llvmShared
+    ++ optional (useLLVM && !withBundledLLVM) [
+      llvmPackages.libunwind
+      # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
+      (runCommandLocal "libunwind-libgcc" {} ''
+        mkdir -p $out/lib
+        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so
+        ln -s ${llvmPackages.libunwind}/lib/libunwind.so $out/lib/libgcc_s.so.1
+      '')
+    ];
 
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
