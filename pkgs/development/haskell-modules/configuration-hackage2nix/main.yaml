@@ -671,7 +671,6 @@ unsupported-platforms:
   freenect:                                     [ platforms.darwin ]
   FTGL:                                         [ platforms.darwin ]
   fuzzytime:                                    [ platforms.darwin ] # https://github.com/kamwitsta/fuzzytime/issues/2
-  ghcjs-dom-hello:                              [ platforms.darwin ]
   ghc-gc-hook:                                  [ platforms.darwin ] # requires C11 threads which Apple doesn't support
   gi-adwaita:                                   [ platforms.darwin ]
   gi-dbusmenugtk3:                              [ platforms.darwin ]
@@ -700,7 +699,6 @@ unsupported-platforms:
   intricacy:                                    [ platforms.darwin ] # depends on mesa
   iwlib:                                        [ platforms.darwin ]
   Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
-  jsaddle-hello:                                [ platforms.darwin ] # depends on jsaddle-webkit2gtk
   jsaddle-webkit2gtk:                           [ platforms.darwin ]
   Kulitta:                                      [ platforms.darwin ] # depends on Euterpea
   LambdaHack:                                   [ platforms.darwin ]
