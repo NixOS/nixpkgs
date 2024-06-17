@@ -3,10 +3,10 @@
   lib,
   fetchurl,
   autoPatchelfHook,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   libusb1,
-  webkitgtk,
-  gtk3,
+  libsoup_3,
+  webkitgtk_4_1,
   writeShellScript,
   makeDesktopItem,
   copyDesktopItems,
@@ -26,23 +26,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "keymapp";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://oryx.nyc3.cdn.digitaloceanspaces.com/keymapp/keymapp-${version}.tar.gz";
-    hash = "sha256-tbRlJ65hHPBDwoXAXf++OdcW67RcqR1x1vfhbPCo1Ls=";
+    hash = "sha256-WiazQD40dG72B9tl4DwcMJgoVEl/Dgq55AHgeqK+sq8=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
     autoPatchelfHook
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     libusb1
-    webkitgtk
-    gtk3
+    webkitgtk_4_1
+    libsoup_3
   ];
 
   sourceRoot = ".";
