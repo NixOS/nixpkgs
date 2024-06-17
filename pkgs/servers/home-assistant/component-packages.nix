@@ -112,9 +112,10 @@
     ];
     "aladdin_connect" = ps: with ps; [
       fnv-hash-fast
+      genie-partner-sdk
       psutil-home-assistant
       sqlalchemy
-    ]; # missing inputs: genie-partner-sdk
+    ];
     "alarm_control_panel" = ps: with ps; [
     ];
     "alarmdecoder" = ps: with ps; [
@@ -5251,6 +5252,7 @@
     "airvisual_pro"
     "airzone"
     "airzone_cloud"
+    "aladdin_connect"
     "alarm_control_panel"
     "alarmdecoder"
     "alert"

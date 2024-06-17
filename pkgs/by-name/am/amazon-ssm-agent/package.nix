@@ -14,7 +14,6 @@
 , nixosTests
 , testers
 , amazon-ssm-agent
-, overrideEtc ? true
 }:
 
 let
@@ -96,9 +95,6 @@ buildGoModule rec {
       --replace "/sbin/shutdown" "shutdown"
 
     echo "${version}" > VERSION
-  '' + lib.optionalString overrideEtc ''
-    substituteInPlace agent/appconfig/constants_unix.go \
-      --replace '"/etc/amazon/ssm/"' '"${placeholder "out"}/etc/amazon/ssm/"'
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
       --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode

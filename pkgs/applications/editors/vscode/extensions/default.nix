@@ -542,6 +542,22 @@ let
 
       betterthantomorrow.calva = callPackage ./betterthantomorrow.calva { };
 
+      bierner.comment-tagged-templates = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "comment-tagged-templates";
+          publisher = "bierner";
+          version = "0.3.3";
+          hash = "sha256-M2XdMQ2l6oMYiHTdfRJ/n/Ys3LecEPwAozQtLBcn7FY=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/bierner.comment-tagged-templates/changelog";
+          description = "VS Code extension that adds basic syntax highlighting for JavaScript and TypeScript tagged template strings using language identifier comments";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.comment-tagged-templates";
+          homepage = "https://github.com/mjbvz/vscode-comment-tagged-templates";
+          license = lib.licenses.mit;
+        };
+      };
+
       bierner.docs-view = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "docs-view";
@@ -607,6 +623,23 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      bierner.markdown-footnotes = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-footnotes";
+          publisher = "bierner";
+          version = "0.1.1";
+          hash = "sha256-h/Iyk8CKFr0M5ULXbEbjFsqplnlN7F+ZvnUTy1An5t4=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/bierner.markdown-footnotes/changelog";
+          description = "Adds [^1] footnote syntax support to VS Code's built-in Markdown preview";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.markdown-footnotes";
+          homepage = "https://github.com/mjbvz/vscode-markdown-footnotes";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.uncenter ];
         };
       };
 
@@ -4853,6 +4886,22 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      yoavbls.pretty-ts-errors = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "pretty-ts-errors";
+          publisher = "yoavbls";
+          version = "0.5.3";
+          hash = "sha256-JSCyTzz10eoUNu76wNUuvPVVKq4KaVKobS1CAPqgXUA=";
+        };
+        meta = {
+          description = "Make TypeScript errors prettier and human-readable in VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors";
+          homepage = "https://github.com/yoavbls/pretty-ts-errors";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.uncenter ];
         };
       };
 

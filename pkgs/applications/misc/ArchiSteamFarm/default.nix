@@ -41,7 +41,7 @@ buildDotnetModule rec {
   doCheck = true;
 
   preBuild = ''
-    export projectFile=(ArchiSteamFarm)
+    dotnetProjectFiles=(ArchiSteamFarm)
   '';
 
   preInstall = ''

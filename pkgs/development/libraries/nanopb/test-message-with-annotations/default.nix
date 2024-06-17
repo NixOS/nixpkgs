@@ -1,9 +1,12 @@
-{ stdenv, protobuf, nanopb }:
+{ lib, stdenv, protobuf, nanopb }:
 
 stdenv.mkDerivation {
   name = "nanopb-test-message-with-annotations";
   meta.timeout = 60;
-  src = ./.;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.unions [ ./withannotations.proto ];
+  };
 
   # protoc requires any .proto file to be compiled to reside within it's
   # proto_path. By default the current directory is automatically added to the

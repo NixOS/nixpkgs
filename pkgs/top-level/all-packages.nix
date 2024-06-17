@@ -21520,7 +21520,7 @@ with pkgs;
 
   ispc = callPackage ../development/compilers/ispc {
     xcode = darwin.xcode_14;
-    llvmPackages = llvmPackages_15;
+    llvmPackages = llvmPackages_17;
   };
 
   isso = callPackage ../servers/isso {
@@ -23286,7 +23286,7 @@ with pkgs;
 
   micropython = callPackage ../development/interpreters/micropython { };
 
-  MIDIVisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midi-visualizer {
+  midivisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midivisualizer {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Carbon CoreAudio CoreMIDI CoreServices Kernel;
   };
 
@@ -29568,8 +29568,6 @@ with pkgs;
   atlassian-cli = callPackage ../applications/office/atlassian-cli { };
 
   asap = callPackage ../tools/audio/asap { };
-
-  aseprite = callPackage ../applications/editors/aseprite { };
 
   assign-lb-ip = callPackage ../applications/networking/cluster/assign-lb-ip { };
 
@@ -36219,7 +36217,9 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
-  shipwright = callPackage ../games/shipwright { };
+  shipwright = callPackage ../games/shipwright {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   wipeout-rewrite = callPackage ../games/wipeout-rewrite {
     inherit (darwin.apple_sdk.frameworks) Foundation;
