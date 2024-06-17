@@ -1,34 +1,29 @@
 {
-  lib,
   mkDerivation,
+  lib,
   bsdSetupHook,
   freebsdSetupHook,
   makeMinimal,
   install,
-  flex,
-  byacc,
-  gencat,
-  include,
+  m4,
 }:
-
 mkDerivation {
-  noLibc = true;
-  path = "lib/csu";
+  path = "lib/libelf";
   extraPaths = [
-    "lib/Makefile.inc"
-    "lib/libc/include/libc_private.h"
+    "lib/libc"
+    "contrib/elftoolchain"
+    "sys/sys/elf32.h"
+    "sys/sys/elf64.h"
+    "sys/sys/elf_common.h"
   ];
+  buildInputs = [ ];
   nativeBuildInputs = [
     bsdSetupHook
     freebsdSetupHook
     makeMinimal
     install
-
-    flex
-    byacc
-    gencat
+    m4
   ];
-  buildInputs = [ include ];
-  MK_TESTS = "no";
+
   meta.platforms = lib.platforms.freebsd;
 }
