@@ -1,7 +1,7 @@
 { lib
 , buildNpmPackage
 , copyDesktopItems
-, electron_28
+, electron
 , buildGoModule
 , esbuild
 , fetchFromGitHub
@@ -36,16 +36,16 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.44.1";
+  version = "1.46.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-fL+9oPQ5dAgvQREZ7A+hKo2MnZKeVvadQDvDPsDNbnQ=";
+    hash = "sha256-PFTfUfJbtR6Aqn1qxXz8qBn2Bbkb7myl3Swb4EAVC5k=";
   };
 
-  npmDepsHash = "sha256-rUxJLDsAfp+brecTThYTdHIVIfVkKwZ/W5sHV0hHHIk=";
+  npmDepsHash = "sha256-S2Kmqiu7W2K6s2zpo7vQct+SjZu3JRMrqXdNQS09TUQ=";
 
   postPatch = ''
     test \
@@ -76,10 +76,6 @@ buildNpmPackage rec {
     VERSION_INFO_GIT_REF = src.rev;
   };
 
-  preBuild = ''
-    rm -r node_modules/deltachat-node/node/prebuilds
-  '';
-
   npmBuildScript = "build4production";
 
   installPhase = ''
@@ -93,6 +89,9 @@ buildNpmPackage rec {
     awk '!/^#/ && NF' build/packageignore_list \
       | xargs -I {} sh -c "rm -rf $out/lib/node_modules/deltachat-desktop/{}" || true
 
+    # required for electron to import index.js as a module
+    cp package.json $out/lib/node_modules/deltachat-desktop
+
     install -D build/icon.png \
       $out/share/icons/hicolor/scalable/apps/deltachat.png
 
@@ -103,7 +102,7 @@ buildNpmPackage rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${lib.getExe electron_28} $out/bin/deltachat \
+    makeWrapper ${lib.getExe electron} $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
 

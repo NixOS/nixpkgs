@@ -3641,6 +3641,7 @@ with pkgs;
 
   deltachat-desktop = callPackage ../applications/networking/instant-messengers/deltachat-desktop {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
+    electron = electron_30;
   };
 
   deskew = callPackage ../applications/graphics/deskew { };
