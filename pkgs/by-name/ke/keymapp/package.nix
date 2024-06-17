@@ -1,21 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, wrapGAppsHook3
-, libusb1
-, webkitgtk
-, gtk3
-, writeShellScript
-, makeDesktopItem
-, copyDesktopItems
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  wrapGAppsHook3,
+  libusb1,
+  webkitgtk,
+  gtk3,
+  writeShellScript,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 let
   desktopItem = makeDesktopItem {
     name = "keymapp";
     icon = "keymapp";
     desktopName = "Keymapp";
-    categories = [ "Settings" "HardwareSettings" ];
+    categories = [
+      "Settings"
+      "HardwareSettings"
+    ];
     type = "Application";
     exec = "keymapp";
   };
@@ -61,7 +65,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zsa.io/flash/";
     description = "Application for ZSA keyboards";
-    maintainers = with lib.maintainers; [ jankaifer shawn8901 ];
+    maintainers = with lib.maintainers; [
+      jankaifer
+      shawn8901
+    ];
     platforms = platforms.linux;
     license = lib.licenses.unfree;
   };
