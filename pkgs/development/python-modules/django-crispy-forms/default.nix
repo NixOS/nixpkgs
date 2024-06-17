@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-crispy-forms";
-  version = "2.1";
+  version = "2.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "django-crispy-forms";
     repo = "django-crispy-forms";
     rev = "refs/tags/${version}";
-    hash = "sha256-UQ5m0JWir20TdLgS+DVVLcMBlIEIfmzv8pkMJtaC0LA=";
+    hash = "sha256-6S/Pscwi6AEQnmJf6JTT5Q5vxoZ3PC65ZjT2XszwVZM=";
   };
 
   propagatedBuildInputs = [
