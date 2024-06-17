@@ -13,6 +13,8 @@
 , withSqlite ? false, sqlite
 , withPam ? false, pam
 , withZlib ? true, zlib
+, withSip ? false
+, withLua ? false
 , withTools ? false
 , withRedis ? false
 , withImagemagick ? false, imagemagick
@@ -42,7 +44,7 @@ let
     beamDeps = [ ];
   };
 
-  beamDeps = import ./rebar-deps.nix {  # TODO(@chuangzhu) add updateScript
+  allBeamDeps = import ./rebar-deps.nix {  # TODO(@chuangzhu) add updateScript
     inherit fetchHex fetchgit fetchFromGitHub;
     builder = lib.makeOverridable beamPackages.buildRebar3;
 
@@ -54,10 +56,6 @@ let
       p1_acme = prev.p1_acme.override { buildPlugins = [ beamPackages.pc ]; };
       eimp = prev.eimp.override {
         buildInputs = [ gd libwebp libpng libjpeg ];
-        buildPlugins = [ beamPackages.pc ];
-      };
-      ezlib = prev.ezlib.override {
-        buildInputs = [ zlib ];
         buildPlugins = [ beamPackages.pc ];
       };
       fast_tls = prev.fast_tls.override {
@@ -75,8 +73,25 @@ let
       xmpp = prev.xmpp.override {
         buildPlugins = [ beamPackages.pc provider_asn1 ];
       };
+      # Optional deps
+      sqlite3 = prev.sqlite3.override {
+        buildInputs = [ sqlite ];
+        buildPlugins = [ beamPackages.pc ];
+      };
+      p1_mysql = prev.p1_acme.override { buildPlugins = [ beamPackages.pc ]; };
+      epam = prev.epam.override {
+        buildInputs = [ pam ];
+        buildPlugins = [ beamPackages.pc ];
+      };
+      esip = prev.esip.override { buildPlugins = [ beamPackages.pc ]; };
+      ezlib = prev.ezlib.override {
+        buildInputs = [ zlib ];
+        buildPlugins = [ beamPackages.pc ];
+      };
     };
   };
+
+  beamDeps = builtins.removeAttrs allBeamDeps [ "sqlite3" "p1_pgsql" "p1_mysql" "luerl" "esip" "eredis" "epam" "ezlib" ];
 
 in stdenv.mkDerivation rec {
   pname = "ejabberd";
@@ -90,9 +105,14 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ erlang ]
     ++ builtins.attrValues beamDeps
-    ++ lib.optional withSqlite sqlite
-    ++ lib.optional withPam pam
-    ++ lib.optional withZlib zlib
+    ++ lib.optional withMysql allBeamDeps.p1_mysql
+    ++ lib.optional withPgsql allBeamDeps.p1_pgsql
+    ++ lib.optional withSqlite allBeamDeps.sqlite3
+    ++ lib.optional withPam allBeamDeps.epam
+    ++ lib.optional withZlib allBeamDeps.ezlib
+    ++ lib.optional withSip allBeamDeps.esip
+    ++ lib.optional withLua allBeamDeps.luerl
+    ++ lib.optional withRedis allBeamDeps.eredis
   ;
 
   src = fetchurl {
@@ -111,6 +131,8 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature withSqlite "sqlite")
     (lib.enableFeature withPam "pam")
     (lib.enableFeature withZlib "zlib")
+    (lib.enableFeature withSip "sip")
+    (lib.enableFeature withLua "lua")
     (lib.enableFeature withTools "tools")
     (lib.enableFeature withRedis "redis")
   ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";

@@ -14,16 +14,6 @@ let
       };
       beamDeps = [ ];
     };
-    ezlib = builder {
-      name = "ezlib";
-      version = "1.0.12";
-      src = fetchHex {
-        pkg = "ezlib";
-        version = "1.0.12";
-        sha256 = "sha256-MOlDVftCJgqrbhJYLLDFa/IzUV5lXIrq9Idg51YeTrs=";
-      };
-      beamDeps = [ p1_utils ];
-    };
     yconf = builder {
       name = "yconf";
       version = "1.0.15";
@@ -64,6 +54,16 @@ let
       };
       beamDeps = [ p1_utils ];
     };
+    sqlite3 = builder {
+      name = "sqlite3";
+      version = "1.1.14";
+      src = fetchHex {
+        pkg = "sqlite3";
+        version = "1.1.14";
+        sha256 = "sha256-hQVLbKKXNDwVntZ5Skc/8sjuq9hUtv4C9xHAv9NzzoY=";
+      };
+      beamDeps = [ ];
+    };
     pkix = builder {
       name = "pkix";
       version = "1.0.9";
@@ -84,6 +84,16 @@ let
       };
       beamDeps = [ ];
     };
+    p1_pgsql = builder {
+      name = "p1_pgsql";
+      version = "1.1.25";
+      src = fetchHex {
+        pkg = "p1_pgsql";
+        version = "1.1.25";
+        sha256 = "sha256-tlTB4H0+d1tia0B+dpbKz9iNF76D5xaLnYnDgy2RPec=";
+      };
+      beamDeps = [ xmpp ];
+    };
     p1_oauth2 = builder {
       name = "p1_oauth2";
       version = "0.6.14";
@@ -91,6 +101,16 @@ let
         pkg = "p1_oauth2";
         version = "0.6.14";
         sha256 = "sha256-H9OsR05Dci2dWofG34029pjth697uBy7tmNhRR2Zro8=";
+      };
+      beamDeps = [ ];
+    };
+    p1_mysql = builder {
+      name = "p1_mysql";
+      version = "1.0.23";
+      src = fetchHex {
+        pkg = "p1_mysql";
+        version = "1.0.23";
+        sha256 = "sha256-nO+YJl+yhzdOe2S/QCLE317GYZbKMc9L7XPGfEW/gk4=";
       };
       beamDeps = [ ];
     };
@@ -113,6 +133,16 @@ let
         sha256 = "sha256-yH0clVddtlrym3lcnao77UP1wb+EByp0RpZZvPU1lOs=";
       };
       beamDeps = [ p1_utils ];
+    };
+    luerl = builder {
+      name = "luerl";
+      version = "1.1.1";
+      src = fetchHex {
+        pkg = "luerl";
+        version = "1.1.1";
+        sha256 = "sha256-4X7yRqf/h27JDmh5KjlwiXlBYATU6s/op2QyBrlHB3M=";
+      };
+      beamDeps = [ ];
     };
     jose = builder {
       name = "jose";
@@ -173,6 +203,46 @@ let
         sha256 = "sha256-2zQyLIeC1MUTnMuAcJ2OyMOAibRCYu3QwvZgrElb04k=";
       };
       beamDeps = [ p1_utils ];
+    };
+    ezlib = builder {
+      name = "ezlib";
+      version = "1.0.12";
+      src = fetchHex {
+        pkg = "ezlib";
+        version = "1.0.12";
+        sha256 = "sha256-MOlDVftCJgqrbhJYLLDFa/IzUV5lXIrq9Idg51YeTrs=";
+      };
+      beamDeps = [ p1_utils ];
+    };
+    esip = builder {
+      name = "esip";
+      version = "1.0.52";
+      src = fetchHex {
+        pkg = "esip";
+        version = "1.0.52";
+        sha256 = "sha256-bwAWU5WQBQCqJizgKXFi2Tkxx4wUZNif0O3G49a8AR8=";
+      };
+      beamDeps = [ fast_tls p1_utils stun ];
+    };
+    eredis = builder {
+      name = "eredis";
+      version = "1.2.0";
+      src = fetchHex {
+        pkg = "eredis";
+        version = "1.2.0";
+        sha256 = "sha256-2bWr7ywsirqPMqoBggPgs9yLEVd3OyVKsdTCACMX8eE=";
+      };
+      beamDeps = [ ];
+    };
+    epam = builder {
+      name = "epam";
+      version = "1.0.14";
+      src = fetchHex {
+        pkg = "epam";
+        version = "1.0.14";
+        sha256 = "sha256-LzRJ5yiFpypsKoQ/VhrdD8L3DXoh9hRWkwpUdHPU2Yk=";
+      };
+      beamDeps = [ ];
     };
     eimp = builder {
       name = "eimp";
