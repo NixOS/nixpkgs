@@ -60,6 +60,7 @@ python3Packages.buildPythonPackage rec {
     lz4
     numpy
     opencv4
+    olefile
     pillow
     pillow-heif
     psutil
@@ -74,6 +75,7 @@ python3Packages.buildPythonPackage rec {
     pyyaml
     qtpy
     requests
+    show-in-file-manager
     send2trash
     service-identity
     twisted
