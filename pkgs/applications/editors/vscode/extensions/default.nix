@@ -4872,6 +4872,22 @@ let
         };
       };
 
+      yoavbls.pretty-ts-errors = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "pretty-ts-errors";
+          publisher = "yoavbls";
+          version = "0.5.3";
+          hash = "sha256-JSCyTzz10eoUNu76wNUuvPVVKq4KaVKobS1CAPqgXUA=";
+        };
+        meta = {
+          description = "Make TypeScript errors prettier and human-readable in VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors";
+          homepage = "https://github.com/yoavbls/pretty-ts-errors";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
       yzhang.dictionary-completion = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "yzhang";
