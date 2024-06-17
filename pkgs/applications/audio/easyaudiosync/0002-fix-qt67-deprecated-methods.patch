@@ -1,0 +1,21 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index e7befae..8689f13 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -43,11 +43,14 @@ configure_file("${PROJECT_SOURCE_DIR}/translations/languages.hpp.in" "${PROJECT_
+ 
+ # Make lupdate target for Qt 6
+ if (${QT_VERSION} VERSION_GREATER_EQUAL "6")
+-  qt_add_lupdate(${EXECUTABLE_NAME}
++  qt_add_lupdate(
+     TS_FILES ${TS_FILES} "${PROJECT_SOURCE_DIR}/translations/source.ts"
++    SOURCE_TARGETS ${EXECUTABLE_NAME}
+   )
+ endif ()
+-qt_add_translation(QM_FILES "${TS_FILES}")
++qt_add_translations(
++  ${EXECUTABLE_NAME} 
++)
+ foreach (FILE ${QM_FILES})
+   get_filename_component(BASENAME ${FILE} NAME)
+   string(APPEND TRANSLATION_FILES "    <file>${BASENAME}</file>\n")

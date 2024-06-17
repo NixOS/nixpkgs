@@ -110,6 +110,17 @@ in
   # build products from that prior build as a starting point for accelerating
   # this build
 , previousIntermediates ? null
+  # References to these store paths are forbidden in the produced output.
+, disallowedRequisites ? []
+  # Whether to allow the produced output to refer to `ghc`.
+  #
+  # This can be used in conjunction with `haskell.lib.justStaticExecutables`
+  # to help prevent static Haskell binaries from having erroneous dependencies
+  # on GHC.
+  #
+  # See https://nixos.org/manual/nixpkgs/stable/#haskell-packaging-helpers
+  # or its source doc/languages-frameworks/haskell.section.md
+, disallowGhcReference ? false
 , # Cabal 3.8 which is shipped by default for GHC >= 9.3 always calls
   # `pkg-config --libs --static` as part of the configure step. This requires
   # Requires.private dependencies of pkg-config dependencies to be present in
@@ -647,7 +658,7 @@ stdenv.mkDerivation ({
 
   passthru = passthru // rec {
 
-    inherit pname version;
+    inherit pname version disallowGhcReference;
 
     compiler = ghc;
 
@@ -808,10 +819,19 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? dontStrip)              { inherit dontStrip; }
 // optionalAttrs (postPhases != [])              { inherit postPhases; }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+// optionalAttrs (disallowedRequisites != [] || disallowGhcReference) {
+  disallowedRequisites =
+    disallowedRequisites
+    ++ (
+      if disallowGhcReference
+      then [ghc]
+      else []
+    );
+}
 
 # Implicit pointer to integer conversions are errors by default since clang 15.
 # Works around https://gitlab.haskell.org/ghc/ghc/-/issues/23456.
-// lib.optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
+// optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
   NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
 }
 )

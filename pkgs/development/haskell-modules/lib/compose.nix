@@ -290,7 +290,7 @@ rec {
   /* link executables statically against haskell libs to reduce
      closure size
    */
-  justStaticExecutables = overrideCabal (drv: {
+ justStaticExecutables = overrideCabal (drv: {
     enableSharedExecutables = false;
     enableLibraryProfiling = false;
     isLibrary = false;
@@ -300,6 +300,8 @@ rec {
       # Remove every directory which could have links to other store paths.
       rm -rf $out/lib $out/nix-support $out/share/doc
     '';
+    # We don't do this yet in 24.05. Unstable has it, and 24.11 will have it.
+    # disallowGhcReference = true;
   });
 
   /* Build a source distribution tarball instead of using the source files
