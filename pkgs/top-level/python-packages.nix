@@ -11060,8 +11060,6 @@ self: super: with self; {
 
   pyfcm = callPackage ../development/python-modules/pyfcm { };
 
-  pyfftw = callPackage ../development/python-modules/pyfftw { };
-
   pyfido = callPackage ../development/python-modules/pyfido { };
 
   pyfiglet = callPackage ../development/python-modules/pyfiglet { };
