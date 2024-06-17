@@ -24194,7 +24194,7 @@ with pkgs;
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
   etcd_3_5 = callPackage ../servers/etcd/3.5 { };
 
-  ejabberd = callPackage ../servers/xmpp/ejabberd { erlang = erlang_24; };
+  ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
   exhaustive = callPackage ../development/tools/exhaustive { };
 
