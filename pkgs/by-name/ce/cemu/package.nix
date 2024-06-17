@@ -25,6 +25,7 @@
   pugixml,
   rapidjson,
   stdenv,
+  testers,
   vulkan-headers,
   vulkan-loader,
   wayland,
@@ -145,6 +146,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = {
