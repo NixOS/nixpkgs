@@ -23,16 +23,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ludusavi";
-  version = "0.23.0";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "ludusavi";
     rev = "v${version}";
-    hash = "sha256-3Z/v3+3mrmPV2Rb/5tM+h6UN+MEIF/aK07B93Zn38AA=";
+    hash = "sha256-nRNXVJJcpZmAfZwDEBaEFlry1gbITWEw0khtsXnMdm0=";
   };
 
-  cargoHash = "sha256-bAap8eSXAPLrs5MEX1Pp6gKdp0iLxci4aX+2+ve6Wk0=";
+  cargoHash = "sha256-E5TaE4TlRA0wmRUiwFqivs18X6oiBCmeXrPI1GxKFBI=";
 
   nativeBuildInputs = [
     cmake
