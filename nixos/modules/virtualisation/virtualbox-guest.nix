@@ -52,7 +52,7 @@ in
       description = "Whether to enable seamless mode. When activated windows from the guest appear next to the windows of the host.";
     };
 
-    dragAndDrop = mkOption {
+    draganddrop = mkOption {
       default = true;
       type = types.bool;
       description = "Whether to enable drag and drop support.";
@@ -112,7 +112,7 @@ in
       }
     )
     (
-      mkIf cfg.dragAndDrop {
+      mkIf cfg.draganddrop {
         systemd.user.services.virtualboxClientDragAndDrop = mkVirtualBoxUserService "--draganddrop";
       }
     )
