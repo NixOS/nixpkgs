@@ -389,9 +389,6 @@ self: super: ({
     '';
   }) super.rio;
 
-  # https://github.com/haskell-crypto/cryptonite/issues/360
-  cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
-
   # Build segfaults unless `fixity-th` is disabled.
   # https://github.com/tweag/ormolu/issues/927
   ormolu = overrideCabal (drv: {
@@ -403,6 +400,13 @@ self: super: ({
 
   # https://github.com/NixOS/nixpkgs/issues/149692
   Agda = disableCabalFlag "optimise-heavily" super.Agda;
+
+} // lib.optionalAttrs (pkgs.stdenv.isAarch64 && super.ghc.version == "9.0.2") {
+
+  # https://github.com/haskell-crypto/cryptonite/issues/360
+  # https://github.com/kazu-yamamoto/crypton/issues/35
+  crypton = appendPatch ./patches/cryptonite-remove-argon2.patch super.crypton;
+  cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
 
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 
