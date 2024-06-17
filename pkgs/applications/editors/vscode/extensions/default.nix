@@ -4594,6 +4594,23 @@ let
         };
       };
 
+      vitaliymaz.vscode-svg-previewer = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-svg-previewer";
+          publisher = "vitaliymaz";
+          version = "0.7.0";
+          hash = "sha256-iX+Js2Pqz1gLDwrihuYtDwQG4ek7GiOhL3M0j3jHF/Y=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/vitaliymaz.vscode-svg-previewer/changelog";
+          description = "Preview SVGs in VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=vitaliymaz.vscode-svg-previewer";
+          homepage = "https://github.com/vitaliymaz/vscode-svg-previewer";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
       vlanguage.vscode-vlang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-vlang";
