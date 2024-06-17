@@ -15142,7 +15142,7 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
   };
 
-  bun = callPackage ../development/web/bun { };
+  bunBaseline = pkgs.bun.passthru.baseline;
 
   cakelisp = callPackage ../development/compilers/cakelisp { };
 
