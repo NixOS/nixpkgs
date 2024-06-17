@@ -4,7 +4,6 @@
 , boehmgc
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchpatch2
 , runCommand
 , Security
@@ -178,12 +177,12 @@ in lib.makeExtensible (self: ({
 
   git = common rec {
     version = "2.23.0";
-    suffix = "pre20240526_${lib.substring 0 8 src.rev}";
+    suffix = "pre20240617_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "7de033d63fbcf97aad164e131ae3a85e5dcebce7";
-      hash = "sha256-LtsyUsVpr9sM0n1L7MeTw8/6wGtGeXFvKAbPR5lqN8Q=";
+      rev = "e0b46917540010da07598bdc6a2d110720d5799d";
+      hash = "sha256-/5vDUvQXic3wZgaJWgok03+45Why/f4oyRPBpk0GryM=";
     };
     self_attribute_name = "git";
   };
