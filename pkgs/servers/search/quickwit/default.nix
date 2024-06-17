@@ -7,14 +7,20 @@
 , protobuf
 , rust-jemalloc-sys
 , Security
+, nodejs
+, yarn
+, fetchYarnDeps
+, fixup-yarn-lock
 }:
 
 let
   pname = "quickwit";
   version = "0.8.1";
-in
-rustPlatform.buildRustPackage rec {
-  inherit pname version;
+
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/quickwit/quickwit-ui/yarn.lock";
+    hash = "sha256-HppK9ycUxCOIagvzCmE+VfcmfMQfPIC8WeWM6WbA6fQ=";
+  };
 
   src = fetchFromGitHub {
     owner = "quickwit-oss";
@@ -22,6 +28,41 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-B5U9nzXh6kj3/UnQzM3//h4hn9ippWHbeDMcMTP9XfM=";
   };
+
+  quickwit-ui = stdenv.mkDerivation {
+    name = "quickwit-ui";
+    src = "${src}/quickwit/quickwit-ui";
+
+    nativeBuildInputs = [
+      nodejs
+      yarn
+      fixup-yarn-lock
+    ];
+
+    configurePhase = ''
+      export HOME=$(mktemp -d)
+    '';
+
+    buildPhase = ''
+      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      fixup-yarn-lock yarn.lock
+
+      yarn install --offline \
+        --frozen-lockfile --no-progress \
+        --ignore-engines --ignore-scripts
+      patchShebangs .
+
+      yarn build
+    '';
+
+    installPhase = ''
+      mkdir $out
+      mv build/* $out
+    '';
+  };
+in
+rustPlatform.buildRustPackage rec {
+  inherit pname version src;
 
   postPatch = ''
     substituteInPlace ./quickwit-ingest/build.rs \
@@ -33,6 +74,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   sourceRoot = "${src.name}/quickwit";
+
+  preBuild = ''
+    mkdir -p quickwit-ui/build
+    cp -r ${quickwit-ui}/* quickwit-ui/build
+  '';
 
   buildInputs = [
     rust-jemalloc-sys
@@ -49,6 +95,9 @@ rustPlatform.buildRustPackage rec {
       "whichlang-0.1.0" = "sha256-7AvLGjtWHjG0TnZdg9p5D+O0H19uo2sqPxJMn6mOU0k=";
     };
   };
+
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
