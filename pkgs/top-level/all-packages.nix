@@ -1751,7 +1751,7 @@ with pkgs;
 
   fscan = callPackage ../tools/security/fscan { };
 
-  copier = callPackage ../tools/misc/copier { };
+  copier = with python3.pkgs; toPythonApplication copier;
 
   gabutdm = callPackage ../applications/networking/gabutdm { };
 
