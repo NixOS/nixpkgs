@@ -12,7 +12,7 @@
   wrapGAppsHook4,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "jailer";
+  pname = "jailer";
   version = "16.2";
 
   src = fetchFromGitHub {

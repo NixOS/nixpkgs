@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     cp -r * $out/lib/snapdragon-profiler
     makeWrapper "${mono}/bin/mono" $out/bin/snapdragon-profiler \
       --add-flags "$out/lib/snapdragon-profiler/SnapdragonProfiler.exe" \
-      --suffix PATH : ${lib.makeBinPath [ jre androidenv.androidPkgs_9_0.platform-tools coreutils ]} \
+      --suffix PATH : ${lib.makeBinPath [ jre androidenv.androidPkgs.platform-tools coreutils ]} \
       --prefix MONO_GAC_PREFIX : ${gtk-sharp-2_0} \
       --suffix LD_LIBRARY_PATH : $(echo $NIX_LDFLAGS | sed 's/ -L/:/g;s/ -rpath /:/g;s/-rpath //') \
       --chdir "$out/lib/snapdragon-profiler" # Fixes themes not loading correctly

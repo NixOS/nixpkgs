@@ -858,7 +858,7 @@ with lib.maintainers; {
     members = [
       hexa
       jonringer
-      tjni
+      natsukium
     ];
     scope = "Maintain the Python interpreter and related packages.";
     shortName = "Python";

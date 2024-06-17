@@ -4068,7 +4068,7 @@ with pkgs;
   adbfs-rootless = callPackage ../development/mobile/adbfs-rootless { };
 
   adb-sync = callPackage ../development/mobile/adb-sync {
-    inherit (androidenv.androidPkgs_9_0) platform-tools;
+    inherit (androidenv.androidPkgs) platform-tools;
   };
 
   amoco = callPackage ../tools/security/amoco { };
@@ -4084,7 +4084,7 @@ with pkgs;
   androidndkPkgs_23b = (callPackage ../development/androidndk-pkgs {})."23b";
   androidndkPkgs_24 = (callPackage ../development/androidndk-pkgs {})."24";
 
-  androidsdk_9_0 = androidenv.androidPkgs_9_0.androidsdk;
+  androidsdk = androidenv.androidPkgs.androidsdk;
 
   webos = recurseIntoAttrs {
     cmake-modules = callPackage ../development/mobile/webos/cmake-modules.nix { };
@@ -4196,8 +4196,6 @@ with pkgs;
   bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
 
   beats = callPackage ../tools/misc/beats { };
-
-  BeatSaberModManager = callPackage ../games/BeatSaberModManager/default.nix { };
 
   beauty-line-icon-theme = callPackage ../data/icons/beauty-line-icon-theme {
     inherit (plasma5Packages) breeze-icons;
@@ -5502,8 +5500,6 @@ with pkgs;
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
     cairo = cairo.override { xcbSupport = true; };  };
 
-  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
-
   hyprland-autoname-workspaces = callPackage ../applications/misc/hyprland-autoname-workspaces { };
 
   hyprland-per-window-layout = callPackage ../tools/wayland/hyprland-per-window-layout { };
@@ -5516,7 +5512,7 @@ with pkgs;
 
   hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
 
-  hyprlandPlugins = recurseIntoAttrs (callPackage ../applications/window-managers/hyprwm/hyprland/plugins.nix { });
+  hyprlandPlugins = recurseIntoAttrs (callPackage ../applications/window-managers/hyprwm/hyprland-plugins { });
 
   hysteria = callPackage ../tools/networking/hysteria { };
 
@@ -7575,7 +7571,7 @@ with pkgs;
 
   tracker = callPackage ../development/libraries/tracker { };
 
-  tracy = callPackage ../development/tools/tracy { };
+  tracy-x11 = callPackage ../by-name/tr/tracy/package.nix { withWayland = false; };
 
   trivy = callPackage ../tools/admin/trivy { };
 
@@ -18611,8 +18607,6 @@ with pkgs;
 
   license-scanner = callPackage ../development/tools/license-scanner { };
 
-  Literate = callPackage ../development/tools/literate-programming/Literate { };
-
   md-tangle = callPackage ../development/tools/literate-programming/md-tangle { };
 
   # NOTE: Override and set useIcon = false to use Awk instead of Icon.
@@ -20332,8 +20326,6 @@ with pkgs;
   coin3d = callPackage ../development/libraries/coin3d { };
 
   soxt = callPackage ../development/libraries/soxt { };
-
-  CoinMP = callPackage ../development/libraries/CoinMP { };
 
   coinlive = callPackage ../tools/misc/coinlive {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -25834,7 +25826,7 @@ with pkgs;
 
   matrix-alertmanager = callPackage ../servers/monitoring/matrix-alertmanager { };
 
-  mattermost = callPackage ../servers/mattermost { buildGoModule = buildGo122Module; };
+  mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
   matterbridge = callPackage ../servers/matterbridge { };
 
@@ -29515,6 +29507,7 @@ with pkgs;
   androidStudioPackages = recurseIntoAttrs
     (callPackage ../applications/editors/android-studio { });
   android-studio = androidStudioPackages.stable;
+  android-studio-full = android-studio.full;
 
   antfs-cli = callPackage ../applications/misc/antfs-cli { };
 
@@ -30596,8 +30589,6 @@ with pkgs;
   fff = callPackage ../applications/misc/fff { };
 
   fig2dev = callPackage ../applications/graphics/fig2dev { };
-
-  FIL-plugins = callPackage ../applications/audio/FIL-plugins { };
 
   finalfrontier = callPackage ../applications/science/machine-learning/finalfrontier {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -33048,8 +33039,6 @@ with pkgs;
 
   nwg-menu = callPackage ../applications/misc/nwg-menu { };
 
-  nwg-panel = callPackage ../applications/misc/nwg-panel { };
-
   nwg-wrapper = callPackage ../applications/misc/nwg-wrapper { };
 
   ocm = callPackage ../applications/networking/cluster/ocm { };
@@ -34220,8 +34209,6 @@ with pkgs;
   };
 
   skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
-
-  SkypeExport = callPackage ../applications/networking/instant-messengers/SkypeExport { };
 
   slingshot = callPackage ../tools/misc/slingshot { };
 
@@ -37957,8 +37944,6 @@ with pkgs;
       sumatra;
 
   seaview = callPackage ../applications/science/biology/seaview { };
-
-  SPAdes = callPackage ../applications/science/biology/spades { };
 
   svaba = callPackage ../applications/science/biology/svaba { };
 

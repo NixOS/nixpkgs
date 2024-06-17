@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zig";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "ziglang";
     repo = "zig";
     rev = finalAttrs.version;
-    hash = "sha256-RNZiUZtaKXoab5kFrDij6YCAospeVvlLWheTc3FGMks=";
+    hash = "sha256-C56jyVf16Co/XCloMLSRsbG9r/gBc8mzCdeEMHV2T2s=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
 
-  strictDeps = true;
+  # strictDeps breaks zig when clang is being used.
+  # https://github.com/NixOS/nixpkgs/issues/317055#issuecomment-2148438395
+  strictDeps = !stdenv.cc.isClang;
 
   # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
   # work in Nix's sandbox. Use env from our coreutils instead.

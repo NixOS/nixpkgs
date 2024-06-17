@@ -14,23 +14,32 @@ in
 
   options.programs.ydotool = {
     enable = lib.mkEnableOption ''
-      ydotoold system service and install ydotool.
-      Add yourself to the 'ydotool' group to be able to use it.
+      ydotoold system service and {command}`ydotool` for members of
+      {option}`programs.ydotool.group`.
     '';
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "ydotool";
+      description = ''
+        Group which users must be in to use {command}`ydotool`.
+      '';
+    };
   };
 
-  config = lib.mkIf cfg.enable {
-    users.groups.ydotool = { };
+  config = let
+    runtimeDirectory = "ydotoold";
+  in lib.mkIf cfg.enable {
+    users.groups."${config.programs.ydotool.group}" = { };
 
     systemd.services.ydotoold = {
       description = "ydotoold - backend for ydotool";
       wantedBy = [ "multi-user.target" ];
       partOf = [ "multi-user.target" ];
       serviceConfig = {
-        Group = "ydotool";
-        RuntimeDirectory = "ydotoold";
+        Group = config.programs.ydotool.group;
+        RuntimeDirectory = runtimeDirectory;
         RuntimeDirectoryMode = "0750";
-        ExecStart = "${lib.getExe' pkgs.ydotool "ydotoold"} --socket-path=/run/ydotoold/socket --socket-perm=0660";
+        ExecStart = "${lib.getExe' pkgs.ydotool "ydotoold"} --socket-path=${config.environment.variables.YDOTOOL_SOCKET} --socket-perm=0660";
 
         # hardening
 
@@ -76,7 +85,7 @@ in
     };
 
     environment.variables = {
-      YDOTOOL_SOCKET = "/run/ydotoold/socket";
+      YDOTOOL_SOCKET = "/run/${runtimeDirectory}/socket";
     };
     environment.systemPackages = with pkgs; [ ydotool ];
   };

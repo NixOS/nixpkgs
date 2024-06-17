@@ -6,6 +6,7 @@
   aiohttp,
   semver,
   deepmerge,
+  jmespath,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "blebox-uniapi";
-  version = "2.3.0";
+  version = "2.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "blebox";
     repo = "blebox_uniapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nqxbwHzx2cnojw/XX9XQoVvOCCd88tulY0m9xEHU3m4=";
+    hash = "sha256-/NXAyEv4RR12/aoSodKiexKlC83GB1YQVAii8vf6U8c=";
   };
 
   postPatch = ''
@@ -34,6 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    jmespath
     semver
   ];
 
