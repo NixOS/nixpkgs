@@ -1,0 +1,126 @@
+{
+  "author": "ndonfris",
+  "license": "Apache-2.0",
+  "name": "fish-lsp",
+  "version": "1.0.7",
+  "description": "LSP implementation for fish/fish-shell",
+  "keywords": [
+    "lsp",
+    "fish",
+    "fish-shell",
+    "language-server-protocol",
+    "language-server"
+  ],
+  "homepage": "https://fish-lsp.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ndonfris/fish-lsp.git"
+  },
+  "bin": "./bin/fish-lsp",
+  "main": "./out/out.js",
+  "directories": {
+    "man": "./docs/man/fish-lsp.1",
+    "bin": "./bin/fish-lsp"
+  },
+  "typings": "./out/server.d.ts",
+  "scripts": {
+    "setup": "yarn run sh:setup",
+    "preinstall": "yarn install --ignore-scripts",
+    "postinstall": "yarn run sh:build-wasm && yarn run sh:build-time && yarn run compile && yarn run sh:relink && yarn run sh:build-completions",
+    "sh:build-completions": "fish ./scripts/build-completions.fish",
+    "sh:build-logs": "fish ./scripts/build-logs.fish",
+    "sh:build-time": "fish ./scripts/build-time.fish",
+    "sh:setup": "fish ./scripts/setup.fish",
+    "sh:build-wasm": "fish ./scripts/build-fish-wasm.fish",
+    "sh:relink": "fish ./scripts/relink-locally.fish",
+    "pre:clean": "yarn exec rimraf lib *.tsbuildinfo out",
+    "clean": "yarn run pre:clean && yarn install",
+    "clean-nodemodules": "yarn rimraf out *.tsbuildinfo node_modules",
+    "clean:all": "yarn exec rimraf out *.tsbuildinfo node_modules tree-sitter-fish.wasm",
+    "fresh": "yarn run clean:all && yarn install && yarn run setup",
+    "pretest-hook": "yarn clean:all && yarn install --ignore-scripts && yarn run sh:setup",
+    "test-hook": "yarn jest document.test.ts tree-sitter.test.ts node-types.test.ts fish-syntax-node.test.ts exec.test.ts logger.test.ts test-data/parser.test.ts snippets.test.ts completion-startup-config.test.ts formatting.test.ts executeHandler.test.ts fileOperations.test.ts diagnostics.test.ts",
+    "test": "jest",
+    "compile": "yarn tsc -b",
+    "watch": "yarn tsc -b -w",
+    "refactor": "yarn knip",
+    "lint:verbose": "yarn run prelint && yarn eslint .",
+    "lint": "yarn eslint . --fix",
+    "prelint": "yarn clean:all && yarn install --ignore-scripts && yarn run sh:setup",
+    "generate-man-page": "mkdir -p ./docs/man && cat docs/MAN_FILE.md | npx marked-man --date \"$(date +'%e %B %+4Y')\"  --manual fish-lsp --section 1 --name fish-lsp > ./docs/man/fish-lsp.1"
+  },
+  "man": "./docs/man/fish-lsp.1",
+  "enabledApiProposals": [
+    "inlineCompletions"
+  ],
+  "eslintIgnore": [
+    "!.eslintrc.cjs"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn run clean",
+      "pre-push": "yarn lint",
+      "post-merge": "yarn"
+    }
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "fish-lsp.createTheme",
+        "title": "create a new theme"
+      },
+      {
+        "command": "fish-lsp.executeBuffer",
+        "title": "execute the buffer"
+      },
+      {
+        "command": "fish-lsp.execute",
+        "title": "execute the buffer"
+      },
+      {
+        "command": "fish-lsp.executeLine",
+        "title": "execute the line"
+      }
+    ]
+  },
+  "dependencies": {
+    "@esdmr/tree-sitter-fish": "^3.5.2-0",
+    "colors": "^1.4.0",
+    "commander": "^12.0.0",
+    "deepmerge": "^4.3.1",
+    "husky": "^9.0.11",
+    "marked-man": "^1.3.5",
+    "tree-sitter": "^0.21.0",
+    "tsc": "^2.0.4",
+    "typescript": "^5.4.3",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-protocol": "3.17.5",
+    "vscode-languageserver-textdocument": "1.0.11",
+    "vscode-uri": "^3.0.8",
+    "web-tree-sitter": "^0.22.2",
+    "zod": "^3.23.6"
+  },
+  "devDependencies": {
+    "@tsconfig/node-lts": "^20.1.3",
+    "@types/chai": "^4.3.14",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.30",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "@typescript-eslint/parser": "^7.4.0",
+    "all-contributors-cli": "^6.26.1",
+    "chai": "^5.1.0",
+    "eslint": "^8.0.1",
+    "eslint-config-love": "^44.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "fast-glob": "^3.3.2",
+    "jest": "^29.7.0",
+    "knip": "^5.7.0",
+    "rimraf": "^5.0.5",
+    "tree-sitter-cli": "^0.22.2",
+    "tree-sitter-fish": "https://github.com/ram02z/tree-sitter-fish",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2"
+  }
+}
