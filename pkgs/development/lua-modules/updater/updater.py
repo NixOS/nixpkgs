@@ -177,7 +177,7 @@ def generate_pkg_nix(plug: LuaPlugin):
                 "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s"
                 % plug.name
             )
-            log.warn(msg)
+            log.warning(msg)
 
         log.debug("Updating from rockspec %s", plug.rockspec)
         cmd.append(plug.rockspec)
