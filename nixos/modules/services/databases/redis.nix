@@ -185,6 +185,12 @@ in
               '';
             };
 
+            dbFilename = mkOption {
+              type = types.str;
+              default = "dump.rdb";
+              description = "filename where to dump the DB";
+            };
+
             save = mkOption {
               type = with types; listOf (listOf int);
               default = [ [ 900 1 ] [ 300 10 ] [ 60 10000 ] ];
@@ -298,7 +304,7 @@ in
                   map
                     (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}")
                     config.save;
-              dbfilename = "dump.rdb";
+              dbfilename = config.dbFilename;
               appendfsync = config.appendFsync;
               slowlog-log-slower-than = config.slowLogLogSlowerThan;
               slowlog-max-len = config.slowLogMaxLen;
