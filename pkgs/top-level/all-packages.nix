@@ -18013,8 +18013,6 @@ with pkgs;
 
   b4 = callPackage ../development/tools/b4 { };
 
-  babeltrace = callPackage ../development/tools/misc/babeltrace { };
-
   bam = callPackage ../development/tools/build-managers/bam { };
 
   bandit = with python3Packages; toPythonApplication bandit;
