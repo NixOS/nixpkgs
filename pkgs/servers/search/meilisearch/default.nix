@@ -55,13 +55,13 @@ rustPlatform.buildRustPackage {
   # Tests will try to compile with mini-dashboard features which downloads something from the internet.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Powerful, fast, and an easy to use search engine";
     mainProgram = "meilisearch";
     homepage = "https://docs.meilisearch.com/";
     changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
     platforms = [ "aarch64-linux" "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
   };
 }
