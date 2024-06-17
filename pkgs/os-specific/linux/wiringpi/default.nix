@@ -7,14 +7,15 @@
 
 let
   version = "2.61-1";
-  mkSubProject = { subprj # The only mandatory argument
-  , buildInputs ? []
-  , src ? fetchFromGitHub {
+  srcAll = fetchFromGitHub {
     owner = "WiringPi";
     repo = "WiringPi";
     rev = version;
     sha256 = "sha256-VxAaPhaPXd9xYt663Ju6SLblqiSLizauhhuFqCqbO5M=";
-  }
+  };
+  mkSubProject = { subprj # The only mandatory argument
+  , buildInputs ? []
+  , src ? srcAll
   }: stdenv.mkDerivation (finalAttrs: {
     pname = "wiringpi-${subprj}";
     inherit version src;
@@ -33,6 +34,9 @@ let
     ];
   });
   passthru = {
+    # Helps nix-update and probably nixpkgs-update find the src of this package
+    # automatically.
+    src = srcAll;
     inherit mkSubProject;
     wiringPi = mkSubProject {
       subprj = "wiringPi";
