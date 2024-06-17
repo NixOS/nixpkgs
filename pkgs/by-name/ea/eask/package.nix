@@ -25,6 +25,9 @@ buildNpmPackage rec {
     homepage = "https://emacs-eask.github.io/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "eask";
-    maintainers = with lib.maintainers; [ jcs090218 ];
+    maintainers = with lib.maintainers; [
+      jcs090218
+      piotrkwiecinski
+    ];
   };
 }
