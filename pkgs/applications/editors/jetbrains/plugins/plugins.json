@@ -145,6 +145,37 @@
       },
       "name": "python-community-edition"
     },
+    "7391": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "rust-rover",
+        "webstorm"
+      ],
+      "builds": {
+        "233.13135.1068": "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip",
+        "241.15989.206": "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip",
+        "241.17011.166": "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip",
+        "241.17890.1": "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip",
+        "241.17890.13": "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip",
+        "241.17890.14": "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip",
+        "241.17890.15": "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip",
+        "241.17890.19": "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip",
+        "241.17890.21": "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip",
+        "241.17890.24": "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip",
+        "241.17890.8": "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip"
+      },
+      "name": "asciidoc"
+    },
     "8182": {
       "compatible": [
         "clion",
@@ -515,6 +546,7 @@
     "https://plugins.jetbrains.com/files/7322/530366/python-ce-241.15989.150.zip": "sha256-VJWFzUk/lloFCfHbXX7lQRV6bGseCqEPA8XOLlkqNho=",
     "https://plugins.jetbrains.com/files/7322/540027/python-ce-241.17011.48.zip": "sha256-UrvhbGhcqxGke5tZTktyaWVYIWO5NhOU/WiswMYr83Y=",
     "https://plugins.jetbrains.com/files/7322/552840/python-ce-241.17890.1.zip": "sha256-njHcuJmpc/5JsfZ6mmjcRK2j78J0E4bu68T1A0DNdVU=",
+    "https://plugins.jetbrains.com/files/7391/531687/asciidoctor-intellij-plugin-0.41.14.zip": "sha256-icVvR79Ut6RopPKqvUQf4ZHKg14LV8/KWUZfQh/BYV8=",
     "https://plugins.jetbrains.com/files/8182/466854/intellij-rust-233.15445.zip": "sha256-+Lc/avYBLpyIV63DlbhAJtieHDv4HdggqdGFDw9iqN0=",
     "https://plugins.jetbrains.com/files/8554/535094/featuresTrainer-241.17011.14.zip": "sha256-p26GW1NyVI8OR1VypeWUFWW8qlwB+LtzrEoKyXBwiCw=",
     "https://plugins.jetbrains.com/files/8607/555059/NixIDEA-0.4.0.14.zip": "sha256-oP/tvAqzMSDLJ0Jah1eLJDZIm9WhOZas7lPWrvjWFMM=",
