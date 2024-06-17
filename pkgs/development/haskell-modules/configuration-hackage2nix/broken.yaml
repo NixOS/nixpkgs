@@ -4810,7 +4810,6 @@ broken-packages:
   - pusher-ws # failure in job https://hydra.nixos.org/build/233204133 at 2023-09-02
   - pushme # failure in job https://hydra.nixos.org/build/233212481 at 2023-09-02
   - push-notifications # failure in job https://hydra.nixos.org/build/233199364 at 2023-09-02
-  - push-notify-apn # failure in job https://hydra.nixos.org/build/260189652 at 2024-05-19
   - pushover # failure in job https://hydra.nixos.org/build/252739908 at 2024-03-16
   - putlenses # failure in job https://hydra.nixos.org/build/233197372 at 2023-09-02
   - puzzle-draw # failure in job https://hydra.nixos.org/build/233204953 at 2023-09-02
