@@ -1,19 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl, paho-mqtt-c, enableStatic ? stdenv.hostPlatform.isStatic, enableShared ? !stdenv.hostPlatform.isStatic }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  paho-mqtt-c,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "paho.mqtt.cpp";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.cpp";
-    rev = "v${version}";
-    hash = "sha256-c2umToT4w+L7bgzp1bCEcb0ECHvxKZ2t6JI5SmUySPo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XAQSNjO34b2BPzAf7x4a+74UdKFH5lYNMJm4kE16nkA=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ openssl paho-mqtt-c ];
+  buildInputs = [
+    openssl
+    paho-mqtt-c
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "PAHO_WITH_SSL" true)
@@ -28,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };
-}
+})
