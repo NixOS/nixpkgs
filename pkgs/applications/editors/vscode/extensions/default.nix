@@ -542,6 +542,22 @@ let
 
       betterthantomorrow.calva = callPackage ./betterthantomorrow.calva { };
 
+      bierner.comment-tagged-templates = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "comment-tagged-templates";
+          publisher = "bierner";
+          version = "0.3.3";
+          hash = "sha256-M2XdMQ2l6oMYiHTdfRJ/n/Ys3LecEPwAozQtLBcn7FY=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/bierner.comment-tagged-templates/changelog";
+          description = "VS Code extension that adds basic syntax highlighting for JavaScript and TypeScript tagged template strings using language identifier comments";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.comment-tagged-templates";
+          homepage = "https://github.com/mjbvz/vscode-comment-tagged-templates";
+          license = lib.licenses.mit;
+        };
+      };
+
       bierner.docs-view = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "docs-view";
