@@ -15,7 +15,7 @@
 
 let
   pname = "quickwit";
-  version = "0.8.1";
+  version = "0.8.2";
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/quickwit/quickwit-ui/yarn.lock";
@@ -26,7 +26,7 @@ let
     owner = "quickwit-oss";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-B5U9nzXh6kj3/UnQzM3//h4hn9ippWHbeDMcMTP9XfM=";
+    hash = "sha256-OrCO0mCFmhYBdpr4Gps56KJJ37uuJpV6ZJHWspOScyw=";
   };
 
   quickwit-ui = stdenv.mkDerivation {
