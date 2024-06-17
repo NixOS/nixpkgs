@@ -99,6 +99,8 @@ let
 
     radioparadise = callPackage ../applications/video/kodi/addons/radioparadise { };
 
+    raiplay = callPackage ../applications/video/kodi/addons/raiplay { };
+
     svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
 
     steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };

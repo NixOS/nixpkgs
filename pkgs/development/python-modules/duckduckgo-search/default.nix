@@ -6,6 +6,7 @@
   pythonOlder,
   setuptools,
   orjson,
+  pyreqwest-impersonate,
   curl-cffi,
 
   # Optional dependencies
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     click
     curl-cffi
     orjson
+    pyreqwest-impersonate
   ];
 
   passthru.optional-dependencies = {
