@@ -1,8 +1,8 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper, pkg-config
+{ lib, stdenv, buildGo122Module, fetchFromGitHub, installShellFiles, makeWrapper, pkg-config
 , withGui ? true, vte
 }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "orbiton";
   version = "2.65.12";
 
