@@ -12,7 +12,7 @@ let
   postgresqlPackage = if config.services.postgresql.enable then
                         config.services.postgresql.package
                       else
-                        pkgs.postgresql_13;
+                        pkgs.postgresql_14;
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
@@ -1119,8 +1119,8 @@ in {
         message = "services.gitlab.secrets.jwsFile must be set!";
       }
       {
-        assertion = versionAtLeast postgresqlPackage.version "13.6.0";
-        message = "PostgreSQL >=13.6 is required to run GitLab 16. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
+        assertion = versionAtLeast postgresqlPackage.version "14.9";
+        message = "PostgreSQL >= 14.9 is required to run GitLab 17. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
       }
     ];
 
