@@ -2,19 +2,19 @@
   lib,
   aiohttp,
   buildPythonPackage,
+  cryptography,
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  wheel,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "aioruckus";
-  version = "0.37";
-  format = "pyproject";
+  version = "0.38";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -22,33 +22,33 @@ buildPythonPackage rec {
     owner = "ms264556";
     repo = "aioruckus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uFYOTF8yfskLSwRP3TIDMSTlsCuU7BxAyYeFgohZuh4=";
+    hash = "sha256-h32EmiCQ6REciGMl0wDV8BSUezsFRo76RqUBeD2+pbY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "setuptools>=68.1" "setuptools"
+      --replace-fail "setuptools>=68.1" "setuptools"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
+    cryptography
     xmltodict
   ];
-
-  pythonImportsCheck = [ "aioruckus" ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [ "aioruckus" ];
+
   disabledTests = [
-    # these require a local ruckus device
+    # Those tests require a local ruckus device
     "test_ap_info"
     "test_authentication_error"
     "test_connect_success"
