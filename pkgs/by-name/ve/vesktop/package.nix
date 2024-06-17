@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r dist/*unpacked/resources $out/opt/Vesktop/
 
       for file in build/icon_*x32.png; do
-        file_suffix=''${file//icon_}
+        file_suffix=''${file//build\/icon_}
         install -Dm0644 $file $out/share/icons/hicolor/''${file_suffix//x32.png}/apps/vesktop.png
       done
     ''
