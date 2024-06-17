@@ -4608,8 +4608,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  consul-alerts = callPackage ../servers/monitoring/consul-alerts { };
-
   consul-template = callPackage ../tools/system/consul-template { };
 
   copyright-update = callPackage ../tools/text/copyright-update { };
