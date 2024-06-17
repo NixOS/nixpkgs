@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Automatically updated list of valid TLDs taken directly from IANA";
-    homepage = "https://github.com/mweinelt/tlds";
+    homepage = "https://github.com/kichik/tlds";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
