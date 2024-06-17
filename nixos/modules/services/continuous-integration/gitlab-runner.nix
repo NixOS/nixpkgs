@@ -1,7 +1,43 @@
 { config, lib, pkgs, ... }:
-with builtins;
-with lib;
+
 let
+  inherit (builtins)
+    hashString
+    map
+    substring
+    toJSON
+    toString
+    unsafeDiscardStringContext
+    ;
+
+  inherit (lib)
+    any
+    assertMsg
+    attrValues
+    concatStringsSep
+    escapeShellArg
+    filterAttrs
+    hasPrefix
+    isStorePath
+    literalExpression
+    mapAttrs'
+    mapAttrsToList
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    nameValuePair
+    optional
+    optionalAttrs
+    optionals
+    teams
+    toShellVar
+    types
+    ;
+
   cfg = config.services.gitlab-runner;
   hasDocker = config.virtualisation.docker.enable;
 
@@ -20,17 +56,16 @@ let
   configPath = ''"$HOME"/.gitlab-runner/config.toml'';
   configureScript = pkgs.writeShellApplication {
     name = "gitlab-runner-configure";
-    runtimeInputs = with pkgs; [
+    runtimeInputs = [ cfg.package ] ++ (with pkgs; [
         bash
         gawk
         jq
         moreutils
         remarshal
         util-linux
-        cfg.package
         perl
         python3
-    ];
+    ]);
     text = if (cfg.configFile != null) then ''
       cp ${cfg.configFile} ${configPath}
       # make config file readable by service
@@ -545,15 +580,19 @@ in {
       environment = config.networking.proxy.envVars // {
         HOME = "/var/lib/gitlab-runner";
       };
-      path = with pkgs; [
-        bash
-        gawk
-        jq
-        moreutils
-        remarshal
-        util-linux
-        cfg.package
-      ] ++ cfg.extraPackages;
+
+      path =
+        (with pkgs; [
+          bash
+          gawk
+          jq
+          moreutils
+          remarshal
+          util-linux
+        ])
+        ++ [ cfg.package ]
+        ++ cfg.extraPackages;
+
       reloadIfChanged = true;
       serviceConfig = {
         # Set `DynamicUser` under `systemd.services.gitlab-runner.serviceConfig`
