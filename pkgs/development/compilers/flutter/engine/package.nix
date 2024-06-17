@@ -57,7 +57,7 @@ let
       ;
   };
 
-  outName = "host_$runtimeMode${lib.optionalString (!isOptimized) "_unopt --unoptimized"}";
+  outName = "host_${runtimeMode}${lib.optionalString (!isOptimized) "_unopt --unoptimized"}";
 in
 stdenv.mkDerivation {
   pname = "flutter-engine-${runtimeMode}${lib.optionalString (!isOptimized) "-unopt"}";
@@ -283,13 +283,13 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
-  # Link sources so we can set $FLUTTER_ENGINE to this derivation
   installPhase = ''
     runHook preInstall
 
-    for dir in $(find $src/src -mindepth 1 -maxdepth 1); do
-      ln -sf $dir $out/$(basename $dir)
-    done
+    rm -rf $out/out/$outName/{obj,gen,exe.unstripped,lib.unstripped,zip_archives}
+    rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,display_list_rendertests,flutter_tester,toolchain.ninja}
+    find $out/out/$outName -name '*_unittests' -delete
+    find $out/out/$outName -name '*_benchmarks' -delete
 
     runHook postInstall
   '';

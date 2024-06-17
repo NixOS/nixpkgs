@@ -53,11 +53,6 @@ stdenv.mkDerivation (
     installPhase =
       ''
         mkdir -p $out/out
-
-        for dir in $(find $src/src -mindepth 1 -maxdepth 1); do
-          ln -sf $dir $out/$(basename $dir)
-        done
-
       ''
       + lib.concatMapStrings (
         runtimeMode:
