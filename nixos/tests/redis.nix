@@ -1,9 +1,8 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
-
-  lib ? pkgs.lib,
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../../.. { inherit system config; }
+, lib ? pkgs.lib
+,
 }:
 let
   makeTest = import ./make-test-python.nix;
@@ -13,9 +12,9 @@ let
     inherit (pkgs) redis keydb;
   };
   makeRedisTest =
-    {
-      package,
-      name ? mkTestName package,
+    { package
+    , name ? mkTestName package
+    ,
     }:
     makeTest {
       inherit name;
@@ -34,6 +33,10 @@ let
                 inherit package;
                 servers."".enable = true;
                 servers."test".enable = true;
+                servers."test-state" = {
+                  enable = true;
+                  dir = "/data/redis";
+                };
               };
             };
 
@@ -51,6 +54,7 @@ let
                 [
                   ""
                   "-test"
+                  "-test-state"
                 ]
             );
           };
@@ -62,7 +66,8 @@ let
           inherit (nodes.machine.services) redis;
         in
         ''
-          start_all()
+          machine.start(allow_reboot = True)
+
           machine.wait_for_unit("redis")
           machine.wait_for_unit("redis-test")
 
@@ -71,16 +76,26 @@ let
 
           machine.wait_for_file("${redis.servers."".unixSocket}")
           machine.wait_for_file("${redis.servers."test".unixSocket}")
+          machine.wait_for_file("${redis.servers."test-state".unixSocket}")
 
           # The unix socket is accessible to the redis group
           machine.succeed('su member -c "${pkgs.redis}/bin/redis-cli ping | grep PONG"')
           machine.succeed('su member-test -c "${pkgs.redis}/bin/redis-cli ping | grep PONG"')
+          machine.succeed('su member-test-state -c "${pkgs.redis}/bin/redis-cli ping | grep PONG"')
+
+          machine.succeed('su member-test-state -c "${pkgs.redis}/bin/redis-cli set a 1 | grep OK"')
 
           machine.succeed("${pkgs.redis}/bin/redis-cli ping | grep PONG")
           machine.succeed("${pkgs.redis}/bin/redis-cli -s ${redis.servers."".unixSocket} ping | grep PONG")
           machine.succeed("${pkgs.redis}/bin/redis-cli -s ${
             redis.servers."test".unixSocket
           } ping | grep PONG")
+
+          machine.reboot()
+
+          # Check for persistance
+          machine.wait_for_file("${redis.servers."test-state".unixSocket}")
+          machine.succeed('su member-test-state -c "${pkgs.redis}/bin/redis-cli get a | grep 1"')
         '';
     };
 in
