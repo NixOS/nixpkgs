@@ -626,6 +626,23 @@ let
         };
       };
 
+      bierner.markdown-footnotes = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-footnotes";
+          publisher = "bierner";
+          version = "0.1.1";
+          hash = "sha256-h/Iyk8CKFr0M5ULXbEbjFsqplnlN7F+ZvnUTy1An5t4=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/bierner.markdown-footnotes/changelog";
+          description = "Adds [^1] footnote syntax support to VS Code's built-in Markdown preview";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.markdown-footnotes";
+          homepage = "https://github.com/mjbvz/vscode-markdown-footnotes";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
       bierner.markdown-mermaid = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "markdown-mermaid";
