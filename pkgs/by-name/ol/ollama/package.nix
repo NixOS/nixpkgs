@@ -192,8 +192,8 @@ goBuild ((lib.optionalAttrs enableRocm {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/jmorganca/ollama/version.Version=${version}"
-    "-X=github.com/jmorganca/ollama/server.mode=release"
+    "-X=github.com/ollama/ollama/version.Version=${version}"
+    "-X=github.com/ollama/ollama/server.mode=release"
   ];
 
   passthru.tests = {
