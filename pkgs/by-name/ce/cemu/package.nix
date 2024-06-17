@@ -145,7 +145,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://cemu.info";
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ zhaofengli baduhai ];
+    maintainers = with maintainers; [ zhaofengli baduhai AndersonTorres ];
     mainProgram = "cemu";
   };
 }
