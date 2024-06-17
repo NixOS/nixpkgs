@@ -1,14 +1,14 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "6.4.1";
+  version = "6.40";
   pname = "clips";
 
   src = fetchurl {
     url = "mirror://sourceforge/clipsrules/CLIPS/${version}/clips_core_source_${
         builtins.replaceStrings [ "." ] [ "" ] version
       }.tar.gz";
-    hash = "sha256-qk87uLFZZL9HNPNlyVh+Mplr3dP1C/z1O5UVS+rnbuM=";
+    hash = "sha256-rWA3pqW15VoocblKvtWLtxCsxEMCLLGQltO4/oOhJd8=";
   };
 
   postPatch = ''
