@@ -17,20 +17,45 @@
 , wrapRustcWith
 , llvmPackages_18, llvm_18
 } @ args:
-
+let
+  llvmSharedFor = pkgSet: pkgSet.llvmPackages_18.libllvm.override ({
+    enableSharedLibraries = true;
+  } // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
+    # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
+    stdenv = pkgSet.stdenv.override { allowedRequisites = null; cc = pkgSet.llvmPackages_18.clangUseLLVM; };
+  });
+in
 import ./default.nix {
   rustcVersion = "1.79.0";
   rustcSha256 = "sha256-Fy7PPH0fnZ+xbNKmKIaXgmcEFt7QEp5SSoZ1H5YUSMA=";
 
-  llvmSharedForBuild = pkgsBuildBuild.llvmPackages_18.libllvm.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvmPackages_18.libllvm.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvmPackages_18.libllvm.override { enableSharedLibraries = true; };
+  llvmSharedForBuild = llvmSharedFor pkgsBuildBuild;
+  llvmSharedForHost = llvmSharedFor pkgsBuildHost;
+  llvmSharedForTarget = llvmSharedFor pkgsBuildTarget;
 
   # For use at runtime
-  llvmShared = llvm_18.override { enableSharedLibraries = true; };
+  llvmShared = llvmSharedFor { inherit llvmPackages_18 stdenv; };
 
   # Expose llvmPackages used for rustc from rustc via passthru for LTO in Firefox
-  llvmPackages = llvmPackages_18;
+  llvmPackages = if (stdenv.targetPlatform.useLLVM or false) then (let
+    setStdenv = pkg: pkg.override {
+      stdenv = stdenv.override { allowedRequisites = null; cc = llvmPackages_18.clangUseLLVM; };
+    };
+  in rec {
+    libunwind = setStdenv llvmPackages_18.libunwind;
+    llvm = setStdenv llvmPackages_18.llvm;
+
+    libcxx = llvmPackages_18.libcxx.override {
+      stdenv = stdenv.override {
+        allowedRequisites = null;
+        cc = llvmPackages_18.clangNoLibcxx;
+        hostPlatform = stdenv.hostPlatform // {
+          useLLVM = !stdenv.isDarwin;
+        };
+      };
+      inherit libunwind;
+    };
+  }) else llvmPackages_18;
 
   # Note: the version MUST be one version prior to the version we're
   # building
