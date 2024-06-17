@@ -1,3 +1,7 @@
+# Manually packaged extensions for azure-cli
+#
+# Checkout ./README.md for more information.
+
 { lib
 , mkAzExtension
 , mycli
