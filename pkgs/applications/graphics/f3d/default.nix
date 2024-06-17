@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DF3D_MODULE_EXTERNAL_RENDERING=ON"
   ] ++ lib.optionals withManual [
     "-DF3D_LINUX_GENERATE_MAN=ON"
   ] ++ lib.optionals withPythonBinding [
