@@ -2838,6 +2838,23 @@ let
         };
       };
 
+      meganrogge.template-string-converter = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "template-string-converter";
+          publisher = "meganrogge";
+          version = "0.6.1";
+          hash = "sha256-w0ppzh0m/9Hw3BPJbAKsNcMStdzoH9ODf3zweRcCG5k=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/meganrogge.template-string-converter/changelog";
+          description = "VS Code extension to autocorrect from quotes to backticks";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=meganrogge.template-string-converter";
+          homepage = "https://github.com/meganrogge/template-string-converter";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
       mgt19937.typst-preview = callPackage ./mgt19937.typst-preview { };
 
       mhutchie.git-graph = buildVscodeMarketplaceExtension {
