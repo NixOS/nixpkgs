@@ -14,7 +14,9 @@ fi
 
 for i in \
     "x86_64-linux linux.gtk.x86_64-nojdk.tar.gz" \
-    "aarch64-linux linux.gtk.aarch64-nojdk.tar.gz"
+    "aarch64-linux linux.gtk.aarch64-nojdk.tar.gz" \
+    "x86_64-darwin macos-x86_64.dmg" \
+    "aarch64-darwin macos-aarch64.dmg"
 do
     set -- $i
     prefetch=$(nix-prefetch-url "https://github.com/dbeaver/dbeaver/releases/download/$latestVersion/dbeaver-ce-$latestVersion-$2")
