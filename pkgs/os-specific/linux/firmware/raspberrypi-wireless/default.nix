@@ -2,7 +2,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
-  version = "unstable-2023-11-15";
+  version = "unstable-2024-01-17";
 
   srcs = [
     (fetchFromGitHub {
@@ -16,8 +16,8 @@ stdenvNoCC.mkDerivation {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "88aa085bfa1a4650e1ccd88896f8343c22a24055";
-      hash = "sha256-Yynww79LPPkau4YDSLI6IMOjH64nMpHUdGjnCfIR2+M=";
+      rev = "3db4164cfd89e6d9afb7ebc87607b792651512df";
+      hash = "sha256-Qu96GKezjF39bBlYsWhEv6CoIpap1jtHTvcrszZOzzE=";
     })
   ];
 
