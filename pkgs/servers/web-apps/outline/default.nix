@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.77.1";
+  version = "0.77.2";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-n2TGbCRe/NSX+4lSmLGs2WUh44s+Hr6eblsqnzYNeSs=";
+    hash = "sha256-Ri2qN7nR79Y1tsUsga/92nS7EuP/nqaUG2FiYJQNAr4=";
   };
 
   nativeBuildInputs = [ makeWrapper prefetch-yarn-deps fixup-yarn-lock ];
