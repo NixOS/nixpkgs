@@ -11,6 +11,7 @@
   glfw3,
   xorg,
   assimp,
+  pkg-config,
   blas,
   curl,
   eigen,
@@ -18,6 +19,7 @@
   glew,
   imgui,
   nasm,
+  tinyobjloader,
   libjpeg,
   filament,
   libjpeg_turbo,
@@ -55,6 +57,28 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0001-cmake-correct-msgpack-package-name.patch ];
 
+  extraCmakeFindModules = [
+    ./Findfilament.cmake
+    ./Findliblzf.cmake
+  ];
+  extraFindPackages = ''
+    # find_package(jsoncpp REQUIRED GLOBAL)
+    # add_library(jsoncpp ALIAS jsoncpp_lib)
+
+    find_package(msgpack REQUIRED GLOBAL)
+    find_package(TinyGLTF REQUIRED GLOBAL)
+    add_library(TinyGLTF::TinyGLTF ALIAS tinygltf::tinygltf)
+
+    # find_package(ZeroMQ REQUIRED GLOBAL)
+    # libzmq, libzmq-static
+    # add_library(Open3D::3rdparty_zeromq ALIAS libzmq-static)
+
+    # find_package(PkgConfig REQUIRED)
+    # pkg_check_modules(LIBCURL libcurl REQUIRED IMPORTED_TARGET)
+    # add_library(ext_curl ALIAS PkgConfig::LIBCURL)
+  '';
+  passAsFile = [ "extraFindPackages" ];
+
   postPatch = ''
     substituteInPlace "cmake/Open3DFetchISPCCompiler.cmake" \
       --replace-fail \
@@ -63,16 +87,25 @@ stdenv.mkDerivation rec {
                 DOWNLOAD_DIR "''${OPEN3D_THIRD_PARTY_DOWNLOAD_DIR}/ispc"
                 FIND_PACKAGE_ARGS ispc
         '
-    cat << \EOF > 3rdparty/jsoncpp/jsoncpp.cmake
-    find_package(jsoncpp REQUIRED)
-    add_library(jsoncpp ALIAS jsoncpp_lib)
-    EOF
+
+    substituteInPlace 3rdparty/find_dependencies.cmake \
+      --replace-fail \
+        'include(''${Open3D_3RDPARTY_DIR}/uvatlas/uvatlas.cmake)' \
+        '# include(''${Open3D_3RDPARTY_DIR}/uvatlas/uvatlas.cmake)'
+
+    sed -i "1r $extraFindPackagesPath" 3rdparty/find_dependencies.cmake
 
     rm -rf build/filament
+
+    echo "Installing extraCmakeFindModules" >&2
     mkdir -p cmake/
-    cp ${./Findfilament.cmake} ./cmake/Findfilament.cmake
-    cp ${./Findliblzf.cmake} ./cmake/Findliblzf.cmake
-    addToSearchPath CMAKE_MODULE_PATH $PWD/cmake
+    for path in $extraCmakeFindModules ; do
+      # Strip the hash bit to get the basename
+      name="$(echo "$path" | sed 's|${builtins.storeDir}[^-]\+-||')"
+      echo "Installing $path to ./cmake/$name" >&2
+      cp "$path" ./cmake/"$name"
+    done
+    addToSearchPath CMAKE_MODULE_PATH "$PWD/cmake"
   '';
 
   cmakeBuildDir = "builddir"; # build/ is checked in git
@@ -81,6 +114,7 @@ stdenv.mkDerivation rec {
     cmake
     ispc
     nasm
+    pkg-config
   ];
 
   buildInputs = [
@@ -106,6 +140,7 @@ stdenv.mkDerivation rec {
     nanoflann
     qhull
     tbb
+    tinyobjloader
     vtk
     vulkan-headers
     vulkan-loader
@@ -133,6 +168,9 @@ stdenv.mkDerivation rec {
 
     # Doesn't seem to generate a `*Config.cmake` file
     (lib.cmakeFeature "filament_DIR" "${lib.getDev filament}/share/cmake")
+
+    # Should work without this but it doesn't
+    (lib.cmakeFeature "TinyGLTF_DIR" "${lib.getDev draco.tinygltf}/lib/cmake")
   ];
 
   meta = {
