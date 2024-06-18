@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "16.3.0";
+  version = "16.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QMddGJUfafXoBxMCjlx1lH45a4Bab3AP4j8Px7JxYaQ=";
+    hash = "sha256-gFhhOCcmorkrLxrup9fICh5ueCrc64fxfuZXTQG1tMk=";
   };
 
   postPatch = ''
