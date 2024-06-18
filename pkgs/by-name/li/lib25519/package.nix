@@ -33,6 +33,8 @@ stdenv.mkDerivation (prev: {
   # - `-Qunused-arguments` suppress clang warning
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-Qunused-arguments" ]);
 
+  patches = [ ./environment-variable-tools.patch ];
+
   nativeBuildInputs = [ python3 ];
   buildInputs = [
     librandombytes
