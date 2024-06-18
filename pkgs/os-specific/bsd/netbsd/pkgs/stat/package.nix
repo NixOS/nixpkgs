@@ -14,8 +14,6 @@
 
 mkDerivation {
   path = "usr.bin/stat";
-  version = "9.2";
-  sha256 = "18nqwlndfc34qbbgqx5nffil37jfq9aw663ippasfxd2hlyc106x";
   nativeBuildInputs = [
     bsdSetupHook
     netbsdSetupHook
