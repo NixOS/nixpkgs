@@ -1,0 +1,20 @@
+diff -Naur source.old/src/makefile source/src/makefile
+--- source.old/src/makefile	1969-12-31 21:00:01.000000000 -0300
++++ source/src/makefile	2021-06-07 18:58:48.851231787 -0300
+@@ -101,14 +101,14 @@
+ 
+ #  need packages nodejs and libnode-dev
+ js_hello_v8 : js_hello_v8.cpp
+-	g++ -I/usr/include/v8 js_hello_v8.cpp -lv8 -lstdc++ -o js_hello_v8
++	$(CXX) -I/usr/include/v8 js_hello_v8.cpp -lv8 -lstdc++ -o js_hello_v8
+ 
+ HELLOEXTRA = stringfile.o messages.o msg-strings.o startwindow.o ebrc.o format.o http.o isup.o fetchmail.o sendmail.o plugin.o buffers.o dbstubs.o html.o decorate.o html-tidy.o css.o
+ js_hello_moz : js_hello_moz.o $(HELLOEXTRA) jseng-moz.o
+ 	$(CC) js_hello_moz.o $(HELLOEXTRA) jseng-moz.o $(LDFLAGS) -lmozjs-$(SMV) -lstdc++ -o $@
+ 
+ js_hello_quick : js_hello_quick.c
+-	gcc $(CFLAGS) js_hello_quick.c stringfile.o messages.o msg-strings.o ebrc.o format.o -o js_hello_quick -L/usr/local/lib/quickjs -lquickjs -lm -ldl -lpthread -latomic
++	$(CC) $(CFLAGS) js_hello_quick.c stringfile.o messages.o msg-strings.o ebrc.o format.o -o js_hello_quick $(QUICKJS_LDFLAGS) -lm -lpthread
+ 
+ hello: js_hello_duk js_hello_v8 js_hello_moz js_hello_quick
+ 

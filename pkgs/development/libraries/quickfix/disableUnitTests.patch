@@ -1,0 +1,65 @@
+diff -u -r source-baseline-patchPhase/configure.ac source/configure.ac
+--- source-baseline-patchPhase/configure.ac	1970-01-01 00:00:01.000000000 +0000
++++ source/configure.ac	2021-01-12 22:49:28.948861699 +0000
+@@ -43,7 +43,7 @@
+ 
+ AC_CANONICAL_HOST
+ 
+-build_no_unit_test = no
++build_no_unit_test = yes
+ 
+ # Detect the target system
+ case "${host_os}" in
+@@ -344,8 +344,6 @@
+     examples/Makefile
+     examples/executor/Makefile
+     examples/executor/C++/Makefile
+-    examples/ordermatch/Makefile
+-    examples/ordermatch/test/Makefile
+     examples/tradeclient/Makefile
+     examples/tradeclientgui/Makefile
+     examples/tradeclientgui/banzai/Makefile
+diff -u -r source-baseline-patchPhase/examples/Makefile.am source/examples/Makefile.am
+--- source-baseline-patchPhase/examples/Makefile.am	1970-01-01 00:00:01.000000000 +0000
++++ source/examples/Makefile.am	2021-01-12 22:51:55.782568550 +0000
+@@ -1,3 +1,3 @@
+-SUBDIRS = executor ordermatch tradeclient tradeclientgui
++SUBDIRS = executor tradeclient tradeclientgui
+ 
+-EXTRA_DIST = examples.dsw configure configure.in bootstrap Makefile.am
+\ No newline at end of file
++EXTRA_DIST = examples.dsw configure configure.in bootstrap Makefile.am
+diff -u -r source-baseline-patchPhase/src/Makefile.am source/src/Makefile.am
+--- source-baseline-patchPhase/src/Makefile.am	1970-01-01 00:00:01.000000000 +0000
++++ source/src/Makefile.am	2021-01-12 22:53:02.593432380 +0000
+@@ -15,27 +15,23 @@
+ if NO_UNIT_TEST
+ noinst_PROGRAMS =
+ else
+-noinst_PROGRAMS = at ut pt
++noinst_PROGRAMS = at pt
+ endif
+ 
+ at_SOURCES = at.cpp at_application.h
+-ut_SOURCES = ut.cpp
+ pt_SOURCES = pt.cpp
+ 
+ EXTRA_DIST = getopt.c getopt-repl.h
+ 
+ at_LDADD = C++/libquickfix.la
+-ut_LDADD = C++/test/libquickfixcpptest.la C++/libquickfix.la
+ pt_LDADD = C++/libquickfix.la
+ 
+ INCLUDES =-IC++ -IC++/test -I../UnitTest++/src
+-LDFLAGS =-L../UnitTest++ -lUnitTest++
++ 
+ 
+ all-local:
+-	rm -f ../test/ut ../test/pt ../test/at ../test/ut_debug
+-	ln -s ../src/ut ../test/ut
++	rm -rf ../test/pt ../test/at ../test/ut_debug
+ 	ln -s ../src/pt ../test/pt
+ 	ln -s ../src/at ../test/at
+-	ln -s ../src/.libs/ut ../test/ut_debug
+ 
+ clean-local:
