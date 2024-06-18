@@ -1703,10 +1703,6 @@ with pkgs;
 
   btc-rpc-explorer = callPackage ../tools/misc/btc-rpc-explorer { };
 
-  butler = callPackage ../by-name/bu/butler/package.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   carbon-now-cli = callPackage ../tools/typesetting/carbon-now-cli { };
 
   cf-vault = callPackage ../tools/admin/cf-vault { };

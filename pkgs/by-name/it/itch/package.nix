@@ -2,7 +2,6 @@
 , stdenvNoCC
 , fetchzip
 , fetchFromGitHub
-, butler
 , electron
 , steam-run
 , makeWrapper
@@ -18,6 +17,12 @@ stdenvNoCC.mkDerivation rec {
     url = "https://broth.itch.ovh/kitch/linux-amd64/${version}/archive/default#.zip";
     stripRoot = false;
     hash = "sha256-FHwbzLPMzIpyg6KyYTq6/rSNRH76dytwb9D5f9vNKkU=";
+  };
+
+  butler = fetchzip {
+    url = "https://broth.itch.zone/butler/linux-amd64/15.21.0/butler.zip";
+    stripRoot = false;
+    hash = "sha256-jHni/5qf7xST6RRonP2EW8fJ6647jobzrnHe8VMx4IA=";
   };
 
   itch-setup = fetchzip {
@@ -80,7 +85,7 @@ stdenvNoCC.mkDerivation rec {
       --add-flags ${electron}/bin/electron \
       --add-flags $out/share/itch/resources/app \
       --set BROTH_USE_LOCAL butler,itch-setup \
-      --prefix PATH : ${butler}/bin/:${itch-setup}
+      --prefix PATH : ${butler}:${itch-setup}
   '';
 
   meta = with lib; {
