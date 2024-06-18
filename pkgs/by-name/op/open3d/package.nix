@@ -2,42 +2,42 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
-  withPython ? false,
-  ispc,
-  jsoncpp,
-  vulkan-loader,
-  vulkan-headers,
-  glfw3,
-  xorg,
   assimp,
-  pkg-config,
   blas,
+  boringssl,
+  cmake,
+  config,
+  cudaSupport ? config.cudaSupport,
   curl,
+  draco,
   eigen,
   embree,
-  glew,
-  imgui,
-  nasm,
-  tinyobjloader,
-  libjpeg,
   filament,
+  fmt,
+  glew,
+  glfw3,
+  imgui,
+  ispc,
+  jsoncpp,
+  libjpeg,
   libjpeg_turbo,
+  liblzf,
   libpng,
   libz,
-  liblzf,
   msgpack,
-  fmt,
   nanoflann,
-  boringssl,
+  nasm,
+  pkg-config,
   qhull,
   stdgpu,
   tbb,
-  draco,
+  tinyobjloader,
   vtk,
+  vulkan-headers,
+  vulkan-loader,
+  withPython ? false,
+  xorg,
   zeromq,
-  config,
-  cudaSupport ? false,
 }:
 
 let
@@ -62,20 +62,9 @@ stdenv.mkDerivation rec {
     ./Findliblzf.cmake
   ];
   extraFindPackages = ''
-    # find_package(jsoncpp REQUIRED GLOBAL)
-    # add_library(jsoncpp ALIAS jsoncpp_lib)
-
     find_package(msgpack REQUIRED GLOBAL)
     find_package(TinyGLTF REQUIRED GLOBAL)
     add_library(TinyGLTF::TinyGLTF ALIAS tinygltf::tinygltf)
-
-    # find_package(ZeroMQ REQUIRED GLOBAL)
-    # libzmq, libzmq-static
-    # add_library(Open3D::3rdparty_zeromq ALIAS libzmq-static)
-
-    # find_package(PkgConfig REQUIRED)
-    # pkg_check_modules(LIBCURL libcurl REQUIRED IMPORTED_TARGET)
-    # add_library(ext_curl ALIAS PkgConfig::LIBCURL)
   '';
   passAsFile = [ "extraFindPackages" ];
 
