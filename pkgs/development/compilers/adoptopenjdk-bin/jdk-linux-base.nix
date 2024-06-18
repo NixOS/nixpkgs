@@ -20,6 +20,7 @@
 , cairo
 , glib
 , gtk3
+, hookLibJvm
 }:
 
 let
@@ -56,12 +57,14 @@ let result = stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optional stdenv.isAarch32 libffi;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper hookLibJvm ];
 
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = 1;
 
   installPhase = ''
+    runHook preInstall
+
     cd ..
 
     mv $sourceRoot $out
@@ -98,6 +101,8 @@ let result = stdenv.mkDerivation rec {
         wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
       fi
     done
+
+    runHook postInstall
   '';
 
   preFixup = ''

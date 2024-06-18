@@ -61,6 +61,8 @@ in
       };
     };
 
+    environment.pathsToLink = [ "/lib/jvm" ];
+
     environment.systemPackages = [ cfg.package ];
 
     environment.shellInit = ''
