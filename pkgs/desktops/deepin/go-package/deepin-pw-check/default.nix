@@ -50,9 +50,7 @@ buildGoPackage rec {
   ];
 
   postPatch = ''
-    sed -i 's|iniparser/||' */*.c
-    substituteInPlace misc/pkgconfig/libdeepin_pw_check.pc \
-      --replace "/usr" "$out"
+    sed -i '1i#include <stdlib.h>\n#include <string.h>' tool/pwd_conf_update.c
     substituteInPlace misc/system-services/com.deepin.daemon.PasswdConf.service \
       --replace "/usr/lib/deepin-pw-check/deepin-pw-check" "$out/lib/deepin-pw-check/deepin-pw-check"
   '';
