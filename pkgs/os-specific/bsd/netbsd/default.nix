@@ -1,5 +1,6 @@
 {
   lib,
+  crossLibcStdenv,
   stdenvNoCC,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
@@ -30,6 +31,16 @@ makeScopeWithSplicing' {
       ];
 
       compatIfNeeded = lib.optional (!stdenvNoCC.hostPlatform.isNetBSD) self.compat;
+
+      stdenvLibcMinimal = crossLibcStdenv.override (old: {
+        cc = old.cc.override {
+          libc = self.libcMinimal;
+          bintools = old.cc.bintools.override {
+            libc = self.libcMinimal;
+            sharedLibraryLoader = null;
+          };
+        };
+      });
 
       # The manual callPackages below should in principle be unnecessary because
       # they're just selecting arguments that would be selected anyway. However,
@@ -75,13 +86,9 @@ makeScopeWithSplicing' {
       # See note in pkgs/stat/hook.nix
       statHook = self.callPackage ./pkgs/stat/hook.nix { inherit (self) stat; };
 
-      tsort = self.callPackage ./pkgs/tsort.nix {
-        inherit (buildPackages.netbsd) makeMinimal install;
-      };
+      tsort = self.callPackage ./pkgs/tsort.nix { inherit (buildPackages.netbsd) makeMinimal install; };
 
-      lorder = self.callPackage ./pkgs/lorder.nix {
-        inherit (buildPackages.netbsd) makeMinimal install;
-      };
+      lorder = self.callPackage ./pkgs/lorder.nix { inherit (buildPackages.netbsd) makeMinimal install; };
 
       config = self.callPackage ./pkgs/config.nix {
         inherit (buildPackages.netbsd) makeMinimal install;
@@ -111,7 +118,16 @@ makeScopeWithSplicing' {
           ;
       };
 
-      libutil = self.callPackage ./pkgs/libutil.nix { inherit (self) libc sys; };
+      libutil = self.callPackage ./pkgs/libutil.nix {
+        inherit (buildPackages.netbsd)
+          netbsdSetupHook
+          makeMinimal
+          install
+          lorder
+          tsort
+          statHook
+          ;
+      };
 
       libpthread-headers = self.callPackage ./pkgs/libpthread/headers.nix { };
 
@@ -129,15 +145,26 @@ makeScopeWithSplicing' {
           ;
       };
 
-
-      libc = self.callPackage ./pkgs/libc.nix {
-        inherit (self) headers csu librt;
+      libcMinimal = self.callPackage ./pkgs/libcMinimal.nix {
+        inherit (self) headers csu;
         inherit (buildPackages.netbsd)
           netbsdSetupHook
           makeMinimal
           install
           genassym
           gencat
+          lorder
+          tsort
+          statHook
+          rpcgen
+          ;
+      };
+
+      librpcsvc = self.callPackage ./pkgs/librpcsvc.nix {
+        inherit (buildPackages.netbsd)
+          netbsdSetupHook
+          makeMinimal
+          install
           lorder
           tsort
           statHook
