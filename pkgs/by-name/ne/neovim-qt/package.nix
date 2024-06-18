@@ -1,9 +1,9 @@
-{ stdenv, makeWrapper, neovim, neovim-qt-unwrapped }:
+{ stdenv, libsForQt5, makeWrapper, neovim, neovim-qt-unwrapped }:
 
 let
   unwrapped = neovim-qt-unwrapped;
 in
-stdenv.mkDerivation {
+libsForQt5.mkDerivation {
   pname = "neovim-qt";
   version = unwrapped.version;
   buildCommand = if stdenv.isDarwin then ''

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lc0";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "LeelaChessZero";
     repo = "lc0";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q85hXNSexHhk6W48tgJLk0Sf32xBipfg2P2SH1FF89Q=";
+    hash = "sha256-kHLO6xM1q/CQIBcGIFXVkvtGEx75sqA7atGYfvnJcso=";
     fetchSubmodules = true;
   };
 
