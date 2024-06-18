@@ -160,16 +160,17 @@ stdenv.mkDerivation rec {
       {} +
 
     pushd ./files/usr/share/cinnamon/cinnamon-settings
-      substituteInPlace ./bin/capi.py                     --replace '"/usr/lib"' '"${cinnamon-control-center}/lib"'
-      substituteInPlace ./bin/SettingsWidgets.py          --replace "/usr/share/sounds" "/run/current-system/sw/share/sounds"
-      substituteInPlace ./bin/Spices.py                   --replace "subprocess.run(['/usr/bin/" "subprocess.run(['" \
-                                                          --replace 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
-                                                          --replace "msgfmt" "${gettext}/bin/msgfmt"
-      substituteInPlace ./modules/cs_info.py              --replace "lspci" "${pciutils}/bin/lspci"
-      substituteInPlace ./modules/cs_themes.py            --replace "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
+      substituteInPlace ./bin/capi.py                     --replace-fail '"/usr/lib"' '"${cinnamon-control-center}/lib"'
+      substituteInPlace ./bin/SettingsWidgets.py          --replace-fail "/usr/share/sounds" "/run/current-system/sw/share/sounds"
+      substituteInPlace ./bin/Spices.py                   --replace-fail "subprocess.run(['/usr/bin/" "subprocess.run(['" \
+                                                          --replace-fail 'subprocess.run(["/usr/bin/' 'subprocess.run(["' \
+                                                          --replace-fail "msgfmt" "${gettext}/bin/msgfmt"
+      substituteInPlace ./modules/cs_info.py              --replace-fail "lspci" "${pciutils}/bin/lspci"
+      substituteInPlace ./modules/cs_themes.py            --replace-fail "$out/share/cinnamon/styles.d" "/run/current-system/sw/share/cinnamon/styles.d"
     popd
 
-    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d}
+    substituteInPlace ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d} \
+      --replace-fail "exec cinnamon-session" "exec ${cinnamon-session}/bin/cinnamon-session"
 
     patchShebangs src/data-to-c.pl
   '';
