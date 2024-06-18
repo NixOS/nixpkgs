@@ -1,13 +1,14 @@
 { lib
 , rustPlatform
-, fetchFromGitLab
+, fetchFromGitea
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "restic-integrity";
   version = "1.2.1";
-  src = fetchFromGitLab {
-    domain = "gitlab.upi.li";
+
+  src = fetchFromGitea {
+    domain = "git.nwex.de";
     owner = "networkException";
     repo = "restic-integrity";
     rev = version;
@@ -18,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A CLI tool to check the integrity of a restic repository without unlocking it";
-    homepage = "https://gitlab.upi.li/networkException/restic-integrity";
+    homepage = "https://git.nwex.de/networkException/restic-integrity";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ janik ];
     mainProgram = "restic-integrity";
