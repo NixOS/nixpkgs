@@ -8228,7 +8228,7 @@
     name = "Akshat Agarwal";
   };
   hummeltech = {
-    email = "hummeltech2024@gmail.com";
+    email = "hummeltech@sherpaguru.com";
     github = "hummeltech";
     githubId = 6109326;
     name = "David Hummel";
@@ -13873,6 +13873,12 @@
     github = "nalbyuites";
     githubId = 1009523;
     name = "Ashijit Pramanik";
+  };
+  Name = {
+    name = "Name";
+    email = "lasagna@garfunkles.space";
+    github = "namescode";
+    githubId = 86119896;
   };
   name-snrl = {
     github = "name-snrl";

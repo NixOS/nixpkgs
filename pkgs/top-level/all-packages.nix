@@ -2595,8 +2595,6 @@ with pkgs;
 
   cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
 
-  cemu = callPackage ../applications/emulators/cemu { };
-
   cen64 = callPackage ../applications/emulators/cen64 { };
 
   citations = callPackage ../applications/misc/citations { };
@@ -3117,7 +3115,7 @@ with pkgs;
   inherit (callPackages ../development/tools/ammonite {})
     ammonite_2_12
     ammonite_2_13;
-  ammonite = if scala == scala_2_12 then ammonite_2_12 else ammonite_2_13;
+  ammonite = ammonite_2_13;
 
   amp = callPackage ../applications/editors/amp { };
 
@@ -5382,8 +5380,6 @@ with pkgs;
   gllvm = callPackage ../development/tools/gllvm { };
 
   globalarrays = callPackage ../development/libraries/globalarrays { };
-
-  glock = callPackage ../development/tools/glock { };
 
   glslviewer = callPackage ../development/tools/glslviewer {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -10358,10 +10354,6 @@ with pkgs;
   lux = callPackage ../tools/video/lux { };
 
   lv = callPackage ../tools/text/lv { };
-
-  lv_img_conv = callPackage ../development/tools/lv_img_conv  {
-    inherit (darwin.apple_sdk.frameworks) CoreText;
-  };
 
   lwc = callPackage ../tools/misc/lwc { };
 
@@ -16780,7 +16772,7 @@ with pkgs;
   scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; };
   scala_3 = callPackage ../development/compilers/scala { };
 
-  scala = scala_2_13;
+  scala = scala_3;
   scala-runners = callPackage ../development/compilers/scala-runners {
     coursier = coursier.override { jre = jdk8; };
   };
@@ -27578,6 +27570,7 @@ with pkgs;
   odin = callPackage ../development/compilers/odin {
     inherit (pkgs.darwin.apple_sdk_11_0) MacOSX-SDK;
     inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
+    llvmPackages = llvmPackages_18;
   };
 
   odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
@@ -39230,8 +39223,6 @@ with pkgs;
   helmsman = callPackage ../applications/networking/cluster/helmsman { };
 
   velero = callPackage ../applications/networking/cluster/velero { };
-
-  HentaiAtHome = callPackage ../applications/misc/HentaiAtHome { };
 
   hplip = callPackage ../misc/drivers/hplip { };
 

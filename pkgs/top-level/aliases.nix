@@ -546,6 +546,7 @@ mapAliases ({
 
   haxe_3_2 = throw "'haxe_3_2' has been removed because it is old and no longer used by any packages in nixpkgs"; # Added 2023-03-15
   haxe_3_4 = throw "'haxe_3_4' has been removed because it is old and no longer used by any packages in nixpkgs"; # Added 2023-03-15
+  HentaiAtHome = hentai-at-home; # Added 2024-06-12
   hepmc = throw "'hepmc' has been renamed to/replaced by 'hepmc2'"; # Converted to throw 2023-09-10
   hikari = throw "hikari has been removed from nixpkgs, it was unmaintained and required wlroots_0_15 at the time of removal"; # Added 2024-03-28
   hip = throw "'hip' has been removed in favor of 'rocmPackages.clr'"; # Added 2023-10-08
@@ -811,6 +812,7 @@ mapAliases ({
 
   lobster-two = google-fonts; # Added 2021-07-22
   luxcorerender = throw "'luxcorerender' has been removed as it's unmaintained and broken in nixpkgs since a while ago"; # Added 2023-06-07
+  lv_img_conv = throw "'lv_img_conv' has been removed from nixpkgs as it is broken"; # Added 2024-06-18
   lxd = lib.warn "lxd has been renamed to lxd-lts" lxd-lts; # Added 2024-04-01
   lxd-unwrapped = lib.warn "lxd-unwrapped has been renamed to lxd-unwrapped-lts" lxd-unwrapped-lts; # Added 2024-04-01
   lzma = xz; # moved from top-level 2021-03-14

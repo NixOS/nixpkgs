@@ -1001,6 +1001,12 @@
     "project_path": "unmaintained/flickr-runner",
     "repo_path": "unmaintained/flickr-runner"
   },
+  "foss-public-alert-server": {
+    "description": "Open source server that allows desktop applications to receive near real-time push notifications about emergency alerts worldwide.",
+    "name": "foss-public-alert-server",
+    "project_path": "playground/www/foss-public-alert-server",
+    "repo_path": "webapps/foss-public-alert-server"
+  },
   "frameworkintegration": {
     "description": "Framework providing components to allow applications to integrate with a KDE Workspace",
     "name": "frameworkintegration",
