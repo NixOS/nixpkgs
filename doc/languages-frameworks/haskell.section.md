@@ -21,41 +21,14 @@ Many “normal” user facing packages written in Haskell, like `niv` or `cachix
 are also exposed at the top level, and there is nothing Haskell specific to
 installing and using them.
 
-All of these packages are originally defined in the `haskellPackages` package
-set and are re-exposed with a reduced dependency closure for convenience.
-(see `justStaticExecutables` or `separateBinOutput` below)
+All of these packages are originally defined in the `haskellPackages` package set.
+The same packages are re-exposed with a reduced dependency closure for convenience (see `justStaticExecutables` or `separateBinOutput` below).
+
+:::{.note}
+See [](#chap-language-support) for techniques to explore package sets.
+:::
 
 The `haskellPackages` set includes at least one version of every package from [Hackage](https://hackage.haskell.org/) as well as some manually injected packages.
-Haskell packages can be searched on [search.nixos.org](https://search.nixos.org/packages?query=haskellPackages) or listed on the command line with [`nix-instantiate`](https://nixos.org/manual/nix/stable/command-ref/nix-instantiate).
-
-:::{.example #example-list-haskellPackages}
-
-# List all Haskell packages in Nixpkgs
-
-The follwowing command evaluates a Nix expression that maps names of Haskell packages to their version, and displays the result as a JSON.
-
-```shell-session
-nix-instantiate --strict --eval --json --expr "$(cat << EOF
-  with (import <nixpkgs> {}); with lib;
-  mapAttrs (k: v: v.version)
-    (filterAttrs (k: v: isDerivation v) haskellPackages)
-EOF
-)" | jq . | head -10
-```
-
-```console
-{
-  "2captcha": "0.1.0.0",
-  "3d-graphics-examples": "0.0.0.2",
-  "3dmodels": "0.3.0",
-  "4Blocks": "0.2",
-  "AAI": "0.2.0.1",
-  "ABList": "0.0.3",
-  "AC-Angle": "1.0",
-  "AC-Boolean": "1.1.0",
-  "AC-BuildPlatform": "1.1.0",
-```
-:::
 
 The attribute names in `haskellPackages` always correspond with their name on
 Hackage. Since Hackage allows names that are not valid Nix without escaping,
@@ -79,67 +52,14 @@ How you can help with that is
 described in [Fixing a broken package](#haskell-fixing-a-broken-package).
 -->
 
-`haskellPackages` is built with our default compiler, but we also provide other
-releases of GHC and package sets built with them. You can list all available
-compilers like this:
+`haskellPackages` is built with our default compiler, but we also provide other releases of GHC and package sets built with them.
+Available compilers are collected under `haskell.compiler`.
 
-```console
-$ nix-env -f '<nixpkgs>' -qaP -A haskell.compiler
-haskell.compiler.ghc810                  ghc-8.10.7
-haskell.compiler.ghc90                   ghc-9.0.2
-haskell.compiler.ghc925                  ghc-9.2.5
-haskell.compiler.ghc926                  ghc-9.2.6
-haskell.compiler.ghc927                  ghc-9.2.7
-haskell.compiler.ghc92                   ghc-9.2.8
-haskell.compiler.ghc945                  ghc-9.4.5
-haskell.compiler.ghc946                  ghc-9.4.6
-haskell.compiler.ghc947                  ghc-9.4.7
-haskell.compiler.ghc94                   ghc-9.4.8
-haskell.compiler.ghc963                  ghc-9.6.3
-haskell.compiler.ghc96                   ghc-9.6.4
-haskell.compiler.ghc98                   ghc-9.8.1
-haskell.compiler.ghcHEAD                 ghc-9.9.20231121
-haskell.compiler.ghc8107Binary           ghc-binary-8.10.7
-haskell.compiler.ghc865Binary            ghc-binary-8.6.5
-haskell.compiler.ghc924Binary            ghc-binary-9.2.4
-haskell.compiler.integer-simple.ghc8107  ghc-integer-simple-8.10.7
-haskell.compiler.integer-simple.ghc810   ghc-integer-simple-8.10.7
-haskell.compiler.native-bignum.ghc90     ghc-native-bignum-9.0.2
-haskell.compiler.native-bignum.ghc902    ghc-native-bignum-9.0.2
-haskell.compiler.native-bignum.ghc925    ghc-native-bignum-9.2.5
-haskell.compiler.native-bignum.ghc926    ghc-native-bignum-9.2.6
-haskell.compiler.native-bignum.ghc927    ghc-native-bignum-9.2.7
-haskell.compiler.native-bignum.ghc92     ghc-native-bignum-9.2.8
-haskell.compiler.native-bignum.ghc928    ghc-native-bignum-9.2.8
-haskell.compiler.native-bignum.ghc945    ghc-native-bignum-9.4.5
-haskell.compiler.native-bignum.ghc946    ghc-native-bignum-9.4.6
-haskell.compiler.native-bignum.ghc947    ghc-native-bignum-9.4.7
-haskell.compiler.native-bignum.ghc94     ghc-native-bignum-9.4.8
-haskell.compiler.native-bignum.ghc948    ghc-native-bignum-9.4.8
-haskell.compiler.native-bignum.ghc963    ghc-native-bignum-9.6.3
-haskell.compiler.native-bignum.ghc96     ghc-native-bignum-9.6.4
-haskell.compiler.native-bignum.ghc964    ghc-native-bignum-9.6.4
-haskell.compiler.native-bignum.ghc98     ghc-native-bignum-9.8.1
-haskell.compiler.native-bignum.ghc981    ghc-native-bignum-9.8.1
-haskell.compiler.native-bignum.ghcHEAD   ghc-native-bignum-9.9.20231121
-haskell.compiler.ghcjs                   ghcjs-8.10.7
-```
-
-Each of those compiler versions has a corresponding attribute set built using
+Each of those compiler versions has a corresponding attribute set `packages` built with
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
 9.4.5 is `haskell.packages.ghc945`. In fact `haskellPackages` is just an alias
 for `haskell.packages.ghc964`:
-
-```console
-$ nix-env -f '<nixpkgs>' -qaP -A haskell.packages.ghc927
-haskell.packages.ghc927.a50                                                         a50-0.5
-haskell.packages.ghc927.AAI                                                         AAI-0.2.0.1
-haskell.packages.ghc927.aasam                                                       aasam-0.2.0.0
-haskell.packages.ghc927.abacate                                                     abacate-0.0.0.0
-haskell.packages.ghc927.abc-puzzle                                                  abc-puzzle-0.2.1
-…
-```
 
 Every package set also re-exposes the GHC used to build its packages as `haskell.packages.*.ghc`.
 
