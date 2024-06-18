@@ -484,6 +484,23 @@ let
         };
       };
 
+      banacorn.agda-mode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "banacorn";
+          name = "agda-mode";
+          version = "0.4.7";
+          hash = "sha256-gNa3n16lP3ooBRvGaugTua4IXcIzpMk7jBYMJDQsY00=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/banacorn.agda-mode/changelog";
+          description = "agda-mode on VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=banacorn.agda-mode";
+          homepage = "https://github.com/banacorn/agda-mode-vscode";
+          maintainers = with lib.maintainers; [ Anillc ];
+          license = lib.licenses.mit;
+        };
+      };
+
       batisteo.vscode-django = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "batisteo";
