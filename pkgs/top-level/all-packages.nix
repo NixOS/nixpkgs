@@ -5381,8 +5381,6 @@ with pkgs;
 
   globalarrays = callPackage ../development/libraries/globalarrays { };
 
-  glock = callPackage ../development/tools/glock { };
-
   glslviewer = callPackage ../development/tools/glslviewer {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
