@@ -16,30 +16,44 @@
   fmt,
   glew,
   glfw3,
+  minizip,
   imgui,
   ispc,
   jsoncpp,
+  lapack,
   libjpeg,
   libjpeg_turbo,
   liblzf,
   libpng,
   libz,
+  mesa,
+  mkl,
   msgpack,
   nanoflann,
   nasm,
+  one-dpl,
+  openblas,
   pkg-config,
   poisson-recon,
   qhull,
   stdgpu,
-  tbb,
+  tbbLatest,
   tinyobjloader,
   vtk,
   vulkan-headers,
   vulkan-loader,
+  withMkl ? blas.provider.pname == "mkl",
   withPython ? false,
   xorg,
   zeromq,
+  open3DRendering ? "gui",
 }:
+
+assert builtins.elem open3DRendering [
+  "headless"
+  "gui"
+  null
+];
 
 let
   buildPkg = p: p.__spliced.buildHost or p;
@@ -48,6 +62,11 @@ in
 stdenv.mkDerivation rec {
   pname = "open3d";
   version = "0.18.0";
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "isl-org";
@@ -66,6 +85,13 @@ stdenv.mkDerivation rec {
     find_package(msgpack REQUIRED GLOBAL)
     find_package(TinyGLTF REQUIRED GLOBAL)
     add_library(TinyGLTF::TinyGLTF ALIAS tinygltf::tinygltf)
+
+    set(POISSON_INCLUDE_DIRS "${lib.getDev poisson-recon}/include")
+
+    find_package(oneDPL REQUIRED GLOBAL)
+    add_library(3rdparty_onedpl ALIAS oneDPL)
+    add_library(ext_parallelstl ALIAS oneDPL)
+    set(PARALLELSTL_INCLUDE_DIRS "${lib.getDev one-dpl}/include/")
   '';
   passAsFile = [ "extraFindPackages" ];
 
@@ -81,11 +107,22 @@ stdenv.mkDerivation rec {
     substituteInPlace 3rdparty/find_dependencies.cmake \
       --replace-fail \
         'include(''${Open3D_3RDPARTY_DIR}/uvatlas/uvatlas.cmake)' \
-        '# include(''${Open3D_3RDPARTY_DIR}/uvatlas/uvatlas.cmake)'
+        '# include(''${Open3D_3RDPARTY_DIR}/uvatlas/uvatlas.cmake)' \
+      --replace-fail \
+        "GLEW::GLEW" \
+        "GLEW::glew" \
+      --replace-fail \
+        "PACKAGE GLEW" \
+        "PACKAGE glew" \
+      --replace-fail \
+        "/usr/bin/matc" \
+        "${lib.getExe' filament "matc"}"
 
     sed -i "1r $extraFindPackagesPath" 3rdparty/find_dependencies.cmake
 
     rm -rf build/filament
+    echo "" > 3rdparty/possionrecon/possionrecon.cmake
+    echo "" > 3rdparty/parallelstl/parallelstl.cmake
 
     echo "Installing extraCmakeFindModules" >&2
     mkdir -p cmake/
@@ -98,6 +135,11 @@ stdenv.mkDerivation rec {
     addToSearchPath CMAKE_MODULE_PATH "$PWD/cmake"
   '';
 
+  NIX_CFLAGS_COMPILE = [
+    # Remove noise
+    "-Wno-int-to-pointer-cast"
+  ];
+
   cmakeBuildDir = "builddir"; # build/ is checked in git
 
   nativeBuildInputs = [
@@ -107,64 +149,112 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    assimp
-    blas
-    boringssl
-    curl
-    draco.tinygltf
-    eigen
-    embree
-    filament
-    fmt
-    glew
-    glfw3
-    imgui
-    jsoncpp
-    libjpeg
-    libjpeg_turbo
-    liblzf
-    libpng
-    libz
-    msgpack
-    nanoflann
-    poisson-recon
-    qhull
-    tbb
-    tinyobjloader
-    vtk
-    vulkan-headers
-    vulkan-loader
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXinerama
-    xorg.libXrandr
-    zeromq
-  ] ++ lib.optionals cudaSupport [ stdgpu ];
+  buildInputs =
+    [
+      assimp
+      blas
+      boringssl
+      curl
+      draco.tinygltf
+      eigen
+      embree
+      filament
+      fmt
+      glew
+      glfw3
+      imgui
+      jsoncpp
+      lapack
+      libjpeg
+      libjpeg_turbo
+      liblzf
+      libpng
+      libz
+      msgpack
+      nanoflann
+      one-dpl
+      poisson-recon
+      qhull
+      tbbLatest
+      tinyobjloader
+      vtk
+      vulkan-headers
+      vulkan-loader
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXinerama
+      xorg.libXrandr
+      minizip # unzip.h
+      zeromq
+    ]
+    ++ lib.optionals (open3DRendering == "headless") [
+      mesa
+      mesa.osmesa
+    ]
+    ++ lib.optionals cudaSupport [ stdgpu ]
+    ++ lib.optionals withMkl [
+      # Currently, the blas/lapack shims do not expose original package info
+      # (e.g. the original cmake configs)
+      mkl
+    ]
+    ++ lib.optionals (!withMkl) [ openblas ];
 
   preConfigure = ''
     # Set all of the USE_SYSTEM_* variables
     while IFS= read name ; do
+      if [[ "$cmakeFlags" == *"$name":BOOL* ]] ; then
+        continue
+      fi
       cmakeFlags+=" -D''${name}:BOOL=ON"
     done < <(grep '\bUSE_SYSTEM[_a-zA-Z0-9]\+\b' --only-matching CMakeLists.txt)
     export cmakeFlags
   '';
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_PYTHON_MODULE" withPython)
-    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
-    (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
-    (lib.cmakeFeature "CMAKE_ISPC_COMPILER" (lib.getExe (buildPkg ispc)))
-    (lib.cmakeFeature "BORINGSSL_ROOT_DIR" "${lib.getDev boringssl}")
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_PYTHON_MODULE" withPython)
+      (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+      (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
+      (lib.cmakeBool "DEVELOPER_BUILD" false)
 
-    # Doesn't seem to generate a `*Config.cmake` file
-    (lib.cmakeFeature "filament_DIR" "${lib.getDev filament}/share/cmake")
+      # `USE_BLAS && USE_SYSTEM_BLAS` means `find_package(BLAS)`;
+      # `!USE_BLAS && USE_SYSTEM_BLAS` means "download MKL from anaconda";
+      # `USE_BLAS && !USE_SYSTEM_BLAS` means "build a vendored copy of openblas".
+      (lib.cmakeBool "USE_SYSTEM_BLAS" true)
+      (lib.cmakeBool "USE_BLAS" (!withMkl)) # "Use BLAS/LAPACK instead of MKL"
 
-    # Should work without this but it doesn't
-    (lib.cmakeFeature "TinyGLTF_DIR" "${lib.getDev draco.tinygltf}/lib/cmake")
-  ];
+      # TBD; these fetch additional vendored dependencies
+      (lib.cmakeBool "WITH_IPPICV" false) # "Intel Performance Primitives"
+      (lib.cmakeBool "BUILD_WEBRTC" false) # A "WebRTC visualizer"
+      (lib.cmakeBool "BUILD_VTK_FROM_SOURCE" false)
+      (lib.cmakeBool "OPEN3D_USE_ONEAPI_PACKAGES" withMkl)
+      (lib.cmakeBool "BUILD_SYCL_MODULE" false) # "Build SYCL module with Intel oneAPI"
+      (lib.cmakeBool "PREFER_OSX_HOMEBREW" false)
+      (lib.cmakeFeature "POISSON_INCLUDE_DIRS" "${lib.getDev poisson-recon}/include")
+
+      (lib.cmakeFeature "CMAKE_ISPC_COMPILER" (lib.getExe (buildPkg ispc)))
+      (lib.cmakeFeature "BORINGSSL_ROOT_DIR" "${lib.getDev boringssl}")
+
+      # Doesn't seem to generate a `*Config.cmake` file
+      (lib.cmakeFeature "filament_DIR" "${lib.getDev filament}/share/cmake")
+      (lib.cmakeFeature "FILAMENT_PRECOMPILED_ROOT" "${lib.getLib filament}")
+
+      # Should work without this but it doesn't
+      (lib.cmakeFeature "TinyGLTF_DIR" "${lib.getDev draco.tinygltf}/lib/cmake")
+
+      (lib.cmakeBool "BUILD_GUI" (open3DRendering == "gui"))
+      (lib.cmakeBool "ENABLE_HEADLESS_RENDERING" (open3DRendering == "headless"))
+    ]
+    ++ lib.optionals (open3DRendering == "headless") [
+      (lib.cmakeFeature "OSMESA_INCLUDE_DIR" "${lib.getDev mesa}/include")
+      (lib.cmakeFeature "OSMESA_ROOT" "${lib.getDev mesa}")
+      # (lib.cmakeFeature "OSMESA_ROOT" "${lib.getOutput "osmesa" mesa}")
+      # Somehow, open3d overrides OSMESA_INCLUDE_DIR if it locates OSMESA_LIBRARY via OSMESA_ROOT
+      (lib.cmakeFeature "OSMESA_LIBRARY" "${lib.getOutput "osmesa" mesa}/lib/libOSMesa${stdenv.hostPlatform.extensions.sharedLibrary}")
+    ];
 
   meta = {
+    broken = withMkl || cudaSupport;
     description = "Open3D: A Modern Library for 3D Data Processing";
     homepage = "https://github.com/isl-org/Open3D/";
     changelog = "https://github.com/isl-org/Open3D/blob/${src.rev}/CHANGELOG.md";

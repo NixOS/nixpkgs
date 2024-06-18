@@ -12,13 +12,13 @@
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
-}:
+}@inputs:
 
 buildPythonPackage rec {
   pname = "nerfacc";
   version = "0.5.3";
   pyproject = true;
-  stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  stdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
   src = fetchFromGitHub {
     owner = "nerfstudio-project";

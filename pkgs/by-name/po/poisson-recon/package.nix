@@ -38,6 +38,37 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE
   '';
 
+  # E.g. Open3D uses "#include "PoissonRecon/Src/PointStreamData.h"
+  includePrefix = "PoissonRecon";
+
+  installPhase = ''
+    runHook preInstall
+
+    while IFS= read -r -d $'\0' path ; do
+      if [[ ! -d "''${!outputLib}/lib" ]] ; then
+        mkdir -p "''${!outputLib}/lib"
+      fi
+      cp "$path" "''${!outputLib}/lib"/
+    done < <( find \( -iname '*.so' -o -iname '*.a' \) -print0 )
+
+    while IFS= read -r -d $'\0' relPath ; do
+      local dirName="''${includePrefix}/$(dirname "$relPath")"
+      if [[ ! -d "''${!outputInclude}/include/$dirName" ]] ; then
+        mkdir -p "''${!outputInclude}/include/$dirName"
+      fi
+      cp "$relPath" "''${!outputInclude}/include/$includePrefix/$relPath"
+    done < <( find \( -iname '*.h' -o -iname '*.inl' \) -print0 )
+
+    while IFS= read -r -d $'\0' relPath ; do
+      if [[ ! -d "''${!outputBin}/bin" ]] ; then
+        mkdir -p "''${!outputBin}/bin"
+      fi
+      cp "$relPath" "''${!outputBin}/bin"
+    done < <( find \( -executable -a -type f \) -print0 )
+
+    runHook postInstall
+  '';
+
   meta = {
     description = "Poisson Surface Reconstruction";
     homepage = "https://github.com/isl-org/Open3D-PoissonRecon";

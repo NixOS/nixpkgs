@@ -34,7 +34,8 @@ find_path(
 find_program(
   FILAMENT_MATC
   NAMES matc
-  HINTS ${filament_DIR})
+  HINTS ${filament_DIR}
+  PATH_SUFFIXES bin)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
