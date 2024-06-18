@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/ranfdev/Geopard";
     description = "Colorful, adaptive gemini browser";
-    maintainers = with maintainers; [ jfvillablanca ];
+    maintainers = with maintainers; [ jfvillablanca aleksana ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "geopard";
