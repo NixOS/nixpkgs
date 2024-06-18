@@ -61,7 +61,7 @@ with pkgs;
   };
 
   stdenvNoLibs =
-    if stdenv.hostPlatform != stdenv.buildPlatform && (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.useLLVM or false)
+    if stdenvNoCC.hostPlatform != stdenvNoCC.buildPlatform && (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.useLLVM or false)
     then
       # We cannot touch binutils or cc themselves, because that will cause
       # infinite recursion. So instead, we just choose a libc based on the
@@ -21018,9 +21018,9 @@ with pkgs;
       if stdenv.targetPlatform.useiOSPrebuilt
       then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
       else targetPackages.darwin.LibsystemCross or (throw "don't yet have a `targetPackages.darwin.LibsystemCross for ${stdenv.targetPlatform.config}`")
-    else if name == "fblibc" then targetPackages.freebsdCross.libc or freebsdCross.libc
-    else if name == "oblibc" then targetPackages.openbsdCross.libc or openbsdCross.libc
-    else if name == "nblibc" then targetPackages.netbsdCross.libc or netbsdCross.libc
+    else if name == "fblibc" then targetPackages.freebsd.libc or freebsd.libc
+    else if name == "oblibc" then targetPackages.openbsd.libc or openbsd.libc
+    else if name == "nblibc" then targetPackages.netbsd.libc or netbsd.libc
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
     else if name == "relibc" then targetPackages.relibc or relibc
     else throw "Unknown libc ${name}";
@@ -40761,18 +40761,11 @@ with pkgs;
     name = "bsd-setup-hook";
   } ../os-specific/bsd/setup-hook.sh;
 
-  inherit (callPackage ../os-specific/bsd/freebsd { })
-    freebsd freebsdCross;
+  freebsd = callPackage ../os-specific/bsd/freebsd { };
 
   netbsd = callPackage ../os-specific/bsd/netbsd { };
-  netbsdCross = callPackage ../os-specific/bsd/netbsd {
-    stdenv = crossLibcStdenv;
-  };
 
   openbsd = callPackage ../os-specific/bsd/openbsd { };
-  openbsdCross = callPackage ../os-specific/bsd/openbsd {
-    stdenv = crossLibcStdenv;
-  };
 
   yrd = callPackage ../tools/networking/yrd { };
 
