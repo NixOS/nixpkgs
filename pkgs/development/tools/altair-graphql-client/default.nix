@@ -2,11 +2,11 @@
 
 let
   pname = "altair";
-  version = "6.2.0";
+  version = "7.0.1";
 
   src = fetchurl {
     url = "https://github.com/imolorhe/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
-    sha256 = "sha256-tDku9PNPCJ3ft7eFq34l90jGOXjHMk8JZcfO8SWJras=";
+    sha256 = "sha256-hcZwGJ409r3XKVScGfj0DonZdClDVvTcIZlmJ1Xd9Mw=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -15,8 +15,6 @@ appimageTools.wrapType2 {
   inherit src pname version;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -28,7 +26,8 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "A feature-rich GraphQL Client IDE";
+    description = "Feature-rich GraphQL Client IDE";
+    mainProgram = "altair";
     homepage = "https://github.com/imolorhe/altair";
     license = licenses.mit;
     maintainers = with maintainers; [ evalexpr ];

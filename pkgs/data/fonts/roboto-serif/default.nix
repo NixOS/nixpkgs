@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Roboto family of fonts";
+    description = "Roboto family of fonts";
     longDescription = ''
       Google’s signature family of fonts, the default font on Android and
       Chrome OS, and the recommended font for Google’s visual language,

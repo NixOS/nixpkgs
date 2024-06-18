@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   preFixup = "rm -rf lib";
 
   meta = with lib; {
-    description = "A cross-platform IRC framework written with Qt";
+    description = "Cross-platform IRC framework written with Qt";
     homepage = "https://communi.github.io";
     license = licenses.bsd3;
     platforms = platforms.all;

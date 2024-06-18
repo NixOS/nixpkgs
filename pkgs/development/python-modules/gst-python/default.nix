@@ -1,36 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, meson
-, ninja
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  meson,
+  ninja,
 
-, pkg-config
-, python
-, pygobject3
-, gobject-introspection
-, gst_all_1
-, isPy3k
+  pkg-config,
+  python,
+  pygobject3,
+  gobject-introspection,
+  gst_all_1,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.22.8";
+  version = "1.24.3";
 
   format = "other";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-python/${pname}-${version}.tar.xz";
-    hash = "sha256-1cuPFEBUoqEQ5mcr1RLksV1bG42YecGSuXI1Ne+3C48=";
+    hash = "sha256-7Ns+K6lOosgrk6jHFdWn4E+XJqiDjAprF2lJKP0ehZU=";
   };
 
   # Python 2.x is not supported.
   disabled = !isPy3k;
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson

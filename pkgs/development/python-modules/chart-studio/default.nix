@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, nose
-, plotly
-, pytest
-, requests
-, retrying
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  nose,
+  plotly,
+  pytest,
+  requests,
+  retrying,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "chart-studio";
-  version = "5.18.0";
+  version = "5.22.0";
   pyproject = true;
 
   # chart-studio was split from plotly
@@ -21,14 +22,12 @@ buildPythonPackage rec {
     owner = "plotly";
     repo = "plotly.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hY8R4UjcTI5RBaaRU/oR63taKEgYRI3+oOxNuDWzg20=";
+    hash = "sha256-cEm0vLQ4PAVxvplqK+yayxLpNCvyfZtjZva0Bl2Sdfs=";
   };
 
   sourceRoot = "${src.name}/packages/python/chart-studio";
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     plotly
@@ -37,7 +36,11 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [ mock nose pytest ];
+  nativeCheckInputs = [
+    mock
+    nose
+    pytest
+  ];
   # most tests talk to a service
   checkPhase = ''
     HOME=$TMPDIR pytest chart_studio/tests/test_core chart_studio/tests/test_plot_ly/test_api

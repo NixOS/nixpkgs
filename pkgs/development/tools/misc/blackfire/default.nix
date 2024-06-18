@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "blackfire";
-  version = "2.25.0";
+  version = "2.28.4";
 
   src = passthru.sources.${stdenv.hostPlatform.system} or (throw "Unsupported platform for blackfire: ${stdenv.hostPlatform.system}");
 
@@ -57,23 +57,23 @@ stdenv.mkDerivation rec {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
-        sha256 = "F3OkFTHPO6zBOYu2umAQIPW7CQ+K+J2/mmL98H2xaCg=";
+        sha256 = "k6CCNafcw6oRD5Dj0AYkidVdOdOOcwT8GBiEcwviByc=";
       };
       "i686-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
-        sha256 = "/rDH9dzSlqDSqkIHzDy/8rJQ+Ow9SAPn+/oRGP37lL8=";
+        sha256 = "zFnzbkPkTRUU6zn4zOlN9AyE3G2Y2Gp9l3MZRsmbdJc=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
-        sha256 = "2fjRPrl9SYCS32lO4bFLam4IrigMjucVc/OVg4yrWsM=";
+        sha256 = "KxpSVTUyhbRHzlLH65XH2bXWS+OZExu0lpiLJ8comZA=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
-        sha256 = "GYjKOUDLCHPkI5k4nt2NB/R8IJhLP+4VNifEhRSsnu8=";
+        sha256 = "sVM7LLVbvbLBArjuZq/qclXclEzqbY47CmgUCNXuZw0=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
-        sha256 = "/Uvwq3wxbIT0kqKJJfh9W55EguUoBdTQ426FI0XOD0o=";
+        sha256 = "mOxYOmDQiEZdAPVKaM/rO37/YLlRXHil83/DKhRqim8=";
       };
     };
 
@@ -88,8 +88,7 @@ stdenv.mkDerivation rec {
       fi
 
       for platform in ${lib.escapeShellArgs meta.platforms}; do
-        update-source-version "blackfire" "0" "${lib.fakeSha256}" --source-key="sources.$platform"
-        update-source-version "blackfire" "$NEW_VERSION" --source-key="sources.$platform"
+        update-source-version "blackfire" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };

@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals isQt5 [ qtx11extras ];
 
   meta = {
-    description = "A simple offline API documentation browser";
+    description = "Simple offline API documentation browser";
     longDescription = ''
       Zeal is a simple offline API documentation browser inspired by Dash (macOS
       app), available for Linux and Windows.
@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/zealdocs/zeal/releases";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ peterhoeg AndersonTorres ];
+    mainProgram = "zeal";
     inherit (qtbase.meta) platforms;
   };
 })

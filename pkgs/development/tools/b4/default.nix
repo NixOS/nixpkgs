@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/utils/b4/b4.git/about";
     license = licenses.gpl2Only;
-    description = "A helper utility to work with patches made available via a public-inbox archive";
+    description = "Helper utility to work with patches made available via a public-inbox archive";
     mainProgram = "b4";
     maintainers = with maintainers; [ jb55 qyliss mfrw ];
   };

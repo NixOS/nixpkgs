@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Diff JSON and JSON-like structures in Python";
+    mainProgram = "jdiff";
     homepage = "https://github.com/ZoomerAnalytics/jsondiff";
     license = lib.licenses.mit;
   };

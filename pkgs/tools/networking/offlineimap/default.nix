@@ -75,7 +75,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ endocrimes ];
+    maintainers = with maintainers; [ ];
     mainProgram = "offlineimap";
   };
 }

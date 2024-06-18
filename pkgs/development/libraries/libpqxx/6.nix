@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-shared" ];
 
   meta = {
-    description = "A C++ library to access PostgreSQL databases";
+    description = "C++ library to access PostgreSQL databases";
     homepage = "https://pqxx.org/development/libpqxx/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;

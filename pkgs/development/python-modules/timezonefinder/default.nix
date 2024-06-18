@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cffi
-, h3
-, numba
-, numpy
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cffi,
+  h3,
+  numba,
+  numpy,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "timezonefinder";
-  version = "6.4.1";
+  version = "6.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "jannikmi";
     repo = "timezonefinder";
     rev = "refs/tags/${version}";
-    hash = "sha256-e9Zx236X76GYFuADCw9+5HWs2craeq44gVNclkc4th0=";
+    hash = "sha256-KVjAK4r+cRrX7U6MT0P7hH/TX6kMDv2DaSa456YG4sA=";
   };
 
   nativeBuildInputs = [
@@ -42,9 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "timezonefinder"
-  ];
+  pythonImportsCheck = [ "timezonefinder" ];
 
   preCheck = ''
     # Some tests need the CLI on the PATH
@@ -54,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/jannikmi/timezonefinder/blob/${version}/CHANGELOG.rst";
     description = "Module for finding the timezone of any point on earth (coordinates) offline";
+    mainProgram = "timezonefinder";
     homepage = "https://github.com/MrMinimal64/timezonefinder";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

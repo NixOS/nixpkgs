@@ -23,12 +23,12 @@
 }:
 
 buildPythonPackage (rec {
-  pname = "buildbot-worker";
+  pname = "buildbot_worker";
   inherit (buildbot) version;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7zpf1Xl5dYPJk8V5PQCx/v+sE9kH23UWM9QbE0fH4tA=";
+    hash = "sha256-TFymBnUufOEWZ/IUKd7nebZ+yl58ZChFkGrUxOXn28g=";
   };
 
   postPatch = ''

@@ -17,7 +17,8 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [ "-p" "cargo-hakari" ];
 
   meta = with lib; {
-    description = "Manage workspace-hack packages to speed up builds in large workspaces.";
+    description = "Manage workspace-hack packages to speed up builds in large workspaces";
+    mainProgram = "cargo-hakari";
     longDescription = ''
       cargo hakari is a command-line application to manage workspace-hack crates.
       Use it to speed up local cargo build and cargo check commands by 15-95%,

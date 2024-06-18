@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix compatiblity with PostgreSQL 16. Remove with the next release.
+    # Fix compatibility with PostgreSQL 16. Remove with the next release.
     (fetchpatch {
       url = "https://github.com/pgbigm/pg_bigm/commit/2a9d783c52a1d7a2eb414da6f091f6035da76edf.patch";
       hash = "sha256-LuMpSUPnT8cPChQfA9sJEKP4aGpsbN5crfTKLnDzMN8=";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Text similarity measurement and index searching based on bigrams";
     homepage = "https://pgbigm.osdn.jp/";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;
   };

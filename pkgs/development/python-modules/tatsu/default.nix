@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, regex
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tatsu";
-  version = "5.11.3";
+  version = "5.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,25 +20,19 @@ buildPythonPackage rec {
     owner = "neogeny";
     repo = "TatSu";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5tVvElM7pZF3rZJMMk0IIZBhiv+9J8KBLjfoVTPF198=";
+    hash = "sha256-dY+hvNwYrkKko9A5yRT0EWYlvVu3OrhJMzk/8cjzuUo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     colorama
     regex
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "tatsu"
-  ];
+  pythonImportsCheck = [ "tatsu" ];
 
   meta = with lib; {
     description = "Generates Python parsers from grammars in a variation of EBNF";

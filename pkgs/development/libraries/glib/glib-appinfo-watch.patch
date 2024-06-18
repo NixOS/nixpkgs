@@ -1,20 +1,8 @@
-This patch lets GLib's GDesktopAppInfo API watch and notice changes
-to the Nix user and system profiles.  That way, the list of available
-applications shown by the desktop environment is immediately updated
-when the user installs or removes any
-(see <https://issues.guix.gnu.org/35594>).
-
-It does so by monitoring /nix/var/nix/profiles (for changes to the system
-profile) and /nix/var/nix/profiles/per-user/USER (for changes to the user
-profile) as well as /etc/profiles/per-user (for chanes to the user
-environment profile) and crawling their share/applications sub-directory when
-changes happen.
-
 diff --git a/gio/gdesktopappinfo.c b/gio/gdesktopappinfo.c
-index b779b30..31069f7 100644
+index 87db7a97a..2e1689ed7 100644
 --- a/gio/gdesktopappinfo.c
 +++ b/gio/gdesktopappinfo.c
-@@ -150,6 +150,7 @@ typedef struct
+@@ -147,6 +147,7 @@ typedef struct
    gchar                      *alternatively_watching;
    gboolean                    is_config;
    gboolean                    is_setup;
@@ -22,7 +10,7 @@ index b779b30..31069f7 100644
    GFileMonitor               *monitor;
    GHashTable                 *app_names;
    GHashTable                 *mime_tweaks;
-@@ -181,6 +182,7 @@ desktop_file_dir_unref (DesktopFileDir *dir)
+@@ -179,6 +180,7 @@ desktop_file_dir_unref (DesktopFileDir *dir)
      {
        desktop_file_dir_reset (dir);
        g_free (dir->path);
@@ -30,7 +18,7 @@ index b779b30..31069f7 100644
        g_free (dir);
      }
  }
-@@ -205,6 +207,14 @@ desktop_file_dir_get_alternative_dir (DesktopFileDir *dir)
+@@ -203,6 +205,14 @@ desktop_file_dir_get_alternative_dir (DesktopFileDir *dir)
  {
    gchar *parent;
  
@@ -45,7 +33,7 @@ index b779b30..31069f7 100644
    /* If the directory itself exists then we need no alternative. */
    if (g_access (dir->path, R_OK | X_OK) == 0)
      return NULL;
-@@ -250,11 +260,11 @@ desktop_file_dir_changed (GFileMonitor      *monitor,
+@@ -248,11 +258,11 @@ desktop_file_dir_changed (GFileMonitor      *monitor,
     *
     * If this is a notification for a parent directory (because the
     * desktop directory didn't exist) then we shouldn't fire the signal
@@ -59,7 +47,7 @@ index b779b30..31069f7 100644
      {
        gchar *alternative_dir;
  
-@@ -1556,6 +1566,40 @@ desktop_file_dirs_lock (void)
+@@ -1650,6 +1660,40 @@ desktop_file_dirs_lock (void)
        for (i = 0; dirs[i]; i++)
          g_ptr_array_add (desktop_file_dirs, desktop_file_dir_new (dirs[i]));
  
@@ -84,7 +72,7 @@ index b779b30..31069f7 100644
 +            user_data_dir = g_build_filename (profile_dir, "profile", "share", NULL);
 +            user_profile_dir = desktop_file_dir_new (user_data_dir);
 +            user_profile_dir->nix_profile_watch_dir = profile_dir;
-+            
++
 +            env_dir = g_build_filename ("/etc/profiles/per-user", NULL);
 +            env_data_dir = g_build_filename (env_dir, user, "share", NULL);
 +            user_env_dir = desktop_file_dir_new (env_data_dir);

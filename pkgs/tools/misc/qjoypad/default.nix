@@ -14,7 +14,7 @@ mkDerivation rec {
   buildInputs = [ libX11 libXtst qtbase qtx11extras ];
 
   meta = with lib; {
-    description = "A program that lets you use gaming devices anywhere";
+    description = "Program that lets you use gaming devices anywhere";
     longDescription = ''
       A simple Linux/QT program that lets you use your gaming devices
       where you want them: in your games! QJoyPad takes input from a
@@ -32,7 +32,7 @@ mkDerivation rec {
       experience just a little bit nicer.
     '';
     homepage = "https://github.com/panzi/qjoypad/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with maintainers; [ astsmtl ];
     platforms = with platforms; linux;
     mainProgram = "qjoypad";

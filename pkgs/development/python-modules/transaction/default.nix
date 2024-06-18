@@ -1,9 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, zope-interface
-, mock
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  zope-interface,
+  mock,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     mock
   ];
 
-  pythonImportsCheck = [
-    "transaction"
-  ];
+  pythonImportsCheck = [ "transaction" ];
 
   meta = with lib; {
     description = "Transaction management";

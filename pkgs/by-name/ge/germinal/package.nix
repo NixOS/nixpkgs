@@ -9,7 +9,7 @@
 , pkg-config
 , tmux
 , vte
-, wrapGAppsHook
+, wrapGAppsHook3
 , nixosTests
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.test = nixosTests.terminal-emulators.germinal;
 
   meta = {
-    description = "A minimal terminal emulator";
+    description = "Minimal terminal emulator";
     homepage = "https://github.com/Keruspe/Germinal";
     license = lib.licenses.gpl3Plus;
     mainProgram = "germinal";

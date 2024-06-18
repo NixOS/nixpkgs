@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ambrop72 ];
     platforms = platforms.linux;
     description = "Parser-generator from KDevplatform";
+    mainProgram = "kdev-pg-qt";
     longDescription = ''
       KDevelop-PG-Qt is the parser-generator from KDevplatform.
       It is used for some KDevelop-languagesupport-plugins (Ruby, PHP, CSS...).

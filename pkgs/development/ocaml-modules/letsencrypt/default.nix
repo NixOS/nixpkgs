@@ -21,11 +21,11 @@
 
 buildDunePackage rec {
   pname = "letsencrypt";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchurl {
     url = "https://github.com/mmaker/ocaml-letsencrypt/releases/download/v${version}/letsencrypt-${version}.tbz";
-    hash = "sha256-XGroZiNyP0ItOMrXK07nrVqT4Yz9RKXYvZuRkDp089M=";
+    hash = "sha256-uQOHpdyPg5kms+negxpQMxfhow6auZ0ipt5ksoXYo1w=";
   };
 
   minimalOCamlVersion = "4.08";

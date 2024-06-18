@@ -7,21 +7,22 @@
 , postgresqlTestHook
 , postgresql
 , yarn
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
+, stdenv
 , server-mode ? true
 }:
 
 let
   pname = "pgadmin";
-  version = "8.2";
-  yarnHash = "sha256-uMSgpkYoLD32VYDAkjywC9bZjm7UKA0hhwVNc/toEbA=";
+  version = "8.8";
+  yarnHash = "sha256-dBgbgZrjF1rNyN1Hp1nKiT6C6FVbYdbEZQgYbRKVsYI=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-RfpZXy265kwpMsWUBDVfbL/0eX0By79I4VNkG8zwVOs=";
+    hash = "sha256-203tuxtYOn1fD1m8BGL6rt5lDDr5V38ybPy+iwmZpkk=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -33,6 +34,17 @@ let
     hash = yarnHash;
   };
 
+  # don't bother to test kerberos authentication
+  # skip tests on macOS which fail due to an error in keyring, see https://github.com/NixOS/nixpkgs/issues/281214
+  skippedTests = builtins.concatStringsSep "," (
+    [ "browser.tests.test_kerberos_with_mocking" ]
+    ++ lib.optionals stdenv.isDarwin [
+      "browser.server_groups.servers.tests.test_all_server_get"
+      "browser.server_groups.servers.tests.test_check_connect"
+      "browser.server_groups.servers.tests.test_check_ssh_mock_connect"
+      "browser.server_groups.servers.tests.test_is_password_saved"
+    ]
+  );
 in
 
 pythonPackages.buildPythonApplication rec {
@@ -54,20 +66,23 @@ pythonPackages.buildPythonApplication rec {
     # patching Makefile, so it doesn't try to build sphinx documentation here
     # (will do so later)
     substituteInPlace Makefile \
-      --replace 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
+      --replace-fail 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
 
     # fix document which refers a non-existing document and fails
     substituteInPlace docs/en_US/contributions.rst \
-      --replace "code_snippets" ""
+      --replace-fail "code_snippets" ""
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
+    # remove packageManager from package.json so we can work without corepack
+    substituteInPlace web/package.json \
+      --replace-fail "\"packageManager\": \"yarn@3.6.4\"" "\"\": \"\""
     substituteInPlace pkg/pip/setup_pip.py \
-      --replace "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
+      --replace-fail "req = req.replace('psycopg[c]', 'psycopg[binary]')" "req = req"
     ${lib.optionalString (!server-mode) ''
     substituteInPlace web/config.py \
-      --replace "SERVER_MODE = True" "SERVER_MODE = False"
+      --replace-fail "SERVER_MODE = True" "SERVER_MODE = False"
     ''}
   '';
 
@@ -125,7 +140,7 @@ pythonPackages.buildPythonApplication rec {
     cp -v ../pkg/pip/setup_pip.py setup.py
   '';
 
-  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn prefetch-yarn-deps nodejs ];
+  nativeBuildInputs = with pythonPackages; [ cython pip sphinx yarn fixup-yarn-lock nodejs ];
   buildInputs = [
     zlib
     pythonPackages.wheel
@@ -133,7 +148,6 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [
     flask
-    flask-gravatar
     flask-login
     flask-mail
     flask-migrate
@@ -182,6 +196,8 @@ pythonPackages.buildPythonApplication rec {
     keyring
     typer
     rich
+    jsonformatter
+    libgravatar
   ];
 
   passthru.tests = {
@@ -194,6 +210,9 @@ pythonPackages.buildPythonApplication rec {
     pythonPackages.testscenarios
     pythonPackages.selenium
   ];
+
+  # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
+  doCheck = postgresql.doCheck;
 
   checkPhase = ''
     runHook preCheck
@@ -209,13 +228,11 @@ pythonPackages.buildPythonApplication rec {
     # in /var/lib/pgadmin and /var/log/pgadmin
     # see https://github.com/pgadmin-org/pgadmin4/blob/fd1c26408bbf154fa455a49ee5c12895933833a3/web/regression/runtests.py#L217-L226
     cp -v regression/test_config.json.in regression/test_config.json
-    substituteInPlace regression/test_config.json --replace "localhost" "$PGHOST"
-    substituteInPlace regression/runtests.py --replace "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
+    substituteInPlace regression/test_config.json --replace-fail "localhost" "$PGHOST"
+    substituteInPlace regression/runtests.py --replace-fail "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
 
     ## Browser test ##
-
-    # don't bother to test kerberos authentication
-    python regression/runtests.py --pkg browser --exclude browser.tests.test_kerberos_with_mocking
+    python regression/runtests.py --pkg browser --exclude ${skippedTests}
 
     ## Reverse engineered SQL test ##
 
@@ -235,7 +252,7 @@ pythonPackages.buildPythonApplication rec {
       This should NOT be used in combination with the `pgadmin4-desktopmode` package as they will interfere.
       '' else ''
       This version is build with SERVER_MODE set to False. It will require access to `~/.pgadmin/`. This version is suitable
-      for single-user deployment or where access to `/var/lib/pgadmin` cannot be granted or the NixOS module cannot be used.
+      for single-user deployment or where access to `/var/lib/pgadmin` cannot be granted or the NixOS module cannot be used (e.g. on MacOS).
       This should NOT be used in combination with the NixOS module `pgadmin` as they will interfere.
       ''}
     '';
@@ -244,5 +261,6 @@ pythonPackages.buildPythonApplication rec {
     changelog = "https://www.pgadmin.org/docs/pgadmin4/latest/release_notes_${lib.versions.major version}_${lib.versions.minor version}.html";
     maintainers = with maintainers; [ gador ];
     mainProgram = "pgadmin4";
+    platforms = platforms.unix;
   };
 }

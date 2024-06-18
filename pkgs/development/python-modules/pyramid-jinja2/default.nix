@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, webtest
-, markupsafe
-, jinja2
-, pytestCheckHook
-, zope-deprecation
-, pyramid
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  webtest,
+  markupsafe,
+  jinja2,
+  pytestCheckHook,
+  zope-deprecation,
+  pyramid,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyramid-jinja2";
-  version = "2.10";
+  version = "2.10.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyramid_jinja2";
     inherit version;
-    hash = "sha256-8nEGnZ6ay6x622kSGQqEj2M49+V6+68+lSN/6DzI9NI=";
+    hash = "sha256-jFCMs1wTX5UUnKI2EQ+ciHU0NXV0DRbFy3OlDvHCFnc=";
   };
 
   propagatedBuildInputs = [
@@ -40,9 +41,7 @@ buildPythonPackage rec {
       --replace " --cov" ""
   '';
 
-  pythonImportsCheck = [
-    "pyramid_jinja2"
-  ];
+  pythonImportsCheck = [ "pyramid_jinja2" ];
 
   disabledTests = [
     # AssertionError: Lists differ: ['pyramid_jinja2-2.10',...

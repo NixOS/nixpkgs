@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight high-performance multi-threaded web server";
+    mainProgram = "lwan";
     longDescription = "A lightweight and speedy web server with a low memory
       footprint (~500KiB for 10k idle connections), with minimal system calls and
       memory allocation.  Lwan contains a hand-crafted HTTP request parser. Files are
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
       support.
     ";
     homepage = "https://lwan.ws/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];
   };

@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "XMonad-like workspace switching for i3 and sway";
+    mainProgram = "i3-wk-switch";
     maintainers = with maintainers; [ synthetica ];
     platforms = platforms.linux;
     license = licenses.mit;

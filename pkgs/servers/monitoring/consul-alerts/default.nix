@@ -17,11 +17,12 @@ buildGoPackage rec {
   };
 
   meta = with lib; {
-    description = "An extendable open source continuous integration server";
+    mainProgram = "consul-alerts";
+    description = "Extendable open source continuous integration server";
     homepage = "https://github.com/AcalephStorage/consul-alerts";
     # As per README
     platforms = platforms.linux ++ platforms.freebsd ++ platforms.darwin;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ nh2 ];
   };
 }

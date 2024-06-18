@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ode";
-  version = "0.16.4";
+  version = "0.16.5";
 
   src = fetchurl {
     url = "https://bitbucket.org/odedevs/ode/downloads/ode-${finalAttrs.version}.tar.gz";
-    hash = "sha256-cQN7goHGyGsKVXKfkNXbaXq+TL7B2BGBV+ANSOwlNGc=";
+    hash = "sha256-uode3RZFcJWHle6qcPFIU7/DTMmHH4rd6NpH4SvVRnk=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Open Dynamics Engine";
+    mainProgram = "ode-config";
     homepage = "https://www.ode.org";
     license = with licenses; [ bsd3 lgpl21Only lgpl3Only zlib ];
     maintainers = with maintainers; [ wegank ];

@@ -6,7 +6,7 @@
 , pkg-config
 , lib
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
     gobject-introspection
   ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-menus";
-    description = "A menu system for the Cinnamon project";
+    description = "Menu system for the Cinnamon project";
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

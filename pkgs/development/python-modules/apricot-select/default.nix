@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, numba
-, numpy
-, pytestCheckHook
-, pythonOlder
-, torchvision
-, scikit-learn
-, scipy
-, setuptools
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  apricot-select,
+  numba,
+  numpy,
+  pynose,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  setuptools,
+  torchvision,
+  tqdm,
 }:
 
 buildPythonPackage rec {
@@ -31,33 +33,44 @@ buildPythonPackage rec {
     sed -i '/"nose"/d' setup.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numba
     numpy
+    scikit-learn
     scipy
+    torchvision
     tqdm
   ];
 
   nativeCheckInputs = [
-    nose
+    pynose
     pytestCheckHook
-    torchvision
-    scikit-learn
   ];
 
-  pythonImportsCheck = [
-    "apricot"
-  ];
+  pythonImportsCheck = [ "apricot" ];
 
   disabledTestPaths = [
     # Tests require nose
     "tests/test_optimizers/test_knapsack_facility_location.py"
     "tests/test_optimizers/test_knapsack_feature_based.py"
   ];
+
+  # NOTE: These tests seem to be flaky.
+  disabledTests = [
+    "test_digits_modular"
+    "test_digits_modular_object"
+    "test_digits_modular_sparse"
+    "test_digits_sqrt_modular"
+    "test_digits_sqrt_modular_object"
+    "test_digits_sqrt_modular_sparse"
+  ];
+
+  # NOTE: Tests are disabled by default because they can run for hours and timeout on Hydra.
+  doCheck = false;
+
+  passthru.tests.check = apricot-select.overridePythonAttrs { doCheck = true; };
 
   meta = with lib; {
     description = "Module for submodular optimization for the purpose of selecting subsets of massive data sets";

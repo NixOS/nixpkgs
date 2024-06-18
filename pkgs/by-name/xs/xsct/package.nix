@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Set color temperature of screen";
+    mainProgram = "xsct";
     homepage = "https://github.com/faf0/sct";
     license = licenses.unlicense;
     maintainers = with maintainers; [ OPNA2608 ];

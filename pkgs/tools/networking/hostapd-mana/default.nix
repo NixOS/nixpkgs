@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/sensepost/hostapd-mana";
-    description = "A featureful rogue wifi access point tool";
+    description = "Featureful rogue wifi access point tool";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bbjubjub ];
     platforms = platforms.linux;

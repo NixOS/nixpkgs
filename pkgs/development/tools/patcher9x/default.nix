@@ -1,7 +1,7 @@
 { fasm, lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation (finalAttr: {
-  name = "patcher9x";
+  pname = "patcher9x";
   version = "0.8.50";
 
   srcs = [
@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttr: {
 
   meta = with lib; {
     description = "Patch for Windows 95/98/98 SE/Me to fix CPU issues";
+    mainProgram = "patcher9x";
     homepage = "https://github.com/JHRobotics/patcher9x";
     license = licenses.mit;
     maintainers = with maintainers; [ hughobrien ];

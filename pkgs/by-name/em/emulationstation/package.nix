@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/RetroPie/EmulationStation";
-    description = "A flexible emulator front-end supporting keyboardless navigation and custom system themes (forked by RetroPie)";
+    description = "Flexible emulator front-end supporting keyboardless navigation and custom system themes (forked by RetroPie)";
     license = with lib.licenses; [ mit ];
     mainProgram = "emulationstation";
     maintainers = with lib.maintainers; [ AndersonTorres edwtjo ];

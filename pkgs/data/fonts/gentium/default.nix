@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://software.sil.org/gentium/";
-    description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
+    description = "High-quality typeface family for Latin, Cyrillic, and Greek";
     longDescription = ''
       Gentium is a typeface family designed to enable the diverse ethnic groups
       around the world who use the Latin, Cyrillic and Greek scripts to produce

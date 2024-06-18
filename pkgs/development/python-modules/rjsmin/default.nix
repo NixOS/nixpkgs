@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
   # tests auto-discovery
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rjsmin"
-  ];
+  pythonImportsCheck = [ "rjsmin" ];
 
   meta = with lib; {
     description = "Module to minify Javascript";

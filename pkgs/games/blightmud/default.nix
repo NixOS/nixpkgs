@@ -50,7 +50,8 @@ rustPlatform.buildRustPackage rec {
     builtins.concatStringsSep " " (builtins.map skipFlag skipList);
 
   meta = with lib; {
-    description = "A terminal MUD client written in Rust";
+    description = "Terminal MUD client written in Rust";
+    mainProgram = "blightmud";
     longDescription = ''
       Blightmud is a terminal client for connecting to Multi User Dungeon (MUD)
       games. It is written in Rust and supports TLS, GMCP, MSDP, MCCP2, tab

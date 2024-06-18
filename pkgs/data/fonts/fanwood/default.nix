@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A serif based on the work of a famous Czech-American type designer of yesteryear";
+    description = "Serif based on the work of a famous Czech-American type designer of yesteryear";
     longDescription = ''
       Based on work of a famous Czech-American type designer of yesteryear. The
       package includes roman and italic.

@@ -56,6 +56,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "CAD program for creating virtual LEGO models";
+    mainProgram = "leocad";
     homepage = "https://www.leocad.org/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];

@@ -7,8 +7,8 @@ sbt.overrideAttrs(previousAttrs: {
     wrapProgram $out/bin/sbt \
       --set CLANG_PATH      "${llvmPackages.clang}/bin/clang" \
       --set CLANGPP_PATH    "${llvmPackages.clang}/bin/clang" \
-      --set CPATH           "${lib.makeSearchPathOutput "dev" "include" [ re2 zlib boehmgc libunwind llvmPackages.libcxxabi llvmPackages.libcxx ]}/c++/v1" \
-      --set LIBRARY_PATH    "${lib.makeLibraryPath [ re2 zlib boehmgc libunwind llvmPackages.libcxxabi llvmPackages.libcxx ]}" \
-      --set NIX_CFLAGS_LINK "-lc++abi -lc++"
+      --set CPATH           "${lib.makeSearchPathOutput "dev" "include" [ re2 zlib boehmgc libunwind llvmPackages.libcxx ]}/c++/v1" \
+      --set LIBRARY_PATH    "${lib.makeLibraryPath [ re2 zlib boehmgc libunwind llvmPackages.libcxx ]}" \
+      --set NIX_CFLAGS_LINK "-lc++"
   '';
 })

@@ -1,40 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# dependencies
-, pyasn1
-, pyasyncore
-, pysmi-lextudio
-, pysnmpcrypto
+  # dependencies
+  pyasn1,
+  pysmi-lextudio,
+  pysnmpcrypto,
 
-# tests
-, pytestCheckHook
-, pytest-asyncio
+  # tests
+  pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pysnmp-lextudio";
-  version = "5.0.33";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
-    rev = "v${version}";
-    hash = "sha256-IXYpR7JnuHmcjtdCs1C+rPHS9IZ93MN/Zuw4Pu1l/4A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-iVej39OmTPiZL11+IetnqHaxFAhZ/YR7tjiRoc7pu8U=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     pyasn1
-    pyasyncore
     pysmi-lextudio
     pysnmpcrypto
   ];
@@ -50,16 +47,20 @@ buildPythonPackage rec {
     "test_send_notification"
     "test_send_trap"
     "test_send_v3_inform_notification"
+    "test_send_v3_inform_sync"
     "test_usm_sha_aes128"
     "test_v1_get"
     "test_v1_next"
     "test_v1_set"
     "test_v2c_bulk"
+    # pysnmp.smi.error.MibNotFoundError
+    "test_send_v3_trap_notification"
+    "test_addAsn1MibSource"
+    "test_v1_walk"
+    "test_v2_walk"
   ];
 
-  pythonImportsCheck = [
-    "pysnmp"
-  ];
+  pythonImportsCheck = [ "pysnmp" ];
 
   meta = with lib; {
     description = "Python SNMP library";

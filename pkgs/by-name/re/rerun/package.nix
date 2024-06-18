@@ -1,6 +1,7 @@
 {
   lib,
   rustPlatform,
+  fetchpatch,
   fetchFromGitHub,
   pkg-config,
   stdenv,
@@ -32,6 +33,14 @@ rustPlatform.buildRustPackage rec {
   patches = [
     # Disables a doctest that depends on a nightly feature
     ./0001-re_space_view_time_series-utils-patch-out-doctests-w.patch
+
+
+    # "Fix cell size test now that the overhead has shrunk"
+    # https://github.com/rerun-io/rerun/pull/5917
+    (fetchpatch {
+      url = "https://github.com/rerun-io/rerun/commit/933fc5cc1f3ee262a78bd4647257295747671152.patch";
+      hash = "sha256-jCeGfzKt0oYqIea+7bA2V/U9VIjhVvfQzLRrYG4jaHY=";
+    })
   ];
 
   cargoHash = "sha256-qvnkOlcjADV4b+JfFAy9yNaZGaf0ZO7hh9HBg5XmPi0=";
@@ -69,39 +78,32 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.isLinux [ (lib.getLib wayland) ];
 
-  env.CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
+  addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libxkbcommon
+      vulkan-loader
+      wayland
+    ]
+  );
 
-  addBuildInputRunpathsPhase = ''
-    declare _extraRunpaths
-    _sep=
-    for p in "''${pkgsHostTarget[@]}" ; do
-      if [[ -d "$p/lib" ]] ; then
-        _extraRunpaths+="$_sep$p/lib"
-        if [[ -z "$_sep" ]] ; then
-          _sep=:
-        fi
-      fi
-    done
-
+  addDlopenRunpathsPhase = ''
     elfHasDynamicSection() {
         patchelf --print-rpath "$1" >& /dev/null
     }
 
     while IFS= read -r -d $'\0' path ; do
-      if elfHasDynamicSection "$path" ; then
-        patchelf "$path" --add-rpath "''${_extraRunpaths}"
-      fi
+      elfHasDynamicSection "$path" || continue
+      for dep in $addDlopenRunpaths ; do
+        patchelf "$path" --add-rpath "$dep"
+      done
     done < <(
       for o in $(getAllOutputNames) ; do
         find "''${!o}" -type f -and "(" -executable -or -iname '*.so' ")" -print0
       done
     )
-
-    unset _extraRunpaths
-    unset _sep
   '';
 
-  postPhases = lib.optionals stdenv.isLinux [ "addBuildInputRunpathsPhase" ];
+  postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
   cargoTestFlags = [
     "-p"
@@ -124,5 +126,8 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with maintainers; [ SomeoneSerge ];
     mainProgram = "rerun";
+    # See comment about wasm32-unknown-unknown in rustc.nix.
+    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+      !stdenv.hostPlatform.gcc.thumb or true;
   };
 }

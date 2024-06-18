@@ -12,10 +12,10 @@ index da40043f..4f566f01 100644
              check=True,
          )
 diff --git a/src/pikepdf/jbig2.py b/src/pikepdf/jbig2.py
-index f89b4f90..f187ebdf 100644
+index 901f3b6f..45551820 100644
 --- a/src/pikepdf/jbig2.py
 +++ b/src/pikepdf/jbig2.py
-@@ -63,7 +63,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
+@@ -72,7 +72,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
              output_path = Path(tmpdir) / "outfile"
  
              args = [
@@ -24,12 +24,12 @@ index f89b4f90..f187ebdf 100644
                  "--embedded",
                  "--format",
                  "png",
-@@ -90,7 +90,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
+@@ -101,7 +101,7 @@ class JBIG2Decoder(JBIG2DecoderInterface):
      def _version(self) -> Version:
          try:
              proc = self._run(
--                ['jbig2dec', '--version'], stdout=PIPE, check=True, encoding='ascii'
-+                ['@jbig2dec@', '--version'], stdout=PIPE, check=True, encoding='ascii'
-             )
-         except (CalledProcessError, FileNotFoundError) as e:
-             raise DependencyError("jbig2dec - not installed or not found") from e
+-                ['jbig2dec', '--version'],
++                ['@jbig2dec@', '--version'],
+                 stdout=PIPE,
+                 check=True,
+                 encoding='ascii',

@@ -5,8 +5,9 @@
 , pkg-config
 , openssl
 , nixVersions
-, nixPackage ? nixVersions.nix_2_17
+, nixPackage ? nixVersions.nix_2_18
 , darwin
+, nukeReferences
 }:
 
 let
@@ -14,16 +15,23 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "nix-web";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "gorgon";
     repo = "gorgon";
     rev = "nix-web-v${version}";
-    hash = "sha256-M/0nlD2jUtvdWJ647QHrp8JcUUVYxiLJlGjnZ+cfpYU=";
+    hash = "sha256-/tjcin3p+nE9Y7bhTCj7D4lpjKEFGM1bRqKE8T6igJE=";
+
+    # Various unit tests contain /nix/store/* paths. This breaks the fetcher in a very funny way:
+    #   error: illegal path references in fixed-output derivation '/nix/store/52nmkc6v9qhdyzszlvbncndxyrcdfjn3-source.drv'
+    nativeBuildInputs = [ nukeReferences ];
+    postFetch = ''
+      find $out -name "*.rs" -print0 | xargs -0 nuke-refs
+    '';
   };
-  cargoHash = "sha256-6kcpP/CFiy571B98Y96/cdcClH50gdyPLZ28Npva7B4=";
+  cargoHash = "sha256-5pPn6APz0kdxuBdz9pgqvECTk6KhXnW/YTjxKgiuD9Q=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional (!stdenv.isDarwin) openssl
@@ -39,6 +47,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = cargoFlags;
   cargoTestFlags = cargoFlags;
+  checkFlags = [
+    # Skip tests that rely on store paths nuked by `nuke-refs`.
+    "--skip=test_env_value_to_html_store_path_subpath"
+    "--skip=test_env_value_to_html_store_path"
+  ];
 
   NIX_WEB_BUILD_NIX_CLI_PATH = "${nixPackage}/bin/nix";
 

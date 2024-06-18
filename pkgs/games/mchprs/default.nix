@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     mainProgram = "mchprs";
-    description = "A multithreaded Minecraft server built for redstone";
+    description = "Multithreaded Minecraft server built for redstone";
     homepage = "https://github.com/MCHPR/MCHPRS";
     license = licenses.mit;
     maintainers = with maintainers; [ gdd ];

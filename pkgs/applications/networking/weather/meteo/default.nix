@@ -9,8 +9,9 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
+, glib-networking
 , gtk3
 , json-glib
 , libappindicator
@@ -37,11 +38,12 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     glib
+    glib-networking # see #311066
     gtk3
     json-glib
     libappindicator

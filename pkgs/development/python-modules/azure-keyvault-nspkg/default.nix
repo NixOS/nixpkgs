@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
 
-# pythonPackages
-, azure-nspkg
+  # pythonPackages
+  azure-nspkg,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
     sha256 = "0hdnd6124hx7s16z1pssmq5m5mqqqz8s38ixl9aayv4wmf5bhs5c";
   };
 
-  propagatedBuildInputs = [
-    azure-nspkg
-  ];
+  propagatedBuildInputs = [ azure-nspkg ];
 
   # Just a namespace package, no tests exist:
   #   https://github.com/Azure/azure-sdk-for-python/blob/master/sdk/keyvault/tests.yml
@@ -29,8 +28,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure Key Vault Namespace Package [Internal]";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

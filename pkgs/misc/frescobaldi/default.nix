@@ -40,7 +40,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://frescobaldi.org/";
-    description = "A LilyPond sheet music text editor";
+    description = "LilyPond sheet music text editor";
     longDescription = ''
       Powerful text editor with syntax highlighting and automatic completion,
       Music view with advanced Point & Click, Midi player to proof-listen

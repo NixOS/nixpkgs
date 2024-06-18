@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, colour
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  colour,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-i9vJr7uTpkUZ9WiL0BGidIgCdG87k8JnmZuPqt6qLQE=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -35,12 +34,11 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ttls"
-  ];
+  pythonImportsCheck = [ "ttls" ];
 
   meta = with lib; {
     description = "Module to interact with Twinkly LEDs";
+    mainProgram = "ttls";
     homepage = "https://github.com/jschlyter/ttls";
     changelog = "https://github.com/jschlyter/ttls/blob/v${version}/CHANGES.md";
     license = licenses.mit;

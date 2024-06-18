@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, hatchling
+  # build-system
+  hatchling,
 
-# native dependencies
-, knot-dns
+  # native dependencies
+  knot-dns,
 }:
 
 buildPythonPackage rec {
   pname = "libknot";
-  version = "3.3.4";
+  version = "3.3.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KRxc34lqOGuYJM2mUsYrjfiVCQNBxcQyO30wPLf17+Q=";
+    hash = "sha256-N96gdO5sezMyKt0QdX7ORg5DnEVSqb1j+WohvOHdYYU=";
   };
 
   postPatch = ''
@@ -25,19 +26,14 @@ buildPythonPackage rec {
       --replace "libknot.so%s" "${lib.getLib knot-dns}/lib/libknot.so%s"
   '';
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  pythonImportsCheck = [
-    "libknot"
-  ];
+  pythonImportsCheck = [ "libknot" ];
 
   meta = with lib; {
     description = "Python bindings for libknot";
     homepage = "https://gitlab.nic.cz/knot/knot-dns/-/tree/master/python/libknot";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ hexa ];
-    mainProgram = "libknot";
   };
 }

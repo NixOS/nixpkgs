@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, configparser
-, fetchFromGitHub
-, pip
-, pytest-mock
-, pytestCheckHook
-, python3-openid
-, pythonOlder
-, semantic-version
-, toml
+{
+  lib,
+  buildPythonPackage,
+  configparser,
+  fetchFromGitHub,
+  pip,
+  pytest-mock,
+  pytestCheckHook,
+  python3-openid,
+  pythonOlder,
+  semantic-version,
+  toml,
 }:
 
 buildPythonPackage rec {
@@ -38,12 +39,11 @@ buildPythonPackage rec {
     python3-openid
   ];
 
-  pythonImportsCheck = [
-    "liccheck"
-  ];
+  pythonImportsCheck = [ "liccheck" ];
 
   meta = with lib; {
     description = "Check python packages from requirement.txt and report issues";
+    mainProgram = "liccheck";
     homepage = "https://github.com/dhatim/python-license-check";
     changelog = "https://github.com/dhatim/python-license-check/releases/tag/${version}";
     license = licenses.asl20;

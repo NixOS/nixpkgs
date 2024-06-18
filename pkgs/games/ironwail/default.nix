@@ -30,9 +30,20 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}/Quake";
 
   nativeBuildInputs = [
-    copyDesktopItems pkg-config vulkan-headers
-    gzip libvorbis libmad flac curl libopus
-    opusfile libogg libxmp vulkan-loader SDL2
+    copyDesktopItems
+    pkg-config
+    vulkan-headers
+    gzip
+    libvorbis
+    libmad
+    flac
+    curl
+    libopus
+    opusfile
+    libogg
+    libxmp
+    vulkan-loader
+    SDL2
   ];
 
   buildFlags = [
@@ -55,8 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     mkdir -p "$out/bin"
     mkdir -p "$out/share/quake"
-    substituteInPlace Makefile --replace "cp ironwail.pak /usr/local/games/quake" "cp ironwail.pak $out/share/quake/ironwail.pak"
-    substituteInPlace Makefile --replace "/usr/local/games" "$out/bin"
+    substituteInPlace Makefile --replace-fail "cp ironwail.pak /usr/local/games/quake" "cp ironwail.pak $out/share/quake/ironwail.pak"
+    substituteInPlace Makefile --replace-fail "/usr/local/games/quake" "$out/bin/ironwail"
   '';
 
   enableParallelBuilding = true;
@@ -64,14 +75,14 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = "ironwail";
-      exec = "quake";
+      exec = "ironwail";
       desktopName = "Ironwail";
       categories = [ "Game" ];
     })
   ];
 
   meta = {
-    description = "A fork of the QuakeSpasm engine for iD software's Quake";
+    description = "Fork of the QuakeSpasm engine for iD software's Quake";
     homepage = "https://github.com/andrei-drexler/ironwail";
     longDescription = ''
       Ironwail is a fork of QuakeSpasm with focus on high performance instead of
@@ -86,6 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.necrophcodr ];
-    mainProgram = "quake";
+    mainProgram = "ironwail";
   };
 })

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A port of the materia theme for Plasma";
+    description = "Port of the materia theme for Plasma";
     homepage = "https://github.com/PapirusDevelopmentTeam/materia-kde";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.diffumist ];

@@ -28,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "miniupnpd";
-  version = "2.3.4";
+  version = "2.3.6";
 
   src = fetchurl {
     url = "https://miniupnp.tuxfamily.org/files/miniupnpd-${version}.tar.gz";
-    sha256 = "sha256-5zAzSPyKxCfefwTw7rdX1J3Mg2cxHuJYJVLDj11toIo=";
+    sha256 = "sha256-Ecp79NS6bGuhLHDDBBgH9Rb02fa2aXvqBOg3YmudZ5w=";
   };
 
   buildInputs = [ iptables-legacy libuuid openssl ]
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://miniupnp.tuxfamily.org/";
-    description = "A daemon that implements the UPnP Internet Gateway Device (IGD) specification";
+    description = "Daemon that implements the UPnP Internet Gateway Device (IGD) specification";
     platforms = platforms.linux;
     license = licenses.bsd3;
     mainProgram = "miniupnpd";

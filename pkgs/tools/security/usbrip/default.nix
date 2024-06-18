@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to track the history of USB events";
+    mainProgram = "usbrip";
     homepage = "https://github.com/snovvcrash/usbrip";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];

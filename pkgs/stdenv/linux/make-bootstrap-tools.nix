@@ -212,22 +212,6 @@ in with pkgs; rec {
       allowedReferences = [];
     };
 
-  dist = stdenv.mkDerivation {
-    name = "stdenv-bootstrap-tools";
-
-    meta = {
-      # Increase priority to unblock nixpkgs-unstable
-      # https://github.com/NixOS/nixpkgs/pull/104679#issuecomment-732267288
-      schedulingPriority = 200;
-    };
-
-    buildCommand = ''
-      mkdir -p $out/nix-support
-      echo "file tarball ${build}/on-server/bootstrap-tools.tar.xz" >> $out/nix-support/hydra-build-products
-      echo "file busybox ${build}/on-server/busybox" >> $out/nix-support/hydra-build-products
-    '';
-  };
-
   bootstrapFiles = {
     # Make them their own store paths to test that busybox still works when the binary is named /nix/store/HASH-busybox
     busybox = runCommand "busybox" {} "cp ${build}/on-server/busybox $out";

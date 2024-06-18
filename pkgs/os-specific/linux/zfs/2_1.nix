@@ -2,7 +2,6 @@
 , kernel ? null
 , stdenv
 , linuxKernel
-, removeLinuxDRM ? false
 , lib
 , nixosTests
 , ...
@@ -16,20 +15,15 @@ callPackage ./generic.nix args {
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfs_2_1";
   # check the release notes for compatible kernels
-  kernelCompatible =
-    if stdenv'.isx86_64 || removeLinuxDRM
-    then kernel.kernelOlder "6.6"
-    else kernel.kernelOlder "6.2";
+  kernelCompatible = kernel.kernelOlder "6.8";
 
-  latestCompatibleLinuxPackages = if stdenv'.isx86_64 || removeLinuxDRM
-    then linuxKernel.packages.linux_6_5
-    else linuxKernel.packages.linux_6_1;
+  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
 
   # This is a fixed version to the 2.1.x series, move only
   # if the 2.1.x series moves.
-  version = "2.1.14";
+  version = "2.1.15";
 
-  hash = "sha256-RVAoZbV9yclGuN+D37SB6UCRFbbLEpBoyrQOQCVsQwE=";
+  hash = "sha256-zFO8fMbirEOrn5W57rAN7IWY6EIXG8jDXqhP7BWJyiY=";
 
   tests = [
     nixosTests.zfs.series_2_1

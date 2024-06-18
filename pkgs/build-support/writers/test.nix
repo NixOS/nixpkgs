@@ -1,13 +1,8 @@
-{ glib
-, haskellPackages
+{ haskellPackages
 , lib
 , nodePackages
 , perlPackages
-, pypy2Packages
 , python3Packages
-, pypy3Packages
-, luaPackages
-, rubyPackages
 , runCommand
 , testers
 , writers
@@ -16,8 +11,38 @@
 
 # If you are reading this, you can test these writers by running: nix-build . -A tests.writers
 
-with writers;
 let
+  inherit (lib) getExe recurseIntoAttrs;
+
+  inherit (writers)
+    makeFSharpWriter
+    writeBash
+    writeBashBin
+    writeDash
+    writeDashBin
+    writeFish
+    writeFishBin
+    writeFSharp
+    writeHaskell
+    writeHaskellBin
+    writeJS
+    writeJSBin
+    writeJSON
+    writeLua
+    writeNu
+    writePerl
+    writePerlBin
+    writePyPy3
+    writePython3
+    writePython3Bin
+    writeRuby
+    writeRust
+    writeRustBin
+    writeText
+    writeTOML
+    writeYAML
+    ;
+
   expectSuccess = test:
     runCommand "run-${test.name}" {} ''
       if [[ "$(${test})" != success ]]; then
@@ -30,7 +55,7 @@ let
 
   expectSuccessBin = test:
     runCommand "run-${test.name}" {} ''
-      if [[ "$(${lib.getExe test})" != success ]]; then
+      if [[ "$(${getExe test})" != success ]]; then
         echo 'test ${test.name} failed'
         exit 1
       fi
@@ -44,8 +69,8 @@ let
     in
     testers.testEqualContents { expected = expectedFile; actual = file; assertion = "${file.name} matches"; };
 in
-lib.recurseIntoAttrs {
-  bin = lib.recurseIntoAttrs {
+recurseIntoAttrs {
+  bin = recurseIntoAttrs {
     bash = expectSuccessBin (writeBashBin "test-writers-bash-bin" ''
      if [[ "test" == "test" ]]; then echo "success"; fi
     '');
@@ -145,7 +170,7 @@ lib.recurseIntoAttrs {
     #'');
   };
 
-  simple = lib.recurseIntoAttrs {
+  simple = recurseIntoAttrs {
     bash = expectSuccess (writeBash "test-writers-bash" ''
      if [[ "test" == "test" ]]; then echo "success"; fi
     '');
@@ -270,7 +295,7 @@ lib.recurseIntoAttrs {
     '');
   };
 
-  path = lib.recurseIntoAttrs {
+  path = recurseIntoAttrs {
     bash = expectSuccess (writeBash "test-writers-bash-path" (writeText "test" ''
       if [[ "test" == "test" ]]; then echo "success"; fi
     ''));
@@ -309,5 +334,86 @@ lib.recurseIntoAttrs {
       file = writeYAML "data.yaml" { hello = "world"; };
       expected = "hello: world\n";
     };
+  };
+
+  wrapping = recurseIntoAttrs {
+    bash-bin = expectSuccessBin (
+      writeBashBin "test-writers-wrapping-bash-bin"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          if [[ "$ThaigerSprint" == "Thailand" ]]; then
+            echo "success"
+          fi
+        ''
+    );
+
+    bash = expectSuccess (
+      writeBash "test-writers-wrapping-bash"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          if [[ "$ThaigerSprint" == "Thailand" ]]; then
+            echo "success"
+          fi
+        ''
+    );
+
+    python = expectSuccess (
+      writePython3 "test-writers-wrapping-python"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          import os
+
+          if os.environ.get("ThaigerSprint") == "Thailand":
+              print("success")
+        ''
+    );
+
+    rust = expectSuccess (
+      writeRust "test-writers-wrapping-rust"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          fn main(){
+            if std::env::var("ThaigerSprint").unwrap() == "Thailand" {
+              println!("success")
+            }
+          }
+        ''
+    );
+
+    no-empty-wrapper = let
+      bin = writeBashBin "bin" { makeWrapperArgs = []; } ''true'';
+    in runCommand "run-test-writers-wrapping-no-empty-wrapper" {} ''
+      ls -A ${bin}/bin
+      if [ $(ls -A ${bin}/bin | wc -l) -eq 1 ]; then
+        touch $out
+      else
+        echo "Error: Empty wrapper was created" >&2
+        exit 1
+      fi
+    '';
   };
 }

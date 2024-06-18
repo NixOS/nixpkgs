@@ -14,19 +14,19 @@
 , pkg-config
 , stdenv
 , unzip
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nestopia";
-  version = "1.52.0";
+  version = "1.52.1";
 
   src = fetchFromGitHub {
     owner = "0ldsk00l";
     repo = "nestopia";
     rev = finalAttrs.version;
-    hash = "sha256-kd5hZ88fCLL8ysGMj7HsrSA7eCI5SL2xxiRXJiZqBZ8=";
+    hash = "sha256-r8Z0Ejf5vWcdvxkUkUKJtipQIRoiwoRj0Bx06Gnxd08=";
   };
 
   buildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     fltk
     pkg-config
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     unzip
   ];
 

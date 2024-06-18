@@ -1,17 +1,18 @@
-{ lib
-, fetchurl
-, stdenv
-, undmg
-, nix-update-script
+{
+  lib,
+  fetchurl,
+  stdenvNoCC,
+  undmg,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "iina";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchurl {
-    url = "https://github.com/iina/iina/releases/download/v${version}/IINA.v${version}.dmg";
-    hash = "sha256-feUPWtSi/Vsnv1mjGyBgB0wFMxx6r6UzrUratlAo14w=";
+    url = "https://github.com/iina/iina/releases/download/v${finalAttrs.version}/IINA.v${finalAttrs.version}.dmg";
+    hash = "sha256-O4uRmfQaGMKqizDlgk0MnazMHVkXaDLqZQ9TP8vcajg=";
   };
 
   nativeBuildInputs = [ undmg ];
@@ -26,13 +27,17 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
+    description = "Modern media player for macOS";
     homepage = "https://iina.io/";
-    description = "The modern media player for macOS";
-    platforms = platforms.darwin;
-    license = licenses.gpl3;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      arkivm
+      donteatoreo
+      stepbrobd
+    ];
     mainProgram = "iina";
-    maintainers = with maintainers; [ arkivm stepbrobd ];
+    platforms = lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

@@ -38,6 +38,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to brute force paths on web servers";
+    mainProgram = "dirstalk";
     homepage = "https://github.com/stefanoj3/dirstalk";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

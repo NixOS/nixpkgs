@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , libX11, libXv
 , udev
 , SDL2
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals stdenv.isLinux [ wrapGAppsHook ]
+    ++ lib.optionals stdenv.isLinux [ wrapGAppsHook3 ]
     ++ lib.optionals stdenv.isDarwin [ libicns makeWrapper ];
 
   buildInputs = [ SDL2 libao ]
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A fork of bsnes that adds HD video features";
+    description = "Fork of bsnes that adds HD video features";
     homepage = "https://github.com/DerKoun/bsnes-hd";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ stevebob ];

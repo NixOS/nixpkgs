@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, django
-, dnspython
-, fetchFromGitHub
-, protobuf
-, pythonOlder
-, mysql80
-, openssl
-, pkgs
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  django,
+  dnspython,
+  fetchFromGitHub,
+  protobuf,
+  pythonOlder,
+  mysql80,
+  openssl,
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -41,10 +42,7 @@ buildPythonPackage rec {
     ./0001-Revert-Fix-MacOS-wheels-platform-tag.patch
   ];
 
-  nativeBuildInputs = [
-    mysql80
-  ];
-
+  nativeBuildInputs = [ mysql80 ];
 
   propagatedBuildInputs = [
     dnspython
@@ -54,15 +52,13 @@ buildPythonPackage rec {
     pkgs.zstd
   ];
 
-  pythonImportsCheck = [
-    "mysql"
-  ];
+  pythonImportsCheck = [ "mysql" ];
 
   # Tests require a running MySQL instance
   doCheck = false;
 
   meta = with lib; {
-    description = "A MySQL driver";
+    description = "MySQL driver";
     longDescription = ''
       A MySQL driver that does not depend on MySQL C client libraries and
       implements the DB API v2.0 specification.
@@ -70,6 +66,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/mysql/mysql-connector-python";
     changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ neosimsim turion ];
+    maintainers = with maintainers; [
+      neosimsim
+      turion
+    ];
   };
 }

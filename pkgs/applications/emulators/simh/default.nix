@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://simh.trailing-edge.com/";
-    description = "A collection of simulators of historic hardware";
+    description = "Collection of simulators of historic hardware";
     longDescription = ''
       SimH (History Simulator) is a collection of simulators for historically
       significant or just plain interesting computer hardware and software from

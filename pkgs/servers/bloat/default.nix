@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "bloat";
-  version = "unstable-2024-02-12";
+  version = "0-unstable-2024-02-12";
 
   src = fetchgit {
     url = "git://git.freesoftwareextremist.com/bloat";
@@ -29,7 +29,7 @@ buildGoModule {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A web client for Pleroma and Mastodon";
+    description = "Web client for Pleroma and Mastodon";
     longDescription = ''
       A lightweight web client for Pleroma and Mastodon.
       Does not require JavaScript to display text, images, audio and videos.

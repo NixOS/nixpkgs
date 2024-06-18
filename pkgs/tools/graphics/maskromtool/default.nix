@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "maskromtool";
-  version = "2024-01-28";
+  version = "2024-05-19";
 
   src = fetchFromGitHub {
     owner = "travisgoodspeed";
     repo = "maskromtool";
     rev = "v${version}";
-    hash = "sha256-jYnJgZ4bn5NDSzNyhb46xnmzbF9Y59shw8y/2zmxiVM=";
+    hash = "sha256-cG1OT5sbDW7uU7t+uh7GAdabd2zRlDTan2qPxBNHJTo=";
   };
 
   buildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "A CAD tool for extracting bits from Mask ROM photographs";
+    description = "CAD tool for extracting bits from Mask ROM photographs";
     homepage = "https://github.com/travisgoodspeed/maskromtool";
     license = [
       lib.licenses.beerware

@@ -5,22 +5,27 @@
 
 python3.pkgs.toPythonModule (python3.pkgs.buildPythonApplication rec {
   pname = "searxng";
-  version = "unstable-2023-10-31";
+  version = "0-unstable-2024-05-31";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "b05a15540e1dc2dfb8e4e25aa537b2a68e713844";
-    hash = "sha256-x0PyS+A4KjbBnTpca17Wx3BQjtOHvVuWpusPPc1ULnU=";
+    owner = "searxng";
+    repo = "searxng";
+    rev = "18fb701be225560b3fb1011cc533f785823f26a4";
+    hash = "sha256-okE/Uxl7YqcM99kLJ4KAlMQi50x5m0bPfYp5bv62WEw=";
   };
 
   postPatch = ''
     sed -i 's/==.*$//' requirements.txt
+
+    # can't be fetchpatched as it is essentially empty and it complains about that
+    # TODO: drop when updating to a version that includes https://github.com/searxng/searxng/pull/3563
+    touch searx/answerers/random/__init__.py
+    touch searx/answerers/statistics/__init__.py
   '';
 
   preBuild =
     let
-      versionString = lib.concatStringsSep "." (builtins.tail (lib.splitString "-" version));
+      versionString = lib.concatStringsSep "." (builtins.tail (lib.splitString "-" (lib.removePrefix "0-" version)));
       commitAbbrev = builtins.substring 0 8 src.rev;
     in
     ''
@@ -66,13 +71,14 @@ python3.pkgs.toPythonModule (python3.pkgs.buildPythonApplication rec {
     ln -s ../${python3.sitePackages}/searx/static $out/share/
 
     # copy config schema for the limiter
-    cp searx/botdetection/limiter.toml $out/${python3.sitePackages}/searx/botdetection/limiter.toml
+    cp searx/limiter.toml $out/${python3.sitePackages}/searx/limiter.toml
   '';
 
   meta = with lib; {
     homepage = "https://github.com/searxng/searxng";
-    description = "A fork of Searx, a privacy-respecting, hackable metasearch engine";
+    description = "Fork of Searx, a privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
+    mainProgram = "searxng-run";
     maintainers = with maintainers; [ SuperSandro2000 _999eagle ];
   };
 })

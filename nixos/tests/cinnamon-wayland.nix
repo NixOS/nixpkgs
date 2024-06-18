@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.desktopManager.cinnamon.enable = true;
-    services.xserver.displayManager = {
+    services.displayManager = {
       autoLogin.enable = true;
       autoLogin.user = nodes.machine.users.users.alice.name;
       defaultSession = "cinnamon-wayland";

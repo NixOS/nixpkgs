@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qpdf";
-  version = "11.8.0";
+  version = "11.9.0";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
     rev = "v${version}";
-    hash = "sha256-EoFCRAWia8LAaLdoBW0ByndzIAjSvQ7bJFh0SZ/FKtY=";
+    hash = "sha256-HD7+2TBDLBIt+VaPO5WgnDjNZOj8naltFmYdYzOIn+4=";
   };
 
   nativeBuildInputs = [ cmake perl ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://qpdf.sourceforge.io/";
-    description = "A C++ library and set of programs that inspect and manipulate the structure of PDF files";
+    description = "C++ library and set of programs that inspect and manipulate the structure of PDF files";
     license = licenses.asl20; # as of 7.0.0, people may stay at artistic2
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.all;

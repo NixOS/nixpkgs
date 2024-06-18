@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeDesktopItem
 , atk
 , cairo
@@ -41,15 +41,15 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "6.0.30";
+  version = "6.0.35";
 
   src = fetchurl {
     url =
       "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    hash = "sha256-4XQZ1xw9Qtk3SzHMsEUk+HuIYtHDAOMgpwzbAd5QQpU=";
+    hash = "sha256-HAVLmamEPuFf0548/iEXes+f4XnQ7kU1u9hyOYhVyZ0=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   buildInputs =
     [ gsettings-desktop-schemas glib gtk3 gnome.adwaita-icon-theme dconf ];
 

@@ -1,12 +1,13 @@
-{ lib
-, anyio
-, buildPythonPackage
-, fetchFromGitHub
-, hatch-fancy-pypi-readme
-, hatchling
-, pytestCheckHook
-, pythonOlder
-, trio
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  pytestCheckHook,
+  pythonOlder,
+  trio,
 }:
 
 buildPythonPackage rec {
@@ -28,18 +29,14 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  propagatedBuildInputs = [
-    anyio
-  ];
+  propagatedBuildInputs = [ anyio ];
 
   nativeCheckInputs = [
     pytestCheckHook
     trio
   ];
 
-  pythonImportsCheck = [
-    "anysqlite"
-  ];
+  pythonImportsCheck = [ "anysqlite" ];
 
   meta = with lib; {
     description = "Sqlite3 for asyncio and trio";

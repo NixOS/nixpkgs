@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, can
-, canmatrix
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  can,
+  canmatrix,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,22 +21,16 @@ buildPythonPackage rec {
     hash = "sha256-XxhlG5325HabmILpafk0rnc+8kpFqrwzNLWGmCBI0Iw=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     can
     canmatrix
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "canopen"
-  ];
+  pythonImportsCheck = [ "canopen" ];
 
   meta = with lib; {
     description = "CANopen stack implementation";

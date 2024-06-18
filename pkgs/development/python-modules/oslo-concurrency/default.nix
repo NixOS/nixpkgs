@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, bash
-, coreutils
-, eventlet
-, fasteners
-, fixtures
-, iana-etc
-, libredirect
-, oslo-config
-, oslo-utils
-, oslotest
-, pbr
-, stestr
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  bash,
+  coreutils,
+  eventlet,
+  fasteners,
+  fixtures,
+  iana-etc,
+  libredirect,
+  oslo-config,
+  oslo-utils,
+  oslotest,
+  pbr,
+  stestr,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "5.3.0";
+  version = "6.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "oslo.concurrency";
     inherit version;
-    hash = "sha256-yqaSBw0hVZ73H/WQeAb3USoXgsRby1ChlP4+DNeNfe0=";
+    hash = "sha256-tS8CtORvXydLkfuOG/xcv5pBjfzUqDvggDRUlePSboo=";
   };
 
   postPatch = ''
@@ -72,6 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Oslo Concurrency library";
+    mainProgram = "lockutils-wrapper";
     homepage = "https://github.com/openstack/oslo.concurrency";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, qttools, alsa-lib, drumstick, qtbase, qtsvg }:
+{ lib, stdenv, fetchurl, cmake, pandoc, pkg-config, qttools, alsa-lib, drumstick, qtbase, qtsvg }:
 
 stdenv.mkDerivation rec {
   pname = "kmetronome";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1ln0nm24w6bj7wc8cay08j5azzznigd39cbbw3h4skg6fxd8p0s7";
+    hash = "sha256-51uFAPR0xsY3z9rFc8SdSGu4ae/VzUmC1qC8RGdt48Y=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config qttools ];
+  nativeBuildInputs = [ cmake pandoc pkg-config qttools ];
 
   buildInputs = [ alsa-lib drumstick qtbase qtsvg ];
 

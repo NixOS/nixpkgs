@@ -2,29 +2,18 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "nasin-nanpa";
-  version = "2.5.1";
+  version = "3.1.0";
 
-  srcs = [
-    (fetchurl {
-      name = "nasin-nanpa.otf";
-      url = "https://github.com/ETBCOR/nasin-nanpa/releases/download/n${version}/nasin-nanpa-${version}.otf";
-      hash = "sha256-++uOrqFzQ6CB/OPEmBivpjMfAtFk3PSsCNpFBjOtGEg=";
-    })
-    (fetchurl {
-      name = "nasin-nanpa-lasina-kin.otf";
-      url = "https://github.com/ETBCOR/nasin-nanpa/releases/download/n${version}/nasin-nanpa-${version}-lasina-kin.otf";
-      hash = "sha256-4WIX74y2O4NaKi/JQrgTbOxlKDQKJ/F9wkQuoOdWuTI=";
-    })
-  ];
+  src = fetchurl {
+    url = "https://github.com/ETBCOR/nasin-nanpa/releases/download/n${version}/nasin-nanpa-${version}.otf";
+    hash = "sha256-remTvvOt7kpvTdq9H8tFI2yU+BtqePXlDDLQv/jtETU=";
+  };
 
   dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype
-    for src in $srcs; do
-        file=$(stripHash $src)
-        cp $src $out/share/fonts/opentype/$file
-    done
+    cp $src $out/share/fonts/opentype/nasin-nanpa.otf
   '';
 
   meta = with lib; {

@@ -18,6 +18,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Protobuf Plugin for Generating a Twirp Typescript Client";
+    mainProgram = "protoc-gen-twirp_typescript";
     homepage = "https://github.com/larrymyers/protoc-gen-twirp_typescript";
     license = licenses.mit;
     maintainers = with maintainers; [ jojosch dgollings ];

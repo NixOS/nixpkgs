@@ -1,24 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, docbook2x, libarchive, libcap_ng, lzo, zstd, docbook_xml_dtd_45 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, docbook2x, libarchive, libcap_ng, lzo, pkg-config, zstd, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
   pname = "icecream";
-  version = "2020-04-15";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "icecc";
     repo = pname;
-    rev = "c370c4d701d05e1872d44d1c1642a774a7f25807";
-    sha256 = "0ld2ihd39irlk4wshpbw7inmgyl3x0gbkgsy10izcm1wwfc0x2ac";
+    rev = version;
+    sha256 = "sha256-nBdUbWNmTxKpkgFM3qbooNQISItt5eNKtnnzpBGVbd4=";
   };
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook docbook2x ];
+  nativeBuildInputs = [ autoreconfHook docbook2x pkg-config ];
   buildInputs = [ libarchive libcap_ng lzo zstd docbook_xml_dtd_45 ];
 
   meta = with lib; {
     description = "Distributed compiler with a central scheduler to share build load";
     inherit (src.meta) homepage;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux ++ darwin;
   };

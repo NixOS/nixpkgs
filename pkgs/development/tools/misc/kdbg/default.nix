@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       intuitive interface for setting breakpoints, inspecting variables, and
       stepping through code.
     '';
+    mainProgram = "kdbg";
     license = licenses.gpl2;
     maintainers = [ maintainers.catern ];
   };

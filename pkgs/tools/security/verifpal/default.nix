@@ -29,6 +29,7 @@ buildGoModule rec {
   meta = {
     homepage = "https://verifpal.com/";
     description = "Cryptographic protocol analysis for students and engineers";
+    mainProgram = "verifpal";
     maintainers = with lib.maintainers; [ zimbatm ];
     license = with lib.licenses; [ gpl3 ];
   };

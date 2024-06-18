@@ -19,14 +19,16 @@ LATEST_TAG_RAWFILE=${WORKDIR}/latest_tag.json
 curl --silent -f ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     https://api.github.com/repos/k3s-io/k3s/releases > ${LATEST_TAG_RAWFILE}
 
-LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} | \
+LATEST_TAG_NAME=$(cat ${LATEST_TAG_RAWFILE} | \
+    jq -r 'map(select(.prerelease == false))' | \
+    jq 'map(.tag_name)' | \
     grep -v -e rc -e engine | tail -n +2 | head -n -1 | sed 's|[", ]||g' | sort -rV | grep -E "^v1\.${MINOR_VERSION}\." | head -n1)
 
 K3S_VERSION=$(echo ${LATEST_TAG_NAME} | sed 's/^v//')
 
 K3S_COMMIT=$(curl --silent -f ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-    https://api.github.com/repos/k3s-io/k3s/tags \
-    | jq -r "map(select(.name == \"${LATEST_TAG_NAME}\")) | .[0] | .commit.sha")
+    https://api.github.com/repos/k3s-io/k3s/git/refs/tags \
+    | jq -r "map(select(.ref == \"refs/tags/${LATEST_TAG_NAME}\")) | .[0] | .object.sha")
 
 K3S_REPO_SHA256=$(nix-prefetch-url --quiet --unpack https://github.com/k3s-io/k3s/archive/refs/tags/${LATEST_TAG_NAME}.tar.gz)
 
@@ -55,14 +57,14 @@ CHARTS_URL=https://k3s.io/k3s-charts/assets
 rm -f chart-versions.nix.update
 cat > chart-versions.nix.update <<EOF
 {
-    traefik-crd  = {
-        url = "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}";
-        sha256 = "$(nix-prefetch-url --quiet "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}")";
-    };
-    traefik = {
-        url = "${CHARTS_URL}/traefik/${CHART_FILES[1]}";
-        sha256 = "$(nix-prefetch-url --quiet "${CHARTS_URL}/traefik/${CHART_FILES[1]}")";
-    };
+  traefik-crd = {
+    url = "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}";
+    sha256 = "$(nix-prefetch-url --quiet "${CHARTS_URL}/traefik-crd/${CHART_FILES[0]}")";
+  };
+  traefik = {
+    url = "${CHARTS_URL}/traefik/${CHART_FILES[1]}";
+    sha256 = "$(nix-prefetch-url --quiet "${CHARTS_URL}/traefik/${CHART_FILES[1]}")";
+  };
 }
 EOF
 mv chart-versions.nix.update chart-versions.nix

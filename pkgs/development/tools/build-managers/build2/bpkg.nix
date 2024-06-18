@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "build2 package dependency manager";
+    mainProgram = "bpkg";
     # https://build2.org/bpkg/doc/bpkg.xhtml
     longDescription = ''
       The build2 package dependency manager is used to manipulate build

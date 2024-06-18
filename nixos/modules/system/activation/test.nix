@@ -5,7 +5,7 @@
 }:
 let
   node-forbiddenDependencies-fail = nixos ({ ... }: {
-    system.forbiddenDependenciesRegex = "-dev$";
+    system.forbiddenDependenciesRegexes = ["-dev$"];
     environment.etc."dev-dependency" = {
       text = "${expect.dev}";
     };
@@ -14,7 +14,7 @@ let
     boot.loader.grub.enable = false;
   });
   node-forbiddenDependencies-succeed = nixos ({ ... }: {
-    system.forbiddenDependenciesRegex = "-dev$";
+    system.forbiddenDependenciesRegexes = ["-dev$"];
     system.extraDependencies = [ expect.dev ];
     documentation.enable = false;
     fileSystems."/".device = "ignore-root-device";

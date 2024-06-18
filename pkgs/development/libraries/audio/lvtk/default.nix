@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A set C++ wrappers around the LV2 C API";
+    description = "Set C++ wrappers around the LV2 C API";
+    mainProgram = "ttl2c";
     homepage = "https://lvtk.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];

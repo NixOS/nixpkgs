@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Recharge the robot";
+    mainProgram = "orthorobot";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;

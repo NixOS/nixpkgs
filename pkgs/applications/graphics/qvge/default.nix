@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Qt Visual Graph Editor";
+    mainProgram = "qvgeapp";
     homepage = "https://github.com/ArsMasiuk/qvge";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, laszip
-, setuptools
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  laszip,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,18 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-StaYkUNY6loJbaUuabzszTINnd+zZ0gKXCteCG24Erc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
     laszip
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "laspy"
@@ -40,6 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Interface for reading/modifying/creating .LAS LIDAR files";
+    mainProgram = "laspy";
     homepage = "https://github.com/laspy/laspy";
     changelog = "https://github.com/laspy/laspy/blob/${version}/CHANGELOG.md";
     license = licenses.bsd2;

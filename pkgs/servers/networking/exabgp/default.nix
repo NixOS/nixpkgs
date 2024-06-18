@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "exabgp";
-  version = "4.2.21";
+  version = "4.2.22";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Exa-Networks";
     repo = "exabgp";
     rev = "refs/tags/${version}";
-    hash = "sha256-NlGE3yHUXPdxAMGhSaXMT2P1e7P+4AWg4lReP3f6Zx8=";
+    hash = "sha256-PrdCAmefKCBmbBFp04KiQGSsZZ4KNFk/ZtMedh9oow4=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "The BGP swiss army knife of networking";
+    description = "BGP swiss army knife of networking";
     homepage = "https://github.com/Exa-Networks/exabgp";
     changelog = "https://github.com/Exa-Networks/exabgp/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.bsd3;

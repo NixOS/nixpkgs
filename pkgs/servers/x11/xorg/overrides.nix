@@ -3,9 +3,9 @@
   automake, autoconf, libiconv, libtool, intltool, gettext, python3, perl,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
-  ncompress,
+  ncompress, updateAutotoolsGnuConfigScriptsHook,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt,
+  mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt, hwdata,
   ApplicationServices, Carbon, Cocoa, Xplugin,
   xorg, windows
 }:
@@ -408,19 +408,24 @@ self: super:
   });
 
   libpciaccess = super.libpciaccess.overrideAttrs (attrs: {
-    patches = attrs.patches or [] ++ [
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/commit/833c86ce15cee2a84a37ae71015f236fd32615d9.patch";
-        hash = "sha256-6koQV+Vse7/OWwuWYrWmBUebHBT+5F32Kkn9V9j+m+Q=";
-      })
-    ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
 
-    buildInputs = lib.optionals stdenv.hostPlatform.isNetBSD (with netbsd; [ libarch libpci ]);
+    buildInputs = attrs.buildInputs ++ [ zlib ]
+      ++ lib.optionals stdenv.hostPlatform.isNetBSD (with netbsd; [ libarch libpci ]);
+
+    mesonFlags = [
+      (lib.mesonOption "pci-ids" "${hwdata}/share/hwdata")
+      (lib.mesonEnable "zlib" true)
+    ];
 
     meta = attrs.meta // {
       # https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/blob/master/configure.ac#L108-114
       platforms = lib.fold (os: ps: ps ++ lib.platforms.${os}) []
         [ "cygwin" "freebsd" "linux" "netbsd" "openbsd" "illumos" ];
+      badPlatforms = [
+        # mandatory shared library
+        lib.systems.inspect.platformPatterns.isStatic
+      ];
     };
   });
 
@@ -556,7 +561,6 @@ self: super:
   xf86videoi128    = super.xf86videoi128.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videonewport = super.xf86videonewport.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videos3virge = super.xf86videos3virge.overrideAttrs (attrs: { meta = attrs.meta // { broken = true; }; });
-  xf86videosavage  = super.xf86videosavage.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videotga     = super.xf86videotga.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videov4l     = super.xf86videov4l.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videovoodoo  = super.xf86videovoodoo.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
@@ -902,6 +906,7 @@ self: super:
 
   lndir = super.lndir.overrideAttrs (attrs: {
     buildInputs = [];
+    nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
     preConfigure = ''
       export XPROTO_CFLAGS=" "
       export XPROTO_LIBS=" "

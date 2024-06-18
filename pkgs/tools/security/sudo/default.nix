@@ -14,6 +14,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sudo";
+  # be sure to check if nixos/modules/security/sudo.nix needs updating when bumping
+  # e.g. links to man pages, value constraints etc.
   version = "1.9.15p5";
 
   src = fetchurl {
@@ -72,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = { inherit (nixosTests) sudo; };
 
   meta = with lib; {
-    description = "A command to run commands as root";
+    description = "Command to run commands as root";
     longDescription =
       ''
         Sudo (su "do") allows a system administrator to delegate
@@ -83,8 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.sudo.ws/";
     # From https://www.sudo.ws/about/license/
     license = with licenses; [ sudo bsd2 bsd3 zlib ];
-    maintainers = with maintainers; [ delroth ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux ++ platforms.freebsd;
     mainProgram = "sudo";
   };
 })

@@ -1,6 +1,5 @@
 { lib
 , python310
-, fetchPypi
 , fetchFromGitHub
 , gdk-pixbuf
 , gnome
@@ -13,7 +12,7 @@
 , sqlite
 , tzdata
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , xvfb-run
 }:
 
@@ -48,7 +47,7 @@ in python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -91,6 +90,7 @@ in python.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
+    mainProgram = "pytrainer";
     maintainers = with maintainers; [ rycee dotlambda ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

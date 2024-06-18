@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, cython_3
-, fetchPypi
-, future
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, hatchling
-, hatch-vcs
-, toolz
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  future,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  hatchling,
+  hatch-vcs,
+  toolz,
 }:
 
 buildPythonPackage rec {
   pname = "in-n-out";
-  version = "0.1.9";
+  version = "0.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,27 +22,23 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "in_n_out";
     inherit version;
-    hash = "sha256-if65ROQg+vQtPCVCFFaBtNVxRDVZMsK4WWlfzcT5oto=";
+    hash = "sha256-Q83it96YHUGm1wYYore9mJSBCVkipT6tTcdfK71d/+o=";
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
-    future
-  ];
+  propagatedBuildInputs = [ future ];
 
   nativeCheckInputs = [
     pytestCheckHook
     toolz
   ];
 
-  pythonImportsCheck = [
-    "in_n_out"
-  ];
+  pythonImportsCheck = [ "in_n_out" ];
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.11") [
     # Fatal Python error

@@ -72,7 +72,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An MPD client based on rofi/fzf";
+    description = "MPD client based on rofi/fzf";
     homepage = "https://github.com/carnager/clerk";
     license = licenses.mit;
     maintainers = with maintainers; [ anderspapitto rewine ];

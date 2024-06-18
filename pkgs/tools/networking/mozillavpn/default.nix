@@ -16,6 +16,7 @@
 , qtnetworkauth
 , qtsvg
 , qttools
+, qtwayland
 , qtwebsockets
 , rustPlatform
 , rustc
@@ -26,13 +27,13 @@
 
 let
   pname = "mozillavpn";
-  version = "2.19.0";
+  version = "2.21.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-aXfxUtGm+vq8U3jYTxYhOP7UXL6ukCJgmGQO2Wsqobo=";
+    hash = "sha256-XBvKSgMuWgMuV+is2G028UNQ4hID7tKiHFuMdPOZcsI=";
   };
   patches = [ ];
 
@@ -46,19 +47,19 @@ let
     inherit src patches;
     name = "${pname}-${version}-extension-bridge";
     preBuild = "cd extension/bridge";
-    hash = "sha256-23GTXsbjL8qfGA5NdPlrbdaA8rg8vOZsZCXvevi7Chc=";
+    hash = "sha256-1BXlp9AC9oQo/UzCtgNWVv8Er2ERoDLKdlTYXLzodMQ=";
   };
   signatureDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-signature";
     preBuild = "cd signature";
-    hash = "sha256-TB172hVIilDTl+y0shNp55if+FhrXjWSaGNF7K6GSH8=";
+    hash = "sha256-GtkDkeFdPsLuTpZh5UqIhFMpzW3HMkbz7npryOQkkGw=";
   };
   qtgleanDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-qtglean";
     preBuild = "cd qtglean";
-    hash = "sha256-tfQ2ogSDDXNPeygBy+el+71iwcafSfY78hvYPHurKPE=";
+    hash = "sha256-HFmRcfxCcc83IPPIovbf3jNftp0olKQ6RzV8vPpCYAM=";
   };
 
 in
@@ -74,6 +75,7 @@ stdenv.mkDerivation {
     qtbase
     qtnetworkauth
     qtsvg
+    qtwayland
     qtwebsockets
   ];
   nativeBuildInputs = [
@@ -147,6 +149,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Client for the Mozilla VPN service";
+    mainProgram = "mozillavpn";
     homepage = "https://vpn.mozilla.org/";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ andersk ];

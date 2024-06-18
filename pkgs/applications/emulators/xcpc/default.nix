@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ++ optional motifSupport lesstif;
 
   meta = {
-    description = "A portable Amstrad CPC 464/664/6128 emulator written in C";
+    description = "Portable Amstrad CPC 464/664/6128 emulator written in C";
     homepage = "https://www.xcpc-emulator.net";
     license = licenses.gpl2Plus;
     maintainers = [ ];

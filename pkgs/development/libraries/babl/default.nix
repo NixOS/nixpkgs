@@ -1,30 +1,36 @@
 { stdenv
 , lib
-, fetchpatch
 , fetchurl
 , meson
 , ninja
 , pkg-config
+, gi-docgen
 , gobject-introspection
 , lcms2
 , vala
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "babl";
-  version = "0.1.106";
+  version = "0.1.108";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor version}/babl-${version}.tar.xz";
-    hash = "sha256-0yUTXTME8IjBNMxiABOs8DXeLl0SWlCi2RBU5zd8QV8=";
+    url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor finalAttrs.version}/babl-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Jt7+neqresTQ4HbKtJwqDW69DfDDH9IJklpfB+3uFHU=";
   };
+
+  patches = [
+    # Allow overriding path to dev output that will be hardcoded e.g. in pkg-config file.
+    ./dev-prefix.patch
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    gi-docgen
     gobject-introspection
     vala
   ];
@@ -33,12 +39,22 @@ stdenv.mkDerivation rec {
     lcms2
   ];
 
+  mesonFlags = [
+    "-Dprefix-dev=${placeholder "dev"}"
+  ];
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   meta = with lib; {
     description = "Image pixel format conversion library";
+    mainProgram = "babl";
     homepage = "https://gegl.org/babl/";
     changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/BABL_${lib.replaceStrings [ "." ] [ "_" ] version}/NEWS";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };
-}
+})

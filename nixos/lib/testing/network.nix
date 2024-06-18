@@ -5,7 +5,6 @@ let
     attrNames concatMap concatMapStrings flip forEach head
     listToAttrs mkDefault mkOption nameValuePair optionalString
     range toLower types zipListsWith zipLists
-    mdDoc
     ;
 
   nodeNumbers =
@@ -89,7 +88,7 @@ let
         default = name;
         # We need to force this in specilisations, otherwise it'd be
         # readOnly = true;
-        description = mdDoc ''
+        description = ''
           The `name` in `nodes.<name>`; stable across `specialisations`.
         '';
       };
@@ -98,7 +97,7 @@ let
         type = types.int;
         readOnly = true;
         default = nodeNumbers.${config.virtualisation.test.nodeName};
-        description = mdDoc ''
+        description = ''
           A unique number assigned for each node in `nodes`.
         '';
       };

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "NanoComp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EXEt7l69etcBdDdEDlD1ODOdhTBZCVjgY1jhRUDd/W0=";
+    hash = "sha256-HV8xylK2IOvbONYGgyaqAabp6xA7/uvN4DU7upIlZh0=";
   };
 
   # File is missing in the git checkout but required by autotools
@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ blas lapack ];
 
-  configureFlags = [ "--enable-shared" ];
+  configureFlags = [
+    "--enable-shared"
+    "--enable-maintainer-mode"
+  ];
 
   meta = with lib; {
     description = "Harmonic inversion algorithm of Mandelshtam: decompose signal into sum of decaying sinusoids";

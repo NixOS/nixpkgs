@@ -16,8 +16,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/alvr-${version} $out/bin/alvr
-
     install -Dm444 ${appimageContents}/alvr.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/alvr.desktop \
       --replace 'Exec=alvr_dashboard' 'Exec=alvr'

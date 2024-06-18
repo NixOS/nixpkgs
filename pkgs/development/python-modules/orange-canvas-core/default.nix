@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, anyqt
-, cachecontrol
-, commonmark
-, dictdiffer
-, docutils
-, filelock
-, lockfile
-, numpy
-, pytest-qt
-, pytestCheckHook
-, qasync
-, qt5
-, requests-cache
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  anyqt,
+  cachecontrol,
+  commonmark,
+  dictdiffer,
+  docutils,
+  filelock,
+  lockfile,
+  numpy,
+  pytest-qt,
+  pytestCheckHook,
+  qasync,
+  qt5,
+  requests-cache,
 }:
 
 buildPythonPackage rec {
@@ -53,9 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    "orangecanvas/canvas/items/tests/test_graphicstextitem.py"
-  ];
+  disabledTestPaths = [ "orangecanvas/canvas/items/tests/test_graphicstextitem.py" ];
 
   meta = {
     description = "Orange framework for building graphical user interfaces for editing workflows";

@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A port of parts of the flamegraph toolkit to Rust";
+    description = "Port of parts of the flamegraph toolkit to Rust";
     homepage = "https://github.com/jonhoo/inferno";
     changelog = "https://github.com/jonhoo/inferno/blob/v${version}/CHANGELOG.md";
     license = licenses.cddl;

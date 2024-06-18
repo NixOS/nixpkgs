@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-core
-, mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-core,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -31,18 +32,14 @@ buildPythonPackage rec {
   ];
 
   # Client tests require credentials
-  disabledTests = [
-    "client_options"
-  ];
+  disabledTests = [ "client_options" ];
 
   # prevent google directory from shadowing google imports
   preCheck = ''
     rm -r google
   '';
 
-  pythonImportsCheck = [
-    "google.cloud.runtimeconfig"
-  ];
+  pythonImportsCheck = [ "google.cloud.runtimeconfig" ];
 
   meta = with lib; {
     description = "Google Cloud RuntimeConfig API client library";

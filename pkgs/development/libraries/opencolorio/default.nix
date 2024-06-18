@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
     # Workaround for https://gitlab.kitware.com/cmake/cmake/-/issues/25200.
     # Needed for zlib >= 1.3 && cmake < 3.27.4.
     ./broken-cmake-zlib-version.patch
+    # Fix incorrect line number in test
+    ./line-numbers.patch
   ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -86,7 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://opencolorio.org";
-    description = "A color management framework for visual effects and animation";
+    description = "Color management framework for visual effects and animation";
     license = licenses.bsd3;
     maintainers = [ maintainers.rytone ];
     platforms = platforms.unix;

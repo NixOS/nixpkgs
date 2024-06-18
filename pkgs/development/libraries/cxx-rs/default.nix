@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Safe FFI between Rust and C++";
+    mainProgram = "cxxbridge";
     homepage = "https://github.com/dtolnay/cxx";
     license = licenses.mit;
     maintainers = with maintainers; [ centromere ];

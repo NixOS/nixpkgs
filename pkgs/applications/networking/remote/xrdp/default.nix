@@ -19,31 +19,20 @@
 , lame
 , pixman
 , libjpeg_turbo
+, _experimental-update-script-combinators
+, gitUpdater
 }:
 
 let
-  version = "0.9.24";
-  patchedXrdpSrc = applyPatches {
-    patches = [ ./dynamic_config.patch ];
-    name = "xrdp-patched-${version}";
-    src = fetchFromGitHub {
-      owner = "neutrinolabs";
-      repo = "xrdp";
-      rev = "v${version}";
-      fetchSubmodules = true;
-      hash = "sha256-Kvj72l+jmoad6VgmCYW2KtQAbJMJ8AZjNIYJ5lUNzRM=";
-    };
-  };
-
   xorgxrdp = stdenv.mkDerivation rec {
     pname = "xorgxrdp";
-    version = "0.9.19";
+    version = "0.9.20";
 
     src = fetchFromGitHub {
       owner = "neutrinolabs";
       repo = "xorgxrdp";
       rev = "v${version}";
-      hash = "sha256-WI1KyJDQkmNHwweZMbNd2KUfawaieoGMDMQfeD12cZs=";
+      hash = "sha256-cAAWk/GqR5zJmh7EAzX3qJiYNl/RrDWdncdFeqsFIaU=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm ];
@@ -62,16 +51,29 @@ let
 
     preConfigure = "./bootstrap";
 
-    configureFlags = [ "XRDP_CFLAGS=-I${patchedXrdpSrc}/common"  ];
+    configureFlags = [ "XRDP_CFLAGS=-I${xrdp.src}/common"  ];
 
     enableParallelBuilding = true;
+
+    passthru.updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
-  xrdp = stdenv.mkDerivation {
-    inherit version;
+  xrdp = stdenv.mkDerivation rec {
     pname = "xrdp";
+    version = "0.9.25.1";
 
-    src = patchedXrdpSrc;
+    src = applyPatches {
+      inherit version;
+      patches = [ ./dynamic_config.patch ];
+      name = "xrdp-patched-${version}";
+      src = fetchFromGitHub {
+        owner = "neutrinolabs";
+        repo = "xrdp";
+        rev = "v${version}";
+        fetchSubmodules = true;
+        hash = "sha256-oAs0oWkCyj3ObdJuHLfT25ZzkTrxNAXDiFU64OOP4Ow=";
+      };
+    };
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm perl ];
 
@@ -150,8 +152,17 @@ let
 
     enableParallelBuilding = true;
 
+    passthru = {
+      inherit xorgxrdp;
+      updateScript = _experimental-update-script-combinators.sequence (map (item: item.command) [
+        (gitUpdater { rev-prefix = "v"; attrPath = "xrdp.src"; ignoredVersions = [ "beta" ]; })
+        { command = ["rm" "update-git-commits.txt"]; }
+        (gitUpdater { rev-prefix = "v"; attrPath = "xrdp.xorgxrdp"; })
+      ]);
+    };
+
     meta = with lib; {
-      description = "An open source RDP server";
+      description = "Open source RDP server";
       homepage = "https://github.com/neutrinolabs/xrdp";
       license = licenses.asl20;
       maintainers = with maintainers; [ chvp lucasew ];

@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pony, whoosh }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pony,
+  whoosh,
+}:
 
 buildPythonPackage rec {
   pname = "ponywhoosh";

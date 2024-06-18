@@ -16,7 +16,7 @@
 , lib
 , stdenv
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook3
 , xapp
 , xorg
 , libexecinfo
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     libexecinfo
     python3
     pkg-config
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-session";
-    description = "The Cinnamon session manager";
+    description = "Cinnamon session manager";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

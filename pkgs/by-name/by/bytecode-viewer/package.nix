@@ -68,7 +68,7 @@ maven.buildMavenPackage rec {
 
   meta = with lib; {
     homepage = "https://bytecodeviewer.com";
-    description = "A lightweight user-friendly Java/Android Bytecode Viewer, Decompiler & More";
+    description = "Lightweight user-friendly Java/Android Bytecode Viewer, Decompiler & More";
     mainProgram = "bytecode-viewer";
     maintainers = with maintainers; [ shard7 d3vil0p3r ];
     platforms = platforms.unix;

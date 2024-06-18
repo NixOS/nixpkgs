@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false; # tests require interactive terminal
 
   meta = with lib; {
-    description = "A tool for comparing Git branches";
+    description = "Tool for comparing Git branches";
     homepage = "https://github.com/MarkForged/GOMP";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];

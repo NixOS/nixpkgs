@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.levien.com/type/myfonts/inconsolata.html";
-    description = "A monospace font for both screen and print";
+    description = "Monospace font for both screen and print";
     maintainers = with maintainers; [ appsforartists mikoim raskin ];
     license = licenses.ofl;
     platforms = platforms.all;

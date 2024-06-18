@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, rapidjson
-, pytestCheckHook
-, pytz
-, glibcLocales
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  rapidjson,
+  pytestCheckHook,
+  pytz,
+  setuptools,
+  substituteAll,
 }:
 
 let
@@ -25,35 +27,37 @@ let
         hash = "sha256-BjSZEwfCXA/9V+kxQ/2JPWbc26jQn35CfN8+8NW24s4=";
       })
     ];
-    # valgrind_unittest failed
-    cmakeFlags = old.cmakeFlags ++ [ "-DCMAKE_CTEST_ARGUMENTS=-E;valgrind_unittest" ];
   });
-in buildPythonPackage rec {
-  version = "1.14";
+in
+buildPythonPackage rec {
+  version = "1.16";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.8";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-rapidjson";
     repo = "python-rapidjson";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fCC6jYUIB89HlEnbsmL0MeCBOO4NAZtePuPgZKYxoM8=";
+    hash = "sha256-4Z8cNu6tK5/yAu6b9Vb/EdXQj+fQgeT0QIszTEUurVM=";
   };
 
-  setupPyBuildFlags = [
-    "--rj-include-dir=${lib.getDev rapidjson'}/include"
+  patches = [
+    (substituteAll {
+      src = ./rapidjson-include-dir.patch;
+      rapidjson = lib.getDev rapidjson';
+    })
   ];
+
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytz
   ];
 
-  disabledTestPaths = [
-    "benchmarks"
-  ];
+  disabledTestPaths = [ "benchmarks" ];
 
   meta = with lib; {
     changelog = "https://github.com/python-rapidjson/python-rapidjson/blob/${src.rev}/CHANGES.rst";

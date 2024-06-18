@@ -10,7 +10,7 @@ in stdenv.mkDerivation {
   };
 
   meta = {
-    description = "A tool for #! scripts with more than one argument";
+    description = "Tool for #! scripts with more than one argument";
 
     homepage = "https://github.com/shlevy/long-shebang";
 

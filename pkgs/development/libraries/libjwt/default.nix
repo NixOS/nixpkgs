@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libjwt";
-  version = "1.16.0";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "benmcollins";
     repo = "libjwt";
     rev = "v${version}";
-    sha256 = "sha256-5hbmEen31lB6Xdv5WU+8InKa0+1OsuB8QG0jVa1+a2w=";
+    sha256 = "sha256-yMnk4gfUa5c6Inppz9I1h6it41nuJ4By3eDO0YrdB2Y=";
   };
 
   buildInputs = [ jansson openssl ];

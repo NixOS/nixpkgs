@@ -17,7 +17,6 @@
 , nodejs
 , yarn
 , yarn2nix-moretea
-, v8
 , cacert
 , redis
 }:
@@ -83,7 +82,7 @@ let
       };
       mini_racer = attrs: {
         buildFlags = [
-          "--with-v8-dir=\"${v8}\""
+          "--with-v8-dir=\"${nodejs.libv8}\""
         ];
         dontBuild = false;
         postPatch = ''
@@ -161,7 +160,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "Zammad, a web-based, open source user support/ticketing solution.";
+    description = "Zammad, a web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
     license = licenses.agpl3Plus;
     platforms = [ "x86_64-linux" "aarch64-linux" ];

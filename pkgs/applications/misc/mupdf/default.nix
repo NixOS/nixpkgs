@@ -155,14 +155,14 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/pkgconfig"
     cat >"$out/lib/pkgconfig/mupdf.pc" <<EOF
     prefix=$out
-    libdir=$out/lib
-    includedir=$out/include
+    libdir=\''${prefix}/lib
+    includedir=\''${prefix}/include
 
     Name: mupdf
     Description: Library for rendering PDF documents
     Version: ${version}
-    Libs: -L$out/lib -lmupdf
-    Cflags: -I$dev/include
+    Libs: -L\''${libdir} -lmupdf
+    Cflags: -I\''${includedir}
     EOF
 
     moveToOutput "bin" "$bin"

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
   # Tests are not shipped and the source not tagged
   doCheck = false;
 
-  pythonImportsCheck = [
-    "stubserver"
-  ];
+  pythonImportsCheck = [ "stubserver" ];
 
   meta = with lib; {
     description = "Web and FTP server for use in unit and7or acceptance tests";

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     license = licenses.mit;
     platforms = platforms.linux;
-    description = "An efficient dynamic menu for wayland (wlroots)";
+    description = "Efficient dynamic menu for wayland (wlroots)";
     homepage = "https://github.com/nyyManni/dmenu-wayland";
     maintainers = with maintainers; [ rewine ];
     mainProgram = "dmenu-wl";

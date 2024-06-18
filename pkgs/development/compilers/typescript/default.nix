@@ -2,20 +2,20 @@
 
 buildNpmPackage rec {
   pname = "typescript";
-  version = "5.3.3";
+  version = "5.4.5";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "TypeScript";
     rev = "v${version}";
-    hash = "sha256-gZdS4TGbafaOdNc1ZB24uAjMu9g0hef6mEsOr/dPqvY=";
+    hash = "sha256-W2ulYb06K4VSlFTYOmXTBHrjWXnQdDGzkwBxvl+QJWo=";
   };
 
   patches = [
     ./disable-dprint-dstBundler.patch
   ];
 
-  npmDepsHash = "sha256-gj59jjko13UBPqqy/3z1KgVMFUQPUAIg47UTTaseF+w=";
+  npmDepsHash = "sha256-T0WfJaSVzwbNbTL1AiuzMUW/3MKMOZo14v4Ut9Iqxas=";
 
   passthru.tests = {
     version = testers.testVersion {
@@ -24,11 +24,11 @@ buildNpmPackage rec {
   };
 
   meta = with lib; {
-    description = "A superset of JavaScript that compiles to clean JavaScript output";
+    description = "Superset of JavaScript that compiles to clean JavaScript output";
     homepage = "https://www.typescriptlang.org/";
     changelog = "https://github.com/microsoft/TypeScript/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "tsc";
   };
 }

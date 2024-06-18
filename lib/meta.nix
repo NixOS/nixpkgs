@@ -26,8 +26,12 @@ rec {
   dontDistribute = drv: addMetaAttrs { hydraPlatforms = []; } drv;
 
 
-  /* Change the symbolic name of a package for presentation purposes
-     (i.e., so that nix-env users can tell them apart).
+  /*
+  Change the [symbolic name of a derivation](https://nixos.org/manual/nix/stable/language/derivations.html#attr-name).
+
+  :::{.warning}
+  Dependent derivations will be rebuilt when the symbolic name is changed.
+  :::
   */
   setName = name: drv: drv // {inherit name;};
 
@@ -87,6 +91,10 @@ rec {
 
      We can inject these into a pattern for the whole of a structured platform,
      and then match that.
+
+     Example:
+      lib.meta.platformMatch { system = "aarch64-darwin"; } "aarch64-darwin"
+      => true
   */
   platformMatch = platform: elem: (
     # Check with simple string comparison if elem was a string.
@@ -112,6 +120,10 @@ rec {
           platform, or `meta.platforms` is not present.
 
        2. None of `meta.badPlatforms` pattern matches the given platform.
+
+     Example:
+       lib.meta.availableOn { system = "aarch64-darwin"; } pkg.zsh
+       => true
   */
   availableOn = platform: pkg:
     ((!pkg?meta.platforms) || any (platformMatch platform) pkg.meta.platforms) &&

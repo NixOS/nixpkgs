@@ -6,68 +6,58 @@
 , ninja
 , pkg-config
 , vala
-, desktop-file-utils
 , gtk3
 , libexif
 , libgee
 , libhandy
-, geocode-glib
+, libportal-gtk3
+, geocode-glib_2
 , gexiv2
 , libgphoto2
 , granite
 , gst_all_1
 , libgudev
-, json-glib
 , libraw
-, librest
-, libsoup
 , sqlite
 , python3
-, webkitgtk
 , libwebp
-, appstream
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.8.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "photos";
     rev = version;
-    sha256 = "sha256-VhJggQMy1vk21zNA5pR4uAPGCwnIxLUHVO58AZs+h6s=";
+    sha256 = "sha256-EULNLtoZ8M68cp1DT11G6O2TONH/0DXWNX0k4AUqa/w=";
   };
 
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
     meson
     ninja
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    geocode-glib
+    geocode-glib_2
     gexiv2
     granite
     gtk3
-    json-glib
     libexif
     libgee
     libgphoto2
     libgudev
     libhandy
+    libportal-gtk3
     libraw
-    librest
-    libsoup
     libwebp
     sqlite
-    webkitgtk
   ] ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-base
@@ -75,10 +65,6 @@ stdenv.mkDerivation rec {
     gst-plugins-ugly
     gstreamer
   ]);
-
-  mesonFlags = [
-    "-Dplugins=false"
-  ];
 
   postPatch = ''
     chmod +x meson/post_install.py

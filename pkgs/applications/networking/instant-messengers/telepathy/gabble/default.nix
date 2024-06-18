@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Jabber/XMPP connection manager for the Telepathy framework";
+    mainProgram = "telepathy-gabble-xmpp-console";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-gabble/";
     license = licenses.lgpl21Plus;
     platforms = lib.platforms.unix;

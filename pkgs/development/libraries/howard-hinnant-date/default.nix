@@ -33,6 +33,13 @@ stdenv.mkDerivation rec {
       src = ./make-zoneinfo-available.diff;
       inherit tzdata;
     })
+    # The reported version to cmake's find_package() is 3.0.0, but the actual
+    # version is 3.0.1. This patch fixes that.
+    (fetchpatch {
+      name = "fix-cmake-version.patch";
+      url = "https://github.com/HowardHinnant/date/commit/2e19c006e2218447ee31f864191859517603f59f.patch";
+      hash = "sha256-SRAWrwv64ap3Qh3RlhwqgS0L2YsrjqVSgw6iH3KlWvk=";
+    })
   ];
 
   # Tweaks to fix undefined variable substitutions
@@ -56,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     license = licenses.mit;
-    description = "A date and time library based on the C++11/14/17 <chrono> header";
+    description = "Date and time library based on the C++11/14/17 <chrono> header";
     homepage = "https://github.com/HowardHinnant/date";
     platforms = platforms.unix;
     maintainers = with maintainers; [ r-burns ];

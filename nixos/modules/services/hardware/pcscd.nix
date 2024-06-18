@@ -3,6 +3,7 @@
 with lib;
 
 let
+  cfg = config.services.pcscd;
   cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
 
   package = if config.security.polkit.enable
@@ -17,13 +18,13 @@ let
 in
 {
   options.services.pcscd = {
-    enable = mkEnableOption (lib.mdDoc "PCSC-Lite daemon");
+    enable = mkEnableOption "PCSC-Lite daemon, to access smart cards using SCard API (PC/SC)";
 
     plugins = mkOption {
       type = types.listOf types.package;
       defaultText = literalExpression "[ pkgs.ccid ]";
       example = literalExpression "[ pkgs.pcsc-cyberjack ]";
-      description = lib.mdDoc "Plugin packages to be used for PCSC-Lite.";
+      description = "Plugin packages to be used for PCSC-Lite.";
     };
 
     readerConfig = mkOption {
@@ -35,11 +36,17 @@ in
         LIBPATH           /path/to/serial_reader.so
         CHANNELID         1
       '';
-      description = lib.mdDoc ''
+      description = ''
         Configuration for devices that aren't hotpluggable.
 
         See {manpage}`reader.conf(5)` for valid options.
       '';
+    };
+
+    extraArgs = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Extra command line arguments to be passed to the PCSC daemon.";
     };
   };
 
@@ -64,7 +71,7 @@ in
       # around it, we force the path to the cfgFile.
       #
       # https://github.com/NixOS/nixpkgs/issues/121088
-      serviceConfig.ExecStart = [ "" "${package}/bin/pcscd -f -x -c ${cfgFile}" ];
+      serviceConfig.ExecStart = [ "" "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}" ];
     };
   };
 }

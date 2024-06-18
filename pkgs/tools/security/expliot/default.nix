@@ -71,6 +71,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "IoT security testing and exploitation framework";
+    mainProgram = "expliot";
     longDescription = ''
       EXPLIoT is a Framework for security testing and exploiting IoT
       products and IoT infrastructure. It provides a set of plugins

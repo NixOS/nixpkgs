@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -28,22 +29,16 @@ buildPythonPackage rec {
       --replace "assertRaisesRegexp" "assertRaisesRegex"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   checkInputs = [
     mock
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "parameterized/test.py"
-  ];
+  pytestFlagsArray = [ "parameterized/test.py" ];
 
-  pythonImportsCheck = [
-    "parameterized"
-  ];
+  pythonImportsCheck = [ "parameterized" ];
 
   meta = with lib; {
     description = "Parameterized testing with any Python test framework";

@@ -1,28 +1,29 @@
-{ ansicolors
-, attrs
-, autobahn
-, buildPythonPackage
-, fetchFromGitHub
-, jinja2
-, lib
-, mock
-, openssh
-, packaging
-, pexpect
-, psutil
-, pyserial
-, pytestCheckHook
-, pytest-dependency
-, pytest-mock
-, pythonRelaxDepsHook
-, pyudev
-, pyusb
-, pyyaml
-, requests
-, setuptools
-, setuptools-scm
-, wheel
-, xmodem
+{
+  ansicolors,
+  attrs,
+  autobahn,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  lib,
+  mock,
+  openssh,
+  packaging,
+  pexpect,
+  psutil,
+  pyserial,
+  pytestCheckHook,
+  pytest-dependency,
+  pytest-mock,
+  pythonRelaxDepsHook,
+  pyudev,
+  pyusb,
+  pyyaml,
+  requests,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  xmodem,
 }:
 
 buildPythonPackage rec {
@@ -72,9 +73,7 @@ buildPythonPackage rec {
     "xmodem"
   ];
 
-  pythonRemoveDeps = [
-    "pyserial-labgrid"
-  ];
+  pythonRemoveDeps = [ "pyserial-labgrid" ];
 
   nativeCheckInputs = [
     mock

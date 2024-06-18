@@ -1,11 +1,12 @@
-{ autoPatchelfHook
-, buildPythonPackage
-, fetchPypi
-, lib
-, ml-dtypes
-, numpy
-, python
-, stdenv
+{
+  autoPatchelfHook,
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  ml-dtypes,
+  numpy,
+  python,
+  stdenv,
 }:
 
 let
@@ -36,7 +37,9 @@ buildPythonPackage rec {
     abi = "cp${pythonVersionNoDot}";
     dist = "cp${pythonVersionNoDot}";
     platform = systemToPlatform.${stdenv.system} or (throw "unsupported system");
-    hash = hashes."${pythonVersionNoDot}-${stdenv.system}" or (throw "unsupported system/python version combination");
+    hash =
+      hashes."${pythonVersionNoDot}-${stdenv.system}"
+        or (throw "unsupported system/python version combination");
   };
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];

@@ -19,6 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Generate a Nix expression to fetch swiftpm dependencies";
+    mainProgram = "swiftpm2nix";
     maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
     platforms = lib.platforms.all;
   };

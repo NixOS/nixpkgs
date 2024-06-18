@@ -21,11 +21,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn";
-  version = "2.6.9";
+  version = "2.6.10";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/openvpn-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4I0UfhW0UI380dZhih8h8UlfmBeo2twe3fBTL6EW1+M=";
+    hash = "sha256-GZO7t7nttDBibqokVz+IH9PfZC9Cf8uCSxrtH8obzJs=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A robust and highly flexible tunneling application";
+    description = "Robust and highly flexible tunneling application";
     downloadPage = "https://openvpn.net/community-downloads/";
     homepage = "https://openvpn.net/";
     license = licenses.gpl2Only;

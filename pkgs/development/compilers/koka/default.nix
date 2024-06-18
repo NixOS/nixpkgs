@@ -2,6 +2,7 @@
 , pkgsHostTarget
 , cmake
 , makeWrapper
+, fetchpatch
 , mkDerivation
 , fetchFromGitHub
 , alex
@@ -31,12 +32,12 @@
 }:
 
 let
-  version = "3.1.0";
+  version = "3.1.2";
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
-    sha256 = "sha256-Twm2Hr8BQ0xTdA30e2Az/57525jTUkmv2Zs/+SNiQns=";
+    sha256 = "sha256-BNkMtYf5maWtKEZzob+218ke1SIkrP7/nboQ2sZKkxI=";
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {

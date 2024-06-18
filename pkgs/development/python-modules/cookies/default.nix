@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # https://gitlab.com/sashahart/cookies/-/issues/6

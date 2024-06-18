@@ -1,30 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, cython
-, gfortran
-, git
-, meson-python
-, pkg-config
-, blas
-, lapack
-, numpy
-, setuptools
-, wheel
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cython,
+  gfortran,
+  git,
+  meson-python,
+  pkg-config,
+  blas,
+  lapack,
+  numpy,
+  setuptools,
+  wheel,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-misc";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "scikit-misc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XV3s+y3JdMr1770S91ek6Y7MqvTg7/2cphLQldUPe5s=";
+    hash = "sha256-2L30hvKbFqIGlSEbzc1HvHybBqDGldJfZoUpqJJOv2Q=";
   };
 
   postPatch = ''
@@ -51,9 +51,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   buildInputs = [
     blas
@@ -65,22 +63,16 @@ buildPythonPackage rec {
     "-Dlapack=${lapack.pname}"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # can not run tests from source directory
   preCheck = ''
     cd "$(mktemp -d)"
   '';
 
-  pytestFlagsArray = [
-    "--pyargs skmisc"
-  ];
+  pytestFlagsArray = [ "--pyargs skmisc" ];
 
-  pythonImportsCheck = [
-    "skmisc"
-  ];
+  pythonImportsCheck = [ "skmisc" ];
 
   meta = with lib; {
     description = "Miscellaneous tools for scientific computing";

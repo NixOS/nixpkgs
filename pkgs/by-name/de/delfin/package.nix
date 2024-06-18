@@ -21,28 +21,21 @@
 
 stdenv.mkDerivation rec {
   pname = "delfin";
-  version = "0.3.0";
+  version = "0.4.5";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "avery42";
     repo = "delfin";
     rev = "v${version}";
-    hash = "sha256-1Q3Aywf80CCXxorWSymwxJwMU1I4k7juDoWG5J18AXY=";
+    hash = "sha256-iqibdVMf4RBl/EuFvE6tEPDliYmRtIYCW/mO+nNKcWU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-/RZD4b7hrbC1Z5MtHDdib5TFEmxAh9odjNPo4m+FqK4=";
+    hash = "sha256-2V2jx78S0Gj4/w3oduH/s7Pd6XG/GCs4lwhFCdGVdd8=";
   };
-
-  # upstream pinned the linker to clang/mold through 0.3.0, unnecessarily.
-  # remove this patch for version > 0.3.0.
-  # see: <https://codeberg.org/avery42/delfin/commit/e6deee77e9a6a6ba2425d1cc88dcbdeb471d1fdc>
-  postPatch = ''
-    rm .cargo/config.toml
-  '';
 
   nativeBuildInputs = [
     appstream
@@ -77,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Stream movies and TV shows from Jellyfin";
     homepage = "https://www.delfin.avery.cafe/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ colinsane ];
+    maintainers = with maintainers; [ colinsane avery ];
     mainProgram = "delfin";
     platforms = platforms.linux;
   };

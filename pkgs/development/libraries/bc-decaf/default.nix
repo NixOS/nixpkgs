@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_STATIC=NO" "-DENABLE_STRICT=NO" ];
 
   meta = with lib; {
-    description = "Elliptic curve library supporting Ed448-Goldilocks and Curve25519. Belledonne Communications' fork for Linphone.";
+    description = "Elliptic curve library supporting Ed448-Goldilocks and Curve25519. Belledonne Communications' fork for Linphone";
     homepage = "https://gitlab.linphone.org/BC/public/bctoolbox";
     license = licenses.mit;
     maintainers = with maintainers; [ thibaultlemaire ];

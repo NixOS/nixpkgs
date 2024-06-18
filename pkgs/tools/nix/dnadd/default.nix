@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/joelancaster/dnadd";
     description = "Adds packages declaratively on the command line";
+    mainProgram = "dnadd";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ joelancaster ];
   };

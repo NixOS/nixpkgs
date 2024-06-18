@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/bin";
 
   meta = with lib; {
-    description = "A build tool for OCaml";
+    description = "Build tool for OCaml";
     longDescription = ''
       ocp-build is a build system for OCaml application, based on simple
       descriptions of packages. ocp-build combines the descriptions of

@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, dask
-, fetchFromGitHub
-, matplotlib
-, pint
-, pooch
-, pytestCheckHook
-, pythonOlder
-, regex
-, rich
-, scipy
-, setuptools
-, setuptools-scm
-, shapely
-, wheel
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  dask,
+  fetchFromGitHub,
+  matplotlib,
+  pint,
+  pooch,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
+  rich,
+  scipy,
+  setuptools,
+  setuptools-scm,
+  shapely,
+  wheel,
+  xarray,
 }:
 
 buildPythonPackage rec {
   pname = "cf-xarray";
-  version = "0.8.8";
+  version = "0.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-memz0VDhxnSHOFaEhFYy/sqRifcu905EGovGduS0YBQ=";
+    hash = "sha256-Og84lB99576G3IZz8LNafF86TyYP+ooe2tL8wb60RPw=";
   };
 
   nativeBuildInputs = [
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     xarray
   ];
 
-  propagatedBuildInputs = [
-    xarray
-  ];
+  propagatedBuildInputs = [ xarray ];
 
   passthru.optional-dependencies = {
     all = [
@@ -59,9 +58,7 @@ buildPythonPackage rec {
     scipy
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "cf_xarray"
-  ];
+  pythonImportsCheck = [ "cf_xarray" ];
 
   disabledTestPaths = [
     # Tests require network access
@@ -70,7 +67,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "An accessor for xarray objects that interprets CF attributes";
+    description = "Accessor for xarray objects that interprets CF attributes";
     homepage = "https://github.com/xarray-contrib/cf-xarray";
     changelog = "https://github.com/xarray-contrib/cf-xarray/releases/tag/v${version}";
     license = licenses.asl20;

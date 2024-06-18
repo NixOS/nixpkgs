@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , pkg-config # needed to find minizip
 , SDL2
 , SDL2_image
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "widelands";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "widelands";
     repo = "widelands";
     rev = "v${version}";
-    sha256 = "sha256-fe1fey34b6T1+kqMa22STROu7dagQJtg24nW2jhVix8=";
+    sha256 = "sha256-V7eappIMEQMNbf9EGQhv71Fwz0wH679ifi/qAHWwMNU=";
   };
 
   postPatch = ''
@@ -45,6 +44,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Wno-dev" # dev warnings are only needed for upstream development
+    "-DCMAKE_BUILD_TYPE=Release"
     "-DWL_INSTALL_BASEDIR=${placeholder "out"}/share/widelands" # for COPYING, Changelog, etc.
     "-DWL_INSTALL_DATADIR=${placeholder "out"}/share/widelands" # for game data
     "-DWL_INSTALL_BINDIR=${placeholder "out"}/bin"
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
       Settlers II". It has a single player campaign mode, as well as a networked
       multiplayer mode.
     '';
-    changelog = "https://github.com/widelands/widelands/releases/tag/v1.1";
+    changelog = "https://github.com/widelands/widelands/releases/tag/v${version}";
     mainProgram = "widelands";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin jcumming ];

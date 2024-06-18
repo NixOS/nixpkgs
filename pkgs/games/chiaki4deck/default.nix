@@ -1,38 +1,54 @@
 { lib
 , fetchFromGitHub
-, mkDerivation
+, stdenv
 , cmake
 , pkg-config
 , protobuf
 , python3
 , ffmpeg_6
 , libopus
+, wrapQtAppsHook
 , qtbase
 , qtmultimedia
 , qtsvg
+, qtwayland
+, qtdeclarative
+, qtwebengine
 , SDL2
 , libevdev
 , udev
+, curlFull
 , hidapi
+, json_c
 , fftw
+, miniupnpc
 , speexdsp
+, libplacebo
+, vulkan-loader
+, vulkan-headers
+, libunwind
+, shaderc
+, lcms2
+, libdovi
+, xxHash
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "chiaki4deck";
-  version = "1.5.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-XNpD9JPbckiq0HgpV/QJR8hDmvGTptxBMoGihHz44lc=";
+    hash = "sha256-gh+ZOsAOi5mKZjs7B1xh07vatoD8F2j2HVxOT/fKDEo=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
     protobuf
     python3
     python3.pkgs.wrapPython
@@ -46,13 +62,44 @@ mkDerivation rec {
     qtbase
     qtmultimedia
     qtsvg
+    qtdeclarative
+    qtwayland
+    qtwebengine
     protobuf
     SDL2
+    curlFull
     hidapi
+    json_c
     fftw
+    miniupnpc
     libevdev
     udev
     speexdsp
+    libplacebo
+    vulkan-headers
+    libunwind
+    shaderc
+    lcms2
+    libdovi
+    xxHash
+  ];
+
+  # handle cmake not being able to identify if curl is built with websocket support, and library name discrepancy when curl not built with cmake
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail ' WS WSS' ""
+
+    substituteInPlace lib/CMakeLists.txt \
+      --replace-fail 'libcurl_shared' 'libcurl'
+  '';
+
+  cmakeFlags = [
+    "-Wno-dev"
+    (lib.cmakeFeature "CHIAKI_USE_SYSTEM_CURL" "true")
+  ];
+
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
   ];
 
   pythonPath = [

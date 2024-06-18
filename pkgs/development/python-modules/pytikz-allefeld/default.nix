@@ -1,18 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pymupdf
-, numpy
-, ipython
-, texlive
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  setuptools,
+  pymupdf,
+  numpy,
+  ipython,
+  texlive,
 }:
 
 buildPythonPackage rec {
   pname = "pytikz-allefeld"; # "pytikz" on pypi is a different module
   version = "unstable-2022-11-01";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -23,7 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-G59UUkpjttJKNBN0MB/A9CftO8tO3nv8qlTxt3/fKHk=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ setuptools ];
+
+  dependencies = [
     pymupdf
     numpy
     ipython
@@ -47,7 +51,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/allefeld/pytikz";
-    description = "A Python interface to TikZ";
+    description = "Python interface to TikZ";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pbsds ];
     broken = stdenv.isDarwin;

@@ -42,7 +42,7 @@ crystal.buildCrystalPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/alexherbo2/kakoune.cr";
-    description = "A command-line tool for Kakoune";
+    description = "Command-line tool for Kakoune";
     license = licenses.unlicense;
     maintainers = with maintainers; [ malte-v ];
     platforms = platforms.unix;

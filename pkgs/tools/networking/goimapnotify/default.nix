@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "goimapnotify";
-  version = "2.3.11";
+  version = "2.3.15";
 
   src = fetchFromGitLab {
     owner = "shackra";
     repo = "goimapnotify";
     rev = version;
-    sha256 = "sha256-b3w+SqmxRY/24qgFUSM4RQswObAH5jy3yEfGXY298Ko=";
+    sha256 = "sha256-da2Q+glDVWSf574pks6UzvQyzKAU+81ypy5H968Y7HE=";
   };
 
   vendorHash = "sha256-DphGe9jbKo1aIfpF5kRYNSn/uIYHaRMrygda5t46svw=";

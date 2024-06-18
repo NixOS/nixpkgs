@@ -68,7 +68,10 @@ let
       passthru = (oldAttrs.passthru or {})// {
         pythonModule = python;
         pythonPath = [ ]; # Deprecated, for compatibility.
-        requiredPythonModules = requiredPythonModules drv.propagatedBuildInputs;
+        requiredPythonModules =
+          builtins.addErrorContext
+          "while calculating requiredPythonModules for ${drv.name or drv.pname}:"
+          (requiredPythonModules drv.propagatedBuildInputs);
       };
     });
 

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://hime-ime.github.io/";
     downloadPage = "https://github.com/hime-ime/hime/downloads";
-    description = "A useful input method engine for Asia region";
+    description = "Useful input method engine for Asia region";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ yanganto ];

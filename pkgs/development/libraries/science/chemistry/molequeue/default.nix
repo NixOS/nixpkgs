@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Desktop integration of high performance computing resources";
+    mainProgram = "molequeue";
     maintainers = with maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/molequeue";
     platforms = platforms.linux;

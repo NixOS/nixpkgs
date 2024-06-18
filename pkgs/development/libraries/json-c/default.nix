@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "A JSON implementation in C";
+    description = "JSON implementation in C";
     longDescription = ''
       JSON-C implements a reference counting object model that allows you to
       easily construct JSON objects in C, output them as JSON formatted strings

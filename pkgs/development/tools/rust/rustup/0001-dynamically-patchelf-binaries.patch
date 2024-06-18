@@ -1,39 +1,185 @@
 diff --git a/src/dist/component/package.rs b/src/dist/component/package.rs
-index 73a533b5..408ab815 100644
+index dfccc661..85233f3b 100644
 --- a/src/dist/component/package.rs
 +++ b/src/dist/component/package.rs
-@@ -113,6 +113,7 @@ fn install<'a>(
+@@ -113,6 +113,7 @@ impl Package for DirectoryPackage {
                      } else {
                          builder.move_file(path.clone(), &src_path)?
                      }
-+                    nix_patchelf_if_needed(&target.prefix().path().join(path.clone()), &src_path)
++                    nix_patchelf_if_needed(&target.prefix().path().join(path.clone()))
                  }
                  "dir" => {
                      if self.copy {
-@@ -135,6 +136,29 @@ fn components(&self) -> Vec<String> {
+@@ -135,6 +136,175 @@ impl Package for DirectoryPackage {
      }
  }
  
-+fn nix_patchelf_if_needed(dest_path: &Path, src_path: &Path) {
-+    let (is_bin, is_lib) = if let Some(p) = src_path.parent() {
-+        (p.ends_with("bin") || p.ends_with("libexec"), p.ends_with("lib"))
-+    } else {
-+        (false, false)
-+    };
++fn nix_wrap_lld(dest_lld_path: &Path) -> Result<()> {
++    use std::fs;
++    use std::io::Write;
++    use std::os::unix::fs::PermissionsExt;
 +
-+    if is_bin {
-+        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
-+            .arg("--set-interpreter")
-+            .arg("@dynamicLinker@")
-+            .arg(dest_path)
-+            .output();
++    let path = dest_lld_path.parent().unwrap();
++    let mut unwrapped_name = path.file_name().unwrap().to_string_lossy().to_string();
++    unwrapped_name.push_str("-unwrapped");
++    let unwrapped_dir = path.with_file_name(unwrapped_name);
++    fs::create_dir(&unwrapped_dir).context("failed to create unwrapped directory")?;
++    let mut unwrapped_lld = unwrapped_dir;
++    unwrapped_lld.push(dest_lld_path.file_name().unwrap());
++    fs::rename(dest_lld_path, &unwrapped_lld).context("failed to move file")?;
++    let mut ld_wrapper_path = std::env::current_exe()?
++        .parent()
++        .ok_or(anyhow!("failed to get parent directory"))?
++        .with_file_name("nix-support");
++    let mut file = std::fs::File::create(dest_lld_path)?;
++    ld_wrapper_path.push("ld-wrapper.sh");
++
++    let wrapped_script = format!(
++        "#!/usr/bin/env bash
++set -eu -o pipefail +o posix
++shopt -s nullglob
++export PROG=\"{}\"
++\"{}\" $@",
++        unwrapped_lld.to_string_lossy().to_string(),
++        ld_wrapper_path.to_string_lossy().to_string(),
++    );
++    file.write_all(wrapped_script.as_bytes())?;
++    let mut permissions = file.metadata()?.permissions();
++    permissions.set_mode(0o755);
++    file.set_permissions(permissions)?;
++    Ok(())
++}
++
++fn nix_patchelf_if_needed(dest_path: &Path) {
++    use std::fs::File;
++    use std::os::unix::fs::FileExt;
++
++    struct ELFReader<'a> {
++        file: &'a mut File,
++        is_32bit: bool,
++        is_little_end: bool,
 +    }
-+    else if is_lib {
-+        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
-+            .arg("--set-rpath")
-+            .arg("@libPath@")
-+            .arg(dest_path)
-+            .output();
++
++    impl<'a> ELFReader<'a> {
++        const MAGIC_NUMBER: &'static [u8] = &[0x7F, 0x45, 0x4c, 0x46];
++        const ET_EXEC: u16 = 0x2;
++        const ET_DYN: u16 = 0x3;
++        const PT_INTERP: u32 = 0x3;
++
++        fn new(file: &'a mut File) -> Option<Self> {
++            let mut magic_number = [0; 4];
++            file.read_exact(&mut magic_number).ok()?;
++            if Self::MAGIC_NUMBER != magic_number {
++                return None;
++            }
++            let mut ei_class = [0; 1];
++            file.read_exact_at(&mut ei_class, 0x4).ok()?;
++            let is_32bit = ei_class[0] == 1;
++            let mut ei_data = [0; 1];
++            file.read_exact_at(&mut ei_data, 0x5).ok()?;
++            let is_little_end = ei_data[0] == 1;
++            Some(Self {
++                file,
++                is_32bit,
++                is_little_end,
++            })
++        }
++
++        fn is_exec_or_dyn(&self) -> bool {
++            let e_type = self.read_u16_at(0x10);
++            e_type == Self::ET_EXEC || e_type == Self::ET_DYN
++        }
++
++        fn e_phoff(&self) -> u64 {
++            if self.is_32bit {
++                self.read_u32_at(0x1C) as u64
++            } else {
++                self.read_u64_at(0x20)
++            }
++        }
++
++        fn e_phentsize(&self) -> u64 {
++            let offset = if self.is_32bit { 0x2A } else { 0x36 };
++            self.read_u16_at(offset) as u64
++        }
++
++        fn e_phnum(&self) -> u64 {
++            let offset = if self.is_32bit { 0x2C } else { 0x38 };
++            self.read_u16_at(offset) as u64
++        }
++
++        fn has_interp(&self) -> bool {
++            let e_phoff = self.e_phoff();
++            let e_phentsize = self.e_phentsize();
++            let e_phnum = self.e_phnum();
++            for i in 0..e_phnum {
++                let p_type = self.read_u32_at(e_phoff + i * e_phentsize);
++                if p_type == Self::PT_INTERP {
++                    return true;
++                }
++            }
++            false
++        }
++
++        fn read_u16_at(&self, offset: u64) -> u16 {
++            let mut data = [0; 2];
++            self.file.read_exact_at(&mut data, offset).unwrap();
++            if self.is_little_end {
++                u16::from_le_bytes(data)
++            } else {
++                u16::from_be_bytes(data)
++            }
++        }
++
++        fn read_u32_at(&self, offset: u64) -> u32 {
++            let mut data = [0; 4];
++            self.file.read_exact_at(&mut data, offset).unwrap();
++            if self.is_little_end {
++                u32::from_le_bytes(data)
++            } else {
++                u32::from_be_bytes(data)
++            }
++        }
++
++        fn read_u64_at(&self, offset: u64) -> u64 {
++            let mut data = [0; 8];
++            self.file.read_exact_at(&mut data, offset).unwrap();
++            if self.is_little_end {
++                u64::from_le_bytes(data)
++            } else {
++                u64::from_be_bytes(data)
++            }
++        }
++    }
++
++    let Some(mut dest_file) = File::open(dest_path).ok() else {
++        return;
++    };
++    let Some(elf) = ELFReader::new(&mut dest_file) else {
++        return;
++    };
++    if !elf.is_exec_or_dyn() {
++        return;
++    }
++    let mut patch_command = std::process::Command::new("@patchelf@/bin/patchelf");
++    if elf.has_interp() {
++        patch_command
++            .arg("--set-interpreter")
++            .arg("@dynamicLinker@");
++    }
++    if Some(std::ffi::OsStr::new("rust-lld")) == dest_path.file_name() || !elf.has_interp() {
++        patch_command.arg("--add-rpath").arg("@libPath@");
++    }
++
++    debug!("patching {dest_path:?} using patchelf");
++    if let Err(err) = patch_command.arg(dest_path).output() {
++        warn!("failed to execute patchelf: {err:?}");
++    }
++
++    if Some(std::ffi::OsStr::new("ld.lld")) == dest_path.file_name() {
++        if let Err(err) = nix_wrap_lld(dest_path) {
++            warn!("failed to wrap `ld.lld`: {err:?}");
++        }
 +    }
 +}
 +

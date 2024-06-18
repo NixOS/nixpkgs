@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, click
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  click,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python API client for interacting with myStrom devices";
+    mainProgram = "mystrom";
     longDescription = ''
       Asynchronous Python API client for interacting with myStrom devices.
       There is support for bulbs, motion sensors, plugs and buttons.

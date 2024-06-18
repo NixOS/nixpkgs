@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
-    description = "A weighted sans serif font";
+    description = "Weighted sans serif font";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars minijackson ];
     license = licenses.ofl;

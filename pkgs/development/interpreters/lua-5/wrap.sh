@@ -3,6 +3,8 @@
 # variable is passed in from the buildLuarocksPackage function.
 set -e
 
+source @lua@/nix-support/utils.sh
+
 wrapLuaPrograms() {
   wrapLuaProgramsIn "$out/bin" "$out $luaPath"
 }

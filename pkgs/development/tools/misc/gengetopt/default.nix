@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Command-line option parser generator";
+    mainProgram = "gengetopt";
 
     longDescription =
       '' GNU Gengetopt program generates a C function that uses getopt_long

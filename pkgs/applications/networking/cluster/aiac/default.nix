@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "aiac";
-  version = "4.2.0";
+  version = "4.3.0";
   excludedPackages = [".ci"];
 
   src = fetchFromGitHub {
     owner = "gofireflyio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-83htckX3AIgLKxxSIaM3HUJDDv4GrpJsZ7nGln5trKw=";
+    hash = "sha256-6u/TVCLFtcNzmchYw8dhedNRm7Lpl9oi8MpYkLYzFdg=";
   };
 
   vendorHash = "sha256-JWQQUB4/yIDGzWeshtcWnkXQS7jYcDHwG/tef6sBizQ=";
@@ -17,6 +17,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = ''Artificial Intelligence Infrastructure-as-Code Generator.'';
+    mainProgram = "aiac";
     homepage = "https://github.com/gofireflyio/aiac/";
     license = licenses.asl20;
     maintainers = with maintainers; [ qjoly ];

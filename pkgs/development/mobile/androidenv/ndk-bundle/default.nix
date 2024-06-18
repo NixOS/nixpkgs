@@ -11,8 +11,8 @@ deployAndroidPackage rec {
   inherit package os;
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
-  autoPatchelfIgnoreMissingDeps = true;
-  buildInputs = lib.optionals (os == "linux") [ pkgs.zlib ];
+  autoPatchelfIgnoreMissingDeps = [ "*" ];
+  buildInputs = lib.optionals (os == "linux") [ pkgs.zlib pkgs.libcxx stdenv.cc.cc.lib ];
 
   patchElfBnaries = ''
     # Patch the executables of the toolchains, but not the libraries -- they are needed for crosscompiling
@@ -24,7 +24,11 @@ deployAndroidPackage rec {
       addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib64
     fi
 
-    find toolchains -type d -name bin -or -name lib64 | while read dir; do
+    if [ -d $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib ]; then
+      addAutoPatchelfSearchPath $out/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/lib
+    fi
+
+    find toolchains -type d -name bin -or -name lib64 -or -name lib | while read dir; do
       autoPatchelf "$dir"
     done
 

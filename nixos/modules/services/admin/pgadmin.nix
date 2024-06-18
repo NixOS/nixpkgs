@@ -27,10 +27,10 @@ let
 in
 {
   options.services.pgadmin = {
-    enable = mkEnableOption (lib.mdDoc "PostgreSQL Admin 4");
+    enable = mkEnableOption "PostgreSQL Admin 4";
 
     port = mkOption {
-      description = lib.mdDoc "Port for pgadmin4 to run on";
+      description = "Port for pgadmin4 to run on";
       type = types.port;
       default = 5050;
     };
@@ -38,12 +38,12 @@ in
     package = mkPackageOptionMD pkgs "pgadmin4" { };
 
     initialEmail = mkOption {
-      description = lib.mdDoc "Initial email for the pgAdmin account";
+      description = "Initial email for the pgAdmin account";
       type = types.str;
     };
 
     initialPasswordFile = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Initial password file for the pgAdmin account. Minimum length by default is 6.
         Please see `services.pgadmin.minimumPasswordLength`.
         NOTE: Should be string not a store path, to prevent the password from being world readable
@@ -52,53 +52,53 @@ in
     };
 
     minimumPasswordLength = mkOption {
-      description = lib.mdDoc "Minimum length of the password";
+      description = "Minimum length of the password";
       type = types.int;
       default = 6;
     };
 
     emailServer = {
       enable = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Enable SMTP email server. This is necessary, if you want to use password recovery or change your own password
         '';
         type = types.bool;
         default = false;
       };
       address = mkOption {
-        description = lib.mdDoc "SMTP server for email delivery";
+        description = "SMTP server for email delivery";
         type = types.str;
         default = "localhost";
       };
       port = mkOption {
-        description = lib.mdDoc "SMTP server port for email delivery";
+        description = "SMTP server port for email delivery";
         type = types.port;
         default = 25;
       };
       useSSL = mkOption {
-        description = lib.mdDoc "SMTP server should use SSL";
+        description = "SMTP server should use SSL";
         type = types.bool;
         default = false;
       };
       useTLS = mkOption {
-        description = lib.mdDoc "SMTP server should use TLS";
+        description = "SMTP server should use TLS";
         type = types.bool;
         default = false;
       };
       username = mkOption {
-        description = lib.mdDoc "SMTP server username for email delivery";
+        description = "SMTP server username for email delivery";
         type = types.nullOr types.str;
         default = null;
       };
       sender = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           SMTP server sender email for email delivery. Some servers require this to be a valid email address from that server
         '';
         type = types.str;
         example = "noreply@example.com";
       };
       passwordFile = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Password for SMTP email account.
           NOTE: Should be string not a store path, to prevent the password from being world readable
         '';
@@ -106,10 +106,10 @@ in
       };
     };
 
-    openFirewall = mkEnableOption (lib.mdDoc "firewall passthrough for pgadmin4");
+    openFirewall = mkEnableOption "firewall passthrough for pgadmin4";
 
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Settings for pgadmin4.
         [Documentation](https://www.pgadmin.org/docs/pgadmin4/development/config_py.html)
       '';
@@ -152,7 +152,8 @@ in
         # Check here for password length to prevent pgadmin from starting
         # and presenting a hard to find error message
         # see https://github.com/NixOS/nixpkgs/issues/270624
-        PW_LENGTH=$(wc -m < ${escapeShellArg cfg.initialPasswordFile})
+        PW_FILE="$CREDENTIALS_DIRECTORY/initial_password"
+        PW_LENGTH=$(wc -m < "$PW_FILE")
         if [ $PW_LENGTH -lt ${toString cfg.minimumPasswordLength} ]; then
             echo "Password must be at least ${toString cfg.minimumPasswordLength} characters long"
             exit 1
@@ -162,7 +163,7 @@ in
           echo ${escapeShellArg cfg.initialEmail}
 
           # file might not contain newline. echo hack fixes that.
-          PW=$(cat ${escapeShellArg cfg.initialPasswordFile})
+          PW=$(cat "$PW_FILE")
 
           # Password:
           echo "$PW"
@@ -181,6 +182,8 @@ in
         LogsDirectory = "pgadmin";
         StateDirectory = "pgadmin";
         ExecStart = "${cfg.package}/bin/pgadmin4";
+        LoadCredential = [ "initial_password:${cfg.initialPasswordFile}" ]
+          ++ optional cfg.emailServer.enable "email_password:${cfg.emailServer.passwordFile}";
       };
     };
 
@@ -193,7 +196,8 @@ in
 
     environment.etc."pgadmin/config_system.py" = {
       text = lib.optionalString cfg.emailServer.enable ''
-        with open("${cfg.emailServer.passwordFile}") as f:
+        import os
+        with open(os.path.join(os.environ['CREDENTIALS_DIRECTORY'], 'email_password')) as f:
           pw = f.read()
         MAIL_PASSWORD = pw
       '' + formatPy cfg.settings;

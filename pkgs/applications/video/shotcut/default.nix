@@ -16,17 +16,18 @@
 , qtmultimedia
 , qtcharts
 , cmake
+, Cocoa
 , gitUpdater
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
-  version = "24.01.31";
+  version = "24.04.28";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
-    rev = "v${version}";
-    hash = "sha256-3Itlv9Jc4xl9pB4WDUwc3f7iP7NHyZ6yr5NZuH8M2Jo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iMg2XrTrLFZXXvnJ7lMdkxf/LTaL9bh9Nc2jsPOS0eo=";
   };
 
   nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
@@ -41,11 +42,13 @@ stdenv.mkDerivation rec {
     qttools
     qtmultimedia
     qtcharts
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";
   cmakeFlags = [
-    "-DSHOTCUT_VERSION=${version}"
+    "-DSHOTCUT_VERSION=${finalAttrs.version}"
   ];
 
   patches = [
@@ -55,15 +58,21 @@ stdenv.mkDerivation rec {
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
     "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [jack1 SDL2]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([SDL2] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [jack1])}"
   ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications $out/bin
+    mv $out/Shotcut.app $out/Applications/Shotcut.app
+    ln -s $out/Applications/Shotcut.app/Contents/MacOS/Shotcut $out/bin/shotcut
+  '';
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
 
   meta = with lib; {
-    description = "A free, open source, cross-platform video editor";
+    description = "Free, open source, cross-platform video editor";
     longDescription = ''
       An official binary for Shotcut, which includes all the
       dependencies pinned to specific versions, is provided on
@@ -76,7 +85,7 @@ stdenv.mkDerivation rec {
     homepage = "https://shotcut.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ goibhniu woffs peti ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "shotcut";
   };
-}
+})

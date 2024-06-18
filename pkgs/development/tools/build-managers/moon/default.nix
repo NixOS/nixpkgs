@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "moon";
-  version = "1.20.1";
+  version = "1.25.1";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wAY5jifyjK5jp5nlrwt/Krp96in06SnayTKx8inrf0A=";
+    hash = "sha256-LPQuP2OsR1TYnt7Qm8XRO0Ne7xliglJgQrMHNWnsYhM=";
   };
 
-  cargoHash = "sha256-qfDw+zmhk0M3gItiB7qfgiQCBRvOYBOirJFMyNRr714=";
+  cargoHash = "sha256-EWwUlKxsf0rZegxk1m11ZPIcfjwZKQ7C95l5UyGVFD0=";
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
@@ -36,7 +36,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A task runner and repo management tool for the web ecosystem, written in Rust";
+    description = "Task runner and repo management tool for the web ecosystem, written in Rust";
+    mainProgram = "moon";
     homepage = "https://github.com/moonrepo/moon";
     license = licenses.mit;
     maintainers = with maintainers; [ flemzord ];

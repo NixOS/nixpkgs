@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "werf";
-  version = "1.2.290";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    hash = "sha256-pXmFpXpab6YKgujMGqP6xt5iRt/7CrG3wbpBeQ9Ty6c=";
+    hash = "sha256-dZwZzBisQUmOz1lij6L0NHigXW2DtUd6s86sHYq8UPA=";
   };
 
-  vendorHash = "sha256-yz0H/016NR+CwVbVfXPAIayacPprcf+MKptbG5fHwVY=";
+  vendorHash = "sha256-cWOnIEvVer+USqNQJmhZ7pYSJfzY2xjq2oTxRd/y94w=";
 
   proxyVendor = true;
 
@@ -35,7 +35,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/werf/werf/pkg/werf.Version=${src.rev}"
+    "-X github.com/werf/werf/v2/pkg/werf.Version=${src.rev}"
   ] ++ lib.optionals (CGO_ENABLED == 1) [
     "-extldflags=-static"
     "-linkmode external"
@@ -48,6 +48,7 @@ buildGoModule rec {
     "dfrunsecurity"
     "dfssh"
   ] ++ lib.optionals (CGO_ENABLED == 1) [
+    "cni"
     "exclude_graphdriver_devicemapper"
     "netgo"
     "no_devmapper"
@@ -83,6 +84,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "GitOps delivery tool";
+    mainProgram = "werf";
     longDescription = ''
       The CLI tool gluing Git, Docker, Helm & Kubernetes with any CI system to
       implement CI/CD and Giterminism.

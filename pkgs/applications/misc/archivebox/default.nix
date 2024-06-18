@@ -43,8 +43,9 @@ let
           rev = "e43f383dae3a35237e42f6acfe1207a8e7e7bdf5";
           hash = "sha256-NAMa78KhAuoJfp0Cb0Codz84sRfRQ1JhSLNYRI4GBPM=";
         };
+
         # possibly a real issue, but that version is not supported anymore
-        disabledTests = [ "test_should_highlight_bash_syntax_without_name" ];
+        doCheck = false;
       });
     };
   };

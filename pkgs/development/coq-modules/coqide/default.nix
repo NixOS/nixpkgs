@@ -1,7 +1,7 @@
 { lib
 , makeDesktopItem
 , copyDesktopItems
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gnome
 , mkCoqDerivation
@@ -26,7 +26,7 @@ mkCoqDerivation rec {
 
   buildInputs = [
     copyDesktopItems
-    wrapGAppsHook
+    wrapGAppsHook3
     coq.ocamlPackages.lablgtk3-sourceview3
     glib
     gnome.adwaita-icon-theme
@@ -54,7 +54,8 @@ mkCoqDerivation rec {
 
   meta = with lib; {
     homepage = "https://coq.inria.fr";
-    description = "The CoqIDE user interface for the Coq proof assistant";
+    description = "CoqIDE user interface for the Coq proof assistant";
+    mainProgram = "coqide";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.Zimmi48 ];
   };

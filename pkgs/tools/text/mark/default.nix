@@ -16,7 +16,8 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
-    description = "A tool for syncing your markdown documentation with Atlassian Confluence pages";
+    description = "Tool for syncing your markdown documentation with Atlassian Confluence pages";
+    mainProgram = "mark";
     homepage = "https://github.com/kovetskiy/mark";
     license = licenses.asl20;
     maintainers = with maintainers; [ rguevara84 ];

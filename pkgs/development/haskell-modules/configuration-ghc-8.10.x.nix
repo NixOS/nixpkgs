@@ -4,6 +4,7 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs) lib;
 in
 
 self: super: {
@@ -58,15 +59,19 @@ self: super: {
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
 
-  # Additionally depends on OneTuple for GHC < 9.0
-  base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
-
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
+  # For GHC < 9.2, os-string is not required.
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
   hashable = addBuildDepends [
     self.data-array-byte
     self.base-orphans
-  ] super.hashable;
+  ] (super.hashable.override {
+    os-string = null;
+  });
+  hashable-time = doDistribute (unmarkBroken super.hashable-time);
+
+  # Too strict lower bounds on base
+  primitive-addr = doJailbreak super.primitive-addr;
 
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
@@ -77,9 +82,6 @@ self: super: {
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
   unliftio-core = doJailbreak super.unliftio-core;
-
-  # Jailbreaking because monoidal-containers hasn’t bumped it's base dependency for 8.10.
-  monoidal-containers = doJailbreak super.monoidal-containers;
 
   # Jailbreak to fix the build.
   brick = doJailbreak super.brick;
@@ -119,13 +121,6 @@ self: super: {
 
   # Overly-strict bounds introducted by a revision in version 0.3.2.
   text-metrics = doJailbreak super.text-metrics;
-
-  # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
-  OneTuple = addBuildDepends [
-    self.foldable1-classes-compat
-  ] (super.OneTuple.override {
-    ghc-prim = self.hashable;
-  });
 
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);
@@ -170,4 +165,25 @@ self: super: {
 
   # No instance for (Show B.Builder) arising from a use of ‘print’
   http-types = dontCheck super.http-types;
+
+  # Packages which need compat library for GHC < 9.6
+  inherit
+    (lib.mapAttrs
+      (_: addBuildDepends [ self.foldable1-classes-compat ])
+      super)
+    indexed-traversable
+    these
+  ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
+
+  # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
+  OneTuple = addBuildDepends [
+    self.foldable1-classes-compat
+    self.base-orphans
+  ] (super.OneTuple.override {
+    ghc-prim = self.hashable;
+  });
 }

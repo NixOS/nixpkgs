@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile-ncurses/";
     description = "Scheme interface to the NCurses libraries";
+    mainProgram = "guile-ncurses-shell";
     longDescription = ''
       GNU Guile-Ncurses is a library for the Guile Scheme interpreter that
       provides functions for creating text user interfaces.  The text user

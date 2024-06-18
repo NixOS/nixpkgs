@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A modified version of the Grml Zsh configuration specialised for the needs of system administration";
+    description = "Modified version of the Grml Zsh configuration specialised for the needs of system administration";
     homepage = "https://github.com/agdsn/agdsn-zsh-config";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

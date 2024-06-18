@@ -7,14 +7,14 @@
 
 buildNpmPackage rec {
   pname = "graphite-cli";
-  version = "1.1.5";
+  version = "1.3.8";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-${version}.tgz";
-    hash = "sha256-/JnhUjrZq1iiXwqCSXZH250gu3yh6gJt6JjZRJ2OQd8=";
+    hash = "sha256-FJaDSg+scrmqYkCGCrb+yT8TtKT09xu6BS5AjTlfhzo=";
   };
 
-  npmDepsHash = "sha256-oQLombXIZRyjnKA04xuDZoZf2NO/0/xFfuXXmp46OaI=";
+  npmDepsHash = "sha256-WyV0f5thWG7hg7Vm1UUIlcFCgP83HfXQFBUVHcQdjRo=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json

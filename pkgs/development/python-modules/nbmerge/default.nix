@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, nbformat
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  nbformat,
+  nose,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-Uqs/SO/AculHCFYcbjW08kLQX5GSU/eAwkN2iy/vhLM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ nbformat ];
 
@@ -36,12 +35,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "nbmerge"
-  ];
+  pythonImportsCheck = [ "nbmerge" ];
 
   meta = {
-    description = "A tool to merge/concatenate Jupyter (IPython) notebooks";
+    description = "Tool to merge/concatenate Jupyter (IPython) notebooks";
     inherit (src.meta) homepage;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];

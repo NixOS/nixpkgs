@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       effect seen in the 1992 movie Sneakers.
     '';
     license = licenses.gpl3;
-    maintainers = [ maintainers.infinisil ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

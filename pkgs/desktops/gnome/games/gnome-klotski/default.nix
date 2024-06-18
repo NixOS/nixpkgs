@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, vala, gnome, gtk3, wrapGAppsHook, appstream-glib, desktop-file-utils
+{ lib, stdenv, fetchurl, pkg-config, vala, gnome, gtk3, wrapGAppsHook3, appstream-glib, desktop-file-utils
 , glib, librsvg, libxml2, gettext, itstool, libgee, libgnome-games-support
 , meson, ninja, python3
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config vala meson ninja python3 wrapGAppsHook
+    pkg-config vala meson ninja python3 wrapGAppsHook3
     gettext itstool libxml2 appstream-glib desktop-file-utils
     gnome.adwaita-icon-theme
   ];
@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Klotski";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-klotski";
     description = "Slide blocks to solve the puzzle";
+    mainProgram = "gnome-klotski";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.unix;

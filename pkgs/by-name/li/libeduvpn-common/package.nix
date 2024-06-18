@@ -5,11 +5,11 @@
 
 buildGoModule rec {
   pname = "libeduvpn-common";
-  version = "1.2.0";
+  version = "2.0.1";
 
   src = fetchurl {
     url = "https://github.com/eduvpn/eduvpn-common/releases/download/${version}/eduvpn-common-${version}.tar.xz";
-    hash = "sha256-CqpOgvGGD6pW03fvKUzgoeCz6YgnzuYK2u5Zbw+/Ks4=";
+    hash = "sha256-hTF9CSqU9c0+TOK+/oRGjY1fBCKpisiiTJnWZqcdvjA=";
   };
 
   vendorHash = null;

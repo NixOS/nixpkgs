@@ -1,29 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "gamble";
-  version = "0.11";
-  format = "setuptools";
+  version = "0.13";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zsEBqhKidgO1e0lpKhw+LY75I2Df+IefNLaSkBBFKFU=";
+  src = fetchFromGitHub {
+    owner = "jpetrucciani";
+    repo = "gamble";
+    rev = "refs/tags/${version}";
+    hash = "sha256-eHosY/JfJr317S7WI8phy7DNHf3cZzs6c5MMfw7yzAE=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ poetry-core ];
 
-  pythonImportsCheck = [
-    "gamble"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "gamble" ];
 
   meta = with lib; {
     description = "Collection of gambling classes/tools";

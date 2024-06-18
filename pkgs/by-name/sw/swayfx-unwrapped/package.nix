@@ -1,9 +1,33 @@
 {
   lib,
   fetchFromGitHub,
-  sway-unwrapped,
   stdenv,
   systemd,
+  meson,
+  substituteAll,
+  swaybg,
+  ninja,
+  pkg-config,
+  gdk-pixbuf,
+  librsvg,
+  wayland-protocols,
+  libdrm,
+  libinput,
+  cairo,
+  pango,
+  wayland,
+  libGL,
+  libxkbcommon,
+  pcre2,
+  json_c,
+  libevdev,
+  scdoc,
+  scenefx,
+  wayland-scanner,
+  xcbutilwm,
+  wlroots,
+  testers,
+  nixosTests,
   # Used by the NixOS module:
   isNixOS ? false,
   enableXWayland ? true,
@@ -11,42 +35,112 @@
   trayEnabled ? systemdSupport,
 }:
 
-(sway-unwrapped.override {
+stdenv.mkDerivation (finalAttrs: {
   inherit
-    isNixOS
     enableXWayland
+    isNixOS
     systemdSupport
     trayEnabled
     ;
-}).overrideAttrs (oldAttrs: rec {
+
   pname = "swayfx-unwrapped";
-  version = "0.3.2";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";
-    rev = version;
-    sha256 = "sha256-Gwewb0yDVhEBrefSSGDf1hLtpWcntzifPCPJQhqLqI0=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-VT+JjQPqCIdtaLeSnRiZ3rES0KgDJR7j5Byxr+d6oRg=";
   };
 
-  # This patch was backported into SwayFX
-  # remove when next release is rebased on Sway 1.9
   patches =
-    let
-      removePatches = [
-        "LIBINPUT_CONFIG_ACCEL_PROFILE_CUSTOM.patch"
-      ];
-    in
-    builtins.filter
-      (patch: !builtins.elem (patch.name or null) removePatches)
-      (oldAttrs.patches or [ ]);
+    [
+      ./load-configuration-from-etc.patch
 
-  meta = with lib; {
+      (substituteAll {
+        src = ./fix-paths.patch;
+        inherit swaybg;
+      })
+    ]
+    ++ lib.optionals (!finalAttrs.isNixOS) [
+      # References to /nix/store/... will get GC'ed which causes problems when
+      # copying the default configuration:
+      ./sway-config-no-nix-store-references.patch
+    ]
+    ++ lib.optionals finalAttrs.isNixOS [
+      # Use /run/current-system/sw/share and /etc instead of /nix/store
+      # references:
+      ./sway-config-nixos-paths.patch
+    ];
+
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
+
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    json_c
+    libdrm
+    libevdev
+    libGL
+    libinput
+    librsvg
+    libxkbcommon
+    pango
+    pcre2
+    scenefx
+    wayland
+    wayland-protocols
+    (wlroots.override { inherit (finalAttrs) enableXWayland; })
+  ] ++ lib.optionals finalAttrs.enableXWayland [ xcbutilwm ];
+
+  mesonFlags =
+    let
+      inherit (lib.strings) mesonEnable mesonOption;
+
+      # The "sd-bus-provider" meson option does not include a "none" option,
+      # but it is silently ignored iff "-Dtray=disabled".  We use "basu"
+      # (which is not in nixpkgs) instead of "none" to alert us if this
+      # changes: https://github.com/swaywm/sway/issues/6843#issuecomment-1047288761
+      # assert trayEnabled -> systemdSupport && dbusSupport;
+
+      sd-bus-provider = if systemdSupport then "libsystemd" else "basu";
+    in
+    [
+      (mesonOption "sd-bus-provider" sd-bus-provider)
+      (mesonEnable "xwayland" finalAttrs.enableXWayland)
+      (mesonEnable "tray" finalAttrs.trayEnabled)
+    ];
+
+  passthru = {
+    tests = {
+      basic = nixosTests.swayfx;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "sway --version";
+        version = "swayfx version ${finalAttrs.version}";
+      };
+    };
+  };
+
+  meta = {
     description = "Sway, but with eye candy!";
     homepage = "https://github.com/WillPower3309/swayfx";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eclairevoyant ricarch97 ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/WillPower3309/swayfx/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      eclairevoyant
+      ricarch97
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "sway";
 
     longDescription = ''

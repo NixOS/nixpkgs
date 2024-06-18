@@ -16,9 +16,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-panel";
-  version = "4.18.5";
+  version = "4.18.6";
 
-  sha256 = "sha256-1oh9C2ZlpcUulqhxUEPLhX22R7tko0rMmDixgkgaU9o=";
+  sha256 = "sha256-eQLz/LJIx2WkzcSLytRdJdhtGv0woT48mdqG7eHB0U4=";
 
   nativeBuildInputs = [
     gobject-introspection
@@ -44,7 +44,7 @@ mkXfceDerivation {
 
   postPatch = ''
     substituteInPlace plugins/clock/clock.c \
-       --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+       --replace-fail "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
   '';
 
   meta = with lib; {

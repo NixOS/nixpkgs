@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "A simple zsh plugin that replaces Ctrl+R with an fzf-driven select which includes date/times";
+    description = "Simple zsh plugin that replaces Ctrl+R with an fzf-driven select which includes date/times";
     homepage = "https://github.com/joshskidmore/zsh-fzf-history-search";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

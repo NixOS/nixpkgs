@@ -40,13 +40,13 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the {command}`fcron` daemon.";
+        description = "Whether to enable the {command}`fcron` daemon.";
       };
 
       allow = mkOption {
         type = types.listOf types.str;
         default = [ "all" ];
-        description = lib.mdDoc ''
+        description = ''
           Users allowed to use fcrontab and fcrondyn (one name per
           line, `all` for everyone).
         '';
@@ -55,25 +55,25 @@ in
       deny = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc "Users forbidden from using fcron.";
+        description = "Users forbidden from using fcron.";
       };
 
       maxSerialJobs = mkOption {
         type = types.int;
         default = 1;
-        description = lib.mdDoc "Maximum number of serial jobs which can run simultaneously.";
+        description = "Maximum number of serial jobs which can run simultaneously.";
       };
 
       queuelen = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = lib.mdDoc "Number of jobs the serial queue and the lavg queue can contain.";
+        description = "Number of jobs the serial queue and the lavg queue can contain.";
       };
 
       systab = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''The "system" crontab contents.'';
+        description = ''The "system" crontab contents.'';
       };
     };
 

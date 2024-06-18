@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://gitlab.com/gasche/domain-shims/";
-    description = "A non-parallel implementation of Domains compatible with OCaml 4";
+    description = "Non-parallel implementation of Domains compatible with OCaml 4";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
   };

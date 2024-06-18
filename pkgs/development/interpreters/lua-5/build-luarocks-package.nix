@@ -2,7 +2,7 @@
 { lib
 , lua
 , wrapLua
-, luarocks
+, luarocks_bootstrap
 , writeTextFile
 
 # Whether the derivation provides a lua module or not.
@@ -51,9 +51,10 @@
 
 # Appended to the generated luarocks config
 , extraConfig ? ""
-# Inserted into the generated luarocks config in the "variables" table
-, extraVariables ? {}
-# The two above arguments have access to builder variables -- e.g. to $out
+
+# transparent mapping nix <-> lua used as LUAROCKS_CONFIG
+# Refer to https://github.com/luarocks/luarocks/wiki/Config-file-format for specs
+, luarocksConfig ? {}
 
 # relative to srcRoot, path to the rockspec to use when using rocks
 , rockspecFilename ? null
@@ -88,16 +89,17 @@ let
   generatedRockspecFilename = "./${self.pname}-${self.rockspecVersion}.rockspec";
 
   nativeBuildInputs = [
+    lua  # for lua.h
     wrapLua
-    luarocks
+    luarocks_bootstrap
   ];
 
-  inherit doCheck extraVariables rockspecFilename knownRockspec externalDeps nativeCheckInputs;
+  inherit doCheck extraConfig rockspecFilename knownRockspec externalDeps nativeCheckInputs;
 
   buildInputs = let
     # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
     externalDeps' = lib.filter (dep: !lib.isDerivation dep) self.externalDeps;
-    in [ lua.pkgs.luarocks ]
+    in [ luarocks_bootstrap ]
       ++ buildInputs
       ++ lib.optionals self.doCheck ([ luarocksCheckHook ] ++ self.nativeCheckInputs)
       ++ (map (d: d.dep) externalDeps')
@@ -116,9 +118,18 @@ let
     text = self.luarocks_content;
   };
 
-  luarocks_content = let
-      externalDepsGenerated = lib.filter (drv: !drv ? luaModule)
-        (self.nativeBuildInputs ++ self.propagatedBuildInputs ++ self.buildInputs);
+  luarocks_content =
+      (lib.generators.toLua { asBindings = true; } self.luarocksConfig) +
+      ''
+
+      ${self.extraConfig}
+      '';
+
+  # TODO make it the default variable
+  luarocksConfig = let
+    externalDepsGenerated = lib.filter (drv: !drv ? luaModule)
+      (self.nativeBuildInputs ++ self.propagatedBuildInputs ++ self.buildInputs);
+
     generatedConfig = luaLib.generateLuarocksConfig {
       externalDeps = lib.unique (self.externalDeps ++ externalDepsGenerated);
       # Filter out the lua derivation itself from the Lua module dependency
@@ -126,13 +137,17 @@ let
       # luaLib.hasLuaModule
       requiredLuaRocks = lib.filter luaLib.hasLuaModule
         (lua.pkgs.requiredLuaModules (self.nativeBuildInputs ++ self.propagatedBuildInputs));
-      inherit (self) extraVariables rocksSubdir;
+      inherit (self) rocksSubdir;
     };
-    in
-      ''
-      ${generatedConfig}
-      ${extraConfig}
-      '';
+
+    luarocksConfig' = lib.recursiveUpdate luarocksConfig
+      (lib.optionalAttrs (attrs ? extraVariables) (lib.warn "extraVariables in buildLuarocksPackage is deprecated, use luarocksConfig instead"
+      {
+        variables = attrs.extraVariables;
+      }))
+    ;
+  in lib.recursiveUpdate generatedConfig luarocksConfig';
+
 
   configurePhase = ''
     runHook preConfigure
@@ -153,6 +168,7 @@ let
   buildPhase = ''
     runHook preBuild
 
+    source ${lua}/nix-support/utils.sh
     nix_debug "Using LUAROCKS_CONFIG=$LUAROCKS_CONFIG"
 
     LUAROCKS_EXTRA_ARGS=""

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pbr
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, tornado
-, typeguard
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pbr,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  tornado,
+  typeguard,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  pythonImportsCheck = [
-    "tenacity"
-  ];
+  pythonImportsCheck = [ "tenacity" ];
 
   meta = with lib; {
     homepage = "https://github.com/jd/tenacity";

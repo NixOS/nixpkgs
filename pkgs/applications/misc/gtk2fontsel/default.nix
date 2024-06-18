@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
 
   meta = with lib; {
-    description = "A font selection program for X11 using the GTK 2 toolkit";
+    description = "Font selection program for X11 using the GTK 2 toolkit";
     longDescription = ''
       Font selection tool similar to xfontsel implemented using GTK 2.
       Trivial, but useful nonetheless.

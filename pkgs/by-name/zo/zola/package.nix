@@ -46,7 +46,8 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion { package = zola; };
 
   meta = with lib; {
-    description = "A fast static site generator with everything built-in";
+    description = "Fast static site generator with everything built-in";
+    mainProgram = "zola";
     homepage = "https://www.getzola.org/";
     changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;

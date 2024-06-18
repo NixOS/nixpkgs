@@ -10,14 +10,14 @@
 , wrapQtAppsHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb-plugin-effects";
   version = "0.9";
 
   src = fetchFromGitLab {
     owner = "OpenRGBDevelopers";
     repo = "OpenRGBEffectsPlugin";
-    rev = "release_${version}";
+    rev = "release_${finalAttrs.version}";
     hash = "sha256-8BnHifcFf7ESJgJi/q3ca38zuIVa++BoGlkWxj7gpog=";
     fetchSubmodules = true;
   };
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/OpenRGBDevelopers/OpenRGBEffectsPlugin";
-    description = "An effects plugin for OpenRGB";
+    description = "Effects plugin for OpenRGB";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.linux;
   };
-}
+})

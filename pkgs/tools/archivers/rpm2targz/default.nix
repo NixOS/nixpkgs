@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "Convert a .rpm file to a .tar.gz archive";
     homepage = "http://slackware.com/config/packages.php";
     license = licenses.bsd1;
-    maintainers = [ maintainers.fogti ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

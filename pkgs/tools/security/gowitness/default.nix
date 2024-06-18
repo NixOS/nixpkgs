@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Web screenshot utility";
+    mainProgram = "gowitness";
     homepage = "https://github.com/sensepost/gowitness";
     changelog = "https://github.com/sensepost/gowitness/releases/tag/${version}";
     license = licenses.gpl3Only;

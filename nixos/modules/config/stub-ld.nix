@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) optionalString mkOption types mdDoc mkIf mkDefault;
+  inherit (lib) optionalString mkOption types mkIf mkDefault;
 
   cfg = config.environment.stub-ld;
 
@@ -38,7 +38,7 @@ in {
         type = types.bool;
         default = true;
         example = false;
-        description = mdDoc ''
+        description = ''
           Install a stub ELF loader to print an informative error message
           in the event that a user attempts to run an ELF binary not
           compiled for NixOS.

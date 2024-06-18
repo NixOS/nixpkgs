@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, flit-core
-, pytestCheckHook
-, pythonOlder
-, borgbackup
-, appdirs
-, arrow
-, docopt
-, inform
-, nestedtext
-, parametrize-from-file
-, quantiphy
-, requests
-, shlib
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
+  borgbackup,
+  appdirs,
+  arrow,
+  docopt,
+  inform,
+  nestedtext,
+  parametrize-from-file,
+  quantiphy,
+  requests,
+  shlib,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-dK/6y1cjegomiy3fta2grUm4T0ZrylmstXfkJo4mDCE=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     appdirs
@@ -69,9 +68,7 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonImportsCheck = [
-    "emborg"
-  ];
+  pythonImportsCheck = [ "emborg" ];
 
   meta = with lib; {
     description = "Interactive command line interface to Borg Backup";

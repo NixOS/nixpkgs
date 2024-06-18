@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A calendar and scheduling application for the command line";
+    description = "Calendar and scheduling application for the command line";
     longDescription = ''
       calcurse is a calendar and scheduling application for the command line. It helps
       keep track of events, appointments and everyday tasks. A configurable notification

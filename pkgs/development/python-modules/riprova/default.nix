@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
 }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   pname = "riprova";
   version = "0.3.1";
   format = "setuptools";

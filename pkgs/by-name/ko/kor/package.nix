@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kor";
-  version = "0.3.4";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "yonahd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-GeGttcvAhCRLbScxgcV9DrNZbvlsVRyOcA4xFUlHCyI=";
+    hash = "sha256-fyVMRHDzP7od+cwC01vNP/TOiDctD8E0y8uNWtgiEeA=";
   };
 
-  vendorHash = "sha256-x3XlqyaNPafBbCOq6leUHmBzz2poxgT0mVJ8UM0aRzg=";
+  vendorHash = "sha256-NPmsXS7P+pCF97N8x3nQhCRoHJLMO5plNtcUqxxexVE=";
 
   preCheck = ''
     HOME=$(mktemp -d)
@@ -24,7 +24,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A Golang Tool to discover unused Kubernetes Resources";
+    description = "Golang Tool to discover unused Kubernetes Resources";
     homepage = "https://github.com/yonahd/kor";
     changelog = "https://github.com/yonahd/kor/releases/tag/v${version}";
     license = licenses.mit;

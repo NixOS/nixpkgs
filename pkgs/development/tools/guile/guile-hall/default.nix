@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Project manager and build tool for GNU guile";
+    mainProgram = "hall";
     homepage = "https://gitlab.com/a-sassmannshausen/guile-hall";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sikmir ];

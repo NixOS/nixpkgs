@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A kinder, curated fortune, written in rust";
+    description = "Kinder, curated fortune, written in rust";
     longDescription = ''
       Historically, contributions to fortune-mod have had a less-than ideal
       quality control process, and as such, many of the fortunes that a user may

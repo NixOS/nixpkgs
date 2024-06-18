@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   useNextest = true;
 
   meta = with lib; {
-    description = "An implementation of the `py` command for Unix-based platforms";
+    description = "Implementation of the `py` command for Unix-based platforms";
     homepage = "https://github.com/brettcannon/python-launcher";
     changelog = "https://github.com/brettcannon/python-launcher/releases/tag/v${version}";
     license = licenses.mit;

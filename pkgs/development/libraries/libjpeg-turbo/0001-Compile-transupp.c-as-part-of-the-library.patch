@@ -26,7 +26,7 @@ index adb0ca45..46fc16dd 100644
    ${CMAKE_CURRENT_SOURCE_DIR}/jerror.h ${CMAKE_CURRENT_SOURCE_DIR}/jmorecfg.h
 -  ${CMAKE_CURRENT_SOURCE_DIR}/jpeglib.h
 +  ${CMAKE_CURRENT_SOURCE_DIR}/jpeglib.h ${CMAKE_CURRENT_SOURCE_DIR}/transupp.h
-   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT include)
  
  include(cmakescripts/BuildPackages.cmake)
 -- 

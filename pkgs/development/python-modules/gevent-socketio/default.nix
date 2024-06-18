@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gevent
-, gevent-websocket
-, mock
-, versiontools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gevent,
+  gevent-websocket,
+  mock,
+  versiontools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,24 +21,16 @@ buildPythonPackage rec {
     hash = "sha256-UzlKuT+9hNnbuyvvhTSfalA7/FPYapvoZTJQ8aBBKv8=";
   };
 
-  nativeBuildInputs = [
-    versiontools
-  ];
+  nativeBuildInputs = [ versiontools ];
 
-  buildInputs = [
-    gevent-websocket
-  ];
+  buildInputs = [ gevent-websocket ];
 
-  propagatedBuildInputs = [
-    gevent
-  ];
+  propagatedBuildInputs = [ gevent ];
 
   # Tests are not ported to Python 3
   doCheck = false;
 
-  pythonImportsCheck = [
-    "socketio"
-  ];
+  pythonImportsCheck = [ "socketio" ];
 
   meta = with lib; {
     description = "SocketIO server based on the Gevent pywsgi server";

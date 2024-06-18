@@ -6,20 +6,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtm";
-  version = "0.9.63";
+  version = "0.9.82";
 
   src = fetchFromGitHub {
     owner = "netxs-group";
     repo = "vtm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6WRSkS2uPHOcEmk2xB63G+zxbRu1tlz1D7k92ITEgSQ=";
+    hash = "sha256-FqsvU3qt5TwTD6J7WFOgDrHWiDYfU3Y51k8klRCV0kQ=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
-
-  cmakeFlags = [ "../src" ];
 
   meta = {
     description = "Terminal multiplexer with window manager and session sharing";

@@ -7,7 +7,7 @@ in
 {
   # interface
   options.services.pacemaker = {
-    enable = mkEnableOption (lib.mdDoc "pacemaker");
+    enable = mkEnableOption "pacemaker";
 
     package = mkPackageOption pkgs "pacemaker" { };
   };

@@ -1,21 +1,23 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, pyyaml
-, openssh
-, nose
-, bc
-, hostname
-, bash
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyyaml,
+  openssh,
+  nose,
+  bc,
+  hostname,
+  bash,
 }:
 
 buildPythonPackage rec {
-  pname = "ClusterShell";
+  pname = "clustershell";
   version = "1.9.2";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "ClusterShell";
+    inherit version;
     hash = "sha256-rsF/HG4GNBC+N49b+sDO2AyUI1G44wJNBUwQNPzShD0=";
   };
 

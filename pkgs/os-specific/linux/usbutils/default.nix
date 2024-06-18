@@ -27,8 +27,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.linux-usb.org/";
     description = "Tools for working with USB devices, such as lsusb";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ cafkafk ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "lsusb";
   };
 }

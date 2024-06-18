@@ -1,11 +1,11 @@
-{ lib, stdenvNoCC, fetchzip }:
+{ lib, stdenvNoCC, fetchzip, useVariableFont ? true }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fira-code";
   version = "6.2";
 
   src = fetchzip {
-    url = "https://github.com/tonsky/FiraCode/releases/download/${version}/Fira_Code_v${version}.zip";
+    url = "https://github.com/tonsky/FiraCode/releases/download/${finalAttrs.version}/Fira_Code_v${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-UHOwZL9WpCHk6vZaqI/XfkZogKgycs5lWg1p0XdQt0A=";
   };
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 variable_ttf/*-VF.ttf -t $out/share/fonts/truetype
+    install -Dm644 -t $out/share/fonts/truetype ${if useVariableFont then "variable_ttf/*-VF.ttf" else "ttf/*.ttf"}
 
     runHook postInstall
   '';
@@ -31,4 +31,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;
   };
-}
+})

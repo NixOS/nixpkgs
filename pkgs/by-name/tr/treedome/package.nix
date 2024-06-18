@@ -13,18 +13,18 @@
 , pkg-config
 , rustPlatform
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , sqlite
 }:
 
 let
   pname = "treedome";
-  version = "0.4";
+  version = "0.4.5";
 
   src = fetchgit {
     url = "https://codeberg.org/solver-orgz/treedome";
     rev = version;
-    hash = "sha256-HzpfctEeiPj5fO1LCiQDvWRuXCPJIX7RsYYr/Y/sahA=";
+    hash = "sha256-YkyjG/ee5WeO5OD4FZnWaqcOJO3YC0uQkbwGkCNBxC8=";
     fetchLFS = true;
   };
 
@@ -34,7 +34,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      hash = "sha256-SU020NgQY2TXbAsGzrXa0gLEt0hllsgD82S5L2lEtKU=";
+      hash = "sha256-CrD/n8z5fJKkBKEcvpRHJaqXBt1gbON7VsuLb2JGu1A=";
     };
 
     packageJSON = ./package.json;
@@ -77,6 +77,10 @@ rustPlatform.buildRustPackage {
     };
   };
 
+  env = {
+    VERGEN_GIT_DESCRIBE = version;
+  };
+
   preConfigure = ''
     mkdir -p dist
     cp -R ${frontend-build}/dist/** dist
@@ -94,7 +98,7 @@ rustPlatform.buildRustPackage {
     cmake
     pkg-config
     cargo-tauri
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -135,9 +139,9 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "A local-first, encrypted, note taking application with tree-like structures, all written and saved in markdown";
+    description = "Local-first, encrypted, note taking application organized in tree-like structures";
     homepage = " https://codeberg.org/solver-orgz/treedome";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = [ "x86_64-linux" ];
     mainProgram = "treedome";
     maintainers = with maintainers; [ tengkuizdihar ];

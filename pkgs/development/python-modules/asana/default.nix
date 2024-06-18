@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-oauthlib
-, responses
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  certifi,
+  six,
+  python-dateutil,
+  urllib3,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "asana";
   version = "5.0.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,20 +25,18 @@ buildPythonPackage rec {
     hash = "sha256-9F63DvwMh9NwlTqFuhiXfgRRRxAFjjRYmYzsuOhlQJ0=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    requests-oauthlib
+  build-system = [ setuptools ];
+
+  dependencies = [
+    certifi
     six
+    python-dateutil
+    urllib3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    responses
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "asana"
-  ];
+  pythonImportsCheck = [ "asana" ];
 
   meta = with lib; {
     description = "Python client library for Asana";

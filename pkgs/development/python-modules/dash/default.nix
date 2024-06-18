@@ -1,64 +1,64 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-, setuptools
-, nodejs
-, yarn
-, prefetch-yarn-deps
-, fetchYarnDeps
+  setuptools,
+  nodejs,
+  yarn,
+  fixup-yarn-lock,
+  fetchYarnDeps,
 
-, flask
-, werkzeug
-, plotly
-, dash-html-components
-, dash-core-components
-, dash-table
-, importlib-metadata
-, typing-extensions
-, requests
-, retrying
-, ansi2html
-, nest-asyncio
+  flask,
+  werkzeug,
+  plotly,
+  dash-html-components,
+  dash-core-components,
+  dash-table,
+  importlib-metadata,
+  typing-extensions,
+  requests,
+  retrying,
+  nest-asyncio,
 
-, celery
-, redis
-, diskcache
-, multiprocess
-, psutil
-, flask-compress
+  celery,
+  redis,
+  diskcache,
+  multiprocess,
+  psutil,
+  flask-compress,
 
-, pytestCheckHook
-, pytest-mock
-, mock
-, pyyaml
+  pytestCheckHook,
+  pytest-mock,
+  mock,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.14.2";
+  version = "2.17.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "dash";
-    rev = "v${version}";
-    hash = "sha256-EFEsFgd3VbzlIUiz1fBIsKHywgWrL74taDFx0yIM/Ks=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-51/nMnXUhb+hTL4xS9x4urI+2eENo/8sEKtk/kt6xTk=";
   };
 
   nativeBuildInputs = [
     setuptools
     nodejs
     yarn
-    prefetch-yarn-deps
+    fixup-yarn-lock
   ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/@plotly/dash-jupyterlab/yarn.lock";
-    hash = "sha256-mkiyrA0jGiP0zbabSjgHFLEUX3f+LZdJ8eARI5QA8CU=";
+    hash = "sha256-L/or8jO6uEypI5krwy/ElIxa6jJrXGsCRZ9mh+0kcGA=";
   };
 
   preBuild = ''
@@ -90,7 +90,6 @@ buildPythonPackage rec {
     typing-extensions
     requests
     retrying
-    ansi2html
     nest-asyncio
   ];
 
@@ -104,9 +103,7 @@ buildPythonPackage rec {
       multiprocess
       psutil
     ];
-    compress = [
-      flask-compress
-    ];
+    compress = [ flask-compress ];
   };
 
   nativeCheckInputs = [
@@ -129,6 +126,9 @@ buildPythonPackage rec {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ antoinerg tomasajt ];
+    maintainers = with lib.maintainers; [
+      antoinerg
+      tomasajt
+    ];
   };
 }

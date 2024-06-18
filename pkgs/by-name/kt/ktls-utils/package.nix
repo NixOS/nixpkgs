@@ -9,17 +9,18 @@
 , libnl
 , systemd
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "ktls-utils";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "ktls-utils";
     rev = "ktls-utils-${version}";
-    hash = "sha256-1HceFajSSq1D3IMeGQF+i/iW1lL2opLLWFfsRHW9atg=";
+    hash = "sha256-QPKBJEuXYDuOhlFhc0zQ4hAq1owFNe9b3BUKliNFgu0=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,8 @@ stdenv.mkDerivation rec {
   makeFlags = lib.optional withSystemd [ "unitdir=$(out)/lib/systemd/system" ];
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "TLS handshake utilities for in-kernel TLS consumers";

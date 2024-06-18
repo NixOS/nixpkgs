@@ -6,38 +6,46 @@
 , openssl
 , pkg-config
 , Security
+, SystemConfiguration
+, IOKit
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nixci";
-  version = "0.2.0";
+  version = "0.5.0";
 
   src = fetchCrate {
     inherit version;
     pname = "nixci";
-    hash = "sha256-Q3V/JL64xkIj0X0NSMRTjRAP3PJC9ouj3CmEscVWdns=";
+    hash = "sha256-XbPXS29zqg+pOs/JRRB2bRPdMTDy/oKLM41UomSZTN0=";
   };
 
-  cargoHash = "sha256-tjk91AaPsMLfXYB2o1HTTxb6Qr3l8BABPStrKEGvbtM=";
+  cargoHash = "sha256-+ed/XsEAwp7bsZOb+bOailpgSFnKvwoHR0QptnGeulk=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libiconv openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+
+  buildInputs = lib.optionals stdenv.isLinux [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    IOKit
+    Security
+    SystemConfiguration
+  ];
 
   # The rust program expects an environment (at build time) that points to the
   # devour-flake flake.
   env.DEVOUR_FLAKE = fetchFromGitHub {
     owner = "srid";
     repo = "devour-flake";
-    rev = "v3";
-    hash = "sha256-O51F4YFOzlaQAc9b6xjkAqpvrvCtw/Os2M7TU0y4SKQ=";
+    rev = "v4";
+    hash = "sha256-Vey9n9hIlWiSAZ6CCTpkrL6jt4r2JvT2ik9wa2bjeC0=";
   };
 
   meta = with lib; {
     description = "Define and build CI for Nix projects anywhere";
     homepage = "https://github.com/srid/nixci";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ srid ];
+    maintainers = with maintainers; [ srid shivaraj-bh ];
     mainProgram = "nixci";
   };
 }

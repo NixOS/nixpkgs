@@ -1,23 +1,29 @@
-{ lib
-, buildPythonPackage
-, catboost
-, python
-, graphviz
-, matplotlib
-, numpy
-, pandas
-, plotly
-, scipy
-, setuptools
-, six
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  catboost,
+  python,
+  graphviz,
+  matplotlib,
+  numpy,
+  pandas,
+  plotly,
+  scipy,
+  setuptools,
+  six,
+  wheel,
 }:
 
-buildPythonPackage {
-  inherit (catboost) pname version src meta;
+buildPythonPackage rec {
+  inherit (catboost)
+    pname
+    version
+    src
+    meta
+    ;
   format = "pyproject";
 
-  sourceRoot = "source/catboost/python-package";
+  sourceRoot = "${src.name}/catboost/python-package";
 
   nativeBuildInputs = [
     setuptools

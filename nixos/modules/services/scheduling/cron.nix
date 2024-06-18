@@ -40,13 +40,13 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the Vixie cron daemon.";
+        description = "Whether to enable the Vixie cron daemon.";
       };
 
       mailto = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = lib.mdDoc "Email address to which job output will be mailed.";
+        description = "Email address to which job output will be mailed.";
       };
 
       systemCronJobs = mkOption {
@@ -57,7 +57,7 @@ in
             "* * * * *  eelco  echo Hello World > /home/eelco/cronout"
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           A list of Cron jobs to be appended to the system-wide
           crontab.  See the manual page for crontab for the expected
           format. If you want to get the results mailed you must setuid
@@ -76,7 +76,7 @@ in
       cronFiles = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           A list of extra crontab files that will be read and appended to the main
           crontab file when the cron service starts.
         '';

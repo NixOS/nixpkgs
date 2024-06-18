@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/yoriyuki/Camomile/tree/master/Camomile";
-    description = "A comprehensive Unicode library for OCaml";
+    description = "Comprehensive Unicode library for OCaml";
     license = lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
     maintainers = [

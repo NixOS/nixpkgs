@@ -63,15 +63,15 @@
     version = "3.1.6";
   };
   CFPropertyList = {
-    dependencies = ["rexml"];
+    dependencies = ["base64" "nkf" "rexml"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1a36zn77yyibqsfpka0i8vgf3yv98ic2b9wwlbc29566y8wpa2bq";
+      sha256 = "0k1w5i4lb1z941m7ds858nly33f3iv12wvr1zav5x3fa99hj2my4";
       type = "gem";
     };
-    version = "3.0.6";
+    version = "3.0.7";
   };
   claide = {
     groups = ["default"];
@@ -89,10 +89,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "19rmw9518zlcalr7vy6f10rbiya7ch86z3nfk2d6klw41ihc5hrq";
+      sha256 = "02h9lk5w0ilz39cdl7fil0fpmfbzyc23whkgp4rx2a6hx0yibxgh";
       type = "gem";
     };
-    version = "1.15.1";
+    version = "1.15.2";
   };
   cocoapods-core = {
     dependencies = ["activesupport" "addressable" "algoliasearch" "concurrent-ruby" "fuzzy_match" "nap" "netrc" "public_suffix" "typhoeus"];
@@ -100,10 +100,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "03dh7vfr9r248c8vbkssa6q0y9imvv1ms6mx28w06ysmdvn4vbgv";
+      sha256 = "0di1g9k1f6i80yxzdl3rdlfdk2w89dv6k5m06444rbg1gzcm09ij";
       type = "gem";
     };
-    version = "1.15.1";
+    version = "1.15.2";
   };
   cocoapods-deintegrate = {
     groups = ["default"];
@@ -305,10 +305,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0hv03j1ac349pjymis7jxmbqr5jalc60cg27529bbb3zymswhdjz";
+      sha256 = "0667vf0zglacry87nkcl3ns8421aydvz71vfa3g3yjhiq8zh19f5";
       type = "gem";
     };
-    version = "5.22.0";
+    version = "5.22.2";
   };
   molinillo = {
     groups = ["default"];
@@ -359,6 +359,16 @@
       type = "gem";
     };
     version = "0.11.0";
+  };
+  nkf = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "09piyp2pd74klb9wcn0zw4mb5l0k9wzwppxggxi1yi95l2ym3hgv";
+      type = "gem";
+    };
+    version = "0.2.0";
   };
   public_suffix = {
     groups = ["default"];

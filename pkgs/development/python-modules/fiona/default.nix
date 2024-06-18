@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cython_3
-, gdal
-, oldest-supported-numpy
-, setuptools
-, wheel
-, attrs
-, certifi
-, click
-, click-plugins
-, cligj
-, munch
-, shapely
-, boto3
-, pytestCheckHook
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython,
+  gdal,
+  oldest-supported-numpy,
+  setuptools,
+  wheel,
+  attrs,
+  certifi,
+  click,
+  click-plugins,
+  cligj,
+  munch,
+  shapely,
+  boto3,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "fiona";
-  version = "1.9.5";
+  version = "1.9.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,20 +31,18 @@ buildPythonPackage rec {
     owner = "Toblerity";
     repo = "Fiona";
     rev = "refs/tags/${version}";
-    hash = "sha256-fq/BuyzuK4iOxdpE4h+KRH0CxOEk/wdmbb9KgCfJ1cw=";
+    hash = "sha256-MboM3IwGF8cuz+jMQ3QVZFAHjpspQ6kVJincq7OEkCM=";
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     gdal # for gdal-config
     oldest-supported-numpy
     setuptools
     wheel
   ];
 
-  buildInputs = [
-    gdal
-  ];
+  buildInputs = [ gdal ];
 
   propagatedBuildInputs = [
     attrs
@@ -84,15 +83,14 @@ buildPythonPackage rec {
     "test_append_memoryfile_drivers"
   ];
 
-  pythonImportsCheck = [
-    "fiona"
-  ];
+  pythonImportsCheck = [ "fiona" ];
 
   doInstallCheck = true;
 
   meta = with lib; {
     changelog = "https://github.com/Toblerity/Fiona/blob/${src.rev}/CHANGES.txt";
     description = "OGR's neat, nimble, no-nonsense API for Python";
+    mainProgram = "fio";
     homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = teams.geospatial.members;

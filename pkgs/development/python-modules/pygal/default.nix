@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, importlib-metadata
+  # dependencies
+  importlib-metadata,
 
-# optional-dependencies
-, lxml
-, cairosvg
+  # optional-dependencies
+  lxml,
+  cairosvg,
 
-# tests
-, pyquery
-, pytestCheckHook
+  # tests
+  pyquery,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,13 +33,9 @@ buildPythonPackage rec {
       --replace pytest-runner ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ importlib-metadata ];
 
   passthru.optional-dependencies = {
     lxml = [ lxml ];
@@ -59,6 +56,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Kozea/pygal/blob/${version}/docs/changelog.rst";
     downloadPage = "https://github.com/Kozea/pygal";
     description = "Sexy and simple python charting";
+    mainProgram = "pygal_gen.py";
     homepage = "http://www.pygal.org";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ ];

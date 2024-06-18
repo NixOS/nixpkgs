@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An interactive replacer for ripgrep that makes it easy to find and replace across files on the command line";
+    description = "Interactive replacer for ripgrep that makes it easy to find and replace across files on the command line";
     homepage = "https://github.com/acheronfail/repgrep";
     changelog = "https://github.com/acheronfail/repgrep/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit asl20 unlicense ];

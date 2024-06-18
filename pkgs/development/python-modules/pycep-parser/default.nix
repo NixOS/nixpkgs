@@ -1,13 +1,14 @@
-{ lib
-, assertpy
-, buildPythonPackage
-, fetchFromGitHub
-, lark
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, regex
-, typing-extensions
+{
+  lib,
+  assertpy,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lark,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-qogUjj/GwMGwFEin+xJCSOCf5Ut8bgsFakyoMhkyKgU=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     lark
@@ -39,9 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pycep"
-  ];
+  pythonImportsCheck = [ "pycep" ];
 
   meta = with lib; {
     description = "Python based Bicep parser";

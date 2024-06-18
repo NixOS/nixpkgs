@@ -115,7 +115,10 @@ in {
     source.systemctl("start --wait syncoid-pool-sanoid.service")
     target.succeed("cat /mnt/pool/sanoid/test.txt")
     source.systemctl("start --wait syncoid-pool-syncoid.service")
+    source.systemctl("start --wait syncoid-pool-syncoid.service")
     target.succeed("cat /mnt/pool/syncoid/test.txt")
+
+    assert(len(source.succeed("zfs list -H -t snapshot pool/syncoid").splitlines()) == 1), "Syncoid should only retain one sync snapshot"
 
     source.systemctl("start --wait syncoid-pool.service")
     target.succeed("[[ -d /mnt/pool/full-pool/syncoid ]]")

@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "fcitx5-lua";
-  version = "5.0.12";
+  version = "5.0.13";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tnGPjMc8oL/P6Vyt7eNYWcPMhYhdpFWtCF4E3dJYGPw=";
+    hash = "sha256-XRfYQquR9SVlYr2sX6ii8JjMyjJZWSMf1u2oKUmOhf8=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

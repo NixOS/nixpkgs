@@ -26,7 +26,7 @@
 # needed for avoiding crash on file selector
 , gsettings-desktop-schemas
 , glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , hicolor-icon-theme
 }:
 
@@ -79,7 +79,7 @@ in stdenv.mkDerivation {
     ./0001-fix-locale.patch
   ];
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 ];
 
   preBuild = ''
     makeFlagsArray+=(PYTHON="python -m py_compile")

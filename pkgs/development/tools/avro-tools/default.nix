@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage    = "https://avro.apache.org/";
     description = "Avro command-line tools and utilities";
+    mainProgram = "avro-tools";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license     = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ];

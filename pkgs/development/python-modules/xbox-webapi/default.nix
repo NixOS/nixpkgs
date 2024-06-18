@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, appdirs
-, ecdsa
-, httpx
-, ms-cv
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, respx
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  appdirs,
+  ecdsa,
+  httpx,
+  ms-cv,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  respx,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-9A3gdSlRjBCx5fBW+jkaSWsFuGieXQKvbEbZzGzLf94=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     appdirs

@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   ];
   meta = with lib; {
     description = "Simple creation and editing of screenshots";
+    mainProgram = "qScreenshot";
     homepage = "https://sourceforge.net/projects/qscreenshot/";
     license = licenses.gpl2;
     platforms = platforms.all;

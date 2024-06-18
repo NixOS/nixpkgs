@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ipykernel
-, gcc
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ipykernel,
+  gcc,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Minimalistic C kernel for Jupyter";
+    mainProgram = "install_c_kernel";
     homepage = "https://github.com/brendanrius/jupyter-c-kernel/";
     license = licenses.mit;
     maintainers = [ ];

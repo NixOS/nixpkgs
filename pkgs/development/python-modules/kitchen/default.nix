@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
   # Waiting for upstream's clean-up
   doCheck = false;
 
-  pythonImportsCheck = [
-    "kitchen"
-  ];
+  pythonImportsCheck = [ "kitchen" ];
 
   meta = with lib; {
     description = "Kitchen contains a cornucopia of useful code";

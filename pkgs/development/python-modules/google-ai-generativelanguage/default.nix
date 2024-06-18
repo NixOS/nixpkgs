@@ -1,31 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-testutils
-, grpcio
-, grpcio-status
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-testutils,
+  grpcio,
+  grpcio-status,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-ai-generativelanguage";
-  version = "0.5.2";
-  format = "setuptools";
+  version = "0.6.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-njzyaFPXTRvZmWfB0uYufMNqhTBBN7fkKtS7bUyA8ME=";
+    hash = "sha256-xAicJ3+k4mci92qwPuMDnyi+i/HJvigpSLlYOhVMbXk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     google-api-core
     grpcio
     grpcio-status

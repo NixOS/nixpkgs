@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   version = "1.0.2";
@@ -14,7 +18,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "FIGlet in pure Python";
-    license     = licenses.gpl2Plus;
+    mainProgram = "pyfiglet";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

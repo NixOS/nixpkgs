@@ -4,7 +4,7 @@
 , pkg-config
 , runCommand
 , writeText
-, wrapGAppsHook
+, wrapGAppsHook3
 , withNvenc ? false
 , atk
 , cairo
@@ -89,7 +89,7 @@ in buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     pandoc
   ] ++ lib.optional withNvenc cudatoolkit;
 
@@ -213,7 +213,7 @@ in buildPythonApplication rec {
     description = "Persistent remote applications for X";
     changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ offline numinit mvnetbiz ];
   };
 }

@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, pyperclip
-, fetchFromGitHub
-, xlib
-, pillow
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  pyperclip,
+  fetchFromGitHub,
+  xlib,
+  pillow,
 }:
 buildPythonPackage rec {
-  pname = "MouseInfo";
+  pname = "mouseinfo";
   version = "0.1.3";
 
   src = fetchFromGitHub {
@@ -34,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "An application to display XY position and RGB color information for the pixel currently under the mouse. Works on Python 2 and 3.";
+    description = "Application to display XY position and RGB color information for the pixel currently under the mouse. Works on Python 2 and 3";
     homepage = "https://github.com/asweigart/mouseinfo";
     license = licenses.gpl3;
     maintainers = with maintainers; [ lucasew ];

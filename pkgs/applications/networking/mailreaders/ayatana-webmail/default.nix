@@ -7,7 +7,7 @@
 , libnotify
 , glib
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 # BTW libappindicator is also supported, but upstream recommends their
 # implementation, see:
 # https://github.com/AyatanaIndicators/ayatana-webmail/issues/24#issuecomment-1050352862
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     glib # For compiling gsettings-schemas
   ];
 

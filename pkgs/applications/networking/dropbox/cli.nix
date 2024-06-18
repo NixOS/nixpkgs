@@ -12,7 +12,7 @@
 }:
 
 let
-  version = "2023.09.06";
+  version = "2024.04.17";
   dropboxd = "${dropbox}/bin/dropbox";
 in
 stdenv.mkDerivation {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://linux.dropbox.com/packages/nautilus-dropbox-${version}.tar.bz2";
-    hash = "sha256-kZMwj8Fn8Hf58C57wE025TlmiSs5TaKMGEzvb2QjgSw=";
+    hash = "sha256-pqCYzxaqR0f0CBaseT1Z436K47cIDQswYR1sK4Zj8sE=";
   };
 
   strictDeps = true;

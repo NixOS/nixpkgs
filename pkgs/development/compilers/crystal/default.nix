@@ -152,7 +152,7 @@ let
         # Darwin links against libc++ not libstdc++. Newer versions of clang (12+) require
         # libc++abi to be linked explicitly (see https://github.com/NixOS/nixpkgs/issues/166205).
         substituteInPlace src/llvm/lib_llvm.cr \
-          --replace '@[Link("stdc++")]' '@[Link("c++", "-l${stdenv.cc.libcxx.cxxabi.libName}")]'
+          --replace '@[Link("stdc++")]' '@[Link("c++")]'
       '';
 
       # Defaults are 4
@@ -249,7 +249,8 @@ let
 
       meta = with lib; {
         inherit (binary.meta) platforms;
-        description = "A compiled language with Ruby like syntax and type inference";
+        description = "Compiled language with Ruby like syntax and type inference";
+        mainProgram = "crystal";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
         maintainers = with maintainers; [ david50407 manveru peterhoeg donovanglover ];
@@ -264,6 +265,16 @@ rec {
       aarch64-darwin = "sha256-4VB4yYGl1/YeYSsHOZq7fdeQ8IQMfloAPhEU0iKrvxs=";
       x86_64-darwin = "sha256-4VB4yYGl1/YeYSsHOZq7fdeQ8IQMfloAPhEU0iKrvxs=";
       aarch64-linux = "sha256-QgPKUDFyodqY1+b85AybSpbbr0RmfISdNpB08Wf34jo=";
+    };
+  };
+
+  binaryCrystal_1_10 = genericBinary {
+    version = "1.10.1";
+    sha256s = {
+      x86_64-linux = "sha256-F0LjdV02U9G6B8ApHxClF/o5KvhxMNukSX7Z2CwSNIs=";
+      aarch64-darwin = "sha256-5kkObQl0VIO6zqQ8TYl0JzYyUmwfmPE9targpfwseSQ=";
+      x86_64-darwin = "sha256-5kkObQl0VIO6zqQ8TYl0JzYyUmwfmPE9targpfwseSQ=";
+      aarch64-linux = "sha256-AzFz+nrU/HJmCL1hbCKXf5ej/uypqV1GJPVLQ4J3778=";
     };
   };
 
@@ -296,5 +307,12 @@ rec {
     llvmPackages = llvmPackages_15;
   };
 
-  crystal = crystal_1_9;
+  crystal_1_11 = generic {
+    version = "1.11.2";
+    sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_15;
+  };
+
+  crystal = crystal_1_11;
 }

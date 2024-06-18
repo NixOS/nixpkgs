@@ -12,10 +12,10 @@ in
 {
   ###### interface
   options.services.kubernetes.flannel = {
-    enable = mkEnableOption (lib.mdDoc "flannel networking");
+    enable = mkEnableOption "flannel networking";
 
     openFirewallPorts = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Whether to open the Flannel UDP ports in the firewall on all interfaces.'';
       type = types.bool;
       default = true;

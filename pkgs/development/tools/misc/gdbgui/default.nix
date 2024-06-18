@@ -43,7 +43,8 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A browser-based frontend for GDB";
+    description = "Browser-based frontend for GDB";
+    mainProgram = "gdbgui";
     homepage = "https://www.gdbgui.com/";
     license = licenses.gpl3;
     platforms = platforms.unix;

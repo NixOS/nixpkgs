@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,24 +22,17 @@ buildPythonPackage rec {
     hash = "sha256-v9hfk2/hBkWtOobQdaYXNOZTTcEqnMV6JYqtjjoidOs=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    packaging
-  ];
+  propagatedBuildInputs = [ packaging ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "newversion"
-  ];
+  pythonImportsCheck = [ "newversion" ];
 
   meta = with lib; {
     description = "PEP 440 version manager";
+    mainProgram = "newversion";
     homepage = "https://github.com/vemel/newversion";
     changelog = "https://github.com/vemel/newversion/releases/tag/${version}";
     license = with licenses; [ mit ];

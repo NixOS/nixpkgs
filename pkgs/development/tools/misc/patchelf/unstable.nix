@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, autoreconfHook, fetchFromGitHub, unstableGitUpdater }:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "patchelf";
-  version = "unstable-2024-01-15";
+  version = "0.18.0-unstable-2024-01-15";
 
   src = fetchFromGitHub {
     owner = "NixOS";
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/NixOS/patchelf";
     license = licenses.gpl3;
-    description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
+    description = "Small utility to modify the dynamic linker and RPATH of ELF executables";
+    mainProgram = "patchelf";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
   };

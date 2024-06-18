@@ -36,6 +36,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Matrix-Mixer for the Jack-Audio-connection-Kit";
+    mainProgram = "jackmix";
     homepage = "https://github.com/kampfschlaefer/jackmix";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ kampfschlaefer ];

@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "c0";
-  version = "unstable-2023-09-05";
+  version = "0-unstable-2023-09-05";
 
   src = fetchFromBitbucket {
     owner = "c0-lang";
@@ -73,10 +73,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A small safe subset of the C programming language, augmented with contracts";
+    description = "Small safe subset of the C programming language, augmented with contracts";
     homepage = "https://c0.cs.cmu.edu/";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.unix;
     # line 1: ../../bin/wrappergen: cannot execute: required file not found
     # make[2]: *** [../../lib.mk:83:

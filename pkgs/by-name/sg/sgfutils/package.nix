@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , openssl
-, iconv
+, libiconv
 , makeWrapper
 , imagemagick
 , makeFontsConf
@@ -18,7 +18,7 @@ stdenv.mkDerivation
     hash = "sha256-KWYgTxz32WK3MKouj1WAJtZmleKt5giCpzQPwfWruZQ=";
   };
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ iconv ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
   buildPhase = ''
     runHook preBuild
     make all

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC:=$(CC)" "PREFIX:=$(out)" ];
 
   meta = {
-    description = "A simple command-line utility for Linux, for extracting text from EPUB documents";
+    description = "Simple command-line utility for Linux, for extracting text from EPUB documents";
     homepage = "https://github.com/kevinboone/epub2txt2";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;

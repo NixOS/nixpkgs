@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python implementation implementation of GNU tail and head";
+    mainProgram = "pytail";
     homepage = "https://github.com/six8/pytailer";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

@@ -1,27 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook
+{ lib, stdenv, fetchurl, autoreconfHook
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsodium";
-  version = "1.0.19";
+  version = "1.0.20";
 
   src = fetchurl {
     url = "https://download.libsodium.org/libsodium/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-AY15/goEXMoHMx03vQy1ey6DjFG8SP2DehRy5QBou+o=";
+    hash = "sha256-67Ze9spDkzPCu0GgwZkFhyiNoH9sf9B8s6GMwY0wzhk=";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    # Drop -Ofast as it breaks floating point arithmetics in downstream
-    # users.
-    (fetchpatch {
-      name = "drop-Ofast.patch";
-      url  = "https://github.com/jedisct1/libsodium/commit/ffd1e374989197b44d815ac8b5d8f0b43b6ce534.patch";
-      hash = "sha256-jG0VirIoFBwYmRx6zHSu2xe6pXYwbeqNVhPJxO6eJEY=";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -39,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "A modern and easy-to-use crypto library";
+    description = "Modern and easy-to-use crypto library";
     homepage = "https://doc.libsodium.org/";
     license = licenses.isc;
     maintainers = with maintainers; [ raskin ];

@@ -1,28 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, aiohttp
-, aiohttp-socks
-, aioredis
-, aiofiles
-, aresponses
-, babel
-, certifi
-, magic-filter
-, pytest-asyncio
-, pytest-lazy-fixture
-, redis
-, hatchling
-, pydantic
-, pytz
-, gitUpdater
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aiohttp-socks,
+  aresponses,
+  babel,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  gitUpdater,
+  hatchling,
+  magic-filter,
+  motor,
+  pycryptodomex,
+  pydantic,
+  pymongo,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytest-lazy-fixture,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  redis,
 }:
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.4.1";
+  version = "3.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,14 +36,16 @@ buildPythonPackage rec {
     owner = "aiogram";
     repo = "aiogram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2of4KHdpAATOt0dCqI3AmTJtdeN5SdiWydeGjtagABI=";
+    hash = "sha256-GIfujywp+yYRQ4xm6O5GgTCMn6I3TSYE5epaqhMGGnE=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  pythonRelaxDeps = [ "pydantic" ];
+
+  dependencies = [
     aiofiles
     aiohttp
     babel
@@ -49,8 +56,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiohttp-socks
-    aioredis
     aresponses
+    motor
+    pycryptodomex
+    pymongo
+    pytest-aiohttp
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
@@ -58,17 +68,18 @@ buildPythonPackage rec {
     redis
   ];
 
-  # import failures
-  disabledTests = [
-    "test_aiohtt_server"
-    "test_deep_linking"
+  pytestFlagsArray = [
+    "-W"
+    "ignore::pluggy.PluggyTeardownRaisedWarning"
+    "-W"
+    "ignore::pytest.PytestDeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "aiogram" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "Modern and fully asynchronous framework for Telegram Bot API";

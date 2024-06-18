@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Osmocom implementation of 3GPP Mobile Swtiching Centre (MSC)";
+    mainProgram = "osmo-msc";
     homepage = "https://osmocom.org/projects/osmomsc/wiki";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ janik ];

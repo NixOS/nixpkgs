@@ -13,13 +13,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartridges";
-  version = "2.7.2";
+  version = "2.8.5";
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+18TWtxKT87CZ8vTtYac9aQ0wIbhJEXbXFZrSj5BmjI=";
+    hash = "sha256-7T+q3T8z8SCpAn3ayodZeETOsTwL+hhVWzY2JyBEoi4=";
   };
 
   pythonPath = with python3Packages; [
@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
     pyyaml
     requests
   ];
+
+  # TODO: remove this when #286814 hits master
+  mesonFlags = [ "-Dtiff_compression=jpeg" ];
 
   buildInputs = [
     libadwaita
@@ -56,14 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A GTK4 + Libadwaita game launcher";
+    description = "GTK4 + Libadwaita game launcher";
+    mainProgram = "cartridges";
     longDescription = ''
       A simple game launcher for all of your games.
       It has support for importing games from Steam, Lutris, Heroic
       and more with no login necessary.
       You can sort and hide games or download cover art from SteamGridDB.
     '';
-    homepage = "https://apps.gnome.org/app/hu.kramo.Cartridges/";
+    homepage = "https://apps.gnome.org/Cartridges/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.getchoo ];
     platforms = platforms.linux;

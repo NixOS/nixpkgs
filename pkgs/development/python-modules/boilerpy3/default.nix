@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 let
@@ -26,7 +27,6 @@ buildPythonPackage {
     substituteInPlace setup.py \
       --replace '>=3.6.*' '>=3.6'
   '';
-
 
   pythonImportsCheck = [ "boilerpy3" ];
 

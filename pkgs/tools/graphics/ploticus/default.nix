@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     cd src
   '';
-  makeFlags = [ "CC=cc" ];
+
+  makeFlags = [ "CC:=$(CC)" ];
 
   preInstall = ''
     mkdir -p "$out/bin"
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     prefab = runCommand "ploticus-prefab-test" {
-      buildInputs = [ finalAttrs.finalPackage ];
+      nativeBuildInputs = [ finalAttrs.finalPackage ];
     } ''
       # trivial test to see if the prefab path munging works
       mkdir $out/
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A non-interactive software package for producing plots and charts";
+    description = "Non-interactive software package for producing plots and charts";
     longDescription = ''
       Ploticus is a free, GPL'd, non-interactive
       software package for producing plots, charts, and graphics from

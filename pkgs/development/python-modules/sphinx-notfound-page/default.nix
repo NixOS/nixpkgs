@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pythonImportsCheckHook
-, pythonOlder
-# documentation build dependencies
-, sphinxHook
-, sphinx-prompt
-, sphinx-rtd-theme
-, sphinx-tabs
-, sphinx-autoapi
-, sphinxemoji
-# runtime dependencies
-, sphinx
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pythonImportsCheckHook,
+  pythonOlder,
+  # documentation build dependencies
+  sphinxHook,
+  sphinx-prompt,
+  sphinx-rtd-theme,
+  sphinx-tabs,
+  sphinx-autoapi,
+  sphinxemoji,
+  # runtime dependencies
+  sphinx,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -46,20 +47,14 @@ buildPythonPackage rec {
     sphinxemoji
   ];
 
-  buildInputs = [
-    sphinx
-  ];
+  buildInputs = [ sphinx ];
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  propagatedBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "notfound"
-  ];
+  pythonImportsCheck = [ "notfound" ];
 
   meta = with lib; {
-    description = "A sphinx extension to create a custom 404 page with absolute URLs hardcoded";
+    description = "Sphinx extension to create a custom 404 page with absolute URLs hardcoded";
     homepage = "https://github.com/readthedocs/sphinx-notfound-page";
     changelog = "https://github.com/readthedocs/sphinx-notfound-page/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;

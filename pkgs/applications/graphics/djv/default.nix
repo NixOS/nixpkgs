@@ -168,7 +168,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A professional review software for VFX, animation, and film production";
+    description = "Professional review software for VFX, animation, and film production";
     homepage = "https://darbyjohnston.github.io/DJV/";
     platforms = platforms.linux;
     maintainers = [ maintainers.blitz ];

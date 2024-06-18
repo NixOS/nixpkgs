@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A code formatting and linting tool for Swift";
+    description = "Code formatting and linting tool for Swift";
     homepage = "https://github.com/nicklockwood/SwiftFormat";
     license = licenses.mit;
     maintainers = [ maintainers.bdesham ];

@@ -1,5 +1,5 @@
 { stdenv, lib, sbclPackages
-, makeWrapper, wrapGAppsHook, gst_all_1
+, makeWrapper, wrapGAppsHook3, gst_all_1
 , glib, gdk-pixbuf, cairo
 , mailcap, pango, gtk3
 , glib-networking, gsettings-desktop-schemas
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = sbclPackages.nyxt;
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 ];
   gstBuildInputs = with gst_all_1; [
     gstreamer gst-libav
     gst-plugins-base
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";
+    mainProgram = "nyxt";
     homepage = "https://nyxt.atlas.engineer";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lewo dariof4 ];

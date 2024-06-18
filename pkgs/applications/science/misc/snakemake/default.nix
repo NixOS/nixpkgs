@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
-  version = "8.4.4";
+  version = "8.14.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-d3pUVhn9oi1ILDR4sfRh6HypbDn2JZMha27h0twixPc=";
+    hash = "sha256-6oguN4u4OUDXpDsbueSBNwtWgLCaKmgq3w/d/MsMh7Y=";
     # https://github.com/python-versioneer/python-versioneer/issues/217
     postFetch = ''
       sed -i "$out"/snakemake/_version.py -e 's#git_refnames = ".*"#git_refnames = " (tag: v${version})"#'
@@ -48,6 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     snakemake-interface-executor-plugins
     snakemake-interface-common
     snakemake-interface-storage-plugins
+    snakemake-interface-report-plugins
     stopit
     tabulate
     throttler
@@ -89,6 +90,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://snakemake.github.io";
     license = licenses.mit;
     description = "Python-based execution environment for make-like workflows";
+    mainProgram = "snakemake";
     longDescription = ''
       Snakemake is a workflow management system that aims to reduce the complexity of
       creating workflows by providing a fast and comfortable execution environment,

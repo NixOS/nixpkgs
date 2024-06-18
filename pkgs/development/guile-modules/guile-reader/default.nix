@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/guile-reader/";
-    description = "A simple framework for building readers for GNU Guile";
+    description = "Simple framework for building readers for GNU Guile";
     longDescription = ''
        Guile-Reader is a simple framework for building readers for GNU Guile.
 

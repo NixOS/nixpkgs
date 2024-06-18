@@ -1,8 +1,8 @@
 { version, hash }:
 
-{ lib, stdenv, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "jetty";
 
   inherit version;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Web server and javax.servlet container";
+    description = "Web server and javax.servlet container";
     homepage = "https://eclipse.dev/jetty/";
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];

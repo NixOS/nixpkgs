@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation ( finalAttrs: {
   pname = "blst";
-  version = "0.3.11";
+  version = "0.3.12";
 
   src = fetchFromGitHub {
     owner = "supranational";
     repo = "blst";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oqljy+ZXJAXEB/fJtmB8rlAr4UXM+Z2OkDa20gpILNA=";
+    hash = "sha256-z/xnttMuAOfoKn/yCBwdYbgcd6cDLD6tZxInAWn8XIk=";
   };
 
   buildPhase = ''

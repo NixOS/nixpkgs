@@ -1,20 +1,20 @@
-{ stdenv
-, lib
-, beautifulsoup4
-, blender
-, boxx
-, bpycv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchPypi
-, fetchurl
-, minexr
-, opencv4
-, python3Packages
-, requests
-, runCommand
-, writeText
-, zcs
+{
+  stdenv,
+  lib,
+  beautifulsoup4,
+  blender,
+  boxx,
+  bpycv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  minexr,
+  opencv4,
+  python3Packages,
+  requests,
+  runCommand,
+  writeText,
+  zcs,
 }:
 
 buildPythonPackage rec {
@@ -44,16 +44,19 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    render = runCommand "bpycv-render-test" {
-      BPY_EXAMPLE_DATA = fetchFromGitHub {
-        owner = "DIYer22";
-        repo = "bpycv_example_data";
-        hash = "sha256-dGb6KvbXTGTu5f4AqhA+i4AwTqBoR5SdXk0vsMEcD3Q=";
-        rev = "6ce0e65c107d572011394da16ffdf851e988dbb4";
-      };
-    } ''
-      ${blender.withPackages (ps: [ps.bpycv])}/bin/blender-wrapped -b -P ${./bpycv-test.py}
-    '';
+    render =
+      runCommand "bpycv-render-test"
+        {
+          BPY_EXAMPLE_DATA = fetchFromGitHub {
+            owner = "DIYer22";
+            repo = "bpycv_example_data";
+            hash = "sha256-dGb6KvbXTGTu5f4AqhA+i4AwTqBoR5SdXk0vsMEcD3Q=";
+            rev = "6ce0e65c107d572011394da16ffdf851e988dbb4";
+          };
+        }
+        ''
+          ${blender.withPackages (ps: [ ps.bpycv ])}/bin/blender-wrapped -b -P ${./bpycv-test.py}
+        '';
   };
 
   meta = with lib; {

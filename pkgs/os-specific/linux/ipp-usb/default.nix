@@ -1,13 +1,13 @@
 { buildGoModule, avahi, libusb1, pkg-config, lib, fetchFromGitHub, ronn }:
 buildGoModule rec {
   pname = "ipp-usb";
-  version = "0.9.24";
+  version = "0.9.25";
 
   src = fetchFromGitHub {
     owner = "openprinting";
     repo = "ipp-usb";
     rev = version;
-    sha256 = "sha256-06Kb4s9oN53llz/Yya45ig5rd86VvlcK+vRh3bL/MAw=";
+    sha256 = "sha256-ryKQDzb31JA192lbCYkwJrXgwErViqIzP4mD2NmWdgA=";
   };
 
   postPatch = ''
@@ -34,6 +34,7 @@ buildGoModule rec {
 
   meta = {
     description = "Daemon to use the IPP everywhere protocol with USB printers";
+    mainProgram = "ipp-usb";
     homepage = "https://github.com/OpenPrinting/ipp-usb";
     maintainers = [ lib.maintainers.symphorien ];
     platforms = lib.platforms.linux;

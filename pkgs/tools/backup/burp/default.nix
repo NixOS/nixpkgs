@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "BURP - BackUp and Restore Program";
     homepage    = "https://burp.grke.org";
-    license     = licenses.agpl3;
+    license     = licenses.agpl3Plus;
     maintainers = with maintainers; [ arjan-s ];
     platforms   = platforms.all;
   };

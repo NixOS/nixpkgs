@@ -18,7 +18,7 @@ let
 
     meta = with lib; {
       homepage = "https://github.com/grimfang4/sdl-gpu";
-      description = "A library for high-performance, modern 2D graphics with SDL written in C";
+      description = "Library for high-performance, modern 2D graphics with SDL written in C";
       license = licenses.mit;
       maintainers = with maintainers; [ CrazedProgrammer ];
     };
@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/incinirate/Riko4";
     description = "Fantasy console for pixel art game development";
+    mainProgram = "riko4";
     license = licenses.mit;
     maintainers = with maintainers; [ CrazedProgrammer ];
   };

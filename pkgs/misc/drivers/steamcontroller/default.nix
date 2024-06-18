@@ -25,7 +25,7 @@ buildPythonApplication {
   pythonImportsCheck = [ "steamcontroller" ];
 
   meta = with lib; {
-    description = "A standalone Steam controller driver";
+    description = "Standalone Steam controller driver";
     homepage    = "https://github.com/ynsta/steamcontroller";
     license     = licenses.mit;
     maintainers = with maintainers; [ rnhmjoj ];

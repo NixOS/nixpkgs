@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folks";
-  version = "0.15.7";
+  version = "0.15.9";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/folks/${lib.versions.majorMinor finalAttrs.version}/folks-${finalAttrs.version}.tar.xz";
-    sha256 = "Eg8hnvYyEsqpWuf2rrZOKZKLCxqLlFIFQwSgDQ80eHE=";
+    hash = "sha256-IxGzc1XDUfM/Fj/cOUh0oioKBoLDGUk9bYpuQgcRQV8=";
   };
 
   nativeBuildInputs = [
@@ -90,12 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
   # occur inconsistently
   doCheck = false;
 
-  # Prevents e-d-s add-contacts-stress-test from timing out
-  checkPhase = ''
-    runHook preCheck
-    meson test --timeout-multiplier 4
-    runHook postCheck
-  '';
+  mesonCheckFlags = [
+    # Prevents e-d-s add-contacts-stress-test from timing out
+    "--timeout-multiplier" "4"
+  ];
 
   postPatch = lib.optionalString telepathySupport ''
     patchShebangs tests/tools/manager-file.py
@@ -109,8 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A library that aggregates people from multiple sources to create metacontacts";
-    homepage = "https://wiki.gnome.org/Projects/Folks";
+    description = "Library that aggregates people from multiple sources to create metacontacts";
+    homepage = "https://gitlab.gnome.org/GNOME/folks";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

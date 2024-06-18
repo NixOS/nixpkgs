@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -25,18 +26,14 @@ buildPythonPackage rec {
       --replace "version=about['__version__']," "version='${version}',"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   dontWrapPythonPrograms = true;
 
   # Projec thas no released tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "exrex"
-  ];
+  pythonImportsCheck = [ "exrex" ];
 
   meta = with lib; {
     description = "Irregular methods on regular expressions";

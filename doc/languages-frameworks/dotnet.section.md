@@ -117,7 +117,6 @@ For more detail about managing the `deps.nix` file, see [Generating and updating
 * `useDotnetFromEnv` will change the binary wrapper so that it uses the .NET from the environment. The runtime specified by `dotnet-runtime` is given as a fallback in case no .NET is installed in the user's environment. This is most useful for .NET global tools and LSP servers, which often extend the .NET CLI and their runtime should match the users' .NET runtime.
 * `dotnet-sdk` is useful in cases where you need to change what dotnet SDK is being used. You can also set this to the result of `dotnetSdkPackages.combinePackages`, if the project uses multiple SDKs to build.
 * `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used. This can be either a regular dotnet runtime, or an aspnetcore.
-* `dotnet-test-sdk` is useful in cases where unit tests expect a different dotnet SDK. By default, this is set to the `dotnet-sdk` attribute.
 * `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. It gets restored and build, but not installed. You may need to regenerate your nuget lockfile after setting this. Note that if set, only tests from this project are executed.
 * `disabledTests` is used to disable running specific unit tests. This gets passed as: `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all unit test frameworks.
 * `dotnetRestoreFlags` can be used to pass flags to `dotnet restore`.
@@ -134,7 +133,7 @@ Here is an example `default.nix`, using some of the previously discussed argumen
 { lib, buildDotnetModule, dotnetCorePackages, ffmpeg }:
 
 let
-  referencedProject = import ../../bar { ... };
+  referencedProject = import ../../bar { /* ... */ };
 in buildDotnetModule rec {
   pname = "someDotnetApplication";
   version = "0.1";
@@ -210,11 +209,11 @@ buildDotnetGlobalTool {
 
   nugetSha256 = "sha256-ZG2HFyKYhVNVYd2kRlkbAjZJq88OADe3yjxmLuxXDUo=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cmd.petabridge.com/index.html";
     changelog = "https://cmd.petabridge.com/articles/RELEASE_NOTES.html";
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
   };
 }
 ```
@@ -236,7 +235,7 @@ the packages inside the `out` directory.
 $ nuget-to-nix out > deps.nix
 ```
 Which `nuget-to-nix` will generate an output similar to below
-```
+```nix
 { fetchNuGet }: [
   (fetchNuGet { pname = "FosterFramework"; version = "0.1.15-alpha"; sha256 = "0pzsdfbsfx28xfqljcwy100xhbs6wyx0z1d5qxgmv3l60di9xkll"; })
   (fetchNuGet { pname = "Microsoft.AspNetCore.App.Runtime.linux-x64"; version = "8.0.1"; sha256 = "1gjz379y61ag9whi78qxx09bwkwcznkx2mzypgycibxk61g11da1"; })

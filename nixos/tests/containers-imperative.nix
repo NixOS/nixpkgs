@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-imperative";
   meta = {
-    maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ];
+    maintainers = with lib.maintainers; [ aristid aszlig kampfschlaefer ];
   };
 
   nodes.machine =

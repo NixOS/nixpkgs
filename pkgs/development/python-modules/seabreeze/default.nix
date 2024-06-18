@@ -1,24 +1,25 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
 
-# build-system
-, cython_3
-, git
-, pkgconfig
-, setuptools
-, setuptools-scm
+  # build-system
+  cython,
+  git,
+  pkgconfig,
+  setuptools,
+  setuptools-scm,
 
-# dependneices
-, numpy
+  # dependneices
+  numpy,
 
-# optional-dependenices
-, pyusb
+  # optional-dependenices
+  pyusb,
 
-# tests
-, mock
-, pytestCheckHook
-, zipp
+  # tests
+  mock,
+  pytestCheckHook,
+  zipp,
 }:
 
 ## Usage
@@ -28,33 +29,29 @@
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
     rev = "refs/tags/v${version}";
-    hash = "sha256-25rFGpfwJKj9lLDO/ZsqJ2NfCsgSSJghLZxffjX/+7w=";
+    hash = "sha256-Ead9G4i8/mFwPqL2PGsndtmX93Njld3nvTTr6ROJTac=";
     leaveDotGit = true;
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     git
     pkgconfig
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   passthru.optional-dependencies = {
-    pyseabreeze = [
-      pyusb
-    ];
+    pyseabreeze = [ pyusb ];
   };
 
   postInstall = ''
@@ -73,8 +70,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/ap--/python-seabreeze";
-    description = "A python library to access Ocean Optics spectrometers";
-    maintainers = [];
+    description = "Python library to access Ocean Optics spectrometers";
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

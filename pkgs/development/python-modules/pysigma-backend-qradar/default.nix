@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pysigma
-, pysigma-pipeline-sysmon
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pysigma,
+  pysigma-pipeline-sysmon,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -24,27 +25,21 @@ buildPythonPackage rec {
     hash = "sha256-VymaxX+iqrRlf+WEt4xqEvNt5kg8xI5O/MoYahayu0o=";
   };
 
-  pythonRelaxDeps = [
-    "pysigma"
-  ];
+  pythonRelaxDeps = [ "pysigma" ];
 
   nativeBuildInputs = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
-    pysigma
-  ];
+  propagatedBuildInputs = [ pysigma ];
 
   nativeCheckInputs = [
     pysigma-pipeline-sysmon
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "sigma.backends.qradar"
-  ];
+  pythonImportsCheck = [ "sigma.backends.qradar" ];
 
   meta = with lib; {
     description = "Library to support Qradar for pySigma";

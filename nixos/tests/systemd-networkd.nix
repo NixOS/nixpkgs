@@ -23,13 +23,13 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
               ListenPort = 51820;
               FirewallMark = 42;
             };
-            wireguardPeers = [ {wireguardPeerConfig={
+            wireguardPeers = [ {
               Endpoint = "192.168.1.${peerId}:51820";
               PublicKey = pubk;
               PresharedKeyFile = pkgs.writeText "psk.key" "yTL3sCOL33Wzi6yCnf9uZQl/Z8laSE+zwpqOHC4HhFU=";
               AllowedIPs = [ "10.0.0.${peerId}/32" ];
               PersistentKeepalive = 15;
-            };}];
+            } ];
           };
         };
         networks = {
@@ -41,8 +41,8 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
             matchConfig = { Name = "wg0"; };
             address = [ "10.0.0.${nodeId}/32" ];
             routes = [
-              { routeConfig = { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; }; }
-              { routeConfig = { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; Table = "custom"; }; }
+              { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; }
+              { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; Table = "custom"; }
             ];
           };
           "30-eth1" = {
@@ -52,11 +52,11 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
               "fe80::${nodeId}/64"
             ];
             routingPolicyRules = [
-              { routingPolicyRuleConfig = { Table = 10; IncomingInterface = "eth1"; Family = "both"; };}
-              { routingPolicyRuleConfig = { Table = 20; OutgoingInterface = "eth1"; };}
-              { routingPolicyRuleConfig = { Table = 30; From = "192.168.1.1"; To = "192.168.1.2"; SourcePort = 666 ; DestinationPort = 667; };}
-              { routingPolicyRuleConfig = { Table = 40; IPProtocol = "tcp"; InvertRule = true; };}
-              { routingPolicyRuleConfig = { Table = 50; IncomingInterface = "eth1"; Family = "ipv4"; };}
+              { Table = 10; IncomingInterface = "eth1"; Family = "both"; }
+              { Table = 20; OutgoingInterface = "eth1"; }
+              { Table = 30; From = "192.168.1.1"; To = "192.168.1.2"; SourcePort = 666 ; DestinationPort = 667; }
+              { Table = 40; IPProtocol = "tcp"; InvertRule = true; }
+              { Table = 50; IncomingInterface = "eth1"; Family = "ipv4"; }
             ];
           };
         };

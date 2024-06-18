@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Time games of over-the-board chess";
+    mainProgram = "chess-clock";
     homepage = "https://gitlab.gnome.org/World/chess-clock";
     changelog = "https://gitlab.gnome.org/World/chess-clock/-/releases/v${version}";
     license = licenses.gpl3Plus;

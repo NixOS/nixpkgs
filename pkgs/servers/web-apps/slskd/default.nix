@@ -18,10 +18,10 @@ let
   };
 
   meta = with lib; {
-    description = "A modern client-server application for the Soulseek file sharing network";
+    description = "Modern client-server application for the Soulseek file sharing network";
     homepage = "https://github.com/slskd/slskd";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ ppom ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ ppom melvyn2 ];
     platforms = platforms.linux;
   };
 

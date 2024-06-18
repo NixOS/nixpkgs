@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, python
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  fetchPypi,
+  python,
 }:
 
 buildPythonPackage rec {

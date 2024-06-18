@@ -9,17 +9,19 @@ A basic config that notifies you of all certificate changes for your
 domain would look as follows:
 
 ```nix
-services.certspotter = {
-  enable = true;
-  # replace example.org with your domain name
-  watchlist = [ ".example.org" ];
-  emailRecipients = [ "webmaster@example.org" ];
-};
+{
+  services.certspotter = {
+    enable = true;
+    # replace example.org with your domain name
+    watchlist = [ ".example.org" ];
+    emailRecipients = [ "webmaster@example.org" ];
+  };
 
-# Configure an SMTP client
-programs.msmtp.enable = true;
-# Or you can use any other module that provides sendmail, like
-# services.nullmailer, services.opensmtpd, services.postfix
+  # Configure an SMTP client
+  programs.msmtp.enable = true;
+  # Or you can use any other module that provides sendmail, like
+  # services.nullmailer, services.opensmtpd, services.postfix
+}
 ```
 
 In this case, the leading dot in `".example.org"` means that Cert
@@ -59,16 +61,18 @@ For example, you can remove `emailRecipients` and send email
 notifications manually using the following hook:
 
 ```nix
-services.certspotter.hooks = [
-  (pkgs.writeShellScript "certspotter-hook" ''
-    function print_email() {
-      echo "Subject: [certspotter] $SUMMARY"
-      echo "Mime-Version: 1.0"
-      echo "Content-Type: text/plain; charset=US-ASCII"
-      echo
-      cat "$TEXT_FILENAME"
-    }
-    print_email | ${config.services.certspotter.sendmailPath} -i webmaster@example.org
-  '')
-];
+{
+  services.certspotter.hooks = [
+    (pkgs.writeShellScript "certspotter-hook" ''
+      function print_email() {
+        echo "Subject: [certspotter] $SUMMARY"
+        echo "Mime-Version: 1.0"
+        echo "Content-Type: text/plain; charset=US-ASCII"
+        echo
+        cat "$TEXT_FILENAME"
+      }
+      print_email | ${config.services.certspotter.sendmailPath} -i webmaster@example.org
+    '')
+  ];
+}
 ```

@@ -8,7 +8,15 @@
 ,   gdb  ? null
 }:
 
-with lib;
+let
+  inherit (lib)
+    licenses
+    maintainers
+    optionals
+    optionalString
+    platforms
+    ;
+in
 
 stdenv.mkDerivation rec {
   pname = "arx-libertatis";

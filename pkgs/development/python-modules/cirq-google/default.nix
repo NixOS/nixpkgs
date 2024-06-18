@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, cirq-core
-, freezegun
-, google-api-core
-, protobuf
-, pytestCheckHook
-, pythonRelaxDepsHook
-, setuptools
+{
+  buildPythonPackage,
+  cirq-core,
+  freezegun,
+  google-api-core,
+  protobuf,
+  pytestCheckHook,
+  pythonRelaxDepsHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -47,5 +48,4 @@ buildPythonPackage rec {
     # Calibration issue
     "test_xeb_to_calibration_layer"
   ];
-
 }

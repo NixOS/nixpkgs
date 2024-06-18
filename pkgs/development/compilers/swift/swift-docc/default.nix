@@ -51,6 +51,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Documentation compiler for Swift";
+    mainProgram = "docc";
     homepage = "https://github.com/apple/swift-docc";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;

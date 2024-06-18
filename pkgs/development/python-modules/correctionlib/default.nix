@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, numpy
-, scikit-build
-, setuptools
-, setuptools-scm
-, wheel
-, packaging
-, pybind11
-, pydantic
-, rich
-, awkward
-, pytestCheckHook
-, scipy
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cmake,
+  numpy,
+  scikit-build,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  packaging,
+  pybind11,
+  pydantic,
+  rich,
+  awkward,
+  pytestCheckHook,
+  scipy,
+  zlib,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
   propagatedBuildInputs = [
     numpy
@@ -54,12 +53,11 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [
-    "correctionlib"
-  ];
+  pythonImportsCheck = [ "correctionlib" ];
 
   meta = with lib; {
     description = "Provides a well-structured JSON data format for a wide variety of ad-hoc correction factors encountered in a typical HEP analysis";
+    mainProgram = "correction";
     homepage = "https://cms-nanoaod.github.io/correctionlib/";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ veprbl ];

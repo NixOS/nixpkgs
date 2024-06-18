@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) last splitString mkOption types mdDoc optionals;
+  inherit (lib) last splitString mkOption types optionals;
 
   libDir = pkgs.stdenv.hostPlatform.libDir;
   ldsoBasename = builtins.unsafeDiscardStringContext (last (splitString "/" pkgs.stdenv.cc.bintools.dynamicLinker));
@@ -14,7 +14,7 @@ in {
     environment.ldso = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = mdDoc ''
+      description = ''
         The executable to link into the normal FHS location of the ELF loader.
       '';
     };
@@ -22,7 +22,7 @@ in {
     environment.ldso32 = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = mdDoc ''
+      description = ''
         The executable to link into the normal FHS location of the 32-bit ELF loader.
 
         This currently only works on x86_64 architectures.

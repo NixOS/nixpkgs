@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, cython
-, poetry-core
-, setuptools
+  # build-system
+  cython,
+  poetry-core,
+  setuptools,
 
-# dependencies
-, habluetooth
+  # dependencies
+  habluetooth,
 
-# tests
-, bleak
-, pytestCheckHook
+  # tests
+  bleak,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-KTaZ3xbZpBIN5zP73YdJW6QeCQThGdqejnfWwvL+0R8=";
   };
 
+  patches = [
+    # https://github.com/home-assistant-libs/home-assistant-bluetooth/issues/38
+    ./habluetooth-3.0-compat.patch
+  ];
+
   postPatch = ''
     # drop pytest parametrization (coverage, etc.)
     sed -i '/addopts/d' pyproject.toml
@@ -41,13 +47,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    habluetooth
-  ];
+  propagatedBuildInputs = [ habluetooth ];
 
-  pythonImportsCheck = [
-    "home_assistant_bluetooth"
-  ];
+  pythonImportsCheck = [ "home_assistant_bluetooth" ];
 
   nativeCheckInputs = [
     bleak

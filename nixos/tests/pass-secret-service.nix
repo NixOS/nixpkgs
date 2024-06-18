@@ -26,7 +26,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
       programs.gnupg = {
         agent.enable = true;
-        agent.pinentryFlavor = "tty";
         dirmngr.enable = true;
       };
     };

@@ -19,15 +19,15 @@ in
   options.virtualisation.azure.agent = {
     enable = mkOption {
       default = false;
-      description = lib.mdDoc "Whether to enable the Windows Azure Linux Agent.";
+      description = "Whether to enable the Windows Azure Linux Agent.";
     };
     verboseLogging = mkOption {
       default = false;
-      description = lib.mdDoc "Whether to enable verbose logging.";
+      description = "Whether to enable verbose logging.";
     };
     mountResourceDisk = mkOption {
       default = true;
-      description = lib.mdDoc "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
+      description = "Whether the agent should format (ext4) and mount the resource disk to /mnt/resource.";
     };
   };
 

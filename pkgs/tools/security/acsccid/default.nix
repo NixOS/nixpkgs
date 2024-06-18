@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card readers";
+    description = "PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card readers";
     longDescription = ''
       acsccid is a PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card
       readers. This library provides a PC/SC IFD handler implementation and

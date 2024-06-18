@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/SorkinType/Merriweather";
-    description = "A text face designed to be pleasant to read on screens";
+    description = "Text face designed to be pleasant to read on screens";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ emily ];

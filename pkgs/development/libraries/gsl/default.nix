@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.hostPlatform.system != "i686-linux";
 
   meta = {
-    description = "The GNU Scientific Library, a large numerical library";
+    description = "GNU Scientific Library, a large numerical library";
     homepage = "https://www.gnu.org/software/gsl/";
     license = lib.licenses.gpl3Plus;
 

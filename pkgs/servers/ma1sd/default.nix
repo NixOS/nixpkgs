@@ -85,7 +85,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "a federated matrix identity server; fork of mxisd";
+    description = "Federated matrix identity server; fork of mxisd";
     homepage = "https://github.com/ma1uta/ma1sd";
     changelog = "https://github.com/ma1uta/ma1sd/releases/tag/${version}";
     sourceProvenance = with sourceTypes; [

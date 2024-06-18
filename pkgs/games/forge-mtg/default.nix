@@ -25,9 +25,9 @@ maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 
-  # Tests need a running Xorg.
-  mvnParameters = "-DskipTests";
   mvnHash = "sha256-QK9g0tG75lIhEtf4jW03N32YbD9Fe5iI0JTuqmCTtnE=";
+
+  doCheck = false; # Needs a running Xorg
 
   nativeBuildInputs = [ makeWrapper ];
 

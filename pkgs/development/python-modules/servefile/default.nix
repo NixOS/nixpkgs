@@ -1,10 +1,11 @@
-{ stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, lib
-, pyopenssl
-, pytestCheckHook
-, requests
+{
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pyopenssl,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyopenssl ];
 
-  nativeCheckInputs = [ pytestCheckHook requests ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests
+  ];
   # Test attempts to connect to a port on localhost which fails in nix build
   # environment.
   disabledTests = [
@@ -38,6 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Serve files from shell via a small HTTP server";
+    mainProgram = "servefile";
     homepage = "https://github.com/sebageek/servefile";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ samuela ];

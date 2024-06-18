@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, python
-, isPy27
-, six
-, zope-testing
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  python,
+  isPy27,
+  six,
+  zope-testing,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ zope-testing ];
 
   meta = with lib; {
-    description = "A documentation builder";
+    description = "Documentation builder";
     homepage = "https://pypi.python.org/pypi/manuel";
     license = licenses.zpl20;
   };
-
 }

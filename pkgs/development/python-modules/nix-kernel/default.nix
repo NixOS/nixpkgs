@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pexpect
-, notebook
-, nix
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  pexpect,
+  notebook,
+  nix,
 }:
 
 buildPythonPackage rec {

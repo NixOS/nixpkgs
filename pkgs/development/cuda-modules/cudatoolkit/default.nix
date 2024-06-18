@@ -1,8 +1,8 @@
 {
   cudaVersion,
-  runPatches ? [],
+  runPatches ? [ ],
   autoPatchelfHook,
-  autoAddOpenGLRunpathHook,
+  autoAddDriverRunpath,
   addOpenGLRunpath,
   alsa-lib,
   curlMinimal,
@@ -61,7 +61,7 @@ backendStdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
 
-  src = fetchurl {inherit (release) url sha256;};
+  src = fetchurl { inherit (release) url sha256; };
 
   outputs = [
     "out"
@@ -76,12 +76,12 @@ backendStdenv.mkDerivation rec {
       rsync
       addOpenGLRunpath
       autoPatchelfHook
-      autoAddOpenGLRunpathHook
+      autoAddDriverRunpath
       markForCudatoolkitRootHook
     ]
-    ++ lib.optionals (lib.versionOlder version "11") [libsForQt5.wrapQtAppsHook]
-    ++ lib.optionals (lib.versionAtLeast version "11.8") [qt6Packages.wrapQtAppsHook];
-  propagatedBuildInputs = [setupCudaHook];
+    ++ lib.optionals (lib.versionOlder version "11") [ libsForQt5.wrapQtAppsHook ]
+    ++ lib.optionals (lib.versionAtLeast version "11.8") [ qt6Packages.wrapQtAppsHook ];
+  propagatedBuildInputs = [ setupCudaHook ];
   buildInputs =
     lib.optionals (lib.versionOlder version "11") [
       libsForQt5.qt5.qtwebengine
@@ -130,7 +130,7 @@ backendStdenv.mkDerivation rec {
       (lib.getLib libtiff)
       qt6Packages.qtwayland
       rdma-core
-      (ucx.override {enableCuda = false;}) # Avoid infinite recursion
+      (ucx.override { enableCuda = false; }) # Avoid infinite recursion
       xorg.libxshmfence
       xorg.libxkbfile
     ]
@@ -144,17 +144,15 @@ backendStdenv.mkDerivation rec {
         gst_all_1.gstreamer
         gst_all_1.gst-plugins-base
       ])
-      ++ (
-        with qt6; [
-          qtmultimedia
-          qttools
-          qtpositioning
-          qtscxml
-          qtsvg
-          qtwebchannel
-          qtwebengine
-        ]
-      )
+      ++ (with qt6; [
+        qtmultimedia
+        qttools
+        qtpositioning
+        qtscxml
+        qtsvg
+        qtwebchannel
+        qtwebengine
+      ])
     ));
 
   # Prepended to runpaths by autoPatchelf.
@@ -170,26 +168,28 @@ backendStdenv.mkDerivation rec {
     "${placeholder "out"}/nvvm/lib64"
   ];
 
-  autoPatchelfIgnoreMissingDeps = [
-    # This is the hardware-dependent userspace driver that comes from
-    # nvidia_x11 package. It must be deployed at runtime in
-    # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
-    # than pinned in runpath
-    "libcuda.so.1"
+  autoPatchelfIgnoreMissingDeps =
+    [
+      # This is the hardware-dependent userspace driver that comes from
+      # nvidia_x11 package. It must be deployed at runtime in
+      # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
+      # than pinned in runpath
+      "libcuda.so.1"
 
-    # The krb5 expression ships libcom_err.so.3 but cudatoolkit asks for the
-    # older
-    # This dependency is asked for by target-linux-x64/CollectX/RedHat/x86_64/libssl.so.10
-    # - do we even want to use nvidia-shipped libssl?
-    "libcom_err.so.2"
-  ] ++ lib.optionals (lib.versionOlder version "10.1") [
-    # For Cuda 10.0, nVidia also shipped a jre implementation which needed
-    # two old versions of ffmpeg which are not available in nixpkgs
-    "libavcodec.so.54"
-    "libavcodec.so.53"
-    "libavformat.so.54"
-    "libavformat.so.53"
-  ];
+      # The krb5 expression ships libcom_err.so.3 but cudatoolkit asks for the
+      # older
+      # This dependency is asked for by target-linux-x64/CollectX/RedHat/x86_64/libssl.so.10
+      # - do we even want to use nvidia-shipped libssl?
+      "libcom_err.so.2"
+    ]
+    ++ lib.optionals (lib.versionOlder version "10.1") [
+      # For Cuda 10.0, nVidia also shipped a jre implementation which needed
+      # two old versions of ffmpeg which are not available in nixpkgs
+      "libavcodec.so.54"
+      "libavcodec.so.53"
+      "libavformat.so.54"
+      "libavformat.so.53"
+    ];
 
   preFixup =
     if (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") then
@@ -237,6 +237,7 @@ backendStdenv.mkDerivation rec {
       ${lib.optionalString (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") ''
         cd pkg/builds/cuda-toolkit
         mv * $out/
+        rm -f $out/nsight-systems-*/host-linux-x64/libstdc++.so*
       ''}
       ${lib.optionalString (lib.versionAtLeast version "11") ''
         mkdir -p $out/bin $out/lib64 $out/include $doc
@@ -282,7 +283,14 @@ backendStdenv.mkDerivation rec {
               for qtlib in $out/host-linux-x64/Plugins/*/libq*.so; do
                 qtdir=$(basename $(dirname $qtlib))
                 filename=$(basename $qtlib)
-                for qtpkgdir in ${lib.concatMapStringsSep " " (x: qt6Packages.${x}) ["qtbase" "qtimageformats" "qtsvg" "qtwayland"]}; do
+                for qtpkgdir in ${
+                  lib.concatMapStringsSep " " (x: qt6Packages.${x}) [
+                    "qtbase"
+                    "qtimageformats"
+                    "qtsvg"
+                    "qtwayland"
+                  ]
+                }; do
                   if [ -e $qtpkgdir/lib/qt-6/plugins/$qtdir/$filename ]; then
                     ln -snf $qtpkgdir/lib/qt-6/plugins/$qtdir/$filename $qtlib
                   fi
@@ -303,8 +311,9 @@ backendStdenv.mkDerivation rec {
       ''}
 
       # Remove some cruft.
-      ${lib.optionalString ((lib.versionAtLeast version "7.0") && (lib.versionOlder version "10.1"))
-        "rm $out/bin/uninstall*"}
+      ${lib.optionalString (
+        (lib.versionAtLeast version "7.0") && (lib.versionOlder version "10.1")
+      ) "rm $out/bin/uninstall*"}
 
       # Fixup path to samples (needed for cuda 6.5 or else nsight will not find them)
       if [ -d "$out"/cuda-samples ]; then
@@ -360,19 +369,18 @@ backendStdenv.mkDerivation rec {
       wrapProgram "$out/bin/$b" \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
     done
-    ${
-      lib.optionalString (lib.versionAtLeast version "12")
-        # Check we don't have any lurking vendored qt libraries that weren't
-        # replaced during installPhase
-        ''
-          qtlibfiles=$(find $out -name "libq*.so" -type f)
-          if [ ! -z "$qtlibfiles" ]; then
-            echo "Found unexpected vendored Qt library files in $out" >&2
-            echo $qtlibfiles >&2
-            echo "These should be replaced with symlinks in installPhase" >&2
-            exit 1
-          fi
-        ''
+    ${lib.optionalString (lib.versionAtLeast version "12")
+      # Check we don't have any lurking vendored qt libraries that weren't
+      # replaced during installPhase
+      ''
+        qtlibfiles=$(find $out -name "libq*.so" -type f)
+        if [ ! -z "$qtlibfiles" ]; then
+          echo "Found unexpected vendored Qt library files in $out" >&2
+          echo $qtlibfiles >&2
+          echo "These should be replaced with symlinks in installPhase" >&2
+          exit 1
+        fi
+      ''
     }
   '';
 
@@ -403,9 +411,9 @@ backendStdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A compiler for NVIDIA GPUs, math libraries, and tools";
+    description = "Deprecated runfile-based CUDAToolkit installation (a compiler for NVIDIA GPUs, math libraries, and tools)";
     homepage = "https://developer.nvidia.com/cuda-toolkit";
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     license = licenses.nvidiaCuda;
     maintainers = teams.cuda.members;
   };

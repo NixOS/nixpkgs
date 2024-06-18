@@ -1,26 +1,31 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, dnspython
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pykaleidescape";
-  version = "2022.2.3";
-  format = "setuptools";
+  version = "1.0.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SteveEasley";
-    repo = pname;
+    repo = "pykaleidescape";
     rev = "refs/tags/v${version}";
-    hash = "sha256-h5G7wV4Z+sf8Qq4GNFsp8DVDSgQgS0dLGf+DzK/egYM=";
+    hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -32,14 +37,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "kaleidescape"
-  ];
+  pythonImportsCheck = [ "kaleidescape" ];
 
-  disabledTests = [
-    # Test requires network access
-    "test_resolve_succeeds"
-  ];
+  disabledTests =
+    [
+      # Test requires network access
+      "test_resolve_succeeds"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # stuck in EpollSelector.poll()
+      "test_manual_disconnect"
+      "test_concurrency"
+    ];
 
   meta = with lib; {
     description = "Module for controlling Kaleidescape devices";

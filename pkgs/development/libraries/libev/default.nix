@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, updateAutotoolsGnuConfigScriptsHook
 , # Note: -static hasn’t work on darwin
   static ? with stdenv.hostPlatform; isStatic && !isDarwin
 }:
@@ -17,10 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "1sjs4324is7fp21an4aas2z4dwsvs6z4xwrmp72vwpq1s6wbfzjh";
   };
 
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+
   configureFlags = lib.optional (static) "LDFLAGS=-static";
 
   meta = {
-    description = "A high-performance event loop/event model with lots of features";
+    description = "High-performance event loop/event model with lots of features";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2; # or GPL2+

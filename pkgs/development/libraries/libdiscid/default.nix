@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation -framework IOKit";
 
   meta = with lib; {
-    description = "A C library for creating MusicBrainz DiscIDs from audio CDs";
+    description = "C library for creating MusicBrainz DiscIDs from audio CDs";
     homepage = "http://musicbrainz.org/doc/libdiscid";
     maintainers = with maintainers; [ ehmry ];
     license = licenses.lgpl21;

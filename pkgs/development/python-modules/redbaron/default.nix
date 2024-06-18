@@ -1,4 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, baron, pytestCheckHook }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  baron,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "redbaron";
@@ -15,7 +21,7 @@ buildPythonPackage rec {
   preCheck = ''
     rm -rf tests/__pycache__
     rm tests/test_bounding_box.py
-  ''; #error about fixtures
+  ''; # error about fixtures
 
   nativeCheckInputs = [ pytestCheckHook ];
 

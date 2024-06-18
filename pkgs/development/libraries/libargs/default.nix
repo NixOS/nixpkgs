@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple header-only C++ argument parser library";
+    description = "Simple header-only C++ argument parser library";
     homepage = "https://github.com/Taywee/args";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

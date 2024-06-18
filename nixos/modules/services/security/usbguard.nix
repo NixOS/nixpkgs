@@ -37,7 +37,7 @@ in
 
   options = {
     services.usbguard = {
-      enable = mkEnableOption (lib.mdDoc "USBGuard daemon");
+      enable = mkEnableOption "USBGuard daemon";
 
       package = mkPackageOption pkgs "usbguard" {
         extraDescription = ''
@@ -49,7 +49,7 @@ in
         type = types.nullOr types.path;
         default = "/var/lib/usbguard/rules.conf";
         example = "/run/secrets/usbguard-rules";
-        description = lib.mdDoc ''
+        description = ''
           This tells the USBGuard daemon which file to load as policy rule set.
 
           The file can be changed manually or via the IPC interface assuming it has the right file permissions.
@@ -64,7 +64,7 @@ in
         example = ''
           allow with-interface equals { 08:*:* }
         '';
-        description = lib.mdDoc ''
+        description = ''
           The USBGuard daemon will load this as the policy rule set.
           As these rules are NixOS managed they are immutable and can't
           be changed by the IPC interface.
@@ -80,9 +80,9 @@ in
       };
 
       implicitPolicyTarget = mkOption {
-        type = policy;
+        type = types.enum [ "allow" "block" "reject" ];
         default = "block";
-        description = lib.mdDoc ''
+        description = ''
           How to treat USB devices that don't match any rule in the policy.
           Target should be one of allow, block or reject (logically remove the
           device node from the system).
@@ -92,7 +92,7 @@ in
       presentDevicePolicy = mkOption {
         type = policy;
         default = "apply-policy";
-        description = lib.mdDoc ''
+        description = ''
           How to treat USB devices that are already connected when the daemon
           starts. Policy should be one of allow, block, reject, keep (keep
           whatever state the device is currently in) or apply-policy (evaluate
@@ -103,16 +103,16 @@ in
       presentControllerPolicy = mkOption {
         type = policy;
         default = "keep";
-        description = lib.mdDoc ''
+        description = ''
           How to treat USB controller devices that are already connected when
           the daemon starts. One of allow, block, reject, keep or apply-policy.
         '';
       };
 
       insertedDevicePolicy = mkOption {
-        type = policy;
+        type = types.enum [ "block" "reject" "apply-policy" ];
         default = "apply-policy";
-        description = lib.mdDoc ''
+        description = ''
           How to treat USB devices that are already connected after the daemon
           starts. One of block, reject, apply-policy.
         '';
@@ -121,7 +121,7 @@ in
       restoreControllerDeviceState = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           The  USBGuard  daemon  modifies  some attributes of controller
           devices like the default authorization state of new child device
           instances. Using this setting, you can control whether the daemon
@@ -134,7 +134,7 @@ in
         type = types.listOf types.str;
         default = [ "root" ];
         example = [ "root" "yourusername" ];
-        description = lib.mdDoc ''
+        description = ''
           A list of usernames that the daemon will accept IPC connections from.
         '';
       };
@@ -143,7 +143,7 @@ in
         type = types.listOf types.str;
         default = [ ];
         example = [ "wheel" ];
-        description = lib.mdDoc ''
+        description = ''
           A list of groupnames that the daemon will accept IPC connections
           from.
         '';
@@ -152,12 +152,12 @@ in
       deviceRulesWithPort = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Generate device specific rules including the "via-port" attribute.
         '';
       };
 
-      dbus.enable = mkEnableOption (lib.mdDoc "USBGuard dbus daemon");
+      dbus.enable = mkEnableOption "USBGuard dbus daemon";
     };
   };
 

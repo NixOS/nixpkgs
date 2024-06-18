@@ -176,6 +176,9 @@ stdenv.mkDerivation rec {
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
 
+  # Fixes compilation with newer versions of clang that make these warnings errors by default.
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion -Wno-incompatible-function-pointer-types";
+
   NIX_LDFLAGS = with lib; toString (
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
@@ -199,7 +202,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A movie player that supports many video formats";
+    description = "Movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ eelco ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A proof checker for unSAT proofs";
+    description = "Proof checker for unSAT proofs";
     longDescription = ''
       DRAT-trim is a satisfiability proof checking and trimming
       utility designed to validate proofs for all known satisfiability

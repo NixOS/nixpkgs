@@ -1,50 +1,50 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  stdenv,
 
-# build-system
-, hatchling
+  # build-system
+  hatchling,
 
-# dependencies
-, decorator
-, httptools
-, python-magic
-, urllib3
+  # dependencies
+  decorator,
+  httptools,
+  python-magic,
+  urllib3,
 
-# optional-dependencies
-, xxhash
-, pook
+  # optional-dependencies
+  xxhash,
+  pook,
 
-# tests
-, aiohttp
-, asgiref
-, fastapi
-, gevent
-, httpx
-, pytest-asyncio
-, pytestCheckHook
-, redis
-, redis-server
-, requests
-, sure
+  # tests
+  aiohttp,
+  asgiref,
+  fastapi,
+  gevent,
+  httpx,
+  psutil,
+  pytest-asyncio,
+  pytestCheckHook,
+  redis,
+  redis-server,
+  requests,
+  sure,
 
 }:
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.12.2";
+  version = "3.12.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BN9S5/mku+HT1vglyobgHZPWsY0yvbfQfpMRUKrnJQQ=";
+    hash = "sha256-6yWo7SBlVldK+AxUBnQOXjQBxz9HbIC+Ch977xiZxek=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     decorator
@@ -54,27 +54,25 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    pook = [
-      pook
-    ];
-    speedups = [
-      xxhash
-    ];
+    pook = [ pook ];
+    speedups = [ xxhash ];
   };
 
-  nativeCheckInputs = [
-    asgiref
-    fastapi
-    gevent
-    httpx
-    pytest-asyncio
-    pytestCheckHook
-    redis
-    requests
-    sure
-  ] ++ lib.optionals (pythonOlder "3.12") [
-    aiohttp
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      asgiref
+      fastapi
+      gevent
+      httpx
+      psutil
+      pytest-asyncio
+      pytestCheckHook
+      redis
+      requests
+      sure
+    ]
+    ++ lib.optionals (pythonOlder "3.12") [ aiohttp ]
+    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   preCheck = lib.optionalString stdenv.isLinux ''
     ${redis-server}/bin/redis-server &
@@ -95,19 +93,17 @@ buildPythonPackage rec {
     "test_truesendall_with_dump_from_recording"
     "test_asyncio_record_replay"
     "test_gethostbyname"
+    # httpx read failure
+    "test_no_dangling_fds"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
-    "tests/main/test_redis.py"
-  ];
+  disabledTestPaths = lib.optionals stdenv.isDarwin [ "tests/main/test_redis.py" ];
 
-  pythonImportsCheck = [
-    "mocket"
-  ];
+  pythonImportsCheck = [ "mocket" ];
 
   meta = with lib; {
     changelog = "https://github.com/mindflayer/python-mocket/releases/tag/${version}";
-    description = "A socket mock framework for all kinds of sockets including web-clients";
+    description = "Socket mock framework for all kinds of sockets including web-clients";
     homepage = "https://github.com/mindflayer/python-mocket";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];

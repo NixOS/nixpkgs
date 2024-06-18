@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# optional-dependencies
-, coverage
+  # optional-dependencies
+  coverage,
 
-# tests
-, unittestCheckHook
+  # tests
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,19 +26,13 @@ buildPythonPackage rec {
     hash = "sha256-f48Dohyd4sMwFZM6/O9yv45KLV3+w7QAkih95uQbCTo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   passthru.optional-dependencies = {
-    coverage = [
-      coverage
-    ];
+    coverage = [ coverage ];
   };
 
-  pythonImportsCheck = [
-    "nose2"
-  ];
+  pythonImportsCheck = [ "nose2" ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -48,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";
     description = "Test runner for Python";
+    mainProgram = "nose2";
     homepage = "https://github.com/nose-devs/nose2";
     license = licenses.bsd0;
     maintainers = with maintainers; [ ];

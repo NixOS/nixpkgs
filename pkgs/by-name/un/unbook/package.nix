@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An ebook to self-contained-HTML converter";
+    description = "Ebook to self-contained-HTML converter";
     homepage = "https://unbook.ludios.org";
     license = licenses.cc0;
     maintainers = with maintainers; [ jmbaur ];

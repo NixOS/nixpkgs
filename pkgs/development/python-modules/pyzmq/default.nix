@@ -1,55 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
 
-# build-system
-, cython_3
-, setuptools
-, setuptools-scm
-, packaging
-, cffi
+  # build-system
+  cython,
+  setuptools,
+  setuptools-scm,
+  packaging,
+  cffi,
 
-# dependencies
+  # dependencies
 
-, py
-, pytestCheckHook
-, python
-, pythonOlder
-, tornado
-, zeromq
-, pytest-asyncio
+  py,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  tornado,
+  zeromq,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "25.1.1";
+  version = "25.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JZwiSFtxq6zfqL95cgzXvPS50SizDqVU8BrnH9v9qiM=";
+    hash = "sha256-k/GqMR6LuRLjTwBM8YZAek6Q7sTw7MDv0mBWv37aAiY=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
     packaging
-  ] ++ (if isPyPy then [
-    cffi
-  ] else [
-    cython_3
-  ]);
+  ] ++ (if isPyPy then [ cffi ] else [ cython ]);
 
-  buildInputs = [
-    zeromq
-  ];
+  buildInputs = [ zeromq ];
 
-  propagatedBuildInputs = lib.optionals isPyPy [
-    cffi
-  ];
+  propagatedBuildInputs = lib.optionals isPyPy [ cffi ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -57,9 +50,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [
-    "zmq"
-  ];
+  pythonImportsCheck = [ "zmq" ];
 
   pytestFlagsArray = [
     "$out/${python.sitePackages}/zmq/tests/" # Folder with tests
@@ -89,7 +80,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
-    license = with licenses; [ bsd3 /* or */ lgpl3Only ];
+    license = with licenses; [
+      bsd3 # or
+      lgpl3Only
+    ];
     maintainers = with maintainers; [ ];
   };
 }

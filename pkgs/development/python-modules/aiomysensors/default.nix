@@ -1,21 +1,22 @@
-{ lib
-, aiofiles
-, asyncio-mqtt
-, awesomeversion
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, marshmallow
-, poetry-core
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiofiles,
+  asyncio-mqtt,
+  awesomeversion,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  marshmallow,
+  poetry-core,
+  pyserial-asyncio,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiomysensors";
-  version = "0.3.11";
+  version = "0.3.16";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,19 +25,17 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiomysensors";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uBmFJFmUClTkaAg8jTThygzmZv7UZDPSt0bXo8BLu00=";
+    hash = "sha256-1BpmjCgKiCZmBpBENlg79+I3UhkIxrgLAUD8ixpGUM8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=src --cov-report=term-missing:skip-covered" ""
+      --replace-fail " --cov=src --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     asyncio-mqtt
     awesomeversion
@@ -50,9 +49,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiomysensors"
-  ];
+  pythonImportsCheck = [ "aiomysensors" ];
 
   meta = with lib; {
     description = "Library to connect to MySensors gateways";
@@ -60,5 +57,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/MartinHjelmare/aiomysensors/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "aiomysensors";
   };
 }

@@ -11,21 +11,21 @@ let
         type = types.enum [ "mail" "web" ];
         default = "web";
         example = "mail";
-        description = lib.mdDoc ''
+        description = ''
           The type of log being collected.
         '';
       };
       domain = mkOption {
         type = types.str;
         default = name;
-        description = lib.mdDoc "The domain name to collect stats for.";
+        description = "The domain name to collect stats for.";
         example = "example.com";
       };
 
       logFile = mkOption {
         type = types.str;
         example = "/var/log/nginx/access.log";
-        description = lib.mdDoc ''
+        description = ''
           The log file to be scanned.
 
           For mail, set this to
@@ -38,7 +38,7 @@ let
       logFormat = mkOption {
         type = types.str;
         default = "1";
-        description = lib.mdDoc ''
+        description = ''
           The log format being used.
 
           For mail, set this to
@@ -52,7 +52,7 @@ let
         type = types.listOf types.str;
         default = [];
         example = [ "www.example.org" ];
-        description = lib.mdDoc ''
+        description = ''
           List of aliases the site has.
         '';
       };
@@ -65,22 +65,22 @@ let
             "ValidHTTPCodes" = "404";
           }
         '';
-        description = lib.mdDoc "Extra configuration to be appended to awstats.\${name}.conf.";
+        description = "Extra configuration to be appended to awstats.\${name}.conf.";
       };
 
       webService = {
-        enable = mkEnableOption (lib.mdDoc "awstats web service");
+        enable = mkEnableOption "awstats web service";
 
         hostname = mkOption {
           type = types.str;
           default = config.domain;
-          description = lib.mdDoc "The hostname the web service appears under.";
+          description = "The hostname the web service appears under.";
         };
 
         urlPrefix = mkOption {
           type = types.str;
           default = "/awstats";
-          description = lib.mdDoc "The URL prefix under which the awstats pages appear.";
+          description = "The URL prefix under which the awstats pages appear.";
         };
       };
     };
@@ -95,12 +95,12 @@ in
   ];
 
   options.services.awstats = {
-    enable = mkEnableOption (lib.mdDoc "awstats");
+    enable = mkEnableOption "awstats, a real-time logfile analyzer";
 
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/awstats";
-      description = lib.mdDoc "The directory where awstats data will be stored.";
+      description = "The directory where awstats data will be stored.";
     };
 
     configs = mkOption {
@@ -114,14 +114,14 @@ in
           };
         }
       '';
-      description = lib.mdDoc "Attribute set of domains to collect stats for.";
+      description = "Attribute set of domains to collect stats for.";
     };
 
     updateAt = mkOption {
       type = types.nullOr types.str;
       default = null;
       example = "hourly";
-      description = lib.mdDoc ''
+      description = ''
         Specification of the time at which awstats will get updated.
         (in the format described by {manpage}`systemd.time(7)`)
       '';

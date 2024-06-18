@@ -120,7 +120,7 @@ init_remote(){
         git config remote.origin.partialclonefilter "blob:none"
         echo "$sparseCheckout" | git sparse-checkout set --stdin ${nonConeMode:+--no-cone}
     fi
-    ( [ -n "$http_proxy" ] && clean_git config http.proxy "$http_proxy" ) || true
+    ( [ -n "$http_proxy" ] && clean_git config --global http.proxy "$http_proxy" ) || true
 }
 
 # Return the reference of an hash if it exists on the remote repository.
@@ -166,7 +166,7 @@ checkout_hash(){
     clean_git fetch -t ${builder:+--progress} origin || return 1
 
     local object_type=$(git cat-file -t "$hash")
-    if [[ "$object_type" == "commit" ]]; then
+    if [[ "$object_type" == "commit" || "$object_type" == "tag" ]]; then
         clean_git checkout -b "$branchName" "$hash" || return 1
     elif [[ "$object_type" == "tree" ]]; then
         clean_git config user.email "nix-prefetch-git@localhost"

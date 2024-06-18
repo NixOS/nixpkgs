@@ -108,18 +108,7 @@ let
     ];
   };
 
-  jzon = build-asdf-system {
-    src = pkgs.fetchzip {
-      url = "https://github.com/Zulu-Inuoe/jzon/archive/6b201d4208ac3f9721c461105b282c94139bed29.tar.gz";
-      sha256 = "01d4a78pjb1amx5amdb966qwwk9vblysm1li94n3g26mxy5zc2k3";
-    };
-    version = "0.0.0-20210905-6b201d4208";
-    pname = "jzon";
-    lispLibs = [
-      super.closer-mop
-    ];
-    systems = [ "com.inuoe.jzon" ];
-  };
+  jzon = super.com_dot_inuoe_dot_jzon;
 
   cl-notify = build-asdf-system {
     pname = "cl-notify";
@@ -198,6 +187,14 @@ let
     patches = [ ./patches/swank-pure-paths.patch ];
     postConfigure = ''
       substituteAllInPlace swank-loader.lisp
+    '';
+  };
+
+  cephes = build-with-compile-into-pwd {
+    inherit (super.cephes) pname version src lispLibs;
+    patches = [ ./patches/cephes-make.patch ];
+    postConfigure = ''
+      substituteAllInPlace cephes.asd
     '';
   };
 
@@ -362,7 +359,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.11.2";
+    version = "3.11.6";
 
     lispLibs = (with super; [
       alexandria
@@ -422,8 +419,8 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "andy128k";
           repo = "cl-gobject-introspection";
-          rev = "83beec4492948b52aae4d4152200de5d5c7ac3e9";
-          sha256 = "sha256-g/FwWE+Rzmzm5Y+irvd1AJodbp6kPHJIFOFDPhaRlXc=";
+          rev = "4908a84c16349929b309c50409815ff81fb9b3c4";
+          sha256 = "sha256-krVU5TQsVAbglxXMq29WJriWBIgQDLy1iCvB5iNziEc=";
         };}))
       (cl-webkit2.overrideAttrs (final: prev: {
         src = pkgs.fetchFromGitHub {
@@ -445,6 +442,8 @@ let
                     "slynk/profiler" "slynk/stickers" "slynk/indentation"
                     "slynk/retro" ];
       }))
+      iterate
+      symbol-munger
     ]) ++ (with self; [
       history-tree
       nhooks
@@ -456,12 +455,13 @@ let
       nclasses
       nfiles
       cl-containers
+      # remove this override after quicklisp one is updated.
       (swank.overrideAttrs (final: prev: {
         src = pkgs.fetchFromGitHub {
           owner = "slime";
           repo = "slime";
-          rev = "735258a26bb97e85d25f39e4bef83c1f80c12f5d";
-          hash = "sha256-vMMer6qLJDKTwNE3unsOQezujISqFtn2AYl8cxsJvrc=";
+          rev = "v2.29.1";
+          hash = "sha256-5hNB5XxbTER4HX3dn4umUGnw6UeiTQkczmggFz4uWoE=";
         };
         systems = [ "swank" "swank/exts" ];
       }))
@@ -470,8 +470,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.11.2";
-      hash = "sha256-D89bPsiMj0SNlt1IlC19hk90mmXAvmZgyjzXw2g7570=";
+      rev = "3.11.6";
+      hash = "sha256-o+4LnSNyhdz5YAjNQJuE2ERtt48PckjKfts9QVRw82A=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -503,7 +503,7 @@ let
       (asdf:operate :program-op :nyxt/gi-gtk-application)
     '';
 
-    # TODO(kasper): use wrapGAppsHook
+    # TODO(kasper): use wrapGAppsHook3
     installPhase = ''
       mkdir -pv $out
       cp -r * $out
@@ -561,6 +561,23 @@ let
   });
 
   stumpwm-unwrapped = super.stumpwm;
+
+  clfswm = super.clfswm.overrideAttrs (o: rec {
+    buildScript = pkgs.writeText "build-clfswm.lisp" ''
+      (load "${o.asdfFasl}/asdf.${o.faslExt}")
+      (asdf:load-system 'clfswm)
+      (sb-ext:save-lisp-and-die
+        "clfswm"
+        :executable t
+        #+sb-core-compression :compression
+        #+sb-core-compression t
+        :toplevel #'clfswm:main)
+    '';
+    installPhase = o.installPhase + ''
+      mkdir -p $out/bin
+      mv $out/clfswm $out/bin
+    '';
+  });
 
   ltk = super.ltk.overrideLispAttrs (o: {
     src = pkgs.fetchzip {
@@ -804,6 +821,124 @@ let
   nsb-cga = super.nsb-cga.overrideLispAttrs (oa: {
     lispLibs = oa.lispLibs ++ [ self.sb-cga ];
   });
+
+  qlot-cli = build-asdf-system rec {
+    pname = "qlot";
+    version = "1.5.2";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "fukamachi";
+      repo = "qlot";
+      rev = "refs/tags/${version}";
+      hash = "sha256-j9iT25Yz9Z6llCKwwiHlVNKLqwuKvY194LrAzXuljsE=";
+    };
+
+    lispLibs = with super; [
+      archive
+      deflate
+      dexador
+      fuzzy-match
+      ironclad
+      lparallel
+      yason
+    ];
+
+    nativeLibs = [
+      pkgs.openssl
+    ];
+
+    nativeBuildInputs = [
+      pkgs.makeWrapper
+    ];
+
+    buildScript = pkgs.writeText "build-qlot-cli" ''
+      (load "${self.qlot-cli.asdfFasl}/asdf.${self.qlot-cli.faslExt}")
+      (asdf:load-system :qlot/command)
+      (asdf:load-system :qlot/subcommands)
+
+      ;; Use uiop:dump-image instead of sb-ext:dump-image for the image restore hooks
+      (setf uiop:*image-entry-point* #'qlot/cli:main)
+      (uiop:dump-image "qlot"
+                       :executable t
+                       #+sb-core-compression :compression
+                       #+sb-core-compression t)
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/bin
+      cp qlot.asd $out
+      rm *.asd
+      cp -r * $out
+
+      mv $out/qlot $out/bin
+      wrapProgram $out/bin/qlot \
+        --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH
+
+      runHook postInstall
+    '';
+
+    meta.mainProgram = "qlot";
+  };
+
+  misc-extensions = super.misc-extensions.overrideLispAttrs (old: rec {
+    version = "4.0.3";
+    src = pkgs.fetchFromGitLab {
+      domain = "gitlab.common-lisp.net";
+      owner = "misc-extensions";
+      repo = "misc-extensions";
+      rev = "v${version}";
+      hash = "sha256-bDNI4mIaNw/rf7ZwvwolKo6+mUUxsgubGUd/988sHAo=";
+    };
+  });
+
+  fset = super.fset.overrideLispAttrs (old: rec {
+    version = "1.4.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "slburson";
+      repo = "fset";
+      rev = "v${version}";
+      hash = "sha256-alO8Ek5Xpyl5N99/LgyIZ50aoRbY7bKh3XBntFV6Q5k=";
+    };
+    lispLibs = with super; [
+      self.misc-extensions
+      mt19937
+      named-readtables
+    ];
+    meta = {
+      description = "functional collections library";
+      homepage = "https://gitlab.common-lisp.net/fset/fset/-/wikis/home";
+      license = pkgs.lib.licenses.llgpl21;
+    };
+  });
+
+  coalton = build-asdf-system {
+    pname = "coalton";
+    version = "trunk";
+    src = pkgs.fetchFromGitHub {
+      owner = "coalton-lang";
+      repo = "coalton";
+      rev = "05111b8a59e3f7346b175ce1ec621bff588e1e1f";
+      hash = "sha256-L9o7Y3zDx9qLXGe/70c1LWEKUWsSRgBQru66mIuaCFw=";
+    };
+    lispLibs = with super; [
+      alexandria
+      eclector-concrete-syntax-tree
+      fiasco
+      float-features
+      self.fset
+      named-readtables
+      trivial-garbage
+    ];
+    nativeLibs = [ pkgs.mpfr ];
+    systems = [ "coalton" "coalton/tests" ];
+    meta = {
+      description = "statically typed functional programming language that supercharges Common Lisp";
+      homepage = "https://coalton-lang.github.io";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
 
   });
 

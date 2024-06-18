@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Mod manager for Kerbal Space Program";
+    mainProgram = "ckan";
     homepage = "https://github.com/KSP-CKAN/CKAN";
     license = licenses.mit;
     maintainers = with maintainers; [ Baughn ymarkus ];

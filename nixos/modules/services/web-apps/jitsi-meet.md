@@ -6,7 +6,7 @@ private, self-hosted video conferencing solution.
 ## Basic usage {#module-services-jitsi-basic-usage}
 
 A minimal configuration using Let's Encrypt for TLS certificates looks like this:
-```
+```nix
 {
   services.jitsi-meet = {
     enable = true;
@@ -22,7 +22,7 @@ A minimal configuration using Let's Encrypt for TLS certificates looks like this
 ## Configuration {#module-services-jitsi-configuration}
 
 Here is the minimal configuration with additional configurations:
-```
+```nix
 {
   services.jitsi-meet = {
     enable = true;

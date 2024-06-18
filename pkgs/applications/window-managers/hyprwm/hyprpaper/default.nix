@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mqxnaNiCVJS88Dk4V1v2wdS0RaCbOk8HFOUUbp0Uiy0=";
+    hash = "sha256-l13c8ALA7ZKDgluYA1C1OfkDGYD6e1/GR6LJnxCLRhA=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     inherit (finalAttrs.src.meta) homepage;
-    description = "A blazing fast wayland wallpaper utility";
+    description = "Blazing fast wayland wallpaper utility";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wozeparrot fufexan ];
     inherit (wayland.meta) platforms;

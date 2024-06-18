@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchPypi
-, isPy27
-, packaging
-, pytest
-, pytestCheckHook
-, psutil
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  isPy27,
+  packaging,
+  pytest,
+  pytestCheckHook,
+  psutil,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {

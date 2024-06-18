@@ -77,12 +77,12 @@ in {
 
   options.services.mpdscribble = {
 
-    enable = mkEnableOption (lib.mdDoc "mpdscribble");
+    enable = mkEnableOption "mpdscribble, an MPD client which submits info about tracks being played to Last.fm (formerly AudioScrobbler)";
 
     proxy = mkOption {
       default = null;
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         HTTP proxy URL.
       '';
     };
@@ -90,7 +90,7 @@ in {
     verbose = mkOption {
       default = 1;
       type = types.int;
-      description = lib.mdDoc ''
+      description = ''
         Log level for the mpdscribble daemon.
       '';
     };
@@ -99,7 +99,7 @@ in {
       default = 600;
       example = 60;
       type = types.int;
-      description = lib.mdDoc ''
+      description = ''
         How often should mpdscribble save the journal file? [seconds]
       '';
     };
@@ -115,7 +115,7 @@ in {
         else "localhost"
       '';
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Host for the mpdscribble daemon to search for a mpd daemon on.
       '';
     };
@@ -133,7 +133,7 @@ in {
         otherwise `null`.
       '';
       type = types.nullOr types.str;
-      description = lib.mdDoc ''
+      description = ''
         File containing the password for the mpd daemon.
         If there is a local mpd configured using {option}`services.mpd.credentials`
         the default is automatically set to a matching passwordFile of the local mpd.
@@ -144,7 +144,7 @@ in {
       default = mpdCfg.network.port;
       defaultText = literalExpression "config.${mpdOpt.network.port}";
       type = types.port;
-      description = lib.mdDoc ''
+      description = ''
         Port for the mpdscribble daemon to search for a mpd daemon on.
       '';
     };
@@ -156,19 +156,17 @@ in {
             url = mkOption {
               type = types.str;
               default = endpointUrls.${name} or "";
-              description =
-                lib.mdDoc "The url endpoint where the scrobble API is listening.";
+              description = "The url endpoint where the scrobble API is listening.";
             };
             username = mkOption {
               type = types.str;
-              description = lib.mdDoc ''
+              description = ''
                 Username for the scrobble service.
               '';
             };
             passwordFile = mkOption {
               type = types.nullOr types.str;
-              description =
-                lib.mdDoc "File containing the password, either as MD5SUM or cleartext.";
+              description = "File containing the password, either as MD5SUM or cleartext.";
             };
           };
         };
@@ -180,7 +178,7 @@ in {
           passwordFile = "/run/secrets/lastfm_password";
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         Endpoints to scrobble to.
         If the endpoint is one of "${
           concatStringsSep "\", \"" (attrNames endpointUrls)

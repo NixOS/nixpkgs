@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,17 +26,11 @@ buildPythonPackage rec {
       --replace '"pytest-runner"' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "spython"
-  ];
+  pythonImportsCheck = [ "spython" ];
 
   disabledTests = [
     # Assertion errors
@@ -51,6 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Streamlined singularity python client (spython) for singularity";
+    mainProgram = "spython";
     homepage = "https://github.com/singularityhub/singularity-cli";
     changelog = "https://github.com/singularityhub/singularity-cli/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;

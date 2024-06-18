@@ -19,9 +19,10 @@
 , gobject-introspection
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , makeWrapper
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "graphene";
   version = "1.10.8";
 
@@ -31,8 +32,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ebassi";
-    repo = pname;
-    rev = version;
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
     sha256 = "P6JQhSktzvyMHatP/iojNGXPmcsxsFxdYerXzS23ojI=";
   };
 
@@ -109,16 +110,20 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.graphene;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
 
     updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    description = "A thin layer of graphic data types";
+    description = "Thin layer of graphic data types";
     homepage = "https://github.com/ebassi/graphene";
     license = licenses.mit;
     maintainers = teams.gnome.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;
+    pkgConfigModules = [ "graphene-1.0" "graphene-gobject-1.0" ];
   };
-}
+})

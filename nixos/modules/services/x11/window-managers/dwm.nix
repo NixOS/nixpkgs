@@ -14,7 +14,7 @@ in
 
   options = {
     services.xserver.windowManager.dwm = {
-      enable = mkEnableOption (lib.mdDoc "dwm");
+      enable = mkEnableOption "dwm";
       package = mkPackageOption pkgs "dwm" {
         example = ''
           pkgs.dwm.overrideAttrs (oldAttrs: rec {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, blas, lapack, gfortran, gmm, fltk, libjpeg
+{ lib, stdenv, fetchurl, cmake, blas, lapack, gfortran, gmm, fltk, libjpeg
 , zlib, libGL, libGLU, xorg, opencascade-occt
 , python ? null, enablePython ? false }:
 
@@ -7,11 +7,11 @@ assert enablePython -> (python != null);
 
 stdenv.mkDerivation rec {
   pname = "gmsh";
-  version = "4.11.1";
+  version = "4.13.1";
 
   src = fetchurl {
     url = "https://gmsh.info/src/gmsh-${version}-source.tgz";
-    sha256 = "sha256-xf4bfL1AOIioFJKfL9D11p4nYAIioYx4bbW3boAFs2U=";
+    hash = "sha256-d5chRfQxcmAm1QWWpqRPs8HJXCElUhjWaVWAa4btvo0=";
   };
 
   buildInputs = [
@@ -26,19 +26,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-python.patch
-
-    # Pull upstream fix git gcc-13:
-    #   https://gitlab.onelab.info/gmsh/gmsh/-/issues/2416
-    (fetchpatch {
-      name = "gcc-13-p1.patch";
-      url = "https://gitlab.onelab.info/gmsh/gmsh/-/commit/fb81a9c9026700e078de947b4522cb39e543a86b.patch";
-      hash = "sha256-1GInFqQZvOgflC3eQTjmZ9uBGFASRNCpCwDACN3yTQ4=";
-    })
-    (fetchpatch {
-      name = "gcc-13-p2.patch";
-      url = "https://gitlab.onelab.info/gmsh/gmsh/-/commit/aceb09c807b78ea26555f99fcb16c4f87c31fb5a.patch";
-      hash = "sha256-6FI0hIvj8hglCvxoKV0GzT2/F/Wz+ddkxV/TLzzJBLU=";
-    })
   ];
 
   postPatch = ''
@@ -63,7 +50,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "A three-dimensional finite element mesh generator";
+    description = "Three-dimensional finite element mesh generator";
+    mainProgram = "gmsh";
     homepage = "https://gmsh.info/";
     license = lib.licenses.gpl2Plus;
   };

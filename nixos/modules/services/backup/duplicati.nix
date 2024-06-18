@@ -8,14 +8,14 @@ in
 {
   options = {
     services.duplicati = {
-      enable = mkEnableOption (lib.mdDoc "Duplicati");
+      enable = mkEnableOption "Duplicati";
 
       package = mkPackageOption pkgs "duplicati" { };
 
       port = mkOption {
         default = 8200;
         type = types.port;
-        description = lib.mdDoc ''
+        description = ''
           Port serving the web interface
         '';
       };
@@ -23,7 +23,7 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/duplicati";
-        description = lib.mdDoc ''
+        description = ''
           The directory where Duplicati stores its data files.
 
           ::: {.note}
@@ -37,7 +37,7 @@ in
       interface = mkOption {
         default = "127.0.0.1";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Listening interface for the web UI
           Set it to "any" to listen on all available interfaces
         '';
@@ -46,7 +46,7 @@ in
       user = mkOption {
         default = "duplicati";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Duplicati runs as it's own user. It will only be able to backup world-readable files.
           Run as root with special care.
         '';

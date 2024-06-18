@@ -13,24 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xtensor";
-  version = "0.24.7";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xtensor";
     rev = finalAttrs.version;
-    hash = "sha256-dVbpcBW+jK9nIl5efk5LdKdBm8CkaJWEZ0ZY7ZuApwk=";
+    hash = "sha256-hVfdtYcJ6mzqj0AUu6QF9aVKQGYKd45RngY6UN3yOH4=";
   };
-  patches = [
-    # Support for xsimd 11
-    (fetchpatch {
-      url = "https://github.com/xtensor-stack/xtensor/commit/77a650a8018e0be6fcc76bf66685ff352ae23ef1.patch";
-      hash = "sha256-vOdUzzsSK+lYcA7fZXWOTVV202GZC0DhkMMjzggnmWE=";
-    })
-    # A single test fails on Darwin, see:
-    # https://github.com/xtensor-stack/xtensor/issues/2718
-    ./remove-failing-test_xinfo.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -38,18 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     nlohmann_json
     xtl
-  ] ++ lib.optionals (!(stdenv.isAarch64 && stdenv.isLinux)) [
-    # xsimd support is broken on aarch64-linux, see:
-    # https://github.com/xtensor-stack/xsimd/issues/945
     xsimd
   ];
 
-  cmakeFlags = let
-    cmakeBool = x: if x then "ON" else "OFF";
-  in [
-    "-DBUILD_TESTS=${cmakeBool finalAttrs.finalPackage.doCheck}"
-    "-DXTENSOR_ENABLE_ASSERT=${cmakeBool enableAssertions}"
-    "-DXTENSOR_CHECK_DIMENSION=${cmakeBool enableBoundChecks}"
+  cmakeFlags = [
+    # Always build the tests, even if not running them, because testing whether
+    # they can be built is a test in itself.
+    (lib.cmakeBool "BUILD_TESTS" true)
+    (lib.cmakeBool "XTENSOR_ENABLE_ASSERT" enableAssertions)
+    (lib.cmakeBool "XTENSOR_CHECK_DIMENSION" enableBoundChecks)
   ];
 
   doCheck = true;
@@ -59,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = "xtest";
 
   meta = with lib; {
-    description = "Multi-dimensional arrays with broadcasting and lazy computing.";
+    description = "Multi-dimensional arrays with broadcasting and lazy computing";
     homepage = "https://github.com/xtensor-stack/xtensor";
     license = licenses.bsd3;
     maintainers = with maintainers; [ cpcloud ];

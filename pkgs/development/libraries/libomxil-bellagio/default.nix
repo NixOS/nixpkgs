@@ -35,11 +35,14 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE =
     # stringop-truncation: see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1028978
     if stdenv.cc.isGNU then "-Wno-error=array-bounds -Wno-error=stringop-overflow=8 -Wno-error=stringop-truncation"
-    else "-Wno-error=absolute-value -Wno-error=enum-conversion -Wno-error=logical-not-parentheses -Wno-error=non-literal-null-conversion";
+    else let
+      isLLVM17 = stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17";
+    in "-Wno-error=absolute-value -Wno-error=enum-conversion -Wno-error=logical-not-parentheses -Wno-error=non-literal-null-conversion${lib.optionalString (isLLVM17) " -Wno-error=unused-but-set-variable"}";
 
   meta = with lib; {
     homepage = "https://omxil.sourceforge.net/";
-    description = "An opensource implementation of the Khronos OpenMAX Integration Layer API to access multimedia components";
+    description = "Opensource implementation of the Khronos OpenMAX Integration Layer API to access multimedia components";
+    mainProgram = "omxregister-bellagio";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

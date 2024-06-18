@@ -1,35 +1,35 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, libiconv
-, cargo
-, rustPlatform
-, rustc
-, pydantic
-, pytestCheckHook
-, y-py
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libiconv,
+  cargo,
+  rustPlatform,
+  rustc,
+  objsize,
+  pydantic,
+  pytestCheckHook,
+  y-py,
 }:
 
 buildPythonPackage rec {
   pname = "pycrdt";
-  version = "0.8.2";
+  version = "0.8.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RY0ndkMW4a2KxkebkoSEAzCgdUyHujglHJCzkoFCJZA=";
+    hash = "sha256-3j5OhjeVE42n4EEOOMUGlQGdnQ/xia0KD543uCMFpCo=";
   };
 
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
   '';
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   nativeBuildInputs = [
     cargo
@@ -38,19 +38,15 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   pythonImportsCheck = [ "pycrdt" ];
 
-  # requires pydantic>=2.5
-  doCheck = false;
-
   nativeCheckInputs = [
+    objsize
+    pydantic
     pytestCheckHook
     y-py
-    pydantic
   ];
 
   meta = with lib; {

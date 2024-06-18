@@ -22,16 +22,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termusic";
-  version = "0.7.11";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "tramhao";
     repo = "termusic";
     rev = "v${version}";
-    hash = "sha256-ykOBXM/WF+zasAt+6mgY2aSFCpGaYcqk+YI7YLM3MWs=";
+    hash = "sha256-FOFZg32hrWpKVsjkMDkiqah7jmUZw0HRWGqOvsN0t8Q=";
   };
 
-  cargoHash = "sha256-BrOpU0RFdlRXQIMjfHfs/XYIdBCYKFSA+5by/rGzC8Y=";
+  postPatch = ''
+    pushd $cargoDepsCopy/stream-download
+    oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
+    substituteInPlace $cargoDepsCopy/stream-download/src/lib.rs \
+      --replace-warn '#![doc = include_str!("../README.md")]' ""
+    substituteInPlace .cargo-checksum.json \
+      --replace $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
+    popd
+  '';
+
+  cargoHash = "sha256-r5FOl3Bp3GYhOhvWj/y6FXsuG2wvuFcMcYKBzVBVqiM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -62,5 +72,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tramhao/termusic";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ devhell ];
+    mainProgram = "termusic";
   };
 }

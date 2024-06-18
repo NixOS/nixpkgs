@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Amazon EC2 Metadata Mock";
+    mainProgram = "ec2-metadata-mock";
     homepage = "https://github.com/aws/amazon-ec2-metadata-mock";
     license = licenses.asl20;
     maintainers = with maintainers; [ ymatsiuk ];

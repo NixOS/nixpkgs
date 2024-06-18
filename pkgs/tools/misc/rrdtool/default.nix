@@ -41,7 +41,7 @@ perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://oss.oetiker.ch/rrdtool/";
     description = "High performance logging in Round Robin Databases";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
   };

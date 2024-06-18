@@ -18,13 +18,14 @@
 , opencv4
 , faad2
 , ldacbt
+, liblc3
 , libass
 , libkate
 , lrdf
 , ladspaH
 , lcms2
 , libnice
-, webrtc-audio-processing
+, webrtc-audio-processing_1
 , lilv
 , lv2
 , serd
@@ -44,6 +45,7 @@
 , flite
 , gsm
 , json-glib
+, libajantv2
 , libaom
 , libdc1394
 , libde265
@@ -68,6 +70,7 @@
 , zbar
 , wayland-protocols
 , wildmidi
+, svt-av1
 , fluidsynth
 , libva
 , libvdpau
@@ -109,13 +112,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.22.8";
+  version = "1.24.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-RYeD+CNgaJkePilu3Wccjt24vm+skzwcLhUDRihk6g8=";
+    hash = "sha256-6Q8mx9ycdvSqWZt1jP1tjBDWoLnLJluiw8m984iFWPg=";
   };
 
   patches = [
@@ -137,7 +140,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ] ++ lib.optionals enableDocumentation [
     hotdoc
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.isLinux) [
     wayland # for wayland-scanner
   ];
 
@@ -147,10 +150,10 @@ stdenv.mkDerivation rec {
     json-glib
     lcms2
     ldacbt
+    liblc3
     libass
     libkate
-    webrtc-audio-processing # required by webrtcdsp
-    #webrtc-audio-processing_1 # required by isac
+    webrtc-audio-processing_1
     libbs2b
     libmodplug
     openjpeg
@@ -192,6 +195,7 @@ stdenv.mkDerivation rec {
     zxing-cpp
     usrsctp
     wildmidi
+    svt-av1
   ] ++ lib.optionals opencvSupport [
     opencv4
   ] ++ lib.optionals enableZbar [
@@ -207,7 +211,7 @@ stdenv.mkDerivation rec {
     bluez
   ] ++ lib.optionals microdnsSupport [
     libmicrodns
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals (gst-plugins-base.waylandEnabled && stdenv.isLinux) [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
@@ -217,6 +221,7 @@ stdenv.mkDerivation rec {
 
     chromaprint
     flite
+    libajantv2
     libdrm
     libgudev
     sbc
@@ -260,6 +265,7 @@ stdenv.mkDerivation rec {
     "-Damfcodec=disabled" # Windows-only
     "-Davtp=disabled"
     "-Ddirectshow=disabled" # Windows-only
+    "-Dqt6d3d11=disabled" # Windows-only
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
@@ -287,11 +293,11 @@ stdenv.mkDerivation rec {
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
-    "-Disac=disabled" # depends on `webrtc-audio-coding-1` not compatible with 0.3
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
     "-Dopencv=${if opencvSupport then "enabled" else "disabled"}" # Reduces rebuild size when `config.cudaSupport = true`
+    "-Daja=disabled" # should pass libajantv2 via aja-sdk-dir instead
     "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
     (lib.mesonEnable "doc" enableDocumentation)
@@ -299,11 +305,12 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (!stdenv.isLinux) [
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
     "-Dnvcodec=disabled" # Linux-only
+  ] ++ lib.optionals (!stdenv.isLinux || !gst-plugins-base.waylandEnabled) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
   ] ++ lib.optionals (!stdenv.isLinux || !guiSupport) [
     "-Ddirectfb=disabled"
-  ]
-  ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-Daja=disabled"
     "-Dchromaprint=disabled"
     "-Dflite=disabled"
     "-Dkms=disabled" # renders to libdrm output
@@ -312,14 +319,15 @@ stdenv.mkDerivation rec {
     "-Dspandsp=disabled"
     "-Ddvb=disabled"
     "-Dfbdev=disabled"
+    "-Duvcgadget=disabled" # requires gudev
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
-  ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64) [
-    "-Dqsv=disabled" # Linux (and Windows) x86 only
+  ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64 || !gst-plugins-base.waylandEnabled) [
+    "-Dqsv=disabled" # Linux (and Windows) x86 only, makes va required
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     "-Dgl=disabled"
-  ] ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
+  ] ++ lib.optionals (!gst-plugins-base.waylandEnabled || !guiSupport) [
     "-Dgtk3=disabled" # Wayland-based GTK sink
     "-Dwayland=disabled"
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
@@ -354,6 +362,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GStreamer Bad Plugins";
+    mainProgram = "gst-transcoder-1.0";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''
       a set of plug-ins that aren't up to par compared to the

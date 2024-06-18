@@ -5,30 +5,36 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "trueseeing";
-  version = "2.1.10";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alterakey";
     repo = "trueseeing";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q7hUsBmTRPizmNWueFtFDc5t7rd1evMrBj3oX1Q2VfM=";
+    hash = "sha256-5IHJXlpHZJFKj7rdmRsWA5FXZFJf3usGsLgXx1cYEmU=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     flit-core
     pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
+    aiohttp
+    asn1crypto
     attrs
+    importlib-metadata
     jinja2
+    lief
     lxml
+    progressbar2
     pypubsub
     pyyaml
     termcolor
+    zstandard
   ];
 
   # Project has no tests
@@ -44,5 +50,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/alterakey/trueseeing/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "trueseeing";
   };
 }

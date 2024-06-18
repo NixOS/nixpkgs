@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTBASEDIR=$(out)" ];
 
   meta = with lib; {
-    description = "A library for displaying messages";
+    description = "Library for displaying messages";
     homepage = "https://shh.thathost.com/pub-unix/";
     license = licenses.artistic1;
     platforms = platforms.all;

@@ -22,6 +22,7 @@ mkDerivation rec {
 
   meta = {
     description = "Library used by KDE finance applications";
+    mainProgram = "onlinequoteseditor5";
     longDescription = ''
       Alkimia is the infrastructure for common storage and business
       logic that will be used by all financial applications in KDE.

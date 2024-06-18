@@ -1,7 +1,9 @@
 { lib, buildFHSEnv, callPackage, makeDesktopItem, writeScript, runtimeShell
-, runCommand, quartus-prime-lite
+, runCommand, unstick, quartus-prime-lite
+, withQuesta ? true
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
-, unwrapped ? callPackage ./quartus.nix { inherit supportedDevices; }
+, unwrapped ? callPackage ./quartus.nix { inherit unstick supportedDevices withQuesta; }
+, extraProfile ? ""
 }:
 
 let
@@ -15,14 +17,16 @@ let
   };
 # I think questa_fse/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
 in buildFHSEnv rec {
-  name = "quartus-prime-lite"; # wrapped
+  pname = "quartus-prime-lite"; # wrapped
+  inherit (unwrapped) version;
 
   targetPkgs = pkgs: with pkgs; [
-    (runCommand "ld-lsb-compat" {} ''
+    (runCommand "ld-lsb-compat" {} (''
       mkdir -p "$out/lib"
       ln -sr "${glibc}/lib/ld-linux-x86-64.so.2" "$out/lib/ld-lsb-x86-64.so.3"
+    '' + lib.optionalString withQuesta ''
       ln -sr "${pkgsi686Linux.glibc}/lib/ld-linux.so.2" "$out/lib/ld-lsb.so.3"
-    '')
+    ''))
     # quartus requirements
     glib
     xorg.libICE
@@ -37,11 +41,14 @@ in buildFHSEnv rec {
     # qsys requirements
     xorg.libXtst
     xorg.libXi
+    dejavu_fonts
+    gnumake
   ];
 
-  # Also support 32-bit executables.
-  multiArch = true;
+  # Also support 32-bit executables used by simulator.
+  multiArch = withQuesta;
 
+  # these libs are installed as 64 bit, plus as 32 bit when multiArch is true
   multiPkgs = pkgs: with pkgs; let
     # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
     freetype = pkgs.freetype.override { libpng = libpng12; };
@@ -74,7 +81,7 @@ in buildFHSEnv rec {
       "${unwrapped}"/questa_fse/linux_x86_64/lmutil
     )
 
-    wrapper=$out/bin/${name}
+    wrapper=$out/bin/${pname}
     progs_wrapped=()
     for prog in ''${progs_to_wrap[@]}; do
         relname="''${prog#"${unwrapped}/"}"
@@ -87,7 +94,7 @@ in buildFHSEnv rec {
                 echo "export NIXPKGS_IS_QUESTA_WRAPPER=1" >> "$wrapped"
                 ;;
         esac
-        echo "$wrapper $prog \"\$@\"" >> "$wrapped"
+        echo "exec $wrapper $prog \"\$@\"" >> "$wrapped"
     done
 
     cd $out
@@ -109,7 +116,7 @@ in buildFHSEnv rec {
     if [ "$NIXPKGS_IS_QUESTA_WRAPPER" != 1 ]; then
         export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}/usr/lib/libudev.so.0
     fi
-  '';
+  '' + extraProfile;
 
   # Run the wrappers directly, instead of going via bash.
   runScript = "";
@@ -154,4 +161,6 @@ in buildFHSEnv rec {
       '';
     };
   };
+
+  inherit (unwrapped) meta;
 }

@@ -1,41 +1,39 @@
 {
+  lib,
   buildPythonApplication,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
   makeWrapper,
   pytestCheckHook,
   python3,
   pythonOlder,
   ruff,
   setuptools,
-}: let
+}:
+let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.12";
+    version = "0.14";
     pyproject = true;
 
     disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";
-      repo = pname;
+      repo = "llm";
       rev = "refs/tags/${version}";
-      hash = "sha256-aCqdw2co/cXrBwVY/k/aSLl3C22nlH5LvU2yir1/NnQ=";
+      hash = "sha256-CgGVFUsntVkF0zORAtYQQMAeGtIwBbj9hE0Ei1OCGq4=";
     };
 
-    patches = [
-      ./001-disable-install-uninstall-commands.patch
-    ];
+    patches = [ ./001-disable-install-uninstall-commands.patch ];
 
-    nativeBuildInputs = [
-      setuptools
-    ];
+    nativeBuildInputs = [ setuptools ];
 
     propagatedBuildInputs = with python3.pkgs; [
       click-default-group
       numpy
       openai
+      pip
       pluggy
       pydantic
       python-ulid
@@ -48,8 +46,8 @@
     nativeCheckInputs = with python3.pkgs; [
       cogapp
       numpy
+      pytest-httpx
       pytestCheckHook
-      requests-mock
     ];
 
     doCheck = true;
@@ -59,11 +57,11 @@
       "tests/"
     ];
 
-    pythonImportsCheck = [
-      "llm"
-    ];
+    pythonImportsCheck = [ "llm" ];
 
-    passthru = {inherit withPlugins;};
+    passthru = {
+      inherit withPlugins;
+    };
 
     meta = with lib; {
       homepage = "https://github.com/simonw/llm";
@@ -71,37 +69,37 @@
       changelog = "https://github.com/simonw/llm/releases/tag/${version}";
       license = licenses.asl20;
       mainProgram = "llm";
-      maintainers = with maintainers; [aldoborrero];
+      maintainers = with maintainers; [ aldoborrero ];
     };
   };
 
-  withPlugins = plugins: buildPythonApplication {
-    inherit (llm) pname version;
-    format = "other";
+  withPlugins =
+    plugins:
+    buildPythonApplication {
+      inherit (llm) pname version;
+      format = "other";
 
-    disabled = pythonOlder "3.8";
+      disabled = pythonOlder "3.8";
 
-    dontUnpack = true;
-    dontBuild = true;
-    doCheck = false;
+      dontUnpack = true;
+      dontBuild = true;
+      doCheck = false;
 
-    nativeBuildInputs = [
-      makeWrapper
-    ];
+      nativeBuildInputs = [ makeWrapper ];
 
-    installPhase = ''
-      makeWrapper ${llm}/bin/llm $out/bin/llm \
-        --prefix PYTHONPATH : "${llm}/${python3.sitePackages}:$PYTHONPATH"
-      ln -sfv ${llm}/lib $out/lib
-    '';
+      installPhase = ''
+        makeWrapper ${llm}/bin/llm $out/bin/llm \
+          --prefix PYTHONPATH : "${llm}/${python3.sitePackages}:$PYTHONPATH"
+        ln -sfv ${llm}/lib $out/lib
+      '';
 
-    propagatedBuildInputs = llm.propagatedBuildInputs ++ plugins;
+      propagatedBuildInputs = llm.propagatedBuildInputs ++ plugins;
 
-    passthru = llm.passthru // {
-      withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
+      passthru = llm.passthru // {
+        withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
+      };
+
+      inherit (llm) meta;
     };
-
-    inherit (llm) meta;
-  };
 in
-  llm
+llm

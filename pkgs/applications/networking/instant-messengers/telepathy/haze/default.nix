@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config libxslt python3 ];
 
   meta = {
-    description = "A Telepathy connection manager based on libpurple";
+    description = "Telepathy connection manager based on libpurple";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-haze/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;

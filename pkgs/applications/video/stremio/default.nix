@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, qmake, wrapQtAppsHook
-, mpv, qtwebengine, qtwebchannel, nodejs
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, ffmpeg
+, mpv
+, nodejs
+, qmake
+, qtwebchannel
+, qtwebengine
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -30,11 +39,13 @@ stdenv.mkDerivation rec {
     install -Dm 644 images/stremio_window.png $out/share/pixmaps/smartcode-stremio.png
     ln -s ${nodejs}/bin/node $out/opt/stremio/node
     ln -s $server $out/opt/stremio/server.js
+    wrapProgram $out/bin/stremio \
+      --suffix PATH ":" ${lib.makeBinPath [ ffmpeg ]}
   '';
 
   meta = with lib; {
     mainProgram = "stremio";
-    description = "A modern media center that gives you the freedom to watch everything you want.";
+    description = "Modern media center that gives you the freedom to watch everything you want";
     homepage = "https://www.stremio.com/";
     # (Server-side) web UI is closed source now, apparently they work on open-sourcing it.
     # server.js appears to be MIT-licensed, but I can't find how they actually build it.

@@ -31,6 +31,7 @@ buildNimPackage {
 
   meta = with lib; {
     description = "REPL for the Nim programming language";
+    mainProgram = "nrpl";
     homepage = "https://github.com/wheineman/nrpl";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

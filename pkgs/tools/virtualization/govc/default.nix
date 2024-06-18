@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "govc";
-  version = "0.34.2";
+  version = "0.37.3";
 
   subPackages = [ "govc" ];
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "vmware";
     repo = "govmomi";
-    sha256 = "sha256-UrGHuzUZvXWZRy4VJ1HlMBs2C8MuaUYhM6dlYIoG7vE=";
+    sha256 = "sha256-lqErey/uht+ub6deGgGNbytf0mhxgRekqe4y53Gtbms=";
   };
 
-  vendorHash = "sha256-1Y2Q2Ep3aqhUCSWey+sD4m7CgVEjlPt6ri3OKV8eERU=";
+  vendorHash = "sha256-1EAQMYaTEtfAiu7+UTkC7QZwSWC1Ihwj9leTd90T0ZU=";
 
   ldflags = [
     "-s"
@@ -22,7 +22,7 @@ buildGoModule rec {
   ];
 
   meta = {
-    description = "A vSphere CLI built on top of govmomi";
+    description = "VSphere CLI built on top of govmomi";
     homepage = "https://github.com/vmware/govmomi/tree/master/govc";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nicknovitski ];

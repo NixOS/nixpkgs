@@ -1,8 +1,8 @@
 diff --git a/gio/gsettingsschema.c b/gio/gsettingsschema.c
-index 1282c10a1..feadfe3aa 100644
+index b1918657d..504ff97c4 100644
 --- a/gio/gsettingsschema.c
 +++ b/gio/gsettingsschema.c
-@@ -360,6 +360,9 @@ initialise_schema_sources (void)
+@@ -356,6 +356,9 @@ initialise_schema_sources (void)
  
        try_prepend_data_dir (g_get_user_data_dir ());
  

@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     '';
 
   meta = with lib; {
-    description = "A unique solution to academic literature management";
+    description = "Unique solution to academic literature management";
     homepage = "http://www.docear.org/";
     # Licenses at: http://www.docear.org/software/download/
     license = with licenses; [

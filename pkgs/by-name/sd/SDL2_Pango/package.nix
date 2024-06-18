@@ -1,48 +1,50 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, freetype
-, pango
-, SDL2
-, darwin
+{
+  lib,
+  SDL2,
+  autoreconfHook,
+  darwin,
+  fetchFromGitHub,
+  freetype,
+  pango,
+  pkg-config,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-pango";
   version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "markuskimius";
     repo = "SDL2_Pango";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8SL5ylxi87TuKreC8m2kxlLr8rcmwYYvwkp4vQZ9dkc=";
   };
+
+  nativeBuildInputs = [
+    SDL2
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    SDL2
+    freetype
+    pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.libobjc
+  ];
 
   outputs = [ "out" "dev" ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    SDL2
-  ];
-
-  buildInputs = [
-    freetype
-    pango
-    SDL2
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.libobjc
-  ];
-
-  meta = with lib; {
-    description = "A library for graphically rendering internationalized and tagged text in SDL2 using TrueType fonts";
+  meta = {
     homepage = "https://github.com/markuskimius/SDL2_Pango";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ rardiol ];
-    platforms = platforms.all;
+    description = "Library for graphically rendering internationalized and tagged text in SDL2 using TrueType fonts";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = lib.teams.sdl.members
+                  ++ (with lib.maintainers; [ rardiol ]);
+    inherit (SDL2.meta) platforms;
   };
-}
+})

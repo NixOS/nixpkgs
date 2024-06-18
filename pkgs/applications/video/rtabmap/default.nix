@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , cmake
 , opencv
@@ -20,39 +19,27 @@
 , libGL
 , libGLU
 , vtkWithQt5
-, wrapGAppsHook
+, wrapGAppsHook3
 , liblapack
 , xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "rtabmap";
-  version = "0.21.0";
+  version = "0.21.4.1";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
     rev = "refs/tags/${version}";
-    hash = "sha256-1xb8O3VrErldid2OgAUMG28mSUO7QBUsPuSz8p03tSI";
+    hash = "sha256-y/p1uFSxVQNXO383DLGCg4eWW7iu1esqpWlyPMF3huk=";
   };
 
-  patches = [
-    # Fix build with g2o 20230806
-    (fetchpatch {
-      url = "https://github.com/introlab/rtabmap/commit/85cc6fe3c742855ad16c8442895e12dbb10b6e8b.patch";
-      hash = "sha256-P6GkYKCNwe9dgZdgF/oEhgjA3bJnwXFWJCPoyIknQCo=";
-    })
-    # Fix typo in previous patch
-    (fetchpatch {
-      url = "https://github.com/introlab/rtabmap/commit/c4e94bcdc31b859c1049724dbb7671e4597d86de.patch";
-      hash = "sha256-1btkV4/y+bnF3xEVqlUy/9F6BoANeTOEJjZLmRzG3iA=";
-    })
-  ];
-
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook wrapGAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook wrapGAppsHook3 ];
   buildInputs = [
     ## Required
     opencv
+    opencv.cxxdev
     pcl
     liblapack
     xorg.libSM

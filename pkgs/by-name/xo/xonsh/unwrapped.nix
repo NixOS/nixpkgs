@@ -9,7 +9,7 @@
 
 let
   pname = "xonsh";
-  version = "0.14.4";
+  version = "0.15.1";
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version;
@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    hash = "sha256-7qOEc4RSdOO059LietKnrxY7cy9MfgmfJjdqZZ5ENLU=";
+    hash = "sha256-mHOCkUGiSSPmkIQ4tgRZIaCTLgnx39SMwug5EIx/jrU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -90,6 +90,8 @@ python3.pkgs.buildPythonApplication {
     export HOME=$TMPDIR
   '';
 
+  dontWrapPythonPrograms = true;
+
   passthru = {
     shellPath = "/bin/xonsh";
     python = python3; # To the wrapper
@@ -98,7 +100,7 @@ python3.pkgs.buildPythonApplication {
 
   meta =  {
     homepage = "https://xon.sh/";
-    description = "A Python-ish, BASHwards-compatible shell";
+    description = "Python-ish, BASHwards-compatible shell";
     changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ AndersonTorres ];

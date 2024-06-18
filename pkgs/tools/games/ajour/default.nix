@@ -83,6 +83,7 @@ in rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "World of Warcraft addon manager written in Rust";
+    mainProgram = "ajour";
     longDescription = ''
       Ajour is a World of Warcraft addon manager written in Rust with a
       strong focus on performance and simplicity. The project is

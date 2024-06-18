@@ -17,7 +17,7 @@ in fetchurl {
 
   sha256 = "Hhl+0Oc5DDohOpBbEARMunMYCpr6nn4X6RgpQeEksNo=";
   meta = {
-    description = "a free Unicode font in the OpenType format which is supported by every usual office program or printer";
+    description = "Free Unicode font in the OpenType format which is supported by every usual office program or printer";
     homepage = "http://www.quivira-font.com/";
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.nosewings ];

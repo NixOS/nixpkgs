@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/gnotclub/xst";
     description = "Suckless Terminal fork";
+    mainProgram = "st";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;

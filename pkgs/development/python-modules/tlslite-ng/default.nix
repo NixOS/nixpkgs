@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ecdsa
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ecdsa,
 }:
 
 buildPythonPackage rec {
@@ -17,10 +18,9 @@ buildPythonPackage rec {
   buildInputs = [ ecdsa ];
 
   meta = with lib; {
-    description = "Pure python implementation of SSL and TLS.";
+    description = "Pure python implementation of SSL and TLS";
     homepage = "https://pypi.python.org/pypi/tlslite-ng";
     license = licenses.lgpl2;
     maintainers = [ ];
   };
-
 }

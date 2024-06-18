@@ -1,10 +1,10 @@
 { lib, stdenv, makeDesktopItem, copyDesktopItems, fetchurl, SDL, SDL_image, SDL_mixer }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnujump";
   version = "1.0.8";
   src = fetchurl {
-    url = "mirror://gnu/gnujump/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/gnujump/gnujump-${finalAttrs.version}.tar.gz";
     sha256 = "05syy9mzbyqcfnm0hrswlmhwlwx54f0l6zhcaq8c1c0f8dgzxhqk";
   };
 
@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://jump.gnu.sinusoid.es/index.php?title=Main_Page";
-    description = "A clone of the simple yet addictive game Xjump";
+    description = "Clone of the simple yet addictive game Xjump";
+    mainProgram = "gnujump";
     longDescription = ''
       The goal in this game is to jump to the next floor trying not to fall
       down. As you go upper in the Falling Tower the floors will fall faster.
@@ -39,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.linux;
   };
-}
+})

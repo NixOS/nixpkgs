@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The classic version of a quick tactics game LiquidWar";
+    description = "Classic version of a quick tactics game LiquidWar";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

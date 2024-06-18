@@ -1,4 +1,4 @@
-{cudaVersion, lib}:
+{ cudaVersion, lib }:
 let
   inherit (lib) attrsets modules trivial;
   redistName = "cuda";
@@ -53,6 +53,10 @@ let
       redistribRelease = redistribManifest.${pname};
       featureRelease = featureManifest.${pname};
       drv =
+        let
+          # get `autoAddDriverRunpath` from pkgs instead of cudaPackages' alias to avoid warning
+          inherit (callPackage ({ pkgs }: pkgs) { }) autoAddDriverRunpath;
+        in
         (callPackage ../generic-builders/manifest.nix {
           # We pass the whole release to the builder because it has logic to handle
           # the case we're trying to build on an unsupported platform.
@@ -61,25 +65,24 @@ let
             redistName
             redistribRelease
             featureRelease
+            autoAddDriverRunpath
             ;
         }).overrideAttrs
-          (
-            prevAttrs: {
-              # Add the package-specific license.
-              meta = prevAttrs.meta // {
-                license =
-                  let
-                    licensePath =
-                      if redistribRelease.license_path != null then
-                        redistribRelease.license_path
-                      else
-                        "${pname}/LICENSE.txt";
-                    url = "https://developer.download.nvidia.com/compute/cuda/redist/${licensePath}";
-                  in
-                  lib.licenses.nvidiaCudaRedist // {inherit url;};
-              };
-            }
-          );
+          (prevAttrs: {
+            # Add the package-specific license.
+            meta = prevAttrs.meta // {
+              license =
+                let
+                  licensePath =
+                    if redistribRelease.license_path != null then
+                      redistribRelease.license_path
+                    else
+                      "${pname}/LICENSE.txt";
+                  url = "https://developer.download.nvidia.com/compute/cuda/redist/${licensePath}";
+                in
+                lib.licenses.nvidiaCudaRedist // { inherit url; };
+            };
+          });
     in
     drv;
 

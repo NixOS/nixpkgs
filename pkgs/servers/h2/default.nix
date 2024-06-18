@@ -13,10 +13,12 @@ maven.buildMavenPackage rec {
     hash = "sha256-pS9jSiuInA0eULPOZK5cjwr9y5KDVY51blhZ9vs4z+g=";
   };
 
-  mvnParameters = "-f h2/pom.xml -DskipTests";
+  mvnParameters = "-f h2/pom.xml";
   mvnHash = "sha256-hUzE4F+RNCAfoY836pjrivf04xqN4m9SkiLXhmVzZRA=";
 
   nativeBuildInputs = [ makeWrapper ];
+
+  doCheck = false;
 
   installPhase = ''
     mkdir -p $out/share/java
@@ -34,7 +36,7 @@ maven.buildMavenPackage rec {
   };
 
   meta = with lib; {
-    description = "The Java SQL database";
+    description = "Java SQL database";
     homepage = "https://h2database.com/html/main.html";
     changelog = "https://h2database.com/html/changelog.html";
     license = licenses.mpl20;

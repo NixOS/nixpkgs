@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ncurses readline ronn ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace '-ltermcap' '-lncurses' \
@@ -33,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Manipulating CPC dsk images and files";
+    mainProgram = "cpcfs";
     homepage = "https://github.com/derikz/cpcfs/" ;
     license = licenses.bsd2;
     maintainers = [ ];

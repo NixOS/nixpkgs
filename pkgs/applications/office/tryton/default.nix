@@ -14,26 +14,26 @@
 , pango
 , fontconfig
 , freetype
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "7.0.5";
+  version = "7.2.1";
 
   disabled = !python3Packages.isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-NAnNBfwnMky0qbtU3P5+kHJwCj6nfIQCtYgu6nXLcaQ=";
+    sha256 = "sha256-CK3XkHX16Ec/j1DhC29uoj/YqcLXs/KsIb7v/cfoiaM=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -62,7 +62,8 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    description = "The client of the Tryton application platform";
+    description = "Client of the Tryton application platform";
+    mainProgram = "tryton";
     longDescription = ''
       The client for Tryton, a three-tier high-level general purpose
       application platform under the license GPL-3 written in Python and using

@@ -6,6 +6,8 @@
 , freetype
 , lib
 , libglvnd
+, libxkbcommon
+, wayland
 , makeWrapper
 , mold
 , pkg-config
@@ -14,16 +16,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "universal-android-debloater";
-  version = "0.6.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "Universal-Debloater-Alliance";
-    repo = pname;
-    rev = version;
-    hash = "sha256-yCtdCg2mEAz4b/ev32x+RbjCtHTu20mOKFgtckXk1Fo=";
+    repo = "universal-android-debloater-next-generation";
+    rev = "v${version}";
+    hash = "sha256-yiCl6inPFveMO4IA2NwwpEmbRSmrZBeZR+eiKzGj6a0=";
   };
 
-  cargoHash = "sha256-70dX5fqORdGG2q3YeXJHABCHy0dvtA/Cptk8aLGNgV4=";
+  cargoHash = "sha256-HqyOslcr3pwDvpZ8CNbAy2W5jGhWGWoe/rutq0leNaY=";
 
   buildInputs = [
     expat
@@ -46,18 +48,18 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/uad_gui \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ fontconfig freetype libglvnd xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr ]} \
+    wrapProgram $out/bin/uad-ng \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ fontconfig freetype libglvnd libxkbcommon wayland xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr ]} \
       --suffix PATH : ${lib.makeBinPath [ android-tools ]}
   '';
 
   meta = with lib; {
-    description = "A tool to debloat non-rooted Android devices";
-    changelog = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater/blob/${src.rev}/CHANGELOG.md";
-    homepage = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater";
+    description = "Tool to debloat non-rooted Android devices";
+    changelog = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation";
     license = licenses.gpl3Only;
-    mainProgram = "uad_gui";
-    maintainers = with maintainers; [ xfix ];
+    mainProgram = "uad-ng";
+    maintainers = with maintainers; [ lavafroth ];
     platforms = platforms.linux;
   };
 }

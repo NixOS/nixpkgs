@@ -36,13 +36,6 @@
       '';
     };
     services.postfix.enable = true;
-    nix = {
-      distributedBuilds = true;
-      buildMachines = [{
-        hostName = "localhost";
-        systems = [ system ];
-      }];
-      settings.substituters = [];
-    };
+    nix.settings.substituters = [];
   };
 }

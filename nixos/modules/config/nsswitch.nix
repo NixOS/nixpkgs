@@ -12,8 +12,8 @@ with lib;
     system.nssModules = mkOption {
       type = types.listOf types.path;
       internal = true;
-      default = [];
-      description = lib.mdDoc ''
+      default = [ ];
+      description = ''
         Search path for NSS (Name Service Switch) modules.  This allows
         several DNS resolution methods to be specified via
         {file}`/etc/nsswitch.conf`.
@@ -28,62 +28,74 @@ with lib;
     system.nssDatabases = {
       passwd = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           List of passwd entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended while "systemd" is appended if nscd is enabled.
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
 
       group = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           List of group entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended while "systemd" is appended if nscd is enabled.
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
 
       shadow = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           List of shadow entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended.
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
+      };
+
+      sudoers = mkOption {
+        type = types.listOf types.str;
+        description = ''
+          List of sudoers entries to configure in {file}`/etc/nsswitch.conf`.
+
+          Note that "files" is always prepended.
+
+          This option only takes effect if nscd is enabled.
+        '';
+        default = [ ];
       };
 
       hosts = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           List of hosts entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended, and "dns" and "myhostname" are always appended.
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
 
       services = mkOption {
         type = types.listOf types.str;
-        description = lib.mdDoc ''
+        description = ''
           List of services entries to configure in {file}`/etc/nsswitch.conf`.
 
           Note that "files" is always prepended.
 
           This option only takes effect if nscd is enabled.
         '';
-        default = [];
+        default = [ ];
       };
     };
   };
@@ -112,6 +124,7 @@ with lib;
       passwd:    ${concatStringsSep " " config.system.nssDatabases.passwd}
       group:     ${concatStringsSep " " config.system.nssDatabases.group}
       shadow:    ${concatStringsSep " " config.system.nssDatabases.shadow}
+      sudoers:   ${concatStringsSep " " config.system.nssDatabases.sudoers}
 
       hosts:     ${concatStringsSep " " config.system.nssDatabases.hosts}
       networks:  files
@@ -126,6 +139,7 @@ with lib;
       passwd = mkBefore [ "files" ];
       group = mkBefore [ "files" ];
       shadow = mkBefore [ "files" ];
+      sudoers = mkBefore [ "files" ];
       hosts = mkMerge [
         (mkOrder 998 [ "files" ])
         (mkOrder 1499 [ "dns" ])

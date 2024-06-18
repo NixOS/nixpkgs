@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk flex ];
 
   meta = with lib; {
-    description = "A GTK 2/3 algebraic and RPN calculator";
+    description = "GTK 2/3 algebraic and RPN calculator";
     longDescription = ''
       galculator is a GTK 2 / GTK 3 based calculator. Its main features include:
 

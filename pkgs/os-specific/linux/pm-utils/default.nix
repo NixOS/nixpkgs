@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://pm-utils.freedesktop.org/wiki/";
-    description = "A small collection of scripts that handle suspend and resume on behalf of HAL";
+    description = "Small collection of scripts that handle suspend and resume on behalf of HAL";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };

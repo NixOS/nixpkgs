@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a4c0vmhxibfc58rrxpbav2bsk546chkg50ir4h3i57v4fjb4xic";
   };
   meta = {
-    description = "A number of small applications that can be used for processing RTP data";
+    description = "Number of small applications that can be used for processing RTP data";
     homepage = "https://www.cs.columbia.edu/irt/software/rtptools/";
     maintainers = [ lib.maintainers.lheckemann ];
     platforms = lib.platforms.unix;

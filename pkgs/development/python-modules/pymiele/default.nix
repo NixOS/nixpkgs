@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-nlilHcBdWpCIknhE/RRvcmuz1waNdmcPt++Vi3amvHg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -31,9 +30,7 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pymiele"
-  ];
+  pythonImportsCheck = [ "pymiele" ];
 
   meta = with lib; {
     changelog = "https://github.com/astrandb/pymiele/releases/tag/v${version}";

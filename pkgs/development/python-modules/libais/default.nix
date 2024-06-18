@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -23,20 +24,14 @@ buildPythonPackage rec {
       --replace "'pytest-runner'," ""
   '';
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # data files missing
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ais"
-  ];
+  pythonImportsCheck = [ "ais" ];
 
   meta = with lib; {
     description = "Library for decoding maritime Automatic Identification System messages";

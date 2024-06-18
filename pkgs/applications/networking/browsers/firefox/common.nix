@@ -50,7 +50,7 @@ in
 , rustPlatform
 , unzip
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 
 # runtime
 , bzip2
@@ -121,7 +121,7 @@ in
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
-, webrtcSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV
+, webrtcSupport ? !privacySupport
 
 # digital rights managemewnt
 
@@ -183,7 +183,7 @@ let
   # We only link c++ libs here, our compiler wrapper can find wasi libc and crt itself.
   wasiSysRoot = runCommand "wasi-sysroot" {} ''
     mkdir -p $out/lib/wasm32-wasi
-    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/* ${pkgsCross.wasi32.llvmPackages.libcxxabi}/lib/*; do
+    for lib in ${pkgsCross.wasi32.llvmPackages.libcxx}/lib/*; do
       ln -s $lib $out/lib/wasm32-wasi
     done
   '';
@@ -254,8 +254,21 @@ buildStdenv.mkDerivation {
       hash = "sha256-cWOyvjIPUU1tavPRqg61xJ53XE4EJTdsFzadfVxyTyM=";
     })
   ]
+  ++ lib.optionals (lib.versionOlder version "122") [
+    ./bindgen-0.64-clang-18.patch
+  ]
   ++ lib.optionals (lib.versionAtLeast version "122" && lib.versionOlder version "123") [
     ./122.0-libvpx-mozbz1875201.patch
+  ]
+  ++ lib.optionals (lib.versionOlder version "123") [
+    (fetchpatch {
+      name = "clang-18.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
+      hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
+    })
+  ]
+  ++ lib.optionals (lib.versionOlder version "115.12") [
+    ./rust-1.78.patch
   ]
   ++ extraPatches;
 
@@ -289,7 +302,7 @@ buildStdenv.mkDerivation {
     rustc
     unzip
     which
-    wrapGAppsHook
+    wrapGAppsHook3
   ]
   ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
@@ -298,9 +311,6 @@ buildStdenv.mkDerivation {
   setOutputFlags = false; # `./mach configure` doesn't understand `--*dir=` flags.
 
   preConfigure = ''
-    # remove distributed configuration files
-    rm -f configure js/src/configure .mozconfig*
-
     # Runs autoconf through ./mach configure in configurePhase
     configureScript="$(realpath ./mach) configure"
 
@@ -308,8 +318,8 @@ buildStdenv.mkDerivation {
     export MOZ_BUILD_DATE=$(head -n1 sourcestamp.txt)
 
     # Set predictable directories for build and state
-    export MOZ_OBJDIR=$(pwd)/mozobj
-    export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
+    export MOZ_OBJDIR=$(pwd)/objdir
+    export MOZBUILD_STATE_PATH=$TMPDIR/mozbuild
 
     # Don't try to send libnotify notifications during build
     export MOZ_NOSPAM=1
@@ -353,7 +363,7 @@ buildStdenv.mkDerivation {
       # since the profiling build has not been installed to $out
       ''
         OLD_LDFLAGS="$LDFLAGS"
-        LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
+        LDFLAGS="-Wl,-rpath,$(pwd)/objdir/dist/${binaryName}"
       ''}
     fi
   '' + lib.optionalString googleAPISupport ''
@@ -510,7 +520,7 @@ buildStdenv.mkDerivation {
   '';
 
   preBuild = ''
-    cd mozobj
+    cd objdir
   '';
 
   postBuild = ''
@@ -535,9 +545,9 @@ buildStdenv.mkDerivation {
   preInstall = lib.optionalString crashreporterSupport ''
     ./mach buildsymbols
     mkdir -p $symbols/
-    cp mozobj/dist/*.crashreporter-symbols.zip $symbols/
+    cp objdir/dist/*.crashreporter-symbols.zip $symbols/
   '' + ''
-    cd mozobj
+    cd objdir
   '';
 
   postInstall = ''

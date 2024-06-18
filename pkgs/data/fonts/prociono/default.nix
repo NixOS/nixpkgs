@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A roman serif with blackletter elements";
+    description = "Roman serif with blackletter elements";
     longDescription = ''
       "Prociono" (pro-tsee-O-no) is an Esperanto word meaning either the star
       Procyon or the animal species known as the raccoon. It is a roman serif

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -21,21 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-t3Q0FEBibkAM5PAG4fjXwNH/71RqSSDj/Mn27ri0iDU=";
   };
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [
-    mock
-  ];
+  checkInputs = [ mock ];
 
-  pythonImportsCheck = [
-    "configobj"
-  ];
+  pythonImportsCheck = [ "configobj" ];
 
   meta = with lib; {
     description = "Config file reading, writing and validation";

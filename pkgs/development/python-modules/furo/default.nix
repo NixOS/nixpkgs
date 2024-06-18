@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pythonRelaxDepsHook
-, sphinx
-, beautifulsoup4
-, sphinx-basic-ng
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  sphinx,
+  beautifulsoup4,
+  sphinx-basic-ng,
 }:
 
 buildPythonPackage rec {
   pname = "furo";
-  version = "2023.9.10";
+  version = "2024.1.29";
   format = "wheel";
 
   disabled = pythonOlder "3.8";
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-UTCSU4U33FxZZpHaBuPDcHFOyZvEOGgO3B3r/7c+W/w=";
+    hash = "sha256-NUi+LO9Foy+M3AJy1BX8s+X6ag603f4h3z7PH+RaE88=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  pythonRelaxDeps = [
-    "sphinx"
-  ];
+  pythonRelaxDeps = [ "sphinx" ];
 
   propagatedBuildInputs = [
     sphinx
@@ -47,12 +44,10 @@ buildPythonPackage rec {
     cd -
   '';
 
-  pythonImportsCheck = [
-    "furo"
-  ];
+  pythonImportsCheck = [ "furo" ];
 
   meta = with lib; {
-    description = "A clean customizable documentation theme for Sphinx";
+    description = "Clean customizable documentation theme for Sphinx";
     homepage = "https://github.com/pradyunsg/furo";
     changelog = "https://github.com/pradyunsg/furo/blob/${version}/docs/changelog.md";
     license = licenses.mit;

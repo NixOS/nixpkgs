@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Replacement for the old crypt() package and crypt(1) command, with extensions";
+    mainProgram = "libmcrypt-config";
     homepage = "https://mcrypt.sourceforge.net";
     license = "GPL";
     platforms = lib.platforms.all;

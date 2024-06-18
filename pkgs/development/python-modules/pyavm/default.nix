@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# tests
-, astropy
-, numpy
-, pillow
-, pytestCheckHook
+  # tests
+  astropy,
+  numpy,
+  pillow,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyavm"
-  ];
+  pythonImportsCheck = [ "pyavm" ];
 
   meta = with lib; {
     description = "Simple pure-python AVM meta-data handling";

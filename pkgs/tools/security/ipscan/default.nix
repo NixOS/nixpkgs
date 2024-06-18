@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Angry IP Scanner - fast and friendly network scanner";
+    mainProgram = "ipscan";
     homepage = "https://angryip.org";
     downloadPage = "https://github.com/angryip/ipscan/releases/tag/${version}";
     changelog = "https://github.com/angryip/ipscan/blob/${version}/CHANGELOG";

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A high quality audio sampling rate converter";
+    description = "High quality audio sampling rate converter";
     longDescription = ''
       This program converts sampling rates of PCM wav files. This
       program also has a function to apply dither to its output and

@@ -1,4 +1,10 @@
-{ lib, buildLua, fetchFromGitHub, gitUpdater, python3 }:
+{
+  lib,
+  buildLua,
+  fetchFromGitHub,
+  gitUpdater,
+  python3,
+}:
 
 buildLua rec {
   pname = "mpv-thumbnail-script";
@@ -10,7 +16,7 @@ buildLua rec {
     rev = version;
     sha256 = "sha256-J24Rou7BTE7zoiPlBkWuO9dtYJiuzkuwB4FROuzXzag=";
   };
-  passthru.updateScript = gitUpdater {};
+  passthru.updateScript = gitUpdater { };
 
   nativeBuildInputs = [ python3 ];
   postPatch = "patchShebangs concat_files.py";
@@ -21,7 +27,7 @@ buildLua rec {
   passthru.scriptName = "mpv_thumbnail_script_{client_osc,server}.lua";
 
   meta = with lib; {
-    description = "A lua script to show preview thumbnails in mpv's OSC seekbar";
+    description = "Lua script to show preview thumbnails in mpv's OSC seekbar";
     homepage = "https://github.com/marzzzello/mpv_thumbnail_script";
     changelog = "https://github.com/marzzzello/mpv_thumbnail_script/releases/tag/${version}";
     license = licenses.gpl3Plus;

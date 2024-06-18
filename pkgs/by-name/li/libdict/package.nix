@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/rtbrick/libdict/";
-    changelog = "https://github.com/rtbrick/libdict/releases/tag/${version}";
+    changelog = "https://github.com/rtbrick/libdict/releases/tag/${finalAttrs.version}";
     description = "C library of key-value data structures";
     license = licenses.bsd2;
     maintainers = teams.wdz.members;

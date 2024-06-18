@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osslsigncode";
-  version = "2.7";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TW4/alnAW3vifAKf02RlnpOq1uW7nc+Sjs0g1BfplLk=";
+    sha256 = "sha256-FcrymV0n/Bv0cS9Dx6sG+ifilBiPfaG+xpQvH9mvylQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config python3 ];
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/mtrojnar/osslsigncode";
     description = "OpenSSL based Authenticode signing for PE/MSI/Java CAB files";
+    mainProgram = "osslsigncode";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mmahut prusnak ];
     platforms = platforms.all;

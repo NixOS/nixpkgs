@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gibberish-detector
-, mock
-, pkgs
-, pyahocorasick
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, responses
-, unidiff
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gibberish-detector,
+  mock,
+  pkgs,
+  pyahocorasick,
+  pytest7CheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  responses,
+  unidiff,
 }:
 
 buildPythonPackage rec {
@@ -37,7 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytestCheckHook
+    pytest7CheckHook
     responses
     unidiff
     pkgs.gitMinimal
@@ -60,14 +61,12 @@ buildPythonPackage rec {
     "test_start_halfway"
   ];
 
-  pythonImportsCheck = [
-    "detect_secrets"
-  ];
+  pythonImportsCheck = [ "detect_secrets" ];
 
   meta = with lib; {
-    description = "An enterprise friendly way of detecting and preventing secrets in code";
+    description = "Enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

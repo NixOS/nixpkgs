@@ -1,6 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
-, pytest
-, pyflakes
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytest,
+  pyflakes,
 }:
 
 buildPythonPackage rec {

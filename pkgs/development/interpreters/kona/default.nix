@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   preInstall = ''mkdir -p "$out/bin"'';
 
   meta = with lib; {
-    description = "An interpreter of K, APL-like programming language";
+    description = "Interpreter of K, APL-like programming language";
     homepage = "https://github.com/kevinlawler/kona/";
     maintainers = with maintainers; [ raskin ];
     mainProgram = "k";

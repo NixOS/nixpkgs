@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A programmable text editor written around S-Lang";
+    description = "Programmable text editor written around S-Lang";
     longDescription = ''
       JED is a freely available text editor for Unix, VMS, MSDOS, OS/2, BeOS,
       QNX, and win9X/NT platforms. Although it is a powerful editor designed for

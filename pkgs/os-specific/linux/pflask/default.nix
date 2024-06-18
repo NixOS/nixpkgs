@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lightweight process containers for Linux";
+    mainProgram = "pflask";
     homepage = "https://ghedo.github.io/pflask/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;

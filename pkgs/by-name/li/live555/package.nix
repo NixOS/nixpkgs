@@ -1,15 +1,16 @@
-{ lib
-, darwin
-, fetchurl
-, fetchpatch
-, openssl
-, stdenv
-, vlc
+{
+  lib,
+  darwin,
+  fetchpatch,
+  fetchurl,
+  openssl,
+  stdenv,
+  vlc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2023.11.30";
+  version = "2024.05.15";
 
   src = fetchurl {
     urls = [
@@ -18,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-xue+9YtdAM2XkzAY6dU2PZ3n6bvPwlULIHqBqc8wuSU=";
+    hash = "sha256-Mgkf5XiFBEEDTTx+YlV12wE4zpmPPqaUPv9KcEK38D0=";
   };
 
   patches = [
@@ -37,11 +38,24 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "C_COMPILER=$(CC)"
+    "CPLUSPLUS_COMPILER=$(CXX)"
+    "LIBRARY_LINK=$(AR) cr "
+    "LINK=$(CXX) -o "
+  ];
+
+  # Since NIX_CFLAGS_COMPILE affects both C and C++ toolchains, we set CXXFLAGS
+  # directly
+  env.CXXFLAGS = "-std=c++20";
+
   strictDeps = true;
 
-  # Since NIX_CFLAGS_COMPILE does not differentiate C and C++ toolchains, we
-  # set CXXFLAGS directly
-  env.CXXFLAGS = "-std=c++20";
+  enableParallelBuilding = true;
+
+  # required for whitespaces in makeFlags
+  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace config.macosx-catalina \
@@ -53,18 +67,19 @@ stdenv.mkDerivation (finalAttrs: {
       config.linux
   ''
   # condition from icu/base.nix
-  + lib.optionalString (stdenv.hostPlatform.libc == "glibc"
-                        || stdenv.hostPlatform.libc == "musl") ''
+  + lib.optionalString (lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" ]) ''
     substituteInPlace liveMedia/include/Locale.hh \
       --replace '<xlocale.h>' '<locale.h>'
   '';
 
   configurePhase = let
-    platform = if stdenv.isLinux
-               then "linux"
-               else if stdenv.isDarwin
-               then "macosx-catalina"
-               else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
+    platform =
+      if stdenv.isLinux then
+        "linux"
+      else if stdenv.isDarwin then
+        "macosx-catalina"
+      else
+        throw "Unsupported platform: ${stdenv.hostPlatform.system}";
   in ''
     runHook preConfigure
 
@@ -72,12 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postConfigure
   '';
-
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
-
-  enableParallelBuilding = true;
 
   passthru.tests = {
     # Downstream dependency

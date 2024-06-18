@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf libpng librsvg libxml2 ];
 
   meta = with lib; {
-    description = "A library of code shared between tuxmath and tuxtype";
+    description = "Library of code shared between tuxmath and tuxtype";
     homepage = "https://github.com/tux4kids/t4kcommon";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.aanderse ];

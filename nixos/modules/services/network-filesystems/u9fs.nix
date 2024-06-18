@@ -14,14 +14,14 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to run the u9fs 9P server for Unix.";
+        description = "Whether to run the u9fs 9P server for Unix.";
       };
 
       listenStreams = mkOption {
         type = types.listOf types.str;
         default = [ "564" ];
         example = [ "192.168.16.1:564" ];
-        description = lib.mdDoc ''
+        description = ''
           Sockets to listen for clients on.
           See {command}`man 5 systemd.socket` for socket syntax.
         '';
@@ -30,16 +30,14 @@ in
       user = mkOption {
         type = types.str;
         default = "nobody";
-        description =
-          lib.mdDoc "User to run u9fs under.";
+        description = "User to run u9fs under.";
       };
 
       extraArgs = mkOption {
         type = types.str;
         default = "";
         example = "-a none";
-        description =
-          lib.mdDoc ''
+        description = ''
             Extra arguments to pass on invocation,
             see {command}`man 4 u9fs`
           '';

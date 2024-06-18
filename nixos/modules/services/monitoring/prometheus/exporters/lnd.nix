@@ -1,9 +1,8 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.lnd;
+  inherit (lib) mkOption types concatStringsSep;
 in
 {
   port = 9092;
@@ -11,21 +10,21 @@ in
     lndHost = mkOption {
       type = types.str;
       default = "localhost:10009";
-      description = lib.mdDoc ''
+      description = ''
         lnd instance gRPC address:port.
       '';
     };
 
     lndTlsPath = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to lnd TLS certificate.
       '';
     };
 
     lndMacaroonDir = mkOption {
       type = types.path;
-      description = lib.mdDoc ''
+      description = ''
         Path to lnd macaroons.
       '';
     };

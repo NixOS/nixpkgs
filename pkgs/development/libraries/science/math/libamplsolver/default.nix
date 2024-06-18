@@ -1,4 +1,4 @@
-{ lib, stdenv, substitute, fetchurl, fetchpatch }:
+{ lib, stdenv, substitute, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libamplsolver";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substitute {
       src = ./libamplsolver-sharedlib.patch;
-      replacements = [ "--replace" "@sharedlibext@" "${stdenv.hostPlatform.extensions.sharedLibrary}" ];
+      substitutions = [ "--replace" "@sharedlibext@" "${stdenv.hostPlatform.extensions.sharedLibrary}" ];
     })
   ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A library of routines that help solvers work with AMPL";
+    description = "Library of routines that help solvers work with AMPL";
     homepage = "https://ampl.com/netlib/ampl/";
     license = [ licenses.mit ];
     platforms = platforms.unix;

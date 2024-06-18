@@ -4,6 +4,8 @@
 , installShellFiles
 , coreutils
 , darwin
+, libblocksruntime
+, llvmPackages
 , libxcrypt
 , openldap
 , ninja
@@ -14,17 +16,17 @@
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation LDAP OpenGL;
+  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation LDAP OpenAL OpenGL;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-KNNtHi3jx0MRiOgmluA4ucZJWB2WeIYdApfHuspbCqg=";
+    hash = "sha256-hRTmKO2E6SIdvAhO7OJtV8dcsGm39c51H+2ZGEkdcFY=";
   };
 
   patches = [
@@ -65,6 +67,17 @@ python3.pkgs.buildPythonApplication rec {
 
     # Nixpkgs cctools does not have bitcode support.
     ./006-disable-bitcode.patch
+
+    # This edge case is explicitly part of meson but is wrong for nix
+    ./007-freebsd-pkgconfig-path.patch
+
+    # Fix cross-compilation of proc-macro (and mesa)
+    # https://github.com/mesonbuild/meson/issues/12973
+    ./0001-Revert-rust-recursively-pull-proc-macro-dependencies.patch
+
+    # Fix compilation of Meson using Ninja 1.12
+    # FIXME: remove in the next point release
+    ./007-Allow-building-via-ninja-12.patch
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
@@ -86,8 +99,14 @@ python3.pkgs.buildPythonApplication rec {
     Cocoa
     Foundation
     LDAP
+    OpenAL
     OpenGL
     openldap
+  ] ++ lib.optionals (stdenv.cc.isClang && !stdenv.isDarwin) [
+    # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
+    llvmPackages.openmp
+    # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
+    libblocksruntime
   ];
 
   checkPhase = lib.concatStringsSep "\n" ([
@@ -96,11 +115,12 @@ python3.pkgs.buildPythonApplication rec {
       patchShebangs 'test cases'
       substituteInPlace \
         'test cases/native/8 external program shebang parsing/script.int.in' \
+        'test cases/common/273 customtarget exe for test/generate.py' \
           --replace /usr/bin/env ${coreutils}/bin/env
     ''
   ]
   # Remove problematic tests
-  ++ (builtins.map (f: ''rm -vr "${f}";'') [
+  ++ (builtins.map (f: ''rm -vr "${f}";'') ([
     # requires git, creating cyclic dependency
     ''test cases/common/66 vcstag''
     # requires glib, creating cyclic dependency
@@ -110,7 +130,10 @@ python3.pkgs.buildPythonApplication rec {
     ''test cases/linuxlike/14 static dynamic linkage''
     # Nixpkgs cctools does not have bitcode support.
     ''test cases/osx/7 bitcode''
-  ])
+  ] ++ lib.optionals stdenv.isFreeBSD [
+    # pch doesn't work quite right on FreeBSD, I think
+    ''test cases/common/13 pch''
+  ]))
   ++ [
     ''HOME="$TMPDIR" python ./run_project_tests.py''
     "runHook postCheck"
@@ -140,7 +163,8 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://mesonbuild.com";
-    description = "An open source, fast and friendly build system made in Python";
+    description = "Open source, fast and friendly build system made in Python";
+    mainProgram = "meson";
     longDescription = ''
       Meson is an open source build system meant to be both extremely fast, and,
       even more importantly, as user friendly as possible.

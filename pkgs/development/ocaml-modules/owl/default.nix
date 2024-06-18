@@ -1,6 +1,5 @@
 { buildDunePackage
 , dune-configurator
-, fetchFromGitHub
 , alcotest
 , ctypes
 , stdio

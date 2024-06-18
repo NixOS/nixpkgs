@@ -63,6 +63,14 @@ stdenv.mkDerivation rec {
   # sometimes fail due to this
   checkFlagsArray = [ "ARGS=--timeout 10000" ];
 
+  postFixup = ''
+    # _IMPORT_PREFIX, used to point to lib, points to dev output. Every package using the generated
+    # cmake file will thus look for the library in the dev output instead of out.
+    # Use the absolute path to $out instead to fix the issue.
+    substituteInPlace  $dev/lib/cmake/scalapack-${version}/scalapack-targets-release.cmake \
+      --replace "\''${_IMPORT_PREFIX}" "$out"
+  '';
+
   meta = with lib; {
     homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";

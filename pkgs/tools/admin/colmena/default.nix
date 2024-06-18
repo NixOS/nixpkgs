@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A simple, stateless NixOS deployment tool";
+    description = "Simple, stateless NixOS deployment tool";
     homepage = "https://colmena.cli.rs/${passthru.apiVersion}";
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];

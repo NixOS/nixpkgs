@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "CLI utility to format json files";
+    mainProgram = "jfmt";
     homepage = "https://github.com/scruffystuffs/jfmt.rs";
     changelog = "https://github.com/scruffystuffs/jfmt.rs/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

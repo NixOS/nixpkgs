@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -16,16 +17,12 @@ buildPythonPackage rec {
     hash = "sha256-YwM7CdZVXpUXKXUzFL3AtoDhekLDIvZ/q8taLsHihNk=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # upstream code does not provide tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mcuuid"
-  ];
+  pythonImportsCheck = [ "mcuuid" ];
 
   meta = with lib; {
     description = "Getting Minecraft player information from Mojang API";

@@ -39,6 +39,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/yishilin14/asc-key-to-qr-code-gif";
     description = "Convert ASCII-armored PGP keys to animated QR code";
+    mainProgram = "asc-to-gif.sh";
     platforms = platforms.unix;
     maintainers = with maintainers; [ asymmetric ];
   };

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://bitbucket.org/amentajo/lib3to2";
     description = "Refactors valid 3.x syntax into valid 2.x syntax, if a syntactical conversion is possible";
+    mainProgram = "3to2";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mt-caret ];
   };

@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ gtest rapidjson ];
 
   meta = with lib; {
-    description = "A C++ API for Kafka clients (i.e. KafkaProducer, KafkaConsumer, AdminClient)";
+    description = "C++ API for Kafka clients (i.e. KafkaProducer, KafkaConsumer, AdminClient)";
     homepage = "https://github.com/morganstanley/modern-cpp-kafka";
     license = licenses.asl20;
     maintainers = with maintainers; [ ditsuke ];

@@ -1,19 +1,20 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, freetype
-, glibcLocales
-, libjpeg
-, pillow
-, pocket
-, pyfiglet
-, pysocks
-, python
-, python-dateutil
-, requests
-, twitter
-, zlib
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freetype,
+  glibcLocales,
+  libjpeg,
+  pillow,
+  pocket,
+  pyfiglet,
+  pysocks,
+  python,
+  python-dateutil,
+  requests,
+  twitter,
+  zlib,
 }:
 
 buildPythonPackage rec {
@@ -74,6 +75,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Streaming command-line twitter client";
+    mainProgram = "rainbowstream";
     homepage = "https://github.com/orakaro/rainbowstream";
     license = licenses.mit;
     maintainers = with maintainers; [ thoughtpolice ];

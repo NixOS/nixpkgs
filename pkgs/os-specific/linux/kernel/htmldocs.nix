@@ -6,7 +6,6 @@
 , makeFontsConf
 , perl
 , python3
-, sphinx
 , which
 }:
 
@@ -18,7 +17,8 @@ stdenv.mkDerivation {
   postPatch = ''
     patchShebangs \
       Documentation/sphinx/parse-headers.pl \
-      scripts/{get_abi.pl,get_feat.pl,kernel-doc,sphinx-pre-install}
+      scripts/{get_abi.pl,get_feat.pl,kernel-doc,sphinx-pre-install} \
+      tools/net/ynl/ynl-gen-rst.py
   '';
 
   FONTCONFIG_FILE = makeFontsConf {
@@ -31,6 +31,7 @@ stdenv.mkDerivation {
     perl
     python3.pkgs.sphinx
     python3.pkgs.sphinx-rtd-theme
+    python3.pkgs.pyyaml
     which
   ];
 
@@ -46,11 +47,11 @@ stdenv.mkDerivation {
     cp -r Documentation/* $out/share/doc/linux-doc/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel html documentation";
     homepage = "https://www.kernel.org/doc/htmldocs/";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     inherit (linux_latest.meta) license;
-    maintainers = with maintainers; [ ];
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

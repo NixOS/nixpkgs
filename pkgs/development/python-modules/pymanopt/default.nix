@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, numpy
-, scipy
-, torch
-, autograd
-, matplotlib
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  numpy,
+  scipy,
+  torch,
+  autograd,
+  matplotlib,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,8 +22,16 @@ buildPythonPackage rec {
     hash = "sha256-pDFRYhswcuAHG9pcqvzXIy3Ivhxe5R5Ric7AFRh7MK4=";
   };
 
-  propagatedBuildInputs = [ numpy scipy torch ];
-  nativeCheckInputs = [ autograd matplotlib pytestCheckHook ];
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    torch
+  ];
+  nativeCheckInputs = [
+    autograd
+    matplotlib
+    pytestCheckHook
+  ];
 
   preCheck = ''
     substituteInPlace "tests/conftest.py" \

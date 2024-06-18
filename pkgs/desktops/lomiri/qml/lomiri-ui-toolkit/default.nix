@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , gitUpdater
 , substituteAll
 , testers
@@ -35,30 +34,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-ui-toolkit";
-  version = "1.3.5012";
+  version = "1.3.5100";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-ui-toolkit";
     rev = finalAttrs.version;
-    hash = "sha256-Azz2IOm/7XRvDbyIKaYxrkR47evSB17ejtssuEJayPc=";
+    hash = "sha256-r+wUCl+ywFcgFYo7BjBoXiulQptd1Zd3LJchXiMtx4I=";
   };
 
   outputs = [ "out" "dev" ];
 
   patches = [
-    # Upstreaming effort for these two patches: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/merge_requests/44
-    (fetchpatch {
-      name = "0001-lomiri-ui-toolkit-fix-tests-on-qt-5.15.4.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri-ui-toolkit/-/raw/1ad650c326ba9706d549d1dbe8335c70f6b382c8/debian/patches/0001-fix-tests-on-qt-5.15.4.patch";
-      hash = "sha256-Y5HVvulR2760DBzlmYkImbJ/qIeqMISqPpUppbv8xJA=";
-    })
-    (fetchpatch {
-      name = "0002-lomiri-ui-toolkit-fix-tests-on-qt-5.15.5.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri-ui-toolkit/-/raw/03bcafadd3e4fda34bcb5af23454f4b202cf5517/debian/patches/0002-fix-tests-on-qt-5.15.5.patch";
-      hash = "sha256-x8Zk7+VBSlM16a3V1yxJqIB63796H0lsS+F4dvR/z80=";
-    })
-
     ./2001-Mark-problematic-tests.patch
     (substituteAll {
       src = ./2002-Nixpkgs-versioned-QML-path.patch.in;
@@ -70,18 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs documentation/docs.sh tests/
 
-    substituteInPlace tests/tests.pro \
-      --replace "\''$\''$PYTHONDIR" "$dev/${python3.sitePackages}"
-
     for subproject in po app-launch-profiler lomiri-ui-toolkit-launcher; do
       substituteInPlace $subproject/$subproject.pro \
-        --replace "\''$\''$[QT_INSTALL_PREFIX]" "$out" \
-        --replace "\''$\''$[QT_INSTALL_LIBS]" "$out/lib"
+        --replace-fail "\''$\''$[QT_INSTALL_PREFIX]" "$out" \
+        --replace-warn "\''$\''$[QT_INSTALL_LIBS]" "$out/lib"
     done
 
     # Install apicheck tool into bin
     substituteInPlace apicheck/apicheck.pro \
-      --replace "\''$\''$[QT_INSTALL_LIBS]/lomiri-ui-toolkit" "$out/bin"
+      --replace-fail "\''$\''$[QT_INSTALL_LIBS]/lomiri-ui-toolkit" "$out/bin"
 
     # Causes redefinition error with our own fortify hardening
     sed -i '/DEFINES += _FORTIFY_SOURCE/d' features/lomiri_common.prf
@@ -98,19 +82,19 @@ stdenv.mkDerivation (finalAttrs: {
     # Using /run/current-system/sw/share/locale instead of /usr/share/locale isn't a great
     # solution, but at least it should get us working localisations
     substituteInPlace src/LomiriToolkit/i18n.cpp \
-      --replace "/usr" "/run/current-system/sw"
+      --replace-fail "/usr" "/run/current-system/sw"
 
     # The code here overrides the regular QML import variables so the just-built modules are found & used in the tests
     # But we need their QML dependencies too, so put them back in there
     substituteInPlace export_qml_dir.sh \
-      --replace '_IMPORT_PATH=$BUILD_DIR/qml' '_IMPORT_PATH=$BUILD_DIR/qml:${qtQmlPaths}'
+      --replace-fail '_IMPORT_PATH=$BUILD_DIR/qml' '_IMPORT_PATH=$BUILD_DIR/qml:${qtQmlPaths}'
 
     # These tests try to load Suru theme icons, but override XDG_DATA_DIRS / use full paths to load them
     substituteInPlace \
       tests/unit/visual/tst_visual.cpp \
       tests/unit/visual/tst_icon.{11,13}.qml \
       tests/unit/visual/tst_imageprovider.11.qml \
-      --replace '/usr/share' '${suru-icon-theme}/share'
+      --replace-fail '/usr/share' '${suru-icon-theme}/share'
   '';
 
   # With strictDeps, QMake only picks up Qt dependencies from nativeBuildInputs
@@ -190,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Qt-generated wrapper script lacks QML paths to dependencies
     for qmlModule in Components PerformanceMetrics Test; do
       substituteInPlace src/imports/$qmlModule/wrapper.sh \
-        --replace 'QML2_IMPORT_PATH=' 'QML2_IMPORT_PATH=${qtQmlPaths}:'
+        --replace-fail 'QML2_IMPORT_PATH=' 'QML2_IMPORT_PATH=${qtQmlPaths}:'
     done
   '';
 
@@ -198,8 +182,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Code loads Qt's qt_module.prf, which force-overrides all QMAKE_PKGCONFIG_* variables except PREFIX for QMake-generated pkg-config files
     for pcFile in Lomiri{Gestures,Metrics,Toolkit}.pc; do
       substituteInPlace $out/lib/pkgconfig/$pcFile \
-        --replace "${lib.getLib qtbase}/lib" "\''${prefix}/lib" \
-        --replace "${lib.getDev qtbase}/include" "\''${prefix}/include"
+        --replace-fail "${lib.getLib qtbase}/lib" "\''${prefix}/lib" \
+        --replace-fail "${lib.getDev qtbase}/include" "\''${prefix}/include"
     done
 
     # These are all dev-related tools, but declaring a bin output also moves around the QML modules

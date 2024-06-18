@@ -116,7 +116,7 @@ in mkDerivation {
   meta = with lib; {
     description = "Ultrastar karaoke song manager";
     homepage = "https://github.com/UltraStar-Deluxe/UltraStar-Manager";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ Profpatsch ];
   };
 }

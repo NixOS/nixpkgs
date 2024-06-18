@@ -8,9 +8,9 @@ in
   {
     options = {
       services.xserver.xautolock = {
-        enable = mkEnableOption (lib.mdDoc "xautolock");
-        enableNotifier = mkEnableOption (lib.mdDoc "xautolock.notify") // {
-          description = lib.mdDoc ''
+        enable = mkEnableOption "xautolock";
+        enableNotifier = mkEnableOption "xautolock.notify" // {
+          description = ''
             Whether to enable the notifier feature of xautolock.
             This publishes a notification before the autolock.
           '';
@@ -20,7 +20,7 @@ in
           default = 15;
           type = types.int;
 
-          description = lib.mdDoc ''
+          description = ''
             Idle time (in minutes) to wait until xautolock locks the computer.
           '';
         };
@@ -31,7 +31,7 @@ in
           example = literalExpression ''"''${pkgs.i3lock}/bin/i3lock -i /path/to/img"'';
           type = types.str;
 
-          description = lib.mdDoc ''
+          description = ''
             The script to use when automatically locking the computer.
           '';
         };
@@ -41,7 +41,7 @@ in
           example = literalExpression ''"''${pkgs.i3lock}/bin/i3lock -i /path/to/img"'';
           type = types.nullOr types.str;
 
-          description = lib.mdDoc ''
+          description = ''
             The script to use when manually locking the computer with {command}`xautolock -locknow`.
           '';
         };
@@ -50,7 +50,7 @@ in
           default = 10;
           type = types.int;
 
-          description = lib.mdDoc ''
+          description = ''
             Time (in seconds) before the actual lock when the notification about the pending lock should be published.
           '';
         };
@@ -60,7 +60,7 @@ in
           example = literalExpression ''"''${pkgs.libnotify}/bin/notify-send 'Locking in 10 seconds'"'';
           type = types.nullOr types.str;
 
-          description = lib.mdDoc ''
+          description = ''
             Notification script to be used to warn about the pending autolock.
           '';
         };
@@ -70,7 +70,7 @@ in
           example = "/run/current-system/systemd/bin/systemctl suspend";
           type = types.nullOr types.str;
 
-          description = lib.mdDoc ''
+          description = ''
             The script to use when nothing has happened for as long as {option}`killtime`
           '';
         };
@@ -79,7 +79,7 @@ in
           default = 20; # default according to `man xautolock`
           type = types.int;
 
-          description = lib.mdDoc ''
+          description = ''
             Minutes xautolock waits until it executes the script specified in {option}`killer`
             (Has to be at least 10 minutes)
           '';
@@ -89,7 +89,7 @@ in
           type = types.listOf types.str;
           default = [ ];
           example = [ "-detectsleep" ];
-          description = lib.mdDoc ''
+          description = ''
             Additional command-line arguments to pass to
             {command}`xautolock`.
           '';

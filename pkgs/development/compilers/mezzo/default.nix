@@ -48,7 +48,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "http://protz.github.io/mezzo/";
-    description = "A programming language in the ML tradition, which places strong emphasis on the control of aliasing and access to mutable memory";
+    description = "Programming language in the ML tradition, which places strong emphasis on the control of aliasing and access to mutable memory";
     license = licenses.gpl2;
     platforms = ocaml.meta.platforms or [];
   };

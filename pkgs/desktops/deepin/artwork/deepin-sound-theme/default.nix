@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "The freedesktop sound theme for Deepin";
+    description = "Freedesktop sound theme for Deepin";
     homepage = "https://github.com/linuxdeepin/deepin-sound-theme";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "A framework for controlling entertainment lighting equipment";
+    description = "Framework for controlling entertainment lighting equipment";
     homepage = "https://www.openlighting.org/ola/";
     maintainers = with maintainers; [ ];
     license = with licenses; [ lgpl21 gpl2Plus ];

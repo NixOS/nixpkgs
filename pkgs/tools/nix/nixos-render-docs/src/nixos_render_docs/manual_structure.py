@@ -201,3 +201,20 @@ class TocEntry(Freezeable):
         while len(entries) > 1:
             entries[-2][1].children.append(entries.pop()[1])
         return (entries[0][1], examples, figures)
+
+_xml_id_translate_table = {
+    ord('*'): ord('_'),
+    ord('<'): ord('_'),
+    ord(' '): ord('_'),
+    ord('>'): ord('_'),
+    ord('['): ord('_'),
+    ord(']'): ord('_'),
+    ord(':'): ord('_'),
+    ord('"'): ord('_'),
+}
+# this function is needed to generate option id attributes in the same format as
+# the docbook toolchain did to not break existing links. we don't actually use
+# xml any more, that's just the legacy we're dealing with and part of our structure
+# now.
+def make_xml_id(s: str) -> str:
+    return s.translate(_xml_id_translate_table)

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "unflac";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromSourcehut {
     owner = "~ft";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BgXuPAXrw28axfTEh10Yh8dQc27M1/lSmCo2eAeNnjE=";
+    sha256 = "sha256-xJEVrzooNcS3zEKeF6DB7ZRZEjHfC7dGKgQfswxbD+U=";
   };
 
   vendorHash = "sha256-IQHxEYv6l8ORoX+a3Szox9tS2fyBk0tpK+Q1AsWohX0=";

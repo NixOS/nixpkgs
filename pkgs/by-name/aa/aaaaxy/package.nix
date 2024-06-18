@@ -20,17 +20,17 @@
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.4.160";
+  version = "1.5.139";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-BI3qnt/u0BXEHJ1E7jUh6jAUXxJZAUX+5Joih1g0JAU=";
+    hash = "sha256-j8BpLN0PhMqUQXhF1L7uEW2KLaVq5cfckXnWrkltCgM=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-m6nSWw+KluP0X3mB18m7OEFzeRFw/XS4JiqARqGopvQ=";
+  vendorHash = "sha256-a6nfGP6Lwjwr4wXXRUrCyV9+BCyHOSKczk5rjZdFnlA=";
 
   buildInputs = [
     alsa-lib
@@ -52,14 +52,14 @@ buildGoModule rec {
   postPatch = ''
     # Without patching, "go run" fails with the error message:
     # package github.com/google/go-licenses: no Go files in /build/source/vendor/github.com/google/go-licenses
-    substituteInPlace scripts/build-licenses.sh --replace \
+    substituteInPlace scripts/build-licenses.sh --replace-fail \
       '$GO run ''${GO_FLAGS} github.com/google/go-licenses' 'go-licenses'
 
     patchShebangs scripts/
     substituteInPlace scripts/regression-test-demo.sh \
-      --replace 'sh scripts/run-timedemo.sh' "$testing_infra/scripts/run-timedemo.sh"
+      --replace-fail 'sh scripts/run-timedemo.sh' "$testing_infra/scripts/run-timedemo.sh"
 
-    substituteInPlace Makefile --replace \
+    substituteInPlace Makefile --replace-fail \
       'CPPFLAGS ?= -DNDEBUG' \
       'CPPFLAGS ?= -DNDEBUG -D_GLFW_GLX_LIBRARY=\"${lib.getLib libGL}/lib/libGL.so\" -D_GLFW_EGL_LIBRARY=\"${lib.getLib libGL}/lib/libEGL.so\"'
   '';
@@ -70,11 +70,11 @@ buildGoModule rec {
     # changes, the hash would change.
     # To work around this, use environment variables.
     postBuild = ''
-      substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_others.go' \
-        --replace \
+      substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_linbsd.go' \
+        --replace-fail \
         '{"libGL.so", "libGL.so.2", "libGL.so.1", "libGL.so.0"}' \
         '{os.Getenv("EBITENGINE_LIBGL")}' \
-        --replace \
+        --replace-fail \
         '{"libGLESv2.so", "libGLESv2.so.2", "libGLESv2.so.1", "libGLESv2.so.0"}' \
         '{os.Getenv("EBITENGINE_LIBGLESv2")}'
     '';
@@ -113,7 +113,8 @@ buildGoModule rec {
   strictDeps = true;
 
   meta = with lib; {
-    description = "A nonlinear 2D puzzle platformer taking place in impossible spaces";
+    description = "Nonlinear 2D puzzle platformer taking place in impossible spaces";
+    mainProgram = "aaaaxy";
     homepage = "https://divverent.github.io/aaaaxy/";
     license = licenses.asl20;
     maintainers = with maintainers; [ Luflosi ];

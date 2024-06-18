@@ -42,6 +42,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Next generation web scanner";
+    mainProgram = "whatweb";
     homepage = "https://github.com/urbanadventurer/whatweb";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ wolfangaukang ];

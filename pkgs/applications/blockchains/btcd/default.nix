@@ -23,7 +23,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An alternative full node bitcoin implementation written in Go (golang)";
+    description = "Alternative full node bitcoin implementation written in Go (golang)";
     homepage = "https://github.com/btcsuite/btcd";
     license = licenses.isc;
     maintainers = with maintainers; [ _0xB10C ];

@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "nixos-modules-contrib";
-  version = "unstable-2021-01-20";
+  version = "0-unstable-2021-01-20";
   pyproject = true;
 
   src = fetchFromGitHub {

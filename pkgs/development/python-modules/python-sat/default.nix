@@ -1,4 +1,11 @@
-{ buildPythonPackage, fetchFromGitHub, lib, six, pypblib, pytestCheckHook }:
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  six,
+  pypblib,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "python-sat";
@@ -12,21 +19,24 @@ buildPythonPackage rec {
     hash = "sha256-zGdgD+SgoMB7/zDQI/trmV70l91TB7OkDxaJ30W3dkI=";
   };
 
-  propagatedBuildInputs = [ six pypblib ];
+  propagatedBuildInputs = [
+    six
+    pypblib
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   # https://github.com/pysathq/pysat/pull/102
   postPatch = ''
-    # Fix for case-insensitive filesystem
-    cat >>solvers/patches/cadical.patch <<EOF
-diff --git solvers/cadical/VERSION solvers/cdc/VERSION
-deleted file mode 100644
---- solvers/cadical/VERSION
-+++ /dev/null
-@@ -1 +0,0 @@
--1.0.3
-EOF
+        # Fix for case-insensitive filesystem
+        cat >>solvers/patches/cadical.patch <<EOF
+    diff --git solvers/cadical/VERSION solvers/cdc/VERSION
+    deleted file mode 100644
+    --- solvers/cadical/VERSION
+    +++ /dev/null
+    @@ -1 +0,0 @@
+    -1.0.3
+    EOF
   '';
 
   meta = with lib; {

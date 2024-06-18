@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchzip
+, fetchurl
 , autoPatchelfHook
 , gcc-unwrapped
 , zlib
@@ -16,22 +16,28 @@ let
     aarch64-darwin = "macos-aarch64";
   }.${system} or (throw "Unsupported system: ${system}");
 
+  # TODO: It'd be nice to write an update script that would update all of these
+  # hashes together.
   packageHash = {
-    x86_64-linux = "sha256-Y0Inew0PncpnEpdLWtl/85t93eGSRewKh5mvGnn+yck=";
-    aarch64-linux = "sha256-HEm3TaLeaws8G73CU9BmxeplQdeF9nQbBSnbctaVhqI=";
-    x86_64-darwin = "sha256-mlshpN/4Od4qrXiqIEYo7G84Dtb+tp2nK2VnrRG2rto=";
-    aarch64-darwin = "sha256-aJH/vOidj0vbkttGDgelaAC/dMYguQPLjxl+V3pOVzI=";
+    x86_64-linux = "sha256-gYHIfvgofT9tKYCchZoRYvioLCtp2wfaOtuVWxTyujM=";
+    aarch64-linux = "sha256-zW+aeUc67pa6mQQkfazShHKAvGeucswLK1eRCxzXOJM=";
+    x86_64-darwin = "sha256-ph+SrrxOIyG9rRS098duhvDFiNGuh0o2uemm++J+zKw=";
+    aarch64-darwin = "sha256-eOpRaivRhk841/TCxC4ygw27UrPkqQCMH2mme2qo8V8=";
   }.${system} or (throw "Unsupported system: ${system}");
 
 in stdenv.mkDerivation rec {
   pname = "fermyon-spin";
-  version = "2.2.0";
+  version = "2.5.1";
 
-  src = fetchzip {
+  # Use fetchurl rather than fetchzip as these tarballs are built by the project
+  # and not by GitHub (and thus are stable) - this simplifies the update script
+  # by allowing it to use the output of `nix store prefetch-file`.
+  src = fetchurl {
     url = "https://github.com/fermyon/spin/releases/download/v${version}/spin-v${version}-${platform}.tar.gz";
-    stripRoot = false;
     hash = packageHash;
   };
+
+  sourceRoot = ".";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     autoPatchelfHook
@@ -46,13 +52,13 @@ in stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp $src/* $out/bin
+    cp ./spin $out/bin
 
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "Framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly.";
+    description = "Framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly";
     homepage = "https://github.com/fermyon/spin";
     license = with licenses; [ asl20 ];
     mainProgram = "spin";

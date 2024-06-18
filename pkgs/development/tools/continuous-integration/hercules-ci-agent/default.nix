@@ -1,4 +1,5 @@
 {
+  crun,
   git,
   gnutar,
   gzip,
@@ -8,14 +9,13 @@
   makeBinaryWrapper,
   nixos,
   openssh,
-  runc,
   stdenv,
   testers,
 }:
 let
   inherit (haskell.lib.compose) overrideCabal addBuildTools justStaticExecutables;
   inherit (lib) makeBinPath;
-  bundledBins = [ gnutar gzip git openssh ] ++ lib.optional stdenv.isLinux runc;
+  bundledBins = [ gnutar gzip git openssh ] ++ lib.optional stdenv.isLinux crun;
 
   pkg =
     # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
@@ -23,6 +23,10 @@ let
       (o: {
         postInstall = ''
           ${o.postInstall or ""}
+          ${lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+            remove-references-to -t ${haskellPackages.hercules-ci-cnix-expr} $out/bin/hercules-ci-agent
+            remove-references-to -t ${haskellPackages.hercules-ci-cnix-expr} $out/bin/hercules-ci-agent-worker
+          ''}
           mkdir -p $out/libexec
           mv $out/bin/hercules-ci-agent $out/libexec
           makeWrapper $out/libexec/hercules-ci-agent $out/bin/hercules-ci-agent --prefix PATH : ${lib.escapeShellArg (makeBinPath bundledBins)}

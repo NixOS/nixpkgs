@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/eunomia/";
-    description = "A futuristic decorative font";
+    description = "Futuristic decorative font";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars minijackson ];
     license = licenses.ofl;

@@ -32,6 +32,7 @@ let
     "mips" = "mips";
     "mips64el" = "mips64le";
     "mipsel" = "mipsle";
+    "powerpc64" = "ppc64";
     "powerpc64le" = "ppc64le";
     "riscv64" = "riscv64";
     "s390x" = "s390x";
@@ -46,11 +47,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.21.6";
+  version = "1.21.11";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-Ekkmpi5F942qu67bnAEdl2MxhqM8I4/8HiUyDAIEYkg=";
+    hash = "sha256-Qq7pvytpVsdaetaqPwpRtYIf/qxX9aLnM6LW6uHm2dI=";
   };
 
   strictDeps = true;
@@ -179,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
-    description = "The Go Programming language";
+    description = "Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;

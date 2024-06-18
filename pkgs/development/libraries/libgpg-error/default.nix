@@ -17,11 +17,11 @@
   };
 in stdenv.mkDerivation (rec {
   pname = "libgpg-error";
-  version = "1.47";
+  version = "1.49";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-njxnCWa5bsx0bCjCxBlUHjvLeH0ac5MPXl9eG8u7m9s=";
+    sha256 = "sha256-i3nVRjnb9KvAi1QG+y835mmi3sCR3QJPuH3TZxMcY6k=";
   };
 
   postPatch = ''
@@ -63,7 +63,8 @@ in stdenv.mkDerivation (rec {
   meta = with lib; {
     homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
     changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
-    description = "A small library that defines common error values for all GnuPG components";
+    description = "Small library that defines common error values for all GnuPG components";
+    mainProgram = "gen-posix-lock-obj";
 
     longDescription = ''
       Libgpg-error is a small library that defines common error values

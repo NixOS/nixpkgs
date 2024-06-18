@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A library for parsing Excel files";
+    description = "Library for parsing Excel files";
     homepage    = "https://www.libxl.com/";
     license     = licenses.unfree;
     platforms   = platforms.linux;

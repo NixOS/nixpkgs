@@ -50,6 +50,7 @@ mkDerivation {
 
   meta = with lib; {
     description = "Contacts and dialer application";
+    mainProgram = "communicator";
     homepage = "https://invent.kde.org/maui/communicator";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];

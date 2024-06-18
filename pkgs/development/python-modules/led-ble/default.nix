@@ -1,13 +1,14 @@
-{ lib
-, async-timeout
-, bleak
-, bleak-retry-connector
-, buildPythonPackage
-, fetchFromGitHub
-, flux-led
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  bleak,
+  bleak-retry-connector,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flux-led,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -29,25 +30,17 @@ buildPythonPackage rec {
       --replace " --cov=led_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     bleak
     bleak-retry-connector
     flux-led
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "led_ble"
-  ];
+  pythonImportsCheck = [ "led_ble" ];
 
   meta = with lib; {
     description = "Library for LED BLE devices";

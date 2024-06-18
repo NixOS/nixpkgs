@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     description = "Graphical command line program for solving crossword puzzles in the terminal";
     mainProgram = "cursewords";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ danderson ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

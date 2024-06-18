@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "The OpenTelemetry C++ Client Library";
+    description = "OpenTelemetry C++ Client Library";
     homepage = "https://github.com/open-telemetry/opentelemetry-cpp";
     license = [ lib.licenses.asl20 ];
     maintainers = with lib.maintainers; [ jfroche ];

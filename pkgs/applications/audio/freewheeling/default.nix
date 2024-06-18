@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    description = "A live looping instrument with JACK and MIDI support";
+    description = "Live looping instrument with JACK and MIDI support";
     longDescription = ''
         Freewheeling allows us to build repetitive grooves
         by sampling and directing loops from within spirited improvisation.

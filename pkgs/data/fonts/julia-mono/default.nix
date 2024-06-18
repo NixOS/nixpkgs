@@ -2,12 +2,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "JuliaMono-ttf";
-  version = "0.053";
+  version = "0.055";
 
   src = fetchzip {
     url = "https://github.com/cormullion/juliamono/releases/download/v${version}/${pname}.tar.gz";
     stripRoot = false;
-    hash = "sha256-KvDyT0T8ecpSoNmqvsvDMooWNNe+z/PvxYj1Nd6qqfA=";
+    hash = "sha256-bE7XjVzleSo5hjc7Azcl8R4OgJzsj1U21UOuXrBkulA=";
   };
 
   installPhase = ''
@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A monospaced font for scientific and technical computing";
+    description = "Monospaced font for scientific and technical computing";
     longDescription = ''
       JuliaMono is a monospaced typeface designed for use in text editing
       environments that require a wide range of specialist and technical Unicode

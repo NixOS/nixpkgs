@@ -8,7 +8,7 @@
 , pulseaudioFull
 , glibmm
 , gtkmm3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "PulseAudio Preferences";
+    mainProgram = "paprefs";
 
     longDescription = ''
       PulseAudio Preferences (paprefs) is a simple GTK based configuration

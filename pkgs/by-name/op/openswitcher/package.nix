@@ -9,7 +9,7 @@
 , ninja
 , pkg-config
 , scdoc
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
     ninja
     pkg-config
     scdoc
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   dontWrapGApps = true;

@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = rec {
-    description = "The GitHub copilot IntelliJ plugin's native component";
+    description = "GitHub copilot IntelliJ plugin's native component";
     longDescription = ''
       The GitHub copilot IntelliJ plugin's native component.
       bin/copilot-agent must be symlinked into the plugin directory, replacing the existing binary.

@@ -1,14 +1,15 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioairzone-cloud";
-  version = "0.3.8";
+  version = "0.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,20 +18,14 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = "aioairzone-cloud";
     rev = "refs/tags/${version}";
-    hash = "sha256-h9WUHehTXg73qqpw+sMxoQMzOV+io2GvjwXlr4gF2ns=";
+    hash = "sha256-06r6Q+MdEirLiPrx71NDp8oeRJzqgDg8FtXt46vHutE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  dependencies = [ aiohttp ];
 
-  pythonImportsCheck = [
-    "aioairzone_cloud"
-  ];
+  pythonImportsCheck = [ "aioairzone_cloud" ];
 
   # Module has no tests
   doCheck = false;

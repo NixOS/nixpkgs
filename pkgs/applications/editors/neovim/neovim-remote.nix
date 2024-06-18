@@ -42,7 +42,7 @@ with python3.pkgs; buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A tool that helps controlling nvim processes from a terminal";
+    description = "Tool that helps controlling nvim processes from a terminal";
     homepage = "https://github.com/mhinz/neovim-remote/";
     license = licenses.mit;
     maintainers = with maintainers; [ edanaher ];

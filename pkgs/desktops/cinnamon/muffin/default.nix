@@ -33,7 +33,7 @@
 , udev
 , wayland
 , wayland-protocols
-, wrapGAppsHook
+, wrapGAppsHook3
 , xorgserver
 , xwayland
 }:
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     xorgserver # for cvt command
     gobject-introspection
   ];
@@ -114,7 +114,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/muffin";
-    description = "The window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
+    description = "Window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
+    mainProgram = "muffin";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

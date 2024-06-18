@@ -156,9 +156,9 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
       # Platforms without host tools from
       # https://doc.rust-lang.org/nightly/rustc/platform-support.html
       "armv7a-darwin"
-      "armv5tel-linux" "armv7a-linux" "m68k-linux" "mipsel-linux"
-      "mips64el-linux" "riscv32-linux"
-      "armv6l-netbsd"
+      "armv5tel-linux" "armv7a-linux" "m68k-linux" "mips-linux"
+      "mips64-linux" "mipsel-linux" "mips64el-linux" "riscv32-linux"
+      "armv6l-netbsd" "mipsel-netbsd" "riscv64-netbsd"
       "x86_64-redox"
       "wasm32-wasi"
     ];

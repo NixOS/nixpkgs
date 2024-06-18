@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A multiplexer for various nmea 0183 interfaces";
+    description = "Multiplexer for various nmea 0183 interfaces";
     homepage = "https://www.stripydog.com/kplex/";
     changelog = "https://www.stripydog.com/kplex/changes.html";
     license = licenses.gpl3Plus;

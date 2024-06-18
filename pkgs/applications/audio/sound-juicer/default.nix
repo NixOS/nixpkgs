@@ -16,7 +16,7 @@
 , libdiscid
 , isocodes
 , gsettings-desktop-schemas
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     pkg-config
     itstool
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -61,8 +61,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A Gnome CD Ripper";
-    homepage = "https://wiki.gnome.org/Apps/SoundJuicer";
+    description = "Gnome CD Ripper";
+    mainProgram = "sound-juicer";
+    homepage = "https://gitlab.gnome.org/GNOME/sound-juicer";
     maintainers = [ maintainers.bdimcheff ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

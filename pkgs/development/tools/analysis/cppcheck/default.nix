@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
-  version = "2.13.4";
+  version = "2.14.1";
 
   outputs = [ "out" "man" ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "danmar";
     repo = "cppcheck";
     rev = finalAttrs.version;
-    hash = "sha256-Bz8ACCsxKfN1Y8TpS+oD/6lixLItL1TQR0Ud4gj1txk=";
+    hash = "sha256-KXE3zmhaTweQhs0Qh7Xd5ILiuGVewtrvOkRkt8hjU58=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A static analysis tool for C/C++ code";
+    description = "Static analysis tool for C/C++ code";
     homepage = "http://cppcheck.sourceforge.net";
     license = lib.licenses.gpl3Plus;
     longDescription = ''

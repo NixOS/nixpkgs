@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "slade";
-  version = "unstable-2023-09-30";
+  version = "3.2.4-unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";

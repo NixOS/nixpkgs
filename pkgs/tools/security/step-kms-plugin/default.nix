@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "step-kms-plugin";
-  version = "0.10.0";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-TmIQjkIESZm6u7CajyJGgf1xm3SvjA6EINUAKehzafs=";
+    hash = "sha256-Gl/5AExN2/MEoR2HKpw7mDfuc/1Wj0UGSdXPzHl2JdU=";
   };
 
-  vendorHash = "sha256-mwi7ux4pnnotdwW6v0j+q8mx5i7W6fJVuAKOEqVDueY=";
+  vendorHash = "sha256-O6orQYrupJdJbx23TXCP0qWyvn6Hv2iDeRYvIgLp1NM=";
 
   proxyVendor = true;
 

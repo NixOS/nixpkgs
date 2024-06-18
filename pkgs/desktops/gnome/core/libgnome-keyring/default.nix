@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Framework for managing passwords and other secrets";
-    homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
+    homepage = "https://gitlab.gnome.org/Archive/libgnome-keyring";
     license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
     pkgConfigModules = [ "gnome-keyring-1" ];
     platforms = lib.platforms.unix;

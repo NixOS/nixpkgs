@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Space flight simulator";
+    mainProgram = "stardust";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 , autoreconfHook
 , go-md2man
@@ -16,6 +17,7 @@
 , fsverity-utils
 , nix-update-script
 , testers
+, nixosTests
 
 , fuseSupport ? lib.meta.availableOn stdenv.hostPlatform fuse3
 , enableValgrindCheck ? false
@@ -23,17 +25,26 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "composefs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ViZkmuLFV5DN1nqWKGl+yaqhYUEOztZ1zGpxjr1U/dw=";
+    hash = "sha256-ekUFLZGWTsiJZFv3nHoxuV057zoOtWBIkt+VdtzlaU4=";
   };
 
   strictDeps = true;
   outputs = [ "out" "lib" "dev" ];
+
+  patches = [
+    # fixes composefs-info tests, remove in next release
+    # https://github.com/containers/composefs/pull/291
+    (fetchpatch {
+      url = "https://github.com/containers/composefs/commit/f7465b3a57935d96451b392b07aa3a1dafb56e7b.patch";
+      hash = "sha256-OO3IfqLf3dQGjEgKx3Bo630KALmLAWwgdACuyZm2Ujc=";
+    })
+  ];
 
   postPatch = lib.optionalString installExperimentalTools ''
     sed -i "s/noinst_PROGRAMS +\?=/bin_PROGRAMS +=/g" tools/Makefile.am
@@ -63,17 +74,21 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     patchShebangs --build tests/*dir tests/*.sh
     substituteInPlace tests/*.sh \
-      --replace " /tmp" " $TMPDIR" \
-      --replace " /var/tmp" " $TMPDIR"
+      --replace-quiet " /tmp" " $TMPDIR" \
+      --replace-quiet " /var/tmp" " $TMPDIR"
   '';
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      # Broken on aarch64 unrelated to this package: https://github.com/NixOS/nixpkgs/issues/291398
+      inherit (nixosTests) activation-etc-overlay-immutable activation-etc-overlay-mutable;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
   meta = {
-    description = "A file system for mounting container images";
+    description = "File system for mounting container images";
     homepage = "https://github.com/containers/composefs";
     changelog = "https://github.com/containers/composefs/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [ gpl3Plus lgpl21Plus ];

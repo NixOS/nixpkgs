@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
 , installShellFiles
 , darwin
@@ -11,16 +12,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "1.0.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "lsd-rs";
     repo = "lsd";
     rev = "v${version}";
-    hash = "sha256-syT+1LNdigUWkfJ/wkbY/kny2uW6qfpl7KmW1FjZKR8=";
+    hash = "sha256-ZMaI0Q/xmYJHWvU4Tha+XVV55zKLukrqkROfBzu/JsQ=";
   };
 
-  cargoHash = "sha256-viLr76Bq9OkPMp+BoprQusMDgx59nbevVi4uxjZ+eZg=";
+  cargoPatches = [
+    # fix cargo lock file
+    (fetchpatch {
+      url = "https://github.com/lsd-rs/lsd/pull/1021/commits/7593fd7ea0985e273c82b6e80e66a801772024de.patch";
+      hash = "sha256-ykKLVSM6FbL4Jt5Zk7LuPKcYw/wrpiwU8vhuGz8Pbi0=";
+    })
+  ];
+
+  cargoHash = "sha256-TDHHY5F4lVrKd7r0QfrfUV2xzT6HMA/PtOIStMryaBA=";
 
   nativeBuildInputs = [ installShellFiles pandoc ];
 
@@ -45,9 +54,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/lsd-rs/lsd";
-    description = "The next gen ls command";
+    description = "Next gen ls command";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [ zowoq SuperSandro2000 ];
     mainProgram = "lsd";
   };
 }

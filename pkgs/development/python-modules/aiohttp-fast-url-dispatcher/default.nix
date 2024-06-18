@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,25 +28,19 @@ buildPythonPackage rec {
       --replace " --cov=aiohttp_fast_url_dispatcher --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aiohttp_fast_url_dispatcher"
-  ];
+  pythonImportsCheck = [ "aiohttp_fast_url_dispatcher" ];
 
   meta = with lib; {
-    description = "A faster URL dispatcher for aiohttp";
+    description = "Faster URL dispatcher for aiohttp";
     homepage = "https://github.com/bdraco/aiohttp-fast-url-dispatcher";
     changelog = "https://github.com/bdraco/aiohttp-fast-url-dispatcher/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

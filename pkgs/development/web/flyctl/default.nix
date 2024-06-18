@@ -1,17 +1,17 @@
-{ lib, buildGo122Module, fetchFromGitHub, testers, flyctl, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, testers, flyctl, installShellFiles }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "flyctl";
-  version = "0.2.6";
+  version = "0.2.69";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-A0mlfTeAAeMvmzIvWGALmvMGtGOgVU3X9kvSyrvtK54=";
+    hash = "sha256-6SPJt+az+C0amCnRScp85JqUfnWswHdS1OtOMa40Haw=";
   };
 
-  vendorHash = "sha256-9l9zft37cGqVp6SBCc4bQcyNLpzSrLDbC++0ywkpDYU=";
+  vendorHash = "sha256-O5lUw0XzQUoy3mAmSpeW6WfBgg0FLxXkk7hCUAS2+o8=";
 
   subPackages = [ "." ];
 
@@ -34,8 +34,15 @@ buildGo122Module rec {
     HOME=$(mktemp -d)
   '';
 
-  postCheck = ''
-    go test ./... -ldflags="-X 'github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z'"
+  # We override checkPhase to be able to test ./... while using subPackages
+  checkPhase = ''
+    runHook preCheck
+    # We do not set trimpath for tests, in case they reference test assets
+    export GOFLAGS=''${GOFLAGS//-trimpath/}
+
+    buildGoDir test ./...
+
+    runHook postCheck
   '';
 
   postInstall = ''
@@ -52,12 +59,12 @@ buildGo122Module rec {
     version = "v${flyctl.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line tools for fly.io services";
     downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ adtya jsierles techknowlogick ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ adtya jsierles techknowlogick RaghavSood teutat3s ];
     mainProgram = "flyctl";
   };
 }

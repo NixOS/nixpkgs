@@ -5,21 +5,22 @@
 
 buildGoModule rec {
   pname = "dbmate";
-  version = "2.11.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "amacneil";
     repo = "dbmate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kY91ToCEl1bNdeIKDAAR3q7053oyFhx+THre7Syw96g=";
+    hash = "sha256-r0C03K/jyL8P0iysa6R1AaHVpB6Bw/FUwBIz7V/rGak=";
   };
 
-  vendorHash = "sha256-z33Ayxc/ftNHh5zunDu0AlamuoSglX4aqOKQLuYT3+s=";
+  vendorHash = "sha256-8NVkpJEAp3UsM2BnZVcavK+89MELo0T96tTcY0pke6Q=";
 
   doCheck = false;
 
   meta = with lib; {
     description = "Database migration tool";
+    mainProgram = "dbmate";
     homepage = "https://github.com/amacneil/dbmate";
     changelog = "https://github.com/amacneil/dbmate/releases/tag/v${version}";
     license = licenses.mit;

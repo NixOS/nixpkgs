@@ -153,8 +153,7 @@
 
     refined = callPackage ./refined.nix {};
 
-    sdl = callPackage ./sdl.nix {};
-
+    sdl = throw "'idrisPackages.sdl' has been removed, as it was broken and unmaintained"; # added 2024-05-09
     sdl2 = callPackage ./sdl2.nix {};
 
     semidirect = callPackage ./semidirect.nix {};

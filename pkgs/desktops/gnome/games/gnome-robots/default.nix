@@ -4,7 +4,7 @@
 , pkg-config
 , gnome
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , librsvg
 , gsound
 , gettext
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     vala
     python3
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     itstool
     desktop-file-utils
@@ -64,8 +64,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Robots";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-robots";
     description = "Avoid the robots and make them crash into each other";
+    mainProgram = "gnome-robots";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

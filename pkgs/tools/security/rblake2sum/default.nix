@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
-    description = "A recursive blake2 digest (hash) of a file-system path";
+    description = "Recursive blake2 digest (hash) of a file-system path";
     homepage = "https://github.com/crev-dev/rblake2sum";
     license = [ licenses.mit ];
     maintainers = with maintainers; [ dpc ];

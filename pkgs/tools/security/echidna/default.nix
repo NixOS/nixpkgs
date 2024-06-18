@@ -1,9 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , haskellPackages
-, haskell
 , slither-analyzer
 }:
 

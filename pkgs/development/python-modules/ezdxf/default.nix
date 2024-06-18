@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pyparsing
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pyparsing,
+  typing-extensions,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # requires geomdl dependency
@@ -49,6 +48,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python package to read and write DXF drawings (interface to the DXF file format)";
+    mainProgram = "ezdxf";
     homepage = "https://github.com/mozman/ezdxf/";
     license = licenses.mit;
     maintainers = with maintainers; [ hodapp ];

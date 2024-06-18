@@ -49,7 +49,7 @@ let
           filename =
             if lib.any (x: x == "lib" || x == "rlib") dep.crateType
             then "${dep.metadata}.rlib"
-            else "${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}";
+            else "${dep.metadata}${stdenv.hostPlatform.extensions.library}";
         in
         " --extern ${opts}${name}=${dep.lib}/lib/lib${extern}-${filename}"
       )

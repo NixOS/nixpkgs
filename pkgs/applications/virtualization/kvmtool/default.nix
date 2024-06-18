@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   ]);
 
   meta = with lib; {
-    description = "A lightweight tool for hosting KVM guests";
+    description = "Lightweight tool for hosting KVM guests";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/tree/README";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ astro mfrw ];

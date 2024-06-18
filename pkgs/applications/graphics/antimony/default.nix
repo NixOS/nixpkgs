@@ -61,7 +61,8 @@ in
     ];
 
     meta = with lib; {
-      description = "A computer-aided design (CAD) tool from a parallel universe";
+      description = "Computer-aided design (CAD) tool from a parallel universe";
+      mainProgram = "antimony";
       homepage    = "https://github.com/mkeeter/antimony";
       license     = licenses.mit;
       maintainers = with maintainers; [ rnhmjoj ];

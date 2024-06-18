@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, miniaudio
-, cffi
-, pytestCheckHook
-, AudioToolbox
-, CoreAudio
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  miniaudio,
+  cffi,
+  pytestCheckHook,
+  AudioToolbox,
+  CoreAudio,
 }:
 
 let
@@ -53,9 +54,7 @@ buildPythonPackage rec {
   propagatedNativeBuildInputs = [ cffi ];
   propagatedBuildInputs = [ cffi ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "miniaudio" ];
 

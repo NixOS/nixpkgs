@@ -9,9 +9,14 @@
 assert repoRepoRev != "" -> repoRepoURL != "";
 assert createMirror -> !useArchive;
 
-with lib;
-
 let
+  inherit (lib)
+    concatMapStringsSep
+    concatStringsSep
+    fetchers
+    optionalString
+    ;
+
   extraRepoInitFlags = [
     (optionalString (repoRepoURL != "") "--repo-url=${repoRepoURL}")
     (optionalString (repoRepoRev != "") "--repo-branch=${repoRepoRev}")

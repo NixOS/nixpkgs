@@ -27,6 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
     "bin"
   ];
 
+  postPatch = ''
+    # For our automatic pkg-config output patcher to work, prefix must be used here
+    substituteInPlace headers/deviceinfo.pc.in \
+      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}'
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [

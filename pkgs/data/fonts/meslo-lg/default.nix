@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   outputHash = "1cppf8sk6r5wjnnas9n6iyag6pj9jvaic66lvwpqg3742s5akx6x";
 
   meta = {
-    description = "A customized version of Apple’s Menlo-Regular font";
+    description = "Customized version of Apple’s Menlo-Regular font";
     homepage = "https://github.com/andreberg/Meslo-Font/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ];

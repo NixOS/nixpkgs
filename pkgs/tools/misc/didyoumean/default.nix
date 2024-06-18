@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A CLI spelling corrector for when you're unsure";
+    description = "CLI spelling corrector for when you're unsure";
     homepage = "https://github.com/hisbaan/didyoumean";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ evanjs wegank ];

@@ -7,7 +7,7 @@
 , xvfb-run
 , dbus
 , libnotify
-, wrapGAppsHook
+, wrapGAppsHook3
 , fetchFromGitLab
 , which
 , gettext
@@ -80,7 +80,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [ dbus ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     python3Packages.setuptools-scm
     (lib.getBin gettext)
@@ -143,7 +143,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    description = "A personal document manager for scanned documents";
+    description = "Personal document manager for scanned documents";
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aszlig symphorien ];

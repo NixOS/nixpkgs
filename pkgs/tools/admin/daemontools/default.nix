@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = {
     license = lib.licenses.publicDomain;
     homepage = "https://cr.yp.to/daemontools.html";
-    description = "A collection of tools for managing UNIX services";
+    description = "Collection of tools for managing UNIX services";
 
     maintainers = with lib.maintainers; [ kevincox ];
     platforms = lib.platforms.unix;

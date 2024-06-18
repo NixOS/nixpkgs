@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/resurrecting-open-source-projects/scrot";
-    description = "A command-line screen capture utility";
+    description = "Command-line screen capture utility";
     mainProgram = "scrot";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];

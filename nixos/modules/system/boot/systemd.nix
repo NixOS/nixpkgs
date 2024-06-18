@@ -47,6 +47,9 @@ let
       "rescue.target"
       "rescue.service"
 
+      # systemd-debug-generator
+      "debug-shell.service"
+
       # Udev.
       "systemd-tmpfiles-setup-dev-early.service"
       "systemd-udevd-control.socket"
@@ -97,6 +100,7 @@ let
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
+      ] ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service") ++ [
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
@@ -499,8 +503,8 @@ in
     environment.systemPackages = [ cfg.package ];
 
     environment.etc = let
-      # generate contents for /etc/systemd/system-${type} from attrset of links and packages
-      hooks = type: links: pkgs.runCommand "system-${type}" {
+      # generate contents for /etc/systemd/${dir} from attrset of links and packages
+      hooks = dir: links: pkgs.runCommand "${dir}" {
           preferLocalBuild = true;
           packages = cfg.packages;
       } ''
@@ -508,7 +512,7 @@ in
         mkdir -p $out
         for package in $packages
         do
-          for hook in $package/lib/systemd/system-${type}/*
+          for hook in $package/lib/systemd/${dir}/*
           do
             ln -s $hook $out/
           done
@@ -558,8 +562,9 @@ in
         ${cfg.sleep.extraConfig}
       '';
 
-      "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
-      "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
+      "systemd/user-generators" = { source = hooks "user-generators" cfg.user.generators; };
+      "systemd/system-generators" = { source = hooks "system-generators" cfg.generators; };
+      "systemd/system-shutdown" = { source = hooks "system-shutdown" cfg.shutdown; };
     });
 
     services.dbus.enable = true;
@@ -591,18 +596,17 @@ in
     };
 
     systemd.units =
-         mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths
-      // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
-      // mapAttrs' (n: v: nameValuePair "${n}.slice"   (sliceToUnit   n v)) cfg.slices
-      // mapAttrs' (n: v: nameValuePair "${n}.socket"  (socketToUnit  n v)) cfg.sockets
-      // mapAttrs' (n: v: nameValuePair "${n}.target"  (targetToUnit  n v)) cfg.targets
-      // mapAttrs' (n: v: nameValuePair "${n}.timer"   (timerToUnit   n v)) cfg.timers
-      // listToAttrs (map
-                   (v: let n = escapeSystemdPath v.where;
-                       in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts)
-      // listToAttrs (map
-                   (v: let n = escapeSystemdPath v.where;
-                       in nameValuePair "${n}.automount" (automountToUnit n v)) cfg.automounts);
+      let
+        withName = cfgToUnit: cfg: lib.nameValuePair cfg.name (cfgToUnit cfg);
+      in
+         mapAttrs' (_: withName pathToUnit) cfg.paths
+      // mapAttrs' (_: withName serviceToUnit) cfg.services
+      // mapAttrs' (_: withName sliceToUnit) cfg.slices
+      // mapAttrs' (_: withName socketToUnit) cfg.sockets
+      // mapAttrs' (_: withName targetToUnit) cfg.targets
+      // mapAttrs' (_: withName timerToUnit) cfg.timers
+      // listToAttrs (map (withName mountToUnit) cfg.mounts)
+      // listToAttrs (map (withName automountToUnit) cfg.automounts);
 
       # Environment of PID 1
       systemd.managerEnvironment = {
@@ -667,7 +671,6 @@ in
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
-    systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
     # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
     # https://github.com/systemd/systemd/pull/12226

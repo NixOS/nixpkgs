@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, php
-, testers
-, phpPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  php,
+  testers,
+  phpPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

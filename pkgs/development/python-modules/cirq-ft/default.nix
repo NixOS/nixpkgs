@@ -1,13 +1,14 @@
-{ attrs
-, buildPythonPackage
-, cachetools
-, cirq-core
-, ipython
-, ipywidgets
-, nbconvert
-, nbformat
-, pytestCheckHook
-, setuptools
+{
+  attrs,
+  buildPythonPackage,
+  cachetools,
+  cirq-core,
+  ipython,
+  ipywidgets,
+  nbconvert,
+  nbformat,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +18,7 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/${pname}";
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     attrs
@@ -43,5 +42,4 @@ buildPythonPackage rec {
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_ft" ];
-
 }

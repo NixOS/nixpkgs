@@ -1,30 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, protobuf
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  protobuf,
+  proto-plus,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.17.1";
+  version = "1.17.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0DXo2h2gqO1z5quUyWI1Qb/CNaqyy1SNinyaPyRWuR0=";
+    hash = "sha256-oKOqWVmAP14dKpbVDlcX2KSRceTqVES/UGlLsYtnWHA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core
@@ -37,9 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "google.cloud.osconfig"
-  ];
+  pythonImportsCheck = [ "google.cloud.osconfig" ];
 
   disabledTests = [
     # Test requires a project ID

@@ -1,11 +1,12 @@
-{ lib
-, bluepy
-, buildPythonPackage
-, csrmesh
-, fetchPypi
-, pycryptodome
-, pythonOlder
-, requests
+{
+  lib,
+  bluepy,
+  buildPythonPackage,
+  csrmesh,
+  fetchPypi,
+  pycryptodome,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {

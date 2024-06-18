@@ -18,6 +18,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "General-purpose preprocessor with customizable syntax";
+    mainProgram = "gpp";
     homepage = "https://logological.org/gpp";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ nmattia ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A set of utilities for querying xrandr monitor information";
+    description = "Set of utilities for querying xrandr monitor information";
     homepage = "https://github.com/pockata/mmutils";
     license = licenses.isc;
     platforms = platforms.unix;

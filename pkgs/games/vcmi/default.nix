@@ -20,6 +20,7 @@
 , tbb
 , unshield
 , wrapQtAppsHook
+, xz
 , zlib
 , testers
 , vcmi
@@ -27,13 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vcmi";
-  version = "1.4.5";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     rev = version;
-    hash = "sha256-nyYzG0O7tZwo77r7QwenVgaTffZ3ELEyUrkZmdvwm/w=";
+    fetchSubmodules = true;
+    hash = "sha256-Hn3qNTWFU3SMBTJxA2owsAQqIl9wZy33B2Mp4UdlLn4=";
   };
 
   nativeBuildInputs = [
@@ -57,13 +59,14 @@ stdenv.mkDerivation rec {
     qtbase
     qttools
     tbb
+    xz
     zlib
   ];
 
   cmakeFlags = [
     "-DENABLE_LUA:BOOL=ON"
     "-DENABLE_ERM:BOOL=ON"
-    "-DENABLE_GITVERSION:BOOL=OFF"
+    "-DENABLE_GOLDMASTER:BOOL=ON"
     "-DENABLE_PCH:BOOL=OFF"
     "-DENABLE_TEST:BOOL=OFF" # Tests require HOMM3 data files.
     "-DFORCE_BUNDLED_MINIZIP:BOOL=OFF"
@@ -88,7 +91,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An open-source engine for Heroes of Might and Magic III";
+    description = "Open-source engine for Heroes of Might and Magic III";
     homepage = "https://vcmi.eu";
     changelog = "https://github.com/vcmi/vcmi/blob/${src.rev}/ChangeLog.md";
     license = with licenses; [ gpl2Plus cc-by-sa-40 ];

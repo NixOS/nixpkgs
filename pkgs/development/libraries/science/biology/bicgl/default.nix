@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "Brain Imaging Centre graphics library";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license = licenses.free;
+    license = licenses.hpndUc;
   };
 }

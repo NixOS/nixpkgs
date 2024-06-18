@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A base library for writing document import filters";
+    description = "Base library for writing document import filters";
     license = licenses.mpl20;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;

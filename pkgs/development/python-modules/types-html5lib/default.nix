@@ -1,29 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-html5lib";
-  version = "1.1.11.20240217";
+  version = "1.1.11.20240228";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-58YJ/Bz9M7ZmxRXRXKKJNjWcWlbQs41aYma/L1HK9Ow=";
+    hash = "sha256-InNrcpnmBexLpTnUhpHpBf0MYcPqYQrMWZIiMtyEzt4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "html5lib-stubs"
-  ];
+  pythonImportsCheck = [ "html5lib-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for html5lib";

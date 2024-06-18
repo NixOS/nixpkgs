@@ -1,26 +1,29 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, cryptography
-, dask
-, distributed
-, docrep
-, fetchPypi
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  cryptography,
+  dask,
+  distributed,
+  docrep,
+  fetchPypi,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dask-jobqueue";
-  version = "0.8.2";
+  version = "0.8.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  # Python 3.12 support should be added in 0.8.6
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-01QHoFoFNDR8XZWK50m5+FNb7FKYV9ATtuVknN5DkUo=";
+    hash = "sha256-9pI/nX/4lLlu+/cGEYss03/Td1HVZ+kcIt/T4uqpMgI=";
   };
 
   propagatedBuildInputs = [
@@ -73,9 +76,7 @@ buildPythonPackage rec {
     "test_wrong_parameter_error"
   ];
 
-  pythonImportsCheck = [
-    "dask_jobqueue"
-  ];
+  pythonImportsCheck = [ "dask_jobqueue" ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

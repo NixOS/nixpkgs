@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A library designed to simplify the usage of the Java Native Interface";
+    description = "Library designed to simplify the usage of the Java Native Interface";
     homepage = "https://github.com/facebookincubator/fbjni";
     license = licenses.asl20;
     maintainers = with maintainers; [ jonringer ];

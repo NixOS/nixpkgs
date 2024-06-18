@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A 2d dogfighting game";
+    description = "2d dogfighting game";
+    mainProgram = "airstrike";
     homepage = "https://icculus.org/airstrike/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];

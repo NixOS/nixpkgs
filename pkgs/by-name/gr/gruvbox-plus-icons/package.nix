@@ -8,15 +8,15 @@
 , hicolor-icon-theme
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gruvbox-plus-icons";
-  version = "unstable-2023-12-07";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "SylEleuth";
     repo = "gruvbox-plus-icon-pack";
-    rev = "f3109979fe93b31ea14eb2d5c04247a895302ea0";
-    sha256 = "sha256-EijTEDkPmcDcMhCuL6fOWjU9eXFUwmeOEwfGlxadb1U=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-mtOYoaejK6ZGPcM4IxXs6l6oXGP9WSMw5N7JIF3n67s=";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -44,4 +44,4 @@ stdenvNoCC.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ eureka-cpu RGBCube ];
   };
-}
+})

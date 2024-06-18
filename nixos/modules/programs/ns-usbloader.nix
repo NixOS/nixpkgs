@@ -5,7 +5,7 @@ in
 {
   options = {
     programs.ns-usbloader = {
-      enable = lib.mkEnableOption (lib.mdDoc "ns-usbloader application with udev rules applied");
+      enable = lib.mkEnableOption "ns-usbloader application with udev rules applied";
     };
   };
 

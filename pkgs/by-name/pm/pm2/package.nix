@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "pm2";
-  version = "5.3.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "Unitech";
     repo = "pm2";
     rev = "v${version}";
-    hash = "sha256-thShqrnM5S3/IImEm+2vHVRLCsLJN5NGaSRYubtULW0=";
+    hash = "sha256-hmciDjlmlIaqOWl9rYWQ6muq6LFzQb5tfpdzL0vV/ZM=";
   };
 
-  npmDepsHash = "sha256-6M8kwiCHaQzcFyUUx7Yax/dobATWXG0Di7enEzlO8YE=";
+  npmDepsHash = "sha256-je+GwPkUiGPWgKQgSPlx2OEWMbDKdwEM/idTjgINLHY=";
 
   dontNpmBuild = true;
 

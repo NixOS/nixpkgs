@@ -13,26 +13,25 @@
 , mesa
 , fontconfig
 , libglvnd
-, libclang
 , autoPatchelfHook
 , clang
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.1";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "v${version}";
-    hash = "sha256-+Y7dnq8gwVxefwvRnamqGneCTI4uUXgAo0SEffIvNB0=";
+    hash = "sha256-MJh0CR2YHJE0GNnxaTcElNMuZUEI0pe9fvC0mfy4484=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-TWq4L7Pe4/s0+hGjvTixoOFQ3P6tJXzV4/VgKcJ0tWU=";
+      "smithay-0.3.0" = "sha256-UzX5pws8yxJhXdKIDzu6uw+PlVLRS9U9ZAfQovKv0w0=";
     };
   };
 
@@ -62,13 +61,26 @@ rustPlatform.buildRustPackage rec {
     libglvnd # For libEGL
   ];
 
-  LIBCLANG_PATH = "${libclang.lib}/lib";
+  passthru.providedSessions = ["niri"];
+
+  postPatch = ''
+    patchShebangs ./resources/niri-session
+    substituteInPlace ./resources/niri.service \
+      --replace-fail '/usr/bin' "$out/bin"
+  '';
+
+  postInstall = ''
+    install -Dm0755 ./resources/niri-session -t $out/bin
+    install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
+    install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
+    install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/share/systemd/user
+  '';
 
   meta = with lib; {
-    description = "A scrollable-tiling Wayland compositor";
+    description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ iogamaster ];
+    maintainers = with maintainers; [ iogamaster foo-dogsquared sodiboo ];
     mainProgram = "niri";
     platforms = platforms.linux;
   };

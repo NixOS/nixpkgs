@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.1.3";
+  version = "7.1.6";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    hash = "sha256-OJy8HhojfpUwWo3zg+FgdFI4pMzWA61VMsdPE03MfeE=";
+    hash = "sha256-NViRZHNgsweoD1YbyWYrRTZPKTCkKk3fGDLLYDD7JfA=";
   };
 
   nativeBuildInputs = [
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
-    description = "Audio effects for PipeWire applications.";
+    description = "Audio effects for PipeWire applications";
     homepage = "https://github.com/wwmm/easyeffects";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];

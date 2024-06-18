@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://pigeonhole.dovecot.org/";
-    description = "A sieve plugin for the Dovecot IMAP server";
+    description = "Sieve plugin for the Dovecot IMAP server";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ globin ] ++ teams.helsinki-systems.members;
     platforms = platforms.unix;

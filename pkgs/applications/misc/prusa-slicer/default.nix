@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , boost
 , cereal
 , cgal
@@ -23,11 +23,11 @@
 , mpfr
 , nanosvg
 , nlopt
-, opencascade-occt
+, opencascade-occt_7_6
 , openvdb
 , pcre
 , qhull
-, tbb_2021_8
+, tbb_2021_11
 , wxGTK32
 , xorg
 , libbgcode
@@ -37,6 +37,7 @@
 , wxGTK-override ? null
 }:
 let
+  opencascade-occt = opencascade-occt_7_6;
   wxGTK-prusa = wxGTK32.overrideAttrs (old: rec {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.2.0";
@@ -61,24 +62,24 @@ let
       hash = "sha256-WNdAYu66ggpSYJ8Kt57yEA4mSTv+Rvzj9Rm1q765HpY=";
     };
   });
-  openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_8; };
+  openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_11; };
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.7.1";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-hSHeh3qJroCFnzeoVz6LKtCK8r0ealWSFz9cW4xvSb8=";
+    hash = "sha256-g2I2l6i/8p8werDs4mDI/lGeDQsma4WSB9vT6OB2LGg=";
     rev = "version_${finalAttrs.version}";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -104,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     openvdb_tbb_2021_8
     pcre
     qhull
-    tbb_2021_8
+    tbb_2021_11
     wxGTK-override'
     xorg.libX11
     libbgcode
@@ -191,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "G-code generator for 3D printer";
     homepage = "https://github.com/prusa3d/PrusaSlicer";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ moredread tweber tmarkus ];
     platforms = platforms.unix;
   } // lib.optionalAttrs (stdenv.isDarwin) {

@@ -19,28 +19,34 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2023.12.9";
+  version = "2024.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-8SHf6cbPYPZctjJgIuEb7eOJVi5hWNONyRnMXK0iBXc=";
+    hash = "sha256-UxNMHRQLrViK9ssFc0vHA/zqNw5yH8E6n+OAnq6vJdQ=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     setuptools
     argcomplete
     installShellFiles
+    pythonRelaxDepsHook
   ];
 
-  postPatch = ''
-    # remove all version pinning (E.g tornado==5.1.1 -> tornado)
-    sed -i -e "s/==[0-9.]*//" requirements.txt
+  pythonRelaxDeps = true;
 
+  postPatch = ''
     # drop coverage testing
     sed -i '/--cov/d' pytest.ini
+
+    # ensure component dependencies are available
+    cat requirements_optional.txt >> requirements.txt
+    # relax strict runtime version check
+    substituteInPlace esphome/components/font/__init__.py \
+      --replace-fail "10.2.0" "${python.pkgs.pillow.version}"
   '';
 
   # Remove esptool and platformio from requirements
@@ -55,11 +61,14 @@ python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     aioesphomeapi
     argcomplete
+    cairosvg
     click
     colorama
     cryptography
     esphome-dashboard
+    icmplib
     kconfiglib
+    packaging
     paho-mqtt
     pillow
     platformio
@@ -69,6 +78,7 @@ python.pkgs.buildPythonApplication rec {
     python-magic
     pyyaml
     requests
+    ruamel-yaml
     tornado
     tzdata
     tzlocal
@@ -95,13 +105,6 @@ python.pkgs.buildPythonApplication rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # requires hypothesis 5.49, we have 6.x
-    # ImportError: cannot import name 'ip_addresses' from 'hypothesis.provisional'
-    "tests/unit_tests/test_core.py"
-    "tests/unit_tests/test_helpers.py"
   ];
 
   postCheck = ''

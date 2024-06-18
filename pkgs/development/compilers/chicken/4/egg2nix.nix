@@ -20,6 +20,7 @@ eggDerivation rec {
 
   meta = {
     description = "Generate nix-expression from CHICKEN scheme eggs";
+    mainProgram = "egg2nix";
     homepage = "https://github.com/the-kenny/egg2nix";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;

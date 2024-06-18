@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   version = "20180104"; # According to steamcmd_linux.tar.gz mtime
 
   src = fetchurl {
-    url = "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz";
-    sha256 = "0z0y0zqvhydmfc9y9vg5am0vz7m3gbj4l2dwlrfz936hpx301gyf";
+    url = "https://web.archive.org/web/20240521141411/https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz";
+    hash = "sha256-zr8ARr/QjPRdprwJSuR6o56/QVXl7eQTc7V5uPEHHnw=";
   };
 
   # The source tarball does not have a single top-level directory.
@@ -37,8 +37,9 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "Steam command-line tools";
     homepage = "https://developer.valvesoftware.com/wiki/SteamCMD";
+    description = "Steam command-line tools";
+    mainProgram = "steamcmd";
     platforms = platforms.linux;
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ tadfisher ];

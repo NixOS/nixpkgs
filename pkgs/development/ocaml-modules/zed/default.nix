@@ -1,34 +1,16 @@
-{ lib, buildDunePackage, fetchFromGitHub, ocaml, react, charInfo_width, result, uchar, uutf, uucp, uuseg }:
-
-let
-  switch =
-    if lib.versionAtLeast ocaml.version "4.08"
-    then
-      {
-        version = "3.2.3";
-        sha256 = "sha256-lbhqjZxeUqHdd+yahRO+B6L2mc+h+4T2+qKVgWC2HY8=";
-        propagatedBuildInputs = [ react result uchar uutf uucp uuseg ];
-      }
-    else
-      {
-        version = "3.1.0";
-        sha256 = "04vr1a94imsghm98iigc35rhifsz0rh3qz2qm0wam2wvp6vmrx0p";
-        propagatedBuildInputs = [ charInfo_width react ];
-      };
-in
+{ lib, buildDunePackage, fetchFromGitHub, react, result, uchar, uutf, uucp, uuseg }:
 
 buildDunePackage rec {
   pname = "zed";
+  version = "3.2.3";
 
-  inherit (switch) version propagatedBuildInputs;
-
-  duneVersion = "3";
+  propagatedBuildInputs = [ react result uchar uutf uucp uuseg ];
 
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = pname;
     rev = version;
-    sha256 = switch.sha256;
+    sha256 = "sha256-lbhqjZxeUqHdd+yahRO+B6L2mc+h+4T2+qKVgWC2HY8=";
   };
 
   meta = {

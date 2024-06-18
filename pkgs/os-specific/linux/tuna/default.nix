@@ -9,7 +9,7 @@
 , gtk3
 , python-linux-procfs
 , python-ethtool
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication rec {
@@ -37,7 +37,7 @@ buildPythonApplication rec {
     glib.dev
     gobject-introspection
     gtk3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   propagatedBuildInputs = [ pygobject3 python-linux-procfs python-ethtool ];
@@ -53,9 +53,9 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Thread and IRQ affinity setting GUI and cmd line tool";
+    mainProgram = "tuna";
     homepage = "https://git.kernel.org/pub/scm/utils/tuna/tuna.git";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

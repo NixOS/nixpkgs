@@ -14,7 +14,7 @@ let
         default = null;
         internal = true;
         visible = true;
-        description = lib.mdDoc ''
+        description = ''
           Use this field for tristate kernel options expecting a "y" or "m" or "n".
         '';
       };
@@ -25,7 +25,7 @@ let
         };
         default = null;
         example = ''MMC_BLOCK_MINORS.freeform = "32";'';
-        description = lib.mdDoc ''
+        description = ''
           Freeform description of a kernel configuration item value.
         '';
       };
@@ -33,7 +33,7 @@ let
       optional = mkOption {
         type = types.bool // { merge = mergeFalseByDefault; };
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether option should generate a failure when unused.
           Upon merging values, mandatory wins over optional.
         '';
@@ -90,7 +90,7 @@ in
         USB? y
         DEBUG n
       '';
-      description = lib.mdDoc ''
+      description = ''
         The result of converting the structured kernel configuration in settings
         to an intermediate string that can be parsed by generate-config.pl to
         answer the kernel `make defconfig`.
@@ -104,7 +104,7 @@ in
         USB = option yes;
         MMC_BLOCK_MINORS = freeform "32";
       }'';
-      description = lib.mdDoc ''
+      description = ''
         Structured kernel configuration.
       '';
     };

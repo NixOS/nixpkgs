@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-vkcapture";
-  version = "1.4.7";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "nowrep";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/EbavDDeFQys9zu3FAgsAeVVbs1Rrv8YR4949XCHc6s=";
+    hash = "sha256-hYPQ1N4k4eb+bvGWZqaQJ/C8C5Lh8ooZ03raGF5ORgE=";
   };
 
   cmakeFlags = lib.optionals stdenv.isi686 [
@@ -50,6 +50,16 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.isi686) [
     obs-studio
   ];
+
+  postPatch = ''
+    substituteInPlace src/glinject.c \
+      --replace "libGLX.so.0" "${lib.getLib libGL}/lib/libGLX.so.0" \
+      --replace "libX11.so.6" "${lib.getLib libX11}/lib/libX11.so.6" \
+      --replace "libX11-xcb.so.1" "${lib.getLib libX11}/lib/libX11-xcb.so.1" \
+      --replace "libxcb-dri3.so.0" "${lib.getLib libxcb}/lib/libxcb-dri3.so.0" \
+      --replace "libEGL.so.1" "${lib.getLib libGL}/lib/libEGL.so.1" \
+      --replace "libvulkan.so.1" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+  '';
 
   # Support 32bit Vulkan applications by linking in the 32bit Vulkan layer
   postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''

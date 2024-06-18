@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.c-amie.co.uk/software/analog/";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     description = "Powerful tool to generate web server statistics";
     platforms = lib.platforms.all;
     mainProgram = "analog";

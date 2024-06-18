@@ -1,4 +1,4 @@
-{ coreutils, fetchFromGitHub, file, gawk, gnugrep, gnused
+{ coreutils, fetchFromGitHub, fetchpatch, file, gawk, gnugrep, gnused
 , installShellFiles, lib, libiconv, makeWrapper, stdenv, ruby
 }:
 
@@ -15,6 +15,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-LCyw3xGsYjsbExueRHVRqoJYluji9MmZq5zGclvSSDk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "LFS64.patch";
+      url = "https://github.com/leahneukirchen/mblaze/commit/1babebc12c3ea8d3395f00c9607e863866c190fc.patch";
+      hash = "sha256-0zTMM9Ay4mo7ATqCQRJPiR7Z53MsMLeup7Fa7lsdWo8=";
+    })
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

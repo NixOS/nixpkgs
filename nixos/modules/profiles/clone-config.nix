@@ -61,7 +61,7 @@ in
 
     installer.cloneConfig = mkOption {
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Try to clone the installation-device configuration by re-using it's
         profile from the list of imported modules.
       '';
@@ -70,14 +70,14 @@ in
     installer.cloneConfigIncludes = mkOption {
       default = [];
       example = [ "./nixos/modules/hardware/network/rt73.nix" ];
-      description = lib.mdDoc ''
+      description = ''
         List of modules used to re-build this installation device profile.
       '';
     };
 
     installer.cloneConfigExtra = mkOption {
       default = "";
-      description = lib.mdDoc ''
+      description = ''
         Extra text to include in the cloned configuration.nix included in this
         installer.
       '';

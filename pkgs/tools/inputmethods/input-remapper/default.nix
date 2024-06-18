@@ -1,6 +1,6 @@
 { lib
 , pkgconfig
-, wrapGAppsHook
+, wrapGAppsHook3
 , gettext
 , gtk3
 , glib
@@ -88,7 +88,7 @@ in
       python tests/test.py --start-dir unit
   '';
 
-  # Nixpkgs 15.9.4.3. When using wrapGAppsHook with special derivers you can end up with double wrapped binaries.
+  # Nixpkgs 15.9.4.3. When using wrapGAppsHook3 with special derivers you can end up with double wrapped binaries.
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=(
@@ -98,7 +98,7 @@ in
   '';
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext # needed to build translations
     gtk3
     glib
@@ -137,7 +137,7 @@ in
   passthru.tests = nixosTests.input-remapper;
 
   meta = with lib; {
-    description = "An easy to use tool to change the mapping of your input device buttons";
+    description = "Easy to use tool to change the mapping of your input device buttons";
     homepage = "https://github.com/sezanzeb/input-remapper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

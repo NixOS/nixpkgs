@@ -26,12 +26,12 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "klee-uclibc";
-  version = "1.3";
+  version = "1.4";
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee-uclibc";
     rev = "klee_uclibc_v${version}";
-    sha256 = "sha256-xQ8GWa0Gmd3lbwKodJhrsZeuR4j7NT4zIUh+kNhVY/w=";
+    sha256 = "sha256-sogQK5Ed0k5tf4rrYwCKT4YRKyEovgT25p0BhGvJ1ok=";
   };
 
   nativeBuildInputs = [
@@ -89,7 +89,7 @@ in stdenv.mkDerivation rec {
   makeFlags = ["HAVE_DOT_CONFIG=y"];
 
   meta = with lib; {
-    description = "A modified version of uClibc for KLEE.";
+    description = "Modified version of uClibc for KLEE";
     longDescription = ''
       klee-uclibc is a bitcode build of uClibc meant for compatibility with the
       KLEE symbolic virtual machine.

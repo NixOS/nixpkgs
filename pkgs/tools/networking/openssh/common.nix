@@ -22,15 +22,18 @@
 , pam
 , libredirect
 , etcDir ? null
-, withKerberos ? true
+, withKerberos ? false
 , withLdns ? true
 , libkrb5
 , libfido2
+, libxcrypt
 , hostname
 , nixosTests
 , withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
 , withPAM ? stdenv.hostPlatform.isLinux
+, dsaKeysSupport ? false
 , linkOpenssl ? true
+, isNixos ? stdenv.hostPlatform.isLinux
 }:
 
 stdenv.mkDerivation {
@@ -62,7 +65,8 @@ stdenv.mkDerivation {
     # https://github.com/NixOS/nixpkgs/pull/107606
     ++ lib.optional withKerberos pkgs.libkrb5
     ++ extraNativeBuildInputs;
-  buildInputs = [ zlib openssl libedit ]
+  buildInputs = [ zlib libedit ]
+    ++ [ (if linkOpenssl then openssl else libxcrypt) ]
     ++ lib.optional withFIDO libfido2
     ++ lib.optional withKerberos libkrb5
     ++ lib.optional withLdns ldns
@@ -74,6 +78,12 @@ stdenv.mkDerivation {
     unset LD
   '';
 
+  env = lib.optionalAttrs isNixos {
+    # openssh calls passwd to allow the user to reset an expired password, but nixos
+    # doesn't ship it at /usr/bin/passwd.
+    PATH_PASSWD_PROG = "/run/wrappers/bin/passwd";
+  };
+
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
   configureFlags = [
@@ -84,6 +94,7 @@ stdenv.mkDerivation {
     "--with-libedit=yes"
     "--disable-strip"
     (lib.withFeature withPAM "pam")
+    (lib.enableFeature dsaKeysSupport "dsa-keys")
   ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional withFIDO "--with-security-key-builtin=yes"
     ++ lib.optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
@@ -166,12 +177,16 @@ stdenv.mkDerivation {
     "sysconfdir=\${out}/etc/ssh"
   ];
 
-  passthru.tests = {
-    borgbackup-integration = nixosTests.borgbackup;
+  passthru = {
+    inherit withKerberos;
+    tests = {
+      borgbackup-integration = nixosTests.borgbackup;
+      openssh = nixosTests.openssh;
+    };
   };
 
   meta = with lib; {
-    description = "An implementation of the SSH protocol${extraDesc}";
+    description = "Implementation of the SSH protocol${extraDesc}";
     homepage = "https://www.openssh.com/";
     changelog = "https://www.openssh.com/releasenotes.html";
     license = licenses.bsd2;

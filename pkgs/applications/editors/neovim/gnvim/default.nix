@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "GUI for neovim, without any web bloat";
+    mainProgram = "gnvim";
     homepage = "https://github.com/vhakulinen/gnvim";
     license = licenses.mit;
     maintainers = with maintainers; [ minijackson ];

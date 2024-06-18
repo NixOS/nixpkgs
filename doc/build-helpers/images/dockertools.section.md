@@ -178,13 +178,20 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
   _Default value:_ 0.
 
+`compressor` (String; _optional_)
+
+: Selects the algorithm used to compress the image.
+
+  _Default value:_ `"gz"`.\
+  _Possible values:_ `"none"`, `"gz"`, `"zstd"`.
+
 `contents` **DEPRECATED**
 
 : This attribute is deprecated, and users are encouraged to use `copyToRoot` instead.
 
 ### Passthru outputs {#ssec-pkgs-dockerTools-buildImage-passthru-outputs}
 
-`buildImage` defines a few [`passthru`](#var-stdenv-passthru) attributes:
+`buildImage` defines a few [`passthru`](#chap-passthru) attributes:
 
 `buildArgs` (Attribute Set)
 
@@ -500,6 +507,16 @@ This allows the function to produce reproducible images.
 
   _Default value:_ `"1970-01-01T00:00:01Z"`.
 
+`uid` (Number; _optional_) []{#dockerTools-buildLayeredImage-arg-uid}
+`gid` (Number; _optional_) []{#dockerTools-buildLayeredImage-arg-gid}
+`uname` (String; _optional_) []{#dockerTools-buildLayeredImage-arg-uname}
+`gname` (String; _optional_) []{#dockerTools-buildLayeredImage-arg-gname}
+
+: Credentials for Nix store ownership.
+  Can be overridden to e.g. `1000` / `1000` / `"user"` / `"user"` to enable building a container where Nix can be used as an unprivileged user in single-user mode.
+
+  _Default value:_ `0` / `0` / `"root"` / `"root"`
+
 `maxLayers` (Number; _optional_) []{#dockerTools-buildLayeredImage-arg-maxLayers}
 
 : The maximum number of layers that will be used by the generated image.
@@ -559,13 +576,13 @@ This allows the function to produce reproducible images.
 
 `passthru` (Attribute Set; _optional_)
 
-: Use this to pass any attributes as [passthru](#var-stdenv-passthru) for the resulting derivation.
+: Use this to pass any attributes as [`passthru`](#chap-passthru) for the resulting derivation.
 
   _Default value:_ `{}`
 
 ### Passthru outputs {#ssec-pkgs-dockerTools-streamLayeredImage-passthru-outputs}
 
-`streamLayeredImage` also defines its own [`passthru`](#var-stdenv-passthru) attributes:
+`streamLayeredImage` also defines its own [`passthru`](#chap-passthru) attributes:
 
 `imageTag` (String)
 
@@ -1160,6 +1177,7 @@ dockerTools.buildImage {
     hello
     dockerTools.binSh
   ];
+}
 ```
 
 After building the image and loading it in Docker, we can create a container based on it and enter a shell inside the container.
