@@ -11903,8 +11903,6 @@ with pkgs;
 
   popfile = callPackage ../tools/text/popfile { };
 
-  poretools = callPackage ../applications/science/biology/poretools { };
-
   porsmo = callPackage ../applications/misc/porsmo { };
 
   pantum-driver = callPackage ../misc/drivers/pantum-driver { };
