@@ -697,10 +697,17 @@ let
         mktplcRef = {
           name = "vscode-fish";
           publisher = "bmalehorn";
-          version = "1.0.35";
-          hash = "sha256-V51Qe6M1CMm9fLOSFEwqeZiC8tWCbVH0AzkLe7kR2vY=";
+          version = "1.0.38";
+          hash = "sha256-QEifCTlzYMX+5H6+k2o1lsQrhW3vxVpn+KFg/3WVVFo=";
         };
-        meta.license = lib.licenses.mit;
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/bmalehorn.vscode-fish/changelog";
+          description = "Fish syntax highlighting and formatting for VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bmalehorn.vscode-fish";
+          homepage = "https://github.com/bmalehorn/vscode-fish";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.uncenter ];
+        };
       };
 
       bmewburn.vscode-intelephense-client = buildVscodeMarketplaceExtension {
