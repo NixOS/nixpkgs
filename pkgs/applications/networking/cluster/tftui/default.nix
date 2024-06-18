@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tftui";
-  version = "0.13.3";
+  version = "0.13.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "idoavrah";
     repo = "terraform-tui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ojmq5m2BRB2Jwvg4j4zc0/jtv4rg1OKJpQiUQoBn+s0=";
+    hash = "sha256-xOlPuPVwfVT7jfBJPqZ5FbOs80HE0k2ZqcA+Jcxh9p4=";
   };
 
   pythonRelaxDeps = [
