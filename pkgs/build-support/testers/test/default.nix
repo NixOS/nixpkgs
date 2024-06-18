@@ -1,4 +1,4 @@
-{ testers, lib, pkgs, hello, runCommand, ... }:
+{ config, testers, lib, pkgs, hello, runCommand, ... }:
 let
   pkgs-with-overlay = pkgs.extend(final: prev: {
     proof-of-overlay-hello = prev.hello;
@@ -29,7 +29,7 @@ lib.recurseIntoAttrs {
 
   # Check that the wiring of nixosTest is correct.
   # Correct operation of the NixOS test driver should be asserted elsewhere.
-  nixosTest-example = pkgs-with-overlay.testers.nixosTest ({ lib, ... }: {
+  ${if config.allowAliases then "nixosTest-example" else null} = pkgs-with-overlay.testers.nixosTest ({ lib, ... }: {
     name = "nixosTest-test";
     nodes.machine = { pkgs, ... }: {
       system.nixos = dummyVersioning;

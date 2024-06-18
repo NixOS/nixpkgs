@@ -1,3 +1,9 @@
+/*
+  These tests may be run with:
+
+      nix-build -A nixosTests.nixos-test-driver.lib-extend
+
+ */
 { pkgs, ... }:
 
 let
@@ -22,10 +28,8 @@ let
     testScript = "";
   };
 
-  inherit (patchedPkgs.testers) nixosTest runNixOSTest;
-  evaluationNixosTest = nixosTest testBody;
+  inherit (patchedPkgs.testers) runNixOSTest;
   evaluationRunNixOSTest = runNixOSTest testBody;
 in {
-  nixosTest = evaluationNixosTest.driver.nodes.machine.system.build.toplevel;
   runNixOSTest = evaluationRunNixOSTest.driver.nodes.machine.system.build.toplevel;
 }

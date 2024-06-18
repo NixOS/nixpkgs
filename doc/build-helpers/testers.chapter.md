@@ -315,6 +315,16 @@ pkgs.testers.runNixOSTest ({ lib, ... }: {
 
 ## `nixosTest` {#tester-nixosTest}
 
+:::{.warning}
+This function is deprecated in favor of [`runNixOSTest`](#tester-runNixOSTest).
+The reason why it's bad is that when you pass it a function, it is invoked via `callPackage`.
+This is somewhat incompatible with the module system and running cross-platform:
+  - The choice of packages is ambiguous when the VM host platform is not Linux.
+    `nixosTest` could in theory pick either:
+    - `hostPkgs` for packages to run on the VM host
+    - or `config.node.pkgs` for packages that run in one of the VMs
+  - The return value of the passed function should have been a module, but `nixosTest` does not actually allow that.
+:::
 Run a NixOS VM network test using this evaluation of Nixpkgs.
 
 NOTE: This function is primarily for external use. NixOS itself uses `make-test-python.nix` directly. Packages defined in Nixpkgs [reuse NixOS tests via `nixosTests`, plural](#ssec-nixos-tests-linking).

@@ -93,7 +93,7 @@ let
     };
   });
 in
-testers.nixosTest {
+testers.runNixOSTest {
   name = "nixpkgs-trivial-builders";
   nodes.machine = { ... }: {
     virtualisation.writableStore = true;

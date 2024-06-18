@@ -1,3 +1,9 @@
+/*
+  These tests may be run with:
+
+      nix-build -A nixosTests.nixops
+
+*/
 { pkgs, ... }:
 let
   inherit (pkgs) lib;
@@ -19,7 +25,7 @@ let
     passthru.override = args': testsForPackage (args // args');
   };
 
-  testLegacyNetwork = { nixopsPkg, ... }: pkgs.testers.nixosTest ({
+  testLegacyNetwork = { nixopsPkg, ... }: pkgs.testers.runNixOSTest ({
     name = "nixops-legacy-network";
     nodes = {
       deployer = { config, lib, nodes, pkgs, ... }: {

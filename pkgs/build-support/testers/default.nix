@@ -1,4 +1,4 @@
-{ pkgs, pkgsLinux, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
+{ config, pkgs, pkgsLinux, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
 # Documentation is in doc/builders/testers.chapter.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-lycheeLinkCheck
@@ -116,7 +116,7 @@
 
   # See doc/builders/testers.chapter.md or
   # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
-  nixosTest =
+  ${if config.allowAliases then "nixosTest" else null} =
     let
       /* The nixos/lib/testing-python.nix module, preapplied with arguments that
        * make sense for this evaluation of Nixpkgs.
@@ -139,6 +139,7 @@
             else test;
           calledTest = lib.toFunction loadedTest pkgs;
         in
+          lib.warn "testers.nixosTest is deprecated. Use testers.runNixOSTest instead. See https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest"
           nixosTesting.simpleTest calledTest;
 
   hasPkgConfigModule =
