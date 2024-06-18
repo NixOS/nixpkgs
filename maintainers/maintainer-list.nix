@@ -15688,6 +15688,12 @@
     name = "Pablo Ovelleiro Corral";
     keys = [ { fingerprint = "D03B 218C AE77 1F77 D7F9  20D9 823A 6154 4264 08D3"; } ];
   };
+  piotrkwiecinski = {
+    email = "piokwiecinski+nixpkgs@gmail.com";
+    github = "piotrkwiecinski";
+    githubId = 2151333;
+    name = "Piotr Kwiecinski";
+  };
   piperswe = {
     email = "contact@piperswe.me";
     github = "piperswe";
