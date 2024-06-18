@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, v8
+, nodejs_20
 , perl
 , postgresql
 , jitSupport
@@ -11,15 +11,17 @@
 , gnugrep
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  libv8 = nodejs_20.libv8;
+in stdenv.mkDerivation (finalAttrs: {
   pname = "plv8";
-  version = "3.1.10";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "plv8";
     repo = "plv8";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-g1A/XPC0dX2360Gzvmo9/FSQnM6Wt2K4eR0pH0p9fz4=";
+    hash = "sha256-azO33v22EF+/sTNmwswxyDR0PhrvWfTENuLu6JgSGJ0=";
   };
 
   patches = [
@@ -33,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    v8
+    libv8
     postgresql
   ];
 
@@ -43,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Nixpkgs build a v8 monolith instead of separate v8_libplatform.
     "USE_SYSTEM_V8=1"
     "SHLIB_LINK=-lv8"
-    "V8_OUTDIR=${v8}/lib"
+    "V8_OUTDIR=${libv8}/lib"
   ];
 
   installFlags = [
@@ -56,9 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs ./generate_upgrade.sh
-    # https://github.com/plv8/plv8/pull/506
-    substituteInPlace generate_upgrade.sh \
-      --replace " 2.3.10 " " 2.3.10 2.3.11 2.3.12 2.3.13 2.3.14 2.3.15 "
   '';
 
   postInstall = ''
