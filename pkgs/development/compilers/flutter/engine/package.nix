@@ -60,7 +60,7 @@ let
 
   outName = "host_${runtimeMode}${lib.optionalString (!isOptimized) "_unopt --unoptimized"}";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flutter-engine-${runtimeMode}${lib.optionalString (!isOptimized) "-unopt"}";
   inherit
     version
@@ -307,6 +307,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru = {
+    dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };
+  };
+
   meta = {
     # Very broken on Darwin
     broken = stdenv.isDarwin;
@@ -321,4 +325,4 @@ stdenv.mkDerivation {
       "aarch64-darwin"
     ];
   };
-}
+})

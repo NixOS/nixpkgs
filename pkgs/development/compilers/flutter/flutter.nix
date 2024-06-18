@@ -19,19 +19,13 @@
 , git
 , which
 , jq
-, flutterTools ? callPackage ./flutter-tools.nix {
-    inherit dart version;
-    flutterSrc = src;
-    inherit patches;
-    inherit pubspecLock;
-    systemPlatform = stdenv.hostPlatform.system;
-  }
+, flutterTools ? null
 }@args:
 
 let
   engine = if args.useNixpkgsEngine or false then
     callPackage ./engine/default.nix {
-      dartSdkVersion = dart.version;
+      dartSdkVersion = args.dart.version;
       flutterVersion = version;
       version = engineVersion;
       hashes = engineHashes;
@@ -39,6 +33,17 @@ let
       patches = enginePatches;
       runtimeModes = engineRuntimeModes;
     } else null;
+
+  dart = if args.useNixpkgsEngine or false then
+    engine.dart else args.dart;
+
+  flutterTools = args.flutterTools or (callPackage ./flutter-tools.nix {
+    inherit dart version;
+    flutterSrc = src;
+    inherit patches;
+    inherit pubspecLock;
+    systemPlatform = stdenv.hostPlatform.system;
+  });
 
   unwrapped =
     stdenv.mkDerivation {

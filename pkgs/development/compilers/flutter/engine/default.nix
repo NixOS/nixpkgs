@@ -44,7 +44,9 @@ stdenv.mkDerivation (
       dartSdkVersion
       isOptimized
       runtimeMode
-      outName;
+      outName
+      dart
+      ;
     inherit altRuntimeMode;
 
     dontUnpack = true;
