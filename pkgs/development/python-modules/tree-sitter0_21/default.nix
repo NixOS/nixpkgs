@@ -4,44 +4,33 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  pythonAtLeast,
   setuptools,
-  tree-sitter-python,
-  tree-sitter-rust,
-  tree-sitter-html,
-  tree-sitter-javascript,
-  tree-sitter-json,
 }:
 
 buildPythonPackage rec {
-  pname = "tree-sitter";
-  version = "0.22.3";
+  pname = "tree-sitter0_21";
+  version = "0.21.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  # https://github.com/tree-sitter/py-tree-sitter/issues/209
+  disabled = pythonAtLeast "3.12" || pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4lxE8oDFE0X7YAnB72PKIaHIqovWSM5QnFo0grPAtKU=";
+    hash = "sha256-HT1sRzDFpeelWCq1ZMeRmoUg0a3SBR7bZKxBqn4fb2g=";
     fetchSubmodules = true;
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    tree-sitter-python
-    tree-sitter-rust
-    tree-sitter-html
-    tree-sitter-javascript
-    tree-sitter-json
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "tree_sitter" ];
 
   preCheck = ''
-    # https://github.com/NixOS/nixpkgs/issues/255262#issuecomment-1721265871
     rm -r tree_sitter
   '';
 
