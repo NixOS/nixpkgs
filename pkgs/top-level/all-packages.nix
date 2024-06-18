@@ -417,8 +417,6 @@ with pkgs;
 
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
-  catppuccin-gtk = callPackage ../data/themes/catppuccin-gtk { };
-
   catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
 
   catppuccin-kvantum = callPackage ../data/themes/catppuccin-kvantum { };
@@ -11222,8 +11220,6 @@ with pkgs;
 
   opencc = callPackage ../tools/text/opencc { };
 
-  opencl-info = callPackage ../tools/system/opencl-info { };
-
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
   opendbx = callPackage ../development/libraries/opendbx { };
@@ -13324,8 +13320,6 @@ with pkgs;
   stone-phaser = callPackage ../applications/audio/stone-phaser { };
 
   systrayhelper = callPackage ../tools/misc/systrayhelper { };
-
-  Sylk = callPackage ../applications/networking/Sylk { };
 
   privoxy = callPackage ../tools/networking/privoxy {
     w3m = w3m-batch;
@@ -16870,6 +16864,7 @@ with pkgs;
   swiPrologWithGui = swiProlog.override { withGui = true; };
 
   tbb_2020_3 = callPackage ../development/libraries/tbb/2020_3.nix { };
+  tbb_2021_5 = callPackage ../development/libraries/tbb/2021_5.nix { } ;
   tbb_2021_11 = callPackage ../development/libraries/tbb { };
   # many packages still fail with latest version
   tbb = tbb_2020_3;
@@ -21522,7 +21517,7 @@ with pkgs;
 
   ispc = callPackage ../development/compilers/ispc {
     xcode = darwin.xcode_14;
-    llvmPackages = llvmPackages_15;
+    llvmPackages = llvmPackages_17;
   };
 
   isso = callPackage ../servers/isso {
@@ -23288,7 +23283,7 @@ with pkgs;
 
   micropython = callPackage ../development/interpreters/micropython { };
 
-  MIDIVisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midi-visualizer {
+  midivisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midivisualizer {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Carbon CoreAudio CoreMIDI CoreServices Kernel;
   };
 
@@ -24728,8 +24723,6 @@ with pkgs;
   vigra = callPackage ../development/libraries/vigra {
     hdf5 = hdf5.override { usev110Api = true; };
   };
-
-  vkd3d = callPackage ../development/libraries/vkd3d {};
 
   vkd3d-proton = callPackage ../development/libraries/vkd3d-proton {};
 
@@ -29571,8 +29564,6 @@ with pkgs;
 
   asap = callPackage ../tools/audio/asap { };
 
-  aseprite = callPackage ../applications/editors/aseprite { };
-
   assign-lb-ip = callPackage ../applications/networking/cluster/assign-lb-ip { };
 
   astroid = callPackage ../applications/networking/mailreaders/astroid {
@@ -30364,10 +30355,6 @@ with pkgs;
     ed edUnstable;
 
   edlin = callPackage ../applications/editors/edlin { };
-
-  orbiton = callPackage ../applications/editors/orbiton {
-    buildGoModule = buildGo122Module;
-  };
 
   oed = callPackage ../applications/editors/oed { };
 
@@ -32589,8 +32576,6 @@ with pkgs;
   mdzk = callPackage ../applications/misc/mdzk {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
-
-  media-downloader = libsForQt5.callPackage ../applications/video/media-downloader { };
 
   mediaelch = mediaelch-qt5;
   mediaelch-qt5 = libsForQt5.callPackage ../applications/misc/mediaelch { };
@@ -36223,7 +36208,9 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
-  shipwright = callPackage ../games/shipwright { };
+  shipwright = callPackage ../games/shipwright {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   wipeout-rewrite = callPackage ../games/wipeout-rewrite {
     inherit (darwin.apple_sdk.frameworks) Foundation;
@@ -39360,8 +39347,6 @@ with pkgs;
   kompute = callPackage ../development/libraries/kompute {
     fmt = fmt_8;
   };
-
-  kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
 
   # In general we only want keep the last three minor versions around that
   # correspond to the last three supported kubernetes versions:

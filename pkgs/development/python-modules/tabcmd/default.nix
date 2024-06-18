@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "tabcmd";
-  version = "2.0.13";
+  version = "2.0.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f9zoYeb4RzcCtgcCYYvvuCuFrjqpP3Fhv38bUWH24+g=";
+    hash = "sha256-wyfKy0g2btdNMNviCd7brB+lwZvPcZ3/DnymdVjCGFg=";
   };
 
   prePatch = ''

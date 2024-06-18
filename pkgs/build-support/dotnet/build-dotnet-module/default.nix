@@ -69,7 +69,7 @@
 , disabledTests ? [ ]
   # The project file to run unit tests against. This is usually referenced in the regular project file, but sometimes it needs to be manually set.
   # It gets restored and build, but not installed. You may need to regenerate your nuget lockfile after setting this.
-, testProjectFile ? ""
+, testProjectFile ? null
 
   # The type of build to perform. This is passed to `dotnet` with the `--configuration` flag. Possible values are `Release`, `Debug`, etc.
 , buildType ? "Release"
@@ -88,17 +88,18 @@
 } @ args:
 
 let
+  projectFiles =
+    lib.optionals (projectFile != null) (lib.toList projectFile);
+  testProjectFiles =
+    lib.optionals (testProjectFile != null) (lib.toList testProjectFile);
+
   platforms =
     if args ? meta.platforms
     then lib.intersectLists args.meta.platforms dotnet-sdk.meta.platforms
     else dotnet-sdk.meta.platforms;
 
   inherit (callPackage ./hooks {
-    inherit dotnet-sdk disabledTests nuget-source dotnet-runtime runtimeDeps buildType;
-    runtimeId =
-      if runtimeId != null
-      then runtimeId
-      else dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
+    inherit dotnet-sdk dotnet-runtime;
   }) dotnetConfigureHook dotnetBuildHook dotnetCheckHook dotnetInstallHook dotnetFixupHook;
 
   localDeps =
@@ -143,6 +144,19 @@ let
   nugetDepsFile = _nugetDeps.sourceFile;
 in
 stdenvNoCC.mkDerivation (args // {
+  dotnetInstallPath = installPath;
+  dotnetExecutables = executables;
+  dotnetBuildType = buildType;
+  dotnetProjectFiles = projectFiles;
+  dotnetTestProjectFiles = testProjectFiles;
+  dotnetDisabledTests = disabledTests;
+  dotnetRuntimeId = runtimeId;
+  nugetSource = nuget-source;
+  dotnetRuntimeDeps = map lib.getLib runtimeDeps;
+  dotnetSelfContainedBuild = selfContainedBuild;
+  dotnetUseAppHost = useAppHost;
+  inherit useDotnetFromEnv;
+
   nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
     dotnetConfigureHook
     dotnetBuildHook
@@ -172,7 +186,7 @@ stdenvNoCC.mkDerivation (args // {
        else [ ]));
 
   makeWrapperArgs = args.makeWrapperArgs or [ ] ++ [
-    "--prefix LD_LIBRARY_PATH : ${dotnet-sdk.icu}/lib"
+    "--prefix" "LD_LIBRARY_PATH" ":" "${dotnet-sdk.icu}/lib"
   ];
 
   # Stripping breaks the executable
@@ -180,8 +194,6 @@ stdenvNoCC.mkDerivation (args // {
 
   # gappsWrapperArgs gets included when wrapping for dotnet, as to avoid double wrapping
   dontWrapGApps = args.dontWrapGApps or true;
-
-  inherit selfContainedBuild useAppHost useDotnetFromEnv;
 
   # propagate the runtime sandbox profile since the contents apply to published
   # executables
@@ -267,11 +279,11 @@ stdenvNoCC.mkDerivation (args // {
                 --no-cache \
                 --force \
                 ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
-                ${lib.optionalString (flags != []) (toString flags)}
+                ${lib.escapeShellArgs flags}
         }
 
-        declare -a projectFiles=( ${toString (lib.toList projectFile)} )
-        declare -a testProjectFiles=( ${toString (lib.toList testProjectFile)} )
+        declare -a projectFiles=( ${lib.escapeShellArgs projectFiles} )
+        declare -a testProjectFiles=( ${lib.escapeShellArgs testProjectFiles} )
 
         export DOTNET_NOLOGO=1
         export DOTNET_CLI_TELEMETRY_OPTOUT=1

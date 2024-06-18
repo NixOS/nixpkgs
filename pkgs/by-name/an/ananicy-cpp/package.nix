@@ -75,7 +75,7 @@ clangStdenv.mkDerivation rec {
   meta = {
     homepage = "https://gitlab.com/ananicy-cpp/ananicy-cpp";
     description = "Rewrite of ananicy in c++ for lower cpu and memory usage";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       artturin
