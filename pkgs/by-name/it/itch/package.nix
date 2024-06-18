@@ -1,23 +1,17 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, fetchFromGitHub
-, electron
-, steam-run
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  fetchFromGitHub,
+  electron,
+  steam-run,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
-stdenvNoCC.mkDerivation rec {
-  pname = "itch";
+
+let
   version = "26.1.9";
-
-  src = fetchzip {
-    url = "https://broth.itch.ovh/itch/linux-amd64/${version}/archive/default#.zip";
-    stripRoot = false;
-    hash = "sha256-4k6afBgOKGs7rzXAtIBpmuQeeT/Va8/0bZgNYjuJhgI=";
-  };
-
   butler = fetchzip {
     url = "https://broth.itch.zone/butler/linux-amd64/15.21.0/butler.zip";
     stripRoot = false;
@@ -30,16 +24,31 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-5MP6X33Jfu97o5R1n6Og64Bv4ZMxVM0A8lXeQug+bNA=";
   };
 
-  icons = let sparseCheckout = "/release/images/itch-icons"; in
+  sparseCheckout = "/release/images/itch-icons";
+  icons =
     fetchFromGitHub {
-        owner = "itchio";
-        repo = "itch";
-        rev = "v${version}";
-        hash = "sha256-jugg+hdP0y0OkFhdQuEI9neWDuNf2p3+DQuwxe09Zck=";
-        sparseCheckout = [ sparseCheckout ];
-      } + sparseCheckout;
+      owner = "itchio";
+      repo = "itch";
+      rev = "v${version}";
+      hash = "sha256-jugg+hdP0y0OkFhdQuEI9neWDuNf2p3+DQuwxe09Zck=";
+      sparseCheckout = [ sparseCheckout ];
+    }
+    + sparseCheckout;
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "itch";
+  inherit version;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  src = fetchzip {
+    url = "https://broth.itch.ovh/itch/linux-amd64/${finalAttrs.version}/archive/default#.zip";
+    stripRoot = false;
+    hash = "sha256-4k6afBgOKGs7rzXAtIBpmuQeeT/Va8/0bZgNYjuJhgI=";
+  };
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -48,7 +57,10 @@ stdenvNoCC.mkDerivation rec {
       tryExec = "itch";
       icon = "itch";
       desktopName = "itch";
-      mimeTypes = [ "x-scheme-handler/itchio" "x-scheme-handler/itch" ];
+      mimeTypes = [
+        "x-scheme-handler/itchio"
+        "x-scheme-handler/itch"
+      ];
       comment = "Install and play itch.io games easily";
       categories = [ "Game" ];
     })
@@ -64,9 +76,9 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 LICENSE -t "$out/share/licenses/$pkgname/"
     install -Dm644 LICENSES.chromium.html -t "$out/share/licenses/$pkgname/"
 
-    for icon in $icons/icon*.png
+    for icon in ${icons}/icon*.png
     do
-      iconsize="''${icon#$icons/icon}"
+      iconsize="''${icon#${icons}/icon}"
       iconsize="''${iconsize%.png}"
       icondir="$out/share/icons/hicolor/''${iconsize}x''${iconsize}/apps/"
       install -Dm644 "$icon" "$icondir/itch.png"
@@ -83,13 +95,13 @@ stdenvNoCC.mkDerivation rec {
       --prefix PATH : ${butler}:${itch-setup}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Best way to play itch.io games";
     homepage = "https://github.com/itchio/itch";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
-    maintainers = with maintainers; [ pasqui23 ];
+    maintainers = with lib.maintainers; [ pasqui23 ];
     mainProgram = "itch";
   };
-}
+})
