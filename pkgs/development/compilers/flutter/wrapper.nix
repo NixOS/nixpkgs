@@ -7,7 +7,7 @@
     "universal"
     "web"
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux "linux"
+  ++ lib.optional (stdenv.hostPlatform.isLinux && !(flutter ? engine)) "linux"
   ++ lib.optional (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin) "android"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "macos" "ios" ]
 , artifactHashes ? flutter.artifactHashes
