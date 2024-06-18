@@ -5328,7 +5328,7 @@ final: prev:
   };
 
   lazydev-nvim = buildVimPlugin {
-    pname = "lazydev-nvim";
+    pname = "lazydev.nvim";
     version = "2024-06-09";
     src = fetchFromGitHub {
       owner = "folke";
