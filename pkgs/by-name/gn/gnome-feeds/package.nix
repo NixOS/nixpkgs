@@ -1,64 +1,72 @@
 {
   lib,
-  callPackage,
+  python3,
 
   fetchFromGitLab,
+  fetchpatch,
 
   appstream,
   gobject-introspection,
   meson,
   ninja,
   pkg-config,
-  wrapGAppsHook3,
+  blueprint-compiler,
+  wrapGAppsHook4,
 
-  glib,
   glib-networking,
-  gtk3,
-  libhandy,
-  listparser ? callPackage ./listparser.nix { },
-  webkitgtk,
-  python3,
+  libadwaita,
+  webkitgtk_6_0,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-feeds";
-  version = "0.16.2";
+  version = "2.2.0";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gfeeds";
     rev = version;
-    sha256 = "sha256-66dwVR9owg050aHCHJek7jYnT+/yyCKo4AaUE0hCqBA=";
+    hash = "sha256-XKwRFjz4ocH01mj8KshLGmGxbm/uvDiyYRf65KL0UFw=";
   };
 
-  format = "other";
+  patches = [
+    # both patches needed to built with newer blueprint-compiler
+    (fetchpatch {
+      name = "fix-for-blueprint-0.8.patch";
+      url = "https://gitlab.gnome.org/World/gfeeds/-/commit/cfe860f44f685be302e2ad9f30b55bab08e078ce.patch";
+      hash = "sha256-exkq9KykB60/X8u3+T1/sShrhGP8BvNkaBWPzm2mchc=";
+    })
+    (fetchpatch {
+      name = "upgrade-blueprint-0.8-syntax.patch";
+      url = "https://gitlab.gnome.org/World/gfeeds/-/commit/d099fda0c62e338080061683a154f711cc487b30.patch";
+      hash = "sha256-M6QLRTj+CItk3XPDeexf3/+B1YHJoHsTjwdE6iw1xjM=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream
-    glib # for glib-compile-schemas
     gobject-introspection
     meson
     ninja
     pkg-config
-    wrapGAppsHook3
+    blueprint-compiler
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    glib
     glib-networking
-    gtk3
-    libhandy
-    webkitgtk
+    libadwaita
+    webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
+    humanize
     python-dateutil
-    feedparser
-    html5lib
-    listparser
-    lxml
+    syndication-domination
+    python-magic
     pillow
     pygments
     pygobject3
@@ -73,16 +81,12 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru = {
-    inherit listparser;
-  };
-
-  meta = with lib; {
+  meta = {
     description = "RSS/Atom feed reader for GNOME";
     mainProgram = "gfeeds";
     homepage = "https://gitlab.gnome.org/World/gfeeds";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.pbogdan ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.pbogdan ];
+    platforms = lib.platforms.linux;
   };
 }
