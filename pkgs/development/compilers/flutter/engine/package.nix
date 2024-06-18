@@ -209,7 +209,7 @@ stdenv.mkDerivation {
       git add .
       git config user.name "nobody"
       git config user.email "nobody@local.host"
-      git commit -a -m "$rev"
+      git commit -a -m "$rev" --quiet
       popd
     done
 
@@ -256,8 +256,7 @@ stdenv.mkDerivation {
         --runtime-mode $runtimeMode \
         --out-dir $out \
         --target-sysroot $toolchain \
-        --target-dir $outName \
-        --verbose
+        --target-dir $outName
 
       runHook postConfigure
     '';
