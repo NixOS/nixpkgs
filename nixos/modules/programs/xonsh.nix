@@ -23,7 +23,7 @@ in
       };
 
       package = lib.mkPackageOption pkgs "xonsh" {
-        example = "xonsh.override { extraPackages = ps: [ ps.requests ]; }";
+        example = "xonsh.wrapper.override { extraPackages = ps: [ ps.requests ]; }";
       };
 
       config = lib.mkOption {
@@ -61,17 +61,14 @@ in
               aliases['ls'] = _ls_alias
           del _ls_alias
 
-
       ${cfg.config}
     '';
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.shells =
-      [ "/run/current-system/sw/bin/xonsh"
-        "${cfg.package}/bin/xonsh"
-      ];
-
+    environment.shells = [
+      "/run/current-system/sw/bin/xonsh"
+      "${lib.getExe cfg.package}"
+    ];
   };
-
 }
