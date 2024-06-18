@@ -130,6 +130,10 @@ buildPythonPackage rec {
       echo 'WorkerReporterTests.test_addSkipPyunit.skip = "'WorkerReporter' object has no attribute '_testStarted'"' >> src/twisted/trial/_dist/test/test_workerreporter.py
       echo 'LocalWorkerAMPTests.test_runSkip.skip = "twisted.protocols.amp.UnknownRemoteError: Code<UNKNOWN>: Unknown Error"' >> src/twisted/trial/_dist/test/test_worker.py
 
+      # https://github.com/twisted/twisted/issues/12194
+      echo 'FlattenerErrorTests.test_asynchronousFlattenError.skip = "builtins.KeyError: 'root'"' >> src/twisted/web/test/test_flatten.py
+      echo 'FlattenerErrorTests.test_cancel.skip = "builtins.KeyError: 'root'"' >> src/twisted/web/test/test_flatten.py
+
       # not packaged
       substituteInPlace src/twisted/test/test_failure.py \
         --replace "from cython_test_exception_raiser import raiser  # type: ignore[import]" "raiser = None"
