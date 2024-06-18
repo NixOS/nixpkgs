@@ -15457,7 +15457,7 @@ with pkgs;
     dontStrip = true;
   }));
 
-  gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccWithoutTargetLibc;
+  gccCrossLibcStdenv = overrideCC stdenvNoCC buildPackages.gccWithoutTargetLibc;
 
   crossLibcStdenv =
     if stdenv.hostPlatform.useLLVM or false || stdenv.hostPlatform.isDarwin
