@@ -5087,6 +5087,22 @@ let
         };
       };
 
+      zguolee.tabler-icons = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "tabler-icons";
+          publisher = "zguolee";
+          version = "0.3.4";
+          hash = "sha256-0XvB9UXqKHbL/ejUfciSvFzZ3GacaQ7pq6hJqRaxq+8=";
+        };
+        meta = {
+          description = "Tabler product icon theme for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=zguolee.tabler-icons";
+          homepage = "https://github.com/zguolee/vscode-tabler-icons";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
       zhuangtongfa.material-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "material-theme";
