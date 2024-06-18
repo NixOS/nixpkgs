@@ -23239,10 +23239,12 @@ with pkgs;
   # Default libGLU
   libGLU = mesa_glu;
 
-  mesa = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa {
-    inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
-    inherit (darwin.apple_sdk_11_0.libs) Xplugin;
-  };
+  mesa = if stdenv.isDarwin
+    then darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/darwin.nix {
+      inherit (darwin.apple_sdk_11_0.libs) Xplugin;
+    }
+    else callPackage ../development/libraries/mesa {};
+
   mesa_i686 = pkgsi686Linux.mesa; # make it build on Hydra
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
