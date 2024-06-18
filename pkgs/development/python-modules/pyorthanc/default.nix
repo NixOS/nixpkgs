@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
   poetry-core,
   httpx,
   pydicom,
@@ -14,7 +13,7 @@ buildPythonPackage rec {
   version = "1.18.0";
   disabled = pythonOlder "3.8";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gacou54";
@@ -23,17 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-ObZjTiEB4a7ForsugzKZDdIsTEWOX1zbv53ZJ4AllHE=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     pydicom
   ];
-
-  pythonRelaxDeps = [ "httpx" ];
 
   doCheck = false; # requires orthanc server (not in Nixpkgs)
 
