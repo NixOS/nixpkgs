@@ -14,15 +14,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
   version = "24.1.0";
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.isDarwin) [
-      gnused
-      wrapGAppsHook3
-      autoPatchelfHook
-    ]
-    ++ lib.optionals stdenvNoCC.isDarwin [ undmg ];
-
   src =
     let
       inherit (stdenvNoCC.hostPlatform) system;
@@ -45,15 +36,25 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       inherit hash;
     };
 
+  sourceRoot = lib.optional stdenvNoCC.isDarwin "dbeaver.app";
+
+  nativeBuildInputs =
+    [ makeWrapper ]
+    ++ lib.optionals (!stdenvNoCC.isDarwin) [
+      gnused
+      wrapGAppsHook3
+      autoPatchelfHook
+    ]
+    ++ lib.optionals stdenvNoCC.isDarwin [ undmg ];
+
   dontConfigure = true;
   dontBuild = true;
-
-  sourceRoot = lib.optional stdenvNoCC.isDarwin "dbeaver.app";
 
   installPhase =
     if !stdenvNoCC.isDarwin then
       ''
         runHook preInstall
+
         mkdir -p $out/opt/dbeaver $out/bin
         cp -r * $out/opt/dbeaver
         makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \
