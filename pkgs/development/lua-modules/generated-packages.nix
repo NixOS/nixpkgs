@@ -2388,6 +2388,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+lz-n = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
+buildLuarocksPackage {
+  pname = "lz.n";
+  version = "1.3.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lz.n-1.3.0-1.rockspec";
+    sha256 = "03rbinqs0za9193v0l06csvxkcfd93ikks6pnvfs2p6f64abdic9";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-neorocks/lz.n/archive/v1.3.0.zip";
+    sha256 = "1hdayr06ni2zzjyciv0f36k82zlkmwnvl0imrlqxqr6hq9yqcwvx";
+  };
+
+  disabled = luaOlder "5.1";
+
+  meta = {
+    homepage = "https://github.com/nvim-neorocks/lz.n";
+    description = "🦥 A dead simple lazy-loading Lua library for Neovim plugins.";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "GPL-2+";
+  };
+}) {};
+
 magick = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, lua }:
 buildLuarocksPackage {
   pname = "magick";

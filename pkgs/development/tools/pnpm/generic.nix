@@ -3,6 +3,7 @@
   stdenvNoCC,
   callPackages,
   fetchurl,
+  installShellFiles,
   nodejs,
   testers,
   withNode ? true,
@@ -25,6 +26,8 @@
 
   buildInputs = lib.optionals withNode [ nodejs ];
 
+  nativeBuildInputs = [ installShellFiles nodejs ];
+
   installPhase = ''
     runHook preInstall
 
@@ -35,6 +38,25 @@
 
     runHook postInstall
   '';
+
+  postInstall =
+    if lib.toInt (lib.versions.major version) < 9 then ''
+      export HOME="$PWD"
+      node $out/bin/pnpm install-completion bash
+      node $out/bin/pnpm install-completion fish
+      node $out/bin/pnpm install-completion zsh
+      sed -i '1 i#compdef pnpm' .config/tabtab/zsh/pnpm.zsh
+      installShellCompletion \
+        .config/tabtab/bash/pnpm.bash \
+        .config/tabtab/fish/pnpm.fish \
+        .config/tabtab/zsh/pnpm.zsh
+    '' else ''
+      node $out/bin/pnpm completion bash >pnpm.bash
+      node $out/bin/pnpm completion fish >pnpm.fish
+      node $out/bin/pnpm completion zsh >pnpm.zsh
+      sed -i '1 i#compdef pnpm' pnpm.zsh
+      installShellCompletion pnpm.{bash,fish,zsh}
+    '';
 
   passthru = let
     fetchDepsAttrs = callPackages ./fetch-deps { pnpm = finalAttrs.finalPackage; };

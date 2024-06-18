@@ -50,8 +50,8 @@ let
         changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
         license = lib.licenses.mit;
         sourceProvenance = [ lib.sourceTypes.fromSource ];
-      };
-    } // (removeAttrs args [ "url" "sha256" "description" ]));
+      } // args.meta or { };
+    } // (removeAttrs args [ "url" "sha256" "description" "meta" ]));
 
   extensions =
     callPackages ./extensions-generated.nix { inherit mkAzExtension; }
@@ -233,7 +233,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage rec {
     # pip is required to install extensions locally, but it's not needed if
     # we're using the default immutable configuration.
     pip
-  ];
+  ] ++ lib.concatMap (extension: extension.propagatedBuildInputs) withExtensions;
 
   postInstall = ''
     substituteInPlace az.completion.sh \

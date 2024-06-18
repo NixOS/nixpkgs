@@ -1,5 +1,4 @@
 repo,branch,alias
-https://codeberg.org/FelipeLema/cmp-async-path/,,
 https://github.com/euclidianAce/BetterLua.vim/,,
 https://github.com/vim-scripts/BufOnly.vim/,,
 https://github.com/jackMort/ChatGPT.nvim/,HEAD,
@@ -132,11 +131,8 @@ https://github.com/laytan/cloak.nvim/,HEAD,
 https://github.com/asheq/close-buffers.vim/,HEAD,
 https://github.com/Civitasv/cmake-tools.nvim/,,
 https://github.com/winston0410/cmd-parser.nvim/,,
-<<<<<<< HEAD
 https://github.com/tzachar/cmp-ai/,HEAD,
 https://codeberg.org/FelipeLema/cmp-async-path/,,
-=======
->>>>>>> 8c49439301ad (vimPlugins.nvim-genghis: init at 2024-05-21)
 https://github.com/crispgm/cmp-beancount/,HEAD,
 https://github.com/hrsh7th/cmp-buffer/,,
 https://github.com/hrsh7th/cmp-calc/,,
@@ -500,6 +496,7 @@ https://github.com/l3mon4d3/luasnip/,,
 https://github.com/alvarosevilla95/luatab.nvim/,,
 https://github.com/rktjmp/lush.nvim/,,
 https://github.com/mkasa/lushtags/,,
+https://github.com/nvim-neorocks/lz.n/,,
 https://github.com/WhiteBlackGoose/magma-nvim-goose/,HEAD,
 https://github.com/winston0410/mark-radar.nvim/,HEAD,
 https://github.com/iamcco/markdown-preview.nvim/,,

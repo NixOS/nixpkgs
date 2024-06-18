@@ -8,7 +8,9 @@
   qtwayland,
   libinput,
   xorg,
+  xwayland,
   libdisplay-info,
+  libei,
   mesa,
   lcms2,
   libcap,
@@ -53,9 +55,12 @@ mkKdeDerivation {
     lcms2
     libcap
     libdisplay-info
+    libei
     libinput
     pipewire
 
     xorg.libxcvt
+    # we need to provide this so it knows our xwayland supports new features
+    xwayland
   ];
 }

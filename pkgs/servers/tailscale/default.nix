@@ -10,10 +10,11 @@
 , shadow
 , procps
 , nixosTests
+, installShellFiles
 }:
 
 let
-  version = "1.68.0";
+  version = "1.68.1";
 in
 buildGoModule {
   pname = "tailscale";
@@ -23,7 +24,7 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-GTl5RCwIoDuzbaigy0/++xaPPEMLRDbBi/z82xCDOZY=";
+    hash = "sha256-ZAzro69F7ovfdqzRss/U7puh1T37bkEtUXabCYc5LwU=";
   };
 
   patches = [
@@ -37,7 +38,7 @@ buildGoModule {
 
   vendorHash = "sha256-SUjoeOFYz6zbEgv/vND7kEXbuWlZDrUKF2Dmqsf/KVw=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ] ++ [ installShellFiles ];
 
   CGO_ENABLED = 0;
 
@@ -62,6 +63,12 @@ buildGoModule {
     wrapProgram $out/bin/tailscaled \
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \
       --suffix PATH : ${lib.makeBinPath [ procps ]}
+
+    local INSTALL="$out/bin/tailscale"
+    installShellCompletion --cmd tailscale \
+      --bash <($out/bin/tailscale completion bash) \
+      --fish <($out/bin/tailscale completion fish) \
+      --zsh <($out/bin/tailscale completion zsh)
 
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service

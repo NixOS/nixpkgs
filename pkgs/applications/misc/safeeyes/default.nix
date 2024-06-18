@@ -18,11 +18,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "safeeyes";
-  version = "2.1.6";
+  version = "2.1.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tvsBTf6+zKBzB5aL+LUcEvE4jmVHnnoY0L4xoKMJ0vM=";
+    hash = "sha256-65U/j6P6X4JzhL0aEOnzKa/Al6SYprOOxix2dtcusJQ=";
   };
 
   postPatch = ''

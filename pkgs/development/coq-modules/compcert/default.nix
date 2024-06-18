@@ -193,6 +193,20 @@ compcert.overrideAttrs (o:
             url = "https://github.com/AbsInt/CompCert/commit/a2e4ed62fc558d565366845f9d135bd7db5e23c4.patch";
             hash = "sha256-ufk0bokuayLfkSvK3cK4E9iXU5eZpp9d/ETSa/zCfMg=";
           })
+          # Support for Coq 8.19.2
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/8fcfb7d2a6e9ba44003ccab0dfcc894982779af1.patch";
+            hash = "sha256-m/kcnDBBPWFriipuGvKZUqLQU8/W1uqw8j4qfCwnTZk=";
+          })
+        ];
+      }
+      { cases = [ (isEq "8.19") (isEq "3.14") ];
+        out = [
+          # Support for Coq 8.19.2
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/8fcfb7d2a6e9ba44003ccab0dfcc894982779af1.patch";
+            hash = "sha256-m/kcnDBBPWFriipuGvKZUqLQU8/W1uqw8j4qfCwnTZk=";
+          })
         ];
       }
     ] [];

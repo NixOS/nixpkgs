@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "dorion";
+  pname = "dorion";
   version = "4.3.0";
 
   src = fetchurl {
