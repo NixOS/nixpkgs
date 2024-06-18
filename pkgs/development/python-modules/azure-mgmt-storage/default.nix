@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "This is the Microsoft Azure Storage Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-storage_${version}/sdk/storage/azure-mgmt-storage/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
       jonringer
