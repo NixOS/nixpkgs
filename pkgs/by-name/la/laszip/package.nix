@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   version = "3.4.3";
-  pname = "LASzip";
+  pname = "laszip";
 
   src = fetchFromGitHub {
     owner = "LASzip";

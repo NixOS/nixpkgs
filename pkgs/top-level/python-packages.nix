@@ -6548,6 +6548,7 @@ self: super: with self; {
 
   laszip = callPackage ../development/python-modules/laszip {
     inherit (pkgs) cmake ninja;
+    inherit (pkgs.__splicedPackages) laszip;
   };
 
   latex2mathml = callPackage ../development/python-modules/latex2mathml { };
