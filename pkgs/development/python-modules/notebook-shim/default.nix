@@ -46,6 +46,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/jupyter/notebook_shim";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ friedelino ];
+    maintainers = with maintainers; [ ];
   };
 }

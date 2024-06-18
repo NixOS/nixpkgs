@@ -31,6 +31,6 @@ buildPythonPackage rec {
       many far from the implicit surface.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ friedelino ];
+    maintainers = with maintainers; [ ];
   };
 }

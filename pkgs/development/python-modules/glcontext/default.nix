@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "OpenGL implementation for ModernGL";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ friedelino ];
+    maintainers = with maintainers; [ ];
   };
 }
