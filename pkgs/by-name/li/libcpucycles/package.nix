@@ -15,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Fb73EOHGgEehZJwTCtCG12xwyiqtDXFs9eFDsHBQiDo=";
   };
 
+  patches = [ ./environment-variable-tools.patch ];
+
   postPatch = ''
     patchShebangs configure
     patchShebangs scripts-build
