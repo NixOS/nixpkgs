@@ -655,6 +655,27 @@ let
         };
       };
 
+      biomejs.biome = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "biome";
+          publisher = "biomejs";
+          version = "2024.5.251958";
+          hash = "sha256-Pxbvj6e3nRwuLKmPEtE02JdHmZbyuXNh4T+FZKjBkWo=";
+        };
+        meta = {
+          changelog = "https://github.com/biomejs/biome-vscode/blob/main/CHANGELOG.md";
+          description = "Biome LSP extension for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=biomejs.biome";
+          homepage = "https://github.com/biomejs/biome-vscode";
+          license = with lib.licenses; [
+            mit
+            # or
+            asl20
+          ];
+          maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
       bmalehorn.vscode-fish = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-fish";
@@ -1780,6 +1801,23 @@ let
         };
       };
 
+      fortran-lang.linter-gfortran = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "linter-gfortran";
+          publisher = "fortran-lang";
+          version = "3.4.2024061701";
+          hash = "sha256-i357EzQ8cm8NPsMBbsV5ToMoBDa59Bh6ylC9tNjMY6s=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/fortran-lang.linter-gfortran/changelog";
+          description = "Fortran language support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=fortran-lang.linter-gfortran";
+          homepage = "https://github.com/fortran-lang/vscode-fortran-support";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
       foxundermoon.shell-format = callPackage ./foxundermoon.shell-format { };
 
       freebroccolo.reasonml = buildVscodeMarketplaceExtension {
@@ -2814,6 +2852,23 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      meganrogge.template-string-converter = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "template-string-converter";
+          publisher = "meganrogge";
+          version = "0.6.1";
+          hash = "sha256-w0ppzh0m/9Hw3BPJbAKsNcMStdzoH9ODf3zweRcCG5k=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/meganrogge.template-string-converter/changelog";
+          description = "VS Code extension to autocorrect from quotes to backticks";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=meganrogge.template-string-converter";
+          homepage = "https://github.com/meganrogge/template-string-converter";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.uncenter ];
         };
       };
 
@@ -4570,6 +4625,23 @@ let
           homepage = "https://github.com/MicrosoftDocs/intellicode";
           license = lib.licenses.cc-by-40;
           maintainers = [ lib.maintainers.themaxmur ];
+        };
+      };
+
+      vitaliymaz.vscode-svg-previewer = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-svg-previewer";
+          publisher = "vitaliymaz";
+          version = "0.7.0";
+          hash = "sha256-iX+Js2Pqz1gLDwrihuYtDwQG4ek7GiOhL3M0j3jHF/Y=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/vitaliymaz.vscode-svg-previewer/changelog";
+          description = "Preview SVGs in VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=vitaliymaz.vscode-svg-previewer";
+          homepage = "https://github.com/vitaliymaz/vscode-svg-previewer";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.uncenter ];
         };
       };
 

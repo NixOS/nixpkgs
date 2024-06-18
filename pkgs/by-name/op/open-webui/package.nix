@@ -59,8 +59,6 @@ python3.pkgs.buildPythonApplication rec {
     "opencv-python-headless"
     # using `psycopg2` instead
     "psycopg2-binary"
-    # package request: https://github.com/NixOS/nixpkgs/issues/317065
-    "rapidocr-onnxruntime"
   ];
 
   dependencies = with python3.pkgs; [
@@ -106,6 +104,7 @@ python3.pkgs.buildPythonApplication rec {
     pytube
     pyxlsb
     rank-bm25
+    rapidocr-onnxruntime
     requests
     sentence-transformers
     unstructured
