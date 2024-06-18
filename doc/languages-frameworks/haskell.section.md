@@ -38,8 +38,7 @@ For packages that are part of [Stackage] (a curated set of known to be
 compatible packages), we use the version prescribed by a Stackage snapshot
 (usually the current LTS one) as the default version. For all other packages we
 use the latest version from [Hackage](https://hackage.org) (the repository of
-basically all open source Haskell packages). See [below](#haskell-available-
-versions) for a few more details on this.
+basically all open source Haskell packages). See [below](#haskell-available-versions) for a few more details on this.
 
 Roughly half of the 16K packages contained in `haskellPackages` don’t actually
 build and are [marked as broken semi-automatically](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml).
