@@ -16724,6 +16724,12 @@
     githubId = 1922770;
     name = "Tim Engler";
   };
+  redhawk = {
+    email = "redhawk76767676@gmail.com";
+    github = "Redhawk18";
+    githubId = 77415970;
+    name = "Redhawk";
+  };
   redvers = {
     email = "red@infect.me";
     github = "redvers";
