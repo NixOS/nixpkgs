@@ -7,6 +7,7 @@
 , fontconfig
 , freetype
 , glib
+, libdrm
 , libGLU
 , libglvnd
 , libICE
@@ -21,15 +22,15 @@
 }:
 
 let
-  buildNum = "2023-12-04-1282";
+  buildNum = "2024-04-18-1396";
 in
 stdenv.mkDerivation {
   pname = "rgp";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-gGkINq0tmOCkZJMxtoURHikqEGXGuRAP6Y6PEOLqmI0=";
+    hash = "sha256-mP5tmq252IsWYVRGNKVib8ZbM5M4srUKXJ3x2ff4YhM=";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
@@ -39,6 +40,7 @@ stdenv.mkDerivation {
     fontconfig
     freetype
     glib
+    libdrm
     libGLU
     libglvnd
     libICE
