@@ -10,13 +10,12 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "itch";
-  version = "26.1.3";
+  version = "26.1.9";
 
-  # TODO: Using kitch instead of itch, revert when possible
   src = fetchzip {
-    url = "https://broth.itch.ovh/kitch/linux-amd64/${version}/archive/default#.zip";
+    url = "https://broth.itch.ovh/itch/linux-amd64/${version}/archive/default#.zip";
     stripRoot = false;
-    hash = "sha256-FHwbzLPMzIpyg6KyYTq6/rSNRH76dytwb9D5f9vNKkU=";
+    hash = "sha256-4k6afBgOKGs7rzXAtIBpmuQeeT/Va8/0bZgNYjuJhgI=";
   };
 
   butler = fetchzip {
@@ -35,8 +34,8 @@ stdenvNoCC.mkDerivation rec {
     fetchFromGitHub {
         owner = "itchio";
         repo = "itch";
-        rev = "v${version}-canary";
-        hash = "sha256-0AMyDZ5oI7/pSvudoEqXnMZJtpcKVlUSR6YVm+s4xv0=";
+        rev = "v${version}";
+        hash = "sha256-jugg+hdP0y0OkFhdQuEI9neWDuNf2p3+DQuwxe09Zck=";
         sparseCheckout = [ sparseCheckout ];
       } + sparseCheckout;
 
@@ -58,10 +57,6 @@ stdenvNoCC.mkDerivation rec {
   # As taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=itch-bin
   installPhase = ''
     runHook preInstall
-
-    # TODO: Remove when the next stable Itch is stabilized
-    substituteInPlace ./resources/app/package.json \
-      --replace "kitch" "itch"
 
     mkdir -p $out/bin $out/share/itch/resources/app
     cp -r resources/app "$out/share/itch/resources/"
