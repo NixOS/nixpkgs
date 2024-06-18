@@ -16,6 +16,7 @@
 
   <xsl:param name="fontDirectories" />
   <xsl:param name="impureFontDirectories" />
+  <xsl:param name="includes" />
 
   <xsl:template match="/fontconfig">
 
@@ -30,8 +31,10 @@
       <xsl:text>&#0010;</xsl:text>
 
       <!-- system-wide config -->
-      <include ignore_missing="yes">/etc/fonts/conf.d</include>
-      <xsl:text>&#0010;</xsl:text>
+      <xsl:for-each select="str:tokenize($includes)">
+        <include ignore_missing="yes"><xsl:value-of select="." /></include>
+        <xsl:text>&#0010;</xsl:text>
+      </xsl:for-each>
 
       <dir prefix="xdg">fonts</dir>
       <xsl:text>&#0010;</xsl:text>
