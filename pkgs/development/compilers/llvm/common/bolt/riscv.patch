@@ -1,0 +1,13 @@
+diff --git a/lib/Target/RISCV/MCTargetDesc/RISCVMCTargetDesc.h b/lib/Target/RISCV/MCTargetDesc/RISCVMCTargetDesc.h
+index 3cfddb530..3fca9ef7b 100644
+--- a/lib/Target/RISCV/MCTargetDesc/RISCVMCTargetDesc.h
++++ b/lib/Target/RISCV/MCTargetDesc/RISCVMCTargetDesc.h
+@@ -13,7 +13,6 @@
+ #ifndef LLVM_LIB_TARGET_RISCV_MCTARGETDESC_RISCVMCTARGETDESC_H
+ #define LLVM_LIB_TARGET_RISCV_MCTARGETDESC_RISCVMCTARGETDESC_H
+ 
+-#include "llvm/Config/config.h"
+ #include "llvm/MC/MCTargetOptions.h"
+ #include "llvm/Support/DataTypes.h"
+ #include <memory>
+

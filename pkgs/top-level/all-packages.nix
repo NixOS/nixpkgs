@@ -15129,6 +15129,9 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
   };
 
+  bolt_17 = llvmPackages_17.bolt;
+  bolt_18 = llvmPackages_18.bolt;
+
   bun = callPackage ../development/web/bun { };
 
   cakelisp = callPackage ../development/compilers/cakelisp { };

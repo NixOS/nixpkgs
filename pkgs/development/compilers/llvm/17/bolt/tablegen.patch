@@ -1,0 +1,116 @@
+diff --git a/lib/Target/AArch64/CMakeLists.txt b/lib/Target/AArch64/CMakeLists.txt
+index be03e247a..ba7be4262 100644
+--- a/lib/Target/AArch64/CMakeLists.txt
++++ b/lib/Target/AArch64/CMakeLists.txt
+@@ -4,6 +4,39 @@ set(LLVM_LINK_COMPONENTS
+   AArch64Desc
+   )
+ 
++if(BOLT_BUILT_STANDALONE)
++  # tablegen, copied from llvm/lib/Target/AAarch64/CMakeLists.txt
++  set(LLVM_TARGET_DEFINITIONS ${LLVM_MAIN_SRC_DIR}/lib/Target/AArch64/AArch64.td)
++  list(APPEND LLVM_TABLEGEN_FLAGS -I ${LLVM_MAIN_SRC_DIR}/lib/Target/AArch64)
++  tablegen(LLVM AArch64GenAsmMatcher.inc -gen-asm-matcher)
++  tablegen(LLVM AArch64GenAsmWriter.inc -gen-asm-writer)
++  tablegen(LLVM AArch64GenAsmWriter1.inc -gen-asm-writer -asmwriternum=1)
++  tablegen(LLVM AArch64GenCallingConv.inc -gen-callingconv)
++  tablegen(LLVM AArch64GenDAGISel.inc -gen-dag-isel)
++  tablegen(LLVM AArch64GenDisassemblerTables.inc -gen-disassembler)
++  tablegen(LLVM AArch64GenFastISel.inc -gen-fast-isel)
++  tablegen(LLVM AArch64GenGlobalISel.inc -gen-global-isel)
++  tablegen(LLVM AArch64GenO0PreLegalizeGICombiner.inc -gen-global-isel-combiner-matchtable
++                -combiners="AArch64O0PreLegalizerCombiner")
++  tablegen(LLVM AArch64GenPreLegalizeGICombiner.inc -gen-global-isel-combiner-matchtable
++                -combiners="AArch64PreLegalizerCombiner")
++  tablegen(LLVM AArch64GenPostLegalizeGICombiner.inc -gen-global-isel-combiner-matchtable
++                -combiners="AArch64PostLegalizerCombiner")
++  tablegen(LLVM AArch64GenPostLegalizeGILowering.inc -gen-global-isel-combiner-matchtable
++                -combiners="AArch64PostLegalizerLowering")
++  tablegen(LLVM AArch64GenInstrInfo.inc -gen-instr-info)
++  tablegen(LLVM AArch64GenMCCodeEmitter.inc -gen-emitter)
++  tablegen(LLVM AArch64GenMCPseudoLowering.inc -gen-pseudo-lowering)
++  tablegen(LLVM AArch64GenRegisterBank.inc -gen-register-bank)
++  tablegen(LLVM AArch64GenRegisterInfo.inc -gen-register-info)
++  tablegen(LLVM AArch64GenSubtargetInfo.inc -gen-subtarget)
++  tablegen(LLVM AArch64GenSystemOperands.inc -gen-searchable-tables)
++  tablegen(LLVM AArch64GenExegesis.inc -gen-exegesis)
++
++  add_public_tablegen_target(AArch64CommonTableGen)
++  include_directories(${CMAKE_CURRENT_BINARY_DIR})
++endif()
++
+ add_llvm_library(LLVMBOLTTargetAArch64
+   AArch64MCPlusBuilder.cpp
+ 
+diff --git a/lib/Target/RISCV/CMakeLists.txt b/lib/Target/RISCV/CMakeLists.txt
+index 7f9557606..6016a13a1 100644
+--- a/lib/Target/RISCV/CMakeLists.txt
++++ b/lib/Target/RISCV/CMakeLists.txt
+@@ -4,6 +4,28 @@ set(LLVM_LINK_COMPONENTS
+   RISCVDesc
+   )
+ 
++if(BOLT_BUILT_STANDALONE)
++  # tablegen, copied from llvm/lib/Target/RISCV/CMakeLists.txt
++  set(LLVM_TARGET_DEFINITIONS ${LLVM_MAIN_SRC_DIR}/lib/Target/RISCV/RISCV.td)
++  list(APPEND LLVM_TABLEGEN_FLAGS -I ${LLVM_MAIN_SRC_DIR}/lib/Target/RISCV)
++  tablegen(LLVM RISCVGenAsmMatcher.inc -gen-asm-matcher)
++  tablegen(LLVM RISCVGenAsmWriter.inc -gen-asm-writer)
++  tablegen(LLVM RISCVGenCompressInstEmitter.inc -gen-compress-inst-emitter)
++  tablegen(LLVM RISCVGenDAGISel.inc -gen-dag-isel)
++  tablegen(LLVM RISCVGenDisassemblerTables.inc -gen-disassembler)
++  tablegen(LLVM RISCVGenGlobalISel.inc -gen-global-isel)
++  tablegen(LLVM RISCVGenInstrInfo.inc -gen-instr-info)
++  tablegen(LLVM RISCVGenMCCodeEmitter.inc -gen-emitter)
++  tablegen(LLVM RISCVGenMCPseudoLowering.inc -gen-pseudo-lowering)
++  tablegen(LLVM RISCVGenRegisterBank.inc -gen-register-bank)
++  tablegen(LLVM RISCVGenRegisterInfo.inc -gen-register-info)
++  tablegen(LLVM RISCVGenSearchableTables.inc -gen-searchable-tables)
++  tablegen(LLVM RISCVGenSubtargetInfo.inc -gen-subtarget)
++
++  add_public_tablegen_target(RISCVCommonTableGen)
++  include_directories(${CMAKE_CURRENT_BINARY_DIR})
++endif()
++
+ add_llvm_library(LLVMBOLTTargetRISCV
+   RISCVMCPlusBuilder.cpp
+ 
+diff --git a/lib/Target/X86/CMakeLists.txt b/lib/Target/X86/CMakeLists.txt
+index 2b769bc7e..4527c4540 100644
+--- a/lib/Target/X86/CMakeLists.txt
++++ b/lib/Target/X86/CMakeLists.txt
+@@ -5,6 +5,32 @@ set(LLVM_LINK_COMPONENTS
+   X86Desc
+   )
+ 
++if(BOLT_BUILT_STANDALONE)
++  # tablegen, copied from llvm/lib/Target/X86/CMakeLists.txt
++  set(LLVM_TARGET_DEFINITIONS ${LLVM_MAIN_SRC_DIR}/lib/Target/X86/X86.td)
++  list(APPEND LLVM_TABLEGEN_FLAGS -I ${LLVM_MAIN_SRC_DIR}/lib/Target/X86)
++  tablegen(LLVM X86GenAsmMatcher.inc -gen-asm-matcher)
++  tablegen(LLVM X86GenAsmWriter.inc -gen-asm-writer)
++  tablegen(LLVM X86GenAsmWriter1.inc -gen-asm-writer -asmwriternum=1)
++  tablegen(LLVM X86GenCallingConv.inc -gen-callingconv)
++  tablegen(LLVM X86GenDAGISel.inc -gen-dag-isel)
++  tablegen(LLVM X86GenDisassemblerTables.inc -gen-disassembler)
++  tablegen(LLVM X86GenEVEX2VEXTables.inc -gen-x86-EVEX2VEX-tables)
++  tablegen(LLVM X86GenExegesis.inc -gen-exegesis)
++  tablegen(LLVM X86GenFastISel.inc -gen-fast-isel)
++  tablegen(LLVM X86GenGlobalISel.inc -gen-global-isel)
++  tablegen(LLVM X86GenInstrInfo.inc -gen-instr-info
++                                    -instr-info-expand-mi-operand-info=0)
++  tablegen(LLVM X86GenMnemonicTables.inc -gen-x86-mnemonic-tables -asmwriternum=1)
++  tablegen(LLVM X86GenRegisterBank.inc -gen-register-bank)
++  tablegen(LLVM X86GenRegisterInfo.inc -gen-register-info)
++  tablegen(LLVM X86GenSubtargetInfo.inc -gen-subtarget)
++  tablegen(LLVM X86GenFoldTables.inc -gen-x86-fold-tables -asmwriternum=1)
++
++  add_public_tablegen_target(X86CommonTableGen)
++  include_directories(${CMAKE_CURRENT_BINARY_DIR})
++endif()
++
+ add_llvm_library(LLVMBOLTTargetX86
+   X86MCPlusBuilder.cpp
+   X86MCSymbolizer.cpp
+
+
