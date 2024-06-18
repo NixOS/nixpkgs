@@ -2,9 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
   cacert,
-  esbuild,
   jq,
   krb5,
   libsecret,
@@ -83,32 +81,6 @@ let
     };
 
   platform = vscodePlatforms stdenv.hostPlatform;
-
-  esbuild' = esbuild.override {
-    buildGoModule =
-      args:
-      buildGoModule (
-        args
-        // rec {
-          version = "0.17.14";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-4TC1d5FOZHUMuEMTcTOBLZZM+sFUswhyblI5HVWyvPA=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
-      );
-  };
-
-  # replaces esbuild's download script with a binary from nixpkgs
-  patchEsbuild = path: version: ''
-    mkdir -p ${path}/node_modules/esbuild/bin
-    jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
-    sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
-    ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
-  '';
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -262,8 +234,6 @@ stdenv.mkDerivation (finalAttrs: {
                  --ignore-scripts                                              \
                  --ignore-engines
 
-      ${patchEsbuild "./build" "0.12.6"}
-      ${patchEsbuild "./extensions" "0.11.23"}
       # patch shebangs of node_modules to allow binary packages to build
       patchShebangs .
       # put ripgrep binary into bin so postinstall does not try to download it
