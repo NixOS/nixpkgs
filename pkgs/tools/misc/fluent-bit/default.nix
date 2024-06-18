@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UoNzgTWPyDoa3hLh9z/aw78lmGcA/ujihUuXnKKqtPc=";
+    hash = "sha256-AR+YmxIP6VZlpztpez6OViX1cGqoP/jeOiuzBcav1Eg=";
   };
 
   # optional only to avoid linux rebuild
