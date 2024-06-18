@@ -28,6 +28,7 @@
   nanoflann,
   nasm,
   pkg-config,
+  poisson-recon,
   qhull,
   stdgpu,
   tbb,
@@ -127,6 +128,7 @@ stdenv.mkDerivation rec {
     libz
     msgpack
     nanoflann
+    poisson-recon
     qhull
     tbb
     tinyobjloader
