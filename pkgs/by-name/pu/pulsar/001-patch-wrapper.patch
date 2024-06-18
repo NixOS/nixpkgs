@@ -1,0 +1,11 @@
+--- a/resources/pulsar.sh	2023-03-16 04:11:14.000000000 +0100
++++ b/resources/pulsar.sh	2023-03-24 14:37:13.468813964 +0100
+@@ -123,7 +123,7 @@
+ elif [ $OS == 'Linux' ]; then
+   SCRIPT=$(readlink -f "$0")
+ 
+-  PULSAR_PATH="/opt/Pulsar/pulsar"
++  # PULSAR_PATH is set-up via `wrapProgram` in the postFixup phase
+ 
+   #Set tmpdir only if tmpdir is unset
+   : ${TMPDIR:=/tmp}

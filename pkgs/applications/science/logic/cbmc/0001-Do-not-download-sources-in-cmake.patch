@@ -1,0 +1,41 @@
+From 714f5ebe9ade721abdccf58edfcddba52465cb8d Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Sun, 2 Jul 2023 22:43:27 +0800
+Subject: [PATCH] Do not download sources in cmake
+
+---
+ src/solvers/CMakeLists.txt | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/src/solvers/CMakeLists.txt b/src/solvers/CMakeLists.txt
+index daa0853a57..4bcbbdaa47 100644
+--- a/src/solvers/CMakeLists.txt
++++ b/src/solvers/CMakeLists.txt
+@@ -123,16 +123,6 @@ foreach(SOLVER ${sat_impl})
+     elseif("${SOLVER}" STREQUAL "cadical")
+         message(STATUS "Building solvers with cadical")
+ 
+-        download_project(PROJ cadical
+-            URL https://github.com/arminbiere/cadical/archive/rel-1.7.2.tar.gz
+-            PATCH_COMMAND patch -p1 -i ${CBMC_SOURCE_DIR}/../scripts/cadical-1.7.2-patch
+-            COMMAND cmake -E copy ${CBMC_SOURCE_DIR}/../scripts/cadical_CMakeLists.txt CMakeLists.txt
+-            COMMAND ./configure
+-            URL_MD5 be646831a017f81b300664e58deba1b5
+-        )
+-
+-        add_subdirectory(${cadical_SOURCE_DIR} ${cadical_BINARY_DIR})
+-
+         target_compile_definitions(solvers PUBLIC
+             SATCHECK_CADICAL HAVE_CADICAL
+         )
+@@ -140,6 +130,7 @@ foreach(SOLVER ${sat_impl})
+         target_include_directories(solvers
+             PUBLIC
+             ${cadical_SOURCE_DIR}/src
++            ${cadical_INCLUDE_DIR}
+         )
+ 
+         target_link_libraries(solvers cadical)
+-- 
+2.42.0
+
