@@ -13,6 +13,7 @@
   stdenvNoCC,
   runCommand,
   patchelf,
+  openbox,
   xorg,
   libglvnd,
   libepoxy,
@@ -117,6 +118,8 @@ stdenv.mkDerivation {
       ln -s $(dirname "$out") $out/$(dirname "$out")
     '';
   };
+
+  nativeCheckInputs = lib.optionals stdenv.isLinux [ xorg.xorgserver openbox ];
 
   nativeBuildInputs =
     [
@@ -277,9 +280,20 @@ stdenv.mkDerivation {
     ${lib.optionalString (stdenv.isLinux) ''
       patchelf $out/out/$outName/dart-sdk/bin/dartaotruntime \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)
+
+      find $out/out/$outName/exe.unstripped -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
     ''}
 
     runHook postBuild
+  '';
+
+  # Tests are broken
+  doCheck = false;
+  checkPhase = ''
+    ln -s $out/out src/out
+    touch src/out/run_tests.log
+    sh src/flutter/testing/run_tests.sh $outName
+    rm src/out/run_tests.log
   '';
 
   installPhase = ''
