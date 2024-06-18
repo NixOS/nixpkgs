@@ -9,8 +9,6 @@
 
 mkDerivation {
   path = "lib/libcurses";
-  version = "9.2";
-  sha256 = "0pd0dggl3w4bv5i5h0s1wrc8hr66n4hkv3zlklarwfdhc692fqal";
   buildInputs = [ libterminfo ];
   env.NIX_CFLAGS_COMPILE = toString (
     [
