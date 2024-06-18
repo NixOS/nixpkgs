@@ -13,6 +13,7 @@
 , makeWrapper
 , libGL
 , glib
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -49,12 +50,14 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ SDL2 libGL ]}
   '';
 
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/monado/demos/xrgears";
     description = "OpenXR example using Vulkan for rendering";
     mainProgram = "xrgears";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = with maintainers; [ expipiplus1 Scrumplex ];
   };
 }
