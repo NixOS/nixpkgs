@@ -1,14 +1,5 @@
 addCMakeParams() {
-    addToSearchPath CMAKE_INCLUDE_PATH "$1/include"
-    addToSearchPath CMAKE_LIBRARY_PATH "$1/lib"
-    # have not hit but CMAKE_PREFIX_PATH $1 would search here
-    addToSearchPath CMAKE_PREFIX_PATH "$1/lib"
-    # many things openexr_3, zig, castxml
-    addToSearchPath CMAKE_PREFIX_PATH "$1/lib/cmake"
-    # vulkan-headers / vulkan-loader
-    addToSearchPath CMAKE_PREFIX_PATH "$1/share"
-    # kdePackages.attica / extra-cmake-modules
-    addToSearchPath CMAKE_PREFIX_PATH "$1/share/cmake"
+    addToSearchPath CMAKE_PREFIX_PATH $1
 }
 
 fixCmakeFiles() {
@@ -132,7 +123,7 @@ cmakeConfigurePhase() {
 
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
-    cmake "$cmakeDir" $cmakeFlags "${cmakeFlagsArray[@]}"
+    NIX_CMAKE_DISABLE_PREFIX_BIN= cmake "$cmakeDir" $cmakeFlags "${cmakeFlagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1

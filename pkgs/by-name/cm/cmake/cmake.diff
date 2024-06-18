@@ -1,0 +1,14 @@
+diff --git a/Source/cmSearchPath.cxx b/Source/cmSearchPath.cxx
+index 2b992ef2..f9be01d7 100644
+--- a/Source/cmSearchPath.cxx
++++ b/Source/cmSearchPath.cxx
+@@ -165,6 +165,9 @@ void cmSearchPath::AddPrefixPaths(const std::vector<std::string>& paths,
+     subdir = "lib";
+   } else if (this->FC->CMakePathName == "FRAMEWORK") {
+     subdir.clear(); // ? what to do for frameworks ?
++  } else if (cmSystemTools::GetEnvVar("NIX_CMAKE_DISABLE_PREFIX_BIN") != std::nullopt) {
++      // don't look at the bin component of CMAKE_PREFIX_PATH
++      return;
+   }
+ 
+   for (std::string const& path : paths) {
