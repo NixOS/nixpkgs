@@ -47,8 +47,10 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "bellows"
+    "pyserial-asyncio-fast"
     "universal-silabs-flasher"
     "zha-quirks"
+    "zigpy"
   ];
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
