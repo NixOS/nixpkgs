@@ -26,6 +26,75 @@ let
   knownHostsFiles = [ "/etc/ssh/ssh_known_hosts" ]
     ++ builtins.map pkgs.copyPathToStore cfg.knownHostsFiles;
 
+
+  settingsNameValueType = with lib.types; submodule {
+    freeformType = lazyAttrsOf (nullOr (oneOf [ singleLineStr int bool (listOf singleLineStr) ]));
+
+    options = {
+      priority = lib.mkOption {
+        description = ''
+          Order of this Host/Match block in relation to the others in the same type.
+          The semantics are the same as with `lib.mkOrder`. Smaller values have
+          a greater priority.
+        '';
+        type = lib.types.int;
+        default = 1000;
+      };
+    };
+  };
+
+  commaSeparatedSettings = [
+    "CASignatureAlgorithms"
+    "Ciphers"
+    "HostKeyAlgorithms"
+    "HostbasedAcceptedAlgorithms"
+    "KexAlgorithms"
+    "MACs"
+    "PreferredAuthentications"
+    "ProxyJump"
+    "PubkeyAcceptedKeyTypes"
+  ];
+  spaceSeparatedSettings = [
+    "DynamicForward"
+    "GlobalKnownHostsFile"
+    "IPQoS"
+    "LocalForward"
+    "RemoteForward"
+    "UserKnownHostsFile"
+    "CanonicalDomains"
+    "CanonicalizePermittedCNAMEs"
+    "SendEnv"
+    "SetEnv"
+    "IdentityFile"
+    "Include"
+    "LogVerbose"
+    "PermitRemoteOpen"
+    "RevokedHostKeys"
+  ];
+
+  # Renders a single value for openssh `ssh_config` with key and value and indented by 2 spaces.
+  renderSingleValue = settingName: settingValue: "  ${settingName} " +
+    (if lib.isInt settingValue then toString settingValue
+    else if lib.isString settingValue then settingValue
+    else if lib.isBool settingValue && settingValue then "yes"
+    else if lib.isBool settingValue && !settingValue then "no"
+    else if lib.isList settingValue && builtins.elem settingName commaSeparatedSettings then builtins.concatStringsSep "," settingValue
+    else if lib.isList settingValue && builtins.elem settingName spaceSeparatedSettings then builtins.concatStringsSep " " settingValue
+    else if lib.isList settingValue then throw "list value for unknown key ${settingName}: ${(lib.generators.toPretty {}) settingValue}"
+    else throw "unsupported value for key `${settingName}`: ${(lib.generators.toPretty {}) settingValue}")
+  ;
+
+  # Renders a single block for `ssh_config`
+  buildSettingsBlock = blockType: blockName: blockSettings: "${blockType} ${blockName}\n" +
+    lib.concatStringsSep "\n"
+      (lib.mapAttrsToList renderSingleValue (lib.filterAttrs (n: v: n != "_module" && v != null) blockSettings));
+  orderableBlocks = blockName: blockSettings: {
+    inherit blockName;
+    inherit (blockSettings) priority;
+    blockSettings = builtins.removeAttrs blockSettings [ "priority" ];
+  };
+  renderSettingsBlocks = blockType: settingsBlock: lib.concatStringsSep "\n\n" (map (block: buildSettingsBlock blockType block.blockName block.blockSettings) (lib.sortProperties (lib.mapAttrsToList orderableBlocks settingsBlock)));
+
 in
 {
   ###### interface
@@ -87,6 +156,29 @@ in
         description = ''
           Specifies the host key algorithms that the client wants to use in order of preference.
         '';
+      };
+
+      hostSettings = lib.mkOption {
+        type = lib.types.attrsOf settingsNameValueType;
+        description = "Restricts declarations to be only for those hosts that match one of the patterns given.";
+        example = {
+          "myhost.com" = {
+            User = "root";
+            Port = 23;
+          };
+        };
+        default = {};
+      };
+
+      matchSettings = lib.mkOption {
+        type = lib.types.attrsOf settingsNameValueType;
+        description = "Restricts declarations to be used only when the conditions are satisifed.";
+        example = {
+          "User root" = {
+            PasswordAuthentication = false;
+          };
+        };
+        default = {};
       };
 
       extraConfig = lib.mkOption {
@@ -290,6 +382,12 @@ in
       ''
         # Custom options from `extraConfig`, to override generated options
         ${cfg.extraConfig}
+
+        # Generated from the host settings of the OpenSSH module
+        ${renderSettingsBlocks "Host" cfg.hostSettings}
+
+        # Generated from the match settings of the OpenSSH module
+        ${renderSettingsBlocks "Match" cfg.matchSettings}
 
         # Generated options from other settings
         Host *
