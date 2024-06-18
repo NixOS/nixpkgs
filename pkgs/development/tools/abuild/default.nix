@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xVxgcBchGfeVo1cgP9iVsWjZ6SHVN6R8zWaE1k3DcXQ=";
   };
 
+  strictDeps = true;
+
   buildInputs = [
     openssl
     zlib
