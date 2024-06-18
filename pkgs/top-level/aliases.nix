@@ -138,6 +138,7 @@ mapAliases ({
   auditBlasHook = throw "'auditBlasHook' has been removed since it never worked"; # Added 2024-04-02
   authy = throw "'authy' has been removed since it reached end of life"; # Added 2024-04-19
   avldrums-lv2 = x42-avldrums; # Added 2020-03-29
+  avrlibcCross = avrlibc; # Added 2024-09-06
   awesome-4-0 = awesome; # Added 2022-05-05
   aws-env = throw "aws-env has been removed as the upstream project was unmaintained"; # Added 2024-06-11
   aws-google-auth = throw "aws-google-auth has been removed as the upstream project was unmaintained"; # Added 2024-07-31
@@ -251,6 +252,7 @@ mapAliases ({
   cosmic-tasks = tasks; # Added 2024-07-04
   cpp-ipfs-api = cpp-ipfs-http-client; # Project has been renamed. Added 2022-05-15
   crispyDoom = crispy-doom; # Added 2023-05-01
+  crossLibcStdenv = stdenvNoLibc; # Added 2024-09-06
   cryptowatch-desktop = throw "Cryptowatch Desktop was sunset on September 30th 2023 and has been removed from nixpkgs"; # Added 2023-12-22
   clash = throw "'clash' has been removed, upstream gone. Consider using 'mihomo' instead."; # added 2023-11-10
   clasp = clingo; # added 2022-12-22
@@ -979,6 +981,7 @@ mapAliases ({
   mpd_clientlib = libmpdclient; # Added 2021-02-11
   mpdevil = plattenalbum; # Added 2024-05-22
   mpg321 = throw "'mpg321' has been removed due to it being unmaintained by upstream. Consider using mpg123 instead."; # Added 2024-05-10
+  msp430NewlibCross = msp430Newlib; # Added 2024-09-06
   mumble_git = throw "'mumble_git' has been renamed to/replaced by 'pkgs.mumble'"; # Converted to throw 2023-09-10
   murmur_git = throw "'murmur_git' has been renamed to/replaced by 'pkgs.murmur'"; # Converted to throw 2023-09-10
   mutt-with-sidebar = mutt; # Added 2022-09-17
@@ -1010,6 +1013,8 @@ mapAliases ({
   nagiosPluginsOfficial = monitoring-plugins;
   neochat = libsForQt5.kdeGear.neochat; # added 2022-05-10
   neoload = throw "'neoload' has been removed as it is broken and unmaintained"; # Added 2024-03-02
+  newlibCross = newlib; # Added 2024-09-06
+  newlib-nanoCross = newlib-nano; # Added 2024-09-06
   nitrokey-udev-rules = libnitrokey; # Added 2023-03-25
   nix-direnv-flakes = nix-direnv;
   nix-repl = throw (
@@ -1487,6 +1492,8 @@ mapAliases ({
   uberwriter = apostrophe; # Added 2020-04-23
   ubootBeagleboneBlack = ubootAmx335xEVM; # Added 2020-01-21
   ubuntu_font_family = ubuntu-classic; # Added 2024-02-19
+  uclibc = uclibc-ng; # Added 2022-06-16
+  uclibcCross = uclibc-ng; # Added 2022-06-16
   ue4 = throw "ue4 has been removed, because the package was broken for years"; # Added 2023-11-22
   uefi-firmware-parser = throw "The uefi-firmware-parser package was dropped since it was unmaintained."; # Added 2024-06-21
   uhd3_5 = throw "uhd3_5 has been removed, because it was no longer needed"; # Added 2023-10-07
@@ -1636,9 +1643,9 @@ mapAliases ({
   inherit (stdenv.hostPlatform) system; # Added 2021-10-22
   inherit (stdenv) buildPlatform hostPlatform targetPlatform; # Added 2023-01-09
 
-  freebsdCross = freebsd; # Added 2024-06-18
-  netbsdCross = netbsd; # Added 2024-06-18
-  openbsdCross = openbsd; # Added 2024-06-18
+  freebsdCross = freebsd; # Added 2024-09-06
+  netbsdCross = netbsd; # Added 2024-09-06
+  openbsdCross = openbsd; # Added 2024-09-06
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
   llvmPackages_latest = llvmPackages_18;
