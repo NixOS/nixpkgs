@@ -57,36 +57,6 @@ buildPythonPackage rec {
       ./0001-ptxas-disable-version-key-for-non-cuda-targets.patch
     ];
 
-  nativeBuildInputs = [
-    setuptools
-    pythonRelaxDepsHook
-    # pytestCheckHook # Requires torch (circular dependency) and probably needs GPUs:
-    cmake
-    ninja
-
-    # Note for future:
-    # These *probably* should go in depsTargetTarget
-    # ...but we cannot test cross right now anyway
-    # because we only support cudaPackages on x86_64-linux atm
-    lit
-    llvm
-  ];
-
-  buildInputs = [
-    gtest
-    libxml2.dev
-    ncurses
-    pybind11
-    zlib
-  ];
-
-  propagatedBuildInputs = [
-    filelock
-    # openai-triton uses setuptools at runtime:
-    # https://github.com/NixOS/nixpkgs/pull/286763/#discussion_r1480392652
-    setuptools
-  ];
-
   postPatch =
     let
       # Bash was getting weird without linting,
@@ -122,6 +92,37 @@ buildPythonPackage rec {
       substituteInPlace python/triton/common/build.py \
         --replace '${oldStr}' '${newStr}'
     '';
+
+  nativeBuildInputs = [
+    setuptools
+    pythonRelaxDepsHook
+    # pytestCheckHook # Requires torch (circular dependency) and probably needs GPUs:
+    cmake
+    ninja
+
+    # Note for future:
+    # These *probably* should go in depsTargetTarget
+    # ...but we cannot test cross right now anyway
+    # because we only support cudaPackages on x86_64-linux atm
+    lit
+    llvm
+  ];
+
+  buildInputs = [
+    gtest
+    libxml2.dev
+    ncurses
+    pybind11
+    zlib
+  ];
+
+  propagatedBuildInputs = [
+    filelock
+    # openai-triton uses setuptools at runtime:
+    # https://github.com/NixOS/nixpkgs/pull/286763/#discussion_r1480392652
+    setuptools
+  ];
+
 
   # Avoid GLIBCXX mismatch with other cuda-enabled python packages
   preConfigure =
