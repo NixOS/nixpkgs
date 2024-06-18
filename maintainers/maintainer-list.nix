@@ -6781,12 +6781,6 @@
     githubId = 2129135;
     name = "Frederik Rietdijk";
   };
-  friedelino = {
-    email = "friede.mann@posteo.de";
-    github = "friedelino";
-    githubId = 46672819;
-    name = "Frido Friedemann";
-  };
   friedow = {
     email = "christian@friedow.com";
     github = "friedow";
