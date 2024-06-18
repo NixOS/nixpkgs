@@ -665,6 +665,14 @@ in
         description = "Primary IP address used in /etc/hosts.";
       };
 
+    networking.primaryIPv6Address =
+      mkOption {
+        type = types.str;
+        default = "";
+        internal = true;
+        description = "Primary IPv6 address used in /etc/hosts.";
+      };
+
     virtualisation.host.pkgs = mkOption {
       type = options.nixpkgs.pkgs.type;
       default = pkgs;
