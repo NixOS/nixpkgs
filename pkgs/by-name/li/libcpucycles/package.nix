@@ -32,8 +32,7 @@ stdenv.mkDerivation (prev: {
     ]
   );
 
-  # TODO: Fix this patch for cross comp. later
-  # patches = [ ./cross.patch ];
+  patches = [ ./environment-variable-tools.patch ];
 
   nativeBuildInputs = [ python3 ];
 
