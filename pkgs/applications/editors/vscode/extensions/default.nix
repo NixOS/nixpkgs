@@ -1715,6 +1715,23 @@ let
         };
       };
 
+      fabiospampinato.vscode-open-in-github = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-open-in-github";
+          publisher = "fabiospampinato";
+          version = "2.3.0";
+          hash = "sha256-vrW6uZyeEJipGtfz7BEeeAwiwtBlfQLjC7jAP1v5GoE=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/fabiospampinato.vscode-open-in-github/changelog";
+          description = "VS Code extension to open the current project or file in github.com";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-open-in-github";
+          homepage = "https://github.com/fabiospampinato/vscode-open-in-github";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
       file-icons.file-icons = buildVscodeMarketplaceExtension {
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/file-icons.file-icons/changelog";
