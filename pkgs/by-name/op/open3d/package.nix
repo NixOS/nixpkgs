@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   assimp,
+  uvatlas,
   blas,
   boringssl,
   cmake,
@@ -118,6 +119,10 @@ stdenv.mkDerivation rec {
         "/usr/bin/matc" \
         "${lib.getExe' filament "matc"}"
 
+    substituteInPlace cpp/open3d/t/io/file_format/FilePCD.cpp cpp/open3d/io/file_format/FilePCD.cpp \
+      --replace-fail \
+        '<liblzf/lzf.h>' \
+        '<lzf.h>'
     sed -i "1r $extraFindPackagesPath" 3rdparty/find_dependencies.cmake
 
     rm -rf build/filament
@@ -138,6 +143,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [
     # Remove noise
     "-Wno-int-to-pointer-cast"
+
+    # Whatever is wrogn with their buld system
+    "-I${lib.getDev liblzf}/include"
+    "-I${lib.getDev embree}/include"
   ];
 
   cmakeBuildDir = "builddir"; # build/ is checked in git
@@ -154,6 +163,7 @@ stdenv.mkDerivation rec {
       assimp
       blas
       boringssl
+      uvatlas
       curl
       draco.tinygltf
       eigen
