@@ -611,10 +611,10 @@
         "src": {
             "owner": "libretro",
             "repo": "parallel-n64",
-            "rev": "1b57f9199b1f8a4510f7f89f14afa9cabf9b3bdd",
-            "hash": "sha256-L20RGav0FJfydOICCNhAMGxIuIvPABDtCs5tWzrh768="
+            "rev": "330fa5efd306ad116c44faf6833a8108ed4144b0",
+            "hash": "sha256-pltPoWfXFh9OhWnQ+XMhHVZCo6BCGr6jCDhiL5T7LNM="
         },
-        "version": "unstable-2024-01-15"
+        "version": "unstable-2024-06-10"
     },
     "pcsx2": {
         "fetcher": "fetchFromGitHub",
