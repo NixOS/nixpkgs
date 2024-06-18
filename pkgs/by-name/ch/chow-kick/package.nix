@@ -35,14 +35,14 @@
 , webkitgtk
 }:
 
-stdenv.mkDerivation rec {
-  pname = "ChowKick";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "chow-kick";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Chowdhury-DSP";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ChowKick";
+    rev = "v${finalAttrs.version}";
     sha256 = "0amnp0p7ckbbr9dcbdnld1ryv46kvza2dj8m6hzmi7c1s4df8x5q";
     fetchSubmodules = true;
   };
@@ -91,9 +91,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/lib/lv2 $out/lib/vst3 $out/bin
-    cp -r ChowKick_artefacts/Release/LV2//${pname}.lv2 $out/lib/lv2
-    cp -r ChowKick_artefacts/Release/VST3/${pname}.vst3 $out/lib/vst3
-    cp ChowKick_artefacts/Release/Standalone/${pname}  $out/bin
+    cp -r ChowKick_artefacts/Release/LV2/ChowKick.lv2 $out/lib/lv2
+    cp -r ChowKick_artefacts/Release/VST3/ChowKick.vst3 $out/lib/vst3
+    cp ChowKick_artefacts/Release/Standalone/ChowKick  $out/bin
   '';
 
   meta = with lib; {
@@ -104,4 +104,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "ChowKick";
   };
-}
+})

@@ -29953,14 +29953,6 @@ with pkgs;
 
   cgif = callPackage ../tools/graphics/cgif { };
 
-  ChowCentaur  = callPackage ../applications/audio/ChowCentaur { };
-
-  ChowKick  = callPackage ../applications/audio/ChowKick { };
-
-  ChowPhaser  = callPackage ../applications/audio/ChowPhaser { };
-
-  CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
-
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
   chuck = callPackage ../applications/audio/chuck {

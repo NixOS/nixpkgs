@@ -39,14 +39,14 @@ let
   # See here: https://forum.juce.com/t/build-fails-on-fedora-wrong-c-version/50902/2
   stdenv = gcc11Stdenv;
 in
-stdenv.mkDerivation rec {
-  pname = "CHOWTapeModel";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "chow-tape-model";
   version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "jatinchowdhury18";
     repo = "AnalogTapeModel";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WriHi68Y6hAsrwE+74JtVlAKUR9lfTczj6UK9h2FOGM=";
     fetchSubmodules = true;
   };
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/lib/lv2 $out/lib/vst3 $out/lib/clap $out/bin $out/share/doc/CHOWTapeModel/
-    cd CHOWTapeModel_artefacts/${cmakeBuildType}
+    cd CHOWTapeModel_artefacts/${finalAttrs.cmakeBuildType}
     cp -r LV2/CHOWTapeModel.lv2 $out/lib/lv2
     cp -r VST3/CHOWTapeModel.vst3 $out/lib/vst3
     cp -r CLAP/CHOWTapeModel.clap $out/lib/clap
@@ -129,4 +129,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.isAarch64; # since 2021-12-27 on hydra (update to 2.10): https://hydra.nixos.org/build/162558991
     mainProgram = "CHOWTapeModel";
   };
-}
+})
