@@ -18,8 +18,6 @@ Each supported language or software ecosystem has its own package set named `<la
 
   ```shell-session
   $ nix repl '<nixpkgs>' -I nixpkgs=channel:nixpkgs-unstable
-  nix-repl> javaP<tab>
-  nix-repl> javaPackages
   nix-repl> javaPackages.<tab>
   javaPackages.compiler               javaPackages.openjfx15              javaPackages.openjfx21              javaPackages.recurseForDerivations
   javaPackages.jogl_2_4_0             javaPackages.openjfx17              javaPackages.openjfx22
