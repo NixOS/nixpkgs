@@ -2930,6 +2930,23 @@ let
         };
       };
 
+      mesonbuild.mesonbuild = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "mesonbuild";
+          name = "mesonbuild";
+          version = "1.24.0";
+          hash = "sha256-n7c2CUiTIej2Y/QMGWpv6anuCDjqpo2W+hJylfvvMVE=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/mesonbuild.mesonbuild/changelog";
+          description = "Meson language support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mesonbuild.mesonbuild";
+          homepage = "https://github.com/mesonbuild/vscode-meson";
+          maintainers = with lib.maintainers; [ Anillc ];
+          license = lib.licenses.asl20;
+        };
+      };
+
       mgt19937.typst-preview = callPackage ./mgt19937.typst-preview { };
 
       mhutchie.git-graph = buildVscodeMarketplaceExtension {
