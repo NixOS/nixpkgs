@@ -11,7 +11,6 @@
   netbsdSetupHook,
   makeMinimal,
   rsync,
-  _mainLibcExtraPaths,
   version,
 }:
 
@@ -134,6 +133,6 @@ mkDerivation (
       "external/bsd/flex"
       "sys"
       "common/include/rpc/types.h"
-    ] ++ _mainLibcExtraPaths;
+    ];
   }
 )

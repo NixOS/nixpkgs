@@ -138,19 +138,6 @@ makeScopeWithSplicing' {
         inherit (buildPackages.buildPackages) rsync;
       };
 
-      _mainLibcExtraPaths = [
-        "common"
-        "lib/i18n_module"
-        "lib/libcrypt"
-        "lib/libm"
-        "lib/libpthread"
-        "lib/libresolv"
-        "lib/librpcsvc"
-        "lib/librt"
-        "lib/libutil"
-        "libexec/ld.elf_so"
-        "sys"
-      ];
 
       libc = self.callPackage ./pkgs/libc.nix {
         inherit (self) headers csu librt;
