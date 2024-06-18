@@ -8347,8 +8347,6 @@ with pkgs;
 
   gnome-extension-manager = callPackage ../applications/misc/gnome-extension-manager { };
 
-  gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds { };
-
   gnome-frog = callPackage ../applications/misc/gnome-frog { };
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
