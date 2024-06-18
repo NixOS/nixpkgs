@@ -56,13 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # don't append bin to search path when env var NIXPKGS_CMAKE_DISABLE_BIN_PREFIX is set
+    ./000-nixpkgs-disable-bin-prefix.diff
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     ./001-search-path.diff
     # Don't depend on frameworks.
     ./002-application-services.diff
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
     ./003-libuv-application-services.diff
-    ./cmake.diff
   ]
   ++ lib.optional stdenv.isCygwin ./004-cygwin.diff
   # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
