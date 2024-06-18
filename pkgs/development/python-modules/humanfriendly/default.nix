@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchPypi,
   fetchpatch2,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "humanfriendly";
   version = "10.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,6 +23,8 @@ buildPythonPackage rec {
       hash = "sha256-m7cySiIx0gNhh6KKhT71DJFOtFu2Copk9ic2yaiCulk=";
     })
   ];
+
+  build-system = [ setuptools ];
 
   # humanfriendly tests depends on coloredlogs which itself depends on
   # humanfriendly. This lead to infinite recursion when trying to
