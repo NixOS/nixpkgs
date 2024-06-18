@@ -655,6 +655,23 @@ let
         };
       };
 
+      bierner.markdown-preview-github-styles = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-preview-github-styles";
+          publisher = "bierner";
+          version = "2.0.4";
+          hash = "sha256-jJulxvjMNsqQqmsb5szQIAUuLWuHw824Caa0KArjUVw=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/bierner.markdown-preview-github-styles/changelog";
+          description = "Changes VS Code's built-in markdown preview to match GitHub's styling";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.markdown-preview-github-styles";
+          homepage = "https://github.com/mjbvz/vscode-github-markdown-preview-style";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
       biomejs.biome = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "biome";
