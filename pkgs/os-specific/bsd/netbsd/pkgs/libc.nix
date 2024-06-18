@@ -2,7 +2,6 @@
   lib,
   mkDerivation,
   defaultMakeFlags,
-  _mainLibcExtraPaths,
   bsdSetupHook,
   netbsdSetupHook,
   makeMinimal,
@@ -28,7 +27,20 @@ mkDerivation {
   path = "lib/libc";
   USE_FORT = "yes";
   MKPROFILE = "no";
-  extraPaths = _mainLibcExtraPaths ++ [ "external/bsd/jemalloc" ];
+  extraPaths = [
+    "common"
+    "lib/i18n_module"
+    "lib/libcrypt"
+    "lib/libm"
+    "lib/libpthread"
+    "lib/libresolv"
+    "lib/librpcsvc"
+    "lib/librt"
+    "lib/libutil"
+    "libexec/ld.elf_so"
+    "sys"
+    "external/bsd/jemalloc"
+  ];
   nativeBuildInputs = [
     bsdSetupHook
     netbsdSetupHook
