@@ -2,7 +2,6 @@
   stdenv,
   lib,
   python3,
-  openssl,
   fetchzip,
   librandombytes,
   libcpucycles,
