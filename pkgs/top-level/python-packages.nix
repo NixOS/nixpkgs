@@ -12269,6 +12269,8 @@ self: super: with self; {
 
   pytest-lazy-fixture = callPackage ../development/python-modules/pytest-lazy-fixture { };
 
+  pytest-lazy-fixtures = callPackage ../development/python-modules/pytest-lazy-fixtures { };
+
   pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
 
   pytest-logdog = callPackage ../development/python-modules/pytest-logdog { };
