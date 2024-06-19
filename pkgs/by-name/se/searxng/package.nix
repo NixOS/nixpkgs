@@ -7,22 +7,17 @@
 python3.pkgs.toPythonModule (
   python3.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2024-05-31";
+    version = "0-unstable-2024-06-19";
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "18fb701be225560b3fb1011cc533f785823f26a4";
-      hash = "sha256-okE/Uxl7YqcM99kLJ4KAlMQi50x5m0bPfYp5bv62WEw=";
+      rev = "acf3f109b2a99a5e6f25f5f2975016a36673c6ef";
+      hash = "sha256-NdFnB5JEaWo7gt+RwxKxkVtEL8uGLlc4z0ROHN+zoL4=";
     };
 
     postPatch = ''
       sed -i 's/==.*$//' requirements.txt
-
-      # can't be fetchpatched as it is essentially empty and it complains about that
-      # TODO: drop when updating to a version that includes https://github.com/searxng/searxng/pull/3563
-      touch searx/answerers/random/__init__.py
-      touch searx/answerers/statistics/__init__.py
     '';
 
     preBuild =
@@ -44,7 +39,7 @@ python3.pkgs.toPythonModule (
         EOF
       '';
 
-    propagatedBuildInputs =
+    dependencies =
       with python3.pkgs;
       [
         babel
