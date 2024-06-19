@@ -24,6 +24,11 @@ self: super:
     aeson = self.aeson_1_5_6_0;
   });
 
+  # Some Hackage packages reference this attribute, which exists only in the
+  # GHCJS package set. We provide a dummy version here to fix potential
+  # evaluation errors.
+  ghcjs-prim = null;
+
   # GHCJS does not ship with the same core packages as GHC.
   # https://github.com/ghcjs/ghcjs/issues/676
   stm = doJailbreak self.stm_2_5_3_1;
