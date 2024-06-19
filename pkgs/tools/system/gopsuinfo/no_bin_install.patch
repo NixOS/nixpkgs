@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index d33866c..e0aafb4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -8,7 +8,6 @@ install:
+ 	mkdir -p "${DESTDIR}/usr/share/gopsuinfo" "${DESTDIR}/usr/bin"
+ 	cp -R icons_light "${DESTDIR}/usr/share/gopsuinfo"
+ 	cp -R icons_dark "${DESTDIR}/usr/share/gopsuinfo"
+-	cp bin/gopsuinfo "${DESTDIR}/usr/bin/"
+ 
+ uninstall:
+ 	rm -r "${DESTDIR}/usr/share/gopsuinfo"

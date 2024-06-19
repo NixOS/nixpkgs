@@ -1,0 +1,68 @@
+diff --git a/kcms/krdb/krdb.cpp b/kcms/krdb/krdb.cpp
+index 46363ddcb..d787f9993 100644
+--- a/kcms/krdb/krdb.cpp
++++ b/kcms/krdb/krdb.cpp
+@@ -468,7 +468,7 @@ void runRdb(unsigned int flags)
+     proc.execute();
+ 
+     // Needed for applications that don't set their own cursor.
+-    QProcess::execute(QStringLiteral("xsetroot"), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
++    QProcess::execute(QStringLiteral("@xsetroot@"), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
+ 
+     applyGtkStyles(1);
+     applyGtkStyles(2);
+diff --git a/startkde/startplasma.cpp b/startkde/startplasma.cpp
+index b0158c97d..c8f7fe223 100644
+--- a/startkde/startplasma.cpp
++++ b/startkde/startplasma.cpp
+@@ -50,7 +50,7 @@ void sigtermHandler(int signalNumber)
+ void messageBox(const QString &text)
+ {
+     out << text;
+-    runSync(QStringLiteral("xmessage"), {QStringLiteral("-geometry"), QStringLiteral("500x100"), text});
++    runSync(QStringLiteral("@xmessage@"), {QStringLiteral("-geometry"), QStringLiteral("500x100"), text});
+ }
+ 
+ QStringList allServices(const QLatin1String &prefix)
+@@ -484,7 +484,7 @@ QProcess *setupKSplash()
+         if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QLatin1String("KSplashQML")) {
+             p = new QProcess;
+             p->setProcessChannelMode(QProcess::ForwardedChannels);
+-            p->start(QStringLiteral("ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
++            p->start(QStringLiteral(CMAKE_INSTALL_FULL_BINDIR "/ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
+         }
+     }
+     return p;
+diff --git a/ksmserver/plasma-restoresession.service.in b/ksmserver/plasma-restoresession.service.in
+index 2c52a4b87..fd7fdc8ac 100644
+--- a/ksmserver/plasma-restoresession.service.in
++++ b/ksmserver/plasma-restoresession.service.in
+@@ -5,5 +5,5 @@ RefuseManualStart=yes
+
+ [Service]
+ Type=oneshot
+-ExecStart=-@QtBinariesDir@/qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.restoreSession
++ExecStart=-@qdbus@ org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.restoreSession
+ Slice=session.slice
+diff --git a/startkde/kcminit/plasma-kcminit-phase1.service.in b/startkde/kcminit/plasma-kcminit-phase1.service.in
+index 7218628ce..9126475ea 100644
+--- a/startkde/kcminit/plasma-kcminit-phase1.service.in
++++ b/startkde/kcminit/plasma-kcminit-phase1.service.in
+@@ -6,5 +6,5 @@ PartOf=graphical-session.target
+
+ [Service]
+ Type=oneshot
+-ExecStart=@QtBinariesDir@/qdbus org.kde.kcminit /kcminit org.kde.KCMInit.runPhase1
++ExecStart=@qdbus@ org.kde.kcminit /kcminit org.kde.KCMInit.runPhase1
+ Slice=session.slice
+diff --git a/startkde/systemd/plasma-ksplash-ready.service.in b/startkde/systemd/plasma-ksplash-ready.service.in
+index 3f6744f37..c51266794 100644
+--- a/startkde/systemd/plasma-ksplash-ready.service.in
++++ b/startkde/systemd/plasma-ksplash-ready.service.in
+@@ -6,5 +6,5 @@ PartOf=graphical-session.target
+
+ [Service]
+ Type=oneshot
+-ExecStart=-@QtBinariesDir@/qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage ready
++ExecStart=-@qdbus@ org.kde.KSplash /KSplash org.kde.KSplash.setStage ready
+ Slice=session.slice

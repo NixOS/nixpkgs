@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<gprconfig>
+  <!-- This differs from the default GNAT compiler description
+       in the following ways:
+
+       * gnatmake is used over gnatls to detect the GNAT version
+         since the latter is not part of the wrapper.
+       * to find the runtime libraries, we rely on the symlink
+         ../nix-support/gprconfig-gnat-unwrapped which is a
+         gprconfig-specific addition to the cc-wrapper we employ
+         for Ada compilers (which is only GNAT at the moment).
+
+       For documentation on this file format and its use refer to
+       https://docs.adacore.com/gprbuild-docs/html/gprbuild_ug/companion_tools.html#the-gprconfig-knowledge-base
+  -->
+  <compiler_description>
+    <!-- We would like to name this something different, so users
+         of gprconfig know this is something custom, nixpkgs-related,
+         but unfortunately the knowledge base depends on the name of
+         the compiler for e. g. linker settings.
+    -->
+    <name>GNAT</name>
+    <executable prefix="1">(.*-.*-.*)?gnatmake</executable>
+    <version>
+      <external>${PREFIX}gnatmake -v</external>
+      <grep regexp="^GNATMAKE.+?(\d+(\.\d+)?)" group="1"></grep>
+    </version>
+    <languages>Ada</languages>
+    <variable name="gcc_version">
+      <external>${PREFIX}gcc -v</external>
+      <grep regexp="^[-\w]*gcc \S+ (\S+)" group="1"></grep>
+    </variable>
+    <!-- The ada runtime libraries and objects are only part of the unwrapped
+         GNAT derivation. We can't symlink them into the wrapper derivation
+         (at least not the canonical location) since that screws with linking
+         against libraries distributed with gcc.
+
+         As a workaround, we create a symlink to the unwrapped GNAT's "out"
+         output in the cc-wrapper which we can read into a variable here and
+         use to find GNAT's Ada runtime.
+    -->
+    <variable name="gnat_unwrapped">
+      <external>readlink -n ${PATH}/../nix-support/gprconfig-gnat-unwrapped</external>
+    </variable>
+    <runtimes default="default,kernel,native">
+       <directory group="default" >$gnat_unwrapped/lib/gcc(-lib)?/$TARGET/$gcc_version/adalib/</directory>
+       <directory group="default" contents="^rts-">$gnat_unwrapped/lib/gcc(-lib)?/$TARGET/$gcc_version/ada_object_path</directory>
+       <directory group="2" >$gnat_unwrapped/lib/gcc(-lib)?/$TARGET/$gcc_version/rts-(.*)/adalib/</directory>
+       <directory group="1" >$gnat_unwrapped/$TARGET/lib/gnat/(.*)/adalib/</directory>
+    </runtimes>
+    <target>
+      <external>${PREFIX}gcc -dumpmachine</external>
+      <grep regexp="[^\r\n]+"></grep>
+    </target>
+  </compiler_description>
+</gprconfig>

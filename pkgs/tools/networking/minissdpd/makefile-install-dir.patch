@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+index b14e2fa..4472598 100644
+--- a/Makefile
++++ b/Makefile
+@@ -74,8 +74,8 @@ install:	minissdpd
+ 	$(INSTALL) -d $(DESTDIR)$(MANINSTALLDIR)/man1
+ 	$(INSTALL) minissdpd.1 $(DESTDIR)$(MANINSTALLDIR)/man1/minissdpd.1
+ ifeq (, $(findstring darwin, $(OS)))
+-	$(INSTALL) -d $(DESTDIR)/etc/init.d
+-	$(INSTALL) minissdpd.init.d.script $(DESTDIR)/etc/init.d/minissdpd
++	$(INSTALL) -d $(DESTDIR)$(INSTALLPREFIX)/etc/init.d
++	$(INSTALL) minissdpd.init.d.script $(DESTDIR)$(INSTALLPREFIX)/etc/init.d/minissdpd
+ endif
+ 
+ check:	validateminissdpd validatecodelength

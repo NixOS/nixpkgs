@@ -1,0 +1,10 @@
+--- crack-attack-1.1.14/src/Game.h
++++ crack-attack-1.1.14/src/Game.h
+@@ -34,6 +34,7 @@
+ #include <climits>
+ #include <cstdlib>
+ #include <cmath>
++#include <cstring>
+ 
+ #ifdef __MINGW32__
+ #  include <windows.h>

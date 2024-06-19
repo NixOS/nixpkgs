@@ -1,0 +1,48 @@
+This code injects an LLVM modulemap for glibc and libstdc++ by overriding
+specific VFS paths. In order to do that, it needs to know the actual locations
+of glibc and libstdc++, but it only searches `-sysroot` and fails. Here we
+patch it to also consider `-idirafter` and `-isystem` as added by cc-wrapper.
+
+--- a/lib/ClangImporter/ClangIncludePaths.cpp
++++ b/lib/ClangImporter/ClangIncludePaths.cpp
+@@ -120,6 +120,7 @@ static clang::driver::Driver createClangDriver(const ASTContext &ctx) {
+ /// \return a path without dots (`../`, './').
+ static llvm::Optional<Path>
+ findFirstIncludeDir(const llvm::opt::InputArgList &args,
++                    const llvm::opt::ArgList &DriverArgs,
+                     const ArrayRef<const char *> expectedFileNames) {
+   // C++ stdlib paths are added as `-internal-isystem`.
+   std::vector<std::string> includeDirs =
+@@ -128,6 +129,14 @@ findFirstIncludeDir(const llvm::opt::InputArgList &args,
+   llvm::append_range(includeDirs,
+                      args.getAllArgValues(
+                          clang::driver::options::OPT_internal_externc_isystem));
++  // Nix adds the C stdlib include path using `-idirafter`.
++  llvm::append_range(includeDirs,
++                     DriverArgs.getAllArgValues(
++                         clang::driver::options::OPT_idirafter));
++  // Nix adds the C++ stdlib include path using `-isystem`.
++  llvm::append_range(includeDirs,
++                     DriverArgs.getAllArgValues(
++                         clang::driver::options::OPT_isystem));
+ 
+   for (const auto &includeDir : includeDirs) {
+     Path dir(includeDir);
+@@ -193,7 +202,7 @@ getGlibcFileMapping(ASTContext &ctx) {
+   // Ideally we would check that all of the headers referenced from the
+   // modulemap are present.
+   Path glibcDir;
+-  if (auto dir = findFirstIncludeDir(parsedIncludeArgs,
++  if (auto dir = findFirstIncludeDir(parsedIncludeArgs, clangDriverArgs,
+                                      {"inttypes.h", "unistd.h", "stdint.h"})) {
+     glibcDir = dir.value();
+   } else {
+@@ -251,7 +260,7 @@ getLibStdCxxFileMapping(ASTContext &ctx) {
+   auto parsedStdlibArgs = parseClangDriverArgs(clangDriver, stdlibArgStrings);
+ 
+   Path cxxStdlibDir;
+-  if (auto dir = findFirstIncludeDir(parsedStdlibArgs,
++  if (auto dir = findFirstIncludeDir(parsedStdlibArgs, clangDriverArgs,
+                                      {"cstdlib", "string", "vector"})) {
+     cxxStdlibDir = dir.value();
+   } else {

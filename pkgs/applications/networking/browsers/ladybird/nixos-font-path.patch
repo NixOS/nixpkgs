@@ -1,0 +1,12 @@
+diff --git a/Userland/Libraries/LibCore/StandardPaths.cpp b/Userland/Libraries/LibCore/StandardPaths.cpp
+index 77ddbeb9..76481497 100644
+--- a/Userland/Libraries/LibCore/StandardPaths.cpp
++++ b/Userland/Libraries/LibCore/StandardPaths.cpp
+@@ -205,6 +205,7 @@ ErrorOr<Vector<String>> StandardPaths::font_directories()
+         "/Library/Fonts"_string,
+         TRY(String::formatted("{}/Library/Fonts"sv, home_directory())),
+ #    else
++        "/run/current-system/sw/share/X11/fonts"_string,
+         "/usr/share/fonts"_string,
+         "/usr/local/share/fonts"_string,
+         TRY(String::formatted("{}/.local/share/fonts"sv, home_directory())),

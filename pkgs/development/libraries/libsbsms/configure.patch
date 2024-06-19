@@ -1,0 +1,22 @@
+diff --git a/configure b/configure
+index 3d40335..faa3ac6 100755
+--- a/configure
++++ b/configure
+@@ -14722,7 +14722,7 @@ if ${ax_cv_cxx_flags__msse+:} false; then :
+ else
+ 
+       ax_save_FLAGS=$CXXFLAGS
+-      CXXFLAGS="-msse"
++      CXXFLAGS="@msse@"
+       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -14747,7 +14747,7 @@ eval ax_check_compiler_flags=$ax_cv_cxx_flags__msse
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_check_compiler_flags" >&5
+ $as_echo "$ax_check_compiler_flags" >&6; }
+ if test "x$ax_check_compiler_flags" = xyes; then
+-	SBSMS_CFLAGS="$SBSMS_CFLAGS -msse"
++	SBSMS_CFLAGS="$SBSMS_CFLAGS @msse@"
+ else
+ 	as_fn_error $? "Need a version of gcc with -msse" "$LINENO" 5
+ fi

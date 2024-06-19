@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7065538..1946574 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -19,14 +19,8 @@ set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}")
+ set(VS_STARTUP_PROJECT ${EXECUTABLE_NAME})
+ 
+ # Configure options
+-if (WIN32 OR APPLE)
+-  set(QT_VERSION "6")
+-else ()
+-  set(QT_VERSION "5" CACHE STRING "Qt major version to use (5 or 6).")
+-  if (NOT (QT_VERSION STREQUAL "5" OR QT_VERSION STREQUAL "6"))
+-    message(FATAL_ERROR "Unsupported Qt version '${QT_VERSION}'. Only 5 and 6 are supported")
+-  endif ()
+-endif ()
++set(QT_VERSION "6")
++
+ if (APPLE)
+   option(DMG "Make deployable DMG" OFF)
+ endif ()

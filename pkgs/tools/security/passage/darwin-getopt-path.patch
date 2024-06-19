@@ -1,0 +1,12 @@
+diff --git a/src/platform/darwin.sh b/src/platform/darwin.sh
+index 9a1fda8..4f7ce3d 100644
+--- a/src/platform/darwin.sh
++++ b/src/platform/darwin.sh
+@@ -39,6 +39,6 @@ qrcode() {
+ 	fi
+ }
+ 
+-GETOPT="$({ test -x /usr/local/opt/gnu-getopt/bin/getopt && echo /usr/local/opt/gnu-getopt; } || brew --prefix gnu-getopt 2>/dev/null || { command -v port &>/dev/null && echo /opt/local; } || echo /usr/local)/bin/getopt"
++GETOPT="@getopt@/bin/getopt"
+ SHRED="srm -f -z"
+ BASE64="openssl base64"
