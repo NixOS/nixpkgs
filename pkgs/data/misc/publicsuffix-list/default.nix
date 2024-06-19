@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub, unstableGitUpdater }:
 
 stdenvNoCC.mkDerivation {
   pname = "publicsuffix-list";
@@ -20,6 +20,8 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     homepage = "https://publicsuffix.org/";
