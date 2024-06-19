@@ -18,15 +18,14 @@
 
 buildPythonPackage rec {
   pname = "babel";
-  version = "2.14.0";
+  version = "2.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "Babel";
-    inherit version;
-    hash = "sha256-aRmGfbA2OYuiHrXHoPayirjLw656c6ROvjSudKTn02M=";
+    inherit pname version;
+    hash = "sha256-ja8OJl0FdovGx6MUzxMh6aEjr8MozGNcGGIqLzCgRBM=";
   };
 
   nativeBuildInputs = [ setuptools ];
