@@ -36,7 +36,7 @@ import ./make-test-python.nix ( { pkgs, nftables, ... } : {
     };
 
   testScript = { nodes, ... }: let
-    newSystem = nodes.walled2.config.system.build.toplevel;
+    newSystem = nodes.walled2.system.build.toplevel;
     unit = if nftables then "nftables" else "firewall";
   in ''
     start_all()
@@ -60,7 +60,10 @@ import ./make-test-python.nix ( { pkgs, nftables, ... } : {
     walled.stop_job("${unit}")
     attacker.succeed("curl -v http://walled/ >&2")
 
-    # Check whether activation of a new configuration reloads the firewall.
+    # This sleep seems to mitigate some race condition that prevents the firewall being
+    # reloaded/started as part of the activation of the new config.
+    walled.sleep(1)
+    # Check whether activation of a new configuration reloads the firewall.    
     walled.succeed(
         "${newSystem}/bin/switch-to-configuration test 2>&1 | grep -qF ${unit}.service"
     )
