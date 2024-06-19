@@ -21,16 +21,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gr-framework";
-  version = "0.73.5";
+  version = "0.73.6";
 
   src = fetchFromGitHub {
     owner = "sciapp";
     repo = "gr";
     rev = "v${version}";
-    hash = "sha256-9Py2r774GaUXWhF3yO3ceT1rPi/uqMVZVAo0xs9n+I0=";
+    hash = "sha256-XzOII13XwxkPZhtL4USkmUmJTL7dZImx4yVYJmhcn08=";
   };
 
-  patches = [ ./patches/use-the-module-mode-to-search-for-the-LibXml2-package.patch ];
+  patches = [ ./use-the-module-mode-to-search-for-the-LibXml2-package.patch ];
 
   nativeBuildInputs = [
     cmake
