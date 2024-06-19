@@ -1,7 +1,20 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 with lib;
 let
+  # NB: build the manual with:
+  # $ nix-build nixos/release.nix -A manual.x86_64-linux
+
+  # NB: run the tests with:
+  # $ nix-build -A nixosTests.iroh
+
+  # Docs for writing tests:
+  # https://nixos.org/manual/nixos/stable/index.html#sec-nixos-tests
+
+  # TODO test: configure systemd logs directory:
+  # iroh: Failed to create log directory: Read-only filesystem
+
   # TODO run systemd-analyze security and apply whatever sandboxing doesn't break the service
+  # TODO add tests
 
   # cfg is a conventional alias for the configuration of the current module
   cfg = config.services.iroh;
@@ -10,24 +23,19 @@ let
   listenPort = 11204;
   # Default RPC port.
   rpcPort = 1337;
-  # Default metrics port.
+  # Default metrics port. With a value of -1 serving metrics is disabled.
   metricsPort = -1;
-
-  # TODO replace this by a system-level directory.
-  dataDirectory = "${builtins.getEnv "HOME"}.config/iroh";
 
   # --add <ADD>: optionally add a file or folder to the node
   irohFlags = utils.escapeSystemdExecArgs (
     optional (cfg.metricsPort != -1) "--metrics-port ${cfg.metricsPort}" ++
     optional cfg.noTicket "--no-ticket" ++
     optional (cfg.tag != null) "--tag ${cfg.tag}" ++
-    # optional (cfg.defaultMode == "offline") "--offline" ++
-    # optional (cfg.defaultMode == "norouting") "--routing=none" ++
     cfg.extraFlags
   );
 
   # A submodule that describes a relay node used to assist in NAT traversal.
-  relayNode = lib.types.submodule {
+  relayNode = types.submodule {
     options = {
       # TODO use regex to match URL, including https:// prefix!
       url = mkOption {
@@ -54,7 +62,8 @@ let
   # The config file should be located in the data directory and is NOT created by default. All
   # values are optional, including the file itself.
   configFormat = pkgs.formats.toml { };
-  configFile = configFormat.generate "${dataDirectory}/iroh.config.toml" relaySettings;
+  #configFile = configFormat.generate "${cfg.dataDir}/iroh.config.toml" relaySettings;
+  configFile = configFormat.generate "/var/lib/iroh/iroh.config.toml" relaySettings;
 in
 {
   # A NixOS module is a function that takes an environment and returns an attrset with the imports,
@@ -70,7 +79,7 @@ in
   # the global module list. When using "imports' the arguments to the current module (config, lib,
   # pkgs) will also be passed to the submodules.
   imports = [
-    ./other-module.nix
+    #./other-module.nix
   ];
 
   # Option declarations for our module.
@@ -98,20 +107,20 @@ in
       };
 
       metricsPort = mkOption {
-        description = "Port at which metrics data is served. By default it is not enabled.";
-        type = types.enum [ -1 types.port ];
+        description = "Port at which metrics data is served. By default it is not enabled. Value must be -1 to disable serving metrics, or a valid port number.";
+        type = types.either ( types.ints.between (-1) (-1) ) types.port;
         default = metricsPort;
       };
 
       noTicket = mkOption {
-        description = "Do not print the all-in-one ticket to get the data from this node";
+        description = "Do not print the all-in-one ticket to get the data from this node.";
         type = types.bool;
         default = false;
       };
 
       tag = mkOption {
-        description = "Tag to apply to hosted data.";
-        type = nullOr types.str;
+        description = "An optional tag to apply to hosted data.";
+        type = types.nullOr types.str;
         default = null;
       };
 
@@ -127,18 +136,19 @@ in
         description = "Group under which the Iroh daemon runs.";
       };
 
-      dataDir = mkOption {
-        type = types.path;
-        default = dataDir;
-        example = "$HOME/.config/iroh";
-        description = ''The data directory for iroh.
+      # TODO can we get rid of this when running with a systemd StateDir? Perhaps we only want it as
+      # a place to put our generated config file, when that's necessary?
+      # dataDir = mkOption {
+      #   type = types.path;
+      #   default = "/var/lib/iroh";
+      #   description = ''The data directory for iroh.
 
-          If the IROH_DATA_DIR environment variable is set, all other values will be
-          ignored in favour of IROH_DATA_DIR. If the directory path does not exist, iroh will attempt to
-          create all directories in the path string (similar to mkdir -p on Unix systems), failing if
-          the final path cannot be written to.
-        '';
-      };
+      #     If the IROH_DATA_DIR environment variable is set, all other values will be
+      #     ignored in favour of IROH_DATA_DIR. If the directory path does not exist, iroh will attempt to
+      #     create all directories in the path string (similar to mkdir -p on Unix systems), failing if
+      #     the final path cannot be written to.
+      #   '';
+      # };
 
       extraFlags = mkOption {
         type = types.listOf types.str;
@@ -190,14 +200,8 @@ in
   # stun_only = false
   # stun_port = 3478
 
-  config = mkIf cfg.server.enable {
+  config = mkIf cfg.enable {
     assertions = [
-      {
-        assertion = cfg.port != null;
-        message = ''
-          The listening port must be specified.
-        '';
-      }
       {
         assertion = cfg.rpcPort != null;
         message = ''
@@ -206,22 +210,27 @@ in
       }
     ];
 
-    # Create a user to run the service.
-    users.users = mkIf (cfg.user == "iroh") {
-      iroh = {
-        group = cfg.group;
-        home = cfg.dataDir;
-        createHome = false;
-        uid = config.ids.uids.iroh;
-        description = "Iroh daemon user";
-        packages = [
-        ];
-      };
-    };
+    # TODO If we need to have a static user/group, look here:
+    # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/misc/ids.nix
 
-    users.groups = mkIf (cfg.group == "iroh") {
-      iroh.gid = config.ids.gids.iroh;
-    };
+    # Create a user to run the service.
+    # users.users = mkIf (cfg.user == "iroh") {
+    #   iroh = {
+    #     group = cfg.group;
+    #     home = cfg.dataDir;
+    #     createHome = false;
+    #     uid = config.ids.uids.iroh;
+    #     description = "Iroh daemon user";
+    #     packages = [ ];
+    #   };
+    # };
+
+    # users.groups = mkIf (cfg.group == "iroh") {
+    #   iroh.gid = config.ids.gids.iroh;
+    # };
+
+    # Run iroh with a systemd "dynamic user":
+    # https://0pointer.net/blog/dynamic-users-with-systemd.html
 
     # Define the systemd service.
     systemd.services.iroh = {
@@ -236,21 +245,25 @@ in
       # preStart
       # postStop
 
-
       # NB: we don't start in the background with --start because defining a systemd service.
       serviceConfig = {
         ExecStart = [ "" "${cfg.package}/bin/iroh start ${irohFlags}" ];
-        User = cfg.user;
-        Group = cfg.group;
-        StateDirectory = "";
-        ReadWritePaths = cfg.dataDir;
+
+        #User = cfg.user;
+        #Group = cfg.group;
+
+        DynamicUser = true;
+        StateDirectory = "iroh";
+        #CacheDirectory = "";
+        #LogsDirectory = "";
+        #ReadWritePaths = cfg.dataDir;
+
         # # Make sure the socket units are started before ipfs.service
         # Sockets = [ "ipfs-gateway.socket" "ipfs-api.socket" ];
-      }
+        #Restart = "on-failure";
+        #RestartSec = "5s";
+      };
 
-      # script = ''
-      #   ${pkgs.my-server}/bin/server start --option ${cfg.option1} --port ${port}
-      # '';
     };
 
     #other.opts.go.here = true;
