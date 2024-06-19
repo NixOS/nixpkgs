@@ -1,11 +1,10 @@
-{ lib, stdenv, unbound, openssl, expat, libevent, swig, pythonPackages }:
+{ lib, buildPythonPackage, unbound, openssl, expat, libevent, swig, python, stdenv }:
 
-let
-  inherit (pythonPackages) python;
-in
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "pyunbound";
   inherit (unbound) version src;
+  pyproject = false; # Built with configure script
+
   patches = unbound.patches or null;
 
   nativeBuildInputs = [ swig ];
