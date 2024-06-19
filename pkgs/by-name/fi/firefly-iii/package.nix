@@ -3,6 +3,9 @@
 , buildNpmPackage
 , php83
 , nixosTests
+, writeScript
+, prefetch-npm-deps
+, nix-update
 , dataDir ? "/var/lib/firefly-iii"
 }:
 
@@ -39,8 +42,18 @@ phpPackage.buildComposerProject (finalAttrs: {
   vendorHash = "sha256-mDVmZUCER1eaTXhh8VIbGbPkkpOeE6fTBhq8UnTlWPc=";
 
   passthru = {
-    inherit phpPackage;
+    inherit phpPackage assets;
     tests = nixosTests.firefly-iii;
+    updateScript = writeScript "update-firefly" ''
+        NEW_VERSION=$(curl --silent https://api.github.com/repos/firefly-iii/firefly-iii/releases/latest | jq -r '.tag_name')
+        OLD_HASH="$(nix --extra-experimental-features nix-command eval -f default.nix --raw firefly-iii.assets.npmDepsHash)"
+        FILE="$(mktemp)"
+        curl --silent https://raw.githubusercontent.com/firefly-iii/firefly-iii/$NEW_VERSION/package-lock.json > "$FILE"
+        NEW_HASH=$(${lib.getExe prefetch-npm-deps} "$FILE")
+        rm "$FILE"
+        sed -e "s#$OLD_HASH#$NEW_HASH#" -i pkgs/by-name/fi/firefly-iii/package.nix
+        ${lib.getExe nix-update} firefly-iii --version "$NEW_VERSION"
+      '';
   };
 
   postInstall = ''
@@ -56,6 +69,6 @@ phpPackage.buildComposerProject (finalAttrs: {
     description = "Firefly III: a personal finances manager";
     homepage = "https://github.com/firefly-iii/firefly-iii";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.savyajha ];
+    maintainers = [ lib.maintainers.savyajha lib.maintainers.patrickdag ];
   };
 })
