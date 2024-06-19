@@ -1,14 +1,18 @@
-commit bcb06af629a36eb84f9a35ac599ec7e51e2d39fb
-Author: georgewhewell <georgerw@gmail.com>
-Date:   Sat May 18 21:22:37 2019 +0100
+From 35c712b7ad2b20088a1a4e233f1d22d7f6dc2525 Mon Sep 17 00:00:00 2001
+From: georgewhewell <georgerw@gmail.com>
+Date: Sat, 18 May 2019 21:36:26 +0100
+Subject: [PATCH 09/16] linuxPackages.broadcom_sta: fix build for kernel 5.1+
 
-    find src -type f -name \'*.c\' -exec sed -i "s/get_ds()/KERNEL_DS/g" {} \;
+---
+ src/wl/sys/wl_cfg80211_hybrid.c | 2 +-
+ src/wl/sys/wl_iw.c              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/wl/sys/wl_cfg80211_hybrid.c b/src/wl/sys/wl_cfg80211_hybrid.c
-index 7b606e0..51c81bc 100644
+index 1893a53..4b3298f 100644
 --- a/src/wl/sys/wl_cfg80211_hybrid.c
 +++ b/src/wl/sys/wl_cfg80211_hybrid.c
-@@ -450,7 +450,7 @@ wl_dev_ioctl(struct net_device *dev, u32 cmd, void *arg, u32 len)
+@@ -457,7 +457,7 @@ wl_dev_ioctl(struct net_device *dev, u32 cmd, void *arg, u32 len)
  	ifr.ifr_data = (caddr_t)&ioc;
  
  	fs = get_fs();
@@ -30,3 +34,6 @@ index c4c610b..9c3c74e 100644
  #if defined(WL_USE_NETDEV_OPS)
  	ret = dev->netdev_ops->ndo_do_ioctl(dev, &ifr, SIOCDEVPRIVATE);
  #else
+-- 
+2.45.1
+

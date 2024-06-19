@@ -1,7 +1,18 @@
-diff -Naur hybrid-portsrc-x86_32-v5_10_91_9.orig/src/wl/sys/wl_linux.c hybrid-portsrc-x86_32-v5_10_91_9/src/wl/sys/wl_linux.c
---- hybrid-portsrc-x86_32-v5_10_91_9.orig/src/wl/sys/wl_linux.c	2009-04-23 02:48:59.000000000 +0900
-+++ hybrid-portsrc-x86_32-v5_10_91_9/src/wl/sys/wl_linux.c	2009-05-08 00:48:20.000000000 +0900
-@@ -171,6 +171,8 @@
+From 5a964e14474e4482a4d24c015371856560dacabc Mon Sep 17 00:00:00 2001
+From: Shea Levy <shea@shealevy.com>
+Date: Sat, 4 Jan 2014 20:57:21 -0500
+Subject: [PATCH 02/16] linuxPackages.broadcom_sta: apply MIXED/Proprietary
+ license
+
+---
+ src/wl/sys/wl_linux.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
+index 0d05100..14922c0 100644
+--- a/src/wl/sys/wl_linux.c
++++ b/src/wl/sys/wl_linux.c
+@@ -148,6 +148,8 @@ static struct wl_if *wl_alloc_if(wl_info_t *wl, int iftype, uint unit, struct wl
  static void wl_free_if(wl_info_t *wl, wl_if_t *wlif);
  static void wl_get_driver_info(struct net_device *dev, struct ethtool_drvinfo *info);
  
@@ -10,4 +21,6 @@ diff -Naur hybrid-portsrc-x86_32-v5_10_91_9.orig/src/wl/sys/wl_linux.c hybrid-po
  #if defined(WL_CONFIG_RFKILL)
  #include <linux/rfkill.h>
  static int wl_init_rfkill(wl_info_t *wl);
+-- 
+2.45.1
 

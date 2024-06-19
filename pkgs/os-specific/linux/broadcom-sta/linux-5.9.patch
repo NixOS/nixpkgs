@@ -1,3 +1,30 @@
+From 34d611f2dcf7d34db2cb413cc7b4f86f3706fec6 Mon Sep 17 00:00:00 2001
+From: Joan Bruguera <joanbrugueram@gmail.com>
+Date: Tue, 13 Oct 2020 19:35:55 +0200
+Subject: [PATCH 11/16] linuxPackages.broadcom_sta: fix build for kernel 5.9+
+
+Get rid of get_fs/set_fs calls in Broadcom WL driver.
+
+Tentative patch for broadcom-wl 6.30.223.271 driver for Linux 5.10 (tested -rc1 up to 5.10.1)
+
+Applies on top of all the patches applied to broadcom-wl-dkms 6.30.223.271-23 on Arch Linux.
+
+NB: Some checks in wlc_ioctl_internal are likely superfluous,
+    but I'm not familiar enough with the driver to remove them with confidence.
+
+See also: https://lwn.net/Articles/722267/
+          https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47058bb54b57962b3958a936ddbc59355e4c5504
+          https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5e6e9852d6f76e01b2e6803c74258afa5b432bc5
+
+Signed-off-by: Joan Bruguera <joanbrugueram@gmail.com>
+---
+ src/wl/sys/wl_cfg80211_hybrid.c | 26 ++-------------------
+ src/wl/sys/wl_iw.c              | 25 ++-------------------
+ src/wl/sys/wl_linux.c           | 40 ++++++++++++++++++++++++++++-----
+ src/wl/sys/wl_linux.h           |  2 ++
+ src/wl/sys/wlc_pub.h            |  1 +
+ 5 files changed, 42 insertions(+), 52 deletions(-)
+
 diff --git a/src/wl/sys/wl_cfg80211_hybrid.c b/src/wl/sys/wl_cfg80211_hybrid.c
 index 4b3298f..c45ad48 100644
 --- a/src/wl/sys/wl_cfg80211_hybrid.c
@@ -86,7 +113,7 @@ index 9c3c74e..e346b15 100644
  
  static int
 diff --git a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
-index c990c70..5bb9480 100644
+index 646f1d9..26ba9fa 100644
 --- a/src/wl/sys/wl_linux.c
 +++ b/src/wl/sys/wl_linux.c
 @@ -1664,10 +1664,7 @@ wl_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
@@ -182,3 +209,6 @@ index 53a98b8..2b5a029 100644
  #include "proto/802.11.h"
  #include "proto/bcmevent.h"
  
+-- 
+2.45.1
+

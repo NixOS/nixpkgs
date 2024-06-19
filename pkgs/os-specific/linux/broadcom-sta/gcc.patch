@@ -1,11 +1,28 @@
---- a/Makefile	2014-06-26 10:42:08.000000000 +0000
-+++ b/Makefile	2014-07-17 22:44:01.662297228 +0000
-@@ -126,6 +126,8 @@
+From 3e28c2a24c3b3b011506bcaa4fee7e8da347c5ff Mon Sep 17 00:00:00 2001
+From: Charles Strahan <charles.c.strahan@gmail.com>
+Date: Tue, 5 May 2015 15:09:51 -0400
+Subject: [PATCH 01/16] linuxPackages.broadcom_sta: since GCC respects
+ SOURCE_DATE_EPOCH, set in the stdenv, set -Wno-date-time
+
+---
+ Makefile | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index a323a0d..15e85c8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -140,10 +140,7 @@ wl-objs            += src/wl/sys/wl_cfg80211_hybrid.o
+ EXTRA_CFLAGS       += -I$(src)/src/include -I$(src)/src/common/include
+ EXTRA_CFLAGS       += -I$(src)/src/wl/sys -I$(src)/src/wl/phy -I$(src)/src/wl/ppr/include
  EXTRA_CFLAGS       += -I$(src)/src/shared/bcmwifi/include
- #EXTRA_CFLAGS       += -DBCMDBG_ASSERT -DBCMDBG_ERR
+-#EXTRA_CFLAGS       += -DBCMDBG_ASSERT -DBCMDBG_ERR
+-ifeq "$(GE_49)" "1"
+ EXTRA_CFLAGS       += -Wno-date-time
+-endif
  
-+EXTRA_CFLAGS       += -Wno-date-time
-+
  EXTRA_LDFLAGS      := $(src)/lib/wlc_hybrid.o_shipped
  
- KBASE              ?= /lib/modules/`uname -r`
+-- 
+2.45.1
+
