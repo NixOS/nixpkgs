@@ -24,9 +24,7 @@ self: super:
     aeson = self.aeson_1_5_6_0;
   });
 
-  # Some Hackage packages reference this attribute, which exists only in the
-  # GHCJS package set. We provide a dummy version here to fix potential
-  # evaluation errors.
+  # Included in ghcjs itself
   ghcjs-prim = null;
 
   ghcjs-websockets = markUnbroken super.ghcjs-websockets;
