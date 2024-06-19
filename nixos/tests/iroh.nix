@@ -17,7 +17,7 @@ in
       services.iroh = {
         enable = true;
         listenPort = listenPort;
-        dataDir = "/mnt/iroh";
+        #dataDir = "/mnt/iroh";
       };
     };
     # read = { config, ... }: {
@@ -31,8 +31,9 @@ in
     write.wait_for_open_port(${toString listenPort})
 
     with subtest("Add and retrieve data"):
+        machine.succeed("echo fnord0 >> test-data")
         iroh_hash = machine.succeed(
-            "echo fnord0 >> test-data && su alice -l -c 'iroh blob add test-data' | grep Blob | cut -d ':' -f 2 | tr -d ' '"
+            "su alice -l -c 'iroh blob add test-data' | grep Blob | cut -d ':' -f 2 | tr -d ' '"
         )
         machine.succeed(f"iroh blob get {iroh_hash} output.txt")
         machine.succeed("cat output.txt | grep fnord0")
