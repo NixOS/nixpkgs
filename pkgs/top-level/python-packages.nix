@@ -5523,9 +5523,7 @@ self: super: with self; {
 
   homepluscontrol = callPackage ../development/python-modules/homepluscontrol { };
 
-  hoomd-blue = toPythonModule (callPackage ../development/python-modules/hoomd-blue {
-    inherit python;
-  });
+  hoomd-blue = callPackage ../development/python-modules/hoomd-blue { };
 
   hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
 
