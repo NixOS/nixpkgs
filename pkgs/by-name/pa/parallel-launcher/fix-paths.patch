@@ -1,0 +1,108 @@
+diff --git a/src/core/retroarch.cpp b/src/core/retroarch.cpp
+index 9629fc7..cdeb94c 100644
+--- a/src/core/retroarch.cpp
++++ b/src/core/retroarch.cpp
+@@ -102,15 +102,12 @@ static void loadConfig( std::map<string, string> &configs ) {
+ 
+ 	const fs::path basePath = RetroArch::getBasePath();
+ 	configs["system_directory"] = (basePath / _NFS("system")).u8string();
+-	configs["libretro_directory"] = (basePath / _NFS("cores")).u8string();
++	configs["libretro_directory"] = "@coresDir@";
+ 	configs["savefile_directory"] = (basePath / _NFS("saves")).u8string();
+ 	configs["savestate_directory"] = (basePath / _NFS("states")).u8string();
+ 	configs["libretro_info_path"] = (basePath / _NFS("info")).u8string();
+ 	configs["log_dir"] = basePath.u8string();
+-#if defined(FLATPAK_VERSION)
+-	configs["assets_directory"] = "/app/share/libretro/assets/";
+-#elif defined(__linux__)
+-	configs["assets_directory"] = (BaseDir::data() / "retro-data" / "assets").u8string();
++  configs["assets_directory"] = "@assetsDir@";
+ 	configs["osk_overlay_directory"] = (BaseDir::data() / "retro-data" / "overlays" / "keyboards").u8string();
+ 	configs["overlay_directory"] = (BaseDir::data() / "retro-data" / "overlays").u8string();
+ 	configs["audio_filter_dir"] = (BaseDir::data() / "retro-data" / "filters" / "audio").u8string();
+@@ -120,11 +117,6 @@ static void loadConfig( std::map<string, string> &configs ) {
+ 	configs["recording_config_directory"] = (BaseDir::data() / "retro-data" / "records_config").u8string();
+ 	configs["recording_output_directory"] = (BaseDir::data() / "retro-data" / "records").u8string();
+ 	configs["screenshot_directory"] = (BaseDir::data() / "retro-data" / "screenshots").u8string();
+-#elif defined(__APPLE__)
+-	configs["assets_directory"] = (BaseDir::home() / "Library" / "Application Support" / "RetroArch" / "assets").u8string();
+-#else
+-	configs["assets_directory"] = (BaseDir::data() / L"retroarch" / L"assets").u8string();
+-#endif
+ }
+ 
+ static void saveConfig( [[maybe_unused]] const std::map<string,string> &configs ) {
+@@ -942,7 +934,7 @@ fs::path RetroArch::getBasePath() {
+ }
+ 
+ fs::path RetroArch::getCorePath() {
+-	return RetroArch::getBasePath() / _NFS("cores");
++	return "@coresDir@";
+ }
+ 
+ fs::path RetroArch::getConfigPath() {
+@@ -950,15 +942,7 @@ fs::path RetroArch::getConfigPath() {
+ }
+ 
+ fs::path RetroArch::getExePath() {
+-#if defined(_WIN32)
+-	return BaseDir::data() / L"retroarch" / L"RetroArch.exe";
+-#elif defined(__APPLE__)
+-	return BaseDir::data() / "retroarch" / "RetroArch.app";
+-#elif defined(FLATPAK_VERSION)
+-	return BaseDir::program() / "retroarch";
+-#else
+-	return BaseDir::data() / "appimage" / "RetroArch-Linux-x86_64.AppImage";
+-#endif
++  return "@exePath@";
+ }
+ 
+ fs::path RetroArch::getTemporaryRomPath() {
+diff --git a/src/main.cpp b/src/main.cpp
+index d181f02..27e9c24 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -198,23 +198,7 @@ int main( int argc, char **argv ) {
+ 
+ 	QTranslator translations;
+ 	loadTranslations( translations, {
+-#ifdef __linux__
+-#if defined(FLATPAK_VERSION)
+-		fs::path( "/app/share/parallel-launcher/translations/" )
+-#elif defined(DEBUG)
+-		BaseDir::program() / "lang",
+-		fs::path( "/usr/local/share/parallel-launcher/translations/" ),
+-		fs::path( "/usr/share/parallel-launcher/translations/" )
+-#else
+-		fs::path( "/usr/share/parallel-launcher/translations/" ),
+-		fs::path( "/usr/local/share/parallel-launcher/translations/" ),
+-		BaseDir::program() / "lang"
+-#endif
+-#elif __APPLE__
+-		BaseDir::program().parent_path() / "Resources" / "translations"
+-#else
+-		BaseDir::program() / L"translations"
+-#endif
+# This is absolutely horrible, but there's no real way to do it otherwise
++     fs::read_symlink( "/proc/self/exe" ).parent_path().parent_path() / "share/parallel-launcher/translations"
+ 	});
+ 	app.installTranslator( &translations );
+ 
+diff --git a/src/polyfill/base-directory.cpp b/src/polyfill/base-directory.cpp
+index 720a754..8a58253 100644
+--- a/src/polyfill/base-directory.cpp
++++ b/src/polyfill/base-directory.cpp
+@@ -131,11 +131,7 @@ static Locations getLocations() {
+ 		xdg( "XDG_CACHE_HOME", home, ".cache" ) / APP_NAME,
+ 		fs::temp_directory_path() / APP_NAME,
+ 		fs::read_symlink( "/proc/self/exe" ).parent_path(),
+-#if defined(FLATPAK_VERSION)
+-		fs::path( "/app/share/parallel-launcher" )
+-#elif defined(__linux__)
+-		fs::path( "/usr/share/parallel-launcher" )
+-#endif
+# This is absolutely horrible, but there's no real way to do it otherwise
++     fs::read_symlink( "/proc/self/exe" ).parent_path().parent_path() / "share/parallel-launcher"
+ 	};
+ }
+ #endif
