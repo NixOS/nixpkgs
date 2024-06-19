@@ -1,0 +1,12 @@
+diff --git a/libecdsaauth/base64.c b/libecdsaauth/base64.c
+index 0f9b7a3..84df22a 100644
+--- a/libecdsaauth/base64.c
++++ b/libecdsaauth/base64.c
+@@ -45,6 +45,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <assert.h>
++#include <ctype.h>
+ 
+ static const char Base64[] =
+ 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

@@ -1,0 +1,29 @@
+Kill google analytics from local documentation.
+
+diff -r bb0a2fbdc886 xslt/ga.xslt
+--- a/xslt/ga.xslt	Mon Apr 06 11:17:11 2020 +0100
++++ b/xslt/ga.xslt	Thu Apr 09 10:29:02 2020 -0400
+@@ -6,23 +6,6 @@
+ <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+ 
+ <xsl:template name="ga">
+-
+-    <script>
+-        (function(w, d, s, l, i) {
+-            w[l] = w[l] || [];
+-            w[l].push({
+-                'gtm.start': new Date().getTime(),
+-                event: 'gtm.js'
+-            });
+-            var f = d.getElementsByTagName(s)[0],
+-                j = d.createElement(s),
+-                dl = l != 'dataLayer' ? '&amp;l=' + l : '';
+-            j.async = true;
+-            j.src = '//www.googletagmanager.com/gtm.js?id=' + i + dl;
+-            f.parentNode.insertBefore(j, f);
+-        })(window, document, 'script', 'dataLayer', 'GTM-TPSP33');
+-    </script>
+-
+ </xsl:template>
+ 
+ </xsl:stylesheet>

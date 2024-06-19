@@ -1,0 +1,14 @@
+diff -Naur old/Makefile new/Makefile
+--- old/Makefile	1969-12-31 21:00:01.000000000 -0300
++++ new/Makefile	2021-09-06 00:10:26.972466947 -0300
+@@ -40,8 +40,8 @@
+ 	rm -rf st-$(VERSION)
+ 
+ install: st
+-	git submodule init
+-	git submodule update
++#	git submodule init
++#	git submodule update
+ 	mkdir -p $(DESTDIR)$(PREFIX)/bin
+ 	cp -f st $(DESTDIR)$(PREFIX)/bin
+ 	cp -f st-copyout $(DESTDIR)$(PREFIX)/bin

@@ -1,0 +1,12 @@
+diff --git a/Source/main.cpp b/Source/main.cpp
+index 3e58a381..2e7e4a86 100644
+--- a/Source/main.cpp
++++ b/Source/main.cpp
+@@ -69,6 +69,7 @@ int main(int argc, char *argv[])
+ {
+     QApplication a(argc, argv);
+     a.setApplicationName("PokeFinder");
++    a.setDesktopFileName("pokefinder");
+     a.setOrganizationName("PokeFinder Team");
+ 
+     Q_INIT_RESOURCE(resources);

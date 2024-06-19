@@ -1,0 +1,11 @@
+--- freebsd/lib/libcxxrt/Makefile	2024-05-30 14:27:42.328086005 -0700
++++ freebsd/lib/libcxxrt/Makefile.mod	2024-05-30 14:27:48.048014581 -0700
+@@ -19,6 +19,8 @@
+ SRCS+=		terminate.cc
+ SRCS+=		typeinfo.cc
+ 
++INCS+=cxxabi.h unwind.h unwind-arm.h unwind-itanium.h
++
+ WARNS?=		0
+ CFLAGS+=	-isystem ${SRCDIR} -nostdinc++
+ CXXSTD?=	c++14

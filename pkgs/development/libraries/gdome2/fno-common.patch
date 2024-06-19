@@ -1,0 +1,11 @@
+On gcc-10 -fno-common is the default which forbids miltiple definitions.
+--- a/libgdome/xpath/gdome-xpath-xpnsresolv.h
++++ b/libgdome/xpath/gdome-xpath-xpnsresolv.h
+@@ -42,6 +42,6 @@ void gdome_xpath_xpnsresolv_ref (GdomeXPathNSResolver *self, GdomeException *exc
+ void gdome_xpath_xpnsresolv_unref (GdomeXPathNSResolver *self, GdomeException *exc);
+ GdomeDOMString * gdome_xpath_xpnsresolv_lookupNamespaceURI( GdomeXPathNSResolver *self, GdomeDOMString *prefix, GdomeException *exc);
+ 
+-const GdomeXPathNSResolverVtab gdome_xpath_xpnsresolv_vtab;
++extern const GdomeXPathNSResolverVtab gdome_xpath_xpnsresolv_vtab;
+ 
+ #endif /* GDOME_XPNSRESOLV_FILE */
