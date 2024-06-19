@@ -10,12 +10,7 @@
 , rustPlatform
 , rustc
 , wrapGAppsHook4
-, cairo
-, gdk-pixbuf
-, glib
-, gtk4
 , libadwaita
-, pango
 , pipewire
 , wireplumber
 }:
@@ -34,13 +29,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pwvucontrol";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "pwvucontrol";
     rev = version;
-    hash = "sha256-cWNWdCMk9hF8Nzq2UFBEKSx1zS8JlplMG7B5gv7BaZA=";
+    hash = "sha256-Y8/W0gPWWYatZ/voAX7iddEtmZ2/lIpcuBPNaH52WGQ=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -63,18 +58,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cairo
-    gdk-pixbuf
-    glib
-    gtk4
     libadwaita
-    pango
     pipewire
     wireplumber_0_4
   ];
 
+  strictDeps = true;
+
   meta = with lib; {
-    description = "Pipewire Volume Control";
+    description = "Pipewire volume control applet";
     homepage = "https://github.com/saivert/pwvucontrol";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ figsoda Guanran928 ];
