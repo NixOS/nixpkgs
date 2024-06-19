@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Raito Bezarius <masterancpp@gmail.com>
+Date: Mon, 19 Jun 2023 02:11:35 +0200
+Subject: [PATCH] Don't try to unmount /nix or /nix/store
+
+They'll still be remounted read-only.
+
+https://github.com/NixOS/nixos/issues/126
+
+Original-Author: Eelco Dolstra <eelco.dolstra@logicblox.com>
+---
+ src/shared/fstab-util.c | 2 ++
+ src/shutdown/umount.c   | 6 ++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/src/shared/fstab-util.c b/src/shared/fstab-util.c
+index 55e76b6e16..015a608035 100644
+--- a/src/shared/fstab-util.c
++++ b/src/shared/fstab-util.c
+@@ -66,6 +66,8 @@ bool fstab_is_extrinsic(const char *mount, const char *opts) {
+         /* Don't bother with the OS data itself */
+         if (PATH_IN_SET(mount,
+                         "/",
++                        "/nix",
++                        "/nix/store",
+                         "/usr",
+                         "/etc"))
+                 return true;
+diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
+index 1a9b99d761..04ef9af1ea 100644
+--- a/src/shutdown/umount.c
++++ b/src/shutdown/umount.c
+@@ -170,8 +170,10 @@ int mount_points_list_get(const char *mountinfo, MountPoint **head) {
+ static bool nonunmountable_path(const char *path) {
+         assert(path);
+ 
+-        return PATH_IN_SET(path, "/", "/usr") ||
+-                path_startswith(path, "/run/initramfs");
++        return PATH_IN_SET(path, "/", "/usr")
++                || path_equal(path, "/nix")
++                || path_equal(path, "/nix/store")
++                || path_startswith(path, "/run/initramfs");
+ }
+ 
+ static void log_umount_blockers(const char *mnt) {

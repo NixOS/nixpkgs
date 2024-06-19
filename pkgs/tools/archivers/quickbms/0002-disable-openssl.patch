@@ -1,0 +1,10 @@
+--- src/Makefile	2023-05-25 18:16:56.000296653 +0900
++++ src/Makefile	2023-05-25 18:17:00.772272861 +0900
+@@ -23,7 +23,6 @@
+ EXTRA_TARGETS  = libs/amiga/amiga.s libs/powzix/*.cpp
+ CFLAGS += -msse2
+ endif
+-USE_OPENSSL	= 1
+ endif
+ 
+ # -liconv and -fPIC are necessary on Android
