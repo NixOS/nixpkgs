@@ -484,6 +484,23 @@ let
         };
       };
 
+      banacorn.agda-mode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "banacorn";
+          name = "agda-mode";
+          version = "0.4.7";
+          hash = "sha256-gNa3n16lP3ooBRvGaugTua4IXcIzpMk7jBYMJDQsY00=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/banacorn.agda-mode/changelog";
+          description = "agda-mode on VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=banacorn.agda-mode";
+          homepage = "https://github.com/banacorn/agda-mode-vscode";
+          maintainers = with lib.maintainers; [ Anillc ];
+          license = lib.licenses.mit;
+        };
+      };
+
       batisteo.vscode-django = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "batisteo";
@@ -2927,6 +2944,23 @@ let
           homepage = "https://github.com/meganrogge/template-string-converter";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
+      mesonbuild.mesonbuild = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "mesonbuild";
+          name = "mesonbuild";
+          version = "1.24.0";
+          hash = "sha256-n7c2CUiTIej2Y/QMGWpv6anuCDjqpo2W+hJylfvvMVE=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/mesonbuild.mesonbuild/changelog";
+          description = "Meson language support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mesonbuild.mesonbuild";
+          homepage = "https://github.com/mesonbuild/vscode-meson";
+          maintainers = with lib.maintainers; [ Anillc ];
+          license = lib.licenses.asl20;
         };
       };
 
