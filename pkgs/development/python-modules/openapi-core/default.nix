@@ -20,7 +20,7 @@
   parse,
   poetry-core,
   pytest-aiohttp,
-  pytest7CheckHook,
+  pytestCheckHook,
   pythonOlder,
   responses,
   requests,
@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.19.0";
+  version = "0.19.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-+YYcSNX717JjVHMk4Seb145iq9/rQZEVQn27Ulk1A3E=";
+    hash = "sha256-6FFJsXObIA9tchTJJmoSu9u+/ZuKuw29AYsLEmvHXrY=";
   };
 
   postPatch = ''
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpx
     pytest-aiohttp
-    pytest7CheckHook
+    pytestCheckHook
     responses
     webob
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
