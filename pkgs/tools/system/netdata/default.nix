@@ -153,8 +153,6 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
     (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
     (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
-    # raitobezarius: I do not wish to maintain Xen-related things alone, thus, disabled.
-    # Feel free to open an issue / PR to fix this.
     (lib.cmakeBool "ENABLE_PLUGIN_XENSTAT" false)
     (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
     (lib.cmakeBool "ENABLE_EXPORTER_PROMETHEUS_REMOTE_WRITE" withConnPrometheus)
@@ -209,6 +207,6 @@ stdenv.mkDerivation rec {
     license = [ licenses.gpl3Plus ]
       ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ raitobezarius ];
+    maintainers = [ ];
   };
 }
