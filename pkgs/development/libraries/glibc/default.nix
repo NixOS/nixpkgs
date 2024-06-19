@@ -2,7 +2,7 @@
 , withLinuxHeaders ? true
 , profilingLibraries ? false
 , withGd ? false
-, enableCET ? if stdenv.hostPlatform.isx86_64 then "permissive" else false
+, enableCET ? false
 , pkgsBuildBuild
 , libgcc
 }:

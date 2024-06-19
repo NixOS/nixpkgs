@@ -297,6 +297,7 @@ let
               "trivialautovarinit"
             ]
           ) super'.stdenv;
+          glibc = super'.glibc.override { enableCET = if stdenv.hostPlatform.isx86_64 then "permissive" else false; };
         })
       ] ++ overlays;
     };
