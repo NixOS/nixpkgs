@@ -453,15 +453,17 @@
     dependencies = with self; [ copilot-lua plenary-nvim ];
   };
 
-  copilot-vim = super.copilot-vim.overrideAttrs {
+  copilot-vim = super.copilot-vim.overrideAttrs (old: {
     postInstall = ''
       substituteInPlace $out/autoload/copilot/agent.vim \
         --replace "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
                   "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
     '';
 
-    meta.license = lib.licenses.unfree;
-  };
+    meta = old.meta // {
+      license = lib.licenses.unfree;
+    };
+  });
 
   coq_nvim = super.coq_nvim.overrideAttrs {
     passthru.python3Dependencies = ps:
