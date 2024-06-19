@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     description = "Pipewire volume control applet";
     homepage = "https://github.com/saivert/pwvucontrol";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda Guanran928 ];
+    maintainers = with maintainers; [ figsoda Guanran928 aleksana ];
     mainProgram = "pwvucontrol";
     platforms = platforms.linux;
   };
