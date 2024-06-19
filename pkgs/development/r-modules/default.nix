@@ -863,6 +863,7 @@ let
     "aroma_affymetrix"
     "aroma_cn"
     "aroma_core"
+    "avotrex"
     "beer"
     "ceramic"
     "connections"
