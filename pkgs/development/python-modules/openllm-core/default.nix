@@ -18,13 +18,14 @@
   mypy-extensions,
   orjson,
   peft,
+  pydantic,
   transformers,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "openllm-core";
-  version = "0.4.44";
+  version = "0.5.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "bentoml";
     repo = "OpenLLM";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kRR715Vnt9ZAmxuWvtH0z093crH0JFrEKPtbjO3QMRc=";
+    hash = "sha256-sEZLszzoo39WUnziHGp7zWNO0YaqkXeXAoIxvyhw42w=";
   };
 
   sourceRoot = "${src.name}/openllm-core";
@@ -41,9 +42,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "hatch-vcs==0.3.0" "hatch-vcs" \
-      --replace-fail "hatchling==1.18.0" "hatchling" \
-      --replace-fail "hatch-fancy-pypi-readme==23.1.0" "hatch-fancy-pypi-readme"
+      --replace-fail "hatch-vcs==" "hatch-vcs>=" \
+      --replace-fail "hatchling==" "hatchling>=" \
+      --replace-fail "hatch-fancy-pypi-readme==" "hatch-fancy-pypi-readme>="
   '';
 
   pythonRelaxDeps = [ "cattrs" ];
@@ -57,6 +58,7 @@ buildPythonPackage rec {
   dependencies = [
     attrs
     cattrs
+    pydantic
     # not listed in pyproject.toml, but required at runtime
     click-option-group
     deepmerge
