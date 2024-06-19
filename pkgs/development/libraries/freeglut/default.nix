@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libICE, libXext, libXi, libXrandr, libXxf86vm, libGLX, libGLU, cmake
+{ lib, stdenv, fetchurl, libICE, libXext, libXi, libXrandr, libXxf86vm, libGLX, libGLU, cmake, darwin
 , testers
 }:
 
@@ -14,7 +14,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libICE libXext libXi libXrandr libXxf86vm libGLU ];
+  buildInputs = [ libICE libXext libXi libXrandr libXxf86vm libGLU ]
+    ++ lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.OpenGL ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
                  "-DOPENGL_INCLUDE_DIR=${libGLX.dev}/include"
