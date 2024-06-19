@@ -2,14 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
+  typing-extensions,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "2.10.1";
-  format = "setuptools";
+  version = "2.12.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -17,8 +19,12 @@ buildPythonPackage rec {
     owner = "carpedm20";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-cCYZ+0IFHIR9++RfUbFTRMKYB9nC5dBaPMH6dSiAXK0=";
+    hash = "sha256-m9V9ryIE2U+KsyzFhAoMCGYMkPCBUl/ex1Ue5OUwslc=";
   };
+
+  build-system = [ setuptools ];
+
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
