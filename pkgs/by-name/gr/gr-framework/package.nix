@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  qt5,
 
-, cmake
+  cmake,
 
-, cairo
-, ffmpeg
-, freetype
-, ghostscript
-, glfw
-, libjpeg
-, libtiff
-, qhull
-, xorg
-, zeromq
+  cairo,
+  ffmpeg,
+  freetype,
+  ghostscript,
+  glfw,
+  libjpeg,
+  libtiff,
+  qhull,
+  xorg,
+  zeromq,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,9 +30,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-9Py2r774GaUXWhF3yO3ceT1rPi/uqMVZVAo0xs9n+I0=";
   };
 
-  patches = [
-    ./patches/use-the-module-mode-to-search-for-the-LibXml2-package.patch
-  ];
+  patches = [ ./patches/use-the-module-mode-to-search-for-the-LibXml2-package.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -64,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "GR framework is a graphics library for visualisation applications";
     homepage = "https://gr-framework.org";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ paveloom ];
+    platforms = platforms.unix;
   };
 }
