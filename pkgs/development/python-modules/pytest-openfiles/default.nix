@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-openfiles";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "setuptools";
   disabled = isPy27; # abandoned
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "179c2911d8aee3441fee051aba08e0d9b4dab61b829ae4811906d5c49a3b0a58";
+    sha256 = "sha256-/1Fgw06q2oK5g6LDFvzMsw4AlGMOl3hEcfAVlWhwqZM=";
   };
 
   patches = [
