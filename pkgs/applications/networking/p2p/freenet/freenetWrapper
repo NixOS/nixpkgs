@@ -1,18 +1,18 @@
 #! @bash@/bin/bash
-
+set -eo pipefail
 PATH=@coreutils@/bin:$PATH
+export CLASSPATH=$(find @outFreenet@/deps/ -name "*.jar"|grep -v bcprov-jdk15on-1.48.jar|tr $'\n' :)
+CLASSPATH=$CLASSPATH:@outFreenet@/share/freenet/freenet-ext.jar:@outFreenet@/share/freenet/freenet.jar
 
 export FREENET_HOME="$HOME/.local/share/freenet"
-if [ -n "$XDG_DATA_HOME" ]
-  then export FREENET_HOME="$XDG_DATA_HOME/freenet"
+if [ -n "$XDG_DATA_HOME" ] ; then
+  FREENET_HOME="$XDG_DATA_HOME/freenet"
 fi
 
-if [ ! -d $FREENET_HOME ]; then
-  mkdir -p $FREENET_HOME
-fi
+mkdir -p -- $FREENET_HOME
 
-cp -u @seednodes@ $FREENET_HOME/seednodes.fref
-chmod u+rw $FREENET_HOME/seednodes.fref
+cp -u -- @seednodes@ $FREENET_HOME/seednodes.fref
+chmod u+rw -- $FREENET_HOME/seednodes.fref
 
-cd $FREENET_HOME
-@jre@/bin/java -cp @freenet@/share/freenet/bcprov-@bcprov_version@.jar:@freenet@/share/freenet/freenet-ext.jar:@freenet@/share/freenet/freenet.jar -Xmx1024M freenet.node.NodeStarter
+cd -- $FREENET_HOME
+exec @jre@/bin/java -Xmx1024M freenet.node.NodeStarter "$@"

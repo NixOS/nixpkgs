@@ -1,26 +1,33 @@
 { lib
-, buildGoModule
+, rustPlatform
 , fetchFromGitHub
-, nix-update-script
+, testers
+, sshs
 }:
 
-buildGoModule rec {
+rustPlatform.buildRustPackage rec {
   pname = "sshs";
-  version = "3.3.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "quantumsheep";
     repo = pname;
     rev = version;
-    sha256 = "OTyk3EGlpr5k6QSwGmHFoF3cAJKQEEkWJuV53Wi8ook=";
+    hash = "sha256-phVwNPElQOTgsrDxzyUcDMByxi7t1IIPFCEHJTXiBdY=";
   };
 
-  vendorSha256 = "wClgX08UbItCpWOkWLgmsy7Ad5LlpvXrStN3JHujVww=";
+  cargoLock = {
+    # Patch version output
+    lockFile = ./Cargo.lock;
+  };
 
-  ldflags = [ "-s" "-w" "-X github.com/quantumsheep/sshs/cmd.Version=${version}" ];
+  postPatch = ''
+    ln -sf ${./Cargo.toml} Cargo.toml
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
+  passthru.tests.version = testers.testVersion {
+    package = sshs;
   };
 
   meta = with lib; {
@@ -28,5 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/quantumsheep/sshs";
     license = licenses.mit;
     maintainers = with maintainers; [ not-my-segfault ];
+    mainProgram = "sshs";
   };
 }

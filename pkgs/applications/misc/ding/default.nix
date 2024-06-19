@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple and fast dictionary lookup tool";
+    mainProgram = "ding";
     homepage = "https://www-user.tu-chemnitz.de/~fri/ding/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux; # homepage says: unix-like except darwin

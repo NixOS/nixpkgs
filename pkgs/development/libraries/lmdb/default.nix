@@ -2,20 +2,25 @@
 
 stdenv.mkDerivation rec {
   pname = "lmdb";
-  version = "0.9.29";
+  version = "0.9.33";
 
   src = fetchFromGitLab {
     domain = "git.openldap.org";
     owner = "openldap";
     repo = "openldap";
     rev = "LMDB_${version}";
-    sha256 = "19zq5s1amrv1fhw1aszcn2w2xjrk080l6jj5hc9f46yiqf98jjg3";
+    sha256 = "sha256-5IBoJ3jaNXao5zVzb0LDM8RGid4s8DGQpjVqrVPLpXQ=";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
 
   patches = [ ./hardcoded-compiler.patch ./bin-ext.patch ];
   patchFlags = [ "-p3" ];
+
+  # Don't attempt the .so if static, as it would fail.
+  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
+    sed 's/^ILIBS\>.*/ILIBS = liblmdb.a/' -i Makefile
+  '';
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -46,6 +51,9 @@ stdenv.mkDerivation rec {
     Cflags: -I$dev/include
     Libs: -L$out/lib -llmdb
     EOF
+
+    # Expected by Rust libraries.
+    ln -s lmdb.pc "$dev/lib/pkgconfig/liblmdb.pc"
   '';
 
   meta = with lib; {
@@ -58,6 +66,7 @@ stdenv.mkDerivation rec {
       limited to the size of the virtual address space.
     '';
     homepage = "https://symas.com/lmdb/";
+    changelog = "https://git.openldap.org/openldap/openldap/-/blob/LMDB_${version}/libraries/liblmdb/CHANGES";
     maintainers = with maintainers; [ jb55 vcunat ];
     license = licenses.openldap;
     platforms = platforms.all;

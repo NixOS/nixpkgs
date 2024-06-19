@@ -1,4 +1,4 @@
-{ lib, writeText, runCommand, writeReferencesToFile }:
+{ lib, writeText, runCommand, writeClosure }:
 
 {
   buildContainer =
@@ -42,7 +42,7 @@
       "/sys/fs/cgroup" = {
         type = "cgroup";
         source = "cgroup";
-        options = [ "nosuid" "noexec" "nodev" "realatime" "ro" ];
+        options = [ "nosuid" "noexec" "nodev" "relatime" "ro" ];
       };
     };
     config = writeText "config.json" (builtins.toJSON {
@@ -72,7 +72,7 @@
       set -o pipefail
       mkdir -p $out/rootfs/{dev,proc,sys}
       cp ${config} $out/config.json
-      xargs tar c < ${writeReferencesToFile args} | tar -xC $out/rootfs/
+      xargs tar c < ${writeClosure args} | tar -xC $out/rootfs/
     '';
 }
 

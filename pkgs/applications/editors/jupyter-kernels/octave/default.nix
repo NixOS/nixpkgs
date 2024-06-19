@@ -1,5 +1,4 @@
-{ lib
-, stdenv
+{ stdenv
 , callPackage
 , runCommand
 , makeWrapper
@@ -8,8 +7,11 @@
 , python3
 }:
 
-# To test:
-# $(nix-build -E 'with import <nixpkgs> {}; jupyter.override { definitions = { octave = octave-kernel.definition; }; }')/bin/jupyter-notebook
+# Jupyter console:
+# nix run --impure --expr 'with import <nixpkgs> {}; jupyter-console.withSingleKernel octave-kernel.definition'
+
+# Jupyter notebook:
+# nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.octave = octave-kernel.definition; }'
 
 let
   kernel = callPackage ./kernel.nix {
@@ -21,7 +23,7 @@ in
 rec {
   launcher = runCommand "octave-kernel-launcher" {
     inherit octave;
-    python = python3.withPackages (ps: [ ps.traitlets ps.jupyter_core ps.ipykernel ps.metakernel kernel ]);
+    python = python3.withPackages (ps: [ ps.traitlets ps.jupyter-core ps.ipykernel ps.metakernel kernel ]);
     nativeBuildInputs = [ makeWrapper ];
   } ''
     mkdir -p $out/bin
@@ -43,7 +45,7 @@ rec {
     dontInstall = true;
 
     buildPhase = ''
-      convert ./libgui/src/icons/logo.png -resize ${size}x${size} $out
+      convert ./libgui/src/icons/octave/128x128/logo.png -resize ${size}x${size} $out
     '';
   };
 

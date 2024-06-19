@@ -2,21 +2,34 @@
 
 stdenv.mkDerivation rec {
   pname = "isabelle-linter";
-  version = "Isabelle2021-1-v1.0.0";
+  version = "2023-1.0.0";
 
   src = fetchFromGitHub {
     owner = "isabelle-prover";
     repo = "isabelle-linter";
-    rev = version;
-    sha256 = "0v6scc2rhj6bjv530gzz6i57czzcgpkw7a9iqnfdnm5gvs5qjk7a";
+    rev = "Isabelle2023-v1.0.0";
+    sha256 = "sha256-q9+qN94NaTzvhbcNQj7yH/VVfs1QgCH8OU8HW+5+s9U=";
   };
 
-  installPhase = import ./mkBuild.nix { inherit isabelle; path = "${pname}-${version}"; };
+  nativeBuildInputs = [ isabelle ];
+
+  buildPhase = ''
+    export HOME=$TMP
+    isabelle components -u $(pwd)
+    isabelle scala_build
+  '';
+
+  installPhase = ''
+    dir=$out/Isabelle${isabelle.version}/contrib/${pname}-${version}
+    mkdir -p $dir
+    cp -r * $dir/
+  '';
 
   meta = with lib; {
     description = "Linter component for Isabelle.";
     homepage = "https://github.com/isabelle-prover/isabelle-linter";
     maintainers = with maintainers; [ jvanbruegge ];
     license = licenses.mit;
+    platforms = platforms.all;
   };
 }

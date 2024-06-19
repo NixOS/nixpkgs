@@ -5,9 +5,9 @@
 , gettext
 , gtk3
 , gobject-introspection
-, intltool, wrapGAppsHook, glib
+, intltool, wrapGAppsHook3, glib
 , librsvg
-, libayatana-appindicator-gtk3
+, libayatana-appindicator
 , libpulseaudio
 , keybinder3
 , gdk-pixbuf
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
     glib
     gdk-pixbuf
   ];
@@ -47,13 +47,14 @@ python3Packages.buildPythonApplication rec {
     gtk3
     gobject-introspection
     librsvg
-    libayatana-appindicator-gtk3
+    libayatana-appindicator
     libpulseaudio
     keybinder3
   ];
 
   meta = with lib; {
     description = "Sound input/output selector indicator for Linux";
+    mainProgram = "indicator-sound-switcher";
     homepage = "https://yktoo.com/en/software/sound-switcher-indicator/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ alexnortung ];

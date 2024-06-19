@@ -11,6 +11,7 @@ in {
     systemd.shutdownRamfs.contents."/etc/systemd/system-shutdown/shutdown-message".source = pkgs.writeShellScript "shutdown-message" ''
       echo "${msg}"
     '';
+    boot.initrd.systemd.enable = systemdStage1;
   };
 
   testScript = ''
@@ -21,6 +22,6 @@ in {
     machine.wait_for_console_text("Unmounting '/oldroot'")
     machine.wait_for_console_text("${msg}")
     # Don't try to sync filesystems
-    machine.booted = False
+    machine.wait_for_shutdown()
   '';
 })

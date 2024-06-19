@@ -5,21 +5,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hunt";
-  version = "1.7.6";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "LyonSyonII";
     repo = "hunt-rs";
     rev = "v${version}";
-    sha256 = "sha256-mNQY2vp4wNDhVqrFNVS/RBXVi9EMbTZ6pE0Z79dLUeM=";
+    sha256 = "sha256-NKXZECtepuFg6qTuXF9Gnat/vnrygt3UOZb0YUKPqi8=";
   };
 
-  cargoSha256 = "sha256-hjvJ9E5U6zGSWUXNDdu0GwUcd7uZeconfjiCSaEzZXU=";
+  cargoHash = "sha256-ExwcFJVqQF/RTUyv1FvOCnlB+9Z7uhi/5UUjW7WcXTk=";
 
   meta = with lib; {
     description = "Simplified Find command made with Rust";
-    homepage = "https://github.com/LyonSyonII/hunt";
+    homepage = "https://github.com/LyonSyonII/hunt-rs";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "hunt";
   };
 }

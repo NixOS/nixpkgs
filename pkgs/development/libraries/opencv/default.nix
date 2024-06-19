@@ -9,7 +9,7 @@
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
 , enableUnfree ? false
-, Cocoa, QTKit
+, AVFoundation, Cocoa, QTKit, Accelerate
 }:
 
 let
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
-    ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit ]
+    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit Accelerate ]
     ;
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
     (opencvFlag "TIFF" enableTIFF)
@@ -79,6 +79,6 @@ stdenv.mkDerivation rec {
     homepage = "https://opencv.org/";
     license = if enableUnfree then licenses.unfree else licenses.bsd3;
     maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

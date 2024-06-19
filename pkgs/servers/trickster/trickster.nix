@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, go
 }:
 
 buildGoModule rec {
@@ -15,32 +16,25 @@ buildGoModule rec {
     sha256 = "sha256-BRD8IF3s9RaDorVtXRvbKLVVVXWiEQTQyKBR9jFo1eM=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/trickster" ];
 
-  preBuild =
-    let
-      ldflags = with lib;
-        concatStringsSep " " (
-          [ "-extldflags '-static'" "-s" "-w" ] ++
-          (mapAttrsToList (n: v: "-X main.application${n}=${v}") {
-            BuildTime = "1970-01-01T00:00:00+0000";
-            GitCommitID = rev;
-            GoVersion = "$(go env GOVERSION)";
-            GoArch = "$(go env GOARCH)";
-          })
-        );
-    in
-    ''
-      buildFlagsArray+=("-ldflags=${ldflags}")
-    '';
+  ldflags = with lib;
+    [ "-extldflags '-static'" "-s" "-w" ] ++
+    (mapAttrsToList (n: v: "-X main.application${n}=${v}") {
+      BuildTime = "1970-01-01T00:00:00+0000";
+      GitCommitID = rev;
+      GoVersion = "go${go.version}}";
+      GoArch = "${go.GOARCH}";
+    });
 
   # Tests are broken.
   doCheck = false;
 
   meta = with lib; {
     description = "Reverse proxy cache and time series dashboard accelerator";
+    mainProgram = "trickster";
     longDescription = ''
       Trickster is a fully-featured HTTP Reverse Proxy Cache for HTTP
       applications like static file servers and web APIs.

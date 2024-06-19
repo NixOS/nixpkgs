@@ -1,25 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytestCheckHook
-, enrich
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pytestCheckHook,
+  enrich,
 }:
 
 buildPythonPackage rec {
   pname = "subprocess-tee";
-  version = "0.3.5";
+  version = "0.4.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff5cced589a4b8ac973276ca1ba21bb6e3de600cde11a69947ff51f696efd577";
+    hash = "sha256-s8EkmT+LiNHrHC/eC8IGl4fqxyC6iHccuhfoyTMkgl0=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     enrich
   ];
@@ -31,9 +31,7 @@ buildPythonPackage rec {
     "test_rich_console_ex"
   ];
 
-  pythonImportsCheck = [
-    "subprocess_tee"
-  ];
+  pythonImportsCheck = [ "subprocess_tee" ];
 
   meta = with lib; {
     homepage = "https://github.com/pycontribs/subprocess-tee";

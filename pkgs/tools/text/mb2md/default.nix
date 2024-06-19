@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "mbox to maildir tool";
+    mainProgram = "mb2md";
     license = licenses.publicDomain;
     platforms = platforms.all;
     maintainers = [ maintainers.jb55 ];

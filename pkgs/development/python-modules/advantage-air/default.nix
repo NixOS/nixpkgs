@@ -1,13 +1,14 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "advantage-air";
-  version = "0.4.1";
+  version = "0.4.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -15,19 +16,15 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "advantage_air";
     inherit version;
-    hash = "sha256-I9HMDLZX9xKDJuYSAweM2r4v3ZKevHTn5dHTYxN3EuE=";
+    hash = "sha256-4rRR9IxzH5EiYfWzWYeyCwoLB2LetBVyH7L3nkvp+gA=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "advantage_air"
-  ];
+  pythonImportsCheck = [ "advantage_air" ];
 
   meta = with lib; {
     description = "API helper for Advantage Air's MyAir and e-zone API";

@@ -1,10 +1,11 @@
-{ lib
-, fetchpatch
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, flake8
-, pytestCheckHook
+{
+  lib,
+  fetchpatch,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  flake8,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,18 +30,15 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    flake8
-  ];
+  propagatedBuildInputs = [ flake8 ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "py.test plugin for efficiently checking PEP8 compliance";
     homepage = "https://github.com/tholo/pytest-flake8";
     maintainers = with lib.maintainers; [ jluttine ];
     license = lib.licenses.bsd2;
+    broken = lib.versionAtLeast flake8.version "6.0.0";
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clac";
-  version = "0.3.3";
+  version = "0.3.3-unstable-2021-09-06";
 
   src = fetchFromGitHub {
     owner = "soveran";
     repo = "clac";
-    rev = version;
-    sha256 = "rsag8MWl/udwXC0Gj864fAuQ6ts1gzrN2N/zelazqjE=";
+    rev = "beae8c4bc89912f4cd66bb875585fa471692cd54";
+    sha256 = "XaULDkFF9OZW7Hbh60wbGgvCJ6L+3gZNGQ9uQv3G0zU=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
+    mainProgram = "clac";
   };
 }

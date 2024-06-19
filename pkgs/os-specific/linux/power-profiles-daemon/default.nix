@@ -1,16 +1,17 @@
 { stdenv
 , lib
+, bash-completion
 , pkg-config
 , meson
 , mesonEmulatorHook
 , ninja
 , fetchFromGitLab
-, fetchpatch
 , libgudev
 , glib
 , polkit
 , dbus
 , gobject-introspection
+, wrapGAppsNoGuiHook
 , gettext
 , gtk-doc
 , docbook-xsl-nons
@@ -21,22 +22,21 @@
 , umockdev
 , systemd
 , python3
-, wrapGAppsNoGuiHook
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
-  version = "0.12";
+  version = "0.21";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "hadess";
+    owner = "upower";
     repo = "power-profiles-daemon";
     rev = version;
-    sha256 = "sha256-2eMFPGVLwTBIlaB1zM3BzHrhydgBEm+kvx+VIZdUDPM=";
+    sha256 = "sha256-5JbMbz38SeNEkVKFjJLxeUHiOrx+QCaK/vXgRPbzwzY=";
   };
 
   nativeBuildInputs = [
@@ -51,36 +51,38 @@ stdenv.mkDerivation rec {
     libxslt # for xsltproc for building docs
     gobject-introspection
     wrapGAppsNoGuiHook
-    python3.pkgs.wrapPython
     # checkInput but cheked for during the configuring
-    (python3.pythonForBuild.withPackages (ps: with ps; [
+    (python3.pythonOnBuildForHost.withPackages (ps: with ps; [
       pygobject3
       dbus-python
       python-dbusmock
+      argparse-manpage
+      shtab
     ]))
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
   buildInputs = [
+    bash-completion
     libgudev
     systemd
     upower
     glib
     polkit
-    python3 # for cli tool
-    # Duplicate from checkInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
-    umockdev
+    # for cli tool
+    (python3.withPackages (ps: [
+      ps.pygobject3
+    ]))
   ];
 
   strictDeps = true;
 
-  # for cli tool
-  pythonPath = [
-    python3.pkgs.pygobject3
+  checkInputs = [
+    umockdev
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     umockdev
     dbus
   ];
@@ -88,43 +90,29 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dgtk_doc=true"
+    "-Dpylint=disabled"
+    "-Dzshcomp=${placeholder "out"}/share/zsh/site-functions"
     "-Dtests=${lib.boolToString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)}"
   ];
 
   doCheck = true;
 
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
-
-  # Avoid double wrapping
+  # Only need to wrap the Python tool (powerprofilectl)
   dontWrapGApps = true;
+
+  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   postPatch = ''
     patchShebangs --build \
       tests/integration-test.py \
       tests/unittest_inspector.py
-  '';
 
-  preInstall = ''
-    # We have pkexec on PATH so Meson will try to use it when installation fails
-    # due to being unable to write to e.g. /etc.
-    # Let’s pretend we already ran pkexec –
-    # the pkexec on PATH would complain it lacks setuid bit,
-    # obscuring the underlying error.
-    # https://github.com/mesonbuild/meson/blob/492cc9bf95d573e037155b588dc5110ded4d9a35/mesonbuild/minstall.py#L558
-    export PKEXEC_UID=-1
-  '';
-
-  postCheck = ''
-    # Do not contaminate the wrapper with test dependencies.
-    unset GI_TYPELIB_PATH
-    unset XDG_DATA_DIRS
+    patchShebangs --host \
+      src/powerprofilesctl
   '';
 
   postFixup = ''
-    # Avoid double wrapping
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    # Make Python libraries available
-    wrapPythonProgramsIn "$out/bin" "$pythonPath"
+    wrapGApp "$out/bin/powerprofilesctl"
   '';
 
   passthru = {
@@ -136,8 +124,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/hadess/power-profiles-daemon";
     description = "Makes user-selected power profiles handling available over D-Bus";
+    mainProgram = "powerprofilesctl";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar mvnetbiz ];
+    maintainers = with maintainers; [ mvnetbiz picnoir ];
   };
 }

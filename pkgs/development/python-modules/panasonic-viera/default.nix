@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, aiohttp
-, pycryptodome
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  aiohttp,
+  pycryptodome,
+  xmltodict,
 }:
 
 buildPythonPackage rec {

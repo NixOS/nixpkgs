@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "peppercorn";
   version = "0.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,5 +20,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.all;
   };
-
 }

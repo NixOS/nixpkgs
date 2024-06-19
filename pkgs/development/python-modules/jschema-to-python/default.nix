@@ -1,13 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi
-, attrs
-, jsonpickle
-, pbr
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  attrs,
+  jsonpickle,
+  pbr,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jschema-to-python";
   version = "1.2.3";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "jschema_to_python";
@@ -21,9 +25,7 @@ buildPythonPackage rec {
     pbr
   ];
 
-  checkInputs =[
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jschema_to_python" ];
 

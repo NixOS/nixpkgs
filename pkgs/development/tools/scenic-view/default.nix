@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, jdk, gradle, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, openjdk, openjfx, gradle_7, makeDesktopItem, perl, writeText, makeWrapper }:
 let
+  jdk = openjdk.override (lib.optionalAttrs stdenv.isLinux {
+    enableJavaFX = true;
+    openjfx = openjfx.override { withWebKit = true; };
+  });
+
   pname = "scenic-view";
   version = "11.0.2";
 
@@ -9,6 +14,8 @@ let
     rev = version;
     sha256 = "1idfh9hxqs4fchr6gvhblhvjqk4mpl4rnpi84vn1l3yb700z7dwy";
   };
+
+  gradle = gradle_7;
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps";
@@ -98,6 +105,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
+    mainProgram = "scenic-view";
     longDescription = ''
       A JavaFX application designed to make it simple to understand the current state of your application scenegraph
       and to also easily manipulate properties of the scenegraph without having to keep editing your code.

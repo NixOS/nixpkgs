@@ -1,6 +1,10 @@
-{ lib, buildPythonPackage, fetchurl, python
-, sphinx
-, xapian
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  python,
+  sphinx,
+  xapian,
 }:
 
 let
@@ -13,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
-    hash = "sha256-578eSYK5H4QSidGSFAIdiDccoqbHME31kEnX2ni4PO0=";
+    hash = "sha256-BoMU/KP1RSRwFJLfQy+lTEhf1OOWE8os0nXhNpZOgak=";
   };
 
   configureFlags = [
@@ -25,7 +29,10 @@ buildPythonPackage rec {
     export XAPIAN_CONFIG=${xapian}/bin/xapian-config
   '';
 
-  buildInputs = [ sphinx xapian ];
+  buildInputs = [
+    sphinx
+    xapian
+  ];
 
   doCheck = true;
 

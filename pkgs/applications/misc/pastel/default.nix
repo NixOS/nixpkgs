@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/pastel/releases/tag/v${version}";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ davidtwco ];
+    mainProgram = "pastel";
   };
 }

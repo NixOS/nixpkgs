@@ -1,28 +1,50 @@
-{ pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
+{ lib, fetchFromGitHub, gerbilPackages, gerbil-support, gerbil, ... }:
 
-gerbil-support.gerbilPackage {
+rec {
   pname = "gerbil-ethereum";
-  version = "unstable-2020-10-18";
-  git-version = "0.0-26-gf27ada8";
-  gerbil-package = "mukn/ethereum";
-  gerbil = gerbil-unstable;
-  gerbilInputs = with gerbil-support.gerbilPackages-unstable;
-    [gerbil-utils gerbil-crypto gerbil-poo gerbil-persist];
-  buildInputs = [];
-  gambit-params = gambit-support.unstable-params;
-  version-path = "version";
+  version = "unstable-2023-12-04";
+  git-version = "0.2-11-g124ec58";
   softwareName = "Gerbil-ethereum";
-  src = fetchFromGitHub {
-    owner = "fare";
+  gerbil-package = "clan/ethereum";
+  version-path = "version";
+
+  gerbilInputs = with gerbilPackages; [
+    gerbil-utils gerbil-crypto gerbil-poo gerbil-persist gerbil-leveldb ];
+
+  pre-src = {
+    fun = fetchFromGitHub;
+    owner = "mighty-gerbils";
     repo = "gerbil-ethereum";
-    rev = "f27ada8e7f4de4f8fbdfede9fe055914b254d8e7";
-    sha256 = "1lykjqim6a44whj1r8kkpiz68wghkfqx5vjlrc2ldxlmgd4r9gvd";
+    rev = "124ec585157e2c505cd3c449a389c124ca6da9e9";
+    sha256 = "0xg07k421r5p0qx98id66k0k2l3vi1is875857sd8q3h6bks0z54";
   };
-  meta = {
+
+  postInstall = ''
+    cp scripts/{croesus.prv,genesis.json,logback.xml,yolo-evm.conf,yolo-kevm.conf,run-ethereum-test-net.ss} $out/gerbil/lib/clan/ethereum/scripts/
+    mkdir -p $out/bin
+    cat > $out/bin/run-ethereum-test-net <<EOF
+    #!/bin/sh
+    #|
+    ORIG_GERBIL_LOADPATH="\$GERBIL_LOADPATH"
+    ORIG_GERBIL_PATH="\$GERBIL_PATH"
+    ORIG_GERBIL_HOME="\$GERBIL_HOME"
+    unset GERBIL_HOME
+    GERBIL_LOADPATH="${gerbil-support.gerbilLoadPath (["$out"] ++ gerbilInputs)}"
+    GERBIL_PATH="\$HOME/.cache/gerbil-ethereum/gerbil"
+    export GERBIL_PATH GERBIL_LOADPATH GLOW_SOURCE ORIG_GERBIL_PATH ORIG_GERBIL_LOADPATH
+    exec ${gerbil}/bin/gxi "\$0" "\$@"
+    |#
+    (import :clan/ethereum/scripts/run-ethereum-test-net :std/lib/multicall)
+    (apply call-entry-point (cdr (command-line)))
+    EOF
+    chmod a+x $out/bin/run-ethereum-test-net
+    '';
+
+  meta = with lib; {
     description = "Gerbil Ethereum: a Scheme alternative to web3.js";
     homepage    = "https://github.com/fare/gerbil-ethereum";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fare ];
+    license     = licenses.asl20;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ fare ];
   };
 }

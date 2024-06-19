@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pkg-config
-, pango
-, cython
-, AppKit
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pkg-config,
+  pango,
+  cython,
+  AppKit,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.4.1";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,27 +22,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ourSUYBAFONdupdsjo/PtwRQpXS7HqLxrHj0Ejr/Wdw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EBSbvjQyQIXOzvQMbuTwOoV8xSAOYDlCBZ56NLneuQI=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    pango
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ];
+  buildInputs = [ pango ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
-  propagatedBuildInputs = [
-    cython
-  ];
+  propagatedBuildInputs = [ cython ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -49,16 +40,15 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    ${python.interpreter} setup.py build_ext --inplace
+    ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
   '';
 
-  pythonImportsCheck = [
-    "manimpango"
-  ];
+  pythonImportsCheck = [ "manimpango" ];
 
   meta = with lib; {
     description = "Binding for Pango";
     homepage = "https://github.com/ManimCommunity/ManimPango";
+    changelog = "https://github.com/ManimCommunity/ManimPango/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ emilytrau ];
   };

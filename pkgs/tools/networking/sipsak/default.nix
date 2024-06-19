@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   pname = "sipsak";
   version = "4.1.2.1";
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
-    autoreconfHook
     openssl
     c-ares
   ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: transport.o:/build/source/sipsak.h:323: multiple definition of
   #     `address'; auth.o:/build/source/sipsak.h:323: first defined here
-  NIX_CFLAGS_COMPILE = "-std=gnu89 -fcommon";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89 -fcommon";
 
   src = fetchFromGitHub {
     owner = "sipwise";
@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/sipwise/sipsak";
     description = "SIP Swiss army knife";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ sheenobu ];
     platforms = with platforms; unix;
+    mainProgram = "sipsak";
   };
 
 }

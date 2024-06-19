@@ -4,32 +4,38 @@
 , pkg-config
 , gettext
 , isocodes
-, gnome
+, libstartup_notification
 , gtk3
 , dconf
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-desktop";
-  version = "1.26.0";
+  version = "1.28.2";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "18sj8smf0b998m5qvki37hxg0agcx7wmgz9z7cwv6v48i2dnnz2z";
+    sha256 = "MrtLeSAUs5HB4biunBioK01EdlCYS0y6fSjpVWSWSqI=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     dconf
-    gtk3
     isocodes
+  ];
+
+  propagatedBuildInputs = [
+    gtk3
+    libstartup_notification
   ];
 
   enableParallelBuilding = true;

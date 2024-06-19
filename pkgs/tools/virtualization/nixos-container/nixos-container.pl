@@ -39,6 +39,7 @@ Usage: nixos-container list
          [--host-address <string>]
          [--local-address <string>]
        nixos-container destroy <container-name>
+       nixos-container restart <container-name>
        nixos-container start <container-name>
        nixos-container stop <container-name>
        nixos-container terminate <container-name>
@@ -170,10 +171,8 @@ sub writeNixOSConfig {
     my $nixosConfig = <<EOF;
 { config, lib, pkgs, ... }:
 
-with lib;
-
 { boot.isContainer = true;
-  networking.hostName = mkDefault "$containerName";
+  networking.hostName = lib.mkDefault "$containerName";
   networking.useDHCP = false;
   $localExtraConfig
 }

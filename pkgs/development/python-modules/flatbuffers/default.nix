@@ -1,16 +1,19 @@
-{ lib
-, buildPythonPackage
-, flatbuffers
+{
+  lib,
+  buildPythonPackage,
+  flatbuffers,
 }:
 
 buildPythonPackage rec {
   inherit (flatbuffers) pname version src;
 
-  sourceRoot = "source/python";
+  format = "setuptools";
+
+  sourceRoot = "${src.name}/python";
 
   # flatbuffers needs VERSION environment variable for setting the correct
   # version, otherwise it uses the current date.
-  VERSION = "${version}";
+  VERSION = version;
 
   pythonImportsCheck = [ "flatbuffers" ];
 

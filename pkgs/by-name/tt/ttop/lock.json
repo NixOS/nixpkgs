@@ -1,0 +1,63 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "asciigraph"
+      ],
+      "path": "/nix/store/q3m2aqlzzrx4jj5akbf8rah0gp40ya2v-source",
+      "ref": "master",
+      "rev": "9f51fc4e94d0960ab63fa6ea274518159720aa69",
+      "sha256": "1n8cx5vl26ppjsn889zmfpa37yhlxahy2va4bqp6q4v4r1dl1h14",
+      "srcDir": "src",
+      "url": "https://github.com/Yardanico/asciigraph/archive/9f51fc4e94d0960ab63fa6ea274518159720aa69.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "illwill"
+      ],
+      "path": "/nix/store/3lmm3z36qn4gz7bfa209zv0pqrpm3di9-source",
+      "ref": "v0.3.2",
+      "rev": "1d12cb36ab7b76c31d2d25fa421013ecb382e625",
+      "sha256": "0f9yncl5gbdja18mrqf5ixrdgrh95k0khda923dm1jd1x1b7ar8z",
+      "srcDir": "",
+      "url": "https://github.com/johnnovak/illwill/archive/1d12cb36ab7b76c31d2d25fa421013ecb382e625.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "jsony"
+      ],
+      "path": "/nix/store/ila4vdklhqs6h14gwyx71yrjbzwf54g3-source",
+      "rev": "non_quoted_key",
+      "sha256": "03xg2psxk765rfbf77q0hw5p9j1lzx5aqgz0j6arknw6r3zjrvrm",
+      "srcDir": "src",
+      "url": "https://github.com/inv2004/jsony/archive/non_quoted_key.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "parsetoml"
+      ],
+      "path": "/nix/store/nrgl7ks2x3svv6pkdxzr97d6jbd3zhlr-source",
+      "ref": "v0.7.1",
+      "rev": "6e5e16179fa2db60f2f37d8b1af4128aaa9c8aaf",
+      "sha256": "0lsgzbjlgd0h9859yn864y9h9h1v4f5jjk81yvfnlkc9zbwb5kfa",
+      "srcDir": "src",
+      "url": "https://github.com/NimParsers/parsetoml/archive/6e5e16179fa2db60f2f37d8b1af4128aaa9c8aaf.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "zippy"
+      ],
+      "path": "/nix/store/dj520pi1q9xh5gplcjs0jsn5wgnaa0cr-source",
+      "ref": "0.10.11",
+      "rev": "9560f3d20479fb390c97f731ef8d100f1ed54e6c",
+      "sha256": "140r42kgynwsnrga4x2mildx9pflwniyhjjzmid2jvnl4i6jrsr4",
+      "srcDir": "src",
+      "url": "https://github.com/guzba/zippy/archive/9560f3d20479fb390c97f731ef8d100f1ed54e6c.tar.gz"
+    }
+  ]
+}

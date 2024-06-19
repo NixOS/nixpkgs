@@ -8,9 +8,8 @@
 , ninja
 , pkg-config
 , polkit
-, python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , editorconfig-core-c
 , granite
 , gtk3
@@ -27,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "6.2.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "code";
     rev = version;
-    sha256 = "sha256-QhJNRhYgGbPMd7B1X3kG+pnC/lGUoF7gc7O1PdG49LI=";
+    sha256 = "sha256-6lvn8c+JfbtZQf5dtViosVqtt/RWL6B/MvksXqmCfFs=";
   };
 
   nativeBuildInputs = [
@@ -43,9 +42,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     polkit # needed for ITS rules
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -69,15 +67,8 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
-
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

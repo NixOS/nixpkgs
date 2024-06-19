@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "Manipulate a Wishbone device over some sort of bridge";
+    mainProgram = "wishbone-tool";
     homepage = "https://github.com/litex-hub/wishbone-utils";
     license = licenses.bsd2;
     maintainers = with maintainers; [ edef ];

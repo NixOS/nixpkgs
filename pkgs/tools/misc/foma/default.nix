@@ -1,34 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, zlib, flex, bison, readline, darwin }:
+{ lib, stdenv, fetchFromGitHub, bison, cmake, flex, pkg-config, readline, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "foma";
-  version = "0.10.0alpha";
+  version = "0.10.0alpha-unstable-03-13-2024";
 
   src = fetchFromGitHub {
     owner = "mhulden";
     repo = "foma";
-    rev = "82f9acdef234eae8b7619ccc3a386cc0d7df62bc";
-    sha256 = "1vf01l18j8cksnavbabcckp9gg692w6v5lg81xrzv6f5v14zp4nr";
+    rev = "e0d8122bda4bbd56f18510bdfe840617f9736ae7";
+    hash = "sha256-UbwuHTilKWo4sVD3igcSlTqH78N6JQFvRD35QwfoX10=";
   };
 
   sourceRoot = "${src.name}/foma";
 
-  nativeBuildInputs = [ flex bison ]
-    ++ lib.optional stdenv.isDarwin darwin.cctools;
-  buildInputs = [ zlib readline ];
+  outputs = [ "out" "dev" ];
 
-  makeFlags = [
-    "CC:=$(CC)"
-    "RANLIB:=$(RANLIB)"
-    "prefix=$(out)"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    "AR:=$(AR)" # libtool is used for darwin
+  nativeBuildInputs = [ bison cmake flex pkg-config ];
+  buildInputs = [ readline zlib ];
+
+  cmakeFlags = [
+    # the cmake package does not handle absolute CMAKE_INSTALL_XXXDIR
+    # correctly (setting it to an absolute path causes include files to go to
+    # $out/$out/include, because the absolute path is interpreted with root at
+    # $out).
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
-
-  patchPhase = ''
-    substituteInPlace Makefile \
-      --replace '-ltermcap' ' '
-  '';
 
   meta = with lib; {
     description = "A multi-purpose finite-state toolkit designed for applications ranging from natural language processing to research in automata theory";

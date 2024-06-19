@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, bson
-, pytestCheckHook
-, pyyaml
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  bson,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pymarshal";
   version = "2.2.0";
-  disabled = pythonOlder "3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "stargateaudio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ds8JV2mtLRcKXBvPs84Hdj3MxxqpeV5muKCSlAFCj1A=";
+    hash = "sha256-Ds8JV2mtLRcKXBvPs84Hdj3MxxqpeV5muKCSlAFCj1A=";
   };
 
   postPatch = ''
@@ -27,15 +27,11 @@ buildPythonPackage rec {
       --replace "--cov=pymarshal --cov-report=html --cov-report=term" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    bson
-  ];
+  propagatedBuildInputs = [ bson ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     bson
     pyyaml

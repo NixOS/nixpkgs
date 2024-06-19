@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Remove snapshots from one or more zpools that match given criteria";
+    mainProgram = "zfs-prune-snapshots";
     homepage = "https://github.com/bahamas10/zfs-prune-snapshots";
     license = licenses.mit;
     maintainers = [ maintainers.ymarkus ];

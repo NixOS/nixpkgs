@@ -1,12 +1,34 @@
-{ lib, stdenv, buildPackages
+{ lib, stdenv, buildPackages, fetchzip, fetchFromGitHub
 , appleDerivation', xnu, Libc, Libm, libdispatch, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
-, copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libplatform, libpthread
-, mDNSResponder, launchd, libutilHeaders, hfsHeaders, darling, darwin-stubs
+, copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libmalloc, libplatform, libpthread
+, mDNSResponder, launchd, libutilHeaders, hfsHeaders, darwin-stubs
 , headersOnly ? false
 , withLibresolv ? !headersOnly
 }:
 
+let
+  darling.src = fetchzip {
+    url = "https://github.com/darlinghq/darling/archive/d2cc5fa748003aaa70ad4180fff0a9a85dc65e9b.tar.gz";
+    hash = "sha256-/YynrKJdi26Xj4lvp5wsN+TAhZjonOrNNHuk4L5tC7s=";
+    postFetch = ''
+      # The archive contains both `src/opendirectory` and `src/OpenDirectory`.
+      # Since neither directory is used for anything, we just remove them to avoid
+      #  the potential issue where file systems with different case sensitivity produce
+      #  different hashes.
+      rm -rf $out/src/{OpenDirectory,opendirectory}
+    '';
+  };
+
+  # Libsystem needs `asl.h` from syslog. This is the version corresponding to the 10.12 SDK
+  # source release, but it hasn’t changed in newer versions.
+  syslog.src = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = "syslog";
+    rev = "syslog-349.50.5";
+    hash = "sha256-tXLW/TNsluhO1X9Rv3FANyzyOe5TE/hZz0gVo7JGvHA=";
+  };
+in
 appleDerivation' stdenv {
   dontBuild = true;
   dontFixup = true;
@@ -33,11 +55,18 @@ appleDerivation' stdenv {
                ${libclosure} ${CarbonHeaders} ${libdispatch} ${ncurses.dev} \
                ${CommonCrypto} ${copyfile} ${removefile} ${libresolvHeaders} \
                ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} \
-               ${libutilHeaders} ${libpthread} ${hfsHeaders}; do
+               ${libutilHeaders} ${libmalloc} ${libpthread} ${hfsHeaders}; do
       (cd $dep/include && find . -name '*.h' | copyHierarchy $out/include)
     done
 
     (cd ${buildPackages.darwin.cctools.dev}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
+
+    for header in pthread.h pthread_impl.h pthread_spis.h sched.h; do
+      ln -s "$out/include/pthread/$header" "$out/include/$header"
+    done
+
+    # Copy `asl.h` from the syslog sources since it is no longer provided as part of Libc.
+    cp ${syslog.src}/libsystem_asl.tproj/include/asl.h $out/include
 
     mkdir -p $out/include/os
 
@@ -141,6 +170,6 @@ appleDerivation' stdenv {
     description = "The Mac OS libc/libSystem (tapi library with pure headers)";
     maintainers = with maintainers; [ copumpkin gridaphobe ];
     platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    license     = licenses.apple-psl20;
   };
 }

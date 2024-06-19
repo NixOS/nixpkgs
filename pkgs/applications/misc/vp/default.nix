@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL SDL_image ];
 
-  NIX_CFLAGS_COMPILE="-I${SDL}/include/SDL -I${SDL_image}/include/SDL";
+  env.NIX_CFLAGS_COMPILE = "-I${SDL}/include/SDL -I${SDL_image}/include/SDL";
 
   meta = with lib; {
     homepage = "https://brlcad.org/~erik/";
@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license  = licenses.gpl3;
     maintainers = [ maintainers.vrthra ];
+    mainProgram = "vp";
   };
 }

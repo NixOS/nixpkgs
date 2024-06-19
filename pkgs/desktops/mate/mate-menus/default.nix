@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-menus";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1r7zf64aclaplz77hkl9kq0xnz6jk1l49z64i8v56c41pm59c283";
+    sha256 = "z0DHXH1vCq0dSWmCj8YgJcYiK8aoTwu51urX5FlwUI0=";
   };
 
   nativeBuildInputs = [

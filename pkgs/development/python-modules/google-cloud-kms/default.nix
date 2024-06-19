@@ -1,30 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, grpc-google-iam-v1
-, google-api-core
-, libcst
-, mock
-, proto-plus
-, pytest-asyncio
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  grpc-google-iam-v1,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "2.12.1";
+  version = "2.21.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-A1sIdkNdK4L6gb3VBApuKJ71J5N2Jq43kcD8DpHU99E=";
+    hash = "sha256-AQW8FKOYt/05GUO766/VkY8+NAaCepiXObLcOInMEhg=";
   };
 
-  propagatedBuildInputs = [ grpc-google-iam-v1 google-api-core libcst proto-plus ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  propagatedBuildInputs = [
+    grpc-google-iam-v1
+    google-api-core
+    proto-plus
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  # Disable tests that need credentials
-  disabledTests = [ "test_list_global_key_rings" ];
+  nativeCheckInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Disable tests that need credentials
+    "test_list_global_key_rings"
+    # Tests require PROJECT_ID
+    "test_list_ekm_connections"
+  ];
 
   pythonImportsCheck = [
     "google.cloud.kms"
@@ -33,8 +54,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cloud Key Management Service (KMS) API API client library";
-    homepage = "https://github.com/googleapis/python-kms";
+    homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-kms";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-kms-v${version}/packages/google-cloud-kms/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

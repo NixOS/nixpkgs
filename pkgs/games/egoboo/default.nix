@@ -48,14 +48,14 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
   #   ld: mad.o:(.bss+0x233800): multiple definition of `tile_dict'; camera.o:(.bss+0x140): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   NIX_LDFLAGS = "-lm";
 
   meta = {
     description = "3D dungeon crawling adventure";
 
-    homepage = "http://egoboo.sourceforge.net/";
+    homepage = "https://egoboo.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
 
     # I take it out of hydra as it does not work as well as I'd like

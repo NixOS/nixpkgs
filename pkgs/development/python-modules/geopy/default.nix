@@ -1,37 +1,31 @@
-{ lib
-, async_generator
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, geographiclib
-, pytestCheckHook
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  geographiclib,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
   pname = "geopy";
-  version = "2.2.0";
-  disabled = pythonOlder "3.5";
+  version = "2.4.1";
+  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-zFz0T/M/CABKkChuiKsFkWj2pphZuFeE5gz0HxZYaz8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-mlOXDEtYry1IUAZWrP2FuY/CGliUnCPYLULnLNN0n4Y=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "geographiclib<2,>=1.49" "geographiclib"
-  '';
+  propagatedBuildInputs = [ geographiclib ];
 
-  propagatedBuildInputs = [
-    geographiclib
-  ];
-
-  checkInputs = [
-    async_generator
+  nativeCheckInputs = [
     docutils
     pytestCheckHook
     pytz
@@ -41,6 +35,8 @@ buildPythonPackage rec {
     # ignore --skip-tests-requiring-internet flag
     "test_user_agent_default"
   ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [ "test/test_init.py" ];
 
   pytestFlagsArray = [ "--skip-tests-requiring-internet" ];
 

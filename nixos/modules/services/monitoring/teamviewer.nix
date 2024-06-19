@@ -14,7 +14,7 @@ in
 
   options = {
 
-    services.teamviewer.enable = mkEnableOption (lib.mdDoc "TeamViewer daemon");
+    services.teamviewer.enable = mkEnableOption "TeamViewer daemon";
 
   };
 
@@ -30,7 +30,8 @@ in
       description = "TeamViewer remote control daemon";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "NetworkManager-wait-online.service" "network.target" "dbus.service" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" "network.target" "dbus.service" ];
       requires = [ "dbus.service" ];
       preStart = "mkdir -pv /var/lib/teamviewer /var/log/teamviewer";
 

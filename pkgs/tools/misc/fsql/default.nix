@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fsql";
-  version = "0.4.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "kshvmdn";
     repo = "fsql";
     rev = "v${version}";
-    sha256 = "sha256-/9X1ag18epFjEfB+TbRsHPCZRZblV0ohvDlZ523kXXc=";
+    sha256 = "sha256-U6TPszqsZvoz+9GIB0wNYMRJqIDLOp/BZO3/k8FC0Gs=";
   };
 
-  vendorSha256 = "sha256-h75iQSpHZqc0QNOZWHU1l6xsHB8ClfWXYo1jVMzX72Q=";
+  vendorHash = "sha256-+laTnx6Xkrv3QQel5opqYQSuFmo54UMI2A653xbBWzQ=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -20,6 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/kshvmdn/fsql";
     license = licenses.mit;
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.unix;
+    mainProgram = "fsql";
   };
 }

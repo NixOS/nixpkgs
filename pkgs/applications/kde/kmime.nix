@@ -13,5 +13,8 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kcodecs ki18n qtbase ];
   outputs = [ "out" "dev" ];
-  meta.broken = lib.versionOlder qtbase.version "5.15.0";
+  postInstall = ''
+    # added as an include directory by cmake files and fails to compile if it's missing
+    mkdir -p "$dev/include/KF5"
+  '';
 }

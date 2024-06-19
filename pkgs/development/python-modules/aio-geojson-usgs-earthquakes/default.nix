@@ -1,29 +1,32 @@
-{ lib
-, aio-geojson-client
-, aiohttp
-, aresponses
-, asynctest
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pytz
-, pythonOlder
+{
+  lib,
+  aio-geojson-client,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytz,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aio-geojson-usgs-earthquakes";
-  version = "0.1";
-  format = "setuptools";
+  version = "0.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-geojson-usgs-earthquakes";
-    rev = "v${version}";
-    hash = "sha256-Hb0/BdK/jjxlPl9WJJpFdOCzZpZDCguXoGreGIyN8oo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Q9vBy5R5N5ihJdSMALo88qVYcFVs2/33lYRPdLej4S8=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aio-geojson-client
@@ -31,20 +34,21 @@ buildPythonPackage rec {
     pytz
   ];
 
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
   checkInputs = [
-    aresponses
-    asynctest
+    aioresponses
     pytest-asyncio
-    pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "aio_geojson_usgs_earthquakes"
-  ];
+  pythonImportsCheck = [ "aio_geojson_usgs_earthquakes" ];
 
   meta = with lib; {
     description = "Python module for accessing the U.S. Geological Survey Earthquake Hazards Program feeds";
     homepage = "https://github.com/exxamalte/python-aio-geojson-usgs-earthquakes";
+    changelog = "https://github.com/exxamalte/python-aio-geojson-usgs-earthquakes/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

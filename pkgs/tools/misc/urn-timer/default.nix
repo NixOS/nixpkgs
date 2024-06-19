@@ -1,49 +1,31 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , unstableGitUpdater
 , xxd
 , pkg-config
 , imagemagick
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk3
 , jansson
+, nixosTests
 }:
 
 stdenv.mkDerivation {
   pname = "urn-timer";
-  version = "unstable-2017-08-20";
+  version = "0-unstable-2024-03-05";
 
   src = fetchFromGitHub {
-    owner = "3snowp7im";
+    owner = "paoloose";
     repo = "urn";
-    rev = "246a7a642fa7a673166c1bd281585d0fc22e75b2";
-    sha256 = "0bniwf3nhsqapsss9m9y9ylh38v6v7q45999wa1qcsddpa72k0i0";
-    fetchSubmodules = true;
+    rev = "10082428749fabb69db1556f19940d8700ce48a2";
+    hash = "sha256-sQjHQ/i1d4v4ZnM0YAay+MdIj5l/FfIYj+NdH48OqfU=";
   };
-
-  patches = [
-    # https://github.com/3snowp7im/urn/pull/50
-    (fetchpatch {
-      name = "stop-hardcoding-prefix";
-      url = "https://github.com/3snowp7im/urn/commit/6054ee62dcd6095e31e8fb2a229155dbbcb39f68.patch";
-      sha256 = "1xdkylbqlqjwqx4pb9v1snf81ag7b6q8vybirz3ibsv6iy79v9pk";
-    })
-    # https://github.com/3snowp7im/urn/pull/53
-    (fetchpatch {
-      name = "create-installation-directories";
-      url = "https://github.com/3snowp7im/urn/commit/fb032851b9c5bebb5066d306f5366f0be34f0797.patch";
-      sha256 = "0jjhcz4n8bm3hl56rvjzkvxr6imc05qlyavzjrlafa19hf036g4a";
-    })
-  ];
-
-  postPatch = ''substituteInPlace GNUmakefile --replace 'rsync -a --exclude=".*"' 'cp -r' '';
 
   nativeBuildInputs = [
     xxd
     pkg-config
     imagemagick
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -54,13 +36,16 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
 
   passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/3snowp7im/urn.git";
+    url = "https://github.com/paoloose/urn.git";
   };
 
+  passthru.tests.nixosTest = nixosTests.urn-timer;
+
   meta = with lib; {
-    homepage = "https://github.com/3snowp7im/urn";
+    homepage = "https://github.com/paoloose/urn";
     description = "Split tracker / timer for speedrunning with GTK+ frontend";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
+    mainProgram = "urn-gtk";
   };
 }

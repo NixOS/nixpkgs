@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub,
-  xlibsWrapper, libev, libXi, libXfixes,
+  libev, libX11, libXext, libXi, libXfixes,
   pkg-config, asciidoc, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config asciidoc libxslt docbook_xsl ];
-  buildInputs = [ xlibsWrapper libev libXi libXfixes ];
+  buildInputs = [ libev libX11 libXext libXi libXfixes ];
 
   prePatch = ''
     substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Rewrite of unclutter using the X11 Xfixes extension";
     platforms = platforms.unix;
     license = lib.licenses.mit;
-    maintainers = [ maintainers.globin ];
+    maintainers = [ ];
     mainProgram = "unclutter";
   };
 }

@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     description = "popcorn anime-downloader + trackma wrapper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ WeebSorceress ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "adl";
   };
 }

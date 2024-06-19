@@ -11,27 +11,26 @@
 , wrapGAppsHook4
 , ninja
 , gnome
+, cairo
 , enchant
 , icu
 , itstool
 , libadwaita
+, editorconfig-core-c
 , libxml2
-, pcre
-, appstream-glib
 , desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-text-editor";
-  version = "42.2";
+  version = "46.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-text-editor/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-5W1KjNy86KjxwIgbRd55n4slIF7Ay/ImnlMgJXYcxdo=";
+    hash = "sha256-AFtIEEqQm+Zq4HRI0rxXBsfRE3gQV6JP9tpVvfMkxz0=";
   };
 
   nativeBuildInputs = [
-    appstream-glib
     desktop-file-utils
     itstool
     libxml2 # for xmllint
@@ -43,6 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cairo
     enchant
     icu
     glib
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     gtk4
     gtksourceview5
     libadwaita
-    pcre
+    editorconfig-core-c
   ];
 
   passthru = {
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-text-editor";
     description = "A Text Editor for GNOME";
+    mainProgram = "gnome-text-editor";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

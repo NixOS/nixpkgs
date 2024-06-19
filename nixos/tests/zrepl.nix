@@ -42,6 +42,7 @@ import ./make-test-python.nix (
       start_all()
 
       with subtest("Wait for zrepl and network ready"):
+          host.systemctl("start network-online.target")
           host.wait_for_unit("network-online.target")
           host.wait_for_unit("zrepl.service")
 
@@ -58,8 +59,8 @@ import ./make-test-python.nix (
           out = host.succeed("curl -f localhost:9811/metrics")
 
           assert (
-              "zrepl_version_daemon" in out
-          ), "zrepl version metric was not found in Prometheus output"
+              "zrepl_start_time" in out
+          ), "zrepl start time metric was not found in Prometheus output"
 
           assert (
               "zrepl_zfs_snapshot_duration_count{filesystem=\"test\"}" in out

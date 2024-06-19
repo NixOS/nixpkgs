@@ -12,7 +12,7 @@
 
 # runtime
 , buildPackages
-, ffmpeg_5
+, ffmpeg_5-headless
 
 # tests
 , nixosTests
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    ffmpeg_5
+    ffmpeg_5-headless
   ];
 
   passthru.tests = {
@@ -50,9 +50,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.flameeyes.eu/projects/unpaper";
+    changelog = "https://github.com/unpaper/unpaper/blob/unpaper-${version}/NEWS";
     description = "Post-processing tool for scanned sheets of paper";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
+    mainProgram = "unpaper";
     maintainers = [ maintainers.rycee ];
   };
 }

@@ -22,13 +22,13 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the Freenet daemon";
+        description = "Enable the Freenet daemon";
       };
 
       nice = mkOption {
         type = types.int;
         default = 10;
-        description = lib.mdDoc "Set the nice level for the Freenet daemon";
+        description = "Set the nice level for the Freenet daemon";
       };
 
     };

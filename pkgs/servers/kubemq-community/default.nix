@@ -2,12 +2,12 @@
 
 buildGoModule rec {
   pname = "kubemq-community";
-  version = "2.3.0";
+  version = "2.3.7";
   src = fetchFromGitHub {
     owner = "kubemq-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-E4X8srrfbOHV2XmjaXV25WilIjBGPjEGD6BqK7HreoQ=";
+    sha256 = "sha256-oAo/O3T3wtfCumT2kjoyXKfCFHijVzSmxhslaKaeF3Y=";
   };
 
   CGO_ENABLED=0;
@@ -16,11 +16,12 @@ buildGoModule rec {
 
   doCheck = false;  # grpc tests are flaky
 
-  vendorSha256 = "sha256-kvQ5sPMudI75fVIWJkkwXpmVrJysvWcIgpgjyQh19W0=";
+  vendorHash = "sha256-L1BxxSI2t0qWXizge+X3BrpGPaSy5Dk81vKuI0N5Ywg=";
 
   meta = {
     homepage = "https://github.com/kubemq-io/kubemq-community";
     description = "KubeMQ Community is the open-source version of KubeMQ, the Kubernetes native message broker.";
+    mainProgram = "kubemq-community";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ brianmcgee ];
   };

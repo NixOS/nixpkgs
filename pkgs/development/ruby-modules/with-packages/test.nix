@@ -6,7 +6,7 @@ let
   stdenv = pkgs.stdenv;
 
   rubyVersions = with pkgs; [
-    ruby_2_7
+    ruby_3_2
   ];
 
   gemTests =
@@ -14,6 +14,22 @@ let
       (name: gem: [ name ])
       pkgs.ruby.gems) //
     (import ./require_exceptions.nix);
+
+  testWrapper = ruby: stdenv.mkDerivation {
+    name = "test-wrappedRuby-${ruby.name}";
+    buildInputs = [ ((ruby.withPackages (ps: [ ])).wrappedRuby) ];
+    buildCommand = ''
+      cat <<'EOF' > test-ruby
+      #!/usr/bin/env ruby
+      puts RUBY_VERSION
+      EOF
+
+      chmod +x test-ruby
+      patchShebangs test-ruby
+      [[ $(./test-ruby) = $(${ruby}/bin/ruby test-ruby) ]]
+      touch $out
+    '';
+  };
 
   tests = ruby:
     lib.mapAttrs (name: gem:
@@ -39,7 +55,7 @@ let
 in
   stdenv.mkDerivation {
     name = "test-all-ruby-gems";
-    buildInputs = builtins.foldl' (sum: ruby: sum ++ ( builtins.attrValues (tests ruby) )) [] rubyVersions;
+    buildInputs = builtins.foldl' (sum: ruby: sum ++ [ (testWrapper ruby) ] ++ ( builtins.attrValues (tests ruby) )) [] rubyVersions;
     buildCommand = ''
       touch $out
     '';

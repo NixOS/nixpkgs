@@ -1,5 +1,4 @@
-{ boost165
-, cmake
+{ cmake
 , fetchFromGitHub
 , freetype
 , ilmbase
@@ -27,6 +26,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UVBA1vXOuLg4RT+BdF4rhbZ6I9ySeZX0N81gh3MH84I=";
   };
 
+  postPatch = ''
+    sed '1i#include <memory>' -i \
+      include/geometry/poly_double.h include/noise/noise_generator.h # gcc12
+  '';
+
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -isystem ${ilmbase.dev}/include/OpenEXR"
   '';
@@ -37,7 +41,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost165
     freetype
     ilmbase
     libjpeg

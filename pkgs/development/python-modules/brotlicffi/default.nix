@@ -1,34 +1,30 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, cffi
-, brotli
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  cffi,
+  brotli,
 }:
 
 buildPythonPackage rec {
   pname = "brotlicffi";
-  version = "1.0.9.2";
-  disabled = pythonOlder "3.6";
+  version = "1.1.0.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-hyper";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qx7an7772brmx1rbbrqzqnkqqvicc70mx740nl31kzzyv4jjs00";
+    sha256 = "sha256-oW4y1WBJ7+4XwNwwSSR0qUqN03cZYXUYQ6EAwce9dzI=";
   };
 
-  buildInputs = [
-    brotli
-  ];
+  buildInputs = [ brotli ];
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
 
-  propagatedBuildInputs = [
-    cffi
-  ];
+  propagatedBuildInputs = [ cffi ];
 
   preBuild = ''
     export USE_SHARED_BROTLI=1

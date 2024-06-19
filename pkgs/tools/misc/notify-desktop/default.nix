@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "1brcvl2fx0yzxj9mc8hzfl32zdka1f1bxpzsclcsjplyakyinr1a";
   };
 
-  buildInputs = [ dbus pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dbus ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -26,8 +27,9 @@ stdenv.mkDerivation {
       It also does not use any external dependencies (except from libdbus of course).
     '';
     homepage = "https://github.com/nowrep/notify-desktop";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ylwghst ];
+    mainProgram = "notify-desktop";
   };
 }

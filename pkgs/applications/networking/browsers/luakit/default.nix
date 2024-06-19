@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , help2man
 , glib-networking
 , gst_all_1
@@ -15,19 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "luakit";
-  version = "2.3";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "luakit";
     repo = pname;
     rev = version;
-    hash = "sha256-5YeJkbWk1wHxWXqWOvhEDeScWPU/aRVhuOWRHLSHVZM=";
+    hash = "sha256-DtoixcLq+ddbacTAo+Qq6q4k1i6thirACw1zqUeOxXo=";
   };
 
   nativeBuildInputs = [
     pkg-config
     help2man
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
   buildInputs = [
     gtk3
@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://luakit.github.io/";
     description = "Fast, small, webkit-based browser framework extensible in Lua";
+    mainProgram = "luakit";
     longDescription = ''
       Luakit is a highly configurable browser framework based on the WebKit web
       content engine and the GTK+ toolkit. It is very fast, extensible with Lua,

@@ -1,11 +1,12 @@
 { lib
 , stdenv
 , fetchurl
+, desktop-file-utils
 , pkg-config
 , gnome
 , gtk4
 , libadwaita
-, wrapGAppsHook
+, wrapGAppsHook4
 , gjs
 , gobject-introspection
 , libgweather
@@ -18,18 +19,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-weather";
-  version = "42.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "V57mkdhT5bs/9Q6Me0P4Wundfls6ZJ4CwlSi2bgHtGU=";
+    hash = "sha256-FTgmcFzPZy4U8v5N/Hgvjom3xMvkqv6VpVMvveej1J0=";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     pkg-config
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook4
     python3
     gobject-introspection
     gjs
@@ -66,10 +68,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Weather";
+    homepage = "https://apps.gnome.org/Weather/";
     description = "Access current weather conditions and forecasts";
+    mainProgram = "gnome-weather";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

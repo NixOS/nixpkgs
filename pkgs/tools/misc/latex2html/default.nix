@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "latex2html";
-  version = "2022.2";
+  version = "2024";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Vl7ozawd4Ra+yDarRpmPhjF7deJELaxo07L4/qVV4fw=";
+    sha256 = "sha256-MF+S6x+k+lkutJQ60HCxFpdR96K3AFZcP/4guK9RvsA=";
   };
 
   buildInputs = [ ghostscript netpbm perl ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.ctan.org/pkg/latex2html";
 
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ yurrriq ];
   };

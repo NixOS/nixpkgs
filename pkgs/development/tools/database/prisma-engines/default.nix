@@ -2,6 +2,7 @@
 , lib
 , Security
 , openssl
+, git
 , pkg-config
 , protobuf
 , rustPlatform
@@ -13,21 +14,30 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "4.4.0";
+  version = "5.12.1";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    sha256 = "sha256-gk+psYNSC5Xy6R3aUF0E9TyJgJ78+EMvz/xnPgN3+RY=";
+    hash = "sha256-emy2Qvx05D8omSc3Ivx66EnThW/tr77UGQu3qhat/fc=";
   };
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
 
-  cargoSha256 = "sha256-BiQMoY2hd5q05YZBrTrHlKDtWlOkyfWjjNB/8F2+lXg=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "barrel-0.6.6-alpha.0" = "sha256-USh0lQ1z+3Spgc69bRFySUzhuY79qprLlEExTmYWFN8=";
+      "cuid-1.3.2" = "sha256-qBu1k/dJiA6rWBwk4nOOqouIneD9h2TTBT8tvs0TDfA=";
+      "graphql-parser-0.3.0" = "sha256-0ZAsj2mW6fCLhwTETucjbu4rPNzfbNiHu2wVTBlTNe4=";
+      "mysql_async-0.31.3" = "sha256-2wOupQ/LFV9pUifqBLwTvA0tySv+XWbxHiqs7iTzvvg=";
+      "postgres-native-tls-0.5.0" = "sha256-UYPsxhCkXXWk8yPbqjNS0illwjS5mVm3Z/jFwpVwqfw=";
+    };
+  };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config git ];
 
   buildInputs = [
     openssl
@@ -45,7 +55,12 @@ rustPlatform.buildRustPackage rec {
     export SQLITE_MAX_EXPR_DEPTH=10000
   '';
 
-  cargoBuildFlags = "-p query-engine -p query-engine-node-api -p migration-engine-cli -p introspection-core -p prisma-fmt";
+  cargoBuildFlags = [
+    "-p" "query-engine"
+    "-p" "query-engine-node-api"
+    "-p" "schema-engine-cli"
+    "-p" "prisma-fmt"
+  ];
 
   postInstall = ''
     mv $out/lib/libquery_engine${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libquery_engine.node
@@ -59,7 +74,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pamplemousse pimeys tomhoule ];
+    maintainers = with maintainers; [ pimeys tomhoule ivan aqrln ];
   };
 }
 

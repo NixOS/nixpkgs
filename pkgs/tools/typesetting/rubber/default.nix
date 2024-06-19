@@ -50,5 +50,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://gitlab.com/latex-rubber/rubber";
     maintainers = with maintainers; [ ttuegel peterhoeg ];
     platforms = platforms.unix;
+    mainProgram = "rubber";
   };
 }

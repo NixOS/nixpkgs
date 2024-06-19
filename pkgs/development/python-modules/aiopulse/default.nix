@@ -1,32 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, async-timeout
-, pythonOlder
+{
+  lib,
+  async-timeout,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiopulse";
-  version = "0.4.3";
-  format = "setuptools";
+  version = "0.4.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Wp8NUjRlO+6ASqIt3C0YJRh0EKcEukXVMp4I+TCTElo=";
+    hash = "sha256-yrltqnePNnNwsVGkfXgtrtL/FuazRvmoVL4L0H4j4Bg=";
   };
 
-  propagatedBuildInputs = [
-    async-timeout
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  # tests are not present
+  propagatedBuildInputs = [ async-timeout ];
+
+  # Tests are not present
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiopulse"
-  ];
+  pythonImportsCheck = [ "aiopulse" ];
 
   meta = with lib; {
     description = "Python Rollease Acmeda Automate Pulse hub protocol implementation";
@@ -37,6 +37,7 @@ buildPythonPackage rec {
       binary protocol to issues commands to the Pulse Hub.
     '';
     homepage = "https://github.com/atmurray/aiopulse";
+    changelog = "https://github.com/atmurray/aiopulse/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

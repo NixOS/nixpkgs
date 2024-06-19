@@ -1,8 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pkgs, qtbase, qmake, soqt }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pkgs,
+  qtbase,
+  qmake,
+  soqt,
+}:
 
 buildPythonPackage rec {
   pname = "pivy";
   version = "0.6.8";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coin3d";
@@ -14,16 +23,28 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = with pkgs; [
-    swig qmake cmake
+    swig
+    qmake
+    cmake
   ];
 
-  buildInputs = with pkgs; with xorg; [
-    coin3d soqt qtbase
-    libGLU libGL
-    libXi libXext libSM libICE libX11
-  ];
+  buildInputs =
+    with pkgs;
+    with xorg;
+    [
+      coin3d
+      soqt
+      qtbase
+      libGLU
+      libGL
+      libXi
+      libXext
+      libSM
+      libICE
+      libX11
+    ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${qtbase.dev}/include/QtCore"
     "-I${qtbase.dev}/include/QtGui"
     "-I${qtbase.dev}/include/QtOpenGL"
@@ -31,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   dontUseQmakeConfigure = true;
-  dontWrapQtApps =true;
+  dontWrapQtApps = true;
   doCheck = false;
 
   postPatch = ''
@@ -45,5 +66,4 @@ buildPythonPackage rec {
     license = licenses.bsd0;
     maintainers = with maintainers; [ gebner ];
   };
-
 }

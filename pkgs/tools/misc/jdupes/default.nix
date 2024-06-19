@@ -1,27 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitea, libjodycode }:
 
 stdenv.mkDerivation rec {
   pname = "jdupes";
-  version = "1.21.0";
+  version = "1.27.3";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "jbruchon";
     repo  = "jdupes";
     rev   = "v${version}";
-    sha256 = "sha256-nDyRaV49bLVHlyqKJ7hf6OBWOLCfmHrTeHryK091c3w=";
+    hash = "sha256-hR5nl8G7TYVm4ol/jgo7iOb4dLr2MovgjKSXCD2UwMg=";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The testdir
     # directories have such files and will be removed.
     postFetch = "rm -r $out/testdir";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "darwin-stack-size.patch";
-      url = "https://github.com/jbruchon/jdupes/commit/8f5b06109b44a9e4316f9445da3044590a6c63e2.patch";
-      sha256 = "0saq92v0mm5g979chr062psvwp3i3z23mgqrcliq4m07lvwc7i3s";
-    })
-  ];
+  buildInputs = [ libjodycode ];
 
   dontConfigure = true;
 
@@ -39,7 +34,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # broken Makefile, the above also removes tests
 
   postInstall = ''
-    install -Dm444 -t $out/share/doc/jdupes CHANGES LICENSE README.md
+    install -Dm444 -t $out/share/doc/jdupes CHANGES.txt LICENSE.txt README.md
   '';
 
   meta = with lib; {
@@ -51,6 +46,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/jbruchon/jdupes";
     license = licenses.mit;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "jdupes";
   };
 }

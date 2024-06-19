@@ -1,11 +1,11 @@
 { lib, stdenv, fetchFromGitHub, fetchFromGitLab, fetchgit
 , buildKakounePluginFrom2Nix
-, kak-lsp, parinfer-rust, rep
+, kakoune-lsp, parinfer-rust, rep
 , fzf, git, guile, kakoune-unwrapped, lua5_3, plan9port
 }:
 
 self: super: {
-  inherit kak-lsp parinfer-rust rep;
+  inherit kakoune-lsp parinfer-rust rep;
 
   case-kak = buildKakounePluginFrom2Nix {
     pname = "case-kak";

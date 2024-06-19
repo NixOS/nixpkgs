@@ -6,30 +6,30 @@
 , pkg-config
 , lib
 , stdenv
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-menus";
-  version = "5.4.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-Q4bgaX8nGSWHKHR3+hFTlHtNhSmZW8ZEHi8DaXKQ+fM=";
+    hash = "sha256-zP1jA5Fwxh6QrM5YwJo7SFPWaxkJsv1D84dhIDP5xuI=";
   };
 
   buildInputs = [
     glib
-    gobject-introspection
   ];
 
   nativeBuildInputs = [
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
+    gobject-introspection
   ];
 
   meta = with lib; {

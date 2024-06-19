@@ -70,9 +70,12 @@ static void init()
 
 }
 
-static const char * rewrite(const char * path, char * buf)
+static const char * rewrite(const char * volatile path, char * buf)
 {
+    // Marking the path volatile is needed so the the following check isn't
+    // optimized away by the compiler.
     if (path == NULL) return path;
+
     for (int n = 0; n < nrRedirects; ++n) {
         int len = strlen(from[n]);
         if (strncmp(path, from[n], len) != 0) continue;
@@ -106,7 +109,7 @@ static int open_needs_mode(int flags)
 
 WRAPPER(int, open)(const char * path, int flags, ...)
 {
-    int (*open_real) (const char *, int, mode_t) = LOOKUP_REAL(open);
+    int (*open_real) (const char *, int, ...) = LOOKUP_REAL(open);
     mode_t mode = 0;
     if (open_needs_mode(flags)) {
         va_list ap;
@@ -139,7 +142,7 @@ WRAPPER_DEF(open64)
 
 WRAPPER(int, openat)(int dirfd, const char * path, int flags, ...)
 {
-    int (*openat_real) (int, const char *, int, mode_t) = LOOKUP_REAL(openat);
+    int (*openat_real) (int, const char *, int, ...) = LOOKUP_REAL(openat);
     mode_t mode = 0;
     if (open_needs_mode(flags)) {
         va_list ap;
@@ -201,6 +204,37 @@ WRAPPER(int, __xstat64)(int ver, const char * path, struct stat64 * st)
 WRAPPER_DEF(__xstat64)
 #endif
 
+#if defined(__linux__) && defined(STATX_TYPE)
+WRAPPER(int, statx)(int dirfd, const char * restrict pathname, int flags,
+    unsigned int mask, struct statx * restrict statxbuf)
+{
+    int (*statx_real) (int, const char * restrict, int,
+        unsigned int, struct statx * restrict) = LOOKUP_REAL(statx);
+    char buf[PATH_MAX];
+    return statx_real(dirfd, rewrite(pathname, buf), flags, mask, statxbuf);
+}
+WRAPPER_DEF(statx)
+#endif
+
+WRAPPER(int, fstatat)(int dirfd, const char * pathname, struct stat * statbuf, int flags)
+{
+    int (*fstatat_real) (int, const char *, struct stat *, int) = LOOKUP_REAL(fstatat);
+    char buf[PATH_MAX];
+    return fstatat_real(dirfd, rewrite(pathname, buf), statbuf, flags);
+}
+WRAPPER_DEF(fstatat);
+
+// In musl libc, fstatat64 is simply a macro for fstatat
+#if !defined(__APPLE__) && !defined(fstatat64)
+WRAPPER(int, fstatat64)(int dirfd, const char * pathname, struct stat64 * statbuf, int flags)
+{
+    int (*fstatat64_real) (int, const char *, struct stat64 *, int) = LOOKUP_REAL(fstatat64);
+    char buf[PATH_MAX];
+    return fstatat64_real(dirfd, rewrite(pathname, buf), statbuf, flags);
+}
+WRAPPER_DEF(fstatat64);
+#endif
+
 WRAPPER(int, stat)(const char * path, struct stat * st)
 {
     int (*__stat_real) (const char *, struct stat *) = LOOKUP_REAL(stat);
@@ -208,6 +242,17 @@ WRAPPER(int, stat)(const char * path, struct stat * st)
     return __stat_real(rewrite(path, buf), st);
 }
 WRAPPER_DEF(stat)
+
+// In musl libc, stat64 is simply a macro for stat
+#if !defined(__APPLE__) && !defined(stat64)
+WRAPPER(int, stat64)(const char * path, struct stat64 * st)
+{
+    int (*stat64_real) (const char *, struct stat64 *) = LOOKUP_REAL(stat64);
+    char buf[PATH_MAX];
+    return stat64_real(rewrite(path, buf), st);
+}
+WRAPPER_DEF(stat64)
+#endif
 
 WRAPPER(int, access)(const char * path, int mode)
 {
@@ -345,6 +390,14 @@ WRAPPER(int, system)(const char *command)
     return _system(newCommand);
 }
 WRAPPER_DEF(system)
+
+WRAPPER(int, chdir)(const char *path)
+{
+    int (*chdir_real) (const char *) = LOOKUP_REAL(chdir);
+    char buf[PATH_MAX];
+    return chdir_real(rewrite(path, buf));
+}
+WRAPPER_DEF(chdir);
 
 WRAPPER(int, mkdir)(const char *path, mode_t mode)
 {

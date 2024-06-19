@@ -1,17 +1,18 @@
+pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1em
+}
+code.hljs {
+  padding: 3px 5px
+}
 /*
   Five-color theme from a single blue hue.
 */
 .hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 0.5em;
   background: #eaeef3;
+  color: #00193a
 }
-
-.hljs {
-  color: #00193a;
-}
-
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-title,
@@ -19,13 +20,11 @@
 .hljs-doctag,
 .hljs-name,
 .hljs-strong {
-  font-weight: bold;
+  font-weight: bold
 }
-
 .hljs-comment {
-  color: #738191;
+  color: #738191
 }
-
 .hljs-string,
 .hljs-title,
 .hljs-section,
@@ -38,9 +37,8 @@
 .hljs-name,
 .hljs-selector-id,
 .hljs-selector-class {
-  color: #0048ab;
+  color: #0048ab
 }
-
 .hljs-meta,
 .hljs-subst,
 .hljs-symbol,
@@ -51,9 +49,8 @@
 .hljs-template-variable,
 .hljs-link,
 .hljs-bullet {
-  color: #4c81c9;
+  color: #4c81c9
 }
-
 .hljs-emphasis {
-  font-style: italic;
+  font-style: italic
 }

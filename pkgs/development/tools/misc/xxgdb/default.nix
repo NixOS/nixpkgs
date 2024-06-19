@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, imake, xlibsWrapper, gccmakedep, libXaw }:
+{ lib
+, stdenv
+, fetchurl
+, imake
+, gccmakedep
+, libX11
+, libXaw
+, libXext
+, libXmu
+, libXt
+}:
 
 stdenv.mkDerivation rec {
   pname = "xxgdb";
@@ -15,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ xlibsWrapper libXaw ];
+  buildInputs = [ libX11 libXaw libXext libXmu libXt ];
 
   preConfigure = ''
     mkdir build
@@ -37,6 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "A simple but powerful graphical interface to gdb";
+    mainProgram = "xxgdb";
     license = licenses.mit;
     maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.all;

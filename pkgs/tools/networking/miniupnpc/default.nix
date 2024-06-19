@@ -1,42 +1,45 @@
-{ lib, stdenv, fetchurl, which, cctools }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+}:
 
-let
-  generic = { version, sha256 }:
-    stdenv.mkDerivation rec {
-      pname = "miniupnpc";
-      inherit version;
-      src = fetchurl {
-        name = "${pname}-${version}.tar.gz";
-        url = "http://miniupnp.free.fr/files/download.php?file=${pname}-${version}.tar.gz";
-        inherit sha256;
-      };
+stdenv.mkDerivation rec {
+  pname = "miniupnpc";
+  version = "2.2.7";
 
-      nativeBuildInputs = lib.optionals stdenv.isDarwin [ which cctools ];
-
-      patches = lib.optional stdenv.isFreeBSD ./freebsd.patch;
-
-      doCheck = !stdenv.isFreeBSD;
-
-      makeFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
-
-      postInstall = ''
-        chmod +x "$out"/lib/libminiupnpc${stdenv.hostPlatform.extensions.sharedLibrary}
-      '';
-
-      meta = with lib; {
-        homepage = "http://miniupnp.free.fr/";
-        description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
-        platforms = with platforms; linux ++ freebsd ++ darwin;
-        license = licenses.bsd3;
-      };
-    };
-in {
-  miniupnpc_2 = generic {
-    version = "2.1.20190625";
-    sha256 = "1yqp0d8x5ldjfma5x2vhpg1aaafdg0470ismccixww3rzpbza8w7";
+  src = fetchFromGitHub {
+    owner = "miniupnp";
+    repo = "miniupnp";
+    rev = "miniupnpc_${lib.replaceStrings ["."] ["_"] version}";
+    hash = "sha256-cIijY1NcdF169tibfB13845UT9ZoJ/CZ+XLES9ctWTY=";
   };
-  miniupnpc_1 = generic {
-    version = "1.9.20160209";
-    sha256 = "0vsbv6a8by67alx4rxfsrxxsnmq74rqlavvvwiy56whxrkm728ap";
+
+  sourceRoot = "${src.name}/miniupnpc";
+
+  nativeBuildInputs = [ cmake ];
+
+  doCheck = !stdenv.isFreeBSD;
+
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    chmod +x $out/lib/libminiupnpc${stdenv.hostPlatform.extensions.sharedLibrary}
+
+    # for some reason cmake does not install binaries and manpages
+    # https://github.com/miniupnp/miniupnp/issues/637
+    mkdir -p $out/bin
+    cp -a upnpc-static $out/bin/upnpc
+    cp -a ../external-ip.sh $out/bin/external-ip
+    mkdir -p $out/share/man
+    cp -a ../man3 $out/share/man
+  '';
+
+  meta = with lib; {
+    homepage = "https://miniupnp.tuxfamily.org/";
+    description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
+    platforms = with platforms; linux ++ freebsd ++ darwin;
+    license = licenses.bsd3;
+    mainProgram = "upnpc";
   };
 }

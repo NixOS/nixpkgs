@@ -8,11 +8,11 @@
 
 buildOctavePackage rec {
   pname = "zeromq";
-  version = "1.5.3";
+  version = "1.5.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1h0pb2pqbnyiavf7r05j8bqxqd8syz16ab48hc74nlnx727anfwl";
+    sha256 = "sha256-MAZEpbVuragVuXrMJ8q5/jU5cTchosAtrAR6ElLwfss=";
   };
 
   preAutoreconf = ''

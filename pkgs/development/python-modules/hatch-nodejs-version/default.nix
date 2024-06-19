@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, hatchling
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "hatch-nodejs-version";
-  version = "0.3.0";
+  version = "0.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,21 +17,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "agoose77";
     repo = "hatch-nodejs-version";
-    rev = "v${version}";
-    sha256 = "sha256-TBvqXjka8poQ8xxQ/H1hFYRLqnP1024uan1d9b95ags=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hknlb11DCe+b55CfF3Pr62ccWPxVrjQ197ZagSiH/zU=";
   };
 
-  propagatedBuildInputs = [
-    hatchling
-  ];
+  propagatedBuildInputs = [ hatchling ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "hatch_nodejs_version"
-  ];
+  pythonImportsCheck = [ "hatch_nodejs_version" ];
 
   meta = with lib; {
     description = "Plugins for dealing with NodeJS versions";

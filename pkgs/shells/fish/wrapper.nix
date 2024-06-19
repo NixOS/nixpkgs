@@ -1,4 +1,4 @@
-{ lib, writeShellScriptBin, fish, writeTextFile }:
+{ lib, writeShellApplication, fish, writeTextFile }:
 
 lib.makeOverridable ({
   completionDirs ? [],
@@ -6,7 +6,8 @@ lib.makeOverridable ({
   confDirs ? [],
   pluginPkgs ? [],
   localConfig ? "",
-  shellAliases ? {}
+  shellAliases ? {},
+  runtimeInputs ? []
 }:
 
 let
@@ -17,7 +18,7 @@ let
     name = "wrapfish.aliases.fish";
     destination = "/share/fish/vendor_conf.d/aliases.fish";
     text = ''
-      status --is-interactive; and begin
+      status is-interactive; and begin
         # Aliases
         ${aliasesStr}
       end
@@ -37,11 +38,15 @@ let
     ++ (map (vendorDir "conf") pluginPkgs)
     ++ (map (vendorDir "conf") [ localFishConfig shellAliasesFishConfig ]);
 
-in writeShellScriptBin "fish" ''
-  ${fish}/bin/fish --init-command "
-    set --prepend fish_complete_path ${lib.escapeShellArgs complPath}
-    set --prepend fish_function_path ${lib.escapeShellArgs funcPath}
-    set --local fish_conf_source_path ${lib.escapeShellArgs confPath}
-    for c in \$fish_conf_source_path/*; source \$c; end
-  " "$@"
-'')
+in writeShellApplication {
+  inherit runtimeInputs;
+  name = "fish";
+  text = ''
+    ${fish}/bin/fish --init-command "
+      set --prepend fish_complete_path ${lib.escapeShellArgs complPath}
+      set --prepend fish_function_path ${lib.escapeShellArgs funcPath}
+      set --local fish_conf_source_path ${lib.escapeShellArgs confPath}
+      for c in \$fish_conf_source_path/*; source \$c; end
+    " "$@"
+  '';
+})

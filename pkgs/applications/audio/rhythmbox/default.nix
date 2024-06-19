@@ -4,13 +4,12 @@
 , pkg-config
 , meson
 , ninja
-, fetchFromGitLab
 , python3
 , vala
 , glib
 , gtk3
 , libpeas
-, libsoup
+, libsoup_3
 , libxml2
 , libsecret
 , libnotify
@@ -27,7 +26,7 @@
 , tdb
 , json-glib
 , itstool
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , gst_all_1
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
@@ -36,11 +35,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rhythmbox";
-  version = "3.4.6";
+  version = "3.4.7";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+VaCEM5V5BHpKcj7leERohHb0ZzEf1ePKRxdMZtesDQ=";
+    sha256 = "L21WwT/BpkxTT1AHiPtIKTbOVHs0PtkMZ94fK84M+n4=";
   };
 
   nativeBuildInputs = [
@@ -50,13 +49,14 @@ stdenv.mkDerivation rec {
     vala
     glib
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
     python3
-    libsoup
+    libsoup_3
     libxml2
     tdb
     json-glib
@@ -72,7 +72,6 @@ stdenv.mkDerivation rec {
     brasero
     grilo
 
-    gobject-introspection
     python3.pkgs.pygobject3
 
     gst_all_1.gstreamer
@@ -87,11 +86,12 @@ stdenv.mkDerivation rec {
     libnotify
   ] ++ gst_plugins;
 
-  checkInputs = [
+  nativeCheckInputs = [
     check
   ];
 
   mesonFlags = [
+    "-Ddaap=enabled"
     "-Dtests=disabled"
   ];
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "${python3.pkgs.pygobject3}/${python3.sitePackages}:$out/lib/rhythmbox/plugins/"
+      --prefix PYTHONPATH : "$out/lib/rhythmbox/plugins/"
     )
   '';
 
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Rhythmbox";
+    homepage = "https://gitlab.gnome.org/GNOME/rhythmbox";
     description = "A music playing application for GNOME";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

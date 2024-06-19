@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, djangorestframework
-, pytestCheckHook
-, pytest-django
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  djangorestframework,
+  pytestCheckHook,
+  pytest-django,
 }:
 
 buildPythonPackage rec {
   pname = "drf-writable-nested";
-  version = "0.6.4";
+  version = "0.7.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "beda-software";
     repo = "drf-writable-nested";
-    rev = "v${version}";
-    sha256 = "sha256-RybtXZ5HipQHaA2RV6TOKIpl6aI9V49mqXDhCH6lg58=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/7MZAw0clzzlBdYchUVKldWT7WqtwdSe+016QAP0hqk=";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +25,7 @@ buildPythonPackage rec {
     djangorestframework
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];

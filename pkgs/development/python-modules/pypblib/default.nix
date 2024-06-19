@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "pypblib";
   version = "0.0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

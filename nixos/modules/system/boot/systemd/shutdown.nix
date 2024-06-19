@@ -9,9 +9,9 @@
 
 in {
   options.systemd.shutdownRamfs = {
-    enable = lib.mkEnableOption (lib.mdDoc "pivoting back to an initramfs for shutdown") // { default = true; };
+    enable = lib.mkEnableOption "pivoting back to an initramfs for shutdown" // { default = true; };
     contents = lib.mkOption {
-      description = lib.mdDoc "Set of files that have to be linked into the shutdown ramfs";
+      description = "Set of files that have to be linked into the shutdown ramfs";
       example = lib.literalExpression ''
         {
           "/lib/systemd/system-shutdown/zpool-sync-shutdown".source = writeShellScript "zpool" "exec ''${zfs}/bin/zpool sync"
@@ -21,7 +21,7 @@ in {
     };
 
     storePaths = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Store paths to copy into the shutdown ramfs as well.
       '';
       type = lib.types.listOf lib.types.singleLineStr;
@@ -30,7 +30,11 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.shutdownRamfs.contents."/shutdown".source = "${config.systemd.package}/lib/systemd/systemd-shutdown";
+    systemd.shutdownRamfs.contents = {
+      "/shutdown".source = "${config.systemd.package}/lib/systemd/systemd-shutdown";
+      "/etc/initrd-release".source = config.environment.etc.os-release.source;
+      "/etc/os-release".source = config.environment.etc.os-release.source;
+    };
     systemd.shutdownRamfs.storePaths = [pkgs.runtimeShell "${pkgs.coreutils}/bin"];
 
     systemd.mounts = [{

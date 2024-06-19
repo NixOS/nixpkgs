@@ -8,7 +8,7 @@ let
     , flex
     , getopt
     , git
-    , gnat11
+    , gnat
     , gcc
     , lib
     , perl
@@ -17,14 +17,14 @@ let
     , withAda ? true
     }:
 
-    stdenvNoCC.mkDerivation rec {
+    stdenvNoCC.mkDerivation (finalAttrs: {
       pname = "coreboot-toolchain-${arch}";
-      version = "4.16";
+      version = "24.05";
 
       src = fetchgit {
         url = "https://review.coreboot.org/coreboot";
-        rev = version;
-        sha256 = "sha256-PCum+IvJ136eZQLovUi9u4xTLLs17MkMP5Oc0/2mMY4=";
+        rev = finalAttrs.version;
+        hash = "sha256-jTfMFvl3sG3BIVVkpZ81BQ20Bs+2ESE6RMh0fW86rKE=";
         fetchSubmodules = false;
         leaveDotGit = true;
         postFetch = ''
@@ -35,7 +35,7 @@ let
       };
 
       nativeBuildInputs = [ bison curl git perl ];
-      buildInputs = [ flex zlib (if withAda then gnat11 else gcc) ];
+      buildInputs = [ flex zlib (if withAda then gnat else gcc) ];
 
       enableParallelBuilding = true;
       dontConfigure = true;
@@ -63,14 +63,14 @@ let
         homepage = "https://www.coreboot.org";
         description = "coreboot toolchain for ${arch} targets";
         license = with licenses; [ bsd2 bsd3 gpl2 lgpl2Plus gpl3Plus ];
-        maintainers = with maintainers; [ felixsinger ];
+        maintainers = with maintainers; [ felixsinger jmbaur ];
         platforms = platforms.linux;
       };
-    }
+    })
   );
 in
 
-lib.listToAttrs (map (arch: lib.nameValuePair arch (common arch {})) [
+lib.listToAttrs (map (arch: lib.nameValuePair arch (common arch { })) [
   "i386"
   "x64"
   "arm"

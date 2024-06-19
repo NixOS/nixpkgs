@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, perl, makeWrapper
-, makeDesktopItem, which, perlPackages, boost
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, makeWrapper
+, makeDesktopItem, which, perlPackages, boost, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cf0QTOzhLyTcbJryCQoTVzU8kfrPV6SLpqi4s36X5N0=";
   };
 
-  nativeBuildInputs = [ makeWrapper which ];
+  nativeBuildInputs = [ makeWrapper which wrapGAppsHook3 ];
   buildInputs =
   [boost] ++
   (with perlPackages; [ perl
@@ -42,10 +42,20 @@ stdenv.mkDerivation rec {
     sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' xs/src/libslic3r/GCodeSender.cpp
   '';
 
-  # note the boost-compile-error is fixed in
-  # https://github.com/slic3r/Slic3r/commit/90f108ae8e7a4315f82e317f2141733418d86a68
-  # this patch can be probably be removed in the next version after 1.3.0
-  patches = lib.optional (lib.versionAtLeast boost.version "1.56.0") ./boost-compile-error.patch;
+  patches = [
+    (fetchpatch {
+      url = "https://web.archive.org/web/20230606220657if_/https://sources.debian.org/data/main/s/slic3r/1.3.0%2Bdfsg1-5/debian/patches/Drop-error-admesh-works-correctly-on-little-endian-machin.patch";
+      hash = "sha256-+F94jzMFBdI++SKgyEZTBaHFVbjxWwgJa8YVbpK0euI=";
+    })
+    (fetchpatch {
+      url = "https://web.archive.org/web/20230606220036if_/https://sources.debian.org/data/main/s/slic3r/1.3.0+dfsg1-5/debian/patches/0006-Fix-FTBFS-with-Boost-1.71.patch";
+      hash = "sha256-4jvNccttig5YI1hXSANAWxVz6C4+kowlacMXVCpFgOo=";
+    })
+    (fetchpatch {
+      url = "https://web.archive.org/web/20230606220054if_/https://sources.debian.org/data/main/s/slic3r/1.3.0+dfsg1-5/debian/patches/fix_boost_174.patch";
+      hash = "sha256-aSmxc2htmrla9l/DIRWeKdBW0LTV96wMUZSLLNjgbzY=";
+    })
+  ];
 
   buildPhase = ''
     export SLIC3R_NO_AUTO=true
@@ -79,13 +89,14 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "G-code generator for 3D printers";
+    mainProgram = "slic3r";
     longDescription = ''
       Slic3r is the tool you need to convert a digital 3D model into printing
       instructions for your 3D printer. It cuts the model into horizontal
       slices (layers), generates toolpaths to fill them and calculates the
       amount of material to be extruded.'';
     homepage = "https://slic3r.org/";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];
   };

@@ -15,21 +15,17 @@
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.67";
+  version = "1.4.75";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-fgTXZ/UajYJLMuJIPvKVCYKSDUJ9EnLvRmf0nW+J81g=";
+    sha256 = "sha256-i3IcqTnTEq+qbvMdy9avtRYe04Wsgo5vzNTFt2vhidY=";
   };
+
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs tests
-    # Linux sandbox has an empty hostname and not /etc/hosts, which fails some tests
-    sed -ire '/[$]self->{HOSTNAME} *=/i     if(length($name)==0) { $name = "127.0.0.1" }' tests/LightyTest.pm
-    # it's difficult to prevent this test from trying to use /var/tmp (which
-    # the sandbox doesn't have) so until libredirect has support for mkstemp
-    # calls it's easiest to disable it
-    sed -i '/test_mod_ssi/d' src/t/test_mod.c
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -61,7 +57,7 @@ stdenv.mkDerivation rec {
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
   '';
 
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
   doCheck = true;
 
   postInstall = ''
@@ -83,5 +79,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor brecht ];
+    mainProgram = "lighttpd";
   };
 }

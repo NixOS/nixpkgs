@@ -7,7 +7,7 @@
 , asio
 , nettle
 , gnutls
-, msgpack
+, msgpack-cxx
 , readline
 , libargon2
 , jsoncpp
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opendht";
-  version = "2.4.10";
+  version = "3.1.11";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
     rev = "v${version}";
-    sha256 = "sha256-2jTphFpBsm72UDzlBlCP1fWk1qNuxicwVJtrEutOjM0=";
+    hash = "sha256-lJaQGkhpKfSSNVbP+NqommagtoWyi8CdauVxEhiI9Bc=";
   };
 
   nativeBuildInputs = [
@@ -37,9 +37,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     asio
+    fmt
     nettle
     gnutls
-    msgpack
+    msgpack-cxx
     readline
     libargon2
   ] ++ lib.optionals enableProxyServerAndClient [
@@ -47,7 +48,6 @@ stdenv.mkDerivation rec {
     restinio
     http-parser
     openssl
-    fmt
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];

@@ -1,8 +1,9 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pycodestyle
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pycodestyle,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-8lpXWp3LPus8dgv5wi22C4taIxICJO0fqppD913X3RY=";
   };
 
-  propagatedBuildInputs = [
-    pycodestyle
-  ];
+  propagatedBuildInputs = [ pycodestyle ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "flake8_blind_except"
-  ];
+  pythonImportsCheck = [ "flake8_blind_except" ];
 
   meta = with lib; {
     description = "A flake8 extension that checks for blind except: statements";

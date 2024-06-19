@@ -1,32 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, click
-, importlib-metadata
-, nbclient
-, nbformat
-, pyyaml
-, sqlalchemy
-, tabulate
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  attrs,
+  click,
+  flit-core,
+  importlib-metadata,
+  nbclient,
+  nbformat,
+  pyyaml,
+  sqlalchemy,
+  tabulate,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-cache";
-  version = "0.5.0";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "87408030a4c8c14fe3f8fe62e6ceeb24c84e544c7ced20bfee45968053d07801";
+    inherit version;
+    pname = "jupyter_cache";
+    hash = "sha256-0Pp9dTPNV5gZjYiJMYJpqME4LtOyL2IsCak1ZSH0hoc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "nbclient>=0.2,<0.6" "nbclient"
-  '';
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     attrs
@@ -43,8 +44,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A defined interface for working with a cache of jupyter notebooks";
+    mainProgram = "jcache";
     homepage = "https://github.com/executablebooks/jupyter-cache";
+    changelog = "https://github.com/executablebooks/jupyter-cache/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

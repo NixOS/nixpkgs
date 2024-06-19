@@ -2,55 +2,70 @@
 , lib
 , ctags
 , cmark
-, appstream-glib
 , desktop-file-utils
+, editorconfig-core-c
 , fetchurl
 , flatpak
 , gnome
 , libgit2-glib
 , gi-docgen
 , gobject-introspection
-, glade
-, gspell
-, gtk3
-, gtksourceview4
+, enchant
+, icu
+, gtk4
+, gtksourceview5
 , json-glib
 , jsonrpc-glib
-, libdazzle
-, libhandy
-, libpeas
-, libportal-gtk3
+, libadwaita
+, libdex
+, libpanel
+, libpeas2
+, libportal-gtk4
+, libsysprof-capture
 , libxml2
 , meson
 , ninja
 , ostree
-, pcre
+, d-spy
 , pcre2
 , pkg-config
 , python3
 , sysprof
 , template-glib
 , vala
-, vte
-, webkitgtk
-, wrapGAppsHook
+, vte-gtk4
+, webkitgtk_6_0
+, wrapGAppsHook4
 , dbus
 , xvfb-run
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-builder";
-  version = "42.1";
+  version = "46.2";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "XU1RtwKGW0gBcgHwxgfiSifXIDGo9ciNT86HW1VFZwo=";
+    url = "mirror://gnome/sources/gnome-builder/${lib.versions.major finalAttrs.version}/gnome-builder-${finalAttrs.version}.tar.xz";
+    hash = "sha256-DIV7iQA7JHh/Kx0qrhLSdaB0xmhLSIA7SMACdtk3GWM=";
   };
 
+  patches = [
+    # The test environment hardcodes `GI_TYPELIB_PATH` environment variable to direct dependencies of libide & co.
+    # https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/2ce510b0ec0518c29427a29b386bb2ac1a121edf
+    # https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/2964f7c2a0729f2f456cdca29a0f5b7525baf7c1
+    #
+    # But Nix does not have a fallback path for typelibs like /usr/lib on FHS distros and relies solely
+    # on `GI_TYPELIB_PATH` environment variable. So, when Ide started to depend on Vte, which
+    # depends on Pango, among others, GIrepository was unable to find these indirect dependencies
+    # and crashed with:
+    #
+    #     Typelib file for namespace 'Pango', version '1.0' not found (g-irepository-error-quark, 0)
+    ./fix-finding-test-typelibs.patch
+  ];
+
   nativeBuildInputs = [
-    appstream-glib
     desktop-file-utils
     gi-docgen
     gobject-introspection
@@ -58,39 +73,39 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    python3.pkgs.wrapPython
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     ctags
     cmark
+    editorconfig-core-c
     flatpak
-    gnome.devhelp
-    glade
     libgit2-glib
-    libpeas
-    libportal-gtk3
-    vte
-    gspell
-    gtk3
-    gtksourceview4
+    libpeas2
+    libportal-gtk4
+    vte-gtk4
+    enchant
+    icu
+    gtk4
+    gtksourceview5
     json-glib
     jsonrpc-glib
-    libdazzle
-    libhandy
+    libadwaita
+    libdex
+    libpanel
+    libsysprof-capture
     libxml2
     ostree
-    pcre
+    d-spy
     pcre2
     python3
-    sysprof
     template-glib
     vala
-    webkitgtk
+    webkitgtk_6_0
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
@@ -110,21 +125,21 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs build-aux/meson/post_install.py
+    substituteInPlace build-aux/meson/post_install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   checkPhase = ''
-    export NO_AT_BRIDGE=1
+    GTK_A11Y=none \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
 
-  pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];
-
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$program_PYTHONPATH"
+      # For sysprof-agent
+      --prefix PATH : "${sysprof}/bin"
     )
 
     # Ensure that all plugins get their interpreter paths fixed up.
@@ -139,7 +154,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gnome.updateScript {
-    packageName = pname;
+    packageName = "gnome-builder";
   };
 
   meta = with lib; {
@@ -154,9 +169,10 @@ stdenv.mkDerivation rec {
       currently recommend running gnome-builder inside a nix-shell with
       appropriate dependencies loaded.
     '';
-    homepage = "https://wiki.gnome.org/Apps/Builder";
+    homepage = "https://apps.gnome.org/Builder/";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
+    mainProgram = "gnome-builder";
   };
-}
+})

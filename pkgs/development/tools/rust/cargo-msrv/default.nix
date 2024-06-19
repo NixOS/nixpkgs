@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, nix-update-script
 , pkg-config
 , rustup
 , openssl
@@ -9,6 +8,7 @@
 , libiconv
 , Security
 , makeWrapper
+, gitUpdater
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,8 +25,9 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-/Bspy94uIP/e4uJY8qo+UPK1tnPjglxiMWeYWx2qoHk=";
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = ".(rc|beta).*";
     };
   };
 
@@ -46,8 +47,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Cargo subcommand \"msrv\": assists with finding your minimum supported Rust version (MSRV)";
+    mainProgram = "cargo-msrv";
     homepage = "https://github.com/foresterre/cargo-msrv";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ otavio ];
+    maintainers = with maintainers; [ otavio matthiasbeyer ];
   };
 }

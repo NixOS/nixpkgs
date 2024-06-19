@@ -1,27 +1,28 @@
 { lib, fetchFromGitHub, rustPlatform, pkg-config, openssl }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "cfdyndns";
-  version = "0.0.3";
+  version = "0.2.0";
   src = fetchFromGitHub {
-    owner = "colemickens";
+    owner = "nrdxp";
     repo = "cfdyndns";
     rev = "v${version}";
-    sha256 = "1fba0w2979dmc2wyggqx4fj52rrl1s2vpjk6mkj1811a848l1hdi";
+    hash = "sha256-iwKMTWLK7pgz8AEmPVBO1bTWrXTokQJ+Z1U4CiiRdho=";
   };
 
-  cargoSha256 = "06qbagq4gvm5vk846lxskli02z9lqxsvis6ndq29bj0b9yyvdkay";
+  cargoLock.lockFile = ./Cargo.lock;
+  cargoLock.outputHashes."cloudflare-0.10.1" = "sha256-AJW4AQ34EDhxf7zMhFY2rqq5n4IaSVWJAYi+7jXEUVo=";
+  cargoLock.outputHashes."public-ip-0.2.2" = "sha256-DDdh90EAo3Ppsym4AntczFuiAQo4/QQ9TEPJjMB1XzY=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
   meta = with lib; {
     description = "CloudFlare Dynamic DNS Client";
-    homepage = "https://github.com/colemickens/cfdyndns";
+    mainProgram = "cfdyndns";
+    homepage = "https://github.com/nrdxp/cfdyndns";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [ colemickens nrdxp ];
     platforms = with platforms; linux;
   };
 }

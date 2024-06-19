@@ -26,6 +26,11 @@ assert enableQt -> qwt != null;
     sha256 = "1zlh44w67py416hkvw6nrfmjickc2d43v51vcli5p374d5sw84ql";
   };
 
+  postPatch = ''
+    substituteInPlace linux/qphotorec.desktop \
+      --replace "/usr" "$out"
+  '';
+
   enableParallelBuilding = true;
 
   buildInputs = [
@@ -41,7 +46,7 @@ assert enableQt -> qwt != null;
 
   nativeBuildInputs = [ pkg-config ];
 
-  NIX_CFLAGS_COMPILE="-Wno-unused";
+  env.NIX_CFLAGS_COMPILE = "-Wno-unused";
 
   meta = with lib; {
     homepage = "https://www.cgsecurity.org/wiki/Main_Page";

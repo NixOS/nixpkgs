@@ -1,71 +1,71 @@
-{ lib
-, asdf-standard
-, asdf-transform-schemas
-, astropy
-, buildPythonPackage
-, fetchPypi
-, importlib-resources
-, jmespath
-, jsonschema
-, lz4
-, numpy
-, packaging
-, pytest-astropy
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, semantic-version
-, setuptools-scm
+{
+  lib,
+  asdf-standard,
+  asdf-transform-schemas,
+  attrs,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fsspec,
+  importlib-metadata,
+  jmespath,
+  lz4,
+  numpy,
+  packaging,
+  psutil,
+  pytest-remotedata,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  semantic-version,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.13.0";
-  format = "pyproject";
+  version = "3.2.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MuKmmlPRcB/EYW6AD7Pa/4G7rYAYMqe/Vj47Ycn+Pf4=";
+  src = fetchFromGitHub {
+    owner = "asdf-format";
+    repo = "asdf";
+    rev = "refs/tags/${version}";
+    hash = "sha256-r+cEv6g7fq3I/h2mlszzJRQcazy7qP9pg0hfYG/Sa9E=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asdf-standard
     asdf-transform-schemas
+    importlib-metadata
     jmespath
-    jsonschema
     numpy
     packaging
     pyyaml
     semantic-version
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
+    attrs
   ];
 
-  checkInputs = [
-    astropy
+  nativeCheckInputs = [
+    fsspec
     lz4
-    pytest-astropy
+    psutil
+    pytest-remotedata
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export PY_IGNORE_IMPORTMISMATCH=1
-  '';
-
-  pythonImportsCheck = [
-    "asdf"
-  ];
+  pythonImportsCheck = [ "asdf" ];
 
   meta = with lib; {
     description = "Python tools to handle ASDF files";
     homepage = "https://github.com/asdf-format/asdf";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchpatch, fetchFromGitHub, cmake, zlib, gmp, jdk8,
-  # The JDK we use on Darwin currenly makes extensive use of rpaths which are
+  # The JDK we use on Darwin currently makes extensive use of rpaths which are
   # annoying and break the python library, so let's not bother for now
   includeJava ? !stdenv.hostPlatform.isDarwin, includeGplCode ? true }:
 
@@ -61,6 +61,7 @@ let
 
     meta = {
       description = "SMT solver for Monotonic Theories";
+      mainProgram = "monosat";
       platforms   = platforms.unix;
       license     = if includeGplCode then licenses.gpl2 else licenses.mit;
       homepage    = "https://github.com/sambayless/monosat";
@@ -89,7 +90,7 @@ let
         --replace 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
     '';
 
-    checkInputs = [ pytestCheckHook ];
+    nativeCheckInputs = [ pytestCheckHook ];
 
     disabledTests = [
       "test_assertAtMostOne"

@@ -7,6 +7,7 @@
 , automake
 , gettext
 , libtool
+, lowdown
 , protobuf
 , unzip
 , which
@@ -17,33 +18,24 @@
 , zlib
 }:
 let
-  py3 = python3.withPackages (p: [ p.Mako ]);
+  py3 = python3.withPackages (p: [ p.mako ]);
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "0.12.0";
+  version = "24.02.2";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "1ff400339db3d314b459e1a3e973f1213783e814faa21f2e1b18917693cabfd9";
-  };
-
-  manpages = fetchurl {
-    url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}-manpages.tar.xz";
-    sha256 = "sha256-7EohXp0/gIJwlMsTHwlcLNBzZb8LwF9n0eXkQhOnY7g=";
+    sha256 = "sha256-KQS/4VmUxJkNpvPcxL5Up9f25leiPzvi2AiKuzRQmDo=";
   };
 
   # when building on darwin we need dawin.cctools to provide the correct libtool
   # as libwally-core detects the host as darwin and tries to add the -static
   # option to libtool, also we have to add the modified gsed package.
-  nativeBuildInputs = [ autoconf autogen automake gettext libtool protobuf py3 unzip which ]
+  nativeBuildInputs = [ autoconf autogen automake gettext libtool lowdown protobuf py3 unzip which ]
     ++ lib.optionals stdenv.isDarwin [ darwin.cctools darwin.autoSignDarwinBinariesHook ];
 
   buildInputs = [ gmp libsodium sqlite zlib ];
-
-  postUnpack = ''
-    tar -xf $manpages -C $sourceRoot
-  '';
 
   # this causes some python trouble on a darwin host so we skip this step.
   # also we have to tell libwally-core to use sed instead of gsed.
@@ -58,11 +50,21 @@ stdenv.mkDerivation rec {
     substituteInPlace external/libwally-core/configure.ac --replace gsed sed
   '';
 
-  configureFlags = [ "--disable-developer" "--disable-valgrind" ];
+  configureFlags = [ "--disable-valgrind" ];
 
   makeFlags = [ "VERSION=v${version}" ];
 
   enableParallelBuilding = true;
+
+  # workaround for build issue, happens only x86_64-darwin, not aarch64-darwin
+  # ccan/ccan/fdpass/fdpass.c:16:8: error: variable length array folded to constant array as an extension [-Werror,-Wgnu-folding-constant]
+  #                 char buf[CMSG_SPACE(sizeof(fd))];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "-Wno-error=gnu-folding-constant";
+
+  # The `clnrest` plugin requires a Python environment to run
+  postInstall = ''
+    rm -r $out/libexec/c-lightning/plugins/clnrest
+  '';
 
   meta = with lib; {
     description = "A Bitcoin Lightning Network implementation in C";

@@ -1,34 +1,30 @@
 { lib
 , rustPlatform
 , fetchCrate
-, pkg-config
-, openssl
 , stdenv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "0.1.88";
+  version = "2.0.17";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-VnVyTUOtoplt0Zd5VkCe/h85/Mqcz7lgeIiZVD+Vrxk=";
+    hash = "sha256-UzPEupmUnph7SjCc/T4sBSGXj8yLVdQlw+X9iM16zD8=";
   };
 
-  cargoSha256 = "sha256-4D63OEz7/2pJGPXiFEwl6ggaV2DNZcoN//BM7H0Sp7I=";
+  cargoHash = "sha256-AchVbf+mn4qQtzWu84Dqek+btCm6BA9mcY+8iHWqdiw=";
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
-
-  # memory allocation of 34359738368 bytes failed
-  doCheck = false;
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.IOKit
+  ];
 
   meta = with lib; {
-    description = "A pure functional compile target that is lazy, non-garbage-collected, and parallel";
-    homepage = "https://github.com/kindelia/hvm";
-    license = licenses.mit;
+    description = "A massively parallel, optimal functional runtime in Rust";
+    mainProgram = "hvm";
+    homepage = "https://github.com/higherorderco/hvm";
+    license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];
   };
 }

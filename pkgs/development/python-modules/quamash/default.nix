@@ -1,11 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, pytest, isPy3k, pyqt5, pyqt ? pyqt5
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  isPy3k,
+  pyqt5,
+  pyqt ? pyqt5,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "quamash";
   version = "0.6.1";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
@@ -21,15 +28,15 @@ buildPythonPackage rec {
     # add 3.10 compatibility, merged remove on next update
     (fetchpatch {
       url = "https://github.com/harvimt/quamash/pull/126/commits/1e9047bec739dbc9d6ab337fc1a111a8b1090244.patch";
-      sha256 = "sha256-6gomY82AOKkrt32SEBKnRugzhnC5FAyKDs6K5xaxnRM=";
+      hash = "sha256-6gomY82AOKkrt32SEBKnRugzhnC5FAyKDs6K5xaxnRM=";
     })
   ];
 
   propagatedBuildInputs = [ pyqt ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
-     pytest -k 'test_qthreadexec.py' # the others cause the test execution to be aborted, I think because of asyncio
+    pytest -k 'test_qthreadexec.py' # the others cause the test execution to be aborted, I think because of asyncio
   '';
 
   meta = with lib; {

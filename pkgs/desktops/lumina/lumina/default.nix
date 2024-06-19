@@ -13,7 +13,7 @@
 , qtx11extras
 , xorg
 , xscreensaver
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 mkDerivation rec {
@@ -30,7 +30,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     qttools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

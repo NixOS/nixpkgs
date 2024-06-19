@@ -20,5 +20,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ pacien ];
     platforms = platforms.all;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/hidrd.x86_64-darwin
+    mainProgram = "hidrd-convert";
   };
 }

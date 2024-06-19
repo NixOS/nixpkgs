@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvimpager";
-  version = "0.10.4";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "lucc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0guSL4RvYQFwok7zGuevhQY6DHjnETRLpEIEQfGslcg=";
+    sha256 = "sha256-Au9rRZMZfU4qHi/ng6JO8FnMpySKDbKzr75SBPY3QiA=";
   };
 
   buildInputs = [
@@ -25,19 +25,18 @@ stdenv.mkDerivation rec {
   buildFlags = [ "nvimpager.configured" "nvimpager.1" ];
   preBuild = ''
     patchShebangs nvimpager
-    substituteInPlace nvimpager --replace ':-nvim' ':-${neovim}/bin/nvim'
+    substituteInPlace nvimpager --replace-fail ':-nvim' ':-${lib.getExe neovim}'
     '';
 
   doCheck = true;
-  checkInputs = [ lua51Packages.busted util-linux neovim ];
-  checkPhase = ''
-    runHook preCheck
-    script -c "busted --lpath './?.lua' test"
-    runHook postCheck
+  nativeCheckInputs = [ lua51Packages.busted util-linux neovim ];
+  # filter out one test that fails in the sandbox of nix or with neovim v0.10
+  # or on macOS
+  preCheck = ''
+    checkFlagsArray+=('BUSTED=busted --output TAP --exclude-tags=${"nix,v10" + lib.optionalString stdenv.isDarwin ",mac"}')
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Use neovim as pager";
     longDescription = ''
       Use neovim as a pager to view manpages, diffs, etc with nvim's syntax
@@ -48,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.lucc ];
+    mainProgram = "nvimpager";
   };
 }

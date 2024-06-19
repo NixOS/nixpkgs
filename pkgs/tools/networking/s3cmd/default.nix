@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   pname = "s3cmd";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "s3tools";
     repo = "s3cmd";
-    rev = "v${version}";
-    sha256 = "0w4abif05mp52qybh4hjg6jbbj2caljq5xdhfiha3g0s5zsq46ri";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-cxwf6+9WFt3U7+JdKRgZxFElD+Dgf2P2VyejHVoiDJk=";
   };
 
   propagatedBuildInputs = [ python-magic python-dateutil ];
@@ -18,7 +18,8 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://s3tools.org/s3cmd";
     description = "Command line tool for managing Amazon S3 and CloudFront services";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.spwhitt ];
+    mainProgram = "s3cmd";
+    license = licenses.gpl2Plus;
+    maintainers = [ ];
   };
 }

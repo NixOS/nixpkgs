@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  nose,
 }:
 
 buildPythonPackage rec {
   pname = "blessings";
   version = "1.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [ six ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     nosetests
@@ -30,5 +32,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

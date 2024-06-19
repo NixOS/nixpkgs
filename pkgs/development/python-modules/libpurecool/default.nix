@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, netifaces
-, paho-mqtt
-, pycryptodome
-, requests
-, six
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  netifaces,
+  paho-mqtt,
+  pycryptodome,
+  requests,
+  six,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "libpurecool";
   version = "0.6.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

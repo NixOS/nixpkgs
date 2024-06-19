@@ -3,7 +3,24 @@
 , libiberty
 }:
 
-stdenvNoLibs.mkDerivation rec {
+let
+  stdenv = stdenvNoLibs;
+  gccConfigureFlags = gcc.cc.configureFlags ++ [
+    "--disable-fixincludes"
+    "--disable-intl"
+    "--enable-threads=posix"
+    "--with-glibc-version=${glibc.version}"
+    "--disable-plugin"
+
+    # these are required in order to prevent inhibit_libc=true,
+    # which will cripple libgcc's unwinder; see:
+    #  https://github.com/NixOS/nixpkgs/issues/213453#issuecomment-1616346163
+    "--with-headers=${lib.getDev glibc}/include"
+    "--with-native-system-header-dir=${lib.getDev glibc}${glibc.incdir or "/include"}"
+    "--with-build-sysroot=/"
+  ];
+
+in stdenv.mkDerivation (finalAttrs: {
   pname = "libgcc";
   inherit (gcc.cc) src version;
 
@@ -12,42 +29,34 @@ stdenvNoLibs.mkDerivation rec {
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ libiberty ];
+  buildInputs = [ glibc ];
 
   postUnpack = ''
     mkdir -p ./build
     buildRoot=$(readlink -e "./build")
   '';
 
-  postPatch = ''
-    sourceRoot=$(readlink -e "./libgcc")
-  '';
+  postPatch =
+    gcc.cc.passthru.forceLibgccToBuildCrtStuff
+    + ''
+      sourceRoot=$(readlink -e "./libgcc")
+    '';
 
   hardeningDisable = [ "pie" ];
 
-  preConfigure = ''
-    cd "$buildRoot"
+  preConfigure =
   ''
-
-  # Drop in libiberty, as external builds are not expected
-  + ''
+    # Drop in libiberty, as external builds are not expected
+    cd "$buildRoot"
     (
-      mkdir -p build-${stdenvNoLibs.buildPlatform.config}/libiberty/
-      cd build-${stdenvNoLibs.buildPlatform.config}/libiberty/
+      mkdir -p build-${stdenv.buildPlatform.config}/libiberty/
+      cd build-${stdenv.buildPlatform.config}/libiberty/
       ln -s ${buildPackages.libiberty}/lib/libiberty.a ./
     )
-  ''
-  # A few misc bits of gcc need to be built.
-  #
-  #  - We "shift" the tools over to fake platforms perspective from the previous
-  #    stage.
-  #
-  #  - We define GENERATOR_FILE so nothing bothers looking for GNU GMP.
-  #
-  #  - We remove the `libgcc.mvar` deps so that the bootstrap xgcc isn't built.
-  + ''
     mkdir -p "$buildRoot/gcc"
     cd "$buildRoot/gcc"
     (
+      # We "shift" the tools over to fake platforms perspective from the previous stage.
       export AS_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$AS_FOR_BUILD
       export CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$CC_FOR_BUILD
       export CPP_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$CPP_FOR_BUILD
@@ -60,15 +69,17 @@ stdenvNoLibs.mkDerivation rec {
       export CXX=$CXX_FOR_BUILD
       export LD=$LD_FOR_BUILD
 
-      export AS_FOR_TARGET=${stdenvNoLibs.cc}/bin/$AS
-      export CC_FOR_TARGET=${stdenvNoLibs.cc}/bin/$CC
-      export CPP_FOR_TARGET=${stdenvNoLibs.cc}/bin/$CPP
-      export LD_FOR_TARGET=${stdenvNoLibs.cc.bintools}/bin/$LD
+      export AS_FOR_TARGET=${stdenv.cc}/bin/$AS
+      export CC_FOR_TARGET=${stdenv.cc}/bin/$CC
+      export CPP_FOR_TARGET=${stdenv.cc}/bin/$CPP
+      export LD_FOR_TARGET=${stdenv.cc.bintools}/bin/$LD
 
+      # We define GENERATOR_FILE so nothing bothers looking for GNU GMP.
       export NIX_CFLAGS_COMPILE_FOR_BUILD+=' -DGENERATOR_FILE=1'
 
-      "$sourceRoot/../gcc/configure" $gccConfigureFlags
+      "$sourceRoot/../gcc/configure" ${lib.concatStringsSep " " gccConfigureFlags}
 
+      # We remove the `libgcc.mvar` deps so that the bootstrap xgcc isn't built.
       sed -e 's,libgcc.mvars:.*$,libgcc.mvars:,' -i Makefile
 
       make \
@@ -78,15 +89,19 @@ stdenvNoLibs.mkDerivation rec {
         tm.h \
         options.h \
         insn-constants.h \
-        insn-modes.h \
-        gcov-iov.h
+  '' + lib.optionalString stdenv.targetPlatform.isM68k ''
+        sysroot-suffix.h \
+  '' + lib.optionalString stdenv.targetPlatform.isAarch32 ''
+        arm-isa.h \
+        arm-cpu.h \
+  '' + ''
+        insn-modes.h
     )
     mkdir -p "$buildRoot/gcc/include"
-  ''
-  # Preparing to configure + build libgcc itself
-  + ''
-    mkdir -p "$buildRoot/gcc/${stdenvNoLibs.hostPlatform.config}/libgcc"
-    cd "$buildRoot/gcc/${stdenvNoLibs.hostPlatform.config}/libgcc"
+
+    # Preparing to configure + build libgcc itself
+    mkdir -p "$buildRoot/gcc/${stdenv.hostPlatform.config}/libgcc"
+    cd "$buildRoot/gcc/${stdenv.hostPlatform.config}/libgcc"
     configureScript=$sourceRoot/configure
     chmod +x "$configureScript"
 
@@ -96,59 +111,31 @@ stdenvNoLibs.mkDerivation rec {
     export CXX_FOR_BUILD=${buildPackages.stdenv.cc}/bin/$CXX_FOR_BUILD
     export LD_FOR_BUILD=${buildPackages.stdenv.cc.bintools}/bin/$LD_FOR_BUILD
 
-    export AS=${stdenvNoLibs.cc}/bin/$AS
-    export CC=${stdenvNoLibs.cc}/bin/$CC
-    export CPP=${stdenvNoLibs.cc}/bin/$CPP
-    export CXX=${stdenvNoLibs.cc}/bin/$CXX
-    export LD=${stdenvNoLibs.cc.bintools}/bin/$LD
+    export AS=${stdenv.cc}/bin/$AS
+    export CC=${stdenv.cc}/bin/$CC
+    export CPP=${stdenv.cc}/bin/$CPP
+    export CXX=${stdenv.cc}/bin/$CXX
+    export LD=${stdenv.cc.bintools}/bin/$LD
 
-    export AS_FOR_TARGET=${stdenvNoLibs.cc}/bin/$AS_FOR_TARGET
-    export CC_FOR_TARGET=${stdenvNoLibs.cc}/bin/$CC_FOR_TARGET
-    export CPP_FOR_TARGET=${stdenvNoLibs.cc}/bin/$CPP_FOR_TARGET
-    export LD_FOR_TARGET=${stdenvNoLibs.cc.bintools}/bin/$LD_FOR_TARGET
+    export AS_FOR_TARGET=${stdenv.cc}/bin/$AS_FOR_TARGET
+    export CC_FOR_TARGET=${stdenv.cc}/bin/$CC_FOR_TARGET
+    export CPP_FOR_TARGET=${stdenv.cc}/bin/$CPP_FOR_TARGET
+    export LD_FOR_TARGET=${stdenv.cc.bintools}/bin/$LD_FOR_TARGET
   '';
-
-  gccConfigureFlags = [
-    "--build=${stdenvNoLibs.buildPlatform.config}"
-    "--host=${stdenvNoLibs.buildPlatform.config}"
-    "--target=${stdenvNoLibs.hostPlatform.config}"
-
-    "--disable-bootstrap"
-    "--disable-multilib" "--with-multilib-list="
-    "--enable-languages=c"
-
-    "--disable-fixincludes"
-    "--disable-intl"
-    "--disable-lto"
-    "--disable-libatomic"
-    "--disable-libbacktrace"
-    "--disable-libcpp"
-    "--disable-libssp"
-    "--disable-libquadmath"
-    "--disable-libgomp"
-    "--disable-libvtv"
-    "--disable-vtable-verify"
-
-    "--with-system-zlib"
-  ] ++ lib.optional (stdenvNoLibs.hostPlatform.libc == "glibc")
-       "--with-glibc-version=${glibc.version}";
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
-    "--disable-dependency-tracking"
-    # $CC cannot link binaries, let alone run then
     "cross_compiling=true"
-    # Do not have dynamic linker without libc
-    "--enable-static"
-    "--disable-shared"
+    "--disable-gcov"
+    "--with-glibc-version=${glibc.version}"
   ];
 
   makeFlags = [ "MULTIBUILDTOP:=../" ];
 
   postInstall = ''
-    moveToOutput "lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}/include" "$dev"
+    moveToOutput "lib/gcc/${stdenv.hostPlatform.config}/${finalAttrs.version}/include" "$dev"
     mkdir -p "$out/lib" "$dev/include"
-    ln -s "$out/lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}"/* "$out/lib"
-    ln -s "$dev/lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}/include"/* "$dev/include/"
+    ln -s "$out/lib/gcc/${stdenv.hostPlatform.config}/${finalAttrs.version}"/* "$out/lib"
+    ln -s "$dev/lib/gcc/${stdenv.hostPlatform.config}/${finalAttrs.version}/include"/* "$dev/include/"
   '';
-}
+})

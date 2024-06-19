@@ -1,69 +1,89 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, pytestCheckHook
-, pytest-timeout
-, h5py
-, matplotlib
-, nibabel
-, pandas
-, scikit-learn
-, decorator
-, jinja2
-, pooch
-, tqdm
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  numpy,
+  scipy,
+  pytestCheckHook,
+  pytest-timeout,
+  matplotlib,
+  decorator,
+  jinja2,
+  pooch,
+  tqdm,
+  packaging,
+  lazy-loader,
+  h5io,
+  pymatreader,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "1.1.1";
+  version = "1.7.0";
+  pyproject = true;
 
-  # PyPI dist insufficient to run tests
+  disabled = pythonOlder "3.9";
+
   src = fetchFromGitHub {
     owner = "mne-tools";
-    repo = pname;
+    repo = "mne-python";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-VM7sKcQeAeK20r4/jehhGlvBSHhYwA2SgsNL5Oa/Hug=";
+    hash = "sha256-Nrar6Iw/jROuo4QTI7TktJSR5IdPSOQcbR+lycH52LI=";
   };
 
-  propagatedBuildInputs = [
-    decorator
-    jinja2
-    matplotlib
-    numpy
-    pooch
-    scipy
-    setuptools
-    tqdm
+  postPatch = ''
+    substituteInPlace pyproject.toml  \
+      --replace-fail "--cov-report=" ""  \
+      --replace-fail "--cov-branch" ""
+  '';
+
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
   ];
 
-  checkInputs = [
-    h5py
-    nibabel
-    pandas
-    pytestCheckHook
-    scikit-learn
-    pytest-timeout
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    matplotlib
+    tqdm
+    pooch
+    decorator
+    packaging
+    jinja2
+    lazy-loader
   ];
+
+  passthru.optional-dependencies.hdf5 = [
+    h5io
+    pymatreader
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-timeout
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   preCheck = ''
-    export HOME=$TMP
+    export HOME=$(mktemp -d)
     export MNE_SKIP_TESTING_DATASET_TESTS=true
     export MNE_SKIP_NETWORK_TESTS=1
   '';
 
-  # all tests pass, but Pytest hangs afterwards - probably some thread hasn't terminated
-  doCheck = false;
-
   pythonImportsCheck = [ "mne" ];
 
   meta = with lib; {
-    homepage = "https://mne.tools";
     description = "Magnetoencephelography and electroencephalography in Python";
+    mainProgram = "mne";
+    homepage = "https://mne.tools";
+    changelog = "https://mne.tools/stable/changes/v${version}.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [
+      bcdarwin
+      mbalatsko
+    ];
   };
 }

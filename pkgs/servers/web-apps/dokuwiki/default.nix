@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, writeText, nixosTests }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeText
+, nixosTests
+, dokuwiki
+}:
 
 stdenv.mkDerivation rec {
   pname = "dokuwiki";
-  version = "2022-07-31a";
+  version = "2024-02-06a";
 
   src = fetchFromGitHub {
-    owner = "splitbrain";
+    owner = "dokuwiki";
     repo = pname;
-    rev = "release_stable_${version}";
-    sha256 = "sha256-gtWEtc3kbMokKycTx71XXblkDF39i926uN2kU3oOeVw=";
+    rev = "release-${version}";
+    sha256 = "sha256-gAoEUskTTbcpHgDUBSsAv6QQDvPuxQ1jXZ4TTKrjWIU=";
   };
 
   preload = writeText "preload.php" ''
@@ -38,20 +44,46 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/dokuwiki
     cp -r * $out/share/dokuwiki
     cp ${preload} $out/share/dokuwiki/inc/preload.php
     cp ${phpLocalConfig} $out/share/dokuwiki/conf/local.php
     cp ${phpPluginsLocalConfig} $out/share/dokuwiki/conf/plugins.local.php
+
+    runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) dokuwiki;
+  passthru = {
+    combine = { basePackage ? dokuwiki
+      , plugins ? []
+      , templates ? []
+      , localConfig ? null
+      , pluginsConfig ? null
+      , aclConfig ? null
+      , pname ? (p: "${p.pname}-combined")
+    }: let
+      isNotEmpty = x: lib.optionalString (! builtins.elem x [ null "" ]);
+    in basePackage.overrideAttrs (prev: {
+      pname = if builtins.isFunction pname then pname prev else pname;
+
+      postInstall = prev.postInstall or "" + ''
+        ${lib.concatMapStringsSep "\n" (tpl: "cp -r ${toString tpl} $out/share/dokuwiki/lib/tpl/${tpl.name}") templates}
+        ${lib.concatMapStringsSep "\n" (plugin: "cp -r ${toString plugin} $out/share/dokuwiki/lib/plugins/${plugin.name}") plugins}
+        ${isNotEmpty localConfig "ln -sf ${localConfig} $out/share/dokuwiki/conf/local.php" }
+        ${isNotEmpty pluginsConfig "ln -sf ${pluginsConfig} $out/share/dokuwiki/conf/plugins.local.php" }
+        ${isNotEmpty aclConfig "ln -sf ${aclConfig} $out/share/dokuwiki/acl.auth.php" }
+      '';
+    });
+    tests = {
+      inherit (nixosTests) dokuwiki;
+    };
   };
 
   meta = with lib; {
     description = "Simple to use and highly versatile Open Source wiki software that doesn't require a database";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "https://www.dokuwiki.org";
     platforms = platforms.all;
     maintainers = with maintainers; [ _1000101 ];

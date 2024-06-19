@@ -1,5 +1,6 @@
 { mkDerivation
 , lib
+, stdenv
 , extra-cmake-modules
 , attr
 , ebook_tools
@@ -17,8 +18,9 @@
 mkDerivation {
   pname = "kfilemetadata";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     attr
+  ] ++ [
     ebook_tools
     exiv2
     ffmpeg

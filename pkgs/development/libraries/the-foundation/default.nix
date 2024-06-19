@@ -10,16 +10,16 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "the-foundation";
-  version = "1.4.0";
+  version = "1.8.1";
 
   src = fetchFromGitea {
     domain = "git.skyjake.fi";
     owner = "skyjake";
     repo = "the_Foundation";
-    rev = "v${version}";
-    hash = "sha256-IHwWJryG4HcrW9Bf8KJrisCrbF86RBQj6Xl1HTmcr6k=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-gyDBK/bF+QxXMnthUfMjeUuRBZk0Xcahm7wOtLGs5kY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };
-}
+})

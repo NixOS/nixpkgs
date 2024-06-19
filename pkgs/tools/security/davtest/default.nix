@@ -1,4 +1,4 @@
-{ lib, stdenv, perl, perlPackages, fetchurl }:
+{ lib, stdenv, perl, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "davtest";

@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
     sha256 = "0hl1i38z9xnbgfjkaz04vv1n8xbgfg88g5z8fyzyb2hxv2z37anf";
   };
 
-  nativeBuildInputs = [ imake gccmakedep ];
+  nativeBuildInputs = [ imake gccmakedep pkg-config ];
 
   buildInputs = [
     libX11
     libXt
     libXext
     libXpm
-  ] ++ lib.optionals svgSupport [ librsvg glib gdk-pixbuf pkg-config ];
+  ] ++ lib.optionals svgSupport [ librsvg glib gdk-pixbuf ];
 
   outputs = [ "out" "man" ];
 
@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.artistic2;
     maintainers = with maintainers; [ rasendubi ];
     platforms = platforms.linux;
+    mainProgram = "xxkb";
   };
 }

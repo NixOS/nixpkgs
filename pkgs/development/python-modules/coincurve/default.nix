@@ -1,28 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, asn1crypto
-, autoconf
-, automake
-, cffi
-, libtool
-, pkg-config
-, pytestCheckHook
-, python
-, pythonOlder
-, secp256k1
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  asn1crypto,
+  autoconf,
+  automake,
+  cffi,
+  libtool,
+  pkg-config,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  secp256k1,
 }:
 
 buildPythonPackage rec {
   pname = "coincurve";
-  version = "17.0.0";
+  version = "19.0.1";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ofek";
     repo = "coincurve";
-    rev = "v${version}";
-    sha256 = "sha256-7H4/TDxteuMTrj1PdfpA5rc7CegJAOjqn1PteImfGiQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-T60iKRrc8/t86nqf8/R4971SjOw586YNCWWBuLd9MjM=";
   };
 
   postPatch = ''
@@ -55,18 +57,17 @@ buildPythonPackage rec {
     rm tests/test_bench.py
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "coincurve"
-  ];
+  pythonImportsCheck = [ "coincurve" ];
 
   meta = with lib; {
     description = "Cross-platform bindings for libsecp256k1";
     homepage = "https://github.com/ofek/coincurve";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -14,7 +14,7 @@
   libxml2,
   clutter,
   clutter-gtk,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   meson,
   ninja,
   python3,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libxml2
     itstool
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -65,7 +65,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Classic falling-block game, Tetris";
-    homepage = "https://wiki.gnome.org/Apps/Quadrapassel";
+    mainProgram = "quadrapassel";
+    homepage = "https://gitlab.gnome.org/GNOME/quadrapassel";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

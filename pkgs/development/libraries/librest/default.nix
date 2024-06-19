@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
+  ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_412
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--enable-gtk-doc"
+    (lib.enableFeature (stdenv.hostPlatform == stdenv.buildPlatform) "gtk-doc")
     # Remove when https://gitlab.gnome.org/GNOME/librest/merge_requests/2 is merged.
     "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt"
   ];
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Helper library for RESTful services";
-    homepage = "https://wiki.gnome.org/Projects/Librest";
+    homepage = "https://gitlab.gnome.org/GNOME/librest";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

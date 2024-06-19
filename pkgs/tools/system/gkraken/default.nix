@@ -10,7 +10,7 @@
 , gtk3
 , libnotify
 , dbus
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -33,15 +33,15 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     meson
     pkg-config
+    gobject-introspection
     glib
     ninja
     gtk3
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    gobject-introspection
     glib
     gtk3
     libnotify
@@ -82,5 +82,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;
+    mainProgram = "gkraken";
   };
 }

@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, libconfuse, gettext }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libconfuse, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "genimage";
-  version = "16";
+  version = "17";
 
   src = fetchurl {
     url = "https://public.pengutronix.de/software/genimage/genimage-${version}.tar.xz";
-    sha256 = "sha256-hp+WYtO3eMabHR/nDfZY4cnpCu2iart1P2/lXosMbnM=";
+    sha256 = "sha256-qHVuNWeg1NgsNrCMzB4IglC5AG1WcMaysBQYXm7GBnE=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libconfuse gettext ];
 
   postInstall = ''
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "genimage";
   };
 }

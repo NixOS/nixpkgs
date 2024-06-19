@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, dpkg, jre_headless, nixosTests }:
+{ lib, stdenv, fetchurl, makeWrapper, dpkg, jre_headless, openssl, nixosTests }:
 
 let
   pname = "jitsi-videobridge2";
-  version = "2.2-22-g42bc1b99";
+  version = "2.3-105-ge155b81e";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "ZiIeD5NXHMurcoyVnD8RCGuOKRiUDU1AMH57A0s4tAs=";
+    sha256 = "jQTZwnj1oECjUTD8dC6PF5tJcPye8FYUJmYEEBhBuRs=";
   };
 in
 stdenv.mkDerivation {
@@ -28,9 +28,11 @@ stdenv.mkDerivation {
     mv usr/share/jitsi-videobridge/* $out/share/jitsi-videobridge/
     ln -s $out/share/jitsi-videobridge/jvb.sh $out/bin/jitsi-videobridge
 
-    # work around https://github.com/jitsi/jitsi-videobridge/issues/1547
+    # - work around https://github.com/jitsi/jitsi-videobridge/issues/1547
+    # - make libcrypto.so available at runtime for hardware AES
     wrapProgram $out/bin/jitsi-videobridge \
-      --set VIDEOBRIDGE_GC_TYPE G1GC
+      --set VIDEOBRIDGE_GC_TYPE G1GC \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]}
     runHook postInstall
   '';
 
@@ -53,5 +55,6 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     maintainers = teams.jitsi.members;
     platforms = platforms.linux;
+    mainProgram = "jitsi-videobridge";
   };
 }

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "moq";
-  version = "0.2.7";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "matryer";
     repo = "moq";
     rev = "v${version}";
-    sha256 = "sha256-me/KD8bgzA+VU7WrfKlk8HZTInJqhijLAVTiZcJRzms=";
+    sha256 = "sha256-HJAfTTmsVIz/2gZxl5Sw+OMh6I6bjpZGd1afIjBWtXo=";
   };
 
-  vendorSha256 = "sha256-XTe52pytjZYJALBOcnytA8z/d3UHSKcU1lJmJm8Iawo=";
+  vendorHash = "sha256-2C5p2JTTCADGRsf0BMuxpQXk+25Q1YI25SSVE/5uZ1A=";
 
   subPackages = [ "." ];
 
@@ -24,6 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/matryer/moq";
     description = "Interface mocking tool for go generate";
+    mainProgram = "moq";
     longDescription = ''
       Moq is a tool that generates a struct from any interface. The struct can
       be used in test code as a mock of the interface.

@@ -19,17 +19,20 @@
 , dbus
 , xvfb-run
 , shared-mime-info
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.4.2";
+  version = "5.12.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "rRQOB+uEGRDeSDwJK9SIWr0puq3W6V+iLZPtLfC3nec=";
+    hash = "sha256-2vMv9dMVDWOFkX01A6hbngR7oViysDB5MUycAIE/oB8=";
   };
 
   patches = [
@@ -48,6 +51,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     vala
     gi-docgen
+    gtk4 # for gtk4-update-icon-cache checked during configure
   ];
 
   buildInputs = [
@@ -65,13 +69,13 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     dbus
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Ddocumentation=true"
   ];
 
   doCheck = stdenv.isLinux;
@@ -79,10 +83,12 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      meson test --no-rebuild --print-errorlogs
+    env \
+      XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
+      GTK_A11Y=none \
+      xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+        --config-file=${dbus}/share/dbus-1/session.conf \
+        meson test --no-rebuild --print-errorlogs
 
     runHook postCheck
   '';
@@ -100,11 +106,16 @@ stdenv.mkDerivation rec {
     };
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Source code editing widget for GTK";
-    homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
+    homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
+    pkgConfigModules = [ "gtksourceview-5" ];
     platforms = platforms.unix;
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
+    # https://hydra.nixos.org/build/258191535/nixlog/1
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
-}
+})

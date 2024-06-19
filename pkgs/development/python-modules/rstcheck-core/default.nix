@@ -1,63 +1,70 @@
-{ lib
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, importlib-metadata
-, mock
-, poetry-core
-, pydantic
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, types-docutils
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  importlib-metadata,
+  mock,
+  pydantic,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "rstcheck-core";
-  version = "1.0.2";
-  format = "pyproject";
+  version = "1.2.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rstcheck";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-XNr+prK9VDP66ZaFvh3Qrx+eJs6mnVO8lvoMC/qrCLs=";
+    repo = "rstcheck-core";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PiQMk0lIv24S6qXMYIQR+SkSji+WA30ivWs2uPQwf2A=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    docutils
-    importlib-metadata
-    pydantic
-    types-docutils
-    typing-extensions
-  ];
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-strict-prototypes";
+  };
 
-  checkInputs = [
+  dependencies =
+    [
+      docutils
+      pydantic
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-metadata
+      typing-extensions
+    ];
+
+  nativeCheckInputs = [
     mock
     pytest-mock
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'types-docutils = ">=0.18, <0.19"' 'types-docutils = ">=0.18"' \
-      --replace 'docutils = ">=0.7, <0.19"' 'docutils = ">=0.7"'
-  '';
-
-  pythonImportsCheck = [
-    "rstcheck_core"
+  disabledTests = [
+    # https://github.com/rstcheck/rstcheck-core/issues/84
+    "test_check_yaml_returns_error_on_bad_code_block"
   ];
+
+  pythonImportsCheck = [ "rstcheck_core" ];
 
   meta = with lib; {
     description = "Library for checking syntax of reStructuredText";
     homepage = "https://github.com/rstcheck/rstcheck-core";
+    changelog = "https://github.com/rstcheck/rstcheck-core/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

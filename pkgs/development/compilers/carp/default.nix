@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, makeWrapper, clang, haskellPackages }:
+{ lib, fetchFromGitHub, fetchpatch, makeWrapper, clang, haskellPackages }:
 
 haskellPackages.mkDerivation rec {
   pname = "carp";
@@ -10,6 +10,16 @@ haskellPackages.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-B7SBzjegFzL2gGivIJE6BZcLD3f0Bsh8yndjScG2TZI=";
   };
+
+  patches = [
+    # Compat with GHC 9.2 / Stackage LTS 20, can be dropped at the next release
+    # https://github.com/carp-lang/Carp/pull/1449
+    (fetchpatch {
+      name = "carp-lts-20.patch";
+      url = "https://github.com/carp-lang/Carp/commit/25f50c92a57cc91b6cb4ec48df658439f936b641.patch";
+      sha256 = "14yjv0hcvw1qyjmrhksrj6chac3n14d1f1gcaxldfa05llrbfqk0";
+    })
+  ];
 
   # -Werror breaks build with GHC >= 9.0
   # https://github.com/carp-lang/Carp/issues/1386
@@ -46,8 +56,9 @@ haskellPackages.mkDerivation rec {
   homepage    = "https://github.com/carp-lang/Carp";
   license     = lib.licenses.asl20;
   maintainers = with lib.maintainers; [ jluttine ];
+  # Not actively maintained at the moment
+  broken      = true;
 
   # Windows not (yet) supported.
   platforms   = with lib.platforms; unix ++ darwin;
-
 }

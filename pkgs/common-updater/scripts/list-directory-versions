@@ -26,6 +26,8 @@ parser.add_argument(
 parser.add_argument("--url", help="url of the page that lists the package versions")
 parser.add_argument("--file", help="file name for writing debugging information")
 
+parser.add_argument("--extra-regex", help="additional regex to filter versions with")
+
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -59,7 +61,9 @@ if __name__ == "__main__":
         link_url = link.get("href", None)
         if link_url is not None:
             match = re.fullmatch(
-                rf"{args.pname}-([\d.]+?(-[\d\w.-]+?)?)(\.tar)?(\.[^.]*)", link_url
+                rf"(.*/)?{args.pname}-([\d.]+?(-[\d\w.-]+?)?)(\.tar)?(\.[^.]*)", link_url
             )
             if match:
-                print(match.group(1))
+                version = match.group(2)
+                if (not args.extra_regex) or re.fullmatch(args.extra_regex, version):
+                    print(version)

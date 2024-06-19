@@ -1,5 +1,4 @@
-{ lib
-, fetchurl
+{ fetchurl
 , appimageTools
 , xorg
 , pname
@@ -27,11 +26,7 @@ in
     export LC_ALL=C.UTF-8
   '';
 
-  extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs;
-
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},caprine}
-
     mkdir -p $out/share
     "${xorg.lndir}/bin/lndir" -silent "${extracted}/usr/share" "$out/share"
     ln -s ${extracted}/caprine.png $out/share/icons/caprine.png
@@ -43,6 +38,5 @@ in
 
   meta = metaCommon // {
     platforms = [ "x86_64-linux" ];
-    mainProgram = "caprine";
   };
 })

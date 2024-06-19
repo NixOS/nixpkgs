@@ -1,16 +1,19 @@
 { lib
 , python3Packages
+, fetchFromGitHub
 , nix
 , ronn
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.10.1";
+  version = "1.10.1-unstable-2024-04-02";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "07v3ddvvhi3bslwrlin45kz48i3va2lzd6ny0blj5i2z8z40qcfm";
+  src = fetchFromGitHub {
+    owner = "nix-community";
+    repo = "vulnix";
+    rev = "ebd8ea84553c0fd95bc3042584b495560821500f";
+    hash = "sha256-huC520cLPjcmnbh+qOamyVfiIJNrCUpwK+orEp+X2LQ=";
   };
 
   postPatch = ''
@@ -21,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   outputs = [ "out" "doc" "man" ];
   nativeBuildInputs = [ ronn ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     freezegun
     pytest
     pytest-cov
@@ -54,7 +57,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "NixOS vulnerability scanner";
-    homepage = "https://github.com/flyingcircusio/vulnix";
+    mainProgram = "vulnix";
+    homepage = "https://github.com/nix-community/vulnix";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ckauhaus ];
   };

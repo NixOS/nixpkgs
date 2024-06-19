@@ -28,13 +28,14 @@ buildPythonApplication rec {
     installShellCompletion --fish watson.fish
   '';
 
-  checkInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];
+  nativeCheckInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];
   propagatedBuildInputs = [ arrow click click-didyoumean requests ];
   nativeBuildInputs = [ installShellFiles ];
 
   meta = with lib; {
     homepage = "https://tailordev.github.io/Watson/";
     description = "A wonderful CLI to track your time!";
+    mainProgram = "watson";
     license = licenses.mit;
     maintainers = with maintainers; [ mguentner nathyong oxzi ];
   };

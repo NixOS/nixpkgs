@@ -1,24 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytools
-, appdirs
-, six
-, cgen
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytools,
+  appdirs,
+  six,
+  cgen,
 }:
 
 buildPythonPackage rec {
   pname = "codepy";
   version = "2019.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-viMfB/nDrvDA/IGRZEX+yXylxbbmqbh/fgdYXBzK0zM=";
+    hash = "sha256-viMfB/nDrvDA/IGRZEX+yXylxbbmqbh/fgdYXBzK0zM=";
   };
 
-  buildInputs = [ pytools six cgen ];
+  buildInputs = [
+    pytools
+    six
+    cgen
+  ];
   propagatedBuildInputs = [ appdirs ];
 
   pythonImportsCheck = [ "codepy" ];

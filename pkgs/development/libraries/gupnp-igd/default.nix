@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
 
@@ -65,6 +66,6 @@ stdenv.mkDerivation rec {
     description = "Library to handle UPnP IGD port mapping";
     homepage = "http://www.gupnp.org/";
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

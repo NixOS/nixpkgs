@@ -1,32 +1,39 @@
-{ stdenvNoCC, lib, fetchFromGitHub, nixosTests, pkgs }:
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, nixosTests
+, php
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "FreshRSS";
-  version = "1.20.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "FreshRSS";
     repo = "FreshRSS";
     rev = version;
-    hash = "sha256-mzhEw2kFv77SmeuEx66n9ujWMscZO3+03tHimk1/vk4=";
+    hash = "sha256-QMSSSSyInkWJP9im6RhyVItSgY30Nt2p1pRDdPPoaYI=";
   };
 
-  passthru.tests = nixosTests.freshrss;
+  passthru.tests = {
+    inherit (nixosTests) freshrss-sqlite freshrss-pgsql freshrss-http-auth freshrss-none-auth;
+  };
+
+  buildInputs = [ php ];
 
   # There's nothing to build.
   dontBuild = true;
 
-  # the data folder is no in this package and thereby declared by an env-var
-  overrideConfig = pkgs.writeText "constants.local.php" ''
-    <?php
-      define('DATA_PATH', getenv('FRESHRSS_DATA_PATH'));
+  postPatch = ''
+    patchShebangs cli/*.php app/actualize_script.php
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     cp -vr * $out/
-
-    cp $overrideConfig $out/constants.local.php
+    runHook postInstall
   '';
 
   meta = with lib; {

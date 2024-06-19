@@ -10,14 +10,14 @@
     if officialRelease
     then ""
     else "pre${toString (src.rev or src.revCount or "")}"
-, src, stdenv, autoconf, automake, libtool
+, src, lib, stdenv, autoconf, automake, libtool
 , # By default, provide all the GNU Build System as input.
   bootstrapBuildInputs ? [ autoconf automake libtool ]
 , ... } @ args:
 
 stdenv.mkDerivation (
 
-  # First, attributes that can be overriden by the caller (via args):
+  # First, attributes that can be overridden by the caller (via args):
   {
     # By default, only configure and build a source distribution.
     # Some packages can only build a distribution after a general
@@ -64,17 +64,16 @@ stdenv.mkDerivation (
       if test -n "$succeedOnFailure"; then
           if test -n "$keepBuildDirectory"; then
               KEEPBUILDDIR="$out/`basename $TMPDIR`"
-              header "Copying build directory to $KEEPBUILDDIR"
+              echo "Copying build directory to $KEEPBUILDDIR"
               mkdir -p $KEEPBUILDDIR
               cp -R "$TMPDIR/"* $KEEPBUILDDIR
-              stopNest
           fi
       fi
     '';
   }
 
   # Then, the caller-supplied attributes.
-  // args //
+  // (builtins.removeAttrs args [ "lib" ]) //
 
   # And finally, our own stuff.
   {
@@ -118,7 +117,7 @@ stdenv.mkDerivation (
       version = version + versionSuffix;
     };
 
-    meta = (if args ? meta then args.meta else {}) // {
+    meta = (lib.optionalAttrs (args ? meta) args.meta) // {
       description = "Source distribution";
 
       # Tarball builds are generally important, so give them a high

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, regex
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  regex,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,12 +19,16 @@ buildPythonPackage rec {
     hash = "sha256-goFgDaGA7IrjVCekq097gr/sHj0eUvgMtg6oK5USUBw=";
   };
 
-  propagatedBuildInputs = [
-    regex
-  ];
+  propagatedBuildInputs = [ regex ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # test_benchmarks.py tests are actually benchmarks and may fail due to
+    # something being unexpectedly slow on a heavily loaded build machine
+    "test_lists_vs_dicts"
+    "test_call_vs_inline"
+    "test_startswith_vs_regex"
   ];
 
   postPatch = ''

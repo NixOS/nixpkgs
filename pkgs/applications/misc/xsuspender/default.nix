@@ -1,8 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkg-config
 , glib, libwnck, procps }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "xsuspender";
   version = "1.3";
@@ -21,11 +19,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/xsuspender \
-      --prefix PATH : "${makeBinPath [ procps ]}"
+      --prefix PATH : "${lib.makeBinPath [ procps ]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Auto-suspend inactive X11 applications";
+    mainProgram = "xsuspender";
     homepage = "https://kernc.github.io/xsuspender/";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ offline ];

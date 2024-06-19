@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    runHook preInstalli
+    runHook preInstall
     install -D V4L_Frontend $out/bin/viper-gui
     install -D icons/viper.png $out/share/icons/viper.png
     runHook postInstall

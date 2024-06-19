@@ -1,41 +1,52 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools-scm
-, pydantic
-, toml
-, typeguard
-, mock
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lsprotocol,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  typeguard,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "pygls";
-  version = "0.12.1";
-  format = "setuptools";
+  version = "1.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "openlawlibrary";
-    repo = pname;
+    repo = "pygls";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-L2KTNiI+I+r2fF88B1NSunowokrDzGCw3PXbxekg/oE=";
+    hash = "sha256-AvrGoQ0Be1xKZhFn9XXYJpt5w+ITbDbj6NFZpaDPKao=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-  nativeBuildInputs = [ setuptools-scm ];
+  pythonRelaxDeps = [
+    # https://github.com/openlawlibrary/pygls/pull/432
+    "lsprotocol"
+  ];
+
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
-    pydantic
-    toml
+    lsprotocol
     typeguard
   ];
 
-  checkInputs = [
-    mock
+  passthru.optional-dependencies = {
+    ws = [ websockets ];
+  };
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -43,11 +54,17 @@ buildPythonPackage rec {
   # Fixes hanging tests on Darwin
   __darwinAllowLocalNetworking = true;
 
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    # Darwin issue: OSError: [Errno 24] Too many open files
+    ulimit -n 1024
+  '';
+
   pythonImportsCheck = [ "pygls" ];
 
   meta = with lib; {
     description = "Pythonic generic implementation of the Language Server Protocol";
     homepage = "https://github.com/openlawlibrary/pygls";
+    changelog = "https://github.com/openlawlibrary/pygls/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ kira-bruneau ];
   };

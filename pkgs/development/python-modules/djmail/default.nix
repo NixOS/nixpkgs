@@ -1,11 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi
-, glibcLocales
-, celery, django, psycopg2
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  celery,
+  django,
+  psycopg2,
 }:
 
 buildPythonPackage rec {
   pname = "djmail";
   version = "2.0.0";
+  format = "setuptools";
 
   meta = {
     description = "Simple, powerfull and nonobstructive django email middleware";
@@ -22,7 +28,11 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  propagatedBuildInputs = [ celery django psycopg2 ];
+  propagatedBuildInputs = [
+    celery
+    django
+    psycopg2
+  ];
 
   # django.core.exceptions.ImproperlyConfigured: Requested setting DEFAULT_INDEX_TABLESPACE, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
   doCheck = false;

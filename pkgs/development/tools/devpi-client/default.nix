@@ -1,61 +1,55 @@
-{ lib
-, argon2-cffi-bindings
-, buildPythonApplication
-, check-manifest
-, devpi-common
-, devpi-server
-, fetchPypi
-, git
-, glibcLocales
-, mercurial
-, mock
-, pkginfo
-, pluggy
-, py
-, pytestCheckHook
-, pytest-flake8
-, setuptools
-, sphinx
-, tox
-, webtest
-, wheel
+{
+  lib,
+  devpi-server,
+  git,
+  glibcLocales,
+  python3,
+  fetchPypi,
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "devpi-client";
-  version = "5.2.3";
+  version = "7.0.3";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Ni6ybpUTankkkYYcwnKNFKYwmp1MTxOnucPm/TneWOw=";
+    pname = "devpi_client";
+    inherit version;
+    hash = "sha256-5aF6EIFnhfywDeAfWSN+eZUpaO6diPCP5QHT11Y/IQI=";
   };
 
-  buildInputs = [
-    glibcLocales
+  build-system = with python3.pkgs; [
+    setuptools
+    setuptools-changelog-shortener
   ];
 
-  propagatedBuildInputs = [
-    argon2-cffi-bindings
+  buildInputs = [ glibcLocales ];
+
+  dependencies = with python3.pkgs; [
+    build
     check-manifest
     devpi-common
+    iniconfig
     pkginfo
     pluggy
-    py
-    setuptools
+    platformdirs
   ];
 
-  checkInputs = [
-    devpi-server
-    git
-    mercurial
-    mock
-    pytestCheckHook
-    pytest-flake8
-    sphinx
-    tox
-    webtest
-    wheel
-  ];
+  nativeCheckInputs =
+    [
+      devpi-server
+      git
+    ]
+    ++ (with python3.pkgs; [
+      mercurial
+      mock
+      pypitoken
+      pytestCheckHook
+      sphinx
+      virtualenv
+      webtest
+      wheel
+    ]);
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -70,10 +64,17 @@ buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
+  pythonImportsCheck = [ "devpi" ];
+
   meta = with lib; {
-    homepage = "http://doc.devpi.net";
     description = "Client for devpi, a pypi index server and packaging meta tool";
+    homepage = "http://doc.devpi.net";
+    changelog = "https://github.com/devpi/devpi/blob/client-${version}/client/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ lewo makefu ];
+    maintainers = with maintainers; [
+      lewo
+      makefu
+    ];
+    mainProgram = "devpi";
   };
 }

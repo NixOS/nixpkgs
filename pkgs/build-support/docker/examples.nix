@@ -7,7 +7,7 @@
 #  $ nix-build '<nixpkgs>' -A dockerTools.examples.redis
 #  $ docker load < result
 
-{ pkgs, buildImage, buildLayeredImage, fakeNss, pullImage, shadowSetup, buildImageWithNixDb, pkgsCross }:
+{ pkgs, buildImage, buildLayeredImage, fakeNss, pullImage, shadowSetup, buildImageWithNixDb, pkgsCross, streamNixShellImage }:
 
 let
   nixosLib = import ../../../nixos/lib {
@@ -92,10 +92,11 @@ rec {
     ];
 
     extraCommands = ''
+      mkdir -p tmp/nginx_client_body
+
       # nginx still tries to read this directory even if error_log
       # directive is specifying another file :/
       mkdir -p var/log/nginx
-      mkdir -p var/cache/nginx
     '';
 
     config = {
@@ -479,6 +480,22 @@ rec {
     layerC = layerOnTopOf layerB "c";
   in layerC;
 
+  bashUncompressed = pkgs.dockerTools.buildImage {
+    name = "bash-uncompressed";
+    tag = "latest";
+    compressor = "none";
+    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
+    copyToRoot = pkgs.bashInteractive;
+  };
+
+  bashZstdCompressed = pkgs.dockerTools.buildImage {
+    name = "bash-zstd";
+    tag = "latest";
+    compressor = "zstd";
+    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
+    copyToRoot = pkgs.bashInteractive;
+  };
+
   # buildImage without explicit tag
   bashNoTag = pkgs.dockerTools.buildImage {
     name = "bash-no-tag";
@@ -492,7 +509,23 @@ rec {
     contents = pkgs.bashInteractive;
   };
 
-  # buildImage without explicit tag
+  # buildLayeredImage without compression
+  bashLayeredUncompressed = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-layered-uncompressed";
+    tag = "latest";
+    compressor = "none";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildLayeredImage with zstd compression
+  bashLayeredZstdCompressed = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-layered-zstd";
+    tag = "latest";
+    compressor = "zstd";
+    contents = pkgs.bashInteractive;
+  };
+
+  # streamLayeredImage without explicit tag
   bashNoTagStreamLayered = pkgs.dockerTools.streamLayeredImage {
     name = "bash-no-tag-stream-layered";
     contents = pkgs.bashInteractive;
@@ -613,6 +646,12 @@ rec {
     layeredImageWithFakeRootCommands
   ];
 
+  mergeVaryingCompressor = pkgs.dockerTools.mergeImages [
+    redis
+    bashUncompressed
+    bashZstdCompressed
+  ];
+
   helloOnRoot = pkgs.dockerTools.streamLayeredImage {
     name = "hello";
     tag = "latest";
@@ -636,6 +675,20 @@ rec {
     ];
     config.Cmd = [ "hello" ];
     includeStorePaths = false;
+  };
+
+  helloOnRootNoStoreFakechroot = pkgs.dockerTools.streamLayeredImage {
+    name = "hello";
+    tag = "latest";
+    contents = [
+      (pkgs.buildEnv {
+        name = "hello-root";
+        paths = [ pkgs.hello ];
+      })
+    ];
+    config.Cmd = [ "hello" ];
+    includeStorePaths = false;
+    enableFakechroot = true;
   };
 
   etc =
@@ -699,6 +752,21 @@ rec {
     contents = [ pkgs.bashInteractive ./test-dummy ];
   };
 
+  build-image-with-architecture = buildImage {
+    name = "build-image-with-architecture";
+    tag = "latest";
+    architecture = "arm64";
+    # Not recommended. Use `buildEnv` between copy and packages to avoid file duplication.
+    copyToRoot = [ pkgs.bashInteractive ./test-dummy ];
+  };
+
+  layered-image-with-architecture = pkgs.dockerTools.streamLayeredImage {
+    name = "layered-image-with-architecture";
+    tag = "latest";
+    architecture = "arm64";
+    contents = [ pkgs.bashInteractive ./test-dummy ];
+  };
+
   # ensure that caCertificates builds
   image-with-certs = buildImage {
     name = "image-with-certs";
@@ -715,4 +783,118 @@ rec {
     config = {
     };
   };
+
+  nix-shell-basic = streamNixShellImage {
+    name = "nix-shell-basic";
+    tag = "latest";
+    drv = pkgs.hello;
+  };
+
+  nix-shell-hook = streamNixShellImage {
+    name = "nix-shell-hook";
+    tag = "latest";
+    drv = pkgs.mkShell {
+      shellHook = ''
+        echo "This is the shell hook!"
+        exit
+      '';
+    };
+  };
+
+  nix-shell-inputs = streamNixShellImage {
+    name = "nix-shell-inputs";
+    tag = "latest";
+    drv = pkgs.mkShell {
+      nativeBuildInputs = [
+        pkgs.hello
+      ];
+    };
+    command = ''
+      hello
+    '';
+  };
+
+  nix-shell-pass-as-file = streamNixShellImage {
+    name = "nix-shell-pass-as-file";
+    tag = "latest";
+    drv = pkgs.mkShell {
+      str = "this is a string";
+      passAsFile = [ "str" ];
+    };
+    command = ''
+      cat "$strPath"
+    '';
+  };
+
+  nix-shell-run = streamNixShellImage {
+    name = "nix-shell-run";
+    tag = "latest";
+    drv = pkgs.mkShell {};
+    run = ''
+      case "$-" in
+      *i*) echo This shell is interactive ;;
+      *) echo This shell is not interactive ;;
+      esac
+    '';
+  };
+
+  nix-shell-command = streamNixShellImage {
+    name = "nix-shell-command";
+    tag = "latest";
+    drv = pkgs.mkShell {};
+    command = ''
+      case "$-" in
+      *i*) echo This shell is interactive ;;
+      *) echo This shell is not interactive ;;
+      esac
+    '';
+  };
+
+  nix-shell-writable-home = streamNixShellImage {
+    name = "nix-shell-writable-home";
+    tag = "latest";
+    drv = pkgs.mkShell {};
+    run = ''
+      if [[ "$HOME" != "$(eval "echo ~$(whoami)")" ]]; then
+        echo "\$HOME ($HOME) is not the same as ~\$(whoami) ($(eval "echo ~$(whoami)"))"
+        exit 1
+      fi
+
+      if ! touch $HOME/test-file; then
+        echo "home directory is not writable"
+        exit 1
+      fi
+      echo "home directory is writable"
+    '';
+  };
+
+  nix-shell-nonexistent-home = streamNixShellImage {
+    name = "nix-shell-nonexistent-home";
+    tag = "latest";
+    drv = pkgs.mkShell {};
+    homeDirectory = "/homeless-shelter";
+    run = ''
+      if [[ "$HOME" != "$(eval "echo ~$(whoami)")" ]]; then
+        echo "\$HOME ($HOME) is not the same as ~\$(whoami) ($(eval "echo ~$(whoami)"))"
+        exit 1
+      fi
+
+      if -e $HOME; then
+        echo "home directory exists"
+        exit 1
+      fi
+      echo "home directory doesn't exist"
+    '';
+  };
+
+  nix-shell-build-derivation = streamNixShellImage {
+    name = "nix-shell-build-derivation";
+    tag = "latest";
+    drv = pkgs.hello;
+    run = ''
+      buildDerivation
+      $out/bin/hello
+    '';
+  };
+
 }

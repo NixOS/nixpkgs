@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "isolyzer";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "KBNLresearch";
     repo = pname;
-    rev = version;
-    sha256 = "1fysm05cz0z54apn1p889xhbgjnfwax6fngi05yij5qp2zxqghf9";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-NqkjnEwpaoyguG5GLscKS9UQGtF9N4jUL5JhrMtKCFE=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ setuptools six ];
@@ -21,5 +21,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Verify size of ISO 9660 image against Volume Descriptor fields";
     license = licenses.asl20;
     maintainers = with maintainers; [ mkg20001 ];
+    mainProgram = "isolyzer";
   };
 }

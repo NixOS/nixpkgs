@@ -1,11 +1,10 @@
 { stdenv
 , lib
 , meson
-, cmake
 , ninja
-, wlroots
 , wayland
 , wayland-protocols
+, wayland-scanner
 , egl-wayland
 , glew-egl
 , mpv
@@ -17,25 +16,26 @@
 
 stdenv.mkDerivation rec {
   pname = "mpvpaper";
-  version = "1.2.1";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "GhostNaN";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1+noph6iXM5OSNMFQyta/ttGyZQ6F7bWDQi8W190G5E=";
+    sha256 = "sha256-/A2C6T7gP+VGON3Peaz2Y4rNC63UT+zYr4RNM2gdLUY=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     makeWrapper
     installShellFiles
+    wayland-scanner
   ];
 
   buildInputs = [
-    wlroots
     wayland
     wayland-protocols
     egl-wayland

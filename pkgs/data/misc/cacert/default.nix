@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , writeText
-, fetchurl
+, fetchFromGitHub
 , buildcatrust
 , blacklist ? []
 , extraCertificateFiles ? []
@@ -20,7 +20,7 @@ let
   blocklist = writeText "cacert-blocklist.txt" (lib.concatStringsSep "\n" blacklist);
   extraCertificatesBundle = writeText "cacert-extra-certificates-bundle.crt" (lib.concatStringsSep "\n\n" extraCertificateStrings);
 
-  srcVersion = "3.80";
+  srcVersion = "3.98";
   version = if nssOverride != null then nssOverride.version else srcVersion;
   meta = with lib; {
     homepage = "https://curl.haxx.se/docs/caextract.html";
@@ -33,9 +33,11 @@ let
     pname = "nss-cacert-certdata";
     inherit version;
 
-    src = if nssOverride != null then nssOverride.src else fetchurl {
-      url = "mirror://mozilla/security/nss/releases/NSS_${lib.replaceStrings ["."] ["_"] version}_RTM/src/nss-${version}.tar.gz";
-      sha256 = "sha256-wL8f0sfimmsCswliK6r8RD7skMiTS7FV2ku5iYh4S2o=";
+    src = if nssOverride != null then nssOverride.src else fetchFromGitHub {
+      owner = "nss-dev";
+      repo = "nss";
+      rev = "NSS_${lib.replaceStrings ["."] ["_"] version}_RTM";
+      hash = "sha256-0p1HzspxyzhzX46O7ax8tmYiaFEBeqEqEvman4NIiQc=";
     };
 
     dontBuild = true;
@@ -44,7 +46,7 @@ let
       runHook preInstall
 
       mkdir $out
-      cp nss/lib/ckfw/builtins/certdata.txt $out
+      cp lib/ckfw/builtins/certdata.txt $out
 
       runHook postInstall
     '';
@@ -69,12 +71,16 @@ stdenv.mkDerivation rec {
       --ca_bundle_input "${extraCertificatesBundle}" ${lib.escapeShellArgs (map (arg: "${arg}") extraCertificateFiles)} \
       --blocklist "${blocklist}" \
       --ca_bundle_output ca-bundle.crt \
+      --ca_standard_bundle_output ca-no-trust-rules-bundle.crt \
       --ca_unpacked_output unbundled \
       --p11kit_output ca-bundle.trust.p11-kit
   '';
 
   installPhase = ''
     install -D -t "$out/etc/ssl/certs" ca-bundle.crt
+
+    # install standard PEM compatible bundle
+    install -D -t "$out/etc/ssl/certs" ca-no-trust-rules-bundle.crt
 
     # install p11-kit specific output to p11kit output
     install -D -t "$p11kit/etc/ssl/trust-source" ca-bundle.trust.p11-kit

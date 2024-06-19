@@ -1,19 +1,17 @@
-{ lib, buildDunePackage, fetchFromGitHub, camomile, react, charInfo_width }:
+{ lib, buildDunePackage, fetchFromGitHub, react, result, uchar, uutf, uucp, uuseg }:
 
 buildDunePackage rec {
   pname = "zed";
-  version = "3.1.0";
+  version = "3.2.3";
 
-  useDune2 = true;
+  propagatedBuildInputs = [ react result uchar uutf uucp uuseg ];
 
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = pname;
     rev = version;
-    sha256 = "04vr1a94imsghm98iigc35rhifsz0rh3qz2qm0wam2wvp6vmrx0p";
+    sha256 = "sha256-lbhqjZxeUqHdd+yahRO+B6L2mc+h+4T2+qKVgWC2HY8=";
   };
-
-  propagatedBuildInputs = [ charInfo_width react ];
 
   meta = {
     description = "Abstract engine for text edition in OCaml";
@@ -24,7 +22,8 @@ buildDunePackage rec {
 
     To support efficient text edition capabilities, Zed provides macro recording and cursor management facilities.
     '';
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ocaml-community/zed";
+    changelog = "https://github.com/ocaml-community/zed/blob/${version}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = [
       lib.maintainers.gal_bolle

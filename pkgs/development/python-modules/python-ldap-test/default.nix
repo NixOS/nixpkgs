@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, py4j }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  py4j,
+}:
 
 buildPythonPackage rec {
   pname = "python-ldap-test";
   version = "0.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,4 +31,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

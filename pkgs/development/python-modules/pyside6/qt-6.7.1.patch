@@ -1,0 +1,87 @@
+--- a/PySide6/QtMultimedia/CMakeLists.txt
++++ b/PySide6/QtMultimedia/CMakeLists.txt
+@@ -12,6 +12,7 @@ ${QtMultimedia_GEN_DIR}/qaudioinput_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qaudiooutput_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qaudiosink_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qaudiosource_wrapper.cpp
++${QtMultimedia_GEN_DIR}/qaudio_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qcameraformat_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qcameradevice_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qcamera_wrapper.cpp
+@@ -28,7 +29,6 @@ ${QtMultimedia_GEN_DIR}/qmediatimerange_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qmediatimerange_interval_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qscreencapture_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qsoundeffect_wrapper.cpp
+-${QtMultimedia_GEN_DIR}/qtaudio_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qtvideo_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qvideoframe_wrapper.cpp
+ ${QtMultimedia_GEN_DIR}/qvideoframeformat_wrapper.cpp
+diff --git a/PySide6/QtMultimedia/typesystem_multimedia.xml b/PySide6/QtMultimedia/typesystem_multimedia.xml
+index dd58f41cc..d37eb15fd 100644
+--- a/PySide6/QtMultimedia/typesystem_multimedia.xml
++++ b/PySide6/QtMultimedia/typesystem_multimedia.xml
+@@ -9,7 +9,7 @@
+     <load-typesystem name="QtGui/typesystem_gui.xml" generate="no"/>
+     <load-typesystem name="QtNetwork/typesystem_network.xml" generate="no"/>
+ 
+-    <namespace-type name="QtAudio">
++    <namespace-type name="QAudio">
+         <enum-type name="Error"/>
+         <enum-type name="State"/>
+         <enum-type name="VolumeScale"/>
+@@ -65,9 +65,6 @@
+         </modify-argument>
+       </modify-function>
+       <modify-function signature="stop()" allow-thread="true"/>
+-      <!-- FIXME PYSIDE 7: Remove this (QT6_DECL_NEW_OVERLOAD_TAIL) -->
+-      <declare-function signature="state()const" return-type="QtAudio::State"/>
+-      <declare-function signature="error()const" return-type="QtAudio::Error"/>
+     </object-type>
+ 
+     <object-type name="QAudioSink">
+@@ -82,9 +79,6 @@
+         </modify-argument>
+       </modify-function>
+       <modify-function signature="stop()" allow-thread="true"/>
+-      <!-- FIXME PYSIDE 7: Remove this (QT6_DECL_NEW_OVERLOAD_TAIL) -->
+-      <declare-function signature="state()const" return-type="QtAudio::State"/>
+-      <declare-function signature="error()const" return-type="QtAudio::Error"/>
+     </object-type>
+ 
+     <object-type name="QCamera">
+diff --git a/PySide6/glue/qtmultimedia.cpp b/PySide6/glue/qtmultimedia.cpp
+index d193b1bd3..ac8434b97 100644
+--- a/PySide6/glue/qtmultimedia.cpp
++++ b/PySide6/glue/qtmultimedia.cpp
+@@ -2,6 +2,7 @@
+ // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+ 
+ // @snippet qvideoframe-bits
++#include "object.h"
+ %BEGIN_ALLOW_THREADS
+ %RETURN_TYPE %0 = %CPPSELF.%FUNCTION_NAME(%1);
+ %END_ALLOW_THREADS
+@@ -23,5 +24,5 @@ const auto size = %CPPSELF.byteCount();
+ 
+ // @snippet qtaudio-namespace-compatibility-alias
+ Py_INCREF(pyType);
+-PyModule_AddObject(module, "QAudio", reinterpret_cast<PyObject *>(pyType));
++PyModule_AddObject(module, "QtAudio", reinterpret_cast<PyObject *>(pyType));
+ // @snippet qtaudio-namespace-compatibility-alias
+diff --git a/libpyside/signalmanager.cpp b/libpyside/signalmanager.cpp
+index 625e4a405..557f130e0 100644
+--- a/libpyside/signalmanager.cpp
++++ b/libpyside/signalmanager.cpp
+@@ -813,11 +813,6 @@ static PyObject *parseArguments(const QMetaMethod &method, void **args)
+     for (qsizetype i = 0; i < argsSize; ++i) {
+         void *data = args[i+1];
+         auto param = paramTypes.at(i);
+-#if QT_VERSION < QT_VERSION_CHECK(7, 0, 0)
+-        // Qt 6.7 renamed namespace "QAudio"->"QtAudio" except for signals
+-        if (param.startsWith("QAudio::"_ba))
+-            param.insert(1, 't');
+-#endif
+         Shiboken::Conversions::SpecificConverter converter(param.constData());
+         if (!converter) {
+             PyErr_SetString(PyExc_TypeError, msgCannotConvertParameter(method, i).constData());
+

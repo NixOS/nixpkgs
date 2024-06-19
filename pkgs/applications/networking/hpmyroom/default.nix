@@ -4,11 +4,11 @@
 }:
 mkDerivation rec {
   pname = "hpmyroom";
-  version = "12.1.1.0257";
+  version = "12.13.0.0749";
 
   src = fetchurl {
     url = "https://www.myroom.hpe.com/downloadfiles/${pname}-${version}.x86_64.rpm";
-    sha256 = "1xm41v324zq1x5awgb7fr238f7ml7vq6jrfh84358i5shgha1g2k";
+    sha256 = "sha256-Ff3j14rC2ZHhNJLPxvKn9Sxyv351HuHbggclwOuFfX4=";
   };
 
   nativeBuildInputs = [
@@ -55,5 +55,7 @@ mkDerivation rec {
     homepage = "https://myroom.hpe.com";
     # TODO: A Darwin binary is available upstream
     platforms = [ "x86_64-linux" ];
+    mainProgram = "hpmyroom";
+    broken = true; # requires libpng15
   };
 }

@@ -4,38 +4,40 @@
 , fetchFromGitHub
 , gpgme
 , libgpg-error
-, libxcb
-, libxkbcommon
+, pkg-config
 , python3
 , AppKit
 , Foundation
 , libiconv
 , libobjc
 , libresolv
+, x11Support ? true, libxcb, libxkbcommon
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gpg-tui";
-  version = "0.9.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "gpg-tui";
     rev = "v${version}";
-    hash = "sha256-eUUHH6bPfYjkHo7C7GWzewTpT8je7TQK9M8mTM5v59s=";
+    hash = "sha256-aHmLcWiDy5GMbcKi285tfBggNmGkpVAoZMm4dt8LKak=";
   };
 
-  cargoHash = "sha256-GtSvDfG9lRUirm4d6PSaOBLTHZJT2PH0Sx/9GVquX5M=";
+  cargoHash = "sha256-rtBvo2nX4A6K/TBl6xhW8huLXdR6xDUhzMB3KRXRYMs=";
 
   nativeBuildInputs = [
     gpgme # for gpgme-config
     libgpg-error # for gpg-error-config
+    pkg-config
     python3
   ];
 
   buildInputs = [
     gpgme
     libgpg-error
+  ] ++ lib.optionals x11Support [
     libxcb
     libxkbcommon
   ] ++ lib.optionals stdenv.isDarwin [
@@ -51,6 +53,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/orhun/gpg-tui";
     changelog = "https://github.com/orhun/gpg-tui/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda matthiasbeyer ];
+    mainProgram = "gpg-tui";
   };
 }

@@ -13,6 +13,7 @@
 , gnugrep
 , gnused
 , libtiff
+, libxcrypt
 , openssl
 , psmisc
 , sharutils
@@ -31,8 +32,8 @@
 let
 
   pname = "hylafaxplus";
-  version = "7.0.6";
-  hash = "sha512-0faeEwF/XQE/85zwUMOnrGzvGanuWRDr53SnrgbX0i/SHjHelzSEd2TK6plVOfV4w8RY7Ox7lSO1gjqEEzfZyw==";
+  version = "7.0.8";
+  hash = "sha512-6wTLVcaHpASy+2i+jeoJ1cM2aLgI5vznGrLd4NCkLHiOxlfCh/ASRaj2Nxt9ZZ5NN/deEwf9tNSZ7MkFZHVsqA==";
 
   configSite = substituteAll {
     name = "${pname}-config.site";
@@ -79,6 +80,7 @@ stdenv.mkDerivation {
     file  # for `file` command
     ghostscript
     libtiff
+    libxcrypt
     openssl
     psmisc  # for `fuser` command
     sharutils  # for `uuencode` command

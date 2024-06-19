@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libbfd, SDL2, obs-studio
+{ lib, stdenv, cmake, libbfd, SDL2, obs-studio
 , looking-glass-client }:
 
 stdenv.mkDerivation {
@@ -7,12 +7,12 @@ stdenv.mkDerivation {
 
   src = looking-glass-client.src;
 
-  sourceRoot = "source/obs";
+  sourceRoot = "${looking-glass-client.src.name}/obs";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio libbfd SDL2 ];
 
-  NIX_CFLAGS_COMPILE = "-mavx";
+  env.NIX_CFLAGS_COMPILE = "-mavx";
 
   installPhase = ''
     mkdir -p $out/lib/obs-plugins/

@@ -1,9 +1,16 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, python, isPy3k, unittestCheckHook }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  isPy3k,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "emailthreads";
   version = "0.1.3";
+  format = "setuptools";
   disabled = !isPy3k;
 
   # pypi is missing files for tests
@@ -11,10 +18,10 @@ buildPythonPackage rec {
     owner = "emersion";
     repo = "python-emailthreads";
     rev = "v${version}";
-    sha256 = "sha256-7BhYS1DQCW9QpG31asPCq5qPyJy+WW2onZpvEHhwQCs=";
+    hash = "sha256-7BhYS1DQCW9QpG31asPCq5qPyJy+WW2onZpvEHhwQCs=";
   };
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   PKGVER = version;
 

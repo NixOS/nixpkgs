@@ -20,12 +20,12 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     click
-    pydantic
+    pydantic_1
     typing-extensions
     yara-python
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Static token and credential scanner";
+    mainProgram = "stacs";
     homepage = "https://github.com/stacscan/stacs";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];

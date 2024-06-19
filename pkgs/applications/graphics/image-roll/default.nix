@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , glib
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , gtk4
 }:
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-cUE2IZOunR/NIo/qytORRfNqCsf87LfpKA8o/v4Nkhk=";
 
-  nativeBuildInputs = [ glib pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ glib pkg-config wrapGAppsHook4 ];
 
   buildInputs = [ gtk4 ];
 
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=file_list::tests"
 
     # sometimes fails on darwin
-    "image_list::tests::save_current_image_overwrites_image_at_current_image_path_when_filename_is_set_to_none"
+    "--skip=image_list::tests::save_current_image_overwrites_image_at_current_image_path_when_filename_is_set_to_none"
   ];
 
   postInstall = ''
@@ -40,6 +40,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Simple and fast GTK image viewer with basic image manipulation tools";
+    mainProgram = "image-roll";
     homepage = "https://github.com/weclaw1/image-roll";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

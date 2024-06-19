@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "runitor";
-  version = "0.10.1";
-  vendorSha256 = null;
+  version = "1.3.0";
+  vendorHash = null;
 
   src = fetchFromGitHub {
     owner = "bdd";
     repo = "runitor";
     rev = "v${version}";
-    sha256 = "sha256-qqfaA1WAHkuiyzyQbrSvnmwuRXElArErJ6PtLPOxzsg=";
+    sha256 = "sha256-9sg+ku3Qh/X/EZ2VCrvIc0pq5iyn4O8RZrO4KpkciAI=";
   };
 
   ldflags = [
@@ -39,5 +39,6 @@ buildGoModule rec {
     '';
     license = licenses.bsd0;
     maintainers = with maintainers; [ bdd ];
+    mainProgram = "runitor";
   };
 }

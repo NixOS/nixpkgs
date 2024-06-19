@@ -1,22 +1,25 @@
-{ lib
-, buildPythonPackage
-, decorator
-, fetchPypi
-, pythonOlder
-, requests
- }:
+{
+  lib,
+  buildPythonPackage,
+  decorator,
+  fetchPypi,
+  requests,
+}:
 
 buildPythonPackage rec {
   pname = "stashy";
   version = "0.7";
-  disabled = pythonOlder "3.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1x89zazwxnsx6rdfw8nfr372hj4sk8nrcs5hsjxpcxcva0calrcr";
   };
 
-  propagatedBuildInputs = [ decorator requests ];
+  propagatedBuildInputs = [
+    decorator
+    requests
+  ];
 
   # Tests require internet connection
   doCheck = false;

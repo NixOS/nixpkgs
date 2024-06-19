@@ -8,6 +8,7 @@ runCommandLocal
     passthru = {
       inherit (libidn2) out info devdoc; # no need to touch these store paths
     };
+    inherit (libidn2) meta;
   }
   ''
     cp -r '${libidn2.bin}' "$bin"

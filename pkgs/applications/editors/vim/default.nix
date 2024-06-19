@@ -15,7 +15,7 @@ in
 stdenv.mkDerivation {
   pname = "vim";
 
-  inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta;
+  inherit (common) version outputs src postPatch hardeningDisable enableParallelBuilding enableParallelInstalling postFixup meta;
 
   nativeBuildInputs = [ gettext pkg-config ];
   buildInputs = [ ncurses bash gawk ]
@@ -50,14 +50,16 @@ stdenv.mkDerivation {
     ln -s $out/bin/vim $out/bin/vi
     mkdir -p $out/share/vim
     cp "${vimrc}" $out/share/vim/vimrc
+
+    # Prevent bugs in the upstream makefile from silently failing and missing outputs.
+    # Some of those are build-time requirements for other packages.
+    for tool in ex xxd vi view vimdiff; do
+      if [ ! -e "$out/bin/$tool" ]; then
+        echo "ERROR: install phase did not install '$tool'."
+        exit 1
+      fi
+    done
   '';
 
   __impureHostDeps = [ "/dev/ptmx" ];
-
-  # To fix the trouble in vim73, that it cannot cross-build with this patch
-  # to bypass a configure script check that cannot be done cross-building.
-  # http://groups.google.com/group/vim_dev/browse_thread/thread/66c02efd1523554b?pli=1
-  # patchPhase = ''
-  #   sed -i -e 's/as_fn_error.*int32.*/:/' src/auto/configure
-  # '';
 }

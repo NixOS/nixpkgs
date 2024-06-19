@@ -1,8 +1,6 @@
 { fetchFromGitHub, rustPlatform, lib }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "tarssh";
   version = "0.7.0";
 
@@ -21,5 +19,6 @@ buildRustPackage rec {
     license = [ licenses.mit ];
     maintainers = with maintainers; [ sohalt ];
     platforms = platforms.unix ;
+    mainProgram = "tarssh";
   };
 }

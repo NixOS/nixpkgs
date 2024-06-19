@@ -9,19 +9,14 @@ in
 
   options = {
     services.xandikos = {
-      enable = mkEnableOption (lib.mdDoc "Xandikos CalDAV and CardDAV server");
+      enable = mkEnableOption "Xandikos CalDAV and CardDAV server";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.xandikos;
-        defaultText = literalExpression "pkgs.xandikos";
-        description = lib.mdDoc "The Xandikos package to use.";
-      };
+      package = mkPackageOption pkgs "xandikos" { };
 
       address = mkOption {
         type = types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           The IP address on which Xandikos will listen.
           By default listens on localhost.
         '';
@@ -30,13 +25,13 @@ in
       port = mkOption {
         type = types.port;
         default = 8080;
-        description = lib.mdDoc "The port of the Xandikos web application";
+        description = "The port of the Xandikos web application";
       };
 
       routePrefix = mkOption {
         type = types.str;
         default = "/";
-        description = lib.mdDoc ''
+        description = ''
           Path to Xandikos.
           Useful when Xandikos is behind a reverse proxy.
         '';
@@ -52,14 +47,14 @@ in
             "--dump-dav-xml"
           ]
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra command line arguments to pass to xandikos.
         '';
       };
 
       nginx = mkOption {
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Configuration for nginx reverse proxy.
         '';
 
@@ -68,14 +63,14 @@ in
             enable = mkOption {
               type = types.bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 Configure the nginx reverse proxy settings.
               '';
             };
 
             hostName = mkOption {
               type = types.str;
-              description = lib.mdDoc ''
+              description = ''
                 The hostname use to setup the virtualhost configuration
               '';
             };

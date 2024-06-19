@@ -9,19 +9,14 @@ in {
 
   options = {
     services.tp-auto-kbbl = {
-      enable = mkEnableOption (lib.mdDoc "Auto toggle keyboard back-lighting on Thinkpads (and maybe other laptops) for Linux");
+      enable = mkEnableOption "auto toggle keyboard back-lighting on Thinkpads (and maybe other laptops) for Linux";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.tp-auto-kbbl;
-        defaultText = literalExpression "pkgs.tp-auto-kbbl";
-        description = lib.mdDoc "Package providing {command}`tp-auto-kbbl`.";
-      };
+      package = mkPackageOption pkgs "tp-auto-kbbl" { };
 
       arguments = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = lib.mdDoc ''
+        description = ''
           List of arguments appended to `./tp-auto-kbbl --device [device] [arguments]`
         '';
       };
@@ -29,7 +24,7 @@ in {
       device = mkOption {
         type = types.str;
         default = "/dev/input/event0";
-        description = lib.mdDoc "Device watched for activities.";
+        description = "Device watched for activities.";
       };
 
     };

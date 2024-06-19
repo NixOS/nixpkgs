@@ -1,22 +1,43 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, kube-score
+}:
 
 buildGoModule rec {
   pname = "kube-score";
-  version = "1.14.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "zegl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6/+S1aj2qoUPz+6+8Z4Z5dpfyOi/DnrLLUpPgBn/OxU=";
+    hash = "sha256-3OdcYqSUy0WH5CrrRMXDs1HGxvToXx/3iPytYBdDncg=";
   };
 
-  vendorSha256 = "sha256-0Zi62FmX4rFl3os2ehtussSSUPJtxLq7622CEdeKZCs=";
+  vendorHash = "sha256-4yd/N57O3avD8KaGU9lZAEDasPx1pRx37rqQpuGeRiY=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+    "-X=main.commit=${src.rev}"
+  ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = kube-score;
+      command = "kube-score version";
+    };
+  };
 
   meta = with lib; {
     description = "Kubernetes object analysis with recommendations for improved reliability and security";
-    homepage    = "https://github.com/zegl/kube-score";
-    license     = licenses.mit;
-    maintainers = [ maintainers.j4m3s ];
+    mainProgram = "kube-score";
+    homepage = "https://github.com/zegl/kube-score";
+    changelog = "https://github.com/zegl/kube-score/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ j4m3s ];
   };
 }

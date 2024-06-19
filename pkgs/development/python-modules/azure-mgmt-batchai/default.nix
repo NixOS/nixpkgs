@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, azure-common
-, azure-mgmt-core
-, azure-mgmt-nspkg
-, msrestazure
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  azure-common,
+  azure-mgmt-core,
+  azure-mgmt-nspkg,
+  msrestazure,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-batchai";
   version = "2.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +24,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     azure-mgmt-nspkg
- ];
+  ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

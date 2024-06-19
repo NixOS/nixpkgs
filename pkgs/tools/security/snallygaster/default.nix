@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     dnspython
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
@@ -31,8 +31,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to scan for secret files on HTTP servers";
+    mainProgram = "snallygaster";
     homepage = "https://github.com/hannob/snallygaster";
     license = licenses.cc0;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

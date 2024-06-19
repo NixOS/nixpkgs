@@ -1,22 +1,34 @@
-{ pkgs, stdenv, lib, fetchFromGitHub, makeBinaryWrapper, makeDesktopItem, copyDesktopItems, nodejs, electron, python3, ... }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, makeBinaryWrapper
+, makeDesktopItem
+, copyDesktopItems
+, nodejs_18
+, electron
+, python3
+, nix-update-script
+}:
 
-let
-  nodeComposition = import ./node-composition.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  };
-in
-
-nodeComposition.package.override rec {
+buildNpmPackage rec {
   pname = "open-stage-control";
-  inherit (nodeComposition.args) version;
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
-    hash = "sha256-q18pRtsHfme+OPmi3LhJDK1AdpfkwhoE9LA2rNenDtY=";
+    hash = "sha256-hBQyz6VAtiC1XOADZml1MwGKtmdyiJNlRAmHRjt6QsA=";
   };
+
+  # Remove some Electron stuff from package.json
+  postPatch = ''
+    sed -i -e '/"electron"\|"electron-installer-debian"/d' package.json
+  '';
+
+  npmDepsHash = "sha256-UqjYNXdNoQmirIgU9DRgkp14SIrawfrfi9mD2h6ACyU=";
+
+  nodejs = nodejs_18;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -27,11 +39,18 @@ nodeComposition.package.override rec {
     python3.pkgs.python-rtmidi
   ];
 
-  dontNpmInstall = true;
+  doInstallCheck = true;
 
-  postInstall = ''
-    # build assets
-    npm run build
+  makeCacheWritable = true;
+  npmFlags = [ "--legacy-peer-deps" ];
+
+  # Override installPhase so we can copy the only directory that matters (app)
+  installPhase = ''
+    runHook preInstall
+
+    # copy built app and node_modules directories
+    mkdir -p $out/lib/node_modules/open-stage-control
+    cp -r app $out/lib/node_modules/open-stage-control/
 
     # copy icon
     install -Dm644 resources/images/logo.png $out/share/icons/hicolor/256x256/apps/open-stage-control.png
@@ -43,12 +62,13 @@ nodeComposition.package.override rec {
       --add-flags $out/lib/node_modules/open-stage-control/app \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix PATH : '${lib.makeBinPath [ python3 ]}'
+
+    runHook postInstall
   '';
 
   installCheckPhase = ''
     XDG_CONFIG_HOME="$(mktemp -d)" $out/bin/open-stage-control --help
   '';
-  doInstallCheck = true;
 
   desktopItems = [
     (makeDesktopItem {
@@ -62,11 +82,14 @@ nodeComposition.package.override rec {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Libre and modular OSC / MIDI controller";
     homepage = "https://openstagecontrol.ammd.net/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lilyinstarlight ];
     platforms = platforms.linux;
+    mainProgram = "open-stage-control";
   };
 }

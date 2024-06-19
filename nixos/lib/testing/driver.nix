@@ -1,6 +1,6 @@
 { config, lib, hostPkgs, ... }:
 let
-  inherit (lib) mkOption types literalMD mdDoc;
+  inherit (lib) mkOption types literalMD;
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
@@ -12,7 +12,9 @@ let
   };
 
 
-  vlans = map (m: m.virtualisation.vlans) (lib.attrValues config.nodes);
+  vlans = map (m: (
+    m.virtualisation.vlans ++
+    (lib.mapAttrsToList (_: v: v.vlan) m.virtualisation.interfaces))) (lib.attrValues config.nodes);
   vms = map (m: m.system.build.vm) (lib.attrValues config.nodes);
 
   nodeHostNames =
@@ -21,29 +23,20 @@ let
     in
     nodesList ++ lib.optional (lib.length nodesList == 1 && !lib.elem "machine" nodesList) "machine";
 
-  # TODO: This is an implementation error and needs fixing
-  # the testing famework cannot legitimately restrict hostnames further
-  # beyond RFC1035
-  invalidNodeNames = lib.filter
-    (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null)
-    nodeHostNames;
+  pythonizeName = name:
+    let
+      head = lib.substring 0 1 name;
+      tail = lib.substring 1 (-1) name;
+    in
+      (if builtins.match "[A-z_]" head == null then "_" else head) +
+      lib.stringAsChars (c: if builtins.match "[A-z0-9_]" c == null then "_" else c) tail;
 
   uniqueVlans = lib.unique (builtins.concatLists vlans);
   vlanNames = map (i: "vlan${toString i}: VLan;") uniqueVlans;
-  machineNames = map (name: "${name}: Machine;") nodeHostNames;
+  pythonizedNames = map pythonizeName nodeHostNames;
+  machineNames = map (name: "${name}: Machine;") pythonizedNames;
 
-  withChecks =
-    if lib.length invalidNodeNames > 0 then
-      throw ''
-        Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
-        All machines are referenced as python variables in the testing framework which will break the
-        script when special characters are used.
-
-        This is an IMPLEMENTATION ERROR and needs to be fixed. Meanwhile,
-        please stick to alphanumeric chars and underscores as separation.
-      ''
-    else
-      lib.warnIf config.skipLint "Linting is disabled";
+  withChecks = lib.warnIf config.skipLint "Linting is disabled";
 
   driver =
     hostPkgs.runCommand "nixos-test-driver-${config.name}"
@@ -72,7 +65,8 @@ let
           echo "${builtins.toString vlanNames}" >> testScriptWithTypes
           echo -n "$testScript" >> testScriptWithTypes
 
-          cat -n testScriptWithTypes
+          echo "Running type check (enable/disable: config.skipTypeCheck)"
+          echo "See https://nixos.org/manual/nixos/stable/#test-opt-skipTypeCheck"
 
           mypy  --no-implicit-optional \
                 --pretty \
@@ -86,8 +80,11 @@ let
 
         ${testDriver}/bin/generate-driver-symbols
         ${lib.optionalString (!config.skipLint) ''
+          echo "Linting test script (enable/disable: config.skipLint)"
+          echo "See https://nixos.org/manual/nixos/stable/#test-opt-skipLint"
+
           PYFLAKES_BUILTINS="$(
-            echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
+            echo -n ${lib.escapeShellArg (lib.concatStringsSep "," pythonizedNames)},
             < ${lib.escapeShellArg "driver-symbols"}
           )" ${hostPkgs.python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}
@@ -97,6 +94,7 @@ let
         wrapProgram $out/bin/nixos-test-driver \
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
+          --set globalTimeout "${toString config.globalTimeout}" \
           --set vlans '${toString vlans}' \
           ${lib.escapeShellArgs (lib.concatMap (arg: ["--add-flags" arg]) config.extraDriverArgs)}
       '';
@@ -106,13 +104,13 @@ in
   options = {
 
     driver = mkOption {
-      description = mdDoc "Package containing a script that runs the test.";
+      description = "Package containing a script that runs the test.";
       type = types.package;
       defaultText = literalMD "set by the test framework";
     };
 
     hostPkgs = mkOption {
-      description = mdDoc "Nixpkgs attrset used outside the nodes.";
+      description = "Nixpkgs attrset used outside the nodes.";
       type = types.raw;
       example = lib.literalExpression ''
         import nixpkgs { inherit system config overlays; }
@@ -120,23 +118,35 @@ in
     };
 
     qemu.package = mkOption {
-      description = mdDoc "Which qemu package to use for the virtualisation of [{option}`nodes`](#test-opt-nodes).";
+      description = "Which qemu package to use for the virtualisation of [{option}`nodes`](#test-opt-nodes).";
       type = types.package;
       default = hostPkgs.qemu_test;
       defaultText = "hostPkgs.qemu_test";
     };
 
+    globalTimeout = mkOption {
+      description = ''
+        A global timeout for the complete test, expressed in seconds.
+        Beyond that timeout, every resource will be killed and released and the test will fail.
+
+        By default, we use a 1 hour timeout.
+      '';
+      type = types.int;
+      default = 60 * 60;
+      example = 10 * 60;
+    };
+
     enableOCR = mkOption {
-      description = mdDoc ''
+      description = ''
         Whether to enable Optical Character Recognition functionality for
-        testing graphical programs. See [Machine objects](`ssec-machine-objects`).
+        testing graphical programs. See [`Machine objects`](#ssec-machine-objects).
       '';
       type = types.bool;
       default = false;
     };
 
     extraPythonPackages = mkOption {
-      description = mdDoc ''
+      description = ''
         Python packages to add to the test driver.
 
         The argument is a Python package set, similar to `pkgs.pythonPackages`.
@@ -149,7 +159,7 @@ in
     };
 
     extraDriverArgs = mkOption {
-      description = mdDoc ''
+      description = ''
         Extra arguments to pass to the test driver.
 
         They become part of [{option}`driver`](#test-opt-driver) via `wrapProgram`.
@@ -161,7 +171,7 @@ in
     skipLint = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Do not run the linters. This may speed up your iteration cycle, but it is not something you should commit.
       '';
     };
@@ -169,7 +179,7 @@ in
     skipTypeCheck = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Disable type checking. This must not be enabled for new NixOS tests.
 
         This may speed up your iteration cycle, unless you're working on the [{option}`testScript`](#test-opt-testScript).
@@ -178,7 +188,12 @@ in
   };
 
   config = {
-    _module.args.hostPkgs = config.hostPkgs;
+    _module.args = {
+      hostPkgs =
+        # Comment is in nixos/modules/misc/nixpkgs.nix
+        lib.mkOverride lib.modules.defaultOverridePriority
+          config.hostPkgs.__splicedPackages;
+    };
 
     driver = withChecks driver;
 

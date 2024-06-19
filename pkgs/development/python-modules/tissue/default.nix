@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, pep8
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  nose,
+  pep8,
 }:
 
 buildPythonPackage rec {
   pname = "tissue";
   version = "0.9.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,5 +25,4 @@ buildPythonPackage rec {
     license = licenses.lgpl2;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

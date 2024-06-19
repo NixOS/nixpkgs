@@ -11,16 +11,15 @@
 , libxkbcommon
 , libGL
 , libX11
-, webkitgtk
  }:
 
 stdenv.mkDerivation rec {
   pname = "wpebackend-fdo";
-  version = "1.12.1";
+  version = "1.14.2";
 
   src = fetchurl {
-    url = "https://wpewebkit.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RaqDPETsKS8x+pQ7AbjMdeVOtiOte6amb8LxGP5p5ik=";
+    url = "https://wpewebkit.org/releases/wpebackend-fdo-${version}.tar.xz";
+    sha256 = "k8l2aumGTurq7isKdPIsvKCN9CwaG9tVsIbyUo44DTg=";
   };
 
   depsBuildBuild = [
@@ -48,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Freedesktop.org backend for WPE WebKit";
     license = licenses.bsd2;
     homepage = "https://wpewebkit.org";
-    maintainers = webkitgtk.meta.maintainers ++ (with maintainers; [ matthewbauer ]);
+    maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.linux;
   };
 }

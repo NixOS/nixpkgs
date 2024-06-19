@@ -13,8 +13,6 @@ let
     # configuration here https://github.com/foxcpp/maddy/blob/master/maddy.conf
     # Do not use this in production!
 
-    tls off
-
     auth.pass_table local_authdb {
       table sql_table {
         driver sqlite3
@@ -35,6 +33,7 @@ let
       }
       optional_step file /etc/maddy/aliases
     }
+
     msgpipeline local_routing {
       destination postmaster $(local_domains) {
         modify {
@@ -139,12 +138,12 @@ in {
   options = {
     services.maddy = {
 
-      enable = mkEnableOption (lib.mdDoc "Maddy, a free an open source mail server");
+      enable = mkEnableOption "Maddy, a free an open source mail server";
 
       user = mkOption {
         default = "maddy";
-        type = with types; uniq string;
-        description = lib.mdDoc ''
+        type = with types; uniq str;
+        description = ''
           User account under which maddy runs.
 
           ::: {.note}
@@ -157,8 +156,8 @@ in {
 
       group = mkOption {
         default = "maddy";
-        type = with types; uniq string;
-        description = lib.mdDoc ''
+        type = with types; uniq str;
+        description = ''
           Group account under which maddy runs.
 
           ::: {.note}
@@ -171,18 +170,18 @@ in {
 
       hostname = mkOption {
         default = "localhost";
-        type = with types; uniq string;
+        type = with types; uniq str;
         example = ''example.com'';
-        description = lib.mdDoc ''
+        description = ''
           Hostname to use. It should be FQDN.
         '';
       };
 
       primaryDomain = mkOption {
         default = "localhost";
-        type = with types; uniq string;
+        type = with types; uniq str;
         example = ''mail.example.com'';
-        description = lib.mdDoc ''
+        description = ''
           Primary MX domain to use. It should be FQDN.
         '';
       };
@@ -195,7 +194,7 @@ in {
           "example.com"
           "other.example.com"
         ];
-        description = lib.mdDoc ''
+        description = ''
           Define list of allowed domains.
         '';
       };
@@ -203,11 +202,11 @@ in {
       config = mkOption {
         type = with types; nullOr lines;
         default = defaultConfig;
-        description = lib.mdDoc ''
+        description = ''
           Server configuration, see
           [https://maddy.email](https://maddy.email) for
           more information. The default configuration of this module will setup
-          minimal maddy instance for mail transfer without TLS encryption.
+          minimal Maddy instance for mail transfer without TLS encryption.
 
           ::: {.note}
           This should not be used in a production environment.
@@ -215,12 +214,134 @@ in {
         '';
       };
 
+      tls = {
+        loader = mkOption {
+          type = with types; nullOr (enum [ "off" "file" "acme" ]);
+          default = "off";
+          description = ''
+            TLS certificates are obtained by modules called "certificate
+            loaders".
+
+            The `file` loader module reads certificates from files specified by
+            the `certificates` option.
+
+            Alternatively the `acme` module can be used to automatically obtain
+            certificates using the ACME protocol.
+
+            Module configuration is done via the `tls.extraConfig` option.
+
+            Secrets such as API keys or passwords should not be supplied in
+            plaintext. Instead the `secrets` option can be used to read secrets
+            at runtime as environment variables. Secrets can be referenced with
+            `{env:VAR}`.
+          '';
+        };
+
+        certificates = mkOption {
+          type = with types; listOf (submodule {
+            options = {
+              keyPath = mkOption {
+                type = types.path;
+                example = "/etc/ssl/mx1.example.org.key";
+                description = ''
+                  Path to the private key used for TLS.
+                '';
+              };
+              certPath = mkOption {
+                type = types.path;
+                example = "/etc/ssl/mx1.example.org.crt";
+                description = ''
+                  Path to the certificate used for TLS.
+                '';
+              };
+            };
+          });
+          default = [];
+          example = lib.literalExpression ''
+            [{
+              keyPath = "/etc/ssl/mx1.example.org.key";
+              certPath = "/etc/ssl/mx1.example.org.crt";
+            }]
+          '';
+          description = ''
+            A list of attribute sets containing paths to TLS certificates and
+            keys. Maddy will use SNI if multiple pairs are selected.
+          '';
+        };
+
+        extraConfig = mkOption {
+          type = with types; nullOr lines;
+          description = ''
+            Arguments for the specified certificate loader.
+
+            In case the `tls` loader is set, the defaults are considered secure
+            and there is no need to change anything in most cases.
+            For available options see [upstream manual](https://maddy.email/reference/tls/).
+
+            For ACME configuration, see [following page](https://maddy.email/reference/tls-acme).
+          '';
+          default = "";
+        };
+      };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Open the configured incoming and outgoing mail server ports.
         '';
+      };
+
+      ensureAccounts = mkOption {
+        type = with types; listOf str;
+        default = [];
+        description = ''
+          List of IMAP accounts which get automatically created. Note that for
+          a complete setup, user credentials for these accounts are required
+          and can be created using the `ensureCredentials` option.
+          This option does not delete accounts which are not (anymore) listed.
+        '';
+        example = [
+          "user1@localhost"
+          "user2@localhost"
+        ];
+      };
+
+      ensureCredentials = mkOption {
+        default = {};
+        description = ''
+          List of user accounts which get automatically created if they don't
+          exist yet. Note that for a complete setup, corresponding mail boxes
+          have to get created using the `ensureAccounts` option.
+          This option does not delete accounts which are not (anymore) listed.
+        '';
+        example = {
+          "user1@localhost".passwordFile = /secrets/user1-localhost;
+          "user2@localhost".passwordFile = /secrets/user2-localhost;
+        };
+        type = types.attrsOf (types.submodule {
+          options = {
+            passwordFile = mkOption {
+              type = types.path;
+              example = "/path/to/file";
+              default = null;
+              description = ''
+                Specifies the path to a file containing the
+                clear text password for the user.
+              '';
+            };
+          };
+        });
+      };
+
+      secrets = lib.mkOption {
+        type = with types; listOf path;
+        description = ''
+          A list of files containing the various secrets. Should be in the format
+          expected by systemd's `EnvironmentFile` directory. Secrets can be
+          referenced in the format `{env:VAR}`.
+        '';
+        default = [ ];
       };
 
     };
@@ -228,17 +349,69 @@ in {
 
   config = mkIf cfg.enable {
 
+    assertions = [
+      {
+        assertion = cfg.tls.loader == "file" -> cfg.tls.certificates != [];
+        message = ''
+          If Maddy is configured to use TLS, tls.certificates with attribute sets
+          of certPath and keyPath must be provided.
+          Read more about obtaining TLS certificates here:
+          https://maddy.email/tutorials/setting-up/#tls-certificates
+        '';
+      }
+      {
+        assertion = cfg.tls.loader == "acme" -> cfg.tls.extraConfig != "";
+        message = ''
+          If Maddy is configured to obtain TLS certificates using the ACME
+          loader, extra configuration options must be supplied via
+          tls.extraConfig option.
+          See upstream documentation for more details:
+          https://maddy.email/reference/tls-acme
+        '';
+      }
+    ];
+
     systemd = {
+
       packages = [ pkgs.maddy ];
-      services.maddy = {
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
-          StateDirectory = [ "maddy" ];
+      services = {
+        maddy = {
+          serviceConfig = {
+            User = cfg.user;
+            Group = cfg.group;
+            StateDirectory = [ "maddy" ];
+            EnvironmentFile = cfg.secrets;
+          };
+          restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
+          wantedBy = [ "multi-user.target" ];
         };
-        restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
-        wantedBy = [ "multi-user.target" ];
+        maddy-ensure-accounts = {
+          script = ''
+            ${optionalString (cfg.ensureAccounts != []) ''
+              ${concatMapStrings (account: ''
+                if ! ${pkgs.maddy}/bin/maddyctl imap-acct list | grep "${account}"; then
+                  ${pkgs.maddy}/bin/maddyctl imap-acct create ${account}
+                fi
+              '') cfg.ensureAccounts}
+            ''}
+            ${optionalString (cfg.ensureCredentials != {}) ''
+              ${concatStringsSep "\n" (mapAttrsToList (name: cfg: ''
+                if ! ${pkgs.maddy}/bin/maddyctl creds list | grep "${name}"; then
+                  ${pkgs.maddy}/bin/maddyctl creds create --password $(cat ${escapeShellArg cfg.passwordFile}) ${name}
+                fi
+              '') cfg.ensureCredentials)}
+            ''}
+          '';
+          serviceConfig = {
+            Type = "oneshot";
+            User= "maddy";
+          };
+          after = [ "maddy.service" ];
+          wantedBy = [ "multi-user.target" ];
+        };
+
       };
+
     };
 
     environment.etc."maddy/maddy.conf" = {
@@ -247,6 +420,23 @@ in {
         $(primary_domain) = ${cfg.primaryDomain}
         $(local_domains) = ${toString cfg.localDomains}
         hostname ${cfg.hostname}
+
+        ${if (cfg.tls.loader == "file") then ''
+          tls file ${concatStringsSep " " (
+            map (x: x.certPath + " " + x.keyPath
+          ) cfg.tls.certificates)} ${optionalString (cfg.tls.extraConfig != "") ''
+            { ${cfg.tls.extraConfig} }
+          ''}
+        '' else if (cfg.tls.loader == "acme") then ''
+          tls {
+            loader acme {
+              ${cfg.tls.extraConfig}
+            }
+          }
+        '' else if (cfg.tls.loader == "off") then ''
+          tls off
+        '' else ""}
+
         ${cfg.config}
       '';
     };

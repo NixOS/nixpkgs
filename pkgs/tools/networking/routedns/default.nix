@@ -5,25 +5,26 @@
 
 buildGoModule rec {
   pname = "routedns";
-  version = "0.1.5";
+  version = "0.1.51";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "routedns";
-    # https://github.com/folbricht/routedns/issues/237
-    rev = "02f14a567fee2a289810979446f5260b8a31bf73";
-    sha256 = "sha256-oImimNBz1qizUPD6qHi73fGKNCu5cii99GIUo21e+bs=";
+    rev = "v${version}";
+    hash = "sha256-9H/l6EAbrNwD2DnweBqjmcoaJEnTH9BdGn2x/ZC3us4=";
   };
 
-  vendorSha256 = "sha256-T6adpxJgOPGy+UOOlGAAf1gjk1wJxwOc9enfv9X3LBE=";
+  vendorHash = "sha256-yOYeMYAXa1jok8QwGtYsvuUGgIXEjZGo6+FiDQkZwUU=";
 
   subPackages = [ "./cmd/routedns" ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://github.com/folbricht/routedns";
     description = "DNS stub resolver, proxy and router";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jsimonetti ];
-    platforms = platforms.linux;
+    mainProgram = "routedns";
   };
 }

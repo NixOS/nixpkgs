@@ -1,13 +1,15 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pkgs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "fusepy";
   version = "3.0.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -36,5 +38,4 @@ buildPythonPackage rec {
     license = licenses.isc;
     platforms = platforms.unix;
   };
-
 }

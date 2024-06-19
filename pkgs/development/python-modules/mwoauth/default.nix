@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oauthlib
-, pyjwt
-, pythonOlder
-, requests
-, requests-oauthlib
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  oauthlib,
+  pyjwt,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -33,14 +34,11 @@ buildPythonPackage rec {
   # https://github.com/mediawiki-utilities/python-mwoauth/issues/44
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mwoauth"
-  ];
+  pythonImportsCheck = [ "mwoauth" ];
 
   meta = with lib; {
     description = "Python library to perform OAuth handshakes with a MediaWiki installation";
     homepage = "https://github.com/mediawiki-utilities/python-mwoauth";
     license = licenses.mit;
-    maintainers = with maintainers; [ ixxie ];
   };
 }

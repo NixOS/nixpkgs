@@ -1,25 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, boost, cmake, libcifpp, zlib, }:
+{ lib
+, stdenv
+, cmake
+, eigen
+, fetchFromGitHub
+, libcifpp
+, libmcfp
+, zlib
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dssp";
-  version = "4.0.5";
+  version = "4.4.7";
 
   src = fetchFromGitHub {
     owner = "PDB-REDO";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1x35rdcm4fch66pjbmy73lv0gdb6g9y3v023a66512a6nzsqjsir";
+    repo = "dssp";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-qePoZYkzzWuK6j1NM+q6fPuWVRDEe4OkPmXc9Nbqobo=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  buildInputs = [ boost libcifpp zlib ];
+  buildInputs = [
+    eigen
+    libcifpp
+    libmcfp
+    zlib
+  ];
 
   meta = with lib; {
     description = "Calculate the most likely secondary structure assignment given the 3D structure of a protein";
+    mainProgram = "mkdssp";
     homepage = "https://github.com/PDB-REDO/dssp";
+    changelog = "https://github.com/PDB-REDO/libcifpp/releases/tag/${finalAttrs.src.rev}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ natsukium ];
     platforms = platforms.unix;
   };
-}
+})

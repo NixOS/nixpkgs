@@ -1,40 +1,50 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, requests
-, setuptools
-, six
-, stone
-, mock
-, pytest-mock
-, pytestCheckHook
-, sphinxHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  requests,
+  six,
+  stone,
+  urllib3,
+  mock,
+  pytest-mock,
+  pytestCheckHook,
+  sphinxHook,
+  sphinx-rtd-theme,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "11.34.0";
-  format = "setuptools";
+  version = "12.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
-  outputs = ["out" "doc"];
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bahl78c0MGu4AoANO/FWYq/DQWPC4T8WVdRHKzwg444=";
+    hash = "sha256-0MDm6NB+0vkN8QRSHvuDYEyYhYQWQD4jsctyd5fLdwE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
-    setuptools
     six
     stone
+    urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-mock
     pytestCheckHook
@@ -42,15 +52,27 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner == 5.2.0'," ""
+      --replace "'pytest-runner==5.2.0'," ""
   '';
 
   doCheck = true;
 
-  pythonImportsCheck = [
-    "dropbox"
+  pythonImportsCheck = [ "dropbox" ];
+
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-rtd-theme
+    pythonRelaxDepsHook
   ];
-  nativeBuildInputs = [ sphinxHook ];
+
+  # Version 12.0.0 re-introduced Python 2 support and set some very restrictive version bounds
+  # https://github.com/dropbox/dropbox-sdk-python/commit/75596daf316b4a806f18057e2797a15bdf83cf6d
+  # This will be the last major version to support Python 2, so version bounds might be more reasonable again in the future.
+  pythonRelaxDeps = [
+    "requests"
+    "stone"
+    "urllib3"
+  ];
 
   # Set SCOPED_USER_DROPBOX_TOKEN environment variable to a valid value.
   disabledTests = [
@@ -72,11 +94,14 @@ buildPythonPackage rec {
     "test_as_user"
     "test_as_admin"
     "test_clone_when_team_linked"
+    "test_bad_pins"
+    "test_bad_pins_session"
   ];
 
   meta = with lib; {
     description = "Python library for Dropbox's HTTP-based Core and Datastore APIs";
     homepage = "https://github.com/dropbox/dropbox-sdk-python";
+    changelog = "https://github.com/dropbox/dropbox-sdk-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sfrijters ];
   };

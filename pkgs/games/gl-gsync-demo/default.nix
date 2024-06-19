@@ -26,8 +26,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ atemu ];
     description = "A very basic OpenGL demo for testing NVIDIA's G-SYNC technology on Linux";
+    mainProgram = "gl-gsync-demo";
     longDescription = ''
-      The demo simply draws a vertical bar moving accross the screen at constant speed, but deliberately rendered at a variable frame rate.
+      The demo simply draws a vertical bar moving across the screen at constant speed, but deliberately rendered at a variable frame rate.
 
       The min and max frame rates can be manually changed at runtime, by step of 10 fps and with a min of 10 fps.
 

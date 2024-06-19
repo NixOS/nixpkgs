@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libxcb,
   xcbutilkeysyms , xcbutilimage, pam, libX11, libev, cairo, libxkbcommon,
-  libxkbfile, libjpeg_turbo, xcbutilxrm
+  libxkbfile, libjpeg_turbo, xcbutilxrm, xorg
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.13.c.4";
+  version = "2.13.c.5";
   pname = "i3lock-color";
 
   src = fetchFromGitHub {
     owner = "PandorasFox";
     repo = "i3lock-color";
     rev = version;
-    sha256 = "sha256-bbjkvgSKD57sdOtPYGLAKpQoIsJnF6s6ySq4dTWC3tI=";
+    sha256 = "sha256-fuLeglRif2bruyQRqiL3nm3q6qxoHcPdVdL+QjGBR/k=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libxcb xcbutilkeysyms xcbutilimage pam libX11
-    libev cairo libxkbcommon libxkbfile libjpeg_turbo xcbutilxrm ];
+    libev cairo libxkbcommon libxkbfile libjpeg_turbo xcbutilxrm xorg.xcbutil ];
 
   makeFlags = [ "all" ];
   preInstall = ''
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=\${out}" "SYSCONFDIR=\${out}/etc" "MANDIR=\${out}/share/man" ];
   postInstall = ''
     mv $out/bin/i3lock $out/bin/i3lock-color
+    ln -s $out/bin/i3lock-color $out/bin/i3lock
     mv $out/share/man/man1/i3lock.1 $out/share/man/man1/i3lock-color.1
     sed -i 's/\(^\|\s\|"\)i3lock\(\s\|$\)/\1i3lock-color\2/g' $out/share/man/man1/i3lock-color.1
   '';

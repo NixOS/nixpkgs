@@ -1,8 +1,6 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "doh-proxy-rust";
-  meta = with lib.maintainers; {
-    maintainers = [ stephank ];
-  };
+  meta.maintainers = with lib.maintainers; [ stephank ];
 
   nodes = {
     machine = { pkgs, lib, ... }: {

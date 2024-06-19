@@ -7,31 +7,40 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cwltool";
-  version = "3.1.20220224085855";
-  format = "setuptools";
+  version = "3.1.20240404144621";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-7+1xOV5Lodqtku0wX1urAEHsCcYKM3Vcd5RDg4DdVow=";
+    repo = "cwltool";
+    rev = "refs/tags/${version}";
+    hash = "sha256-atpXkMIQ60POuUk99uiiuCoRXt4Seg11g/eHCeTDe+Q=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "ruamel.yaml >= 0.15, < 0.17.18" "ruamel.yaml" \
+      --replace "ruamel.yaml >= 0.16, < 0.19" "ruamel.yaml" \
       --replace "prov == 1.5.1" "prov" \
-      --replace "setup_requires=PYTEST_RUNNER," ""
+      --replace '"schema-salad >= 8.4.20230426093816, < 9",' "" \
+      --replace "PYTEST_RUNNER + " ""
+    substituteInPlace pyproject.toml \
+      --replace "mypy==1.8.0" "mypy" \
+      --replace "ruamel.yaml>=0.16.0,<0.18" "ruamel.yaml"
   '';
 
   nativeBuildInputs = [
     git
-  ];
+  ] ++ (with python3.pkgs; [
+    setuptools
+    setuptools-scm
+  ]);
 
   propagatedBuildInputs = with python3.pkgs; [
     argcomplete
     bagit
     coloredlogs
+    cwl-utils
+    mypy
     mypy-extensions
     prov
     psutil
@@ -41,13 +50,18 @@ python3.pkgs.buildPythonApplication rec {
     ruamel-yaml
     schema-salad
     shellescape
+    spython
+    toml
+    types-psutil
+    types-requests
     typing-extensions
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     mock
     nodejs
     pytest-mock
+    pytest-httpserver
     pytest-xdist
     pytestCheckHook
   ];
@@ -56,6 +70,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_content_types"
     "test_env_filtering"
     "test_http_path_mapping"
+    "test_modification_date"
   ];
 
   disabledTestPaths = [
@@ -69,7 +84,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Common Workflow Language reference implementation";
+    mainProgram = "cwltool";
     homepage = "https://www.commonwl.org";
+    changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ veprbl ];
   };

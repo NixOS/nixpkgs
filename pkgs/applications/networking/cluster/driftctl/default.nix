@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "driftctl";
-  version = "0.37.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "driftctl";
     rev = "v${version}";
-    sha256 = "sha256-Abp5JetsMqIXZK8BxNa22OBFCxquoLoy3npv6XxCWGo=";
+    sha256 = "sha256-IDKfW0NCEsgKXpHA7SwkHjMeoGAIYITlDVR/vI/b9hk=";
   };
 
-  vendorSha256 = "sha256-uWPnBqT6lZSRClw2RyxHEOzue1Azj9VpPaulMA3qlug=";
+  vendorHash = "sha256-JFvC9PReziktHSXbltGkGHjVR8hTM1hPJ0OqrZQXRQM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -46,11 +46,12 @@ buildGoModule rec {
     homepage = "https://driftctl.com/";
     changelog = "https://github.com/snyk/driftctl/releases/tag/v${version}";
     description = "Detect, track and alert on infrastructure drift";
+    mainProgram = "driftctl";
     longDescription = ''
       driftctl is a free and open-source CLI that warns of infrastructure drift
       and fills in the missing piece in your DevSecOps toolbox.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ kaction jk ];
+    maintainers = with maintainers; [ kaction jk qjoly ];
   };
 }

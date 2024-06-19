@@ -1,23 +1,44 @@
-{ lib, buildGoModule, fetchFromGitHub
-, nixosTests, postgresql, postgresqlTestHook }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, postgresql
+, postgresqlTestHook
+}:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.9.9";
+  version = "0.13.7";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "sha256-HPcPaI0JACyDJAHTGSXHoIuWU34A8pV7blmt/zKOUB4=";
+    hash = "sha256-A6rQ8zqpV6SBpiALIPMF1nZtGvUtzoiTE2Rioh3T1WA=";
   };
 
-  vendorSha256 = "sha256-jX8NJYrhUHRUiZRTqzgMK3mgRhzPJGFNTCK4SuEHKzg=";
+  vendorHash = "sha256-ByRCI4MuU8/ilbeNNOXSsTlBVHL5MkxLHItEGeGC9MQ=";
 
-  # some tests are racy, re-enable once upstream has fixed them
-  doCheck = false;
+  subPackages = [
+    # The server
+    "cmd/dendrite"
+    # admin tools
+    "cmd/create-account"
+    "cmd/generate-config"
+    "cmd/generate-keys"
+    "cmd/resolve-state"
+    ## curl, but for federation requests, only useful for developers
+    # "cmd/furl"
+    ## an internal tool for upgrading ci tests, only relevant for developers
+    # "cmd/dendrite-upgrade-tests"
+    ## tech demos
+    # "cmd/dendrite-demo-pinecone"
+    # "cmd/dendrite-demo-yggdrasil"
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     postgresqlTestHook
     postgresql
   ];
@@ -30,13 +51,20 @@ buildGoModule rec {
     rm roomserver/internal/input/input_test.go
   '';
 
+  # PostgreSQL's request for a shared memory segment exceeded your kernel's SHMALL parameter
+  doCheck = !stdenv.isDarwin;
+
   passthru.tests = {
     inherit (nixosTests) dendrite;
+  };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(.+)" ];
   };
 
   meta = with lib; {
     homepage = "https://matrix-org.github.io/dendrite";
     description = "A second-generation Matrix homeserver written in Go";
+    changelog = "https://github.com/matrix-org/dendrite/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     platforms = platforms.unix;

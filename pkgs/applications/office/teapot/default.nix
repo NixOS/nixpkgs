@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   # By no known reason libtirpc is not detected
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
   cmakeConfigureFlags = [
@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    mainProgram = "teapot";
   };
 }
 # TODO: patch/fix FLTK building

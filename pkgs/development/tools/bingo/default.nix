@@ -1,24 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, bingo }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "bingo";
-  version = "0.6.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "bwplotka";
     repo = "bingo";
     rev = "v${version}";
-    sha256 = "sha256-t2nkY+mwek2NcbCwCkI3Mc1ULEJIjatBjChBdnKFAg8=";
+    hash = "sha256-bzh6P+J8EoewjOofwWXMgtSXAhESetD3y9EiqLNOT54=";
   };
 
-  vendorSha256 = "sha256-TCbwIHDg2YaLIscCoGPRBv5G3YSJ+qn/koOjPh+KKRY=";
-
-  patches = [
-    # Do not execute `go` command when invoking `bingo version`.
-    ./version_go.patch
-    # Specific to v0.6.0. `v0.6` -> `v0.6.0`
-    ./bingo_version.patch
-  ];
+  vendorHash = "sha256-cDeeRkTwuwEKNTqK/6ZEKANrjTIUTeR3o5oClkJQ4AE=";
 
   postPatch = ''
     rm get_e2e_test.go get_e2e_utils_test.go
@@ -28,14 +21,9 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = bingo;
-    command = "bingo version";
-    version = "v${version}";
-  };
-
   meta = with lib; {
     description = "Like `go get` but for Go tools! CI Automating versioning of Go binaries in a nested, isolated Go modules.";
+    mainProgram = "bingo";
     homepage = "https://github.com/bwplotka/bingo";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];

@@ -12,7 +12,7 @@ attrs@{
   preInstall ? "",
   postInstall ? "",
 
-  checkInputs ? [],
+  nativeCheckInputs ? [],
   # plugin packages to add to the vendor paths of the test fish shell
   checkPlugins ? [],
   # vendor directories to add to the function path of the test fish shell
@@ -45,9 +45,11 @@ stdenv.mkDerivation (drvAttrs // {
         source="$1"
         target="$out/share/fish/vendor_$2.d"
 
-        [ -d $source ] || return 0
+        # Check if any .fish file exists in $source
+        [ -n "$(shopt -s nullglob; echo $source/*.fish)" ] || return 0
+
         mkdir -p $target
-        cp -r $source/*.fish "$target/"
+        cp $source/*.fish "$target/"
       }
 
       install_vendor_files completions completions
@@ -61,10 +63,10 @@ stdenv.mkDerivation (drvAttrs // {
 
   inherit doCheck;
 
-  checkInputs = [ (wrapFish {
+  nativeCheckInputs = [ (wrapFish {
     pluginPkgs = checkPlugins;
     functionDirs = checkFunctionDirs;
-  }) ] ++ checkInputs;
+  }) ] ++ nativeCheckInputs;
 
   checkPhase = ''
     export HOME=$(mktemp -d)  # fish wants a writable home

@@ -4,12 +4,12 @@ in {
   options = {
     services.ergochat = {
 
-      enable = lib.mkEnableOption (lib.mdDoc "Ergo IRC daemon");
+      enable = lib.mkEnableOption "Ergo IRC daemon";
 
       openFilesLimit = lib.mkOption {
         type = lib.types.int;
         default = 1024;
-        description = lib.mdDoc ''
+        description = ''
           Maximum number of open files. Limits the clients and server connections.
         '';
       };
@@ -17,16 +17,16 @@ in {
       configFile = lib.mkOption {
         type = lib.types.path;
         default = (pkgs.formats.yaml {}).generate "ergo.conf" cfg.settings;
-        defaultText = "generated config file from <literal>.settings</literal>";
-        description = lib.mdDoc ''
+        defaultText = lib.literalMD "generated config file from `settings`";
+        description = ''
           Path to configuration file.
-          Setting this will skip any configuration done via `.settings`
+          Setting this will skip any configuration done via `settings`
         '';
       };
 
       settings = lib.mkOption {
         type = (pkgs.formats.yaml {}).type;
-        description = lib.mdDoc ''
+        description = ''
           Ergo IRC daemon configuration file.
           https://raw.githubusercontent.com/ergochat/ergo/master/default.yaml
         '';

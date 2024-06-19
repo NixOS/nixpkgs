@@ -164,14 +164,17 @@ import ./make-test-python.nix ({ pkgs, ... }:
   '';
 
   tls-cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
-    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=pleroma.nixos.test' -days 36500
     mkdir -p $out
-    cp key.pem cert.pem $out
+    openssl req -x509 \
+      -subj '/CN=pleroma.nixos.test/' -days 49710 \
+      -addext 'subjectAltName = DNS:pleroma.nixos.test' \
+      -keyout "$out/key.pem" -newkey ed25519 \
+      -out "$out/cert.pem" -noenc
   '';
 
   hosts = nodes: ''
-    ${nodes.pleroma.config.networking.primaryIPAddress} pleroma.nixos.test
-    ${nodes.client.config.networking.primaryIPAddress} client.nixos.test
+    ${nodes.pleroma.networking.primaryIPAddress} pleroma.nixos.test
+    ${nodes.client.networking.primaryIPAddress} client.nixos.test
   '';
   in {
   name = "pleroma";
@@ -180,7 +183,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       security.pki.certificateFiles = [ "${tls-cert}/cert.pem" ];
       networking.extraHosts = hosts nodes;
       environment.systemPackages = with pkgs; [
-        toot
+        pkgs.toot
         send-toot
       ];
     };

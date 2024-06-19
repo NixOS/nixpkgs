@@ -27,15 +27,15 @@
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vengi-tools";
-  version = "0.0.21";
+  version = "0.0.32";
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
     repo = "vengi";
-    rev = "v${version}";
-    sha256 = "sha256-T9YBU/YhhOASdKnzLcwQGBLc4HcQspiOV9VRgotfq3c=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-3oL+hRFATdJmBmZK55Ui2blj8LTqt/zJWJ85kSUFCY4=";
   };
 
   nativeBuildInputs = [
@@ -106,7 +106,5 @@ stdenv.mkDerivation rec {
     license = [ licenses.mit licenses.cc-by-sa-30 ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    # Requires SDK 10.14 https://github.com/NixOS/nixpkgs/issues/101229
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
-}
+})

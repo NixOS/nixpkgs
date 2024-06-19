@@ -3,7 +3,12 @@
 with lib;
 
 let
+  cfg = config.services.pcscd;
   cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
+
+  package = if config.security.polkit.enable
+              then pkgs.pcscliteWithPolkit
+              else pkgs.pcsclite;
 
   pluginEnv = pkgs.buildEnv {
     name = "pcscd-plugins";
@@ -12,18 +17,14 @@ let
 
 in
 {
-
-  ###### interface
-
   options.services.pcscd = {
-    enable = mkEnableOption (lib.mdDoc "PCSC-Lite daemon");
+    enable = mkEnableOption "PCSC-Lite daemon, to access smart cards using SCard API (PC/SC)";
 
     plugins = mkOption {
       type = types.listOf types.package;
-      default = [ pkgs.ccid ];
       defaultText = literalExpression "[ pkgs.ccid ]";
       example = literalExpression "[ pkgs.pcsc-cyberjack ]";
-      description = lib.mdDoc "Plugin packages to be used for PCSC-Lite.";
+      description = "Plugin packages to be used for PCSC-Lite.";
     };
 
     readerConfig = mkOption {
@@ -35,28 +36,32 @@ in
         LIBPATH           /path/to/serial_reader.so
         CHANNELID         1
       '';
-      description = lib.mdDoc ''
+      description = ''
         Configuration for devices that aren't hotpluggable.
 
         See {manpage}`reader.conf(5)` for valid options.
       '';
     };
+
+    extraArgs = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Extra command line arguments to be passed to the PCSC daemon.";
+    };
   };
 
-  ###### implementation
-
   config = mkIf config.services.pcscd.enable {
-
     environment.etc."reader.conf".source = cfgFile;
 
-    environment.systemPackages = [ pkgs.pcsclite ];
-    systemd.packages = [ (getBin pkgs.pcsclite) ];
+    environment.systemPackages = [ package ];
+    systemd.packages = [ package ];
+
+    services.pcscd.plugins = [ pkgs.ccid ];
 
     systemd.sockets.pcscd.wantedBy = [ "sockets.target" ];
 
     systemd.services.pcscd = {
       environment.PCSCLITE_HP_DROPDIR = pluginEnv;
-      restartTriggers = [ "/etc/reader.conf" ];
 
       # If the cfgFile is empty and not specified (in which case the default
       # /etc/reader.conf is assumed), pcscd will happily start going through the
@@ -66,7 +71,7 @@ in
       # around it, we force the path to the cfgFile.
       #
       # https://github.com/NixOS/nixpkgs/issues/121088
-      serviceConfig.ExecStart = [ "" "${getBin pkgs.pcsclite}/bin/pcscd -f -x -c ${cfgFile}" ];
+      serviceConfig.ExecStart = [ "" "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}" ];
     };
   };
 }

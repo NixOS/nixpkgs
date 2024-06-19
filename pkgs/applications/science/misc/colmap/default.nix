@@ -1,11 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, boost17x, ceres-solver, eigen,
+{ mkDerivation, lib, fetchFromGitHub, cmake, boost179, ceres-solver, eigen,
   freeimage, glog, libGLU, glew, qtbase,
-  cudaSupport ? false, cudaPackages }:
+  autoAddDriverRunpath,
+  config,
+  cudaSupport ? config.cudaSupport, cudaPackages
+}:
 
 assert cudaSupport -> cudaPackages != { };
 
 let
-  boost_static = boost17x.override { enableStatic = true; };
+  boost_static = boost179.override { enableStatic = true; };
 
   # TODO: migrate to redist packages
   inherit (cudaPackages) cudatoolkit;
@@ -36,7 +39,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
   ];
 
   meta = with lib; {

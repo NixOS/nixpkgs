@@ -1,27 +1,22 @@
-{ lib, stdenv, fetchurl, fixDarwinDylibNames, which
-, enableShared ? !(stdenv.hostPlatform.isStatic)
+{ lib, stdenv, fetchurl, fixDarwinDylibNames, which, dieHook
+, enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
+# for passthru.tests
+, nix
 }:
 
 stdenv.mkDerivation rec {
   pname = "lowdown";
-  version = "1.0.0";
+  version = "1.1.0";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "2izqgzk677y511kms09c0hgar2ax5cd5hspr8djsa3qykaxq0688xkgfad00bl6j0jpixna714ipvqa0gxm480iz2sma7qhdgr6bl4x";
+    hash = "sha512-EpAWTz7Zy+2qqJGgzLrt0tK7WEZ+hHbdyqzAmMiaqc6uNXscR88git6/UbTjvB9Yanvetvw9huSuyhcORCEIug==";
   };
 
-  # Upstream always passes GNU-style "soname", but cctools expects "install_name".
-  # Whatever name is inserted will be replaced by fixDarwinDylibNames.
-  # https://github.com/kristapsdz/lowdown/issues/87
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace soname install_name
-  '';
-
-  nativeBuildInputs = [ which ]
+  nativeBuildInputs = [ which dieHook ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
@@ -49,20 +44,30 @@ stdenv.mkDerivation rec {
     "install_static"
   ];
 
-  # Fix lib extension so that fixDarwinDylibNames detects it
-  # Symlink liblowdown.so to liblowdown.so.1 (or equivalent)
   postInstall =
     let
-      inherit (stdenv.hostPlatform.extensions) sharedLibrary;
+      soVersion = "1";
     in
 
-    lib.optionalString (enableShared && stdenv.isDarwin) ''
-      mv $lib/lib/liblowdown.{so.1,1.dylib}
-    '' + lib.optionalString enableShared ''
-      ln -s $lib/lib/liblowdown*${sharedLibrary}* $lib/lib/liblowdown${sharedLibrary}
+    # Check that soVersion is up to date even if we are not on darwin
+    lib.optionalString (enableShared && !stdenv.isDarwin) ''
+      test -f $lib/lib/liblowdown.so.${soVersion} || \
+        die "postInstall: expected $lib/lib/liblowdown.so.${soVersion} is missing"
+    ''
+    # Fix lib extension so that fixDarwinDylibNames detects it, see
+    # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
+    + lib.optionalString (enableShared && stdenv.isDarwin) ''
+      darwinDylib="$lib/lib/liblowdown.${soVersion}.dylib"
+      mv "$lib/lib/liblowdown.so.${soVersion}" "$darwinDylib"
+
+      # Make sure we are re-creating a symbolic link here
+      test -L "$lib/lib/liblowdown.so" || \
+        die "postInstall: expected $lib/lib/liblowdown.so to be a symlink"
+      ln -s "$darwinDylib" "$lib/lib/liblowdown.dylib"
+      rm "$lib/lib/liblowdown.so"
     '';
 
-  doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
     echo '# TEST' > test.md
@@ -70,8 +75,13 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = true;
   checkTarget = "regress";
+
+  passthru.tests = {
+    # most important consumer in nixpkgs
+    inherit nix;
+  };
 
   meta = with lib; {
     homepage = "https://kristaps.bsd.lv/lowdown/";

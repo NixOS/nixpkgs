@@ -1,0 +1,24 @@
+diff --git a/go.mod b/go.mod
+index 9bc55db..4bddb07 100644
+--- a/go.mod
++++ b/go.mod
+@@ -19,5 +19,6 @@ require (
+ 	github.com/smallfish/simpleyaml v0.0.0-20170527020626-116d8e577389 // indirect
+ 	github.com/starkandwayne/goutils v0.0.0-20190115202530-896b8a6904be
+ 	github.com/urfave/cli v1.19.1
++	golang.org/x/sys v0.0.0-20220731174439-a90be440212d // indirect
+ 	gopkg.in/yaml.v2 v2.3.0
+ )
+diff --git a/go.sum b/go.sum
+index 7641199..d983a95 100644
+--- a/go.sum
++++ b/go.sum
+@@ -138,6 +138,8 @@ golang.org/x/sys v0.0.0-20191120155948-bd437916bb0e/go.mod h1:h1NjWce9XRLGQEsW7w
+ golang.org/x/sys v0.0.0-20200116001909-b77594299b42/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+ golang.org/x/sys v0.0.0-20200523222454-059865788121 h1:rITEj+UZHYC927n8GT97eC3zrpzXdb/voyeOuVKS46o=
+ golang.org/x/sys v0.0.0-20200523222454-059865788121/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
++golang.org/x/sys v0.0.0-20220731174439-a90be440212d h1:Sv5ogFZatcgIMMtBSTTAgMYsicp25MXBubjXNDKwm80=
++golang.org/x/sys v0.0.0-20220731174439-a90be440212d/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+ golang.org/x/text v0.3.0 h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=
+ golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
+ golang.org/x/tools v0.0.0-20190328211700-ab21143f2384/go.mod h1:LCzVGOaR6xXOjkQ3onu1FJEFr0SW1gC7cKk1uF8kGRs=

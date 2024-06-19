@@ -12,17 +12,13 @@ in rec {
 
   getdns = stdenv.mkDerivation rec {
     pname = "getdns";
-    version = "1.7.2";
+    version = "1.7.3";
     outputs = [ "out" "dev" "lib" "man" ];
 
     src = fetchurl {
-      url = "https://getdnsapi.net/releases/${pname}-${
-          with builtins;
-          concatStringsSep "-" (splitVersion version)
-        }/${pname}-${version}.tar.gz";
-      sha256 =
-        # upstream publishes hashes in hex format
-        "db89fd2a940000e03ecf48d0232b4532e5f0602e80b592be406fd57ad76fdd17";
+      url = with lib; "https://getdnsapi.net/releases/${pname}-${concatStringsSep "-" (splitVersion version)}/${pname}-${version}.tar.gz";
+      # upstream publishes hashes in hex format
+      sha256 = "f1404ca250f02e37a118aa00cf0ec2cbe11896e060c6d369c6761baea7d55a2c";
     };
 
     nativeBuildInputs = [ cmake doxygen ];
@@ -58,11 +54,11 @@ in rec {
 
   stubby = stdenv.mkDerivation rec {
     pname = "stubby";
-    version = "0.4.2";
+    version = "0.4.3";
     outputs = [ "out" "man" "stubbyExampleJson" ];
 
     inherit (getdns) src;
-    sourceRoot = "${getdns.name}/stubby";
+    sourceRoot = "${getdns.pname}-${getdns.version}/stubby";
 
     nativeBuildInputs = [ cmake doxygen yq ];
 
@@ -82,6 +78,7 @@ in rec {
     meta = with lib;
       metaCommon // {
         description = "A local DNS Privacy stub resolver (using DNS-over-TLS)";
+        mainProgram = "stubby";
         longDescription = ''
           Stubby is an application that acts as a local DNS Privacy stub
           resolver (using RFC 7858, aka DNS-over-TLS). Stubby encrypts DNS
@@ -89,7 +86,7 @@ in rec {
           Privacy resolver increasing end user privacy. Stubby is developed by
           the getdns team.
         '';
-        homepage = "https://dnsprivacy.org/wiki/x/JYAT";
+        homepage = "https://dnsprivacy.org/dns_privacy_daemon_-_stubby/";
       };
   };
 

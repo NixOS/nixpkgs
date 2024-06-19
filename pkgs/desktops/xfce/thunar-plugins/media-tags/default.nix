@@ -1,8 +1,8 @@
 { lib
 , mkXfceDerivation
+, glib
 , gtk3
 , thunar
-, exo
 , libxfce4util
 , intltool
 , gettext
@@ -12,10 +12,10 @@
 mkXfceDerivation {
   category = "thunar-plugins";
   pname = "thunar-media-tags-plugin";
-  version = "0.3.0";
+  version = "0.4.0";
   odd-unstable = false;
 
-  sha256 = "sha256-jtgcHH5U5GOvzDVUwPEreMtTdk5DT6sXvFPDbzbF684=";
+  sha256 = "sha256-2WA7EtDmNl8XP0wK00iyQcSqV3mnfHNJZTKhBJ/YWPQ=";
 
   nativeBuildInputs = [
     intltool
@@ -24,7 +24,7 @@ mkXfceDerivation {
 
   buildInputs = [
     thunar
-    exo
+    glib
     gtk3
     libxfce4util
     taglib

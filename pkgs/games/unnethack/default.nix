@@ -33,7 +33,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  enableParallelBuilding = true;
+  # Fails at startup due to off-by-one:
+  #   https://github.com/NixOS/nixpkgs/issues/292113#issuecomment-1969989058
+  # TODO: drop it once 6.x branch releases.
+  hardeningDisable = [ "fortify3" ];
+
+  # Fails the build occasionally due to missing buid depends:
+  #   ./../sys/unix/unixmain.c:9:10: fatal error: date.h: No such file or directory
+  # TODO: remove once upstream issue is fixed:
+  #   https://github.com/UnNetHack/UnNetHack/issues/56
+  enableParallelBuilding = false;
 
   postInstall = ''
     cp -r /tmp/unnethack $out/share/unnethack/profile
@@ -60,6 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fork of NetHack";
+    mainProgram = "unnethack";
     homepage = "https://unnethack.wordpress.com/";
     license = "nethack";
     platforms = platforms.all;

@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -12,7 +14,8 @@ buildPythonPackage rec {
   version = "2.0.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  # https://github.com/mlenzen/collections-extended/issues/198
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "mlenzen";
@@ -21,18 +24,14 @@ buildPythonPackage rec {
     hash = "sha256-cK13+CQUELKSiLpG747+C+RB5b6luu0mWLLXTT+uGH4=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "collections_extended"
-  ];
+  pythonImportsCheck = [ "collections_extended" ];
 
   meta = with lib; {
     description = "Extra Python Collections - bags (multisets), setlists (unique list/indexed set), RangeMap and IndexedDict";

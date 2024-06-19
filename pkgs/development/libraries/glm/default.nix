@@ -16,22 +16,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-F//+3L5Ozrw6s7t4LrcUmO7sN30ZSESdrPAYX57zgr8=";
   };
 
-  # https://github.com/g-truc/glm/pull/1055
-  # Fix more implicit-int-float-conversion warnings
   # (https://github.com/g-truc/glm/pull/986 wasn't enough, and -Werror is used)
-  patches = [(fetchpatch {
-    url = "https://github.com/kraj/glm/commit/bd9b5060bc3b9581090d44f15b4e236566ea86a6.patch";
-    sha256 = "sha256-QO4o/wV564kJimBcEyr9TWzREEnRJ1n0j0HPojN4pkI=";
-  })];
+  # (https://github.com/g-truc/glm/pull/1055 neither)
+  patches = [
+    (fetchpatch {
+      name = "glm-0.9.9.8-clang.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/glm/files/glm-0.9.9.8-clang.patch?id=79476d4b145a4a6b0cbc0e73a6cefb5d584bf8fa";
+      hash = "sha256-D8O+qofnGUEaH5nQGdNddwHyr5FhPQa/lOup4z4SFgY=";
+    })
+  ];
 
   outputs = [ "out" "doc" ];
 
   nativeBuildInputs = [ cmake ];
 
-  NIX_CFLAGS_COMPILE =
-    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
-      "-fno-ipa-modref" # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102823
-    ];
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102823
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") "-fno-ipa-modref";
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=OFF"

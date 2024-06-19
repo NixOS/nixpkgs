@@ -185,6 +185,14 @@ let
     monA.succeed(
         "ceph osd pool create multi-node-test 32 32",
         "ceph osd pool ls | grep 'multi-node-test'",
+
+        # We need to enable an application on the pool, otherwise it will
+        # stay unhealthy in state POOL_APP_NOT_ENABLED.
+        # Creating a CephFS would do this automatically, but we haven't done that here.
+        # See: https://docs.ceph.com/en/reef/rados/operations/pools/#associating-a-pool-with-an-application
+        # We use the custom application name "nixos-test" for this.
+        "ceph osd pool application enable multi-node-test nixos-test",
+
         "ceph osd pool rename multi-node-test multi-node-other-test",
         "ceph osd pool ls | grep 'multi-node-other-test'",
     )

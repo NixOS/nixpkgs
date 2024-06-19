@@ -1,26 +1,32 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  testers,
+  jrnl,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
-  version = "3.0";
-  format = "pyproject";
+  version = "4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jrnl-org";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-wyN7dlAbQwqvES8qEJ4Zo+fDMM/Lh9tNjf215Ywop10=";
+    repo = "jrnl";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DtujXSDJWnOrHjVgJEJNKJMhSrNBHlR2hvHeHLSIF2o=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  postPatch = ''
+    # Support pytest_bdd 7.1.2 and later, https://github.com/jrnl-org/jrnl/pull/1878
+    substituteInPlace tests/lib/when_steps.py \
+      --replace-fail "from pytest_bdd.steps import inject_fixture" "from pytest_bdd.compat import inject_fixture"
+  '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    ansiwrap
+  build-system = with python3.pkgs; [ poetry-core ];
+
+  dependencies = with python3.pkgs; [
     asteval
     colorama
     cryptography
@@ -35,37 +41,33 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-bdd
     pytest-xdist
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
     toml
   ];
-
-  # Upstream expects a old pytest-bdd version
-  # Once it changes we should update here too
-  # https://github.com/jrnl-org/jrnl/blob/develop/poetry.lock#L732
-  disabledTests = [
-    "bdd"
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'tzlocal = ">2.0, <3.0"' 'tzlocal = ">2.0, !=3.0"'
-  '';
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  pythonImportsCheck = [
-    "jrnl"
-  ];
+  pythonImportsCheck = [ "jrnl" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = jrnl;
+    version = "v${version}";
+  };
 
   meta = with lib; {
-    description = "Simple command line journal application that stores your journal in a plain text file";
+    description = "Command line journal application that stores your journal in a plain text file";
     homepage = "https://jrnl.sh/";
+    changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zalakain ];
+    maintainers = with maintainers; [
+      bryanasdev000
+      zalakain
+    ];
+    mainProgram = "jrnl";
   };
 }

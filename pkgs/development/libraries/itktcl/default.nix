@@ -29,7 +29,7 @@ tcl.mkTclDerivation rec {
   outputs = [ "out" "dev" "man" ];
 
   meta = with lib; {
-    homepage    = "http://incrtcl.sourceforge.net/";
+    homepage    = "https://incrtcl.sourceforge.net/";
     description = "Mega-widget toolkit for incr Tk";
     license     = licenses.tcltk;
     platforms   = platforms.unix;

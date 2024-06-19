@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools-scm }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+}:
 
 buildPythonPackage rec {
   pname = "py";
   version = "1.11.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -14,9 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  pythonImportsCheck = [
-    "py"
-  ];
+  pythonImportsCheck = [ "py" ];
 
   meta = with lib; {
     description = "Library with cross-python path, ini-parsing, io, code, log facilities";

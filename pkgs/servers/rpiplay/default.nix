@@ -1,4 +1,4 @@
-{ lib, stdenv, pkg-config, fetchFromGitHub, fetchpatch, cmake, wrapGAppsHook, avahi, avahi-compat, openssl, gst_all_1, libplist }:
+{ lib, stdenv, pkg-config, fetchFromGitHub, fetchpatch, cmake, wrapGAppsHook3, avahi, avahi-compat, openssl, gst_all_1, libplist }:
 
 stdenv.mkDerivation rec {
   pname = "rpiplay";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     openssl
     libplist
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    mainProgram = "rpiplay";
   };
 }

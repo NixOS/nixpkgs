@@ -20,16 +20,16 @@ in
 {
   options.services.parsedmarc = {
 
-    enable = lib.mkEnableOption (lib.mdDoc ''
+    enable = lib.mkEnableOption ''
       parsedmarc, a DMARC report monitoring service
-    '');
+    '';
 
     provision = {
       localMail = {
         enable = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether Postfix and Dovecot should be set up to receive
             mail locally. parsedmarc will be configured to watch the
             local inbox as the automatically created user specified in
@@ -40,7 +40,7 @@ in
         recipientName = lib.mkOption {
           type = lib.types.str;
           default = "dmarc";
-          description = lib.mdDoc ''
+          description = ''
             The DMARC mail recipient name, i.e. the name part of the
             email address which receives DMARC reports.
 
@@ -54,7 +54,7 @@ in
           default = config.networking.fqdn;
           defaultText = lib.literalExpression "config.networking.fqdn";
           example = "monitoring.example.com";
-          description = lib.mdDoc ''
+          description = ''
             The hostname to use when configuring Postfix.
 
             Should correspond to the host's fully qualified domain
@@ -68,7 +68,7 @@ in
       geoIp = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable and configure the [geoipupdate](#opt-services.geoipupdate.enable)
           service to automatically fetch GeoIP databases. Not crucial,
           but recommended for full functionality.
@@ -82,7 +82,7 @@ in
       elasticsearch = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to set up and use a local instance of Elasticsearch.
         '';
       };
@@ -95,7 +95,7 @@ in
             config.${opt.provision.elasticsearch} && config.${options.services.grafana.enable}
           '';
           apply = x: x && cfg.provision.elasticsearch;
-          description = lib.mdDoc ''
+          description = ''
             Whether the automatically provisioned Elasticsearch
             instance should be added as a grafana datasource. Has no
             effect unless
@@ -108,7 +108,7 @@ in
           type = lib.types.bool;
           default = config.services.grafana.enable;
           defaultText = lib.literalExpression "config.services.grafana.enable";
-          description = lib.mdDoc ''
+          description = ''
             Whether the official parsedmarc grafana dashboard should
             be provisioned to the local grafana instance.
           '';
@@ -123,7 +123,10 @@ in
             host = "imap.example.com";
             user = "alice@example.com";
             password = { _secret = "/run/keys/imap_password" };
+          };
+          mailbox = {
             watch = true;
+            batch_size = 30;
           };
           splunk_hec = {
             url = "https://splunkhec.example.com";
@@ -132,7 +135,7 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Configuration parameters to set in
         {file}`parsedmarc.ini`. For a full list of
         available parameters, see
@@ -156,7 +159,7 @@ in
             save_aggregate = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Save aggregate report data to Elasticsearch and/or Splunk.
               '';
             };
@@ -164,8 +167,26 @@ in
             save_forensic = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Save forensic report data to Elasticsearch and/or Splunk.
+              '';
+            };
+          };
+
+          mailbox = {
+            watch = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = ''
+                Use the IMAP IDLE command to process messages as they arrive.
+              '';
+            };
+
+            delete = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Delete messages after processing them, instead of archiving them.
               '';
             };
           };
@@ -174,7 +195,7 @@ in
             host = lib.mkOption {
               type = lib.types.str;
               default = "localhost";
-              description = lib.mdDoc ''
+              description = ''
                 The IMAP server hostname or IP address.
               '';
             };
@@ -182,7 +203,7 @@ in
             port = lib.mkOption {
               type = lib.types.port;
               default = 993;
-              description = lib.mdDoc ''
+              description = ''
                 The IMAP server port.
               '';
             };
@@ -190,7 +211,7 @@ in
             ssl = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Use an encrypted SSL/TLS connection.
               '';
             };
@@ -198,7 +219,7 @@ in
             user = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The IMAP server username.
               '';
             };
@@ -206,7 +227,7 @@ in
             password = lib.mkOption {
               type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The IMAP server password.
 
                 Always handled as a secret whether the value is
@@ -216,29 +237,13 @@ in
               '';
               apply = x: if isAttrs x || x == null then x else { _secret = x; };
             };
-
-            watch = lib.mkOption {
-              type = lib.types.bool;
-              default = true;
-              description = lib.mdDoc ''
-                Use the IMAP IDLE command to process messages as they arrive.
-              '';
-            };
-
-            delete = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = lib.mdDoc ''
-                Delete messages after processing them, instead of archiving them.
-              '';
-            };
           };
 
           smtp = {
             host = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The SMTP server hostname or IP address.
               '';
             };
@@ -246,7 +251,7 @@ in
             port = lib.mkOption {
               type = with lib.types; nullOr port;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The SMTP server port.
               '';
             };
@@ -254,7 +259,7 @@ in
             ssl = lib.mkOption {
               type = with lib.types; nullOr bool;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Use an encrypted SSL/TLS connection.
               '';
             };
@@ -262,7 +267,7 @@ in
             user = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The SMTP server username.
               '';
             };
@@ -270,7 +275,7 @@ in
             password = lib.mkOption {
               type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The SMTP server password.
 
                 Always handled as a secret whether the value is
@@ -284,7 +289,7 @@ in
             from = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The `From` address to use for the
                 outgoing mail.
               '';
@@ -293,9 +298,10 @@ in
             to = lib.mkOption {
               type = with lib.types; nullOr (listOf str);
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The addresses to send outgoing mail to.
               '';
+              apply = x: if x == [] || x == null then null else lib.concatStringsSep "," x;
             };
           };
 
@@ -304,7 +310,7 @@ in
               default = [];
               type = with lib.types; listOf str;
               apply = x: if x == [] then null else lib.concatStringsSep "," x;
-              description = lib.mdDoc ''
+              description = ''
                 A list of Elasticsearch hosts to push parsed reports
                 to.
               '';
@@ -313,7 +319,7 @@ in
             user = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 Username to use when connecting to Elasticsearch, if
                 required.
               '';
@@ -322,7 +328,7 @@ in
             password = lib.mkOption {
               type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
-              description = lib.mdDoc ''
+              description = ''
                 The password to use when connecting to Elasticsearch,
                 if required.
 
@@ -337,7 +343,7 @@ in
             ssl = lib.mkOption {
               type = lib.types.bool;
               default = false;
-              description = lib.mdDoc ''
+              description = ''
                 Whether to use an encrypted SSL/TLS connection.
               '';
             };
@@ -345,7 +351,7 @@ in
             cert_path = lib.mkOption {
               type = lib.types.path;
               default = "/etc/ssl/certs/ca-certificates.crt";
-              description = lib.mdDoc ''
+              description = ''
                 The path to a TLS certificate bundle used to verify
                 the server's certificate.
               '';
@@ -359,6 +365,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
+    warnings = let
+      deprecationWarning = optname: "Starting in 8.0.0, the `${optname}` option has been moved from the `services.parsedmarc.settings.imap`"
+        + "configuration section to the `services.parsedmarc.settings.mailbox` configuration section.";
+      hasImapOpt = lib.flip builtins.hasAttr cfg.settings.imap;
+      movedOptions = [ "reports_folder" "archive_folder" "watch" "delete" "test" "batch_size" ];
+    in builtins.map deprecationWarning (builtins.filter hasImapOpt movedOptions);
 
     services.elasticsearch.enable = lib.mkDefault cfg.provision.elasticsearch;
 
@@ -397,7 +410,7 @@ in
 
       provision = {
         enable = cfg.provision.grafana.datasource || cfg.provision.grafana.dashboard;
-        datasources =
+        datasources.settings.datasources =
           let
             esVersion = lib.getVersion config.services.elasticsearch.package;
           in
@@ -423,9 +436,9 @@ in
                 };
               }
             ];
-        dashboards = lib.mkIf cfg.provision.grafana.dashboard [{
+        dashboards.settings.providers = lib.mkIf cfg.provision.grafana.dashboard [{
           name = "parsedmarc";
-          options.path = "${pkgs.python3Packages.parsedmarc.dashboard}";
+          options.path = "${pkgs.parsedmarc.dashboard}";
         }];
       };
     };
@@ -433,7 +446,7 @@ in
     services.parsedmarc.settings = lib.mkMerge [
       (lib.mkIf cfg.provision.elasticsearch {
         elasticsearch = {
-          hosts = [ "localhost:9200" ];
+          hosts = [ "http://localhost:9200" ];
           ssl = false;
         };
       })
@@ -444,6 +457,8 @@ in
           ssl = false;
           user = cfg.provision.localMail.recipientName;
           password = "${pkgs.writeText "imap-password" "@imap-password@"}";
+        };
+        mailbox = {
           watch = true;
         };
       })
@@ -494,7 +509,7 @@ in
             Group = "parsedmarc";
             DynamicUser = true;
             RuntimeDirectory = "parsedmarc";
-            RuntimeDirectoryMode = 0700;
+            RuntimeDirectoryMode = "0700";
             CapabilityBoundingSet = "";
             PrivateDevices = true;
             PrivateMounts = true;
@@ -515,7 +530,7 @@ in
             MemoryDenyWriteExecute = true;
             LockPersonality = true;
             SystemCallArchitectures = "native";
-            ExecStart = "${pkgs.python3Packages.parsedmarc}/bin/parsedmarc -c /run/parsedmarc/parsedmarc.ini";
+            ExecStart = "${lib.getExe pkgs.parsedmarc} -c /run/parsedmarc/parsedmarc.ini";
           };
         };
 
@@ -525,8 +540,6 @@ in
     };
   };
 
-  # Don't edit the docbook xml directly, edit the md and generate it:
-  # `pandoc parsedmarc.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > parsedmarc.xml`
-  meta.doc = ./parsedmarc.xml;
+  meta.doc = ./parsedmarc.md;
   meta.maintainers = [ lib.maintainers.talyz ];
 }

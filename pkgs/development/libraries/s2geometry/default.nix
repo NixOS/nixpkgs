@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ openssl gtest ];
 
+  # Default of C++11 is too low for gtest.
+  # In newer versions of s2geometry this can be done with cmakeFlags.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace "CMAKE_CXX_STANDARD 11" "CMAKE_CXX_STANDARD 14"
+  '';
+
   meta = with lib; {
     description = "Computational geometry and spatial indexing on the sphere";
     homepage = "http://s2geometry.io/";

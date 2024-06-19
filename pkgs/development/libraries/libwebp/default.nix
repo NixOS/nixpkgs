@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.2.4";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner  = "webmproject";
     repo   = pname;
     rev    = "v${version}";
-    hash   = "sha256-XX6qOWlIl8TqOQMiGpmmDVKwQnM1taG6lrqq1ZFVk5s=";
+    hash   = "sha256-OR/VzKNn3mnwjf+G+RkEGAaaKrhVlAu1e2oTRwdsPj8=";
   };
 
   configureFlags = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit freeimage gd graphicsmagick imagemagick imlib2 libjxl opencv vips;
+    inherit gd graphicsmagick imagemagick imlib2 libjxl opencv vips;
     inherit (python3.pkgs) pillow imread;
     haskell-webp = haskellPackages.webp;
   };

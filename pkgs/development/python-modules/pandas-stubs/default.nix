@@ -1,39 +1,91 @@
-{ lib
-, buildPythonPackage
-, isPy27
-, fetchFromGitHub
-, typing-extensions
-, mypy
+{
+  lib,
+  stdenv,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  html5lib,
+  jinja2,
+  lxml,
+  matplotlib,
+  odfpy,
+  openpyxl,
+  pandas,
+  poetry-core,
+  pyarrow,
+  pyreadstat,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  sqlalchemy,
+  tables,
+  tabulate,
+  types-pytz,
+  typing-extensions,
+  xarray,
+  xlsxwriter,
 }:
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
-  version = "1.2.0.39";
+  version = "2.2.0.240218";
+  pyproject = true;
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.9";
 
-  # Use GitHub source since PyPi source does not include tests
   src = fetchFromGitHub {
-    owner = "VirtusLab";
-    repo = pname;
-    rev = "2bd932777d1050ea8f86c527266a4cd205aa15b1";
-    sha256 = "m2McU53NNvRwnWKN9GL8dW1eCGKbTi0471szRQwZu1Q=";
+    owner = "pandas-dev";
+    repo = "pandas-stubs";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-416vyaHcSfTfkSNKZ05edozfsMmNKcpOZAoPenCLFzQ=";
   };
 
+  nativeBuildInputs = [ poetry-core ];
+
   propagatedBuildInputs = [
-    typing-extensions
+    pandas
+    types-pytz
   ];
 
+  nativeCheckInputs = [
+    beautifulsoup4
+    html5lib
+    jinja2
+    lxml
+    matplotlib
+    odfpy
+    openpyxl
+    pyarrow
+    pyreadstat
+    pytestCheckHook
+    scipy
+    sqlalchemy
+    tables
+    tabulate
+    typing-extensions
+    xarray
+    xlsxwriter
+  ];
+
+  disabledTests =
+    [
+      # AttributeErrors, missing dependencies, error and warning checks
+      "test_types_groupby"
+      "test_frame_groupby_resample"
+      "test_orc"
+      "test_all_read_without_lxml_dtype_backend"
+      "test_show_version"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_plotting" # Fatal Python error: Illegal instruction
+    ];
+
   pythonImportsCheck = [ "pandas" ];
-  checkInputs = [ mypy ];
-  checkPhase = ''
-    mypy --config-file mypy.ini third_party/3/pandas tests/snippets
-  '';
 
   meta = with lib; {
     description = "Type annotations for Pandas";
-    homepage = "https://github.com/VirtusLab/pandas-stubs";
+    homepage = "https://github.com/pandas-dev/pandas-stubs";
     license = licenses.mit;
-    maintainers = [ maintainers.malo ];
+    maintainers = with maintainers; [ malo ];
   };
 }

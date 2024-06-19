@@ -1,11 +1,9 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , fetchFromGitLab
 , cairo
 , cmake
-, pcre
 , boost
 , cups-filters
 , curl
@@ -21,11 +19,11 @@
 , pkg-config
 , python3
 , scribus
-, texlive
 , zlib
 , withData ? true, poppler_data
 , qt5Support ? false, qt6Support ? false, qtbase ? null
 , introspectionSupport ? false, gobject-introspection ? null
+, gpgmeSupport ? false, gpgme ? null
 , utils ? false, nss ? null
 , minimal ? false
 , suffix ? "glib"
@@ -42,28 +40,20 @@ let
     domain = "gitlab.freedesktop.org";
     owner = "poppler";
     repo = "test";
-    rev = "920c89f8f43bdfe8966c8e397e7f67f5302e9435";
-    sha256 = "sha256-ySP7zcVI3HW4lk8oqVMPTlFh5pgvBwqcE0EXE71iWos=";
+    rev = "400f3ff05b2b1c0ae17797a0bd50e75e35c1f1b1";
+    hash = "sha256-Y4aNOJLqo4g6tTW6TAb60jAWtBhRgT/JXsub12vi3aU=";
   };
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "poppler-${suffix}";
-  version = "22.08.0"; # beware: updates often break cups-filters build, check texlive and scribus too!
+  version = "24.02.0"; # beware: updates often break cups-filters build, check scribus too!
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-    sha256 = "sha256-tJMyhyFALyXLdSP5zcL318WfRa2Zm951xjyQYE2w8gs=";
+    hash = "sha256-GRh6P90F8z59YExHmcGD3lygEYZAyIs3DdzzE2NDIi4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-38784.patch";
-      url = "https://gitlab.freedesktop.org/poppler/poppler/-/commit/27354e9d9696ee2bc063910a6c9a6b27c5184a52.patch";
-      sha256 = "sha256-M12zaHxcgQB/37tHffllqzd+Juq9BH5gpKVGaRY00vI=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -74,10 +64,9 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   buildInputs = [
     boost
-    pcre
     libiconv
     libintl
-  ] ++ lib.optional withData [
+  ] ++ lib.optionals withData [
     poppler_data
   ];
 
@@ -97,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: rec {
     qtbase
   ] ++ lib.optionals introspectionSupport [
     gobject-introspection
+  ] ++ lib.optionals gpgmeSupport [
+    gpgme
   ];
 
   cmakeFlags = [
@@ -104,13 +95,17 @@ stdenv.mkDerivation (finalAttrs: rec {
     (mkFlag (!minimal) "GLIB")
     (mkFlag (!minimal) "CPP")
     (mkFlag (!minimal) "LIBCURL")
+    (mkFlag (!minimal) "LCMS")
+    (mkFlag (!minimal) "LIBTIFF")
+    (mkFlag (!minimal) "NSS3")
     (mkFlag utils "UTILS")
     (mkFlag qt5Support "QT5")
     (mkFlag qt6Support "QT6")
-  ] ++ lib.optionals finalAttrs.doCheck [
+    (mkFlag gpgmeSupport "GPGME")
+  ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
     "-DTESTDATADIR=${testData}"
   ];
-  disallowedReferences = lib.optional finalAttrs.doCheck testData;
+  disallowedReferences = lib.optional finalAttrs.finalPackage.doCheck testData;
 
   dontWrapQtApps = true;
 
@@ -119,18 +114,30 @@ stdenv.mkDerivation (finalAttrs: rec {
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
   '';
 
+  # Work around gpgme trying to write to $HOME during qt5 and qt6 tests:
+  preCheck = lib.optionalString gpgmeSupport ''
+    HOME_orig="$HOME"
+    export HOME="$(mktemp -d)"
+  '';
+
+  postCheck = lib.optionalString gpgmeSupport ''
+    export HOME="$HOME_orig"
+    unset -v HOME_orig
+  '';
+
   doCheck = true;
 
   passthru = {
     inherit testData;
     tests = {
       # These depend on internal poppler code that frequently changes.
-      inherit inkscape cups-filters texlive scribus;
+      inherit inkscape cups-filters scribus;
     };
   };
 
   meta = with lib; {
     homepage = "https://poppler.freedesktop.org/";
+    changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${version}/NEWS";
     description = "A PDF rendering library";
     longDescription = ''
       Poppler is a PDF rendering library based on the xpdf-3.0 code base. In

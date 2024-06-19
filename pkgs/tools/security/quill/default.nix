@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, Security, libiconv, pkg-config, protobuf, which, buildPackages }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, Security, libiconv, pkg-config, protobuf, buildPackages }:
 
 rustPlatform.buildRustPackage rec {
   pname = "quill";
@@ -30,7 +30,14 @@ rustPlatform.buildRustPackage rec {
     export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
   '';
 
-  cargoSha256 = "sha256-QgvQ0ptfb4L465hn/aBpVAUwSvm4MkpZlBQaVrinkq4=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "derive_more-0.99.8-alpha.0" = "sha256-tEsfYC9oCAsDjinCsUDgRg3q6ruvayuA1lRmsEP9cys=";
+      "dfn_candid-0.8.0" = "sha256-7LXTwxSA9pTjFynMRzNRXie4x5u8BSLpFaOzpRsgrKA=";
+      "once_cell-1.4.0-alpha.0" = "sha256-5g26ZizSY5egH/4yU5glzBxpWzdvgKtDsckBpAUBatw=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config protobuf ];
   buildInputs = [ openssl ]
@@ -39,7 +46,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/dfinity/quill";
     changelog = "https://github.com/dfinity/quill/releases/tag/v${version}";
-    description = "Minimalistic ledger and governance toolkit for cold wallets on the Internet Computer.";
+    description = "Minimalistic ledger and governance toolkit for cold wallets on the Internet Computer";
+    mainProgram = "quill";
     license = licenses.asl20;
     maintainers = with maintainers; [ imalison ];
   };

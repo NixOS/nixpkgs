@@ -26,7 +26,7 @@ directory which is scanned by the ICL loader for ICD files. For example:
 
 ```ShellSession
 $ export \
-  OCL_ICD_VENDORS=`nix-build '<nixpkgs>' --no-out-link -A rocm-opencl-icd`/etc/OpenCL/vendors/
+  OCL_ICD_VENDORS=`nix-build '<nixpkgs>' --no-out-link -A rocmPackages.clr.icd`/etc/OpenCL/vendors/
 ```
 
 The second mechanism is to add the OpenCL driver package to
@@ -50,14 +50,16 @@ Platform Vendor      Advanced Micro Devices, Inc.
 
 Modern AMD [Graphics Core
 Next](https://en.wikipedia.org/wiki/Graphics_Core_Next) (GCN) GPUs are
-supported through the rocm-opencl-icd package. Adding this package to
+supported through the rocmPackages.clr.icd package. Adding this package to
 [](#opt-hardware.opengl.extraPackages)
 enables OpenCL support:
 
 ```nix
-hardware.opengl.extraPackages = [
-  rocm-opencl-icd
-];
+{
+  hardware.opengl.extraPackages = [
+    rocmPackages.clr.icd
+  ];
+}
 ```
 
 ### Intel {#sec-gpu-accel-opencl-intel}
@@ -65,20 +67,20 @@ hardware.opengl.extraPackages = [
 [Intel Gen8 and later
 GPUs](https://en.wikipedia.org/wiki/List_of_Intel_graphics_processing_units#Gen8)
 are supported by the Intel NEO OpenCL runtime that is provided by the
-intel-compute-runtime package. For Gen7 GPUs, the deprecated Beignet
-runtime can be used, which is provided by the beignet package. The
-proprietary Intel OpenCL runtime, in the intel-ocl package, is an
-alternative for Gen7 GPUs.
+intel-compute-runtime package. The proprietary Intel OpenCL runtime, in
+the intel-ocl package, is an alternative for Gen7 GPUs.
 
-The intel-compute-runtime, beignet, or intel-ocl package can be added to
+The intel-compute-runtime or intel-ocl package can be added to
 [](#opt-hardware.opengl.extraPackages)
 to enable OpenCL support. For example, for Gen8 and later GPUs, the following
 configuration can be used:
 
 ```nix
-hardware.opengl.extraPackages = [
-  intel-compute-runtime
-];
+{
+  hardware.opengl.extraPackages = [
+    intel-compute-runtime
+  ];
+}
 ```
 
 ## Vulkan {#sec-gpu-accel-vulkan}
@@ -143,20 +145,60 @@ makes amdvlk the default driver and hides radv and lavapipe from the device list
 A specific driver can be forced as follows:
 
 ```nix
-hardware.opengl.extraPackages = [
-  pkgs.amdvlk
-];
+{
+  hardware.opengl.extraPackages = [
+    pkgs.amdvlk
+  ];
 
-# To enable Vulkan support for 32-bit applications, also add:
-hardware.opengl.extraPackages32 = [
-  pkgs.driversi686Linux.amdvlk
-];
+  # To enable Vulkan support for 32-bit applications, also add:
+  hardware.opengl.extraPackages32 = [
+    pkgs.driversi686Linux.amdvlk
+  ];
 
-# Force radv
-environment.variables.AMD_VULKAN_ICD = "RADV";
-# Or
-environment.variables.VK_ICD_FILENAMES =
-  "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+  # Force radv
+  environment.variables.AMD_VULKAN_ICD = "RADV";
+  # Or
+  environment.variables.VK_ICD_FILENAMES =
+    "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+}
+```
+
+## VA-API {#sec-gpu-accel-va-api}
+
+[VA-API (Video Acceleration API)](https://www.intel.com/content/www/us/en/developer/articles/technical/linuxmedia-vaapi.html)
+is an open-source library and API specification, which provides access to
+graphics hardware acceleration capabilities for video processing.
+
+VA-API drivers are loaded by `libva`. The version in nixpkgs is built to search
+the opengl driver path, so drivers can be installed in
+[](#opt-hardware.opengl.extraPackages).
+
+VA-API can be tested using:
+
+```ShellSession
+$ nix-shell -p libva-utils --run vainfo
+```
+
+### Intel {#sec-gpu-accel-va-api-intel}
+
+Modern Intel GPUs use the iHD driver, which can be installed with:
+
+```nix
+{
+  hardware.opengl.extraPackages = [
+    intel-media-driver
+  ];
+}
+```
+
+Older Intel GPUs use the i965 driver, which can be installed with:
+
+```nix
+{
+  hardware.opengl.extraPackages = [
+    intel-vaapi-driver
+  ];
+}
 ```
 
 ## Common issues {#sec-gpu-accel-common-issues}

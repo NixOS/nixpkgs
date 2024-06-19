@@ -1,19 +1,21 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, pandas
-, numpy
-, scipy
-, filelock
-, pytest
-, nose
-, parameterized
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  pandas,
+  numpy,
+  scipy,
+  filelock,
+  pytest,
+  nose,
+  parameterized,
 }:
 
 buildPythonPackage rec {
   pname = "theano-pymc";
   version = "1.1.2";
+  format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -44,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/majidaldo/Theano-PyMC";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nidabdella ];
+    broken = true;
   };
 }

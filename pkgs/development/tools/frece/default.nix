@@ -15,9 +15,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Maintain a database sorted by frecency (frequency + recency)";
+    mainProgram = "frece";
     homepage = "https://github.com/YodaEmbedding/frece";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ WeebSorceress ];
+    maintainers = with maintainers; [ ];
   };
 }

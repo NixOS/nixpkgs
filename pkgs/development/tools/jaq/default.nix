@@ -1,24 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "jaq";
-  version = "0.8.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
     rev = "v${version}";
-    sha256 = "sha256-lTfpN+BnWMENRlSjR1+iGlGMTp4BBiMDvzFjvwRpuLQ=";
+    hash = "sha256-6HqZBJeUaYykTZLSrqQN0Rt6rvnvzb53T56oy06wIUw=";
   };
 
-  cargoSha256 = "sha256-z12ecgJJYKYc5kOLyjZU/MfBuBp7aJuEmDAGleiecz0=";
+  cargoHash = "sha256-Zais+yGfrzxKrKA4uAG65uzhamnuYxQEKkIaeiOlcLQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with lib; {
     description = "A jq clone focused on correctness, speed and simplicity";
     homepage = "https://github.com/01mf02/jaq";
+    changelog = "https://github.com/01mf02/jaq/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [ figsoda siraben ];
+    mainProgram = "jaq";
   };
 }

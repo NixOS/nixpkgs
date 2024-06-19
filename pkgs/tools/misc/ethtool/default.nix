@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , libmnl
 , pkg-config
 , writeScript
@@ -8,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ethtool";
-  version = "5.19";
+  version = "6.7";
 
   src = fetchurl {
     url = "mirror://kernel/software/network/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-O3UqMymCeQesOBLygx3+z1HIxBxV0tac+5xTygZEn8Y=";
+    sha256 = "sha256-w65SawHOTY32x5SrFw3kpBBNER6o2Ns/H9fCX8uQVhk=";
   };
 
   nativeBuildInputs = [
@@ -45,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "ethtool";
   };
 }

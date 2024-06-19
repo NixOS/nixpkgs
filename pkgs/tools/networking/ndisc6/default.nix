@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "A small collection of useful tools for IPv6 networking";
     maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

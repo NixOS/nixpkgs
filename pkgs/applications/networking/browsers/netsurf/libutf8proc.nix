@@ -5,13 +5,12 @@
 , buildsystem
 }:
 
-stdenv.mkDerivation rec {
-  pname = "netsurf-${libname}";
-  libname = "libutf8proc";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "netsurf-libutf8proc";
   version = "2.4.0-1";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
+    url = "http://download.netsurf-browser.org/libs/releases/libutf8proc-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-AasdaYnBx3VQkNskw/ZOSflcVgrknCa+xRQrrGgCxHI=";
   };
 
@@ -24,11 +23,10 @@ stdenv.mkDerivation rec {
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.netsurf-browser.org/";
     description = "UTF8 Processing library for netsurf browser";
-    license = licenses.mit;
-    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    inherit (buildsystem.meta) maintainers platforms;
   };
-}
+})

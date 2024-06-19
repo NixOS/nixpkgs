@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1HXMf9mHManR7jhonU2Agon0YFXOlM9APIN1Zm840AM=";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile.in --replace 'ar r libbgpdump.a' '$(AR) r libbgpdump.a'
+  '';
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ zlib bzip2 ];
 
@@ -20,5 +24,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.hpnd;
     maintainers = with lib.maintainers; [ lewo ];
     platforms = with lib.platforms; linux;
+    mainProgram = "bgpdump";
   };
 }

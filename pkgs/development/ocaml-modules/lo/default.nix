@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "lo";
   version = "0.2.0";
 
+  minimalOCamlVersion = "4.06";
+
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-lo";

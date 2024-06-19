@@ -29,37 +29,37 @@ in {
   options = {
 
     services.wasabibackend = {
-      enable = mkEnableOption (lib.mdDoc "Wasabi backend service");
+      enable = mkEnableOption "Wasabi backend service";
 
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/wasabibackend";
-        description = lib.mdDoc "The data directory for the Wasabi backend node.";
+        description = "The data directory for the Wasabi backend node.";
       };
 
       customConfigFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc "Defines the path to a custom configuration file that is copied to the user's directory. Overrides any config options.";
+        description = "Defines the path to a custom configuration file that is copied to the user's directory. Overrides any config options.";
       };
 
       network = mkOption {
         type = types.enum [ "mainnet" "testnet" "regtest" ];
         default = "mainnet";
-        description = lib.mdDoc "The network to use for the Wasabi backend service.";
+        description = "The network to use for the Wasabi backend service.";
       };
 
       endpoint = {
         ip = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = lib.mdDoc "IP address for P2P connection to bitcoind.";
+          description = "IP address for P2P connection to bitcoind.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8333;
-          description = lib.mdDoc "Port for P2P connection to bitcoind.";
+          description = "Port for P2P connection to bitcoind.";
         };
       };
 
@@ -67,45 +67,45 @@ in {
         ip = mkOption {
           type = types.str;
           default = "127.0.0.1";
-          description = lib.mdDoc "IP address for RPC connection to bitcoind.";
+          description = "IP address for RPC connection to bitcoind.";
         };
 
         port = mkOption {
           type = types.port;
           default = 8332;
-          description = lib.mdDoc "Port for RPC connection to bitcoind.";
+          description = "Port for RPC connection to bitcoind.";
         };
 
         user = mkOption {
           type = types.str;
           default = "bitcoin";
-          description = lib.mdDoc "RPC user for the bitcoin endpoint.";
+          description = "RPC user for the bitcoin endpoint.";
         };
 
         password = mkOption {
           type = types.str;
           default = "password";
-          description = lib.mdDoc "RPC password for the bitcoin endpoint. Warning: this is stored in cleartext in the Nix store! Use `configFile` or `passwordFile` if needed.";
+          description = "RPC password for the bitcoin endpoint. Warning: this is stored in cleartext in the Nix store! Use `configFile` or `passwordFile` if needed.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
-          description = lib.mdDoc "File that contains the password of the RPC user.";
+          description = "File that contains the password of the RPC user.";
         };
       };
 
       user = mkOption {
         type = types.str;
         default = "wasabibackend";
-        description = lib.mdDoc "The user as which to run the wasabibackend node.";
+        description = "The user as which to run the wasabibackend node.";
       };
 
       group = mkOption {
         type = types.str;
         default = cfg.user;
         defaultText = literalExpression "config.${opt.user}";
-        description = lib.mdDoc "The group as which to run the wasabibackend node.";
+        description = "The group as which to run the wasabibackend node.";
       };
     };
   };
@@ -119,6 +119,7 @@ in {
     systemd.services.wasabibackend = {
       description = "wasabibackend server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = {
         DOTNET_PRINT_TELEMETRY_MESSAGE = "false";

@@ -1,9 +1,7 @@
-{ stdenv
-, buildDunePackage
+{ buildDunePackage
 , dune-configurator
-, fetchFromGitHub
 , alcotest
-, eigen
+, ctypes
 , stdio
 , openblasCompat
 , owl-base
@@ -14,13 +12,18 @@
 buildDunePackage rec {
   pname = "owl";
 
-  inherit (owl-base) version src meta useDune2;
+  inherit (owl-base) version src meta;
 
   checkInputs = [ alcotest ];
   buildInputs = [ dune-configurator stdio ];
   propagatedBuildInputs = [
-    eigen openblasCompat owl-base npy
+    ctypes
+    openblasCompat
+    owl-base
+    npy
   ];
 
-  doCheck = !stdenv.isDarwin;  # https://github.com/owlbarn/owl/issues/462
+  doCheck = false;
+  # Tests fail with Clang: https://github.com/owlbarn/owl/issues/462
+  # and with GCC 13: https://github.com/owlbarn/owl/issues/653
 }

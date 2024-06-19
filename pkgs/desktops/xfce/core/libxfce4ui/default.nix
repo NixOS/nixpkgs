@@ -4,20 +4,21 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "libxfce4ui";
-  version = "4.16.1";
+  version = "4.18.6";
 
-  sha256 = "sha256-5mwyC3YA1LvdVSvaHN7CXDJh+IXjmdHGLKzhpjtUZkw=";
+  sha256 = "sha256-ojmI745tKLHv26uL1qS/v6hAcLmAV/WF2NAtAhQRUkg=";
 
   nativeBuildInputs = [ gobject-introspection vala ];
   buildInputs =  [ gtk3 libstartup_notification libgtop libepoxy xfconf ];
   propagatedBuildInputs = [ libxfce4util libICE libSM ];
 
   configureFlags = [
-    "--with-vendor-info='NixOS'"
+    "--with-vendor-info=NixOS"
   ];
 
   meta = with lib; {
     description = "Widgets library for Xfce";
+    mainProgram = "xfce4-about";
     license = with licenses; [ lgpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };

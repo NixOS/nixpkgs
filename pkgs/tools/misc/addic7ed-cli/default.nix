@@ -1,12 +1,13 @@
 { lib
 , python3Packages
+, fetchPypi
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "addic7ed-cli";
   version = "1.4.6";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "182cpwxpdybsgl1nps850ysvvjbqlnx149kri4hxhgm58nqq0qf5";
   };
@@ -26,5 +27,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ aethelz ];
     platforms = platforms.unix;
+    mainProgram = "addic7ed";
   };
 }

@@ -1,22 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, regex
-, pytestCheckHook
-, js2py
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  regex,
+  pytestCheckHook,
+  pythonOlder,
+  js2py,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lark";
-  version = "1.1.2";
+  version = "1.1.9";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "lark-parser";
     repo = "lark";
-    rev = version;
-    sha256 = "sha256-Y1bDSiFnqAKTlIcd8aAgtc+I3TLnWF8hhQK2ez96TQs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-pWLKjELy10VNumpBHjBYCO2TltKsZx1GhQcGMHsYJNk=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   # Optional import, but fixes some re known bugs & allows advanced regex features
   propagatedBuildInputs = [ regex ];
@@ -28,7 +33,10 @@ buildPythonPackage rec {
     "lark.grammars"
   ];
 
-  checkInputs = [
+  # Js2py is not supported on 3.12
+  doCheck = pythonOlder "3.12";
+
+  nativeCheckInputs = [
     js2py
     pytestCheckHook
   ];
@@ -38,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://lark-parser.readthedocs.io/";
     changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fridh drewrisinger ];
+    maintainers = with maintainers; [ drewrisinger ];
   };
 }

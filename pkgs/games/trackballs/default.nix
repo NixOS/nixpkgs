@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "trackballs";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "trackballs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fCoQqGXwcpcq/gl67XXY5/wEvCM0ZZTV8LhjC+tnRuo=";
+    sha256 = "sha256-JKSiNe5mu8rRztUhduGFY6IsSMx6VyBqKcGO5EssI+8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://trackballs.github.io/";
     description = "3D Marble Madness clone";
+    mainProgram = "trackballs";
     platforms = platforms.linux;
     # Music is licensed under Ethymonics Free Music License.
     license = licenses.gpl2Plus;

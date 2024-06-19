@@ -4,7 +4,7 @@
 , glib
 , meson
 , ninja
-, wrapGAppsHook
+, wrapGAppsHook3
 , desktop-file-utils
 , gobject-introspection
 , gtk3
@@ -35,17 +35,17 @@ stdenv.mkDerivation rec {
     glib
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     python3.pkgs.wrapPython
     python3
     desktop-file-utils
     gtk3
+    gobject-introspection
   ];
 
   buildInputs = [
     gtk3
     python3.pkgs.gatt
-    gobject-introspection
   ];
 
   pythonPath = with python3.pkgs; [
@@ -61,10 +61,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GTK app to sync InfiniTime watch with PinePhone";
+    mainProgram = "siglo";
     homepage = "https://github.com/theironrobin/siglo";
     changelog = "https://github.com/theironrobin/siglo/tags/v${version}";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ tomfitzhenry ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

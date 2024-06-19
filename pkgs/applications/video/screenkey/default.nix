@@ -1,47 +1,51 @@
 { lib
 , fetchFromGitLab
-# native
-, wrapGAppsHook
-# not native
+, wrapGAppsHook3
 , xorg
 , gobject-introspection
 , gtk3
+, libappindicator-gtk3
+, slop
 , python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "screenkey";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitLab {
-    owner = "screenkey";
-    repo = "screenkey";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1rfngmkh01g5192pi04r1fm7vsz6hg9k3qd313sn9rl9xkjgp11l";
+    hash = "sha256-kWktKzRyWHGd1lmdKhPwrJoSzAIN2E5TKyg30uhM4Ug=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     # for setup hook
     gobject-introspection
   ];
 
   buildInputs = [
     gtk3
+    libappindicator-gtk3
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     babel
     pycairo
     pygobject3
+    dbus-python
   ];
 
-  # Prevent double wrapping because of wrapGAppsHook
+  # Prevent double wrapping because of wrapGAppsHook3
   dontWrapGApps = true;
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
+
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      --prefix PATH ":" "${lib.makeBinPath [ slop ]}"
+      "''${gappsWrapperArgs[@]}"
+      )
   '';
 
   # screenkey does not have any tests
@@ -60,5 +64,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rasendubi ];
+    mainProgram = "screenkey";
   };
 }

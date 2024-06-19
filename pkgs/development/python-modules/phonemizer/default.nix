@@ -1,29 +1,31 @@
-{ lib
-, stdenv
-, substituteAll
-, buildPythonApplication
-, fetchPypi
-, joblib
-, segments
-, attrs
-, dlinfo
-, typing-extensions
-, espeak-ng
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  stdenv,
+  substituteAll,
+  buildPythonPackage,
+  fetchPypi,
+  joblib,
+  segments,
+  attrs,
+  dlinfo,
+  typing-extensions,
+  espeak-ng,
+  pytestCheckHook,
+  pytest-cov,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "phonemizer";
   version = "3.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Bo+F+FqKmtxjijeHrqyvcaU+R1eLEtdzwJdDNQDNiSs=";
+    hash = "sha256-Bo+F+FqKmtxjijeHrqyvcaU+R1eLEtdzwJdDNQDNiSs=";
   };
 
   postPatch = ''
-    sed -i -e '/\'pytest-runner\'/d setup.py
+    sed -i '/pytest-runner/d' setup.py
   '';
 
   patches = [
@@ -32,7 +34,6 @@ buildPythonApplication rec {
       libespeak = "${lib.getLib espeak-ng}/lib/libespeak-ng${stdenv.hostPlatform.extensions.sharedLibrary}";
       # FIXME package festival
     })
-    ./remove-intertwined-festival-test.patch
   ];
 
   propagatedBuildInputs = [
@@ -43,31 +44,15 @@ buildPythonApplication rec {
     typing-extensions
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
-  checkInputs = [
-    pytestCheckHook
-  ];
-
-  # We tried to package festvial, but were unable to get the backend running,
+  # We tried to package festival, but were unable to get the backend running,
   # so let's disable related tests.
-  disabledTestPaths = [
-    "test/test_festival.py"
-  ];
-
-  disabledTests = [
-    "test_festival"
-    "test_festival_path"
-    "test_readme_festival_syll"
-    "test_unicode"
-  ];
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/bootphon/phonemizer";
     changelog = "https://github.com/bootphon/phonemizer/blob/v${version}/CHANGELOG.md";
     description = "Simple text to phones converter for multiple languages";
+    mainProgram = "phonemize";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
   };

@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "chain-bench";
-  version = "0.1.4";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-H0CSeZ7plMJJ3vaf+ihm/PQMPw4DnNsAaVsH4zP8wqs=";
+    sha256 = "sha256-5+jSbXbT1UwHMVeZ07qcY8Is88ddHdr7QlgcbQK+8FA=";
   };
-  vendorSha256 = "sha256-wBt0NbRJdU9yfRx2aIA5P6Q0Q3oysJBnfFbAx1yr3fI=";
+  vendorHash = "sha256-uN4TSAxb229NhcWmiQmWBajla9XKnpiZrXOWJxt/mic=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -43,6 +43,7 @@ buildGoModule rec {
     homepage = "https://github.com/aquasecurity/chain-bench";
     changelog = "https://github.com/aquasecurity/chain-bench/releases/tag/v${version}";
     description = "An open-source tool for auditing your software supply chain stack for security compliance based on a new CIS Software Supply Chain benchmark";
+    mainProgram = "chain-bench";
     longDescription = ''
       Chain-bench is an open-source tool for auditing your software supply chain
       stack for security compliance based on a new CIS Software Supply Chain

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
 }:
 
 buildPythonPackage rec {
   pname = "pymemoize";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
@@ -14,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0yqr60hm700zph6nv8wb6yp2s0i08mahxvw98bvkmw5ijbsviiq7";
   };
 
-  checkInputs = [ django ];
+  nativeCheckInputs = [ django ];
 
   # django.core.exceptions.ImproperlyConfigured: Requested settings, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings
   doCheck = false;
@@ -26,4 +28,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ mmai ];
   };
 }
-

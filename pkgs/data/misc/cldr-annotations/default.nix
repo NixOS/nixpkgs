@@ -1,23 +1,28 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "41.0";
-in fetchzip rec {
-  name = "cldr-annotations-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "cldr-annotations";
+  version = "45.0";
 
-  url = "https://unicode.org/Public/cldr/${lib.versions.major version}/cldr-common-${version}.zip";
+  src = fetchzip {
+    url = "https://unicode.org/Public/cldr/${lib.versions.major version}/cldr-common-${version}.zip";
+    stripRoot = false;
+    hash = "sha256-8Id9thc3LWSw87aNpuSjQuLmFsx+XvXcz8Ox1Ua3sJw=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/unicode/cldr
-    unzip -d $out/share/unicode/cldr $downloadedFile 'common/annotations/*' 'common/annotationsDerived/*'
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/unicode/cldr/common
+    mv common/annotations{,Derived} -t $out/share/unicode/cldr/common
+
+    runHook postInstall
   '';
-
-  sha256 = "sha256-3dHVZGx3FmR97fzhlTSx/xp6YTAV+sMExl6gpLzl1MY=";
 
   meta = with lib; {
     description = "Names and keywords for Unicode characters from the Common Locale Data Repository";
     homepage = "https://cldr.unicode.org";
-    license = licenses.unicode-dfs-2016;
+    license = licenses.unicode-30;
     platforms = platforms.all;
     maintainers = with maintainers; [ DeeUnderscore ];
   };

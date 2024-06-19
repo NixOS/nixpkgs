@@ -1,34 +1,34 @@
 { lib
 , stdenv
-, fetchFromGitea
+, fetchFromGitHub
 , rustPlatform
 , pkg-config
 , asciidoctor
 , openssl
 , Security
+, SystemConfiguration
 , ansi2html
 , installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.28.0";
+  version = "2.1.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "flausch";
+  src = fetchFromGitHub {
+    owner = "swsnr";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    sha256 = "sha256-l64gRoWYYLbPA0n6vNQf14CCUtnkfMnQdqbetIbWvBU=";
+    hash = "sha256-qdNORp9THxHWR95uVcYtCy59OQqdop1012thZN5i64w=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
   buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  cargoSha256 = "sha256-MCldDRleFfl4UrITuMEmLo0JyR+eoi6S6zGvFOMnIBE=";
+  cargoHash = "sha256-/avxRvT35LxCBWkTYJDCtdd95VC67epZIPCMv994uBo=";
 
-  checkInputs = [ ansi2html ];
+  nativeCheckInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.
   checkFlags = [
     "--skip magic::tests::detect_mimetype_of_larger_than_magic_param_bytes_max_length"
@@ -43,15 +43,20 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage $releaseDir/build/mdcat-*/out/mdcat.1
-    installShellCompletion \
-      --bash $releaseDir/build/mdcat-*/out/completions/mdcat.bash \
-      --fish $releaseDir/build/mdcat-*/out/completions/mdcat.fish \
-      --zsh $releaseDir/build/mdcat-*/out/completions/_mdcat
+    ln -sr $out/bin/{mdcat,mdless}
+
+    for bin in mdcat mdless; do
+      installShellCompletion \
+        --bash $releaseDir/build/mdcat-*/out/completions/$bin.bash \
+        --fish $releaseDir/build/mdcat-*/out/completions/$bin.fish \
+        --zsh $releaseDir/build/mdcat-*/out/completions/_$bin
+    done
   '';
 
   meta = with lib; {
     description = "cat for markdown";
-    homepage = "https://codeberg.org/flausch/mdcat";
+    homepage = "https://github.com/swsnr/mdcat";
+    changelog = "https://github.com/swsnr/mdcat/releases/tag/mdcat-${version}";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

@@ -4,13 +4,12 @@
 , libsoup
 , graphicsmagick
 , json-glib
-, wrapGAppsHook
+, wrapGAppsHook3
 , cairo
 , cmake
 , ninja
 , curl
 , perl
-, llvm_13
 , desktop-file-utils
 , exiv2
 , glib
@@ -27,6 +26,7 @@
 , libpng
 , librsvg
 , libtiff
+, libjxl
 , openexr_3
 , osm-gps-map
 , pkg-config
@@ -52,20 +52,24 @@
 , libheif
 , libaom
 , portmidi
-, fetchpatch
 , lua
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.0";
+  version = "4.6.1";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "0bfcag6bj5vcmg4z4xjirs43iafcx89al6jl41i5mrhpjzszh5hl";
+    sha256 = "sha256-Fu3AoHApPi082k6hDkm9qb3pMuI/nmLi+i56x0rPev0=";
   };
 
-  nativeBuildInputs = [ cmake ninja llvm_13 pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
+  patches = [
+    ./fix_darwin_x86_compile.patch
+  ];
+
+
+  nativeBuildInputs = [ cmake ninja llvmPackages.llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook3 ];
 
   buildInputs = [
     cairo
@@ -83,6 +87,7 @@ stdenv.mkDerivation rec {
     libpng
     librsvg
     libtiff
+    libjxl
     openexr_3
     sqlite
     libxslt
@@ -145,6 +150,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.darktable.org";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ goibhniu flosse mrVanDalo paperdigits ];
+    maintainers = with maintainers; [ goibhniu flosse mrVanDalo paperdigits freyacodes ];
   };
 }

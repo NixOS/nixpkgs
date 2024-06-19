@@ -1,21 +1,30 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "lf";
-  version = "27";
+  version = "32";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    hash = "sha256-CrtVw3HhrC+D3c4ltHX8FSQnDvBpQJ890oJHoD6qPt4=";
+    hash = "sha256-rFK1M15NcshVY2vtXcMWZhB9Rd/DRC8JyKE5u4wjh2I=";
   };
 
-  vendorSha256 = "sha256-evkQT624EGj6MUwx3/ajdIbUMYjA1QyOnIQFtTLt0Yo=";
+  vendorHash = "sha256-r1Kq6CYGNbxTTue3sb3CKMsWZJDzX2dKX7QHQ73nZ8g=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" "-X main.gVersion=r${version}" ];
+
+  # Force the use of the pure-go implementation of the os/user library.
+  # Relevant issue: https://github.com/gokcehan/lf/issues/191
+  tags = lib.optionals (!stdenv.isDarwin) [ "osusergo" ];
 
   postInstall = ''
     install -D --mode=444 lf.desktop $out/share/applications/lf.desktop
@@ -34,7 +43,7 @@ buildGoModule rec {
     homepage = "https://godoc.org/github.com/gokcehan/lf";
     changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "lf";
   };
 }

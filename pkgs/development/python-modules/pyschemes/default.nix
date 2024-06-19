@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -22,12 +23,10 @@ buildPythonPackage rec {
     # https://github.com/spy16/pyschemes/pull/6
     (fetchpatch {
       url = "https://github.com/spy16/pyschemes/commit/23011128c6c22838d4fca9e00fd322a20bb566c4.patch";
-      sha256 = "sha256-vDaWxMrn2aC2wmd035EWRZ3cd/XME81z/BWG0f2T9jc=";
+      hash = "sha256-vDaWxMrn2aC2wmd035EWRZ3cd/XME81z/BWG0f2T9jc=";
     })
   ];
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyschemes" ];
 

@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitLab, git, bash }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.0";
+  version = "1.6.0";
   pname = "git-latexdiff";
 
   src = fetchFromGitLab {
-    sha256 = "05fnhr1pqvj8l25vi9hdccwfk4mv2f0pfhn05whbdvf66gyl4fs9";
-    rev = "v${version}";
+    hash = "sha256-DMoGEbCBuqUGjbna3yDpD4WNTikPudYRD4Wy1pPG2mw=";
+    rev = version;
     repo = "git-latexdiff";
     owner = "git-latexdiff";
   };
@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = licenses.bsd3; # https://gitlab.com/git-latexdiff/git-latexdiff/issues/9
     platforms = platforms.unix;
+    mainProgram = "git-latexdiff";
   };
 }

@@ -1,36 +1,55 @@
-{ lib
-, asn1crypto
-, buildPythonPackage
-, certifi
-, cffi
-, charset-normalizer
-, fetchPypi
-, filelock
-, idna
-, oscrypto
-, pycryptodomex
-, pyjwt
-, pyopenssl
-, pythonOlder
-, pytz
-, requests
-, setuptools
-, typing-extensions
+{
+  lib,
+  asn1crypto,
+  buildPythonPackage,
+  certifi,
+  cffi,
+  charset-normalizer,
+  cython,
+  fetchPypi,
+  filelock,
+  idna,
+  keyring,
+  oscrypto,
+  packaging,
+  pandas,
+  platformdirs,
+  pyarrow,
+  pycryptodomex,
+  pyjwt,
+  pyopenssl,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  pytz,
+  requests,
+  setuptools,
+  sortedcontainers,
+  tomlkit,
+  typing-extensions,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.8.0";
-  format = "setuptools";
+  version = "3.8.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gvZ+Nuf+Ns1XIYpsBHdegzA9sjFxT9+Qm6kbsJR8JLY=";
+    hash = "sha256-m8zhoNniEs7s9F7c6gLRjiBalfiMwEcK2kqLrLVCR9U=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    cython
+    setuptools
+    wheel
+  ];
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  dependencies = [
     asn1crypto
     certifi
     cffi
@@ -38,21 +57,25 @@ buildPythonPackage rec {
     filelock
     idna
     oscrypto
+    packaging
+    platformdirs
     pycryptodomex
     pyjwt
     pyopenssl
     pytz
     requests
-    setuptools
+    sortedcontainers
+    tomlkit
     typing-extensions
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pyOpenSSL>=16.2.0,<23.0.0" "pyOpenSSL" \
-      --replace "cryptography>=3.1.0,<37.0.0" "cryptography" \
-      --replace "charset-normalizer~=2.0.0" "charset_normalizer>=2"
-  '';
+  passthru.optional-dependencies = {
+    pandas = [
+      pandas
+      pyarrow
+    ];
+    secure-local-storage = [ keyring ];
+  };
 
   # Tests require encrypted secrets, see
   # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
@@ -66,6 +89,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Snowflake Connector for Python";
     homepage = "https://github.com/snowflakedb/snowflake-connector-python";
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

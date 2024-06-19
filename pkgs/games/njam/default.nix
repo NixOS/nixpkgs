@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
   patches = [ ./logfile.patch ];
 
   meta = {
-    homepage = "http://trackballs.sourceforge.net/";
+    homepage = "https://trackballs.sourceforge.net/";
     description = "Cross-platform pacman-like game";
+    mainProgram = "njam";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

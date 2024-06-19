@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, botan2, libobjc, Security }:
+{ lib, stdenv, fetchurl, botan2, sqlite, libobjc, Security }:
 
 stdenv.mkDerivation rec {
 
@@ -12,15 +12,16 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-crypto-backend=botan"
-    "--with-botan=${botan2}"
+    "--with-botan=${lib.getDev botan2}"
+    "--with-objectstore-backend-db"
     "--sysconfdir=$out/etc"
     "--localstatedir=$out/var"
-    ];
+  ];
 
   propagatedBuildInputs =
     lib.optionals stdenv.isDarwin [ libobjc Security ];
 
-  buildInputs = [ botan2 ];
+  buildInputs = [ botan2 sqlite ];
 
   postInstall = "rm -rf $out/var";
 

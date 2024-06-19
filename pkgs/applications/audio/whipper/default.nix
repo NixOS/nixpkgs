@@ -2,6 +2,7 @@
 , python3
 , fetchFromGitHub
 , fetchpatch
+, installShellFiles
 , libcdio-paranoia
 , cdrdao
 , libsndfile
@@ -35,6 +36,8 @@ in python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = with python3.pkgs; [
+    installShellFiles
+
     setuptools-scm
     docutils
     setuptoolsCheckHook
@@ -53,7 +56,7 @@ in python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [ libsndfile ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     twisted
   ] ++ bins;
 
@@ -61,8 +64,9 @@ in python3.pkgs.buildPythonApplication rec {
     "--prefix" "PATH" ":" (lib.makeBinPath bins)
   ];
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
+  outputs = [ "out" "man" ];
+  postBuild = ''
+    make -C man
   '';
 
   preCheck = ''
@@ -71,6 +75,10 @@ in python3.pkgs.buildPythonApplication rec {
     substituteInPlace whipper/test/test_common_accurip.py \
       --replace "test_AccurateRipResponse" "dont_test_AccurateRipResponse"
     export HOME=$TMPDIR
+  '';
+
+  postInstall = ''
+    installManPage man/*.1
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -83,6 +91,6 @@ in python3.pkgs.buildPythonApplication rec {
     description = "A CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ emily ];
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

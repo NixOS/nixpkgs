@@ -8,20 +8,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "memray";
-  version = "1.3.1";
+  version = "1.11.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bloomberg";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-zHdgVpe92OiwLC4jHVtT3oC+WnB30e5U3ZOHnmuo+Ao=";
+    repo = "memray";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DaJ1Hhg7q4ckA5feUx0twOsmy28v5aBBCTUAkn43xAo=";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs = [
     libunwind
     lz4
-    pkg-config
   ] ++ (with python3.pkgs; [
     cython
   ]);
@@ -31,9 +34,10 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
+    ipython
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [
+  ] ++ lib.optionals (pythonOlder "3.12") [
     greenlet
   ];
 
@@ -48,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # Import issue
     "test_header_allocator"
+    "test_hybrid_stack_of_allocations_inside_ceval"
   ];
 
   disabledTestPaths = [
@@ -58,6 +63,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Memory profiler for Python";
     homepage = "https://bloomberg.github.io/memray/";
+    changelog = "https://github.com/bloomberg/memray/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.linux;

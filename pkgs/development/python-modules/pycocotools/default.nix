@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, matplotlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  matplotlib,
 }:
 
 buildPythonPackage rec {
   pname = "pycocotools";
-  version = "2.0.5";
+  version = "2.0.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QdH7Bi31urXrw+kpcUVaoIlHnnzRBVMnjKVGKLncm/U=";
+    hash = "sha256-2ot4FRlu6/Ctq/Z/zEWRJsvGSYu8arH9FEw3FGXYaHk=";
   };
 
   propagatedBuildInputs = [

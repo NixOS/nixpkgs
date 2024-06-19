@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, pcre
+, pcre2
 , uthash
 , lua5_4
 , makeWrapper
@@ -11,28 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mle";
-  version = "1.5.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "adsr";
     repo = "mle";
     rev = "v${version}";
-    sha256 = "1nhd00lsx9v12zdmps92magz76c2d8zzln3lxvzl4ng73gbvq3n0";
+    sha256 = "0rkk7mh6w5y1lrbdv7wmxdgl5cqzpzw0p26adazkqlfdyb6wbj9k";
   };
-
-  # Bug fixes found after v1.5.0 release
-  patches = [
-    (fetchpatch {
-      name = "skip_locale_dep_test.patch";
-      url = "https://github.com/adsr/mle/commit/e4dc4314b02a324701d9ae9873461d34cce041e5.patch";
-      sha256 = "sha256-j3Z/n+2LqB9vEkWzvRVSOrF6yE+hk6f0dvEsTQ74erw=";
-    })
-    (fetchpatch {
-      name = "fix_input_trail.patch";
-      url = "https://github.com/adsr/mle/commit/bc05ec0eee4143d824010c6688fce526550ed508.patch";
-      sha256 = "sha256-dM63EBDQfHLAqGZk3C5NtNAv23nCTxXVW8XpLkAeEyQ=";
-    })
-  ];
 
   # Fix location of Lua 5.4 header and library
   postPatch = ''
@@ -41,13 +26,9 @@ stdenv.mkDerivation rec {
     patchShebangs tests/*
   '';
 
-  # Use select(2) instead of poll(2) (poll is returning POLLINVAL on macOS)
-  # Enable compiler optimization
-  CFLAGS = "-DTB_OPT_SELECT -O2";
-
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  buildInputs = [ pcre uthash lua5_4 ];
+  buildInputs = [ pcre2 uthash lua5_4 ];
 
   doCheck = true;
 
@@ -63,5 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ adsr ];
+    mainProgram = "mle";
   };
 }

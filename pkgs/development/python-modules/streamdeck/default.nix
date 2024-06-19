@@ -1,18 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, pkgs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "streamdeck";
-  version = "0.9.2";
+  version = "0.9.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XhNB/flNju2XdOMbVo7X4dhGCqNEV1314PDFC9Ma3nw=";
+    hash = "sha256-BHliZrRFd64D+UD1xcpp2HAH4D0Z7tibawJobAMM65E=";
   };
 
   patches = [

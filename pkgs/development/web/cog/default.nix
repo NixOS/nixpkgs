@@ -10,7 +10,7 @@
 , glib-networking
 , webkitgtk
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , gnome
 , gdk-pixbuf
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     pkg-config
     wayland
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   depsBuildsBuild = [

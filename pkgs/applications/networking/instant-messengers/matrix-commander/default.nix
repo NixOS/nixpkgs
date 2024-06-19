@@ -7,23 +7,23 @@
 , python-magic
 , markdown
 , pillow
-, urllib3
 , aiofiles
 , notify2
 , dbus-python
 , pyxdg
 , python-olm
+, emoji
 }:
 
 buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "3.5.0";
+  version = "7.6.2";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
-    sha256 = "sha256-/hNTaajZTyeIcGILIXqUVbBvZ8AUNZKBDsZ4Gr5RL2o=";
+    hash = "sha256-BiQShJHCTvEdkhp21uxxCTxBZ1eezuWE6btMc/wkPlc=";
   };
 
   format = "pyproject";
@@ -45,19 +45,20 @@ buildPythonApplication rec {
     python-magic
     markdown
     pillow
-    urllib3
     aiofiles
     notify2
     dbus-python
     pyxdg
     python-olm
-  ];
+    emoji
+  ] ++ matrix-nio.optional-dependencies.e2e;
 
   meta = with lib; {
     description = "Simple but convenient CLI-based Matrix client app for sending and receiving";
+    mainProgram = "matrix-commander";
     homepage = "https://github.com/8go/matrix-commander";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.seb314 ];
   };
 }

@@ -73,9 +73,9 @@ in stdenv.mkDerivation {
   buildCommand = ''
     system=$lib/lib/systemd/system
 
-    install -Dm444 ${service "fcopy" "file copy (FCOPY)" "hv_fcopy" } $system/hv-fcopy.service
-    install -Dm444 ${service "kvp"   "key-value pair (KVP)"     ""  } $system/hv-kvp.service
-    install -Dm444 ${service "vss"   "volume shadow copy (VSS)" ""  } $system/hv-vss.service
+    install -Dm444 ${service "fcopy" "file copy (FCOPY)"        "hv_fcopy" } $system/hv-fcopy.service
+    install -Dm444 ${service "kvp"   "key-value pair (KVP)"     "hv_kvp"   } $system/hv-kvp.service
+    install -Dm444 ${service "vss"   "volume shadow copy (VSS)" "hv_vss"   } $system/hv-vss.service
 
     cat > $system/hyperv-daemons.target <<EOF
     [Unit]
@@ -97,6 +97,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Integration Services for running NixOS under HyperV";
+    mainProgram = "lsvmbus";
     longDescription = ''
       This packages contains the daemons that are used by the Hyper-V hypervisor
       on the host.

@@ -1,20 +1,30 @@
-{fetchurl, lib, stdenv, flex, db}:
+{ lib
+, stdenv
+, fetchurl
+, flex
+, db
+, makeWrapper
+, pax
+}:
 
 stdenv.mkDerivation rec {
   pname = "bogofilter";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bogofilter/bogofilter-${version}.tar.bz2";
-    sha256 = "1d56n2m9inm8gnzm88aa27xl2a7sp7aff3484vmflpqkinjqf0p1";
+    url = "mirror://sourceforge/bogofilter/bogofilter-${version}.tar.xz";
+    hash = "sha256-MkihNzv/VSxQCDStvqS2yu4EIkUWrlgfslpMam3uieo=";
   };
 
-  # FIXME: We would need `pax' as a "propagated build input" (for use
-  # by the `bf_tar' script) but we don't have it currently.
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ flex db ];
 
   doCheck = false; # needs "y" tool
+
+  postInstall = ''
+    wrapProgram "$out/bin/bf_tar" --prefix PATH : "${lib.makeBinPath [ pax ]}"
+  '';
 
   meta = {
     homepage = "http://bogofilter.sourceforge.net/";
@@ -25,7 +35,7 @@ stdenv.mkDerivation rec {
       classifications and corrections.  It is based on a Bayesian
       filter.
     '';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
 }

@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libX11
     xorgproto
@@ -51,7 +52,6 @@ stdenv.mkDerivation rec {
     gnuchess
     texinfo
     libXpm
-    pkg-config
     librsvg
     cairo
     pango
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GUI for chess engines";
+    mainProgram = "xboard";
     homepage = "https://www.gnu.org/software/xboard/";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;

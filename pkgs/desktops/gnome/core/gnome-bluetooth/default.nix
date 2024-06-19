@@ -14,7 +14,7 @@
 , upower
 , itstool
 , libxml2
-, wrapGAppsHook
+, wrapGAppsHook4
 , libnotify
 , gsound
 , gobject-introspection
@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-bluetooth";
-  version = "42.2";
+  version = "46.0";
 
   # TODO: split out "lib"
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "jOjs+rKCctsYMKY/CPnMtTBHNNG+Lb/OeV/kAp5inww=";
+    hash = "sha256-E/4edfMXrNvfXoDJAp0uBjLWCpzPcqQ64263VFAh++8=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook4
     gobject-introspection
     gtk-doc
     docbook-xsl-nons
@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-bluetooth";
     description = "Application that lets you manage Bluetooth in the GNOME desktop";
+    mainProgram = "bluetooth-sendto";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

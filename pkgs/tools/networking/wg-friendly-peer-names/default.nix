@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "wg-friendly-peer-names";
-  version = "unstable-2021-11-08";
+  version = "unstable-2021-12-10";
 
   src = fetchFromGitHub {
     owner = "FlyveHest";
     repo = "wg-friendly-peer-names";
-    rev = "66b9b6b74ec77b9fec69b2a58296635321d4f5f1";
-    sha256 = "pH/b5rCHIqLxz/Fnx+Dm0m005qAUWBsczSU9vGEQ2RQ=";
+    rev = "b0c3e1a95c843dc9c6432895105b839ef9b362fc";
+    hash = "sha256-aGxrABmR+aQO35RYo/zI2037clnGOW0Tr16p7M1fQqc=";
   };
 
   installPhase = ''

@@ -6,7 +6,8 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
+, gtk3
 , atk
 , libhandy
 , libnotify
@@ -31,12 +32,12 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
+    gtk3
     atk
-    gobject-introspection
     libhandy
     libnotify
     pango
@@ -51,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Mobile-friendly Gtk frontend for password-store";
+    mainProgram = "caerbannog";
     homepage = "https://sr.ht/~craftyguy/caerbannog/";
     changelog = "https://git.sr.ht/~craftyguy/caerbannog/refs/${version}";
     license = licenses.gpl3Plus;

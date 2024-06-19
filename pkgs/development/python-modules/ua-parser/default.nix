@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ua-parser";
-  version = "0.15.0";
+  version = "0.18.0";
 
   format = "setuptools";
 
@@ -16,29 +17,14 @@ buildPythonPackage rec {
     repo = "uap-python";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-TtOj1ZL8+4T95AgF9ErvI+0W35WQ23snFhCyCbuRjxM=";
+    hash = "sha256-GiuGPnyYL0HQ/J2OpDTD1/panZCuzKtD3mKW5op5lXA=";
   };
 
-  patches = [
-    ./dont-fetch-submodule.patch
-  ];
+  patches = [ ./dont-fetch-submodule.patch ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pyyaml ~= 5.4.0" pyyaml
-  '';
+  nativeBuildInputs = [ pyyaml ];
 
-  nativeBuildInputs = [
-    pyyaml
-  ];
-
-  preBuild = ''
-    mkdir -p build/lib/ua_parser
-  '';
-
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # import from $out

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocaml findlib ];
   strictDeps = true;
 
-  buildFlags = "release";
+  buildFlags = [ "release" ];
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
@@ -27,8 +27,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://dune.build/";
     description = "A composable build system";
+    mainProgram = "dune";
     changelog = "https://github.com/ocaml/dune/raw/${version}/CHANGES.md";
-    maintainers = [ lib.maintainers.vbgl lib.maintainers.marsam ];
+    maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.mit;
     inherit (ocaml.meta) platforms;
   };

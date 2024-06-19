@@ -6,6 +6,8 @@
 , python3
 , libxslt
 , makeWrapper
+, autoreconfHook
+, gtk-doc
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +29,9 @@ stdenv.mkDerivation rec {
     pkg-config
     libxslt
     makeWrapper
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoreconfHook
+    gtk-doc
   ];
 
   propagatedBuildInputs = [
@@ -47,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "An account manager and channel dispatcher for the Telepathy framework";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-mission-control/";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

@@ -1,30 +1,27 @@
 { lib
 , stdenv
 , fetchurl
+, asar
 , dpkg
-, electron_16
+, electron
 , makeWrapper
 , nixosTests
-, nodePackages
 , undmg
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
 
-  version = "3.1.0";
+  sources = import ./sources.nix;
 
   systemArgs = rec {
-    x86_64-linux = rec {
-      src = fetchurl {
-        url = "https://download.breitbandmessung.de/bbm/Breitbandmessung-${version}-linux.deb";
-        sha256 = "sha256-jSP+H9ej9Wd+swBZSy9uMi2ExSTZ191FGZhqaocTl7w=";
-      };
+    x86_64-linux = {
+      src = fetchurl sources.x86_64-linux;
 
       nativeBuildInputs = [
+        asar
         dpkg
         makeWrapper
-        nodePackages.asar
       ];
 
       unpackPhase = "dpkg-deb -x $src .";
@@ -49,7 +46,7 @@ let
         }
         EOF
 
-        makeWrapper ${electron_16}/bin/electron $out/bin/breitbandmessung \
+        makeWrapper ${electron}/bin/electron $out/bin/breitbandmessung \
           --add-flags $out/share/breitbandmessung/resources/build/electron.js
 
         # Fix the desktop link
@@ -59,10 +56,7 @@ let
     };
 
     x86_64-darwin = {
-      src = fetchurl {
-        url = "https://download.breitbandmessung.de/bbm/Breitbandmessung-${version}-mac.dmg";
-        sha256 = "sha256-2c8mDKJuHDSw7p52EKnJO5vr2kNTLU6r9pmGPANjE20=";
-      };
+      src = fetchurl sources.x86_64-darwin;
 
       nativeBuildInputs = [ undmg ];
 
@@ -79,9 +73,10 @@ let
 in
 stdenv.mkDerivation ({
   pname = "breitbandmessung";
-  inherit version;
+  inherit (sources) version;
 
   passthru.tests = { inherit (nixosTests) breitbandmessung; };
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Broadband internet speed test app from the german Bundesnetzagentur";

@@ -1,23 +1,24 @@
-{ lib
-, boto3
-, botocore
-, buildPythonPackage
-, cached-property
-, click
-, click-option-group
-, fetchFromGitHub
-, jinja2
-, markdown
-, policy-sentry
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, schema
+{
+  lib,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  cached-property,
+  click,
+  click-option-group,
+  fetchFromGitHub,
+  jinja2,
+  markdown,
+  policy-sentry,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  schema,
 }:
 
 buildPythonPackage rec {
   pname = "cloudsplaining";
-  version = "0.5.0";
+  version = "0.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = pname;
-    rev = version;
-    hash = "sha256-HdZHRK/Q544z9ySbjNIjqiXzel0UTsnb9tuXawbkwZg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7aOPerqayuJTHItlpnVVSzOlSGNnqHvtIi5BdovNh3A=";
   };
 
   propagatedBuildInputs = [
@@ -42,9 +43,7 @@ buildPythonPackage rec {
     schema
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     # Ignore pinned versions
@@ -56,12 +55,11 @@ buildPythonPackage rec {
     "test_statement_details_for_allow_not_action"
   ];
 
-  pythonImportsCheck = [
-    "cloudsplaining"
-  ];
+  pythonImportsCheck = [ "cloudsplaining" ];
 
   meta = with lib; {
     description = "Python module for AWS IAM security assessment";
+    mainProgram = "cloudsplaining";
     homepage = "https://github.com/salesforce/cloudsplaining";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];

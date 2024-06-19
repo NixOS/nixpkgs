@@ -7,7 +7,7 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
     url = "https://wsr.imagej.net/distros/cross-platform/ij${version}.zip";
     sha256 = "sha256-MGuUdUDuW3s/yGC68rHr6xxzmYScUjdXRawDpc1UQqw=";
   };
-  nativeBuildInputs = [ copyDesktopItems makeWrapper unzip wrapGAppsHook ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper unzip wrapGAppsHook3 ];
   buildInputs = [ glib ];
   dontWrapGApps = true;
 
@@ -78,5 +78,6 @@ in stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     platforms = platforms.unix;
     maintainers = with maintainers; [ yuriaisaka ];
+    mainProgram = "imagej";
   };
 }

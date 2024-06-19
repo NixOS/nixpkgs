@@ -1,6 +1,6 @@
 # This module defines a system-wide environment that will be
 # initialised by pam_env (that is, not only in shells).
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -16,7 +16,7 @@ in
 
     environment.sessionVariables = mkOption {
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         A set of environment variables used in the global environment.
         These variables will be set by PAM early in the login process.
 
@@ -32,14 +32,13 @@ in
         therefore not possible to use PAM style variables such as
         `@{HOME}`.
       '';
-      type = with types; attrsOf (either str (listOf str));
-      apply = mapAttrs (n: v: if isList v then concatStringsSep ":" v else v);
+      inherit (options.environment.variables) type apply;
     };
 
     environment.profileRelativeSessionVariables = mkOption {
       type = types.attrsOf (types.listOf types.str);
       example = { PATH = [ "/bin" ]; MANPATH = [ "/man" "/share/man" ]; };
-      description = lib.mdDoc ''
+      description = ''
         Attribute set of environment variable used in the global
         environment. These variables will be set by PAM early in the
         login process.

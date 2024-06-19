@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
   # Check inputs
-, pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-constraint";
   version = "1.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "python-constraint";
@@ -16,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "1dv11406yxmmgkkhwzqicajbg2bmla5xfad7lv57zyahxz8jzz94";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   dontUseSetuptoolsCheck = true;
 
   meta = with lib; {

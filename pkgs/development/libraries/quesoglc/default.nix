@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       provides Unicode support and is designed to be easily ported to any
       platform that supports both FreeType and the OpenGL API.
     '';
-    homepage = "http://quesoglc.sourceforge.net/";
+    homepage = "https://quesoglc.sourceforge.net/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;

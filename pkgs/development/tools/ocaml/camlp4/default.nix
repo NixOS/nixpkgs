@@ -56,7 +56,9 @@ stdenv.mkDerivation rec {
     inherit (param) sha256;
   };
 
-  buildInputs = [ which ocaml ocamlbuild ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ which ocaml ocamlbuild ];
 
   # build fails otherwise
   enableParallelBuilding = false;

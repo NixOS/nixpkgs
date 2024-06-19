@@ -1,8 +1,8 @@
 diff --git a/src/libcalamares/utils/Runner.cpp b/src/libcalamares/utils/Runner.cpp
-index c7146c2d7..e165d9a8f 100644
+index 632f32028..fe9052449 100644
 --- a/src/libcalamares/utils/Runner.cpp
 +++ b/src/libcalamares/utils/Runner.cpp
-@@ -140,13 +140,13 @@ Calamares::Utils::Runner::run()
+@@ -137,13 +137,13 @@ Calamares::Utils::Runner::run()
      }
      if ( m_location == RunLocation::RunInTarget )
      {
@@ -21,10 +21,10 @@ index c7146c2d7..e165d9a8f 100644
  
      if ( m_output )
 diff --git a/src/modules/mount/main.py b/src/modules/mount/main.py
-index a3318d1a0..5fbe202fd 100644
+index 4202639f3..de2556b91 100644
 --- a/src/modules/mount/main.py
 +++ b/src/modules/mount/main.py
-@@ -152,7 +152,8 @@ def mount_partition(root_mount_point, partition, partitions):
+@@ -235,7 +235,8 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
  
      # Ensure that the created directory has the correct SELinux context on
      # SELinux-enabled systems.
@@ -34,7 +34,7 @@ index a3318d1a0..5fbe202fd 100644
      try:
          subprocess.call(['chcon', '--reference=' + raw_mount_point, mount_point])
      except FileNotFoundError as e:
-@@ -193,13 +194,13 @@ def mount_partition(root_mount_point, partition, partitions):
+@@ -278,13 +279,13 @@ def mount_partition(root_mount_point, partition, partitions, mount_options, moun
          for s in btrfs_subvolumes:
              if not s["subvolume"]:
                  continue
@@ -52,10 +52,10 @@ index a3318d1a0..5fbe202fd 100644
          device = partition["device"]
  
 diff --git a/src/modules/welcome/checker/GeneralRequirements.cpp b/src/modules/welcome/checker/GeneralRequirements.cpp
-index ca7219ca4..6ac682ba4 100644
+index a58f3df83..b66576b09 100644
 --- a/src/modules/welcome/checker/GeneralRequirements.cpp
 +++ b/src/modules/welcome/checker/GeneralRequirements.cpp
-@@ -371,10 +371,34 @@ GeneralRequirements::checkEnoughStorage( qint64 requiredSpace )
+@@ -431,10 +431,35 @@ GeneralRequirements::checkEnoughStorage( qint64 requiredSpace )
      cWarning() << "GeneralRequirements is configured without libparted.";
      return false;
  #else
@@ -88,9 +88,10 @@ index ca7219ca4..6ac682ba4 100644
 +
 +    return false;
 +}
- 
++
  bool
  GeneralRequirements::checkEnoughRam( qint64 requiredRam )
+ {
 diff --git a/src/modules/welcome/checker/GeneralRequirements.h b/src/modules/welcome/checker/GeneralRequirements.h
 index b6646da11..ea27324fa 100644
 --- a/src/modules/welcome/checker/GeneralRequirements.h

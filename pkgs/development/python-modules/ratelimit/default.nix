@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ratelimit";
   version = "2.2.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tomasbasham";
@@ -19,7 +21,7 @@ buildPythonPackage rec {
     sed -i "/--cov/d" pytest.ini
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "tests" ];
 

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, flake8
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  flake8,
 }:
 
 buildPythonPackage rec {
   pname = "getkey";
   version = "0.6.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -20,7 +22,7 @@ buildPythonPackage rec {
     rm setup.cfg
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     flake8
     pytestCheckHook
   ];

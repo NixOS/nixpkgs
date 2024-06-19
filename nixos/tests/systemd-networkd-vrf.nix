@@ -1,5 +1,26 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: let
   inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+
+  mkNode = vlan: id: {
+    virtualisation.vlans = [ vlan ];
+    networking = {
+      useDHCP = false;
+      useNetworkd = true;
+    };
+
+    systemd.network = {
+      enable = true;
+
+      networks."10-eth${toString vlan}" = {
+        matchConfig.Name = "eth${toString vlan}";
+        linkConfig.RequiredForOnline = "no";
+        networkConfig = {
+          Address = "192.168.${toString vlan}.${toString id}/24";
+          IPForward = "yes";
+        };
+      };
+    };
+  };
 in {
   name = "systemd-networkd-vrf";
   meta.maintainers = with lib.maintainers; [ ma27 ];
@@ -38,14 +59,14 @@ in {
           matchConfig.Name = "vrf1";
           networkConfig.IPForward = "yes";
           routes = [
-            { routeConfig = { Destination = "192.168.1.2"; Metric = 100; }; }
+            { Destination = "192.168.1.2"; Metric = 100; }
           ];
         };
         networks."10-vrf2" = {
           matchConfig.Name = "vrf2";
           networkConfig.IPForward = "yes";
           routes = [
-            { routeConfig = { Destination = "192.168.2.3"; Metric = 100; }; }
+            { Destination = "192.168.2.3"; Metric = 100; }
           ];
         };
 
@@ -54,7 +75,7 @@ in {
           linkConfig.RequiredForOnline = "no";
           networkConfig = {
             VRF = "vrf1";
-            Address = "192.168.1.1";
+            Address = "192.168.1.1/24";
             IPForward = "yes";
           };
         };
@@ -63,78 +84,23 @@ in {
           linkConfig.RequiredForOnline = "no";
           networkConfig = {
             VRF = "vrf2";
-            Address = "192.168.2.1";
+            Address = "192.168.2.1/24";
             IPForward = "yes";
           };
         };
       };
     };
 
-    node1 = { pkgs, ... }: {
-      virtualisation.vlans = [ 1 ];
-      networking = {
-        useDHCP = false;
-        useNetworkd = true;
-      };
+    node1 = lib.mkMerge [
+      (mkNode 1 2)
+      {
+        services.openssh.enable = true;
+        users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
+      }
+    ];
 
-      services.openssh.enable = true;
-      users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
-
-      systemd.network = {
-        enable = true;
-
-        networks."10-eth1" = {
-          matchConfig.Name = "eth1";
-          linkConfig.RequiredForOnline = "no";
-          networkConfig = {
-            Address = "192.168.1.2";
-            IPForward = "yes";
-          };
-        };
-      };
-    };
-
-    node2 = { pkgs, ... }: {
-      virtualisation.vlans = [ 2 ];
-      networking = {
-        useDHCP = false;
-        useNetworkd = true;
-      };
-
-      systemd.network = {
-        enable = true;
-
-        networks."10-eth2" = {
-          matchConfig.Name = "eth2";
-          linkConfig.RequiredForOnline = "no";
-          networkConfig = {
-            Address = "192.168.2.3";
-            IPForward = "yes";
-          };
-        };
-      };
-    };
-
-    node3 = { pkgs, ... }: {
-      virtualisation.vlans = [ 2 ];
-      networking = {
-        useDHCP = false;
-        useNetworkd = true;
-      };
-
-      systemd.network = {
-        enable = true;
-
-        networks."10-eth2" = {
-          matchConfig.Name = "eth2";
-          linkConfig.RequiredForOnline = "no";
-          networkConfig = {
-            Address = "192.168.2.4";
-            IPForward = "yes";
-          };
-        };
-      };
-    };
+    node2 = mkNode 2 3;
+    node3 = mkNode 2 4;
   };
 
   testScript = ''
@@ -158,22 +124,6 @@ in {
     node1.wait_for_unit("network.target")
     node2.wait_for_unit("network.target")
     node3.wait_for_unit("network.target")
-
-    client_ipv4_table = """
-    192.168.1.2 dev vrf1 proto static metric 100\x20
-    192.168.2.3 dev vrf2 proto static metric 100
-    """.strip()
-    vrf1_table = """
-    192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.1\x20
-    local 192.168.1.1 dev eth1 proto kernel scope host src 192.168.1.1\x20
-    broadcast 192.168.1.255 dev eth1 proto kernel scope link src 192.168.1.1
-    """.strip()
-    vrf2_table = """
-    192.168.2.0/24 dev eth2 proto kernel scope link src 192.168.2.1\x20
-    local 192.168.2.1 dev eth2 proto kernel scope host src 192.168.2.1\x20
-    broadcast 192.168.2.255 dev eth2 proto kernel scope link src 192.168.2.1
-    """.strip()
-    # editorconfig-checker-enable
 
     # Check that networkd properly configures the main routing table
     # and the routing tables for the VRF.

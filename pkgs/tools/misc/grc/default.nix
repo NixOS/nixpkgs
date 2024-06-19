@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonApplication
+, installShellFiles
 }:
 
 buildPythonApplication rec {
@@ -20,12 +21,20 @@ buildPythonApplication rec {
       substituteInPlace $f \
         --replace /usr/local/ $out/
     done
+
+    # Support for absolute store paths.
+    substituteInPlace grc.conf \
+      --replace "^([/\w\.]+\/)" "^([/\w\.\-]+\/)"
   '';
+
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
     runHook preInstall
+
     ./install.sh "$out" "$out"
-    install -Dm444 -t $out/share/zsh/vendor-completions _grc
+    installShellCompletion --zsh --name _grc _grc
+
     runHook postInstall
   '';
 
@@ -37,7 +46,8 @@ buildPythonApplication rec {
       beautifying your logfiles or output of commands.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 AndersonTorres peterhoeg ];
+    maintainers = with maintainers; [ azahi lovek323 AndersonTorres peterhoeg ];
     platforms = platforms.unix;
+    mainProgram = "grc";
   };
 }

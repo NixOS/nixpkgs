@@ -8,16 +8,16 @@ with lib;
 
 buildGoModule rec {
   pname = "gogs";
-  version = "0.12.10";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "gogs";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "sha256-EFGC94aIMW7AYJpgaHBT4W7BjXd+oijMqQPH40rIvlg=";
+    sha256 = "sha256-UfxE+NaqDr3XUXpvlV989Iwjq/lsAwpMTDAPkcOmma8=";
   };
 
-  vendorSha256 = "sha256-5AnQ7zF2UK1HNoyr6gwFdVv+KMJEGkjKPpDEpUXckUg=";
+  vendorHash = "sha256-ISJOEJ1DWO4nnMpDuZ36Nq528LhgekDh3XUF8adlj2w=";
 
   subPackages = [ "." ];
 
@@ -44,5 +44,13 @@ buildGoModule rec {
     homepage = "https://gogs.io";
     license = licenses.mit;
     maintainers = [ maintainers.schneefux ];
+    mainProgram = "gogs";
+    knownVulnerabilities = [ ''
+      Gogs has known unpatched vulnerabilities and upstream maintainers appears to be unresponsive.
+
+      More information can be found in forgejo's blogpost: https://forgejo.org/2023-11-release-v1-20-5-1/
+
+      You might want to consider migrating to Gitea or forgejo.
+    '' ];
   };
 }

@@ -1,6 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
 let
+  stdenv = stdenvNoCC;
+
   pname = "ookla-speedtest";
   version = "1.2.0";
 
@@ -9,9 +11,17 @@ let
       url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-x86_64.tgz";
       sha256 = "sha256-VpBZbFT/m+1j+jcy+BigXbwtsZrTbtaPIcpfZNXP7rc=";
     };
+    i686-linux = fetchurl {
+      url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-i386.tgz";
+      sha256 = "sha256-n/fhjbrn7g4DxmEIRFovts7qbIb2ZILhOS9ViBt3L+g=";
+    };
     aarch64-linux = fetchurl {
       url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-aarch64.tgz";
       sha256 = "sha256-OVPSMdo3g+K/iQS23XJ2fFxuUz4WPTdC/QQ3r/pDG9M=";
+    };
+    armv7l-linux = fetchurl {
+      url = "https://install.speedtest.net/app/cli/${pname}-${version}-linux-armhf.tgz";
+      sha256 = "sha256-5F/N672KGFVTU1Uz3QMtaxC8jGTu5BObEUe5wJg10I0=";
     };
     x86_64-darwin = fetchurl {
       url = "https://install.speedtest.net/app/cli/${pname}-${version}-macosx-universal.tgz";
@@ -26,9 +36,7 @@ stdenv.mkDerivation rec {
 
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  setSourceRoot = ''
-    sourceRoot=$PWD
-  '';
+  sourceRoot = ".";
 
   dontBuild = true;
   dontConfigure = true;
@@ -45,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ kranzes ];
     platforms = lib.attrNames srcs;
+    mainProgram = "speedtest";
   };
 }

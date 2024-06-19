@@ -14,7 +14,7 @@ let
           inherit sha256;
         };
 
-        vendorSha256 = null;
+        vendorHash = null;
 
         nativeBuildInputs = [ installShellFiles ];
 
@@ -38,33 +38,32 @@ let
 
         meta = with lib; {
           description = "Easiest way to get a production Kubernetes up and running";
+          mainProgram = "kops";
           homepage = "https://github.com/kubernetes/kops";
           changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
           maintainers = with maintainers; [ offline zimbatm diegolelis yurrriq ];
-          platforms = platforms.unix;
         };
       } // attrs';
 in
 rec {
   mkKops = generic;
 
-  kops_1_22 = mkKops rec {
-    version = "1.22.4";
-    sha256 = "sha256-osU7yI77ZALGrAGuP8qAgv+ogDRn+BSVmcjPbi/WEKE=";
+  kops_1_26 = mkKops rec {
+    version = "1.26.6";
+    sha256 = "sha256-qaehvPgB3phZl/K577hig4G4RxAUi6Im94vXP5ctnWM=";
     rev = "v${version}";
   };
 
-  kops_1_23 = mkKops rec {
-    version = "1.23.2";
-    sha256 = "sha256-9GANjGRS9QaJw+CEeMv/f+rEu37QV2YxMvSRSH6+3PM=";
+  kops_1_27 = mkKops rec {
+    version = "1.27.1";
+    sha256 = "sha256-WV+0380yj8GHckY4PDM3WspbZ/YuYZOAQEMd2ygEOjo=";
     rev = "v${version}";
   };
 
-  kops_1_24 = mkKops rec {
-    version = "1.24.3";
-    sha256 = "sha256-o84060P2aHTIm61lSkz2/GqzYd2NYk1zKgGdNaHlWfA=";
+  kops_1_28 = mkKops rec {
+    version = "1.29.0";
+    sha256 = "sha256-YneB9pc4IR+tYPRFE5CS+4JK/kPOHMo5/70A3k1x1tg=";
     rev = "v${version}";
   };
-
 }

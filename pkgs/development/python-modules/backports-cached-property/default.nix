@@ -1,6 +1,13 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, setuptools-scm, wheel
-, pytestCheckHook, pytest-mock, pytest-sugar
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools-scm,
+  wheel,
+  pytestCheckHook,
+  pytest-mock,
+  pytest-sugar,
 }:
 
 buildPythonPackage rec {
@@ -14,28 +21,20 @@ buildPythonPackage rec {
     owner = "penguinolog";
     repo = "backports.cached_property";
     rev = version;
-    sha256 = "sha256-rdgKbVQaELilPrN4ve8RbbaLiT14Xex0esy5vUX2ZBc=";
+    hash = "sha256-rdgKbVQaELilPrN4ve8RbbaLiT14Xex0esy5vUX2ZBc=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  nativeBuildInputs = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  propagatedBuildInputs = [ wheel ];
 
-  propagatedBuildInputs = [
-    wheel
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     pytest-sugar
   ];
 
-  pythonImportsCheck = [
-    "backports.cached_property"
-  ];
+  pythonImportsCheck = [ "backports.cached_property" ];
 
   meta = with lib; {
     description = "Python 3.8 functools.cached_property backport to python 3.6";

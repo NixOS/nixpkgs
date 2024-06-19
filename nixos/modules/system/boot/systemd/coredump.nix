@@ -10,7 +10,7 @@ in {
     systemd.coredump.enable = mkOption {
       default = true;
       type = types.bool;
-      description = lib.mdDoc ''
+      description = ''
         Whether core dumps should be processed by
         {command}`systemd-coredump`. If disabled, core dumps
         appear in the current directory of the crashing process.
@@ -21,7 +21,7 @@ in {
       default = "";
       type = types.lines;
       example = "Storage=journal";
-      description = lib.mdDoc ''
+      description = ''
         Extra config options for systemd-coredump. See coredump.conf(5) man page
         for available options.
       '';
@@ -44,7 +44,21 @@ in {
         '';
 
         # install provided sysctl snippets
-        "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
+        "sysctl.d/50-coredump.conf".source =
+          # Fix systemd-coredump error caused by truncation of `kernel.core_pattern`
+          # when the `systemd` derivation name is too long. This works by substituting
+          # the path to `systemd` with a symlink that has a constant-length path.
+          #
+          # See: https://github.com/NixOS/nixpkgs/issues/213408
+          pkgs.substitute {
+            src = "${systemd}/example/sysctl.d/50-coredump.conf";
+            substitutions = [
+              "--replace"
+              "${systemd}"
+              "${pkgs.symlinkJoin { name = "systemd"; paths = [ systemd ]; }}"
+            ];
+          };
+
         "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
       };
 

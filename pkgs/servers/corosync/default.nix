@@ -4,17 +4,18 @@
 , enableInfiniBandRdma ? false
 , enableMonitoring ? false
 , enableSnmp ? false
+, nixosTests
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "corosync";
-  version = "3.1.6";
+  version = "3.1.8";
 
   src = fetchurl {
     url = "http://build.clusterlabs.org/corosync/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ym7TK01/M+1hSvzodg/ljQ3pLGi1ddSWnrrNiS89Hic=";
+    sha256 = "sha256-cCNUT6O7NsALvKvZk1tyabQdiWc4oQjtMuqbnJsn7D0=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config ];

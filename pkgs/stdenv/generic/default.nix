@@ -52,33 +52,26 @@ argsStdenv@{ name ? "stdenv", preHook ? "", initialPath
 
 , # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
   # This is convient to have as a parameter so the stdenv "adapters" work better
-  mkDerivationFromStdenv ? import ./make-derivation.nix { inherit lib config; }
+  mkDerivationFromStdenv ? stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation
 }:
 
 let
   defaultNativeBuildInputs = extraNativeBuildInputs ++
-    [ ../../build-support/setup-hooks/move-docs.sh
-      ../../build-support/setup-hooks/make-symlinks-relative.sh
+    [
+      ../../build-support/setup-hooks/audit-tmpdir.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
-      ../../build-support/setup-hooks/strip.sh
+      ../../build-support/setup-hooks/make-symlinks-relative.sh
+      ../../build-support/setup-hooks/move-docs.sh
+      ../../build-support/setup-hooks/move-lib64.sh
+      ../../build-support/setup-hooks/move-sbin.sh
+      ../../build-support/setup-hooks/move-systemd-user-units.sh
+      ../../build-support/setup-hooks/multiple-outputs.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
       ../../build-support/setup-hooks/prune-libtool-files.sh
-    ]
-      # FIXME this on Darwin; see
-      # https://github.com/NixOS/nixpkgs/commit/94d164dd7#commitcomment-22030369
-    ++ lib.optionals hostPlatform.isLinux [
-      ../../build-support/setup-hooks/audit-tmpdir.sh
-      ../../build-support/setup-hooks/move-systemd-user-units.sh
-    ]
-    ++ [
-      ../../build-support/setup-hooks/multiple-outputs.sh
-      ../../build-support/setup-hooks/move-sbin.sh
-      ../../build-support/setup-hooks/move-lib64.sh
-      ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
       ../../build-support/setup-hooks/reproducible-builds.sh
-      # TODO use lib.optional instead
-      (if hasCC then cc else null)
-    ];
+      ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
+      ../../build-support/setup-hooks/strip.sh
+    ] ++ lib.optionals hasCC [ cc ];
 
   defaultBuildInputs = extraBuildInputs;
 
@@ -116,7 +109,7 @@ let
       # there (yet?) so it goes here until then.
       preHook = preHook + lib.optionalString buildPlatform.isDarwin ''
         export NIX_DONT_SET_RPATH_FOR_BUILD=1
-      '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
+      '' + lib.optionalString (hostPlatform.isDarwin || (!hostPlatform.isElf && !hostPlatform.isMacho)) ''
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
       '' + lib.optionalString (hostPlatform.isDarwin && hostPlatform.isMacOS) ''
@@ -175,6 +168,11 @@ let
       # without running any commands. Because this will also skip `shopt -s extglob`
       # commands and extglob affects the Bash parser, we enable extglob always.
       shellDryRun = "${stdenv.shell} -n -O extglob";
+
+      tests = {
+        succeedOnFailure = import ../tests/succeedOnFailure.nix { inherit stdenv; };
+      };
+      passthru.tests = lib.warn "Use `stdenv.tests` instead. `passthru` is a `mkDerivation` detail." stdenv.tests;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

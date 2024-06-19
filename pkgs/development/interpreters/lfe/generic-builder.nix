@@ -3,9 +3,10 @@
 { baseName ? "lfe"
 , version
 , maximumOTPVersion
-, sha256 ? null
+, sha256 ? ""
+, hash ? ""
 , rev ? version
-, src ? fetchFromGitHub { inherit rev sha256; owner = "rvirding"; repo = "lfe"; }
+, src ? fetchFromGitHub { inherit hash rev sha256; owner = "lfe"; repo = "lfe"; }
 , patches ? []
 }:
 
@@ -18,13 +19,9 @@ let
 
   proper = buildHex {
     name = "proper";
-    version = "1.1.1-beta";
+    version = "1.4.0";
 
-    sha256  = "0hnkhs761yjynw9382w8wm4j3x0r7lllzavaq2kh9n7qy3zc1rdx";
-
-    configurePhase = ''
-      ${erlang}/bin/escript write_compile_flags include/compile_flags.hrl
-    '';
+    sha256  = "sha256-GChYQhhb0z772pfRNKXLWgiEOE2zYRn+4OPPpIhWjLs=";
   };
 
 in

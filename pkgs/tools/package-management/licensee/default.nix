@@ -13,5 +13,6 @@ bundlerApp {
     license     = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
     platforms   = platforms.unix;
+    mainProgram = "licensee";
   };
 }

@@ -1,35 +1,39 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
-, cmake
 , alsa-lib
+, cmake
 , ffmpeg
+, fribidi
 , game-music-emu
+, libXdmcp
+, libXv
 , libass
 , libcddb
 , libcdio
 , libpulseaudio
 , libsidplayfp
 , libva
-, libXv
-, taglib
+, libxcb
+, pkg-config
 , qtbase
 , qttools
+, taglib
 , vulkan-headers
 , vulkan-tools
 , wrapQtAppsHook
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "qmplay2";
-  version = "22.08.21";
+  version = "24.04.07";
 
   src = fetchFromGitHub {
     owner = "zaps166";
     repo = "QMPlay2";
-    rev = version;
-    sha256 = "sha256-UQf1aJGoUlXBo2lejw8A3lF6rFOKK6LUGDxRY9207Dw=";
+    rev = finalAttrs.version;
     fetchSubmodules = true;
+    hash = "sha256-WIDGApvl+aaB3Vdv0sHY+FHWqzreWWd3/xOLV11YfxM=";
   };
 
   nativeBuildInputs = [
@@ -37,10 +41,13 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapQtAppsHook
   ];
+
   buildInputs = [
     alsa-lib
     ffmpeg
+    fribidi
     game-music-emu
+    libXdmcp
     libXv
     libass
     libcddb
@@ -48,6 +55,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libsidplayfp
     libva
+    libxcb
     qtbase
     qttools
     taglib
@@ -60,7 +68,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/QMPlay2 $out/bin/qmplay2
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zaps166/QMPlay2/";
     description = "Qt-based Multimedia player";
     longDescription = ''
@@ -69,8 +77,9 @@ stdenv.mkDerivation rec {
       files, Rayman 2 music and chiptunes. It contains YouTube and MyFreeMP3
       browser.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    changelog = "https://github.com/zaps166/QMPlay2/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres kashw2 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

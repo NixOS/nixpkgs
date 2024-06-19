@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-opengl";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-NdK5UwUszX5B0kKbynG8oD2PCKIGpZ1x91ktBDvpDo8=";
+    hash = "sha256-uPCH7CiCPQmfuELDupQQS7BPqecIFmSHpHGYnhwXbGU=";
   };
 
   nativeBuildInputs = [

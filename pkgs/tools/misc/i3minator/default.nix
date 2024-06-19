@@ -20,6 +20,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "i3 project manager similar to tmuxinator";
+    mainProgram = "i3minator";
     longDescription = ''
       A simple "workspace manager" for i3. It allows to quickly
       manage workspaces defining windows and their layout. The

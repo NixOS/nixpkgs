@@ -1,26 +1,27 @@
-{ lib, fetchurl, buildDunePackage, ocaml
+{ lib, fetchurl, buildDunePackage, ocaml, findlib
 , alcotest
-, astring, cmdliner, cppo, fmt, logs, ocaml-version, odoc-parser, ocaml_lwt, re, result, csexp
-, pandoc}:
+, astring, cppo, fmt, logs, ocaml-version, camlp-streams, lwt, re, csexp
+, gitUpdater
+}:
 
 buildDunePackage rec {
   pname = "mdx";
-  version = "2.1.0";
+  version = "2.4.1";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/realworldocaml/mdx/releases/download/${version}/mdx-${version}.tbz";
-    sha256 = "sha256-ol1zy8LODDYdcnv/jByE0pnqJ5ujQuMALq3v9y7td/o=";
+    hash = "sha256-GkDMkcxVPe0KIMmNQ0NUlTvbdZ7Mka02u7mn3QQSrxM=";
   };
 
   nativeBuildInputs = [ cppo ];
-  buildInputs = [ cmdliner ];
-  propagatedBuildInputs = [ astring fmt logs result csexp ocaml-version odoc-parser re ];
-  checkInputs = [ alcotest ocaml_lwt pandoc ];
+  propagatedBuildInputs = [
+    astring fmt logs csexp ocaml-version camlp-streams re findlib
+  ];
+  checkInputs = [ alcotest lwt ];
 
-  # Check fails with cmdliner ≥ 1.1
-  doCheck = false;
+  doCheck = true;
 
   outputs = [ "bin" "lib" "out" ];
 
@@ -29,6 +30,8 @@ buildDunePackage rec {
     dune install --prefix=$bin --libdir=$lib/lib/ocaml/${ocaml.version}/site-lib ${pname}
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Executable OCaml code blocks inside markdown files";

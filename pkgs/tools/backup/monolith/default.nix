@@ -5,29 +5,31 @@
 , openssl
 , libiconv
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "monolith";
-  version = "2.6.2";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-E+2D/oidqxRqKR70LN4uR1QkBa4oFfLiS8SoJkrgwtI=";
+    sha256 = "sha256-qMB4Tok0tYAqj8r9LEkjhBV5ko+hwagFS7MsL8AYJnc=";
   };
 
-  cargoSha256 = "sha256-Acmo0p+WihRg3dU3ptaFw6uf9OQegvPUCQ63b5Ucdmk=";
+  cargoHash = "sha256-FeD0+s79orFDUVsb205W0pdXgDI+p1UrH3GIfKwUqDQ=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
 
   checkFlagsArray = [ "--skip=tests::cli" ];
 
   meta = with lib; {
     description = "Bundle any web page into a single HTML file";
+    mainProgram = "monolith";
     homepage = "https://github.com/Y2Z/monolith";
     license = licenses.unlicense;
     maintainers = with maintainers; [ Br1ght0ne ];

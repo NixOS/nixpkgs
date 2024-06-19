@@ -1,24 +1,46 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, SDL2, lua5_1, minizip, x264 }:
+{ lib
+, SDL2
+, cmake
+, fetchFromGitHub
+, lua
+, minizip
+, pkg-config
+, stdenv
+, wrapQtAppsHook
+, x264
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fceux";
-  version = "2.6.4";
+  version = "2.6.6-unstable-2024-01-19";
 
   src = fetchFromGitHub {
     owner = "TASEmulators";
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-Q6r/iBlmi0z40+U6OLZCahS0io4IBBGZMP1mJH7szRM=";
+    repo = "fceux";
+    rev = "2fce5ffe745bb89be471e450d9cd6284cd5614d9";
+    hash = "sha256-5uUTw7ZkmBrGuntSQFNAp1Xz69ANmmIxNGd0/enPoW8=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ SDL2 lua5_1 minizip x264 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
-  meta = with lib; {
-    description = "A Nintendo Entertainment System (NES) Emulator";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sbruder scubed2 ];
+  buildInputs = [
+    SDL2
+    lua
+    minizip
+    x264
+  ];
+
+  meta = {
     homepage = "http://www.fceux.com/";
-    platforms = platforms.linux;
+    description = "A Nintendo Entertainment System (NES) Emulator";
+    mainProgram = "fceux";
+    changelog = "https://github.com/TASEmulators/blob/fceux/${finalAttrs.src.rev}/changelog.txt";
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ AndersonTorres sbruder ];
+    platforms = lib.platforms.linux;
   };
-}
+})

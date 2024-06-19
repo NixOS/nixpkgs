@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 

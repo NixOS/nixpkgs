@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ ramkromberg ];
+    mainProgram = "texi2mdoc";
   };
 }

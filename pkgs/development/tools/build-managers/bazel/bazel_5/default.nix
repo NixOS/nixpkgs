@@ -1,20 +1,16 @@
-{ stdenv, callPackage, lib, fetchurl, fetchpatch, fetchFromGitHub, installShellFiles
+{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, installShellFiles
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
-# needed only for the updater
-, bazel_4
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
-, python27, python3, writeScript
+, python3, writeScript
 # Apple dependencies
 , cctools, libcxx, sigtool, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , runtimeShell
-# Downstream packages for tests
-, bazel-watcher
 # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
 # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
@@ -26,16 +22,19 @@
 }:
 
 let
-  version = "5.2.0";
+  version = "5.4.1";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "sha256-ggqU27FAce1tjCZs8MCA7LJlpe6mUwdXlInEZiwtWCo=";
+    hash = "sha256-3P9pNXVqp6yk/Fabsr0m4VN/Cx9tG9pfKyAPqDXMUH8=";
   };
 
-  # Update with `eval $(nix-build -A bazel_5.updater)`,
-  # then add new dependencies from the dict in ./src-deps.json as required.
+  # Update with
+  # 1. export BAZEL_SELF=$(nix-build -A bazel_5)
+  # 2. update version and hash for sources above
+  # 3. `eval $(nix-build -A bazel_5.updater)`
+  # 4. add new dependencies from the dict in ./src-deps.json if required by failing build
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
@@ -100,10 +99,6 @@ let
     #            "@bison//:bin/bison",
     #        ],
     #     )
-    #
-    # Some of the scripts explicitly depend on Python 2.7. Otherwise, we
-    # default to using python3. Therefore, both python27 and python3 are
-    # runtime dependencies.
     [
       bash
       coreutils
@@ -114,7 +109,6 @@ let
       gnused
       gnutar
       gzip
-      python27
       python3
       unzip
       which
@@ -170,6 +164,8 @@ stdenv.mkDerivation rec {
   inherit src;
   inherit sourceRoot;
   patches = [
+    ./upb-clang16.patch
+
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
@@ -289,10 +285,10 @@ stdenv.mkDerivation rec {
         sha256 = "1mm4awx6sa0myiz9j4hwp71rpr7yh8vihf3zm15n2ii6xb82r31k";
       };
 
-    in (if !stdenv.hostPlatform.isDarwin then {
+    in (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # `extracted` doesn’t work on darwin
       shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self;};
-    } else {}) // {
+    }) // {
       bashTools = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self;};
       cpp = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
       java = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
@@ -305,12 +301,6 @@ stdenv.mkDerivation rec {
       javaWithNixHacks = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
       protobufWithNixHacks = callPackage ../protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
       pythonBinPathWithNixHacks = callPackage ../python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
-
-      # downstream packages using buildBazelPackage
-      # fixed-output hashes of the fetch phase need to be spot-checked manually
-      downstream = recurseIntoAttrs ({
-        inherit bazel-watcher;
-      });
     };
 
   src_for_updater = stdenv.mkDerivation rec {
@@ -331,8 +321,8 @@ stdenv.mkDerivation rec {
     #!${runtimeShell}
     (cd "${src_for_updater}" &&
         BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
-        "${bazel_4}"/bin/bazel \
-            query 'kind(http_archive, //external:all) + kind(http_file, //external:all) + kind(distdir_tar, //external:all) + kind(git_repository, //external:all)' \
+        "$BAZEL_SELF"/bin/bazel \
+            query 'kind(http_archive, //external:*) + kind(http_file, //external:*) + kind(distdir_tar, //external:*) + kind(git_repository, //external:*)' \
             --loading_phase_threads=1 \
             --output build) \
     | "${python3}"/bin/python3 "${./update-srcDeps.py}" \
@@ -368,6 +358,8 @@ stdenv.mkDerivation rec {
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
+      # for CLang 16 compatibility in external/{absl,upb} dependencies and in execlog
+      export NIX_CFLAGS_COMPILE+=" -Wno-deprecated-builtins -Wno-gnu-offsetof-extensions -Wno-implicit-function-declaration"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
@@ -393,11 +385,9 @@ stdenv.mkDerivation rec {
 
     genericPatches = ''
       # Substitute j2objc and objc wrapper's python shebang to plain python path.
-      # These scripts explicitly depend on Python 2.7, hence we use python27.
-      # See also `postFixup` where python27 is added to $out/nix-support
-      substituteInPlace tools/j2objc/j2objc_header_map.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
-      substituteInPlace tools/j2objc/j2objc_wrapper.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
-      substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
+      substituteInPlace tools/j2objc/j2objc_header_map.py --replace "$!/usr/bin/python2.7" "#!${python3.interpreter}"
+      substituteInPlace tools/j2objc/j2objc_wrapper.py --replace "$!/usr/bin/python2.7" "#!${python3.interpreter}"
+      substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python3.interpreter}"
 
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|g' \
@@ -414,8 +404,6 @@ stdenv.mkDerivation rec {
       grep -rlZ /bin/ src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
-        # We default to python3 where possible. See also `postFixup` where
-        # python3 is added to $out/nix-support
         substituteInPlace "$path" \
           --replace /bin/bash ${bash}/bin/bash \
           --replace "/usr/bin/env bash" ${bash}/bin/bash \
@@ -426,7 +414,7 @@ stdenv.mkDerivation rec {
 
       grep -rlZ /bin/ tools/python | while IFS="" read -r -d "" path; do
         substituteInPlace "$path" \
-          --replace "/usr/bin/env python2" ${python27}/bin/python \
+          --replace "/usr/bin/env python2" ${python3.interpreter} \
           --replace "/usr/bin/env python3" ${python3}/bin/python \
           --replace /usr/bin/env ${coreutils}/bin/env
       done
@@ -630,6 +618,7 @@ stdenv.mkDerivation rec {
     }
 
     cd ./bazel_src
+    rm .bazelversion # this doesn't necessarily match the version we built
 
     # test whether $WORKSPACE_ROOT/tools/bazel works
 

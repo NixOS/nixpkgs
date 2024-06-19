@@ -1,12 +1,6 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-
-with lib;
-
-{
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "yabar";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ];
-  };
+  meta.maintainers = [ ];
 
   nodes.machine = {
     imports = [ ./common/x11.nix ./common/user-account.nix ];

@@ -1,16 +1,33 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man, python3,
-  alsa-lib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, help2man
+, python3
+, linuxHeaders
+
+, alsa-lib
+, libxslt
+, systemd
+, libusb-compat-0_1
+, libftdi1
+, libICE
+, libSM
+, libX11
+}:
 
 let
-  pythonEnv = python3.pythonForBuild.withPackages (p: with p; [ pyyaml setuptools ]);
+  pythonEnv = python3.pythonOnBuildForHost.withPackages (p: with p; [ pyyaml setuptools ]);
 in
 stdenv.mkDerivation rec {
   pname = "lirc";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/lirc/${pname}-${version}.tar.bz2";
-    sha256 = "1whlyifvvc7w04ahq07nnk1h18wc8j7c6wnvlb6mszravxh3qxcb";
+    sha256 = "sha256-PUTsgnSIHPJi8WCAVkHwgn/8wgreDYXn5vO5Dg09Iio=";
   };
 
   patches = [
@@ -44,19 +61,16 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    # use empty inc file instead of a from linux kernel generated one
-    touch lib/lirc/input_map.inc
+    export PKGCONFIG="$PKG_CONFIG"
   '';
 
   strictDeps = true;
 
-  nativeBuildInputs = [ autoreconfHook help2man libxslt pythonEnv ];
+  nativeBuildInputs = [ autoreconfHook help2man libxslt pythonEnv pkg-config ];
 
-  depsBuildBuild = [ pkg-config ];
+  buildInputs = [ alsa-lib systemd libusb-compat-0_1 libftdi1 libICE libSM libX11 ];
 
-  buildInputs = [ alsa-lib xlibsWrapper systemd libusb-compat-0_1 libftdi1 ];
-
-  DEVINPUT_HEADER = "include/linux/input-event-codes.h";
+  DEVINPUT_HEADER = "${linuxHeaders}/include/linux/input-event-codes.h";
 
   configureFlags = [
     "--sysconfdir=/etc"

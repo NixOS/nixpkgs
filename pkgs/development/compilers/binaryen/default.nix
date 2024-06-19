@@ -1,28 +1,31 @@
-{ lib, stdenv, cmake, python3, fetchFromGitHub, emscripten,
-  gtest, lit, nodejs, filecheck, fetchpatch
+{ lib, stdenv, cmake, python3, fetchFromGitHub, fetchpatch, emscripten,
+  gtest, lit, nodejs, filecheck
 }:
 
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "109";
+  version = "116";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    sha256 = "sha256-HMPoiuTvYhTDaBUfSOfh/Dt4FdO9jGqUaFpi92pnscI=";
+    hash = "sha256-gMwbWiP+YDCVafQMBWhTuJGWmkYtnhEdn/oofKaUT08=";
   };
 
+  # FIXME: remove for next release
   patches = [
-    # https://github.com/WebAssembly/binaryen/pull/4321
     (fetchpatch {
-      url = "https://github.com/WebAssembly/binaryen/commit/93b8849d9f98ef7ed812938ff0b3219819c2be77.patch";
-      sha256 = "sha256-Duan/B9A+occ5Lj2SbRX793xIfhzHbdYPI5PyTNCZoU=";
+      name = "nodejs-20.patch";
+      url = "https://github.com/WebAssembly/binaryen/commit/889422e0c92552ff484659f9b41e777ba7ab35c1.patch";
+      hash = "sha256-acM8mytL9nhm4np9tpUbd1X0wJ7y308HV2fvgcAW1lY=";
     })
-    # https://github.com/WebAssembly/binaryen/pull/4913
+
+    # Fix fmin tests on gcc-13: https://github.com/WebAssembly/binaryen/pull/5994
     (fetchpatch {
-      url = "https://github.com/WebAssembly/binaryen/commit/b70fe755aa4c90727edfd91dc0a9a51febf0239d.patch";
-      sha256 = "sha256-kjPLbdiMVQepSJ7J1gK6dRSMI/2SsH39k7W5AMOIrkM=";
+      name = "gcc-13.patch";
+      url = "https://github.com/WebAssembly/binaryen/commit/1e17dfb695a19d5d41f1f88411fbcbc5f2408c8f.patch";
+      hash = "sha256-5JZh15CXkg5XdTG8eRJXPwO+zmymYeFjKbHutRPTmlU=";
     })
   ];
 
@@ -36,7 +39,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  checkInputs = [ gtest lit nodejs filecheck ];
+  nativeCheckInputs = [ gtest lit nodejs filecheck ];
   checkPhase = ''
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
   '';

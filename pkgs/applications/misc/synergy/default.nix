@@ -14,7 +14,8 @@
 , gdk-pixbuf
 , libnotify
 , qttools
-, xlibsWrapper
+, libICE
+, libSM
 , libX11
 , libxkbfile
 , libXi
@@ -31,26 +32,24 @@
 , Cocoa
 , CoreServices
 , ScreenSaver
+, UserNotifications
 }:
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.14.5.22";
+  version = "1.14.6.19-stable";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
     rev = version;
-    sha256 = "sha256-rqQ4n8P8pZSWRCxaQLa2PuduXMt2XeaFs051qcT3/o8=";
+    sha256 = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
     fetchSubmodules = true;
   };
 
   patches = [
     # Without this OpenSSL from nixpkgs is not detected
     ./darwin-non-static-openssl.patch
-    # We cannot include UserNotifications because of a build failure in the Apple SDK.
-    # The functions used from it are already implicitly included anyways.
-    ./darwin-no-UserNotifications-includes.patch
   ];
 
   postPatch = ''
@@ -76,11 +75,13 @@ stdenv.mkDerivation rec {
     Cocoa
     CoreServices
     ScreenSaver
+    UserNotifications
   ] ++ lib.optionals stdenv.isLinux [
     util-linux
     libselinux
     libsepol
-    xlibsWrapper
+    libICE
+    libSM
     libX11
     libXi
     libXtst
@@ -94,15 +95,20 @@ stdenv.mkDerivation rec {
   ];
 
   # Silences many warnings
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
 
   cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
-    ++ lib.optional stdenv.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.targetPlatform.darwinSdkVersion}";
+    # NSFilenamesPboardType is deprecated in 10.14+
+    ++ lib.optional stdenv.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${if stdenv.isAarch64 then "10.13" else stdenv.hostPlatform.darwinSdkVersion}";
 
   doCheck = true;
 
   checkPhase = ''
     runHook preCheck
+  '' + lib.optionalString stdenv.isDarwin ''
+    # filter out tests failing with sandboxing on darwin
+    export GTEST_FILTER=-ServerConfigTests.serverconfig_will_deem_equal_configs_with_same_cell_names:NetworkAddress.hostname_valid_parsing
+  '' + ''
     bin/unittests
     runHook postCheck
   '';
@@ -119,7 +125,7 @@ stdenv.mkDerivation rec {
     cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
     substitute ../res/synergy.desktop $out/share/applications/synergy.desktop \
       --replace "/usr/bin" "$out/bin"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString (stdenv.isDarwin && withGUI) ''
     mkdir -p $out/Applications
     cp -r bundle/Synergy.app $out/Applications
     ln -s $out/bin $out/Applications/Synergy.app/Contents/MacOS

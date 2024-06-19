@@ -2,20 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "pythia";
-  version = "8.307";
+  version = "8.311";
 
   src = fetchurl {
     url = "https://pythia.org/download/pythia83/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
-    sha256 = "sha256-5bFNRKpZQzMuMt1d2poY/dGgCFxxmOKNhA4EFn+mAT0=";
+    sha256 = "sha256-J4LV5CnBVDxnN1r+VH/UxMoHIDCd6wCPfbeGJtx9FGQ=";
   };
 
   nativeBuildInputs = [ rsync ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
   buildInputs = [ boost fastjet hepmc zlib lhapdf ];
-
-  preConfigure = ''
-    patchShebangs ./configure
-  '';
 
   configureFlags = [
     "--enable-shared"
@@ -30,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A program for the generation of high-energy physics events";
+    mainProgram = "pythia8-config";
     license = licenses.gpl2Only;
     homepage = "https://pythia.org";
     platforms = platforms.unix;

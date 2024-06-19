@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fdkaac";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "nu774";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7a8JlQtMGuMWgU/HePd31/EvtBNc2tBMz8V8NQivuNo=";
+    sha256 = "sha256-GYvI9T5Bv2OcK0hMAQE7/tE6ajDyqkaak66b3Hc0Fls=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Command line encoder frontend for libfdk-aac encoder";
+    mainProgram = "fdkaac";
     longDescription = ''
       fdkaac reads linear PCM audio in either WAV, raw PCM, or CAF format,
       and encodes it into either M4A / AAC file.

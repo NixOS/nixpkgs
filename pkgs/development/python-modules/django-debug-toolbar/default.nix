@@ -1,27 +1,31 @@
-{ lib
-, fetchFromGitHub
-, pythonOlder
-, buildPythonPackage
-, python
-, django
-, jinja2
-, sqlparse
-, html5lib
+{
+  lib,
+  fetchFromGitHub,
+  pythonOlder,
+  buildPythonPackage,
+  python,
+  hatchling,
+  django,
+  jinja2,
+  sqlparse,
+  html5lib,
 }:
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "3.5";
-  format = "setuptools";
+  version = "4.3";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-OZWO3tXZ+p+zKtQHCkj0kGSXpDFHFV+HqSgiJvLmMTg=";
+    hash = "sha256-8rwEM+YSO9TtkC1UWS4JrzFH+TlGOHzL+WmxNwMJIWQ=";
   };
+
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     django
@@ -34,9 +38,7 @@ buildPythonPackage rec {
   TEST_ARGS = "tests";
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  checkInputs = [
-    html5lib
-  ];
+  nativeCheckInputs = [ html5lib ];
 
   checkPhase = ''
     runHook preCheck
@@ -44,9 +46,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "debug_toolbar"
-  ];
+  pythonImportsCheck = [ "debug_toolbar" ];
 
   meta = with lib; {
     description = "Configurable set of panels that display debug information about the current request/response";
@@ -54,5 +54,5 @@ buildPythonPackage rec {
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yuu ];
-};
+  };
 }

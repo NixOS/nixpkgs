@@ -4,28 +4,24 @@
 , pkg-config
 , gtk4
 , stdenv
-, DiskArbitration
-, Foundation
-, IOKit
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "process-viewer";
-  version = "0.5.5";
+  version = "0.5.8";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-MHVKjbD1/h7G94x6dpyRT/BPWQVUFurW7EvAUJ2xZeU=";
+    sha256 = "sha256-mEmtLCtHlrCurjKKJ3vEtEkLBik4LwuUED5UeQ1QLws=";
   };
 
-  cargoSha256 = "sha256-NkJjwB4rBV4hFRwYHILMET8o4x1+95sVsFqNaVN8tMg=";
+  cargoSha256 = "sha256-lgVByl+mpCDbhwlC1Eiw9ZkHIDYJsOR06Ds790pXOMc=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gtk4 ] ++ lib.optionals stdenv.isDarwin [
-    DiskArbitration
-    Foundation
-    IOKit
+    darwin.apple_sdk_11_0.frameworks.Foundation
   ];
 
   postInstall = ''
@@ -39,5 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/guillaumegomez/process-viewer";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "process_viewer";
   };
 }

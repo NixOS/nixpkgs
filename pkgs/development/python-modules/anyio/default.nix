@@ -1,89 +1,103 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, setuptools
-, setuptools-scm
-, idna
-, sniffio
-, typing-extensions
-, curio
-, hypothesis
-, mock
-, pytest-mock
-, pytestCheckHook
-, trio
-, trustme
-, uvloop
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  exceptiongroup,
+  idna,
+  sniffio,
+  typing-extensions,
+
+  # optionals
+  trio,
+
+  # tests
+  hypothesis,
+  psutil,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  trustme,
+  uvloop,
 }:
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "3.5.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "4.3.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-AZ9M/NBCBlMIUpRJgKbJRL/oReZDUh2Jhwtoxoo0tMs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-y58DQiTD0ZKaBNf0cA3MFE+7F68Svrl+Idz6BZY7HWQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Pytest 7.0 compatibility
-      url = "https://github.com/agronholm/anyio/commit/fed7cc4f95e196f68251bcb9253da3b143ea8e7e.patch";
-      sha256 = "sha256-VmZmiQEmWJ4aPz0Wx+GTMZo7jXRDScnRYf2Hu2hiRVw=";
-    })
-  ];
-
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
-  '';
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    idna
-    sniffio
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-  ];
+  propagatedBuildInputs =
+    [
+      idna
+      sniffio
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      typing-extensions
+    ];
 
-  checkInputs = [
-    curio
+  passthru.optional-dependencies = {
+    trio = [ trio ];
+  };
+
+  # trustme uses pyopenssl
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+
+  nativeCheckInputs = [
+    exceptiongroup
     hypothesis
+    psutil
     pytest-mock
+    pytest-xdist
     pytestCheckHook
-    trio
     trustme
     uvloop
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    mock
+  ] ++ passthru.optional-dependencies.trio;
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
+    "-m"
+    "'not network'"
   ];
 
-  disabledTests = [
-    # block devices access
+  disabledTests = lib.optionals (stdenv.isx86_64 && stdenv.isDarwin) [
+    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
     "test_is_block_device"
   ];
 
   disabledTestPaths = [
     # lots of DNS lookups
     "tests/test_sockets.py"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # darwin sandboxing limitations
-    "tests/streams/test_tls.py"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "anyio" ];
 
   meta = with lib; {
+    changelog = "https://github.com/agronholm/anyio/blob/${src.rev}/docs/versionhistory.rst";
     description = "High level compatibility layer for multiple asynchronous event loop implementations on Python";
     homepage = "https://github.com/agronholm/anyio";
     license = licenses.mit;

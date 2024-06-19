@@ -2,15 +2,16 @@
 , hwdata
 , static ? stdenv.hostPlatform.isStatic
 , IOKit
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "pciutils";
-  version = "3.8.0"; # with release-date database
+  version = "3.12.0"; # with release-date database
 
   src = fetchurl {
     url = "mirror://kernel/software/utils/pciutils/pciutils-${version}.tar.xz";
-    sha256 = "sha256-ke29BCmoRwXJrRVtT/OMzHJNQepUxMW4jjjplvijTwU=";
+    hash = "sha256-8YXRFtX/mbeXSX786PGfHujMxaZouXoVnj0TRy9nQVQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -43,11 +44,18 @@ stdenv.mkDerivation rec {
     cp --reflink=auto ${hwdata}/share/hwdata/pci.ids $out/share/pci.ids
   '';
 
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://github.com/pciutils/pciutils.git";
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
     homepage = "https://mj.ucw.cz/sw/pciutils/";
     description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ]; # not really, but someone should watch it
+    mainProgram = "lspci";
   };
 }

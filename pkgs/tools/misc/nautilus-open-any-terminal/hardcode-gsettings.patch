@@ -1,22 +1,22 @@
-diff --git a/nautilus_open_any_terminal/open_any_terminal_extension.py b/nautilus_open_any_terminal/open_any_terminal_extension.py
+diff --git a/nautilus_open_any_terminal/nautilus_open_any_terminal.py b/nautilus_open_any_terminal/nautilus_open_any_terminal.py
 index b02a995..a616399 100644
---- a/nautilus_open_any_terminal/open_any_terminal_extension.py
-+++ b/nautilus_open_any_terminal/open_any_terminal_extension.py
-@@ -205,9 +205,10 @@ def set_terminal_args(*args):
- 
-     class OpenAnyTerminalShortcutProvider(GObject.GObject, Nautilus.LocationWidgetProvider):
+--- a/nautilus_open_any_terminal/nautilus_open_any_terminal.py
++++ b/nautilus_open_any_terminal/nautilus_open_any_terminal.py
+@@ -228,9 +228,10 @@ def set_terminal_args(*args):
+         """Provide keyboard shortcuts for opening terminals in Nautilus."""
+
          def __init__(self):
--            source = Gio.SettingsSchemaSource.get_default()
--            if source.lookup(GSETTINGS_PATH, True):
+-            gsettings_source = Gio.SettingsSchemaSource.get_default()
+-            if gsettings_source.lookup(GSETTINGS_PATH, True):
 -                self._gsettings = Gio.Settings.new(GSETTINGS_PATH)
-+            source = Gio.SettingsSchemaSource.new_from_directory("@gsettings_path@", Gio.SettingsSchemaSource.get_default(), True)
++            gsettings_source = Gio.SettingsSchemaSource.new_from_directory("@gsettings_path@", Gio.SettingsSchemaSource.get_default(), True)
 +            if True:
-+                _schema = source.lookup(GSETTINGS_PATH, False)
++                _schema = gsettings_source.lookup(GSETTINGS_PATH, False)
 +                self._gsettings = Gio.Settings.new_full(_schema, None, None);
                  self._gsettings.connect("changed", self._bind_shortcut)
                  self._create_accel_group()
              self._window = None
-@@ -232,9 +233,10 @@ class OpenAnyTerminalExtension(GObject.GObject, Nautilus.MenuProvider):
+@@ -326,9 +327,10 @@ class OpenAnyTerminalExtension(GObject.GObject, Nautilus.MenuProvider):
          return items
  
  

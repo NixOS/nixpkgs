@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dpic";
-  version = "2021.11.01";
+  version = "2024.01.01";
 
   src = fetchurl {
     url = "https://ece.uwaterloo.ca/~aplevich/dpic/${pname}-${version}.tar.gz";
-    sha256 = "sha256-TkMc5tG+sPHfjiCxli5bIteJfq5ZG36+HaqZOk/v6oI=";
+    sha256 = "sha256-FhkBrJr4bXMFUSuhtWSUBPtMgDoPqwYmJ8w8WJWthy8=";
   };
 
   # The prefix passed to configure is not used.
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ aespinosa ];
     platforms = platforms.all;
+    mainProgram = "dpic";
   };
 }
 

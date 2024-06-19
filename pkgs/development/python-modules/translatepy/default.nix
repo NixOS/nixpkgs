@@ -1,23 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, beautifulsoup4
-, pyuseragents
-, safeio
-, inquirer
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  beautifulsoup4,
+  pyuseragents,
+  safeio,
+  inquirer,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "translatepy";
   version = "2.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Animenosekai";
     repo = "translate";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-cx5OeBrB8il8KrcyOmQbQ7VCXoaA5RP++oTTxCs/PcM=";
+    hash = "sha256-cx5OeBrB8il8KrcyOmQbQ7VCXoaA5RP++oTTxCs/PcM=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +30,7 @@ buildPythonPackage rec {
     inquirer
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   disabledTestPaths = [
     # Requires network connection
     "tests/test_translate.py"
@@ -38,6 +40,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A module grouping multiple translation APIs";
+    mainProgram = "translatepy";
     homepage = "https://github.com/Animenosekai/translate";
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ emilytrau ];

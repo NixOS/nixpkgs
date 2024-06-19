@@ -13,13 +13,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "yelp-tools";
-  version = "42.0";
+  version = "42.1";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp-tools/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "LNQwY/+nJi3xXdjTeao+o5mdQmYfB1Y/SALaoRSfffQ=";
+    sha256 = "PklqQCDUFFuZ/VCKJfoJM2pQOk6JAAKEIecsaksR+QU=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Yelp/Tools";
+    homepage = "https://gitlab.gnome.org/GNOME/yelp-tools";
     description = "Small programs that help you create, edit, manage, and publish your Mallard or DocBook documentation";
     maintainers = teams.gnome.members ++ (with maintainers; [ domenkozar ]);
     license = licenses.gpl2Plus;

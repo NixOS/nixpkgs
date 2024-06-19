@@ -1,21 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, sqlparse
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  setuptools,
+  sqlparse,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "yoyo-migrations";
-  version = "7.3.2";
+  version = "8.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RIQIKOGgFp9UHnAtWu3KgYWtpoCH57rUhQpvxdced6Q=";
+    hash = "sha256-ggYGoD4mLPHNT1niVsKPpEZCUiTVuCo9EnX9eBeFI+Q=";
   };
 
-  propagatedBuildInputs = [ setuptools sqlparse tabulate ];
+  propagatedBuildInputs = [
+    importlib-metadata
+    setuptools
+    sqlparse
+    tabulate
+  ];
 
   doCheck = false; # pypi tarball does not contain tests
 

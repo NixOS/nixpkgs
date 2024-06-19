@@ -1,14 +1,15 @@
-{ lib
-, crownstone-core
-, buildPythonPackage
-, pyserial
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  crownstone-core,
+  buildPythonPackage,
+  pyserial,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "crownstone-uart";
-  version = "2.5.0";
+  version = "2.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "crownstone";
     repo = "crownstone-lib-python-uart";
     rev = version;
-    sha256 = "sha256-WcEwAqHy3tuRlx1nyc+BKAb+PLD2B55fGSgb8dsbXbM=";
+    hash = "sha256-Sc6BCIRbf1+GraTScmV4EAgwtSE/JXNe0f2XhKyACIY=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "crownstone_uart"
-  ];
+  pythonImportsCheck = [ "crownstone_uart" ];
 
   meta = with lib; {
     description = "Python module for communicating with Crownstone USB dongles";

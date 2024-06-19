@@ -1,9 +1,15 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.varnish;
+  inherit (lib)
+    mkOption
+    types
+    mkDefault
+    optional
+    escapeShellArg
+    concatStringsSep
+    ;
 in
 {
   port = 9131;
@@ -11,35 +17,35 @@ in
     noExit = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Do not exit server on Varnish scrape errors.
       '';
     };
     withGoMetrics = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Export go runtime and http handler metrics.
       '';
     };
     verbose = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable verbose logging.
       '';
     };
     raw = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Enable raw stdout logging without timestamps.
       '';
     };
     varnishStatPath = mkOption {
       type = types.str;
       default = "varnishstat";
-      description = lib.mdDoc ''
+      description = ''
         Path to varnishstat.
       '';
     };
@@ -47,21 +53,21 @@ in
       type = types.nullOr types.str;
       default = config.services.varnish.stateDir;
       defaultText = lib.literalExpression "config.services.varnish.stateDir";
-      description = lib.mdDoc ''
+      description = ''
         varnishstat -n value.
       '';
     };
     healthPath = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose healthcheck. Disabled unless configured.
       '';
     };
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };

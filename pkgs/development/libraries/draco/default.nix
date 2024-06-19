@@ -15,17 +15,23 @@
 let
   cmakeBool = b: if b then "ON" else "OFF";
 in
-stdenv.mkDerivation rec {
-  version = "1.5.3";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.5.7";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
-    rev = version;
-    sha256 = "sha256-LbWtZtgvZQdgwAGHVsouH6cAIVXP+9Q5n8KjzaBRrBQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-p0Mn4kGeBBKL7Hoz4IBgb6Go6MdkgE7WZgxAnt1tE/0=";
     fetchSubmodules = true;
   };
+
+  # ld: unknown option: --start-group
+  postPatch = ''
+    substituteInPlace cmake/draco_targets.cmake \
+      --replace "^Clang" "^AppleClang"
+  '';
 
   buildInputs = [ gtest ]
     ++ lib.optionals withTranscoder [ eigen ghc_filesystem tinygltf ];
@@ -43,15 +49,19 @@ stdenv.mkDerivation rec {
     "-DDRACO_TINYGLTF_PATH=${tinygltf}"
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  CXXFLAGS = [
+    # error: expected ')' before 'value' in 'explicit GltfValue(uint8_t value)'
+    "-include cstdint"
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";
     homepage = "https://google.github.io/draco/";
+    changelog = "https://github.com/google/draco/releases/tag/${finalAttrs.version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jansol ];
     platforms = platforms.all;
   };
-}
+})

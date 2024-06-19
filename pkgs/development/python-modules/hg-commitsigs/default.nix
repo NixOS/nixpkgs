@@ -1,7 +1,8 @@
-{ lib
-, fetchhg
-, stdenv
-, python
+{
+  lib,
+  fetchhg,
+  stdenv,
+  python,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,9 +21,9 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/lib/${python.libPrefix}/site-packages/hgext3rd/
+    mkdir -p $out/${python.sitePackages}/hgext3rd/
     install -D $src/commitsigs.py \
-               $out/lib/${python.libPrefix}/site-packages/hgext3rd/
+               $out/${python.sitePackages}/hgext3rd/
   '';
 
   meta = with lib; {

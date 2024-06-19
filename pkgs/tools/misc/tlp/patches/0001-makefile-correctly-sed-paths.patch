@@ -15,14 +15,14 @@ The reason DESTDIR is used at all, as opposed to the more appropriate
 PREFIX, is covered in the nix formula, and is (also) due to the Makefile
 being a bit "different."
 ---
- Makefile | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ Makefile | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index e9bbab4..ab05720 100644
+index 8042517..1c436ad 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -51,19 +51,19 @@ _TPACPIBAT = $(DESTDIR)$(TPACPIBAT)
+@@ -57,20 +57,20 @@ _TPACPIBAT = $(DESTDIR)$(TPACPIBAT)
  
  SED = sed \
  	-e "s|@TLPVER@|$(TLPVER)|g" \
@@ -40,9 +40,11 @@ index e9bbab4..ab05720 100644
  	-e "s|@TLP_CONFDIR@|$(TLP_CONFDIR)|g" \
 -	-e "s|@TLP_CONFDEF@|$(TLP_CONFDEF)|g" \
 -	-e "s|@TLP_CONFREN@|$(TLP_CONFREN)|g" \
+-	-e "s|@TLP_CONFDPR@|$(TLP_CONFDPR)|g" \
 -	-e "s|@TLP_CONF@|$(TLP_CONF)|g" \
 +	-e "s|@TLP_CONFDEF@|$(_CONFDEF)|g" \
 +	-e "s|@TLP_CONFREN@|$(_CONFREN)|g" \
++	-e "s|@TLP_CONFDPR@|$(_CONFDPR)|g" \
 +	-e "s|@TLP_CONF@|$(_CONF)|g" \
  	-e "s|@TLP_RUN@|$(TLP_RUN)|g"   \
  	-e "s|@TLP_VAR@|$(TLP_VAR)|g"   \
@@ -52,5 +54,5 @@ index e9bbab4..ab05720 100644
  INFILES = \
  	tlp \
 -- 
-2.33.0
+2.41.0
 

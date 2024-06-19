@@ -1,17 +1,23 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pytest }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "simanneal";
   version = "0.5.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "perrygeo";
     repo = "simanneal";
     rev = version;
-    sha256 = "sha256-yKZHkrf6fM0WsHczIEK5Kxusz5dSBgydK3fLu1nDyvk=";
+    hash = "sha256-yKZHkrf6fM0WsHczIEK5Kxusz5dSBgydK3fLu1nDyvk=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = "pytest tests";
 
   meta = with lib; {

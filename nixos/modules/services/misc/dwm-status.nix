@@ -22,21 +22,15 @@ in
 
     services.dwm-status = {
 
-      enable = mkEnableOption (lib.mdDoc "dwm-status user service");
+      enable = mkEnableOption "dwm-status user service";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.dwm-status;
-        defaultText = literalExpression "pkgs.dwm-status";
-        example = literalExpression "pkgs.dwm-status.override { enableAlsaUtils = false; }";
-        description = lib.mdDoc ''
-          Which dwm-status package to use.
-        '';
+      package = mkPackageOption pkgs "dwm-status" {
+        example = "dwm-status.override { enableAlsaUtils = false; }";
       };
 
       order = mkOption {
         type = types.listOf (types.enum [ "audio" "backlight" "battery" "cpu_load" "network" "time" ]);
-        description = lib.mdDoc ''
+        description = ''
           List of enabled features in order.
         '';
       };
@@ -44,7 +38,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra config in TOML format.
         '';
       };

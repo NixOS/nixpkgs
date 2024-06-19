@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "atdgen-codec-runtime";
-  version = "2.10.0";
+  version = "2.15.0";
 
   src = fetchurl {
-    url = "https://github.com/ahrefs/atd/releases/download/${version}/atdts-${version}.tbz";
-    sha256 = "sha256-d9J0CaTp2sQbnKLp6mCDbGwYAIsioVer7ftaLSSFCZg=";
+    url = "https://github.com/ahrefs/atd/releases/download/${version}/atd-${version}.tbz";
+    hash = "sha256-ukJ5vtVNE9zz9nA6SzF0TbgV3yLAUC2ZZdbGdM4IOTM=";
   };
 
   meta = {

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.7";
 
   src = fetchurl {
-    url = "mirror://gnu/gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-Pue50cvjzZ+19iJxfae7VQbxpto7MPgS4jhLh7zk2lA=";
   };
 

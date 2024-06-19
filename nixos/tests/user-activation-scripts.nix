@@ -8,6 +8,7 @@ import ./make-test-python.nix ({ lib, ... }: {
       initialPassword = "pass1";
       isNormalUser = true;
     };
+    systemd.user.tmpfiles.users.alice.rules = [ "r %h/file-to-remove" ];
   };
 
   testScript = ''
@@ -27,7 +28,9 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.wait_for_file("/home/alice/login-ok")
     verify_user_activation_run_count(1)
 
+    machine.succeed("touch /home/alice/file-to-remove")
     machine.succeed("/run/current-system/bin/switch-to-configuration test")
     verify_user_activation_run_count(2)
+    machine.succeed("[[ ! -f /home/alice/file-to-remove ]] || false")
   '';
 })

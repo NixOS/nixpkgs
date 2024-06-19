@@ -1,30 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, cffi
-, pkg-config
-, libxkbcommon
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  cffi,
+  pkg-config,
+  libxkbcommon,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "xkbcommon";
-  version = "0.4";
+  version = "1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "V5LMaX5TPhk9x4ZA4MGFzDhUiC6NKPo4uTbW6Q7mdVw=";
+    hash = "sha256-NTEafcAU/PU1/2n3pb3m8dbZptI9j9nnmVG4iFqHHe8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   propagatedNativeBuildInputs = [ cffi ];
   buildInputs = [ libxkbcommon ];
   propagatedBuildInputs = [ cffi ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postBuild = ''
-    ${python.interpreter} xkbcommon/ffi_build.py
+    ${python.pythonOnBuildForHost.interpreter} xkbcommon/ffi_build.py
   '';
 
   pythonImportsCheck = [ "xkbcommon" ];

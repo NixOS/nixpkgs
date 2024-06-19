@@ -33,7 +33,7 @@
   # `self` as second, and returns a set of haskell packages
   package-set
 
-, # The final, fully overriden package set usable with the nixpkgs fixpoint
+, # The final, fully overridden package set usable with the nixpkgs fixpoint
   # overriding functionality
   extensible-self
 }:
@@ -73,7 +73,7 @@ let
 
   mkDerivation = makeOverridable mkDerivationImpl;
 
-  # manualArgs are the arguments that were explictly passed to `callPackage`, like:
+  # manualArgs are the arguments that were explicitly passed to `callPackage`, like:
   #
   # callPackage foo { bar = null; };
   #
@@ -93,8 +93,9 @@ let
       # Converts a returned function to a functor attribute set if necessary
       ensureAttrs = v: if builtins.isFunction v then { __functor = _: v; } else v;
 
-      # this wraps the `drv` function to add a `overrideScope` function to the result.
+      # this wraps the `drv` function to add `scope` and `overrideScope` to the result.
       drvScope = allArgs: ensureAttrs (drv allArgs) // {
+        inherit scope;
         overrideScope = f:
           let newScope = mkScope (fix' (extends f scope.__unfix__));
           # note that we have to be careful here: `allArgs` includes the auto-arguments that
@@ -161,17 +162,13 @@ let
     src    = "${component}/${name}.cabal";
   };
 
-  # Adds a nix file as an input to the haskell derivation it
-  # produces. This is useful for callHackage / callCabal2nix to
-  # prevent the generated default.nix from being garbage collected
-  # (requiring it to be frequently rebuilt), which can be an
-  # annoyance.
+  # Adds a nix file derived from cabal2nix in the passthru of the derivation it
+  # produces. This is useful to debug callHackage / callCabal2nix by looking at
+  # the content of the nix file pointed by `cabal2nixDeriver`.
+  # However, it does not keep a reference to that file, which may be garbage
+  # collected, which may be an annoyance.
   callPackageKeepDeriver = src: args:
     overrideCabal (orig: {
-      preConfigure = ''
-        # Generated from ${src}
-        ${orig.preConfigure or ""}
-      '';
       passthru = orig.passthru or {} // {
         # When using callCabal2nix or callHackage, it is often useful
         # to debug a failure by inspecting the Nix expression
@@ -202,23 +199,33 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # for any version that has been released on hackage as opposed to only
     # versions released before whatever version of all-cabal-hashes you happen
     # to be currently using.
-    callHackageDirect = {pkg, ver, sha256}:
+    callHackageDirect = {pkg, ver, sha256, rev ? { revision = null; sha256 = null; }}: args:
       let pkgver = "${pkg}-${ver}";
-      in self.callCabal2nix pkg (pkgs.fetchzip {
-           url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
-           inherit sha256;
-         });
+          firstRevision = self.callCabal2nix pkg (pkgs.fetchzip {
+            url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
+            inherit sha256;
+          }) args;
+      in overrideCabal (orig: {
+        revision = rev.revision;
+        editedCabalFile = rev.sha256;
+      }) firstRevision;
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
+    callCabal2nixWithOptions = name: src: opts: args:
       let
-        filter = path: type:
+        extraCabal2nixOptions = if builtins.isString opts
+                                then opts
+                                else opts.extraCabal2nixOptions or "";
+        srcModifier = opts.srcModifier or null;
+        defaultFilter = path: type:
                    pkgs.lib.hasSuffix ".cabal" path ||
                    baseNameOf path == "package.yaml";
         expr = self.haskellSrc2nix {
           inherit name extraCabal2nixOptions;
-          src = if pkgs.lib.canCleanSource src
-                  then pkgs.lib.cleanSourceWith { inherit src filter; }
+          src = if srcModifier != null
+                then srcModifier src
+                else if pkgs.lib.canCleanSource src
+                then pkgs.lib.cleanSourceWith { inherit src; filter = defaultFilter; }
                 else src;
         };
       in overrideCabal (orig: {
@@ -257,7 +264,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # a cabal flag with '--flag=myflag'.
     developPackage =
       { root
-      , name ? if builtins.typeOf root == "path" then builtins.baseNameOf root else ""
+      , name ? lib.optionalString (builtins.typeOf root == "path") (builtins.baseNameOf root)
       , source-overrides ? {}
       , overrides ? self: super: {}
       , modifier ? drv: drv
@@ -284,8 +291,9 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # GHC is setup with a package database with all the specified Haskell packages.
     #
     # ghcWithPackages :: (HaskellPkgSet -> [ HaskellPkg ]) -> Derivation
-    ghcWithPackages = self.callPackage ./with-packages-wrapper.nix {
+    ghcWithPackages = buildHaskellPackages.callPackage ./with-packages-wrapper.nix {
       haskellPackages = self;
+      inherit (self) hoogleWithPackages;
     };
 
 
@@ -597,4 +605,48 @@ in package-set { inherit pkgs lib callPackage; } self // {
         }
         pkg;
 
+    /*
+      Modify a Haskell package to add shell completion scripts for the
+      given executables produced by it. These completion scripts will be
+      picked up automatically if the resulting derivation is installed,
+      e.g. by `nix-env -i`.
+
+      This depends on the `--*-completion` flag `optparse-applicative` provides
+      automatically. Since we need to invoke installed executables, completions
+      are not generated if we are cross-compiling.
+
+       commands: names of the executables built by the derivation
+            pkg: Haskell package that builds the executables
+
+      Example:
+        generateOptparseApplicativeCompletions [ "exec1" "exec2" ] pkg
+
+       Type: [str] -> drv -> drv
+    */
+    generateOptparseApplicativeCompletions =
+      (self.callPackage (
+        { stdenv }:
+
+        commands:
+        pkg:
+
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform
+        then lib.foldr haskellLib.__generateOptparseApplicativeCompletion pkg commands
+        else pkg
+      ) { }) // { __attrsFailEvaluation = true; };
+
+    /*
+      Modify given Haskell package to force GHC to employ the LLVM
+      codegen backend when compiling. Useful when working around bugs
+      in a native codegen backend GHC defaults to.
+
+      Example:
+        forceLlvmCodegenBackend tls
+
+      Type: drv -> drv
+    */
+    forceLlvmCodegenBackend = overrideCabal (drv: {
+      configureFlags = drv.configureFlags or [ ] ++ [ "--ghc-option=-fllvm" ];
+      buildTools = drv.buildTools or [ ] ++ [ self.llvmPackages.llvm ];
+    });
   }

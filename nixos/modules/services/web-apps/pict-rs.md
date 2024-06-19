@@ -7,7 +7,9 @@ pict-rs is a  a simple image hosting service.
 the minimum to start pict-rs is
 
 ```nix
-services.pict-rs.enable = true;
+{
+  services.pict-rs.enable = true;
+}
 ```
 
 this will start the http server on port 8080 by default.
@@ -15,6 +17,7 @@ this will start the http server on port 8080 by default.
 ## Usage {#module-services-pict-rs-usage}
 
 pict-rs offers the following endpoints:
+
 - `POST /image` for uploading an image. Uploaded content must be valid multipart/form-data with an
     image array located within the `images[]` key
 

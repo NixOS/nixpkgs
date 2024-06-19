@@ -2,6 +2,7 @@
 , stdenv
 , symlinkJoin
 , fetchFromGitHub
+, libxcrypt
 }:
 
 let
@@ -14,10 +15,10 @@ let
     rev = version;
     sha256 = "sha256-VxAaPhaPXd9xYt663Ju6SLblqiSLizauhhuFqCqbO5M=";
   }
-  }: stdenv.mkDerivation rec {
+  }: stdenv.mkDerivation (finalAttrs: {
     pname = "wiringpi-${subprj}";
     inherit version src;
-    sourceRoot = "source/${subprj}";
+    sourceRoot = "${src.name}/${subprj}";
     inherit buildInputs;
     # Remove (meant for other OSs) lines from Makefiles
     preInstall = ''
@@ -30,11 +31,14 @@ let
       # On NixOS we don't need to run ldconfig during build:
       "LDCONFIG=echo"
     ];
-  };
+  });
   passthru = {
     inherit mkSubProject;
     wiringPi = mkSubProject {
       subprj = "wiringPi";
+      buildInputs = [
+        libxcrypt
+      ];
     };
     devLib = mkSubProject {
       subprj = "devLib";
@@ -45,6 +49,7 @@ let
     wiringPiD = mkSubProject {
       subprj = "wiringPiD";
       buildInputs = [
+        libxcrypt
         passthru.wiringPi
         passthru.devLib
       ];
@@ -52,6 +57,7 @@ let
     gpio = mkSubProject {
       subprj = "gpio";
       buildInputs = [
+        libxcrypt
         passthru.wiringPi
         passthru.devLib
       ];

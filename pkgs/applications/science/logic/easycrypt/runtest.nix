@@ -21,5 +21,6 @@ python3Packages.buildPythonApplication rec {
 
   meta = easycrypt.meta // {
     description = "Testing program for EasyCrypt formalizations";
+    mainProgram = "ec-runtest";
   };
 }

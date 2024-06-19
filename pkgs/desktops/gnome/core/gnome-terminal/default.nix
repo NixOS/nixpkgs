@@ -1,16 +1,17 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitLab
 , meson
 , ninja
 , pkg-config
 , python3
 , libxml2
-, gnome
-, dconf
+, gitUpdater
 , nautilus
 , glib
+, gtk4
 , gtk3
+, libhandy
 , gsettings-desktop-schemas
 , vte
 , gettext
@@ -19,20 +20,23 @@
 , vala
 , desktop-file-utils
 , itstool
-, wrapGAppsHook
+, wrapGAppsHook3
 , pcre2
 , libxslt
 , docbook-xsl-nons
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-terminal";
-  version = "3.44.1";
+  version = "3.52.2";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gnome-terminal/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+28g7h/yMamq7asT1dxuWmTJVXESJISLeQCG6IlZ03s=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gnome-terminal";
+    rev = finalAttrs.version;
+    hash = "sha256-c6xMUyhQnJiIrFnnUEx6vGVvFghGvLjTxiAFq+nSj2A=";
   };
 
   nativeBuildInputs = [
@@ -48,48 +52,46 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     vala
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
     pcre2
     python3
   ];
 
   buildInputs = [
     glib
+    gtk4
     gtk3
+    libhandy
     gsettings-desktop-schemas
     vte
     libuuid
-    dconf
     nautilus # For extension
   ];
 
-  # Silly build system, it looks for dbus file from gnome-shell in the
-  # installation tree of the package it is configuring.
   postPatch = ''
-    substituteInPlace src/meson.build \
-       --replace "gt_prefix / gt_dbusinterfacedir / 'org.gnome.ShellSearchProvider2.xml'" \
-       "'${gnome.gnome-shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml'"
-
     patchShebangs \
       data/icons/meson_updateiconcache.py \
       data/meson_desktopfile.py \
+      data/meson_metainfofile.py \
       src/meson_compileschemas.py
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gnome-terminal";
-      attrPath = "gnome.gnome-terminal";
+    updateScript = gitUpdater {
+      odd-unstable = true;
+    };
+
+    tests = {
+      test = nixosTests.terminal-emulators.gnome-terminal;
     };
   };
 
-  passthru.tests.test = nixosTests.terminal-emulators.gnome-terminal;
-
   meta = with lib; {
     description = "The GNOME Terminal Emulator";
-    homepage = "https://wiki.gnome.org/Apps/Terminal";
+    mainProgram = "gnome-terminal";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-terminal";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
   };
-}
+})

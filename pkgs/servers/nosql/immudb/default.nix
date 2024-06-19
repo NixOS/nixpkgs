@@ -6,21 +6,21 @@
 }:
 
 let
-  webconsoleVersion = "1.0.17";
+  webconsoleVersion = "1.0.18";
   webconsoleDist = fetchzip {
     url = "https://github.com/codenotary/immudb-webconsole/releases/download/v${webconsoleVersion}/immudb-webconsole.tar.gz";
-    sha256 = "sha256-hFSvPwSRXyrSBYktTOwIRa1+aH+mX/scDYDokvZuW1s=";
+    sha256 = "sha256-4BhTK+gKO8HW1CelGa30THpfkqfqFthK+b7p9QWl4Pw=";
   };
 in
 buildGoModule rec {
   pname = "immudb";
-  version = "1.3.2";
+  version = "1.9DOM.2";
 
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lcKjeqZeTQQMhVjnWNP3c+HanI/eenfUbpZJAo5FEkM=";
+    sha256 = "sha256-bNMJZWXelHQatW9rhqf3eYs61nJJEBwMXZhUZWQv6S0=";
   };
 
   preBuild = ''
@@ -29,9 +29,7 @@ buildGoModule rec {
     go generate -tags webconsole ./webconsole
   '';
 
-  proxyVendor = true; # check if this is needed anymore when updating
-
-  vendorSha256 = "sha256-gMpkV0XqY6wh7s0lndIdCoYlvVBrMk7/lvyDVqnJ66c=";
+  vendorHash = "sha256-6DHmJrE+xkf8K38a8h1VSD33W6qj594Q5bJJXnfSW0Q=";
 
   nativeBuildInputs = [ installShellFiles ];
 

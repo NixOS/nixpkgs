@@ -7,14 +7,13 @@ let
     thickness = [ "" "Slim_" ];  # Thick or slim edges.
     handedness = [ "" "LH_" ];   # Right- or left-handed.
   };
-  product = lib.cartesianProductOfSets dimensions;
   variantName =
     { color, opacity, thickness, handedness }:
     "${handedness}${opacity}${thickness}${color}";
   variants =
     # (The order of this list is already good looking enough to show in the
     # meta.longDescription.)
-    map variantName product;
+    lib.mapCartesianProduct variantName dimensions;
 in
 stdenvNoCC.mkDerivation rec {
   pname = "comixcursors";
@@ -52,7 +51,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
-    for outputName in $outputs ; do
+    for outputName in $(getAllOutputNames) ; do
       if [ $outputName != out ]; then
         local outputDir=''${!outputName};
         local iconsDir=$outputDir/share/icons

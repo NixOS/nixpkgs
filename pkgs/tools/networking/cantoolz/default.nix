@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     bitstring
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
@@ -52,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Black-box CAN network analysis framework";
+    mainProgram = "cantoolz";
     longDescription = ''
       CANToolz is a framework for analysing CAN networks and devices. It
       provides multiple modules that can be chained using CANToolz's pipe

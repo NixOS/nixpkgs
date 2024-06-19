@@ -13,6 +13,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "The server part of irony";
+    mainProgram = "irony-server";
     homepage = "https://melpa.org/#/irony";
     maintainers = [ maintainers.deepfire ];
     platforms = platforms.unix;

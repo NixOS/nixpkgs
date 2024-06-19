@@ -1,14 +1,12 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 {
   # interface
   options.programs.k3b = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable k3b, the KDE disk burning application.
 
         Additionally to installing `k3b` enabling this will
@@ -22,13 +20,13 @@ with lib;
   };
 
   # implementation
-  config = mkIf config.programs.k3b.enable {
+  config = lib.mkIf config.programs.k3b.enable {
 
     environment.systemPackages = with pkgs; [
       k3b
       dvdplusrwtools
       cdrdao
-      cdrkit
+      cdrtools
     ];
 
     security.wrappers = {
@@ -44,7 +42,7 @@ with lib;
         owner = "root";
         group = "cdrom";
         permissions = "u+wrx,g+x";
-        source = "${pkgs.cdrkit}/bin/cdrecord";
+        source = "${pkgs.cdrtools}/bin/cdrecord";
       };
     };
 

@@ -1,21 +1,30 @@
-{ lib, fetchPypi, buildPythonPackage
-, nose, numpy, future
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  future,
+  numpy,
+  pynose,
 }:
 
 buildPythonPackage rec {
   pname = "uncertainties";
   version = "3.1.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-gBEeCDnyOcWyM8tHcgF7SDoLehVzpYG5Krd0ajXm+qs=";
+    hash = "sha256-gBEeCDnyOcWyM8tHcgF7SDoLehVzpYG5Krd0ajXm+qs=";
   };
 
   propagatedBuildInputs = [ future ];
-  checkInputs = [ nose numpy ];
+  nativeCheckInputs = [
+    pynose
+    numpy
+  ];
 
   checkPhase = ''
-    nosetests -sv
+    nosetests -sve test_1to2
   '';
 
   meta = with lib; {

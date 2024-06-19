@@ -4,13 +4,11 @@
 , meson
 , ninja
 , pkg-config
-, vala_0_56
+, vala
 , gettext
 , itstool
-, python3
-, appstream-glib
 , desktop-file-utils
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtk3
 , libhandy
@@ -23,25 +21,23 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
-  version = "42.1.2";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-2ObnJ0EJHYkt/IQoH2JVUdBWjNSC1I21ik7bivoTd7Y=";
+    hash = "sha256-+xzqaOeTC73B2yi3zQqaN80xDUtOeHL+gU9QoWqNJdM=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    vala_0_56
+    vala
     gettext
     itstool
-    python3
-    appstream-glib
     desktop-file-utils
     glib # glib-compile-resources
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -54,11 +50,6 @@ stdenv.mkDerivation rec {
     gtk-frdp
   ];
 
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -68,6 +59,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/connections";
     description = "A remote desktop client for the GNOME desktop environment";
+    mainProgram = "gnome-connections";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

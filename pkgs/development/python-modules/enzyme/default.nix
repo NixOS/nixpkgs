@@ -1,8 +1,13 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+}:
 
 buildPythonPackage rec {
   pname = "enzyme";
   version = "0.4.1";
+  format = "setuptools";
 
   # Tests rely on files obtained over the network
   doCheck = false;

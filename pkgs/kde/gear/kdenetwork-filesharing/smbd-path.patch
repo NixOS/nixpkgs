@@ -1,0 +1,14 @@
+diff --git a/samba/filepropertiesplugin/sambausershareplugin.cpp b/samba/filepropertiesplugin/sambausershareplugin.cpp
+index d5c8d77..11c45d4 100644
+--- a/samba/filepropertiesplugin/sambausershareplugin.cpp
++++ b/samba/filepropertiesplugin/sambausershareplugin.cpp
+@@ -112,7 +112,8 @@ SambaUserSharePlugin::SambaUserSharePlugin(QObject *parent)
+ bool SambaUserSharePlugin::isSambaInstalled()
+ {
+     return QFile::exists(QStringLiteral("/usr/sbin/smbd"))
+-        || QFile::exists(QStringLiteral("/usr/local/sbin/smbd"));
++        || QFile::exists(QStringLiteral("/usr/local/sbin/smbd"))
++        || QFile::exists(QStringLiteral("/run/current-system/sw/bin/smbd"));
+ }
+ 
+ void SambaUserSharePlugin::showSambaStatus()

@@ -1,30 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, urllib3
-, pyopenssl
-, cryptography
-, idna
-, certifi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  urllib3,
+  certifi,
 }:
 
 buildPythonPackage rec {
   pname = "domeneshop";
-  version = "0.4.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.4";
+  version = "0.4.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "tr3wsrscIU66kTz3nlvDHj2EXoEHCH3grD0yD7BU3Fc=";
+    hash = "sha256-UCxIDnhIAkxZ1oQXYRyAMdGgUsUZ6AlYXwsxL49TFAg=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ setuptools ];
+
+  dependencies = [
     certifi
     urllib3
-  ] ++ urllib3.optional-dependencies.secure;
+  ];
 
   # There are none
   doCheck = false;
@@ -32,6 +30,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "domeneshop" ];
 
   meta = with lib; {
+    changelog = "https://github.com/domeneshop/python-domeneshop/releases/tag/v${version}";
     description = "Python library for working with the Domeneshop API";
     homepage = "https://api.domeneshop.no/docs/";
     license = licenses.mit;

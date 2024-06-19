@@ -1,31 +1,27 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
-let
-  pname = "phpstan";
-  version = "1.8.6";
-in
-mkDerivation {
-  inherit pname version;
+{
+  fetchFromGitHub,
+  lib,
+  php,
+}:
 
-  src = fetchurl {
-    url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-    sha256 = "sha256-8scUd8BT6u9rqBPoaXozkn6H9PIWF/MWNWT9y8RwPkg=";
+php.buildComposerProject (finalAttrs: {
+  pname = "phpstan";
+  version = "1.11.2";
+
+  src = fetchFromGitHub {
+    owner = "phpstan";
+    repo = "phpstan-src";
+    rev = finalAttrs.version;
+    hash = "sha256-g1YIFqNo1UTmNrgS+lAkDXSnKsmhLj+Itoi3tgxdx4Y=";
   };
 
-  dontUnpack = true;
+  vendorHash = "sha256-sFV22B5ohbDvclb1nuvpMhhfKjEe7FAFCqWfIguAY8M=";
+  composerStrictValidation = false;
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/phpstan/phpstan.phar
-    makeWrapper ${php}/bin/php $out/bin/phpstan \
-      --add-flags "$out/libexec/phpstan/phpstan.phar"
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/phpstan/phpstan/releases/tag/${finalAttrs.version}";
     description = "PHP Static Analysis Tool";
+    homepage = "https://github.com/phpstan/phpstan";
     longDescription = ''
       PHPStan focuses on finding errors in your code without actually
       running it. It catches whole classes of bugs even before you write
@@ -33,8 +29,8 @@ mkDerivation {
       sense that the correctness of each line of the code can be checked
       before you run the actual line.
     '';
-    license = licenses.mit;
-    homepage = "https://github.com/phpstan/phpstan";
-    maintainers = teams.php.members;
+    license = lib.licenses.mit;
+    mainProgram = "phpstan";
+    maintainers = lib.teams.php.members;
   };
-}
+})

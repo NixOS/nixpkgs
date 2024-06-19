@@ -2,18 +2,19 @@
 , fetchFromGitHub
 , python3
 , mopidy
+, extraPkgs ? pkgs: []
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mopidy-youtube";
-  version = "3.6";
+  version = "3.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "natumbri";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Mp8eCVNGokJRwmYiZYCYRwV1QVDV02Uqfh6fGcPgJss=";
+    hash = "sha256-iFt7r8Ljymc+grNJiOClTHkZOeo7AcYpcNc8tLMPROk=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -25,9 +26,9 @@ python3.pkgs.buildPythonApplication rec {
     ytmusicapi
   ] ++ [
     mopidy
-  ];
+  ] ++ extraPkgs pkgs;
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     vcrpy
     pytestCheckHook
   ];
@@ -52,6 +53,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Mopidy extension for playing music from YouTube";
     homepage = "https://github.com/natumbri/mopidy-youtube";
     license = licenses.asl20;
-    maintainers = with maintainers; [ spwhitt ];
+    maintainers = with maintainers; [ ];
   };
 }

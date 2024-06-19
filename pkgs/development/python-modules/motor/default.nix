@@ -1,26 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mockupdb
-, pymongo
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mockupdb,
+  pymongo,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "motor";
-  version = "3.1.0";
-  disabled = pythonOlder "3.6";
+  version = "3.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Wc0C4sO33v/frBtZVV2u9ESunHKyJI+eQ59l72h2eFk=";
+    hash = "sha256-Rj8eYZxmw/cn/vkhLunmHgxMMHIQe80Zhc2p0q3b/AY=";
   };
 
   propagatedBuildInputs = [ pymongo ];
 
-  checkInputs = [ mockupdb ];
+  nativeCheckInputs = [ mockupdb ];
 
   # network connections
   doCheck = false;

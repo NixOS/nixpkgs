@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
-  version = "2.7.1";
+  version = "2.12.0";
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "ena_linux_${version}";
-    sha256 = "sha256-JkGzmmsAmLvL9e+bg58H79GNHgsqydK/79VoWEq5/Mc=";
+    hash = "sha256-Z/eeIUY7Yl2l/IqK3Z2nxPhn+JLvP976IZ9ZXPBqoSo=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -17,11 +17,18 @@ stdenv.mkDerivation rec {
   makeFlags = kernel.makeFlags;
 
   # linux 3.12
-  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
+  patches = [
+    # Use kernel version checks instead of API feature detection
+    # See https://github.com/NixOS/nixpkgs/pull/310680
+    ./override-features-api-detection.patch
+  ];
 
   configurePhase = ''
     runHook preConfigure
     cd kernel/linux/ena
+    export ENA_PHC_INCLUDE=1
     substituteInPlace Makefile --replace '/lib/modules/$(BUILD_KERNEL)' ${kernel.dev}/lib/modules/${kernel.modDirVersion}
     runHook postConfigure
   '';
@@ -40,8 +47,7 @@ stdenv.mkDerivation rec {
     description = "Amazon Elastic Network Adapter (ENA) driver for Linux";
     homepage = "https://github.com/amzn/amzn-drivers";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.eelco ];
+    maintainers = with maintainers; [ eelco sielicki ];
     platforms = platforms.linux;
-    broken = kernel.kernelAtLeast "5.17";
   };
 }

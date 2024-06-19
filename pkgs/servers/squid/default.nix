@@ -3,13 +3,13 @@
 , cppunit
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "5.7";
+  version = "6.8";
 
   src = fetchurl {
-    url = "http://www.squid-cache.org/Versions/v5/${pname}-${version}.tar.xz";
-    hash = "sha256-awdTqrpMnE79Mz5nEkyuz3rWzC04WB8Z0vAyH1t+zYE=";
+    url = "http://www.squid-cache.org/Versions/v6/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    hash = "sha256-EcxWULUYCdmUg8z64kdEouUc0WGZ9f8MkX6E/OaVhw8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--enable-linux-netfilter";
 
   doCheck = true;
-  checkInputs = [ cppunit ];
+  nativeCheckInputs = [ cppunit ];
   preCheck = ''
     # tests attempt to copy around "/bin/true" to make some things
     # no-ops but this doesn't work if our "true" is a multi-call
@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
+    knownVulnerabilities = [ "Squid has multiple unresolved security vulnerabilities, for more information see https://megamansec.github.io/Squid-Security-Audit/" ];
   };
-}
+})

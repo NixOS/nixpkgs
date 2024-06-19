@@ -1,43 +1,46 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, python
-, py-multiaddr
-, requests
-, pytestCheckHook
-, pytest-cov
-, pytest-dependency
-, pytest-localserver
-, pytest-mock
-, pytest-order
-, pytest-cid
-, mock
-, kubo
-, httpx
-, httpcore
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pythonOlder,
+  python,
+  py-multiaddr,
+  requests,
+  pytestCheckHook,
+  pytest-cov,
+  pytest-dependency,
+  pytest-localserver,
+  pytest-mock,
+  pytest-order,
+  pytest-cid,
+  mock,
+  kubo,
+  httpx,
+  httpcore,
 }:
 
 buildPythonPackage rec {
   pname = "ipfshttpclient";
   version = "0.8.0a2";
-  format = "flit";
+  format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ipfs-shipyard";
     repo = "py-ipfs-http-client";
     rev = version;
-    sha256 = "sha256-OmC67pN2BbuGwM43xNDKlsLhwVeUbpvfOazyIDvoMEA=";
+    hash = "sha256-OmC67pN2BbuGwM43xNDKlsLhwVeUbpvfOazyIDvoMEA=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     py-multiaddr
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
     pytest-dependency
@@ -85,10 +88,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ipfshttpclient" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A python client library for the IPFS API";
     homepage = "https://github.com/ipfs-shipyard/py-ipfs-http-client";
     license = licenses.mit;
-    maintainers = with maintainers; [ mguentner Luflosi ];
+    maintainers = with maintainers; [
+      mguentner
+      Luflosi
+    ];
   };
 }

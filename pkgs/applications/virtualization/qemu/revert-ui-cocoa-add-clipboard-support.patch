@@ -1,14 +1,5 @@
-From 756021d1e433925cf9a732d7ea67b01b0beb061c Mon Sep 17 00:00:00 2001
-From: Will Cohen <willcohen@users.noreply.github.com>
-Date: Tue, 29 Mar 2022 14:00:56 -0400
-Subject: [PATCH] Revert "ui/cocoa: Add clipboard support"
-
-This reverts commit 7e3e20d89129614f4a7b2451fe321cc6ccca3b76.
----
- include/ui/clipboard.h |   2 +-
- ui/clipboard.c         |   2 +-
- ui/cocoa.m             | 123 -----------------------------------------
- 3 files changed, 2 insertions(+), 125 deletions(-)
+Based on a reversion of upstream 7e3e20d89129614f4a7b2451fe321cc6ccca3b76,
+adapted for 7.2.0
 
 diff --git a/include/ui/clipboard.h b/include/ui/clipboard.h
 index ce76aa451f..c4e1dc4ff4 100644
@@ -24,10 +15,10 @@ index ce76aa451f..c4e1dc4ff4 100644
  
  G_DEFINE_AUTOPTR_CLEANUP_FUNC(QemuClipboardInfo, qemu_clipboard_info_unref)
 diff --git a/ui/clipboard.c b/ui/clipboard.c
-index 9079ef829b..6b9ed59e1b 100644
+index 3d14bffaf8..2c3f4c3ba0 100644
 --- a/ui/clipboard.c
 +++ b/ui/clipboard.c
-@@ -140,7 +140,7 @@ void qemu_clipboard_set_data(QemuClipboardPeer *peer,
+@@ -154,7 +154,7 @@ void qemu_clipboard_set_data(QemuClipboardPeer *peer,
                               QemuClipboardInfo *info,
                               QemuClipboardType type,
                               uint32_t size,
@@ -37,7 +28,7 @@ index 9079ef829b..6b9ed59e1b 100644
  {
      if (!info ||
 diff --git a/ui/cocoa.m b/ui/cocoa.m
-index 5a8bd5dd84..79ed6d043f 100644
+index 660d3e0935..0e6760c360 100644
 --- a/ui/cocoa.m
 +++ b/ui/cocoa.m
 @@ -29,7 +29,6 @@
@@ -48,8 +39,8 @@ index 5a8bd5dd84..79ed6d043f 100644
  #include "ui/console.h"
  #include "ui/input.h"
  #include "ui/kbd-state.h"
-@@ -109,10 +108,6 @@ static void cocoa_switch(DisplayChangeListener *dcl,
- static QemuSemaphore app_started_sem;
+@@ -105,10 +104,6 @@ static void cocoa_switch(DisplayChangeListener *dcl,
+ 
  static bool allow_events;
  
 -static NSInteger cbchangecount = -1;
@@ -59,7 +50,7 @@ index 5a8bd5dd84..79ed6d043f 100644
  // Utility functions to run specified code block with iothread lock held
  typedef void (^CodeBlock)(void);
  typedef bool (^BoolCodeBlock)(void);
-@@ -1815,107 +1810,6 @@ static void addRemovableDevicesMenuItems(void)
+@@ -1799,107 +1794,6 @@ static void addRemovableDevicesMenuItems(void)
      qapi_free_BlockInfoList(pointerToFree);
  }
  
@@ -167,15 +158,15 @@ index 5a8bd5dd84..79ed6d043f 100644
  /*
   * The startup process for the OSX/Cocoa UI is complicated, because
   * OSX insists that the UI runs on the initial main thread, and so we
-@@ -1950,7 +1844,6 @@ static void cocoa_clipboard_request(QemuClipboardInfo *info,
-     COCOA_DEBUG("Second thread: calling qemu_main()\n");
-     status = qemu_main(gArgc, gArgv, *_NSGetEnviron());
-     COCOA_DEBUG("Second thread: qemu_main() returned, exiting\n");
+@@ -1922,7 +1816,6 @@ static void cocoa_clipboard_request(QemuClipboardInfo *info,
+     status = qemu_default_main();
+     qemu_mutex_unlock_iothread();
+     COCOA_DEBUG("Second thread: qemu_default_main() returned, exiting\n");
 -    [cbowner release];
      exit(status);
  }
  
-@@ -2066,18 +1959,6 @@ static void cocoa_refresh(DisplayChangeListener *dcl)
+@@ -2003,18 +1896,6 @@ static void cocoa_refresh(DisplayChangeListener *dcl)
              [cocoaView setAbsoluteEnabled:YES];
          });
      }
@@ -194,7 +185,7 @@ index 5a8bd5dd84..79ed6d043f 100644
      [pool release];
  }
  
-@@ -2117,10 +1998,6 @@ static void cocoa_display_init(DisplayState *ds, DisplayOptions *opts)
+@@ -2071,12 +1952,6 @@ static void cocoa_display_init(DisplayState *ds, DisplayOptions *opts)
  
      // register vga output callbacks
      register_displaychangelistener(&dcl);
@@ -202,9 +193,8 @@ index 5a8bd5dd84..79ed6d043f 100644
 -    qemu_event_init(&cbevent, false);
 -    cbowner = [[QemuCocoaPasteboardTypeOwner alloc] init];
 -    qemu_clipboard_peer_register(&cbpeer);
+-
+-    [pool release];
  }
  
  static QemuDisplay qemu_display_cocoa = {
--- 
-2.35.1
-

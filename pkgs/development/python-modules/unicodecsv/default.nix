@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   version = "0.14.1";
+  format = "setuptools";
   pname = "unicodecsv";
 
   src = fetchPypi {
@@ -20,5 +22,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/jdunck/python-unicodecsv";
     maintainers = with maintainers; [ koral ];
   };
-
 }

@@ -1,9 +1,45 @@
-{ lib, config, pkgs }: with lib;
+{ lib, config, pkgs }:
 
-rec {
+let
+  inherit (lib)
+    any
+    attrNames
+    concatMapStringsSep
+    concatStringsSep
+    elem
+    escapeShellArg
+    filter
+    flatten
+    getName
+    hasPrefix
+    hasSuffix
+    imap0
+    imap1
+    isAttrs
+    isDerivation
+    isFloat
+    isInt
+    isList
+    isPath
+    isString
+    listToAttrs
+    nameValuePair
+    optionalString
+    removePrefix
+    removeSuffix
+    replaceStrings
+    stringToCharacters
+    types
+    ;
+
+  inherit (lib.strings) toJSON normalizePath escapeC;
+in
+
+let
+utils = rec {
 
   # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommand (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
+  copyFile = filePath: pkgs.runCommand (builtins.unsafeDiscardStringContext (baseNameOf filePath)) {} ''
     cp ${filePath} $out
   '';
 
@@ -39,11 +75,19 @@ rec {
     || hasPrefix a'.mountPoint b'.mountPoint
     || any (hasPrefix a'.mountPoint) b'.depends;
 
-  # Escape a path according to the systemd rules, e.g. /dev/xyzzy
-  # becomes dev-xyzzy.  FIXME: slow.
-  escapeSystemdPath = s:
-   replaceChars ["/" "-" " "] ["-" "\\x2d" "\\x20"]
-   (removePrefix "/" s);
+  # Escape a path according to the systemd rules. FIXME: slow
+  # The rules are described in systemd.unit(5) as follows:
+  # The escaping algorithm operates as follows: given a string, any "/" character is replaced by "-", and all other characters which are not ASCII alphanumerics, ":", "_" or "." are replaced by C-style "\x2d" escapes. In addition, "." is replaced with such a C-style escape when it would appear as the first character in the escaped string.
+  # When the input qualifies as absolute file system path, this algorithm is extended slightly: the path to the root directory "/" is encoded as single dash "-". In addition, any leading, trailing or duplicate "/" characters are removed from the string before transformation. Example: /foo//bar/baz/ becomes "foo-bar-baz".
+  escapeSystemdPath = s: let
+    replacePrefix = p: r: s: (if (hasPrefix p s) then r + (removePrefix p s) else s);
+    trim = s: removeSuffix "/" (removePrefix "/" s);
+    normalizedPath = normalizePath s;
+  in
+    replaceStrings ["/"] ["-"]
+    (replacePrefix "." (escapeC ["."] ".")
+    (escapeC (stringToCharacters " !\"#$%&'()*+,;<=>=@[\\]^`{|}~-")
+    (if normalizedPath == "/" then normalizedPath else trim normalizedPath)));
 
   # Quotes an argument for use in Exec* service lines.
   # systemd accepts "-quoted strings with escape sequences, toJSON produces
@@ -54,12 +98,12 @@ rec {
   # substitution for the directive.
   escapeSystemdExecArg = arg:
     let
-      s = if builtins.isPath arg then "${arg}"
-        else if builtins.isString arg then arg
-        else if builtins.isInt arg || builtins.isFloat arg then toString arg
-        else throw "escapeSystemdExecArg only allows strings, paths and numbers";
+      s = if isPath arg then "${arg}"
+        else if isString arg then arg
+        else if isInt arg || isFloat arg || isDerivation arg then toString arg
+        else throw "escapeSystemdExecArg only allows strings, paths, numbers and derivations";
     in
-      replaceChars [ "%" "$" ] [ "%%" "$$" ] (builtins.toJSON s);
+      replaceStrings [ "%" "$" ] [ "%%" "$$" ] (toJSON s);
 
   # Quotes a list of arguments into a single string for use in a Exec*
   # line.
@@ -101,8 +145,13 @@ rec {
       recurse = prefix: item:
         if item ? ${attr} then
           nameValuePair prefix item.${attr}
+        else if isDerivation item then []
         else if isAttrs item then
-          map (name: recurse (prefix + "." + name) item.${name}) (attrNames item)
+          map (name:
+            let
+              escapedName = ''"${replaceStrings [''"'' "\\"] [''\"'' "\\\\"] name}"'';
+            in
+              recurse (prefix + "." + escapedName) item.${name}) (attrNames item)
         else if isList item then
           imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
         else
@@ -165,6 +214,7 @@ rec {
   genJqSecretsReplacementSnippet' = attr: set: output:
     let
       secrets = recursiveGetAttrWithJqPrefix set attr;
+      stringOrDefault = str: def: if str == "" then def else str;
     in ''
       if [[ -h '${output}' ]]; then
         rm '${output}'
@@ -182,14 +232,16 @@ rec {
                 '')
                (attrNames secrets))
     + "\n"
-    + "${pkgs.jq}/bin/jq >'${output}' '"
-    + concatStringsSep
-      " | "
-      (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
-             (attrNames secrets))
+    + "${pkgs.jq}/bin/jq >'${output}' "
+    + escapeShellArg (stringOrDefault
+          (concatStringsSep
+            " | "
+            (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
+                   (attrNames secrets)))
+          ".")
     + ''
-      ' <<'EOF'
-      ${builtins.toJSON set}
+       <<'EOF'
+      ${toJSON set}
       EOF
       (( ! $inherit_errexit_enabled )) && shopt -u inherit_errexit
     '';
@@ -206,13 +258,17 @@ rec {
   */
   removePackagesByName = packages: packagesToRemove:
     let
-      namesToRemove = map lib.getName packagesToRemove;
+      namesToRemove = map getName packagesToRemove;
     in
-      lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
+      filter (x: !(elem (getName x) namesToRemove)) packages;
 
   systemdUtils = {
-    lib = import ./systemd-lib.nix { inherit lib config pkgs; };
+    lib = import ./systemd-lib.nix { inherit lib config pkgs utils; };
     unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
     types = import ./systemd-types.nix { inherit lib systemdUtils pkgs; };
+    network = {
+      units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
+    };
   };
-}
+};
+in utils

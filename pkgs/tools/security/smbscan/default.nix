@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "smbscan";
   version = "unstable-2022-05-26";
-  format = "setuptools";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "jeffhacks";
@@ -37,5 +37,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/jeffhacks/smbscan";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "smbscan";
   };
 }

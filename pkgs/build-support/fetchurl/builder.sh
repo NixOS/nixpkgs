@@ -1,3 +1,4 @@
+if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
 source $stdenv/setup
 
 source $mirrorsFile
@@ -36,7 +37,7 @@ if [ -n "$downloadToTemp" ]; then downloadedFile="$TMPDIR/file"; fi
 tryDownload() {
     local url="$1"
     echo
-    header "trying $url"
+    echo "trying $url"
     local curlexit=18;
 
     success=

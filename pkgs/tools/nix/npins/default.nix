@@ -1,7 +1,5 @@
 { lib
 , rustPlatform
-, fetchFromGitHub
-, nix-gitignore
 , makeWrapper
 , stdenv
 , darwin
@@ -15,15 +13,15 @@
 
 let
   runtimePath = lib.makeBinPath [ nix nix-prefetch-git git ];
-  sources = (builtins.fromJSON (builtins.readFile ./sources.json)).pins;
+  sources = (lib.importJSON ./sources.json).pins;
 in rustPlatform.buildRustPackage rec {
   pname = "npins";
   version = src.version;
   src = passthru.mkSource sources.npins;
 
-  cargoSha256 = "0rwnzkmx91cwcz9yw0rbbqv73ba6ggim9f4qgz5pgy6h696ld2k8";
+  cargoSha256 = "sha256-YwMypBl+P1ygf4zUbkZlq4zPrOzf+lPOz2FLg2/xI3k=";
 
-  buildInputs = lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ]);
+  buildInputs = lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
   nativeBuildInputs = [ makeWrapper ];
 
   # (Almost) all tests require internet
@@ -35,6 +33,7 @@ in rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Simple and convenient dependency pinning for Nix";
+    mainProgram = "npins";
     homepage = "https://github.com/andir/npins";
     license = licenses.eupl12;
     maintainers = with maintainers; [ piegames ];

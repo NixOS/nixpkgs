@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ipset";
-  version = "7.15";
+  version = "7.21";
 
   src = fetchurl {
     url = "https://ipset.netfilter.org/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ClVFqq22QBQsH4iNNmp43fhyR5mWf6IGhqcAU71iF1E=";
+    sha256 = "sha256-4sbOT886yziTyl01yGk1+ArXb8XMrmARhYQt92DgvGk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

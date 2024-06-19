@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, removeReferencesTo
 , alsaSupport ? !stdenv.isDarwin, alsa-lib
 , dbusSupport ? !stdenv.isDarwin, dbus
 , pipewireSupport ? !stdenv.isDarwin, pipewire
@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openal-soft";
-  version = "1.22.2";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
     rev = version;
-    sha256 = "sha256-MVM0qCZDWcO7/Hnco+0dBqzBLcWD279xjx0slxxlc4w=";
+    sha256 = "sha256-jwY1NzNJdWIvVv7TvJyg4cIGFLWGZhL3BkMI1NbOEG0=";
   };
 
   patches = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config removeReferencesTo ];
 
   buildInputs = lib.optional alsaSupport alsa-lib
     ++ lib.optional dbusSupport dbus
@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/183774
     "-DOSS_INCLUDE_DIR=${stdenv.cc.libc}/include"
   ];
+
+  postInstall = lib.optional pipewireSupport ''
+    remove-references-to -t ${pipewire.dev} $(readlink -f $out/lib/*.so)
+  '';
 
   meta = with lib; {
     description = "OpenAL alternative";

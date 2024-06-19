@@ -1,28 +1,30 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , zlib
 , pkg-config
 , autoreconfHook
-, xz
 , libintl
 , python
 , gettext
 , ncurses
 , findXMLCatalogs
 , libiconv
-, pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
+# Python limits cross-compilation to an allowlist of host OSes.
+# https://github.com/python/cpython/blob/dfad678d7024ab86d265d84ed45999e031a03691/configure.ac#L534-L562
+, pythonSupport ? enableShared &&
+    (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWasi)
 , icuSupport ? false
 , icu
-, enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 , gnome
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "libxml2";
-  version = "2.10.0";
+  version = "2.12.7";
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -30,35 +32,16 @@ stdenv.mkDerivation rec {
   outputMan = "bin";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "LdMxEOp3hnbeFL6kmZ7hFzxMpV1f8UUryiJOBvAVJZU=";
+    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+    hash = "sha256-JK54/xNjqXPm2L66lBp5RdoqwFbhm1OVautpJ/1s+1Y=";
   };
 
-  patches = [
-    # Upstream bugs:
-    #   https://bugzilla.gnome.org/show_bug.cgi?id=789714
-    #   https://gitlab.gnome.org/GNOME/libxml2/issues/64
-    # Patch from https://bugzilla.opensuse.org/show_bug.cgi?id=1065270 ,
-    # but only the UTF-8 part.
-    # Can also be mitigated by fixing malformed XML inputs, such as in
-    # https://gitlab.gnome.org/GNOME/gnumeric/merge_requests/3 .
-    # Other discussion:
-    #   https://github.com/itstool/itstool/issues/22
-    #   https://github.com/NixOS/nixpkgs/pull/63174
-    #   https://github.com/NixOS/nixpkgs/pull/72342
-    ./utf8-xmlErrorFuncHandler.patch
+  # https://gitlab.gnome.org/GNOME/libxml2/-/issues/725
+  postPatch = if stdenv.hostPlatform.isFreeBSD then ''
+    substituteInPlace ./configure.ac --replace-fail pthread_join pthread_create
+  '' else null;
 
-    # Fix PostgreSQL tests
-    # https://gitlab.gnome.org/GNOME/libxml2/-/issues/397
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/4ad71c2d72beef0d10cf75aa417db10d77846f75.patch";
-      sha256 = "gubGDhBhHNYdEty+sFQFd3pSWB9isN5AjD//ksujGQk=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/5b2d07a72670513e41b481a9d922c983a64027ca.patch";
-      sha256 = "7jYvMW6bgImXubbaWpQhrIw3xBBnaNn+iJt3EQiW3yU=";
-    })
-  ];
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
@@ -73,11 +56,6 @@ stdenv.mkDerivation rec {
     ncurses
   ] ++ lib.optionals (stdenv.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
     libintl
-  ] ++ lib.optionals stdenv.isFreeBSD [
-    # Libxml2 has an optional dependency on liblzma.  However, on impure
-    # platforms, it may end up using that from /usr/lib, and thus lack a
-    # RUNPATH for that, leading to undefined references for its users.
-    xz
   ];
 
   propagatedBuildInputs = [
@@ -94,7 +72,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
     (lib.withFeature icuSupport "icu")
-    (lib.withFeatureAs pythonSupport "python" python)
+    (lib.withFeature pythonSupport "python")
+    (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
   ];
 
   installFlags = lib.optionals pythonSupport [
@@ -134,6 +113,11 @@ stdenv.mkDerivation rec {
       packageName = pname;
       versionPolicy = "none";
     };
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = with lib; {
@@ -142,5 +126,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ eelco jtojnar ];
+    pkgConfigModules = [ "libxml-2.0" ];
   };
-}
+})

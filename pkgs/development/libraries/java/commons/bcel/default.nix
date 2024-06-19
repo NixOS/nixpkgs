@@ -1,18 +1,18 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  version = "5.2";
+  version = "6.8.2";
   pname = "commons-bcel";
 
   src = fetchurl {
-    url    = "mirror://apache/commons/bcel/binaries/bcel-${version}.tar.gz";
-    sha256 = "13ppnd6afljdjq21jpn4ik2h1yxq8k2kg21ghi0lyb1yap1rd7k6";
+    url    = "mirror://apache/commons/bcel/binaries/bcel-${version}-bin.tar.gz";
+    hash   = "sha256-VRCRxy+P3uPW9gWy9xHfJ35muhWCHtXNimRmTfba+04=";
   };
 
   installPhase = ''
     tar xf ${src}
     mkdir -p $out/share/java
-    cp bcel-5.2.jar $out/share/java/
+    cp bcel-${version}.jar $out/share/java/
   '';
 
   meta = {

@@ -9,7 +9,7 @@ with lib;
     environment.enableDebugInfo = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Some NixOS packages provide debug symbols. However, these are
         not included in the system closure by default to save disk
         space. Enabling this option causes the debug symbols to appear

@@ -9,15 +9,15 @@
 , inih
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vgmplay-libvgm";
-  version = "unstable-2022-03-17";
+  version = "0.51.1-unstable-2024-01-03";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "vgmplay-libvgm";
-    rev = "a2c21cb134b58043a013ac2efc060144cdecf13d";
-    sha256 = "0g251laqjvvzblyflkg8xac424dbxm1v35ckfazsfchmcqiaqfw4";
+    rev = "7db1c63c056d79a8f9f533aa7eb82b7fdf7d456c";
+    hash = "sha256-GjBwu8Y/lOI8SLO4SrAWcntQIwKe/hXuh9tKbOPHQiA=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

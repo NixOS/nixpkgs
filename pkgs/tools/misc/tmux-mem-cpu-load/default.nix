@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tmux-mem-cpu-load";
-  version = "3.6.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "thewtex";
     repo = "tmux-mem-cpu-load";
     rev = "v${version}";
-    sha256 = "sha256-1smhlp30y0qihm+d9RcCKY1CFbPm5gzago+OIQQT5jE=";
+    sha256 = "sha256-8QUcEbgk3DSsWt9TRHHtDhQ7a1hkK8RZEX+0d3h/c0w=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ thomasjm ];
     platforms = platforms.all;
+    mainProgram = "tmux-mem-cpu-load";
   };
 }

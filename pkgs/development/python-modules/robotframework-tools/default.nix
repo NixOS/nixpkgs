@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, robotframework
-, moretools
-, path
-, six
-, zetup
-, modeled
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  robotframework,
+  moretools,
+  path,
+  six,
+  zetup,
+  modeled,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   version = "0.1rc4";
+  format = "setuptools";
   pname = "robotframework-tools";
 
   src = fetchPypi {
@@ -36,7 +38,7 @@ buildPythonPackage rec {
       "setup_requires=SETUP_REQUIRES + (zfg.SETUP_REQUIRES or [])," ""
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "test" ];
   pythonImportsCheck = [ "robottools" ];
 
@@ -44,6 +46,6 @@ buildPythonPackage rec {
     description = "Python Tools for Robot Framework and Test Libraries";
     homepage = "https://github.com/userzimmermann/robotframework-tools";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

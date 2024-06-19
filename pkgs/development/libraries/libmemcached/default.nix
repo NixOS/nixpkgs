@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent ];
   propagatedBuildInputs = [ cyrus_sasl ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   meta = with lib; {
     homepage = "https://libmemcached.org";

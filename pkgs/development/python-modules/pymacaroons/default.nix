@@ -1,8 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, six, pynacl }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pynacl,
+}:
 
 buildPythonPackage rec {
   pname = "pymacaroons";
   version = "0.13.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

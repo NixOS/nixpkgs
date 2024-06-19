@@ -2,26 +2,30 @@
 , fetchCrate
 , rustPlatform
 , pkg-config
+, installShellFiles
 , openssl
 , dbus
 , sqlite
 , stdenv
 , darwin
+, testers
+, leetcode-cli
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "leetcode-cli";
-  version = "0.3.11";
+  version = "0.4.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-DHtIhiRPRGuO6Rf1d9f8r0bMOHqAaJleUvYNyPiX6mc=";
+    sha256 = "sha256-y5zh93WPWSMDXqYangqrxav+sC0b0zpFIp6ZIew6KMo=";
   };
 
-  cargoSha256 = "sha256-Suk/nQ+JcoD9HO9x1lYp+p4qx0DZ9dt0p5jPz0ZQB+k=";
+  cargoHash = "sha256-VktDiLsU+GOsa6ba9JJZGEPTavSKp+aSZm2dfhPEqMs=";
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -29,6 +33,19 @@ rustPlatform.buildRustPackage rec {
     dbus
     sqlite
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+
+  postInstall = ''
+    installShellCompletion --cmd leetcode \
+      --bash <($out/bin/leetcode completions bash) \
+      --fish <($out/bin/leetcode completions fish) \
+      --zsh <($out/bin/leetcode completions zsh)
+  '';
+
+  passthru.tests = testers.testVersion {
+    package = leetcode-cli;
+    command = "leetcode -V";
+    version = "leetcode ${version}";
+  };
 
   meta = with lib; {
     description = "May the code be with you 👻";

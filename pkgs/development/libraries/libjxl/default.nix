@@ -1,5 +1,4 @@
 { stdenv, lib, fetchFromGitHub
-, fetchpatch
 , brotli
 , cmake
 , giflib
@@ -9,19 +8,26 @@
 , libjpeg
 , libpng
 , libwebp
-, openexr
+, gdk-pixbuf
+, openexr_3
 , pkg-config
+, makeWrapper
 , zlib
-, buildDocs ? true
 , asciidoc
 , graphviz
 , doxygen
 , python3
+, lcms2
+, enablePlugins ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 }:
+
+let
+  loadersPath = "${gdk-pixbuf.binaryDir}/jxl-loaders.cache";
+in
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.6.1";
+  version = "0.10.2";
 
   outputs = [ "out" "dev" ];
 
@@ -29,58 +35,24 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
-    sha256 = "sha256-fTK5hyU9PZ6nigMsfzVugwviihgAXfEcLF+l+n5h+54=";
+    hash = "sha256-Ip/5fbzt6OfIrHJajnxEe14ppvX1hJ1FSJUBEE/h5YQ=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
 
-  patches = [
-    # present in master, see https://github.com/libjxl/libjxl/pull/1403
-    (fetchpatch {
-      name = "prefixless-pkg-config.patch";
-      url = "https://github.com/libjxl/libjxl/commit/0b906564bfbfd8507d61c5d6a447f545f893227c.patch";
-      sha256 = "1g5c6lrsmgxb9j64pjy8lbdgbvw834m5jyfivy9ppmd8iiv0kkq4";
-    })
-
-    # present in master, remove after 0.7?
-    (fetchpatch {
-      name = "fix-link-lld-macho.patch";
-      url = "https://github.com/libjxl/libjxl/commit/88fe3fff3dc70c72405f57c69feffd9823930034.patch";
-      sha256 = "1419fyiq4srpj72cynwyvqy8ldi7vn9asvkp5fsbmiqkyhb15jpk";
-    })
-
-    # "robust statistics" have been removed in upstream mainline as they are
-    # conidered to cause "interoperability problems". sure enough the tests
-    # fail with precision issues on aarch64.
-    (fetchpatch {
-      name = "remove-robust-and-descriptive-statistics.patch";
-      url = "https://github.com/libjxl/libjxl/commit/204f87a5e4d684544b13900109abf040dc0b402b.patch";
-      sha256 = "sha256-DoAaYWLmQ+R9GZbHMTYGe0gBL9ZesgtB+2WhmbARna8=";
-    })
-
-    # fix build with asciidoc wrapped in shell script
-    (fetchpatch {
-      url = "https://github.com/libjxl/libjxl/commit/b8ec58c58c6281987f42ebec892f513824c0cc0e.patch";
-      hash = "sha256-g8U+YVhLfgSHJ+PWJgvVOI66+FElJSC8IgSRodNnsMw=";
-    })
-    (fetchpatch {
-      url = "https://github.com/libjxl/libjxl/commit/ca8e276aacf63a752346a6a44ba673b0af993237.patch";
-      excludes = [ "AUTHORS" ];
-      hash = "sha256-9VXy1LdJ0JhYbCGPNMySpnGLBxUrr8BYzE+oU3LnUGw=";
-    })
-  ];
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    gtest
     pkg-config
-  ] ++ lib.optionals buildDocs [
+    gdk-pixbuf
+    makeWrapper
     asciidoc
     doxygen
     python3
   ];
 
-  depsBuildBuild = lib.optionals buildDocs [
+  depsBuildBuild = [
     graphviz
   ];
 
@@ -101,12 +73,15 @@ stdenv.mkDerivation rec {
   # conclusively in its README or otherwise; they can best be determined
   # by checking the CMake output for "Could NOT find".
   buildInputs = [
+    lcms2
     giflib
     gperftools # provides `libtcmalloc`
+    gtest
     libjpeg
     libpng
     libwebp
-    openexr
+    gdk-pixbuf
+    openexr_3
     zlib
   ];
 
@@ -126,22 +101,42 @@ stdenv.mkDerivation rec {
     # Use our version of highway, though it is still statically linked in
     "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
 
+    # Use our version of gtest
+    "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
+
     # TODO: Update this package to enable this (overridably via an option):
     # Viewer tools for evaluation.
     # "-DJPEGXL_ENABLE_VIEWERS=ON"
-
-    # TODO: Update this package to enable this (overridably via an option):
+  ] ++ lib.optionals enablePlugins [
     # Enable plugins, such as:
     # * the `gdk-pixbuf` one, which allows applications like `eog` to load jpeg-xl files
     # * the `gimp` one, which allows GIMP to load jpeg-xl files
-    # "-DJPEGXL_ENABLE_PLUGINS=ON"
+    "-DJPEGXL_ENABLE_PLUGINS=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-   "-DJPEGXL_STATIC=ON"
+    "-DJPEGXL_STATIC=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+    "-DJPEGXL_FORCE_NEON=ON"
   ];
 
-  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+  postPatch = ''
+    substituteInPlace plugins/gdk-pixbuf/jxl.thumbnailer \
+      --replace '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
+  '';
 
-  doCheck = !stdenv.hostPlatform.isi686;
+  postInstall = lib.optionalString enablePlugins ''
+    GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
+    GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
+      gdk-pixbuf-query-loaders --update-cache
+    mkdir -p "$out/bin"
+    makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-jxl" \
+      --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
+  '';
+
+  CXXFLAGS = lib.optionalString stdenv.hostPlatform.isAarch32 "-mfp16-format=ieee";
+
+  # FIXME x86_64-darwin:
+  # https://github.com/NixOS/nixpkgs/pull/204030#issuecomment-1352768690
+  doCheck = with stdenv; !(hostPlatform.isi686 || isDarwin && isx86_64);
 
   meta = with lib; {
     homepage = "https://github.com/libjxl/libjxl";

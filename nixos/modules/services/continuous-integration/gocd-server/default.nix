@@ -8,12 +8,12 @@ let
 in {
   options = {
     services.gocd-server = {
-      enable = mkEnableOption (lib.mdDoc "gocd-server");
+      enable = mkEnableOption "gocd-server";
 
       user = mkOption {
         default = "gocd-server";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           User the Go.CD server should execute under.
         '';
       };
@@ -21,7 +21,7 @@ in {
       group = mkOption {
         default = "gocd-server";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           If the default user "gocd-server" is configured then this is the primary group of that user.
         '';
       };
@@ -30,7 +30,7 @@ in {
         default = [ ];
         type = types.listOf types.str;
         example = [ "wheel" "docker" ];
-        description = lib.mdDoc ''
+        description = ''
           List of extra groups that the "gocd-server" user should be a part of.
         '';
       };
@@ -39,15 +39,15 @@ in {
         default = "0.0.0.0";
         example = "localhost";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Specifies the bind address on which the Go.CD server HTTP interface listens.
         '';
       };
 
       port = mkOption {
         default = 8153;
-        type = types.int;
-        description = lib.mdDoc ''
+        type = types.port;
+        description = ''
           Specifies port number on which the Go.CD server HTTP interface listens.
         '';
       };
@@ -55,7 +55,7 @@ in {
       sslPort = mkOption {
         default = 8154;
         type = types.int;
-        description = lib.mdDoc ''
+        description = ''
           Specifies port number on which the Go.CD server HTTPS interface listens.
         '';
       };
@@ -63,7 +63,7 @@ in {
       workDir = mkOption {
         default = "/var/lib/go-server";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Specifies the working directory in which the Go.CD server java archive resides.
         '';
       };
@@ -72,7 +72,7 @@ in {
         default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
         defaultText = literalExpression "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
-        description = lib.mdDoc ''
+        description = ''
           Packages to add to PATH for the Go.CD server's process.
         '';
       };
@@ -80,7 +80,7 @@ in {
       initialJavaHeapSize = mkOption {
         default = "512m";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Specifies the initial java heap memory size for the Go.CD server's java process.
         '';
       };
@@ -88,7 +88,7 @@ in {
       maxJavaHeapMemory = mkOption {
         default = "1024m";
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           Specifies the java maximum heap memory size for the Go.CD server's java process.
         '';
       };
@@ -106,6 +106,8 @@ in {
           "-Dcruise.config.file=${cfg.workDir}/conf/cruise-config.xml"
           "-Dcruise.server.port=${toString cfg.port}"
           "-Dcruise.server.ssl.port=${toString cfg.sslPort}"
+          "--add-opens=java.base/java.lang=ALL-UNNAMED"
+          "--add-opens=java.base/java.util=ALL-UNNAMED"
         ];
         defaultText = literalExpression ''
           [
@@ -119,10 +121,12 @@ in {
             "-Dcruise.config.file=''${config.${opt.workDir}}/conf/cruise-config.xml"
             "-Dcruise.server.port=''${toString config.${opt.port}}"
             "-Dcruise.server.ssl.port=''${toString config.${opt.sslPort}}"
+            "--add-opens=java.base/java.lang=ALL-UNNAMED"
+            "--add-opens=java.base/java.util=ALL-UNNAMED"
           ]
         '';
 
-        description = lib.mdDoc ''
+        description = ''
           Specifies startup command line arguments to pass to Go.CD server
           java process.
         '';
@@ -141,7 +145,7 @@ in {
           "-XX:+PrintGCDetails"
           "-XX:+PrintGC"
         ];
-        description = lib.mdDoc ''
+        description = ''
           Specifies additional command line arguments to pass to Go.CD server's
           java process.  Example contains debug and gcLog arguments.
         '';
@@ -150,7 +154,7 @@ in {
       environment = mkOption {
         default = { };
         type = with types; attrsOf str;
-        description = lib.mdDoc ''
+        description = ''
           Additional environment variables to be passed to the gocd-server process.
           As a base environment, gocd-server receives NIX_PATH from
           {option}`environment.sessionVariables`, NIX_REMOTE is set to
@@ -199,7 +203,7 @@ in {
         ${pkgs.git}/bin/git config --global --add http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
         ${pkgs.jre}/bin/java -server ${concatStringsSep " " cfg.startupOptions} \
                                ${concatStringsSep " " cfg.extraOptions}  \
-                              -jar ${pkgs.gocd-server}/go-server/go.jar
+                              -jar ${pkgs.gocd-server}/go-server/lib/go.jar
       '';
 
       serviceConfig = {

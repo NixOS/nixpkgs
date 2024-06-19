@@ -1,25 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, bluez, dbus, glew, glfw, imgui, makeDesktopItem, copyDesktopItems }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, bluez, dbus, glew, glfw, imgui, makeDesktopItem, copyDesktopItems }:
 
 stdenv.mkDerivation rec {
   pname = "SonyHeadphonesClient";
-  version = "1.2";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Plutoberth";
     repo = "SonyHeadphonesClient";
     rev = "v${version}";
-    sha256 = "sha256-oejXrs9X+R6Jydro0XIw2XifzFA7asDhpobtaE3//Hc=";
+    hash = "sha256-vhI97KheKzr87exCh4xNN7NDefcagdMu1tWSt67vLiU=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      name = "include-cstdint-to-fix-gcc-compiling.patch";
+      url = "https://github.com/Plutoberth/SonyHeadphonesClient/commit/4da8a12b22f8a45e79aa53d4cae88ca99b51d41f.patch";
+      stripLen = 2;
+      extraPrefix = "";
+      hash = "sha256-IZR/Znj40pUEC9gmNJDMPWuZOM2ueAgykZFn5DVn6es=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config copyDesktopItems ];
   buildInputs = [ bluez dbus glew glfw imgui ];
 
-  sourceRoot = "./source/Client";
+  sourceRoot = "${src.name}/Client";
 
   cmakeFlags = [ "-Wno-dev" ];
-
-  patches = [ ./gcc.patch ];
 
   postPatch = ''
     substituteInPlace Constants.h \
@@ -49,5 +57,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ stunkymonkey ];
     platforms = platforms.linux;
+    mainProgram = "SonyHeadphonesClient";
   };
 }

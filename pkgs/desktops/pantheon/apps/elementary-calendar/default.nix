@@ -7,29 +7,30 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , clutter
 , evolution-data-server
 , folks
 , geoclue2
-, geocode-glib
+, geocode-glib_2
 , granite
 , gtk3
-, libchamplain
+, libchamplain_libsoup3
 , libgee
 , libhandy
 , libical
+, libportal-gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "6.1.1";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calendar";
     rev = version;
-    sha256 = "sha256-c2c8QNifBDzb0CelB72AIL4G694l6KCSXBjWIHrzZJo=";
+    sha256 = "sha256-qZvSzhLGr4Gg9DSJ638IQRLlPiZkbJUCJ7tZ8ZFZZ1E=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -46,13 +47,14 @@ stdenv.mkDerivation rec {
     evolution-data-server
     folks
     geoclue2
-    geocode-glib
+    geocode-glib_2
     granite
     gtk3
-    libchamplain
+    libchamplain_libsoup3
     libgee
     libhandy
     libical
+    libportal-gtk3
   ];
 
   postPatch = ''
@@ -61,9 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

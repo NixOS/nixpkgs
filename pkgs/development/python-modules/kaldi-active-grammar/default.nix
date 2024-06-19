@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, scikit-build
-, cmake
-, ush
-, requests
-, six
-, numpy
-, cffi
-, openfst
-, substituteAll
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  scikit-build,
+  cmake,
+  ush,
+  requests,
+  six,
+  numpy,
+  cffi,
+  openfst,
+  substituteAll,
+  callPackage,
 }:
 
 #
@@ -24,6 +25,7 @@ in
 buildPythonPackage rec {
   pname = "kaldi-active-grammar";
   version = "3.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "daanzu";
@@ -52,11 +54,23 @@ buildPythonPackage rec {
     cd ..
   '';
 
-  buildInputs = [ openfst kaldi ];
-  nativeBuildInputs = [ scikit-build cmake ];
-  propagatedBuildInputs = [ ush requests numpy cffi six ];
+  buildInputs = [
+    openfst
+    kaldi
+  ];
+  nativeBuildInputs = [
+    scikit-build
+    cmake
+  ];
+  propagatedBuildInputs = [
+    ush
+    requests
+    numpy
+    cffi
+    six
+  ];
 
-  doCheck = false;  # no tests exist
+  doCheck = false; # no tests exist
 
   meta = with lib; {
     description = "Python Kaldi speech recognition";

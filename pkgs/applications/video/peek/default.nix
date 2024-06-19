@@ -11,13 +11,13 @@
 , pkg-config
 , txt2man
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 , gtk3
 , glib
 , cairo
 , keybinder3
-, ffmpeg
+, ffmpeg-full
 , python3
 , libxml2
 , gst_all_1
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     txt2man
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -75,13 +75,11 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ which ffmpeg gifski ]})
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ which ffmpeg-full gifski ]})
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
 
@@ -91,5 +89,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ puffnfresh ];
     platforms = platforms.linux;
+    mainProgram = "peek";
   };
 }

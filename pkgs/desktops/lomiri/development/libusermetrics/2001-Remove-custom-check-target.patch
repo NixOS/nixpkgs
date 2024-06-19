@@ -1,0 +1,37 @@
+From 52ac1d6548b4a92d569c5d2f53b84c604c7fce8a Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Thu, 1 Feb 2024 22:42:39 +0100
+Subject: [PATCH] Remove custom check target
+
+The automatic one provides better controls for us
+---
+ CMakeLists.txt | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index af643a7..75b3cc1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -105,18 +105,13 @@ add_subdirectory("data")
+ 
+ 
+ if(ENABLE_TESTS)
+-enable_testing()
++include(CTest)
+ 
+ pkg_check_modules(QTDBUSTEST REQUIRED libqtdbustest-1 REQUIRED)
+ include_directories(${QTDBUSTEST_INCLUDE_DIRS})
+ 
+ add_subdirectory(tests)
+ 
+-ADD_CUSTOM_TARGET(
+-	check
+-	${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure
+-)
+-
+ find_package(CoverageReport)
+ enable_coverage_report(
+   TARGETS
+-- 
+2.42.0
+

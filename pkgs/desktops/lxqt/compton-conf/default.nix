@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, mkDerivation
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
+, libconfig
+, lxqt-build-tools
 , pkg-config
 , qtbase
 , qttools
-, lxqt
-, libconfig
+, qtx11extras
+, wrapQtAppsHook
 , gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "compton-conf";
   version = "0.16.0";
 
@@ -19,24 +20,26 @@ mkDerivation rec {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0gcvyn7aabdz5yj0jzv14hlgjgbm8d9ib5r73i842f0hv4cv9m0q";
+    hash = "sha256-GNS0GdkQOEFQHCeXFVNDdT35KCRhfwmkL78tpY71mz0=";
   };
 
   nativeBuildInputs = [
     cmake
+    lxqt-build-tools
     pkg-config
-    lxqt.lxqt-build-tools
+    qttools
+    qtx11extras
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qttools
     libconfig
+    qtbase
   ];
 
   preConfigure = ''
     substituteInPlace autostart/CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
+      --replace-fail "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
   '';
 
   passthru.updateScript = gitUpdater { };
@@ -45,6 +48,7 @@ mkDerivation rec {
     broken = stdenv.isDarwin;
     homepage = "https://github.com/lxqt/compton-conf";
     description = "GUI configuration tool for compton X composite manager";
+    mainProgram = "compton-conf";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
     maintainers = teams.lxqt.members;

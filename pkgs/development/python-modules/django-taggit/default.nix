@@ -1,34 +1,30 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, django
-, djangorestframework
-, python
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  django,
+  djangorestframework,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "django-taggit";
-  version = "3.0.0";
+  version = "5.0.1";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5kW4491PhZidXvXFo9Xrvlut9dHlG1PkLQr3JiQLALk=";
+    hash = "sha256-7c19seDzXDBOCCovYx3awuFu9SlgKVJOt5KvdDDKtMw=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
-  pythonImportsCheck = [
-    "taggit"
-  ];
+  pythonImportsCheck = [ "taggit" ];
 
-  checkInputs = [
-    djangorestframework
-  ];
+  nativeCheckInputs = [ djangorestframework ];
 
   checkPhase = ''
     # prove we're running tests against installed package, not build dir
@@ -42,8 +38,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple tagging for django";
     homepage = "https://github.com/jazzband/django-taggit";
+    changelog = "https://github.com/jazzband/django-taggit/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ desiderius ];
   };
-
 }

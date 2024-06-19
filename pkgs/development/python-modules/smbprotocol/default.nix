@@ -1,36 +1,35 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pyspnego
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, six
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pyspnego,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "smbprotocol";
-  version = "1.9.0";
+  version = "1.12.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jborean93";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-u3brP3WsnoqRy3R0OQQkIbq+avS7nemx9GKpvTq+vxg=";
+    repo = "smbprotocol";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1huM+/WDrVJsB4ARh6fB6rLFOe9IqSQWr/A78FAk/Ag=";
   };
 
   propagatedBuildInputs = [
     cryptography
     pyspnego
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
@@ -45,13 +44,12 @@ buildPythonPackage rec {
     "test_recv_"
   ];
 
-  pythonImportsCheck = [
-    "smbprotocol"
-  ];
+  pythonImportsCheck = [ "smbprotocol" ];
 
   meta = with lib; {
     description = "Python SMBv2 and v3 Client";
     homepage = "https://github.com/jborean93/smbprotocol";
+    changelog = "https://github.com/jborean93/smbprotocol/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

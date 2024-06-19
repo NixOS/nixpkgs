@@ -1,79 +1,78 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, python
-, fetchPypi
-, pytestCheckHook
-, blis
-, catalogue
-, cymem
-, cython
-, contextvars
-, dataclasses
-, Accelerate
-, CoreFoundation
-, CoreGraphics
-, CoreVideo
-, hypothesis
-, mock
-, murmurhash
-, numpy
-, plac
-, pythonOlder
-, preshed
-, pydantic
-, srsly
-, tqdm
-, typing-extensions
-, wasabi
+{
+  lib,
+  stdenv,
+  Accelerate,
+  blis,
+  buildPythonPackage,
+  catalogue,
+  confection,
+  CoreFoundation,
+  CoreGraphics,
+  CoreVideo,
+  cymem,
+  cython_0,
+  fetchPypi,
+  hypothesis,
+  mock,
+  murmurhash,
+  numpy,
+  plac,
+  preshed,
+  pydantic,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools,
+  srsly,
+  tqdm,
+  typing-extensions,
+  wasabi,
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.1.1";
+  version = "8.2.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-m5AoKYTzy6rJjgNn3xsa+eSDYjG8Bj361yQqnQ3VK80=";
+    hash = "sha256-9a/FIikSqAvai9zslYNiorpTjXAn3I22FUhF0oWdynY=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic"
+      --replace "preshed>=3.0.2,<3.1.0" "preshed"
   '';
 
-  buildInputs = [
-    cython
-  ] ++ lib.optionals stdenv.isDarwin [
-    Accelerate
-    CoreFoundation
-    CoreGraphics
-    CoreVideo
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  buildInputs =
+    [ cython_0 ]
+    ++ lib.optionals stdenv.isDarwin [
+      Accelerate
+      CoreFoundation
+      CoreGraphics
+      CoreVideo
+    ];
 
   propagatedBuildInputs = [
     blis
     catalogue
+    confection
     cymem
     murmurhash
     numpy
     plac
     preshed
+    pydantic
     srsly
     tqdm
-    pydantic
     wasabi
-  ] ++ lib.optional (pythonOlder "3.8") [
-    typing-extensions
-  ] ++ lib.optional (pythonOlder "3.7") [
-    contextvars
-    dataclasses
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
     pytestCheckHook
@@ -88,13 +87,12 @@ buildPythonPackage rec {
     rm -r thinc
   '';
 
-  pythonImportsCheck = [
-    "thinc"
-  ];
+  pythonImportsCheck = [ "thinc" ];
 
   meta = with lib; {
-    description = "Practical Machine Learning for NLP in Python";
+    description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
+    changelog = "https://github.com/explosion/thinc/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ aborsu ];
   };

@@ -14,7 +14,7 @@
 , ninja
 , pkg-config
 , slop
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -43,13 +43,13 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
+    gobject-introspection
   ];
 
   buildInputs = [
     libnotify
     librsvg
-    gobject-introspection
     gtk3
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -77,5 +77,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/amikha1lov/RecApp";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "recapp";
   };
 }

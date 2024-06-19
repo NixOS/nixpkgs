@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   sourceRoot = ".";
-  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
   buildPhase = ''
     g++ Pers.cpp -O3 -fpermissive -o perseus
   '';
@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "The Persistent Homology Software";
+    mainProgram = "perseus";
     longDescription = ''
       Persistent homology - or simply, persistence - is an algebraic
       topological invariant of a filtered cell complex. Perseus

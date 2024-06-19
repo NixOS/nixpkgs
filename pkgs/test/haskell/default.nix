@@ -5,5 +5,6 @@ lib.recurseIntoAttrs {
   cabalSdist = callPackage ./cabalSdist { };
   documentationTarball = callPackage ./documentationTarball { };
   setBuildTarget = callPackage ./setBuildTarget { };
-  writers = callPackage ./writers { };
+  incremental = callPackage ./incremental { };
+  upstreamStackHpackVersion = callPackage ./upstreamStackHpackVersion { };
 }

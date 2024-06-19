@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     alsa-lib
     boost
@@ -33,7 +34,6 @@ stdenv.mkDerivation rec {
     glibmm
     gtkmm2
     libjack2
-    pkg-config
     python3
     wafHook
   ];
@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.nico202 ];
+    mainProgram = "patchage";
   };
 }

@@ -12,7 +12,7 @@ in stdenvNoCC.mkDerivation {
     sha256 = "sha256-+FU5n7EkY78X5nUiW3WN9+6Bf6oiPjsG2MSRCleooFs=";
   };
 
-  checkInputs = [ bats ];
+  nativeCheckInputs = [ bats ];
 
   dontConfigure = true;
   doCheck = true;

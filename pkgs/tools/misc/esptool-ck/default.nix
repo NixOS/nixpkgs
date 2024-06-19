@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ESP8266/ESP32 build helper tool";
     homepage = "https://github.com/igrr/esptool-ck";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
+    mainProgram = "esptool";
   };
 }

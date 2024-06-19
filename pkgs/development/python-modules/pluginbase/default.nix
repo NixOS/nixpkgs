@@ -1,7 +1,13 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pytest,
+}:
 
 buildPythonPackage rec {
   version = "1.0.1";
+  format = "setuptools";
   pname = "pluginbase";
 
   src = fetchPypi {
@@ -9,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "ff6c33a98fce232e9c73841d787a643de574937069f0d18147028d70d7dee287";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     cd tests

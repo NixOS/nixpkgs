@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, ply
-, poetry-core
-, requests
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  ply,
+  poetry-core,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pysnmp-pysmi";
-  version = "1.1.10";
-  format = "pyproject";
+  version = "1.1.12";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -18,14 +19,12 @@ buildPythonPackage rec {
     owner = "pysnmp";
     repo = "pysmi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZfN0nU9IurBEjSZijC2E4UoLIM54mBFgv7rcI1v/a4Q=";
+    hash = "sha256-dK02y8HXhwq1W6NOYsycjTpIMxoQY4qNT4n8TEycmWM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ply
     requests
   ];
@@ -33,13 +32,12 @@ buildPythonPackage rec {
   # Circular dependency with pysnmplib
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pysmi"
-  ];
+  pythonImportsCheck = [ "pysmi" ];
 
   meta = with lib; {
     description = "SNMP MIB parser";
     homepage = "https://github.com/pysnmp/pysmi";
+    changelog = "https://github.com/pysnmp/pysmi/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
   };

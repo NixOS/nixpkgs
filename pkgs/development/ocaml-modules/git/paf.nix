@@ -8,13 +8,11 @@
 , logs
 , lwt
 , mirage-clock
-, mirage-stack
 , mirage-time
 , result
 , rresult
 , tls
 , uri
-, bigarray-compat
 , bigstringaf
 , domain-name
 , httpaf
@@ -25,7 +23,9 @@
 buildDunePackage {
   pname = "git-paf";
 
-  inherit (git) version src minimumOCamlVersion useDune2;
+  inherit (git) version src;
+
+  minimalOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
     git
@@ -39,11 +39,9 @@ buildDunePackage {
     ipaddr
     logs
     mirage-clock
-    mirage-stack
     mirage-time
     tls
     uri
-    bigarray-compat
     bigstringaf
     domain-name
     httpaf

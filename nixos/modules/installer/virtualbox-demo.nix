@@ -21,7 +21,7 @@ with lib;
   services.xserver.videoDrivers = mkOverride 40 [ "virtualbox" "vmware" "cirrus" "vesa" "modesetting" ];
 
   powerManagement.enable = false;
-  system.stateVersion = mkDefault "18.03";
+  system.stateVersion = lib.mkDefault lib.trivial.release;
 
   installer.cloneConfigExtra = ''
   # Let demo build as a trusted user.
@@ -40,7 +40,7 @@ with lib;
   # If you prefer another desktop manager or display manager, you may want
   # to disable the default.
   # services.xserver.desktopManager.plasma5.enable = lib.mkForce false;
-  # services.xserver.displayManager.sddm.enable = lib.mkForce false;
+  # services.displayManager.sddm.enable = lib.mkForce false;
 
   # Enable GDM/GNOME by uncommenting above two lines and two lines below.
   # services.xserver.displayManager.gdm.enable = true;

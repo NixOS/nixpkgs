@@ -1,31 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # tests
+  objgraph,
+  psutil,
+  python,
+  unittestCheckHook,
 }:
 
+let
+  greenlet = buildPythonPackage rec {
+    pname = "greenlet";
+    version = "3.0.3";
+    pyproject = true;
 
-buildPythonPackage rec {
-  pname = "greenlet";
-  version = "1.1.3";
-  disabled = isPyPy; # builtin for pypy
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-QzdEQjUyWVVM4zWZ2otpLVqpb4l21WfUut8mM3H75JE=";
+    };
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-vLbG3R1r5tONbbKDdH0H/aCJ/4xVmoNSNlYKRBA0BFU=";
-  };
+    nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [ unittestCheckHook ];
+    # tests in passthru, infinite recursion via objgraph/graphviz
+    doCheck = false;
 
-  unittestFlagsArray = [ "-v" "greenlet.tests" ];
-
-  meta = with lib; {
-    homepage = "https://github.com/python-greenlet/greenlet";
-    description = "Module for lightweight in-process concurrent programming";
-    license = with licenses; [
-      psfl # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
-      mit
+    nativeCheckInputs = [
+      objgraph
+      psutil
+      unittestCheckHook
     ];
+
+    preCheck = ''
+      pushd ${placeholder "out"}/${python.sitePackages}
+    '';
+
+    unittestFlagsArray = [ "greenlet.tests" ];
+
+    postCheck = ''
+      popd
+    '';
+
+    passthru.tests.pytest = greenlet.overridePythonAttrs (_: {
+      doCheck = true;
+    });
+
+    meta = with lib; {
+      changelog = "https://github.com/python-greenlet/greenlet/blob/${version}/CHANGES.rst";
+      homepage = "https://github.com/python-greenlet/greenlet";
+      description = "Module for lightweight in-process concurrent programming";
+      license = with licenses; [
+        psfl # src/greenlet/slp_platformselect.h & files in src/greenlet/platform/ directory
+        mit
+      ];
+    };
   };
-}
+in
+greenlet

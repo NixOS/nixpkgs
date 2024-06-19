@@ -8,11 +8,10 @@
 , bullet
 , glm
 , libmad
-, xlibsWrapper
 , openal
 , SDL2
 , boost
-, ffmpeg
+, ffmpeg_4
 , Cocoa
 , OpenAL }:
 
@@ -36,7 +35,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    sfml libGLU libGL bullet glm libmad xlibsWrapper openal SDL2 boost ffmpeg
+    sfml libGLU libGL bullet glm libmad openal SDL2 boost ffmpeg_4
   ] ++ lib.optionals stdenv.isDarwin [ OpenAL Cocoa ];
 
   meta = with lib; {
@@ -49,5 +48,6 @@ stdenv.mkDerivation {
     '';
     maintainers = with maintainers; [ kragniz ];
     platforms = platforms.all;
+    mainProgram = "rwgame";
   };
 }

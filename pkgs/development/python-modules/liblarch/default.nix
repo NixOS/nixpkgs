@@ -1,16 +1,18 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, python
-, pygobject3
-, xvfb-run
-, gobject-introspection
-, gtk3
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  pygobject3,
+  xvfb-run,
+  gobject-introspection,
+  gtk3,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   version = "3.2.0";
+  format = "setuptools";
   pname = "liblarch";
   disabled = pythonOlder "3.5.0";
 
@@ -18,19 +20,17 @@ buildPythonPackage rec {
     owner = "getting-things-gnome";
     repo = "liblarch";
     rev = "v${version}";
-    sha256 = "sha256-A2qChe2z6rAhjRVX5VoHQitebf/nMATdVZQgtlquuYg=";
+    hash = "sha256-A2qChe2z6rAhjRVX5VoHQitebf/nMATdVZQgtlquuYg=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     gobject-introspection # for setup hook
     gtk3
   ];
 
   buildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [
-    pygobject3
-  ];
+  propagatedBuildInputs = [ pygobject3 ];
 
   checkPhase = ''
     runHook preCheck

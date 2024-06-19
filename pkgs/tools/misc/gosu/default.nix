@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gosu";
-  version = "1.14";
+  version = "1.17";
 
   src = fetchFromGitHub {
     owner = "tianon";
     repo = "gosu";
     rev = version;
-    sha256 = "sha256-qwoHQB37tY8Pz8CHleYZI+SGkbHG7P/vgfXVMSyqi10=";
+    hash = "sha256-ziviUXqCpCGECewyZNLDKSjnpmz/3i5DKrIKZlLwl4o=";
   };
 
-  vendorSha256 = "sha256-yxrOLCtSrY/a84N5yRWGUx1L425TckjvRyn/rtkzsRY=";
+  vendorHash = "sha256-fygLYSO0kpMFJd6WQp/uLYkELkyaOPZ9V8BrJcIcMuU=";
 
   ldflags = [ "-d" "-s" "-w" ];
 
@@ -21,9 +21,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool that avoids TTY and signal-forwarding behavior of sudo and su";
+    mainProgram = "gosu";
     homepage = "https://github.com/tianon/gosu";
-    license = lib.licenses.gpl3;
-    maintainers = with maintainers; [ aaronjheng ];
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }

@@ -19,7 +19,7 @@ if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
 
     # Print a greeting.
     echo
-    echo -e "\e[1;32m<<< NixOS Stage 2 >>>\e[0m"
+    echo -e "\e[1;32m<<< @distroName@ Stage 2 >>>\e[0m"
     echo
 
 
@@ -54,7 +54,7 @@ if [ ! -e /proc/1 ]; then
 fi
 
 
-if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ]; then
+if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" = true ] || [ ! -c /dev/kmsg ] ; then
     echo "booting system configuration ${systemConfig}"
 else
     echo "booting system configuration $systemConfig" > /dev/kmsg
@@ -68,7 +68,7 @@ fi
 # like squashfs.
 chown -f 0:30000 /nix/store
 chmod -f 1775 /nix/store
-if [ -n "@readOnlyStore@" ]; then
+if [ -n "@readOnlyNixStore@" ]; then
     if ! [[ "$(findmnt --noheadings --output OPTIONS /nix/store)" =~ ro(,|$) ]]; then
         if [ -z "$container" ]; then
             mount --bind /nix/store /nix/store
@@ -104,7 +104,10 @@ fi
 
 
 # Required by the activation script
-install -m 0755 -d /etc /etc/nixos
+install -m 0755 -d /etc
+if [ ! -h "/etc/nixos" ]; then
+    install -m 0755 -d /etc/nixos
+fi
 install -m 01777 -d /tmp
 
 

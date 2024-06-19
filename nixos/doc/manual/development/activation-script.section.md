@@ -17,13 +17,15 @@ activation script will take these dependencies into account and order the
 snippets accordingly. As a simple example:
 
 ```nix
-system.activationScripts.my-activation-script = {
-  deps = [ "etc" ];
-  # supportsDryActivation = true;
-  text = ''
-    echo "Hallo i bims"
-  '';
-};
+{
+  system.activationScripts.my-activation-script = {
+    deps = [ "etc" ];
+    # supportsDryActivation = true;
+    text = ''
+      echo "Hallo i bims"
+    '';
+  };
+}
 ```
 
 This example creates an activation script snippet that is run after the `etc`
@@ -34,7 +36,7 @@ read which is set to `dry-activate` when a dry activation is done.
 
 An activation script can write to special files instructing
 `switch-to-configuration` to restart/reload units. The script will take these
-requests into account and will incorperate the unit configuration as described
+requests into account and will incorporate the unit configuration as described
 above. This means that the activation script will "fake" a modified unit file
 and `switch-to-configuration` will act accordingly. By doing so, configuration
 like [systemd.services.\<name\>.restartIfChanged](#opt-systemd.services) is
@@ -49,7 +51,7 @@ dry activation being `/run/nixos/dry-activation-restart-list` and
 `/run/nixos/dry-activation-reload-list`. Those files can contain
 newline-separated lists of unit names where duplicates are being ignored. These
 files are not create automatically and activation scripts must take the
-possiblility into account that they have to create them first.
+possibility into account that they have to create them first.
 
 ## NixOS snippets {#sec-activation-script-nixos-snippets}
 
@@ -69,4 +71,4 @@ do:
   `/etc/group` and `/etc/shadow`. This also creates home directories
 - `usrbinenv` creates `/usr/bin/env`
 - `var` creates some directories in `/var` that are not service-specific
-- `wrappers` creates setuid wrappers like `ping` and `sudo`
+- `wrappers` creates setuid wrappers like `sudo`

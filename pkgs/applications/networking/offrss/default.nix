@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains:
   #   ld: serve_pdf.o:offrss.h:75: multiple definition of `cgi_url_path';
   #     offrss.o:offrss.h:75: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   configurePhase = ''
     substituteInPlace Makefile \
@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ viric ];
     platforms = lib.platforms.linux;
+    mainProgram = "offrss";
   };
 }

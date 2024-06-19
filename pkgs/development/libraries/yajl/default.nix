@@ -1,17 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, which, testers }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yajl";
-  version = "2.1.0";
+  version = "2.1.0-unstable-2024-02-01";
 
   src = fetchFromGitHub {
-    owner = "lloyd";
+    owner = "containers";
     repo = "yajl";
-    rev = "refs/tags/${version}";
-    sha256 = "00yj06drb6izcxfxfqlhimlrb089kka0w0x8k27pyzyiq7qzcvml";
+    rev = "6bc5219389fd2752631682b0a8368e6d8218a8c5";
+    hash = "sha256-vY0tqCkz6PN00Qbip5ViO64L3C06fJ4JjFuIk0TWgCo=";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  doCheck = true;
+  nativeCheckInputs = [ which ];
+
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "Yet Another JSON Library";
@@ -21,7 +28,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://lloyd.github.com/yajl/";
     license = lib.licenses.isc;
+    pkgConfigModules = [ "yajl" ];
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ maggesi ];
   };
-}
+})

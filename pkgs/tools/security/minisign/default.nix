@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minisign";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitHub {
     repo = "minisign";
     owner = "jedisct1";
     rev = version;
-    sha256 = "sha256-uqlX4m1e5NTqqyI99j1c6/w/YQWeJC39FufpxAf4JT4=";
+    sha256 = "sha256-sczGs6du797WUkfr3JiTI/bUHp7vKEeZtJdCryFcYu8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ joachifm ];
     platforms = platforms.unix;
+    mainProgram = "minisign";
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchbzr, xlibsWrapper }:
+{ lib, stdenv, fetchbzr, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "xwinwrap";
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    xlibsWrapper
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
   ];
 
   buildPhase = if stdenv.hostPlatform.system == "x86_64-linux" then ''
@@ -46,7 +48,8 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.hpnd;
     homepage = "https://shantanugoel.com/2008/09/03/shantz-xwinwrap/";
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
     platforms = platforms.linux;
+    mainProgram = "xwinwrap";
   };
 }

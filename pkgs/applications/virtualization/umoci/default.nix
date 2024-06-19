@@ -17,7 +17,7 @@ buildGoModule rec {
     sha256 = "0in8kyi4jprvbm3zsl3risbjj8b0ma62yl3rq8rcvcgypx0mn7d4";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -35,6 +35,6 @@ buildGoModule rec {
     homepage = "https://umo.ci";
     license = licenses.asl20;
     maintainers = with maintainers; [ zokrezyl ];
-    platforms = platforms.unix;
+    mainProgram = "umoci";
   };
 }

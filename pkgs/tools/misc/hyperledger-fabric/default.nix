@@ -5,20 +5,22 @@
 
 buildGoModule rec {
   pname = "hyperledger-fabric";
-  version = "2.4.6";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "hyperledger";
     repo = "fabric";
     rev = "v${version}";
-    sha256 = "sha256-Q0qrDPih3M4YCzjhLFBy51qVvoICwwn1LJf63rYiUUg=";
+    hash = "sha256-Ev9a+d15kr6apKyGR5xTa/2I3cByyPSTW2Y+HAQk9GU=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   postPatch = ''
     # Broken
     rm cmd/peer/main_test.go
+    # Requires network
+    rm cmd/osnadmin/main_test.go
   '';
 
   subPackages = [
@@ -50,6 +52,6 @@ buildGoModule rec {
     '';
     homepage = "https://wiki.hyperledger.org/display/fabric";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

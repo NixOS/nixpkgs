@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     kubernetes
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     requests-mock
   ];
@@ -47,10 +47,16 @@ python3.pkgs.buildPythonApplication rec {
     "kube_hunter"
   ];
 
+  disabledTests = [
+    # Test is out-dated
+    "test_K8sCveHunter"
+  ];
+
   meta = with lib; {
     description = "Tool to search issues in Kubernetes clusters";
     homepage = "https://github.com/aquasecurity/kube-hunter";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "kube-hunter";
   };
 }

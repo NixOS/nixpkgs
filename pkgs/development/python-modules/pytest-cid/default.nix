@@ -1,23 +1,25 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, py-cid
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  flit-core,
+  py-cid,
+  pytestCheckHook,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-cid";
-  version = "1.1.1";
-  format = "flit";
+  version = "1.1.2";
+  format = "pyproject";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ntninja";
     repo = pname;
-    rev = "1ff9ec43ac9eaf76352ea7e7a060cd081cb8b68a"; # Version has no git tag
-    sha256 = "sha256-H2RtMGYWukowTTfqZSx+hikxzkqw1v5bA4AfZfiVl8U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dcL/i5+scmdXh7lfE8+32w9PdHWf+mkunJL1vpJ5+Co=";
   };
 
   postPatch = ''
@@ -25,11 +27,11 @@ buildPythonPackage rec {
       --replace "pytest >= 5.0, < 7.0" "pytest >= 5.0"
   '';
 
-  propagatedBuildInputs = [
-    py-cid
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  checkInputs = [
+  propagatedBuildInputs = [ py-cid ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
   ];

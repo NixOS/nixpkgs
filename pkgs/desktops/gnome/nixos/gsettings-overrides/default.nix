@@ -47,7 +47,7 @@ runCommand "gnome-gsettings-overrides" { preferLocalBuild = true; } ''
   ${concatMapStringsSep "\n" (pkg: "cp -rf \"${glib.getSchemaPath pkg}\"/*.xml \"${glib.getSchemaPath pkg}\"/*.gschema.override \"$schema_dir\"") gsettingsOverridePackages}
 
   chmod -R a+w "$data_dir"
-  cat - > "$schema_dir/nixos-defaults.gschema.override" <<- EOF
+  cat - > "$schema_dir/zz-nixos-defaults.gschema.override" <<- EOF
   ${gsettingsOverrides}
   EOF
 

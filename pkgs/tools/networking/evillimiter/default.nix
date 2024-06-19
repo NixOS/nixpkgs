@@ -40,6 +40,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool that monitors, analyzes and limits the bandwidth";
+    mainProgram = "evillimiter";
     longDescription = ''
       A tool to monitor, analyze and limit the bandwidth (upload/download) of
       devices on your local network without physical or administrative access.

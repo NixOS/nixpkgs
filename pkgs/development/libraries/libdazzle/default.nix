@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   checkPhase = ''
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
   '';
 
@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A library to delight your users with fancy features";
+    mainProgram = "dazzle-list-counters";
     longDescription = ''
       The libdazzle library is a companion library to GObject and GTK. It
       provides various features that we wish were in the underlying library but
@@ -80,7 +81,7 @@ stdenv.mkDerivation rec {
       for those libraries. In other cases, our design isn't quite generic
       enough to work for everyone.
     '';
-    homepage = "https://wiki.gnome.org/Apps/Builder";
+    homepage = "https://gitlab.gnome.org/GNOME/libdazzle";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Based on: https://github.com/dani-garcia/vaultwarden/wiki/Backing-up-your-vault
-if ! mkdir -p "$BACKUP_FOLDER"; then
-  echo "Could not create backup folder '$BACKUP_FOLDER'" >&2
+if [ ! -d "$BACKUP_FOLDER" ]; then
+  echo "Backup folder '$BACKUP_FOLDER' does not exist" >&2
   exit 1
 fi
 

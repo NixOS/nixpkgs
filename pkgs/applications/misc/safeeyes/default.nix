@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, python3
 , fetchPypi
 , alsa-utils
 , gobject-introspection
@@ -7,27 +7,30 @@
 , libnotify
 , wlrctl
 , gtk3
+, safeeyes
+, testers
 , xprintidle
-, wrapGAppsHook
-, babel
-, psutil
-, xlib
-, pygobject3
-, dbus-python
-, croniter
+, xprop
+, wrapGAppsHook3
 }:
+
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "safeeyes";
-  version = "2.1.3";
+  version = "2.1.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b5w887hivmdrkm1ydbar4nmnks6grpbbpvxgf9j9s46msj03c9x";
+    hash = "sha256-tvsBTf6+zKBzB5aL+LUcEvE4jmVHnnoY0L4xoKMJ0vM=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "root_dir = sys.prefix" "root_dir = '/'"
+  '';
+
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -50,19 +53,19 @@ buildPythonApplication rec {
   dontWrapGApps = true;
 
   postInstall = ''
-    mkdir -p $out/share/applications
-    cp -r safeeyes/platform/icons $out/share/icons/
-    cp safeeyes/platform/safeeyes.desktop $out/share/applications/safeeyes.desktop
+    mv $out/lib/python*/site-packages/share $out/share
   '';
 
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      --prefix PATH : ${lib.makeBinPath [ alsa-utils wlrctl xprintidle ]}
+      --prefix PATH : ${lib.makeBinPath [ alsa-utils wlrctl xprintidle xprop ]}
     )
   '';
 
   doCheck = false; # no tests
+
+  passthru.tests.version = testers.testVersion { package = safeeyes; };
 
   meta = with lib; {
     homepage = "http://slgobinath.github.io/SafeEyes";
@@ -70,5 +73,6 @@ buildPythonApplication rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ srghma ];
     platforms = platforms.linux;
+    mainProgram = "safeeyes";
   };
 }

@@ -1,34 +1,62 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 , fetchurl
 , nixosTests
 }:
 
 buildGoModule rec {
   pname = "mattermost";
-  version = "7.3.0";
+  # ESR releases only.
+  # See https://docs.mattermost.com/upgrade/extended-support-release.html
+  # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
+  # the version regex in passthru.updateScript as well.
+  version = "9.5.5";
 
   src = fetchFromGitHub {
     owner = "mattermost";
-    repo = "mattermost-server";
+    repo = "mattermost";
     rev = "v${version}";
-    sha256 = "sha256-WDFay0XeaeNR/yX5if9Ab9XwzFF4cIGwBOrhc2rlX/c=";
+    hash = "sha256-ZaFXuYm9SEE9ARN5PG8vjt9WnNfGiALilGzjfnDP7aA=";
   };
+
+  # Needed because buildGoModule does not support go workspaces yet.
+  # We use go 1.22's workspace vendor command, which is not yet available
+  # in the default version of go used in nixpkgs, nor is it used by upstream:
+  # https://github.com/mattermost/mattermost/issues/26221#issuecomment-1945351597
+  overrideModAttrs = (_: {
+    buildPhase = ''
+      make setup-go-work
+      go work vendor -e
+    '';
+  });
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    sha256 = "sha256-fIjasaaAEMPLaxo86MfASqTp/0WzzTDKJACKWuWby/A=";
+    hash = "sha256-tgds8eTBeisuJcLgtx6zOiFUcVL1oU0LLbPqmh4SQUU=";
   };
 
-  vendorSha256 = "sha256-qZQXNVbJZDddVE+xk6F8XJCEg5dhhuXz68wcn2Uvmxk=";
+  vendorHash = "sha256-TJCtgNf56A1U0EbV5gXjTro+YudVBRWiSZoBC3nJxnE=";
+
+  modRoot = "./server";
+  preBuild = ''
+    make setup-go-work
+  '';
 
   subPackages = [ "cmd/mattermost" ];
+
+  tags = [ "production" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mattermost/mattermost-server/v6/model.Version=${version}"
+    "-X github.com/mattermost/mattermost/server/public/model.Version=${version}"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildNumber=${version}-nixpkgs"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildDate=1970-01-01"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildHash=v${version}"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildHashEnterprise=none"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildEnterpriseReady=false"
   ];
 
   postInstall = ''
@@ -39,12 +67,18 @@ buildGoModule rec {
     find $out/{client,i18n,fonts,templates,config} -type f -exec chmod -x {} \;
   '';
 
-  passthru.tests.mattermost = nixosTests.mattermost;
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "v(9\.5\.[0-9]+)" ];
+    };
+    tests.mattermost = nixosTests.mattermost;
+  };
 
   meta = with lib; {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
-    license = with licenses; [ agpl3 asl20 ];
-    maintainers = with maintainers; [ ryantm numinit kranzes ];
+    license = with licenses; [ agpl3Only asl20 ];
+    maintainers = with maintainers; [ ryantm numinit kranzes mgdelacroix ];
+    mainProgram = "mattermost";
   };
 }

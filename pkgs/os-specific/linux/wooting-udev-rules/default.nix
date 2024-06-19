@@ -2,9 +2,9 @@
 
 stdenv.mkDerivation rec {
   pname = "wooting-udev-rules";
-  version = "20210525";
+  version = "unstable-2023-03-31";
 
-  # Source: https://wooting.helpscoutdocs.com/article/68-wootility-configuring-device-access-for-wootility-under-linux-udev-rules
+  # Source: https://help.wooting.io/en/article/wootility-configuring-device-access-for-wootility-under-linux-udev-rules-r6lb2o/
   src = [ ./wooting.rules ];
 
   dontUnpack = true;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://wooting.helpscoutdocs.com/article/34-linux-udev-rules";
+    homepage = "https://help.wooting.io/en/article/wootility-configuring-device-access-for-wootility-under-linux-udev-rules-r6lb2o/";
     description = "udev rules that give NixOS permission to communicate with Wooting keyboards";
     platforms = platforms.linux;
     license = "unknown";

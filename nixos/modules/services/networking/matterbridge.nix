@@ -17,13 +17,13 @@ in
 {
   options = {
     services.matterbridge = {
-      enable = mkEnableOption (lib.mdDoc "Matterbridge chat platform bridge");
+      enable = mkEnableOption "Matterbridge chat platform bridge";
 
       configPath = mkOption {
         type = with types; nullOr str;
         default = null;
         example = "/etc/nixos/matterbridge.toml";
-        description = lib.mdDoc ''
+        description = ''
           The path to the matterbridge configuration file.
         '';
       };
@@ -62,7 +62,7 @@ in
               account="mattermost.work"
               channel="off-topic"
         '';
-        description = lib.mdDoc ''
+        description = ''
           WARNING: THIS IS INSECURE, as your password will end up in
           {file}`/nix/store`, thus publicly readable. Use
           `services.matterbridge.configPath` instead.
@@ -73,7 +73,7 @@ in
       user = mkOption {
         type = types.str;
         default = "matterbridge";
-        description = lib.mdDoc ''
+        description = ''
           User which runs the matterbridge service.
         '';
       };
@@ -81,7 +81,7 @@ in
       group = mkOption {
         type = types.str;
         default = "matterbridge";
-        description = lib.mdDoc ''
+        description = ''
           Group which runs the matterbridge service.
         '';
       };

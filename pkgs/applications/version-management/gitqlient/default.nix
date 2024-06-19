@@ -8,46 +8,15 @@
 
 mkDerivation rec {
   pname = "gitqlient";
-  version = "1.5.0";
+  version = "1.6.2";
 
-  srcs = [
-    (fetchFromGitHub {
-      owner = "francescmm";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "sha256-Mq29HbmPABrRIJjWC5AAKIOKbGngeJdkZkWeJw8BFuw=";
-    })
-    (fetchFromGitHub rec {
-      owner = "francescmm";
-      repo = "AuxiliarCustomWidgets";
-      rev = "835f538b4a79e4d6bb70eef37a32103e7b2a1fd1";
-      sha256 = "sha256-b1gb/7UcLS6lI92dBfTenGXA064t4dZufs3S9lu/lQA=";
-      name = repo;
-    })
-    (fetchFromGitHub rec {
-      owner = "francescmm";
-      repo = "QLogger";
-      rev = "d1ed24e080521a239d5d5e2c2347fe211f0f3e4f";
-      sha256 = "sha256-NVlFYmm7IIkf8LhQrAYXil9kH6DFq1XjOEHQiIWmER4=";
-      name = repo;
-    })
-    (fetchFromGitHub rec {
-      owner = "francescmm";
-      repo = "QPinnableTabWidget";
-      rev = "cc937794e910d0452f0c07b4961c6014a7358831";
-      sha256 = "sha256-2KzzBv/s2t665axeBxWrn8aCMQQArQLlUBOAlVhU+wE=";
-      name = repo;
-    })
-    (fetchFromGitHub rec {
-      owner = "francescmm";
-      repo = "git";
-      rev = "b62750f4da4b133faff49e6f53950d659b18c948";
-      sha256 = "sha256-4FqA+kkHd0TqD6ZuB4CbJ+IhOtQG9uWN+qhSAT0dXGs=";
-      name = repo;
-    })
-  ];
-
-  sourceRoot = "source";
+  src = fetchFromGitHub {
+    owner = "francescmm";
+    repo = "gitqlient";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-fHrsDEHEUgQYkZdnSzJ/+gTsV0eX8tOqSlr7vNH6LVs=";
+  };
 
   nativeBuildInputs = [
     qmake
@@ -56,13 +25,6 @@ mkDerivation rec {
   buildInputs = [
     qtwebengine
   ];
-
-  postUnpack = ''
-    for dep in AuxiliarCustomWidgets QPinnableTabWidget QLogger git; do
-      rmdir "source/src/$dep"
-      ln -sf "../../$dep" "source/src/$dep"
-    done
-  '';
 
   qmakeFlags = [
     "GitQlient.pro"
@@ -78,5 +40,6 @@ mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
+    mainProgram = "gitqlient";
   };
 }

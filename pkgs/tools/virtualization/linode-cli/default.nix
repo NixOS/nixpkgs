@@ -8,29 +8,33 @@
 , requests
 , setuptools
 , terminaltables
+, rich
+, openapi3
+, packaging
 }:
 
 let
-  sha256 = "1fv53wikx745kci86xrsq9kfsgv0a65srhywdw32cab1wywwpn2z";
+  hash = "sha256-J0L+FTVzYuAqTDOwpoH12lQr03UNo5dsQpd/iUKR40Q=";
   # specVersion taken from: https://www.linode.com/docs/api/openapi.yaml at `info.version`.
-  specVersion = "4.136.0";
-  specSha256 = "17cxg83cav9qnrnv7i45hsn0z4a6a5yyfhzy80x1v0fshnc52dpw";
+  specVersion = "4.166.0";
+  specHash = "sha256-rUwKQt3y/ALZUoW3eJiiIDJYLQpUHO7Abm0h09ra02g=";
   spec = fetchurl {
     url = "https://raw.githubusercontent.com/linode/linode-api-docs/v${specVersion}/openapi.yaml";
-    sha256 = specSha256;
+    hash = specHash;
   };
 
 in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "5.23.0";
+  version = "5.45.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "linode";
     repo = pname;
-    rev = version;
-    inherit sha256;
+    rev = "v${version}";
+    inherit hash;
   };
 
   patches = [
@@ -40,7 +44,7 @@ buildPythonApplication rec {
   # remove need for git history
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "version=get_version()," "version='${version}',"
+      --replace "version = get_version()" "version='${version}',"
   '';
 
   propagatedBuildInputs = [
@@ -49,11 +53,15 @@ buildPythonApplication rec {
     requests
     setuptools
     terminaltables
+    rich
+    openapi3
+    packaging
   ];
 
   postConfigure = ''
     python3 -m linodecli bake ${spec} --skip-config
     cp data-3 linodecli/
+    echo "${version}" > baked_version
   '';
 
   doInstallCheck = true;
@@ -69,9 +77,10 @@ buildPythonApplication rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
+    mainProgram = "linode-cli";
     description = "The Linode Command Line Interface";
     homepage = "https://github.com/linode/linode-cli";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ryantm ];
+    maintainers = with maintainers; [ ryantm techknowlogick ];
   };
 }

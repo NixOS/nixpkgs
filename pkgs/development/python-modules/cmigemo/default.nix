@@ -1,8 +1,17 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, six, cmigemo, pytestCheckHook }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  cmigemo,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "cmigemo";
   version = "0.1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,7 +30,7 @@ buildPythonPackage rec {
     sed -i 's~dict_path_base = "/usr/share/cmigemo"~dict_path_base = "/${cmigemo}/share/migemo"~g' test/test_cmigemo.py
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "test/" ];
 

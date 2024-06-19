@@ -1,17 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "benthos";
-  version = "4.9.0";
+  version = "4.27.0";
 
   src = fetchFromGitHub {
     owner = "benthosdev";
     repo = "benthos";
-    rev = "v${version}";
-    sha256 = "sha256-gFtlu+Jg5XC9OlUArTCHPFN4iTF7kdyrcRcymRwSHsw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Jswy4Ku/dxIEfC+jNjLXu/WW24enc4Qn0vrOHvNDVYQ=";
   };
 
-  vendorSha256 = "sha256-sRhiTati1EsU+gBv29OkBAxqot+Bjp1BemYR1qbqN1w=";
+  proxyVendor = true;
+
+  vendorHash = "sha256-6CVDhy29bIn19EgKbKDNTBWdy+i18g0oz/NxABcQ6QE=";
 
   doCheck = false;
 
@@ -19,11 +24,17 @@ buildGoModule rec {
     "cmd/benthos"
   ];
 
-  ldflags = [ "-s" "-w" "-X github.com/benthosdev/benthos/v4/internal/cli.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/benthosdev/benthos/v4/internal/cli.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "Fancy stream processing made operationally mundane";
+    mainProgram = "benthos";
     homepage = "https://www.benthos.dev";
+    changelog = "https://github.com/benthosdev/benthos/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ sagikazarmark ];
   };

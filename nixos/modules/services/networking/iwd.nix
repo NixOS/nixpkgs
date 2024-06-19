@@ -2,7 +2,7 @@
 
 let
   inherit (lib)
-    mkEnableOption mkIf mkOption types
+    mkEnableOption mkPackageOption mkIf mkOption types
     recursiveUpdate;
 
   cfg = config.networking.wireless.iwd;
@@ -17,7 +17,9 @@ let
 in
 {
   options.networking.wireless.iwd = {
-    enable = mkEnableOption (lib.mdDoc "iwd");
+    enable = mkEnableOption "iwd";
+
+    package = mkPackageOption pkgs "iwd" { };
 
     settings = mkOption {
       type = ini.type;
@@ -32,7 +34,7 @@ in
         };
       };
 
-      description = lib.mdDoc ''
+      description = ''
         Options passed to iwd.
         See [here](https://iwd.wiki.kernel.org/networkconfigurationsettings) for supported options.
       '';
@@ -50,11 +52,11 @@ in
     environment.etc."iwd/${configFile.name}".source = configFile;
 
     # for iwctl
-    environment.systemPackages = [ pkgs.iwd ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ pkgs.iwd ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ pkgs.iwd ];
+    systemd.packages = [ cfg.package ];
 
     systemd.network.links."80-iwd" = {
       matchConfig.Type = "wlan";
@@ -62,10 +64,12 @@ in
     };
 
     systemd.services.iwd = {
+      path = [ config.networking.resolvconf.package ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
+      serviceConfig.ReadWritePaths = "-/etc/resolv.conf";
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ mic92 dtzWill ];
+  meta.maintainers = with lib.maintainers; [ dtzWill ];
 }

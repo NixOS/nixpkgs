@@ -1,65 +1,46 @@
-{ stdenv, lib, rustPlatform, fetchgit
-, minijail-tools, pkg-config, protobuf, wayland-scanner
+{ lib, rustPlatform, fetchgit
+, pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "104.0";
+  version = "124.0";
 
   src = fetchgit {
-    url = "https://chromium.googlesource.com/crosvm/crosvm";
-    rev = "265aab613b1eb31598ea0826f04810d9f010a2c6";
-    sha256 = "OzbtPHs6BWK83RZ/6eCQHA61X6SY8FoBkaN70a37pvc=";
+    url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
+    rev = "bc2900b9ccbdf37b780a63888ca94437fd7dd6af";
+    hash = "sha256-t/47u5BlSC5vbRc7OQSbGBF+wnhcDFOMjrRQc/p2HcQ=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  patches = [
-    ./default-seccomp-policy-dir.diff
+  cargoHash = "sha256-7zx0k7HXequpwcURHx+Ml3cDhdvLkXTg+V71F6TO/d0=";
+
+  nativeBuildInputs = [
+    pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
   ];
-
-  cargoLock.lockFile = ./Cargo.lock;
-
-  nativeBuildInputs = [ minijail-tools pkg-config protobuf wayland-scanner ];
 
   buildInputs = [
     libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
   ];
 
-  arch = stdenv.hostPlatform.parsed.cpu.name;
-
-  postPatch = ''
-    cp ${cargoLock.lockFile} Cargo.lock
-    sed -i "s|/usr/share/policy/crosvm/|$PWD/seccomp/$arch/|g" \
-        seccomp/$arch/*.policy
+  preConfigure = ''
+    patchShebangs third_party/minijail/tools/*.py
   '';
 
-  preBuild = ''
-    export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
+  CROSVM_USE_SYSTEM_MINIGBM = true;
+  CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
 
-    for policy in seccomp/$arch/*.policy; do
-        compile_seccomp_policy \
-            --default-action trap $policy ''${policy%.policy}.bpf
-    done
-
-    substituteInPlace seccomp/$arch/*.policy \
-      --replace "@include $(pwd)/seccomp/$arch/" "@include $out/share/policy/"
-  '';
-
-  buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
-
-  postInstall = ''
-    mkdir -p $out/share/policy/
-    cp -v seccomp/$arch/*.{policy,bpf} $out/share/policy/
-  '';
+  buildFeatures = [ "virgl_renderer" ];
 
   passthru.updateScript = ./update.py;
 
   meta = with lib; {
     description = "A secure virtual machine monitor for KVM";
-    homepage = "https://chromium.googlesource.com/crosvm/crosvm/";
+    homepage = "https://crosvm.dev/";
+    mainProgram = "crosvm";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.bsd3;
     platforms = [ "aarch64-linux" "x86_64-linux" ];

@@ -12,8 +12,6 @@ appimageTools.wrapType2 rec {
   extraInstallCommands =
     let contents = appimageTools.extract { inherit pname version src; };
     in ''
-      mv $out/bin/${pname}-${version} $out/bin/${pname}
-
       install -m 444 -D ${contents}/zecwallet-lite.desktop -t $out/share/applications
       substituteInPlace $out/share/applications/zecwallet-lite.desktop \
         --replace 'Exec=AppRun' "Exec=$out/bin/zecwallet-lite"
@@ -26,5 +24,6 @@ appimageTools.wrapType2 rec {
     license = licenses.mit;
     maintainers = with maintainers; [ colinsane ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "zecwallet-lite";
   };
 }

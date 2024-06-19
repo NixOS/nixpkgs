@@ -1,38 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, python
-
-# For tests/setup.py
-, pytest
-, pytest-runner
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "packet-python";
   version = "1.44.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WVfMELOoml7Hx78jy6TAwlFRLuSQu9dtsb6Khs6/cgI=";
+    hash = "sha256-WVfMELOoml7Hx78jy6TAwlFRLuSQu9dtsb6Khs6/cgI=";
   };
-  nativeBuildInputs = [ pytest-runner ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+  '';
+
   propagatedBuildInputs = [ requests ];
-  checkInputs = [
-    pytest
-    pytest-runner
+
+  nativeCheckInputs = [
+    pytestCheckHook
     requests-mock
   ];
 
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  pythonImportsCheck = [ "packet" ];
 
-  meta = {
-    description = "A Python client for the Packet API.";
-    homepage    = "https://github.com/packethost/packet-python";
-    license     = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ dipinhora ];
+  meta = with lib; {
+    description = "Python client for the Packet API";
+    homepage = "https://github.com/packethost/packet-python";
+    changelog = "https://github.com/packethost/packet-python/blob/v${version}/CHANGELOG.md";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ dipinhora ];
   };
 }

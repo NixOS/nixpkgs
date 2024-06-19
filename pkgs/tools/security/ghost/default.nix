@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Android post-exploitation framework";
+    mainProgram = "ghost";
     homepage = "https://github.com/EntySec/ghost";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, dicttoxml2
-, fetchFromGitHub
-, pythonOlder
-, xmltodict
+{
+  lib,
+  buildPythonPackage,
+  dicttoxml2,
+  fetchFromGitHub,
+  pythonOlder,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pyialarm";
   version = "2.2.0";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -26,9 +28,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyialarm"
-  ];
+  pythonImportsCheck = [ "pyialarm" ];
 
   meta = with lib; {
     description = "Python library to interface with Antifurto365 iAlarm systems";

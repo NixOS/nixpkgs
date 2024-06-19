@@ -1,9 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pythonOlder
-, semver
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose3,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  semver,
 }:
 
 buildPythonPackage rec {
@@ -16,17 +18,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "reubano";
     repo = "pkutils";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-AK+xX+LPz6IVLZedsqMUm7G28ue0s3pXgIzxS4EHHLE=";
   };
 
-  propagatedBuildInputs = [
-    semver
-  ];
+  pythonRelaxDeps = [ "semver" ];
 
-  checkInputs = [
-    nose
-  ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+
+  propagatedBuildInputs = [ semver ];
+
+  nativeCheckInputs = [ nose3 ];
 
   checkPhase = ''
     runHook preCheck
@@ -34,9 +36,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "pkutils"
-  ];
+  pythonImportsCheck = [ "pkutils" ];
 
   meta = with lib; {
     description = "A Python packaging utility library";

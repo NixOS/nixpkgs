@@ -1,8 +1,21 @@
-{ lib, fetchFromGitHub, buildDunePackage, qcheck-alcotest }:
+{ lib, ocaml, fetchFromGitHub, buildDunePackage
+, algaeff, bwd
+, qcheck-alcotest
+}:
+
+let params = if lib.versionAtLeast ocaml.version "5.0" then {
+    version = "5.1.0";
+    hash = "sha256-J3qkytgJkk2gT83KJ47nNM4cXqVHbx4iTPK+fLwR7Wk=";
+    propagatedBuildInputs = [ algaeff bwd ];
+  } else {
+    version = "2.0.0";
+    hash = "sha256:1nhz44cyipy922anzml856532m73nn0g7iwkg79yzhq6yb87109w";
+  }
+; in
 
 buildDunePackage rec {
   pname = "yuujinchou";
-  version = "2.0.0";
+  inherit (params) version;
 
   minimalOCamlVersion = "4.12";
 
@@ -10,15 +23,18 @@ buildDunePackage rec {
     owner = "RedPRL";
     repo = pname;
     rev = version;
-    sha256 = "sha256:1nhz44cyipy922anzml856532m73nn0g7iwkg79yzhq6yb87109w";
+    inherit (params) hash;
   };
+
+  propagatedBuildInputs = params.propagatedBuildInputs or [];
+
 
   doCheck = true;
   checkInputs = [ qcheck-alcotest ];
 
   meta = {
     description = "Name pattern combinators";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/RedPRL/yuujinchou";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.vbgl ];
   };

@@ -23,7 +23,7 @@
 , pkg-config
 , sword
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 , yelp-tools
 , zip
 }:
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     itstool
     libxslt
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     yelp-tools # for yelp-build
     zip # for building help epubs
   ];

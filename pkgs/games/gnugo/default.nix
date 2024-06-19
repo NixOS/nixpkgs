@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GNU Go - A computer go player";
+    mainProgram = "gnugo";
     homepage = "https://www.gnu.org/software/gnugo/";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;

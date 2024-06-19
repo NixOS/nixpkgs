@@ -8,30 +8,25 @@
 
 stdenv.mkDerivation rec {
   pname = "cfs-zen-tweaks";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "igo95862";
     repo = "cfs-zen-tweaks";
     rev = version;
-    sha256 = "HRR2tdjNmWyrpbcMlihSdb/7g/tHma3YyXogQpRCVyo=";
+    hash = "sha256-E3sNWWXm0NEqLCzFccd/nfYby+/b/MVjIHeGlDxV1W4=";
   };
 
-  postPatch = ''
-    patchShebangs set-cfs-zen-tweaks.bash
-    chmod +x set-cfs-zen-tweaks.bash
-    substituteInPlace set-cfs-zen-tweaks.bash \
+  preConfigure = ''
+    substituteInPlace set-cfs-zen-tweaks.sh \
       --replace '$(gawk' '$(${gawk}/bin/gawk'
   '';
 
-  buildInputs = [
-    gawk
-  ];
+  preFixup = ''
+    chmod +x $out/lib/cfs-zen-tweaks/set-cfs-zen-tweaks.sh
+  '';
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-  ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "Tweak Linux CPU scheduler for desktop responsiveness";

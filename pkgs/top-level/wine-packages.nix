@@ -12,8 +12,7 @@ rec {
     fontconfigSupport = stdenv.isLinux;
     alsaSupport = stdenv.isLinux;
     openglSupport = true;
-    # Works on Darwin but disabled by default to prevent Hydra build failures due to MoltenVK.
-    vulkanSupport = stdenv.isLinux;
+    vulkanSupport = true;
     tlsSupport = true;
     cupsSupport = true;
     dbusSupport = stdenv.isLinux;
@@ -26,12 +25,13 @@ rec {
     sdlSupport = true;
     mingwSupport = true;
     usbSupport = true;
+    waylandSupport = stdenv.isLinux;
+    x11Support = stdenv.isLinux;
   };
 
   full = base.override {
     gtkSupport = stdenv.isLinux;
     gstreamerSupport = true;
-    openalSupport = true;
     openclSupport = true;
     odbcSupport = true;
     netapiSupport = stdenv.isLinux;
@@ -40,9 +40,6 @@ rec {
     v4lSupport = stdenv.isLinux;
     gphoto2Support = true;
     krb5Support = true;
-    ldapSupport = true;
-    # Works on Darwin but disabled by default to prevent Hydra build failures due to MoltenVK.
-    vkd3dSupport = stdenv.isLinux;
     embedInstallers = true;
   };
 
@@ -55,6 +52,6 @@ rec {
   staging = base.override { wineRelease = "staging"; };
   stagingFull = full.override { wineRelease = "staging"; };
 
-  wayland = base.override { wineRelease = "wayland"; };
-  waylandFull = full.override { wineRelease = "wayland"; };
+  wayland = base.override { wineRelease = "wayland"; waylandSupport = true; };
+  waylandFull = full.override { wineRelease = "wayland"; waylandSupport = true; };
 }

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mapcache";
-  version = "1.12.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = pname;
     rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-NuiZMWcmsN5wDCd37Hvj3cazwT3Ea+OknV/YR3urZB0=";
+    sha256 = "sha256-+QP4xXhP+MNqnhMUtMdtKrcuJ0M2BXWu3mbxXzj5ybc=";
   };
 
   nativeBuildInputs = [
@@ -48,12 +48,14 @@ stdenv.mkDerivation rec {
     "-DAPACHE_MODULE_DIR=${placeholder "out"}/modules"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-std=c99";
+
   meta = with lib; {
     description = "A server that implements tile caching to speed up access to WMS layers";
     homepage = "https://mapserver.org/mapcache/";
     changelog = "https://www.mapserver.org/development/changelog/mapcache/";
     license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = teams.geospatial.members;
     platforms = platforms.unix;
   };
 }

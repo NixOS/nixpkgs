@@ -199,7 +199,7 @@ in
     ];
   };
   everything = makeTest {
-    name = "atop-everthing";
+    name = "atop-everything";
     nodes.machine = {
       programs.atop = {
         enable = true;

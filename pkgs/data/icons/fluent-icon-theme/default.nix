@@ -6,23 +6,23 @@
 , jdupes
 , roundedIcons ? false
 , blackPanelIcons ? false
+, allColorVariants ? false
 , colorVariants ? [ ]
 ,
 }:
-let
-  pname = "Fluent-icon-theme";
+let pname = "Fluent-icon-theme";
 in
-lib.checkListOfEnum "${pname}: available color variants" [ "standard" "green" "grey" "orange" "pink" "purple" "red" "yellow" "teal" "all" ] colorVariants
+lib.checkListOfEnum "${pname}: available color variants" [ "standard" "green" "grey" "orange" "pink" "purple" "red" "yellow" "teal" ] colorVariants
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-09-20";
+  version = "2024-02-25";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "Ce8LTIxKabeqV9QVK68DqUVwtwG5lyxDPDQx0mLIr5o=";
+    hash = "sha256-Cadp2+4kBZ74kdD5x0O85FszxvN6/sg6yccxughyX1Q";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
@@ -44,10 +44,11 @@ stdenvNoCC.mkDerivation rec {
     ./install.sh --dest $out/share/icons \
       --name Fluent \
       ${builtins.toString colorVariants} \
+      ${lib.optionalString allColorVariants "--all"} \
       ${lib.optionalString roundedIcons "--round"} \
       ${lib.optionalString blackPanelIcons "--black"}
 
-    jdupes --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';

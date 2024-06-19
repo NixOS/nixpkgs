@@ -1,17 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-colorama";
-  version = "0.4.15";
-  format = "setuptools";
+  version = "0.4.15.20240311";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/RKLHjLz/s7F8J30Nm0hSY7obqMfz4tOjxrebQu/mDI=";
+    hash = "sha256-oo5/mNF9KxT7lWXTI4jkGfQQj1V6fZOaZjGZabK5nHo=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   # Module has no tests
   doCheck = false;

@@ -7,16 +7,16 @@
 , gettext
 , libxml2
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , glib
-, gssdp
-, gupnp
+, gssdp_1_6
+, gupnp_1_6
 , gupnp-av
 , gupnp-dlna
 , gst_all_1
 , libgee
-, libsoup
+, libsoup_3
 , gtk3
 , libmediaart
 , sqlite
@@ -26,16 +26,16 @@
 , gnome
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rygel";
-  version = "0.40.4";
+  version = "0.42.6";
 
   # TODO: split out lib
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "c22K2+hhX2y8j8//mEXcmF/RDhZinaI2tLUtvt8KNIs=";
+    url = "mirror://gnome/sources/rygel/${lib.versions.majorMinor finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
+    sha256 = "R9JXBLYQiDdeJqq6Vr5HwXGJRy5vgMdSq+hvAu9OMwQ=";
   };
 
   patches = [
@@ -50,18 +50,18 @@ stdenv.mkDerivation rec {
     gettext
     libxml2
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
     python3
   ];
 
   buildInputs = [
     glib
-    gssdp
-    gupnp
+    gssdp_1_6
+    gupnp_1_6
     gupnp-av
     gupnp-dlna
     libgee
-    libsoup
+    libsoup_3
     gtk3
     libmediaart
     sqlite
@@ -92,17 +92,17 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "rygel";
+      attrPath = "gnome.rygel";
       versionPolicy = "odd-unstable";
     };
   };
 
   meta = with lib; {
     description = "A home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
-    homepage = "https://wiki.gnome.org/Projects/Rygel";
+    homepage = "https://gitlab.gnome.org/GNOME/rygel";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

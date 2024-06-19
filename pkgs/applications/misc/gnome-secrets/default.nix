@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , meson
 , ninja
 , pkg-config
@@ -12,20 +12,20 @@
 , gobject-introspection
 , desktop-file-utils
 , appstream-glib
-, libadwaita }:
+, libadwaita
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "6.5";
+  version = "8.0";
   format = "other";
-  strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "secrets";
     rev = version;
-    sha256 = "sha256-Hy2W7cvvzVcKtd/KzTn81awoolnfM3ST0Nm70YBLTYY=";
+    hash = "sha256-SEPQjl6hd8IBs0c0LBEYaqn2n8CGQmYSEMJp5yoL/PA=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,6 @@ python3Packages.buildPythonApplication rec {
     glib
     gdk-pixbuf
     libadwaita
-    python3Packages.libpwquality.dev # Use python-enabled libpwquality
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -52,7 +51,8 @@ python3Packages.buildPythonApplication rec {
     construct
     pykeepass
     pyotp
-    libpwquality
+    validators
+    zxcvbn
   ];
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
@@ -63,11 +63,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isStatic; # libpwquality doesn't provide bindings when static
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";
     homepage = "https://gitlab.gnome.org/World/secrets";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mvnetbiz ];
+    mainProgram = "secrets";
   };
 }

@@ -1,14 +1,20 @@
-{ lib, buildDunePackage, fetchurl
+{ lib, buildDunePackage, fetchurl, fetchpatch
 , astring, cmdliner, fmt, re, stdlib-shims, uutf, ocaml-syntax-shims
 }:
 
 buildDunePackage rec {
   pname = "alcotest";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/alcotest/releases/download/${version}/alcotest-${version}.tbz";
-    sha256 = "sha256-/QD5ZoOVh0/zsdfvVm0U78Avp900Ej6yXVk1W+lLIyk=";
+    hash = "sha256-gSus2zS0XoiZXgfXMGvasvckee8ZlmN/HV0fQWZ5At8=";
+  };
+
+  # Fix tests with OCaml 5.2
+  patches = fetchpatch {
+    url = "https://github.com/mirage/alcotest/commit/aa437168b258db97680021116af176c55e1bd53b.patch";
+    hash = "sha256-cytuJFg4Mft47LsAEcz2zvzyy1wNzMdeLK+cjaFANpo=";
   };
 
   nativeBuildInputs = [ ocaml-syntax-shims ];

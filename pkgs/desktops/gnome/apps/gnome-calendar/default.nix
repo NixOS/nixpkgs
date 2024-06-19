@@ -7,14 +7,13 @@
 , wrapGAppsHook4
 , libgweather
 , geoclue2
-, geocode-glib
 , gettext
 , libxml2
 , gnome
 , gtk4
-, evolution-data-server
+, evolution-data-server-gtk4
 , libical
-, libsoup
+, libsoup_3
 , glib
 , gsettings-desktop-schemas
 , libadwaita
@@ -22,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "42.2";
+  version = "46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "rnzGOq6WoCqlmbbWo0hYX0529ylTbznvt0QwKwW1+70=";
+    hash = "sha256-mGH/e4q9W3sgaQulXrdULH7FNLVmJp4ptbHoWMFhCJc=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +39,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk4
-    evolution-data-server # waiting for GTK4 port
+    evolution-data-server-gtk4
     libical
-    libsoup
+    libsoup_3
     glib
     libgweather
     geoclue2
-    geocode-glib
     gsettings-desktop-schemas
     libadwaita
   ];
@@ -59,10 +57,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Calendar";
+    homepage = "https://apps.gnome.org/Calendar/";
     description = "Simple and beautiful calendar application for GNOME";
+    mainProgram = "gnome-calendar";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

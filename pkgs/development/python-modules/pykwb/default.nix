@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pyserial
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pyserial,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-mor2TKhq08w4HzaUaspWOMEFwJaAKjXKoNAaoZJqWPQ=";
   };
 
-  propagatedBuildInputs = [
-    pyserial
-  ];
+  propagatedBuildInputs = [ pyserial ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pykwb"
-  ];
+  pythonImportsCheck = [ "pykwb" ];
 
   meta = with lib; {
     description = "Library for interacting with KWB Easyfire Pellet Central Heating Units";

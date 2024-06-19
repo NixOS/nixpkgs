@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msgpack
-, oslo-utils
-, oslotest
-, pbr
-, pytz
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msgpack,
+  oslo-utils,
+  oslotest,
+  pbr,
+  pytz,
+  stestr,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-serialization";
-  version = "5.0.0";
+  version = "5.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "oslo.serialization";
     inherit version;
-    sha256 = "sha256-KEUyjQ9H3Ioj/tKoIlPpCs/wqnMdvSTzec+OUObMZro=";
+    hash = "sha256-MVyzRl6ZxoXLCRuQNly3Ab7nFA4gS6Pl/C2KILTsbnY=";
   };
 
   postPatch = ''
@@ -27,9 +29,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pbr ];
 
-  propagatedBuildInputs = [ msgpack oslo-utils pytz ];
+  propagatedBuildInputs = [
+    msgpack
+    oslo-utils
+    pytz
+  ];
 
-  checkInputs = [ oslotest stestr ];
+  nativeCheckInputs = [
+    oslotest
+    stestr
+  ];
 
   checkPhase = ''
     stestr run

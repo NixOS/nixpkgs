@@ -1,28 +1,32 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, cachelib
-, flask
-, pytest-asyncio
-, pytest-xprocess
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  cachelib,
+  flask,
+  asgiref,
+  pytest-asyncio,
+  pytest-xprocess,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-Caching";
-  version = "2.0.1";
+  pname = "flask-caching";
+  version = "2.1.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-EN8gCgPwMq9gB3vv5Bd53ZSJi2fIIEDTTochC3G6Jjg=";
+    pname = "Flask-Caching";
+    inherit version;
+    hash = "sha256-t1AMFFE1g2qVLj3jqAiB2WVOMnopyFLJJlYH9cRJI1w=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "Flask <= 2.1.2" "Flask <= 2.2"
+      --replace "cachelib >= 0.9.0, < 0.10.0" "cachelib"
   '';
 
   propagatedBuildInputs = [
@@ -30,23 +34,32 @@ buildPythonPackage rec {
     flask
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    asgiref
     pytest-asyncio
     pytest-xprocess
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # backend_cache relies on pytest-cache, which is a stale package from 2013
-    "backend_cache"
-    # optional backends
-    "Redis"
-    "Memcache"
-  ];
+  disabledTests =
+    [
+      # backend_cache relies on pytest-cache, which is a stale package from 2013
+      "backend_cache"
+      # optional backends
+      "Redis"
+      "Memcache"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # ignore flaky test
+      "test_cache_timeout_dynamic"
+      "test_cached_view_class"
+    ];
 
   meta = with lib; {
-    description = "Adds caching support to your Flask application";
-    homepage = "https://github.com/sh4nks/flask-caching";
+    description = "A caching extension for Flask";
+    homepage = "https://github.com/pallets-eco/flask-caching";
+    changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
+    maintainers = with maintainers; [ ];
     license = licenses.bsd3;
   };
 }

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bintools-unwrapped unzip ];
 
   # slashes are significant because upstream uses o/$(MODE)/foo.o
-  buildFlags = "o//third_party/python";
+  buildFlags = [ "o//third_party/python" ];
   checkTarget = "o//third_party/python/test";
   enableParallelBuilding = true;
 

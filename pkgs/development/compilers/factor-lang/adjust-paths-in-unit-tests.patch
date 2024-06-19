@@ -8,17 +8,17 @@ Subject: [PATCH] adjust unit test for finding executables in path for NixOS
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/basis/io/standard-paths/unix/unix-tests.factor b/basis/io/standard-paths/unix/unix-tests.factor
-index 986c0564d2..f0772fdcc9 100644
+index acd5029..870537f 100644
 --- a/basis/io/standard-paths/unix/unix-tests.factor
 +++ b/basis/io/standard-paths/unix/unix-tests.factor
-@@ -5,12 +5,12 @@ sequences tools.test ;
- 
+@@ -5,13 +5,13 @@ sequences tools.test ;
+
  { f } [ "" find-in-path ] unit-test
  { t } [
 -    "ls" find-in-path { "/bin/ls" "/usr/bin/ls" } member?
 +    "ls" find-in-path not not
  ] unit-test
- 
+
  { t } [
      "/sbin:" "PATH" os-env append "PATH" [
          "ps" find-in-path
@@ -26,6 +26,3 @@ index 986c0564d2..f0772fdcc9 100644
 +        not not
      ] with-os-env
  ] unit-test
--- 
-2.19.2
-

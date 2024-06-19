@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gibberish-detector
-, mock
-, pkgs
-, pyahocorasick
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, requests
-, responses
-, unidiff
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gibberish-detector,
+  mock,
+  pkgs,
+  pyahocorasick,
+  pytest7CheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
+  responses,
+  unidiff,
 }:
 
 buildPythonPackage rec {
   pname = "detect-secrets";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Dl/2HgCacDko/ug9nGA9X+LyOkuDot11H28lxrgkwdE=";
+    hash = "sha256-6EmL6XPySqcA3EA+FFkfw7Dkxl5LvyBorIw0hesV5eU=";
     leaveDotGit = true;
   };
 
@@ -35,9 +36,9 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
-    pytestCheckHook
+    pytest7CheckHook
     responses
     unidiff
     pkgs.gitMinimal
@@ -60,14 +61,12 @@ buildPythonPackage rec {
     "test_start_halfway"
   ];
 
-  pythonImportsCheck = [
-    "detect_secrets"
-  ];
+  pythonImportsCheck = [ "detect_secrets" ];
 
   meta = with lib; {
     description = "An enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
     license = licenses.asl20;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

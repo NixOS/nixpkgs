@@ -1,34 +1,30 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
 , fcitx5
-, lua5_3
-, luaPackage ? lua5_3
+, lua
 , gettext
 }:
-
 stdenv.mkDerivation rec {
   pname = "fcitx5-lua";
-  version = "5.0.10";
+  version = "5.0.13";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0ESgQv8kyc+zv/tDZtBZ+QhFFswD80ApwswFlJs8tOU=";
+    hash = "sha256-XRfYQquR9SVlYr2sX6ii8JjMyjJZWSMf1u2oKUmOhf8=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
-  buildInputs = [
-    fcitx5
-    luaPackage
-    gettext
-  ];
+  buildInputs = [ fcitx5 lua gettext ];
+
+  passthru = {
+    extraLdLibraries = [ lua ];
+  };
 
   meta = with lib; {
     description = "Lua support for Fcitx 5";

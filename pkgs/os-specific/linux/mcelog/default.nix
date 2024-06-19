@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Log x86 machine checks: memory, IO, and CPU hardware errors";
+    mainProgram = "mcelog";
     longDescription = ''
       The mcelog daemon accounts memory and some other errors in various ways
       on modern x86 Linux systems. The daemon can be queried and/or execute

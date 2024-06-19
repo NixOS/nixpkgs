@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "buildkit-nix";
-  version = "0.0.2";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
-    owner = "AkihiroSuda";
+    owner = "reproducible-containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-k9YO4KFIDebfszhKG6RYDFlVfbUPFHRsHRQXXlJ6SoU=";
+    sha256 = "sha256-i8KQLLL36iP26jIj10fZLtYpS57Xni4eIQEJG4ixWy8=";
   };
 
-  vendorSha256 = "sha256-c+VHt2uTaEQIXsmJ9TA7X5lfMxGL9yKbbnnXn4drCLU=";
+  vendorHash = "sha256-SFsf2QOIuUQY5Zzshb2190pQtOBGEsELBRihOvHYVGA=";
 
   CGO_ENABLED = 0;
 
@@ -19,9 +19,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Nix frontend for BuildKit";
-    homepage = "https://github.com/AkihiroSuda/buildkit-nix/";
+    homepage = "https://github.com/reproducible-containers/buildkit-nix/";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lesuisse ];
+    mainProgram = "buildkit-nix";
   };
 }

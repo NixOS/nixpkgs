@@ -1,34 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, six
-, html5lib
-, setuptools
-, packaging
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  six,
+  html5lib,
+  setuptools,
+  tinycss2,
+  packaging,
+  pythonOlder,
+  webencodings,
 }:
 
 buildPythonPackage rec {
   pname = "bleach";
-  version = "5.0.1";
-  disabled = pythonOlder "3.6";
+  version = "6.1.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DQMlXEfrm9Lyaqm7fyEHcy5+j+GVyi9kcJ/POwpKCFw=";
+    hash = "sha256-CjHxg3ljxB1Gu/EzG4d44TCOoHkdsDzE5zV7l89CqP4=";
   };
 
+  nativeBuildInputs = [ setuptools ];
+
   propagatedBuildInputs = [
-    packaging
-    six
     html5lib
+    packaging
     setuptools
+    six
+    webencodings
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  passthru.optional-dependencies = {
+    css = [ tinycss2 ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Disable network tests
@@ -52,6 +62,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mozilla/bleach";
     downloadPage = "https://github.com/mozilla/bleach/releases";
+    changelog = "https://github.com/mozilla/bleach/blob/v${version}/CHANGES";
     license = licenses.asl20;
     maintainers = with maintainers; [ prikhi ];
   };

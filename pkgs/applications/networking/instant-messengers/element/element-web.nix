@@ -6,37 +6,45 @@
 , writeText
 , jq
 , yarn
-, fixup_yarn_lock
+, fixup-yarn-lock
 , nodejs
 , jitsi-meet
-, conf ? { }
 }:
 
 let
-  pinData = lib.importJSON ./pin.json;
+  pinData = import ./pin.nix;
+  inherit (pinData.hashes) webSrcHash webYarnHash;
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
-    piwik = false; # disable analytics
   };
-  configOverrides = writeText "element-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   pname = "element-web";
-  inherit (pinData) version;
 
   src = fetchFromGitHub {
     owner = "vector-im";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = pinData.webSrcHash;
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = webSrcHash;
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = pinData.webYarnHash;
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    sha256 = webYarnHash;
   };
 
-  nativeBuildInputs = [ yarn fixup_yarn_lock jq nodejs ];
+  nativeBuildInputs = [ yarn fixup-yarn-lock jq nodejs ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    export VERSION=${finalAttrs.version}
+    yarn --offline build:res
+    yarn --offline build:module_system
+    yarn --offline build:bundle
+
+    runHook postBuild
+  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -49,7 +57,7 @@ in stdenv.mkDerivation rec {
     export NODE_OPTIONS=--openssl-legacy-provider
     mkdir -p $HOME
 
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $offlineCache
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules
@@ -57,24 +65,13 @@ in stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    export VERSION=${version}
-    yarn build:res --offline
-    yarn build:module_system --offline
-    yarn build:bundle --offline
-
-    runHook postBuild
-  '';
-
   installPhase = ''
     runHook preInstall
 
     cp -R webapp $out
     cp ${jitsi-meet}/libs/external_api.min.js $out/jitsi_external_api.min.js
-    echo "${version}" > "$out/version"
-    jq -s '.[0] * .[1]' "config.sample.json" "${configOverrides}" > "$out/config.json"
+    echo "${finalAttrs.version}" > "$out/version"
+    jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
 
     runHook postInstall
   '';
@@ -82,9 +79,9 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "A glossy Matrix collaboration client for the web";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-web/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/vector-im/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = lib.teams.matrix.members;
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
   };
-}
+})

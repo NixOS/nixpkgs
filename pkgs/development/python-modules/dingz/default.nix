@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "home-assistant-ecosystem";
     repo = "python-dingz";
     rev = version;
-    sha256 = "sha256-bCytQwLWw8D1UkKb/3LQ301eDCkVR4alD6NHjTs6I+4=";
+    hash = "sha256-bCytQwLWw8D1UkKb/3LQ301eDCkVR4alD6NHjTs6I+4=";
   };
 
   propagatedBuildInputs = [
@@ -30,12 +31,11 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dingz"
-  ];
+  pythonImportsCheck = [ "dingz" ];
 
   meta = with lib; {
     description = "Python API for interacting with Dingz devices";
+    mainProgram = "dingz";
     homepage = "https://github.com/home-assistant-ecosystem/python-dingz";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, cmake, libyamlcpp,
+{ lib, stdenv, fetchFromGitLab, pkg-config, cmake, yaml-cpp,
   libevdev, udev, boost }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libevdev udev libyamlcpp boost ];
+  buildInputs = [ libevdev udev yaml-cpp boost ];
 
   meta = {
     description = "A minimal composable infrastructure on top of libudev and libevdev";

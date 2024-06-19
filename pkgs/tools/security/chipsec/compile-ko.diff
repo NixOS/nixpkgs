@@ -1,10 +1,10 @@
-diff --git i/setup.py w/setup.py
-index cfe2665..5795874 100755
---- i/setup.py
-+++ w/setup.py
-@@ -179,7 +179,7 @@ class build_ext(_build_ext):
-             driver_build_function = self._build_win_driver 
-             self._build_win_compression()
+diff --git a/setup.py b/setup.py
+index 3465765c..ae128922 100755
+--- a/setup.py
++++ b/setup.py
+@@ -137,7 +137,7 @@ class build_ext(_build_ext):
+         elif platform.system().lower() == "windows":
+             driver_build_function = self._build_win_driver
  
 -        if not self.skip_driver:
 +        if True:

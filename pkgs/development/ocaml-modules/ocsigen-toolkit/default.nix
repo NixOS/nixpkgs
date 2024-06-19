@@ -5,12 +5,12 @@
 stdenv.mkDerivation rec {
  pname = "ocsigen-toolkit";
  name = "ocaml${ocaml.version}-${pname}-${version}";
- version = "3.2.0";
+ version = "3.3.4";
 
  propagatedBuildInputs = [ calendar js_of_ocaml-ppx_deriving_json eliom ];
  nativeBuildInputs = [ ocaml findlib opaline eliom ];
 
-  strictDeps = true;
+ strictDeps = true;
 
  installPhase = ''
     runHook preInstall
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "ocsigen";
     repo = pname;
     rev = version;
-    sha256 = "sha256:13n0y8a80bl94la4lnp9dr2x7b8plhm17g9zgf0l6x42g3886pw7";
+    hash = "sha256-6ccu8WJxUwpR5YyB4j1jQPWba8GhQDxuw+IDHswQpSA=";
   };
 
   meta = {

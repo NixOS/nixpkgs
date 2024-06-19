@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bibclean";
-  version = "3.06";
+  version = "3.07";
 
   src = fetchurl {
     url = "http://ftp.math.utah.edu/pub/bibclean/bibclean-${version}.tar.xz";
-    sha256 = "sha256-ZXT5uAQrqPoF6uVBazc4o1w40Sn0jnM+JYeOz7qq3kM=";
+    sha256 = "sha256-kZM2eC6ePCBOYPVkhf0fjdZ562IvyP0fSDNZXuEBkaY=";
   };
 
   postPatch = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Prettyprint and syntax check BibTeX and Scribe bibliography data base files";
     homepage = "http://ftp.math.utah.edu/pub/bibclean";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ dtzWill ];
   };

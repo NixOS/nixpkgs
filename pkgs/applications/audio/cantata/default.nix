@@ -111,6 +111,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A graphical client for MPD";
+    mainProgram = "cantata";
     homepage = "https://github.com/cdrummond/cantata";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ peterhoeg ];

@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytest
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,19 +20,17 @@ buildPythonPackage rec {
     owner = "CircleUp";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ui9ZpWaVBfCbDlZH3EgHX32FIZtyTHnc/UXqtoEyFcw=";
+    hash = "sha256-Ui9ZpWaVBfCbDlZH3EgHX32FIZtyTHnc/UXqtoEyFcw=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   buildInputs = [
     pytest
     pytest-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     pytest-asyncio
     pytestCheckHook
@@ -45,9 +44,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "aresponses"
-  ];
+  pythonImportsCheck = [ "aresponses" ];
 
   meta = with lib; {
     description = "Asyncio testing server";
@@ -56,4 +53,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ makefu ];
   };
 }
-

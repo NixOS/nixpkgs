@@ -2,18 +2,16 @@
 
 buildGoModule rec {
   pname = "golangci-lint";
-  version = "1.50.0";
+  version = "1.59.0";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    sha256 = "sha256-bYLKju4+X28KpAcd1OcniTHwLZz97qDj9ZruGFqspaY=";
+    hash = "sha256-m4VT4jJa8AQipH1KQOYYEG84cbCS6qXORZQC8PA7838=";
   };
 
-  vendorSha256 = "sha256-DYfoPyE8MA2NiPDE1y8bE+tOn81adkN9zQJ7G3dqA64=";
-
-  doCheck = false;
+  vendorHash = "sha256-ZNoBXSJsLCqRXc09/3woUCJVyeMrFjHIznXMlNz8MsI=";
 
   subPackages = [ "cmd/golangci-lint" ];
 
@@ -37,7 +35,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Fast linters Runner for Go";
     homepage = "https://golangci-lint.run/";
+    changelog = "https://github.com/golangci/golangci-lint/blob/v${version}/CHANGELOG.md";
+    mainProgram = "golangci-lint";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ anpryl manveru mic92 ];
+    maintainers = with maintainers; [ SuperSandro2000 mic92 ];
   };
 }

@@ -5,8 +5,8 @@
 , pkg-config
 , gobject-introspection
 , gdk-pixbuf
+, caja
 , gtk3
-, mate
 , python3
 , dropbox
 , mateUpdateScript
@@ -17,11 +17,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "caja-dropbox";
-  version = "1.26.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "16w4r0zjps12lmzwiwpb9qnmbvd0p391q97296sxa8k88b1x14wn";
+    sha256 = "t0w4qZQlS9PPfLxxK8LsdRagypQqpleFJs29aqYgGWM=";
   };
 
   patches = [
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    caja
     gtk3
-    mate.caja
     python3
   ];
 

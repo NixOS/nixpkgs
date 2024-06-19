@@ -1,22 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, babel
-, humanize
-, python-dateutil
-, tzlocal
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  babel,
+  humanize,
+  python-dateutil,
+  pytz,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
-  pname = "Delorean";
+  pname = "delorean";
   version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0d31ay7yq2w7xz7m3ssk5phjbm64b2k8hmgcif22719k29p7hrzy";
+    pname = "Delorean";
+    inherit version;
+    hash = "sha256-/md4bhIzhSOEi+xViKZYxNQl4S1T61HP74cL7I9XYTQ=";
   };
 
-  propagatedBuildInputs = [ babel humanize python-dateutil tzlocal ];
+  propagatedBuildInputs = [
+    babel
+    humanize
+    python-dateutil
+    pytz
+    tzlocal
+  ];
 
   pythonImportsCheck = [ "delorean" ];
 

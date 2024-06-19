@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, gawk, gnugrep, gnused, jre }:
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, coreutils, gawk, gnugrep, gnused, openjdk17 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "marvin";
-  version = "22.13.0";
+  version = "23.17.0";
 
   src = fetchurl {
     name = "marvin-${version}.deb";
     url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${versions.majorMinor version}.deb";
-    sha256 = "sha256-cZ9SFdKNURhcInM6zZNwoi+WyHAsGCeAgkfpAVi7GYE=";
+    hash = "sha256-zE/9EaOsNJwzE4Doasm9N8QG4t7wDOxqpV/Nhc4p7Ws=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     wrapBin() {
       makeWrapper $1 $out/bin/$(basename $1) \
-        --set INSTALL4J_JAVA_HOME "${jre}" \
+        --set INSTALL4J_JAVA_HOME "${openjdk17}" \
         --prefix PATH : ${makeBinPath [ coreutils gawk gnugrep gnused ]}
     }
     cp -r opt $out

@@ -1,17 +1,17 @@
 import ../make-test-python.nix ({ pkgs, lib, ... }:
 
-with lib;
-
 let
-  krb5 =
-    { enable = true;
-      domain_realm."nfs.test"   = "NFS.TEST";
+  security.krb5 = {
+    enable = true;
+    settings = {
+      domain_realm."nfs.test" = "NFS.TEST";
       libdefaults.default_realm = "NFS.TEST";
-      realms."NFS.TEST" =
-        { admin_server = "server.nfs.test";
-          kdc = "server.nfs.test";
-        };
+      realms."NFS.TEST" = {
+        admin_server = "server.nfs.test";
+        kdc = "server.nfs.test";
+      };
     };
+  };
 
   hosts =
     ''
@@ -34,7 +34,7 @@ in
 
   nodes = {
     client = { lib, ... }:
-      { inherit krb5 users;
+      { inherit security users;
 
         networking.extraHosts = hosts;
         networking.domain = "nfs.test";
@@ -50,7 +50,7 @@ in
       };
 
     server = { lib, ...}:
-      { inherit krb5 users;
+      { inherit security users;
 
         networking.extraHosts = hosts;
         networking.domain = "nfs.test";
@@ -105,6 +105,7 @@ in
       server.wait_for_unit("rpc-gssd.service")
       server.wait_for_unit("rpc-svcgssd.service")
 
+      client.systemctl("start network-online.target")
       client.wait_for_unit("network-online.target")
 
       # add principals to client keytab
@@ -130,4 +131,6 @@ in
           expected = ["alice", "users"]
           assert ids == expected, f"ids incorrect: got {ids} expected {expected}"
     '';
+
+  meta.maintainers = [ lib.maintainers.dblsaiko ];
 })

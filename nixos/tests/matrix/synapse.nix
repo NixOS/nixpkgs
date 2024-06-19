@@ -1,31 +1,15 @@
 import ../make-test-python.nix ({ pkgs, ... } : let
 
+  ca_key = mailerCerts.ca.key;
+  ca_pem = mailerCerts.ca.cert;
 
-  runWithOpenSSL = file: cmd: pkgs.runCommand file {
-    buildInputs = [ pkgs.openssl ];
-  } cmd;
-
-
-  ca_key = runWithOpenSSL "ca-key.pem" "openssl genrsa -out $out 2048";
-  ca_pem = runWithOpenSSL "ca.pem" ''
-    openssl req \
-      -x509 -new -nodes -key ${ca_key} \
-      -days 10000 -out $out -subj "/CN=snakeoil-ca"
+  bundle = pkgs.runCommand "bundle" {
+    nativeBuildInputs = [ pkgs.minica ];
+  } ''
+    minica -ca-cert ${ca_pem} -ca-key ${ca_key} \
+      -domains localhost
+    install -Dm444 -t $out localhost/{key,cert}.pem
   '';
-  key = runWithOpenSSL "matrix_key.pem" "openssl genrsa -out $out 2048";
-  csr = runWithOpenSSL "matrix.csr" ''
-    openssl req \
-       -new -key ${key} \
-       -out $out -subj "/CN=localhost" \
-  '';
-  cert = runWithOpenSSL "matrix_cert.pem" ''
-    openssl x509 \
-      -req -in ${csr} \
-      -CA ${ca_pem} -CAkey ${ca_key} \
-      -CAcreateserial -out $out \
-      -days 365
-  '';
-
 
   mailerCerts = import ../common/acme/server/snakeoil-certs.nix;
   mailerDomain = mailerCerts.domain;
@@ -65,7 +49,7 @@ in {
 
   nodes = {
     # Since 0.33.0, matrix-synapse doesn't allow underscores in server names
-    serverpostgres = { pkgs, nodes, ... }: let
+    serverpostgres = { pkgs, nodes, config, ... }: let
       mailserverIP = nodes.mailserver.config.networking.primaryIPAddress;
     in
     {
@@ -77,8 +61,13 @@ in {
             name = "psycopg2";
             args.password = "synapse";
           };
-          tls_certificate_path = "${cert}";
-          tls_private_key_path = "${key}";
+          redis = {
+            enabled = true;
+            host = "localhost";
+            port = config.services.redis.servers.matrix-synapse.port;
+          };
+          tls_certificate_path = "${bundle}/cert.pem";
+          tls_private_key_path = "${bundle}/key.pem";
           registration_shared_secret = registrationSharedSecret;
           public_baseurl = "https://example.com";
           email = {
@@ -105,6 +94,11 @@ in {
             LC_COLLATE = "C"
             LC_CTYPE = "C";
         '';
+      };
+
+      services.redis.servers.matrix-synapse = {
+        enable = true;
+        port = 6380;
       };
 
       networking.extraHosts = ''
@@ -193,8 +187,8 @@ in {
         settings = {
           inherit listeners;
           database.name = "sqlite3";
-          tls_certificate_path = "${cert}";
-          tls_private_key_path = "${key}";
+          tls_certificate_path = "${bundle}/cert.pem";
+          tls_private_key_path = "${bundle}/key.pem";
         };
       };
     };
@@ -208,8 +202,11 @@ in {
     serverpostgres.wait_until_succeeds(
         "curl --fail -L --cacert ${ca_pem} https://localhost:8448/"
     )
+    serverpostgres.wait_until_succeeds(
+        "journalctl -u matrix-synapse.service | grep -q 'Connected to redis'"
+    )
     serverpostgres.require_unit_state("postgresql.service")
-    serverpostgres.succeed("register_new_matrix_user -u ${testUser} -p ${testPassword} -a -k ${registrationSharedSecret} https://localhost:8448/")
+    serverpostgres.succeed("REQUESTS_CA_BUNDLE=${ca_pem} register_new_matrix_user -u ${testUser} -p ${testPassword} -a -k ${registrationSharedSecret} https://localhost:8448/")
     serverpostgres.succeed("obtain-token-and-register-email")
     serversqlite.wait_for_unit("matrix-synapse.service")
     serversqlite.wait_until_succeeds(

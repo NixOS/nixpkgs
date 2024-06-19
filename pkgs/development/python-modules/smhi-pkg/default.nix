@@ -1,27 +1,27 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "smhi-pkg";
   version = "1.0.16";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joysoftware";
     repo = "pypi_smhi";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-jcIXzAZO9SxC/0apdjAVv1GmBTbdlasfXr1/Tj9adNc=";
+    hash = "sha256-jcIXzAZO9SxC/0apdjAVv1GmBTbdlasfXr1/Tj9adNc=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

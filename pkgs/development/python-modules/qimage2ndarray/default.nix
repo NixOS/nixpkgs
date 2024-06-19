@@ -1,16 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, numpy
-, pyqt5
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  numpy,
+  pyqt5,
 }:
 
 buildPythonPackage rec {
   pname = "qimage2ndarray";
-  version = "1.9.0";
+  version = "1.10.0";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-p5B1xtDYRDxEIu6WmlQJ5E/QJUVxYEzOqHXGyV4/Veo=";
+    hash = "sha256-NyUQJEbcimlrLsd1sdKvQ7E69qf56+6KNxFbuVQ6LFg=";
   };
 
   propagatedBuildInputs = [

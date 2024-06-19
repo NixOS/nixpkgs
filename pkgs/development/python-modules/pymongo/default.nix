@@ -1,23 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  dnspython,
+
+  # for passthru.tests
+  celery, # check-input only
+  flask-pymongo,
+  kombu, # check-input only
+  mongoengine,
+  motor,
+  pymongo-inmemory,
 }:
 
 buildPythonPackage rec {
   pname = "pymongo";
-  version = "4.2.0";
-  disabled = pythonOlder "3.6";
+  version = "4.6.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cvM49qq9N9NDvZ0f3T3pIRBNOVdmvMXNxAOeTC3Zd2Y=";
+    hash = "sha256-QAB0CQuaYx8SC0LGGyIv10NJDBM6XS+ZwCCM78zMlk4=";
   };
+
+  propagatedBuildInputs = [ dnspython ];
 
   # Tests call a running mongodb instance
   doCheck = false;
 
   pythonImportsCheck = [ "pymongo" ];
+
+  passthru.tests = {
+    inherit
+      celery
+      flask-pymongo
+      kombu
+      mongoengine
+      motor
+      pymongo-inmemory
+      ;
+  };
 
   meta = with lib; {
     description = "Python driver for MongoDB";

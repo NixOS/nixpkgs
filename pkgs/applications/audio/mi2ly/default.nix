@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = [ "-fgnu89-inline" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-fgnu89-inline" ];
 
   buildPhase = "./cc";
   installPhase = ''
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     homepage = "https://www.nongnu.org/mi2ly/";
+    mainProgram = "mi2ly";
   };
 }

@@ -1,20 +1,52 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU, libGL, zlib, swig, doxygen, xorg, python3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, unzip
+, cmake
+, freeglut
+, libGLU
+, libGL
+, zlib
+, swig
+, doxygen
+, xorg
+, python3
+, darwin
+}:
 
 stdenv.mkDerivation rec {
   pname = "partio";
-  version = "1.14.6";
+  version = "1.17.3";
 
   src = fetchFromGitHub {
     owner = "wdas";
     repo = "partio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-S8U5I3dllFzDSocU1mJ8FYCCmBpsOR4n174oiX5hvAM=";
+    hash = "sha256-wV9byR85qwOkoTyLjG0gOLC3Gc19ykwiLpDy4T/MENQ=";
   };
 
   outputs = [ "dev" "out" "lib" ];
 
-  nativeBuildInputs = [ unzip cmake doxygen ];
-  buildInputs = [ freeglut libGLU libGL zlib swig xorg.libXi xorg.libXmu python3 ];
+  nativeBuildInputs = [
+    unzip
+    cmake
+    doxygen
+  ];
+
+  buildInputs = [
+    zlib
+    swig
+    xorg.libXi
+    xorg.libXmu
+    python3
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+    darwin.apple_sdk.frameworks.GLUT
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    freeglut
+    libGLU
+    libGL
+  ];
 
   # TODO:
   # Sexpr support
@@ -23,9 +55,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ (with python bindings) library for easily reading/writing/manipulating common animation particle formats such as PDB, BGEO, PTC";
-    homepage = "https://www.disneyanimation.com/technology/partio.html";
+    homepage = "https://github.com/wdas/partio";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.guibou ];
   };
 }

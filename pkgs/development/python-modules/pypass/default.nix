@@ -1,30 +1,28 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, click
-, colorama
-, enum34
-, fetchPypi
-, git
-, gnugrep
-, gnupg
-, nose
-, pbr
-, pexpect
-, pythonAtLeast
-, pythonOlder
-, substituteAll
-, tree
-, xclip
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  click,
+  colorama,
+  fetchPypi,
+  git,
+  gnugrep,
+  gnupg,
+  nose,
+  pbr,
+  pexpect,
+  pythonAtLeast,
+  substituteAll,
+  tree,
+  xclip,
 }:
 
-# NOTE: pypass can also be used as an application, but probably the most
-# important usecase is as a library. So, let's use buildPythonPackage and
-# support any Python version instead of defining it as an application with
-# buildPythonApplication.
+# Use the `pypass` top-level attribute, if you're interested in the
+# application
 buildPythonPackage rec {
   pname = "pypass";
   version = "0.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -54,9 +52,9 @@ buildPythonPackage rec {
     click
     colorama
     pexpect
-  ] ++ lib.optional (pythonOlder "3.4") enum34;
+  ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   # Configuration so that the tests work
   preCheck = ''
@@ -78,6 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Password manager pass in Python";
+    mainProgram = "pypass";
     homepage = "https://github.com/aviau/python-pass";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

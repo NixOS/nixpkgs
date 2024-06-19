@@ -1,29 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildGoModule
-, coreutils
-, pcsclite
-, PCSC
-, pkg-config
-, hsmSupport ? true
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  coreutils,
+  pcsclite,
+  PCSC,
+  pkg-config,
+  hsmSupport ? true,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.22.1";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
-    rev = "v${version}";
-    sha256 = "sha256-iWThTFH36NNjO9Acx5QyxJrUzKFl7vD/seWF/Rz05CU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yej7gzhaUPbcvqbse7Hh7Im38+DUfC9UZkpjpuG8ctk=";
   };
 
-  vendorSha256 = "sha256-AcjICy991WPQyXp/9j6rgedg4FTYXilH7O4dy8gGYq8=";
+  vendorHash = "sha256-XlfdIg8YHCeCvc7kZczUxlxUonyZSQATgsxLTMvNDk4=";
 
-  ldflags = [ "-buildid=" ];
+  ldflags = [
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
   nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
 
@@ -43,16 +47,29 @@ buildGoModule rec {
     install -Dm444 -t $out/lib/systemd/system systemd/step-ca.service
   '';
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   # Tests start http servers which need to bind to local addresses:
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
+
+  # Tests need to run in a reproducible order, otherwise they run unreliably on
+  # (at least) x86_64-linux.
+  checkFlags = [ "-p 1" ];
 
   passthru.tests.step-ca = nixosTests.step-ca;
 
   meta = with lib; {
     description = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
+    changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cmcdragonkai mohe2015 techknowlogick ];
+    maintainers = with maintainers; [
+      cmcdragonkai
+      mohe2015
+      techknowlogick
+    ];
   };
 }

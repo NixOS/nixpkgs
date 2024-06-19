@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, runCommand, ncurses, gettext
-, pkg-config, cscope, ruby, tcl, perl, luajit
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, ncurses
+, gettext
+, pkg-config
+, cscope
+, ruby
+, tcl
+, perl
+, luajit
 , darwin
-
-, usePython27 ? false
-, python27 ? null, python37 ? null
+, libiconv
+, python3
 }:
-
-let
-  python = if usePython27
-           then { pkg = python27; name = "python"; }
-           else { pkg = python37; name = "python3"; };
-in
-assert python.pkg != null;
 
 let
   # Building requires a few system tools to be in PATH.
@@ -40,7 +42,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config buildSymlinks ];
   buildInputs = [
-    gettext ncurses cscope luajit ruby tcl perl python.pkg
+    gettext ncurses cscope luajit ruby tcl perl python3
   ];
 
   patches = [ ./macvim.patch ];
@@ -53,14 +55,14 @@ stdenv.mkDerivation {
       "--enable-multibyte"
       "--enable-nls"
       "--enable-luainterp=dynamic"
-      "--enable-${python.name}interp=dynamic"
+      "--enable-python3interp=dynamic"
       "--enable-perlinterp=dynamic"
       "--enable-rubyinterp=dynamic"
       "--enable-tclinterp=yes"
       "--without-local-dir"
       "--with-luajit"
       "--with-lua-prefix=${luajit}"
-      "--with-${python.name}-command=${python.pkg}/bin/${python.name}"
+      "--with-python3-command=${python3}/bin/python3"
       "--with-ruby-command=${ruby}/bin/ruby"
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"
@@ -126,7 +128,7 @@ stdenv.mkDerivation {
       --replace " -L${stdenv.cc.libc}/lib" "" \
       --replace " -L${darwin.libobjc}/lib" "" \
       --replace " -L${darwin.libunwind}/lib" "" \
-      --replace " -L${darwin.libiconv}/lib" ""
+      --replace " -L${libiconv}/lib" ""
 
     # All the libraries we stripped have -osx- in their name as of this time.
     # Assert now that this pattern no longer appears in config.mk.
@@ -158,7 +160,7 @@ stdenv.mkDerivation {
     libperl=$(dirname $(find ${perl} -name "libperl.dylib"))
     install_name_tool -add_rpath ${luajit}/lib $exe
     install_name_tool -add_rpath ${tcl}/lib $exe
-    install_name_tool -add_rpath ${python.pkg}/lib $exe
+    install_name_tool -add_rpath ${python3}/lib $exe
     install_name_tool -add_rpath $libperl $exe
     install_name_tool -add_rpath ${ruby}/lib $exe
 
@@ -179,7 +181,7 @@ stdenv.mkDerivation {
     description = "Vim - the text editor - for macOS";
     homepage    = "https://github.com/macvim-dev/macvim";
     license = licenses.vim;
-    maintainers = with maintainers; [ cstrahan lilyball ];
+    maintainers = with maintainers; [ lilyball ];
     platforms   = platforms.darwin;
     hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };

@@ -14,6 +14,7 @@ mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.schmittlauch ];
     description = "A touch typing tutor from the KDE software collection";
+    mainProgram = "ktouch";
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools qtdeclarative ];
   buildInputs = [

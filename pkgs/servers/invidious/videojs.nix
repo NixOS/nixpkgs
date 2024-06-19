@@ -1,8 +1,12 @@
-{ stdenvNoCC, cacert, crystal, openssl, pkg-config, invidious }:
+{ stdenvNoCC
+, cacert
+, crystal
+, openssl
+, pkg-config
+, invidious
+, versions
+}:
 
-let
-  versions = builtins.fromJSON (builtins.readFile ./versions.json);
-in
 stdenvNoCC.mkDerivation {
   name = "videojs";
 
@@ -14,5 +18,5 @@ stdenvNoCC.mkDerivation {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = versions.videojs.sha256;
+  outputHash = versions.videojs.hash;
 }

@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/incinirate/Riko4";
     description = "Fantasy console for pixel art game development";
+    mainProgram = "riko4";
     license = licenses.mit;
     maintainers = with maintainers; [ CrazedProgrammer ];
   };

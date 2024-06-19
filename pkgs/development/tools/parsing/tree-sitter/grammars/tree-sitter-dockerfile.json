@@ -4,6 +4,7 @@
   "date": "2022-01-27T11:20:14-07:00",
   "path": "/nix/store/3whf6fv79zqk5w0d6jbzfgs5jzm4cll4-tree-sitter-dockerfile",
   "sha256": "0kf4c4xs5naj8lpcmr3pbdvwj526wl9p6zphxxpimbll7qv6qfnd",
+  "hash": "sha256-zTpsNj6Urhpv7/B+cxPlRhTJd1t35MouRVLZojthxE0=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

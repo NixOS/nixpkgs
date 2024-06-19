@@ -51,8 +51,9 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A generator for YARA rules";
+    mainProgram = "yarGen.py";
     homepage = "https://github.com/Neo23x0/yarGen";
     license = licenses.bsd3;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

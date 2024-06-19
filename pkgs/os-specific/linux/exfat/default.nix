@@ -1,11 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, kernel }:
 
 stdenv.mkDerivation rec {
-  # linux kernel above 5.7 comes with its own exfat implementation https://github.com/arter97/exfat-linux/issues/27
-  # Assertion moved here due to some tests unintenionally triggering it,
-  # e.g. nixosTests.kernel-latest; it's unclear how/why so far.
-  assertion = assert lib.versionOlder kernel.version "5.8"; null;
-
   name = "exfat-nofuse-${version}-${kernel.version}";
   version = "2020-04-15";
 
@@ -23,7 +18,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 

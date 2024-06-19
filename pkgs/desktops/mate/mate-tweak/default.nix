@@ -7,26 +7,26 @@
 , gtk3
 , gdk-pixbuf
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gitUpdater
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mate-tweak";
-  version = "22.04.8";
+  version = "22.10.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu-mate";
     repo = pname;
     rev = version;
-    sha256 = "eaOEe/tvpDBBPVuZhSWWLZBXXjqt05ukGLUmVMY1hZU=";
+    sha256 = "emeNgCzMhHMeLOyUkXe+8OzQMEWuwNdD4xkGXIFgbh4=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
-    python3Packages.distutils_extra
+    python3Packages.distutils-extra
     gobject-introspection
   ];
 

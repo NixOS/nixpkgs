@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, desktop-file-utils
 , meson
 , ninja
 , vala
@@ -9,61 +10,57 @@
 , pkg-config
 , glib
 , gtk3
+, libhandy
 , gnome
-, python3
 , dconf
 , libxml2
 , gettext
 , docbook-xsl-nons
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "dconf-editor";
-  version = "3.38.3";
+  version = "45.0.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Vxr0x9rU8Em1PmzXKLea3fCMJ92ra8V7OW0hGGbueeM=";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-EYApdnju2uYhfMUUomOMGH0vHR7ycgy5B5t0DEKZQd0=";
   };
 
   patches = [
+    # Fix crash with GSETTINGS_SCHEMA_DIR env var.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/dconf-editor/-/commit/baf183737d459dcde065c9f8f6fe5be7ed874de6.patch";
+      hash = "sha256-Vp0qjJChDr6IarUD+tZPLJhdI8v8r6EzWNfqFSnGvqQ=";
+    })
+
     # Look for compiled schemas in NIX_GSETTINGS_OVERRIDES_DIR
     # environment variable, to match what we patched GLib to do.
     ./schema-override-variable.patch
-
-    # Fix build with Meson 0.61.0
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/dconf-editor/-/commit/56474378568e6ff4af8aa912810323e808c1d977.patch";
-      sha256 = "iFyJcskqcmvz7tp1Z9jM9f8WvAhD0L9Vx1hu2c402MA=";
-    })
   ];
 
   nativeBuildInputs = [
+    desktop-file-utils
     meson
     ninja
     vala
     libxslt
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     docbook-xsl-nons
     libxml2
     gobject-introspection
-    python3
   ];
 
   buildInputs = [
     glib
     gtk3
+    libhandy
     dconf
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -74,9 +71,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GSettings editor for GNOME";
-    homepage = "https://wiki.gnome.org/Apps/DconfEditor";
+    mainProgram = "dconf-editor";
+    homepage = "https://apps.gnome.org/DconfEditor/";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

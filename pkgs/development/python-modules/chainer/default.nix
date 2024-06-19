@@ -1,30 +1,45 @@
-{ config, lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, filelock, protobuf, numpy, pytestCheckHook, mock, typing-extensions
-, cupy, cudaSupport ? config.cudaSupport or false
+{
+  lib,
+  buildPythonPackage,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cupy,
+  fetchFromGitHub,
+  filelock,
+  mock,
+  numpy,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  six,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "chainer";
   version = "7.8.1.post1";
-  disabled = !isPy3k; # python2.7 abandoned upstream
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "chainer";
     repo = "chainer";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-epwnExmyCWmwaOz+mJnAl1peEeHLBdQGC62BlLfSTQQ=";
+    hash = "sha256-epwnExmyCWmwaOz+mJnAl1peEeHLBdQGC62BlLfSTQQ=";
   };
 
   propagatedBuildInputs = [
     filelock
-    protobuf
     numpy
+    protobuf
+    six
     typing-extensions
   ] ++ lib.optionals cudaSupport [ cupy ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [
     mock
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [ "tests/chainer_tests/utils_tests" ];
@@ -42,6 +57,8 @@ buildPythonPackage rec {
     "cupy"
     "ideep"
   ];
+
+  pythonImportsCheck = [ "chainer" ];
 
   meta = with lib; {
     description = "A flexible framework of neural networks for deep learning";

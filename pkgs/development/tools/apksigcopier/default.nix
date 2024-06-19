@@ -9,13 +9,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apksigcopier";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "obfusk";
     repo = "apksigcopier";
-    rev = "v${version}";
-    sha256 = "07ldq3q1x2lpb15q5s5i1pbg89sn6ah45amskm9pndqlh16z9k2x";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-VuwSaoTv5qq1jKwgBTKd1y9RKUzz89n86Z4UBv7Q51o=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Copy/extract/patch android apk signatures & compare APKs";
+    mainProgram = "apksigcopier";
     longDescription = ''
       apksigcopier is a tool for copying android APK signatures from a signed
       APK to an unsigned one (in order to verify reproducible builds).

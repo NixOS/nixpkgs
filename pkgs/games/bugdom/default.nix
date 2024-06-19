@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, IOKit, Foundation, cmake, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, SDL2, IOKit, Foundation, OpenGL, cmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "bugdom";
-  version = "1.3.2";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "jorio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-pgms2mipW1zol35LVCuU5+7mN7CBiVGFvu1CJ3CrGU0=";
+    hash = "sha256-0c7v5tSqYuqtLOFl4sqD7+naJNqX/wlKHVntkZQGJ8A=";
     fetchSubmodules = true;
   };
 
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     # Passing this in cmakeFlags doesn't work because the path is hard-coded for Darwin
     substituteInPlace cmake/FindSDL2.cmake \
       --replace 'set(SDL2_LIBRARIES' 'set(SDL2_LIBRARIES "${SDL2}/lib/libSDL2.dylib") #'
+    # Expects plutil, which we don't have
+    sed -i '/plutil/d' CMakeLists.txt
   '';
 
   buildInputs = [
@@ -24,6 +26,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     IOKit
     Foundation
+    OpenGL
   ];
 
   nativeBuildInputs = [
@@ -43,12 +46,14 @@ stdenv.mkDerivation rec {
   '' + (if stdenv.hostPlatform.isDarwin then ''
     mkdir -p $out/{bin,Applications}
     mv {,$out/Applications/}Bugdom.app
-    ln -s $out/{Applications/Bugdom.app/Contents/MacOS,bin}/Bugdom
+    makeWrapper $out/{Applications/Bugdom.app/Contents/MacOS,bin}/Bugdom
   '' else ''
     mkdir -p $out/share/bugdom
     mv Data $out/share/bugdom
     install -Dm755 {.,$out/bin}/Bugdom
     wrapProgram $out/bin/Bugdom --run "cd $out/share/bugdom"
+    install -Dm644 $src/packaging/io.jor.bugdom.desktop $out/share/applications/io.jor.bugdom.desktop
+    install -Dm644 $src/packaging/io.jor.bugdom.png $out/share/pixmaps/io.jor.bugdom.png
   '') + ''
 
     runHook postInstall

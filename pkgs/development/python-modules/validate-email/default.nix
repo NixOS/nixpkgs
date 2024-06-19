@@ -1,22 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "validate-email";
   version = "1.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "validate_email";
-    sha256 = "1bxffaf5yz2cph8ki55vdvdypbwkvn2xr1firlcy62vqbzf1jivq";
+    hash = "sha256-eEcZ3F94C+MZzdGF3IXdk6/r2267lDgRvEx8X5xyrq8=";
   };
+
+  build-system = [ setuptools ];
 
   # No tests
   doCheck = false;
 
+  pythonImportsCheck = [ "validate_email" ];
+
   meta = with lib; {
-    homepage = "https://github.com/syrusakbary/validate_email";
     description = "Verify if an email address is valid and really exists";
+    homepage = "https://github.com/syrusakbary/validate_email";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = with maintainers; [ mmahut ];
   };
 }

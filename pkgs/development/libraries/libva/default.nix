@@ -1,33 +1,49 @@
 { stdenv, lib, fetchFromGitHub, meson, pkg-config, ninja, wayland-scanner
 , libdrm
-, minimal ? false, libva-minimal
+, minimal ? false
 , libX11, libXext, libXfixes, wayland, libffi, libGL
 , mesa
+# for passthru.tests
+, intel-compute-runtime
+, intel-media-driver
+, mpv
+, intel-vaapi-driver
+, vlc
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.15.0";
+  version = "2.21.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
-    rev    = version;
-    sha256 = "sha256-NJA2FTPrhLj9+vmkBy+GcTiH57gBEQnYhZzYk3sEOBo=";
+    rev    = finalAttrs.version;
+    sha256 = "sha256-X9H5nxbYFSMfxZMxs3iWwCgdrJ2FTVWW7tlgQek3WIg=";
   };
 
   outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [ meson pkg-config ninja ]
+    ++ lib.optional (!minimal) wayland-scanner;
 
   buildInputs = [ libdrm ]
-    ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
-  # TODO: share libs between minimal and !minimal - perhaps just symlink them
+    ++ lib.optionals (!minimal) [ libX11 libXext libXfixes wayland libffi libGL ];
 
   mesonFlags = [
     # Add FHS and Debian paths for non-NixOS applications
     "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
   ];
+
+  passthru.tests = {
+    # other drivers depending on libva and selected application users.
+    # Please get a confirmation from the maintainer before adding more applications.
+    inherit intel-compute-runtime intel-media-driver intel-vaapi-driver mpv vlc;
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     description = "An implementation for VA-API (Video Acceleration API)";
@@ -38,9 +54,16 @@ stdenv.mkDerivation rec {
       driver-specific acceleration backends for each supported hardware vendor.
     '';
     homepage = "https://01.org/linuxmedia/vaapi";
-    changelog = "https://raw.githubusercontent.com/intel/libva/${version}/NEWS";
+    changelog = "https://raw.githubusercontent.com/intel/libva/${finalAttrs.version}/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    pkgConfigModules = [ "libva" "libva-drm" ] ++ lib.optionals (!minimal) [
+      "libva-glx" "libva-wayland" "libva-x11"
+    ];
     platforms = platforms.unix;
+    badPlatforms = [
+      # Mandatory libva shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
-}
+})

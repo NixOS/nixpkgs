@@ -10,19 +10,19 @@ in {
 
   options.services.tuptime = {
 
-    enable = mkEnableOption (lib.mdDoc "the total uptime service");
+    enable = mkEnableOption "the total uptime service";
 
     timer = {
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Whether to regularly log uptime to detect bad shutdowns.";
+        description = "Whether to regularly log uptime to detect bad shutdowns.";
       };
 
       period = mkOption {
         type = types.str;
         default = "*:0/5";
-        description = lib.mdDoc "systemd calendar event";
+        description = "systemd calendar event";
       };
     };
   };
@@ -54,8 +54,8 @@ in {
             Type = "oneshot";
             User = "_tuptime";
             RemainAfterExit = true;
-            ExecStart = "${pkgs.tuptime}/bin/tuptime -x";
-            ExecStop = "${pkgs.tuptime}/bin/tuptime -xg";
+            ExecStart = "${pkgs.tuptime}/bin/tuptime -q";
+            ExecStop = "${pkgs.tuptime}/bin/tuptime -qg";
           };
         };
 
@@ -64,7 +64,7 @@ in {
           serviceConfig = {
             Type = "oneshot";
             User = "_tuptime";
-            ExecStart = "${pkgs.tuptime}/bin/tuptime -x";
+            ExecStart = "${pkgs.tuptime}/bin/tuptime -q";
           };
         };
       };

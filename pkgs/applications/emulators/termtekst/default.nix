@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Console NOS Teletekst viewer in Python";
+    mainProgram = "tt";
     longDescription = ''
       Small Python app using curses to display Dutch NOS Teletekst on
       the Linux console. The original Teletekst font includes 2x6

@@ -15,11 +15,10 @@
 , libgnomekbd
 , gnome
 , libtool
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , python3
 , pam
-, accountsservice
 , cairo
 , xapp
 , xdotool
@@ -29,18 +28,18 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "5.4.4";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-D+SpAO4i4KGFWJI94LalTMB3j1YPvV63cKb34FDDprk=";
+    hash = "sha256-ncYE2dCIAQxCMCe/5zrDU9iHTIkw+iO/IQl8+pfTvLI=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     gettext
     intltool
     dbus # for meson.build
@@ -48,11 +47,11 @@ stdenv.mkDerivation rec {
     libtool
     meson
     ninja
+    gobject-introspection
   ];
 
   buildInputs = [
     # from meson.build
-    gobject-introspection
     gtk3
     glib
 
@@ -70,7 +69,6 @@ stdenv.mkDerivation rec {
     xapp
     xdotool
     pam
-    accountsservice
     cairo
     cinnamon-desktop
     cinnamon-common
@@ -89,8 +87,13 @@ stdenv.mkDerivation rec {
       -e s,/usr/share/cinnamon-screensaver,$out/share,g \
       -e s,/usr/share/iso-flag-png,${iso-flags-png-320x420}/share/iso-flags-png,g \
       {} +
+  '';
 
-    sed "s|/usr/share/locale|/run/current-system/sw/share/locale|g" -i ./src/cinnamon-screensaver-main.py
+  preFixup = ''
+    # https://github.com/NixOS/nixpkgs/issues/101881
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
+    )
   '';
 
   meta = with lib; {

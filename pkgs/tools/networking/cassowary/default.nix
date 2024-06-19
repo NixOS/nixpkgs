@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "cassowary";
-  version = "0.14.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "rogerwelin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JWuVoEEViVHn39LmJ0IQGg6ggDKS49WhE5Qwp+ep0Pk=";
+    sha256 = "sha256-lC3GOS4hugRoQbJYVGv6kl3h6xMAukcOdV2m/u3Wgkk=";
   };
 
-  vendorSha256 = "sha256-caFYa0chTsIVW7pN/TBJNfQpnF6Hm4/GFyULDqL/bH4=";
+  vendorHash = "sha256-YP9q9lL2A9ERhzbJBIFKsYsgvy5xYeUO3ekyQdh97f8=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -20,6 +20,6 @@ buildGoModule rec {
     description = "Modern cross-platform HTTP load-testing tool written in Go";
     license = licenses.mit;
     maintainers = with maintainers; [ hugoreeves ];
-    platforms = platforms.unix;
+    mainProgram = "cassowary";
   };
 }

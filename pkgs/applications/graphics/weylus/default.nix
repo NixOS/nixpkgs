@@ -14,9 +14,10 @@
 , pango
 , pipewire
 , cmake
+, git
 , autoconf
 , libtool
-, nodePackages
+, typescript
 , ApplicationServices
 , Carbon
 , Cocoa
@@ -63,7 +64,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     cmake
-    nodePackages.typescript
+    git
+    typescript
     makeWrapper
   ] ++ lib.optionals stdenv.isLinux [
     pkg-config
@@ -71,7 +73,12 @@ rustPlatform.buildRustPackage rec {
     libtool
   ];
 
-  cargoSha256 = "sha256-R46RSRdtfqi1PRQ0MaSIIqtj+Pr3yikm6NeMwwu1CSw=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "autopilot-0.4.0" = "sha256-1DRuhAAXaIADUmXlDVr8UNbI/Ab2PYdrx9Qh0j9rTX8=";
+    };
+  };
 
   cargoBuildFlags = [ "--features=ffmpeg-system" ];
   cargoTestFlags = [ "--features=ffmpeg-system" ];
@@ -92,6 +99,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Use your tablet as graphic tablet/touch screen on your computer";
+    mainProgram = "weylus";
     homepage = "https://github.com/H-M-H/Weylus";
     license = with licenses; [ agpl3Only ];
     maintainers = with maintainers; [ lom ];

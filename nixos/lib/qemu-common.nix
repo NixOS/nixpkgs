@@ -19,7 +19,7 @@ rec {
     ];
 
   qemuSerialDevice =
-    if with pkgs.stdenv.hostPlatform; isx86 || isMips64 || isRiscV then "ttyS0"
+    if with pkgs.stdenv.hostPlatform; isx86 || isLoongArch64 || isMips64 || isRiscV then "ttyS0"
     else if (with pkgs.stdenv.hostPlatform; isAarch || isPower) then "ttyAMA0"
     else throw "Unknown QEMU serial device for system '${pkgs.stdenv.hostPlatform.system}'";
 
@@ -35,11 +35,14 @@ rec {
         aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=max,accel=kvm:tcg -cpu max";
         powerpc64le-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
         powerpc64-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
+        riscv32-linux = "${qemuPkg}/bin/qemu-system-riscv32 -machine virt";
+        riscv64-linux = "${qemuPkg}/bin/qemu-system-riscv64 -machine virt";
         x86_64-darwin = "${qemuPkg}/bin/qemu-kvm -cpu max";
       };
       otherHostGuestMatrix = {
         aarch64-darwin = {
           aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=2,accel=hvf:tcg -cpu max";
+          inherit (otherHostGuestMatrix.x86_64-darwin) x86_64-linux;
         };
         x86_64-darwin = {
           x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine type=q35,accel=hvf:tcg -cpu max";

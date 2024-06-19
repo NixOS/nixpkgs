@@ -25,6 +25,7 @@ substituteAll {
           containers-ip
           containers-tmpfs
           containers-ephemeral
+          containers-unified-hierarchy
           ;
       };
     };
@@ -34,4 +35,5 @@ substituteAll {
       mkdir -p $t
       cp ${./nixos-container-completion.sh} $t/nixos-container
     '';
+    meta.mainProgram = "nixos-container";
 }

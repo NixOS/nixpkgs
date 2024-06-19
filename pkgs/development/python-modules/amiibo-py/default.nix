@@ -1,14 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiohttp
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  aiohttp,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "amiibo-py";
   version = "unstable-2021-01-16";
+  format = "setuptools";
   disabled = pythonOlder "3.5.3"; # Older versions are not supported upstream
 
   src = fetchFromGitHub {

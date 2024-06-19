@@ -3,20 +3,15 @@
 , fetchFromGitHub
 , desktop-file-utils
 , ffmpeg
-, gobject-introspection
 , granite
 , gtk
 , imagemagick
-, libgee
-, libhandy
-, libsecret
-, libsoup
 , meson
 , ninja
 , pkg-config
 , python
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +32,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

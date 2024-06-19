@@ -7,12 +7,12 @@
 , ninja
 , gettext
 , gnome
-, wrapGAppsHook
+, wrapGAppsHook4
 , packagekit
 , ostree
 , glib
 , appstream
-, libsoup
+, libsoup_3
 , libadwaita
 , polkit
 , isocodes
@@ -24,7 +24,9 @@
 , gtk4
 , gsettings-desktop-schemas
 , gnome-desktop
+, libgudev
 , libxmlb
+, malcontent
 , json-glib
 , libsecret
 , valgrind-light
@@ -34,19 +36,20 @@
 , gtk-doc
 , desktop-file-utils
 , libsysprof-capture
+, gst_all_1
 }:
 
 let
   withFwupd = stdenv.hostPlatform.isx86;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "42.4";
+  version = "46.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "cRgp7mf58qG2S/oXQTdzuY8NxdIZ649sohfNZXK7SnQ=";
+    url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
+    hash = "sha256-5wDLood2T14iVVFOMS4WBVD9v3pdP+FjWLtve2cyuXQ=";
   };
 
   patches = [
@@ -61,7 +64,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    wrapGAppsHook
+    wrapGAppsHook4
     libxslt
     docbook_xml_dtd_42
     docbook_xml_dtd_43
@@ -77,7 +80,7 @@ stdenv.mkDerivation rec {
     glib
     packagekit
     appstream
-    libsoup
+    libsoup_3
     libadwaita
     gsettings-desktop-schemas
     gnome-desktop
@@ -87,34 +90,37 @@ stdenv.mkDerivation rec {
     ostree
     polkit
     flatpak
+    libgudev
     libxmlb
+    malcontent
     libsysprof-capture
+    # For video screenshots
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
   ] ++ lib.optionals withFwupd [
     fwupd
   ];
 
   mesonFlags = [
-    "-Dgudev=false"
-    # FIXME: package malcontent parental controls
-    "-Dmalcontent=false"
-    # Needs flatpak to upgrade
-    "-Dsoup2=true"
+    # Requires /etc/machine-id, D-Bus system bus, etc.
+    "-Dtests=false"
   ] ++ lib.optionals (!withFwupd) [
     "-Dfwupd=false"
   ];
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-software";
       attrPath = "gnome.gnome-software";
     };
   };
 
   meta = with lib; {
     description = "Software store that lets you install and update applications and system extensions";
-    homepage = "https://wiki.gnome.org/Apps/Software";
+    mainProgram = "gnome-software";
+    homepage = "https://apps.gnome.org/Software/";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

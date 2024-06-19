@@ -35,9 +35,9 @@
 
 { pkgs, python, extraIntegrations ? {} }:
 
-with pkgs.lib;
-
 let
+  inherit (pkgs.lib) attrValues mapAttrs;
+
   src = pkgs.fetchFromGitHub {
     owner = "DataDog";
     repo = "integrations-core";
@@ -51,7 +51,7 @@ let
     inherit src version;
     name = "datadog-integration-${pname}-${version}";
 
-    sourceRoot = "source/${args.sourceRoot or pname}";
+    sourceRoot = "${src.name}/${args.sourceRoot or pname}";
     doCheck = false;
   });
 
@@ -59,7 +59,16 @@ let
   datadog_checks_base = buildIntegration {
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
+
+    # Make setuptools build the 'base' and 'checks' modules.
+    postPatch = ''
+      substituteInPlace setup.py \
+        --replace "from setuptools import setup" "from setuptools import find_packages, setup" \
+        --replace "packages=['datadog_checks']" "packages=find_packages()"
+    '';
+
     propagatedBuildInputs = with python.pkgs; [
+      binary
       cachetools
       cryptography
       immutables
@@ -75,6 +84,12 @@ let
       simplejson
       uptime
       wrapt
+    ];
+
+    pythonImportsCheck = [
+      "datadog_checks.base"
+      "datadog_checks.base.checks"
+      "datadog_checks.checks"
     ];
   };
 

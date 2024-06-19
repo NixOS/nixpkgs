@@ -1,12 +1,13 @@
 { stdenv
 , lib
+, autoreconfHook
 , fetchurl
 , file
 , glib
 , gnome
 , gtk3
 , gtk4
-, intltool
+, gettext
 , libnma
 , libnma-gtk4
 , libsecret
@@ -19,17 +20,18 @@
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-sstp";
-  version = "1.3.0";
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  version = "1.3.2";
+  name = "${pname}${lib.optionalString withGnome "-gnome"}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+IJw3jvOYs/+NDS9HvCrSQ6wxh1x1yqwiFij7UZb+rU=";
+    sha256 = "sha256-zd+g86cZLyibLhYLal6XzUb9wFu7kHROp0KzRM95Qng=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     file
-    intltool
+    gettext
     pkg-config
   ];
 
@@ -54,6 +56,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
     "--with-gtk4=${if withGnome then "yes" else "no"}"
+    "--with-pppd-plugin-dir=$(out)/lib/pppd/2.5.0"
     "--enable-absolute-paths"
   ];
 

@@ -1,16 +1,27 @@
-{ lib, substituteAll, buildPythonPackage, fetchFromGitHub
-, pandoc, texlive
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pandoc,
+  pandocfilters,
+  poetry-core,
+  pythonOlder,
+  substituteAll,
+  texliveSmall,
 }:
 
 buildPythonPackage rec {
   pname = "pypandoc";
-  version = "1.8.1";
+  version = "1.13";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "NicklasTegner";
+    owner = "JessicaTegner";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-1vQmONQFJrjptwVVjw25Wyt59loatjScsdnSax+q/f8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9fpits8O/50maM/e1lVVqBoTwUmcI+/IAYhVX1Pt6ZE=";
   };
 
   patches = [
@@ -22,14 +33,22 @@ buildPythonPackage rec {
     ./skip-tests.patch
   ];
 
-  checkInputs = [
-    texlive.combined.scheme-small
+  nativeBuildInputs = [ poetry-core ];
+
+  nativeCheckInputs = [
+    texliveSmall
+    pandocfilters
   ];
+
+  pythonImportsCheck = [ "pypandoc" ];
 
   meta = with lib; {
     description = "Thin wrapper for pandoc";
-    homepage = "https://github.com/NicklasTegner/pypandoc";
+    homepage = "https://github.com/JessicaTegner/pypandoc";
     license = licenses.mit;
-    maintainers = with maintainers; [ sternenseemann bennofs ];
+    maintainers = with maintainers; [
+      sternenseemann
+      bennofs
+    ];
   };
 }

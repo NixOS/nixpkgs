@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, lxml
-, sqlalchemy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  lxml,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
   pname = "cinemagoer";
-  version = "2022.2.11";
+  version = "2023.5.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8efe29dab44a7d275702f3160746015bd55c87b2eed85991dd57dda42594e6c6";
+    hash = "sha256-XOHXeuZUZwFhjxHlsVVqGdGO3srRttfZaXPsNJQbGPI=";
   };
 
   propagatedBuildInputs = [

@@ -2,6 +2,6 @@
 
 qtModule {
   pname = "qtdoc";
-  qtInputs = [ qtdeclarative ];
+  propagatedBuildInputs = [ qtdeclarative ];
   outputs = [ "out" ];
 }

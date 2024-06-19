@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "prs";
-  version = "0.3.4";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "prs";
-    rev = "v${version}";
-    hash = "sha256-dfyTaWwV2hNZPZfvM+AqqR1zbChjT6Y/TEkQPEXRtGA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MvQ0B35NF/AuGHBMa201FkFlU/UX0WXMcBRxTJwpUFw=";
   };
 
-  cargoHash = "sha256-yf46le0jG4EXo60kGKc0GwSO5vl4Dw0gmYJ4yr+TFdE=";
+  cargoHash = "sha256-YDcAjBIdUboOKvGSnGW6b1JVbhQaB3ccXcSmK78M7DI=";
 
   postPatch = ''
     # The GPGME backend is recommended
@@ -59,5 +59,6 @@ rustPlatform.buildRustPackage rec {
       gpl3Only  # everything else
     ];
     maintainers = with maintainers; [ dotlambda ];
+    mainProgram = "prs";
   };
 }

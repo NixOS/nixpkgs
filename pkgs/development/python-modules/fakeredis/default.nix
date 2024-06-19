@@ -1,23 +1,25 @@
-{ lib
-, aioredis
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, lupa
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pytest-mock
-, pythonOlder
-, redis
-, six
-, sortedcontainers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  jsonpath-ng,
+  lupa,
+  poetry-core,
+  pybloom-live,
+  pyprobables,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  sortedcontainers,
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "1.9.3";
-  format = "pyproject";
+  version = "2.23.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,20 +27,17 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tZ+t4s5V8Na2Lt/TlkdJi7vZxlxAaMbk3MvxUhdQOLs=";
+    hash = "sha256-/nuBj9h5MMz1YvJozhl4Fq/OkLckesnQHHTUWfz06sA=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     redis
-    six
     sortedcontainers
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest-asyncio
     pytest-mock
@@ -46,22 +45,25 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    lua = [
-      lupa
-    ];
-    aioredis = [
-      aioredis
-    ];
+    lua = [ lupa ];
+    json = [ jsonpath-ng ];
+    bf = [ pyprobables ];
+    cf = [ pyprobables ];
+    probabilistic = [ pyprobables ];
   };
 
-  pythonImportsCheck = [
-    "fakeredis"
+  pythonImportsCheck = [ "fakeredis" ];
+
+  disabledTests = [
+    # AssertionError
+    "test_command"
   ];
 
   meta = with lib; {
     description = "Fake implementation of Redis API";
     homepage = "https://github.com/dsoftwareinc/fakeredis-py";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/cunla/fakeredis-py/releases/tag/v${version}";
+    license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
 }

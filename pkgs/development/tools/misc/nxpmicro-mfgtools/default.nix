@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nxpmicro-mfgtools";
-  version = "1.4.243";
+  version = "1.5.139";
 
   src = fetchFromGitHub {
-    owner = "NXPmicro";
+    owner = "nxp-imx";
     repo = "mfgtools";
     rev = "uuu_${version}";
-    hash = "sha256-gyy9D6y1y+9GlT3wfW+huoWaZP1e8YzZnc7EbJftppI=";
+    sha256 = "sha256-t5usUGbcdLQlqPpZkNDeGncka9VfkpO7U933Kw/Sm7U=";
   };
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];

@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, ipython
-, numpy
-, pyserial
-, pyusb
-, hostPlatform
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  ipython,
+  numpy,
+  pyserial,
+  pyusb,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "rfcat";
-  version = "1.9.6";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "atlas0fd00m";
     repo = "rfcat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7iYz7YY9zpnJmLfCmp/sF21eZ21HMGq2sLQIENxbr34=";
+    hash = "sha256-hdRsVbDXRC1EOhBoFJ9T5ZE6hwOgDWSdN5sIpxJ0x3E=";
   };
 
   propagatedBuildInputs = [
@@ -33,18 +34,14 @@ buildPythonPackage rec {
     pyusb
   ];
 
-  postInstall = lib.optionalString hostPlatform.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/etc/udev/rules.d
     cp etc/udev/rules.d/20-rfcat.rules $out/etc/udev/rules.d
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "rflib"
-  ];
+  pythonImportsCheck = [ "rflib" ];
 
   meta = with lib; {
     description = "Swiss Army knife of sub-GHz ISM band radio";

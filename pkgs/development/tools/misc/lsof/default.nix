@@ -1,52 +1,46 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, buildPackages, ncurses }:
+{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses, nukeReferences }:
 
-let dialect = with lib; last (splitString "-" stdenv.hostPlatform.system); in
+let
+  dialect = with lib; last (splitString "-" stdenv.hostPlatform.system);
+in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.95.0";
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  buildInputs = [ ncurses ];
+  version = "4.99.3";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
     rev = version;
-    sha256 = "sha256-HgU7/HxLdUOfLU2E/dpusko6gBOoEKeWPJIFbBQGzFU=";
+    hash = "sha256-XW3l+E9D8hgI9jGJGKkIAKa8O9m0JHgZhEASqg4gYuw=";
   };
 
-  patches = [
-    ./no-build-info.patch
-
-    # Pull upstream fix for -fno-common toolchains:
-    #   https://github.com/lsof-org/lsof/pull/226
-    #   https://github.com/lsof-org/lsof/pull/233
-    (fetchpatch {
-      name = "add-extern.patch";
-      url = "https://github.com/lsof-org/lsof/commit/180ffa29b0544f77cabbc54d7f77d50d33dd27d7.patch";
-      sha256 = "sha256-zzcN9HrFYMTBeEekeAwi2RIcVukymgaqtpvFIBV6njU=";
-    })
-    (fetchpatch {
-      name = "add-declaration.patch";
-      url = "https://github.com/lsof-org/lsof/commit/8e47e1491636e8cf41baf834554391be45177b00.patch";
-      sha256 = "sha256-kwkDQp7VApLenOLTPMY24Me+/xUhD56skHWRd4ZB1I4=";
-    })
-  ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
+  postPatch = ''
+    patchShebangs --build lib/dialects/*/Mksrc
+    # Do not re-build version.h in every 'make' to allow nuke-refs below.
+    # We remove phony 'FRC' target that forces rebuilds:
+    #   'version.h: FRC ...' is translated to 'version.h: ...'.
+    sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's|lcurses|lncurses|g' Configure
   '';
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ nukeReferences perl which ];
+  buildInputs = [ ncurses ];
+
   # Stop build scripts from searching global include paths
   LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
+
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do
       sed -i "s,/usr/include,$LSOF_INCLUDE,g" $filepath
     done
+
+    # Wipe out development-only flags from CFLAGS embedding
+    make version.h
+    nuke-refs version.h
   '';
 
   installPhase = ''
@@ -62,13 +56,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/lsof-org/lsof";
     description = "A tool to list open files";
+    mainProgram = "lsof";
     longDescription = ''
       List open files. Can show what process has opened some file,
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.unix;
     license = licenses.purdueBsd;
+    maintainers = with maintainers; [ dezgeg ];
+    platforms = platforms.unix;
   };
 }

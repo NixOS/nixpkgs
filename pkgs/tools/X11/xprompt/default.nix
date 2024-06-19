@@ -38,9 +38,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC:=$(CC)" "PREFIX=$(out)" ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A dmenu rip-off with contextual completion";
@@ -52,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.unix;
+    mainProgram = "xprompt";
   };
 }

@@ -209,6 +209,13 @@ rec {
   # Legacy attribute, for compatibility with existing configs only.
   raspberrypi2 = armv7l-hf-multiplatform;
 
+  # Nvidia Bluefield 2 (w. crypto support)
+  bluefield2 = {
+    gcc = {
+      arch = "armv8-a+fp+simd+crc+crypto";
+    };
+  };
+
   zero-gravitas = {
     linux-kernel = {
       name = "zero-gravitas";
@@ -557,7 +564,7 @@ rec {
 
     else if platform.isRiscV then riscv-multiplatform
 
-    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then fuloong2f_n32
+    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then (import ./examples.nix { inherit lib; }).mipsel-linux-gnu
 
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then powernv
 

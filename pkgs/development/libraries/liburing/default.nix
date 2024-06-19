@@ -1,32 +1,23 @@
-{ lib, stdenv, fetchgit
-, fetchpatch
-}:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
   pname = "liburing";
-  version = "2.2";
+  version = "2.5";
 
   src = fetchgit {
     url    = "http://git.kernel.dk/${pname}";
     rev    = "liburing-${version}";
-    sha256 = "sha256-M/jfxZ+5DmFvlAt8sbXrjBTPf2gLd9UyTNymtjD+55g";
+    sha256 = "sha256-hPyEZ0P1rfos53OCNd2OYFiqmv6TgpWaj5/xPLccCvM=";
   };
 
   separateDebugInfo = true;
   enableParallelBuilding = true;
   # Upstream's configure script is not autoconf generated, but a hand written one.
   setOutputFlags = false;
-  preConfigure =
-    # We cannot use configureFlags or configureFlagsArray directly, since we
-    # don't have structuredAttrs yet and using placeholder causes permissions
-    # denied errors. Using $dev / $man in configureFlags causes bash evaluation
-    # errors
-  ''
-    configureFlagsArray+=(
-      "--includedir=$dev/include"
-      "--mandir=$man/share/man"
-    )
-  '';
+  configureFlags = [
+    "--includedir=${placeholder "dev"}/include"
+    "--mandir=${placeholder "man"}/share/man"
+  ];
 
   # Doesn't recognize platform flags
   configurePlatforms = [];
@@ -48,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://git.kernel.dk/cgit/liburing/";
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice nickcao ];
   };
 }

@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pynut2";
   version = "2.1.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mezz64";
@@ -15,9 +17,7 @@ buildPythonPackage rec {
     sha256 = "1lg7n1frndfgw73s0ssl1h7kc6zxm7fpiwlc6v6d60kxzaj1dphx";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   pythonImportsCheck = [ "pynut2.nut2" ];
 

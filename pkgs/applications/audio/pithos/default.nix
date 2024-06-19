@@ -1,16 +1,16 @@
 { stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, appstream-glib
-, wrapGAppsHook, pythonPackages, gtk3, gnome, gobject-introspection
+, wrapGAppsHook3, pythonPackages, gtk3, gnome, gobject-introspection
 , libnotify, libsecret, gst_all_1 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "pithos";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo  = pname;
-    rev = version;
-    hash = "sha256-cFmsdQXfGxgpKe32dw1lgoANU9Drhu5Mecyz37BVP4g=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3j6IoMi30BQ8WHK4BxbsW+/3XZx7rBFd47EBENa2GiQ=";
   };
 
   format = "other";
@@ -20,7 +20,7 @@ pythonPackages.buildPythonApplication rec {
     patchShebangs meson_post_install.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config appstream-glib wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config appstream-glib wrapGAppsHook3 ];
 
   propagatedNativeBuildInputs = [
     gobject-introspection
@@ -34,6 +34,7 @@ pythonPackages.buildPythonApplication rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Pandora Internet Radio player for GNOME";
+    mainProgram = "pithos";
     homepage = "https://pithos.github.io/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ obadz ];

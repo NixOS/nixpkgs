@@ -30,8 +30,8 @@ let
   src = fetchFromGitHub {
     owner = "abathur";
     repo = "binlore";
-    rev = "v0.2.0";
-    hash = "sha256-bBJky7Km+mieHTqoMz3mda3KaKxr9ipYpfQqn/4w8J0=";
+    rev = "v0.3.0";
+    hash = "sha256-4Fs6HThfDhKRskuDJx2+hucl8crMRm10K6949JdIwPY=";
   };
   /*
   binlore has one one more yallbacks responsible for
@@ -45,11 +45,11 @@ let
   # TODO: feeling really uninspired on the API
   loreDef = {
     # YARA rule file
-    rules = (src + /execers.yar);
+    rules = (src + "/execers.yar");
     # output filenames; "types" of lore
     types = [ "execers" "wrappers" ];
     # shell rule callbacks; see github.com/abathur/yallback
-    yallback = (src + /execers.yall);
+    yallback = (src + "/execers.yall");
     # TODO:
     # - echo for debug, can be removed at some point
     # - I really just wanted to put the bit after the pipe
@@ -88,7 +88,7 @@ let
       fi
     '';
   };
-  overrides = (src + /overrides);
+  overrides = (src + "/overrides");
 
 in rec {
   collect = { lore ? loreDef, drvs, strip ? [ ] }: (runCommand "more-binlore" { } ''

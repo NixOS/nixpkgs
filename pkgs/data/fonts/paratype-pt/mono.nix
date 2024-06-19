@@ -1,20 +1,26 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip {
-  name = "paratype-pt-mono";
+stdenvNoCC.mkDerivation rec {
+  pname = "paratype-pt-mono";
+  version = "2.005";
 
-  urls = [
-    "https://company.paratype.com/system/attachments/631/original/ptmono.zip"
-    "http://rus.paratype.ru/system/attachments/631/original/ptmono.zip"
-  ];
+  src = fetchzip {
+    urls = [
+      "https://company.paratype.com/system/attachments/631/original/ptmono.zip"
+      "http://rus.paratype.ru/system/attachments/631/original/ptmono.zip"
+    ];
+    stripRoot = false;
+    hash = "sha256-mfDAu/KGelC6wZpUCrUrLVZKo+XiKNBqcpMI8tH2tMw=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.txt -d $out/share/doc/paratype
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype
+    install -Dm644 *.txt -t $out/share/doc/paratype
+
+    runHook postInstall
   '';
-
-  sha256 = "07kl82ngby55khvzsvn831ddpc0q8djgz2y6gsjixkyjfdk2xjjm";
 
   meta = with lib; {
     homepage = "http://www.paratype.ru/public/";
@@ -29,4 +35,3 @@ fetchzip {
     maintainers = with maintainers; [ raskin ];
   };
 }
-

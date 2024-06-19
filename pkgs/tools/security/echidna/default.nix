@@ -1,45 +1,41 @@
 { lib
+, mkDerivation
 , fetchFromGitHub
-# Haskell deps
-, mkDerivation, aeson, ansi-terminal, base, base16-bytestring, binary, brick
-, bytestring, cborg, containers, data-dword, data-has, deepseq, directory
-, exceptions, filepath, hashable, hevm, hpack, lens, lens-aeson, megaparsec
-, MonadRandom, mtl, optparse-applicative, process, random, stm, tasty
-, tasty-hunit, tasty-quickcheck, temporary, text, transformers , unix, unliftio
-, unliftio-core, unordered-containers, vector, vector-instances, vty
-, wl-pprint-annotated, word8, yaml, extra, ListLike, semver
+, fetchpatch
+, haskellPackages
+, haskell
+, slither-analyzer
 }:
+
 mkDerivation rec {
   pname = "echidna";
-  version = "2.0.3";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
-    sha256 = "sha256-ZLk3K00O6aERf+G5SagDVUk1/ba9U+9n9dqCImkczJs=";
+    sha256 = "sha256-l1ILdO+xb0zx/TFM6Am9j5hq1RnIMNf2HU6YvslAj0w=";
   };
-
-  # NOTE: echidna is behind with aeson because of hevm, this patch updates
-  # the code to work with the major aeson update that broke the build
-  # it's temporary until hevm version 0.50.0 is released - https://github.com/ethereum/hevm/milestone/1
-  patches = [ ./echidna-update-aeson.patch ];
 
   isLibrary = true;
   isExecutable = true;
-  libraryHaskellDepends = [
-    aeson ansi-terminal base base16-bytestring binary brick bytestring cborg
-    containers data-dword data-has deepseq directory exceptions filepath
-    hashable hevm lens lens-aeson megaparsec MonadRandom mtl
-    optparse-applicative process random stm temporary text transformers unix
-    unliftio unliftio-core unordered-containers vector vector-instances vty
-    wl-pprint-annotated word8 yaml extra ListLike semver
+
+  libraryToolDepends = with haskellPackages; [
+    haskellPackages.hpack
   ];
-  libraryToolDepends = [ hpack ];
-  executableHaskellDepends = libraryHaskellDepends;
-  testHaskellDepends = [
-    tasty tasty-hunit tasty-quickcheck
-  ];
+
+  executableHaskellDepends = with haskellPackages; [ aeson base base16-bytestring binary bytestring code-page
+  containers data-bword data-dword deepseq directory exceptions extra filepath hashable hevm html-conduit html-entities
+  http-conduit ListLike MonadRandom mtl optics optics-core optparse-applicative process random rosezipper semver split
+  strip-ansi-escape text time transformers unliftio utf8-string vector wai-extra warp with-utf8 word-wrap xml-conduit
+  yaml ];
+
+  # Note: there is also a runtime dependency of slither-analyzer, let's include it also.
+  executableSystemDepends = [ slither-analyzer ];
+
+  testHaskellDepends = with haskellPackages; [ tasty tasty-hunit tasty-quickcheck ];
+
   preConfigure = ''
     hpack
     # re-enable dynamic build for Linux
@@ -53,7 +49,7 @@ mkDerivation rec {
   description = "Ethereum smart contract fuzzer";
   homepage = "https://github.com/crytic/echidna";
   license = lib.licenses.agpl3Plus;
-  maintainers = with lib.maintainers; [ arturcygan ];
+  maintainers = with lib.maintainers; [ arturcygan hellwolf ];
   platforms = lib.platforms.unix;
   mainProgram = "echidna-test";
 }

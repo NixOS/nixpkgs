@@ -1,21 +1,13 @@
-{ stdenv, gnvim-unwrapped, neovim, makeWrapper }:
+{ lib, stdenv, gnvim-unwrapped, neovim, makeWrapper }:
 
 stdenv.mkDerivation {
   pname = "gnvim";
   version = gnvim-unwrapped.version;
-  buildCommand = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    cp -r ${gnvim-unwrapped}/bin/gnvim.app $out/Applications
-
-    chmod -R a+w "$out/Applications/gnvim.app/Contents/MacOS"
-    wrapProgram "$out/Applications/gnvim.app/Contents/MacOS/gnvim" \
-      --prefix PATH : "${neovim}/bin" \
-      --set GNVIM_RUNTIME_PATH "${gnvim-unwrapped}/share/gnvim/runtime"
-  '' else ''
+  buildCommand = ''
     makeWrapper '${gnvim-unwrapped}/bin/gnvim' "$out/bin/gnvim" \
       --prefix PATH : "${neovim}/bin" \
       --set GNVIM_RUNTIME_PATH "${gnvim-unwrapped}/share/gnvim/runtime"
-
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     mkdir -p "$out/share"
     ln -s '${gnvim-unwrapped}/share/icons' "$out/share/icons"
 

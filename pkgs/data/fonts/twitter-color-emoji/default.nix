@@ -10,18 +10,18 @@
 , python3
 , which
 , zopfli
-, noto-fonts-emoji
+, noto-fonts-color-emoji
 }:
 
 let
-  version = "14.0.0";
+  version = "15.0.2";
 
   twemojiSrc = fetchFromGitHub {
     name = "twemoji";
-    owner = "twitter";
+    owner = "jdecked";
     repo = "twemoji";
     rev = "v${version}";
-    sha256 = "sha256-ar6rBYudMIMngMVe/IowDV3X8wA77JBA6g0x/M7YLMg=";
+    hash = "sha256-FLOqXDpSFyClBlG5u3IRL0EKeu1mckCfRizJh++IWxo=";
   };
 
   pythonEnv =
@@ -33,15 +33,15 @@ stdenv.mkDerivation rec {
   inherit version;
 
   srcs = [
-    noto-fonts-emoji.src
+    noto-fonts-color-emoji.src
     twemojiSrc
   ];
 
-  sourceRoot = noto-fonts-emoji.src.name;
+  sourceRoot = noto-fonts-color-emoji.src.name;
 
   postUnpack = ''
     chmod -R +w ${twemojiSrc.name}
-    mv ${twemojiSrc.name} ${noto-fonts-emoji.src.name}
+    mv ${twemojiSrc.name} ${noto-fonts-color-emoji.src.name}
   '';
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       "s#http://scripts.sil.org/OFL#http://creativecommons.org/licenses/by/4.0/#"
     ];
   in ''
-    ${noto-fonts-emoji.postPatch}
+    ${noto-fonts-color-emoji.postPatch}
 
     sed '${templateSubstitutions}' NotoColorEmoji.tmpl.ttx.tmpl > TwitterColorEmoji.tmpl.ttx.tmpl
     pushd ${twemojiSrc.name}/assets/72x72/
@@ -94,13 +94,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Color emoji font with a flat visual style, designed and used by Twitter";
     longDescription = ''
-      A bitmap color emoji font built from the Twitter Emoji for
-      Everyone artwork with support for ZWJ, skin tone diversity and country
-      flags.
+      A bitmap color emoji font built from Twitter's Twemoji emoji set
+      with support for ZWJ, skin tone diversity and country flags.
 
       This font uses Google’s CBDT format making it work on Android and Linux graphical stack.
     '';
-    homepage = "https://twemoji.twitter.com/";
+    homepage = "https://github.com/jdecked/twemoji";
     # In noto-emoji-fonts source
     ## noto-emoji code is in ASL 2.0 license
     ## Emoji fonts are under OFL license
@@ -112,6 +111,6 @@ stdenv.mkDerivation rec {
     # In Fedora twitter-twemoji-fonts source
     ## spec files are MIT: https://fedoraproject.org/wiki/Licensing:Main#License_of_Fedora_SPEC_Files
     license = with licenses; [ asl20 ofl cc-by-40 mit ];
-    maintainers = with maintainers; [ jtojnar emily ];
+    maintainers = with maintainers; [ emily ];
   };
 }

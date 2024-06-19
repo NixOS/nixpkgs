@@ -1,21 +1,19 @@
 { fetchFromGitHub
-, gcc
 , lib
 , libnl
 , libpcap
 , pkg-config
 , stdenv
-, writeShellScriptBin
 }:
 stdenv.mkDerivation rec {
   pname = "nmrpflash";
-  version = "0.9.18.2";
+  version = "0.9.22";
 
   src = fetchFromGitHub {
-    owner  = "jclehner";
-    repo   = "nmrpflash";
-    rev    = "v${version}";
-    sha256 = "sha256-hKE9FEBkbN39zBRSoy3Ntq/fziizskJXNBcwQZX9igE=";
+    owner = "jclehner";
+    repo = "nmrpflash";
+    rev = "v${version}";
+    hash = "sha256-gr/7tZYnuXFvfIUh2MmtgSbFoELTomQ4h05y/WFDhjo=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -23,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnl libpcap ];
 
   PREFIX = "${placeholder "out"}";
-  STANDALONE_VERSION = "${version}";
+  STANDALONE_VERSION = version;
 
   preInstall = ''
     mkdir -p $out/bin
@@ -34,6 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jclehner/nmrpflash";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dadada ];
+    mainProgram = "nmrpflash";
     platforms = platforms.unix;
   };
 }

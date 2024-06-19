@@ -1,43 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, flask
-, google-api-core
-, google-cloud-appengine-logging
-, google-cloud-audit-log
-, google-cloud-core
-, google-cloud-testutils
-, mock
-, pandas
-, proto-plus
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
-, rich
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  flask,
+  google-api-core,
+  google-cloud-appengine-logging,
+  google-cloud-audit-log,
+  google-cloud-core,
+  google-cloud-testutils,
+  grpc-google-iam-v1,
+  mock,
+  pandas,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.2.4";
-  format = "setuptools";
+  version = "3.10.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Dsq4+2EE+fgbMWKZmtlO1lAp6a1EaWpMLvDOC7E10ek=";
+    hash = "sha256-2T00c1EkDdsUz+IBmHotMs+df0eLiy+r7TAVtCWzJ08=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     google-api-core
     google-cloud-appengine-logging
     google-cloud-audit-log
     google-cloud-core
+    grpc-google-iam-v1
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     django
     flask
     google-cloud-testutils
@@ -48,17 +56,25 @@ buildPythonPackage rec {
     rich
   ];
 
+  preCheck = ''
+    # Prevent google directory from shadowing google imports
+    rm -r google
+  '';
+
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_write_log_entries"
+    # No need for a second import check
+    "test_namespace_package_compat"
   ];
 
-  preCheck = ''
-    # prevent google directory from shadowing google imports
-    rm -r google
-    # requires credentials
-    rm tests/system/test_system.py tests/unit/test__gapic.py
-  '';
+  disabledTestPaths = [
+    # Tests require credentials
+    "tests/system/test_system.py"
+    "tests/unit/test__gapic.py"
+    # Exclude performance tests
+    "tests/performance/test_performance.py"
+  ];
 
   pythonImportsCheck = [
     "google.cloud.logging"
@@ -68,7 +84,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/python-logging";
+    changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

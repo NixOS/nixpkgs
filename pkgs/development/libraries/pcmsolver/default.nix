@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An API for the Polarizable Continuum Model";
+    mainProgram = "run_pcm";
     homepage = "https://pcmsolver.readthedocs.io/en/stable/";
     license = licenses.lgpl3Only;
     platforms = platforms.linux;

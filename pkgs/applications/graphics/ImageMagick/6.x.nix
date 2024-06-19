@@ -21,6 +21,7 @@
 , libde265Support ? true, libde265
 , fftw
 , ApplicationServices, Foundation
+, testers
 }:
 
 let
@@ -33,15 +34,15 @@ let
     else null;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "6.9.12-26";
+  version = "6.9.13-10";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
-    rev = version;
-    sha256 = "sha256-oNorY/93jk1v5BS1T3wqctXuzV4o8JlyZtHnsNYmO4U=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-AdlJaCJOrN+NkkzzzgELtgAr5iZ9dvlVYVc7tYiM+R8=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -91,7 +92,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional libXtSupport libXt
     ++ lib.optional libwebpSupport libwebp;
 
-  doCheck = false; # fails 6 out of 76 tests
+  doCheck = false; # fails 2 out of 76 tests
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
@@ -109,12 +110,41 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://legacy.imagemagick.org/";
     changelog = "https://legacy.imagemagick.org/script/changelog.php";
     description = "A software suite to create, edit, compose, or convert bitmap images";
+    pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];
     license = licenses.asl20;
+    knownVulnerabilities = [
+      "CVE-2019-13136"
+      "CVE-2019-17547"
+      "CVE-2020-25663"
+      "CVE-2020-27768"
+      "CVE-2020-27769"
+      "CVE-2020-27829"
+      "CVE-2021-20243"
+      "CVE-2021-20244"
+      "CVE-2021-20310"
+      "CVE-2021-20311"
+      "CVE-2021-20312"
+      "CVE-2021-20313"
+      "CVE-2021-3596"
+      "CVE-2022-0284"
+      "CVE-2022-2719"
+      "CVE-2023-1289"
+      "CVE-2023-2157"
+      "CVE-2023-34151"
+      "CVE-2023-34152"
+      "CVE-2023-34153"
+      "CVE-2023-3428"
+      "CVE-2023-34474"
+      "CVE-2023-34475"
+      "CVE-2023-5341"
+    ];
   };
-}
+})

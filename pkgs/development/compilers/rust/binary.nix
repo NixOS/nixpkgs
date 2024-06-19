@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, bash, curl, darwin, zlib
+{ lib, stdenv, makeWrapper, wrapRustc, bash, curl, darwin, zlib
 , autoPatchelfHook, gcc
 , version
 , src
@@ -19,14 +19,15 @@ let
 in
 
 rec {
-  rustc = stdenv.mkDerivation {
+  rustc-unwrapped = stdenv.mkDerivation {
     pname = "rustc-${versionType}";
 
     inherit version;
     inherit src;
 
     meta = with lib; {
-      homepage = "http://www.rust-lang.org/";
+      homepage = "https://www.rust-lang.org/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
@@ -52,8 +53,16 @@ rec {
       # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
     '';
 
+    # The strip tool in cctools 973.0.1 and up appears to break rlibs in the
+    # binaries. The lib.rmeta object inside the ar archive should contain an
+    # .rmeta section, but it is removed. Luckily, this doesn't appear to be an
+    # issue for Rust builds produced by Nix.
+    dontStrip = true;
+
     setupHooks = ./setup-hook.sh;
   };
+
+  rustc = wrapRustc rustc-unwrapped;
 
   cargo = stdenv.mkDerivation {
     pname = "cargo-${versionType}";
@@ -62,8 +71,9 @@ rec {
     inherit src;
 
     meta = with lib; {
-      homepage = "http://www.rust-lang.org/";
-      description = "A safe, concurrent, practical language";
+      homepage = "https://doc.rust-lang.org/cargo/";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      description = "The Rust package manager";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };

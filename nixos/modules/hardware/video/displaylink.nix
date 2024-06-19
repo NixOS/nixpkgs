@@ -26,6 +26,7 @@ in
         Identifier  "DisplayLink"
         MatchDriver "evdi"
         Driver      "modesetting"
+        Option      "TearFree" "true"
         Option      "AccelMethod" "none"
       EndSection
     '';

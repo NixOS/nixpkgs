@@ -12,7 +12,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable `localtimed`, a simple daemon for keeping the
           system timezone up-to-date based on the current location. It uses
           geoclue2 to determine the current location.

@@ -33,6 +33,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A shell that only permits scp and sftp-server";
+    mainProgram = "scponly";
     homepage = "https://github.com/scponly/scponly";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ wmertens ];

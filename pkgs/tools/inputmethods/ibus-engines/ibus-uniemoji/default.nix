@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , python3
 , ibus
 }:
@@ -11,7 +11,7 @@ let
     pygobject3
     (toPythonModule ibus)
     pyxdg
-    python-Levenshtein
+    levenshtein
   ]);
 in stdenv.mkDerivation rec {
   pname = "ibus-uniemoji";
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

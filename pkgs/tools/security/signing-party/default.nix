@@ -219,7 +219,7 @@ in stdenv.mkDerivation rec {
       * keyart: creates a random ASCII art of a PGP key file
       * gpg-key2latex: generate LaTeX file with fingerprint paper slips
     '';
-    license = with licenses; [ bsd2 bsd3 gpl2 gpl2Plus gpl3Plus ];
+    license = with licenses; [ bsd2 bsd3 gpl2Only gpl2Plus gpl3Plus ];
     maintainers = with maintainers; [ primeos ];
     platforms = platforms.linux;
   };

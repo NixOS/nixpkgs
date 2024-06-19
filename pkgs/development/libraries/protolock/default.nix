@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "protolock";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "nilslice";
     repo = "protolock";
     rev = "v${version}";
-    sha256 = "sha256-vWwRZVArmlTIGwD4zV3dEHN2kkoeCZuNIvjCBVAviPo=";
+    sha256 = "sha256-+7kU4nCBwCA6mnjFrejPrIILYUSfYpq13d+0MmNZoBg=";
   };
 
-  vendorSha256 = "sha256-pYtP+Tkh2TcGsbk7zQNaoYLEQrqGOL0gkMG5dUkfpt4=";
+  vendorHash = "sha256-lJhtZQ9S7/h3dSZ72O2l8oHHf3tEmGKC2PPAms09Itc=";
 
   postInstall = ''
     rm $out/bin/plugin*
@@ -19,6 +19,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Protocol Buffer companion tool. Track your .proto files and prevent changes to messages and services which impact API compatibility. https://protolock.dev";
+    mainProgram = "protolock";
     homepage = "https://github.com/nilslice/protolock";
     license = licenses.bsd3;
     maintainers = with maintainers; [ groodt ];

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubespy";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "pulumi";
     repo = "kubespy";
-    sha256 = "sha256-ChHrDAmPUjdyiF+XQONQMDN3UZQMM80BR+m+E8o3gnw=";
+    sha256 = "sha256-l/vOIFvCQHq+gOr38SpVZ8ShZdI1bP4G5PY4hKhkCU0=";
   };
 
-  vendorSha256 = "sha256-HmMh5jrRGs4rtN9GLddS9IwITyvVmOrL5TShhQeyxKU=";
+  vendorHash = "sha256-4q+eFMrcZsEdk1W7aorIrfS3oVAuD4V0KQ7oJ/5d8nk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,9 +28,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A tool to observe Kubernetes resources in real time";
+    mainProgram = "kubespy";
     homepage = "https://github.com/pulumi/kubespy";
     license = licenses.asl20;
     maintainers = with maintainers; [ blaggacao ];
-    platforms = platforms.unix;
   };
 }

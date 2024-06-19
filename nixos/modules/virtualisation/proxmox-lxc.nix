@@ -7,14 +7,14 @@ with lib;
     privileged = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable privileged mounts
       '';
     };
     manageNetwork = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to manage network interfaces through nix options
         When false, systemd-networkd is enabled to accept network
         configuration from proxmox.
@@ -23,7 +23,7 @@ with lib;
     manageHostName = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to manage hostname through nix options
         When false, the hostname is picked up from /etc/hostname
         populated by proxmox.
@@ -55,6 +55,8 @@ with lib;
         loader.initScript.enable = true;
       };
 
+      console.enable = true;
+
       networking = mkIf (!cfg.manageNetwork) {
         useDHCP = false;
         useHostResolvConf = false;
@@ -68,8 +70,13 @@ with lib;
         startWhenNeeded = mkDefault true;
       };
 
-      systemd.mounts = mkIf (!cfg.privileged)
-        [{ where = "/sys/kernel/debug"; enable = false; }];
+      systemd = {
+        mounts = mkIf (!cfg.privileged) [{
+          enable = false;
+          where = "/sys/kernel/debug";
+        }];
+        services."getty@".unitConfig.ConditionPathExists = [ "" "/dev/%I" ];
+      };
 
     };
 }

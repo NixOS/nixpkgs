@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, pkg-config, swig, perl, gcc }:
+{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, libxcrypt, pkg-config, swig, perl, gcc }:
 
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
-    version = "4.2";
+    version = "4.11";
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      sha256 = "sha256-KkLN8b2sJhDbYVfNANEg1prPfIySoL9N48PSQyXqE8I=";
+      sha256 = "sha256-8QWcpSYkzw62XFyIqisM2x1AOqzVUPUYgs5bPA4liSw=";
     };
 
     enableParallelBuilding = true;
@@ -17,7 +17,7 @@ let
     nativeBuildInputs = [ pkg-config swig perl ]
       ++ lib.optional stdenv.isDarwin gcc;
 
-    buildInputs = [ getopt lua boost ];
+    buildInputs = [ getopt lua boost libxcrypt ];
 
     postPatch = ''
       substituteInPlace src/makefile \
@@ -51,6 +51,7 @@ let
 
     meta = with lib; {
       description = "Source code highlighting tool";
+      mainProgram = "highlight";
       homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
       platforms = platforms.unix;
       maintainers = with maintainers; [ willibutz ];

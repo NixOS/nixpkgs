@@ -1,8 +1,15 @@
-{ lib, isPy3k, buildPythonPackage, fetchPypi, defusedxml }:
+{
+  lib,
+  isPy3k,
+  buildPythonPackage,
+  fetchPypi,
+  defusedxml,
+}:
 
 buildPythonPackage rec {
   pname = "python3-openid";
   version = "3.2.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

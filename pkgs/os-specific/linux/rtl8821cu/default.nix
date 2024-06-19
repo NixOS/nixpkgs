@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, kernel, bc }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rtl8821cu";
-  version = "${kernel.version}-unstable-2022-05-07";
+  version = "${kernel.version}-unstable-2024-05-03";
 
   src = fetchFromGitHub {
     owner = "morrownr";
-    repo = "8821cu-20210118";
-    rev = "14aac4269afe5d21d1cc0032bdc1426128f83734";
-    hash = "sha256-TLakNRhHvYAbK0slKsFgSjqJdxVStzZhi1EEajmr7hg=";
+    repo = "8821cu-20210916";
+    rev = "3eacc28b721950b51b0249508cc31e6e54988a0c";
+    hash = "sha256-JP7mvwhnKqmkb/B0l4vhc11TBjjUA1Ubzbj/IVEXvBM=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -19,7 +19,6 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';

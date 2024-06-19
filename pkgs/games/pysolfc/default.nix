@@ -1,24 +1,42 @@
-{ lib, fetchzip, buildPythonApplication, python3Packages
-  , desktop-file-utils, freecell-solver }:
+{ lib
+, fetchzip
+, buildPythonApplication
+, python3Packages
+, desktop-file-utils
+, freecell-solver
+}:
 
 buildPythonApplication rec {
-  pname = "PySolFC";
-  version = "2.6.4";
+  pname = "pysolfc";
+  version = "2.21.0";
 
   src = fetchzip {
-    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC/PySolFC-${version}/PySolFC-${version}.tar.xz";
-    sha256 = "1bd84law5b1yga3pryggdvlfvm0l62gci2q8y3q79cysdk3z4w3z";
+    url = "mirror://sourceforge/pysolfc/PySolFC-${version}.tar.xz";
+    hash = "sha256-Deye7KML5G6RZkth2veVgPOWZI8gnusEvszlrPTAhag=";
   };
 
   cardsets = fetchzip {
-    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC-Cardsets/PySolFC-Cardsets-2.0/PySolFC-Cardsets-2.0.tar.bz2";
-    sha256 = "0h0fibjv47j8lkc1bwnlbbvrx2nr3l2hzv717kcgagwhc7v2mrqh";
+    url = "mirror://sourceforge/pysolfc/PySolFC-Cardsets-2.2.tar.bz2";
+    hash = "sha256-mWJ0l9rvn9KeZ9rCWy7VjngJzJtSQSmG8zGcYFE4yM0=";
+  };
+
+  music = fetchzip {
+    url = "mirror://sourceforge/pysolfc/pysol-music-4.50.tar.xz";
+    hash = "sha256-sOl5U98aIorrQHJRy34s0HHaSW8hMUE7q84FMQAj5Yg=";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    tkinter six random2
+    tkinter
+    six
+    random2
+    configobj
+    pysol-cards
+    attrs
+    pycotap
     # optional :
-    pygame freecell-solver pillow
+    pygame
+    freecell-solver
+    pillow
   ];
 
   patches = [
@@ -34,6 +52,7 @@ buildPythonApplication rec {
   postInstall = ''
     mkdir $out/share/PySolFC/cardsets
     cp -r $cardsets/* $out/share/PySolFC/cardsets
+    cp -r $music/data/music $out/share/PySolFC
   '';
 
   # No tests in archive
@@ -41,6 +60,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "A collection of more than 1000 solitaire card games";
+    mainProgram = "pysol.py";
     homepage = "https://pysolfc.sourceforge.io";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kierdavis ];

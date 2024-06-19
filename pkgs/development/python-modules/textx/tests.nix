@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, click
-, gprof2dot
-, html5lib
-, jinja2
-, memory_profiler
-, psutil
-, pytestCheckHook
-, setuptools
-, textx
-, textx-data-dsl
-, textx-example-project
-, textx-flow-codegen
-, textx-flow-dsl
-, textx-types-dsl
+{
+  lib,
+  buildPythonPackage,
+  click,
+  gprof2dot,
+  html5lib,
+  jinja2,
+  memory-profiler,
+  psutil,
+  pytestCheckHook,
+  setuptools,
+  textx,
+  textx-data-dsl,
+  textx-example-project,
+  textx-flow-codegen,
+  textx-flow-dsl,
+  textx-types-dsl,
 }:
 
 buildPythonPackage {
@@ -25,12 +26,12 @@ buildPythonPackage {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     click
     gprof2dot
     html5lib
     jinja2
-    memory_profiler
+    memory-profiler
     psutil
     pytestCheckHook
     setuptools
@@ -41,9 +42,7 @@ buildPythonPackage {
     textx-types-dsl
   ];
 
-  pytestFlagsArray = [
-    "tests/functional"
-  ];
+  pytestFlagsArray = [ "tests/functional" ];
 
   meta = with lib; {
     inherit (textx.meta) license maintainers;

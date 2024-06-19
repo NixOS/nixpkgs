@@ -49,7 +49,7 @@ resholve.mkDerivation rec {
   '';
 
   inherit doCheck;
-  checkInputs = [ bash ];
+  nativeCheckInputs = [ bash ];
 
   checkPhase = ''
     runHook preCheck
@@ -68,7 +68,7 @@ resholve.mkDerivation rec {
   };
 
   inherit doInstallCheck;
-  installCheckInputs = [ bash ];
+  nativeInstallCheckInputs = [ bash ];
   installCheckPhase = ''
     runHook preInstallCheck
     ${installCheck "${bash}/bin/bash"}
@@ -78,6 +78,7 @@ resholve.mkDerivation rec {
   meta = with lib; {
     inherit branch;
     description = "An event listener/callback API for creating extensible bash programs";
+    mainProgram = "bashup.events";
     homepage = "https://github.com/bashup/events";
     license = licenses.cc0;
     maintainers = with maintainers; [ abathur ];

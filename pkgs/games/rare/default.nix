@@ -1,36 +1,46 @@
-{ lib, fetchFromGitHub, buildPythonApplication, qt5
-, psutil, pypresence, pyqt5, python, qtawesome, requests }:
+{ lib
+, fetchFromGitHub
+, buildPythonApplication
+, qt5
+, legendary-gl
+, orjson
+, pypresence
+, pyqt5
+, python
+, qtawesome
+, requests
+, setuptools
+, typing-extensions
+}:
 
 buildPythonApplication rec {
   pname = "rare";
-  version = "1.8.9";
+  version = "1.10.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Dummerle";
+    owner = "RareDevs";
     repo = "Rare";
-    rev = version;
-    sha256 = "sha256-2l8Id+bA5Ugb8+3ioiZ78dUtDusU8cvZEAMhmYBcJFc=";
-    fetchSubmodules = true;
+    rev = "refs/tags/${version}";
+    hash = "sha256-2DtI5iaK4bYdGfIEhPy52WaEqh+IJMZ6qo/348lMnLY=";
   };
 
   nativeBuildInputs = [
+    setuptools
     qt5.wrapQtAppsHook
   ];
 
   propagatedBuildInputs = [
-    psutil
+    legendary-gl
+    orjson
     pypresence
     pyqt5
     qtawesome
     requests
+    typing-extensions
   ];
 
   dontWrapQtApps = true;
-
-  preBuild = ''
-    # Solves "PermissionError: [Errno 13] Permission denied: '/homeless-shelter'"
-    export HOME=$(mktemp -d)
-  '';
 
   postInstall = ''
     install -Dm644 misc/rare.desktop -t $out/share/applications/
@@ -46,9 +56,10 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "GUI for Legendary, an Epic Games Launcher open source alternative";
-    homepage = "https://github.com/Dummerle/Rare";
+    homepage = "https://github.com/RareDevs/Rare";
     maintainers = with maintainers; [ wolfangaukang ];
     license = licenses.gpl3Only;
     platforms = platforms.linux;
+    mainProgram = "rare";
   };
 }

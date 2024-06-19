@@ -1,34 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, murmurhash
-, pytest
-, cython
-, cymem
-, python
+{
+  lib,
+  buildPythonPackage,
+  cymem,
+  cython,
+  python,
+  fetchPypi,
+  murmurhash,
+  pytestCheckHook,
+  pythonOlder,
 }:
+
 buildPythonPackage rec {
   pname = "preshed";
-  version = "3.0.7";
+  version = "3.0.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Oc0qCrGtsRRSxheDHqDM6n0XEvKBLRdEc4c1mHUTETo=";
+    hash = "sha256-chhjxSRP/NJlGtCSiVGix8d7EC9OEaJRrYXTfudiFmA=";
   };
 
+  nativeBuildInputs = [ cython ];
+
   propagatedBuildInputs = [
-    cython
     cymem
     murmurhash
   ];
 
-  checkInputs = [
-    pytest
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
+  # Tests have import issues with 3.0.8
+  doCheck = false;
+
+  pythonImportsCheck = [ "preshed" ];
+
+  # don't update to 4.0.0, version was yanked
+  passthru.skipBulkUpdate = true;
 
   meta = with lib; {
     description = "Cython hash tables that assume keys are pre-hashed";

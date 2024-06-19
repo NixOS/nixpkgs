@@ -1,14 +1,15 @@
 { stdenv
-, buildFHSUserEnv
+, buildFHSEnv
 , fetchurl
+, fetchzip
 , lib
 , zlib
 , gdbm
-, bzip2
 , libxslt
 , libxml2
 , libuuid
 , readline
+, readline70
 , xz
 , cups
 , glibc
@@ -16,6 +17,7 @@
 , vulkan-loader
 , alsa-lib
 , libpulseaudio
+, libxcrypt-legacy
 , libGL
 , numactl
 , libX11
@@ -24,15 +26,59 @@
 , python3
 , autoPatchelfHook
 , makeWrapper
-, sqlite
-, enableInstaller ? false
+, symlinkJoin
+, enableInstaller ? false, bzip2, sqlite
+, enableMacOSGuests ? false, fetchFromGitHub, unzip
+, enableGuestTools ? true,
 }:
 
 let
-  vmware-unpack-env = buildFHSUserEnv rec {
-    name = "vmware-unpack-env";
-    targetPkgs = pkgs: [ zlib ];
+  # base - versions
+  version = "17.5.2";
+  build = "23775571";
+  baseUrl = "https://softwareupdate.vmware.com/cds/vmw-desktop/ws/${version}/${build}/linux";
+
+  # tools - versions
+  toolsVersion = "12.4.0";
+  toolsBuild = "23259341";
+
+  # macOS - versions
+  fusionVersion = "13.5.2";
+  fusionBuild = "23775688";
+  unlockerVersion = "3.0.5";
+
+  guestToolsSrc =
+  let
+    fetchComponent = (system: hash: fetchzip {
+      inherit hash;
+      url = "${baseUrl}/packages/vmware-tools-${system}-${toolsVersion}-${toolsBuild}.x86_64.component.tar";
+      stripRoot = false;
+    } + "/vmware-tools-${system}-${toolsVersion}-${toolsBuild}.x86_64.component");
+  in lib.mapAttrsToList fetchComponent {
+      linux = "sha256-vT08mR6cCXZjiQgb9jy+MaqYzS0hFbNUM7xGAHIJ8Ao=";
+      linuxPreGlibc25 = "sha256-BodN1lxuhxyLlxIQSlVhGKItJ10VPlti/sEyxcRF2SA=";
+      netware = "sha256-o/S4wAYLR782Fn20fTQ871+rzsa1twnAxb9laV16XIk=";
+      solaris = "sha256-3LdFoI4TD5zxlohDGR3DRGbF6jwDZAoSMEpHWU4vSGU=";
+      winPre2k = "sha256-+QcvWfY3aCDxUwAfSuj7Wf9sxIO+ztWBrRolMim8Dfw=";
+      winPreVista = "sha256-3NgO/GdRFTpKNo45TMet0msjzxduuoF4nVLtnOUTHUA=";
+      windows = "sha256-2F7UPjNvtibmWAJxpB8IOnol12aMOGMy+403WeCTXw8=";
   };
+
+  # macOS - ISOs
+  darwinIsoSrc = fetchzip {
+    url = "https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/${fusionVersion}/${fusionBuild}/universal/core/com.vmware.fusion.zip.tar";
+    sha256 = "sha256-DDLRWAVRI3ZeXV5bUXWwput9mEC1qsJUsjojI0CJYMI=";
+    stripRoot = false;
+  } + "/com.vmware.fusion.zip";
+
+  # macOS - Unlocker
+  unlockerSrc = fetchFromGitHub {
+    owner = "paolo-projects";
+    repo = "unlocker";
+    rev = "${unlockerVersion}";
+    sha256 = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
+  };
+
   gdbm3 = gdbm.overrideAttrs (old: rec {
     version = "1.8.3";
 
@@ -46,11 +92,23 @@ let
       cp .libs/libgdbm*.so* $out/lib/
     '';
   });
+
+  vmware-unpack-env = buildFHSEnv rec {
+    name = "vmware-unpack-env";
+    targetPkgs = pkgs: [ zlib ];
+  };
+
+  readline70_compat63 = symlinkJoin {
+    name = "readline70_compat63";
+    paths = [ readline70 ];
+    postBuild = ''
+      ln -s $out/lib/libreadline.so $out/lib/libreadline.so.6
+    '';
+  };
 in
 stdenv.mkDerivation rec {
   pname = "vmware-workstation";
-  version = "16.2.3";
-  build = "19376536";
+  inherit version build;
 
   buildInputs = [
     libxslt
@@ -65,6 +123,7 @@ stdenv.mkDerivation rec {
     vulkan-loader
     alsa-lib
     libpulseaudio
+    libxcrypt-legacy
     libGL
     numactl
     libX11
@@ -73,15 +132,38 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ python3 vmware-unpack-env autoPatchelfHook makeWrapper ]
-    ++ lib.optionals enableInstaller [ sqlite bzip2 ];
+    ++ lib.optionals enableInstaller [ bzip2 sqlite readline70_compat63 ]
+    ++ lib.optionals enableMacOSGuests [ unzip ];
 
-  src = fetchurl {
-    url = "https://download3.vmware.com/software/WKST-1623-LX-New/VMware-Workstation-Full-${version}-${build}.x86_64.bundle";
-    sha256 = "sha256-+JE1KnRfawcaBannIyEr1TNZTF7YXRYYaFMVq0/erbM=";
-  };
+  src = fetchzip {
+    url = "${baseUrl}/core/VMware-Workstation-${version}-${build}.x86_64.bundle.tar";
+    sha256 = "sha256-5PZZpXN/V687TXjqeTm8MEays4/QTf02jVfdpi9C7GI=";
+    stripRoot = false;
+  } + "/VMware-Workstation-${version}-${build}.x86_64.bundle";
 
-  unpackPhase = ''
-    ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} --extract unpacked"
+  unpackPhase = let
+    guestTools = lib.optionalString enableGuestTools (lib.concatMapStringsSep " " (src: "--install-component ${src}") guestToolsSrc);
+  in
+  ''
+    ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} ${guestTools} --extract unpacked"
+
+    ${lib.optionalString enableMacOSGuests ''
+      mkdir -p fusion/
+      unzip "${darwinIsoSrc}" \
+        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
+        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
+        -d fusion/
+    ''}
+  '';
+
+  patchPhase = lib.optionalString enableMacOSGuests ''
+    cp -R "${unlockerSrc}" unlocker/
+
+    substituteInPlace unlocker/unlocker.py --replace \
+      "/usr/lib/vmware/bin/" "$out/lib/vmware/bin"
+
+    substituteInPlace unlocker/unlocker.py --replace \
+      "/usr/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so" "$out/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so"
   '';
 
   installPhase = ''
@@ -130,7 +212,7 @@ stdenv.mkDerivation rec {
         component_version=$(cat unpacked/$component/manifest.xml | grep -oPm1 "(?<=<version>)[^<]+")
         component_core_id=$([ "$component" == "vmware-installer" ] && echo "-1" || echo "1")
         type=$([ "$component" == "vmware-workstation" ] && echo "0" || echo "1")
-        sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES(\"$component\",\"$component_version\",\"${build}\",$component_core_id,\"$component\",\"$component\",$type);"
+        sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES('$component','$component_version',${build},$component_core_id,'$component','$component',$type);"
         mkdir -p $out/etc/vmware-installer/components/$component
         cp -r $folder/* $out/etc/vmware-installer/components/$component
       done
@@ -212,34 +294,35 @@ stdenv.mkDerivation rec {
     unpacked="unpacked/vmware-network-editor"
     cp -r $unpacked/lib $out/lib/vmware/
 
-    ## VMware Tools + Virtual Printer
-    echo "Installing VMware Tools + Virtual Printer"
     mkdir -p $out/lib/vmware/isoimages/
-    cp unpacked/vmware-tools-linuxPreGlibc25/linuxPreGlibc25.iso \
-       unpacked/vmware-tools-windows/windows.iso \
-       unpacked/vmware-tools-winPreVista/winPreVista.iso \
-       unpacked/vmware-virtual-printer/VirtualPrinter-Linux.iso \
-       unpacked/vmware-virtual-printer/VirtualPrinter-Windows.iso \
-       unpacked/vmware-tools-winPre2k/winPre2k.iso \
-       unpacked/vmware-tools-linux/linux.iso \
+
+    ${lib.optionalString enableGuestTools ''
+    echo "Installing VMware Tools"
+    cp unpacked/vmware-tools-linux/linux.iso \
+       unpacked/vmware-tools-linuxPreGlibc25/linuxPreGlibc25.iso \
        unpacked/vmware-tools-netware/netware.iso \
        unpacked/vmware-tools-solaris/solaris.iso \
+       unpacked/vmware-tools-winPre2k/winPre2k.iso \
+       unpacked/vmware-tools-winPreVista/winPreVista.iso \
+       unpacked/vmware-tools-windows/windows.iso \
        $out/lib/vmware/isoimages/
+    ''}
+
+    ${lib.optionalString enableMacOSGuests ''
+      echo "Installing VMWare Tools for MacOS"
+      cp -v \
+       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
+       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
+       $out/lib/vmware/isoimages/
+    ''}
 
     ## VMware Player Application
     echo "Installing VMware Player Application"
     unpacked="unpacked/vmware-player-app"
     cp -r $unpacked/lib/* $out/lib/vmware/
-    cp -r $unpacked/etc/* $out/etc/
     cp -r $unpacked/share/* $out/share/
     cp -r $unpacked/bin/* $out/bin/
     cp -r $unpacked/doc/* $out/share/doc/ # Licences
-
-    mkdir -p $out/etc/thnuclnt
-    cp -r $unpacked/extras/.thnumod $out/etc/thnuclnt/
-
-    mkdir -p $out/lib/cups/filter
-    cp -r $unpacked/extras/thnucups $out/lib/cups/filter/
 
     for target in "vmplayer" "vmware-enter-serial" "vmware-setup-helper" "licenseTool" "vmware-mount" "vmware-fuseUI" "vmware-app-control" "vmware-zenity"
     do
@@ -290,9 +373,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/include/
     cp -r $unpacked/include/* $out/include/
 
-    ## VMware VIX Workstation-16.0.0 Library
-    echo "Installing VMware VIX Workstation-16.0.0 Library"
-    unpacked="unpacked/vmware-vix-lib-Workstation1600"
+    ## VMware VIX Workstation-17.0.0 Library
+    echo "Installing VMware VIX Workstation-17.0.0 Library"
+    unpacked="unpacked/vmware-vix-lib-Workstation1700"
     cp -r $unpacked/lib/* $out/lib/vmware-vix/
 
     ## VMware VProbes component for Linux
@@ -327,6 +410,11 @@ stdenv.mkDerivation rec {
       sed -i -e "s,/usr/local/sbin,/run/vmware/bin," "$out/$lib"
     done
 
+    ${lib.optionalString enableMacOSGuests ''
+      echo "Running VMWare Unlocker to enable macOS Guests"
+      python3 unlocker/unlocker.py
+    ''}
+
     # SUID hack
     wrapProgram $out/lib/vmware/bin/vmware-vmx
     rm $out/lib/vmware/bin/vmware-vmx
@@ -339,6 +427,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ deinferno ];
+    maintainers = with maintainers; [ cawilliamson deinferno vifino ];
   };
 }

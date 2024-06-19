@@ -1,20 +1,20 @@
 { stdenv, lib, fetchFromGitHub
-, qtbase, qttools, cmake, wrapQtAppsHook
+, qtbase, qttools, qtquickcontrols2, opencascade-occt, libGLU, cmake, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "librepcb";
-  version = "0.1.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "sha256-zqvvc3CHqdRWVUFt4BkH5Vq50/FKNvMNW2NvGyfWwFM=";
+    sha256 = "sha256-Vyp7asVqvKFkkEb67LXapMkT1AQSburN3+B2dXIPcEU=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake qttools wrapQtAppsHook qtquickcontrols2 opencascade-occt libGLU ];
   buildInputs = [ qtbase ];
 
   meta = with lib; {

@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Run your rust code without setting up cargo";
+    mainProgram = "cargo-play";
     homepage = "https://github.com/fanzeyi/cargo-play";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

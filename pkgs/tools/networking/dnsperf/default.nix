@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dnsperf";
-  version = "2.9.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "DNS-OARC";
     repo = "dnsperf";
     rev = "v${version}";
-    sha256 = "sha256-TWFi3oPTIKjBaw0Rq0AfZgxyVukvL2SWa2qvWw2WAQ4=";
+    hash = "sha256-eDDVNFMjj+0wEBe1qO6r4Bai554Sp+EmP86reJ/VXGk=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +37,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tools for DNS benchmaring";
     homepage = "https://www.dns-oarc.net/tools/dnsperf";
+    changelog = "https://github.com/DNS-OARC/dnsperf/releases/tag/v${version}";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vcunat ];
+    mainProgram = "dnsperf";
+    maintainers = with maintainers; [ vcunat mfrw ];
   };
 }

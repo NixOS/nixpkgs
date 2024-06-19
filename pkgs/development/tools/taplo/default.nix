@@ -1,6 +1,8 @@
 { lib
 , rustPlatform
 , fetchCrate
+, pkg-config
+, openssl
 , stdenv
 , Security
 , withLsp ? true
@@ -8,17 +10,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "taplo";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchCrate {
     inherit version;
     pname = "taplo-cli";
-    sha256 = "sha256-lJdDr6pXOxndv3mBAbqkDnVXOFklSMcnzTed0U1Nm9U=";
+    hash = "sha256-vvb00a6rppx9kKx+pzObT/hW/IsG6RyYFEDp9M5gvqc=";
   };
 
-  cargoSha256 = "sha256-1wN43HOyrSFTs9nKxUi3kcnGvtONW8SgKwIEK1ckCgk=";
+  cargoHash = "sha256-oT7U9htu7J22MqLZb+YXohlB1CVGxHGQvHJu18PeLf8=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+  ];
 
   buildFeatures = lib.optional withLsp "lsp";
 
@@ -27,5 +37,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://taplo.tamasfe.dev";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "taplo";
   };
 }

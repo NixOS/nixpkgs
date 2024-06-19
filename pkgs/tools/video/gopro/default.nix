@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.gpl3;
     maintainers = with maintainers; [ jonringer ];
+    mainProgram = "gopro";
   };
 }

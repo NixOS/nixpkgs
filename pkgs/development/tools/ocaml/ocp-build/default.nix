@@ -1,5 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ncurses, cmdliner_1_0, re }:
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "ocp-build is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocp-build";
   version = "1.99.21";
@@ -19,7 +22,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ocaml findlib cmdliner_1_0 re ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs =  [ cmdliner_1_0 re ];
   propagatedBuildInputs = [ ncurses ];
   preInstall = "mkdir -p $out/bin";
 

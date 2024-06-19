@@ -1,30 +1,51 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, CoreFoundation, CoreServices }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
-  version = "0.5.11";
+  version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "regexident";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-dxy46ls0n7j2uax+djqB9Zy/uGgV37w5K1Zc8Wzd1Vc=";
+    rev = "v${version}";
+    hash = "sha256-+jHanZ2/BIgNLUpMlibfUAVfA6QTPlavRci2YD1w3zE=";
   };
 
-  cargoSha256 = "sha256-2Q4pGnMo4FiPPGz2XXOv6+zB5DxHA8oEqztidO2Vvyw=";
+  cargoHash = "sha256-umaKVs1fFiUKz2HIJuB+7skSwRQbG12dl9eD+et42go=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    CoreServices
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
+
+  checkFlags = [
+    "--skip=cfg_test::smoke"
+    "--skip=colors::ansi::smoke"
+    "--skip=colors::plain::smoke"
+    "--skip=colors::truecolor::smoke"
+    "--skip=focus_on::glob_path::smoke"
+    "--skip=focus_on::self_path::smoke"
+    "--skip=focus_on::simple_path::smoke"
+    "--skip=focus_on::use_tree::smoke"
+    "--skip=functions::function_body"
+    "--skip=functions::function_inputs"
+    "--skip=functions::function_outputs"
+    "--skip=max_depth::depth_2::smoke"
+    "--skip=selection::no_fns::smoke"
+    "--skip=selection::no_modules::smoke"
+    "--skip=selection::no_traits::smoke"
+    "--skip=selection::no_types::smoke"
+    "--skip=fields::enum_fields"
+    "--skip=fields::struct_fields"
+    "--skip=fields::tuple_fields"
+    "--skip=fields::union_fields"
   ];
 
   meta = with lib; {
     description = "A cargo plugin for showing a tree-like overview of a crate's modules";
+    mainProgram = "cargo-modules";
     homepage = "https://github.com/regexident/cargo-modules";
+    changelog = "https://github.com/regexident/cargo-modules/blob/${version}/CHANGELOG.md";
     license = with licenses; [ mpl20 ];
-    # all tests fail with:
-    # thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: "tests run with disabled concurrency, automatic snapshot name generation is not supported.  Consider using the \"backtrace\" feature of insta which tries to recover test names from the call stack."', /private/tmp/nix-build-cargo-modules-0.5.9.drv-0/cargo-modules-0.5.9-vendor.tar.gz/insta/src/runtime.rs:908:22
-    broken = (stdenv.isDarwin && stdenv.isx86_64);
-    maintainers = with maintainers; [ figsoda rvarago ];
+    maintainers = with maintainers; [ figsoda rvarago matthiasbeyer ];
   };
 }

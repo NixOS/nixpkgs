@@ -1,8 +1,8 @@
 diff --git a/src/addressbook/libebook/e-book-client.c b/src/addressbook/libebook/e-book-client.c
-index 7888e69..c3b695c 100644
+index 5e65ec8..8ca28c6 100644
 --- a/src/addressbook/libebook/e-book-client.c
 +++ b/src/addressbook/libebook/e-book-client.c
-@@ -1983,7 +1983,18 @@ e_book_client_get_self (ESourceRegistry *registry,
+@@ -1924,7 +1924,18 @@ e_book_client_get_self (ESourceRegistry *registry,
  
  	*out_client = book_client;
  
@@ -10,7 +10,7 @@ index 7888e69..c3b695c 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -22,7 +22,7 @@ index 7888e69..c3b695c 100644
  	uid = g_settings_get_string (settings, SELF_UID_KEY);
  	g_object_unref (settings);
  
-@@ -2051,7 +2062,18 @@ e_book_client_set_self (EBookClient *client,
+@@ -1992,7 +2003,18 @@ e_book_client_set_self (EBookClient *client,
  	g_return_val_if_fail (
  		e_contact_get_const (contact, E_CONTACT_UID) != NULL, FALSE);
  
@@ -30,7 +30,7 @@ index 7888e69..c3b695c 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -42,7 +42,7 @@ index 7888e69..c3b695c 100644
  	g_settings_set_string (
  		settings, SELF_UID_KEY,
  		e_contact_get_const (contact, E_CONTACT_UID));
-@@ -2087,8 +2109,18 @@ e_book_client_is_self (EContact *contact)
+@@ -2028,8 +2050,18 @@ e_book_client_is_self (EContact *contact)
  	 * unfortunately the API doesn't allow that.
  	 */
  	g_mutex_lock (&mutex);
@@ -51,7 +51,7 @@ index 7888e69..c3b695c 100644
 +	if (!settings) {
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -64,7 +64,7 @@ index 7888e69..c3b695c 100644
  	g_mutex_unlock (&mutex);
  
 diff --git a/src/addressbook/libebook/e-book.c b/src/addressbook/libebook/e-book.c
-index 8dfff6d..cd88392 100644
+index e85a56b..59d3fe2 100644
 --- a/src/addressbook/libebook/e-book.c
 +++ b/src/addressbook/libebook/e-book.c
 @@ -2587,7 +2587,18 @@ e_book_get_self (ESourceRegistry *registry,
@@ -75,7 +75,7 @@ index 8dfff6d..cd88392 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -95,7 +95,7 @@ index 8dfff6d..cd88392 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -115,7 +115,7 @@ index 8dfff6d..cd88392 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -127,11 +127,35 @@ index 8dfff6d..cd88392 100644
  	uid = g_settings_get_string (settings, SELF_UID_KEY);
  	g_object_unref (settings);
  
+diff --git a/src/addressbook/libedata-book/e-book-meta-backend.c b/src/addressbook/libedata-book/e-book-meta-backend.c
+index 5b4debf..77c8d9c 100644
+--- a/src/addressbook/libedata-book/e-book-meta-backend.c
++++ b/src/addressbook/libedata-book/e-book-meta-backend.c
+@@ -144,7 +144,18 @@ ebmb_is_power_saver_enabled (void)
+ 	GSettings *settings;
+ 	gboolean enabled = FALSE;
+ 
+-	settings = g_settings_new ("org.gnome.evolution-data-server");
++	{
++		g_autoptr(GSettingsSchemaSource) schema_source;
++		g_autoptr(GSettingsSchema) schema;
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
++									    g_settings_schema_source_get_default(),
++									    TRUE,
++									    NULL);
++		schema = g_settings_schema_source_lookup(schema_source,
++							 "org.gnome.evolution-data-server",
++							 FALSE);
++		settings = g_settings_new_full(schema, NULL, NULL);
++	}
+ 
+ 	if (g_settings_get_boolean (settings, "limit-operations-in-power-saver-mode")) {
+ 		GPowerProfileMonitor *power_monitor;
 diff --git a/src/calendar/backends/contacts/e-cal-backend-contacts.c b/src/calendar/backends/contacts/e-cal-backend-contacts.c
-index e696861..52af238 100644
+index 43bd383..4dce824 100644
 --- a/src/calendar/backends/contacts/e-cal-backend-contacts.c
 +++ b/src/calendar/backends/contacts/e-cal-backend-contacts.c
-@@ -1387,7 +1387,18 @@ e_cal_backend_contacts_init (ECalBackendContacts *cbc)
+@@ -1369,7 +1369,18 @@ e_cal_backend_contacts_init (ECalBackendContacts *cbc)
  		(GDestroyNotify) g_free,
  		(GDestroyNotify) contact_record_free);
  
@@ -139,7 +163,7 @@ index e696861..52af238 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -151,19 +175,46 @@ index e696861..52af238 100644
  	cbc->priv->notifyid = 0;
  	cbc->priv->update_alarms_id = 0;
  	cbc->priv->alarm_enabled = FALSE;
+diff --git a/src/calendar/backends/file/e-cal-backend-file.c b/src/calendar/backends/file/e-cal-backend-file.c
+index 2525856..7ecc1a8 100644
+--- a/src/calendar/backends/file/e-cal-backend-file.c
++++ b/src/calendar/backends/file/e-cal-backend-file.c
+@@ -3682,7 +3682,20 @@ e_cal_backend_file_receive_objects (ECalBackendSync *backend,
+ 			if (is_declined) {
+ 				GSettings *settings;
+ 
+-				settings = g_settings_new ("org.gnome.evolution-data-server.calendar");
++				{
++					g_autoptr(GSettingsSchemaSource) schema_source;
++					g_autoptr(GSettingsSchema) schema;
++					schema_source = g_settings_schema_source_new_from_directory("@EDS@",
++												    g_settings_schema_source_get_default(),
++												    TRUE,
++												    NULL);
++					schema = g_settings_schema_source_lookup(schema_source,
++										 "org.gnome.evolution-data-server.calendar",
++										 FALSE);
++					settings = g_settings_new_full(schema,
++								       NULL,
++								       NULL);
++				}
+ 				can_delete = g_settings_get_boolean (settings, "delete-meeting-on-decline");
+ 				g_clear_object (&settings);
+ 			}
 diff --git a/src/calendar/libecal/e-reminder-watcher.c b/src/calendar/libecal/e-reminder-watcher.c
-index a24ede2..5d2a032 100644
+index 44ba49c..dfac2a2 100644
 --- a/src/calendar/libecal/e-reminder-watcher.c
 +++ b/src/calendar/libecal/e-reminder-watcher.c
-@@ -2477,7 +2477,19 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
+@@ -2826,8 +2826,33 @@ e_reminder_watcher_init (EReminderWatcher *watcher)
  
  	watcher->priv = e_reminder_watcher_get_instance_private (watcher);
  	watcher->priv->cancellable = g_cancellable_new ();
 -	watcher->priv->settings = g_settings_new ("org.gnome.evolution-data-server.calendar");
+-	watcher->priv->desktop_settings = g_settings_new ("org.gnome.desktop.interface");
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -173,14 +224,74 @@ index a24ede2..5d2a032 100644
 +		watcher->priv->settings = g_settings_new_full(schema, NULL,
 +							      NULL);
 +	}
- 	watcher->priv->scheduled = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, e_reminder_watcher_free_rd_slist);
- 	watcher->priv->default_zone = e_cal_util_copy_timezone (zone);
- 	watcher->priv->timers_enabled = TRUE;
++	{
++		g_autoptr(GSettingsSchemaSource) schema_source;
++		g_autoptr(GSettingsSchema) schema;
++		schema_source = g_settings_schema_source_new_from_directory("@GDS@",
++									    g_settings_schema_source_get_default(),
++									    TRUE,
++									    NULL);
++		schema = g_settings_schema_source_lookup(schema_source,
++							 "org.gnome.desktop.interface",
++							 FALSE);
++		watcher->priv->desktop_settings = g_settings_new_full(schema,
++								      NULL,
++								      NULL);
++	}
+ 	if (watcher->priv->desktop_settings) {
+ 		g_signal_connect_object (
+ 			watcher->priv->desktop_settings,
+diff --git a/src/calendar/libedata-cal/e-cal-meta-backend.c b/src/calendar/libedata-cal/e-cal-meta-backend.c
+index e0e9169..a44f52c 100644
+--- a/src/calendar/libedata-cal/e-cal-meta-backend.c
++++ b/src/calendar/libedata-cal/e-cal-meta-backend.c
+@@ -156,7 +156,18 @@ ecmb_is_power_saver_enabled (void)
+ 	GSettings *settings;
+ 	gboolean enabled = FALSE;
+ 
+-	settings = g_settings_new ("org.gnome.evolution-data-server");
++	{
++		g_autoptr(GSettingsSchemaSource) schema_source;
++		g_autoptr(GSettingsSchema) schema;
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
++									    g_settings_schema_source_get_default(),
++									    TRUE,
++									    NULL);
++		schema = g_settings_schema_source_lookup(schema_source,
++							 "org.gnome.evolution-data-server",
++							 FALSE);
++		settings = g_settings_new_full(schema, NULL, NULL);
++	}
+ 
+ 	if (g_settings_get_boolean (settings, "limit-operations-in-power-saver-mode")) {
+ 		GPowerProfileMonitor *power_monitor;
+@@ -2627,7 +2638,20 @@ ecmb_receive_object_sync (ECalMetaBackend *meta_backend,
+ 			if (is_declined) {
+ 				GSettings *settings;
+ 
+-				settings = g_settings_new ("org.gnome.evolution-data-server.calendar");
++				{
++					g_autoptr(GSettingsSchemaSource) schema_source;
++					g_autoptr(GSettingsSchema) schema;
++					schema_source = g_settings_schema_source_new_from_directory("@EDS@",
++												    g_settings_schema_source_get_default(),
++												    TRUE,
++												    NULL);
++					schema = g_settings_schema_source_lookup(schema_source,
++										 "org.gnome.evolution-data-server.calendar",
++										 FALSE);
++					settings = g_settings_new_full(schema,
++								       NULL,
++								       NULL);
++				}
+ 				is_declined = g_settings_get_boolean (settings, "delete-meeting-on-decline");
+ 				g_clear_object (&settings);
+ 			}
 diff --git a/src/camel/camel-cipher-context.c b/src/camel/camel-cipher-context.c
-index 8013ba7..ba74769 100644
+index d5a0823..2ae03f8 100644
 --- a/src/camel/camel-cipher-context.c
 +++ b/src/camel/camel-cipher-context.c
-@@ -1625,7 +1625,18 @@ camel_cipher_can_load_photos (void)
+@@ -1631,7 +1631,18 @@ camel_cipher_can_load_photos (void)
  	GSettings *settings;
  	gboolean load_photos;
  
@@ -188,7 +299,7 @@ index 8013ba7..ba74769 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -201,10 +312,10 @@ index 8013ba7..ba74769 100644
  	g_clear_object (&settings);
  
 diff --git a/src/camel/camel-gpg-context.c b/src/camel/camel-gpg-context.c
-index 685d3ab..521d91f 100644
+index cceba4a..d3c4da6 100644
 --- a/src/camel/camel-gpg-context.c
 +++ b/src/camel/camel-gpg-context.c
-@@ -571,7 +571,18 @@ gpg_ctx_get_executable_name (void)
+@@ -747,7 +747,18 @@ gpg_ctx_get_executable_name (void)
  		GSettings *settings;
  		gchar *path;
  
@@ -212,7 +323,7 @@ index 685d3ab..521d91f 100644
 +		{
 +			g_autoptr(GSettingsSchemaSource) schema_source;
 +			g_autoptr(GSettingsSchema) schema;
-+			schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++			schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +										    g_settings_schema_source_get_default(),
 +										    TRUE,
 +										    NULL);
@@ -225,7 +336,7 @@ index 685d3ab..521d91f 100644
  		g_clear_object (&settings);
  
 diff --git a/src/camel/camel-utils.c b/src/camel/camel-utils.c
-index e61160c..d17871a 100644
+index e61160c..b6553a4 100644
 --- a/src/camel/camel-utils.c
 +++ b/src/camel/camel-utils.c
 @@ -362,7 +362,19 @@ void
@@ -236,7 +347,7 @@ index e61160c..d17871a 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -249,11 +360,35 @@ index e61160c..d17871a 100644
  	g_signal_connect (mi_user_headers_settings, "changed::camel-message-info-user-headers",
  		G_CALLBACK (mi_user_headers_settings_changed_cb), NULL);
  	G_UNLOCK (mi_user_headers);
+diff --git a/src/camel/providers/imapx/camel-imapx-server.c b/src/camel/providers/imapx/camel-imapx-server.c
+index 56429a9..a9cc62c 100644
+--- a/src/camel/providers/imapx/camel-imapx-server.c
++++ b/src/camel/providers/imapx/camel-imapx-server.c
+@@ -5682,7 +5682,18 @@ camel_imapx_server_do_old_flags_update (CamelFolder *folder)
+ 	if (do_old_flags_update) {
+ 		GSettings *eds_settings;
+ 
+-		eds_settings = g_settings_new ("org.gnome.evolution-data-server");
++		{
++			g_autoptr(GSettingsSchemaSource) schema_source;
++			g_autoptr(GSettingsSchema) schema;
++			schema_source = g_settings_schema_source_new_from_directory("@EDS@",
++										    g_settings_schema_source_get_default(),
++										    TRUE,
++										    NULL);
++			schema = g_settings_schema_source_lookup(schema_source,
++								 "org.gnome.evolution-data-server",
++								 FALSE);
++			eds_settings = g_settings_new_full(schema, NULL, NULL);
++		}
+ 
+ 		if (g_settings_get_boolean (eds_settings, "limit-operations-in-power-saver-mode")) {
+ 			GPowerProfileMonitor *power_monitor;
 diff --git a/src/camel/providers/smtp/camel-smtp-transport.c b/src/camel/providers/smtp/camel-smtp-transport.c
-index f535ad6..30130b9 100644
+index 6556f1e..90f0a5e 100644
 --- a/src/camel/providers/smtp/camel-smtp-transport.c
 +++ b/src/camel/providers/smtp/camel-smtp-transport.c
-@@ -1458,7 +1458,18 @@ smtp_helo (CamelSmtpTransport *transport,
+@@ -1471,7 +1471,18 @@ smtp_helo (CamelSmtpTransport *transport,
  		transport->authtypes = NULL;
  	}
  
@@ -261,7 +396,7 @@ index f535ad6..30130b9 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -274,7 +409,7 @@ index f535ad6..30130b9 100644
  	g_clear_object (&settings);
  
 diff --git a/src/libedataserver/e-network-monitor.c b/src/libedataserver/e-network-monitor.c
-index 188f276..7c4db94 100644
+index 188f276..939f89b 100644
 --- a/src/libedataserver/e-network-monitor.c
 +++ b/src/libedataserver/e-network-monitor.c
 @@ -256,7 +256,18 @@ e_network_monitor_constructed (GObject *object)
@@ -285,7 +420,7 @@ index 188f276..7c4db94 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -298,10 +433,10 @@ index 188f276..7c4db94 100644
  		settings, "network-monitor-gio-name",
  		object, "gio-name",
 diff --git a/src/libedataserver/e-oauth2-service-google.c b/src/libedataserver/e-oauth2-service-google.c
-index f9d9056..115d344 100644
+index 1453410..a3f06b0 100644
 --- a/src/libedataserver/e-oauth2-service-google.c
 +++ b/src/libedataserver/e-oauth2-service-google.c
-@@ -70,7 +70,18 @@ eos_google_read_settings (EOAuth2Service *service,
+@@ -72,7 +72,18 @@ eos_google_read_settings (EOAuth2Service *service,
  	if (!value) {
  		GSettings *settings;
  
@@ -309,7 +444,7 @@ index f9d9056..115d344 100644
 +		{
 +			g_autoptr(GSettingsSchemaSource) schema_source;
 +			g_autoptr(GSettingsSchema) schema;
-+			schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++			schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +										    g_settings_schema_source_get_default(),
 +										    TRUE,
 +										    NULL);
@@ -322,10 +457,10 @@ index f9d9056..115d344 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service-outlook.c b/src/libedataserver/e-oauth2-service-outlook.c
-index 687c10d..ac1deae 100644
+index 734f194..5b05077 100644
 --- a/src/libedataserver/e-oauth2-service-outlook.c
 +++ b/src/libedataserver/e-oauth2-service-outlook.c
-@@ -70,7 +70,18 @@ eos_outlook_read_settings (EOAuth2Service *service,
+@@ -75,7 +75,18 @@ eos_outlook_read_settings (EOAuth2Service *service,
  	if (!value) {
  		GSettings *settings;
  
@@ -333,7 +468,7 @@ index 687c10d..ac1deae 100644
 +		{
 +			g_autoptr(GSettingsSchemaSource) schema_source;
 +			g_autoptr(GSettingsSchema) schema;
-+			schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++			schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +										    g_settings_schema_source_get_default(),
 +										    TRUE,
 +										    NULL);
@@ -346,10 +481,10 @@ index 687c10d..ac1deae 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service-yahoo.c b/src/libedataserver/e-oauth2-service-yahoo.c
-index 329a38c..f541393 100644
+index c8bbd3a..e71e36a 100644
 --- a/src/libedataserver/e-oauth2-service-yahoo.c
 +++ b/src/libedataserver/e-oauth2-service-yahoo.c
-@@ -66,7 +66,18 @@ eos_yahoo_read_settings (EOAuth2Service *service,
+@@ -67,7 +67,18 @@ eos_yahoo_read_settings (EOAuth2Service *service,
  	if (!value) {
  		GSettings *settings;
  
@@ -357,7 +492,7 @@ index 329a38c..f541393 100644
 +		{
 +			g_autoptr(GSettingsSchemaSource) schema_source;
 +			g_autoptr(GSettingsSchema) schema;
-+			schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++			schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +										    g_settings_schema_source_get_default(),
 +										    TRUE,
 +										    NULL);
@@ -370,10 +505,10 @@ index 329a38c..f541393 100644
  		g_object_unref (settings);
  
 diff --git a/src/libedataserver/e-oauth2-service.c b/src/libedataserver/e-oauth2-service.c
-index 979095b..ecac6bb 100644
+index af59b0b..0c7e75e 100644
 --- a/src/libedataserver/e-oauth2-service.c
 +++ b/src/libedataserver/e-oauth2-service.c
-@@ -89,7 +89,18 @@ eos_default_guess_can_process (EOAuth2Service *service,
+@@ -94,7 +94,18 @@ eos_default_guess_can_process (EOAuth2Service *service,
  	name_len = strlen (name);
  	hostname_len = strlen (hostname);
  
@@ -381,7 +516,7 @@ index 979095b..ecac6bb 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -393,51 +528,11 @@ index 979095b..ecac6bb 100644
  	values = g_settings_get_strv (settings, "oauth2-services-hint");
  	g_object_unref (settings);
  
-diff --git a/src/libedataserver/e-proxy.c b/src/libedataserver/e-proxy.c
-index bcd07f9..17db26c 100644
---- a/src/libedataserver/e-proxy.c
-+++ b/src/libedataserver/e-proxy.c
-@@ -957,8 +957,33 @@ e_proxy_init (EProxy *proxy)
- 
- 	proxy->priv->type = PROXY_TYPE_SYSTEM;
- 
--	proxy->priv->evolution_proxy_settings = g_settings_new ("org.gnome.evolution.shell.network-config");
--	proxy->priv->proxy_settings = g_settings_new ("org.gnome.system.proxy");
-+	{
-+		g_autoptr(GSettingsSchemaSource) schema_source;
-+		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
-+									    g_settings_schema_source_get_default(),
-+									    TRUE,
-+									    NULL);
-+		schema = g_settings_schema_source_lookup(schema_source,
-+							 "org.gnome.evolution.shell.network-config",
-+							 FALSE);
-+		proxy->priv->evolution_proxy_settings = g_settings_new_full(schema,
-+									    NULL,
-+									    NULL);
-+	}
-+	{
-+		g_autoptr(GSettingsSchemaSource) schema_source;
-+		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@GDS_GSETTINGS_PATH@",
-+									    g_settings_schema_source_get_default(),
-+									    TRUE,
-+									    NULL);
-+		schema = g_settings_schema_source_lookup(schema_source,
-+							 "org.gnome.system.proxy",
-+							 FALSE);
-+		proxy->priv->proxy_settings = g_settings_new_full(schema,
-+								  NULL, NULL);
-+	}
- 	proxy->priv->proxy_http_settings = g_settings_get_child (proxy->priv->proxy_settings, "http");
- 	proxy->priv->proxy_https_settings = g_settings_get_child (proxy->priv->proxy_settings, "https");
- 	proxy->priv->proxy_socks_settings = g_settings_get_child (proxy->priv->proxy_settings, "socks");
 diff --git a/src/libedataserver/e-source-registry.c b/src/libedataserver/e-source-registry.c
-index 837e940..4bbd00d 100644
+index 1539f8b..77cf123 100644
 --- a/src/libedataserver/e-source-registry.c
 +++ b/src/libedataserver/e-source-registry.c
-@@ -1769,7 +1769,19 @@ e_source_registry_init (ESourceRegistry *registry)
+@@ -1754,7 +1754,19 @@ e_source_registry_init (ESourceRegistry *registry)
  
  	g_mutex_init (&registry->priv->sources_lock);
  
@@ -445,7 +540,7 @@ index 837e940..4bbd00d 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -459,10 +554,10 @@ index 837e940..4bbd00d 100644
  	g_signal_connect (
  		registry->priv->settings, "changed",
 diff --git a/src/libedataserverui/e-reminders-widget.c b/src/libedataserverui/e-reminders-widget.c
-index d18474d..418ccc2 100644
+index 14b6481..7149b74 100644
 --- a/src/libedataserverui/e-reminders-widget.c
 +++ b/src/libedataserverui/e-reminders-widget.c
-@@ -1874,7 +1874,19 @@ static void
+@@ -1986,7 +1986,19 @@ static void
  e_reminders_widget_init (ERemindersWidget *reminders)
  {
  	reminders->priv = e_reminders_widget_get_instance_private (reminders);
@@ -470,7 +565,7 @@ index d18474d..418ccc2 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -484,7 +579,7 @@ index d18474d..418ccc2 100644
  	reminders->priv->is_empty = TRUE;
  	reminders->priv->is_mapped = FALSE;
 diff --git a/src/services/evolution-source-registry/evolution-source-registry-autoconfig.c b/src/services/evolution-source-registry/evolution-source-registry-autoconfig.c
-index 6f03053..127c92e 100644
+index 6f03053..b5db6b2 100644
 --- a/src/services/evolution-source-registry/evolution-source-registry-autoconfig.c
 +++ b/src/services/evolution-source-registry/evolution-source-registry-autoconfig.c
 @@ -706,7 +706,18 @@ evolution_source_registry_merge_autoconfig_sources (ESourceRegistryServer *serve
@@ -495,7 +590,7 @@ index 6f03053..127c92e 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -508,7 +603,7 @@ index 6f03053..127c92e 100644
  	autoconfig_sources = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, e_autoconfig_free_merge_source_data);
  
 diff --git a/src/services/evolution-source-registry/evolution-source-registry-migrate-proxies.c b/src/services/evolution-source-registry/evolution-source-registry-migrate-proxies.c
-index d531cb9..3d8807c 100644
+index d531cb9..c96f1d5 100644
 --- a/src/services/evolution-source-registry/evolution-source-registry-migrate-proxies.c
 +++ b/src/services/evolution-source-registry/evolution-source-registry-migrate-proxies.c
 @@ -61,7 +61,18 @@ evolution_source_registry_migrate_proxies (ESourceRegistryServer *server)
@@ -519,7 +614,7 @@ index d531cb9..3d8807c 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);
@@ -532,7 +627,7 @@ index d531cb9..3d8807c 100644
  	switch (g_settings_get_int (settings, "proxy-type")) {
  		case 1:
 diff --git a/src/services/evolution-source-registry/evolution-source-registry.c b/src/services/evolution-source-registry/evolution-source-registry.c
-index 1c0a113..d26b059 100644
+index 1c0a113..6b41423 100644
 --- a/src/services/evolution-source-registry/evolution-source-registry.c
 +++ b/src/services/evolution-source-registry/evolution-source-registry.c
 @@ -181,7 +181,18 @@ main (gint argc,
@@ -543,7 +638,7 @@ index 1c0a113..d26b059 100644
 +	{
 +		g_autoptr(GSettingsSchemaSource) schema_source;
 +		g_autoptr(GSettingsSchema) schema;
-+		schema_source = g_settings_schema_source_new_from_directory("@EDS_GSETTINGS_PATH@",
++		schema_source = g_settings_schema_source_new_from_directory("@EDS@",
 +									    g_settings_schema_source_get_default(),
 +									    TRUE,
 +									    NULL);

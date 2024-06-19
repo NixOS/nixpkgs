@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "csscompressor";
   version = "0.9.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -15,6 +20,6 @@ buildPythonPackage rec {
     description = "A python port of YUI CSS Compressor";
     homepage = "https://pypi.python.org/pypi/csscompressor";
     license = licenses.bsd3;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

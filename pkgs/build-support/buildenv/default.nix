@@ -1,8 +1,14 @@
 # buildEnv creates a tree of symlinks to the specified paths.  This is
-# a fork of the buildEnv in the Nix distribution.  Most changes should
-# eventually be merged back into the Nix distribution.
+# a fork of the hardcoded buildEnv in the Nix distribution.
 
 { buildPackages, runCommand, lib, substituteAll }:
+
+let
+  builder = substituteAll {
+    src = ./builder.pl;
+    inherit (builtins) storeDir;
+  };
+in
 
 lib.makeOverridable
 ({ name
@@ -43,13 +49,6 @@ lib.makeOverridable
 , passthru ? {}
 , meta ? {}
 }:
-
-let
-  builder = substituteAll {
-    src = ./builder.pl;
-    inherit (builtins) storeDir;
-  };
-in
 
 runCommand name
   rec {

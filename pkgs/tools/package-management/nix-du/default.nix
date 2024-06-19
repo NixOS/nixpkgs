@@ -12,19 +12,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-du";
-  version = "0.6.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nix-du";
     rev = "v${version}";
-    sha256 = "sha256-2OODk0Z6UpUOHrGOrMa0XZnG/CPP4yfP8kvsE9Mn3DU=";
+    sha256 = "sha256-HfmMZVlsdg9hTWGUihl6OlQAp/n1XRvPLfAKJ8as8Ew=";
   };
 
-  cargoSha256 = "sha256-LB2XJSANQOKHlbifPMd8hH26bRO06Vp+qjWomvrU8Dc=";
+  cargoSha256 = "sha256-oUxxuBqec4aI2h8BAn1WSA44UU7f5APkv0DIwuSun0M=";
 
   doCheck = true;
-  checkInputs = [ nix graphviz ];
+  nativeCheckInputs = [ nix graphviz ];
 
   buildInputs = [
     boost
@@ -40,5 +40,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.lgpl3Only;
     maintainers = [ maintainers.symphorien ];
     platforms = platforms.unix;
+    mainProgram = "nix-du";
   };
 }

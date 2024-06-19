@@ -15,15 +15,15 @@
 
 let
   pname = "wallabag";
-  version = "2.5.1";
+  version = "2.6.9";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
-  # GitHub distribution does not include vendored files
+  # Release tarball includes vendored files
   src = fetchurl {
-    url = "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz";
-    hash = "sha256-vurjWI5Sh/SFPtxd5cHaaw7edcAzNub/duhOUF+Wshk=";
+    url = "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz";
+    hash = "sha256-V4s5/y9fFAmZ+WnUxU03UyRivEihD1ZUKQOOq4TLEKw=";
   };
 
   patches = [
@@ -33,8 +33,12 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
     cp -R * $out/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

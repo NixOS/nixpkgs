@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, ruby }:
+{ lib, stdenv, fetchFromGitHub, ruby }:
 
 stdenv.mkDerivation rec {
   pname = "h";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "zimbatm";
     repo = "h";
     rev = "v${version}";
-    hash = "sha256-RyQZ9F+rZ0a/90hljSyNCzYK8eA3rYJlJkV7B5NPRzY=";
+    hash = "sha256-eitUKOo2c1c+SyctkUW/SUb2RCKUoU6nJplfJVdwBSs=";
   };
 
   buildInputs = [ ruby ];

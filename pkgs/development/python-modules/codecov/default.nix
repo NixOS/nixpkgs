@@ -1,22 +1,24 @@
-{ lib
-, buildPythonPackage
-, coverage
-, ddt
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  coverage,
+  ddt,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "codecov";
-  version = "2.1.12";
+  version = "2.1.13";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "codecov";
     repo = "codecov-python";
-    rev = "v${version}";
-    sha256 = "0bdk1cp3hxydpx9knqfv88ywwzw7yqhywi0inxjd6x53qh75prqy";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-cZEpAw8uv/XGiGzdBZ9MnabNaTP0did2GT+BkKMJM/E=";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +26,7 @@ buildPythonPackage rec {
     coverage
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     mock
     pytestCheckHook
@@ -43,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python report uploader for Codecov";
+    mainProgram = "codecov";
     homepage = "https://codecov.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];

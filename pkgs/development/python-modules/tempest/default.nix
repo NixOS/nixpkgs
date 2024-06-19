@@ -1,43 +1,53 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, pbr
-, cliff
-, jsonschema
-, testtools
-, paramiko
-, netaddr
-, oslo-concurrency
-, oslo-config
-, oslo-log
-, stestr
-, oslo-serialization
-, oslo-utils
-, fixtures
-, pyyaml
-, subunit
-, stevedore
-, prettytable
-, urllib3
-, debtcollector
-, hacking
-, oslotest
-, bash
-, python
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchPypi,
+  pbr,
+  cliff,
+  jsonschema,
+  testtools,
+  paramiko,
+  netaddr,
+  oslo-concurrency,
+  oslo-config,
+  oslo-log,
+  stestr,
+  oslo-serialization,
+  oslo-utils,
+  fixtures,
+  pythonOlder,
+  pyyaml,
+  subunit,
+  stevedore,
+  prettytable,
+  urllib3,
+  debtcollector,
+  hacking,
+  oslotest,
+  bash,
+  python,
+  setuptools,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "tempest";
-  version = "32.0.0";
+  version = "39.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MPaGhT2H8Hzk29qylQru9Z6QaRrHM+9I7N5qhe9Wts4=";
+    hash = "sha256-l4qKbTfQRWiRsoHN9fiAAiGMGP+q3gwRH1pMSXV/eSU=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pbr
     cliff
+    defusedxml
     jsonschema
     testtools
     paramiko
@@ -57,7 +67,7 @@ buildPythonApplication rec {
     debtcollector
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     hacking
     oslotest

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
-  version = "2.4.3";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-g0EvdYwgs+5l3wFKhQbf9o8iUr6NOvBqv+VM6xYThPA=";
+    hash = "sha256-Dd7sZ66iyfuoHeQYrhlx9G9g4ylGq1IBlkTF5zFlVBQ=";
   };
 
   patches = [
@@ -51,9 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

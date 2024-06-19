@@ -2,17 +2,17 @@
 , mailcap, libGL, libpulseaudio, alsa-lib, nss, gd, gst_all_1, nspr, expat, fontconfig
 , dbus, glib, zlib, openssl, libdrm, cups, avahi-compat, xorg, wayland, libudev0-shim
 # Qt 5 subpackages
-, qtbase, qtgamepad, qtserialport, qtserialbus, qtvirtualkeyboard, qtmultimedia, qtwebkit, qt3d, mlt
+, qtbase, qtgamepad, qtserialport, qtserialbus, qtvirtualkeyboard, qtmultimedia, qt3d, mlt
 }:
 
 stdenv.mkDerivation rec {
   pname = "pixinsight";
-  version = "1.8.9-1";
+  version = "1.8.9-2";
 
   src = requireFile rec {
-    name = "PI-linux-x64-${version}-20220518-c.tar.xz";
+    name = "PI-linux-x64-${version}-20230920-c.tar.xz";
     url = "https://pixinsight.com/";
-    sha256 = "sha256-AVeDJ7YYqCo7KfelUUQurjglNnTwCf0pOzJCV/bQrrw=";
+    hash = "sha256-g7paYTYv52XBg0w3d3YhVNrmt+iS20uobaUsvY6F3jM=";
     message = ''
       PixInsight is available from ${url} and requires a commercial (or trial) license.
       After a license has been obtained, PixInsight can be downloaded from the software distribution
@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
     qtserialbus
     qtvirtualkeyboard
     qtmultimedia
-    qtwebkit
   ] ++ (with xorg; [
     libX11
     libXdamage
@@ -72,6 +71,7 @@ stdenv.mkDerivation rec {
     libXext
     libXfixes
     libXrandr
+    libxkbfile
   ]);
 
   postPatch = ''

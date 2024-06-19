@@ -135,5 +135,17 @@
     "legacy_s": "1rb7h8lzlsjs08rvhhl3nwbrpj54zijijp4y0qdp4vyzsig6nisk",
     "legacy32": "0ayw09x9smihh8qp5pdvr6vvhwkvcqz36h3lh4g1b5kzxj7g9cyf",
     "legacy32_s": "10gfxlysfs9gyi1mv52idp5xk45g9h517g2jq4a8cqp2j7594v9c"
+  },
+  "50.10": {
+    "linux": "13s5p7205r9ha2j5n7carrwd0y7krq34bcdl08khp0kh2v4470a3"
+  },
+  "50.11": {
+    "linux": "0iz2d88gzvn0vjxlr99f13j4awhvh2lggjmipdwpbxhfsqih7dx0"
+  },
+  "50.12": {
+    "linux": "070014fzwszfgjyxjyij0k0hadah6s62lpi91ykp3vs220azya1m"
+  },
+  "50.13": {
+    "linux": "19wzgsdgv0vq7v2dxhypr9hayky3nm3lbra1kk9vn8ri96jdkfkw"
   }
 }

@@ -1,27 +1,28 @@
-{ lib, fetchFromGitHub, fetchpatch, pkg-config, buildDunePackage, dune-configurator, gtk3, cairo2 }:
+{ lib, fetchurl, fetchpatch, pkg-config, buildDunePackage, dune-configurator
+, gtk3, cairo2
+, camlp-streams
+}:
 
 buildDunePackage rec {
-  version = "3.1.2";
+  version = "3.1.4";
   pname = "lablgtk3";
-
-  useDune2 = true;
 
   minimalOCamlVersion = "4.05";
 
-  src = fetchFromGitHub {
-    owner = "garrigue";
-    repo = "lablgtk";
-    rev = version;
-    sha256 = "sha256:0b17w9qb1f02h3313cm62mrqlhwxficppzm72n7sf8mmwrylxbm7";
+  src = fetchurl {
+    url = "https://github.com/garrigue/lablgtk/releases/download/${version}/lablgtk3-${version}.tbz";
+    hash = "sha256-bxEVMzfnaH5yHVxAmifNYOy8GnSivLLgSE/9+1yxBI4=";
   };
 
-  patches = [ (fetchpatch {
-    name = "dune-project.patch";
-    url = "https://raw.githubusercontent.com/ocaml/opam-repository/10a48cb9fab88f67f6cb70280e0fec035c32d41c/packages/lablgtk3/lablgtk3.3.1.2/files/dune-project.patch";
-    sha256 = "03jf5hclqdq7iq84djaqcnfnnnd7z3hb48rr8n1gyxzjyx86b3fh";
-  }) ];
+  # Fix build with clang 16
+  # See: https://github.com/garrigue/lablgtk/pull/175
+  patches = fetchpatch {
+    url = "https://github.com/garrigue/lablgtk/commit/a9b64b9ed8a13855c672cde0a2d9f78687f4214b.patch";
+    hash = "sha256-j/L+yYKLlj410jx2VG77hnn9SVHCcSzmr3wpOMZhX5w=";
+  };
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dune-configurator ];
+  buildInputs = [ dune-configurator camlp-streams ];
   propagatedBuildInputs = [ gtk3 cairo2 ];
 
   meta = {

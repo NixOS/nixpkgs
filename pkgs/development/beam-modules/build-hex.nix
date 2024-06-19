@@ -5,8 +5,6 @@
 , hexPkg ? name
 , ... }@attrs:
 
-with lib;
-
 let
   pkg = self: builder (attrs // {
 
@@ -17,4 +15,4 @@ let
     };
   });
 in
-  fix pkg
+  lib.fix pkg

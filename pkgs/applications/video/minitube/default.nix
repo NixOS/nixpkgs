@@ -16,6 +16,12 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Taken from FreeBSD; already merged upstream in the media submodule
+    # (https://github.com/flaviotordini/media/commit/f6b7020f273e1fc06e6e204fab37a7c8edaa857a)
+    ./lib_media_src_mpv_mpvwidget.patch
+  ];
+
   nativeBuildInputs = [ qmake qttools ];
 
   buildInputs = [ phonon phonon-backend-vlc qtbase qtdeclarative qtx11extras mpv ];
@@ -33,5 +39,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    mainProgram = "minitube";
   };
 }

@@ -2,14 +2,17 @@
 
 stdenv.mkDerivation {
   pname = "f2c";
-  version = "20200916";
+  version = "20240312";
 
   src = fetchurl {
     url = "https://www.netlib.org/f2c/src.tgz";
-    sha256 = "0d8xfbv6dk4dz95qds7sd44b5hvara07f2g2c5g4xiwim9b7916l";
+    sha256 = "sha256-TTPve2fe31/Ad+xFAWy6NUIes2QyUi6NjFucN0pdb5k=";
   };
 
   makeFlags = [ "-f" "makefile.u" ];
+
+  # Ensure xsum binary is built from scratch
+  preBuild = "rm xsum";
 
   installPhase = ''
     runHook preInstall

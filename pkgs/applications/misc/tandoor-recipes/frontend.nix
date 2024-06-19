@@ -1,4 +1,4 @@
-{ stdenv, fetchYarnDeps, fixup_yarn_lock, callPackage, nodejs-16_x }:
+{ stdenv, fetchYarnDeps, fixup-yarn-lock, callPackage, nodejs }:
 let
   common = callPackage ./common.nix { };
 in
@@ -10,14 +10,13 @@ stdenv.mkDerivation {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${common.src}/vue/yarn.lock";
-    sha256 = common.yarnSha256;
+    hash = common.yarnHash;
   };
 
   nativeBuildInputs = [
-    fixup_yarn_lock
-    # Use Node JS 16 because of @achrinza/node-ipc@9.2.2
-    nodejs-16_x
-    nodejs-16_x.pkgs.yarn
+    fixup-yarn-lock
+    nodejs
+    nodejs.pkgs.yarn
   ];
 
   configurePhase = ''
@@ -25,7 +24,7 @@ stdenv.mkDerivation {
 
     export HOME=$(mktemp -d)
     yarn config --offline set yarn-offline-mirror "$yarnOfflineCache"
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     command -v yarn
     yarn install --frozen-lockfile --offline --no-progress --non-interactive
     patchShebangs node_modules/

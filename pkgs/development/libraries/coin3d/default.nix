@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://github.com/coin3d/coin";
     description = "High-level, retained-mode toolkit for effective 3D graphics development";
+    mainProgram = "coin-config";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gebner viric ];
     platforms = platforms.linux;

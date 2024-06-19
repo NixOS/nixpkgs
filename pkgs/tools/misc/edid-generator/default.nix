@@ -1,21 +1,34 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , dos2unix
 , edid-decode
 , hexdump
 , zsh
-, modelines ? [] # Modeline "1280x800"   83.50  1280 1352 1480 1680  800 803 809 831 -hsync +vsync
 }:
 
-stdenv.mkDerivation rec {
+# Usage:
+#   hardware.firmware = [(edid-generator.overrideAttrs {
+#     clean = true;
+#     modelines = ''
+#       Modeline "PG278Q_60"      241.50   2560 2608 2640 2720   1440 1443 1448 1481   -hsync +vsync
+#       Modeline "PG278Q_120"     497.75   2560 2608 2640 2720   1440 1443 1448 1525   +hsync -vsync
+#       Modeline "U2711_60"       241.50   2560 2600 2632 2720   1440 1443 1448 1481   -hsync +vsync
+#     '';
+#   })];
+
+stdenv.mkDerivation {
   pname = "edid-generator";
-  version = "unstable-2018-03-15";
+  version = "master-2023-11-20";
+
+  # so `hardware.firmware` doesn't compress it
+  compressFirmware = false;
 
   src = fetchFromGitHub {
     owner = "akatrevorjay";
     repo = "edid-generator";
-    rev = "31a6f80784d289d2faa8c4ca4788409c83b3ea14";
-    sha256 = "0j6wqzx5frca8b5i6812vvr5iwk7440fka70bmqn00k0vfhsc2x3";
+    rev = "476a016d8b488df749bf6d6efbf7b9fbfb2e3cb8";
+    sha256 = "sha256-UGxze273VB5cQDWrv9X/Lam6WbOu9U3bro8GcVbEvws=";
   };
 
   nativeBuildInputs = [ dos2unix edid-decode hexdump zsh ];
@@ -24,7 +37,32 @@ stdenv.mkDerivation rec {
     patchShebangs modeline2edid
   '';
 
-  configurePhase = (lib.concatMapStringsSep "\n" (m: "echo \"${m}\" | ./modeline2edid -") modelines);
+  passAsFile = [ "modelines" ];
+  clean = false;
+  modelines = "";
+
+  configurePhase = ''
+    test "$clean" != 1 || rm *x*.S
+    ./modeline2edid - <"$modelinesPath"
+
+    for file in *.S ; do
+      echo "--- generated file: $file"
+      cat "$file"
+    done
+    make clean
+  '';
+
+  buildPhase = ''
+    make all
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    for file in *.bin ; do
+      echo "validating $file"
+      edid-decode <"$file"
+    done
+  '';
 
   installPhase = ''
     install -Dm 444 *.bin -t "$out/lib/firmware/edid"
@@ -33,8 +71,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Hackerswork to generate an EDID blob from given Xorg Modelines";
     homepage = "https://github.com/akatrevorjay/edid-generator";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.flokli ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ flokli nazarewk ];
     platforms = lib.platforms.all;
     broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/edid-generator.x86_64-darwin
   };

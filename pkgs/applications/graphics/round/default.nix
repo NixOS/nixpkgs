@@ -11,10 +11,10 @@ buildGoModule rec {
     owner = "mingrammer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09brjr3h4qnhlidxlki1by5anahxy16ai078zm4k7ryl579amzdw";
+    hash = "sha256-vP2q0inU5zNJ/eiAqEzwHSqril8hTtpbpNBiAkeWeSU=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "." ];
 
@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage    = "https://github.com/mingrammer/round";
     license     = licenses.mit;
     maintainers =  with maintainers; [ addict3d ];
+    mainProgram = "round";
   };
 }

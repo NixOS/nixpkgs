@@ -11,14 +11,19 @@ let
 
   format = pkgs.formats.toml {};
   settings = {
-    database_url = dbURL;
     human_logs = true;
+    syncstorage = {
+      database_url = dbURL;
+    };
     tokenserver = {
       node_type = "mysql";
       database_url = dbURL;
       fxa_email_domain = "api.accounts.firefox.com";
       fxa_oauth_server_url = "https://oauth.accounts.firefox.com/v1";
       run_migrations = true;
+      # if JWK caching is not enabled the token server must verify tokens
+      # using the fxa api, on a thread pool with a static size.
+      additional_blocking_threads_for_fxa_requests = 10;
     } // lib.optionalAttrs cfg.singleNode.enable {
       # Single-node mode is likely to be used on small instances with little
       # capacity. The default value (0.1) can only ever release capacity when
@@ -29,12 +34,50 @@ let
     };
   };
   configFile = format.generate "syncstorage.toml" (lib.recursiveUpdate settings cfg.settings);
+  setupScript = pkgs.writeShellScript "firefox-syncserver-setup" ''
+        set -euo pipefail
+        shopt -s inherit_errexit
+
+        schema_configured() {
+          mysql ${cfg.database.name} -Ne 'SHOW TABLES' | grep -q services
+        }
+
+        update_config() {
+          mysql ${cfg.database.name} <<"EOF"
+            BEGIN;
+
+            INSERT INTO `services` (`id`, `service`, `pattern`)
+              VALUES (1, 'sync-1.5', '{node}/1.5/{uid}')
+              ON DUPLICATE KEY UPDATE service='sync-1.5', pattern='{node}/1.5/{uid}';
+            INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
+                                 `capacity`, `downed`, `backoff`)
+              VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
+              0, ${toString cfg.singleNode.capacity}, 0, 0)
+              ON DUPLICATE KEY UPDATE node = '${cfg.singleNode.url}', capacity=${toString cfg.singleNode.capacity};
+
+            COMMIT;
+        EOF
+        }
+
+
+        for (( try = 0; try < 60; try++ )); do
+          if ! schema_configured; then
+            sleep 2
+          else
+            update_config
+            exit 0
+          fi
+        done
+
+        echo "Single-node setup failed"
+        exit 1
+      '';
 in
 
 {
   options = {
     services.firefox-syncserver = {
-      enable = lib.mkEnableOption (lib.mdDoc ''
+      enable = lib.mkEnableOption ''
         the Firefox Sync storage service.
 
         Out of the box this will not be very useful unless you also configure at least
@@ -49,13 +92,13 @@ in
         ```
 
         {option}`${opt.singleNode.enable}` does this automatically when enabled
-      '');
+      '';
 
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.syncstorage-rs;
         defaultText = lib.literalExpression "pkgs.syncstorage-rs";
-        description = lib.mdDoc ''
+        description = ''
           Package to use.
         '';
       };
@@ -66,7 +109,7 @@ in
         # behavior ever change.
         type = lib.types.strMatching "[a-z_][a-z0-9_]*";
         default = defaultDatabase;
-        description = lib.mdDoc ''
+        description = ''
           Database to use for storage. Will be created automatically if it does not exist
           and `config.${opt.database.createLocally}` is set.
         '';
@@ -75,7 +118,7 @@ in
       database.user = lib.mkOption {
         type = lib.types.str;
         default = defaultUser;
-        description = lib.mdDoc ''
+        description = ''
           Username for database connections.
         '';
       };
@@ -83,7 +126,7 @@ in
       database.host = lib.mkOption {
         type = lib.types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           Database host name. `localhost` is treated specially and inserts
           systemd dependencies, other hostnames or IP addresses of the local machine do not.
         '';
@@ -92,7 +135,7 @@ in
       database.createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to create database and user on the local machine if they do not exist.
           This includes enabling unix domain socket authentication for the configured user.
         '';
@@ -101,7 +144,7 @@ in
       logLevel = lib.mkOption {
         type = lib.types.str;
         default = "error";
-        description = lib.mdDoc ''
+        description = ''
           Log level to run with. This can be a simple log level like `error`
           or `trace`, or a more complicated logging expression.
         '';
@@ -109,7 +152,7 @@ in
 
       secrets = lib.mkOption {
         type = lib.types.path;
-        description = lib.mdDoc ''
+        description = ''
           A file containing the various secrets. Should be in the format expected by systemd's
           `EnvironmentFile` directory. Two secrets are currently available:
           `SYNC_MASTER_SECRET` and
@@ -118,15 +161,15 @@ in
       };
 
       singleNode = {
-        enable = lib.mkEnableOption (lib.mdDoc "auto-configuration for a simple single-node setup");
+        enable = lib.mkEnableOption "auto-configuration for a simple single-node setup";
 
-        enableTLS = lib.mkEnableOption (lib.mdDoc "automatic TLS setup");
+        enableTLS = lib.mkEnableOption "automatic TLS setup";
 
-        enableNginx = lib.mkEnableOption (lib.mdDoc "nginx virtualhost definitions");
+        enableNginx = lib.mkEnableOption "nginx virtualhost definitions";
 
         hostname = lib.mkOption {
           type = lib.types.str;
-          description = lib.mdDoc ''
+          description = ''
             Host name to use for this service.
           '';
         };
@@ -134,7 +177,7 @@ in
         capacity = lib.mkOption {
           type = lib.types.ints.unsigned;
           default = 10;
-          description = lib.mdDoc ''
+          description = ''
             How many sync accounts are allowed on this server. Setting this value
             equal to or less than the number of currently active accounts will
             effectively deny service to accounts not yet registered here.
@@ -147,7 +190,7 @@ in
           defaultText = lib.literalExpression ''
             ''${if cfg.singleNode.enableTLS then "https" else "http"}://''${config.${opt.singleNode.hostname}}
           '';
-          description = lib.mdDoc ''
+          description = ''
             URL of the host. If you are not using the automatic webserver proxy setup you will have
             to change this setting or your sync server may not be functional.
           '';
@@ -162,7 +205,7 @@ in
             port = lib.mkOption {
               type = lib.types.port;
               default = 5000;
-              description = lib.mdDoc ''
+              description = ''
                 Port to bind to.
               '';
             };
@@ -170,21 +213,23 @@ in
             tokenserver.enabled = lib.mkOption {
               type = lib.types.bool;
               default = true;
-              description = lib.mdDoc ''
+              description = ''
                 Whether to enable the token service as well.
               '';
             };
           };
         };
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           Settings for the sync server. These take priority over values computed
           from NixOS options.
 
-          See the doc comments on the `Settings` structs in
-          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/settings.rs>
+          See the example config in
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/config/local.example.toml>
+          and the doc comments on the `Settings` structs in
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage-settings/src/lib.rs>
           and
-          <https://github.com/mozilla-services/syncstorage-rs/blob/master/syncstorage/src/tokenserver/settings.rs>
+          <https://github.com/mozilla-services/syncstorage-rs/blob/master/tokenserver-settings/src/lib.rs>
           for available options.
         '';
       };
@@ -207,12 +252,12 @@ in
       wantedBy = [ "multi-user.target" ];
       requires = lib.mkIf dbIsLocal [ "mysql.service" ];
       after = lib.mkIf dbIsLocal [ "mysql.service" ];
+      restartTriggers = lib.optional cfg.singleNode.enable setupScript;
       environment.RUST_LOG = cfg.logLevel;
       serviceConfig = {
         User = defaultUser;
         Group = defaultUser;
-        ExecStart = "${cfg.package}/bin/syncstorage --config ${configFile}";
-        Stderr = "journal";
+        ExecStart = "${cfg.package}/bin/syncserver --config ${configFile}";
         EnvironmentFile = lib.mkIf (cfg.secrets != null) "${cfg.secrets}";
 
         # hardening
@@ -252,56 +297,7 @@ in
       requires = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal "mysql.service";
       after = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal "mysql.service";
       path = [ config.services.mysql.package ];
-      script = ''
-        set -euo pipefail
-        shopt -s inherit_errexit
-
-        schema_configured() {
-          mysql ${cfg.database.name} -Ne 'SHOW TABLES' | grep -q services
-        }
-
-        services_configured() {
-          [ 1 != $(mysql ${cfg.database.name} -Ne 'SELECT COUNT(*) < 1 FROM `services`') ]
-        }
-
-        create_services() {
-          mysql ${cfg.database.name} <<"EOF"
-            BEGIN;
-
-            INSERT INTO `services` (`id`, `service`, `pattern`)
-              VALUES (1, 'sync-1.5', '{node}/1.5/{uid}');
-            INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
-                                 `capacity`, `downed`, `backoff`)
-              VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
-                      0, ${toString cfg.singleNode.capacity}, 0, 0);
-
-            COMMIT;
-        EOF
-        }
-
-        update_nodes() {
-          mysql ${cfg.database.name} <<"EOF"
-            UPDATE `nodes`
-              SET `capacity` = ${toString cfg.singleNode.capacity}
-              WHERE `id` = 1;
-        EOF
-        }
-
-        for (( try = 0; try < 60; try++ )); do
-          if ! schema_configured; then
-            sleep 2
-          elif services_configured; then
-            update_nodes
-            exit 0
-          else
-            create_services
-            exit 0
-          fi
-        done
-
-        echo "Single-node setup failed"
-        exit 1
-      '';
+      serviceConfig.ExecStart = [ "${setupScript}" ];
     };
 
     services.nginx.virtualHosts = lib.mkIf cfg.singleNode.enableNginx {
@@ -309,11 +305,11 @@ in
         enableACME = cfg.singleNode.enableTLS;
         forceSSL = cfg.singleNode.enableTLS;
         locations."/" = {
-          proxyPass = "http://localhost:${toString cfg.settings.port}";
-          # source mentions that this header should be set
-          extraConfig = ''
-            add_header X-Content-Type-Options nosniff;
-          '';
+          proxyPass = "http://127.0.0.1:${toString cfg.settings.port}";
+          # We need to pass the Host header that matches the original Host header. Otherwise,
+          # Hawk authentication will fail (because it assumes that the client and server see
+          # the same value of the Host header).
+          recommendedProxySettings = true;
         };
       };
     };
@@ -321,8 +317,6 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [ pennae ];
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc firefox-syncserver.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > firefox-syncserver.xml`
-    doc = ./firefox-syncserver.xml;
+    doc = ./firefox-syncserver.md;
   };
 }

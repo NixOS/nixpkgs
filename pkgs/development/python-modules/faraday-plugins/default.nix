@@ -1,37 +1,51 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, click
-, colorama
-, fetchFromGitHub
-, html2text
-, lxml
-, pytestCheckHook
-, python-dateutil
-, pytz
-, requests
-, simplejson
-, tabulate
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  click,
+  colorama,
+  fetchFromGitHub,
+  html2text,
+  lxml,
+  markdown,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  requests,
+  setuptools,
+  simplejson,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.7.0";
-  format = "setuptools";
+  version = "1.18.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KAfy2AQWZYFT/+rX8dNe8aWTFI0kkGg5IaSHhwYGk3A=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-oYE7Iik0+CbOfxF9IeeZotpGqV8TTz15MxJEC4VBrhk=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version=version," "version='${version}',"
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     beautifulsoup4
     click
     colorama
     html2text
     lxml
+    markdown
     python-dateutil
     pytz
     requests
@@ -39,9 +53,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # faraday itself is currently not available
@@ -57,14 +69,14 @@ buildPythonPackage rec {
     "test_process_report_tags"
   ];
 
-  pythonImportsCheck = [
-    "faraday_plugins"
-  ];
+  pythonImportsCheck = [ "faraday_plugins" ];
 
   meta = with lib; {
     description = "Security tools report parsers for Faraday";
     homepage = "https://github.com/infobyte/faraday_plugins";
-    license = with licenses; [ gpl3Only ];
+    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${version}";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "faraday-plugins";
   };
 }

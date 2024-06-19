@@ -1,5 +1,4 @@
-{ atomEnv
-, autoPatchelfHook
+{ autoPatchelfHook
 , dpkg
 , fetchurl
 , makeDesktopItem
@@ -7,11 +6,15 @@
 , stdenv
 , lib
 , udev
-, wrapGAppsHook
+, wrapGAppsHook3
 , cpio
 , xar
 , libdbusmenu
-, libxshmfence
+, alsa-lib
+, mesa
+, nss
+, nspr
+, systemd
 }:
 
 let
@@ -22,14 +25,20 @@ let
 
   pname = "wire-desktop";
 
-  version = {
-    x86_64-darwin = "3.28.4393";
-    x86_64-linux = "3.28.2946";
+  version = let
+    x86_64-darwin = "3.35.4861";
+  in {
+    inherit x86_64-darwin;
+    aarch64-darwin = x86_64-darwin;
+    x86_64-linux = "3.35.3348";
   }.${system} or throwSystem;
 
-  sha256 = {
-    x86_64-darwin = "03w8hafwxg4v85s8n3ss6bsr7fipksyjax30dnxxj72x947zygxw";
-    x86_64-linux = "03f1qz0mwn6f14w4g1w72sd5idfyvmv18r5y1h279p56x0i919kq";
+  hash = let
+    x86_64-darwin = "sha256-QPxslMEz1jOH2LceFOdCyVDtpya1SfJ8GWMIAIhie4U=";
+  in {
+    inherit x86_64-darwin;
+    aarch64-darwin = x86_64-darwin;
+    x86_64-linux = "sha256-KtDUuAzD53mFJ0+yywp0Q2/hx9MGsOhFjRLWsZAd+h0=";
   }.${system} or throwSystem;
 
   meta = with lib; {
@@ -54,19 +63,18 @@ let
       kiwi
       toonn
     ];
-    platforms = [
-      "x86_64-darwin"
+    platforms = platforms.darwin ++ [
       "x86_64-linux"
     ];
+    hydraPlatforms = [];
   };
 
   linux = stdenv.mkDerivation rec {
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://wire-app.wire.com/linux/debian/pool/main/"
-      + "Wire-${version}_amd64.deb";
-      inherit sha256;
+      url = "https://wire-app.wire.com/linux/debian/pool/main/Wire-${version}_amd64.deb";
+      inherit hash;
     };
 
     desktopItem = makeDesktopItem {
@@ -85,14 +93,21 @@ let
     dontPatchELF = true;
     dontWrapGApps = true;
 
+    # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
     nativeBuildInputs = [
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook
+      wrapGAppsHook3
     ];
 
-    buildInputs = [ libxshmfence ] ++ atomEnv.packages;
+    buildInputs = [
+      alsa-lib
+      mesa
+      nss
+      nspr
+      systemd
+    ];
 
     unpackPhase = ''
       runHook preUnpack
@@ -132,9 +147,8 @@ let
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://github.com/wireapp/wire-desktop/releases/download/"
-          + "macos%2F${version}/Wire.pkg";
-      inherit sha256;
+      url = "https://github.com/wireapp/wire-desktop/releases/download/macos%2F${version}/Wire.pkg";
+      inherit hash;
     };
 
     buildInputs = [

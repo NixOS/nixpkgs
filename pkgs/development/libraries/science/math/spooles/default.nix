@@ -13,10 +13,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./spooles.patch
+    # fix compiler error where NULL is used as a zero parameter
+    ./transform.patch
+    # use proper format specifier for size_t
+    ./allocate.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace makefile --replace '-Wl,-soname' '-Wl,-install_name'
+    substituteInPlace makefile --replace "-Wl,-soname," "-Wl,-install_name,$out/lib/"
   '';
 
   buildPhase = ''

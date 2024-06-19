@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
+{ lib, stdenv, fetchurl, qtbase, qtsvg, qttools, qmake, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "qwt";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ qtbase qtsvg qttools ];
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   postPatch = ''
     sed -e "s|QWT_INSTALL_PREFIX.*=.*|QWT_INSTALL_PREFIX = $out|g" -i qwtconfig.pri

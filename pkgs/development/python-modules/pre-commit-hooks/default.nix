@@ -1,34 +1,32 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, toml
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
-  version = "4.3.0";
+  version = "4.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-qdsSM+7ScSfxhmLAqwi1iraGHrhb5NBee/j+TKr2WUA=";
+    hash = "sha256-p/pPpuuNjVxHSPyi4RL2DJlj9weSq8QinugQ4zmv9Ck=";
   };
 
-  propagatedBuildInputs = [
-    ruamel-yaml
-    toml
-  ];
+  propagatedBuildInputs = [ ruamel-yaml ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];
@@ -47,13 +45,12 @@ buildPythonPackage rec {
     git init .
   '';
 
-  pythonImportsCheck = [
-    "pre_commit_hooks"
-  ];
+  pythonImportsCheck = [ "pre_commit_hooks" ];
 
   meta = with lib; {
     description = "Some out-of-the-box hooks for pre-commit";
     homepage = "https://github.com/pre-commit/pre-commit-hooks";
+    changelog = "https://github.com/pre-commit/pre-commit-hooks/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
   };

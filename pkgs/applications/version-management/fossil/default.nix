@@ -3,6 +3,7 @@
 , tcl
 , libiconv
 , fetchurl
+, buildPackages
 , zlib
 , openssl
 , readline
@@ -14,14 +15,17 @@
 , withJson ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fossil";
-  version = "2.19";
+  version = "2.23";
 
   src = fetchurl {
-    url = "https://www.fossil-scm.org/home/tarball/version-${version}/fossil-${version}.tar.gz";
-    sha256 = "sha256-RZ9/7b4lRJqFVyfXwzutO8C/Pa6XPyxtvpp7gmEGoj4=";
+    url = "https://www.fossil-scm.org/home/tarball/version-${finalAttrs.version}/fossil-${finalAttrs.version}.tar.gz";
+    hash = "sha256-dfgI6BNRAYqXFnRtnvGh/huxkEcz6LQYZDiB04GYhZM=";
   };
+
+  # required for build time tool `./tools/translate.c`
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ installShellFiles tcl tcllib ];
 
@@ -62,5 +66,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ maggesi viric ];
     platforms = platforms.all;
+    mainProgram = "fossil";
   };
-}
+})

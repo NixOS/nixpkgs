@@ -7,20 +7,15 @@ let
   configFile = settingsFormat.generate "lokinet.ini" (lib.filterAttrsRecursive (n: v: v != null) cfg.settings);
 in with lib; {
   options.services.lokinet = {
-    enable = mkEnableOption (lib.mdDoc "Lokinet daemon");
+    enable = mkEnableOption "Lokinet daemon";
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.lokinet;
-      defaultText = literalExpression "pkgs.lokinet";
-      description = lib.mdDoc "Lokinet package to use.";
-    };
+    package = mkPackageOption pkgs "lokinet" { };
 
     useLocally = mkOption {
       type = types.bool;
       default = false;
       example = true;
-      description = lib.mdDoc "Whether to use Lokinet locally.";
+      description = "Whether to use Lokinet locally.";
     };
 
     settings = mkOption {
@@ -33,14 +28,14 @@ in with lib; {
               bind = mkOption {
                 type = str;
                 default = "127.3.2.1";
-                description = lib.mdDoc "Address to bind to for handling DNS requests.";
+                description = "Address to bind to for handling DNS requests.";
               };
 
               upstream = mkOption {
                 type = listOf str;
                 default = [ "9.9.9.10" ];
                 example = [ "1.1.1.1" "8.8.8.8" ];
-                description = lib.mdDoc ''
+                description = ''
                   Upstream resolver(s) to use as fallback for non-loki addresses.
                   Multiple values accepted.
                 '';
@@ -51,7 +46,7 @@ in with lib; {
               exit = mkOption {
                 type = bool;
                 default = false;
-                description = lib.mdDoc ''
+                description = ''
                   Whether to act as an exit node. Beware that this
                   increases demand on the server and may pose liability concerns.
                   Enable at your own risk.
@@ -65,7 +60,7 @@ in with lib; {
                   exit-node = [ "example.loki" ];              # maps all exit traffic to example.loki
                   exit-node = [ "example.loki:100.0.0.0/24" ]; # maps 100.0.0.0/24 to example.loki
                 '';
-                description = lib.mdDoc ''
+                description = ''
                   Specify a `.loki` address and an optional ip range to use as an exit broker.
                   See <http://probably.loki/wiki/index.php?title=Exit_Nodes> for
                   a list of exit nodes.
@@ -76,7 +71,7 @@ in with lib; {
                 type = nullOr str;
                 default = null;
                 example = "snappkey.private";
-                description = lib.mdDoc ''
+                description = ''
                   The private key to persist address with. If not specified the address will be ephemeral.
                   This keyfile is generated automatically if the specified file doesn't exist.
                 '';
@@ -95,7 +90,7 @@ in with lib; {
           network.exit-node = [ "example.loki" "example2.loki" ];
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Configuration for Lokinet.
         Currently, the best way to view the available settings is by
         generating a config file using `lokinet -g`.

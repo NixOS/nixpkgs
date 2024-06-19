@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   # Workaround build failure on -fno-common toolchains:
   #   ld: postscript.o:postscript.h:29: multiple definition of
   #     `postscript_params'; fped.o:postscript.h:29: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   # This uses '/bin/bash', '/usr/local' and 'lex' by default
   makeFlags = [
@@ -41,6 +41,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "An editor that allows the interactive creation of footprints electronic components";
+    mainProgram = "fped";
     homepage = "http://projects.qi-hardware.com/index.php/p/fped/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ expipiplus1 ];

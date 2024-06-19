@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cxx-rs";
-  version = "1.0.72";
+  version = "1.0.94";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
     repo = "cxx";
     rev = version;
-    sha256 = "sha256-+OumeLSgz8kLQKhEc3icCk1q+X+S7Xt+XtAlkx8iguU=";
+    sha256 = "sha256-h6TmQyxhoOhaAWBZr9rRPCf0BE2QMBIYm5uTVKD2paE=";
   };
 
   cargoLock = {
@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Safe FFI between Rust and C++";
+    mainProgram = "cxxbridge";
     homepage = "https://github.com/dtolnay/cxx";
     license = licenses.mit;
     maintainers = with maintainers; [ centromere ];

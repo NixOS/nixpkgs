@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   #   ld: libcamlrun.a(minor_gc.o):/build/ocaml/byterun/caml/major_gc.h:67: multiple definition of
   #     `caml_major_ring'; libcamlrun.a(stacks.o):/build/ocaml/byterun/caml/major_gc.h:67: first defined here
   # Match -fcommon workaround in ocaml-4.06 itself.
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildPhase = ''
     make -j9 world.opt

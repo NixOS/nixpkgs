@@ -23,6 +23,7 @@ in stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
 
     mkdir -p $out/bin
     cp -R ${arch}/{gettext,pstosecps,rastertospl,smfpnetdiscovery,usbresetter} $out/bin
@@ -82,6 +83,8 @@ in stdenv.mkDerivation rec {
     cd $out/share/cups
     ln -s ../ppd .
     ln -s ppd model
+
+    runHook postInstall
   '';
 
   preFixup = ''
@@ -112,6 +115,6 @@ in stdenv.mkDerivation rec {
     # Tested on linux-x86_64. Might work on linux-i386.
     # Probably won't work on anything else.
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tohl ];
+    maintainers = with maintainers; [ ];
   };
 }

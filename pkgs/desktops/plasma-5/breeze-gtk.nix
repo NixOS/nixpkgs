@@ -1,6 +1,4 @@
-{ mkDerivation, lib, extra-cmake-modules, gtk2, qtbase, sassc, python3, breeze-qt5 }:
-
-let inherit (lib) getLib; in
+{ mkDerivation, extra-cmake-modules, qtbase, sassc, python3, breeze-qt5 }:
 
 mkDerivation {
   pname = "breeze-gtk";
@@ -9,9 +7,5 @@ mkDerivation {
   patches = [
     ./patches/0001-fix-add-executable-bit.patch
   ];
-  postPatch = ''
-    sed -i cmake/FindGTKEngine.cmake \
-      -e "s|\''${KDE_INSTALL_FULL_LIBDIR}|${getLib gtk2}/lib|"
-  '';
   cmakeFlags = [ "-DWITH_GTK3_VERSION=3.22" ];
 }

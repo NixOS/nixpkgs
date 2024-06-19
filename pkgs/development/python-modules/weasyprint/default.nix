@@ -1,39 +1,39 @@
-{ buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pytestCheckHook
-, cairosvg
-, flit-core
-, fonttools
-, pydyf
-, pyphen
-, cffi
-, cssselect2
-, html5lib
-, tinycss2
-, glib
-, harfbuzz
-, pango
-, fontconfig
-, lib
-, stdenv
-, ghostscript
-, isPy3k
-, substituteAll
-, pillow
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cairosvg,
+  cffi,
+  cssselect2,
+  fetchPypi,
+  flit-core,
+  fontconfig,
+  fonttools,
+  ghostscript,
+  glib,
+  harfbuzz,
+  html5lib,
+  pango,
+  pillow,
+  pydyf,
+  pyphen,
+  pytestCheckHook,
+  pythonOlder,
+  substituteAll,
+  tinycss2,
 }:
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "54.3";
-  disabled = !isPy3k;
-
+  version = "61.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    sha256 = "sha256-4E2gQGMFZsRMqiAgM/B/hYdl9TZwkEWoCXOfPQSOidY=";
+    hash = "sha256-R99s/u/4xsKM8uTK+DfN4XcV7+RicIradLqi6zkbYFk=";
   };
 
   patches = [
@@ -46,17 +46,9 @@ buildPythonPackage rec {
       pangocairo = "${pango.out}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
-    # Disable tests for new Ghostscript
-    # Remove when next version is released
-    (fetchpatch {
-      url = "https://github.com/Kozea/WeasyPrint/commit/e544398b00d76bc0317ea7e2abe40dc46b380910.patch";
-      sha256 = "sha256-oQO3j9Mo1x98WaLPROxsOn0qkeYRJrCx5QWWKoHvabE=";
-    })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     cffi
@@ -69,7 +61,7 @@ buildPythonPackage rec {
     tinycss2
   ] ++ fonttools.optional-dependencies.woff;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ghostscript
   ];
@@ -86,6 +78,9 @@ buildPythonPackage rec {
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
+  # Set env variable explicitly for Darwin, but allow overriding when invoking directly
+  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}" ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--isort --flake8 --cov --no-cov-on-fail" ""
@@ -96,9 +91,12 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
+  pythonImportsCheck = [ "weasyprint" ];
+
   meta = with lib; {
-    homepage = "https://weasyprint.org/";
     description = "Converts web documents to PDF";
+    mainProgram = "weasyprint";
+    homepage = "https://weasyprint.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ elohmeier ];
   };

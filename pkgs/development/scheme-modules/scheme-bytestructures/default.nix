@@ -17,17 +17,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Wvs288K8BVjUuWvvzpDGBwOxL7mAXjVtgIwJAsQd0L4=";
   };
 
-  postConfigure = ''
-    sed -i '/moddir\s*=/s%=.*%=''${out}/share/guile/site%' Makefile;
-    sed -i '/godir\s*=/s%=.*%=''${out}/share/guile/ccache%' Makefile;
-  '';
-
+  strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook pkg-config
+    autoreconfHook guile pkg-config
   ];
   buildInputs = [
     guile
   ];
+
+  doCheck = true;
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
+
+  # In procedure bytevector-u8-ref: Argument 2 out of range
+  dontStrip = stdenv.isDarwin;
 
   meta = with lib; {
     description = "Structured access to bytevector contents";

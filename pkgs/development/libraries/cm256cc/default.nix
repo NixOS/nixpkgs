@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost } :
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost } :
 
 stdenv.mkDerivation rec {
   pname = "cm256cc";
@@ -10,6 +10,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-T7ZUVVYGdzAialse//MoqWCVNBpbZvzWMAKc0cw7O9k=";
   };
+
+  patches = [
+    # Pull fix pending upstream inclusion for gcc-13 support:
+    #   https://github.com/f4exb/cm256cc/pull/18
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/f4exb/cm256cc/commit/a7f142bcdae8be1c646d67176ba0ba0f7e8dcd68.patch";
+      hash = "sha256-J7bm44sqnGsdPhJxQrE8LDxZ6tkTzLslHQnnKmtgrtM=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ];
@@ -23,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast GF(256) Cauchy MDS Block Erasure Codec in C++";
     homepage = "https://github.com/f4exb/cm256cc";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ alkeryn ];
     license = licenses.gpl3;
   };

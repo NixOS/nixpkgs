@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ bew ];
     platforms = with platforms; linux;
+    mainProgram = "rofi";
   };
 }

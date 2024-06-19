@@ -3,7 +3,6 @@
   dnsmasq,
   fetchFromGitHub,
   lib,
-  nixosTests,
   makeWrapper,
 }:
 
@@ -23,17 +22,14 @@ buildGoModule rec {
     wrapProgram $out/bin/dnsname --prefix PATH : ${lib.makeBinPath [ dnsmasq ]}
   '';
 
-  vendorSha256 = null;
+  vendorHash = null;
   subPackages = [ "plugins/meta/dnsname" ];
 
   doCheck = false; # NOTE: requires root privileges
 
-  passthru.tests = {
-    inherit (nixosTests) podman-dnsname;
-  };
-
   meta = with lib; {
     description = "DNS name resolution for containers";
+    mainProgram = "dnsname";
     homepage = "https://github.com/containers/dnsname";
     license = licenses.asl20;
     platforms = platforms.linux;

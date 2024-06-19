@@ -1,41 +1,41 @@
 { lib, stdenv
 , fetchurl
 , pkg-config
-, gtk3
-, gtkspell3
-, isocodes
-, goocanvas2
+, wrapGAppsHook3
 , intltool
 , itstool
 , libxml2
+, gobject-introspection
+, gtk3
+, goocanvas2
+, gtkspell3
+, isocodes
 , gnome
 , python3
-, gobject-introspection
-, wrapGAppsHook
 , tesseract4
 , extraOcrEngines ? [] # other supported engines are: ocrad gocr cuneiform
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ocrfeeder";
   version = "0.8.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-sD0qWUndguJzTw0uy0FIqupFf4OX6dTFvcd+Mz+8Su0=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     itstool
     libxml2
+    gobject-introspection
   ];
 
   buildInputs = [
     gtk3
-    gobject-introspection
     goocanvas2
     gtkspell3
     isocodes
@@ -59,15 +59,15 @@ stdenv.mkDerivation rec {
   ] ++ extraOcrEngines);
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${enginesPath}")
+    gappsWrapperArgs+=(--prefix PATH : "${finalAttrs.enginesPath}")
     gappsWrapperArgs+=(--set ISO_CODES_DIR "${isocodes}/share/xml/iso-codes")
   '';
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/OCRFeeder";
+    homepage = "https://gitlab.gnome.org/GNOME/ocrfeeder";
     description = "Complete Optical Character Recognition and Document Analysis and Recognition program";
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})

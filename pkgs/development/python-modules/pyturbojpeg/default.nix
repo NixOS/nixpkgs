@@ -1,22 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, libjpeg_turbo
-, numpy
-, python
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  libjpeg_turbo,
+  setuptools,
+  numpy,
+  python,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
   pname = "pyturbojpeg";
-  version = "1.6.7";
-  format = "setuptools";
+  version = "1.7.3";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyTurboJPEG";
     inherit version;
-    hash = "sha256-e++Dl7khHWLXo+G9Gd8RQiF458OtYn+X7JU6HF6WzYA=";
+    hash = "sha256-edSOOrU0YVKP+4AJxCCYnQh6iewxVFTM1QmU88mukis=";
   };
 
   patches = [
@@ -26,18 +28,16 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ numpy ];
 
   # upstream has no tests, but we want to test whether the library is found
   checkPhase = ''
     ${python.interpreter} -c 'from turbojpeg import TurboJPEG; TurboJPEG()'
   '';
 
-  pythonImportsCheck = [
-    "turbojpeg"
-  ];
+  pythonImportsCheck = [ "turbojpeg" ];
 
   meta = with lib; {
     description = "A Python wrapper of libjpeg-turbo for decoding and encoding JPEG image";

@@ -8,9 +8,23 @@ with lib;
 {
   options = {
 
+    netboot.squashfsCompression = mkOption {
+      default = with pkgs.stdenv.hostPlatform; "xz -Xdict-size 100% "
+                + lib.optionalString isx86 "-Xbcj x86"
+                # Untested but should also reduce size for these platforms
+                + lib.optionalString isAarch "-Xbcj arm"
+                + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
+                + lib.optionalString (isSparc) "-Xbcj sparc";
+      description = ''
+        Compression settings to use for the squashfs nix store.
+      '';
+      example = "zstd -Xcompression-level 6";
+      type = types.str;
+    };
+
     netboot.storeContents = mkOption {
       example = literalExpression "[ pkgs.stdenv ]";
-      description = lib.mdDoc ''
+      description = ''
         This option lists additional derivations to be included in the
         Nix store in the generated netboot image.
       '';
@@ -25,9 +39,8 @@ with lib;
 
     # !!! Hack - attributes expected by other modules.
     environment.systemPackages = [ pkgs.grub2_efi ]
-      ++ (if pkgs.stdenv.hostPlatform.system == "aarch64-linux"
-          then []
-          else [ pkgs.grub2 pkgs.syslinux ]);
+      ++ (lib.optionals (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.syslinux)
+        [pkgs.grub2 pkgs.syslinux]);
 
     fileSystems."/" = mkImageMediaOverride
       { fsType = "tmpfs";
@@ -50,19 +63,12 @@ with lib;
       };
 
     fileSystems."/nix/store" = mkImageMediaOverride
-      { fsType = "overlay";
-        device = "overlay";
-        options = [
-          "lowerdir=/nix/.ro-store"
-          "upperdir=/nix/.rw-store/store"
-          "workdir=/nix/.rw-store/work"
-        ];
-
-        depends = [
-          "/nix/.ro-store"
-          "/nix/.rw-store/store"
-          "/nix/.rw-store/work"
-        ];
+      { overlay = {
+          lowerdir = [ "/nix/.ro-store" ];
+          upperdir = "/nix/.rw-store/store";
+          workdir = "/nix/.rw-store/work";
+        };
+        neededForBoot = true;
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "overlay" ];
@@ -77,6 +83,7 @@ with lib;
     # Create the squashfs image that contains the Nix store.
     system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
       storeContents = config.netboot.storeContents;
+      comp = config.netboot.squashfsCompression;
     };
 
 

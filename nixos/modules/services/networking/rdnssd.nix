@@ -20,8 +20,7 @@ in
       type = types.bool;
       default = false;
       #default = config.networking.enableIPv6;
-      description =
-        lib.mdDoc ''
+      description = ''
           Whether to enable the RDNSS daemon
           ({command}`rdnssd`), which configures DNS servers in
           {file}`/etc/resolv.conf` from RDNSS

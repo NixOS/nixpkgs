@@ -31,8 +31,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Quantum mechanics-based minigolf-like game";
+    mainProgram = "quantumminigolf";
     license = licenses.gpl2;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

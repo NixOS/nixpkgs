@@ -1,17 +1,19 @@
-{ lib
-, blas
-, lapack
-, buildPythonPackage
-, cffi
-, fetchFromGitHub
-, nose
-, numpy
-, stdenv
+{
+  lib,
+  blas,
+  lapack,
+  buildPythonPackage,
+  cffi,
+  fetchFromGitHub,
+  nose,
+  numpy,
+  stdenv,
 }:
 
 buildPythonPackage {
   pname = "prox-tv";
   version = "3.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "albarji";
@@ -20,9 +22,7 @@ buildPythonPackage {
     sha256 = "0mlrjbb5rw78dgijkr3bspmsskk6jqs9y7xpsgs35i46dvb327q5";
   };
 
-  checkInputs = [
-    nose
-  ];
+  nativeCheckInputs = [ nose ];
 
   propagatedBuildInputs = [
     numpy
@@ -36,7 +36,10 @@ buildPythonPackage {
 
   propagatedNativeBuildInputs = [ cffi ];
 
-  buildInputs = [ blas lapack ];
+  buildInputs = [
+    blas
+    lapack
+  ];
 
   enableParallelBuilding = true;
 

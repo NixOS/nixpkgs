@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchgit
-, pyptlib
-, twisted
-, pycrypto
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchgit,
+  pyptlib,
+  twisted,
+  pycrypto,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "obfsproxy";
   version = "0.2.13";
+  format = "setuptools";
 
   src = fetchgit {
     url = "https://git.torproject.org/pluggable-transports/obfsproxy.git";
@@ -22,7 +24,12 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "argparse" ""
   '';
 
-  propagatedBuildInputs = [ pyptlib twisted pycrypto pyyaml ];
+  propagatedBuildInputs = [
+    pyptlib
+    twisted
+    pycrypto
+    pyyaml
+  ];
 
   # No tests in archive
   doCheck = false;
@@ -32,5 +39,4 @@ buildPythonPackage rec {
     homepage = "https://www.torproject.org/projects/obfsproxy";
     maintainers = with maintainers; [ thoughtpolice ];
   };
-
 }

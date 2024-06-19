@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jdk, python2 }:
+{ lib, stdenv, fetchurl, jdk }:
 
 stdenv.mkDerivation rec {
   pname = "antlr";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
   patches = [ ./2.7.7-fixes.patch ];
   buildInputs = [ jdk ];
-  nativeBuildInputs = [ python2 ];
+
+  CXXFLAGS = lib.optionalString stdenv.isDarwin "-D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION";
 
   meta = with lib; {
     description = "Powerful parser generator";

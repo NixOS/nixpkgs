@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
       used to estimate the musical key of many different audio formats.
     '';
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    mainProgram = "keyfinder-cli";
   };
 }

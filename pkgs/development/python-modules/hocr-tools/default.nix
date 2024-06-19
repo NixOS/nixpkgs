@@ -1,13 +1,15 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pillow
-, reportlab
-, lib
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pillow,
+  reportlab,
+  lib,
 }:
 buildPythonPackage rec {
   pname = "hocr-tools";
   version = "1.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tmbdev";
@@ -19,7 +21,11 @@ buildPythonPackage rec {
   # hocr-tools uses a test framework that requires internet access
   doCheck = false;
 
-  propagatedBuildInputs = [ pillow lxml reportlab ];
+  propagatedBuildInputs = [
+    pillow
+    lxml
+    reportlab
+  ];
 
   meta = with lib; {
     description = "

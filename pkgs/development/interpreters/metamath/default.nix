@@ -15,14 +15,15 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Interpreter for the metamath proof language";
+    mainProgram = "metamath";
     longDescription = ''
       The metamath program is an ASCII-based ANSI C program with a command-line
       interface. It was used (along with mmj2) to build and verify the proofs
       in the Metamath Proof Explorer, and it generated its web pages. The *.mm
       ASCII databases (set.mm and others) are also included in this derivation.
     '';
-    homepage = "http://us.metamath.org";
-    downloadPage = "http://us.metamath.org/#downloads";
+    homepage = "https://us.metamath.org";
+    downloadPage = "https://us.metamath.org/#downloads";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.taneb ];
     platforms = platforms.all;

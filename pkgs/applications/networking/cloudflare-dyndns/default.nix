@@ -1,17 +1,10 @@
 { lib
-, buildPythonApplication
-, attrs
-, click
-, cloudflare
+, python3
 , fetchFromGitHub
 , fetchpatch
-, poetry-core
-, pydantic
-, pytestCheckHook
-, requests
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "cloudflare-dyndns";
   version = "4.1";
   format = "pyproject";
@@ -23,19 +16,19 @@ buildPythonApplication rec {
     hash = "sha256-6Q5fpJ+HuQ+hc3xTtB5tR43pn9WZ0nZZR723iLAkpis=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     attrs
     click
     cloudflare
-    pydantic
+    pydantic_1
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
@@ -63,5 +56,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/kissgyorgy/cloudflare-dyndns";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault ];
+    mainProgram = "cloudflare-dyndns";
   };
 }

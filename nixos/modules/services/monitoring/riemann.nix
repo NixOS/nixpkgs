@@ -27,16 +27,11 @@ in {
   options = {
 
     services.riemann = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Enable the Riemann network monitoring daemon.
-        '';
-      };
+      enable = mkEnableOption "Riemann network monitoring daemon";
+
       config = mkOption {
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Contents of the Riemann configuration file. For more complicated
           config you should use configFile.
         '';
@@ -44,7 +39,7 @@ in {
       configFiles = mkOption {
         type = with types; listOf path;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Extra files containing Riemann configuration. These files will be
           loaded at runtime by Riemann (with Clojure's
           `load-file` function) at the end of the
@@ -54,7 +49,7 @@ in {
       };
       configFile = mkOption {
         type = types.str;
-        description = lib.mdDoc ''
+        description = ''
           A Riemann config file. Any files in the same directory as this file
           will be added to the classpath by Riemann.
         '';
@@ -62,14 +57,14 @@ in {
       extraClasspathEntries = mkOption {
         type = with types; listOf str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Extra entries added to the Java classpath when running Riemann.
         '';
       };
       extraJavaOpts = mkOption {
         type = with types; listOf str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Extra Java options used when launching Riemann.
         '';
       };

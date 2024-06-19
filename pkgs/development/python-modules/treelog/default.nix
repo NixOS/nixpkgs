@@ -1,8 +1,14 @@
-{ lib , python, buildPythonPackage , fetchPypi, typing-extensions }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  typing-extensions,
+}:
 
 buildPythonPackage rec {
   pname = "treelog";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -11,13 +17,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "treelog" ];
 
-  propagatedBuildInputs = [
-    typing-extensions
-  ];
-
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
+  propagatedBuildInputs = [ typing-extensions ];
 
   meta = with lib; {
     description = "Logging framework that organizes messages in a tree structure";

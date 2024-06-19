@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "closure-compiler";
-  version = "20220905";
+  version = "20231112";
 
   src = fetchurl {
     url = "mirror://maven/com/google/javascript/closure-compiler/v${version}/closure-compiler-v${version}.jar";
-    sha256 = "sha256-+1f6ILeoMO+6a+uL3y95PAbcyr2KXh0yMQfzsUcCg0E=";
+    sha256 = "sha256-oH1/QZX8cF9sZikP5XpNdfsMepJrgW+uX0OGHhJVbmw=";
   };
 
   dontUnpack = true;
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tool for making JavaScript download and run faster";
+    mainProgram = "closure-compiler";
     homepage = "https://developers.google.com/closure/compiler/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;

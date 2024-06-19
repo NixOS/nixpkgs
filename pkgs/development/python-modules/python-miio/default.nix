@@ -1,27 +1,29 @@
-{ lib
-, android-backup
-, appdirs
-, attrs
-, buildPythonPackage
-, click
-, construct
-, croniter
-, cryptography
-, defusedxml
-, fetchPypi
-, importlib-metadata
-, micloud
-, netifaces
-, poetry-core
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pytz
-, pyyaml
-, tqdm
-, zeroconf
+{
+  lib,
+  android-backup,
+  appdirs,
+  attrs,
+  buildPythonPackage,
+  click,
+  construct,
+  croniter,
+  cryptography,
+  defusedxml,
+  fetchPypi,
+  fetchpatch,
+  importlib-metadata,
+  micloud,
+  netifaces,
+  poetry-core,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  tqdm,
+  zeroconf,
 }:
-
 
 buildPythonPackage rec {
   pname = "python-miio";
@@ -35,8 +37,14 @@ buildPythonPackage rec {
     hash = "sha256-BJw1Gg3FO2R6WWKjkrpxDN4fTMTug5AIj0SNq1gEbBY=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
+  nativeBuildInputs = [ poetry-core ];
+
+  patches = [
+    (fetchpatch {
+      # Fix pytest 7.2 compat
+      url = "https://github.com/rytilahti/python-miio/commit/67d9d771d04d51f5bd97f361ca1c15ae4a18c274.patch";
+      hash = "sha256-Os9vCSKyieCqHs63oX6gcLrtv1N7hbX5WvEurelEp8w=";
+    })
   ];
 
   propagatedBuildInputs = [
@@ -54,26 +62,15 @@ buildPythonPackage rec {
     pyyaml
     tqdm
     zeroconf
-  ] ++ lib.optional (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'defusedxml = "^0"' 'defusedxml = "*"'
-    # Will be fixed with the next release, https://github.com/rytilahti/python-miio/pull/1378
-    substituteInPlace miio/integrations/vacuum/roborock/vacuum_cli.py \
-      --replace "resultcallback" "result_callback"
-  '';
-
-  pythonImportsCheck = [
-    "miio"
-  ];
+  pythonImportsCheck = [ "miio" ];
 
   meta = with lib; {
     description = "Python library for interfacing with Xiaomi smart appliances";

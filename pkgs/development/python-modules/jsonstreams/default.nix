@@ -1,8 +1,16 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, six, }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "jsonstreams";
   version = "0.6.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dcbaker";
@@ -13,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests --doctest-modules jsonstreams" ];
 
   meta = with lib; {

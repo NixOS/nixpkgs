@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  CXXFLAGS = "-std=c++98";
+
   buildInputs = [
     freetype
     fribidi
@@ -53,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A bastard hacked offspring of Blackbox";
-    homepage = "http://github.com/museoa/hackedbox/";
+    homepage = "https://github.com/museoa/hackedbox/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     inherit (libX11.meta) platforms;

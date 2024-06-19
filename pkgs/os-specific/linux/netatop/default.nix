@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [ kmod zlib ];
 
   hardeningDisable = [ "pic" ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-fallthrough" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-fallthrough" ];
 
   patches = [
     # fix paths in netatop.service
@@ -47,6 +47,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Network monitoring module for atop";
+    mainProgram = "netatopd";
     homepage = "https://www.atoptool.nl/downloadnetatop.php";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

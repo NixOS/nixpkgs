@@ -1,34 +1,35 @@
-{ buildPythonPackage
-, cloudpickle
-, dm-haiku
-, einops
-, fetchFromGitHub
-, flax
-, hypothesis
-, jaxlib
-, keras
-, lib
-, poetry-core
-, pytestCheckHook
-, pyyaml
-, rich
-, tensorflow
-, treeo
-, torchmetrics
-, pythonRelaxDepsHook
-, torch
+{
+  buildPythonPackage,
+  cloudpickle,
+  dm-haiku,
+  einops,
+  fetchFromGitHub,
+  flax,
+  hypothesis,
+  jaxlib,
+  keras,
+  lib,
+  poetry-core,
+  pytestCheckHook,
+  pyyaml,
+  rich,
+  tensorflow,
+  treeo,
+  torchmetrics,
+  pythonRelaxDepsHook,
+  torch,
 }:
 
 buildPythonPackage rec {
   pname = "treex";
-  version = "0.6.10";
+  version = "0.6.11";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cgarciae";
     repo = pname;
-    rev = version;
-    hash = "sha256-ZHfgmRNbFh8DFZkmilY0pmRNQhJFqT689I7Lu8FuFm4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ObOnbtAT4SlrwOms1jtn7/XKZorGISGY6VuhQlC3DaQ=";
   };
 
   # At the time of writing (2022-03-29), rich is currently at version 11.0.0.
@@ -57,7 +58,7 @@ buildPythonPackage rec {
     torch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cloudpickle
     dm-haiku
     hypothesis

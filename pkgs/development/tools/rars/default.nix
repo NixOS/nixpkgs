@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "rars";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchurl {
-    url = "https://github.com/TheThirdOne/rars/releases/download/v${version}/rars1_5.jar";
-    sha256 = "sha256-w75gfARfR46Up6qng1GYL0u8ENfpD3xHhl/yp9lEcUE=";
+    url = "https://github.com/TheThirdOne/rars/releases/download/v${version}/rars1_6.jar";
+    hash = "sha256-eA9zDrRXsbpgnpaKzMLIt32PksPZ2/MMx/2zz7FOjCQ=";
   };
 
   dontUnpack = true;
@@ -24,6 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     description = "RISC-V Assembler and Runtime Simulator";
+    mainProgram = "rars";
     homepage = "https://github.com/TheThirdOne/rars";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;

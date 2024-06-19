@@ -29,7 +29,7 @@ let
 
       export PATH=$PATH:${pkgs.iproute2}/sbin
 
-      ip link set $IFNAME up
+      ip link set dev $IFNAME up
       ip address add ${cfg.ipAddress} dev $IFNAME
       ip route add ${cfg.subnet} dev $IFNAME
 
@@ -42,12 +42,12 @@ in
 {
   options = {
     services.gvpe = {
-      enable = lib.mkEnableOption (lib.mdDoc "gvpe");
+      enable = lib.mkEnableOption "gvpe";
 
       nodename = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description =lib.mdDoc ''
+        description = ''
           GVPE node name
         '';
       };
@@ -68,7 +68,7 @@ in
           on alpha if-up = if-up-0
           on alpha pid-file = /var/gvpe/gvpe.pid
         '';
-        description = lib.mdDoc ''
+        description = ''
           GVPE config contents
         '';
       };
@@ -76,14 +76,14 @@ in
         default = null;
         type = types.nullOr types.path;
         example = "/root/my-gvpe-conf";
-        description = lib.mdDoc ''
+        description = ''
           GVPE config file, if already present
         '';
       };
       ipAddress = mkOption {
         default = null;
         type = types.nullOr types.str;
-        description = lib.mdDoc ''
+        description = ''
           IP address to assign to GVPE interface
         '';
       };
@@ -91,14 +91,14 @@ in
         default = null;
         type = types.nullOr types.str;
         example = "10.0.0.0/8";
-        description = lib.mdDoc ''
+        description = ''
           IP subnet assigned to GVPE network
         '';
       };
       customIFSetup = mkOption {
         default = "";
         type = types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Additional commands to apply in ifup script
         '';
       };

@@ -1,30 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, makeWrapper
-, SDL2
-, SDL2_image
-, SDL2_mixer
+{ lib, stdenv, fetchFromGitLab, cmake, makeWrapper, SDL2, SDL2_image, SDL2_mixer
 }:
 
 stdenv.mkDerivation rec {
   pname = "infra-arcana";
-  version = "21.0.1";
+  version = "22.1.0";
 
   src = fetchFromGitLab {
     owner = "martin-tornqvist";
     repo = "ia";
     rev = "v${version}";
-    sha256 = "sha256-E2ssxdYa27qRk5cCmM7A5VqXGExwXHblR34y+rOUBRI=";
+    sha256 = "sha256-MI+wH0+1f41JYXT2hzDs3RrrR3eTfOzgtCa5T6m8oQc=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ SDL2 SDL2_image SDL2_mixer ];
-
-  # Some parts of the game don't compile with glibc 2.34. As soon as
-  # this is fixed upstream we can switch to the default build flags.
-  buildFlags = [ "ia" ];
 
   installPhase = ''
     runHook preInstall
@@ -35,7 +24,7 @@ stdenv.mkDerivation rec {
     rm -rf CMake* cmake* compile_commands.json CTest* Makefile
     cp -ra * $out/opt/ia
 
-    # Uses relative paths when looking for assets
+    # IA uses relative paths when looking for assets
     wrapProgram $out/opt/ia/ia --run "cd $out/opt/ia"
     ln -s $out/opt/ia/ia $out/bin/infra-arcana
 
@@ -45,6 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://sites.google.com/site/infraarcana";
     description = "A Lovecraftian single-player roguelike game";
+    mainProgram = "infra-arcana";
     longDescription = ''
       Infra Arcana is a Roguelike set in the early 20th century. The goal is to
       explore the lair of a dreaded cult called The Church of Starry Wisdom.

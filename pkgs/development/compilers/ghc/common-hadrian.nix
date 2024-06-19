@@ -5,7 +5,7 @@
     if rev != null
     then "https://gitlab.haskell.org/ghc/ghc.git"
     else "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
-
+, postFetch ? null
 }:
 
 { lib
@@ -19,7 +19,6 @@
 , autoconf
 , automake
 , coreutils
-, fetchpatch
 , fetchurl
 , fetchgit
 , perl
@@ -29,6 +28,7 @@
 , xattr
 , autoSignDarwinBinariesHook
 , bash
+, srcOnly
 
 , libiconv ? null, ncurses
 , glibcLocales ? null
@@ -39,8 +39,9 @@
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc
-              || (stdenv.targetPlatform.isAarch64 && stdenv.targetPlatform.isDarwin))
-, # LLVM is conceptually a run-time-only depedendency, but for
+              || stdenv.targetPlatform.isAarch64
+              || stdenv.targetPlatform.isGhcjs)
+, # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
   buildTargetLlvmPackages
@@ -48,21 +49,23 @@
 
 , # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
-  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp)
+  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp
+                         && lib.meta.availableOn stdenv.targetPlatform gmp)
+                       || stdenv.targetPlatform.isGhcjs
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
-  # aarch64 outputs otherwise exceed 2GB limit
-, enableProfiledLibs ? !stdenv.targetPlatform.isAarch64
+, enableProfiledLibs ? true
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic
+  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs
 
 , # Whether to build terminfo.
-  enableTerminfo ? !stdenv.targetPlatform.isWindows
+  enableTerminfo ? !(stdenv.targetPlatform.isWindows
+                     || stdenv.targetPlatform.isGhcjs)
 
 , # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
   enableDwarf ? (stdenv.targetPlatform.isx86 ||
@@ -87,7 +90,7 @@
       transformers =
         lib.optionals useLLVM [ "llvm" ]
         ++ lib.optionals (!enableShared) [
-          "fully_static"
+          "no_dynamic_libs"
           "no_dynamic_ghc"
         ]
         ++ lib.optionals (!enableProfiledLibs) [ "no_profiled_libs" ]
@@ -113,8 +116,11 @@
     -- no way to set this via the command line
     finalStage :: Stage
     finalStage = ${
-      if stdenv.hostPlatform == stdenv.targetPlatform
-      then "Stage2" # native compiler
+      # Always build the stage 2 compiler if possible. Note we can currently
+      # assume hostPlatform == buildPlatform.
+      # TODO(@sternenseemann): improve this condition when we can cross-compile GHC
+      if stdenv.hostPlatform.canExecute stdenv.targetPlatform
+      then "Stage2" # native compiler or “native” cross e.g. pkgsStatic
       else "Stage1" # cross compiler
     }
 
@@ -139,14 +145,68 @@
         return $ verbosity >= Verbose
   ''
 
+, ghcSrc ?
+    srcOnly {
+      name = "ghc-${version}"; # -source appended by srcOnly
+      src =
+        (if rev != null then fetchgit else fetchurl) ({
+          inherit url sha256;
+        } // lib.optionalAttrs (rev != null) {
+          inherit rev;
+        } // lib.optionalAttrs (postFetch != null) {
+          inherit postFetch;
+        });
+
+      patches =
+        let
+          # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
+          enableHyperlinkedSource =
+            lib.versionAtLeast version "9.8" ||
+            !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
+        in
+        [
+          # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+          (if lib.versionAtLeast version "9.8"
+           then ./docs-sphinx-7-ghc98.patch
+           else ./docs-sphinx-7.patch )
+        ]
+        ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+          # Prevent the paths module from emitting symbols that we don't use
+          # when building with separate outputs.
+          #
+          # These cause problems as they're not eliminated by GHC's dead code
+          # elimination on aarch64-darwin. (see
+          # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+          ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
+        ]
+        # Prevents passing --hyperlinked-source to haddock. This is a custom
+        # workaround as we wait for this to be configurable via userSettings or
+        # similar. https://gitlab.haskell.org/ghc/ghc/-/issues/23625
+        ++ lib.optionals (!enableHyperlinkedSource) [
+          # TODO(@sternenseemann): Doesn't apply for GHC >= 9.8
+          ../../tools/haskell/hadrian/disable-hyperlinked-source.patch
+        ]
+        # Incorrect bounds on Cabal in hadrian
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/24100
+        ++ lib.optionals (lib.elem version [ "9.8.1" "9.8.2" ]) [
+          ../../tools/haskell/hadrian/hadrian-9.8.1-allow-Cabal-3.10.patch
+        ];
+    }
+
+  # GHC's build system hadrian built from the GHC-to-build's source tree
+  # using our bootstrap GHC.
+, hadrian ? import ../../tools/haskell/hadrian/make-hadrian.nix { inherit bootPkgs lib; } {
+    inherit ghcSrc;
+    ghcVersion = version;
+    userSettings = hadrianUserSettings;
+  }
+
 , #  Whether to build sphinx documentation.
+  # TODO(@sternenseemann): Hadrian ignores the --docs flag if finalStage = Stage1
   enableDocs ? (
-    # Docs disabled for musl and cross because it's a large task to keep
-    # all `sphinx` dependencies building in those environments.
-    # `sphinx` pulls in among others:
-    # Ruby, Python, Perl, Rust, OpenGL, Xorg, gtk, LLVM.
-    (stdenv.targetPlatform == stdenv.hostPlatform)
-    && !stdenv.hostPlatform.isMusl
+    # Docs disabled if we are building on musl because it's a large task to keep
+    # all `sphinx` dependencies building in this environment.
+    !stdenv.buildPlatform.isMusl
   )
 
 , # Whether to disable the large address space allocator
@@ -156,19 +216,7 @@
 
 assert !enableNativeBignum -> gmp != null;
 
-assert stdenv.hostPlatform == stdenv.targetPlatform || throw ''
-  hadrian doesn't support building an installable GHC cross-compiler at the moment.
-  Consider using GHC 9.4.2 or lower which support this via the make build system.
-  See also: https://gitlab.haskell.org/ghc/ghc/-/issues/22090
-'';
-
 let
-  src = (if rev != null then fetchgit else fetchurl) ({
-    inherit url sha256;
-  } // lib.optionalAttrs (rev != null) {
-    inherit rev;
-  });
-
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   inherit (bootPkgs) ghc;
@@ -184,34 +232,27 @@ let
     # be needed for TemplateHaskell. This solution was described in
     # https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
     lib.optionals enableRelocatedStaticLibs [
-      "*.*.rts.*.opts += -fPIC -fexternal-dynamic-refs"
       "*.*.ghc.*.opts += -fPIC -fexternal-dynamic-refs"
     ]
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
       "*.*.ghc.c.opts += -optc-std=gnu99"
     ];
 
-  # GHC's build system hadrian built from the GHC-to-build's source tree
-  # using our bootstrap GHC.
-  hadrian = bootPkgs.callPackage ../../tools/haskell/hadrian {
-    ghcSrc = src;
-    ghcVersion = version;
-    userSettings = hadrianUserSettings;
-  };
-
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
-    ++ [libffi]
+    ++ lib.optionals (!targetPlatform.isGhcjs) [libffi]
     # Bindist configure script fails w/o elfutils in linker search path
     # https://gitlab.haskell.org/ghc/ghc/-/issues/22081
     ++ lib.optional enableDwarf elfutils
     ++ lib.optional (!enableNativeBignum) gmp
-    ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
+    ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows && !targetPlatform.isGhcjs) libiconv;
 
   # TODO(@sternenseemann): is buildTarget LLVM unnecessary?
   # GHC doesn't seem to have {LLC,OPT}_HOST
   toolsForTarget = [
-    pkgsBuildTarget.targetPackages.stdenv.cc
+    (if targetPlatform.isGhcjs
+     then pkgsBuildTarget.emscripten
+     else pkgsBuildTarget.targetPackages.stdenv.cc)
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
@@ -251,7 +292,7 @@ in
 # C compiler, bintools and LLVM are used at build time, but will also leak into
 # the resulting GHC's settings file and used at runtime. This means that we are
 # currently only able to build GHC if hostPlatform == buildPlatform.
-assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
+assert !targetPlatform.isGhcjs -> targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
 assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
@@ -259,7 +300,7 @@ stdenv.mkDerivation ({
   pname = "${targetPrefix}ghc${variantSuffix}";
   inherit version;
 
-  inherit src;
+  src = ghcSrc;
 
   enableParallelBuilding = true;
 
@@ -334,6 +375,13 @@ stdenv.mkDerivation ({
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
   ''
+  # Need to make writable EM_CACHE for emscripten. The path in EM_CACHE must be absolute.
+  # https://gitlab.haskell.org/ghc/ghc/-/wikis/javascript-backend#configure-fails-with-sub-word-sized-atomic-operations-not-available
+  + lib.optionalString targetPlatform.isGhcjs ''
+    export EM_CACHE="$(realpath $(mktemp -d emcache.XXXXXXXXXX))"
+    cp -Lr ${targetCC /* == emscripten */}/share/emscripten/cache/* "$EM_CACHE/"
+    chmod u+rwX -R "$EM_CACHE"
+  ''
   # Create bash array hadrianFlagsArray for use in buildPhase. Do it in
   # preConfigure, so overrideAttrs can be used to modify it effectively.
   # hadrianSettings are passed via the command line so they are more visible
@@ -345,6 +393,10 @@ stdenv.mkDerivation ({
     )
   '';
 
+  ${if targetPlatform.isGhcjs then "configureScript" else null} = "emconfigure ./configure";
+  # GHC currently ships an edited config.sub so ghcjs is accepted which we can not rollback
+  ${if targetPlatform.isGhcjs then "dontUpdateAutotoolsGnuConfigScripts" else null} = true;
+
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ]
     ++ lib.optional (targetPlatform != hostPlatform) "target";
@@ -353,7 +405,7 @@ stdenv.mkDerivation ({
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ lib.optionals (libffi != null) [
+  ] ++ lib.optionals (libffi != null && !targetPlatform.isGhcjs) [
     "--with-system-libffi"
     "--with-ffi-includes=${targetPackages.libffi.dev}/include"
     "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
@@ -375,6 +427,12 @@ stdenv.mkDerivation ({
     "--enable-dwarf-unwind"
     "--with-libdw-includes=${lib.getDev elfutils}/include"
     "--with-libdw-libraries=${lib.getLib elfutils}/lib"
+  ] ++ lib.optionals targetPlatform.isDarwin [
+    # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
+    # but it doesn’t currently work because Cabal never uses `-L` on Darwin. See:
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
+    # https://github.com/haskell/cabal/issues/8882
+    "fp_cv_prog_ar_supports_dash_l=no"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
@@ -385,9 +443,10 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = [
     perl ghc hadrian bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-  ] ++ lib.optionals (rev != null) [
-    # We need to execute the boot script
-    autoconf automake m4 python3
+    # autoconf and friends are necessary for hadrian to create the bindist
+    autoconf automake m4
+    # Python is used in a few scripts invoked by hadrian to generate e.g. rts headers.
+    python3
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
@@ -412,10 +471,10 @@ stdenv.mkDerivation ({
     runHook preBuild
 
     # hadrianFlagsArray is created in preConfigure
-    echo "hadrianFlags: $hadrianFlags ''${hadrianFlagsArray}"
+    echo "hadrianFlags: $hadrianFlags ''${hadrianFlagsArray[@]}"
 
     # We need to go via the bindist for installing
-    hadrian $hadrianFlags "''${hadrianFlagsArray}" binary-dist-dir
+    hadrian $hadrianFlags "''${hadrianFlagsArray[@]}" binary-dist-dir
 
     runHook postBuild
   '';
@@ -450,7 +509,15 @@ stdenv.mkDerivation ({
   preInstall = ''
     pushd _build/bindist/*
 
-    ./configure $configureFlags "''${configureFlagsArray[@]}"
+  ''
+  # the bindist configure script uses different env variables than the GHC configure script
+  # see https://github.com/NixOS/nixpkgs/issues/267250 and https://gitlab.haskell.org/ghc/ghc/-/issues/24211
+  + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
+    export InstallNameToolCmd=$INSTALL_NAME_TOOL
+    export OtoolCmd=$OTOOL
+  ''
+  + ''
+    $configureScript $configureFlags "''${configureFlagsArray[@]}"
   '';
 
   postInstall = ''
@@ -472,6 +539,10 @@ stdenv.mkDerivation ({
 
     # Expose hadrian used for bootstrapping, for debugging purposes
     inherit hadrian;
+
+    # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
+    # so haddock isn't available for GHC cross-compilers. Can we fix that?
+    hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
   };
 
   meta = {
@@ -482,6 +553,10 @@ stdenv.mkDerivation ({
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
+    # https://github.com/NixOS/nixpkgs/issues/208959
+    broken =
+      (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8")
+      && stdenv.targetPlatform.isStatic;
   };
 
   dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;

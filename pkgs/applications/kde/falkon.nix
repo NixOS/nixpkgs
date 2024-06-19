@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub, fetchpatch
+{ stdenv, mkDerivation, lib
 , cmake, extra-cmake-modules, pkg-config
 , libpthreadstubs, libxcb, libXdmcp
 , qtsvg, qttools, qtwebengine, qtx11extras
@@ -32,6 +32,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "QtWebEngine based cross-platform web browser";
+    mainProgram = "falkon";
     homepage    = "https://www.falkon.org";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];

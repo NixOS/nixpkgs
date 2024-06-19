@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
 , sage-src
-, sphinx
 , jupyter-sphinx
+, sphinx
+, sphinx-copybutton
+, sphinx-inline-tabs
 }:
 
 buildPythonPackage rec {
@@ -11,8 +13,10 @@ buildPythonPackage rec {
   src = sage-src;
 
   propagatedBuildInputs = [
-    sphinx
     jupyter-sphinx
+    sphinx
+    sphinx-copybutton
+    sphinx-inline-tabs
   ];
 
   preBuild = ''

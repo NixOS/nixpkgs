@@ -19,12 +19,13 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Make fuzzy comparisons of strings and byte arrays";
+    mainProgram = "fstrcmp";
     longDescription = ''
       The fstrcmp project provides a library that is used to make fuzzy
       comparisons of strings and byte arrays, including multi-byte character
       strings.
     '';
-    homepage = "http://fstrcmp.sourceforge.net/";
+    homepage = "https://fstrcmp.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/fstrcmp/";
     license = licenses.gpl3;
     maintainers = [ maintainers.sephalon ];

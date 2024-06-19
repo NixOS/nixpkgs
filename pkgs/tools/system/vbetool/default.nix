@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.codon.org.uk/~mjg59/vbetool/";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
+    mainProgram = "vbetool";
   };
 }

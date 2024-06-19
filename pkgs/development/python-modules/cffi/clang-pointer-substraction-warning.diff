@@ -1,0 +1,11 @@
+diff -r c649a735cf82 testing/support.py
+--- a/testing/support.py	Thu Feb 23 05:42:01 2023 +0100
++++ b/testing/support.py	Sat May 20 21:46:56 2023 -0400
+@@ -112,6 +112,7 @@
+                               '-Wno-unreachable-code']
+         # special things for clang
+         extra_compile_args.append('-Qunused-arguments')
++        extra_compile_args.append('-Wno-null-pointer-subtraction')
+     else:
+         # assume a standard gcc
+         extra_compile_args = ['-Werror', '-Wall', '-Wextra', '-Wconversion',

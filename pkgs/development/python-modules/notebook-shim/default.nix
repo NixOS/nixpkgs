@@ -1,23 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jupyter_server
-, pytestCheckHook
-, pytest-tornasync
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  jupyter-server,
+  pytestCheckHook,
+  pytest-tornasync,
 }:
 
 buildPythonPackage rec {
   pname = "notebook-shim";
-  version = "0.1.0";
+  version = "0.2.4";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "notebook_shim";
-    rev = "v${version}";
-    sha256 = "sha256-5oIYj8SdC4E0N/yFxsmD2p4VkStHvqrVqAwb/htyPm4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CWnXOKE1xvr+a/qWNY6XCTB5+G/fg2O/glgeLzYD+Zc=";
   };
 
-  propagatedBuildInputs = [ jupyter_server ];
+  nativeBuildInputs = [ hatchling ];
+  propagatedBuildInputs = [ jupyter-server ];
 
   preCheck = ''
     mv notebook_shim/conftest.py notebook_shim/tests
@@ -28,7 +32,7 @@ buildPythonPackage rec {
   # have been comitted with msgs "wip" though.
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-tornasync
   ];

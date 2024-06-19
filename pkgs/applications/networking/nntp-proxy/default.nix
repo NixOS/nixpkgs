@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libconfig, pkg-config, libevent, openssl }:
+{ lib, stdenv, fetchFromGitHub, libconfig, pkg-config, libevent, openssl, libxcrypt }:
 
 stdenv.mkDerivation {
   pname = "nntp-proxy";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libconfig libevent openssl ];
+  buildInputs = [ libconfig libevent openssl libxcrypt ];
 
   installFlags = [ "INSTALL_DIR=$(out)/bin/" ];
 
@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.fadenb ];
     platforms = lib.platforms.all;
+    mainProgram = "nntp-proxy";
   };
 }

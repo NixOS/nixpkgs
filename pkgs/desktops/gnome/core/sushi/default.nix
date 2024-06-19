@@ -8,10 +8,10 @@
 , gnome
 , gtksourceview4
 , gjs
-, libsoup
-, webkitgtk
+, libsoup_3
+, webkitgtk_4_1
 , icu
-, wrapGAppsHook
+, wrapGAppsHook3
 , gst_all_1
 , gdk-pixbuf
 , librsvg
@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sushi";
-  version = "42.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/sushi/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "RdjbevRaeXhOejRYjRSeqVXIvkS7gqNuiWgpQFt8iCA=";
+    hash = "sha256-lghbqqQwqyFCxgaqtcR+L7sv0+two1ITfmXFmlig8sY=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
     gtksourceview4
     gdk-pixbuf
     librsvg
-    libsoup
-    webkitgtk
+    libsoup_3
+    webkitgtk_4_1
     libepoxy
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://en.wikipedia.org/wiki/Sushi_(software)";
     description = "A quick previewer for Nautilus";
+    mainProgram = "sushi";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

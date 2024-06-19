@@ -5,12 +5,12 @@
 , ninja
 , vala
 , pkg-config
+, desktop-file-utils
 , wrapGAppsHook4
 , gobject-introspection
 , gettext
 , itstool
 , libxml2
-, python3
 , gnome
 , glib
 , gtk4
@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-chess";
-  version = "42.1";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-chess/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "ZikL9yhky8bufM6Mn0DegSTo5gl712hi8teqsMS9sCw=";
+    hash = "sha256-oryQ4KdUMSxXibkZi0knMDd1tiWDqOlnbSxqlztG/ec=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2
-    python3
+    desktop-file-utils
     wrapGAppsHook4
     gobject-introspection
   ];
@@ -49,11 +49,6 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-chess";
@@ -62,10 +57,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Chess";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-chess";
     description = "Play the classic two-player boardgame of chess";
+    mainProgram = "gnome-chess";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

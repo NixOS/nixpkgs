@@ -1,37 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, apispec
-, boto3
-, cachetools
-, click
-, localstack-client
-, localstack-ext
-, plux
-, psutil
-, python-dotenv
-, pyyaml
-, requests
-, rich
-, semver
-, tailer
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  apispec,
+  boto3,
+  cachetools,
+  click,
+  localstack-client,
+  localstack-ext,
+  plux,
+  psutil,
+  python-dotenv,
+  pyyaml,
+  packaging,
+  requests,
+  rich,
+  semver,
+  tailer,
 }:
 
 buildPythonPackage rec {
   pname = "localstack";
-  version = "1.0.4";
+  version = "3.0.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "localstack";
-    rev = "v${version}";
-    sha256 = "sha256-JDF3wM5AVhfkAFlxmy1f3aMxs4J5LWd0JOY8MzRAzT4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-N/Mc1bubCcq38VxUqkO9LGG25pEetEyJ+VJMdg/7hrU=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "requests>=2.20.0,<2.26" "requests~=2.20" \
-      --replace "cachetools~=5.0.0" "cachetools~=5.0"
+      --replace "cachetools~=5.0.0" "cachetools~=5.0" \
+      --replace "boto3>=1.20,<1.25.0" "boto3~=1.20"
   '';
 
   propagatedBuildInputs = [
@@ -45,6 +49,7 @@ buildPythonPackage rec {
     psutil
     python-dotenv
     pyyaml
+    packaging
     requests
     rich
     semver

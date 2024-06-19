@@ -1,19 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, thrift
-, beautifulsoup4
-, markdown2
-, sqlalchemy
-, html2text
-, evernote
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy27,
+  thrift,
+  beautifulsoup4,
+  markdown2,
+  sqlalchemy,
+  html2text,
+  evernote,
 }:
 
 buildPythonPackage {
   version = "2015-05-11";
+  format = "setuptools";
   pname = "geeknote";
-  disabled = ! isPy27;
+  disabled = !isPy27;
 
   src = fetchFromGitHub {
     owner = "VitaliyRodnenko";
@@ -22,17 +24,25 @@ buildPythonPackage {
     sha256 = "0l16v4xnyqnsf84b1pma0jmdyxvmfwcv3sm8slrv3zv7zpmcm3lf";
   };
 
-  /* build with tests fails with "Can not create application dirictory :
-   /homeless-shelter/.geeknotebuilder". */
+  /*
+    build with tests fails with "Can not create application dirictory :
+    /homeless-shelter/.geeknotebuilder".
+  */
   doCheck = false;
 
-  propagatedBuildInputs = [ thrift beautifulsoup4 markdown2 sqlalchemy html2text evernote ];
+  propagatedBuildInputs = [
+    thrift
+    beautifulsoup4
+    markdown2
+    sqlalchemy
+    html2text
+    evernote
+  ];
 
   meta = with lib; {
     description = "Work with Evernote from command line";
     homepage = "http://www.geeknote.me";
-    license = licenses.gpl1;
+    license = licenses.gpl1Only;
     maintainers = with maintainers; [ hbunke ];
   };
-
 }

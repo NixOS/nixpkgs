@@ -1,11 +1,25 @@
-{ stdenv, lib, buildPythonPackage, fetchurl, pkg-config, gtk2, libX11, libXtst, libXi, libxkbfile, xorgproto }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  libX11,
+  libXtst,
+  libXi,
+  libxkbfile,
+  xorgproto,
+}:
 
 let
   majorVersion = "0.63";
   minorVersion = "0";
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "virtkey";
   version = "${majorVersion}.${minorVersion}";
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://launchpad.net/virtkey/${majorVersion}/${version}/+download/virtkey-${version}.tar.gz";
@@ -14,7 +28,14 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk2 libX11 libXtst libXi libxkbfile xorgproto ];
+  buildInputs = [
+    gtk2
+    libX11
+    libXtst
+    libXi
+    libxkbfile
+    xorgproto
+  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;

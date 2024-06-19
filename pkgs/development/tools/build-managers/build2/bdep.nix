@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bdep";
-  version = "0.14.0";
+  version = "0.16.0";
 
   outputs = [ "out" "doc" "man" ];
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bdep-${version}.tar.gz";
-    sha256 = "sha256-sizrGmSixkkJL9nocA4B1I5n9OySxyuZ2bNc1Z4zmPg=";
+    hash = "sha256-5w8Ng8TS8g+Nkbixn5txg4FGi57TSfc6ii+2wh8apCo=";
   };
 
   strictDeps = true;
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "build2 project dependency manager";
+    mainProgram = "bdep";
     # https://build2.org/bdep/doc/bdep.xhtml
     longDescription = ''
       The build2 project dependency manager is used to manage the dependencies

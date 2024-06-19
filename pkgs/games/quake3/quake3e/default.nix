@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, curl, libGL, libX11, libXxf86dga, alsa-lib, libXrandr, libXxf86vm, libXext, SDL2, glibc
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, curl
+, libGL
+, libX11
+, libXxf86dga
+, alsa-lib
+, libXrandr
+, libXxf86vm
+, libXext
+, SDL2
+, glibc
+, copyDesktopItems
+, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +27,9 @@ stdenv.mkDerivation rec {
     sha256 = "0qd13fndbhgkkmhxbprpzmj2l2v9ihacxagpdqi9sg9nrzvahr9h";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
   buildInputs = [ curl libGL libX11 libXxf86dga alsa-lib libXrandr libXxf86vm libXext SDL2 glibc ];
-  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
+  env.NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
   enableParallelBuilding = true;
 
   postPatch = ''
@@ -36,10 +50,21 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     make install DESTDIR=$out/lib
     makeWrapper $out/lib/quake3e.x64 $out/bin/quake3e
     makeWrapper $out/lib/quake3e.ded.x64 $out/bin/quake3e.ded
+    runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Quake3e";
+      exec = "quake3e";
+      desktopName = "Quake3e";
+      categories = [ "Game" ];
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ec-/Quake3e";
@@ -47,6 +72,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pmiddend ];
-    badPlatforms = [ platforms.aarch64 ];
+    badPlatforms = platforms.aarch64;
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

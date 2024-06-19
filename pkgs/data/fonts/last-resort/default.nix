@@ -1,24 +1,28 @@
-{ lib, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
-  version = "14.000";
-in fetchurl {
-  name = "last-resort-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "last-resort";
+  version = "15.100";
 
-  url = "https://github.com/unicode-org/last-resort-font/releases/download/${version}/LastResortHE-Regular.ttf";
-  downloadToTemp = true;
+  src = fetchurl {
+    url = "https://github.com/unicode-org/last-resort-font/releases/download/${version}/LastResortHE-Regular.ttf";
+    hash = "sha256-dPk6j7Orh1bg6GyzwsB4P9oQvepvl51YF4abpyhOVso=";
+  };
 
-  postFetch = ''
-    install -D -m 0644 $downloadedFile $out/share/fonts/truetype/LastResortHE-Regular.ttf
+  dontUnpack = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D -m 0644 $src $out/share/fonts/truetype/LastResortHE-Regular.ttf
+
+    runHook postInstall
   '';
-
-  recursiveHash = true;
-  sha256 = "sha256-rb69V4oExSFx4GpedpyVvGuS6o+MxmxTCSZhoe9kUhI=";
 
   meta = with lib; {
     description = "Fallback font of last resort";
     homepage = "https://github.com/unicode-org/last-resort-font";
     license = licenses.ofl;
-    maintainers = with maintainers; [ V ];
+    maintainers = with maintainers; [ ];
   };
 }

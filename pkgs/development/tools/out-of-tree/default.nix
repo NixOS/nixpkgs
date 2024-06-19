@@ -1,28 +1,29 @@
-{ lib, buildGoModule, fetchgit, qemu, docker, which, makeWrapper }:
+{ lib, buildGoModule, fetchgit, qemu, podman, makeWrapper }:
 
 buildGoModule rec {
   pname = "out-of-tree";
-  version = "1.4.0";
+  version = "2.1.1";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchgit {
     rev = "refs/tags/v${version}";
     url = "https://code.dumpstack.io/tools/${pname}.git";
-    sha256 = "1rn824l3dzh3xjxsbzzj053qg1abhzjimc8l73r0n5qrl44k2qk2";
+    sha256 = "sha256-XzO8NU7A5m631PjAm0F/K7qLrD+ZDSdHXaNowGaZAPo=";
   };
 
-  vendorSha256 = "0kg5c4h7xnwfcfshrh5n76xv98wzr73kxzr8q65iphsjimbxcpy3";
+  vendorHash = "sha256-p1dqzng3ak9lrnzrEABhE1TP1lM2Ikc8bmvp5L3nUp0=";
 
   doCheck = false;
 
   postFixup = ''
     wrapProgram $out/bin/out-of-tree \
-      --prefix PATH : "${lib.makeBinPath [ qemu docker which ]}"
+      --prefix PATH : "${lib.makeBinPath [ qemu podman ]}"
   '';
 
   meta = with lib; {
     description = "kernel {module, exploit} development tool";
+    mainProgram = "out-of-tree";
     homepage = "https://out-of-tree.io";
     maintainers = [ maintainers.dump_stack ];
     license = licenses.agpl3Plus;

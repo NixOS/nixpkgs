@@ -1,0 +1,12 @@
+--- ./Cargo.toml	2024-04-10 00:01:12.033806583 +0100
++++ ./Cargo.toml	2024-04-10 00:01:48.324228125 +0100
+@@ -45,7 +45,8 @@ path = "tests/e2e/mod.rs"
+ # This results in roughly a 5% reduction in performance when compiling locally vs when
+ # compiled via the CI pipeline.
+ [profile.release]
+-debug = false # Do not include debug symbols in the executable.
++lto = true
++codegen-units = 1
+ 
+ [profile.bench]
+ debug = true

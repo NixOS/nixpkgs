@@ -5,6 +5,6 @@
  
  (void
 - (if remove?
-+ (if #t
++ (begin
       (remove-signature file)
       (add-ad-hoc-signature file)))

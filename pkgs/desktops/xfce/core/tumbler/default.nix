@@ -4,9 +4,11 @@
 , gdk-pixbuf
 , glib
 , freetype
+, libgepub
 , libgsf
 , poppler
 , gst_all_1
+, libxfce4util
 }:
 
 # TODO: add libopenraw
@@ -14,16 +16,18 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "tumbler";
-  version = "4.16.1";
+  version = "4.18.2";
 
-  sha256 = "sha256-f2pCItNHTB0ggovIddpwNWEhaohfxD2otN8x9VfwR4k=";
+  sha256 = "sha256-thioE0q2qnV4weJFPz8OWoHIRuUcXnQEviwBtCWsSV4=";
 
   buildInputs = [
+    libxfce4util
     ffmpegthumbnailer
     freetype
     gdk-pixbuf
     glib
     gst_all_1.gst-plugins-base
+    libgepub # optional EPUB thumbnailer support
     libgsf
     poppler # technically the glib binding
   ];

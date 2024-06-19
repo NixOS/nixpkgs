@@ -5,6 +5,7 @@
 , pkg-config
 , makeWrapper
 , openssl
+, configd
 , Security
 , mpv
 , ffmpeg
@@ -13,21 +14,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dmlive";
-  version = "unstable-2022-08-22";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "THMonster";
     repo = pname;
-    rev = "fd4fa1859f05350658db598a50d29f59d22b55a1";
-    hash = "sha256-NVabHLxPHi7hWoztthPmVC5VRKQKglpytuUQOY1Hzrw=";
+    rev = "3736d83ac0920de78ac82fe331bc6b16dc72b5cd"; # no tag
+    hash = "sha256-3agUeAv6Nespn6GNw4wmy8HNPQ0VIgZAMnKiV/myKbA=";
   };
 
-  cargoHash = "sha256-TziP7n9Xgi/wHaiF/NI6noMp1iR6vRuAXxvKJwQHbTw=";
+  cargoHash = "sha256-MxkWaEn/gMMOuje7lu7PlqsQjnF0LWpV9JzmFBG1ukU=";
 
   OPENSSL_NO_VENDOR = true;
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ configd Security ];
 
   postInstall = ''
     wrapProgram "$out/bin/dmlive" --prefix PATH : "${lib.makeBinPath [ mpv ffmpeg nodejs ]}"
@@ -37,6 +39,7 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to play and record videos or live streams with danmaku";
     homepage = "https://github.com/THMonster/dmlive";
     license = licenses.mit;
+    mainProgram = "dmlive";
     maintainers = with maintainers; [ nickcao ];
   };
 }

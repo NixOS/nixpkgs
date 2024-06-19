@@ -1,31 +1,33 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, attrs
-, pluggy
-, six
-, pyhamcrest
-, setuptools-scm
-, python
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  attrs,
+  pluggy,
+  six,
+  pyhamcrest,
+  setuptools-scm,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "allure-python-commons-test";
-  version = "2.10.0";
-
-  disabled = pythonOlder "3.4";
+  version = "2.13.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wSISmLO1qE91tO0svQ+Dau35wP8h9hMfFtW5STGX5dg=";
+    hash = "sha256-pWkLVfBrLEhdhuTE95K3aqrhEY2wEyo5uRzuJC3ngjE=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ attrs pluggy six pyhamcrest ];
+  propagatedBuildInputs = [
+    attrs
+    pluggy
+    six
+    pyhamcrest
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m doctest ./src/container.py

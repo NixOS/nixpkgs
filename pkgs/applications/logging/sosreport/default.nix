@@ -1,36 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , gettext
+, magic
 , pexpect
+, pyyaml
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "sosreport";
-  version = "4.3";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "sosreport";
     repo = "sos";
-    rev = version;
-    sha256 = "sha256-fLEYRRQap7xqSyUU9MAV8cxxYKydHjn8J147VTXSf78=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-usa4xSNAv0AaML7qv5kCQDA3VMz4IneLFDVyv7uPUcQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      # fix sos --help
-      url = "https://github.com/sosreport/sos/commit/ac4eb48fa35c13b99ada41540831412480babf8d.patch";
-      sha256 = "sha256-6ZRoDDZN2KkHTXOKuHTAquB/HTIUppodmx83WxxYFP0=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
   ];
 
   propagatedBuildInputs = [
+    magic
     pexpect
+    pyyaml
+    setuptools
   ];
 
   # requires avocado-framework 94.0, latest version as of writing is 96.0
@@ -46,6 +43,6 @@ buildPythonPackage rec {
     description = "Unified tool for collecting system logs and other debug information";
     homepage = "https://github.com/sosreport/sos";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

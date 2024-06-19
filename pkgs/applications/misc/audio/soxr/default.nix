@@ -14,15 +14,15 @@ stdenv.mkDerivation rec {
     ./arm64-check.patch
   ];
 
-  outputs = [ "out" "doc" ]; # headers are just two and very small
+  outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "An audio resampling library";
-    homepage = "http://soxr.sourceforge.net";
+    homepage = "https://soxr.sourceforge.net";
     license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ ];
   };
 }

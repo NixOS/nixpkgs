@@ -23,6 +23,7 @@ mkDerivation rec {
     homepage    = "http://speedcrunch.org";
     license     = licenses.gpl2Plus;
     description = "A fast power user calculator";
+    mainProgram = "speedcrunch";
     longDescription = ''
       SpeedCrunch is a fast, high precision and powerful desktop calculator.
       Among its distinctive features are a scrollable display, up to 50 decimal
@@ -31,7 +32,6 @@ mkDerivation rec {
     '';
     maintainers = with maintainers; [ gebner j0hax ];
     inherit (qtbase.meta) platforms;
-    # works with qt 5.6 and qt 5.8
-    broken = builtins.compareVersions qtbase.version "5.7.0" == 0 || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
   };
 }

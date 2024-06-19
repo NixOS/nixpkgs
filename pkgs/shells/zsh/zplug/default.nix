@@ -17,8 +17,10 @@ stdenv.mkDerivation rec {
   dontPatch = true;
 
   installPhase = ''
-    mkdir -p $out
-    cp -r $src/* $out/
+    mkdir -p $out/share/zplug
+    cp -r $src/{autoload,base,bin,init.zsh,misc} $out/share/zplug/
+    mkdir -p $out/share/man
+    cp -r $src/doc/man/* $out/share/man/
   '';
 
   meta = with lib; {

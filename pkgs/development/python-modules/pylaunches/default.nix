@@ -1,16 +1,17 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-asyncio
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-asyncio,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylaunches";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,14 +20,12 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "1b41j384lqg3gc7dsmdzp7anrsymqgc1895lc5j8g43x2mfgbjnh";
+    sha256 = "sha256-bIcnYcbfAwjet3cg97y+ujFfY2916ANk4sw0sZoU59g=";
   };
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytestCheckHook
     pytest-asyncio
@@ -39,9 +38,7 @@ buildPythonPackage rec {
       --replace ', "pytest-runner"' ""
   '';
 
-  pythonImportsCheck = [
-    "pylaunches"
-  ];
+  pythonImportsCheck = [ "pylaunches" ];
 
   meta = with lib; {
     description = "Python module to get information about upcoming space launches";

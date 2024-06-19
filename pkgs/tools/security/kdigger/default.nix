@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "kdigger";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "quarkslab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/KkqwjFxTipa5dCVRFlrKzl+PB4QB4aY0wjlsi1Phug=";
+    sha256 = "sha256-/F1wmP1hfhrAmx2jJtAn02LkTabi0RJu36T/oW3tyZw=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -23,7 +23,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-rDJFowbOj77n/sBoDgFEF+2PgghxufvIgzbMqrHehws=";
+  vendorHash = "sha256-rDJFowbOj77n/sBoDgFEF+2PgghxufvIgzbMqrHehws=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -61,6 +61,7 @@ buildGoModule rec {
     homepage = "https://github.com/quarkslab/kdigger";
     changelog = "https://github.com/quarkslab/kdigger/releases/tag/v${version}";
     description = "An in-pod context discovery tool for Kubernetes penetration testing";
+    mainProgram = "kdigger";
     longDescription = ''
       kdigger, short for "Kubernetes digger", is a context discovery tool for
       Kubernetes penetration testing. This tool is a compilation of various

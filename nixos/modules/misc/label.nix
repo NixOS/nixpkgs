@@ -12,7 +12,7 @@ in
 
     nixos.label = mkOption {
       type = types.strMatching "[a-zA-Z0-9:_\\.-]*";
-      description = lib.mdDoc ''
+      description = ''
         NixOS version name to be used in the names of generated
         outputs and boot labels.
 
@@ -27,7 +27,7 @@ in
         variable (defaults to the value of
         {option}`system.nixos.version`).
 
-        Can be overriden by setting {env}`NIXOS_LABEL`.
+        Can be overridden by setting {env}`NIXOS_LABEL`.
 
         Useful for not loosing track of configurations built from different
         nixos branches/revisions, e.g.:
@@ -47,7 +47,7 @@ in
       type = types.listOf types.str;
       default = [];
       example = [ "with-xen" ];
-      description = lib.mdDoc ''
+      description = ''
         Strings to prefix to the default
         {option}`system.nixos.label`.
 

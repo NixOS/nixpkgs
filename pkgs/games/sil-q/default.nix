@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ ncurses libX11 ];
 
   # Makefile(s) and config are not top-level
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   postPatch = ''
     # allow usage of ANGBAND_PATH
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp sil $out/bin/sil-q
     wrapProgram $out/bin/sil-q \
-      --run "export ANGBAND_PATH=\$HOME/.sil" \
+      --run "export ANGBAND_PATH=\$HOME/.sil-q" \
       --run "${setup} ${src}/lib"
 
     runHook postInstall
@@ -50,12 +50,13 @@ in stdenv.mkDerivation rec {
   passthru.tests = {
     saveDirCreation = pkgs.runCommand "save-dir-creation" {} ''
       HOME=$(pwd) ${lib.getExe pkgs.sil-q} --help
-      test -d .sil && touch $out
+      test -d .sil-q && touch $out
     '';
   };
 
   meta = {
     description = "A roguelike game set in the First Age of Middle-earth";
+    mainProgram = "sil-q";
     longDescription = ''
       A game of adventure set in the First Age of Middle-earth, when the world still
       rang with Elven song and gleamed with Dwarven mail.

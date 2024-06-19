@@ -2,7 +2,6 @@
 , lib
 , gettext
 , fetchurl
-, fetchpatch
 , python3
 , meson
 , ninja
@@ -10,9 +9,10 @@
 , gtk3
 , glib
 , gjs
-, webkitgtk
+, enableWebkit2gtk ? stdenv.isLinux
+, webkitgtk_4_1
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , itstool
 , libxml2
 , docbook-xsl-nons
@@ -25,28 +25,12 @@
 
 stdenv.mkDerivation rec {
   pname = "glade";
-  version = "3.38.2";
+  version = "3.40.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glade/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1dxsiz9ahqkxg2a1dw9sbd8jg59y5pdz4c1gvnbmql48gmj8gz4q";
+    sha256 = "McmtrqhJlyq5UXtWThmsGZd8qXdYsQntwxZwCPU+PZw=";
   };
-
-  patches = [
-    # Fix build with meson 0.61
-    # data/meson.build:4:5: ERROR: Function does not take positional arguments.
-    # Taken from https://gitlab.gnome.org/GNOME/glade/-/merge_requests/117
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glade/-/commit/61304b2e8bac8ded76643cb7c3e781f73881dd2b.patch";
-      sha256 = "9x6RK8Wgnm8bDxeBLV3PlUkUuH2706Ba9kwE5S87DgE=";
-    })
-    # help/meson.build:6:6: ERROR: Tried to create target "help-glade-da-update-po", but a target of that name already exists.
-    # Taken from https://gitlab.gnome.org/GNOME/glade/-/merge_requests/117
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glade/-/commit/04ba6f969f716fbfe3c7feb7e4bab8678cc1e9eb.patch";
-      sha256 = "j3XfF7P6rndL+0PWqnp+QYph7Ba6bgcp4Pkikr2wuJA=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -54,7 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     docbook-xsl-nons
     docbook_xml_dtd_42
     libxslt
@@ -66,14 +50,24 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     gjs
-    webkitgtk
     libxml2
     python3
     python3.pkgs.pygobject3
     gsettings-desktop-schemas
     gdk-pixbuf
     gnome.adwaita-icon-theme
+  ] ++ lib.optionals enableWebkit2gtk [
+    webkitgtk_4_1
   ];
+
+  mesonFlags = [
+    (lib.mesonEnable "webkit2gtk" enableWebkit2gtk)
+  ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace 'webkit2gtk-4.0' 'webkit2gtk-4.1'
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -82,10 +76,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Glade";
+    homepage = "https://gitlab.gnome.org/GNOME/glade";
     description = "User interface designer for GTK applications";
     maintainers = teams.gnome.members;
     license = licenses.lgpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -22,16 +22,16 @@
 
 stdenv.mkDerivation rec {
   pname = "yoshimi";
-  version = "2.2.2.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
     repo = pname;
     rev = version;
-    hash = "sha256-fkN5VNiXRVKCCAyrG6Z2s5qLEtHQNB2874VprhHBhAg=";
+    hash = "sha256-UaZjT7B9T3a3W9PD9abA/WPmt9Id8/zUUSZU05+8x9c=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   postPatch = ''
     substituteInPlace Misc/Config.cpp --replace /usr $out
@@ -71,5 +71,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];
+    mainProgram = "yoshimi";
   };
 }

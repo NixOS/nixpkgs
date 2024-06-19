@@ -75,7 +75,8 @@ stdenv.mkDerivation rec {
     + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
       (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
-  phases = "unpackPhase installPhase fixupPhase";
+  dontConfigure = true;
+  dontBuild = true;
 
   unpackPhase = ''
     echo "=== Extracting makeself archive ==="

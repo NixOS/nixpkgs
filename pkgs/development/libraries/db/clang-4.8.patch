@@ -139,3 +139,67 @@ index f3922e0..e40fcdf 100644
  		} else {
  			DB_ASSERT(env, sharecount > 0);
  			MEMBAR_EXIT();
+diff -ur a/dist/aclocal/clock.m4 b/dist/aclocal/clock.m4
+--- a/dist/aclocal/clock.m4	1969-12-31 19:00:01.000000000 -0500
++++ b/dist/aclocal/clock.m4	2023-06-05 19:14:02.007080500 -0400
+@@ -21,6 +21,7 @@
+ AC_CACHE_CHECK([for clock_gettime monotonic clock], db_cv_clock_monotonic, [
+ AC_TRY_RUN([
+ #include <sys/time.h>
++int
+ main() {
+ 	struct timespec t;
+ 	return (clock_gettime(CLOCK_MONOTONIC, &t) != 0);
+diff -ur a/dist/aclocal/mutex.m4 b/dist/aclocal/mutex.m4
+--- a/dist/aclocal/mutex.m4	1969-12-31 19:00:01.000000000 -0500
++++ b/dist/aclocal/mutex.m4	2023-06-05 19:14:47.214158196 -0400
+@@ -4,6 +4,7 @@
+ AC_DEFUN(AM_PTHREADS_SHARED, [
+ AC_TRY_RUN([
+ #include <pthread.h>
++int
+ main() {
+ 	pthread_cond_t cond;
+ 	pthread_mutex_t mutex;
+@@ -46,6 +47,7 @@
+ AC_DEFUN(AM_PTHREADS_PRIVATE, [
+ AC_TRY_RUN([
+ #include <pthread.h>
++int
+ main() {
+ 	pthread_cond_t cond;
+ 	pthread_mutex_t mutex;
+diff -ur a/dist/aclocal/sequence.m4 b/dist/aclocal/sequence.m4
+--- a/dist/aclocal/sequence.m4	1969-12-31 19:00:01.000000000 -0500
++++ b/dist/aclocal/sequence.m4	2023-06-05 19:14:02.007869956 -0400
+@@ -43,6 +43,9 @@
+ 	# test, which won't test for the appropriate printf format strings.
+ 	if test "$db_cv_build_sequence" = "yes"; then
+ 		AC_TRY_RUN([
++		#include <string.h>
++		#include <stdio.h>
++		int
+ 		main() {
+ 			$db_cv_seq_type l;
+ 			unsigned $db_cv_seq_type u;
+@@ -59,7 +62,9 @@
+				return (1);
+ 			return (0);
+ 		}],, [db_cv_build_sequence="no"],
+-		AC_TRY_LINK(,[
++		AC_TRY_LINK([
++			#include <string.h>
++			#include <stdio.h>],[
+ 			$db_cv_seq_type l;
+ 			unsigned $db_cv_seq_type u;
+ 			char buf@<:@100@:>@;
+diff -ur a/dist/RELEASE b/dist/RELEASE
+--- a/dist/RELEASE	1969-12-31 19:00:01.000000000 -0500
++++ b/dist/RELEASE	2023-07-02 17:32:34.703953049 -0400
+@@ -7,5 +7,5 @@
+ 
+ DB_VERSION_UNIQUE_NAME=`printf "_%d%03d" $DB_VERSION_MAJOR $DB_VERSION_MINOR`
+ 
+-DB_RELEASE_DATE=`date "+%B %e, %Y"`
++DB_RELEASE_DATE="April  9, 2010"
+ DB_VERSION_STRING="Berkeley DB $DB_VERSION: ($DB_RELEASE_DATE)"

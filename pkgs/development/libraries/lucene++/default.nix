@@ -22,11 +22,19 @@ stdenv.mkDerivation rec {
       url = "https://github.com/luceneplusplus/LucenePlusPlus/commit/39cd44bd54e918d25ee464477992ad0dc234dcba.patch";
       sha256 = "sha256-PP6ENNhPJMWrYDlTnr156XV8d5aX/VNX8v4vvi9ZiWo";
     })
+    (fetchpatch {
+      name = "fix-visibility-on-mac.patch";
+      url = "https://github.com/luceneplusplus/LucenePlusPlus/commit/bc436842227aea561b68c6ae89fbd1fdefcac7b3.patch";
+      sha256 = "sha256-/S7tFZ4ht5p0cv036xF2NKZQwExbPaGINyWZiUg/lS4=";
+    })
   ];
 
+  # Don't use the built in gtest - but the nixpkgs one requires C++14.
   postPatch = ''
     substituteInPlace src/test/CMakeLists.txt \
       --replace "add_subdirectory(gtest)" ""
+    substituteInPlace CMakeLists.txt \
+      --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
   '';
 
   doCheck = true;
@@ -47,6 +55,6 @@ stdenv.mkDerivation rec {
     description = "C++ port of the popular Java Lucene search engine";
     homepage = "https://github.com/luceneplusplus/LucenePlusPlus";
     license = with lib.licenses; [ asl20 lgpl3Plus ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,13 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  six,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "importmagic";
   version = "0.1.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "importmagic" ];
 
@@ -26,5 +28,4 @@ buildPythonPackage rec {
     license = licenses.bsd0;
     maintainers = with maintainers; [ onny ];
   };
-
 }

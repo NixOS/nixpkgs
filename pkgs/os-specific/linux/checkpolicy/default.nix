@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "checkpolicy";
-  version = "3.3";
+  version = "3.6";
   inherit (libsepol) se_url;
 
   src = fetchurl {
     url = "${se_url}/${version}/checkpolicy-${version}.tar.gz";
-    sha256 = "118l8c2vvnnckbd269saslr7adv6rdavr5rv0z5vh2m1lgglxj15";
+    sha256 = "sha256-GzRrPN1PinihV2J7rWSjs0ecZ7ahnRXm1chpRiDq28E=";
   };
 
   nativeBuildInputs = [ bison flex ];

@@ -6,13 +6,13 @@ else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-wasm";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "spec";
     rev = "opam-${version}";
-    sha256 = "sha256:09s0v79x0ymzcp2114zkm3phxavdfnkkq67qz1ndnknbkziwqf3v";
+    hash = "sha256-5eo8MIui2GxRS5X9az0NlLGZfxi5KGsTI/EaP6m/zts=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An executable and OCaml library to run, read and write Web Assembly (wasm) files and manipulate their AST";
+    mainProgram = "wasm";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/WebAssembly/spec/tree/master/interpreter";

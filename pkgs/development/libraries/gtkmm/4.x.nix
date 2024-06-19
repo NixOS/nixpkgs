@@ -6,6 +6,7 @@
 , ninja
 , python3
 , gtk4
+, glib
 , glibmm_2_68
 , cairomm_1_16
 , pangomm_2_48
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "4.8.0";
+  version = "4.14.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "yCeG1G4rBzRrY5fKfxkp2VL0ki+lyds97ghJi5oTbPU=";
+    hash = "sha256-k1CgREt0TKPcaVhuvRtnB1IJIrbZ9PIyEDzmA6Jx7No=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3
+    glib # glib-compile-resources
   ];
 
   buildInputs = [
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
     pangomm_2_48
   ];
 
-  checkInputs = lib.optionals (!stdenv.isDarwin)[
+  nativeCheckInputs = lib.optionals (!stdenv.isDarwin)[
     xvfb-run
   ];
 

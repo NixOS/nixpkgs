@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postInstall = ''
+    install -D -m644 Ticon.png $out/share/pixmaps/torcs.png
+    install -D -m644 torcs.desktop $out/share/applications/torcs.desktop
+  '';
+
   postPatch = ''
     sed -i -e s,/bin/bash,`type -P bash`, src/linux/torcs.in
   '';
@@ -42,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Car racing game";
-    homepage = "http://torcs.sourceforge.net/";
+    homepage = "https://torcs.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [viric];
     platforms = lib.platforms.linux;

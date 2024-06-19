@@ -1,14 +1,20 @@
-{ lib, buildPythonPackage, fetchFromGitHub, csdr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  csdr,
+}:
 
 buildPythonPackage rec {
   pname = "pycsdr";
   version = "0.18.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jketterl";
     repo = "pycsdr";
     rev = version;
-    sha256 = "sha256-OyfcXCcbvOOhBUkbAba3ayPzpH5z2nJWHbR6GcrCMy8=";
+    hash = "sha256-OyfcXCcbvOOhBUkbAba3ayPzpH5z2nJWHbR6GcrCMy8=";
   };
 
   propagatedBuildInputs = [ csdr ];

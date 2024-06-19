@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-MM4o7d3L3XIRYWJ/KPM2OltlVfVA/BgMuyhJMm/BS3c=";
   };
 
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace Makefile --replace gcc clang
+  '';
+
   nativeBuildInputs = [ installShellFiles ];
 
   enableParallelBuilding = true;
@@ -42,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
+    mainProgram = "p910nd";
   };
 }

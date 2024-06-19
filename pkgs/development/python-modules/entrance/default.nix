@@ -1,28 +1,46 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, routerFeatures
-, janus, ncclient, paramiko, pyyaml, sanic }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  routerFeatures,
+  janus,
+  ncclient,
+  paramiko,
+  pyyaml,
+  sanic,
+}:
 
 let
   # The `routerFeatures` flag optionally brings in some somewhat heavy
   # dependencies, in order to enable interacting with routers
-  opts = if routerFeatures then {
-      prePatch = ''
-        substituteInPlace ./setup.py --replace "extra_deps = []" "extra_deps = router_feature_deps"
-      '';
-      extraBuildInputs = [ janus ncclient paramiko ];
-    } else {
-      prePatch = "";
-      extraBuildInputs = [];
-    };
-
+  opts =
+    if routerFeatures then
+      {
+        prePatch = ''
+          substituteInPlace ./setup.py --replace "extra_deps = []" "extra_deps = router_feature_deps"
+        '';
+        extraBuildInputs = [
+          janus
+          ncclient
+          paramiko
+        ];
+      }
+    else
+      {
+        prePatch = "";
+        extraBuildInputs = [ ];
+      };
 in
 
 buildPythonPackage rec {
   pname = "entrance";
-  version = "1.1.17";
+  version = "1.1.20";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dee5b4f3330f633fcd4e665f1781bf6e53b375ffdc7a24434257dfba6b1c2d7f";
+    hash = "sha256-PvsP6HXCllW102h3o7abz9uC2AZTwvg5qIqP+rdkk6Y=";
   };
 
   # The versions of `sanic` and `websockets` in nixpkgs only support 3.6 or later
@@ -31,7 +49,10 @@ buildPythonPackage rec {
   # No useful tests
   doCheck = false;
 
-  propagatedBuildInputs = [ pyyaml sanic ] ++ opts.extraBuildInputs;
+  propagatedBuildInputs = [
+    pyyaml
+    sanic
+  ] ++ opts.extraBuildInputs;
 
   prePatch = opts.prePatch;
 
@@ -42,4 +63,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ simonchatts ];
   };
 }
-

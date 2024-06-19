@@ -104,6 +104,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     ats.wait_for_open_port(80)
     httpbin.wait_for_unit("httpbin")
     httpbin.wait_for_open_port(80)
+    client.systemctl("start network-online.target")
     client.wait_for_unit("network-online.target")
 
     with subtest("Traffic Server is running"):
@@ -172,6 +173,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         assert re.fullmatch(expected, out) is not None, "no matching logs"
 
         out = json.loads(ats.succeed(f"traffic_logstats -jf {access_log_path}"))
+        assert isinstance(out, dict)
         assert out["total"]["error.total"]["req"] == "0", "unexpected log stat"
   '';
 })

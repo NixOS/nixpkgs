@@ -21,6 +21,7 @@ stdenv.mkDerivation {
 
   meta = with lib;{
     description = "A MP2 encoder";
+    mainProgram = "twolame";
     longDescription = ''
       TwoLAME is an optimised MPEG Audio Layer 2 (MP2) encoder based on
       tooLAME by Mike Cheng, which in turn is based upon the ISO dist10

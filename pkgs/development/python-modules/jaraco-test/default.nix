@@ -1,54 +1,54 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, setuptools
-, setuptools-scm
-, toml
-, jaraco_functools
-, jaraco-context
-, more-itertools
-, jaraco_collections
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  setuptools-scm,
+  toml,
+  jaraco-functools,
+  jaraco-context,
+  more-itertools,
+  jaraco-collections,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-test";
-  version = "5.1.0";
+  version = "5.4.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jaraco.test";
     inherit version;
-    sha256 = "04a7503c0c78cd057bd6b5f16ad1e3379b911b619df6694480a564ebc214c0a8";
+    hash = "sha256-29NDh4dYrcVER9YRXEYXia2zH8QHOyEpUCQwk7oxfsI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     toml
-    jaraco_functools
+    jaraco-functools
     jaraco-context
     more-itertools
-    jaraco_collections
+    jaraco-collections
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # https://github.com/jaraco/jaraco.test/issues/6
+    "jaraco/test/cpython.py"
   ];
 
   pythonImportsCheck = [ "jaraco.test" ];
 
-  meta = {
+  meta = with lib; {
     description = "Testing support by jaraco";
     homepage = "https://github.com/jaraco/jaraco.test";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    changelog = "https://github.com/jaraco/jaraco.test/blob/v${version}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

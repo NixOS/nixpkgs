@@ -1,45 +1,65 @@
 { lib
 , python3Packages
+, fetchPypi
+, substituteAll
 , ffmpeg
-, fetchpatch
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "5.0.1";
-  format = "pyproject";
+  version = "6.7.4";
+  pyproject = true;
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PKRioPBhTV6i3ckQgcKuhQFmpBvUQE4o3FLej8qx4mM=";
+    hash = "sha256-kzdTerEZ/ndSSl1mWq7Ou/sG4suN8o0SYNkodkJXUc4=";
   };
 
-  checkInputs = with python3Packages; [
+  patches = [
+    (substituteAll {
+      src = ./ffmpeg-path.patch;
+      ffmpeg = lib.getExe ffmpeg;
+    })
+  ];
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools
+  ];
+
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     mock
     requests-mock
     freezegun
+    pytest-asyncio
+    pytest-trio
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    versioningit
+  disabledTests = [
+    # requires ffmpeg to be in PATH
+    "test_no_cache"
   ];
 
-  propagatedBuildInputs = (with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
+    certifi
+    exceptiongroup
     isodate
     lxml
     pycountry
     pycryptodome
     pysocks
     requests
+    trio
+    trio-websocket
+    typing-extensions
+    urllib3
     websocket-client
-  ]) ++ [
-    ffmpeg
   ];
 
-  meta = with lib; {
-    homepage = "https://streamlink.github.io/";
+  meta = {
+    changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
     description = "CLI for extracting streams from various websites to video player of your choosing";
+    homepage = "https://streamlink.github.io/";
     longDescription = ''
       Streamlink is a CLI utility that pipes videos from online
       streaming services to a variety of video players such as VLC, or
@@ -47,8 +67,8 @@ python3Packages.buildPythonApplication rec {
 
       Streamlink is a fork of the livestreamer project.
     '';
-    changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ dezgeg zraexy DeeUnderscore ];
+    license = lib.licenses.bsd2;
+    mainProgram = "streamlink";
+    maintainers = with lib.maintainers; [ dezgeg zraexy DeeUnderscore ];
   };
 }

@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitLab
 , appstream-glib
+, cargo
 , desktop-file-utils
 , itstool
 , meson
@@ -9,22 +10,27 @@
 , pkg-config
 , python3
 , rustPlatform
-, wrapGAppsHook
+, rustc
+, wrapGAppsHook4
 , glib
 , gtk4
 , libadwaita
+, zbar
+, gst_all_1
+, Security
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.2.1";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "warp";
     rev = "v${version}";
-    hash = "sha256-ajz450ix68TDkhyAZd1IgZA/jUnXULrYZOSdcoOL+S0=";
+    hash = "sha256-GRxZ3y1PdJpBDnGCfmOmZgN8n1aaYf9IhyszRwo3MjQ=";
   };
 
   postPatch = ''
@@ -34,7 +40,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-08xbd2YmJw2NTrxBrnJZMV2VvX6V0eX+fxbEEWFoC9c=";
+    hash = "sha256-v/MhVcQmMYD/n/8wmPCYUy4YpXhL0v4fq8h6cllo/pw=";
   };
 
   nativeBuildInputs = [
@@ -45,24 +51,33 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    wrapGAppsHook4
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     glib
     gtk4
     libadwaita
+    zbar
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+  ]) ++ lib.optionals stdenv.isDarwin [
+    Security
+    Foundation
   ];
 
   meta = {
     description = "Fast and secure file transfer";
-    homepage = "https://apps.gnome.org/app/app.drey.Warp";
+    homepage = "https://apps.gnome.org/Warp/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dotlambda ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
+    platforms = lib.platforms.all;
+    mainProgram = "warp";
+    broken = stdenv.isDarwin;
   };
 }

@@ -6,6 +6,7 @@
 , cinnamon-desktop
 , dbus
 , desktop-file-utils
+, egl-wayland
 , glib
 , gnome
 , gobject-introspection
@@ -19,6 +20,7 @@
 , libinput
 , libstartup_notification
 , libwacom
+, libxcvt
 , libXdamage
 , libxkbcommon
 , libXtst
@@ -29,15 +31,25 @@
 , pkg-config
 , python3
 , udev
-, wrapGAppsHook
+, wayland
+, wayland-protocols
+, wrapGAppsHook3
 , xorgserver
+, xwayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "5.4.7";
+  version = "6.0.1";
 
   outputs = [ "out" "dev" "man" ];
+
+  src = fetchFromGitHub {
+    owner = "linuxmint";
+    repo = pname;
+    rev = version;
+    hash = "sha256-yd23naaPIa6xrdf7ipOvVZKqkr7/CMxNqDZ3CQ2QH+Y=";
+  };
 
   patches = [
     (substituteAll {
@@ -46,13 +58,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  src = fetchFromGitHub {
-    owner = "linuxmint";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Zx6au1FXLgK8PRmkh8jaGJ3Zh0YYFj2zmbxhgXAFgDg=";
-  };
-
   nativeBuildInputs = [
     desktop-file-utils
     mesa # needed for gbm
@@ -60,16 +65,17 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     xorgserver # for cvt command
+    gobject-introspection
   ];
 
   buildInputs = [
     cairo
     cinnamon-desktop
     dbus
+    egl-wayland
     glib
-    gobject-introspection
     gtk3
     libcanberra
     libdrm
@@ -78,10 +84,14 @@ stdenv.mkDerivation rec {
     libinput
     libstartup_notification
     libwacom
+    libxcvt
     libXdamage
     libxkbcommon
     pipewire
     udev
+    wayland
+    wayland-protocols
+    xwayland
   ];
 
   propagatedBuildInputs = [
@@ -91,6 +101,13 @@ stdenv.mkDerivation rec {
     graphene
   ];
 
+  mesonFlags = [
+    # Based on Mint's debian/rules.
+    "-Degl_device=true"
+    "-Dwayland_eglstream=true"
+    "-Dxwayland_path=${lib.getExe xwayland}"
+  ];
+
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
   '';
@@ -98,6 +115,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/linuxmint/muffin";
     description = "The window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
+    mainProgram = "muffin";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

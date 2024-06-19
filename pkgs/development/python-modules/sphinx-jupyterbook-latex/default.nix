@@ -1,38 +1,60 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, sphinx
-, importlib-resources
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  flit-core,
+  packaging,
+  sphinx,
+  click,
+  myst-parser,
+  pytest-regressions,
+  pytestCheckHook,
+  sphinx-external-toc,
+  sphinxcontrib-bibtex,
+  texsoup,
+  defusedxml,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-jupyterbook-latex";
-  version = "0.5.1";
-  format = "pyproject";
+  version = "1.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "sphinx_jupyterbook_latex";
-    sha256 = "sha256-QErSEpolSEkJaQLzfcF0oDlugEhN5Y9/KwVwC2IknLY=";
+  src = fetchFromGitHub {
+    owner = "executablebooks";
+    repo = "sphinx-jupyterbook-latex";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZTR+s6a/++xXrLMtfFRmSmAeMWa/1de12ukxfsx85g4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "sphinx>=3,<5" "sphinx>=3"
-  '';
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [ sphinx ]
-    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  propagatedBuildInputs = [
+    packaging
+    sphinx
+  ];
 
   pythonImportsCheck = [ "sphinx_jupyterbook_latex" ];
+
+  nativeCheckInputs = [
+    click
+    myst-parser
+    pytest-regressions
+    pytestCheckHook
+    sphinx-external-toc
+    sphinxcontrib-bibtex
+    texsoup
+    defusedxml
+  ];
 
   meta = with lib; {
     description = "Latex specific features for jupyter book";
     homepage = "https://github.com/executablebooks/sphinx-jupyterbook-latex";
+    changelog = "https://github.com/executablebooks/sphinx-jupyterbook-latex/raw/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
   };
 }

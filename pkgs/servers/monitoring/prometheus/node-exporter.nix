@@ -5,27 +5,22 @@
 
 buildGoModule rec {
   pname = "node_exporter";
-  version = "1.4.0";
+  version = "1.8.1";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "sha256-KO33Cyrc4Oh6vvTMazo5iuekpyxNsi18gIb66Z8B9i4=";
+    hash = "sha256-dg4JSJx5xXEOLLb5xEgrNeDmh/En9G6qKA9G+3v9PH0=";
   };
 
-  vendorSha256 = "sha256-eJbb56U6VStwfi6iSemWrriDYNaPiDegW3KJr8rH1NU=";
+  vendorHash = "sha256-sly8AJk+jNZG8ijTBF1Pd5AOOUJJxIG8jHwBUdlt8fM=";
 
   # FIXME: tests fail due to read-only nix store
   doCheck = false;
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation IOKit ];
-  # upstream currently doesn't work with the version of the macOS SDK
-  # we're building against in nix-darwin without a patch.
-  # this patch has been submitted upstream at https://github.com/prometheus/node_exporter/pull/2327
-  # and only needs to be carried until it lands in a new release.
-  patches = lib.optionals stdenv.isDarwin [ ./node-exporter/node-exporter-darwin.patch ];
 
   excludedPackages = [ "docs/node-mixin" ];
 
@@ -43,7 +38,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Prometheus exporter for machine metrics";
+    mainProgram = "node_exporter";
     homepage = "https://github.com/prometheus/node_exporter";
+    changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz globin Frostman ];
   };

@@ -1,36 +1,53 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, google-auth
-, google-cloud-iam
-, google-cloud-core
-, google-cloud-kms
-, google-cloud-testutils
-, google-resumable-media
-, mock
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-auth,
+  google-cloud-core,
+  google-cloud-iam,
+  google-cloud-kms,
+  google-cloud-testutils,
+  google-resumable-media,
+  mock,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "2.5.0";
-  format = "setuptools";
+  version = "2.16.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OC80uR3iIS48LntA7AedJ+4uPbuumbdbG82MYwY84jU=";
+    hash = "sha256-3aSF+lA3EKgo0BJGvRbOnbCCPcUbvKdCzpamgX1YZp8=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+  ];
+
+  pythonRelaxDeps = [ "google-auth" ];
 
   propagatedBuildInputs = [
     google-auth
     google-cloud-core
     google-resumable-media
+    requests
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    protobuf = [ protobuf ];
+  };
+
+  nativeCheckInputs = [
     google-cloud-iam
     google-cloud-kms
     google-cloud-testutils
@@ -38,7 +55,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # disable tests which require credentials and network access
+  # Disable tests which require credentials and network access
   disabledTests = [
     "create"
     "download"
@@ -51,6 +68,8 @@ buildPythonPackage rec {
     "test_list_buckets"
     "test_open"
     "test_anonymous_client_access_to_public_bucket"
+    "test_ctor_w_custom_endpoint_use_auth"
+    "test_ctor_w_api_endpoint_override"
   ];
 
   disabledTestPaths = [
@@ -59,6 +78,7 @@ buildPythonPackage rec {
     "tests/system/test_bucket.py"
     "tests/system/test_fileio.py"
     "tests/system/test_kms_integration.py"
+    "tests/unit/test_transfer_manager.py"
   ];
 
   preCheck = ''
@@ -74,7 +94,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Storage API client library";
     homepage = "https://github.com/googleapis/python-storage";
+    changelog = "https://github.com/googleapis/python-storage/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

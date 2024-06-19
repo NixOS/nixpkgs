@@ -1,86 +1,161 @@
-{ stdenv
+{ config
+, stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
-, fetchurl
-, pkg-config
+, Foundation
+, abseil-cpp
 , cmake
-, python3Packages
-, libpng
-, zlib
 , eigen
-, protobuf
-, howard-hinnant-date
-, nlohmann_json
-, boost
-, oneDNN
 , gtest
-, pythonSupport ? false
+, libpng
+, nlohmann_json
 , nsync
-, flatbuffers
-}:
+, pkg-config
+, python3Packages
+, re2
+, zlib
+, microsoft-gsl
+, libiconv
+, protobuf_21
+, pythonSupport ? true
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? {}
+}@inputs:
 
-# Python Support
-#
-# When enabling Python support a wheel is made and stored in a `dist` output.
-# This wheel is then installed in a separate derivation.
-
-assert pythonSupport -> lib.versionOlder protobuf.version "3.20";
 
 let
-  # prefetch abseil
-  # Note: keep URL in sync with `cmake/external/abseil-cpp.cmake`
-  abseil = fetchurl {
-    url = "https://github.com/abseil/abseil-cpp/archive/refs/tags/20211102.0.zip";
-    sha256 = "sha256-pFZ/8C+spnG5XjHTFbqxi0K2xvGmDpHG6oTlohQhEsI=";
+  version = "1.16.3";
+
+  stdenv = throw "Use effectiveStdenv instead";
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
+
+  cudaCapabilities = cudaPackages.cudaFlags.cudaCapabilities;
+  # E.g. [ "80" "86" "90" ]
+  cudaArchitectures = (builtins.map cudaPackages.cudaFlags.dropDot cudaCapabilities);
+  cudaArchitecturesString = lib.strings.concatStringsSep ";" cudaArchitectures;
+
+  howard-hinnant-date = fetchFromGitHub {
+    owner = "HowardHinnant";
+    repo = "date";
+    rev = "v2.4.1";
+    sha256 = "sha256-BYL7wxsYRI45l8C3VwxYIIocn5TzJnBtU0UZ9pHwwZw=";
   };
+
+  mp11 = fetchFromGitHub {
+    owner = "boostorg";
+    repo = "mp11";
+    rev = "boost-1.79.0";
+    hash = "sha256-ZxgPDLvpISrjpEHKpLGBowRKGfSwTf6TBfJD18yw+LM=";
+  };
+
+  safeint = fetchFromGitHub {
+    owner = "dcleblanc";
+    repo = "safeint";
+    rev = "ff15c6ada150a5018c5ef2172401cb4529eac9c0";
+    hash = "sha256-PK1ce4C0uCR4TzLFg+elZdSk5DdPCRhhwT3LvEwWnPU=";
+  };
+
+  pytorch_cpuinfo = fetchFromGitHub {
+    owner = "pytorch";
+    repo = "cpuinfo";
+    # There are no tags in the repository
+    rev = "5916273f79a21551890fd3d56fc5375a78d1598d";
+    hash = "sha256-nXBnloVTuB+AVX59VDU/Wc+Dsx94o92YQuHp3jowx2A=";
+  };
+
+  flatbuffers = fetchFromGitHub {
+    owner = "google";
+    repo = "flatbuffers";
+    rev = "v1.12.0";
+    hash = "sha256-L1B5Y/c897Jg9fGwT2J3+vaXsZ+lfXnskp8Gto1p/Tg=";
+  };
+
+  onnx = fetchFromGitHub {
+    owner = "onnx";
+    repo = "onnx";
+    rev = "refs/tags/v1.14.1";
+    hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
+  };
+
+   cutlass = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "cutlass";
+    rev = "v3.0.0";
+    sha256 = "sha256-YPD5Sy6SvByjIcGtgeGH80TEKg2BtqJWSg46RvnJChY=";
+   };
 in
-stdenv.mkDerivation rec {
+effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "1.12.1";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
-    rev = "v${version}";
-    sha256 = "sha256-wwllEemiHTp9aJcCd1gsTS4WUVMp5wW+4i/+6DzmAeM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bTW9Pc3rvH+c8VIlDDEtAXyA3sajVyY5Aqr6+SxaMF4=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # Use dnnl from nixpkgs instead of submodules
-    (fetchpatch {
-      name = "system-dnnl.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/system-dnnl.diff?h=python-onnxruntime&id=0185531906bda3a9aba93bbb0f3dcfeb0ae671ad";
-      sha256 = "sha256-58RBrQnAWNtc/1pmFs+PkZ6qCsL1LfMY3P0exMKzotA=";
-    })
+    # If you stumble on these patches trying to update onnxruntime, check
+    # `git blame` and ping the introducers.
+
+    # Context: we want the upstream to
+    # - always try find_package first (FIND_PACKAGE_ARGS),
+    # - use MakeAvailable instead of the low-level Populate,
+    # - use Eigen3::Eigen as the target name (as declared by libeigen/eigen).
+    ./0001-eigen-allow-dependency-injection.patch
+  ] ++ lib.optionals cudaSupport [
+    # We apply the referenced 1064.patch ourselves to our nix dependency.
+    #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
+    ./nvcc-gsl.patch
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     python3Packages.python
-    gtest
+    protobuf_21
   ] ++ lib.optionals pythonSupport (with python3Packages; [
+    pip
+    python
+    pythonOutputDistHook
     setuptools
     wheel
-    pip
-    pythonOutputDistHook
-  ]);
+  ]) ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
   buildInputs = [
+    eigen
     libpng
     zlib
-    howard-hinnant-date
     nlohmann_json
-    boost
-    oneDNN
-    protobuf
-  ] ++ lib.optionals pythonSupport [
-    nsync
-    python3Packages.numpy
-    python3Packages.pybind11
-  ];
+    microsoft-gsl
+  ] ++ lib.optionals pythonSupport (with python3Packages; [
+    numpy
+    pybind11
+    packaging
+  ]) ++ lib.optionals effectiveStdenv.isDarwin [
+    Foundation
+    libiconv
+  ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_cccl # cub/cub.cuh
+    libcublas # cublas_v2.h
+    libcurand # curand.h
+    libcusparse # cusparse.h
+    libcufft # cufft.h
+    cudnn # cudnn.h
+    cuda_cudart
+  ]);
+
+  nativeCheckInputs = [
+    gtest
+  ] ++ lib.optionals pythonSupport (with python3Packages; [
+    pytest
+    sympy
+    onnx
+  ]);
 
   # TODO: build server, and move .so's to lib output
   # Python's wheel is stored in a separate dist output
@@ -91,26 +166,51 @@ stdenv.mkDerivation rec {
   cmakeDir = "../cmake";
 
   cmakeFlags = [
-    "-Donnxruntime_PREFER_SYSTEM_LIB=ON"
+    "-DABSL_ENABLE_INSTALL=ON"
+    "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
+    "-DFETCHCONTENT_QUIET=OFF"
+    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_DATE=${howard-hinnant-date}"
+    "-DFETCHCONTENT_SOURCE_DIR_FLATBUFFERS=${flatbuffers}"
+    "-DFETCHCONTENT_SOURCE_DIR_GOOGLE_NSYNC=${nsync.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
+    "-DFETCHCONTENT_SOURCE_DIR_ONNX=${onnx}"
+    "-DFETCHCONTENT_SOURCE_DIR_PYTORCH_CPUINFO=${pytorch_cpuinfo}"
+    "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
+    "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
+    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" doCheck)
     "-Donnxruntime_ENABLE_LTO=ON"
-    "-Donnxruntime_BUILD_UNIT_TESTS=ON"
-    "-Donnxruntime_USE_PREINSTALLED_EIGEN=ON"
-    "-Donnxruntime_USE_MPI=ON"
-    "-Deigen_SOURCE_PATH=${eigen.src}"
-    "-Donnxruntime_USE_DNNL=YES"
+    "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
+    (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
+    (lib.cmakeBool "onnxruntime_USE_NCCL" cudaSupport)
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
+  ] ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${cutlass}")
+    (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+    (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
   ];
 
-  doCheck = true;
+  env = lib.optionalAttrs effectiveStdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=deprecated-declarations"
+      "-Wno-error=unused-but-set-variable"
+    ];
+  };
+
+  doCheck = !cudaSupport;
+
+  requiredSystemFeatures = lib.optionals cudaSupport [ "big-parallel" ];
 
   postPatch = ''
-    substituteInPlace cmake/external/abseil-cpp.cmake \
-      --replace "${abseil.url}" "${abseil}"
-
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+  '' + lib.optionalString (effectiveStdenv.hostPlatform.system == "aarch64-linux") ''
+    # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
+    rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc
   '';
 
   postBuild = lib.optionalString pythonSupport ''
@@ -126,7 +226,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit protobuf;
+    inherit cudaSupport cudaPackages; # for the python module
+    protobuf = protobuf_21;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;
     };
@@ -148,6 +249,6 @@ stdenv.mkDerivation rec {
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer puffnfresh ck3d ];
+    maintainers = with maintainers; [ jonringer puffnfresh ck3d cbourjau ];
   };
 }

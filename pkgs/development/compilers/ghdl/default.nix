@@ -1,42 +1,53 @@
-{ stdenv, fetchFromGitHub, fetchpatch, callPackage, gnat11, zlib, llvm, lib
-, backend ? "mcode" }:
+{ stdenv
+, fetchFromGitHub
+, callPackage
+, gnat
+, zlib
+, llvm
+, lib
+, backend ? "mcode"
+}:
 
 assert backend == "mcode" || backend == "llvm";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghdl-${backend}";
-  version = "1.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner  = "ghdl";
     repo   = "ghdl";
-    rev    = "v${version}";
-    sha256 = "1gyh0xckwbzgslbpw9yrpj4gqs9fm1a2qpbzl0sh143fk1kwjlly";
+    rev    = "v${finalAttrs.version}";
+    hash   = "sha256-tPSHer3qdtEZoPh9BsEyuTOrXgyENFUyJqnUS3UYAvM=";
   };
-
-  patches = [
-    # Allow compilation with GNAT 11, picked from master
-    (fetchpatch {
-      name = "fix-gnat-11-compilation.patch";
-      url = "https://github.com/ghdl/ghdl/commit/8356ea3bb4e8d0e5ad8638c3d50914b64fc360ec.patch";
-      sha256 = "04pzn8g7xha8000wbjjmry6h1grfqyn3bjvj47hi4qwgl21wfjra";
-    })
-  ];
 
   LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
-  buildInputs = [ gnat11 zlib ] ++ lib.optional (backend == "llvm") [ llvm ];
-  propagatedBuildInputs = lib.optionals (backend == "llvm") [ zlib ];
+  nativeBuildInputs = [
+    gnat
+  ];
+  buildInputs = [
+    zlib
+  ] ++ lib.optionals (backend == "llvm") [
+    llvm
+  ];
+  propagatedBuildInputs = [
+  ] ++ lib.optionals (backend == "llvm") [
+    zlib
+  ];
 
   preConfigure = ''
     # If llvm 7.0 works, 7.x releases should work too.
     sed -i 's/check_version  7.0/check_version  7/g' configure
   '';
 
-  configureFlags = [ "--enable-synth" ] ++ lib.optional (backend == "llvm")
-    "--with-llvm-config=${llvm.dev}/bin/llvm-config";
-
-  hardeningDisable = [ "format" ];
+  configureFlags = [
+    # See https://github.com/ghdl/ghdl/pull/2058
+    "--disable-werror"
+    "--enable-synth"
+  ] ++ lib.optionals (backend == "llvm") [
+    "--with-llvm-config=${llvm.dev}/bin/llvm-config"
+  ];
 
   enableParallelBuilding = true;
 
@@ -49,11 +60,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ghdl/ghdl";
     description = "VHDL 2008/93/87 simulator";
-    maintainers = with maintainers; [ lucus16 thoughtpolice ];
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "ghdl";
+    maintainers = with lib.maintainers; [ lucus16 thoughtpolice ];
+    platforms = lib.platforms.linux;
   };
-}
+})

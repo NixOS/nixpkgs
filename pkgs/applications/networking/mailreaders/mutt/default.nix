@@ -12,41 +12,53 @@
 , gpgSupport   ? false
 , gpgmeSupport ? true
 , imapSupport  ? true
+, pop3Support  ? true
+, smtpSupport  ? true
 , withSidebar  ? true
 , gssSupport   ? true
 , writeScript
 }:
+assert smimeSupport -> sslSupport;
+assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.2.7";
+  version = "2.2.13";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    sha256 = "6xOFj1i7Np9He/ZS2Q6baq3dDWEKy+o0VQSeXvrTbfE=";
+    hash = "sha256-6yP63cHMl9hnaT86Sp8wlJrZN2WtW2/a4nl6QAHFjvs=";
   };
 
-  patches = lib.optional smimeSupport (fetchpatch {
+  patches = [
+    # Avoid build-only references embedding into 'mutt -v' output.
+    ./no-build-only-refs.patch
+  ] ++ lib.optional smimeSupport (fetchpatch {
     url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
     sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
   });
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    perl which
+  ];
+
   buildInputs =
-    [ ncurses which perl ]
+    [ ncurses ]
     ++ lib.optional headerCache  gdbm
     ++ lib.optional sslSupport   openssl
     ++ lib.optional gssSupport   libkrb5
-    ++ lib.optional saslSupport  cyrus_sasl
-    ++ lib.optional gpgmeSupport gpgme;
+    ++ lib.optional saslSupport  cyrus_sasl;
 
   configureFlags = [
     (lib.enableFeature headerCache  "hcache")
     (lib.enableFeature gpgmeSupport "gpgme")
     (lib.enableFeature imapSupport  "imap")
+    (lib.enableFeature smtpSupport  "smtp")
+    (lib.enableFeature pop3Support  "pop")
     (lib.enableFeature withSidebar  "sidebar")
-    "--enable-smtp"
-    "--enable-pop"
     "--with-mailpath="
 
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
@@ -59,9 +71,10 @@ stdenv.mkDerivation rec {
     # set by the installer, and removing the need for the group 'mail'
     # I set the value 'mailbox' because it is a default in the configure script
     "--with-homespool=mailbox"
-  ] ++ lib.optional sslSupport  "--with-ssl"
-    ++ lib.optional gssSupport  "--with-gss"
-    ++ lib.optional saslSupport "--with-sasl";
+  ] ++ lib.optional sslSupport   "--with-ssl"
+    ++ lib.optional gssSupport   "--with-gss"
+    ++ lib.optional saslSupport  "--with-sasl"
+    ++ lib.optional gpgmeSupport "--with-gpgme-prefix=${lib.getDev gpgme}";
 
   postPatch = lib.optionalString (smimeSupport || gpgmeSupport) ''
     sed -i 's#/usr/bin/openssl#${openssl}/bin/openssl#' smime_keys.pl
@@ -96,6 +109,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A small but very powerful text-based mail client";
     homepage = "http://www.mutt.org";
+    mainProgram = "mutt";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ rnhmjoj ];

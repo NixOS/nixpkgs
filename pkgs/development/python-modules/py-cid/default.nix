@@ -1,26 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, base58
-, py-multibase
-, py-multicodec
-, morphys
-, py-multihash
-, hypothesis
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  base58,
+  py-multibase,
+  py-multicodec,
+  morphys,
+  py-multihash,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "py-cid";
   version = "0.3.0";
+  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ipld";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aN7ee25ghKKa90+FoMDCdGauToePc5AzDLV3tONvh4U=";
+    hash = "sha256-aN7ee25ghKKa90+FoMDCdGauToePc5AzDLV3tONvh4U=";
   };
 
   postPatch = ''
@@ -38,7 +40,7 @@ buildPythonPackage rec {
     py-multihash
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
   ];

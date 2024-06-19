@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext pkg-config which ];
   buildInputs = [ glib gtk2 ];
 
-  patches = lib.optional enableSoftening [
+  patches = lib.optionals enableSoftening [
     ./encryption.patch
     ./dvdrom.patch
   ];
@@ -93,5 +93,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
+    mainProgram = "dvdisaster";
   };
 }

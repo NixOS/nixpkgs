@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flax
-, jax
-, jaxlib
-, transformers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flax,
+  jax,
+  jaxlib,
+  transformers,
 }:
 
 buildPythonPackage rec {
@@ -15,14 +16,12 @@ buildPythonPackage rec {
     owner = "patil-suraj";
     repo = "vqgan-jax";
     rev = "1be20eee476e5d35c30e4ec3ed12222018af8ce4";
-    sha256 = "sha256-OZihAXpE0UsgauQ38XDmAF+lrIgz05uK0ro8SCdVsPc=";
+    hash = "sha256-OZihAXpE0UsgauQ38XDmAF+lrIgz05uK0ro8SCdVsPc=";
   };
 
   format = "setuptools";
 
-  buildInputs = [
-    jaxlib
-  ];
+  buildInputs = [ jaxlib ];
 
   propagatedBuildInputs = [
     flax
@@ -32,9 +31,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "vqgan_jax"
-  ];
+  pythonImportsCheck = [ "vqgan_jax" ];
 
   meta = with lib; {
     description = "JAX implementation of VQGAN";

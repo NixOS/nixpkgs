@@ -4,33 +4,42 @@
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy_1_4;
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.18";
+  version = "0.6.21";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    sha256 = "sha256-KjmpFetNhNM5tL34e/Pn1i3hc86JZglubSMsHZWu198=";
+    hash = "sha256-tRrOquetn3P2NmrXq7DQHRGP1sWnLR7bV2Lw0W/lUPQ=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
+    apscheduler
     advocate
-    backports_abc
     chardet
     flask-babel
-    flask_login
-    flask_principal
+    flask-login
+    flask-principal
     flask-wtf
+    flask-limiter
     iso-639
+    jsonschema
     lxml
-    pypdf3
+    pypdf
     requests
     sqlalchemy
     tornado
     unidecode
-    Wand
+    wand
     werkzeug
   ];
 
@@ -53,16 +62,20 @@ python3.pkgs.buildPythonApplication rec {
     mv cps.py src/calibreweb/__init__.py
     mv cps src/calibreweb
 
+    sed -i "/backports_abc/d" setup.cfg
+
     substituteInPlace setup.cfg \
       --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
+      --replace "APScheduler>=3.6.3,<3.10.0" "APScheduler>=3.6.3" \
       --replace "chardet>=3.0.0,<4.1.0" "chardet>=3.0.0,<6" \
       --replace "Flask>=1.0.2,<2.1.0" "Flask>=1.0.2" \
-      --replace "Flask-Login>=0.3.2,<0.5.1" "Flask-Login>=0.3.2" \
+      --replace "Flask-Babel>=0.11.1,<3.1.0" "Flask-Babel>=0.11.1" \
+      --replace "Flask-Login>=0.3.2,<0.6.2" "Flask-Login>=0.3.2" \
       --replace "flask-wtf>=0.14.2,<1.1.0" "flask-wtf>=0.14.2" \
       --replace "lxml>=3.8.0,<4.9.0" "lxml>=3.8.0" \
       --replace "tornado>=4.1,<6.2" "tornado>=4.1,<7" \
-      --replace "PyPDF3>=1.0.0,<1.0.7" "PyPDF3>=1.0.0" \
-      --replace "requests>=2.11.1,<2.28.0" "requests" \
+      --replace "PyPDF>=3.0.0,<3.6.0" "PyPDF>=3.0.0" \
+      --replace "requests>=2.11.1,<2.29.0" "requests" \
       --replace "unidecode>=0.04.19,<1.4.0" "unidecode>=0.04.19" \
       --replace "werkzeug<2.1.0" ""
   '';
@@ -78,5 +91,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pborzenkov ];
     platforms = platforms.all;
+    mainProgram = "calibre-web";
   };
 }

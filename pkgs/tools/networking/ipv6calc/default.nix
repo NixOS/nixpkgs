@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ipv6calc";
-  version = "4.0.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "pbiering";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mfJ6ADjGjECyoW5ELnUzXiJHHiwEDHzeOKCGSmGnLno=";
+    sha256 = "sha256-z4CfakCvFdCPwB52wfeooCMI51QY629nMDbCmR50fI4=";
   };
 
   buildInputs = [
@@ -39,15 +39,16 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--prefix=${placeholder "out"}"
     "--libdir=${placeholder "out"}/lib"
+    "--datadir=${placeholder "out"}/share"
     "--disable-bundled-getopt"
     "--disable-bundled-md5"
     "--disable-dynamic-load"
     "--enable-shared"
-  ] ++ lib.optional (libmaxminddb != null) [
+  ] ++ lib.optionals (libmaxminddb != null) [
     "--enable-mmdb"
-  ] ++ lib.optional (geolite-legacy != null) [
+  ] ++ lib.optionals (geolite-legacy != null) [
     "--with-geoip-db=${geolite-legacy}/share/GeoIP"
-  ] ++ lib.optional (ip2location-c != null) [
+  ] ++ lib.optionals (ip2location-c != null) [
     "--enable-ip2location"
   ];
 

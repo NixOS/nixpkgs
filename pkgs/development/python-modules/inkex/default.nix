@@ -1,47 +1,81 @@
-{ buildPythonPackage
-, inkscape
-, cssselect
-, lxml
-, numpy
-, pygobject3
-, python
+{
+  lib,
+  buildPythonPackage,
+  inkscape,
+  poetry-core,
+  cssselect,
+  lxml,
+  numpy,
+  packaging,
+  pillow,
+  pygobject3,
+  pyparsing,
+  pyserial,
+  scour,
+  gobject-introspection,
+  pytestCheckHook,
+  gtk3,
 }:
 
 buildPythonPackage {
   pname = "inkex";
   inherit (inkscape) version;
 
-  format = "other";
+  format = "pyproject";
+
+  inherit (inkscape) src;
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     cssselect
     lxml
     numpy
     pygobject3
+    pyserial
   ];
 
-  # We just copy the files.
-  dontUnpack = true;
-  dontBuild = true;
+  pythonImportsCheck = [ "inkex" ];
 
-  # No tests installed.
-  doCheck = false;
+  nativeCheckInputs = [
+    gobject-introspection
+    pytestCheckHook
+  ];
 
-  installPhase = ''
-    runHook preInstall
+  checkInputs = [
+    gtk3
+    packaging
+    pillow
+    pyparsing
+    scour
+  ];
 
-    mkdir -p "$out/${python.sitePackages}"
-    cp -r "${inkscape}/share/inkscape/extensions/inkex" "$out/${python.sitePackages}"
+  disabledTests = [
+    "test_extract_multiple"
+    "test_lookup_and"
+  ];
 
-    runHook postInstall
+  disabledTestPaths = [
+    # Fatal Python error: Segmentation fault
+    "tests/test_inkex_gui.py"
+    "tests/test_inkex_gui_listview.py"
+    "tests/test_inkex_gui_window.py"
+    # Failed to find pixmap 'image-missing' in /build/source/tests/data/
+    "tests/test_inkex_gui_pixmaps.py"
+  ];
+
+  postPatch = ''
+    cd share/extensions
+
+    substituteInPlace pyproject.toml \
+      --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"' \
+      --replace-fail 'lxml = "^4.5.0"' 'lxml = "^4.5.0 || ^5.0.0"'
   '';
 
-  meta = inkscape.meta // {
-    description = "Inkscape Extensions Library";
-    longDescription = ''
-      This module provides support for inkscape extensions, it includes support for opening svg files and processing them.
-
-      Standalone, it is especially useful for running tests for Inkscape extensions.
-    '';
+  meta = {
+    description = "Library for manipulating SVG documents which is the basis for Inkscape extensions";
+    homepage = "https://gitlab.com/inkscape/extensions";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

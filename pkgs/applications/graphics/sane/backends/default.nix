@@ -3,6 +3,7 @@
 , avahi, libgphoto2, libieee1284, libjpeg, libpng, libtiff, libusb1, libv4l, net-snmp
 , curl, systemd, libxml2, poppler, gawk
 , sane-drivers
+, nixosTests
 
 # List of { src name backend } attibute sets - see installFirmware below:
 , extraFirmware ? []
@@ -16,7 +17,7 @@
 
 stdenv.mkDerivation {
   pname = "sane-backends";
-  version = "1.0.32";
+  version = "1.2.1";
 
   src = fetchurl {
     # raw checkouts of the repo do not work because, the configure script is
@@ -24,9 +25,9 @@ stdenv.mkDerivation {
     # https://gitlab.com/sane-project/backends/-/issues/440
     # unfortunately this make the url unpredictable on update, to find the link
     # go to https://gitlab.com/sane-project/backends/-/releases and choose
-    # the link with other in the URL.
-    url = "https://gitlab.com/sane-project/backends/uploads/104f09c07d35519cc8e72e604f11643f/sane-backends-1.0.32.tar.gz";
-    sha256 = "055iicihxa6b28iv5fnz13n67frdr5nrydq2c846f9x7q0vw4a1s";
+    # the link under the heading "Other".
+    url = "https://gitlab.com/sane-project/backends/uploads/110fc43336d0fb5e514f1fdc7360dd87/sane-backends-1.2.1.tar.gz";
+    sha256 = "f832395efcb90bb5ea8acd367a820c393dda7e0dd578b16f48928b8f5bdd0524";
   };
 
   patches = [
@@ -106,7 +107,7 @@ stdenv.mkDerivation {
   in ''
     mkdir -p $out/etc/udev/rules.d/ $out/etc/udev/hwdb.d
     ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external > $out/etc/udev/rules.d/49-libsane.rules
-    ./tools/sane-desc -m udev+hwdb -s doc/descriptions -m hwdb > $out/etc/udev/hwdb.d/20-sane.hwdb
+    ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external -m hwdb > $out/etc/udev/hwdb.d/20-sane.hwdb
     # the created 49-libsane references /bin/sh
     substituteInPlace $out/etc/udev/rules.d/49-libsane.rules \
       --replace "RUN+=\"/bin/sh" "RUN+=\"${runtimeShell}"
@@ -125,6 +126,14 @@ stdenv.mkDerivation {
   ''
   + lib.concatStrings (builtins.map installFirmware compatFirmware);
 
+  # parallel install creates a bad symlink at $out/lib/sane/libsane.so.1 which prevents finding plugins
+  # https://github.com/NixOS/nixpkgs/issues/224569
+  enableParallelInstalling = false;
+
+  passthru.tests = {
+    inherit (nixosTests) sane;
+  };
+
   meta = with lib; {
     description = "SANE (Scanner Access Now Easy) backends";
     longDescription = ''
@@ -137,5 +146,6 @@ stdenv.mkDerivation {
     homepage = "http://www.sane-project.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ maintainers.symphorien ];
   };
 }

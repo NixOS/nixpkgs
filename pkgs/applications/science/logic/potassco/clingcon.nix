@@ -7,18 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "clingcon";
-  version = "5.0.0";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "potassco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1g2xkz9nsgqnrw3fdf5jchl16f0skj5mm32va61scc2yrchll166";
+    sha256 = "sha256-R2kgcw8VUwhOdvPXnsahT5gnoUd5DXLqfdH++8rFoAA=";
    };
-
-  patches = [
-    ./clingcon_limits.patch
-  ];
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp libclingcon/tests/catch.hpp
@@ -36,6 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Extension of clingo to handle constraints over integers";
+    mainProgram = "clingcon";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     homepage = "https://potassco.org/";

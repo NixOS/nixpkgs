@@ -16,9 +16,10 @@
 , which
 , Security
 , withKeyring ? true
-, libsecret ? null
-, withSystemd ? stdenv.isLinux
-, systemd ? null
+, libsecret
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, withScripts ? true
 }:
 
 let
@@ -39,9 +40,10 @@ let
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
+    mainProgram = "msmtp";
   };
 
-  binaries = stdenv.mkDerivation rec {
+  binaries = stdenv.mkDerivation {
     pname = "msmtp-binaries";
     inherit version src meta;
 
@@ -62,7 +64,7 @@ let
     '';
   };
 
-  scripts = resholve.mkDerivation rec {
+  scripts = resholve.mkDerivation {
     pname = "msmtp-scripts";
     inherit version src meta;
 
@@ -124,8 +126,11 @@ let
   };
 
 in
-symlinkJoin {
-  name = "msmtp-${version}";
-  inherit version meta;
-  paths = [ binaries scripts ];
-}
+if withScripts then
+  symlinkJoin
+  {
+    name = "msmtp-${version}";
+    inherit version meta;
+    paths = [ binaries scripts ];
+    passthru = { inherit binaries scripts; };
+  } else binaries

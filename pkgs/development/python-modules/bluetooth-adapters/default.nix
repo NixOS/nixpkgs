@@ -1,29 +1,35 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, async-timeout
-, bleak
-, dbus-fast
-, myst-parser
-, pytestCheckHook
-, sphinxHook
-, sphinx-rtd-theme
+{
+  lib,
+  aiohttp,
+  aiooui,
+  async-timeout,
+  bleak,
+  buildPythonPackage,
+  dbus-fast,
+  fetchFromGitHub,
+  mac-vendor-lookup,
+  myst-parser,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  sphinx-rtd-theme,
+  sphinxHook,
+  uart-devices,
+  usb-devices,
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.6.0";
-  format = "pyproject";
+  version = "0.19.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "bluetooth-adapters";
     rev = "refs/tags/v${version}";
-    hash = "sha256-26w7513h5WWGqKz4OqHob42O0bk1yW8ePPKB2V9+AHs=";
+    hash = "sha256-hPs6YnmndJ2Z5RotcIRIYWPdvMyX56ul84l1Cs8kqH0=";
   };
 
   postPatch = ''
@@ -36,31 +42,32 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     myst-parser
     poetry-core
     sphinx-rtd-theme
     sphinxHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp
+    aiooui
     async-timeout
     bleak
     dbus-fast
+    mac-vendor-lookup
+    uart-devices
+    usb-devices
   ];
 
-  pythonImportsCheck = [
-    "bluetooth_adapters"
-  ];
+  pythonImportsCheck = [ "bluetooth_adapters" ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/main/CHANGELOG.md";
     description = "Tools to enumerate and find Bluetooth Adapters";
-    homepage = "https://bluetooth-adapters.readthedocs.io/";
+    homepage = "https://github.com/Bluetooth-Devices/bluetooth-adapters";
+    changelog = "https://github.com/bluetooth-devices/bluetooth-adapters/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.home-assistant.members;
   };

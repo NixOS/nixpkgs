@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.xdhampus ];
     platforms = platforms.all;
+    mainProgram = "quich";
   };
 }

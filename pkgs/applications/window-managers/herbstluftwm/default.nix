@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, libXft, libXrender, libXdmcp, libXfixes, freetype, asciidoc
 , xdotool, xorgserver, xsetroot, xterm, runtimeShell
+, fetchpatch
 , nixosTests }:
 
 stdenv.mkDerivation rec {
@@ -44,6 +45,19 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./test-path-environment.patch
+    # Adjust tests for compatibility with gcc 12 (https://github.com/herbstluftwm/herbstluftwm/issues/1512)
+    # Can be removed with the next release (>0.9.5).
+    (fetchpatch {
+      url = "https://github.com/herbstluftwm/herbstluftwm/commit/8678168c7a3307b1271e94974e062799e745ab40.patch";
+      hash = "sha256-uI6ErfDitT2Tw0txx4lMSBn/jjiiyL4Qw6AJa/CTh1E=";
+    })
+    # Fix tests with recent Xorg, can be removed with the next release (<0.9.5)
+    # Details here: https://github.com/herbstluftwm/herbstluftwm/issues/1560
+    (fetchpatch {
+      url = "https://github.com/herbstluftwm/herbstluftwm/commit/1a6e8ee24eac671569f54bfec22ab47ff285a52c.patch";
+      hash = "sha256-srulWJQ9zTR4Kdxo40AdHND4nexDe2PDSR69yWsOpVA=";
+    })
+
   ];
 
   postPatch = ''
@@ -61,7 +75,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     (python3.withPackages (ps: with ps; [ ewmh pytest xlib ]))
     xdotool
     xorgserver
@@ -70,17 +84,16 @@ stdenv.mkDerivation rec {
     python3.pkgs.pytestCheckHook
   ];
 
-  # make the package's module avalaible
+  # make the package's module available
   preCheck = ''
     export PYTHONPATH="$PYTHONPATH:../python"
   '';
 
   pytestFlagsArray = [ "../tests" ];
   disabledTests = [
-    "test_title_different_letters_are_drawn" # font problems
-    "test_completable_commands" # font problems
     "test_autostart" # $PATH problems
     "test_wmexec_to_other" # timeouts in sandbox
+    "test_rules" # timeouts
   ];
 
   passthru = {

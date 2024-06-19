@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An automated theorem prover for classical higher-order logic with choice";
+    mainProgram = "leo3";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.bsd3;
     maintainers = [maintainers.raskin];

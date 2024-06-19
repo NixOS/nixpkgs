@@ -1,32 +1,34 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry-core
-, gobject-introspection
-, gtk3
-, pycairo
-, pygobject3
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  poetry-core,
+  gobject-introspection,
+  gtk3,
+  pycairo,
+  pygobject3,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "gaphas";
-  version = "3.8.0";
-  disabled = pythonOlder "3.7";
-
+  version = "4.0.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-szES3oLJayboCAMCGKtQqclOcbpYtEn3rg95OPtOZpU=";
+    hash = "sha256-x4CVY2i/SCjq/c1Xfx3gdx7jTims1aKd05ziN4DdE1g=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    gobject-introspection
   ];
 
-  buildInputs = [ gobject-introspection gtk3 ];
+  buildInputs = [ gtk3 ];
 
   propagatedBuildInputs = [
     pycairo
@@ -38,8 +40,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "GTK+ based diagramming widget";
-    maintainers = with maintainers; [ wolfangaukang ];
     homepage = "https://github.com/gaphor/gaphas";
+    changelog = "https://github.com/gaphor/gaphas/releases/tag/${version}";
     license = licenses.asl20;
+    maintainers = with maintainers; [ wolfangaukang ];
   };
 }

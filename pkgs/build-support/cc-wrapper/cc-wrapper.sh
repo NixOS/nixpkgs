@@ -31,8 +31,8 @@ cxxLibrary=1
 cInclude=1
 
 expandResponseParams "$@"
-linkType=$(checkLinkType "${params[@]}")
 
+declare -ag positionalArgs=()
 declare -i n=0
 nParams=${#params[@]}
 while (( "$n" < "$nParams" )); do
@@ -46,11 +46,24 @@ while (( "$n" < "$nParams" )); do
         -nostdinc) cInclude=0 cxxInclude=0 ;;
         -nostdinc++) cxxInclude=0 ;;
         -nostdlib) cxxLibrary=0 ;;
+        -x*-header) dontLink=1 ;; # both `-x c-header` and `-xc-header` are accepted by clang
+        -xc++*) isCxx=1 ;;        # both `-xc++` and `-x c++` are accepted by clang
         -x)
             case "$p2" in
                 *-header) dontLink=1 ;;
                 c++*) isCxx=1 ;;
             esac
+            ;;
+        --) # Everything else is positional args!
+            # See: https://github.com/llvm/llvm-project/commit/ed1d07282cc9d8e4c25d585e03e5c8a1b6f63a74
+
+            # Any positional arg (i.e. any argument after `--`) will be
+            # interpreted as a "non flag" arg:
+            if [[ -v "params[$n]" ]]; then nonFlagArgs=1; fi
+
+            positionalArgs=("${params[@]:$n}")
+            params=("${params[@]:0:$((n - 1))}")
+            break;
             ;;
         -?*) ;;
         *) nonFlagArgs=1 ;; # Includes a solitary dash (`-`) which signifies standard input; it is not a flag
@@ -122,6 +135,31 @@ fi
 
 if [[ "$isCxx" = 1 ]]; then
     if [[ "$cxxInclude" = 1 ]]; then
+        #
+        # The motivation for this comment is to explain the reason for appending
+        # the C++ stdlib to NIX_CFLAGS_COMPILE, which I initially thought should
+        # change and later realized it shouldn't in:
+        #
+        #   https://github.com/NixOS/nixpkgs/pull/185569#issuecomment-1234959249
+        #
+        # NIX_CFLAGS_COMPILE contains dependencies added using "-isystem", and
+        # NIX_CXXSTDLIB_COMPILE adds the C++ stdlib using "-isystem". Appending
+        # NIX_CXXSTDLIB_COMPILE to NIX_CLAGS_COMPILE emulates this part of the
+        # include lookup order from GCC/Clang:
+        #
+        # > 4. Directories specified with -isystem options are scanned in
+        # >    left-to-right order.
+        # > 5. Standard system directories are scanned.
+        # > 6. Directories specified with -idirafter options are scanned
+        # >    in left-to-right order.
+        #
+        # NIX_CXX_STDLIB_COMPILE acts as the "standard system directories" that
+        # are otherwise missing from CC in nixpkgs, so should be added last.
+        #
+        # This means that the C standard library should never be present inside
+        # NIX_CFLAGS_COMPILE, because it MUST come after the C++ stdlib. It is
+        # added automatically by cc-wrapper later using "-idirafter".
+        #
         NIX_CFLAGS_COMPILE_@suffixSalt@+=" $NIX_CXXSTDLIB_COMPILE_@suffixSalt@"
     fi
     if [[ "$cxxLibrary" = 1 ]]; then
@@ -132,10 +170,11 @@ fi
 source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.
-extraAfter=($NIX_CFLAGS_COMPILE_@suffixSalt@)
-extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
+extraAfter=(${hardeningCFlagsAfter[@]+"${hardeningCFlagsAfter[@]}"} $NIX_CFLAGS_COMPILE_@suffixSalt@)
+extraBefore=(${hardeningCFlagsBefore[@]+"${hardeningCFlagsBefore[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
 
 if [ "$dontLink" != 1 ]; then
+    linkType=$(checkLinkType $NIX_LDFLAGS_BEFORE_@suffixSalt@ "${params[@]}" ${NIX_CFLAGS_LINK_@suffixSalt@:-} $NIX_LDFLAGS_@suffixSalt@)
 
     # Add the flags that should only be passed to the compiler when
     # linking.
@@ -180,6 +219,12 @@ if [ "$cc1" = 1 ]; then
   extraBefore=()
 fi
 
+# Finally, if we got any positional args, append them to `extraAfter`
+# now:
+if [[ "${#positionalArgs[@]}" -gt 0 ]]; then
+    extraAfter+=(-- "${positionalArgs[@]}")
+fi
+
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see ld-wrapper for explanation.
@@ -194,11 +239,20 @@ fi
 PATH="$path_backup"
 # Old bash workaround, see above.
 
+# if a cc-wrapper-hook exists, run it.
+if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
+    compiler=@prog@
+    source @out@/nix-support/cc-wrapper-hook
+fi
+
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    exec @prog@ @<(printf "%q\n" \
+    responseFile=$(mktemp "${TMPDIR:-/tmp}/cc-params.XXXXXX")
+    trap 'rm -f -- "$responseFile"' EXIT
+    printf "%q\n" \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
-       ${extraAfter+"${extraAfter[@]}"})
+       ${extraAfter+"${extraAfter[@]}"} > "$responseFile"
+    @prog@ "@$responseFile"
 else
     exec @prog@ \
        ${extraBefore+"${extraBefore[@]}"} \

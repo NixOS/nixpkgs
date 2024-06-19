@@ -7,7 +7,6 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , gtk4
 , libadwaita
 , glib
@@ -19,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "baobab";
-  version = "42.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Sxqr5rqxWCs/6nmigpvOfyQVu25QYvJTV67t1TF6UNw=";
+    hash = "sha256-zk3vXILQVnGlAJ9768+FrJhnXZ2BYNKK2RgbJppy43w=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +34,8 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook4
-    # Prevents “error: Package `libadwaita-1' not found in specified Vala API
-    # directories or GObject-Introspection GIR directories” with strictDeps,
-    # even though it should only be a runtime dependency.
-    libadwaita
   ];
 
   buildInputs = [
@@ -52,12 +46,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postPatch = ''
-    # https://gitlab.gnome.org/GNOME/baobab/-/merge_requests/40
-    substituteInPlace build-aux/post-install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -66,9 +54,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical application to analyse disk usage in any GNOME environment";
-    homepage = "https://wiki.gnome.org/Apps/DiskUsageAnalyzer";
+    mainProgram = "baobab";
+    homepage = "https://apps.gnome.org/Baobab/";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

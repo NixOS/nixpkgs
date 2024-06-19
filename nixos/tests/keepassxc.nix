@@ -4,6 +4,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
   name = "keepassxc";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ turion ];
+    timeout = 1800;
   };
 
   nodes.machine = { ... }:
@@ -17,7 +18,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     services.xserver.enable = true;
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/163482
-    qt5 = {
+    qt = {
       enable = true;
       platformTheme = "gnome";
       style = "adwaita-dark";
@@ -55,9 +56,12 @@ import ./make-test-python.nix ({ pkgs, ...} :
         machine.sleep(5)
         # Regression #163482: keepassxc did not crash
         machine.succeed("ps -e | grep keepassxc")
-        machine.wait_for_text("foo.kdbx")
+        machine.wait_for_text("Open database")
         machine.send_key("ret")
-        machine.sleep(1)
+
+        # Wait for the enter password screen to appear.
+        machine.wait_for_text("/home/alice/foo.kdbx")
+
         # Click on "Browse" button to select keyfile
         machine.send_key("tab")
         machine.send_chars("/home/alice/foo.keyfile")

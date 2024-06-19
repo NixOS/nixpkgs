@@ -6,6 +6,7 @@
 , autoreconfHook
 , bzip2
 , e2fsprogs
+, glibcLocalesUtf8
 , lzo
 , openssl
 , pkg-config
@@ -25,43 +26,48 @@
 }:
 
 assert xarSupport -> libxml2 != null;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.6.1";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
-    rev = "v${version}";
-    hash = "sha256-G4wL5DDbX0FqaA4cnOlVLZ25ObN8dNsRtxyas29tpDA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-czNKXHoEn1x4deNErnqp/NZfCglF1CxNoLtZ8tcl394=";
   };
-
-  postPatch = ''
-    substituteInPlace Makefile.am --replace '/bin/pwd' "$(type -P pwd)"
-
-    declare -a skip_test_paths=(
-      # test won't work in nix sandbox
-      'libarchive/test/test_write_disk_perms.c'
-      # can't be sure builder will have sparse-capable fs
-      'libarchive/test/test_sparse_basic.c'
-      # can't even be sure builder will have hardlink-capable fs
-      'libarchive/test/test_write_disk_hardlink.c'
-      # access-time-related tests flakey on some systems
-      'cpio/test/test_option_a.c'
-      'cpio/test/test_option_t.c'
-    )
-
-    for test_path in "''${skip_test_paths[@]}" ; do
-      substituteInPlace Makefile.am --replace "$test_path" ""
-      rm "$test_path"
-    done
-  '';
 
   outputs = [ "out" "lib" "dev" ];
 
+  postPatch = let
+    skipTestPaths = [
+      # test won't work in nix sandbox
+      "libarchive/test/test_write_disk_perms.c"
+      # the filesystem does not necessarily have sparse capabilities
+      "libarchive/test/test_sparse_basic.c"
+      # the filesystem does not necessarily have hardlink capabilities
+      "libarchive/test/test_write_disk_hardlink.c"
+      # access-time-related tests flakey on some systems
+      "cpio/test/test_option_a.c"
+      "cpio/test/test_option_t.c"
+    ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+      # only on some aarch64-linux systems?
+      "cpio/test/test_basic.c"
+      "cpio/test/test_format_newc.c"
+    ];
+    removeTest = testPath: ''
+      substituteInPlace Makefile.am --replace-fail "${testPath}" ""
+      rm "${testPath}"
+    '';
+  in ''
+    substituteInPlace Makefile.am --replace-fail '/bin/pwd' "$(type -P pwd)"
+
+    ${lib.concatStringsSep "\n" (map removeTest skipTestPaths)}
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
+    glibcLocalesUtf8 # test_I test requires an UTF-8 locale
     pkg-config
   ];
 
@@ -88,6 +94,11 @@ stdenv.mkDerivation rec {
   # https://github.com/libarchive/libarchive/issues/1475
   doCheck = !stdenv.hostPlatform.isMusl;
 
+  preCheck = ''
+    # Need an UTF-8 locale for test_I test.
+    export LANG=en_US.UTF-8
+  '';
+
   preFixup = ''
     sed -i $lib/lib/libarchive.la \
       -e 's|-lcrypto|-L${lib.getLib openssl}/lib -lcrypto|' \
@@ -105,7 +116,7 @@ stdenv.mkDerivation rec {
       includes implementations of the common tar, cpio, and zcat command-line
       tools that use the libarchive library.
     '';
-    changelog = "https://github.com/libarchive/libarchive/releases/tag/v${version}";
+    changelog = "https://github.com/libarchive/libarchive/releases/tag/v${finalAttrs.version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jcumming AndersonTorres ];
     platforms = platforms.all;
@@ -114,4 +125,4 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit cmake nix samba;
   };
-}
+})

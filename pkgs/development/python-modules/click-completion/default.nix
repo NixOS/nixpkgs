@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 
-# propagates
-, click
-, jinja2
-, shellingham
-, six
+  # propagates
+  click,
+  jinja2,
+  shellingham,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "click-completion";
   version = "0.5.2";
+  format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
@@ -27,9 +29,7 @@ buildPythonPackage rec {
     six
   ];
 
-  pythonImportsCheck = [
-    "click_completion"
-  ];
+  pythonImportsCheck = [ "click_completion" ];
 
   # has no tests
   doCheck = false;

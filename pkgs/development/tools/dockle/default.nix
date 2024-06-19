@@ -2,22 +2,24 @@
 
 buildGoModule rec {
   pname = "dockle";
-  version = "0.4.5";
+  version = "0.4.14";
 
   src = fetchFromGitHub {
     owner = "goodwithtech";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QC0WAM+qitee0dyJorl5Hio3COy4JiIHmFgBIj7S2yM=";
+    hash = "sha256-ZAk51juPFSaDQYfzsf7HXigL4aIk8V+tGA9lZqHBOsY=";
   };
 
-  vendorSha256 = "sha256-9n/782uKu7qNV/WEpbEV3aHcPXipyOhGdAhT/F4O2xc=";
+  vendorHash = "sha256-+AtvnplvPWkUwmxfB7rjYcLTQibQsObFT1QRR0FXAe0=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ btrfs-progs lvm2 ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/goodwithtech/dockle/pkg.version=${version}"
   ];
 
   preCheck = ''
@@ -37,6 +39,7 @@ buildGoModule rec {
     homepage = "https://containers.goodwith.tech";
     changelog = "https://github.com/goodwithtech/dockle/releases/tag/v${version}";
     description = "Container Image Linter for Security";
+    mainProgram = "dockle";
     longDescription = ''
       Container Image Linter for Security.
       Helping build the Best-Practice Docker Image.

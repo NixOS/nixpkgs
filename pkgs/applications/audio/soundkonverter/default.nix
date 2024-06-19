@@ -68,15 +68,17 @@ mkDerivation rec {
   buildInputs = [ taglib ] ++ runtimeDeps;
   # encoder plugins go to ${out}/lib so they're found by kbuildsycoca5
   cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=$out" ];
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
   # add runt-time deps to PATH
   postInstall = ''
     wrapProgram $out/bin/soundkonverter --prefix PATH : ${lib.makeBinPath runtimeDeps }
     '';
   meta = {
+    homepage = "https://github.com/dfaust/soundkonverter";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.schmittlauch ];
     description = "Audio file converter, CD ripper and Replay Gain tool";
+    mainProgram = "soundkonverter";
     longDescription = ''
       soundKonverter is a frontend to various audio converters.
 

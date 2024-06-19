@@ -1,23 +1,29 @@
 { lib
-, runCommandLocal
+, stdenvNoCC
 , fetchFromGitHub
 , python3
 }:
 
-runCommandLocal "er-patcher" rec {
+stdenvNoCC.mkDerivation rec {
   pname = "er-patcher";
-  version = "1.06-2";
+  version = "1.10.1-1";
 
   src = fetchFromGitHub {
     owner = "gurrgur";
     repo = "er-patcher";
     rev = "v${version}";
-    sha256 = "sha256-rFIuswn55FNVmBoDfIpG2cKxybNDaTwOeIUFFoncGF0=";
+    sha256 = "sha256-vSCZQBI9Q+7m+TT9pS7R5Fw3BgTxznbFAArJ7J6+tUQ=";
   };
 
   buildInputs = [
     python3
   ];
+
+  installPhase = ''
+    mkdir -p $out/bin
+    install -Dm755 $src/er-patcher $out/bin/er-patcher
+    patchShebangs $out/bin/er-patcher
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/gurrgur/er-patcher";
@@ -30,9 +36,6 @@ runCommandLocal "er-patcher" rec {
     '';
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
+    mainProgram = "er-patcher";
   };
-} ''
-  mkdir -p $out/bin
-  install -Dm755 $src/er-patcher $out/bin/er-patcher
-  patchShebangs $out/bin/er-patcher
-''
+}

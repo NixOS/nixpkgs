@@ -15,7 +15,7 @@ buildGoModule rec {
     "-s" "-w" "-X main.GitCommit=${version}" "-X main.GitBranch=${version}" "-X main.GitState=nixpkgs" "-X main.GitSummary=${version}" "-X main.Version=${version}"
   ];
 
-  vendorSha256 = "sha256-sC9JA6VRmHGuO3anaZW2Ih5QnRrUom9IIOE7yi3TTG8=";
+  vendorHash = "sha256-sC9JA6VRmHGuO3anaZW2Ih5QnRrUom9IIOE7yi3TTG8=";
 
   meta = with lib; {
     homepage = "https://github.com/devture/matrix-corporal";

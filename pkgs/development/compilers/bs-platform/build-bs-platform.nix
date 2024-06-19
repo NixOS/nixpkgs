@@ -1,7 +1,7 @@
 # This file is based on https://github.com/turboMaCk/bs-platform.nix/blob/master/build-bs-platform.nix
 # to make potential future updates simpler
 
-{ lib, stdenv, fetchFromGitHub, ninja, runCommand, nodejs, python3,
+{ lib, stdenv, ninja, runCommand, nodejs, python3,
   ocaml-version, version, src,
   patches ? [],
   ocaml ? (import ./ocaml.nix {
@@ -15,7 +15,8 @@
       tar zxvf ${src}/vendor/ninja.tar.gz -C $out
     '';
     patches = [];
-  }))
+  })),
+  ...
 }:
 
 let

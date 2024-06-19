@@ -27,6 +27,8 @@ import ./make-test-python.nix (
         };
       };
     testScript = ''
+      import os
+
       start_all()
 
       # Create a fake cache with Nginx service the static files

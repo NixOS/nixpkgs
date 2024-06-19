@@ -1,12 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "fnvhash";
   version = "0.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "znerol";
@@ -15,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "00h8i70qd3dpsyf2dp7fkcb9m2prd6m3l33qv3wf6idpnqgjz6fq";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "fnvhash" ];
 

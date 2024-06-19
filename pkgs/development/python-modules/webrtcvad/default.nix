@@ -1,11 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "webrtcvad";
   version = "2.0.10";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

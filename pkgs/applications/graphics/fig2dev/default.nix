@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fig2dev";
-  version = "3.2.8b";
+  version = "3.2.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/fig2dev-${version}.tar.xz";
-    sha256 = "1jv8rg71dsy00lpg434r5zqs5qrg8mxqvv2gpcjjvmzsm551d2j1";
+    hash = "sha256-FeJGyNE8xy3iXggxQDitUM59Le+pzxr8Fy/X9ZMgkLE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool to convert Xfig files to other formats";
-    homepage = "http://mcj.sourceforge.net/";
+    homepage = "https://mcj.sourceforge.net/";
     license = licenses.xfig;
     platforms = platforms.unix;
     maintainers = with maintainers; [ lesuisse ];

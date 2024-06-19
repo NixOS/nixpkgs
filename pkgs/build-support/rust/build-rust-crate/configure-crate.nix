@@ -1,4 +1,4 @@
-{ lib, stdenv, rust, echo_colored, noisily, mkRustcDepArgs, mkRustcFeatureArgs }:
+{ lib, stdenv, echo_colored, noisily, mkRustcDepArgs, mkRustcFeatureArgs }:
 {
   build
 , buildDependencies
@@ -8,10 +8,16 @@
 , completeDeps
 , crateAuthors
 , crateDescription
-, crateHomepage
 , crateFeatures
+, crateHomepage
+, crateLicense
+, crateLicenseFile
+, crateLinks
 , crateName
+, crateReadme
 , crateRenames
+, crateRepository
+, crateRustVersion
 , crateVersion
 , extraLinkFlags
 , extraRustcOptsForBuildRs
@@ -21,7 +27,7 @@
 , verbose
 , workspace_member }:
 let version_ = lib.splitString "-" crateVersion;
-    versionPre = if lib.tail version_ == [] then "" else lib.elemAt version_ 1;
+    versionPre = lib.optionalString (lib.tail version_ != []) (lib.elemAt version_ 1);
     version = lib.splitVersion (lib.head version_);
     rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
@@ -32,7 +38,7 @@ let version_ = lib.splitString "-" crateVersion;
     completeDepsDir = lib.concatStringsSep " " completeDeps;
     completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
     envFeatures = lib.concatStringsSep " " (
-      map (f: lib.replaceChars ["-"] ["_"] (lib.toUpper f)) crateFeatures
+      map (f: lib.replaceStrings ["-"] ["_"] (lib.toUpper f)) crateFeatures
     );
 in ''
   ${echo_colored colors}
@@ -119,25 +125,28 @@ in ''
 
   EXTRA_BUILD=""
   BUILD_OUT_DIR=""
+
+  # Set up Cargo Environment variables: https://doc.rust-lang.org/cargo/reference/environment-variables.html
   export CARGO_PKG_NAME=${crateName}
   export CARGO_PKG_VERSION=${crateVersion}
   export CARGO_PKG_AUTHORS="${authors}"
   export CARGO_PKG_DESCRIPTION="${crateDescription}"
 
-  export CARGO_CFG_TARGET_ARCH=${rust.toTargetArch stdenv.hostPlatform}
-  export CARGO_CFG_TARGET_OS=${rust.toTargetOs stdenv.hostPlatform}
+  export CARGO_CFG_TARGET_ARCH=${stdenv.hostPlatform.rust.platform.arch}
+  export CARGO_CFG_TARGET_OS=${stdenv.hostPlatform.rust.platform.os}
   export CARGO_CFG_TARGET_FAMILY="unix"
   export CARGO_CFG_UNIX=1
   export CARGO_CFG_TARGET_ENV="gnu"
   export CARGO_CFG_TARGET_ENDIAN=${if stdenv.hostPlatform.parsed.cpu.significantByte.name == "littleEndian" then "little" else "big"}
-  export CARGO_CFG_TARGET_POINTER_WIDTH=${toString stdenv.hostPlatform.parsed.cpu.bits}
+  export CARGO_CFG_TARGET_POINTER_WIDTH=${with stdenv.hostPlatform; toString (if isILP32 then 32 else parsed.cpu.bits)}
   export CARGO_CFG_TARGET_VENDOR=${stdenv.hostPlatform.parsed.vendor.name}
 
   export CARGO_MANIFEST_DIR=$(pwd)
+  export CARGO_MANIFEST_LINKS=${crateLinks}
   export DEBUG="${toString (!release)}"
   export OPT_LEVEL="${toString optLevel}"
-  export TARGET="${rust.toRustTargetSpec stdenv.hostPlatform}"
-  export HOST="${rust.toRustTargetSpec stdenv.buildPlatform}"
+  export TARGET="${stdenv.hostPlatform.rust.rustcTargetSpec}"
+  export HOST="${stdenv.buildPlatform.rust.rustcTargetSpec}"
   export PROFILE=${if release then "release" else "debug"}
   export OUT_DIR=$(pwd)/target/build/${crateName}.out
   export CARGO_PKG_VERSION_MAJOR=${lib.elemAt version 0}
@@ -145,6 +154,11 @@ in ''
   export CARGO_PKG_VERSION_PATCH=${lib.elemAt version 2}
   export CARGO_PKG_VERSION_PRE="${versionPre}"
   export CARGO_PKG_HOMEPAGE="${crateHomepage}"
+  export CARGO_PKG_LICENSE="${crateLicense}"
+  export CARGO_PKG_LICENSE_FILE="${crateLicenseFile}"
+  export CARGO_PKG_README="${crateReadme}"
+  export CARGO_PKG_REPOSITORY="${crateRepository}"
+  export CARGO_PKG_RUST_VERSION="${crateRustVersion}"
   export NUM_JOBS=$NIX_BUILD_CORES
   export RUSTC="rustc"
   export RUSTDOC="rustdoc"
@@ -186,12 +200,27 @@ in ''
      set +e
      EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
      EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS=$(sed -n "s/^cargo:rustc-link-arg=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS_BINS=$(sed -n "s/^cargo:rustc-link-arg-bins=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS_LIB=$(sed -n "s/^cargo:rustc-link-arg-lib=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_LIBS=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
      EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
 
+     # We want to read part of every line that has cargo:rustc-env= prefix and
+     # export it as environment variables. This turns out tricky if the lines
+     # have spaces: we can't wrap the command in double quotes as that captures
+     # all the lines in single output. We can't use while read loop because
+     # exporting from inside of it doesn't make it to the outside scope. We
+     # can't use xargs as export is a built-in and does not work from it. As a
+     # last resort then, we change the IFS so that the for loop does not split
+     # on spaces and reset it after we are done. See ticket #199298.
+     #
+     _OLDIFS="$IFS"
+     IFS=$'\n'
      for env in $(sed -n "s/^cargo:rustc-env=\(.*\)/\1/p" target/build/${crateName}.opt); do
-       export $env
+       export "$env"
      done
+     IFS="$_OLDIFS"
 
      CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/" -e "s/-/_/g")
      grep -P "^cargo:(?!(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \

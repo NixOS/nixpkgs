@@ -1,58 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fastjsonschema
-, flit-core
-, pytestCheckHook
-, glibcLocales
-, ipython_genutils
-, traitlets
-, testpath
-, jsonschema
-, jupyter_core
-, pep440
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  hatchling,
+  hatch-nodejs-version,
+  fastjsonschema,
+  jsonschema,
+  jupyter-core,
+  traitlets,
+  pep440,
+  pytestCheckHook,
+  testpath,
 }:
 
 buildPythonPackage rec {
   pname = "nbformat";
-  version = "5.5.0";
-  format = "pyproject";
+  version = "5.10.4";
+  pyproject = true;
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nr4w5sOz5bR9Of8KOJehrPUj0r+vy04tBM23D4pmxQc=";
+    hash = "sha256-MiFosU+Tel0RNimI7KwqSVLT2OOiy+sjGVhGMSJtWzo=";
   };
 
-  nativeBuildInputs = [
-    flit-core
+  build-system = [
+    hatchling
+    hatch-nodejs-version
   ];
 
-  LC_ALL="en_US.utf8";
-
-  propagatedBuildInputs = [
+  dependencies = [
     fastjsonschema
-    ipython_genutils
     jsonschema
-    jupyter_core
-    pep440
-    testpath
+    jupyter-core
     traitlets
   ];
 
-  checkInputs = [ pytestCheckHook glibcLocales ];
+  pythonImportsCheck = [ "nbformat" ];
 
-  preCheck = ''
-    mkdir tmp
-    export HOME=tmp
-  '';
+  nativeCheckInputs = [
+    pep440
+    pytestCheckHook
+    testpath
+  ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "The Jupyter Notebook format";
+    mainProgram = "jupyter-trust";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh globin ];
+    maintainers = with lib.maintainers; [ globin ];
   };
 }

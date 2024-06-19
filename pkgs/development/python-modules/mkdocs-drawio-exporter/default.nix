@@ -1,23 +1,28 @@
-{ buildPythonPackage
-, drawio-headless
-, fetchPypi
-, isPy3k
-, lib
-, mkdocs
+{
+  buildPythonPackage,
+  drawio-headless,
+  fetchPypi,
+  isPy3k,
+  lib,
+  mkdocs,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-drawio-exporter";
   version = "0.8.0";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9cvA186FS6bHmpOrv4OfPZ5kRfgfafBfaWxgWJIlwwA=";
+    hash = "sha256-9cvA186FS6bHmpOrv4OfPZ5kRfgfafBfaWxgWJIlwwA=";
   };
 
-  propagatedBuildInputs = [ mkdocs drawio-headless ];
+  propagatedBuildInputs = [
+    mkdocs
+    drawio-headless
+  ];
 
   pythonImportsCheck = [ "mkdocsdrawioexporter" ];
 

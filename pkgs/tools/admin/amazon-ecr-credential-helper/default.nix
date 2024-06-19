@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "amazon-ecr-credential-helper";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-ecr-credential-helper";
     rev = "v${version}";
-    sha256 = "sha256-lkc8plWWmth8SjeWBCf1HTnCfg09QNIsN3xPePqnv6Y=";
+    sha256 = "sha256-xhJnhh1pDANGq4CFBPAEwqtsxSYeIvhKcHEsvYRebbM=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   modRoot = "./ecr-login";
 

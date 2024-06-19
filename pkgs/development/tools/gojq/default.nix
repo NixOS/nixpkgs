@@ -2,18 +2,16 @@
 
 buildGoModule rec {
   pname = "gojq";
-  version = "0.12.9";
+  version = "0.12.16";
 
   src = fetchFromGitHub {
     owner = "itchyny";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AII3mC+JWOP0x4zf8FQdRhOmckPgY7BDRoKICCFkn9Q=";
+    hash = "sha256-lCNh0J0vVvSJaNE9fu3X83YRZlWHOI4rQwmrGJDQWzk=";
   };
 
-  proxyVendor = true;
-
-  vendorSha256 = "sha256-kq9vfmST8M69yiWqzsM/ORG7F7ERtEv9dyfy8u3sWYk=";
+  vendorHash = "sha256-ZC0byawZLBwId5GcAgHXRdEOMUSAv4wDNHFHLrbhB+I=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -24,7 +22,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Pure Go implementation of jq";
     homepage = "https://github.com/itchyny/gojq";
+    changelog = "https://github.com/itchyny/gojq/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "gojq";
   };
 }

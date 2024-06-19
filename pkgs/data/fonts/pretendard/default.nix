@@ -1,21 +1,24 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
 let
-  version = "1.3.3";
+  version = "1.3.9";
 
-  mkPretendard = { pname, typeface, sha256 }:
-    fetchzip {
-      name = "${pname}-${version}";
+  mkPretendard = { pname, typeface, hash }:
+    stdenvNoCC.mkDerivation {
+      inherit pname version;
 
-      url = "https://github.com/orioncactus/pretendard/releases/download/v${version}/${typeface}-${version}.zip";
-      inherit sha256;
+      src = fetchzip {
+        url = "https://github.com/orioncactus/pretendard/releases/download/v${version}/${typeface}-${version}.zip";
+        stripRoot = false;
+        inherit hash;
+      };
 
-      stripRoot = false;
+      installPhase = ''
+        runHook preInstall
 
-      postFetch = ''
-        mkdir -p $out/share/fonts/
-        install -Dm644 $out/public/static/*.otf -t $out/share/fonts/opentype
-        rm -rf $out/{public,web,LICENSE.txt}
+        install -Dm644 public/static/*.otf -t $out/share/fonts/opentype
+
+        runHook postInstall
       '';
 
       meta = with lib; {
@@ -32,18 +35,24 @@ in
   pretendard = mkPretendard {
     pname = "pretendard";
     typeface = "Pretendard";
-    sha256 = "sha256-lRHRdCAg3i3+3Y6j0dCXUgwLdeS/VeI6KNkbDKchNEY=";
+    hash = "sha256-n7RQApffpL/8ojHcZbdxyanl9Tlc8HP8kxLFBdArUfY=";
+  };
+
+  pretendard-gov = mkPretendard {
+    pname = "pretendard-gov";
+    typeface = "PretendardGOV";
+    hash = "sha256-qoDUBOmrk6WPKQgnapThfKC01xWup+HN82hcoIjEe0M=";
   };
 
   pretendard-jp = mkPretendard {
     pname = "pretendard-jp";
     typeface = "PretendardJP";
-    sha256 = "sha256-VgGt/WoaaJJDAzw+gUQVgTQ+q34bdAaKUB4cA9eU0dQ=";
+    hash = "sha256-1nTk1LPoRSfSDgDuGWkcs6RRIY4ZOqDBPMsxezMos6Q=";
   };
 
   pretendard-std = mkPretendard {
     pname = "pretendard-std";
     typeface = "PretendardStd";
-    sha256 = "sha256-FOlZrr6CHPfUm9Q+Yoi0HLQUI7cAhQYq6P6sJGXBIWg=";
+    hash = "sha256-gkYqqxSICmSIrBuPRzBaOlGGM/rJU1z7FiFvu9RhK5s=";
   };
 }

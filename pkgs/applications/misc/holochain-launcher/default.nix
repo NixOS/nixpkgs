@@ -7,38 +7,50 @@
 , openssl
 , webkitgtk
 , libappindicator
-, wrapGAppsHook
+, wrapGAppsHook3
+, shared-mime-info
+, glib-networking
 }:
 
 stdenv.mkDerivation rec {
   name = "holochain-launcher";
-  version = "0.6.0";
+  version = "0.11.5";
+  prerelease = "beta-2";
 
   src = fetchurl {
-    url = "https://github.com/holochain/launcher/releases/download/v${version}/holochain-launcher_${version}_amd64.deb";
-    sha256 = "sha256-o9cUFtq5XUkbC3yFRFiV2k4uWjb+szlE8qV+G9Gve5E=";
+    url = "https://github.com/holochain/launcher/releases/download/v${version}/holochain-launcher-${prerelease}_${version}_amd64.deb";
+    sha256 = "sha256-MRFQJRfvJ+dLmPDfPQX9wErIwEr07EAUqxic8kbKVdo=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    wrapGAppsHook # required for FileChooser
+    wrapGAppsHook3 # required for FileChooser
   ];
 
   buildInputs = [
     openssl
     webkitgtk
     libappindicator
+
+    glib-networking
   ];
 
   unpackCmd = "dpkg-deb -x $curSrc source";
 
   installPhase = ''
     mv usr $out
+    mv $out/bin/holochain-launcher-${prerelease} $out/bin/holochain-launcher
   '';
 
   preFixup = ''
     patchelf --add-needed "libappindicator3.so" "$out/bin/holochain-launcher"
+
+    # without this the DevTools will just display an unparsed HTML file (see https://github.com/tauri-apps/tauri/issues/5711#issuecomment-1336409601)
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+    )
   '';
 
   meta = with lib; {

@@ -1,15 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-Levenshtein
-, pytesseract
-, opencv4
-, fuzzywuzzy
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  levenshtein,
+  pytesseract,
+  opencv4,
+  fuzzywuzzy,
 }:
 
 buildPythonPackage rec {
   pname = "videocr";
   version = "0.1.6";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    python-Levenshtein
+    levenshtein
     pytesseract
     opencv4
     fuzzywuzzy
@@ -25,6 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "python-Levenshtein" "Levenshtein" \
       --replace "opencv-python" "opencv"
     substituteInPlace videocr/constants.py \
       --replace "master" "main"

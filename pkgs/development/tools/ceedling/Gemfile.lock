@@ -1,0 +1,21 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ceedling (0.31.1)
+      constructor (~> 2)
+      deep_merge (~> 1.2)
+      rake (>= 12, < 14)
+      thor (~> 0.14)
+    constructor (2.0.0)
+    deep_merge (1.2.2)
+    rake (13.0.6)
+    thor (0.20.3)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  ceedling
+
+BUNDLED WITH
+   2.4.17

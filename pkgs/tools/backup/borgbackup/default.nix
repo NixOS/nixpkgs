@@ -2,39 +2,49 @@
 , stdenv
 , acl
 , e2fsprogs
+, fetchFromGitHub
 , libb2
 , lz4
 , openssh
 , openssl
 , python3
+, xxHash
 , zstd
 , installShellFiles
 , nixosTests
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3;
+in
+python.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.2";
-  format = "pyproject";
+  version = "1.2.8";
+  pyproject = true;
 
-  src = python3.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-1zBodEPxvrYCsdcrrjYxj2+WVIGPzcUEWFQOxXnlcmA=";
+  src = fetchFromGitHub {
+    owner = "borgbackup";
+    repo = "borg";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+FHqOVuHlY9QUjCrYVnrMBZPMFH9Z2U7eZ6eUSINSrw=";
   };
 
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits
     substituteInPlace src/borg/testsuite/archiver.py \
-      --replace "0o4755" "0o0755"
+      --replace-fail "0o4755" "0o0755"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python.pkgs; [
     cython
     setuptools-scm
+    pkgconfig
+  ];
 
+  nativeBuildInputs = with python.pkgs; [
     # docs
     sphinxHook
-    guzzle_sphinx_theme
+    guzzle-sphinx-theme
 
     # shell completions
     installShellFiles
@@ -45,24 +55,18 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     libb2
     lz4
+    xxHash
     zstd
     openssl
   ] ++ lib.optionals stdenv.isLinux [
     acl
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python.pkgs; [
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
   ];
-
-  preConfigure = ''
-    export BORG_OPENSSL_PREFIX="${openssl.dev}"
-    export BORG_LZ4_PREFIX="${lz4.dev}"
-    export BORG_LIBB2_PREFIX="${libb2}"
-    export BORG_LIBZSTD_PREFIX="${zstd.dev}"
-  '';
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${openssh}/bin"''
@@ -75,8 +79,9 @@ python3.pkgs.buildPythonApplication rec {
       --zsh scripts/shell_completions/zsh/_borg
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     e2fsprogs
+    py
     python-dateutil
     pytest-benchmark
     pytest-xdist
@@ -117,11 +122,12 @@ python3.pkgs.buildPythonApplication rec {
   outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
+    changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
     mainProgram = "borg";
-    maintainers = with maintainers; [ flokli dotlambda globin ];
+    maintainers = with maintainers; [ dotlambda globin ];
   };
 }

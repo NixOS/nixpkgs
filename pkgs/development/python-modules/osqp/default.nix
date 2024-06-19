@@ -1,30 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, future
-, numpy
-, qdldl
-, setuptools-scm
-, scipy
-# check inputs
-, pytestCheckHook
-, cvxopt
+{
+  lib,
+  buildPythonPackage,
+  cmake,
+  cvxopt,
+  fetchPypi,
+  future,
+  numpy,
+  oldest-supported-numpy,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  qdldl,
+  scipy,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "osqp";
-  version = "0.6.2.post5";
+  version = "0.6.7";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b2fa17aae42a7ed498ec261b33f262bb4b3605e7e8464062159d9fae817f0d61";
+    hash = "sha256-O3ARmFV6SZxg67U9fyUBkGSFXHMvTz+84gVdeJ5Tph0=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeBuildInputs = [ cmake setuptools-scm ];
   dontUseCmakeConfigure = true;
+
+  nativeBuildInputs = [
+    cmake
+    oldest-supported-numpy
+    setuptools-scm
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [ "scipy" ];
 
   propagatedBuildInputs = [
     future
@@ -33,11 +45,26 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [ "osqp" ];
-  checkInputs = [ pytestCheckHook cvxopt ];
-  disabledTests = [
-    "mkl_"
+  nativeCheckInputs = [
+    cvxopt
+    pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "osqp" ];
+
+  disabledTests =
+    [
+      # Need an unfree license package - mkl
+      "test_issue14"
+    ]
+    # disable tests failing after scipy 1.12 update
+    # https://github.com/osqp/osqp-python/issues/121
+    # re-enable once unit tests fixed
+    ++ [
+      "feasibility_tests"
+      "polish_tests"
+      "update_matrices_tests"
+    ];
 
   meta = with lib; {
     description = "The Operator Splitting QP Solver";

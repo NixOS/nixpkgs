@@ -15,11 +15,11 @@ assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";
-  version = "1.10.1";
+  version = "1.10.3";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
-    hash = "sha256-7xSuVGsAhM2EJZ9hpV4Ho4w7U6/A9Ua//O8vAbr/6d4=";
+    hash = "sha256-iwhwiXrFrGfe1Wjc+t9Flpz6imvrD9YK8qnq3Coycqo=";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
         -e 's/NOEXECSTACK_FLAGS=$/NOEXECSTACK_FLAGS="-Wa,--noexecstack"/'
   '';
 
+  enableParallelBuilding = true;
+
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
   postFixup = ''
@@ -66,6 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  enableParallelChecking = true;
 
   passthru.tests = {
     inherit gnupg libotr rsyslog;
@@ -73,7 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/libgcrypt/";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
     description = "General-purpose cryptographic library";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;

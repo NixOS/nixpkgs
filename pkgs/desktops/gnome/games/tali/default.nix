@@ -11,7 +11,7 @@
   gettext,
   itstool,
   libxml2,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   meson,
   ninja,
   python3,
@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tali";
-  version = "40.8";
+  version = "40.9";
 
   src = fetchurl {
     url = "mirror://gnome/sources/tali/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "bBeMFg/LtNEb49FWnVOODngUDVC721KnWDGI95XAF+4=";
+    sha256 = "+p7eNm8KcuTKpSGJw6sLEMG1aoDHiFsBZgJVjETc59M=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     libxml2
     itstool
     gettext
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -60,10 +60,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Tali";
+    homepage = "https://gitlab.gnome.org/GNOME/tali";
     description = "Sort of poker with dice and less money";
+    mainProgram = "tali";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

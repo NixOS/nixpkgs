@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.27.11";
+  version = "0.28.12";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    hash = "sha256-w3ag+TPUrjPbPIy6N4HPsfraOyoHqBbvjwB1M6+qh60=";
+    hash = "sha256-QvEoXKJ9sH5WIarYPsYEWwoFwA/pZa2etegA+AD8rPo=";
   };
 
   postPatch = ''
@@ -43,9 +43,12 @@ mkDerivation rec {
   postBuild = ''
     mkdir $out/bin
     mv $out/lib/klayout $out/bin/
+
+    install -Dm444 etc/klayout.desktop -t $out/share/applications
+    install -Dm444 etc/logo.png $out/share/icons/hicolor/256x256/apps/klayout.png
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-parentheses" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-parentheses" ];
 
   dontInstall = true; # Installation already happens as part of "build.sh"
 
@@ -55,6 +58,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "High performance layout viewer and editor with support for GDS and OASIS";
+    mainProgram = "klayout";
     license = with licenses; [ gpl2Plus ];
     homepage = "https://www.klayout.de/";
     changelog = "https://www.klayout.de/development.html#${version}";

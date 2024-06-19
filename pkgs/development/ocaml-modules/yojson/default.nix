@@ -1,15 +1,14 @@
-{ lib, fetchurl, buildDunePackage, cppo, seq }:
+{ lib, fetchurl, buildDunePackage, seq }:
 
 buildDunePackage rec {
   pname = "yojson";
-  version = "2.0.2";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://github.com/ocaml-community/yojson/releases/download/${version}/yojson-${version}.tbz";
-    sha256 = "sha256-h2u284r3OoSilDij2jXkhXxgoUVWpgZSWxSMb9vlRhs=";
+    hash = "sha256-v9wzvvMUG7qaj6ZqiFtUsp9r+rRQBAiE3Yz3zex4RRk=";
   };
 
-  nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [ seq ];
 
   meta = with lib; {

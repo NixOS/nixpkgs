@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     substitutions = [
       ''--replace "convert" "${imagemagick}/bin/convert"''
       ''--replace "qrencode" "${qrencode.bin}/bin/qrencode"''
-    ] ++ lib.optional testQR [
+    ] ++ lib.optionals testQR [
       ''--replace "hash zbarimg" "true"'' # hash does not work on NixOS
       ''--replace "$(zbarimg --raw" "$(${zbar.out}/bin/zbarimg --raw"''
     ];
@@ -39,6 +39,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/yishilin14/asc-key-to-qr-code-gif";
     description = "Convert ASCII-armored PGP keys to animated QR code";
+    mainProgram = "asc-to-gif.sh";
     platforms = platforms.unix;
     maintainers = with maintainers; [ asymmetric ];
   };

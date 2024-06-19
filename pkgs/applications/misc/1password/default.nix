@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, cpio, xar }:
+{ lib, stdenv, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, cpio, xar, _1password, testers }:
 
 let
   inherit (stdenv.hostPlatform) system;
-  fetch = srcPlatform: sha256: extension:
+  fetch = srcPlatform: hash: extension:
     let
       args = {
         url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_${srcPlatform}_v${version}.${extension}";
-        inherit sha256;
+        inherit hash;
       } // lib.optionalAttrs (extension == "zip") { stripRoot = false; };
     in
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.7.1";
+  version = "2.29.0";
   sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-JEOvLga6o3QOPYyGJfvqWIYL00TaqjcFzSMKw1ZSxtM=" "zip";
-    i686-linux = fetch "linux_386" "sha256-Xd40mOsElbrGioPX0irz13jhiu8mZ2n6LmKrt4FyzDg=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-DZYSkgrIpH0cYpIllVWHIuUcNgNyeX09dZ1RgUudWP8=" "zip";
-    aarch64-darwin = fetch "apple_universal" "sha256-j+e9y1FQp30O5pFVLbbXhtrbyRjWZZPFhkFfNXDcCPs=" "pkg";
+    aarch64-linux = fetch "linux_arm64" "sha256-sBbdkoacGI/gawM4YH+BBCLDhC2B+cE4iKVGHBhwkic=" "zip";
+    i686-linux = fetch "linux_386" "sha256-TTd5juT0Aqp1+OfunXcuk0KbL6HIHQV31+1Q1e0GYMY=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-Bb6fNoeNxlbDfwt7Jr8BaKCmFUwSdsLQdVoCmQCNmLA=" "zip";
+    aarch64-darwin = fetch "apple_universal" "sha256-/ryklZnGhrgJggDIa8HmuDsHAXkdrWeXKCQGGVwUAAo=" "pkg";
     x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;
@@ -63,11 +63,17 @@ stdenv.mkDerivation {
     $out/bin/${mainProgram} --version
   '';
 
+  passthru.updateScript = ./update.sh;
+
+  passthru.tests.version = testers.testVersion {
+    package = _1password;
+  };
+
   meta = with lib; {
     description = "1Password command-line tool";
     homepage = "https://developer.1password.com/docs/cli/";
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI2";
-    maintainers = with maintainers; [ joelburget marsam ];
+    maintainers = with maintainers; [ joelburget ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     inherit mainProgram platforms;

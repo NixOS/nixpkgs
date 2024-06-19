@@ -1,24 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, toolz
-, cons
-, multipledispatch
-, etuples
-, logical-unification
-, pytestCheckHook
-, pytest-html
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  toolz,
+  cons,
+  multipledispatch,
+  etuples,
+  logical-unification,
+  py,
+  pytestCheckHook,
+  pytest-html,
 }:
 
 buildPythonPackage rec {
   pname = "minikanren";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "kanren";
     rev = "5aa9b1734cbb3fe072a7c72b46e1b72a174d28ac";
-    sha256 = "sha256-daAtREgm91634Q0mc0/WZivDiyZHC7TIRoGRo8hMnGE=";
+    hash = "sha256-daAtREgm91634Q0mc0/WZivDiyZHC7TIRoGRo8hMnGE=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +32,8 @@ buildPythonPackage rec {
     logical-unification
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    py
     pytestCheckHook
     pytest-html
   ];

@@ -35,7 +35,10 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-abs.patch
     ./0002-datadir.patch
+    ./0003-swap.patch
   ];
+
+  env.CXXFLAGS = "-std=c++11";
 
   postFixup = ''
     wrapProgram $out/bin/cfutil --prefix PERL5LIB : $PERL5LIB

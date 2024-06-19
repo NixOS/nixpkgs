@@ -1,40 +1,36 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, aiohttp
-, async-upnp-client
-, attrs
-, click
-, importlib-metadata
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  aiohttp,
+  async-upnp-client,
+  attrs,
+  click,
 }:
 
 buildPythonPackage rec {
   pname = "python-songpal";
-  version = "0.15.1";
+  version = "0.16.2";
+  pyproject = true;
 
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rytilahti";
     repo = "python-songpal";
     rev = "refs/tags/release/${version}";
-    hash = "sha256-FX5pDWjUhrhK5B7zEfvihN77pSNi2QltRu0xbkUdc/c=";
+    hash = "sha256-PYw6xlUtBrxl+YeVO/2Njt5LYWEprzGPVNk1Mlr83HM=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-upnp-client
     attrs
     click
-    importlib-metadata
   ];
 
   # no tests implemented
@@ -44,7 +40,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for interfacing with Sony's Songpal devices";
+    mainProgram = "songpal";
     homepage = "https://github.com/rytilahti/python-songpal";
+    changelog = "https://github.com/rytilahti/python-songpal/blob/release/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dotlambda ];
   };

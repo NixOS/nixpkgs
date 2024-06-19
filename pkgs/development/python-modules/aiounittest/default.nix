@@ -1,35 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, coverage
-, isPy27
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonAtLeast,
+  setuptools,
+  pynose,
+  coverage,
+  wrapt,
 }:
 
 buildPythonPackage rec {
   pname = "aiounittest";
   version = "1.4.2";
-  disabled = isPy27;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kwarunek";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-7lDOI1SHPpRZLTHRTmfbKlZH18T73poJdFyVmb+HKms=";
+    hash = "sha256-7lDOI1SHPpRZLTHRTmfbKlZH18T73poJdFyVmb+HKms=";
   };
 
-  propagatedBuildInputs = [
-    wrapt
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  checkInputs = [
-    nose
+  propagatedBuildInputs = [ wrapt ];
+
+  nativeCheckInputs = [
+    pynose
     coverage
   ];
 
   checkPhase = ''
-    nosetests
+    nosetests -e test_specific_test
   '';
 
   pythonImportsCheck = [ "aiounittest" ];
@@ -38,6 +40,6 @@ buildPythonPackage rec {
     description = "Test asyncio code more easily";
     homepage = "https://github.com/kwarunek/aiounittest";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

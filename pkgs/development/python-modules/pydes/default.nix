@@ -1,8 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+}:
 
 buildPythonPackage rec {
   pname = "pydes";
   version = "unstable-2019-01-08";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "twhiteman";

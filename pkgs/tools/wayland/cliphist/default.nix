@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "cliphist";
-  version = "0.3.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kmXR8xzjAphgaC2Yd55VwZIJ4ehxP1LEA24hgyAbM7A=";
+    sha256 = "sha256-U78G7X9x3GQg3qcBINni8jWa0wSXQu+TjYChuRPPcLE=";
   };
 
-  vendorSha256 = "sha256-LZnefa0FjYG39YJrSN9ef6OnXHXgSrlSL4LvRqLxFx4=";
+  vendorHash = "sha256-O4jOFWygmFxm8ydOq1xtB1DESyWpFGXeSp8a6tT+too=";
 
   meta = with lib; {
     description = "Wayland clipboard manager";
@@ -19,5 +19,6 @@ buildGoModule rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "cliphist";
   };
 }

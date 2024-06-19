@@ -15,9 +15,6 @@ let
     name ? mkTestName package
   }: makeTest {
     name = "${name}-backup";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ rvl ];
-    };
 
     nodes = {
       master = { pkgs, ... }: {

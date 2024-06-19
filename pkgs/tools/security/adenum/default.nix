@@ -1,11 +1,10 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , john
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "adenum";
   version = "unstable-2022-04-01";
   format = "other";
@@ -41,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to find misconfiguration through LDAP";
+    mainProgram = "adenum";
     homepage = "https://github.com/SecuProject/ADenum";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];

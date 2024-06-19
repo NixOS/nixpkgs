@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "uftrace";
-  version = "0.12";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "namhyung";
     repo = "uftrace";
     rev = "v${version}";
-    sha256 = "sha256-YjeZGjSctnhbHqWikdVhiEl0hr/qrA4S4JbCJscXe7A=";
+    sha256 = "sha256-JuBwyE6JH3CpJH863LbnWELUIIEKVaAcz8h8beeABGQ=";
   };
 
   postUnpack = ''
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Function (graph) tracer for user-space";
+    mainProgram = "uftrace";
     homepage = "https://github.com/namhyung/uftrace";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

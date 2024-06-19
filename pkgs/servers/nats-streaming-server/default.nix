@@ -4,16 +4,16 @@ with lib;
 
 buildGoModule rec {
   pname   = "nats-streaming-server";
-  version = "0.24.6";
+  version = "0.25.6";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "nats-io";
     repo   = pname;
-    sha256 = "sha256-CEDUlMigOK8ZAntqwD6jnqcMhDfgxrrrP53QU6XgI6k=";
+    sha256 = "sha256-i5fNxeJQXiyy+9NOGT1X68u9Pztxvnnba64rxIgjbZc=";
   };
 
-  vendorSha256 = "sha256-qaKkYcHOpnQQUWg3jWq99hM9y/7p0Vsy6hQm7HqXEKg=";
+  vendorHash = "sha256-r6RDHGAt83sKyMHvG3927rZroWdnTQFb8zTrmlc0W5U=";
 
   # tests fail and ask to `go install`
   doCheck = false;
@@ -23,5 +23,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = [ maintainers.swdunlop ];
     homepage = "https://nats.io/";
+    mainProgram = "nats-streaming-server";
   };
 }

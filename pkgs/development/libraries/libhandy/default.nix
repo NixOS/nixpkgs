@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.6.3";
+  version = "1.8.3";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-R3iL01gE69M8sJkR6XU0TIQ1ngttlSCv0cgh66i6d/8=";
+    hash = "sha256-BbSXIpBz/1V/ELMm4HTFBm+HQ6MC1IIKuXvLXNLasIc=";
   };
 
   depsBuildBuild = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     glade
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     at-spi2-atk
     at-spi2-core
@@ -132,6 +132,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/GNOME/libhandy/-/tags/${version}";
     description = "Building blocks for modern adaptive GNOME apps";
+    mainProgram = "handy-1-demo";
     homepage = "https://gitlab.gnome.org/GNOME/libhandy";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

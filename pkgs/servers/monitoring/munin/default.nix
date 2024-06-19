@@ -1,16 +1,16 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
-, python3, ruby, jre, nettools, bc
+, python3, ruby, jre8, nettools, bc
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.70";
+  version = "2.0.76";
   pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "sha256-fczrCulKs7c9e0vKQ12bEJODr74/uBj77llqCqcPMps=";
+    sha256 = "sha256-9PfIzUObm3Nu2k2TFjbQ3cqIDkPz07ZUczEcfm3bpDc=";
   };
 
   nativeBuildInputs = [
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     perlPackages.NetSSLeay
     perlPackages.NetServer
     perlPackages.LogLog4perl
-    perlPackages.IOSocketInet6
+    perlPackages.IOSocketINET6
     perlPackages.Socket6
     perlPackages.URI
     perlPackages.DBFile
-    perlPackages.DateManip
+    perlPackages.TimeDate
     perlPackages.FileCopyRecursive
     perlPackages.FCGI
     perlPackages.NetSNMP
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     perlPackages.DBDPg
     python3
     ruby
-    jre
+    jre8
     # tests
     perlPackages.TestLongString
     perlPackages.TestDifferences
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   # needs to find a local perl module during build
-  PERL_USE_UNSAFE_INC = "1";
+  env.PERL_USE_UNSAFE_INC = "1";
 
   # TODO: tests are failing https://munin-monitoring.org/ticket/1390#comment:1
   # NOTE: important, test command always exits with 0, think of a way to abort the build once tests pass
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     "PERL=${perlPackages.perl.outPath}/bin/perl"
     "PYTHON=${python3.interpreter}"
     "RUBY=${ruby.outPath}/bin/ruby"
-    "JAVARUN=${jre.outPath}/bin/java"
+    "JAVARUN=${jre8.outPath}/bin/java"
     "PLUGINUSER=munin"
   ];
 
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
         esac
         wrapProgram "$file" \
           --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
-                LogLog4perl IOSocketInet6 Socket6 URI DBFile DateManip
+                LogLog4perl IOSocketINET6 Socket6 URI DBFile TimeDate
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
                 ListMoreUtils DBDPg LWP rrdtool
                 ]}"
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
       to kill our performance?' problems.
     '';
     homepage = "https://munin-monitoring.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.bjornfor ];
     platforms = platforms.linux;
   };

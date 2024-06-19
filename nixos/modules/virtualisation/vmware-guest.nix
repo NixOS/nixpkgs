@@ -13,22 +13,23 @@ in
   ];
 
   options.virtualisation.vmware.guest = {
-    enable = mkEnableOption (lib.mdDoc "VMWare Guest Support");
+    enable = mkEnableOption "VMWare Guest Support";
     headless = mkOption {
       type = types.bool;
-      default = false;
-      description = lib.mdDoc "Whether to disable X11-related features.";
+      default = !config.services.xserver.enable;
+      defaultText = "!config.services.xserver.enable";
+      description = "Whether to disable X11-related features.";
     };
   };
 
   config = mkIf cfg.enable {
     assertions = [ {
-      assertion = pkgs.stdenv.hostPlatform.isx86;
+      assertion = pkgs.stdenv.hostPlatform.isx86 || pkgs.stdenv.hostPlatform.isAarch64;
       message = "VMWare guest is not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } ];
 
     boot.initrd.availableKernelModules = [ "mptspi" ];
-    boot.initrd.kernelModules = [ "vmw_pvscsi" ];
+    boot.initrd.kernelModules = lib.optionals pkgs.stdenv.hostPlatform.isx86 [ "vmw_pvscsi" ];
 
     environment.systemPackages = [ open-vm-tools ];
 

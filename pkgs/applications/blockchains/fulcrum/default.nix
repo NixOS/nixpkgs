@@ -5,26 +5,26 @@
 , qmake
 , python3
 , qtbase
-, rocksdb
+, rocksdb_7_10
 , zeromq
 }:
 
 stdenv.mkDerivation rec {
   pname = "fulcrum";
-  version = "1.8.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "cculianu";
     repo = "Fulcrum";
     rev = "v${version}";
-    sha256 = "sha256-GaXXqIHuMTGn8iLymAhL8i0HzXmaO6RxtvIzgWw6QI0=";
+    sha256 = "sha256-HTyOlbrmZHN2MbG70auGkuPPo3fTN/oCHi6Lwnq+gKk=";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];
 
   dontWrapQtApps = true; # no GUI
 
-  buildInputs = [ python3 qtbase rocksdb zeromq ];
+  buildInputs = [ python3 qtbase rocksdb_7_10 zeromq ];
 
   meta = with lib; {
     description = "Fast & nimble SPV server for Bitcoin Cash & Bitcoin BTC";

@@ -1,41 +1,55 @@
-{ fetchFromGitHub, python3, lib }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
-  version = "0.7.4";
-
-  format = "pyproject";
+  version = "0.10.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ep1cman";
-    repo = pname;
+    repo = "unifi-protect-backup";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4Kpz89yqKmxHmnaPYpvJ2hx46yfcaCYjOioyya+38vE=";
+    hash = "sha256-Ypx9drM9Ks3RR75lz2COflr6GF6Bm9D+GwJWPGwuq/c=";
   };
 
-  preBuild = ''
-    sed -i 's_click = "8.0.1"_click = "^8"_' pyproject.toml
-    sed -i 's_pyunifiprotect = .*_pyunifiprotect = "*"_' pyproject.toml
-  '';
+  pythonRelaxDeps = [
+    "aiorun"
+    "aiosqlite"
+    "click"
+    "pyunifiprotect"
+  ];
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiocron
+    aiolimiter
+    aiorun
+    aiosqlite
+    apprise
+    async-lru
     click
+    expiring-dict
+    python-dateutil
     pyunifiprotect
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
   meta = with lib; {
     description = "Python tool to backup unifi event clips in realtime";
     homepage = "https://github.com/ep1cman/unifi-protect-backup";
-    maintainers = with maintainers; [ ajs124 ];
+    changelog = "https://github.com/ep1cman/unifi-protect-backup/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
+    maintainers = teams.helsinki-systems.members;
+    mainProgram = "unifi-protect-backup";
   };
 }

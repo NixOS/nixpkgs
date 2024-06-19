@@ -1,11 +1,12 @@
 { writeShellScript
+, writeText
+, writers
 , nix-prefetch-git
 , formats
 , lib
+, coreutils
 , curl
-, jq
 , xe
-, src
 }:
 
 # Grammar list:
@@ -30,8 +31,6 @@ let
     "tree-sitter-scala"
     "tree-sitter-ocaml"
     "tree-sitter-julia"
-    "tree-sitter-agda"
-    "tree-sitter-fluent"
     "tree-sitter-html"
     "tree-sitter-haskell"
     "tree-sitter-regex"
@@ -53,7 +52,7 @@ let
     # this is the haskell language bindings, tree-sitter-haskell is the grammar
     "haskell-tree-sitter"
     # this is the ruby language bindings, tree-sitter-ruby is the grammar
-    "ruby-tree-sitter"
+    "ruby-tree-sitter.old"
     # this is the (unmaintained) rust language bindings, tree-sitter-rust is the grammar
     "rust-tree-sitter"
     # this is the nodejs language bindings, tree-sitter-javascript is the grammar
@@ -72,6 +71,22 @@ let
     "tree-sitter-graph"
     # abandoned
     "tree-sitter-swift"
+    # abandoned
+    "tree-sitter-agda"
+    # abandoned
+    "tree-sitter-fluent"
+    # to unblock my update
+    "csharp-tree-sitter"
+
+    # Non-grammar repositories
+    ".github"
+    "fuzz-action"
+    "parse-action"
+    "parser-setup-action"
+    "parser-test-action"
+    "parser-update-action"
+    "setup-action"
+    "workflows"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -79,6 +94,10 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-bitbake" = {
+      orga = "amaanq";
+      repo = "tree-sitter-bitbake";
+    };
     "tree-sitter-beancount" = {
       orga = "polarmutex";
       repo = "tree-sitter-beancount";
@@ -98,6 +117,10 @@ let
     "tree-sitter-elisp" = {
       orga = "wilfred";
       repo = "tree-sitter-elisp";
+    };
+    "tree-sitter-just" = {
+      orga = "IndianBoy42";
+      repo = "tree-sitter-just";
     };
     "tree-sitter-nix" = {
       orga = "cstrahan";
@@ -123,6 +146,10 @@ let
       orga = "MDeiml";
       repo = "tree-sitter-markdown";
     };
+    "tree-sitter-proto" = {
+      orga = "mitchellh";
+      repo = "tree-sitter-proto";
+    };
     "tree-sitter-rego" = {
       orga = "FallenAngel97";
       repo = "tree-sitter-rego";
@@ -136,8 +163,17 @@ let
       repo = "tree-sitter-svelte";
     };
     "tree-sitter-sql" = {
-      orga = "m-novikov";
+      orga = "derekstride";
       repo = "tree-sitter-sql";
+      branch = "gh-pages";
+    };
+    "tree-sitter-talon" = {
+      orga = "wenkokke";
+      repo = "tree-sitter-talon";
+    };
+    "tree-sitter-typst" = {
+      orga = "uben0";
+      repo = "tree-sitter-typst";
     };
     "tree-sitter-vim" = {
       orga = "vigoux";
@@ -162,6 +198,10 @@ let
     "tree-sitter-norg" = {
       orga = "nvim-neorg";
       repo = "tree-sitter-norg";
+    };
+    "tree-sitter-norg-meta" = {
+      orga = "nvim-neorg";
+      repo = "tree-sitter-norg-meta";
     };
     "tree-sitter-commonlisp" = {
       orga = "thehamsta";
@@ -222,6 +262,10 @@ let
     "tree-sitter-surface" = {
       orga = "connorlay";
       repo = "tree-sitter-surface";
+    };
+    "tree-sitter-eex" = {
+      orga = "connorlay";
+      repo = "tree-sitter-eex";
     };
     "tree-sitter-heex" = {
       orga = "connorlay";
@@ -347,6 +391,50 @@ let
       orga = "indoorvivants";
       repo = "tree-sitter-smithy";
     };
+    "tree-sitter-jsonnet" = {
+      orga = "sourcegraph";
+      repo = "tree-sitter-jsonnet";
+    };
+    "tree-sitter-solidity" = {
+      orga = "JoranHonig";
+      repo = "tree-sitter-solidity";
+    };
+    "tree-sitter-nu" = {
+      orga = "nushell";
+      repo = "tree-sitter-nu";
+    };
+    "tree-sitter-cue" = {
+      orga = "eonpatapon";
+      repo = "tree-sitter-cue";
+    };
+    "tree-sitter-uiua" = {
+      orga = "shnarazk";
+      repo = "tree-sitter-uiua";
+    };
+    "tree-sitter-wing" = {
+      orga = "winglang";
+      repo = "wing";
+    };
+    "tree-sitter-wgsl" = {
+      orga = "szebniok";
+      repo = "tree-sitter-wgsl";
+    };
+    "tree-sitter-templ" = {
+      orga = "vrischmann";
+      repo = "tree-sitter-templ";
+    };
+    "tree-sitter-gleam" = {
+      orga = "gleam-lang";
+      repo = "tree-sitter-gleam";
+    };
+    "tree-sitter-koka" = {
+      orga = "mtoohey31";
+      repo = "tree-sitter-koka";
+    };
+    "tree-sitter-earthfile" = {
+      orga = "glehmann";
+      repo = "tree-sitter-earthfile";
+    };
   };
 
   allGrammars =
@@ -364,126 +452,85 @@ let
           knownTreeSitterOrgGrammarRepos);
 
     in
-    mergeAttrsUnique otherGrammars treeSitterOrgaGrammars;
-
-  # TODO: move to lib
-  mergeAttrsUnique = left: right:
-    let intersect = lib.intersectLists (lib.attrNames left) (lib.attrNames right); in
-    assert
-    lib.assertMsg (intersect == [ ])
-      (lib.concatStringsSep "\n" [
-        "mergeAttrsUnique: keys in attrset overlapping:"
-        "left: ${lib.generators.toPretty {} (lib.getAttrs intersect left)}"
-        "right: ${lib.generators.toPretty {} (lib.getAttrs intersect right)}"
-      ]);
-    left // right;
+    lib.attrsets.unionOfDisjoint otherGrammars treeSitterOrgaGrammars;
 
 
 
   jsonFile = name: val: (formats.json { }).generate name val;
 
-  # check the tree-sitter orga repos
-  checkTreeSitterRepos = writeShellScript "get-grammars.sh" ''
-    set -euo pipefail
-    res=$(${jq}/bin/jq \
-      --slurpfile known "${knownTreeSitterOrgGrammarReposJson}" \
-      --slurpfile ignore "${ignoredTreeSitterOrgReposJson}" \
-      '. - ($known[0] + $ignore[0])' \
-      )
-    if [ ! "$res" == "[]" ]; then
-      echo "These repositories are neither known nor ignored:" 1>&2
-      echo "$res" 1>&2
-      exit 1
-    fi
-  '';
+  # implementation of the updater
+  updateImpl = passArgs "updateImpl-with-args"
+    {
+      binaries = {
+        curl = "${curl}/bin/curl";
+        nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
+        printf = "${coreutils}/bin/printf";
+      };
+      inherit
+        knownTreeSitterOrgGrammarRepos
+        ignoredTreeSitterOrgRepos
+        ;
+    }
+    (writers.writePython3 "updateImpl"
+      {
+        flakeIgnore = [ "E501" ];
+      } ./update_impl.py);
 
-  # TODO
-  urlEscape = x: x;
-
-  # generic bash script to find the latest github release for a repo
-  latestGithubRelease = { orga, repo }: writeShellScript "latest-github-release" ''
-    set -euo pipefail
-
-    args=( '--silent' )
-    if [ -n "''${GITHUB_TOKEN:-}" ]; then
-      args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
-    fi
-    args+=( "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest" )
-
-    res=$(${curl}/bin/curl "''${args[@]}")
-
-    if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2
-    fi
-    release="$(printf "%s" "$res" | ${jq}/bin/jq -r '.tag_name' | tr -d \")"
-    # github sometimes returns an empty list even tough there are releases
-    if [ "$release" = "null" ]; then
-      echo "uh-oh, latest for ${orga + "/" + repo} is not there, using HEAD" >&2
-      release="HEAD"
-    fi
-    echo "$release"
-  '';
-
-  # find the latest repos of a github organization
-  latestGithubRepos = { orga }: writeShellScript "latest-github-repos" ''
-    set -euo pipefail
-
-    args=( '--silent' )
-    if [ -n "''${GITHUB_TOKEN:-}" ]; then
-      args+=( "-H" "Authorization: token ''${GITHUB_TOKEN}" )
-    fi
-    args+=( 'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100' )
-
-    res=$(${curl}/bin/curl "''${args[@]}")
-
-    if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2
-      exit 1
-    elif [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "Bad credentials" ]]; then
-      echo "bad credentials" >&2
-      exit 1
-    fi
-
-    printf "%s" "$res" | ${jq}/bin/jq 'map(.name)' \
-      || echo "failed $res"
-  '';
-
-  # update one tree-sitter grammar repo and print their nix-prefetch-git output
-  updateGrammar = { orga, repo }: writeShellScript "update-grammar.sh" ''
-    set -euo pipefail
-    latest="$(${latestGithubRelease { inherit orga repo; }})"
-    echo "Fetching latest release ($latest) of ${repo} …" >&2
-    ${nix-prefetch-git}/bin/nix-prefetch-git \
-      --quiet \
-      --no-deepClone \
-      --url "https://github.com/${urlEscape orga}/${urlEscape repo}" \
-      --rev "$latest"
+  # Pass the given arguments to the command, in the ARGS environment variable.
+  # The arguments are just a json object that should be available in the script.
+  passArgs = name: argAttrs: script: writeShellScript name ''
+    env ARGS="$(< ${jsonFile "${name}-args" argAttrs})" \
+      ${script} "$@"
   '';
 
   foreachSh = attrs: f:
     lib.concatMapStringsSep "\n" f
       (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
 
-  update-all-grammars = writeShellScript "update-all-grammars.sh" ''
-    set -euo pipefail
-    echo "fetching list of grammars" 1>&2
-    treeSitterRepos=$(${latestGithubRepos { orga = "tree-sitter"; }})
-    echo "checking the tree-sitter repo list against the grammars we know" 1>&2
-    printf '%s' "$treeSitterRepos" | ${checkTreeSitterRepos}
-    outputDir="${toString ./.}/grammars"
-    echo "writing files to $outputDir" 1>&2
-    mkdir -p "$outputDir"
-    ${foreachSh allGrammars
-      ({name, orga, repo}: ''${updateGrammar { inherit orga repo; }} > $outputDir/${name}.json'')}
-    ( echo "{ lib }:"
-      echo "{"
-      ${foreachSh allGrammars
-        ({name, ...}: ''
-           # indentation hack
-             printf "  %s = lib.importJSON ./%s.json;\n" "${name}" "${name}"'')}
-      echo "}" ) \
-      > "$outputDir/default.nix"
+  jsonNewlines = lib.concatMapStringsSep "\n" (lib.generators.toJSON { });
+
+  # Run the given script for each of the attr list.
+  # The attrs are passed to the script as a json value.
+  forEachParallel = name: script: listOfAttrs: writeShellScript "for-each-parallel.sh" ''
+    < ${writeText "${name}.json" (jsonNewlines listOfAttrs)} \
+      ${xe}/bin/xe -F -j5 ${script} {}
   '';
+
+  # The output directory in the current source tree.
+  # This will depend on your local environment, but that is intentional.
+  outputDir = "${toString ./.}/grammars";
+
+  update-all-grammars = writeShellScript "update-all-grammars.sh" ''
+     set -euo pipefail
+    ${updateImpl} fetch-and-check-tree-sitter-repos '{}'
+     echo "writing files to ${outputDir}" 1>&2
+     mkdir -p "${outputDir}"
+     ${forEachParallel
+         "repos-to-fetch"
+         (writeShellScript "fetch-repo" ''
+             ${updateImpl} fetch-repo "$1"
+         '')
+         (lib.mapAttrsToList
+           (nixRepoAttrName: attrs: attrs // {
+             inherit
+               nixRepoAttrName
+               outputDir;
+           })
+           allGrammars)
+     }
+     ${updateImpl} print-all-grammars-nix-file "$(< ${
+         jsonFile "all-grammars.json" {
+           allGrammars =
+             (lib.mapAttrsToList
+               (nixRepoAttrName: attrs: attrs // {
+                 inherit nixRepoAttrName;
+               })
+               allGrammars);
+           inherit outputDir;
+         }
+     })"
+  '';
+
 
 in
 update-all-grammars

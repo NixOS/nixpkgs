@@ -1,34 +1,30 @@
 { lib
-, stdenv
 , fetchurl
 , makeDesktopItem
-, makeWrapper
 , symlinkJoin
 , writeShellScriptBin
-
 , wine
-, use64 ? false
 }:
 
 let
   inherit (lib) last splitString;
 
   pname = "winbox";
-  version = "3.37";
+  version = "3.40";
   name = "${pname}-${version}";
 
-  executable = fetchurl (if use64 then {
-    url = "https://download.mikrotik.com/winbox/${version}/winbox64.exe";
-    sha256 = "0fbl0i5ga9afg8mklm9xqidcr388sca00slj401npwh9b3j9drmb";
+  executable = fetchurl (if (wine.meta.mainProgram == "wine64") then {
+    url = "https://download.mikrotik.com/routeros/winbox/${version}/winbox64.exe";
+    sha256 = "1dxny1qmq4pmdn40j9zk461p3qwwjin5d18ajhczrnqrcr2v1xwi";
   } else {
-    url = "https://download.mikrotik.com/winbox/${version}/winbox.exe";
-    sha256 = "1zla30bc755x5gfv9ff1bgjvpsjmg2d7jsjxnwwy679fry4n4cwl";
+    url = "https://download.mikrotik.com/routeros/winbox/${version}/winbox.exe";
+    sha256 = "11vmdkwi38y7wkdkgsqpfs4l2bdaj9yg6c8wlgfzp91227gjn5li";
   });
+
   # This is from the winbox AUR package:
   # https://aur.archlinux.org/cgit/aur.git/tree/winbox64?h=winbox64&id=8edd93792af84e87592e8645ca09e9795931e60e
   wrapper = writeShellScriptBin pname ''
     export WINEPREFIX="''${WINBOX_HOME:-"''${XDG_DATA_HOME:-"''${HOME}/.local/share"}/winbox"}/wine"
-    export WINEARCH=${if use64 then "win64" else "win32"}
     export WINEDLLOVERRIDES="mscoree=" # disable mono
     export WINEDEBUG=-all
     if [ ! -d "$WINEPREFIX" ] ; then
@@ -36,7 +32,7 @@ let
       ${wine}/bin/wineboot -u
     fi
 
-    ${wine}/bin/wine ${executable} "$@"
+    ${wine}/bin/${wine.meta.mainProgram} ${executable} "$@"
   '';
 
   desktopItem = makeDesktopItem {

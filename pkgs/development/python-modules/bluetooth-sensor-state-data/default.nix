@@ -1,53 +1,49 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, home-assistant-bluetooth
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, sensor-state-data
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  home-assistant-bluetooth,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "bluetooth-sensor-state-data";
-  version = "1.6.0";
-  format = "pyproject";
+  version = "1.7.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Btfya9l1UX7GbiUxuaFHT0l+pG+Dg5X0L2JS+1/VYOo=";
+    repo = "bluetooth-sensor-state-data";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-phiK+2tULBE78d1X/TsaT2kLRHxiCiuLMkaI7S6tqJ8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail " --cov=bluetooth_sensor_state_data --cov-report=term-missing:skip-covered" ""
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     home-assistant-bluetooth
     sensor-state-data
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=bluetooth_sensor_state_data --cov-report=term-missing:skip-covered" ""
-  '';
-
-  pythonImportsCheck = [
-    "bluetooth_sensor_state_data"
-  ];
+  pythonImportsCheck = [ "bluetooth_sensor_state_data" ];
 
   meta = with lib; {
     description = "Models for storing and converting Bluetooth Sensor State Data";
     homepage = "https://github.com/bluetooth-devices/bluetooth-sensor-state-data";
-    license = with licenses; [ asl20 ];
+    changelog = "https://github.com/Bluetooth-Devices/bluetooth-sensor-state-data/releases/tag/v${version}";
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }

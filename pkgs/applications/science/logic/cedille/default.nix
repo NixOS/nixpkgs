@@ -4,7 +4,6 @@
 , alex
 , happy
 , Agda
-, buildPlatform
 , buildPackages
 , ghcWithPackages
 }:
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
 
   LANG = "en_US.UTF-8";
   LOCALE_ARCHIVE =
-    lib.optionalString (buildPlatform.libc == "glibc")
+    lib.optionalString (stdenv.buildPlatform.libc == "glibc")
       "${buildPackages.glibcLocales}/lib/locale/locale-archive";
 
   postPatch = ''
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "An interactive theorem-prover and dependently typed programming language, based on extrinsic (aka Curry-style) type theory";
     homepage = "https://cedille.github.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam mpickering ];
+    maintainers = with maintainers; [ mpickering ];
     platforms = platforms.unix;
 
     # Broken due to Agda update.  See

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "delve";
-  version = "1.9.1";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "sha256-Ga+1xz7gsLoHA0G4UOiJf331hrBVoeB93Pjd0PyATB4=";
+    hash = "sha256-rR84muba8nMrPZAhH+8xXOOxBvKIsU8Xju8tG7BjqBo=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/dlv" ];
 
@@ -44,7 +44,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "debugger for the Go programming language";
     homepage = "https://github.com/go-delve/delve";
-    maintainers = with maintainers; [ SuperSandro2000 vdemeester ];
+    maintainers = with maintainers; [ vdemeester ];
     license = licenses.mit;
+    mainProgram = "dlv";
   };
 }

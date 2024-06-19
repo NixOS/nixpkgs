@@ -1,4 +1,10 @@
-{ buildPecl, lib, imagemagick, pkg-config, pcre2 }:
+{
+  buildPecl,
+  lib,
+  imagemagick,
+  pkg-config,
+  pcre2,
+}:
 
 buildPecl {
   pname = "imagick";

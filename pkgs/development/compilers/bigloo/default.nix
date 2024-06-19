@@ -45,8 +45,14 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" '';
+  # remove forbidden references to $TMPDIR
+  preFixup = lib.optionalString stdenv.isLinux ''
+    for f in "$out"/bin/*; do
+      if isELF "$f"; then
+        patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
+      fi
+    done
+  '';
 
   meta = {
     description = "Efficient Scheme compiler";
@@ -54,10 +60,7 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.gpl2Plus;
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
-    # dyld: Library not loaded: /nix/store/w3liqjlrcmzc0sf2kgwjprqgqwqx8z47-libunistring-1.0/lib/libunistring.2.dylib
-    #  Referenced from: /private/tmp/nix-build-bigloo-4.4b.drv-0/bigloo-4.4b/bin/bigloo
-    #  Reason: Incompatible library version: bigloo requires version 5.0.0 or later, but libunistring.2.dylib provides version 4.0.0
-    broken      = (stdenv.isDarwin && stdenv.isx86_64);
+    broken      = stdenv.isDarwin && stdenv.isAarch64; # segfault during build
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

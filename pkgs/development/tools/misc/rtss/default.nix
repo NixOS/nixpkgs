@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Annotate output with relative durations between lines";
+    mainProgram = "rtss";
     homepage = "https://github.com/Freaky/rtss";
     license = licenses.mit;
     maintainers = with maintainers; [ djanatyn ];

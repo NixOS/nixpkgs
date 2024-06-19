@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "riot-redis";
-  version = "2.18.1";
+  version = "2.19.0";
 
   src = fetchzip {
     url = "https://github.com/redis-developer/riot/releases/download/v${version}/riot-redis-${version}.zip";
-    sha256 = "sha256-mRuW/mPcqDO2txVwL2MlqZeprNDifjmOx7UUUy3yF3M=";
+    sha256 = "sha256-q2ZqFVdjg5HSH4kiwoC1W+a8VgHNxBgNeMaw5n97isc=";
   };
 
   buildInputs = [ jre_headless ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/redis-developer/riot";
     description = "Get data in and out of Redis";
+    mainProgram = "riot-redis";
     license = licenses.asl20;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ wesnel ];

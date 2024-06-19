@@ -11,14 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "0y3crfm0jqprgxamlly713cka2x1bp6z63p1lw9wh4wc37kpira6";
   };
 
-  buildInputs = [ diffutils gd pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ diffutils gd ];
   installFlags = [ "prefix=" "DESTDIR=$(out)" ];
 
   meta = {
     homepage = "https://github.com/dbohdan/s2png/";
     description = "Store any data in PNG images";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.dbohdan ];
     platforms = lib.platforms.unix;
+    mainProgram = "s2png";
   };
 }

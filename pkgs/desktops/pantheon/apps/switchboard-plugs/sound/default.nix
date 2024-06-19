@@ -7,6 +7,7 @@
 , pkg-config
 , vala
 , libgee
+, libhandy
 , granite
 , gtk3
 , pulseaudio
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sound";
-  version = "2.3.1";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hyBmo9P68XSXRUuLw+baEAetba2QdqOwUti64geH6xc=";
+    sha256 = "sha256-JXt/S+vNzuRaRC0DMX13Lxv+OoAPRQmSLv9fsvnkWY4=";
   };
 
   nativeBuildInputs = [
@@ -37,14 +38,13 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra-gtk3
     libgee
+    libhandy
     pulseaudio
     switchboard
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

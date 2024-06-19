@@ -1,16 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
   pname = "python-codon-tables";
   version = "0.1.12";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "python_codon_tables";
     inherit version;
-    sha256 = "sha256-pzPoR55nU8ObPv1iIE52qpqD5xGdYLm1uG3nCD6I46Y=";
+    hash = "sha256-pzPoR55nU8ObPv1iIE52qpqD5xGdYLm1uG3nCD6I46Y=";
   };
 
   # no tests in tarball

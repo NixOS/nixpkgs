@@ -1,6 +1,7 @@
 # Global configuration {#chap-packageconfig}
 
-Nix comes with certain defaults about what packages can and cannot be installed, based on a package's metadata. By default, Nix will prevent installation if any of the following criteria are true:
+Nix comes with certain defaults about which packages can and cannot be installed, based on a package's metadata.
+By default, Nix will prevent installation if any of the following criteria are true:
 
 -   The package is thought to be broken, and has had its `meta.broken` set to `true`.
 
@@ -10,23 +11,14 @@ Nix comes with certain defaults about what packages can and cannot be installed,
 
 -   The package has known security vulnerabilities but has not or can not be updated for some reason, and a list of issues has been entered in to the package's `meta.knownVulnerabilities`.
 
-Note that all this is checked during evaluation already, and the check includes any package that is evaluated. In particular, all build-time dependencies are checked. `nix-env -qa` will (attempt to) hide any packages that would be refused.
+Each of these criteria can be altered in the Nixpkgs configuration.
 
-Each of these criteria can be altered in the nixpkgs configuration.
+:::{.note}
+All this is checked during evaluation already, and the check includes any package that is evaluated.
+In particular, all build-time dependencies are checked.
+:::
 
-The nixpkgs configuration for a NixOS system is set in the `configuration.nix`, as in the following example:
-
-```nix
-{
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
-}
-```
-
-However, this does not allow unfree software for individual users. Their configurations are managed separately.
-
-A user's nixpkgs configuration is stored in a user-specific configuration file located at `~/.config/nixpkgs/config.nix`. For example:
+A user's Nixpkgs configuration is stored in a user-specific configuration file located at `~/.config/nixpkgs/config.nix`. For example:
 
 ```nix
 {
@@ -34,7 +26,10 @@ A user's nixpkgs configuration is stored in a user-specific configuration file l
 }
 ```
 
-Note that we are not able to test or build unfree software on Hydra due to policy. Most unfree licenses prohibit us from either executing or distributing the software.
+:::{.caution}
+Unfree software is not tested or built in Nixpkgs continuous integration, and therefore not cached.
+Most unfree licenses prohibit either executing or distributing the software.
+:::
 
 ## Installing broken packages {#sec-allow-broken}
 
@@ -73,7 +68,7 @@ There are also two ways to try compiling a package which has been marked as unsu
     }
     ```
 
-The difference between a package being unsupported on some system and being broken is admittedly a bit fuzzy. If a program *ought* to work on a certain platform, but doesn't, the platform should be included in `meta.platforms`, but marked as broken with e.g.  `meta.broken = !hostPlatform.isWindows`. Of course, this begs the question of what \"ought\" means exactly. That is left to the package maintainer.
+The difference between a package being unsupported on some system and being broken is admittedly a bit fuzzy. If a program *ought* to work on a certain platform, but doesn't, the platform should be included in `meta.platforms`, but marked as broken with e.g.  `meta.broken = !hostPlatform.isWindows`. Of course, this begs the question of what "ought" means exactly. That is left to the package maintainer.
 
 ## Installing unfree packages {#sec-allow-unfree}
 
@@ -176,7 +171,7 @@ You can define a function called `packageOverrides` in your local `~/.config/nix
 ```nix
 {
   packageOverrides = pkgs: rec {
-    foo = pkgs.foo.override { ... };
+    foo = pkgs.foo.override { /* ... */ };
   };
 }
 ```
@@ -185,8 +180,10 @@ You can define a function called `packageOverrides` in your local `~/.config/nix
 
 The following attributes can be passed in [`config`](#chap-packageconfig).
 
-```{=docbook}
-<include xmlns="http://www.w3.org/2001/XInclude" href="../doc-support/result/config-options.docbook.xml"/>
+```{=include=} options
+id-prefix: opt-
+list-id: configuration-variable-list
+source: ../config-options.json
 ```
 
 
@@ -310,16 +307,16 @@ For this to work fully, you must also have this script sourced when you are logg
 
 ```ShellSession
 #!/bin/sh
-if [ -d $HOME/.nix-profile/etc/profile.d ]; then
-  for i in $HOME/.nix-profile/etc/profile.d/*.sh; do
-    if [ -r $i ]; then
-      . $i
+if [ -d "${HOME}/.nix-profile/etc/profile.d" ]; then
+  for i in "${HOME}/.nix-profile/etc/profile.d/"*.sh; do
+    if [ -r "$i" ]; then
+      . "$i"
     fi
   done
 fi
 ```
 
-Now just run `source $HOME/.profile` and you can starting loading man pages from your environment.
+Now just run `. "${HOME}/.profile"` and you can start loading man pages from your environment.
 
 ### GNU info setup {#sec-gnu-info-setup}
 

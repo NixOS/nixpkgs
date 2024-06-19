@@ -1,26 +1,28 @@
 { lib
 , stdenv
 , python3Packages
-, wrapGAppsHook
+, fetchPypi
+, wrapGAppsHook3
 , gtk3
 , gobject-introspection
 , libcanberra-gtk3
 , poppler_gi
 , withGstreamer ? stdenv.isLinux
 , withVLC ? stdenv.isLinux
- }:
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
-  version = "1.7.2";
+  version = "1.8.5";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "LFUzrGHr8jmUqoIcKokC0gNDVmW1EUZlj9eI+GDycvI=";
+  src = fetchPypi {
+    inherit version;
+    pname = "pympress";
+    hash = "sha256-Kb05EV0F8lTamTq7pC1UoOkYf04s58NjMksVE2xTC/Y=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -40,6 +42,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Simple yet powerful PDF reader designed for dual-screen presentations";
+    mainProgram = "pympress";
     license = licenses.gpl2Plus;
     homepage = "https://cimbali.github.io/pympress/";
     maintainers = [ maintainers.tbenst ];

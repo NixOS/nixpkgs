@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, gtk2, lua, perl, python3Packages
+{ lib, stdenv, fetchFromGitHub, pkg-config, gtk2, lua, perl, python3Packages
 , pciutils, dbus-glib, libcanberra-gtk2, libproxy
 , enchant2, libnotify, openssl, isocodes
 , desktop-file-utils
@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hexchat";
-  version = "2.16.1";
+  version = "2.16.2";
 
   src = fetchFromGitHub {
     owner = "hexchat";
     repo = "hexchat";
     rev = "v${version}";
-    sha256 = "sha256-2IUlNUTL3TOJnDNMds2EWwkfn5NUOQ1ids96Ddo196E=";
+    sha256 = "sha256-rgaXqXbBWlfSyz+CT0jRLyfGOR1cYYnRhEAu7AsaWus=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];

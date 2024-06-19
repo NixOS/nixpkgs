@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cntr";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "cntr";
     rev = version;
-    sha256 = "sha256-z+0bSxoLJTK4e5xS4CHZ2hNUI56Ci1gbWJsRcN6ZqZA=";
+    sha256 = "sha256-spa4qPEhpNSZIk16jeH9YEr4g9JcVmpetHz72A/ZAPY=";
   };
 
-  cargoSha256 = "sha256-3e5wDne6Idu+kDinHPcAKHfH/d4DrGg90GkiMbyF280=";
+  cargoHash = "sha256-YN8EtUXKtT8Xc0RnW7QqL+awyWy5xFKWhYMxgYG28I4=";
 
   passthru.tests = nixosTests.cntr;
 
@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.mic92 ];
+    mainProgram = "cntr";
   };
 }

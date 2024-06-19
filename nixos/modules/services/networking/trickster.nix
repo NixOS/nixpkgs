@@ -15,24 +15,17 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable Trickster.
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.trickster;
-        defaultText = literalExpression "pkgs.trickster";
-        description = lib.mdDoc ''
-          Package that should be used for trickster.
-        '';
-      };
+      package = mkPackageOption pkgs "trickster" { };
 
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to configuration file.
         '';
       };
@@ -40,7 +33,7 @@ in
       instance-id = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Instance ID for when running multiple processes (default null).
         '';
       };
@@ -48,7 +41,7 @@ in
       log-level = mkOption {
         type = types.str;
         default = "info";
-        description = lib.mdDoc ''
+        description = ''
           Level of Logging to use (debug, info, warn, error) (default "info").
         '';
       };
@@ -56,7 +49,7 @@ in
       metrics-port = mkOption {
         type = types.port;
         default = 8082;
-        description = lib.mdDoc ''
+        description = ''
           Port that the /metrics endpoint will listen on.
         '';
       };
@@ -64,7 +57,7 @@ in
       origin-type = mkOption {
         type = types.enum [ "prometheus" "influxdb" ];
         default = "prometheus";
-        description = lib.mdDoc ''
+        description = ''
           Type of origin (prometheus, influxdb)
         '';
       };
@@ -72,7 +65,7 @@ in
       origin-url = mkOption {
         type = types.str;
         default = "http://prometheus:9090";
-        description = lib.mdDoc ''
+        description = ''
           URL to the Origin. Enter it like you would in grafana, e.g., http://prometheus:9090 (default http://prometheus:9090).
         '';
       };
@@ -80,7 +73,7 @@ in
       profiler-port = mkOption {
         type = types.nullOr types.port;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Port that the /debug/pprof endpoint will listen on.
         '';
       };
@@ -88,7 +81,7 @@ in
       proxy-port = mkOption {
         type = types.port;
         default = 9090;
-        description = lib.mdDoc ''
+        description = ''
           Port that the Proxy server will listen on.
         '';
       };

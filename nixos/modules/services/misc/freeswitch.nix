@@ -18,11 +18,11 @@ let
 in {
   options = {
     services.freeswitch = {
-      enable = mkEnableOption (lib.mdDoc "FreeSWITCH");
+      enable = mkEnableOption "FreeSWITCH";
       enableReload = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Issue the `reloadxml` command to FreeSWITCH when configuration directory changes (instead of restart).
           See [FreeSWITCH documentation](https://freeswitch.org/confluence/display/FREESWITCH/Reloading) for more info.
           The configuration directory is exposed at {file}`/etc/freeswitch`.
@@ -34,7 +34,7 @@ in {
         default = "${config.services.freeswitch.package}/share/freeswitch/conf/vanilla";
         defaultText = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/vanilla"'';
         example = literalExpression ''"''${config.services.freeswitch.package}/share/freeswitch/conf/minimal"'';
-        description = lib.mdDoc ''
+        description = ''
           Configuration template to use.
           See available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
           You can also set your own configuration directory.
@@ -51,21 +51,14 @@ in {
             ''';
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Override file in FreeSWITCH config template directory.
           Each top-level attribute denotes a file path in the configuration directory, its value is the file path.
           See [FreeSWITCH documentation](https://freeswitch.org/confluence/display/FREESWITCH/Default+Configuration) for more info.
           Also check available templates in [FreeSWITCH repository](https://github.com/signalwire/freeswitch/tree/master/conf).
         '';
       };
-      package = mkOption {
-        type = types.package;
-        default = pkgs.freeswitch;
-        defaultText = literalExpression "pkgs.freeswitch";
-        description = lib.mdDoc ''
-          FreeSWITCH package.
-        '';
-      };
+      package = mkPackageOption pkgs "freeswitch" { };
     };
   };
   config = mkIf cfg.enable {

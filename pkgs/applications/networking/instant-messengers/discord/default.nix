@@ -1,51 +1,58 @@
 { branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
-  versions = if stdenv.isLinux then {
-    stable = "0.0.20";
-    ptb = "0.0.29";
-    canary = "0.0.139";
-  } else {
-    stable = "0.0.264";
-    ptb = "0.0.59";
-    canary = "0.0.283";
-  };
+  versions =
+    if stdenv.isLinux then {
+      stable = "0.0.54";
+      ptb = "0.0.85";
+      canary = "0.0.402";
+      development = "0.0.19";
+    } else {
+      stable = "0.0.305";
+      ptb = "0.0.114";
+      canary = "0.0.510";
+      development = "0.0.41";
+    };
   version = versions.${branch};
   srcs = rec {
     x86_64-linux = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
-        sha256 = "3f7yuxigEF3e8qhCetCHKBtV4XUHsx/iYiaCCXjspYw=";
+        hash = "sha256-ruaotzJ+dvqNUV/e4xpJ1rorGiC4Im57BSSiddP8ZF8=";
       };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        sha256 = "d78NnQZ3MkLje8mHrI6noH2iD2oEvSJ3cDnsmzQsUYc=";
+        hash = "sha256-2RyilxldJX2wqKlEcrp6srj0O7UNHMxySRJD1xBfqMk=";
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "sha256-/PfO0TWRxMrK+V1XkYmdaXQ6SfyJNBFETaR9oV90itI=";
+        hash = "sha256-YE+sHmEkUCHLflSUgf4aotWWdzhbFyzozc3vLcJ96yA=";
+      };
+      development = fetchurl {
+        url = "https://dl-development.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
+        hash = "sha256-RP6SUM4DW3JhddSbJX6Xg8EE4iqCkSOgBL1oa7Zwp/E=";
       };
     };
-    aarch64-darwin = {
+    x86_64-darwin = {
+      stable = fetchurl {
+        url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
+        hash = "sha256-UEKsweUvtVKXZDrdIYuo3FPSPrnY3ECIilntBs9ZrGU=";
+      };
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        sha256 = "sha256-LS7KExVXkOv8O/GrisPMbBxg/pwoDXIOo1dK9wk1yB8=";
+        hash = "sha256-ahCgJ1aSLL7Mhx5Jjkeuqqlis8gqxHbIhQvlbUK2wIU=";
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
-        sha256 = "0mqpk1szp46mih95x42ld32rrspc6jx1j7qdaxf01whzb3d4pi9l";
+        hash = "sha256-viWOmu1+6tpzNDN/q0kXRMo+rohOP6/L7ke2EeBEADg=";
+      };
+      development = fetchurl {
+        url = "https://dl-development.discordapp.net/apps/osx/${version}/DiscordDevelopment.dmg";
+        hash = "sha256-RiGyca/zjPpENgcq9KnRh5G4YArrUOQeueUdUBgZgjo=";
       };
     };
-    # Stable does not (yet) provide aarch64-darwin support. PTB and Canary, however, do.
-    x86_64-darwin =
-      aarch64-darwin
-      // {
-        stable = fetchurl {
-          url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
-          sha256 = "1jvlxmbfqhslsr16prsgbki77kq7i3ipbkbn67pnwlnis40y9s7p";
-        };
-      };
+    aarch64-darwin = x86_64-darwin;
   };
-  src = srcs.${stdenv.hostPlatform.system}.${branch};
+  src = srcs.${stdenv.hostPlatform.system}.${branch} or (throw "${stdenv.hostPlatform.system} not supported on ${branch}");
 
   meta = with lib; {
     description = "All-in-one cross-platform voice and text chat for gamers";
@@ -53,23 +60,21 @@ let
     downloadPage = "https://discordapp.com/download";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ MP2E devins2518 artturin infinidoge ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ]
-      ++ lib.optionals (branch != "stable") [ "aarch64-darwin" ];
+    maintainers = with maintainers; [ Scrumplex artturin infinidoge jopejoe1 ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "discord";
   };
   package =
     if stdenv.isLinux
     then ./linux.nix
     else ./darwin.nix;
 
-  openasar = callPackage ./openasar.nix { };
-
   packages = (
     builtins.mapAttrs
       (_: value:
         callPackage package (value
           // {
-          inherit src version openasar;
+          inherit src version branch;
           meta = meta // { mainProgram = value.binaryName; };
         }))
       {
@@ -87,6 +92,11 @@ let
           pname = "discord-canary";
           binaryName = if stdenv.isLinux then "DiscordCanary" else desktopName;
           desktopName = "Discord Canary";
+        };
+        development = rec {
+          pname = "discord-development";
+          binaryName = if stdenv.isLinux then "DiscordDevelopment" else desktopName;
+          desktopName = "Discord Development";
         };
       }
   );

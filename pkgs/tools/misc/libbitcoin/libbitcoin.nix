@@ -1,18 +1,15 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , boost, secp256k1 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "libbitcoin";
-  version = "3.6.0";
-
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rppyp3zpb6ymwangjpblwf6qh4y3d1hczrjx8aavmrq7hznnrhq";
+    hash = "sha256-7fxj2hnuGRUS4QSQ1w0s3looe9pMvE2U50/yhNyBMf0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -20,8 +17,6 @@ in stdenv.mkDerivation {
   propagatedBuildInputs = [ secp256k1 ];
 
   enableParallelBuilding = true;
-
-  patches = [ ./fix-gcc11-compilation.patch ];
 
   configureFlags = [
     "--with-tests=no"
@@ -34,8 +29,7 @@ in stdenv.mkDerivation {
     homepage = "https://libbitcoin.info/";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];
-
     # AGPL with a lesser clause
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
   };
 }

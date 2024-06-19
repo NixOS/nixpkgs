@@ -13,16 +13,29 @@ let
   wrapper =
     {}:
     let
+      archToBindir = with stdenv.hostPlatform; if isx86 then
+        "bin"
+      else if isAarch then
+        "arm"
+      # we don't support running on AXP
+      # don't know what MIPS, PPC bindirs are called
+      else throw "Don't know where ${system} binaries are located!";
+
       binDirs = with stdenv.hostPlatform; if isWindows then [
-        (lib.optionalString is64bit "binnt64")
-        "binnt"
-        (lib.optionalString is32bit "binw")
-      ] else if (isDarwin && is64bit) then [
-        "osx64"
+        (lib.optionalString is64bit "${archToBindir}nt64")
+        "${archToBindir}nt"
+        (lib.optionalString is32bit "${archToBindir}w")
+      ] else if (isDarwin) then [
+        (lib.optionalString is64bit "${archToBindir}o64")
+        # modern Darwin cannot execute 32-bit code anymore
+        (lib.optionalString is32bit "${archToBindir}o")
       ] else [
-        (lib.optionalString is64bit "binl64")
-        "binl"
+        (lib.optionalString is64bit "${archToBindir}l64")
+        "${archToBindir}l"
       ];
+      # TODO
+      # This works good enough as-is, but should really only be targetPlatform-specific
+      # but we don't support targeting DOS, OS/2, 16-bit Windows etc Nixpkgs-wide so this needs extra logic
       includeDirs = with stdenv.hostPlatform; [
         "h"
       ]
@@ -71,9 +84,9 @@ let
             }
             EOF
             cat test.c
-            # Darwin target not supported, only host
             wcl386 -fe=test_c test.c
-            ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "./test_c"}
+            # Only test execution if hostPlatform is targetable
+            ${lib.optionalString (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch) "./test_c"}
 
             cat <<EOF >test.cpp
             #include <string>
@@ -91,9 +104,9 @@ let
             }
             EOF
             cat test.cpp
-            # Darwin target not supported, only host
             wcl386 -fe=test_cpp test.cpp
-            ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "./test_cpp"}
+            # Only test execution if hostPlatform is targetable
+            ${lib.optionalString (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch) "./test_cpp"}
             touch $out
           '';
           cross = runCommand "${name}-test-cross" { nativeBuildInputs = [ wrapped file ]; } ''

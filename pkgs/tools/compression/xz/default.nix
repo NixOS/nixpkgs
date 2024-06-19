@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl
 , enableStatic ? stdenv.hostPlatform.isStatic
 , writeScript
+, testers
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -8,13 +9,16 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xz";
-  version = "5.2.6";
+  version = "5.4.6"; # Beware of CVE-2024-3094 and related risks!!!
 
   src = fetchurl {
-    url = "https://tukaani.org/xz/xz-${version}.tar.bz2";
-    sha256 = "E+NALjAbYBj2px7w5Jf3FMbRHiFK6C2rFWuBwqZKyyU=";
+    url = with finalAttrs;
+      # The original URL has been taken down.
+      # "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.bz2";
+      "mirror://sourceforge/lzmautils/xz-${version}.tar.bz2";
+    sha256 = "sha256-kThRsnTo4dMXgeyUnxwj6NvPDs9uc6JDbcIXad0+b0k=";
   };
 
   strictDeps = true;
@@ -45,9 +49,13 @@ stdenv.mkDerivation rec {
       # Expect the text in format of '>xz-5.2.6.tar.bz2</a>'
       # We pick first match where a stable release goes first.
       new_version="$(curl -s https://tukaani.org/xz/ |
-          pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]bz2</a>')"
-      update-source-version ${pname} "$new_version"
+          pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]bz2</a>' |
+          head -n1)"
+      update-source-version ${finalAttrs.pname} "$new_version"
     '';
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {
@@ -71,5 +79,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
+    pkgConfigModules = [ "liblzma" ];
   };
-}
+})

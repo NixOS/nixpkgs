@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, boost165, zlib }:
+{ lib, stdenv, fetchFromGitHub, boost, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "starspace";
-  version = "unstable-2021-01-17";
+  version = "unstable-2019-12-13";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0sc7a37z1skb9377a1qs8ggwrkz0nmpybx7sms38xj05b702kbvj";
   };
 
-  buildInputs = [ boost165 zlib ];
+  buildInputs = [ boost zlib ];
 
   makeFlags = [
     "CXX=${stdenv.cc.targetPrefix}c++"
-    "BOOST_DIR=${boost165.dev}/include"
+    "BOOST_DIR=${boost.dev}/include"
   ];
 
   preBuild = ''
@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    # Does not build against gcc-13. No development activity upstream
+    # for past few years.
+    broken = true;
     description = "General-purpose neural model for efficient learning of entity embeddings";
     homepage = "https://ai.facebook.com/tools/starspace/";
     license = licenses.mit;

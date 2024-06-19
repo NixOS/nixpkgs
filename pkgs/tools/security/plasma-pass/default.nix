@@ -8,14 +8,14 @@
 
 mkDerivation rec {
   pname = "plasma-pass";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "plasma";
     repo = "plasma-pass";
+    sha256 = "sha256-fEYH3cvDZzEKpYqkTVqxxh3rhV75af8dZUHxQq8fPNg=";
     rev = "v${version}";
-    sha256 = "1w2mzxyrh17x7da62b6sg1n85vnh1q77wlrfxwfb1pk77y59rlf1";
   };
 
   buildInputs  = [

@@ -1,24 +1,31 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, zlib
 , cmake
 , imath
+, libdeflate
+, pkg-config
+, pkgsCross
 }:
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "3.1.5";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    sha256 = "sha256-mmzrMCYyAAa1z8fLZVbaTL1TZzdRaRTLgK+wzPuH4tg=";
+    hash = "sha256-mVUxxYe6teiJ18PQ9703/kjBpJ9+a7vcDme+NwtQQQM=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
+
+  patches =
+    # Disable broken test on musl libc
+    # https://github.com/AcademySoftwareFoundation/openexr/issues/1556
+    lib.optional stdenv.hostPlatform.isMusl ./disable-iex-test.patch
+  ;
 
   # tests are determined to use /var/tmp on unix
   postPatch = ''
@@ -29,10 +36,19 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
 
-  nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ imath zlib ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  propagatedBuildInputs = [ imath libdeflate ];
 
-  doCheck = true;
+  # Without 'sse' enforcement tests fail on i686 as due to excessive precision as:
+  #   error reading back channel B pixel 21,-76 got -nan expected -nan
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
+
+  # https://github.com/AcademySoftwareFoundation/openexr/issues/1400
+  doCheck = !stdenv.isAarch32;
+
+  passthru.tests = {
+    musl = pkgsCross.musl64.openexr_3;
+  };
 
   meta = with lib; {
     description = "A high dynamic-range (HDR) image file format";

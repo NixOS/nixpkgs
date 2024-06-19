@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, cmake, imagemagick }:
+{ lib, stdenv, fetchurl, cmake, imagemagick, testers }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cuneiform";
   version = "1.1.0";
 
@@ -24,15 +24,28 @@ stdenv.mkDerivation {
   # gcc-10. Otherwise build fails as:
   #   ld: CMakeFiles/rbal.dir/src/statsearchbl.cpp.o:(.bss+0x0):
   #     multiple definition of `minrow'; CMakeFiles/rbal.dir/src/linban.c.o:(.bss+0xa3a): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   postPatch = ''
     rm cuneiform_src/Kern/hhh/tigerh/h/strings.h
   '';
 
+  # make the install path match the rpath
+  postInstall = ''
+    if [[ -d ''${!outputLib}/lib64 ]]; then
+      mv ''${!outputLib}/lib64 ''${!outputLib}/lib
+      ln -s lib ''${!outputLib}/lib64
+    fi
+  '';
+
   buildInputs = [ imagemagick ];
 
   nativeBuildInputs = [ cmake ];
+
+  passthru.tests = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "cuneiform";
+  };
 
   meta = with lib; {
     description = "Multi-language OCR system";
@@ -40,5 +53,6 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.raskin ];
+    mainProgram = "cuneiform";
   };
-}
+})

@@ -3,11 +3,10 @@
 , fetchurl
 , gettext
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gtk3
 , libnotify
-, scandir ? null
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -24,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -37,7 +36,6 @@ python3Packages.buildPythonApplication rec {
     chardet
     pygobject3
     requests
-    scandir
   ];
 
   # Patch the many hardcoded uses of /usr/share/ and /usr/bin
@@ -67,5 +65,6 @@ python3Packages.buildPythonApplication rec {
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
     license = licenses.gpl3;
     maintainers = with maintainers; [ leonardoce mbprtpmnr ];
+    mainProgram = "bleachbit";
   };
 }

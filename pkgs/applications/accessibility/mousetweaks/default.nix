@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config
-, glib, gtk3, gnome, gsettings-desktop-schemas, wrapGAppsHook
-, libX11, libXtst, libXfixes, libXcursor
+, glib, gtk3, gnome, gsettings-desktop-schemas, wrapGAppsHook3
+, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
    sha256 = "005fhmvb45sa9mq17dpa23n1xnspiissx5rnpiy7hiqmy3g5rg8f";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
 
   buildInputs = [
     glib gtk3 gsettings-desktop-schemas
-    libX11 libXtst libXfixes libXcursor
+    xorg.libX11 xorg.libXtst xorg.libXfixes xorg.libXcursor
   ];
 
   passthru = {
@@ -41,9 +41,10 @@ stdenv.mkDerivation rec {
       The features can be activated and configured through the Universal Access
       panel of the GNOME Control Center.
     '';
-    homepage = "https://wiki.gnome.org/Projects/Mousetweaks";
+    homepage = "https://gitlab.gnome.org/Archive/mousetweaks";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.johnazoidberg ];
+    mainProgram = "mousetweaks";
   };
 }

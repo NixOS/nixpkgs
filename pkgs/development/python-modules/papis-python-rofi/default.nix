@@ -1,8 +1,13 @@
-{ buildPythonPackage, lib, fetchPypi }:
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "papis-python-rofi";
   version = "1.0.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

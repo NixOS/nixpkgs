@@ -1,24 +1,36 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, psutil
-, pygobject3
-, gtk3
-, gobject-introspection
-, xapp
-, polkit
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  meson,
+  ninja,
+  psutil,
+  pygobject3,
+  gtk3,
+  gobject-introspection,
+  xapp,
+  polkit,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "xapp";
-  version = "2.2.2";
+  version = "22";
+
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "python-xapp";
-    rev = version;
-    hash = "sha256-ntjJ/O6HiRZMsqsuQY4HLM4fBE0aWpn/L4n5YCRlhhg=";
+    rev = "refs/tags/master.mint${version}";
+    hash = "sha256-2Gx85y0ARu6EfDYAT9ZL154RH0R1HY78tm3rceODnZU=";
   };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   propagatedBuildInputs = [
     psutil
@@ -33,14 +45,23 @@ buildPythonPackage rec {
     substituteInPlace "xapp/os.py" --replace "/usr/bin/pkexec" "${polkit}/bin/pkexec"
   '';
 
+  postInstall = ''
+    # This is typically set by pipInstallHook/eggInstallHook,
+    # so we have to do so manually when using meson.
+    # https://github.com/NixOS/nixpkgs/issues/175227
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+  '';
+
   doCheck = false;
   pythonImportsCheck = [ "xapp" ];
+
+  passthru.updateScript = gitUpdater { ignoredVersions = "^master.*"; };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/python-xapp";
     description = "Cross-desktop libraries and common resources for python";
     license = licenses.lgpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

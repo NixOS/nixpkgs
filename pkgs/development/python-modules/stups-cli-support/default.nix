@@ -1,17 +1,19 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, clickclick
-, dnspython
-, requests
-, pytest
-, pytest-cov
-, isPy3k
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  clickclick,
+  dnspython,
+  requests,
+  pytest,
+  pytest-cov,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "stups-cli-support";
   version = "1.1.20";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
@@ -29,7 +31,7 @@ buildPythonPackage rec {
 
   preCheck = "export HOME=$TEMPDIR";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-cov
   ];

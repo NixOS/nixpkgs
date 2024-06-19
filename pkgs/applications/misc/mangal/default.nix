@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "mangal";
-  version = "3.11.0";
+  version = "4.0.6";
 
   src = fetchFromGitHub {
     owner = "metafates";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gBHNB3s7RHHxlxgeUFmxOdYvPaI78AzL4vRaCmXKgus=";
+    hash = "sha256-nbJdePlzZFM2ihbvFIMKyYZ9C0uKjU3TE5VLduLvtKE=";
   };
 
   proxyVendor = true;
-  vendorSha256 = "sha256-Faz/cujnbK83vrIM1KUWXbUzNIB9eYAWCqWs+oJ1sYk=";
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
 
@@ -35,5 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/metafates/mangal";
     license = licenses.mit;
     maintainers = [ maintainers.bertof ];
+    mainProgram = "mangal";
   };
 }

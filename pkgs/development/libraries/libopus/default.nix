@@ -1,26 +1,79 @@
-{ lib, stdenv, fetchurl
-, fixedPoint ? false, withCustomModes ? true }:
+{ lib
+, stdenv
+, fetchurl
+, gitUpdater
+, meson
+, python3
+, ninja
+, fixedPoint ? false
+, withCustomModes ? true
+, withIntrinsics ? stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isx86
+, withAsm ? false
 
-stdenv.mkDerivation rec {
+# tests
+, ffmpeg-headless
+, testers
+}:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "libopus";
-  version = "1.3.1";
+  version = "1.5.2";
 
   src = fetchurl {
-    url = "mirror://mozilla/opus/opus-${version}.tar.gz";
-    sha256 = "17gz8kxs4i7icsc1gj713gadiapyklynlwqlf0ai98dj4lg8xdb5";
+    url = "https://downloads.xiph.org/releases/opus/opus-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ZcHS94ufL7IAgsOMvkfJUa1YOTRYduRpQWEu6H+afOE=";
   };
+
+  patches = [
+    # Some tests time out easily on slower machines
+    ./test-timeout.patch
+  ];
+
+  postPatch = ''
+    patchShebangs meson/
+  '';
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = lib.optional fixedPoint "--enable-fixed-point"
-                ++ lib.optional withCustomModes "--enable-custom-modes";
+  nativeBuildInputs = [
+    meson
+    python3
+    ninja
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "fixed-point" fixedPoint)
+    (lib.mesonBool "custom-modes" withCustomModes)
+    (lib.mesonEnable "intrinsics" withIntrinsics)
+    (lib.mesonEnable "rtcd" (withIntrinsics || withAsm))
+    (lib.mesonEnable "asm" withAsm)
+    (lib.mesonEnable "docs" false)
+  ];
 
   doCheck = !stdenv.isi686 && !stdenv.isAarch32; # test_unit_LPC_inv_pred_gain fails
 
+  passthru = {
+    updateScript = gitUpdater {
+      url = "https://gitlab.xiph.org/xiph/opus.git";
+      rev-prefix = "v";
+    };
+
+    tests = {
+      inherit ffmpeg-headless;
+
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        moduleNames = [ "opus" ];
+      };
+    };
+  };
+
   meta = with lib; {
     description = "Open, royalty-free, highly versatile audio codec";
-    license = lib.licenses.bsd3;
-    homepage = "https://www.opus-codec.org/";
+    homepage = "https://opus-codec.org/";
+    changelog = "https://gitlab.xiph.org/xiph/opus/-/releases/v${finalAttrs.version}";
+    license = licenses.bsd3;
     platforms = platforms.all;
+    maintainers = [ ];
   };
-}
+})

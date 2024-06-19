@@ -1,38 +1,79 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, django
-, django_compat
-, pytest-django
-, pytestCheckHook
+{
+  lib,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  buildPythonPackage,
+  nix-update-script,
+
+  # build-system
+  gettext,
+  nodejs,
+  npmHooks,
+  setuptools-scm,
+
+  # dependencies
+  django,
+
+  # tests
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-hijack";
-  version = "3.2.1";
+  version = "3.4.5";
+  format = "setuptools";
 
-  # the wheel comes with pre-built assets, allowing us to avoid fighting
-  # with npm/webpack/gettext to build them ourselves.
-  format = "wheel";
-  src = fetchPypi {
-    inherit version format;
-    pname = "django_hijack";
-    dist = "py3";
-    python = "py3";
-    sha256 = "sha256-sHI3ULJH5bH2n2AKQLHVEkBAYfM5GOC/+0qpKDFOods=";
+  src = fetchFromGitHub {
+    owner = "django-hijack";
+    repo = "django-hijack";
+    rev = "refs/tags/${version}";
+    hash = "sha256-FXh5OFMTjsKgjEeIS+CiOwyGOs4AisJA+g49rCILDsQ=";
   };
 
-  propagatedBuildInputs = [ django django_compat ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'cmd = ["npm", "ci"]' 'cmd = ["true"]' \
+      --replace 'f"{self.build_lib}/{name}.mo"' 'f"{name}.mo"'
 
-  checkInputs = [ pytestCheckHook pytest-django ];
-  preCheck = ''
-    export DJANGO_SETTINGS_MODULE='hijack.tests.test_app.settings'
+    sed -i "/addopts/d" setup.cfg
   '';
-  pytestFlagsArray = [ "--pyargs" "hijack" ];
+
+  npmDeps = fetchNpmDeps {
+    inherit src;
+    hash = "sha256-cZEr/7FW4vCR8gpraT+/rPwYK9Xn22b5WH7lnuK5L4U=";
+  };
+
+  nativeBuildInputs = [
+    gettext
+    nodejs
+    npmHooks.npmConfigHook
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [ django ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+  ];
+
+  env.DJANGO_SETTINGS_MODULE = "hijack.tests.test_app.settings";
+
+  pytestFlagsArray = [
+    "--pyargs"
+    "hijack"
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  # needed for npmDeps update
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";
     homepage = "https://github.com/arteria/django-hijack";
+    changelog = "https://github.com/django-hijack/django-hijack/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };

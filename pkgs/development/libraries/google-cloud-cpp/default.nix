@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, abseil-cpp
+, fetchpatch
 , c-ares
 , cmake
 , crc32c
@@ -19,37 +19,40 @@
 , staticOnly ? stdenv.hostPlatform.isStatic
 }:
 let
-  googleapisRev = "d4f3468ef85278428005ed555b3a85db91551ee6";
+  # defined in cmake/GoogleapisConfig.cmake
+  googleapisRev = "85f8c758016c279fb7fa8f0d51ddc7ccc0dd5e05";
   googleapis = fetchFromGitHub {
+    name = "googleapis-src";
     owner = "googleapis";
     repo = "googleapis";
     rev = googleapisRev;
-    hash = "sha256-sIQVFQhE3Ae6ia45apzdgtwzglMM4hFZ8efNAhMO5ZY=";
+    hash = "sha256-4Qiz0pBgW3OZi+Z8Zq6k9E94+8q6/EFMwPh8eQxDjdI=";
   };
-  excludedTests = builtins.fromTOML (builtins.readFile ./skipped_tests.toml);
 in
 stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
-  version = "1.38.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     rev = "v${version}";
-    sha256 = "sha256-kobOkohWIDTQaaihhoh/25tZUNv+CjKFwj2xQqO52bA=";
+    sha256 = "sha256-0SoOaAqvk8cVC5W3ejTfe4O/guhrro3uAzkeIpAkCpg=";
   };
+
+  patches = [
+    # https://github.com/googleapis/google-cloud-cpp/pull/12554, tagged in 2.16.0
+    (fetchpatch {
+      name = "prepare-for-GCC-13.patch";
+      url = "https://github.com/googleapis/google-cloud-cpp/commit/ae30135c86982c36e82bb0f45f99baa48c6a780b.patch";
+      hash = "sha256-L0qZfdhP8Zt/gYBWvJafteVgBHR8Kup49RoOrLDtj3k=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace external/googleapis/CMakeLists.txt \
-      --replace "https://github.com/googleapis/googleapis/archive/\''${GOOGLE_CLOUD_CPP_GOOGLEAPIS_COMMIT_SHA}.tar.gz" "file://${googleapis}"
-
-    # https://github.com/googleapis/google-cloud-cpp/issues/8992
-    for file in external/googleapis/config.pc.in google/cloud/{,*/}config.pc.in; do
-      substituteInPlace "$file" \
-        --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-        --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
-        --replace '$'{prefix}/@CMAKE_INSTALL_BINDIR@ @CMAKE_INSTALL_FULL_BINDIR@
-    done
+      --replace "https://github.com/googleapis/googleapis/archive/\''${_GOOGLE_CLOUD_CPP_GOOGLEAPIS_COMMIT_SHA}.tar.gz" "file://${googleapis}"
+    sed -i '/https:\/\/storage.googleapis.com\/cloud-cpp-community-archive\/com_google_googleapis/d' external/googleapis/CMakeLists.txt
   '';
 
   nativeBuildInputs = [
@@ -60,13 +63,12 @@ stdenv.mkDerivation rec {
     # enable these dependencies when doInstallCheck is false because we're
     # unconditionally building tests and benchmarks
     #
-    # when doInstallCheck is true, these deps are added to installCheckInputs
+    # when doInstallCheck is true, these deps are added to nativeInstallCheckInputs
     gbenchmark
     gtest
   ];
 
   buildInputs = [
-    abseil-cpp
     c-ares
     crc32c
     (curl.override { inherit openssl; })
@@ -75,6 +77,9 @@ stdenv.mkDerivation rec {
     openssl
     protobuf
   ];
+
+  # https://hydra.nixos.org/build/222679737/nixlog/3/tail
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-error=maybe-uninitialized";
 
   doInstallCheck = true;
 
@@ -100,21 +105,22 @@ stdenv.mkDerivation rec {
     lib.optionalString doInstallCheck (
       lib.optionalString (!staticOnly) ''
         export ${ldLibraryPathName}=${lib.concatStringsSep ":" additionalLibraryPaths}
-      '' + ''
-        export GTEST_FILTER="-${lib.concatStringsSep ":" excludedTests.cases}"
       ''
     );
 
   installCheckPhase = lib.optionalString doInstallCheck ''
     runHook preInstallCheck
 
-    # disable tests that contact the internet
-    ctest --exclude-regex '^(${lib.concatStringsSep "|" excludedTests.whole})'
+    # Disable any integration tests, which need to contact the internet.
+    # Also disable the `storage_benchmark_*` tests.
+    # With Protobuf < 23.x they require -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=ON.
+    # With Protobuf >= 23.x they require They require setting -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=OFF
+    ctest --label-exclude integration-test --exclude-regex storage_benchmarks_
 
     runHook postInstallCheck
   '';
 
-  installCheckInputs = lib.optionals doInstallCheck [
+  nativeInstallCheckInputs = lib.optionals doInstallCheck [
     gbenchmark
     gtest
   ];
@@ -129,10 +135,13 @@ stdenv.mkDerivation rec {
     "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
   ];
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     license = with licenses; [ asl20 ];
     homepage = "https://github.com/googleapis/google-cloud-cpp";
     description = "C++ Idiomatic Clients for Google Cloud Platform services";
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ cpcloud ];
   };
 }

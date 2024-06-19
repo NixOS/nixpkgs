@@ -3,7 +3,10 @@
 , fetchFromGitHub
 , dos2unix
 , makeWrapper
-, SDL2
+, makeDesktopItem
+, copyDesktopItems
+, libX11
+, libXi
 , libGL
 , curl
 , openal
@@ -12,16 +15,28 @@
 
 stdenv.mkDerivation rec {
   pname = "ClassiCube";
-  version = "1.3.2";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
     rev = version;
-    sha256 = "6a0f7b03ef3a7f74cf42ffa5b88ab1a7b7beb4d864871a1b700465343ae74bb6";
+    sha256 = "sha256-7VPn5YXNoAR3ftYMDQuQRqeMCrbyB56ir1sQWBiPWAI=";
   };
 
-  nativeBuildInputs = [ dos2unix makeWrapper ];
+  nativeBuildInputs = [ dos2unix makeWrapper copyDesktopItems ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = pname;
+      genericName = "Sandbox Block Game";
+      exec = "ClassiCube";
+      icon = "CCicon";
+      comment = "Minecraft Classic inspired sandbox game";
+      categories = [ "Game" ];
+    })
+  ];
 
   prePatch = ''
     # The ClassiCube sources have DOS-style newlines
@@ -32,12 +47,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix hardcoded font paths
     ./font-location.patch
-    # ClassiCube doesn't compile with its X11 backend
-    # because of issues with libXi.
-    ./use-sdl.patch
     # For some reason, the Makefile doesn't link
     # with libcurl and openal when ClassiCube requires them.
-    # Also links with SDL2 instead of libX11 and libXi.
     ./fix-linking.patch
   ];
 
@@ -53,19 +64,17 @@ stdenv.mkDerivation rec {
       --replace '%NIXPKGS_FONT_PATH%' "${font_path}"
     # ClassiCube's Makefile hardcodes JOBS=1 for some reason,
     # even though it works perfectly well multi-threaded.
-    substituteInPlace src/Makefile \
+    substituteInPlace Makefile \
       --replace 'JOBS=1' "JOBS=$NIX_BUILD_CORES"
   '';
 
-  buildInputs = [ SDL2 libGL curl openal liberation_ttf ];
-
-  preBuild = "cd src";
-
-  postBuild = "cd -";
+  buildInputs = [ libX11 libXi libGL curl openal liberation_ttf ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
-    cp 'src/ClassiCube' "$out/bin"
+    cp 'ClassiCube' "$out/bin"
     # ClassiCube puts downloaded resources
     # next to the location of the executable by default.
     # This doesn't work with Nix
@@ -74,7 +83,12 @@ stdenv.mkDerivation rec {
     # in ~/.local/share instead.
     wrapProgram "$out/bin/ClassiCube" \
       --run 'mkdir -p "$HOME/.local/share/ClassiCube"' \
-      --add-flags '-d"$HOME/.local/share/ClassiCube"'
+      --run 'cd       "$HOME/.local/share/ClassiCube"'
+
+    mkdir -p "$out/share/icons/hicolor/256x256/apps"
+    cp misc/CCicon.png "$out/share/icons/hicolor/256x256/apps"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -83,5 +97,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ _360ied ];
+    mainProgram = "ClassiCube";
   };
 }

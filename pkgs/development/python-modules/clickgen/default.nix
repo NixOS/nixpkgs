@@ -1,19 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pillow
-, libX11
-, libXcursor
-, libpng
-, python
-, pytestCheckHook
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  attrs,
+  pillow,
+  toml,
+  numpy,
+  pyyaml,
+  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "clickgen";
-  version = "1.2.0";
+  version = "2.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,25 +23,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ful1e5";
     repo = "clickgen";
-    rev = "v${version}";
-    sha256 = "sha256-01c8SVy+J004dq5KCUe62w7i/xUTxTfl/IpvUtGQgw0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hYorjqm/FCnff3ZTgIlicwmSLA9ZnHGDyPt1BcijBII=";
   };
 
-  buildInputs = [ libXcursor libX11 libpng ];
+  propagatedBuildInputs = [
+    attrs
+    numpy
+    pillow
+    pyyaml
+    toml
+  ];
 
-  propagatedBuildInputs = [ pillow ];
-
-  checkInputs = [ pytestCheckHook ];
-
-  postBuild = ''
-    # Needs to build xcursorgen.so
-    cd src/xcursorgen
-    make
-    cd ../..
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postInstall = ''
-    install -m644 src/xcursorgen/xcursorgen.so $out/${python.sitePackages}/clickgen/xcursorgen.so
     # Copying scripts directory needed by clickgen script at $out/bin/
     cp -R src/clickgen/scripts $out/${python.sitePackages}/clickgen/scripts
   '';

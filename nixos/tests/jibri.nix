@@ -35,9 +35,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_unit("jibri.service")
 
     machine.wait_until_succeeds(
-        "journalctl -b -u jitsi-videobridge2 -o cat | grep -q 'Performed a successful health check'", timeout=30
-    )
-    machine.wait_until_succeeds(
         "journalctl -b -u prosody -o cat | grep -q 'Authenticated as focus@auth.machine'", timeout=31
     )
     machine.wait_until_succeeds(

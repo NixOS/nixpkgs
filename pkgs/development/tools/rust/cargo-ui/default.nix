@@ -1,57 +1,63 @@
 { lib
 , rustPlatform
 , fetchCrate
-, cmake
 , pkg-config
-, makeWrapper
+, libgit2
 , openssl
 , stdenv
+, expat
 , fontconfig
 , libGL
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libxcb
+, xorg
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-ui";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-IL7BxiJg6eTuFM0pJ3qLxYCVofE/RjmgQjvOW96QF9A=";
+    hash = "sha256-M/ljgtTHMSc7rY/a8CpKGNuOSdVDwRt6+tzPPHdpKOw=";
   };
 
-  cargoSha256 = "sha256-16mgp7GsjbizzCWN3MDpl6ps9CK1zdIpLiyNiKYjDI4=";
+  cargoHash = "sha256-u3YqXQZCfveSBjxdWb+GC0IA9bpruAYQdxX1zanT3fw=";
 
-  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optionals stdenv.isLinux [
-    makeWrapper
+  nativeBuildInputs = [
+    pkg-config
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [
+  buildInputs = [
+    libgit2
+    openssl
+  ] ++ lib.optionals stdenv.isLinux [
+    expat
     fontconfig
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libxcb
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libxcb
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/cargo-ui \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf $out/bin/cargo-ui \
+      --add-rpath ${lib.makeLibraryPath [ fontconfig libGL ]}
   '';
+
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   meta = with lib; {
     description = "A GUI for Cargo";
+    mainProgram = "cargo-ui";
     homepage = "https://github.com/slint-ui/cargo-ui";
     changelog = "https://github.com/slint-ui/cargo-ui/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 gpl3Only ];
-    maintainers = with maintainers; [ figsoda ];
-    # figsoda: I can't figure how to make it build on darwin
-    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

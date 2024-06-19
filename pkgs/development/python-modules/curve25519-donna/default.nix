@@ -1,8 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "curve25519-donna";
   version = "1.3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

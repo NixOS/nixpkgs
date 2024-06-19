@@ -15,27 +15,14 @@ in {
 
     services.opentsdb = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to run OpenTSDB.
-        '';
-      };
+      enable = mkEnableOption "OpenTSDB";
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.opentsdb;
-        defaultText = literalExpression "pkgs.opentsdb";
-        description = lib.mdDoc ''
-          OpenTSDB package to use.
-        '';
-      };
+      package = mkPackageOption pkgs "opentsdb" { };
 
       user = mkOption {
         type = types.str;
         default = "opentsdb";
-        description = lib.mdDoc ''
+        description = ''
           User account under which OpenTSDB runs.
         '';
       };
@@ -43,15 +30,15 @@ in {
       group = mkOption {
         type = types.str;
         default = "opentsdb";
-        description = lib.mdDoc ''
+        description = ''
           Group account under which OpenTSDB runs.
         '';
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 4242;
-        description = lib.mdDoc ''
+        description = ''
           Which port OpenTSDB listens on.
         '';
       };
@@ -62,7 +49,7 @@ in {
           tsd.core.auto_create_metrics = true
           tsd.http.request.enable_chunked  = true
         '';
-        description = lib.mdDoc ''
+        description = ''
           The contents of OpenTSDB's configuration file
         '';
       };

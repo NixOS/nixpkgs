@@ -1,14 +1,21 @@
-{lib, stdenv, fetchFromGitLab, autoconf, automake, gettext, ncurses}:
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoconf
+, automake
+, gettext
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "psmisc";
-  version = "23.5";
+  version = "23.7";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-02jvRPqN8DS30ID42hQFu400NoFC5QiH5YA3NB+EoFI=";
+    hash = "sha256-49YpdIh0DxLHfxos4sw1HUkV0XQBqmm4M9b0T4eN2xI=";
   };
 
   nativeBuildInputs = [ autoconf automake gettext ];

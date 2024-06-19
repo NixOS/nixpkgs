@@ -1,11 +1,10 @@
 { lib, stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , glib
 , coreutils
 , accountsservice
@@ -19,16 +18,16 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.10.5";
+  version = "0.12.0";
 
   outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
-    repo = pname;
+    repo = "malcontent";
     rev = version;
-    sha256 = "sha256-UPKAStB6wTd3qbbISHMgNw1bJjIRgn89tHnsw4ZptvQ=";
+    hash = "sha256-UK/WVqDMkwIqkTFFjzh7PRCA/Ej8Iyu33FasnAEApRs=";
   };
 
   patches = [
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -96,6 +95,7 @@ stdenv.mkDerivation rec {
     outputsToInstall = [ "bin" "out" "man" ];
 
     description = "Parental controls library";
+    mainProgram = "malcontent-client";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];

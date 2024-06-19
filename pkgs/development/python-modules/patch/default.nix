@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchzip
+{
+  lib,
+  buildPythonPackage,
+  fetchzip,
 }:
 
 buildPythonPackage rec {
   version = "1.16";
+  format = "setuptools";
   pname = "patch";
 
   src = fetchzip {
@@ -22,5 +24,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = [ maintainers.igsha ];
   };
-
 }

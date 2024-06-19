@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ruby, zfs }:
+{ lib, stdenv, fetchFromGitHub, ruby, zfs, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "zfstools";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ruby ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -20,10 +21,10 @@ stdenv.mkDerivation rec {
     cp -R lib $out/
 
     for f in $out/bin/*; do
-      substituteInPlace $f --replace "/usr/bin/env ruby" "ruby -I$out/lib"
+      wrapProgram $f \
+        --set RUBYLIB $out/lib \
+        --prefix PATH : ${zfs}/bin
     done
-
-    sed -e 's|cmd.*=.*"zfs |cmd = "${zfs}/sbin/zfs |g' -i $out/lib/zfstools/{dataset,snapshot}.rb
   '';
 
   meta = with lib; {

@@ -1,28 +1,29 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, gitleaks
-, installShellFiles
-, testers
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitleaks,
+  installShellFiles,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.13.0";
+  version = "8.18.3";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Pdl26PoTcI0LiC3O8EN/vW9LjVfI54TsspRnmhpFaVo=";
+    repo = "gitleaks";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OLs3rpP6s6ZyCUKkD5Sl/tAMl3gSBWrUUFYeNffiXEs=";
   };
 
-  vendorSha256 = "sha256-Ev0/CSpwJDmc+Dvu/bFDzsgsq80rWImJWXNAUqYHgoE=";
+  vendorHash = "sha256-DgCtWRo5KNuFCdhGJvzoH2v8n7mIxNk8eHyZFPUPo24=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/zricethezav/gitleaks/v${lib.versions.major version}/cmd.Version=${version}"
+    "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/cmd.Version=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -49,7 +50,9 @@ buildGoModule rec {
       API keys and tokens in git repos.
     '';
     homepage = "https://github.com/zricethezav/gitleaks";
+    changelog = "https://github.com/zricethezav/gitleaks/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "gitleaks";
   };
 }

@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk, writeScript
-, common-updater-scripts, cacert, git, nixfmt, nix, jq, coreutils, gnused }:
+, common-updater-scripts, cacert, git, nixfmt-classic, nix, jq, coreutils
+, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
-  rev = "52fa7de64091bc687fe11e3a8c660bbbfb42742f";
-  version = "2022-10-03";
+  rev = "7208170046457c70a67e4b86c833a074be9de958";
+  version = "2024-05-06";
 
   src = fetchFromGitHub {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "TMp5qxUf7U3re8HKXvtArEJMtn4iZy4zs4SqFTxX5X4=";
+    sha256 = "Ci4V1GHKzGux5qU33Z6+NC+YApqlQfgjekGb+WHtLaQ=";
   };
 
   dontBuild = true;
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
          curl
          cacert
          git
-         nixfmt
+         nixfmt-classic
          nix
          jq
          coreutils

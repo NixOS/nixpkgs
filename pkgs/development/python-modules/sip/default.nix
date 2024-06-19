@@ -1,54 +1,51 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, packaging, ply, toml, fetchpatch }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  packaging,
+  ply,
+  toml,
+  tomli,
+
+  # tests
+  poppler-qt5,
+  qgis,
+  qgis-ltr,
+}:
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.6.2";
+  version = "6.8.3";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "sip";
-    inherit version;
-    sha256 = "sha256-Dj76wcXf2OUlrlcUCSffJpk+E/WLidFXfDFPQQW/2Q0=";
+    inherit pname version;
+    hash = "sha256-iIVHsBi7JMNq3tUZ6T0+UT1MaqC6VbfMGv+9Rc8Qdiw=";
   };
 
-  patches = [
-    # on non-x86 Linux platforms, sip incorrectly detects the manylinux version
-    # and PIP will refuse to install the resulting wheel.
-    # remove once upstream fixes this, hopefully in 6.5.2
-    ./fix-manylinux-version.patch
+  nativeBuildInputs = [ setuptools ];
 
-    # fix issue triggered by QGIS 3.26.x, already fixed upstream
-    # in SIP, waiting for release past 6.6.2
-    (fetchpatch {
-      url = "https://riverbankcomputing.com/hg/sip/raw-diff/323d39a2d602/sipbuild/generator/parser/instantiations.py";
-      hash = "sha256-QEQuRzXA+wK9Dt22U/LgIwtherY9pJURGJYpKpJkiok=";
-    })
-  ];
-
-  propagatedBuildInputs = [ packaging ply toml ];
+  propagatedBuildInputs = [
+    packaging
+    setuptools
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # There aren't tests
   doCheck = false;
 
   pythonImportsCheck = [ "sipbuild" ];
 
-  # FIXME: Why isn't this detected automatically?
-  # Needs to be specified in pyproject.toml, e.g.:
-  # [tool.sip.bindings.MODULE]
-  # tags = [PLATFORM_TAG]
-  platform_tag =
-    if stdenv.targetPlatform.isLinux then
-      "WS_X11"
-    else if stdenv.targetPlatform.isDarwin then
-      "WS_MACX"
-    else if stdenv.targetPlatform.isWindows then
-      "WS_WIN"
-    else
-      throw "unsupported platform";
+  passthru.tests = {
+    # test depending packages
+    inherit poppler-qt5 qgis qgis-ltr;
+  };
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nrdxp ];
   };
 }

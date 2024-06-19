@@ -1,15 +1,14 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
-, msgpack, neovim, python3Packages, qtbase, qtsvg }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, doxygen, msgpack, neovim, python3Packages, qtbase, qtsvg }:
 
 mkDerivation rec {
   pname = "neovim-qt-unwrapped";
-  version = "0.2.17";
+  version = "0.2.18";
 
   src = fetchFromGitHub {
     owner  = "equalsraf";
     repo   = "neovim-qt";
     rev    = "v${version}";
-    sha256 = "sha256-UJXaHENqau5EEe5c94pJuNxZU5rutJs642w9Cof8Sa4=";
+    sha256 = "sha256-BitFHHwL2aqBUpY/8eHaZIFvnDCeABC6w33Vmbx0z2g=";
   };
 
   cmakeFlags = [
@@ -38,6 +37,7 @@ mkDerivation rec {
     description = "Neovim client library and GUI, in Qt5";
     homepage = "https://github.com/equalsraf/neovim-qt";
     license     = licenses.isc;
+    mainProgram = "nvim-qt";
     maintainers = with maintainers; [ peterhoeg ];
     inherit (neovim.meta) platforms;
   };

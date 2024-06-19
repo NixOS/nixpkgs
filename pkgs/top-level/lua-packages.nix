@@ -19,7 +19,7 @@ let
 
   buildLuaApplication = args: buildLuarocksPackage ({ namePrefix = ""; } // args);
 
-  buildLuarocksPackage = lib.makeOverridable (callPackage ../development/interpreters/lua-5/build-lua-package.nix { });
+  buildLuarocksPackage = lib.makeOverridable (callPackage ../development/interpreters/lua-5/build-luarocks-package.nix { });
 
   luaLib = callPackage ../development/lua-modules/lib.nix { };
 
@@ -30,7 +30,7 @@ let
     lib.concatMapStringsSep ";" (path: "${drv}/${path}") pathListForVersion;
 
 in
-{
+rec {
 
   # Dont take luaPackages from "global" pkgs scope to avoid mixing lua versions
   luaPackages = self;
@@ -42,7 +42,7 @@ in
   getLuaCPath = drv: getPath drv luaLib.luaCPathList;
 
   inherit (callPackage ../development/interpreters/lua-5/hooks { })
-    luarocksMoveDataFolder luarocksCheckHook lua-setup-hook;
+    luarocksMoveDataFolder luarocksCheckHook;
 
   inherit lua;
   inherit buildLuaPackage buildLuarocksPackage buildLuaApplication;
@@ -54,24 +54,103 @@ in
     inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
   };
 
-  luarocks = callPackage ../development/tools/misc/luarocks/default.nix { };
+  luarocks_bootstrap = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
 
   # a fork of luarocks used to generate nix lua derivations from rockspecs
-  luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
+  luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });
 
-  luxio = callPackage ({ fetchurl, which, pkg-config }: buildLuaPackage {
+ lua-pam = callPackage({fetchFromGitHub, linux-pam, openpam}: buildLuaPackage rec {
+    pname = "lua-pam";
+    version = "unstable-2015-07-03";
+    # Needed for `disabled`, overridden in buildLuaPackage
+    name = "${pname}-${version}";
+
+    src = fetchFromGitHub {
+      owner = "devurandom";
+      repo = "lua-pam";
+      rev = "3818ee6346a976669d74a5cbc2a83ad2585c5953";
+      hash = "sha256-YlMZ5mM9Ij/9yRmgA0X1ahYVZMUx8Igj5OBvAMskqTg=";
+      fetchSubmodules = true;
+    };
+
+    # The makefile tries to link to `-llua<luaversion>`
+    LUA_LIBS = "-llua";
+
+    buildInputs = lib.optionals stdenv.isLinux [linux-pam]
+      ++ lib.optionals stdenv.isDarwin [openpam];
+
+    installPhase = ''
+      runHook preInstall
+
+      install -Dm755 pam.so $out/lib/lua/${lua.luaversion}/pam.so
+
+      runHook postInstall
+    '';
+
+    # The package does not build with lua 5.4 or luaJIT
+    disabled = luaAtLeast "5.4" || isLuaJIT;
+
+    meta = with lib; {
+      description = "Lua module for PAM authentication";
+      homepage = "https://github.com/devurandom/lua-pam";
+      license = licenses.mit;
+      maintainers = with maintainers; [ traxys ];
+    };
+ }) {};
+
+ lua-resty-core = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
+    pname = "lua-resty-core";
+    version = "0.1.28";
+
+    src = fetchFromGitHub {
+      owner = "openresty";
+      repo = "lua-resty-core";
+      rev = "v${version}";
+      sha256 = "sha256-RJ2wcHTu447wM0h1fa2qCBl4/p9XL6ZqX9pktRW64RI=";
+    };
+
+    propagatedBuildInputs = [ lua-resty-lrucache ];
+
+    meta = with lib; {
+      description = "New FFI-based API for lua-nginx-module";
+      homepage = "https://github.com/openresty/lua-resty-core";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ ];
+    };
+  }) {};
+
+ lua-resty-lrucache = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
+    pname = "lua-resty-lrucache";
+    version = "0.13";
+
+    src = fetchFromGitHub {
+      owner = "openresty";
+      repo = "lua-resty-lrucache";
+      rev = "v${version}";
+      sha256 = "sha256-J8RNAMourxqUF8wPKd8XBhNwGC/x1KKvrVnZtYDEu4Q=";
+    };
+
+    meta = with lib; {
+      description = "Lua-land LRU Cache based on LuaJIT FFI";
+      homepage = "https://github.com/openresty/lua-resty-lrucache";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ ];
+    };
+  }) {};
+
+  luxio = callPackage ({ fetchurl, which, pkg-config }: buildLuaPackage rec {
     pname = "luxio";
     version = "13";
 
     src = fetchurl {
-      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-13.tar.bz2";
+      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-${version}.tar.bz2";
       sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
     };
 
     nativeBuildInputs = [ which pkg-config ];
 
     postPatch = ''
-      patchShebangs .
+      patchShebangs const-proc.lua
     '';
 
     preBuild = ''
@@ -80,7 +159,7 @@ in
         INST_LUADIR="$out/share/lua/${lua.luaversion}"
         LUA_BINDIR="$out/bin"
         INSTALL=install
-        );
+      );
     '';
 
     meta = with lib; {
@@ -91,21 +170,22 @@ in
       maintainers = with maintainers; [ richardipsum ];
       platforms = platforms.unix;
     };
-  });
+  }) {};
 
   nfd = callPackage ../development/lua-modules/nfd {
     inherit (pkgs.gnome) zenity;
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
-  vicious = (callPackage ({ fetchFromGitHub }: stdenv.mkDerivation rec {
+  vicious = callPackage ({ fetchFromGitHub }: stdenv.mkDerivation rec {
     pname = "vicious";
-    version = "2.5.1";
+    version = "2.6.0";
 
     src = fetchFromGitHub {
       owner = "vicious-widgets";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "sha256-geu/g/dFAVxtY1BuJYpZoVtFS/oL66NFnqiLAnJELtI=";
+      sha256 = "sha256-VlJ2hNou2+t7eSyHmFkC2xJ92OH/uJ/ewYHkFLQjUPQ=";
     };
 
     buildInputs = [ lua ];
@@ -119,10 +199,10 @@ in
     meta = with lib; {
       description = "A modular widget library for the awesome window manager";
       homepage = "https://vicious.rtfd.io";
+      changelog = "https://vicious.rtfd.io/en/v${version}/changelog.html";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ makefu mic92 McSinyx ];
       platforms = platforms.linux;
     };
-  }) {});
-
+  }) {};
 }

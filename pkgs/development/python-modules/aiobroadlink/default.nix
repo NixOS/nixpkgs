@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -14,22 +15,19 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-uTUtDhL9VtWZE+Y6ZJY4prmlE+Yh2UrCg5+eSyAQzMk=";
+    hash = "sha256-uTUtDhL9VtWZE+Y6ZJY4prmlE+Yh2UrCg5+eSyAQzMk=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "aiobroadlink"
-  ];
+  pythonImportsCheck = [ "aiobroadlink" ];
 
   meta = with lib; {
     description = "Python module to control various Broadlink devices";
+    mainProgram = "aiobroadlink";
     homepage = "https://github.com/frawau/aiobroadlink";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
