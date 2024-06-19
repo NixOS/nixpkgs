@@ -16,6 +16,7 @@
   pnpm,
   nodejs,
   withTTS ? true,
+  withMiddleClickScroll ? false,
   # Enables the use of vencord from nixpkgs instead of
   # letting vesktop manage it's own version
   withSystemVencord ? false,
@@ -134,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper ${electron}/bin/electron $out/bin/vesktop \
         --add-flags $out/opt/Vesktop/resources/app.asar \
         ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
+        ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
     ''
     + lib.optionalString stdenv.isDarwin ''
