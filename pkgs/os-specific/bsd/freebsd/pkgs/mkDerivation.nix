@@ -2,6 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
+  stdenvNoLibs,
   versionData,
   writeText,
   patches,
@@ -21,7 +22,13 @@
 lib.makeOverridable (
   attrs:
   let
-    stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
+    stdenv' =
+      if attrs.noCC or false then
+        stdenvNoCC
+      else if attrs.noLibc or false then
+        stdenvNoLibs
+      else
+        stdenv;
   in
   stdenv'.mkDerivation (
     rec {
@@ -128,15 +135,17 @@ lib.makeOverridable (
           splitPatch =
             patchFile:
             let
+              allLines' = lib.strings.splitString "\n" (builtins.readFile patchFile);
+              allLines = builtins.filter (
+                line: !((lib.strings.hasPrefix "diff --git" line) || (lib.strings.hasPrefix "index " line))
+              ) allLines';
               foldFunc =
                 a: b:
-                if (lib.strings.hasPrefix "--- " b) then
+                if ((lib.strings.hasPrefix "--- " b) || (lib.strings.hasPrefix "diff --git " b)) then
                   (a ++ [ [ b ] ])
                 else
                   ((lib.lists.init a) ++ (lib.lists.singleton ((lib.lists.last a) ++ [ b ])));
-              partitionedPatches' = lib.lists.foldl foldFunc [ [ ] ] (
-                lib.strings.splitString "\n" (builtins.readFile patchFile)
-              );
+              partitionedPatches' = lib.lists.foldl foldFunc [ [ ] ] allLines;
               partitionedPatches =
                 if (builtins.length partitionedPatches' > 1) then
                   (lib.lists.drop 1 partitionedPatches')
