@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.3.4";
+  version = "5.5.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tFoshbAl3RU2fWm/knSN5KMOyCq7Swj6UwG3LokFH+I=";
+    hash = "sha256-hM52Zv+PvfT0H7X2ykUqsmOaUUvIiWeihUqbG4INbqA=";
   };
 
   build-system = [ poetry-core ];
