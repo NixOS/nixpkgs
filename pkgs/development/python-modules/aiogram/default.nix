@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.7.0";
+  version = "3.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "aiogram";
     repo = "aiogram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GIfujywp+yYRQ4xm6O5GgTCMn6I3TSYE5epaqhMGGnE=";
+    hash = "sha256-lqZnebFmNNSAOv3XcWHl+gtoWO7z27Zk0O6AJ7w+HDk=";
   };
 
   build-system = [ hatchling ];
