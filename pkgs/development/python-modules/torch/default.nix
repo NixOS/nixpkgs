@@ -453,7 +453,7 @@ buildPythonPackage rec {
         cuda_cudart.static
         cuda_cupti.dev # For kineto
         cuda_cupti.lib # For kineto
-        cuda_nvcc.dev # crt/host_config.h; even though we include this in nativeBuildinputs, it's needed here too
+        cuda_nvcc.dev # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
         cuda_nvml_dev.dev # <nvml.h>
         cuda_nvrtc.dev
         cuda_nvrtc.lib

@@ -1,8 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchNpmDeps,
   pythonOlder,
+  nodejs,
+  npmHooks,
   hatchling,
   hatch-vcs,
   anywidget,
@@ -16,14 +19,31 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-C0mYkguN4ZfxSLqETH3dUwXeoNcicrmAgp6e9IIT43s=";
+  src = fetchFromGitHub {
+    owner = "niivue";
+    repo = "ipyniivue";
+    rev = "v${version}";
+    hash = "sha256-6DZmHVVxJspjUhJ9pzTmTvwAnQfvTp8OL2xZONz2XbU=";
+  };
+
+  npmDeps = fetchNpmDeps {
+    name = "${pname}-${version}-npm-deps";
+    inherit src;
+    hash = "sha256-ZJRBGMNn5clxMavimfl6Jwqf7M2pRo+WLne0gUWOiJ8=";
   };
 
   # We do not need the build hooks, because we do not need to
   # build any JS components; these are present already in the PyPI artifact.
   env.HATCH_BUILD_NO_HOOKS = true;
+
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+  ];
+
+  preBuild = ''
+    npm run build
+  '';
 
   build-system = [
     hatchling
@@ -32,7 +52,7 @@ buildPythonPackage rec {
 
   dependencies = [ anywidget ];
 
-  nativeCheckImports = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "ipyniivue" ];
 
   meta = with lib; {
