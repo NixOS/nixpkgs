@@ -113,6 +113,10 @@ stdenv.mkDerivation rec {
       mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
          $out/libexec/netdata/plugins.d/network-viewer.plugin.org
     ''}
+    ${lib.optionalString (!withCloudUi) ''
+      rm -rf $out/share/netdata/web/index.html
+      cp $out/share/netdata/web/v1/index.html $out/share/netdata/web/index.html
+    ''}
   '';
 
   preConfigure = lib.optionalString (!stdenv.isDarwin) ''
