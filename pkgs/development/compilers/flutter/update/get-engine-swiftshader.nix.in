@@ -1,0 +1,5 @@
+{ fetchgit }:
+fetchgit {
+  url = "https://swiftshader.googlesource.com/SwiftShader.git";
+  rev = "@engine_swiftshader_rev@";
+}

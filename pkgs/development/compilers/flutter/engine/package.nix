@@ -11,7 +11,10 @@
   tools ? callPackage ./tools.nix { inherit hostPlatform; },
   stdenv,
   stdenvNoCC,
+  dart,
+  fetchgit,
   runCommand,
+  llvmPackages,
   patchelf,
   openbox,
   xorg,
@@ -34,6 +37,8 @@
   version,
   flutterVersion,
   dartSdkVersion,
+  swiftshaderHash,
+  swiftshaderRev,
   hashes,
   patches,
   url,
@@ -58,6 +63,20 @@ let
       ;
   };
 
+  swiftshader = fetchgit {
+    url = "https://swiftshader.googlesource.com/SwiftShader.git";
+    hash = swiftshaderHash;
+    rev = swiftshaderRev;
+  };
+
+  llvm = symlinkJoin {
+    name = "llvm";
+    paths = with llvmPackages; [
+      clang
+      llvmPackages.llvm
+    ];
+  };
+
   outName = "host_${runtimeMode}${lib.optionalString (!isOptimized) "_unopt --unoptimized"}";
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -69,7 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     isOptimized
     dartSdkVersion
     src
-    outName;
+    outName
+    swiftshader;
 
   toolchain = symlinkJoin {
     name = "flutter-engine-toolchain-${version}";
@@ -119,6 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  NIX_CFLAGS_COMPILE = "-I${finalAttrs.toolchain}/include";
+
   nativeCheckInputs = lib.optionals stdenv.isLinux [ xorg.xorgserver openbox ];
 
   nativeBuildInputs =
@@ -128,6 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
       git
       pkg-config
       ninja
+      dart
     ]
     ++ lib.optionals (stdenv.isLinux) [ patchelf ]
     ++ optionals (stdenv.isDarwin) [
@@ -139,54 +162,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gtk3 ];
 
-  patchtools =
-    let
-      buildtoolsPath =
-        if lib.versionAtLeast flutterVersion "3.21" then "flutter/buildtools" else "buildtools";
-    in
-    [
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-apply-replacements"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-doc"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-format"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-include-fixer"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-refactor"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-scan-deps"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clang-tidy"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/clangd"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/dsymutil"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/find-all-symbols"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/lld"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-ar"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-bolt"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-cov"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-cxxfilt"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-debuginfod-find"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-dwarfdump"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-dwp"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-gsymutil"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-ifs"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-libtool-darwin"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-lipo"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-ml"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-mt"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-nm"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-objcopy"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-objdump"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-pdbutil"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-profdata"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-rc"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-readobj"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-size"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-symbolizer"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-undname"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm-xray"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/llvm"
-      "${buildtoolsPath}/${constants.alt-platform}/clang/bin/sancov"
-      "flutter/prebuilts/${constants.alt-platform}/dart-sdk/bin/dartaotruntime"
-      "flutter/prebuilts/${constants.alt-platform}/dart-sdk/bin/dart"
-      "flutter/third_party/gn/gn"
-      "third_party/dart/tools/sdks/dart-sdk/bin/dart"
-    ];
+  patchtools = [
+    "third_party/dart/tools/sdks/dart-sdk/bin/dart"
+    "flutter/third_party/gn/gn"
+  ];
 
   dontPatch = true;
 
@@ -198,6 +177,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postUnpack = ''
     pushd ${src.name}
+
+    ln -s $swiftshader src/flutter/third_party/swiftshader
+
     ${lib.optionalString (stdenv.isLinux) ''
       for patchtool in ''${patchtools[@]}; do
         patchelf src/$patchtool --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)
@@ -216,7 +198,10 @@ stdenv.mkDerivation (finalAttrs: {
       popd
     done
 
-    src/flutter/prebuilts/${constants.alt-platform}/dart-sdk/bin/dart src/third_party/dart/tools/generate_package_config.dart
+    mkdir -p src/flutter/buildtools/${constants.alt-platform}
+    ln -s ${llvm} src/flutter/buildtools/${constants.alt-platform}/clang
+
+    dart src/third_party/dart/tools/generate_package_config.dart
     cp ${./pkg-config.py} src/build/config/linux/pkg-config.py
     echo "${dartSdkVersion}" >src/third_party/dart/sdk/version
 
@@ -259,7 +244,9 @@ stdenv.mkDerivation (finalAttrs: {
         --runtime-mode $runtimeMode \
         --out-dir $out \
         --target-sysroot $toolchain \
-        --target-dir $outName
+        --target-dir $outName \
+        --target-triple ${targetPlatform.config} \
+        --enable-fontconfig
 
       runHook postConfigure
     '';

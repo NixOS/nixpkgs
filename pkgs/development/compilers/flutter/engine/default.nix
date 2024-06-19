@@ -2,6 +2,8 @@
   callPackage,
   dartSdkVersion,
   flutterVersion,
+  swiftshaderHash,
+  swiftshaderRev,
   version,
   hashes,
   url,
@@ -10,6 +12,7 @@
   isOptimized ? true,
   lib,
   stdenv,
+  dart,
   mainRuntimeMode ? null,
   altRuntimeMode ? null,
 }@args:
@@ -23,6 +26,8 @@ let
       inherit
         dartSdkVersion
         flutterVersion
+        swiftshaderHash
+        swiftshaderRev
         version
         hashes
         url
