@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "django-simple-history";
-  version = "3.5.0";
+  version = "3.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "django-simple-history";
     rev = "refs/tags/${version}";
-    hash = "sha256-BW/F+RBf1KvwGRY9IK00+n69Jtx/ndEuvpHSi8/odSE=";
+    hash = "sha256-bPdMdtiEDRvRD00ZBwUQkeCDKCx2SW65+FsbuMwVdK0=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
