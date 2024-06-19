@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xviewer";
-  version = "3.4.4";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Kr3GoroQUzOePJiYeJYE9wrqWKcfX7ncu3tZSxOdnvU=";
+    sha256 = "sha256-J6KDkGPbcRBofsJVmd+1IEapSfSd3ftjz0AggvBI8ck=";
   };
 
   nativeBuildInputs = [
