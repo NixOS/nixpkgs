@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   graphviz,
   jupyter,
   matplotlib,
@@ -22,14 +22,16 @@
 
 buildPythonPackage rec {
   pname = "pyro-ppl";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit version pname;
-    hash = "sha256-QfTABRWVaCgPvFEWSJYKmKKxpBACfYvQpDIgrJsQLN8=";
+  src = fetchFromGitHub {
+    owner = "pyro-ppl";
+    repo = "pyro";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Dvbl/80EGoGWGhWYVIf/xjovUJG1+3WtpMH+lx1oB2E=";
   };
 
   nativeBuildInputs = [ setuptools ];
