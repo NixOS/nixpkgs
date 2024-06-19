@@ -30,7 +30,7 @@
 
 let
 
-  jbr = jetbrains.jdk-no-jcef;
+  jbr = jetbrains.jdk-no-jcef-17;
 
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";

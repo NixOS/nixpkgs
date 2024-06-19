@@ -31138,6 +31138,9 @@ with pkgs;
       jdk = jdk21;
       withJcef = false;
     };
+    jdk-no-jcef-17 = callPackage ../development/compilers/jetbrains-jdk/17.nix {
+      withJcef = false;
+    };
     jdk = callPackage ../development/compilers/jetbrains-jdk {
       jdk = jdk21;
     };
