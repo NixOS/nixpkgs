@@ -11,4 +11,5 @@ graalvmPackages.buildGraalvm {
   version = (import ./hashes.nix).version;
   meta.platforms = builtins.attrNames (import ./hashes.nix).hashes;
   meta.license = lib.licenses.unfree;
+  pname = "graalvm-oracle";
 }
