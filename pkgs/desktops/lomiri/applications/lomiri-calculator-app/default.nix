@@ -4,6 +4,7 @@
   fetchFromGitLab,
   fetchpatch,
   gitUpdater,
+  nixosTests,
   cmake,
   gettext,
   lomiri-ui-toolkit,
@@ -91,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests.vm = nixosTests.lomiri-calculator-app;
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
