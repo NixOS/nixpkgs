@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, oo7
-, openssl
-, pkg-config
-, testers
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  oo7,
+  openssl,
+  pkg-config,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,13 +28,9 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
   postInstall = ''
     install -Dm644 portal/data/oo7-portal.portal $out/share/xdg-desktop-portal/portals/oo7.portal
@@ -43,9 +40,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
-    tests.testVersion = testers.testVersion {
-      package = oo7;
-    };
+    tests.testVersion = testers.testVersion { package = oo7; };
     updateScript = nix-update-script { };
   };
 
@@ -53,7 +48,10 @@ rustPlatform.buildRustPackage rec {
     description = "James Bond went on a new mission as a Secret Service provider";
     homepage = "https://github.com/bilelmoussaoui/oo7";
     license = licenses.mit;
-    maintainers = with maintainers; [ getchoo Scrumplex ];
+    maintainers = with maintainers; [
+      getchoo
+      Scrumplex
+    ];
     platforms = platforms.linux;
     mainProgram = "oo7-cli";
   };
