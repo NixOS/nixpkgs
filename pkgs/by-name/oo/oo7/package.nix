@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "James Bond went on a new mission as a Secret Service provider";
     homepage = "https://github.com/bilelmoussaoui/oo7";
+    changelog = "https://github.com/bilelmoussaoui/oo7/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [
       getchoo
