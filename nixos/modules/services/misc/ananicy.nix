@@ -1,25 +1,23 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.ananicy;
-  configFile = pkgs.writeText "ananicy.conf" (generators.toKeyValue { } cfg.settings);
-  extraRules = pkgs.writeText "extraRules" (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraRules);
-  extraTypes = pkgs.writeText "extraTypes" (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraTypes);
-  extraCgroups = pkgs.writeText "extraCgroups" (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraCgroups);
+  configFile = pkgs.writeText "ananicy.conf" (lib.generators.toKeyValue { } cfg.settings);
+  extraRules = pkgs.writeText "extraRules" (lib.concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraRules);
+  extraTypes = pkgs.writeText "extraTypes" (lib.concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraTypes);
+  extraCgroups = pkgs.writeText "extraCgroups" (lib.concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraCgroups);
   servicename = if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp)) then "ananicy-cpp" else "ananicy";
 in
 {
   options = {
     services.ananicy = {
-      enable = mkEnableOption "Ananicy, an auto nice daemon";
+      enable = lib.mkEnableOption "Ananicy, an auto nice daemon";
 
-      package = mkPackageOption pkgs "ananicy" {
+      package = lib.mkPackageOption pkgs "ananicy" {
         example = "ananicy-cpp";
       };
 
-      rulesProvider = mkPackageOption pkgs "ananicy" {
+      rulesProvider = lib.mkPackageOption pkgs "ananicy" {
         example = "ananicy-cpp";
       } // {
         description = ''
@@ -27,8 +25,8 @@ in
         '';
       };
 
-      settings = mkOption {
-        type = with types; attrsOf (oneOf [ int bool str ]);
+      settings = lib.mkOption {
+        type = with lib.types; attrsOf (oneOf [ int bool str ]);
         default = { };
         example = {
           apply_nice = false;
@@ -38,8 +36,8 @@ in
         '';
       };
 
-      extraRules = mkOption {
-        type = with types; listOf attrs;
+      extraRules = lib.mkOption {
+        type = with lib.types; listOf attrs;
         default = [ ];
         description = ''
           Rules to write in 'nixRules.rules'. See:
@@ -51,8 +49,8 @@ in
           { name = "fdupes"; type = "BG_CPUIO"; }
         ];
       };
-      extraTypes = mkOption {
-        type = with types; listOf attrs;
+      extraTypes = lib.mkOption {
+        type = with lib.types; listOf attrs;
         default = [ ];
         description = ''
           Types to write in 'nixTypes.types'. See:
@@ -63,8 +61,8 @@ in
           { type = "compiler"; nice = 19; sched = "batch"; ioclass = "idle"; }
         ];
       };
-      extraCgroups = mkOption {
-        type = with types; listOf attrs;
+      extraCgroups = lib.mkOption {
+        type = with lib.types; listOf attrs;
         default = [ ];
         description = ''
           Cgroups to write in 'nixCgroups.cgroups'. See:
@@ -77,7 +75,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ cfg.package ];
       etc."ananicy.d".source = pkgs.runCommandLocal "ananicyfiles" { } ''
@@ -92,16 +90,16 @@ in
         # configured through .setings
         rm -f $out/ananicy.conf
         cp ${configFile} $out/ananicy.conf
-        ${optionalString (cfg.extraRules != [ ]) "cp ${extraRules} $out/nixRules.rules"}
-        ${optionalString (cfg.extraTypes != [ ]) "cp ${extraTypes} $out/nixTypes.types"}
-        ${optionalString (cfg.extraCgroups != [ ]) "cp ${extraCgroups} $out/nixCgroups.cgroups"}
+        ${lib.optionalString (cfg.extraRules != [ ]) "cp ${extraRules} $out/nixRules.rules"}
+        ${lib.optionalString (cfg.extraTypes != [ ]) "cp ${extraTypes} $out/nixTypes.types"}
+        ${lib.optionalString (cfg.extraCgroups != [ ]) "cp ${extraCgroups} $out/nixCgroups.cgroups"}
       '';
     };
 
     # ananicy and ananicy-cpp have different default settings
     services.ananicy.settings =
       let
-        mkOD = mkOptionDefault;
+        mkOD = lib.mkOptionDefault;
       in
       {
         cgroup_load = mkOD true;
@@ -133,6 +131,6 @@ in
   };
 
   meta = {
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with lib.maintainers; [ artturin ];
   };
 }
