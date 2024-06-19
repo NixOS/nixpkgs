@@ -5,6 +5,7 @@
 , nix-update-script
 , stdenv
 , fetchurl
+, fetchpatch
 
 , git
 , openssl
@@ -171,7 +172,12 @@ rustPlatform.buildRustPackage {
   ;
 
   env.LLAMA_CPP_LIB = "${lib.getLib llamacppPackage}/lib";
-  patches = [ ./0001-nix-build-use-nix-native-llama-cpp-package.patch ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/TabbyML/tabby/compare/v0.11.1...ghthor:tabby:dylink-llama-cpp.patch";
+      sha256 = "sha256-piNWtxBAC30eV6ycNnpa0fWDZajYNwKqc4J3yk+7wQE=";
+    })
+  ];
 
   # Fails with:
   # file cannot create directory: /var/empty/local/lib64/cmake/Llama
