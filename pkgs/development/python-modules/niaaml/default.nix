@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "niaaml";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "lukapecnik";
     repo = "NiaAML";
     rev = "refs/tags/${version}";
-    hash = "sha256-d6UlpMrT0GBZlcD1BCZxInXTdyFMBVltxnSyUFbSy0g=";
+    hash = "sha256-VMZLEirE01Q9eyQIhV18PepGWmBcxLIwNeuVf7EuSWE=";
   };
 
   pythonRelaxDeps = [ "pandas" ];
