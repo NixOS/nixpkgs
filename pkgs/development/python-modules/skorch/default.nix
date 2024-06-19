@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "0.15.0";
+  version = "1.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-39XVBlCmbg162z9uL84GZrU+v+M8waXbGdVV72ZYf84=";
+    hash = "sha256-JcplwaeYlGRAJXRNac1Ya/hgWoHE+NWjZhCU9eaSyRQ=";
   };
 
   # Remove at next skorch release:
