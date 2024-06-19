@@ -1999,6 +1999,7 @@ broken-packages:
   - ghcjs-fetch # timeout
   - ghcjs-promise # failure in job https://hydra.nixos.org/build/233243985 at 2023-09-02
   - ghcjs-xhr # failure in job https://hydra.nixos.org/build/233235693 at 2023-09-02
+  - ghcjs-websockets # Does not work on the js backend added in 9.6+, only on ghcjs, where we markUnbroken
   - ghc-justdoit # failure in job https://hydra.nixos.org/build/233221884 at 2023-09-02
   - ghclive # failure in job https://hydra.nixos.org/build/233231592 at 2023-09-02
   - ghc-man-completion # failure in job https://hydra.nixos.org/build/233245740 at 2023-09-02
