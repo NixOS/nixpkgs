@@ -5968,10 +5968,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
-  odoo = callPackage ../applications/finance/odoo { };
-  odoo16 = callPackage ../applications/finance/odoo/odoo16.nix { };
-  odoo15 = callPackage ../applications/finance/odoo/odoo15.nix { };
-
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter { };
 
   oil-buku = callPackage ../applications/misc/oil-buku { };

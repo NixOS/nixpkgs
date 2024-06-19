@@ -32,6 +32,7 @@ in python.pkgs.buildPythonApplication rec {
   format = "setuptools";
 
   src = fetchzip {
+    # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "${pname}-${version}";
     hash = "sha256-WdJBs1YgJhHmD+ip6UU2pwXrcZCsbjgOGjrZTRFQBFw="; # odoo
