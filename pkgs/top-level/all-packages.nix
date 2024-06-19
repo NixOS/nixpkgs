@@ -3909,8 +3909,6 @@ with pkgs;
 
   facter = callPackage ../tools/system/facter { };
 
-  factplusplus = callPackage ../applications/science/logic/factplusplus { };
-
   faketty = callPackage ../tools/misc/faketty { };
 
   fasd = callPackage ../tools/misc/fasd { };
