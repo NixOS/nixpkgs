@@ -20981,6 +20981,8 @@ with pkgs;
 
   gperftools = callPackage ../development/libraries/gperftools { };
 
+  grab-site = callPackage ../tools/backup/grab-site { };
+
   grilo = callPackage ../development/libraries/grilo { };
 
   grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
