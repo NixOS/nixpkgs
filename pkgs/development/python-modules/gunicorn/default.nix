@@ -21,21 +21,21 @@
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "21.2.0";
+  version = "22.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.3";
 
   src = fetchFromGitHub {
     owner = "benoitc";
     repo = "gunicorn";
-    rev = version;
-    hash = "sha256-xP7NNKtz3KNrhcAc00ovLZRx2h6ZqHbwiFOpCiuwf98=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xIXQMAdTZEBORu6789tLpT1OpBL+aveL/MfDj4f4bes=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=gunicorn --cov-report=xml" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=gunicorn --cov-report=xml" ""
   '';
 
   build-system = [ setuptools ];
