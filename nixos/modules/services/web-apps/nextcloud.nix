@@ -819,8 +819,7 @@ in {
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
         ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
-        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
-        ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"));
+        ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
