@@ -143,6 +143,8 @@ let
 
       depsBuildBuild = [ buildPackages.stdenv.cc ];
       nativeBuildInputs = [
+        bison
+        flex
         perl
         bc
         nettools
@@ -156,7 +158,6 @@ let
         python3Minimal
         kmod
       ] ++ optional  needsUbootTools ubootTools
-        ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
         ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
         ++ optionals withRust [ rustc rust-bindgen ];
 
