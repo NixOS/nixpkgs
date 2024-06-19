@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "ovh";
-  version = "1.1.0";
+  version = "1.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EI+bWjtHEZPOSkWJx3gvS8y//gugMWl3TrBHKsKO9nk=";
+    hash = "sha256-Yarx6ymS/Vr4Gbpa3Qgmbp7eLgAkUeOhYGpMNn3aoE8=";
   };
 
   propagatedBuildInputs = [ requests ];
