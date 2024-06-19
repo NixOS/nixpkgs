@@ -65,6 +65,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/netdata/netdata/pull/17240/commits/b108df72281633234b731b223d99ec99f1d36adf.patch";
       hash = "sha256-tgsnbNY0pxFU3bz1J1qPaAeVsozsk2bpHV2mNy8A9is=";
     })
+    # Allow for go.d plugins to access the right directory.
+    # Can be removed once > v1.45.4 is released
+    # https://github.com/netdata/netdata/pull/17661
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/netdata/netdata/pull/17661.patch";
+      sha256 = "sha256-j+mrwkibQio2KO8UnV7sxzCoHmkcsalHNzP+YvrRz74=";
+    })
   ];
 
   # Guard against unused buld-time development inputs in closure. Without
