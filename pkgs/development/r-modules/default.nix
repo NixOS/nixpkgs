@@ -801,6 +801,7 @@ let
     "DeducerSurvival"
     "DeducerText"
     "Demerelate"
+    "diveR"
     "dpa"
     "dynamicGraph"
     "EasyqpcR"
