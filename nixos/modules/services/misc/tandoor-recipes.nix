@@ -88,7 +88,7 @@ in
         Group = "tandoor_recipes";
         DynamicUser = true;
         StateDirectory = "tandoor-recipes";
-        WorkingDirectory = "/var/lib/tandoor-recipes";
+        WorkingDirectory = env.MEDIA_ROOT;
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [

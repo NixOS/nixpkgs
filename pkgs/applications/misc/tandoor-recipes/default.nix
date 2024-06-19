@@ -165,7 +165,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     updateScript = ./update.sh;
 
     tests = {
-      inherit (nixosTests) tandoor-recipes;
+      inherit (nixosTests) tandoor-recipes tandoor-recipes-script-name;
     };
   };
 
