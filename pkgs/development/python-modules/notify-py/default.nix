@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "notify-py";
-  version = "0.3.42";
+  version = "0.3.43";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "ms7m";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XtjJImH9UwPPZS/Yqs8S5xGXOLBRmJRawzxWXoPWvrM=";
+    hash = "sha256-4PJ/0dLG3bWDuF1G/qUmvNaIUFXgPP2S/0uhZz86WRA=";
   };
 
   patches =
