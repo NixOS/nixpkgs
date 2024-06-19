@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "6.3.3";
+  version = "6.4.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tornadoweb";
     repo = "tornado";
     rev = "v${version}";
-    hash = "sha256-l9Ce/c2wDSmsySr9yXu5Fl/+63QkQay46aDSUTJmetA=";
+    hash = "sha256-VAH/frbR6kgi4dZr+Co8gOtF7yin6pncDyW4EDva1y8=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
