@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.2.71";
+  version = "0.2.72";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-d2qoTRWuUh7Kn0uqT3fIlB8BbFJmyVEIlfInS3m+etc=";
+    hash = "sha256-v2+xDeErVkgiGavPpBtKg7+BBhiKZdmbo2NIFL7iXvw=";
   };
 
   vendorHash = "sha256-iRZrjkWQxuUW/YM5TygFt+g8suM5iLGsWsCt4QQOX3M=";
@@ -35,14 +35,12 @@ buildGoModule rec {
   '';
 
   # We override checkPhase to be able to test ./... while using subPackages
-  # Temporary fix for https://github.com/superfly/flyctl/issues/3642. We
-  # should go back to buildGoDir instead of go test once that is resolved.
   checkPhase = ''
     runHook preCheck
     # We do not set trimpath for tests, in case they reference test assets
     export GOFLAGS=''${GOFLAGS//-trimpath/}
 
-    go test ./...
+    buildGoDir test ./...
 
     runHook postCheck
   '';
