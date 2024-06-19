@@ -3,10 +3,11 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  pytest-django,
+  hatch-fancy-pypi-readme,
+  hatchling,
+  hatch-vcs,
   python,
   pythonOlder,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -23,12 +24,18 @@ buildPythonPackage rec {
     hash = "sha256-bPdMdtiEDRvRD00ZBwUQkeCDKCx2SW65+FsbuMwVdK0=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatchling
+    hatch-vcs
+  ];
 
   propagatedBuildInputs = [ django ];
 
   checkPhase = ''
+    runHook preCheck
     ${python.interpreter} runtests.py
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "simple_history" ];
