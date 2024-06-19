@@ -6,6 +6,8 @@
 , rtlcss
 , wkhtmltopdf
 , nixosTests
+, odoo_version ? "17.0"
+, odoo_release ? "20240610"
 }:
 
 let
@@ -23,8 +25,6 @@ let
       });
     };
   };
-  odoo_version = "17.0";
-  odoo_release = "20240507";
 in python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
@@ -35,7 +35,7 @@ in python.pkgs.buildPythonApplication rec {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "${pname}-${version}";
-    hash = "sha256-WdJBs1YgJhHmD+ip6UU2pwXrcZCsbjgOGjrZTRFQBFw="; # odoo
+    hash = "sha256-blibGJyaz+MxMazOXhPbGBAJWZoGubirwSnjVYyLBJs="; # odoo
   };
 
   # needs some investigation
