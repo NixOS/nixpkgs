@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
+  fetchpatch2,
 
   # build-system
   setuptools,
 
   # dependencies
+  aiosmtpd,
   django,
 
   # tests
@@ -27,16 +28,21 @@ buildPythonPackage rec {
   version = "3.2.3";
   pyproject = true;
 
-  # https://github.com/django-extensions/django-extensions/issues/1831
-  # Requires asyncore, which was dropped in 3.12
-  disabled = pythonAtLeast "3.12";
-
-  src = fetchFromGitHub {
+   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
     hash = "sha256-A2+5FBv0IhTJPkwgd7je+B9Ac64UHJEa3HRBbWr2FxM=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Replace dead asyncore, smtp implementation with aiosmtpd
+      name = "django-extensions-aiosmtpd.patch";
+      url = "https://github.com/django-extensions/django-extensions/commit/37d56c4a4704c823ac6a4ef7c3de4c0232ceee64.patch";
+      hash = "sha256-49UeJQKO0epwY/7tqoiHgOXdgPcB/JBIZaCn3ulaHTg=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
@@ -45,7 +51,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ django ];
+  dependencies = [
+    aiosmtpd
+    django
+  ];
 
   __darwinAllowLocalNetworking = true;
 
