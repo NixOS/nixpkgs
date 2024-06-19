@@ -2,31 +2,40 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  meson,
+  ninja,
+  pkg-config,
   wrapGAppsHook3,
   gobject-introspection,
   keybinder3,
   xdotool,
+  wl-clipboard,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "emote";
-  version = "4.0.1";
+  version = "4.1.0";
+  pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "tom-james-watson";
     repo = "Emote";
     rev = "v${version}";
-    sha256 = "sha256-+GpL4Rp0ECsxXGP9dWZbVNkH7H2GF1brDTLsB+TQY5A=";
+    hash = "sha256-c5EY1Cc3oD8EG1oTChbl10jJlNeAETQbAFGoA9Lw5PY=";
   };
 
   postPatch = ''
-    sed -i setup.py -e '/==.*/d'
-    substituteInPlace emote/config.py --replace 'os.environ.get("SNAP")' "'$out/share/emote'"
-    substituteInPlace emote/picker.py --replace 'os.environ.get("SNAP_VERSION", "dev build")' "'$version'"
-    substituteInPlace snap/gui/emote.desktop --replace "Icon=\''${SNAP}/usr/share/icons/emote.svg" "Icon=emote.svg"
+    substituteInPlace emote/picker.py \
+      --replace-fail 'os.environ.get("SNAP_VERSION", "dev build")' "'$version'"
+    substituteInPlace emote/config.py \
+      --replace-fail 'is_flatpak = os.environ.get("FLATPAK") is not None' 'is_flatpak = False' \
+      --replace-fail 'os.environ.get("SNAP")' "'$out/share/emote'"
   '';
 
   nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
     wrapGAppsHook3
     gobject-introspection
   ];
@@ -36,28 +45,30 @@ python3Packages.buildPythonApplication rec {
     keybinder3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     dbus-python.out # don't propagate dev output
     manimpango
-    pygobject3.out # not listed in setup.py, don't propagate dev output
+    pygobject3.out # don't propagate dev output
     setproctitle
   ];
 
   postInstall = ''
-    install -D snap/gui/emote.desktop $out/share/applications/emote.desktop
-    install -D snap/gui/emote.svg $out/share/pixmaps/emote.svg
-    install -D -t $out/share/emote/static static/{emojis.csv,logo.svg,style.css}
+    rm $out/share/emote/emote/{emote.in,meson.build}
+    rm $out/share/emote/static/{meson.build,com.tomjwatson.Emote.desktop,prepare-launch}
   '';
 
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      --prefix PATH : ${lib.makeBinPath [ xdotool ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          xdotool
+          wl-clipboard
+        ]
+      }
     )
   '';
-
-  doCheck = false;
 
   meta = with lib; {
     description = "Modern emoji picker for Linux";
