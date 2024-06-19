@@ -30201,8 +30201,6 @@ with pkgs;
   docker-machine-hyperkit = callPackage ../applications/networking/cluster/docker-machine/hyperkit.nix { };
   docker-machine-kvm2 = callPackage ../applications/networking/cluster/docker-machine/kvm2.nix { };
 
-  docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
-
   dockfmt = callPackage ../development/tools/dockfmt { };
 
   afterburn = callPackage ../tools/admin/afterburn { };
