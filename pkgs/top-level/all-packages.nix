@@ -30048,8 +30048,6 @@ with pkgs;
 
   coursera-dl = callPackage ../applications/misc/coursera-dl { };
 
-  coyim = callPackage ../applications/networking/instant-messengers/coyim { };
-
   cozy-drive = callPackage ../applications/networking/cozy-drive { };
 
   cplay-ng = callPackage ../applications/audio/cplay-ng { };
