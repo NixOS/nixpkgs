@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   isPyPy,
-  pythonAtLeast,
   pythonOlder,
 
   # build-system
@@ -30,11 +29,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.9") [ pytz ];
-
-  # including backports.zoneinfo for python<3.9 yields infinite recursion
-  doCheck = pythonAtLeast "3.9";
 
   nativeCheckInputs = [
     freezegun
