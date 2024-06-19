@@ -10640,7 +10640,7 @@ self: super: with self; {
 
   py2bit = callPackage ../development/python-modules/py2bit { };
 
-  py3buddy = toPythonModule (callPackage ../development/python-modules/py3buddy { });
+  py3buddy = callPackage ../development/python-modules/py3buddy { };
 
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
