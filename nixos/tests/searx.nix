@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} :
+{ pkgs, ...} :
 
 {
   name = "searx";
@@ -8,8 +8,6 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
   # basic setup: searx running the built-in webserver
   nodes.base = { ... }: {
-    imports = [ ../modules/profiles/minimal.nix ];
-
     services.searx = {
       enable = true;
       environmentFile = pkgs.writeText "secrets" ''
@@ -37,8 +35,6 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
   # fancy setup: run in uWSGI and use nginx as proxy
   nodes.fancy = { config, ... }: {
-    imports = [ ../modules/profiles/minimal.nix ];
-
     services.searx = {
       enable = true;
       # searx refuses to run if unchanged
@@ -111,4 +107,4 @@ import ./make-test-python.nix ({ pkgs, ...} :
               "${pkgs.curl}/bin/curl --fail http://localhost/searx/static/themes/simple/js/leaflet.js >&2"
           )
     '';
-})
+}
