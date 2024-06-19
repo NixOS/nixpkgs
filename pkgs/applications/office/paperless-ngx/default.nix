@@ -24,13 +24,13 @@
 }:
 
 let
-  version = "2.9.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7dcZbuz3yi0sND6AEqIwIo9byeZheOpIAhmBpOW5lhU=";
+    hash = "sha256-M1S5ebdpw11Ot4h4xvbk/rbJxXom2dZ5Of+6eOlBIuE=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -86,7 +86,7 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-gLEzifZK8Ok1SOo3YIIV5pTx4cbedQh025VqkodYrYQ=";
+    npmDepsHash = "sha256-zmlYwlH2cnGbbKf6jt5zBLh0Iv3C9/xN0iA4xVetRNE=";
 
     nativeBuildInputs = [
       pkg-config
@@ -150,6 +150,7 @@ python.pkgs.buildPythonApplication rec {
     django-filter
     django-guardian
     django-multiselectfield
+    django-soft-delete
     djangorestframework
     djangorestframework-guardian2
     drf-writable-nested
@@ -165,7 +166,7 @@ python.pkgs.buildPythonApplication rec {
     ocrmypdf
     pathvalidate
     pdf2image
-    psycopg2
+    psycopg
     python-dateutil
     python-dotenv
     python-gnupg
