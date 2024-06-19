@@ -452,6 +452,7 @@ in {
   invoiceplane = handleTest ./invoiceplane.nix {};
   iodine = handleTest ./iodine.nix {};
   ipv6 = handleTest ./ipv6.nix {};
+  iroh = handleTest ./iroh.nix {};
   iscsi-multipath-root = handleTest ./iscsi-multipath-root.nix {};
   iscsi-root = handleTest ./iscsi-root.nix {};
   isso = handleTest ./isso.nix {};
