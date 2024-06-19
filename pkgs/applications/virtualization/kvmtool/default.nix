@@ -18,11 +18,10 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "prefix=${placeholder "out"}"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
   ] ++ lib.optionals stdenv.hostPlatform.isAarch64 ([
     "LIBFDT_DIR=${dtc}/lib"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "CROSS_COMPILE=aarch64-unknown-linux-gnu-"
-    "ARCH=arm64"
   ]);
 
   meta = with lib; {
