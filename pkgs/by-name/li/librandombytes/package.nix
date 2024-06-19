@@ -40,10 +40,7 @@ stdenv.mkDerivation (prev: {
 
   patches = [ ./environment-variable-tools.patch ];
 
-  nativeBuildInputs = [
-    openssl
-    python3
-  ];
+  nativeBuildInputs = [ python3 ];
 
   buildInputs = [ openssl ];
 

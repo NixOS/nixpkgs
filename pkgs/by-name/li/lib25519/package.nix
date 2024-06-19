@@ -24,9 +24,15 @@ stdenv.mkDerivation (prev: {
     $out/bin/lib25519-test
   '';
 
-  # NOTE: librandombytes uses a custom Python `./configure`: it does not expect standard
+  # NOTE: lib25519 uses a custom Python `./configure`: it does not expect standard
   # autoconfig --build --host etc. arguments: disable
   configurePlatforms = [ ];
+
+  configurePhase = ''
+       runHook preConfigure
+    pwd; ./configure --host=arm64
+       runHook postConfigure
+  '';
 
   # NOTE: the librandombytes library has required specific CFLAGS defined:
   # https://randombytes.cr.yp.to/librandombytes-20240318/compilers/default.html
