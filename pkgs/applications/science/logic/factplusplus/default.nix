@@ -16,15 +16,21 @@ stdenv.mkDerivation rec {
   nativeBuiltInputs = [ cmake ];
 
   configurePhase = ''
+    runHook preConfigure
+    
     sed -i 's/OS = MACOSX/OS = LINUX/g' Makefile.include
     printf '%s\n%s\n' '#include <iostream>' "$(cat Kernel/AtomicDecomposer.cpp)" > Kernel/AtomicDecomposer.cpp
+    
+    runHook postConfigure
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/lib
-    install -m 755 FaCT++.{C,JNI,KE,Kernel}/obj/*.{so,o} $out/lib/
-    install -m 755 FaCT++/obj/FaCT++ $out/bin/FaCT++
+    runHook preInstall
+    
+    install -Dm755 FaCT++.{C,JNI,KE,Kernel}/obj/*.{so,o} -t $out/lib/
+    install -Dm755 FaCT++/obj/FaCT++ -t $out/bin
+    
+    runHook postInstall
   '';
 
    meta = with lib; {
