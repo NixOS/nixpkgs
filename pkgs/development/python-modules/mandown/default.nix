@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "mandown";
-  version = "1.8.2";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
     repo = "mandown";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DSbxWff5pY7tjB9aXY8/rQJzCQyDN2+OrmP10uEeXWM=";
+    hash = "sha256-K5/ij0VzQJGj+VvASllaV8/YBCiu2Lv+JdeSHLYMV7I=";
   };
 
   nativeBuildInputs = [
