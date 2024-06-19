@@ -31558,6 +31558,8 @@ with pkgs;
 
   pureref = callPackage ../applications/graphics/pureref { };
 
+  rpicam-apps = callPackage ../applications/misc/rpicam-apps/default.nix { };
+
   inherit (callPackage ../applications/virtualization/singularity/packages.nix { })
     apptainer
     singularity
