@@ -12291,8 +12291,6 @@ self: super: with self; {
 
   pytest-notebook = callPackage ../development/python-modules/pytest-notebook { };
 
-  pytest-openfiles = callPackage ../development/python-modules/pytest-openfiles { };
-
   pytest-order = callPackage ../development/python-modules/pytest-order { };
 
   pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
