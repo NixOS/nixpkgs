@@ -18317,8 +18317,6 @@ with pkgs;
 
   cov-build = callPackage ../development/tools/analysis/cov-build { };
 
-  cppcheck = callPackage ../development/tools/analysis/cppcheck { };
-
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
   credstash = with python3Packages; toPythonApplication credstash;
