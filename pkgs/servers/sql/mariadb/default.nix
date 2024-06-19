@@ -58,10 +58,6 @@ let
 
       patches = [
         ./patch/cmake-includedir.patch
-
-        # Fix build with libxml 2.12 and Clang 16.
-        # https://github.com/MariaDB/server/pull/2983
-        ./patch/0001-Fix-build-with-libxml2-2.12.patch
       ]
         # Fixes a build issue as documented on
         # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
@@ -248,29 +244,31 @@ in
     # see https://mariadb.org/about/#maintenance-policy for EOLs
     mariadb_105 = self.callPackage generic {
       # Supported until 2025-06-24
-      version = "10.5.23";
-      hash = "sha256-P3wzsgjLeZ2wFKh09WcY6t/yLulXgfo2Cqa8aWEJrP4=";
+      # TODO should be removed
+      version = "10.5.25";
+      hash = "sha256-lhnQ9R6GQ1dGayxjMBo0pT99/ZnxjE/UUvqyK/Obpk4=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_106 = self.callPackage generic {
       # Supported until 2026-07-06
-      version = "10.6.16";
-      hash = "sha256-Xvg4Q+eW3Nqa6keyRpDd9thI9D9D4R+dmgzCHHj7uc8=";
+      version = "10.6.18";
+      hash = "sha256-aJihER9HEwcJ4ouix70aV+S7VxAfbhCeWX1R5tOFzxg=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_1011 = self.callPackage generic {
       # Supported until 2028-02-16
-      version = "10.11.6";
-      hash = "sha256-HAFjRj6Y1x9HgHQWEaQJge7ivETTkmAcpJu/lI0E3Wc=";
+      version = "10.11.8";
+      hash = "sha256-XwTz4z2fHL7/BeecVNQdMCYwUAyZWu5ysGOOL5383w8=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_110 = self.callPackage generic {
       # Supported until 2024-06-07
-      version = "11.0.4";
-      hash = "sha256-J2ls3zEVnyJUEOtchmW4VkWhxZmBzlr2vP9sll/u3ms=";
+      # TODO should be removed
+      version = "11.0.6";
+      hash = "sha256-AYnWKUbDfG20a/GkaLqVgLy6joDwWVjsSDwzh+zPmgA=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };

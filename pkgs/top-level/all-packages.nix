@@ -5968,9 +5968,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
-  odoo = callPackage ../applications/finance/odoo { };
-  odoo15 = callPackage ../applications/finance/odoo/odoo15.nix { };
-
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter { };
 
   oil-buku = callPackage ../applications/misc/oil-buku { };
@@ -30053,8 +30050,6 @@ with pkgs;
 
   coursera-dl = callPackage ../applications/misc/coursera-dl { };
 
-  coyim = callPackage ../applications/networking/instant-messengers/coyim { };
-
   cozy-drive = callPackage ../applications/networking/cozy-drive { };
 
   cplay-ng = callPackage ../applications/audio/cplay-ng { };
@@ -30207,8 +30202,6 @@ with pkgs;
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
   docker-machine-hyperkit = callPackage ../applications/networking/cluster/docker-machine/hyperkit.nix { };
   docker-machine-kvm2 = callPackage ../applications/networking/cluster/docker-machine/kvm2.nix { };
-
-  docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
 
   dockfmt = callPackage ../development/tools/dockfmt { };
 
@@ -31141,6 +31134,9 @@ with pkgs;
   }) // {
     jdk-no-jcef = callPackage ../development/compilers/jetbrains-jdk {
       jdk = jdk21;
+      withJcef = false;
+    };
+    jdk-no-jcef-17 = callPackage ../development/compilers/jetbrains-jdk/17.nix {
       withJcef = false;
     };
     jdk = callPackage ../development/compilers/jetbrains-jdk {
@@ -35584,8 +35580,6 @@ with pkgs;
 
   xmobar = haskellPackages.xmobar.bin;
 
-  xmonad-log = callPackage ../tools/misc/xmonad-log { };
-
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
     packages = _: [ haskellPackages.xmonad-contrib ];
@@ -39330,8 +39324,9 @@ with pkgs;
     kops_1_26
     kops_1_27
     kops_1_28
+    kops_1_29
     ;
-  kops = kops_1_28;
+  kops = kops_1_29;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
@@ -40709,8 +40704,6 @@ with pkgs;
   };
 
   webwormhole = callPackage ../tools/networking/webwormhole { };
-
-  werf = callPackage ../applications/networking/cluster/werf { };
 
   yor = callPackage ../applications/networking/cluster/yor { };
 
