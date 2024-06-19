@@ -18,35 +18,28 @@ let
         };
       });
       werkzeug = super.werkzeug.overridePythonAttrs (old: rec {
-        version = "3.0.3";#"3.0.0";#2.3.7
+        version = "2.3.7";
         src = old.src.override {
           inherit version;
-          hash = "sha256-CX5b/anwq6jaa4VFFG3vSB0Gqn0yZudEjizM9n3YvRg=";#"sha256-P//03MMttS7zzJTf8wAKPChGiQ86WlGACie5CcXncPA=";# from 3.0.0 hash = "sha256-K4wORHtLnbzIXdl7butNy69si2w74L1lTiVVPgohV9g="; #from 2.3.7
-        };
-      });
-      rjsmin = super.rjsmin.overridePythonAttrs (old: rec {
-        version = "1.1.0";
-        src = old.src.override {
-          inherit version;
-          hash = "sha256-sV3HXHH2XZSTqMf6Iz/c7II+PxuIrYSoQ//vSbM4rDI=";
+          hash = "sha256-K4wORHtLnbzIXdl7butNy69si2w74L1lTiVVPgohV9g=";
         };
       });
     };
   };
 
-  odoo_version = "17.0";
-  odoo_release = "20240603";
+  odoo_version = "16.0";
+  odoo_release = "20231024";
 in python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
 
   format = "setuptools";
 
-  # latest release is at https://github.com/odoo/docker/blob/master/17.0/Dockerfile
+  # latest release is at https://github.com/odoo/docker/blob/master/16.0/Dockerfile
   src = fetchzip {
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "${pname}-${version}";
-    hash = "sha256-EhPCTDQKcUePA0eCoZlvEiCt+kxE+i/xRh9fGY+pvfM=";#"sha256-jMAzIKDG6mRfdgrFa6yyq6OVj4og6O8HC5PrMfYRQbg="; # odoo
+    hash = "sha256-Ux8RfA7kWLKissBBY5wrfL+aKKw++5BxjP3Vw0JAOsk="; # odoo
   };
 
   # needs some investigation
@@ -97,7 +90,6 @@ in python.pkgs.buildPythonApplication rec {
     xlsxwriter
     xlwt
     zeep
-    rjsmin
 
     setuptools
     mock
