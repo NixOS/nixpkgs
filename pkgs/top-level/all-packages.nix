@@ -16083,7 +16083,6 @@ with pkgs;
   graalvmCEPackages =
     recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition { });
   graalvm-ce = graalvmCEPackages.graalvm-ce;
-  graalvm-oracle = callPackage ../development/compilers/graalvm/oracle { };
   buildGraalvmNativeImage = (callPackage ../build-support/build-graalvm-native-image {
     graalvmDrv = graalvm-ce;
   }).override;
