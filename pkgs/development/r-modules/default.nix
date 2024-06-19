@@ -1507,6 +1507,18 @@ let
       '';
     });
 
+    nearfar = let
+      angrist = fetchurl {
+        url = "https://raw.githubusercontent.com/joerigdon/nearfar/master/angrist.csv";
+        hash = "sha256-lb+HMHnRGonc26merFGB0B7Vk1Lk+sIJlay+JtQC8m4=";
+      };
+    in old.nearfar.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace "R/nearfar.R" --replace-fail \
+         'url("https://raw.githubusercontent.com/joerigdon/nearfar/master/angrist.csv")'  '"${angrist}"'
+      '';
+    });
+
     rstan = old.rstan.overrideAttrs (attrs: {
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE = attrs.env.NIX_CFLAGS_COMPILE + " -DBOOST_PHOENIX_NO_VARIADIC_EXPRESSION";
