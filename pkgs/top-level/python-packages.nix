@@ -2021,6 +2021,8 @@ self: super: with self; {
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
+  connectorx = callPackage ../development/python-modules/connectorx {};
+
   connio = callPackage ../development/python-modules/connio { };
 
   conway-polynomials = callPackage ../development/python-modules/conway-polynomials {};
@@ -2956,6 +2958,8 @@ self: super: with self; {
   delorean = callPackage ../development/python-modules/delorean { };
 
   deltachat = callPackage ../development/python-modules/deltachat { };
+
+  deltalake = callPackage ../development/python-modules/deltalake { };
 
   deluge-client = callPackage ../development/python-modules/deluge-client { };
 

@@ -3799,6 +3799,12 @@
     githubId = 718298;
     name = "Michael Livshin";
   };
+  coastalwhite = {
+    name = "Gijs Burghoorn";
+    email = "me@gburghoorn.com";
+    github = "coastalwhite";
+    githubId = 6944009;
+  };
   CobaltCause = {
     name = "Charles Hall";
     email = "charles@computer.surgery";
