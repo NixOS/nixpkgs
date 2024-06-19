@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch2,
   pythonOlder,
   setuptools,
   setuptools-scm,
@@ -25,6 +26,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-xVahuVlIIwUQBwylP6A0H7CWRhG9BdWY2H+1IRXWX+4=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Fixes compat with Python>=3.12.4
+      url = "https://github.com/agronholm/typeguard/commit/6647e5db5308a57e4a424f4f4836025053566225.patch";
+      hash = "sha256-Kf2OJfetBb6E/tzmQZayJfc1dCyupf/wfU+kewKieWU=";
+      excludes = [ "docs/versionhistory.rst" ];
+    })
+  ];
 
   outputs = [
     "out"
