@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    icu
     ninja
     perl
     pkg-config
