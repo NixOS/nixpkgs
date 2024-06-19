@@ -27,15 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.7.0-unstable-2024-05-09";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    # FIXME: switch to a tagged release once available > 1.7.0
-    # Fix for https://github.com/NixOS/nixpkgs/issues/313350
-    rev = "3ac510f6a41feb1b695381fa30869d557c00b822";
-    hash = "sha256-ZmkeYPiCy7vkXnMFbtUF4761K+I+Ef7UbmSY7dJG09U=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-1GsRBAVAfD0SAM1gk8W+bX7MtxunGKOLtXweL4rrf9Q=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
-    hash = "sha256-RsRz/nb8L+pL1U4l6RnvqeDFddPvcBFH4wdV7G60pxA=";
+    hash = "sha256-rabiNqw4hg0Js8VadxfkhNLIsrKfMuoKa5lFIfSMNPY=";
   };
 
   makeFlags = [
@@ -79,18 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
-
-  patches = [
-    # code refactoring of bcachefs-tools broke reading passphrases from stdin (vs. terminal)
-    # upstream issue https://github.com/koverstreet/bcachefs-tools/issues/261
-    ./fix-encrypted-boot.patch
-    # https://github.com/koverstreet/bcachefs-tools/pull/305
-    (fetchpatch {
-      name = "use-ar-var-in-makefile.patch";
-      url = "https://github.com/koverstreet/bcachefs-tools/commit/91e67ab2bd48fa135a1f5109b23899a4f1019a03.patch";
-      sha256 = "sha256-nB4Tgcwa8eeasIDQ4rrYORie/X8LMuCSRi+WJNw+R/U=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace Makefile \
