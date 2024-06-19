@@ -1,19 +1,18 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule {
   pname = "xmonad-log";
-  version = "0.1.0";
-
-  goPackagePath = "github.com/xintron/xmonad-log";
+  version = "0.1.0-unstable-2024-06-14";
 
   src = fetchFromGitHub {
     owner = "xintron";
     repo = "xmonad-log";
-    rev = version;
-    sha256 = "1il6v0zcjw0pfb1hjj198y94jmlcx255h422ph0f1zr7afqkzmaw";
+    rev = "70c76d59c22cf5f412467cd42fa9ff34eeb2bd1b";
+    sha256 = "sha256-hDYb3mSX2+FX/2uazCKPXmNj0avDlutwSMjST7wLBVY=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-58zK6t3rb+19ilaQaNgsMVFQBYKPIV40ww8klrGbpnw=";
+  proxyVendor = true;
 
   meta = with lib; {
     description = "xmonad DBus monitoring solution";
