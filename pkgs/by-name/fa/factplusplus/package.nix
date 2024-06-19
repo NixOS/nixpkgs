@@ -17,19 +17,19 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     runHook preConfigure
-    
+
     sed -i 's/OS = MACOSX/OS = LINUX/g' Makefile.include
     printf '%s\n%s\n' '#include <iostream>' "$(cat Kernel/AtomicDecomposer.cpp)" > Kernel/AtomicDecomposer.cpp
-    
+
     runHook postConfigure
   '';
 
   installPhase = ''
     runHook preInstall
-    
+
     install -Dm755 FaCT++.{C,JNI,KE,Kernel}/obj/*.{so,o} -t $out/lib/
     install -Dm755 FaCT++/obj/FaCT++ -t $out/bin
-    
+
     runHook postInstall
   '';
 
