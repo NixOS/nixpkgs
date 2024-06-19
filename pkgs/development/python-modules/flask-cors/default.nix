@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "flask-cors";
-  version = "4.0.0";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corydolphin";
     repo = "flask-cors";
     rev = "refs/tags/${version}";
-    hash = "sha256-o//ulROKKBv/CBJIGPBFP/+T0TpMHUVjr23Y5g1V05g=";
+    hash = "sha256-ISot5KglCjfbJNsnveDLK44vVaapHRAFdS+1tOd08pw=";
   };
 
   nativeBuildInputs = [ setuptools ];
