@@ -235,12 +235,10 @@ in
     # Define the systemd service.
     systemd.services.iroh = {
       after = [ "network-online.target" ];
-      before = [ "multi-user.target" ];
-      wantedBy = [ "multi-user.target" ];
 
       path = [ "/run/wrappers" pkgs.iroh ];
 
-      environment.IROH_DATA_DIR = cfg.dataDir;
+      #environment.IROH_DATA_DIR = cfg.dataDir;
 
       # preStart
       # postStop
@@ -253,9 +251,12 @@ in
         #Group = cfg.group;
 
         DynamicUser = true;
+        # /var/lib/iroh -> /var/lib/private/iroh
         StateDirectory = "iroh";
+        # /var/log/iroh -> /var/log/private/iroh
+        LogsDirectory = "iroh";
+
         #CacheDirectory = "";
-        #LogsDirectory = "";
         #ReadWritePaths = cfg.dataDir;
 
         # # Make sure the socket units are started before ipfs.service
