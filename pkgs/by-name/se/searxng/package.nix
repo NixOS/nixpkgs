@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  nixosTests
 }:
 
 python3.pkgs.toPythonModule (
@@ -75,6 +76,12 @@ python3.pkgs.toPythonModule (
       # copy config schema for the limiter
       cp searx/limiter.toml $out/${python3.sitePackages}/searx/limiter.toml
     '';
+
+    passthru = {
+      tests = {
+        searxng = nixosTests.searx;
+      };
+    };
 
     meta = with lib; {
       homepage = "https://github.com/searxng/searxng";
