@@ -34,6 +34,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # -file://///filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
+    # +file:////filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
+    "test_normalize_url_slashes"
+    "test_normalize_url_with_base_unc_path"
+  ];
+
   pythonImportsCheck = [ "xmlschema" ];
 
   meta = with lib; {
