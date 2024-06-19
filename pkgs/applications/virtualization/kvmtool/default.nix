@@ -1,12 +1,13 @@
-{ stdenv, fetchzip, lib, dtc }:
+{ stdenv, fetchgit, lib, dtc }:
 
 stdenv.mkDerivation {
   pname = "kvmtool";
-  version = "unstable-2023-07-12";
+  version = "0-unstable-2024-04-09";
 
-  src = fetchzip {
-    url = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/snapshot/kvmtool-106e2ea7756d980454d68631b87d5e25ba4e4881.tar.gz";
-    hash = "sha256-wpc5DfHnui0lBVH4uOq6a7pXVUZStjNLRvauu6QpRvE=";
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git";
+    rev = "da4cfc3e540341b84c4bbad705b5a15865bc1f80";
+    hash = "sha256-05tNsZauOXe1L1y1YchzvLZm3xOctPJhHCjyAyRnwy4=";
   };
 
   patches = [ ./strlcpy-glibc-2.38-fix.patch ];
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
     description = "Lightweight tool for hosting KVM guests";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/tree/README";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ astro mfrw ];
+    maintainers = with maintainers; [ astro mfrw peigongdsd ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "lkvm";
   };
