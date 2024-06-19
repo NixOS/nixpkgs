@@ -235,7 +235,7 @@ in
       timerConfig.OnUnitActiveSec = cfg.cleanupInterval;
     };
 
-    systemd.services.snapper-boot = lib.optionalAttrs cfg.snapshotRootOnBoot {
+    systemd.services.snapper-boot = lib.mkIf cfg.snapshotRootOnBoot {
       description = "Take snapper snapshot of root on boot";
       inherit documentation;
       serviceConfig.ExecStart = "${pkgs.snapper}/bin/snapper --config root create --cleanup-algorithm number --description boot";
