@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     "--mandir=${placeholder "man"}/share/man"
   ];
 
+  # mysterious link failure
+  hardeningDisable = [ "trivialautovarinit" ];
+
   # Doesn't recognize platform flags
   configurePlatforms = [ ];
 
