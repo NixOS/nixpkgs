@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   django,
+  django-stubs,
   pytestCheckHook,
   pytest-django,
   parameterized,
@@ -37,6 +38,7 @@ buildPythonPackage {
   propagatedBuildInputs = [ django ];
 
   nativeCheckInputs = [
+    django-stubs
     pytestCheckHook
     pytest-django
     parameterized
