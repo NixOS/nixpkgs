@@ -1385,6 +1385,8 @@ self: super: with self; {
 
   backports-strenum = callPackage ../development/python-modules/backports-strenum { };
 
+  backports-tarfile = callPackage ../development/python-modules/backports-tarfile { };
+
   backports-zoneinfo = callPackage ../development/python-modules/backports-zoneinfo { };
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
