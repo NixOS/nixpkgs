@@ -1,27 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, ffmpeg
-, fribidi
-, game-music-emu
-, libXdmcp
-, libXv
-, libass
-, libcddb
-, libcdio
-, libpulseaudio
-, libsidplayfp
-, libva
-, libxcb
-, pkg-config
-, qtbase
-, qttools
-, taglib
-, vulkan-headers
-, vulkan-tools
-, wrapQtAppsHook
+{
+  lib,
+  alsa-lib,
+  cmake,
+  fetchFromGitHub,
+  ffmpeg,
+  fribidi,
+  game-music-emu,
+  libXdmcp,
+  libXv,
+  libass,
+  libcddb,
+  libcdio,
+  libpulseaudio,
+  libsidplayfp,
+  libva,
+  libxcb,
+  pkg-config,
+  qt5,
+  stdenv,
+  taglib,
+  vulkan-headers,
+  vulkan-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,7 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+  ]
+  ++ [
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -56,16 +57,19 @@ stdenv.mkDerivation (finalAttrs: {
     libsidplayfp
     libva
     libxcb
-    qtbase
-    qttools
     taglib
     vulkan-headers
     vulkan-tools
+  ]
+  ++ [
+    qt5.qtbase
+    qt5.qttools
   ];
 
-  postInstall = ''
-    # Because we think it is better to use only lowercase letters!
-    ln -s $out/bin/QMPlay2 $out/bin/qmplay2
+  # Because we think it is better to use only lowercase letters!
+  # But sometimes we come across case-insensitive filesystems...
+  postFixup = ''
+    [ -e $out/bin/qmplay2 ] || ln -s $out/bin/QMPlay2 $out/bin/qmplay2
   '';
 
   meta = {
@@ -79,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/zaps166/QMPlay2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
+    mainProgram = "qmplay2";
     maintainers = with lib.maintainers; [ AndersonTorres kashw2 ];
     platforms = lib.platforms.linux;
   };
