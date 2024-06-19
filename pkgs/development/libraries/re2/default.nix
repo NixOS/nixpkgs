@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, gtest
-, gbenchmark
-, abseil-cpp
-, icu
-, chromium
-, grpc
-, mercurial
-, python3Packages
-, haskellPackages
+{
+  abseil-cpp,
+  chromium,
+  cmake,
+  fetchFromGitHub,
+  gbenchmark,
+  grpc,
+  gtest,
+  haskellPackages,
+  icu,
+  lib,
+  mercurial,
+  ninja,
+  python3Packages,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,13 +26,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iQETsjdIFcYM5I/W8ytvV3z/4va6TaZ/+KkSjb8CtF0=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-  buildInputs = lib.optionals finalAttrs.doCheck [ gtest gbenchmark ];
+  buildInputs = lib.optionals finalAttrs.doCheck [
+    gbenchmark
+    gtest
+  ];
 
-  propagatedBuildInputs = [ abseil-cpp icu ];
+  propagatedBuildInputs = [
+    abseil-cpp
+    icu
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "RE2_BUILD_TESTING" finalAttrs.doCheck)
@@ -55,7 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.bsd3;
     homepage = "https://github.com/google/re2";
-    maintainers = with maintainers; [ azahi networkexception ];
+    maintainers = with maintainers; [
+      azahi
+      networkexception
+    ];
     platforms = platforms.all;
   };
 })
