@@ -15313,6 +15313,14 @@
     github = "p3psi-boo";
     githubId = 43925055;
   };
+  p4p4j0hn = {
+    name = "John Schmidt";
+    email = "john@schmidthaus.rocks";
+    matrix = "@p4p4j0hn:gnulinux.club";
+    github = "p4p4j0hn";
+    githubId = 119713522;
+    keys = [ { fingerprint = "A792 08BD 70D0 2F18 19AB  0AFD 1972 A1A7 296A 2156"; } ];
+  };
   pabloaul = {
     email = "contact@nojus.org";
     github = "pabloaul";
