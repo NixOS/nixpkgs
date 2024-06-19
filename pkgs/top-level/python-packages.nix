@@ -1877,6 +1877,8 @@ self: super: with self; {
 
   cachetools = callPackage ../development/python-modules/cachetools { };
 
+  asyncache = callPackage ../development/python-modules/asyncache { };
+
   cachey = callPackage ../development/python-modules/cachey { };
 
   cachier = callPackage ../development/python-modules/cachier { };
@@ -6215,6 +6217,8 @@ self: super: with self; {
 
   jsonpath-ng = callPackage ../development/python-modules/jsonpath-ng { };
 
+  python-jsonpath = callPackage ../development/python-modules/python-jsonpath { };
+
   jsonpickle = callPackage ../development/python-modules/jsonpickle { };
 
   jsonpointer = callPackage ../development/python-modules/jsonpointer { };
@@ -6499,6 +6503,8 @@ self: super: with self; {
   kserve = callPackage ../development/python-modules/kserve { };
 
   kubernetes = callPackage ../development/python-modules/kubernetes { };
+
+  kr8s = callPackage ../development/python-modules/kr8s { };
 
   kurbopy = callPackage ../development/python-modules/kurbopy { };
 
