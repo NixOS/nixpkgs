@@ -78,6 +78,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with maintainers; [
       emilytrau
       SuperSandro2000
+      aleksana
     ];
     platforms = platforms.linux;
   };
