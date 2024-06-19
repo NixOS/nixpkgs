@@ -229,7 +229,7 @@ let
       else "cp $lockFileContentsPath $out/Cargo.lock"
     }
 
-    cat > $out/.cargo/config <<EOF
+    cat > $out/.cargo/config.toml <<EOF
 [source.crates-io]
 replace-with = "vendored-sources"
 
@@ -240,7 +240,7 @@ EOF
     declare -A keysSeen
 
     for registry in ${toString (builtins.attrNames extraRegistries)}; do
-      cat >> $out/.cargo/config <<EOF
+      cat >> $out/.cargo/config.toml <<EOF
 
 [source."$registry"]
 registry = "$registry"
@@ -256,7 +256,7 @@ EOF
         key=$(sed 's/\[source\."\(.*\)"\]/\1/; t; d' < "$crate/.cargo-config")
         if [[ -z ''${keysSeen[$key]} ]]; then
           keysSeen[$key]=1
-          cat "$crate/.cargo-config" >> $out/.cargo/config
+          cat "$crate/.cargo-config" >> $out/.cargo/config.toml
         fi
       fi
     done
