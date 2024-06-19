@@ -18,7 +18,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.3.6";
+  version = "3.0.0";
   format = "setuptools";
   pname = "beancount";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gB+Tvta1fS4iQ2aIxInVob8fduIQ887RhoB1fmDTR1o=";
+    hash = "sha256-z2aGhpx+o+78CU7hPthmv196K7DGHk1PXfPjX4Rs/98=";
   };
 
   # Tests require files not included in the PyPI archive.
