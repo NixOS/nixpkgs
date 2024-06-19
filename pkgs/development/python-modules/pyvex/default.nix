@@ -43,7 +43,7 @@ buildPythonPackage rec {
   preBuild = ''
     export CC=${stdenv.cc.targetPrefix}cc
     substituteInPlace pyvex_c/Makefile \
-      --replace 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
+      --replace-fail 'AR=ar' 'AR=${stdenv.cc.targetPrefix}ar'
   '';
 
   # No tests are available on PyPI, GitHub release has tests
