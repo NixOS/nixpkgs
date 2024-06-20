@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libGL, SDL2, libGLU, catch }:
+{ stdenv, lib, fetchFromGitHub, cmake, libGL, SDL2, libGLU, catch, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "recastai";
@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libGL SDL2 libGLU ];
+  buildInputs = [ libGL SDL2 libGLU ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.OpenGL ];
 
   meta = with lib; {
     homepage = "https://github.com/recastnavigation/recastnavigation";
