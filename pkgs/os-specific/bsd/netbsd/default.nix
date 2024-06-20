@@ -8,8 +8,13 @@
   fetchcvs,
 }:
 
-makeScopeWithSplicing' {
+let
   otherSplices = generateSplicesForMkScope "netbsd";
+  buildNetbsd = otherSplices.selfBuildHost;
+in
+
+makeScopeWithSplicing' {
+  inherit otherSplices;
   f = (
     self:
     lib.packagesFromDirectoryRecursive {
@@ -50,18 +55,18 @@ makeScopeWithSplicing' {
       compat = self.callPackage ./pkgs/compat/package.nix {
         inherit (buildPackages) coreutils;
         inherit (buildPackages.darwin) cctools-port;
-        inherit (buildPackages.netbsd) makeMinimal;
+        inherit (buildNetbsd) makeMinimal;
         inherit (self) install;
       };
 
       config = self.callPackage ./pkgs/config.nix {
-        inherit (buildPackages.netbsd) makeMinimal install;
+        inherit (buildNetbsd) makeMinimal install;
         inherit (self) cksum;
       };
 
       csu = self.callPackage ./pkgs/csu.nix {
         inherit (self) headers sys-headers ld_elf_so;
-        inherit (buildPackages.netbsd)
+        inherit (buildNetbsd)
           netbsdSetupHook
           makeMinimal
           install
@@ -74,7 +79,7 @@ makeScopeWithSplicing' {
       };
 
       include = self.callPackage ./pkgs/include.nix {
-        inherit (buildPackages.netbsd)
+        inherit (buildNetbsd)
           makeMinimal
           install
           nbperf
@@ -90,12 +95,12 @@ makeScopeWithSplicing' {
           make
           compatIfNeeded
           ;
-        inherit (buildPackages.netbsd) makeMinimal;
+        inherit (buildNetbsd) makeMinimal;
       };
 
       libcMinimal = self.callPackage ./pkgs/libcMinimal.nix {
         inherit (self) headers csu;
-        inherit (buildPackages.netbsd)
+        inherit (buildNetbsd)
           netbsdSetupHook
           makeMinimal
           install
@@ -111,7 +116,7 @@ makeScopeWithSplicing' {
       libpthread-headers = self.callPackage ./pkgs/libpthread/headers.nix { };
 
       librpcsvc = self.callPackage ./pkgs/librpcsvc.nix {
-        inherit (buildPackages.netbsd)
+        inherit (buildNetbsd)
           netbsdSetupHook
           makeMinimal
           install
@@ -123,7 +128,7 @@ makeScopeWithSplicing' {
       };
 
       libutil = self.callPackage ./pkgs/libutil.nix {
-        inherit (buildPackages.netbsd)
+        inherit (buildNetbsd)
           netbsdSetupHook
           makeMinimal
           install
@@ -133,12 +138,12 @@ makeScopeWithSplicing' {
           ;
       };
 
-      lorder = self.callPackage ./pkgs/lorder.nix { inherit (buildPackages.netbsd) makeMinimal install; };
+      lorder = self.callPackage ./pkgs/lorder.nix { inherit (buildNetbsd) makeMinimal install; };
 
       mtree = self.callPackage ./pkgs/mtree.nix { inherit (self) mknod; };
 
       mkDerivation = self.callPackage ./pkgs/mkDerivation.nix {
-        inherit (buildPackages.netbsd)
+        inherit (buildNetbsd)
           netbsdSetupHook
           makeMinimal
           install
@@ -152,15 +157,13 @@ makeScopeWithSplicing' {
       makeMinimal = self.callPackage ./pkgs/makeMinimal.nix { inherit (self) make; };
 
       # See note in pkgs/stat/package.nix
-      stat = self.callPackage ./pkgs/stat/package.nix {
-        inherit (buildPackages.netbsd) makeMinimal install;
-      };
+      stat = self.callPackage ./pkgs/stat/package.nix { inherit (buildNetbsd) makeMinimal install; };
 
       # See note in pkgs/stat/hook.nix
       statHook = self.callPackage ./pkgs/stat/hook.nix { inherit (self) stat; };
 
       sys-headers = self.callPackage ./pkgs/sys/headers.nix {
-        inherit (buildPackages.netbsd)
+        inherit (buildNetbsd)
           makeMinimal
           install
           tsort
@@ -172,7 +175,7 @@ makeScopeWithSplicing' {
           ;
       };
 
-      tsort = self.callPackage ./pkgs/tsort.nix { inherit (buildPackages.netbsd) makeMinimal install; };
+      tsort = self.callPackage ./pkgs/tsort.nix { inherit (buildNetbsd) makeMinimal install; };
     }
   );
 }
