@@ -6644,6 +6644,14 @@
     github = "ErinvanderVeen";
     githubId = 10973664;
   };
+  erooke = {
+    email = "ethan@roo.ke";
+    name = "Ethan Rooke";
+    keys = [ { fingerprint = "B66B EB9F 6111 E44B 7588  8240 B287 4A77 049A 5923"; } ];
+    github = "erooke";
+    githubId = 46689793;
+    matrix = "@ethan:roo.ke";
+  };
   erosennin = {
     email = "ag@sologoc.com";
     github = "erosennin";
