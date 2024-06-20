@@ -91,13 +91,11 @@ let
     # The match in this line is not a typo, see https://github.com/NixOS/nixpkgs/pull/124839
     grep -q "LOOGGED_IN_KEY" "${hostStateDir}/secret-keys.php" && rm "${hostStateDir}/secret-keys.php"
     if ! test -e "${hostStateDir}/secret-keys.php"; then
-      umask 0177
-      echo "<?php" >> "${hostStateDir}/secret-keys.php"
-      ${concatMapStringsSep "\n" (var: ''
-        echo "define('${var}', '`tr -dc a-zA-Z0-9 </dev/urandom | head -c 64`');" >> "${hostStateDir}/secret-keys.php"
-      '') secretsVars}
-      echo "?>" >> "${hostStateDir}/secret-keys.php"
-      chmod 440 "${hostStateDir}/secret-keys.php"
+      install -m 0440 /dev/stdin "${hostStateDir}/secret-keys.php" << EOF
+    <?php
+    ${concatMapStringsSep "\n" (var: ''define('${var}', "$(tr -dc a-zA-Z0-9 </dev/urandom | head -c 64)");'') secretsVars}
+    ?>
+    EOF
     fi
   '';
 
@@ -468,6 +466,7 @@ in
             Type = "oneshot";
             User = user;
             Group = webserver.group;
+            UMask = "0117";
           };
       })) eachSite)
 
