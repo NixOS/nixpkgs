@@ -49,9 +49,8 @@ stdenv.mkDerivation ({
     fi
   '';
 
-  checkPhase = ''
-    # noop since R CMD INSTALL tests packages
-  '';
+  doCheck = false;
+
 } // attrs // {
   name = "r-" + name;
 })
