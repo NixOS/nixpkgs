@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkg-config
-, enable-tools ? true }:
+, libedit, enable-tools ? true }:
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
@@ -16,9 +16,12 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+  buildInputs = [ libedit ];
+
   configureFlags = [
     "--enable-tools=${if enable-tools then "yes" else "no"}"
     "--enable-bindings-cxx"
+    "--enable-gpioset-interactive"
   ];
 
   meta = with lib; {
