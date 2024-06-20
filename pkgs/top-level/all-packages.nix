@@ -25759,6 +25759,10 @@ with pkgs;
 
   linx-server = callPackage ../servers/web-apps/linx-server { };
 
+  livekit = callPackage ../servers/livekit { };
+
+  livekit-cli = callPackage ../servers/livekit/cli.nix { };
+
   livepeer = callPackage ../servers/livepeer { };
 
   lldap = callPackage ../servers/ldap/lldap { };
