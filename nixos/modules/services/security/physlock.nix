@@ -49,6 +49,22 @@ in
         '';
       };
 
+      displayIssue = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to display /etc/issue when locked with physlock.
+        '';
+      };
+
+      displayUser = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to display the currently logged in user when locked with physlock.
+        '';
+      };
+
       lockMessage = mkOption {
         type = types.str;
         default = "";
@@ -124,7 +140,11 @@ in
                 ++ cfg.lockOn.extraTargets;
         serviceConfig = {
           Type = "forking";
-          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.muteKernelMessages "m"}${optionalString cfg.disableSysRq "s"}${optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""}";
+          ExecStart = pkgs.writeScript "start-physlock.sh" ''
+            #!${pkgs.bash}/bin/bash
+
+            ${pkgs.physlock}/bin/physlock -d ${optionalString cfg.disableSysRq "-s"} ${optionalString cfg.muteKernelMessages "-m"} ${optionalString (!cfg.displayIssue) "-z"} ${optionalString cfg.displayUser "-u"} ${optionalString (cfg.lockMessage != "") " -p $'${builtins.replaceStrings [ "\n" ] [ "\\n" ] cfg.lockMessage}'"}
+          '';
         };
       };
 
