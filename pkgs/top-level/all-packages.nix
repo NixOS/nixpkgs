@@ -3060,8 +3060,6 @@ with pkgs;
 
   lilo = callPackage ../tools/misc/lilo { };
 
-  logseq = callPackage ../applications/misc/logseq { };
-
   natls = callPackage ../tools/misc/natls { };
 
   notion-app-enhanced = callPackage ../applications/office/notion-app-enhanced { };
@@ -5695,6 +5693,11 @@ with pkgs;
   loadwatch = callPackage ../tools/system/loadwatch { };
 
   loccount = callPackage ../development/tools/misc/loccount { };
+
+  logseq = callPackage ../by-name/lo/logseq/package.nix {
+    # electron version from: https://github.com/logseq/logseq/blob/d8c6ca264bdf9a6a0f03c46dbf3509210367624a/package.json#L116
+    electron = electron_28;
+  };
 
   long-shebang = callPackage ../misc/long-shebang { };
 
