@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq common-updater-scripts
 
 latestVersion=$(curl "https://api.github.com/repos/dbeaver/dbeaver/tags" | jq -r '.[0].name')
 currentVersion=$(nix-instantiate --eval -E "with import ./. {}; dbeaver-bin.version" | tr -d '"')

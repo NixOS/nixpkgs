@@ -67,6 +67,7 @@
   ./hardware/gkraken.nix
   ./hardware/glasgow.nix
   ./hardware/gpgsmartcards.nix
+  ./hardware/graphics.nix
   ./hardware/hackrf.nix
   ./hardware/i2c.nix
   ./hardware/infiniband.nix
@@ -84,7 +85,6 @@
   ./hardware/new-lg4ff.nix
   ./hardware/nitrokey.nix
   ./hardware/onlykey/default.nix
-  ./hardware/opengl.nix
   ./hardware/openrazer.nix
   ./hardware/opentabletdriver.nix
   ./hardware/pcmcia.nix
@@ -103,7 +103,6 @@
   ./hardware/uni-sync.nix
   ./hardware/usb-modeswitch.nix
   ./hardware/usb-storage.nix
-  ./hardware/video/amdgpu-pro.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/capture/mwprocapture.nix
   ./hardware/video/displaylink.nix
@@ -111,6 +110,7 @@
   ./hardware/video/nvidia.nix
   ./hardware/video/switcheroo-control.nix
   ./hardware/video/uvcvideo/default.nix
+  ./hardware/video/virtualbox.nix
   ./hardware/video/webcam/facetimehd.nix
   ./hardware/video/webcam/ipu6.nix
   ./hardware/wooting.nix
@@ -549,6 +549,7 @@
   ./services/games/xonotic.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
+  ./services/hardware/amdgpu.nix
   ./services/hardware/amdvlk.nix
   ./services/hardware/argonone.nix
   ./services/hardware/asusd.nix
