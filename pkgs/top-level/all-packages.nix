@@ -10462,6 +10462,8 @@ with pkgs;
       };
     };
 
+  mediaeditor = callPackage ../applications/video/mediaeditor { };
+
   mediawiki = callPackage ../servers/web-apps/mediawiki { };
 
   mediawriter = callPackage ../tools/system/mediawriter { };
