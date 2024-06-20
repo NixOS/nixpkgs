@@ -5,6 +5,7 @@
   fetchzip,
   librandombytes,
   libcpucycles,
+  system ? builtins.currentSystem 
 }:
 stdenv.mkDerivation (prev: {
   pname = "lib25519";
@@ -26,20 +27,22 @@ stdenv.mkDerivation (prev: {
 
   # NOTE: lib25519 uses a custom Python `./configure`: it does not expect standard
   # autoconfig --build --host etc. arguments: disable
-  #configurePlatforms = [ ];
+  configurePlatforms = [ ];
 
-   configurePhase = ''
-        runHook preConfigure
-     pwd; ./configure --host=arm64 --prefix=$out
-        runHook postConfigure
-   '';
+   # configurePhase = ''
+   #  runHook preConfigure
+   #  pwd; ./configure --host=${system} --prefix=$out 
+   #  # pwd; ./configure --host=arm64 --prefix=$out 
+   #  # echo "ISTHISBEINGCALLED"; ./configure --prefix=$out 
+   #  runHook postConfigure
+   # '';
 
   # NOTE: the librandombytes library has required specific CFLAGS defined:
   # https://randombytes.cr.yp.to/librandombytes-20240318/compilers/default.html
   # - `-Qunused-arguments` suppress clang warning
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-Qunused-arguments" ]);
 
-  patches = [ ./environment-variable-tools.patch ];
+  # patches = [ ./environment-variable-tools.patch ];
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [
