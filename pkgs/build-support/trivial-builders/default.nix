@@ -91,6 +91,7 @@ rec {
     , destination ? ""
     , checkPhase ? ""
     , meta ? { }
+    , passthru ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     , derivationArgs ? { }
@@ -107,6 +108,7 @@ rec {
           {
             mainProgram = lib.head matches;
           } // meta // derivationArgs.meta or {};
+        passthru = passthru // derivationArgs.passthru or {};
       } // removeAttrs derivationArgs [ "passAsFile" "meta" ])
       ''
         target=$out${lib.escapeShellArg destination}
