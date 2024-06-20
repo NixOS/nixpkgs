@@ -82,6 +82,7 @@ rec {
     , destination ? ""
     , checkPhase ? ""
     , meta ? { }
+    , passthru ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     , derivationArgs ? { }
@@ -105,7 +106,8 @@ rec {
           {
             mainProgram = lib.head matches;
           } // meta // derivationArgs.meta or {};
-      } // removeAttrs derivationArgs [ "passAsFile" "meta" ])
+        passthru = passthru // derivationArgs.passthru or {};
+      } // removeAttrs derivationArgs [ "passAsFile" "meta" "passthru" ])
       ''
         target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
