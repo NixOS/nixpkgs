@@ -65,7 +65,7 @@ let
     kernel = callLibs ./kernel.nix;
 
     inherit (builtins) addErrorContext
-      elem elemAt genericClosure getAttr
+      elemAt genericClosure getAttr
       hasAttr isAttrs isBool isInt isList isPath isString
       pathExists readFile replaceStrings
       trace;
@@ -94,7 +94,7 @@ let
       reverseList listDfs toposort sort sortOn naturalSort compareLists take
       drop sublist last init crossLists unique allUnique intersectLists
       subtractLists mutuallyExclusive groupBy groupBy' concatLists genList
-      length head tail;
+      length head tail elem;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       stringLength substring
       intersperse concatStringsSep concatMapStringsSep
