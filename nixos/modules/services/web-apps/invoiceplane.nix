@@ -9,7 +9,7 @@ let
   webserver = config.services.${cfg.webserver};
 
   invoiceplane-config = hostName: cfg: pkgs.writeText "ipconfig.php" ''
-    IP_URL=http://${hostName}
+    IP_URL=http://${hostName}${if cfg.port != 80 then ":" + (toString cfg.port) else ""}
     ENABLE_DEBUG=false
     DISABLE_SETUP=false
     REMOVE_INDEXPHP=false
@@ -87,6 +87,12 @@ let
             The directory passed here is automatically created and permissions
             adjusted as required.
           '';
+        };
+        port = mkOption {
+          type = types.port;
+          default = 80;
+          example = 8080;
+          description = lib.mdDoc "Port for Caddy to listen on";
         };
 
         database = {
@@ -351,7 +357,7 @@ in
     services.caddy = {
       enable = true;
       virtualHosts = mapAttrs' (hostName: cfg: (
-        nameValuePair "http://${hostName}" {
+        nameValuePair "http://${hostName}:${toString cfg.port}" {
           extraConfig = ''
             root * ${pkg hostName cfg}
             file_server
