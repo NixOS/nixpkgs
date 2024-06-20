@@ -145,6 +145,8 @@ in
     (mkIf cfg.enable (mkMerge [
       { environment.systemPackages = [ pkgs.kbd ];
 
+        systemd.generators.systemd-getty-generator = "${config.systemd.package}/lib/systemd/system-generators/systemd-getty-generator";
+
         # Let systemd-vconsole-setup.service do the work of setting up the
         # virtual consoles.
         environment.etc."vconsole.conf".source = vconsoleConf;
