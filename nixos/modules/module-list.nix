@@ -722,6 +722,7 @@
   ./services/misc/evdevremapkeys.nix
   ./services/misc/felix.nix
   ./services/misc/forgejo.nix
+  ./services/misc/fishnet.nix
   ./services/misc/freeswitch.nix
   ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix
