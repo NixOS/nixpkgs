@@ -9793,6 +9793,12 @@
     githubId = 15893072;
     name = "Josh van Leeuwen";
   };
+  joweiss = {
+    email = "jweissensel@mailbox.org";
+    github = "joWeiss";
+    githubId = 690428;
+    name = "Jonas Weissensel";
+  };
   jpagex = {
     name = "Jérémy Pagé";
     email = "contact@jeremypage.me";
