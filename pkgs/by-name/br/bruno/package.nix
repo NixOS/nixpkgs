@@ -8,7 +8,6 @@
   writeShellScriptBin,
   makeWrapper,
   copyDesktopItems,
-  giflib,
   makeDesktopItem,
   pkg-config,
   pixman,
@@ -61,7 +60,6 @@ buildNpmPackage' rec {
     ]
     ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk_11_0.frameworks.CoreText
-      giflib
     ];
 
   desktopItems = [
@@ -82,6 +80,14 @@ buildNpmPackage' rec {
   '';
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+
+  # remove giflib dependency
+  npmRebuildFlags = [ "--ignore-scripts" ];
+  preBuild = ''
+    substituteInPlace node_modules/canvas/binding.gyp \
+      --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
+    npm rebuild
+  '';
 
   dontNpmBuild = true;
   postBuild = ''
