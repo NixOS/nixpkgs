@@ -15,7 +15,6 @@
   lorder,
   tsort,
   statHook,
-  rsync,
   rpcgen,
   csu,
   headers,
@@ -55,7 +54,6 @@ mkDerivation {
     lorder
     tsort
     statHook
-    rsync
     rpcgen
   ];
   buildInputs = [

@@ -53,7 +53,6 @@ makeScopeWithSplicing' {
       compat = self.callPackage ./pkgs/compat/package.nix {
         inherit (buildPackages) coreutils;
         inherit (buildPackages.darwin) cctools-port;
-        inherit (buildPackages.buildPackages) rsync;
         inherit (buildPackages.netbsd) makeMinimal;
         inherit (self) install;
       };
@@ -65,14 +64,12 @@ makeScopeWithSplicing' {
           make
           compatIfNeeded
           ;
-        inherit (buildPackages.buildPackages) rsync;
         inherit (buildPackages.netbsd) makeMinimal;
       };
 
       # See note in pkgs/stat/package.nix
       stat = self.callPackage ./pkgs/stat/package.nix {
         inherit (buildPackages.netbsd) makeMinimal install;
-        inherit (buildPackages.buildPackages) rsync;
       };
 
       # See note in pkgs/stat/hook.nix
@@ -80,17 +77,14 @@ makeScopeWithSplicing' {
 
       tsort = self.callPackage ./pkgs/tsort.nix {
         inherit (buildPackages.netbsd) makeMinimal install;
-        inherit (buildPackages.buildPackages) rsync;
       };
 
       lorder = self.callPackage ./pkgs/lorder.nix {
         inherit (buildPackages.netbsd) makeMinimal install;
-        inherit (buildPackages.buildPackages) rsync;
       };
 
       config = self.callPackage ./pkgs/config.nix {
         inherit (buildPackages.netbsd) makeMinimal install;
-        inherit (buildPackages.buildPackages) rsync;
         inherit (self) cksum;
       };
 
@@ -102,7 +96,6 @@ makeScopeWithSplicing' {
           rpcgen
           ;
         inherit (buildPackages) stdenv;
-        inherit (buildPackages.buildPackages) rsync;
       };
 
       sys-headers = self.callPackage ./pkgs/sys/headers.nix {
@@ -116,7 +109,6 @@ makeScopeWithSplicing' {
           config
           genassym
           ;
-        inherit (buildPackages.buildPackages) rsync;
       };
 
       libutil = self.callPackage ./pkgs/libutil.nix { inherit (self) libc sys; };
@@ -135,7 +127,6 @@ makeScopeWithSplicing' {
           tsort
           statHook
           ;
-        inherit (buildPackages.buildPackages) rsync;
       };
 
 
@@ -152,7 +143,6 @@ makeScopeWithSplicing' {
           statHook
           rpcgen
           ;
-        inherit (buildPackages.buildPackages) rsync;
       };
 
       mtree = self.callPackage ./pkgs/mtree.nix { inherit (self) mknod; };

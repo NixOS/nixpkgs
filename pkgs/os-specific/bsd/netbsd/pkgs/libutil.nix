@@ -11,7 +11,6 @@
   lorder,
   mandoc,
   statHook,
-  rsync,
   headers,
 }:
 
@@ -32,7 +31,6 @@ mkDerivation {
     lorder
     mandoc
     statHook
-    rsync
   ];
   buildInputs = [ headers ];
   SHLIBINSTALLDIR = "$(out)/lib";
