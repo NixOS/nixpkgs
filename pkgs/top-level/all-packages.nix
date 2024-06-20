@@ -6165,6 +6165,8 @@ with pkgs;
 
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
+  stacktile = callPackage ../applications/misc/stacktile { };
+
   stacs = callPackage ../tools/security/stacs { };
 
   stagit = callPackage ../development/tools/stagit { };
