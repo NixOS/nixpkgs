@@ -39,6 +39,14 @@ else stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
+    ENABLE_TEST_SYSTEM=1
+    if [ "$(cat /proc/self/uid_map)" = "         0          0 4294967295" ]; then
+      echo "Boot namespace detected! Disabling tests that use system()."
+      echo "The system() relies on /bin/sh which may not be compatible with nixpkgs's"
+      echo "glibc, so we can't test this without the sandboxing isolation."
+      ENABLE_TEST_SYSTEM=0
+    fi
+
     ${if stdenv.isDarwin && stdenv.isAarch64 then ''
     # We need the unwrapped binutils and clang:
     # We also want to build a fat library with x86_64, arm64, arm64e in there.
@@ -52,16 +60,15 @@ else stdenv.mkDerivation rec {
       -isystem ${llvmPkgs.libclang.lib}/lib/clang/*/include \
       -L${llvmPkgs.clang.libc}/lib \
       -Wl,-install_name,$libName \
-      -Wall -std=c99 -O3 -fPIC libredirect.c \
-      -shared -o "$libName"
     '' else if stdenv.isDarwin then ''
-    $CC -Wall -std=c99 -O3 -fPIC libredirect.c \
+    $CC \
       -Wl,-install_name,$out/lib/$libName \
-      -shared -o "$libName"
     '' else ''
-    $CC -Wall -std=c99 -O3 -fPIC libredirect.c \
+    $CC \
+    ''} \
+      -Wall -std=c99 -O3 -fPIC libredirect.c \
+      -DENABLE_TEST_SYSTEM=$ENABLE_TEST_SYSTEM \
       -shared -o "$libName"
-    ''}
 
     if [ -n "$doInstallCheck" ]; then
       $CC -Wall -std=c99 \

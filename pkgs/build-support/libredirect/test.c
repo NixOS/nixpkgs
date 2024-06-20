@@ -157,6 +157,8 @@ int main(int argc, char *argv[])
     assert_mktemp_path(TESTDIR "/temp", "", buf);
 
     test_spawn();
+
+#if ENABLE_TEST_SYSTEM
     test_system();
     test_stat_with_null_path();
 
@@ -166,6 +168,7 @@ int main(int argc, char *argv[])
     if (argc == 1) {
         test_subprocess();
     }
+#endif
 
     test_execv();
 
