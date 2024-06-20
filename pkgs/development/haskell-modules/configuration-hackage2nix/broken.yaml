@@ -5265,7 +5265,6 @@ broken-packages:
   - serf # failure in job https://hydra.nixos.org/build/233251981 at 2023-09-02
   - serial # failure in job https://hydra.nixos.org/build/252729356 at 2024-03-16
   - serialize-instances # failure in job https://hydra.nixos.org/build/233239330 at 2023-09-02
-  - serialport # failure in job https://hydra.nixos.org/build/233201348 at 2023-09-02
   - serokell-util # failure in job https://hydra.nixos.org/build/233209952 at 2023-09-02
   - servant-aeson-specs # failure in job https://hydra.nixos.org/build/233202245 at 2023-09-02
   - servant-auth-cookie # failure in job https://hydra.nixos.org/build/233235829 at 2023-09-02
