@@ -66,7 +66,7 @@ let
 
     inherit (builtins) addErrorContext
       genericClosure getAttr
-      isList isPath isString
+      isPath isString
       pathExists readFile replaceStrings
       trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
@@ -94,7 +94,7 @@ let
       reverseList listDfs toposort sort sortOn naturalSort compareLists take
       drop sublist last init crossLists unique allUnique intersectLists
       subtractLists mutuallyExclusive groupBy groupBy' concatLists genList
-      length head tail elem elemAt;
+      length head tail elem elemAt isList;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       stringLength substring
       intersperse concatStringsSep concatMapStringsSep
