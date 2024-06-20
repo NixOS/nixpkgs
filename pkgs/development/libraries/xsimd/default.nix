@@ -32,6 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  buildInputs = [
+    doctest
+  ];
+
   cmakeFlags = [
     # Always build the tests, even if not running them, because testing whether
     # they can be built is a test in itself.
@@ -39,9 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [
-    doctest
-  ];
   checkTarget = "xtest";
 
   meta = with lib; {
