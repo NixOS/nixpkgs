@@ -47,20 +47,6 @@ makeScopeWithSplicing' {
       # if we don't perform these manual calls, we get infinite recursion issues
       # because of the splices.
 
-      mkDerivation = self.callPackage ./pkgs/mkDerivation.nix {
-        inherit (buildPackages.netbsd)
-          netbsdSetupHook
-          makeMinimal
-          install
-          tsort
-          lorder
-          ;
-        inherit (buildPackages) mandoc;
-        inherit (buildPackages.buildPackages) rsync;
-      };
-
-      makeMinimal = self.callPackage ./pkgs/makeMinimal.nix { inherit (self) make; };
-
       compat = self.callPackage ./pkgs/compat/package.nix {
         inherit (buildPackages) coreutils;
         inherit (buildPackages.darwin) cctools-port;
@@ -68,68 +54,10 @@ makeScopeWithSplicing' {
         inherit (self) install;
       };
 
-      install = self.callPackage ./pkgs/install/package.nix {
-        inherit (self)
-          fts
-          mtree
-          make
-          compatIfNeeded
-          ;
-        inherit (buildPackages.netbsd) makeMinimal;
-      };
-
-      # See note in pkgs/stat/package.nix
-      stat = self.callPackage ./pkgs/stat/package.nix {
-        inherit (buildPackages.netbsd) makeMinimal install;
-      };
-
-      # See note in pkgs/stat/hook.nix
-      statHook = self.callPackage ./pkgs/stat/hook.nix { inherit (self) stat; };
-
-      tsort = self.callPackage ./pkgs/tsort.nix { inherit (buildPackages.netbsd) makeMinimal install; };
-
-      lorder = self.callPackage ./pkgs/lorder.nix { inherit (buildPackages.netbsd) makeMinimal install; };
-
       config = self.callPackage ./pkgs/config.nix {
         inherit (buildPackages.netbsd) makeMinimal install;
         inherit (self) cksum;
       };
-
-      include = self.callPackage ./pkgs/include.nix {
-        inherit (buildPackages.netbsd)
-          makeMinimal
-          install
-          nbperf
-          rpcgen
-          ;
-        inherit (buildPackages) stdenv;
-      };
-
-      sys-headers = self.callPackage ./pkgs/sys/headers.nix {
-        inherit (buildPackages.netbsd)
-          makeMinimal
-          install
-          tsort
-          lorder
-          statHook
-          uudecode
-          config
-          genassym
-          ;
-      };
-
-      libutil = self.callPackage ./pkgs/libutil.nix {
-        inherit (buildPackages.netbsd)
-          netbsdSetupHook
-          makeMinimal
-          install
-          lorder
-          tsort
-          statHook
-          ;
-      };
-
-      libpthread-headers = self.callPackage ./pkgs/libpthread/headers.nix { };
 
       csu = self.callPackage ./pkgs/csu.nix {
         inherit (self) headers sys-headers ld_elf_so;
@@ -143,6 +71,26 @@ makeScopeWithSplicing' {
           tsort
           statHook
           ;
+      };
+
+      include = self.callPackage ./pkgs/include.nix {
+        inherit (buildPackages.netbsd)
+          makeMinimal
+          install
+          nbperf
+          rpcgen
+          ;
+        inherit (buildPackages) stdenv;
+      };
+
+      install = self.callPackage ./pkgs/install/package.nix {
+        inherit (self)
+          fts
+          mtree
+          make
+          compatIfNeeded
+          ;
+        inherit (buildPackages.netbsd) makeMinimal;
       };
 
       libcMinimal = self.callPackage ./pkgs/libcMinimal.nix {
@@ -160,6 +108,8 @@ makeScopeWithSplicing' {
           ;
       };
 
+      libpthread-headers = self.callPackage ./pkgs/libpthread/headers.nix { };
+
       librpcsvc = self.callPackage ./pkgs/librpcsvc.nix {
         inherit (buildPackages.netbsd)
           netbsdSetupHook
@@ -172,7 +122,57 @@ makeScopeWithSplicing' {
           ;
       };
 
+      libutil = self.callPackage ./pkgs/libutil.nix {
+        inherit (buildPackages.netbsd)
+          netbsdSetupHook
+          makeMinimal
+          install
+          lorder
+          tsort
+          statHook
+          ;
+      };
+
+      lorder = self.callPackage ./pkgs/lorder.nix { inherit (buildPackages.netbsd) makeMinimal install; };
+
       mtree = self.callPackage ./pkgs/mtree.nix { inherit (self) mknod; };
+
+      mkDerivation = self.callPackage ./pkgs/mkDerivation.nix {
+        inherit (buildPackages.netbsd)
+          netbsdSetupHook
+          makeMinimal
+          install
+          tsort
+          lorder
+          ;
+        inherit (buildPackages) mandoc;
+        inherit (buildPackages.buildPackages) rsync;
+      };
+
+      makeMinimal = self.callPackage ./pkgs/makeMinimal.nix { inherit (self) make; };
+
+      # See note in pkgs/stat/package.nix
+      stat = self.callPackage ./pkgs/stat/package.nix {
+        inherit (buildPackages.netbsd) makeMinimal install;
+      };
+
+      # See note in pkgs/stat/hook.nix
+      statHook = self.callPackage ./pkgs/stat/hook.nix { inherit (self) stat; };
+
+      sys-headers = self.callPackage ./pkgs/sys/headers.nix {
+        inherit (buildPackages.netbsd)
+          makeMinimal
+          install
+          tsort
+          lorder
+          statHook
+          uudecode
+          config
+          genassym
+          ;
+      };
+
+      tsort = self.callPackage ./pkgs/tsort.nix { inherit (buildPackages.netbsd) makeMinimal install; };
     }
   );
 }
