@@ -237,6 +237,15 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
 fi
 
 PATH="$path_backup"
+
+# Optionally run external hook.
+if [ -n "${NIX_CC_WRAPPER_HOOK:-}" ]; then
+    "$NIX_CC_WRAPPER_HOOK" @prog@ \
+        ${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"}
+fi
+
 # Old bash workaround, see above.
 
 # if a cc-wrapper-hook exists, run it.
