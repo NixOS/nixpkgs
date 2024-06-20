@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, future
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  future,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,26 +21,18 @@ buildPythonPackage rec {
     hash = "sha256-pXLG2Mkrv6EeJn6Dk+SefzNtrPdQ6of95LbVTKjTADQ=";
   };
 
-  propagatedBuildInputs = [
-    future
-  ];
+  propagatedBuildInputs = [ future ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "enum-compat" ""
   '';
 
-  pytestFlagsArray = [
-    "tests/test_asn1.py"
-  ];
+  pytestFlagsArray = [ "tests/test_asn1.py" ];
 
-  pythonImportsCheck = [
-    "asn1"
-  ];
+  pythonImportsCheck = [ "asn1" ];
 
   meta = with lib; {
     description = "Python ASN.1 encoder and decoder";

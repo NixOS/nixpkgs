@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, chardet
-, hatchling
-, html5lib
-, lxml
-, pytestCheckHook
-, pythonOlder
-, soupsieve
-, sphinxHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chardet,
+  hatchling,
+  html5lib,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  soupsieve,
+  sphinxHook,
 
-# for passthru.tests
-, html-sanitizer
-, markdownify
-, mechanicalsoup
-, nbconvert
-, subliminal
-, wagtail
+  # for passthru.tests
+  html-sanitizer,
+  markdownify,
+  mechanicalsoup,
+  nbconvert,
+  subliminal,
+  wagtail,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,10 @@ buildPythonPackage rec {
   version = "4.12.3";
   pyproject = true;
 
-  outputs = ["out" "doc"];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   disabled = pythonOlder "3.6";
 
@@ -44,29 +48,25 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    html5lib = [
-      html5lib
-    ];
-    lxml = [
-      lxml
-    ];
+    html5lib = [ html5lib ];
+    lxml = [ lxml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "bs4"
-  ];
+  pythonImportsCheck = [ "bs4" ];
 
   passthru.tests = {
-    inherit html-sanitizer
+    inherit
+      html-sanitizer
       markdownify
       mechanicalsoup
       nbconvert
       subliminal
-      wagtail;
+      wagtail
+      ;
   };
 
   meta = with lib; {

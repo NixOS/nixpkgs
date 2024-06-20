@@ -18,7 +18,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X github.com/GoogleContainerTools/kpt/run.version=${version}" ];
 
   meta = with lib; {
-    description = "A toolkit to help you manage, manipulate, customize, and apply Kubernetes Resource configuration data files";
+    description = "Toolkit to help you manage, manipulate, customize, and apply Kubernetes Resource configuration data files";
     mainProgram = "kpt";
     homepage = "https://googlecontainertools.github.io/kpt/";
     license = licenses.asl20;

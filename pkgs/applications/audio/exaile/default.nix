@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     gst-plugins-ugly
     gst-libav
   ]) ++ (with python3.pkgs; [
-    bsddb3
+    berkeleydb
     dbus-python
     mutagen
     pygobject3
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.exaile.org/";
-    description = "A music player with a simple interface and powerful music management capabilities";
+    description = "Music player with a simple interface and powerful music management capabilities";
     mainProgram = "exaile";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ ryneeverett ];

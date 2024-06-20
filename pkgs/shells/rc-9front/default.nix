@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "The 9front shell";
+    description = "9front shell";
     longDescription = "unix port of 9front rc";
     homepage = "http://shithub.us/cinap_lenrek/rc/HEAD/info.html";
     license = licenses.mit;

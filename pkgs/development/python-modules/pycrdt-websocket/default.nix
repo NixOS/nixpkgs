@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatchling
-, anyio
-, channels
-, httpx-ws
-, hypercorn
-, pycrdt
-, pytest-asyncio
-, pytestCheckHook
-, sqlite-anyio
-, trio
-, uvicorn
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hatchling,
+  anyio,
+  channels,
+  httpx-ws,
+  hypercorn,
+  pycrdt,
+  pytest-asyncio,
+  pytestCheckHook,
+  sqlite-anyio,
+  trio,
+  uvicorn,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "pycrdt-websocket";
-  version = "0.13.4";
+  version = "0.13.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,12 +28,10 @@ buildPythonPackage rec {
     owner = "jupyter-server";
     repo = "pycrdt-websocket";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nkm1ZQ6bYBRDDoREovhEthDZoHApYxzAnwVgDgpWW/s=";
+    hash = "sha256-dzlmgxrdQ97+DO/vDtoX7PIOpngEE+FGUGq1vdVmhNw=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     anyio
@@ -41,14 +40,10 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    django = [
-      channels
-    ];
+    django = [ channels ];
   };
 
-  pythonImportsCheck = [
-    "pycrdt_websocket"
-  ];
+  pythonImportsCheck = [ "pycrdt_websocket" ];
 
   nativeCheckInputs = [
     httpx-ws

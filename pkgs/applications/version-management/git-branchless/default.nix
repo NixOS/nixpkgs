@@ -27,12 +27,14 @@ rustPlatform.buildRustPackage rec {
   patches = [
     # Fix tests with Git 2.44.0+
     (fetchpatch {
-      url = "https://github.com/arxanas/git-branchless/pull/1245.patch";
+      name = "1245.patch"; # https://github.com/arxanas/git-branchless/pull/1245
+      url = "https://github.com/arxanas/git-branchless/commit/c8436aed3d616409b4d6fb1eedb383077f435497.patch";
       hash = "sha256-gBm0A478Uhg9IQVLQppvIeTa8s1yHUMddxiUbpHUvGw=";
     })
     # Fix tests with Git 2.44.0+
     (fetchpatch {
-      url = "https://github.com/arxanas/git-branchless/pull/1161.patch";
+      name = "1161.patch"; # https://github.com/arxanas/git-branchless/pull/1161
+      url = "https://github.com/arxanas/git-branchless/commit/6e1f26900a0dd60d10d9aa3552cab9181fa7be03.patch";
       hash = "sha256-KHobEIXhlDar8CvIVUi4I695jcJZXgGRhU86b99x86Y=";
     })
   ];
@@ -67,7 +69,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
+    description = "Suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
     license = licenses.gpl2Only;
     mainProgram = "git-branchless";

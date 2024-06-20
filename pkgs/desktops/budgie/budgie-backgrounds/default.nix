@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "The default background set for the Budgie Desktop";
+    description = "Default background set for the Budgie Desktop";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-backgrounds";
     platforms = lib.platforms.linux;
     maintainers = lib.teams.budgie.members;

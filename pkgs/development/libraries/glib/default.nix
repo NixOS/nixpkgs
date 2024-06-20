@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -60,11 +61,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.80.0";
+  version = "2.80.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-giipL5KkEhYLE5rmi2NFvSjyRDSnta8VDr4h/1h6Vh0=";
+    hash = "sha256-uc+296W9WzEjj9XVbfImst2l6jdhFHW/ifag+UAP6L0=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -73,6 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
+    # Fix double-free & segfault issues on menu and dbus connection action group export failures
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4073
+    # Remove when version > 2.80.2
+    (fetchpatch {
+      name = "GLib-Fix-memory-problems-on-gmenuexporter-and-gactiongroupexporter-error-paths.patch";
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/b9490a499a004618c883f180b1081a166ff1a86b.patch";
+      hash = "sha256-c6uZ9NEhg26/2RdgjQ4s5ErCDm5HH6T/tfJXTwh/H6o=";
+    })
+
     # This patch lets GLib's GDesktopAppInfo API watch and notice changes
     # to the Nix user and system profiles.  That way, the list of available
     # applications shown by the desktop environment is immediately updated
@@ -239,7 +249,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    moveToOutput "share/doc/glib-2.0" "$devdoc"
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   nativeCheckInputs = [ tzdata desktop-file-utils shared-mime-info ];
@@ -267,14 +277,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $PWD/gobject/libgobject-${librarySuffix} $out/lib/libgobject-${librarySuffix}
     ln -s $PWD/gio/libgio-${librarySuffix} $out/lib/libgio-${librarySuffix}
     ln -s $PWD/glib/libglib-${librarySuffix} $out/lib/libglib-${librarySuffix}
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-
-    meson test --print-errorlogs
-
-    runHook postCheck
   '';
 
   postCheck = ''

@@ -16,21 +16,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "6.0.6";
+  version = "6.0.9";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-to2HJAqU3+xl6Wt90GH7RA7079v1QyP+AE0pL/9rd/M=";
+    hash = "sha256-mml+nj+Z6267QtejTkWiR3SdNAdZCNz4M8r6LzvhALw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "const-field-offset-0.1.5" = "sha256-53pT9ERsmF4lM9tVG09hgbM0zfbTp1qSM+NDyFQxe3c=";
+      "const-field-offset-0.1.5" = "sha256-0MaNu6cUXislY+wDFuxZptXeJRkOuXGRJwZWm6AvcZ8=";
       "notify-rust-4.7.0" = "sha256-A7edUorty5GpGXCUQPszZuXtLdEmbmrDSU9JcoDaiaI=";
-      "supergfxctl-5.2.2" = "sha256-hg1QJ7DLtn5oH6IqQu7BcWIsZKAsFy6jjsjF/2o1Cos=";
+      "supergfxctl-5.2.3" = "sha256-wKcHoMukdUXZrdbE1xsylq7ySJpxny3+0dGUQ40BVH8=";
     };
   };
 
@@ -90,7 +90,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
+    description = "Control daemon, CLI tools, and a collection of crates for interacting with ASUS ROG laptops";
     homepage = "https://gitlab.com/asus-linux/asusctl";
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];

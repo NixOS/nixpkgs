@@ -18,14 +18,14 @@
 }:
 
 let
-  version = "2.60.0";
+  version = "2.61.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-rQwjcp6MsqhP+o+Hpvt4CFC4ygqsIaRIQOxWKca5Hq8=";
+    hash = "sha256-RmCZigDenbX8OoIZeY087ga2AP8yRckyG0qZnN9gg44=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -43,15 +43,15 @@ let
     }@args: python3.pkgs.buildPythonPackage ({
       format = "wheel";
       src = fetchurl { inherit url sha256; };
-      meta = with lib; {
+      meta = {
         inherit description;
         inherit (azure-cli.meta) platforms maintainers;
         homepage = "https://github.com/Azure/azure-cli-extensions";
         changelog = "https://github.com/Azure/azure-cli-extensions/blob/main/src/${pname}/HISTORY.rst";
         license = lib.licenses.mit;
-        sourceProvenance = [ sourceTypes.fromSource ];
-      };
-    } // (removeAttrs args [ "url" "sha256" "description" ]));
+        sourceProvenance = [ lib.sourceTypes.fromSource ];
+      } // args.meta or { };
+    } // (removeAttrs args [ "url" "sha256" "description" "meta" ]));
 
   extensions =
     callPackages ./extensions-generated.nix { inherit mkAzExtension; }
@@ -233,7 +233,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage rec {
     # pip is required to install extensions locally, but it's not needed if
     # we're using the default immutable configuration.
     pip
-  ];
+  ] ++ lib.concatMap (extension: extension.propagatedBuildInputs) withExtensions;
 
   postInstall = ''
     substituteInPlace az.completion.sh \

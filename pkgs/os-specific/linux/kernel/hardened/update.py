@@ -211,6 +211,7 @@ with open(NIXPKGS_KERNEL_PATH / "kernels-org.json") as kernel_versions_json:
 
 # Remove patches for unpackaged kernel versions.
 for kernel_key in sorted(patches.keys() - kernel_versions.keys()):
+    del patches[kernel_key]
     commit_patches(kernel_key=kernel_key, message="remove")
 
 g = Github(os.environ.get("GITHUB_TOKEN"))

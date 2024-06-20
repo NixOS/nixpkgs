@@ -41,13 +41,13 @@
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.7.7";
+  version = "2.7.9";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    hash = "sha256-HjDzb1H3eMSraKbfHgg9S+w4TXNt40lQkDz+EChb5Ks=";
+    hash = "sha256-rnietdc8eDNTag0GaZ8VJb28JsKKD/qrQ0Gg6FMWpr0=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
   passthru.tests = nixosTests.keepassxc;
 
   meta = with lib; {
-    description = "Offline password manager with many features.";
+    description = "Offline password manager with many features";
     longDescription = ''
       A community fork of KeePassX, which is itself a port of KeePass Password Safe.
       The goal is to extend and improve KeePassX with new features and bugfixes,

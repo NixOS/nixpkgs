@@ -23,7 +23,7 @@ appimageTools.wrapType2 {
     substituteInPlace $out/share/applications/${pname}.desktop --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=${pname} %U'
   '';
 
-  extraPkgs = pkgs: with pkgs; [ libsecret ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
   meta = with lib; {
     description = "Open-source electronics prototyping platform";

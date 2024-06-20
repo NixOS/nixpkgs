@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A network diagnostics tool";
+    description = "Network diagnostics tool";
     homepage = "https://www.bitwizard.nl/mtr/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ koral orivej raskin globin ];

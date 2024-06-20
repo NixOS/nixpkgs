@@ -1,7 +1,7 @@
-diff --git a/Modules/kwinsupportinfo/kcm_kwinsupportinfo.json.in b/Modules/kwinsupportinfo/kcm_kwinsupportinfo.json.in
+diff --git a/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in b/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
 index 0de6973e..30035768 100644
---- a/Modules/kwinsupportinfo/kcm_kwinsupportinfo.json.in
-+++ b/Modules/kwinsupportinfo/kcm_kwinsupportinfo.json.in
+--- a/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
++++ b/kcms/kwinsupportinfo/kcm_kwinsupportinfo.json.in
 @@ -85,6 +85,6 @@
          "Name[zh_CN]": "窗口管理器",
          "Name[zh_TW]": "視窗管理員"
@@ -10,23 +10,23 @@ index 0de6973e..30035768 100644
 +    "TryExec": "@qdbus@",
      "X-KDE-KInfoCenter-Category": "graphical_information"
  }
-diff --git a/Modules/kwinsupportinfo/main.cpp b/Modules/kwinsupportinfo/main.cpp
+diff --git a/kcms/kwinsupportinfo/main.cpp b/kcms/kwinsupportinfo/main.cpp
 index 6ae168b5..89d0a2ff 100644
---- a/Modules/kwinsupportinfo/main.cpp
-+++ b/Modules/kwinsupportinfo/main.cpp
+--- a/kcms/kwinsupportinfo/main.cpp
++++ b/kcms/kwinsupportinfo/main.cpp
 @@ -18,7 +18,7 @@ public:
      explicit KCMKWinSupportInfo(QObject *parent, const KPluginMetaData &data)
          : KQuickConfigModule(parent, data)
      {
--        m_outputContext = new CommandOutputContext(QLibraryInfo::location(QLibraryInfo::BinariesPath) + QStringLiteral("/qdbus"),
+-        m_outputContext = new CommandOutputContext(QLibraryInfo::path(QLibraryInfo::BinariesPath) + QStringLiteral("/qdbus"),
 +        m_outputContext = new CommandOutputContext(QStringLiteral("@qdbus@"),
                                                     {QStringLiteral("org.kde.KWin"), QStringLiteral("/KWin"), QStringLiteral("supportInformation")},
                                                     parent);
      }
-diff --git a/Modules/xserver/kcm_xserver.json b/Modules/xserver/kcm_xserver.json
+diff --git a/kcms/xserver/kcm_xserver.json b/kcms/xserver/kcm_xserver.json
 index b3f1ce24..dc610932 100644
---- a/Modules/xserver/kcm_xserver.json
-+++ b/Modules/xserver/kcm_xserver.json
+--- a/kcms/xserver/kcm_xserver.json
++++ b/kcms/xserver/kcm_xserver.json
 @@ -141,7 +141,7 @@
          "Name[zh_CN]": "X 服务器",
          "Name[zh_TW]": "X 伺服器"
@@ -36,10 +36,10 @@ index b3f1ce24..dc610932 100644
      "X-DocPath": "kinfocenter/graphical.html#xserver",
      "X-KDE-KInfoCenter-Category": "graphical_information",
      "X-KDE-Keywords": "X,X-Server,XServer,XFree86,Display,VideoCard,System Information",
-diff --git a/Modules/xserver/main.cpp b/Modules/xserver/main.cpp
+diff --git a/kcms/xserver/main.cpp b/kcms/xserver/main.cpp
 index 6d4d1e25..d39fe19e 100644
---- a/Modules/xserver/main.cpp
-+++ b/Modules/xserver/main.cpp
+--- a/kcms/xserver/main.cpp
++++ b/kcms/xserver/main.cpp
 @@ -16,7 +16,7 @@ public:
      explicit KCMXServer(QObject *parent, const KPluginMetaData &data)
          : KQuickConfigModule(parent, data)

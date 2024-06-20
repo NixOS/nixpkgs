@@ -8,12 +8,12 @@
 , stdenv
 }:
 let
-  version = "2.7.6";
+  version = "2.8.4";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
     rev = "v${version}";
-    hash = "sha256-aZ7hdAZJH1PvrX9GQLzLquzzZG3LZSKOvt7sWQhTiR8=";
+    hash = "sha256-O4s7PhSUTXoNEIi+zYASx8AgClMC5rs7se863G6w+l0=";
   };
 in
 buildGoModule {
@@ -24,10 +24,10 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     rev = "v${version}";
-    hash = "sha256-th0R3Q1nGT0q5PGOygtD1/CpJmrT5TYagrwQR4t/Fvg=";
+    hash = "sha256-CBfyqtWp3gYsYwaIxbfXO3AYaBiM7LutLC7uZgYXfkQ=";
   };
 
-  vendorHash = "sha256-ebnSehuhbCY58ctM8IRVMfNxxbJBp6ht9cbuLdGFNek=";
+  vendorHash = "sha256-1Api8bBZJ1/oYk4ZGIiwWCSraLzK9L+hsKXkFtk6iVM=";
 
   subPackages = [ "cmd/caddy" ];
 
@@ -35,6 +35,9 @@ buildGoModule {
     "-s" "-w"
     "-X github.com/caddyserver/caddy/v2.CustomVersion=${version}"
   ];
+
+  # matches upstream since v2.8.0
+  tags = [ "nobadger" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

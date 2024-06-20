@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "A JVM-based Common Lisp implementation";
+    description = "JVM-based Common Lisp implementation";
     homepage = "https://common-lisp.net/project/armedbear/";
     license = lib.licenses.gpl2Classpath;
     mainProgram = "abcl";

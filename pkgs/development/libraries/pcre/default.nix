@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.pcre.org/";
-    description = "A library for Perl Compatible Regular Expressions";
+    description = "Library for Perl Compatible Regular Expressions";
     license = lib.licenses.bsd3;
 
     longDescription = ''

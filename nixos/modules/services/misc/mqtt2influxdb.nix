@@ -125,6 +125,7 @@ in {
   options = {
     services.mqtt2influxdb = {
       enable = mkEnableOption "BigClown MQTT to InfluxDB bridge.";
+      package = mkPackageOption pkgs ["python3Packages" "mqtt2influxdb"] {};
       environmentFiles = mkOption {
         type = types.listOf types.path;
         default = [];
@@ -245,7 +246,7 @@ in {
       '';
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        ExecStart = "${cfg.package}/bin/mqtt2influxdb -dc ${finalConfig}";
+        ExecStart = "${lib.getExe cfg.package} -dc ${finalConfig}";
         RuntimeDirectory = "mqtt2influxdb";
       };
     };

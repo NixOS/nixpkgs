@@ -29,6 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   doCheck = true;
 
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  postPatch = ''
+    substituteInPlace ./build-aux/config.guess --replace-fail /usr/bin/uname uname
+  '';
+
   preCheck = ''
     # Tests have a /bin/sh dependency...
     patchShebangs tests
@@ -60,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://tukaani.org/xz/";
-    description = "A general-purpose data compression software, successor of LZMA";
+    description = "General-purpose data compression software, successor of LZMA";
 
     longDescription =
       '' XZ Utils is free general-purpose data compression software with high

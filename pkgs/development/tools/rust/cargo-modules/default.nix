@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
-  version = "0.15.5";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "regexident";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+jHanZ2/BIgNLUpMlibfUAVfA6QTPlavRci2YD1w3zE=";
+    hash = "sha256-6JFQuFISIKmR+dm2YYb4iwBjR61WrcLpfwcC67a96t4=";
   };
 
-  cargoHash = "sha256-umaKVs1fFiUKz2HIJuB+7skSwRQbG12dl9eD+et42go=";
+  cargoHash = "sha256-TiSiOMBkmH4Y5VORXZ59fl9+EwOjfWV2n/r3LTmSFxQ=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A cargo plugin for showing a tree-like overview of a crate's modules";
+    description = "Cargo plugin for showing a tree-like overview of a crate's modules";
     mainProgram = "cargo-modules";
     homepage = "https://github.com/regexident/cargo-modules";
     changelog = "https://github.com/regexident/cargo-modules/blob/${version}/CHANGELOG.md";

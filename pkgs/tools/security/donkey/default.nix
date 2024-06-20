@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   passthru.tests.version = testers.testVersion { package = donkey; };
 
   meta = with lib; {
-    description = "An alternative for S/KEY's 'key' command";
+    description = "Alternative for S/KEY's 'key' command";
     longDescription = ''
 Donkey is an alternative for S/KEY's "key" command.  The new feature that
 the original key doesn't have is print an entry for skeykeys as

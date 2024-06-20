@@ -1,26 +1,27 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, mock
-, opentelemetry-api
-, opentelemetry-sdk
-, orjson
-, pytest-asyncio
-, pytest-httpserver
-, pytestCheckHook
-, pythonOlder
-, requests
-, respx
-, setuptools
-, trustme
-, urllib3
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  mock,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  orjson,
+  pytest-asyncio,
+  pytest-httpserver,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  respx,
+  setuptools,
+  trustme,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "elastic-transport";
-  version = "8.13.0";
+  version = "8.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "elastic-transport-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KmZCaAbzbfqbPwFuF43ckwgVhZVbPvwjF7uqPKHml9Q=";
+    hash = "sha256-zxx5BvqQf5ipaOANKpThWUTsfhDkNMJqUejAWH68wpo=";
   };
 
   postPatch = ''
@@ -37,9 +38,7 @@ buildPythonPackage rec {
       --replace " --cov-report=term-missing --cov=elastic_transport" ""
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     urllib3
@@ -60,9 +59,7 @@ buildPythonPackage rec {
     trustme
   ];
 
-  pythonImportsCheck = [
-    "elastic_transport"
-  ];
+  pythonImportsCheck = [ "elastic_transport" ];
 
   disabledTests = [
     # Tests require network access

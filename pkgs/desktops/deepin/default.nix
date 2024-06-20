@@ -23,6 +23,11 @@ let
     image-editor = callPackage ./library/image-editor { };
     udisks2-qt5 = callPackage ./library/udisks2-qt5 { };
     util-dfm = callPackage ./library/util-dfm { };
+    dtk6core = callPackage ./library/dtk6core { };
+    dtk6gui = callPackage ./library/dtk6gui { };
+    dtk6widget = callPackage ./library/dtk6widget { };
+    dtk6declarative = callPackage ./library/dtk6declarative { };
+    dtk6systemsettings = callPackage ./library/dtk6systemsettings { };
 
     #### CORE
     deepin-kwin = callPackage ./core/deepin-kwin { };

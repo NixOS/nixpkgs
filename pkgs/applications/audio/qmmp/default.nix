@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qmmp";
-  version = "2.1.7";
+  version = "2.1.8";
 
   src = fetchurl {
     url = "https://qmmp.ylsoftware.com/files/qmmp/2.1/${pname}-${version}.tar.bz2";
-    hash = "sha256-5qdnvGFgFEk+00tjnVhqW29AyyjCfiFQOyYyVmAjHnM=";
+    hash = "sha256-hGphQ8epqym47C9doiSOQd3yc28XwV2UsNc7ivhaae4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];

@@ -123,7 +123,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An easy-to-use database designer and user interface";
+    description = "Easy-to-use database designer and user interface";
     homepage = "http://www.glom.org/";
     license = [ licenses.lgpl2 licenses.gpl2 ];
     maintainers = teams.gnome.members;

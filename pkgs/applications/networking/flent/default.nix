@@ -46,7 +46,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "The FLExible Network Tester";
+    description = "FLExible Network Tester";
     homepage = "https://flent.org";
     license = licenses.gpl3;
 

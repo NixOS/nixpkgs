@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    description = "The GNU Portable Threads library";
+    description = "GNU Portable Threads library";
     mainProgram = "pth-config";
     homepage = "https://www.gnu.org/software/pth";
     license = licenses.lgpl21Plus;

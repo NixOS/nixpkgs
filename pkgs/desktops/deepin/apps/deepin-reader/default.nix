@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A simple memo software with texts and voice recordings";
+    description = "Simple memo software with texts and voice recordings";
     mainProgram = "deepin-reader";
     homepage = "https://github.com/linuxdeepin/deepin-reader";
     license = licenses.gpl3Plus;

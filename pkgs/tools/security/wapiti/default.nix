@@ -1,57 +1,59 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
   version = "3.1.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
-    repo = pname;
+    repo = "wapiti";
     rev = "refs/tags/${version}";
     hash = "sha256-2ssbczUa4pTA5Fai+sK1hES8skJMIHxa/R2hNIiEVLs=";
   };
 
   postPatch = ''
-    # Ignore pinned versions
-    sed -i -e "s/==[0-9.]*//;s/>=[0-9.]*//" pyproject.toml
-
     # Remove code coverage checking
     substituteInPlace pyproject.toml \
       --replace "--cov --cov-report=xml" ""
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-    wheel
-  ];
+  pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    aiocache
-    aiohttp
-    aiosqlite
-    arsenic
-    beautifulsoup4
-    browser-cookie3
-    dnspython
-    h11
-    httpcore
-    httpx
-    httpx-ntlm
-    loguru
-    mako
-    markupsafe
-    mitmproxy
-    pyasn1
-    six
-    sqlalchemy
-    tld
-    yaswfp
-  ] ++ httpx.optional-dependencies.brotli
-  ++ httpx.optional-dependencies.socks;
+  build-system = with python3.pkgs; [ setuptools ];
+
+  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
+
+  dependencies =
+    with python3.pkgs;
+    [
+      aiocache
+      aiohttp
+      aiosqlite
+      arsenic
+      beautifulsoup4
+      browser-cookie3
+      dnspython
+      h11
+      httpcore
+      httpx
+      httpx-ntlm
+      loguru
+      mako
+      markupsafe
+      mitmproxy
+      pyasn1
+      six
+      sqlalchemy
+      tld
+      yaswfp
+    ]
+    ++ httpx.optional-dependencies.brotli
+    ++ httpx.optional-dependencies.socks;
 
   __darwinAllowLocalNetworking = true;
 
@@ -138,9 +140,7 @@ python3.pkgs.buildPythonApplication rec {
     "tests/attack/test_mod_ssl.py"
   ];
 
-  pythonImportsCheck = [
-    "wapitiCore"
-  ];
+  pythonImportsCheck = [ "wapitiCore" ];
 
   meta = with lib; {
     description = "Web application vulnerability scanner";
@@ -154,7 +154,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://wapiti-scanner.github.io/";
     changelog = "https://github.com/wapiti-scanner/wapiti/blob/${version}/doc/ChangeLog_Wapiti";
-    license = with licenses; [ gpl2Only ];
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
   };
 }

@@ -38,7 +38,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/cvtienhoven/graylog-plugin-aggregates";
-      description = "A plugin that enables users to execute term searches and get notified when the given criteria are met";
+      description = "Plugin that enables users to execute term searches and get notified when the given criteria are met";
     };
   };
   auth_sso = glPlugin rec {
@@ -114,7 +114,7 @@ in {
     '';
     meta = {
       homepage = "https://github.com/Graylog2/graylog-plugin-integrations";
-      description = "A collection of open source Graylog integrations that will be released together";
+      description = "Collection of open source Graylog integrations that will be released together";
     };
   };
   internal-logs = glPlugin rec {
@@ -140,7 +140,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-ipanonymizer";
-      description = "A graylog-server plugin that replaces the last octet of IP addresses in messages with xxx";
+      description = "Graylog-server plugin that replaces the last octet of IP addresses in messages with xxx";
     };
   };
   jabber = glPlugin rec {
@@ -166,7 +166,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-metrics";
-      description = "An output plugin for integrating Graphite, Ganglia and StatsD with Graylog";
+      description = "Output plugin for integrating Graphite, Ganglia and StatsD with Graylog";
     };
   };
   mongodb-profiler = glPlugin rec {
@@ -192,7 +192,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-pagerduty";
-      description = "An alarm callback plugin for integrating PagerDuty into Graylog";
+      description = "Alarm callback plugin for integrating PagerDuty into Graylog";
     };
   };
   redis = glPlugin rec {
@@ -285,7 +285,7 @@ in {
     };
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-twiliosms";
-      description = "An alarm callback plugin for integrating the Twilio SMS API into Graylog";
+      description = "Alarm callback plugin for integrating the Twilio SMS API into Graylog";
     };
   };
   twitter = glPlugin rec {

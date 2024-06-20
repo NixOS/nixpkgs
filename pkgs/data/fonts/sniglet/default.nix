@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A fun rounded display face that’s great for headlines";
+    description = "Fun rounded display face that’s great for headlines";
     longDescription = ''
       A rounded display face that’s great for headlines. It comes with a full
       character set, so you can type in Icelandic or even French!

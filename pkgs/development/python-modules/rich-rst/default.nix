@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "rich-rst";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wasi-master";
     repo = "rich-rst";
     rev = "refs/tags/v${version}";
-    hash = "sha256-A3SPbu1N5X55c32S8z8UPpmniJT+mdqfb1+zQEJMA5k=";
+    hash = "sha256-jbzGTEth5Qoc0ORFCS3sZMrGUpoQQOVsd+l3/zMWy20=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "rich_rst" ];
 
   meta = with lib; {
-    description = "A beautiful reStructuredText renderer for rich";
+    description = "Beautiful reStructuredText renderer for rich";
     homepage = "https://github.com/wasi-master/rich-rst";
     license = licenses.mit;
     maintainers = with maintainers; [ joelkoen ];

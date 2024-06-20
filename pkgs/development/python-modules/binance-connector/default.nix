@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodome
-, pythonOlder
-, requests
-, websocket-client
-# dependencies for tests
-, pytest-cov
-, pytest
-, sure
-, responses
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodome,
+  pythonOlder,
+  requests,
+  websocket-client,
+  # dependencies for tests
+  pytest-cov,
+  pytest,
+  sure,
+  responses,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
 
   # pytestCheckHook attempts to run examples directory, which requires
   # network access
-  disabledTestPaths = [
-    "examples/"
-  ];
+  disabledTestPaths = [ "examples/" ];
 
   pythonImportsCheck = [
     "binance.spot"

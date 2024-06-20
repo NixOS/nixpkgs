@@ -1,13 +1,14 @@
-{ lib
-, absl-py
-, buildPythonPackage
-, flit-core
-, chex
-, fetchFromGitHub
-, jaxlib
-, numpy
-, callPackage
-, pythonOlder
+{
+  lib,
+  absl-py,
+  buildPythonPackage,
+  flit-core,
+  chex,
+  fetchFromGitHub,
+  jaxlib,
+  numpy,
+  callPackage,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -29,13 +30,9 @@ buildPythonPackage rec {
     "testsout"
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  buildInputs = [
-    jaxlib
-  ];
+  buildInputs = [ jaxlib ];
 
   propagatedBuildInputs = [
     absl-py
@@ -48,9 +45,7 @@ buildPythonPackage rec {
     cp -R examples $testsout/examples
   '';
 
-  pythonImportsCheck = [
-    "optax"
-  ];
+  pythonImportsCheck = [ "optax" ];
 
   # check in passthru.tests.pytest to escape infinite recursion with flax
   doCheck = false;

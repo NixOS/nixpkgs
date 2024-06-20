@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, hatchling
-, pythonRelaxDepsHook
-, numpy
-, typeguard
-, typing-extensions
-, cloudpickle
-, equinox
-, ipython
-, jax
-, jaxlib
-, pytestCheckHook
-, tensorflow
-, torch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  hatchling,
+  pythonRelaxDepsHook,
+  numpy,
+  typeguard,
+  typing-extensions,
+  cloudpickle,
+  equinox,
+  ipython,
+  jax,
+  jaxlib,
+  pytestCheckHook,
+  tensorflow,
+  torch,
 }:
 
 let
@@ -43,9 +44,7 @@ let
       typing-extensions
     ];
 
-    pythonRelaxDeps = [
-      "typeguard"
-    ];
+    pythonRelaxDeps = [ "typeguard" ];
 
     nativeCheckInputs = [
       cloudpickle
@@ -78,4 +77,5 @@ let
       maintainers = with maintainers; [ GaetanLepage ];
     };
   };
- in self
+in
+self

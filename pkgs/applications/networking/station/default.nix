@@ -19,8 +19,6 @@ in appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
-  multiArch = false;
-  extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/browserx.desktop $out/share/applications/browserx.desktop
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/browserx.png \
@@ -30,7 +28,7 @@ in appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
-    description = "A single place for all of your web applications";
+    description = "Single place for all of your web applications";
     homepage = "https://getstation.com";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];

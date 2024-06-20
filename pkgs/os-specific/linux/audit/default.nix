@@ -1,11 +1,9 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , autoreconfHook
 , bash
 , buildPackages
-, libtool
 , linuxHeaders
 , python3
 , swig

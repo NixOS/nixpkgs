@@ -47,7 +47,6 @@ python3Packages.buildPythonApplication {
     setuptools
     truststore
     yarl
-    zipstream
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];

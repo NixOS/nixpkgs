@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, fetchpatch
 , wrapQtAppsHook
 , python3
 , zbar
@@ -14,7 +13,7 @@
 }:
 
 let
-  version = "4.5.4";
+  version = "4.5.5";
 
   python = python3.override {
     self = python;
@@ -47,7 +46,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-fDu2PlEQOF7ftlS6dYw15S2XiAx+D/bng4zC9ELj6uk=";
+    sha256 = "sha256-CbhI/q+zjk9odxuvdzpogi046FqkedJooiQwS+WAkJ8=";
 
     postFetch = ''
       mv $out ./all
@@ -63,7 +62,7 @@ python.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-lDuwXhOjcbCx8x/oIoigrklDwCbhn1trf5lDf/X/1Qc=";
+    sha256 = "1jiagz9avkbd158pcip7p4wz0pdsxi94ndvg5p8afvshb32aqwav";
   };
 
   postUnpack = ''
@@ -99,7 +98,7 @@ python.pkgs.buildPythonApplication {
     keepkey
     trezor
     bitbox02
-    cbor
+    cbor2
     pyserial
   ] ++ lib.optionals enableQt [
     pyqt5
@@ -110,30 +109,7 @@ python.pkgs.buildPythonApplication {
     pyqt6
   ];
 
-  patches = [
-    # aiorpcx 0.23.1 compatibility
-    # Note: this patches `/run_electrum`.
-    # In the source repo, `/electrum/electrum`
-    # is a symlink to `../run_electrum`,
-    # so that path would also be affected by the patch.
-    # However, in the distribution tarball used here,
-    # `/electrum/electrum` is simply an exact copy of
-    # `/run_electrum` and is thereby *not* affected.
-    # So we have to manually copy the patched `/run_electrum`
-    # over `/electrum/electrum` after the patching (see below).
-    # XXX remove the copy command in `postPatch`
-    # as soon as the patch itself is removed!
-    (fetchpatch {
-      url = "https://github.com/spesmilo/electrum/commit/5f95d919dfa9868eaf82889903b94faa8c6443e0.patch";
-      hash = "sha256-cEkduLsL6A8qPhXS2KPQWzVtkQPYQhHSbuwQ2SnanHw=";
-    })
-  ];
-
   postPatch = ''
-    # copy the patched `/run_electrum` over `/electrum/electrum`
-    # so the aiorpcx compatibility patch is used
-    cp run_electrum electrum/electrum
-
     # make compatible with protobuf4 by easing dependencies ...
     substituteInPlace ./contrib/requirements/requirements.txt \
       --replace "protobuf>=3.20,<4" "protobuf>=3.20"

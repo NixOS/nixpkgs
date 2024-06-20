@@ -1,11 +1,12 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, zlib-ng
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  zlib-ng,
 }:
 
 buildPythonPackage rec {
@@ -27,22 +28,16 @@ buildPythonPackage rec {
       --replace-fail " --cov=aiohttp_zlib_ng --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp
     zlib-ng
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "aiohttp_zlib_ng"
-  ];
+  pythonImportsCheck = [ "aiohttp_zlib_ng" ];
 
   meta = with lib; {
     description = "Enable zlib_ng on aiohttp";

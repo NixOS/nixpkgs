@@ -15,7 +15,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A better kubectl explain with the fuzzy finder";
+    description = "Better kubectl explain with the fuzzy finder";
     mainProgram = "kubectl-explore";
     homepage = "https://github.com/keisku/kubectl-explore";
     changelog = "https://github.com/keisku/kubectl-explore/releases/tag/v${version}";

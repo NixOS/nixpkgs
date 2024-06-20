@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pyusb }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyusb,
+}:
 
 buildPythonPackage rec {
   pname = "blinkstick";
@@ -23,6 +28,9 @@ buildPythonPackage rec {
     mainProgram = "blinkstick";
     homepage = "https://github.com/arvydas/blinkstick-python";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ np perstark ];
+    maintainers = with lib.maintainers; [
+      np
+      perstark
+    ];
   };
 }

@@ -28,7 +28,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests.prometheus-exporters) graphite; };
 
   meta = {
-    description = "An exporter for metrics exported in the Graphite plaintext protocol";
+    description = "Exporter for metrics exported in the Graphite plaintext protocol";
     homepage = "https://github.com/prometheus/graphite_exporter";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.misterio77 ];

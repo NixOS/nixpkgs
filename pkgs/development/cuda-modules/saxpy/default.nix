@@ -18,12 +18,19 @@ let
     setupCudaHook
     ;
   inherit (lib) getDev getLib getOutput;
+  fs = lib.fileset;
 in
 backendStdenv.mkDerivation {
   pname = "saxpy";
   version = "unstable-2023-07-11";
 
-  src = ./.;
+  src = fs.toSource {
+    root = ./.;
+    fileset = fs.unions [
+      ./CMakeLists.txt
+      ./saxpy.cu
+    ];
+  };
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -52,7 +59,7 @@ backendStdenv.mkDerivation {
   ];
 
   meta = rec {
-    description = "A simple (Single-precision AX Plus Y) FindCUDAToolkit.cmake example for testing cross-compilation";
+    description = "Simple (Single-precision AX Plus Y) FindCUDAToolkit.cmake example for testing cross-compilation";
     license = lib.licenses.mit;
     maintainers = lib.teams.cuda.members;
     platforms = lib.platforms.unix;

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, flit-core
-, hypothesis
-, inform
-, nestedtext
-, pytestCheckHook
-, pythonOlder
-, quantiphy
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  flit-core,
+  hypothesis,
+  inform,
+  nestedtext,
+  pytestCheckHook,
+  pythonOlder,
+  quantiphy,
+  voluptuous,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-lNqSmEmzuRGdXs/4mwKSh7yDGHnAykpIDIR+abbLCns=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    inform
-  ];
+  propagatedBuildInputs = [ inform ];
 
   nativeCheckInputs = [
     docopt
@@ -57,15 +54,15 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    runTests = nestedtext.overrideAttrs (_: { doCheck = true; });
+    runTests = nestedtext.overrideAttrs (_: {
+      doCheck = true;
+    });
   };
 
-  pythonImportsCheck = [
-    "nestedtext"
-  ];
+  pythonImportsCheck = [ "nestedtext" ];
 
   meta = with lib; {
-    description = "A human friendly data format";
+    description = "Human friendly data format";
     longDescription = ''
       NestedText is a file format for holding data that is to be entered,
       edited, or viewed by people. It allows data to be organized into a nested

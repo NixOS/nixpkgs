@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, wheel
-, sortedcontainers
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  sortedcontainers,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -27,17 +28,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  dependencies = [
-    sortedcontainers
-  ];
+  dependencies = [ sortedcontainers ];
 
-  pythonImportsCheck = [
-    "portion"
-  ];
+  pythonImportsCheck = [ "portion" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Portion, a Python library providing data structure and operations for intervals";

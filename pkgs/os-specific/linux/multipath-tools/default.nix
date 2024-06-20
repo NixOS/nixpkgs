@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , coreutils
 
 , perl
@@ -21,31 +22,29 @@
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
-  version = "0.9.6";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "opensvc";
     repo = "multipath-tools";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-X4sAMGn4oBMY3cQkVj1dMcrDF7FgMl8SbZeUnCCOY6Q=";
+    sha256 = "sha256-4cby19BjgnmWf7klK1sBgtZnyvo7q3L1uyVPlVoS+uk=";
   };
+
+  patches = [
+    # Backport build fix for musl libc 1.2.5
+    (fetchpatch {
+      url = "https://github.com/openSUSE/multipath-tools/commit/e5004de8296cd596aeeac0a61b901e98cf7a69d2.patch";
+      hash = "sha256-3Qt8zfrWi9aOdqMObZQaNAaXDmjhvSYrXK7qycC9L1Q=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace create-config.mk \
-      --replace /bin/echo ${coreutils}/bin/echo
+      --replace-fail /bin/echo ${coreutils}/bin/echo
 
-    substituteInPlace multipathd/multipathd.service \
-      --replace /sbin/multipathd "$out/bin/multipathd"
-
-    sed -i -re '
-      s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
-    ' libmultipath/defaults.h
-    sed -i -e 's,\$(DESTDIR)/\(usr/\)\?,$(prefix)/,g' \
-      kpartx/Makefile libmpathpersist/Makefile
-    sed -i -e "s,GZIP,GZ," \
-      $(find * -name Makefile\*)
-
-    sed '1i#include <assert.h>' -i tests/{util,vpd}.c
+    substituteInPlace multipathd/multipathd.service.in \
+      --replace-fail /sbin/multipathd "$out/bin/multipathd"
   '';
 
   nativeBuildInputs = [
@@ -76,7 +75,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   preCheck = ''
     # skip test attempting to access /sys/dev/block
-    substituteInPlace tests/Makefile --replace ' devt ' ' '
+    substituteInPlace tests/Makefile --replace-fail ' devt ' ' '
   '';
   nativeCheckInputs = [ cmocka ];
 

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, cssselect
-, fetchPypi
-, jmespath
-, lxml
-, packaging
-, psutil
-, pytestCheckHook
-, pythonOlder
-, w3lib
+{
+  lib,
+  buildPythonPackage,
+  cssselect,
+  fetchPypi,
+  jmespath,
+  lxml,
+  packaging,
+  psutil,
+  pytestCheckHook,
+  pythonOlder,
+  w3lib,
 }:
 
 buildPythonPackage rec {
@@ -41,9 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "parsel"
-  ];
+  pythonImportsCheck = [ "parsel" ];
 
   meta = with lib; {
     description = "Python library to extract data from HTML and XML using XPath and CSS selectors";

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0y2q46i838gha58p95vcv5r5i14il1kv86k35s30ncfibijgp0lc";
 
   meta = with lib; {
-    description = "A tool to parallelize shell commands";
+    description = "Tool to parallelize shell commands";
     mainProgram = "async";
     longDescription = ''
       `async` is a tool to run shell commands in parallel and is designed to be

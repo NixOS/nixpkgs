@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pkg-config
-, setuptools
-, igraph
-, texttable
-, cairocffi
-, matplotlib
-, plotly
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pkg-config,
+  setuptools,
+  igraph,
+  texttable,
+  cairocffi,
+  matplotlib,
+  plotly,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,13 +37,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [
-    igraph
-  ];
+  buildInputs = [ igraph ];
 
-  propagatedBuildInputs = [
-    texttable
-  ];
+  propagatedBuildInputs = [ texttable ];
 
   passthru.optional-dependencies = {
     cairo = [ cairocffi ];
@@ -73,6 +70,9 @@ buildPythonPackage rec {
     homepage = "https://igraph.org/python/";
     changelog = "https://github.com/igraph/python-igraph/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
+    maintainers = with maintainers; [
+      MostAwesomeDude
+      dotlambda
+    ];
   };
 }

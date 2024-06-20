@@ -7,7 +7,7 @@
   stdenv
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "lcsync";
+  pname = "lcsync";
   version = "0.3.0";
 
   src = fetchFromGitea {

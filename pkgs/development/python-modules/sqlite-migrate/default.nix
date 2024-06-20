@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, sqlite-utils
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  sqlite-utils,
 }:
 
 buildPythonPackage rec {
@@ -19,24 +20,16 @@ buildPythonPackage rec {
     hash = "sha256-wztAqe3TW0SQ4JX1XPWeA4KNJci5c3fNih97cmlPwRE=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    sqlite-utils
-  ];
+  propagatedBuildInputs = [ sqlite-utils ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "sqlite_migrate"
-  ];
+  pythonImportsCheck = [ "sqlite_migrate" ];
 
   meta = with lib; {
-    description = "A simple database migration system for SQLite, based on sqlite-utils";
+    description = "Simple database migration system for SQLite, based on sqlite-utils";
     homepage = "https://github.com/simonw/sqlite-migrate";
     changelog = "https://github.com/simonw/sqlite-migrate/releases/tag/${version}";
     license = licenses.asl20;

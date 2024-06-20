@@ -187,7 +187,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
-    description = "A set of libraries for development of security-enabled client and server applications";
+    description = "Set of libraries for development of security-enabled client and server applications";
     changelog = "https://github.com/nss-dev/nss/blob/master/doc/rst/releases/nss_${underscoreVersion}.rst";
     maintainers = with maintainers; [ hexa ajs124 ];
     license = licenses.mpl20;

@@ -1,11 +1,12 @@
-{ lib
-, blockdiag
-, buildPythonPackage
-, fetchFromGitHub
-, pynose
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  blockdiag,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pynose,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,22 +23,16 @@ buildPythonPackage rec {
     hash = "sha256-WmprkHOgvlsOIg8H77P7fzEqxGnj6xaL7Df7urRkg3o=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    blockdiag
-  ];
+  propagatedBuildInputs = [ blockdiag ];
 
   nativeCheckInputs = [
     pynose
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "src/actdiag/tests/"
-  ];
+  pytestFlagsArray = [ "src/actdiag/tests/" ];
 
   disabledTests = [
     # AttributeError: 'TestRstDirectives' object has no attribute 'assertRegexpMatches'
@@ -45,9 +40,7 @@ buildPythonPackage rec {
     "noviewbox"
   ];
 
-  pythonImportsCheck = [
-    "actdiag"
-  ];
+  pythonImportsCheck = [ "actdiag" ];
 
   meta = with lib; {
     description = "Generate activity-diagram image from spec-text file (similar to Graphviz)";

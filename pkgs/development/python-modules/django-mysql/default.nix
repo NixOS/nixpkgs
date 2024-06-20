@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, django
+  # dependencies
+  django,
 
-# tests
-, pytest-django
-, pytestCheckHook
+  # tests
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +26,9 @@ buildPythonPackage rec {
     hash = "sha256-hIvkLLv9R23u+JC6t/zwbMvmgLMstYp0ytuSqNiohJg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    django
-  ];
+  dependencies = [ django ];
 
   doCheck = false; # requires mysql/mariadb server
 
@@ -42,9 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "django_mysql"
-  ];
+  pythonImportsCheck = [ "django_mysql" ];
 
   meta = with lib; {
     changelog = "https://github.com/adamchainz/django-mysql/blob/${version}/docs/changelog.rst";

@@ -10,7 +10,7 @@ mkXfceDerivation {
   buildInputs = [ gtk3 libnotify libpulseaudio keybinder3 xfconf ];
 
   meta = with lib; {
-    description = "A volume keys control daemon for Xfce using pulseaudio";
+    description = "Volume keys control daemon for Xfce using pulseaudio";
     mainProgram = "xfce4-volumed-pulse";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar ] ++ teams.xfce.members;

@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "7.3.4";
+  version = "7.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rFxCeQTCQSpg0LQYyOxhk150KOUyV9PXdXo1mOA0KPw=";
+    hash = "sha256-ATeSMS8WaJS/2CaeNQgaK/6zyQBw07+6YYTZdhZPJug=";
   };
 
   build-system = [ poetry-core ];

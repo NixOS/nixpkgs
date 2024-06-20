@@ -15,8 +15,6 @@ trivialBuild rec {
     hash = "sha256-/8T1VTYkKUxlNWXuuS54S5jpl4UxJBbgSuWc17a/VyM=";
   };
 
-  buildInputs = [ emacs ];
-
   meta = with lib; {
     homepage = "http://emacswiki.org/emacs/RectangleMark";
     description = "Mark a rectangle of text with highlighting";

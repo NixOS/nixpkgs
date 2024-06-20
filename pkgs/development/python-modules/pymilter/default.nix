@@ -1,14 +1,15 @@
-{ lib
-, python
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, libmilter
-, bsddb3
-, pydns
-, iana-etc
-, libredirect
-, pyasyncore
+{
+  lib,
+  python,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  libmilter,
+  bsddb3,
+  pydns,
+  iana-etc,
+  libredirect,
+  pyasyncore,
 }:
 
 buildPythonPackage rec {
@@ -25,11 +26,15 @@ buildPythonPackage rec {
 
   buildInputs = [ libmilter ];
   nativeCheckInputs = [ pyasyncore ];
-  propagatedBuildInputs = [ bsddb3 pydns ];
-  patches = [ (fetchpatch {
-    name = "Remove-calls-to-the-deprecated-method-assertEquals";
-    url = "https://github.com/sdgathman/pymilter/pull/57.patch";
-    hash = "sha256-/5LlDR15nMR3l7rkVjT3w4FbDTFAAgNdERWlPNL2TVg=";
+  propagatedBuildInputs = [
+    bsddb3
+    pydns
+  ];
+  patches = [
+    (fetchpatch { # https://github.com/sdgathman/pymilter/pull/57
+      name = "Remove-calls-to-the-deprecated-method-assertEquals";
+      url = "https://github.com/sdgathman/pymilter/commit/1ead9028fc63ae3ec6ea3b0c438e6ed088a2b20e.patch";
+      hash = "sha256-/5LlDR15nMR3l7rkVjT3w4FbDTFAAgNdERWlPNL2TVg=";
     })
   ];
 

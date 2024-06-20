@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = callPackage ./update.nix {};
 
   meta = with lib; {
-    description = "A simple and private notes app";
+    description = "Simple and private notes app";
     longDescription = ''
       Standard Notes is a private notes app that features unmatched simplicity,
       end-to-end encryption, powerful extensions, and open-source applications.

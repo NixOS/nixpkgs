@@ -30,7 +30,7 @@
 
 let
 
-  jbr = jetbrains.jdk-no-jcef;
+  jbr = jetbrains.jdk-no-jcef-17;
 
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
@@ -100,7 +100,7 @@ let
     sourceRoot = "source/native/fsNotifier/linux";
     buildPhase = ''
       runHook preBuild
-      cc -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildVer}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
+      $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildVer}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
       runHook postBuild
     '';
     installPhase = ''

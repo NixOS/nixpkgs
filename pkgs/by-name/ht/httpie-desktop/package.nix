@@ -13,7 +13,7 @@ appimageTools.wrapType2 rec {
   };
 
   meta = with lib; {
-    description = "Cross-platform API testing client for humans. Painlessly test REST, GraphQL, and HTTP APIs.";
+    description = "Cross-platform API testing client for humans. Painlessly test REST, GraphQL, and HTTP APIs";
     homepage = "https://github.com/httpie/desktop";
     license = licenses.unfree;
     maintainers = with maintainers; [ luftmensch-luftmensch ];

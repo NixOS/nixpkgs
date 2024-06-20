@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, celery
-, humanize
-, pytz
-, tornado
-, prometheus-client
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  celery,
+  humanize,
+  pytz,
+  tornado,
+  prometheus-client,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -35,13 +36,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "flower"
-  ];
+  pythonImportsCheck = [ "flower" ];
 
   meta = with lib; {
     description = "Real-time monitor and web admin for Celery distributed task queue";

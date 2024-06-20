@@ -30,7 +30,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/nvarner.typst-lsp/changelog";
-    description = "A VSCode extension for providing a language server for Typst";
+    description = "VSCode extension for providing a language server for Typst";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=nvarner.typst-lsp";
     homepage = "https://github.com/nvarner/typst-lsp";
     license = lib.licenses.mit;

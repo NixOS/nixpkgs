@@ -1,4 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, libpulseaudio, glibc, substituteAll, stdenv, pulseaudio, unittestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  libpulseaudio,
+  glibc,
+  substituteAll,
+  stdenv,
+  pulseaudio,
+  unittestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "pulsectl";
@@ -19,11 +29,12 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonImportsCheck = [
-    "pulsectl"
-  ];
+  pythonImportsCheck = [ "pulsectl" ];
 
-  nativeCheckInputs = [ unittestCheckHook pulseaudio ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    pulseaudio
+  ];
 
   preCheck = ''
     export HOME=$TMPDIR

@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [ "--with-inotify" ];
 
   meta = {
-    description = "A workspace manager for GNUstep";
+    description = "Workspace manager for GNUstep";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "GWorkspace";

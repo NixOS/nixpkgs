@@ -12,15 +12,16 @@ index 525693b6c10ab..245491e137d39 100644
      "ENABLE_MEDIA_FOUNDATION_WIDEVINE_CDM=$enable_media_foundation_widevine_cdm",
    ]
 diff --git a/third_party/widevine/cdm/widevine.gni b/third_party/widevine/cdm/widevine.gni
-index 58f073ca562ca..4b242c2618dfb 100644
+index 8b97b7a57419e..69fe548ec2845 100644
 --- a/third_party/widevine/cdm/widevine.gni
 +++ b/third_party/widevine/cdm/widevine.gni
-@@ -41,8 +41,7 @@ enable_library_widevine_cdm =
- # Widevine CDM can be deployed as a component. Currently only supported on
- # desktop platforms. The CDM can be bundled regardless whether
- # it's a component. See below.
+@@ -42,9 +42,7 @@ enable_library_widevine_cdm =
+ # desktop platforms. Not enabled for lacros (as it is changing to use the
+ # ash updated version). The CDM can be bundled regardless whether it's a
+ # component. See below.
 -enable_widevine_cdm_component =
--    enable_library_widevine_cdm && (is_win || is_mac || is_linux || is_chromeos)
+-    enable_library_widevine_cdm &&
+-    (is_win || is_mac || is_linux || is_chromeos_ash)
 +enable_widevine_cdm_component = false
  
  # Enable (Windows) Media Foundation Widevine CDM component.

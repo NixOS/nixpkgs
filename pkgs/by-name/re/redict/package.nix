@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitea, fetchurl, fetchpatch, lua, jemalloc, pkg-config, nixosTests
+{ lib, stdenv, fetchFromGitea, fetchurl, lua, jemalloc, pkg-config, nixosTests
 , tcl, which, ps, getconf
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 # dependency ordering is broken at the moment when building with openssl
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://redict.io";
-    description = "A distributed key/value store";
+    description = "Distributed key/value store";
     license = licenses.lgpl3Only;
     platforms = platforms.all;
     changelog = "https://codeberg.org/redict/redict/releases/tag/${finalAttrs.version}";

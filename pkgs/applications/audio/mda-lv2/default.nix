@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://drobilla.net/software/mda-lv2.html";
-    description = "An LV2 port of the MDA plugins by Paul Kellett";
+    description = "LV2 port of the MDA plugins by Paul Kellett";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

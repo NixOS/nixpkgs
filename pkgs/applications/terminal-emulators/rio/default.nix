@@ -51,16 +51,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.36";
+  version = "0.0.39";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-QCQFFnlKD5olaGjRwDlj5/EBV6Qy/bFAZOQRtCSPamc=";
+    hash = "sha256-pnU2wxgopHMWgJ7JGdO2P/MCfxqCY7MTEE39qtD0XKw=";
   };
 
-  cargoHash = "sha256-Ea0scCbM9mfxC1YL3HCoBk93eVW20bj2mJyauyDSzT8=";
+  cargoHash = "sha256-GwI2zHX1YcR4pC+qtkDoxx2U+zipbqqxsCI8/XNg2BU=";
 
   nativeBuildInputs = [
     ncurses
@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A hardware-accelerated GPU terminal emulator powered by WebGPU";
+    description = "Hardware-accelerated GPU terminal emulator powered by WebGPU";
     homepage = "https://raphamorim.io/rio";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tornax otavio oluceps ];

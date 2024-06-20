@@ -7,11 +7,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    hash = "sha256-eoImAByJFtAEaPYn02XerR/0+dXO8IdhnTEDCMKmlJI=";
+    hash = "sha256-RS5/1Ci2hqp1LP65viuU+fz3upqyLgrlcKh83PeCJC4=";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
-    description = "A new unix shell - Python version";
+    description = "New unix shell - Python version";
     homepage = "https://www.oilshell.org/";
 
     license = with lib.licenses; [

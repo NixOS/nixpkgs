@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/pragtical/pragtical/blob/${finalAttrs.src.rev}/changelog.md";
-    description = "A practical and pragmatic code editor";
+    description = "Practical and pragmatic code editor";
     homepage = "https://pragtical.dev";
     license = lib.licenses.mit;
     mainProgram = "pragtical";

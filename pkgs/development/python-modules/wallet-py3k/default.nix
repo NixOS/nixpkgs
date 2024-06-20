@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, openssl
-, setuptools
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  openssl,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -24,19 +25,13 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    six
-  ];
+  dependencies = [ six ];
 
   doCheck = false; # no tests
 
-  pythonImportsCheck = [
-    "wallet"
-  ];
+  pythonImportsCheck = [ "wallet" ];
 
   meta = with lib; {
     description = "Passbook file generator";

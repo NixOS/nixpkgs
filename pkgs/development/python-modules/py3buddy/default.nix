@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python
-, pyusb
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python,
+  pyusb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

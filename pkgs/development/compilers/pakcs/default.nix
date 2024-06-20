@@ -74,7 +74,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "http://www.informatik.uni-kiel.de/~pakcs/";
-    description = "An implementation of the multi-paradigm declarative language Curry";
+    description = "Implementation of the multi-paradigm declarative language Curry";
     license = licenses.bsd3;
 
     longDescription = ''

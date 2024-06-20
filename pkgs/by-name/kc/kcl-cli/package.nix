@@ -5,12 +5,12 @@
 
 buildGoModule rec {
   pname = "kcl-cli";
-  version = "0.8.8";
+  version = "0.8.9";
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-Bk/sCNMDupdY/YyKT+VoPIzEfjFDa5z9pevcCPnTX8U=";
+    hash = "sha256-slU3n7YCV5VfvXArzlcITb9epdu/gyXlAWq9KLjGdJA=";
   };
   vendorHash = "sha256-Xv8Tfq9Kb1xGFCWZQwBFDX9xZW9j99td/DUb7jBtkpE=";
   ldflags = [
@@ -18,7 +18,7 @@ buildGoModule rec {
   ];
   subPackages = [ "cmd/kcl" ];
   meta = with lib; {
-    description = "A command line interface for KCL programming language";
+    description = "Command line interface for KCL programming language";
     homepage = "https://github.com/kcl-lang/cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ peefy ];

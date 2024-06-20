@@ -1,16 +1,17 @@
-{ lib
-, atomicwrites
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  atomicwrites,
+  buildPythonPackage,
+  fetchFromGitHub,
   #, hatchling
-, ruamel-yaml
-, poetry-core
-, pytest
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, testfixtures
+  ruamel-yaml,
+  poetry-core,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  testfixtures,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
       --replace poetry.masonry.api poetry.core.masonry.api
   '';
 
-  pythonRelaxDeps = [
-    "testfixtures"
-  ];
+  pythonRelaxDeps = [ "testfixtures" ];
 
   nativeBuildInputs = [
     # hatchling used for > 0.2.2
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     atomicwrites
@@ -58,9 +55,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pytest_golden"
-  ];
+  pythonImportsCheck = [ "pytest_golden" ];
 
   meta = with lib; {
     description = "Plugin for pytest that offloads expected outputs to data files";

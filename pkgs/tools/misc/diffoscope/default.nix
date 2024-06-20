@@ -96,17 +96,20 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "266";
+  version = "269";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-whEFBUFl8yFsZOtOWHbDm6Tx6i6UJYmQ5Fz7svLqGgs=";
+    hash = "sha256-L2UygmcTXgcc9l8ALpOS52+2dhsO42733nlc1Hzl8L8=";
   };
 
   outputs = [
     "out"
     "man"
   ];
+
+  # https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/378
+  sourceRoot = "./-269";
 
   patches = [
     ./ignore_links.patch

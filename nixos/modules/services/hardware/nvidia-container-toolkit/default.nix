@@ -69,14 +69,18 @@
     virtualisation.docker.daemon.settings = lib.mkIf
       (config.hardware.nvidia-container-toolkit.enable &&
        (lib.versionAtLeast config.virtualisation.docker.package.version "25")) {
-      features.cdi = true;
-    };
+         features.cdi = true;
+       };
 
     hardware.nvidia-container-toolkit.mounts = let
       nvidia-driver = config.hardware.nvidia.package;
     in (lib.mkMerge [
       [{ hostPath = pkgs.addDriverRunpath.driverLink;
          containerPath = pkgs.addDriverRunpath.driverLink; }
+       { hostPath = "${lib.getLib nvidia-driver}/etc";
+         containerPath = "${lib.getLib nvidia-driver}/etc"; }
+       { hostPath = "${lib.getLib nvidia-driver}/share";
+         containerPath = "${lib.getLib nvidia-driver}/share"; }
        { hostPath = "${lib.getLib pkgs.glibc}/lib";
          containerPath = "${lib.getLib pkgs.glibc}/lib"; }
        { hostPath = "${lib.getLib pkgs.glibc}/lib64";

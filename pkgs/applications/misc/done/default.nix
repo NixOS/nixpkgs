@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The ultimate task management solution for seamless organization and efficiency";
+    description = "Ultimate task management solution for seamless organization and efficiency";
     homepage = "https://done.edfloreshz.dev/";
     changelog = "https://github.com/done-devs/done/blob/${src.rev}/CHANGES.md";
     license = licenses.mpl20;

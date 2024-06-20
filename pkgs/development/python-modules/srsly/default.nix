@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, cython_0
-, catalogue
-, mock
-, numpy
-, psutil
-, pytest
-, ruamel-yaml
-, setuptools
-, tornado
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  cython_0,
+  catalogue,
+  mock,
+  numpy,
+  psutil,
+  pytest,
+  ruamel-yaml,
+  setuptools,
+  tornado,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    catalogue
-  ];
+  propagatedBuildInputs = [ catalogue ];
 
   nativeCheckInputs = [
     mock
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  pythonImportsCheck = [
-    "srsly"
-  ];
+  pythonImportsCheck = [ "srsly" ];
 
   meta = with lib; {
     changelog = "https://github.com/explosion/srsly/releases/tag/v${version}";

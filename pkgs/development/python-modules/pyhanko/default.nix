@@ -1,33 +1,34 @@
-{ lib
-, aiohttp
-, asn1crypto
-, buildPythonPackage
-, certomancer
-, click
-, cryptography
-, defusedxml
-, fetchFromGitHub
-, fonttools
-, freezegun
-, oscrypto
-, pillow
-, pyhanko-certvalidator
-, pytest-aiohttp
-, pytestCheckHook
-, python-barcode
-, python-pae
-, python-pkcs11
-, pythonOlder
-, pytz
-, pyyaml
-, qrcode
-, requests
-, requests-mock
-, setuptools
-, tzlocal
-, uharfbuzz
-, wheel
-, xsdata
+{
+  lib,
+  aiohttp,
+  asn1crypto,
+  buildPythonPackage,
+  certomancer,
+  click,
+  cryptography,
+  defusedxml,
+  fetchFromGitHub,
+  fonttools,
+  freezegun,
+  oscrypto,
+  pillow,
+  pyhanko-certvalidator,
+  pytest-aiohttp,
+  pytestCheckHook,
+  python-barcode,
+  python-pae,
+  python-pkcs11,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  qrcode,
+  requests,
+  requests-mock,
+  setuptools,
+  tzlocal,
+  uharfbuzz,
+  wheel,
+  xsdata,
 }:
 
 buildPythonPackage rec {
@@ -67,12 +68,8 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    extra-pubkey-algs = [
-      oscrypto
-    ];
-    xmp = [
-      defusedxml
-    ];
+    extra-pubkey-algs = [ oscrypto ];
+    xmp = [ defusedxml ];
     opentype = [
       fonttools
       uharfbuzz
@@ -81,15 +78,9 @@ buildPythonPackage rec {
       pillow
       python-barcode
     ];
-    pkcs11 = [
-      python-pkcs11
-    ];
-    async-http = [
-      aiohttp
-    ];
-    etsi = [
-      xsdata
-    ];
+    pkcs11 = [ python-pkcs11 ];
+    async-http = [ aiohttp ];
+    etsi = [ xsdata ];
   };
 
   nativeCheckInputs = [
@@ -133,9 +124,7 @@ buildPythonPackage rec {
     "test_ts_fetch_requests"
   ];
 
-  pythonImportsCheck = [
-    "pyhanko"
-  ];
+  pythonImportsCheck = [ "pyhanko" ];
 
   meta = with lib; {
     description = "Sign and stamp PDF files";

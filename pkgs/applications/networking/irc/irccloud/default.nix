@@ -16,7 +16,7 @@ let
 in appimageTools.wrapType2 {
   inherit pname version src;
 
-  extraPkgs = pkgs: with pkgs; [ at-spi2-core ];
+  extraPkgs = pkgs: [ pkgs.at-spi2-core ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/irccloud.desktop $out/share/applications/irccloud.desktop
@@ -27,7 +27,7 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "A desktop client for IRCCloud";
+    description = "Desktop client for IRCCloud";
     mainProgram = "irccloud";
     homepage = "https://www.irccloud.com";
     license = licenses.asl20;

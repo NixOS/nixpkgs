@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   stdenvNoCC,
   makeScopeWithSplicing',
@@ -17,19 +16,13 @@ makeScopeWithSplicing' {
       directory = ./pkgs;
     }
     // {
-
-      fetchNetBSD =
-        path: version: sha256:
-        fetchcvs {
-          cvsRoot = ":pserver:anoncvs@anoncvs.NetBSD.org:/cvsroot";
-          module = "src/${path}";
-          inherit sha256;
-          tag = "netbsd-${lib.replaceStrings [ "." ] [ "-" ] version}-RELEASE";
-        };
+      version = "9.2";
 
       defaultMakeFlags = [
         "MKSOFTFLOAT=${
-          if stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft" then
+          if
+            stdenvNoCC.hostPlatform.gcc.float or (stdenvNoCC.hostPlatform.parsed.abi.float or "hard") == "soft"
+          then
             "yes"
           else
             "no"
@@ -44,7 +37,6 @@ makeScopeWithSplicing' {
       # because of the splices.
 
       mkDerivation = self.callPackage ./pkgs/mkDerivation.nix {
-        inherit stdenv stdenvNoCC;
         inherit (buildPackages.netbsd)
           netbsdSetupHook
           makeMinimal
@@ -137,7 +129,7 @@ makeScopeWithSplicing' {
       libpthread-headers = self.callPackage ./pkgs/libpthread/headers.nix { };
 
       csu = self.callPackage ./pkgs/csu.nix {
-        inherit (self) headers sys ld_elf_so;
+        inherit (self) headers sys-headers ld_elf_so;
         inherit (buildPackages.netbsd)
           netbsdSetupHook
           makeMinimal
@@ -151,18 +143,18 @@ makeScopeWithSplicing' {
         inherit (buildPackages.buildPackages) rsync;
       };
 
-      _mainLibcExtraPaths = with self; [
-        common
-        i18n_module.src
-        sys.src
-        ld_elf_so.src
-        libpthread.src
-        libm.src
-        libresolv.src
-        librpcsvc.src
-        libutil.src
-        librt.src
-        libcrypt.src
+      _mainLibcExtraPaths = [
+        "common"
+        "lib/i18n_module"
+        "lib/libcrypt"
+        "lib/libm"
+        "lib/libpthread"
+        "lib/libresolv"
+        "lib/librpcsvc"
+        "lib/librt"
+        "lib/libutil"
+        "libexec/ld.elf_so"
+        "sys"
       ];
 
       libc = self.callPackage ./pkgs/libc.nix {

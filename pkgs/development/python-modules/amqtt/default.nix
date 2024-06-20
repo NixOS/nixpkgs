@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, docopt
-, fetchFromGitHub
-, hypothesis
-, passlib
-, poetry-core
-, pytest-logdog
-, pytest-asyncio
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, pyyaml
-, setuptools
-, transitions
-, websockets
+{
+  lib,
+  buildPythonPackage,
+  docopt,
+  fetchFromGitHub,
+  hypothesis,
+  passlib,
+  poetry-core,
+  pytest-logdog,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  transitions,
+  websockets,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
       --replace 'websockets = ">=9.0,<11.0"' 'websockets = "*"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     docopt
@@ -56,9 +55,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "--asyncio-mode=auto"
-  ];
+  pytestFlagsArray = [ "--asyncio-mode=auto" ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # stuck in epoll
@@ -83,9 +80,7 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  pythonImportsCheck = [
-    "amqtt"
-  ];
+  pythonImportsCheck = [ "amqtt" ];
 
   meta = with lib; {
     description = "Python MQTT client and broker implementation";

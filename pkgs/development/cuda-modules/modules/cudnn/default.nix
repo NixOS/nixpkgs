@@ -5,7 +5,7 @@
   # to the generic release.
   # {
   #   url = options.mkOption {
-  #     description = "The URL to download the tarball from";
+  #     description = "URL to download the tarball from";
   #     type = types.str;
   #   };
   # }

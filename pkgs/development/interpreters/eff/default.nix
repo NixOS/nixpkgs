@@ -23,7 +23,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://www.eff-lang.org";
-    description = "A functional programming language based on algebraic effects and their handlers";
+    description = "Functional programming language based on algebraic effects and their handlers";
     mainProgram = "eff";
     longDescription = ''
       Eff is a functional language with handlers of not only exceptions,

@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "badkeys";
-  version = "0.0.10";
+  version = "0.0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "badkeys";
     repo = "badkeys";
-    rev = "v${version}";
-    hash = "sha256-4vIPOKU/R+wASEx4OQHjtP6mJSKJDtPgQB968vuT24Y=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VfkJeHEdvRc0Khf/C7ZUNpjd6t+hUULCTXXY80rs4Ko=";
   };
 
   build-system = with python3Packages; [

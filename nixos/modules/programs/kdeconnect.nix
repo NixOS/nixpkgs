@@ -21,7 +21,6 @@
       lib.mkIf cfg.enable {
         environment.systemPackages = [
           cfg.package
-          pkgs.sshfs
         ];
         networking.firewall = rec {
           allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];

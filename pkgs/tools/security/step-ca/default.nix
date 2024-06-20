@@ -13,16 +13,21 @@
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.26.1";
+  version = "0.26.2";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yej7gzhaUPbcvqbse7Hh7Im38+DUfC9UZkpjpuG8ctk=";
+    hash = "sha256-sLHmeF/yh74/qsoF/DrYSAbULG9Nsvd6bvUT4tSVHdQ=";
   };
 
-  vendorHash = "sha256-XlfdIg8YHCeCvc7kZczUxlxUonyZSQATgsxLTMvNDk4=";
+  vendorHash = "sha256-TISPM6bYzS0TpmopQLBns/rQqPKLDHK1job003vpFiQ=";
+
+  ldflags = [
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
   nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
 
@@ -57,7 +62,7 @@ buildGoModule rec {
   passthru.tests.step-ca = nixosTests.step-ca;
 
   meta = with lib; {
-    description = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
+    description = "Private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
     changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
     license = licenses.asl20;

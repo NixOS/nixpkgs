@@ -22,13 +22,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catboost";
-  version = "1.2.3";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-wn9STnpqX3zmdxPmMYAz9JPdg13Goux76CMaCiqohk8=";
+    hash = "sha256-2dfCCCa0LheytkLRbYuBd25M320f1kbhBWKIVjslor0=";
   };
 
   patches = [

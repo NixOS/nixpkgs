@@ -98,10 +98,12 @@ The function `buildFlutterApplication` builds Flutter applications.
 
 See the [Dart documentation](#ssec-dart-applications) for more details on required files and arguments.
 
+`flutter` in Nixpkgs always points to `flutterPackages.stable`, which is the latest packaged version. To avoid unforeseen breakage during upgrade, packages in Nixpkgs should use a specific flutter version, such as `flutter319` and `flutter322`, instead of using `flutter` directly.
+
 ```nix
 {  flutter, fetchFromGitHub }:
 
-flutter.buildFlutterApplication {
+flutter322.buildFlutterApplication {
   pname = "firmware-updater";
   version = "0-unstable-2023-04-30";
 

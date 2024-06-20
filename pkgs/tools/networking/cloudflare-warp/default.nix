@@ -85,9 +85,11 @@ stdenv.mkDerivation rec {
     homepage = "https://pkg.cloudflareclient.com/packages/cloudflare-warp";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+    mainProgram = "warp-cli";
     maintainers = with maintainers; [
       wolfangaukang
       devpikachu
+      marcusramberg
     ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };

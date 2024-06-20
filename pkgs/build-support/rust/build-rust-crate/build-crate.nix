@@ -51,7 +51,7 @@
     # configure & source common build functions
     LIB_RUSTC_OPTS="${libRustcOpts}"
     BIN_RUSTC_OPTS="${binRustcOpts}"
-    LIB_EXT="${stdenv.hostPlatform.extensions.sharedLibrary or ""}"
+    LIB_EXT="${stdenv.hostPlatform.extensions.library}"
     LIB_PATH="${libPath}"
     LIB_NAME="${libName}"
 

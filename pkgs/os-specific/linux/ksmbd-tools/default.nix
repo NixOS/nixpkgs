@@ -37,6 +37,5 @@ stdenv.mkDerivation rec {
     homepage = "https://www.kernel.org/doc/html/latest/filesystems/cifs/ksmbd.html";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

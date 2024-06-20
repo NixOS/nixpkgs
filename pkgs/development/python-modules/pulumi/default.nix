@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, protobuf
-, dill
-, grpcio
-, pulumi
-, isPy27
-, semver
-, pip
-, pytestCheckHook
-, pyyaml
-, six
+{
+  lib,
+  buildPythonPackage,
+  protobuf,
+  dill,
+  grpcio,
+  pulumi,
+  isPy27,
+  semver,
+  pip,
+  pytestCheckHook,
+  pyyaml,
+  six,
 }:
 buildPythonPackage rec {
   inherit (pulumi) version src;
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "test/"
-  ];
+  pytestFlagsArray = [ "test/" ];
 
   sourceRoot = "${src.name}/sdk/python/lib";
 

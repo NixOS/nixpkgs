@@ -1,6 +1,7 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
+{ lowPrio, newScope, pkgs, lib, stdenv
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, fetchpatch, substitute, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
+, substitute, substituteAll, fetchFromGitHub, fetchpatch
+, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -39,7 +40,11 @@
 # to you to make sure that the LLVM repo given matches the release configuration
 # specified.
 , monorepoSrc ? null
-}:
+# Allows passthrough to packages via newScope. This makes it possible to
+# do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
+# an llvmPackages whose packages are overridden in an internally consistent way.
+, ...
+}@args:
 
 assert
   lib.assertMsg
@@ -51,10 +56,13 @@ assert
 let
   monorepoSrc' = monorepoSrc;
 in let
-  # Import releaseInfo separately to avoid infinite recursion
-  inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
-  inherit (releaseInfo) release_version version;
-  inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
+
+  metadata = rec {
+    # Import releaseInfo separately to avoid infinite recursion
+    inherit (import ../common/common-let.nix { inherit lib gitRelease officialRelease; }) releaseInfo;
+    inherit (releaseInfo) release_version version;
+    inherit (import ../common/common-let.nix { inherit lib fetchFromGitHub release_version gitRelease officialRelease monorepoSrc'; }) llvm_meta monorepoSrc;
+  };
 
   lldbPlugins = lib.makeExtensible (lldbPlugins: let
     callPackage = newScope (lldbPlugins // { inherit stdenv; inherit (tools) lldb; });
@@ -63,11 +71,11 @@ in let
   });
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
+    callPackage = newScope (tools // args // metadata);
     mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
-      ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
+      ln -s "${cc.lib}/lib/clang/${metadata.release_version}/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
     mkExtraBuildCommands = cc: mkExtraBuildCommands0 cc + ''
@@ -144,7 +152,6 @@ in let
         # Just like the `llvm-lit-cfg` patch, but for `polly`.
         ./llvm/polly-lit-cfg-add-libs-to-dylib-path.patch
       ];
-      inherit llvm_meta;
     };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
@@ -162,7 +169,6 @@ in let
           libllvmLibdir = "${tools.libllvm.lib}/lib";
         })
       ];
-      inherit llvm_meta;
     };
 
     clang-unwrapped = tools.libclang;
@@ -212,7 +218,6 @@ in let
       patches = [
         ./lld/gnu-install-dirs.patch
       ];
-      inherit llvm_meta;
     };
 
     lldb = callPackage ../common/lldb.nix {
@@ -245,7 +250,6 @@ in let
             && !stdenv.targetPlatform.isAarch64
             && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
         ) ./lldb/cpu_subtype_arm64e_replacement.patch;
-      inherit llvm_meta;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -348,7 +352,7 @@ in let
   });
 
   libraries = lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
+    callPackage = newScope (libraries // buildLlvmTools // args // metadata);
   in {
 
     compiler-rt-libc = callPackage ../common/compiler-rt {
@@ -365,7 +369,6 @@ in let
         # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
         ../common/compiler-rt/armv7l-15.patch
       ];
-      inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
@@ -385,7 +388,6 @@ in let
         # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
         ../common/compiler-rt/armv7l-15.patch
       ];
-      inherit llvm_meta;
       stdenv = if stdenv.hostPlatform.useLLVM or false
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRt
                else stdenv;
@@ -427,7 +429,6 @@ in let
           ];
         })
       ];
-      inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
@@ -435,7 +436,6 @@ in let
       patches = [
         ./libunwind/gnu-install-dirs.patch
       ];
-      inherit llvm_meta;
       stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
@@ -445,9 +445,8 @@ in let
         ./openmp/gnu-install-dirs.patch
         ./openmp/run-lit-directly.patch
       ];
-      inherit llvm_meta targetLlvm;
     };
   });
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries release_version lldbPlugins; } // (noExtend libraries) // (noExtend tools)
+in { inherit tools libraries lldbPlugins; inherit (metadata) release_version; } // (noExtend libraries) // (noExtend tools)

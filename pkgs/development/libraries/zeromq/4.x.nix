@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     branch = "4";
     homepage = "http://www.zeromq.org";
-    description = "The Intelligent Transport Layer";
+    description = "Intelligent Transport Layer";
     license = licenses.mpl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];

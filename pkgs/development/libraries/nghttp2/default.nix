@@ -67,6 +67,12 @@ stdenv.mkDerivation rec {
     export TZDIR=${tzdata}/share/zoneinfo
   '';
 
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
+  postPatch = ''
+    substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
+  '';
+
   postInstall = lib.optionalString (enableApp) ''
     installShellCompletion --bash doc/bash_completion/{h2load,nghttp,nghttpd,nghttpx}
   '' + lib.optionalString (!enableApp) ''

@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   meta = with lib; {
-    description = "An OCaml interface to GTK";
+    description = "OCaml interface to GTK";
     homepage = "http://lablgtk.forge.ocamlcore.org/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ maggesi roconnor vbgl ];

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     cp $src/resources/icon.png $out/share/icons/hicolor/256x256/apps/chatterino.png
   '';
   meta = with lib; {
-    description = "A chat client for Twitch chat";
+    description = "Chat client for Twitch chat";
     mainProgram = "chatterino";
     longDescription = ''
       Chatterino is a chat client for Twitch chat. It aims to be an

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://aide.github.io/";
-    description = "A file and directory integrity checker";
+    description = "File and directory integrity checker";
     mainProgram = "aide";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ happysalada ];

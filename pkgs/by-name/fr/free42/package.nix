@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/thomasokken/free42";
-    description = "A software clone of HP-42S Calculator";
+    description = "Software clone of HP-42S Calculator";
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "free42dec";

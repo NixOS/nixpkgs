@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sherlock";
-  version = "unstable-2024-05-12";
+  version = "0-unstable-2024-06-04";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = "sherlock";
-    rev = "3e978d774b428dce6eed7afbb6606444e7a74924";
-    hash = "sha256-wa32CSQ9+/PJPep84Tqtzmr6EjD1Bb3guZe5pTOZVnA=";
+    rev = "ef124acf34e90626f4e59ab88bba1ed6141a4126";
+    hash = "sha256-haxUKdZuuJrSI4TH8jA1fT+4fhr6tlxnrEgWTuBuIC4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

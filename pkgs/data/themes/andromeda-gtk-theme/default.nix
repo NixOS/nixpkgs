@@ -2,22 +2,22 @@
 
 stdenvNoCC.mkDerivation {
   pname = "andromeda-gtk-theme";
-  version = "0-unstable-2024-03-04";
+  version = "0-unstable-2024-06-08";
 
   srcs = [
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "Andromeda-gtk";
-      rev = "250751a546dd0fa2e67eef86d957fbf993b61dfe";
-      hash = "sha256-exr9j/jW2P9cBhKUPQy3AtK5Vgav5vOyWInXUyVhBk0=";
+      rev = "8efb8ffef7118adf7a22d34a287594499d62b9b8";
+      hash = "sha256-AlPSD6tPNYY8iqPFS5IVOO5Zd3UqR3uS5h4l48UZ+dw=";
       name = "Andromeda";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "Andromeda-gtk";
-      rev = "11a6194d19cb846447db048455a5e782ec830ae1";
-      hash = "sha256-Yy3mih0nyA+ahLqj2D99EKqtmWYJRsvQMkmlLfUPcqQ=";
+      rev = "b8c1a8bd0ba8d3e35dcd43f3fc3c177844b02c9c";
+      hash = "sha256-51IWJtbAHA8jNbrGbudiwqQ9SC4dpj9CTHqovNWOtc8=";
       name = "Andromeda-standard-buttons";
     })
   ];
@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An elegant dark theme for gnome, mate, budgie, cinnamon, xfce";
+    description = "Elegant dark theme for gnome, mate, budgie, cinnamon, xfce";
     homepage = "https://github.com/EliverLara/Andromeda-gtk";
     license = licenses.gpl3Only;
     platforms = platforms.linux;

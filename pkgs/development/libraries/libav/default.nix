@@ -123,7 +123,7 @@ let
 
     meta = with lib; {
       homepage = "https://libav.org/";
-      description = "A complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
+      description = "Complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;
       platforms = with platforms; linux ++ darwin;

@@ -9,7 +9,6 @@
 , fetchFromGitHub
 , fetchpatch
 , ffmpeg
-, ffmpeg_4
 , fluidsynth
 , fmt
 , freetype
@@ -406,7 +405,7 @@ in
     hardeningDisable = [ "format" ];
     makefile = "Makefile";
     meta = {
-      description = "Port of DOSBox to libretro aiming for simplicity and ease of use.";
+      description = "Port of DOSBox to libretro aiming for simplicity and ease of use";
       license = lib.licenses.gpl2Only;
     };
   };
@@ -511,7 +510,7 @@ in
   fuse = mkLibretroCore {
     core = "fuse";
     meta = {
-      description = "A port of the Fuse Unix Spectrum Emulator to libretro";
+      description = "Port of the Fuse Unix Spectrum Emulator to libretro";
       license = lib.licenses.gpl3Only;
     };
   };
@@ -810,7 +809,7 @@ in
       && sed -i -e 's,CPUFLAGS  :=,,g' Makefile
     '';
     meta = {
-      description = "Parallel Mupen64plus rewrite for libretro.";
+      description = "Parallel Mupen64plus rewrite for libretro";
       license = lib.licenses.gpl3Only;
     };
   };
@@ -890,11 +889,13 @@ in
   ppsspp = mkLibretroCore {
     core = "ppsspp";
     extraNativeBuildInputs = [ cmake pkg-config python3 ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg_4 snappy xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libzip snappy xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DLIBRETRO=ON"
-      "-DUSE_SYSTEM_FFMPEG=ON"
+      # USE_SYSTEM_FFMPEG=ON causes several glitches during video playback
+      # See: https://github.com/NixOS/nixpkgs/issues/304616
+      "-DUSE_SYSTEM_FFMPEG=OFF"
       "-DUSE_SYSTEM_SNAPPY=ON"
       "-DUSE_SYSTEM_LIBZIP=ON"
       "-DOpenGL_GL_PREFERENCE=GLVND"

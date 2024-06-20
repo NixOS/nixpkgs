@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A tool for fast source code browsing (exuberant ctags)";
+    description = "Tool for fast source code browsing (exuberant ctags)";
     mainProgram = "ctags";
     longDescription = ''
       Ctags generates an index (or tag) file of language objects found

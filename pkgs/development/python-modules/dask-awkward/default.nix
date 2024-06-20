@@ -1,26 +1,27 @@
-{ lib
-, awkward
-, buildPythonPackage
-, cachetools
-, dask
-, dask-histogram
-, distributed
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, hist
-, pandas
-, pyarrow
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, typing-extensions
-, uproot
+{
+  lib,
+  awkward,
+  buildPythonPackage,
+  cachetools,
+  dask,
+  dask-histogram,
+  distributed,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  hist,
+  pandas,
+  pyarrow,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  typing-extensions,
+  uproot,
 }:
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.3.0";
+  version = "2024.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,20 +30,18 @@ buildPythonPackage rec {
     owner = "dask-contrib";
     repo = "dask-awkward";
     rev = "refs/tags/${version}";
-    hash = "sha256-Lkbp/XrDHOekMpT71pbxtuozgzU9iiGF2GJZ+tuV/yM=";
+    hash = "sha256-m/KvPo4IGn19sA5RcA/+OhLMCDBU+9BbMQtK3gHOoEc=";
   };
 
-  pythonRelaxDeps = [
-    "awkward"
-  ];
+  pythonRelaxDeps = [ "awkward" ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awkward
     cachetools
     dask
@@ -50,9 +49,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    io = [
-      pyarrow
-    ];
+    io = [ pyarrow ];
   };
 
   checkInputs = [
@@ -64,9 +61,7 @@ buildPythonPackage rec {
     uproot
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "dask_awkward"
-  ];
+  pythonImportsCheck = [ "dask_awkward" ];
 
   disabledTests = [
     # Tests require network access
@@ -79,11 +74,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Native Dask collection for awkward arrays, and the library to use it";
     homepage = "https://github.com/dask-contrib/dask-awkward";
     changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

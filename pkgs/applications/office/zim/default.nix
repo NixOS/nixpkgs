@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A desktop wiki";
+    description = "Desktop wiki";
     homepage = "https://zim-wiki.org/";
     changelog = "https://github.com/zim-desktop-wiki/zim-desktop-wiki/blob/${version}/CHANGELOG.md";
     license = licenses.gpl2Plus;

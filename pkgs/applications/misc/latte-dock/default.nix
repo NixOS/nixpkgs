@@ -4,14 +4,14 @@
 
 mkDerivation rec {
   pname = "latte-dock";
-  version = "unstable-2023-03-31";
+  version = "unstable-2024-01-31";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "plasma";
     repo = "latte-dock";
-    rev = "4f93251d8c635c6150483ecb321eb276f34d4280";
-    sha256 = "sha256-oEfKfsVIAmYgQ7+WyBEQfVpI4IndWhYXWBsJE8bNNyI=";
+    rev = "131ee4d39ce8913b2de8f9a673903225345c7a38";
+    sha256 = "sha256-C1FvgkdxCzny+F6igS2YjsHOpkK34wl6je2tHlGQwU0=";
   };
 
   buildInputs = [ plasma-framework plasma-wayland-protocols qtwayland xorg.libpthreadstubs xorg.libXdmcp xorg.libSM wayland plasma-workspace plasma-desktop ];

@@ -1,5 +1,4 @@
 { buildGoModule
-, cacert
 , cairo
 , cargo
 , cargo-tauri
@@ -7,15 +6,14 @@
 , fetchFromGitHub
 , gdk-pixbuf
 , gobject-introspection
-, jq
 , lib
 , libsoup
 , llvmPackages_15
 , makeBinaryWrapper
-, moreutils
-, nodePackages
+, nodejs
 , pango
 , pkg-config
+, pnpm
 , rustc
 , rustPlatform
 , stdenv
@@ -83,7 +81,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ];
 
     postBuild = ''
-      CC=clang CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER=lld cargo build \
+      CC=clang cargo build \
         --target wasm32-unknown-unknown \
         --release
 
@@ -95,49 +93,25 @@ in stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  pnpm-deps = stdenvNoCC.mkDerivation {
-    inherit (finalAttrs) src version;
-    pname = "${finalAttrs.pname}-pnpm-deps";
-    dontFixup = true;
-
-    nativeBuildInputs = [ cacert jq moreutils nodePackages.pnpm ];
-
-    postInstall = ''
-      export HOME=$(mktemp -d)
-      pnpm config set store-dir $out
-      # use --ignore-script and --no-optional to avoid downloading binaries
-      # use --frozen-lockfile to avoid checking git deps
-      pnpm install --frozen-lockfile --no-optional --ignore-script
-
-      # Remove timestamp and sort the json files
-      rm -rf $out/v3/tmp
-      for f in $(find $out -name "*.json"); do
-        sed -i -E -e 's/"checkedAt":[0-9]+,//g' $f
-        jq --sort-keys . $f | sponge $f
-      done
-    '';
-
-    outputHashMode = "recursive";
-    outputHash = "sha256-jT0Bw0xiusOw/5o6EUaEV3/GqkD/l6jkwXmOqc3a/nc=";
-  };
-
   ui = stdenvNoCC.mkDerivation {
     inherit (finalAttrs) src version;
     pname = "${finalAttrs.pname}-ui";
     dontFixup = true;
 
+    pnpmDeps = pnpm.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      hash = "sha256-3x/GKgVX0mnxTZmINe/qTtr/vI0h5IqPYt9N0l/VGzg=";
+    };
+
     ESBUILD_BINARY_PATH = "${lib.getExe esbuild-18-20}";
 
-    nativeBuildInputs = [ nodePackages.pnpm ];
+    nativeBuildInputs = [ nodejs pnpm.configHook ];
 
     postPatch = ''
       ln -s ${finalAttrs.embed} src/generated
     '';
 
     postBuild = ''
-      export HOME=$(mktemp -d)
-      pnpm config set store-dir ${finalAttrs.pnpm-deps}
-      pnpm install --offline --frozen-lockfile --no-optional --ignore-script
       pnpm build
     '';
 
@@ -192,5 +166,8 @@ in stdenv.mkDerivation (finalAttrs: {
     mainProgram = "surrealist";
     maintainers = with maintainers; [ frankp ];
     platforms = platforms.linux;
+    # See comment about wasm32-unknown-unknown in rustc.nix.
+    broken = lib.any (a: lib.hasAttr a stdenv.hostPlatform.gcc) [ "cpu" "float-abi" "fpu" ] ||
+      !stdenv.hostPlatform.gcc.thumb or true;
   };
 })

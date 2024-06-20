@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   RUSTC_BOOTSTRAP = 1;
 
   meta = {
-    description = "A widget system made in Rust to create widgets for any WM";
+    description = "Widget system made in Rust to create widgets for any WM";
     longDescription = ''
       Eww (ElKowar's Wacky Widgets) is a widget system made in Rust which lets
       you create your own widgets similarly to how you can in AwesomeWM.

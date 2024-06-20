@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, fontconfig, autoreconfHook, DiskArbitration
+{ lib, stdenv, fetchurl, pkg-config, fontconfig, autoreconfHook, DiskArbitration
 , withJava ? false, jdk17, ant, stripJavaArchivesHook
 , withAACS ? false, libaacs
 , withBDplus ? false, libbdplus

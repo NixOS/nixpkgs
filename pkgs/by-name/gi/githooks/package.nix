@@ -5,6 +5,7 @@
   git,
   testers,
   makeWrapper,
+  githooks
 }:
 buildGoModule rec {
   pname = "githooks";
@@ -70,13 +71,13 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = "githooks-cli";
+    package = githooks;
     command = "githooks-cli --version";
     inherit version;
   };
 
   meta = with lib; {
-    description = "A Git hooks manager with per-repo and shared Git hooks including version control";
+    description = "Git hooks manager with per-repo and shared Git hooks including version control";
     homepage = "https://github.com/gabyx/Githooks";
     license = licenses.mpl20;
     maintainers = with maintainers; [ gabyx ];

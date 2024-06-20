@@ -1,7 +1,6 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
-, fetchpatch
 
 , anthy
 , hunspell

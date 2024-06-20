@@ -13,7 +13,7 @@ In turn when running locally, we don't want to have to push commits to test them
 and we can also rely on the local Git history to do the mergeability check.
 
 Arguments:
-- `BASE_BRANCH`: The base branch to use, e.g. master or release-23.11
+- `BASE_BRANCH`: The base branch to use, e.g. master or release-24.05
 - `REPOSITORY`: The repository to fetch the base branch from, defaults to https://github.com/NixOS/nixpkgs.git
 
 ## `./update-pinned-tool.sh`

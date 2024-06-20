@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/git-cola/git-cola";
-    description = "A sleek and powerful Git GUI";
+    description = "Sleek and powerful Git GUI";
     license = licenses.gpl2;
     maintainers = [ maintainers.bobvanderlinden ];
   };

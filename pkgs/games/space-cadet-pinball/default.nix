@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchzip
 , cmake, SDL2, SDL2_mixer, Cocoa
 , unrar-wrapper, makeWrapper
-, fetchpatch
 }:
 
 let

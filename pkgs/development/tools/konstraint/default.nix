@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "konstraint";
-  version = "0.36.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "plexsystems";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GQ79xsvlRDwrthtYgykwAJLP9rkk5iNHGelWAQzOZoA=";
+    sha256 = "sha256-poIXY4++nv2bCkcHdZHb0dRa5NVxsw9Vmg7nMVh1ocI=";
   };
-  vendorHash = "sha256-EBlJCcF8UcstaD1ztaAFL4MSfBOYvpeUygzXnQbW8N8=";
+  vendorHash = "sha256-0V8B/w4K3r23tINDfjLAKe5wMpJ+8uiF4nCMr062pb0=";
 
   # Exclude go within .github folder
   excludedPackages = ".github";
@@ -37,7 +37,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/plexsystems/konstraint";
     changelog = "https://github.com/plexsystems/konstraint/releases/tag/v${version}";
-    description = "A policy management tool for interacting with Gatekeeper";
+    description = "Policy management tool for interacting with Gatekeeper";
     mainProgram = "konstraint";
     longDescription = ''
       konstraint is a CLI tool to assist with the creation and management of templates and constraints when using

@@ -132,6 +132,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     cp bin/godot.* $out/bin/godot4
 
@@ -144,6 +146,8 @@ stdenv.mkDerivation rec {
       --replace "Godot Engine" "Godot Engine 4"
     cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
     cp icon.png "$out/share/icons/godot.png"
+
+    runHook postInstall
   '';
 
   meta = {

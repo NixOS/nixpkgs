@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, flit-core
-, freezegun
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  flit-core,
+  freezegun,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,5 +33,4 @@ buildPythonPackage rec {
     homepage = "https://itsdangerous.palletsprojects.com";
     license = licenses.bsd3;
   };
-
 }

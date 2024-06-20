@@ -13,15 +13,15 @@
 }:
 
 let
-  version = "2.7.1";
-  ui_version = "OSS-v${version}";
-  libflux_version = "0.193.0";
+  version = "2.7.6";
+  ui_version = "OSS-v2.7.1";
+  libflux_version = "0.194.5";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    hash = "sha256-JWu4V2k8ItbzBa421EtzgMVlDznoDdGjIhfDSaZ0j6c=";
+    hash = "sha256-0gqFUIV0ETdVuVmC+SwoKsO6OkoT/s+qKO1f8fkaZj4=";
   };
 
   ui = fetchurl {
@@ -36,21 +36,22 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      hash = "sha256-gx6vnGOFu35wasLl7X/73eDsE0/50cAzjmBjZ+H2Ne4=";
+      hash = "sha256-XHT/+JMu5q1cPjZT2x/OKEPgxFJcnjrQKqn8w9/Mb3s=";
     };
     patches = [
-      # Fix build with recent rust versions
+      # Fix build on Rust 1.78 (included after v0.195.0)
       (fetchpatch {
-        url = "https://github.com/influxdata/flux/commit/6dc8054cfeec4b65b5c7ae786d633240868b8589.patch";
+        name = "fix-build-on-rust-1.78.patch";
+        url = "https://github.com/influxdata/flux/commit/68c831c40b396f0274f6a9f97d77707c39970b02.patch";
         stripLen = 2;
         extraPrefix = "";
-        excludes = [ "rust-toolchain.toml" ];
-        hash = "sha256-w3z+Z26Xhy9TNICyNhc8XiWNSpdLA23ADI4K/AOMYhg=";
+        excludes = [ ];
+        hash = "sha256-6LOTgbOCfETNTmshyXgtDZf9y4t/2iqRuVPkz9dYPHc=";
       })
-      ./no-deny-warnings.patch
+      ./fix-unsigned-char.patch
     ];
     sourceRoot = "${src.name}/libflux";
-    cargoSha256 = "sha256-MoI5nxLGA/3pduZ+vgmSG3lm3Nx58SP+6WXQl2pX9Lc=";
+    cargoHash = "sha256-O+t4f4P5291BuyARH6Xf3LejMFEQEBv+qKtyjHRhclA=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
     pkgcfg = ''
@@ -78,7 +79,7 @@ in buildGoModule {
 
   nativeBuildInputs = [ go-bindata pkg-config perl ];
 
-  vendorHash = "sha256-5b1WRq3JndkOkKBhMzGZnSyBDY5Lk0UGe/WGHQJp0CQ=";
+  vendorHash = "sha256-3Vf8BCrOwliXrH+gmZ4RJ1YBEbqL0Szx2prW3ie9CNg=";
   subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
@@ -120,7 +121,7 @@ in buildGoModule {
   passthru.tests = { inherit (nixosTests) influxdb2; };
 
   meta = with lib; {
-    description = "An open-source distributed time series database";
+    description = "Open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
     maintainers = with maintainers; [ abbradar ];

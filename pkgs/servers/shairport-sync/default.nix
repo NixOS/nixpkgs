@@ -40,13 +40,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shairport-sync";
-  version = "4.3.2";
+  version = "4.3.3";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     rev = "refs/tags/${version}";
-    hash = "sha256-M7bJO8KVxP2H27aB0qJcsaN9uHADWeOYPdNo8Xfg9gc=";
+    hash = "sha256-sxYzFmI1Geoqckw+7XMXyvkizNVSlfvpWI7vMbCPT0U=";
   };
 
   nativeBuildInputs = [

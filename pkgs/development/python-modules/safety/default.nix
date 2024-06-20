@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools
-, click
-, urllib3
-, requests
-, packaging
-, dparse
-, ruamel-yaml
-, jinja2
-, marshmallow
-, authlib
-, jwt
-, rich
-, typer
-, pydantic
-, safety-schemas
-, typing-extensions
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  pythonRelaxDepsHook,
+  setuptools,
+  click,
+  urllib3,
+  requests,
+  packaging,
+  dparse,
+  ruamel-yaml,
+  jinja2,
+  marshmallow,
+  authlib,
+  jwt,
+  rich,
+  typer,
+  pydantic,
+  safety-schemas,
+  typing-extensions,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.2.0";
+  version = "3.2.3";
 
   disabled = pythonOlder "3.7";
 
@@ -32,7 +33,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-i9XKtfPYphzg6m6Y8mfBAG0FYJfEXGRP7nr+/31ZScE=";
+    hash = "sha256-QUFUk08XJ9r4pkc0k5RP7LOAVAw/AIddwa43c4L32D8=";
   };
 
   postPatch = ''
@@ -78,9 +79,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Disable tests depending on online services
   disabledTests = [
@@ -105,6 +104,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyupio/safety";
     changelog = "https://github.com/pyupio/safety/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ thomasdesr dotlambda ];
+    maintainers = with maintainers; [
+      thomasdesr
+      dotlambda
+    ];
   };
 }

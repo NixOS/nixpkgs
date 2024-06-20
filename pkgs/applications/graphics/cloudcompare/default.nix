@@ -11,7 +11,7 @@
 , flann
 , gdal
 , gmp
-, LASzip
+, laszip
 , mpfr
 , pdal
 , pcl
@@ -48,7 +48,7 @@ mkDerivation rec {
     flann
     gdal
     gmp
-    LASzip
+    laszip
     mpfr
     pdal
     pcl

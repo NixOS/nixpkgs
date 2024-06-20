@@ -5,7 +5,8 @@
 , hash ? null
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
-, maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ma27 ]
+, maintainers ? with lib.maintainers; [ eelco lovesegfault artturin ]
+, self_attribute_name
 }@args:
 assert (hash == null) -> (src != null);
 let
@@ -61,6 +62,7 @@ in
 , mdbook
 , mdbook-linkcheck
 , nlohmann_json
+, nixosTests
 , openssl
 , perl
 , pkg-config
@@ -249,7 +251,10 @@ self = stdenv.mkDerivation {
     perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; inherit Security; });
 
     tests = {
-      nixi686 = pkgsi686Linux.nixVersions.${"nix_${lib.versions.major version}_${lib.versions.minor version}"};
+      nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
+      # Basic smoke test that needs to pass when upgrading nix.
+      # Note that this test does only test the nixVersions.stable attribute.
+      misc = nixosTests.nix-misc.default;
     };
   };
 

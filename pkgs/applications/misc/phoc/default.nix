@@ -13,6 +13,7 @@
 , gnome-desktop
 , glib
 , gtk3
+, json-glib
 , wayland
 , libdrm
 , libxkbcommon
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     # For keybindings settings schemas
     gnome.mutter
+    json-glib
     wayland
     finalAttrs.wlroots
     xorg.xcbutilwm
@@ -85,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "phoc";
     homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
+    maintainers = with maintainers; [ masipcat zhaofengli ];
     platforms = platforms.linux;
   };
 })

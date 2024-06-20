@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# runtime
-, editables
-, packaging
-, pathspec
-, pluggy
-, tomli
-, trove-classifiers
+  # runtime
+  editables,
+  packaging,
+  pathspec,
+  pluggy,
+  tomli,
+  trove-classifiers,
 
-# tests
-, build
-, python
-, requests
-, virtualenv
+  # tests
+  build,
+  python,
+  requests,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
     pathspec
     pluggy
     trove-classifiers
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [
     "hatchling"
@@ -71,6 +70,9 @@ buildPythonPackage rec {
     homepage = "https://hatch.pypa.io/latest/";
     changelog = "https://github.com/pypa/hatch/releases/tag/hatchling-v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ofek ];
+    maintainers = with maintainers; [
+      hexa
+      ofek
+    ];
   };
 }

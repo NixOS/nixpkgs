@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, cloudpickle
-, dask
-, distributed
-, fetchPypi
-, multipledispatch
-, pytestCheckHook
-, pythonOlder
-, scikit-learn
-, scipy
-, setuptools-scm
-, sparse
+{
+  lib,
+  buildPythonPackage,
+  cloudpickle,
+  dask,
+  distributed,
+  fetchPypi,
+  multipledispatch,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-learn,
+  scipy,
+  setuptools-scm,
+  sparse,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-yUelZoZmmKAdeZeK5zIzy16DitXq1ghRQ1gsXpMLmko=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     cloudpickle
@@ -43,9 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "dask_glm"
-  ];
+  pythonImportsCheck = [ "dask_glm" ];
 
   disabledTestPaths = [
     # Circular dependency with dask-ml

@@ -1,11 +1,11 @@
 { lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests, k3s }:
 
 let
-  version = "3.5.13";
-  etcdSrcHash = "sha256-6dQXgM6VEWwv5CfHvxxPxdhMwNjFsinwhsbSqvQoDxI=";
-  etcdServerVendorHash = "sha256-PB4gACfeYhdOXYs0xbcq2CmSMJnf/ifX2U2DN6zfJ1o=";
-  etcdUtlVendorHash = "sha256-f23mn4zE6beM8yPSbs9gEEEifyF2D+CVKdlYwQtzAkQ=";
-  etcdCtlVendorHash = "sha256-gSlyhmLKarDwc+MhYuTeTqwj0wLiN6+k2bHEVVTkyPc=";
+  version = "3.5.14";
+  etcdSrcHash = "sha256-BbrOWAVrUj3LxFGvm1ycnFHglskaZesL0XILLnN8TIE=";
+  etcdServerVendorHash = "sha256-LNVRwPaaqpk7PKcgzwNrtBx+Dy9JJS88RT71RBDJ0ug=";
+  etcdUtlVendorHash = "sha256-fFERNwaWwdukTtACuihlMZZYpdo0cnZnnFb5xmug2vI=";
+  etcdCtlVendorHash = "sha256-cQMWb0PGYUPLlYvILrD2vxcDhcpYdAts9ARTeAh1Wew=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";

@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://dosbox-x.com";
-    description = "A cross-platform DOS emulator based on the DOSBox project";
+    description = "Cross-platform DOS emulator based on the DOSBox project";
     longDescription = ''
       DOSBox-X is an expanded fork of DOSBox with specific focus on running
       Windows 3.x/9x/Me, PC-98 and 3D support via 3dfx.

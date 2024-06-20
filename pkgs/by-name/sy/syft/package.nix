@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "syft";
-  version = "1.4.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "syft";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fFJcRNqXhhdxsxQkP5S8xSeeUOa+KbS9CkUs1sbNuOg=";
+    hash = "sha256-fTqyFsFWSsVt2Thd15nlsmnNIhQSLAv9SaaaVJWto/8=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +28,7 @@ buildGoModule rec {
   # hash mismatch with darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-vuKvQjWMFHtTjTb7Sg/jXvzpR2IxrHaWyfibTQdpSd4=";
+  vendorHash = "sha256-U4PZPUsfWCJB2YFJkirF8Q46pRmhKqzSnk7GpKOrfbU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -42,6 +42,12 @@ buildGoModule rec {
     "-X=main.gitTreeState=clean"
   ];
 
+  postPatch = ''
+    # Don't check for updates.
+    substituteInPlace cmd/syft/internal/options/update_check.go \
+      --replace-fail "CheckForAppUpdate: true" "CheckForAppUpdate: false"
+  '';
+
   preBuild = ''
     ldflags+=" -X main.gitCommit=$(cat COMMIT)"
     ldflags+=" -X main.buildDate=$(cat SOURCE_DATE_EPOCH)"
@@ -51,9 +57,6 @@ buildGoModule rec {
   doCheck = false;
 
   postInstall = ''
-    # avoid update checks when generating completions
-    export SYFT_CHECK_FOR_APP_UPDATE=false
-
     installShellCompletion --cmd syft \
       --bash <($out/bin/syft completion bash) \
       --fish <($out/bin/syft completion fish) \
@@ -64,7 +67,6 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    export SYFT_CHECK_FOR_APP_UPDATE=false
     $out/bin/syft --help
     $out/bin/syft version | grep "${version}"
 

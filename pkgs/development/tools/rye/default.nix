@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.33.0";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-sgA+Tp4Qysd07+1iNDgn9Hw0nDN8l6/fD41rE5QqWzY=";
+    hash = "sha256-M5TJXyh1fNigHOuBpEpnUeOWboZWxZ9bGrBuMB1oHgE=";
   };
 
   cargoLock = {
@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A tool to easily manage python dependencies and environments";
+    description = "Tool to easily manage python dependencies and environments";
     homepage = "https://github.com/mitsuhiko/rye";
     changelog = "https://github.com/mitsuhiko/rye/releases/tag/${version}";
     license = licenses.mit;

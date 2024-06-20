@@ -17,11 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9o+gWQbpCJb+UZzPNmzGqpWD0QbGjg41is/f1POUEQs=";
   };
 
+  sourceRoot = "${finalAttrs.src.name}/lib60870-C";
+
   separateDebugInfo = true;
 
   nativeBuildInputs = [ cmake ];
-
-  preConfigure = "cd lib60870-C";
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
@@ -30,6 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libiec61850.com/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ stv0g ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })

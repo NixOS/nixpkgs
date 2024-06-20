@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,13 +26,9 @@ buildPythonPackage rec {
       --replace "install_requires=install_requires" "install_requires=[],"
   '';
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "merkletools"
-  ];
+  pythonImportsCheck = [ "merkletools" ];
 
   meta = with lib; {
     description = "Python tools for creating Merkle trees, generating Merkle proofs, and verification of Merkle proofs";

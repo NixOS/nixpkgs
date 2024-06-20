@@ -11,6 +11,7 @@ let
       git
       xdg-user-dirs
       ncurses
+      udev
     ]) ++ (with python.pkgs; [
       python
       setuptools
@@ -27,7 +28,7 @@ buildFHSEnv {
   # multiPkgs = pio-pkgs;
 
   meta = with lib; {
-    description = "An open source ecosystem for IoT development";
+    description = "Open source ecosystem for IoT development";
     homepage = "https://platformio.org";
     maintainers = with maintainers; [ mog ];
     license = licenses.asl20;

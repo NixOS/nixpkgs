@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "courlan";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1wZoQzTxi+StofvVfyaArfADZkj22ECFL3pIItOt/Y0=";
+    hash = "sha256-DLycrIOXDGUbk3p4I6XZLL67a2AUVOoPtstNDuXRhF0=";
   };
 
   # Tests try to write to /tmp directly. use $TMPDIR instead.

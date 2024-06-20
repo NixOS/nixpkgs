@@ -26,6 +26,7 @@
 , "previewgenerator": "agpl3Plus"
 , "qownnotesapi": "agpl3Plus"
 , "registration": "agpl3Plus"
+, "richdocuments": "agpl3Only"
 , "spreed": "agpl3Plus"
 , "tasks": "agpl3Plus"
 , "twofactor_nextcloud_notification": "agpl3Only"

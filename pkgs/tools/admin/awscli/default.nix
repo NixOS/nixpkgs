@@ -20,7 +20,7 @@ let
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-GPcXkl2H0XNaeqt2/qD5+KvW23dRB0X+zLWo9hLigQM=";
+      hash = "sha256-96hFvXs3Fcvad+PBEpS9RFMJkcD1qHqfQ+8gtVfEbnc=";
     };
 
     nativeBuildInputs = [

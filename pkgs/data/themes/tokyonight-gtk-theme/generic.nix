@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A GTK theme based on the Tokyo Night colour palette";
+    description = "GTK theme based on the Tokyo Night colour palette";
     homepage = "https://www.pling.com/p/1681315";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

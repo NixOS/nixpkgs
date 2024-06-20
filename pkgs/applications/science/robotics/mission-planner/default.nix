@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An ArduPilot ground station";
+    description = "ArduPilot ground station";
     mainProgram = "mission-planner";
     longDescription = ''
       Full-featured ground station application for the ArduPilot open source

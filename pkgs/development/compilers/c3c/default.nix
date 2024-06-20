@@ -7,16 +7,17 @@
 , libxml2
 , libffi
 , xar
+, testers
 }:
 
-llvmPackages.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "c3c";
   version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "c3lang";
-    repo = pname;
-    rev = "refs/tags/${version}";
+    repo = "c3c";
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-iOljE1BRVc92NJZj+nr1G6KkBTCwJEUOadXHUDNoPGk=";
   };
 
@@ -50,11 +51,18 @@ llvmPackages.stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
     description = "Compiler for the C3 language";
     homepage = "https://github.com/c3lang/c3c";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
+    mainProgram = "c3c";
   };
-}
+})

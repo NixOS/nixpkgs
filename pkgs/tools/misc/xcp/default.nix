@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-UdQUrIRos3TmebotdESvKH+90WVMJ0oTc43p+AT4xMI=";
 
   meta = with lib; {
-    description = "An extended cp(1)";
+    description = "Extended cp(1)";
     homepage = "https://github.com/tarka/xcp";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lom ];

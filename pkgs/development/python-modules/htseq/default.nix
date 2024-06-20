@@ -31,7 +31,7 @@ buildPythonPackage rec {
       name = "replace-distutils-with-sysconfig.patch";
       url = "https://github.com/htseq/htseq/commit/f0f1e464ee9aee56f0b44f905e7b3355b0bb8f29.patch";
       hash = "sha256-yDYkXCPy+YFgnk1rnXwCB998aZwVd5nJeejZIgeEzAo=";
-     })
+    })
   ];
 
   nativeBuildInputs = [ swig ];
@@ -73,7 +73,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://htseq.readthedocs.io/";
-    description = "A framework to work with high-throughput sequencing data";
+    description = "Framework to work with high-throughput sequencing data";
     maintainers = with maintainers; [ unode ];
   };
 }

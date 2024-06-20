@@ -1,5 +1,6 @@
 name,rockspec,ref,server,version,luaversion,maintainers
 alt-getopt,,,,,,arobyn
+ansicolors,,,,,,Freed-Wu
 bit32,,,,5.3.0-1,5.1,lblasc
 argparse,,,,,,
 basexx,,,,,,
@@ -76,7 +77,9 @@ lualdap,,,,,,aanderse
 lualogging,,,,,,
 luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc
+luaprompt,,,,,,Freed-Wu
 luarepl,,,,,,
+luarocks,,,,,,mrcjkb teto
 luarocks-build-rust-mlua,,,,,,mrcjkb
 luarocks-build-treesitter-parser,,,,,,mrcjkb
 luasec,,,,,,flosse
@@ -85,6 +88,7 @@ luasocket,,,,,,
 luasql-sqlite3,,,,,,vyp
 luassert,,,,,,
 luasystem,,,,,,
+luatext,,,,,,
 luaunbound,,,,,,
 luaunit,,,,,,lockejan
 luautf8,,,,,,pstn
@@ -96,6 +100,7 @@ luuid,,,,20120509-2,,
 luv,,,,1.44.2-1,,
 lush.nvim,,,https://luarocks.org/dev,,,teto
 lyaml,,,,,,lblasc
+lz.n,,,,,,mrcjkb
 magick,,,,,5.1,donovanglover
 markdown,,,,,,
 mediator_lua,,,,,,
@@ -111,6 +116,7 @@ nvim-nio,,,,,,mrcjkb
 pathlib.nvim,,,,,,
 penlight,,,,,,alerque
 plenary.nvim,https://raw.githubusercontent.com/nvim-lua/plenary.nvim/master/plenary.nvim-scm-1.rockspec,,,,5.1,
+psl,,,,0.3,,
 rapidjson,,,,,,
 rest.nvim,,,,,5.1,teto
 rocks.nvim,,,,,,mrcjkb

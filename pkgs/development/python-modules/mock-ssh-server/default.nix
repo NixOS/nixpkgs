@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, paramiko
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  paramiko,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-yJd+WDidW5ouofytAKTlSiZhIQg2cLs8BvEp15qwtjo=";
   };
 
-  propagatedBuildInputs = [
-    paramiko
-  ];
+  propagatedBuildInputs = [ paramiko ];
 
   # Tests are running into a timeout on Hydra, they work locally
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mockssh"
-  ];
+  pythonImportsCheck = [ "mockssh" ];
 
   meta = with lib; {
     description = "Python mock SSH server for testing purposes";

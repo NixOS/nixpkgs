@@ -1,27 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ansible-core
-, flaky
-, pytest-mock
-, pytestCheckHook
-, pyyaml
-, setuptools
-, setuptools-scm
-, subprocess-tee
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ansible-core,
+  coreutils,
+  flaky,
+  pytest-mock,
+  pytestCheckHook,
+  pyyaml,
+  setuptools,
+  setuptools-scm,
+  subprocess-tee,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "4.1.11";
+  version = "24.6.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-s+n518OhzmIi3kROncb+zn66cKxk8qC+/cTi1UIBi0o=";
+    pname = "ansible_compat";
+    inherit version;
+    hash = "sha256-+T1MNH2OGQPCkkSUQcCamH1wNm+crfmv5eMtyKAZPKw=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +39,8 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$(mktemp -d)
-    export PATH=$PATH:$out/bin
+    substituteInPlace test/test_runtime.py \
+      --replace-fail "printenv" "${coreutils}/bin/printenv"
   '';
 
   nativeCheckInputs = [
@@ -57,18 +61,18 @@ buildPythonPackage rec {
     "test_install_collection_dest"
     "test_upgrade_collection"
     "test_require_collection_no_cache_dir"
-    "test_runtime"
+    "test_runtime_has_playbook"
+    "test_runtime_plugins"
+    "test_scan_sys_path"
   ];
 
-  pythonImportsCheck = [
-    "ansible_compat"
-  ];
+  pythonImportsCheck = [ "ansible_compat" ];
 
   meta = with lib; {
     description = "Function collection that help interacting with various versions of Ansible";
     homepage = "https://github.com/ansible/ansible-compat";
     changelog = "https://github.com/ansible/ansible-compat/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dawidd6 ];
   };
 }

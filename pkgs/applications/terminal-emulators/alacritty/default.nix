@@ -131,7 +131,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.test = nixosTests.terminal-emulators.alacritty;
 
   meta = with lib; {
-    description = "A cross-platform, GPU-accelerated terminal emulator";
+    description = "Cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
     mainProgram = "alacritty";

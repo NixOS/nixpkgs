@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
-    description = "A simple cargo plugin to get a list of features for a specific crate";
+    description = "Simple cargo plugin to get a list of features for a specific crate";
     mainProgram = "cargo-whatfeatures";
     homepage = "https://github.com/museun/cargo-whatfeatures";
     license = with licenses; [ mit asl20 ];

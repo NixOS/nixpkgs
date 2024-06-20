@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An extension to GTK used by elementary OS";
+    description = "Extension to GTK used by elementary OS";
     longDescription = ''
       Granite is a companion library for GTK and GLib. Among other things, it provides complex widgets and convenience functions
       designed for use in apps built for elementary OS.

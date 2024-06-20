@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, auditwheel
-, buildPythonPackage
-, git
-, greenlet
-, fetchFromGitHub
-, pyee
-, python
-, pythonOlder
-, setuptools
-, setuptools-scm
-, playwright-driver
-, pythonRelaxDepsHook
+{
+  lib,
+  stdenv,
+  auditwheel,
+  buildPythonPackage,
+  git,
+  greenlet,
+  fetchFromGitHub,
+  pyee,
+  python,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  playwright-driver,
+  pythonRelaxDepsHook,
 }:
 
 let
@@ -67,7 +68,6 @@ buildPythonPackage rec {
       --replace "@driver@" "${driver}/bin/playwright"
   '';
 
-
   nativeBuildInputs = [
     git
     setuptools-scm
@@ -75,9 +75,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ] ++ lib.optionals stdenv.isLinux [ auditwheel ];
 
-  pythonRelaxDeps = [
-    "pyee"
-  ];
+  pythonRelaxDeps = [ "pyee" ];
 
   propagatedBuildInputs = [
     greenlet
@@ -91,9 +89,7 @@ buildPythonPackage rec {
   # Skip tests because they require network access.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "playwright"
-  ];
+  pythonImportsCheck = [ "playwright" ];
 
   passthru = {
     inherit driver;
@@ -109,7 +105,15 @@ buildPythonPackage rec {
     mainProgram = "playwright";
     homepage = "https://github.com/microsoft/playwright-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ techknowlogick yrd ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      techknowlogick
+      yrd
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 }

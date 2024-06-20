@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pycrypto
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pycrypto,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -35,12 +36,10 @@ buildPythonPackage rec {
   # requires a certificates file
   doCheck = false;
 
-  pythonImportsCheck = [
-    "libcloud"
-  ];
+  pythonImportsCheck = [ "libcloud" ];
 
   meta = with lib; {
-    description = "A unified interface to many cloud providers";
+    description = "Unified interface to many cloud providers";
     homepage = "https://libcloud.apache.org/";
     changelog = "https://github.com/apache/libcloud/blob/v${version}/CHANGES.rst";
     license = licenses.asl20;

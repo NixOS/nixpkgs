@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
-  version = "1.12.2";
+  version = "1.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
     rev = "refs/tags/${version}";
-    hash = "sha256-CeVt4Vkr3tGvWsDQtw8eAaRS5jBeDei0TrS5rViSCaI=";
+    hash = "sha256-FxVyPks42hoj2y2epZjSNuTOvhDk3Vxm895a4teeSuw=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests require network access
     "test_plugin_config_through_mkdocs"
-    "test_remote_image_ok"
+    "test_remote_image"
   ];
 
   disabledTestPaths = [

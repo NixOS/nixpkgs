@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withRpm rpm;
 
   meta = with lib; {
-    description = "A free package dependency solver";
+    description = "Free package dependency solver";
     homepage = "https://github.com/openSUSE/libsolv";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;

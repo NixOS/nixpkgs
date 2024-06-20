@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/indestructible-type/Jost";
-    description = "A sans serif font by Indestructible Type";
+    description = "Sans serif font by Indestructible Type";
     license = licenses.ofl;
     maintainers = [ maintainers.ar1a ];
   };

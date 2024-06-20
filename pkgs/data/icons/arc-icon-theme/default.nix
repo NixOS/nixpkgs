@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "arc-icon-theme";
-  version = "2016-11-22";
+  version = "20161122";
 
   src = fetchFromGitHub {
     owner = "horst3180";
-    repo = pname;
-    rev = "55a575386a412544c3ed2b5617a61f842ee4ec15";
-    sha256 = "1ch3hp08qri93510hypzz6m2x4xgg2h15wvnhjwh1x1s1b7jvxjd";
+    repo = "arc-icon-theme";
+    rev = version;
+    hash = "sha256-TfYtzwo69AC5hHbzEqB4r5Muqvn/eghCGSlmjMCFA7I=";
   };
 
   nativeBuildInputs = [

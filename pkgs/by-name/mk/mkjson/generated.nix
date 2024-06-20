@@ -38,7 +38,7 @@ mkDerivation rec {
     time unordered-containers uuid vector
   ];
 
-  description = "A commandline tool to generate static or random JSON records";
+  description = "Commandline tool to generate static or random JSON records";
   homepage = "https://github.com/mfussenegger/mkjson";
   license = lib.licenses.mit;
   maintainers = with lib.maintainers; [ athas ];

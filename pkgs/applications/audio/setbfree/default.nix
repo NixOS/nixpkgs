@@ -44,7 +44,7 @@ stdenv.mkDerivation  rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A DSP tonewheel organ emulator";
+    description = "DSP tonewheel organ emulator";
     homepage = "https://setbfree.org";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ]; # fails on ARM and Darwin

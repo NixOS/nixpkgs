@@ -7,30 +7,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "1.0.9";
+  version = "2.0.17";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-dO0GzbMopX84AKOtJYYW6vojcs4kYcZ8LQ4tXEgUN7I=";
+    hash = "sha256-UzPEupmUnph7SjCc/T4sBSGXj8yLVdQlw+X9iM16zD8=";
   };
 
-  cargoHash = "sha256-RQnyVRHWrqnKcI3Jy593jDTydG1nGyrScsqSNyJTDJk=";
+  cargoHash = "sha256-AchVbf+mn4qQtzWu84Dqek+btCm6BA9mcY+8iHWqdiw=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.IOKit
   ];
 
-  # tests are broken
-  doCheck = false;
-
-  # enable nightly features
-  RUSTC_BOOTSTRAP = true;
-
   meta = with lib; {
-    description = "A pure functional compile target that is lazy, non-garbage-collected, and parallel";
+    description = "Massively parallel, optimal functional runtime in Rust";
     mainProgram = "hvm";
     homepage = "https://github.com/higherorderco/hvm";
-    license = licenses.mit;
+    license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];
   };
 }

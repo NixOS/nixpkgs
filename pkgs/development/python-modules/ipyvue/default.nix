@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
   # Python Inputs
-, setuptools
-, ipywidgets
+  setuptools,
+  ipywidgets,
 }:
 
 buildPythonPackage rec {
@@ -16,13 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-AwgE/5GgRK0/oHrjTjlSo9IxmDdnhDSqqZrkiLp0mls=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [ ipywidgets ];
 
-  doCheck = false;  # No tests in package or GitHub
+  doCheck = false; # No tests in package or GitHub
   pythonImportsCheck = [ "ipyvue" ];
 
   meta = with lib; {

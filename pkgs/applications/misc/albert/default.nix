@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A fast and flexible keyboard launcher";
+    description = "Fast and flexible keyboard launcher";
     longDescription = ''
       Albert is a desktop agnostic launcher. Its goals are usability and beauty,
       performance and extensibility. It is written in C++ and based on the Qt

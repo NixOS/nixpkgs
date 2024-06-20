@@ -1,18 +1,19 @@
-{ lib
-, argparse-addons
-, bitstruct
-, buildPythonPackage
-, can
-, crccheck
-, diskcache
-, fetchPypi
-, matplotlib
-, parameterized
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-scm
-, textparser
+{
+  lib,
+  argparse-addons,
+  bitstruct,
+  buildPythonPackage,
+  can,
+  crccheck,
+  diskcache,
+  fetchPypi,
+  matplotlib,
+  parameterized,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  textparser,
 }:
 
 buildPythonPackage rec {
@@ -41,18 +42,14 @@ buildPythonPackage rec {
     textparser
   ];
 
-  passthru.optional-dependencies.plot = [
-    matplotlib
-  ];
+  passthru.optional-dependencies.plot = [ matplotlib ];
 
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
   ] ++ passthru.optional-dependencies.plot;
 
-  pythonImportsCheck = [
-    "cantools"
-  ];
+  pythonImportsCheck = [ "cantools" ];
 
   meta = with lib; {
     description = "Tools to work with CAN bus";

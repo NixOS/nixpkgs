@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
-, unasync
-, poetry-core
-, python
-, click
-, hiredis
-, more-itertools
-, pydantic
-, python-ulid
-, redis
-, types-redis
-, typing-extensions
-, pkgs
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  unasync,
+  poetry-core,
+  python,
+  click,
+  hiredis,
+  more-itertools,
+  pydantic,
+  python-ulid,
+  redis,
+  types-redis,
+  typing-extensions,
+  pkgs,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

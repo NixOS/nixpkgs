@@ -15,17 +15,16 @@
 
 stdenv.mkDerivation rec {
   pname = "sticky";
-  version = "1.19";
+  version = "1.20";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-nvnft62vZ9ivijYnQGULW7ff2aAVJiIx9xq09My2NxE=";
+    hash = "sha256-HzTXaJgDu72pWM0mGNNBy2yFB0u0rqATFK9JzyOw8oE=";
   };
 
   postPatch = ''
-    sed -i -e "s|/usr/bin|$out/bin|" data/org.x.sticky.service
     sed -i -e "s|/usr/lib|$out/lib|" usr/bin/sticky
     sed -i -e "s|/usr/share|$out/share|" usr/lib/sticky/*.py
   '';
@@ -51,20 +50,11 @@ stdenv.mkDerivation rec {
     xapp
   ];
 
-  postInstall = ''
-    # https://github.com/linuxmint/sticky/pull/118
-    cp -r ../etc $out
-    cp -r ../usr/* $out
-
-    glib-compile-schemas $out/share/glib-2.0/schemas
-  '';
-
   dontWrapGApps = true;
 
   preFixup = ''
     buildPythonPath "$out $pythonPath"
 
-    chmod +x $out/bin/sticky
     wrapProgram $out/bin/sticky \
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
       ''${gappsWrapperArgs[@]}
@@ -77,7 +67,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A sticky notes app for the linux desktop";
+    description = "Sticky notes app for the linux desktop";
     mainProgram = "sticky";
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;

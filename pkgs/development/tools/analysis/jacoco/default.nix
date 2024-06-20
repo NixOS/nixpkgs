@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free code coverage library for Java";
+    description = "Free code coverage library for Java";
     mainProgram = "jacoco";
     homepage = "https://www.jacoco.org/jacoco";
     changelog = "https://www.jacoco.org/jacoco/trunk/doc/changes.html";

@@ -1,18 +1,23 @@
 {
+  blake3 = {
+    url = "https://github.com/geopjr/blake3.cr.git";
+    rev = "v1.3.0";
+    sha256 = "0pc3h7b5gfkmxlw708qaqjfzjvv5ig3iwxxainq6pwfhpff4a5wd";
+  };
   gettext = {
     url = "https://github.com/geopjr/gettext.cr.git";
     rev = "v1.0.0";
     sha256 = "1y27m4170rr4532j56grzhwbz8hj6z7j3zfkd0jnfwnsxclks1kc";
   };
-  gio = {
-    url = "https://github.com/hugopl/gio.cr.git";
-    rev = "v0.1.0";
-    sha256 = "0vj35bi64d4hni18nrl8fmms306a0gl4zlxpf3aq08lh0sbwzhd8";
+  gi-crystal = {
+    url = "https://github.com/hugopl/gi-crystal.git";
+    rev = "v0.22.2";
+    sha256 = "0bpa1f8iaf97z2kbgjc7nc8km7nd7bppiwna319lm2hvm8m5pw15";
   };
   gtk4 = {
     url = "https://github.com/hugopl/gtk4.cr.git";
-    rev = "v0.15.0";
-    sha256 = "100j5k4sfc2dpj3nplzjcaxw1bwy3hsy5cw93asg00kda9h8dbb1";
+    rev = "v0.16.1";
+    sha256 = "1cqkbh072y70l8g0p040vf50k920p32ry1larnwn9mqabd74jwaj";
   };
   harfbuzz = {
     url = "https://github.com/hugopl/harfbuzz.cr.git";
@@ -26,12 +31,12 @@
   };
   non-blocking-spawn = {
     url = "https://github.com/geopjr/non-blocking-spawn.git";
-    rev = "v1.0.5";
-    sha256 = "139gr87zlw0k9kf6pf9k2d88aa9x3kcnfg34qpbqrwsrck7708za";
+    rev = "v1.1.0";
+    sha256 = "1h43gskannylaai4dz2sjb6rds2h6slm1krg88inan12silhp66c";
   };
   pango = {
     url = "https://github.com/hugopl/pango.cr.git";
-    rev = "v0.2.0";
-    sha256 = "0dl3qrhi2ybylmvzx1x5gsznp2pcdkc50waxrljxwnf5avn8ixsf";
+    rev = "v0.3.1";
+    sha256 = "0xlf127flimnll875mcq92q7xsi975rrgdpcpmnrwllhdhfx9qmv";
   };
 }

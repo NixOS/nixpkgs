@@ -150,9 +150,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags =
     (lib.mapAttrsToList lib.mesonEnable {
-      "cava" = cavaSupport;
+      "cava" = cavaSupport && lib.asserts.assertMsg sndioSupport "Sndio support is required for Cava";
       "dbusmenu-gtk" = traySupport;
       "jack" = jackSupport;
+      "libevdev" = evdevSupport;
       "libinput" = inputSupport;
       "libnl" = nlSupport;
       "libudev" = udevSupport;

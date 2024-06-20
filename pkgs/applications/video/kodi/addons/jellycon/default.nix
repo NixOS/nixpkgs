@@ -43,7 +43,7 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://github.com/jellyfin/jellycon";
-    description = "A lightweight Kodi add-on for Jellyfin";
+    description = "Lightweight Kodi add-on for Jellyfin";
     longDescription = ''
       JellyCon is a lightweight Kodi add-on that lets you browse and play media
       files directly from your Jellyfin server within the Kodi interface. It can

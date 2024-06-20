@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jamo
-, nltk
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  jamo,
+  nltk,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     nltk
   ];
 
-  pythonImportsCheck = [
-    "g2pkk"
-  ];
+  pythonImportsCheck = [ "g2pkk" ];
 
   doCheck = false;
 
@@ -33,4 +32,3 @@ buildPythonPackage rec {
     maintainers = teams.tts.members;
   };
 }
-

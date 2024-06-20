@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gcsfuse";
-  version = "2.0.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
     rev = "v${version}";
-    hash = "sha256-8O8JIN2KmTw5bMmcxu9ZeNiS48XkMUUpAX3+6Km13Y8=";
+    hash = "sha256-ecTwC0FHg0MHBkrsydTam4UfylldZQp06t/1BYUwgUI=";
   };
 
-  vendorHash = "sha256-nw2b0lDUJ9B+LloySns4cUzXeJ8uv4oYkZY0Jjg4hxc=";
+  vendorHash = "sha256-GmLyYtgiUBd09mUktjNhbPN5QCUb9VNUzA0xT5mzQ0Q=";
 
   subPackages = [ "." "tools/mount_gcsfuse" ];
 
@@ -36,7 +36,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A user-space file system for interacting with Google Cloud Storage";
+    description = "User-space file system for interacting with Google Cloud Storage";
     homepage = "https://cloud.google.com/storage/docs/gcs-fuse";
     changelog = "https://github.com/GoogleCloudPlatform/gcsfuse/releases/tag/v${version}";
     license = licenses.asl20;

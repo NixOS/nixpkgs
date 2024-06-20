@@ -479,7 +479,7 @@ let
             # `-undefined dynamic_lookup` as otherwise the compilation fails.
             $CC -shared \
               ${lib.optionalString stdenv.isDarwin "-undefined dynamic_lookup"} \
-              -o $out/lib/${name}${stdenv.hostPlatform.extensions.sharedLibrary} ${src}
+              -o $out/lib/${name}${stdenv.hostPlatform.extensions.library} ${src}
           '';
           b = compile "libb" ''
             #include <stdio.h>

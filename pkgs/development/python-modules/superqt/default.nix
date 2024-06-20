@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "superqt";
-  version = "0.6.5";
+  version = "0.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "pyapp-kit";
     repo = "superqt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zEMG2zscGDlRxtLn/lUTEjZBPabcwzMcj/kMcy3yOs8=";
+    hash = "sha256-/VR9Lc1x+7J/3zyo/eBFBvGkPXzpTfPpNAvNhSzWio8=";
   };
 
   build-system = [

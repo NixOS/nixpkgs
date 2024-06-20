@@ -67,8 +67,8 @@
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nix, the package manager
-pkgs/tools/package-management/nix/                    @raitobezarius @ma27
-nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
+pkgs/tools/package-management/nix/                    @raitobezarius
+nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
@@ -152,6 +152,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 
 # C compilers
 /pkgs/development/compilers/gcc
+/pkgs/development/compilers/llvm @RossComputerGuy
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
@@ -306,8 +307,8 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
 
 # Forgejo
-nixos/modules/services/misc/forgejo.nix      @bendlas @emilylange
-pkgs/applications/version-management/forgejo @bendlas @emilylange
+nixos/modules/services/misc/forgejo.nix @adamcstephens @bendlas @emilylange
+pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
 
 # Dotnet
 /pkgs/build-support/dotnet                  @IvarWithoutBones
@@ -362,4 +363,17 @@ pkgs/by-name/in/incus/                  @adamcstephens
 pkgs/by-name/lx/lxc*                    @adamcstephens
 pkgs/by-name/lx/lxd*                    @adamcstephens
 pkgs/os-specific/linux/lxc/             @adamcstephens
+
+# ExpidusOS, Flutter
+/pkgs/development/compilers/flutter @RossComputerGuy
+/pkgs/desktops/expidus              @RossComputerGuy
+
+# GNU Tar & Zip
+/pkgs/tools/archivers/gnutar        @RossComputerGuy
+/pkgs/tools/archivers/zip           @RossComputerGuy
+
+# SELinux
+/pkgs/os-specific/linux/checkpolicy @RossComputerGuy
+/pkgs/os-specific/linux/libselinux  @RossComputerGuy
+/pkgs/os-specific/linux/libsepol    @RossComputerGuy
 

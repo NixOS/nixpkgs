@@ -1,7 +1,7 @@
 { version, sha256, patches ? [] }:
 
-{ lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
-, gnulib, gawk, libiconv
+{ lib, stdenv, buildPackages, fetchurl, perl, libintl, bash
+, updateAutotoolsGnuConfigScriptsHook, gnulib, gawk, freebsd, libiconv
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -49,7 +49,8 @@ stdenv.mkDerivation {
   # A native compiler is needed to build tools needed at build time
   depsBuildBuild = [ buildPackages.stdenv.cc perl ];
 
-  buildInputs = [ xz.bin bash libintl ]
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+  buildInputs = [ bash libintl ]
     ++ optionals stdenv.isSunOS [ libiconv gawk ]
     ++ optional interactive ncurses;
 
@@ -63,7 +64,8 @@ stdenv.mkDerivation {
   installFlags = [ "TEXMF=$(out)/texmf-dist" ];
   installTargets = [ "install" "install-tex" ];
 
-  nativeCheckInputs = [ procps ];
+  nativeCheckInputs = [ procps ]
+    ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
 
   doCheck = interactive
     && !stdenv.isDarwin
@@ -83,7 +85,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "The GNU documentation system";
+    description = "GNU documentation system";
     homepage = "https://www.gnu.org/software/texinfo/";
     changelog = "https://git.savannah.gnu.org/cgit/texinfo.git/plain/NEWS";
     license = licenses.gpl3Plus;

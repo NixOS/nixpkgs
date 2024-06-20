@@ -19,7 +19,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Updated configparser from Python 3.7 for Python 2.6+.";
+    description = "Updated configparser from Python 3.7 for Python 2.6+";
     license = licenses.mit;
     homepage = "https://github.com/jaraco/configparser";
   };

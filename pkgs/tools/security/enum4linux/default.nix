@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool for enumerating information from Windows and Samba systems";
+    description = "Tool for enumerating information from Windows and Samba systems";
     mainProgram = "enum4linux";
     homepage = "https://labs.portcullis.co.uk/tools/enum4linux/";
     license = licenses.gpl2Plus;

@@ -5,17 +5,17 @@
 }:
 buildGoModule rec {
   pname = "dae";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "dae";
     rev = "v${version}";
-    hash = "sha256-hvAuWCacaWxXwxx5ktj57hnWt8fcnwD6rUuRj1+ZtFA=";
+    hash = "sha256-RO0XsGyIgf2PQekiC71HirEPp2SQDJpiAbjg7TyaGVQ=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-4U6zIxK8K+MGxRboTtsKntDMp8/cQWPqXQ3l03AEtBs=";
+  vendorHash = "sha256-KFe0hGAXn4mrWCsU91cfUZc21SgJes6XXFhAKrqmULE=";
 
   proxyVendor = true;
 
@@ -44,7 +44,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A Linux high-performance transparent proxy solution based on eBPF";
+    description = "Linux high-performance transparent proxy solution based on eBPF";
     homepage = "https://github.com/daeuniverse/dae";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ oluceps pokon548 ];

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, pytest
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  pytest,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     "testout"
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   postInstall = ''
     mkdir $testout
@@ -40,11 +37,9 @@ buildPythonPackage rec {
   '';
 
   doCheck = false;
-  passthru.tests.pytest = callPackage ./tests.nix {};
+  passthru.tests.pytest = callPackage ./tests.nix { };
 
-  pythonImportsCheck = [
-    "pytest_asyncio"
-  ];
+  pythonImportsCheck = [ "pytest_asyncio" ];
 
   meta = with lib; {
     description = "Library for testing asyncio code with pytest";

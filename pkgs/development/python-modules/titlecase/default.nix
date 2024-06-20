@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, regex
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -21,25 +22,15 @@ buildPythonPackage rec {
     hash = "sha256-aJbbfNnQvmmYPXVOO+xx7ADetsxE+jnVQOVDzV5jUp8=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    regex
-  ];
+  propagatedBuildInputs = [ regex ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "titlecase/tests.py"
-  ];
+  pytestFlagsArray = [ "titlecase/tests.py" ];
 
-  pythonImportsCheck = [
-    "titlecase"
-  ];
+  pythonImportsCheck = [ "titlecase" ];
 
   meta = with lib; {
     description = "Python library to capitalize strings as specified by the New York Times";

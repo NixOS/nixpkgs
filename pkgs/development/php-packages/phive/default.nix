@@ -19,7 +19,7 @@ php.buildComposerProject (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/phar-io/phive/releases/tag/${finalAttrs.version}";
-    description = "The Phar Installation and Verification Environment (PHIVE)";
+    description = "Phar Installation and Verification Environment (PHIVE)";
     homepage = "https://github.com/phar-io/phive";
     license = lib.licenses.bsd3;
     mainProgram = "phive";

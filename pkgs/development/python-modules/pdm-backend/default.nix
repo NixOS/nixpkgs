@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
 
-# propagates
-, importlib-metadata
+  # propagates
+  importlib-metadata,
 
-# tests
-, editables
-, git
-, mercurial
-, pytestCheckHook
-, setuptools
+  # tests
+  editables,
+  git,
+  mercurial,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
 
   env.PDM_BUILD_SCM_VERSION = version;
 
-  dependencies = lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  dependencies = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  pythonImportsCheck = [
-    "pdm.backend"
-  ];
+  pythonImportsCheck = [ "pdm.backend" ];
 
   nativeCheckInputs = [
     editables
@@ -57,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/pdm-project/pdm-backend";
     changelog = "https://github.com/pdm-project/pdm-backend/releases/tag/${version}";
-    description = "Yet another PEP 517 backend.";
+    description = "Yet another PEP 517 backend";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

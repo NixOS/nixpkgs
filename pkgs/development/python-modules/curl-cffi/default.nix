@@ -1,38 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, curl-impersonate-chrome
-, cffi
-, certifi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  curl-impersonate-chrome,
+  cffi,
+  certifi,
 }:
 
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.6.3";
+  version = "0.7.0b4";
 
   src = fetchFromGitHub {
     owner = "yifeikong";
     repo = "curl_cffi";
-    rev = "v${version}";
-    hash = "sha256-VeBh5wp/VEMDGR2YK06w34hBv9qHIyA+EiZHrhEhAGw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-txrJNUzswAPeH4Iazn0iKJI0Rqk0HHRoDrtTfDHKMoo=";
   };
 
-  patches = [
-    ./use-system-libs.patch
-  ];
-  buildInputs = [
-    curl-impersonate-chrome
-  ];
+  patches = [ ./use-system-libs.patch ];
+  buildInputs = [ curl-impersonate-chrome ];
 
   format = "pyproject";
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    cffi
-  ];
+  nativeBuildInputs = [ cffi ];
   propagatedBuildInputs = [
     cffi
     certifi

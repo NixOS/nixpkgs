@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, asn1tools
-, coincurve
-, eth-hash
-, eth-typing
-, eth-utils
-, factory-boy
-, hypothesis
-, isPyPy
-, pyasn1
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  asn1tools,
+  coincurve,
+  eth-hash,
+  eth-typing,
+  eth-utils,
+  factory-boy,
+  hypothesis,
+  isPyPy,
+  pyasn1,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,22 +29,24 @@ buildPythonPackage rec {
     hash = "sha256-vyyaLCG2uIHXX0t93DmFq8/u0rZL+nsBsH2gfgjziyo=";
   };
 
-  build-system = [ setuptools];
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     eth-typing
     eth-utils
   ];
 
-  nativeCheckInputs = [
-    asn1tools
-    factory-boy
-    hypothesis
-    pyasn1
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.coincurve
-  ++ lib.optional (!isPyPy) eth-hash.optional-dependencies.pysha3
-  ++ lib.optional isPyPy eth-hash.optional-dependencies.pycryptodome;
+  nativeCheckInputs =
+    [
+      asn1tools
+      factory-boy
+      hypothesis
+      pyasn1
+      pytestCheckHook
+    ]
+    ++ passthru.optional-dependencies.coincurve
+    ++ lib.optional (!isPyPy) eth-hash.optional-dependencies.pysha3
+    ++ lib.optional isPyPy eth-hash.optional-dependencies.pycryptodome;
 
   disabledTests = [
     # tests are broken

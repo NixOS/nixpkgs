@@ -6,7 +6,7 @@ src: version:
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-zQUD/PQWzp2Q6fiVmLicvSusXffu6s9q3x/aAUnCN38=";
+    hash = "sha256-a2kIOQHaMzaMWId6+SSYN+SPQM2Ipa+F1ztFZgo3R6A=";
   };
 
   nativeBuildInputs = [

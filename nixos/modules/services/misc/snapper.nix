@@ -103,6 +103,18 @@ in
       '';
     };
 
+    persistentTimer = mkOption {
+      default = false;
+      type = types.bool;
+      example = true;
+      description = ''
+        Set the `Persistent` option for the
+        {manpage}`systemd.timer(5)`
+        which triggers the snapshot immediately if the last trigger
+        was missed (e.g. if the system was powered down).
+      '';
+    };
+
     cleanupInterval = mkOption {
       type = types.str;
       default = "1d";
@@ -198,7 +210,14 @@ in
       inherit documentation;
       requires = [ "local-fs.target" ];
       serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --timeline";
-      startAt = cfg.snapshotInterval;
+    };
+
+    systemd.timers.snapper-timeline = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        Persistent = cfg.persistentTimer;
+        OnCalendar = cfg.snapshotInterval;
+      };
     };
 
     systemd.services.snapper-cleanup = {
@@ -216,7 +235,7 @@ in
       timerConfig.OnUnitActiveSec = cfg.cleanupInterval;
     };
 
-    systemd.services.snapper-boot = lib.optionalAttrs cfg.snapshotRootOnBoot {
+    systemd.services.snapper-boot = lib.mkIf cfg.snapshotRootOnBoot {
       description = "Take snapper snapshot of root on boot";
       inherit documentation;
       serviceConfig.ExecStart = "${pkgs.snapper}/bin/snapper --config root create --cleanup-algorithm number --description boot";

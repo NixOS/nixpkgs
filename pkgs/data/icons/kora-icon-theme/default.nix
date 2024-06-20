@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation rec  {
   };
 
   meta = with lib; {
-    description = "An SVG icon theme in four variants";
+    description = "SVG icon theme in four variants";
     homepage = "https://github.com/bikass/kora";
     license = with licenses; [ gpl3Only ];
     platforms = platforms.linux;

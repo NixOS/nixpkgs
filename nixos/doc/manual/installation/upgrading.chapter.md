@@ -6,7 +6,7 @@ expressions and associated binaries. The NixOS channels are updated
 automatically from NixOS's Git repository after certain tests have
 passed and all packages have been built. These channels are:
 
--   *Stable channels*, such as [`nixos-23.11`](https://channels.nixos.org/nixos-23.11).
+-   *Stable channels*, such as [`nixos-24.05`](https://channels.nixos.org/nixos-24.05).
     These only get conservative bug fixes and package upgrades. For
     instance, a channel update may cause the Linux kernel on your system
     to be upgraded from 4.19.34 to 4.19.38 (a minor bug fix), but not
@@ -19,7 +19,7 @@ passed and all packages have been built. These channels are:
     radical changes between channel updates. It's not recommended for
     production systems.
 
--   *Small channels*, such as [`nixos-23.11-small`](https://channels.nixos.org/nixos-23.11-small)
+-   *Small channels*, such as [`nixos-24.05-small`](https://channels.nixos.org/nixos-24.05-small)
     or [`nixos-unstable-small`](https://channels.nixos.org/nixos-unstable-small).
     These are identical to the stable and unstable channels described above,
     except that they contain fewer binary packages. This means they get updated
@@ -38,8 +38,8 @@ supported stable release.
 
 When you first install NixOS, you're automatically subscribed to the
 NixOS channel that corresponds to your installation source. For
-instance, if you installed from a 23.11 ISO, you will be subscribed to
-the `nixos-23.11` channel. To see which NixOS channel you're subscribed
+instance, if you installed from a 24.05 ISO, you will be subscribed to
+the `nixos-24.05` channel. To see which NixOS channel you're subscribed
 to, run the following as root:
 
 ```ShellSession
@@ -54,16 +54,16 @@ To switch to a different NixOS channel, do
 ```
 
 (Be sure to include the `nixos` parameter at the end.) For instance, to
-use the NixOS 23.11 stable channel:
+use the NixOS 24.05 stable channel:
 
 ```ShellSession
-# nix-channel --add https://channels.nixos.org/nixos-23.11 nixos
+# nix-channel --add https://channels.nixos.org/nixos-24.05 nixos
 ```
 
 If you have a server, you may want to use the "small" channel instead:
 
 ```ShellSession
-# nix-channel --add https://channels.nixos.org/nixos-23.11-small nixos
+# nix-channel --add https://channels.nixos.org/nixos-24.05-small nixos
 ```
 
 And if you want to live on the bleeding edge:
@@ -117,6 +117,6 @@ modules. You can also specify a channel explicitly, e.g.
 
 ```nix
 {
-  system.autoUpgrade.channel = "https://channels.nixos.org/nixos-23.11";
+  system.autoUpgrade.channel = "https://channels.nixos.org/nixos-24.05";
 }
 ```

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://sebastien.godard.pagesperso-orange.fr/";
-    description = "A collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)";
+    description = "Collection of performance monitoring tools for Linux (such as sar, iostat and pidstat)";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.eelco ];

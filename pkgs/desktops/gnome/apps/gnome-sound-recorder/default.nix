@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A simple and modern sound recorder";
+    description = "Simple and modern sound recorder";
     mainProgram = "gnome-sound-recorder";
     homepage = "https://gitlab.gnome.org/World/vocalis";
     license = licenses.gpl2Plus;

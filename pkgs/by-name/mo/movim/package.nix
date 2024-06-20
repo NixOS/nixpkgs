@@ -136,7 +136,7 @@ php.buildComposerProject (finalAttrs: {
   };
 
   meta = {
-    description = "a federated blogging & chat platform that acts as a web front end for the XMPP protocol";
+    description = "Federated blogging & chat platform that acts as a web front end for the XMPP protocol";
     homepage = "https://movim.eu";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ toastal ];

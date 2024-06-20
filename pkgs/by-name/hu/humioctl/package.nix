@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "humioctl";
-  version = "0.32.3";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "humio";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-MaBJL/3TZYmXjwt5/WmBBTXVhlJ6oyCgm+Lb8id6J3c=";
+    hash = "sha256-/oMsNAUCM1FdGDfn7pxkfT1hJlJJDbaxEXvGGJy0VgE=";
   };
 
-  vendorHash = "sha256-FAy0LNmesEDgS3JTz5DPd8vkR5CHHhAbms++N8TQApA=";
+  vendorHash = "sha256-ABXBzmRBByet6Jb/uvcvpdGHC5MSAKvZUnsyY2d2nGs=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/humio/cli";
-    description = "A CLI for managing and sending data to Humio";
+    description = "CLI for managing and sending data to Humio";
     license = licenses.asl20;
     maintainers = with maintainers; [ lucperkins ];
     mainProgram = "humioctl";

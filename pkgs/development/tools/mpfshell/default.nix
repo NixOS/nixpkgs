@@ -20,7 +20,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/wendlers/mpfshell";
-    description = "A simple shell based file explorer for ESP8266 Micropython based devices";
+    description = "Simple shell based file explorer for ESP8266 Micropython based devices";
     mainProgram = "mpfshell";
     license = licenses.mit;
   };

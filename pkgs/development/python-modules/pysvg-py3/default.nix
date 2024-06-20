@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, python
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
 }:
 
 buildPythonPackage rec {

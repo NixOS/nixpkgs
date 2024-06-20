@@ -1,11 +1,12 @@
-{ buildPythonPackage
-, fetchPypi
-, lib
-, pytest
-, pytest-xdist
-, pytest-dependency
-, pytest-mock
-, pytestCheckHook
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  pytest,
+  pytest-xdist,
+  pytest-dependency,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,9 @@ buildPythonPackage rec {
     description = "Pytest plugin that allows you to customize the order in which your tests are run";
     homepage = "https://github.com/pytest-dev/pytest-order";
     license = licenses.mit;
-    maintainers = with maintainers; [ jacg Luflosi ];
+    maintainers = with maintainers; [
+      jacg
+      Luflosi
+    ];
   };
 }

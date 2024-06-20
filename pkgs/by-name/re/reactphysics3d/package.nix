@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reactphysics3d";
@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "An open source C++ physics engine library";
+    description = "Open source C++ physics engine library";
     homepage = "https://www.reactphysics3d.com";
     maintainers = with maintainers; [ rexxDigital ];
     license = licenses.zlib;

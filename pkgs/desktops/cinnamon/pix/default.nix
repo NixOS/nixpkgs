@@ -7,6 +7,7 @@
 , exiv2
 , libheif
 , libjpeg
+, libjxl
 , libtiff
 , gst_all_1
 , libraw
@@ -30,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "3.2.2";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tRndJjUw/k5mJPFTBMfW88Mvp2wZtC3RUzyS8bBO1jc=";
+    sha256 = "sha256-QkgjUzoBOXE3mxXy/Lq3YkHq7f9oE97FeP7PHIBDHvc=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     lcms2
     libheif
     libjpeg
+    libjxl
     libraw
     librsvg
     libsecret
@@ -92,7 +94,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A generic image viewer from Linux Mint";
+    description = "Generic image viewer from Linux Mint";
     mainProgram = "pix";
     homepage = "https://github.com/linuxmint/pix";
     license = licenses.gpl2Only;

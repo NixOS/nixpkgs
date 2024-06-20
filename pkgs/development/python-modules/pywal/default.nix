@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, imagemagick, feh, isPy3k }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  imagemagick,
+  feh,
+  isPy3k,
+}:
 
 buildPythonPackage rec {
   pname = "pywal";

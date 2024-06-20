@@ -93,6 +93,8 @@ let
 
       mkdir -p $lib/lib/clang
       mv $lib/lib/17 $lib/lib/clang/17
+    '') + (lib.optionalString (lib.versionAtLeast release_version "19") ''
+      mv $out/lib/clang $lib/lib/clang
     '') + ''
 
       # Move libclang to 'lib' output
@@ -147,7 +149,7 @@ let
 
     meta = llvm_meta // {
       homepage = "https://clang.llvm.org/";
-      description = "A C language family frontend for LLVM";
+      description = "C language family frontend for LLVM";
       longDescription = ''
         The Clang project provides a language front-end and tooling
         infrastructure for languages in the C language family (C, C++, Objective

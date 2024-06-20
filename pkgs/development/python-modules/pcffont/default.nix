@@ -1,35 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, bdffont
-, pytestCheckHook
-, nix-update-script
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  bdffont,
+  pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pcffont";
-  version = "0.0.11";
+  version = "0.0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "pcffont";
     rev = "refs/tags/${version}";
-    hash = "sha256-gu9niWxYTw3rcA++z8B+MdKp5XaqAGjmvd+PdSDosfg=";
+    hash = "sha256-UIRhUlsRd3ICdLAjUasQ1NX5NofSKCEqa8cf1c1voGM=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    bdffont
-  ];
+  dependencies = [ bdffont ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pcffont" ];
 

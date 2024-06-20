@@ -106,7 +106,8 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = "${pkgs.coreutils}/bin/mkdir -p /var/lib/alsa";
+          ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/alsa";
+          ExecStart = "${alsa-utils}/sbin/alsactl restore --ignore";
           ExecStop = "${alsa-utils}/sbin/alsactl store --ignore";
         };
       };

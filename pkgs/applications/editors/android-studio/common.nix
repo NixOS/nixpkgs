@@ -1,7 +1,7 @@
 { channel, pname, version, sha256Hash }:
 
 { alsa-lib
-, bash
+, runtimeShell
 , buildFHSEnv
 , cacert
 , coreutils
@@ -65,6 +65,7 @@
 , zlib
 , makeDesktopItem
 , tiling_wm # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
+, androidenv
 }:
 
 let
@@ -214,20 +215,55 @@ let
         '')
     ];
   };
-in runCommand
-  drvName
-  {
-    startScript = ''
-      #!${bash}/bin/bash
-      ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh "$@"
+  mkAndroidStudioWrapper = {androidStudio, androidSdk ? null}: runCommand drvName {
+    startScript = let
+      hasAndroidSdk = androidSdk != null;
+      androidSdkRoot = lib.optionalString hasAndroidSdk "${androidSdk}/libexec/android-sdk";
+    in ''
+      #!${runtimeShell}
+      ${lib.optionalString hasAndroidSdk ''
+        echo "=== nixpkgs Android Studio wrapper" >&2
+
+        # Default ANDROID_SDK_ROOT to the packaged one, if not provided.
+        ANDROID_SDK_ROOT="''${ANDROID_SDK_ROOT-${androidSdkRoot}}"
+
+        if [ -d "$ANDROID_SDK_ROOT" ]; then
+          export ANDROID_SDK_ROOT
+          # Legacy compatibility.
+          export ANDROID_HOME="$ANDROID_SDK_ROOT"
+          echo "  - ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >&2
+
+          # See if we can export ANDROID_NDK_ROOT too.
+          ANDROID_NDK_ROOT="$ANDROID_SDK_ROOT/ndk-bundle"
+          if [ ! -d "$ANDROID_NDK_ROOT" ]; then
+            ANDROID_NDK_ROOT="$(ls "$ANDROID_SDK_ROOT/ndk/"* 2>/dev/null | head -n1)"
+          fi
+
+          if [ -d "$ANDROID_NDK_ROOT" ]; then
+            export ANDROID_NDK_ROOT
+            echo "  - ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT" >&2
+          else
+            unset ANDROID_NDK_ROOT
+          fi
+        else
+          unset ANDROID_SDK_ROOT
+          unset ANDROID_HOME
+        fi
+      ''}
+      exec ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh "$@"
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;
-    passthru = {
+    passthru = let
+      withSdk = androidSdk: mkAndroidStudioWrapper { inherit androidStudio androidSdk; };
+    in {
       unwrapped = androidStudio;
+      full = withSdk androidenv.androidPkgs.androidsdk;
+      inherit withSdk;
+      sdk = androidSdk;
     };
     meta = with lib; {
-      description = "The Official IDE for Android (${channel} channel)";
+      description = "Official IDE for Android (${channel} channel)";
       longDescription = ''
         Android Studio is the official IDE for Android app development, based on
         IntelliJ IDEA.
@@ -245,9 +281,9 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ alapshin ];
-        beta = [ alapshin ];
-        canary = [ alapshin ];
+        stable = [ alapshin numinit ];
+        beta = [ alapshin numinit ];
+        canary = [ alapshin numinit ];
         dev = canary;
       }."${channel}";
       mainProgram = pname;
@@ -261,4 +297,5 @@ in runCommand
 
     ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${pname}.png
     ln -s ${desktopItem}/share/applications $out/share/applications
-  ''
+  '';
+in mkAndroidStudioWrapper { inherit androidStudio; }

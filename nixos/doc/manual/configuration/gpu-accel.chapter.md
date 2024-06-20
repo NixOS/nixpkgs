@@ -30,7 +30,7 @@ $ export \
 ```
 
 The second mechanism is to add the OpenCL driver package to
-[](#opt-hardware.opengl.extraPackages).
+[](#opt-hardware.graphics.extraPackages).
 This links the ICD file under `/run/opengl-driver`, where it will be visible
 to the ICD loader.
 
@@ -51,12 +51,12 @@ Platform Vendor      Advanced Micro Devices, Inc.
 Modern AMD [Graphics Core
 Next](https://en.wikipedia.org/wiki/Graphics_Core_Next) (GCN) GPUs are
 supported through the rocmPackages.clr.icd package. Adding this package to
-[](#opt-hardware.opengl.extraPackages)
+[](#opt-hardware.graphics.extraPackages)
 enables OpenCL support:
 
 ```nix
 {
-  hardware.opengl.extraPackages = [
+  hardware.graphics.extraPackages = [
     rocmPackages.clr.icd
   ];
 }
@@ -71,13 +71,13 @@ intel-compute-runtime package. The proprietary Intel OpenCL runtime, in
 the intel-ocl package, is an alternative for Gen7 GPUs.
 
 The intel-compute-runtime or intel-ocl package can be added to
-[](#opt-hardware.opengl.extraPackages)
+[](#opt-hardware.graphics.extraPackages)
 to enable OpenCL support. For example, for Gen8 and later GPUs, the following
 configuration can be used:
 
 ```nix
 {
-  hardware.opengl.extraPackages = [
+  hardware.graphics.extraPackages = [
     intel-compute-runtime
   ];
 }
@@ -90,8 +90,8 @@ compute API for GPUs. It is used directly by games or indirectly though
 compatibility layers like
 [DXVK](https://github.com/doitsujin/dxvk/wiki).
 
-By default, if [](#opt-hardware.opengl.driSupport)
-is enabled, mesa is installed and provides Vulkan for supported hardware.
+By default, if [](#opt-hardware.graphics.enable)
+is enabled, Mesa is installed and provides Vulkan for supported hardware.
 
 Similar to OpenCL, Vulkan drivers are loaded through the *Installable
 Client Driver* (ICD) mechanism. ICD files for Vulkan are JSON files that
@@ -110,7 +110,7 @@ $ export \
 ```
 
 The second mechanism is to add the Vulkan driver package to
-[](#opt-hardware.opengl.extraPackages).
+[](#opt-hardware.graphics.extraPackages).
 This links the ICD file under `/run/opengl-driver`, where it will be
 visible to the ICD loader.
 
@@ -140,18 +140,18 @@ Modern AMD [Graphics Core
 Next](https://en.wikipedia.org/wiki/Graphics_Core_Next) (GCN) GPUs are
 supported through either radv, which is part of mesa, or the amdvlk
 package. Adding the amdvlk package to
-[](#opt-hardware.opengl.extraPackages)
+[](#opt-hardware.graphics.extraPackages)
 makes amdvlk the default driver and hides radv and lavapipe from the device list.
 A specific driver can be forced as follows:
 
 ```nix
 {
-  hardware.opengl.extraPackages = [
+  hardware.graphics.extraPackages = [
     pkgs.amdvlk
   ];
 
   # To enable Vulkan support for 32-bit applications, also add:
-  hardware.opengl.extraPackages32 = [
+  hardware.graphics.extraPackages32 = [
     pkgs.driversi686Linux.amdvlk
   ];
 
@@ -171,7 +171,7 @@ graphics hardware acceleration capabilities for video processing.
 
 VA-API drivers are loaded by `libva`. The version in nixpkgs is built to search
 the opengl driver path, so drivers can be installed in
-[](#opt-hardware.opengl.extraPackages).
+[](#opt-hardware.graphics.extraPackages).
 
 VA-API can be tested using:
 
@@ -185,7 +185,7 @@ Modern Intel GPUs use the iHD driver, which can be installed with:
 
 ```nix
 {
-  hardware.opengl.extraPackages = [
+  hardware.graphics.extraPackages = [
     intel-media-driver
   ];
 }
@@ -195,7 +195,7 @@ Older Intel GPUs use the i965 driver, which can be installed with:
 
 ```nix
 {
-  hardware.opengl.extraPackages = [
+  hardware.graphics.extraPackages = [
     intel-vaapi-driver
   ];
 }

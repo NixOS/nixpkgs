@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "A model-airplane flight simulator";
+    description = "Model-airplane flight simulator";
     mainProgram = "crrcsim";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" ];

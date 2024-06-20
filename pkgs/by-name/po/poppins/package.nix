@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "A Devanagari + Latin family for Google Fonts";
+    description = "Devanagari + Latin family for Google Fonts";
     homepage = "https://github.com/itfoundry/Poppins/";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [nyawox];

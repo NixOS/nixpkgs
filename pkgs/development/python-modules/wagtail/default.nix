@@ -1,26 +1,27 @@
-{ lib
-, anyascii
-, beautifulsoup4
-, buildPythonPackage
-, callPackage
-, django
-, django-filter
-, django-modelcluster
-, django-taggit
-, django-treebeard
-, djangorestframework
-, draftjs-exporter
-, fetchPypi
-, html5lib
-, l18n
-, laces
-, openpyxl
-, permissionedforms
-, pillow
-, pythonOlder
-, requests
-, telepath
-, willow
+{
+  lib,
+  anyascii,
+  beautifulsoup4,
+  buildPythonPackage,
+  callPackage,
+  django,
+  django-filter,
+  django-modelcluster,
+  django-taggit,
+  django-treebeard,
+  djangorestframework,
+  draftjs-exporter,
+  fetchPypi,
+  html5lib,
+  l18n,
+  laces,
+  openpyxl,
+  permissionedforms,
+  pillow,
+  pythonOlder,
+  requests,
+  telepath,
+  willow,
 }:
 
 buildPythonPackage rec {
@@ -70,7 +71,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "wagtail" ];
 
   meta = with lib; {
-    description = "A Django content management system focused on flexibility and user experience";
+    description = "Django content management system focused on flexibility and user experience";
     mainProgram = "wagtail";
     homepage = "https://github.com/wagtail/wagtail";
     changelog = "https://github.com/wagtail/wagtail/blob/v${version}/CHANGELOG.txt";

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perlPackages.TextMarkdown python3.pkgs.pygments ];
 
   meta = with lib; {
-    description = "A quick-and-dirty, literate-programming-style documentation generator for / in POSIX shell";
+    description = "Quick-and-dirty, literate-programming-style documentation generator for / in POSIX shell";
     mainProgram = "shocco";
     homepage = "https://rtomayko.github.io/shocco/";
     license = licenses.mit;

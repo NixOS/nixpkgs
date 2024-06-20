@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A simple download manager based on aria2 and libadwaita";
+    description = "Simple download manager based on aria2 and libadwaita";
     homepage = "https://giantpinkrobots.github.io/varia";
     license = licenses.mpl20;
     mainProgram = "varia";

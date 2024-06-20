@@ -1,49 +1,49 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib, installShellFiles }:
+{ stdenv, buildGoModule, fetchFromGitHub, lib, nix-update-script, go }:
 
 buildGoModule rec {
   pname = "jx";
-  version = "2.1.155";
+  version = "3.10.150";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "sha256-kwcmZSOA26XuSgNSHitGaMohalnLobabXf4z3ybSJtk=";
+    sha256 = "sha256-Zck06wbe+hLbecFnfY/udi1s712ilt7j0EdoumohOEI=";
   };
 
-  vendorHash = "sha256-ZtcCBXcJXX9ThzY6T0MhNfDDzRC9PYzRB1VyS4LLXLs=";
+  vendorHash = "sha256-AIaZVkWdNj1Vsrv2k4B5lLE0lOFuiTD7lwS/DikmC14=";
 
-  doCheck = false;
+  subPackages = [ "cmd" ];
 
-  subPackages = [ "cmd/jx" ];
-
-  nativeBuildInputs = [ installShellFiles ];
+  CGO_ENABLED = 0;
 
   ldflags = [
-    "-s -w"
-    "-X github.com/jenkins-x/jx/pkg/version.Version=${version}"
-    "-X github.com/jenkins-x/jx/pkg/version.Revision=${src.rev}"
-    "-X github.com/jenkins-x/jx/pkg/version.GitTreeState=clean"
+    "-s"
+    "-X github.com/jenkins-x/jx/pkg/cmd/version.Version=${version}"
+    "-X github.com/jenkins-x/jx/pkg/cmd/version.Revision=${src.rev}"
+    "-X github.com/jenkins-x/jx/pkg/cmd/version.GoVersion=${go.version}"
+    "-X github.com/jenkins-x/jx/pkg/cmd/version.GitTreeState=clean"
+    "-X github.com/jenkins-x/jx/pkg/cmd/version.BuildDate=''"
   ];
 
   postInstall = ''
-    for shell in bash zsh; do
-      $out/bin/jx completion $shell > jx.$shell
-      installShellCompletion jx.$shell
-    done
+    mv $out/bin/cmd $out/bin/jx
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Command line tool for installing and using Jenkins X";
     mainProgram = "jx";
     homepage = "https://jenkins-x.io";
+    changelog = "https://github.com/jenkins-x/jx/releases/tag/v${version}";
     longDescription = ''
       Jenkins X provides automated CI+CD for Kubernetes with Preview
-      Environments on Pull Requests using Jenkins, Knative Build, Prow,
-      Skaffold and Helm.
+      Environments on Pull Requests using using Cloud Native pipelines
+      from Tekton.
     '';
-    license = licenses.asl20 ;
+    license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;
   };

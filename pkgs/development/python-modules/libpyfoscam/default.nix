@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
   # tests need access to a camera
   doCheck = false;
 
-  pythonImportsCheck = [
-    "libpyfoscam"
-  ];
+  pythonImportsCheck = [ "libpyfoscam" ];
 
   meta = with lib; {
     description = "Python Library for Foscam IP Cameras";

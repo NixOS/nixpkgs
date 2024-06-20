@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, fastrlock
-, numpy
-, wheel
-, pytestCheckHook
-, mock
-, setuptools
-, cudaPackages
-, addOpenGLRunpath
-, pythonOlder
-, symlinkJoin
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  fastrlock,
+  numpy,
+  wheel,
+  pytestCheckHook,
+  mock,
+  setuptools,
+  cudaPackages,
+  addOpenGLRunpath,
+  pythonOlder,
+  symlinkJoin,
 }:
 
 let
@@ -102,7 +103,7 @@ buildPythonPackage rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A NumPy-compatible matrix library accelerated by CUDA";
+    description = "NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
     changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
     license = licenses.mit;

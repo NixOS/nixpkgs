@@ -24,7 +24,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   '';
 
   meta = {
-    description = "A VSCode extension for Context Mapper";
+    description = "VSCode extension for Context Mapper";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=${mktplcRef.publisher}.${mktplcRef.name}";
     homepage = "https://github.com/ContextMapper/vscode-extension";
     license = lib.licenses.asl20;

@@ -97,20 +97,21 @@ stdenv.mkDerivation {
     "-DCUDAToolkit_INCLUDE_DIR=${cudaJoined}/include"
   ];
 
+  buildFlags = [
+    "faiss"
+    "demo_ivfpq_indexing"
+  ] ++ lib.optionals pythonSupport [
+    "swigfaiss"
+  ];
 
   # pip wheel->pip install commands copied over from opencv4
 
-  buildPhase = ''
-    make -j faiss
-    make demo_ivfpq_indexing
-  '' + lib.optionalString pythonSupport ''
-    make -j swigfaiss
+  postBuild = lib.optionalString pythonSupport ''
     (cd faiss/python &&
      python -m pip wheel --verbose --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .)
   '';
 
-  installPhase = ''
-    make install
+  postInstall = ''
     mkdir -p $demos/bin
     cp ./demos/demo_ivfpq_indexing $demos/bin/
   '' + lib.optionalString pythonSupport ''
@@ -118,7 +119,7 @@ stdenv.mkDerivation {
     (cd faiss/python && python -m pip install dist/*.whl --no-index --no-warn-script-location --prefix="$out" --no-cache)
   '';
 
-  fixupPhase = lib.optionalString (pythonSupport && cudaSupport) ''
+  postFixup = lib.optionalString (pythonSupport && cudaSupport) ''
     addOpenGLRunpath $out/${pythonPackages.python.sitePackages}/faiss/*.so
     addOpenGLRunpath $demos/bin/*
   '';
@@ -144,7 +145,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    description = "A library for efficient similarity search and clustering of dense vectors by Facebook Research";
+    description = "Library for efficient similarity search and clustering of dense vectors by Facebook Research";
     mainProgram = "demo_ivfpq_indexing";
     homepage = "https://github.com/facebookresearch/faiss";
     license = licenses.mit;

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, isodate
-, docstring-parser
-, colorlog
-, websocket-client
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  isodate,
+  docstring-parser,
+  colorlog,
+  websocket-client,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "chat_downloader" ];
 
   meta = with lib; {
-    description = "A simple tool used to retrieve chat messages from livestreams, videos, clips and past broadcasts";
+    description = "Simple tool used to retrieve chat messages from livestreams, videos, clips and past broadcasts";
     mainProgram = "chat_downloader";
     homepage = "https://github.com/xenova/chat-downloader";
     changelog = "https://github.com/xenova/chat-downloader/releases/tag/v${version}";

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-8gQs7+EIblOcnaOfrVrX9hFzv3lmXmm/fk3lX6iLE18=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   # Tests access a DB via network
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dj_database_url"
-  ];
+  pythonImportsCheck = [ "dj_database_url" ];
 
   meta = with lib; {
     description = "Use Database URLs in your Django Application";

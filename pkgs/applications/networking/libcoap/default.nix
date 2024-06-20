@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withTLS "--enable-dtls";
   meta = with lib; {
     homepage = "https://github.com/obgm/libcoap";
-    description = "A CoAP (RFC 7252) implementation in C";
+    description = "CoAP (RFC 7252) implementation in C";
     platforms = platforms.unix;
     license = licenses.bsd2;
     maintainers = [ maintainers.kmein ];

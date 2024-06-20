@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
-  version = "4.1.0";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    hash = "sha256-cQdIPQNZzy5CisWw5yifPXC7FqaZxj4VKWpvtPOffE8=";
+    hash = "sha256-BP28utEUI9g1VNv3lCXuiKrDtEImFQxxZfIjLiE3Wr8=";
   };
 
   outputs = [ "out" "man" "dev" ];

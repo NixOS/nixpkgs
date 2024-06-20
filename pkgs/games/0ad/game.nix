@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A free, open-source game of ancient warfare";
+    description = "Free, open-source game of ancient warfare";
     homepage = "https://play0ad.com/";
     license = with licenses; [
       gpl2 lgpl21 mit cc-by-sa-30
@@ -125,5 +125,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ chvp ];
     platforms = subtractLists platforms.i686 platforms.linux;
+    mainProgram = "0ad";
   };
 }

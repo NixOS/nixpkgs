@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    description = "The official C++ client library for MongoDB";
+    description = "Official C++ client library for MongoDB";
     homepage = "http://mongocxx.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ adriandole ];

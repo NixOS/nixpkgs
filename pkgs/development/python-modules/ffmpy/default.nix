@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, pytestCheckHook
-, go
-, ffmpeg-headless
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  pytestCheckHook,
+  go,
+  ffmpeg-headless,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +37,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ffmpy" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -58,7 +57,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple python interface for FFmpeg/FFprobe";
+    description = "Simple python interface for FFmpeg/FFprobe";
     homepage = "https://github.com/Ch00k/ffmpy";
     license = licenses.mit;
     maintainers = with maintainers; [ pbsds ];

@@ -4,6 +4,7 @@ on:
     branches:
      - 'release-**'
      - 'staging-**'
+     - '!staging-next'
 
 permissions: {}
 

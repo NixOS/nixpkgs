@@ -19,7 +19,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion { package = leaps; };
 
   meta = with lib; {
-    description = "A pair programming tool and library written in Golang";
+    description = "Pair programming tool and library written in Golang";
     mainProgram = "leaps";
     homepage = "https://github.com/jeffail/leaps/";
     license = licenses.mit;

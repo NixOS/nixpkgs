@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A real-time pitch and formant tracking software";
+    description = "Real-time pitch and formant tracking software";
     mainProgram = "in-formant";
     homepage = "https://github.com/in-formant/in-formant";
     license = licenses.asl20;

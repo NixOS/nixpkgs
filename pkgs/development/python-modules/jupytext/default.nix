@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, hatch-jupyter-builder
-, hatchling
-, jupyter-client
-, markdown-it-py
-, mdit-py-plugins
-, nbformat
-, notebook
-, packaging
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tomli
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-jupyter-builder,
+  hatchling,
+  jupyter-client,
+  markdown-it-py,
+  mdit-py-plugins,
+  nbformat,
+  notebook,
+  packaging,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tomli,
 }:
 
 buildPythonPackage rec {
@@ -40,9 +41,7 @@ buildPythonPackage rec {
     nbformat
     packaging
     pyyaml
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     jupyter-client
@@ -57,9 +56,7 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH;
   '';
 
-  disabledTestPaths = [
-    "tests/external"
-  ];
+  disabledTestPaths = [ "tests/external" ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # requires access to trash

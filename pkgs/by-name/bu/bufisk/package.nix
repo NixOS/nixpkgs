@@ -20,7 +20,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/bufbuild/bufisk";
-    description = "A user-friendly launcher for Buf";
+    description = "User-friendly launcher for Buf";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "bufisk";

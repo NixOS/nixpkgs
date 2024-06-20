@@ -36,7 +36,7 @@ mavenJdk11.buildMavenPackage rec {
   '';
 
   meta = with lib; {
-    description = "A platform for visualizing and manipulating large graphs";
+    description = "Platform for visualizing and manipulating large graphs";
     mainProgram = "gephi";
     homepage = "https://gephi.org";
     sourceProvenance = with sourceTypes; [

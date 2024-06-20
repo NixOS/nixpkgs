@@ -149,20 +149,20 @@ in
     systemd.services.bcg = let
       envConfig = cfg.environmentFiles != [];
       finalConfig = if envConfig
-                    then "$RUNTIME_DIRECTORY/bcg.config.yaml"
+                    then "\${RUNTIME_DIRECTORY}/bcg.config.yaml"
                     else configFile;
     in {
       description = "BigClown Gateway";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ] ++ lib.optional config.services.mosquitto.enable "mosquitto.service";
       after = [ "network-online.target" ];
-      preStart = ''
+      preStart = mkIf envConfig ''
         umask 077
         ${pkgs.envsubst}/bin/envsubst -i "${configFile}" -o "${finalConfig}"
         '';
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        ExecStart="${cfg.package}/bin/bcg -c ${finalConfig} -v ${cfg.verbose}";
+        ExecStart = "${cfg.package}/bin/bcg -c ${finalConfig} -v ${cfg.verbose}";
         RuntimeDirectory = "bcg";
       };
     };

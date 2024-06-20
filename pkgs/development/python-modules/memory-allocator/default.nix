@@ -1,10 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, cython
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  cython,
 
-# Reverse dependency
-, sage
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
@@ -22,10 +23,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "memory_allocator" ];
 
-  passthru.tests = { inherit sage; };
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
-    description = "An extension class to allocate memory easily with cython";
+    description = "Extension class to allocate memory easily with cython";
     homepage = "https://github.com/sagemath/memory_allocator/";
     maintainers = teams.sage.members;
     license = licenses.lgpl3Plus;

@@ -24,7 +24,7 @@ buildPecl {
 
   meta = with lib; {
     changelog = "https://github.com/php-ds/ext-ds/releases/tag/v${version}";
-    description = "An extension providing efficient data structures for PHP";
+    description = "Extension providing efficient data structures for PHP";
     license = licenses.mit;
     homepage = "https://github.com/php-ds/ext-ds";
     maintainers = teams.php.members;

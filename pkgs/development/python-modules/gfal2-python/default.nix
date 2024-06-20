@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cmake
-, pkg-config
-, boost
-, gfal2
-, glib
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  boost,
+  gfal2,
+  glib,
+  pythonAtLeast,
   # For tests
-, gfal2-util ? null
+  gfal2-util ? null,
 }:
 buildPythonPackage rec {
   pname = "gfal2-python";
@@ -31,15 +32,12 @@ buildPythonPackage rec {
   # We don't want setup.py to (re-)execute cmake in buildPhase
   # Besides, this package is totally handled by CMake, which means no additional configuration is needed.
   dontConfigure = true;
-  pythonImportsCheck = [
-    "gfal2"
-  ];
+  pythonImportsCheck = [ "gfal2" ];
   passthru = {
     inherit gfal2;
     tests = {
       inherit gfal2-util;
-    }
-    // lib.optionalAttrs (gfal2-util != null) gfal2-util.tests or { };
+    } // lib.optionalAttrs (gfal2-util != null) gfal2-util.tests or { };
   };
   meta = with lib; {
     description = "Python binding for gfal2";

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, asgiref
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  asgiref,
 }:
 
 buildPythonPackage rec {
@@ -15,18 +16,12 @@ buildPythonPackage rec {
     hash = "sha256-son1ML9J0UMgJCpWdYD/yK0FO6VmfuzifSWpeCLToKo=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
-  propagatedBuildInputs = [
-    asgiref
-  ];
+  nativeBuildInputs = [ poetry-core ];
+  propagatedBuildInputs = [ asgiref ];
 
   # tests are not in the pypi release, and there are no tags/release corresponding to the pypi releases in the github
   doCheck = false;
-  pythonImportsCheck = [
-    "asgi_logger"
-  ];
+  pythonImportsCheck = [ "asgi_logger" ];
 
   meta = with lib; {
     description = "Access logger for ASGI servers";

@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description = "A tool to help with formatting git patches for review on mailing lists";
+    description = "Tool to help with formatting git patches for review on mailing lists";
     longDescription = ''
       git series tracks changes to a patch series over time. git
       series also tracks a cover letter for the patch series,

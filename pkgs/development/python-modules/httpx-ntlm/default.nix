@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, httpx
-, pyspnego
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  httpx,
+  pyspnego,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
   # https://github.com/ulodciv/httpx-ntlm/issues/5
   doCheck = false;
 
-  pythonImportsCheck = [
-    "httpx_ntlm"
-  ];
+  pythonImportsCheck = [ "httpx_ntlm" ];
 
   meta = with lib; {
     description = "NTLM authentication support for HTTPX";

@@ -88,7 +88,7 @@ buildDotnetModule rec {
 
   meta = {
     changelog = "https://github.com/rmcrackan/Libation/releases/tag/${src.rev}";
-    description = "An Audible audiobook manager";
+    description = "Audible audiobook manager";
     homepage = "https://github.com/rmcrackan/Libation";
     license = lib.licenses.gpl3Only;
     mainProgram = "libation";

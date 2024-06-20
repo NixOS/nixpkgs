@@ -34,7 +34,7 @@ buildGraalvmNativeImage rec {
 
   meta = with lib; {
     mainProgram = "cljfmt";
-    description = "A tool for formatting Clojure code";
+    description = "Tool for formatting Clojure code";
     homepage = "https://github.com/weavejester/cljfmt";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;

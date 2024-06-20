@@ -1,9 +1,10 @@
-{ lib
-, pycryptodome
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
+{
+  lib,
+  pycryptodome,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,21 +21,13 @@ buildPythonPackage rec {
     hash = "sha256-0dHdXb4v92681xL21FsrIkNgNQ9R5ULV1lnSCITZzP8=";
   };
 
-  propagatedBuildInputs = [
-    pycryptodome
-  ];
+  propagatedBuildInputs = [ pycryptodome ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "unittests"
-  ];
+  pytestFlagsArray = [ "unittests" ];
 
-  pythonImportsCheck = [
-    "cart"
-  ];
+  pythonImportsCheck = [ "cart" ];
 
   meta = with lib; {
     description = "Python module for the CaRT Neutering format";

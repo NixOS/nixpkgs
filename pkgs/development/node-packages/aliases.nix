@@ -57,6 +57,7 @@ mapAliases {
   inherit (pkgs) asar; # added 2023-08-26
   inherit (pkgs) aws-azure-login; # added 2023-09-30
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
+  inherit (pkgs) bash-language-server; # added 2024-06-07
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
   inherit (pkgs) btc-rpc-explorer; # added 2023-08-17
@@ -133,9 +134,24 @@ mapAliases {
   stf = throw "stf was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) stylelint; # added 2023-09-13
   surge = pkgs.surge-cli; # Added 2023-09-08
+  inherit (pkgs) svelte-language-server; # Added 2024-05-12
   swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
   tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
   inherit (pkgs) terser; # Added 2023-08-31
+  inherit (pkgs) textlint; # Added 2024-05-13
+  textlint-plugin-latex = throw "textlint-plugin-latex was removed because it is unmaintained for years. Please use textlint-plugin-latex2e instead."; # Added 2024-05-17
+  inherit (pkgs) textlint-rule-abbr-within-parentheses; # Added 2024-05-17
+  inherit (pkgs) textlint-rule-alex; # Added 2024-05-16
+  inherit (pkgs) textlint-rule-common-misspellings; # Added 2024-05-25
+  inherit (pkgs) textlint-rule-diacritics; # Added 2024-05-16
+  inherit (pkgs) textlint-rule-en-max-word-count; # Added 2024-05-17
+  inherit (pkgs) textlint-rule-max-comma; # Added 2024-05-15
+  inherit (pkgs) textlint-rule-no-start-duplicated-conjunction; # Added 2024-05-17
+  inherit (pkgs) textlint-rule-period-in-list-item; # Added 2024-05-17
+  inherit (pkgs) textlint-rule-stop-words; # Added 2024-05-17
+  inherit (pkgs) textlint-rule-terminology; # Added 2024-05-17
+  inherit (pkgs) textlint-rule-unexpanded-acronym; # Added 2024-05-17
+  inherit (pkgs) textlint-rule-write-good; # Added 2024-05-16
   thelounge = pkgs.thelounge; # Added 2023-05-22
   three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
   inherit (pkgs) titanium; # added 2023-08-17

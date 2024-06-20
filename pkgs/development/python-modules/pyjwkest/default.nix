@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi,
-  future, pycryptodomex, pytest, requests, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  future,
+  pycryptodomex,
+  pytest,
+  requests,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -19,5 +26,10 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ future pycryptodomex requests six ];
+  propagatedBuildInputs = [
+    future
+    pycryptodomex
+    requests
+    six
+  ];
 }

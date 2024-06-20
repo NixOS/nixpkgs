@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    description = "A small, fast run-time speech synthesis engine";
+    description = "Small, fast run-time speech synthesis engine";
     homepage = "http://www.festvox.org/flite/";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ getchoo ];

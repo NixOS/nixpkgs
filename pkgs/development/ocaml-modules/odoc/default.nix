@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, ocaml
+{ lib, buildDunePackage, ocaml
 , ocaml-crunch
 , astring, cmdliner, cppo, fpath, result, tyxml
 , markup, yojson, sexplib0, jq
@@ -25,7 +25,7 @@ buildDunePackage rec {
   '';
 
   meta = {
-    description = "A documentation generator for OCaml";
+    description = "Documentation generator for OCaml";
     mainProgram = "odoc";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];

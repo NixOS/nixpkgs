@@ -1,21 +1,22 @@
-{ lib
-, aws-sam-translator
-, buildPythonPackage
-, fetchFromGitHub
-, jschema-to-python
-, jsonpatch
-, jsonschema
-, junit-xml
-, mock
-, networkx
-, pydot
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, regex
-, sarif-om
-, setuptools
-, sympy
+{
+  lib,
+  aws-sam-translator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jschema-to-python,
+  jsonpatch,
+  jsonschema,
+  junit-xml,
+  mock,
+  networkx,
+  pydot,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  regex,
+  sarif-om,
+  setuptools,
+  sympy,
 }:
 
 buildPythonPackage rec {
@@ -70,9 +71,7 @@ buildPythonPackage rec {
     "test_template_config"
   ];
 
-  pythonImportsCheck = [
-    "cfnlint"
-  ];
+  pythonImportsCheck = [ "cfnlint" ];
 
   meta = with lib; {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";

@@ -1,4 +1,4 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir, libxcrypt
+{ gnustep, lib, fetchFromGitHub, makeWrapper, python3, lndir, libxcrypt
 , openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
 , oath-toolkit
 , enableActiveSync ? false
@@ -73,7 +73,7 @@ gnustep.stdenv.mkDerivation rec {
   passthru.tests.sogo = nixosTests.sogo;
 
   meta = with lib; {
-    description = "A very fast and scalable modern collaboration suite (groupware)";
+    description = "Very fast and scalable modern collaboration suite (groupware)";
     license = with licenses; [ gpl2Only lgpl21Only ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;

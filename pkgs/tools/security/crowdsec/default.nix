@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "crowdsec";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-CCQDMIBpKmaUSRwyjryTO3YWVIrr6FwW64K+alTrcdw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3GpSpADtCNvekR7gjbIlqzog7PMog6Sra5tpcnUf/gk=";
   };
 
-  vendorHash = "sha256-K38hxWcrYOznXr8eST0xQBL0nNxHMAiGji5rFwAK0Qw=";
+  vendorHash = "sha256-kkQYKiOSmFHjhOrYV40YRZX9w6rUue0NSKfw+Bqxb9s=";
 
   nativeBuildInputs = [ installShellFiles ];
 

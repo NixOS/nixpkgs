@@ -1,13 +1,14 @@
-{ lib
-, aiobotocore
-, boto3
-, buildPythonPackage
-, dvc-objects
-, fetchPypi
-, flatten-dict
-, pythonRelaxDepsHook
-, s3fs
-, setuptools-scm
+{
+  lib,
+  aiobotocore,
+  boto3,
+  buildPythonPackage,
+  dvc-objects,
+  fetchPypi,
+  flatten-dict,
+  pythonRelaxDepsHook,
+  s3fs,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
   };
 
   # Prevent circular dependency
-  pythonRemoveDeps = [
-    "dvc"
-  ];
+  pythonRemoveDeps = [ "dvc" ];
 
   # dvc-s3 uses boto3 directly, we add in propagatedBuildInputs
   postPatch = ''
@@ -39,7 +38,8 @@ buildPythonPackage rec {
     aiobotocore
     boto3
     dvc-objects
-    flatten-dict s3fs
+    flatten-dict
+    s3fs
   ];
 
   # Network access is needed for tests

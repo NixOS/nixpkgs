@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
-    description = "A simple command line tool for converting Chinese characters to space-separate pinyin words";
+    description = "Simple command line tool for converting Chinese characters to space-separate pinyin words";
     mainProgram = "pinyin-tool";
     homepage = "https://github.com/briankung/pinyin-tool";
     license = licenses.mit;

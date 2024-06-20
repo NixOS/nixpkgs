@@ -83,7 +83,7 @@ composerInstallBuildHook() {
 
     # Since this file cannot be generated in the composer-repository-hook.sh
     # because the file contains hardcoded nix store paths, we generate it here.
-    composer-local-repo-plugin --no-ansi build-local-repo-lock -m "${composerRepository}" .
+    composer build-local-repo-lock -m "${composerRepository}" .
 
     echo "Finished composerInstallBuildHook"
 }

@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, lib
-, pythonRelaxDepsHook
-, setuptools
+{
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  lib,
+  pythonRelaxDepsHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {

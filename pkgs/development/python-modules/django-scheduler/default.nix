@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, icalendar
-, pytest
-, pytest-django
-, python
-, python-dateutil
-, pythonOlder
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  icalendar,
+  pytest,
+  pytest-django,
+  python,
+  python-dateutil,
+  pythonOlder,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -38,12 +39,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [
-    "schedule"
-  ];
+  pythonImportsCheck = [ "schedule" ];
 
   meta = with lib; {
-    description = "A calendar app for Django";
+    description = "Calendar app for Django";
     homepage = "https://github.com/llazzaro/django-scheduler";
     changelog = "https://github.com/llazzaro/django-scheduler/releases/tag/${version}";
     license = licenses.bsd3;

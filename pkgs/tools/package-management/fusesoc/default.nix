@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/olofk/fusesoc";
-    description = "A package manager and build tools for HDL code";
+    description = "Package manager and build tools for HDL code";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd3;
     mainProgram = "fusesoc";

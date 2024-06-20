@@ -1,6 +1,12 @@
 {
   "version": "3.19.4",
   "engineVersion": "a5c24f538d05aaf66f7972fb23959d8cafb9f95a",
+  "channel": "stable",
+  "engineHashes": {
+    "x86_64-linux": "sha256-xhihh4v9bh2ZxAewKEdhpXerLDoXFm8YO72+tGRnkCw=",
+    "aarch64-linux": "sha256-mUimQRg0UqvTueuDWO8Isy0FKOxJLvVZrehv4SMj0XY=",
+    "aarch64-darwin": "sha256-5DcD7ebrANznB++QOQOoynr1aOgJqTF8QfSihQnghoY="
+  },
   "dartVersion": "3.3.2",
   "dartHash": {
     "x86_64-linux": "sha256-eO8qcSQNWGEz/5oVaJ5tjRMnGy2aq3PbcF15z/Pi3xQ=",

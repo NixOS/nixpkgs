@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/brummer10/MelMatchEQ.lv2";
-    description = "a profiling EQ using a 26 step Mel Frequency Band";
+    description = "Profiling EQ using a 26 step Mel Frequency Band";
     maintainers = with maintainers; [ magnetophon ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

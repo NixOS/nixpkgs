@@ -14,7 +14,8 @@ let
 in
 runCommand "xonsh-${xonsh-unwrapped.version}"
 {
-  inherit (xonsh-unwrapped) pname version meta passthru;
+  inherit (xonsh-unwrapped) pname version meta;
+  passthru = xonsh-unwrapped.passthru // { unwrapped = xonsh-unwrapped; };
 } ''
   mkdir -p $out/bin
   for bin in ${lib.getBin xonsh-unwrapped}/bin/*; do

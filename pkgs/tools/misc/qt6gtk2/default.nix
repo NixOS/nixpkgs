@@ -1,14 +1,14 @@
-{ fetchFromGitHub, lib, stdenv, gtk2, pkg-config, qmake, qtbase }:
+{ fetchFromGitHub, lib, stdenv, gtk2, pkg-config, qmake, qtbase, unstableGitUpdater }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qt6gtk2";
-  version = "0.2";
+  version = "0.2-unstable-2024-05-06";
 
   src = fetchFromGitHub {
     owner = "trialuser02";
     repo = finalAttrs.pname;
-    rev = finalAttrs.version;
-    hash = "sha256-g5ZCwTnNEJJ57zEwNqMxrl0EWYJMt3PquZ2IsmxQYqk=";
+    rev = "d29ba6c1fb4ac933ed7b91f0480cbd0c5a975ab8";
+    hash = "sha256-lIUCdfsmvuzDQaOi2U/CHch1re6Jn6yDfcX26Gu0eUo=";
   };
 
   buildInputs = [ gtk2 qtbase ];
@@ -16,15 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  installPhase = ''
-    runHook preInstall
+  qmakeFlags = [
+    "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+  ];
 
-    mkdir -p $out/lib/qt-6/plugins/{platformthemes,styles}
-    cp -pr src/qt6gtk2-qtplugin/libqt6gtk2.so $out/lib/qt-6/plugins/platformthemes
-    cp -pr src/qt6gtk2-style/libqt6gtk2-style.so $out/lib/qt-6/plugins/styles
-
-    runHook postInstall
-  '';
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "GTK+2.0 integration plugins for Qt6";

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, ptyprocess
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  ptyprocess,
 
-# Reverse dependency
-, sage
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage (rec {
@@ -18,16 +19,16 @@ buildPythonPackage (rec {
     hash = "sha256-7n1BEj88mREFDqLC2sEHVo3EOy07DHVXozISw5jq0w8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Wants to run pythonin a subprocess
   doCheck = false;
 
   propagatedBuildInputs = [ ptyprocess ];
 
-  passthru.tests = { inherit sage; };
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     homepage = "http://www.noah.org/wiki/Pexpect";

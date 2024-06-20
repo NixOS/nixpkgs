@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://sourceware.org/elfutils/";
-    description = "A set of utilities to handle ELF objects";
+    description = "Set of utilities to handle ELF objects";
     platforms = platforms.linux;
     # https://lists.fedorahosted.org/pipermail/elfutils-devel/2014-November/004223.html
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];

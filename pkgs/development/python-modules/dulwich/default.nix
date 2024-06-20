@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, certifi
-, fastimport
-, fetchFromGitHub
-, gevent
-, geventhttpclient
-, git
-, glibcLocales
-, gnupg
-, gpgme
-, paramiko
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-rust
-, urllib3
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  certifi,
+  fastimport,
+  fetchFromGitHub,
+  gevent,
+  geventhttpclient,
+  git,
+  glibcLocales,
+  gnupg,
+  gpgme,
+  paramiko,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-rust,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -44,28 +45,26 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    fastimport = [
-      fastimport
-    ];
+    fastimport = [ fastimport ];
     pgp = [
       gpgme
       gnupg
     ];
-    paramiko = [
-      paramiko
-    ];
+    paramiko = [ paramiko ];
   };
 
-  nativeCheckInputs = [
-    gevent
-    geventhttpclient
-    git
-    glibcLocales
-    pytest-xdist
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.fastimport
-  ++ passthru.optional-dependencies.pgp
-  ++ passthru.optional-dependencies.paramiko;
+  nativeCheckInputs =
+    [
+      gevent
+      geventhttpclient
+      git
+      glibcLocales
+      pytest-xdist
+      pytestCheckHook
+    ]
+    ++ passthru.optional-dependencies.fastimport
+    ++ passthru.optional-dependencies.pgp
+    ++ passthru.optional-dependencies.paramiko;
 
   doCheck = !stdenv.isDarwin;
 
@@ -87,9 +86,7 @@ buildPythonPackage rec {
     "dulwich/tests/compat/test_client.py"
   ];
 
-  pythonImportsCheck = [
-    "dulwich"
-  ];
+  pythonImportsCheck = [ "dulwich" ];
 
   meta = with lib; {
     description = "Implementation of the Git file formats and protocols";
@@ -99,7 +96,10 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.dulwich.io/";
     changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${version}/NEWS";
-    license = with licenses; [ asl20 gpl2Plus ];
+    license = with licenses; [
+      asl20
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ koral ];
   };
 }

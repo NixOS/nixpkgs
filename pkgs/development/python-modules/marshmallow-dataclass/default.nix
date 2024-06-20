@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, typeguard
-, typing-inspect
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marshmallow,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  typeguard,
+  typing-inspect,
 }:
 
 buildPythonPackage rec {
@@ -44,9 +45,7 @@ buildPythonPackage rec {
     "test_newtype"
   ];
 
-  pythonImportsCheck = [
-    "marshmallow_dataclass"
-  ];
+  pythonImportsCheck = [ "marshmallow_dataclass" ];
 
   meta = with lib; {
     description = "Automatic generation of marshmallow schemas from dataclasses";

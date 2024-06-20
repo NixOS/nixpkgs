@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, llvmPackages
-, zlib
-, cython_0
-, oldest-supported-numpy
-, setuptools
-, wheel
-, astunparse
-, numpy
-, packaging
-, pyparsing
-, scipy
-, gsd
-, networkx
-, pandas
-, pytest-xdist
-, pytestCheckHook
-, tables
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  llvmPackages,
+  zlib,
+  cython_0,
+  oldest-supported-numpy,
+  setuptools,
+  wheel,
+  astunparse,
+  numpy,
+  packaging,
+  pyparsing,
+  scipy,
+  gsd,
+  networkx,
+  pandas,
+  pytest-xdist,
+  pytestCheckHook,
+  tables,
 }:
 
 buildPythonPackage rec {
@@ -61,7 +62,7 @@ buildPythonPackage rec {
       name = "fix-intrinsics-flag.patch";
       url = "https://github.com/mdtraj/mdtraj/commit/d6041c645d51898e2a09030633210213eec7d4c5.patch";
       hash = "sha256-kcnlHMoA/exJzV8iQltH+LWXrvSk7gsUV+yWK6xn0jg=";
-     })
+    })
   ];
 
   build-system = [
@@ -71,11 +72,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    zlib
-  ] ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  buildInputs = [ zlib ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   dependencies = [
     astunparse
@@ -119,7 +116,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mdtraj" ];
 
   meta = with lib; {
-    description = "An open library for the analysis of molecular dynamics trajectories";
+    description = "Open library for the analysis of molecular dynamics trajectories";
     homepage = "https://github.com/mdtraj/mdtraj";
     changelog = "https://github.com/mdtraj/mdtraj/releases/tag/${src.rev}";
     license = licenses.lgpl21Plus;

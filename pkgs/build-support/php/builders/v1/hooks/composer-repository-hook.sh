@@ -63,7 +63,7 @@ composerRepositoryBuildHook() {
     # Build the local composer repository
     # The command 'build-local-repo' is provided by the Composer plugin
     # nix-community/composer-local-repo-plugin.
-    composer-local-repo-plugin --no-ansi build-local-repo-lock ${composerNoDev:+--no-dev} -r repository
+    composer build-local-repo-lock ${composerNoDev:+--no-dev} -r repository
 
     echo "Finished composerRepositoryBuildHook"
 }

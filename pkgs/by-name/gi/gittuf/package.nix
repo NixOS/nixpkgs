@@ -22,7 +22,7 @@ buildGoModule rec {
 
   meta = with lib; {
     changelog = "https://github.com/gittuf/gittuf/blob/v${version}/CHANGELOG.md";
-    description = "A security layer for Git repositories";
+    description = "Security layer for Git repositories";
     homepage = "https://gittuf.dev";
     license = licenses.asl20;
     mainProgram = "gittuf";

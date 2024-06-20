@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatch-fancy-pypi-readme
-, hatch-requirements-txt
-, hatchling
-, gradio
-, gradio-client
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatch-fancy-pypi-readme,
+  hatch-requirements-txt,
+  hatchling,
+  gradio,
+  gradio-client,
 }:
 
 buildPythonPackage rec {
   pname = "gradio-pdf";
-  version = "0.0.7";
+  version = "0.0.11";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "gradio_pdf";
     inherit version;
-    hash = "sha256-3OJiBnp79woCUtiNiaePwfJCAS42WYkv9GFeScesFv8=";
+    hash = "sha256-HCfjJdd9DIRqm/dS00xlU9AYGM7U/b3zNo2IgZHtasc=";
   };
 
   nativeBuildInputs = [
@@ -25,16 +26,10 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [
-    gradio-client
-  ];
+  dependencies = [ gradio-client ];
 
-  buildInputs = [
-    gradio.sans-reverse-dependencies
-  ];
-  disallowedReferences = [
-    gradio.sans-reverse-dependencies
-  ];
+  buildInputs = [ gradio.sans-reverse-dependencies ];
+  disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
   pythonImportsCheck = [ "gradio_pdf" ];
 

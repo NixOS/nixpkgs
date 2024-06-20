@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, cookiecutter
-, networkx
-, pandas
-, tornado
-, tqdm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  cookiecutter,
+  networkx,
+  pandas,
+  tornado,
+  tqdm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     "test_examples"
@@ -44,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/projectmesa/mesa";
-    description = "An agent-based modeling (or ABM) framework in Python";
+    description = "Agent-based modeling (or ABM) framework in Python";
     license = licenses.asl20;
     maintainers = [ maintainers.dpaetzel ];
     broken = true; # missing dependencies

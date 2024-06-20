@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# tests
-, pandas
-, pytestCheckHook
-, undefined
+  # tests
+  pandas,
+  pytestCheckHook,
+  undefined,
 }:
 
 buildPythonPackage rec {
@@ -25,26 +26,24 @@ buildPythonPackage rec {
     hash = "sha256-IMtR6GDC8/+DhZFirVE0u4sKHnqB3woYz8zEhi0Nncw=";
   };
 
-  postPatch = ''
-    # test doesn't work in sandbox
-    substituteInPlace pyfakefs/tests/fake_filesystem_test.py \
-      --replace "test_expand_root" "notest_expand_root"
-    substituteInPlace pyfakefs/tests/fake_os_test.py \
-      --replace "test_path_links_not_resolved" "notest_path_links_not_resolved" \
-      --replace "test_append_mode_tell_linux_windows" "notest_append_mode_tell_linux_windows"
-  '' + (lib.optionalString stdenv.isDarwin ''
-    # this test fails on darwin due to case-insensitive file system
-    substituteInPlace pyfakefs/tests/fake_os_test.py \
-      --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
-  '');
+  postPatch =
+    ''
+      # test doesn't work in sandbox
+      substituteInPlace pyfakefs/tests/fake_filesystem_test.py \
+        --replace "test_expand_root" "notest_expand_root"
+      substituteInPlace pyfakefs/tests/fake_os_test.py \
+        --replace "test_path_links_not_resolved" "notest_path_links_not_resolved" \
+        --replace "test_append_mode_tell_linux_windows" "notest_append_mode_tell_linux_windows"
+    ''
+    + (lib.optionalString stdenv.isDarwin ''
+      # this test fails on darwin due to case-insensitive file system
+      substituteInPlace pyfakefs/tests/fake_os_test.py \
+        --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
+    '');
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "pyfakefs"
-  ];
+  pythonImportsCheck = [ "pyfakefs" ];
 
   nativeCheckInputs = [
     pandas

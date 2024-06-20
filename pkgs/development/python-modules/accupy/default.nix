@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, mpmath
-, numpy
-, pybind11
-, pyfma
-, eigen
-, importlib-metadata
-, pytestCheckHook
-, matplotlib
-, dufte
-, perfplot
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  mpmath,
+  numpy,
+  pybind11,
+  pyfma,
+  eigen,
+  importlib-metadata,
+  pytestCheckHook,
+  matplotlib,
+  dufte,
+  perfplot,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  buildInputs = [
-    eigen
-  ];
+  buildInputs = [ eigen ];
 
   dependencies = [
     mpmath
@@ -53,8 +52,8 @@ buildPythonPackage rec {
   ];
 
   postConfigure = ''
-   substituteInPlace setup.py \
-     --replace-fail "/usr/include/eigen3/" "${eigen}/include/eigen3/"
+    substituteInPlace setup.py \
+      --replace-fail "/usr/include/eigen3/" "${eigen}/include/eigen3/"
   '';
 
   preBuild = ''
@@ -73,7 +72,10 @@ buildPythonPackage rec {
     done
   '';
 
-  disabledTests = [ "test_speed_comparison1" "test_speed_comparison2" ];
+  disabledTests = [
+    "test_speed_comparison1"
+    "test_speed_comparison2"
+  ];
 
   pythonImportsCheck = [ "accupy" ];
 

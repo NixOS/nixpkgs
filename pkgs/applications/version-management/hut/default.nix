@@ -33,7 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://sr.ht/~emersion/hut/";
-    description = "A CLI tool for Sourcehut / sr.ht";
+    description = "CLI tool for Sourcehut / sr.ht";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fgaz ];
     mainProgram = "hut";

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, nix-update-script
-, hatch-vcs
-, hatchling
-, langcodes
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  nix-update-script,
+  hatch-vcs,
+  hatchling,
+  langcodes,
 }:
 
 buildPythonPackage rec {
@@ -36,7 +37,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/TakWolf/unidata-blocks";
-    description = "A library that helps query unicode blocks by Blocks.txt";
+    description = "Library that helps query unicode blocks by Blocks.txt";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ h7x4 ];

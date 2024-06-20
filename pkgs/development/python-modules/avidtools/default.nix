@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, datetime
-, fetchPypi
-, nvdlib
-, pydantic
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  datetime,
+  fetchPypi,
+  nvdlib,
+  pydantic,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     sed -i "/'typing'/d" setup.py
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     datetime
@@ -39,9 +38,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "avidtools"
-  ];
+  pythonImportsCheck = [ "avidtools" ];
 
   meta = with lib; {
     description = "Developer tools for AVID";

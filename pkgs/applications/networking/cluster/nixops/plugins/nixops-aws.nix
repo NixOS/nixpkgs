@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "nixops-aws";
-  version = "unstable-2024-02-29";
+  version = "1.0.0-unstable-2024-02-29";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,7 +45,9 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nixops_aws" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib; {
     description = "AWS plugin for NixOps";

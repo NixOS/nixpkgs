@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "wazero";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "tetratelabs";
     repo = "wazero";
     rev = "v${version}";
-    hash = "sha256-xMI/6zhXxoD5rq+MZBiMzdmxlHS1gel1IChZe1iENyE=";
+    hash = "sha256-NhwFIN5xLHovbXko6Ki0szwg+MFJdIwJGude4GiSb8A=";
   };
 
   vendorHash = null;
@@ -41,7 +41,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A zero dependency WebAssembly runtime for Go developers";
+    description = "Zero dependency WebAssembly runtime for Go developers";
     homepage = "https://github.com/tetratelabs/wazero";
     changelog = "https://github.com/tetratelabs/wazero/releases/tag/${src.rev}";
     license = licenses.asl20;

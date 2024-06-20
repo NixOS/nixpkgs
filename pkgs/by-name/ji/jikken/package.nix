@@ -26,15 +26,15 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
+      darwin.apple_sdk_11_0.frameworks.IOKit
+      darwin.apple_sdk_11_0.frameworks.Security
+      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
     ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A powerful, source control friendly REST API testing toolkit";
+    description = "Powerful, source control friendly REST API testing toolkit";
     homepage = "https://jikken.io/";
     changelog = "https://github.com/jikkenio/jikken/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

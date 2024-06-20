@@ -1,6 +1,10 @@
 {
   "version": "3.13.8",
   "engineVersion": "767d8c75e898091b925519803830fc2721658d07",
+  "channel": "stable",
+  "engineHashes": {
+    "aarch64-linux": "sha256-1s7I+AWb2kNDzJ5k2XYm7rSK8yj1wqTjPUuS0f85Jig="
+  },
   "dartVersion": "3.1.4",
   "dartHash": {
     "x86_64-linux": "sha256-42wrqzjRcFDWw2aEY6+/faX+QE9PA8FmRWP4M/NkgBE=",

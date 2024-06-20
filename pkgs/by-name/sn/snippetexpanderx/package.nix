@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchFromSourcehut
 , pkg-config
 , vala
 , wrapGAppsHook3

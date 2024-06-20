@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A microbenchmark support library";
+    description = "Microbenchmark support library";
     homepage = "https://github.com/google/benchmark";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;

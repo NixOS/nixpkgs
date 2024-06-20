@@ -82,7 +82,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Allow leaving {option}`config.boot.initrd.network.ssh` empty,
+        Allow leaving {option}`config.boot.initrd.network.ssh.hostKeys` empty,
         to deploy ssh host keys out of band.
       '';
     };

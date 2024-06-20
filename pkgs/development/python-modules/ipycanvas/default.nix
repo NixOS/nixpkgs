@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatchling
-, ipywidgets
-, numpy
-, pillow
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatchling,
+  ipywidgets,
+  numpy,
+  pillow,
 }:
 
 buildPythonPackage rec {
@@ -29,15 +30,17 @@ buildPythonPackage rec {
       --replace-fail '"jupyterlab>=3,<5",' "" \
   '';
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   env.HATCH_BUILD_NO_HOOKS = true;
 
-  dependencies = [ ipywidgets numpy pillow ];
+  dependencies = [
+    ipywidgets
+    numpy
+    pillow
+  ];
 
-  doCheck = false;  # tests are in Typescript and require `npx` and `chromium`
+  doCheck = false; # tests are in Typescript and require `npx` and `chromium`
   pythonImportsCheck = [ "ipycanvas" ];
 
   meta = with lib; {

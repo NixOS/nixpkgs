@@ -1,26 +1,27 @@
-{ lib
-, babel
-, buildPythonPackage
-, fetchFromGitLab
-, fetchpatch
-, pythonRelaxDepsHook
-, html2text
-, lxml
-, packaging
-, pillow
-, prettytable
-, pycountry
-, pytestCheckHook
-, python-dateutil
-, python-jose
-, pythonOlder
-, pyyaml
-, requests
-, rich
-, setuptools
-, testers
-, unidecode
-, woob
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  fetchFromGitLab,
+  fetchpatch,
+  pythonRelaxDepsHook,
+  html2text,
+  lxml,
+  packaging,
+  pillow,
+  prettytable,
+  pycountry,
+  pytestCheckHook,
+  python-dateutil,
+  python-jose,
+  pythonOlder,
+  pyyaml,
+  requests,
+  rich,
+  setuptools,
+  testers,
+  unidecode,
+  woob,
 }:
 
 buildPythonPackage rec {
@@ -50,9 +51,7 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "packaging"
-  ];
+  pythonRelaxDeps = [ "packaging" ];
 
   propagatedBuildInputs = [
     babel
@@ -70,9 +69,7 @@ buildPythonPackage rec {
     unidecode
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # require networking
@@ -80,9 +77,7 @@ buildPythonPackage rec {
     "test_verify"
   ];
 
-  pythonImportsCheck = [
-    "woob"
-  ];
+  pythonImportsCheck = [ "woob" ];
 
   passthru.tests.version = testers.testVersion {
     package = woob;

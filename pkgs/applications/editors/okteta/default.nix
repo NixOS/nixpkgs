@@ -30,7 +30,7 @@ mkDerivation rec {
 
   meta = with lib; {
     license = licenses.gpl2;
-    description = "A hex editor";
+    description = "Hex editor";
     homepage = "https://apps.kde.org/okteta/";
     maintainers = with maintainers; [ peterhoeg bkchr ];
     platforms = platforms.linux;

@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libsForQt5.qtbase
     libsForQt5.qttools
+    libsForQt5.qtwayland
     libsForQt5.qtx11extras
     protobuf
     yaml-cpp

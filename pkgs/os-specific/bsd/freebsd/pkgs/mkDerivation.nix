@@ -2,6 +2,9 @@
   lib,
   stdenv,
   stdenvNoCC,
+  stdenvNoLibc,
+  overrideCC,
+  buildPackages,
   versionData,
   writeText,
   patches,
@@ -21,7 +24,15 @@
 lib.makeOverridable (
   attrs:
   let
-    stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
+    stdenv' =
+      if attrs.noCC or false then
+        stdenvNoCC
+      else if attrs.noLibc or false then
+        stdenvNoLibc
+      else if attrs.noLibcxx or false then
+        overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
+      else
+        stdenv;
   in
   stdenv'.mkDerivation (
     rec {
@@ -47,12 +58,9 @@ lib.makeOverridable (
 
       HOST_SH = stdenv'.shell;
 
-      # Since STRIP below is the flag
-      STRIPBIN = "${stdenv.cc.bintools.targetPrefix}strip";
-
       makeFlags = [
         "STRIP=-s" # flag to install, not command
-      ] ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "MK_WERROR=no";
+      ] ++ lib.optional (!stdenv'.hostPlatform.isFreeBSD) "MK_WERROR=no";
 
       # amd64 not x86_64 for this on unlike NetBSD
       MACHINE_ARCH = freebsd-lib.mkBsdArch stdenv';
@@ -80,6 +88,9 @@ lib.makeOverridable (
     // lib.optionalAttrs stdenv'.hasCC {
       # TODO should CC wrapper set this?
       CPP = "${stdenv'.cc.targetPrefix}cpp";
+
+      # Since STRIP in `makeFlags` has to be a flag, not the binary itself
+      STRIPBIN = "${stdenv'.cc.bintools.targetPrefix}strip";
     }
     // lib.optionalAttrs stdenv'.isDarwin { MKRELRO = "no"; }
     // lib.optionalAttrs (stdenv'.cc.isClang or false) {
@@ -128,15 +139,17 @@ lib.makeOverridable (
           splitPatch =
             patchFile:
             let
+              allLines' = lib.strings.splitString "\n" (builtins.readFile patchFile);
+              allLines = builtins.filter (
+                line: !((lib.strings.hasPrefix "diff --git" line) || (lib.strings.hasPrefix "index " line))
+              ) allLines';
               foldFunc =
                 a: b:
-                if (lib.strings.hasPrefix "--- " b) then
+                if ((lib.strings.hasPrefix "--- " b) || (lib.strings.hasPrefix "diff --git " b)) then
                   (a ++ [ [ b ] ])
                 else
                   ((lib.lists.init a) ++ (lib.lists.singleton ((lib.lists.last a) ++ [ b ])));
-              partitionedPatches' = lib.lists.foldl foldFunc [ [ ] ] (
-                lib.strings.splitString "\n" (builtins.readFile patchFile)
-              );
+              partitionedPatches' = lib.lists.foldl foldFunc [ [ ] ] allLines;
               partitionedPatches =
                 if (builtins.length partitionedPatches' > 1) then
                   (lib.lists.drop 1 partitionedPatches')

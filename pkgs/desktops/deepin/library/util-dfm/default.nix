@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Toolkits of libdfm-io,libdfm-mount and libdfm-burn";
+    description = "Toolkits of libdfm-io,libdfm-mount and libdfm-burn";
     homepage = "https://github.com/linuxdeepin/util-dfm";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

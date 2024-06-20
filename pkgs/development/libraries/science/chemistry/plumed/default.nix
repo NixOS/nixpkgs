@@ -8,13 +8,13 @@ assert !blas.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "plumed";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "plumed";
     repo = "plumed2";
     rev = "v${version}";
-    hash = "sha256-yL+59f908IhbxGIylI1ydi1BPZwAapjK/vP4/h5gcHk=";
+    hash = "sha256-68/ajM87ApEXUs4xPIq7Vfmzl7Ms4ck6jnjlIv7woMs=";
   };
 
   postPatch = ''

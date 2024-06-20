@@ -2,6 +2,7 @@
 , brotli
 , buildGoModule
 , forgejo
+, fetchpatch
 , git
 , gzip
 , lib
@@ -24,7 +25,7 @@ let
     pname = "forgejo-frontend";
     inherit (forgejo) src version;
 
-    npmDepsHash = "sha256-BffoEbIzTU61bw3ECEm5eDHcav4S27MB5jQKsMprkcw=";
+    npmDepsHash = "sha256-Nu9aOjJpEAuCWWnJfZXy/GayiUDiyc3hOu6Bx7GxfxA=";
 
     patches = [
       ./package-json-npm-build-frontend.patch
@@ -39,27 +40,37 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "7.0.2";
+  version = "7.0.4";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-YY5dHXWMqlCIPfqsDtHZLHjEdYmrFnh4yc0hfTUESww=";
+    hash = "sha256-WtJJdqPbx5k9U+u3ZpI3q/dm3eidxdkFgc8IskaJg88=";
   };
 
-  vendorHash = "sha256-UcjaMi/4XYLdaJhi2j3UWqHqkpTbZBo6EwNXxdRIKLw=";
+  vendorHash = "sha256-TYVWou9fIVL4od2o1uOb/MRBpf2lIg/9Tem9w+ihYzU=";
 
-  subPackages = [ "." ];
+  subPackages = [ "." "contrib/environment-to-ini" ];
 
   outputs = [ "out" "data" ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    git # checkPhase
+    openssh # checkPhase
+  ];
   buildInputs = lib.optional pamSupport pam;
 
   patches = [
     ./static-root-path.patch
+    # Fix TestAddRecursiveExclude go test.
+    # This will be part of the upcoming v7.0.5 release at which point this needs to be removed again.
+    (fetchpatch {
+      url = "https://codeberg.org/forgejo/forgejo/commit/f01dc4b271f54201e60a7c795d784813eac3f7ce.patch";
+      sha256  = "sha256-1lPLVHBad+Fmk+6EFXKuMnmDUl5BkEYJuMkTPfdrCgU=";
+    })
   ];
 
   postPatch = ''
@@ -80,9 +91,32 @@ buildGoModule rec {
     export ldflags+=" -X main.ForgejoVersion=$(GITEA_VERSION=${version} make show-version-api)"
   '';
 
-  preBuild = ''
-    go run build/merge-forgejo-locales.go
+  preCheck = ''
+    # $HOME is required for ~/.ssh/authorized_keys and such
+    export HOME="$TMPDIR/home"
+
+    # expose and use the GO_TEST_PACKAGES var from the Makefile
+    # instead of manually copying over the entire list:
+    # https://codeberg.org/forgejo/forgejo/src/tag/v7.0.4/Makefile#L124
+    echo -e 'show-backend-tests:\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
+    getGoDirs() {
+      make show-backend-tests
+    }
   '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "Test_SSHParsePublicKey/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
+        "Test_calcFingerprint/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
+        "TestPamAuth" # we don't have PAM set up in the build sandbox
+        "TestPassword" # requires network: api.pwnedpasswords.com
+        "TestCaptcha" # requires network: hcaptcha.com
+        "TestDNSUpdate" # requires network: release.forgejo.org
+        "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     mkdir $data
@@ -93,10 +127,9 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
-  # $data is not available in goModules.drv and preBuild isn't needed
+  # $data is not available in goModules.drv
   overrideModAttrs = (_: {
     postPatch = null;
-    preBuild = null;
   });
 
   passthru = {
@@ -120,7 +153,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "A self-hosted lightweight software forge";
+    description = "Self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
     license = lib.licenses.mit;

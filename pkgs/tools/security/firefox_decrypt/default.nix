@@ -38,7 +38,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/unode/firefox_decrypt";
-    description = "A tool to extract passwords from profiles of Mozilla Firefox and derivates";
+    description = "Tool to extract passwords from profiles of Mozilla Firefox and derivates";
     mainProgram = "firefox_decrypt";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ schnusch ];

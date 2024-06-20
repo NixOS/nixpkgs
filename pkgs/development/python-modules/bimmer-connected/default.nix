@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pbr
-, httpx
-, pillow
-, pycryptodome
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, python
-, respx
-, setuptools
-, time-machine
-, tzdata
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pbr,
+  httpx,
+  pillow,
+  pycryptodome,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python,
+  respx,
+  setuptools,
+  time-machine,
+  tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.15.2";
+  version = "0.15.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = "refs/tags/${version}";
-    hash = "sha256-UCzPD+3v74eB32q0/blsyHAsN0yNskGky5nrBKzFFaE=";
+    hash = "sha256-0Z7W9Z5zl7N0WbvfOTs8wcloI5VfqrZ+OBWocFAnjwY=";
   };
 
   build-system = [
@@ -44,9 +45,7 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    china = [
-      pillow
-    ];
+    china = [ pillow ];
   };
 
   postInstall = ''
@@ -69,9 +68,7 @@ buildPythonPackage rec {
     export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
   '';
 
-  pythonImportsCheck = [
-    "bimmer_connected"
-  ];
+  pythonImportsCheck = [ "bimmer_connected" ];
 
   meta = with lib; {
     changelog = "https://github.com/bimmerconnected/bimmer_connected/releases/tag/${version}";

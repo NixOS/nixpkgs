@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatch-jupyter-builder
-, hatch-nodejs-version
-, hatchling
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatch-jupyter-builder,
+  hatch-nodejs-version,
+  hatchling,
+  pygments,
 }:
 
 buildPythonPackage rec {

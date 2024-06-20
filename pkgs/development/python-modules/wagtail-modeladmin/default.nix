@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, dj-database-url
-, django
-, django-rq
-, fetchFromGitHub
-, flit-core
-, freezegun
-, google-cloud-translate
-, polib
-, python
-, pythonOlder
-, typing-extensions
-, wagtail
+{
+  lib,
+  buildPythonPackage,
+  dj-database-url,
+  django,
+  django-rq,
+  fetchFromGitHub,
+  flit-core,
+  freezegun,
+  google-cloud-translate,
+  polib,
+  python,
+  pythonOlder,
+  typing-extensions,
+  wagtail,
 }:
 
 buildPythonPackage rec {
@@ -28,17 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-J6ViGf7lqUvl5EV4/LbADVDp15foY9bUZygs1dSDlKw=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    wagtail
-  ];
+  propagatedBuildInputs = [ wagtail ];
 
-  nativeCheckInputs = [
-    dj-database-url
-  ];
+  nativeCheckInputs = [ dj-database-url ];
 
   pythonImportsCheck = [ "wagtail_modeladmin" ];
 

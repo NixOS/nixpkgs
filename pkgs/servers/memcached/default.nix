@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin "-Wno-error");
 
   meta = with lib; {
-    description = "A distributed memory object caching system";
+    description = "Distributed memory object caching system";
     homepage = "http://memcached.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.coconnor ];

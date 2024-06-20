@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An internet radio player for linux";
+    description = "Internet radio player for linux";
     homepage = "https://github.com/ebruck/radiotray-ng";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];

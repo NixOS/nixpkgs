@@ -1,11 +1,12 @@
-{ lib
-, adal
-, azure-common
-, buildPythonPackage
-, fetchPypi
-, msal
-, pythonOlder
-, requests
+{
+  lib,
+  adal,
+  azure-common,
+  buildPythonPackage,
+  fetchPypi,
+  msal,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {

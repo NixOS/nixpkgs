@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "release" ]; # "release" enables compiler optimizations
 
   meta = with lib; {
-    description = "A breadth-first version of the UNIX find command";
+    description = "Breadth-first version of the UNIX find command";
     longDescription = ''
       bfs is a variant of the UNIX find command that operates breadth-first rather than
       depth-first. It is otherwise intended to be compatible with many versions of find.

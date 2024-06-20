@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Cargo tool that detects unused dependencies in Rust projects";
+    description = "Cargo tool that detects unused dependencies in Rust projects";
     mainProgram = "cargo-machete";
     homepage = "https://github.com/bnjbvr/cargo-machete";
     changelog = "https://github.com/bnjbvr/cargo-machete/blob/${src.rev}/CHANGELOG.md";

@@ -16,6 +16,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-Z6j4w4/anfK0ln2MvgnwZFoe8BA5jVHG3g9m2TynmmE=";
 
+  ldflags = [
+    "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'"
+  ];
+
   meta = with lib; {
     description = "Command line for managing SpiceDB";
     mainProgram = "zed";

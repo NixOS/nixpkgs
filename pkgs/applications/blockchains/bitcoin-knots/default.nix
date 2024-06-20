@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A derivative of Bitcoin Core with a collection of improvements";
+    description = "Derivative of Bitcoin Core with a collection of improvements";
     homepage = "https://bitcoinknots.org/";
     maintainers = with maintainers; [ prusnak mmahut ];
     license = licenses.mit;

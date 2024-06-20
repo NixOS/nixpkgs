@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, protobuf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  protobuf,
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,7 @@ buildPythonPackage rec {
     sha256 = "085238b4944cb9c658ee62d5794de936ac3d0c337c504b2cc86424a205ae978a";
   };
 
-  propagatedBuildInputs = [
-    protobuf
-  ];
+  propagatedBuildInputs = [ protobuf ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -26,9 +25,7 @@ buildPythonPackage rec {
   # Tests require hadoop hdfs
   doCheck = false;
 
-  pythonImportsCheck = [
-    "snakebite"
-  ];
+  pythonImportsCheck = [ "snakebite" ];
 
   meta = with lib; {
     description = "Pure Python HDFS client";

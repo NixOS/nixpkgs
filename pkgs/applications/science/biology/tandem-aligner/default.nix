@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A parameter-free algorithm for sequence alignment";
+    description = "Parameter-free algorithm for sequence alignment";
     homepage = "https://github.com/seryrzu/tandem_aligner";
     changelog = "https://github.com/seryrzu/tandem_aligner/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;

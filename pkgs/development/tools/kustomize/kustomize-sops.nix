@@ -22,7 +22,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Flexible Kustomize Plugin for SOPS Encrypted Resource";
+    description = "Flexible Kustomize Plugin for SOPS Encrypted Resource";
     longDescription = ''
       KSOPS can be used to decrypt any Kubernetes resource, but is most commonly
       used to decrypt encrypted Kubernetes Secrets and ConfigMaps.

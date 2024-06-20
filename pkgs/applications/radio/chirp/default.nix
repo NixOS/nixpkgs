@@ -10,13 +10,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chirp";
-  version = "0.4.0-unstable-2024-05-10";
+  version = "0.4.0-unstable-2024-05-24";
 
   src = fetchFromGitHub {
     owner = "kk7ds";
     repo = "chirp";
-    rev = "d5dc5c8e053dbcf87c8b0ccf03109c0870c22bfb";
-    hash = "sha256-Tqq1dTjtzHTgaHUAio5B8V4Bo+P8EPa3s/kG181TrCc=";
+    rev = "e17c021ba4fc39eea8a2a1de37ef04a0d1253090";
+    hash = "sha256-YvIRo7g9fxnlf8og5CM2JLf8DeADVkcHdvb4ppS1veE=";
   };
   buildInputs = [
     glib
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A free, open-source tool for programming your amateur radio";
+    description = "Free, open-source tool for programming your amateur radio";
     homepage = "https://chirp.danplanet.com/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.emantor ];

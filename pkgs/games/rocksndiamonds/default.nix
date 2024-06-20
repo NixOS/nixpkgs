@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , makeDesktopItem
 , SDL2
 , SDL2_image

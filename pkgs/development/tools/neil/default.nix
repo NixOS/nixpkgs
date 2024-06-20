@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/babashka/neil";
-    description = "A CLI to add common aliases and features to deps.edn-based projects";
+    description = "CLI to add common aliases and features to deps.edn-based projects";
     mainProgram = "neil";
     license = licenses.mit;
     platforms = babashka.meta.platforms;

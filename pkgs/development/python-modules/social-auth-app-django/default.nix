@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, social-auth-core
-, django
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  social-auth-core,
+  django,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,17 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-BvPQo0pXffGYu0tpy5yHT9lJVwOTewBiX5GLeezBrhE=";
   };
 
-  propagatedBuildInputs = [
-    social-auth-core
-  ];
+  propagatedBuildInputs = [ social-auth-core ];
 
-  pythonImportsCheck = [
-    "social_django"
-  ];
+  pythonImportsCheck = [ "social_django" ];
 
-  nativeCheckInputs = [
-    django
-  ];
+  nativeCheckInputs = [ django ];
 
   checkPhase = ''
     ${python.interpreter} -m django test --settings="tests.settings"

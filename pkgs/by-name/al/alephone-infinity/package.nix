@@ -6,6 +6,7 @@ alephone.makeWrapper rec {
   version = "20240510";
   icon = alephone.icons + "/marathon-infinity.png";
 
+  # nixpkgs-update: no auto update
   zip = fetchurl {
     url =
       "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/MarathonInfinity-${version}-Data.zip";

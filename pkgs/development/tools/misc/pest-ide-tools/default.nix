@@ -10,14 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pest-ide-tools";
-  version = "0.3.9";
-  cargoSha256 = "sha256-kFLVzsk2ML78zWoLVX/tPz+rwBPziXmfGAcVSA7GiTA=";
+  version = "0.3.11";
+  cargoSha256 = "sha256-ZD8UQbkk5JhkanBkzo+c86DZE4aD44ma5cN97aKx97U=";
 
   src = fetchFromGitHub {
     owner = "pest-parser";
     repo = "pest-ide-tools";
     rev = "v${version}";
-    sha256 = "sha256-6051J3DQjI+Wp3iLn65GRmMnwOjGEtcWyXEKsT9k9fE=";
+    sha256 = "sha256-12/FndzUbUlgcYcwMT1OfamSKgy2q+CvtGyx5YY4IFQ=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "IDE support for Pest, via the LSP.";
+    description = "IDE support for Pest, via the LSP";
     homepage = "https://pest.rs";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ nickhu ];

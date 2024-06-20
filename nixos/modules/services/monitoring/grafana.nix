@@ -47,13 +47,6 @@ let
   datasourceFileOrDir = mkProvisionCfg "datasource" "datasources" cfg.provision.datasources;
   dashboardFileOrDir = mkProvisionCfg "dashboard" "providers" cfg.provision.dashboards;
 
-  notifierConfiguration = {
-    apiVersion = 1;
-    notifiers = cfg.provision.notifiers;
-  };
-
-  notifierFileOrDir = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
-
   generateAlertingProvisioningYaml = x:
     if (cfg.provision.alerting."${x}".path == null)
     then provisioningSettingsFormat.generate "${x}.yaml" cfg.provision.alerting."${x}".settings
@@ -74,10 +67,9 @@ let
     fi
   '';
   provisionConfDir = pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; } ''
-    mkdir -p $out/{alerting,datasources,dashboards,notifiers,plugins}
+    mkdir -p $out/{alerting,datasources,dashboards,plugins}
     ${ln { src = datasourceFileOrDir;    dir = "datasources"; filename = "datasource"; }}
     ${ln { src = dashboardFileOrDir;     dir = "dashboards";  filename = "dashboard"; }}
-    ${ln { src = notifierFileOrDir;      dir = "notifiers";   filename = "notifier"; }}
     ${ln { src = rulesFileOrDir;         dir = "alerting";    filename = "rules"; }}
     ${ln { src = contactPointsFileOrDir; dir = "alerting";    filename = "contactPoints"; }}
     ${ln { src = policiesFileOrDir;      dir = "alerting";    filename = "policies"; }}
@@ -161,73 +153,13 @@ let
       };
     };
   };
-
-  grafanaTypes.notifierConfig = types.submodule {
-    options = {
-      name = mkOption {
-        type = types.str;
-        default = "default";
-        description = "Notifier name.";
-      };
-      type = mkOption {
-        type = types.enum [ "dingding" "discord" "email" "googlechat" "hipchat" "kafka" "line" "teams" "opsgenie" "pagerduty" "prometheus-alertmanager" "pushover" "sensu" "sensugo" "slack" "telegram" "threema" "victorops" "webhook" ];
-        description = "Notifier type.";
-      };
-      uid = mkOption {
-        type = types.str;
-        description = "Unique notifier identifier.";
-      };
-      org_id = mkOption {
-        type = types.int;
-        default = 1;
-        description = "Organization ID.";
-      };
-      org_name = mkOption {
-        type = types.str;
-        default = "Main Org.";
-        description = "Organization name.";
-      };
-      is_default = mkOption {
-        type = types.bool;
-        description = "Is the default notifier.";
-        default = false;
-      };
-      send_reminder = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Should the notifier be sent reminder notifications while alerts continue to fire.";
-      };
-      frequency = mkOption {
-        type = types.str;
-        default = "5m";
-        description = "How frequently should the notifier be sent reminders.";
-      };
-      disable_resolve_message = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Turn off the message that sends when an alert returns to OK.";
-      };
-      settings = mkOption {
-        type = types.nullOr types.attrs;
-        default = null;
-        description = "Settings for the notifier type.";
-      };
-      secure_settings = mkOption {
-        type = types.nullOr types.attrs;
-        default = null;
-        description = ''
-          Secure settings for the notifier type. Please note that the contents of this option
-          will end up in a world-readable Nix store. Use the file provider
-          pointing at a reasonably secured file in the local filesystem
-          to work around that. Look at the documentation for details:
-          <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
-        '';
-      };
-    };
-  };
 in
 {
   imports = [
+    (mkRemovedOptionModule [ "services" "grafana" "provision" "notifiers" ] ''
+      Notifiers (services.grafana.provision.notifiers) were removed in Grafana 11.
+    '')
+
     (mkRenamedOptionModule [ "services" "grafana" "protocol" ] [ "services" "grafana" "settings" "server" "protocol" ])
     (mkRenamedOptionModule [ "services" "grafana" "addr" ] [ "services" "grafana" "settings" "server" "http_addr" ])
     (mkRenamedOptionModule [ "services" "grafana" "port" ] [ "services" "grafana" "settings" "server" "http_port" ])
@@ -1256,15 +1188,6 @@ in
         };
       };
 
-
-      notifiers = mkOption {
-        description = "Grafana notifier configuration.";
-        default = [ ];
-        type = types.listOf grafanaTypes.notifierConfig;
-        apply = x: map _filter x;
-      };
-
-
       alerting = {
         rules = {
           path = mkOption {
@@ -1746,12 +1669,6 @@ in
             Use file provider or an env-var instead.
           '';
 
-        # Warn about deprecated notifiers.
-        deprecatedNotifiers = optional (cfg.provision.notifiers != [ ]) ''
-          Notifiers are deprecated upstream and will be removed in Grafana 11.
-          Use `services.grafana.provision.alerting.contactPoints` instead.
-        '';
-
         # Ensure that `secureJsonData` of datasources provisioned via `datasources.settings`
         # only uses file/env providers.
         secureJsonDataWithoutFileProvider = optional
@@ -1770,15 +1687,10 @@ in
             Declarations in the `secureJsonData`-block of a datasource will be leaked to the
             Nix store unless a file-provider or an env-var is used!
           '';
-
-        notifierSecureSettingsWithoutFileProvider = optional
-          (any (x: x.secure_settings != null) cfg.provision.notifiers)
-          "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.";
       in
       passwordWithoutFileProvider
-      ++ deprecatedNotifiers
       ++ secureJsonDataWithoutFileProvider
-      ++ notifierSecureSettingsWithoutFileProvider;
+      ;
 
     environment.systemPackages = [ cfg.package ];
 

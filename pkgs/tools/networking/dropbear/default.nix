@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib libxcrypt ];
 
   meta = with lib; {
-    description = "A small footprint implementation of the SSH 2 protocol";
+    description = "Small footprint implementation of the SSH 2 protocol";
     homepage = "https://matt.ucc.asn.au/dropbear/dropbear.html";
     changelog = "https://github.com/mkj/dropbear/raw/DROPBEAR_${version}/CHANGES";
     license = licenses.mit;

@@ -29,6 +29,7 @@ with lib;
 
 { version, sha256, patches ? []
 , license ? lib.licenses.sspl
+, avxSupport ? stdenv.hostPlatform.avxSupport
 }:
 
 let
@@ -114,6 +115,9 @@ in stdenv.mkDerivation rec {
     # don't fail by default on i686
     substituteInPlace src/mongo/db/storage/storage_options.h \
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
+  '' + lib.optionalString (!avxSupport) ''
+    substituteInPlace SConstruct \
+      --replace-fail "default=['+sandybridge']," 'default=[],'
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
@@ -171,7 +175,7 @@ in stdenv.mkDerivation rec {
   hardeningEnable = [ "pie" ];
 
   meta = {
-    description = "A scalable, high-performance, open source NoSQL database";
+    description = "Scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
     inherit license;
 

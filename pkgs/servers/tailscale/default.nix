@@ -2,6 +2,7 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , makeWrapper
 , getent
 , iproute2
@@ -9,10 +10,11 @@
 , shadow
 , procps
 , nixosTests
+, installShellFiles
 }:
 
 let
-  version = "1.66.1";
+  version = "1.68.1";
 in
 buildGoModule {
   pname = "tailscale";
@@ -22,11 +24,21 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-1Yt8W/UanAghaElGiD+z7BKeV/Ge+OElA+B9yBnu3vw=";
+    hash = "sha256-ZAzro69F7ovfdqzRss/U7puh1T37bkEtUXabCYc5LwU=";
   };
-  vendorHash = "sha256-Hd77xy8stw0Y6sfk3/ItqRIbM/349M/4uf0iNy1xJGw=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
+  patches = [
+    # Fix "tailscale ssh" when built with ts_include_cli tag
+    # https://github.com/tailscale/tailscale/pull/12109
+    (fetchpatch {
+      url = "https://github.com/tailscale/tailscale/commit/325ca13c4549c1af58273330744d160602218af9.patch";
+      hash = "sha256-SMwqZiGNVflhPShlHP+7Gmn0v4b6Gr4VZGIF/oJAY8M=";
+    })
+  ];
+
+  vendorHash = "sha256-SUjoeOFYz6zbEgv/vND7kEXbuWlZDrUKF2Dmqsf/KVw=";
+
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ] ++ [ installShellFiles ];
 
   CGO_ENABLED = 0;
 
@@ -52,6 +64,12 @@ buildGoModule {
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \
       --suffix PATH : ${lib.makeBinPath [ procps ]}
 
+    local INSTALL="$out/bin/tailscale"
+    installShellCompletion --cmd tailscale \
+      --bash <($out/bin/tailscale completion bash) \
+      --fish <($out/bin/tailscale completion fish) \
+      --zsh <($out/bin/tailscale completion zsh)
+
     sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
   '';
@@ -62,7 +80,7 @@ buildGoModule {
 
   meta = with lib; {
     homepage = "https://tailscale.com";
-    description = "The node agent for Tailscale, a mesh VPN built on WireGuard";
+    description = "Node agent for Tailscale, a mesh VPN built on WireGuard";
     license = licenses.bsd3;
     mainProgram = "tailscale";
     maintainers = with maintainers; [ mbaillie jk mfrw ];

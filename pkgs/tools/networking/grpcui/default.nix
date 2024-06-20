@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
-    description = "An interactive web UI for gRPC, along the lines of postman";
+    description = "Interactive web UI for gRPC, along the lines of postman";
     homepage = "https://github.com/fullstorydev/grpcui";
     license = licenses.mit;
     maintainers = with maintainers; [ pradyuman ];

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.5.3";
+  version = "2024.6.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -51,6 +51,8 @@
     ];
     "air_quality" = ps: with ps; [
     ];
+    "airgradient" = ps: with ps; [
+    ]; # missing inputs: airgradient
     "airly" = ps: with ps; [
       airly
     ];
@@ -109,7 +111,10 @@
       aioairzone-cloud
     ];
     "aladdin_connect" = ps: with ps; [
-      aioaladdinconnect
+      fnv-hash-fast
+      genie-partner-sdk
+      psutil-home-assistant
+      sqlalchemy
     ];
     "alarm_control_panel" = ps: with ps; [
     ];
@@ -129,9 +134,6 @@
     ];
     "amberelectric" = ps: with ps; [
       amberelectric
-    ];
-    "ambiclimate" = ps: with ps; [
-      ambiclimate
     ];
     "ambient_network" = ps: with ps; [
       aioambient
@@ -216,6 +218,8 @@
       aprslib
       geopy
     ];
+    "apsystems" = ps: with ps; [
+    ]; # missing inputs: apsystems-ez1
     "aqualogic" = ps: with ps; [
       aqualogic
     ];
@@ -331,6 +335,8 @@
       axis
       paho-mqtt
     ];
+    "azure_data_explorer" = ps: with ps; [
+    ]; # missing inputs: azure-kusto-data azure-kusto-ingest
     "azure_devops" = ps: with ps; [
       aioazuredevops
     ];
@@ -527,6 +533,7 @@
     ];
     "brother" = ps: with ps; [
       brother
+      pysnmp-lextudio
     ];
     "brottsplatskartan" = ps: with ps; [
       brottsplatskartan
@@ -801,8 +808,12 @@
       deluge-client
     ];
     "demo" = ps: with ps; [
+      fnv-hash-fast
       hassil
       home-assistant-intents
+      pillow
+      psutil-home-assistant
+      sqlalchemy
     ];
     "denon" = ps: with ps; [
     ];
@@ -822,7 +833,10 @@
     "device_automation" = ps: with ps; [
     ];
     "device_sun_light_trigger" = ps: with ps; [
+      fnv-hash-fast
       pillow
+      psutil-home-assistant
+      sqlalchemy
     ];
     "device_tracker" = ps: with ps; [
     ];
@@ -1560,8 +1574,12 @@
     ];
     "google_generative_ai_conversation" = ps: with ps; [
       google-generativeai
+      ha-ffmpeg
       hassil
       home-assistant-intents
+      mutagen
+      voluptuous-openapi
+      webrtc-noise-gain
     ];
     "google_mail" = ps: with ps; [
       fnv-hash-fast
@@ -1649,6 +1667,10 @@
     "greenwave" = ps: with ps; [
     ]; # missing inputs: greenwavereality
     "group" = ps: with ps; [
+      fnv-hash-fast
+      pillow
+      psutil-home-assistant
+      sqlalchemy
     ];
     "growatt_server" = ps: with ps; [
       growattserver
@@ -1752,7 +1774,6 @@
       pillow
       psutil-home-assistant
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       pyudev
       sqlalchemy
@@ -1770,7 +1791,6 @@
       pillow
       psutil-home-assistant
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       pyudev
       sqlalchemy
@@ -1788,7 +1808,6 @@
       pillow
       psutil-home-assistant
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       pyudev
       sqlalchemy
@@ -1806,7 +1825,6 @@
       pillow
       psutil-home-assistant
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       pyudev
       sqlalchemy
@@ -2010,6 +2028,8 @@
     "imap" = ps: with ps; [
       aioimaplib
     ];
+    "imgw_pib" = ps: with ps; [
+    ]; # missing inputs: imgw_pib
     "improv_ble" = ps: with ps; [
       aioesphomeapi
       aioruuvigateway
@@ -2132,6 +2152,9 @@
     ];
     "irish_rail_transport" = ps: with ps; [
     ]; # missing inputs: pyirishrail
+    "isal" = ps: with ps; [
+      isal
+    ];
     "islamic_prayer_times" = ps: with ps; [
     ]; # missing inputs: prayer-times-calculator-offline
     "ismartwindow" = ps: with ps; [
@@ -2810,6 +2833,12 @@
     ];
     "monoprice" = ps: with ps; [
     ]; # missing inputs: pymonoprice
+    "monzo" = ps: with ps; [
+      fnv-hash-fast
+      monzopy
+      psutil-home-assistant
+      sqlalchemy
+    ];
     "moon" = ps: with ps; [
     ];
     "mopeka" = ps: with ps; [
@@ -3106,9 +3135,13 @@
       defusedxml
     ];
     "ollama" = ps: with ps; [
+      ha-ffmpeg
       hassil
       home-assistant-intents
-    ]; # missing inputs: ollama-hass
+      mutagen
+      ollama
+      webrtc-noise-gain
+    ];
     "ombi" = ps: with ps; [
       pyombi
     ];
@@ -3144,6 +3177,7 @@
       home-assistant-intents
       mutagen
       openai
+      voluptuous-openapi
       webrtc-noise-gain
     ];
     "openalpr_cloud" = ps: with ps; [
@@ -3178,7 +3212,7 @@
       pyopenuv
     ];
     "openweathermap" = ps: with ps; [
-      pyowm
+      pyopenweathermap
     ];
     "opnsense" = ps: with ps; [
       pyopnsense
@@ -3237,7 +3271,6 @@
       psutil-home-assistant
       pyroute2
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       python-otbr-api
       pyudev
@@ -3802,7 +3835,8 @@
       zeroconf
     ];
     "rympro" = ps: with ps; [
-    ]; # missing inputs: pyrympro
+      pyrympro
+    ];
     "sabnzbd" = ps: with ps; [
       pysabnzbd
     ];
@@ -3858,6 +3892,7 @@
     ]; # missing inputs: scsgate
     "search" = ps: with ps; [
       fnv-hash-fast
+      pillow
       psutil-home-assistant
       sqlalchemy
     ];
@@ -3973,7 +4008,7 @@
       sqlalchemy
     ];
     "serial" = ps: with ps; [
-      pyserial-asyncio
+      pyserial-asyncio-fast
     ];
     "serial_pm" = ps: with ps; [
       pmsensor
@@ -4436,6 +4471,10 @@
       temperusb
     ];
     "template" = ps: with ps; [
+      fnv-hash-fast
+      pillow
+      psutil-home-assistant
+      sqlalchemy
     ];
     "tensorflow" = ps: with ps; [
       numpy
@@ -4515,6 +4554,7 @@
       stringcase
     ]; # missing inputs: thermoworks-smoke
     "thethingsnetwork" = ps: with ps; [
+      ttn-client
     ];
     "thingspeak" = ps: with ps; [
     ]; # missing inputs: thingspeak
@@ -4725,7 +4765,7 @@
       unifiled
     ];
     "unifiprotect" = ps: with ps; [
-      pyunifiprotect
+      uiprotect
       unifi-discovery
     ];
     "universal" = ps: with ps; [
@@ -4895,7 +4935,8 @@
       pyweatherflowudp
     ];
     "weatherflow_cloud" = ps: with ps; [
-    ]; # missing inputs: weatherflow4py
+      weatherflow4py
+    ];
     "weatherkit" = ps: with ps; [
       apple-weatherkit
     ];
@@ -5146,7 +5187,6 @@
       pillow
       psutil-home-assistant
       pyserial
-      pyserial-asyncio
       pyserial-asyncio-fast
       pyudev
       sqlalchemy
@@ -5218,7 +5258,6 @@
     "alert"
     "alexa"
     "amberelectric"
-    "ambiclimate"
     "ambient_network"
     "ambient_station"
     "analytics"
@@ -5527,6 +5566,7 @@
     "ipma"
     "ipp"
     "iqvia"
+    "isal"
     "isy994"
     "izone"
     "jellyfin"
@@ -5619,6 +5659,7 @@
     "modem_callerid"
     "modern_forms"
     "mold_indicator"
+    "monzo"
     "moon"
     "mopeka"
     "motion_blinds"
@@ -5670,6 +5711,7 @@
     "nx584"
     "obihai"
     "octoprint"
+    "ollama"
     "omnilogic"
     "onboarding"
     "oncue"
@@ -5777,6 +5819,7 @@
     "ruckus_unleashed"
     "ruuvi_gateway"
     "ruuvitag_ble"
+    "rympro"
     "sabnzbd"
     "samsungtv"
     "sanix"
@@ -5891,6 +5934,7 @@
     "text"
     "thermobeacon"
     "thermopro"
+    "thethingsnetwork"
     "thread"
     "threshold"
     "tibber"
@@ -5972,6 +6016,7 @@
     "waze_travel_time"
     "weather"
     "weatherflow"
+    "weatherflow_cloud"
     "weatherkit"
     "webhook"
     "webostv"

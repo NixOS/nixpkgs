@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pycryptodomex
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pycryptodomex,
 }:
 
 buildPythonPackage rec {
@@ -17,13 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-fiDJWcypFabnUoS313f56ypDuDrLASHrkk0Em8bymmw=";
   };
 
-  propagatedBuildInputs = [
-    pycryptodomex
-  ];
+  propagatedBuildInputs = [ pycryptodomex ];
 
-  pythonImportsCheck = [
-    "pyctr"
-  ];
+  pythonImportsCheck = [ "pyctr" ];
 
   meta = with lib; {
     description = "Python library to interact with Nintendo 3DS files";

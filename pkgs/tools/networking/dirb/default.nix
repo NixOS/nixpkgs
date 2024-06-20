@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A web content scanner";
+    description = "Web content scanner";
     homepage = "https://dirb.sourceforge.net/";
     maintainers = with lib.maintainers; [ bennofs ];
     license = with lib.licenses; [ gpl2Only ];

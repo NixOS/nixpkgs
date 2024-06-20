@@ -76,10 +76,23 @@ in
       };
     };
 
+    systemd.nspawn.${containerName} = {
+      filesConfig = {
+        # workaround to fix kernel namespaces; needed for Nix sandbox
+        # https://github.com/systemd/systemd/issues/27994#issuecomment-1704005670
+        Bind = "/proc:/run/proc";
+      };
+    };
+
     systemd.services."systemd-nspawn@${containerName}" = {
       serviceConfig.Environment = [
         # Disable tmpfs for /tmp
         "SYSTEMD_NSPAWN_TMPFS_TMP=0"
+
+        # force unified cgroup delegation, which would be the default
+        # if systemd could check the capabilities of the installed systemd.
+        # see also: https://github.com/NixOS/nixpkgs/pull/198526
+        "SYSTEMD_NSPAWN_UNIFIED_HIERARCHY=1"
       ];
       overrideStrategy = "asDropin";
     };
@@ -120,6 +133,17 @@ in
     # Test machinectl start
     machine.succeed("machinectl start ${containerName}");
     machine.wait_until_succeeds("systemctl -M ${containerName} is-active default.target");
+
+    # Test systemd-nspawn configured unified cgroup delegation
+    # see also:
+    # https://github.com/systemd/systemd/blob/main/docs/CGROUP_DELEGATION.md#three-different-tree-setups-
+    machine.succeed('systemd-run --pty --wait -M ${containerName} /run/current-system/sw/bin/stat --format="%T" --file-system /sys/fs/cgroup > fstype')
+    machine.succeed('test $(tr -d "\\r" < fstype) = cgroup2fs')
+
+    # Test if systemd-nspawn provides a working environment for nix to build derivations
+    # https://nixos.org/guides/nix-pills/07-working-derivation
+    machine.succeed('systemd-run --pty --wait -M ${containerName} /run/current-system/sw/bin/nix-instantiate --expr \'derivation { name = "myname"; builder = "/bin/sh"; args = [ "-c" "echo foo > $out" ]; system = "${pkgs.system}"; }\' --add-root /tmp/drv')
+    machine.succeed('systemd-run --pty --wait -M ${containerName} /run/current-system/sw/bin/nix-store --option substitute false --realize /tmp/drv')
 
     # Test nss_mymachines without nscd
     machine.succeed('LD_LIBRARY_PATH="/run/current-system/sw/lib" getent -s hosts:mymachines hosts ${containerName}');

@@ -9,7 +9,7 @@ mkFranzDerivation rec {
     sha256 = "sha256-zQhZlxr7kyMWx6txDnV+ECBTzVEwnUaBsLWKJy3XYFg=";
   };
   meta = with lib; {
-    description = "A free messaging app that combines chat & messaging services into one application";
+    description = "Free messaging app that combines chat & messaging services into one application";
     homepage = "https://meetfranz.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.free;

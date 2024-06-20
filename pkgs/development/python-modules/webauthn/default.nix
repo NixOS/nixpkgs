@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, asn1crypto
-, cbor2
-, pythonOlder
-, pyopenssl
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  asn1crypto,
+  cbor2,
+  pythonOlder,
+  pyopenssl,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -28,13 +29,9 @@ buildPythonPackage rec {
     pyopenssl
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "webauthn"
-  ];
+  pythonImportsCheck = [ "webauthn" ];
 
   disabledTests = [
     # TypeError: X509StoreContextError.__init__() missing 1 required...

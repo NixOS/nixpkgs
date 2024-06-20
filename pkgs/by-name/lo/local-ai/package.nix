@@ -94,13 +94,33 @@ let
     '';
   };
 
+  llama-cpp-rpc = (llama-cpp-grpc.overrideAttrs (prev: {
+    name = "llama-cpp-rpc";
+    cmakeFlags = prev.cmakeFlags ++ [
+      (lib.cmakeBool "LLAMA_AVX" false)
+      (lib.cmakeBool "LLAMA_AVX2" false)
+      (lib.cmakeBool "LLAMA_AVX512" false)
+      (lib.cmakeBool "LLAMA_FMA" false)
+      (lib.cmakeBool "LLAMA_F16C" false)
+      (lib.cmakeBool "LLAMA_RPC" true)
+    ];
+    postPatch = prev.postPatch + ''
+      sed -i examples/rpc/CMakeLists.txt \
+        -e '$a\install(TARGETS rpc-server RUNTIME)'
+    '';
+  })).override {
+    cudaSupport = false;
+    openclSupport = false;
+    blasSupport = true; # TODO: set to false, when dropping 23.11 support
+  };
+
   llama-cpp-grpc = (llama-cpp.overrideAttrs (final: prev: {
     name = "llama-cpp-grpc";
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "c12452c7aec8a02264afc00196a13caa591a13ac";
-      hash = "sha256-Kji8dlz7OfhPeNXnYgBHzpGGMhCsRLJ9d+EFf77Q6Co=";
+      rev = "74f33adf5f8b20b08fc5a6aa17ce081abe86ef2f";
+      hash = "sha256-hSdHhsC5Q8pLEC2bj8Gke4/ffCts5l7LtYa9RDrpGBI=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -253,8 +273,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "73d13ad19a8c9c4da4f405088a85169b1a171e66";
-      hash = "sha256-7g/J3a3behGgcJXy9ryAYXxgOYnsRMlGmux13re28AY=";
+      rev = "22d46b7ba4620e2db1281e210d0186863cffcec0";
+      hash = "sha256-JC3GHRBjFvfQSUWRdAcMc0pol54RsqUF1+zIZYAsbC4=";
     };
 
     nativeBuildInputs = [ cmake pkg-config ]
@@ -285,8 +305,8 @@ let
     src = fetchFromGitHub {
       owner = "go-skynet";
       repo = "go-bert.cpp";
-      rev = "6abe312cded14042f6b7c3cd8edf082713334a4d";
-      hash = "sha256-lh9cvXc032Eq31kysxFOkRd0zPjsCznRl0tzg9P2ygo=";
+      rev = "710044b124545415f555e4260d16b146c725a6e4";
+      hash = "sha256-UNrs3unYjvSzCVaVISFFBDD+s37lmN6/7ajmGNcYgrU=";
       fetchSubmodules = true;
     };
     buildFlags = [ "libgobert.a" ];
@@ -372,18 +392,18 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.15.0";
+  version = "2.16.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-AjNgfZjVxlw0LtPbUTbJuLcUfqJdPzn6vOmUDz/v7Jc=";
+    hash = "sha256-3SfU68wGyYIX0haKfuHGKHhthuDSeSdr18ReDkFzhH0=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-+ZPZkOpaTsKrL2HDOEtAr8sT6uqTiQXo/XS+MBNZq5E=";
+    vendorHash = "sha256-UjqEsgRZ+xv4Thwh4u3juvg3JI3+RdGyCZlsk7ddgTU=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
@@ -403,12 +423,20 @@ let
           -e 's;git clone.*go-tiny-dream$;${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream;' \
           -e 's, && git checkout.*,,g' \
           -e '/mod download/ d' \
-          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-/ d' \
+          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-fallback/ d' \
+          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-avx/ d' \
+          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
+
       '';
 
     postConfigure = ''
+      shopt -s extglob
       mkdir -p backend-assets/grpc
-      cp ${llama-cpp-grpc}/bin/*grpc-server backend-assets/grpc/llama-cpp
+      cp ${llama-cpp-grpc}/bin/?(llama-cpp-)grpc-server backend-assets/grpc/llama-cpp-avx2
+      cp ${llama-cpp-rpc}/bin/?(llama-cpp-)grpc-server backend-assets/grpc/llama-cpp-grpc
+
+      mkdir -p backend-assets/util
+      cp ${llama-cpp-rpc}/bin/?(llama-cpp-)rpc-server backend-assets/util/llama-cpp-rpc-server
     '';
 
     buildInputs = [ ]
@@ -496,7 +524,7 @@ let
       inherit
         go-tiny-dream go-rwkv go-bert go-llama gpt4all go-piper
         llama-cpp-grpc whisper-cpp go-tiny-dream-ncnn espeak-ng' piper-phonemize
-        piper-tts';
+        piper-tts' llama-cpp-rpc;
     };
 
     passthru.features = {

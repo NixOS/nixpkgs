@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A KVM Frame Relay (KVMFR) implementation";
+    description = "KVM Frame Relay (KVMFR) implementation";
     longDescription = ''
       Looking Glass is an open source application that allows the use of a KVM
       (Kernel-based Virtual Machine) configured for VGA PCI Pass-through

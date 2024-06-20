@@ -14,8 +14,7 @@ let
 in appimageTools.wrapType2 rec {
   inherit name pname src;
 
-  multiArch = false;
-  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [ p.glib ];
+  extraPkgs = pkgs: [ pkgs.glib ];
 
   # Also expose the udev rules here, so it can be used as:
   #   services.udev.packages = [ pkgs.chrysalis ];
@@ -39,7 +38,7 @@ in appimageTools.wrapType2 rec {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "A graphical configurator for Kaleidoscope-powered keyboards";
+    description = "Graphical configurator for Kaleidoscope-powered keyboards";
     homepage = "https://github.com/keyboardio/Chrysalis";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aw eclairevoyant nshalman ];

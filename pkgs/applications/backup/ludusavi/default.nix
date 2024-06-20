@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , cmake
 , pkg-config
 , makeWrapper
@@ -34,6 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     cmake
+    installShellFiles
     pkg-config
     makeWrapper
   ];
@@ -57,6 +60,11 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 "assets/ludusavi.desktop" -t "$out/share/applications/"
     install -Dm644 assets/MaterialIcons-Regular.ttf -t "$out/share/fonts/TTF/"
     install -Dm644 LICENSE -t "$out/share/licenses/ludusavi/"
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd ludusavi \
+      --bash <($out/bin/ludusavi complete bash) \
+      --fish <($out/bin/ludusavi complete fish) \
+      --zsh <($out/bin/ludusavi complete zsh)
   '';
 
   postFixup =

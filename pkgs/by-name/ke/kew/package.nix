@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A command-line music player for Linux";
+    description = "Command-line music player for Linux";
     homepage = "https://github.com/ravachol/kew";
     platforms = platforms.linux;
     license = licenses.gpl2Only;

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, wheel
-, numpy
-, pip
-, termcolor
-, pytestCheckHook
-, torch
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  numpy,
+  pip,
+  termcolor,
+  pytestCheckHook,
+  torch,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     termcolor
   ];
 
-  pythonImportsCheck = [
-    "rlcard"
-  ];
+  pythonImportsCheck = [ "rlcard" ];
 
   nativeCheckInputs = [
     pytestCheckHook

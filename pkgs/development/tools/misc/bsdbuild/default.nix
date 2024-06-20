@@ -49,7 +49,7 @@ EOF
 
   meta = {
     homepage = "http://bsdbuild.hypertriton.com";
-    description = "A cross-platform build system";
+    description = "Cross-platform build system";
 
     longDescription = ''
       BSDBuild is a cross-platform build system. Derived from the

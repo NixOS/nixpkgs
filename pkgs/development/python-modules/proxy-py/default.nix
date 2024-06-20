@@ -4,7 +4,6 @@
   bash,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   gnumake,
   h2,
   hpack,

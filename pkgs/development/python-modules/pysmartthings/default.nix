@@ -1,10 +1,11 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
       --replace "aiohttp>=3.8.0,<4.0.0" "aiohttp<=4.0.0"
   '';
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # https://github.com/andrewsayre/pysmartthings/issues/80
   doCheck = lib.versionOlder aiohttp.version "3.9.0";
@@ -38,9 +37,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pysmartthings"
-  ];
+  pythonImportsCheck = [ "pysmartthings" ];
 
   meta = with lib; {
     description = "Python library for interacting with the SmartThings cloud API";

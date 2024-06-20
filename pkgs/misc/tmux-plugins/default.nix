@@ -92,12 +92,12 @@ in rec {
 
   catppuccin = mkTmuxPlugin {
     pluginName = "catppuccin";
-    version = "unstable-2023-08-21";
+    version = "unstable-2024-05-15";
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "tmux";
-      rev = "7a284c98e5df4cc84a1a45ad633916f0b2b916b2";
-      hash = "sha256-jxcxW0gEfXaSt8VM3UIs0dKNKaHb8JSEQBBV3SVjW/A=";
+      rev = "697087f593dae0163e01becf483b192894e69e33";
+      hash = "sha256-EHinWa6Zbpumu+ciwcMo6JIIvYFfWWEKH1lwfyZUNTo=";
     };
     postInstall = ''
       sed -i -e 's|''${PLUGIN_DIR}/catppuccin-selected-theme.tmuxtheme|''${TMUX_TMPDIR}/catppuccin-selected-theme.tmuxtheme|g' $target/catppuccin.tmux
@@ -207,7 +207,7 @@ in rec {
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
-      description = "A feature packed Dracula theme for tmux!";
+      description = "Feature packed Dracula theme for tmux!";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ ethancedwards8 ];
@@ -587,12 +587,12 @@ in rec {
   session-wizard = mkTmuxPlugin rec {
     pluginName = "session-wizard";
     rtpFilePath = "session-wizard.tmux";
-    version = "1.2.0";
+    version = "1.3.1";
     src = pkgs.fetchFromGitHub {
       owner = "27medkamal";
       repo = "tmux-session-wizard";
       rev = "V${version}";
-      sha256 = "sha256-IfSgX02vXdpzyu1GRF1EvzVCqqOEiTjeXtl1EvNr7EI=";
+      sha256 = "sha256-nJaC5aX+cR/+ks3I/lW/tUnVG0CrEYfsIjPDisgMrTE=";
     };
     meta = with lib; {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
@@ -610,9 +610,11 @@ in rec {
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-      substituteInPlace $target/session-wizard.tmux \
-        --replace  \$CURRENT_DIR/session-wizard.sh $target/session-wizard.sh
-      wrapProgram $target/session-wizard.sh \
+      for f in .gitignore Dockerfile flake.* scripts tests; do
+        rm -rf $target/$f
+      done
+      substituteInPlace $target/session-wizard.tmux --replace  \$CURRENT_DIR $target
+      wrapProgram $target/bin/t \
         --prefix PATH : ${with pkgs; lib.makeBinPath ([ fzf zoxide coreutils gnugrep gnused ])}
     '';
   };
@@ -814,6 +816,25 @@ in rec {
       repo = "tmux-yank";
       rev = "1b1a436e19f095ae8f825243dbe29800a8acd25c";
       sha256 = "hRvkBf+YrWycecnDixAsD4CAHg3KsioomfJ/nLl5Zgs=";
+    };
+  };
+
+  tmux-nova = mkTmuxPlugin rec {
+    pluginName = "tmux-nova";
+    rtpFilePath = "nova.tmux";
+    version = "1.2.0";
+    src = fetchFromGitHub {
+      owner = "o0th";
+      repo = "tmux-nova";
+      rev = "v${version}";
+      sha256 = "16llz3nlyw88lyd8mmj27i0ncyhpfjj5c1yikngf7nxcqsbjmcnh";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/o0th/tmux-nova";
+      description = "tmux-nova theme";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ o0th ];
     };
   };
 }

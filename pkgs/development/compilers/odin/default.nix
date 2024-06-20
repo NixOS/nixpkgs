@@ -1,42 +1,43 @@
 { lib
 , fetchFromGitHub
-, llvmPackages_13
+, llvmPackages
 , makeBinaryWrapper
 , libiconv
 , MacOSX-SDK
+, Security
 , which
 }:
 
 let
-  llvmPackages = llvmPackages_13;
   inherit (llvmPackages) stdenv;
 in stdenv.mkDerivation rec {
   pname = "odin";
-  version = "dev-2024-04a";
+  version = "dev-2024-06";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     rev = version;
-    hash = "sha256-jFENpWUosNNTctYiHdKqDg7ENAoEtigz87pTfYJDj5Q=";
+    hash = "sha256-Ba+244L855y+XzLcaf1fgQhHVDv2Q77GPapRAYmCQfg=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper which
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
 
   LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
   postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i src/main.cpp \
-      -e 's|-syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk|-syslibroot ${MacOSX-SDK}|'
-  '' + ''
-    sed -i build_odin.sh \
-      -e 's/^GIT_SHA=.*$/GIT_SHA=/' \
-      -e 's/LLVM-C/LLVM/' \
-      -e 's/framework System/lSystem/'
+    substituteInPlace src/linker.cpp \
+        --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' ${MacOSX-SDK}
+    '' + ''
+    substituteInPlace build_odin.sh \
+        --replace-fail '-framework System' '-lSystem'
     patchShebangs build_odin.sh
   '';
 
@@ -70,7 +71,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A fast, concise, readable, pragmatic and open sourced programming language";
+    description = "Fast, concise, readable, pragmatic and open sourced programming language";
     mainProgram = "odin";
     homepage = "https://odin-lang.org/";
     license = licenses.bsd3;

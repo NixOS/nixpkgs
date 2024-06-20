@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, pygments
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  pygments,
 }:
 
 buildPythonPackage rec {
@@ -18,13 +19,9 @@ buildPythonPackage rec {
     hash = "sha256-57V6mxWVjpYBx+nrB6RAyBMoNUWiCXPyV0pfRT0OlT4=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    pygments
-  ];
+  dependencies = [ pygments ];
 
   # Tests only execute pygments with these styles
   doCheck = false;
@@ -35,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A collection of accessible pygments styles";
+    description = "Collection of accessible pygments styles";
     homepage = "https://github.com/Quansight-Labs/accessible-pygments";
     changelog = "https://github.com/Quansight-Labs/accessible-pygments/raw/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
