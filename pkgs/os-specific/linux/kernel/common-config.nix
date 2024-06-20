@@ -327,6 +327,10 @@ let
       INET_RAW_DIAG     = mkDefault module;
       INET_DIAG_DESTROY = mkDefault yes;
 
+      # IPsec over TCP
+      INET_ESPINTCP  = mkDefault yes;
+      INET6_ESPINTCP = mkDefault yes;
+
       # enable multipath-tcp
       MPTCP           = whenAtLeast "5.6" yes;
       MPTCP_IPV6      = whenAtLeast "5.6" yes;
