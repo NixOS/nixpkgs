@@ -297,7 +297,7 @@ in
             KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
             KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
           '';
-          hardware.opengl = {
+          hardware.graphics = {
             extraPackages = [ nvidia_x11.out ];
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
@@ -467,7 +467,7 @@ in
             "egl/egl_external_platform.d".source = "/run/opengl-driver/share/egl/egl_external_platform.d/";
           };
 
-          hardware.opengl = {
+          hardware.graphics = {
             extraPackages = [ pkgs.nvidia-vaapi-driver ];
             extraPackages32 = [ pkgs.pkgsi686Linux.nvidia-vaapi-driver ];
           };

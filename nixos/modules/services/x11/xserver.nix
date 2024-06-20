@@ -302,7 +302,7 @@ in
         default = [ "modesetting" "fbdev" ];
         example = [
           "nvidia"
-          "amdgpu-pro"
+          "amdgpu"
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
         relatedPackages = concatLists
@@ -716,10 +716,7 @@ in
 
         restartIfChanged = false;
 
-        environment =
-          optionalAttrs config.hardware.opengl.setLdLibraryPath
-            { LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.addOpenGLRunpath.driverLink ]; }
-          // config.services.displayManager.environment;
+        environment = config.services.displayManager.environment;
 
         preStart =
           ''

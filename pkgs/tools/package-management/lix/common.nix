@@ -220,7 +220,7 @@ stdenv.mkDerivation {
       echo "file binary-dist $out/bin/nix" >> $out/nix-support/hydra-build-products
     ''
     + lib.optionalString stdenv.isDarwin ''
-      for lib in libnixutil.dylib libnixexpr.dylib; do
+      for lib in liblixutil.dylib liblixexpr.dylib; do
         install_name_tool \
           -change "${lib.getLib boost}/lib/libboost_context.dylib" \
           "$out/lib/libboost_context.dylib" \

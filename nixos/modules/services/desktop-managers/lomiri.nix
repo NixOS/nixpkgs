@@ -63,7 +63,7 @@ in {
     ];
 
     # Copy-pasted basic stuff
-    hardware.opengl.enable = lib.mkDefault true;
+    hardware.graphics.enable = lib.mkDefault true;
     fonts.enableDefaultPackages = lib.mkDefault true;
     programs.dconf.enable = lib.mkDefault true;
 

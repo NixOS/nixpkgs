@@ -3636,6 +3636,7 @@ with pkgs;
   dell-command-configure = callPackage ../tools/system/dell-command-configure { };
 
   deltachat-desktop = callPackage ../applications/networking/instant-messengers/deltachat-desktop {
+    electron = electron_30;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
@@ -31565,8 +31566,6 @@ with pkgs;
     singularity-overriden-nixos
     ;
 
-  sfwbar = callPackage ../applications/misc/sfwbar { };
-
   skate = callPackage ../applications/misc/skate { };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
@@ -32298,12 +32297,10 @@ with pkgs;
   libreoffice-bin = callPackage ../applications/office/libreoffice/darwin { };
 
   libreoffice = hiPrio libreoffice-still;
+  libreoffice-unwrapped = libreoffice.unwrapped;
 
   libreoffice-qt = hiPrio libreoffice-qt-still;
-
   libreoffice-qt-unwrapped = libreoffice-qt.unwrapped;
-
-  libreoffice-unwrapped = libreoffice.unwrapped;
 
   libreoffice-qt-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     unwrapped = libsForQt5.callPackage ../applications/office/libreoffice {
@@ -32320,6 +32317,9 @@ with pkgs;
     };
   });
   libreoffice-qt-still-unwrapped = libreoffice-qt-still.unwrapped;
+
+  libreoffice-qt6 = hiPrio libreoffice-qt6-still;
+  libreoffice-qt6-unwrapped = libreoffice-qt6.unwrapped;
 
   libreoffice-qt6-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     unwrapped = kdePackages.callPackage ../applications/office/libreoffice {

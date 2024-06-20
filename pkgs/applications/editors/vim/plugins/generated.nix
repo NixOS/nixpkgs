@@ -9676,6 +9676,18 @@ final: prev:
     meta.homepage = "https://github.com/mfukar/robotframework-vim/";
   };
 
+  rocks-nvim = buildNeovimPlugin {
+    pname = "rocks.nvim";
+    version = "2024-06-19";
+    src = fetchFromGitHub {
+      owner = "nvim-neorocks";
+      repo = "rocks.nvim";
+      rev = "6737e01a76eaaae06d11b45c8b5b774fa97c283b";
+      sha256 = "0vl6rm3rv1730iw3bwzrwjsgr1hw5h4ksdgpir5spd3vqj7i97lz";
+    };
+    meta.homepage = "https://github.com/nvim-neorocks/rocks.nvim/";
+  };
+
   ron-vim = buildVimPlugin {
     pname = "ron.vim";
     version = "2022-08-19";

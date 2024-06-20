@@ -2,25 +2,34 @@
   lib,
   stdenv,
   cmake,
+  pkg-config,
+  pixman,
   fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprutils";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprutils";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-8KvVqtApNt4FWTdn1TqVvw00rpqyG9UuUPA2ilPVD1U=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-CqRZne63BpYlPd/i8lXV0UInUt59oKogiwdVtBRHt60=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  outputs = [ "out" "dev" ];
+  buildInputs = [
+    pixman
+  ];
 
-  doCheck = false;
+  outputs = ["out" "dev"];
+
+  cmakeBuildType = "RelWithDebInfo";
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprutils";

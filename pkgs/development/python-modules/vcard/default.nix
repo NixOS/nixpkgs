@@ -2,14 +2,19 @@
   buildPythonPackage,
   fetchFromGitLab,
   lib,
+  nix-update-script,
   pytestCheckHook,
   python-dateutil,
   pythonAtLeast,
   pythonOlder,
 }:
-buildPythonPackage rec {
-  pname = "vcard";
+let
   version = "0.15.4";
+in
+buildPythonPackage {
+  inherit version;
+
+  pname = "vcard";
   format = "setuptools";
 
   disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
@@ -26,6 +31,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "vcard" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gitlab.com/engmark/vcard";
