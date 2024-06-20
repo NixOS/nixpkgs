@@ -28,8 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-test_error_gamma.patch
   ];
 
+  # strictDeps raises the chance that xsimd will be able to be cross compiled
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
+  ];
+
+  buildInputs = [
+    doctest
   ];
 
   cmakeFlags = [
@@ -39,9 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [
-    doctest
-  ];
   checkTarget = "xtest";
 
   meta = with lib; {
