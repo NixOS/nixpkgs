@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   meta = with lib; {
     homepage = "https://fukuchi.org/works/qrencode/";
-    description = "C library for encoding data in a QR Code symbol";
+    description = "C library and command line tool for encoding data in a QR Code symbol";
     longDescription = ''
       Libqrencode is a C library for encoding data in a QR Code symbol,
       a kind of 2D symbology that can be scanned by handy terminals
