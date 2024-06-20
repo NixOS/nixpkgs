@@ -35,7 +35,15 @@ in
 
     xdg.portal.extraPortals = [ pkgs.gnome.gnome-keyring ];
 
-    security.pam.services.login.enableGnomeKeyring = true;
+    security.pam.services = lib.mkMerge [
+      {
+        login.enableGnomeKeyring = true;
+      }
+      (lib.mkIf config.services.xserver.displayManager.gdm.enable {
+        gdm-password.enableGnomeKeyring = true;
+        gdm-autologin.enableGnomeKeyring = true;
+      })
+    ];
 
     security.wrappers.gnome-keyring-daemon = {
       owner = "root";
