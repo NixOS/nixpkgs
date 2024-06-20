@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   crossLibcStdenv,
+  stdenvLibcMinimal,
   runCommand,
   rsync,
   source,
@@ -10,6 +11,8 @@
   openbsdSetupHook,
   makeMinimal,
   install,
+  tsort,
+  lorder,
 }:
 
 lib.makeOverridable (
@@ -20,6 +23,8 @@ lib.makeOverridable (
         stdenvNoCC
       else if attrs.noLibc or false then
         crossLibcStdenv
+      else if attrs.libcMinimal or false then
+        stdenvLibcMinimal
       else
         stdenv;
   in
@@ -46,13 +51,11 @@ lib.makeOverridable (
         openbsdSetupHook
         makeMinimal
         install
+        tsort
+        lorder
       ];
 
       HOST_SH = stdenv'.shell;
-
-      makeFlags = [
-        "-B"
-      ];
 
       MACHINE_ARCH =
         {
