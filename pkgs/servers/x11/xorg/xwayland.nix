@@ -64,6 +64,13 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/8cb1c21a4240a5b6bf4aeeef51819639b4e0ad24.patch";
       hash = "sha256-MZPP9QgYO4RFJ/vcjkpu7SVSo5Dh09ZdZjOwTopjdYQ=";
     })
+    # Backport fix for segfault when linux-dmabuf device is not accessible
+    # FIXME: remove when merged
+    # Upstream PR: https://gitlab.freedesktop.org/xorg/xserver/-/merge_requests/1565
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/xorg/xserver/-/commit/7605833315c05488eca30ed0a70a2a1430e89bbc.patch";
+      hash = "sha256-4/A6aOiOGouPe2v4wIYDQY9rWkuNZJwk0h4gpfrl6hI=";
+    })
   ];
 
   depsBuildBuild = [

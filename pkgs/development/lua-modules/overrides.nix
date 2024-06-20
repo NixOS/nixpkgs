@@ -530,6 +530,17 @@ in
     };
   });
 
+  lz-n  = prev.lz-n.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+      '';
+  });
+
   neotest  = prev.neotest.overrideAttrs(oa: {
     # A few tests fail for strange reasons on darwin
     doCheck = !stdenv.isDarwin;

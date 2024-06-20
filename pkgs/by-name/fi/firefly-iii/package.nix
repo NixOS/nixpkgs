@@ -8,20 +8,20 @@
 
 let
   pname = "firefly-iii";
-  version = "6.1.16";
+  version = "6.1.17";
   phpPackage = php83;
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "firefly-iii";
     rev = "v${version}";
-    hash = "sha256-1I4Wm10mmloqeWcpc4XloNATpvroiw6m8MiSVsoB6xo=";
+    hash = "sha256-KbTHbhv+8Lv5fk1Z8nxICySk6MK6Xc3TNATSIUnENa4=";
   };
 
   assets = buildNpmPackage {
     pname = "${pname}-assets";
     inherit version src;
-    npmDepsHash = "sha256-Ff7pDKoXvyj/gR+ljQsCjtyzxzJ7/zN6hRMEAderqOg=";
+    npmDepsHash = "sha256-Nlz+zsvUx9X70uofh8dWEvru8SAQzIh+XxGGOH5npyY=";
     dontNpmBuild = true;
     installPhase = ''
       runHook preInstall
@@ -36,7 +36,7 @@ in
 phpPackage.buildComposerProject (finalAttrs: {
   inherit pname src version;
 
-  vendorHash = "sha256-BanSEqE3KN46VtEZH0TVWUBrgPCwmd2TjheYq+e+lzo=";
+  vendorHash = "sha256-mDVmZUCER1eaTXhh8VIbGbPkkpOeE6fTBhq8UnTlWPc=";
 
   passthru = {
     inherit phpPackage;

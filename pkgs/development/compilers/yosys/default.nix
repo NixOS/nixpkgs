@@ -171,6 +171,6 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage    = "https://yosyshq.net/yosys/";
     license     = licenses.isc;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ shell thoughtpolice emily Luflosi ];
+    maintainers = with maintainers; [ shell thoughtpolice Luflosi ];
   };
 })

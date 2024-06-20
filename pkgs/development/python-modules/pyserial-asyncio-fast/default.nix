@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyserial-asyncio-fast";
-  version = "0.11";
+  version = "0.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "pyserial-asyncio-fast";
     rev = version;
-    hash = "sha256-B1CLk7ggI7l+DaMDlnMjl2tfh+evvaf1nxzBpmqMBZk=";
+    hash = "sha256-37dbJq+9Ex+/uiRR2esgOP15CjySA0MLvxnjiPDTF08=";
   };
 
   nativeBuildInputs = [

@@ -172,12 +172,6 @@ let
         # Ensure that depmod gets resolved through PATH
         sed -i Makefile -e 's|= /sbin/depmod|= depmod|'
 
-        # Don't include a (random) NT_GNU_BUILD_ID, to make the build more deterministic.
-        # This way kernels can be bit-by-bit reproducible depending on settings
-        # (e.g. MODULE_SIG and SECURITY_LOCKDOWN_LSM need to be disabled).
-        # See also https://kernelnewbies.org/BuildId
-        sed -i Makefile -e 's|--build-id=[^ ]*|--build-id=none|'
-
         # Some linux-hardened patches now remove certain files in the scripts directory, so the file may not exist.
         [[ -f scripts/ld-version.sh ]] && patchShebangs scripts/ld-version.sh
 

@@ -42,7 +42,6 @@ buildPythonPackage rec {
     description = "Pure-python FinTS (formerly known as HBCI) implementation";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [
-      elohmeier
       dotlambda
     ];
   };

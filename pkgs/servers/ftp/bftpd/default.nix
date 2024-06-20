@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxcrypt ];
 
+  CFLAGS = "-std=gnu89";
+
   preConfigure = ''
     sed -re 's/-[og] 0//g' -i Makefile*
   '';

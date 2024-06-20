@@ -1,4 +1,4 @@
-{ callPackage, fetchzip, fetchFromGitHub, dart, lib, stdenv }:
+{ useNixpkgsEngine ? false, callPackage, fetchzip, fetchFromGitHub, dart, lib, stdenv }@args:
 let
   mkCustomFlutter = args: callPackage ./flutter.nix args;
   wrapFlutter = flutter: callPackage ./wrapper.nix { inherit flutter; };
@@ -8,6 +8,8 @@ let
   mkFlutter =
     { version
     , engineVersion
+    , engineHashes
+    , enginePatches
     , dartVersion
     , flutterHash
     , dartHash
@@ -15,10 +17,10 @@ let
     , pubspecLock
     , artifactHashes
     , channel
-    }:
+    }@fargs:
     let
       args = {
-        inherit version engineVersion patches pubspecLock artifactHashes channel;
+        inherit version engineVersion engineHashes enginePatches patches pubspecLock artifactHashes useNixpkgsEngine channel;
 
         dart = dart.override {
           version = dartVersion;
@@ -64,6 +66,7 @@ let
       in
       lib.nameValuePair "v${version}" (wrapFlutter (mkFlutter ({
         patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
+        enginePatches = (getPatches ./engine/patches) ++ (getPatches (versionDir + "/engine/patches"));
       } // data))))
     (builtins.readDir ./versions);
 

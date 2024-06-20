@@ -45,7 +45,7 @@
   (fetchNuGet { pname = "ICSharpCode.Decompiler"; version = "7.2.1.6856"; sha256 = "19z68rgzl93lh1h8anbgzw119mhvcgr9nh5q2nxk6qihl2mx97ba"; })
   (fetchNuGet { pname = "Ionide.Analyzers"; version = "0.11.0"; sha256 = "1wsx7gbr4macmim5z1iz9clgq9xfmg423snb589bvaiyg5k6ha00"; })
   (fetchNuGet { pname = "Ionide.KeepAChangelog.Tasks"; version = "0.1.8"; sha256 = "066zla2rp1sal6by3h3sg6ibpkk52kbhn30bzk58l6ym7q1kqa6b"; })
-  (fetchNuGet { pname = "Ionide.LanguageServerProtocol"; version = "0.4.23"; sha256 = "0jfsan2d7aj68xksn1xrdiww1fdz34n7k91r5y4a77jx6h4ngbxq"; })
+  (fetchNuGet { pname = "Ionide.LanguageServerProtocol"; version = "0.6.0"; sha256 = "15wjmm91qdvhdpjjggqqsqgwlsi0wwsdzqarvdx9l1h2681hq9g0"; })
   (fetchNuGet { pname = "Ionide.ProjInfo"; version = "0.65.0"; sha256 = "0aka78yaj7h3apbr9ia7rdikr2hhyizl1xakks90h47nax00kscz"; })
   (fetchNuGet { pname = "Ionide.ProjInfo.FCS"; version = "0.65.0"; sha256 = "0kjrn6r6nwd5m5wlb8jpyzaicjcw64dg7w7vqndrwv7nw0wd4di0"; })
   (fetchNuGet { pname = "Ionide.ProjInfo.ProjectSystem"; version = "0.65.0"; sha256 = "15080y3f0zqvdzi6ks9v6jhih5xsrgi08ji5zym88qvmp81g1m8q"; })

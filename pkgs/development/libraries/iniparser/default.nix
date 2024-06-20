@@ -1,51 +1,79 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, fetchFromGitHub
+, substituteAll
+, symlinkJoin
+, cmake
+, doxygen
+, ruby
+, validatePkgConfig
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iniparser";
-  version = "4.1";
+  version = "4.2.3";
 
-  src = fetchFromGitHub {
-    owner = "ndevilla";
+  src = fetchFromGitLab {
+    owner = "iniparser";
     repo = "iniparser";
-    rev = "v${version}";
-    sha256 = "0dhab6pad6wh816lr7r3jb6z273njlgw2vpw8kcfnmi7ijaqhnr5";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rCp9whYPYmVd7saVFILmpdn041u6fYGqe1/Oqc7RaeA=";
   };
 
-  patches = ./no-usr.patch;
+  patches = [
+    (fetchpatch {
+      name = "fix-paths-pkgconfig-file.patch";
+      url = "https://gitlab.com/iniparser/iniparser/-/commit/6a76cd5e97b32014b22d87039bf6f4ee425c79a2.patch";
+      hash = "sha256-KlTxeOzwBZiLNmuwbbem5c/xspxsflyYfeUaQnGyarI=";
+    })
+  ] ++ lib.optionals finalAttrs.doCheck [
+    (substituteAll {
+      # Do not let cmake's fetchContent download unity
+      src = ./remove-fetchcontent-usage.patch;
+      unitySrc = symlinkJoin {
+        name = "unity-with-iniparser-config";
+        paths = [
+          (fetchFromGitHub {
+            owner = "throwtheswitch";
+            repo = "unity";
+            rev = "v2.6.0";
+            hash = "sha256-SCcUGNN/UJlu3ALJiZ9bQKxYRZey3cm9QG+NOehp6Ow=";
+          })
+        ];
+        postBuild = ''
+          ln -s ${finalAttrs.src}/test/unity_config.h $out/src/unity_config.h
+        '';
+      };
+    })
+  ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile \
-        --replace -Wl,-soname= -Wl,-install_name,
+  nativeBuildInputs = [ cmake doxygen validatePkgConfig ] ++ lib.optionals finalAttrs.doCheck [ ruby ];
+
+  cmakeFlags = [
+    "-DBUILD_TESTING=${if finalAttrs.doCheck then "ON" else "OFF"}"
+  ];
+
+  doCheck = false;
+
+  postFixup = ''
+    ln -sv $out/include/iniparser/*.h $out/include/
   '';
 
-  doCheck = true;
-  preCheck = "patchShebangs test/make-tests.sh";
-
-  installPhase = ''
-    mkdir -p $out/lib
-
-    mkdir -p $out/include
-    cp src/*.h $out/include
-
-    mkdir -p $out/share/doc/${pname}-${version}
-    for i in AUTHORS INSTALL LICENSE README.md; do
-      bzip2 -c -9 $i > $out/share/doc/${pname}-${version}/$i.bz2;
-    done;
-    cp -r html $out/share/doc/${pname}-${version}
-
-    cp libiniparser.a $out/lib
-    cp libiniparser.so.1 $out/lib
-    ln -s libiniparser.so.1 $out/lib/libiniparser.so
-
-    mkdir -p $out/lib/pkgconfig
-    substituteAll ${./iniparser.pc.in} $out/lib/pkgconfig/iniparser.pc
-  '';
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    iniparser-with-tests = finalAttrs.overrideAttrs (_: { doCheck = true; });
+  };
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://gitlab.com/iniparser/iniparser";
     description = "Free standalone ini file parsing library";
+    changelog = "https://gitlab.com/iniparser/iniparser/-/releases/v${finalAttrs.version}";
     license = licenses.mit;
     platforms = platforms.unix;
+    pkgConfigModules = [ "iniparser" ];
     maintainers = [ maintainers.primeos ];
   };
-}
+})

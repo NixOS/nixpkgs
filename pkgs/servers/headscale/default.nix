@@ -18,6 +18,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-IOkbbFtE6+tNKnglE/8ZuNxhPSnloqM2sLgTvagMmnc=";
 
+  patches = [
+    # backport of https://github.com/juanfont/headscale/pull/1697
+    ./trim-oidc-secret-path.patch
+  ];
+
   ldflags = ["-s" "-w" "-X github.com/juanfont/headscale/cmd/headscale/cli.Version=v${version}"];
 
   nativeBuildInputs = [installShellFiles];

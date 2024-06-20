@@ -7,12 +7,6 @@ let
   defaultRpcListenPort = 6800;
   defaultDir = "${homeDir}/Downloads";
 
-  rangesToStringList = map (x:
-    if x.from == x.to
-    then builtins.toString x.from
-    else builtins.toString x.from + "-" + builtins.toString x.to
-  );
-
   portRangesToString = ranges: lib.concatStringsSep "," (map
     (x:
       if x.from == x.to
@@ -77,6 +71,7 @@ in
 
           [0]: https://aria2.github.io/manual/en/html/aria2c.html#synopsis
         '';
+        default = { };
         type = lib.types.submodule {
           freeformType = with lib.types; attrsOf (oneOf [ bool int float singleLineStr ]);
           options = {

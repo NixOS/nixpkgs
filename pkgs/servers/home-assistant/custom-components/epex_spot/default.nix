@@ -7,22 +7,18 @@
 buildHomeAssistantComponent rec {
   owner = "mampfes";
   domain = "epex_spot";
-  version = "2.3.5";
+  version = "2.3.7";
 
   src = fetchFromGitHub {
     owner = "mampfes";
     repo = "ha_epex_spot";
     rev = "refs/tags/${version}";
-    hash = "sha256-WmPsFfQm8ChEr41XVgKi2BGwta5aKH9GDz4iIfTAPK4=";
+    hash = "sha256-8cxEOCzlQbS3HbQMBo7/rZb/GfpJvOWayLttEaEENYs=";
   };
 
   propagatedBuildInputs = [
     beautifulsoup4
   ];
-
-  postPatch = ''
-    substituteInPlace custom_components/epex_spot/manifest.json --replace-fail 'bs4' 'beautifulsoup4'
-  '';
 
   #skip phases without activity
   dontConfigure = true;

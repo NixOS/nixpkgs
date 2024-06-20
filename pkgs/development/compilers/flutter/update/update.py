@@ -85,6 +85,32 @@ def nix_build_to_fail(code):
     return stderr
 
 
+def get_engine_hashes(engine_version):
+    code = load_code("get-engine-hashes.nix",
+                     nixpkgs_root=NIXPKGS_ROOT,
+                     engine_version=engine_version)
+
+    stderr = nix_build_to_fail(code)
+
+    pattern = re.compile(
+        r"/nix/store/.*-flutter-engine-source-(.+?)-(.+?).drv':\n\s+specified: .*\n\s+got:\s+(.+?)\n")
+    matches = pattern.findall(stderr)
+    result_dict = {}
+
+    for match in matches:
+        _, system, got = match
+        result_dict[system] = got
+
+    def sort_dict_recursive(d):
+        return {
+            k: sort_dict_recursive(v) if isinstance(
+                v, dict) else v for k, v in sorted(
+                d.items())}
+    result_dict = sort_dict_recursive(result_dict)
+
+    return result_dict
+
+
 def get_artifact_hashes(flutter_compact_version):
     code = load_code("get-artifact-hashes.nix",
                      nixpkgs_root=NIXPKGS_ROOT,
@@ -180,6 +206,7 @@ def write_data(
         flutter_version,
         channel,
         engine_hash,
+        engine_hashes,
         dart_version,
         dart_hash,
         flutter_hash,
@@ -190,6 +217,7 @@ def write_data(
             "version": flutter_version,
             "engineVersion": engine_hash,
             "channel": channel,
+            "engineHashes": engine_hashes,
             "dartVersion": dart_version,
             "dartHash": dart_hash,
             "flutterHash": flutter_hash,
@@ -205,7 +233,9 @@ def update_all_packages():
         int(x.split('_')[0]), int(x.split('_')[1])), reverse=True)
 
     new_content = [
-        "flutterPackages = recurseIntoAttrs (callPackage ../development/compilers/flutter { });",
+        "flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });",
+        "flutterPackages-source = recurseIntoAttrs (callPackage ../development/compilers/flutter { useNixpkgsEngine = true; });",
+        "flutterPackages = flutterPackages-bin;"
         "flutter = flutterPackages.stable;",
     ] + [f"flutter{version.replace('_', '')} = flutterPackages.v{version};" for version in versions]
 
@@ -215,7 +245,7 @@ def update_all_packages():
     start = -1
     end = -1
     for i, line in enumerate(lines):
-        if "flutterPackages = recurseIntoAttrs (callPackage ../development/compilers/flutter { });" in line:
+        if "flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });" in line:
             start = i
         if start != -1 and len(line.strip()) == 0:
             end = i
@@ -329,6 +359,7 @@ def main():
     write_data(
         pubspec_lock={},
         artifact_hashes={},
+        engine_hashes={},
         **common_data_args)
 
     pubspec_lock = get_pubspec_lock(flutter_compact_version, flutter_src)
@@ -336,6 +367,7 @@ def main():
     write_data(
         pubspec_lock=pubspec_lock,
         artifact_hashes={},
+        engine_hashes={},
         **common_data_args)
 
     artifact_hashes = get_artifact_hashes(flutter_compact_version)
@@ -343,6 +375,15 @@ def main():
     write_data(
         pubspec_lock=pubspec_lock,
         artifact_hashes=artifact_hashes,
+        engine_hashes={},
+        **common_data_args)
+
+    engine_hashes = get_engine_hashes(engine_hash)
+
+    write_data(
+        pubspec_lock=pubspec_lock,
+        artifact_hashes=artifact_hashes,
+        engine_hashes=engine_hashes,
         **common_data_args)
 
 

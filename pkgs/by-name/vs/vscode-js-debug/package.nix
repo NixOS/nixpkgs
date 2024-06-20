@@ -1,7 +1,7 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
-, jq
+, buildPackages
 , libsecret
 , pkg-config
 , nodePackages
@@ -23,12 +23,12 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-DfeaiqKadTnGzOObK01ctlavwqTMa0tqn59sLZMPvUM=";
 
-  nativeBuildInputs = [ pkg-config nodePackages.node-gyp jq ];
+  nativeBuildInputs = [ pkg-config nodePackages.node-gyp ];
 
   buildInputs = [ libsecret ];
 
   postPatch = ''
-    jq '
+    ${lib.getExe buildPackages.jq} '
       .scripts.postinstall |= empty |             # tries to install playwright, not necessary for build
       .scripts.build |= "gulp dapDebugServer" |   # there is no build script defined
       .bin |= "./dist/src/dapDebugServer.js"      # there is no bin output defined

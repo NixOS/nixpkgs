@@ -419,8 +419,8 @@ let
         src = pkgs.fetchFromGitHub {
           owner = "andy128k";
           repo = "cl-gobject-introspection";
-          rev = "83beec4492948b52aae4d4152200de5d5c7ac3e9";
-          sha256 = "sha256-g/FwWE+Rzmzm5Y+irvd1AJodbp6kPHJIFOFDPhaRlXc=";
+          rev = "4908a84c16349929b309c50409815ff81fb9b3c4";
+          sha256 = "sha256-krVU5TQsVAbglxXMq29WJriWBIgQDLy1iCvB5iNziEc=";
         };}))
       (cl-webkit2.overrideAttrs (final: prev: {
         src = pkgs.fetchFromGitHub {
@@ -880,6 +880,64 @@ let
     '';
 
     meta.mainProgram = "qlot";
+  };
+
+  misc-extensions = super.misc-extensions.overrideLispAttrs (old: rec {
+    version = "4.0.3";
+    src = pkgs.fetchFromGitLab {
+      domain = "gitlab.common-lisp.net";
+      owner = "misc-extensions";
+      repo = "misc-extensions";
+      rev = "v${version}";
+      hash = "sha256-bDNI4mIaNw/rf7ZwvwolKo6+mUUxsgubGUd/988sHAo=";
+    };
+  });
+
+  fset = super.fset.overrideLispAttrs (old: rec {
+    version = "1.4.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "slburson";
+      repo = "fset";
+      rev = "v${version}";
+      hash = "sha256-alO8Ek5Xpyl5N99/LgyIZ50aoRbY7bKh3XBntFV6Q5k=";
+    };
+    lispLibs = with super; [
+      self.misc-extensions
+      mt19937
+      named-readtables
+    ];
+    meta = {
+      description = "functional collections library";
+      homepage = "https://gitlab.common-lisp.net/fset/fset/-/wikis/home";
+      license = pkgs.lib.licenses.llgpl21;
+    };
+  });
+
+  coalton = build-asdf-system {
+    pname = "coalton";
+    version = "trunk";
+    src = pkgs.fetchFromGitHub {
+      owner = "coalton-lang";
+      repo = "coalton";
+      rev = "05111b8a59e3f7346b175ce1ec621bff588e1e1f";
+      hash = "sha256-L9o7Y3zDx9qLXGe/70c1LWEKUWsSRgBQru66mIuaCFw=";
+    };
+    lispLibs = with super; [
+      alexandria
+      eclector-concrete-syntax-tree
+      fiasco
+      float-features
+      self.fset
+      named-readtables
+      trivial-garbage
+    ];
+    nativeLibs = [ pkgs.mpfr ];
+    systems = [ "coalton" "coalton/tests" ];
+    meta = {
+      description = "statically typed functional programming language that supercharges Common Lisp";
+      homepage = "https://coalton-lang.github.io";
+      license = pkgs.lib.licenses.mit;
+    };
   };
 
   });

@@ -3,7 +3,7 @@
   astral,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  pdm-backend,
   pythonRelaxDepsHook,
   pytestCheckHook,
   pythonOlder,
@@ -12,26 +12,25 @@
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "0.10.8";
+  version = "0.10.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "py-libhdate";
     repo = "py-libhdate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SANCZl+1ghUuuxZAl6oycvo7hB7mIagjVEmwzarsspk=";
+    hash = "sha256-Cni8GegB8GAhtIKKCgSn3QavE/Gi9Rcm9v0grToMyq4=";
   };
-
-  build-system = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
 
   pythonRelaxDeps = [
     "astral"
-    "pytz"
+  ];
+
+  build-system = [
+    pdm-backend
+    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -49,7 +48,7 @@ buildPythonPackage rec {
     description = "Python module for Jewish/Hebrew date and Zmanim";
     homepage = "https://github.com/py-libhdate/py-libhdate";
     changelog = "https://github.com/py-libhdate/py-libhdate/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
 }

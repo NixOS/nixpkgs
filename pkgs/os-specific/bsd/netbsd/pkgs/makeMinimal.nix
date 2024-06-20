@@ -9,8 +9,6 @@
 
 mkDerivation {
   path = "tools/make";
-  sha256 = "0fh0nrnk18m613m5blrliq2aydciv51qhc0ihsj4k63incwbk90n";
-  version = "9.2";
 
   buildInputs = [ ];
   nativeBuildInputs = [
@@ -47,5 +45,5 @@ mkDerivation {
     runHook postInstall
   '';
 
-  extraPaths = [ make.src ];
+  extraPaths = [ make.path ];
 }

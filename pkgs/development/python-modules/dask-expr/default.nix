@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dask-expr";
-  version = "1.1.2";
+  version = "1.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask-expr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Gvib8fyogIiOllDp4SoVQkGcIPHMo9e9AfJWDaZ5sTU=";
+    hash = "sha256-20gVzmOnVWoPGrGcLp8nhAoiHWunaYZIXOxYho7ZhUs=";
   };
 
   postPatch = ''

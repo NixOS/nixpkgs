@@ -12,11 +12,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eduvpn-client";
-  version = "4.2.1";
+  version = "4.3.1";
+  format = "pyproject";
 
   src = fetchurl {
     url = "https://github.com/eduvpn/python-${pname}/releases/download/${version}/python-${pname}-${version}.tar.xz";
-    hash = "sha256-57EKWOzGfA4ihVYTyfLF2yoe7hN/7OnEkG+zLz7QtxI=";
+    hash = "sha256-8k5ZbbN2OvoFFq0nn+fftQfQJbGhb2MEvZNokMXegr0=";
   };
 
   nativeBuildInputs = [
@@ -37,12 +38,6 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     setuptools
   ];
-
-  patches = [ ./nix-python-prefix.patch ];
-
-  postPatch = ''
-    substituteInPlace eduvpn/utils.py --subst-var-by out $out
-  '';
 
   checkInputs = with python3Packages; [
     pytestCheckHook

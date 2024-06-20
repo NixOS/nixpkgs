@@ -10,7 +10,6 @@
   libcanberra,
   libqalculate,
   pipewire,
-  breeze,
   qttools,
   qqc2-breeze-style,
   gpsd,
@@ -24,10 +23,6 @@ mkKdeDerivation {
       xmessage = "${lib.getBin xorg.xmessage}/bin/xmessage";
       xsetroot = "${lib.getBin xorg.xsetroot}/bin/xsetroot";
       qdbus = "${lib.getBin qttools}/bin/qdbus";
-    })
-    (substituteAll {
-      src = ./wallpaper-paths.patch;
-      wallpapers = "${lib.getBin breeze}/share/wallpapers";
     })
   ];
 

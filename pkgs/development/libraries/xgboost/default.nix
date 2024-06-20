@@ -59,9 +59,9 @@ effectiveStdenv.mkDerivation rec {
   };
 
   patches = lib.optionals (cudaSupport && cudaPackages.cudaMajorMinorVersion == "12.4") [
-    (fetchpatch {
+    (fetchpatch { # https://github.com/dmlc/xgboost/pull/10123
       name = "Fix compilation with the ctk 12.4.";
-      url = "https://github.com/dmlc/xgboost/pull/10123.patch";
+      url = "https://github.com/dmlc/xgboost/commit/c760f85db0bc7bd6379901fbfb67ceccc2b37700.patch";
       hash = "sha256-iP9mll9pg8T2ztCR7dBPnLP17/x3ImJFrr5G3e2dqHo=";
     })
   ];

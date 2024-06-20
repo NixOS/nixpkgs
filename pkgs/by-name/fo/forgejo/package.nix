@@ -2,6 +2,7 @@
 , brotli
 , buildGoModule
 , forgejo
+, fetchpatch
 , git
 , gzip
 , lib
@@ -55,11 +56,21 @@ buildGoModule rec {
 
   outputs = [ "out" "data" ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    git # checkPhase
+    openssh # checkPhase
+  ];
   buildInputs = lib.optional pamSupport pam;
 
   patches = [
     ./static-root-path.patch
+    # Fix TestAddRecursiveExclude go test.
+    # This will be part of the upcoming v7.0.5 release at which point this needs to be removed again.
+    (fetchpatch {
+      url = "https://codeberg.org/forgejo/forgejo/commit/f01dc4b271f54201e60a7c795d784813eac3f7ce.patch";
+      sha256  = "sha256-1lPLVHBad+Fmk+6EFXKuMnmDUl5BkEYJuMkTPfdrCgU=";
+    })
   ];
 
   postPatch = ''
@@ -79,6 +90,33 @@ buildGoModule rec {
   preConfigure = ''
     export ldflags+=" -X main.ForgejoVersion=$(GITEA_VERSION=${version} make show-version-api)"
   '';
+
+  preCheck = ''
+    # $HOME is required for ~/.ssh/authorized_keys and such
+    export HOME="$TMPDIR/home"
+
+    # expose and use the GO_TEST_PACKAGES var from the Makefile
+    # instead of manually copying over the entire list:
+    # https://codeberg.org/forgejo/forgejo/src/tag/v7.0.4/Makefile#L124
+    echo -e 'show-backend-tests:\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
+    getGoDirs() {
+      make show-backend-tests
+    }
+  '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "Test_SSHParsePublicKey/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
+        "Test_calcFingerprint/dsa-1024/SSHKeygen" # dsa-1024 is deprecated in openssh and requires opting-in at compile time
+        "TestPamAuth" # we don't have PAM set up in the build sandbox
+        "TestPassword" # requires network: api.pwnedpasswords.com
+        "TestCaptcha" # requires network: hcaptcha.com
+        "TestDNSUpdate" # requires network: release.forgejo.org
+        "TestMigrateWhiteBlocklist" # requires network: gitlab.com (DNS)
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     mkdir $data

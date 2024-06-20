@@ -1,19 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "zfind";
-  version = "0.4.0";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "laktak";
     repo = "zfind";
     rev = "v${version}";
-    hash = "sha256-T0cTEjjF9GTe+knixsgnbNfACUvbx92PUbLE+wgZ7sk=";
+    hash = "sha256-Nc7C0aauv/SChChAtyA089y6qTuaC9ClVz/u5QgJLPk=";
   };
 
-  vendorHash = "sha256-mmoJrqWRmJTAR2wkAB52mpYEEj3XD+jHvlVrw51vqys=";
+  vendorHash = "sha256-WF5jeTeTK99MRNrIW80jYuyH60Rc/EVBW6owUCIyosE=";
 
-  ldflags = [ "-X" "main.appVersion=${version}" ];
+  ldflags = [
+    "-X"
+    "main.appVersion=${version}"
+  ];
 
   meta = with lib; {
     description = "CLI for file search with SQL like syntax.";

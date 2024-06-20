@@ -176,6 +176,12 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "nix_2_22";
   };
 
+  nix_2_23 = common {
+    version = "2.23.0";
+    hash = "sha256-cRCwRDxR8rEQQEvGjIH8g0krJd4ZFJrdgmPXkv65S/Y=";
+    self_attribute_name = "nix_2_23";
+  };
+
   git = common rec {
     version = "2.23.0";
     suffix = "pre20240526_${lib.substring 0 8 src.rev}";
@@ -188,7 +194,7 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "git";
   };
 
-  latest = self.nix_2_22;
+  latest = self.nix_2_23;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,

@@ -34,6 +34,5 @@ buildGoModule rec {
     homepage = "https://github.com/tnpitsecurity/ligolo-ng";
     changelog = "https://github.com/nicocha30/ligolo-ng/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

@@ -25,7 +25,7 @@ appimageTools.wrapType2 {
   meta = with lib; {
     description = "Note-taking application focused on learning and productivity";
     homepage = "https://remnote.com/";
-    maintainers = with maintainers; [ max-niederman chewblacka ];
+    maintainers = with maintainers; [ chewblacka ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     mainProgram = "remnote";

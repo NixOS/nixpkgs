@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, electron_28
+, electron
 , makeWrapper
 }:
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     substituteInPlace $out/share/applications/Mattermost.desktop \
       --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
 
-    makeWrapper '${lib.getExe electron_28}' $out/bin/${pname} \
+    makeWrapper '${lib.getExe electron}' $out/bin/${pname} \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags $out/share/${pname}/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"

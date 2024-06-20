@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , ffmpeg
 , glfw
+, libglvnd
 , libogg
 , libvorbis
 , makeWrapper
@@ -23,13 +24,13 @@ let
 in
 buildDotnetModule rec {
   pname = "famistudio";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "BleuBleu";
     repo = "FamiStudio";
     rev = "refs/tags/${version}";
-    hash = "sha256-ydEWLL05B86672j3MVo/90tgDHg8FJ2EZaesqrBZy4A=";
+    hash = "sha256-WYy/6cWQg3Ayok/eAdnvlWAvdcuhy/sdlWOVvaYcPkc=";
   };
 
   postPatch = let
@@ -88,6 +89,10 @@ buildDotnetModule rec {
   nugetDeps = ./deps.nix;
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
+
+  runtimeDeps = lib.optionals stdenv.hostPlatform.isLinux [
+    libglvnd
+  ];
 
   executables = [ "FamiStudio" ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libmediainfo, sqlite, curl, makeWrapper, icu, dotnet-runtime, openssl, nixosTests }:
+{ lib, stdenv, fetchurl, libmediainfo, sqlite, curl, makeWrapper, icu, dotnet-runtime, openssl, nixosTests, zlib }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -8,13 +8,13 @@ let
     x86_64-darwin = "x64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash = {
-    x64-linux_hash = "sha256-JKGLMu7rIhMAJM2bThTQiHDgc449gWQwmku/yQEAXL4=";
-    arm64-linux_hash = "sha256-1gzjriw4osMp8w2Auwu+PPCz0qi7hwTY+1tlcb2GxeI=";
-    x64-osx_hash = "sha256-eYUCmtG2yz/IoGUQJPa5z3UGJyXafsNG/CFIBBoz0hQ=";
+    x64-linux_hash = "sha256-GncaJNZEbApPl6Tt9k0NblRPdYnOGiR1V6VTJB8+LIU=";
+    arm64-linux_hash = "sha256-PvZHTjBmcpfu7fg5TLgcGoLofnAr6QM/2uNbGOpsx+U=";
+    x64-osx_hash = "sha256-h6JPb9esNlR+zqa8P0U2+zeLyW2JWw+AE/5PBHBGIQA=";
   }."${arch}-${os}_hash";
 in stdenv.mkDerivation rec {
   pname = "readarr";
-  version = "0.3.27.2538";
+  version = "0.3.28.2554";
 
   src = fetchurl {
     url = "https://github.com/Readarr/Readarr/releases/download/v${version}/Readarr.develop.${version}.${os}-core-${arch}.tar.gz";
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     cp -r * $out/share/${pname}-${version}/.
     makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Readarr \
       --add-flags "$out/share/${pname}-${version}/Readarr.dll" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite libmediainfo icu openssl ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite libmediainfo icu openssl zlib ]}
 
     runHook postInstall
   '';

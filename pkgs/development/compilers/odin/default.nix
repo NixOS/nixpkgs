@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, llvmPackages_13
+, llvmPackages
 , makeBinaryWrapper
 , libiconv
 , MacOSX-SDK
@@ -9,7 +9,6 @@
 }:
 
 let
-  llvmPackages = llvmPackages_13;
   inherit (llvmPackages) stdenv;
 in stdenv.mkDerivation rec {
   pname = "odin";

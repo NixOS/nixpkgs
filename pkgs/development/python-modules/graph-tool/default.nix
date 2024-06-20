@@ -22,6 +22,7 @@
   python,
   scipy,
   sparsehash,
+  gitUpdater,
 }:
 
 let
@@ -33,12 +34,12 @@ let
 in
 buildPythonPackage rec {
   pname = "graph-tool";
-  version = "2.68";
+  version = "2.70";
   format = "other";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-jB+/R6yZVhU0iohxYVNHdD205MauRxMoohbj4a2T+rw=";
+    hash = "sha256-hohGgOnxP1nb8NfkDRYPJ08sx0EH8PxX7Rblk1PLlIk=";
   };
 
   # Remove error messages about tput during build process without adding ncurses,
@@ -87,6 +88,11 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   pythonImportsCheck = [ "graph_tool" ];
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.skewed.de/count0/graph-tool";
+    rev-prefix = "release-";
+  };
 
   meta = {
     description = "Python module for manipulation and statistical analysis of graphs";

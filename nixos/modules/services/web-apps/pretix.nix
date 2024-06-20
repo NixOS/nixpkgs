@@ -310,7 +310,7 @@ in
               type = types.str;
               default = "redis+socket://${config.services.redis.servers.pretix.unixSocket}?virtual_host=1";
               defaultText = literalExpression ''
-                optionalString config.services.pretix.celery.enable "redis+socket://''${config.services.redis.servers.pretix.unixSocket}?virtual_host=1"
+                redis+socket://''${config.services.redis.servers.pretix.unixSocket}?virtual_host=1
               '';
               description = ''
                 URI to the celery backend used for the asynchronous job queue.
@@ -321,7 +321,7 @@ in
               type = types.str;
               default = "redis+socket://${config.services.redis.servers.pretix.unixSocket}?virtual_host=2";
               defaultText = literalExpression ''
-                optionalString config.services.pretix.celery.enable "redis+socket://''${config.services.redis.servers.pretix.unixSocket}?virtual_host=2"
+                redis+socket://''${config.services.redis.servers.pretix.unixSocket}?virtual_host=2
               '';
               description = ''
                 URI to the celery broker used for the asynchronous job queue.

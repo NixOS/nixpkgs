@@ -14,7 +14,6 @@
   config,
   genassym,
   defaultMakeFlags,
-  common,
 }:
 let
   base = import ./base.nix {
@@ -34,7 +33,6 @@ let
       config
       genassym
       defaultMakeFlags
-      common
       ;
   };
 in

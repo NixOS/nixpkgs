@@ -4,31 +4,31 @@
 
 linkFarm "zig-packages" [
   {
-    name = "122014eeb4600a059bdcfe1c864862f17e6d5e4237e3bb7d6818f2a5583f6f4eb843";
+    name = "1220687c8c47a48ba285d26a05600f8700d37fc637e223ced3aa8324f3650bf52242";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-pixman/archive/v0.1.0.tar.gz";
-      hash = "sha256-Atfkiyt9v+GWry3xA2Y0Iv6AvwbZ+EHfHLmX0AUEz6Y=";
+      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.2.0.tar.gz";
+      hash = "sha256-dvit+yvc0MnipqWjxJdfIsA6fJaJZOaIpx4w4woCxbE=";
     };
   }
   {
-    name = "1220714d1cc39c3abb1d9c22a0b838d847ead099cb7d9931821490483f30c022e827";
+    name = "12209db20ce873af176138b76632931def33a10539387cba745db72933c43d274d56";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.17.0.tar.gz";
-      hash = "sha256-C1D2dBn65Z9PmDacpeYbdX574fcOyYi/BJVDUMibkPA=";
+      url = "https://codeberg.org/ifreund/zig-pixman/archive/v0.2.0.tar.gz";
+      hash = "sha256-zcfZEMnipWDPuptl9UN0PoaJDjy2EHc7Wwi4GQq3hkY=";
     };
   }
   {
-    name = "1220840390382c88caf9b0887f6cebbba3a7d05960b8b2ee6d80567b2950b71e5017";
+    name = "1220c65ab884c236cc950b564c70f6cd04046d86485ee76e0cde886cef7438021b4f";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-xkbcommon/archive/v0.1.0.tar.gz";
-      hash = "sha256-xilmsDGWlkfpTiGff+/nb76jx87ANdr4zqYy6rKOBMg=";
+      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.17.1.tar.gz";
+      hash = "sha256-rVI/tJD3cx8b+nGTG5u08/RYoI179oDY7AY0riTntA0=";
     };
   }
   {
-    name = "1220b0f8f822c1625af7aae4cb3ab2c4ec1a4c0e99ef32867b2a8d88bb070b3e7f6d";
+    name = "1220c90b2228d65fd8427a837d31b0add83e9fade1dcfa539bb56fd06f1f8461605f";
     path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.1.0.tar.gz";
-      hash = "sha256-VLEx8nRgmJZWgLNBRqrR7bZEkW0m5HTRv984HKwoIfA=";
+      url = "https://codeberg.org/ifreund/zig-xkbcommon/archive/v0.2.0.tar.gz";
+      hash = "sha256-T+EZiStBfmxFUjaX05WhYkFJ8tRok/UQtpc9QY9NxZk=";
     };
   }
 ]

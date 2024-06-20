@@ -1,25 +1,65 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gtk3, glib, libid3tag, id3lib, taglib
-, libvorbis, libogg, opusfile, flac, itstool, libxml2, gsettings-desktop-schemas
-, gnome, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  gtk3,
+  glib,
+  libid3tag,
+  id3lib,
+  taglib,
+  libvorbis,
+  libogg,
+  opusfile,
+  flac,
+  itstool,
+  libxml2,
+  gsettings-desktop-schemas,
+  gnome,
+  wrapGAppsHook3,
+  fetchpatch,
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "easytag";
   version = "2.4.3";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1mbxnqrw1fwcgraa1bgik25vdzvf97vma5pzknbwbqq5ly9fwlgw";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-/FHukqcF48WXnf8WVfdJbv+2i5jxraBUfoy7wDO2fdU=";
   };
+
+  patches = [
+    # https://gitlab.gnome.org/GNOME/easytag/-/merge_requests/8
+    # Borrowed from Gentoo
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-sound/easytag/files/easytag-2.4.3-ogg-corruption.patch?id=b175a159c1138702bdfb009ff4d6565019ed3c4a";
+      hash = "sha256-z75dYTEVp1raSFROjpakLeBjF96sgWBxxRB6ut9wYXw=";
+    })
+  ];
 
   NIX_LDFLAGS = "-lid3tag -lz";
 
-  nativeBuildInputs = [ pkg-config intltool itstool libxml2 wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    itstool
+    libxml2
+    wrapGAppsHook3
+  ];
   buildInputs = [
-    gtk3 glib libid3tag id3lib taglib libvorbis libogg opusfile flac
-    gsettings-desktop-schemas gnome.adwaita-icon-theme
+    gtk3
+    glib
+    libid3tag
+    id3lib
+    taglib
+    libvorbis
+    libogg
+    opusfile
+    flac
+    gsettings-desktop-schemas
+    gnome.adwaita-icon-theme
   ];
 
   doCheck = false; # fails 1 out of 9 tests
@@ -36,7 +76,7 @@ in stdenv.mkDerivation rec {
     mainProgram = "easytag";
     homepage = "https://gitlab.gnome.org/GNOME/easytag";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ matteopacini ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

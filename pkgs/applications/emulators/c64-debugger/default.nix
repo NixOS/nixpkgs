@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "c64-debugger";
+  pname = "c64-debugger";
   version = "0.64.58.6";
 
   src = fetchgit {

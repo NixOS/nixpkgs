@@ -46,6 +46,6 @@ buildPythonPackage rec {
     mainProgram = "fx2tool";
     homepage = "https://github.com/whitequark/libfx2";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ emily ];
+    maintainers = with maintainers; [ ];
   };
 }

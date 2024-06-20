@@ -14,7 +14,7 @@
 
 { url ? null # The git url, if empty it will be set to src.gitRepoUrl
 , branch ? null
-, hardcodeZeroVersion ? false # Use a made-up version "0" instead of latest tag. Use when there is no previous release, or the project's tagging system is incompatible with what we expect from versions
+, hardcodeZeroVersion ? false # Use a made-up version "0" instead of latest tag. Use when the project's tagging system is incompatible with what we expect from versions
 , tagFormat ? "*" # A `git describe --tags --match '<format>'` pattern that tags must match to be considered
 , tagPrefix ? null # strip this prefix from a tag name
 , tagConverter ? null # A command to convert more complex tag formats. It receives the git tag via stdin and should convert it into x.y.z format to stdout

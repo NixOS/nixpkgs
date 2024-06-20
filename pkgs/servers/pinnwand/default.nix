@@ -58,7 +58,7 @@ with python3.pkgs; buildPythonApplication rec {
   meta = with lib; {
     changelog = "https://github.com/supakeen/pinnwand/releases/tag/v${version}";
     description = "Python pastebin that tries to keep it simple";
-    homepage = "https://supakeen.com/project/pinnwand/";
+    homepage = "https://github.com/supakeen/pinnwand";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
     mainProgram = "pinnwand";

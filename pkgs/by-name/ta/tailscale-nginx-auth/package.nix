@@ -1,7 +1,7 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 let
-  version = "1.66.4";
+  version = "1.68.0";
 in
 buildGoModule {
   pname = "tailscale-nginx-auth";
@@ -11,9 +11,9 @@ buildGoModule {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-ETBca3qKO2iS30teIF5sr/oyJdRSKFqLFVO3+mmm7bo=";
+    hash = "sha256-GTl5RCwIoDuzbaigy0/++xaPPEMLRDbBi/z82xCDOZY=";
   };
-  vendorHash = "sha256-Hd77xy8stw0Y6sfk3/ItqRIbM/349M/4uf0iNy1xJGw=";
+  vendorHash = "sha256-SUjoeOFYz6zbEgv/vND7kEXbuWlZDrUKF2Dmqsf/KVw=";
 
   CGO_ENABLED = 0;
 

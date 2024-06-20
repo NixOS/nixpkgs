@@ -2,7 +2,6 @@
   lib,
   mkDerivation,
   headers,
-  common,
   libc,
   librt,
   sys,
@@ -18,10 +17,10 @@ mkDerivation (
     buildInputs = [ headers ];
     SHLIBINSTALLDIR = "$(out)/lib";
     extraPaths = [
-      common
-      libc.src
-      librt.src
-      sys.src
+      "common"
+      libc.path
+      librt.path
+      sys.path
     ];
     meta.platforms = lib.platforms.netbsd;
   }
