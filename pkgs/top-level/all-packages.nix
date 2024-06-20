@@ -34676,6 +34676,8 @@ with pkgs;
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt { };
 
+  tiatracker = libsForQt5.callPackage ../applications/audio/tiatracker { };
+
   ticpp = callPackage ../development/libraries/ticpp { };
 
   ticker = callPackage ../applications/misc/ticker { };
