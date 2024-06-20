@@ -5154,6 +5154,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  faucet = python3Packages.callPackage ../servers/faucet { };
+
   faudio = callPackage ../development/libraries/faudio { };
 
   fblog = callPackage ../development/tools/fblog { };
