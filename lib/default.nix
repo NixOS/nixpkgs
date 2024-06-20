@@ -64,9 +64,9 @@ let
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
 
-    inherit (builtins) addErrorContext
-      isPath
-      trace;
+    # TODO: For consistency, all builtins should also be available from a sub-library;
+    # these are the only ones that are currently not
+    inherit (builtins) addErrorContext isPath trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum
