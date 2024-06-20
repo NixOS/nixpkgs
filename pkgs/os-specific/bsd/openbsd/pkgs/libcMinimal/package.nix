@@ -20,18 +20,16 @@
 
 mkDerivation {
   noLibc = true;
-  pname = "libc";
   path = "lib/libc";
+  pname = "libcMinimal-openbsd";
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
   extraPaths = [
     "lib/csu/os-note-elf.h"
     "sys/arch"
-
-    "lib/libm"
-    "lib/libpthread"
-    "lib/librpcsvc"
-    "lib/librpcsvc"
-    "lib/librthread"
-    "lib/libutil"
   ];
 
   patches = [
@@ -48,12 +46,8 @@ mkDerivation {
     openbsdSetupHook
     makeMinimal
     install
-    flex
-    byacc
-    gencat
-    rpcgen
-    ctags
     tsort
+    gencat
   ];
 
   buildInputs = [
@@ -78,43 +72,17 @@ mkDerivation {
   ];
 
   postInstall = ''
-    symlink_so () {
-      pushd $out/lib
-      ln -s "lib$1".so.* "lib$1.so"
-      popd
-    }
-
-    symlink_so c
-
     pushd ${include}
-    find . -type d -exec mkdir -p $out/\{} \;
-    find . \( -type f -o -type l \) -exec cp -pr \{} $out/\{} \;
+    find include -type d -exec mkdir -p "$dev/{}" ';'
+    find include '(' -type f -o -type l ')' -exec cp -pr "{}" "$dev/{}" ';'
     popd
-    substituteInPlace $out/include/sys/time.h --replace "defined (_LIBC)" "true"
+    substituteInPlace "$dev/include/sys/time.h" --replace "defined (_LIBC)" "true"
 
     pushd ${csu}
-    find . -type d -exec mkdir -p $out/\{} \;
-    find . \( -type f -o -type l \) -exec cp -pr \{} $out/\{} \;
+    find lib -type d -exec mkdir -p "$out/{}" ';'
+    find lib '(' -type f -o -type l ')' -exec cp -pr "{}" "$out/{}" ';'
     popd
-
-    NIX_CFLAGS_COMPILE+=" -B$out/lib"
-    NIX_CFLAGS_COMPILE+=" -I$out/include"
-    NIX_LDFLAGS+=" -L$out/lib"
-
-    make -C $BSDSRCDIR/lib/libm $makeFlags
-    make -C $BSDSRCDIR/lib/libm $makeFlags install
-    symlink_so m
-
-    make -C $BSDSRCDIR/lib/librthread $makeFlags
-    make -C $BSDSRCDIR/lib/librthread $makeFlags install
-    symlink_so pthread
-
-    make -C $BSDSRCDIR/lib/librpcsvc $makeFlags
-    make -C $BSDSRCDIR/lib/librpcsvc $makeFlags install
-    symlink_so rpcsv
-
-    make -C $BSDSRCDIR/lib/libutil $makeFlags
-    make -C $BSDSRCDIR/lib/libutil $makeFlags install
-    symlink_so util
   '';
+
+  meta.platforms = lib.platforms.openbsd;
 }

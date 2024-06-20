@@ -40,8 +40,10 @@ makeScopeWithSplicing' {
       stdenvLibcMinimal = crossLibcStdenv.override (old: {
         cc = old.cc.override {
           libc = self.libcMinimal;
+          noLibc = false;
           bintools = old.cc.bintools.override {
             libc = self.libcMinimal;
+            noLibc = false;
             sharedLibraryLoader = null;
           };
         };
