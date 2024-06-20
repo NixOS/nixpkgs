@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libGL, freeglut, camlp-streams, darwin } :
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libGL, libglut, camlp-streams, darwin } :
 
 if lib.versionOlder ocaml.version "4.06"
 then throw "lablgl is not available for OCaml ${ocaml.version}"
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ ocaml findlib ];
-  buildInputs = [ freeglut camlp-streams ];
+  buildInputs = [ libglut camlp-streams ];
   propagatedBuildInputs = [
     libGLU
     libGL

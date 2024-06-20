@@ -3,7 +3,7 @@
 , fetchFromGitLab
 , alsa-lib
 , fftw
-, freeglut
+, libglut
 , freetype
 , glew
 , libjack2
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   buildInputs = [
     alsa-lib
     fftw
-    freeglut.dev
+    libglut.dev
     freetype
     glew
     libjack2

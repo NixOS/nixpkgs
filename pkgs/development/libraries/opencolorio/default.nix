@@ -10,7 +10,7 @@
 , minizip-ng
 # Only required on Linux
 , glew
-, freeglut
+, libglut
 # Only required on Darwin
 , Carbon
 , GLUT
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     pystring
     imath
     minizip-ng
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glew freeglut ]
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glew libglut ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon GLUT Cocoa ]
     ++ lib.optionals pythonBindings [ python3Packages.python python3Packages.pybind11 ]
     ++ lib.optionals buildApps [
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
     "-DOCIO_USE_SSE2NEON=OFF"
-    # GPU test fails with: freeglut (GPU tests): failed to open display ''
+    # GPU test fails with: libglut (GPU tests): failed to open display ''
     "-DOCIO_BUILD_GPU_TESTS=OFF"
     "-Dminizip-ng_INCLUDE_DIR=${minizip-ng}/include/minizip-ng"
   ] ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"

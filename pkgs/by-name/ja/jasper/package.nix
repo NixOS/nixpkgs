@@ -1,7 +1,7 @@
 { lib
 , cmake
 , fetchFromGitHub
-, freeglut
+, libglut
 , libGL
 , libheif
 , libjpeg
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableJPGCodec [
     libjpeg
   ] ++ lib.optionals enableOpenGL [
-    freeglut
+    libglut
     libGL
   ];
 
