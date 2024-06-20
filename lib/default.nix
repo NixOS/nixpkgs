@@ -67,7 +67,7 @@ let
     inherit (builtins) add addErrorContext
       deepSeq elem elemAt genericClosure getAttr
       hasAttr isAttrs isBool isInt isList isPath isString
-      lessThan listToAttrs pathExists readFile replaceStrings seq
+      lessThan pathExists readFile replaceStrings seq
       sub trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
@@ -87,7 +87,7 @@ let
       recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput
       getBin getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
-      mapCartesianProduct updateManyAttrsByPath intersectAttrs removeAttrs;
+      mapCartesianProduct updateManyAttrsByPath listToAttrs intersectAttrs removeAttrs;
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       filter ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
