@@ -32,7 +32,11 @@ rec {
 
 
   # Override the compiler in stdenv for specific packages.
-  overrideCC = stdenv: cc: stdenv.override { allowedRequisites = null; cc = cc; };
+  overrideCC = stdenv: cc: stdenv.override {
+    allowedRequisites = null;
+    cc = cc;
+    hasCC = cc != null;
+  };
 
 
   # Add some arbitrary packages to buildInputs for specific packages.
