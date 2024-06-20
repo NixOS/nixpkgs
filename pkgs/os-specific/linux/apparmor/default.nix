@@ -4,7 +4,7 @@
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gawk
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform perl, perl
-, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform python3, python3
+, withPython ? true, python3
 , swig
 , ncurses
 , pam
@@ -67,6 +67,7 @@ let
   ];
 
   python = python3.withPackages (ps: with ps; [ setuptools ]);
+  buildPython = buildPackages.python3.withPackages (ps: with ps; [ setuptools ]);
 
   # Set to `true` after the next FIXME gets fixed or this gets some
   # common derivation infra. Too much copy-paste to fix one by one.
@@ -94,7 +95,11 @@ let
       ncurses
       which
       perl
-    ] ++ lib.optional withPython python;
+    ] ++ lib.optional withPython buildPython;
+
+    # The python env uses a makeCWrapper python-config which breaks cross-builds,
+    # for the purposes of this build, the original shell script is sufficient.
+    PYTHON_CONFIG = "${stdenv.shell} ${python.python}/bin/python-config";
 
     buildInputs = [ libxcrypt ]
       ++ lib.optional withPerl perl
@@ -123,6 +128,12 @@ let
     postInstall = lib.optionalString withPython ''
       mkdir -p $python/lib
       mv $out/lib/python* $python/lib/
+    '' # setuptools incorrectly names shared library with buildPlatform architecture name.
+    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      pushd $python/lib/*/site-packages/LibAppArmor
+      OLD=$(ls _LibAppArmor.*.so)
+      mv $OLD ''${OLD/${stdenv.buildPlatform.qemuArch}/${stdenv.targetPlatform.qemuArch}}
+      popd
     '';
 
     inherit doCheck;
@@ -184,7 +195,7 @@ let
     inherit doCheck;
 
     meta = apparmor-meta "user-land utilities" // {
-      broken = !(withPython && withPerl);
+      broken = !(withPython);
     };
   };
 
