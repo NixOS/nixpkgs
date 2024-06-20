@@ -66,7 +66,6 @@ let
 
     inherit (builtins) addErrorContext
       isPath
-      replaceStrings
       trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
@@ -96,7 +95,7 @@ let
       subtractLists mutuallyExclusive groupBy groupBy' concatLists genList
       length head tail elem elemAt isList;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
-      stringLength substring isString
+      stringLength substring isString replaceStrings
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
       makeLibraryPath makeIncludePath makeBinPath optionalString
