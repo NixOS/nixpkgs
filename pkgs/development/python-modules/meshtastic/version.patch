@@ -1,0 +1,43 @@
+diff --git a/meshtastic/__main__.py b/meshtastic/__main__.py
+index 6a2f31c..bc3e1b4 100644
+--- a/meshtastic/__main__.py
++++ b/meshtastic/__main__.py
+@@ -9,7 +9,6 @@ import platform
+ import sys
+ import time
+ 
+-import pkg_resources
+ import pyqrcode
+ import yaml
+ from google.protobuf.json_format import MessageToDict
+@@ -1351,7 +1350,7 @@ def initParser():
+ 
+     parser.set_defaults(deprecated=None)
+ 
+-    the_version = pkg_resources.get_distribution("meshtastic").version
++    the_version = "%VERSION%"
+     parser.add_argument("--version", action="version", version=f"{the_version}")
+ 
+     parser.add_argument(
+diff --git a/meshtastic/util.py b/meshtastic/util.py
+index 7a5dd10..81b5af9 100644
+--- a/meshtastic/util.py
++++ b/meshtastic/util.py
+@@ -269,7 +269,7 @@ def support_info():
+     print(f"   Machine: {platform.uname().machine}")
+     print(f"   Encoding (stdin): {sys.stdin.encoding}")
+     print(f"   Encoding (stdout): {sys.stdout.encoding}")
+-    the_version = pkg_resources.get_distribution("meshtastic").version
++    the_version = "%VERSION%"
+     pypi_version = check_if_newer_version()
+     if pypi_version:
+         print(
+@@ -599,7 +599,7 @@ def check_if_newer_version():
+         pypi_version = data["info"]["version"]
+     except Exception:
+         pass
+-    act_version = pkg_resources.get_distribution("meshtastic").version
++    act_version = "%VERSION%"
+     if pypi_version and pkg_resources.parse_version(
+         pypi_version
+     ) <= pkg_resources.parse_version(act_version):
