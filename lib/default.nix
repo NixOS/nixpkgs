@@ -87,7 +87,7 @@ let
       recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput
       getBin getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
-      mapCartesianProduct updateManyAttrsByPath;
+      mapCartesianProduct updateManyAttrsByPath intersectAttrs;
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
