@@ -73,7 +73,6 @@ mkDerivation {
   ) "--undefined-version";
 
   makeFlags = [
-    "STRIP=-s" # flag to install, not command
     "COMPILER_VERSION=clang"
     "LIBC_TAGS=no"
   ];
