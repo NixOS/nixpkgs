@@ -8,6 +8,7 @@
 , ninja
 , pkg-config
 , fetchFromGitHub
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +29,8 @@ stdenv.mkDerivation rec {
     SDL2_mixer
     libconfig
     libGLU
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.OpenGL
   ];
 
   meta = with lib; {
