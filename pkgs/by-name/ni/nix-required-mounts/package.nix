@@ -1,10 +1,16 @@
-{ addOpenGLRunpath
-, cmake
-, allowedPatternsPath ? callPackage ./closure.nix { inherit allowedPatterns; }
-, allowedPatterns ? rec {
+{
+  addOpenGLRunpath,
+  cmake,
+  allowedPatternsPath ? callPackage ./closure.nix { inherit allowedPatterns; },
+  allowedPatterns ? rec {
     # This config is just an example.
     # When the hook observes either of the following requiredSystemFeatures:
-    nvidia-gpu.onFeatures = [ "gpu" "nvidia-gpu" "opengl" "cuda" ];
+    nvidia-gpu.onFeatures = [
+      "gpu"
+      "nvidia-gpu"
+      "opengl"
+      "cuda"
+    ];
     # It exposes these paths in the sandbox:
     nvidia-gpu.paths = [
       addOpenGLRunpath.driverLink
@@ -12,19 +18,18 @@
       "/dev/nvidia*"
     ];
     nvidia-gpu.unsafeFollowSymlinks = true;
-  }
-, buildPackages
-, callPackage
-, extraWrapperArgs ? [ ]
-, formats
-, lib
-, makeWrapper
-, nix
-, nixosTests
-, python3Packages
-, runCommand
+  },
+  buildPackages,
+  callPackage,
+  extraWrapperArgs ? [ ],
+  formats,
+  lib,
+  makeWrapper,
+  nix,
+  nixosTests,
+  python3Packages,
+  runCommand,
 }:
-
 
 let
   attrs = builtins.fromTOML (builtins.readFile ./pyproject.toml);
@@ -32,8 +37,7 @@ let
   inherit (attrs.project) version;
 in
 
-python3Packages.buildPythonApplication
-{
+python3Packages.buildPythonApplication {
   inherit pname version;
   pyproject = true;
 

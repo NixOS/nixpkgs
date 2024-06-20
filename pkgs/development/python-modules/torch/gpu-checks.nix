@@ -16,7 +16,7 @@ let
     }:
     let
       name = "${torch.name}-${feature}-check";
-      unwrapped = writers.writePython3Bin "${name}-unwrapped" {libraries = [torch];} ''
+      unwrapped = writers.writePython3Bin "${name}-unwrapped" { libraries = [ torch ]; } ''
         import torch
         message = f"{torch.cuda.is_available()=} and {torch.version.${versionAttr}=}"
         assert torch.cuda.is_available() and torch.version.${versionAttr}, message
@@ -25,8 +25,8 @@ let
     in
     runCommandNoCC name
       {
-        nativeBuildInputs = [unwrapped];
-        requiredSystemFeatures = [feature];
+        nativeBuildInputs = [ unwrapped ];
+        requiredSystemFeatures = [ feature ];
         passthru = {
           inherit unwrapped;
         };

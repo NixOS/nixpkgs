@@ -8,7 +8,7 @@
 }:
 
 let
-  blenderWithCuda = blender.override {cudaSupport = true;};
+  blenderWithCuda = blender.override { cudaSupport = true; };
   name = "${blenderWithCuda.name}-check-cuda";
   unwrapped = writeScriptBin "${name}-unwrapped" ''
     #!${lib.getExe bash}
@@ -16,14 +16,11 @@ let
   '';
 in
 {
-  cudaAvailable =
-    runCommand name
-      {
-        nativeBuildInputs = [unwrapped];
-        requiredSystemFeatures = ["cuda"];
-        passthru = {
-          inherit unwrapped;
-        };
-      }
-      "${name}-unwrapped && touch $out";
+  cudaAvailable = runCommand name {
+    nativeBuildInputs = [ unwrapped ];
+    requiredSystemFeatures = [ "cuda" ];
+    passthru = {
+      inherit unwrapped;
+    };
+  } "${name}-unwrapped && touch $out";
 }
