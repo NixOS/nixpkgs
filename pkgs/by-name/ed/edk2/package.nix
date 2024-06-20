@@ -5,6 +5,7 @@
 , bc
 , lib
 , buildPackages
+, nix-update-script
 }:
 
 let
@@ -98,11 +99,14 @@ edk2 = stdenv.mkDerivation {
   meta = with lib; {
     description = "Intel EFI development kit";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
+    changelog = "https://github.com/tianocore/edk2/releases/tag/edk2-stable${edk2.version}";
     license = licenses.bsd2;
     platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64 ++ riscv64;
   };
 
   passthru = {
+    updateScript = nix-update-script { };
+
     mkDerivation = projectDscPath: attrsOrFun: stdenv.mkDerivation (finalAttrs:
     let
       attrs = lib.toFunction attrsOrFun finalAttrs;
