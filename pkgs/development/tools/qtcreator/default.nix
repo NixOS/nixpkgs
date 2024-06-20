@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitHub
 , cmake
 , pkg-config
 , ninja
@@ -30,11 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "13.0.2";
+  version = "14.0.0";
 
-  src = fetchurl {
-    url = "https://download.qt.io/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-wSXMVSJhnH+PwoBadQq5bLu1al/fw4i2yxWrda9+wM4=";
+  src = fetchFromGitHub {
+    owner = "qt-creator";
+    repo = "qt-creator";
+    rev = "v${version}";
+    hash = "sha256-jGtRNEo3AVxNn1Ix4cywrtaw/xdCdCpCwfLHNbZstyY=";
   };
 
   nativeBuildInputs = [
