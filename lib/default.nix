@@ -67,7 +67,7 @@ let
     inherit (builtins) addErrorContext
       genericClosure
       isPath
-      pathExists readFile replaceStrings
+      readFile replaceStrings
       trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
@@ -75,7 +75,7 @@ let
       info showWarnings nixpkgsVersion version isInOldestRelease
       mod compare splitByAndCompare seq deepSeq lessThan add sub
       functionArgs setFunctionArgs isFunction toFunction mirrorFunctionArgs
-      toHexString toBaseDigits inPureEvalMode isBool isInt;
+      toHexString toBaseDigits inPureEvalMode isBool isInt pathExists;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
