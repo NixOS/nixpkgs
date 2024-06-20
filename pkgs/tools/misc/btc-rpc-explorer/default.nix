@@ -4,6 +4,7 @@
 , pkg-config
 , python3
 , vips
+, cacert
 }:
 
 buildNpmPackage rec {
@@ -28,6 +29,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     pkg-config
     python3
+    cacert
   ];
 
   buildInputs = [
