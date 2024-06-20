@@ -65,7 +65,7 @@ let
     kernel = callLibs ./kernel.nix;
 
     inherit (builtins) add addErrorContext
-      deepSeq elem elemAt genericClosure genList getAttr
+      deepSeq elem elemAt genericClosure getAttr
       hasAttr head isAttrs isBool isInt isList isPath isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail trace;
@@ -93,7 +93,7 @@ let
       optional optionals toList range replicate partition zipListsWith zipLists
       reverseList listDfs toposort sort sortOn naturalSort compareLists take
       drop sublist last init crossLists unique allUnique intersectLists
-      subtractLists mutuallyExclusive groupBy groupBy' concatLists;
+      subtractLists mutuallyExclusive groupBy groupBy' concatLists genList;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
