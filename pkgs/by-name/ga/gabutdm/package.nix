@@ -14,18 +14,19 @@
 , json-glib
 , qrencode
 , curl
+, libadwaita
 , aria2
 }:
 
 stdenv.mkDerivation rec {
   pname = "gabutdm";
-  version = "2.1.6";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "gabutakut";
-    repo = pname;
+    repo = "gabutdm";
     rev = version;
-    hash = "sha256-ai5LsoK21XwXqL4LRuKsOR1/JV6LnP+1ZJ9fMHpj178=";
+    hash = "sha256-HF+zBDkA9fYauLUYsvJJxcRggHu+5qH4rm0IM/tL9Hc=";
   };
 
   nativeBuildInputs = [
@@ -45,11 +46,12 @@ stdenv.mkDerivation rec {
     json-glib
     qrencode
     curl
+    libadwaita
   ];
 
   postPatch = ''
     substituteInPlace meson/post_install.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
+      --replace-fail gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   preFixup = ''
