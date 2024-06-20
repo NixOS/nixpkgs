@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "zx";
-  version = "8.1.2";
+  version = "8.1.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "zx";
     rev = version;
-    hash = "sha256-tv66idt+IfELc5TpMwDujJeIOi+kxFSl3RX3SrYL9ac=";
+    hash = "sha256-h3osu1FDBZsawXxtSVBDjcIiRdqgElPMBxdx2N4cfeQ=";
   };
 
-  npmDepsHash = "sha256-WZJDbdqoy/JkKAR00nG4IdM6okHLsqfudHw0Gs+WntM=";
+  npmDepsHash = "sha256-bijPRIiGNGfbtZiQ5aEVGI3DfYfFeA1YbNCTdljDhfw=";
 
   meta = {
     description = "Tool for writing scripts using JavaScript";
