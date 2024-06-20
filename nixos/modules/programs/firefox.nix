@@ -249,6 +249,19 @@ in
       '';
     };
 
+    autoConfigFiles = lib.mkOption {
+      type = with lib.types; listOf path;
+      default = [];
+      description = ''
+        AutoConfig files can be used to set and lock preferences that are not covered
+        by the policies.json for Mac and Linux. This method can be used to automatically
+        change user preferences or prevent the end user from modifiying specific
+        preferences by locking them. More info can be found in https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig.
+
+        Files are concated and autoConfig is appended.
+      '';
+    };
+
     nativeMessagingHosts = ({
       packages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
@@ -271,7 +284,7 @@ in
 
     environment.systemPackages = [
       (cfg.package.override (old: {
-        extraPrefsFiles = old.extraPrefsFiles or [] ++ [(pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig)];
+        extraPrefsFiles = old.extraPrefsFiles or [] ++ cfg.autoConfigFiles ++ [(pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig)];
         nativeMessagingHosts = old.nativeMessagingHosts or [] ++ cfg.nativeMessagingHosts.packages;
         cfg = (old.cfg or {}) // cfg.wrapperConfig;
       }))
