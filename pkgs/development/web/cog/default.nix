@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cmake
+, meson
 , pkg-config
 , wayland
 , wayland-protocols
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cog";
-  version = "0.8.1";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "igalia";
     repo = "cog";
-    rev = "v${version}";
-    sha256 = "sha256-eF7rvOjZntcMmn622342yqfp4ksZ6R/FFBT36bYCViE=";
+    rev = version;
+    sha256 = "sha256-Ss1wZREE56BzLf/2ec7Qv/tc7HiMfXJKaNpP7WJa9xg=";
   };
 
   buildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake
+    meson
     pkg-config
     wayland
     makeWrapper
@@ -48,22 +48,6 @@ stdenv.mkDerivation rec {
   depsBuildsBuild = [
     pkg-config
   ];
-
-  cmakeFlags = [
-    "-DCOG_USE_WEBKITGTK=ON"
-  ];
-
-  # https://github.com/Igalia/cog/issues/438
-  postPatch = ''
-    substituteInPlace core/cogcore.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
-  '';
-
-  # not ideal, see https://github.com/WebPlatformForEmbedded/libwpe/issues/59
-  preFixup = ''
-    wrapProgram $out/bin/cog \
-      --prefix LD_LIBRARY_PATH : ${libwpe-fdo}/lib
-  '';
 
   meta = with lib; {
     description = "Small single “window” launcher for the WebKit WPE port";
