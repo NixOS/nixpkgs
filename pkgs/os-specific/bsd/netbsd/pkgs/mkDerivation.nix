@@ -59,7 +59,6 @@ lib.makeOverridable (
         mandoc
         groff
         statHook
-        rsync
       ];
       buildInputs = compatIfNeeded;
 

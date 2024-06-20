@@ -10,7 +10,6 @@
   bsdSetupHook,
   netbsdSetupHook,
   makeMinimal,
-  rsync,
   version,
 }:
 
@@ -48,7 +47,6 @@ mkDerivation (
       bsdSetupHook
       netbsdSetupHook
       makeMinimal
-      rsync
     ];
 
     buildInputs = commonDeps;

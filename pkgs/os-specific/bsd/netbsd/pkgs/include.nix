@@ -7,7 +7,6 @@
   install,
   mandoc,
   groff,
-  rsync,
   nbperf,
   rpcgen,
   defaultMakeFlags,
@@ -24,7 +23,6 @@ mkDerivation {
     install
     mandoc
     groff
-    rsync
     nbperf
     rpcgen
   ];
