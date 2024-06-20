@@ -68,7 +68,7 @@ let
       deepSeq elem elemAt genericClosure getAttr
       hasAttr head isAttrs isBool isInt isList isPath isString
       lessThan listToAttrs pathExists readFile replaceStrings seq
-      stringLength sub substring tail trace;
+      sub substring tail trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum
@@ -96,6 +96,7 @@ let
       subtractLists mutuallyExclusive groupBy groupBy' concatLists genList
       length;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
+      stringLength
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
       makeLibraryPath makeIncludePath makeBinPath optionalString
