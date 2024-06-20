@@ -51,21 +51,21 @@ edk2 = stdenv.mkDerivation {
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    hash = "sha256-7vNodHocwqQiO0ZXtqo8lEOFyt8JkFHcAathEhrKWE0=";
-
-    # We don't want EDK2 to keep track of OpenSSL,
-    # they're frankly bad at it.
-    postFetch = ''
-      rm -rf $out/CryptoPkg/Library/OpensslLib/openssl
-      mkdir -p $out/CryptoPkg/Library/OpensslLib/openssl
-      tar --strip-components=1 -xf ${buildPackages.openssl.src} -C $out/CryptoPkg/Library/OpensslLib/openssl
-
-      # Fix missing INT64_MAX include that edk2 explicitly does not provide
-      # via it's own <stdint.h>. Let's pull in openssl's definition instead:
-      sed -i $out/CryptoPkg/Library/OpensslLib/openssl/crypto/property/property_parse.c \
-          -e '1i #include "internal/numbers.h"'
-    '';
+    hash = "sha256-+phKAr3xc4T8tg6YAoGgRWCmxZiFzhazEAai48ICnKM=";
   };
+
+  # We don't want EDK2 to keep track of OpenSSL,
+  # they're frankly bad at it.
+  postPatch = ''
+    rm -r CryptoPkg/Library/OpensslLib/openssl
+    mkdir -p CryptoPkg/Library/OpensslLib/openssl
+    tar --strip-components=1 -xf ${buildPackages.openssl.src} -C CryptoPkg/Library/OpensslLib/openssl
+
+    # Fix missing INT64_MAX include that edk2 explicitly does not provide
+    # via it's own <stdint.h>. Let's pull in openssl's definition instead:
+    sed -i CryptoPkg/Library/OpensslLib/openssl/crypto/property/property_parse.c \
+        -e '1i #include "internal/numbers.h"'
+  '';
 
   nativeBuildInputs = [ pythonEnv ];
   depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.bash ];
