@@ -223,6 +223,12 @@ rec {
        */
       meta ? { },
       /*
+         `stdenv.mkDerivation`'s `passthru` argument.
+
+         Type: AttrSet
+       */
+      passthru ? { },
+      /*
          The `checkPhase` to run. Defaults to `shellcheck` on supported
          platforms and `bash -n`.
 
@@ -265,7 +271,7 @@ rec {
       derivationArgs ? { },
     }:
     writeTextFile {
-      inherit name meta derivationArgs;
+      inherit name meta passthru derivationArgs;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
