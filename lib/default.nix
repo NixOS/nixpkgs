@@ -64,7 +64,7 @@ let
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
 
-    inherit (builtins) add addErrorContext attrNames concatLists
+    inherit (builtins) add addErrorContext attrNames
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isPath isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
@@ -93,7 +93,7 @@ let
       optional optionals toList range replicate partition zipListsWith zipLists
       reverseList listDfs toposort sort sortOn naturalSort compareLists take
       drop sublist last init crossLists unique allUnique intersectLists
-      subtractLists mutuallyExclusive groupBy groupBy';
+      subtractLists mutuallyExclusive groupBy groupBy' concatLists;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
