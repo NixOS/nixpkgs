@@ -18956,6 +18956,8 @@ with pkgs;
 
   lenmus = callPackage ../applications/misc/lenmus { };
 
+  libprotobuf-mutator = callPackage ../development/libraries/libprotobuf-mutator { };
+
   libtool = libtool_2;
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
