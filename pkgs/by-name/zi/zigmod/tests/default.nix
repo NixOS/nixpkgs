@@ -1,0 +1,5 @@
+{ callPackage }:
+
+{
+  clap = callPackage ./clap { };
+}

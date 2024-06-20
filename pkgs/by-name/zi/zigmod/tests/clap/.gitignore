@@ -1,0 +1,4 @@
+.zigmod
+deps.zig
+zig-cache
+zig-out
