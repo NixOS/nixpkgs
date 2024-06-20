@@ -4722,6 +4722,8 @@ self: super: with self; {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  generate-chroma = callPackage ../development/python-modules/generate-chroma { };
+
   generic = callPackage ../development/python-modules/generic { };
 
   genie-partner-sdk = callPackage ../development/python-modules/genie-partner-sdk { };
@@ -8843,6 +8845,8 @@ self: super: with self; {
   nftables = callPackage ../os-specific/linux/nftables/python.nix {
     inherit (pkgs) nftables;
   };
+
+  nglview = callPackage ../development/python-modules/nglview { };
 
   nh3 = callPackage ../development/python-modules/nh3 { };
 
