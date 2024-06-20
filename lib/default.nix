@@ -105,7 +105,7 @@ let
       escapeRegex escapeURL escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
-      getName getVersion match
+      getName getVersion match split
       cmakeOptionType cmakeBool cmakeFeature
       mesonOption mesonBool mesonEnable
       nameFromURL enableFeature enableFeatureAs withFeature
