@@ -2,14 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "soqt";
-  version = "2020-12-05-unstable";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "soqt";
-    # rev = "SoQt-${version}";
-    rev = "fb8f655632bb9c9c60e0ff9fa69a5ba22d3ff99d";
-    sha256 = "sha256-YoBq8P3Tag2Sepqxf/qIcJDBhH/gladBmDUj78aacZs=";
+    rev = "v${version}";
+    sha256 = "sha256-lR1AiXAmkBFndroijRV6E0NLpyiNRfSCrcO+RJdBkZE=";
     fetchSubmodules = true;
   };
 
