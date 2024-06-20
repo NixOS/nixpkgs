@@ -66,7 +66,7 @@ let
 
     inherit (builtins) addErrorContext
       genericClosure getAttr
-      isBool isInt isList isPath isString
+      isInt isList isPath isString
       pathExists readFile replaceStrings
       trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
@@ -75,7 +75,7 @@ let
       info showWarnings nixpkgsVersion version isInOldestRelease
       mod compare splitByAndCompare seq deepSeq lessThan add sub
       functionArgs setFunctionArgs isFunction toFunction mirrorFunctionArgs
-      toHexString toBaseDigits inPureEvalMode;
+      toHexString toBaseDigits inPureEvalMode isBool;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
