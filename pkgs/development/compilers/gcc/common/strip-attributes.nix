@@ -1,4 +1,12 @@
-{ lib, stdenv, langJit }:
+{ lib, stdenv, langJit, enableShared }:
+
+let enableLibGccOutput =
+      !langJit &&
+      !stdenv.hostPlatform.isDarwin &&
+      enableShared
+      ;
+
+in
 
 {
   # Note [Cross-compiler stripping]
@@ -59,11 +67,19 @@
       )
       popd
 
+  '' + lib.optionalString enableLibGccOutput ''
+    ${/*keep indentation*/ ""}
+      pushd $libgcc
+      local -ar libgccTargetFiles=(
+        lib{,32,64}/*.{a,o,so*}
+      )
+      popd
+
   '' + ''
       eval "$oldOpts"
 
       stripDebugList="$stripDebugList ''${outHostFiles[*]} ''${libHostFiles[*]}"
-      stripDebugListTarget="$stripDebugListTarget ''${outTargetFiles[*]} ''${libTargetFiles[*]}"
+      stripDebugListTarget="$stripDebugListTarget ''${outTargetFiles[*]} ''${libTargetFiles[*]} ''${libgccTargetFiles[*]}"
     }
     updateDebugListPaths
   '';
