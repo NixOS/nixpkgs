@@ -1,14 +1,14 @@
 { lib
 , runCommand
-, R
+, rWrapper
 , rstudio
 , makeWrapper
 , wrapQtAppsHook
+, symlinkJoin
 , recommendedPackages
 , packages
 , fontconfig
 }:
-
 runCommand (rstudio.name + "-wrapper")
 {
   preferLocalBuild = true;
@@ -17,7 +17,7 @@ runCommand (rstudio.name + "-wrapper")
   nativeBuildInputs = [ (if rstudio.server then makeWrapper else wrapQtAppsHook) ];
   dontWrapQtApps = true;
 
-  buildInputs = [ R rstudio ] ++ recommendedPackages ++ packages;
+  buildInputs = [ rWrapper rstudio ] ++ recommendedPackages ++ packages;
 
   # rWrapper points R to a specific set of packages by using a wrapper
   # (as in https://nixos.org/nixpkgs/manual/#r-packages) which sets
