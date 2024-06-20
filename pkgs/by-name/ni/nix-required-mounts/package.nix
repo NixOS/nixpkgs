@@ -10,7 +10,6 @@
       addOpenGLRunpath.driverLink
       "/dev/dri"
       "/dev/nvidia*"
-      "/dev/video*"
     ];
     nvidia-gpu.unsafeFollowSymlinks = true;
   }
