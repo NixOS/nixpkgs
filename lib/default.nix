@@ -66,7 +66,7 @@ let
 
     inherit (builtins) addErrorContext
       isPath
-      readFile replaceStrings
+      replaceStrings
       trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
@@ -75,7 +75,7 @@ let
       mod compare splitByAndCompare seq deepSeq lessThan add sub
       functionArgs setFunctionArgs isFunction toFunction mirrorFunctionArgs
       toHexString toBaseDigits inPureEvalMode isBool isInt pathExists
-      genericClosure;
+      genericClosure readFile;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
