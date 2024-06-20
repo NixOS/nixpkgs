@@ -40126,6 +40126,8 @@ with pkgs;
 
   vhs = callPackage ../applications/misc/vhs { };
 
+  verovio = callPackage ../tools/audio/verovio { };
+
   vgmstream = callPackage ../applications/audio/vgmstream { };
 
   viddy = callPackage ../tools/misc/viddy { };
