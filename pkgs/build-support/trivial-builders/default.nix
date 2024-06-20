@@ -91,6 +91,7 @@ rec {
     , destination ? ""
     , checkPhase ? ""
     , meta ? { }
+    , passthru ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     , derivationArgs ? { }
@@ -100,7 +101,7 @@ rec {
     in
     runCommand name
       ({
-        inherit text executable checkPhase allowSubstitutes preferLocalBuild;
+        inherit text executable checkPhase passthru allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ]
           ++ derivationArgs.passAsFile or [ ];
         meta = lib.optionalAttrs (executable && matches != null)
