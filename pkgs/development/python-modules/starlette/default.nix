@@ -40,11 +40,11 @@ buildPythonPackage rec {
     hash = "sha256-GiCN1sfhLu9i19d2OcLZrlY8E64DFrFh+ITRSvLaxdE=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ anyio ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
-  passthru.optional-dependencies.full = [
+  optional-dependencies.full = [
     itsdangerous
     jinja2
     python-multipart
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
     trio
     typing-extensions
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     "-W"
