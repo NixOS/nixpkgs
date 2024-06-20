@@ -1,6 +1,7 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
+{ lowPrio, newScope, pkgs, lib, stdenv
 , preLibcCrossHeaders
-, libxml2, python3, fetchFromGitHub, fetchpatch, substituteAll, overrideCC, wrapCCWith, wrapBintoolsWith
+, substitute, substituteAll, fetchFromGitHub, fetchpatch
+, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -39,6 +40,10 @@
 # to you to make sure that the LLVM repo given matches the release configuration
 # specified.
 , monorepoSrc ? null
+# Allows passthrough to packages via newScope. This makes it possible to
+# do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
+# an llvmPackages whose packages are overridden in an internally consistent way.
+, ...
 }@args:
 
 assert
