@@ -14,7 +14,7 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "parrot";
-  version = "1.6.0-unstable-2024-02-28";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "aquelemiguel";
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-3YTXIKj1iqCB+tN7/0v1DAaMM6aJiSxBYHO98uK8KFo=";
   };
 
-  cargoHash = "sha256-3G7NwSZaiocjgfdtmJVWfMZOHCNhC08NgolPa9AvPfE=";
+  cargoHash = "sha256-1ZUcGjhP0nxOlxzA+Z1wgnVIusS09ZUgVZxZuGy063Q=";
 
   nativeBuildInputs = [ cmake makeBinaryWrapper pkg-config ];
 
