@@ -64,7 +64,7 @@ let
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
 
-    inherit (builtins) add addErrorContext
+    inherit (builtins) addErrorContext
       deepSeq elem elemAt genericClosure getAttr
       hasAttr isAttrs isBool isInt isList isPath isString
       pathExists readFile replaceStrings
@@ -73,7 +73,7 @@ let
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum
       info showWarnings nixpkgsVersion version isInOldestRelease
-      mod compare splitByAndCompare seq lessThan
+      mod compare splitByAndCompare seq lessThan add
       functionArgs setFunctionArgs isFunction toFunction mirrorFunctionArgs
       toHexString toBaseDigits inPureEvalMode;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
