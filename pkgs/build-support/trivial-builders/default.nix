@@ -370,9 +370,10 @@ rec {
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
     , checkPhase ? ""    # syntax checks, e.g. for scripts
     , meta ? { }
+    , passthru ? { }
     }:
     runCommandLocal name
-      { inherit files executable checkPhase meta destination; }
+      { inherit files executable checkPhase meta passthru destination; }
       ''
         file=$out$destination
         mkdir -p "$(dirname "$file")"
