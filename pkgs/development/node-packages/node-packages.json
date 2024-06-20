@@ -177,6 +177,7 @@
 , "npm"
 , "npm-merge-driver"
 , "nrm"
+, "ollama"
 , "orval"
 , "parcel"
 , "parsoid"
