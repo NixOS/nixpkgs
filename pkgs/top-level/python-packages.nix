@@ -4145,6 +4145,8 @@ self: super: with self; {
 
   fastapi = callPackage ../development/python-modules/fastapi { };
 
+  fastapi-cli = callPackage ../development/python-modules/fastapi-cli { };
+
   fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
 
   fastapi-sso = callPackage ../development/python-modules/fastapi-sso { };
