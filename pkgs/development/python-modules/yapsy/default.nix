@@ -4,9 +4,10 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  python,
 }:
 
-buildPythonPackage {
+with python.pkgs; buildPythonPackage {
   pname = "yapsy";
   version = "1.12.2-unstable-2023-03-29";
   pyproject = true;
@@ -25,6 +26,8 @@ buildPythonPackage {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "yapsy" ];
+
+  propagatedBuildInputs = [ packaging ];
 
   meta = with lib; {
     homepage = "https://yapsy.sourceforge.net/";
