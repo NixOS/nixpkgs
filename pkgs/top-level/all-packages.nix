@@ -23246,6 +23246,14 @@ with pkgs;
     else
       libglvnd;
 
+  # On macOS, we use the GLUT framework. Packages that use libGLX on
+  # macOS may need to depend on freeglut directly if this doesn’t work.
+  libglut =
+    if stdenv.hostPlatform.isDarwin then
+      darwin.apple_sdk.frameworks.GLUT
+    else
+      freeglut;
+
   mesa = if stdenv.isDarwin
     then darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/darwin.nix {
       inherit (darwin.apple_sdk_11_0.libs) Xplugin;
