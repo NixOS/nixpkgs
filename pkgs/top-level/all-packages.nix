@@ -12036,6 +12036,8 @@ with pkgs;
 
   pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
 
+  pycom-fwtool = callPackage ../tools/admin/pycom-fwtool { };
+
   pydf = callPackage ../applications/misc/pydf { };
 
   pyinfra = with python3Packages; toPythonApplication pyinfra;
