@@ -18,6 +18,7 @@ fetchFromGitHub {
     maintainers = with maintainers; [
       moni
       Guanran928
+      frontear
     ];
   };
 }
