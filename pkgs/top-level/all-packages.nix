@@ -5543,6 +5543,8 @@ with pkgs;
 
   irpf = callPackage ../applications/finance/irpf { };
 
+  jhide = sbclPackages.jhide;
+
   jellycli = callPackage ../applications/audio/jellycli { };
 
   jellyfin-ffmpeg = callPackage ../development/libraries/jellyfin-ffmpeg { };
