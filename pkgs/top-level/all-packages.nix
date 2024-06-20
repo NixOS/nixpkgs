@@ -2896,6 +2896,8 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
+  minase = callPackage ../applications/file-managers/minase { };
+
   mucommander = callPackage ../applications/file-managers/mucommander { };
 
   nnn = callPackage ../applications/file-managers/nnn { };
