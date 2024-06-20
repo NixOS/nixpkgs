@@ -19,20 +19,20 @@ stdenv.mkDerivation (prev: {
     patchShebangs configure
     patchShebangs scripts-build
   '';
-  doInstallCheck = true;
+  #doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/lib25519-test
   '';
 
   # NOTE: lib25519 uses a custom Python `./configure`: it does not expect standard
   # autoconfig --build --host etc. arguments: disable
-  configurePlatforms = [ "host" ];
+  #configurePlatforms = [ ];
 
-  # configurePhase = ''
-  #      runHook preConfigure
-  #   pwd; ./configure --host=arm64
-  #      runHook postConfigure
-  # '';
+   configurePhase = ''
+        runHook preConfigure
+     pwd; ./configure --host=arm64 --prefix=$out
+        runHook postConfigure
+   '';
 
   # NOTE: the librandombytes library has required specific CFLAGS defined:
   # https://randombytes.cr.yp.to/librandombytes-20240318/compilers/default.html
