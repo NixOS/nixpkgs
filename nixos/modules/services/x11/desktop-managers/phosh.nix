@@ -216,7 +216,7 @@ in
 
     security.pam.services.phosh = {};
 
-    hardware.opengl.enable = mkDefault true;
+    hardware.graphics.enable = mkDefault true;
 
     services.gnome.core-shell.enable = true;
     services.gnome.core-os-services.enable = true;
