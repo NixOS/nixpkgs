@@ -12176,6 +12176,8 @@ with pkgs;
 
   qrscan = callPackage ../tools/misc/qrscan { };
 
+  qsv = callPackage ../tools/text/qsv { };
+
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
   qtspim = libsForQt5.callPackage ../development/tools/misc/qtspim { };
