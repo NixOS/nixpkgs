@@ -36169,6 +36169,8 @@ with pkgs;
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 
+  starruler2 = callPackage ../games/starruler2 { };
+
   wipeout-rewrite = callPackage ../games/wipeout-rewrite {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
