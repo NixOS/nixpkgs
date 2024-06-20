@@ -11,6 +11,7 @@
 , config
 , guiSupport ? false
 , libX11
+, enableShared ? !stdenv.hostPlatform.isStatic # dlib has a build system that forces the user to choose between either shared or static libraries. See https://github.com/davisking/dlib/issues/923#issuecomment-2175865174
 , sse4Support ? stdenv.hostPlatform.sse4_1Support
 , avxSupport ? stdenv.hostPlatform.avxSupport
 , cudaSupport ? config.cudaSupport
@@ -32,6 +33,7 @@
   '';
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
     (lib.cmakeBool "USE_SSE4_INSTRUCTIONS" sse4Support)
     (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
     (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
