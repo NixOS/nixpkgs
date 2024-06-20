@@ -14,6 +14,7 @@
 , includes ? []
 , revert ? false
 , postFetch ? ""
+, sortHunks ? true
 , ...
 }@args:
 let
@@ -51,7 +52,7 @@ fetchurl ({
     "${patchutils}/bin/lsdiff" \
       ${lib.optionalString (relative != null) "-p1 -i ${lib.escapeShellArg relative}/'*'"} \
       "$out" \
-    | sort -u | sed -e 's/[*?]/\\&/g' \
+    ${lib.optionalString sortHunks "| sort -u"} | sed -e 's/[*?]/\\&/g' \
     | xargs -I{} \
       "${patchutils}/bin/filterdiff" \
       --include={} \
@@ -89,5 +90,5 @@ fetchurl ({
   '' + postFetch;
 } // builtins.removeAttrs args [
   "relative" "stripLen" "decode" "extraPrefix" "excludes" "includes" "revert"
-  "postFetch"
+  "postFetch" "sortHunks"
 ])
