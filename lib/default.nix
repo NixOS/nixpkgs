@@ -67,13 +67,13 @@ let
     inherit (builtins) add addErrorContext
       deepSeq elem elemAt genericClosure getAttr
       hasAttr isAttrs isBool isInt isList isPath isString
-      lessThan pathExists readFile replaceStrings
+      pathExists readFile replaceStrings
       sub trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum
       info showWarnings nixpkgsVersion version isInOldestRelease
-      mod compare splitByAndCompare seq
+      mod compare splitByAndCompare seq lessThan
       functionArgs setFunctionArgs isFunction toFunction mirrorFunctionArgs
       toHexString toBaseDigits inPureEvalMode;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
