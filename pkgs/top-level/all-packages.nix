@@ -31565,8 +31565,6 @@ with pkgs;
     singularity-overriden-nixos
     ;
 
-  sfwbar = callPackage ../applications/misc/sfwbar { };
-
   skate = callPackage ../applications/misc/skate { };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
