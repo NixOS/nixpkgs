@@ -1,6 +1,5 @@
 {
   addOpenGLRunpath,
-  cmake,
   allowedPatternsPath ? callPackage ./closure.nix { inherit allowedPatterns; },
   allowedPatterns ? rec {
     # This config is just an example.
@@ -19,16 +18,13 @@
     ];
     nvidia-gpu.unsafeFollowSymlinks = true;
   },
-  buildPackages,
   callPackage,
   extraWrapperArgs ? [ ],
-  formats,
   lib,
   makeWrapper,
   nix,
   nixosTests,
   python3Packages,
-  runCommand,
 }:
 
 let
