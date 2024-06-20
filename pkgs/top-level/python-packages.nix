@@ -4457,6 +4457,8 @@ self: super: with self; {
 
   flexmock = callPackage ../development/python-modules/flexmock { };
 
+  flexparser = callPackage ../development/python-modules/flexparser { };
+
   flickrapi = callPackage ../development/python-modules/flickrapi { };
 
   flipr-api = callPackage ../development/python-modules/flipr-api { };
