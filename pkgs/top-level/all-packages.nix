@@ -3199,8 +3199,6 @@ with pkgs;
 
   arangodb = callPackage ../servers/nosql/arangodb { };
 
-  arcanist = callPackage ../development/tools/misc/arcanist { php = php81; };
-
   arduino = arduino-core.override { withGui = true; };
 
   arduino-ci = callPackage ../development/embedded/arduino/arduino-ci { };
