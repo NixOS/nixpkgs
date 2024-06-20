@@ -65,7 +65,7 @@ let
     kernel = callLibs ./kernel.nix;
 
     inherit (builtins) addErrorContext
-      deepSeq elem elemAt genericClosure getAttr
+      elem elemAt genericClosure getAttr
       hasAttr isAttrs isBool isInt isList isPath isString
       pathExists readFile replaceStrings
       trace;
@@ -73,7 +73,7 @@ let
       bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum
       info showWarnings nixpkgsVersion version isInOldestRelease
-      mod compare splitByAndCompare seq lessThan add sub
+      mod compare splitByAndCompare seq deepSeq lessThan add sub
       functionArgs setFunctionArgs isFunction toFunction mirrorFunctionArgs
       toHexString toBaseDigits inPureEvalMode;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
