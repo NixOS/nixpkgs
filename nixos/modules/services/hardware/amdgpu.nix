@@ -10,11 +10,27 @@ in {
       series cards. Note: this removes support for analog video outputs,
       which is only available in the `radeon` driver
     '';
-    initrd.enable = lib.mkEnableOption ''
-      loading `amdgpu` kernelModule in stage 1.
-      Can fix lower resolution in boot screen during initramfs phase
-    '';
-    opencl.enable = lib.mkEnableOption ''OpenCL support using ROCM runtime library'';
+    enable = lib.mkEnableOption "AMD GPU";
+    initrd.enable = lib.mkOption {
+      description = ''
+        Enable loading `amdgpu` kernelModule in stage 1.
+        Can fix lower resolution in boot screen during initramfs phase
+      '';
+      type = lib.types.bool;
+      default = cfg.enable;
+      defaultText = "hardware.amdgpu.enable";
+    };
+    opencl.enable = lib.mkOption {
+      description = "Enable OpenCL support using Rusticl runtime library.";
+      type = lib.types.bool;
+      default = cfg.enable;
+      defaultText = "hardware.amdgpu.enable";
+    };
+    opencl.runtime = lib.mkOption {
+      description = "Enable OpenCL support using Rusticl runtime library.";
+      type = lib.types.enum [ "rusticl" "rocm" ];
+      default = "rusticl";
+    };
     # cfg.amdvlk option is defined in ./amdvlk.nix module
   };
 
@@ -30,7 +46,9 @@ in {
 
     hardware.opengl = lib.mkIf cfg.opencl.enable {
       enable = lib.mkDefault true;
-      extraPackages = [
+      extraPackages = if cfg.runtime == "rusticl" then [
+        pkgs.mesa.opencl
+      ] else [
         pkgs.rocmPackages.clr
         pkgs.rocmPackages.clr.icd
       ];
