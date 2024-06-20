@@ -3362,6 +3362,23 @@ let
         };
       };
 
+      ms-vscode-remote.remote-wsl = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "remote-wsl";
+          publisher = "ms-vscode-remote";
+          version = "0.88.2";
+          hash = "sha256-fl7fLNd3EHA9eMiPUIL/23SUiA81gveqZLFkqaHTX+Q=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/ms-vscode-remote.remote-wsl/changelog";
+          description = "Windows Subsystem for Linux support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl";
+          homepage = "https://code.visualstudio.com/docs/remote/wsl";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.uncenter ];
+        };
+      };
+
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare.vsliveshare { };
 
       mshr-h.veriloghdl = buildVscodeMarketplaceExtension {
