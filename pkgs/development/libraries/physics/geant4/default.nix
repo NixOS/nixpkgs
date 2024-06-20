@@ -32,6 +32,7 @@
 , libGLU, libGL
 , libXext
 , libXmu
+, darwin
 
 # For enablePython
 , boost
@@ -98,7 +99,8 @@ stdenv.mkDerivation rec {
   buildInputs =
     lib.optionals enableOpenGLX11 [ libGLU libXext libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
-    ++ lib.optionals enablePython [ boost_python python3 ];
+    ++ lib.optionals enablePython [ boost_python python3 ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.OpenGL ];
 
   propagatedBuildInputs = [ clhep expat xercesc zlib ]
     ++ lib.optionals enableOpenGLX11 [ libGL ]
