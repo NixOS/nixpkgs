@@ -88,7 +88,7 @@ let
       getBin getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
       mapCartesianProduct updateManyAttrsByPath;
-    inherit (self.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
+    inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
       reverseList listDfs toposort sort sortOn naturalSort compareLists take
