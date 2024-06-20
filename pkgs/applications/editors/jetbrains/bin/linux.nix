@@ -110,7 +110,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
       --set-default JDK_HOME "$jdk" \
       --set-default ANDROID_JAVA_HOME "$jdk" \
       --set-default JAVA_HOME "$jdk" \
-      --set-default JETBRAINSCLIENT_JDK "$jdk" \
+      --set-default JETBRAINS_CLIENT_JDK "$jdk" \
       --set-default ${hiName}_JDK "$jdk" \
       --set-default ${hiName}_VM_OPTIONS ${vmoptsFile}
 
