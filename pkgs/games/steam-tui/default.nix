@@ -2,27 +2,35 @@
 , rustPlatform
 , steamcmd
 , fetchFromGitHub
-, steam-run
+, openssl
+, pkg-config
 , runtimeShell
+, steam-run
 , withWine ? false
 , wine
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "steam-tui";
-  version = "0.1.0";
+  # 0.2.1 has build issues for the tests a later commit cleaned up
+  # (additional unreleased enchancements have been added as well)
+  version = "unstable-2022-12-24";
 
   src = fetchFromGitHub {
     owner = "dmadisetti";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-UTXYlPecv0MVonr9zZwfwopfC/Fdch/ZSCxqgUsem40=";
+    rev = "236a3b592c23d576730f6c168db33affb7dbff5a";
+    sha256 = "czNId8LBaI8T6ot/1xG/xfS34DMwpAC47WglGNLJF+8=";
   };
 
-  cargoSha256 = "sha256-VYBzwDLSV4N4qt2dNgIS399T2HIbPTdQ2rDIeheLlfo=";
+  cargoSha256 = "M7AOlfzRhmhDKYJCG9R9iJUtpgmI8I24wUTh4cI9S/c=";
 
-  buildInputs = [ steamcmd ]
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl steamcmd ]
     ++ lib.optional withWine wine;
+
+  checkFlags = [ "--skip=impure" ];
 
   preFixup = ''
     mv $out/bin/steam-tui $out/bin/.steam-tui-unwrapped
