@@ -66,7 +66,7 @@ let
 
     inherit (builtins) add addErrorContext
       deepSeq elem elemAt genericClosure getAttr
-      hasAttr head isAttrs isBool isInt isList isPath isString
+      hasAttr isAttrs isBool isInt isList isPath isString
       lessThan listToAttrs pathExists readFile replaceStrings seq
       sub substring trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
@@ -94,7 +94,7 @@ let
       reverseList listDfs toposort sort sortOn naturalSort compareLists take
       drop sublist last init crossLists unique allUnique intersectLists
       subtractLists mutuallyExclusive groupBy groupBy' concatLists genList
-      length tail;
+      length head tail;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       stringLength
       intersperse concatStringsSep concatMapStringsSep
