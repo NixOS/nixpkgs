@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , gtk3
 , git
-, colloid-gtk-theme
 , python3
 , sassc
 , nix-update-script
@@ -34,7 +33,8 @@ stdenvNoCC.mkDerivation {
     owner = "catppuccin";
     repo = "gtk";
     rev = "v${version}";
-    hash = "sha256-8KyZtZqVVz5UKuGdLrUsR2djD3nsJDliHMtvFtUVim8=";
+    fetchSubmodules = true;
+    hash = "sha256-q5/VcFsm3vNEw55zq/vcM11eo456SYE5TQA3g2VQjGc=";
   };
 
   nativeBuildInputs = [
@@ -45,12 +45,6 @@ stdenvNoCC.mkDerivation {
     git
     (python3.withPackages (ps: [ ps.catppuccin ]))
   ];
-
-  postUnpack = ''
-    rm -rf source/sources/colloid
-    cp -r ${colloid-gtk-theme.src} source/sources/colloid
-    chmod -R +w source/sources/colloid
-  '';
 
   dontConfigure = true;
   dontBuild = true;
