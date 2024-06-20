@@ -1,0 +1,41 @@
+From eaa36ed12c945dd5f3f60800fd44145a58e833db Mon Sep 17 00:00:00 2001
+From: Ethan Rooke <ethan@roo.ke>
+Date: Thu, 20 Jun 2024 09:14:50 -0500
+Subject: [PATCH 1/2] tests: make coiled an optional import
+
+Coiled has a non-free license, well no license as far as I can find.
+Refactored the one test which used it to skip the test if coiled is not
+installed.
+---
+ tests/test_shared.py | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/tests/test_shared.py b/tests/test_shared.py
+index 882daba..76b95a6 100644
+--- a/tests/test_shared.py
++++ b/tests/test_shared.py
+@@ -4,7 +4,6 @@ import functools
+ import textwrap
+ from contextlib import ExitStack as does_not_raise  # noqa: N813
+ 
+-import coiled
+ import pytest
+ from _pytask.shared import convert_to_enum
+ from _pytask.shared import find_duplicates
+@@ -76,5 +75,13 @@ def test_unwrap_task_function():
+     decorated = decorator(task)
+     assert unwrap_task_function(decorated) is task
+ 
++
++@pytest.mark.unit()
++def test_no_unwrap_coiled():
++    coiled = pytest.importorskip("coiled")
++
++    def task():
++        pass
++
+     coiled_decorated = coiled.function()(task)
+     assert unwrap_task_function(coiled_decorated) is coiled_decorated
+-- 
+2.45.1
+
