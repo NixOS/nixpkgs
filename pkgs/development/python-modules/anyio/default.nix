@@ -26,6 +26,9 @@
   pytestCheckHook,
   trustme,
   uvloop,
+
+  # smoke tests
+  starlette,
 }:
 
 buildPythonPackage rec {
@@ -95,6 +98,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "anyio" ];
+
+  passthru.tests = {
+    inherit starlette;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/agronholm/anyio/blob/${src.rev}/docs/versionhistory.rst";
