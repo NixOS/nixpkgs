@@ -6,6 +6,7 @@ let
     any
     attrByPath
     attrNames
+    attrValues
     catAttrs
     concatLists
     concatMap
@@ -801,11 +802,37 @@ let
       # yield a value computed from the definitions
       value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
 
-      warnDeprecation =
-        warnIf (opt.type.deprecationMessage != null)
-          "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
+      # Issue deprecation warnings recursively over all nested types of the
+      # given type. But don't recurse if a type with the same name was already
+      # track before in order to prevent infinite recursion. So this only
+      # warns once per type name.
+      # Returns the new set of track type names
 
-    in warnDeprecation opt //
+      maybeDeprecationWarning =
+        let
+          recurse = level: track: type:
+            if type ? recursiveId && track.recursive ? ${type.recursiveId} then
+              track
+            else if level > 10 then
+              track // { potentialInfiniteRecursion = true; }
+            else
+              foldl'
+                (recurse (level + 1))
+                (track // warnIf
+                  (! track.visited ? ${type.name} && type.deprecationMessage != null)
+                  "The type `types.${type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${type.deprecationMessage}" {
+                    visited =
+                      track.visited // { ${type.name} = null; };
+                    recursive = track.recursive // lib.optionalAttrs (type ? recursiveId) { ${type.recursiveId} = null; };
+                })
+                (attrValues type.nestedTypes);
+          result = recurse 0 { visited = { }; recursive = { }; potentialInfiniteRecursion = false; } opt.type;
+        in
+        warnIf (result.potentialInfiniteRecursion)
+          "The type of option `${showOption loc}' defined in ${showFiles opt.declarations} might have infinitely nested different types: ${toString (attrNames result.visited)}"
+          result;
+
+    in builtins.seq maybeDeprecationWarning opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
         inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;

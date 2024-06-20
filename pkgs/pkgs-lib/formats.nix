@@ -47,19 +47,19 @@ rec {
 
   json = {}: {
 
-    type = with lib.types; let
+    type = with lib.types; (fix (final: {
       valueType = nullOr (oneOf [
         bool
         int
         float
         str
         path
-        (attrsOf valueType)
-        (listOf valueType)
+        (attrsOf final.valueType)
+        (listOf final.valueType)
       ]) // {
         description = "JSON value";
       };
-    in valueType;
+    })).valueType;
 
     generate = name: value: pkgs.callPackage ({ runCommand, jq }: runCommand name {
       nativeBuildInputs = [ jq ];
@@ -83,19 +83,19 @@ rec {
       json2yaml "$valuePath" "$out"
     '') {};
 
-    type = with lib.types; let
+    type = with lib.types; (fix (final: {
       valueType = nullOr (oneOf [
         bool
         int
         float
         str
         path
-        (attrsOf valueType)
-        (listOf valueType)
+        (attrsOf final.valueType)
+        (listOf final.valueType)
       ]) // {
         description = "YAML value";
       };
-    in valueType;
+    })).valueType;
 
   };
 
@@ -254,19 +254,19 @@ rec {
   };
 
   toml = {}: json {} // {
-    type = with lib.types; let
+    type = with lib.types; (fix (final: {
       valueType = oneOf [
         bool
         int
         float
         str
         path
-        (attrsOf valueType)
-        (listOf valueType)
+        (attrsOf final.valueType)
+        (listOf final.valueType)
       ] // {
         description = "TOML value";
       };
-    in valueType;
+    })).valueType;
 
     generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
       nativeBuildInputs = [ remarshal ];
@@ -369,20 +369,19 @@ rec {
         '';
     in
     {
-      type = with lib.types; let
+      type = with lib.types; attrsOf (attrsOf (fix (final: {
         valueType = nullOr
           (oneOf [
             bool
             int
             float
             str
-            (attrsOf valueType)
-            (listOf valueType)
+            (attrsOf final.valueType)
+            (listOf final.valueType)
           ]) // {
           description = "Elixir value";
         };
-      in
-      attrsOf (attrsOf (valueType));
+      })).valueType);
 
       lib =
         let
@@ -480,19 +479,19 @@ rec {
   # Outputs a succession of Python variable assignments
   # Useful for many Django-based services
   pythonVars = {}: {
-    type = with lib.types; let
+    type = with lib.types; attrsOf (types.fix (final: {
       valueType = nullOr(oneOf [
         bool
         float
         int
         path
         str
-        (attrsOf valueType)
-        (listOf valueType)
+        (attrsOf final.valueType)
+        (listOf final.valueType)
       ]) // {
         description = "Python value";
       };
-    in attrsOf valueType;
+    })).valueType;
     generate = name: value: pkgs.callPackage ({ runCommand, python3, black }: runCommand name {
       nativeBuildInputs = [ python3 black ];
       value = builtins.toJSON value;
