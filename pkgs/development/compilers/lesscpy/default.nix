@@ -13,13 +13,17 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "lesscpy" ];
   propagatedBuildInputs = with python3Packages; [ ply six ];
 
-  doCheck = false; # Really weird test failures (`nix-build-python2.css not found`)
+  nativeCheckInputs = with python3Packages; [
+    tox
+    nose
+    flake8
+  ];
 
   meta = with lib; {
     description = "Python LESS Compiler";
     mainProgram = "lesscpy";
     homepage    = "https://github.com/lesscpy/lesscpy";
     license     = licenses.mit;
-    maintainers = with maintainers; [ s1341 ];
+    maintainers = with maintainers; [ s1341 WhiteBlackGoose ];
   };
 }
