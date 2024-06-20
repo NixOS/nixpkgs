@@ -6,6 +6,7 @@
 }:
 
 mkDerivation {
+  noLibc = true;
   path = "libexec/ld.elf_so";
   meta.platforms = lib.platforms.netbsd;
   LIBC_PIC = "${libc}/lib/libc_pic.a";
