@@ -487,6 +487,8 @@ self: super: with self; {
 
   alarmdecoder = callPackage ../development/python-modules/alarmdecoder { };
 
+  albucore = callPackage ../development/python-modules/albucore { };
+
   albumentations = callPackage ../development/python-modules/albumentations { };
 
   ale-py = callPackage ../development/python-modules/ale-py { };
