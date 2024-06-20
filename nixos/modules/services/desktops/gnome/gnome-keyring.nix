@@ -43,6 +43,9 @@ in
         gdm-password.enableGnomeKeyring = true;
         gdm-autologin.enableGnomeKeyring = true;
       })
+      (lib.mkIf (config.services.xserver.displayManager.gdm.enable && config.services.fprintd.enable) {
+        gdm-fingerprint.enableGnomeKeyring = true;
+      })
     ];
 
     security.wrappers.gnome-keyring-daemon = {
