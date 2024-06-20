@@ -36,12 +36,10 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   dotnetBuildFlags = [ "--no-self-contained" ];
 
-  preInstall = ''
-    makeWrapperArgs+=(
-      --add-flags "--ffmpeg ${jellyfin-ffmpeg}/bin/ffmpeg"
-      --add-flags "--webdir ${jellyfin-web}/share/jellyfin-web"
-    )
-  '';
+  makeWrapperArgs = [
+    "--add-flags" "--ffmpeg=${jellyfin-ffmpeg}/bin/ffmpeg"
+    "--add-flags" "--webdir=${jellyfin-web}/share/jellyfin-web"
+  ];
 
   passthru.tests = {
     smoke-test = nixosTests.jellyfin;

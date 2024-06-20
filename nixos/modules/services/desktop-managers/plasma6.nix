@@ -146,6 +146,7 @@ in {
         dolphin-plugins
         spectacle
         ffmpegthumbs
+        krdp
       ];
     in
       requiredPackages

@@ -17,6 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-pqHDSQQMvfas9yeyhs5cWokBPISQygz2aHf6W5Zc+co=";
 
+  ldflags = [
+    "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.rev}'"
+  ];
+
   subPackages = [ "cmd/spicedb" ];
 
   meta = with lib; {

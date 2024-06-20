@@ -44,6 +44,17 @@ let
       x86hash   = "";
       x64suffix = "65";
       x86suffix = "";
+      homepage  = "https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-latest12.html";
+    };
+
+    "24.05.0" = {
+      major     = "24";
+      minor     = "5";
+      patch     = "0";
+      x64hash   = "sha256-pye2JOilSbp8PFCpVXFkrRW98E8klCqoisVSWjR38nE=";
+      x86hash   = "";
+      x64suffix = "76";
+      x86suffix = "";
       homepage  = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
     };
   };

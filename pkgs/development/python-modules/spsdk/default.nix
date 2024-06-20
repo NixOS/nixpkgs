@@ -59,6 +59,7 @@ buildPythonPackage rec {
     "click"
     "cryptography"
     "platformdirs"
+    "requests"
     "typing-extensions"
   ];
 
