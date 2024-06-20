@@ -311,5 +311,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ danth ];
+  meta.maintainers = with lib.maintainers; [ danth linsui ];
 }
