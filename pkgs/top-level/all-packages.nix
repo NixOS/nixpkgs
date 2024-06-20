@@ -38241,6 +38241,8 @@ with pkgs;
 
   groove = callPackage ../applications/science/programming/groove { };
 
+  tapaal = callPackage ../applications/science/programming/tapaal { };
+
   plm = callPackage ../applications/science/programming/plm { };
 
   ### SCIENCE/LOGIC
