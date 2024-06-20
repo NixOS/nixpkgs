@@ -657,6 +657,11 @@ stdenvNoCC.mkDerivation {
       echo "-mtune=${tune}" >> $out/nix-support/cc-cflags-before
     '')
 
+    # Clang doesn't parse gnuabielfv{1,2} triplet parts for powerpc64{,le}, need to manually override abi
+    + optionalString (isClang && targetPlatform.isPower64 && lib.strings.hasPrefix "gnuabielf" targetPlatform.parsed.abi.name) ''
+      echo "-mabi=${targetPlatform.parsed.abi.abi}" >> $out/nix-support/cc-cflags-before
+    ''
+
     # TODO: categorize these and figure out a better place for them
     + optionalString targetPlatform.isWindows ''
       hardening_unsupported_flags+=" pic"
