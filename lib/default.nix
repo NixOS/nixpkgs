@@ -64,7 +64,7 @@ let
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
 
-    inherit (builtins) add addErrorContext attrNames
+    inherit (builtins) add addErrorContext
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isPath isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
@@ -79,7 +79,7 @@ let
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
-      getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
+      getAttrFromPath attrVals attrNames attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs
       mapAttrs' mapAttrsToList attrsToList concatMapAttrs mapAttrsRecursive
       mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
