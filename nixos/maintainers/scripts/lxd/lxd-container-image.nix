@@ -14,9 +14,9 @@
 
   # copy the config for nixos-rebuild
   system.activationScripts.config = let
-    config = pkgs.substituteAll {
+    config = pkgs.substitute {
       src = ./lxd-container-image-inner.nix;
-      stateVersion = lib.trivial.release;
+      substitutions = [ "--subst-var-by" "stateVersion" lib.trivial.release ];
     };
   in ''
     if [ ! -e /etc/nixos/configuration.nix ]; then

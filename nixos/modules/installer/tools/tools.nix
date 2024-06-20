@@ -6,7 +6,7 @@
 with lib;
 
 let
-  makeProg = args: pkgs.substituteAll (args // {
+  makeProg = args: pkgs.substitute (args // {
     dir = "bin";
     isExecutable = true;
     nativeBuildInputs = [
@@ -20,19 +20,18 @@ let
   nixos-build-vms = makeProg {
     name = "nixos-build-vms";
     src = ./nixos-build-vms/nixos-build-vms.sh;
-    inherit (pkgs) runtimeShell;
+    substitutions = [
+      "--subst-var-by" "runtimeShell" pkgs.runtimeShell
+    ];
     manPage = ./manpages/nixos-build-vms.8;
   };
 
   nixos-install = makeProg {
     name = "nixos-install";
     src = ./nixos-install.sh;
-    inherit (pkgs) runtimeShell;
-    nix = config.nix.package.out;
-    path = makeBinPath [
-      pkgs.jq
-      nixos-enter
-      pkgs.util-linuxMinimal
+    substitutions = [
+      "--subst-var-by" "path" (makeBinPath [ pkgs.jq nixos-enter pkgs.util-linuxMinimal config.nix.package.out ])
+      "--subst-var-by" "runtimeShell" pkgs.runtimeShell
     ];
     manPage = ./manpages/nixos-install.8;
   };
@@ -42,39 +41,53 @@ let
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
-    perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
-    detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
-    btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
-    inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
-    xserverEnabled = config.services.xserver.enable;
+    substitutions = [
+      "--subst-var-by" "perl" "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl"
+      "--subst-var-by" "runtimeShell" pkgs.runtimeShell
+      "--subst-var-by" "btrfs" "${pkgs.btrfs-progs}/bin/btrfs"
+      "--subst-var-by" "hostPlatformSystem" pkgs.stdenv.hostPlatform.system
+      "--subst-var-by" "detectvirt" "${config.systemd.package}/bin/systemd-detect-virt"
+      "--subst-var-by" "configuration" config.system.nixos-generate-config.configuration
+      "--subst-var-by" "desktopConfiguration" config.system.nixos-generate-config.desktopConfiguration
+      "--subst-var-by" "xserverEnabled" config.services.xserver.enable
+    ];
     manPage = ./manpages/nixos-generate-config.8;
   };
 
   inherit (pkgs) nixos-option;
 
+  nixos-version-json = builtins.toJSON (
+    {
+      nixosVersion = config.system.nixos.version;
+    }
+    // optionalAttrs (config.system.nixos.revision != null) {
+      nixpkgsRevision = config.system.nixos.revision;
+    }
+    // optionalAttrs (config.system.configurationRevision != null) {
+      configurationRevision = config.system.configurationRevision;
+    }
+  );
+
   nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
-    inherit (pkgs) runtimeShell;
-    inherit (config.system.nixos) version codeName revision;
-    inherit (config.system) configurationRevision;
-    json = builtins.toJSON ({
-      nixosVersion = config.system.nixos.version;
-    } // optionalAttrs (config.system.nixos.revision != null) {
-      nixpkgsRevision = config.system.nixos.revision;
-    } // optionalAttrs (config.system.configurationRevision != null) {
-      configurationRevision = config.system.configurationRevision;
-    });
+    substitutions = [
+      "--subst-var-by" "version" config.system.nixos.version
+      "--subst-var-by" "codeName" config.system.nixos.codeName
+      "--subst-var-by" "revision" config.system.nixos.revision
+      "--subst-var-by" "configurationRevision" config.system.configurationRevision
+      "--subst-var-by" "runtimeShell" pkgs.runtimeShell
+      "--subst-var-by" "json" nixos-version-json
+    ];
     manPage = ./manpages/nixos-version.8;
   };
 
   nixos-enter = makeProg {
     name = "nixos-enter";
     src = ./nixos-enter.sh;
-    inherit (pkgs) runtimeShell;
-    path = makeBinPath [
-      pkgs.util-linuxMinimal
+    substitutions = [
+      "--subst-var-by" "runtimeShell" pkgs.runtimeShell
+      "--subst-var-by" "path" (makeBinPath [ pkgs.util-linuxMinimal ])
     ];
     manPage = ./manpages/nixos-enter.8;
   };
