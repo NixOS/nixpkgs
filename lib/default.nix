@@ -65,7 +65,7 @@ let
     kernel = callLibs ./kernel.nix;
 
     inherit (builtins) addErrorContext
-      genericClosure getAttr
+      genericClosure
       isPath
       pathExists readFile replaceStrings
       trace;
@@ -87,7 +87,7 @@ let
       recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput
       getBin getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
-      mapCartesianProduct updateManyAttrsByPath listToAttrs hasAttr isAttrs intersectAttrs removeAttrs;
+      mapCartesianProduct updateManyAttrsByPath listToAttrs hasAttr getAttr isAttrs intersectAttrs removeAttrs;
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       filter ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
