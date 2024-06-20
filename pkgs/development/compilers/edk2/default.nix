@@ -1,10 +1,7 @@
 { stdenv
-, clangStdenv
 , fetchFromGitHub
 , fetchpatch
-, runCommand
 , libuuid
-, python3
 , bc
 , lib
 , buildPackages
@@ -31,7 +28,7 @@ buildType = if stdenv.isDarwin then
   else
     "GCC5";
 
-edk2 = stdenv.mkDerivation rec {
+edk2 = stdenv.mkDerivation {
   pname = "edk2";
   version = "202402";
 
@@ -48,28 +45,26 @@ edk2 = stdenv.mkDerivation rec {
     })
   ];
 
-  srcWithVendoring = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    hash = "sha256-Nurm6QNKCyV6wvbj0ELdYAL7mbZ0yg/tTwnEJ+N18ng=";
+    hash = "sha256-xIOaM4l08R7OqYgCIl17qeKO0xWy+3qTwyrknzQWA40=";
+
+    # We don't want EDK2 to keep track of OpenSSL,
+    # they're frankly bad at it.
+    postFetch = ''
+      rm -rf $out/CryptoPkg/Library/OpensslLib/openssl
+      mkdir -p $out/CryptoPkg/Library/OpensslLib/openssl
+      tar --strip-components=1 -xf ${buildPackages.openssl.src} -C $out/CryptoPkg/Library/OpensslLib/openssl
+
+      # Fix missing INT64_MAX include that edk2 explicitly does not provide
+      # via it's own <stdint.h>. Let's pull in openssl's definition instead:
+      sed -i $out/CryptoPkg/Library/OpensslLib/openssl/crypto/property/property_parse.c \
+          -e '1i #include "internal/numbers.h"'
+    '';
   };
-
-  # We don't want EDK2 to keep track of OpenSSL,
-  # they're frankly bad at it.
-  src = runCommand "edk2-unvendored-src" { } ''
-    cp --no-preserve=mode -r ${srcWithVendoring} $out
-    rm -rf $out/CryptoPkg/Library/OpensslLib/openssl
-    mkdir -p $out/CryptoPkg/Library/OpensslLib/openssl
-    tar --strip-components=1 -xf ${buildPackages.openssl.src} -C $out/CryptoPkg/Library/OpensslLib/openssl
-    chmod -R +w $out/
-
-    # Fix missing INT64_MAX include that edk2 explicitly does not provide
-    # via it's own <stdint.h>. Let's pull in openssl's definition instead:
-    sed -i $out/CryptoPkg/Library/OpensslLib/openssl/crypto/property/property_parse.c \
-        -e '1i #include "internal/numbers.h"'
-  '';
 
   nativeBuildInputs = [ pythonEnv ];
   depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.bash ];
