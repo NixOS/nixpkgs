@@ -24,6 +24,12 @@
 mkDerivation {
   noLibc = true;
   path = "lib/libc";
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "tags"
+  ];
   USE_FORT = "yes";
   MKPROFILE = "no";
   extraPaths = [
@@ -68,17 +74,17 @@ mkDerivation {
   makeFlags = defaultMakeFlags ++ [ "FILESDIR=$(out)/var/db" ];
   postInstall = ''
     pushd ${headers}
-    find . -type d -exec mkdir -p $out/\{} \;
-    find . \( -type f -o -type l \) -exec cp -pr \{} $out/\{} \;
+    find include -type d -exec mkdir -p "$dev/{}" ';'
+    find include '(' -type f -o -type l ')' -exec cp -pr "{}" "$dev/{}" ';'
     popd
 
     pushd ${csu}
-    find . -type d -exec mkdir -p $out/\{} \;
-    find . \( -type f -o -type l \) -exec cp -pr \{} $out/\{} \;
+    find lib -type d -exec mkdir -p "$out/{}" ';'
+    find lib '(' -type f -o -type l ')' -exec cp -pr "{}" "$out/{}" ';'
     popd
 
     NIX_CFLAGS_COMPILE+=" -B$out/lib"
-    NIX_CFLAGS_COMPILE+=" -I$out/include"
+    NIX_CFLAGS_COMPILE+=" -I$dev/include"
     NIX_LDFLAGS+=" -L$out/lib"
 
     make -C $BSDSRCDIR/lib/libpthread $makeFlags
@@ -104,6 +110,8 @@ mkDerivation {
 
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags install
+
+    moveToOutput var/db/libc.tags "$tags"
   '';
   postPatch = ''
     sed -i 's,/usr\(/include/sys/syscall.h\),${headers}\1,g' \
