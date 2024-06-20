@@ -8,7 +8,7 @@
   matplotlib,
   pynose,
   pillow,
-  pytestCheckHook,
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   disabledTests = [
     # Broken since b6e98f18950c2b5dbdc725c1181df2ad1be19fee
