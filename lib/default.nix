@@ -66,7 +66,7 @@ let
 
     inherit (builtins) addErrorContext
       genericClosure getAttr
-      isPath isString
+      isPath
       pathExists readFile replaceStrings
       trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
@@ -96,7 +96,7 @@ let
       subtractLists mutuallyExclusive groupBy groupBy' concatLists genList
       length head tail elem elemAt isList;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
-      stringLength substring
+      stringLength substring isString
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
       makeLibraryPath makeIncludePath makeBinPath optionalString
