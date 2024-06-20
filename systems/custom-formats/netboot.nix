@@ -15,12 +15,11 @@
       nuke-refs $out/kernel
     '';
     xnode_version = "0";
-    xnode_uuid = "d9be30bf-1501-446d-8815-23fcb37a375c"; # XU Controller inserts these already
-    xnode_access_token = "RQ7YYfRP2J8BNkNDDQu5Kp8oLC1ajZMNLDtRYxLX8ylhFeImgq1RLvzp6FYOqa1B";
+    xnode_uuid = "BFA511IU2MV-RAZSDP7BBME";
+    xnode_access_token = "BmK6+mx7lHDS6whoQIAnh5QvvqRvXtYaSqHSV/Tqlyzilsw8q7frSAJ2kj8ja47r0we4UtrpzonCVxmPV3AUKA==";
     ipxe_script = pkgs.writeTextFile {
       executable = false;
       name = "ipxe";
-
       text = ''
         #!ipxe
         # TODO: MAKE CONFIGURABLE WITH iPXE VARS for CHAINLOAD
