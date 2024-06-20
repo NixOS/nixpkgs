@@ -233,14 +233,25 @@ in {
         User = "gns3";
         WorkingDirectory = "%S/gns3";
 
+        # Required for ubridge integration to work
+        #
+        # GNS3 needs to run SUID binaries (ubridge)
+        # but NoNewPrivileges breaks execution of SUID binaries
+        DynamicUser = lib.mkForce false;
+        NoNewPrivileges = lib.mkForce false;
+        RestrictSUIDSGID = lib.mkForce false;
+        PrivateUsers = lib.mkForce false;
+
         # Hardening
-        DeviceAllow = lib.optional flags.enableLibvirtd "/dev/kvm";
+        DeviceAllow = [
+          "/dev/net/tap rw" # ubridge needs access to tap devices
+        ] ++ lib.optionals flags.enableLibvirtd [
+          "/dev/kvm"
+        ];
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
         PrivateTmp = true;
-        PrivateUsers = true;
         # Don't restrict ProcSubset because python3Packages.psutil requires read access to /proc/stat
         # ProcSubset = "pid";
         ProtectClock = true;
@@ -261,8 +272,7 @@ in {
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        UMask = "0077";
+        UMask = "0022";
       };
     };
   };
