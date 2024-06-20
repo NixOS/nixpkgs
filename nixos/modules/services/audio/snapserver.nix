@@ -37,6 +37,7 @@ let
         "&${key}=${value}";
     in
       "--stream.stream=\"${opt.type}://" + os opt.location + "?" + os' "name=" name
+        + os' "&sampleformat=" opt.sampleFormat + os' "&codec=" opt.codec
         + concatStrings (mapAttrsToList flatten opt.query) + "\"";
 
   optionalNull = val: ret:
