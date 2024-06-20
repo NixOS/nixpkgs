@@ -52,17 +52,18 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1712222121,
-        "narHash": "sha256-8f3glF4uwsPlDvaKDRgXD9xGe4YoCH4jA8ICxy/NbCo=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "23ff7d9dc4f3d553939e7bfe0d2667198f993536",
+        "lastModified": 1718771219,
+        "narHash": "sha256-pmjP5ePc1jz+Okona3HxD7AYT0wbrCwm9bXAlj08nDM=",
+        "owner": "openmesh-network",
+        "repo": "xnodepkgs",
+        "rev": "373929394f8f5fb03e84caabf7ffab10e318e299",
         "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
-        "ref": "nixpkgs-unstable",
-        "type": "indirect"
+        "owner": "openmesh-network",
+        "ref": "dev",
+        "repo": "xnodepkgs",
+        "type": "github"
       }
     },
     "root": {

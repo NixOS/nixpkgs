@@ -1,7 +1,7 @@
 {
   description = "Xnode OS";
   inputs = {
-    nixpkgs.url = "flake:nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:openmesh-network/xnodepkgs/dev";
     nixos-generators.url = "github:nix-community/nixos-generators";
   };
   outputs = inputs:
