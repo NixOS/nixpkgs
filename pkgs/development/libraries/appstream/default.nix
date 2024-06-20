@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , meson
 , mesonEmulatorHook
+, appstream
 , ninja
 , pkg-config
 , cmake
@@ -80,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     gperf
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
+    appstream
   ];
 
   buildInputs = [
