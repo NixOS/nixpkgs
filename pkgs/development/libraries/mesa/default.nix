@@ -272,6 +272,7 @@ in stdenv.mkDerivation {
     flex
     file
     python3Packages.python
+    python3Packages.packaging
     python3Packages.pycparser
     python3Packages.mako
     python3Packages.ply
