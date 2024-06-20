@@ -1,0 +1,12 @@
+diff --git a/vpp-api/vapi/vapi_cpp_test.cpp b/vpp-api/vapi/vapi_cpp_test.cpp
+index c0e0cdc3a..b0a39428b 100644
+--- a/vpp-api/vapi/vapi_cpp_test.cpp
++++ b/vpp-api/vapi/vapi_cpp_test.cpp
+@@ -16,6 +16,7 @@
+  */
+
+ #include <memory>
++#include <array>
+ #include <stdio.h>
+ #include <unistd.h>
+ #include <assert.h>

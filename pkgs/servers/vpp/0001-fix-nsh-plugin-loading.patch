@@ -1,0 +1,70 @@
+From 1371753d43dba32667b5a63354d22f96cdc2cc88 Mon Sep 17 00:00:00 2001
+From: Alexander Skorichenko <askorichenko@netgate.com>
+Date: Fri, 14 Jul 2023 17:18:34 +0200
+Subject: [PATCH] nsh: Fix plugin loading
+
+Converting GRE to a plugin (VPP-2044) left nsh-plugin with
+    plugin/load: nsh_plugin.so: undefined symbol: gre4_input_node
+    plugin/load: Failed to load plugin 'nsh_plugin.so'
+
+Export GRE symbols, correct NSH pointers to enable NSH plugin.
+
+Type: fix
+
+Change-Id: I0d71e620c1bb3590c0fff408914948396420c1bd
+Signed-off-by: Alexander Skorichenko <askorichenko@netgate.com>
+---
+
+diff --git a/plugins/gre/node.c b/plugins/gre/node.c
+index 7ee22c3..85bf226 100644
+--- a/plugins/gre/node.c
++++ b/plugins/gre/node.c
+@@ -21,6 +21,11 @@
+ #include <vnet/mpls/mpls.h>
+ #include <vppinfra/sparse_vec.h>
+
++#ifndef CLIB_MARCH_VARIANT
++__clib_export vlib_node_registration_t gre4_input_node;
++__clib_export vlib_node_registration_t gre6_input_node;
++#endif
++
+ #define foreach_gre_input_next                                                \
+   _ (PUNT, "error-punt")                                                      \
+   _ (DROP, "error-drop")                                                      \
+diff --git a/plugins/nsh/nsh.c b/plugins/nsh/nsh.c
+index 3c804e9..2efc02f 100644
+--- a/plugins/nsh/nsh.c
++++ b/plugins/nsh/nsh.c
+@@ -189,6 +189,7 @@
+   clib_error_t *error = 0;
+   uword next_node;
+   vlib_node_registration_t *vxlan4_input, *vxlan6_input;
++  vlib_node_registration_t *gre4_input, *gre6_input;
+
+   /* Init the main structures from VPP */
+   nm->vlib_main = vm;
+@@ -240,15 +241,16 @@
+   vlib_node_add_next (vm, vxlan6_gpe_input_node.index,
+ 		      nsh_aware_vnf_proxy_node.index);
+
+-  vlib_node_add_next (vm, gre4_input_node.index, nm->nsh_input_node_index);
+-  vlib_node_add_next (vm, gre4_input_node.index, nm->nsh_proxy_node_index);
+-  vlib_node_add_next (vm, gre4_input_node.index,
+-		      nsh_aware_vnf_proxy_node.index);
++  gre4_input = vlib_get_plugin_symbol ("gre_plugin.so", "gre4_input_node");
++  gre6_input = vlib_get_plugin_symbol ("gre_plugin.so", "gre6_input_node");
+
+-  vlib_node_add_next (vm, gre6_input_node.index, nm->nsh_input_node_index);
+-  vlib_node_add_next (vm, gre6_input_node.index, nm->nsh_proxy_node_index);
+-  vlib_node_add_next (vm, gre6_input_node.index,
+-		      nsh_aware_vnf_proxy_node.index);
++  vlib_node_add_next (vm, gre4_input->index, nm->nsh_input_node_index);
++  vlib_node_add_next (vm, gre4_input->index, nm->nsh_proxy_node_index);
++  vlib_node_add_next (vm, gre4_input->index, nsh_aware_vnf_proxy_node.index);
++
++  vlib_node_add_next (vm, gre6_input->index, nm->nsh_input_node_index);
++  vlib_node_add_next (vm, gre6_input->index, nm->nsh_proxy_node_index);
++  vlib_node_add_next (vm, gre6_input->index, nsh_aware_vnf_proxy_node.index);
+
+   /* Add NSH-Proxy support */
+   vxlan4_input =

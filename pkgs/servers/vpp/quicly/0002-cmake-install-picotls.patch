@@ -1,0 +1,30 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d1d6c09..90d7221 100644
+--- a/deps/picotls/CMakeLists.txt
++++ b/deps/picotls/CMakeLists.txt
+@@ -13,6 +13,9 @@ IF (WITH_DTRACE)
+ ENDIF ()
+ 
+ SET(CMAKE_C_FLAGS "-std=c99 -Wall -O2 -g ${CC_WARNING_FLAGS} ${CMAKE_C_FLAGS}")
++SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
++SET(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
++
+ INCLUDE_DIRECTORIES(
+     deps/cifra/src/ext
+     deps/cifra/src
+@@ -161,6 +164,15 @@ TARGET_LINK_LIBRARIES(ptlsbench ${PTLSBENCH_LIBS})
+ 
+ ADD_CUSTOM_TARGET(check env BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR} prove --exec '' -v ${CMAKE_CURRENT_BINARY_DIR}/*.t t/*.t WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DEPENDS ${TEST_EXES} cli)
+ 
++INSTALL (DIRECTORY ${CMAKE_SOURCE_DIR}/include/
++    DESTINATION include
++    FILES_MATCHING PATTERN "*.h")
++
++INSTALL(TARGETS picotls-core picotls-openssl
++        RUNTIME DESTINATION bin
++        LIBRARY DESTINATION lib
++        ARCHIVE DESTINATION lib)
++
+ IF (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+      SET(CMAKE_C_FLAGS "-D_GNU_SOURCE -pthread ${CMAKE_C_FLAGS}")
+ ELSEIF ("${CMAKE_SYSTEM_NAME}" MATCHES "SunOS")

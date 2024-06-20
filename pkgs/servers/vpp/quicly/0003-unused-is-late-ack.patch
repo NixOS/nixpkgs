@@ -1,0 +1,13 @@
+diff --git a/lib/quicly.c b/lib/quicly.c
+index 82ba627..8c0163e 100644
+--- a/lib/quicly.c
++++ b/lib/quicly.c
+@@ -4713,7 +4713,7 @@ static int handle_ack_frame(quicly_conn_t *conn, struct st_quicly_handle_payload
+             /* process newly acked packet */
+             if (state->epoch != sent->ack_epoch)
+                 return QUICLY_TRANSPORT_ERROR_PROTOCOL_VIOLATION;
+-            int is_late_ack = 0;
++            int __attribute__((unused)) is_late_ack = 0;
+             if (sent->ack_eliciting) {
+                 includes_ack_eliciting = 1;
+                 if (sent->cc_bytes_in_flight == 0) {

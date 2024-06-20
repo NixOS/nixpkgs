@@ -3204,6 +3204,15 @@
     githubId = 85318248;
     name = "Carlos Henrique Craveiro Aquino Veras";
   };
+  cariandrum22 = {
+    email = "cariandrum22@gmail.com";
+    githubId = 1421516;
+    github = "cariandrum22";
+    name = "Takafumi Asano";
+    keys = [{
+      fingerprint = "48F3 02B6 3152 5FA4 D5A4  0106 AC7A A417 4AC6 4BA5";
+    }];
+  };
   carlosdagos = {
     email = "m@cdagostino.io";
     github = "carlosdagos";
