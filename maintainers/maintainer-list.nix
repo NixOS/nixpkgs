@@ -4260,6 +4260,12 @@
     github = "d4ilyrun";
     githubId = 34611103;
   };
+  d4rkstar = {
+    name = "Bruno Salzano";
+    email = "d4rkstar@gmail.com";
+    github = "d4rkstar";
+    githubId = 4957015;
+  };
   dadada = {
     name = "dadada";
     email = "dadada@dadada.li";
@@ -13628,6 +13634,12 @@
     github = "mschwaig";
     githubId = 3856390;
     email = "mschwaig+nixpkgs@eml.cc";
+  };
+  msciabarra = {
+    email = "msciabarra@apache.org";
+    github = "sciabarracom";
+    githubId = 30654959;
+    name = "Michele Sciabarra";
   };
   msiedlarek = {
     email = "mikolaj@siedlarek.pl";
