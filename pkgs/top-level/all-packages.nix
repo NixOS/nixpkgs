@@ -36830,6 +36830,15 @@ with pkgs;
   minetest-touch = minetest.override { buildServer = false; withTouchSupport = true; };
   minetestserver = minetest.override { buildClient = false; };
 
+  minetest-mods = callPackage ../games/minetest/mods { };
+
+  minetestWithMods = import ../games/minetest/minetest-with-mods.nix
+                                pkgs
+                                {
+                                    inherit minetest-mods;
+                                    inherit minetest;
+                                  };
+
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;
   };
