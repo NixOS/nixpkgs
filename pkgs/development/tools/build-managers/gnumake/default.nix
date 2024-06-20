@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     # See https://github.com/NixOS/nixpkgs/issues/51221 for discussion.
     ++ lib.optional stdenv.isDarwin "ac_cv_struct_st_mtim_nsec=no";
 
-  outputs = [ "out" "man" "info" ];
+  outputs = [ "out" "man" "info" "dev" ];
   separateDebugInfo = true;
 
   passthru.tests = {
