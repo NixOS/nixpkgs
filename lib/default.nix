@@ -65,7 +65,7 @@ let
     kernel = callLibs ./kernel.nix;
 
     inherit (builtins) add addErrorContext
-      deepSeq elem elemAt filter genericClosure genList getAttr
+      deepSeq elem elemAt genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isPath isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail trace;
@@ -89,7 +89,7 @@ let
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
       mapCartesianProduct updateManyAttrsByPath intersectAttrs removeAttrs;
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
-      ifilter0 concatMap flatten remove findSingle findFirst any all count
+      filter ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
       reverseList listDfs toposort sort sortOn naturalSort compareLists take
       drop sublist last init crossLists unique allUnique intersectLists
