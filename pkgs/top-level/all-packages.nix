@@ -2508,6 +2508,8 @@ with pkgs;
 
   labctl = callPackage ../tools/networking/labctl { };
 
+  legdur = callPackage ../tools/misc/legdur { };
+
   legit = callPackage ../applications/version-management/legit { };
 
   legit-web = callPackage ../applications/version-management/legit-web { };
