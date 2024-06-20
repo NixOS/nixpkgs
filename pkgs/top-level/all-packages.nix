@@ -8961,8 +8961,6 @@ with pkgs;
 
   httpie = with python3Packages; toPythonApplication httpie;
 
-  httping = callPackage ../tools/networking/httping { };
-
   httplz = callPackage ../tools/networking/httplz { };
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
