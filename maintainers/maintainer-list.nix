@@ -15989,6 +15989,12 @@
     githubId = 146413;
     name = "Tobias Poschwatta";
   };
+  povik = {
+    email = "povik+nix@cutebit.org";
+    github = "povik";
+    githubId = 382160;
+    name = "Martin Povišer";
+  };
   poweredbypie = {
     name = "poweredbypie";
     github = "poweredbypie";
