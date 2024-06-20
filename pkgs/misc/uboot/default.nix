@@ -54,6 +54,7 @@ let
   , extraPatches ? []
   , extraMakeFlags ? []
   , extraMeta ? {}
+  , extraMaintainers ? []
   , crossTools ? false
   , ... } @ args: stdenv.mkDerivation ({
     pname = "uboot-${defconfig}";
@@ -133,9 +134,9 @@ let
       homepage = "https://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
+      maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ] ++ extraMaintainers;
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" "pythonScriptsToInstall" ]));
+  } // removeAttrs args [ "extraMeta" "pythonScriptsToInstall" "extraMaintainers" ]));
 in {
   inherit buildUBoot;
 
@@ -375,6 +376,7 @@ in {
   ubootOlimexA64Teres1 = buildUBoot {
     defconfig = "teres_i_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
+    extraMaintainers = with lib.maintainers; [ kreyren ];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
     # Using /dev/null here is upstream-specified way that disables the inclusion of crust-firmware as it's not yet packaged and without which the build will fail -- https://docs.u-boot.org/en/latest/board/allwinner/sunxi.html#building-the-crust-management-processor-firmware
     SCP = "/dev/null";

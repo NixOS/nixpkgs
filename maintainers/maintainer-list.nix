@@ -10795,6 +10795,12 @@
     githubId = 4032;
     name = "Kristoffer Thømt Ravneberg";
   };
+  kreyren = {
+    email = "kreyren@fsfe.org";
+    github = "kreyren";
+    githubId = 11302521;
+    name = "Jacob Hrbek";
+  };
   kristian-brucaj = {
     email = "kbrucaj@gmail.com";
     github = "Flameslice";
