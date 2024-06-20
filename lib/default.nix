@@ -66,7 +66,7 @@ let
 
     inherit (builtins) addErrorContext
       genericClosure getAttr
-      hasAttr isAttrs isBool isInt isList isPath isString
+      isAttrs isBool isInt isList isPath isString
       pathExists readFile replaceStrings
       trace;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
@@ -87,7 +87,7 @@ let
       recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput
       getBin getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
-      mapCartesianProduct updateManyAttrsByPath listToAttrs intersectAttrs removeAttrs;
+      mapCartesianProduct updateManyAttrsByPath listToAttrs hasAttr intersectAttrs removeAttrs;
     inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       filter ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
