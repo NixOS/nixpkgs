@@ -1,0 +1,25 @@
+From 31fac126851f1ee10ab5e45a392f840c26fb9f01 Mon Sep 17 00:00:00 2001
+From: gatopeich <gatoguan-os@yahoo.com>
+Date: Sun, 21 Mar 2021 22:14:04 +0000
+Subject: [PATCH] Fix issue #4 (free(): invalid pointer)
+
+---
+diff --git a/settings.c b/settings.c
+index 221b27c..ffedd06 100644
+--- a/settings.c
++++ b/settings.c
+@@ -144,9 +144,9 @@ void pref_init()
+     for(PrefString* s=pref_strings; s < pref_strings+G_N_ELEMENTS(pref_strings); s++)
+     {
+         GError* gerror = NULL;
+-        *s->value = s->default_value;
+         gchar* value = g_key_file_get_string(pref_file, "Options", s->description, &gerror);
+-        if(!gerror) *s->value = value;
++        if (!gerror) *s->value = value;
++        else *s->value = g_strdup(s->default_value);
+     }
+     preferences_changed();
+ }
+-- 
+2.25.4
+
