@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
     else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
     else if stdenv.isDarwin && stdenv.isAarch64 then "arm64-apple-darwin"
-    else if stdenv.isWindows && stdenv.isx86_64 then "x86_64-pc-win32"
     else throw "unsupported platform";
 
   src = fetchurl {
@@ -25,7 +24,6 @@ stdenv.mkDerivation rec {
       if stdenv.isLinux && stdenv.isx86_64 then "sha256-FN8isien2d4CG2BvzX3chhylaiO3/03atInJOlBetjY="
       else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-DTIdoX/cbltE03+8JCPQ4YzEikWf7XDhxkuuJG5plrM="
       else if stdenv.isDarwin && stdenv.isAarch64 then "sha256-L27Pmk2TX/0hrZeRsnPUPUMEVV+s76Fbx9zJBP2WEIQ="
-      else if stdenv.isWindows&& stdenv.isx86_64 then "sha256-4yyFy1FWYdCaYLB0IYkMa7EiLQi1wOxlQHU7HXLUd/4="
     else throw "unsupported platform";
   };
 
@@ -68,7 +66,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "Blazing fast scala build tool";
     mainProgram = "bleep";
-    platforms = [ "x86_64-linux" "x86_64-apple-darwin" "arm64-apple-darwin" "x86_64-pc-win32" ];
+    platforms = [ "x86_64-linux" "x86_64-apple-darwin" "arm64-apple-darwin" ];
     maintainers = with maintainers; [ KristianAN ];
   };
 }
