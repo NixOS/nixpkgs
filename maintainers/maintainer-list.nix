@@ -5867,6 +5867,13 @@
     githubId = 13485450;
     name = "Emmanuel Rosa";
   };
+  emneo = {
+    name = "emneo";
+    email = "emneo@kreog.com";
+    github = "emneo-dev";
+    githubId = 44233177;
+    keys = [ { fingerprint = "5FD0 400D 0E78 EAF9 8431  4880 8EBF C4B9 24C6 2D20"; } ];
+  };
   emptyflask = {
     email = "jon@emptyflask.dev";
     github = "emptyflask";
