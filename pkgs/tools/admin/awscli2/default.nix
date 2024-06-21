@@ -57,7 +57,7 @@ let
   };
 
 in
-with py.pkgs; buildPythonApplication rec {
+py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
   version = "2.17.0"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
@@ -86,12 +86,15 @@ with py.pkgs; buildPythonApplication rec {
     sed -i '/pip>=/d' requirements/bootstrap.txt
   '';
 
-  build-system = [
+  nativeBuildInputs = [
     installShellFiles
+  ];
+
+  build-system = with py.pkgs; [
     flit-core
   ];
 
-  dependencies = [
+  dependencies = with py.pkgs; [
     awscrt
     bcdoc
     botocore
@@ -99,9 +102,7 @@ with py.pkgs; buildPythonApplication rec {
     cryptography
     distro
     docutils
-    groff
     jmespath
-    less
     prompt-toolkit
     python-dateutil
     pyyaml
@@ -109,7 +110,12 @@ with py.pkgs; buildPythonApplication rec {
     urllib3
   ];
 
-  nativeCheckInputs = [
+  propagatedBuildInputs = [
+    groff
+    less
+  ];
+
+  nativeCheckInputs = with py.pkgs; [
     jsonschema
     mock
     pytestCheckHook
