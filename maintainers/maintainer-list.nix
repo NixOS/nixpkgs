@@ -12721,6 +12721,15 @@
     githubId = 1377571;
     name = "Matthew S. Daiter";
   };
+  m-dango = {
+    github = "m-dango";
+    githubId = 966706;
+    matrix = "@m-dango:beeper.com";
+    name = "Daniel Mita";
+    keys = [{
+      fingerprint = "69F7 7191 46B0 74E0 0F43 056C 6479 B966 8E88 BAFE";
+    }];
+  };
   mdarocha = {
     email = "marek@mdarocha.pl";
     github = "mdarocha";
