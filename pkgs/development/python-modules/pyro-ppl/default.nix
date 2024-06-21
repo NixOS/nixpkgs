@@ -3,18 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   graphviz,
-  jupyter,
+  ipywidgets,
   matplotlib,
-  networkx,
+  notebook,
+  numpy,
   opt-einsum,
   pandas,
   pillow,
   pyro-api,
   pythonOlder,
-  torch,
   scikit-learn,
+  scipy,
   seaborn,
   setuptools,
+  torch,
   torchvision,
   tqdm,
   wget,
@@ -34,27 +36,28 @@ buildPythonPackage rec {
     hash = "sha256-Dvbl/80EGoGWGhWYVIf/xjovUJG1+3WtpMH+lx1oB2E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    numpy
+    opt-einsum
     pyro-api
     torch
-    networkx
-    opt-einsum
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     extras = [
+      notebook
+      ipywidgets
       graphviz
-      jupyter
-      # lap
       matplotlib
+      torchvision
       pandas
       pillow
       scikit-learn
       seaborn
-      torchvision
+      scipy
       # visdom
       wget
     ];
