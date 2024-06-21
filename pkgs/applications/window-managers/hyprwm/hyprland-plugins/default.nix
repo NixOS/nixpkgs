@@ -24,9 +24,10 @@ let
       }
     );
 
-  plugins = {
-    hy3 = import ./hy3.nix;
-  };
+  plugins = lib.mergeAttrsList [
+    { hy3 = import ./hy3.nix; }
+    (import ./hyprland-plugins.nix)
+  ];
 in
 (lib.mapAttrs (name: plugin: callPackage plugin { inherit mkHyprlandPlugin; }) plugins)
 // {
