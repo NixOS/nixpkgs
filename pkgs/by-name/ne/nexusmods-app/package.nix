@@ -18,7 +18,7 @@ let
   _7zzWithOptionalUnfreeRarSupport = _7zz.override { inherit enableUnfree; };
 in
 buildDotnetModule rec {
-  pname = "nexusmods-app";
+  pname = "nexusmods-app" + lib.strings.optionalString enableUnfree "-unfree";
 
   version = "0.4.1";
 
@@ -103,7 +103,10 @@ buildDotnetModule rec {
   };
 
   meta = {
-    description = "Game mod installer, creator and manager";
+    description =
+      "Game mod manager, "
+      + (if enableUnfree then "includes" else "use the unfree version if you need")
+      + " support for mods packaged in RAR files";
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
     changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${src.rev}";
