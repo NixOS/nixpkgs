@@ -4022,6 +4022,8 @@ self: super: with self; {
 
   exitcode = callPackage ../development/python-modules/exitcode { };
 
+  extension-helpers = callPackage ../development/python-modules/extension-helpers { };
+
   extract-msg = callPackage ../development/python-modules/extract-msg { };
 
   extractcode = callPackage ../development/python-modules/extractcode { };
