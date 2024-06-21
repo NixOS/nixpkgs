@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, nixosTests
 , fetchFromGitHub
 , nodejs
 , pnpm
@@ -109,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) pnpmDeps;
+    tests.misskey = nixosTests.misskey;
   };
 
   meta = {
