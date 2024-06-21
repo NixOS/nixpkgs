@@ -77,8 +77,20 @@ buildPythonPackage rec {
     "legacy_venv"
     "determination"
     "json"
+    "test_auto_update_shared_libs"
+    "test_cli"
+    "test_cli_global"
+    "test_fetch_missing_python"
+    "test_list_does_not_trigger_maintenance"
+    "test_list_pinned_packages"
     "test_list_short"
+    "test_list_standalone_interpreter"
+    "test_list_unused_standalone_interpreters"
+    "test_list_used_standalone_interpreters"
+    "test_pin"
     "test_skip_maintenance"
+    "test_unpin"
+    "test_unpin_warning"
   ];
 
   postInstall = ''
