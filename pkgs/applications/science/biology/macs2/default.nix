@@ -1,6 +1,8 @@
-{ lib, python3, fetchpatch, fetchPypi }:
+{ lib, python311, fetchpatch, fetchPypi }:
 
-python3.pkgs.buildPythonPackage rec {
+# pin python311 because macs2 does not support python 3.12
+# https://github.com/macs3-project/MACS/issues/598#issuecomment-1812622572
+python311.pkgs.buildPythonPackage rec {
   pname = "macs2";
   version = "2.2.9.1";
   format = "pyproject";
@@ -20,20 +22,20 @@ python3.pkgs.buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python311.pkgs; [
     cython_0
     numpy
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python311.pkgs; [
     numpy
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python311.pkgs; [
     unittestCheckHook
   ];
 
