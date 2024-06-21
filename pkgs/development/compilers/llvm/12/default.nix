@@ -1,7 +1,7 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake
+{ lowPrio, newScope, pkgs, lib, stdenv
 , preLibcCrossHeaders
-, substitute, substituteAll, fetchFromGitHub, fetchpatch
-, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
+, substitute, substituteAll, fetchFromGitHub, fetchpatch, fetchurl
+, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
@@ -17,6 +17,10 @@
     then null
     else pkgs.bintools
 , darwin
+# Allows passthrough to packages via newScope. This makes it possible to
+# do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
+# an llvmPackages whose packages are overridden in an internally consistent way.
+, ...
 }@args:
 
 let
