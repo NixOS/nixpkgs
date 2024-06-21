@@ -4,12 +4,14 @@
   fetchFromGitHub,
   django,
   pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "dj-database-url";
   version = "2.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,7 +22,12 @@ buildPythonPackage rec {
     hash = "sha256-i2btutob+5R+FFPlGwRSNF01MTfxVop8xaePDHxnqLE=";
   };
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    django
+    typing-extensions
+  ];
 
   # Tests access a DB via network
   doCheck = false;
