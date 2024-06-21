@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   setuptools-scm,
   pytestCheckHook,
   enrich,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "subprocess-tee";
   version = "0.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycontribs";
@@ -19,7 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-rfI4UZdENfSQ9EbQeldv6DDGIQe5yMjboGTCOwed1AU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -38,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/pycontribs/subprocess-tee";
     description = "Subprocess.run drop-in replacement that supports a tee mode";
+    changelog = "https://github.com/pycontribs/subprocess-tee/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ putchar ];
   };
