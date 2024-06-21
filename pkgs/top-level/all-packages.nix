@@ -39869,8 +39869,6 @@ with pkgs;
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
-  hll2390dw-cups = callPackage ../misc/cups/drivers/hll2390dw-cups { };
-
   mfc465cncupswrapper = callPackage ../misc/cups/drivers/brother/mfc465cncupswrapper { };
   mfc465cnlpr = callPackage ../misc/cups/drivers/brother/mfc465cnlpr { };
 
