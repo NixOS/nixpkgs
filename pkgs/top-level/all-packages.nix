@@ -8026,9 +8026,7 @@ with pkgs;
 
   fortune = callPackage ../tools/misc/fortune { };
 
-  fox = callPackage ../development/libraries/fox {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
+  fox = callPackage ../development/libraries/fox {};
 
   fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
