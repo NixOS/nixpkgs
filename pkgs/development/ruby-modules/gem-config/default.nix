@@ -624,6 +624,11 @@ in
     ];
   } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     buildInputs = [ libxml2 ];
+
+    # libxml 2.12 upgrade requires these fixes
+    # https://github.com/sparklemotion/nokogiri/pull/3032
+    # which don't trivially apply to older versions
+    meta.broken = (lib.versionOlder attrs.version "1.16.0") && (lib.versionAtLeast libxml2.version "2.12");
   });
 
   openssl = attrs: {
