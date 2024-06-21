@@ -32,6 +32,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "mitm6";
     homepage = "https://github.com/dirkjanm/mitm6";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ arcayr ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
