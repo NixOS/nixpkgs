@@ -20031,12 +20031,6 @@
     githubId = 1391883;
     name = "Tom Hall";
   };
-  thubrecht = {
-    email = "tom@hubrecht.ovh";
-    github = "Tom-Hubrecht";
-    githubId = 26650391;
-    name = "Tom Hubrecht";
-  };
   Thunderbottom = {
     email = "chinmaydpai@gmail.com";
     github = "Thunderbottom";
