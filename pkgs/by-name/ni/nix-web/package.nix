@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional (!stdenv.isDarwin) openssl
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
 
   postPatch = ''
     substituteInPlace nix-web/nix-web.service \
