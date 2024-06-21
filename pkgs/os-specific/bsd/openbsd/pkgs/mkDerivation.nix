@@ -2,6 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
+  crossLibcStdenv,
   runCommand,
   rsync,
   source,
@@ -14,7 +15,13 @@
 lib.makeOverridable (
   attrs:
   let
-    stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
+    stdenv' =
+      if attrs.noCC or false then
+        stdenvNoCC
+      else if attrs.noLibc or false then
+        crossLibcStdenv
+      else
+        stdenv;
   in
   stdenv'.mkDerivation (
     rec {
@@ -42,9 +49,6 @@ lib.makeOverridable (
       ];
 
       HOST_SH = stdenv'.shell;
-
-      # Since STRIP below is the flag
-      STRIPBIN = "${stdenv.cc.bintools.targetPrefix}strip";
 
       makeFlags = [
         "STRIP=-s" # flag to install, not command
@@ -81,6 +85,9 @@ lib.makeOverridable (
     // lib.optionalAttrs stdenv'.hasCC {
       # TODO should CC wrapper set this?
       CPP = "${stdenv'.cc.targetPrefix}cpp";
+
+      # Since STRIP in `makeFlags` has to be a flag, not the binary itself
+      STRIPBIN = "${stdenv'.cc.bintools.targetPrefix}strip";
     }
     // lib.optionalAttrs (attrs.headersOnly or false) {
       installPhase = "includesPhase";

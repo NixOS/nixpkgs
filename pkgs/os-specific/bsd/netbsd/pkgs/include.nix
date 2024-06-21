@@ -15,6 +15,7 @@
 }:
 
 mkDerivation {
+  noLibc = true;
   path = "include";
   nativeBuildInputs = [
     bsdSetupHook

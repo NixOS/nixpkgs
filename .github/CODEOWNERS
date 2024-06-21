@@ -67,6 +67,9 @@
 /nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nix, the package manager
+# @raitobezarius is not "code owner", but is listed here to be notified of changes
+# pertaining to the Nix package manager.
+# i.e. no authority over those files.
 pkgs/tools/package-management/nix/                    @raitobezarius
 nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 

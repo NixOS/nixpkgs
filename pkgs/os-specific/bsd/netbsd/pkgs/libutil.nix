@@ -19,8 +19,8 @@ mkDerivation {
   path = "lib/libutil";
   extraPaths = [
     "common"
-    libc.path
-    sys.path
+    "lib/libc"
+    "sys"
   ];
   nativeBuildInputs = [
     bsdSetupHook

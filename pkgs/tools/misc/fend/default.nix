@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.4.8";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = "fend";
     rev = "v${version}";
-    hash = "sha256-i4h2QYgA1XX+qHOEH07PR3G/0SSA8a413vm9T39TuYQ=";
+    hash = "sha256-ZfDoDOHQlvuPSX6OWQOX7HdeSVUfAlOpHVwcNPDEeU8=";
   };
 
-  cargoHash = "sha256-EhumvDwXNXB0Vp3qWkJs0y0gEwiy3Z9/3KZ92YDTlqk=";
+  cargoHash = "sha256-Xwf3Mxvso9mb1YYTuKMzLhtJNX5b2dmGi05TZ111cMc=";
 
   nativeBuildInputs = [ pandoc installShellFiles pkg-config copyDesktopItems ];
   buildInputs = [ pkg-config openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];

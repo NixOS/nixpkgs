@@ -58,12 +58,9 @@ lib.makeOverridable (
 
       HOST_SH = stdenv'.shell;
 
-      # Since STRIP below is the flag
-      STRIPBIN = "${stdenv.cc.bintools.targetPrefix}strip";
-
       makeFlags = [
         "STRIP=-s" # flag to install, not command
-      ] ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "MK_WERROR=no";
+      ] ++ lib.optional (!stdenv'.hostPlatform.isFreeBSD) "MK_WERROR=no";
 
       # amd64 not x86_64 for this on unlike NetBSD
       MACHINE_ARCH = freebsd-lib.mkBsdArch stdenv';
@@ -91,6 +88,9 @@ lib.makeOverridable (
     // lib.optionalAttrs stdenv'.hasCC {
       # TODO should CC wrapper set this?
       CPP = "${stdenv'.cc.targetPrefix}cpp";
+
+      # Since STRIP in `makeFlags` has to be a flag, not the binary itself
+      STRIPBIN = "${stdenv'.cc.bintools.targetPrefix}strip";
     }
     // lib.optionalAttrs stdenv'.isDarwin { MKRELRO = "no"; }
     // lib.optionalAttrs (stdenv'.cc.isClang or false) {
