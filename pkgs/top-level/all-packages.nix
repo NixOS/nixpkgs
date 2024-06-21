@@ -12642,8 +12642,6 @@ with pkgs;
 
   sanctity = callPackage ../tools/misc/sanctity { };
 
-  sandboxfs = callPackage ../tools/filesystems/sandboxfs { };
-
   sanjuuni = callPackage ../tools/graphics/sanjuuni { };
 
   sasquatch = callPackage ../tools/filesystems/sasquatch { };
