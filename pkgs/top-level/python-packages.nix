@@ -5530,8 +5530,6 @@ self: super: with self; {
 
   htmldate = callPackage ../development/python-modules/htmldate { };
 
-  htmllaundry = callPackage ../development/python-modules/htmllaundry { };
-
   htmllistparse = callPackage ../development/python-modules/htmllistparse { };
 
   htmlmin = callPackage ../development/python-modules/htmlmin { };
