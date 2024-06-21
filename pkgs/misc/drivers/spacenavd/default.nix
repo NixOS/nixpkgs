@@ -1,22 +1,32 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, libX11, IOKit }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libXext,
+  libX11,
+  IOKit,
+}:
 stdenv.mkDerivation rec {
-  version = "1.2";
+  version = "1.3";
   pname = "spacenavd";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "spacenavd";
     rev = "v${version}";
-    sha256 = "sha256-UuM/HTgictvIvlUnHZ5Ha8XwBhDTbt7CG9c4jzKQl0s=";
+    sha256 = "sha256-26geQYOXjMZZ/FpPpav7zfql0davTBwB4Ir+X1oep9Q=";
   };
 
-  buildInputs = [ libX11 ]
+  buildInputs =
+    [
+      libX11
+      libXext
+    ]
     ++ lib.optional stdenv.isDarwin IOKit;
 
-  configureFlags = [ "--disable-debug" ];
+  configureFlags = ["--disable-debug"];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc"];
 
   postInstall = ''
     install -Dm644 $src/contrib/systemd/spacenavd.service -t $out/lib/systemd/system
@@ -30,6 +40,6 @@ stdenv.mkDerivation rec {
     longDescription = "A free, compatible alternative, to the proprietary 3Dconnexion device driver and SDK, for their 3D input devices (called 'space navigator', 'space pilot', 'space traveller', etc)";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sohalt ];
+    maintainers = with maintainers; [sohalt];
   };
 }
