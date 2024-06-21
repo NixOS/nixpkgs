@@ -15787,6 +15787,10 @@ with pkgs;
     backend = "mcode";
   };
 
+  ghdl-gcc = callPackage ../development/compilers/ghdl {
+    backend = "gcc";
+  };
+
   ghdl-llvm = callPackage ../development/compilers/ghdl {
     backend = "llvm";
     inherit (llvmPackages_15) llvm;
