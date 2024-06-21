@@ -9115,8 +9115,6 @@ with pkgs;
 
   input-remapper = python3Packages.callPackage ../tools/inputmethods/input-remapper { };
 
-  input-utils = callPackage ../os-specific/linux/input-utils { };
-
   inql = callPackage ../tools/security/inql { };
 
   intel-media-sdk = callPackage ../development/libraries/intel-media-sdk { };
@@ -19715,8 +19713,6 @@ with pkgs;
 
   udis86 = callPackage  ../development/tools/udis86 { };
 
-  uefi-firmware-parser = callPackage ../development/tools/analysis/uefi-firmware-parser { };
-
   uhd = callPackage ../applications/radio/uhd { };
   uhdMinimal = uhd.override {
     enableUtils = false;
@@ -25769,8 +25765,6 @@ with pkgs;
   mailmanPackages = callPackage ../servers/mail/mailman { };
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
-
-  mailman-rss = callPackage ../tools/misc/mailman-rss { };
 
   listadmin = callPackage ../applications/networking/listadmin { };
 
@@ -39578,11 +39572,7 @@ with pkgs;
 
   nix-script = callPackage ../tools/nix/nix-script { };
 
-  nix-top = callPackage ../tools/package-management/nix-top { };
-
   nix-tree = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-tree);
-
-  nix-universal-prefetch = callPackage ../tools/package-management/nix-universal-prefetch { };
 
   nixpkgs-review = callPackage ../tools/package-management/nixpkgs-review { };
 
@@ -39842,8 +39832,6 @@ with pkgs;
   timeloop = pkgs.darwin.apple_sdk_11_0.callPackage ../applications/science/computer-architecture/timeloop { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
-
-  hll2390dw-cups = callPackage ../misc/cups/drivers/hll2390dw-cups { };
 
   mfc465cncupswrapper = callPackage ../misc/cups/drivers/brother/mfc465cncupswrapper { };
   mfc465cnlpr = callPackage ../misc/cups/drivers/brother/mfc465cnlpr { };
