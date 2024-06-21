@@ -9124,8 +9124,6 @@ with pkgs;
 
   input-remapper = python3Packages.callPackage ../tools/inputmethods/input-remapper { };
 
-  input-utils = callPackage ../os-specific/linux/input-utils { };
-
   inql = callPackage ../tools/security/inql { };
 
   intel-media-sdk = callPackage ../development/libraries/intel-media-sdk { };
