@@ -1,5 +1,5 @@
 { lib
-, stdenvNoLibc
+, stdenv
 , buildPackages
 , fetchurl
 , gitUpdater
@@ -9,7 +9,6 @@
 }:
 
 let
-  stdenv = stdenvNoLibc;
   isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
   configParser = ''
     function parseconfig {

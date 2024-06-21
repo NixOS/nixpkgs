@@ -1,6 +1,6 @@
-{ stdenv, texinfo, flex, bison, fetchFromGitHub, stdenvNoLibc, buildPackages }:
+{ stdenv, texinfo, flex, bison, fetchFromGitHub, crossLibcStdenv, buildPackages }:
 
-stdenvNoLibc.mkDerivation {
+crossLibcStdenv.mkDerivation {
   name = "newlib";
   src = fetchFromGitHub {
     owner = "itszor";
