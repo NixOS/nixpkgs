@@ -1,19 +1,11 @@
-{ lib, stdenvNoCC, fetchurl }:
+{ stdenvNoCC, mingw_w64 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "mingw_w64-headers";
-  version = "11.0.1";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/mingw-w64/mingw-w64-v${finalAttrs.version}.tar.bz2";
-    hash = "sha256-P2a84Gnui+10OaGhPafLkaXmfqYXDyExesf1eUYl7hA=";
-  };
+stdenvNoCC.mkDerivation {
+  name = "${mingw_w64.name}-headers";
+  inherit (mingw_w64) src meta;
 
   preConfigure = ''
     cd mingw-w64-headers
   '';
 
-  meta = {
-    platforms = lib.platforms.windows;
-  };
-})
+}

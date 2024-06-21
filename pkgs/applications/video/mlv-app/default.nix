@@ -54,9 +54,7 @@ mkDerivation rec {
     description = "All in one MLV processing app that is pretty great";
     homepage = "https://mlv.app";
     license = licenses.gpl3;
-    maintainers = with maintainers; [
-      kiwi
-    ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     mainProgram = "mlvapp";
   };

@@ -60,6 +60,9 @@
 , zsh
 , # codeium-nvim dependencies
   codeium
+, # codesnap-nvim dependencies
+  clang
+, libuv
 , # command-t dependencies
   getconf
 , ruby
@@ -399,6 +402,50 @@
       runHook postCheck
     '';
   };
+
+  codesnap-nvim =
+    let
+      version = "1.3.1";
+      src = fetchFromGitHub {
+        owner = "mistricky";
+        repo = "codesnap.nvim";
+        rev = "refs/tags/v${version}";
+        hash = "sha256-nS/bAWsBQ1L4M9437Yp6FdmHoogzalKlLIAXnRZyMp0=";
+      };
+      codesnap-lib = rustPlatform.buildRustPackage {
+        pname = "codesnap-lib";
+        inherit version src;
+
+        sourceRoot = "${src.name}/generator";
+
+        cargoHash = "sha256-FTQl5WIGEf+RQKYJ4BbIE3cCeN+NYUp7VXIrpxB05tU=";
+
+        nativeBuildInputs = [
+          pkg-config
+          rustPlatform.bindgenHook
+        ];
+
+        buildInputs = [
+          libuv.dev
+        ] ++ lib.optionals stdenv.isDarwin [
+          darwin.apple_sdk.frameworks.AppKit
+        ];
+      };
+    in
+    buildVimPlugin {
+      pname = "codesnap.nvim";
+      inherit version src;
+
+      # https://github.com/mistricky/codesnap.nvim/blob/main/scripts/build_generator.sh
+      postInstall = let
+        extension = if stdenv.isDarwin then "dylib" else "so";
+      in ''
+        cp ${codesnap-lib}/lib/libgenerator.${extension} lua/generator.so
+      '';
+
+      doInstallCheck = true;
+      nvimRequireCheck = "codesnap";
+    };
 
   command-t = super.command-t.overrideAttrs {
     nativeBuildInputs = [ getconf ruby ];
@@ -1483,6 +1530,11 @@
       substituteInPlace lua/telescope/_extensions/zoxide/config.lua \
         --replace "zoxide query -ls" "${zoxide}/bin/zoxide query -ls"
     '';
+  };
+
+  todo-comments-nvim = super.todo-comments-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    nvimRequireCheck = "todo-comments";
   };
 
   tup =

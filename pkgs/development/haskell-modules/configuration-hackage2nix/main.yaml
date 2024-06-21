@@ -306,15 +306,6 @@ package-maintainers:
     - elm-export-persistent
     # - pipes-mongodb
     - streaming-wai
-  kiwi:
-    - config-schema
-    - config-value
-    - glirc
-    - irc-core
-    - matterhorn
-    - mattermost-api
-    - mattermost-api-qc
-    - Unique
   libjared:
     - sensei
   malo:

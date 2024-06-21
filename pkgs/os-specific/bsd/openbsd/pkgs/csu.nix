@@ -9,7 +9,6 @@
 }:
 
 mkDerivation {
-  noLibc = true;
   path = "lib/csu";
   nativeBuildInputs = [
     bsdSetupHook

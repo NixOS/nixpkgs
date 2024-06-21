@@ -3,12 +3,18 @@
 , windows
 , fetchurl
 , autoreconfHook
-, mingw_w64_headers
 }:
 
-stdenv.mkDerivation {
+let
+  version = "11.0.1";
+in stdenv.mkDerivation {
   pname = "mingw-w64";
-  inherit (mingw_w64_headers) version src meta;
+  inherit version;
+
+  src = fetchurl {
+    url = "mirror://sourceforge/mingw-w64/mingw-w64-v${version}.tar.bz2";
+    hash = "sha256-P2a84Gnui+10OaGhPafLkaXmfqYXDyExesf1eUYl7hA=";
+  };
 
   outputs = [ "out" "dev" ];
 
@@ -24,4 +30,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ windows.mingw_w64_headers ];
   hardeningDisable = [ "stackprotector" "fortify" ];
+
+  meta = {
+    platforms = lib.platforms.windows;
+  };
 }

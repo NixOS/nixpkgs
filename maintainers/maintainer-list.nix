@@ -8413,6 +8413,12 @@
     githubId = 7403236;
     name = "Markus J. Ankenbrand";
   };
+  iivusly = {
+    email = "iivusly@icloud.com";
+    github = "iivusly";
+    githubId = 52052910;
+    name = "iivusly";
+  };
   ikervagyok = {
     email = "ikervagyok@gmail.com";
     github = "ikervagyok";
@@ -10587,13 +10593,6 @@
     githubId = 67870215;
     name = "Kat Inskip";
     keys = [ { fingerprint = "9CC6 44B5 69CD A59B C874  C4C9 E8DD E3ED 1C90 F3A0"; } ];
-  };
-  kiwi = {
-    email = "envy1988@gmail.com";
-    github = "Kiwi";
-    githubId = 35715;
-    name = "Robert Djubek";
-    keys = [ { fingerprint = "8992 44FC D291 5CA2 0A97  802C 156C 88A5 B0A0 4B2A"; } ];
   };
   kjeremy = {
     email = "kjeremy@gmail.com";
@@ -17708,13 +17707,6 @@
     githubId = 226872;
     name = "Samuel Ainsworth";
   };
-  samueldr = {
-    email = "samuel@dionne-riel.com";
-    matrix = "@samueldr:matrix.org";
-    github = "samueldr";
-    githubId = 132835;
-    name = "Samuel Dionne-Riel";
-  };
   samuelefacenda = {
     name = "Samuele Facenda";
     email = "samuele.facenda@gmail.com";
@@ -20044,12 +20036,6 @@
     github = "Thra11";
     githubId = 1391883;
     name = "Tom Hall";
-  };
-  thubrecht = {
-    email = "tom@hubrecht.ovh";
-    github = "Tom-Hubrecht";
-    githubId = 26650391;
-    name = "Tom Hubrecht";
   };
   Thunderbottom = {
     email = "chinmaydpai@gmail.com";

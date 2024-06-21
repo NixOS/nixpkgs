@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   stdenvNoCC,
   makeScopeWithSplicing',
@@ -20,9 +21,7 @@ makeScopeWithSplicing' {
 
       defaultMakeFlags = [
         "MKSOFTFLOAT=${
-          if
-            stdenvNoCC.hostPlatform.gcc.float or (stdenvNoCC.hostPlatform.parsed.abi.float or "hard") == "soft"
-          then
+          if stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft" then
             "yes"
           else
             "no"
@@ -37,6 +36,7 @@ makeScopeWithSplicing' {
       # because of the splices.
 
       mkDerivation = self.callPackage ./pkgs/mkDerivation.nix {
+        inherit stdenv stdenvNoCC;
         inherit (buildPackages.netbsd)
           netbsdSetupHook
           makeMinimal
@@ -129,7 +129,7 @@ makeScopeWithSplicing' {
       libpthread-headers = self.callPackage ./pkgs/libpthread/headers.nix { };
 
       csu = self.callPackage ./pkgs/csu.nix {
-        inherit (self) headers sys-headers ld_elf_so;
+        inherit (self) headers sys ld_elf_so;
         inherit (buildPackages.netbsd)
           netbsdSetupHook
           makeMinimal

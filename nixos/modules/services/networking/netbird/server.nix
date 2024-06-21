@@ -16,7 +16,7 @@ in
 
 {
   meta = {
-    maintainers = with lib.maintainers; [thubrecht patrickdag];
+    maintainers = with lib.maintainers; [patrickdag];
     doc = ./server.md;
   };
 
