@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jwrdegoede/rtl8189ES_linux";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ danielfullmer lheckemann ];
+    maintainers = with maintainers; [ danielfullmer ];
   };
 }
