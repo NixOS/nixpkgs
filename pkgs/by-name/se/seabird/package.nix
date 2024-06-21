@@ -42,6 +42,8 @@ buildGo122Module rec {
 
   ldflags = [ "-s" "-w" ];
 
+  enableParallelBuilding = true;
+
   postPatch = ''
     substituteInPlace main.go --replace-fail 'version = "dev"' 'version = "${version}"'
   '';
