@@ -10,7 +10,11 @@
   systemd ? config.systemd.package,
 }:
 
-assert lib.elem allowPolkitPolicy [ "none" "pkexec" "systemctl" ];
+assert lib.elem allowPolkitPolicy [
+  "none"
+  "pkexec"
+  "systemctl"
+];
 
 stdenvNoCC.mkDerivation rec {
   pname = "gnome-shell-extension-systemd-manager";
@@ -27,22 +31,25 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ glib ];
 
-  postInstall = ''
-    rm systemd-manager@hardpixel.eu/schemas/gschemas.compiled
-    glib-compile-schemas systemd-manager@hardpixel.eu/schemas
+  postInstall =
+    ''
+      rm systemd-manager@hardpixel.eu/schemas/gschemas.compiled
+      glib-compile-schemas systemd-manager@hardpixel.eu/schemas
 
-    mkdir -p $out/share/gnome-shell/extensions
-    mv systemd-manager@hardpixel.eu $out/share/gnome-shell/extensions
-  '' + lib.optionalString (allowPolkitPolicy == "pkexec") ''
-    local bn=org.freedesktop.policykit.pkexec.systemctl.policy
-    mkdir -p $out/share/polkit-1/actions
-    substitute systemd-policies/$bn $out/share/polkit-1/actions/$bn \
-      --replace-fail /usr/bin/systemctl ${lib.getBin systemd}/bin/systemctl
-  '' + lib.optionalString (allowPolkitPolicy == "systemctl") ''
-    install -Dm0644 \
-      systemd-policies/10-service_status.rules \
-      $out/share/polkit-1/rules.d/10-gnome-extension-systemd-manager.rules
-  '';
+      mkdir -p $out/share/gnome-shell/extensions
+      mv systemd-manager@hardpixel.eu $out/share/gnome-shell/extensions
+    ''
+    + lib.optionalString (allowPolkitPolicy == "pkexec") ''
+      local bn=org.freedesktop.policykit.pkexec.systemctl.policy
+      mkdir -p $out/share/polkit-1/actions
+      substitute systemd-policies/$bn $out/share/polkit-1/actions/$bn \
+        --replace-fail /usr/bin/systemctl ${lib.getBin systemd}/bin/systemctl
+    ''
+    + lib.optionalString (allowPolkitPolicy == "systemctl") ''
+      install -Dm0644 \
+        systemd-policies/10-service_status.rules \
+        $out/share/polkit-1/rules.d/10-gnome-extension-systemd-manager.rules
+    '';
 
   passthru = {
     extensionUuid = "systemd-manager@hardpixel.eu";
@@ -53,6 +60,9 @@ stdenvNoCC.mkDerivation rec {
     description = "GNOME Shell extension to manage systemd services";
     homepage = "https://github.com/hardpixel/systemd-manager";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ linsui ];
+    maintainers = with maintainers; [
+      linsui
+      doronbehar
+    ];
   };
 }
