@@ -36,7 +36,7 @@ appimageTools.wrapType2 {
     install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
     install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps/
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun --no-sandbox' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=${pname}'
   '';
 
   meta = with lib; {
