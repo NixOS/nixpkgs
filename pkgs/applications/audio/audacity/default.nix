@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
       # Documentation.
       cc-by-30
     ];
-    maintainers = with maintainers; [ lheckemann veprbl wegank ];
+    maintainers = with maintainers; [ veprbl wegank ];
     platforms = platforms.unix;
   };
 }

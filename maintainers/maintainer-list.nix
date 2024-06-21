@@ -11310,12 +11310,6 @@
     github = "LogicalOverflow";
     githubId = 5919957;
   };
-  lheckemann = {
-    email = "git@sphalerite.org";
-    github = "lheckemann";
-    githubId = 341954;
-    name = "Linus Heckemann";
-  };
   lhvwb = {
     email = "nathaniel.baxter@gmail.com";
     github = "nathanielbaxter";

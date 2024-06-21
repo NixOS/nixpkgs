@@ -42,5 +42,5 @@ in with lib; {
       };
     };
   };
-  meta.maintainers = [ maintainers.lheckemann ];
+  meta.maintainers = [ ];
 }

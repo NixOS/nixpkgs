@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lheckemann alva mkg20001 melkor333 ];
+    maintainers = with lib.maintainers; [ alva mkg20001 melkor333 ];
     changelog = "https://www.oilshell.org/release/${version}/changelog.html";
   };
 
