@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl3Only;
     platforms = platforms.all;
     changelog = "https://codeberg.org/redict/redict/releases/tag/${finalAttrs.version}";
-    maintainers = with maintainers; [ yuka gmemstr ];
+    maintainers = with maintainers; [ yuka ];
     mainProgram = "redict-cli";
   };
 })

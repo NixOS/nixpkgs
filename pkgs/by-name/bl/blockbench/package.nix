@@ -7,11 +7,10 @@
   imagemagick,
   copyDesktopItems,
   makeDesktopItem,
-  electron_28,
+  electron
 }:
 
 let
-  electron = electron_28;
   electronDist = "${electron}/${if stdenv.isDarwin then "Applications" else "libexec/electron"}";
 in
 buildNpmPackage rec {

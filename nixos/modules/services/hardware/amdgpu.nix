@@ -28,7 +28,7 @@ in {
 
     boot.initrd.kernelModules = lib.optionals cfg.initrd.enable [ "amdgpu" ];
 
-    hardware.opengl = lib.mkIf cfg.opencl.enable {
+    hardware.graphics = lib.mkIf cfg.opencl.enable {
       enable = lib.mkDefault true;
       extraPackages = [
         pkgs.rocmPackages.clr

@@ -2101,6 +2101,8 @@ self: super: with self; {
 
   chameleon = callPackage ../development/python-modules/chameleon { };
 
+  changefinder = callPackage ../development/python-modules/changefinder { };
+
   channels = callPackage ../development/python-modules/channels { };
 
   channels-redis = callPackage ../development/python-modules/channels-redis { };
@@ -5528,8 +5530,6 @@ self: super: with self; {
 
   htmldate = callPackage ../development/python-modules/htmldate { };
 
-  htmllaundry = callPackage ../development/python-modules/htmllaundry { };
-
   htmllistparse = callPackage ../development/python-modules/htmllistparse { };
 
   htmlmin = callPackage ../development/python-modules/htmlmin { };
@@ -8805,6 +8805,8 @@ self: super: with self; {
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
   netdata = callPackage ../development/python-modules/netdata { };
+
+  netdata-pandas = callPackage ../development/python-modules/netdata-pandas { };
 
   netdisco = callPackage ../development/python-modules/netdisco { };
 

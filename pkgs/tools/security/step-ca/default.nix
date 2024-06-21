@@ -68,7 +68,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       cmcdragonkai
-      mohe2015
       techknowlogick
     ];
   };

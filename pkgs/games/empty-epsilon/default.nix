@@ -82,7 +82,7 @@ stdenv.mkDerivation {
     mainProgram = "EmptyEpsilon";
     homepage = "https://daid.github.io/EmptyEpsilon/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz lheckemann ma27 ];
+    maintainers = with maintainers; [ fpletz ma27 ];
     platforms = platforms.linux;
   };
 }

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ];
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lheckemann alva melkor333 ];
+    maintainers = with lib.maintainers; [ alva melkor333 ];
     changelog = "https://www.oilshell.org/release/${version}/changelog.html";
   };
 
