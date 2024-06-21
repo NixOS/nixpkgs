@@ -81,7 +81,7 @@ let
         && final.parsed.kernel == platform.parsed.kernel;
       isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
       # Derived meta-data
-      useLLVM = final.isFreeBSD;
+      useLLVM = final.isFreeBSD || final.isOpenBSD;
 
       libc =
         /**/ if final.isDarwin              then "libSystem"
