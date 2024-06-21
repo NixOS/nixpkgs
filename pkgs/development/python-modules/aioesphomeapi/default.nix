@@ -70,6 +70,10 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/esphome/aioesphomeapi/issues/837
     "test_reconnect_logic_stop_callback"
+    # python3.12.4 regression
+    # https://github.com/esphome/aioesphomeapi/issues/889
+    "test_start_connection_cannot_increase_recv_buffer"
+    "test_start_connection_can_only_increase_buffer_size_to_262144"
   ];
 
   pythonImportsCheck = [ "aioesphomeapi" ];
