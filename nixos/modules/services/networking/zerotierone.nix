@@ -4,7 +4,9 @@ with lib;
 
 let
   cfg = config.services.zerotierone;
-  localConfFile = pkgs.writeText "zt-local.conf" (builtins.toJSON cfg.localConf);
+
+  settingsFormat = pkgs.formats.json {};
+  localConfFile = settingsFormat.generate "zt-local.conf" cfg.localConf;
   localConfFilePath = "/var/lib/zerotier-one/local.conf";
 in
 {
@@ -41,7 +43,7 @@ in
     example = {
       settings.allowTcpFallbackRelay = false;
     };
-    type = types.nullOr types.attrs;
+    type = settingsFormat.type;
   };
 
   config = mkIf cfg.enable {
@@ -60,7 +62,7 @@ in
         chown -R root:root /var/lib/zerotier-one
       '' + (concatMapStrings (netId: ''
         touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
-      '') cfg.joinNetworks) + optionalString (cfg.localConf != null) ''
+      '') cfg.joinNetworks) + optionalString (cfg.localConf != {}) ''
         if [ -L "${localConfFilePath}" ]
         then
           rm ${localConfFilePath}

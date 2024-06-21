@@ -9932,8 +9932,6 @@ with pkgs;
     withCloud = !stdenv.isDarwin;
     withCloudUi = true;
   };
-  # Exposed here so the bots can auto-upgrade it
-  netdata-go-plugins = callPackage ../tools/system/netdata/go.d.plugin.nix { };
 
   netsurf = recurseIntoAttrs (callPackage ../applications/networking/browsers/netsurf { });
   netsurf-browser = netsurf.browser;
@@ -12643,8 +12641,6 @@ with pkgs;
   samplicator = callPackage ../tools/networking/samplicator { };
 
   sanctity = callPackage ../tools/misc/sanctity { };
-
-  sandboxfs = callPackage ../tools/filesystems/sandboxfs { };
 
   sanjuuni = callPackage ../tools/graphics/sanjuuni { };
 

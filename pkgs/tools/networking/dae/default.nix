@@ -1,7 +1,8 @@
-{ lib
-, clang
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  clang,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 buildGoModule rec {
   pname = "dae";
@@ -21,17 +22,15 @@ buildGoModule rec {
 
   nativeBuildInputs = [ clang ];
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/daeuniverse/dae/cmd.Version=${version}"
-    "-X github.com/daeuniverse/dae/common/consts.MaxMatchSetLen_=64"
-  ];
+  buildPhase = ''
+    runHook preBuild
 
-  preBuild = ''
     make CFLAGS="-D__REMOVE_BPF_PRINTK -fno-stack-protector -Wno-unused-command-line-argument" \
     NOSTRIP=y \
-    ebpf
+    VERSION=${version} \
+    OUTPUT=$out/bin/dae
+
+    runHook postBuild
   '';
 
   # network required
@@ -47,7 +46,10 @@ buildGoModule rec {
     description = "Linux high-performance transparent proxy solution based on eBPF";
     homepage = "https://github.com/daeuniverse/dae";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ oluceps pokon548 ];
+    maintainers = with maintainers; [
+      oluceps
+      pokon548
+    ];
     platforms = platforms.linux;
     mainProgram = "dae";
   };

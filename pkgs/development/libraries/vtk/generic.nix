@@ -110,7 +110,7 @@ in stdenv.mkDerivation {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
+    maintainers = with maintainers; [ knedlsepp tfmoraes ];
     platforms = with platforms; unix;
   };
 }

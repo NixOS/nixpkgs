@@ -219,5 +219,5 @@ in
     users.groups.zitadel = lib.mkIf (cfg.group == "zitadel") { };
   };
 
-  meta.maintainers = with lib.maintainers; [ Sorixelle ];
+  meta.maintainers = [ ];
 }
