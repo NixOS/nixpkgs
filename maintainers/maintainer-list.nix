@@ -17658,13 +17658,6 @@
     githubId = 226872;
     name = "Samuel Ainsworth";
   };
-  samueldr = {
-    email = "samuel@dionne-riel.com";
-    matrix = "@samueldr:matrix.org";
-    github = "samueldr";
-    githubId = 132835;
-    name = "Samuel Dionne-Riel";
-  };
   samuelefacenda = {
     name = "Samuele Facenda";
     email = "samuele.facenda@gmail.com";
