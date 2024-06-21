@@ -3,9 +3,8 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   libmilter,
-  bsddb3,
+  berkeleydb,
   pydns,
   iana-etc,
   libredirect,
@@ -14,28 +13,21 @@
 
 buildPythonPackage rec {
   pname = "pymilter";
-  version = "1.0.5";
+  version = "1.0.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "sdgathman";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-gZUWEDVZfDRiOOdG3lpiQldHxm/93l8qYVOHOEpHhzQ=";
+    hash = "sha256-plaWXwDAIsVzEtrabZuZj7T4WNfz2ntQHgcMCVf5S70=";
   };
 
   buildInputs = [ libmilter ];
   nativeCheckInputs = [ pyasyncore ];
   propagatedBuildInputs = [
-    bsddb3
+    berkeleydb
     pydns
-  ];
-  patches = [
-    (fetchpatch { # https://github.com/sdgathman/pymilter/pull/57
-      name = "Remove-calls-to-the-deprecated-method-assertEquals";
-      url = "https://github.com/sdgathman/pymilter/commit/1ead9028fc63ae3ec6ea3b0c438e6ed088a2b20e.patch";
-      hash = "sha256-/5LlDR15nMR3l7rkVjT3w4FbDTFAAgNdERWlPNL2TVg=";
-    })
   ];
 
   preBuild = ''
