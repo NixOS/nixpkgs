@@ -56,9 +56,12 @@ in
 
 stdenv.mkDerivation {
   pname = "perf-linux";
-  version = kernel.version;
+  inherit (kernel) version src;
 
-  inherit (kernel) src;
+  patches = [
+    # fix wrong path to dmesg
+    ./fix-dmesg-path.diff
+  ];
 
   postPatch = ''
     # Linux scripts
