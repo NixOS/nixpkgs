@@ -7,6 +7,7 @@
 , pkg-config
 , glib
 , python3Packages
+, wrapGAppsNoGuiHook
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,6 +28,7 @@ python3Packages.buildPythonApplication rec {
     ninja
     meson
     pkg-config
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -42,6 +44,12 @@ python3Packages.buildPythonApplication rec {
   mesonFlags = [
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "-Dhwdbdir=${placeholder "out"}/etc/udev/hwdb.d"
+  ];
+
+  dontWrapGApps = true;
+
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
   ];
 
   meta = with lib; {
