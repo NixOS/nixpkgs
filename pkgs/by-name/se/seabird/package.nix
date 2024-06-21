@@ -27,13 +27,13 @@ buildGo122Module rec {
 
   nativeBuildInputs = [
     copyDesktopItems
+    gobject-introspection
     libxml2
     pkg-config
     wrapGAppsHook4
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk4
     gtksourceview5
     libadwaita
