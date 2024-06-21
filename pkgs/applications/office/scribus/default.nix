@@ -70,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     maintainers = with maintainers; [
-      kiwi
       arthsmn
     ];
     description = "Desktop Publishing (DTP) and Layout program";

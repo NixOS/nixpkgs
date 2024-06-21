@@ -38,6 +38,6 @@ mkDerivation rec {
     mainProgram = "krecorder";
     homepage = "https://invent.kde.org/plasma-mobile/krecorder";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ ];
   };
 }

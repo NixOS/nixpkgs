@@ -2597,14 +2597,14 @@ buildLuarocksPackage {
 nlua = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "nlua";
-  version = "0.1.0-1";
+  version = "0.2.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/nlua-0.1.0-1.rockspec";
-    sha256 = "14ynhy85m2prawym1ap1kplkbicafbczpggzgdnji00frwqa1zvv";
+    url    = "mirror://luarocks/nlua-0.2.0-1.rockspec";
+    sha256 = "15d8gmlf0kr31p1nlj9skliq8yfk3k24w0df6jxlxqnmb8nkxk04";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/mfussenegger/nlua/archive/v0.1.0.zip";
-    sha256 = "1x3pbv5ngbk0sjgwfpjsv3x49wzq4x29d9rm0hgyyb2g2mwag3jc";
+    url    = "https://github.com/mfussenegger/nlua/archive/v0.2.0.zip";
+    sha256 = "09fxryslz9qwyzsvy0sc67irjikcg8cngl5d6g56prqixr3bsxpy";
   };
 
   disabled = luaOlder "5.1";

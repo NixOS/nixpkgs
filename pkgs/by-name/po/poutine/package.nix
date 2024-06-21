@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -21,6 +23,15 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd ${meta.mainProgram} \
+      --bash <($out/bin/${meta.mainProgram} completion bash) \
+      --fish <($out/bin/${meta.mainProgram} completion fish) \
+      --zsh <($out/bin/${meta.mainProgram} completion zsh)
+  '';
 
   meta = with lib; {
     description = "Security scanner that detects misconfigurations and vulnerabilities in build pipelines of repositories";

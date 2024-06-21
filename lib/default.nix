@@ -87,8 +87,8 @@ let
       recursiveUpdate matchAttrs mergeAttrsList overrideExisting showAttrPath getOutput
       getBin getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs cartesianProduct cartesianProductOfSets
-      mapCartesianProduct updateManyAttrsByPath;
-    inherit (self.lists) singleton forEach foldr fold foldl foldl' imap0 imap1
+      mapCartesianProduct updateManyAttrsByPath intersectAttrs removeAttrs;
+    inherit (self.lists) singleton forEach map foldr fold foldl foldl' imap0 imap1
       ifilter0 concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range replicate partition zipListsWith zipLists
       reverseList listDfs toposort sort sortOn naturalSort compareLists take
@@ -105,7 +105,7 @@ let
       escapeRegex escapeURL escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
-      getName getVersion
+      getName getVersion match split
       cmakeOptionType cmakeBool cmakeFeature
       mesonOption mesonBool mesonEnable
       nameFromURL enableFeature enableFeatureAs withFeature

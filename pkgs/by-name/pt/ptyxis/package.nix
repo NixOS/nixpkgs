@@ -15,14 +15,14 @@
 }:
 
 let
-  version = "46.2";
+  version = "46.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "chergert";
     repo = "ptyxis";
     rev = version;
-    hash = "sha256-/n/S2ws6qsVwTXX96MPa+/ISozDDu8A1wkD1g3dmAtQ=";
+    hash = "sha256-DKZgnistOv6eFWtqYPtMc1tQJWovCWIqrqGgs9uWu5k=";
   };
 
   vte-gtk4-patched = vte-gtk4.overrideAttrs (prev: {

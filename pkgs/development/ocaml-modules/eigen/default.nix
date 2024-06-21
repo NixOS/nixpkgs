@@ -13,7 +13,7 @@ buildDunePackage rec {
     sha256 = "1zaw03as14hyvfpyj6bjrfbcxp2ljdbqcqqgm53kms244mig425f";
   };
 
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 

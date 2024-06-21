@@ -7,7 +7,7 @@ buildDunePackage rec {
 
   inherit (opam-core) src version;
 
-  minimumOCamlVersion = "4.02.3";
+  minimalOCamlVersion = "4.02.3";
 
   # get rid of check for curl at configure time
   # opam-format does not call curl at run time
