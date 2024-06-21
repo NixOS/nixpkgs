@@ -1,18 +1,26 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, libX11, IOKit }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libXext,
+  libX11,
+  IOKit,
+}:
 stdenv.mkDerivation rec {
-  version = "1.2";
+  version = "1.3";
   pname = "spacenavd";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "spacenavd";
     rev = "v${version}";
-    sha256 = "sha256-UuM/HTgictvIvlUnHZ5Ha8XwBhDTbt7CG9c4jzKQl0s=";
+    hash = "sha256-26geQYOXjMZZ/FpPpav7zfql0davTBwB4Ir+X1oep9Q=";
   };
 
-  buildInputs = [ libX11 ]
-    ++ lib.optional stdenv.isDarwin IOKit;
+  buildInputs = [
+    libX11
+    libXext
+  ] ++ lib.optional stdenv.isDarwin IOKit;
 
   configureFlags = [ "--disable-debug" ];
 
