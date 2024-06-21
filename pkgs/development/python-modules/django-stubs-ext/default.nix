@@ -1,24 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchPypi,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, django
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {
   pname = "django-stubs-ext";
-  version = "4.2.7";
+  version = "5.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UZNCrAhJzaFVl0bJpWPwP/mfY2sOvnwUt16BagDf3cM=";
+    inherit version;
+    pname = "django_stubs_ext";
+    hash = "sha256-QJxiWF1/mWzvXHYObifqP/KflhyUN0fmdRnIN0IsrTI=";
   };
 
   nativeBuildInputs = [ setuptools ];
