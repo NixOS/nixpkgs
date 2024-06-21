@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     description = "Blazing fast scala build tool";
     mainProgram = "bleep";
     platforms = [ "x86_64-linux" "x86_64-apple-darwin" "arm64-apple-darwin" ];
-    maintainers = with maintainers; [ KristianAN ];
+    maintainers = with maintainers; [ kristianan ];
   };
 }
