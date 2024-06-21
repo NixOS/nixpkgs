@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-admonish";
-  version = "1.17.1";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "tommilligan";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Jj3mbsH/rFrUTWcgT4+KQJ2Bae58STHBB+7oZwbrhLk=";
+    hash = "sha256-GNQIOjgHCt3XPCzF0RjV9YStI8psLdHhTPuTkdgx8vA=";
   };
 
-  cargoHash = "sha256-a2JGpIvI65djxyB1LZFWgIQmhsLPLhiYkyvqKwysgQo=";
+  cargoHash = "sha256-CG4WvAFDqtRUjF4kJ29363F6jWRChIXgT5i6ozwV4pw=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

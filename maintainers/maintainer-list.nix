@@ -6506,6 +6506,18 @@
     githubId = 8182846;
     name = "Francesco Gazzetta";
   };
+  fidgetingbits = {
+    name = "fidgetingbits";
+    email = "nixpkgs.xe7au@passmail.net";
+    matrix = "@fidgetingbits:matrix.org";
+    github = "fidgetingbits";
+    githubId = 13679876;
+    keys = [
+      { fingerprint = "U+vNNrQxJRj3NPu9EoD0LFZssRbk6LBg4YPN5nFvQvs"; }
+      { fingerprint = "lX5ewVcaQLxuzqI92gujs3jFNki4d8qF+PATexMijoQ"; }
+      { fingerprint = "elY15tXap1tddxbBVoUoAioe1u0RDWti5rc9cauSmwo"; }
+    ];
+  };
   figsoda = {
     email = "figsoda@pm.me";
     matrix = "@figsoda:matrix.org";
@@ -6811,6 +6823,14 @@
     name = "Dominic Shelton";
     matrix = "@frogamic:beeper.com";
     keys = [ { fingerprint = "779A 7CA8 D51C C53A 9C51  43F7 AAE0 70F0 67EC 00A5"; } ];
+  };
+  frontear = {
+    name = "Ali Rizvi";
+    email = "perm-iterate-0b@icloud.com";
+    matrix = "@frontear:matrix.org";
+    github = "Frontear";
+    githubId = 31909298;
+    keys = [ { fingerprint = "C170 11B7 C0AA BB3F 7415  022C BCB5 CEFD E222 82F5"; } ];
   };
   frontsideair = {
     email = "photonia@gmail.com";

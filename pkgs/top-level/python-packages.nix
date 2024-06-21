@@ -1514,6 +1514,8 @@ self: super: with self; {
 
   bentoml = callPackage ../development/python-modules/bentoml { };
 
+  berkeleydb = callPackage ../development/python-modules/berkeleydb { };
+
   bespon = callPackage ../development/python-modules/bespon { };
 
   betacode = callPackage ../development/python-modules/betacode { };
@@ -5342,6 +5344,8 @@ self: super: with self; {
   hatch-fancy-pypi-readme = callPackage ../development/python-modules/hatch-fancy-pypi-readme { };
 
   hatch-jupyter-builder = callPackage ../development/python-modules/hatch-jupyter-builder { };
+
+  hatch-odoo = callPackage ../development/python-modules/hatch-odoo { };
 
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
@@ -13581,6 +13585,8 @@ self: super: with self; {
   rubicon-objc = callPackage ../development/python-modules/rubicon-objc { };
 
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
+
+  ruff-api = callPackage ../development/python-modules/ruff-api { };
 
   ruffus = callPackage ../development/python-modules/ruffus { };
 

@@ -152,6 +152,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius
 
 # C compilers
 /pkgs/development/compilers/gcc
+/pkgs/development/compilers/llvm @RossComputerGuy
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
@@ -362,4 +363,17 @@ pkgs/by-name/in/incus/                  @adamcstephens
 pkgs/by-name/lx/lxc*                    @adamcstephens
 pkgs/by-name/lx/lxd*                    @adamcstephens
 pkgs/os-specific/linux/lxc/             @adamcstephens
+
+# ExpidusOS, Flutter
+/pkgs/development/compilers/flutter @RossComputerGuy
+/pkgs/desktops/expidus              @RossComputerGuy
+
+# GNU Tar & Zip
+/pkgs/tools/archivers/gnutar        @RossComputerGuy
+/pkgs/tools/archivers/zip           @RossComputerGuy
+
+# SELinux
+/pkgs/os-specific/linux/checkpolicy @RossComputerGuy
+/pkgs/os-specific/linux/libselinux  @RossComputerGuy
+/pkgs/os-specific/linux/libsepol    @RossComputerGuy
 

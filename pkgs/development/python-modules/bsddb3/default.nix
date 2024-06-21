@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
+  python,
   fetchPypi,
   setuptools,
   pkgs,
-  python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,11 +22,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.db ];
 
-  doCheck = pythonOlder "3.12"; # distutils usage
-
-  checkPhase = ''
-    ${python.interpreter} test.py
-  '';
+  # See : https://github.com/NixOS/nixpkgs/pull/311198#discussion_r1599257522
+  # More details here : https://www.jcea.es/programacion/pybsddb.htm
+  disabled = pythonAtLeast "3.10";
 
   # Path to database need to be set.
   # Somehow the setup.py flag is not propagated.
@@ -34,6 +32,16 @@ buildPythonPackage rec {
   # We can also use a variable
   preConfigure = ''
     export BERKELEYDB_DIR=${pkgs.db.dev};
+  '';
+
+  postPatch = ''
+    substituteInPlace test3.py \
+      --replace-fail "from distutils.util import get_platform" "from sysconfig import get_platform" \
+      --replace-fail "sys.config[0:3]" "sys.implementation.cache_tag"
+  '';
+
+  checkPhase = ''
+    ${python.interpreter} test.py
   '';
 
   meta = with lib; {

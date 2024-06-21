@@ -3,8 +3,10 @@
 , fetchurl
 , appimageTools
 , makeWrapper
-# graphs will not sync without matching upstream's major electron version
-, electron_27
+# Notice: graphs will not sync without matching upstream's major electron version
+#         the specific electron version is set at top-level file to preserve override interface.
+#         whenever updating this package also sync electron version at top-level file.
+, electron
 , autoPatchelfHook
 , git
 , nix-update-script
@@ -59,7 +61,7 @@ in {
 
   postFixup = ''
     # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
-    makeWrapper ${electron_27}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --set "LOCAL_GIT_DIRECTORY" ${git} \
       --add-flags $out/share/${pname}/resources/app \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
