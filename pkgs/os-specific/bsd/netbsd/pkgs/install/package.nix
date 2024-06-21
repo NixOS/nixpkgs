@@ -8,7 +8,6 @@
   makeMinimal,
   mandoc,
   groff,
-  rsync,
   compatIfNeeded,
   fts,
 
@@ -36,7 +35,6 @@ mkDerivation {
     makeMinimal
     mandoc
     groff
-    rsync
   ];
   skipIncludesPhase = true;
   buildInputs =
