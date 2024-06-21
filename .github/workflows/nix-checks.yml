@@ -19,5 +19,8 @@ jobs:
       - name: Check Nix flake inputs
         uses: DeterminateSystems/flake-checker-action@v5
         with:
+          check-owner: false # we use our own custom fork of nixpkgs stored in other org on GitHub, so this check would fail otherwise
+          check-supported: false # we use our own custom fork of nixpkgs which uses dev as the unstable integration branch, so this check would fail otherwise
           ignore-missing-flake-lock: false
           fail-mode: true
+          send-statistics: false

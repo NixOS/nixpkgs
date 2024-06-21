@@ -13,7 +13,7 @@ You must have the nix package installed for this build to work.
 make clean netboot
 cd result
 python3 -m http.server&
-qemu-system-x86_64 -enable-kvm -m 4G -cpu core2duo -serial mon:stdio -net user,bootfile="http://127.0.0.1:8000/ipxe" -net nic -msg timestamp=on
+qemu-system-x86_64 -enable-kvm -m 4G -cpu core2duo -serial mon:stdio -net user,bootfile="http://127.0.0.1:8000/ipxe_test_entrypoint" -net nic -msg timestamp=on
 ```
 
 ### FEATURE: SSH-Keys
