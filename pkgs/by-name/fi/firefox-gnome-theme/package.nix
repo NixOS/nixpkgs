@@ -3,21 +3,22 @@
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttr: {
   pname = "firefox-gnome-theme";
-  version = "126";
+  version = "127";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "firefox-gnome-theme";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-jVbj2JD5GRkP8s3vKBtd9PDpftf3kjLR0ZA/ND/c2+Q=";
+    rev = "refs/tags/v${finalAttr.version}";
+    hash = "sha256-ihOVmsno400zgdgSdRRxKRzmKiydH0Vux7LtSDpCyUI=";
   };
 
   outputs = [ "out" "doc" ];
 
   strictDeps = true;
 
+  # Only copy necessary files
   installPhase = ''
     runHook preInstall
 
