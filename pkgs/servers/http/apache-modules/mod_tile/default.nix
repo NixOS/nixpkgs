@@ -20,19 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mod_tile";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zXUwTG8cqAkY5MC1jAc2TtMgNMQPLc5nc22okVYP4ME=";
+    hash = "sha256-JC275LKsCeEo5DcIX0X7kcLoijQJqfJvBvw8xi2gwpk=";
   };
-
-  patches = [
-    # Support Mapnik >= v4.0.0-rc2 (boost:optional no longer used)
-    ./mod_tile-std_optional.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -79,6 +74,6 @@ stdenv.mkDerivation rec {
     description = "Efficiently render and serve OpenStreetMap tiles using Apache and Mapnik";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jglukasik ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
