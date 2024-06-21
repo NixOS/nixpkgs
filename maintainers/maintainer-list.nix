@@ -13426,14 +13426,6 @@
     githubId = 754512;
     name = "Mogria";
   };
-  mohe2015 = {
-    name = "Moritz Hedtke";
-    email = "Moritz.Hedtke@t-online.de";
-    matrix = "@moritz.hedtke:matrix.org";
-    github = "mohe2015";
-    githubId = 13287984;
-    keys = [ { fingerprint = "1248 D3E1 1D11 4A85 75C9  8934 6794 D45A 488C 2EDE"; } ];
-  };
   momeemt = {
     name = "Mutsuha Asada";
     email = "me@momee.mt";
