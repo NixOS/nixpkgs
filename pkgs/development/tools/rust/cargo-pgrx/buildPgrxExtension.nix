@@ -56,6 +56,7 @@
 # dependency here. Set to false and provide rustfmt in nativeBuildInputs, if you need it, e.g.
 # if you include the generated code in the output via postInstall.
 , useFakeRustfmt ? true
+, usePgTestCheckFeature ? true
 , ...
 } @ args:
 let
@@ -96,7 +97,7 @@ let
     pg_ctl stop
   '';
 
-  argsForBuildRustPackage = builtins.removeAttrs args [ "postgresql" "useFakeRustfmt" ];
+  argsForBuildRustPackage = builtins.removeAttrs args [ "postgresql" "useFakeRustfmt" "usePgTestCheckFeature" ];
 
   # so we don't accidentally `(rustPlatform.buildRustPackage argsForBuildRustPackage) // { ... }` because
   # we forgot parentheses
@@ -154,7 +155,7 @@ let
     RUST_BACKTRACE = "full";
 
     checkNoDefaultFeatures = true;
-    checkFeatures = (args.checkFeatures or [ ]) ++ [ "pg_test pg${pgrxPostgresMajor}" ];
+    checkFeatures = (args.checkFeatures or [ ]) ++ (lib.optionals usePgTestCheckFeature [ "pg_test" ]) ++ [ "pg${pgrxPostgresMajor}" ];
   };
 in
 rustPlatform.buildRustPackage finalArgs
