@@ -795,6 +795,8 @@ self: super: with self; {
 
   asdf-transform-schemas = callPackage ../development/python-modules/asdf-transform-schemas { };
 
+  asdf-wcs-schemas = callPackage ../development/python-modules/asdf-wcs-schemas { };
+
   ase = callPackage ../development/python-modules/ase { };
 
   asf-search = callPackage ../development/python-modules/asf-search { };
