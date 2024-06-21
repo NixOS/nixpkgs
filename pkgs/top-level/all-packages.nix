@@ -10439,12 +10439,8 @@ with pkgs;
   inherit (callPackages ../servers/nextcloud {})
     nextcloud28 nextcloud29;
 
-  nextcloud28Packages = callPackage ../servers/nextcloud/packages {
-    apps = lib.importJSON ../servers/nextcloud/packages/28.json;
-  };
-  nextcloud29Packages = callPackage ../servers/nextcloud/packages {
-    apps = lib.importJSON ../servers/nextcloud/packages/29.json;
-  };
+  nextcloud28Packages = callPackage ../servers/nextcloud/packages { ncVersion = "28"; };
+  nextcloud29Packages = callPackage ../servers/nextcloud/packages { ncVersion = "29"; };
 
 
   nextcloud-client = qt6Packages.callPackage ../applications/networking/nextcloud-client { };
