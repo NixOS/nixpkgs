@@ -42,7 +42,7 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail "'numpy>=2.0.0rc1'," ""
   '';
-  
+
   build-system = [
     setuptools
     setuptools-scm
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     ];
   };
 
-  # With 1.12.0 tests have issues importing modules 
+  # With 1.12.0 tests have issues importing modules
   doCheck = false;
 
   pythonImportsCheck = [ "photutils" ];
