@@ -24,6 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "argcomplete"
     "decli"
   ];
 
