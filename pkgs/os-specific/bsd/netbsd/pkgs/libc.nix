@@ -24,7 +24,6 @@
 }:
 
 mkDerivation {
-  noLibc = true;
   path = "lib/libc";
   USE_FORT = "yes";
   MKPROFILE = "no";
@@ -95,8 +94,5 @@ mkDerivation {
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags install
   '';
-  postPatch = ''
-    sed -i 's,/usr\(/include/sys/syscall.h\),${headers}\1,g' \
-      $BSDSRCDIR/lib/{libc,librt}/sys/Makefile.inc
-  '';
+  inherit (librt) postPatch;
 }

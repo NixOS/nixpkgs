@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  stdenvNoLibc,
+  crossLibcStdenv,
   runCommand,
   rsync,
   source,
@@ -23,13 +23,7 @@
 lib.makeOverridable (
   attrs:
   let
-    stdenv' =
-      if attrs.noCC or false then
-        stdenvNoCC
-      else if attrs.noLibc or false then
-        stdenvNoLibc
-      else
-        stdenv;
+    stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
   in
   stdenv'.mkDerivation (
     rec {

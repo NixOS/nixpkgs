@@ -1,6 +1,6 @@
 {
   lib,
-  stdenvNoLibc,
+  stdenv,
   mkDerivation,
   bsdSetupHook,
   openbsdSetupHook,
@@ -10,6 +10,7 @@
   byacc,
   gencat,
   rpcgen,
+  lorder,
   csu,
   include,
   ctags,
@@ -18,8 +19,7 @@
   fetchpatch,
 }:
 
-mkDerivation {
-  noLibc = true;
+mkDerivation rec {
   pname = "libc";
   path = "lib/libc";
   extraPaths = [
@@ -53,6 +53,7 @@ mkDerivation {
     gencat
     rpcgen
     ctags
+    lorder
     tsort
   ];
 
@@ -68,9 +69,7 @@ mkDerivation {
 
   # Suppress lld >= 16 undefined version errors
   # https://github.com/freebsd/freebsd-src/commit/2ba84b4bcdd6012e8cfbf8a0d060a4438623a638
-  env.NIX_LDFLAGS = lib.optionalString (
-    stdenvNoLibc.hostPlatform.linker == "lld"
-  ) "--undefined-version";
+  env.NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.linker == "lld") "--undefined-version";
 
   makeFlags = [
     "STRIP=-s" # flag to install, not command
