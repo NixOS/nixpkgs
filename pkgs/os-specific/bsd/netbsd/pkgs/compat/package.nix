@@ -6,9 +6,6 @@
   defaultMakeFlags,
   coreutils,
   cctools-port,
-  include,
-  libc,
-  libutil,
   install,
   bsdSetupHook,
   netbsdSetupHook,
@@ -130,12 +127,13 @@ mkDerivation (
           --subst-var-by version ${version}
       '';
     extraPaths = [
-      include.path
-      libc.path
-      libutil.path
+      "common"
+      "include"
+      "lib/libc"
+      "lib/libutil"
       "external/bsd/flex"
-      "sys/sys"
+      "sys"
       "common/include/rpc/types.h"
-    ] ++ libutil.extraPaths ++ _mainLibcExtraPaths;
+    ] ++ _mainLibcExtraPaths;
   }
 )
