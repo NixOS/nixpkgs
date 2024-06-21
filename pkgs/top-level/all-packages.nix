@@ -19728,8 +19728,6 @@ with pkgs;
 
   udis86 = callPackage  ../development/tools/udis86 { };
 
-  uefi-firmware-parser = callPackage ../development/tools/analysis/uefi-firmware-parser { };
-
   uhd = callPackage ../applications/radio/uhd { };
   uhdMinimal = uhd.override {
     enableUtils = false;
