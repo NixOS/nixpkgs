@@ -1,0 +1,14 @@
+diff --git a/bundle/bin/rke2-killall.sh b/bundle/bin/rke2-killall.sh
+index 1099ad90..db8a7ea9 100755
+--- a/bundle/bin/rke2-killall.sh
++++ b/bundle/bin/rke2-killall.sh
+@@ -54,8 +54,7 @@ export PATH=$PATH:/var/lib/rancher/rke2/bin
+ 
+ set -x
+ 
+-systemctl stop rke2-server.service || true
+-systemctl stop rke2-agent.service || true
++systemctl stop rke2.service || true
+ 
+ killtree $({ set +x; } 2>/dev/null; getshims; set -x)
+ 

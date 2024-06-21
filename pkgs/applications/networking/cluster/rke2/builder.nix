@@ -7,6 +7,9 @@ lib: { rke2Version, rke2RepoSha256, rke2VendorHash, updateScript
 # Runtime dependencies
 , procps, coreutils, util-linux, ethtool, socat, iptables, bridge-utils, iproute2, kmod, lvm2
 
+# Killall Script dependencies
+, systemd, gnugrep, gnused
+
 # Testing dependencies
 , nixosTests, testers, rke2
 }:
@@ -41,6 +44,9 @@ buildGoModule rec {
     lvm2 # dmsetup
   ];
 
+  # Patch the systemd unit name to be `rke2.service`.
+  patches = [ ./fix-systemd-unit-name.patch ];
+
   # See: https://github.com/rancher/rke2/blob/e7f87c6dd56fdd76a7dab58900aeea8946b2c008/scripts/build-binary#L27-L38
   ldflags = [
     "-w"
@@ -71,6 +77,11 @@ buildGoModule rec {
   installPhase = ''
     install -D $GOPATH/bin/rke2 $out/bin/rke2
     wrapProgram $out/bin/rke2 \
+      --prefix PATH : ${lib.makeBinPath buildInputs}
+
+    install -D ./bundle/bin/rke2-killall.sh $out/bin/rke2-killall.sh
+    wrapProgram $out/bin/rke2-killall.sh \
+      --prefix PATH : ${lib.makeBinPath [ systemd gnugrep gnused ]} \
       --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
 
