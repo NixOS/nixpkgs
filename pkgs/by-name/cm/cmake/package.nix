@@ -31,6 +31,8 @@
 , darwin
 , libsForQt5
 , gitUpdater
+  # for tests
+, callPackage
 }:
 
 let
@@ -183,10 +185,47 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
-  passthru.updateScript = gitUpdater {
-    url = "https://gitlab.kitware.com/cmake/cmake.git";
-    rev-prefix = "v";
-    ignoredVersions = "-"; # -rc1 and friends
+  passthru = {
+    tests = {
+      # Quick setup-hook.sh tests that do not depend on CMake itself,
+      # but use the CMakeLists.txt from its source as sample input.
+      cmake-args-no-structured-attrs = (callPackage ./test/cmake-args.nix {
+        cmake = finalAttrs.finalPackage;
+      }).overrideAttrs {
+        __structuredAttrs = false;
+      };
+      cmake-args-structured-attrs =
+        finalAttrs.passthru.tests.cmake-args-no-structured-attrs.overrideAttrs {
+          __structuredAttrs = true;
+        };
+      cmake-args-structured-attrs-equivalence = callPackage (
+        {
+          lib,
+          runCommandLocal,
+          diffutils,
+        }:
+        let
+          substituteOut = cmake-args-drv:
+            lib.escapeShellArgs [
+              "substitute" cmake-args-drv.out "/dev/stdout"
+              "--replace-quiet" cmake-args-drv.out (placeholder "out")
+            ];
+        in
+        runCommandLocal "cmake-args-structured-attrs-equivalence" {
+          nativeBuildInputs = [ diffutils ];
+        } ''
+          diff -u \
+            <(${substituteOut finalAttrs.passthru.tests.cmake-args-no-structured-attrs}) \
+            <(${substituteOut finalAttrs.passthru.tests.cmake-args-structured-attrs}) \
+            | tee "$out"
+        ''
+      ) { };
+    };
+    updateScript = gitUpdater {
+      url = "https://gitlab.kitware.com/cmake/cmake.git";
+      rev-prefix = "v";
+      ignoredVersions = "-"; # -rc1 and friends
+    };
   };
 
   meta = {
