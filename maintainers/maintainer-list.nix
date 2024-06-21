@@ -13157,6 +13157,12 @@
     githubId = 3269878;
     name = "Miguel Madrid Mencía";
   };
+  mimvoid = {
+    github = "mimvoid";
+    githubId = 153698678;
+    email = "mimvoid@proton.me";
+    name = "mimvoid";
+  };
   mindavi = {
     email = "rol3517@gmail.com";
     github = "Mindavi";
