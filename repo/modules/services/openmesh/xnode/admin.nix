@@ -14,7 +14,7 @@ in
 
     stateDir = mkOption {
       type = types.str;
-      default = "/var/lib/openmesh-xnode-admin/default.nix";
+      default = "/var/lib/openmesh-xnode-admin";
       description = "State storage directory.";
     };
 
@@ -32,7 +32,7 @@ in
 
     remoteDir = mkOption {
       type = types.str;
-      default = "https://openmesh.network/xnodes/functions";
+      default = "https://dpl-backend-staging.up.railway.app/xnodes/functions";
       description = "The remote repository to pull down a configuration from.";
     };
 
@@ -41,7 +41,6 @@ in
       default = 0;
       description = "Number of seconds between fetching for changes to configuration.";
     };
-    # Todo: UUID + PSK implementation
   };
 
   config = lib.mkIf cfg.enable {
@@ -50,30 +49,34 @@ in
     systemd.services.openmesh-xnode-admin = {
       description = "Openmesh Xnode Administration and Configuration Subsystem Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
 
       serviceConfig = {
-        ExecStart = ''${lib.getExe cfg.package} -p ${cfg.stateDir}/${cfg.localStateFilename} ${cfg.remoteDir} ${toString cfg.searchInterval}''; 
+        ExecStart = ''${lib.getExe cfg.package} -p ${cfg.stateDir} ${cfg.remoteDir} ${toString cfg.searchInterval}''; 
+        ExecStartPre = ''-${lib.getExe pkgs.git} clone --branch feature/import-agent-config-dynamically https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
+        ExecCondition = ''-${lib.getExe pkgs.git} pull --branch feature/import-agent-config-dynamically https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
         Restart = "always";
         WorkingDirectory = cfg.stateDir;
         StateDirectory = "openmesh-xnode-admin";
+        StateDirectoryMode = "0775";
         RuntimeDirectory = "openmesh-xnode-admin";
-        RuntimeDirectoryMode = "0755";
+        RuntimeDirectoryMode = "0775";
         PrivateTmp = true;
-        DynamicUser = true;
-        DevicePolicy = "closed";
-        LockPersonality = true;
-        PrivateUsers = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectControlGroups = true;
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
+        User="root";
+        #DevicePolicy = "closed";
+        #LockPersonality = true;
+        #PrivateUsers = true;
+        #ProtectHome = true;
+        #ProtectHostname = true;
+        #ProtectKernelLogs = true;
+        #ProtectKernelModules = true;
+        #ProtectKernelTunables = true;
+        #ProtectControlGroups = true;
+        #RestrictNamespaces = true;
+        #RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        UMask = "0077";
+        Environment="NIX_PATH=nixpkgs=flake:nixpkgs:/nix/var/nix/profiles/per-user/root/channels";
       };
     };
 
