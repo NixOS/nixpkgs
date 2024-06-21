@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Light-weight Python Computational Pipeline Management";
     homepage = "http://www.ruffus.org.uk";
     license = licenses.mit;
-    maintainers = [ maintainers.kiwi ];
+    maintainers = [ ];
   };
 }
