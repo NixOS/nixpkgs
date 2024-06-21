@@ -6506,6 +6506,18 @@
     githubId = 8182846;
     name = "Francesco Gazzetta";
   };
+  fidgetingbits = {
+    name = "fidgetingbits";
+    email = "nixpkgs.xe7au@passmail.net";
+    matrix = "@fidgetingbits:matrix.org";
+    github = "fidgetingbits";
+    githubId = 13679876;
+    keys = [
+      { fingerprint = "U+vNNrQxJRj3NPu9EoD0LFZssRbk6LBg4YPN5nFvQvs"; }
+      { fingerprint = "lX5ewVcaQLxuzqI92gujs3jFNki4d8qF+PATexMijoQ"; }
+      { fingerprint = "elY15tXap1tddxbBVoUoAioe1u0RDWti5rc9cauSmwo"; }
+    ];
+  };
   figsoda = {
     email = "figsoda@pm.me";
     matrix = "@figsoda:matrix.org";

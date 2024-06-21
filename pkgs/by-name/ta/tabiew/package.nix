@@ -1,17 +1,20 @@
-{ lib, fetchFromGitHub, rustPlatform, stdenv, installShellFiles }:
-
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+}:
 rustPlatform.buildRustPackage rec {
   pname = "tabiew";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "shshemi";
     repo = "tabiew";
     rev = "v${version}";
-    hash = "sha256-sJQlvJxVXHgkE4RUtlM3BNL1rZKvQa7C5wlPHjFSuus=";
+    hash = "sha256-ObS+8901Uw9mIzMK14D0UgCWJFRNaQ0tOIq5merHYIo=";
   };
 
-  cargoHash = "sha256-QpeCGeId6pPYSGQvcI06zFC013RLcv7ryZlEn3F9dAI=";
+  cargoHash = "sha256-vOdjHBR/FZjYkLMvPvBZ/xTPKXgchv92BQSLLodymgY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
