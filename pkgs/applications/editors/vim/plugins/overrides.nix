@@ -1485,6 +1485,11 @@
     '';
   };
 
+  todo-comments-nvim = super.todo-comments-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    nvimRequireCheck = "todo-comments";
+  };
+
   tup =
     let
       # Based on the comment at the top of https://github.com/gittup/tup/blob/master/contrib/syntax/tup.vim
