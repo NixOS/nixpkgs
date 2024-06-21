@@ -44,9 +44,6 @@ buildGoModule rec {
     lvm2 # dmsetup
   ];
 
-  # Patch the systemd unit name to be `rke2.service`.
-  patches = [ ./fix-systemd-unit-name.patch ];
-
   # See: https://github.com/rancher/rke2/blob/e7f87c6dd56fdd76a7dab58900aeea8946b2c008/scripts/build-binary#L27-L38
   ldflags = [
     "-w"

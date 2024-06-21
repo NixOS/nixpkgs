@@ -241,7 +241,7 @@ in
       "kernel.panic_on_oops" = 1;
     };
 
-    systemd.services.rke2 = {
+    systemd.services."rke2-${cfg.role}" = {
       description = "Rancher Kubernetes Engine v2";
       documentation = [ "https://github.com/rancher/rke2#readme" ];
       after = [ "network-online.target" ];
