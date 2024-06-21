@@ -244,6 +244,8 @@ mapAliases ({
   clang_10 = throw "clang_10 has been removed from nixpkgs"; # Added 2024-01-26
   clang_11 = throw "clang_11 has been removed from nixpkgs"; # Added 2023-01-24
 
+  clash-verge-rev = throw "clash-verge-rev has been renamed to clash-verge"; # Added 2024-06-09
+
   cq-editor = throw "cq-editor has been removed, as it use a dependency that was disabled since python 3.8 and was last updated in 2021"; # Added 2024-05-13
   ### D ###
 
