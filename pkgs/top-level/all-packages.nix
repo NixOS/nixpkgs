@@ -25790,8 +25790,6 @@ with pkgs;
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
 
-  mailman-rss = callPackage ../tools/misc/mailman-rss { };
-
   listadmin = callPackage ../applications/networking/listadmin { };
 
   maker-panel = callPackage ../tools/misc/maker-panel { };
