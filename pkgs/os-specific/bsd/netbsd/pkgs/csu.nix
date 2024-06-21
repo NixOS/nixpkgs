@@ -16,11 +16,12 @@
   statHook,
   rsync,
   headers,
-  sys,
+  sys-headers,
   ld_elf_so,
 }:
 
 mkDerivation {
+  noLibc = true;
   path = "lib/csu";
   meta.platforms = lib.platforms.netbsd;
   nativeBuildInputs = [
@@ -41,7 +42,7 @@ mkDerivation {
   ];
   buildInputs = [ headers ];
   extraPaths = [
-    sys.path
+    sys-headers.path
     ld_elf_so.path
   ];
 }
