@@ -5,7 +5,7 @@
 python311.pkgs.buildPythonPackage rec {
   pname = "macs2";
   version = "2.2.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = lib.toUpper pname;
@@ -22,14 +22,13 @@ python311.pkgs.buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = with python311.pkgs; [
+  build-system = with python311.pkgs; [
     cython_0
     numpy
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = with python311.pkgs; [
+  dependencies = with python311.pkgs; [
     numpy
   ];
 
