@@ -1977,6 +1977,12 @@
     githubId = 12958979;
     name = "Mika Naylor";
   };
+  autra = {
+    email = "augustin.trancart@gmail.com";
+    github = "autra";
+    githubId = 1576598;
+    name = "Augustin Trancart";
+  };
   autrimpo = {
     email = "michal@koutensky.net";
     github = "autrimpo";
