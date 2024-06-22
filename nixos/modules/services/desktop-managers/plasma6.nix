@@ -187,8 +187,6 @@ in {
       "/libexec" # for drkonqi
     ];
 
-    environment.etc."X11/xkb".source = config.services.xserver.xkb.dir;
-
     # Add ~/.config/kdedefaults to XDG_CONFIG_DIRS for shells, since Plasma sets that.
     # FIXME: maybe we should append to XDG_CONFIG_DIRS in /etc/set-environment instead?
     environment.sessionVariables.XDG_CONFIG_DIRS = ["$HOME/.config/kdedefaults"];
@@ -204,6 +202,8 @@ in {
 
     # Enable GTK applications to load SVG icons
     programs.gdk-pixbuf.modulePackages = [pkgs.librsvg];
+
+    services.xkb.enable = true;
 
     fonts.packages = [cfg.notoPackage pkgs.hack-font];
     fonts.fontconfig.defaultFonts = {

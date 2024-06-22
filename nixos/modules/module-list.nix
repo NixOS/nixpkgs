@@ -512,6 +512,7 @@
   ./services/desktops/system76-scheduler.nix
   ./services/desktops/telepathy.nix
   ./services/desktops/tumbler.nix
+  ./services/desktops/xkb.nix
   ./services/desktops/zeitgeist.nix
   ./services/development/athens.nix
   ./services/development/blackfire.nix
@@ -1502,7 +1503,6 @@
   ./services/x11/display-managers/startx.nix
   ./services/x11/display-managers/sx.nix
   ./services/x11/display-managers/xpra.nix
-  ./services/x11/extra-layouts.nix
   ./services/x11/fractalart.nix
   ./services/x11/hardware/cmt.nix
   ./services/x11/hardware/digimend.nix
