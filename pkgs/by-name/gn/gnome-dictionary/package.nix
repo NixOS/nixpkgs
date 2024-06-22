@@ -72,7 +72,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-dictionary";
-      attrPath = "gnome.gnome-dictionary";
     };
   };
 
