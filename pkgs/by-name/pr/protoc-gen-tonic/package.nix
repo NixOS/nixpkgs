@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "protoc-gen-tonic";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-jgU1XvUxIrZ72dLNPqDGHCONMlHsjW4k4vkO626iqxs=";
+    hash = "sha256-3qz1ea9lEsZjhWNA0lcwqsPkNmjj2ZBljqNRr5/2lKM=";
   };
 
-  cargoSha256 = "sha256-FrkvL/uJitMkSyOytVSmlwr26yMVM12S2n+EaSw11CE=";
+  cargoHash = "sha256-nUsRoDaP+omZdOTnaxvHbJT1uNGtyfgXyEFZbp/CeYA=";
 
   passthru.updateScript = nix-update-script { };
 
