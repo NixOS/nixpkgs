@@ -8,6 +8,11 @@ in
   imports = [ ./azure-common.nix ];
 
   options = {
+    virtualisation.azureImage.name = mkOption {
+      type = types.str;
+      description = "The name of the generated image file";
+      default = "nixos-azure-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
+    };
     virtualisation.azureImage.diskSize = mkOption {
       type = with types; either (enum [ "auto" ]) int;
       default = "auto";
@@ -28,7 +33,7 @@ in
     system.build.azureImage = import ../../lib/make-disk-image.nix {
       name = "azure-image";
       postVM = ''
-        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/disk.vhd
+        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/${cfg.name}.vhd
         rm $diskImage
       '';
       configFile = ./azure-config-user.nix;
