@@ -30995,8 +30995,6 @@ with pkgs;
 
   gitolite = callPackage ../applications/version-management/gitolite { };
 
-  inherit (gnome) gitg;
-
   gmrun = callPackage ../applications/misc/gmrun { };
 
   gnucash = callPackage ../applications/office/gnucash { };
