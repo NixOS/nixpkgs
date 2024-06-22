@@ -646,6 +646,63 @@ runTests {
     ( builtins.tryEval (toIntBase10 " foo00123 ") == { success = false; value = false; } )
   ];
 
+  # Manual tests for error messages:
+  # derivationOf "hi"
+  # derivationOf (hello.outPath + hello.drvPath + bind)
+  # derivationOf (bind + dig)     # These are outputs of the same drv. While not impossible to return something, this is almost certainly a mistake.
+  # derivationOf (hello.drvPath)  # Unless hello.outPath is an `outputOf` an output, it does not have a deriver.
+  testDerivationOf =
+    let
+      drv = derivation { name = "dummy"; builder = "x"; system = "x"; };
+      drvPathNoContext = builtins.unsafeDiscardStringContext drv.drvPath;
+      result = derivationOf drv;
+    in
+    {
+      expr = {
+        rawStr = builtins.unsafeDiscardStringContext result;
+        context = builtins.getContext result;
+      };
+      expected = {
+        rawStr = drvPathNoContext;
+        context.${drvPathNoContext} = { path = true; };
+      };
+    };
+
+  testDerivationOfSelectedOutput =
+    let
+      drv = derivation { name = "dummy"; builder = "x"; system = "x"; outputs = [ "foo" "bar" "baz" ]; };
+      drvPathNoContext = builtins.unsafeDiscardStringContext drv.drvPath;
+      result = derivationOf drv.bar;
+    in
+    {
+      expr = {
+        rawStr = builtins.unsafeDiscardStringContext result;
+        context = builtins.getContext result;
+      };
+      expected = {
+        rawStr = drvPathNoContext;
+        context.${drvPathNoContext} = { path = true; };
+      };
+    };
+
+  testDerivationOfOutputPathString =
+    let
+      drv = derivation { name = "dummy"; builder = "x"; system = "x"; };
+      drvPathNoContext = builtins.unsafeDiscardStringContext drv.drvPath;
+      outString = "${drv}";
+      result = derivationOf outString;
+    in
+    {
+      expr = {
+        rawStr = builtins.unsafeDiscardStringContext result;
+        context = builtins.getContext result;
+      };
+      expected = {
+        rawStr = drvPathNoContext;
+        context.${drvPathNoContext} = { path = true; };
+      };
+    };
+
 # LISTS
 
   testFilter = {

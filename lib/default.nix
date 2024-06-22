@@ -95,7 +95,7 @@ let
       drop sublist last init crossLists unique allUnique intersectLists
       subtractLists mutuallyExclusive groupBy groupBy';
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
-      intersperse concatStringsSep concatMapStringsSep
+      derivationOf intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
       makeLibraryPath makeIncludePath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape

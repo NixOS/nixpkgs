@@ -6,8 +6,43 @@ let
 
   inherit (lib.trivial) warnIf;
 
+  inherit (lib)
+    attrNames
+    attrsToList
+    concatMap
+    isDerivation
+    mapAttrsToList
+    optional
+    throwIf
+    ;
+  inherit (lib.strings)
+    concatStringsSep
+    hasPrefix
+    hasSuffix
+    ;
+
 asciiTable = import ./ascii-table.nix;
 
+  showContextItemList = context:
+    concatStringsSep
+      "\n"
+      (concatMap
+        ({ path, items }:
+          optional (items?allOutputs) "  - ${path} as derivation and closure including closure outputs"
+          ++ map (outName: "  - ${path}^${outName}") items.outputs or []
+          ++ optional (items?path)
+              (if hasSuffix ".drv" path
+                then "  - ${path} as derivation file and closure"
+                else "  - ${path} as store path closure")
+        )
+        (mapAttrsToList (k: v: { path = k; items = v; }) context)
+      );
+  countPathsInContextGroup = v:
+    (if v?outputs
+    then length v.outputs
+    else 0)
+    + (if v?path then 1 else 0)
+    + (if v?allOutputs then 1 else 0);
 in
 
 rec {
@@ -1338,4 +1373,44 @@ rec {
         else if k == 2 then infixDifferAtMost2 ainfix binfix
         else levenshtein ainfix binfix <= k;
       in f;
+
+  /*
+    Return the derivation path that has the given path as an output.
+
+    Not all paths are constructed by derivations, so this function may throw.
+
+    Design note:
+    While this function is close to being the inverse of the RFC 92 `outputOf`
+    function, it does not return the output name. This is intentional, because
+    the output name *of a derivation* is not meant to carry meaning, unlike
+    the output *attribute* of a package. Hence, bundling the output name into
+    this return value would almost always be inconvenient.
+  */
+  derivationOf =
+    v:
+    let
+      outputString =
+        if isDerivation v
+        then "${v.outPath}"
+        else if isString v
+        then v
+        else if isPath v
+        then throw "derivationOf: The passed argument is a path value, and path values are not outputs, so we can't find the derivation that produced it."
+        else throw "derivationOf: Expected a string containing a derivation output, but got a ${typeOf v} instead.";
+      ctx = builtins.getContext outputString;
+      items = attrsToList ctx;
+      drv = (head items).name;
+      group = (head items).value;
+      drvAsSource = builtins.appendContext drv { ${drv} = { path = true; }; };
+    in
+      throwIf (! hasPrefix builtins.storeDir outputString)
+        "lib.derivationOf: To retrieve the derivation of an output, the passed string must reference a store path. The passed string does not reference a store path."
+      throwIf (length items != 1)
+        (if length items == 0
+         then "lib.derivationOf: To retrieve the derivation of an output, the passed string must reference a store path. The passed string does not reference any store path."
+         else "lib.derivationOf: To retrieve the derivation of an output, the passed string must only reference a single store path. The passed string appears to be constructed from multiple outputs. It refers to the following:\n" + showContextItemList ctx)
+      throwIf (countPathsInContextGroup group != 1)
+        "lib.derivationOf: To retrieve the derivation of an output, the passed string must only reference a single output, rather than multiple paths referring to the same derivation. The passed string references:\n${showContextItemList ctx}"
+      drvAsSource;
+
 }
