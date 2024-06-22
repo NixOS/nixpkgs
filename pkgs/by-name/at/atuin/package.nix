@@ -4,7 +4,7 @@
 , installShellFiles
 , rustPlatform
 , libiconv
-, protobuf
+, buildPackages
 , darwin
 , nixosTests
 }:
@@ -35,9 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [
-    protobuf
-  ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
     darwin.apple_sdk_11_0.frameworks.AppKit
     darwin.apple_sdk_11_0.frameworks.Security
@@ -45,8 +43,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   preBuild = ''
-    export PROTOC=${protobuf}/bin/protoc
-    export PROTOC_INCLUDE="${protobuf}/include";
+    export PROTOC=${buildPackages.protobuf}/bin/protoc
+    export PROTOC_INCLUDE="${buildPackages.protobuf}/include";
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
