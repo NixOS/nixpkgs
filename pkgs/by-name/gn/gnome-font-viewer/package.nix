@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-font-viewer";
-      attrPath = "gnome.gnome-font-viewer";
     };
   };
 

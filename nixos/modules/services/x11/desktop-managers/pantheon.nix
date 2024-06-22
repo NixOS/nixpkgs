@@ -288,7 +288,7 @@ in
       programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
       environment.systemPackages = utils.removePackagesByName ([
-        pkgs.gnome.gnome-font-viewer
+        pkgs.gnome-font-viewer
       ] ++ (with pkgs.pantheon; [
         elementary-calculator
         elementary-calendar
