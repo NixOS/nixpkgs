@@ -109,12 +109,6 @@ let
     ];
   };
 
-  runtimeLibs = lib.optionals enableRocm [
-    rocmPath
-  ] ++ lib.optionals enableCuda [
-    linuxPackages.nvidia_x11
-  ];
-
   appleFrameworks = darwin.apple_sdk_11_0.frameworks;
   metalFrameworks = [
     appleFrameworks.Accelerate
@@ -122,6 +116,17 @@ let
     appleFrameworks.MetalKit
     appleFrameworks.MetalPerformanceShaders
   ];
+
+  runtimeLibs = lib.optionals enableRocm [
+    rocmPath
+  ] ++ lib.optionals enableCuda [
+    linuxPackages.nvidia_x11
+  ];
+  wrapperOptions = builtins.concatStringsSep " " ([
+    "--suffix LD_LIBRARY_PATH : '/run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}'"
+  ] ++ lib.optionals enableRocm [
+    "--set-default HIP_PATH '${rocmPath}'"
+  ]);
 
 
   goBuild =
@@ -183,10 +188,7 @@ goBuild ((lib.optionalAttrs enableRocm {
   '' + lib.optionalString (enableRocm || enableCuda) ''
     # expose runtime libraries necessary to use the gpu
     mv "$out/bin/ollama" "$out/bin/.ollama-unwrapped"
-    makeWrapper "$out/bin/.ollama-unwrapped" "$out/bin/ollama" ${
-      lib.optionalString enableRocm
-        ''--set-default HIP_PATH '${rocmPath}' ''} \
-      --suffix LD_LIBRARY_PATH : '/run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}'
+    makeWrapper "$out/bin/.ollama-unwrapped" "$out/bin/ollama" ${wrapperOptions}
   '';
 
   ldflags = [
