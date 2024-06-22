@@ -588,6 +588,7 @@ in {
   # Fails on aarch64-linux at the PDF creation step - need to debug this on an
   # aarch64 machine..
   musescore = handleTestOn ["x86_64-linux"] ./musescore.nix {};
+  music-assistant = runTest ./music-assistant.nix;
   munin = handleTest ./munin.nix {};
   mutableUsers = handleTest ./mutable-users.nix {};
   mxisd = handleTest ./mxisd.nix {};
