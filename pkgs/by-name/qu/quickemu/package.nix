@@ -56,13 +56,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.4";
+  version = "4.9.4-unstable-2024-05-28";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = finalAttrs.version;
-    hash = "sha256-fjbXgze6klvbRgkJtPIUh9kEkP/As7dAj+cazpzelBY=";
+    rev = "d78255b097b599e8ab3713cb61c4085cc45f5a95"; # TODO: return to version on next release
+    hash = "sha256-fF306CdGqKM+779OLm0NNyqPBtm7TuU7UN/NanT12y8=";
   };
 
   postPatch = ''
@@ -73,16 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
       quickemu
   '';
-
-  patches = [
-    # reduces windows vm ram requirements to 4G, to match microsoft recommendations
-    # TODO: remove on next release
-    (fetchpatch2 {
-      name = "decrease-windows-ram-requirements.patch";
-      url = "https://github.com/quickemu-project/quickemu/commit/f51697593a4650c5486661292e2febe1d16f8c71.patch";
-      hash = "sha256-J5hIvQGtkufOcjk2FZN65iox/W2zkLlg+Veg9TF11Fs=";
-    })
-  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -106,7 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = testers.testVersion { package = quickemu; };
+  passthru.tests = testers.testVersion {
+    version = "4.9.5"; # required for passing tests, TODO: remove when release bump
+    package = quickemu;
+  };
 
   meta = {
     description = "Quickly create and run optimised Windows, macOS and Linux virtual machines";
