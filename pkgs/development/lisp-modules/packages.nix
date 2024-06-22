@@ -397,41 +397,10 @@ let
       cl-cffi-gtk
       quri
       sqlite
-      # TODO: Remove these overrides after quicklisp updates past the June 2023 release
-      (trivial-clipboard.overrideAttrs (final: prev: {
-        src = pkgs.fetchFromGitHub {
-          owner = "snmsts";
-          repo = "trivial-clipboard";
-          rev = "f7b2c96fea00ca06a83f20b00b7b1971e76e03e7";
-          sha256 = "sha256-U6Y9BiM2P1t9P8fdX8WIRQPRWl2v2ZQuKdP1IUqvOAk=";
-        };}))
-      (cl-gobject-introspection.overrideAttrs (final: prev: {
-        src = pkgs.fetchFromGitHub {
-          owner = "andy128k";
-          repo = "cl-gobject-introspection";
-          rev = "4908a84c16349929b309c50409815ff81fb9b3c4";
-          sha256 = "sha256-krVU5TQsVAbglxXMq29WJriWBIgQDLy1iCvB5iNziEc=";
-        };}))
-      (cl-webkit2.overrideAttrs (final: prev: {
-        src = pkgs.fetchFromGitHub {
-          owner = "joachifm";
-          repo = "cl-webkit";
-          rev = "66fd0700111586425c9942da1694b856fb15cf41";
-          sha256 = "sha256-t/B9CvQTekEEsM/ZEp47Mn6NeZaTYFsTdRqclfX9BNg=";
-        };
-      }))
-      (slynk.overrideAttrs (final: prev: {
-        src = pkgs.fetchFromGitHub {
-          owner = "joaotavora";
-          repo = "sly";
-          rev = "9c43bf65b967e12cef1996f1af5f0671d8aecbf4";
-          hash = "sha256-YlHZ/7VwvHe2PBPRshN+Gr3WuGK9MpkOJprP6QXI3pY=";
-        };
-        systems = [ "slynk" "slynk/arglists" "slynk/fancy-inspector"
-                    "slynk/package-fu" "slynk/mrepl" "slynk/trace-dialog"
-                    "slynk/profiler" "slynk/stickers" "slynk/indentation"
-                    "slynk/retro" ];
-      }))
+      trivial-clipboard
+      cl-gobject-introspection
+      cl-webkit2
+      slynk
       iterate
       symbol-munger
       history-tree
@@ -444,16 +413,7 @@ let
       nclasses
       nfiles
       cl-containers
-      # remove this override after quicklisp one is updated.
-      (swank.overrideAttrs (final: prev: {
-        src = pkgs.fetchFromGitHub {
-          owner = "slime";
-          repo = "slime";
-          rev = "v2.29.1";
-          hash = "sha256-5hNB5XxbTER4HX3dn4umUGnw6UeiTQkczmggFz4uWoE=";
-        };
-        systems = [ "swank" "swank/exts" ];
-      }))
+      swank
     ]);
 
     src = pkgs.fetchFromGitHub {
