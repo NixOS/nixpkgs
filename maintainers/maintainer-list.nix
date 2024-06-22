@@ -11648,6 +11648,13 @@
     githubId = 10626;
     name = "Andreas Wagner";
   };
+  lpchaim = {
+    email = "lpchaim@gmail.comm";
+    matrix = "@lpchaim:matrix.org";
+    github = "lpchaim";
+    githubId = 4030336;
+    name = "Lucas Chaim";
+  };
   lpostula = {
     email = "lois@postu.la";
     github = "loispostula";
