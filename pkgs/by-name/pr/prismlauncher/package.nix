@@ -2,14 +2,11 @@
 , stdenv
 , symlinkJoin
 , makeWrapper
-, wrapQtAppsHook
 , addOpenGLRunpath
 
 , prismlauncher-unwrapped
 
-, qtbase  # needed for wrapQtAppsHook
-, qtsvg
-, qtwayland
+, kdePackages
 , xorg
 , libpulseaudio
 , libGL
@@ -60,17 +57,17 @@ symlinkJoin {
   paths = [ prismlauncher' ];
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ]
   # purposefully using a shell wrapper here for variable expansion
   # see https://github.com/NixOS/nixpkgs/issues/172583
   ++ lib.optional withWaylandGLFW makeWrapper;
 
   buildInputs = [
-    qtbase
-    qtsvg
+    kdePackages.qtbase
+    kdePackages.qtsvg
   ]
-  ++ lib.optional (lib.versionAtLeast qtbase.version "6" && stdenv.isLinux) qtwayland;
+  ++ lib.optional (lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.isLinux) kdePackages.qtwayland;
 
   waylandPreExec = lib.optionalString withWaylandGLFW ''
     if [ -n "$WAYLAND_DISPLAY" ]; then

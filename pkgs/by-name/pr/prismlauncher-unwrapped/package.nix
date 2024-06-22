@@ -4,12 +4,11 @@
 , stripJavaArchivesHook
 , cmake
 , cmark
-, Cocoa
+, darwin
 , ninja
 , jdk17
 , zlib
-, qtbase
-, quazip
+, kdePackages
 , extra-cmake-modules
 , tomlplusplus
 , ghc_filesystem
@@ -43,15 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja stripJavaArchivesHook ];
   buildInputs =
     [
-      qtbase
+      kdePackages.qtbase
       zlib
-      quazip
+      kdePackages.quazip
       ghc_filesystem
       tomlplusplus
       cmark
     ]
     ++ lib.optional gamemodeSupport gamemode
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   hardeningEnable = lib.optionals stdenv.isLinux [ "pie" ];
 
@@ -59,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     # downstream branding
     "-DLauncher_BUILD_PLATFORM=nixpkgs"
   ] ++ lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
-  ++ lib.optionals (lib.versionOlder qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=5" ]
+  ++ lib.optionals (lib.versionOlder kdePackages.qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=5" ]
   ++ lib.optionals stdenv.isDarwin [
     "-DINSTALL_BUNDLE=nodeps"
     "-DMACOSX_SPARKLE_UPDATE_FEED_URL=''"
@@ -82,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       their own mods, texture packs, saves, etc) and helps you manage them and
       their associated options with a simple interface.
     '';
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ minion3665 Scrumplex getchoo ];
