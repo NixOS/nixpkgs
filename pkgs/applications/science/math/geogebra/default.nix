@@ -27,7 +27,7 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [ sikmir soupglasses ];
+    maintainers = with maintainers; [ sikmir ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     sourceProvenance = with sourceTypes; [
       binaryBytecode

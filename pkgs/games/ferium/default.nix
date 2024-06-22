@@ -42,6 +42,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "ferium";
     homepage = "https://github.com/gorilla-devs/ferium";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ leo60228 soupglasses ];
+    maintainers = with maintainers; [ leo60228 ];
   };
 }

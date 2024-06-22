@@ -18827,12 +18827,6 @@
     githubId = 6277322;
     name = "Wei Tang";
   };
-  soupglasses = {
-    email = "sofi+git@mailbox.org";
-    github = "soupglasses";
-    githubId = 20756843;
-    name = "Sofi";
-  };
   soyouzpanda = {
     name = "soyouzpanda";
     email = "soyouzpanda@soyouzpanda.fr";

@@ -99,7 +99,7 @@ maven.buildMavenPackage rec {
     description = pkgDescription;
     homepage = "https://github.com/developersu/ns-usbloader";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ soupglasses ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "ns-usbloader";
   };
