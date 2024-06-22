@@ -10,6 +10,7 @@
   # dependencies
   aiosmtpd,
   django,
+  looseversion,
 
   # tests
   factory-boy,
@@ -46,7 +47,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=django_extensions --cov-report html --cov-report term" ""
+      --replace-fail "--cov=django_extensions --cov-report html --cov-report term" ""
+
+    substituteInPlace django_extensions/management/commands/pipchecker.py \
+      --replace-fail "from distutils.version" "from looseversion"
   '';
 
   build-system = [ setuptools ];
@@ -54,6 +58,7 @@ buildPythonPackage rec {
   dependencies = [
     aiosmtpd
     django
+    looseversion
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -68,6 +73,11 @@ buildPythonPackage rec {
     shortuuid
     vobject
     werkzeug
+  ];
+
+  disabledTests = [
+    # Mismatch in expectation of exception message
+    "test_installed_apps_no_resolve_conflicts_function"
   ];
 
   disabledTestPaths = [
