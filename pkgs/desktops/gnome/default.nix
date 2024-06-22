@@ -44,8 +44,6 @@ in
 
   gnome-control-center = callPackage ./core/gnome-control-center { };
 
-  gnome-common = callPackage ./core/gnome-common { };
-
   gnome-dictionary = callPackage ./core/gnome-dictionary { };
 
   gnome-disk-utility = callPackage ./core/gnome-disk-utility { };
@@ -241,6 +239,7 @@ in
   file-roller = lib.warn "The ‘gnome.file-roller’ was moved to top-level. Please use ‘pkgs.file-roller’ directly." pkgs.file-roller; # Added on 2024-06-13.
   ghex = lib.warn "The ‘gnome.ghex’ was moved to top-level. Please use ‘pkgs.ghex’ directly." pkgs.ghex; # Added on 2024-06-22.
   gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
+  gnome-common = lib.warn "The ‘gnome.gnome-common’ was moved to top-level. Please use ‘pkgs.gnome-common’ directly." pkgs.gnome-common; # Added on 2024-06-22.
   gnome-calculator = lib.warn "The ‘gnome.gnome-calculator’ was moved to top-level. Please use ‘pkgs.gnome-calculator’ directly." pkgs.gnome-calculator; # Added on 2024-06-22.
   gnome-calendar = lib.warn "The ‘gnome.gnome-calendar’ was moved to top-level. Please use ‘pkgs.gnome-calendar’ directly." pkgs.gnome-calendar; # Added on 2024-06-22.
   gnome-screenshot = lib.warn "The ‘gnome.gnome-screenshot’ was moved to top-level. Please use ‘pkgs.gnome-screenshot’ directly." pkgs.gnome-screenshot; # Added on 2024-06-22.

@@ -6756,9 +6756,7 @@ with pkgs;
     libsbsms_2_3_0
   ;
 
-  libskk = callPackage ../development/libraries/libskk {
-    inherit (gnome) gnome-common;
-  };
+  libskk = callPackage ../development/libraries/libskk { };
 
   m17-cxx-demod = callPackage ../applications/radio/m17-cxx-demod { };
 
@@ -10141,9 +10139,7 @@ with pkgs;
 
   libite = callPackage ../development/libraries/libite { };
 
-  liblangtag = callPackage ../development/libraries/liblangtag {
-    inherit (gnome) gnome-common;
-  };
+  liblangtag = callPackage ../development/libraries/liblangtag { };
 
   liblouis = callPackage ../development/libraries/liblouis { };
 

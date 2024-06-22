@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-common"; attrPath = "gnome.gnome-common"; };
+    updateScript = gnome.updateScript { packageName = "gnome-common"; };
   };
 
   propagatedBuildInputs = [ which autoconf automake ]; # autogen.sh which is using gnome-common tends to require which
