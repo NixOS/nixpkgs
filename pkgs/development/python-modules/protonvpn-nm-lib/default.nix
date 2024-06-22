@@ -77,7 +77,7 @@ buildPythonPackage rec {
     mainProgram = "protonvpn_reconnector.py";
     homepage = "https://github.com/ProtonVPN/protonvpn-nm-lib";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

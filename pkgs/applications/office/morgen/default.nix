@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     mainProgram = "morgen";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ justanotherariel wolfangaukang ];
+    maintainers = with maintainers; [ justanotherariel ];
     platforms = [ "x86_64-linux" ];
   };
 }
