@@ -93,7 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "rygel";
-      attrPath = "gnome.rygel";
       versionPolicy = "odd-unstable";
     };
   };
