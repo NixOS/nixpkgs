@@ -2,6 +2,7 @@
   stdenv,
   lib,
   openexr,
+  opencv,
   jemalloc,
   c-blosc,
   binutils,
@@ -65,13 +66,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.09.00.70";
+  version = "01.09.03.50";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-RBctBhKo7mjxsP7OJhGfoU1eIiGVuMiAqwwSU+gsMds=";
+    hash = "sha256-B8p2FNe5vuDNo6Uw3bjYyPykXe0mUOLvWkTBYmRBKUo=";
   };
 
   nativeBuildInputs = [
@@ -107,6 +108,7 @@ stdenv.mkDerivation rec {
     mpfr
     nlopt
     opencascade-occt
+    opencv
     openvdb_tbb_2021_8
     pcre
     tbb_2021_11
