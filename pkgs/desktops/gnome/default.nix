@@ -83,8 +83,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
-  eog = callPackage ./core/eog { };
-
   mutter = callPackage ./core/mutter { };
 
   # Needed for elementary's gala, wingpanel and greeter until support for higher versions is provided
@@ -243,6 +241,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gedit = throw "The ‘gnome.gedit’ alias was removed. Please use ‘pkgs.gedit’ directly."; # converted to throw on 2023-12-27
   gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
 
+  eog = lib.warn "The ‘gnome.eog’ was moved to top-level. Please use ‘pkgs.eog’ directly." pkgs.eog; # Added on 2024-06-22.
   evince = lib.warn "The ‘gnome.evince’ was moved to top-level. Please use ‘pkgs.evince’ directly." pkgs.evince; # Added on 2024-06-13.
   evolution-data-server = lib.warn "The ‘gnome.evolution-data-server’ was moved to top-level. Please use ‘pkgs.evolution-data-server’ directly." pkgs.evolution-data-server; # Added on 2024-06-13.
   file-roller = lib.warn "The ‘gnome.file-roller’ was moved to top-level. Please use ‘pkgs.file-roller’ directly." pkgs.file-roller; # Added on 2024-06-13.
