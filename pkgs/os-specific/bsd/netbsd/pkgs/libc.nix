@@ -3,7 +3,6 @@
   mkDerivation,
   defaultMakeFlags,
   _mainLibcExtraPaths,
-  fetchNetBSD,
   bsdSetupHook,
   netbsdSetupHook,
   makeMinimal,
@@ -25,14 +24,11 @@
 }:
 
 mkDerivation {
+  noLibc = true;
   path = "lib/libc";
-  version = "9.2";
-  sha256 = "1y9c13igg0kai07sqvf9cm6yqmd8lhfd8hq3q7biilbgs1l99as3";
   USE_FORT = "yes";
   MKPROFILE = "no";
-  extraPaths = _mainLibcExtraPaths ++ [
-    (fetchNetBSD "external/bsd/jemalloc" "9.2" "0cq704swa0h2yxv4gc79z2lwxibk9k7pxh3q5qfs7axx3jx3n8kb")
-  ];
+  extraPaths = _mainLibcExtraPaths ++ [ "external/bsd/jemalloc" ];
   nativeBuildInputs = [
     bsdSetupHook
     netbsdSetupHook
@@ -99,5 +95,8 @@ mkDerivation {
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags install
   '';
-  inherit (librt) postPatch;
+  postPatch = ''
+    sed -i 's,/usr\(/include/sys/syscall.h\),${headers}\1,g' \
+      $BSDSRCDIR/lib/{libc,librt}/sys/Makefile.inc
+  '';
 }

@@ -1419,6 +1419,10 @@ mapAliases ({
   inherit (stdenv.hostPlatform) system; # Added 2021-10-22
   inherit (stdenv) buildPlatform hostPlatform targetPlatform; # Added 2023-01-09
 
+  freebsdCross = freebsd; # Added 2024-06-18
+  netbsdCross = netbsd; # Added 2024-06-18
+  openbsdCross = openbsd; # Added 2024-06-18
+
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
   llvmPackages_latest = llvmPackages_18;
   llvmPackages_git = recurseIntoAttrs (callPackage ../development/compilers/llvm/git {

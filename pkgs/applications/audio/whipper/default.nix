@@ -3,9 +3,12 @@
 , fetchFromGitHub
 , fetchpatch
 , installShellFiles
+, wrapGAppsNoGuiHook
+, gobject-introspection
 , libcdio-paranoia
 , cdrdao
 , libsndfile
+, glib
 , flac
 , sox
 , util-linux
@@ -37,6 +40,8 @@ in python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     installShellFiles
+    wrapGAppsNoGuiHook
+    gobject-introspection
 
     setuptools-scm
     docutils
@@ -54,7 +59,7 @@ in python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  buildInputs = [ libsndfile ];
+  buildInputs = [ libsndfile glib ];
 
   nativeCheckInputs = with python3.pkgs; [
     twisted
@@ -62,7 +67,10 @@ in python3.pkgs.buildPythonApplication rec {
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" (lib.makeBinPath bins)
+    "\${gappsWrapperArgs[@]}"
   ];
+
+  dontWrapGApps = true;
 
   outputs = [ "out" "man" ];
   postBuild = ''

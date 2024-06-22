@@ -6,27 +6,21 @@
   defaultMakeFlags,
   coreutils,
   cctools-port,
-  include,
-  libc,
-  libutil,
   install,
   bsdSetupHook,
   netbsdSetupHook,
   makeMinimal,
   rsync,
-  fetchNetBSD,
   _mainLibcExtraPaths,
+  version,
 }:
 
 mkDerivation (
   let
-    version = "9.2";
     commonDeps = [ zlib ];
   in
   {
     path = "tools/compat";
-    sha256 = "1vsxg7136nlhc72vpa664vs22874xh7ila95nkmsd8crn3z3cyn0";
-    inherit version;
 
     setupHooks = [
       ../../../../../build-support/setup-hooks/role.bash
@@ -133,14 +127,13 @@ mkDerivation (
           --subst-var-by version ${version}
       '';
     extraPaths = [
-      include.src
-      libc.src
-      libutil.src
-      (fetchNetBSD "external/bsd/flex" "9.2" "0h98jpfj7vx5zh7vd7bk6b1hmzgkcb757a8j6d9zgygxxv13v43m")
-      (fetchNetBSD "sys/sys" "9.2" "0zawhw51klaigqqwkx0lzrx3mim2jywrc24cm7c66qsf1im9awgd")
-      (fetchNetBSD "common/include/rpc/types.h" "9.2"
-        "0n2df12mlc3cbc48jxq35yzl1y7ghgpykvy7jnfh898rdhac7m9a"
-      )
-    ] ++ libutil.extraPaths ++ _mainLibcExtraPaths;
+      "common"
+      "include"
+      "lib/libc"
+      "lib/libutil"
+      "external/bsd/flex"
+      "sys"
+      "common/include/rpc/types.h"
+    ] ++ _mainLibcExtraPaths;
   }
 )
