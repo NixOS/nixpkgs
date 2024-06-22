@@ -11,6 +11,7 @@
   jdk17,
   kdePackages,
   ninja,
+  nix-update-script,
   stripJavaArchivesHook,
   tomlplusplus,
   zlib,
@@ -88,6 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   dontWrapQtApps = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Free, open source launcher for Minecraft";
