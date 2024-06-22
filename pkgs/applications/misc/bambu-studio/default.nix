@@ -46,6 +46,7 @@
   withSystemd ? stdenv.isLinux,
 }:
 let
+  opencv_gtk = opencv.override (old : { enableGtk2 = true; });
   opencascade-occt = opencascade-occt_7_6;
   wxGTK31' = wxGTK31.overrideAttrs (old: {
     configureFlags = old.configureFlags ++ [
@@ -108,7 +109,7 @@ stdenv.mkDerivation rec {
     mpfr
     nlopt
     opencascade-occt
-    opencv
+    opencv_gtk
     openvdb_tbb_2021_8
     pcre
     tbb_2021_11
