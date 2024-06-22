@@ -61,17 +61,8 @@ let
   });
 
   cl-unicode = build-with-compile-into-pwd {
-    pname = "cl-unicode";
-    version = "0.1.6";
-    src =  pkgs.fetchzip {
-      url = "https://github.com/edicl/cl-unicode/archive/refs/tags/v0.1.6.tar.gz";
-      sha256 = "0ykx2s9lqfl74p1px0ik3l2izd1fc9jd1b4ra68s5x34rvjy0hza";
-    };
-    systems = [ "cl-unicode" ];
-    lispLibs = with super; [
-      cl-ppcre
-      flexi-streams
-    ];
+    inherit (super.cl-unicode) pname version src systems;
+    lispLibs = super.cl-unicode.lispLibs ++ [ self.flexi-streams ];
   };
 
   dissect = super.dissect.overrideAttrs {
