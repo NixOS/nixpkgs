@@ -12,7 +12,6 @@
 , intltool
 , jdupes
 , libdrm
-, libffi
 , libglvnd
 , libomxil-bellagio
 , libunwind
@@ -22,7 +21,6 @@
 , lm_sensors
 , meson
 , ninja
-, openssl
 , pkg-config
 , python3Packages
 , rust-bindgen
@@ -231,10 +229,8 @@ in stdenv.mkDerivation {
     elfutils
     expat
     glslang
-    libffi
     libglvnd
     libomxil-bellagio
-    libpthreadstubs
     libunwind
     libva-minimal
     libvdpau
@@ -244,14 +240,12 @@ in stdenv.mkDerivation {
     libXfixes
     libXrandr
     libxshmfence
-    libXt
-    libXvMC
+    libXxf86vm
     llvmPackages.clang
     llvmPackages.clang-unwrapped
     llvmPackages.libclc
     llvmPackages.libllvm
     lm_sensors
-    openssl
     python3Packages.python # for shebang
     spirv-llvm-translator
     udev
@@ -296,11 +290,7 @@ in stdenv.mkDerivation {
     buildPackages.mesa.driversdev
   ];
 
-  propagatedBuildInputs = with xorg; [
-    libXdamage
-    libXxf86vm
-    libdrm
-  ];
+  propagatedBuildInputs = [ libdrm ];
 
   doCheck = false;
 
