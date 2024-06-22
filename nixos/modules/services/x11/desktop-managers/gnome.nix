@@ -89,7 +89,7 @@ in
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExpression "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GNOME Shell extensions or GSettings-conditional autostart.

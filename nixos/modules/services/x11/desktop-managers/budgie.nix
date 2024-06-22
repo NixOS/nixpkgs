@@ -61,7 +61,7 @@ in {
         '';
         type = types.listOf types.package;
         default = [];
-        example = literalExpression "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gpaste ]";
       };
 
       extraGSettingsOverrides = mkOption {
