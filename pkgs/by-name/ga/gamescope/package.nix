@@ -1,4 +1,5 @@
 { stdenv
+, edid-decode
 , fetchFromGitHub
 , meson
 , pkg-config
@@ -18,6 +19,7 @@
 , SDL2
 , pipewire
 , pixman
+, python3
 , libinput
 , glslang
 , hwdata
@@ -62,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
   # so `placeholder "out"` ends up pointing to the wrong place
   postPatch = ''
     substituteInPlace src/reshade_effect_manager.cpp --replace "@out@" "$out"
+    # Patching shebangs in the main `libdisplay-info` build
+    patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
   '';
 
   mesonFlags = [
@@ -82,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
+    # For `libdisplay-info`
+    python3
+    hwdata
+    edid-decode
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang
