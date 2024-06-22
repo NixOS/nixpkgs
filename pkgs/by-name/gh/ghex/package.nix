@@ -72,7 +72,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "ghex";
-      attrPath = "gnome.${pname}";
     };
   };
 
