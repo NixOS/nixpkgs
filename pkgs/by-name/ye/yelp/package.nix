@@ -15,6 +15,7 @@
 , libxslt
 , gst_all_1
 , wrapGAppsHook3
+, yelp-xsl
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     sqlite
     libxml2
     libxslt
-    gnome.yelp-xsl
+    yelp-xsl
     adwaita-icon-theme
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
