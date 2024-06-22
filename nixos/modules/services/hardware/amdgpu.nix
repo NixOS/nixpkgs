@@ -10,13 +10,23 @@ in {
       series cards. Note: this removes support for analog video outputs,
       which is only available in the `radeon` driver
     '';
-    initrd.enable = lib.mkEnableOption ''
-      loading `amdgpu` kernelModule in stage 1.
-      Can fix lower resolution in boot screen during initramfs phase
-    '';
+    kernelModule = {
+      inInitrd = lib.mkEnableOption ''
+        installing the `amdgpu` kernelModule into the initrd; making it
+        available in stage 1 of the boot process.
+
+        This allows for an earlier modeset to apply the preferred resolution in
+        the beginning of the initramfs phase rather than after it.
+      '';
+    };
     opencl.enable = lib.mkEnableOption ''OpenCL support using ROCM runtime library'';
     # cfg.amdvlk option is defined in ./amdvlk.nix module
   };
+
+  imports = [
+    # This can be removed post 24.11; it was only ever in unstable
+    (lib.mkRenamedOptionModule [ "hardware" "amdgpu" "initrd" "enable" ] [ "hardware" "amdgpu" "kernelModule" "inInitrd" ])
+  ];
 
   config = {
     boot.kernelParams = lib.optionals cfg.legacySupport.enable [
@@ -26,7 +36,7 @@ in {
       "radeon.cik_support=0"
     ];
 
-    boot.initrd.kernelModules = lib.optionals cfg.initrd.enable [ "amdgpu" ];
+    boot.initrd.kernelModules = lib.optionals cfg.kernelModule.inInitrd [ "amdgpu" ];
 
     hardware.opengl = lib.mkIf cfg.opencl.enable {
       enable = lib.mkDefault true;
