@@ -3962,6 +3962,12 @@
     githubId = 40290417;
     name = "Seb Blair";
   };
+  CompileTime = {
+    email = "socialcoms@posteo.de";
+    github = "Compile-Time";
+    githubId = 18414241;
+    name = "Andreas Erdes";
+  };
   confus = {
     email = "con-f-use@gmx.net";
     github = "con-f-use";
