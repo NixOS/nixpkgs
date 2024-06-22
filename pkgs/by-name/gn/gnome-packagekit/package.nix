@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-packagekit";
-      attrPath = "gnome.gnome-packagekit";
     };
   };
 
