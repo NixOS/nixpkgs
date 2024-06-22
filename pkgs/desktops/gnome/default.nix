@@ -108,8 +108,6 @@ in
 
   totem = callPackage ./core/totem { };
 
-  yelp = callPackage ./core/yelp { };
-
   yelp-xsl = callPackage ./core/yelp-xsl { };
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
@@ -239,6 +237,7 @@ in
   rygel = lib.warn "The ‘gnome.rygel’ was moved to top-level. Please use ‘pkgs.rygel’ directly." pkgs.rygel; # Added on 2024-06-22.
   seahorse = lib.warn "The ‘gnome.seahorse’ was moved to top-level. Please use ‘pkgs.seahorse’ directly." pkgs.seahorse; # Added on 2024-06-22.
   simple-scan = lib.warn "The ‘gnome.simple-scan’ was moved to top-level. Please use ‘pkgs.simple-scan’ directly." pkgs.simple-scan; # Added on 2024-06-22.
+  yelp = lib.warn "The ‘gnome.yelp’ was moved to top-level. Please use ‘pkgs.yelp’ directly." pkgs.yelp; # Added on 2024-06-22.
   zenity = lib.warn "The ‘gnome.zenity’ was moved to top-level. Please use ‘pkgs.zenity’ directly." pkgs.zenity; # Added on 2024-06-22.
 
 #### Removals

@@ -35557,8 +35557,6 @@ with pkgs;
 
   yeetgif = callPackage ../applications/graphics/yeetgif { };
 
-  inherit (gnome) yelp;
-
   yelp-tools = callPackage ../development/misc/yelp-tools { };
 
   yewtube = callPackage ../applications/misc/yewtube { };

@@ -420,7 +420,7 @@ in
             pkgs.simple-scan
             pkgs.snapshot
             totem
-            yelp
+            pkgs.yelp
           ] ++ lib.optionals config.services.flatpak.enable [
             # Since PackageKit Nix support is not there yet,
             # only install gnome-software if flatpak is enabled.
