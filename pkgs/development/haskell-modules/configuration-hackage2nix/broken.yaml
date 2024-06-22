@@ -3601,7 +3601,6 @@ broken-packages:
   - L-seed # failure in job https://hydra.nixos.org/build/233222324 at 2023-09-02
   - lsfrom # failure in job https://hydra.nixos.org/build/233211705 at 2023-09-02
   - lsh # failure in job https://hydra.nixos.org/build/233256686 at 2023-09-02
-  - lsp-client # failure in job https://hydra.nixos.org/build/233219871 at 2023-09-02
   - ltext # failure in job https://hydra.nixos.org/build/255686825 at 2024-04-16
   - lti13 # failure in job https://hydra.nixos.org/build/252715722 at 2024-03-16
   - ltiv1p1 # failure in job https://hydra.nixos.org/build/233200883 at 2023-09-02
