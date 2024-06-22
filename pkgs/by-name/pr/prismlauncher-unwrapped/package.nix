@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, stripJavaArchivesHook
-, cmake
-, cmark
-, darwin
-, ninja
-, jdk17
-, zlib
-, kdePackages
-, extra-cmake-modules
-, tomlplusplus
-, ghc_filesystem
-, gamemode
-, msaClientID ? null
-, gamemodeSupport ? stdenv.isLinux
-,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  stripJavaArchivesHook,
+  cmake,
+  cmark,
+  darwin,
+  kdePackages,
+  ninja,
+  jdk17,
+  zlib,
+  extra-cmake-modules,
+  tomlplusplus,
+  ghc_filesystem,
+  gamemode,
+  msaClientID ? null,
+  gamemodeSupport ? stdenv.isLinux,
 }:
 let
   libnbtplusplus = fetchFromGitHub {
@@ -26,7 +26,9 @@ let
   };
 in
 
-assert lib.assertMsg (stdenv.isLinux || !gamemodeSupport) "gamemodeSupport is only available on Linux";
+assert lib.assertMsg (
+  stdenv.isLinux || !gamemodeSupport
+) "gamemodeSupport is only available on Linux";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
@@ -39,7 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1YGzCgNdzscnOVeNlHMFJa0RbMo6C2qQjtBOeDxHakI=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja stripJavaArchivesHook ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    cmake
+    jdk17
+    ninja
+    stripJavaArchivesHook
+  ];
   buildInputs =
     [
       kdePackages.qtbase
@@ -54,16 +62,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningEnable = lib.optionals stdenv.isLinux [ "pie" ];
 
-  cmakeFlags = [
-    # downstream branding
-    "-DLauncher_BUILD_PLATFORM=nixpkgs"
-  ] ++ lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
-  ++ lib.optionals (lib.versionOlder kdePackages.qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=5" ]
-  ++ lib.optionals stdenv.isDarwin [
-    "-DINSTALL_BUNDLE=nodeps"
-    "-DMACOSX_SPARKLE_UPDATE_FEED_URL=''"
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/Applications/"
-  ];
+  cmakeFlags =
+    [
+      # downstream branding
+      "-DLauncher_BUILD_PLATFORM=nixpkgs"
+    ]
+    ++ lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
+    ++ lib.optionals (lib.versionOlder kdePackages.qtbase.version "6") [
+      "-DLauncher_QT_VERSION_MAJOR=5"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "-DINSTALL_BUNDLE=nodeps"
+      "-DMACOSX_SPARKLE_UPDATE_FEED_URL=''"
+      "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/Applications/"
+    ];
 
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus
@@ -84,6 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ minion3665 Scrumplex getchoo ];
+    maintainers = with lib.maintainers; [
+      minion3665
+      Scrumplex
+      getchoo
+    ];
   };
 })
