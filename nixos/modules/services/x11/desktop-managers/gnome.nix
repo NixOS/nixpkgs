@@ -400,7 +400,7 @@ in
         utils.removePackagesByName
           ([
             pkgs.baobab
-            epiphany
+            pkgs.epiphany
             pkgs.gnome-text-editor
             pkgs.gnome-calculator
             pkgs.gnome-calendar
