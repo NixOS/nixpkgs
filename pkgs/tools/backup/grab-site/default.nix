@@ -14,12 +14,12 @@ buildPythonApplication rec {
     rev = version;
     owner = "ArchiveTeam";
     repo = "grab-site";
-    sha256 = "sha256-tf8GyFjya3+TVc2VjlY6ztfjCJgof6tg4an18pz+Ig8=";
+    hash = "sha256-tf8GyFjya3+TVc2VjlY6ztfjCJgof6tg4an18pz+Ig8=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"wpull @ https://github.com/ArchiveTeam/ludios_wpull/tarball/master#egg=wpull-${ludios_wpull.version}"' '"wpull"'
+      --replace-fail '"wpull @ https://github.com/ArchiveTeam/ludios_wpull/tarball/master#egg=wpull-3.0.9"' '"wpull"'
   '';
 
   propagatedBuildInputs = [
@@ -42,6 +42,5 @@ buildPythonApplication rec {
     description = "Crawler for web archiving with WARC output";
     homepage = "https://github.com/ArchiveTeam/grab-site";
     license = licenses.mit;
-    platforms = platforms.all;
   };
 }
