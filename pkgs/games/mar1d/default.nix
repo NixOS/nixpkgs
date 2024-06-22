@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "MAR1D";
-  version = "0.3.1";
+  version = "unstable-2023-02-02";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-c48azBGdnzhEQGUeRJWlNLJhtrYjnpiORuWvowcQK5Y=";
-    rev = "v${version}";
+    hash = "sha256-kZERhwnTpBhjx6MLdf1bYCWMjtTiId/5a69kRt+/6oY=";
+    rev = "fa5dc36e1819a15539ced339ad01672e5a498c5c";
     repo = "MAR1D";
     owner = "Radvendii";
   };
