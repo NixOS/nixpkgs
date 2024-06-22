@@ -2,6 +2,7 @@
   fetchCrate,
   lib,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-l27+Rs4TYIJXZVLj7Tjw8M5+7ivWEY0TXbLtbuzwxLw=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Protoc plugin that generates serde serialization implementations for `protoc-gen-prost`";

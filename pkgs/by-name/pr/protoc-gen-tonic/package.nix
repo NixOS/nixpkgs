@@ -2,6 +2,7 @@
   fetchCrate,
   lib,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-FrkvL/uJitMkSyOytVSmlwr26yMVM12S2n+EaSw11CE=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Protoc plugin that generates Tonic gRPC server and client code using the Prost code generation engine";

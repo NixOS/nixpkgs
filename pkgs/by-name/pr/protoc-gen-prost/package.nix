@@ -2,6 +2,7 @@
   fetchCrate,
   lib,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-ghXcyxG9zqUOFKGvUza29OgC3XiEtesqsAsfI/lFT08=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Protocol Buffers compiler plugin powered by Prost";

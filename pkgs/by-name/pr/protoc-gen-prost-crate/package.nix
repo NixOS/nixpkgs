@@ -2,6 +2,7 @@
   fetchCrate,
   lib,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-dcKJRX/iHIWEmBD2nTMyQozxld8b7dhxxB85quPUysg=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Protoc plugin that generates Cargo crates and include files for `protoc-gen-prost`";
