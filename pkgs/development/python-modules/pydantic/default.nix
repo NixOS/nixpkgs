@@ -48,6 +48,7 @@ buildPythonPackage rec {
       url = "https://github.com/pydantic/pydantic/commit/825a6920e177a3b65836c13c7f37d82b810ce482.patch";
       hash = "sha256-Dap5DtDzHw0jS/QUo5CRI9sLDJ719GRyC4ZNDWEdzus=";
     })
+    ./python3.12.4-compat.patch
   ];
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
