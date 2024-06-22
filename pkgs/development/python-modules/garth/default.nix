@@ -23,6 +23,8 @@ buildPythonPackage rec {
     hash = "sha256-WuGeZ2EggyhbEDIbjg4ffIFaj2DyHi8Tvowhoi5k2Os=";
   };
 
+  pythonRelaxDeps = [ "requests-oauthlib" ];
+
   build-system = [ pdm-backend ];
 
   dependencies = [
