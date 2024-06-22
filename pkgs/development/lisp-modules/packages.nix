@@ -43,45 +43,11 @@ let
       src = build;
     });
 
-  # A little hacky
-  isJVM = spec.pkg.pname == "abcl";
-
   # Makes it so packages imported from Quicklisp can be re-used as
   # lispLibs ofpackages in this file.
   ql = quicklispPackagesFor spec;
 
   packages = ql.overrideScope (self: super: {
-
-  cffi = let
-    jna = pkgs.fetchMavenArtifact {
-      groupId = "net.java.dev.jna";
-      artifactId = "jna";
-      version = "5.9.0";
-      sha256 = "0qbis8acv04fi902qzak1mbagqaxcsv2zyp7b8y4shs5nj0cgz7a";
-    };
-  in build-asdf-system {
-    src =  pkgs.fetchzip {
-      url = "http://beta.quicklisp.org/archive/cffi/2021-04-11/cffi_0.24.1.tgz";
-      sha256 = "17ryim4xilb1rzxydfr7595dnhqkk02lmrbkqrkvi9091shi4cj3";
-    };
-    version = "0.24.1";
-    pname = "cffi";
-    lispLibs = with super; [
-      alexandria
-      babel
-      trivial-features
-    ];
-    javaLibs = optionals isJVM [ jna ];
-  };
-
-  cffi-libffi = build-asdf-system {
-    inherit (super.cffi-libffi) pname version asds lispLibs nativeLibs nativeBuildInputs;
-    src = pkgs.fetchzip {
-      url = "https://github.com/cffi/cffi/archive/3f842b92ef808900bf20dae92c2d74232c2f6d3a.tar.gz";
-      sha256 = "1jilvmbbfrmb23j07lwmkbffc6r35wnvas5s4zjc84i856ccclm2";
-    };
-    patches = optionals stdenv.isDarwin [ ./patches/cffi-libffi-darwin-ffi-h.patch ];
-  };
 
   cl-environments = super.cl-environments.overrideLispAttrs (old: {
     patches = old.patches or [] ++ [
