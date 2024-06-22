@@ -39,13 +39,14 @@ appimageTools.wrapType2 {
       --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern and easy to use SQL client for MySQL, Postgres, SQLite, SQL Server, and more. Linux, MacOS, and Windows";
     homepage = "https://www.beekeeperstudio.io";
     changelog = "https://github.com/beekeeper-studio/beekeeper-studio/releases/tag/v${version}";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "beekeeper-studio";
-    maintainers = with maintainers; [ milogert alexnortung ];
+    maintainers = with lib.maintainers; [ milogert alexnortung ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 }
