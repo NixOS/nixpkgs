@@ -234,6 +234,7 @@ in
 
     # Define the systemd service.
     systemd.services.iroh = {
+      depends = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
       path = [ "/run/wrappers" pkgs.iroh ];
@@ -258,20 +259,13 @@ in
 
         #CacheDirectory = "";
         #ReadWritePaths = cfg.dataDir;
-
-        # # Make sure the socket units are started before ipfs.service
-        # Sockets = [ "ipfs-gateway.socket" "ipfs-api.socket" ];
-        #Restart = "on-failure";
-        #RestartSec = "5s";
       };
 
     };
 
-    #other.opts.go.here = true;
-
-    # meta = {
-    #   maintainers = with lib.maintainers; [ Luflosi ];
-    # };
+    meta = {
+      maintainers = with lib.maintainers; [ crimeminister ];
+    };
 
   };
 }
