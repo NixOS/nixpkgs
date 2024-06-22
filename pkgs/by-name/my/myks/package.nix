@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "myks";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "mykso";
     repo = "myks";
     rev = "refs/tags/v${version}";
-    hash = "sha256-98JkyRszWls2fWS3JxlYa8MRHKpC2ViiDoH8VEk6r3Q=";
+    hash = "sha256-IkcMn6g9d8C42W1WdgYBSJn603La1eORB58YSY0+HFA=";
   };
 
-  vendorHash = "sha256-blx/Q787h1eBUmg45VFydqH8hmrCpcobJwIWvTUNDEo=";
+  vendorHash = "sha256-5pDe/3BDDdB+rd5UnGSmgY+FIu8mxVkP9ppVXFe5SxE=";
 
   subPackages = ".";
 
