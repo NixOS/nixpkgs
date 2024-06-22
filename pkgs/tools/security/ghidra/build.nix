@@ -11,16 +11,17 @@
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
-  icoutils,
   xcbuild,
   protobuf,
   ghidra-extensions,
+  python3,
+  python3Packages,
 }:
 
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "11.0.3";
+  version = "11.1.1";
 
   releaseName = "NIX";
   distroPrefix = "ghidra_${version}_${releaseName}";
@@ -28,7 +29,7 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-IiLxaJvfJcK275FDZEsUCGp7haJjp8O2fUIoM4F9H30=";
+    hash = "sha256-t96FcAK3JwO66dOf4OhpOfU8CQfAczfF61Cg7m+B3fA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -136,7 +137,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-nKfJiGoZlDEpbCmYVKNZXz2PYIosCd4nPFdy3MfprHc=";
+    outputHash = "sha256-66gL4UFlBUo2JIEOXoF6tFvXtBdEX4b2MeSrV1b6Vg4=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -147,6 +148,12 @@ stdenv.mkDerivation (finalAttrs: {
     patches
     postPatch
     ;
+
+  # Don't create .orig files if the patch isn't an exact match.
+  patchFlags = [
+    "--no-backup-if-mismatch"
+    "-p1"
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -167,6 +174,8 @@ stdenv.mkDerivation (finalAttrs: {
       makeBinaryWrapper
       copyDesktopItems
       protobuf
+      python3
+      python3Packages.pip
     ]
     ++ lib.optionals stdenv.isDarwin [
       xcbuild
