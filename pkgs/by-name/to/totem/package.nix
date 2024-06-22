@@ -125,7 +125,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "totem";
-      attrPath = "gnome.totem";
     };
   };
 

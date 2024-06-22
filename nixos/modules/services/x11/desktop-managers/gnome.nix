@@ -176,7 +176,7 @@ in
 
     environment.gnome.excludePackages = mkOption {
       default = [];
-      example = literalExpression "[ pkgs.gnome.totem ]";
+      example = literalExpression "[ pkgs.totem ]";
       type = types.listOf types.package;
       description = "Which packages gnome should exclude from the default environment";
     };
@@ -419,7 +419,7 @@ in
             pkgs.gnome-connections
             pkgs.simple-scan
             pkgs.snapshot
-            totem
+            pkgs.totem
             pkgs.yelp
           ] ++ lib.optionals config.services.flatpak.enable [
             # Since PackageKit Nix support is not there yet,
