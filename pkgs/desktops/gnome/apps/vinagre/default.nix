@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     mainProgram = "vinagre";
     homepage = "https://gitlab.gnome.org/Archive/vinagre";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

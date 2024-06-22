@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/Archive/gnome-dictionary";
     description = "Dictionary is the GNOME application to look up definitions";
     mainProgram = "gnome-dictionary";
-    maintainers = teams.gnome.members;
+    maintainers = [ ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };
