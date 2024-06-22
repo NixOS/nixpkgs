@@ -22,7 +22,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.8.1";
+  version = "0.8.2";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "v${version}";
-    hash = "sha256-al2+/+HPbjJ30rju2ih/yFZgmTdO2bQ6jDv+dtoIqsc=";
+    hash = "sha256-JzbfQ/WZrHGdG9vv9ngfTxqwBxS+ZezIIp8yUJ2VplE=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-ek9vPo/M4peDcDkfzjXoKlJ+gFZUiREwNflOKEJNaWQ=";
+  cargoHash = "sha256-w40mksUVMBXSr/LBXj0uyZ/VbvJFMFJaQN5Kx6sLm5I=";
 
   nativeBuildInputs = [
     pkg-config
