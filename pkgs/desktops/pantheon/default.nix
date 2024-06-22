@@ -98,7 +98,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
 
   elementary-session-settings = callPackage ./desktop/elementary-session-settings {
-    inherit (gnome) gnome-session gnome-keyring;
+    inherit (gnome) gnome-session;
   };
 
   elementary-shortcut-overlay = callPackage ./desktop/elementary-shortcut-overlay { };

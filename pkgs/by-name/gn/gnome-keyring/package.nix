@@ -95,7 +95,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-keyring";
-      attrPath = "gnome.gnome-keyring";
     };
   };
 
