@@ -108,6 +108,16 @@ let
     ];
   };
 
+  dissect = super.dissect.overrideAttrs {
+    version = "1.0.0-trunk";
+    src = pkgs.fetchFromGitHub {
+      owner = "Shinmera";
+      repo = "dissect";
+      rev = "a70cabcd748cf7c041196efd711e2dcca2bbbb2c";
+      hash = "sha256-WXv/jbokgKJTc47rBjvOF5npnqDlsyr8oSXIzN/7ofo=";
+    };
+  };
+
   jzon = super.com_dot_inuoe_dot_jzon;
 
   cl-notify = build-asdf-system {
