@@ -30720,8 +30720,6 @@ with pkgs;
 
   gthumb = callPackage ../applications/graphics/gthumb { };
 
-  inherit (gnome) gucharmap;
-
   guitarix = callPackage ../applications/audio/guitarix {
     fftw = fftwSinglePrec;
   };
