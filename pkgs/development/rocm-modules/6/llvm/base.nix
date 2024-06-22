@@ -63,7 +63,7 @@ let
   llvmTargetsToBuild' = [ "AMDGPU" ] ++ builtins.map inferNativeTarget llvmTargetsToBuild;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-llvm-${targetName}";
-  version = "6.0.2";
+  version = "6.1.2";
 
   outputs = [
     "out"
@@ -76,27 +76,47 @@ in stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      name = "llvm-support-compressing-device-binary.patch";
-      url = "https://github.com/GZGavinZhao/llvm-project/commit/fae9d73436c8fb71fdd16a078f485c9cbe99be27.patch";
-      hash = "sha256-wISQTE73cjtWOJ46idN6mn06jm2ML4B3fJJWmfzi0as=";
+      name = "reland-hip-support-compressing-device-binary.patch";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/ba2a2049fc83983fa1ec6126792f3229b32238d3.patch";
+      hash = "sha256-6HUFk/WmJaTx/jkqMwx5nj7GJpQrd3z1kymhT5Nwmf4=";
     })
-    (fetchpatch {
-      name = "clang-support-compressing-device-binary.patch";
-      url = "https://github.com/GZGavinZhao/llvm-project/commit/baff627c21febe8080d534b96406c95b29100144.patch";
-      hash = "sha256-ZiJ7Gi+Ly2WK1G9y4noeKGvWGVL/cdK+c5W+EzPI2cw=";
+    (fetchpatch{
+      name = "fix-unbundling-archive.patch";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/2f5f4f4f771c335a611351b177615c2cd3a8933d.patch";
+      hash = "sha256-V/2khNealc3YWOX8QW1V3zeE7ANOWjdz/3qhKAdwQRQ=";
     })
-    (fetchpatch {
-      name = "add-file-size-to-ccob-header.patch";
-      url = "https://github.com/GZGavinZhao/llvm-project/commit/8b04ffc2353b1d3d8900f76fb52ff65ed2a20d80.patch";
-      hash = "sha256-AsO2RVkOsT6UUEjSYAaWDY9BmHrTnupWNpZqxoQ8sXo=";
+    (fetchpatch{
+      name = "add-offload-compression-level-option.patch";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/f8550bfe01665716f5d4cb2269fa8c8be47b8991.patch";
+      hash = "sha256-qX3ShG66AUZ371v6nfw8mpIl2c+mXe5ZGn0rStGyW/U=";
     })
+    (fetchpatch{
+      name = "add-file-size-to-header.patch";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/0c8938eb77b8f94683d74d875eac5b9ae223bae6.patch";
+      hash = "sha256-cCPB0pBpKUjShGdeqq44RJ7k4l6JU8Ym+NKdznZhPA4=";
+    })
+    # (fetchpatch {
+    #   name = "llvm-support-compressing-device-binary.patch";
+    #   url = "https://github.com/GZGavinZhao/llvm-project/commit/fae9d73436c8fb71fdd16a078f485c9cbe99be27.patch";
+    #   hash = "sha256-wISQTE73cjtWOJ46idN6mn06jm2ML4B3fJJWmfzi0as=";
+    # })
+    # (fetchpatch {
+    #   name = "clang-support-compressing-device-binary.patch";
+    #   url = "https://github.com/GZGavinZhao/llvm-project/commit/baff627c21febe8080d534b96406c95b29100144.patch";
+    #   hash = "sha256-ZiJ7Gi+Ly2WK1G9y4noeKGvWGVL/cdK+c5W+EzPI2cw=";
+    # })
+    # (fetchpatch {
+    #   name = "add-file-size-to-ccob-header.patch";
+    #   url = "https://github.com/GZGavinZhao/llvm-project/commit/8b04ffc2353b1d3d8900f76fb52ff65ed2a20d80.patch";
+    #   hash = "sha256-AsO2RVkOsT6UUEjSYAaWDY9BmHrTnupWNpZqxoQ8sXo=";
+    # })
   ] ++ extraPatches;
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "llvm-project";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-uGxalrwMNCOSqSFVrYUBi3ijkMEFFTrzFImmvZKQf6I=";
+    hash = "sha256-+pe3e65Ri5zOOYvoSUiN0Rto/Ss8OyRfqxRifToAO7g=";
   };
 
   nativeBuildInputs = [
@@ -158,6 +178,9 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     cd ${targetDir}
+  '' + lib.optionalString buildTests ''
+    # Respect NIX_BUILD_CORES in lit tests
+    export LIT_OPTS="-j=$NIX_BUILD_CORES"
   '' + lib.optionalString finalAttrs.passthru.isLLVM ''
     patchShebangs lib/OffloadArch/make_generated_offload_arch_h.sh
   '' + lib.optionalString (buildTests && finalAttrs.passthru.isLLVM) ''

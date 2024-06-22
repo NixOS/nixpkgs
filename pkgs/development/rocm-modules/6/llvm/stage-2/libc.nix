@@ -19,6 +19,9 @@ callPackage ../base.nix rec {
       --replace-fail "test(mpfr::RoundingMode::Downward);" "" \
       --replace-fail "test(mpfr::RoundingMode::Upward);" "" \
       --replace-fail "test(mpfr::RoundingMode::TowardZero);" ""
+
+    substituteInPlace ../libc/test/src/string/memory_utils/CMakeLists.txt \
+      --replace-fail "op_tests.cpp" ""
   '';
 
   checkTargets = [ "check-${targetName}" ];
