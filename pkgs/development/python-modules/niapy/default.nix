@@ -8,6 +8,7 @@
   pandas,
   poetry-core,
   pytest7CheckHook,
+  pytest-xdist,
   pythonOlder,
 }:
 
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  nativeCheckInputs = [ pytest7CheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook pytest-xdist ];
 
   pythonImportsCheck = [ "niapy" ];
 
