@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "protoc-gen-prost-serde";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-V2Z6m9y/bBwrr1mgKXKZjVg+LqTe+GalN/AeaICyE64=";
+    hash = "sha256-O2Mpft31ZQncqETWzwD73I1nX1Wt5XVHcTJUk5qhRLY=";
   };
 
-  cargoSha256 = "sha256-l27+Rs4TYIJXZVLj7Tjw8M5+7ivWEY0TXbLtbuzwxLw=";
+  cargoHash = "sha256-aUWmNS3jF1I0NLApBn3GMMv6ID9mM/j7r7sPFCsFIuw=";
 
   passthru.updateScript = nix-update-script { };
 
