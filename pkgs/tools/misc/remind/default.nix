@@ -6,31 +6,26 @@
 , tkremind ? true
 }:
 
-let
-  inherit (lib) optionals optionalString;
-  tclLibraries = optionals tkremind [ tcllib tk ];
-  tkremindPatch = optionalString tkremind ''
-    substituteInPlace scripts/tkremind --replace "exec wish" "exec ${tk}/bin/wish"
-  '';
-in
 tcl.mkTclDerivation rec {
   pname = "remind";
   version = "05.00.01";
 
   src = fetchurl {
     url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
-    sha256 = "sha256-tj36/lLn67/hkNMrRVGXRLqQ9Sx6oDKZHeajiSYn97c=";
+    hash = "sha256-tj36/lLn67/hkNMrRVGXRLqQ9Sx6oDKZHeajiSYn97c=";
   };
 
-  propagatedBuildInputs = tclLibraries;
+  propagatedBuildInputs = lib.optionals tkremind [ tcllib tk ];
 
-  postPatch = ''
-    substituteInPlace ./configure \
-      --replace "sleep 1" "true"
-    substituteInPlace ./src/init.c \
-      --replace "rkrphgvba(0);" "" \
-      --replace "rkrphgvba(1);" ""
-    ${tkremindPatch}
+  postPatch = lib.optionalString tkremind ''
+    # NOTA BENE: The path to rem2pdf is replaced in tkremind for future use
+    # as rem2pdf is currently not build since it requires the JSON::MaybeXS,
+    # Pango and Cairo Perl modules.
+    substituteInPlace scripts/tkremind \
+      --replace-fail "exec wish" "exec ${lib.getBin tk}/bin/wish" \
+      --replace-fail 'set Remind "remind"' "set Remind \"$out/bin/remind\"" \
+      --replace-fail 'set Rem2PS "rem2ps"' "set Rem2PS \"$out/bin/rem2ps\"" \
+      --replace-fail 'set Rem2PDF "rem2pdf"' "set Rem2PDF \"$out/bin/rem2pdf\""
   '';
 
   meta = with lib; {
@@ -38,6 +33,7 @@ tcl.mkTclDerivation rec {
     description = "Sophisticated calendar and alarm program for the console";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ raskin kovirobi ];
+    mainProgram = "remind";
     platforms = platforms.unix;
   };
 }
