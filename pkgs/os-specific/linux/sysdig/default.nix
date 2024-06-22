@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, cmake, kernel, installShellFiles, pkg-config
 , luajit, ncurses, perl, jsoncpp, openssl, curl, jq, gcc, elfutils, tbb
-, protobuf, grpc, yaml-cpp, nlohmann_json, re2, zstd, uthash }:
+, protobuf, grpc, yaml-cpp, nlohmann_json, re2, zstd, uthash, clang, libbpf, bpftools }:
 
 let
-  # Compare with https://github.com/draios/sysdig/blob/0.37.1/cmake/modules/falcosecurity-libs.cmake
-  libsRev = "0.16.0";
-  libsHash = "sha256-aduO2pLj91tRdZ1dW1F1JFEg//SopialXWPd6Oav/u8=";
+  # Compare with https://github.com/draios/sysdig/blob/0.38.0/cmake/modules/falcosecurity-libs.cmake
+  libsRev = "0.17.2";
+  libsHash = "sha256-BTLXtdU7GjOJReaycHvXkSd2vtybnCn0rTR7OEsvaMQ=";
 
-  # Compare with https://github.com/falcosecurity/libs/blob/0.16.0/cmake/modules/valijson.cmake
+  # Compare with https://github.com/falcosecurity/libs/blob/0.17.2/cmake/modules/valijson.cmake
   valijson = fetchFromGitHub {
     owner = "tristanpenman";
     repo = "valijson";
@@ -15,15 +15,15 @@ let
     hash = "sha256-wvFdjsDtKH7CpbEpQjzWtLC4RVOU9+D2rSK0Xo1cJqo=";
   };
 
-  # https://github.com/draios/sysdig/blob/0.37.1/cmake/modules/driver.cmake
+  # https://github.com/draios/sysdig/blob/0.38.0/cmake/modules/driver.cmake
   driver = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "libs";
-    rev = "7.1.0+driver";
+    rev = "7.2.0+driver";
     hash = "sha256-FIlnJsNgofGo4HETEEpW28wpC3U9z5AZprwFR5AgFfA=";
   };
 
-  version = "0.37.1";
+  version = "0.38.0";
 in stdenv.mkDerivation {
   pname = "sysdig";
   inherit version;
@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    hash = "sha256-V1rvQ6ZznL9UiUFW2lyW6gvdoGttOd5kgT2KPQCjmvQ=";
+    hash = "sha256-y6WArSz57w8vb3A3nHT37G6D8++6en2jQfeIS4YCD9U=";
   };
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
@@ -53,6 +53,9 @@ in stdenv.mkDerivation {
     nlohmann_json
     zstd
     uthash
+    clang
+    libbpf
+    bpftools
   ] ++ lib.optionals (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
