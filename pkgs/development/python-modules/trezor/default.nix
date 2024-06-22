@@ -56,7 +56,7 @@ buildPythonPackage rec {
     description = "Python library for communicating with Trezor Hardware Wallet";
     mainProgram = "trezorctl";
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
-    license = licenses.gpl3;
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [
       np
       prusnak
