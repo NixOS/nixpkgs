@@ -16,6 +16,7 @@
 , appstream-glib
 , desktop-file-utils
 , gnome
+, adwaita-icon-theme
 , gsettings-desktop-schemas
 }:
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     glib
     libcanberra-gtk3
     libhandy
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gsettings-desktop-schemas
   ];
 

@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , gitUpdater
 , glibcLocales
-, gnome
+, adwaita-icon-theme
 , gobject-introspection
 , gtk3
 , intltool
@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     python3
     gtk3
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   nativeCheckInputs = with python3Packages; [

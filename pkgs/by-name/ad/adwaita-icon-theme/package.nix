@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "adwaita-icon-theme";
-      attrPath = "gnome.adwaita-icon-theme";
     };
   };
 

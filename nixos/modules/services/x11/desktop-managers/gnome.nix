@@ -373,7 +373,7 @@ in
             gnome-shell
           ];
           optionalPackages = with pkgs.gnome; [
-            adwaita-icon-theme
+            pkgs.adwaita-icon-theme
             nixos-background-info
             gnome-backgrounds
             gnome-bluetooth

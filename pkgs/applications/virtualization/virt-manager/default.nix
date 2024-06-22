@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook3, gtk-vnc
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, gst_all_1, libosinfo, gnome, gtksourceview4, docutils, cpio
+, gsettings-desktop-schemas, gst_all_1, libosinfo, adwaita-icon-theme, gtksourceview4, docutils, cpio
 , e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
 , desktopToDarwinBundle, stdenv
 , spiceSupport ? true, spice-gtk ? null
@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
+    libvirt-glib vte dconf gtk-vnc adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
   ] ++ lib.optional spiceSupport spice-gtk;
 

@@ -15,6 +15,7 @@
 , libnotify
 , itstool
 , gnome
+, adwaita-icon-theme
 , libxml2
 , gsettings-desktop-schemas
 , libcanberra-gtk3
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     libdvdread
     libcanberra-gtk3
     udisks2
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     systemd
     gnome.gnome-settings-daemon
     gsettings-desktop-schemas

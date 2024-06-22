@@ -3,6 +3,7 @@
 , fetchurl
 , fetchpatch
 , gnome
+, adwaita-icon-theme
 , meson
 , ninja
 , pkg-config
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
     udev
     libnotify
     libcanberra-gtk3
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gsettings-desktop-schemas
   ];
 

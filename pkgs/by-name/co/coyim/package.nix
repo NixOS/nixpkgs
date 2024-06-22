@@ -6,7 +6,7 @@
 , cairo
 , gdk-pixbuf
 , glib
-, gnome
+, adwaita-icon-theme
 , wrapGAppsHook3
 , gtk3
 }:
@@ -26,7 +26,7 @@ buildGoModule {
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
 
-  buildInputs = [ glib cairo gdk-pixbuf gtk3 gnome.adwaita-icon-theme ];
+  buildInputs = [ glib cairo gdk-pixbuf gtk3 adwaita-icon-theme ];
 
   meta = {
     description = "Safe and secure chat client";

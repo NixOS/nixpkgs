@@ -8,6 +8,7 @@
 , libhandy
 , glib
 , gnome
+, adwaita-icon-theme
 , sqlite
 , itstool
 , libxml2
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     libxml2
     libxslt
     gnome.yelp-xsl
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
   ];

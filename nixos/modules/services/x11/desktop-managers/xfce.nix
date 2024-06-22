@@ -85,7 +85,7 @@ in
       gtk3.out # gtk-update-icon-cache
 
       gnome.gnome-themes-extra
-      gnome.adwaita-icon-theme
+      adwaita-icon-theme
       hicolor-icon-theme
       tango-icon-theme
       xfce4-icon-theme

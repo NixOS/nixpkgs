@@ -2,7 +2,7 @@
 , python3Packages
 , gtk3
 , cairo
-, gnome
+, adwaita-icon-theme
 , librsvg
 , xvfb-run
 , dbus
@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication rec {
       ln -s $i $site/icon/out;
     done
 
-    export XDG_DATA_DIRS=$XDG_DATA_DIRS:${gnome.adwaita-icon-theme}/share
+    export XDG_DATA_DIRS=$XDG_DATA_DIRS:${adwaita-icon-theme}/share
     # build the user manual
     PATH=$out/bin:$PATH PAPERWORK_TEST_DOCUMENTS=${sample_docs} make data
     for i in src/paperwork_gtk/model/help/out/*.pdf; do
@@ -89,7 +89,7 @@ python3Packages.buildPythonApplication rec {
   ] ++ documentation_deps;
 
   buildInputs = [
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libnotify
     librsvg
     gtk3

@@ -15,6 +15,7 @@
 , docbook_xsl
 , docbook_xml_dtd_43
 , gnome
+, adwaita-icon-theme
 , gtk3
 , glib
 , gsettings-desktop-schemas
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     gsettings-desktop-schemas
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   doCheck = true;

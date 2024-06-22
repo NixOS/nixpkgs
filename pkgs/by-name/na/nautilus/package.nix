@@ -14,6 +14,7 @@
   libadwaita,
   libportal-gtk4,
   gnome,
+  adwaita-icon-theme,
   gnome-autoar,
   glib-networking,
   shared-mime-info,
@@ -79,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     gexiv2
     glib-networking
     gnome-desktop
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gsettings-desktop-schemas
     gnome-user-share
     gst_all_1.gst-plugins-base

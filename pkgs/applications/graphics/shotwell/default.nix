@@ -3,6 +3,7 @@
 , fetchurl
 , meson
 , ninja
+, adwaita-icon-theme
 , gtk3
 , libexif
 , libgphoto2
@@ -80,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     librest
     gcr
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libsecret
     libportal-gtk3
   ];

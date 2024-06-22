@@ -5,6 +5,7 @@
 , ninja
 , pkg-config
 , gnome
+, adwaita-icon-theme
 , gtk3
 , wrapGAppsHook3
 , glib
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     webkitgtk_4_1
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gsettings-desktop-schemas
   ];
 

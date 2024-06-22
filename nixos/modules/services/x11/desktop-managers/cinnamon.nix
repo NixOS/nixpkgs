@@ -163,7 +163,7 @@ in
         libgnomekbd
 
         # theme
-        gnome.adwaita-icon-theme
+        adwaita-icon-theme
         gnome.gnome-themes-extra
         gtk3.out
 

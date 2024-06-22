@@ -207,7 +207,7 @@ in
         desktop-file-utils
         glib # for gsettings program
         gnome-menus
-        gnome.adwaita-icon-theme
+        adwaita-icon-theme
         gtk3.out # for gtk-launch program
         onboard
         orca # elementary/greeter#668

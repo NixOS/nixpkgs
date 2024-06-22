@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook3, gnome }:
+{ lib, stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook3, adwaita-icon-theme }:
 
 # TODO: Declare configuration options for the following optional dependencies:
 #  -  File stores: hg, git, bzr
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-QIkNsFsWeNHEcXhGHHZyJDMMW2lNvdwMJLGxeCZaLdI=";
   };
 
-  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
+  buildInputs = [ gtk3 adwaita-icon-theme ];
   propagatedBuildInputs = with python3Packages; [ pyxdg pygobject3 ];
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook3 ];
 
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     makeWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share)
-    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : ${gnome.adwaita-icon-theme}/share)
+    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : ${adwaita-icon-theme}/share)
     makeWrapperArgs+=(--argv0 $out/bin/.zim-wrapped)
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';

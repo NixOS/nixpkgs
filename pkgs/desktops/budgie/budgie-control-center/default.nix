@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , substituteAll
 , accountsservice
+, adwaita-icon-theme
 , budgie-desktop
 , clutter
 , clutter-gtk
@@ -102,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking
     gnome-desktop
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gnome.cheese
     gnome.gnome-bluetooth_1_0
     gnome.gnome-remote-desktop

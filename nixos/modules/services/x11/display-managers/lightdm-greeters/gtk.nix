@@ -68,8 +68,8 @@ in
 
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome.adwaita-icon-theme;
-          defaultText = literalExpression "pkgs.gnome.adwaita-icon-theme";
+          default = pkgs.adwaita-icon-theme;
+          defaultText = literalExpression "pkgs.adwaita-icon-theme";
           description = ''
             The package path that contains the icon theme given in the name option.
           '';
@@ -89,8 +89,8 @@ in
 
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome.adwaita-icon-theme;
-          defaultText = literalExpression "pkgs.gnome.adwaita-icon-theme";
+          default = pkgs.adwaita-icon-theme;
+          defaultText = literalExpression "pkgs.adwaita-icon-theme";
           description = ''
             The package path that contains the cursor theme given in the name option.
           '';

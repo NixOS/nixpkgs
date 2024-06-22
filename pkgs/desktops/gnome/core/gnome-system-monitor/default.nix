@@ -15,6 +15,7 @@
 , gsettings-desktop-schemas
 , itstool
 , gnome
+, adwaita-icon-theme
 , librsvg
 , gdk-pixbuf
 , libgtop
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     gtkmm4
     libgtop
     gdk-pixbuf
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     librsvg
     gsettings-desktop-schemas
     systemd
