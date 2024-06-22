@@ -44,8 +44,6 @@ in
 
   gnome-control-center = callPackage ./core/gnome-control-center { };
 
-  gnome-calculator = callPackage ./core/gnome-calculator { };
-
   gnome-common = callPackage ./core/gnome-common { };
 
   gnome-dictionary = callPackage ./core/gnome-dictionary { };
@@ -249,6 +247,7 @@ in
   file-roller = lib.warn "The ‘gnome.file-roller’ was moved to top-level. Please use ‘pkgs.file-roller’ directly." pkgs.file-roller; # Added on 2024-06-13.
   ghex = lib.warn "The ‘gnome.ghex’ was moved to top-level. Please use ‘pkgs.ghex’ directly." pkgs.ghex; # Added on 2024-06-22.
   gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
+  gnome-calculator = lib.warn "The ‘gnome.gnome-calculator’ was moved to top-level. Please use ‘pkgs.gnome-calculator’ directly." pkgs.gnome-calculator; # Added on 2024-06-22.
   gnome-screenshot = lib.warn "The ‘gnome.gnome-screenshot’ was moved to top-level. Please use ‘pkgs.gnome-screenshot’ directly." pkgs.gnome-screenshot; # Added on 2024-06-22.
   gnome-terminal = lib.warn "The ‘gnome.gnome-terminal’ was moved to top-level. Please use ‘pkgs.gnome-terminal’ directly." pkgs.gnome-terminal; # Added on 2024-06-13.
   gnome-user-share = lib.warn "The ‘gnome.gnome-user-share’ was moved to top-level. Please use ‘pkgs.gnome-user-share’ directly." pkgs.gnome-user-share; # Added on 2024-06-13.

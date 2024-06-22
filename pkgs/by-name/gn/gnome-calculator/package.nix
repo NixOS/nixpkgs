@@ -67,7 +67,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-calculator";
-      attrPath = "gnome.gnome-calculator";
     };
   };
 

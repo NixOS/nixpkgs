@@ -402,7 +402,7 @@ in
             baobab
             epiphany
             pkgs.gnome-text-editor
-            gnome-calculator
+            pkgs.gnome-calculator
             gnome-calendar
             gnome-characters
             gnome-clocks
