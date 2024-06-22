@@ -21,7 +21,6 @@
 , qmake
 , qtbase
 , qtwayland
-, removeReferencesTo
 , speechd
 , sqlite
 , wrapQtAppsHook
@@ -69,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     qmake
-    removeReferencesTo
     wrapGAppsHook3
     wrapQtAppsHook
   ];
@@ -173,13 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
   dontWrapGApps = true;
 
-  # Remove some references to shrink the closure size. This reference (as of
-  # 2018-11-06) was a single string like the following:
-  #   /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-podofo-0.9.6-dev/include/podofo/base/PdfVariant.h
   preFixup = ''
-    remove-references-to -t ${podofo.dev} \
-      $out/lib/calibre/calibre/plugins/podofo.so
-
     for program in $out/bin/*; do
       wrapProgram $program \
         ''${qtWrapperArgs[@]} \
@@ -188,8 +180,6 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix PATH : ${poppler_utils.out}/bin
     done
   '';
-
-  disallowedReferences = [ podofo.dev ];
 
   meta = {
     homepage = "https://calibre-ebook.com";
