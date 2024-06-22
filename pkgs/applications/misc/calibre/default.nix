@@ -26,6 +26,8 @@
 , wrapQtAppsHook
 , xdg-utils
 , wrapGAppsHook3
+, popplerSupport ? true
+, speechSupport ? true
 , unrarSupport ? false
 }:
 
@@ -117,7 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
       regex
       sip
       setuptools
-      speechd
       zeroconf
       jeepney
       pycryptodome
@@ -130,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
       # does not support by simply omitting qtwebengine.
       pyqt6-webengine
     ] ++ lib.optional (unrarSupport) unrardll
-  );
+  ) ++ lib.optional (speechSupport) speechd;
 
   installPhase = ''
     runHook preInstall
@@ -171,15 +172,19 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
   dontWrapGApps = true;
 
-  preFixup = ''
-    for program in $out/bin/*; do
-      wrapProgram $program \
-        ''${qtWrapperArgs[@]} \
-        ''${gappsWrapperArgs[@]} \
-        --prefix PYTHONPATH : $PYTHONPATH \
-        --prefix PATH : ${poppler_utils.out}/bin
-    done
-  '';
+  preFixup =
+    let
+      popplerArgs = "--prefix PATH : ${poppler_utils.out}/bin";
+    in
+    ''
+      for program in $out/bin/*; do
+        wrapProgram $program \
+          ''${qtWrapperArgs[@]} \
+          ''${gappsWrapperArgs[@]} \
+          --prefix PYTHONPATH : $PYTHONPATH \
+          ${if popplerSupport then popplerArgs else ""}
+      done
+    '';
 
   meta = {
     homepage = "https://calibre-ebook.com";
