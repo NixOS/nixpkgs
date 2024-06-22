@@ -399,7 +399,7 @@ in
         with pkgs.gnome;
         utils.removePackagesByName
           ([
-            baobab
+            pkgs.baobab
             epiphany
             pkgs.gnome-text-editor
             pkgs.gnome-calculator
