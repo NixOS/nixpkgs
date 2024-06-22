@@ -434,7 +434,7 @@ in
       # through `environment.gnome.excludePackages`
       programs.evince.enable = notExcluded pkgs.evince;
       programs.file-roller.enable = notExcluded pkgs.file-roller;
-      programs.geary.enable = notExcluded pkgs.gnome.geary;
+      programs.geary.enable = notExcluded pkgs.geary;
       programs.gnome-disks.enable = notExcluded pkgs.gnome.gnome-disk-utility;
       programs.seahorse.enable = notExcluded pkgs.seahorse;
       services.gnome.sushi.enable = notExcluded pkgs.gnome.sushi;

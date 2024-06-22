@@ -143,7 +143,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "gnome.${pname}";
     };
   };
 

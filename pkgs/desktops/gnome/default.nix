@@ -199,8 +199,6 @@ in
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
-  geary = callPackage ./misc/geary { };
-
   gitg = callPackage ./misc/gitg { };
 
   gnome-applets = callPackage ./misc/gnome-applets { };
@@ -234,6 +232,7 @@ in
   evince = lib.warn "The ‘gnome.evince’ was moved to top-level. Please use ‘pkgs.evince’ directly." pkgs.evince; # Added on 2024-06-13.
   evolution-data-server = lib.warn "The ‘gnome.evolution-data-server’ was moved to top-level. Please use ‘pkgs.evolution-data-server’ directly." pkgs.evolution-data-server; # Added on 2024-06-13.
   file-roller = lib.warn "The ‘gnome.file-roller’ was moved to top-level. Please use ‘pkgs.file-roller’ directly." pkgs.file-roller; # Added on 2024-06-13.
+  geary = lib.warn "The ‘gnome.geary’ was moved to top-level. Please use ‘pkgs.geary’ directly." pkgs.geary; # Added on 2024-06-22.
   ghex = lib.warn "The ‘gnome.ghex’ was moved to top-level. Please use ‘pkgs.ghex’ directly." pkgs.ghex; # Added on 2024-06-22.
   gnome-autoar = lib.warn "The ‘gnome.gnome-autoar’ was moved to top-level. Please use ‘pkgs.gnome-autoar’ directly." pkgs.gnome-autoar; # Added on 2024-06-13.
   gnome-common = lib.warn "The ‘gnome.gnome-common’ was moved to top-level. Please use ‘pkgs.gnome-common’ directly." pkgs.gnome-common; # Added on 2024-06-22.
