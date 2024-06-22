@@ -1469,7 +1469,6 @@ dont-distribute-packages:
  - funnyprint
  - funsat
  - fwgl-glfw
- - fwgl-javascript
  - fxpak
  - g2
  - g2q
@@ -2224,7 +2223,6 @@ dont-distribute-packages:
  - hsx-xhtml
  - hsyslog-tcp
  - html-kure
- - html-parse-util
  - html2hamlet
  - htoml-parse
  - htsn-import
@@ -2486,7 +2484,6 @@ dont-distribute-packages:
  - kubernetes-client
  - kure-your-boilerplate
  - kurita
- - kvitable
  - laborantin-hs
  - labsat
  - labyrinth
@@ -3903,7 +3900,6 @@ dont-distribute-packages:
  - tasty-jenkins-xml
  - tasty-laws
  - tasty-lens
- - tasty-sugar
  - tateti-tateti
  - tbox
  - tccli
