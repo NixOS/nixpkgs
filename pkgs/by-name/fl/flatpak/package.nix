@@ -1,55 +1,59 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, docbook_xml_dtd_45
-, docbook-xsl-nons
-, which
-, libxml2
-, gobject-introspection
-, gtk-doc
-, intltool
-, libxslt
-, pkg-config
-, xmlto
-, substituteAll
-, runCommand
-, bison
-, xdg-dbus-proxy
-, p11-kit
-, appstream
-, bubblewrap
-, bzip2
-, curl
-, dbus
-, glib
-, gpgme
-, json-glib
-, libarchive
-, libcap
-, libseccomp
-, coreutils
-, socat
-, gettext
-, hicolor-icon-theme
-, shared-mime-info
-, desktop-file-utils
-, gtk3
-, fuse3
-, nixosTests
-, xz
-, zstd
-, ostree
-, polkit
-, python3
-, systemd
-, xorg
-, valgrind
-, glib-networking
-, wrapGAppsNoGuiHook
-, dconf
-, gsettings-desktop-schemas
-, librsvg
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  runCommand,
+  appstream,
+  autoreconfHook,
+  bison,
+  bubblewrap,
+  bzip2,
+  coreutils,
+  curl,
+  dbus,
+  dconf,
+  desktop-file-utils,
+  docbook_xml_dtd_45,
+  docbook-xsl-nons,
+  fuse3,
+  gettext,
+  glib,
+  glib-networking,
+  gobject-introspection,
+  gpgme,
+  gsettings-desktop-schemas,
+  gtk3,
+  gtk-doc,
+  hicolor-icon-theme,
+  intltool,
+  json-glib,
+  libarchive,
+  libcap,
+  librsvg,
+  libseccomp,
+  libxml2,
+  libxslt,
+  nix-update-script,
+  nixosTests,
+  nixos-icons,
+  ostree,
+  p11-kit,
+  pkg-config,
+  polkit,
+  python3,
+  shared-mime-info,
+  socat,
+  substituteAll,
+  systemd,
+  testers,
+  valgrind,
+  which,
+  wrapGAppsNoGuiHook,
+  xdg-dbus-proxy,
+  xmlto,
+  xorg,
+  xz,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,11 +61,18 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.14.6";
 
   # TODO: split out lib once we figure out what to do with triggerdir
-  outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "doc"
+    "devdoc"
+    "installedTests"
+  ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-U482ssb4xw7v0S0TrVsa2DCCAQaovTqfa45NnegeSUY="; # Taken from https://github.com/flatpak/flatpak/releases/
+    hash = "sha256-U482ssb4xw7v0S0TrVsa2DCCAQaovTqfa45NnegeSUY=";
   };
 
   patches = [
@@ -69,7 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/flatpak/flatpak/issues/1460
     (substituteAll {
       src = ./fix-test-paths.patch;
-      inherit coreutils gettext socat gtk3;
+      inherit
+        coreutils
+        gettext
+        socat
+        gtk3
+        ;
       smi = shared-mime-info;
       dfu = desktop-file-utils;
       hicolorIconTheme = hicolor-icon-theme;
@@ -149,9 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     ostree
   ];
 
-  nativeCheckInputs = [
-    valgrind
-  ];
+  nativeCheckInputs = [ valgrind ];
 
   # TODO: some issues with temporary files
   doCheck = false;
@@ -162,8 +176,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-curl"
-    "--with-system-bubblewrap=${bubblewrap}/bin/bwrap"
-    "--with-system-dbus-proxy=${xdg-dbus-proxy}/bin/xdg-dbus-proxy"
+    "--with-system-bubblewrap=${lib.getExe bubblewrap}"
+    "--with-system-dbus-proxy=${lib.getExe xdg-dbus-proxy}"
     "--with-dbus-config-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-profile-dir=${placeholder "out"}/etc/profile.d"
     "--localstatedir=/var"
@@ -177,15 +191,15 @@ stdenv.mkDerivation (finalAttrs: {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/flatpak"
   ];
 
-  postPatch = let
-    vsc-py = python3.withPackages (pp: [
-      pp.pyparsing
-    ]);
-  in ''
-    patchShebangs buildutil
-    patchShebangs tests
-    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
-  '';
+  postPatch =
+    let
+      vsc-py = python3.withPackages (pp: [ pp.pyparsing ]);
+    in
+    ''
+      patchShebangs buildutil
+      patchShebangs tests
+      PATH=${lib.makeBinPath [ vsc-py ]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
+    '';
 
   passthru = {
     icon-validator-patch = substituteAll {
@@ -193,21 +207,29 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (builtins) storeDir;
     };
 
+    updateScript = nix-update-script { };
+
     tests = {
       installedTests = nixosTests.installed-tests.flatpak;
 
       validate-icon = runCommand "test-icon-validation" { } ''
-        ${finalAttrs.finalPackage}/libexec/flatpak-validate-icon --sandbox 512 512 ${../../../applications/audio/zynaddsubfx/ZynLogo.svg} > "$out"
+        ${finalAttrs.finalPackage}/libexec/flatpak-validate-icon \
+          --sandbox 512 512 \
+          "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg" > "$out"
+
         grep format=svg "$out"
       '';
+
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Linux application sandboxing and distribution framework";
     homepage = "https://flatpak.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/flatpak/flatpak/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ getchoo ];
+    platforms = lib.platforms.linux;
   };
 })
