@@ -6,6 +6,7 @@ let
 
   inherit (lib)
     types
+    mkEnableOption
     mkMerge
     mkOption
     mkChangedOptionModule
@@ -95,15 +96,7 @@ in
         else value;
     in
     {
-      enable = mkOption {
-        type = bool;
-        default = false;
-        example = true;
-        description = ''
-          Whether to enable the Keycloak identity and access management
-          server.
-        '';
-      };
+      enable = mkEnableOption "the Keycloak identity and access management server";
 
       sslCertificate = mkOption {
         type = nullOr path;
@@ -270,6 +263,25 @@ in
           `login` etc. After adding a theme to this option you
           can select it by its name in Keycloak administration console.
         '';
+      };
+
+      themeDevMode = {
+        enable = mkEnableOption ''
+          the theme devleopment mode. This is a quite huge performance deficit as caching of themes is disabled.
+
+          This requires `services.keycloak.themeDevMode.themeDirPath` to be set.
+          `service.keycloak.themes` is ignored when this option is true
+        '';
+
+        themesDirPath = mkOption {
+          type = str;
+          default = "";
+          description = ''
+            The path to the themes directory if the theme development mode is activated.
+
+            This directory should have the format <theme name>/<area>.
+          '';
+        };
       };
 
       settings = mkOption {
@@ -445,6 +457,8 @@ in
         ${concatStringsSep "\n" (mapAttrsToList (name: theme: "linkTheme ${theme} ${escapeShellArg name}") cfg.themes)}
       '';
 
+      themesPath = if cfg.themeDevMode.enable then cfg.themeDevMode.themesDirPath else themesBundle;
+
       keycloakConfig = lib.generators.toKeyValue {
         mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
           mkValueString = v:
@@ -468,6 +482,8 @@ in
     in
     mkIf cfg.enable
       {
+        warnings = optionals (cfg.themeDevMode.enable && cfg.themes != {}) [ "`services.keycloak.themes` is ignored when `services.keycloak.themeDevMode.enable` is true." ];
+
         assertions = [
           {
             assertion = (cfg.database.useSSL && cfg.database.type == "postgresql") -> (cfg.database.caCert != null);
@@ -492,6 +508,10 @@ in
               Set `services.keycloak.settings.hostname-backchannel-dynamic' instead.
               See [New Hostname options](https://www.keycloak.org/docs/25.0.0/upgrading/#new-hostname-options) for details.
             '';
+          }
+          {
+            assertion = cfg.themeDevMode.enable -> (cfg.themeDevMode.themesDirPath != "");
+            message = "`services.keycloak.themeDevMode.enable` requires `services.keycloak.themeDevMode.themesDirPath` to be set";
           }
         ];
 
@@ -533,6 +553,11 @@ in
             (mkIf (cfg.sslCertificate != null && cfg.sslCertificateKey != null) {
               https-certificate-file = "/run/keycloak/ssl/ssl_cert";
               https-certificate-key-file = "/run/keycloak/ssl/ssl_key";
+            })
+            (mkIf cfg.themeDevMode.enable {
+              spi-theme-static-max-age = -1;
+              spi-theme-cache-themes = false;
+              spi-theme-cache-templates = false;
             })
           ];
 
@@ -652,7 +677,7 @@ in
 
               umask u=rwx,g=,o=
 
-              ln -s ${themesBundle} /run/keycloak/themes
+              ln -s ${themesPath} /run/keycloak/themes
               ln -s ${keycloakBuild}/providers /run/keycloak/
 
               install -D -m 0600 ${confFile} /run/keycloak/conf/keycloak.conf
