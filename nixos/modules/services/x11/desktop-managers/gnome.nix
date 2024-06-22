@@ -436,7 +436,7 @@ in
       programs.file-roller.enable = notExcluded pkgs.file-roller;
       programs.geary.enable = notExcluded pkgs.gnome.geary;
       programs.gnome-disks.enable = notExcluded pkgs.gnome.gnome-disk-utility;
-      programs.seahorse.enable = notExcluded pkgs.gnome.seahorse;
+      programs.seahorse.enable = notExcluded pkgs.seahorse;
       services.gnome.sushi.enable = notExcluded pkgs.gnome.sushi;
 
       # VTE shell integration for gnome-console

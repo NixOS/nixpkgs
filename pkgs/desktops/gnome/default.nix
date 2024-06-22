@@ -159,8 +159,6 @@ in
 
   polari = callPackage ./apps/polari { };
 
-  seahorse = callPackage ./apps/seahorse { };
-
   vinagre = callPackage ./apps/vinagre { };
 
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
@@ -252,6 +250,7 @@ in
   gnome-user-share = lib.warn "The ‘gnome.gnome-user-share’ was moved to top-level. Please use ‘pkgs.gnome-user-share’ directly." pkgs.gnome-user-share; # Added on 2024-06-13.
   nautilus = lib.warn "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly." pkgs.nautilus; # Added on 2024-06-13.
   nautilus-python = lib.warn "The ‘gnome.nautilus-python’ was moved to top-level. Please use ‘pkgs.nautilus-python’ directly." pkgs.nautilus-python; # Added on 2024-06-13.
+  seahorse = lib.warn "The ‘gnome.seahorse’ was moved to top-level. Please use ‘pkgs.seahorse’ directly." pkgs.seahorse; # Added on 2024-06-22.
 
 #### Removals
   anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16
