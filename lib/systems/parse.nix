@@ -456,8 +456,7 @@ rec {
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
     "3" =
       # cpu-kernel-environment
-      if elemAt l 1 == "linux" ||
-         elem (elemAt l 2) ["eabi" "eabihf" "elf" "gnu"]
+      if elemAt l 1 == "linux"
       then {
         cpu    = elemAt l 0;
         kernel = elemAt l 1;
@@ -466,17 +465,21 @@ rec {
       }
       # cpu-vendor-os
       else if elemAt l 1 == "apple" ||
-              elem (elemAt l 2) [ "wasi" "redox" "mmixware" "ghcjs" "mingw32" ] ||
+              elem (elemAt l 2) [ "elf" "ghcjs" "gnu" "mingw32" "mmixware" "redox" "wasi" ] ||
+              hasPrefix "eabi" (elemAt l 2) ||
               hasPrefix "freebsd" (elemAt l 2) ||
               hasPrefix "netbsd" (elemAt l 2) ||
               hasPrefix "openbsd" (elemAt l 2) ||
               hasPrefix "genode" (elemAt l 2)
       then {
+        kernel = "none";
+      } // {
         cpu    = elemAt l 0;
-        vendor = elemAt l 1;
-        kernel = if elemAt l 2 == "mingw32"
-                 then "windows"  # autotools breaks on -gnu for window
-                 else elemAt l 2;
+        vendor = if elemAt l 1 == "none" then "unknown" else elemAt l 1;
+        ${if hasPrefix "eabi" (elemAt l 2) || elem (elemAt l 2) [ "elf" "gnu" ] then "abi" else "kernel"} =
+          if elemAt l 2 == "mingw32"
+          then "windows"  # autotools breaks on -gnu for windows
+          else elemAt l 2;
       }
       else throw "Target specification with 3 components is ambiguous";
     "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
