@@ -132,7 +132,7 @@ in {
         gnome-menus
 
         # Required by Budgie Control Center.
-        gnome.zenity
+        zenity
 
         # Provides `gsettings`.
         glib

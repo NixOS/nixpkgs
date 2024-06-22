@@ -1641,7 +1641,6 @@ with pkgs;
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   ajour = callPackage ../tools/games/ajour {
-    inherit (gnome) zenity;
     inherit (plasma5Packages) kdialog;
   };
 
@@ -2774,9 +2773,7 @@ with pkgs;
 
   vice = callPackage ../applications/emulators/vice { };
 
-  winetricks = callPackage ../applications/emulators/wine/winetricks.nix {
-    inherit (gnome) zenity;
-  };
+  winetricks = callPackage ../applications/emulators/wine/winetricks.nix { };
 
   xcpc = callPackage ../applications/emulators/xcpc { };
 
@@ -32480,9 +32477,7 @@ with pkgs;
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
-  mepo = callPackage ../applications/misc/mepo {
-    inherit (gnome) zenity;
-  };
+  mepo = callPackage ../applications/misc/mepo { };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
 
@@ -33952,9 +33947,7 @@ with pkgs;
 
   rusty-psn-gui = rusty-psn.override { withGui = true; };
 
-  rymcast = callPackage ../applications/audio/rymcast {
-    inherit (gnome) zenity;
-  };
+  rymcast = callPackage ../applications/audio/rymcast { };
 
   rymdport = callPackage ../applications/networking/rymdport {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -34332,7 +34325,6 @@ with pkgs;
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
 
   surge = callPackage ../applications/audio/surge {
-    inherit (gnome) zenity;
     git = gitMinimal;
   };
 
@@ -35698,7 +35690,6 @@ with pkgs;
 
   alfis = callPackage ../applications/blockchains/alfis {
     inherit (darwin.apple_sdk.frameworks) Cocoa Security WebKit;
-    inherit (gnome) zenity;
   };
   alfis-nogui = alfis.override {
     withGui = false;
