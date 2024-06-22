@@ -163,6 +163,23 @@ let
     '';
   };
 
+  slynk = build-asdf-system {
+    pname = "slynk";
+    version = "trunk";
+    src = pkgs.fetchFromGitHub {
+      owner = "joaotavora";
+      repo = "sly";
+      rev =  "ba40c8f054ec3b7040a6c36a1ef3e9596b936421";
+      hash = "sha256-hoaCZtyezuXptDPnAvBTT0SZ14M9Ifrmki3beBOwFmI=";
+    };
+    systems = [
+      "slynk" "slynk/arglists" "slynk/fancy-inspector"
+      "slynk/package-fu" "slynk/mrepl" "slynk/trace-dialog"
+      "slynk/profiler" "slynk/stickers" "slynk/indentation"
+      "slynk/retro"
+    ];
+  };
+
   cephes = build-with-compile-into-pwd {
     inherit (super.cephes) pname version src lispLibs;
     patches = [ ./patches/cephes-make.patch ];
