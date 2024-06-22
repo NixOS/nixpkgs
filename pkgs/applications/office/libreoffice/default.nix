@@ -2,7 +2,7 @@
 , fetchurl
 , lib
 , pam
-, python3
+, python311
 , libxslt
 , perl
 , perlPackages
@@ -372,7 +372,7 @@ in stdenv.mkDerivation (finalAttrs: {
     perl
     poppler
     postgresql
-    python3
+    python311
     sane-backends
     unixODBC
     unzip
