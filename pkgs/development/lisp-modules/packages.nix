@@ -147,8 +147,16 @@ let
     systems = [ "cl-containers" "cl-containers/with-moptilities" ];
   };
 
-  swank = build-with-compile-into-pwd {
-    inherit (super.swank) pname version src lispLibs;
+  swank = build-with-compile-into-pwd rec {
+    inherit (super.swank) pname lispLibs;
+    version = "2.29.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "slime";
+      repo = "slime";
+      rev =  "v${version}";
+      hash = "sha256-5hNB5XxbTER4HX3dn4umUGnw6UeiTQkczmggFz4uWoE=";
+    };
+    systems = [ "swank" "swank/exts" ];
     patches = [ ./patches/swank-pure-paths.patch ];
     postConfigure = ''
       substituteAllInPlace swank-loader.lisp
