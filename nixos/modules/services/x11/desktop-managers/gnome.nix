@@ -437,7 +437,7 @@ in
       programs.geary.enable = notExcluded pkgs.geary;
       programs.gnome-disks.enable = notExcluded pkgs.gnome.gnome-disk-utility;
       programs.seahorse.enable = notExcluded pkgs.seahorse;
-      services.gnome.sushi.enable = notExcluded pkgs.gnome.sushi;
+      services.gnome.sushi.enable = notExcluded pkgs.sushi;
 
       # VTE shell integration for gnome-console
       programs.bash.vteIntegration = mkDefault true;
