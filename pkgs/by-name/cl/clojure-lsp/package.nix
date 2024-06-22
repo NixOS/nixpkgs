@@ -1,48 +1,53 @@
-{ lib
-, stdenv
-, buildGraalvmNativeImage
-, babashka
-, fetchurl
-, fetchFromGitHub
-, clojure
-, writeScript
-, testers
-, clojure-lsp
+{
+  lib,
+  stdenv,
+  buildGraalvmNativeImage,
+  babashka,
+  fetchurl,
+  fetchFromGitHub,
+  clojure,
+  writeScript,
+  testers,
+  clojure-lsp,
 }:
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
-  version = "2023.08.06-00.28.06";
+  version = "2024.04.22-11.50.26";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "clojure-lsp";
+    repo = "clojure-lsp";
     rev = version;
-    sha256 = "sha256-wc7M2cPRtdaRzZn3GNu/aCbQ2VqxiDxvu/b7qnBVUBo=";
+    hash = "sha256-GyPIFYR+/BZ+vq6+yuer5HoVILXLWNw1sW8XpJ7q4SA=";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp-standalone.jar";
-    sha256 = "c301821ac6914999a44f5c1cd371d46b248fe9a2e31d43a666d0bc2656cfdd78";
+    hash = "sha256-dB16225A7L3nWplvqlal+5gho+LmqqVGPN9dfasKaPk=";
   };
 
   extraNativeImageBuildArgs = [
+    # These build args mirror the build.clj upstream
+    # ref: https://github.com/clojure-lsp/clojure-lsp/blob/2024.04.22-11.50.26/cli/build.clj#L141-L144
     "--no-fallback"
     "--native-image-info"
+    "--features=clj_easy.graal_build_time.InitClojureClasses"
   ];
 
   doCheck = true;
-  checkPhase = ''
-    runHook preCheck
+  checkPhase =
+    ''
+      runHook preCheck
 
-    export HOME="$(mktemp -d)"
-    ./${pname} --version | fgrep -q '${version}'
-  ''
-  # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
-  #${babashka}/bin/bb integration-test ./${pname}
-  + ''
-    runHook postCheck
-  '';
+      export HOME="$(mktemp -d)"
+      ./clojure-lsp --version | fgrep -q '${version}'
+    ''
+    # TODO: fix classpath issue per https://github.com/NixOS/nixpkgs/pull/153770
+    #${babashka}/bin/bb integration-test ./clojure-lsp
+    + ''
+      runHook postCheck
+    '';
 
   passthru.tests.version = testers.testVersion {
     inherit version;
@@ -71,11 +76,12 @@ buildGraalvmNativeImage rec {
     update-source-version clojure-lsp "$latest_version"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Language Server Protocol (LSP) for Clojure";
     homepage = "https://github.com/clojure-lsp/clojure-lsp";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ ericdallo ];
+    changelog = "https://github.com/clojure-lsp/clojure-lsp/releases/tag/${version}";
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ericdallo ];
   };
 }

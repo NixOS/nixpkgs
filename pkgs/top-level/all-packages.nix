@@ -7672,8 +7672,6 @@ with pkgs;
 
   emscriptenStdenv = stdenv // { mkDerivation = buildEmscriptenPackage; };
 
-  efibootmgr = callPackage ../tools/system/efibootmgr { };
-
   efivar = callPackage ../tools/system/efivar { };
 
   eget = callPackage ../tools/misc/eget { };
@@ -17088,8 +17086,6 @@ with pkgs;
     # set this to an LTS version of java
     jdk = jdk21;
   };
-
-  clojure-lsp = callPackage ../development/tools/misc/clojure-lsp { };
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
