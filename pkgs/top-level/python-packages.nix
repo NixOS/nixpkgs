@@ -7780,6 +7780,8 @@ self: super: with self; {
 
   motionblinds = callPackage ../development/python-modules/motionblinds { };
 
+  motionblindsble = callPackage ../development/python-modules/motionblindsble { };
+
   motioneye-client = callPackage ../development/python-modules/motioneye-client { };
 
   moto = callPackage ../development/python-modules/moto { };
