@@ -269,6 +269,9 @@ let
     capstone = super.capstone.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.capstone ];
     });
+    vk = super.vk.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.vulkan-loader ];
+    });
   });
 
   qlpkgs =
