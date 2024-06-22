@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional stdenv.isLinux openssl
     ++ lib.optional withALSA alsa-lib
     ++ lib.optional withClipboard libxcb
-    ++ lib.optional withCover ueberzug
+    ++ lib.optional withCover ueberzugpp
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional (withMPRIS || withNotify) dbus
