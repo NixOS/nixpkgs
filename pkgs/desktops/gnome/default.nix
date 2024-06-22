@@ -98,8 +98,6 @@ in
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
-  accerciser = callPackage ./apps/accerciser { };
-
   cheese = callPackage ./apps/cheese { };
 
   gnome-boxes = callPackage ./apps/gnome-boxes { };
@@ -188,6 +186,7 @@ in
   gedit = throw "The ‘gnome.gedit’ alias was removed. Please use ‘pkgs.gedit’ directly."; # converted to throw on 2023-12-27
   gnome-todo = throw "The ‘gnome.gnome-todo’ alias was removed. Please use ‘pkgs.endeavour’ directly."; # converted to throw on 2023-12-27
 
+  accerciser = lib.warn "The ‘gnome.accerciser’ was moved to top-level. Please use ‘pkgs.accerciser’ directly." pkgs.accerciser; # Added on 2024-06-22.
   adwaita-icon-theme = lib.warn "The ‘gnome.adwaita-icon-theme’ was moved to top-level. Please use ‘pkgs.adwaita-icon-theme’ directly." pkgs.adwaita-icon-theme; # Added on 2024-06-22.
   baobab = lib.warn "The ‘gnome.baobab’ was moved to top-level. Please use ‘pkgs.baobab’ directly." pkgs.baobab; # Added on 2024-06-22.
   dconf-editor = lib.warn "The ‘gnome.dconf-editor’ was moved to top-level. Please use ‘pkgs.dconf-editor’ directly." pkgs.dconf-editor; # Added on 2024-06-22.

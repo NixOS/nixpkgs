@@ -62,7 +62,6 @@ python3.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "accerciser";
-      attrPath = "gnome.accerciser";
       versionPolicy = "odd-unstable";
     };
   };
