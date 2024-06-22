@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
       "CVE-2019-9587: loop in PDF objects"
       "CVE-2019-9588: loop in PDF objects"
       "CVE-2019-16088: loop in PDF objects"
+      "CVE-2022-30524"
       "CVE-2022-38334"
       "CVE-2022-38928"
       "CVE-2022-41842"
@@ -88,7 +89,6 @@ stdenv.mkDerivation rec {
       "CVE-2022-45586"
       "CVE-2022-45587"
       "CVE-2023-26930"
-      "CVE-2023-26931"
       "CVE-2023-2664"
     ];
   };
