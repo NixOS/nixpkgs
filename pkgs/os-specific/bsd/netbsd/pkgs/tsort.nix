@@ -6,7 +6,6 @@
   install,
   mandoc,
   groff,
-  rsync,
 }:
 
 mkDerivation {
@@ -18,6 +17,5 @@ mkDerivation {
     install
     mandoc
     groff
-    rsync
   ];
 }

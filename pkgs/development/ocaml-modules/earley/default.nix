@@ -12,7 +12,7 @@ buildDunePackage rec {
     sha256 = "1vi58zdxchpw6ai0bz9h2ggcmg8kv57yk6qbx82lh47s5wb3mz5y";
   };
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
   useDune2 = true;
 
   buildInputs = [ stdlib-shims ];

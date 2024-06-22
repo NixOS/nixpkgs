@@ -500,7 +500,8 @@ in {
   libreddit = handleTest ./libreddit.nix {};
   librenms = handleTest ./librenms.nix {};
   libresprite = handleTest ./libresprite.nix {};
-  libreswan = handleTest ./libreswan.nix {};
+  libreswan = runTest ./libreswan.nix;
+  libreswan-nat = runTest ./libreswan-nat.nix;
   librewolf = handleTest ./firefox.nix { firefoxPackage = pkgs.librewolf; };
   libuiohook = handleTest ./libuiohook.nix {};
   libvirtd = handleTest ./libvirtd.nix {};
@@ -1045,6 +1046,7 @@ in {
   wordpress = handleTest ./wordpress.nix {};
   wrappers = handleTest ./wrappers.nix {};
   writefreely = handleTest ./web-apps/writefreely.nix {};
+  wstunnel = runTest ./wstunnel.nix;
   xandikos = handleTest ./xandikos.nix {};
   xautolock = handleTest ./xautolock.nix {};
   xfce = handleTest ./xfce.nix {};

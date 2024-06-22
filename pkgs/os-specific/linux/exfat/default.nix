@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "exfat kernel module";
     inherit (src.meta) homepage;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ makefu ];
     platforms = lib.platforms.linux;
     broken = true;

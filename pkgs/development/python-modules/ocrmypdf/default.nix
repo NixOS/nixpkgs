@@ -100,7 +100,6 @@ buildPythonPackage rec {
       mit
     ];
     maintainers = with maintainers; [
-      kiwi
       dotlambda
     ];
     changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";

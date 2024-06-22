@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  stdenvNoLibc,
+  crossLibcStdenv,
   runCommand,
   rsync,
   source,
@@ -19,7 +19,7 @@ lib.makeOverridable (
       if attrs.noCC or false then
         stdenvNoCC
       else if attrs.noLibc or false then
-        stdenvNoLibc
+        crossLibcStdenv
       else
         stdenv;
   in

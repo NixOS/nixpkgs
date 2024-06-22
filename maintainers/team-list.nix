@@ -677,12 +677,6 @@ with lib.maintainers;
     shortName = "Mercury Employees";
   };
 
-  mobile = {
-    members = [ samueldr ];
-    scope = "Maintain Mobile NixOS.";
-    shortName = "Mobile";
-  };
-
   nix = {
     members = [
       eelco

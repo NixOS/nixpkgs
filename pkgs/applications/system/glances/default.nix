@@ -26,14 +26,15 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "4.0.7";
+  # use unstable to fix a build error for aarch64.
+  version = "4.0.8-unstable-2024-06-09";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Vfsco8Wno57aPM7PtwCc/gI+6FnAG3H/t5OAUngDU5o=";
+    rev = "051006e12f7c90281dda4af60871b535b0dcdcb9";
+    hash = "sha256-iCK5soTACQwtCVMmMsFaqXvZtTKX9WbTul0mUeSWC2M=";
   };
 
   # On Darwin this package segfaults due to mismatch of pure and impure

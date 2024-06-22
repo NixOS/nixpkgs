@@ -14,6 +14,7 @@
 , gtk4
 , gnome
 , gsettings-desktop-schemas
+, desktop-file-utils
 , xvfb-run
 , AppKit
 , Foundation
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     vala
     gobject-introspection
+    desktop-file-utils  # for validate-desktop-file
   ];
 
   mesonFlags = [
@@ -104,6 +106,11 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
+
+    # Put all resources related to demo app into devdoc output.
+    for d in applications icons metainfo; do
+      moveToOutput "share/$d" "$devdoc"
+    done
   '';
 
   passthru = {

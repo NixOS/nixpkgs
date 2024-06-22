@@ -101,6 +101,8 @@ let
 
     raiplay = callPackage ../applications/video/kodi/addons/raiplay { };
 
+    skyvideoitalia = callPackage ../applications/video/kodi/addons/skyvideoitalia { };
+
     svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
 
     steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };
