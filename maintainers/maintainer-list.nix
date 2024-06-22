@@ -19879,6 +19879,13 @@
     github = "thenonameguy";
     githubId = 2217181;
   };
+  theobori = {
+    name = "Théo Bori";
+    email = "theo1.bori@epitech.eu";
+    github = "theobori";
+    githubId = 71843723;
+    keys = [ { fingerprint = "EEFB CC3A C529 CFD1 943D  A75C BDD5 7BE9 9D55 5965"; } ];
+  };
   therealansh = {
     email = "tyagiansh23@gmail.com";
     github = "therealansh";
