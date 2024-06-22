@@ -46,8 +46,16 @@
 }:
 
 assert lib.assertMsg (
+  controllerSupport -> stdenv.isLinux
+) "controllerSupport only has an effect on Linux.";
+
+assert lib.assertMsg (
+  textToSpeechSupport -> stdenv.isLinux
+) "textToSpeechSupport only has an effect on Linux.";
+
+assert lib.assertMsg (
   withWaylandGLFW -> stdenv.isLinux
-) "withWaylandGLFW is only available on Linux!";
+) "withWaylandGLFW is only available on Linux.";
 
 let
   prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };

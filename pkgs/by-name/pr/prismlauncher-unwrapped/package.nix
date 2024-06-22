@@ -31,7 +31,7 @@ in
 
 assert lib.assertMsg (
   gamemodeSupport -> stdenv.isLinux
-) "gamemodeSupport is only available on Linux!";
+) "gamemodeSupport is only available on Linux.";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
