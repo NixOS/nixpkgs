@@ -93,7 +93,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "cheese";
-      attrPath = "gnome.cheese";
     };
   };
 

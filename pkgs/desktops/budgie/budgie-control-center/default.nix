@@ -5,6 +5,7 @@
 , accountsservice
 , adwaita-icon-theme
 , budgie-desktop
+, cheese
 , clutter
 , clutter-gtk
 , colord
@@ -104,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking
     gnome-desktop
     adwaita-icon-theme
-    gnome.cheese
+    cheese
     gnome.gnome-bluetooth_1_0
     gnome.gnome-remote-desktop
     gnome.gnome-settings-daemon
