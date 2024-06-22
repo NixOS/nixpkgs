@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "jellyfish";
-  version = "1.0.0";
+  version = "1.0.4";
 
   disabled = !isPy3k;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iBquNnGZm7B85QwnaW8pyn6ELz4SOswNtlJcmZmIG9Q=";
+    hash = "sha256-cqq7O+3VE83SBxIkL9URc7WZcsCxRregucbzLxZWKT8=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}-rust-dependencies";
-    hash = "sha256-Grk+n4VCPjirafcRWWI51jHw/IFUYkBtbXY739j0MFI=";
+    hash = "sha256-HtzgxTO6tbN/tohaiTm9B9jrFYGTt1Szo9qRzpcy8BA=";
   };
 
   nativeCheckInputs = [
