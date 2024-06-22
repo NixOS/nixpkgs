@@ -16,6 +16,7 @@
 , pkg-config
 , buildGoModule
 , makeWrapper
+, ncurses
 
   # apply feature parameter names according to
   # https://github.com/NixOS/rfcs/pull/169
@@ -60,7 +61,7 @@ let
     else if with_clblas then "clblas"
     else "";
 
-  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart cudatoolkit;
+  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart libcufft;
 
   go-llama = effectiveStdenv.mkDerivation {
     name = "go-llama";
@@ -77,13 +78,12 @@ let
     ];
 
     buildInputs = [ ]
+      ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas ]
       ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
       ++ lib.optionals with_openblas [ openblas.dev ];
 
     nativeBuildInputs = [ cmake ]
-      # backward compatiblity with nixos-23.11
-      # use cuda_nvcc after release of nixos-24.05
-      ++ lib.optionals with_cublas [ cudatoolkit ];
+      ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     dontUseCmakeConfigure = true;
 
@@ -111,7 +111,7 @@ let
   })).override {
     cudaSupport = false;
     openclSupport = false;
-    blasSupport = true; # TODO: set to false, when dropping 23.11 support
+    blasSupport = false;
   };
 
   llama-cpp-grpc = (llama-cpp.overrideAttrs (final: prev: {
@@ -119,8 +119,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "74f33adf5f8b20b08fc5a6aa17ce081abe86ef2f";
-      hash = "sha256-hSdHhsC5Q8pLEC2bj8Gke4/ffCts5l7LtYa9RDrpGBI=";
+      rev = "37bef8943312d91183ff06d8f1214082a17344a5";
+      hash = "sha256-E3kCMDK5TXozBsprp4D581WHTVP9aljxB1KZUKug1pM=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -143,6 +143,8 @@ let
       (lib.cmakeBool "LLAMA_FMA" enable_fma)
       (lib.cmakeBool "LLAMA_F16C" enable_f16c)
     ];
+    postInstall = null;
+
     buildInputs = prev.buildInputs ++ [
       protobuf # provides also abseil_cpp as propagated build input
       grpc
@@ -273,15 +275,15 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "22d46b7ba4620e2db1281e210d0186863cffcec0";
-      hash = "sha256-JC3GHRBjFvfQSUWRdAcMc0pol54RsqUF1+zIZYAsbC4=";
+      rev = "b29b3b29240aac8b71ce8e5a4360c1f1562ad66f";
+      hash = "sha256-vSd+AP9AexbG4wvdkk6wjxYQBZdKWGK2Ix7c86MUfB8=";
     };
 
     nativeBuildInputs = [ cmake pkg-config ]
       ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     buildInputs = [ ]
-      ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas ]
+      ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas libcufft ]
       ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
       ++ lib.optionals with_openblas [ openblas.dev ];
 
@@ -392,18 +394,18 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.16.0";
+  version = "2.17.1";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-3SfU68wGyYIX0haKfuHGKHhthuDSeSdr18ReDkFzhH0=";
+    hash = "sha256-G9My4t3vJ1sWyD+vxUgON4ezXURVAAgu1nAtTjd3ZR8=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-UjqEsgRZ+xv4Thwh4u3juvg3JI3+RdGyCZlsk7ddgTU=";
+    vendorHash = "sha256-Hu7aJFi40CKNWAxYOR47VBZI1A/9SlBIVQVcB8iqcxA=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
@@ -427,16 +429,19 @@ let
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-avx/ d' \
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
 
+      '' + lib.optionalString with_cublas ''
+        sed -i Makefile \
+          -e '/^CGO_LDFLAGS_WHISPER?=/ s;$;-L${libcufft}/lib -L${cuda_cudart}/lib;'
       '';
 
     postConfigure = ''
       shopt -s extglob
       mkdir -p backend-assets/grpc
-      cp ${llama-cpp-grpc}/bin/?(llama-cpp-)grpc-server backend-assets/grpc/llama-cpp-avx2
-      cp ${llama-cpp-rpc}/bin/?(llama-cpp-)grpc-server backend-assets/grpc/llama-cpp-grpc
+      cp ${llama-cpp-grpc}/bin/grpc-server backend-assets/grpc/llama-cpp-avx2
+      cp ${llama-cpp-rpc}/bin/grpc-server backend-assets/grpc/llama-cpp-grpc
 
       mkdir -p backend-assets/util
-      cp ${llama-cpp-rpc}/bin/?(llama-cpp-)rpc-server backend-assets/util/llama-cpp-rpc-server
+      cp ${llama-cpp-rpc}/bin/rpc-server backend-assets/util/llama-cpp-rpc-server
     '';
 
     buildInputs = [ ]
@@ -451,6 +456,7 @@ let
       protoc-gen-go
       protoc-gen-go-grpc
       makeWrapper
+      ncurses # tput
     ]
     ++ lib.optionals with_cublas [ cuda_nvcc ];
 
