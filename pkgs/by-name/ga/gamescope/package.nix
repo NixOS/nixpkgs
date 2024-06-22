@@ -4,6 +4,7 @@
 , meson
 , pkg-config
 , ninja
+, cmake
 , xorg
 , libdrm
 , libei
@@ -23,11 +24,9 @@
 , libinput
 , glslang
 , hwdata
-, openvr
 , stb
 , wlroots
 , libdecor
-, libdisplay-info
 , lib
 , makeBinaryWrapper
 , patchelfUnstable
@@ -45,14 +44,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.14.18";
+  version = "3.14.22";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-XcefR0wiDHQY7wMX+LQTEntffi2RdMW8m2HNQMz035A=";
+    hash = "sha256-/muitEE3LCU6Xnjbpczb/zy2JRvUbBPT5L13T/v3MvE=";
   };
 
   patches = [
@@ -90,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     hwdata
     edid-decode
+    # For OpenVR
+    cmake
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang
@@ -102,7 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     vulkan-loader
-    openvr
     glm
   ] ++ lib.optionals enableWsi [
     vulkan-headers
@@ -128,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     libcap
     stb
-    libdisplay-info
   ]);
 
   postInstall = lib.optionalString enableExecutable ''
