@@ -20,6 +20,7 @@
 , "news": "agpl3Plus"
 , "notes": "agpl3Plus"
 , "notify_push": "agpl3Plus"
+, "oidc_login": "agpl3Only"
 , "onlyoffice": "asl20"
 , "phonetrack": "agpl3Plus"
 , "polls": "agpl3Plus"

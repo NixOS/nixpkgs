@@ -209,6 +209,16 @@
       "agpl"
     ]
   },
+  "oidc_login": {
+    "sha256": "0cd188qyi2zvlp3wv4x82mya1dmpjazsm4rbprcnkxvkbc6c6l8i",
+    "url": "https://github.com/pulsejet/nextcloud-oidc-login/releases/download/v3.1.1/oidc_login.tar.gz",
+    "version": "3.1.1",
+    "description": "# OpenID Connect Login\n\nProvides user creation and login via one single OpenID Connect provider. Even though this is a fork of [nextcloud-social-login](https://github.com/zorn-v/nextcloud-social-login), it fundamentally differs in two ways - aims for simplistic, single provider login (and hence is very minimalistic), and it supports having LDAP as the primary user backend. This way, you can use OpenID Connect to login to Nextcloud while maintaining an LDAP backend with attributes with the LDAP plugin.\n\n### Features\n\n- Automatic [Identity provider endpoints discovery](https://openid.net/specs/openid-connect-discovery-1_0.html)\n- User creation at first login\n- User profile update at login (name, email, avatar, groups etc.)\n- Group creation\n- Automatic redirection from the nextcloud login page to the Identity Provider login page\n- WebDAV endpoints `Bearer` and `Basic` authentication",
+    "homepage": "https://github.com/pulsejet/nextcloud-single-openid-connect",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "onlyoffice": {
     "sha256": "1vflj70q8d0hrfck9c5l1k4qa38gpdh3zjgx4aqamnlbvkfssk7h",
     "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v9.2.2/onlyoffice.tar.gz",
