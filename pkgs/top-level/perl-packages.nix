@@ -20298,7 +20298,8 @@ with self; {
         --replace 'WITH_PROJ => undef' 'WITH_PROJ => 0'
     '';
 
-    nativeBuildInputs = with pkgs; [ autoPatchelfHook libGL.dev glibc.dev mesa_glu.dev ];
+    # FIXME: Why are these libraries in `nativeBuildInputs`?
+    nativeBuildInputs = with pkgs; [ autoPatchelfHook (lib.getDev libGL) (lib.getDev glibc) (lib.getDev mesa_glu) ];
 
     buildInputs = [ DevelChecklib TestDeep TestException TestWarn ] ++
                   (with pkgs; [ gsl libglut xorg.libXmu xorg.libXi ]);
@@ -20322,7 +20323,7 @@ with self; {
       homepage = "https://pdl.perl.org";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "pdl2";
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.unix;
     };
   };
 
