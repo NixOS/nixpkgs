@@ -2,33 +2,38 @@
   lib,
   stdenv,
   symlinkJoin,
-  makeWrapper,
-  addOpenGLRunpath,
-
   prismlauncher-unwrapped,
-
-  kdePackages,
-  xorg,
-  libpulseaudio,
-  libGL,
+  addOpenGLRunpath,
+  flite,
+  gamemode,
   glfw,
   glfw-wayland-minecraft,
-  openal,
+  glxinfo,
   jdk8,
   jdk17,
   jdk21,
-  gamemode,
-  flite,
-  glxinfo,
+  kdePackages,
+  libGL,
+  libpulseaudio,
+  libusb1,
+  makeWrapper,
+  openal,
   pciutils,
   udev,
   vulkan-loader,
-  libusb1,
+  xorg,
 
-  msaClientID ? null,
-  gamemodeSupport ? stdenv.isLinux,
-  textToSpeechSupport ? stdenv.isLinux,
+  additionalLibs ? [ ],
+  additionalPrograms ? [ ],
   controllerSupport ? stdenv.isLinux,
+  gamemodeSupport ? stdenv.isLinux,
+  jdks ? [
+    jdk21
+    jdk17
+    jdk8
+  ],
+  msaClientID ? null,
+  textToSpeechSupport ? stdenv.isLinux,
 
   # Adds `glfw-wayland-minecraft` to `LD_LIBRARY_PATH`
   # when launched on wayland, allowing for the game to be run natively.
@@ -38,19 +43,11 @@
   # Warning: This build of glfw may be unstable, and the launcher
   # itself can take slightly longer to start
   withWaylandGLFW ? false,
-
-  jdks ? [
-    jdk21
-    jdk17
-    jdk8
-  ],
-  additionalLibs ? [ ],
-  additionalPrograms ? [ ],
 }:
 
 assert lib.assertMsg (
   withWaylandGLFW -> stdenv.isLinux
-) "withWaylandGLFW is only available on Linux";
+) "withWaylandGLFW is only available on Linux!";
 
 let
   prismlauncher' = prismlauncher-unwrapped.override { inherit msaClientID gamemodeSupport; };
@@ -76,59 +73,71 @@ symlinkJoin {
       lib.versionAtLeast kdePackages.qtbase.version "6" && stdenv.isLinux
     ) kdePackages.qtwayland;
 
-  waylandPreExec = lib.optionalString withWaylandGLFW ''
-    if [ -n "$WAYLAND_DISPLAY" ]; then
-      export LD_LIBRARY_PATH=${lib.getLib glfw-wayland-minecraft}/lib:"$LD_LIBRARY_PATH"
-    fi
-  '';
+  env = {
+    waylandPreExec = lib.optionalString withWaylandGLFW ''
+      if [ -n "$WAYLAND_DISPLAY" ]; then
+        export LD_LIBRARY_PATH=${lib.getLib glfw-wayland-minecraft}/lib:"$LD_LIBRARY_PATH"
+      fi
+    '';
+  };
 
-  postBuild = ''
-    ${lib.optionalString withWaylandGLFW ''
+  postBuild =
+    lib.optionalString withWaylandGLFW ''
       qtWrapperArgs+=(--run "$waylandPreExec")
-    ''}
-
-    wrapQtAppsHook
-  '';
+    ''
+    + ''
+      wrapQtAppsHook
+    '';
 
   qtWrapperArgs =
     let
       runtimeLibs =
         [
+          # lwjgl
+          glfw
+          libpulseaudio
+          libGL
+          openal
+          stdenv.cc.cc.lib
+
+          vulkan-loader # VulkanMod's lwjgl
+
+          udev # oshi
+
           xorg.libX11
           xorg.libXext
           xorg.libXcursor
           xorg.libXrandr
           xorg.libXxf86vm
-
-          # lwjgl
-          libpulseaudio
-          libGL
-          glfw
-          openal
-          stdenv.cc.cc.lib
-          vulkan-loader # VulkanMod's lwjgl
-
-          # oshi
-          udev
         ]
-        ++ lib.optional gamemodeSupport gamemode.lib
         ++ lib.optional textToSpeechSupport flite
+        ++ lib.optional gamemodeSupport gamemode.lib
         ++ lib.optional controllerSupport libusb1
         ++ additionalLibs;
 
       runtimePrograms = [
-        xorg.xrandr
         glxinfo
         pciutils # need lspci
+        xorg.xrandr # needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
       ] ++ additionalPrograms;
 
     in
     [ "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}" ]
     ++ lib.optionals stdenv.isLinux [
       "--set LD_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib:${lib.makeLibraryPath runtimeLibs}"
-      # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
       "--prefix PATH : ${lib.makeBinPath runtimePrograms}"
     ];
 
-  inherit (prismlauncher') meta;
+  meta = {
+    inherit (prismlauncher'.meta)
+      description
+      longDescription
+      homepage
+      changelog
+      license
+      maintainers
+      mainProgram
+      platforms
+      ;
+  };
 }
