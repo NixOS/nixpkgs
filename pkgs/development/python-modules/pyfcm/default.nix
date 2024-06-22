@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyfcm";
-  version = "1.4.8";
+  version = "2.0.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "olucurious";
     repo = "pyfcm";
-    rev = version;
-    sha256 = "15q6p21wsjm75ccmzcsgad1w9fgk6189hbrp7pawpxl7l3qxn2p7";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-lpSbb0DDXLHne062s7g27zRpvTuOHiqQkqGOtWvuWdI=";
   };
 
   propagatedBuildInputs = [ requests ];
