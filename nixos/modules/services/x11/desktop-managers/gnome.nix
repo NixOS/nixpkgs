@@ -417,7 +417,7 @@ in
             pkgs.loupe
             pkgs.nautilus
             pkgs.gnome-connections
-            simple-scan
+            pkgs.simple-scan
             pkgs.snapshot
             totem
             yelp

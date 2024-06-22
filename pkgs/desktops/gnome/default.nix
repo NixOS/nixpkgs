@@ -116,8 +116,6 @@ in
 
   rygel = callPackage ./core/rygel { };
 
-  simple-scan = callPackage ./core/simple-scan { };
-
   sushi = callPackage ./core/sushi { };
 
   totem = callPackage ./core/totem { };
@@ -251,6 +249,7 @@ in
   nautilus = lib.warn "The ‘gnome.nautilus’ was moved to top-level. Please use ‘pkgs.nautilus’ directly." pkgs.nautilus; # Added on 2024-06-13.
   nautilus-python = lib.warn "The ‘gnome.nautilus-python’ was moved to top-level. Please use ‘pkgs.nautilus-python’ directly." pkgs.nautilus-python; # Added on 2024-06-13.
   seahorse = lib.warn "The ‘gnome.seahorse’ was moved to top-level. Please use ‘pkgs.seahorse’ directly." pkgs.seahorse; # Added on 2024-06-22.
+  simple-scan = lib.warn "The ‘gnome.simple-scan’ was moved to top-level. Please use ‘pkgs.simple-scan’ directly." pkgs.simple-scan; # Added on 2024-06-22.
 
 #### Removals
   anjuta = throw "`anjuta` was removed after not being maintained upstream and losing control of its official domain."; # 2024-01-16

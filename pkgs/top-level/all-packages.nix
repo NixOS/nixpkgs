@@ -34050,8 +34050,6 @@ with pkgs;
 
   sic-image-cli = callPackage ../tools/graphics/sic-image-cli { };
 
-  simple-scan = gnome.simple-scan;
-
   sioyek = libsForQt5.callPackage ../applications/misc/sioyek { };
 
   siproxd = callPackage ../applications/networking/siproxd { };
