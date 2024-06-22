@@ -233,7 +233,7 @@ in
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
       programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
-      environment.systemPackages = with pkgs // pkgs.gnome // pkgs.cinnamon; utils.removePackagesByName [
+      environment.systemPackages = with pkgs // pkgs.cinnamon; utils.removePackagesByName [
         # cinnamon team apps
         bulky
         warpinator

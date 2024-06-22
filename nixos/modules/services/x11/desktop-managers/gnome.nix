@@ -403,7 +403,7 @@ in
             epiphany
             pkgs.gnome-text-editor
             pkgs.gnome-calculator
-            gnome-calendar
+            pkgs.gnome-calendar
             gnome-characters
             gnome-clocks
             pkgs.gnome-console
