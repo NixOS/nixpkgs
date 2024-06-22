@@ -484,7 +484,7 @@ in
     (lib.mkIf serviceCfg.core-developer-tools.enable {
       environment.systemPackages = with pkgs.gnome; utils.removePackagesByName [
         dconf-editor
-        devhelp
+        pkgs.devhelp
         pkgs.gnome-builder
         # boxes would make sense in this option, however
         # it doesn't function well enough to be included
