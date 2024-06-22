@@ -1,0 +1,31 @@
+From 1885a2349102742e33c5c97a8ab4bcacc032fc70 Mon Sep 17 00:00:00 2001
+From: Ryan Swart <ryan@talosystems.com>
+Date: Thu, 30 Mar 2023 15:50:23 +0800
+Subject: [PATCH] fix: multicharge dep needed for static compilation
+
+---
+ config/meson.build | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/config/meson.build b/config/meson.build
+index 4f76160..629fa5e 100644
+--- a/config/meson.build
++++ b/config/meson.build
+@@ -136,6 +136,14 @@ sdftd3_dep = dependency(
+ )
+ lib_deps += sdftd3_dep
+ 
++# Create multicharge library as subproject
++multicharge_dep = dependency(
++  'multicharge',
++  fallback: ['multicharge'],
++  default_options: ['default_library=static', 'api=false', 'python=false'],
++)
++lib_deps += multicharge_dep
++
+ # Create TOML Fortran as subproject
+ tomlf_dep = dependency(
+   'toml-f',
+-- 
+2.39.2
+

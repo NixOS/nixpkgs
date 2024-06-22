@@ -1,0 +1,21 @@
+--- a/CMakeLists.txt	2016-05-26 11:31:16.000000000 +0200
++++ b/CMakeLists.txt	2016-07-22 19:07:22.074669909 +0200
+@@ -320,12 +320,12 @@
+ 
+ # ======== libexif ==========
+ 
+-find_package(EXIF)
+-if( NOT EXIF_FOUND )
+-    message( "EXIF library (libexif) not found. 'pfsalign' will not be compiled" )
+-else( NOT EXIF_FOUND )
+-    message(STATUS "libexif library found.")  
+-endif( NOT EXIF_FOUND )
++find_package( PkgConfig REQUIRED )
++pkg_check_modules( MYPKG REQUIRED libexif IlmBase )
++if( MYPKG_FOUND )
++    message( STATUS "libexif and IlmBase found." )
++endif( MYPKG_FOUND )
++include_directories( ${MYPKG_INCLUDE_DIRS} )
+ 
+ # ======== Config and sub dirs ===========
+ 

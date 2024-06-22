@@ -1,0 +1,64 @@
+diff --git a/setup.py b/setup.py
+index 020768f..13c2b67 100755
+--- a/setup.py
++++ b/setup.py
+@@ -17,6 +17,8 @@ from __future__ import absolute_import
+ from __future__ import division
+ from __future__ import print_function
+ 
++import sys
++
+ from setuptools import setup
+ 
+ description = """PySC2 - StarCraft II Learning Environment
+@@ -36,6 +38,27 @@ some initial research results using the environment.
+ Read the README at https://github.com/deepmind/pysc2 for more information.
+ """
+ 
++requires = [
++    'absl-py>=0.1.0',
++    'future',
++    'mock',
++    'mpyq',
++    'numpy>=1.10',
++    'portpicker>=1.2.0',
++    'protobuf>=2.6',
++    'pygame',
++    's2clientprotocol>=3.19.0.58400.0',
++    'six',
++    'websocket-client',
++]
++
++if sys.version_info[0] == 2:
++    requires.append('futures')
++
++if (sys.version_info[0] == 2
++        or (sys.version_info[0] == 3 and sys.version_info[1] < 4)):
++    requires.append('enum34')
++
+ setup(
+     name='PySC2',
+     version='1.2',
+@@ -56,21 +79,7 @@ setup(
+         'pysc2.run_configs',
+         'pysc2.tests',
+     ],
+-    install_requires=[
+-        'absl-py>=0.1.0',
+-        'enum34',
+-        'future',
+-        'futures',
+-        'mock',
+-        'mpyq',
+-        'numpy>=1.10',
+-        'portpicker>=1.2.0',
+-        'protobuf>=2.6',
+-        'pygame',
+-        's2clientprotocol>=3.19.0.58400.0',
+-        'six',
+-        'websocket-client',
+-    ],
++    install_requires=requires,
+     entry_points={
+         'console_scripts': [
+             'pysc2_agent = pysc2.bin.agent:entry_point',
