@@ -85,6 +85,18 @@ in {
         description = "Whether to cache credentials.";
       };
 
+      ipaHostname = mkOption {
+        type = types.str;
+        example = "myworkstation.example.com";
+        default = if config.networking.domain != null then config.networking.fqdn
+                  else "${config.networking.hostName}.${cfg.domain}";
+        defaultText = literalExpression ''
+          if config.networking.domain != null then config.networking.fqdn
+          else "''${networking.hostName}.''${security.ipa.domain}"
+        '';
+        description = "Fully-qualified hostname used to identify this host in the IPA domain.";
+      };
+
       ifpAllowedUids = mkOption {
         type = types.listOf types.str;
         default = ["root"];
@@ -218,7 +230,7 @@ in {
 
       ipa_domain = ${cfg.domain}
       ipa_server = _srv_, ${cfg.server}
-      ipa_hostname = ${config.networking.hostName}.${cfg.domain}
+      ipa_hostname = ${cfg.ipaHostname}
 
       cache_credentials = ${pyBool cfg.cacheCredentials}
       krb5_store_password_if_offline = ${pyBool cfg.offlinePasswords}
