@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
+, nose
 , numpy
 , scipy
 , statsmodels
@@ -24,6 +25,7 @@ buildPythonPackage {
   ];
 
   propagatedBuildInputs = [
+    nose # not actually required during runtime, but specified as required in `setup.py`
     numpy
     scipy
     statsmodels
