@@ -21,13 +21,13 @@
 
 gcc11Stdenv.mkDerivation rec {
   pname = "saunafs";
-  version = "4.0.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "leil-io";
     repo = "saunafs";
     rev = "v${version}";
-    hash = "sha256-R9a0AfG/SS95TQVB34fst05cZpmqupWW/XN+1ehbTf8=";
+    hash = "sha256-rEiiBHB1wRqpnSgFgqVGwA3kOwiDx6MgyTmWyIQHATU=";
   };
 
   nativeBuildInputs = [
