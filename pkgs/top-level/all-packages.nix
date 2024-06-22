@@ -23262,9 +23262,7 @@ with pkgs;
 
   mesa_i686 = pkgsi686Linux.mesa; # make it build on Hydra
 
-  mesa_glu =  callPackage ../development/libraries/mesa-glu {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-  };
+  mesa_glu = callPackage ../development/libraries/mesa-glu {};
 
   ## End libGL/libGLU/Mesa stuff
 
