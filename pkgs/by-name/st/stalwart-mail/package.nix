@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , protobuf
 , bzip2
@@ -37,6 +38,16 @@ rustPlatform.buildRustPackage {
   };
 
   cargoHash = "sha256-w40mksUVMBXSr/LBXj0uyZ/VbvJFMFJaQN5Kx6sLm5I=";
+
+  patches = [
+    # Remove "PermissionsStartOnly" from systemd service files,
+    # which is deprecated and conflicts with our module's ExecPreStart.
+    # Upstream PR: https://github.com/stalwartlabs/mail-server/pull/528
+    (fetchpatch {
+      url = "https://github.com/stalwartlabs/mail-server/pull/528/commits/6e292b3d7994441e58e367b87967c9a277bce490.patch";
+      hash = "sha256-j/Li4bYNE7IppxG3FGfljra70/rHyhRvDgOkZOlhMHY=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
