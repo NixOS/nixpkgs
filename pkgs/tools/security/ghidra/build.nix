@@ -1,19 +1,20 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, callPackage
-, gradle_7
-, perl
-, makeBinaryWrapper
-, openjdk17
-, unzip
-, makeDesktopItem
-, copyDesktopItems
-, desktopToDarwinBundle
-, icoutils
-, xcbuild
-, protobuf
-, ghidra-extensions
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  callPackage,
+  gradle_7,
+  perl,
+  makeBinaryWrapper,
+  openjdk17,
+  unzip,
+  makeDesktopItem,
+  copyDesktopItems,
+  desktopToDarwinBundle,
+  icoutils,
+  xcbuild,
+  protobuf,
+  ghidra-extensions,
 }:
 
 let
@@ -76,26 +77,26 @@ let
 
   # Adds a gradle step that downloads all the dependencies to the gradle cache.
   addResolveStep = ''
-    cat >>build.gradle <<HERE
-task resolveDependencies {
-  doLast {
-    project.rootProject.allprojects.each { subProject ->
-      subProject.buildscript.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "buildscript config \''${configuration.name}")
-      }
-      subProject.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "config \''${configuration.name}")
+        cat >>build.gradle <<HERE
+    task resolveDependencies {
+      doLast {
+        project.rootProject.allprojects.each { subProject ->
+          subProject.buildscript.configurations.each { configuration ->
+            resolveConfiguration(subProject, configuration, "buildscript config \''${configuration.name}")
+          }
+          subProject.configurations.each { configuration ->
+            resolveConfiguration(subProject, configuration, "config \''${configuration.name}")
+          }
+        }
       }
     }
-  }
-}
-void resolveConfiguration(subProject, configuration, name) {
-  if (configuration.canBeResolved) {
-    logger.info("Resolving project {} {}", subProject.name, name)
-    configuration.resolve()
-  }
-}
-HERE
+    void resolveConfiguration(subProject, configuration, name) {
+      if (configuration.canBeResolved) {
+        logger.info("Resolving project {} {}", subProject.name, name)
+        configuration.resolve()
+      }
+    }
+    HERE
   '';
 
   # fake build to pre-download deps into fixed-output derivation
@@ -106,7 +107,10 @@ HERE
 
     postPatch = addResolveStep;
 
-    nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
+    nativeBuildInputs = [
+      gradle
+      perl
+    ] ++ lib.optional stdenv.isDarwin xcbuild;
     buildPhase = ''
       runHook preBuild
       export HOME="$NIX_BUILD_TOP/home"
@@ -134,9 +138,15 @@ HERE
     outputHashMode = "recursive";
     outputHash = "sha256-nKfJiGoZlDEpbCmYVKNZXz2PYIosCd4nPFdy3MfprHc=";
   };
-
-in stdenv.mkDerivation (finalAttrs: {
-  inherit pname version src patches postPatch;
+in
+stdenv.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    patches
+    postPatch
+    ;
 
   desktopItems = [
     (makeDesktopItem {
@@ -150,16 +160,18 @@ in stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    gradle
-    unzip
-    makeBinaryWrapper
-    copyDesktopItems
-    protobuf
-  ] ++ lib.optionals stdenv.isDarwin [
-    xcbuild
-    desktopToDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      gradle
+      unzip
+      makeBinaryWrapper
+      copyDesktopItems
+      protobuf
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      xcbuild
+      desktopToDarwinBundle
+    ];
 
   dontStrip = true;
 
@@ -211,7 +223,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit releaseName distroPrefix;
-    inherit (ghidra-extensions.override { ghidra = finalAttrs.finalPackage; }) buildGhidraExtension buildGhidraScripts;
+    inherit (ghidra-extensions.override { ghidra = finalAttrs.finalPackage; })
+      buildGhidraExtension
+      buildGhidraScripts
+      ;
 
     withExtensions = callPackage ./with-extensions.nix { ghidra = finalAttrs.finalPackage; };
   };
@@ -221,14 +236,21 @@ in stdenv.mkDerivation (finalAttrs: {
     description = "Software reverse engineering (SRE) suite of tools";
     mainProgram = "ghidra";
     homepage = "https://ghidra-sre.org/";
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ roblabla vringar ];
+    maintainers = with maintainers; [
+      roblabla
+      vringar
+    ];
     broken = stdenv.isDarwin && stdenv.isx86_64;
   };
-
 })
