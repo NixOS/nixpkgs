@@ -229,7 +229,7 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome.gnome-disk-utility);
+      programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome-disk-utility);
       programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
       programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 

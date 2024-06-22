@@ -67,7 +67,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-disk-utility";
-      attrPath = "gnome.gnome-disk-utility";
     };
   };
 
