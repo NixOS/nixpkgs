@@ -22,8 +22,6 @@ in
 
   caribou = callPackage ./core/caribou { };
 
-  dconf-editor = callPackage ./core/dconf-editor { };
-
   gdm = callPackage ./core/gdm { };
 
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
@@ -210,6 +208,7 @@ in
 
   adwaita-icon-theme = lib.warn "The ‘gnome.adwaita-icon-theme’ was moved to top-level. Please use ‘pkgs.adwaita-icon-theme’ directly." pkgs.adwaita-icon-theme; # Added on 2024-06-22.
   baobab = lib.warn "The ‘gnome.baobab’ was moved to top-level. Please use ‘pkgs.baobab’ directly." pkgs.baobab; # Added on 2024-06-22.
+  dconf-editor = lib.warn "The ‘gnome.dconf-editor’ was moved to top-level. Please use ‘pkgs.dconf-editor’ directly." pkgs.dconf-editor; # Added on 2024-06-22.
   devhelp = lib.warn "The ‘gnome.devhelp’ was moved to top-level. Please use ‘pkgs.devhelp’ directly." pkgs.devhelp; # Added on 2024-06-22.
   eog = lib.warn "The ‘gnome.eog’ was moved to top-level. Please use ‘pkgs.eog’ directly." pkgs.eog; # Added on 2024-06-22.
   epiphany = lib.warn "The ‘gnome.epiphany’ was moved to top-level. Please use ‘pkgs.epiphany’ directly." pkgs.epiphany; # Added on 2024-06-22.

@@ -482,8 +482,8 @@ in
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/3.38.0/elements/core/meta-gnome-core-developer-tools.bst
     (lib.mkIf serviceCfg.core-developer-tools.enable {
-      environment.systemPackages = with pkgs.gnome; utils.removePackagesByName [
-        dconf-editor
+      environment.systemPackages = utils.removePackagesByName [
+        pkgs.dconf-editor
         pkgs.devhelp
         pkgs.gnome-builder
         # boxes would make sense in this option, however
