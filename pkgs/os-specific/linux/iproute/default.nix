@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , buildPackages, bison, flex, pkg-config
-, db, iptables, elfutils, libmnl
+, db, iptables, elfutils, libmnl ,libbpf
 , gitUpdater
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ db iptables libmnl ]
+  buildInputs = [ db iptables libmnl libbpf ]
     # needed to uploaded bpf programs
     ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ elfutils ];
 
