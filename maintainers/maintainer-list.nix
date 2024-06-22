@@ -22458,5 +22458,11 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+  maksteel = {
+    email = "kukreja.m@gmail.com";
+    github = "maksteel";
+    githubId = 6572855;
+    name = "Manish Kukreja";
+  };
 }
 # Keep the list alphabetically sorted.
