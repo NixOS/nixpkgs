@@ -16,6 +16,8 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  patches = [ ./system-service-certs.patch ];
+
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
