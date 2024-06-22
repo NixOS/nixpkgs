@@ -34,6 +34,7 @@
 , nixos-icons
 , perlPackages
 , python3
+, fetchpatch
 }:
 
 assert libXtSupport -> libX11Support;
@@ -50,14 +51,23 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-32";
+  version = "7.1.1-33";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-9pDxnUNMmrwnP4rrR41OSZOJZjQnlVvedpLvMZJJnJo=";
+    hash = "sha256-URGcJDgvRdpYZoECyVeSd0ut1Nkl0Sx2pDhYpi8Yf6o=";
   };
+
+  patches = [
+    # Fixes 7.1.1-32 -> 7.1.1-33 regression that, notably, affects
+    # perlPackages.ImageMagick tests. Should be in the next release.
+    (fetchpatch {
+      url = "https://github.com/ImageMagick/ImageMagick/commit/bdc6c09cec64fd8e1570ee3edf5647acde336272.patch";
+      hash = "sha256-cfmti9DXFhvn0UasmW0vwrNp+Lfepyrnp6ijk+1sJo8=";
+    })
+  ];
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
