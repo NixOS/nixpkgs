@@ -32,7 +32,7 @@ appimageTools.wrapType2 rec {
     description = "Customization and management software for Wooting keyboards";
     platforms = [ "x86_64-linux" ];
     license = "unknown";
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = with maintainers; [ davidtwco sodiboo ];
     mainProgram = "wootility";
   };
 }
