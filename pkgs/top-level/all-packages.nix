@@ -37430,8 +37430,6 @@ with pkgs;
 
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
-  gnome-themes-extra = gnome.gnome-themes-extra;
-
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
 
   ### SCIENCE/CHEMISTY

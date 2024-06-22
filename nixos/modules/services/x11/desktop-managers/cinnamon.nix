@@ -164,7 +164,7 @@ in
 
         # theme
         adwaita-icon-theme
-        gnome.gnome-themes-extra
+        gnome-themes-extra
         gtk3.out
 
         # other
