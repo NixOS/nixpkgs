@@ -220,8 +220,12 @@ let
       javaLibs = lib.optionals isJVM args.javaLibs or [];
     in {
       pname = "${args.pkg.pname}-${args.pname}";
-      src = if builtins.length (args.patches or []) > 0
-            then pkgs.applyPatches { inherit (args) src patches; }
+      src = if args?patches || args?postPatch
+            then pkgs.applyPatches {
+              inherit (args) src;
+              patches = args.patches or [];
+              postPatch = args.postPatch or "";
+            }
             else args.src;
       patches = [];
       inherit javaLibs;
