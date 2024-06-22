@@ -244,7 +244,6 @@ in {
       ldap_user_extra_attrs = mail:mail, sn:sn, givenname:givenname, telephoneNumber:telephoneNumber, lock:nsaccountlock
 
       [sssd]
-      debug_level = 65510
       services = nss, sudo, pam, ssh, ifp
       domains = ${cfg.domain}
 
@@ -256,7 +255,6 @@ in {
       pam_verbosity = 3
 
       [sudo]
-      debug_level = 65510
 
       [autofs]
 
