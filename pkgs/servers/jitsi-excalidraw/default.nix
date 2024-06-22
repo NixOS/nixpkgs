@@ -1,8 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, nodejs
-, python3
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodejs,
+  python3,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -30,6 +32,8 @@ buildNpmPackage rec {
       --add-flags dist/index.js \
       --chdir $out/share
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Excalidraw collaboration backend for Jitsi";

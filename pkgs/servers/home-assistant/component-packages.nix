@@ -2893,6 +2893,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      motionblindsble
       mutagen
       psutil-home-assistant
       pyserial
@@ -2900,7 +2901,7 @@
       sqlalchemy
       webrtc-noise-gain
       zeroconf
-    ]; # missing inputs: motionblindsble
+    ];
     "motioneye" = ps: with ps; [
       motioneye-client
     ];
@@ -5663,6 +5664,7 @@
     "moon"
     "mopeka"
     "motion_blinds"
+    "motionblinds_ble"
     "motioneye"
     "motionmount"
     "mqtt"

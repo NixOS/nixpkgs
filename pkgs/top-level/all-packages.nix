@@ -7878,8 +7878,6 @@ with pkgs;
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
-  flatpak = callPackage ../development/libraries/flatpak { };
-
   flatpak-builder = callPackage ../development/tools/flatpak-builder {
     binutils = binutils-unwrapped;
   };
@@ -28003,8 +28001,6 @@ with pkgs;
   v4l2-relayd = callPackage ../os-specific/linux/v4l2-relayd { };
 
   vendir = callPackage ../development/tools/vendir { };
-
-  vndr = callPackage ../development/tools/vndr { };
 
   vdo = callPackage ../os-specific/linux/vdo { };
 

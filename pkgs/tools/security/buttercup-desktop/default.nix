@@ -26,7 +26,7 @@ in appimageTools.wrapType2 {
     mainProgram = "buttercup-desktop";
     homepage = "https://buttercup.pw";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }
