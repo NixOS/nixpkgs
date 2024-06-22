@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  enableParallelBuilding = true;
+
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
