@@ -63,6 +63,7 @@ let
 
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
+    rfc_0169 = callLibs ./rfc_0169.nix;
 
     # TODO: For consistency, all builtins should also be available from a sub-library;
     # these are the only ones that are currently not
@@ -168,5 +169,6 @@ let
       nixType imap;
     inherit (self.versions)
       splitVersion;
+    inherit (self.rfc_0169) rfc0169Renamed;
   });
 in lib
