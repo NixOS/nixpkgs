@@ -77,6 +77,13 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sikmir ];
     knownVulnerabilities = [
       "CVE-2023-26930"
+      "CVE-2024-2971"
+      "CVE-2024-3247"
+      "CVE-2024-3248"
+      "CVE-2024-3900"
+      "CVE-2024-4141"
+      "CVE-2024-4568"
+      "CVE-2024-4976"
     ];
   };
 }
