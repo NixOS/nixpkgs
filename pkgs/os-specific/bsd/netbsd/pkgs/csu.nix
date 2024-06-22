@@ -14,7 +14,6 @@
   lorder,
   tsort,
   statHook,
-  rsync,
   headers,
   sys-headers,
   ld_elf_so,
@@ -38,7 +37,6 @@ mkDerivation {
     lorder
     tsort
     statHook
-    rsync
   ];
   buildInputs = [ headers ];
   extraPaths = [

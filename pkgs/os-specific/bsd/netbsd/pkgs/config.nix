@@ -7,7 +7,6 @@
   mandoc,
   byacc,
   flex,
-  rsync,
   compatIfNeeded,
   cksum,
 }:
@@ -22,7 +21,6 @@ mkDerivation {
     mandoc
     byacc
     flex
-    rsync
   ];
   buildInputs = compatIfNeeded;
   extraPaths = [ cksum.path ];
