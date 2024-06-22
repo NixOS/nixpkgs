@@ -65,8 +65,6 @@ in
 
   gnome-software = callPackage ./core/gnome-software { };
 
-  gnome-system-monitor = callPackage ./core/gnome-system-monitor { };
-
   gnome-themes-extra = callPackage ./core/gnome-themes-extra { };
 
   gvfs = pkgs.gvfs.override { gnomeSupport = true; };
@@ -223,6 +221,7 @@ in
   gnome-calculator = lib.warn "The ‘gnome.gnome-calculator’ was moved to top-level. Please use ‘pkgs.gnome-calculator’ directly." pkgs.gnome-calculator; # Added on 2024-06-22.
   gnome-calendar = lib.warn "The ‘gnome.gnome-calendar’ was moved to top-level. Please use ‘pkgs.gnome-calendar’ directly." pkgs.gnome-calendar; # Added on 2024-06-22.
   gnome-screenshot = lib.warn "The ‘gnome.gnome-screenshot’ was moved to top-level. Please use ‘pkgs.gnome-screenshot’ directly." pkgs.gnome-screenshot; # Added on 2024-06-22.
+  gnome-system-monitor = lib.warn "The ‘gnome.gnome-system-monitor’ was moved to top-level. Please use ‘pkgs.gnome-system-monitor’ directly." pkgs.gnome-system-monitor; # Added on 2024-06-22.
   gnome-terminal = lib.warn "The ‘gnome.gnome-terminal’ was moved to top-level. Please use ‘pkgs.gnome-terminal’ directly." pkgs.gnome-terminal; # Added on 2024-06-13.
   gnome-user-share = lib.warn "The ‘gnome.gnome-user-share’ was moved to top-level. Please use ‘pkgs.gnome-user-share’ directly." pkgs.gnome-user-share; # Added on 2024-06-13.
   gpaste = lib.warn "The ‘gnome.gpaste’ was moved to top-level. Please use ‘pkgs.gpaste’ directly." pkgs.gpaste; # Added on 2024-06-22.

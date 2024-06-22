@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-system-monitor";
-      attrPath = "gnome.gnome-system-monitor";
     };
   };
 
