@@ -76,20 +76,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
     knownVulnerabilities = [
-      "CVE-2019-9587: loop in PDF objects"
-      "CVE-2019-9588: loop in PDF objects"
-      "CVE-2019-16088: loop in PDF objects"
-      "CVE-2022-30524"
-      "CVE-2022-38334"
-      "CVE-2022-38928"
-      "CVE-2022-41842"
-      "CVE-2022-41843"
-      "CVE-2022-43071"
-      "CVE-2022-43295"
-      "CVE-2022-45586"
-      "CVE-2022-45587"
       "CVE-2023-26930"
-      "CVE-2023-2664"
     ];
   };
 }
