@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , expat
 , yaml-cpp
@@ -26,22 +25,16 @@
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    sha256 = "sha256-E4TmMEFzI3nKqiDFaAkNx44uo84sacvZqjbfWe3A8fE=";
+    hash = "sha256-CSD3AZ36tmC/cYSdPsdDYx894+jd9GkGkhYJ767QY8A=";
   };
 
   patches = [
-    (fetchpatch {
-      # Taken from https://github.com/AcademySoftwareFoundation/OpenColorIO/pull/1891.
-      name = "opencolorio-yaml-cpp-8.0-compat.patch";
-      url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/e99b4afcf0408d8ec56fdf2b9380327c9284db00.patch";
-      sha256 = "sha256-7eIvVWKcpE0lmuYdNqFQFHkW/sSSzQ//LNIMOC28KZg=";
-    })
     # Workaround for https://gitlab.kitware.com/cmake/cmake/-/issues/25200.
     # Needed for zlib >= 1.3 && cmake < 3.27.4.
     ./broken-cmake-zlib-version.patch
