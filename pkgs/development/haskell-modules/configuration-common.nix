@@ -1864,8 +1864,6 @@ self: super: {
   # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
   reflex = doJailbreak (dontCheck super.reflex);
 
-  # 2024-03-02: hspec <2.11, primitive <0.8 - https://github.com/reflex-frp/reflex-vty/pull/80
-  reflex-vty = assert super.reflex-vty.version == "0.5.2.0"; doJailbreak super.reflex-vty;
   # 2024-03-02: vty <5.39 - https://github.com/reflex-frp/reflex-ghci/pull/33
   reflex-ghci = assert super.reflex-ghci.version == "0.2.0.1"; doJailbreak super.reflex-ghci;
 
@@ -2292,12 +2290,12 @@ self: super: {
   gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  gi-gtk_4 = self.gi-gtk_4_0_8;
-  gi-gtk_4_0_8 = doDistribute (super.gi-gtk_4_0_8.override {
+  gi-gtk_4 = self.gi-gtk_4_0_9;
+  gi-gtk_4_0_9 = doDistribute (super.gi-gtk_4_0_9.override {
     gi-gdk = self.gi-gdk_4;
   });
-  gi-gdk_4 = self.gi-gdk_4_0_7;
-  gi-gdk_4_0_7 = doDistribute super.gi-gdk_4_0_7;
+  gi-gdk_4 = self.gi-gdk_4_0_8;
+  gi-gdk_4_0_8 = doDistribute super.gi-gdk_4_0_8;
   # GSK is only used for GTK 4.
   gi-gsk = super.gi-gsk.override {
     gi-gdk = self.gi-gdk_4;
@@ -3014,7 +3012,7 @@ self: super: {
     libraryToolDepends = (drv.libraryToolDepends or []) ++ [pkgs.buildPackages.git];
   }) super.kmonad;
 
-  ghc-syntax-highlighter_0_0_11_0 = super.ghc-syntax-highlighter_0_0_11_0.overrideScope(self: super: {
+  ghc-syntax-highlighter_0_0_12_0 = super.ghc-syntax-highlighter_0_0_12_0.overrideScope(self: super: {
     ghc-lib-parser = self.ghc-lib-parser_9_10_1_20240511;
   });
 
