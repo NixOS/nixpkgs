@@ -7,7 +7,7 @@
   python,
 }:
 
-with python.pkgs; buildPythonPackage {
+buildPythonPackage {
   pname = "yapsy";
   version = "1.12.2-unstable-2023-03-29";
   pyproject = true;
@@ -27,7 +27,7 @@ with python.pkgs; buildPythonPackage {
 
   pythonImportsCheck = [ "yapsy" ];
 
-  propagatedBuildInputs = [ packaging ];
+  propagatedBuildInputs = [ python.pkgs.packaging ];
 
   meta = with lib; {
     homepage = "https://yapsy.sourceforge.net/";
