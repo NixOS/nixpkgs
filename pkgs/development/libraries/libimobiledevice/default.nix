@@ -26,6 +26,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-pNvtDGUlifp10V59Kah4q87TvLrcptrCJURHo+Y+hs4=";
   };
 
+  patches = [
+    # Fix gcc-14 and clang-16 build:
+    #   https://github.com/libimobiledevice/libimobiledevice/pull/1569
+    (fetchpatch {
+      name = "fime.h.patch";
+      url = "https://github.com/libimobiledevice/libimobiledevice/commit/92256c2ae2422dac45d8648a63517598bdd89883.patch";
+      hash = "sha256-sB+wEFuXFoQnuf7ntWfvYuCgWfYbmlPL7EjW0L0F74o=";
+    })
+  ];
+
   preAutoreconf = ''
     export RELEASE_VERSION=${version}
   '';
