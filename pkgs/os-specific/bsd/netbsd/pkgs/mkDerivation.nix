@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   crossLibcStdenv,
+  stdenvLibcMinimal,
   runCommand,
   rsync,
   source,
@@ -23,7 +24,15 @@
 lib.makeOverridable (
   attrs:
   let
-    stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
+    stdenv' =
+      if attrs.noCC or false then
+        stdenvNoCC
+      else if attrs.noLibc or false then
+        crossLibcStdenv
+      else if attrs.libcMinimal or false then
+        stdenvLibcMinimal
+      else
+        stdenv;
   in
   stdenv'.mkDerivation (
     rec {
@@ -53,7 +62,6 @@ lib.makeOverridable (
         mandoc
         groff
         statHook
-        rsync
       ];
       buildInputs = compatIfNeeded;
 

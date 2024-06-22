@@ -14,13 +14,13 @@
   lorder,
   tsort,
   statHook,
-  rsync,
   headers,
-  sys,
+  sys-headers,
   ld_elf_so,
 }:
 
 mkDerivation {
+  noLibc = true;
   path = "lib/csu";
   meta.platforms = lib.platforms.netbsd;
   nativeBuildInputs = [
@@ -37,11 +37,10 @@ mkDerivation {
     lorder
     tsort
     statHook
-    rsync
   ];
   buildInputs = [ headers ];
   extraPaths = [
-    sys.path
+    sys-headers.path
     ld_elf_so.path
   ];
 }

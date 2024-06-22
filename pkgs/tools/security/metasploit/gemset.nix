@@ -724,12 +724,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "0dae49af4bc85231052e15fc97f8bfbf9ec56cf3";
-      sha256 = "1v19fvnw9f6l9qssl2434brqf086nymnpkx1llbkkbr4a3l3w2pm";
+      rev = "685168ecf3266361a8e7836b2a7889751b7d20b8";
+      sha256 = "0l6g1bsv1685pdq04za31wnbbwq3pl3wds7a8814v521wh4lfk39";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.4.13";
+    version = "6.4.14";
   };
   metasploit-model = {
     groups = ["default"];

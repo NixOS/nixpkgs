@@ -7,7 +7,6 @@
   install,
   mandoc,
   groff,
-  rsync,
   nbperf,
   rpcgen,
   defaultMakeFlags,
@@ -15,6 +14,7 @@
 }:
 
 mkDerivation {
+  noLibc = true;
   path = "include";
   nativeBuildInputs = [
     bsdSetupHook
@@ -23,7 +23,6 @@ mkDerivation {
     install
     mandoc
     groff
-    rsync
     nbperf
     rpcgen
   ];
