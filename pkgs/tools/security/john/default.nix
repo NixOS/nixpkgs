@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "John the Ripper password cracker";
     license = licenses.gpl2Plus;
     homepage = "https://github.com/openwall/john/";
-    maintainers = with maintainers; [ offline matthewbauer ];
+    maintainers = with maintainers; [ offline matthewbauer cherrykitten ];
     platforms = platforms.unix;
   };
 }
