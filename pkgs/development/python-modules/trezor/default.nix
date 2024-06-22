@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   isPy3k,
-  installShellFiles,
   attrs,
   click,
   construct,
@@ -35,8 +34,6 @@ buildPythonPackage rec {
     hash = "sha256-Y01O3fNWAyV8MhYY2FSMajWyc4Rle2XjsL261jWlfP8=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
-
   propagatedBuildInputs = [
     attrs
     click
@@ -65,16 +62,6 @@ buildPythonPackage rec {
 
   postCheck = ''
     $out/bin/trezorctl --version
-  '';
-
-  postFixup = ''
-    mkdir completions
-    _TREZORCTL_COMPLETE=source_bash $out/bin/trezorctl > completions/trezorctl || true
-    _TREZORCTL_COMPLETE=source_zsh $out/bin/trezorctl > completions/_trezorctl || true
-    _TREZORCTL_COMPLETE=source_fish $out/bin/trezorctl > completions/trezorctl.fish || true
-    installShellCompletion --bash completions/trezorctl
-    installShellCompletion --zsh completions/_trezorctl
-    installShellCompletion --fish completions/trezorctl.fish
   '';
 
   meta = with lib; {
