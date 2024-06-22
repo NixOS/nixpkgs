@@ -21551,12 +21551,6 @@
     githubId = 11740700;
     name = "Andrei Pampu";
   };
-  wolfangaukang = {
-    email = "clone.gleeful135+nixpkgs@anonaddy.me";
-    github = "WolfangAukang";
-    githubId = 8378365;
-    name = "P. R. d. O.";
-  };
   wolfgangwalther = {
     name = "Wolfgang Walther";
     email = "walther@technowledgy.de";

@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Python bindings for zbar";
     homepage = "https://github.com/mchehab/zbar";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }
