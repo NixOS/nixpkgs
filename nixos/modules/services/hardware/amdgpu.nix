@@ -117,6 +117,9 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ johnrtitor ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+      atemu
+    ];
   };
 }
