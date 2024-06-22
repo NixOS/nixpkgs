@@ -8,7 +8,7 @@
 , Cocoa
 , withALSA ? false, alsa-lib
 , withClipboard ? true, libxcb, python3
-, withCover ? false, ueberzug
+, withCover ? false, ueberzugpp
 , withPulseAudio ? true, libpulseaudio
 , withPortAudio ? false, portaudio
 , withMPRIS ? true, withNotify ? true, dbus
