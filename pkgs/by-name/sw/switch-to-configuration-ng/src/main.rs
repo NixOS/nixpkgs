@@ -1854,7 +1854,7 @@ won't take effect until you reboot the system.
             // A unit in auto-restart substate is a failure *if* it previously failed to start
             let unit_object_path = systemd
                 .get_unit(&unit)
-                .context("Failed to get unit info for {unit}")?;
+                .with_context(|| format!("Failed to get unit info for {unit}"))?;
             let exec_main_status: i32 = dbus_conn
                 .with_proxy(
                     "org.freedesktop.systemd1",
@@ -1862,7 +1862,7 @@ won't take effect until you reboot the system.
                     Duration::from_millis(5000),
                 )
                 .get("org.freedesktop.systemd1.Service", "ExecMainStatus")
-                .context("Failed to get ExecMainStatus for {unit}")?;
+                .with_context(|| format!("Failed to get ExecMainStatus for {unit}"))?;
 
             if exec_main_status != 0 {
                 failed_units.push(unit);
