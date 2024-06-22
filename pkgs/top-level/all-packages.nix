@@ -23210,16 +23210,41 @@ with pkgs;
 
   ## libGL/libGLU/Mesa stuff
 
-  # Default libGL implementation, should provide headers and
-  # libGL.so/libEGL.so/... to link agains them. Android NDK provides
-  # an OpenGL implementation, we can just use that.
-  libGL = if stdenv.hostPlatform.useAndroidPrebuilt then stdenv
-          else callPackage ../development/libraries/mesa/stubs.nix {
-            inherit (darwin.apple_sdk.frameworks) OpenGL;
-          };
+  # Default libGL implementation.
+  #
+  # Android NDK provides an OpenGL implementation, we can just use that.
+  #
+  # On macOS, we use the OpenGL framework. Packages that still need GLX
+  # specifically can pull in libGLX instead. If you have a package that
+  # should work without X11 but it can’t find the library, it may help
+  # to add the path to `NIX_CFLAGS_COMPILE`:
+  #
+  #     -L${libGL}/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries
+  #
+  # If you still can’t get it working, please don’t hesitate to ping
+  # @NixOS/darwin-maintainers to ask an expert to take a look.
+  libGL =
+    if stdenv.hostPlatform.useAndroidPrebuilt then
+      stdenv
+    else if stdenv.hostPlatform.isDarwin then
+      darwin.apple_sdk.frameworks.OpenGL
+    else
+      libglvnd;
 
-  # Default libGLU
-  libGLU = mesa_glu;
+  # On macOS, we use the OpenGL framework. Packages that use libGLX on
+  # macOS may need to depend on mesa_glu directly if this doesn’t work.
+  libGLU =
+    if stdenv.hostPlatform.isDarwin then
+      darwin.apple_sdk.frameworks.OpenGL
+    else
+      mesa_glu;
+
+  # libglvnd does not work (yet?) on macOS.
+  libGLX =
+    if stdenv.hostPlatform.isDarwin then
+      mesa
+    else
+      libglvnd;
 
   mesa = if stdenv.isDarwin
     then darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/darwin.nix {
