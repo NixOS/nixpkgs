@@ -1,7 +1,7 @@
-{ fetchCrate
-, lib
-, rustPlatform
-, protobuf
+{
+  fetchCrate,
+  lib,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,6 +21,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/neoeinstein/protoc-gen-prost";
     changelog = "https://github.com/neoeinstein/protoc-gen-prost/blob/main/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ felschr sitaaax ];
+    maintainers = with maintainers; [
+      felschr
+      sitaaax
+    ];
   };
 }
