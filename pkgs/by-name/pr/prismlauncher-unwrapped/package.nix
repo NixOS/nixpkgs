@@ -2,21 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  stripJavaArchivesHook,
   cmake,
   cmark,
   darwin,
+  extra-cmake-modules,
+  gamemode,
+  ghc_filesystem,
+  jdk17,
   kdePackages,
   ninja,
-  jdk17,
-  zlib,
-  extra-cmake-modules,
+  stripJavaArchivesHook,
   tomlplusplus,
-  ghc_filesystem,
-  gamemode,
+  zlib,
+
   msaClientID ? null,
   gamemodeSupport ? stdenv.isLinux,
 }:
+
 let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
@@ -27,8 +29,8 @@ let
 in
 
 assert lib.assertMsg (
-  stdenv.isLinux || !gamemodeSupport
-) "gamemodeSupport is only available on Linux";
+  gamemodeSupport -> stdenv.isLinux
+) "gamemodeSupport is only available on Linux!";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
@@ -41,24 +43,30 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-460hB91M2hZm+uU1tywJEj20oRd5cz/NDvya8/vJdSA=";
   };
 
+  postUnpack = ''
+    rm -rf source/libraries/libnbtplusplus
+    ln -s ${libnbtplusplus} source/libraries/libnbtplusplus
+  '';
+
   nativeBuildInputs = [
-    extra-cmake-modules
     cmake
-    jdk17
     ninja
+    extra-cmake-modules
+    jdk17
     stripJavaArchivesHook
   ];
+
   buildInputs =
     [
-      kdePackages.qtbase
-      zlib
-      kdePackages.quazip
-      ghc_filesystem
-      tomlplusplus
       cmark
+      ghc_filesystem
+      kdePackages.qtbase
+      kdePackages.quazip
+      tomlplusplus
+      zlib
     ]
-    ++ lib.optional gamemodeSupport gamemode
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
+    ++ lib.optional gamemodeSupport gamemode;
 
   hardeningEnable = lib.optionals stdenv.isLinux [ "pie" ];
 
@@ -72,34 +80,31 @@ stdenv.mkDerivation (finalAttrs: {
       "-DLauncher_QT_VERSION_MAJOR=5"
     ]
     ++ lib.optionals stdenv.isDarwin [
+      # we wrap our binary manually
       "-DINSTALL_BUNDLE=nodeps"
+      # disable built-in updater
       "-DMACOSX_SPARKLE_UPDATE_FEED_URL=''"
       "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/Applications/"
     ];
 
-  postUnpack = ''
-    rm -rf source/libraries/libnbtplusplus
-    ln -s ${libnbtplusplus} source/libraries/libnbtplusplus
-  '';
-
   dontWrapQtApps = true;
 
   meta = {
-    mainProgram = "prismlauncher";
-    homepage = "https://prismlauncher.org/";
     description = "Free, open source launcher for Minecraft";
     longDescription = ''
       Allows you to have multiple, separate instances of Minecraft (each with
       their own mods, texture packs, saves, etc) and helps you manage them and
       their associated options with a simple interface.
     '';
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${finalAttrs.version}";
+    homepage = "https://prismlauncher.org/";
+    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       minion3665
       Scrumplex
       getchoo
     ];
+    mainProgram = "prismlauncher";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
