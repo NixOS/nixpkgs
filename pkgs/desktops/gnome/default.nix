@@ -1,5 +1,6 @@
 { config, pkgs, lib }:
 
+# NOTE: New packages should generally go to top-level instead of here!
 lib.makeScope pkgs.newScope (self: with self; {
   updateScript = callPackage ./update.nix { };
 
