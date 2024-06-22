@@ -178,8 +178,6 @@ in
 
   gnome-panel-with-modules = callPackage ./misc/gnome-panel/wrapper.nix { };
 
-  gnome-tweaks = callPackage ./misc/gnome-tweaks { };
-
   metacity = callPackage ./misc/metacity { };
 
   gtkhtml = callPackage ./misc/gtkhtml { enchant = pkgs.enchant2; };
@@ -214,6 +212,7 @@ in
   gnome-system-monitor = lib.warn "The ‘gnome.gnome-system-monitor’ was moved to top-level. Please use ‘pkgs.gnome-system-monitor’ directly." pkgs.gnome-system-monitor; # Added on 2024-06-22.
   gnome-terminal = lib.warn "The ‘gnome.gnome-terminal’ was moved to top-level. Please use ‘pkgs.gnome-terminal’ directly." pkgs.gnome-terminal; # Added on 2024-06-13.
   gnome-themes-extra = lib.warn "The ‘gnome.gnome-themes-extra’ was moved to top-level. Please use ‘pkgs.gnome-themes-extra’ directly." pkgs.gnome-themes-extra; # Added on 2024-06-22.
+  gnome-tweaks = lib.warn "The ‘gnome.gnome-tweaks’ was moved to top-level. Please use ‘pkgs.gnome-tweaks’ directly." pkgs.gnome-tweaks; # Added on 2024-06-22.
   gnome-user-share = lib.warn "The ‘gnome.gnome-user-share’ was moved to top-level. Please use ‘pkgs.gnome-user-share’ directly." pkgs.gnome-user-share; # Added on 2024-06-13.
   gpaste = lib.warn "The ‘gnome.gpaste’ was moved to top-level. Please use ‘pkgs.gpaste’ directly." pkgs.gpaste; # Added on 2024-06-22.
   gucharmap = lib.warn "The ‘gnome.gucharmap’ was moved to top-level. Please use ‘pkgs.gucharmap’ directly." pkgs.gucharmap; # Added on 2024-06-22.

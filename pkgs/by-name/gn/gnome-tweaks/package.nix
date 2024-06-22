@@ -80,7 +80,6 @@ python3Packages.buildPythonApplication rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      attrPath = "gnome.${pname}";
     };
   };
 
