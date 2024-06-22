@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonOlder,
 
   # build-system
@@ -37,6 +38,13 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-i/tmPTDb5DJRSj//Ju9OERx8A9S69WkWyoN+j2MO6mI=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/esphome/aioesphomeapi/commit/647dd99e0d04f017da41880e2fc299914ad5c762.diff";
+      hash = "sha256-A0emzRj8AO7KF/XcAk0ysUvXO7v/tzvKGa63T5dzgTk=";
+    })
+  ];
 
   build-system = [
     setuptools
