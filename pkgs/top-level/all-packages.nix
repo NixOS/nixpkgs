@@ -22032,7 +22032,7 @@ with pkgs;
 
   libglibutil = callPackage ../development/libraries/libglibutil { };
 
-  libgnome-keyring = callPackage ../development/libraries/libgnome-keyring { };
+  libgnome-keyring = gnome.libgnome-keyring;
   libgnome-keyring3 = gnome.libgnome-keyring;
 
   libgnome-games-support = callPackage ../development/libraries/libgnome-games-support { };
