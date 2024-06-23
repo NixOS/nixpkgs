@@ -44,11 +44,6 @@ stdenv.mkDerivation rec {
     "-Dbuild-tests=true"
   ];
 
-  # Meson is no longer able to pick up Boost automatically.
-  # https://github.com/NixOS/nixpkgs/issues/86131
-  BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-  BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
-
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
