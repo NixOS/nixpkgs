@@ -3122,7 +3122,7 @@ self: super: {
 
   cabal-gild = super.cabal-gild.overrideScope (self: super: {
     tasty = super.tasty_1_5_1;
-    tasty-quickcheck = super.tasty-quickcheck_0_10_3;
+    tasty-quickcheck = super.tasty-quickcheck_0_11;
   });
 
   # Fixes build on some platforms: https://github.com/obsidiansystems/commutative-semigroups/pull/18
