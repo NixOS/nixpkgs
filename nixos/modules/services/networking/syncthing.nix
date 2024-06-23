@@ -185,7 +185,7 @@ in {
         default = !anyAutoAccept;
         defaultText = literalMD ''
           `true` unless any device has the
-          [autoAcceptFolders](#opt-services.syncthing.settings.devices.<name>.autoAcceptFolders)
+          [autoAcceptFolders](#opt-services.syncthing.settings.devices._name_.autoAcceptFolders)
           option set to `true`.
         '';
         description = ''
