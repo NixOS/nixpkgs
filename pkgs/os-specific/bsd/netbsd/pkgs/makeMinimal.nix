@@ -2,7 +2,6 @@
   mkDerivation,
   bsdSetupHook,
   netbsdSetupHook,
-  rsync,
   make,
   make-rules,
 }:
@@ -14,7 +13,6 @@ mkDerivation {
   nativeBuildInputs = [
     bsdSetupHook
     netbsdSetupHook
-    rsync
   ];
 
   skipIncludesPhase = true;
