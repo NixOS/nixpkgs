@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
     # consumers of the CMake config file to fail at the configuration step.
     # Explicitly disabling unwind support sidesteps the issue.
     "-DWITH_UNWIND=OFF"
+    # Upstream disabled generation of pkg-config `.pc` files since
+    #     https://github.com/google/glog/releases/tag/v0.7.0
+    # because they are "undocumented and untested".
+    # Non-C++ dependents (that thus can't use CMake) may need them though
+    # to find `glog`, so we enable them.
+    "-DWITH_PKGCONFIG=ON"
   ];
 
   doCheck = true;
