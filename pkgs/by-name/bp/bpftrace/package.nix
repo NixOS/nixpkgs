@@ -51,6 +51,10 @@ stdenv.mkDerivation rec {
     ./tcp-bt-no-includes.patch
     # https://github.com/bpftrace/bpftrace/pull/3262 (merged)
     ./runqlat-bt-no-includes.patch
+    # https://github.com/bpftrace/bpftrace/pull/3242 (merged)
+    ./kheaders-not-found-message-fix.patch
+    # https://github.com/bpftrace/bpftrace/pull/3265
+    ./kheaders-not-found-message-only-on-error.patch
   ];
 
   # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
