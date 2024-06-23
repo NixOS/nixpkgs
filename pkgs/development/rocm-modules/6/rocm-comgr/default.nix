@@ -16,16 +16,16 @@ let
     else throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
-  version = "6.0.2";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "ROCm-CompilerSupport";
+    repo = "llvm-project";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-9HuNU/k+kPJMlzqOTM20gm6SAOWJe9tpAZXEj4erdmI=";
+    hash = "sha256-+pe3e65Ri5zOOYvoSUiN0Rto/Ss8OyRfqxRifToAO7g=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/lib/comgr";
+  sourceRoot = "${finalAttrs.src.name}/amd/comgr";
 
   nativeBuildInputs = [
     cmake
@@ -41,14 +41,23 @@ in stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "extend-comgr-isa-compatibility.patch";
       url = "https://github.com/GZGavinZhao/ROCm-CompilerSupport/commit/ae653fb884fb1e3b4d9fd79fb727b3b027ca69ac.patch";
-      hash = "sha256-V0MOo8n7SSVbtYhUw/AQl9Lbmvb0pHHDSmLKrwE7osM=";
-      stripLen = 2;
+      stripLen = 3;
+      extraPrefix = "";
+      hash = "sha256-cEzIKEDHaJXrQnnnt2rohPqlfoBM8czr7qz+HIQdkro=";
     })
     (fetchpatch {
-      name = "comgr-support-compressed-device-binaries.patch";
-      url = "https://github.com/GZGavinZhao/ROCm-CompilerSupport/commit/3f86eb4e1818b28f05a3b927b34cf7b4f5e02f9c.patch";
-      hash = "sha256-A8m8EIMYVgVv7CZL24JZK16qdcmkfDYqPrnZxksmY2A=";
-      stripLen = 2;
+      name = "add-offload-bundler-apis.patch";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/f589e773857bc7115ac20a6cc606e94dd1123357.patch";
+      stripLen = 3;
+      extraPrefix = "";
+      hash = "sha256-DcbpCIKqfZJ//BbZ2Lx2ZXYAEkCvTIlFna8ceSWF1IA=";
+    })
+    (fetchpatch {
+      name = "split-get_bundle_entry_ids.patch";
+      url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/e773c2c90cfaa2ead378127538a58129ba0708b0.patch";
+      stripLen = 3;
+      extraPrefix = "";
+      hash = "sha256-a7hFT+IsNhpzuYoIPuXc2qmh3sgvafXz4Rvn9dA0Xoc=";
     })
   ];
 
