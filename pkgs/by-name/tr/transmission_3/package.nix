@@ -117,12 +117,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    apparmor = nixosTests.transmission; # starts the service with apparmor enabled
+    apparmor = nixosTests.transmission_3; # starts the service with apparmor enabled
     smoke-test = nixosTests.bittorrent;
   };
 
   meta = {
-    description = "Fast, easy and free BitTorrent client";
+    description = "Fast, easy and free BitTorrent client (deprecated version 3)";
     mainProgram = if enableQt then "transmission-qt" else if enableGTK3 then "transmission-gtk" else "transmission-cli";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface

@@ -313,6 +313,8 @@ self: super: with self; {
 
   aiomcache = callPackage ../development/python-modules/aiomcache { };
 
+  aiomealie = callPackage ../development/python-modules/aiomealie { };
+
   aiomisc = callPackage ../development/python-modules/aiomisc { };
 
   aiomisc-pytest = callPackage ../development/python-modules/aiomisc-pytest { };
@@ -13108,6 +13110,8 @@ self: super: with self; {
   raincloudy = callPackage ../development/python-modules/raincloudy { };
 
   ramlfications = callPackage ../development/python-modules/ramlfications { };
+
+  random-user-agent = callPackage ../development/python-modules/random-user-agent { };
 
   random2 = callPackage ../development/python-modules/random2 { };
 
