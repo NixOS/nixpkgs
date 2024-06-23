@@ -1,9 +1,7 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, gtk-doc, pkg-config
-, zlib, shadow
+{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
 , capabilitiesSupport ? stdenv.isLinux
 , libcap_ng
 , libxcrypt
-, sqlite
 , ncursesSupport ? true
 , ncurses
 , pamSupport ? true
@@ -19,20 +17,14 @@
 , memstreamHook
 , gitUpdater
 }:
-let
-  # Temporarily avoid applying the patches on systems where already we have binaries
-  # (in particular x86_64-linux and aarch64-linux) as the package is a huge rebuild there.
-  avoidRebuild = with stdenv.hostPlatform; isLinux && is64bit && !isStatic;
-in
+
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = if avoidRebuild then "2.40.1" else "2.39.4";
+  version = "2.39.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = if avoidRebuild
-      then "sha256-WeZ2qlPMtEtsOfD/4BqPonSJHJG+8UdHUvrZJGHe8k8="
-      else "sha256-bE+HI9r9QcOdk+y/FlCfyIwzzVvTJ3iArlodl6AU/Q4=";
+    hash = "sha256-bE+HI9r9QcOdk+y/FlCfyIwzzVvTJ3iArlodl6AU/Q4=";
   };
 
   patches = [
@@ -48,7 +40,7 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   postPatch = ''
-    patchShebangs tests/run.sh tools/all_syscalls
+    patchShebangs tests/run.sh
 
     substituteInPlace sys-utils/eject.c \
       --replace "/bin/umount" "$bin/bin/umount"
@@ -67,7 +59,6 @@ stdenv.mkDerivation rec {
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
-    "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     (lib.enableFeature writeSupport "write")
     (lib.enableFeature nlsSupport "nls")
     (lib.withFeature ncursesSupport "ncursesw")
@@ -89,7 +80,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config installShellFiles ]
     ++ lib.optionals translateManpages [ po4a ];
 
-  buildInputs = [ zlib libxcrypt sqlite ]
+  buildInputs = [ zlib libxcrypt ]
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]

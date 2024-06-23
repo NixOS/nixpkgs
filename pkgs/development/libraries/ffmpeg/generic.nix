@@ -395,22 +395,22 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
   '';
 
-  patches = map (patch: fetchpatch2 patch) ([ ]
+  patches = []
     ++ optionals (versionOlder version "5") [
-      {
+      (fetchpatch2 {
         name = "libsvtav1-1.5.0-compat-compressed_ten_bit_format.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/031f1561cd286596cdb374da32f8aa816ce3b135";
         hash = "sha256-agJgzIzrBTQBAypuCmGXXFo7vw6Iodw5Ny5O5QCKCn8=";
-      }
-      {
+      })
+      (fetchpatch2 {
         # Backport fix for binutils-2.41.
         name = "binutils-2.41.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/effadce6c756247ea8bae32dc13bb3e6f464f0eb";
         hash = "sha256-vLSltvZVMcQ0CnkU0A29x6fJSywE8/aU+Mp9os8DZYY=";
-      }
+      })
       # The upstream patch isn’t for ffmpeg 4, but it will apply with a few tweaks.
       # Fixes a crash when built with clang 16 due to UB in ff_seek_frame_binary.
-      {
+      (fetchpatch2 {
         name = "utils-fix_crash_in_ff_seek_frame_binary.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/ab792634197e364ca1bb194f9abe36836e42f12d";
         hash = "sha256-vqqVACjbCcGL9Qvmg1QArSKqVmOqr8BEr+OxTBDt6mA=";
@@ -419,60 +419,96 @@ stdenv.mkDerivation (finalAttrs: {
             --replace libavformat/seek.c libavformat/utils.c \
             --replace 'const AVInputFormat *const ' 'const AVInputFormat *'
         '';
-      }
+      })
     ]
-    ++ (lib.optionals (lib.versionAtLeast version "5" && lib.versionOlder version "6") [
-      {
+    ++ optionals (lib.versionAtLeast version "5" && lib.versionOlder version "6") [
+      (fetchpatch2 {
         name = "fix_build_failure_due_to_libjxl_version_to_new";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/75b1a555a70c178a9166629e43ec2f6250219eb2";
         hash = "sha256-+2kzfPJf5piim+DqEgDuVEEX5HLwRsxq0dWONJ4ACrU=";
-      }
-      {
+      })
+      (fetchpatch2 {
         name = "5.x-CVE-2024-31585.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/8711cea3841fc385cccb1e7255176479e865cd4d";
         hash = "sha256-WT+ly/l04yM/tRVbhkESA3sDDjwvtd/Cg2y8tQo4ApI=";
-      }
-      {
+      })
+      (fetchpatch2 {
         name = "CVE-2024-31582.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/99debe5f823f45a482e1dc08de35879aa9c74bd2";
         hash = "sha256-+CQ9FXR6Vr/AmsbXFiCUXZcxKj1s8nInEdke/Oc/kUA=";
-      }
-      {
+      })
+      (fetchpatch2 {
         name = "CVE-2024-31578.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3bb00c0a420c3ce83c6fafee30270d69622ccad7";
         hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
-      }
-    ])
-    ++ (lib.optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
-      { # this can be removed post 6.1
+      })
+      ./5.1.4-CVE-2023-49502.patch
+      (fetchpatch2 {
+        name = "CVE-2023-50008.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/5f87a68cf70dafeab2fb89b42e41a4c29053b89b";
+        hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-51793.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/8b8b4bdef311f88c0075a06a25320187aff00bf2";
+        hash = "sha256-e7oGyOfUXuA8XK3vfygNtFlHpHl92O2KSLAo50sNJ5o=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-51796.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e01a55c5283b82667dad347331816a5e20869ce9";
+        hash = "sha256-m4rq+UFG3nXdgOJ3S6XcruMZ+CPw+twmy2HFv3cnvJc=";
+      })
+    ]
+    ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
+      (fetchpatch2 { # this can be removed post 6.1
         name = "fix_build_failure_due_to_PropertyKey_EncoderID";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
         hash = "sha256-sxRXKKgUak5vsQTiV7ge8vp+N22CdTIvuczNgVRP72c=";
-      }
-      {
+      })
+      (fetchpatch2 {
         name = "fix_vulkan_av1";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/e06ce6d2b45edac4a2df04f304e18d4727417d24";
         hash = "sha256-73mlX1rdJrguw7OXaSItfHtI7gflDrFj+7SepVvvUIg=";
-      }
-      {
+      })
+      (fetchpatch2 {
         name = "CVE-2024-31582.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/99debe5f823f45a482e1dc08de35879aa9c74bd2";
         hash = "sha256-+CQ9FXR6Vr/AmsbXFiCUXZcxKj1s8nInEdke/Oc/kUA=";
-      }
-      {
+      })
+      (fetchpatch2 {
         name = "CVE-2024-31578.patch";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3bb00c0a420c3ce83c6fafee30270d69622ccad7";
         hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
-      }
-    ])
-    ++ (lib.optionals (lib.versionAtLeast version "7.0") [
-      {
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-49501.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4adb93dff05dd947878c67784d98c9a4e13b57a7";
+        hash = "sha256-7cwktto3fPMDGvCZCVtB01X8Q9S/4V4bDLUICSNfGgw=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-49502.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/737ede405b11a37fdd61d19cf25df296a0cb0b75";
+        hash = "sha256-mpSJwR9TX5ENjjCKvzuM/9e1Aj/AOiQW0+72oOMl9v8=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-50007.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/b1942734c7cbcdc9034034373abcc9ecb9644c47";
+        hash = "sha256-v0hNcqBtm8GCGAU9UbRUCE0slodOjZCHrkS8e4TrVcQ=";
+      })
+      (fetchpatch2 {
+        name = "CVE-2023-50008.patch";
+        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/5f87a68cf70dafeab2fb89b42e41a4c29053b89b";
+        hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
+      })
+    ]
+    ++ optionals (lib.versionAtLeast version "7.0" && lib.versionOlder version "7.0.1") [
+      (fetchpatch2 {
         # Will likely be obsolete in >7.0
         name = "fate_avoid_dependency_on_samples";
         url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/7b7b7819bd21cc92ac07f6696b0e7f26fa8f9834";
         hash = "sha256-TKI289XqtG86Sj9s7mVYvmkjAuRXeK+2cYYEDkg6u6I=";
-      }
-    ]));
+      })
+    ];
 
   configurePlatforms = [];
   setOutputFlags = false; # Only accepts some of them

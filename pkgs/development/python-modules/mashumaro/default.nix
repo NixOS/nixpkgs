@@ -3,6 +3,7 @@
   buildPythonPackage,
   ciso8601,
   fetchFromGitHub,
+  fetchpatch2,
   msgpack,
   orjson,
   pendulum,
@@ -29,6 +30,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-ETK1rHKlByQkqibejiZmXF6c4eIiMazLa8XY2OH30q4=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Fix calling typing._evaluate on Python 3.12.4
+      url = "https://github.com/Fatal1ty/mashumaro/commit/01b1d795e71ecb86c6c36a3b537473a9246df194.patch";
+      hash = "sha256-YrRnXgv2UHD6BPezPadzOEVpaKZree6KO3K0JKZeDi0=";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools ];
 

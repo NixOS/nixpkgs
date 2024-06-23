@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -73,6 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
+    # Fix double-free & segfault issues on menu and dbus connection action group export failures
+    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4073
+    # Remove when version > 2.80.2
+    (fetchpatch {
+      name = "GLib-Fix-memory-problems-on-gmenuexporter-and-gactiongroupexporter-error-paths.patch";
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/b9490a499a004618c883f180b1081a166ff1a86b.patch";
+      hash = "sha256-c6uZ9NEhg26/2RdgjQ4s5ErCDm5HH6T/tfJXTwh/H6o=";
+    })
+
     # This patch lets GLib's GDesktopAppInfo API watch and notice changes
     # to the Nix user and system profiles.  That way, the list of available
     # applications shown by the desktop environment is immediately updated

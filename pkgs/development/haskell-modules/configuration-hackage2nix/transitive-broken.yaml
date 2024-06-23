@@ -616,6 +616,7 @@ dont-distribute-packages:
  - bamstats
  - barley
  - base32-bytestring
+ - base_4_20_0_0
  - baserock-schema
  - basic
  - batchd
@@ -636,6 +637,7 @@ dont-distribute-packages:
  - bearriver
  - beautifHOL
  - bech32-th
+ - bech32-th_1_1_7
  - bein
  - belka
  - bff
@@ -1513,6 +1515,7 @@ dont-distribute-packages:
  - geolite-csv
  - getemx
  - ghc-dump-util
+ - ghc-experimental
  - ghc-imported-from
  - ghc-instances
  - ghc-mod
@@ -2815,7 +2818,6 @@ dont-distribute-packages:
  - mps
  - mptcp-pm
  - mptcpanalyzer
- - ms-tds
  - msgpack-aeson
  - msgpack-arbitrary
  - msgpack-binary
@@ -2825,7 +2827,6 @@ dont-distribute-packages:
  - msgpack-rpc-conduit
  - msgpack-testsuite
  - msi-kb-backlit
- - mssql-simple
  - mstate
  - mtgoxapi
  - mu-avro
@@ -4226,6 +4227,7 @@ dont-distribute-packages:
  - werewolf-slack
  - wgpu-hs
  - what4
+ - what4_1_6
  - wheb-mongo
  - wheb-redis
  - wheb-strapped

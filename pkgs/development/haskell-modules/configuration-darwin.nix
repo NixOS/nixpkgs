@@ -110,6 +110,12 @@ self: super: ({
         substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
       '' + (drv.postPatch or "");
     }) super.x509-system;
+  crypton-x509-system = overrideCabal (drv:
+    lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
+      postPatch = ''
+        substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
+      '' + (drv.postPatch or "");
+    }) super.crypton-x509-system;
 
   # https://github.com/haskell-foundation/foundation/pull/412
   foundation = dontCheck super.foundation;
@@ -371,4 +377,12 @@ self: super: ({
   # same
   # https://hydra.nixos.org/build/174540882/nixlog/9
   jacinda = dontCheck super.jacinda;
+
+  # Greater floating point error on x86_64-darwin (!) for some reason
+  # https://github.com/ekmett/ad/issues/113
+  ad = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p" "!/issue-108/"
+    ];
+  }) super.ad;
 })
