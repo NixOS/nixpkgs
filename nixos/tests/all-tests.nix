@@ -775,7 +775,7 @@ in {
   printing-service = handleTest ./printing.nix { socket = false; };
   private-gpt = handleTest ./private-gpt.nix {};
   privoxy = handleTest ./privoxy.nix {};
-  prometheus = handleTest ./prometheus.nix {};
+  prometheus = handleTest ./prometheus {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
   prosody = handleTest ./xmpp/prosody.nix {};
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix {};
@@ -968,6 +968,7 @@ in {
   teleport = handleTest ./teleport.nix {};
   thelounge = handleTest ./thelounge.nix {};
   terminal-emulators = handleTest ./terminal-emulators.nix {};
+  thanos = handleTest ./thanos.nix {};
   tiddlywiki = handleTest ./tiddlywiki.nix {};
   tigervnc = handleTest ./tigervnc.nix {};
   timescaledb = handleTest ./timescaledb.nix {};
