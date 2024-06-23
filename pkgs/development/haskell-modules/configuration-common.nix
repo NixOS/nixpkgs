@@ -3135,4 +3135,9 @@ self: super: {
     hash = "sha256-tFOWpjGmZANC7H82QapZ36raaNWuZ6F3BgjxnfTXpMs=";
   }) super.proto3-wire;
 
+  safe-exceptions = overrideCabal (drv: {
+    # Fix strictDeps build error "could not execute: hspec-discover"
+    testToolDepends = drv.testToolDepends or [] ++ [ self.hspec-discover ];
+  }) super.safe-exceptions;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
