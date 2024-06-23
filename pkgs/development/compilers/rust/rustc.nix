@@ -215,7 +215,7 @@ in stdenv.mkDerivation (finalAttrs: {
     export JEMALLOC_SYS_WITH_LG_VADDR=48
   '' + lib.optionalString (!(finalAttrs.src.passthru.isReleaseTarball or false)) ''
     mkdir .cargo
-    cat > .cargo/config.toml <<\EOF
+    cat > .cargo/config <<\EOF
     [source.crates-io]
     replace-with = "vendored-sources"
     [source.vendored-sources]
