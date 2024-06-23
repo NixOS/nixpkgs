@@ -64,9 +64,9 @@ let
 
   etcHardlinks = filter (f: f.mode != "symlink" && f.mode != "direct-symlink") etc';
 
-  build-composefs-dump = pkgs.runCommand "build-composefs-dump.py"
+  build-composefs-dump = pkgs.buildPackages.runCommand "build-composefs-dump.py"
     {
-      buildInputs = [ pkgs.python3 ];
+      buildInputs = [ pkgs.buildPackages.python3 ];
     } ''
     install ${./build-composefs-dump.py} $out
     patchShebangs --host $out
