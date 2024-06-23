@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "respx";
-  version = "0.21.0";
+  version = "0.21.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "lundberg";
     repo = "respx";
     rev = version;
-    hash = "sha256-fjZ5JMWOZUnDLTdIexhnB5ZVYJOVUGraxNpDpB9ZrAU=";
+    hash = "sha256-sBb9HPvX+AKJUMWBME381F2amYdQmBiM8OguGW3lFG0=";
   };
 
   postPatch = ''
