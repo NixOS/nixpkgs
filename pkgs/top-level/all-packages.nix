@@ -12061,8 +12061,6 @@ with pkgs;
 
   raysession = python3Packages.callPackage ../applications/audio/raysession {};
 
-  revolt-desktop = callPackage ../applications/networking/instant-messengers/revolt-desktop { };
-
   rbw = callPackage ../tools/security/rbw { };
 
   remarshal = with python3Packages; toPythonApplication remarshal;
@@ -31489,7 +31487,7 @@ with pkgs;
 
   pixeluvo = callPackage ../applications/graphics/pixeluvo { };
 
-  pixinsight = libsForQt5.callPackage ../applications/graphics/pixinsight { };
+  pixinsight = qt6Packages.callPackage ../applications/graphics/pixinsight { };
 
   planner = callPackage ../applications/office/planner { };
 
@@ -39629,8 +39627,6 @@ with pkgs;
   sam-ba = callPackage ../tools/misc/sam-ba { };
 
   sndio = callPackage ../misc/sndio { };
-
-  SP800-90B_EntropyAssessment = callPackage ../tools/misc/SP800-90B_EntropyAssessment { };
 
   sticky = callPackage ../applications/misc/sticky { };
 

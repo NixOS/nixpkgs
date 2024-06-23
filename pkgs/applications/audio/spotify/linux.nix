@@ -120,11 +120,15 @@ stdenv.mkDerivation {
   # Prevent double wrapping
   dontWrapGApps = true;
 
+  env = rec {
+    libdir = "${placeholder "out"}/lib/spotify";
+    librarypath = "${lib.makeLibraryPath deps}:${libdir}";
+  };
+
   installPhase =
     ''
       runHook preInstall
 
-      libdir=$out/lib/spotify
       mkdir -p $libdir
       mv ./usr/* $out/
 
@@ -147,16 +151,6 @@ stdenv.mkDerivation {
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath $rpath $out/share/spotify/spotify
 
-      librarypath="${lib.makeLibraryPath deps}:$libdir"
-      wrapProgramShell $out/share/spotify/spotify \
-        ''${gappsWrapperArgs[@]} \
-        ${lib.optionalString (deviceScaleFactor != null) ''
-          --add-flags "--force-device-scale-factor=${toString deviceScaleFactor}" \
-        ''} \
-        --prefix LD_LIBRARY_PATH : "$librarypath" \
-        --prefix PATH : "${gnome.zenity}/bin" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
-
       # fix Icon line in the desktop file (#48062)
       sed -i "s:^Icon=.*:Icon=spotify-client:" "$out/share/spotify/spotify.desktop"
 
@@ -173,6 +167,21 @@ stdenv.mkDerivation {
       done
 
       runHook postInstall
+    '';
+
+    fixupPhase = ''
+      runHook preFixup
+
+      wrapProgramShell $out/share/spotify/spotify \
+        ''${gappsWrapperArgs[@]} \
+        ${lib.optionalString (deviceScaleFactor != null) ''
+          --add-flags "--force-device-scale-factor=${toString deviceScaleFactor}" \
+        ''} \
+        --prefix LD_LIBRARY_PATH : "$librarypath" \
+        --prefix PATH : "${gnome.zenity}/bin" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+
+      runHook postFixup
     '';
 
   meta = meta // {
