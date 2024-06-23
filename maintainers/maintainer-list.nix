@@ -11296,6 +11296,12 @@
     githubId = 11614750;
     name = "Alexander Sharov";
   };
+  kvik = {
+    email = "viktor@a-b.xyz";
+    github = "okvik";
+    githubId = 58425080;
+    name = "Viktor Pocedulić";
+  };
   kwaa = {
     name = "藍+85CD";
     email = "kwa@kwaa.dev";
