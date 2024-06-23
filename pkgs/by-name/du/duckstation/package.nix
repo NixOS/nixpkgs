@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckstation";
-  version = "0.1-6658";
+  version = "0.1-6759";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = "duckstation";
-    rev = "4e0c417add264226b3db065c1466791f0591a1b5";
-    hash = "sha256-fN0bcjqjMmK3qVLlrYmR2VgjK0BjdK4nUj8vNYdFC3I=";
+    rev = "0a63bec65ca0346c89f82469a8a9c9cba401faa1";
+    hash = "sha256-TGaNOFY2kl5yhP/KKcJAjR0ZqxrzWlwOxnSCKvvCgAE=";
   };
 
   patches = [
@@ -48,14 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./002-hardcode-vars.diff;
       gitHash = finalAttrs.src.rev;
       gitBranch = "master";
-      gitTag = "${finalAttrs.version}-g4e0c417a";
-      gitDate = "2024-04-16T12:49:54+10:00";
+      gitTag = "${finalAttrs.version}-g0a63bec65";
+      gitDate = "2024-05-09T16:39:17+10:00";
     })
   ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     ninja
     pkg-config
     qttools
@@ -65,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     curl
+    extra-cmake-modules
     libXrandr
     libbacktrace
     libwebp
