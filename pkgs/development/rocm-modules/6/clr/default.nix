@@ -47,7 +47,7 @@ let
   });
 in stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "6.0.2";
+  version = "6.1.2";
 
   outputs = [
     "out"
@@ -58,7 +58,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "clr";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-ZMpA7vCW2CcpGdBLZfPimMHcgjhN1PHuewJiYwZMgGY=";
+    hash = "sha256-epapcXwa+uzTVNT/Sw4fTBm6Jl+noSoys5VQWmafNmE=";
   };
 
   nativeBuildInputs = [
@@ -101,20 +101,20 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (fetchpatch {
-      name = "add-missing-operators.patch";
-      url = "https://github.com/ROCm/clr/commit/86bd518981b364c138f9901b28a529899d8654f3.patch";
-      hash = "sha256-lbswri+zKLxif0hPp4aeJDeVfadhWZz4z+m+G2XcCPI=";
-    })
-    (fetchpatch {
-      name = "static-functions.patch";
-      url = "https://github.com/ROCm/clr/commit/77c581a3ebd47b5e2908973b70adea66891159ee.patch";
-      hash = "sha256-auBedbd7rghlKav7A9V6l64J7VmtE9GizIdi5gWj+fs=";
-    })
+    # (fetchpatch {
+    #   name = "add-missing-operators.patch";
+    #   url = "https://github.com/ROCm/clr/commit/86bd518981b364c138f9901b28a529899d8654f3.patch";
+    #   hash = "sha256-lbswri+zKLxif0hPp4aeJDeVfadhWZz4z+m+G2XcCPI=";
+    # })
+    # (fetchpatch {
+    #   name = "static-functions.patch";
+    #   url = "https://github.com/ROCm/clr/commit/77c581a3ebd47b5e2908973b70adea66891159ee.patch";
+    #   hash = "sha256-auBedbd7rghlKav7A9V6l64J7VmtE9GizIdi5gWj+fs=";
+    # })
     (fetchpatch {
       name = "extend-hip-isa-compatibility-check.patch";
-      url = "https://salsa.debian.org/rocm-team/rocm-hipamd/-/raw/d6d20142c37e1dff820950b16ff8f0523241d935/debian/patches/0026-extend-hip-isa-compatibility-check.patch";
-      hash = "sha256-eG0ALZZQLRzD7zJueJFhi2emontmYy6xx8Rsm346nQI=";
+      url = "https://github.com/GZGavinZhao/clr/commit/83d3ac45eab395f34e6391cfdcc06c76cd75cb14.patch";
+      hash = "sha256-DzcRBc3S9MJyal6RLKJZqq5XBsHEUCNVtxiccBY45m0=";
     })
     (fetchpatch {
       name = "improve-rocclr-isa-compatibility-check.patch";
@@ -123,8 +123,8 @@ in stdenv.mkDerivation (finalAttrs: {
     })
     (fetchpatch {
       name = "clr-support-compressed-device-binaries.patch";
-      url = "https://github.com/GZGavinZhao/clr/commit/17e701c0f4217c8b7313d67e15f59a1854d22048.patch";
-      hash = "sha256-FPoLAXQjNlqwya6l5QIVQPgb1r6/HbB49xU5aDat3Ds=";
+      url = "https://github.com/GZGavinZhao/clr/commit/ac22d50951b1aec238cd4600767fc3039c3afe90.patch";
+      hash = "sha256-Bj3hA6UKa0mUIxOhkuPPREpH+ulcUZgkme0PktNpEwU=";
     })
   ];
 
