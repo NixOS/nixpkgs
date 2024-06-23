@@ -5,6 +5,7 @@
 , cmake
 , deltachat-desktop
 , deltachat-repl
+, deltachat-rpc-server
 , openssl
 , perl
 , pkg-config
@@ -81,7 +82,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     inherit cargoLock;
     tests = {
-      inherit deltachat-desktop deltachat-repl;
+      inherit deltachat-desktop deltachat-repl deltachat-rpc-server;
       python = python3.pkgs.deltachat;
     };
   };
