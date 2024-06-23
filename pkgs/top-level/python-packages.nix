@@ -1492,6 +1492,8 @@ self: super: with self; {
 
   bdffont = callPackage ../development/python-modules/bdffont { };
 
+  bdsim = callPackage ../development/python-modules/bdsim { };
+
   beaker = callPackage ../development/python-modules/beaker { };
 
   before-after = callPackage ../development/python-modules/before-after { };
