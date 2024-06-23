@@ -7482,6 +7482,8 @@ with pkgs;
 
   epubcheck = callPackage ../tools/text/epubcheck { };
 
+  epub-thumbnailer = python3Packages.callPackage ../tools/graphics/epub-thumbnailer { };
+
   evil-winrm = callPackage ../tools/security/evil-winrm { };
 
   evtx = callPackage ../tools/security/evtx { };
