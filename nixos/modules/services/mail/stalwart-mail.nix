@@ -7,13 +7,21 @@ let
   configFormat = pkgs.formats.toml { };
   configFile = configFormat.generate "stalwart-mail.toml" cfg.settings;
   dataDir = "/var/lib/stalwart-mail";
-  useLegacyStorage = versionOlder config.system.stateVersion "24.11";
+  useLegacyStorage = versionOlder cfg.stateVersion "24.11";
 
 in {
   options.services.stalwart-mail = {
     enable = mkEnableOption "the Stalwart all-in-one email server";
 
     package = mkPackageOption pkgs "stalwart-mail" { };
+
+    stateVersion = mkOption {
+      type = types.str;
+      default = config.system.stateVersion;
+      description = ''
+        State version determining the defaults for this module.
+      '';
+    };
 
     settings = mkOption {
       inherit (configFormat) type;
