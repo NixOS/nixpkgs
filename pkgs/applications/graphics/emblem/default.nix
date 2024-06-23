@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.Foundation
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-Wno-error=incompatible-function-pointer-types"
+  ]);
+
   meta = {
     description = "Generate project icons and avatars from a symbolic icon";
     mainProgram = "emblem";
