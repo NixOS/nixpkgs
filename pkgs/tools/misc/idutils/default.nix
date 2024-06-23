@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # replace embedded gnulib tests with those from gnulib package
     bash -O extglob -c "cd gnulib-tests; rm -r !(Makefile.am)"
-    substituteInPlace ./configure.ac --replace "AC_PREREQ(2.61)" "AC_PREREQ(2.64)"
+    substituteInPlace ./configure.ac --replace-fail "AC_PREREQ(2.61)" "AC_PREREQ(2.64)"
     ./bootstrap --force --gnulib-srcdir=${gnulib} --skip-po --bootstrap-sync --no-git
-    '';
+  '' + lib.optionalString stdenv.isLinux ''
+    # Test fails with 'Use of uninitialized value $_ in pattern match (m//) [and] $ARGV in concatenation (.)'
+    substituteInPlace ./gnulib-tests/gnulib.mk --replace-fail \
+      "TESTS += test-update-copyright.sh" "#TESTS += test-update-copyright.sh"
+  '';
 
   buildInputs = lib.optionals stdenv.isLinux [
     emacs
