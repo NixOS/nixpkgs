@@ -3121,7 +3121,7 @@ self: super: {
   cornelis = dontCheck super.cornelis;
 
   cabal-gild = super.cabal-gild.overrideScope (self: super: {
-    tasty = super.tasty_1_5;
+    tasty = super.tasty_1_5_1;
     tasty-quickcheck = super.tasty-quickcheck_0_10_3;
   });
 
