@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs meson/
   '';
 
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "pie"
+  ];
+
   outputs = [
     "out"
     "dev"
