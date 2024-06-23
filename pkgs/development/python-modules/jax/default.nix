@@ -30,7 +30,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.28";
+  version = "0.4.30";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -39,8 +39,8 @@ buildPythonPackage rec {
     owner = "google";
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
-    rev = "refs/tags/jax-v${version}";
-    hash = "sha256-qSHPwi3is6Ts7pz5s4KzQHBMbcjGp+vAOsejW3o36Ek=";
+    rev = "refs/tags/jaxlib-v${version}";
+    hash = "sha256-eg+uP0ZWHG6R+5UGeAcKyg+v150ANQvD31jYtPkcYc8=";
   };
 
   nativeBuildInputs = [ setuptools ];
