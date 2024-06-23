@@ -5,6 +5,7 @@
   setuptools,
   pytestCheckHook,
   python,
+  packaging,
 }:
 
 buildPythonPackage {
@@ -27,7 +28,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "yapsy" ];
 
-  propagatedBuildInputs = [ python.pkgs.packaging ];
+  propagatedBuildInputs = [ packaging ];
 
   meta = with lib; {
     homepage = "https://yapsy.sourceforge.net/";
