@@ -8,6 +8,8 @@ let
   opt = options.services.rtorrent;
 
 in {
+  meta.maintainers = with lib.maintainers; [ thiagokokada ];
+
   options.services.rtorrent = {
     enable = mkEnableOption "rtorrent";
 
@@ -203,6 +205,30 @@ in {
             ExecStart="${cfg.package}/bin/rtorrent -n -o system.daemon.set=true -o import=${rtorrentConfigFile}";
             RuntimeDirectory = "rtorrent";
             RuntimeDirectoryMode = 755;
+
+            CapabilityBoundingSet = [ "" ];
+            LockPersonality = true;
+            NoNewPrivileges = true;
+            PrivateDevices = true;
+            PrivateTmp = true;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            # If the default user is changed, there is a good chance that they
+            # want to store data in e.g.: $HOME directory
+            # Relax hardening in this case
+            ProtectHome = lib.mkIf (cfg.user == "rtorrent") true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectProc = "invisible";
+            ProtectSystem = "full";
+            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = [ "@system-service" "~@privileged" ];
           };
         };
       };
