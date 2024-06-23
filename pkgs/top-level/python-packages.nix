@@ -4083,6 +4083,11 @@ self: super: with self; {
 
   ezyrb = callPackage ../development/python-modules/ezyrb { };
 
+  f3d = toPythonModule (pkgs.f3d.override {
+    withPythonBinding = true;
+    python3Packages = self;
+  });
+
   f5-icontrol-rest = callPackage ../development/python-modules/f5-icontrol-rest { };
 
   f5-sdk = callPackage ../development/python-modules/f5-sdk { };
