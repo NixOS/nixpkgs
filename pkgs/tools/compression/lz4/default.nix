@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , valgrind, testers
 }:
 
@@ -24,11 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "dev" "lib" "man" "out" ];
 
   patches = [
-    (fetchpatch { # https://github.com/lz4/lz4/pull/1162
-      name = "build-shared-no.patch";
-      url = "https://github.com/lz4/lz4/commit/851ef4b23c7cbf4ceb2ba1099666a8b5ec4fa195.patch";
-      hash = "sha256-P+/uz3m7EAmHgXF/1Vncc0uKKxNVq6HNIsElx0rGxpw=";
-    })
+    ./0001-Create-a-unified-lz4-target.patch
   ];
 
   cmakeDir = "../build/cmake";
