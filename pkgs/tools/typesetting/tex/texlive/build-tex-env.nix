@@ -63,7 +63,7 @@ let
           (p: p.outputSpecified or false -> builtins.elem (p.tlOutputName or p.outputName) [ "out" "tex" "tlpkg" ])
           packages;
         keySet = p: {
-          key = ((p.name or "${p.pname}-${p.version}") + "-" + p.tlOutputName or p.outputName or "");
+          key = p.pname or p.name + lib.optionalString (p.outputSpecified or false) ("-" + p.tlOutputName or p.outputName or "");
           inherit p;
           tlDeps = if p ? tlDeps then ensurePkgSets p.tlDeps else (p.requiredTeXPackages or (_: [ ]) tl);
         };
