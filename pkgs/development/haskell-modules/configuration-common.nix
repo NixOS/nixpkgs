@@ -2840,6 +2840,21 @@ self: super: {
   # base <4.14
   decimal-literals = doJailbreak super.decimal-literals;
 
+  # 2024-06-22: hevm ghc96 fixes
+  hevm = lib.pipe super.hevm [
+    (appendPatch (fetchpatch {
+      url = "https://github.com/ethereum/hevm/compare/02c072f...hellwolf:hevm:c29d3a7.patch";
+      hash = "sha256-cL26HD77vXsiKqo5G6PXgK0q19MUGMwaNium5x93CBI=";
+    }))
+    (overrideCabal (old: {
+      postPatch = old.postPatch or "" + ''
+        sed -i 's/^ *brick .*,/brick,/' hevm.cabal
+        sed -i 's/^ *vty .*,/vty,/' hevm.cabal
+      '';
+    }))
+    doJailbreak
+  ];
+
   # multiple bounds too strict
   snaplet-sqlite-simple = doJailbreak super.snaplet-sqlite-simple;
 
