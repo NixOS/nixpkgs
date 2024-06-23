@@ -22,7 +22,7 @@ perlPackages.buildPerlPackage {
   meta = {
     description = "A colourful wrapper for terminal programs";
     homepage = "https://github.com/deftdawg/cope";
-    license = with licenses; [ artistic1 gpl1Plus ];
-    maintainers = with maintainers; [ deftdawg ];
+    license = with lib.licenses; [ artistic1 gpl1Plus ];
+    maintainers = with lib.maintainers; [ deftdawg ];
   };
 }
