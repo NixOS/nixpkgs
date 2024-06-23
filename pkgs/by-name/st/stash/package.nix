@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   lib,
+  nixosTests,
   nodejs,
   stdenv,
   testers,
@@ -135,6 +136,7 @@ in
       passthru = {
         updateScript = ./update.py;
         tests = {
+          stash = nixosTests.stash;
           version = testers.testVersion {
             package = final.finalPackage;
             version = "v${version} (${gitHash}) - Unofficial Build - 1970-01-01 00:00:00";
