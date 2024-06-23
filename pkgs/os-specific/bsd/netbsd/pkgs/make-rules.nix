@@ -4,7 +4,6 @@
   stdenv,
   bsdSetupHook,
   netbsdSetupHook,
-  rsync,
 }:
 
 mkDerivation {
@@ -15,7 +14,6 @@ mkDerivation {
   nativeBuildInputs = [
     bsdSetupHook
     netbsdSetupHook
-    rsync
   ];
 
   dontBuild = true;
