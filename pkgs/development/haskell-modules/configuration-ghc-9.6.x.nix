@@ -89,25 +89,6 @@ self: super: {
   # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
   newtype-generics = jailbreakForCurrentVersion super.newtype-generics "0.6.2";
 
-  #
-  # Too strict bounds, waiting on Hackage release in nixpkgs
-  #
-
-  #
-  # Compilation failure workarounds
-  #
-
-  # Add support for time 1.10
-  # https://github.com/vincenthz/hs-hourglass/pull/56
-  hourglass = appendPatches [
-      (pkgs.fetchpatch {
-        name = "hourglass-pr-56.patch";
-        url =
-          "https://github.com/vincenthz/hs-hourglass/commit/cfc2a4b01f9993b1b51432f0a95fa6730d9a558a.patch";
-        sha256 = "sha256-gntZf7RkaR4qzrhjrXSC69jE44SknPDBmfs4z9rVa5Q=";
-      })
-    ] (super.hourglass);
-
   # Jailbreaks for servant <0.20
   servant-lucid = doJailbreak super.servant-lucid;
 

@@ -246,6 +246,20 @@ self: super: {
     };
   }) super.leveldb-haskell;
 
+  # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
+  # Patch is needed to add support for time 1.10, which is only used in the tests
+  # https://github.com/vincenthz/hs-hourglass/pull/56
+  # Jailbreak is needed because a hackage revision added the (correct) time <1.10 bound.
+  hourglass = doJailbreak 
+    (appendPatches [
+      (pkgs.fetchpatch {
+        name = "hourglass-pr-56.patch";
+        url =
+          "https://github.com/vincenthz/hs-hourglass/commit/cfc2a4b01f9993b1b51432f0a95fa6730d9a558a.patch";
+        sha256 = "sha256-gntZf7RkaR4qzrhjrXSC69jE44SknPDBmfs4z9rVa5Q=";
+      })
+    ] super.hourglass);
+
   # Arion's test suite needs a Nixpkgs, which is cumbersome to do from Nixpkgs
   # itself. For instance, pkgs.path has dirty sources and puts a huge .git in the
   # store. Testing is done upstream.
