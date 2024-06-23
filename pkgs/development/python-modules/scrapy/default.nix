@@ -19,6 +19,7 @@
   protego,
   pydispatcher,
   pyopenssl,
+  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   queuelib,
@@ -81,6 +82,7 @@ buildPythonPackage rec {
     glibcLocales
     jmespath
     pexpect
+    pytest-xdist
     pytestCheckHook
     sybil
     testfixtures
