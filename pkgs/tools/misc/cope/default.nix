@@ -8,7 +8,7 @@ perlPackages.buildPerlPackage rec {
     owner = "deftdawg";
     repo = "cope";
     rev = "ad0c1ebec5684f5ec3e8becf348414292c489175";
-    sha256 = "sha256-LMAir7tUkjHtKz+KME/Raa9QHGN1g0bzr56fNxfURQY=";
+    hash = "sha256-LMAir7tUkjHtKz+KME/Raa9QHGN1g0bzr56fNxfURQY=";
   };
 
   buildInputs = with perlPackages; [ EnvPath FileShareDir IOPty IOStty ListMoreUtils RegexpCommon RegexpIPv6 ];
