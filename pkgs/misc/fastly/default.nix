@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "fastly";
-  version = "10.12.2";
+  version = "10.12.3";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2B/7XmhHo/1Y2szdXNygiK6IsmVvcdAPtOvZI/B26pw=";
+    hash = "sha256-rvutRCfySapyHHzU6hVUdcQ/QdC/mqjrDhx1KTJnWlE=";
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,

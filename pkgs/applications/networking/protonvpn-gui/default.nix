@@ -98,6 +98,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "protonvpn-app";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

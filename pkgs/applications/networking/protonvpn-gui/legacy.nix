@@ -71,7 +71,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Official ProtonVPN Linux app";
     homepage = "https://github.com/ProtonVPN/linux-app";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     license = licenses.gpl3Plus;
     mainProgram = "protonvpn";
     platforms = platforms.linux;

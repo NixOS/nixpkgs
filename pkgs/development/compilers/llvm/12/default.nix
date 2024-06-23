@@ -149,6 +149,9 @@ let
     #   python3 = pkgs.python3;  # don't use python-boot
     # });
 
+    # Wrapper for standalone command line utilities
+    clang-tools = callPackage ../common/clang-tools { };
+
     # pick clang appropriate for package set we are targeting
     clang =
       /**/ if stdenv.targetPlatform.libc == null then tools.clangNoLibc

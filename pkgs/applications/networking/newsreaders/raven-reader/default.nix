@@ -31,7 +31,7 @@ appimageTools.wrapType2 {
     mainProgram = "raven-reader";
     homepage = "https://ravenreader.app/";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

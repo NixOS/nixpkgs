@@ -7672,8 +7672,6 @@ with pkgs;
 
   emscriptenStdenv = stdenv // { mkDerivation = buildEmscriptenPackage; };
 
-  efibootmgr = callPackage ../tools/system/efibootmgr { };
-
   efivar = callPackage ../tools/system/efivar { };
 
   eget = callPackage ../tools/misc/eget { };
@@ -7879,8 +7877,6 @@ with pkgs;
   cni-plugin-flannel = callPackage ../tools/networking/flannel/plugin.nix { };
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
-
-  flatpak = callPackage ../development/libraries/flatpak { };
 
   flatpak-builder = callPackage ../development/tools/flatpak-builder {
     binutils = binutils-unwrapped;
@@ -8332,8 +8328,6 @@ with pkgs;
   gnome-epub-thumbnailer = callPackage ../applications/misc/gnome-epub-thumbnailer { };
 
   gnome-extension-manager = callPackage ../applications/misc/gnome-extension-manager { };
-
-  gnome-feeds = callPackage ../applications/networking/feedreaders/gnome-feeds { };
 
   gnome-frog = callPackage ../applications/misc/gnome-frog { };
 
@@ -15183,31 +15177,7 @@ with pkgs;
   clang_16 = llvmPackages_16.clang;
   clang_17 = llvmPackages_17.clang;
 
-  clang-tools = callPackage ../development/tools/clang-tools { };
-
-  clang-tools_12 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_12;
-  };
-
-  clang-tools_13 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_13;
-  };
-
-  clang-tools_14 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_14;
-  };
-
-  clang-tools_15 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_15;
-  };
-
-  clang-tools_16 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_16;
-  };
-
-  clang-tools_17 = callPackage ../development/tools/clang-tools {
-    llvmPackages = llvmPackages_17;
-  };
+  clang-tools = llvmPackages.clang-tools;
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
     llvmPackages = llvmPackages_14;
@@ -16282,17 +16252,12 @@ with pkgs;
       lld_18 = llvmPackages_18.lld;
       lldb_18 = llvmPackages_18.lldb;
       llvm_18 = llvmPackages_18.llvm;
-
-      clang-tools_18 = callPackage ../development/tools/clang-tools {
-        llvmPackages = llvmPackages_18;
-      };
     })
       llvmPackages_18
       clang_18
       lld_18
       lldb_18
-      llvm_18
-      clang-tools_18;
+      llvm_18;
 
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
@@ -17088,8 +17053,6 @@ with pkgs;
     # set this to an LTS version of java
     jdk = jdk21;
   };
-
-  clojure-lsp = callPackage ../development/tools/misc/clojure-lsp { };
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
@@ -28010,8 +27973,6 @@ with pkgs;
 
   vendir = callPackage ../development/tools/vendir { };
 
-  vndr = callPackage ../development/tools/vndr { };
-
   vdo = callPackage ../os-specific/linux/vdo { };
 
   windows = callPackages ../os-specific/windows {};
@@ -34765,15 +34726,14 @@ with pkgs;
 
   transcribe = callPackage ../applications/audio/transcribe { };
 
-  transmission = callPackage ../applications/networking/p2p/transmission { };
-  libtransmission = transmission.override {
+  libtransmission_3 = transmission_3.override {
     installLib = true;
     enableDaemon = false;
     enableCli = false;
   };
-  transmission-gtk = transmission.override { enableGTK3 = true; };
-  transmission-qt = transmission.override { enableQt = true; };
-  transmission_noSystemd = transmission.override { enableSystemd = false; };
+  transmission_3-gtk = transmission_3.override { enableGTK3 = true; };
+  transmission_3-qt = transmission_3.override { enableQt = true; };
+  transmission_3_noSystemd = transmission_3.override { enableSystemd = false; };
 
   # Needs macOS >= 10.14.6
   transmission_4 = darwin.apple_sdk_11_0.callPackage ../applications/networking/p2p/transmission/4.nix {

@@ -2721,7 +2721,7 @@ let
             description = "CloudFormation Linter IDE integration, autocompletion, and documentation";
             homepage = "https://github.com/aws-cloudformation/cfn-lint-visual-studio-code";
             license = lib.licenses.asl20;
-            maintainers = [ lib.maintainers.wolfangaukang ];
+            maintainers = [ ];
           };
         };
 
@@ -3962,6 +3962,31 @@ let
         };
       };
 
+      sdras.night-owl = buildVscodeMarketplaceExtension rec {
+        mktplcRef = {
+          name = "night-owl";
+          publisher = "sdras";
+          version = "2.0.1";
+          hash = "sha256-AqfcVV9GYZ+GLgusXfij9z4WzrU9cCHp3sdZb0i6HzE=";
+        };
+        meta = {
+          changelog = "https://github.com/sdras/night-owl-vscode-theme/blob/main/CHANGELOG.md#${
+            builtins.replaceStrings [ "." ] [ "" ] mktplcRef.version
+          }";
+          description = "A Visual Studio Code theme named Light Owl for daytime usage";
+          longDescription = ''
+            A VS Code theme for the night owls out there. Now introducing
+            Light Owl theme for daytime usage. Decisions were based
+            on meaningful contrast for reading comprehension and for
+            optimal razzle dazzle.
+          '';
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=sdras.night-owl";
+          homepage = "https://github.com/sdras/night-owl-vscode-theme";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.pladypus ];
+        };
+      };
+
       seatonjiang.gitmoji-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "seatonjiang";
@@ -4706,7 +4731,7 @@ let
         };
         meta = {
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.wolfangaukang ];
+          maintainers = [ ];
         };
       };
 

@@ -1977,6 +1977,12 @@
     githubId = 12958979;
     name = "Mika Naylor";
   };
+  autra = {
+    email = "augustin.trancart@gmail.com";
+    github = "autra";
+    githubId = 1576598;
+    name = "Augustin Trancart";
+  };
   autrimpo = {
     email = "michal@koutensky.net";
     github = "autrimpo";
@@ -3955,6 +3961,12 @@
     github = "CompEng0001";
     githubId = 40290417;
     name = "Seb Blair";
+  };
+  CompileTime = {
+    email = "socialcoms@posteo.de";
+    github = "Compile-Time";
+    githubId = 18414241;
+    name = "Andreas Erdes";
   };
   confus = {
     email = "con-f-use@gmx.net";
@@ -11636,6 +11648,13 @@
     githubId = 10626;
     name = "Andreas Wagner";
   };
+  lpchaim = {
+    email = "lpchaim@gmail.comm";
+    matrix = "@lpchaim:matrix.org";
+    github = "lpchaim";
+    githubId = 4030336;
+    name = "Lucas Chaim";
+  };
   lpostula = {
     email = "lois@postu.la";
     github = "loispostula";
@@ -15796,6 +15815,12 @@
     github = "plabadens";
     githubId = 4303706;
     keys = [ { fingerprint = "B00F E582 FD3F 0732 EA48  3937 F558 14E4 D687 4375"; } ];
+  };
+  pladypus = {
+    name = "Peter Loftus";
+    email = "loftusp5976+nixpkgs@gmail.com";
+    github = "pladypus";
+    githubId = 56337621;
   };
   plchldr = {
     email = "mail@oddco.de";
@@ -21538,12 +21563,6 @@
     github = "andreisergiu98";
     githubId = 11740700;
     name = "Andrei Pampu";
-  };
-  wolfangaukang = {
-    email = "clone.gleeful135+nixpkgs@anonaddy.me";
-    github = "WolfangAukang";
-    githubId = 8378365;
-    name = "P. R. d. O.";
   };
   wolfgangwalther = {
     name = "Wolfgang Walther";
