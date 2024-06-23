@@ -35,6 +35,8 @@ buildPythonPackage rec {
       --replace "requests~=2.24" "requests"
   '';
 
+  pythonRelaxDeps = [ "requests-oauthlib" ];
+
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
