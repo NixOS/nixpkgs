@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage rec {
     rm -r $out/lib/perl5/site_perl/${perl.version}/auto
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A colourful wrapper for terminal programs";
     homepage = "https://github.com/deftdawg/cope";
     license = with licenses; [ artistic1 gpl1Plus ];
