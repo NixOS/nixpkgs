@@ -611,7 +611,7 @@ dont-distribute-packages:
  - bamstats
  - barley
  - base32-bytestring
- - base_4_20_0_0
+ - base_4_20_0_1
  - baserock-schema
  - basic
  - batchd
@@ -632,7 +632,6 @@ dont-distribute-packages:
  - bearriver
  - beautifHOL
  - bech32-th
- - bech32-th_1_1_7
  - bein
  - belka
  - bff
@@ -1176,6 +1175,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
+ - dl-fedora_1_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1963,7 +1963,7 @@ dont-distribute-packages:
  - haskoin-bitcoind
  - haskoin-crypto
  - haskoin-node
- - haskoin-node_1_1_0
+ - haskoin-node_1_1_3
  - haskoin-protocol
  - haskoin-script
  - haskoon
@@ -1984,6 +1984,7 @@ dont-distribute-packages:
  - haskus-web
  - haslo
  - hasloGUI
+ - hasmtlib
  - hasql-cursor-query
  - hasql-postgres
  - hasql-postgres-options
@@ -2396,6 +2397,7 @@ dont-distribute-packages:
  - jespresso
  - jmacro-rpc-happstack
  - jmacro-rpc-snap
+ - job
  - jobs-ui
  - join
  - jordan-openapi
@@ -2536,7 +2538,6 @@ dont-distribute-packages:
  - layouting
  - lazy-hash-cache
  - lda
- - ldap-client
  - ldap-client-og
  - ldap-scim-bridge
  - ldapply
@@ -3871,6 +3872,7 @@ dont-distribute-packages:
  - syslog
  - systemd-api
  - systemstats
+ - systranything
  - t3-client
  - ta
  - tag-stream
