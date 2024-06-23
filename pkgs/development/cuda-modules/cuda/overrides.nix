@@ -157,12 +157,23 @@ filterAndCreateOverrides {
       cudaAtLeast,
       gmp,
       lib,
+      ncurses6,
+      python311,
+      libxcrypt,
     }:
     prevAttrs: {
       buildInputs =
         prevAttrs.buildInputs
         # x86_64 only needs gmp from 12.0 and on
         ++ lib.lists.optionals (cudaAtLeast "12.0") [ gmp ];
+      
+      nativeBuildInputs =
+        prevAttrs.buildInputs
+        ++ lib.optionals (cudaAtLeast "12.5") (map lib.getLib [ 
+          ncurses6 
+          python311 
+          libxcrypt 
+        ]);
     };
 
   cuda_nvcc =
@@ -171,6 +182,7 @@ filterAndCreateOverrides {
       cuda_cudart,
       lib,
       setupCudaHook,
+      cudaAtLeast
     }:
     prevAttrs: {
       # Patch the nvcc.profile.
@@ -187,26 +199,54 @@ filterAndCreateOverrides {
       # backend-stdenv.nix
 
       postPatch =
-        (prevAttrs.postPatch or "")
-        + ''
-          substituteInPlace bin/nvcc.profile \
-            --replace-fail \
-              '$(TOP)/$(_NVVM_BRANCH_)' \
-              "''${!outputBin}/nvvm" \
-            --replace-fail \
-              '$(TOP)/$(_TARGET_DIR_)/include' \
-              "''${!outputDev}/include"
+        let
+          cudaBefore_12_5 =
+            (prevAttrs.postPatch or "")
+            + ''
+              substituteInPlace bin/nvcc.profile \
+                --replace-fail \
+                  '$(TOP)/$(_NVVM_BRANCH_)' \
+                  "''${!outputBin}/nvvm" \
+                --replace-fail \
+                  '$(TOP)/$(_TARGET_DIR_)/include' \
+                  "''${!outputDev}/include"
 
-          cat << EOF >> bin/nvcc.profile
+              cat << EOF >> bin/nvcc.profile
 
-          # Fix a compatible backend compiler
-          PATH += "${backendStdenv.cc}/bin":
+              # Fix a compatible backend compiler
+              PATH += "${backendStdenv.cc}/bin":
 
-          # Expose the split-out nvvm
-          LIBRARIES =+ "-L''${!outputBin}/nvvm/lib"
-          INCLUDES =+ "-I''${!outputBin}/nvvm/include"
-          EOF
-        '';
+              # Expose the split-out nvvm
+              LIBRARIES =+ "-L''${!outputBin}/nvvm/lib"
+              INCLUDES =+ "-I''${!outputBin}/nvvm/include"
+              EOF
+            '';
+          cuda_12_5_andAfter = 
+            (prevAttrs.postPatch or "")
+            + ''
+              cat bin/nvcc.profile
+              substituteInPlace bin/nvcc.profile \
+                --replace-fail \
+                  '$(TOP)/$(_TARGET_DIR_)/include' \
+                  "''${!outputDev}/include" \
+                --replace-fail \
+                  '$(TOP)/' \
+                  "''${!outputBin}/"
+
+              cat << EOF >> bin/nvcc.profile
+
+              # Fix a compatible backend compiler
+              PATH += "${backendStdenv.cc}/bin":
+
+              # Expose the split-out nvvm
+              LIBRARIES =+ "-L''${!outputBin}/nvvm/lib"
+              INCLUDES =+ "-I''${!outputBin}/nvvm/include"
+              EOF
+            '';
+        in
+          (if cudaAtLeast "12.5" then cuda_12_5_andAfter else cudaBefore_12_5);
+     
+      
 
       # NOTE(@connorbaker):
       # Though it might seem odd or counter-intuitive to add the setup hook to `propagatedBuildInputs` instead of
