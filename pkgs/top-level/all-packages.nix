@@ -421,8 +421,6 @@ with pkgs;
 
   catppuccin-catwalk = callPackage ../development/tools/misc/catppuccin-catwalk { };
 
-  catppuccin-gtk = callPackage ../data/themes/catppuccin-gtk { };
-
   catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
 
   catppuccin-kvantum = callPackage ../data/themes/catppuccin-kvantum { };

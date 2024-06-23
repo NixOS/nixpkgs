@@ -2,9 +2,7 @@
 , stdenvNoCC
 , fetchFromGitHub
 , gtk3
-, colloid-gtk-theme
-, gnome-themes-extra
-, gtk-engine-murrine
+, git
 , python3
 , sassc
 , nix-update-script
@@ -20,6 +18,7 @@ let
   validVariants = [ "latte" "frappe" "macchiato" "mocha" ];
 
   pname = "catppuccin-gtk";
+  version = "1.0.3";
 in
 
 lib.checkListOfEnum "${pname}: theme accent" validAccents accents
@@ -27,39 +26,25 @@ lib.checkListOfEnum "${pname}: color variant" validVariants [variant]
 lib.checkListOfEnum "${pname}: size variant" validSizes [size]
 lib.checkListOfEnum "${pname}: tweaks" validTweaks tweaks
 
-stdenvNoCC.mkDerivation rec {
-  inherit pname;
-  version = "0.7.5";
+stdenvNoCC.mkDerivation {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "gtk";
     rev = "v${version}";
-    hash = "sha256-DIeMdkEjIcPIf/EgE83F5URHY+lR2+hxdc4wSrruFJ8=";
+    fetchSubmodules = true;
+    hash = "sha256-q5/VcFsm3vNEw55zq/vcM11eo456SYE5TQA3g2VQjGc=";
   };
 
-  nativeBuildInputs = [ gtk3 sassc ];
-
-  patches = [
-    ./colloid-src-git-reset.patch
-  ];
-
-  buildInputs = [
-    gnome-themes-extra
+  nativeBuildInputs = [
+    gtk3
+    sassc
+    # git is needed here since "git apply" is being used for patches
+    # see <https://github.com/catppuccin/gtk/blob/4173b70b910bbb3a42ef0e329b3e98d53cef3350/build.py#L465>
+    git
     (python3.withPackages (ps: [ ps.catppuccin ]))
   ];
-
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
-
-  postUnpack = ''
-    rm -rf source/colloid
-    cp -r ${colloid-gtk-theme.src} source/colloid
-    chmod -R +w source/colloid
-  '';
-
-  postPatch = ''
-    patchShebangs --build colloid/install.sh colloid/build.sh
-  '';
 
   dontConfigure = true;
   dontBuild = true;
@@ -67,14 +52,12 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    cp -r colloid colloid-base
     mkdir -p $out/share/themes
-    export HOME=$(mktemp -d)
 
-    python3 install.py ${variant} \
-      ${lib.optionalString (accents != []) "--accent " + builtins.toString accents} \
-      ${lib.optionalString (size != []) "--size " + size} \
-      ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
+    python3 build.py ${variant} \
+      --accent ${builtins.toString accents} \
+      ${lib.optionalString (size != [ ]) "--size " + size} \
+      ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
       --dest $out/share/themes
 
     runHook postInstall
@@ -82,11 +65,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Soothing pastel theme for GTK";
     homepage = "https://github.com/catppuccin/gtk";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fufexan dixslyf ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fufexan dixslyf isabelroses ];
   };
 }
