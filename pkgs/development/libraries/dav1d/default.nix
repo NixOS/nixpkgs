@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "pie"
+  ];
+
   nativeBuildInputs = [ meson ninja nasm pkg-config ];
   # TODO: doxygen (currently only HTML and not build by default).
   buildInputs = [ xxHash ]
