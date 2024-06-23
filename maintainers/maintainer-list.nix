@@ -10618,6 +10618,11 @@
     github = "kkharji";
     githubId = 65782666;
   };
+  kkoniuszy = {
+    name = "Kacper Koniuszy";
+    github = "kkoniuszy";
+    githubId = 120419423;
+  };
   klden = {
     name = "Kenzyme Le";
     email = "kl@kenzymele.com";
