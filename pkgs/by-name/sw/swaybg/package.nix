@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, scdoc
-, wayland, wayland-protocols, cairo, gdk-pixbuf
-, wayland-scanner
+{ lib, stdenv, fetchFromGitHub, gnome, libheif, libjxl
+, librsvg, makeWrapper, meson, ninja, pkg-config
+, scdoc, wayland, wayland-protocols, cairo, gdk-pixbuf
+, wayland-scanner, webp-pixbuf-loader, wrapGAppsNoGuiHook
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +17,32 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner makeWrapper wrapGAppsNoGuiHook ];
   buildInputs = [ wayland wayland-protocols cairo gdk-pixbuf ];
 
   mesonFlags = [
     "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
   ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/swaybg ''${makeWrapperArgs[@]}
+  '';
+
+  postInstall = ''
+    # Pull in WebP and JXL support
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        libjxl
+        librsvg
+        webp-pixbuf-loader
+        libheif.out
+      ];
+    }}"
+  '';
 
   meta = with lib; {
     description = "Wallpaper tool for Wayland compositors";
