@@ -5,16 +5,18 @@ import os
 import pprint
 import subprocess
 import sys
+import json
 from fnmatch import fnmatch
 from collections import defaultdict
 from contextlib import contextmanager
 from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path, PurePath
-from typing import DefaultDict, Iterator, Optional
+from typing import DefaultDict, Generator, Iterator, Optional
 
 from elftools.common.exceptions import ELFError  # type: ignore
 from elftools.elf.dynamic import DynamicSection  # type: ignore
+from elftools.elf.sections import NoteSection  # type: ignore
 from elftools.elf.elffile import ELFFile  # type: ignore
 from elftools.elf.enums import ENUM_E_TYPE, ENUM_EI_OSABI  # type: ignore
 
@@ -38,7 +40,7 @@ def is_dynamic_executable(elf: ELFFile) -> bool:
     return bool(elf.get_section_by_name(".interp"))
 
 
-def get_dependencies(elf: ELFFile) -> list[str]:
+def get_dependencies(elf: ELFFile) -> list[Path]:
     dependencies = []
     # This convoluted code is here on purpose. For some reason, using
     # elf.get_section_by_name(".dynamic") does not always return an
@@ -46,9 +48,31 @@ def get_dependencies(elf: ELFFile) -> list[str]:
     for section in elf.iter_sections():
         if isinstance(section, DynamicSection):
             for tag in section.iter_tags('DT_NEEDED'):
-                dependencies.append(tag.needed)
+                dependencies.append(Path(tag.needed))
             break # There is only one dynamic section
 
+    return dependencies
+
+
+def get_dlopen_dependencies(elf: ELFFile) -> list[Path]:
+    """
+    Extracts dependencies from the .note.dlopen section, which is used by
+    systemd to store the list of libraries that are opened with dlopen.
+    https://systemd.io/ELF_DLOPEN_METADATA/
+    """
+    dependencies = []
+    for section in elf.iter_sections():
+        if not isinstance(section, NoteSection) or section.name != ".note.dlopen":
+            continue
+        for note in section.iter_notes():
+            if note["n_type"] != 0x407C0C0A or note["n_name"] != "FDO":
+                continue
+            note_desc = note["n_desc"]
+            text = note_desc.decode("utf-8").rstrip("\0")
+            j = json.loads(text)
+            for d in j:
+                for soname in d["soname"]:
+                    dependencies.append(Path(soname))
     return dependencies
 
 
@@ -204,7 +228,7 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
 
             file_is_dynamic_executable = is_dynamic_executable(elf)
 
-            file_dependencies = map(Path, get_dependencies(elf))
+            file_dependencies = get_dependencies(elf) + get_dlopen_dependencies(elf)
 
     except ELFError:
         return []
