@@ -14659,20 +14659,6 @@ with pkgs;
 
   xvfb-run = callPackage ../tools/misc/xvfb-run {
     inherit (texFunctions) fontsConf;
-
-    # xvfb-run is used by a bunch of things to run tests
-    # and doesn't support hardware accelerated rendering
-    # so remove it from the rebuild heavy path for mesa
-    xorgserver = xorg.xorgserver.overrideAttrs(old: {
-      buildInputs = lib.filter (pkg: lib.getName pkg != "mesa") old.buildInputs;
-      configureFlags = old.configureFlags ++ [
-        "--disable-glamor"
-        "--disable-glx"
-        "--disable-dri"
-        "--disable-dri2"
-        "--disable-dri3"
-      ];
-    });
   };
 
   xvkbd = callPackage ../tools/X11/xvkbd { };
