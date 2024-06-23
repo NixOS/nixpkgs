@@ -84,6 +84,10 @@ python3.pkgs.buildPythonApplication rec {
     libxcrypt
   ];
 
+  hardeningDisable = lib.optionals stdenv.isDarwin [
+    "pie"
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
