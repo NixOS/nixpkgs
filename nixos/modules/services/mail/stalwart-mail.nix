@@ -37,8 +37,6 @@ in {
         ansi = mkDefault false;  # no colour markers to journald
         enable = mkDefault true;
       };
-      queue.path = mkDefault "${dataDir}/queue";
-      report.path = mkDefault "${dataDir}/reports";
       store = if useLegacyStorage then {
         # structured data in SQLite, blobs on filesystem
         db.type = mkDefault "sqlite";
@@ -83,9 +81,9 @@ in {
         after = [ "local-fs.target" "network.target" ];
 
         preStart = if useLegacyStorage then ''
-          mkdir -p ${dataDir}/{queue,reports,data/blobs}
+          mkdir -p ${dataDir}/data/blobs
         '' else ''
-          mkdir -p ${dataDir}/{queue,reports,db}
+          mkdir -p ${dataDir}/db
         '';
 
         serviceConfig = {
