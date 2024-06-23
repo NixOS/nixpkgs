@@ -1,24 +1,18 @@
 { lib
 , rustPlatform
 , fetchCrate
-, stdenv
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "2.0.17";
+  version = "2.0.19";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-UzPEupmUnph7SjCc/T4sBSGXj8yLVdQlw+X9iM16zD8=";
+    hash = "sha256-+Cx+2v4JrQflDBaNZ9Fu8734Zr4rrgtnojUS4dkx7Ck=";
   };
 
-  cargoHash = "sha256-AchVbf+mn4qQtzWu84Dqek+btCm6BA9mcY+8iHWqdiw=";
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.IOKit
-  ];
+  cargoHash = "sha256-crVEtMzjg9T0oiS13URevPuRYqod4d2Ylb1IWRPVpa8=";
 
   meta = with lib; {
     description = "Massively parallel, optimal functional runtime in Rust";
