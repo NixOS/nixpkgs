@@ -5,6 +5,7 @@
   fetchYarnDeps,
   lib,
   mkYarnPackage,
+  nixosTests,
   stdenv,
   testers,
 }:
@@ -115,6 +116,7 @@ mininalBuildGoModule.overrideAttrs (
       updateScript = ./update.nu;
 
       tests = {
+        stash = nixosTests.stash;
         version = testers.testVersion {
           package = final.finalPackage;
           version = "v${version} (${gitHash}) - Official Build - ${stamp}";
