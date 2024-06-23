@@ -6,16 +6,16 @@
 }:
 let
   pname = "immersed-vr";
-  version = "9.10";
+  version = "10.2.1";
 
   sources = rec {
     x86_64-linux = {
-      url = "https://web.archive.org/web/20240210075929/https://static.immersed.com/dl/Immersed-x86_64.AppImage";
-      hash = "sha256-Mx8UnV4fZSebj9ah650ZqsL/EIJpM6jl8tYmXJZiJpA=";
+      url = "http://web.archive.org/web/20240415082836/https://static.immersed.com/dl/Immersed-x86_64.AppImage";
+      hash = "sha256-hKaF1XzZa0qAh7r1CtK0j2JFqE16hGNBGph7aOnYJCQ=";
     };
     x86_64-darwin = {
-      url = "https://web.archive.org/web/20240210075929/https://static.immersed.com/dl/Immersed.dmg";
-      hash = "sha256-CR2KylovlS7zerZIEScnadm4+ENNhib5QnS6z5Ihv1Y=";
+      url = "http://web.archive.org/web/20240415083533/https://static.immersed.com/dl/Immersed.dmg";
+      hash = "sha256-MdRJAo85xAB8OEgdQf0BjfORwSLIwtpOVwJ5qWfpXJY=";
     };
     aarch64-darwin = x86_64-darwin;
   };
