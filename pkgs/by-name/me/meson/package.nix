@@ -80,10 +80,10 @@ python3.pkgs.buildPythonApplication rec {
     # FIXME: remove in the next point release
     ./007-Allow-building-via-ninja-12.patch
 
-
     # Find boost via pkg-config
     # https://github.com/NixOS/nixpkgs/issues/86131
     # Already merged upstream PR: https://github.com/mesonbuild/meson/pull/13272
+    # FIXME: remove in the next release
     (fetchpatch {
       name = "find-boost-pkg-config.patch";
       url = "https://github.com/mesonbuild/meson/commit/c21b886ba8a60cce7fa56e4be40bd7547129fb00.patch";
