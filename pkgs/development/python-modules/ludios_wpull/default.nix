@@ -62,6 +62,7 @@ in with py.pkgs; buildPythonPackage rec {
     description = "Web crawler; fork of wpull used by grab-site";
     homepage = "https://github.com/ArchiveTeam/ludios_wpull";
     license = lib.licenses.gpl3;
+    maintainers = with maintainers; [ ivan ];
     broken = lib.versions.major tornado.version != "6";
   };
 }
