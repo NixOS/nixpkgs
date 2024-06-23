@@ -250,7 +250,7 @@ self: super: {
   # Patch is needed to add support for time 1.10, which is only used in the tests
   # https://github.com/vincenthz/hs-hourglass/pull/56
   # Jailbreak is needed because a hackage revision added the (correct) time <1.10 bound.
-  hourglass = doJailbreak 
+  hourglass = doJailbreak
     (appendPatches [
       (pkgs.fetchpatch {
         name = "hourglass-pr-56.patch";
