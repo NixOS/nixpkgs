@@ -4,7 +4,7 @@ let
   inherit (lib.attrsets) optionalAttrs;
   inherit (lib.generators) toINIWithGlobalSection;
   inherit (lib.lists) optional;
-  inherit (lib.modules) mkIf;
+  inherit (lib.modules) mkIf mkRemovedOptionModule;
   inherit (lib.options) literalExpression mkEnableOption mkOption;
   inherit (lib.strings) escape;
   inherit (lib.types) attrsOf bool int lines oneOf str submodule;
@@ -26,6 +26,13 @@ let
     } cfg.settings);
 in
 {
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "davfs2" "extraConfig" ] ''
+      The option extraConfig got removed, please migrate to
+      services.davfs2.settings instead.
+    '')
+  ];
 
   options.services.davfs2 = {
     enable = mkEnableOption "davfs2";

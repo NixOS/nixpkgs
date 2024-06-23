@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coin";
-  version = "unstable-2022-07-27";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "coin";
-    rev = "4c67945a58d2a6e5adb4d2332ab08007769130ef";
-    hash = "sha256-lXS7GxtoPsZe2SJfr0uY99Q0ZtYG0KFlauY1PBuFleo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tBegPZQme5McC0HGvjjdIBQQl59Ud4aJk2hONWMzEdc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,8 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     libGL
     libGLU
-    libX11
-  ];
+  ] ++ lib.optional stdenv.isLinux libX11;
 
   cmakeFlags = [ "-DCOIN_USE_CPACK=OFF" ];
 
@@ -36,6 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "coin-config";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gebner viric ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 })

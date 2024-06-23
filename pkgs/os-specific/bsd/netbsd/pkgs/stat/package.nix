@@ -6,7 +6,6 @@
   install,
   mandoc,
   groff,
-  rsync,
 }:
 
 # Don't add this to nativeBuildInputs directly.
@@ -21,6 +20,5 @@ mkDerivation {
     install
     mandoc
     groff
-    rsync
   ];
 }

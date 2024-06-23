@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.6.3";
+  version = "2024.6.4";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -2893,6 +2893,7 @@
       hassil
       home-assistant-intents
       ifaddr
+      motionblindsble
       mutagen
       psutil-home-assistant
       pyserial
@@ -2900,7 +2901,7 @@
       sqlalchemy
       webrtc-noise-gain
       zeroconf
-    ]; # missing inputs: motionblindsble
+    ];
     "motioneye" = ps: with ps; [
       motioneye-client
     ];
@@ -5663,6 +5664,7 @@
     "moon"
     "mopeka"
     "motion_blinds"
+    "motionblinds_ble"
     "motioneye"
     "motionmount"
     "mqtt"

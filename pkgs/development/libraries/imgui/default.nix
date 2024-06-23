@@ -139,7 +139,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit; # vcpkg licensed as MIT too
     maintainers = with lib.maintainers; [
       SomeoneSerge
-      wolfangaukang
     ];
     platforms = lib.platforms.all;
   };
