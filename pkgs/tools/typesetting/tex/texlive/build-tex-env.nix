@@ -58,8 +58,7 @@ let
     # resolve dependencies of the packages that affect the runtime
     all =
       let
-        # order of packages is irrelevant
-        packages = builtins.sort (a: b: a.pname < b.pname) (ensurePkgSets (requiredTeXPackages tl));
+        packages = ensurePkgSets (requiredTeXPackages tl);
         runtime = builtins.partition
           (p: p.outputSpecified or false -> builtins.elem (p.tlOutputName or p.outputName) [ "out" "tex" "tlpkg" ])
           packages;
@@ -211,7 +210,7 @@ let
     __overrideTeXConfig = newArgs:
       let appliedArgs = if builtins.isFunction newArgs then newArgs args else newArgs; in
         self (args // { __fromCombineWrapper = false; } // appliedArgs);
-    withPackages = reqs: self (args // { requiredTeXPackages = ps: requiredTeXPackages ps ++ reqs ps; __fromCombineWrapper = false; });
+    withPackages = reqs: self (args // { requiredTeXPackages = ps: reqs ps ++ requiredTeXPackages ps; __fromCombineWrapper = false; });
   };
 
   # TeXLive::TLOBJ::fmtutil_cnf_lines
