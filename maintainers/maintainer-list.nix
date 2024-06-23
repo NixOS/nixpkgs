@@ -9983,6 +9983,12 @@
     githubId = 5802758;
     name = "Joshua Trees";
   };
+  jtszalay = {
+    email = "jamestszalay@gmail.com";
+    github = "jtszalay";
+    githubId = 589502;
+    name = "James Szalay";
+  };
   juancmuller = {
     email = "nix@juancmuller.com";
     githubId = 208500;
