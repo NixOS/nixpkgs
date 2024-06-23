@@ -2,6 +2,7 @@
 , stdenv
 , overrideSDK
 , fetchFromGitHub
+, fetchpatch
 , boost
 , cmake
 , double-conversion
@@ -35,6 +36,21 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-INvWTw27fmVbKQIT9ebdRGMCOIzpc/NepRN2EnKLJx0=";
   };
+
+  patches = [
+    # Fix incorrect include of glog >= 0.7.0, see https://github.com/facebook/folly/issues/2171
+    (fetchpatch {
+      name = "folly-fix-cmake-find-glog.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix-cmake-find-glog.patch?h=folly&id=4b68f47338d4b20111e3ffa1291433120bb899f0";
+      hash = "sha256-QGNpS5UNEm+0PW9+agwUVILzpK9t020KXDGyP03OAwE=";
+    })
+    # Fix missing includes with glog >= 0.7.0, see https://github.com/facebook/folly/pull/2245
+    (fetchpatch {
+      name = "folly-symbolizer-Fix-missing-unistd-h-include.patch";
+      url = "https://github.com/facebook/folly/commit/f64cfb8aca569c1259c1e202861281b4704565c6.patch";
+      hash = "sha256-j1uV0JDFsMReCG7XVVADwW1f/2PICYzqdyfEjP314Dg=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
