@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, perl, perlPackages }:
 
-perlPackages.buildPerlPackage rec {
+perlPackages.buildPerlPackage {
   pname = "cope";
   version = "0-unstable-2024-03-27";
 
