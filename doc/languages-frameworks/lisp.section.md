@@ -284,7 +284,6 @@ derivation.
 `wrapLisp` takes these arguments:
 
 - `pkg`: the Lisp package
-- `faslExt`: Implementation-specific extension for FASL files
 - `program`: The name of executable file in `${pkg}/bin/` (Default: `pkg.pname`)
 - `flags`: A list of flags to always pass to `program` (Default: `[]`)
 - `asdf`: The ASDF version to use (Default: `pkgs.asdf_3_3`)
@@ -295,7 +294,6 @@ This example wraps CLISP:
 ```nix
 wrapLisp {
   pkg = clisp;
-  faslExt = "fas";
   flags = ["-E" "UTF8"];
 }
 ```
