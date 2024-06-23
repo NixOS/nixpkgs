@@ -14336,6 +14336,8 @@ self: super: with self; {
 
   spatial-image = callPackage ../development/python-modules/spatial-image { };
 
+  spatialmath-python = callPackage ../development/python-modules/spatialmath-python { };
+
   spdx = callPackage ../development/python-modules/spdx { };
 
   spdx-lookup = callPackage ../development/python-modules/spdx-lookup { };
