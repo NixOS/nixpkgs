@@ -1,14 +1,14 @@
 { lib, fetchurl }:
 rec {
   pname = "mesa";
-  version = "24.1.1";
+  version = "24.1.2";
 
   src = fetchurl {
     urls = [
       "https://archive.mesa3d.org/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    hash = "sha256-ADiCbG9+iNkLTOb3GRkvpYyn3t9O3KoRdM972SDvieo=";
+    hash = "sha256-osWEyNV9O9i6EXkKbprjcT+IId+WwFm3ivsp3Zdcn0U=";
   };
 
   meta = {
@@ -26,7 +26,6 @@ rec {
     changelog = "https://www.mesa3d.org/relnotes/${version}.html";
     license = with lib.licenses; [ mit ]; # X11 variant, in most files
     platforms = lib.platforms.mesaPlatforms;
-    badPlatforms = []; # Load bearing for libGL meta on Darwin.
     maintainers = with lib.maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
 }
