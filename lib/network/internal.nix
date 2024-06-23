@@ -112,6 +112,20 @@ let
     # Type: String -> IPv6
   */
   parseIpv6FromString = addr: parseExpandedIpv6 (expandIpv6 addr);
+
+  /**
+    Raises `base` to the power of `exponent`.
+
+    # Type: Int -> Int -> Int
+  */
+  pow =
+    base: exponent:
+    if exponent < 0 then
+      throw "lib.network.pow: Exponent cannot be negative."
+    else if exponent == 0 then
+      1
+    else
+      lists.foldl' (acc: _: acc * base) 1 (lists.range 1 exponent);
 in
 {
   # Internally IPv6 address is stored as a list of 16 bits integers with 8 elements.
@@ -120,6 +134,8 @@ in
       Converts an internal representation of an IPv6 address (i.e, a list
       of integers) to a string. The returned string is not a canonical
       representation as defined in RFC 5952, i.e zeros are not compressed.
+
+      # Type: IPv6 -> String
     */
     toStringFromExpandedIp =
       pieces: strings.concatMapStringsSep ":" (piece: strings.toLower (trivial.toHexString piece)) pieces;
@@ -157,5 +173,54 @@ in
         }
       else
         throw "${addr} is not a valid IPv6 address in CIDR notation";
+
+    /**
+      Calculates the first address in a subnet.
+
+      # Type: IPv6 -> Int -> IPv6
+    */
+    calculateFirstAddress =
+      addr: prefixLength:
+      let
+        prefixMask = lists.imap0 (
+          idx: piece:
+          # Generate a decimal number, which in binary format will have the format "1111111100000000", where the number of ones is equal to `bits'.
+          let
+            bits = trivial.min (trivial.max (prefixLength - ipv6PieceBits * idx) 0) ipv6PieceBits;
+            # 2^n - 2^(n-k) to pad k bits with ones on the left.
+            maskForPiece = (pow 2 ipv6PieceBits) - (pow 2 (ipv6PieceBits - bits));
+          in
+          maskForPiece
+        ) addr;
+
+        firstAddress = lists.zipListsWith (l: r: trivial.bitAnd l r) addr prefixMask;
+      in
+      firstAddress;
+
+    /**
+      Calculates the last address in a subnet.
+
+      # Type: IPv6 -> Int -> IPv6
+    */
+    calculateLastAddress =
+      addr: prefixLength:
+      let
+        suffixLength = ipv6Bits - prefixLength;
+        suffixMask = lists.imap0 (
+          idx: piece:
+          # Generate a decimal number, which in binary format will have the format "0000000011111111", where the number of ones is equal to `bits'.
+          let
+            bits = trivial.min (trivial.max (
+              suffixLength - ipv6PieceBits * (ipv6Pieces - idx - 1)
+            ) 0) ipv6PieceBits;
+            # 2^n - 1 to pad k bits with ones on the right.
+            maskForPiece = (pow 2 bits) - 1;
+          in
+          maskForPiece
+        ) addr;
+
+        lastAddress = lists.zipListsWith (l: r: trivial.bitOr l r) addr suffixMask;
+      in
+      lastAddress;
   };
 }

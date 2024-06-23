@@ -110,8 +110,18 @@ expectFailure '(internal._ipv6.split "::/0").prefixLength'   "IPv6 subnet should
 expectFailure '(internal._ipv6.split "::/129").prefixLength' "IPv6 subnet should be in range \[1;128\], got 129"
 expectFailure '(internal._ipv6.split "/::/").prefixLength'   "is not a valid IPv6 address in CIDR notation"
 
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 1)'   '[32768,0,0,0,0,0,0,0]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 16)'  '[65535,0,0,0,0,0,0,0]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 17)'  '[65535,32768,0,0,0,0,0,0]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 128)' '[65535,65535,65535,65535,65535,65535,65535,65535]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [0 0 0 0 65535 65535 65535 65535] 64)'                  '[0,0,0,0,0,0,0,0]'
+
+expectSuccess '(internal._ipv6.calculateLastAddress [0 0 0 0 0 0 0 0] 1)'       '[32767,65535,65535,65535,65535,65535,65535,65535]'
+expectSuccess '(internal._ipv6.calculateLastAddress [0 0 0 0 0 0 0 0] 64)'      '[0,0,0,0,65535,65535,65535,65535]'
+expectSuccess '(internal._ipv6.calculateLastAddress [0 0 1 0 0 0 0 65535] 127)' '[0,0,1,0,0,0,0,65535]'
+
 # Library API
-expectSuccess 'lib.network.ipv6.fromString "2001:DB8::ffff/64"' '{"address":"2001:db8:0:0:0:0:0:ffff","prefixLength":64}'
-expectSuccess 'lib.network.ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44"' '{"address":"1234:5678:90ab:cdef:fedc:ba09:8765:4321","prefixLength":44}'
+expectSuccess 'lib.network.ipv6.fromString "2001:DB8::ffff/64"' '{"address":"2001:db8:0:0:0:0:0:ffff","firstAddress":"2001:db8:0:0:0:0:0:0","lastAddress":"2001:db8:0:0:ffff:ffff:ffff:ffff","prefixLength":64}'
+expectSuccess 'lib.network.ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44"' '{"address":"1234:5678:90ab:cdef:fedc:ba09:8765:4321","firstAddress":"1234:5678:90a0:0:0:0:0:0","lastAddress":"1234:5678:90af:ffff:ffff:ffff:ffff:ffff","prefixLength":44}'
 
 echo >&2 tests ok

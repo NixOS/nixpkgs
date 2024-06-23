@@ -25,6 +25,8 @@ in
       => {
         address = "2001:db8:0:0:0:0:0:ffff";
         prefixLength = 32;
+        firstAddress = "2001:db8:0:0:0:0:0:0";
+        lastAddress = "2001:db8:ffff:ffff:ffff:ffff:ffff:ffff"
       }
       ```
 
@@ -41,9 +43,16 @@ in
         prefixLength = splittedAddr.prefixLength;
 
         address = _ipv6.toStringFromExpandedIp addrInternal;
+        firstAddress = _ipv6.toStringFromExpandedIp (_ipv6.calculateFirstAddress addrInternal prefixLength);
+        lastAddress = _ipv6.toStringFromExpandedIp (_ipv6.calculateLastAddress addrInternal prefixLength);
       in
       {
-        inherit address prefixLength;
+        inherit
+          address
+          prefixLength
+          firstAddress
+          lastAddress
+          ;
       };
   };
 }
