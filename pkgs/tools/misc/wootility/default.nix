@@ -46,7 +46,7 @@ appimageTools.wrapType2 rec {
     homepage = "https://wooting.io/wootility";
     description = "Customization and management software for Wooting keyboards";
     platforms = [ "x86_64-linux" ];
-    license = "unknown";
+    license = licenses.unfree;
     maintainers = with maintainers; [ davidtwco sodiboo ];
     mainProgram = "wootility";
   };
