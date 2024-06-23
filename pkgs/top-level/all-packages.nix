@@ -36734,14 +36734,7 @@ with pkgs;
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
   golly = callPackage ../applications/science/misc/golly {
-    wxGTK = wxGTK32.overrideAttrs (x: {
-      configureFlags = x.configureFlags ++ [
-        "--enable-webrequest"
-      ];
-      buildInputs = x.buildInputs ++ [
-        curl
-      ];
-    });
+    wxGTK = wxGTK32;
   };
 
   megam = callPackage ../applications/science/misc/megam {
