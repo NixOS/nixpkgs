@@ -13480,6 +13480,8 @@ self: super: with self; {
 
   robotframework-tools = callPackage ../development/python-modules/robotframework-tools { };
 
+  roboticstoolbox-python = callPackage ../development/python-modules/roboticstoolbox-python { };
+
   robotstatuschecker = callPackage ../development/python-modules/robotstatuschecker { };
 
   robotsuite = callPackage ../development/python-modules/robotsuite { };
@@ -14342,6 +14344,8 @@ self: super: with self; {
 
   spatial-image = callPackage ../development/python-modules/spatial-image { };
 
+  spatialgeometry = callPackage ../development/python-modules/spatialgeometry { };
+
   spatialmath-python = callPackage ../development/python-modules/spatialmath-python { };
 
   spdx = callPackage ../development/python-modules/spdx { };
@@ -14835,6 +14839,8 @@ self: super: with self; {
   switchbot-api = callPackage ../development/python-modules/switchbot-api { };
 
   swift = callPackage ../development/python-modules/swift { };
+
+  swift-sim = callPackage ../development/python-modules/swift-sim { };
 
   swisshydrodata = callPackage ../development/python-modules/swisshydrodata { };
 
