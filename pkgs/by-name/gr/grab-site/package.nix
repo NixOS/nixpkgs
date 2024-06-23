@@ -41,6 +41,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Crawler for web archiving with WARC output";
     homepage = "https://github.com/ArchiveTeam/grab-site";
+    maintainers = with maintainers; [ ivan ];
     license = licenses.mit;
   };
 }
