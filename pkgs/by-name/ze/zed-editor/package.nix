@@ -18,12 +18,17 @@
   alsa-lib,
   libxkbcommon,
   wayland,
+  libglvnd,
   xorg,
   stdenv,
   darwin,
   makeFontsConf,
   vulkan-loader,
+
+  withGLES ? false
 }:
+
+assert withGLES -> stdenv.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zed";
@@ -123,8 +128,11 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  RUSTFLAGS = if withGLES then "--cfg gles" else "";
+  gpu-lib = if withGLES then libglvnd else vulkan-loader;
+
   postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --add-rpath ${vulkan-loader}/lib $out/bin/*
+    patchelf --add-rpath ${gpu-lib}/lib $out/bin/*
     patchelf --add-rpath ${wayland}/lib $out/bin/*
   '';
 
