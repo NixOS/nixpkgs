@@ -41,6 +41,7 @@
 , python3
 , SDL2
 , shaderc
+, tracy
 , udev
 , vulkan-headers
 , vulkan-loader
@@ -80,6 +81,8 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DXRT_FEATURE_SERVICE=${if serviceSupport then "ON" else "OFF"}"
     "-DXRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH=ON"
+    "-DXRT_HAVE_TRACY=ON"
+    "-DXRT_FEATURE_TRACING=ON"
   ];
 
   buildInputs = [
@@ -117,6 +120,7 @@ stdenv.mkDerivation {
     pcre2
     SDL2
     shaderc
+    tracy
     udev
     vulkan-headers
     vulkan-loader
