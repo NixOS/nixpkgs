@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, freeglut
+, libglut
 , libGL
 , libGLU
 , libX11
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    freeglut
+    libglut
     libX11
     libXext
     libGL

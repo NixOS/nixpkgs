@@ -2,7 +2,7 @@
 , fetchFromGitLab
 , lib
 , cmake
-, freeglut
+, libglut
 , libGL
 , libGLU
 , libglvnd
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    freeglut
+    libglut
     libGL
     libGLU
     libglvnd

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libGLU, libGL, freeglut, glew, libXmu, libXext, libX11
+{lib, stdenv, fetchurl, libGLU, libGL, libglut, glew, libXmu, libXext, libX11
 , qmake, GLUT, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ glew ]
-    ++ lib.optionals stdenv.isLinux [ libGLU libGL freeglut libXmu libXext libX11 ]
+    ++ lib.optionals stdenv.isLinux [ libGLU libGL libglut libXmu libXext libX11 ]
     ++ lib.optional stdenv.isDarwin GLUT;
 
   doCheck = false;

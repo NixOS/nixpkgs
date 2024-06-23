@@ -6,7 +6,7 @@
 , SDL2_mixer
 , fontconfig
 , freealut
-, freeglut
+, libglut
 , ftgl
 , gettext
 , glpng
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     SDL2_mixer
     fontconfig
     freealut
-    freeglut
+    libglut
     ftgl
     glpng
     libGL

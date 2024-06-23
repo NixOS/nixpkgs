@@ -6,7 +6,7 @@
 , installShellFiles
 , perl
 , xorg
-, libGL
+, libGLX
 , coreutils
 , unixtools
 , targetPackages
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ] ++ lib.optionals withGL [
     xorg.libX11
     xorg.libXext
-    libGL
+    libGLX
   ];
 
   runtimeDependencies = [
