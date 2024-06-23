@@ -48,6 +48,8 @@
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
 
+  spook = callPackage ./spook {};
+
   tuya_local = callPackage ./tuya_local {};
 
   waste_collection_schedule = callPackage ./waste_collection_schedule {};
