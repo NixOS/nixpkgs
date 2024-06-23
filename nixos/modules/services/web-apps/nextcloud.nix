@@ -80,6 +80,12 @@ let
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
   };
 
+  phpCli = concatStringsSep " " ([
+    "${getExe phpPackage}"
+  ] ++ optionals (cfg.cli.memoryLimit != null) [
+    "-dmemory_limit=${cfg.cli.memoryLimit}"
+  ]);
+
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.runtimeShell}
     cd ${webroot}
@@ -89,7 +95,7 @@ let
     fi
     export NEXTCLOUD_CONFIG_DIR="${datadir}/config"
     $sudo \
-      ${phpPackage}/bin/php \
+      ${phpCli} \
       occ "$@"
   '';
 
@@ -196,6 +202,9 @@ let
 in {
 
   imports = [
+    (mkRenamedOptionModule
+      [ "services" "nextcloud" "cron" "memoryLimit" ]
+      [ "services" "nextcloud" "cli" "memoryLimit" ])
     (mkRemovedOptionModule [ "services" "nextcloud" "enableBrokenCiphersForSSE" ] ''
       This option has no effect since there's no supported Nextcloud version packaged here
       using OpenSSL for RC4 SSE.
@@ -648,7 +657,6 @@ in {
       type = types.package;
       default = occ;
       defaultText = literalMD "generated script";
-      internal = true;
       description = ''
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
@@ -800,7 +808,7 @@ in {
       };
     };
 
-    cron.memoryLimit = mkOption {
+    cli.memoryLimit = mkOption {
       type = types.nullOr types.str;
       default = null;
       example = "1G";
@@ -1023,14 +1031,8 @@ in {
           serviceConfig = {
             Type = "exec";
             User = "nextcloud";
-            ExecCondition = "${lib.getExe phpPackage} -f ${webroot}/occ status -e";
-            ExecStart = lib.concatStringsSep " " ([
-              (lib.getExe phpPackage)
-            ] ++ optional (cfg.cron.memoryLimit != null) "-dmemory_limit=${cfg.cron.memoryLimit}"
-              ++ [
-              "-f"
-              "${webroot}/cron.php"
-            ]);
+            ExecCondition = "${phpCli} -f ${webroot}/occ status -e";
+            ExecStart = "${phpCli} -f ${webroot}/cron.php";
             KillMode = "process";
           };
         };
@@ -1054,7 +1056,7 @@ in {
           serviceConfig = {
             Type = "exec";
             User = "nextcloud";
-            ExecCondition = "${lib.getExe phpPackage} -f ${webroot}/occ status -e";
+            ExecCondition = "${phpCli} -f ${webroot}/occ status -e";
           };
         };
       };
