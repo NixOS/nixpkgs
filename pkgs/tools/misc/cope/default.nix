@@ -6,7 +6,7 @@ perlPackages.buildPerlPackage rec {
 
   src = fetchFromGitHub {
     owner = "deftdawg";
-    repo = pname;
+    repo = "cope";
     rev = "ad0c1ebec5684f5ec3e8becf348414292c489175";
     sha256 = "sha256-LMAir7tUkjHtKz+KME/Raa9QHGN1g0bzr56fNxfURQY=";
   };
