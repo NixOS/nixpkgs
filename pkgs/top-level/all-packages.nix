@@ -12061,8 +12061,6 @@ with pkgs;
 
   raysession = python3Packages.callPackage ../applications/audio/raysession {};
 
-  revolt-desktop = callPackage ../applications/networking/instant-messengers/revolt-desktop { };
-
   rbw = callPackage ../tools/security/rbw { };
 
   remarshal = with python3Packages; toPythonApplication remarshal;
