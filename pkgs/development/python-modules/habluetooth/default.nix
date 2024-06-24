@@ -10,6 +10,7 @@
   cython,
   fetchFromGitHub,
   poetry-core,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "habluetooth";
-  version = "3.1.1";
+  version = "3.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HlQAYR+feu1awKFf11Q5Us4zSeHASu8OscJ8T8tlm5M=";
+    hash = "sha256-HG2G/ymSw6e03KJOB/F5ja2Cv5nD+nPgOjMHPCYNSH8=";
   };
 
   postPatch = ''
@@ -51,7 +52,10 @@ buildPythonPackage rec {
     bluetooth-data-tools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "habluetooth" ];
 
