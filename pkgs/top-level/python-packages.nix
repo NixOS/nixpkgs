@@ -5372,6 +5372,8 @@ self: super: with self; {
 
   hatch-nodejs-version = callPackage ../development/python-modules/hatch-nodejs-version { };
 
+  hatch-regex-commit = callPackage ../development/python-modules/hatch-regex-commit { };
+
   hatch-requirements-txt = callPackage ../development/python-modules/hatch-requirements-txt { };
 
   haversine = callPackage ../development/python-modules/haversine { };
@@ -10093,6 +10095,8 @@ self: super: with self; {
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
 
   pylddwrap = callPackage ../development/python-modules/pylddwrap { };
+
+  pyloadapi = callPackage ../development/python-modules/pyloadapi { };
 
   pyngo = callPackage ../development/python-modules/pyngo { };
 
