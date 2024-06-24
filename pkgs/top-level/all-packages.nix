@@ -7060,7 +7060,7 @@ with pkgs;
   cudaPackages_12_3 = callPackage ./cuda-packages.nix { cudaVersion = "12.3"; };
   cudaPackages_12_4 = callPackage ./cuda-packages.nix { cudaVersion = "12.4"; };
   cudaPackages_12_5 = callPackage ./cuda-packages.nix { cudaVersion = "12.5"; };
-  cudaPackages_12 = cudaPackages_12_5; # Latest supported by cudnn
+  cudaPackages_12 = cudaPackages_12_3; # Latest supported by cudnn
 
   cudaPackages = recurseIntoAttrs cudaPackages_12;
 
