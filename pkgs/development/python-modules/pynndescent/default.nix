@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.12";
+  version = "0.5.13";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BzYpH8u+39Xgo6KA9xpj+Osvi9lnDUwLUawbTQga33A=";
+    hash = "sha256-10JUwO4KHu7IRZfV/on+3Pd4WT7qvjLC+XQSk0qYAPs=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   installShellFiles,
   libnitrokey,
   flit-core,
@@ -71,7 +70,6 @@ buildPythonPackage {
   nativeBuildInputs = [
     flit-core
     installShellFiles
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;

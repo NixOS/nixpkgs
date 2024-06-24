@@ -3,14 +3,20 @@
   buildPythonPackage,
   callPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   babel,
   gruut-ipa,
   dateparser,
   jsonlines,
   num2words,
   python-crfsuite,
-  python,
   networkx,
+
+  # checks
   glibcLocales,
   pytestCheckHook,
 }:
@@ -36,23 +42,20 @@ in
 buildPythonPackage rec {
   pname = "gruut";
   version = "2.3.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
-    repo = pname;
+    repo = "gruut";
     rev = "refs/tags/v${version}";
     hash = "sha256-DD7gnvH9T2R6E19+exWE7Si+XEpfh0Iy5FYbycjgzgM=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "gruut_lang_en~=2.0.0" "gruut_lang_en" \
-      --replace "jsonlines~=1.2.0" "jsonlines" \
-      --replace "networkx>=2.5.0,<3.0.0" "networkx"
-  '';
+  pythonRelaxDeps = true;
 
-  propagatedBuildInputs =
+  build-system = [ setuptools ];
+
+  dependencies =
     [
       babel
       gruut-ipa
@@ -68,8 +71,8 @@ buildPythonPackage rec {
         inherit
           lang
           version
-          format
           src
+          build-system
           ;
       }
     ) langPkgs);

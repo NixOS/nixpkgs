@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   hostPlatform,
   fetchFromGitHub,
   # build dependencies
@@ -27,7 +26,7 @@
 }:
 buildPythonPackage rec {
   pname = "conda";
-  version = "24.4.0";
+  version = "24.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -35,10 +34,9 @@ buildPythonPackage rec {
     owner = "conda";
     repo = "conda";
     rev = "refs/tags/${version}";
-    hash = "sha256-LdoBlR5EFYd2mQIjOgp1MH3w6osfRfurPq+N5Y1iaFw=";
+    hash = "sha256-DbgdTaCMWf0d3MLEMGoWxN3x37tAtoW8T7mm5279yqk=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     hatchling

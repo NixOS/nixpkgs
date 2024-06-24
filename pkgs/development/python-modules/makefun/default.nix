@@ -2,6 +2,7 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -32,6 +33,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.12") [
+    # https://github.com/smarie/python-makefun/issues/102
+    "test_args_order_and_kind"
+  ];
 
   pythonImportsCheck = [ "makefun" ];
 

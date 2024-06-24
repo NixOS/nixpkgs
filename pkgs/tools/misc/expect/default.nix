@@ -10,12 +10,8 @@ tcl.mkTclDerivation rec {
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/buildroot/buildroot/c05e6aa361a4049eabd8b21eb64a34899ef83fc7/package/expect/0001-enable-cross-compilation.patch";
-      hash = "sha256-yyzE0Jjac5qaj7Svn4VpMiAqSNLYrw7VZbtFqgMVncs=";
-    })
     (substituteAll {
-      src = ./fix-cross-compilation.patch;
+      src = ./fix-build-time-run-tcl.patch;
       tcl = "${buildPackages.tcl}/bin/tclsh";
     })
     # The following patches fix compilation with clang 15+
@@ -27,8 +23,12 @@ tcl.mkTclDerivation rec {
       url = "https://sourceforge.net/p/expect/patches/_discuss/thread/b813ca9895/6759/attachment/expect-configure-c99.patch";
       hash = "sha256-PxQQ9roWgVXUoCMxkXEgu+it26ES/JuzHF6oML/nk54=";
     })
+    ./0004-enable-cross-compilation.patch
     # Include `sys/ioctl.h` and `util.h` on Darwin, which are required for `ioctl` and `openpty`.
-    ./fix-darwin-clang16.patch
+    # Include `termios.h` on FreeBSD for `openpty`
+    ./fix-darwin-bsd-clang16.patch
+    # Remove some code which causes it to link against a file that does not exist at build time on native FreeBSD
+    ./freebsd-unversioned.patch
   ];
 
   postPatch = ''

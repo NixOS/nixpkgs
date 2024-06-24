@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   setuptools-scm,
   # install requirements
   fido2,
@@ -40,7 +39,6 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 

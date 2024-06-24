@@ -6,19 +6,19 @@
   dvc-objects,
   fetchPypi,
   flatten-dict,
-  pythonRelaxDepsHook,
   s3fs,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dvc-s3";
-  version = "3.1.0";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0yD5FsinQat3cbmY5teClFS0KEGUvED2Ah/JCbTtZ/s=";
+    pname = "dvc_s3";
+    inherit version;
+    hash = "sha256-HQEqwdzkdlmYb5GBI7SJMc+bNCmrC0oi/UsCRIGFzrY=";
   };
 
   # Prevent circular dependency
@@ -31,7 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

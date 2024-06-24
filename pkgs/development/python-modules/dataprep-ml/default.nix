@@ -12,7 +12,6 @@
   pydateinfer,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   scipy,
   symlinkJoin,
   type-infer,
@@ -44,7 +43,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

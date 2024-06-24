@@ -2864,7 +2864,7 @@ with pkgs;
   x16-run = x16.run;
 
   yabause = libsForQt5.callPackage ../applications/emulators/yabause {
-    freeglut = null;
+    libglut = null;
     openal = null;
   };
 
@@ -7793,8 +7793,6 @@ with pkgs;
 
   expliot = callPackage ../tools/security/expliot { };
 
-  f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
-
   Fabric = with python3Packages; toPythonApplication fabric;
 
   fail2ban = callPackage ../tools/security/fail2ban { };
@@ -8026,9 +8024,7 @@ with pkgs;
 
   fortune = callPackage ../tools/misc/fortune { };
 
-  fox = callPackage ../development/libraries/fox {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
+  fox = callPackage ../development/libraries/fox {};
 
   fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -14657,20 +14653,6 @@ with pkgs;
 
   xvfb-run = callPackage ../tools/misc/xvfb-run {
     inherit (texFunctions) fontsConf;
-
-    # xvfb-run is used by a bunch of things to run tests
-    # and doesn't support hardware accelerated rendering
-    # so remove it from the rebuild heavy path for mesa
-    xorgserver = xorg.xorgserver.overrideAttrs(old: {
-      buildInputs = lib.filter (pkg: lib.getName pkg != "mesa") old.buildInputs;
-      configureFlags = old.configureFlags ++ [
-        "--disable-glamor"
-        "--disable-glx"
-        "--disable-dri"
-        "--disable-dri2"
-        "--disable-dri3"
-      ];
-    });
   };
 
   xvkbd = callPackage ../tools/X11/xvkbd { };
@@ -14988,6 +14970,9 @@ with pkgs;
 
   ### DEVELOPMENT / COMPILERS
 
+  temurin-bin-22 = javaPackages.compiler.temurin-bin.jdk-22;
+  temurin-jre-bin-22 = javaPackages.compiler.temurin-bin.jre-22;
+
   temurin-bin-21 = javaPackages.compiler.temurin-bin.jdk-21;
   temurin-jre-bin-21 = javaPackages.compiler.temurin-bin.jre-21;
 
@@ -15009,8 +14994,8 @@ with pkgs;
   temurin-bin-8 = javaPackages.compiler.temurin-bin.jdk-8;
   temurin-jre-bin-8 = javaPackages.compiler.temurin-bin.jre-8;
 
-  temurin-bin = temurin-bin-21;
-  temurin-jre-bin = temurin-jre-bin-21;
+  temurin-bin = temurin-bin-22;
+  temurin-jre-bin = temurin-jre-bin-22;
 
   semeru-bin-21 = javaPackages.compiler.semeru-bin.jdk-21;
   semeru-jre-bin-21 = javaPackages.compiler.semeru-bin.jre-21;
@@ -17309,11 +17294,11 @@ with pkgs;
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python2 = python27;
-  python3 = python311;
+  python3 = python312;
 
   # pythonPackages further below, but assigned here because they need to be in sync
   python2Packages = dontRecurseIntoAttrs python27Packages;
-  python3Packages = dontRecurseIntoAttrs python311Packages;
+  python3Packages = dontRecurseIntoAttrs python312Packages;
 
   pypy = pypy2;
   pypy2 = pypy27;
@@ -20042,7 +20027,7 @@ with pkgs;
 
   bicpl = callPackage ../development/libraries/science/biology/bicpl { };
 
-  bicgl = callPackage ../development/libraries/science/biology/bicgl { inherit (darwin.apple_sdk.frameworks) GLUT; };
+  bicgl = callPackage ../development/libraries/science/biology/bicgl { };
 
   # TODO(@Ericson2314): Build bionic libc from source
   bionic = if stdenv.hostPlatform.useAndroidPrebuilt
@@ -20479,7 +20464,9 @@ with pkgs;
   # TODO: Fix references and add justStaticExecutables https://github.com/NixOS/nixpkgs/issues/318013
   emanote = haskellPackages.emanote;
 
-  enchant2 = callPackage ../development/libraries/enchant/2.x.nix { };
+  enchant2 = callPackage ../development/libraries/enchant/2.x.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
   enchant = enchant2;
 
   enet = callPackage ../development/libraries/enet { };
@@ -20589,8 +20576,6 @@ with pkgs;
   flint = callPackage ../development/libraries/flint { };
 
   flint3 = callPackage ../development/libraries/flint/3.nix { };
-
-  flite = callPackage ../development/libraries/flite { };
 
   fltk13 = callPackage ../development/libraries/fltk {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa OpenGL;
@@ -21355,7 +21340,7 @@ with pkgs;
     icu74
   ;
 
-  icu = icu73;
+  icu = icu74;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
@@ -23168,26 +23153,59 @@ with pkgs;
 
   ## libGL/libGLU/Mesa stuff
 
-  # Default libGL implementation, should provide headers and
-  # libGL.so/libEGL.so/... to link agains them. Android NDK provides
-  # an OpenGL implementation, we can just use that.
-  libGL = if stdenv.hostPlatform.useAndroidPrebuilt then stdenv
-          else callPackage ../development/libraries/mesa/stubs.nix {
-            inherit (darwin.apple_sdk.frameworks) OpenGL;
-          };
+  # Default libGL implementation.
+  #
+  # Android NDK provides an OpenGL implementation, we can just use that.
+  #
+  # On macOS, we use the OpenGL framework. Packages that still need GLX
+  # specifically can pull in libGLX instead. If you have a package that
+  # should work without X11 but it can’t find the library, it may help
+  # to add the path to `NIX_CFLAGS_COMPILE`:
+  #
+  #     -L${libGL}/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries
+  #
+  # If you still can’t get it working, please don’t hesitate to ping
+  # @NixOS/darwin-maintainers to ask an expert to take a look.
+  libGL =
+    if stdenv.hostPlatform.useAndroidPrebuilt then
+      stdenv
+    else if stdenv.hostPlatform.isDarwin then
+      darwin.apple_sdk.frameworks.OpenGL
+    else
+      libglvnd;
 
-  # Default libGLU
-  libGLU = mesa_glu;
+  # On macOS, we use the OpenGL framework. Packages that use libGLX on
+  # macOS may need to depend on mesa_glu directly if this doesn’t work.
+  libGLU =
+    if stdenv.hostPlatform.isDarwin then
+      darwin.apple_sdk.frameworks.OpenGL
+    else
+      mesa_glu;
 
-  mesa = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa {
-    inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
-    inherit (darwin.apple_sdk_11_0.libs) Xplugin;
-  };
+  # libglvnd does not work (yet?) on macOS.
+  libGLX =
+    if stdenv.hostPlatform.isDarwin then
+      mesa
+    else
+      libglvnd;
+
+  # On macOS, we use the GLUT framework. Packages that use libGLX on
+  # macOS may need to depend on freeglut directly if this doesn’t work.
+  libglut =
+    if stdenv.hostPlatform.isDarwin then
+      darwin.apple_sdk.frameworks.GLUT
+    else
+      freeglut;
+
+  mesa = if stdenv.isDarwin
+    then darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/darwin.nix {
+      inherit (darwin.apple_sdk_11_0.libs) Xplugin;
+    }
+    else callPackage ../development/libraries/mesa {};
+
   mesa_i686 = pkgsi686Linux.mesa; # make it build on Hydra
 
-  mesa_glu =  callPackage ../development/libraries/mesa-glu {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-  };
+  mesa_glu = callPackage ../development/libraries/mesa-glu {};
 
   ## End libGL/libGLU/Mesa stuff
 
@@ -24840,8 +24858,6 @@ with pkgs;
   xml-security-c = callPackage ../development/libraries/xml-security-c { };
 
   xlslib = callPackage ../development/libraries/xlslib { };
-
-  xsimd = callPackage ../development/libraries/xsimd { };
 
   xtensor = callPackage ../development/libraries/xtensor { };
 
@@ -36359,11 +36375,11 @@ with pkgs;
   construoBase = lowPrio (callPackage ../games/construo {
     libGL = null;
     libGLU = null;
-    freeglut = null;
+    libglut = null;
   });
 
   construo = construoBase.override {
-    inherit libGL libGLU freeglut;
+    inherit libGL libGLU libglut;
   };
 
   crack_attack = callPackage ../games/crack-attack { };

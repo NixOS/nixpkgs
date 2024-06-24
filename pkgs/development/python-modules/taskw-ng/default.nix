@@ -8,7 +8,6 @@
   poetry-dynamic-versioning,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   taskwarrior,
 }:
@@ -37,7 +36,6 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     kitchen

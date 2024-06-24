@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , unzip
 , cmake
-, freeglut
+, libglut
 , libGLU
 , libGL
 , zlib
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.Cocoa
     darwin.apple_sdk.frameworks.GLUT
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    freeglut
+    libglut
     libGLU
     libGL
   ];

@@ -11,7 +11,6 @@
   packaging,
   poetry-core,
   pydantic,
-  pythonRelaxDepsHook,
   wrapt,
 }:
 
@@ -29,7 +28,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "packaging" ];
 

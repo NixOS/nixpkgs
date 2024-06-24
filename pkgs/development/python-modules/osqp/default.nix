@@ -9,7 +9,6 @@
   oldest-supported-numpy,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   qdldl,
   scipy,
   setuptools-scm,
@@ -33,7 +32,6 @@ buildPythonPackage rec {
     cmake
     oldest-supported-numpy
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "scipy" ];

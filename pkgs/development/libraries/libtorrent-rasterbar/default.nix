@@ -25,10 +25,13 @@ in stdenv.mkDerivation {
   buildInputs = [ boostPython openssl zlib python ncurses ]
     ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
+  patches = [
+    # provide distutils alternative for python 3.12
+    ./distutils.patch
+  ];
+
   # https://github.com/arvidn/libtorrent/issues/6865
   postPatch = ''
-    substituteInPlace cmake/Modules/GeneratePkgConfig.cmake \
-      --replace @CMAKE_INSTALL_PREFIX@/'$<'1: '$<'1:
     substituteInPlace cmake/Modules/GeneratePkgConfig/target-compile-settings.cmake.in \
       --replace 'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")' \
                 'set(_INSTALL_LIBDIR "@CMAKE_INSTALL_LIBDIR@")

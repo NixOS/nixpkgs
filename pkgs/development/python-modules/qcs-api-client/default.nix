@@ -15,7 +15,6 @@
   python-dateutil,
   pythonAtLeast,
   pythonOlder,
-  pythonRelaxDepsHook,
   respx,
   retrying,
   rfc3339,
@@ -54,7 +53,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     attrs

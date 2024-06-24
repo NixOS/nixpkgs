@@ -8,7 +8,6 @@
   pytest,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   ruff,
 }:
 
@@ -47,7 +46,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   buildInputs = [ pytest ];

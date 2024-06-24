@@ -9,7 +9,6 @@
   poetry-core,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   toml,
 }:
 
@@ -43,7 +42,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

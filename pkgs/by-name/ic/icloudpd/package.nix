@@ -20,10 +20,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
-  ];
-
   propagatedBuildInputs = with python3Packages; [
     wheel
     setuptools

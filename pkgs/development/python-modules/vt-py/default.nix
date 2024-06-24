@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
   setuptools,
 }:
@@ -35,7 +34,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [ aiohttp ];
 

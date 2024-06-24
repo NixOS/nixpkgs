@@ -8,7 +8,6 @@
   poetry-core,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   setuptools,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pinecone-client";
-  version = "4.1.0";
+  version = "4.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,12 +26,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pinecone_client";
     inherit version;
-    hash = "sha256-QgYqYo56lB0Lwku4r7Am861NJkzwbWpiej3lgyFK494=";
+    hash = "sha256-sueMKd5QwYDb/nXhXwjIfsGjpPG8ayvh8Myu4atENPo=";
   };
 
   pythonRelaxDeps = [ "urllib3" ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     setuptools

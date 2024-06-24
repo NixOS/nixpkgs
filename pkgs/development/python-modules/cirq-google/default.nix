@@ -5,7 +5,6 @@
   google-api-core,
   protobuf,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -17,7 +16,6 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/${pname}";
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

@@ -3,12 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
 
   # build-system
-  hatchling,
+  pdm-backend,
 
   # dependencies
+  fastapi-cli,
   starlette,
   pydantic,
   typing-extensions,
@@ -39,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.110.2";
+  version = "0.111.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -48,27 +48,24 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-qUh5exkXVRcKIO0t4KIOZhhpsftj3BrWaL2asf8RqUI=";
+    hash = "sha256-DQYjK1dZuL7cF6quyNkgdd/GYmWm7k6YlF7YEjObQlI=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-    pythonRelaxDepsHook
-  ];
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [
     "anyio"
-    # https://github.com/tiangolo/fastapi/pull/9636
     "starlette"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    fastapi-cli
     starlette
     pydantic
     typing-extensions
   ];
 
-  passthru.optional-dependencies.all =
+  optional-dependencies.all =
     [
       httpx
       jinja2
@@ -95,7 +92,7 @@ buildPythonPackage rec {
     python-jose
     trio
     sqlalchemy
-  ] ++ passthru.optional-dependencies.all ++ python-jose.optional-dependencies.cryptography;
+  ] ++ optional-dependencies.all ++ python-jose.optional-dependencies.cryptography;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from

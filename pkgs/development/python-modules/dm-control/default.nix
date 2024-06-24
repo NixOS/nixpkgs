@@ -6,7 +6,6 @@
   absl-py,
   mujoco,
   pyparsing,
-  pythonRelaxDepsHook,
   setuptools,
   wheel,
   dm-env,
@@ -46,7 +45,6 @@ buildPythonPackage rec {
     absl-py
     mujoco
     pyparsing
-    pythonRelaxDepsHook
     setuptools
     wheel
   ];

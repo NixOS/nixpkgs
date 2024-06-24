@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   hatchling,
   boilerpy3,
   events,
@@ -92,19 +91,18 @@
 
 buildPythonPackage rec {
   pname = "farm-haystack";
-  version = "1.25.0";
+  version = "2.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepset-ai";
     repo = "haystack";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lAXzWnHpOBVjgleFTYqlZ34hmZkcrPJ/h1kk4iVVvec=";
+    hash = "sha256-vaZ8bn36Eezf3/SnJ6ao0CvFZaHrpgbX+nM0IOqG2oo=";
   };
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [

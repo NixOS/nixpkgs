@@ -21,7 +21,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
-    pythonRelaxDepsHook
     qt6.wrapQtAppsHook
   ];
 

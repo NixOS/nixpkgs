@@ -140,7 +140,7 @@ let
       nativeLibs = [ pkgs.libGLU ];
     });
     cl-glut = super.cl-glut.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.freeglut ];
+      nativeLibs = [ pkgs.libglut ];
     });
     cl-glfw = super.cl-glfw.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.glfw ];

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , nix-update-script
 
 , autoreconfHook
@@ -43,6 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
+    # Fix static linking of `libtiff` via `pkg-config` not working
+    # because `libtiff` does not declare `Lerc` dependency.
+    # nixpkgs has `lerc` >= 4 which provides a `.pc` file.
+    # TODO: Close when https://gitlab.com/libtiff/libtiff/-/merge_requests/633 is merged and available
+    (fetchpatch {
+      name = "libtiff-4.pc-Fix-Requires.private-missing-Lerc.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/ea882c3c240c14a897b9be38d815cc1893aafa59.patch";
+      hash = "sha256-C0xA3k1sgKmGJjEnyG9UxhXqYBYShKUDQsyjhbEDJbQ=";
+    })
   ];
 
   postPatch = ''

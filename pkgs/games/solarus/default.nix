@@ -22,6 +22,10 @@ mkDerivation rec {
     openal libmodplug libvorbis
     qtbase glm ];
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGLM_ENABLE_EXPERIMENTAL")
+  ];
+
   preFixup = ''
     mkdir $lib/
     mv $out/lib $lib

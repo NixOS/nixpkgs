@@ -10,7 +10,6 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-rvtY7fsn2K2hueAsQkaPXcwxUAgE8j+GsQFF3eJKG2o=";
   };
 
-  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3Packages; [ colorama ];
 

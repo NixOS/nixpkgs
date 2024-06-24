@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   pythonOlder,
-  pythonRelaxDepsHook,
   numpy,
   wheel,
   werkzeug,
@@ -24,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.16.2";
+  version = "2.17.0";
   format = "wheel";
   disabled = pythonOlder "3.9";
 
@@ -32,10 +31,9 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-nytOfa2GZnYVwOXNBy8eqEA/wDKimfAHLW90hVd1zEU=";
+    hash = "sha256-hZpJmpsftooFiFiWRIZicQC3H8shZGhhxh0xhGpkePs=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [
     "google-auth-oauthlib"

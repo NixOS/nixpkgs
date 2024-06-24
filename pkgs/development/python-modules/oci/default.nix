@@ -8,7 +8,6 @@
   pyopenssl,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   setuptools,
 }:
@@ -33,7 +32,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

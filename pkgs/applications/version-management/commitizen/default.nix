@@ -24,12 +24,12 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "argcomplete"
     "decli"
   ];
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
     installShellFiles
   ];
 

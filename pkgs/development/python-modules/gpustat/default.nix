@@ -8,7 +8,6 @@
   psutil,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools-scm,
 }:
 
@@ -27,7 +26,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "nvidia-ml-py" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 

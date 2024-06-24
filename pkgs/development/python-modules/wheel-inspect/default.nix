@@ -7,7 +7,6 @@
   hatchling,
   headerparser,
   jsonschema,
-  pythonRelaxDepsHook,
   packaging,
   pytestCheckHook,
   pythonOlder,
@@ -42,7 +41,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

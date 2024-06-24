@@ -4,7 +4,6 @@
   pythonOlder,
   fetchFromGitHub,
   poetry-core,
-  pythonRelaxDepsHook,
   setuptools,
   wheel,
   ipykernel,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
     setuptools
     wheel
   ];

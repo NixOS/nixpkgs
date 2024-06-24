@@ -12,7 +12,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   six,
@@ -21,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.13.1";
+  version = "8.14.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,14 +29,13 @@ buildPythonPackage rec {
     owner = "untergeek";
     repo = "es_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4v9SRWVG9p4kCob4C3by2JxNqX6L3yMHpbnMYEAM7A0=";
+    hash = "sha256-CJhiSDmIlhTWV7LLWd2ZCzuj5cWXwgh0lkKJvhmaDFw=";
   };
 
   pythonRelaxDeps = true;
 
   build-system = [ hatchling ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     certifi

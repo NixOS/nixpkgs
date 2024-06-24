@@ -10,7 +10,6 @@
   pythonOlder,
   redis,
   requests,
-  pythonRelaxDepsHook,
   sphinx,
   ua-parser,
 }:
@@ -36,7 +35,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     async-timeout

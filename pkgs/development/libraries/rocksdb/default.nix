@@ -11,6 +11,8 @@
 , windows
 , enableJemalloc ? false
 , jemalloc
+, enableLiburing ? true
+, liburing
 , enableShared ? !stdenv.hostPlatform.isStatic
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
 }:
@@ -26,11 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Zifn5Gu/4h6TaEqSaWQ2mFdryeAarqbHWW3fKUGGFac=";
   };
 
+  patches = [ ./fix-findliburing.patch ];
+
   nativeBuildInputs = [ cmake ninja ];
 
   propagatedBuildInputs = [ bzip2 lz4 snappy zlib zstd ];
 
   buildInputs = lib.optional enableJemalloc jemalloc
+    ++ lib.optional enableLiburing liburing
     ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
 
   outputs = [
@@ -45,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DPORTABLE=1"
     "-DWITH_JEMALLOC=${if enableJemalloc then "1" else "0"}"
+    "-DWITH_LIBURING=${if enableLiburing then "1" else "0"}"
     "-DWITH_JNI=0"
     "-DWITH_BENCHMARK_TOOLS=0"
     "-DWITH_TESTS=1"

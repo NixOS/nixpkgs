@@ -5,7 +5,6 @@
   pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   dill,
   lightning-utilities,
   numpy,
@@ -27,7 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-sBzVTst5Tp2oZZ+Xsg3M7uAMbucL6idlpYwHvib3EaY=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "lightning-utilities" ];
 

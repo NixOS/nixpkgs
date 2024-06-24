@@ -36,14 +36,6 @@ let
       ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
 
       ./qtbase.patch.d/0014-aarch64-darwin.patch
-
-      # Fix typo that breaks build on Darwin
-      # FIXME: remove this once merged upstream
-      # See: https://invent.kde.org/qt/qt/qtbase/-/merge_requests/325
-      (fetchpatch {
-        url = "https://invent.kde.org/qt/qt/qtbase/-/commit/e84c0df50f51c61aa49b47823582b0f8de406e3d.patch";
-        hash = "sha256-d1RIY03E71aMzOOVtcIaMeariki/72QRekUne6P2D3M=";
-      })
     ] ++ [
       ./qtbase.patch.d/0003-qtbase-mkspecs.patch
       ./qtbase.patch.d/0004-qtbase-replace-libdir.patch

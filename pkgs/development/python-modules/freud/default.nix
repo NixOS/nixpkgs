@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "freud";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "freud";
-    rev = "v${version}";
-    hash = "sha256-aKh2Gub1vU/wzvWkCl8yzlIswp8CtR975USiCr6ijUI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jlscEHQ1q4oqxE06NhVWCOlPRcjDcJVrvy4h6iYrkz0=";
     fetchSubmodules = true;
   };
   # Because we prefer to not `leaveDotGit`, we need to fool upstream into

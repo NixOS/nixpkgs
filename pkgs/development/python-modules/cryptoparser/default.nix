@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "cryptoparser";
-  version = "0.12.4";
+  version = "0.12.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-y5rpc0tn5JJQr4xdRUJbsq8XT/YqqJqZr3CXjqN7k7I=";
+    hash = "sha256-t8vK7T6nz1iH81fTMEYkQv7E7EjmkTx3u4zUIybEm5E=";
   };
 
   postPatch = ''

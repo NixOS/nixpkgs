@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "3.0.6";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     owner = "spec-first";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-0EaJwxT80qLqlrxYk4H7Pf/UKq2pA/8HGL8OiqNA/2s=";
+    hash = "sha256-rngQDU9kXw/Z+Al0SCVnWN8xnphueTtZ0+xPBR5MbEM=";
   };
 
   nativeBuildInputs = [ poetry-core ];

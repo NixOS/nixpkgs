@@ -53,11 +53,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (backend == "cuda") [
     cudaPackages.cudnn
     cudaPackages.cudatoolkit
-    mesa.drivers
   ] ++ lib.optionals (backend == "tensorrt") [
       cudaPackages.cudatoolkit
       cudaPackages.tensorrt
-      mesa.drivers
   ] ++ lib.optionals (backend == "opencl") [
     opencl-headers
     ocl-icd

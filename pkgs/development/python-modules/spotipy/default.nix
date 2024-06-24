@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "spotipy";
-  version = "2.23.0";
+  version = "2.24.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Dfr+CCOdqubBb6po9gtXddQMQRByXhp8VFrUx/tm1Og=";
+    hash = "sha256-OWr4HmQghlUa8VcnDN/nQsFzlAWHG6nawfplG4ZJ7w0=";
   };
 
   propagatedBuildInputs = [

@@ -227,7 +227,7 @@ in {
       ../development/compilers/openjdk/22.nix
       ../development/compilers/zulu/22.nix
       {
-        openjdk22-bootstrap = temurin-bin.jdk-21;
+        openjdk22-bootstrap = temurin-bin.jdk-22;
         openjfx = openjfx22;
       };
 

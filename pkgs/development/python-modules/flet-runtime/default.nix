@@ -3,7 +3,6 @@
   buildPythonPackage,
   flet-client-flutter,
   poetry-core,
-  pythonRelaxDepsHook,
   flet-core,
   httpx,
   oauthlib,
@@ -26,7 +25,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "httpx" ];

@@ -4,7 +4,6 @@
   pythonOlder,
   fetchFromGitHub,
   fetchpatch,
-  pythonRelaxDepsHook,
   setuptools,
   attrs,
   boto3,
@@ -60,7 +59,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
