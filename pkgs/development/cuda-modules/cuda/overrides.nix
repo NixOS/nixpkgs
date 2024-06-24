@@ -28,19 +28,19 @@ let
     ];
 in
 # Each attribute name is the name of an existing package in the previous version
-# of the package set.
-# The value is a function (to be provided to callPackage), which yields a value
-# to be provided to overrideAttrs. This allows us to override the attributes of
-# a package without losing access to the fixed point of the package set --
-# especially useful given that some packages may depend on each other!
+  # of the package set.
+  # The value is a function (to be provided to callPackage), which yields a value
+  # to be provided to overrideAttrs. This allows us to override the attributes of
+  # a package without losing access to the fixed point of the package set --
+  # especially useful given that some packages may depend on each other!
 filterAndCreateOverrides {
   libcufile =
-    {
-      cudaOlder,
-      lib,
-      libcublas,
-      numactl,
-      rdma-core,
+    { cudaOlder
+    , lib
+    , libcublas
+    , numactl
+    , rdma-core
+    ,
     }:
     prevAttrs: {
       buildInputs = prevAttrs.buildInputs ++ [
@@ -55,12 +55,12 @@ filterAndCreateOverrides {
     };
 
   libcusolver =
-    {
-      cudaAtLeast,
-      lib,
-      libcublas,
-      libcusparse ? null,
-      libnvjitlink ? null,
+    { cudaAtLeast
+    , lib
+    , libcublas
+    , libcusparse ? null
+    , libnvjitlink ? null
+    ,
     }:
     prevAttrs: {
       buildInputs =
@@ -81,10 +81,10 @@ filterAndCreateOverrides {
     };
 
   libcusparse =
-    {
-      cudaAtLeast,
-      lib,
-      libnvjitlink ? null,
+    { cudaAtLeast
+    , lib
+    , libnvjitlink ? null
+    ,
     }:
     prevAttrs: {
       buildInputs =
@@ -153,36 +153,35 @@ filterAndCreateOverrides {
     };
 
   cuda_gdb =
-    {
-      cudaAtLeast,
-      gmp,
-      lib,
-      ncurses6,
-      python311,
-      libxcrypt,
+    { cudaAtLeast
+    , gmp
+    , lib
+    , ncurses6
+    , python311
+    , libxcrypt
+    ,
     }:
     prevAttrs: {
       buildInputs =
         prevAttrs.buildInputs
         # x86_64 only needs gmp from 12.0 and on
         ++ lib.lists.optionals (cudaAtLeast "12.0") [ gmp ];
-      
+
       nativeBuildInputs =
         prevAttrs.buildInputs
-        ++ lib.optionals (cudaAtLeast "12.5") (map lib.getLib [ 
-          ncurses6 
-          python311 
-          libxcrypt 
+        ++ lib.optionals (cudaAtLeast "12.5") (map lib.getLib [
+          ncurses6
+          python311
+          libxcrypt
         ]);
     };
 
   cuda_nvcc =
-    {
-      backendStdenv,
-      cuda_cudart,
-      lib,
-      setupCudaHook,
-      cudaAtLeast
+    { backendStdenv
+    , cuda_cudart
+    , lib
+    , setupCudaHook
+    , cudaAtLeast
     }:
     prevAttrs: {
       # Patch the nvcc.profile.
@@ -221,7 +220,7 @@ filterAndCreateOverrides {
               INCLUDES =+ "-I''${!outputBin}/nvvm/include"
               EOF
             '';
-          cuda_12_5_andAfter = 
+          cuda_12_5_andAfter =
             (prevAttrs.postPatch or "")
             + ''
               cat bin/nvcc.profile
@@ -244,9 +243,9 @@ filterAndCreateOverrides {
               EOF
             '';
         in
-          (if cudaAtLeast "12.5" then cuda_12_5_andAfter else cudaBefore_12_5);
-     
-      
+        (if cudaAtLeast "12.5" then cuda_12_5_andAfter else cudaBefore_12_5);
+
+
 
       # NOTE(@connorbaker):
       # Though it might seem odd or counter-intuitive to add the setup hook to `propagatedBuildInputs` instead of
@@ -274,13 +273,13 @@ filterAndCreateOverrides {
     { cuda_cupti }: prevAttrs: { buildInputs = prevAttrs.buildInputs ++ [ cuda_cupti.lib ]; };
 
   cuda_demo_suite =
-    {
-      freeglut,
-      libcufft,
-      libcurand,
-      libGLU,
-      libglvnd,
-      mesa,
+    { freeglut
+    , libcufft
+    , libcurand
+    , libGLU
+    , libglvnd
+    , mesa
+    ,
     }:
     prevAttrs: {
       buildInputs = prevAttrs.buildInputs ++ [
@@ -294,10 +293,10 @@ filterAndCreateOverrides {
     };
 
   nsight_compute =
-    {
-      lib,
-      qt5 ? null,
-      qt6 ? null,
+    { lib
+    , qt5 ? null
+    , qt6 ? null
+    ,
     }:
     prevAttrs:
     let
@@ -316,20 +315,20 @@ filterAndCreateOverrides {
     };
 
   nsight_systems =
-    {
-      cuda_cudart,
-      cudaOlder,
-      gst_all_1,
-      lib,
-      nss,
-      numactl,
-      pulseaudio,
-      qt5 ? null,
-      qt6 ? null,
-      rdma-core,
-      ucx,
-      wayland,
-      xorg,
+    { cuda_cudart
+    , cudaOlder
+    , gst_all_1
+    , lib
+    , nss
+    , numactl
+    , pulseaudio
+    , qt5 ? null
+    , qt6 ? null
+    , rdma-core
+    , ucx
+    , wayland
+    , xorg
+    ,
     }:
     prevAttrs:
     let
@@ -394,7 +393,7 @@ filterAndCreateOverrides {
     };
 
   nvidia_driver =
-    { }:
+    {}:
     prevAttrs: {
       brokenConditions = prevAttrs.brokenConditions // {
         "Package is not supported; use drivers from linuxPackages" = true;

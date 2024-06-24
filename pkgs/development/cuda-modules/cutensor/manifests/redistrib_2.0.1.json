@@ -1,35 +1,35 @@
 {
-    "release_date": "2024-02-08",
-    "release_label": "2.0.1",
-    "release_product": "cutensor",
-    "libcutensor": {
-        "name": "NVIDIA cuTENSOR",
-        "license": "cuTensor",
-        "license_path": "libcutensor/LICENSE.txt",
-        "version": "2.0.1.2",
-        "linux-x86_64": {
-            "relative_path": "libcutensor/linux-x86_64/libcutensor-linux-x86_64-2.0.1.2-archive.tar.xz",
-            "sha256": "ededa12ca622baad706ea0a500a358ea51146535466afabd96e558265dc586a2",
-            "md5": "65c9a27d85530750e338f30b2d4ecc12",
-            "size": "524522896"
-        },
-        "linux-ppc64le": {
-            "relative_path": "libcutensor/linux-ppc64le/libcutensor-linux-ppc64le-2.0.1.2-archive.tar.xz",
-            "sha256": "7176083a4dad44cb0176771be6efb3775748ad30a39292bf7b4584510f1dd811",
-            "md5": "05277a6ccf012efcaefd57dc90ab1c8b",
-            "size": "521663772"
-        },
-        "linux-sbsa": {
-            "relative_path": "libcutensor/linux-sbsa/libcutensor-linux-sbsa-2.0.1.2-archive.tar.xz",
-            "sha256": "4214a0f7b44747c738f2b643be06b2b24826bd1bae6af27f29f3c6dec131bdeb",
-            "md5": "bc3910b997cfa6c1ae4613ffedd8cef5",
-            "size": "518923592"
-        },
-        "windows-x86_64": {
-            "relative_path": "libcutensor/windows-x86_64/libcutensor-windows-x86_64-2.0.1.2-archive.zip",
-            "sha256": "6ba9e03ee76dd0a5ace281ce703baf1175e0884b535924c3af88206d8951e33b",
-            "md5": "386b32335db602a71b502a21a093a3a1",
-            "size": "873664751"
-        }
-    }
-}
+  "release_date": "2024-02-08",
+  "release_label": "2.0.1",
+  "release_product": "cutensor",
+  "libcutensor": {
+  "name": "NVIDIA cuTENSOR",
+  "license": "cuTensor",
+  "license_path": "libcutensor/LICENSE.txt",
+  "version": "2.0.1.2",
+  "linux-x86_64": {
+  "relative_path": "libcutensor/linux-x86_64/libcutensor-linux-x86_64-2.0.1.2-archive.tar.xz",
+  "sha256": "ededa12ca622baad706ea0a500a358ea51146535466afabd96e558265dc586a2",
+  "md5": "65c9a27d85530750e338f30b2d4ecc12",
+  "size": "524522896"
+  },
+  "linux-ppc64le": {
+  "relative_path": "libcutensor/linux-ppc64le/libcutensor-linux-ppc64le-2.0.1.2-archive.tar.xz",
+  "sha256": "7176083a4dad44cb0176771be6efb3775748ad30a39292bf7b4584510f1dd811",
+  "md5": "05277a6ccf012efcaefd57dc90ab1c8b",
+  "size": "521663772"
+  },
+  "linux-sbsa": {
+  "relative_path": "libcutensor/linux-sbsa/libcutensor-linux-sbsa-2.0.1.2-archive.tar.xz",
+  "sha256": "4214a0f7b44747c738f2b643be06b2b24826bd1bae6af27f29f3c6dec131bdeb",
+  "md5": "bc3910b997cfa6c1ae4613ffedd8cef5",
+  "size": "518923592"
+  },
+  "windows-x86_64": {
+  "relative_path": "libcutensor/windows-x86_64/libcutensor-windows-x86_64-2.0.1.2-archive.zip",
+  "sha256": "6ba9e03ee76dd0a5ace281ce703baf1175e0884b535924c3af88206d8951e33b",
+  "md5": "386b32335db602a71b502a21a093a3a1",
+  "size": "873664751"
+  }
+  }
+  }
