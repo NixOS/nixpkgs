@@ -14,6 +14,7 @@
 , itstool
 , poppler
 , gnome
+, darwin
 , djvulibre
 , libspectre
 , libarchive
@@ -96,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     libgxps
   ] ++ lib.optionals supportNautilus [
     gnome.nautilus
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
   ];
 
   mesonFlags = [
@@ -117,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
       # https://gitlab.gnome.org/GNOME/Incubator/papers/-/issues/176
       --prefix PATH : "$out/bin"
     )
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath "$out/lib" "$out/bin/papers"
   '';
 
   postFixup = ''
