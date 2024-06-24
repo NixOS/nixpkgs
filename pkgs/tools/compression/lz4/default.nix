@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ bsd2 gpl2Plus ];
     platforms = platforms.all;
     mainProgram = "lz4";
+    maintainers = [ maintainers.tobim ];
   };
 })
