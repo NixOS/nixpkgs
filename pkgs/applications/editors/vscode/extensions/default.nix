@@ -754,6 +754,23 @@ let
         };
       };
 
+      bradgashler.htmltagwrap = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "bradgashler";
+          name = "htmltagwrap";
+          version = "1.0.0";
+          hash = "sha256-WOMfwxyeDLoSwF0xz9tbntDVrUWycJ4bW0rZjfLSzgM=";
+        };
+        meta = {
+          changelog = "https://github.com/bgashler1/vscode-htmltagwrap/blob/master/CHANGELOG.md";
+          description = "VSCode extension for wrapping a text selection in HTML tags";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=bradgashler.htmltagwrap";
+          homepage = "https://github.com/bgashler1/vscode-htmltagwrap";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.superherointj ];
+        };
+      };
+
       bradlc.vscode-tailwindcss = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-tailwindcss";
