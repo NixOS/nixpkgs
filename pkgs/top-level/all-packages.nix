@@ -740,14 +740,6 @@ with pkgs;
 
   protoc-gen-connect-go = callPackage ../development/tools/protoc-gen-connect-go { };
 
-  protoc-gen-prost = callPackage ../development/tools/protoc-gen-prost { };
-
-  protoc-gen-prost-crate = callPackage ../development/tools/protoc-gen-prost-crate { };
-
-  protoc-gen-prost-serde = callPackage ../development/tools/protoc-gen-prost-serde { };
-
-  protoc-gen-tonic = callPackage ../development/tools/protoc-gen-tonic { };
-
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
@@ -39471,14 +39463,9 @@ with pkgs;
 
   dnadd = callPackage ../tools/nix/dnadd { };
 
-  nix-eval-jobs = if stdenv.isDarwin then
-    callPackage ../tools/package-management/nix-eval-jobs/2.19.nix {
-      nix = nixVersions.nix_2_19;
-    }
-  else
-    callPackage ../tools/package-management/nix-eval-jobs {
-      nix = nixVersions.nix_2_22;
-    };
+  nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
+    nix = nixVersions.nix_2_22;
+  };
 
   nix-doc = callPackage ../tools/package-management/nix-doc { };
 

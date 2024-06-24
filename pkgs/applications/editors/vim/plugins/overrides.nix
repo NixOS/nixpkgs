@@ -7,6 +7,7 @@
 , fetchFromSourcehut
 , fetchpatch
 , fetchurl
+, neovimUtils
 , substituteAll
 , # Language dependencies
   fetchYarnDeps
@@ -1285,6 +1286,10 @@
       (nvim-treesitter.withPlugins (p: [ p.http p.json ]))
     ];
   };
+
+  rocks-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "rocks-nvim"; };
+
+  rocks-config-nvim = neovimUtils.buildNeovimPlugin { luaAttr = "rocks-config-nvim"; };
 
   roslyn-nvim = super.roslyn-nvim.overrideAttrs {
     dependencies = with self; [ nvim-lspconfig ];

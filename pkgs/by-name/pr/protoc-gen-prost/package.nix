@@ -1,19 +1,22 @@
-{ fetchCrate
-, lib
-, rustPlatform
-, protobuf
+{
+  fetchCrate,
+  lib,
+  rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "protoc-gen-prost";
-  version = "0.2.3";
+  version = "0.3.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-QTt5mSUe41r2fxrgWj1l6fHC/utMVIgMi2ySsdGyl/Y=";
+    hash = "sha256-ma9sdt3/uq06BMELwsNadMkiEfstQhA4DAQEPdizZJM=";
   };
 
-  cargoSha256 = "sha256-ghXcyxG9zqUOFKGvUza29OgC3XiEtesqsAsfI/lFT08=";
+  cargoHash = "sha256-pJDrwX5uDIrycxtmbds8l4wadZE0RdgmNpMwVkUGJDs=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Protocol Buffers compiler plugin powered by Prost";
@@ -21,6 +24,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/neoeinstein/protoc-gen-prost";
     changelog = "https://github.com/neoeinstein/protoc-gen-prost/blob/main/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ felschr sitaaax ];
+    maintainers = with maintainers; [
+      felschr
+      sitaaax
+    ];
   };
 }
