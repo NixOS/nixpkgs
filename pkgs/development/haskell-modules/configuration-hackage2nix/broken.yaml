@@ -224,7 +224,6 @@ broken-packages:
   - archnews # failure in job https://hydra.nixos.org/build/233192480 at 2023-09-02
   - arena # failure in job https://hydra.nixos.org/build/233252500 at 2023-09-02
   - argo # failure in job https://hydra.nixos.org/build/233216252 at 2023-09-02
-  - argon2 # failure in job https://hydra.nixos.org/build/233207704 at 2023-09-02
   - argparser # failure in job https://hydra.nixos.org/build/233222416 at 2023-09-02
   - arguedit # failure in job https://hydra.nixos.org/build/233211367 at 2023-09-02
   - arion # failure in job https://hydra.nixos.org/build/233254120 at 2023-09-02

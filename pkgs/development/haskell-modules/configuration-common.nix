@@ -3140,4 +3140,10 @@ self: super: {
     hash = "sha256-tFOWpjGmZANC7H82QapZ36raaNWuZ6F3BgjxnfTXpMs=";
   }) super.proto3-wire;
 
+  argon2 = appendPatch (fetchpatch {
+    # https://github.com/haskell-hvr/argon2/pull/20
+    url = "https://github.com/haskell-hvr/argon2/commit/f7cc92f18e233e6b1dabf1798dd099e17b6a81a1.patch";
+    hash = "sha256-JxraFWzErJT4EhELa3PWBGHaLT9OLgEPNSnxwpdpHd0=";
+  }) (doJailbreak super.argon2); # Unmaintained
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
