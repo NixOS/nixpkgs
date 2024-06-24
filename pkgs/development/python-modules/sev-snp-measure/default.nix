@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "sev-snp-measure";
-  version = "0.0.9";
+  version = "0.0.11";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "virtee";
     repo = "sev-snp-measure";
-    rev = "v${version}";
-    hash = "sha256-efW4DMple26S3Jizc7yAvdPjVivyMJq4fEdkuToamGc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-M+d9uIAQvEmEsdhhjlwHbhB2RhlaGjphN4ov2ipzCFY=";
   };
 
   nativeBuildInputs = [
