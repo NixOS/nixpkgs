@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Conntrack top like tool";
+    mainProgram = "iptstate";
     homepage = "https://github.com/jaymzh/iptstate";
     platforms = platforms.linux;
     maintainers = with maintainers; [ trevorj ];

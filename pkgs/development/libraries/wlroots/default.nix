@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -98,7 +97,7 @@ let
       passthru.tests.tinywl = nixosTests.tinywl;
 
       meta = {
-        description = "A modular Wayland compositor library";
+        description = "Modular Wayland compositor library";
         longDescription = ''
           Pluggable, composable, unopinionated modules for building a Wayland
           compositor; or about 50,000 lines of code you were going to write anyway.
@@ -113,14 +112,6 @@ let
 
 in
 rec {
-  wlroots_0_15 = generic {
-    version = "0.15.1";
-    hash = "sha256-MFR38UuB/wW7J9ODDUOfgTzKLse0SSMIRYTpEaEdRwM=";
-    extraBuildInputs = [
-      ffmpeg_4
-    ];
-  };
-
   wlroots_0_16 = generic {
     version = "0.16.2";
     hash = "sha256-JeDDYinio14BOl6CbzAPnJDOnrk4vgGNMN++rcy2ItQ=";
@@ -134,11 +125,13 @@ rec {
   };
 
   wlroots_0_17 = generic {
-    version = "0.17.1";
-    hash = "sha256-Z0gWM7AQqJOSr2maUtjdgk/MF6pyeyFMMTaivgt+RMI=";
+    version = "0.17.3";
+    hash = "sha256-jth6BKci3sVDC86o+gSHKyDWnibVcNmipm7nn0S6LTg=";
+    extraNativeBuildInputs = [
+      hwdata
+    ];
     extraBuildInputs = [
       ffmpeg
-      hwdata
       libliftoff
       libdisplay-info
     ];

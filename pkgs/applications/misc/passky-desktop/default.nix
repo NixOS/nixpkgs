@@ -1,24 +1,30 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, electron_22
+, electron_29
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 }:
 
+let
+  electron = electron_29;
+in
 stdenv.mkDerivation rec {
   pname = "passky-desktop";
-  version = "8.1.1";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "Rabbit-Company";
     repo = "Passky-Desktop";
     rev = "refs/tags/v${version}";
-    sha256 = "1ma8s1bngjdzclcc4m5pcmavk38sidaskmz7dgfnv84y35si18dr";
+    sha256 = "sha256-QQ0+qIkDPNCHeWmcF6FkbDrrt/r3fIkNi0dv6XlV1rc=";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
     done
 
     mkdir "$out/share/applications"
-    makeWrapper ${electron_22}/bin/electron "$out/bin/passky" \
+    makeWrapper ${electron}/bin/electron "$out/bin/passky" \
       --add-flags "$out/share/passky/electron/" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
@@ -45,12 +51,13 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (
       makeDesktopItem {
-        name = "Passky";
+        name = "passky";
         type = "Application";
-        desktopName = "passky";
+        desktopName = "Passky";
         comment = "Simple, modern, open source and secure password manager.";
         icon = "passky";
         exec = "passky %U";
+        terminal = false;
         categories = [ "Utility" ];
         startupWMClass = "Passky";
       }
@@ -58,7 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A simple, modern, lightweight, open source and secure password manager";
+    description = "Simple, modern, lightweight, open source and secure password manager";
     homepage = "https://passky.org";
     downloadPage = "https://github.com/Rabbit-Company/Passky-Desktop/releases";
     changelog = "https://github.com/Rabbit-Company/Passky-Desktop/releases/tag/v${version}";

@@ -198,13 +198,16 @@ in ''
      )
 
      set +e
-     EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
-     EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK_ARGS=$(sed -n "s/^cargo:rustc-link-arg=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK_ARGS_BINS=$(sed -n "s/^cargo:rustc-link-arg-bins=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK_ARGS_LIB=$(sed -n "s/^cargo:rustc-link-arg-lib=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK_LIBS=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
-     EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
+     # We want to support the new prefix invocation syntax which uses two colons
+     # See https://doc.rust-lang.org/cargo/reference/build-scripts.html#outputs-of-the-build-script
+
+     EXTRA_BUILD=$(sed -n "s/^cargo::\{0,1\}rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
+     EXTRA_FEATURES=$(sed -n "s/^cargo::\{0,1\}rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS=$(sed -n "s/^cargo::\{0,1\}rustc-link-arg=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS_BINS=$(sed -n "s/^cargo::\{0,1\}rustc-link-arg-bins=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_ARGS_LIB=$(sed -n "s/^cargo::\{0,1\}rustc-link-arg-lib=\(.*\)/-C link-arg=\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_LIBS=$(sed -n "s/^cargo::\{0,1\}rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+     EXTRA_LINK_SEARCH=$(sed -n "s/^cargo::\{0,1\}rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
 
      # We want to read part of every line that has cargo:rustc-env= prefix and
      # export it as environment variables. This turns out tricky if the lines
@@ -217,14 +220,15 @@ in ''
      #
      _OLDIFS="$IFS"
      IFS=$'\n'
-     for env in $(sed -n "s/^cargo:rustc-env=\(.*\)/\1/p" target/build/${crateName}.opt); do
+     for env in $(sed -n "s/^cargo::\{0,1\}rustc-env=\(.*\)/\1/p" target/build/${crateName}.opt); do
        export "$env"
      done
      IFS="$_OLDIFS"
 
      CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/" -e "s/-/_/g")
-     grep -P "^cargo:(?!(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
-       | awk -F= "/^cargo:/ { sub(/^cargo:/, \"\", \$1); gsub(/-/, \"_\", \$1); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$1) \"=\" \$2 }" > target/env
+     grep -P "^cargo:(?!:?(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
+       | awk -F= "/^cargo::metadata=/ {  gsub(/-/, \"_\", \$2); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$2) \"=\" \"\\\"\"\$3\"\\\"\"; next }
+                  /^cargo:/ { sub(/^cargo::?/, \"\", \$1); gsub(/-/, \"_\", \$1); print \"export \" toupper(\"DEP_$(echo $CRATENAME)_\" \$1) \"=\" \"\\\"\"\$2\"\\\"\"; next }" > target/env
      set -e
   fi
   runHook postConfigure

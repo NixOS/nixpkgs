@@ -26,13 +26,13 @@ assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "videolan";
     repo = pname;
     rev = version;
-    hash = "sha256-c7Dur+0HpteI7KkR9oo3WynoH/FCRaBwZA7bJmPDJp8=";
+    hash = "sha256-PBFQrGGP7hKNMuwkl7q/7/C7v41xqdOYW+pJ70fI4Uo=";
   };
 
   outputs = [ "out" "dev" ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A cross-platform AV1 decoder focused on speed and correctness";
+    description = "Cross-platform AV1 decoder focused on speed and correctness";
     longDescription = ''
       The goal of this project is to provide a decoder for most platforms, and
       achieve the highest speed possible to overcome the temporary lack of AV1

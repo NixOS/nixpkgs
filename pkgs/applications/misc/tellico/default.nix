@@ -61,6 +61,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Collection management software, free and simple";
+    mainProgram = "tellico";
     homepage = "https://tellico-project.org/";
     license = with licenses; [ gpl2Only gpl3Only lgpl2Only ];
     maintainers = with maintainers; [ numkem ];

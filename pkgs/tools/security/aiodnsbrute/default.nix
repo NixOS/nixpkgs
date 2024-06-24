@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "DNS brute force utility";
+    mainProgram = "aiodnsbrute";
     homepage = "https://github.com/blark/aiodnsbrute";
     changelog = "https://github.com/blark/aiodnsbrute/releases/tag/v${version}";
     license = with licenses; [ gpl3Only ];

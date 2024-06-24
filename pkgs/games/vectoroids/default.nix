@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.newbreedsoftware.com/vectoroids/";
     description = "Clone of the classic arcade game Asteroids by Atari";
+    mainProgram = "vectoroids";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

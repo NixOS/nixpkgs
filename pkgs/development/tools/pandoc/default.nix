@@ -6,15 +6,6 @@ let
 
 in
   (haskell.lib.compose.overrideCabal (drv: {
-    # pandoc-cli's pandoc executable report the libraries version via --version, match that,
-    inherit (static.scope.pandoc) version;
-    # but prevent haskellPackages.mkDerivation from recomputing the src tarball based on that.
-    inherit (static) src;
-    # Make it possible to recover the cli version if necessary.
-    passthru = drv.passthru or {} // {
-      cliVersion = static.version;
-    };
-
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
     buildDepends = drv.buildDepends or [] ++ [haskellPackages.file-embed];
     buildTools = (drv.buildTools or []) ++ [
@@ -37,7 +28,7 @@ in
         -t ${haskellPackages.warp} \
         $out/bin/pandoc
       remove-references-to \
-        -t ${haskellPackages.pandoc_3_1_11} \
+        -t ${haskellPackages.pandoc} \
         $out/bin/pandoc
     '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
       mkdir -p $out/share/bash-completion/completions
@@ -53,5 +44,5 @@ in
     # lead to a transitive runtime dependency on the whole GHC distribution.
     # This should ideally be fixed in haskellPackages (or even Cabal),
     # but a minimal pandoc is important enough to patch it manually.
-    disallowedReferences = [ haskellPackages.pandoc-types haskellPackages.warp haskellPackages.pandoc_3_1_11 ];
+    disallowedReferences = [ haskellPackages.pandoc-types haskellPackages.warp haskellPackages.pandoc ];
   })

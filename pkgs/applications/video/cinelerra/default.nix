@@ -44,13 +44,13 @@
 
 stdenv.mkDerivation {
   pname = "cinelerra-cv";
-  version = "unstable-2023-01-29";
+  version = "2.3-unstable-2024-03-20";
 
   src = fetchFromGitHub {
     owner = "cinelerra-cv-team";
     repo = "cinelerra-cv";
-    rev = "bb00ac6b70fcf3cf419348b56f9b264bc01c1a89";
-    sha256 = "11965kb3d7xcvlcf8p7jlzk9swk5i78x7wja4s3043wlzmqmwv0q";
+    rev = "18a693425f78f7c4c68b5a342efce3e8db2a30dc";
+    hash = "sha256-+47Xa63GoKiQzEXbxmKUwJLDIFUnzc/FfxRPXCCxzpE=";
   };
 
   preConfigure = ''
@@ -107,7 +107,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Professional video editing and compositing environment (community version)";
     homepage = "http://cinelerra-cv.wikidot.com/";
+    mainProgram = "cinelerracv";
     maintainers = with maintainers; [ marcweber ];
     license = licenses.gpl2Only;
+    # https://github.com/cinelerra-cv-team/cinelerra-cv/issues/3
+    platforms = [ "x86_64-linux" ];
   };
 }

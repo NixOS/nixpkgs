@@ -95,6 +95,9 @@ mkDerivation {
     "--prefix PATH : ${placeholder "out"}/bin"
   ] ++ lib.optional withSage "--prefix PATH : ${sage-with-env}/bin";
 
+  # Causes failures on Hydra and ofborg from some reason
+  enableParallelBuilding = false;
+
   meta = with lib; {
     description = "Front end to powerful mathematics and statistics packages";
     homepage = "https://cantor.kde.org/";

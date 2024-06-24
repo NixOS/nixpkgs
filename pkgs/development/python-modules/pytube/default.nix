@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,13 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-Nvs/YlOjk/P5nd1kpUnCM2n6yiEaqZP830UQI0Ug1rk=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    "test_streaming"
-  ];
+  disabledTests = [ "test_streaming" ];
 
   disabledTestPaths = [
     "tests/test_extract.py"
@@ -39,6 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python 3 library for downloading YouTube Videos";
+    mainProgram = "pytube";
     homepage = "https://github.com/nficano/pytube";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

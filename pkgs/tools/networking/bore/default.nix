@@ -45,5 +45,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://crates.io/crates/bore";
     license = licenses.isc;
     maintainers = [ maintainers.delan ];
+    mainProgram = "bore";
+    broken = stdenv.isDarwin; # bindgen fails on: "in6_addr_union_(...)" is not a valid Ident
   };
 }

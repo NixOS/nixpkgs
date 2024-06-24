@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/azlux/botamusique";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = [ ];
     mainProgram = "botamusique";
   };
 }

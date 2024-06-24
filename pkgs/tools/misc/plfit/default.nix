@@ -7,16 +7,22 @@
 , llvmPackages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plfit";
-  version = "0.9.4";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "ntamas";
     repo = "plfit";
-    rev = version;
-    hash = "sha256-hnmP/56P2anR0S8zQyQqN1lbge5GgK+P8Lx8bRkwSxA=";
+    rev = finalAttrs.version;
+    hash = "sha256-XRl6poEdgPNorFideQmEJHCU+phs4rIhMYa8iAOtL1A=";
   };
+
+  postPatch = lib.optionalString (python != null) ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail ' ''${Python3_SITEARCH}' ' ${placeholder "out"}/${python.sitePackages}' \
+      --replace-fail ' ''${Python3_SITELIB}' ' ${placeholder "out"}/${python.sitePackages}'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -35,11 +41,13 @@ stdenv.mkDerivation rec {
     llvmPackages.openmp
   ];
 
+  doCheck = true;
+
   meta = with lib; {
     description = "Fitting power-law distributions to empirical data";
     homepage = "https://github.com/ntamas/plfit";
-    changelog = "https://github.com/ntamas/plfit/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ntamas/plfit/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
   };
-}
+})

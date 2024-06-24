@@ -34,8 +34,7 @@ targetHost=
 remoteSudo=
 verboseScript=
 noFlake=
-# comma separated list of vars to preserve when using sudo
-preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
+installBootloader=
 json=
 
 # log the given argument to stderr
@@ -51,16 +50,20 @@ while [ "$#" -gt 0 ]; do
         ;;
       switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
         if [ "$i" = dry-run ]; then i=dry-build; fi
+        if [ "$i" = list-generations ]; then
+            buildNix=
+            fast=1
+        fi
         # exactly one action mandatory, bail out if multiple are given
         if [ -n "$action" ]; then showSyntax; fi
         action="$i"
         ;;
       --install-grub)
         log "$0: --install-grub deprecated, use --install-bootloader instead"
-        export NIXOS_INSTALL_BOOTLOADER=1
+        installBootloader=1
         ;;
       --install-bootloader)
-        export NIXOS_INSTALL_BOOTLOADER=1
+        installBootloader=1
         ;;
       --no-build-nix)
         buildNix=
@@ -157,8 +160,6 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
-sudoCommand=(sudo --preserve-env="$preservedSudoVars" --)
-
 if [[ -n "$SUDO_USER" ]]; then
     useSudo=1
 fi
@@ -179,7 +180,7 @@ runCmd() {
 buildHostCmd() {
     local c
     if [[ "${useSudo:-x}" = 1 ]]; then
-        c=("${sudoCommand[@]}")
+        c=("sudo")
     else
         c=()
     fi
@@ -196,7 +197,7 @@ buildHostCmd() {
 targetHostCmd() {
     local c
     if [[ "${useSudo:-x}" = 1 ]]; then
-        c=("${sudoCommand[@]}")
+        c=("sudo")
     else
         c=()
     fi
@@ -390,7 +391,7 @@ if [[ -n $flake ]]; then
        flakeAttr="${BASH_REMATCH[2]}"
     fi
     if [[ -z $flakeAttr ]]; then
-        read -r hostname < /proc/sys/kernel/hostname
+        hostname="$(targetHostCmd cat /proc/sys/kernel/hostname)"
         if [[ -z $hostname ]]; then
             hostname=default
         fi
@@ -562,11 +563,16 @@ if [ "$action" = repl ]; then
         blue="$(echo -e '\033[34;1m')"
         attention="$(echo -e '\033[35;1m')"
         reset="$(echo -e '\033[0m')"
+        if [[ -e $flake ]]; then
+            flakePath=$(realpath "$flake")
+        else
+            flakePath=$flake
+        fi
         # This nix repl invocation is impure, because usually the flakeref is.
         # For a solution that preserves the motd and custom scope, we need
         # something like https://github.com/NixOS/nix/issues/8679.
         exec nix repl --impure --expr "
-          let flake = builtins.getFlake ''$flake'';
+          let flake = builtins.getFlake ''$flakePath'';
               configuration = flake.$flakeAttr;
               motd = ''
                 $d{$q\n$q}
@@ -756,10 +762,10 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     cmd=(
         "systemd-run"
         "-E" "LOCALE_ARCHIVE" # Will be set to new value early in switch-to-configuration script, but interpreter starts out with old value
-        "-E" "NIXOS_INSTALL_BOOTLOADER"
+        "-E" "NIXOS_INSTALL_BOOTLOADER=$installBootloader"
         "--collect"
         "--no-ask-password"
-        "--pty"
+        "--pipe"
         "--quiet"
         "--same-dir"
         "--service-type=exec"
@@ -774,14 +780,14 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     # may be dangerous in remote access (e.g. SSH).
     if [[ -n "$NIXOS_SWITCH_USE_DIRTY_ENV" ]]; then
         log "warning: skipping systemd-run since NIXOS_SWITCH_USE_DIRTY_ENV is set. This environment variable will be ignored in the future"
-        cmd=()
+        cmd=("env" "NIXOS_INSTALL_BOOTLOADER=$installBootloader")
     elif ! targetHostSudoCmd "${cmd[@]}" true; then
         logVerbose "Skipping systemd-run to switch configuration since it is not working in target host."
         cmd=(
             "env"
             "-i"
             "LOCALE_ARCHIVE=$LOCALE_ARCHIVE"
-            "NIXOS_INSTALL_BOOTLOADER=$NIXOS_INSTALL_BOOTLOADER"
+            "NIXOS_INSTALL_BOOTLOADER=$installBootloader"
         )
     else
         logVerbose "Using systemd-run to switch configuration."
@@ -791,7 +797,13 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
     else
         cmd+=("$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration")
 
-        if [[ ! -f "${cmd[-1]}" ]]; then
+        if [ -z "$targetHost" ]; then
+            specialisationExists=$(test -f "${cmd[-1]}")
+        else
+            specialisationExists=$(targetHostCmd test -f "${cmd[-1]}")
+        fi
+
+        if ! $specialisationExists; then
             log "error: specialisation not found: $specialisation"
             exit 1
         fi

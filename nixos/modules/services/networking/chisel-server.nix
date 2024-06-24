@@ -8,42 +8,42 @@ let
 in {
   options = {
     services.chisel-server = {
-      enable = mkEnableOption (mdDoc "Chisel Tunnel Server");
+      enable = mkEnableOption "Chisel Tunnel Server";
       host = mkOption {
-        description = mdDoc "Address to listen on, falls back to 0.0.0.0";
+        description = "Address to listen on, falls back to 0.0.0.0";
         type = with types; nullOr str;
         default = null;
         example = "[::1]";
       };
       port = mkOption {
-        description = mdDoc "Port to listen on, falls back to 8080";
+        description = "Port to listen on, falls back to 8080";
         type = with types; nullOr port;
         default = null;
       };
       authfile = mkOption {
-        description = mdDoc "Path to auth.json file";
+        description = "Path to auth.json file";
         type = with types; nullOr path;
         default = null;
       };
       keepalive  = mkOption {
-        description = mdDoc "Keepalive interval, falls back to 25s";
+        description = "Keepalive interval, falls back to 25s";
         type = with types; nullOr str;
         default = null;
         example = "5s";
       };
       backend = mkOption {
-        description = mdDoc "HTTP server to proxy normal requests to";
+        description = "HTTP server to proxy normal requests to";
         type = with types; nullOr str;
         default = null;
         example = "http://127.0.0.1:8888";
       };
       socks5 = mkOption {
-        description = mdDoc "Allow clients access to internal SOCKS5 proxy";
+        description = "Allow clients access to internal SOCKS5 proxy";
         type = types.bool;
         default = false;
       };
       reverse = mkOption {
-        description = mdDoc "Allow clients reverse port forwarding";
+        description = "Allow clients reverse port forwarding";
         type = types.bool;
         default = false;
       };

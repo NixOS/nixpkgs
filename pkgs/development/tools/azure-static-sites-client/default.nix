@@ -21,14 +21,14 @@ let
   };
   sources = {
     "x86_64-linux" = fetchBinary "linux-x64";
-    "x86_64-darwin" = fetchBinary "macOS";
+    "x86_64-darwin" = fetchBinary "osx-x64";
   };
 in
 stdenv.mkDerivation {
   pname = "StaticSitesClient-${versionFlavor}";
   version = flavor.buildId;
 
-  src = sources.${stdenv.hostPlatform.system} or (throw "Unsupported platform");
+  src = sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook

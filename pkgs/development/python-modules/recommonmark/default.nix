@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, commonmark
-, docutils
-, sphinx
-, isPy3k
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  commonmark,
+  docutils,
+  sphinx,
+  isPy3k,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
-  propagatedBuildInputs = [ commonmark docutils sphinx ];
+  propagatedBuildInputs = [
+    commonmark
+    docutils
+    sphinx
+  ];
 
   dontUseSetuptoolsCheck = true;
 
@@ -35,9 +40,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "recommonmark" ];
 
   meta = {
-    description = "A docutils-compatibility bridge to CommonMark";
+    description = "Docutils-compatibility bridge to CommonMark";
     homepage = "https://github.com/rtfd/recommonmark";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

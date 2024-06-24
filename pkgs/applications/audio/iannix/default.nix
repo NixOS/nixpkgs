@@ -21,6 +21,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical open-source sequencer";
+    mainProgram = "iannix";
     homepage = "https://www.iannix.org/";
     license = licenses.lgpl3;
     platforms = platforms.linux;

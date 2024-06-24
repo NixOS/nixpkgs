@@ -4,6 +4,7 @@
 , jupyter-sphinx
 , sphinx
 , sphinx-copybutton
+, sphinx-inline-tabs
 }:
 
 buildPythonPackage rec {
@@ -15,6 +16,7 @@ buildPythonPackage rec {
     jupyter-sphinx
     sphinx
     sphinx-copybutton
+    sphinx-inline-tabs
   ];
 
   preBuild = ''

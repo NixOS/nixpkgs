@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, requests
-, pytestCheckHook
-, mock
-, nose
-, pycrypto
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  requests,
+  pytestCheckHook,
+  mock,
+  nose,
+  pycrypto,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   pythonImportsCheck = [ "rauth" ];
 
@@ -44,11 +43,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python library for OAuth 1.0/a, 2.0, and Ofly";
+    description = "Python library for OAuth 1.0/a, 2.0, and Ofly";
     homepage = "https://github.com/litl/rauth";
     changelog = "https://github.com/litl/rauth/blob/${src.rev}/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-

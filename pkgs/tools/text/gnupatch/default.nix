@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";
+    mainProgram = "patch";
 
     longDescription =
       '' GNU Patch takes a patch file containing a difference listing

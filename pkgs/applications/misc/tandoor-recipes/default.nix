@@ -2,7 +2,6 @@
 , nixosTests
 , python3
 , fetchFromGitHub
-, fetchpatch
 }:
 let
   python = python3.override {
@@ -16,6 +15,18 @@ let
           hash = "sha256-ZnLyTHlsrXthGnaPzlV2ga/UTm5SSEHLTwC/tobiPak=";
         };
         propagatedBuildInputs = [ super.decorator super.six ];
+      });
+
+      djangorestframework = super.djangorestframework.overridePythonAttrs (oldAttrs: rec {
+        version = "3.14.0";
+        src = oldAttrs.src.override {
+          rev = version;
+          hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
+        };
+        nativeCheckInputs = with super; [
+          pytest7CheckHook
+          pytest-django
+        ];
       });
     };
   };
@@ -32,15 +43,15 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   format = "other";
 
   patches = [
-    # Allow setting MEDIA_ROOT through environment variable
-    # https://github.com/TandoorRecipes/recipes/pull/2931
-    (fetchpatch {
-      url = "https://github.com/TandoorRecipes/recipes/commit/abf981792057481f1d5b7473eb1090b3901ef8fa.patch";
-      hash = "sha256-3AFf0K/BpVwPQ2NGLUsefj6HvW7ej3szd3WaxFoqMiQ=";
-    })
+    ./pytest-xdist.patch # adapt pytest.ini the use $NIX_BUILD_CORES
   ];
 
+  postPatch = ''
+    substituteInPlace pytest.ini --subst-var NIX_BUILD_CORES
+  '';
+
   propagatedBuildInputs = with python.pkgs; [
+    aiohttp
     beautifulsoup4
     bleach
     bleach-allowlist
@@ -50,7 +61,6 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-allauth
     django-annoying
     django-auth-ldap
-    django-autocomplete-light
     django-cleanup
     django-cors-headers
     django-crispy-forms
@@ -132,15 +142,21 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   '';
 
   nativeCheckInputs = with python.pkgs; [
+    mock
     pytestCheckHook
+    pytest-asyncio
+    pytest-cov
     pytest-django
     pytest-factoryboy
+    pytest-html
+    pytest-xdist
   ];
 
   # flaky
   disabledTests = [
     "test_search_count"
     "test_url_import_regex_replace"
+    "test_delete"
   ];
 
   passthru = {
@@ -149,7 +165,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     updateScript = ./update.sh;
 
     tests = {
-      inherit (nixosTests) tandoor-recipes;
+      inherit (nixosTests) tandoor-recipes tandoor-recipes-script-name;
     };
   };
 
@@ -158,5 +174,6 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
       Application for managing recipes, planning meals, building shopping lists
       and much much more!
     '';
+    mainProgram = "tandoor-recipes";
   };
 }

@@ -6,31 +6,31 @@
 
 buildGoModule rec {
   pname = "bitmagnet";
-  version = "0.6.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "bitmagnet-io";
     repo = "bitmagnet";
     rev = "v${version}";
-    hash = "sha256-17jRktEqBCAXiddx8FnqHg3+c/03nqKHC8BQc9AhQA0=";
+    hash = "sha256-PdDXQC702mmK8wpYmi3N5iFv7Y3wbzpyF4Yq3utqX2c=";
   };
 
-  vendorHash = "sha256-YfsSz72CeHdrh5610Ilo1NYxlCT993hxWRWh0OsvEQc=";
+  vendorHash = "sha256-aauXgHPZbSiTW9utuHXzJr7GsWs/2aFiGuukA/B9BRc=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [ "-s" "-w" "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}" ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "A self-hosted BitTorrent indexer, DHT crawler, and torrent search engine";
+    description = "Self-hosted BitTorrent indexer, DHT crawler, and torrent search engine";
     longDescription = ''
       A self-hosted BitTorrent indexer, DHT crawler, content classifier and torrent search engine with web UI, GraphQL API and Servarr stack integration.
     '';
     homepage = "https://bitmagnet.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eclairevoyant viraptor ];
+    maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "bitmagnet";
   };
 }

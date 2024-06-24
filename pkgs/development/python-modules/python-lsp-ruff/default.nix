@@ -1,25 +1,26 @@
-{ lib
-, pythonOlder
-, buildPythonPackage
-, fetchPypi
-, ruff
-, cattrs
-, lsprotocol
-, python-lsp-server
-, tomli
-, pytestCheckHook
+{
+  lib,
+  pythonOlder,
+  buildPythonPackage,
+  fetchPypi,
+  ruff,
+  cattrs,
+  lsprotocol,
+  python-lsp-server,
+  tomli,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-lsp-ruff";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
-    pname = "python-lsp-ruff";
-    hash = "sha256-uvTSmoY9rVGEruxY20wOPVgR2JTBDzbn5S7ccDz3zBU=";
+    pname = "python_lsp_ruff";
+    hash = "sha256-C7OiJ7wTboq4xm6Rcz8mc9wV329/yeuZ1CZ9CZGzJ6U=";
   };
 
   postPatch = ''
@@ -35,13 +36,9 @@ buildPythonPackage rec {
     cattrs
     lsprotocol
     python-lsp-server
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/python-lsp/python-lsp-ruff";

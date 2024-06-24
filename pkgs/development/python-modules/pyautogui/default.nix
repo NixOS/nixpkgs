@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, mouseinfo
-, pygetwindow
-, pymsgbox
-, pyperclip
-, pyscreeze
-, pytweening
-, tkinter
-, xlib
-, xvfb-run
-, scrot
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mouseinfo,
+  pygetwindow,
+  pymsgbox,
+  pyperclip,
+  pyscreeze,
+  pytweening,
+  tkinter,
+  xlib,
+  xvfb-run,
+  scrot,
 }:
 buildPythonPackage rec {
   pname = "pyautogui";
@@ -24,7 +25,10 @@ buildPythonPackage rec {
     hash = "sha256-R9tcTqxUaqw63FLOGFRaO/Oz6kD7V6MPHdQ8A29NdXw=";
   };
 
-  nativeCheckInputs = [ xvfb-run scrot ];
+  nativeCheckInputs = [
+    xvfb-run
+    scrot
+  ];
   checkPhase = ''
     xvfb-run python -c 'import pyautogui'
     # The tests depend on some specific things that xvfb cant provide, like keyboard and mouse
@@ -48,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "PyAutoGUI lets Python control the mouse and keyboard, and other GUI automation tasks.";
+    description = "PyAutoGUI lets Python control the mouse and keyboard, and other GUI automation tasks";
     homepage = "https://github.com/asweigart/pyautogui";
     license = licenses.bsd3;
     maintainers = with maintainers; [ lucasew ];

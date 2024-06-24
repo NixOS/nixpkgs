@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, substituteAll
-, buildPythonPackage
-, fetchPypi
-, joblib
-, segments
-, attrs
-, dlinfo
-, typing-extensions
-, espeak-ng
-, pytestCheckHook
-, pytest-cov
+{
+  lib,
+  stdenv,
+  substituteAll,
+  buildPythonPackage,
+  fetchPypi,
+  joblib,
+  segments,
+  attrs,
+  dlinfo,
+  typing-extensions,
+  espeak-ng,
+  pytestCheckHook,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/bootphon/phonemizer";
     changelog = "https://github.com/bootphon/phonemizer/blob/v${version}/CHANGELOG.md";
     description = "Simple text to phones converter for multiple languages";
+    mainProgram = "phonemize";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
   };

@@ -7,13 +7,13 @@ let
 in
 {
   options.services.endlessh = {
-    enable = mkEnableOption (mdDoc "endlessh service");
+    enable = mkEnableOption "endlessh service";
 
     port = mkOption {
       type = types.port;
       default = 2222;
       example = 22;
-      description = mdDoc ''
+      description = ''
         Specifies on which port the endlessh daemon listens for SSH
         connections.
 
@@ -25,7 +25,7 @@ in
       type = with types; listOf str;
       default = [ ];
       example = [ "-6" "-d 9000" "-v" ];
-      description = mdDoc ''
+      description = ''
         Additional command line options to pass to the endlessh daemon.
       '';
     };
@@ -33,7 +33,7 @@ in
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to open a firewall port for the SSH listener.
       '';
     };

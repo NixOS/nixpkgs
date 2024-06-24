@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";
-  version = "2.14";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = finalAttrs.pname;
     repo = "pjproject";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-PWCeIvnBAOqbcNYPhIY7hykdvLzoD9lssSViCCPNT68=";
+    hash = "sha256-LDA3o1QMrAxcGuOi/YRoMzXmw/wFkfDs2wweZuIJ2RY=";
   };
 
   patches = [
@@ -35,10 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreFoundation Security ];
 
-  env = lib.optionalAttrs (stdenv.cc.libcxx != null) {
-    # work around https://github.com/NixOS/nixpkgs/issues/166205
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  } // lib.optionalAttrs stdenv.cc.isClang {
+  env = lib.optionalAttrs stdenv.cc.isClang {
     CXXFLAGS = "-std=c++11";
   } // lib.optionalAttrs stdenv.isDarwin {
     NIX_CFLAGS_LINK = "-headerpad_max_install_names";
@@ -118,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
+    description = "Multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = "https://pjsip.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ olynch ];

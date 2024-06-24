@@ -3,7 +3,7 @@
 , makeWrapper
 , mkDerivation
 , substituteAll
-, wrapGAppsHook
+, wrapGAppsHook3
 , wrapQtAppsHook
 
 , withGrass ? true
@@ -52,6 +52,7 @@ let
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
+        withSerialPort = true;
       };
     };
   };
@@ -77,14 +78,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.34.3";
+  version = "3.36.3";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-uf4qUalY6LxPykgUt/atHBTu+A6ITrcnfez/jwVMLvA=";
+    hash = "sha256-uPyW/zzoyyd3SXvP+h9joJEv9DjRNJSaorx1rNmAaFQ=";
   };
 
   passthru = {
@@ -94,12 +95,12 @@ in mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     wrapQtAppsHook
 
+    bison
     cmake
     flex
-    bison
     ninja
   ];
 
@@ -180,7 +181,7 @@ in mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Free and Open Source Geographic Information System";
+    description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; teams.geospatial.members ++ [ lsix ];

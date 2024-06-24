@@ -1,34 +1,36 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, exceptiongroup
-, idna
-, sniffio
+  # dependencies
+  exceptiongroup,
+  idna,
+  sniffio,
+  typing-extensions,
 
-# optionals
-, trio
+  # optionals
+  trio,
 
-# tests
-, hypothesis
-, psutil
-, pytest-mock
-, pytest-xdist
-, pytestCheckHook
-, trustme
-, uvloop
+  # tests
+  hypothesis,
+  psutil,
+  pytest-mock,
+  pytest-xdist,
+  pytestCheckHook,
+  trustme,
+  uvloop,
 }:
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.1.0";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,7 +39,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-PEDPliWJX3QypwsvJTAJhrQnJx8lWXQQSdyjN0I8L+I=";
+    hash = "sha256-y58DQiTD0ZKaBNf0cA3MFE+7F68Svrl+Idz6BZY7HWQ=";
   };
 
   nativeBuildInputs = [
@@ -45,17 +47,18 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    idna
-    sniffio
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-  ];
+  propagatedBuildInputs =
+    [
+      idna
+      sniffio
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      exceptiongroup
+      typing-extensions
+    ];
 
   passthru.optional-dependencies = {
-    trio = [
-      trio
-    ];
+    trio = [ trio ];
   };
 
   # trustme uses pyopenssl
@@ -73,20 +76,13 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.trio;
 
   pytestFlagsArray = [
-    "-W" "ignore::trio.TrioDeprecationWarning"
-    "-m" "'not network'"
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
+    "-m"
+    "'not network'"
   ];
 
-  disabledTests = [
-    # INTERNALERROR> AttributeError: 'NonBaseMultiError' object has no attribute '_exceptions'. Did you mean: 'exceptions'?
-    "test_exception_group_children"
-    "test_exception_group_host"
-    "test_exception_group_filtering"
-    # timing sensitive
-    # assert threading.active_count() == initial_count + 1
-    # assert 4 == (4 + 1)
-    "test_run_sync_from_thread_pooling"
-  ] ++ lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals (stdenv.isx86_64 && stdenv.isDarwin) [
     # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
     "test_is_block_device"
   ];

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nest";
-  version = "3.6";
+  version = "3.7";
 
   src = fetchFromGitHub {
     owner = "nest";
     repo = "nest-simulator";
     rev = "v${version}";
-    hash = "sha256-sXtF4JmHYoLp0t3o4KF6R2E0qLnKrzSPMXOxVJAm+sU=";
+    hash = "sha256-EwhpsfRmBLJnPiH6hXQXgG9jSNoC2oqq5lZ6t038VpI=";
   };
 
   postPatch = ''

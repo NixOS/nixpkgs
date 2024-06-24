@@ -1,11 +1,12 @@
 { lib
 , stdenv
 , fetchurl
+, nixosTests
 , directoryListingUpdater
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , desktop-file-utils
 , feedbackd
 , gtk4
@@ -20,12 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.35.1";
+  version = "0.38.0";
 
   src = fetchurl {
     # This tarball includes the meson wrapped subproject 'gmobile'.
     url = "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-Kg3efPs0knbJ9b0buIkgqIL1XplcZpGIi0hxJptG6UI=";
+    hash = "sha256-WDqgVsJx5y6IlWII9fRBsAeWn/tB8BaXRtlPvA0wmMk=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     ninja
     phosh
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -59,12 +60,16 @@ stdenv.mkDerivation rec {
     ln -s '${phosh}/lib/phosh' "$out/lib/phosh"
   '';
 
-  passthru.updateScript = directoryListingUpdater { };
+  passthru = {
+    tests.phosh = nixosTests.phosh;
+    updateScript = directoryListingUpdater { };
+  };
 
   meta = with lib; {
-    description = "A settings app for mobile specific things";
-    homepage = "https://gitlab.gnome.org/guidog/phosh-mobile-settings";
-    changelog = "https://gitlab.gnome.org/guidog/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
+    description = "Settings app for mobile specific things";
+    mainProgram = "phosh-mobile-settings";
+    homepage = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh-mobile-settings/-/blob/v${version}/debian/changelog";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ rvl ];
     platforms = platforms.linux;

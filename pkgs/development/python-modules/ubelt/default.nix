@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, wheel
-, numpy
-, python-dateutil
-, xxhash
-, pytestCheckHook
-, requests
-, xdoctest
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  wheel,
+  numpy,
+  python-dateutil,
+  xxhash,
+  pytestCheckHook,
+  requests,
+  xdoctest,
 }:
 
 buildPythonPackage rec {
   pname = "ubelt";
-  version = "1.3.4";
+  version = "1.3.6";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "Erotemic";
     repo = "ubelt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pvCmmdPRLupMUCiOvfa+JTX8NPFZ/UcXSPEaaDG3eTk=";
+    hash = "sha256-ygoJqyTscfuZVDGVbrZobZFvlcuF4HavTU65tmhyU+w=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +62,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A Python utility library with a stdlib like feel and extra batteries. Paths, Progress, Dicts, Downloads, Caching, Hashing: ubelt makes it easy";
+    description = "Python utility library with a stdlib like feel and extra batteries. Paths, Progress, Dicts, Downloads, Caching, Hashing: ubelt makes it easy";
     homepage = "https://github.com/Erotemic/ubelt";
     changelog = "https://github.com/Erotemic/ubelt/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

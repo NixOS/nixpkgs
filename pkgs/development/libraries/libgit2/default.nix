@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libgit2";
-  version = "1.7.1";
+  version = "1.7.2";
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   outputs = ["lib" "dev" "out"];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    hash = "sha256-3W0/i6Pu7I7D1zMQhmEqJVsa7PZpKOqU1+udNENSBvM=";
+    hash = "sha256-fVPY/byE2/rxmv/bUykcAbmUFMlF3UZogVuTzjOXJUU=";
   };
 
   cmakeFlags = [
@@ -74,8 +74,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linkable library implementation of Git that you can use in your application";
+    mainProgram = "git2";
     homepage = "https://libgit2.org/";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

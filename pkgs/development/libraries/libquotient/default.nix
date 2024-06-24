@@ -4,7 +4,7 @@ let
   isQt6 = lib.versions.major qtbase.version == "6";
 in stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.8.1.2";
+  version = "0.8.2";
 
   outputs = [ "out" "dev" ];
 
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    hash = "sha256-qJTikc42sFUlb4g0sAEg6v9d4k1lhbn3MZPvghm56E8=";
+    hash = "sha256-6sR/80r9qW9kMYqIi2FeXgb6M795XKzpvyE6eTaBsjA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Qt5/Qt6 library to write cross-platform clients for Matrix";
+    description = "Qt5/Qt6 library to write cross-platform clients for Matrix";
     homepage = "https://quotient-im.github.io/libQuotient/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ colemickens matthiasbeyer ];

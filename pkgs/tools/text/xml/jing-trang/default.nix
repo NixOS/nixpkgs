@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   checkPhase = "ant test";
 
   meta = with lib; {
-    description = "A RELAX NG validator in Java";
+    description = "RELAX NG validator in Java";
     # The homepage is www.thaiopensource.com, but it links to googlecode.com
     # for downloads and call it the "project site".
     homepage = "https://www.thaiopensource.com/relaxng/trang.html";

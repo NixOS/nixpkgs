@@ -103,7 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A font rendering engine";
+    description = "Font rendering engine";
+    mainProgram = "freetype-config";
     longDescription = ''
       FreeType is a portable and efficient library for rendering fonts. It
       supports TrueType, Type 1, CFF fonts, and WOFF, PCF, FNT, BDF and PFR

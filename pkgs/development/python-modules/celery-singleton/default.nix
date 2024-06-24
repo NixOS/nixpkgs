@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, fetchFromGitHub
-, poetry-core
-, celery
-, redis
-, pytestCheckHook
-, pytest-celery
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  fetchFromGitHub,
+  poetry-core,
+  celery,
+  redis,
+  pytestCheckHook,
+  pytest-celery,
 }:
 
 buildPythonPackage rec {
@@ -38,9 +39,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     celery

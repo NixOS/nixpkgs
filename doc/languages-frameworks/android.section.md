@@ -3,10 +3,36 @@
 The Android build environment provides three major features and a number of
 supporting features.
 
+## Using androidenv with Android Studio {#using-androidenv-with-android-studio}
+
+Use the `android-studio-full` attribute for a very complete Android SDK, including system images:
+
+```nix
+buildInputs = [ android-studio-full ];
+```
+
+This is identical to:
+
+```nix
+buildInputs = [ androidStudioPackages.stable.full ];
+```
+
+Alternatively, you can pass composeAndroidPackages to the `withSdk` passthru:
+
+```nix
+buildInputs = [
+  (android-studio.withSdk (androidenv.composeAndroidPackages {
+    includeNDK = true;
+  }).androidsdk)
+];
+```
+
+These will export ANDROID_SDK_ROOT and ANDROID_NDK_ROOT to the SDK and NDK directories
+in the specified Android build environment.
+
 ## Deploying an Android SDK installation with plugins {#deploying-an-android-sdk-installation-with-plugins}
 
-The first use case is deploying the SDK with a desired set of plugins or subsets
-of an SDK.
+Alternatively, you can deploy the SDK separately with a desired set of plugins, or subsets of an SDK.
 
 ```nix
 with import <nixpkgs> {};
@@ -104,18 +130,20 @@ pull from:
   repo.json to the Nix store based on the given repository XMLs.
 
 ```nix
-repoXmls = {
-  packages = [ ./xml/repository2-1.xml ];
-  images = [
-    ./xml/android-sys-img2-1.xml
-    ./xml/android-tv-sys-img2-1.xml
-    ./xml/android-wear-sys-img2-1.xml
-    ./xml/android-wear-cn-sys-img2-1.xml
-    ./xml/google_apis-sys-img2-1.xml
-    ./xml/google_apis_playstore-sys-img2-1.xml
-  ];
-  addons = [ ./xml/addon2-1.xml ];
-};
+{
+  repoXmls = {
+    packages = [ ./xml/repository2-1.xml ];
+    images = [
+      ./xml/android-sys-img2-1.xml
+      ./xml/android-tv-sys-img2-1.xml
+      ./xml/android-wear-sys-img2-1.xml
+      ./xml/android-wear-cn-sys-img2-1.xml
+      ./xml/google_apis-sys-img2-1.xml
+      ./xml/google_apis_playstore-sys-img2-1.xml
+    ];
+    addons = [ ./xml/addon2-1.xml ];
+  };
+}
 ```
 
 When building the above expression with:
@@ -143,16 +171,14 @@ androidComposition.platform-tools
 ## Using predefined Android package compositions {#using-predefined-android-package-compositions}
 
 In addition to composing an Android package set manually, it is also possible
-to use a predefined composition that contains all basic packages for a specific
-Android version, such as version 9.0 (API-level 28).
+to use a predefined composition that contains a fairly complete set of Android packages:
 
-The following Nix expression can be used to deploy the entire SDK with all basic
-plugins:
+The following Nix expression can be used to deploy the entire SDK:
 
 ```nix
 with import <nixpkgs> {};
 
-androidenv.androidPkgs_9_0.androidsdk
+androidenv.androidPkgs.androidsdk
 ```
 
 It is also possible to use one plugin only:
@@ -160,49 +186,8 @@ It is also possible to use one plugin only:
 ```nix
 with import <nixpkgs> {};
 
-androidenv.androidPkgs_9_0.platform-tools
+androidenv.androidPkgs.platform-tools
 ```
-
-## Building an Android application {#building-an-android-application}
-
-In addition to the SDK, it is also possible to build an Ant-based Android
-project and automatically deploy all the Android plugins that a project
-requires.
-
-
-```nix
-with import <nixpkgs> {};
-
-androidenv.buildApp {
-  name = "MyAndroidApp";
-  src = ./myappsources;
-  release = true;
-
-  # If release is set to true, you need to specify the following parameters
-  keyStore = ./keystore;
-  keyAlias = "myfirstapp";
-  keyStorePassword = "mykeystore";
-  keyAliasPassword = "myfirstapp";
-
-  # Any Android SDK parameters that install all the relevant plugins that a
-  # build requires
-  platformVersions = [ "24" ];
-
-  # When we include the NDK, then ndk-build is invoked before Ant gets invoked
-  includeNDK = true;
-}
-```
-
-Aside from the app-specific build parameters (`name`, `src`, `release` and
-keystore parameters), the `buildApp {}` function supports all the function
-parameters that the SDK composition function (the function shown in the
-previous section) supports.
-
-This build function is particularly useful when it is desired to use
-[Hydra](https://nixos.org/hydra): the Nix-based continuous integration solution
-to build Android apps. An Android APK gets exposed as a build product and can be
-installed on any Android device with a web browser by navigating to the build
-result page.
 
 ## Spawning emulator instances {#spawning-emulator-instances}
 
@@ -247,11 +232,11 @@ In addition to prebuilt APKs, you can also bind the APK parameter to a
 
 ## Notes on environment variables in Android projects {#notes-on-environment-variables-in-android-projects}
 
-* `ANDROID_SDK_ROOT` should point to the Android SDK. In your Nix expressions, this should be
-  `${androidComposition.androidsdk}/libexec/android-sdk`. Note that `ANDROID_HOME` is deprecated,
+* `ANDROID_HOME` should point to the Android SDK. In your Nix expressions, this should be
+  `${androidComposition.androidsdk}/libexec/android-sdk`. Note that `ANDROID_SDK_ROOT` is deprecated,
   but if you rely on tools that need it, you can export it too.
 * `ANDROID_NDK_ROOT` should point to the Android NDK, if you're doing NDK development.
-  In your Nix expressions, this should be `${ANDROID_SDK_ROOT}/ndk-bundle`.
+  In your Nix expressions, this should be `${ANDROID_HOME}/ndk-bundle`.
 
 If you are running the Android Gradle plugin, you need to export GRADLE_OPTS to override aapt2
 to point to the aapt2 binary in the Nix store as well, or use a FHS environment so the packaged
@@ -265,11 +250,11 @@ let
   androidComposition = <...>;
 in
 pkgs.mkShell rec {
-  ANDROID_SDK_ROOT = "${androidComposition.androidsdk}/libexec/android-sdk";
-  ANDROID_NDK_ROOT = "${ANDROID_SDK_ROOT}/ndk-bundle";
+  ANDROID_HOME = "${androidComposition.androidsdk}/libexec/android-sdk";
+  ANDROID_NDK_ROOT = "${ANDROID_HOME}/ndk-bundle";
 
   # Use the same buildToolsVersion here
-  GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_SDK_ROOT}/build-tools/${buildToolsVersion}/aapt2";
+  GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_HOME}/build-tools/${buildToolsVersion}/aapt2";
 }
 ```
 
@@ -285,18 +270,18 @@ let
   androidComposition = <...>;
 in
 pkgs.mkShell rec {
-  ANDROID_SDK_ROOT = "${androidComposition.androidsdk}/libexec/android-sdk";
-  ANDROID_NDK_ROOT = "${ANDROID_SDK_ROOT}/ndk-bundle";
+  ANDROID_HOME = "${androidComposition.androidsdk}/libexec/android-sdk";
+  ANDROID_NDK_ROOT = "${ANDROID_HOME}/ndk-bundle";
 
   # Use the same cmakeVersion here
   shellHook = ''
-    export PATH="$(echo "$ANDROID_SDK_ROOT/cmake/${cmakeVersion}".*/bin):$PATH"
+    export PATH="$(echo "$ANDROID_HOME/cmake/${cmakeVersion}".*/bin):$PATH"
   '';
 }
 ```
 
-Note that running Android Studio with ANDROID_SDK_ROOT set will automatically write a
-`local.properties` file with `sdk.dir` set to $ANDROID_SDK_ROOT if one does not already
+Note that running Android Studio with ANDROID_HOME set will automatically write a
+`local.properties` file with `sdk.dir` set to $ANDROID_HOME if one does not already
 exist. If you are using the NDK as well, you may have to add `ndk.dir` to this file.
 
 An example shell.nix that does all this for you is provided in examples/shell.nix.
@@ -347,3 +332,44 @@ To update the expressions run the `generate.sh` script that is stored in the
 ```bash
 ./generate.sh
 ```
+
+## Building an Android application with Ant {#building-an-android-application-with-ant}
+
+In addition to the SDK, it is also possible to build an Ant-based Android
+project and automatically deploy all the Android plugins that a project
+requires. Most newer Android projects use Gradle, and this is included for historical
+purposes.
+
+```nix
+with import <nixpkgs> {};
+
+androidenv.buildApp {
+  name = "MyAndroidApp";
+  src = ./myappsources;
+  release = true;
+
+  # If release is set to true, you need to specify the following parameters
+  keyStore = ./keystore;
+  keyAlias = "myfirstapp";
+  keyStorePassword = "mykeystore";
+  keyAliasPassword = "myfirstapp";
+
+  # Any Android SDK parameters that install all the relevant plugins that a
+  # build requires
+  platformVersions = [ "24" ];
+
+  # When we include the NDK, then ndk-build is invoked before Ant gets invoked
+  includeNDK = true;
+}
+```
+
+Aside from the app-specific build parameters (`name`, `src`, `release` and
+keystore parameters), the `buildApp {}` function supports all the function
+parameters that the SDK composition function (the function shown in the
+previous section) supports.
+
+This build function is particularly useful when it is desired to use
+[Hydra](https://nixos.org/hydra): the Nix-based continuous integration solution
+to build Android apps. An Android APK gets exposed as a build product and can be
+installed on any Android device with a web browser by navigating to the build
+result page.

@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "samply";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-V0uAS7Oo7wv0yU5CgqqYhltwM5PXJ3GP/TLVZV2GkkI=";
+    hash = "sha256-7bf1lDIZGhRpvnn8rHNwzH2GBY8CwtYCjuRAUTQgbsA=";
   };
 
-  cargoHash = "sha256-jsuICNVY3noZi/+mgVj9uUu53z+5bW9Vi5CBKcHOqSI=";
+  cargoHash = "sha256-QGvtKx+l6+UxdlziHnF63geAvW55RRlatK2/J8LR0Ck=";
 
   # the dependencies linux-perf-data and linux-perf-event-reader contains both README.md and Readme.md,
   # which causes a hash mismatch on systems with a case-insensitive filesystem
@@ -46,7 +46,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A command line profiler for macOS and Linux";
+    description = "Command line profiler for macOS and Linux";
+    mainProgram = "samply";
     homepage = "https://github.com/mstange/samply";
     changelog = "https://github.com/mstange/samply/releases/tag/samply-v${version}";
     license = with licenses; [ asl20 mit ];

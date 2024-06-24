@@ -22,13 +22,13 @@ assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
 
 stdenv.mkDerivation rec {
   pname = "SpFFT";
-  version = "1.0.6";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-70fPbIYbW50CoMdRS93hZKSbMEIQvZGFNE+eiRvuw0o=";
+    hash = "sha256-hZdB/QcjL8rjvR1YZS+CHe5U5zxedpfDq6msMih4Elc=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fftw
+    mpi
   ] ++ lib.optionals (gpuBackend == "cuda") [
     cudaPackages.libcufft
     cudaPackages.cuda_cudart
@@ -47,8 +48,6 @@ stdenv.mkDerivation rec {
     rocmPackages.hipfft
   ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
-
-  propagatedBuildInputs = [ mpi ];
 
   cmakeFlags = [
     "-DSPFFT_OMP=ON"

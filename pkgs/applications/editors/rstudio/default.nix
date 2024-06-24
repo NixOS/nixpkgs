@@ -7,7 +7,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , cmake
-, boost
+, boost183
 , zlib
 , openssl
 , R
@@ -29,8 +29,6 @@
 , soci
 , postgresql
 , nodejs
-, mkYarnModules
-, fetchYarnDeps
 , qmake
 , server ? false # build server version
 , sqlite
@@ -40,18 +38,19 @@
 
 let
   pname = "RStudio";
-  version =
-  "${RSTUDIO_VERSION_MAJOR}.${RSTUDIO_VERSION_MINOR}.${RSTUDIO_VERSION_PATCH}${RSTUDIO_VERSION_SUFFIX}";
-  RSTUDIO_VERSION_MAJOR  = "2023";
-  RSTUDIO_VERSION_MINOR  = "09";
-  RSTUDIO_VERSION_PATCH  = "0";
-  RSTUDIO_VERSION_SUFFIX = "+463";
+  version = "2024.04.1+748";
+  RSTUDIO_VERSION_MAJOR = lib.versions.major version;
+  RSTUDIO_VERSION_MINOR = lib.versions.minor version;
+  RSTUDIO_VERSION_PATCH = lib.versions.patch version;
+  RSTUDIO_VERSION_SUFFIX = "+" + toString (
+    lib.tail (lib.splitString "+" version)
+  );
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
-    rev = "v${version}";
-    hash = "sha256-FwNuU2rbE3GEhuwphvZISUMhvSZJ6FjjaZ1oQ9F8NWc=";
+    rev = "v" + version;
+    hash = "sha256-fzxbhN9NdM0E2rxezj2BMEZ8obUbX0Zw8haDNmfAkWs=";
   };
 
   mathJaxSrc = fetchurl {
@@ -62,8 +61,8 @@ let
   rsconnectSrc = fetchFromGitHub {
     owner = "rstudio";
     repo = "rsconnect";
-    rev = "5175a927a41acfd9a21d9fdecb705ea3292109f2";
-    hash = "sha256-c1fFcN6KAfxXv8bv4WnIqQKg1wcNP2AywhEmIbyzaBA=";
+    rev = "v1.2.2";
+    hash = "sha256-wvM9Bm7Nb6yU9z0o+uF5lB2kdgjOW5wZSk6y48NPF2U=";
   };
 
   # Ideally, rev should match the rstudio release name.
@@ -93,7 +92,7 @@ in
     ];
 
     buildInputs = [
-      boost
+      boost183
       zlib
       openssl
       R
@@ -118,6 +117,7 @@ in
       "-DRSTUDIO_USE_SYSTEM_SOCI=ON"
       "-DRSTUDIO_USE_SYSTEM_BOOST=ON"
       "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON"
+      "-DRSTUDIO_DISABLE_CHECK_FOR_UPDATES=ON"
       "-DQUARTO_ENABLED=TRUE"
       "-DPANDOC_VERSION=${pandoc.version}"
       "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
@@ -133,6 +133,14 @@ in
       ./fix-resources-path.patch
       ./pandoc-nix-path.patch
       ./use-system-quarto.patch
+      ./ignore-etc-os-release.patch
+
+      (fetchpatch {
+        name = "use-system-yaml-patch";
+        url = "https://github.com/rstudio/rstudio/commit/04de8ca8b83dcc7fee9fd65e6ef58c372489d5ef.patch";
+        hash = "sha256-FHSSOPsw6AAYBj/fgNT6idyxvRj3SG+fbla0UDjug1Y=";
+      })
+
     ];
 
     postPatch = ''
@@ -180,6 +188,11 @@ in
       done
 
       unzip -q ${mathJaxSrc} -d dependencies/mathjax-27
+
+     # As of Chocolate Cosmos, node 18.19.1 is used for runtime
+     # 18.18.2 is still used for build
+     # see https://github.com/rstudio/rstudio/commit/facb5cf1ab38fe77813aaf36590804e4f865d780
+     mkdir -p dependencies/common/node/18.19.1
 
       mkdir -p dependencies/pandoc/${pandoc.version}
       cp ${pandoc}/bin/pandoc dependencies/pandoc/${pandoc.version}/pandoc

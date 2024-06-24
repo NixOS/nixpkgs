@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, setuptools
-, shapely
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  setuptools,
+  shapely,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "preprocess-cancellation";
-  version = "0.2.0";
+  version = "0.2.1";
   disabled = pythonOlder "3.6"; # >= 3.6
   format = "pyproject";
 
@@ -18,13 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kageurufu";
     repo = "cancelobject-preprocessor";
-    rev = version;
-    hash = "sha256-mn3/etXA5dkL+IsyxwD4/XjU/t4/roYFVyqQxlLOoOI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MJ4mwOFswLYHhg2LNZ+/ZwDvSjoxElVxlaWjArHV2NY=";
   };
-
-  patches = [
-    ./pep-621.patch
-  ];
 
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
@@ -44,13 +41,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [
-    shapely
-  ];
+  propagatedBuildInputs = [ shapely ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "preprocess_cancellation" ];
 

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-5lzLknuGLQryLCc4YQJn8AGuWTiSM90+8UTQ/WYfASM=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pylgnetcast"
-  ];
+  pythonImportsCheck = [ "pylgnetcast" ];
 
   meta = with lib; {
     description = "Python API client for the LG Smart TV running NetCast 3 or 4";

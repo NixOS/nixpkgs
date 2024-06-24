@@ -78,6 +78,9 @@ stdenv.mkDerivation rec {
     gst-plugins-good
   ]);
 
+  # Fix build failure on dtk 5.6.20
+  env.NIX_CFLAGS_COMPILE = "-std=c++14";
+
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
   qtWrapperArgs = [
     "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"

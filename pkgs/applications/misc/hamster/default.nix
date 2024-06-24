@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, python3Packages, intltool, glib, itstool, gtk3
-, wrapGAppsHook, gobject-introspection, pango, gdk-pixbuf, atk, wafHook }:
+, wrapGAppsHook3, gobject-introspection, pango, gdk-pixbuf, atk, wafHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "hamster";
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     python3Packages.setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     itstool
     wafHook
@@ -51,6 +51,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Time tracking application";
+    mainProgram = "hamster";
     homepage = "http://projecthamster.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

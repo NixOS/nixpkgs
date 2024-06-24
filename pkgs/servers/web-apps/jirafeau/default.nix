@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Website permitting upload of a file in a simple way and giving a unique link to it";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     homepage = "https://gitlab.com/mojo42/Jirafeau";
     platforms = platforms.all;
     maintainers = with maintainers; [ davidtwco ];

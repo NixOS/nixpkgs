@@ -21,5 +21,6 @@ buildGoModule rec {
     description = "FlexRadio digital audio transport (DAX) connector for PulseAudio";
     license = licenses.mit;
     maintainers = with maintainers; [ mvs ];
+    mainProgram = "nDAX";
   };
 }

@@ -1,14 +1,15 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, bluetooth-data-tools
-, bluetooth-sensor-state-data
-, buildPythonPackage
-, fetchFromGitHub
-, miauth
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  bleak,
+  bleak-retry-connector,
+  bluetooth-data-tools,
+  bluetooth-sensor-state-data,
+  buildPythonPackage,
+  fetchFromGitHub,
+  miauth,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -41,15 +42,13 @@ buildPythonPackage rec {
   # Module has no test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ninebot_ble"
-  ];
+  pythonImportsCheck = [ "ninebot_ble" ];
 
   meta = with lib; {
     description = "Ninebot scooter BLE client";
+    mainProgram = "ninebot-ble";
     homepage = "https://github.com/ownbee/ninebot-ble";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
-

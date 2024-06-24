@@ -1,14 +1,5 @@
-From 2629af4ed00d7ca65359178203d80fb146901cdb Mon Sep 17 00:00:00 2001
-From: Daniel Fullmer <danielrf12@gmail.com>
-Date: Fri, 3 Jul 2020 21:00:45 -0700
-Subject: [PATCH 1/2] Fix CMakeLists
-
----
- CMakeLists.txt | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index e218279..4341de9 100644
+index 365b835..4341de9 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -57,6 +57,7 @@ endif(JPEG_FOUND)
@@ -39,11 +30,8 @@ index e218279..4341de9 100644
    include_directories(SYSTEM ${MUPDF_INCLUDEDIR})
    message(STATUS "mupdf libraries: ${MUPDF_LDFLAGS}")
    set(K2PDFOPT_LIB ${K2PDFOPT_LIB} ${MUPDF_LDFLAGS} 
--    -lmupdf-js-none -lopenjpeg -ljbig2dec -ljpeg -lfreetype
+-    -lmupdf-js-none -lopenjpeg -ljbig2dec -ljpeg -lfreetype -llcms -lgumbo
 +
    )
  endif(MUPDF_FOUND)
  
--- 
-2.27.0
-

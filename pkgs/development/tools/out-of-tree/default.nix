@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "kernel {module, exploit} development tool";
+    mainProgram = "out-of-tree";
     homepage = "https://out-of-tree.io";
     maintainers = [ maintainers.dump_stack ];
     license = licenses.agpl3Plus;

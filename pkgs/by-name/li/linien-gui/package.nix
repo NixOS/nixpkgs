@@ -9,7 +9,7 @@ python3.pkgs.buildPythonApplication rec {
 
   inherit (python3.pkgs.linien-common) src version;
 
-  sourceRoot = "source/linien-gui";
+  sourceRoot = "${src.name}/linien-gui";
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
@@ -40,6 +40,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Graphical user interface of the Linien spectroscopy lock application";
+    mainProgram = "linien";
     homepage = "https://github.com/linien-org/linien/tree/develop/linien-gui";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fsagbuya doronbehar ];

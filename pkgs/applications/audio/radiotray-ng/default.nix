@@ -19,7 +19,6 @@
 # GStreamer
 , glib-networking
 , gst_all_1
-, libsoup_3
 # User-agent info
 , lsb-release
 # rt2rtng
@@ -27,7 +26,7 @@
 # Testing
 , gtest
 # Fixup
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeWrapper
 }:
 
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/0GlQdSsIPKGrDT9CgxvaH8TpAbqxFduwL2A2+BSrEI=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 makeWrapper ];
 
   buildInputs = [
     curl
@@ -100,12 +99,10 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ dbus ]})
     wrapProgram $out/bin/rt2rtng --prefix PYTHONPATH : $PYTHONPATH
-    # for GStreamer
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.getLib libsoup_3}/lib")
   '';
 
   meta = with lib; {
-    description = "An internet radio player for linux";
+    description = "Internet radio player for linux";
     homepage = "https://github.com/ebruck/radiotray-ng";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];

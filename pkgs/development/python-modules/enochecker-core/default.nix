@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,10 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-N41p2XRCp55rcPXLpA4rPIARsva/dQzK8qafjzXtavI=";
   };
 
-
-  pythonImportsCheck = [
-    "enochecker_core"
-  ];
+  pythonImportsCheck = [ "enochecker_core" ];
 
   # no tests upstream
   doCheck = false;

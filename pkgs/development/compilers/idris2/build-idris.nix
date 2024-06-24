@@ -18,11 +18,13 @@
 , ... }@attrs:
 
 let
+  propagate = libs: lib.unique (lib.concatMap (nextLib: [nextLib] ++ nextLib.propagatedIdrisLibraries) libs);
   ipkgFileName = ipkgName + ".ipkg";
   idrName = "idris2-${idris2.version}";
   libSuffix = "lib/${idrName}";
+  propagatedIdrisLibraries = propagate idrisLibraries;
   libDirs =
-    (lib.makeSearchPath libSuffix idrisLibraries) +
+    (lib.makeSearchPath libSuffix propagatedIdrisLibraries) +
     ":${idris2}/${idrName}";
   supportDir = "${idris2}/${idrName}/lib";
   drvAttrs = builtins.removeAttrs attrs [
@@ -30,24 +32,34 @@ let
     "idrisLibraries"
   ];
 
-  sharedAttrs = drvAttrs // {
-    pname = ipkgName;
-    inherit version;
-    src = src;
-    nativeBuildInputs = [ idris2 makeWrapper ] ++ attrs.nativeBuildInputs or [];
-    buildInputs = idrisLibraries ++ attrs.buildInputs or [];
+  derivation = stdenv.mkDerivation (finalAttrs:
+    drvAttrs // {
+      pname = ipkgName;
+      inherit version;
+      src = src;
+      nativeBuildInputs = [ idris2 makeWrapper ] ++ attrs.nativeBuildInputs or [];
+      buildInputs = propagatedIdrisLibraries ++ attrs.buildInputs or [];
 
-    IDRIS2_PACKAGE_PATH = libDirs;
+      IDRIS2_PACKAGE_PATH = libDirs;
 
-    buildPhase = ''
-      runHook preBuild
-      idris2 --build ${ipkgFileName}
-      runHook postBuild
-    '';
-  };
+      buildPhase = ''
+        runHook preBuild
+        idris2 --build ${ipkgFileName}
+        runHook postBuild
+      '';
+
+      passthru = {
+        inherit propagatedIdrisLibraries;
+      };
+
+      shellHook = ''
+        export IDRIS2_PACKAGE_PATH="${finalAttrs.IDRIS2_PACKAGE_PATH}"
+      '';
+    }
+  );
 
 in {
-  executable = stdenv.mkDerivation (sharedAttrs // {
+  executable = derivation.overrideAttrs {
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
@@ -70,11 +82,11 @@ in {
       fi
       runHook postInstall
     '';
-  });
+  };
 
   library = { withSource ? false }:
     let installCmd = if withSource then "--install-with-src" else "--install";
-    in stdenv.mkDerivation (sharedAttrs // {
+    in derivation.overrideAttrs {
       installPhase = ''
         runHook preInstall
         mkdir -p $out/${libSuffix}
@@ -82,5 +94,5 @@ in {
         idris2 ${installCmd} ${ipkgFileName}
         runHook postInstall
       '';
-    });
+    };
 }

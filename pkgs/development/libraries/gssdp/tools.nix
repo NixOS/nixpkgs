@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Device Sniffer tool based on GSSDP framework";
+    mainProgram = "gssdp-device-sniffer";
     homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
     maintainers = gssdp_1_6.meta.maintainers;

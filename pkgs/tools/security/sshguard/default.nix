@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Protects hosts from brute-force attacks";
+    mainProgram = "sshguard";
     longDescription = ''
       SSHGuard can read log messages from various input sources. Log messages are parsed, line-by-line, for recognized patterns.
       If an attack, such as several login failures within a few seconds, is detected, the offending IP is blocked.

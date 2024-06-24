@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrar-free";
-  version = "0.1.3";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     owner = "bgermann";
     repo = "unrar-free";
     rev = finalAttrs.version;
-    hash = "sha256-pNcbbHFcEzXKGKUg9nLM3NuUCgZFmFjFa4dXmUuuLYo";
+    hash = "sha256-hVUEvlaVx2Ai1lYXU6hwiLToEMhCPWlSIh1WrbYKmco=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

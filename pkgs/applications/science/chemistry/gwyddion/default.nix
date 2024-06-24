@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, gtk2, pkg-config, fftw, file,
-  pythonSupport ? false, python2Packages,
   gnome2,
   openexrSupport ? true, openexr,
   libzipSupport ? true, libzip,
@@ -15,16 +14,12 @@
   openglSupport ? !stdenv.isDarwin, libGL
 }:
 
-let
-    inherit (python2Packages) pygtk pygobject2 python;
-in
-
 stdenv.mkDerivation rec {
   pname = "gwyddion";
-   version = "2.65";
+   version = "2.66";
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "sha256-kRX7CoPJY8YkYNode5g0OCyWmL+5sM8puCmk9ZE2nqM=";
+    sha256 = "sha256-N3vtzSsNjRM6MpaG2p9fkYB/8dR5N/mZEZXx6GN5LVI=";
   };
 
   nativeBuildInputs = [ pkg-config file ];
@@ -42,9 +37,6 @@ stdenv.mkDerivation rec {
     optional zlibSupport zlib ++
     optional libuniqueSupport libunique ++
     optional libzipSupport libzip;
-
-  propagatedBuildInputs = with lib;
-    optionals pythonSupport [ pygtk pygobject2 python gnome2.gtksourceview ];
 
   # This patch corrects problems with python support, but should apply cleanly
   # regardless of whether python support is enabled, and have no effects if

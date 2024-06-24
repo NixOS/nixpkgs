@@ -24,6 +24,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Export Prometheus-style metrics about mail server functionality";
+    mainProgram = "mailexporter";
     homepage = "https://github.com/cherti/mailexporter";
     license = licenses.gpl3;
     maintainers = with maintainers; [ willibutz globin ];

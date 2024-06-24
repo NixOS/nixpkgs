@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gridcoin-research";
-  version = "5.4.5.0";
+  version = "5.4.8.0";
 
   src = fetchFromGitHub {
     owner = "gridcoin-community";
     repo = "Gridcoin-Research";
     rev = "${version}";
-    sha256 = "1a174m7821c7d3yh9lyh0r3ds6qn06x16aa1qxcbrqyxxc127yky";
+    sha256 = "sha256-HZirzXkqM2aep+wq8k2UCFWHPtN0sBZXjamgt7RYPBo=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A POS-based cryptocurrency that rewards users for participating on the BOINC network";
+    description = "POS-based cryptocurrency that rewards users for participating on the BOINC network";
     longDescription = ''
       A POS-based cryptocurrency that rewards users for participating on the BOINC network,
       using peer-to-peer technology to operate with no central authority - managing transactions,

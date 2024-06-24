@@ -9,12 +9,12 @@ let
 in {
   options = {
     services.powerdns = {
-      enable = mkEnableOption (lib.mdDoc "PowerDNS domain name server");
+      enable = mkEnableOption "PowerDNS domain name server";
 
       extraConfig = mkOption {
         type = types.lines;
         default = "launch=bind";
-        description = lib.mdDoc ''
+        description = ''
           PowerDNS configuration. Refer to
           <https://doc.powerdns.com/authoritative/settings.html>
           for details on supported values.
@@ -25,7 +25,7 @@ in {
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/powerdns.env";
-        description = lib.mdDoc ''
+        description = ''
           Environment variables from this file will be interpolated into the
           final config file using envsubst with this syntax: `$ENVIRONMENT`
           or `''${VARIABLE}`.

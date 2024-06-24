@@ -33,6 +33,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/mr-karan/doggo";
     description = "Command-line DNS Client for Humans. Written in Golang";
+    mainProgram = "doggo";
     longDescription = ''
       doggo is a modern command-line DNS client (like dig) written in Golang.
       It outputs information in a neat concise manner and supports protocols like DoH, DoT, DoQ, and DNSCrypt as well

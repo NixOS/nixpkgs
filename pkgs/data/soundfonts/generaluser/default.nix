@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "a SoundFont bank featuring 259 instrument presets and 11 drum kits";
+    description = "SoundFont bank featuring 259 instrument presets and 11 drum kits";
     homepage = "https://www.schristiancollins.com/generaluser.php";
     license = licenses.generaluser;
     platforms = platforms.all;

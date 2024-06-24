@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/sshpass/";
     description = "Non-interactive ssh password auth";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.madjar ];
     platforms = platforms.unix;
+    mainProgram = "sshpass";
   };
 }

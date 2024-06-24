@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A port of Nanosaur2, a 2004 Macintosh game by Pangea Software, for modern operating systems";
+    description = "Port of Nanosaur2, a 2004 Macintosh game by Pangea Software, for modern operating systems";
     longDescription = ''
       Nanosaur is a 2004 Macintosh game by Pangea Software.
 

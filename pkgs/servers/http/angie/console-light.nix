@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.1";
+  version = "1.2.1";
   pname = "angie-console-light";
 
   src = fetchurl {
     url = "https://download.angie.software/files/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-Teg+EPl4IvmScTTX3F3rdM6qZ3ztFkMks9oo2B1xHTs=";
+    hash = "sha256-bwnVwhcPyEXGzvpXj2bC1WUGtNbBlHpqZibApKtESq8=";
   };
 
   outputs = [ "out" "doc" ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
    '';
 
   meta = {
-    description = "Console Light is a lightweight, real-time activity monitoring interface.";
+    description = "Console Light is a lightweight, real-time activity monitoring interface";
     homepage    = "https://angie.software/en/console/";
     license     = lib.licenses.asl20;
     platforms   = lib.platforms.all;

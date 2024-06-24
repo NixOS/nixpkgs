@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub }:
 
 let
-  version = "3.14.44";
+  version = "3.14.79";
 in
 fetchFromGitHub {
   name = "stevenblack-blocklist-${version}";
@@ -9,12 +9,16 @@ fetchFromGitHub {
   owner = "StevenBlack";
   repo = "hosts";
   rev = version;
-  sha256 = "sha256-LlTyhtx3DbtsQdkl6J7ktj/zLJULFqQWq5sCqKPX71g=";
+  hash = "sha256-MfQGu+Y4/A0GKIu9d//U+yiP0fN/7cWhEo2dut4UvcE=";
 
   meta = with lib; {
     description = "Unified hosts file with base extensions";
     homepage = "https://github.com/StevenBlack/hosts";
     license = licenses.mit;
-    maintainers = with maintainers; [ moni ];
+    maintainers = with maintainers; [
+      moni
+      Guanran928
+      frontear
+    ];
   };
 }

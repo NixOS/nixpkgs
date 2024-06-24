@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rubygems";
-  version = "3.5.5";
+  version = "3.5.11";
 
   src = fetchurl {
     url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
-    hash = "sha256-ErKsKMIEvs4oA8eS9v1ASfqlMOJOxeTVfCA99AIcTh0=";
+    hash = "sha256-RSG1L4Q2IKn8XKdBRSa3RjsJiVZMOugLJraPvRMEyBg=";
   };
 
   patches = [

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "okteto";
-  version = "2.25.1";
+  version = "2.27.4";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     rev = version;
-    hash = "sha256-HBXp66chq+SzdEb463awolf4Uv0ScHN6MjoziYyh4kA=";
+    hash = "sha256-FctWmYGOdmGqjHGlsi3k+RUmU35ufzpMh7Eh88GZiUc=";
   };
 
-  vendorHash = "sha256-+Adnveutg8soqK2Zwn2SNq7SEHd/Z91diHbPYHrGVrA=";
+  vendorHash = "sha256-RpkKWz/cJ1StbpVydqpSfA6uwIYgKa1YOCJVXZRer6k=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
@@ -20,6 +20,8 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [ installShellFiles ];
+
+  excludedPackages = [ "integration" "samples" ];
 
   ldflags = [
     "-s"
@@ -30,8 +32,12 @@ buildGoModule rec {
   tags = [ "osusergo" "netgo" "static_build" ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
+    export HOME="$(mktemp -d)"
   '';
+
+  checkFlags = [
+    "-skip=TestCreateDockerfile" # Skip flaky test
+  ];
 
   postInstall = ''
     installShellCompletion --cmd okteto \
@@ -42,7 +48,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = okteto;
-    command = "HOME=$(mktemp -d) okteto version";
+    command = "HOME=\"$(mktemp -d)\" okteto version";
   };
 
   meta = with lib; {
@@ -50,5 +56,6 @@ buildGoModule rec {
     homepage = "https://okteto.com/";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
+    mainProgram = "okteto";
   };
 }

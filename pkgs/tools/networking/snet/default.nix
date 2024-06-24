@@ -18,5 +18,6 @@ buildGoModule rec {
     homepage = "https://github.com/monsterxx03/snet";
     license = licenses.mit;
     maintainers = with maintainers; [ azuwis ];
+    mainProgram = "snet";
   };
 }

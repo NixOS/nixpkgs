@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, bashlex
-, click
-, shutilwhich
-, gcc
-, coreutils
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  bashlex,
+  click,
+  shutilwhich,
+  gcc,
+  coreutils,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +28,16 @@ buildPythonPackage rec {
                       --replace /bin/echo ${coreutils}/bin/echo
   '';
 
-  nativeCheckInputs = [ pytest gcc coreutils ];
-  propagatedBuildInputs = [ click bashlex shutilwhich ];
+  nativeCheckInputs = [
+    pytest
+    gcc
+    coreutils
+  ];
+  propagatedBuildInputs = [
+    click
+    bashlex
+    shutilwhich
+  ];
 
   checkPhase = ''
     pytest
@@ -36,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Tool for generating Clang's JSON Compilation Database files";
+    mainProgram = "compiledb";
     license = licenses.gpl3;
     homepage = "https://github.com/nickdiego/compiledb";
     maintainers = with maintainers; [ multun ];

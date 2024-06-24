@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library that generates loops for scanning polyhedra";
+    mainProgram = "cloog";
 
     longDescription = ''
       CLooG is a free software library to generate code for scanning

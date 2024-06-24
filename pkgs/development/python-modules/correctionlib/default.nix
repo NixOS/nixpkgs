@@ -1,33 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cmake
-, numpy
-, scikit-build
-, setuptools
-, setuptools-scm
-, wheel
-, packaging
-, pybind11
-, pydantic
-, rich
-, awkward
-, pytestCheckHook
-, scipy
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cmake,
+  scikit-build,
+  setuptools,
+  setuptools-scm,
+  pybind11,
+
+  zlib,
+
+  # dependencies
+  numpy,
+  packaging,
+  pydantic,
+  rich,
+
+  # checks
+  awkward,
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "correctionlib";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-H8QCdU6piBdqJEJOGVbsz+6eyMhFVuwTpIHKUoKaf4A=";
+  src = fetchFromGitHub {
+    owner = "cms-nanoAOD";
+    repo = "correctionlib";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RI0wL+/6aNCV9PZMY9ZLNFLVYPm9kAyxcvLzLLM/T3Y=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
     scikit-build
     setuptools
@@ -35,11 +45,9 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     packaging
     pydantic
@@ -54,14 +62,14 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [
-    "correctionlib"
-  ];
+  pythonImportsCheck = [ "correctionlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a well-structured JSON data format for a wide variety of ad-hoc correction factors encountered in a typical HEP analysis";
+    mainProgram = "correction";
     homepage = "https://cms-nanoaod.github.io/correctionlib/";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/cms-nanoAOD/correctionlib/releases/tag/v${version}";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

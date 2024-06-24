@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/recastnavigation/recastnavigation";
     description = "Navigation-mesh Toolset for Games";
+    mainProgram = "RecastDemo";
     license = licenses.zlib;
     maintainers = with maintainers; [ marius851000 ];
     platforms = platforms.all;

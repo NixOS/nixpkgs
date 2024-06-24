@@ -23,7 +23,7 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An open-source multi-platform crash reporting system";
+    description = "Open-source multi-platform crash reporting system";
     homepage = "https://chromium.googlesource.com/breakpad";
     license = licenses.bsd3;
     maintainers = with maintainers; [ berberman ];

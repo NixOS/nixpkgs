@@ -1,15 +1,16 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiopvapi";
-  version = "3.0.1";
+  version = "3.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,39 +19,20 @@ buildPythonPackage rec {
     owner = "sander76";
     repo = "aio-powerview-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+jhfp8gLEmL8TGPPN7QY8lw1SkV4sMSDb4VSq2OJ6PU=";
+    hash = "sha256-WtTqtVr1oL86dpsAIK55pbXWU4X/cajVLlggd6hfM4c=";
   };
 
-  postPatch = ''
-    # https://github.com/sander76/aio-powerview-api/pull/31
-    substituteInPlace setup.py \
-      --replace '"asyncio", ' ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  dependencies = [ aiohttp ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  pythonImportsCheck = [ "aiopvapi" ];
 
-  pythonImportsCheck = [
-    "aiopvapi"
-  ];
-
-  disabledTestPaths = [
-    # https://github.com/sander76/aio-powerview-api/issues/32
-    "tests/test_shade.py"
-    "tests/test_scene.py"
-    "tests/test_room.py"
-    "tests/test_apiresource.py"
-    "tests/test_hub.py"
-    "tests/test_scene_members.py"
+  disabledTests = [
+    # AssertionError
+    "test_remove_shade_from_scene"
   ];
 
   meta = with lib; {

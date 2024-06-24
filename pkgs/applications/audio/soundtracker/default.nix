@@ -12,17 +12,17 @@
 , libsndfile
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soundtracker";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchzip {
     # Past releases get moved to the "old releases" directory.
     # Only the latest release is at the top level.
     # Nonetheless, only the name of the file seems to affect which file is
     # downloaded, so this path should be fine both for old and current releases.
-    url = "mirror://sourceforge/soundtracker/soundtracker-${version}.tar.xz";
-    hash = "sha256-kNt0BSRaEQY+oa1xbuZ1l6nCqXhcktVugxzcC3ZDaX0=";
+    url = "mirror://sourceforge/soundtracker/soundtracker-${finalAttrs.version}.tar.xz";
+    hash = "sha256-g96Z1SdFGMq7WFI6x+UtmAHPZF0C+tHUOjNhmK2ld8I=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.isLinux alsa-lib;
 
   meta = with lib; {
-    description = "A music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
+    description = "Music tracking tool similar in design to the DOS program FastTracker and the Amiga legend ProTracker";
     longDescription = ''
       SoundTracker is a pattern-oriented music editor (similar to the DOS
       program 'FastTracker'). Samples are lined up on tracks and patterns
@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    hydraPlatforms = platforms.linux; # sdl-config times out on darwin
   };
-}
+})

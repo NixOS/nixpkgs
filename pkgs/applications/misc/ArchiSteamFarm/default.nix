@@ -11,13 +11,13 @@
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "5.5.0.11";
+  version = "6.0.3.4";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-VlJiTCdoH6hlVtQgECIlbsQvg3S58B5IIy1zRxh1eOg=";
+    hash = "sha256-qYB94SJYCwcUrXdKtD+ZdiPRpwXg3rOHVmFWD+Y1ZXg=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
@@ -26,22 +26,20 @@ buildDotnetModule rec {
   nugetDeps = ./deps.nix;
 
   projectFile = "ArchiSteamFarm.sln";
-  executables = [ "ArchiSteamFarm" ];
+  executable = "ArchiSteamFarm";
   dotnetFlags = [
-    "-p:PublishSingleFile=true"
-    "-p:PublishTrimmed=true"
+    "-p:UseAppHost=false"
   ];
   dotnetInstallFlags = [
     "--framework=net8.0"
   ];
-  selfContainedBuild = true;
 
   runtimeDeps = [ libkrb5 zlib openssl ];
 
   doCheck = true;
 
   preBuild = ''
-    export projectFile=(ArchiSteamFarm)
+    dotnetProjectFiles=(ArchiSteamFarm)
   '';
 
   preInstall = ''
@@ -58,11 +56,17 @@ buildDotnetModule rec {
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
         --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
         -p:UseAppHost=false
-     }
+    }
 
-     buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
-     buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
-     buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+    buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
+    buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
+    buildPlugin ArchiSteamFarm.OfficialPlugins.Monitoring
+    buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+
+    chmod +x $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll
+    wrapDotnetProgram $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll $out/bin/ArchiSteamFarm
+    substituteInPlace $out/bin/ArchiSteamFarm \
+      --replace-fail "exec " "exec dotnet "
   '';
 
   passthru = {
@@ -76,6 +80,6 @@ buildDotnetModule rec {
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
     mainProgram = "ArchiSteamFarm";
-    maintainers = with maintainers; [ SuperSandro2000 lom ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

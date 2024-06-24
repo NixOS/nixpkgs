@@ -14,6 +14,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     maintainers = with maintainers; [ felixscheinost ];
     description = "CLI tool to search text in XLSX and XLS files. It works similarly to Unix/GNU Linux grep";
+    mainProgram = "xlsxgrep";
     homepage = "https://github.com/zazuum/xlsxgrep";
     license = licenses.mit;
   };

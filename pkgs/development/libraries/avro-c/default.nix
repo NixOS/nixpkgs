@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ jansson snappy xz zlib ];
 
   meta = with lib; {
-    description = "A C library which implements parts of the Avro Specification";
+    description = "C library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ lblasc ];

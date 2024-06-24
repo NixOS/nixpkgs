@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ fmt_9 libjack2 ];
 
   meta = with lib; {
-    description = "A simple app to help with JACK apps that behave strangely.";
+    description = "Simple app to help with JACK apps that behave strangely";
     longDescription = ''
       Creates a JACK passthrough client with an arbitrary name and number of
       ports. Common uses include tricking stubborn applications into creating
@@ -35,5 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.unfree;
     maintainers = [ maintainers.PowerUser64 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "jack-passthru";
   };
 })

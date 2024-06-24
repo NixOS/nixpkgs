@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.cs.waikato.ac.nz/ml/weka/";
     description = "Collection of machine learning algorithms for data mining tasks";
+    mainProgram = "weka";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.mimame ];

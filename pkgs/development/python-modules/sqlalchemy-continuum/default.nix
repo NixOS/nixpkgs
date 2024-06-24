@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flask
-, flask-login
-, flask-sqlalchemy
-, psycopg2
-, pymysql
-, pytestCheckHook
-, pythonOlder
-, sqlalchemy
-, sqlalchemy-i18n
-, sqlalchemy-utils
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  flask-login,
+  flask-sqlalchemy,
+  psycopg2,
+  pymysql,
+  pytestCheckHook,
+  pythonOlder,
+  sqlalchemy,
+  sqlalchemy-i18n,
+  sqlalchemy-utils,
 }:
 
 buildPythonPackage rec {
   pname = "sqlalchemy-continuum";
-  version = "1.4.0";
+  version = "1.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "SQLAlchemy-Continuum";
     inherit version;
-    hash = "sha256-Rk+aWxBjUrXuRPE5MSyzWMWS0l7qrjU3wOrHLC+vteU=";
+    hash = "sha256-4BZGzfv9azGiGwrrprv/ZhJY1b6Ed8dQDKs6HHSEjm4=";
   };
 
   propagatedBuildInputs = [
@@ -32,18 +33,10 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    flask = [
-      flask
-    ];
-    flask-login = [
-      flask-login
-    ];
-    flask-sqlalchemy = [
-      flask-sqlalchemy
-    ];
-    i18n = [
-      sqlalchemy-i18n
-    ];
+    flask = [ flask ];
+    flask-login = [ flask-login ];
+    flask-sqlalchemy = [ flask-sqlalchemy ];
+    i18n = [ sqlalchemy-i18n ];
   };
 
   nativeCheckInputs = [
@@ -55,9 +48,7 @@ buildPythonPackage rec {
   # Indicate tests that we don't have a database server at hand
   env.DB = "sqlite";
 
-  pythonImportsCheck = [
-    "sqlalchemy_continuum"
-  ];
+  pythonImportsCheck = [ "sqlalchemy_continuum" ];
 
   meta = with lib; {
     description = "Versioning and auditing extension for SQLAlchemy";

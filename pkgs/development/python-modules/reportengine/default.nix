@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit
-, jinja2
-, ruamel-yaml
-, matplotlib
-, pandas
-, pandoc
-, pygments
-, blessings
-, curio
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit,
+  jinja2,
+  ruamel-yaml,
+  matplotlib,
+  pandas,
+  pandoc,
+  pygments,
+  blessings,
+  curio,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -45,9 +46,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "reportengine" ];
 
   meta = with lib; {
-    description = "A framework for declarative data analysis";
+    description = "Framework for declarative data analysis";
     homepage = "https://github.com/NNPDF/reportengine/";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ veprbl ];
+    # Incompatibility with ruamel >= 0.18
+    # https://github.com/NNPDF/reportengine/issues/60
+    broken = versionAtLeast ruamel-yaml.version "0.18";
   };
 }

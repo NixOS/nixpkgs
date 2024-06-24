@@ -11,7 +11,7 @@
       uid = 1000;
     };
 
-  services.xserver.displayManager = {
+  services.displayManager = {
     autoLogin = {
       enable = true;
       user = "demo";

@@ -13,6 +13,7 @@
 , meson-tools
 , ncurses
 , openssl
+, rkbin
 , swig
 , which
 , python3
@@ -21,15 +22,16 @@
 , armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
+, armTrustedFirmwareRK3588
 , armTrustedFirmwareS905
 , buildPackages
 }:
 
 let
-  defaultVersion = "2023.07.02";
+  defaultVersion = "2024.04";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-a2pIWBwUq7D5W9h8GvTXQJIkBte4AQAqn5Ryf93gIdU=";
+    hash = "sha256-GKhT/jn6160DqQzC1Cda6u1tppc13vrDSSuAUIhD3Uo=";
   };
 
   # Dependencies for the tools need to be included as either native or cross,
@@ -77,7 +79,6 @@ let
       ncurses # tools/kwboot
       bc
       bison
-      dtc
       flex
       installShellFiles
       (buildPackages.python3.withPackages (p: [
@@ -96,7 +97,7 @@ let
     enableParallelBuilding = true;
 
     makeFlags = [
-      "DTC=dtc"
+      "DTC=${lib.getExe buildPackages.dtc}"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     ] ++ extraMakeFlags;
 
@@ -132,7 +133,7 @@ let
       homepage = "https://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
+      maintainers = with maintainers; [ bartsch dezgeg lopsided98 ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" "pythonScriptsToInstall" ]));
 in {
@@ -297,6 +298,14 @@ in {
     '';
   };
 
+  ubootNanoPCT6 = buildUBoot {
+    defconfig = "nanopc-t6-rk3588_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
+  };
+
   ubootNovena = buildUBoot {
     defconfig = "novena_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -370,6 +379,14 @@ in {
     # Using /dev/null here is upstream-specified way that disables the inclusion of crust-firmware as it's not yet packaged and without which the build will fail -- https://docs.u-boot.org/en/latest/board/allwinner/sunxi.html#building-the-crust-management-processor-firmware
     SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootOrangePi5 = buildUBoot {
+    defconfig = "orangepi-5-rk3588s_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
   };
 
   ubootOrangePiPc = buildUBoot {
@@ -516,6 +533,21 @@ in {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootRock4CPlus = buildUBoot {
+    defconfig = "rock-4c-plus-rk3399_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img" ];
+  };
+
+  ubootRock5ModelB = buildUBoot {
+    defconfig = "rock5b-rk3588_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
+  };
+
   ubootRock64 = buildUBoot {
     defconfig = "rock64-rk3328_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
@@ -573,6 +605,14 @@ in {
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
     SCP = "/dev/null";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootTuringRK1 = buildUBoot {
+    defconfig = "turing-rk1-rk3588_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
+    ROCKCHIP_TPL = rkbin.TPL_RK3588;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" ];
   };
 
   ubootUtilite = buildUBoot {

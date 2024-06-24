@@ -1,10 +1,15 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   logPrefix = "services.prometheus.exporter.ipmi";
   cfg = config.services.prometheus.exporters.ipmi;
+  inherit (lib)
+    mkOption
+    types
+    concatStringsSep
+    optionals
+    escapeShellArg
+    ;
 in {
   port = 9290;
 
@@ -12,7 +17,7 @@ in {
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to configuration file.
       '';
     };
@@ -20,7 +25,7 @@ in {
     webConfigFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to configuration file that can enable TLS or authentication.
       '';
     };

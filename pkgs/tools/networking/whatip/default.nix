@@ -55,6 +55,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Info on your IP";
+    mainProgram = "whatip";
     homepage = "https://gitlab.gnome.org/GabMus/whatip";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

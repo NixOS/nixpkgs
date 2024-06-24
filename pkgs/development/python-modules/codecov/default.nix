@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, coverage
-, ddt
-, fetchFromGitHub
-, mock
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  coverage,
+  ddt,
+  fetchFromGitHub,
+  mock,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python report uploader for Codecov";
+    mainProgram = "codecov";
     homepage = "https://codecov.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];

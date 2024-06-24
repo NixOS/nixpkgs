@@ -66,6 +66,9 @@ stdenv.mkDerivation {
     "-DCUSTOM_R_PATH=${customREnv}"
   ];
 
+  # necessary for R 4.4.0
+  hardeningDisable = [ "format" ];
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -108,9 +111,9 @@ stdenv.mkDerivation {
 
   meta = {
     changelog = "https://jasp-stats.org/release-notes";
-    description = "A complete statistical package for both Bayesian and Frequentist statistical methods";
+    description = "Complete statistical package for both Bayesian and Frequentist statistical methods";
     homepage = "https://github.com/jasp-stats/jasp-desktop";
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "JASP";
     maintainers = with lib.maintainers; [ tomasajt ];
     # JASP's cmake build steps are really different on Darwin

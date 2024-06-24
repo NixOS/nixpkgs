@@ -90,4 +90,10 @@ lib.mapAttrs networkRequiringTestPkg {
     tectonic -X new
     cat Tectonic.toml | grep "${tectonic.bundleUrl}"
   '';
+
+  /** test that the `nextonic -> tectonic` symlink is working as intended */
+  nextonic = ''
+    nextonic new 2>&1 \
+      | grep '"version 2" Tectonic command-line interface activated'
+  '';
 }

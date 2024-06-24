@@ -12,7 +12,7 @@
 , meson
 , ninja
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , appstream-glib
 , desktop-file-utils
 , gnome
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libxml2
     desktop-file-utils
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-screenshot";
     description = "Utility used in the GNOME desktop environment for taking screenshots";
+    mainProgram = "gnome-screenshot";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

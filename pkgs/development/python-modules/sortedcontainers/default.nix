@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 let
@@ -19,14 +20,14 @@ let
 
     doCheck = false;
 
-    nativeCheckInputs = [
-      pytestCheckHook
-    ];
+    nativeCheckInputs = [ pytestCheckHook ];
 
     pythonImportsCheck = [ "sortedcontainers" ];
 
     passthru.tests = {
-      pytest = sortedcontainers.overridePythonAttrs (_: { doCheck = true; });
+      pytest = sortedcontainers.overridePythonAttrs (_: {
+        doCheck = true;
+      });
     };
 
     meta = with lib; {

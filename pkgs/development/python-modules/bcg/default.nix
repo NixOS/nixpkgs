@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, click
-, click-log
-, paho-mqtt
-, pyaml
-, pyserial
-, schema
-, simplejson
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  appdirs,
+  click,
+  click-log,
+  paho-mqtt,
+  pyaml,
+  pyserial,
+  schema,
+  simplejson,
 }:
 buildPythonPackage rec {
   pname = "bcg";
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/hardwario/bch-gateway";
     description = "HARDWARIO Gateway (Python Application «bcg»)";
+    mainProgram = "bcg";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ cynerd ];

@@ -9,7 +9,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to run xray server.
 
           Either `settingsFile` or `settings` must be specified.
@@ -22,7 +22,7 @@ with lib;
         type = types.nullOr types.path;
         default = null;
         example = "/etc/xray/config.json";
-        description = lib.mdDoc ''
+        description = ''
           The absolute path to the configuration file.
 
           Either `settingsFile` or `settings` must be specified.
@@ -44,7 +44,7 @@ with lib;
             protocol = "freedom";
           }];
         };
-        description = lib.mdDoc ''
+        description = ''
           The configuration object.
 
           Either `settingsFile` or `settings` must be specified.

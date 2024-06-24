@@ -1,45 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, marshmallow
-, marshmallow-dataclass
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, responses
-, setuptools
-, typing-extensions
-, vcrpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  marshmallow-dataclass,
+  marshmallow,
+  pdm-backend,
+  pytestCheckHook,
+  pythonOlder,
+  pythonRelaxDepsHook,
+  requests,
+  responses,
+  setuptools,
+  typing-extensions,
+  vcrpy,
 }:
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.13.0";
+  version = "1.15.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LRzyZAusCo4uZlXFWoRPIfPgAGO4sP0KCGYOICNZ6f4=";
+    hash = "sha256-jmjlNGyGYsiwQ0qi8KiSUI38J4n1ZTzqxzY9Bn9OdqY=";
   };
 
   pythonRelaxDeps = [
     "marshmallow-dataclass"
+    "setuptools"
+  ];
+
+  build-system = [
+    pdm-backend
   ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
-    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     marshmallow
     marshmallow-dataclass
     requests
+    setuptools
     typing-extensions
   ];
 
@@ -49,9 +56,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "pygitguardian"
-  ];
+  pythonImportsCheck = [ "pygitguardian" ];
 
   disabledTests = [
     # Tests require an API key
@@ -68,6 +73,7 @@ buildPythonPackage rec {
     "test_multiscan_parameters"
     "test_quota_overview"
     "test_rate_limit"
+    "test_read_metadata_bad_response"
     "test_sca_client_scan_diff"
     "test_sca_scan_all_with_params"
     "test_sca_scan_directory_invalid_tar"

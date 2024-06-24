@@ -2,7 +2,7 @@
 , sway-unwrapped
 , makeWrapper, symlinkJoin, writeShellScriptBin
 , withBaseWrapper ? true, extraSessionCommands ? "", dbus
-, withGtkWrapper ? false, wrapGAppsHook, gdk-pixbuf, glib, gtk3
+, withGtkWrapper ? false, wrapGAppsHook3, gdk-pixbuf, glib, gtk3
 , extraOptions ? [] # E.g.: [ "--verbose" ]
 # Used by the NixOS module:
 , isNixOS ? false
@@ -13,9 +13,12 @@
 
 assert extraSessionCommands != "" -> withBaseWrapper;
 
-with lib;
-
 let
+  inherit (builtins) replaceStrings;
+  inherit (lib.lists) optional optionals;
+  inherit (lib.meta) getExe;
+  inherit (lib.strings) concatMapStrings optionalString;
+
   sway = sway-unwrapped.overrideAttrs (oa: { inherit isNixOS enableXWayland; });
   baseWrapper = writeShellScriptBin sway.meta.mainProgram ''
      set -o errexit
@@ -26,13 +29,13 @@ let
      fi
      if [ "$DBUS_SESSION_BUS_ADDRESS" ]; then
        export DBUS_SESSION_BUS_ADDRESS
-       exec ${lib.getExe sway} "$@"
+       exec ${getExe sway} "$@"
      else
-       exec ${lib.optionalString dbusSupport "${dbus}/bin/dbus-run-session"} ${lib.getExe sway} "$@"
+       exec ${optionalString dbusSupport "${dbus}/bin/dbus-run-session"} ${getExe sway} "$@"
      fi
    '';
 in symlinkJoin rec {
-  pname = lib.replaceStrings ["-unwrapped"] [""] sway.pname;
+  pname = replaceStrings ["-unwrapped"] [""] sway.pname;
   inherit (sway) version;
   name = "${pname}-${version}";
 
@@ -41,7 +44,7 @@ in symlinkJoin rec {
 
   strictDeps = false;
   nativeBuildInputs = [ makeWrapper ]
-    ++ (optional withGtkWrapper wrapGAppsHook);
+    ++ (optional withGtkWrapper wrapGAppsHook3);
 
   buildInputs = optionals withGtkWrapper [ gdk-pixbuf glib gtk3 ];
 

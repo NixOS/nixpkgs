@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Daemon for communicating with WebOS devices";
+    mainProgram = "novacomd";
     license = licenses.asl20;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.linux;

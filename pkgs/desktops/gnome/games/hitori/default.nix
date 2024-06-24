@@ -8,7 +8,7 @@
 , glib
 , gtk3
 , cairo
-, wrapGAppsHook
+, wrapGAppsHook3
 , libxml2
 , python3
 , gettext
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     libxml2
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -56,8 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Hitori";
+    homepage = "https://gitlab.gnome.org/GNOME/hitori";
     description = "GTK application to generate and let you play games of Hitori";
+    mainProgram = "hitori";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;

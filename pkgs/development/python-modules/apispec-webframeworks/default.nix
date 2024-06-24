@@ -1,19 +1,21 @@
-{ lib
-, apispec
-, bottle
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, flask
-, mock
-, pytestCheckHook
-, pythonOlder
-, tornado
+{
+  lib,
+  aiohttp,
+  apispec,
+  bottle,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  flask,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  tornado,
 }:
 
 buildPythonPackage rec {
   pname = "apispec-webframeworks";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,18 +24,15 @@ buildPythonPackage rec {
     owner = "marshmallow-code";
     repo = "apispec-webframeworks";
     rev = "refs/tags/${version}";
-    hash = "sha256-zrsqIZ5ZogZsK1ZOL2uy8igS4T8a+19IwL5dMhKw7OA=";
+    hash = "sha256-qepiaRW36quIgxBtEHMF3HN0wO6jp2uGAHgg5fJoMUY=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    apispec
-  ] ++ apispec.optional-dependencies.yaml;
+  propagatedBuildInputs = [ apispec ] ++ apispec.optional-dependencies.yaml;
 
   nativeCheckInputs = [
+    aiohttp
     bottle
     flask
     mock
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  pythonImportsCheck = [
-    "apispec_webframeworks"
-  ];
+  pythonImportsCheck = [ "apispec_webframeworks" ];
 
   meta = with lib; {
     description = "Web framework plugins for apispec";

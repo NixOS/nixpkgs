@@ -2,7 +2,7 @@
 , stdenv
 , fetchzip
 , ant
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 , jdk
 , makeWrapper
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     ant
-    canonicalize-jars-hook
+    stripJavaArchivesHook
     jdk
     makeWrapper
   ];

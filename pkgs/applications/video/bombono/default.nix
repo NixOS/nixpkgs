@@ -15,7 +15,7 @@
 , libdvdread
 , libxmlxx
 , mjpegtools
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       --replace "lib_mbase_env['CPPDEFINES']" "list(lib_mbase_env['CPPDEFINES'])"
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook scons pkg-config gettext ];
+  nativeBuildInputs = [ wrapGAppsHook3 scons pkg-config gettext ];
 
   buildInputs = [
     boost
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "a DVD authoring program for personal computers";
+    description = "DVD authoring program for personal computers";
     homepage = "https://www.bombono.org/";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ symphorien ];

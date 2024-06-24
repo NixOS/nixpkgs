@@ -59,7 +59,6 @@ in writeShellScript "update-${pname}" ''
     sha256=$(grep "${name}-$arch-$version.tar.xz" "$HOME/shasums" | cut -d" " -f1)
     hash=$(nix hash to-sri --type sha256 "$sha256")
 
-    update-source-version "${pname}" "0" "sha256-${lib.fakeSha256}" --source-key="sources.$platform"
-    update-source-version "${pname}" "$version" "$hash" --source-key="sources.$platform"
+    update-source-version "${pname}" "$version" "$hash" --ignore-same-version --source-key="sources.$platform"
   done
 ''

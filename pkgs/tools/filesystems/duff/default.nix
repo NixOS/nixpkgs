@@ -29,6 +29,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Quickly find duplicate files";
+    mainProgram = "duff";
     longDescription = ''
       Duff is a Unix command-line utility for quickly finding duplicates in
       a given set of files.

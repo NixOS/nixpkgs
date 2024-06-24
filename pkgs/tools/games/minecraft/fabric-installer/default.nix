@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fabric-installer";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchurl {
     url = "https://maven.fabricmc.net/net/fabricmc/fabric-installer/${version}/fabric-installer-${version}.jar";
-    sha256 = "sha256-fX5bHTp/jiCBBpiY6V3HHYS7Olx5yyNcA0iVFzz9NHs=";
+    sha256 = "sha256-Yu3xcL3MQe3qhdM6zz64VHQlhpmz1B+UGNKGyDbLCI0=";
   };
 
   dontUnpack = true;
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fabricmc.net/";
-    description = "A lightweight, experimental modding toolchain for Minecraft";
+    description = "Lightweight, experimental modding toolchain for Minecraft";
+    mainProgram = "fabric-installer";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = [ maintainers.ivar ];

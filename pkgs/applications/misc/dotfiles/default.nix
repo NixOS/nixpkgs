@@ -17,6 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Easily manage your dotfiles";
+    mainProgram = "dotfiles";
     homepage = "https://github.com/jbernard/dotfiles";
     license = licenses.isc;
   };

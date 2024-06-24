@@ -12,7 +12,11 @@ stdenv.mkDerivation  rec {
 
   hardeningDisable = [ "format" ];
 
-  patches = [ ./fltk-path.patch ];
+  patches = [
+    ./fltk-path.patch
+    # https://sourceforge.net/p/rakarrack/git/merge-requests/2/
+    ./looper-preset.patch
+  ];
 
   buildInputs = [ alsa-lib alsa-utils fltk libjack2 libXft libXpm libjpeg
     libpng libsamplerate libsndfile zlib ];

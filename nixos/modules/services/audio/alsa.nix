@@ -25,7 +25,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable ALSA sound.
         '';
       };
@@ -33,7 +33,7 @@ in
       enableOSSEmulation = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable ALSA OSS emulation (with certain cards sound mixing may not work!).
         '';
       };
@@ -44,7 +44,7 @@ in
         example = ''
           defaults.pcm.!card 3
         '';
-        description = lib.mdDoc ''
+        description = ''
           Set addition configuration for system-wide alsa.
         '';
       };
@@ -54,7 +54,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable volume and capture control with keyboard media keys.
 
             You want to leave this disabled if you run a desktop environment
@@ -70,7 +70,7 @@ in
           type = types.str;
           default = "1";
           example = "1%";
-          description = lib.mdDoc ''
+          description = ''
             The value by which to increment/decrement volume on media keys.
 
             See amixer(1) for allowed values.
@@ -106,7 +106,8 @@ in
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = "${pkgs.coreutils}/bin/mkdir -p /var/lib/alsa";
+          ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/alsa";
+          ExecStart = "${alsa-utils}/sbin/alsactl restore --ignore";
           ExecStop = "${alsa-utils}/sbin/alsactl store --ignore";
         };
       };

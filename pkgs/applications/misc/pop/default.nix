@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-8YcJXvR0cdL9PlP74Qh6uN2XZoN16sz/yeeZlBsk5N8=";
 
-  GOWORK = "off";
+  env.GOWORK = "off";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,5 +36,6 @@ buildGoModule rec {
     changelog = "https://github.com/charmbracelet/pop/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ caarlos0 maaslalani ];
+    mainProgram = "pop";
   };
 }

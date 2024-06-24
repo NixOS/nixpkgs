@@ -12,17 +12,19 @@ rustPlatform.buildRustPackage rec {
   pname = "libsignal-ffi";
   # must match the version used in mautrix-signal
   # see https://github.com/mautrix/signal/issues/401
-  version = "0.39.2";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     rev = "v${version}";
-    hash = "sha256-MKmkqfUhXOHUlP3jSNKsplT9kP0ERj3rmTrLLU3T2no=";
+    hash = "sha256-HqnxemAPjjKl/l4dVjEUIIvgW3ibNtQWnA10QYcd8Os=";
   };
 
-  nativeBuildInputs = [ protobuf ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
-  buildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    protobuf
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
 
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
 
@@ -38,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p" "libsignal-ffi" ];
 
   meta = with lib; {
-    description = "A C ABI library which exposes Signal protocol logic";
+    description = "C ABI library which exposes Signal protocol logic";
     homepage = "https://github.com/signalapp/libsignal";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ niklaskorz ];

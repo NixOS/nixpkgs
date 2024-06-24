@@ -30,13 +30,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "45.0";
+  version = "46.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "M+dwFmImp0U31MELFTjvqIQklP/pvyyQoWyrmKuZe98=";
+    hash = "sha256-pFDVzgFokvavL4q3H8fDlDguIse2ILqSpuFc9mvF7F8=";
   };
 
   nativeBuildInputs = [
@@ -102,8 +102,9 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Music";
+    homepage = "https://apps.gnome.org/Music/";
     description = "Music player and management application for the GNOME desktop environment";
+    mainProgram = "gnome-music";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

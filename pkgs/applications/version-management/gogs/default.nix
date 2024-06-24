@@ -40,7 +40,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "A painless self-hosted Git service";
+    description = "Painless self-hosted Git service";
     homepage = "https://gogs.io";
     license = licenses.mit;
     maintainers = [ maintainers.schneefux ];

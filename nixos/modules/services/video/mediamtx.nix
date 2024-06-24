@@ -9,12 +9,12 @@ in
 
   options = {
     services.mediamtx = {
-      enable = lib.mkEnableOption (lib.mdDoc "MediaMTX");
+      enable = lib.mkEnableOption "MediaMTX";
 
       package = lib.mkPackageOption pkgs "mediamtx" { };
 
       settings = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Settings for MediaMTX. Refer to the defaults at
           <https://github.com/bluenviron/mediamtx/blob/main/mediamtx.yml>.
         '';
@@ -32,16 +32,16 @@ in
 
       env = lib.mkOption {
         type = with lib.types; attrsOf anything;
-        description = lib.mdDoc "Extra environment variables for MediaMTX";
+        description = "Extra environment variables for MediaMTX";
         default = {};
         example = {
           MTX_CONFKEY = "mykey";
         };
       };
 
-      allowVideoAccess = lib.mkEnableOption (lib.mdDoc ''
+      allowVideoAccess = lib.mkEnableOption ''
         access to video devices like cameras on the system
-      '');
+      '';
     };
   };
 

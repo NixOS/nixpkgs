@@ -12,10 +12,10 @@ in
   ];
 
   options.services.youtrack = {
-    enable = lib.mkEnableOption (lib.mdDoc "YouTrack service");
+    enable = lib.mkEnableOption "YouTrack service";
 
     address = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         The interface youtrack will listen on.
       '';
       default = "127.0.0.1";
@@ -24,7 +24,7 @@ in
 
     extraParams = lib.mkOption {
       default = {};
-      description = lib.mdDoc ''
+      description = ''
         Extra parameters to pass to youtrack.
         Use to configure YouTrack 2022.x, deprecated with YouTrack 2023.x. Use `services.youtrack.generalParameters`.
         https://www.jetbrains.com/help/youtrack/standalone/YouTrack-Java-Start-Parameters.html
@@ -40,7 +40,7 @@ in
     };
 
     package = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Package to use.
       '';
       type = lib.types.package;
@@ -50,7 +50,7 @@ in
 
 
     statePath = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Path were the YouTrack state is stored.
         To this path the base version (e.g. 2023_1) of the used package will be appended.
       '';
@@ -59,7 +59,7 @@ in
     };
 
     virtualHost = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Name of the nginx virtual host to use and setup.
         If null, do not setup anything.
       '';
@@ -68,7 +68,7 @@ in
     };
 
     jvmOpts = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Extra options to pass to the JVM.
         Only has a use with YouTrack 2022.x, deprecated with YouTrack 2023.x. Use `serivces.youtrack.generalParameters`.
         See https://www.jetbrains.com/help/youtrack/standalone/Configure-JVM-Options.html
@@ -83,12 +83,12 @@ in
     autoUpgrade = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc "Whether YouTrack should auto upgrade it without showing the upgrade dialog.";
+      description = "Whether YouTrack should auto upgrade it without showing the upgrade dialog.";
     };
 
     generalParameters = lib.mkOption {
       type = with lib.types; listOf str;
-      description = lib.mdDoc ''
+      description = ''
         General configuration parameters and other JVM options.
         Only has an effect for YouTrack 2023.x.
         See https://www.jetbrains.com/help/youtrack/server/2023.3/youtrack-java-start-parameters.html#general-parameters
@@ -110,16 +110,16 @@ in
           listen-address = lib.mkOption {
             type = lib.types.str;
             default = "0.0.0.0";
-            description = lib.mdDoc "The interface YouTrack will listen on.";
+            description = "The interface YouTrack will listen on.";
           };
           listen-port = lib.mkOption {
             type = lib.types.port;
             default = 8080;
-            description = lib.mdDoc "The port YouTrack will listen on.";
+            description = "The port YouTrack will listen on.";
           };
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         Environmental configuration parameters, set imperatively. The values doesn't get removed, when removed in Nix.
         Only has an effect for YouTrack 2023.x.
         See https://www.jetbrains.com/help/youtrack/server/2023.3/youtrack-java-start-parameters.html#environmental-parameters

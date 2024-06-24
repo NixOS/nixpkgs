@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # integration tests depend on changing cargo config
 
   meta = with lib; {
-    description = "A utility for managing cargo dependencies from the command line";
+    description = "Utility for managing cargo dependencies from the command line";
     homepage = "https://github.com/killercup/cargo-edit";
     changelog = "https://github.com/killercup/cargo-edit/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];

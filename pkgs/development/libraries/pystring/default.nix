@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/imageworks/pystring/";
-    description = "A collection of C++ functions which match the interface and behavior of python's string class methods using std::string";
+    description = "Collection of C++ functions which match the interface and behavior of python's string class methods using std::string";
     license = licenses.bsd3;
     maintainers = [ maintainers.rytone ];
     platforms = platforms.unix;

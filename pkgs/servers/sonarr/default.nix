@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dotnet-runtime, icu, ffmpeg, openssl, sqlite, curl, makeWrapper, nixosTests }:
+{ lib, stdenv, fetchurl, dotnet-runtime, icu, ffmpeg, openssl, sqlite, curl, makeWrapper, nixosTests, zlib }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -10,15 +10,15 @@ let
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-9YNhyhxnnn2CesXLJH5Cs7yB9w23YUAZPrk9vEHvevk=";
-    arm64-linux_hash = "sha256-RBCyfozmBpWrmsfMcdb1BqcBXj64CMDrgpMZTzj85ZQ=";
-    x64-osx_hash = "sha256-+AKENBZohBUEKQEM3L69EzC84MhCX3fGvsNFn5p2v84=";
-    arm64-osx_hash = "sha256-Arx8usecAN+d0NGL7Hv+rB4GG7p/KLAaqpJFgNg7C2Y=";
+    x64-linux_hash = "sha256-MkRKWMhH4x5Z9mURh8qpShaozHrBFOHHwTmFlU1wqS8=";
+    arm64-linux_hash = "sha256-OIwWZEW4qmL5359hmGdNzunxVTIT3hIbTdAsd5Cpw/k=";
+    x64-osx_hash = "sha256-uDQXfj4r56ewrhZdwOnF78L3M1o0jDLt/PZlfWxxV18=";
+    arm64-osx_hash = "sha256-6WUeMIfF5juNHrLqep3mONqfcgxlBJOOJmHJkyHpZhU=";
   }."${arch}-${os}_hash";
 in
 stdenv.mkDerivation rec {
   pname = "sonarr";
-  version = "4.0.1.929";
+  version = "4.0.5.1710";
 
   src = fetchurl {
     url = "https://github.com/Sonarr/Sonarr/releases/download/v${version}/Sonarr.main.${version}.${os}-${arch}.tar.gz";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/NzbDrone \
       --add-flags "$out/share/sonarr-${version}/Sonarr.dll" \
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]} \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite openssl icu ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite openssl icu zlib ]}
 
     runHook postInstall
   '';

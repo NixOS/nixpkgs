@@ -137,7 +137,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/debanjum/khoj/releases/tag/${version}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ dit7ya ];
-    # src/tcmalloc.cc:333] Attempt to free invalid pointer
-    broken = stdenv.isDarwin;
+    broken = true; # last successful build 2024-01-10
   };
 }

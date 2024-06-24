@@ -1,26 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gobject-introspection
-, setuptools
-, networkmanager
-, proton-core
-, proton-vpn-connection
-, pycairo
-, pygobject3
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gobject-introspection,
+  setuptools,
+  networkmanager,
+  proton-core,
+  proton-vpn-connection,
+  pycairo,
+  pygobject3,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-vpn-network-manager";
-  version = "0.3.0-unstable-2023-09-05";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-network-manager";
-    rev = "6ffd04fa0ae88a89d2b733443317066ef23b3ccd";
-    hash = "sha256-Bqlwo7U/mwodQarl30n3/BNETqit1MVQUJT+mAhC6AI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zw6fzay1zCBIrouDg2EMhaxDLKIYV5TKYK5lQ3v8W6o=";
   };
 
   nativeBuildInputs = [
@@ -40,12 +42,13 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=proton/vpn/backend/linux/networkmanager --cov-report html --cov-report term" ""
+      --replace-fail "--cov=proton/vpn/backend/linux/networkmanager --cov-report html --cov-report term" ""
   '';
 
   pythonImportsCheck = [ "proton.vpn.backend.linux.networkmanager" ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
 
@@ -53,6 +56,6 @@ buildPythonPackage {
     description = "Provides the necessary functionality for other ProtonVPN components to interact with NetworkManager";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-network-manager";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

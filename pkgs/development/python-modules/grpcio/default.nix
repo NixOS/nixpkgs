@@ -1,46 +1,66 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, grpc
-, six
-, protobuf
-, enum34 ? null
-, futures ? null
-, isPy27
-, pkg-config
-, cython
-, c-ares
-, openssl
-, zlib
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  grpc,
+  six,
+  protobuf,
+  enum34 ? null,
+  futures ? null,
+  isPy27,
+  pkg-config,
+  cython,
+  c-ares,
+  openssl,
+  zlib,
 }:
 
 buildPythonPackage rec {
   pname = "grpcio";
   format = "setuptools";
-  version = "1.60.1";
+  version = "1.62.2";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3R06jR0uUK2bWeEKp/B8fRvis2fz8tM8X63pbtVGCWI=";
+    hash = "sha256-x3YYBx2Wt6i+LBBwGphTeCO5xluiVsC5Bn4FlM29lU0=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ cython pkg-config ];
+  nativeBuildInputs = [
+    cython
+    pkg-config
+  ];
 
-  buildInputs = [ c-ares openssl zlib ];
-  propagatedBuildInputs = [ six protobuf ]
-    ++ lib.optionals (isPy27) [ enum34 futures ];
+  buildInputs = [
+    c-ares
+    openssl
+    zlib
+  ];
+  propagatedBuildInputs =
+    [
+      six
+      protobuf
+    ]
+    ++ lib.optionals (isPy27) [
+      enum34
+      futures
+    ];
 
-  preBuild = ''
-    export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
-    if [ -z "$enableParallelBuilding" ]; then
-      GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
-    fi
-  '' + lib.optionalString stdenv.isDarwin ''
-    unset AR
-  '';
+  preBuild =
+    ''
+      export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
+      if [ -z "$enableParallelBuilding" ]; then
+        GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
+      fi
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      unset AR
+    '';
 
   GRPC_BUILD_WITH_BORING_SSL_ASM = "";
   GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;

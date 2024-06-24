@@ -1,6 +1,5 @@
 { python3
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 , lib
 
@@ -77,6 +76,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://peering-manager.net/";
     license = licenses.asl20;
     description = "BGP sessions management tool";
+    mainProgram = "peering-manager";
     maintainers = teams.wdz.members;
     platforms = platforms.linux;
   };

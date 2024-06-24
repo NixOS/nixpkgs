@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Force programs to exclusively use tor network";
+    mainProgram = "orjail";
     homepage = "https://github.com/orjail/orjail";
     license = licenses.wtfpl;
     maintainers = with maintainers; [ onny ];

@@ -1,8 +1,14 @@
-{ buildPecl, lib, php, fetchFromGitHub }:
+{
+  buildPecl,
+  lib,
+  php,
+  fetchFromGitHub,
+}:
 
 let
   version = "6.0.2";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "redis";
 
@@ -13,9 +19,7 @@ in buildPecl {
     hash = "sha256-Ie31zak6Rqxm2+jGXWg6KN4czHe9e+190jZRQ5VoB+M=";
   };
 
-  internalDeps = with php.extensions; [
-    session
-  ];
+  internalDeps = with php.extensions; [ session ];
 
   meta = with lib; {
     changelog = "https://github.com/phpredis/phpredis/releases/tag/${version}";

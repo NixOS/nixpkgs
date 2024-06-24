@@ -47,6 +47,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Debugging tool to diff network traffic leveraging Wireshark";
+    mainProgram = "qtwirediff";
     homepage = "https://github.com/aaptel/qtwirediff";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ janik ];

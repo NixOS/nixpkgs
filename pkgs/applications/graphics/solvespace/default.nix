@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , at-spi2-core
 , cairo
 , dbus
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
 
   meta = with lib; {
-    description = "A parametric 3d CAD program";
+    description = "Parametric 3d CAD program";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.edef ];
     platforms = platforms.linux;

@@ -28,5 +28,6 @@ buildGoModule rec {
     changelog = "https://github.com/kitabisa/mubeng/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "mubeng";
   };
 }

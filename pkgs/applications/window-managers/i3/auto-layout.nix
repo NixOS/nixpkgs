@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Automatic, optimal tiling for i3wm";
+    mainProgram = "i3-auto-layout";
     homepage = "https://github.com/chmln/i3-auto-layout";
     license = licenses.mit;
     maintainers = with maintainers; [ mephistophiles perstark ];

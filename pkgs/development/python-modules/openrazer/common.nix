@@ -1,14 +1,13 @@
-{ lib
-, fetchFromGitHub
-}: rec {
-  version = "3.6.1";
-  format = "setuptools";
+{ lib, fetchFromGitHub }:
+rec {
+  version = "3.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openrazer";
     repo = "openrazer";
     rev = "v${version}";
-    hash = "sha256-bboTRZqJq5tKeBQuiEQAXxTHYvoldDQlwbfehjDA8EE=";
+    hash = "sha256-eV5xDFRQi0m95pL6e2phvblUbh5GEJ1ru1a62TnbGNk=";
   };
 
   meta = with lib; {

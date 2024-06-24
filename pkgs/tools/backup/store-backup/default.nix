@@ -14,7 +14,7 @@ in
 
 stdenv.mkDerivation rec {
 
-  version = "3.5";
+  version = "3.5.2";
 
   pname = "store-backup";
 
@@ -25,8 +25,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.savannah.gnu.org/releases/storebackup/storeBackup-${version}.tar.bz2";
-    sha256 = "0y4gzssc93x6y93mjsxm5b5cdh68d7ffa43jf6np7s7c99xxxz78";
+    hash = "sha256-Ki1DT2zypFFiiMVd9Y8eSX7T+yr8moWMoALmAexjqWU=";
   };
+
+  patches = [
+    # https://www.openwall.com/lists/oss-security/2020/01/20/3
+    ./CVE-2020-7040.patch
+  ];
 
   installPhase = ''
     mkdir -p $out/scripts
@@ -48,7 +53,8 @@ stdenv.mkDerivation rec {
 
     PATH=$PATH:${dummyMount}/bin
 
-
+    export USER=test
+    export HOME=$(mktemp -d)
     { # simple sanity test, test backup/restore of simple store paths
 
       mkdir backup
@@ -101,7 +107,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A backup suite that stores files on other disks";
+    description = "Backup suite that stores files on other disks";
     homepage = "https://savannah.nongnu.org/projects/storebackup";
     license = lib.licenses.gpl3Plus;
     maintainers = [lib.maintainers.marcweber];

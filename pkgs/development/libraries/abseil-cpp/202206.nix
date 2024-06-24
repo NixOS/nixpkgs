@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , static ? stdenv.hostPlatform.isStatic
 , cxxStandard ? null
@@ -9,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abseil-cpp";
-  version = "20220623.1";
+  version = "20220623.2";
 
   src = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
     rev = "refs/tags/${version}";
-    hash = "sha256-Od1FZOOWEXVQsnZBwGjDIExi6LdYtomyL0STR44SsG8=";
+    hash = "sha256-ma8QJfSySsk2XVLA0rhwYJMQx+6HxMFgub6gi5mDrLI=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -33,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "An open-source collection of C++ code designed to augment the C++ standard library";
+    description = "Open-source collection of C++ code designed to augment the C++ standard library";
     homepage = "https://abseil.io/";
     license = licenses.asl20;
     platforms = platforms.all;

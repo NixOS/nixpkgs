@@ -11,7 +11,6 @@
 , enableUnfree ? false
 
   # For tests
-, _7zz
 , testers
 }:
 
@@ -26,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "23.01";
+  version = "24.06";
 
   src = fetchurl {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash = {
-      free = "sha256-F1ybQsyReF2NBR/3eMZySvxVEntpwq2VUlRCHp/5nZs=";
-      unfree = "sha256-NWBxAHNg5aGCTZkEmT6LJIC1G1cOjJ+vfA9Y6+S/n3Q=";
+      free = "sha256-X3uqGnJGQpW5MOaTtgWYwwrhS84e+piX7Gc+e8Pll00=";
+      unfree = "sha256-KqFmDHc1JbLthNbNf/BoDHhuwIk7h+TbRGVNy39ayLU=";
     }.${if enableUnfree then "unfree" else "free"};
     downloadToTemp = (!enableUnfree);
     # remove the unRAR related code from the src drv
@@ -55,8 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-cross-mingw-build.patch
-    # remove unneeded semicolons related to -Wextra-semi-stmt, caused by upstream
-    ./fix-empty-expr-stmt.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
@@ -99,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = lib.optionals useUasm [ uasm ];
 
+  setupHook = ./setup-hook.sh;
+
   enableParallelBuilding = true;
 
   preBuild = "cd CPP/7zip/Bundles/Alone2";
@@ -115,23 +114,23 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = ./update.sh;
     tests.version = testers.testVersion {
-      package = _7zz;
+      package = finalAttrs.finalPackage;
       command = "7zz --help";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command line archiver utility";
     homepage = "https://7-zip.org";
-    license = with licenses;
+    license = with lib.licenses;
       # 7zip code is largely lgpl2Plus
       # CPP/7zip/Compress/LzfseDecoder.cpp is bsd3
       [ lgpl2Plus /* and */ bsd3 ] ++
       # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
       # the unRAR compression code is disabled by default
       lib.optionals enableUnfree [ unfree ];
-    maintainers = with maintainers; [ anna328p eclairevoyant jk peterhoeg ];
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with lib.maintainers; [ anna328p eclairevoyant jk peterhoeg ];
+    platforms = with lib.platforms; unix ++ windows;
     mainProgram = "7zz";
   };
 })

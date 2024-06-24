@@ -23,6 +23,7 @@ import ./make-test-python.nix ({ lib, ... }: {
       };
       services.paperless.settings = {
         PAPERLESS_DBHOST = "/run/postgresql";
+        PAPERLESS_OCR_LANGUAGE = "deu";
       };
     };
   }; in self;

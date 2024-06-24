@@ -36,6 +36,14 @@ let
       ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
 
       ./qtbase.patch.d/0014-aarch64-darwin.patch
+
+      # Fix typo that breaks build on Darwin
+      # FIXME: remove this once merged upstream
+      # See: https://invent.kde.org/qt/qt/qtbase/-/merge_requests/325
+      (fetchpatch {
+        url = "https://invent.kde.org/qt/qt/qtbase/-/commit/e84c0df50f51c61aa49b47823582b0f8de406e3d.patch";
+        hash = "sha256-d1RIY03E71aMzOOVtcIaMeariki/72QRekUne6P2D3M=";
+      })
     ] ++ [
       ./qtbase.patch.d/0003-qtbase-mkspecs.patch
       ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
@@ -173,29 +181,22 @@ let
       })
     ];
     qtwebengine = [
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a6f16c6daea3b5a1f7bc9f175d1645922c131563/qt5/qt5-webengine-python3.patch";
-        hash = "sha256-rUSDwTucXVP3Obdck7LRTeKZ+JYQSNhQ7+W31uHZ9yM=";
-      })
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/7ae178a617d1e0eceb742557e63721af949bd28a/qt5/qt5-webengine-chromium-python3.patch";
-        stripLen = 1;
-        extraPrefix = "src/3rdparty/";
-        hash = "sha256-MZGYeMdGzwypfKoSUaa56K3inbcGRx7he/+AFyk5ekA=";
-      })
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/7ae178a617d1e0eceb742557e63721af949bd28a/qt5/qt5-webengine-gcc12.patch";
-        stripLen = 1;
-        extraPrefix = "src/3rdparty/";
-        hash = "sha256-s4GsGMJTBNWw2gTJuIEP3tqT82AmTsR2mbj59m2p6rM=";
-      })
       ./qtwebengine-link-pulseaudio.patch
+      # Fixes Chromium build failure with Ninja 1.12.
+      # See: https://bugreports.qt.io/browse/QTBUG-124375
+      # Backport of: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=a766045f65f934df3b5f1aa63bc86fbb3e003a09
+      ./qtwebengine-ninja-1.12.patch
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
       ./qtwebengine-darwin-checks.patch
     ];
     qtwebkit = [
+      (fetchpatch {
+        name = "qtwebkit-python39-json.patch";
+        url = "https://github.com/qtwebkit/qtwebkit/commit/78360c01c796b6260bf828bc9c8a0ef73c5132fd.patch";
+        sha256 = "yCX/UL666BPxjnxT6rIsUrJsPcSWHhZwMFJfuHhbkhk=";
+      })
       (fetchpatch {
         name = "qtwebkit-bison-3.7-build.patch";
         url = "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
@@ -211,8 +212,14 @@ let
         url = "https://github.com/qtwebkit/qtwebkit/commit/5c272a21e621a66862821d3ae680f27edcc64c19.patch";
         sha256 = "9hjqLyABz372QDgoq7nXXXQ/3OXBGcYN1/92ekcC3WE=";
       })
+      (fetchpatch {
+        name = "qtwebkit-libxml2-api-change.patch";
+        url = "https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b.patch";
+        sha256 = "WZEj+UuKhgJBM7auhND3uddk1wWdTY728jtiWVe7CSI=";
+      })
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
+      ./qtwebkit-cstdint.patch
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch
@@ -273,7 +280,11 @@ let
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
       qtpim = callPackage ../modules/qtpim.nix {};
       qtpositioning = callPackage ../modules/qtpositioning.nix {};
+      qtpurchasing = callPackage ../modules/qtpurchasing.nix {
+        inherit (darwin.apple_sdk_11_0.frameworks) Foundation StoreKit;
+      };
       qtquick1 = null;
+      qtquick3d = callPackage ../modules/qtquick3d.nix { };
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
       qtremoteobjects = callPackage ../modules/qtremoteobjects.nix {};
@@ -305,11 +316,6 @@ let
           in if stdenv'.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
         inherit (srcs.qtwebengine) version;
         python = python3;
-        postPatch = ''
-          # update catapult for python3 compatibility
-          rm -r src/3rdparty/chromium/third_party/catapult
-          cp -r ${srcs.catapult} src/3rdparty/chromium/third_party/catapult
-        '';
         inherit (darwin) cctools xnu;
         inherit (darwin.apple_sdk_11_0) libpm libunwind;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;

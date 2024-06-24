@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Streaming replication for SQLite";
+    mainProgram = "litestream";
     license = licenses.asl20;
     homepage = "https://litestream.io/";
     maintainers = with maintainers; [ fbrs ];

@@ -1,9 +1,14 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.unifi;
+  inherit (lib)
+    mkOption
+    types
+    escapeShellArg
+    optionalString
+    concatStringsSep
+    ;
 in
 {
   port = 9130;
@@ -11,7 +16,7 @@ in
     unifiAddress = mkOption {
       type = types.str;
       example = "https://10.0.0.1:8443";
-      description = lib.mdDoc ''
+      description = ''
         URL of the UniFi Controller API.
       '';
     };
@@ -19,7 +24,7 @@ in
     unifiInsecure = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         If enabled skip the verification of the TLS certificate of the UniFi Controller API.
         Use with caution.
       '';
@@ -28,14 +33,14 @@ in
     unifiUsername = mkOption {
       type = types.str;
       example = "ReadOnlyUser";
-      description = lib.mdDoc ''
+      description = ''
         username for authentication against UniFi Controller API.
       '';
     };
 
     unifiPassword = mkOption {
       type = types.str;
-      description = lib.mdDoc ''
+      description = ''
         Password for authentication against UniFi Controller API.
       '';
     };
@@ -44,7 +49,7 @@ in
       type = types.str;
       default = "5s";
       example = "2m";
-      description = lib.mdDoc ''
+      description = ''
         Timeout including unit for UniFi Controller API requests.
       '';
     };

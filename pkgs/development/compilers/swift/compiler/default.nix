@@ -284,7 +284,6 @@ in stdenv.mkDerivation {
     patch -p1 -d swift -i ${./patches/swift-linux-fix-libc-paths.patch}
     patch -p1 -d swift -i ${./patches/swift-linux-fix-linking.patch}
     patch -p1 -d swift -i ${./patches/swift-darwin-libcxx-flags.patch}
-    patch -p1 -d swift -i ${./patches/swift-darwin-link-cxxabi.patch}
     patch -p1 -d swift -i ${substituteAll {
       src = ./patches/swift-darwin-plistbuddy-workaround.patch;
       inherit swiftArch;
@@ -697,7 +696,7 @@ in stdenv.mkDerivation {
   };
 
   meta = {
-    description = "The Swift Programming Language";
+    description = "Swift Programming Language";
     homepage = "https://github.com/apple/swift";
     maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
     license = lib.licenses.asl20;

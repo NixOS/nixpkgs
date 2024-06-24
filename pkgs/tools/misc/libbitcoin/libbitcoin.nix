@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];
     # AGPL with a lesser clause
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
   };
 }

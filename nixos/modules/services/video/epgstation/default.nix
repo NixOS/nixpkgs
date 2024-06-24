@@ -78,7 +78,7 @@ in
   ];
 
   options.services.epgstation = {
-    enable = lib.mkEnableOption (lib.mdDoc description);
+    enable = lib.mkEnableOption description;
 
     package = lib.mkPackageOption pkgs "epgstation" { };
 
@@ -90,7 +90,7 @@ in
     usePreconfiguredStreaming = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Use preconfigured default streaming options.
 
         Upstream defaults:
@@ -101,7 +101,7 @@ in
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Open ports in the firewall for the EPGStation web interface.
 
         ::: {.warning}
@@ -116,7 +116,7 @@ in
       name = lib.mkOption {
         type = lib.types.str;
         default = "epgstation";
-        description = lib.mdDoc ''
+        description = ''
           Name of the MySQL database that holds EPGStation's data.
         '';
       };
@@ -124,7 +124,7 @@ in
       passwordFile = lib.mkOption {
         type = lib.types.path;
         example = "/run/keys/epgstation-db-password";
-        description = lib.mdDoc ''
+        description = ''
           A file containing the password for the database named
           {option}`database.name`.
         '';
@@ -142,7 +142,7 @@ in
     # configure them according to their needs. In these cases, the value in the
     # upstream template configuration should serve as a "good enough" default.
     settings = lib.mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Options to add to config.yml.
 
         Documentation:
@@ -161,7 +161,7 @@ in
         options.port = lib.mkOption {
           type = lib.types.port;
           default = 20772;
-          description = lib.mdDoc ''
+          description = ''
             HTTP port for EPGStation to listen on.
           '';
         };
@@ -170,7 +170,7 @@ in
           type = lib.types.port;
           default = cfg.settings.port + 1;
           defaultText = lib.literalExpression "config.${opt.settings}.port + 1";
-          description = lib.mdDoc ''
+          description = ''
             Socket.io port for EPGStation to listen on. It is valid to share
             ports with {option}`${opt.settings}.port`.
           '';
@@ -180,7 +180,7 @@ in
           type = lib.types.port;
           default = cfg.settings.socketioPort;
           defaultText = lib.literalExpression "config.${opt.settings}.socketioPort";
-          description = lib.mdDoc ''
+          description = ''
             Socket.io port that the web client is going to connect to. This may
             be different from {option}`${opt.settings}.socketioPort` if
             EPGStation is hidden behind a reverse proxy.
@@ -194,13 +194,13 @@ in
             "http+unix://''${lib.replaceStrings ["/"] ["%2F"] config.${option}}"
           '';
           example = "http://localhost:40772";
-          description = lib.mdDoc "URL to connect to Mirakurun.";
+          description = "URL to connect to Mirakurun.";
         };
 
         options.encodeProcessNum = lib.mkOption {
           type = lib.types.ints.positive;
           default = 4;
-          description = lib.mdDoc ''
+          description = ''
             The maximum number of processes that EPGStation would allow to run
             at the same time for encoding or streaming videos.
           '';
@@ -209,7 +209,7 @@ in
         options.concurrentEncodeNum = lib.mkOption {
           type = lib.types.ints.positive;
           default = 1;
-          description = lib.mdDoc ''
+          description = ''
             The maximum number of encoding jobs that EPGStation would run at the
             same time.
           '';
@@ -217,7 +217,7 @@ in
 
         options.encode = lib.mkOption {
           type = with lib.types; listOf attrs;
-          description = lib.mdDoc "Encoding presets for recorded videos.";
+          description = "Encoding presets for recorded videos.";
           default = [
             {
               name = "H.264";

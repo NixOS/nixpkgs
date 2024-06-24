@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     "--enable-pcre"
     "--enable-zshenv=${placeholder "out"}/etc/zshenv"
     "--disable-site-fndir"
-    "--enable-function-subdirs"
+    # --enable-function-subdirs is not enabled due to it being slow at runtime in some cases
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && !stdenv.hostPlatform.isStatic) [
     # Also see: https://github.com/buildroot/buildroot/commit/2f32e668aa880c2d4a2cce6c789b7ca7ed6221ba
     "zsh_cv_shared_environ=yes"
@@ -127,7 +127,7 @@ EOF
   '';
 
   meta = {
-    description = "The Z shell";
+    description = "Z shell";
     longDescription = ''
       Zsh is a UNIX command interpreter (shell) usable as an interactive login
       shell and as a shell script command processor.  Of the standard shells,

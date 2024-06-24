@@ -17,24 +17,24 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable the postsrsd SRS server for Postfix.";
+        description = "Whether to enable the postsrsd SRS server for Postfix.";
       };
 
       secretsFile = mkOption {
         type = types.path;
         default = "/var/lib/postsrsd/postsrsd.secret";
-        description = lib.mdDoc "Secret keys used for signing and verification";
+        description = "Secret keys used for signing and verification";
       };
 
       domain = mkOption {
         type = types.str;
-        description = lib.mdDoc "Domain name for rewrite";
+        description = "Domain name for rewrite";
       };
 
       separator = mkOption {
         type = types.enum ["-" "=" "+"];
         default = "=";
-        description = lib.mdDoc "First separator character in generated addresses";
+        description = "First separator character in generated addresses";
       };
 
       # bindAddress = mkOption { # uncomment once 1.5 is released
@@ -46,37 +46,37 @@ in {
       forwardPort = mkOption {
         type = types.int;
         default = 10001;
-        description = lib.mdDoc "Port for the forward SRS lookup";
+        description = "Port for the forward SRS lookup";
       };
 
       reversePort = mkOption {
         type = types.int;
         default = 10002;
-        description = lib.mdDoc "Port for the reverse SRS lookup";
+        description = "Port for the reverse SRS lookup";
       };
 
       timeout = mkOption {
         type = types.int;
         default = 1800;
-        description = lib.mdDoc "Timeout for idle client connections in seconds";
+        description = "Timeout for idle client connections in seconds";
       };
 
       excludeDomains = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc "Origin domains to exclude from rewriting in addition to primary domain";
+        description = "Origin domains to exclude from rewriting in addition to primary domain";
       };
 
       user = mkOption {
         type = types.str;
         default = "postsrsd";
-        description = lib.mdDoc "User for the daemon";
+        description = "User for the daemon";
       };
 
       group = mkOption {
         type = types.str;
         default = "postsrsd";
-        description = lib.mdDoc "Group for the daemon";
+        description = "Group for the daemon";
       };
 
     };
@@ -120,14 +120,9 @@ in {
         if [ ! -e "${cfg.secretsFile}" ]; then
           echo "WARNING: secrets file not found, autogenerating!"
           DIR="$(dirname "${cfg.secretsFile}")"
-          if [ ! -d "$DIR" ]; then
-            mkdir -p -m750 "$DIR"
-            chown "${cfg.user}:${cfg.group}" "$DIR"
-          fi
-          dd if=/dev/random bs=18 count=1 | base64 > "${cfg.secretsFile}"
-          chmod 600 "${cfg.secretsFile}"
+          install -m 750 -o ${cfg.user} -g ${cfg.group} -d "$DIR"
+          install -m 600 -o ${cfg.user} -g ${cfg.group} <(dd if=/dev/random bs=18 count=1 | base64) "${cfg.secretsFile}"
         fi
-        chown "${cfg.user}:${cfg.group}" "${cfg.secretsFile}"
       '';
     };
 

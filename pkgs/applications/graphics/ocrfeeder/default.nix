@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , intltool
 , itstool
 , libxml2
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     itstool
     libxml2
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/OCRFeeder";
+    homepage = "https://gitlab.gnome.org/GNOME/ocrfeeder";
     description = "Complete Optical Character Recognition and Document Analysis and Recognition program";
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.gpl3Plus;

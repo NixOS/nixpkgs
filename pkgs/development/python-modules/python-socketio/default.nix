@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, bidict
-, python-engineio
+  # dependencies
+  bidict,
+  python-engineio,
 
-# optional-dependencies
-, aiohttp
-, requests
-, websocket-client
+  # optional-dependencies
+  aiohttp,
+  requests,
+  websocket-client,
 
-# tests
-, msgpack
-, pytestCheckHook
-, simple-websocket
-, uvicorn
+  # tests
+  msgpack,
+  pytestCheckHook,
+  simple-websocket,
+  uvicorn,
 
 }:
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.10.0";
+  version = "5.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -34,12 +35,10 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nlzTzIswMRjvJ9l9TOtVvRvbKlQPvNH0/P1NIbQCmy8=";
+    hash = "sha256-t5QbuXjipLaf9GV+N5FLq45xJPK2/FUaM/0s8RNPTzo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     bidict
@@ -51,9 +50,7 @@ buildPythonPackage rec {
       requests
       websocket-client
     ];
-    asyncio_client = [
-      aiohttp
-    ];
+    asyncio_client = [ aiohttp ];
   };
 
   nativeCheckInputs = [
@@ -63,9 +60,7 @@ buildPythonPackage rec {
     simple-websocket
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [
-    "socketio"
-  ];
+  pythonImportsCheck = [ "socketio" ];
 
   meta = with lib; {
     description = "Python Socket.IO server and client";

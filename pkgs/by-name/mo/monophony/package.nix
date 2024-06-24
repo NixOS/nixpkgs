@@ -6,21 +6,20 @@
 , gobject-introspection
 , yt-dlp
 , libadwaita
-, libsoup_3
 , glib-networking
 , nix-update-script
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "2.6.0";
-  format = "other";
+  version = "2.11.0";
+  pyproject = false;
 
-  sourceRoot = "source/source";
+  sourceRoot = "${src.name}/source";
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-dLv1zdhWXOimxhoyf0T8oM5dF4fKepcIED+DG6D1MH0=";
+    hash = "sha256-OGUj1NNJNerYx/nBtg4g9xMbz6u4YSqKO6HeMNeYpE8=";
   };
 
   pythonPath = with python3Packages; [
@@ -29,8 +28,13 @@ python3Packages.buildPythonApplication rec {
     ytmusicapi
   ];
 
+  build-system = with python3Packages; [
+    pip
+    setuptools
+    wheel
+  ];
+
   nativeBuildInputs = [
-    python3Packages.nuitka
     gobject-introspection
     wrapGAppsHook4
   ];
@@ -38,7 +42,6 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     libadwaita
     # needed for gstreamer https
-    libsoup_3
     glib-networking
   ] ++ (with gst_all_1; [
     gst-plugins-base
@@ -46,15 +49,17 @@ python3Packages.buildPythonApplication rec {
     gstreamer
   ]);
 
+  # Makefile only contains `install`
+  dontBuild = true;
+
   installFlags = [ "prefix=$(out)" ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    buildPythonPath "$pythonPath"
-    gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$program_PYTHONPATH"
+    makeWrapperArgs+=(
       --prefix PATH : "${lib.makeBinPath [yt-dlp]}"
-      # needed for gstreamer https
-      --prefix LD_LIBRARY_PATH : "${lib.getLib libsoup_3}/lib"
+      "''${gappsWrapperArgs[@]}"
     )
   '';
 

@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   postPatch = ''
-    cp -r ${imgui}/include/imgui third-party/imgui
+    cp -r ${imgui.src}/* third-party/imgui/imgui
+    chmod -R u+w third-party/imgui
   '' + lib.optionalString (lib.versionAtLeast imgui.version "1.90.1") ''
     substituteInPlace src/imtui-impl-{emscripten,ncurses}.cpp \
       --replace "ImGuiKey_KeyPadEnter" "ImGuiKey_KeypadEnter"
@@ -44,10 +45,6 @@ stdenv.mkDerivation rec {
     "-DIMTUI_BUILD_EXAMPLES:BOOL=OFF"
     "-DIMTUI_INSTALL_IMGUI_HEADERS:BOOL=OFF"
   ];
-
-  postInstall = ''
-    rm -rf $out/include/imgui
-  '';
 
   meta = with lib; {
     description = "Immediate mode text-based user interface library";

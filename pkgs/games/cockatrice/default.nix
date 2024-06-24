@@ -21,7 +21,7 @@ mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/Cockatrice/Cockatrice";
-    description = "A cross-platform virtual tabletop for multiplayer card games";
+    description = "Cross-platform virtual tabletop for multiplayer card games";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ evanjs ];
     platforms = with lib.platforms; linux;

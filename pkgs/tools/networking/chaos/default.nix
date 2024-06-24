@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "chaos";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "chaos-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TpzTDNkfwL2CgEZwk2b5Zojhh61hXBm3PgjLkav6B3M=";
+    hash = "sha256-YjwxInBEPgovSk5EZzpeNhp4/FRWf6prZnNqcyyFFJg=";
   };
 
-  vendorHash = "sha256-Zu3TxBFTrXkAOmtUELjSdyzlE6CIr4SUBSdvaRnKy+k=";
+  vendorHash = "sha256-c5J2cTzyb7CiBlS4vS3PdRhr6DhIvXE2lt40u0s6G0k=";
 
   subPackages = [
     "cmd/chaos/"
@@ -26,5 +26,6 @@ buildGoModule rec {
     changelog = "https://github.com/projectdiscovery/chaos-client/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "chaos";
   };
 }

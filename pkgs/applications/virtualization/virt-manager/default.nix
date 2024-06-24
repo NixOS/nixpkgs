@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook, gtk-vnc
+{ lib, fetchFromGitHub, python3, intltool, file, wrapGAppsHook3, gtk-vnc
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, gst_all_1, libosinfo, gnome, gtksourceview4, docutils, cpio
 , e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
@@ -28,13 +28,18 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/virt-manager/virt-manager/commit/83fcc5b2e8f2cede84564387756fe8971de72188.patch";
       hash = "sha256-yEk+md5EkwYpP27u3E+oTJ8thgtH2Uy1x3JIWPBhqeE=";
     })
+    # fix crash with some cursor themes
+    (fetchpatch {
+      url = "https://github.com/virt-manager/virt-manager/commit/cc4a39ea94f42bc92765eb3bb56e2b7f9198be67.patch";
+      hash = "sha256-dw6yrMaAOnTh8Z6xJQQKmYelOkOl6EBAOfJQU9vQ8Ws=";
+    })
   ];
 
   nativeBuildInputs = [
     intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
-    wrapGAppsHook
+    wrapGAppsHook3
   ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
@@ -76,7 +81,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
+    pytest7CheckHook
     cpio
     cdrtools
     xorriso

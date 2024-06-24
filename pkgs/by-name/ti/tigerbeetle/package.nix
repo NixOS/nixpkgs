@@ -14,21 +14,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tigerbeetle";
-  version = "0.14.178";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "tigerbeetle";
     repo = "tigerbeetle";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-QbNfy9S+h+o6WJTMdNzGsGZhrfCTGTyhcO3psbmQKaU=";
+    hash = "sha256-3+uCMoOnyvI//ltEaqTIXytUxxgJrfMnFly11WCh66Q=";
   };
+
+  env.TIGERBEETLE_RELEASE = finalAttrs.version;
 
   nativeBuildInputs = [ custom_zig_hook ];
 
   zigBuildFlags = [
     "-Drelease"
     "-Dgit-commit=0000000000000000000000000000000000000000"
-    "-Dversion=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://tigerbeetle.com/";
-    description = "A financial accounting database designed to be distributed and fast";
+    description = "Financial accounting database designed to be distributed and fast";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danielsidhion ];
     platforms = lib.platforms.linux;

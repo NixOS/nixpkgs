@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, hatchling
+  # build-system
+  hatchling,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,18 +23,11 @@ buildPythonPackage rec {
     hash = "sha256-fRrfpVcoz0tdgS7OPQh3A/rqlT4MChp4QV3p31Ak2EQ=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  pythonImportsCheck = [
-    "expandvars"
-  ];
+  pythonImportsCheck = [ "expandvars" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Expand system variables Unix style";

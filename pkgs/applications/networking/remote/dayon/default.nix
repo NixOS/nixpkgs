@@ -6,18 +6,18 @@
 , jre
 , makeWrapper
 , copyDesktopItems
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dayon";
-  version = "13.0.0";
+  version = "14.0.2";
 
   src = fetchFromGitHub {
     owner = "RetGal";
     repo = "dayon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2Fo+LQvsrDvqEudZxzQBtJHGxrRYUyNyhrPV1xS49pQ=";
+    hash = "sha256-nRNqubR44ydZwwuQG3q6TRm+MHTRgRbeLI9dsk83wq4=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     jdk
     makeWrapper
     copyDesktopItems
-    canonicalize-jars-hook
+    stripJavaArchivesHook
   ];
 
   buildPhase = ''
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An easy to use, cross-platform remote desktop assistance solution";
+    description = "Easy to use, cross-platform remote desktop assistance solution";
     homepage = "https://retgal.github.io/Dayon/index.html";
     license = licenses.gpl3Plus; # https://github.com/RetGal/Dayon/issues/59
     mainProgram = "dayon";

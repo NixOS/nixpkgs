@@ -3,6 +3,8 @@
 , gettext
 , python3
 , fetchFromGitHub
+, fetchpatch2
+, plugins ? [ ]
 , nixosTests
 }:
 
@@ -27,20 +29,22 @@ let
     };
   };
 
-  version = "2023.1.3";
+  version = "2024.1.0";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     rev = "v${version}";
-    hash = "sha256-YxmkjfftNrInIcSkK21wJXiEU6hbdDa1Od8p+HiLprs=";
+    hash = "sha256-rFOlovybaEZnv5wBx6Dv8bVkP1D+CgYAKRXuNb6hLKQ=";
   };
 
   meta = with lib; {
     description = "Conference planning tool: CfP, scheduling, speaker management";
+    mainProgram = "pretalx-manage";
     homepage = "https://github.com/pretalx/pretalx";
+    changelog = "https://docs.pretalx.org/en/latest/changelog.html";
     license = licenses.asl20;
-    maintainers = teams.c3d2.members;
+    maintainers = with maintainers; [ hexa] ++ teams.c3d2.members;
     platforms = platforms.linux;
   };
 
@@ -50,7 +54,7 @@ let
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
 
-    npmDepsHash = "sha256-4cnBHZ8WpHgp/bbsYYbdtrhuD6ffUAZq9ZjoLpWGfRg=";
+    npmDepsHash = "sha256-B9R3Nn4tURNxzeyLDHscqHxYOQK9AcmDnyNq3k5WQQs=";
 
     npmBuildScript = "build";
 
@@ -67,27 +71,44 @@ python.pkgs.buildPythonApplication rec {
     "static"
   ];
 
+  patches = [
+    (fetchpatch2 {
+      # Backport support for Djangorestframework 3.15.x
+      name = "pretalx-drf-3.15.patch";
+      url = "https://github.com/pretalx/pretalx/commit/43a0416c6968d64ea57720abdb82f482940b11f8.patch";
+      hash = "sha256-Iw1xVF7j7c712kwIk1SMbQSF0ixMUZr1BJib3KAb2HY=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace src/pretalx/common/management/commands/rebuild.py \
       --replace 'subprocess.check_call(["npm", "run", "build"], cwd=frontend_dir, env=env)' ""
 
     substituteInPlace src/setup.cfg \
-      --replace "--cov=./" ""
+      --replace "--cov=./ --cov-report=" ""
   '';
 
   nativeBuildInputs = [
     gettext
-    python.pkgs.pythonRelaxDepsHook
-  ];
+  ] ++ (with python.pkgs; [
+    pythonRelaxDepsHook
+    setuptools
+  ]);
 
   pythonRelaxDeps = [
-    "bleach"
+    "celery"
+    "css-inline"
     "cssutils"
+    "django-csp"
     "django-filter"
-    "django-formtools"
-    "libsass"
+    "django-hierarkey"
+    "djangorestframework"
     "markdown"
     "pillow"
+    "python-dateutil"
+    "reportlab"
+    "requests"
+    "rules"
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -125,7 +146,7 @@ python.pkgs.buildPythonApplication rec {
     vobject
     whitenoise
     zxcvbn
-  ] ++ beautifulsoup4.optional-dependencies.lxml;
+  ] ++ beautifulsoup4.optional-dependencies.lxml ++ plugins;
 
   passthru.optional-dependencies = {
     mysql = with python.pkgs; [
@@ -174,6 +195,7 @@ python.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python.pkgs; [
     faker
     freezegun
+    jsonschema
     pytest-django
     pytest-mock
     pytest-xdist
@@ -185,9 +207,16 @@ python.pkgs.buildPythonApplication rec {
     # tries to run npm run i18n:extract
     "test_common_custom_makemessages_does_not_blow_up"
     # Expected to perform X queries or less but Y were done
+    "test_can_see_schedule"
     "test_schedule_export_public"
     "test_schedule_frab_json_export"
+    "test_schedule_frab_xcal_export"
     "test_schedule_frab_xml_export"
+    "test_schedule_frab_xml_export_control_char"
+    "test_schedule_page_text_list"
+    "test_schedule_page_text_table"
+    "test_schedule_page_text_wrong_format"
+    "test_versioned_schedule_page"
   ];
 
   passthru = {
@@ -195,6 +224,12 @@ python.pkgs.buildPythonApplication rec {
     tests = {
       inherit (nixosTests) pretalx;
     };
+    plugins = lib.recurseIntoAttrs (
+      lib.packagesFromDirectoryRecursive {
+        inherit (python.pkgs) callPackage;
+        directory = ./plugins;
+      }
+    );
   };
 
   inherit meta;

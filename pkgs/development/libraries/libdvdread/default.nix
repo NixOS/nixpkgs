@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://dvdnav.mplayerhq.hu/";
-    description = "A library for reading DVDs";
+    description = "Library for reading DVDs";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.wmertens ];
     platforms = with lib.platforms; linux ++ darwin;

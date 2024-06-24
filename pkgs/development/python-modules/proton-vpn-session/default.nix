@@ -1,34 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, cryptography
-, distro
-, proton-core
-, proton-vpn-logger
-, pynacl
-, aiohttp
-, pyopenssl
-, pytest-asyncio
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  cryptography,
+  distro,
+  proton-core,
+  proton-vpn-logger,
+  pynacl,
+  aiohttp,
+  pyopenssl,
+  pytest-asyncio,
+  requests,
+  pytestCheckHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "proton-vpn-session";
-  version = "0.6.2-unstable-2023-10-24";
+  version = "0.6.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-session";
-    rev = "419b25bd1823f78d1219dc4cc441eeaf37646068";
-    hash = "sha256-YPyNxbKxw+670bNQZ7U5nljyUjsNJ+k7eL+HpGiSCLk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/5ju/2bxhqK6JWchkxFe3amBKHtO98GCVQWIrUsn+nQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cryptography
@@ -40,7 +39,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=proton.vpn.session --cov-report term" ""
+      --replace-fail "--cov=proton.vpn.session --cov-report term" ""
   '';
 
   pythonImportsCheck = [ "proton.vpn.session" ];
@@ -62,6 +61,6 @@ buildPythonPackage {
     description = "Provides utility classes to manage VPN sessions";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-session";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

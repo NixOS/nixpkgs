@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, vala, gtk3, libgee
-, poppler, libpthreadstubs, gstreamer, gst-plugins-base, gst-plugins-good, gst-libav, gobject-introspection, wrapGAppsHook
+, poppler, libpthreadstubs, gstreamer, gst-plugins-base, gst-plugins-good, gst-libav, gobject-introspection, wrapGAppsHook3
 , qrencode, webkitgtk, discount, json-glib, fetchpatch }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cmake pkg-config vala
     # For setup hook
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -41,12 +41,19 @@ stdenv.mkDerivation rec {
       url = "https://github.com/pdfpc/pdfpc/commit/d38edfac63bec54173b4b31eae5c7fb46cd8f714.diff";
       hash = "sha256-KC2oyzcwU2fUmxaed8qAsKcePwR5KcXgpVdstJg8KmU=";
     })
+    # Allow compiling with markdown3
+    # https://github.com/pdfpc/pdfpc/pull/716
+    (fetchpatch {
+      url = "https://github.com/pdfpc/pdfpc/commit/08e66b9d432e9598c1ee9a78b2355728036ae1a1.patch";
+      hash = "sha256-SKH2GQ5/6Is36xOFmSs89Yw/w7Fnma3FrNqwjOlUQKM=";
+    })
   ];
 
-  cmakeFlags = lib.optional stdenv.isDarwin "-DMOVIES=OFF";
+  cmakeFlags = lib.optional stdenv.isDarwin (lib.cmakeBool "MOVIES" false);
 
   meta = with lib; {
-    description = "A presenter console with multi-monitor support for PDF files";
+    description = "Presenter console with multi-monitor support for PDF files";
+    mainProgram = "pdfpc";
     homepage = "https://pdfpc.github.io/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub ];

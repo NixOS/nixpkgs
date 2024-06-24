@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Native Messaging Host for ff2mpv firefox addon.";
+    description = "Native Messaging Host for ff2mpv firefox addon";
     homepage = "https://github.com/woodruffw/ff2mpv";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Enzime ];
+    mainProgram = "ff2mpv.py";
   };
 }

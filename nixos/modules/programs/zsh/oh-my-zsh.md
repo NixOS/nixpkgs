@@ -9,7 +9,7 @@ prompt themes.
 The module uses the `oh-my-zsh` package with all available
 features. The initial setup using Nix expressions is fairly similar to the
 configuration format of `oh-my-zsh`.
-```
+```nix
 {
   programs.zsh.ohMyZsh = {
     enable = true;
@@ -33,7 +33,7 @@ environment variable for this which points to a directory with additional
 scripts.
 
 The module can do this as well:
-```
+```nix
 {
   programs.zsh.ohMyZsh.custom = "~/path/to/custom/scripts";
 }
@@ -48,7 +48,7 @@ which bundles completion scripts and a plugin for `oh-my-zsh`.
 
 Rather than using a single mutable path for `ZSH_CUSTOM`,
 it's also possible to generate this path from a list of Nix packages:
-```
+```nix
 { pkgs, ... }:
 {
   programs.zsh.ohMyZsh.customPkgs = [
@@ -89,7 +89,7 @@ If third-party customizations (e.g. new themes) are supposed to be added to
     [upstream repo.](https://github.com/robbyrussell/oh-my-zsh/tree/91b771914bc7c43dd7c7a43b586c5de2c225ceb7/plugins)
 
 A derivation for `oh-my-zsh` may look like this:
-```
+```nix
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {

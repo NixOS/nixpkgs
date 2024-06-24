@@ -13,6 +13,7 @@ rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "like cargo, but backwards";
+    mainProgram = "ograc";
     homepage = "https://crates.io/crates/ograc";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ sciencentistguy ];

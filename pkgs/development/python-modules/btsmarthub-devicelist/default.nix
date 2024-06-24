@@ -21,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-7ncxCpY+A2SuSFa3k21QchrmFs1dPRUMb1r1z/laa6M=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
     responses
@@ -31,14 +29,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    "test_btsmarthub2_detection_neither_router_present"
-  ];
+  disabledTests = [ "test_btsmarthub2_detection_neither_router_present" ];
 
   meta = with lib; {
     description = "Retrieve a list of devices from a bt smarthub or bt smarthub 2 on a local network";
     homepage = "https://github.com/jxwolstenholme/btsmarthub_devicelist";
     license = licenses.mit;
-    maintainers = with maintainers; [jamiemagee];
+    maintainers = with maintainers; [ jamiemagee ];
   };
 }

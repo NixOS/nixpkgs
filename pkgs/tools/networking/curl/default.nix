@@ -49,17 +49,26 @@ assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsS
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "8.6.0";
+  version = "8.8.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.xz"
       "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-PM1V2Rr5UWU534BiX4GMc03G8uz5utozx2dl6ZEh2xU=";
+    hash = "sha256-D1i7lfwzDIpG7rPfVwGw2Qydm/zEK9HNCHkdElUdRAA=";
   };
 
+  patches = lib.optionals (lib.versionOlder finalAttrs.version "8.7.2") [
+    # https://github.com/curl/curl/pull/13219
+    # https://github.com/newsboat/newsboat/issues/2728
+    ./8.7.1-compression-fix.patch
+  ];
+
+  # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
+  # necessary for FreeBSD code path in configure
   postPatch = ''
+    substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
     patchShebangs scripts
   '';
 
@@ -196,6 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
       # nginx-http3 = useThisCurl nixosTests.nginx-http3;
       nginx-http3 = nixosTests.nginx-http3;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    } // lib.optionalAttrs (stdenv.hostPlatform.system != "x86_64-darwin") {
       static = pkgsStatic.curl;
     } // lib.optionalAttrs (!stdenv.isDarwin) {
       fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
@@ -204,13 +214,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://curl.se/changes.html#${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    description = "A command line tool for transferring files with URL syntax";
+    description = "Command line tool for transferring files with URL syntax";
     homepage    = "https://curl.se/";
     license = licenses.curl;
     maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;
     # Fails to link against static brotli or gss
-    broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
+    broken = (stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport || stdenv.hostPlatform.system == "x86_64-darwin")) || rustlsSupport;
     pkgConfigModules = [ "libcurl" ];
     mainProgram = "curl";
   };

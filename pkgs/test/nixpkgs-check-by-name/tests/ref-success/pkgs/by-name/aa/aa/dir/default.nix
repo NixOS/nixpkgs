@@ -1,2 +1,0 @@
-# Recursive
-../package.nix

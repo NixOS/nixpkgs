@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "exercism";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "exercism";
     repo  = "cli";
     rev   = "refs/tags/v${version}";
-    hash  = "sha256-+DXmbbs9oo667o5P0OVcfBMMIvyBzEAdbrq9i+U7p0k=";
+    hash  = "sha256-+Tg9b7JZtriF5b+mnLgOeTTLiswH/dSGg3Mj1TBt4Wk=";
   };
 
-  vendorHash = "sha256-wQGnGshsRJLe3niHDoyr3BTxbwrV3L66EjJ8x633uHY=";
+  vendorHash = "sha256-xY3C3emqtPIKyxIN9aEkrLXhTxWNmo0EJXNZVtbtIvs=";
 
   doCheck = false;
 
@@ -21,8 +21,9 @@ buildGoModule rec {
 
   meta = with lib; {
    inherit (src.meta) homepage;
-   description = "A Go based command line tool for exercism.io";
+   description = "Go based command line tool for exercism.io";
    license     = licenses.mit;
    maintainers = [ maintainers.rbasso maintainers.nobbz ];
+   mainProgram = "exercism";
   };
 }

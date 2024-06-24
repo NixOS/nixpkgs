@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A UI for configuring Ploopy Headphones";
+    description = "UI for configuring Ploopy Headphones";
     homepage = "https://github.com/ploopyco/headphones-toolbox/";
     maintainers = with maintainers; [ knarkzel nyanbinary ];
     license = licenses.gpl3Only;

@@ -1,13 +1,16 @@
-{ lib
-, buildPythonPackage
-, isPy3k
-, fetchFromGitHub
-, appdirs
-, consonance
-, protobuf
-, python-axolotl
-, six
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  isPy3k,
+  fetchFromGitHub,
+  appdirs,
+  consonance,
+  protobuf,
+  python-axolotl,
+  six,
+  pyasyncore,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +35,7 @@ buildPythonPackage rec {
       --replace "==" ">=" \
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [
     appdirs
@@ -42,11 +43,12 @@ buildPythonPackage rec {
     protobuf
     python-axolotl
     six
-  ];
+  ] ++ lib.optionals (!pythonOlder "3.12") [ pyasyncore ];
 
   meta = with lib; {
     homepage = "https://github.com/tgalal/yowsup";
-    description = "The python WhatsApp library";
+    description = "Python WhatsApp library";
+    mainProgram = "yowsup-cli";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
   };

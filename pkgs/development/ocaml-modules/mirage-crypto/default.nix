@@ -8,11 +8,11 @@ buildDunePackage rec {
   duneVersion = "3";
 
   pname = "mirage-crypto";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-crypto/releases/download/v${version}/mirage-crypto-${version}.tbz";
-    sha256 = "sha256-1rl8t/DcNEpgJRPMAxN8Hn8K4QXQchYUYmz08jHt92Q=";
+    sha256 = "sha256-v7Uw+hac2QXrx+JEnzQHz71nAjrAspG4tvShQ3pdlbE=";
   };
 
   doCheck = true;

@@ -42,8 +42,10 @@ let
         # Otherwise we get errors on the terminal because bash tries to
         # setup things like job control.
         # Note: calling bash explicitly here instead of sh makes sure that
-        # we can also run non-NixOS guests during tests.
-        PS1= exec /usr/bin/env bash --norc /dev/hvc0
+        # we can also run non-NixOS guests during tests. This, however, is
+        # mostly futureproofing as the test instrumentation is still very
+        # tightly coupled to NixOS.
+        PS1= exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
       '';
       serviceConfig.KillSignal = "SIGHUP";
   };
@@ -54,14 +56,14 @@ in
 
   options.testing = {
 
-    initrdBackdoor = lib.mkEnableOption (lib.mdDoc ''
+    initrdBackdoor = lib.mkEnableOption ''
       enable backdoor.service in initrd. Requires
       boot.initrd.systemd.enable to be enabled. Boot will pause in
       stage 1 at initrd.target, and will listen for commands from the
       Machine python interface, just like stage 2 normally does. This
       enables commands to be sent to test and debug stage 1. Use
       machine.switch_root() to leave stage 1 and proceed to stage 2.
-    '');
+    '';
 
   };
 
@@ -121,7 +123,9 @@ in
           }
         ];
 
-        contents."/usr/bin/env".source = "${pkgs.coreutils}/bin/env";
+        storePaths = [
+          "${pkgs.coreutils}/bin/env"
+        ];
       })
     ];
 
@@ -166,7 +170,7 @@ in
       # thing, but for VM tests it should provide a bit more
       # determinism (e.g. if the VM runs at lower speed, then
       # timeouts in the VM should also be delayed).
-      "clock=acpi_pm"
+      "clocksource=acpi_pm"
     ];
 
     # `xwininfo' is used by the test driver to query open windows.
@@ -212,7 +216,9 @@ in
     # uses credentials to set passwords on users.
     users.users.root.hashedPasswordFile = mkOverride 150 "${pkgs.writeText "hashed-password.root" ""}";
 
-    services.xserver.displayManager.job.logToJournal = true;
+    services.displayManager.logToJournal = true;
+
+    services.logrotate.enable = mkOverride 150 false;
 
     # Make sure we use the Guest Agent from the QEMU package for testing
     # to reduce the closure size required for the tests.

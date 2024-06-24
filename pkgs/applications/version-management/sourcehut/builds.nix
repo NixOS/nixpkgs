@@ -16,28 +16,28 @@
 , setuptools
 }:
 let
-  version = "0.89.13";
+  version = "0.89.15";
   gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.39"; };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    hash = "sha256-JpRVRzuHB6cgk/qW1j4zF8/K1xwz3J4nZhijmz5kVWU=";
+    hash = "sha256-rmNaBnTPDDQO/ImkGkMwW8fyjQyBUBchTEnbtAK24pw=";
   };
 
   buildsrht-api = buildGoModule ({
     inherit src version;
     pname = "buildsrht-api";
     modRoot = "api";
-    vendorHash = "sha256-kTqoUfFEoNdDDzVNJ7XIbH7tbsl5MdBL+/UDHFv7D+A=";
+    vendorHash = "sha256-dwpuB+aYqzhGSdGVq/F9FTdHWMBkGMtVuZ7I3hB3b+Q=";
   } // gqlgen);
 
   buildsrht-worker = buildGoModule ({
     inherit src version;
     pname = "buildsrht-worker";
     modRoot = "worker";
-    vendorHash = "sha256-kTqoUfFEoNdDDzVNJ7XIbH7tbsl5MdBL+/UDHFv7D+A=";
+    vendorHash = "sha256-dwpuB+aYqzhGSdGVq/F9FTdHWMBkGMtVuZ7I3hB3b+Q=";
   } // gqlgen);
 in
 buildPythonPackage rec {

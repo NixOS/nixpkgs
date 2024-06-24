@@ -1,27 +1,27 @@
-{ lib
-, aiolimiter
-, apscheduler
-, beautifulsoup4
-, buildPythonPackage
-, cachetools
-, cryptography
-, fetchFromGitHub
-, flaky
-, httpx
-, pytest-asyncio
-, pytest-timeout
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pytz
-, setuptools
-, wheel
-, tornado
+{
+  lib,
+  aiolimiter,
+  apscheduler,
+  beautifulsoup4,
+  buildPythonPackage,
+  cachetools,
+  cryptography,
+  fetchFromGitHub,
+  flaky,
+  httpx,
+  pytest-asyncio,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  setuptools,
+  tornado,
 }:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "20.8";
+  version = "21.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,24 +30,19 @@ buildPythonPackage rec {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FvVUl0bV95IDPbG+6N9b3ZIsnLAUwVcdS4cu0I1aNDw=";
+    hash = "sha256-eyIRZkt1ea2L20ryogKrmSx/+xL2fhNXcf3vUnuS9vo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiolimiter
     apscheduler
     cachetools
     cryptography
     httpx
     pytz
-  ]
-  ++ httpx.optional-dependencies.socks
-  ++ httpx.optional-dependencies.http2;
+  ] ++ httpx.optional-dependencies.socks ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     beautifulsoup4
@@ -59,9 +54,7 @@ buildPythonPackage rec {
     tornado
   ];
 
-  pythonImportsCheck = [
-    "telegram"
-  ];
+  pythonImportsCheck = [ "telegram" ];
 
   disabledTests = [
     # Tests require network access
@@ -129,6 +122,9 @@ buildPythonPackage rec {
     homepage = "https://python-telegram-bot.org";
     changelog = "https://github.com/python-telegram-bot/python-telegram-bot/blob/v${version}/CHANGES.rst";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ veprbl pingiun ];
+    maintainers = with maintainers; [
+      veprbl
+      pingiun
+    ];
   };
 }

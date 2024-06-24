@@ -1,6 +1,5 @@
 { lib
 , fetchurl
-, fetchpatch
 , stdenv
 , zlib
 , openssl
@@ -9,13 +8,13 @@
 , bzip2
 }:
 
-stdenv.mkDerivation rec {
-  pname = "libewf-ewf";
-  version = "20140814";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libewf-legacy";
+  version = "20140816";
 
   src = fetchurl {
-    url = "https://github.com/libyal/libewf-legacy/releases/download/${version}/libewf-${version}.tar.gz";
-    hash = "sha256-OM3QXwnaIDeo66UNjzmu6to53SxgCMn/rE9VTPlX5BQ=";
+    url = "https://github.com/libyal/libewf-legacy/releases/download/${finalAttrs.version}/libewf-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ay0Hj7OGFnm6g5Qv6lHp5gKcN+wuoMN/V0QlbW9wJak=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -29,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
   };
-}
+})

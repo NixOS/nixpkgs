@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "endless-sky";
-  version = "0.10.4";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "endless-sky";
     repo = "endless-sky";
     rev = "v${version}";
-    sha256 = "sha256-VTg8H6umq9yMMP274StIJfEZZvUFDILiMKhioam58QE=";
+    sha256 = "sha256-3mprmW6K8pYs7J2q71fohsh9fZEP2RZjN1rSWUAwbhg=";
   };
 
   patches = [
@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
   prefixKey = "PREFIX=";
 
   meta = with lib; {
-    description = "A sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
+    description = "Sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
+    mainProgram = "endless-sky";
     homepage = "https://endless-sky.github.io/";
     license = with licenses; [
       gpl3Plus
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
       cc-by-sa-40
       publicDomain
     ];
-    maintainers = with maintainers; [ lheckemann _360ied ];
+    maintainers = with maintainers; [ _360ied ];
     platforms = platforms.linux; # Maybe other non-darwin Unix
   };
 }

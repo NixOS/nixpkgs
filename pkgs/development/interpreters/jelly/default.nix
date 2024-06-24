@@ -19,7 +19,8 @@ python3Packages.buildPythonApplication {
   doCheck = false;
 
   meta = with lib; {
-    description = "A recreational programming language inspired by J";
+    description = "Recreational programming language inspired by J";
+    mainProgram = "jelly";
     homepage    = "https://github.com/DennisMitchell/jellylanguage";
     license     = licenses.mit;
     maintainers = [ maintainers.tckmn ];

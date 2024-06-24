@@ -14,13 +14,13 @@
 
 let
   pname = "zerotierone";
-  version = "1.12.2";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-p0zrYgbHTLefj5GTrMnYLytCXZ/nRuqTL+6dEeC+uVw=";
+    sha256 = "sha256-YWcqALUB3ZEukL4er2FKcyNdEbuaf//QU5hRbKAfxDA=";
   };
 
 in stdenv.mkDerivation {
@@ -30,13 +30,14 @@ in stdenv.mkDerivation {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "jwt-0.16.0" = "sha256-P5aJnNlcLe9sBtXZzfqHdRvxNfm6DPBcfcKOVeLZxcM=";
+      "rustfsm-0.1.0" = "sha256-q7J9QgN67iuoNhQC8SDVzUkjCNRXGiNCkE8OsQc5+oI=";
     };
   };
   postPatch = "cp ${./Cargo.lock} Cargo.lock";
 
   preConfigure = ''
-    cmp ./Cargo.lock ./zeroidc/Cargo.lock || {
-      echo 1>&2 "Please make sure that the derivation's Cargo.lock is identical to ./zeroidc/Cargo.lock!"
+    cmp ./Cargo.lock ./rustybits/Cargo.lock || {
+      echo 1>&2 "Please make sure that the derivation's Cargo.lock is identical to ./rustybits/Cargo.lock!"
       exit 1
     }
 
@@ -63,6 +64,19 @@ in stdenv.mkDerivation {
   ];
 
   enableParallelBuilding = true;
+
+  # Ensure Rust compiles for the right target
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTarget;
+
+  # Cargo won't compile to target/release but to target/<RUST_TARGET>/release when a target is
+  # explicitly defined. The build-system however expects target/release. Hence we just symlink from
+  # the latter to the former.
+  preBuild = ''
+    mkdir -p rustybits/target/release
+    ln -rs \
+      ./rustybits/target/${stdenv.hostPlatform.rust.rustcTarget}/release/libzeroidc.a \
+      ./rustybits/target/release/
+  '';
 
   buildFlags = [ "all" "selftest" ];
 

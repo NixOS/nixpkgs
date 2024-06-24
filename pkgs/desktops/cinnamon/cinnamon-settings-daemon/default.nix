@@ -10,7 +10,7 @@
 , libgnomekbd
 , libnotify
 , libxklavier
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , lib
 , stdenv
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    wrapGAppsHook
+    wrapGAppsHook3
     pkg-config
   ];
 
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-settings-daemon";
-    description = "The settings daemon for the Cinnamon desktop";
+    description = "Settings daemon for the Cinnamon desktop";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;

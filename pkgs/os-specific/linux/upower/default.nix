@@ -32,7 +32,7 @@ assert withDocs -> withIntrospection;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
-  version = "1.90.2";
+  version = "1.90.4";
 
   outputs = [ "out" "dev" "installedTests" ]
     ++ lib.optionals withDocs [ "devdoc" ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "upower";
     repo = "upower";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7WzMAJuf1czU8ZalsEU/NwCXYqTGvcqEqxFt5ocgt48=";
+    hash = "sha256-5twHuDLisVF07Y5KYwlqWMi12+p6UpARJvoBN/+tX2o=";
   };
 
   patches = lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
@@ -210,7 +210,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://upower.freedesktop.org/";
     changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${finalAttrs.version}/NEWS";
-    description = "A D-Bus service for power management";
+    description = "D-Bus service for power management";
+    mainProgram = "upower";
     maintainers = teams.freedesktop.members;
     platforms = platforms.linux;
     license = licenses.gpl2Plus;

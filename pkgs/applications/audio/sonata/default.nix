@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, wrapGAppsHook, gettext
+{ lib, fetchFromGitHub, wrapGAppsHook3, gettext
 , python3Packages, gnome, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
 
 let
@@ -19,7 +19,7 @@ in buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -45,7 +45,8 @@ in buildPythonApplication rec {
   '';
 
   meta = {
-    description = "An elegant client for the Music Player Daemon";
+    description = "Elegant client for the Music Player Daemon";
+    mainProgram = "sonata";
     longDescription = ''
       Sonata is an elegant client for the Music Player Daemon.
 

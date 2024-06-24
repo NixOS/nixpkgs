@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Videos";
+    homepage = "https://gitlab.gnome.org/GNOME/totem-pl-parser";
     description = "Simple GObject-based library to parse and save a host of playlist formats";
     maintainers = teams.gnome.members;
     license = licenses.lgpl2;

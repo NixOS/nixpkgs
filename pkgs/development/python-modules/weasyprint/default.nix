@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cairosvg
-, cffi
-, cssselect2
-, fetchPypi
-, flit-core
-, fontconfig
-, fonttools
-, ghostscript
-, glib
-, harfbuzz
-, html5lib
-, pango
-, pillow
-, pydyf
-, pyphen
-, pytestCheckHook
-, pythonOlder
-, substituteAll
-, tinycss2
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cairosvg,
+  cffi,
+  cssselect2,
+  fetchPypi,
+  flit-core,
+  fontconfig,
+  fonttools,
+  ghostscript,
+  glib,
+  harfbuzz,
+  html5lib,
+  pango,
+  pillow,
+  pydyf,
+  pyphen,
+  pytestCheckHook,
+  pythonOlder,
+  substituteAll,
+  tinycss2,
 }:
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "60.2";
+  version = "61.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-DAzdYXp4aZJiuAAm5n+haS44As+pZjlUNu6vb3h90SY=";
+    hash = "sha256-R99s/u/4xsKM8uTK+DfN4XcV7+RicIradLqi6zkbYFk=";
   };
 
   patches = [
@@ -47,9 +48,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     cffi
@@ -80,9 +79,7 @@ buildPythonPackage rec {
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
-  makeWrapperArgs = [
-    "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}"
-  ];
+  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}" ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -94,14 +91,12 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pythonImportsCheck = [
-    "weasyprint"
-  ];
+  pythonImportsCheck = [ "weasyprint" ];
 
   meta = with lib; {
     description = "Converts web documents to PDF";
+    mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

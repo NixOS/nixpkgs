@@ -28,6 +28,7 @@ let
                 inherit version;
                 hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
               };
+              doCheck = false;
             });
             flask = super.flask.overridePythonAttrs (oldAttrs: rec {
               version = "2.2.5";
@@ -36,6 +37,16 @@ let
                 pname = "Flask";
                 inherit version;
                 hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
+              };
+            });
+
+            netaddr = super.netaddr.overridePythonAttrs (oldAttrs: rec {
+              version = "0.9.0";
+
+              src = fetchPypi {
+                pname = "netaddr";
+                inherit version;
+                hash = "sha256-e0b6mxotcf1d6eSjeE7zOXAKU6CMgEDwi69fEZTaASg=";
               };
             });
           }
@@ -105,13 +116,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.9.3";
+              version = "1.10.1";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                hash = "sha256-71uE8JvcS++xH8WSVWj5x0+9s3XIwf3A64c6YtxpSRc=";
+                hash = "sha256-kJTYIsbNr6cLzti8yg+IlXjbKwXuwumE3Wydy+oTeK4=";
               };
 
               propagatedBuildInputs = with self; [
@@ -245,7 +256,8 @@ let
 
               meta = with lib; {
                 homepage = "https://octoprint.org/";
-                description = "The snappy web interface for your 3D printer";
+                description = "Snappy web interface for your 3D printer";
+                mainProgram = "octoprint";
                 license = licenses.agpl3Only;
                 maintainers = with maintainers; [ abbradar gebner WhittlesJr gador ];
               };

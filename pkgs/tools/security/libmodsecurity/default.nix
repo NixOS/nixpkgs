@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "3.0.12";
 
   src = fetchFromGitHub {
-    owner = "SpiderLabs";
+    owner = "owasp-modsecurity";
     repo = "ModSecurity";
     rev = "v${version}";
     sha256 = "sha256-WIFAg9LvKAC8e3gpcIxtNHT53AIfPtUTyrv30woxP4M=";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/SpiderLabs/ModSecurity";
+    homepage = "https://github.com/owasp-modsecurity/ModSecurity";
     description = ''
       ModSecurity v3 library component.
     '';

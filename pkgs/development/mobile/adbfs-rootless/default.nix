@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Mount Android phones on Linux with adb, no root required";
+    mainProgram = "adbfs";
     inherit (src.meta) homepage;
     license = licenses.bsd3;
     maintainers = with maintainers; [ aleksana ];

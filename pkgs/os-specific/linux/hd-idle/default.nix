@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Spins down external disks after a period of idle time";
+    mainProgram = "hd-idle";
     homepage = "https://github.com/adelolmo/hd-idle";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

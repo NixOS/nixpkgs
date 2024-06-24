@@ -11,7 +11,7 @@
 , pkg-config
 , txt2man
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , gsettings-desktop-schemas
 , gtk3
 , glib
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     txt2man
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

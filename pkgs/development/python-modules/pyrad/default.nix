@@ -1,60 +1,58 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, lib
-, poetry-core
-, netaddr
-, six
-, unittestCheckHook
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  poetry-core,
+  netaddr,
+  six,
+  unittestCheckHook,
+  fetchPypi,
 }:
+let
+  netaddr_0_8_0 = netaddr.overridePythonAttrs (oldAttrs: rec {
+    version = "0.8.0";
+
+    src = fetchPypi {
+      pname = "netaddr";
+      inherit version;
+      hash = "sha256-1sxXx6B7HZ0ukXqos2rozmHDW6P80bg8oxxaDuK1okM=";
+    };
+  });
+in
 
 buildPythonPackage rec {
   pname = "pyrad";
-  version = "2.4";
+  version = "2.4-unstable-2023-06-13";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyradius";
     repo = pname;
-    rev = version;
-    hash = "sha256-oqgkE0xG/8cmLeRZdGoHkaHbjtByeJwzBJwEdxH8oNY=";
+    rev = "dd34c5a29b46d83b0bea841e85fd72b79f315b87";
+    hash = "sha256-U4VVGkDDyN4J/tRDaDGSr2TSA4JmqIoQj5qn9qBAvQU=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Migrate to poetry-core
-      url = "https://github.com/pyradius/pyrad/commit/a4b70067dd6269e14a2f9530d820390a8a454231.patch";
-      hash = "sha256-1We9wrVY3Or3GLIKK6hZvEjVYv6JOaahgP9zOMvgErE=";
-    })
-  ];
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
-    netaddr
+    netaddr_0_8_0
     six
   ];
 
   preCheck = ''
     substituteInPlace tests/testServer.py \
-      --replace "def testBind(self):" "def dontTestBind(self):" \
-      --replace "def testBindv6(self):" "def dontTestBindv6(self):"
+      --replace-warn "def testBind(self):" "def dontTestBind(self):" \
+      --replace-warn "def testBindv6(self):" "def dontTestBindv6(self):" \
   '';
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyrad"
-  ];
+  pythonImportsCheck = [ "pyrad" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python RADIUS Implementation";
     homepage = "https://github.com/pyradius/pyrad";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 }

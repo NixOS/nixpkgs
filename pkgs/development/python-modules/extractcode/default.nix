@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, extractcode-7z
-, extractcode-libarchive
-, fetchPypi
-, patch
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, six
-, typecode
+{
+  lib,
+  buildPythonPackage,
+  extractcode-7z,
+  extractcode-libarchive,
+  fetchPypi,
+  patch,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  six,
+  typecode,
 }:
 
 buildPythonPackage rec {
@@ -32,9 +33,7 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     typecode
@@ -70,12 +69,11 @@ buildPythonPackage rec {
     "test_patch_info_patch_patches_misc_linux_st710x_patches_motorola_rootdisk_c_patch"
   ];
 
-  pythonImportsCheck = [
-    "extractcode"
-  ];
+  pythonImportsCheck = [ "extractcode" ];
 
   meta = with lib; {
     description = "Universal archive extractor using z7zip, libarchive, other libraries and the Python standard library";
+    mainProgram = "extractcode";
     homepage = "https://github.com/nexB/extractcode";
     changelog = "https://github.com/nexB/extractcode/releases/tag/v${version}";
     license = licenses.asl20;

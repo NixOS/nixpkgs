@@ -1,6 +1,5 @@
 { lib, fetchurl, appimageTools }:
 let
-  name = "vial-${version}";
   version = "0.7.1";
   pname = "Vial";
 
@@ -9,13 +8,12 @@ let
     hash = "sha256-pOcrxZ6vbnbdE/H4Kxufxm/ZovaYBXjFpVpKZYV7f3c=";
   };
 
-  appimageContents = appimageTools.extractType2 { inherit name src; };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
 appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
 
@@ -24,10 +22,10 @@ appimageTools.wrapType2 {
   '';
 
   meta = {
-    description = "An Open-source GUI and QMK fork for configuring your keyboard in real time";
+    description = "Open-source GUI and QMK fork for configuring your keyboard in real time";
     homepage = "https://get.vial.today";
     license = lib.licenses.gpl2Plus;
-    mainProgram = "vial";
+    mainProgram = "Vial";
     maintainers = with lib.maintainers; [ kranzes ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

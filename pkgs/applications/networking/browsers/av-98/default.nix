@@ -19,6 +19,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://tildegit.org/solderpunk/AV-98";
     description = "Experimental console client for the Gemini protocol";
+    mainProgram = "av98";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ehmry ];
   };

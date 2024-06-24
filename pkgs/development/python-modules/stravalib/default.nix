@@ -1,15 +1,16 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, pint
-, pydantic_1 # use pydantic 2 on next release
-, pythonOlder
-, pytz
-, requests
-, responses
-, setuptools
-, setuptools-scm
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pint,
+  pydantic,
+  pythonOlder,
+  pytz,
+  requests,
+  responses,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -26,11 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-U+QlSrijvT77/m+yjhFxbcVTQe51J+PR4Kc8N+qG+wI=";
   };
 
-  postPatch = ''
-    # Remove on next release
-    sed -i 's/pydantic==1.10.9/pydantic/' pyproject.toml
-  '';
-
   nativeBuildInputs = [
     setuptools
     setuptools-scm
@@ -39,7 +35,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     arrow
     pint
-    pydantic_1
+    pydantic
     pytz
     requests
     responses
@@ -48,9 +44,7 @@ buildPythonPackage rec {
   # Tests require network access, testing strava API
   doCheck = false;
 
-  pythonImportsCheck = [
-    "stravalib"
-  ];
+  pythonImportsCheck = [ "stravalib" ];
 
   meta = with lib; {
     description = "Python library for interacting with Strava v3 REST API";
@@ -58,5 +52,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/stravalib/stravalib/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ sikmir ];
+    broken = lib.versionAtLeast pydantic.version "2";
   };
 }

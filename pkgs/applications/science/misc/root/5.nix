@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://root.cern.ch/";
-    description = "A data analysis framework";
+    description = "Data analysis framework";
     platforms = platforms.unix;
     broken = !stdenv.isx86_64 || stdenv.cc.isClang or false;
     maintainers = with maintainers; [ veprbl ];

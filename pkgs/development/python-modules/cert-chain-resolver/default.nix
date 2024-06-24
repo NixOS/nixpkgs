@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytestCheckHook
-, pytest-mock
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-mock,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-2itpu/Ap5GNnqAiw3Cp+8rndreWlwfPd+WwM99G7U2E=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -38,12 +37,11 @@ buildPythonPackage rec {
     "test_display_flag_is_properly_formatted"
   ];
 
-  pythonImportsCheck = [
-    "cert_chain_resolver"
-  ];
+  pythonImportsCheck = [ "cert_chain_resolver" ];
 
   meta = with lib; {
     description = "Resolve / obtain the certificate intermediates of a x509 certificate";
+    mainProgram = "cert-chain-resolver";
     homepage = "https://github.com/rkoopmans/python-certificate-chain-resolver";
     changelog = "https://github.com/rkoopmans/python-certificate-chain-resolver/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

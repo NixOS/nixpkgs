@@ -40,25 +40,25 @@ in
               from = mkOption {
                 type = referenceAttrs;
                 example = { type = "indirect"; id = "nixpkgs"; };
-                description = lib.mdDoc "The flake reference to be rewritten.";
+                description = "The flake reference to be rewritten.";
               };
               to = mkOption {
                 type = referenceAttrs;
                 example = { type = "github"; owner = "my-org"; repo = "my-nixpkgs"; };
-                description = lib.mdDoc "The flake reference {option}`from` is rewritten to.";
+                description = "The flake reference {option}`from` is rewritten to.";
               };
               flake = mkOption {
                 type = types.nullOr types.attrs;
                 default = null;
                 example = literalExpression "nixpkgs";
-                description = lib.mdDoc ''
+                description = ''
                   The flake input {option}`from` is rewritten to.
                 '';
               };
               exact = mkOption {
                 type = types.bool;
                 default = true;
-                description = lib.mdDoc ''
+                description = ''
                   Whether the {option}`from` reference needs to match exactly. If set,
                   a {option}`from` reference like `nixpkgs` does not
                   match with a reference like `nixpkgs/nixos-20.03`.
@@ -79,7 +79,7 @@ in
           }
         ));
         default = { };
-        description = lib.mdDoc ''
+        description = ''
           A system-wide flake registry.
         '';
       };

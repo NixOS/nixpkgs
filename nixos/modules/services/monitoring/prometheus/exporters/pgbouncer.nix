@@ -1,9 +1,14 @@
-{ config, lib, pkgs, options }:
-
-with lib;
+{ config, lib, pkgs, options, ... }:
 
 let
   cfg = config.services.prometheus.exporters.pgbouncer;
+  inherit (lib)
+    mkOption
+    types
+    optionals
+    escapeShellArg
+    concatStringsSep
+    ;
 in
 {
   port = 9127;
@@ -12,7 +17,7 @@ in
     telemetryPath = mkOption {
       type = types.str;
       default = "/metrics";
-      description = lib.mdDoc ''
+      description = ''
         Path under which to expose metrics.
       '';
     };
@@ -21,7 +26,7 @@ in
       type = types.str;
       default = "";
       example = "postgres://admin:@localhost:6432/pgbouncer?sslmode=require";
-      description = lib.mdDoc ''
+      description = ''
         Connection string for accessing pgBouncer.
 
         NOTE: You MUST keep pgbouncer as database name (special internal db)!!!
@@ -38,7 +43,7 @@ in
       type = types.nullOr types.path;
       default = null;
       example = "/run/keys/pgBouncer-connection-string";
-      description = lib.mdDoc ''
+      description = ''
         File that contains pgBouncer connection string in format:
         postgres://admin:@localhost:6432/pgbouncer?sslmode=require
 
@@ -54,7 +59,7 @@ in
     pidFile = mkOption {
       type = types.nullOr types.str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to PgBouncer pid file.
 
         If provided, the standard process metrics get exported for the PgBouncer
@@ -70,7 +75,7 @@ in
     webSystemdSocket = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Use systemd socket activation listeners instead of port listeners (Linux only).
       '';
     };
@@ -78,7 +83,7 @@ in
     logLevel = mkOption {
       type = types.enum ["debug" "info" "warn" "error" ];
       default = "info";
-      description = lib.mdDoc ''
+      description = ''
         Only log messages with the given severity or above.
       '';
     };
@@ -86,7 +91,7 @@ in
     logFormat = mkOption {
       type = types.enum ["logfmt" "json"];
       default = "logfmt";
-      description = lib.mdDoc ''
+      description = ''
         Output format of log messages. One of: [logfmt, json]
       '';
     };
@@ -94,7 +99,7 @@ in
     webConfigFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Path to configuration file that can enable TLS or authentication.
       '';
     };
@@ -102,7 +107,7 @@ in
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [ ];
-      description = lib.mdDoc ''
+      description = ''
         Extra commandline options when launching Prometheus.
       '';
     };

@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub
-, gtk3, wrapGAppsHook, gst_all_1, gobject-introspection
+, gtk3, wrapGAppsHook3, gst_all_1, gobject-introspection
 , python3Packages, gnome }:
 
 buildPythonApplication {
@@ -15,7 +15,7 @@ buildPythonApplication {
 
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
 
   buildInputs = with gst_all_1; [
     gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad

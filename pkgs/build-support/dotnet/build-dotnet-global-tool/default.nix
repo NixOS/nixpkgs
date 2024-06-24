@@ -28,7 +28,7 @@ buildDotnetModule (args // {
     ] ++ (nugetDeps fetchNuGet);
   };
 
-  projectFile = "";
+  dotnetGlobalTool = true;
 
   useDotnetFromEnv = true;
 

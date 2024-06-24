@@ -17,7 +17,7 @@
 , boost
 , libxslt
 , goffice
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     perl
   ];
 
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Word processing program, similar to Microsoft Word";
+    mainProgram = "abiword";
     homepage = "https://www.abisource.com/";
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -35,9 +35,9 @@
 
 { pkgs, python, extraIntegrations ? {} }:
 
-with pkgs.lib;
-
 let
+  inherit (pkgs.lib) attrValues mapAttrs;
+
   src = pkgs.fetchFromGitHub {
     owner = "DataDog";
     repo = "integrations-core";

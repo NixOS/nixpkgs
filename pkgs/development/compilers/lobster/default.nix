@@ -16,15 +16,15 @@
 , ForceFeedback
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2023.13";
+  version = "2024.0";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
-    rev = "v${version}";
-    sha256 = "sha256-7lMIIJ3iduyxZKwK65tle3c+az2G2Mpi4JwAeCCsTxw=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-EBgb442wI9qU/o6EVCwPnMtPuv1f6Xk2+CZpKWXf3tY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "https://strlen.com/lobster/";
-    description = "The Lobster programming language";
+    description = "Lobster programming language";
+    mainProgram = "lobster";
     longDescription = ''
       Lobster is a programming language that tries to combine the advantages of
       very static typing and memory management with a very lightweight,
@@ -62,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
-}
+})

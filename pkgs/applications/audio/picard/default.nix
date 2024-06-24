@@ -60,7 +60,7 @@ pythonPackages.buildPythonApplication rec {
     pyyaml
   ];
 
-  setupPyGlobalFlags = [ "build" "--disable-autoupdate" ];
+  setupPyGlobalFlags = [ "build" "--disable-autoupdate" "--localedir=$out/share/locale" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -76,7 +76,8 @@ pythonPackages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://picard.musicbrainz.org";
     changelog = "https://picard.musicbrainz.org/changelog";
-    description = "The official MusicBrainz tagger";
+    description = "Official MusicBrainz tagger";
+    mainProgram = "picard";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

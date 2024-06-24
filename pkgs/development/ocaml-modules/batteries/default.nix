@@ -4,7 +4,7 @@
 
 buildDunePackage rec {
   pname = "batteries";
-  version = "3.7.2";
+  version = "3.8.0";
 
   minimalOCamlVersion = "4.05";
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "ocaml-batteries-team";
     repo = "batteries-included";
     rev = "v${version}";
-    hash = "sha256-POhdb6d4VZyCm9QYgj0m3ejduaBmm+cnd1tshWjgp04=";
+    hash = "sha256-Ixqfo2F4VftrIVF8oBOx/rSiJZppiwXOjVQ3Tcelxac=";
   };
 
   nativeCheckInputs = [ qtest ];

@@ -23,7 +23,7 @@
 , libarchive
 , libhandy
 , libsecret
-, wrapGAppsHook
+, wrapGAppsHook3
 , librsvg
 , gobject-introspection
 , yelp-tools
@@ -40,15 +40,15 @@
 , withLibsecret ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evince";
-  version = "45.0";
+  version = "46.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0YZH1Cdcvd8NMoF7HQTjBzQqhb6RTsTa0tgIKq+KpKg=";
+    url = "mirror://gnome/sources/evince/${lib.versions.major finalAttrs.version}/evince-${finalAttrs.version}.tar.xz";
+    hash = "sha256-vA0dQbnX/8di6Z0qv6+sv3RRgvCzHYbbXuyMZ/XzAGs=";
   };
 
   depsBuildBuild = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     yelp-tools
   ];
 
@@ -110,8 +110,6 @@ stdenv.mkDerivation rec {
     "-Dmultimedia=disabled"
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
@@ -123,12 +121,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "evince";
     };
   };
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Apps/Evince";
+    homepage = "https://apps.gnome.org/Evince/";
     description = "GNOME's document viewer";
 
     longDescription = ''
@@ -143,4 +141,4 @@ stdenv.mkDerivation rec {
     mainProgram = "evince";
     maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
-}
+})

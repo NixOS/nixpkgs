@@ -1,0 +1,30 @@
+diff --git a/snapcraft/providers.py b/snapcraft/providers.py
+index a999537a..dcd290a7 100644
+--- a/snapcraft/providers.py
++++ b/snapcraft/providers.py
+@@ -21,6 +21,7 @@ import sys
+ from pathlib import Path
+ from textwrap import dedent
+ from typing import Dict, Optional
++import platform
+ 
+ from craft_cli import emit
+ from craft_providers import Provider, ProviderError, bases, executor
+@@ -178,14 +179,14 @@ def get_base_configuration(
+     # injecting a snap on a non-linux system is not supported, so default to
+     # install snapcraft from the store's stable channel
+     snap_channel = get_managed_environment_snap_channel()
+-    if sys.platform != "linux" and not snap_channel:
++    if snap_channel is None and (sys.platform != "linux" or "NixOS" in platform.version()):
+         emit.progress(
+-            "Using snapcraft from snap store channel 'latest/stable' in instance "
++            "Using snapcraft from snap store channel 'latest/beta' in instance "
+             "because snap injection is only supported on Linux hosts.",
+             permanent=True,
+         )
+         snap_name = "snapcraft"
+-        snap_channel = "stable"
++        snap_channel = "beta"
+     elif is_snapcraft_running_from_snap():
+         # Use SNAP_INSTANCE_NAME for snapcraft's snap name, as it may not be
+         # 'snapcraft' if the '--name' parameter was used to install snapcraft.

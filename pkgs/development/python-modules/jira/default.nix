@@ -1,27 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, defusedxml
-, flaky
-, ipython
-, keyring
-, packaging
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-futures
-, requests-mock
-, requests-oauthlib
-, requests-toolbelt
-, setuptools
-, setuptools-scm
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  defusedxml,
+  flaky,
+  ipython,
+  keyring,
+  packaging,
+  pillow,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-futures,
+  requests-mock,
+  requests-oauthlib,
+  requests-toolbelt,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "3.5.2";
+  version = "3.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +32,7 @@ buildPythonPackage rec {
     owner = "pycontribs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-9hzKN57OHi2be9C2mtHZU1KcpbcKxiiYDj9Vw7MxTK4=";
+    hash = "sha256-zE0fceCnyv0qKak8sRCXPCauC0KeOmczY/ZkVoHNcS8=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +46,7 @@ buildPythonPackage rec {
     requests
     requests-oauthlib
     requests-toolbelt
+    pillow
     typing-extensions
   ];
 
@@ -58,9 +61,7 @@ buildPythonPackage rec {
       # requests-jwt
       # requests-keyberos
     ];
-    async = [
-      requests-futures
-    ];
+    async = [ requests-futures ];
   };
 
   nativeCheckInputs = [
@@ -74,9 +75,7 @@ buildPythonPackage rec {
       --replace "--cov-report=xml --cov jira" ""
   '';
 
-  pythonImportsCheck = [
-    "jira"
-  ];
+  pythonImportsCheck = [ "jira" ];
 
   # impure tests because of connectivity attempts to jira servers
   doCheck = false;

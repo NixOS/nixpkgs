@@ -8,13 +8,13 @@
 
 buildPythonApplication rec {
   pname = "fortls";
-  version = "2.13.0";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "fortran-lang";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-kFk2Dlnb0FXM3Ysvsy+g2AAMgpWmwzxuyJPovDm/FJU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mOYPtysPj+JczRPTeM1DUckAH0XC9cO1ssP8pviYa0E=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -26,6 +26,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Fortran Language Server ";
+    mainProgram = "fortls";
     homepage = "https://github.com/fortran-lang/fortls";
     license = [ licenses.mit ];
     maintainers = [ maintainers.sheepforce ];

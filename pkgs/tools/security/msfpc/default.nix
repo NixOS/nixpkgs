@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MSFvenom Payload Creator";
+    mainProgram = "msfpc";
     homepage = "https://github.com/g0tmi1k/msfpc";
     license = licenses.mit;
     maintainers = with maintainers; [ emilytrau ];

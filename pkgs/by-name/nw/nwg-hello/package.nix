@@ -4,23 +4,23 @@
 , gtk-layer-shell
 , gtk3
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-hello";
-  version = "0.1.6";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-hello";
-    rev = "v${version}";
-    hash = "sha256-+D89QTFUV7/dhfcOWnQshG8USh35Vdm/QPHbsxiV0j0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WKDj68hQDPNsqyDG9kB1SklRIl/BSfVl7ebjVKA+33c=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -59,8 +59,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Userspace locking validation tool built on the Linux kernel";
+    mainProgram = "lockdep";
     homepage    = "https://kernel.org/";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Only;
     platforms   = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };

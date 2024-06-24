@@ -1,27 +1,29 @@
-{ stdenv
-, lib
-, aiodns
-, aiohttp
-, boto3
-, buildPythonPackage
-, codecov
-, fetchFromGitHub
-, flake8
-, flask-sockets
-, moto
-, pythonOlder
-, psutil
-, pytest-asyncio
-, pytestCheckHook
-, sqlalchemy
-, websocket-client
-, websockets
+{
+  lib,
+  stdenv,
+  aiodns,
+  aiohttp,
+  boto3,
+  buildPythonPackage,
+  codecov,
+  fetchFromGitHub,
+  flake8,
+  flask-sockets,
+  moto,
+  pythonOlder,
+  psutil,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+  sqlalchemy,
+  websocket-client,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.26.2";
-  format = "setuptools";
+  version = "3.30.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -29,10 +31,17 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pvD86kbNOnuNT6+WTAKziJDUTx3ebJUq029UbSVuxdw=";
+    hash = "sha256-KJC0M5sk1dlCzadQ1/MBEnWuAGva/MP2MygqehH2fTg=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "pytest-runner"' ""
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiodns
     aiohttp
     boto3
@@ -68,15 +77,13 @@ buildPythonPackage rec {
     "test_issue_690_oauth_access"
   ];
 
-  pythonImportsCheck = [
-    "slack_sdk"
-  ];
+  pythonImportsCheck = [ "slack_sdk" ];
 
   meta = with lib; {
     description = "Slack Developer Kit for Python";
     homepage = "https://slack.dev/python-slack-sdk/";
     changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

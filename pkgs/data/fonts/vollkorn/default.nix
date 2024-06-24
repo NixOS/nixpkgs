@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://vollkorn-typeface.com/";
-    description = "The free and healthy typeface for bread and butter use";
+    description = "Free and healthy typeface for bread and butter use";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ maintainers.schmittlauch ];

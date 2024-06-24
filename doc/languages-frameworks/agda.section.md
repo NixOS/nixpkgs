@@ -114,7 +114,7 @@ This can be overridden by a different version of `ghc` as follows:
 
 ```nix
 agda.withPackages {
-  pkgs = [ ... ];
+  pkgs = [ /* ... */ ];
   ghc = haskell.compiler.ghcHEAD;
 }
 ```
@@ -180,6 +180,7 @@ To add an Agda package to `nixpkgs`, the derivation should be written to `pkgs/d
 
 ```nix
 { mkDerivation, standard-library, fetchFromGitHub }:
+{}
 ```
 
 Note that the derivation function is called with `mkDerivation` set to `agdaPackages.mkDerivation`, therefore you
@@ -193,7 +194,7 @@ mkDerivation {
   version = "1.5.0";
   pname = "iowa-stdlib";
 
-  src = ...
+  src = <...>;
 
   libraryFile = "";
   libraryName = "IAL-1.3";

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, fastrlock
-, numpy
-, wheel
-, pytestCheckHook
-, mock
-, setuptools
-, cudaPackages
-, addOpenGLRunpath
-, pythonOlder
-, symlinkJoin
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  fastrlock,
+  numpy,
+  wheel,
+  pytestCheckHook,
+  mock,
+  setuptools,
+  cudaPackages,
+  addOpenGLRunpath,
+  pythonOlder,
+  symlinkJoin,
 }:
 
 let
@@ -40,14 +41,14 @@ let
 in
 buildPythonPackage rec {
   pname = "cupy";
-  version = "12.3.0";
+  version = "13.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-R9syEU5v3UjQUQy/Cwiwk1Ui19+j45QWsMDaORQyNSQ=";
+    hash = "sha256-LwTnhX9pKnEzYNycOwZwmAarhAT8o5ta+XIcBKKXmq4=";
   };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both
@@ -102,7 +103,7 @@ buildPythonPackage rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A NumPy-compatible matrix library accelerated by CUDA";
+    description = "NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
     changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
     license = licenses.mit;

@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A wrapper generator for Guile";
+    description = "Wrapper generator for Guile";
+    mainProgram = "g-wrap-config";
     longDescription = ''
       G-Wrap is a tool (and Guile library) for generating function wrappers for
       inter-language calls.  It currently only supports generating Guile

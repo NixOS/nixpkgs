@@ -5,17 +5,23 @@ Pantheon is the desktop environment created for the elementary OS distribution. 
 ## Enabling Pantheon {#sec-pantheon-enable}
 
 All of Pantheon is working in NixOS and the applications should be available, aside from a few [exceptions](https://github.com/NixOS/nixpkgs/issues/58161). To enable Pantheon, set
-```
-services.xserver.desktopManager.pantheon.enable = true;
+```nix
+{
+  services.xserver.desktopManager.pantheon.enable = true;
+}
 ```
 This automatically enables LightDM and Pantheon's LightDM greeter. If you'd like to disable this, set
-```
-services.xserver.displayManager.lightdm.greeters.pantheon.enable = false;
-services.xserver.displayManager.lightdm.enable = false;
+```nix
+{
+  services.xserver.displayManager.lightdm.greeters.pantheon.enable = false;
+  services.xserver.displayManager.lightdm.enable = false;
+}
 ```
 but please be aware using Pantheon without LightDM as a display manager will break screenlocking from the UI. The NixOS module for Pantheon installs all of Pantheon's default applications. If you'd like to not install Pantheon's apps, set
-```
-services.pantheon.apps.enable = false;
+```nix
+{
+  services.pantheon.apps.enable = false;
+}
 ```
 You can also use [](#opt-environment.pantheon.excludePackages) to remove any other app (like `elementary-mail`).
 
@@ -29,30 +35,33 @@ Wingpanel and Switchboard work differently than they do in other distributions, 
 to configure the programs with plugs or indicators.
 
 The difference in NixOS is both these programs are patched to load plugins from a directory that is the value of an environment variable. All of which is controlled in Nix. If you need to configure the particular packages manually you can override the packages like:
-```
+```nix
 wingpanel-with-indicators.override {
   indicators = [
     pkgs.some-special-indicator
   ];
-};
+}
 
+```
+```nix
 switchboard-with-plugs.override {
   plugs = [
     pkgs.some-special-plug
   ];
-};
+}
 ```
 please note that, like how the NixOS options describe these as extra plugins, this would only add to the default plugins included with the programs. If for some reason you'd like to configure which plugins to use exactly, both packages have an argument for this:
-```
+```nix
 wingpanel-with-indicators.override {
   useDefaultIndicators = false;
   indicators = specialListOfIndicators;
-};
-
+}
+```
+```nix
 switchboard-with-plugs.override {
   useDefaultPlugs = false;
   plugs = specialListOfPlugs;
-};
+}
 ```
 this could be most useful for testing a particular plug-in in isolation.
 

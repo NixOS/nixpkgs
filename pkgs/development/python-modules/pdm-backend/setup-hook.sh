@@ -1,8 +1,10 @@
-version-pretend-hook() {
-  echo "Setting PDM_BUILD_SCM_VERSION to $version"
-  export PDM_BUILD_SCM_VERSION=$version
+pdm-version-pretend-hook() {
+  if [ -z "${PDM_BUILD_SCM_VERSION-}" ]; then
+    echo "Setting PDM_BUILD_SCM_VERSION to $version"
+    export PDM_BUILD_SCM_VERSION="$version"
+  fi
 }
 
 if [ -z "${dontSetPdmBackendVersion-}" ]; then
-  preBuildHooks+=(version-pretend-hook)
+  preBuildHooks+=(pdm-version-pretend-hook)
 fi

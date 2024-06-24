@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    description = "A small OCaml library to read and write .ini files";
+    description = "Small OCaml library to read and write .ini files";
     license = lib.licenses.lgpl21Plus;
     inherit (ocaml.meta) platforms;
   };

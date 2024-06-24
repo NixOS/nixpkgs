@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, cython_3
-, pkg-config
-, setuptools
-, fuse3
-, trio
-, python
-, pytestCheckHook
-, pytest-trio
-, which
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  cython,
+  pkg-config,
+  setuptools,
+  fuse3,
+  trio,
+  python,
+  pytestCheckHook,
+  pytest-trio,
+  which,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +35,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     pkg-config
     setuptools
   ];
@@ -66,7 +67,10 @@ buildPythonPackage rec {
     description = "Python 3 bindings for libfuse 3 with async I/O support";
     homepage = "https://github.com/libfuse/pyfuse3";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ nyanloutre dotlambda ];
+    maintainers = with maintainers; [
+      nyanloutre
+      dotlambda
+    ];
     changelog = "https://github.com/libfuse/pyfuse3/blob/${version}/Changes.rst";
   };
 }

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gatk.broadinstitute.org/hc/en-us";
-    description = "A wide variety of tools with a primary focus on variant discovery and genotyping." ;
+    description = "Wide variety of tools with a primary focus on variant discovery and genotyping." ;
     license = licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ] ;
     maintainers = with maintainers; [ apraga ];

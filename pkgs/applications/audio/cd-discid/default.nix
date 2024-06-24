@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     description = "Command-line utility to get CDDB discid information from a CD-ROM disc";
+    mainProgram = "cd-discid";
 
     longDescription = ''
       cd-discid is a backend utility to get CDDB discid information

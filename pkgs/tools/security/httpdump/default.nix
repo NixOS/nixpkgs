@@ -23,6 +23,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Parse and display HTTP traffic from network device or pcap file";
+    mainProgram = "httpdump";
     homepage = "https://github.com/hsiafan/httpdump";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];

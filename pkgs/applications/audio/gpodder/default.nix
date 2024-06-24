@@ -8,7 +8,7 @@
 , intltool
 , python3
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 }:
 
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     intltool
-    wrapGAppsHook
+    wrapGAppsHook3
     glibcLocales
     gobject-introspection
   ];
@@ -87,7 +87,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = gitUpdater {};
 
   meta = with lib; {
-    description = "A podcatcher written in python";
+    description = "Podcatcher written in python";
     longDescription = ''
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.

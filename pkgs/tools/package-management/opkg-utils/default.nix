@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Helper scripts for use with the opkg package manager";
     homepage = "http://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };

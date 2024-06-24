@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ socat ];
 
   meta = with lib; {
-    description = "A mpc-like control interface for mpv";
+    description = "Mpc-like control interface for mpv";
+    mainProgram = "mpvc";
     homepage = "https://github.com/lwilletts/mpvc";
     license = licenses.mit;
     maintainers = [ maintainers.neeasade ];

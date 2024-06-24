@@ -33,6 +33,9 @@ let
 
     env.INCLUDE_DIR = "../inst/include/jaspColumnEncoder";
 
+    # necessary for R 4.4.0
+    hardeningDisable = [ "format" ];
+
     postPatch = ''
       mkdir -p inst/include
       cp -r --no-preserve=all ${jaspColumnEncoder-src} inst/include/jaspColumnEncoder

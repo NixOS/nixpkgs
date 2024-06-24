@@ -35,5 +35,6 @@ buildGoModule rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
     broken = stdenv.isDarwin;
+    mainProgram = "dnsmonster";
   };
 }

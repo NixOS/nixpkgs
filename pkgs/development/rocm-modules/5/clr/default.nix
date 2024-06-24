@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
+, fetchurl
 , rocmUpdateScript
 , makeWrapper
 , cmake
@@ -33,6 +34,16 @@ let
     "--set HSA_PATH ${rocm-runtime}"
     "--set ROCM_PATH $out"
   ];
+
+  # https://github.com/NixOS/nixpkgs/issues/305641
+  # Not needed when 3.29.2 is in unstable
+  cmake' = cmake.overrideAttrs(old: rec {
+    version = "3.29.2";
+    src = fetchurl {
+      url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
+      hash = "sha256-NttLaSaqt0G6bksuotmckZMiITIwi03IJNQSPLcwNS4=";
+    };
+  });
 in stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
   version = "5.7.1";
@@ -51,7 +62,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-    cmake
+    cmake'
     perl
     python3Packages.python
     python3Packages.cppheaderparser
@@ -88,6 +99,11 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+  patches = [
+    ./add-missing-operators.patch
+    ./static-functions.patch
+  ];
+
   postPatch = ''
     patchShebangs hipamd/src
 
@@ -98,6 +114,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace hipamd/src/hip_embed_pch.sh \
       --replace "\''$LLVM_DIR/bin/clang" "${clang}/bin/clang"
+
+    substituteInPlace opencl/khronos/icd/loader/icd_platform.h \
+      --replace-fail '#define ICD_VENDOR_PATH "/etc/OpenCL/vendors/";' \
+                     '#define ICD_VENDOR_PATH "/run/opengl-driver/etc/OpenCL/vendors/";'
   '';
 
   postInstall = ''

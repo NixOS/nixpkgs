@@ -1,4 +1,4 @@
-{ lib, stdenv, autoPatchelfHook, makeDesktopItem, copyDesktopItems, wrapGAppsHook, fetchurl
+{ lib, stdenv, autoPatchelfHook, makeDesktopItem, copyDesktopItems, wrapGAppsHook3, fetchurl
 , alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups
 , gtk3, nss, glib, dbus, nspr, gdk-pixbuf, libdrm, mesa
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "snapmaker-luban";
-  version = "4.9.1";
+  version = "4.10.2";
 
   src = fetchurl {
     url = "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
-    sha256 = "sha256-qLeF1trBrp53xkiAhybPTHUKuXYHQYfZ3tsmPPJlvUM=";
+    sha256 = "sha256-unxI0L8pcF6iWWa57GpYv/aYsApKAKfRaes3uXE7izM=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
   ];
 

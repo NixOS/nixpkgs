@@ -1,10 +1,15 @@
 { lib
-, mkDerivation
+, stdenv
+, binutils
 , cmake
-, elfutils
 , extra-cmake-modules
+, patchelfUnstable
+, wrapQtAppsHook
+, elfutils
 , fetchFromGitHub
+, fetchpatch
 , kconfigwidgets
+, kddockwidgets
 , ki18n
 , kio
 , kitemmodels
@@ -12,33 +17,48 @@
 , kparts
 , kwindowsystem
 , libelf
+, linuxPackages
 , qtbase
-, threadweaver
-, qtx11extras
-, zstd
-, kddockwidgets
+, qtsvg
 , rustc-demangle
+, syntax-highlighting
+, threadweaver
+, zstd
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "hotspot";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DW4R7+rnonmEMbCkNS7TGodw+3mEyHl6OlFK3kbG5HM=";
+    hash = "sha256-FJkDPWqNwoWg/15tvMnwke7PVtWVuqT0gtJBFQE0qZ4=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Backport stuck UI bug fix
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://github.com/KDAB/hotspot/commit/7639dee8617dba9b88182c7ff4887e8d3714ac98.patch";
+      hash = "sha256-aAo9uEy+MBztMhnC5jB08moZBeRCENU22R39pqSBXOY=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    # stable patchelf corrupts the binary
+    patchelfUnstable
+    wrapQtAppsHook
   ];
+
   buildInputs = [
     (elfutils.override { enableDebuginfod = true; }) # perfparser needs to find debuginfod.h
     kconfigwidgets
+    kddockwidgets
     ki18n
     kio
     kitemmodels
@@ -47,27 +67,27 @@ mkDerivation rec {
     kwindowsystem
     libelf
     qtbase
-    threadweaver
-    qtx11extras
-    zstd
-    kddockwidgets
+    qtsvg
     rustc-demangle
+    syntax-highlighting
+    threadweaver
+    zstd
   ];
-
-  # hotspot checks for the presence of third party libraries'
-  # git directory to give a nice warning when you forgot to clone
-  # submodules; but Nix clones them and removes .git (for reproducibility).
-  # So we need to fake their existence here.
-  postPatch = ''
-    mkdir -p 3rdparty/{perfparser,PrefixTickLabels}/.git
-  '';
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ rustc-demangle ]}"
+    "--suffix PATH : ${lib.makeBinPath [ linuxPackages.perf binutils ]}"
   ];
 
+  preFixup = ''
+    patchelf \
+      --add-rpath ${lib.makeLibraryPath [ rustc-demangle ]} \
+      --add-needed librustc_demangle.so \
+      $out/libexec/hotspot-perfparser
+  '';
+
   meta = with lib; {
-    description = "A GUI for Linux perf";
+    description = "GUI for Linux perf";
+    mainProgram = "hotspot";
     longDescription = ''
       hotspot is a GUI replacement for `perf report`.
       It takes a perf.data file, parses and evaluates its contents and

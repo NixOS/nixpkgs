@@ -12,7 +12,7 @@
 , libnotify
 , makeDesktopItem
 , which
-, wrapGAppsHook
+, wrapGAppsHook3
 , writeText
 }:
 
@@ -78,7 +78,7 @@ with mikutterPaths; stdenv.mkDerivation rec {
     sha256 = "05253nz4i1lmnq6czj48qdab2ny4vx2mznj6nsn2l1m2z6zqkwk3";
   };
 
-  nativeBuildInputs = [ copyDesktopItems wrapGAppsHook gobject-introspection ]
+  nativeBuildInputs = [ copyDesktopItems wrapGAppsHook3 gobject-introspection ]
     ++ lib.optionals stdenv.isDarwin [ libicns ];
   buildInputs = [
     atk

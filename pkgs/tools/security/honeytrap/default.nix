@@ -21,6 +21,7 @@ buildGoModule {
 
   meta = with lib; {
     description = "Advanced Honeypot framework";
+    mainProgram = "honeytrap";
     homepage = "https://github.com/honeytrap/honeytrap";
     license = licenses.asl20;
     maintainers = [ ];

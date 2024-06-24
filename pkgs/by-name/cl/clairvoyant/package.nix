@@ -2,22 +2,24 @@
 , fetchFromGitHub
 , gtk4
 , libadwaita
+, libportal
 , meson
 , ninja
 , pkg-config
 , stdenv
 , vala
+, wrapGAppsHook4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clairvoyant";
-  version = "3.1.2";
+  version = "3.1.7";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
-    repo = pname;
-    rev = version;
-    hash = "sha256-q+yN3FAs1L+GzagOQRK5gw8ptBpHPqWOiCL6aaoWcJo=";
+    repo = "clairvoyant";
+    rev = finalAttrs.version;
+    hash = "sha256-p9Lgs5z5oRuMQYRKzWp+aQDi0FnxvbQGLZpBigolHUw=";
   };
 
   nativeBuildInputs = [
@@ -25,19 +27,21 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     gtk4
     libadwaita
+    libportal
   ];
 
   meta = with lib; {
-    description = "Ask questions and get psychic answers";
+    changelog = "https://github.com/cassidyjames/clairvoyant/releases/tag/${finalAttrs.version}";
+    description = "Ask questions, get psychic answers";
     homepage = "https://github.com/cassidyjames/clairvoyant";
-    changelog = "https://github.com/cassidyjames/clairvoyant/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ michaelgrahamevans ];
     mainProgram = "com.github.cassidyjames.clairvoyant";
+    maintainers = with maintainers; [ michaelgrahamevans ];
   };
-}
+})

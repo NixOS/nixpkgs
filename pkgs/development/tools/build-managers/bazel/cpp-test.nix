@@ -41,7 +41,7 @@ let
   ''));
 
   testBazel = bazelTest {
-    name = "bazel-test-cpp";
+    name = "${bazel.pname}-test-cpp";
     inherit workspaceDir;
     bazelPkg = bazel;
     bazelScript = ''

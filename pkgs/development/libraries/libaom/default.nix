@@ -1,6 +1,11 @@
 { lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3
 , enableVmaf ? true, libvmaf
 , gitUpdater
+
+# for passthru.tests
+, ffmpeg
+, libavif
+, libheif
 }:
 
 let
@@ -8,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.8.1";
+  version = "3.9.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    hash = "sha256-qng9fEbm71HqPnPzfgqswSium9egIgpB6ZLesOQVg6c=";
+    hash = "sha256-ON/BWCO2k7fADW3ZANKjnRE8SrQZpjdyUF1N0fD/xnc=";
     stripRoot = false;
   };
 
@@ -42,9 +47,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_TESTS=OFF"
   ] ++ lib.optionals enableVmaf [
     "-DCONFIG_TUNE_VMAF=1"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
-    "-DCONFIG_RUNTIME_CPU_DETECT=0"
   ] ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
     "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
   ] ++ lib.optionals stdenv.isAarch32 [
@@ -66,6 +68,10 @@ stdenv.mkDerivation rec {
       url = "https://aomedia.googlesource.com/aom";
       rev-prefix = "v";
       ignoredVersions = "(alpha|beta|rc).*";
+    };
+    tests = {
+      inherit libavif libheif;
+      ffmpeg = ffmpeg.override { withAom = true; };
     };
   };
 

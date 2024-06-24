@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
-let version = "1.98";
+let version = "2.00";
 in stdenv.mkDerivation {
   pname = "cloc";
   inherit version;
@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
     owner = "AlDanial";
     repo = "cloc";
     rev = "v${version}";
-    sha256 = "sha256-OTzIzLgE9sdbHZUSARSbVrxD95dW8gPiM8tvMvqm1Bg=";
+    sha256 = "sha256-GZvrsVuPLg09yOlDmdHNZ0QLXoftgSYMFkn6PLf1/Pw=";
   };
 
   setSourceRoot = ''
@@ -51,9 +51,9 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A program that counts lines of source code";
+    description = "Program that counts lines of source code";
     homepage = "https://github.com/AlDanial/cloc";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ rycee ];
     mainProgram = "cloc";

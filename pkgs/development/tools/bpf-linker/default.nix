@@ -31,13 +31,9 @@ rustPlatform.buildRustPackage rec {
   # rust-src and `-Z build-std=core` are required to properly run the tests
   doCheck = false;
 
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
-  };
-
   meta = with lib; {
     description = "Simple BPF static linker";
+    mainProgram = "bpf-linker";
     homepage = "https://github.com/aya-rs/bpf-linker";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ nickcao ];

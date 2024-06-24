@@ -27,6 +27,11 @@ buildGoModule rec {
       url = "https://github.com/packethost/prometheus-packet-sd/commit/a0afc2a4c3f49dc234d0d2c4901df25b4110b3ec.patch";
       hash = "sha256-M5133+r77z21/Ulnbz+9sGbbuY5UpU1+22iY464UVAU=";
     })
+    (fetchpatch2 {
+      # apply chmod to tmpfile, not the outfile, that does not exist at that point
+      url = "https://github.com/packethost/prometheus-packet-sd/commit/41977f11b449677497a93456c499916c68e56334.patch";
+      hash = "sha256-ffXxbwatKBw7G1fdmsZaT7WX4OmYFMJnueL/kEKc1VE=";
+    })
   ];
 
   vendorHash = null;

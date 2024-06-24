@@ -3,7 +3,6 @@
 , bazel-gazelle
 , buildBazelPackage
 , fetchFromGitHub
-, fetchpatch
 , stdenv
 , cmake
 , gn
@@ -25,15 +24,15 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.27.2";
-    rev = "ae07f9a11715245f7d25d2a13699c260c2ae8ebb";
-    hash = "sha256-VgP3st26Wkx51tTM++tKAZX7+BmPGgy1MIJFGLDu4JU=";
+    version = "1.30.2";
+    rev = "d79f6e8d453ee260e9094093b8dd31af0056e67b";
+    hash = "sha256-qbe9M4dH7NFDY5UF17urJ6WvnZNhvdMU4HAg0BaL+KA=";
   };
 
   # these need to be updated for any changes to fetchAttrs
   depsHash = {
-    x86_64-linux = "sha256-389CaxJ3F66eMID7+KgwzCdlT2QPOTkKPLnqpmM49ig=";
-    aarch64-linux = "sha256-ui7AUzWouAn2DZ7kUpp1huNxPGBqzKXqtwcuRZUhmqo=";
+    x86_64-linux = "sha256-/IpTRFBkif1HSycPrWxphKTnhL6wHgPAweyxoXZ1oVg=";
+    aarch64-linux = "sha256-uA1CHKzdBht+WYxgwR2g5t7fRybhbo6Hgpzdr+H1vqY=";
   }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 in
 buildBazelPackage {
@@ -57,7 +56,7 @@ buildBazelPackage {
     sed -i '/javabase=/d' .bazelrc
     sed -i '/"-Werror"/d' bazel/envoy_internal.bzl
 
-    cp ${./protobuf.patch} bazel/protobuf.patch
+    cp ${./dd_trace_cpp.patch} bazel/dd_trace_cpp.patch
   '';
 
   patches = [
@@ -70,11 +69,10 @@ buildBazelPackage {
     # use system C/C++ tools
     ./0003-nixpkgs-use-system-C-C-toolchains.patch
 
-    # bump proxy-wasm-cpp-host until > 1.27.2/1.28.0
-    (fetchpatch {
-      url = "https://github.com/envoyproxy/envoy/pull/31451.patch";
-      hash = "sha256-n8k7bho3B8Gm0dJbgf43kU7ymvo15aGJ2Twi2xR450g=";
-    })
+    # apply patch to dd-trace-cpp
+    # remove once a version of dd-trace-cpp is released and adopted by envoy
+    # that contains https://github.com/DataDog/dd-trace-cpp/commit/3a8e1e9a3cf4e87ef053e954a39dc7a967ac6965
+    ./0004-nixpkgs-add-cstdint-in-dd-trace-cpp.patch
   ];
 
   nativeBuildInputs = [
@@ -90,9 +88,6 @@ buildBazelPackage {
   buildInputs = [
     linuxHeaders
   ];
-
-  # external/com_github_grpc_grpc/src/core/ext/transport/binder/transport/binder_transport.cc:756:29: error: format not a string literal and no format arguments [-Werror=format-security]
-  hardeningDisable = [ "format" ];
 
   fetchAttrs = {
     sha256 = depsHash;
@@ -172,6 +167,14 @@ buildBazelPackage {
     "--java_runtime_version=local_jdk"
     "--tool_java_runtime_version=local_jdk"
 
+    # undefined reference to 'grpc_core::*Metadata*::*Memento*
+    #
+    # During linking of the final binary, we see undefined references to grpc_core related symbols.
+    # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
+    # "ParseMemento" and "MementoToValue" are only implemented for some types
+    # and appear unused and unimplemented for the undefined cases reported by the linker.
+    "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
+
     "--define=wasm=${wasmRuntime}"
   ] ++ (lib.optionals stdenv.isAarch64 [
     # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
@@ -179,8 +182,13 @@ buildBazelPackage {
     #       |         ^
     "--define=tcmalloc=disabled"
   ]);
+
   bazelFetchFlags = [
     "--define=wasm=${wasmRuntime}"
+
+    # https://github.com/bazelbuild/rules_go/issues/3844
+    "--repo_env=GOPROXY=https://proxy.golang.org,direct"
+    "--repo_env=GOSUMDB=sum.golang.org"
   ];
 
   passthru.tests = {
@@ -191,7 +199,9 @@ buildBazelPackage {
 
   meta = with lib; {
     homepage = "https://envoyproxy.io";
+    changelog = "https://github.com/envoyproxy/envoy/releases/tag/v${version}";
     description = "Cloud-native edge and service proxy";
+    mainProgram = "envoy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

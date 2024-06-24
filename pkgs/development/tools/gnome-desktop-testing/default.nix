@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "GNOME test runner for installed tests";
-    homepage = "https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-desktop-testing";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.jtojnar ];

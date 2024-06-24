@@ -1,7 +1,7 @@
 { stdenv
 , fetchzip
 , lib
-, wrapGAppsHook
+, wrapGAppsHook3
 , xdg-utils
 , which
 , alsa-lib
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     which
     xdg-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = with gst_all_1; [
@@ -110,5 +110,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ iwanb ];
     platforms = platforms.linux;
+    mainProgram = "transcribe";
   };
 }

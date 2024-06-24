@@ -8,24 +8,27 @@
 , CoreServices
 , Libsystem
 , SystemConfiguration
+, nix-update-script
+, testers
+, rye
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.22.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-gM/Vn/eBPZ39568LqUXyx+ZTTsKAVur30Qrl3GS1ID8=";
+    hash = "sha256-mkBp9iFoN1LanJrcm4VdZ9k8cWNaRZIYl10ukT4Rfqc=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "dialoguer-0.10.4" = "sha256-WDqUKOu7Y0HElpPxf2T8EpzAY3mY8sSn9lf0V0jyAFc=";
-      "monotrail-utils-0.0.1" = "sha256-h2uxWsDrU9j2C5OWbYsfGz0S1VsPzYrfksQVEkwd2ys=";
+      "monotrail-utils-0.0.1" = "sha256-ydNdg6VI+Z5wXe2bEzRtavw0rsrcJkdsJ5DvXhbaDE4=";
     };
   };
 
@@ -53,14 +56,44 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     "--skip=utils::test_is_inside_git_work_tree"
+
+    # The following require internet access to fetch a python binary
+    "--skip=test_add_and_sync_no_auto_sync"
+    "--skip=test_add_autosync"
+    "--skip=test_add_explicit_version_or_url"
+    "--skip=test_add_flask"
+    "--skip=test_add_from_find_links"
+    "--skip=test_autosync_remember"
+    "--skip=test_basic_list"
+    "--skip=test_basic_tool_behavior"
+    "--skip=test_config_empty"
+    "--skip=test_config_get_set_multiple"
+    "--skip=test_config_incompatible_format_and_show_path"
+    "--skip=test_config_save_missing_folder"
+    "--skip=test_config_show_path"
+    "--skip=test_dotenv"
+    "--skip=test_empty_sync"
+    "--skip=test_fetch"
+    "--skip=test_init_default"
+    "--skip=test_init_lib"
+    "--skip=test_init_script"
+    "--skip=test_lint_and_format"
+    "--skip=test_list_not_rye_managed"
+    "--skip=test_publish_outside_project"
+    "--skip=test_version"
   ];
 
-  meta = with lib; {
-    description = "A tool to easily manage python dependencies and environments";
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = rye; };
+  };
+
+  meta = {
+    description = "Tool to easily manage python dependencies and environments";
     homepage = "https://github.com/mitsuhiko/rye";
     changelog = "https://github.com/mitsuhiko/rye/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "rye";
   };
 }

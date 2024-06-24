@@ -26,7 +26,7 @@
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.6.2";
+  version = "0.6.10";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
@@ -37,7 +37,7 @@ let
   cargoLock = fetchurl {
     name = "Cargo.lock";
     url = "https://crates.io/api/v1/crates/${pname}/${version}/download";
-    sha256 = "sha256-iML16yjSJsyDsr9F3gyp4XTu5Z9petSUQ0jXotU5tmw=";
+    sha256 = "sha256-mlmvM/7FQkhSjLtueEJqZU3D86lL8Kf1EFXiY1+b/Oo=";
     downloadToTemp = true;
     postFetch = ''
       tar xzf $downloadedFile ${pname}-${version}/Cargo.lock
@@ -55,8 +55,7 @@ rustPlatform.buildRustPackage {
     inherit owner;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1VfWs8f4i3YjH69A7X3/1WPxSIwPRF5osQ/1eqOUB8U=";
-    leaveDotGit = true;
+    sha256 = "sha256-yF4i1V50TpR3pEqHQfAK4VTUW+GmT+XU6WVTWMzCUwo=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
@@ -64,7 +63,7 @@ rustPlatform.buildRustPackage {
     cp ${cargoLock} source/Cargo.lock
   '';
 
-  cargoSha256 = "sha256-9pOfhGnktEgyTbfK4roFU7t3qcgx2yRp17hJVKsvNqw=";
+  cargoSha256 = "sha256-6VQEu38g5a8bfbs8P/nOa3Zg2bSYnEOClzoMF95LAHI=";
 
   # `cargo-llvm-cov` reads these environment variables to find these binaries,
   # which are needed to run the tests
@@ -75,17 +74,17 @@ rustPlatform.buildRustPackage {
     git
   ];
 
+  # `cargo-llvm-cov` tests rely on `git ls-files.
   preCheck = ''
-    # `cargo-llvm-cov`'s tests rely on `git ls-files` so the staging area needs
-    # to not have everything staged as deleted, which is how `leaveDotGit` in
-    # `fetchFromGitHub` leaves the staging area for reproducibility reasons.
-    git restore --staged .
+    git init -b main
+    git add .
   '';
 
   meta = {
     inherit homepage;
     changelog = homepage + "/blob/v${version}/CHANGELOG.md";
     description = "Cargo subcommand to easily use LLVM source-based code coverage";
+    mainProgram = "cargo-llvm-cov";
     longDescription = ''
       In order for this to work, you either need to run `rustup component add llvm-
       tools-preview` or install the `llvm-tools-preview` component using your Nix

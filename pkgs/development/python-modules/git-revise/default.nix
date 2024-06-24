@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, git
-, gnupg
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  git,
+  gnupg,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,18 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  nativeCheckInputs = [ git gnupg pytestCheckHook ];
+  nativeCheckInputs = [
+    git
+    gnupg
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Efficiently update, split, and rearrange git commits";
     homepage = "https://github.com/mystor/git-revise";
     changelog = "https://github.com/mystor/git-revise/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
+    mainProgram = "git-revise";
     maintainers = with maintainers; [ emily ];
   };
 }

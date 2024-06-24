@@ -9,7 +9,7 @@
 
 buildDunePackage rec {
   pname = "tsdl-ttf";
-  version = "0.5";
+  version = "0.6";
 
   duneVersion = "3";
 
@@ -17,7 +17,7 @@ buildDunePackage rec {
     owner = "sanette";
     repo = pname;
     rev = version;
-    hash = "sha256-ai9ChsA3HZzTxT9AuHsY1UIA2Q3U3CcOA7jRSG4MDsQ=";
+    hash = "sha256-1MGbsekaBoCz4vAwg+Dfzsl0xUKgs8dUEr+OpLopnig=";
   };
 
   buildInputs = [

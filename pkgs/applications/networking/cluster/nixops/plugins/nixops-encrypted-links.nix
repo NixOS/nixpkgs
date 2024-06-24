@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "nixops-encrypted-links";
-  version = "unstable-2021-02-16";
+  version = "0-unstable-2021-02-16";
   pyproject = true;
 
   src = fetchFromGitHub {

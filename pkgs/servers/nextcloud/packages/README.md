@@ -24,17 +24,19 @@ After that you can commit and submit the changes.
 The apps will be available in the namespace `nextcloud25Packages.apps`.
 Using it together with the Nextcloud module could look like this:
 
-```
-services.nextcloud = {
-  enable = true;
-  package = pkgs.nextcloud25;
-  hostName = "localhost";
-  config.adminpassFile = "${pkgs.writeText "adminpass" "hunter2"}";
-  extraApps = with pkgs.nextcloud25Packages.apps; {
-    inherit mail calendar contact;
+```nix
+{
+  services.nextcloud = {
+    enable = true;
+    package = pkgs.nextcloud25;
+    hostName = "localhost";
+    config.adminpassFile = "${pkgs.writeText "adminpass" "hunter2"}";
+    extraApps = with pkgs.nextcloud25Packages.apps; {
+      inherit mail calendar contact;
+    };
+    extraAppsEnable = true;
   };
-  extraAppsEnable = true;
-};
+}
 ```
 
 Adapt the version number in the Nextcloud package and nextcloudPackages set

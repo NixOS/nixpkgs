@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytestCheckHook
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -18,19 +19,13 @@ buildPythonPackage rec {
     hash = "sha256-eGj7HIv6dkwaxWPTzzacOB0TJdNhJJM6cm8p/NqoEuk=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
-    "test_declaration_junk_chars"
-  ];
+  disabledTests = lib.optionals (pythonAtLeast "3.10") [ "test_declaration_junk_chars" ];
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sgmllib"
-  ];
+  pythonImportsCheck = [ "sgmllib" ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/sgmllib3k/";

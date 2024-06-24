@@ -2,6 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
 let
 
+  # FIXME: 404s
   stick = pkgs.fetchurl {
     url = "https://nixos.org/~eelco/nix/udisks-test.img.xz";
     sha256 = "0was1xgjkjad91nipzclaz5biv3m4b2nk029ga6nk7iklwi19l8b";
@@ -12,7 +13,7 @@ in
 {
   name = "udisks2";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
+    maintainers = [ ];
   };
 
   nodes.machine =

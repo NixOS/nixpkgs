@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ghz";
-  version = "0.117.0";
+  version = "0.120.0";
 
   src = fetchFromGitHub {
     owner = "bojand";
     repo = "ghz";
     rev = "v${version}";
-    sha256 = "sha256-aAqbSPcz7qQID4H0Vu3VTnbECvlj+We9K5F656k9jTw=";
+    sha256 = "sha256-EzyQbMoR4veHbc9VaNfiXMi18wXbTbDPfDxo5NCk7CE=";
   };
 
-  vendorHash = "sha256-jtzCOF5TAHv3PiGxBx65IR/3x6JpqMzsWW8amab8hqQ=";
+  vendorHash = "sha256-7TrYWmVKxHKVTyiIak7tRYKE4hgG/4zfsM76bJRxnAk=";
 
   subPackages = [ "cmd/ghz" "cmd/ghz-web" ];
 
@@ -35,6 +35,5 @@ buildGoModule rec {
     description = "Simple gRPC benchmarking and load testing tool";
     homepage = "https://ghz.sh";
     license = licenses.asl20;
-    maintainers = [ maintainers.zombiezen ];
   };
 }

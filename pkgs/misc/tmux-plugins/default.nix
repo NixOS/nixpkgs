@@ -92,12 +92,12 @@ in rec {
 
   catppuccin = mkTmuxPlugin {
     pluginName = "catppuccin";
-    version = "unstable-2023-08-21";
+    version = "unstable-2024-05-15";
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "tmux";
-      rev = "7a284c98e5df4cc84a1a45ad633916f0b2b916b2";
-      hash = "sha256-jxcxW0gEfXaSt8VM3UIs0dKNKaHb8JSEQBBV3SVjW/A=";
+      rev = "697087f593dae0163e01becf483b192894e69e33";
+      hash = "sha256-EHinWa6Zbpumu+ciwcMo6JIIvYFfWWEKH1lwfyZUNTo=";
     };
     postInstall = ''
       sed -i -e 's|''${PLUGIN_DIR}/catppuccin-selected-theme.tmuxtheme|''${TMUX_TMPDIR}/catppuccin-selected-theme.tmuxtheme|g' $target/catppuccin.tmux
@@ -198,16 +198,16 @@ in rec {
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "2.2.0";
+    version = "2.3.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       rev = "v${version}";
-      sha256 = "9p+KO3/SrASHGtEk8ioW+BnC4cXndYx4FL0T70lKU2w=";
+      sha256 = "IrNDBRopg9lgN5AfeXbhhh+uXiWQD2bjS1sNOgOJsu4=";
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
-      description = "A feature packed Dracula theme for tmux!";
+      description = "Feature packed Dracula theme for tmux!";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ ethancedwards8 ];
@@ -310,12 +310,18 @@ in rec {
   fzf-tmux-url = mkTmuxPlugin {
     pluginName = "fzf-tmux-url";
     rtpFilePath = "fzf-url.tmux";
-    version = "unstable-2021-12-27";
+    version = "unstable-2024-04-14";
     src = fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-fzf-url";
-      rev = "1241fc5682850fe41812cad81c76541674ee305b";
-      sha256 = "1270c5nfvgsdajgfahlacqfb5xwg4hwfrciiy0v03d50vg4h0kdi";
+      rev = "28ed7ce3c73a328d8463d4f4aaa6ccb851e520fa";
+      hash = "sha256-tl0SjG/CeolrN7OIHj6MgkB9lFmFgEuJevsSuwVs+78=";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/wfxr/tmux-fzf-url";
+      description = "Quickly open urls on your terminal screen!";
+      license = licenses.mit;
+      platforms = platforms.unix;
     };
   };
 
@@ -397,10 +403,23 @@ in rec {
     pluginName = "nord";
     version = "0.3.0";
     src = pkgs.fetchFromGitHub {
-      owner = "arcticicestudio";
-      repo = "nord-tmux";
+      owner = "nordtheme";
+      repo = "tmux";
       rev = "v${version}";
-      sha256 = "14xhh49izvjw4ycwq5gx4if7a0bcnvgsf3irywc3qps6jjcf5ymk";
+      hash = "sha256-s/rimJRGXzwY9zkOp9+2bAF1XCT9FcyZJ1zuHxOBsJM=";
+    };
+    meta = {
+      homepage = "https://www.nordtheme.com/ports/tmux";
+      description = "Nord Tmux theme with plugin support";
+      longDescription =
+        ''
+          > An arctic, north-bluish clean and elegant tmux theme.
+          > Designed for a fluent and clear workflow with support for third-party plugins.
+
+          This plugin requires that tmux be used with a Nord terminal emulator
+          theme in order to work properly.
+      '';
+      license = lib.licenses.mit;
     };
   };
 
@@ -568,12 +587,12 @@ in rec {
   session-wizard = mkTmuxPlugin rec {
     pluginName = "session-wizard";
     rtpFilePath = "session-wizard.tmux";
-    version = "1.2.0";
+    version = "1.3.1";
     src = pkgs.fetchFromGitHub {
       owner = "27medkamal";
       repo = "tmux-session-wizard";
       rev = "V${version}";
-      sha256 = "sha256-IfSgX02vXdpzyu1GRF1EvzVCqqOEiTjeXtl1EvNr7EI=";
+      sha256 = "sha256-nJaC5aX+cR/+ks3I/lW/tUnVG0CrEYfsIjPDisgMrTE=";
     };
     meta = with lib; {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
@@ -591,9 +610,11 @@ in rec {
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-      substituteInPlace $target/session-wizard.tmux \
-        --replace  \$CURRENT_DIR/session-wizard.sh $target/session-wizard.sh
-      wrapProgram $target/session-wizard.sh \
+      for f in .gitignore Dockerfile flake.* scripts tests; do
+        rm -rf $target/$f
+      done
+      substituteInPlace $target/session-wizard.tmux --replace  \$CURRENT_DIR $target
+      wrapProgram $target/bin/t \
         --prefix PATH : ${with pkgs; lib.makeBinPath ([ fzf zoxide coreutils gnugrep gnused ])}
     '';
   };
@@ -795,6 +816,25 @@ in rec {
       repo = "tmux-yank";
       rev = "1b1a436e19f095ae8f825243dbe29800a8acd25c";
       sha256 = "hRvkBf+YrWycecnDixAsD4CAHg3KsioomfJ/nLl5Zgs=";
+    };
+  };
+
+  tmux-nova = mkTmuxPlugin rec {
+    pluginName = "tmux-nova";
+    rtpFilePath = "nova.tmux";
+    version = "1.2.0";
+    src = fetchFromGitHub {
+      owner = "o0th";
+      repo = "tmux-nova";
+      rev = "v${version}";
+      sha256 = "16llz3nlyw88lyd8mmj27i0ncyhpfjj5c1yikngf7nxcqsbjmcnh";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/o0th/tmux-nova";
+      description = "tmux-nova theme";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ o0th ];
     };
   };
 }

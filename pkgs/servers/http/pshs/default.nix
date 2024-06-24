@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Pretty small HTTP server - a command-line tool to share files";
+    mainProgram = "pshs";
     homepage = "https://github.com/mgorny/pshs";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;

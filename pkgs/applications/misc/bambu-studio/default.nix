@@ -1,51 +1,52 @@
-{ stdenv
-, lib
-, openexr
-, jemalloc
-, c-blosc
-, binutils
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook
-, boost179
-, cereal
-, cgal_5
-, curl
-, dbus
-, eigen
-, expat
-, gcc-unwrapped
-, glew
-, glfw
-, glib
-, glib-networking
-, gmp
-, gstreamer
-, gst-plugins-base
-, gst-plugins-bad
-, gst-plugins-good
-, gtest
-, gtk3
-, hicolor-icon-theme
-, ilmbase
-, libpng
-, mesa
-, mpfr
-, nlopt
-, opencascade-occt
-, openvdb
-, pcre
-, qhull
-, systemd
-, tbb_2021_8
-, webkitgtk
-, wxGTK31
-, xorg
-, fetchpatch
-, withSystemd ? stdenv.isLinux
+{
+  stdenv,
+  lib,
+  openexr,
+  jemalloc,
+  c-blosc,
+  binutils,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  boost179,
+  cereal,
+  cgal_5,
+  curl,
+  dbus,
+  eigen,
+  expat,
+  gcc-unwrapped,
+  glew,
+  glfw,
+  glib,
+  glib-networking,
+  gmp,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-plugins-good,
+  gtest,
+  gtk3,
+  hicolor-icon-theme,
+  ilmbase,
+  libpng,
+  mesa,
+  mpfr,
+  nlopt,
+  opencascade-occt_7_6,
+  openvdb,
+  pcre,
+  qhull,
+  systemd,
+  tbb_2021_11,
+  webkitgtk,
+  wxGTK31,
+  xorg,
+  withSystemd ? stdenv.isLinux,
 }:
 let
+  opencascade-occt = opencascade-occt_7_6;
   wxGTK31' = wxGTK31.overrideAttrs (old: {
     configureFlags = old.configureFlags ++ [
       # Disable noisy debug dialogs
@@ -53,24 +54,31 @@ let
     ];
   });
   openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
-    buildInputs = [ openexr boost179 tbb_2021_8 jemalloc c-blosc ilmbase ];
+    buildInputs = [
+      openexr
+      boost179
+      tbb_2021_11
+      jemalloc
+      c-blosc
+      ilmbase
+    ];
   });
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.08.04.51";
+  version = "01.09.00.70";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-rqD1+3Q4ZUBgS57iCItuLX6ZMP7VQuedaJmgKB1szgs=";
+    hash = "sha256-RBctBhKo7mjxsP7OJhGfoU1eIiGVuMiAqwwSU+gsMds=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -102,17 +110,17 @@ stdenv.mkDerivation rec {
     opencascade-occt
     openvdb_tbb_2021_8
     pcre
-    tbb_2021_8
+    tbb_2021_11
     webkitgtk
     wxGTK31'
     xorg.libX11
-  ] ++ lib.optionals withSystemd [
-    systemd
-  ] ++ checkInputs;
+  ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
     ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
+    # Fix build with cgal-5.6.1+
+    ./meshboolean-const.patch
   ];
 
   doCheck = true;
@@ -164,10 +172,17 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  # needed to prevent collisions between the LICENSE.txt files of
+  # bambu-studio and orca-slicer.
+  postInstall = ''
+    mv $out/LICENSE.txt $out/share/BambuStudio/LICENSE.txt
+    mv $out/README.md $out/share/BambuStudio/README.md
+  '';
+
   meta = with lib; {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ zhaofengli ];
     mainProgram = "bambu-studio";
     platforms = platforms.linux;

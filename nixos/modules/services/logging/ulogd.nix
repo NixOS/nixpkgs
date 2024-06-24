@@ -8,7 +8,7 @@ let
 in {
   options = {
     services.ulogd = {
-      enable = mkEnableOption (lib.mdDoc "ulogd");
+      enable = mkEnableOption "ulogd, a userspace logging daemon for netfilter/iptables related logging";
 
       settings = mkOption {
         example = {
@@ -31,14 +31,14 @@ in {
         };
         type = settingsFormat.type;
         default = { };
-        description = lib.mdDoc
+        description =
           "Configuration for ulogd. See {file}`/share/doc/ulogd/` in `pkgs.ulogd.doc`.";
       };
 
       logLevel = mkOption {
         type = types.enum [ 1 3 5 7 8 ];
         default = 5;
-        description = lib.mdDoc
+        description =
           "Log level (1 = debug, 3 = info, 5 = notice, 7 = error, 8 = fatal)";
       };
     };

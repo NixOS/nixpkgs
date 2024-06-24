@@ -7,7 +7,7 @@ However, it is possible and not-uncommon to create [impermanent systems], whose
 `rootfs` is either a `tmpfs` or reset during boot. While NixOS itself supports
 this kind of configuration, special care needs to be taken.
 
-[impermanent systems]: https://nixos.wiki/wiki/Impermanence
+[impermanent systems]: https://wiki.nixos.org/wiki/Impermanence
 
 
 ```{=include=} sections

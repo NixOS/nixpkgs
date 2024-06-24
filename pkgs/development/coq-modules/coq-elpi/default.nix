@@ -70,7 +70,7 @@ in mkCoqDerivation {
   propagatedBuildInputs = [ coq.ocamlPackages.findlib elpi ];
 
   meta = {
-    description = "Coq plugin embedding ELPI.";
+    description = "Coq plugin embedding ELPI";
     maintainers = [ maintainers.cohencyril ];
     license = licenses.lgpl21Plus;
   };

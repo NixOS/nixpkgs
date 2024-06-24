@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, poppler, libgcrypt, pcre, asciidoc }:
+{ lib, stdenv, fetchurl, pkg-config, poppler, libgcrypt, pcre2, asciidoc }:
 
 stdenv.mkDerivation rec {
   pname = "pdfgrep";
-  version = "2.1.2";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://pdfgrep.org/download/${pname}-${version}.tar.gz";
-    sha256 = "1fia10djcxxl7n9jw2prargw4yzbykk6izig2443ycj9syhxrwqf";
+    hash = "sha256-BmHlMeTA7wl5Waocl3N5ZYXbOccshKAv+H0sNjfGIMs=";
   };
 
   postPatch = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config asciidoc ];
-  buildInputs = [ poppler libgcrypt pcre ];
+  buildInputs = [ poppler libgcrypt pcre2 ];
 
   meta = {
     description = "Commandline utility to search text in PDF files";

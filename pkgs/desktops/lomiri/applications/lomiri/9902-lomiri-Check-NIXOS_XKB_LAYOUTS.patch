@@ -1,0 +1,29 @@
+From 640cab41986fac83742af39dd19877041a2ab8dc Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Sat, 1 Jun 2024 00:22:27 +0200
+Subject: [PATCH] Check NIXOS_XKB_LAYOUTS for layouts before falling back to
+ "us"
+
+---
+ plugins/AccountsService/AccountsService.cpp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/plugins/AccountsService/AccountsService.cpp b/plugins/AccountsService/AccountsService.cpp
+index bcf18246c..f4a7dfaa1 100644
+--- a/plugins/AccountsService/AccountsService.cpp
++++ b/plugins/AccountsService/AccountsService.cpp
+@@ -295,6 +295,11 @@ QStringList AccountsService::keymaps() const
+         return simplifiedMaps;
+     }
+ 
++    char* fallbackNixosLayouts = getenv("NIXOS_XKB_LAYOUTS");
++    if (fallbackNixosLayouts != NULL && fallbackNixosLayouts[0] != '\0') {
++        return QString(fallbackNixosLayouts).split(QLatin1Char(','), Qt::SkipEmptyParts);
++    }
++
+     return {QStringLiteral("us")};
+ }
+ 
+-- 
+2.42.0
+

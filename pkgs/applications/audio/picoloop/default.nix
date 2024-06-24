@@ -42,9 +42,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A synth and a stepsequencer (a clone of the famous nanoloop)";
+    description = "Synth and a stepsequencer (a clone of the famous nanoloop)";
     homepage = "https://github.com/yoyz/picoloop";
     platforms = platforms.linux;
     license = licenses.bsd3;
+    mainProgram = "picoloop";
   };
 }

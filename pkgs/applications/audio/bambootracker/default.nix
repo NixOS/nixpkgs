@@ -8,7 +8,7 @@
 , qtbase
 , qttools
 , qtwayland
-, rtaudio
+, rtaudio_6
 , rtmidi
 , wrapQtAppsHook
 }:
@@ -43,16 +43,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qtbase
+    rtaudio_6
     rtmidi
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ] ++ lib.optionals (lib.versionAtLeast qtbase.version "6.0") [
     qt5compat
-  ] ++ rtaudio.buildInputs;
+  ];
 
   qmakeFlags = [
-    # we don't have RtAudio 6 yet: https://github.com/NixOS/nixpkgs/pull/245075
-    # "CONFIG+=system_rtaudio"
+    "CONFIG+=system_rtaudio"
     "CONFIG+=system_rtmidi"
   ];
 
@@ -75,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
+    description = "Tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
+    mainProgram = "BambooTracker";
     homepage = "https://bambootracker.github.io/BambooTracker/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

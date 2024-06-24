@@ -1,14 +1,15 @@
-{ lib
-, arrow
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-datafiles
-, pytest-vcr
-, pytestCheckHook
-, python-box
-, pythonOlder
-, responses
-, requests
+{
+  lib,
+  arrow,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-datafiles,
+  pytest-vcr,
+  pytestCheckHook,
+  python-box,
+  pythonOlder,
+  responses,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     "test_session_ssl_error"
   ];
 
-  pythonImportsCheck = [
-    "restfly"
-  ];
+  pythonImportsCheck = [ "restfly" ];
 
   meta = with lib; {
     description = "Python RESTfly API Library Framework";

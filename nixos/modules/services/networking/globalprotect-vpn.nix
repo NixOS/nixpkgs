@@ -14,10 +14,10 @@ in
 
 {
   options.services.globalprotect = {
-    enable = mkEnableOption (lib.mdDoc "globalprotect");
+    enable = mkEnableOption "globalprotect";
 
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         GlobalProtect-openconnect configuration. For more information, visit
         <https://github.com/yuezk/GlobalProtect-openconnect/wiki/Configuration>.
       '';
@@ -31,7 +31,7 @@ in
     };
 
     csdWrapper = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         A script that will produce a Host Integrity Protection (HIP) report,
         as described at <https://www.infradead.org/openconnect/hip.html>
       '';

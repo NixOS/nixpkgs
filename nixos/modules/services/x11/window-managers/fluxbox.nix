@@ -8,7 +8,7 @@ in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.fluxbox.enable = mkEnableOption (lib.mdDoc "fluxbox");
+    services.xserver.windowManager.fluxbox.enable = mkEnableOption "fluxbox";
   };
 
   ###### implementation

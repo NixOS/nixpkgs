@@ -5,7 +5,6 @@
 , autoreconfHook
 , withDebugSymbols ? false
 , withCli ? true, libedit
-, withPython ? false, python3
 , withXtables ? true, iptables
 , nixosTests
 }:
@@ -29,25 +28,12 @@ stdenv.mkDerivation rec {
     libmnl libnftnl libpcap
     gmp jansson
   ] ++ lib.optional withCli libedit
-    ++ lib.optional withXtables iptables
-    ++ lib.optionals withPython [
-      python3
-      python3.pkgs.setuptools
-    ];
-
-  patches = [ ./fix-py-libnftables.patch ];
-
-  postPatch = ''
-    substituteInPlace "py/src/nftables.py" \
-      --subst-var-by "out" "$out"
-  '';
+    ++ lib.optional withXtables iptables;
 
   configureFlags = [
     "--with-json"
     (lib.withFeatureAs withCli "cli" "editline")
   ] ++ lib.optional (!withDebugSymbols) "--disable-debug"
-    ++ lib.optional (!withPython) "--disable-python"
-    ++ lib.optional withPython "--enable-python"
     ++ lib.optional withXtables "--with-xtables";
 
   passthru.tests = {
@@ -57,7 +43,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
+    description = "Project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
     homepage = "https://netfilter.org/projects/nftables/";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

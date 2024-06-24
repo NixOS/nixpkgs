@@ -1,6 +1,5 @@
 { mkDerivation
 , lib
-, fetchpatch
 , extra-cmake-modules
 , kauth
 , kconfig

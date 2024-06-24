@@ -64,9 +64,10 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   meta = with lib; {
-    description = "A tiling window manager";
+    description = "Tiling window manager";
     homepage    = "https://i3wm.org";
     maintainers = with maintainers; [ modulistic fpletz ];
+    mainProgram = "i3";
     license     = licenses.bsd3;
     platforms   = platforms.all;
 

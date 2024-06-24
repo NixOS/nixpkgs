@@ -1,10 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytest
-, sphinx
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytest,
+  sphinx,
+  defusedxml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,23 +21,16 @@ buildPythonPackage rec {
     hash = "sha256-oSBBt+hSMs4mvGqibQHoYHXr2j/bpsGOnIMfwfTfWKQ=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    sphinx
-  ];
+  propagatedBuildInputs = [ sphinx ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  pythonImportsCheck = [
-    "sphinx_pytest"
-  ];
+  pythonImportsCheck = [ "sphinx_pytest" ];
 
   nativeCheckInputs = [
+    defusedxml
     pytestCheckHook
   ];
 

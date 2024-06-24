@@ -1,25 +1,34 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , protobuf
 , installShellFiles
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "clipcat";
-  version = "0.16.4";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-gYg1czSwUm1zJUkw5SMk6C4yDfHcwjWnnHJftDLNvfs=";
+    hash = "sha256-i+5hUwarJHa3QzHPqJ0N/gztKWoRCKXsEbX3Q/1PQ9Q=";
   };
 
-  cargoHash = "sha256-e32DGV7/ueT25Lx318aGZEHRnUGxCn0J5/K3dgT02Ug=";
+  cargoHash = "sha256-lPH2v+OfO/NCLdAVvPbIgAeVAOWHjhNIOap94p0+NR0=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
 
   nativeBuildInputs = [
     protobuf
+
     installShellFiles
   ];
 
@@ -42,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     description = "Clipboard Manager written in Rust Programming Language";
     homepage = "https://github.com/xrelkd/clipcat";
     license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ xrelkd ];
     mainProgram = "clipcatd";
   };

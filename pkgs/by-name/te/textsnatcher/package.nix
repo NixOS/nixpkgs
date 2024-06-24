@@ -4,7 +4,7 @@
 , meson
 , ninja
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , pantheon
 , libhandy
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     vala
     pkg-config
     desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.curlpp.org/";
     description = "C++ wrapper around libcURL";
+    mainProgram = "curlpp-config";
     license = licenses.mit;
     maintainers = with maintainers; [ CrazedProgrammer ];
   };

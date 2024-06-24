@@ -46,7 +46,7 @@
   (fetchNuGet { pname = "NicolasDorier.CommandLine"; version = "2.0.0"; sha256 = "0gywvl0gqs3crlzwgwzcqf0qsrbhk3dxjycpimxqvs1ihg4dhb1f"; })
   (fetchNuGet { pname = "NicolasDorier.CommandLine.Configuration"; version = "2.0.0"; sha256 = "1cng096r3kb85lf5wjill4yhxx8nv9v0d6ksbn1i1vvdawwl6fkw"; })
   (fetchNuGet { pname = "NicolasDorier.StandardConfiguration"; version = "2.0.0"; sha256 = "0058dx34ja2idw468bmw7l3w21wr2am6yx57sqp7llhjl5ayy0wv"; })
-  (fetchNuGet { pname = "Npgsql"; version = "8.0.1"; sha256 = "01dqlqpwr450vfs7r113k1glrnpnr2fgc04x5ni6bj0k6aahhl7v"; })
+  (fetchNuGet { pname = "Npgsql"; version = "8.0.2"; sha256 = "0w1hm3bjh1vfnkzflp1x8bd4d723mpr4y6gb6ga79v5kkf09cmm2"; })
   (fetchNuGet { pname = "RabbitMQ.Client"; version = "5.1.2"; sha256 = "195nxmnva1z2p0ahvn0kswv4d39f5bdy2sl3cxcvfziamc21xrmd"; })
   (fetchNuGet { pname = "runtime.any.System.Collections"; version = "4.3.0"; sha256 = "0bv5qgm6vr47ynxqbnkc7i797fdi8gbjjxii173syrx14nmrkwg0"; })
   (fetchNuGet { pname = "runtime.any.System.Diagnostics.Tools"; version = "4.3.0"; sha256 = "1wl76vk12zhdh66vmagni66h5xbhgqq7zkdpgw21jhxhvlbcl8pk"; })

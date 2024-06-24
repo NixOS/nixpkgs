@@ -1,9 +1,10 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  bleak,
+  bleak-retry-connector,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,9 +29,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "cometblue_lite"
-  ];
+  pythonImportsCheck = [ "cometblue_lite" ];
 
   meta = with lib; {
     description = "Module for Eurotronic Comet Blue thermostats";

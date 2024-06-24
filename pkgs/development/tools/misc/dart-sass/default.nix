@@ -10,24 +10,24 @@
 }:
 
 let
-  embedded-protocol-version = "2.4.0";
+  embedded-protocol-version = "2.7.1";
 
   embedded-protocol = fetchFromGitHub {
     owner = "sass";
     repo = "sass";
     rev = "refs/tags/embedded-protocol-${embedded-protocol-version}";
-    hash = "sha256-19YQTda5su2PI2vLzVRCn7fQoH5vEg3539gXEeLLvV8=";
+    hash = "sha256-6bGH/klCYxuq7CrOJVF8ySafhLJwet5ppBcpI8dzeCQ=";
   };
 in
 buildDartApplication rec {
   pname = "dart-sass";
-  version = "1.70.0";
+  version = "1.77.4";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
     rev = version;
-    hash = "sha256-JLVcoDAngP1y8EC4K6fIJdPu2Xm8LLAxUm8BTK5tSVk=";
+    hash = "sha256-xHOZDeK6xYnfrb6yih6jzRDZLRvyp0EeKZynEq3A4aI=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -47,7 +47,7 @@ buildDartApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/sass/dart-sass";
-    description = "The reference implementation of Sass, written in Dart";
+    description = "Reference implementation of Sass, written in Dart";
     mainProgram = "sass";
     license = licenses.mit;
     maintainers = with maintainers; [ lelgenio ];

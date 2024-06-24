@@ -1,5 +1,4 @@
-{ autoPatchelfHook
-, autoSignDarwinBinariesHook
+{ autoSignDarwinBinariesHook
 , buildDotnetModule
 , dotnetCorePackages
 , fetchFromGitHub
@@ -23,13 +22,13 @@ assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.313.0";
+  version = "2.317.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-0CclkbJ8AfffdfVNXacnpgFOS+ONk6eP1LTyFa12xU4=";
+    hash = "sha256-+VwEH4hmEjeYFWm7TOndD5SOJwsyPZEhKkCSyl7x8cE=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -114,8 +113,6 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     which
     git
-  ] ++ lib.optionals stdenv.isLinux [
-    autoPatchelfHook
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ];

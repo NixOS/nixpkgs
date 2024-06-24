@@ -7,17 +7,18 @@
 , openldap
 , openssl
 , trousers
+, libcap
 }:
 
 stdenv.mkDerivation rec {
   pname = "opencryptoki";
-  version = "3.20.0";
+  version = "3.23.0";
 
   src = fetchFromGitHub {
     owner = "opencryptoki";
     repo = "opencryptoki";
     rev = "v${version}";
-    hash = "sha256-Z11CDw9ykmJ7MI7I0H4Y/i+8/I+hRgC2frklYPP1di0=";
+    hash = "sha256-5FcvwGTzsL0lYrSYGlbSY89s6OKzg+2TRlwHlJjdzXo=";
   };
 
   nativeBuildInputs = [
@@ -30,14 +31,17 @@ stdenv.mkDerivation rec {
     openldap
     openssl
     trousers
+    libcap
   ];
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace "usermod" "true" \
-      --replace "groupadd" "true" \
-      --replace "chmod" "true" \
-      --replace "chgrp" "true"
+      --replace-fail "usermod" "true" \
+      --replace-fail "useradd" "true" \
+      --replace-fail "groupadd" "true" \
+      --replace-fail "chmod" "true" \
+      --replace-fail "chown" "true" \
+      --replace-fail "chgrp" "true"
   '';
 
   configureFlags = [

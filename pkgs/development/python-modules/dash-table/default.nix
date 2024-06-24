@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A First-Class Interactive DataTable for Dash";
+    description = "First-Class Interactive DataTable for Dash";
     homepage = "https://dash.plot.ly/datatable";
     license = licenses.mit;
     maintainers = [ maintainers.antoinerg ];

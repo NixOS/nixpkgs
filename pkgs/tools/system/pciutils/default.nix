@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pciutils";
-  version = "3.10.0"; # with release-date database
+  version = "3.12.0"; # with release-date database
 
   src = fetchurl {
     url = "mirror://kernel/software/utils/pciutils/pciutils-${version}.tar.xz";
-    sha256 = "sha256-I4ouJxZnMOU6F/4Hv60ingf6ObYYEX5ZRLbX7an7sOk=";
+    hash = "sha256-8YXRFtX/mbeXSX786PGfHujMxaZouXoVnj0TRy9nQVQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -52,9 +52,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://mj.ucw.cz/sw/pciutils/";
-    description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
+    description = "Collection of programs for inspecting and manipulating configuration of PCI devices";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ]; # not really, but someone should watch it
+    mainProgram = "lspci";
   };
 }

@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "runme";
-  version = "2.2.6";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-pbdY0/1ityPWI3bGjpgWZ5pKTIh8wRqquBuK7aCbeHg=";
+    hash = "sha256-a+7Gff3Z1V17uaywoUE+nLVeVprB50Gslarcle/NPB8=";
   };
 
   vendorHash = "sha256-QoZzEq1aC7cjY/RVp5Z5HhSuTFf2BSYQnfg0jSaeTJU=";
@@ -67,6 +67,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Execute commands inside your runbooks, docs, and READMEs";
+    mainProgram = "runme";
     homepage = "https://runme.dev";
     changelog = "https://github.com/stateful/runme/releases/tag/v${version}";
     license = licenses.asl20;

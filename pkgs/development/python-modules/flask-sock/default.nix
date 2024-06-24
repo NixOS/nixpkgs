@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pytestCheckHook
-, pythonOlder
-, fetchFromGitHub
-, flask
-, setuptools
-, simple-websocket
+{
+  lib,
+  buildPythonPackage,
+  pytestCheckHook,
+  pythonOlder,
+  fetchFromGitHub,
+  flask,
+  setuptools,
+  simple-websocket,
 }:
 
 buildPythonPackage rec {
@@ -22,24 +23,18 @@ buildPythonPackage rec {
     hash = "sha256-GKfOVdeLPag2IKGCWrMjQp4NTL1/9GiyLhXhf9jQKhQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     flask
     simple-websocket
   ];
 
-  pytestFlagsArray = [
-    "tests/test_flask_sock.py"
-  ];
+  pytestFlagsArray = [ "tests/test_flask_sock.py" ];
 
   pythonImportsCheck = [ "flask_sock" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "WebSocket support for Flask";

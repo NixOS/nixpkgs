@@ -24,7 +24,9 @@ if [ -z "$rev" ]; then
     rev="$(wget -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/jpochyla/psst/commits?per_page=1" | jq -r '.[0].sha')"
 fi
 
-version="unstable-$(date +%F)"
+date="$(wget -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/jpochyla/psst/commits/$rev" | jq -r '.commit.author.date' | cut -dT -f1)"
+
+version="unstable-$date"
 
 # Sources
 src_hash=$(nix-prefetch-github jpochyla psst --rev "$rev" | jq -r .hash)

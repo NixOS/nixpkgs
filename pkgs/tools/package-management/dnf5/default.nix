@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.1.12";
+  version = "5.1.15";
 
   outputs = [ "out" "man" ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     rev = finalAttrs.version;
-    hash = "sha256-AzyFc+fBQyyCNzr8ulMEtFEotdUzStsyYOv9ppcIBw4=";
+    hash = "sha256-IDF/jRnPpGbHk5bY7plkCO1x/i10H+HCcU88JI4EHvs=";
   };
 
   nativeBuildInputs = [
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Next-generation RPM package management system";
     homepage = "https://github.com/rpm-software-management/dnf5";
-    changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${version}";
+    changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
     license = licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ malt3 katexochen ];
     mainProgram = "dnf5";

@@ -1,35 +1,36 @@
-{ lib
-, aws-sam-translator
-, buildPythonPackage
-, fetchFromGitHub
-, jschema-to-python
-, jsonpatch
-, jsonschema
-, junit-xml
-, mock
-, networkx
-, pydot
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, regex
-, sarif-om
-, setuptools
-, sympy
+{
+  lib,
+  aws-sam-translator,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jschema-to-python,
+  jsonpatch,
+  jsonschema,
+  junit-xml,
+  mock,
+  networkx,
+  pydot,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  regex,
+  sarif-om,
+  setuptools,
+  sympy,
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.83.3";
+  version = "0.86.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0NHD8P+lKsrsEX/ypUS5dIwHOLudQcqkH8zG5RxANxE=";
+    hash = "sha256-QkxCQ8YPRZSqAidmPus4JCgzez6uuRWvcaqfZsvugtY=";
   };
 
   propagatedBuildInputs = [
@@ -70,12 +71,11 @@ buildPythonPackage rec {
     "test_template_config"
   ];
 
-  pythonImportsCheck = [
-    "cfnlint"
-  ];
+  pythonImportsCheck = [ "cfnlint" ];
 
   meta = with lib; {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
+    mainProgram = "cfn-lint";
     homepage = "https://github.com/aws-cloudformation/cfn-lint";
     changelog = "https://github.com/aws-cloudformation/cfn-lint/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "boinc";
-  version = "7.24.3";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${lib.versions.majorMinor version}/${version}";
-    hash = "sha256-0gyCO5t8t0SbOCBClVVu+C2VpBlxsnoRHBRYgI8nNO4=";
+    hash = "sha256-kkEEJp7NTpHwbo03BGjjJAraFQIJcoNyV+oDsCZlzPQ=";
   };
 
   nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];

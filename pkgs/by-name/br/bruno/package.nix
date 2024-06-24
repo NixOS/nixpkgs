@@ -8,30 +8,41 @@
 , writeShellScriptBin
 , makeWrapper
 , copyDesktopItems
+, giflib
 , makeDesktopItem
 , pkg-config
 , pixman
 , cairo
 , pango
 , npm-lockfile-fix
+, overrideSDK
+, darwin
 }:
 
-buildNpmPackage rec {
+let
+  # fix for: https://github.com/NixOS/nixpkgs/issues/272156
+  buildNpmPackage' =
+    buildNpmPackage.override {
+      stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    };
+in
+buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.6.1";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-Vf4UHN13eE9W4rekOEGAWIP3x79cVH3vI9sxuIscv8c=";
+    hash = "sha256-XprUu4Dp7ER8YC1uO4kkzTZLsJtoOFH15elnkxUn7/c=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-pfV9omdJiozJ9VotTImfM/DRsBPNGAEzmSdj3/C//4A=";
+  npmDepsHash = "sha256-BVCyZKhSBNJDmhnO68ULj5aMINFQIIlwlGqwjGkOoEI=";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     (writeShellScriptBin "phantomjs" "echo 2.1.1")
@@ -45,6 +56,9 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.CoreText
+    giflib
   ];
 
   desktopItems = [
@@ -61,13 +75,14 @@ buildNpmPackage rec {
 
   postPatch = ''
     substituteInPlace scripts/build-electron.sh \
-      --replace 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
+      --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
   '';
 
   ELECTRON_SKIP_BINARY_DOWNLOAD=1;
 
   dontNpmBuild = true;
   postBuild = ''
+    npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
@@ -81,8 +96,8 @@ buildNpmPackage rec {
     find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
     substituteInPlace electron-builder-config.js \
-      --replace "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
-      --replace "afterSign: 'notarize.js'," ""
+      --replace-fail "identity: 'Anoop MD (W7LPPWA48L)'" 'identity: null' \
+      --replace-fail "afterSign: 'notarize.js'," ""
 
     npm exec electron-builder -- \
       --dir \
@@ -134,11 +149,11 @@ buildNpmPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Open-source IDE For exploring and testing APIs.";
+    description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
     inherit (electron.meta) platforms;
     license = licenses.mit;
-    maintainers = with maintainers; [ water-sucks lucasew kashw2 mattpolzin ];
+    maintainers = with maintainers; [ gepbird kashw2 lucasew mattpolzin water-sucks ];
     mainProgram = "bruno";
   };
 }

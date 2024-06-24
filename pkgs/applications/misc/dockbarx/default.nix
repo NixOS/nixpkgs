@@ -6,7 +6,7 @@
 , keybinder3
 , libwnck
 , python3Packages
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     glib.dev
     gobject-introspection
     python3Packages.polib
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

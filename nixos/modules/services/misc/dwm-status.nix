@@ -22,7 +22,7 @@ in
 
     services.dwm-status = {
 
-      enable = mkEnableOption (lib.mdDoc "dwm-status user service");
+      enable = mkEnableOption "dwm-status user service";
 
       package = mkPackageOption pkgs "dwm-status" {
         example = "dwm-status.override { enableAlsaUtils = false; }";
@@ -30,7 +30,7 @@ in
 
       order = mkOption {
         type = types.listOf (types.enum [ "audio" "backlight" "battery" "cpu_load" "network" "time" ]);
-        description = lib.mdDoc ''
+        description = ''
           List of enabled features in order.
         '';
       };
@@ -38,7 +38,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Extra config in TOML format.
         '';
       };

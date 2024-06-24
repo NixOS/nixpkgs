@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  pname = "Wikipedia-API";
+  pname = "wikipedia-api";
   version = "0.6.0";
   format = "setuptools";
 
@@ -17,9 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-cmwyQhKbkIpZXkKqqT0X2Lp8OFma2joeb4uxDRPiQe8=";
   };
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

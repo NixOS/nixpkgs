@@ -7,10 +7,13 @@
 , cmake
 , curl
 , fetchFromGitHub
+, fetchpatch
 , ffmpeg
-, ffmpeg_4
 , fluidsynth
+, fmt
+, freetype
 , gettext
+, harfbuzz
 , hexdump
 , hidapi
 , icu
@@ -19,21 +22,28 @@
 , libGL
 , libGLU
 , libjpeg
+, liblcf
 , libpcap
 , libpng
+, libsndfile
 , libvorbis
 , libxml2
+, libxmp
 , libzip
 , makeWrapper
+, mpg123
 , nasm
 , openssl
+, opusfile
 , pcre
+, pixman
 , pkg-config
 , portaudio
 , python3
 , retroarch
 , sfml
 , snappy
+, speexdsp
 , udev
 , which
 , xorg
@@ -48,13 +58,15 @@ let
   getCore = repo: (lib.getAttr repo hashesFile);
 
   getCoreSrc = repo:
-    (lib.pipe repo [
-      getCore
-      (x: builtins.removeAttrs x [ "date" ])
-      fetchFromGitHub
-    ]);
+    let
+      inherit (getCore repo) src fetcher;
+      fetcherFn = {
+        inherit fetchFromGitHub;
+      }.${fetcher} or (throw "Unknown fetcher: ${fetcher}");
+    in
+    fetcherFn src;
 
-  getCoreDate = repo: (getCore repo).date or "unstable-1970-01-01";
+  getCoreVersion = repo: (getCore repo).version;
 
   mkLibretroCore =
     # Sometimes core name != repo name, so you may need to set them differently
@@ -67,7 +79,7 @@ let
     { core
     , repo ? core
     , src ? (getCoreSrc repo)
-    , version ? (getCoreDate repo)
+    , version ? (getCoreVersion repo)
     , ...
     }@args:
     import ./mkLibretroCore.nix ({
@@ -393,8 +405,34 @@ in
     hardeningDisable = [ "format" ];
     makefile = "Makefile";
     meta = {
-      description = "Port of DOSBox to libretro aiming for simplicity and ease of use.";
+      description = "Port of DOSBox to libretro aiming for simplicity and ease of use";
       license = lib.licenses.gpl2Only;
+    };
+  };
+
+  easyrpg = mkLibretroCore {
+    core = "easyrpg";
+    extraNativeBuildInputs = [ cmake pkg-config ];
+    extraBuildInputs = [ fmt freetype harfbuzz liblcf libpng libsndfile libvorbis libxmp mpg123 opusfile pcre pixman speexdsp ];
+    patches = [
+      # The following patch is shared with easyrpg-player.
+      # Update when new versions of liblcf and easyrpg-player are released.
+      # See pkgs/games/easyrpg-player/default.nix for details.
+      (fetchpatch {
+        name = "0001-Fix-building-with-fmtlib-10.patch";
+        url = "https://github.com/EasyRPG/Player/commit/ab6286f6d01bada649ea52d1f0881dde7db7e0cf.patch";
+        hash = "sha256-GdSdVFEG1OJCdf2ZIzTP+hSrz+ddhTMBvOPjvYQHy54=";
+      })
+    ];
+    cmakeFlags = [
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DPLAYER_TARGET_PLATFORM=libretro"
+      "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
+    ];
+    makefile = "Makefile";
+    meta = {
+      description = "EasyRPG Player libretro port";
+      license = lib.licenses.gpl3Only;
     };
   };
 
@@ -472,7 +510,7 @@ in
   fuse = mkLibretroCore {
     core = "fuse";
     meta = {
-      description = "A port of the Fuse Unix Spectrum Emulator to libretro";
+      description = "Port of the Fuse Unix Spectrum Emulator to libretro";
       license = lib.licenses.gpl3Only;
     };
   };
@@ -771,7 +809,7 @@ in
       && sed -i -e 's,CPUFLAGS  :=,,g' Makefile
     '';
     meta = {
-      description = "Parallel Mupen64plus rewrite for libretro.";
+      description = "Parallel Mupen64plus rewrite for libretro";
       license = lib.licenses.gpl3Only;
     };
   };
@@ -851,11 +889,13 @@ in
   ppsspp = mkLibretroCore {
     core = "ppsspp";
     extraNativeBuildInputs = [ cmake pkg-config python3 ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg_4 snappy xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libzip snappy xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DLIBRETRO=ON"
-      "-DUSE_SYSTEM_FFMPEG=ON"
+      # USE_SYSTEM_FFMPEG=ON causes several glitches during video playback
+      # See: https://github.com/NixOS/nixpkgs/issues/304616
+      "-DUSE_SYSTEM_FFMPEG=OFF"
       "-DUSE_SYSTEM_SNAPPY=ON"
       "-DUSE_SYSTEM_LIBZIP=ON"
       "-DOpenGL_GL_PREFERENCE=GLVND"

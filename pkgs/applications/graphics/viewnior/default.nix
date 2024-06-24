@@ -58,5 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://siyanpanayotov.com/project/viewnior/";
     maintainers = with maintainers; [ smironov artturin ];
     platforms = platforms.gnu ++ platforms.linux;
+    mainProgram = "viewnior";
   };
 }

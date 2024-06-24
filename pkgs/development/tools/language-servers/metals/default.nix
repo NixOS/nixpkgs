@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "metals";
-  version = "1.2.0";
+  version = "1.3.2";
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-nikQ/GFRWmYYzboc9TWIi9gd5kwgCxOLhvIEQWusFik=";
+    outputHash = "sha256-hRESY7TFxUjEkNf0vhCG30mIHZHXoAyZl3nTQ3OvQ0E=";
   };
 
   nativeBuildInputs = [ makeWrapper setJavaClassPath ];
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://scalameta.org/metals/";
     license = licenses.asl20;
     description = "Language server for Scala";
-    maintainers = with maintainers; [ fabianhjr tomahna ];
+    mainProgram = "metals";
+    maintainers = with maintainers; [ fabianhjr jpaju tomahna ];
   };
 }

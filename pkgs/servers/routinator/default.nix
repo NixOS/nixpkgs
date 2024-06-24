@@ -3,28 +3,29 @@
 , fetchFromGitHub
 , stdenv
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "routinator";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ia9N2jZlFW0Gu5YDfwh023zorMyWWL/KggeBRvCD1W4=";
+    hash = "sha256-DCejOfL+c04MABweyuvDLImlYKj/SONxBfXD/4OVzH0=";
   };
 
-  cargoHash = "sha256-RHT6+zrY4SjoC/hgoMRal+cG8Ruip/6v7oVtKvR8doU=";
+  cargoHash = "sha256-X+pAvudfbxng6kMv0NO00v6mMBXUMaXvZb/L1OgWd38=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "socks" ];
 
   meta = with lib; {
-    description = "An RPKI Validator written in Rust";
+    description = "RPKI Validator written in Rust";
     homepage = "https://github.com/NLnetLabs/routinator";
     changelog = "https://github.com/NLnetLabs/routinator/blob/v${version}/Changelog.md";
     license = licenses.bsd3;

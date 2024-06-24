@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A TUI tool to run multiple commands in parallel and show the output of each command separately";
+    description = "TUI tool to run multiple commands in parallel and show the output of each command separately";
     homepage = "https://github.com/pvolok/mprocs";
     license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage thehedgeh0g ];
+    maintainers = with maintainers; [ GaetanLepage pyrox0 ];
     mainProgram = "mprocs";
   };
 }

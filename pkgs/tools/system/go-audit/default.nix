@@ -20,7 +20,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "An alternative to the auditd daemon";
+    description = "Alternative to the auditd daemon";
     homepage = "https://github.com/slackhq/go-audit";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

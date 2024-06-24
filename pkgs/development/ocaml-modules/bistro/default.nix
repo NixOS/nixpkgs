@@ -1,6 +1,4 @@
 { lib
-, ocaml
-, fetchpatch
 , fetchFromGitHub
 , buildDunePackage
 , base64

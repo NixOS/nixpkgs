@@ -8,11 +8,11 @@
 
 buildGoModule rec {
   pname = "honk";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://humungus.tedunangst.com/r/honk/d/honk-${version}.tgz";
-    hash = "sha256-adBbJG45md7wUGzqYKA06RXzXul3Ltncrtz2eN4Ezqo=";
+    hash = "sha256-F4Hz36nvcZv8MTh7a9Zr73kEBTS0c16Xty3T6/EzJeI=";
   };
   vendorHash = null;
 
@@ -56,7 +56,7 @@ buildGoModule rec {
 
   meta = {
     changelog = "https://humungus.tedunangst.com/r/honk/v/v${version}/f/docs/changelog.txt";
-    description = "An ActivityPub server with minimal setup and support costs.";
+    description = "ActivityPub server with minimal setup and support costs";
     homepage = "https://humungus.tedunangst.com/r/honk";
     license = lib.licenses.isc;
     mainProgram = "honk";

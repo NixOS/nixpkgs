@@ -23,7 +23,7 @@
 
     with subtest("FUSE mountpoint"):
         machine.fail("echo a | su bob -l -c 'ipfs add --quieter'")
-        # The FUSE mount functionality is broken as of v0.13.0 and v0.17.0.
+        # The FUSE mount functionality is broken as of v0.13.0. This is still the case with v0.29.0.
         # See https://github.com/ipfs/kubo/issues/9044.
         # Workaround: using CID Version 1 avoids that.
         ipfs_hash = machine.succeed(

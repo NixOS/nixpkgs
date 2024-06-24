@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , glib
 , gtk4
 , pango
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "gtk4_8" ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
   buildInputs = [ glib gtk4 pango librsvg ];
 
   meta = with lib; {

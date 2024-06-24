@@ -1,4 +1,9 @@
-{ lib, fetchPypi, buildPythonPackage, setuptools }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "iso-639";
@@ -15,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/noumar/iso639";
     description = "ISO 639 library for Python";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ zraexy ];
   };
 }

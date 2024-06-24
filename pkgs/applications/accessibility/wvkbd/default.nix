@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wvkbd";
-  version = "0.14.3";
+  version = "0.15";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-U4xq9FY2uZlnBwm8Se1wReU1c1RAJMx6FIoD0D2BlM4=";
+    sha256 = "sha256-9gDxMH1hghqjcXlbda7CHjDdjcjApjjie7caihKIg9M=";
   };
 
   postPatch = ''
@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/jjsullivan5196/wvkbd";
     description = "On-screen keyboard for wlroots";
-    maintainers = [ maintainers.elohmeier ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     mainProgram = "wvkbd-mobintl";

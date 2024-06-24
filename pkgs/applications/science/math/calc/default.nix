@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "http://www.isthe.com/chongo/tech/comp/calc/";
     description = "C-style arbitrary precision calculator";
+    mainProgram = "calc";
     changelog = "https://github.com/lcn2/calc/blob/v${finalAttrs.version}/CHANGES";
     # The licensing situation depends on readline (see section 3 of the LGPL)
     # If linked against readline then GPLv2 otherwise LGPLv2.1

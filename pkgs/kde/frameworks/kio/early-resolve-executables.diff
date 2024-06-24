@@ -1,0 +1,13 @@
+diff --git a/src/gui/systemd/systemdprocessrunner.cpp b/src/gui/systemd/systemdprocessrunner.cpp
+index afe3e2c69..5e5ee012d 100644
+--- a/src/gui/systemd/systemdprocessrunner.cpp
++++ b/src/gui/systemd/systemdprocessrunner.cpp
+@@ -128,7 +128,7 @@ void SystemdProcessRunner::startProcess()
+                                               // so we can be notified (see https://github.com/systemd/systemd/pull/3984)
+             {QStringLiteral("Environment"), m_process->environment()},
+             {QStringLiteral("WorkingDirectory"), m_process->workingDirectory()},
+-            {QStringLiteral("ExecStart"), QVariant::fromValue(ExecCommandList{{m_process->program().first(), m_process->program(), false}})},
++            {QStringLiteral("ExecStart"), QVariant::fromValue(ExecCommandList{{QStandardPaths::findExecutable(m_process->program().first()), m_process->program(), false}})},
+         },
+         {} // aux is currently unused and should be passed as empty array.
+     );

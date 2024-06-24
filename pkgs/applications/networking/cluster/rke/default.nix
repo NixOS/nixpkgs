@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "rke";
-  version = "1.5.3";
+  version = "1.5.10";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-p1hkiXHwh8Vo2LIP1BeE5XSc/gKjn9XN30usGwCVj7w=";
+    hash = "sha256-e4YR3vYpaRVhwvBY8VwLp3XNXxnwYlS14VP0gSyLvJA=";
   };
 
-  vendorHash = "sha256-eH4FBfX9LNb1UgSRsYSd1Fn2Ju+cL6t64u+/sf9uzNM=";
+  vendorHash = "sha256-++4d87ARL1czjL9I/AuodIP2PmbjjAQ5jf5x2bP16yQ=";
 
   subPackages = [ "." ];
 
@@ -19,7 +19,8 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/rancher/rke";
-    description = "An extremely simple, lightning fast Kubernetes distribution that runs entirely within containers";
+    description = "Extremely simple, lightning fast Kubernetes distribution that runs entirely within containers";
+    mainProgram = "rke";
     changelog = "https://github.com/rancher/rke/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ urandom ];

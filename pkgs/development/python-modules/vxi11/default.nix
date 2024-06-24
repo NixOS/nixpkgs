@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nose }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nose,
+}:
 
 buildPythonPackage rec {
   pname = "python-vxi11";
@@ -19,6 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "VXI-11 driver for controlling instruments over Ethernet";
+    mainProgram = "vxi11-cli";
     homepage = "https://github.com/python-ivi/python-vxi11";
     license = licenses.mit;
     maintainers = with maintainers; [ bgamari ];

@@ -6,7 +6,7 @@
 , makeWrapper
 , writeText
 , autoPatchelfHook
-, wrapGAppsHook
+, wrapGAppsHook3
 , callPackage
 
 , atk
@@ -101,7 +101,7 @@ lib.warnIf (useHardenedMalloc != null)
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "13.0.9";
+  version = "13.5";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -111,7 +111,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-qcB3DLVt2J4WNJLunDSnZdyflMY9/NIsGrj+TkQeJEg=";
+      hash = "sha256-npqrGyCwqMeZ8JssR/EpvDClkLQ3K0xEfE19fHn+GDs=";
     };
 
     i686-linux = fetchurl {
@@ -121,7 +121,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-aq2WffQ3ZUL0vopbDU5n9bWb8MC7rHoaz54kz2oaXz8=";
+      hash = "sha256-qeXLBFhcCPDWRuCZiLL1wOY6BRWsk0h36jWe5U6eCJ8=";
     };
   };
 
@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
 
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook copyDesktopItems makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook copyDesktopItems makeWrapper wrapGAppsHook3 ];
   buildInputs = [
     gtk3
     alsa-lib
@@ -199,8 +199,8 @@ stdenv.mkDerivation rec {
     ''}
 
     # Fixup paths to pluggable transports.
-    sed -i TorBrowser/Data/Tor/torrc-defaults \
-        -e "s,./TorBrowser,$TBB_IN_STORE/TorBrowser,g"
+    substituteInPlace TorBrowser/Data/Tor/torrc-defaults \
+      --replace-fail './TorBrowser' "$TBB_IN_STORE/TorBrowser"
 
     # Fixup obfs transport.  Work around patchelf failing to set
     # interpreter for pre-compiled Go binaries by invoking the interpreter
@@ -263,8 +263,8 @@ stdenv.mkDerivation rec {
     # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
     # indicates the system fonts.conf being used instead.
     FONTCONFIG_FILE=$TBB_IN_STORE/fontconfig/fonts.conf
-    sed -i "$FONTCONFIG_FILE" \
-      -e "s,<dir>fonts</dir>,<dir>$TBB_IN_STORE/fonts</dir>,"
+    substituteInPlace "$FONTCONFIG_FILE" \
+      --replace-fail '<dir prefix="cwd">fonts</dir>' "<dir>$TBB_IN_STORE/fonts</dir>"
 
     # Hard-code paths to geoip data files.  TBB resolves the geoip files
     # relative to torrc-defaults_path but if we do not hard-code them
@@ -323,6 +323,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Privacy-focused browser routing traffic through the Tor network";
+    mainProgram = "tor-browser";
     homepage = "https://www.torproject.org/";
     changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
     platforms = attrNames sources;

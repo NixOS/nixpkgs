@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, canonicalize-jars-hook
+, stripJavaArchivesHook
 , fetchzip
 , pkg-config
 , atk
@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    canonicalize-jars-hook
+    stripJavaArchivesHook
     pkg-config
   ];
   buildInputs = [

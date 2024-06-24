@@ -1,21 +1,22 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, rustPlatform
-, bitstring
-, cachetools
-, cffi
-, deprecation
-, iconv
-, matplotlib
-, numpy
-, scipy
-, screed
-, hypothesis
-, pytest-xdist
-, pyyaml
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  rustPlatform,
+  bitstring,
+  cachetools,
+  cffi,
+  deprecation,
+  iconv,
+  matplotlib,
+  numpy,
+  scipy,
+  screed,
+  hypothesis,
+  pytest-xdist,
+  pyyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -70,6 +71,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Quickly search, compare, and analyze genomic and metagenomic data sets";
+    mainProgram = "sourmash";
     homepage = "https://sourmash.bio";
     changelog = "https://github.com/sourmash-bio/sourmash/releases/tag/v${version}";
     maintainers = with maintainers; [ luizirber ];

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cython_3
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -30,19 +31,15 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython_3
+    cython
     poetry-core
     setuptools
     wheel
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "cached_ipaddress"
-  ];
+  pythonImportsCheck = [ "cached_ipaddress" ];
 
   meta = with lib; {
     description = "Cache construction of ipaddress objects";

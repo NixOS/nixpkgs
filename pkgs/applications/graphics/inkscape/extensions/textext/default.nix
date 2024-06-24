@@ -6,7 +6,7 @@
 , pdflatex
 , lualatex
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 , gobject-introspection
 , gtk3
 , gtksourceview3
@@ -20,13 +20,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "textext";
-  version = "1.10.1";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     owner = "textext";
     repo = "textext";
-    rev = version;
-    sha256 = "sha256-FbUfZfVOYEyQVL1YMyNwb/sIUxJ+VhevatjuJI/ocIw=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-JbI/ScCFCvHbK9JZzHuT67uSAL3546et+gtTkwRnCSE=";
   };
 
   patches = [
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
   ];
 

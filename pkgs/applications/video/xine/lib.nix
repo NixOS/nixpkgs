@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://xine.sourceforge.net/";
-    description = "A high-performance, portable and reusable multimedia playback engine";
+    description = "High-performance, portable and reusable multimedia playback engine";
     license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;

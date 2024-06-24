@@ -22,7 +22,7 @@
 , pkg-config
 , python3
 , sqlite
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -93,7 +93,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small GTK application to allow to keep a diary of your life";
-    homepage = "https://wiki.gnome.org/Apps/Almanah_Diary";
+    mainProgram = "almanah";
+    homepage = "https://gitlab.gnome.org/GNOME/almanah";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The command line interface to interact with Camunda 8 and Zeebe";
+    description = "Command line interface to interact with Camunda 8 and Zeebe";
     homepage = "https://docs.camunda.io/docs/apis-clients/cli-client/";
     downloadPage = "https://github.com/camunda/zeebe/releases";
     changelog = "https://github.com/camunda/zeebe/releases/tag/${version}";
@@ -45,5 +45,6 @@ stdenvNoCC.mkDerivation rec {
       * Updating variables and retries
       * Viewing cluster status
     '';
+    mainProgram = "zbctl";
   };
 }

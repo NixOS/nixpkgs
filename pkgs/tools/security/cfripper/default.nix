@@ -5,26 +5,30 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cfripper";
-  version = "1.15.3";
+  version = "1.15.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "cfripper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SmD3Dq5LicPRe3lWFsq4zqM/yDZ1LsgRwSUA5/RbN9I=";
+    hash = "sha256-ymuxZwW3Pwx/CyG2iPoY7LP9e+1K6EUBi/TApg0YvkE=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pluggy~=0.13.1" "pluggy" \
-  '';
-
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
+  pythonRelaxDeps = [
+    "pluggy"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  dependencies = with python3.pkgs; [
     boto3
     cfn-flip
     click
@@ -61,5 +65,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/Skyscanner/cfripper/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "cfripper";
   };
 }

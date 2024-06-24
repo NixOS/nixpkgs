@@ -20,6 +20,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/virtualabs/btlejack";
     description = "Bluetooth Low Energy Swiss-army knife";
+    mainProgram = "btlejack";
     license = licenses.mit;
     maintainers = with maintainers; [ oxzi ];
   };

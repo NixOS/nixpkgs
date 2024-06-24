@@ -17,8 +17,6 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-
     mkdir -p $out/share/${pname}
     cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
     cp -a ${appimageContents}/usr/share/icons $out/share/
@@ -29,10 +27,11 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "A simple, clean and cross-platform music player";
+    description = "Simple, clean and cross-platform music player";
     homepage = "https://github.com/martpie/museeks";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ zendo ];
+    mainProgram = "museeks";
   };
 }

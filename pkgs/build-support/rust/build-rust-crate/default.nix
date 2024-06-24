@@ -49,7 +49,9 @@ let
           filename =
             if lib.any (x: x == "lib" || x == "rlib") dep.crateType
             then "${dep.metadata}.rlib"
-            else "${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}";
+            # Adjust lib filename for crates of type proc-macro. Proc macros are compiled/run on the build platform architecture.
+            else if (lib.attrByPath [ "procMacro" ] false dep) then "${dep.metadata}${stdenv.buildPlatform.extensions.library}"
+            else "${dep.metadata}${stdenv.hostPlatform.extensions.library}";
         in
         " --extern ${opts}${name}=${dep.lib}/lib/lib${extern}-${filename}"
       )

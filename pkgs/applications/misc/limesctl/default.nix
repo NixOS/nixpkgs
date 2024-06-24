@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/sapcc/limesctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    mainProgram = "limesctl";
   };
 }

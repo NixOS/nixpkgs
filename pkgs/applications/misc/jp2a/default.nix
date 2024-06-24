@@ -36,9 +36,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "https://csl.name/jp2a/";
-    description = "A small utility that converts JPG images to ASCII";
+    description = "Small utility that converts JPG images to ASCII";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.FlorianFranzen ];
     platforms = platforms.unix;
+    mainProgram = "jp2a";
   };
 }

@@ -5,7 +5,7 @@ with lib;
     enable = mkOption {
       default = false;
       example = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the SDRplay API service and udev rules.
 
         ::: {.note}

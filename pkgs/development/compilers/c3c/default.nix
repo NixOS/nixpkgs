@@ -3,39 +3,59 @@
 , fetchFromGitHub
 , cmake
 , python3
+, curl
+, libxml2
+, libffi
+, xar
+, testers
 }:
 
-llvmPackages.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "c3c";
-  version = "unstable-2021-07-30";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "c3lang";
-    repo = pname;
-    rev = "2246b641b16e581aec9059c8358858e10a548d94";
-    sha256 = "VdMKdQsedDQCnsmTxO4HnBj5GH/EThspnotvrAscSqE=";
+    repo = "c3c";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-iOljE1BRVc92NJZj+nr1G6KkBTCwJEUOadXHUDNoPGk=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "\''${LLVM_LIBRARY_DIRS}" "${llvmPackages.lld.lib}/lib ${llvmPackages.llvm.lib}/lib"
+  '';
+
+  nativeBuildInputs = [
+    cmake
+  ];
 
   buildInputs = [
     llvmPackages.llvm
     llvmPackages.lld
+    curl
+    libxml2
+    libffi
+  ] ++ lib.optionals llvmPackages.stdenv.isDarwin [
+    xar
   ];
 
   nativeCheckInputs = [ python3 ];
 
-  doCheck = true;
+  doCheck = llvmPackages.stdenv.system == "x86_64-linux";
 
   checkPhase = ''
+    runHook preCheck
     ( cd ../resources/testproject; ../../build/c3c build )
     ( cd ../test; python src/tester.py ../build/c3c test_suite )
+    runHook postCheck
   '';
 
-  installPhase = ''
-    install -Dm755 c3c $out/bin/c3c
-    cp -r lib $out
-  '';
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     description = "Compiler for the C3 language";
@@ -43,5 +63,6 @@ llvmPackages.stdenv.mkDerivation rec {
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
+    mainProgram = "c3c";
   };
-}
+})

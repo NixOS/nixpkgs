@@ -20,7 +20,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable this option to support PCMCIA card.
         '';
       };
@@ -28,7 +28,7 @@ in
       firmware = mkOption {
         type = types.listOf types.path;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           List of firmware used to handle specific PCMCIA card.
         '';
       };
@@ -36,7 +36,7 @@ in
       config = mkOption {
         default = null;
         type = types.nullOr types.path;
-        description = lib.mdDoc ''
+        description = ''
           Path to the configuration file which maps the memory, IRQs
           and ports used by the PCMCIA hardware.
         '';

@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildPythonPackage
-, python3Packages
-, pybind11
-, cmake
-, xcbuild
-, zsh
-, darwin
-, blas
-, lapack
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python3Packages,
+  pybind11,
+  cmake,
+  xcbuild,
+  zsh,
+  darwin,
+  blas,
+  lapack,
 }:
 
 let
@@ -29,13 +30,13 @@ let
 in
 buildPythonPackage rec {
   pname = "mlx";
-  version = "0.1.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xNJPG8XGbC0fy6RGcn1cxCsejyHsgnV35PuP8F1I4R4=";
+    hash = "sha256-FihdI+3ACKMJfPT2POjTRdtkXs7x+KiQpdpo3RcczBE=";
   };
 
   pyproject = true;
@@ -63,13 +64,23 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeBuildInputs = [ cmake pybind11 xcbuild zsh gguf-tools nlohmann_json ] ++ (with python3Packages; [ setuptools ]);
+  nativeBuildInputs = [
+    cmake
+    pybind11
+    xcbuild
+    zsh
+    gguf-tools
+    nlohmann_json
+  ] ++ (with python3Packages; [ setuptools ]);
 
-  buildInputs = [ blas lapack ];
+  buildInputs = [
+    blas
+    lapack
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ml-explore/mlx";
-    description = "An array framework for Apple silicon";
+    description = "Array framework for Apple silicon";
     changelog = "https://github.com/ml-explore/mlx/releases/tag/v${version}";
     license = licenses.mit;
     platforms = [ "aarch64-darwin" ];

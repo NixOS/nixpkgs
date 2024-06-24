@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    mainProgram = "evtest";
   };
 }

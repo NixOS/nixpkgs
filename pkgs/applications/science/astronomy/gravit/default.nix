@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://github.com/gak/gravit";
     description = "Beautiful OpenGL-based gravity simulator";
+    mainProgram = "gravit";
     license = lib.licenses.gpl2Plus;
 
     longDescription = ''

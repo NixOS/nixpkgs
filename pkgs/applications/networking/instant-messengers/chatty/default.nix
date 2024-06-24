@@ -15,6 +15,8 @@
 , gnome-desktop
 , gspell
 , gtk4
+, gtksourceview5
+, gst_all_1
 , json-glib
 , libgcrypt
 , libadwaita
@@ -27,17 +29,17 @@
 , plugins ? [ ]
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chatty";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Chatty";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-5IkQnXAKl0duy/B6+z7PXYv5zxakxJCgQhWBw5wioWg=";
+    hash = "sha256-Ywed/8PhOgmzcka+5dyxjmWTcDBPF90LW+C2eeQmyLo=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +60,8 @@ stdenv.mkDerivation rec {
     gnome-desktop
     gspell
     gtk4
+    gtksourceview5
+    gst_all_1.gstreamer
     json-glib
     libgcrypt
     libadwaita
@@ -78,10 +82,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "XMPP and SMS messaging via libpurple and ModemManager";
+    mainProgram = "chatty";
     homepage = "https://gitlab.gnome.org/World/Chatty";
-    changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${src.rev}/NEWS";
+    changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${finalAttrs.src.rev}/NEWS";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda tomfitzhenry ];
+    maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.linux;
   };
-}
+})

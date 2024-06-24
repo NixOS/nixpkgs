@@ -39,7 +39,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/joscha/bkyml";
-    description = "A CLI tool to generate a pipeline.yaml file for Buildkite on the fly";
+    description = "CLI tool to generate a pipeline.yaml file for Buildkite on the fly";
     license = licenses.mit;
     maintainers = with maintainers; [ olebedev ];
   };

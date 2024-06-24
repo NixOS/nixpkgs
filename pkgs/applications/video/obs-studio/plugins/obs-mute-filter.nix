@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-mute-filter";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-mute-filter";
     rev = version;
-    sha256 = "sha256-SiutSmp+DnzMU62kxtBUL0xgMXTe0k+nKwSU3wQe4+g=";
+    sha256 = "sha256-UVYN9R7TnwD3a+KIYTXvxOQWfNUtR8cSWUoKZuNoBJc=";
   };
 
   nativeBuildInputs = [ cmake ];

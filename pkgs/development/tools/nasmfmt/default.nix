@@ -21,6 +21,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Formatter for NASM source files";
+    mainProgram = "nasmfmt";
     homepage = "https://github.com/yamnikov-oleg/nasmfmt";
     license = licenses.mit;
     maintainers = with maintainers; [ ckie ];

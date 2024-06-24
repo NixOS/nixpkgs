@@ -1,30 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 , autoreconfHook, bison, flex, pkg-config
 , bzip2, check, ncurses, util-linux, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "gfs2-utils";
-  version = "3.4.1";
+  version = "3.5.1";
 
   src = fetchurl {
     url = "https://pagure.io/gfs2-utils/archive/${version}/gfs2-utils-${version}.tar.gz";
-    sha256 = "sha256-gwKxBBG5PtG4/RxX4sUC25ZeG8K2urqVkFDKL7NS4ZI=";
+    hash = "sha256-ZWzNfYuhIxGmSAe454vRjAKp9Lq7EBBSY36P7qVgZnw=";
   };
-
-  patches = [
-    # pull pending upstream inclusion fix for ncurses-6.3: sent upstream over email.
-    (fetchpatch {
-      name = "ncurses-6.3.patch";
-      url = "https://pagure.io/fork/slyfox/gfs2-utils/c/c927b635f380cca77665195a3aaae804d92870a4.patch";
-      sha256 = "sha256-0M1xAqRXoUi2el03WODF/nqEe9JEE5GehMWs776QZNI=";
-    })
-  ];
-  postPatch = ''
-    # Apply fix for ncurses-6.3. Upstream development branch already reworked the code.
-    # To be removed on next reelase.
-    substituteInPlace gfs2/edit/gfs2hex.c --replace 'printw(title);' 'printw("%s",title);'
-  '';
 
   outputs = [ "bin" "doc" "out" "man" ];
 

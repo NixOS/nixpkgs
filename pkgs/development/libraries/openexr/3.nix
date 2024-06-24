@@ -5,17 +5,18 @@
 , imath
 , libdeflate
 , pkg-config
+, pkgsCross
 }:
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "3.2.1";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    hash = "sha256-ycn2RbHM/vIDUGGGnfNZ0Zm0qjjKRRNhkMD11PkpGF0=";
+    hash = "sha256-mVUxxYe6teiJ18PQ9703/kjBpJ9+a7vcDme+NwtQQQM=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -45,8 +46,12 @@ stdenv.mkDerivation rec {
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1400
   doCheck = !stdenv.isAarch32;
 
+  passthru.tests = {
+    musl = pkgsCross.musl64.openexr_3;
+  };
+
   meta = with lib; {
-    description = "A high dynamic-range (HDR) image file format";
+    description = "High dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ paperdigits ];

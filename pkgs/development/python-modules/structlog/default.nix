@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, pretend
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, simplejson
-, twisted
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  pretend,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  simplejson,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "23.2.0";
-  format = "pyproject";
+  version = "24.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -25,17 +25,13 @@ buildPythonPackage rec {
     owner = "hynek";
     repo = "structlog";
     rev = "refs/tags/${version}";
-    hash = "sha256-KSHKgkv+kObKCdWZDg5o6QYe0AMND9VLdEuseY/GyDY=";
+    hash = "sha256-0Yc28UEeozK2+IqILFTqHoTiM5L2SA4t6jld4qTBSzQ=";
   };
 
   nativeBuildInputs = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
-  ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -47,20 +43,13 @@ buildPythonPackage rec {
     twisted
   ];
 
-  disabledTests = [
-    # _pickle.PicklingError: Only BytesLoggers to sys.stdout and sys.stderr can be pickled.
-    "test_pickle"
-  ];
-
-  pythonImportsCheck = [
-    "structlog"
-  ];
+  pythonImportsCheck = [ "structlog" ];
 
   meta = with lib; {
     description = "Painless structural logging";
     homepage = "https://github.com/hynek/structlog";
     changelog = "https://github.com/hynek/structlog/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

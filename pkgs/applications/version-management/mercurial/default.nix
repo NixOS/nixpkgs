@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
+{ lib, stdenv, fetchurl, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
 # depends on rust-cpython which won't support python312
 # https://github.com/dgrunwald/rust-cpython/commit/e815555629e557be084813045ca1ddebc2f76ef9
@@ -23,11 +23,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.6.2";
+    version = "6.6.3";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-y0lNe+fdwvydMXHIiDCvnAKyHHU+PlET3vrJwDc7S2A=";
+      hash = "sha256-911qSnWCOht9cTpJZ+yi9Zb0ZuWPxrwG1yZCky/X4wc=";
     };
 
     format = "other";
@@ -37,7 +37,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-yOysqMrTWDx/ENcJng8Rm338NI9vpuBGH6Yq8B7+MFg=";
+      sha256 = "sha256-G5tzwoIGOgpVI35rYXDeelnBgTbAiq7BDcXCHQzqSrs=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -89,7 +89,7 @@ let
     };
 
     meta = with lib; {
-      description = "A fast, lightweight SCM system for very large distributed projects";
+      description = "Fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
       changelog = "https://wiki.mercurial-scm.org/Release${versions.majorMinor version}";

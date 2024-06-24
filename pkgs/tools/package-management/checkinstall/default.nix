@@ -70,10 +70,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://checkinstall.izto.org/";
-    description = "A tool for automatically generating Slackware, RPM or Debian packages when doing `make install'";
+    description = "Tool for automatically generating Slackware, RPM or Debian packages when doing `make install'";
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     knownVulnerabilities = [
       "CVE-2020-25031"
     ];

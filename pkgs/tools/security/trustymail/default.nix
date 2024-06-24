@@ -39,6 +39,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to scan domains and return data based on trustworthy email best practices";
+    mainProgram = "trustymail";
     homepage = "https://github.com/cisagov/trustymail";
     changelog = "https://github.com/cisagov/trustymail/releases/tag/v${version}";
     license = with licenses; [ cc0 ];

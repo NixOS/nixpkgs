@@ -4,7 +4,7 @@
 , imagemagick
 , mesa
 , libdrm
-, flutter
+, flutter319
 , pulseaudio
 , makeDesktopItem
 , gnome
@@ -16,22 +16,22 @@ let
   libwebrtcRpath = lib.makeLibraryPath [ mesa libdrm ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 in
-flutter.buildFlutterApplication (rec {
+flutter319.buildFlutterApplication (rec {
   pname = "fluffychat-${targetFlutterPlatform}";
-  version = "1.17.1";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "krille-chan";
     repo = "fluffychat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SCZtdmpUaCwORIJgT9lQO/It+WSzkhBOd6liLzPBerU=";
+    hash = "sha256-eHwzvWKWJ9Q2OgCvgZTt+Bcph2w2pTqyOtwXFbZ4LEg=";
   };
 
   inherit pubspecLock;
 
   gitHashes = {
+    flutter_shortcuts = "sha256-4nptZ7/tM2W/zylk3rfQzxXgQ6AipFH36gcIb/0RbHo=";
     keyboard_shortcuts = "sha256-U74kRujftHPvpMOIqVT0Ph+wi1ocnxNxIFA1krft4Os=";
-    wakelock_windows = "sha256-Dfwe3dSScD/6kvkP67notcbb+EgTQ3kEYcH7wpra2dI=";
   };
 
   inherit targetFlutterPlatform;

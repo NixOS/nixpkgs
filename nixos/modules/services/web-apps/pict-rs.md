@@ -7,7 +7,9 @@ pict-rs is a  a simple image hosting service.
 the minimum to start pict-rs is
 
 ```nix
-services.pict-rs.enable = true;
+{
+  services.pict-rs.enable = true;
+}
 ```
 
 this will start the http server on port 8080 by default.

@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/shiiion/dolphin";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ MP2E ashkitten Madouura ];
+    maintainers = with maintainers; [ ashkitten Madouura ];
     broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };

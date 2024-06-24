@@ -18,6 +18,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Dedicated SSH brute-forcing tool";
+    mainProgram = "sshchecker";
     longDescription = ''
       sshchecker is a fast dedicated SSH brute-forcing tool to check
       SSH login on the giving IP list.

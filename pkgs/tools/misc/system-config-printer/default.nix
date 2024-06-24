@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, udev, pkg-config, glib, xmlto, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, udev, pkg-config, glib, xmlto, wrapGAppsHook3
 , docbook_xml_dtd_412, docbook_xsl
 , libxml2, desktop-file-utils, libusb1, cups, gdk-pixbuf, pango, atk, libnotify
 , gobject-introspection, libsecret, packagekit
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     pkg-config gettext libtool autoconf-archive
     xmlto libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
     python3Packages.wrapPython
-    wrapGAppsHook autoreconfHook gobject-introspection
+    wrapGAppsHook3 autoreconfHook gobject-introspection
   ];
 
   pythonPath = with python3Packages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 pycairo pysmbc ];
@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/openprinting/system-config-printer";
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 }

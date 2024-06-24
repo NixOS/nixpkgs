@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An aesthetic cursor theme for Linux desktops";
+    description = "Aesthetic cursor theme for Linux desktops";
     homepage = "https://gitlab.com/cursors/simp1e";
     license = licenses.gpl3;
     platforms = platforms.linux;

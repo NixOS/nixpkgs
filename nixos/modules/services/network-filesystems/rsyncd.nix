@@ -10,12 +10,12 @@ in {
   options = {
     services.rsyncd = {
 
-      enable = mkEnableOption (lib.mdDoc "the rsync daemon");
+      enable = mkEnableOption "the rsync daemon";
 
       port = mkOption {
         default = 873;
         type = types.port;
-        description = lib.mdDoc "TCP port the daemon will listen on.";
+        description = "TCP port the daemon will listen on.";
       };
 
       settings = mkOption {
@@ -39,7 +39,7 @@ in {
             "secrets file" = "/etc/rsyncd.secrets";
           };
         };
-        description = lib.mdDoc ''
+        description = ''
           Configuration for rsyncd. See
           {manpage}`rsyncd.conf(5)`.
         '';
@@ -48,8 +48,7 @@ in {
       socketActivated = mkOption {
         default = false;
         type = types.bool;
-        description =
-          lib.mdDoc "If enabled Rsync will be socket-activated rather than run persistently.";
+        description = "If enabled Rsync will be socket-activated rather than run persistently.";
       };
 
     };

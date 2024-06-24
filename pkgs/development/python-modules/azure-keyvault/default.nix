@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, azure-keyvault-certificates
-, azure-keyvault-keys
-, azure-keyvault-secrets
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  azure-keyvault-certificates,
+  azure-keyvault-keys,
+  azure-keyvault-secrets,
 }:
 
 buildPythonPackage rec {

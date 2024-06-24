@@ -34,6 +34,7 @@ buildPythonApplication rec {
     pyperclip
     asttokens
     send2trash
+    dbus-next
   ];
 
   preInstall = ''

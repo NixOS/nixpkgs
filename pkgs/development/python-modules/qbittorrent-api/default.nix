@@ -1,21 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, urllib3
-, packaging
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  urllib3,
+  packaging,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "qbittorrent-api";
-  version = "2024.1.58";
+  version = "2024.5.63";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6JyU9mr0xfRLB7AJOcnPc+PpF0EWi/R/Wy3lCKanAmA=";
+    pname = "qbittorrent_api";
+    inherit version;
+    hash = "sha256-zTAS8EL7lOnVIcQGttxSJgDv0YFNSy08kAxoEOn8viw=";
   };
 
   propagatedBuildInputs = [
@@ -32,9 +34,7 @@ buildPythonPackage rec {
   # Tests require internet access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "qbittorrentapi"
-  ];
+  pythonImportsCheck = [ "qbittorrentapi" ];
 
   meta = with lib; {
     description = "Python client implementation for qBittorrent's Web API";

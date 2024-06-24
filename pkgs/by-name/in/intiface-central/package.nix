@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, flutter
+, flutterPackages
 , corrosion
 , rustPlatform
 , cargo
@@ -9,14 +9,14 @@
 , copyDesktopItems
 , makeDesktopItem
 }:
-flutter.buildFlutterApplication rec {
+flutterPackages.v3_19.buildFlutterApplication rec {
   pname = "intiface-central";
-  version = "2.5.3";
+  version = "2.6.0";
   src = fetchFromGitHub {
     owner = "intiface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-i0G3wCfJ9Q7DEmVMrQv2K6fy4YRWsEMNns9zMZkJxvY=";
+    hash = "sha256-7+rw0cD8MJPFOkgmfHD6y+EojTGQhb15o1mn2p14eoE=";
   };
   patches = [
     ./corrosion.patch
@@ -27,8 +27,8 @@ flutter.buildFlutterApplication rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}-cargo-deps";
     inherit src;
-    sourceRoot = "source/intiface-engine-flutter-bridge";
-    hash = "sha256-0sCHa3rMaLYaUG3E3fmsLi0dSdb9vGyv7qNR3JQkXuU=";
+    sourceRoot = "${src.name}/intiface-engine-flutter-bridge";
+    hash = "sha256-tPkLZmHReY1TU2qcY4aGWsQPhLFowrqxTPwmTHZ5fDE=";
   };
   cargoRoot = "intiface-engine-flutter-bridge";
 

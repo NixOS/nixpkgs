@@ -18,7 +18,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Start SSH service during initrd boot. It can be used to debug failing
         boot on a remote server, enter pasphrase for an encrypted partition etc.
         Service is killed when stage-1 boot is finished.
@@ -31,7 +31,7 @@ in
     port = mkOption {
       type = types.port;
       default = 22;
-      description = lib.mdDoc ''
+      description = ''
         Port on which SSH initrd service should listen.
       '';
     };
@@ -40,7 +40,7 @@ in
       type = types.nullOr types.str;
       default = null;
       defaultText = ''"/bin/ash"'';
-      description = lib.mdDoc ''
+      description = ''
         Login shell of the remote user. Can be used to limit actions user can do.
       '';
     };
@@ -52,7 +52,7 @@ in
         "/etc/secrets/initrd/ssh_host_rsa_key"
         "/etc/secrets/initrd/ssh_host_ed25519_key"
       ];
-      description = lib.mdDoc ''
+      description = ''
         Specify SSH host keys to import into the initrd.
 
         To generate keys, use
@@ -81,8 +81,8 @@ in
     ignoreEmptyHostKeys = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
-        Allow leaving {option}`config.boot.initrd.network.ssh` empty,
+      description = ''
+        Allow leaving {option}`config.boot.initrd.network.ssh.hostKeys` empty,
         to deploy ssh host keys out of band.
       '';
     };
@@ -91,15 +91,30 @@ in
       type = types.listOf types.str;
       default = config.users.users.root.openssh.authorizedKeys.keys;
       defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keys";
-      description = lib.mdDoc ''
+      description = ''
         Authorized keys for the root user on initrd.
+        You can combine the `authorizedKeys` and `authorizedKeyFiles` options.
+      '';
+      example = [
+        "ssh-rsa AAAAB3NzaC1yc2etc/etc/etcjwrsh8e596z6J0l7 example@host"
+        "ssh-ed25519 AAAAC3NzaCetcetera/etceteraJZMfk3QPfQ foo@bar"
+      ];
+    };
+
+    authorizedKeyFiles = mkOption {
+      type = types.listOf types.path;
+      default = config.users.users.root.openssh.authorizedKeys.keyFiles;
+      defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keyFiles";
+      description = ''
+        Authorized keys taken from files for the root user on initrd.
+        You can combine the `authorizedKeyFiles` and `authorizedKeys` options.
       '';
     };
 
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = lib.mdDoc "Verbatim contents of {file}`sshd_config`.";
+      description = "Verbatim contents of {file}`sshd_config`.";
     };
   };
 
@@ -152,7 +167,7 @@ in
   in mkIf enabled {
     assertions = [
       {
-        assertion = cfg.authorizedKeys != [];
+        assertion = cfg.authorizedKeys != [] || cfg.authorizedKeyFiles != [];
         message = "You should specify at least one authorized key for initrd SSH";
       }
 
@@ -206,6 +221,9 @@ in
       ${concatStrings (map (key: ''
         echo ${escapeShellArg key} >> /root/.ssh/authorized_keys
       '') cfg.authorizedKeys)}
+      ${concatStrings (map (keyFile: ''
+        cat ${keyFile} >> /root/.ssh/authorized_keys
+      '') cfg.authorizedKeyFiles)}
 
       ${flip concatMapStrings cfg.hostKeys (path: ''
         # keys from Nix store are world-readable, which sshd doesn't like
@@ -236,9 +254,13 @@ in
 
       users.root.shell = mkIf (config.boot.initrd.network.ssh.shell != null) config.boot.initrd.network.ssh.shell;
 
-      contents."/etc/ssh/authorized_keys.d/root".text =
-        concatStringsSep "\n" config.boot.initrd.network.ssh.authorizedKeys;
-      contents."/etc/ssh/sshd_config".text = sshdConfig;
+      contents = {
+        "/etc/ssh/sshd_config".text = sshdConfig;
+        "/etc/ssh/authorized_keys.d/root".text =
+          concatStringsSep "\n" (
+            config.boot.initrd.network.ssh.authorizedKeys ++
+            (map (file: lib.fileContents file) config.boot.initrd.network.ssh.authorizedKeyFiles));
+      };
       storePaths = ["${package}/bin/sshd"];
 
       services.sshd = {

@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
 
-# dependencies
-, flask
-, jsonschema
-, mistune
-, pyyaml
-, six
-, werkzeug
+  # dependencies
+  flask,
+  jsonschema,
+  mistune,
+  pyyaml,
+  six,
+  werkzeug,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -49,13 +50,9 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  pythonImportsCheck = [
-    "flasgger"
-  ];
+  pythonImportsCheck = [ "flasgger" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = false; # missing flex dependency
 

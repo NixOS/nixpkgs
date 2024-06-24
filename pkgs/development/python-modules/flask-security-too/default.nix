@@ -1,54 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 
-# extras: babel
-, babel
-, flask-babel
+  # extras: babel
+  babel,
+  flask-babel,
 
-# extras: common
-, bcrypt
-, bleach
-, flask-mailman
+  # extras: common
+  bcrypt,
+  bleach,
+  flask-mailman,
 
-# extras: fsqla
-, flask-sqlalchemy
-, sqlalchemy
-, sqlalchemy-utils
+  # extras: fsqla
+  flask-sqlalchemy,
+  sqlalchemy,
+  sqlalchemy-utils,
 
-# extras: mfa
-, cryptography
-, phonenumbers
-, webauthn
-, qrcode
+  # extras: mfa
+  cryptography,
+  phonenumbers,
+  webauthn,
+  qrcode,
 
-# propagates
-, email-validator
-, flask
-, flask-login
-, flask-principal
-, flask-wtf
-, passlib
-, importlib-resources
-, wtforms
+  # propagates
+  email-validator,
+  flask,
+  flask-login,
+  flask-principal,
+  flask-wtf,
+  passlib,
+  importlib-resources,
+  wtforms,
 
-# tests
-, argon2-cffi
-, mongoengine
-, mongomock
-, peewee
-, pony
-, pytestCheckHook
-, python-dateutil
-, zxcvbn
+  # tests
+  argon2-cffi,
+  freezegun,
+  mongoengine,
+  mongomock,
+  peewee,
+  pony,
+  pytestCheckHook,
+  zxcvbn,
 }:
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "5.3.3";
+  version = "5.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -56,22 +56,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    hash = "sha256-we2TquU28qP/ir4eE67J0Nlft/8IL8w7Ny3ypSE5cNk=";
+    hash = "sha256-YrGTl+jXGo1MuNwNRAnMehSXmCVJAwOWlgruUYdV5YM=";
   };
 
-  patches = [
-    # https://github.com/Flask-Middleware/flask-security/pull/901
-    (fetchpatch {
-      name = "fixes-for-py_webauthn-2.0.patch";
-      url = "https://github.com/Flask-Middleware/flask-security/commit/5725f7021343567ec0b25c890e859f4e84c93ba6.patch";
-      hash = "sha256-4EgwT4zRj0mh4ZaoZFz7H5KeiZ9zs+BY4siYm8DwMfU=";
-      excludes = [ "CHANGES.rst" ];
-    })
-  ];
-
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     email-validator
@@ -107,30 +95,29 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    argon2-cffi
-    mongoengine
-    mongomock
-    peewee
-    pony
-    pytestCheckHook
-    python-dateutil
-    zxcvbn
-  ]
-  ++ passthru.optional-dependencies.babel
-  ++ passthru.optional-dependencies.common
-  ++ passthru.optional-dependencies.fsqla
-  ++ passthru.optional-dependencies.mfa;
-
+  nativeCheckInputs =
+    [
+      argon2-cffi
+      freezegun
+      mongoengine
+      mongomock
+      peewee
+      pony
+      pytestCheckHook
+      zxcvbn
+      freezegun
+    ]
+    ++ passthru.optional-dependencies.babel
+    ++ passthru.optional-dependencies.common
+    ++ passthru.optional-dependencies.fsqla
+    ++ passthru.optional-dependencies.mfa;
 
   disabledTests = [
     # needs /etc/resolv.conf
     "test_login_email_whatever"
   ];
 
-  pythonImportsCheck = [
-    "flask_security"
-  ];
+  pythonImportsCheck = [ "flask_security" ];
 
   meta = with lib; {
     changelog = "https://github.com/Flask-Middleware/flask-security/blob/${version}/CHANGES.rst";

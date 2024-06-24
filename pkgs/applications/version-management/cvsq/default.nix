@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A collection of tools to work locally with CVS";
+    description = "Collection of tools to work locally with CVS";
     longDescription = ''
       cvsq is a collection of tools to work locally with CVS.
 

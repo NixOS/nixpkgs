@@ -1,12 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flake8
-, mock
-, nose
-, pytest
-, cryptography
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytestCheckHook,
+  cryptography,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,19 +20,16 @@ buildPythonPackage rec {
     hash = "sha256-BmSreJl0LvKyhzl6TUYe9pHtDML1hyBRKNjPYX/9uRk=";
   };
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
   nativeCheckInputs = [
-    flake8
     mock
-    nose
-    pytest
+    pytestCheckHook
   ];
 
   meta = with lib; {
     description = "Library for VAPID header generation";
+    mainProgram = "vapid";
     homepage = "https://github.com/mozilla-services/vapid";
     license = licenses.mpl20;
     maintainers = with maintainers; [ ];

@@ -1,31 +1,35 @@
-{ lib, stdenv
-, buildPythonPackage
-, fetchurl
-, python
-, pythonAtLeast
-, pythonOlder
-, addOpenGLRunpath
-, cudaPackages
-, future
-, numpy
-, autoPatchelfHook
-, pyyaml
-, requests
-, setuptools
-, typing-extensions
-, sympy
-, jinja2
-, networkx
-, filelock
-, openai-triton
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  autoAddDriverRunpath,
+  fetchurl,
+  python,
+  pythonAtLeast,
+  pythonOlder,
+  addOpenGLRunpath,
+  cudaPackages,
+  future,
+  numpy,
+  autoPatchelfHook,
+  pyyaml,
+  requests,
+  setuptools,
+  typing-extensions,
+  sympy,
+  jinja2,
+  networkx,
+  filelock,
+  openai-triton,
 }:
 
 let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.2.0";
-in buildPythonPackage {
+  version = "2.3.1";
+in
+buildPythonPackage {
   inherit version;
 
   pname = "torch";
@@ -33,32 +37,35 @@ in buildPythonPackage {
 
   format = "wheel";
 
-  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.12");
+  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.13");
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     addOpenGLRunpath
     autoPatchelfHook
-    cudaPackages.autoAddOpenGLRunpathHook
+    autoAddDriverRunpath
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux (with cudaPackages; [
-    # $out/${sitePackages}/nvfuser/_C*.so wants libnvToolsExt.so.1 but torch/lib only ships
-    # libnvToolsExt-$hash.so.1
-    cuda_nvtx
+  buildInputs = lib.optionals stdenv.isLinux (
+    with cudaPackages;
+    [
+      # $out/${sitePackages}/nvfuser/_C*.so wants libnvToolsExt.so.1 but torch/lib only ships
+      # libnvToolsExt-$hash.so.1
+      cuda_nvtx
 
-    cuda_cudart
-    cuda_cupti
-    cuda_nvrtc
-    cudnn
-    libcublas
-    libcufft
-    libcurand
-    libcusolver
-    libcusparse
-    nccl
-  ]);
+      cuda_cudart
+      cuda_cupti
+      cuda_nvrtc
+      cudnn
+      libcublas
+      libcufft
+      libcurand
+      libcusolver
+      libcusparse
+      nccl
+    ]
+  );
 
   autoPatchelfIgnoreMissingDeps = lib.optionals stdenv.isLinux [
     # This is the hardware-dependent userspace driver that comes from
@@ -68,7 +75,7 @@ in buildPythonPackage {
     "libcuda.so.1"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     future
     numpy
     pyyaml
@@ -79,9 +86,7 @@ in buildPythonPackage {
     jinja2
     networkx
     filelock
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [
-    openai-triton
-  ];
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isx86_64) [ openai-triton ];
 
   postInstall = ''
     # ONNX conversion
@@ -92,12 +97,29 @@ in buildPythonPackage {
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
   '';
 
+  # See https://github.com/NixOS/nixpkgs/issues/296179
+  #
+  # This is a quick hack to add `libnvrtc` to the runpath so that torch can find
+  # it when it is needed at runtime.
+  extraRunpaths = lib.optionals stdenv.hostPlatform.isLinux [ "${lib.getLib cudaPackages.cuda_nvrtc}/lib" ];
+  postPhases = lib.optionals stdenv.isLinux [ "postPatchelfPhase" ];
+  postPatchelfPhase = ''
+    while IFS= read -r -d $'\0' elf ; do
+      for extra in $extraRunpaths ; do
+        echo patchelf "$elf" --add-rpath "$extra" >&2
+        patchelf "$elf" --add-rpath "$extra"
+      done
+    done < <(
+      find "''${!outputLib}" "$out" -type f -iname '*.so' -print0
+    )
+  '';
+
   # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
   dontStrip = true;
 
   pythonImportsCheck = [ "torch" ];
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/pytorch/releases/tag/v${version}";
@@ -106,10 +128,18 @@ in buildPythonPackage {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     # torch's license is BSD3.
     # torch-bin used to vendor CUDA. It still links against CUDA and MKL.
-    license = with licenses; [ bsd3 issl unfreeRedistributable ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "aarch64-darwin" "aarch64-linux" "x86_64-darwin" "x86_64-linux" ];
-    hydraPlatforms = []; # output size 3.2G on 1.11.0
-    maintainers = with maintainers; [ junjihashimoto ];
+    license = with lib.licenses; [
+      bsd3
+      issl
+      unfreeRedistributable
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = [
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+    hydraPlatforms = [ ]; # output size 3.2G on 1.11.0
+    maintainers = with lib.maintainers; [ junjihashimoto ];
   };
 }

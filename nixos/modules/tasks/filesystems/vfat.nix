@@ -4,12 +4,12 @@ with lib;
 
 let
 
-  inInitrd = any (fs: fs == "vfat") config.boot.initrd.supportedFilesystems;
+  inInitrd = config.boot.initrd.supportedFilesystems.vfat or false;
 
 in
 
 {
-  config = mkIf (any (fs: fs == "vfat") config.boot.supportedFilesystems) {
+  config = mkIf (config.boot.supportedFilesystems.vfat or false) {
 
     system.fsPackages = [ pkgs.dosfstools pkgs.mtools ];
 

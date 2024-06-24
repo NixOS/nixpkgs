@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, numpy
-, scipy
-, pytestCheckHook
-, nose
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scipy,
+  pytestCheckHook,
+  nose,
 }:
 
 buildPythonPackage rec {
   pname = "pykalman";
-  version = "0.9.5";
+  version = "0.9.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gWr0dyDZJKTGAW+nS54sjCEWWgjZFpPDIqF0Ho4H+zg=";
+    hash = "sha256-E1d5IAOTxrNwIhmQ9zFnQEcvVBNG6SEdEWMOLC2PuKA=";
   };
 
   patches = [
@@ -36,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pykalman" ];
 
   meta = with lib; {
-    description = "An implementation of the Kalman Filter, Kalman Smoother, and EM algorithm in Python";
+    description = "Implementation of the Kalman Filter, Kalman Smoother, and EM algorithm in Python";
     homepage = "https://github.com/pykalman/pykalman";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mbalatsko ];

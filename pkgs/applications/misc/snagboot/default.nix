@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snagboot";
-  version = "1.2";
+  version = "1.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bootlin";
     repo = "snagboot";
     rev = "v${version}";
-    hash = "sha256-OuHY5+2puZAERtwmXduUW5Wjus6KeQLJLcGcl48umLA=";
+    hash = "sha256-ergTa6uR1SyR27H2HAWp/rtgalCnQge07Pi24PrsW+8=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
     pyusb
     pyserial
-    hid
     crccheck
     six
     xmodem

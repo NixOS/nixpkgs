@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, fonttools
-, defcon
-, lxml
-, fs
-, unicodedata2
-, zopfli
-, brotlipy
-, fontpens
-, brotli
-, fontmath
-, mutatormath
-, booleanoperations
-, ufoprocessor
-, ufonormalizer
-, tqdm
-, setuptools-scm
-, scikit-build
-, cmake
-, ninja
-, antlr4_9
-, libxml2
-, pytestCheckHook
-# Enables some expensive tests, useful for verifying an update
-, runAllTests ? false
-, afdko
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  fonttools,
+  defcon,
+  lxml,
+  fs,
+  unicodedata2,
+  zopfli,
+  brotlipy,
+  fontpens,
+  brotli,
+  fontmath,
+  mutatormath,
+  booleanoperations,
+  ufoprocessor,
+  ufonormalizer,
+  tqdm,
+  setuptools-scm,
+  scikit-build,
+  cmake,
+  ninja,
+  antlr4_9,
+  libxml2,
+  pytestCheckHook,
+  # Enables some expensive tests, useful for verifying an update
+  runAllTests ? false,
+  afdko,
 }:
 
 buildPythonPackage rec {
@@ -80,11 +81,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     booleanoperations
     fonttools
-    lxml           # fonttools[lxml], defcon[lxml] extra
-    fs             # fonttools[ufo] extra
-    unicodedata2   # fonttools[unicode] extra
-    brotlipy       # fonttools[woff] extra
-    zopfli         # fonttools[woff] extra
+    lxml # fonttools[lxml], defcon[lxml] extra
+    fs # fonttools[ufo] extra
+    unicodedata2 # fonttools[unicode] extra
+    brotlipy # fonttools[woff] extra
+    zopfli # fonttools[woff] extra
     fontpens
     brotli
     defcon
@@ -107,23 +108,26 @@ buildPythonPackage rec {
     rm -rf _skbuild
   '';
 
-  disabledTests = lib.optionals (!runAllTests) [
-    # Disable slow tests, reduces test time ~25 %
-    "test_report"
-    "test_post_overflow"
-    "test_cjk"
-    "test_extrapolate"
-    "test_filename_without_dir"
-    "test_overwrite"
-    "test_options"
-  ] ++ lib.optionals (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV) [
-    # unknown reason so far
-    # https://github.com/adobe-type-tools/afdko/issues/1425
-    "test_spec"
-  ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
-    "test_dump_option"
-    "test_type1mm_inputs"
-  ];
+  disabledTests =
+    lib.optionals (!runAllTests) [
+      # Disable slow tests, reduces test time ~25 %
+      "test_report"
+      "test_post_overflow"
+      "test_cjk"
+      "test_extrapolate"
+      "test_filename_without_dir"
+      "test_overwrite"
+      "test_options"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV) [
+      # unknown reason so far
+      # https://github.com/adobe-type-tools/afdko/issues/1425
+      "test_spec"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isi686) [
+      "test_dump_option"
+      "test_type1mm_inputs"
+    ];
 
   passthru.tests = {
     fullTestsuite = afdko.override { runAllTests = true; };

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Duo Security Unix login integration";
     homepage    = "https://duosecurity.com";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Only;
     platforms   = lib.platforms.unix;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };

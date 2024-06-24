@@ -15,14 +15,14 @@ in
 {
   options = {
     services.xmr-stak = {
-      enable = mkEnableOption (lib.mdDoc "xmr-stak miner");
-      openclSupport = mkEnableOption (lib.mdDoc "support for OpenCL (AMD/ATI graphics cards)");
+      enable = mkEnableOption "xmr-stak miner";
+      openclSupport = mkEnableOption "support for OpenCL (AMD/ATI graphics cards)";
 
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "--noCPU" "--currency monero" ];
-        description = lib.mdDoc "List of parameters to pass to xmr-stak.";
+        description = "List of parameters to pass to xmr-stak.";
       };
 
       configFiles = mkOption {
@@ -51,7 +51,7 @@ in
             ''';
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Content of config files like config.txt, pools.txt or cpu.txt.
         '';
       };

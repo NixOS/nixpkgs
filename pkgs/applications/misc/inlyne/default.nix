@@ -6,6 +6,8 @@
 , pkg-config
 , fontconfig
 , xorg
+, libxkbcommon
+, wayland
 , libGL
 , openssl
 , darwin
@@ -13,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inlyne";
-  version = "0.3.2";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "trimental";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DSi6iS1ySdvGf6FxZpsDOAFpAKx/APcZjxA3Qy0gQBU=";
+    hash = "sha256-Kae8WnahA/6k6QT5htYU2+diAFkmxVsbVaxRUlhf39o=";
   };
 
-  cargoHash = "sha256-UzegSJGAOBUDN8WluN7fLWS7NfHhm9YY0Zuq6DCIqHo=";
+  cargoHash = "sha256-M6daK2y9HBRDV2wQjw87g1QYOqiJBfRf9uW1Eg6z6C8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,6 +38,8 @@ rustPlatform.buildRustPackage rec {
     xorg.libXi
     xorg.libXrandr
     xorg.libxcb
+    wayland
+    libxkbcommon
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit
@@ -60,10 +64,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A GPU powered browserless markdown viewer";
+    description = "GPU powered browserless markdown viewer";
     homepage = "https://github.com/trimental/inlyne";
     changelog = "https://github.com/trimental/inlyne/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "inlyne";
   };
 }

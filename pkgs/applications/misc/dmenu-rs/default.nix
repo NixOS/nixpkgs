@@ -2,7 +2,6 @@
 , rustPlatform
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cargo
 , expat
 , fontconfig
@@ -19,13 +18,13 @@
 # See: https://github.com/Shizcow/dmenu-rs#plugins
 stdenv.mkDerivation rec {
   pname = "dmenu-rs";
-  version = "5.5.2";
+  version = "5.5.3";
 
   src = fetchFromGitHub {
     owner = "Shizcow";
-    repo = pname;
+    repo = "dmenu-rs";
     rev = version;
-    sha256 = "sha256-6yO2S6j/BD6x/bsuTFKAKvARl1n94KRiPwpmswmUOPU=";
+    hash = "sha256-05Ia+GHeL8PzOwR7H+NEVhKJVMPhlIaQLwGfvwOAl0g=";
   };
 
   nativeBuildInputs = [
@@ -52,17 +51,6 @@ stdenv.mkDerivation rec {
     lockFile = ./Cargo.lock;
   };
 
-  # Fix a bug in the makefile when installing.
-  # See https://github.com/Shizcow/dmenu-rs/pull/50
-  patches = let
-    fix-broken-make-install-patch = fetchpatch {
-      url = "https://github.com/Shizcow/dmenu-rs/commit/1f4b3f8a07d73272f8c6f19bfb6ff3de5e042815.patch";
-      sha256 = "sha256-hmXApWg8qngc1vHkHUnB7Lt7wQUOyCSsBmn4HC1j53M=";
-    };
-  in [
-    fix-broken-make-install-patch
-  ];
-
   # Copy the Cargo.lock stored here in nixpkgs into the build directory.
   postPatch = ''
     cp ${./Cargo.lock} src/Cargo.lock
@@ -78,7 +66,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A pixel perfect port of dmenu, rewritten in Rust with extensive plugin support";
+    description = "Pixel perfect port of dmenu, rewritten in Rust with extensive plugin support";
     homepage = "https://github.com/Shizcow/dmenu-rs";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ benjaminedwardwebb ];

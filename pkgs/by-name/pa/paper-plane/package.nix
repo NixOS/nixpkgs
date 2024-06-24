@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , gtk4
-, wrapGAppsHook
+, wrapGAppsHook3
 , libadwaita
 , tdlib
 , rlottie
@@ -35,7 +35,7 @@ let
   gtk4-paperplane = gtk4.overrideAttrs (prev: {
     patches = (prev.patches or []) ++ [ "${src}/build-aux/gtk-reversed-list.patch" ];
   });
-  wrapPaperPlaneHook = wrapGAppsHook.override {
+  wrapPaperPlaneHook = wrapGAppsHook3.override {
     gtk3 = gtk4-paperplane;
   };
   # libadwaita has gtk4 in propagatedBuildInputs so it must be overrided

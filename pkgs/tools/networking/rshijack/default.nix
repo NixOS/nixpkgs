@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ xrelkd ];
     platforms = platforms.unix;
+    mainProgram = "rshijack";
   };
 }

@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, django
-, djangorestframework
-, fetchPypi
-, pyjwt
-, python-jose
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  django,
+  djangorestframework,
+  fetchPypi,
+  pyjwt,
+  python-jose,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -23,9 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-bEvTdTdEC8Q5Vk6/fWCF50xUEUhRlwc/UI69+jS8n64=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     django
@@ -34,20 +33,14 @@ buildPythonPackage rec {
   ];
 
   passthru.optional-dependencies = {
-    python-jose = [
-      python-jose
-    ];
-    crypto = [
-      cryptography
-    ];
+    python-jose = [ python-jose ];
+    crypto = [ cryptography ];
   };
 
   # Test raises django.core.exceptions.ImproperlyConfigured
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rest_framework_simplejwt"
-  ];
+  pythonImportsCheck = [ "rest_framework_simplejwt" ];
 
   meta = with lib; {
     description = "JSON Web Token authentication plugin for Django REST Framework";

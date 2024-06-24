@@ -6,8 +6,9 @@ All generators follow a similar call interface: `generatorName configFunctions d
 Generators can be fine-tuned to produce exactly the file format required by your application/service. One example is an INI-file format which uses `: ` as separator, the strings `"yes"`/`"no"` as boolean values and requires all string values to be quoted:
 
 ```nix
-with lib;
 let
+  inherit (lib) generators isString;
+
   customToINI = generators.toINI {
     # specifies how to format a key/value pair
     mkKeyValue = generators.mkKeyValueDefault {

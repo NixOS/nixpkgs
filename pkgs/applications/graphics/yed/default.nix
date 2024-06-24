@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, makeWrapper, unzip, jre, wrapGAppsHook }:
+{ lib, stdenv, fetchzip, makeWrapper, unzip, jre, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "yEd";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-u83OmIzq9VygKbfa886mj6BIa/9ET1btry2nR/wxeyI=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip wrapGAppsHook ];
-  # For wrapGAppsHook setup hook
+  nativeBuildInputs = [ makeWrapper unzip wrapGAppsHook3 ];
+  # For wrapGAppsHook3 setup hook
   buildInputs = [ (jre.gtk3 or null) ];
 
   dontConfigure = true;
@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     homepage = "https://www.yworks.com/products/yed";
-    description = "A powerful desktop application that can be used to quickly and effectively generate high-quality diagrams";
+    description = "Powerful desktop application that can be used to quickly and effectively generate high-quality diagrams";
     platforms = jre.meta.platforms;
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "yed";
   };
 }

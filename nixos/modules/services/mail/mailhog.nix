@@ -27,36 +27,36 @@ in
   options = {
 
     services.mailhog = {
-      enable = mkEnableOption (lib.mdDoc "MailHog");
+      enable = mkEnableOption "MailHog, web and API based SMTP testing";
 
       storage = mkOption {
         type = types.enum [ "maildir" "memory" ];
         default = "memory";
-        description = lib.mdDoc "Store mails on disk or in memory.";
+        description = "Store mails on disk or in memory.";
       };
 
       apiPort = mkOption {
         type = types.port;
         default = 8025;
-        description = lib.mdDoc "Port on which the API endpoint will listen.";
+        description = "Port on which the API endpoint will listen.";
       };
 
       smtpPort = mkOption {
         type = types.port;
         default = 1025;
-        description = lib.mdDoc "Port on which the SMTP endpoint will listen.";
+        description = "Port on which the SMTP endpoint will listen.";
       };
 
       uiPort = mkOption {
         type = types.port;
         default = 8025;
-        description = lib.mdDoc "Port on which the HTTP UI will listen.";
+        description = "Port on which the HTTP UI will listen.";
       };
 
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc "List of additional arguments to pass to the MailHog process.";
+        description = "List of additional arguments to pass to the MailHog process.";
       };
     };
   };

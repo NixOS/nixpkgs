@@ -32,19 +32,19 @@
 , upower
 , vala
 , xfce
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.9.1";
+  version = "10.9.2";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-H+J/zFUjiXbr5ynDkkjrRsEbyO4LPOhqe8DdG60ikRw=";
+    hash = "sha256-lDsQlUAa79gnM8wC5pwyquvFyEiayH4W4gD/uyC5Koo=";
   };
 
   patches = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -72,13 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
     gnome.mutter
     gnome.zenity
     graphene
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
     gtk3
     ibus
     libcanberra-gtk3
     libgee
     libGL
     libnotify
-    libpeas
     libpulseaudio
     libuuid
     libwnck
@@ -88,20 +89,22 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     upower
     xfce.libxfce4windowing
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-  ]);
+  ];
+
+  propagatedBuildInputs = [
+    # budgie-1.0.pc, budgie-raven-plugin-1.0.pc
+    libpeas
+  ];
 
   passthru.providedSessions = [
     "budgie-desktop"
   ];
 
   meta = {
-    description = "A feature-rich, modern desktop designed to keep out the way of the user";
+    description = "Feature-rich, modern desktop designed to keep out the way of the user";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop";
     license = with lib.licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30 ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ federicoschonborn ];
+    maintainers = lib.teams.budgie.members;
   };
 })

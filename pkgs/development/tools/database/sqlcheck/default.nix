@@ -29,8 +29,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Automatically identify anti-patterns in SQL queries";
+    mainProgram = "sqlcheck";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

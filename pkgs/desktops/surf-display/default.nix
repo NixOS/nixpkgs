@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Kiosk browser session manager based on the surf browser";
+    mainProgram = "surf-display";
     homepage = "https://code.it-zukunft-schule.de/cgit/surf-display/";
     maintainers = with maintainers; [ ];
     license = licenses.gpl2;

@@ -13,7 +13,7 @@ let
 in appimageTools.wrapType2 {
   inherit name src;
 
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ pkgs.libsecret ];
+  extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands = ''
     mv $out/bin/${name} $out/bin/${pname}
@@ -30,10 +30,10 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "A user-friendly desktop wallet with support for transaction history, encrypted contact book, gift codes, and payments";
+    description = "User-friendly desktop wallet with support for transaction history, encrypted contact book, gift codes, and payments";
     homepage = "https://github.com/mobilecoinofficial/desktop-wallet";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     mainProgram = "mobilecoin-wallet";
     platforms = [ "x86_64-linux" ];
   };

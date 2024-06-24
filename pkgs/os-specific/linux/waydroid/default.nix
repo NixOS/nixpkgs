@@ -12,7 +12,7 @@
 , iproute2
 , iptables
 , util-linux
-, wrapGAppsHook
+, wrapGAppsHook3
 , wl-clipboard
 , runtimeShell
 }:
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Waydroid is a container-based approach to boot a full Android system on a regular GNU/Linux system like Ubuntu";
+    mainProgram = "waydroid";
     homepage = "https://github.com/waydroid/waydroid";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;

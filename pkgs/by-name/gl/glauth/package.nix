@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "glauth";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "glauth";
     repo = "glauth";
     rev = "v${version}";
-    hash = "sha256-OkkiB1AGO7r7ehpnSJ+cB00crVpZ5Cwy4rAT55LUUdE=";
+    hash = "sha256-FOhtL8nIm5kuKRxFtkrDyUU2z1K22ZdHaes3GY0KmfQ=";
   };
 
   vendorHash = "sha256-MfauZRufl3kxr1fqatxTmiIvLJ+5JhbpSnbTHiujME8=";
@@ -28,10 +28,6 @@ buildGoModule rec {
   # Disable go workspaces to fix build.
   env.GOWORK = "off";
 
-  # Fix this build error:
-  #   main module (github.com/glauth/glauth/v2) does not contain package github.com/glauth/glauth/v2/vendored/toml
-  excludedPackages = [ "vendored/toml" ];
-
   # Based on ldflags in <glauth>/Makefile.
   ldflags = [
     "-s"
@@ -45,7 +41,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A lightweight LDAP server for development, home use, or CI";
+    description = "Lightweight LDAP server for development, home use, or CI";
     homepage = "https://github.com/glauth/glauth";
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor christoph-heiss ];

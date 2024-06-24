@@ -22,7 +22,7 @@ buildGoModule rec {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-rycAGqZhO48bPTFO2y2J1d16oon24sEEUns4EayWDvg=";
+  vendorHash = "sha256-AHEhIWa6PP8f+hhIdY+0brLF2HYhvTal7qXfCwG9iyo=";
 
   nativeBuildInputs = [
     scdoc
@@ -69,7 +69,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "An email client for your terminal";
+    description = "Email client for your terminal";
     homepage = "https://aerc-mail.org/";
     maintainers = with maintainers; [ tadeokondrak ];
     mainProgram = "aerc";

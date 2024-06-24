@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Configurable Ident protocol server";
+    mainProgram = "oidentd";
     homepage = "https://oidentd.janikrabe.com/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

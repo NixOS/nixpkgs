@@ -75,7 +75,7 @@ llvmPackages_14.stdenv.mkDerivation {
   ];
   doCheck = false;
   meta = with lib; {
-    description = "High performance server-side application framework.";
+    description = "High performance server-side application framework";
     license = licenses.asl20;
     homepage = "https://seastar.io/";
     maintainers = with maintainers; [ avakhrenev ];

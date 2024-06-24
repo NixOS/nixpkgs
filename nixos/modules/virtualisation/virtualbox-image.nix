@@ -14,42 +14,42 @@ in {
         type = with types; either (enum [ "auto" ]) int;
         default = "auto";
         example = 50 * 1024;
-        description = lib.mdDoc ''
+        description = ''
           The size of the VirtualBox base image in MiB.
         '';
       };
       baseImageFreeSpace = mkOption {
         type = with types; int;
         default = 30 * 1024;
-        description = lib.mdDoc ''
+        description = ''
           Free space in the VirtualBox base image in MiB.
         '';
       };
       memorySize = mkOption {
         type = types.int;
         default = 1536;
-        description = lib.mdDoc ''
+        description = ''
           The amount of RAM the VirtualBox appliance can use in MiB.
         '';
       };
       vmDerivationName = mkOption {
         type = types.str;
         default = "nixos-ova-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
-        description = lib.mdDoc ''
+        description = ''
           The name of the derivation for the VirtualBox appliance.
         '';
       };
       vmName = mkOption {
         type = types.str;
         default = "${config.system.nixos.distroName} ${config.system.nixos.label} (${pkgs.stdenv.hostPlatform.system})";
-        description = lib.mdDoc ''
+        description = ''
           The name of the VirtualBox appliance.
         '';
       };
       vmFileName = mkOption {
         type = types.str;
         default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.ova";
-        description = lib.mdDoc ''
+        description = ''
           The file name of the VirtualBox appliance.
         '';
       };
@@ -60,7 +60,7 @@ in {
           rtcuseutc = "on";
           usb = "off";
         };
-        description = lib.mdDoc ''
+        description = ''
           Parameters passed to the Virtualbox appliance.
 
           Run `VBoxManage modifyvm --help` to see more options.
@@ -72,14 +72,14 @@ in {
           "--vsys" "0" "--vendor" "ACME Inc."
         ];
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Parameters passed to the Virtualbox export command.
 
           Run `VBoxManage export --help` to see more options.
         '';
       };
       extraDisk = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Optional extra disk/hdd configuration.
           The disk will be an 'ext4' partition on a separate file.
         '';
@@ -93,16 +93,16 @@ in {
           options = {
             size = mkOption {
               type = types.int;
-              description = lib.mdDoc "Size in MiB";
+              description = "Size in MiB";
             };
             label = mkOption {
               type = types.str;
               default = "vm-extra-storage";
-              description = lib.mdDoc "Label for the disk partition";
+              description = "Label for the disk partition";
             };
             mountPoint = mkOption {
               type = types.str;
-              description = lib.mdDoc "Path where to mount this disk.";
+              description = "Path where to mount this disk.";
             };
           };
         });
@@ -120,7 +120,7 @@ in {
             --network-descriptions 'Nic description' \
             --scsi-subtypes VirtualSCSI
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra commands to run after exporting the OVA to `$fn`.
         '';
       };
@@ -140,7 +140,7 @@ in {
           bootable = "on";
           hostiocache = "on";
         };
-        description = lib.mdDoc ''
+        description = ''
           Parameters passed to the VirtualBox appliance. Must have at least
           `name`.
 

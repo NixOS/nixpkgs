@@ -35,6 +35,7 @@ in rustPlatform.buildRustPackage {
 
   meta = with lib; {
     description = "System76 Scheduler";
+    mainProgram = "system76-scheduler";
     homepage = "https://github.com/pop-os/system76-scheduler";
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" "x86-linux" "aarch64-linux" ];

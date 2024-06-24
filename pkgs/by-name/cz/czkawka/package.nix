@@ -19,15 +19,15 @@
 
 let
   pname = "czkawka";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "czkawka";
     rev = version;
-    hash = "sha256-uKmiBNwuu3Eduf0v3p2VYYNf6mgxJTBUsYs+tKZQZys=";
+    hash = "sha256-SOWtLmehh1F8SoDQ+9d7Fyosgzya5ZztCv8IcJZ4J94=";
   };
-  cargoHash = "sha256-iBO99kpITVl7ySlXPkEg2YecS1lonVx9CbKt9WI180s=";
+  cargoHash = "sha256-GOX7V6NLEMP06nMeRZINwcWCaHwK6T3nkRKl4e25DPg=";
 in
 rustPlatform.buildRustPackage {
   inherit pname version src cargoHash;
@@ -45,9 +45,10 @@ rustPlatform.buildRustPackage {
     glib
     gtk4
     pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
+    Foundation
+    AppKit
+  ]);
 
   nativeCheckInputs = [
     xvfb-run
@@ -79,7 +80,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     changelog = "https://github.com/qarmin/czkawka/raw/${version}/Changelog.md";
-    description = "A simple, fast and easy to use app to remove unnecessary files from your computer";
+    description = "Simple, fast and easy to use app to remove unnecessary files from your computer";
     homepage = "https://github.com/qarmin/czkawka";
     license = with lib.licenses; [ mit ];
     mainProgram = "czkawka_gui";

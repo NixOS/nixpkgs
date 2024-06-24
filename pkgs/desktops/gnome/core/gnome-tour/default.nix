@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-tour";
-  version = "45.0";
+  version = "46.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-W+S470uPTV7KzMMQSNtuCFqPe/+tqghDuOiniP8dre4=";
+    hash = "sha256-8yZSqp1+8GQ3YM5jkyCCz9NkHnczt2xCm3jQl4O3xGo=";
   };
 
   cargoVendorDir = "vendor";
@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tour";
     description = "GNOME Greeter & Tour";
+    mainProgram = "gnome-tour";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

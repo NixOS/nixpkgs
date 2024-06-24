@@ -23,7 +23,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
 
   meta = with lib; {
-    description = "A simple CLI client for installing and maintaining linux GOG games";
+    description = "Simple CLI client for installing and maintaining linux GOG games";
+    mainProgram = "wyvern";
     homepage = "https://git.sr.ht/~nicohman/wyvern";
     license = licenses.gpl3;
     maintainers = with maintainers; [ _0x4A6F ];

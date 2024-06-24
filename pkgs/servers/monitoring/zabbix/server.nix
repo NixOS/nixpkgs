@@ -16,14 +16,14 @@ assert postgresqlSupport -> !mysqlSupport;
 let
   inherit (lib) optional optionalString;
 in
-  import ./versions.nix ({ version, sha256, ... }:
+  import ./versions.nix ({ version, hash, ... }:
     stdenv.mkDerivation {
       pname = "zabbix-server";
       inherit version;
 
       src = fetchurl {
         url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
-        inherit sha256;
+        inherit hash;
       };
 
       nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -88,9 +88,9 @@ in
       '';
 
       meta = with lib; {
-        description = "An enterprise-class open source distributed monitoring solution";
+        description = "Enterprise-class open source distributed monitoring solution";
         homepage = "https://www.zabbix.com/";
-        license = licenses.gpl2;
+        license = licenses.gpl2Plus;
         maintainers = with maintainers; [ mmahut psyanticy ];
         platforms = platforms.linux;
       };

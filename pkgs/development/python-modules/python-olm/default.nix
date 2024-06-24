@@ -1,9 +1,13 @@
-{ lib, buildPythonPackage, isPy3k, olm
-, cffi
-, future
-, aspectlib
-, pytest-benchmark
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  isPy3k,
+  olm,
+  cffi,
+  future,
+  aspectlib,
+  pytest-benchmark,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
@@ -25,9 +29,7 @@ buildPythonPackage {
     future
   ];
 
-  propagatedNativeBuildInputs = [
-    cffi
-  ];
+  propagatedNativeBuildInputs = [ cffi ];
 
   pythonImportsCheck = [ "olm" ];
 

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pgroonga";
-  version = "3.1.6";
+  version = "3.1.8";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-XfHpKstgdBQ6Oo0cDpOphUJNTu9KgfBuxAa8RadvjyA=";
+    hash = "sha256-Wjh0NJK6IfcI30R7HKCsB87/lxXZYEqiMD9t2nldCW4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A PostgreSQL extension to use Groonga as the index";
+    description = "PostgreSQL extension to use Groonga as the index";
     longDescription = ''
       PGroonga is a PostgreSQL extension to use Groonga as the index.
       PostgreSQL supports full text search against languages that use only alphabet and digit.

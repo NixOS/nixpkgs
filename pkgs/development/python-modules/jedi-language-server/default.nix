@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, docstring-to-markdown
-, fetchFromGitHub
-, jedi
-, lsprotocol
-, poetry-core
-, pygls
-, pydantic
-, pyhamcrest
-, pytestCheckHook
-, python-lsp-jsonrpc
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  docstring-to-markdown,
+  fetchFromGitHub,
+  jedi,
+  lsprotocol,
+  poetry-core,
+  pygls,
+  pydantic,
+  pyhamcrest,
+  pytestCheckHook,
+  python-lsp-jsonrpc,
+  pythonOlder,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.41.1-unstable-2023-10-04";
+  version = "0.41.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,18 +25,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pappasam";
     repo = pname;
-    rev = "c4c470cff67e54593a626b22d1b6b05e56fde3a3";
-    hash = "sha256-qFBni97B/GkabbznnZtWTG4dCHFkOx5UQjuevxq+Uvo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RDLwL9AZ3G8CzVwDtWqFFZNH/ulpHeFBhglbWNv/ZIk=";
   };
 
-  pythonRelaxDeps = [
-    "pygls"
-  ];
-
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     docstring-to-markdown
@@ -55,12 +49,17 @@ buildPythonPackage rec {
     HOME="$(mktemp -d)"
   '';
 
-  pythonImportsCheck = [
-    "jedi_language_server"
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # https://github.com/pappasam/jedi-language-server/issues/313
+    "test_publish_diagnostics_on_change"
+    "test_publish_diagnostics_on_save"
   ];
 
+  pythonImportsCheck = [ "jedi_language_server" ];
+
   meta = with lib; {
-    description = "A Language Server for the latest version(s) of Jedi";
+    description = "Language Server for the latest version(s) of Jedi";
+    mainProgram = "jedi-language-server";
     homepage = "https://github.com/pappasam/jedi-language-server";
     changelog = "https://github.com/pappasam/jedi-language-server/blob/${version}/CHANGELOG.md";
     license = licenses.mit;

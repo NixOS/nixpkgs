@@ -41,6 +41,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
 
     description = "utility to manipulate constant databases (cdb)";
+    mainProgram = "cdb";
 
     longDescription = ''
       tinycdb is a small, fast and reliable utility and subroutine

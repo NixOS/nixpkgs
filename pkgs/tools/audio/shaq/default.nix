@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A CLI client for Shazam";
+    description = "CLI client for Shazam";
     homepage = "https://github.com/woodruffw/shaq";
     changelog = "https://github.com/woodruffw/shaq/releases/tag/${src.rev}";
     license = licenses.mit;

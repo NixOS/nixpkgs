@@ -47,13 +47,15 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-I${libtirpc.dev}/include/tirpc";
   NIX_LDFLAGS = lib.optional (stdenv.hostPlatform.libc == "glibc") "-ltirpc";
 
+  hardeningDisable = [ "format" ];
+
   # workaround wrong library IDs
   postInstall = lib.optionalString stdenv.isDarwin ''
     ln -sv "$out/lib/xfitter/"* "$out/lib/"
   '';
 
   meta = with lib; {
-    description = "The xFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
+    description = "XFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
     license     = licenses.gpl3;
     homepage    = "https://www.xfitter.org/xFitter";
     platforms   = platforms.unix;

@@ -6,7 +6,7 @@
 , pkg-config
 , gnome
 , gtk3
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gobject-introspection
 , gi-docgen
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection
     gi-docgen
     # post install script
@@ -78,7 +78,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "API documentation browser for GNOME";
-    homepage = "https://wiki.gnome.org/Apps/Devhelp";
+    mainProgram = "devhelp";
+    homepage = "https://apps.gnome.org/Devhelp/";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

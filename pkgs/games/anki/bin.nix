@@ -1,24 +1,36 @@
-{ fetchurl, stdenv, lib, buildFHSEnv, appimageTools, writeShellScript, anki, undmg, zstd, commandLineArgs ? [] }:
+{
+  fetchurl,
+  stdenv,
+  lib,
+  buildFHSEnv,
+  appimageTools,
+  writeShellScript,
+  anki,
+  undmg,
+  zstd,
+  cacert,
+  commandLineArgs ? [ ],
+}:
 
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "23.12.1";
+  version = "24.06.2";
 
   sources = {
     linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
-      sha256 = "sha256-bFtAUqSoFS8CWESiepWXywndkijATbWp6CJdqlQecuk=";
+      sha256 = "sha256-A7/R7nQUt0L4fKFadPvKyi1sCEUIXcOZSW+Yr1ty63c=";
     };
 
     # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
     darwin-x86_64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
-      sha256 = "sha256-z48REB14p7rb50ty9u/26wx0sY4QZb4pj6wOXsSBCdg=";
+      sha256 = "sha256-tZjR5ebzbm9w5m66Q2cy8Oe1VtqGEDpLfjpgbUh07Lo=";
     };
     darwin-aarch64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
-      sha256 = "sha256-bdaCqSjje86wmVKIFZqzuFaEZ7SWQr7CAS/Hm1CpOMg=";
+      sha256 = "sha256-/SVtyvsPWv5EGiNTbfHbPtguLi/oNytO16JPnD7IaCM=";
     };
   };
 
@@ -43,51 +55,80 @@ let
   };
 
   meta = with lib; {
-    inherit (anki.meta) license homepage description longDescription;
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    inherit (anki.meta)
+      license
+      homepage
+      description
+      longDescription
+      ;
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     maintainers = with maintainers; [ mahmoudk1000 ];
   };
 
-  passthru = { inherit sources; };
+  passthru = {
+    inherit sources;
+  };
 
-  fhsEnvAnki = buildFHSEnv (appimageTools.defaultFhsEnvArgs // {
-    inherit pname version;
-    name = null; # Appimage sets it to "appimage-env"
+  fhsEnvAnki = buildFHSEnv (
+    appimageTools.defaultFhsEnvArgs
+    // {
+      inherit pname version;
 
-    # Dependencies of anki
-    targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 ]);
+      profile = ''
+        # anki vendors QT and mixing QT versions usually causes crashes
+        unset QT_PLUGIN_PATH
+        # anki uses the system ssl cert, without it plugins do not download/update
+        export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+      '';
 
-    runScript = writeShellScript "anki-wrapper.sh" ''
-      exec ${unpacked}/bin/anki ${ lib.strings.escapeShellArgs commandLineArgs } "$@"
-    '';
+      # Dependencies of anki
+      targetPkgs =
+        pkgs:
+        (with pkgs; [
+          xorg.libxkbfile
+          xcb-util-cursor-HEAD
+          krb5
+          zstd
+        ]);
 
-    extraInstallCommands = ''
-      ln -s ${pname} $out/bin/anki
+      runScript = writeShellScript "anki-wrapper.sh" ''
+        exec ${unpacked}/bin/anki ${lib.strings.escapeShellArgs commandLineArgs} "$@"
+      '';
 
-      mkdir -p $out/share
-      cp -R ${unpacked}/share/applications \
-        ${unpacked}/share/man \
-        ${unpacked}/share/pixmaps \
-        $out/share/
-    '';
+      extraInstallCommands = ''
+        ln -s ${pname} $out/bin/anki
 
-    inherit meta passthru;
-  });
+        mkdir -p $out/share
+        cp -R ${unpacked}/share/applications \
+          ${unpacked}/share/man \
+          ${unpacked}/share/pixmaps \
+          $out/share/
+      '';
+
+      inherit meta passthru;
+    }
+  );
 in
 
-if stdenv.isLinux then fhsEnvAnki
-else stdenv.mkDerivation {
-  inherit pname version passthru;
+if stdenv.isLinux then
+  fhsEnvAnki
+else
+  stdenv.mkDerivation {
+    inherit pname version passthru;
 
-  src = if stdenv.isAarch64 then sources.darwin-aarch64 else sources.darwin-x86_64;
+    src = if stdenv.isAarch64 then sources.darwin-aarch64 else sources.darwin-x86_64;
 
-  nativeBuildInputs = [ undmg ];
-  sourceRoot = ".";
+    nativeBuildInputs = [ undmg ];
+    sourceRoot = ".";
 
-  installPhase = ''
-    mkdir -p $out/Applications/
-    cp -a Anki.app $out/Applications/
-  '';
+    installPhase = ''
+      mkdir -p $out/Applications/
+      cp -a Anki.app $out/Applications/
+    '';
 
-  inherit meta;
-}
+    inherit meta;
+  }

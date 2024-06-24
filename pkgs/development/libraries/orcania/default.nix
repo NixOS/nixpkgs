@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Potluck with different functions for different purposes that can be shared among C programs";
+    mainProgram = "base64url";
     homepage = "https://github.com/babelouest/orcania";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ johnazoidberg ];

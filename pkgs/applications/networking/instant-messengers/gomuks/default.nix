@@ -51,7 +51,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://maunium.net/go/gomuks/";
     description = "A terminal based Matrix client written in Go";
+    mainProgram = "gomuks";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ chvp emily ];
+    maintainers = with maintainers; [ chvp ];
   };
 }
