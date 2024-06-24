@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pythonOlder,
 
   # build-system
@@ -27,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "24.6.0";
+  version = "24.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -36,15 +35,8 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-T0E8lrire3rlPY3B3P3CqNWYV4SMvnOKKiiGTRoDz/s=";
+    hash = "sha256-wvfAkV+EjGytPog3ik7NAC0rW8nkHufenGfapeQr1X0=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/esphome/aioesphomeapi/commit/647dd99e0d04f017da41880e2fc299914ad5c762.diff";
-      hash = "sha256-A0emzRj8AO7KF/XcAk0ysUvXO7v/tzvKGa63T5dzgTk=";
-    })
-  ];
 
   build-system = [
     setuptools
