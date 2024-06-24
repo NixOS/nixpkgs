@@ -7,13 +7,16 @@
   flit-core,
   id,
   importlib-resources,
+  platformdirs,
   pretend,
+  pyasn1,
   pydantic,
   pyjwt,
   pyopenssl,
   pytestCheckHook,
   pythonOlder,
   requests,
+  rfc8785,
   rich,
   securesystemslib,
   sigstore-protobuf-specs,
@@ -23,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "sigstore-python";
-  version = "2.1.5";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +35,7 @@ buildPythonPackage rec {
     owner = "sigstore";
     repo = "sigstore-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lqmrM4r1yPVCcvWNC9CKYMyryuIyliI2Y+TAYgAwA1Y=";
+    hash = "sha256-AL1YXlgXRxA4tobPdSDfDGTYWhs/BS4bVrYBVQ9P6yM=";
   };
 
   build-system = [ flit-core ];
@@ -42,16 +45,19 @@ buildPythonPackage rec {
     cryptography
     id
     importlib-resources
+    platformdirs
+    pyasn1
     pydantic
     pyjwt
     pyopenssl
     requests
+    rfc8785
     rich
     securesystemslib
     sigstore-protobuf-specs
     sigstore-rekor-types
     tuf
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ importlib-resources ];
 
   nativeCheckInputs = [
     pretend
@@ -72,7 +78,11 @@ buildPythonPackage rec {
     "test_init_url"
     "test_production"
     "test_sct_verify_keyring"
+    "test_sign_dsse"
+    "test_sign_prehashed"
     "test_sign_rekor_entry_consistent"
+    "test_store_reads_root_json"
+    "test_store_reads_targets_json"
     "test_verification_materials_retrieves_rekor_entry"
     "test_verifier"
   ];
