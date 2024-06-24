@@ -10,10 +10,10 @@
 buildPythonPackage rec {
   pname = "capstone";
   version = lib.getVersion capstone;
-  format = "setuptools";
+  pyproject = true;
 
-  # distutils usage
-  disabled = pythonAtLeast "3.12";
+  # Remove distutils usage when > 3.12 as 3.12 removes distutils.
+  patches = [ ./remove-distutils.patch ];
 
   src = capstone.src;
   sourceRoot = "${src.name}/bindings/python";
@@ -33,7 +33,9 @@ buildPythonPackage rec {
     "macosx_11_0"
   ];
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  dependencies = [ setuptools ];
 
   checkPhase = ''
     mv capstone capstone.hidden

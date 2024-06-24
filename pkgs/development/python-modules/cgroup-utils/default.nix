@@ -2,38 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pep8,
-  nose,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   version = "0.8";
-  format = "setuptools";
   pname = "cgroup-utils";
-
-  buildInputs = [
-    pep8
-    nose
-  ];
-  # Pep8 tests fail...
-  doCheck = false;
-
-  postPatch = ''
-    sed -i -e "/argparse/d" setup.py
-  '';
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "peo3";
     repo = "cgroup-utils";
     rev = "v${version}";
-    sha256 = "0qnbn8cnq8m14s8s1hcv25xjd55dyb6yy54l5vc7sby5xzzp11fq";
+    hash = "sha256-2IVw/+/FL33YLpQU783yrZQmexGbwaCRJqEibBmyy2I=";
   };
 
-  meta = with lib; {
+  postPatch = ''
+    sed -i -e "/argparse/d" setup.py
+    substituteInPlace test_pep8.py --replace-fail \
+    'print message' 'print(message)'
+    rm test_pep8.py
+  '';
+
+  build-system = [ setuptools ];
+
+  # Importing causes it to check the /sys directory, which isn't allowed, and so
+  # tests fail. Therefore, tests can't be run.
+  doCheck = false;
+
+  pythonImportsCheck = [ "cgutils" ];
+
+  meta = {
     description = "Utility tools for control groups of Linux";
     mainProgram = "cgutil";
-    maintainers = with maintainers; [ layus ];
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    maintainers = with lib.maintainers; [ layus ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }
