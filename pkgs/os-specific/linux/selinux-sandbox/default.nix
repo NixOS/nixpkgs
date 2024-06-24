@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     homepage = "https://selinuxproject.org";
     platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
   };
 }

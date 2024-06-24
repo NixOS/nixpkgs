@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     mainProgram = "netcat";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
   };
 }
