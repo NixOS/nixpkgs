@@ -13403,6 +13403,8 @@ self: super: with self; {
 
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
 
+  rfc8785 = callPackage ../development/python-modules/rfc8785 { };
+
   rfcat = callPackage ../development/python-modules/rfcat { };
 
   rflink = callPackage ../development/python-modules/rflink { };
