@@ -87,12 +87,17 @@ let
   cudaArchitectures = (builtins.map cudaFlags.dropDot cudaCapabilities);
 
   cudaArchitecturesString = strings.concatStringsSep ";" cudaArchitectures;
+
+  # NOTE: MIN_ARCH *must* be parseable as an integer; various code paths in Magma do division and integer comparison.
   minArch =
     let
-      minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
+      oldestToNewest = builtins.sort strings.versionOlder cudaArchitectures;
+      oldestArch = builtins.head oldestToNewest;
+      # Some architectures have a suffix, like Hopper/Thor (9.0a)
+      oldestArchJustDigits = builtins.head (lib.strings.match "^([[:digit:]]+){1}[[:alpha:]]*$" oldestArch);
     in
     # "75" -> "750"  Cf. https://bitbucket.org/icl/magma/src/f4ec79e2c13a2347eff8a77a3be6f83bc2daec20/CMakeLists.txt#lines-273
-    "${minArch'}0";
+    "${oldestArchJustDigits}0";
 
 in
 

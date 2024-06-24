@@ -9239,7 +9239,7 @@ self: super: with self; {
 
   openai-triton = callPackage ../development/python-modules/openai-triton {
     llvm = pkgs.openai-triton-llvm;
-    cudaPackages = pkgs.cudaPackages_12_1;
+    inherit (torch.passthru) cudaPackages;
   };
 
   openai-triton-cuda = self.openai-triton.override {
@@ -15387,9 +15387,36 @@ self: super: with self; {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
-  torch = callPackage ../development/python-modules/torch {
+  torch = callPackage ../development/python-modules/torch rec {
+    inherit (pkgs.config) cudaSupport rocmSupport;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
+
+    # See CUDA support here:
+    # https://github.com/pytorch/builder/blob/main/CUDA_UPGRADE_GUIDE.MD#a-currently-supported-cuda-and-cudnn-libraries
+    # https://pytorch.org/get-started/locally/
+    # Also see: https://github.com/NixOS/nixpkgs/issues/294111
+    cudaPackages = pkgs.cudaPackages_12_1;
+    # CuDNN isn't available on every supported platform for every CUDA version.
+    cudnn =
+      let
+        inherit (cudaPackages) cudaMajorMinorVersion;
+      in
+      if cudaMajorMinorVersion == "11.8" then
+        cudaPackages.cudnn_8_7 or null
+      else if cudaMajorMinorVersion == "12.1" then
+        cudaPackages.cudnn_8_9 or null
+      else
+        null;
+    magma =
+      if cudaSupport then
+        pkgs.magma-cuda-static
+      else if rocmSupport then
+        pkgs.magma-hip
+      else
+        pkgs.magma;
+    openai-triton = self.openai-triton.override { inherit cudaSupport; };
+    rocmPackages = pkgs.rocmPackages_5;
   };
 
   torch-audiomentations = callPackage ../development/python-modules/torch-audiomentations { };
@@ -15403,7 +15430,6 @@ self: super: with self; {
   torchsnapshot = callPackage ../development/python-modules/torchsnapshot { };
 
   torchWithCuda = self.torch.override {
-    openai-triton = self.openai-triton-cuda;
     cudaSupport = true;
     rocmSupport = false;
   };
@@ -15413,7 +15439,6 @@ self: super: with self; {
   };
 
   torchWithRocm = self.torch.override {
-    openai-triton = self.openai-triton-no-cuda;
     rocmSupport = true;
     cudaSupport = false;
   };
