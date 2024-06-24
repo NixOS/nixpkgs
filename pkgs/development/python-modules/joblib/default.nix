@@ -33,6 +33,12 @@ buildPythonPackage rec {
     hash = "sha256-/II5E97u7UkfQ87DU+TWQ2IdsmQf24QRCfgSwUtgSBI=";
   };
 
+  patches = [
+    # If in derivation build environment, ignore physical cores.
+    # This information might be unavailable in isolated environment.
+    ./ignore_phys_cores_in_build_env.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
