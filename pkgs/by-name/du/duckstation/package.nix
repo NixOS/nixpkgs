@@ -60,11 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ cubeb.passthru.backendLibs;
 
-  strictDeps = true;
-
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTS" true)
   ];
+
+  strictDeps = true;
+
+  doInstallCheck = true;
 
   postPatch = ''
     gitHash=$(cat .nixpkgs-auxfiles/git_hash) \
@@ -73,8 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     gitDate=$(cat .nixpkgs-auxfiles/git_date) \
       substituteAllInPlace src/scmversion/gen_scmversion.sh
   '';
-
-  doInstallCheck = true;
 
   installCheckPhase = ''
     runHook preCheck
