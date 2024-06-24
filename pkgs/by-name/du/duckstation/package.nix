@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     ninja
     pkg-config
     qttools
@@ -49,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     curl
+    extra-cmake-modules
     libXrandr
     libbacktrace
     libwebp
