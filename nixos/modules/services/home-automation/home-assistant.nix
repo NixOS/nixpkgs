@@ -518,8 +518,9 @@ in {
           # recreate symlinks for desired components
           declare -a components=(${escapeShellArgs cfg.customComponents})
           for component in "''${components[@]}"; do
-            path="$(dirname $(find "$component" -name "manifest.json"))"
-            ln -fns "$path" "${cfg.configDir}/custom_components/"
+            readarray -t manifests < <(find "$component" -name manifest.json)
+            readarray -t paths < <(dirname "''${manifests[@]}")
+            ln -fns "''${paths[@]}" "${cfg.configDir}/custom_components/"
           done
         '';
       in
