@@ -2,6 +2,7 @@
   callPackage,
   hostPlatform,
   targetPlatform,
+  fetchgit,
   tools ? callPackage ./tools.nix { inherit hostPlatform; },
   curl,
   pkg-config,
@@ -16,6 +17,7 @@
 }:
 let
   constants = callPackage ./constants.nix { inherit targetPlatform; };
+  boolOption = value: if value then "True" else "False";
 in
 runCommand "flutter-engine-source-${version}-${targetPlatform.system}"
   {
@@ -42,6 +44,14 @@ runCommand "flutter-engine-source-${version}-${targetPlatform.system}"
         "managed": False,
         "name": "src/flutter",
         "url": "${url}",
+        "custom_vars": {
+          "download_fuchsia_deps": False,
+          "download_android_deps": False,
+          "download_linux_deps": ${boolOption targetPlatform.isLinux},
+          "setup_githooks": False,
+          "download_esbuild": False,
+          "download_dart_sdk": False,
+        },
       }]
     '';
 
@@ -66,13 +76,13 @@ runCommand "flutter-engine-source-${version}-${targetPlatform.system}"
     cd $out
 
     export PATH=$PATH:$depot_tools
-    python3 $depot_tools/gclient.py sync --no-history --shallow --nohooks >/dev/null
+    python3 $depot_tools/gclient.py sync --no-history --shallow --nohooks 2>&1 >/dev/null
     find $out -name '.git' -exec dirname {} \; | xargs bash -c 'make_deterministic_repo $@' _
     find $out -path '*/.git/*' ! -name 'HEAD' -prune -exec rm -rf {} \;
     find $out -name '.git' -exec mkdir {}/logs \;
     find $out -name '.git' -exec cp {}/HEAD {}/logs/HEAD \;
 
-    python3 src/build/linux/sysroot_scripts/install-sysroot.py --arch=${constants.arch} >/dev/null
+    rm -rf $out/src/flutter/{buildtools,prebuilts,third_party/swiftshader}
 
     rm -rf $out/.cipd $out/.gclient $out/.gclient_entries $out/.gclient_previous_custom_vars $out/.gclient_previous_sync_commits
   ''

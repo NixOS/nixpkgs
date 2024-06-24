@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , python3
 , meson
 , ninja
@@ -99,6 +100,12 @@ stdenv.mkDerivation(finalAttrs: {
     ./0060-libjack-path.patch
     # Move installed tests into their own output.
     ./0070-installed-tests-path.patch
+    # fix module-roc-sink explicity specifying sender packet encoding
+    # https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/2048
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/6acfb53884c6f3936030fe43a584bfa01c27d3ea.patch";
+      hash = "sha256-UQTWnw2fJ8Sx+eMaUmbJEFopV3HPr63v4xVtk0z3/xM=";
+    })
   ];
 
   strictDeps = true;

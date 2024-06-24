@@ -257,10 +257,12 @@ let
     passthru = let
       withSdk = androidSdk: mkAndroidStudioWrapper { inherit androidStudio androidSdk; };
     in {
+      inherit version;
       unwrapped = androidStudio;
       full = withSdk androidenv.androidPkgs.androidsdk;
       inherit withSdk;
       sdk = androidSdk;
+      updateScript = [ ./update.sh "${channel}" ];
     };
     meta = {
       description = "Official IDE for Android (${channel} channel)";

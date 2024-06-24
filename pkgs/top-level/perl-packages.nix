@@ -6966,6 +6966,22 @@ with self; {
     };
   };
 
+  DevelCover = buildPerlPackage {
+    pname = "Devel-Cover";
+    version = "1.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PJ/PJCJ/Devel-Cover-1.44.tar.gz";
+      hash = "sha256-9AwVQ5kuXWWm94AD1GLVms15rm0w04BHscadmZ0rH9g=";
+    };
+    propagatedBuildInputs = [ HTMLParser ];
+    doCheck = false;
+    meta = {
+      description = "Code coverage metrics for Perl";
+      homepage = "http://www.pjcj.net/perl.html";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DevelDeprecationsEnvironmental = buildPerlPackage {
     pname = "Devel-Deprecations-Environmental";
     version = "1.101";
@@ -15646,6 +15662,36 @@ with self; {
     meta = {
       description = "Expiry plug-in for Memoize that adds LRU cache expiration";
       homepage = "https://github.com/neilb/Memoize-ExpireLRU";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  MemoryProcess = buildPerlPackage {
+    pname = "Memory-Process";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKIM/Memory-Process-0.06.tar.gz";
+      hash = "sha256-NYFEiP/SnJdiFiXqOz1wCvv6YO0FW9dZ1OWNnI/UTk4=";
+    };
+    buildInputs = [ CaptureTiny TestNoWarnings ];
+    propagatedBuildInputs = [ MemoryUsage Readonly ];
+    meta = {
+      description = "Memory process reporting";
+      homepage = "https://github.com/michal-josef-spacek/Memory-Process";
+      license = lib.licenses.bsd3;
+      platforms = lib.platforms.linux;
+    };
+  };
+
+  MemoryUsage = buildPerlPackage {
+    pname = "Memory-Usage";
+    version = "0.201";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DO/DONEILL/Memory-Usage-0.201.tar.gz";
+      hash = "sha256-jyr60h5Ap0joHIwPPkDKcYwU3bn7LYgL+9KK6RPOU0k=";
+    };
+    meta = {
+      description = "Tools to determine actual memory usage";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

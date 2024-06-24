@@ -1,19 +1,22 @@
-{ fetchCrate
-, lib
-, rustPlatform
-, protobuf
+{
+  fetchCrate,
+  lib,
+  rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "protoc-gen-prost-crate";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-MtGeU2PnVYPXb3nly2UaryjmjMz1lxcvYDjFiwf58FA=";
+    hash = "sha256-+TSZ2QstAF8DXsHunV/nQyqF++0bFud1ZWJQEI3JEwc=";
   };
 
-  cargoSha256 = "sha256-dcKJRX/iHIWEmBD2nTMyQozxld8b7dhxxB85quPUysg=";
+  cargoHash = "sha256-KbErgnXG11ngzLVSktuyUAupYs1ZD64z3plKVtzLx1A=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Protoc plugin that generates Cargo crates and include files for `protoc-gen-prost`";
@@ -21,6 +24,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/neoeinstein/protoc-gen-prost";
     changelog = "https://github.com/neoeinstein/protoc-gen-prost/blob/main/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ felschr sitaaax ];
+    maintainers = with maintainers; [
+      felschr
+      sitaaax
+    ];
   };
 }

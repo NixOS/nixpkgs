@@ -15230,6 +15230,12 @@
     githubId = 79252025;
     name = "Nicolas Benes";
   };
+  panky = {
+    email = "dev@pankajraghav.com";
+    github = "Panky-codes";
+    githubId = 33182938;
+    name = "Pankaj";
+  };
   paperdigits = {
     email = "mica@silentumbrella.com";
     github = "paperdigits";
@@ -19559,6 +19565,12 @@
     github = "taku0";
     githubId = 870673;
     name = "Takuo Yonezawa";
+  };
+  TakWolf = {
+    email = "takwolf@foxmail.com";
+    github = "TakWolf";
+    githubId = 6064962;
+    name = "TakWolf";
   };
   talkara = {
     email = "taito.horiuchi@relexsolutions.com";
