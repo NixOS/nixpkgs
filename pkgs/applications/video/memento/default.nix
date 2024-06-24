@@ -28,13 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     makeWrapper
-    qt6.qtbase
-    qt6.qtsvg
-    qt6.qtwayland
     wrapQtAppsHook
   ];
 
   buildInputs = [
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtwayland
     sqlite
     json_c
     libzip
