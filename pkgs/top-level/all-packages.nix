@@ -33998,8 +33998,6 @@ with pkgs;
 
   rusty-psn-gui = rusty-psn.override { withGui = true; };
 
-  rutorrent = callPackage ../applications/networking/p2p/rutorrent {};
-
   rymcast = callPackage ../applications/audio/rymcast {
     inherit (gnome) zenity;
   };
