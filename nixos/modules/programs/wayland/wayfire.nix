@@ -25,6 +25,7 @@ in
         Additional plugins to use with the wayfire window manager.
       '';
     };
+    xwayland.enable = lib.mkEnableOption "XWayland" // { default = true; };
   };
 
   config = let
@@ -33,7 +34,7 @@ in
       plugins = cfg.plugins;
     };
   in
-  lib.mkIf cfg.enable {
+  lib.mkIf cfg.enable (lib.mkMerge [{
     environment.systemPackages = [
       finalPackage
     ];
@@ -46,5 +47,10 @@ in
       # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050914
       config.wayfire.default = lib.mkDefault [ "wlr" "gtk" ];
     };
-  };
+  }
+  (import ./wayland-session.nix {
+    inherit  lib pkgs;
+    enableXWayland = cfg.xwayland.enable;
+    })
+  ]);
 }
