@@ -6,12 +6,12 @@
   vkd3d-proton = let
     self = {
       pname = "vkd3d-proton";
-      version = "2.8-unstable-2023-04-21";
+      version = "2.12";
 
       src = fetchFromGitHub {
         owner = "HansKristian-Work";
         repo = "vkd3d-proton";
-        rev = "83308675078e9ea263fa8c37af95afdd15b3ab71";
+        rev = "v${self.version}";
         fetchSubmodules = true;
         #
         # Some files are filled by using Git commands; it requires deepClone.
@@ -32,7 +32,7 @@
           git describe --always --tags --dirty=+ > .nixpkgs-auxfiles/vkd3d_version
           find $out -name .git -print0 | xargs -0 rm -fr
         '';
-        hash = "sha256-KAa7iidME3iVGLvGmCysU3Vnl14Et8Es/5n6m6E+jHU=";
+        hash = "sha256-ev7wVxTapjhPBSNyJzbZXAnZUluCB2lMLkPH581zy9I=";
       };
     };
   in
