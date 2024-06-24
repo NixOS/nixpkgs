@@ -9848,6 +9848,11 @@
     githubId = 1918771;
     name = "Joe Doyle";
   };
+  jpds = {
+    github = "jpds";
+    githubId = 29158971;
+    name = "Jonathan Davies";
+  };
   jpentland = {
     email = "joe.pentland@gmail.com";
     github = "jpentland";
@@ -10617,6 +10622,11 @@
     email = "kkharji@protonmail.com";
     github = "kkharji";
     githubId = 65782666;
+  };
+  kkoniuszy = {
+    name = "Kacper Koniuszy";
+    github = "kkoniuszy";
+    githubId = 120419423;
   };
   klden = {
     name = "Kenzyme Le";
