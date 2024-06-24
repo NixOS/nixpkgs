@@ -14,6 +14,7 @@
 , taglib
 , ffmpeg
 , ffmpegthumbnailer
+, pcre
 , dbus
 }:
 
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     taglib
     ffmpeg
     ffmpegthumbnailer
+    pcre
   ];
 
   patches = [
