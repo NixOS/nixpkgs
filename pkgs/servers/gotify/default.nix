@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "gotify-server";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "gotify";
     repo = "server";
     rev = "v${version}";
-    hash = "sha256-TZeQcrJCH9TW039r499fxY4xJ27nZm9GdrilsI33Iqc=";
+    hash = "sha256-Na/bxETIgVm1mxMOXWTgYIFFuB6XG1jGvbW6q/n5LRw=";
   };
 
   # With `allowGoReference = true;`, `buildGoModule` adds the `-trimpath`
@@ -24,7 +24,7 @@ buildGoModule rec {
   #   server[780]: stat /var/lib/private/ui/build/index.html: no such file or directory
   allowGoReference = true;
 
-  vendorHash = "sha256-TR6YGNhSMQ/1kvX3p3QGlXovuoJdaRH0LOwIPZwQ/xY=";
+  vendorHash = "sha256-Vnk/c2dzxIXDChobFSP++9uyiFD+SKyxJC9ZwaQ2pVw=";
 
   doCheck = false;
 
