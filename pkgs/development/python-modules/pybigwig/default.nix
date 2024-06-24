@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pybigwig";
-  version = "0.3.22";
+  version = "0.3.23";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "deeptools";
     repo = "pyBigWig";
     rev = "refs/tags/${version}";
-    hash = "sha256-wJC5eXIC9PNlbCtmq671WuoIJVkh3aX7K6WArJWjyFg=";
+    hash = "sha256-ch9nZrQAnzFQQ62/NF4J51pV4DQAbVq4/f/6LaXf5hM=";
   };
 
   buildInputs = [ zlib ];
