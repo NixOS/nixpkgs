@@ -8,7 +8,6 @@
 , gtk3
 , nemo
 , python3
-, substituteAll
 }:
 
 let
@@ -25,11 +24,8 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/78327
     ./load-extensions-from-env.patch
 
-    # Required for pygobject_init ().
-    (substituteAll {
-      src = ./python-path.patch;
-      env = "${python3.pkgs.pygobject3}/${python3.sitePackages}";
-    })
+    # Pick up all passthru.nemoPythonExtensionDeps via nemo-with-extensions wrapper
+    ./python-path.patch
   ];
 
   nativeBuildInputs = [
@@ -53,6 +49,8 @@ stdenv.mkDerivation rec {
   '';
 
   PKG_CONFIG_LIBNEMO_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/${nemo.extensiondir}";
+
+  passthru.nemoPythonExtensionDeps = [ python3.pkgs.pygobject3 ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo-extensions/tree/master/nemo-python";

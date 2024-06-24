@@ -41,12 +41,9 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = ''
-    # For Gdk.cairo_surface_create_from_pixbuf()
-    # TypeError: Couldn't find foreign struct converter for 'cairo.Surface'
-    buildPythonPath ${python3.pkgs.pycairo}
-    patchPythonScript $out/share/nemo-python/extensions/nemo-folder-color-switcher.py
-  '';
+  # For Gdk.cairo_surface_create_from_pixbuf()
+  # TypeError: Couldn't find foreign struct converter for 'cairo.Surface'
+  passthru.nemoPythonExtensionDeps = [ python3.pkgs.pycairo ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/folder-color-switcher";
