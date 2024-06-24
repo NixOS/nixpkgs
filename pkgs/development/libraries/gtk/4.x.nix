@@ -279,9 +279,13 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
     pkgConfigModules = [
       "gtk4"
+    ] ++ lib.optionals broadwaySupport [
       "gtk4-broadway"
+    ] ++ lib.optionals stdenv.hostPlatform.isUnix [
       "gtk4-unix-print"
+    ] ++ lib.optionals waylandSupport [
       "gtk4-wayland"
+    ] ++ lib.optionals x11Support [
       "gtk4-x11"
     ];
   };
