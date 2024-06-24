@@ -1,13 +1,18 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, gnused
 , nixosTests
 , caddy
 , testers
 , installShellFiles
 , stdenv
+, externalPlugins ? [ ]
+, vendorHash ? "sha256-1Api8bBZJ1/oYk4ZGIiwWCSraLzK9L+hsKXkFtk6iVM="
 }:
 let
+  attrsToModules = map (plugin: plugin.repo);
+  attrsToSources = map ({ repo, version, ... }: lib.escapeShellArg "${repo}@${version}");
   version = "2.8.4";
   dist = fetchFromGitHub {
     owner = "caddyserver";
@@ -27,7 +32,7 @@ buildGoModule {
     hash = "sha256-CBfyqtWp3gYsYwaIxbfXO3AYaBiM7LutLC7uZgYXfkQ=";
   };
 
-  vendorHash = "sha256-1Api8bBZJ1/oYk4ZGIiwWCSraLzK9L+hsKXkFtk6iVM=";
+  inherit vendorHash;
 
   subPackages = [ "cmd/caddy" ];
 
@@ -39,7 +44,34 @@ buildGoModule {
   # matches upstream since v2.8.0
   tags = [ "nobadger" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ gnused installShellFiles ];
+
+  modBuildPhase = ''
+    for module in ${toString (attrsToModules externalPlugins)}; do
+      sed -i "/standard/a _ \"$module\"" ./cmd/caddy/main.go
+    done
+    for plugin in ${toString (attrsToSources externalPlugins)}; do
+      go get $plugin
+    done
+
+    go generate
+    go mod vendor
+  '';
+
+  modInstallPhase = ''
+    mv -t vendor go.mod go.sum
+    cp -r vendor "$out"
+  '';
+
+  preBuild = ''
+    chmod -R u+w vendor
+    [ -f vendor/go.mod ] && mv -t . vendor/go.{mod,sum}
+    go generate
+
+    for module in ${toString (attrsToModules externalPlugins)}; do
+      sed -i "/standard/a _ \"$module\"" ./cmd/caddy/main.go
+    done
+  '';
 
   postInstall = ''
     install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
