@@ -4342,6 +4342,12 @@
     githubId = 24708079;
     name = "Dan Eads";
   };
+  danielalvsaaker = {
+    email = "daniel.alvsaaker@proton.me";
+    github = "danielalvsaaker";
+    githubId = 30574112;
+    name = "Daniel Alvsåker";
+  };
   danielbarter = {
     email = "danielbarter@gmail.com";
     github = "danielbarter";
