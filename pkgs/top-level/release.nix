@@ -29,14 +29,6 @@
 , nixpkgsArgs ? { config = {
     allowUnfree = false;
     inHydra = true;
-    permittedInsecurePackages = [
-      # *Exceptionally*, those packages will be cached with their *secure* dependents
-      # because they will reach EOL in the middle of the 23.05 release
-      # and it will be too much painful for our users to recompile them
-      # for no real reason.
-      # Remove them for 23.11.
-      "openssl-1.1.1w"
-    ];
   }; }
 
   # This flag, if set to true, will inhibit the use of `mapTestOn`
