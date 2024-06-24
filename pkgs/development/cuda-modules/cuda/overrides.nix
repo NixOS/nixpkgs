@@ -157,8 +157,8 @@ filterAndCreateOverrides {
       cudaAtLeast,
       gmp,
       lib,
-      ncurses6,
-      python311,
+      ncurses,
+      python3,
       libxcrypt,
     }:
     prevAttrs: {
@@ -171,8 +171,8 @@ filterAndCreateOverrides {
         prevAttrs.buildInputs
         ++ lib.optionals (cudaAtLeast "12.5") (
           map lib.getLib [
-            ncurses6
-            python311
+            ncurses
+            python3
             libxcrypt
           ]
         );
