@@ -5,6 +5,7 @@
   dpkg,
   makeWrapper,
   alsa-lib,
+  brotli,
   cups,
   curl,
   dbus,
@@ -14,31 +15,40 @@
   glib,
   gst_all_1,
   harfbuzz,
+  lcms,
   libcap,
+  libevent,
   libGL,
   libGLU,
+  libkrb5,
+  libopus,
   libpulseaudio,
   libxkbcommon,
+  libxkbfile,
   libxml2,
   libxslt,
+  libwebp,
+  mesa,
   nspr,
   nss,
-  openssl_1_1,
+  openssl,
+  snappy,
   systemd,
   wayland,
   xorg,
   zlib,
+  zstd,
   ...
 }:
 
 stdenv.mkDerivation {
   pname = "viber";
-  version = "16.1.0.37";
+  version = "21.8.0.11";
 
   src = fetchurl {
     # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
-    url = "https://web.archive.org/web/20211119123858/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "sha256-hOz+EQc2OOlLTPa2kOefPJMUyWvSvrgqgPgBKjWE3p8=";
+    url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    hash = "sha256-RrObmN21QOm5nk0R2avgCH0ulrfiUIo2PnyYWvQaGVw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -48,6 +58,7 @@ stdenv.mkDerivation {
 
   libPath = lib.makeLibraryPath [
     alsa-lib
+    brotli
     cups
     curl
     dbus
@@ -58,20 +69,29 @@ stdenv.mkDerivation {
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     harfbuzz
+    lcms
     libcap
+    libevent
     libGLU
     libGL
+    libkrb5
+    libopus
     libpulseaudio
     libxkbcommon
+    libxkbfile
     libxml2
     libxslt
+    libwebp
+    mesa
     nspr
     nss
-    openssl_1_1
+    openssl
+    snappy
     stdenv.cc.cc
     systemd
     wayland
     zlib
+    zstd
 
     xorg.libICE
     xorg.libSM
