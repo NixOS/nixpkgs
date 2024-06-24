@@ -31972,11 +31972,9 @@ with pkgs;
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
-  klee = callPackage ../applications/science/logic/klee (with llvmPackages_13; {
-    clang = clang;
-    llvm = llvm;
-    stdenv = stdenv;
-  });
+  klee = callPackage ../applications/science/logic/klee {
+    llvmPackages = llvmPackages_13;
+  };
 
   kmetronome = qt6Packages.callPackage ../applications/audio/kmetronome { };
 
