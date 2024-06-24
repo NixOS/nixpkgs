@@ -4,14 +4,14 @@
   pname,
   version,
   meta,
-  makeWrapper
+  makeWrapper,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname version meta;
 
   src = fetchurl {
     url = "https://github.com/PCSX2/pcsx2/releases/download/v${version}/pcsx2-v${version}-macos-Qt.tar.xz";
-    hash = "sha256-QdYV63lrAwYSDhUOy4nB8qL5LfZkrg/EYHtY2smtZuk=";
+    hash = "sha256-NYgHsYXoIhI2pxqqiMgz5sKBAezEFf4AfEfu5S3diMg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
