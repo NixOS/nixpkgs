@@ -4,7 +4,7 @@
 , nix-update-script
 }:
 let
-  version = "0.0.3";
+  version = "0.0.4";
 in
 buildGoModule {
   inherit version;
@@ -14,7 +14,7 @@ buildGoModule {
     owner = "kubernetes-sigs";
     repo = "kubectl-validate";
     rev = "v${version}";
-    hash = "sha256-k2+2QIPjNw6C/Do1WhPN39VZhZX4PZ6ZsKDKGJ9E5QA=";
+    hash = "sha256-0r3ffrZSRtSe5CgvocRhoJz0zqUsx9vtABP2h1o9vCw=";
   };
 
   vendorHash = null;
@@ -24,6 +24,9 @@ buildGoModule {
   preBuild = ''
     mv cmd/download-builtin-schemas/main.go cmd/download-builtin-schemas/_main.go
     mv pkg/openapiclient/github_builtins_test.go pkg/openapiclient/_github_builtins_test.go
+
+    # https://github.com/kubernetes-sigs/kubectl-validate/issues/134
+    mv pkg/openapiclient/hardcoded_builtins_test.go pkg/openapiclient/_hardcoded_builtins_test.go
   '';
 
   passthru.updateScript = nix-update-script { };
