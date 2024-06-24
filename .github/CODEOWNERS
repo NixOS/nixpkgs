@@ -288,9 +288,9 @@ nixos/modules/services/networking/networkmanager.nix @Janik-Haag
 /pkgs/applications/blockchains  @mmahut @RaghavSood
 
 # Go
-/doc/languages-frameworks/go.section.md @kalbasit @Mic92 @zowoq
-/pkgs/build-support/go @kalbasit @Mic92 @zowoq
-/pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
+/doc/languages-frameworks/go.section.md @kalbasit @katexochen @Mic92 @zowoq
+/pkgs/build-support/go @kalbasit @katexochen @Mic92 @zowoq
+/pkgs/development/compilers/go @kalbasit @katexochen @Mic92 @zowoq
 
 # GNOME
 /pkgs/desktops/gnome                              @jtojnar
