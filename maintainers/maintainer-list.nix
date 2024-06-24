@@ -15230,6 +15230,12 @@
     githubId = 79252025;
     name = "Nicolas Benes";
   };
+  paparodeo = {
+    github = "paparodeo";
+    githubId = 170618376;
+    matrix = "@paparodeo:matrix.org";
+    name = "Reno Dakota";
+  };
   paperdigits = {
     email = "mica@silentumbrella.com";
     github = "paperdigits";
