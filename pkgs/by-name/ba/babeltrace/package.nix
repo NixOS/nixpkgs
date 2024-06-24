@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://git.efficios.com/babeltrace.git";
     rev-prefix = "v";
     # Versions 2.x are packaged independently as babeltrace2
-    ignoredVersions = "^[^1]";
+    allowedVersions = "^1\\.";
   };
 
   meta = {
