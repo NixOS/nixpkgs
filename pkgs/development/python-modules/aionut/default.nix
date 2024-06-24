@@ -27,7 +27,7 @@ buildPythonPackage rec {
       --replace-fail " --cov=aionut --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     pytest-asyncio
