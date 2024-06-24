@@ -1,12 +1,15 @@
 {
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  copyDesktopItems,
-  python3,
-  xdg-utils,
-  electron,
-  makeDesktopItem,
+  lib
+  , buildNpmPackage
+  , fetchFromGitHub
+  , copyDesktopItems
+  , python3
+  , xdg-utils
+  , electron
+  , makeDesktopItem
+
+  # command line arguments which are always set e.g "--no-proxy-server"
+  , commandLineArgs ? ""
 }:
 
 buildNpmPackage rec {
@@ -56,7 +59,8 @@ buildNpmPackage rec {
       makeWrapper '${lib.getExe electron}' $out/bin/webcord \
         --suffix PATH : "${binPath}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-        --add-flags $out/lib/node_modules/webcord/
+        --add-flags $out/lib/node_modules/webcord/ \
+        --add-flags ${lib.escapeShellArg commandLineArgs}
 
       runHook postInstall
     '';
