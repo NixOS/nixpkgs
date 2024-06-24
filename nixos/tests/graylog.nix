@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   nodes.machine = { pkgs, ... }: {
     virtualisation.memorySize = 4096;
-    virtualisation.diskSize = 4096;
+    virtualisation.diskSize = 1024 * 6;
 
     services.mongodb.enable = true;
     services.elasticsearch.enable = true;
