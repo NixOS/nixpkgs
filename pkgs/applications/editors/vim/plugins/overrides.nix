@@ -449,6 +449,8 @@
 
       doInstallCheck = true;
       nvimRequireCheck = "codesnap";
+
+      meta.homepage = "https://github.com/mistricky/codesnap.nvim/";
     };
 
   command-t = super.command-t.overrideAttrs {
