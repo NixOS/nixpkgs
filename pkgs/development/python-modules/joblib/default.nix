@@ -33,6 +33,11 @@ buildPythonPackage rec {
     hash = "sha256-/II5E97u7UkfQ87DU+TWQ2IdsmQf24QRCfgSwUtgSBI=";
   };
 
+  patches = [
+    # Ignore phys core information in sandbox env, and consider NIX_BUILD_CORES
+    ./nix_build_env.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
