@@ -2503,7 +2503,6 @@ broken-packages:
   - heterogeneous-list-literals # failure in job https://hydra.nixos.org/build/233212297 at 2023-09-02
   - hetris # failure in job https://hydra.nixos.org/build/233256814 at 2023-09-02
   - heukarya # failure in job https://hydra.nixos.org/build/233247440 at 2023-09-02
-  - hevm # failure in job https://hydra.nixos.org/build/254311642 at 2024-03-31
   - HExcel # failure in job https://hydra.nixos.org/build/233211971 at 2023-09-02
   - hexchat # failure in job https://hydra.nixos.org/build/233234161 at 2023-09-02
   - hexif # failure in job https://hydra.nixos.org/build/233245470 at 2023-09-02
