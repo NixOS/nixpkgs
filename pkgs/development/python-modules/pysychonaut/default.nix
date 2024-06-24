@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Unofficial python api for Erowid, PsychonautWiki and AskTheCaterpillar";
     homepage = "https://github.com/OpenJarbas/PySychonaut";
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     license = licenses.asl20;
   };
 }

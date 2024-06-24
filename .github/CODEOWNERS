@@ -313,10 +313,10 @@ nixos/modules/services/misc/forgejo.nix @adamcstephens @bendlas @emilylange
 pkgs/by-name/fo/forgejo/package.nix     @adamcstephens @bendlas @emilylange
 
 # Dotnet
-/pkgs/build-support/dotnet                  @IvarWithoutBones
-/pkgs/development/compilers/dotnet          @IvarWithoutBones
-/pkgs/test/dotnet                           @IvarWithoutBones
-/doc/languages-frameworks/dotnet.section.md @IvarWithoutBones
+/pkgs/build-support/dotnet
+/pkgs/development/compilers/dotnet
+/pkgs/test/dotnet
+/doc/languages-frameworks/dotnet.section.md
 
 # Node.js
 /pkgs/build-support/node/build-npm-package      @lilyinstarlight @winterqt

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     mainProgram = "fabric-installer";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }
