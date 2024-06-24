@@ -58,16 +58,4 @@ in
     version = "60.2";
     hash = "sha256-8HPqjzW5JtcLsz5ld1CKpkKosxaoA/Eb4grzhIEdtBg=";
   };
-  icu58 = make-icu {
-    version = "58.2";
-    hash = "sha256-KwpEEBU6myDeDiDH2LZgSacq7yRLU2g9DXUhNxaD2gw=";
-    patches = [
-      (fetchurl {
-        url = "http://bugs.icu-project.org/trac/changeset/39484?format=diff";
-        name = "icu-changeset-39484.diff";
-        sha256 = "0hxhpgydalyxacaaxlmaddc1sjwh65rsnpmg0j414mnblq74vmm8";
-      })
-    ];
-    patchFlags = [ "-p4" ];
-  };
 }
