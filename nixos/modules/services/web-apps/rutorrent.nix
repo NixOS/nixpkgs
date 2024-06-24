@@ -64,7 +64,7 @@ in {
       plugins = mkOption {
         type = with types; listOf (either str package);
         default = [ "httprpc" ];
-        example = literalExample ''[ "httprpc" "data" "diskspace" "edit" "erasedata" "theme" "trafic" ]'';
+        example = literalExpression ''[ "httprpc" "data" "diskspace" "edit" "erasedata" "theme" "trafic" ]'';
         description = ''
           List of plugins to enable. See the list of <link xlink:href="https://github.com/Novik/ruTorrent/wiki/Plugins#currently-there-are-the-following-plugins">available plugins</link>. Note: the <literal>unpack</literal> plugin needs the nonfree <literal>unrar</literal> package.
           You need to either enable one of the <literal>rpc</literal> or <literal>httprpc</literal> plugin or enable the <xref linkend="opt-services.rutorrent.nginx.exposeInsecureRPC2mount"/> option.
