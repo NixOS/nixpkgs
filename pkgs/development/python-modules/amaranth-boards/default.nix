@@ -18,7 +18,9 @@ buildPythonPackage rec {
     owner = "amaranth-lang";
     repo = "amaranth-boards";
     rev = "170675812b71ee722bcf8ccdb88409a9ad97ffe2";
-    hash = "sha256-dwZCKMJnEY9RjzkcJ9r3TEC7W+Wfi/P7Hjl4/d60/qo=";
+    # these files change depending on git branch status
+    postFetch = "rm -f $out/.git_archival.txt $out/.gitattributes";
+    hash = "sha256-qaRPVSBaIpxwYSGoeLv9ii9OUyM6qhZsY6Azy2UrVRQ=";
   };
 
   nativeBuildInputs = [
