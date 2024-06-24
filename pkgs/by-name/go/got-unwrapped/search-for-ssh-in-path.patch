@@ -1,0 +1,13 @@
+--- a/lib/dial.c	1970-01-01 00:00:01.000000000 +0000
++++ b/lib/dial.c	1970-01-01 00:00:01.000000000 +0000
+@@ -316,8 +316,8 @@
+ 			err(1, "dup2");
+ 		if (strlcpy(cmd, command, sizeof(cmd)) >= sizeof(cmd))
+ 			err(1, "snprintf");
+-		if (execv(GOT_DIAL_PATH_SSH, (char *const *)argv) == -1)
+-			err(1, "execv %s", GOT_DIAL_PATH_SSH);
++		if (execvp(GOT_DIAL_PATH_SSH, (char *const *)argv) == -1)
++			err(1, "execvp %s", GOT_DIAL_PATH_SSH);
+ 		abort(); /* not reached */
+ 	} else {
+ 		if (close(pfd[0]) == -1)
