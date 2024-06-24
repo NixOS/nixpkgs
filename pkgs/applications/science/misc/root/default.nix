@@ -166,7 +166,6 @@ stdenv.mkDerivation rec {
     "-Dmysql=OFF"
     "-Dpgsql=OFF"
     "-Dsqlite=OFF"
-    "-Dtmva-pymva=OFF"
     "-Dvdt=OFF"
   ]
   ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
