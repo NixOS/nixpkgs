@@ -74,6 +74,10 @@ rustPlatform.buildRustPackage {
   };
 
   postInstall = ''
+    mkdir -p $out/etc/stalwart
+    cp resources/config/spamfilter.toml $out/etc/stalwart/spamfilter.toml
+    cp -r resources/config/spamfilter $out/etc/stalwart/
+
     mkdir -p $out/lib/systemd/system
 
     substitute resources/systemd/stalwart-mail.service $out/lib/systemd/system/stalwart-mail.service \
