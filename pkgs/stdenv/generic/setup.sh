@@ -1622,7 +1622,7 @@ runPhase() {
     if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then return; fi
     if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then return; fi
 
-    nixLog "@nix { \"action\": \"setPhase\", \"phase\": \"$currPhase\" }"
+    nixLog "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }"
 
     showPhaseHeader "$curPhase"
     dumpVars
