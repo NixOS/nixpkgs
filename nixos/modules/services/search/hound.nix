@@ -2,9 +2,11 @@
 with lib;
 let
   cfg = config.services.hound;
+  settingsFormat = pkgs.formats.json { };
 in {
   imports = [
     (lib.mkRemovedOptionModule [ "services" "hound" "extraGroups" ] "Use users.users.hound.extraGroups instead")
+    (lib.mkChangedOptionModule [ "services" "hound" "config" ] [ "services" "hound" "settings" ] (config: builtins.fromJSON config.services.hound.config))
   ];
 
   meta.maintainers = with maintainers; [ SuperSandro2000 ];
@@ -40,21 +42,21 @@ in {
         '';
       };
 
-      config = mkOption {
-        type = types.str;
-        description = ''
-          The full configuration of the Hound daemon. Note the dbpath
-          should be an absolute path to a writable location on disk.
-        '';
+      settings = mkOption {
+        type = settingsFormat.type;
         example = literalExpression ''
           {
-            "max-concurrent-indexers" : 2,
-            "repos" : {
-                "nixpkgs": {
-                  "url" : "https://www.github.com/NixOS/nixpkgs.git"
-                }
-            }
+            max-concurrent-indexers = 2;
+            repos.nixpkgs.url = "https://www.github.com/NixOS/nixpkgs.git";
           }
+        '';
+        description = ''
+          The full configuration of the Hound daemon.
+          See the upstream documentation <https://github.com/hound-search/hound/blob/main/docs/config-options.md> for details.
+
+          :::{.note}
+          The `dbpath` should be an absolute path to a writable directory.
+          :::.com/hound-search/hound/blob/main/docs/config-options.md>.
         '';
       };
 
@@ -83,16 +85,15 @@ in {
       };
     };
 
-    systemd.services.hound = let
-      configFile = pkgs.writeTextFile {
-        name = "hound.json";
-        text = cfg.config;
-        checkPhase = ''
-          # check if the supplied text is valid json
-          ${lib.getExe pkgs.jq} . $target > /dev/null
-        '';
-      };
-    in {
+    environment.etc."hound/config.json".source = pkgs.writeTextFile {
+      name = "hound-config";
+      text = builtins.toJSON cfg.settings;
+      checkPhase = ''
+        ${cfg.package}/bin/houndd -check-conf -conf $out
+      '';
+    };
+
+    systemd.services.hound = {
       description = "Hound Code Search";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -101,7 +102,7 @@ in {
         Group = cfg.group;
         WorkingDirectory = cfg.home;
         ExecStartPre = "${pkgs.git}/bin/git config --global --replace-all http.sslCAinfo /etc/ssl/certs/ca-certificates.crt";
-        ExecStart = "${cfg.package}/bin/houndd -addr ${cfg.listen} -conf ${configFile}";
+        ExecStart = "${cfg.package}/bin/houndd -addr ${cfg.listen} -conf /etc/hound/config.json";
       };
     };
   };
