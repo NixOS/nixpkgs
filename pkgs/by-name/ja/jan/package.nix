@@ -29,7 +29,7 @@ appimageTools.wrapType2 {
     homepage = "https://github.com/janhq/jan";
     license = lib.licenses.agpl3Plus;
     mainProgram = "jan";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 }
