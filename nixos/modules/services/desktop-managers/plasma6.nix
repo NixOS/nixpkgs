@@ -263,9 +263,12 @@ in {
         enable = true;
         package = kdePackages.kwallet-pam;
       };
-      kde.kwallet = {
-        enable = true;
-        package = kdePackages.kwallet-pam;
+      kde = {
+        allowNullPassword = true;
+        kwallet = {
+          enable = true;
+          package = kdePackages.kwallet-pam;
+        };
       };
       kde-fingerprint = lib.mkIf config.services.fprintd.enable { fprintAuth = true; };
       kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };

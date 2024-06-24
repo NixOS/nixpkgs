@@ -421,8 +421,6 @@ with pkgs;
 
   catppuccin-catwalk = callPackage ../development/tools/misc/catppuccin-catwalk { };
 
-  catppuccin-gtk = callPackage ../data/themes/catppuccin-gtk { };
-
   catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
 
   catppuccin-kvantum = callPackage ../data/themes/catppuccin-kvantum { };
@@ -5509,8 +5507,6 @@ with pkgs;
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
     cairo = cairo.override { xcbSupport = true; };  };
 
-  hyprland = callPackage ../applications/window-managers/hyprwm/hyprland { };
-
   hyprland-autoname-workspaces = callPackage ../applications/misc/hyprland-autoname-workspaces { };
 
   hyprland-per-window-layout = callPackage ../tools/wayland/hyprland-per-window-layout { };
@@ -5525,7 +5521,7 @@ with pkgs;
 
   hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
 
-  hyprlandPlugins = recurseIntoAttrs (callPackage ../applications/window-managers/hyprwm/hyprland/plugins.nix { });
+  hyprlandPlugins = recurseIntoAttrs (callPackage ../applications/window-managers/hyprwm/hyprland-plugins { });
 
   hysteria = callPackage ../tools/networking/hysteria { };
 
