@@ -1,9 +1,9 @@
 {
   "bookmarks": {
-    "sha256": "01m78jfnqgvqj94v13bi6rj52sgwrp18zs4svgbdrci3lc7xqyp2",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.1.2/bookmarks-14.1.2.tar.gz",
-    "version": "14.1.2",
-    "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
+    "sha256": "1vpha2lxq199ckssnw7fc23dnk4pn1r0ipdwdqv102adpiqrfiy1",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v14.2.2/bookmarks-14.2.2.tar.gz",
+    "version": "14.2.2",
+    "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- ☠ Find broken links and duplicates\n- 📲 Synchronize with all your browsers and devices\n- 📔 Store archived versions of your links in case they are depublished\n- 🔍 Full-text search on site contents\n- 👪 Share bookmarks with other users and via public links\n- ⚛ Generate RSS feeds of your collections\n- 📈 Stats on how often you access which links\n- 🔒 Automatic backups of your bookmarks collection\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
       "agpl"
@@ -90,9 +90,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "06lbv04byc08zqfws2hbxqdg05d25sfps80y21xahzcrv74z4ngl",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.6/groupfolders-v16.0.6.tar.gz",
-    "version": "16.0.6",
+    "sha256": "17lhmj4ndxp7h0fxmxk3f3dwhs44mplxpyfb6nb5ia2dm8i858w1",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v16.0.7/groupfolders-v16.0.7.tar.gz",
+    "version": "16.0.7",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -119,6 +119,16 @@
       "agpl"
     ]
   },
+  "integration_paperless": {
+    "sha256": "08rgdlinxpcwyq0f97ibv022qhj8smk94dvlf927xq46220w9pfx",
+    "url": "https://github.com/nextcloud-releases/integration_paperless/releases/download/v1.0.3/integration_paperless-v1.0.3.tar.gz",
+    "version": "1.0.3",
+    "description": "Integration with the [Paperless](https://docs.paperless-ngx.com) Document Management System.\nIt adds a file action menu item that can be used to upload a file from your Nextcloud Files to Paperless.",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "mail": {
     "sha256": "1q0ihgrb6sk0rizs45clqhjpmai2m2zislw6s1694j1zssz4jpqg",
     "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.1/mail-v3.7.1.tar.gz",
@@ -130,8 +140,8 @@
     ]
   },
   "maps": {
-    "sha256": "1gqms3rrdpjmpb1h5d72b4lwbvsl8p10zwnkhgnsmvfcf93h3r1c",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0/maps-1.4.0.tar.gz",
+    "sha256": "18gln06hgljgnr90ki95nl7b8986ivf3cymr6hajilszlr77hk22",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0-1-nightly/maps-1.4.0-1-nightly.tar.gz",
     "version": "1.4.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -200,9 +210,9 @@
     ]
   },
   "polls": {
-    "sha256": "1crs6fks9ywywyi3pnji49dxnry5vpcmd1x29y8anyp32ji2a35r",
-    "url": "https://github.com/nextcloud/polls/releases/download/v7.0.3/polls.tar.gz",
-    "version": "7.0.3",
+    "sha256": "1hcirwsi68n3j3haw31svkxv6qyj3jbj5frfzspp8x8vnfclrask",
+    "url": "https://github.com/nextcloud/polls/releases/download/v7.1.1/polls.tar.gz",
+    "version": "7.1.1",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
