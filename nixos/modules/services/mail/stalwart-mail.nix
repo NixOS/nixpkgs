@@ -60,6 +60,9 @@ in {
       resolver.public-suffix = lib.mkDefault [
         "file://${pkgs.publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
       ];
+      config.resource = {
+        spam-filter = lib.mkDefault "file://${cfg.package}/etc/stalwart/spamfilter.toml";
+      };
     };
 
     # This service stores a potentially large amount of data.

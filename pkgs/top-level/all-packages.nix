@@ -26549,8 +26549,6 @@ with pkgs;
 
   virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
 
-  vmagent = callPackage ../servers/monitoring/vmagent { };
-
   vsftpd = callPackage ../servers/ftp/vsftpd { };
 
   wallabag = callPackage ../servers/web-apps/wallabag { };
@@ -31992,11 +31990,9 @@ with pkgs;
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
-  klee = callPackage ../applications/science/logic/klee (with llvmPackages_13; {
-    clang = clang;
-    llvm = llvm;
-    stdenv = stdenv;
-  });
+  klee = callPackage ../applications/science/logic/klee {
+    llvmPackages = llvmPackages_13;
+  };
 
   kmetronome = qt6Packages.callPackage ../applications/audio/kmetronome { };
 
