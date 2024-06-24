@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
   pythonAtLeast,
   stdenv,
 
@@ -22,18 +22,20 @@
 buildPythonPackage rec {
   pname = "joblib";
   version = "1.4.2";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-I4LFgWsmNvvSCgng9Ona1HNnZf37fcpYKUO5wTZrPw4=";
+  src = fetchFromGitHub {
+    owner = "joblib";
+    repo = "joblib";
+    rev = version;
+    hash = "sha256-/II5E97u7UkfQ87DU+TWQ2IdsmQf24QRCfgSwUtgSBI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     lz4
     psutil
   ];
@@ -65,6 +67,6 @@ buildPythonPackage rec {
     description = "Lightweight pipelining: using Python functions as pipeline jobs";
     homepage = "https://joblib.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dsuetin ];
   };
 }
