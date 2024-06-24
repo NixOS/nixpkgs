@@ -17,7 +17,6 @@ buildGoModule rec {
   sourceRoot = "${src.name}/cmd/builder";
   vendorHash = "sha256-MTwD9xkrq3EudppLSoONgcPCBWlbSmaODLH9NtYgVOk=";
 
-  GOFLAGS = [ "-trimpath" ];
   CGO_ENABLED = 0;
   ldflags = [
     "-s"
