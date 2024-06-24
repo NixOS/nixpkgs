@@ -125,6 +125,24 @@ in
 {
   # Different version of hadoop support different java runtime versions
   # https://cwiki.apache.org/confluence/display/HADOOP/Hadoop+Java+Versions
+  hadoop_3_4 = common rec {
+    pname = "hadoop";
+    platformAttrs = rec {
+      x86_64-linux = {
+        version = "3.4.0";
+        hash = "sha256-4xGnhIBBQDD57GNUml1oXmnibyBxA9mr8hpIud0DyGw=";
+        srcHash = "sha256-viDF3LdRCZHqFycOYfN7nUQBPHiMCIjmu7jgIAaaK9E=";
+      };
+      x86_64-darwin = x86_64-linux;
+      aarch64-linux = x86_64-linux // {
+        hash = "sha256-QWxzKtNyw/AzcHMv0v7kj91pw1HO7VAN9MHO84caFk8=";
+      };
+      aarch64-darwin = aarch64-linux;
+    };
+    jdk = jdk11_headless;
+    # TODO: Package and add Intel Storage Acceleration Library
+    tests = nixosTests.hadoop;
+  };
   hadoop_3_3 = common rec {
     pname = "hadoop";
     platformAttrs = rec {
@@ -141,17 +159,7 @@ in
     };
     jdk = jdk11_headless;
     # TODO: Package and add Intel Storage Acceleration Library
-    tests = nixosTests.hadoop;
-  };
-  hadoop_3_2 = common {
-    pname = "hadoop";
-    platformAttrs.x86_64-linux = {
-      version = "3.2.4";
-      hash = "sha256-qt2gpMr+NHuiVR+/zFRzRyRKG725/ZNBIM69z9J9wNw=";
-      srcHash = "sha256-F9nGD3mZZ1eJf3Ec3AJGE9YBcL/HiagskcdKQhCn/sw=";
-    };
-    jdk = jdk8_headless;
-    tests = nixosTests.hadoop_3_2;
+    tests = nixosTests.hadoop_3_3;
   };
   hadoop2 = common rec {
     pname = "hadoop";
