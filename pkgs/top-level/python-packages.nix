@@ -6943,6 +6943,8 @@ self: super: with self; {
     python3 = python;
   });
 
+  listparser = toPythonModule (callPackage ../development/python-modules/listparser { });
+
   lit = callPackage ../development/python-modules/lit { };
 
   litellm = callPackage ../development/python-modules/litellm { };
