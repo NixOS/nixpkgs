@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
-  buildInputs = [ hackrf rtl-sdr airspy limesuite libiio libbladeRF ]
+  buildInputs = [ hackrf rtl-sdr airspy limesuite libiio libbladeRF qt5.qtwayland ]
     ++ lib.optional USRPSupport uhd;
 
   propagatedBuildInputs = with python3Packages; [
