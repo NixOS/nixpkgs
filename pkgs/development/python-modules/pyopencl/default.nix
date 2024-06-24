@@ -1,8 +1,17 @@
 {
   lib,
   stdenv,
-  fetchPypi,
+  fetchFromGitHub,
   buildPythonPackage,
+
+  # build-system
+  cmake,
+  scikit-build-core,
+  pathspec,
+  ninja,
+  nanobind,
+
+  # dependencies
   appdirs,
   cffi,
   darwin,
@@ -16,9 +25,7 @@
   pybind11,
   pytestCheckHook,
   pytools,
-  setuptools,
   six,
-  wheel,
 }:
 
 let
@@ -26,19 +33,27 @@ let
 in
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2024.1";
+  version = "2024.2.6";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7NVy7pQK2L2hY5w6e+tog0/JqYrX6z9uAarE99nUusE=";
+  src = fetchFromGitHub {
+    owner = "inducer";
+    repo = "pyopencl";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nP7ZAGeRXrjqDRWlc2SDP1hk1fseGeu9Zx0lOp9Pchs=";
   };
 
   nativeBuildInputs = [
+    cmake
+    nanobind
+    ninja
+    numpy
     oldest-supported-numpy
-    setuptools
-    wheel
+    pathspec
+    scikit-build-core
   ];
+
+  dontUseCmakeConfigure = true;
 
   buildInputs = [
     opencl-headers
@@ -60,6 +75,7 @@ buildPythonPackage rec {
 
   preBuild = ''
     export HOME=$(mktemp -d)
+    rm -rf pyopencl
   '';
 
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory

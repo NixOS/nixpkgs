@@ -1121,7 +1121,7 @@ dependencies = [
  "futures-util",
  "http",
  "hyper",
- "rustls 0.21.10",
+ "rustls 0.21.11",
  "tokio",
  "tokio-rustls 0.24.1",
 ]
@@ -1283,14 +1283,13 @@ dependencies = [
 
 [[package]]
 name = "jsonwebtoken"
-version = "9.2.0"
+version = "8.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c7ea04a7c5c055c175f189b6dc6ba036fd62306b58c66c9f6389036c503a3f4"
+checksum = "6971da4d9c3aa03c3d8f3ff0f4155b534aad021292003895a469716b2a230378"
 dependencies = [
  "base64 0.21.7",
- "js-sys",
  "pem",
- "ring 0.17.8",
+ "ring 0.16.20",
  "serde",
  "serde_json",
  "simple_asn1",
@@ -1880,12 +1879,11 @@ checksum = "19b17cddbe7ec3f8bc800887bab5e717348c95ea2ca0b1bf0837fb964dc67099"
 
 [[package]]
 name = "pem"
-version = "3.0.3"
+version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b8fcc794035347fb64beda2d3b462595dd2753e3f268d89c5aae77e8cf2c310"
+checksum = "a8835c273a76a90455d7344889b0964598e3316e2a79ede8e36f16bdcf2228b8"
 dependencies = [
- "base64 0.21.7",
- "serde",
+ "base64 0.13.1",
 ]
 
 [[package]]
@@ -2124,7 +2122,7 @@ dependencies = [
 
 [[package]]
 name = "qcs"
-version = "0.21.7"
+version = "0.21.10"
 dependencies = [
  "assert2",
  "async-trait",
@@ -2184,9 +2182,9 @@ dependencies = [
 
 [[package]]
 name = "qcs-api-client-common"
-version = "0.7.12"
+version = "0.7.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e96a94ca1f4ac3e094d51d90deb5d158dddfd0723cca1b50d302acfd2e4e78ef"
+checksum = "53c56fa367070074f32143b4adef924af1441faa86e835f45371e14801884d14"
 dependencies = [
  "async-trait",
  "backoff",
@@ -2207,9 +2205,9 @@ dependencies = [
 
 [[package]]
 name = "qcs-api-client-grpc"
-version = "0.7.14"
+version = "0.7.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b82196be0676c8dc24749a830e886ffda6e34b3130c6a7078354c24dec07933a"
+checksum = "01247ae1b0523e058007edb0132cd40915452b8b4dc669d68156e187740ead70"
 dependencies = [
  "backoff",
  "http",
@@ -2240,9 +2238,9 @@ dependencies = [
 
 [[package]]
 name = "qcs-api-client-openapi"
-version = "0.8.13"
+version = "0.8.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0e318c4bffb689688d4f95afb2b5a52a70e12a191da402e0dded093102fcb1e9"
+checksum = "04d7172e79b083a85c911917c03be58eda083b36ea7575db685d21aa2fa99b41"
 dependencies = [
  "anyhow",
  "qcs-api-client-common",
@@ -2260,7 +2258,7 @@ dependencies = [
 
 [[package]]
 name = "qcs-sdk-python"
-version = "0.17.7"
+version = "0.17.10"
 dependencies = [
  "async-trait",
  "numpy",
@@ -2290,8 +2288,8 @@ checksum = "a1d01941d82fa2ab50be1e79e6714289dd7cde78eba4c074bc5a4374f650dfe0"
 
 [[package]]
 name = "quil-rs"
-version = "0.25.1"
-source = "git+https://github.com/rigetti/quil-rs?tag=quil-py/v0.9.1#4179fb03feff6b83edfb7a0448b0b3967ed28212"
+version = "0.26.0"
+source = "git+https://github.com/rigetti/quil-rs?tag=quil-py/v0.10.0#25966563850ed151fad0cdab3f6931bdd90be8f8"
 dependencies = [
  "approx",
  "indexmap 2.2.6",
@@ -2436,7 +2434,7 @@ dependencies = [
  "once_cell",
  "percent-encoding",
  "pin-project-lite",
- "rustls 0.21.10",
+ "rustls 0.21.11",
  "rustls-native-certs 0.6.3",
  "rustls-pemfile 1.0.4",
  "serde",
@@ -2491,14 +2489,15 @@ dependencies = [
 
 [[package]]
 name = "rigetti-pyo3"
-version = "0.3.1"
+version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ff977cba40f2cadf214226cf51c9729a4f5730a5413f901246eed78cb6e795c9"
+checksum = "c59068763670399bb3e895a17cc631d9214c3172b64fc74d3ab63dac7371c340"
 dependencies = [
  "num-complex",
  "num-traits",
  "paste",
  "pyo3",
+ "time",
 ]
 
 [[package]]
@@ -2628,9 +2627,9 @@ dependencies = [
 
 [[package]]
 name = "rustls"
-version = "0.21.10"
+version = "0.21.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f9d5a6813c0759e4609cd494e8e725babae6a2ca7b62a5536a13daaec6fcb7ba"
+checksum = "7fecbfb7b1444f477b345853b1fce097a2c6fb637b2bfb87e6bc5db0f043fae4"
 dependencies = [
  "log",
  "ring 0.17.8",
@@ -2640,9 +2639,9 @@ dependencies = [
 
 [[package]]
 name = "rustls"
-version = "0.22.2"
+version = "0.22.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e87c9956bd9807afa1f77e0f7594af32566e830e088a5576d27c5b6f30f49d41"
+checksum = "bf4ef73721ac7bcd79b2b315da7779d8fc09718c6b3d2d1b2d94850eb8c18432"
 dependencies = [
  "log",
  "ring 0.17.8",
@@ -3290,7 +3289,7 @@ version = "0.24.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c28327cf380ac148141087fbfb9de9d7bd4e84ab5d2c28fbc911d753de8a7081"
 dependencies = [
- "rustls 0.21.10",
+ "rustls 0.21.11",
  "tokio",
 ]
 
@@ -3300,7 +3299,7 @@ version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "775e0c0f0adb3a2f22a00c4745d728b479985fc15ee7ca6a2608388c5569860f"
 dependencies = [
- "rustls 0.22.2",
+ "rustls 0.22.4",
  "rustls-pki-types",
  "tokio",
 ]

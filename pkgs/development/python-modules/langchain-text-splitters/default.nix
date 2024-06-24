@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.2.1";
+  version = "0.2.9";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    rev = "refs/tags/langchain-text-splitters==${version}";
-    hash = "sha256-5le+P+7iGjrTetnTHiJilqtc7G7kJbZnEsUgFyF2aQ8=";
+    rev = "refs/tags/langchain-core==${version}";
+    hash = "sha256-/BUn/NxaE9l3VY6dPshr1JJaHTGzn9NMQhSQ2De65Jg=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";

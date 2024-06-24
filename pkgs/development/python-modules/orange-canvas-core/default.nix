@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "orange-canvas-core";
-  version = "0.1.35";
+  version = "0.2.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xLCwjeNDx9RqxlNkIWMo0Pcrg7akGuu4Rv9oRDgOK18=";
+    hash = "sha256-f0E/7jnzoIrV4V1KSbec0MZB/BLz0UVbBCsc3v4dp0o=";
   };
 
   propagatedBuildInputs = [

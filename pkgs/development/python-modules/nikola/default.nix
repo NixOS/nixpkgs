@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "nikola";
-  version = "8.3.0";
+  version = "8.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Nikola";
     inherit version;
-    hash = "sha256-VYuhiGLMTHcOZM8/bGZT7Xx5BOHo9gsMPjufYglrBL0=";
+    hash = "sha256-IfJB2Rl3c1MyEiuyNpT3udfpM480VvFD8zosJFDHr7k=";
   };
 
   patches = [

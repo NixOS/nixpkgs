@@ -20,7 +20,7 @@
 let
   self = buildPythonPackage rec {
     pname = "jaxtyping";
-    version = "0.2.28";
+    version = "0.2.30";
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ let
       owner = "google";
       repo = "jaxtyping";
       rev = "refs/tags/v${version}";
-      hash = "sha256-xDFrgPecUIfCACg/xkMQ8G1+6hNiUUDg9eCZKNpNfzs=";
+      hash = "sha256-WOMEzOZE6A7hqUcs1bZZAgGSWsdzIzaquQIX/1pN/0M=";
     };
 
     nativeBuildInputs = [

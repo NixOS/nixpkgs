@@ -19,6 +19,7 @@
   protego,
   pydispatcher,
   pyopenssl,
+  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   queuelib,
@@ -47,6 +48,9 @@ buildPythonPackage rec {
     hash = "sha256-EaO1kQ3VSTwEW+r0kSKycOxHNTPwwCVjch1ZBrTU0qQ=";
   };
 
+  pythonRelaxDeps = [
+    "defusedxml"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -78,6 +82,7 @@ buildPythonPackage rec {
     glibcLocales
     jmespath
     pexpect
+    pytest-xdist
     pytestCheckHook
     sybil
     testfixtures

@@ -46,6 +46,9 @@ with python3Packages; buildPythonApplication rec {
   postPatch = ''
     # Disable update checks at runtime
     substituteInPlace platformio/maintenance.py --replace-fail '    check_platformio_upgrade()' ""
+
+    # Remove filterwarnings which fails on new deprecations in Python 3.12 for 3.14
+    rm tox.ini
   '';
 
   nativeBuildInputs = [

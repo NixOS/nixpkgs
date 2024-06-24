@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "borb";
-  version = "2.1.23";
+  version = "2.1.24";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "jorisschellekens";
     repo = "borb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cpih7ijoT4dEdoFjh6qQcnzjWd2zusv4tNgPyrIghvg=";
+    hash = "sha256-3PZ3fHsq9pgJ4oK42Y4b/3ghuYELgRPe09fciOKknuE=";
   };
 
   build-system = [ setuptools ];
