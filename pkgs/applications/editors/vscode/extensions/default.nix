@@ -2533,6 +2533,22 @@ let
 
       jebbs.plantuml = callPackage ./jebbs.plantuml { };
 
+      jeff-hykin.better-nix-syntax = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "jeff-hykin";
+          name = "better-nix-syntax";
+          version = "1.1.5";
+          hash = "sha256-9V+ziWk9V4LyQiVNSC6DniJDun+EvcK30ykPjyNsvp0=";
+        };
+        meta = {
+          description = "Visual Studio Code extension providing Nix Syntax highlighting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jeff-hykin.better-nix-syntax";
+          homepage = "https://github.com/jeff-hykin/better-nix-syntax";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.superherointj ];
+        };
+      };
+
       jellyedwards.gitsweep = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "jellyedwards";
