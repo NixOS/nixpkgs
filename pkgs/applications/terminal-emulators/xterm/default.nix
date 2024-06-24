@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
-  version = "390";
+  version = "392";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
-    hash = "sha256-dRF8PMUXSgnEJe8QbmlATXL17wXgOl2gCq8VeS1vnA8=";
+    hash = "sha256-TVc3LvCOr6n7doLbjQe+D+BRPljoR4wuyOm2JIbn/l4=";
   };
 
   strictDeps = true;
