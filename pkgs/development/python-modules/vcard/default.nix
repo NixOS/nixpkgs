@@ -9,7 +9,7 @@
   pythonOlder,
 }:
 let
-  version = "0.15.4";
+  version = "0.16.1";
 in
 buildPythonPackage {
   inherit version;
@@ -23,7 +23,7 @@ buildPythonPackage {
     owner = "engmark";
     repo = "vcard";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7GNq6PoWZgwhhpxhWOkUEpqckeSfzocex1ZGN9CTJyo=";
+    hash = "sha256-cz1WF8LQsyJwcVKMSWmFb6OB/JWyfc2FgcOT3jJ45Cg=";
   };
 
   propagatedBuildInputs = [ python-dateutil ];
