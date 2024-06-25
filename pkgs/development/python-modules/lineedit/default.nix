@@ -9,6 +9,7 @@
   pyte,
   ptyprocess,
   pexpect,
+  nix-update-script
 }:
 
 buildPythonPackage rec {
@@ -37,6 +38,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "lineedit" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Readline library based on prompt_toolkit which supports multiple modes";
