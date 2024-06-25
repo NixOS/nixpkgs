@@ -13,15 +13,15 @@
 , unstableGitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rakshasa-libtorrent";
-  version = "0.13.8+date=2021-08-07";
+  version = "0.13.8-unstable-2023-03-16";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "libtorrent";
-    rev = "53596afc5fae275b3fb5753a4bb2a1a7f7cf6a51";
-    hash = "sha256-gyl/jfbptHz/gHkkVGWShhv1Z7o9fa9nJIz27U2A6wg=";
+    rev = "91f8cf4b0358d9b4480079ca7798fa7d9aec76b5";
+    hash = "sha256-mEIrMwpWMCAA70Qb/UIOg8XTfg71R/2F4kb3QG38duU=";
   };
 
   nativeBuildInputs = [
