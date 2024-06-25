@@ -28,7 +28,7 @@ in {
         export PATH=${pkgs.kexectools}/bin:${pkgs.cpio}/bin:$PATH
         set -x
         set -e
-        kexec -l ${image}/kernel --initrd=${image}/initrd --append="init=${builtins.unsafeDiscardStringContext config.system.build.toplevel}/init ${toString config.boot.kernelParams}"
+        kexec -l ${image}/kernel --initrd=${image}/initrd --append="init=${builtins.unsafeDiscardStringContext config.system.build.toplevel}/init ${toString config.boot.kernelParams} ''$@"
         kexec -e
         '';
     };
