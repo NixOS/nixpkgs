@@ -10,6 +10,7 @@
 , openssl
 , pkg-config
 , zlib
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
     openssl
     zlib
   ];
+
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   enableParallelBuilding = true;
 
