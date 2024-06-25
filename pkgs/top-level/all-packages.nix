@@ -8532,6 +8532,8 @@ with pkgs;
 
   gql = callPackage ../applications/version-management/gql { };
 
+  grab-site = python312Packages.callPackage ../by-name/gr/grab-site/package.nix { };
+
   grafterm = callPackage ../tools/misc/grafterm { };
 
   gradience = callPackage ../applications/misc/gradience { };
