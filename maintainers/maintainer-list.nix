@@ -10628,6 +10628,12 @@
     github = "kkoniuszy";
     githubId = 120419423;
   };
+  klchen0112 = {
+    name = "klchen0112";
+    email = "klchen0112@gmail.com";
+    github = "klchen0112";
+    githubId = 32459567;
+  };
   klden = {
     name = "Kenzyme Le";
     email = "kl@kenzymele.com";
