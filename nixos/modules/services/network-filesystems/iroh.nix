@@ -94,20 +94,25 @@ in
 
       package = mkPackageOption pkgs "iroh" { };
 
+      # NB: This is READ ONLY because there's no way to configure the listen port; iroh exposes as
+      # few configuration knobs as possible. The default port can be read from this read-only
+      # option, but if a different port is chosen by the service it has to be retrieved another way.
       listenPort = mkOption {
-        description = "Address iroh listens on for connections from other nodes. If the port is taken iroh will choose a random port to listen on. This port is NOT automatically opened in the firewall.";
+        description = "Address iroh listens on for connections from other nodes. If the port is taken iroh will choose a random port to listen on, so it can't be configured. This port is NOT automatically opened in the firewall.";
         type = types.port;
+        readOnly = true;
         default = listenPort;
       };
 
       rpcPort = mkOption {
-        description = "Port for localhost-only Remote Procedure Calls, used to control an iroh node from another process. If the port is taken iroh will fail to start.";
+        description = "Port for localhost-only Remote Procedure Calls, used to control an iroh node from another process. If the port is taken iroh will fail to start. This port is NOT automatically opened in the firewall.";
         type = types.port;
+        readOnly = true;
         default = rpcPort;
       };
 
       metricsPort = mkOption {
-        description = "Port at which metrics data is served. By default it is not enabled. Value must be -1 to disable serving metrics, or a valid port number.";
+        description = "Port at which metrics data is served. By default it is not enabled. Value must be -1 to disable serving metrics, or a valid port number. This port is NOT automatically opened in the firewall.";
         type = types.either ( types.ints.between (-1) (-1) ) types.port;
         default = metricsPort;
       };
@@ -124,17 +129,17 @@ in
         default = null;
       };
 
-      user = mkOption {
-        type = types.str;
-        default = "iroh";
-        description = "User under which the Iroh daemon runs.";
-      };
+      # user = mkOption {
+      #   type = types.str;
+      #   default = "iroh";
+      #   description = "User under which the Iroh daemon runs.";
+      # };
 
-      group = mkOption {
-        type = types.str;
-        default = "iroh";
-        description = "Group under which the Iroh daemon runs.";
-      };
+      # group = mkOption {
+      #   type = types.str;
+      #   default = "iroh";
+      #   description = "Group under which the Iroh daemon runs.";
+      # };
 
       # TODO can we get rid of this when running with a systemd StateDir? Perhaps we only want it as
       # a place to put our generated config file, when that's necessary?
@@ -234,12 +239,16 @@ in
 
     # Define the systemd service.
     systemd.services.iroh = {
-      depends = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      wantedBy = [ "default.target" ];
 
       path = [ "/run/wrappers" pkgs.iroh ];
 
-      #environment.IROH_DATA_DIR = cfg.dataDir;
+      # When StateDirectory is "iroh" a writable directory is created at /var/lib/iroh.
+      environment.IROH_DATA_DIR = "/var/lib/iroh"; #cfg.dataDir;
+
+      # TODO create configuration that causes logs to be written under /var/log/iroh. This feature
+      # is currently pending release in next version of iroh.
 
       # preStart
       # postStop
@@ -256,9 +265,8 @@ in
         StateDirectory = "iroh";
         # /var/log/iroh -> /var/log/private/iroh
         LogsDirectory = "iroh";
-
-        #CacheDirectory = "";
-        #ReadWritePaths = cfg.dataDir;
+        # /var/cache/iroh -> /var/cache/private/iroh
+        #CacheDirectory = "iroh";
       };
 
     };
