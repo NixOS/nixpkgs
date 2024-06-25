@@ -28,7 +28,7 @@ Each supported language or software ecosystem has its own package set named `<la
 
 - List all derivations on the command line with [`nix-env --query`](https://nixos.org/manual/nix/stable/command-ref/nix-env/query).
 
-  `nix-env` is the only convenient way to do that, as it will skip attributes that fail [assertions](https://nixos.org/manual/nix/stable/language/constructs#assertions), such as when a package is [marked as broken](#var-meta-broken).
+  `nix-env` is the only convenient way to do that, as it will skip attributes that fail [assertions](https://nixos.org/manual/nix/stable/language/constructs#assertions), such as when a package is [marked as broken](#var-meta-broken), rather than failing the entire evaluation.
 
   :::{.example #example-list-haskellPackages}
 
