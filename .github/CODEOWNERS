@@ -93,7 +93,6 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /nixos/default.nix                                    @infinisil
 /nixos/lib/from-env.nix                               @infinisil
 /nixos/lib/eval-config.nix                            @infinisil
-/nixos/modules/system                                 @dasJ
 /nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
@@ -137,9 +136,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @raitobezarius @ma27
 /pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @ncfavier
 
 # Perl
-/pkgs/development/interpreters/perl @stigtsp @zakame @dasJ @marcusramberg
-/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @dasJ @marcusramberg
-/pkgs/development/perl-modules      @stigtsp @zakame @dasJ @marcusramberg
+/pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
+/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @marcusramberg
+/pkgs/development/perl-modules      @stigtsp @zakame @marcusramberg
 
 # R
 /pkgs/applications/science/math/R   @jbedo
