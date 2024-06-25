@@ -11,13 +11,7 @@ in {
 
   options = {
     services.hound = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the hound code search daemon.
-        '';
-      };
+      enable = mkEnableOption "hound";
 
       package = mkPackageOption pkgs "hound" { };
 
