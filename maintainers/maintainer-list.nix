@@ -1048,13 +1048,6 @@
     githubId = 169249;
     name = "Alex Brandt";
   };
-  alva = {
-    email = "alva@skogen.is";
-    github = "illfygli";
-    githubId = 42881386;
-    name = "Alva";
-    keys = [ { fingerprint = "B422 CFB1 C9EF 73F7 E1E2 698D F53E 3233 42F7 A6D3A"; } ];
-  };
   alxsimon = {
     email = "alexis.simon@normalesup.org";
     github = "alxsimon";
