@@ -1,15 +1,33 @@
-{ lib, fetchFromGitHub }:
-
-let
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  nix-update-script,
+}:
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "stevenblack-blocklist";
   version = "3.14.82";
-in
-fetchFromGitHub {
-  name = "stevenblack-blocklist-${version}";
 
-  owner = "StevenBlack";
-  repo = "hosts";
-  rev = version;
-  hash = "sha256-FS9+w+9QPBd6hCtX7C5x/xm4nGCA0lOtYgjefkQNbbg=";
+  src = fetchFromGitHub {
+    owner = "StevenBlack";
+    repo = "hosts";
+    rev = finalAttrs.version;
+    hash ="sha256-FS9+w+9QPBd6hCtX7C5x/xm4nGCA0lOtYgjefkQNbbg=";
+  };
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out
+    cp -r hosts alternates $out
+
+    runHook postInstall
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Unified hosts file with base extensions";
@@ -21,4 +39,4 @@ fetchFromGitHub {
       frontear
     ];
   };
-}
+})
