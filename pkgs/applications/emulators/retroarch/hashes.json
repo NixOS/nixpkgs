@@ -550,10 +550,10 @@
         "src": {
             "owner": "libretro",
             "repo": "neocd_libretro",
-            "rev": "c5a266254ffbaa2730d2814195f60e7be153fc86",
-            "hash": "sha256-MJhUYFNrtt2SSLun75OXKrT7nZzLBtyslqG9mziQuRk="
+            "rev": "f87ed9eb4a7bf1243f031044c4e2ae1a7bf7100b",
+            "hash": "sha256-DqXYMno+NGIZrE1Q0y0WYR/jnjjHMfVT6lasLG4ew9A="
         },
-        "version": "unstable-2024-06-16"
+        "version": "unstable-2024-06-22"
     },
     "nestopia": {
         "fetcher": "fetchFromGitHub",
