@@ -560,10 +560,10 @@
         "src": {
             "owner": "libretro",
             "repo": "nestopia",
-            "rev": "b99ede358b2219602443e7f414eabf81e17da244",
-            "hash": "sha256-iciidNkOhie3qJO8D4yB081ywfQtGGMrKBWFmBpps9g="
+            "rev": "1fc8c32b91c64aed056fa6d26359f1831c455c70",
+            "hash": "sha256-LjdIOcwzWRSQTxJeWsQzGuYGOUsPycNzURoG029zpHk="
         },
-        "version": "unstable-2024-04-07"
+        "version": "unstable-2024-06-22"
     },
     "np2kai": {
         "fetcher": "fetchFromGitHub",
