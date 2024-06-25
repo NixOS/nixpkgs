@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-draw";
-  version = "6.0.5";
+  version = "6.0.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WeubXsshN4tUlIwEHTxHXv1L2dvJ2DZ6qtSPyiVtc98=";
+    hash = "sha256-1YN8W3aBKqgJAB/vzG0s8VcjgVpTiMmSi4ebvFrmktI=";
   };
 
   postPatch = ''
