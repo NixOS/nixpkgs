@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/rakshasa/libtorrent";
     description = "BitTorrent library written in C++ for *nix, with focus on high performance and good code";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ebzzry codyopel ];
+    maintainers = with maintainers; [ ebzzry codyopel thiagokokada ];
     platforms = platforms.unix;
   };
 }
