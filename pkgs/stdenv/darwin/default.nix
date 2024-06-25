@@ -673,6 +673,11 @@ in
             nixSupport.cc-ldflags = [ "-lSystem" ];
           });
 
+          tools = super.llvmPackages.tools.extend (selfTools: superTools: {
+            # LLVM’s check phase takes a while to run, so disable it in the first LLVM build to speed up the bootstrap.
+            libllvm = superTools.libllvm.override { doCheck = false; };
+          });
+
           libraries = super.llvmPackages.libraries.extend (selfLib: superLib: {
             compiler-rt = null;
             libcxx = superLib.libcxx.override ({
@@ -680,7 +685,7 @@ in
             });
           });
         in
-        { inherit libraries; } // libraries
+        { inherit tools libraries; } // tools // libraries
       );
     };
 
