@@ -7468,8 +7468,6 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  emote = callPackage ../tools/inputmethods/emote { };
-
   engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
 
   epub2txt2 = callPackage ../tools/text/epub2txt2 { };
