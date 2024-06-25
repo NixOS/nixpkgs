@@ -52,7 +52,6 @@ let
     "lnd"
     "mail"
     "mikrotik"
-    "minio"
     "modemmanager"
     "mongodb"
     "mysqld"
@@ -279,20 +278,16 @@ let
 in
 {
 
-  imports = (lib.forEach [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
-                   "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
-                   "snmpExporter" "unifiExporter" "varnishExporter" ]
-       (opt: lib.mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''
-         The prometheus exporters are now configured using `services.prometheus.exporters'.
-         See the 18.03 release notes for more information.
-       '' ));
-
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
       options = (mkSubModules);
       imports = [
         ../../../misc/assertions.nix
         (lib.mkRenamedOptionModule [ "unifi-poller" ] [ "unpoller" ])
+        (lib.mkRemovedOptionModule [ "minio" ] ''
+          The Minio exporter has been removed, as it was broken and unmaintained.
+          See the 24.11 release notes for more information.
+        '')
       ];
     };
     description = "Prometheus exporter configuration";
@@ -438,11 +433,7 @@ in
         ''
       )
     ] ++ config.services.prometheus.exporters.warnings;
-  }] ++ [(mkIf config.services.minio.enable {
-    services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
-    services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
-    services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
-  })] ++ [(mkIf config.services.prometheus.exporters.rtl_433.enable {
+  }]  ++ [(mkIf config.services.prometheus.exporters.rtl_433.enable {
     hardware.rtl-sdr.enable = mkDefault true;
   })] ++ [(mkIf config.services.postfix.enable {
     services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
