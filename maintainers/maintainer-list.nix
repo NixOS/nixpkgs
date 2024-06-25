@@ -21916,6 +21916,12 @@
     githubId = 58453832;
     keys = [ { fingerprint = "FD0A C425 9EF5 4084 F99F 9B47 2ACC 9749 7C68 FAD4"; } ];
   };
+  yelite = {
+    name = "Lite Ye";
+    email = "yelite958@gmail.com";
+    github = "yelite";
+    githubId = 3517225;
+  };
   YellowOnion = {
     name = "Daniel Hill";
     email = "daniel@gluo.nz";
