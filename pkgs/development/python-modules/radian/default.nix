@@ -15,6 +15,7 @@
   R,
   rPackages,
   pythonOlder,
+  nix-update-script
 }:
 
 buildPythonPackage rec {
@@ -69,6 +70,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "radian" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "21 century R console";
