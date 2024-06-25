@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , autoPatchelfHook
 , cups
 , dbus
@@ -16,6 +17,7 @@
 , libinput
 , libxcb
 , libxkbcommon
+, makeWrapper
 , nss
 , qttools
 , qtwebengine
@@ -73,6 +75,12 @@ in
 stdenv.mkDerivation {
   inherit pname version;
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  inherit unwrapped;
+
   # Build a "clean" version of the package so that we don't add extra ".bin" or
   # configuration files to users' PATHs. We can't easily put the unwrapped
   # package files in libexec (where they belong, probably) because the upstream
@@ -80,7 +88,10 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out/bin
     for f in p4admin p4merge p4v p4vc; do
-      ln -s ${unwrapped}/bin/$f $out/bin
+      # Qt has trouble finding libdbus-1 dynamically, so we provide a wrapper.
+      # When resolved, this could be reduced to a symlink again.
+      makeWrapper $unwrapped/bin/$f $out/bin/$f \
+        --prefix LD_LIBRARY_PATH : "${lib.getLib dbus}/lib"
     done
   '';
   preferLocalBuild = true;
