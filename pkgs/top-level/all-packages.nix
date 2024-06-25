@@ -10210,9 +10210,7 @@ with pkgs;
 
   libnids = callPackage ../tools/networking/libnids { };
 
-  rtorrent = callPackage ../applications/networking/p2p/rakshasa-rtorrent {
-    libtorrent = callPackage ../applications/networking/p2p/rakshasa-rtorrent/libtorrent.nix { };
-  };
+  rtorrent = callPackage ../applications/networking/p2p/rakshasa-rtorrent { };
 
   jesec-rtorrent = callPackage ../applications/networking/p2p/jesec-rtorrent {
     libtorrent = callPackage ../applications/networking/p2p/jesec-rtorrent/libtorrent.nix { };
