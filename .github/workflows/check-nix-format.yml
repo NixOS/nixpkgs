@@ -56,6 +56,7 @@ jobs:
           NIX_FMT_PATHS_BUILD_SUPPORT_PHP: pkgs/build-support/php
         # Iterate over all environment variables beginning with NIX_FMT_PATHS_.
         run: |
+          unformattedPaths=()
           for env_var in "${!NIX_FMT_PATHS_@}"; do
             readarray -t paths <<< "${!env_var}"
             if [[ "${paths[*]}" == "" ]]; then
@@ -64,7 +65,12 @@ jobs:
             fi
             echo "Checking paths: ${paths[@]}"
             if ! nixfmt --check "${paths[@]}"; then
-              echo "Error: nixfmt failed."
-              exit 1
+              unformattedPaths+=("${paths[@]}")
             fi
           done
+          if (( "${#unformattedPaths[@]}" > 0 )); then
+            echo "Some required Nix files are not properly formatted"
+            echo "Please run the following in \`nix-shell\`:"
+            echo "nixfmt ${unformattedPaths[*]@Q}"
+            exit 1
+          fi
