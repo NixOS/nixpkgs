@@ -1,25 +1,27 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, callPackage
-, gradle_7
-, perl
-, makeBinaryWrapper
-, openjdk17
-, unzip
-, makeDesktopItem
-, copyDesktopItems
-, desktopToDarwinBundle
-, icoutils
-, xcbuild
-, protobuf
-, ghidra-extensions
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  callPackage,
+  gradle_7,
+  perl,
+  makeBinaryWrapper,
+  openjdk17,
+  unzip,
+  makeDesktopItem,
+  copyDesktopItems,
+  desktopToDarwinBundle,
+  xcbuild,
+  protobuf,
+  ghidra-extensions,
+  python3,
+  python3Packages,
 }:
 
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "11.0.3";
+  version = "11.1.1";
 
   releaseName = "NIX";
   distroPrefix = "ghidra_${version}_${releaseName}";
@@ -27,7 +29,7 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-IiLxaJvfJcK275FDZEsUCGp7haJjp8O2fUIoM4F9H30=";
+    hash = "sha256-t96FcAK3JwO66dOf4OhpOfU8CQfAczfF61Cg7m+B3fA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -76,26 +78,26 @@ let
 
   # Adds a gradle step that downloads all the dependencies to the gradle cache.
   addResolveStep = ''
-    cat >>build.gradle <<HERE
-task resolveDependencies {
-  doLast {
-    project.rootProject.allprojects.each { subProject ->
-      subProject.buildscript.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "buildscript config \''${configuration.name}")
-      }
-      subProject.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "config \''${configuration.name}")
+        cat >>build.gradle <<HERE
+    task resolveDependencies {
+      doLast {
+        project.rootProject.allprojects.each { subProject ->
+          subProject.buildscript.configurations.each { configuration ->
+            resolveConfiguration(subProject, configuration, "buildscript config \''${configuration.name}")
+          }
+          subProject.configurations.each { configuration ->
+            resolveConfiguration(subProject, configuration, "config \''${configuration.name}")
+          }
+        }
       }
     }
-  }
-}
-void resolveConfiguration(subProject, configuration, name) {
-  if (configuration.canBeResolved) {
-    logger.info("Resolving project {} {}", subProject.name, name)
-    configuration.resolve()
-  }
-}
-HERE
+    void resolveConfiguration(subProject, configuration, name) {
+      if (configuration.canBeResolved) {
+        logger.info("Resolving project {} {}", subProject.name, name)
+        configuration.resolve()
+      }
+    }
+    HERE
   '';
 
   # fake build to pre-download deps into fixed-output derivation
@@ -106,7 +108,10 @@ HERE
 
     postPatch = addResolveStep;
 
-    nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
+    nativeBuildInputs = [
+      gradle
+      perl
+    ] ++ lib.optional stdenv.isDarwin xcbuild;
     buildPhase = ''
       runHook preBuild
       export HOME="$NIX_BUILD_TOP/home"
@@ -132,11 +137,23 @@ HERE
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-nKfJiGoZlDEpbCmYVKNZXz2PYIosCd4nPFdy3MfprHc=";
+    outputHash = "sha256-66gL4UFlBUo2JIEOXoF6tFvXtBdEX4b2MeSrV1b6Vg4=";
   };
+in
+stdenv.mkDerivation (finalAttrs: {
+  inherit
+    pname
+    version
+    src
+    patches
+    postPatch
+    ;
 
-in stdenv.mkDerivation (finalAttrs: {
-  inherit pname version src patches postPatch;
+  # Don't create .orig files if the patch isn't an exact match.
+  patchFlags = [
+    "--no-backup-if-mismatch"
+    "-p1"
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -150,16 +167,20 @@ in stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    gradle
-    unzip
-    makeBinaryWrapper
-    copyDesktopItems
-    protobuf
-  ] ++ lib.optionals stdenv.isDarwin [
-    xcbuild
-    desktopToDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      gradle
+      unzip
+      makeBinaryWrapper
+      copyDesktopItems
+      protobuf
+      python3
+      python3Packages.pip
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      xcbuild
+      desktopToDarwinBundle
+    ];
 
   dontStrip = true;
 
@@ -211,7 +232,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit releaseName distroPrefix;
-    inherit (ghidra-extensions.override { ghidra = finalAttrs.finalPackage; }) buildGhidraExtension buildGhidraScripts;
+    inherit (ghidra-extensions.override { ghidra = finalAttrs.finalPackage; })
+      buildGhidraExtension
+      buildGhidraScripts
+      ;
 
     withExtensions = callPackage ./with-extensions.nix { ghidra = finalAttrs.finalPackage; };
   };
@@ -221,14 +245,21 @@ in stdenv.mkDerivation (finalAttrs: {
     description = "Software reverse engineering (SRE) suite of tools";
     mainProgram = "ghidra";
     homepage = "https://ghidra-sre.org/";
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ roblabla vringar ];
+    maintainers = with maintainers; [
+      roblabla
+      vringar
+    ];
     broken = stdenv.isDarwin && stdenv.isx86_64;
   };
-
 })

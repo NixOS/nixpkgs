@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Library and command-line utility for rendering projects templates";
     homepage = "https://copier.readthedocs.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer greg ];
+    maintainers = with maintainers; [ greg ];
     mainProgram = "copier";
   };
 }

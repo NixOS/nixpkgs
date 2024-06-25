@@ -42,7 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-storage_${version}/sdk/storage/azure-mgmt-storage/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [
-      jonringer
       olcai
       maxwilson
     ];

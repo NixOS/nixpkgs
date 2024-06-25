@@ -78,7 +78,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/nicolargo/glances/blob/v${version}/NEWS.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
-      jonringer
       primeos
       koral
     ];
