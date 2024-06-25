@@ -142,7 +142,10 @@ in stdenv.mkDerivation {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = "https://www.zerotier.com";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
+    maintainers = with maintainers; [
+      sjmackenzie zimbatm ehmry obadz danielfullmer
+      mic92 # also can test darwin
+    ];
     platforms = platforms.unix;
   };
 }
