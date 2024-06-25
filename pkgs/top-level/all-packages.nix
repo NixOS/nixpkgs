@@ -5153,6 +5153,10 @@ with pkgs;
 
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
+  fedimint = callPackage ../by-name/fe/fedimint/package.nix {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
+
   fetch-scm = callPackage ../tools/misc/fetch-scm { };
 
   fiano = callPackage ../tools/misc/fiano { };
