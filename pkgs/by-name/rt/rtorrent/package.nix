@@ -70,12 +70,12 @@ stdenv.mkDerivation {
     mv doc/rtorrent.rc $out/share/doc/rtorrent/rtorrent.rc
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rakshasa.github.io/rtorrent/";
     description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ebzzry codyopel thiagokokada ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ebzzry codyopel thiagokokada ];
+    platforms = lib.platforms.unix;
     mainProgram = "rtorrent";
   };
 }
