@@ -40,14 +40,14 @@ jobs:
           NIX_FMT_PATHS_BSD: pkgs/os-specific/bsd
           NIX_FMT_PATHS_MPVSCRIPTS: pkgs/applications/video/mpv/scripts
           # Format paths related to the Nixpkgs CUDA ecosystem.
-          NIX_FMT_PATHS_CUDA: |
+          NIX_FMT_PATHS_CUDA: |-
             pkgs/development/cuda-modules
             pkgs/test/cuda
             pkgs/top-level/cuda-packages.nix
-          NIX_FMT_PATHS_MAINTAINERS: |
+          NIX_FMT_PATHS_MAINTAINERS: |-
             maintainers/maintainer-list.nix
             maintainers/team-list.nix
-          NIX_FMT_PATHS_K3S: |
+          NIX_FMT_PATHS_K3S: |-
             nixos/modules/services/cluster/k3s
             nixos/tests/k3s
             pkgs/applications/networking/cluster/k3s
