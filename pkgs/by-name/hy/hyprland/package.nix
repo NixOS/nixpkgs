@@ -186,8 +186,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      wozeparrot
       fufexan
+      johnrtitor
+      wozeparrot
     ];
     mainProgram = "Hyprland";
     platforms = lib.platforms.linux;

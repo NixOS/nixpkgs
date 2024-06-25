@@ -25,6 +25,9 @@ mkHyprlandPlugin hyprland rec {
     description = "Hyprland plugin for an i3 / sway like manual tiling layout";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ aacebedo ];
+    maintainers = with lib.maintainers; [
+      aacebedo
+      johnrtitor
+    ];
   };
 }
