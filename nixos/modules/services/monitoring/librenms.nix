@@ -37,8 +37,14 @@ let
 
   lnmsWrapper = pkgs.writeShellScriptBin "lnms" ''
     cd ${package}
-    exec ${package}/lnms $*
+    sudo=exec
+    if [[ "$USER" != ${cfg.user} ]]; then
+    sudo='exec /run/wrappers/bin/sudo -u ${cfg.user}'
+    fi
+    $sudo ${package}/lnms "$@"
   '';
+
+
 
   configFile = pkgs.writeText "config.php" ''
     <?php
