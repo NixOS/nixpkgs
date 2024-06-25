@@ -21,7 +21,7 @@ let
           xnode = {
             admin = {
               enable = true;
-              remoteDir = "http://dpl-staging.openmesh.network/xnodes/functions";
+              remoteDir = "https://dpl-staging.openmesh.network/xnodes/functions";
             };
           };
         };

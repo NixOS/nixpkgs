@@ -32,7 +32,7 @@ in
 
     remoteDir = mkOption {
       type = types.str;
-      default = "https://dpl-backend-staging.up.railway.app/xnodes/functions";
+      default = "https://dpl-staging.openmesh.network/xnodes/functions";
       description = "The remote repository to pull down a configuration from.";
     };
 
@@ -54,8 +54,8 @@ in
 
       serviceConfig = {
         ExecStart = ''${lib.getExe cfg.package} -p ${cfg.stateDir} ${cfg.remoteDir} ${toString cfg.searchInterval}''; 
-        ExecStartPre = ''-${lib.getExe pkgs.git} clone --branch feature/import-agent-config-dynamically https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
-        ExecCondition = ''-${lib.getExe pkgs.git} pull --branch feature/import-agent-config-dynamically https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
+        ExecStartPre = ''-${lib.getExe pkgs.git} clone --branch dev https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
+        ExecCondition = ''-${lib.getExe pkgs.git} pull --branch dev https://github.com/openmesh-network/xnodeos ${cfg.stateDir}/xnodeos'';
         Restart = "always";
         WorkingDirectory = cfg.stateDir;
         StateDirectory = "openmesh-xnode-admin";

@@ -15,6 +15,9 @@
 
       nuke-refs $out/kernel
     '';
+    xnode_version = "0";
+    xnode_uuid = "I5KMFECV11H-VX5K78G4P7I";
+    xnode_access_token = "Tah6WlMnal0mpka6ki8jHmoD9hhK9KXc81xyNjvSt1hm1nj74dlM4W8jPEdPdmSJD1JVba+eDHEceUysRZnplw==";
 
     ipxe_test_entrypoint_script = pkgs.writeTextFile {
       executable = false;
@@ -23,8 +26,8 @@
       text = ''
         #!ipxe
         set xnode_version 0
-        set xnode_uuid d9be30bf-1501-446d-8815-23fcb37a375c
-        set xnode_access_token RQ7YYfRP2J8BNkNDDQu5Kp8oLC1ajZMNLDtRYxLX8ylhFeImgq1RLvzp6FYOqa1B
+        set xnode_uuid ${xnode_uuid}
+        set xnode_access_token ${xnode_access_token}
         chain http://127.0.0.1:8000/ipxe
       '';
     };
@@ -32,7 +35,6 @@
     ipxe_script = pkgs.writeTextFile {
       executable = false;
       name = "ipxe";
-
       text = ''
         #!ipxe
         # Admin Service Expects the following to be set for initialisation in the chainloading iPXE script:
