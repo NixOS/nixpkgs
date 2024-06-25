@@ -489,7 +489,7 @@ in {
             implementation into the virtual filesystem.
 
             Further details about this feature can be found in the
-            [upstream documentation](https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html).
+            [upstream documentation](https://docs.nextcloud.com/server/22/admin_manual/configuration_files/primary_storage.html)
           '';
           bucket = mkOption {
             type = types.str;
@@ -591,7 +591,7 @@ in {
         This is used by the theming app and for generating previews of certain images (e.g. SVG and HEIF).
         You may want to disable it for increased security. In that case, previews will still be available
         for some images (e.g. JPEG and PNG).
-        See <https://github.com/nextcloud/server/issues/13099>.
+        See <https://github.com/nextcloud/server/issues/13099>
     '' // {
       default = true;
     };
