@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libwbxml";
-  version = "0.11.9";
+  version = "0.11.10";
 
   src = fetchFromGitHub {
     owner = "libwbxml";
     repo = "libwbxml";
     rev = "${pname}-${version}";
-    sha256 = "sha256-zmMsp5xS13rqfSWXXb0FGQcGZkrSMRYc/GQppO4/+Z4=";
+    sha256 = "sha256-yy8+CyNKXuttCmxRxH/XptIloDklto4f5Zg0vnwnneY=";
   };
 
   nativeBuildInputs = [ cmake ];
