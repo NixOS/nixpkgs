@@ -1,24 +1,27 @@
-{ cacert
+{ lib
+, stdenv
+
+, cacert
 , cmake
 , fetchFromGitHub
+, gcc
 , git
-, lib
-, lld
 , ninja
 , nix-update-script
 , perl
 , python3
-, stdenv
+, runCommand
+, zlib
 }:
 
 let
-  version = "0.16.1";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "exaloop";
     repo = "codon";
     rev = "v${version}";
-    hash = "sha256-s2GqiFcekXRts8BU5CSmTrkFZ9xLqq4A5MybhB1o1Gg=";
+    hash = "sha256-cfdb/DxrLS3F4MK31l/17j/R6IWlh85blWEsLDqDCDI=";
   };
 
   depsDir = "deps";
@@ -37,7 +40,6 @@ let
     nativeBuildInputs = [
       cmake
       git
-      lld
       ninja
       python3
     ];
@@ -48,13 +50,12 @@ let
       "-DLLVM_ENABLE_ZLIB=OFF"
       "-DLLVM_INCLUDE_TESTS=OFF"
       "-DLLVM_TARGETS_TO_BUILD=all"
-      "-DLLVM_USE_LINKER=lld"
       "-S ../llvm"
     ];
   };
 
   codon-deps = stdenv.mkDerivation {
-    name = "codon-deps-${version}.tar.gz";
+    name = "codon-deps.tar.gz";
 
     inherit src;
 
@@ -91,8 +92,6 @@ let
         "sha256-KfemYV42xBAhsPbwTkzdc3GxCVHiWRbyUZORPWxx4vg="
       else
         "sha256-a1zGSpbMjfQBrcgW/aiIdKX8+uI3p/S9pgZjHe2HtWs=";
-
-    outputHashAlgo = "sha256";
   };
 in
 stdenv.mkDerivation {
@@ -103,27 +102,44 @@ stdenv.mkDerivation {
   patches = [
     # Without the hash, CMake will try to replace the `.zip` file
     ./Add-a-hash-to-the-googletest-binary.patch
+    # Make sure `CXX` calls can find the shared libraries
+    (runCommand "Add-run-time-search-paths-and-override-the-CXX-compiler.patch"
+      {
+        CXX = "${gcc}/bin/c++";
+        NIX_RPATHS = lib.concatStringsSep ", "
+          (map (s: "\"" + s + "/lib\"") (map lib.getLib [ zlib ]));
+      }
+      ''
+        substitute \
+          ${./Add-run-time-search-paths-and-override-the-CXX-compiler.patch} \
+          $out \
+          --subst-var CXX \
+          --subst-var NIX_RPATHS \
+      '')
   ];
 
   nativeBuildInputs = [
     cmake
     git
-    lld
     ninja
     perl
     python3
+  ];
+
+  depsHostHost = [
+    # Compiling to executable with optimizations enabled fails without it
+    gcc
+  ];
+
+  cmakeFlags = [
+    "-DCPM_SOURCE_CACHE=${depsDir}"
+    "-DLLVM_DIR=${codon-llvm}/lib/cmake/llvm"
   ];
 
   postUnpack = ''
     mkdir -p $sourceRoot/build
     tar -xf ${codon-deps} -C $sourceRoot/build
   '';
-
-  cmakeFlags = [
-    "-DCPM_SOURCE_CACHE=${depsDir}"
-    "-DLLVM_DIR=${codon-llvm}/lib/cmake/llvm"
-    "-DLLVM_USE_LINKER=lld"
-  ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     ln -s $out/lib/codon/*.dylib $out/lib/
