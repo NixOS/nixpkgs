@@ -267,7 +267,6 @@
 , "vega-cli"
 , "vega-lite"
 , "vercel"
-, "vim-language-server"
 , "vls"
 , "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
