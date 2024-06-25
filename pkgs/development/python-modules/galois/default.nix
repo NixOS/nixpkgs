@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "galois";
-  version = "0.3.9";
+  version = "0.3.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mhostetter";
     repo = "galois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vgOsFEocgBvYba9Aq4HDYsnK1w+iQm1QDTzln68Tqss=";
+    hash = "sha256-GHvLE6xTY37MCDlGOmvyqi42ORRk1W8UcQXqH3Ty/c4=";
   };
 
   nativeBuildInputs = [
