@@ -53,12 +53,14 @@
 , libvaSupport ? mediaSupport
 , libva
 
+, p7zip
+
 # Extra preferences
 , extraPrefs ? ""
 }:
 
 let
-  libPath = lib.makeLibraryPath (
+  libPath = if stdenv.isLinux then lib.makeLibraryPath (
     [
       alsa-lib
       atk
@@ -104,6 +106,14 @@ let
       ];
       hash = "sha256-Wz1gYK1CqfK4aa7K2PR8wKx7VcvALquYKA2vetUAdeU=";
     };
+    aarch64-darwin = fetchurl {
+      urls = mkUrls "macos" "dmg";
+      hash = "sha256-1rXzXLbmBd567MCUNGL1Vw0xfpk4WdoAG6weJgz9+Pg=";
+    };
+    x86_64-darwin = fetchurl {
+      urls = mkUrls "macos" "dmg";
+      hash = "sha256-1rXzXLbmBd567MCUNGL1Vw0xfpk4WdoAG6weJgz9+Pg=";
+    };
   };
 
   distributionIni = writeText "distribution.ini" (lib.generators.toINI {} {
@@ -123,14 +133,24 @@ stdenv.mkDerivation rec {
   pname = "mullvad-browser";
   inherit version;
 
+  dontUnpack = stdenv.isDarwin;
+  dontFixup = stdenv.isDarwin;
+
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook3 autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    copyDesktopItems wrapGAppsHook3 autoPatchelfHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    p7zip
+  ];
   buildInputs = [
-    gtk3
-    alsa-lib
     dbus-glib
     libXtst
+  ] ++ lib.optionals stdenv.isLinux [
+    gtk3
+    alsa-lib
   ];
 
   preferLocalBuild = true;
@@ -146,7 +166,10 @@ stdenv.mkDerivation rec {
     categories = [ "Network" "WebBrowser" "Security" ];
   })];
 
-  buildPhase = ''
+  buildPhase = if stdenv.isDarwin then ''
+    # undmg does not support AFS
+    7z x "$src"
+  '' else ''
     runHook preBuild
 
     # For convenience ...
@@ -235,7 +258,37 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = ''
+  entitlements = writeText "entitlements.plist" ''
+  <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>application-identifier</key>
+	<string>$(AppIdentifierPrefix)$(CFBundleIdentifier)</string>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)$(CFBundleIdentifier)</string>
+	</array>
+</dict>
+</plist>
+  '';
+
+
+  installPhase = if stdenv.isDarwin then ''
+    runHook preInstall
+
+    mkdir -p "$out/Applications/"
+    cp -r "Mullvad Browser/Mullvad Browser.app" "$out/Applications"
+
+    /usr/bin/codesign --preserve-metadata=entitlements -fs - "$out/Applications/Mullvad Browser.app"
+    cp ${distributionIni} "$out/Applications/Mullvad Browser.app/Contents/Resources/distribution/distribution.ini"
+    cp ${policiesJson} "$out/Applications/Mullvad Browser.app/Contents/Resources/distribution/policies.json"
+
+    chmod +x "$out/Applications/Mullvad Browser.app/Contents/MacOS/mullvadbrowser"
+    makeWrapper "$out/Applications/Mullvad Browser.app/Contents/MacOS/mullvadbrowser" "$out/bin/mullvad-browser"
+
+    runHook postInstall
+  '' else ''
     runHook preInstall
 
     # Install distribution customizations
@@ -259,7 +312,7 @@ stdenv.mkDerivation rec {
     mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
     platforms = attrNames sources;
-    maintainers = with maintainers; [ felschr panicgh ];
+    maintainers = with maintainers; [ felschr panicgh heywoodlh ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
