@@ -1,6 +1,45 @@
-{ config, hostPkgs, lib, ... }:
+{ config, hostPkgs, lib, options, ... }:
 let
   inherit (lib) types mkOption;
+
+  /**
+    Create a module system definition that overrides an existing option from a different module evaluation.
+
+    Type: Option a -> (a -> a) -> Definition a
+   */
+  mkOneUp =
+    /** Option from an existing module evaluation, e.g.
+      - `(lib.evalModules ...).options.x` when invoking `evalModules` again,
+      - or `{ options, ... }:` when invoking `extendModules`. */
+    opt:
+    /** Function from the old value to the new definition, which will be wrapped with `mkOverride`. */
+    f:
+    lib.mkOverride (opt.highestPrio - 1) (f opt.value);
+
+  /**
+    Upgrade the overrideAttrs argument to an overlay-style function.
+
+    `toOverlay (old: { foo = f old; })`
+    becomes `(_: old: { foo = f old; })`.
+
+    `toOverlay (finalAttrs: prevAttrs: { foo = f old; })`
+    remains `(finalAttrs: prevAttrs: { foo = f old; })`.
+   */
+  toOverlay =
+    # Function to upgrade
+    f0:
+    # The returned overlay-style function
+    self: super:
+      # See mkDerivation
+      let x = f0 super;
+      in
+        if builtins.isFunction x
+        then
+          # Can't reuse `x`, because `self` comes first.
+          # Looks inefficient, but `f0 super` was a cheap thunk.
+          f0 self super
+        else x;
+
 in
 {
   options = {
@@ -25,6 +64,13 @@ in
       internal = true;
     };
 
+    rawTestDerivationArg = mkOption {
+      type = types.functionTo types.raw;
+      description = ''
+        Argument passed to `mkDerivation` to create the `rawTestDerivation`.
+      '';
+    };
+
     test = mkOption {
       type = types.package;
       # TODO: can the interactive driver be configured to access the network?
@@ -38,7 +84,8 @@ in
   };
 
   config = {
-    rawTestDerivation = hostPkgs.stdenv.mkDerivation {
+    rawTestDerivation = hostPkgs.stdenv.mkDerivation config.rawTestDerivationArg;
+    rawTestDerivationArg = finalAttrs: {
       name = "vm-test-run-${config.name}";
 
       requiredSystemFeatures = [ "nixos-test" ]
@@ -65,5 +112,13 @@ in
 
     # useful for inspection (debugging / exploration)
     passthru.config = config;
+
+    # See https://nixos.org/manual/nixos/unstable#sec-override-nixos-test
+    # written in nixos/doc/manual/development/writing-nixos-tests.section.md
+    passthru.overrideTestDerivation = f:
+      config.passthru.extend { modules = [{
+        rawTestDerivationArg =
+          mkOneUp options.rawTestDerivationArg (lib.extends (toOverlay f));
+      }]; };
   };
 }
