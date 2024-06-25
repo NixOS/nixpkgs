@@ -351,6 +351,20 @@ in
         assertion = config.security.polkit.enable;
         message = "The libvirtd module currently requires Polkit to be enabled ('security.polkit.enable = true').";
       }
+      {
+        assertion = (!cfg.nss.enable && !cfg.nss.enableGuest) || !config.services.resolved.enable;
+        message = ''
+          The resolved resolver is enabled, which takes priority over other NSS modules. The libvirt NSS modules will be
+          skipped when resolved is enabled. Either disable resolved by setting the option `services.resolved.enable` to
+          `false`, or disable the libvirt NSS modules by setting the options `virtualization.libvirtd.nss.enable` and
+          `virtualization.libvirtd.nss.enableGuest` to `false`.
+
+          It is possible to add the libvirt NSS modules manually at a higher priority, if desired:
+
+              system.nssModules = [ config.virtualisation.libvirtd.package ];
+              system.nssDatabases.hosts = lib.mkBefore [ "libvirt libvirt_guest" ];
+        '';
+      }
     ];
 
     environment = {
