@@ -1,34 +1,58 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook
-, asciidoc, pkg-config, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
-, json_c, kmod, which, util-linux, udev, keyutils
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, asciidoctor
+, iniparser
+, json_c
+, keyutils
+, kmod
+, udev
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "libndctl";
-  version = "71.1";
+  version = "79";
 
   src = fetchFromGitHub {
     owner  = "pmem";
     repo   = "ndctl";
     rev    = "v${version}";
-    sha256 = "sha256-osux3DiKRh8ftHwyfFI+WSFx20+yJsg1nVx5nuoKJu4=";
+    sha256 = "sha256-gG1Rz5AtDLzikGFr8A3l25ypd+VoLw2oWjszy9ogDLk=";
   };
 
-  outputs = [ "out" "lib" "man" "dev" ];
+  outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs =
-    [ autoreconfHook asciidoc pkg-config xmlto docbook_xml_dtd_45 docbook_xsl libxslt
-      which
+    [
+      meson
+      ninja
+      pkg-config
     ];
 
   buildInputs =
-    [ json_c kmod util-linux udev keyutils
+    [
+      asciidoctor
+      iniparser
+      json_c
+      keyutils
+      kmod
+      udev
+      util-linux
     ];
 
-  configureFlags =
-    [ "--without-bash"
-      "--without-systemd"
-      "--disable-asciidoctor" # depends on ruby 2.7, use asciidoc instead
+  mesonFlags =
+    [
+      "-Drootprefix=${placeholder "out"}"
+      "-Dsysconfdir=${placeholder "out"}/etc/ndctl.conf.d"
+      "-Dlibtracefs=disabled"
+      # Use asciidoctor due to xmlto errors
+      "-Dasciidoctor=enabled"
+      "-Dsystemd=disabled"
+      "-Diniparserdir=${iniparser}"
     ];
 
   patchPhase = ''
@@ -36,8 +60,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace git-version --replace /bin/bash ${stdenv.shell}
     substituteInPlace git-version-gen --replace /bin/sh ${stdenv.shell}
-
-    echo "m4_define([GIT_VERSION], [${version}])" > version.m4;
   '';
 
   meta = with lib; {
