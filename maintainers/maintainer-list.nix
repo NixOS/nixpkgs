@@ -17209,6 +17209,12 @@
     githubId = 52847440;
     name = "Ryan Burns";
   };
+  rcmlz = {
+    email = "haguga-nixos@yahoo.com";
+    github = "rcmlz";
+    githubId = 19784049;
+    name = "rcmlz";
+  };
   rconybea = {
     email = "n1xpkgs@hushmail.com";
     github = "rconybea";
