@@ -11013,8 +11013,6 @@ with pkgs;
 
   noisetorch = callPackage ../applications/audio/noisetorch { };
 
-  notary = callPackage ../tools/security/notary { };
-
   notation = callPackage ../tools/security/notation { };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
