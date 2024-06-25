@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "discovery30303";
-  version = "0.2.1";
+  version = "0.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
