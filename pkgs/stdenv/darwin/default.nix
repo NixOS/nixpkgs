@@ -505,6 +505,8 @@ in
       inherit (prevStage) ccWrapperStdenv
         coreutils gnugrep;
 
+      binutils-unwrapped = builtins.throw "nothing in the bootstrap should depend on GNU binutils";
+
       # Use this stage’s CF to build CMake. It’s required but can’t be included in the stdenv.
       cmake = self.cmakeMinimal;
       cmakeMinimal = super.cmakeMinimal.overrideAttrs (old: {
@@ -1332,8 +1334,6 @@ in
 
       allowedRequisites = (with prevStage; [
         bash
-        binutils.bintools
-        binutils.bintools.lib
         bzip2.bin
         bzip2.out
         cc.expand-response-params
@@ -1433,8 +1433,6 @@ in
           in
           { inherit tools libraries; } // tools // libraries
         );
-
-        inherit (prevStage) binutils binutils-unwrapped;
       };
     };
   })
@@ -1455,5 +1453,10 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libllvm;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.libcxx;
     assert isBuiltByNixpkgsCompiler prevStage.llvmPackages.compiler-rt;
+
+    # Make sure these evaluate since they were disabled explicitly in the bootstrap.
+    assert isBuiltByNixpkgsCompiler prevStage.binutils-unwrapped;
+    assert            isFromNixpkgs prevStage.binutils-unwrapped.src;
+
     { inherit (prevStage) config overlays stdenv; })
 ]
