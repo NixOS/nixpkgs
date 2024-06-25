@@ -787,19 +787,6 @@ in
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
   });
 
-  toml = prev.toml.overrideAttrs (oa: {
-    patches = [ ./toml.patch ];
-
-    nativeBuildInputs = oa.nativeBuildInputs ++ [ tomlplusplus ];
-    propagatedBuildInputs = oa.propagatedBuildInputs ++ [ sol2 ];
-
-    postPatch = ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "TOML_PLUS_PLUS_SRC" "${tomlplusplus.src}/include/toml++" \
-        --replace-fail "MAGIC_ENUM_SRC" "${magic-enum.src}/include/magic_enum"
-    '';
-  });
-
   toml-edit = prev.toml-edit.overrideAttrs (oa: {
 
     cargoDeps = rustPlatform.fetchCargoTarball {

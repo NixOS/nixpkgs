@@ -3233,32 +3233,6 @@ buildLuarocksPackage {
   };
 }) {};
 
-toml = callPackage({ buildLuarocksPackage, cmake, fetchFromGitHub, fetchurl, luaOlder }:
-buildLuarocksPackage {
-  pname = "toml";
-  version = "0.4.0-0";
-  knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/toml-0.4.0-0.rockspec";
-    sha256 = "17yr5gj9yyax3wzn7cv3vvkjrg5qq4yfw8sc6v72ivg79fhvwnli";
-  }).outPath;
-  src = fetchFromGitHub {
-    owner = "LebJe";
-    repo = "toml.lua";
-    rev = "0.4.0";
-    hash = "sha256-zVV49x2FW7UE1JoI88VzfYoQtkMFPiXrrAGOaNk4nok=";
-  };
-
-  disabled = luaOlder "5.1";
-  nativeBuildInputs = [ cmake ];
-
-  meta = {
-    homepage = "https://github.com/LebJe/toml.lua";
-    description = "TOML v1.0.0 parser and serializer for Lua. Powered by toml++.";
-    maintainers = with lib.maintainers; [ mrcjkb ];
-    license.fullName = "MIT";
-  };
-}) {};
-
 toml-edit = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, luarocks-build-rust-mlua }:
 buildLuarocksPackage {
   pname = "toml-edit";
