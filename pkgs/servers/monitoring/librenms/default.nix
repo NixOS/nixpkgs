@@ -98,6 +98,8 @@ in phpPackage.buildComposerProject rec {
     substituteInPlace $out/LibreNMS/__init__.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
     substituteInPlace $out/snmp-scan.py --replace '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
 
+    substituteInPlace $out/lnms --replace '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
+
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
 
     rm -rf $out/logs $out/rrd $out/bootstrap/cache $out/storage $out/.env
