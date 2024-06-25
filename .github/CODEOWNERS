@@ -15,8 +15,9 @@
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /ci @infinisil
 
-# EditorConfig
+# Develompent support
 /.editorconfig @Mic92 @zowoq
+/shell.nix @infinisil @NixOS/Security
 
 # Libraries
 /lib                        @infinisil
