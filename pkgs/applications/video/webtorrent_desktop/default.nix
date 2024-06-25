@@ -2,20 +2,14 @@
 
 buildNpmPackage {
   pname = "webtorrent-desktop";
-  version = "0.25-pre-1eb612";
+  version = "0.25-pre-ac7f16";
   src = fetchFromGitHub {
     owner = "webtorrent";
     repo = "webtorrent-desktop";
-    rev = "1eb61201d6360698a2cc4ea72bf0fa7ee78b457c";
-    sha256 = "sha256-DBEFOamncyidMXypvKNnUmDIPUq1LzYjDgox7fa4+Gg=";
+    rev = "ac7f16e71c96c5ad670bfcb8728df5af78ae21a1";
+    sha256 = "sha256-UEN5NhLVSQEO8rsiTW1hJPjNFL9KobW/Bho98FzKaf4=";
   };
   patches = [
-    # electron 27 fix
-    (fetchpatch {
-      name = "2388.patch"; # https://github.com/webtorrent/webtorrent-desktop/pull/2388
-      url = "https://github.com/webtorrent/webtorrent-desktop/compare/ebaf9cf8487dbd9e14a9a0c5adc3eab23b199e58...0c3e55d1f091bf66a342e2732550ebeccc2e4169.patch";
-      hash = "sha256-gam5oAZtsaiCNFwecA5ff0nhraySLx3SOHlb/js+cPM=";
-    })
     # startup fix
     (fetchpatch {
       name = "2389.patch"; # https://github.com/webtorrent/webtorrent-desktop/pull/2389
@@ -23,7 +17,7 @@ buildNpmPackage {
       hash = "sha256-hBJGLNNjcGRhYOFlLm/RL0po+70tEeJtR6Y/CfacPAI=";
     })
   ];
-  npmDepsHash = "sha256-tqhp3jDb1xtyV/n9kJtzkiznLQfqeYWeZiTnTVV0ibE=";
+  npmDepsHash = "sha256-otAes6GkqoAVvfeWhWgyY4IVZIZxw3WtkrVdEWIk1Lk=";
   makeCacheWritable = true;
   npmRebuildFlags = [ "--ignore-scripts" ];
   installPhase = ''

@@ -2,17 +2,15 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pytestCheckHook,
   pythonOlder,
+  pytestCheckHook,
   nix-update-script,
-  hatch-vcs,
   hatchling,
-  bdffont,
-  brotli,
   fonttools,
-  pypng,
+  brotli,
+  bdffont,
   pcffont,
-  pythonRelaxDepsHook,
+  pypng,
 }:
 
 buildPythonPackage rec {
@@ -28,26 +26,19 @@ buildPythonPackage rec {
     hash = "sha256-66mGZ7q64z+tTJSSveD7UCkTq7YXgsHTM25MqUSLfvM=";
   };
 
-  pythonRelaxDeps = [ "fonttools" ];
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
-  build-system = [
-    hatch-vcs
-    hatchling
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
+  dependencies = [
+    fonttools
+    brotli
+    bdffont
+    pcffont
     pypng
   ];
 
-  dependencies = [
-    bdffont
-    brotli
-    fonttools
-    pcffont
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "pixel_font_builder" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -56,6 +47,9 @@ buildPythonPackage rec {
     description = "Library that helps create pixel style fonts";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ h7x4 ];
+    maintainers = with lib.maintainers; [
+      TakWolf
+      h7x4
+    ];
   };
 }

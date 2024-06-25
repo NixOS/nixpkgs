@@ -2,6 +2,8 @@
   callPackage,
   dartSdkVersion,
   flutterVersion,
+  swiftshaderHash,
+  swiftshaderRev,
   version,
   hashes,
   url,
@@ -10,10 +12,13 @@
   isOptimized ? true,
   lib,
   stdenv,
-}:
+  dart,
+  mainRuntimeMode ? null,
+  altRuntimeMode ? null,
+}@args:
 let
-  mainRuntimeMode = builtins.elemAt runtimeModes 0;
-  altRuntimeMode = builtins.elemAt runtimeModes 1;
+  mainRuntimeMode = args.mainRuntimeMode or builtins.elemAt runtimeModes 0;
+  altRuntimeMode = args.altRuntimeMode or builtins.elemAt runtimeModes 1;
 
   runtimeModesBuilds = lib.genAttrs runtimeModes (
     runtimeMode:
@@ -21,6 +26,8 @@ let
       inherit
         dartSdkVersion
         flutterVersion
+        swiftshaderHash
+        swiftshaderRev
         version
         hashes
         url
@@ -42,6 +49,8 @@ stdenv.mkDerivation (
       dartSdkVersion
       isOptimized
       runtimeMode
+      outName
+      dart
       ;
     inherit altRuntimeMode;
 
@@ -51,19 +60,12 @@ stdenv.mkDerivation (
     installPhase =
       ''
         mkdir -p $out/out
-
-        for dir in $(find $src/src -mindepth 1 -maxdepth 1); do
-          ln -sf $dir $out/$(basename $dir)
-        done
-
       ''
       + lib.concatMapStrings (
         runtimeMode:
         let
           runtimeModeBuild = runtimeModesBuilds.${runtimeMode};
-          runtimeModeOut = "host_${runtimeMode}${
-            lib.optionalString (!runtimeModeBuild.isOptimized) "_unopt"
-          }";
+          runtimeModeOut = runtimeModeBuild.outName;
         in
         ''
           ln -sf ${runtimeModeBuild}/out/${runtimeModeOut} $out/out/${runtimeModeOut}

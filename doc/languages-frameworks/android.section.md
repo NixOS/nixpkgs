@@ -232,11 +232,11 @@ In addition to prebuilt APKs, you can also bind the APK parameter to a
 
 ## Notes on environment variables in Android projects {#notes-on-environment-variables-in-android-projects}
 
-* `ANDROID_SDK_ROOT` should point to the Android SDK. In your Nix expressions, this should be
-  `${androidComposition.androidsdk}/libexec/android-sdk`. Note that `ANDROID_HOME` is deprecated,
+* `ANDROID_HOME` should point to the Android SDK. In your Nix expressions, this should be
+  `${androidComposition.androidsdk}/libexec/android-sdk`. Note that `ANDROID_SDK_ROOT` is deprecated,
   but if you rely on tools that need it, you can export it too.
 * `ANDROID_NDK_ROOT` should point to the Android NDK, if you're doing NDK development.
-  In your Nix expressions, this should be `${ANDROID_SDK_ROOT}/ndk-bundle`.
+  In your Nix expressions, this should be `${ANDROID_HOME}/ndk-bundle`.
 
 If you are running the Android Gradle plugin, you need to export GRADLE_OPTS to override aapt2
 to point to the aapt2 binary in the Nix store as well, or use a FHS environment so the packaged
@@ -250,11 +250,11 @@ let
   androidComposition = <...>;
 in
 pkgs.mkShell rec {
-  ANDROID_SDK_ROOT = "${androidComposition.androidsdk}/libexec/android-sdk";
-  ANDROID_NDK_ROOT = "${ANDROID_SDK_ROOT}/ndk-bundle";
+  ANDROID_HOME = "${androidComposition.androidsdk}/libexec/android-sdk";
+  ANDROID_NDK_ROOT = "${ANDROID_HOME}/ndk-bundle";
 
   # Use the same buildToolsVersion here
-  GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_SDK_ROOT}/build-tools/${buildToolsVersion}/aapt2";
+  GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${ANDROID_HOME}/build-tools/${buildToolsVersion}/aapt2";
 }
 ```
 
@@ -270,18 +270,18 @@ let
   androidComposition = <...>;
 in
 pkgs.mkShell rec {
-  ANDROID_SDK_ROOT = "${androidComposition.androidsdk}/libexec/android-sdk";
-  ANDROID_NDK_ROOT = "${ANDROID_SDK_ROOT}/ndk-bundle";
+  ANDROID_HOME = "${androidComposition.androidsdk}/libexec/android-sdk";
+  ANDROID_NDK_ROOT = "${ANDROID_HOME}/ndk-bundle";
 
   # Use the same cmakeVersion here
   shellHook = ''
-    export PATH="$(echo "$ANDROID_SDK_ROOT/cmake/${cmakeVersion}".*/bin):$PATH"
+    export PATH="$(echo "$ANDROID_HOME/cmake/${cmakeVersion}".*/bin):$PATH"
   '';
 }
 ```
 
-Note that running Android Studio with ANDROID_SDK_ROOT set will automatically write a
-`local.properties` file with `sdk.dir` set to $ANDROID_SDK_ROOT if one does not already
+Note that running Android Studio with ANDROID_HOME set will automatically write a
+`local.properties` file with `sdk.dir` set to $ANDROID_HOME if one does not already
 exist. If you are using the NDK as well, you may have to add `ndk.dir` to this file.
 
 An example shell.nix that does all this for you is provided in examples/shell.nix.

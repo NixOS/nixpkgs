@@ -9676,18 +9676,6 @@ final: prev:
     meta.homepage = "https://github.com/mfukar/robotframework-vim/";
   };
 
-  rocks-nvim = buildNeovimPlugin {
-    pname = "rocks.nvim";
-    version = "2024-06-19";
-    src = fetchFromGitHub {
-      owner = "nvim-neorocks";
-      repo = "rocks.nvim";
-      rev = "6737e01a76eaaae06d11b45c8b5b774fa97c283b";
-      sha256 = "0vl6rm3rv1730iw3bwzrwjsgr1hw5h4ksdgpir5spd3vqj7i97lz";
-    };
-    meta.homepage = "https://github.com/nvim-neorocks/rocks.nvim/";
-  };
-
   ron-vim = buildVimPlugin {
     pname = "ron.vim";
     version = "2022-08-19";
@@ -10892,6 +10880,18 @@ final: prev:
       sha256 = "0aii4vy97zyh2fpdkawwdanwd7sd0751ih5yznjcwn8cvrv74wl5";
     };
     meta.homepage = "https://github.com/Marskey/telescope-sg/";
+  };
+
+  telescope-smart-history-nvim = buildVimPlugin {
+    pname = "telescope-smart-history.nvim";
+    version = "2022-12-15";
+    src = fetchFromGitHub {
+      owner = "nvim-telescope";
+      repo = "telescope-smart-history.nvim";
+      rev = "81a4cceaa54d65d5f7c7c26178ee63b634d3e26d";
+      sha256 = "sha256-riBl0vSkRtM9Gtw/FNSKodSmqgGUpDnH7d5w+uU4ReQ=";
+    };
+    meta.homepage = "https://github.com/nvim-telescope/telescope-smart-history.nvim/";
   };
 
   telescope-symbols-nvim = buildVimPlugin {

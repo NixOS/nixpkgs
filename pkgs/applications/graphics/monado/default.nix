@@ -41,6 +41,7 @@
 , python3
 , SDL2
 , shaderc
+, tracy
 , udev
 , vulkan-headers
 , vulkan-loader
@@ -80,6 +81,9 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DXRT_FEATURE_SERVICE=${if serviceSupport then "ON" else "OFF"}"
     "-DXRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH=ON"
+    "-DXRT_HAVE_TRACY=ON"
+    "-DXRT_FEATURE_TRACING=ON"
+    "-DXRT_HAVE_STEAM=ON"
   ];
 
   buildInputs = [
@@ -117,6 +121,7 @@ stdenv.mkDerivation {
     pcre2
     SDL2
     shaderc
+    tracy
     udev
     vulkan-headers
     vulkan-loader
@@ -137,11 +142,6 @@ stdenv.mkDerivation {
   setupHook = writeText "setup-hook" ''
     export XDG_CONFIG_DIRS=@out@/etc/xdg''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
   '';
-
-  patches = [
-    # We don't have $HOME/.steam when building
-    ./force-enable-steamvr_lh.patch
-  ];
 
   passthru.tests = {
     basic-service = nixosTests.monado;

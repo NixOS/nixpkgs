@@ -740,14 +740,6 @@ with pkgs;
 
   protoc-gen-connect-go = callPackage ../development/tools/protoc-gen-connect-go { };
 
-  protoc-gen-prost = callPackage ../development/tools/protoc-gen-prost { };
-
-  protoc-gen-prost-crate = callPackage ../development/tools/protoc-gen-prost-crate { };
-
-  protoc-gen-prost-serde = callPackage ../development/tools/protoc-gen-prost-serde { };
-
-  protoc-gen-tonic = callPackage ../development/tools/protoc-gen-tonic { };
-
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
@@ -16370,11 +16362,14 @@ with pkgs;
 
   ocaml-crunch = ocamlPackages.crunch.bin;
 
+  inherit (ocaml-ng.ocamlPackages_4_14)
+    ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0
+    ocamlformat_0_22_4;
+
   inherit (ocamlPackages)
     ocamlformat # latest version
-    ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0
-    ocamlformat_0_22_4 ocamlformat_0_23_0 ocamlformat_0_24_1 ocamlformat_0_25_1
-    ocamlformat_0_26_0 ocamlformat_0_26_1 ocamlformat_0_26_2;
+    ocamlformat_0_23_0 ocamlformat_0_24_1 ocamlformat_0_25_1 ocamlformat_0_26_0
+    ocamlformat_0_26_1 ocamlformat_0_26_2;
 
   inherit (ocamlPackages) odig;
 
@@ -19793,6 +19788,10 @@ with pkgs;
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
+  yourkit-java = callPackage ../by-name/yo/yourkit-java/package.nix {
+    jre = jdk17;
+  };
+
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
 
   yq-go = callPackage ../development/tools/yq-go { };
@@ -20423,8 +20422,8 @@ with pkgs;
       intel-media-driver
       intel-vaapi-driver
       mesa
+      libva-vdpau-driver
       libvdpau-va-gl
-      vaapiVdpau
       glxinfo
       vdpauinfo;
   };
@@ -24613,7 +24612,7 @@ with pkgs;
 
   vaapi-intel-hybrid = callPackage ../development/libraries/vaapi-intel-hybrid { };
 
-  vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau { };
+  libva-vdpau-driver = callPackage ../development/libraries/libva-vdpau-driver { };
 
   vale = callPackage ../tools/text/vale { };
 
@@ -26530,8 +26529,6 @@ with pkgs;
   virtualenv = with python3Packages; toPythonApplication virtualenv;
 
   virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
-
-  vmagent = callPackage ../servers/monitoring/vmagent { };
 
   vsftpd = callPackage ../servers/ftp/vsftpd { };
 
@@ -31974,11 +31971,9 @@ with pkgs;
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
-  klee = callPackage ../applications/science/logic/klee (with llvmPackages_13; {
-    clang = clang;
-    llvm = llvm;
-    stdenv = stdenv;
-  });
+  klee = callPackage ../applications/science/logic/klee {
+    llvmPackages = llvmPackages_13;
+  };
 
   kmetronome = qt6Packages.callPackage ../applications/audio/kmetronome { };
 
@@ -35227,9 +35222,7 @@ with pkgs;
 
   webssh = with python3Packages; toPythonApplication webssh;
 
-  webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {
-    electron = electron_27;
-  };
+  webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop { };
 
   wrapWeechat = callPackage ../applications/networking/irc/weechat/wrapper.nix { };
 
@@ -39461,14 +39454,9 @@ with pkgs;
 
   dnadd = callPackage ../tools/nix/dnadd { };
 
-  nix-eval-jobs = if stdenv.isDarwin then
-    callPackage ../tools/package-management/nix-eval-jobs/2.19.nix {
-      nix = nixVersions.nix_2_19;
-    }
-  else
-    callPackage ../tools/package-management/nix-eval-jobs {
-      nix = nixVersions.nix_2_22;
-    };
+  nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
+    nix = nixVersions.nix_2_22;
+  };
 
   nix-doc = callPackage ../tools/package-management/nix-doc { };
 
