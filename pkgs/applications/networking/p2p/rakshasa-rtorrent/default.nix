@@ -13,9 +13,10 @@
 , pkg-config
 , xmlrpc_c
 , zlib
+, nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rakshasa-rtorrent";
   version = "0.9.8+date=2022-06-20";
 
@@ -52,6 +53,10 @@ stdenv.mkDerivation rec {
     "--with-xmlrpc-c"
     "--with-posix-fallocate"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) rtorrent;
+  };
 
   enableParallelBuilding = true;
 
