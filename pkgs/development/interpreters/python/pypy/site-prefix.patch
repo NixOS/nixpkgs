@@ -1,0 +1,15 @@
+diff --git a/lib-python/3/site.py b/lib-python/3/site.py
+index 94e8aae..c03947e 100644
+--- a/lib-python/3/site.py
++++ b/lib-python/3/site.py
+@@ -352,9 +352,7 @@ implementation = _get_implementation().lower()
+         ver = sys.version_info
+         if os.sep == '/':
+             for libdir in libdirs:
+-                path = os.path.join(prefix, libdir,
+-                                            f"{implementation}{ver[0]}.{ver[1]}",
+-                                            "site-packages")
++                path = os.path.join(prefix, "site-packages")
+                 sitepackages.append(path)
+         else:
+             sitepackages.append(prefix)
