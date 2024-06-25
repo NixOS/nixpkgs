@@ -1097,7 +1097,7 @@ lib.mapAttrs mkLicense ({
   };
 
   purdueBsd = {
-    fullName = " Purdue BSD-Style License"; # also know as lsof license
+    fullName = "Purdue BSD-Style License"; # also known as lsof license
     url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
   };
 
