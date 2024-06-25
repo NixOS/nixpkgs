@@ -1,14 +1,5 @@
-From e26ae067644ea780f050fb900bd850027bb86456 Mon Sep 17 00:00:00 2001
-From: superherointj <5861043+superherointj@users.noreply.github.com>
-Date: Tue, 7 Mar 2023 14:59:31 -0300
-Subject: [PATCH] make-safe-for-sandbox.patch
-
----
- lib/CMakeLists.txt | 80 ++--------------------------------------------
- 1 file changed, 2 insertions(+), 78 deletions(-)
-
 diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
-index 129e26e6..d25bdf9d 100644
+index 8d853b4b..9a9f46bf 100644
 --- a/lib/CMakeLists.txt
 +++ b/lib/CMakeLists.txt
 @@ -32,14 +32,14 @@ endif()
@@ -34,7 +25,7 @@ index 129e26e6..d25bdf9d 100644
  
 -find_package(Git)
 -
--set(LLVM_DESIRED_HASH "1f9140064dfbfb0bbda8e51306ea51080b2f7aac")
+-set(LLVM_DESIRED_HASH "8dfdcc7b7bf66834a761bd8de445840ef68e4d1a")
 -set(PATCHES_DESIRED_HASH "3e16c097794cb669a8f6a0bd7600b440205ac5c29a6135750c2e83263eb16a95")
 -
 -if(GIT_FOUND)
@@ -111,6 +102,3 @@ index 129e26e6..d25bdf9d 100644
  message("Building targets: ${LLVM_TARGETS_TO_BUILD}")
  
  set(LLVM_ENABLE_BINDINGS OFF CACHE BOOL "ponyc specific override of LLVM cache entry")
--- 
-2.39.2
-
