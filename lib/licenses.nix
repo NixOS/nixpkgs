@@ -1259,6 +1259,11 @@ in mkLicense lset) ({
     fullName = "X11 License";
   };
 
+  x11DistributeModifications = {
+    spdxId = "X11-distribute-modifications-variant";
+    fullName = "X11 License Distribution Modification Variant";
+  };
+
   xfig = {
     spdxId = "Xfig";
     fullName = "xfig";
