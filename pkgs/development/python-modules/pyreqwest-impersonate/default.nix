@@ -1,11 +1,14 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
   pytest,
   runCommand,
   boringssl,
+  libiconv,
+  SystemConfiguration,
 }:
 
 let
@@ -39,6 +42,11 @@ buildPythonPackage rec {
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    SystemConfiguration
   ];
 
   env.BORING_BSSL_PATH = boringssl-wrapper;
