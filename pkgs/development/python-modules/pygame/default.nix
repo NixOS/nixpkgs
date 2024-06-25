@@ -9,8 +9,9 @@
 
   # build-system
   cython,
-  setuptools,
   pkg-config,
+  SDL2,
+  setuptools,
 
   # native dependencies
   AppKit,
@@ -20,7 +21,6 @@
   libpng,
   libX11,
   portmidi,
-  SDL2,
   SDL2_image,
   SDL2_mixer,
   SDL2_ttf,
@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "2.5.2";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The documentation
     # has such files and will be removed.
-    hash = "sha256-+gRv3Rim+2aL2uhPPGfVD0QDgB013lTf6wPx8rOwgXg=";
+    hash = "sha256-wNXcmH0IIuAOoomIdmhAPxe4TiEzes3Kq+Vth2r4/IA=";
     postFetch = "rm -rf $out/docs/reST";
   };
 
@@ -66,14 +66,7 @@ buildPythonPackage rec {
       );
     })
     # Skip tests that should be disabled without video driver
-    ./skip-surface-tests.patch
-
-    # removes distutils unbreaking py312, part of https://github.com/pygame/pygame/pull/4211
-    (fetchpatch {
-      name = "remove-distutils.patch";
-      url = "https://github.com/pygame/pygame/commit/6038e7d6583a7a25fcc6e15387cf6240e427e5a7.patch";
-      hash = "sha256-HxcYjjhsu/Y9HiK9xDvY4X5dgWPP4XFLxdYGXC6tdWM=";
-    })
+    # ./skip-surface-tests.patch
   ];
 
   postPatch = ''
@@ -82,7 +75,7 @@ buildPythonPackage rec {
       --replace-fail /usr/X11/bin/fc-list ${fontconfig}/bin/fc-list
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     pkg-config
     SDL2
@@ -122,11 +115,12 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "pygame" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for games";
     homepage = "https://www.pygame.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/pygame/pygame/releases/tag/${version}";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.unix;
   };
 }
