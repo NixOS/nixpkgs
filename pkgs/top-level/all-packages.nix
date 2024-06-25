@@ -27305,14 +27305,14 @@ with pkgs;
 
   minimal-bootstrap = recurseIntoAttrs (import ../os-specific/linux/minimal-bootstrap {
     inherit (stdenv) buildPlatform hostPlatform;
-    inherit lib config;
+    inherit lib config stage0-posix;
     fetchurl = import ../build-support/fetchurl/boot.nix {
       inherit (stdenv.buildPlatform) system;
     };
     checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
   });
-  minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix { };
-  make-minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix {
+  minimal-bootstrap-sources = callPackage ../os-specific/linux/stage0-posix/bootstrap-sources.nix { };
+  make-minimal-bootstrap-sources = callPackage ../os-specific/linux/stage0-posix/make-bootstrap-sources.nix {
     inherit (stdenv) hostPlatform;
   };
 
@@ -27719,6 +27719,8 @@ with pkgs;
   smem = callPackage ../os-specific/linux/smem { };
 
   smimesign = callPackage ../os-specific/darwin/smimesign { };
+
+  stage0-posix = recurseIntoAttrs (callPackage ../os-specific/linux/stage0-posix { });
 
   statik = callPackage ../development/tools/statik { };
 

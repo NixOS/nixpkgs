@@ -10,7 +10,7 @@
 { lib
 , callPackage
 , fetchurl
-, kaem
+, stage0-posix
 , mes
 , mes-libc
 }:
@@ -24,7 +24,7 @@ let
     url = "https://gitlab.com/janneke/tinycc/-/archive/${rev}/tinycc-${rev}.tar.gz";
     sha256 = "1a0cw9a62qc76qqn5sjmp3xrbbvsz2dxrw21lrnx9q0s74mwaxbq";
   };
-  src = (kaem.runCommand "tinycc-bootstrappable-${version}-source" {} ''
+  src = (stage0-posix.kaem.runCommand "tinycc-bootstrappable-${version}-source" {} ''
     ungz --file ${tarball} --output tinycc.tar
     mkdir -p ''${out}
     cd ''${out}
@@ -47,8 +47,8 @@ let
   pname = "tinycc-boot-mes";
 
   tinycc-boot-mes = rec {
-    compiler = kaem.runCommand "${pname}-${version}" {
-      passthru.tests.get-version = result: kaem.runCommand "${pname}-get-version-${version}" {} ''
+    compiler = stage0-posix.kaem.runCommand "${pname}-${version}" {
+      passthru.tests.get-version = result: stage0-posix.kaem.runCommand "${pname}-get-version-${version}" {} ''
         ${result}/bin/tcc -version
         mkdir ''${out}
       '';

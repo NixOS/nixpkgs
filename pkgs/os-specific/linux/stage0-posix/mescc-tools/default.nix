@@ -1,5 +1,5 @@
 { lib
-, derivationWithMeta
+, minimal-bootstrap
 , hostPlatform
 , kaem-unwrapped
 , M1
@@ -20,7 +20,7 @@ let
 
   # We need a few tools from mescc-tools-extra to assemble the output folder
   buildMesccToolsExtraUtil = name:
-    derivationWithMeta {
+    minimal-bootstrap.derivationWithMeta {
       pname = "mescc-tools-extra-${name}";
       builder = kaem-unwrapped;
       args = [
@@ -69,7 +69,7 @@ let
   chmod = buildMesccToolsExtraUtil "chmod";
   replace = buildMesccToolsExtraUtil "replace";
 in
-derivationWithMeta {
+minimal-bootstrap.derivationWithMeta {
   pname = "mescc-tools";
   builder = kaem-unwrapped;
   args = [

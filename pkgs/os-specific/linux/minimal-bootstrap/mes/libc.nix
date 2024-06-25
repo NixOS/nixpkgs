@@ -1,8 +1,8 @@
 { lib
-, kaem
 , ln-boot
 , mes
 , mes-libc
+, stage0-posix
 }:
 let
   pname = "mes-libc";
@@ -20,7 +20,7 @@ let
   firstLibc = lib.take 100 libc_gnu_SOURCES;
   lastLibc = lib.drop 100 libc_gnu_SOURCES;
 in
-kaem.runCommand "${pname}-${version}" {
+stage0-posix.kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [ ln-boot ];
