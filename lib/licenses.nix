@@ -628,7 +628,7 @@ in mkLicense lset) ({
   # Intel's license, seems free
   iasl = {
     spdxId = "Intel-ACPI";
-    fullName = "iASL";
+    fullName = "Intel ACPI Software License Agreement";
     url = "https://old.calculate-linux.org/packages/licenses/iASL";
   };
 
