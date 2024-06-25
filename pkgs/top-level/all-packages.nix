@@ -25093,7 +25093,11 @@ with pkgs;
 
   # Armed Bear Common Lisp
   abcl = wrapLisp {
-    pkg = callPackage ../development/compilers/abcl { };
+    pkg = callPackage ../development/compilers/abcl {
+      # https://armedbear.common-lisp.dev/ lists OpenJDK 17 as the highest
+      # supported JDK.
+      jdk = openjdk17;
+    };
     faslExt = "abcl";
   };
 
