@@ -29,10 +29,7 @@ let
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
-  cudaCapabilities = cudaPackages.cudaFlags.cudaCapabilities;
-  # E.g. [ "80" "86" "90" ]
-  cudaArchitectures = (builtins.map cudaPackages.cudaFlags.dropDot cudaCapabilities);
-  cudaArchitecturesString = lib.strings.concatStringsSep ";" cudaArchitectures;
+  cudaArchitecturesString = cudaPackages.flags.cmakeCudaArchitecturesString;
 
   howard-hinnant-date = fetchFromGitHub {
     owner = "HowardHinnant";
