@@ -1,5 +1,5 @@
 { lib
-, buildPythonPackage
+, buildPythonApplication
 , fetchFromGitHub
 , fetchPypi
 , chardet
@@ -38,13 +38,13 @@ let
     # Put packageOverrides at the start so they are applied after defaultOverrides
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
-in with py.pkgs; buildPythonPackage rec {
+in with py.pkgs; buildPythonApplication rec {
   pname = "ludios_wpull";
   version = "5.0.3";
 
   disabled = pythonOlder "3.12";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     rev = version;
@@ -62,7 +62,7 @@ in with py.pkgs; buildPythonPackage rec {
     description = "Web crawler; fork of wpull used by grab-site";
     homepage = "https://github.com/ArchiveTeam/ludios_wpull";
     license = lib.licenses.gpl3;
-    maintainers = with maintainers; [ ivan ];
+    maintainers = with lib.maintainers; [ ivan ];
     broken = lib.versions.major tornado.version != "6";
   };
 }
