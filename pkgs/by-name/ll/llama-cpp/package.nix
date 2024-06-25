@@ -122,12 +122,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "LLAMA_VULKAN" vulkanSupport)
   ]
       ++ optionals cudaSupport [
-        (
-          with cudaPackages.flags;
-          cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (
-            builtins.concatStringsSep ";" (map dropDot cudaCapabilities)
-          )
-        )
+        (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
       ]
       ++ optionals rocmSupport [
         (cmakeFeature "CMAKE_C_COMPILER" "hipcc")
