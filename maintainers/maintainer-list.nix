@@ -16310,6 +16310,11 @@
     githubId = 5636;
     name = "Steve Purcell";
   };
+  purefns = {
+    github = "purefns";
+    githubId = 44219367;
+    name = "James Adam";
+  };
   purrpurrn = {
     email = "scrcpynovideoaudiocodecraw+nixpkgs@gmail.com";
     github = "purrpurrn";
