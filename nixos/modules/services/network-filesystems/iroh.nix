@@ -215,6 +215,8 @@ in
       }
     ];
 
+    environment.systemPackages = [ cfg.package ];
+
     # TODO If we need to have a static user/group, look here:
     # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/misc/ids.nix
 
