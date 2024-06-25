@@ -8532,7 +8532,9 @@ with pkgs;
 
   gql = callPackage ../applications/version-management/gql { };
 
-  grab-site = python312Packages.callPackage ../by-name/gr/grab-site/package.nix { };
+  grab-site = callPackage ../by-name/gr/grab-site/package.nix {
+    python3 = python312;
+  };
 
   grafterm = callPackage ../tools/misc/grafterm { };
 
@@ -8714,7 +8716,9 @@ with pkgs;
 
   lucky-cli = callPackage ../development/web/lucky-cli { };
 
-  ludios_wpull = python312Packages.callPackage ../by-name/lu/ludios_wpull/package.nix { };
+  ludios_wpull = callPackage ../by-name/lu/ludios_wpull/package.nix {
+    python3 = python312;
+  };
 
   mac-fdisk = callPackage ../tools/system/mac-fdisk { };
 

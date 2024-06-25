@@ -1,19 +1,6 @@
 { lib
-, buildPythonApplication
 , fetchFromGitHub
-, fetchPypi
-, chardet
-, dnspython
-, html5-parser
-, lxml
-, namedlist
-, psutil
-, setuptools
-, sqlalchemy
-, tornado
-, yapsy
-, python
-, pythonOlder
+, python3
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
@@ -34,7 +21,7 @@ let
       });
     })
   ];
-  py = python.override {
+  py = python3.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };

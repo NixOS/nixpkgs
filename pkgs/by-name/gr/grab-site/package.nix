@@ -1,11 +1,9 @@
 { lib
-, fetchPypi
 , fetchFromGitHub
-, buildPythonApplication
-, python
-, pythonOlder
+, python3
 , ludios_wpull
 }:
+with python3.pkgs;
 buildPythonApplication rec {
   pname = "grab-site";
   version = "2.2.7";
@@ -24,7 +22,7 @@ buildPythonApplication rec {
       --replace-fail '"wpull @ https://github.com/ArchiveTeam/ludios_wpull/tarball/master#egg=wpull-3.0.9"' '"wpull"'
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = [
     click
     ludios_wpull
     manhole
