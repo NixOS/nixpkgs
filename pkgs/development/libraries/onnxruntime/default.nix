@@ -249,6 +249,6 @@ effectiveStdenv.mkDerivation rec {
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer puffnfresh ck3d cbourjau ];
+    maintainers = with maintainers; [ puffnfresh ck3d cbourjau ];
   };
 }

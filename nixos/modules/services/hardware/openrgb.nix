@@ -51,5 +51,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ jonringer ];
+  meta.maintainers = with lib.maintainers; [ ];
 }
