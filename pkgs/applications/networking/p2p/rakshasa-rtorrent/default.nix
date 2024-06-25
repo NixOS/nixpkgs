@@ -14,6 +14,7 @@
 , xmlrpc_c
 , zlib
 , nixosTests
+, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
@@ -54,8 +55,11 @@ stdenv.mkDerivation {
     "--with-posix-fallocate"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) rtorrent;
+  passthru = {
+    updateScript = unstableGitUpdater { tagPrefix = "v"; };
+    tests = {
+      inherit (nixosTests) rtorrent;
+    };
   };
 
   enableParallelBuilding = true;
