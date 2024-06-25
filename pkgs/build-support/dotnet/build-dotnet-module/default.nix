@@ -17,7 +17,7 @@
 , runtimeShellPackage
 }:
 
-{ name ? "${args.pname}-${args.version}"
+{ name ? "${_args.pname}-${_args.version}"
 , pname ? name
 , enableParallelBuilding ? true
 , doCheck ? false
@@ -87,9 +87,11 @@
   # The dotnet runtime to use.
 , dotnet-runtime ? dotnetCorePackages.runtime_6_0
 , ...
-} @ args:
+} @ _args:
 
 let
+  args = removeAttrs _args [ "nugetDeps" ];
+
   projectFiles =
     lib.optionals (projectFile != null) (lib.toList projectFile);
   testProjectFiles =
