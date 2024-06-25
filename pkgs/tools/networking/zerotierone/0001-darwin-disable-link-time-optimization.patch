@@ -1,0 +1,32 @@
+From f71d88a15f537cbc5ea80ad2922c013553a5caab Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Fri, 21 Jun 2024 14:43:03 +0200
+Subject: [PATCH 2/2] darwin: disable link-time optimization
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It's not yet clear to me, but in our build we somehow mix objects with
+and without flto.
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ make-mac.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/make-mac.mk b/make-mac.mk
+index 7af200ad..b388c05a 100644
+--- a/make-mac.mk
++++ b/make-mac.mk
+@@ -84,7 +84,7 @@ ifeq ($(ZT_DEBUG),1)
+ node/Salsa20.o node/SHA512.o node/C25519.o node/Poly1305.o: CFLAGS = -Wall -O2 -g $(INCLUDES) $(DEFS)
+ else
+ 	CFLAGS?=-Ofast -fstack-protector-strong
+-	CFLAGS+=$(ARCH_FLAGS) -Wall -flto -fPIE -mmacosx-version-min=$(MACOS_VERSION_MIN) -DNDEBUG -Wno-unused-private-field $(INCLUDES) $(DEFS)
++	CFLAGS+=$(ARCH_FLAGS) -Wall -fPIE -mmacosx-version-min=$(MACOS_VERSION_MIN) -DNDEBUG -Wno-unused-private-field $(INCLUDES) $(DEFS)
+ 	STRIP=strip
+ 	EXTRA_CARGO_FLAGS=--release
+ 	RUST_VARIANT=release
+-- 
+2.44.1
+
