@@ -332,6 +332,14 @@ in
         libvirt NSS module options.
       '';
     };
+
+    sshProxy = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Weither to configure OpenSSH to use the [SSH Proxy](https://libvirt.org/ssh-proxy.html).
+      '';
+    };
   };
 
 
@@ -381,6 +389,10 @@ in
       group = "root";
       source = "${cfg.qemu.package}/libexec/qemu-bridge-helper";
     };
+
+    programs.ssh.extraConfig = mkIf cfg.sshProxy ''
+      Include ${cfg.package}/etc/ssh/ssh_config.d/30-libvirt-ssh-proxy.conf
+    '';
 
     systemd.packages = [ cfg.package ];
 
