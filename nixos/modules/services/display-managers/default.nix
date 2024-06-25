@@ -203,6 +203,7 @@ in
       let dmConf = config.services.xserver.displayManager;
           noDmUsed = !(dmConf.gdm.enable
                     || cfg.sddm.enable
+                    || cfg.aporia.enable
                     || dmConf.xpra.enable
                     || dmConf.lightdm.enable);
       in lib.mkIf noDmUsed (lib.mkDefault false);
