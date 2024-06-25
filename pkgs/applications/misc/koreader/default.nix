@@ -6,6 +6,7 @@
 , glib
 , gnutar
 , gtk3-x11
+, openssl_1_1
 , luajit
 , sdcv
 , SDL2 }:
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     gnutar
     gtk3-x11
     luajit_lua52
+    openssl_1_1
     sdcv
     SDL2
   ];
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
     find ${src_repo}/resources/fonts -type d -execdir cp -r '{}' $out/lib/koreader/fonts \;
     find $out -xtype l -print -delete
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ gtk3-x11 SDL2 glib ]
+      lib.makeLibraryPath [ gtk3-x11 SDL2 glib openssl_1_1 ]
     }
   '';
 
