@@ -41,11 +41,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rakshasa/libtorrent";
     description = "BitTorrent library written in C++ for *nix, with focus on high performance and good code";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ebzzry codyopel thiagokokada ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ebzzry codyopel thiagokokada ];
+    platforms = lib.platforms.unix;
   };
 }
