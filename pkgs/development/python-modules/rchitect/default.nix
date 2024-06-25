@@ -10,6 +10,7 @@
   rPackages,
   six,
   packaging,
+  nix-update-script
 }:
 
 buildPythonPackage rec {
@@ -49,6 +50,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "rchitect" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Interoperate R with Python";
