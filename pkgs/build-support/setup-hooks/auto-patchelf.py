@@ -253,10 +253,6 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: list
             # checked (because just updating the rpath won't satisfy
             # it).
             continue
-        elif (libc_lib / dep).is_file():
-            # This library exists in libc, and will be correctly
-            # resolved by the linker.
-            continue
 
         if found_dependency := find_dependency(dep.name, file_arch, file_osabi):
             rpath.append(found_dependency)
