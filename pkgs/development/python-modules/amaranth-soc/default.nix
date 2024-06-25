@@ -16,7 +16,9 @@ buildPythonPackage rec {
     owner = "amaranth-lang";
     repo = "amaranth-soc";
     rev = "cce8a79a37498f4d5900be21a295ba77e51e6c9d";
-    sha256 = "sha256-hfkJaqICuy3iSTwLM9lbUPvSMDBLW8GdxqswyAOsowo=";
+    # these files change depending on git branch status
+    postFetch = "rm -f $out/.git_archival.txt $out/.gitattributes";
+    sha256 = "sha256-QElpfjlBsOmUk9i6sRPvf3GEvDLssKUjgfFfsabiCTI=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
