@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     sha256 = "0ns12q7vg9yand4dmdsps1917cavfbw67yl5q7bm6kb4ia5kkx13";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" "gas" "man" ];
 
   nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
@@ -176,6 +176,12 @@ stdenv.mkDerivation {
     install -c -m 444  libsyminfo.h \
       $dev/include/cbt
     popd
+  '';
+
+  postInstall = ''
+    # Move GNU as to its own output to prevent it from being used accidentally.
+    moveToOutput bin/gas "$gas"
+    moveToOutput libexec "$gas"
   '';
 
   passthru = {
