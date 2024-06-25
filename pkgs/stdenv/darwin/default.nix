@@ -440,10 +440,12 @@ in
 
       ninja = super.ninja.override { buildDocs = false; };
 
-      # Use this stage’s CF to build Python. It’s required but can’t be included in the stdenv.
+      # Use this stage’s CF to build Python. It’s required, but it can’t be included in the stdenv.
       python3 = self.python3Minimal;
-      python3Minimal = super.python3Minimal.overrideAttrs (old: {
-        buildInputs = old.buildInputs ++ [ self.darwin.CF ];
+      python3Minimal = (super.python3Minimal.override {
+        self = self.python3Minimal;
+      }).overrideAttrs (old: {
+        buildInputs = old.buildInputs or [ ] ++ [ self.darwin.CF ];
       });
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
@@ -510,9 +512,7 @@ in
     '';
   })
 
-  # Build cctools, Python, and sysctl for use by LLVM’s check phase. They must be built in
-  # their stage to prevent infinite recursions and to make sure the stdenv used to build
-  # LLVM has the newly built cctools instead of the one from the bootstrap tools.
+  # Build sysctl for use by LLVM’s check phase. It must be built separately to avoid an infinite recursion.
   (prevStage:
     # previous stage1 stdenv:
     assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils gnugrep ]);
@@ -551,28 +551,18 @@ in
         python3Minimal scons sed serf sharutils sqlite subversion texinfo unzip which xz
         zlib zstd;
 
-      # Support for the SystemConfiguration framework is required to run the LLVM tests, but trying
-      # to override python3Minimal does not appear to work.
-      python3 = (super.python3.override {
-        inherit (self) libffi;
-        inherit (self.darwin) configd;
-        openssl = null;
-        readline = null;
-        ncurses = null;
-        gdbm = null;
-        sqlite = null;
-        tzdata = null;
-        stripConfig = true;
-        stripIdlelib = true;
-        stripTests = true;
-        stripTkinter = true;
-        rebuildBytecode = false;
-        stripBytecode = true;
-        includeSiteCustomize = false;
-        enableOptimizations = false;
+      # Avoid pulling in openldap just to run Meson’s tests.
+      meson = super.meson.overrideAttrs {
+        doInstallCheck = false;
+      };
+
+      # The bootstrap Python needs its own `pythonAttr` to make sure the override works properly.
+      python3 = self.python3-bootstrap;
+      python3-bootstrap = super.python3.override {
+        self = self.python3-bootstrap;
+        pythonAttr = "python3-bootstrap";
         enableLTO = false;
-        mimetypesSupport = false;
-      }).overrideAttrs (_: { pname = "python3-minimal-scproxy"; });
+      };
 
       darwin = super.darwin.overrideScope (_: superDarwin: {
         inherit (prevStage.darwin)
@@ -623,7 +613,7 @@ in
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
       atf autoconf automake bash binutils-unwrapped bison brotli cmake cpio cyrus_sasl db
       ed expat flex gettext gmp groff icu kyua libedit libffi libiconv libidn2 libkrb5 libssh2
-      libtool libunistring libxml2 m4 ncurses nghttp2 ninja openldap openssh openssl
+      libtool libunistring libxml2 m4 meson ncurses nghttp2 ninja openldap openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
       subversion sysctl.provider texinfo unzip which xz zlib zstd
     ]);
@@ -650,7 +640,7 @@ in
       inherit (prevStage) ccWrapperStdenv
         atf autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
         cpio cyrus_sasl db ed expat flex gettext gmp groff icu kyua libedit libffi libiconv
-        libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2 ninja
+        libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 meson ncurses nghttp2 ninja
         openldap openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal
         scons sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zlib zstd;
 
@@ -746,7 +736,7 @@ in
       inherit (prevStage) ccWrapperStdenv
         atf autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
         cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libffi
-        libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2
+        libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 meson ncurses nghttp2
         ninja openbsm openldap openpam openssh openssl patchutils pbzx perl pkg-config
         python3 python3Minimal scons serf sqlite subversion sysctl texinfo unzip which xz
         zlib zstd;
@@ -813,7 +803,7 @@ in
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
       atf autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
       cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu kyua libedit libidn2
-      libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap openpam openssh
+      libkrb5 libssh2 libtool libunistring m4 meson nghttp2 ninja openbsm openldap openpam openssh
       openssl patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf
       sqlite subversion sysctl.provider texinfo unzip which xz zstd
     ]);
@@ -850,7 +840,7 @@ in
       inherit (prevStage) ccWrapperStdenv
         atf autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio
         cyrus_sasl db ed expat flex gettext gmp gnugrep groff kyua libedit libidn2 libkrb5
-        libssh2 libtool libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam
+        libssh2 libtool libunistring m4 meson ncurses nghttp2 ninja openbsm openldap openpam
         openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons serf
         sqlite subversion sysctl texinfo unzip which xz zstd;
 
@@ -935,7 +925,7 @@ in
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
       autoconf automake bison brotli cmake cmakeMinimal coreutils cpio cyrus_sasl
       db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
-      libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam openssh openssl
+      libunistring m4 meson ncurses nghttp2 ninja openbsm openldap openpam openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
       subversion sysctl.provider texinfo unzip which xz zstd
     ]);
@@ -971,7 +961,7 @@ in
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
         coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
-        libidn2 libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap
+        libidn2 libkrb5 libssh2 libtool libunistring m4 meson nghttp2 ninja openbsm openldap
         openpam openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons
         sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zstd
 
@@ -1019,7 +1009,7 @@ in
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
       autoconf automake bison brotli cmake cmakeMinimal coreutils cpio cyrus_sasl
       db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
-      libunistring m4 nghttp2 ninja openbsm openldap openpam openssh openssl patchutils pbzx
+      libunistring m4 meson nghttp2 ninja openbsm openldap openpam openssh openssl patchutils pbzx
       perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite subversion
       sysctl.provider texinfo unzip which xz zstd
     ]);
@@ -1054,7 +1044,7 @@ in
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
         autoconf automake bash bison cmake cmakeMinimal cyrus_sasl db expat flex groff
-        libedit libtool m4 ninja openldap openssh patchutils perl pkg-config python3 scons
+        libedit libtool m4 meson ninja openldap openssh patchutils perl pkg-config python3 scons
         serf sqlite subversion sysctl texinfo unzip which
 
         # CF dependencies - don’t rebuild them.
@@ -1202,7 +1192,7 @@ in
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
       autoconf automake bison cmake cmakeMinimal cyrus_sasl db expat flex groff libedit
-      libtool m4 ninja openldap openssh patchutils perl pkg-config.pkg-config python3 scons
+      libtool m4 meson ninja openldap openssh patchutils perl pkg-config.pkg-config python3 scons
       serf sqlite subversion sysctl.provider texinfo unzip which
     ]);
 
