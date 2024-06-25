@@ -238,33 +238,38 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.misskey.settings = {
-      db = (lib.optionalAttrs cfg.database.createLocally {
-        db = "misskey";
-        # Use unix socket instead of localhost to allow PostgreSQL peer authentication,
-        # required for `services.postgresql.ensureUsers`
-        host = "/var/run/postgresql";
-        port = config.services.postgresql.settings.port;
-        user = "misskey";
-        pass = null;
-      }) // (lib.optionalAttrs (cfg.database.passwordFile != null) {
-        pass = "@DATABASE_PASSWORD@";
-      });
-      redis = (lib.optionalAttrs cfg.redis.createLocally {
-        host = "localhost";
-      }) // (lib.optionalAttrs (cfg.redis.passwordFile != null) {
-        pass = "@REDIS_PASSWORD@";
-      });
-      meilisearch =
-        if (cfg.meilisearch.createLocally || (cfg.meilisearch.keyFile != null)) then
-          ((lib.optionalAttrs cfg.meilisearch.createLocally {
-            host = "localhost";
-            port = config.services.meilisearch.listenPort;
-            ssl = false;
-          }) // (lib.optionalAttrs (cfg.meilisearch.keyFile != null) {
-            apiKey = "@MEILISEARCH_KEY@";
-          })) else null;
-    };
+    services.misskey.settings = lib.mkMerge [
+      (lib.mkIf cfg.database.createLocally {
+        db = {
+          db = lib.mkForce "misskey";
+          # Use unix socket instead of localhost to allow PostgreSQL peer authentication,
+          # required for `services.postgresql.ensureUsers`
+          host = lib.mkForce "/var/run/postgresql";
+          port = lib.mkForce config.services.postgresql.settings.port;
+          user = lib.mkForce "misskey";
+          pass = lib.mkForce null;
+        };
+      })
+      (lib.mkIf (cfg.database.passwordFile != null) {
+        db.pass = lib.mkForce "@DATABASE_PASSWORD@";
+      })
+      (lib.mkIf cfg.redis.createLocally {
+        redis.host = lib.mkForce "localhost";
+      })
+      (lib.mkIf (cfg.redis.passwordFile != null) {
+        redis.pass = lib.mkForce "@REDIS_PASSWORD@";
+      })
+      (lib.mkIf cfg.meilisearch.createLocally {
+        meilisearch = {
+          host = lib.mkForce "localhost";
+          port = lib.mkForce config.services.meilisearch.listenPort;
+          ssl = lib.mkForce false;
+        };
+      })
+      (lib.mkIf (cfg.meilisearch.keyFile != null) {
+        meilisearch.apiKey = lib.mkForce "@MEILISEARCH_KEY@";
+      })
+    ];
 
     systemd.services.misskey = {
       after = [ "network-online.target" "postgresql.service" ];
