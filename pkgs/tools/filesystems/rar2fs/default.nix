@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rar2fs";
-  version = "1.29.6";
+  version = "1.29.7";
 
   src = fetchFromGitHub {
     owner = "hasse69";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b8zMCzSFJewXMQOuaKwMJx//Wq9vT/bUj6XS/jDBBBo=";
+    sha256 = "sha256-iYlmNtaJZrnsNNNlaoV1Vu6PHrHIr/glhgs3784JCm4=";
   };
 
   postPatch = ''
