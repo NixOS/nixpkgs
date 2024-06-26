@@ -23,34 +23,55 @@
 , vulkan-loader
 , gnome
 , zenity ? gnome.zenity
+, darwin
+, p7zip
+, libarchive
 }:
 
-stdenvNoCC.mkDerivation {
-  pname = "parsec-bin";
-  version = "150_93b";
+{ pname
+, version
+, url
+, hash
+}:
+
+stdenvNoCC.mkDerivation rec {
+  inherit pname version;
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20240329180120/https://builds.parsec.app/package/parsec-linux.deb";
-    sha256 = "sha256-wfsauQMubnGKGfL9c0Zee5g3nn0eEnOFalQNL3d4weE=";
+    inherit url hash;
   };
 
-  unpackPhase = ''
+  unpackPhase = lib.optionalString stdenv.isLinux
+  ''
     runHook preUnpack
 
     dpkg-deb -x $src .
 
     runHook postUnpack
+  ''
+  + lib.optionalString stdenv.isDarwin
+  ''
+    7z x $src
+    bsdtar -xf Payload~
   '';
 
-  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
+    dpkg
+    autoPatchelfHook
+    makeWrapper
+  ] ++ lib.optionals stdenv.isDarwin [
+    libarchive
+    p7zip
+  ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     stdenv.cc.cc # libstdc++
     libglvnd
     libX11
   ];
 
-  runtimeDependenciesPath = lib.makeLibraryPath [
+  runtimeDependenciesPath = lib.optionalString stdenv.isLinux
+  (lib.makeLibraryPath [
     stdenv.cc.cc
     libglvnd
     openssl
@@ -68,7 +89,7 @@ stdenvNoCC.mkDerivation {
     libXrandr
     libXfixes
     vulkan-loader
-  ];
+  ]);
 
   binPath = lib.makeBinPath [
     zenity
@@ -81,7 +102,7 @@ stdenvNoCC.mkDerivation {
     fi
   '';
 
-  installPhase = ''
+  installPhase = lib.optionalString stdenv.isLinux ''
     runHook preInstall
 
     mkdir $out
@@ -97,14 +118,22 @@ stdenvNoCC.mkDerivation {
       --replace "/usr/share/icons" "${placeholder "out"}/share/icons"
 
     runHook postInstall
-  '';
+  ''
+  + lib.optionalString stdenv.isDarwin
+  ''
+    runHook preInstall
 
+    mkdir -p $out/Applications
+    cp -R Parsec.app $out/Applications/
+
+    runHook postInstall
+  '';
   # Only the main binary needs to be patched, the wrapper script handles
   # everything else. The libraries in `share/parsec/skel` would otherwise
   # contain dangling references when copied out of the nix store.
   dontAutoPatchelf = true;
 
-  fixupPhase = ''
+  fixupPhase = lib.optionalString stdenv.isLinux ''
     runHook preFixup
 
     autoPatchelf $out/bin
@@ -118,7 +147,7 @@ stdenvNoCC.mkDerivation {
     description = "Remote streaming service client";
     license = licenses.unfree;
     maintainers = with maintainers; [ arcnmx pabloaul ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "parsecd";
   };
 }
