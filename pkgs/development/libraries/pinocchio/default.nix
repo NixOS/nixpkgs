@@ -30,6 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace unittest/CMakeLists.txt \
       --replace-fail "add_pinocchio_unit_test(contact-cholesky)" ""
   '' + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) ''
+    # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2304
+    substituteInPlace unittest/CMakeLists.txt \
+      --replace-fail "add_pinocchio_unit_test(contact-models)" ""
     # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2277
     substituteInPlace unittest/algorithm/utils/CMakeLists.txt \
       --replace-fail "add_pinocchio_unit_test(force)" ""
