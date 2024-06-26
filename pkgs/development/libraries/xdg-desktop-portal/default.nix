@@ -114,6 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "systemd" enableSystemd)
   ] ++ lib.optionals (!enableGeoLocation) [
     "-Dgeoclue=disabled"
+  ] ++ lib.optionals (!finalAttrs.doCheck) [
+    "-Dpytest=disabled"
   ];
 
   doCheck = true;
