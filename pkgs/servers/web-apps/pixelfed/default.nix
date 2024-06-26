@@ -10,16 +10,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "pixelfed";
-  version = "0.11.13";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bEwKaC9fSOGLQbjsuPuIdMMbO3kzvzQxWQR8C2A4mQc=";
+    hash = "sha256-pNo10vvUD7q0HLM7+GgT+6PyocF4kDZ3Zee4ZCPDJNQ=";
   };
 
-  vendorHash = "sha256-ahQsOq3qOMGt3b0Ebac4xex+MP9knTmjyCy0PSNE4W8=";
+  vendorHash = "sha256-y6dgF/LHEYEVG+MgNnZa6f6oMQGvuvAgG6PVbmeMIz4=";
 
   postInstall = ''
     mv "$out/share/php/${finalAttrs.pname}"/* $out
