@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     fi
 
     # Necessary for FTS5 on Linux
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lm"
+    export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lm"
 
     echo ""
     echo "NIX_CFLAGS_COMPILE = $NIX_CFLAGS_COMPILE"
