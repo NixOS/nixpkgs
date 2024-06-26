@@ -74299,24 +74299,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  git-standup = nodeEnv.buildNodePackage {
-    name = "git-standup";
-    packageName = "git-standup";
-    version = "2.3.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/git-standup/-/git-standup-2.3.2.tgz";
-      sha512 = "vDYicak+2y+u6TCtneCx/j6LuT9WhJShyWjTB5dhjXqTB9TJ/uF444OmYwrMlaT0/CqxHOV9NXlML+CR8AJxdA==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Recall what you did on the last working day. Psst! or be nosy and find what someone else in your team did ;-)";
-      homepage = "https://github.com/kamranahmedse/git-standup#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   "@gitbeaker/cli" = nodeEnv.buildNodePackage {
     name = "_at_gitbeaker_slash_cli";
     packageName = "@gitbeaker/cli";
@@ -85668,24 +85650,6 @@ in
     meta = {
       description = "Streaming torrent client for node.js with web ui.";
       homepage = "https://github.com/asapach/peerflix-server#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  pnpm = nodeEnv.buildNodePackage {
-    name = "pnpm";
-    packageName = "pnpm";
-    version = "9.3.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-9.3.0.tgz";
-      sha512 = "7nuT4MK9EUCcZCT5K4ZvMdPqG+9fvkfTx1AM3DyWaIM9LlVoGtZt9bZAxh+p3CXVRu+lTXbX+L9UsTYUrCk2MQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Fast, disk space efficient package manager";
-      homepage = "https://pnpm.io";
       license = "MIT";
     };
     production = true;

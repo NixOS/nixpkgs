@@ -84,6 +84,7 @@ mapAliases {
   flood = pkgs.flood; # Added 2023-07-25
   generator-code = throw "generator-code was removed because it provides no executable"; # added 2023-09-24
   git-ssb = throw "git-ssb was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) git-standup; # added 2024-06-26
   inherit (pkgs) gitmoji-cli; # added 2023-09-23
   glob = pkgs.node-glob; # added 2023-08-18
   inherit (pkgs) gqlint; # added 2023-08-19
@@ -118,6 +119,7 @@ mapAliases {
   parcel-bundler = parcel; # added 2023-09-04
   pkg = pkgs.vercel-pkg; # added 2023-10-04
   inherit (pkgs) pm2; # added 2024-01-22
+  inherit (pkgs) pnpm; # added 2024-06-26
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
   inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09
