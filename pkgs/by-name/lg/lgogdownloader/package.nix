@@ -13,9 +13,7 @@
   tinyxml-2,
   help2man,
   html-tidy,
-  wrapQtAppsHook,
-  qtbase,
-  qtwebengine,
+  libsForQt5,
   testers,
   lgogdownloader,
 
@@ -38,7 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     help2man
     html-tidy
-  ] ++ lib.optional enableGui wrapQtAppsHook;
+  ] ++ lib.optional enableGui libsForQt5.wrapQtAppsHook;
 
   buildInputs =
     [
@@ -51,8 +49,8 @@ stdenv.mkDerivation rec {
       tinyxml-2
     ]
     ++ lib.optionals enableGui [
-      qtbase
-      qtwebengine
+      libsForQt5.qtbase
+      libsForQt5.qtwebengine
     ];
 
   cmakeFlags = lib.optional enableGui "-DUSE_QT_GUI=ON";
