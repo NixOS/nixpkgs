@@ -888,6 +888,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
+  "onepassword": {
+    "hash": "sha256-rdS9Udzfc/U7E4CIyySnntOCVBBZL0/GuAiVCI5uMrc=",
+    "homepage": "https://registry.terraform.io/providers/1Password/onepassword",
+    "owner": "1Password",
+    "repo": "terraform-provider-onepassword",
+    "rev": "v2.1.0",
+    "spdx": "MIT",
+    "vendorHash": null
+  },
   "opennebula": {
     "hash": "sha256-Bz/JKPbdxKS7VDnQoXnZ5ajqh++ujl+4wIS49BDtT94=",
     "homepage": "https://registry.terraform.io/providers/OpenNebula/opennebula",
