@@ -28771,15 +28771,6 @@ let
         sha512 = "tdcqOOpwArNjEr0gNQKCXwaNCWnQJrog14nJNQPeemcLnXQUUGrsCWpWkVKt46zLjcS6/KGoayeJfHHyPDlvwA==";
       };
     };
-    "graphql-14.7.0" = {
-      name = "graphql";
-      packageName = "graphql";
-      version = "14.7.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/graphql/-/graphql-14.7.0.tgz";
-        sha512 = "l0xWZpoPKpppFzMfvVyFmp9vLN7w/ZZJPefUicMCepfJeQ8sMcztloGYY9DfjVPo6tIUDzU5Hw3MUbIjj9AVVA==";
-      };
-    };
     "graphql-15.3.0" = {
       name = "graphql";
       packageName = "graphql";
@@ -74227,43 +74218,6 @@ in
     meta = {
       description = "Gatsby command-line interface for creating new sites and running Gatsby commands";
       homepage = "https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-cli#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  get-graphql-schema = nodeEnv.buildNodePackage {
-    name = "get-graphql-schema";
-    packageName = "get-graphql-schema";
-    version = "2.1.2";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/get-graphql-schema/-/get-graphql-schema-2.1.2.tgz";
-      sha512 = "1z5Hw91VrE3GrpCZE6lE8Dy+jz4kXWesLS7rCSjwOxf5BOcIedAZeTUJRIeIzmmR+PA9CKOkPTYFRJbdgUtrxA==";
-    };
-    dependencies = [
-      sources."ansi-styles-3.2.1"
-      sources."chalk-2.4.2"
-      sources."color-convert-1.9.3"
-      sources."color-name-1.1.3"
-      sources."encoding-0.1.13"
-      sources."escape-string-regexp-1.0.5"
-      sources."graphql-14.7.0"
-      sources."has-flag-3.0.0"
-      sources."iconv-lite-0.6.3"
-      sources."iterall-1.3.0"
-      sources."minimist-1.2.8"
-      sources."node-fetch-2.7.0"
-      sources."safer-buffer-2.1.2"
-      sources."supports-color-5.5.0"
-      sources."tr46-0.0.3"
-      sources."webidl-conversions-3.0.1"
-      sources."whatwg-url-5.0.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Downloads the GraphQL Schema of an GraphQL endpoint URL";
-      homepage = "https://github.com/graphcool/get-graphql-schema#readme";
       license = "MIT";
     };
     production = true;

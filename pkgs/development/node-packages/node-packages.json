@@ -112,7 +112,6 @@
 , "fx"
 , "ganache"
 , "gatsby-cli"
-, "get-graphql-schema"
 , "git-run"
 , "git-standup"
 , "@gitbeaker/cli"
