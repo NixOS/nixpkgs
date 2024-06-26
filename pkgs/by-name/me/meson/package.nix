@@ -135,7 +135,7 @@ python3.pkgs.buildPythonApplication rec {
     ''test cases/common/13 pch''
   ]))
   ++ [
-    ''HOME="$TMPDIR" python ./run_project_tests.py''
+    ''HOME="$TMPDIR" ${python3.executable} ./run_project_tests.py''
     "runHook postCheck"
   ]);
 
