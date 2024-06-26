@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "xevd" ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
     platforms = lib.platforms.all;
-    broken = !stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isDarwin;
+    # Currently only supports gcc and msvc as compiler, the limitation for clang gets removed in the next release, but that does not fix building on darwin.
+    broken = !stdenv.hostPlatform.isx86 || !stdenv.cc.isGNU;
   };
 })
