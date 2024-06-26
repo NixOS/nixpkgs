@@ -257,7 +257,6 @@
 , "vega-lite"
 , "vercel"
 , "vls"
-, "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
 , "vscode-json-languageserver"
 , "vscode-json-languageserver-bin"
