@@ -39,7 +39,7 @@ let
 
         music_directory     "${cfg.musicDirectory}"
         playlist_directory  "${cfg.playlistDirectory}"
-        ${lib.optionalString (cfg.dbFile != null) ''
+        ${optionalString (cfg.dbFile != null) ''
           db_file             "${cfg.dbFile}"
         ''}
         state_file          "${cfg.dataDir}/state"
@@ -263,7 +263,7 @@ in {
       wantedBy = [ "sockets.target" ];
       listenStreams = [
         ""  # Note: this is needed to override the upstream unit
-        (if pkgs.lib.hasPrefix "/" cfg.network.listenAddress
+        (if hasPrefix "/" cfg.network.listenAddress
           then cfg.network.listenAddress
           else "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}")
       ];
