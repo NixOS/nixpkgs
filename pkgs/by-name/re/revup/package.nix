@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , python3
 , fetchPypi
 }:
@@ -12,7 +11,7 @@ let
     hash = "sha256-EaBI414m5kihuaOkaHYAzvVxeJCgMIh9lD0JnCeVdZM=";
   };
 in
-python3.pkgs.buildPythonPackage {
+python3.pkgs.buildPythonApplication {
   inherit pname version src;
 
   nativeBuildInputs = with python3.pkgs; [
@@ -39,7 +38,7 @@ python3.pkgs.buildPythonPackage {
 
   meta = {
     homepage = "https://github.com/Skydio/revup";
-    description = " Revolutionary github tools";
+    description = "Efficient git workflow and code review toolkit";
     longDescription = ''
       Revup provides command-line tools that allow developers to iterate faster
       on parallel changes and reduce the overhead of creating and maintaining
