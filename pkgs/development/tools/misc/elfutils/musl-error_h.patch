@@ -1,66 +1,80 @@
-diff -crb --new-file a/lib/error.h b/lib/error.h
-*** a/lib/error.h	1969-12-31 19:00:00.000000000 -0500
---- b/lib/error.h	2021-01-21 04:38:25.000000000 -0500
-***************
-*** 0 ****
---- 1,27 ----
-+ #ifndef _ERROR_H_
-+ #define _ERROR_H_
-+ 
-+ #include <stdarg.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <errno.h>
-+ 
-+ static unsigned int error_message_count = 0;
-+ 
-+ static inline void error(int status, int errnum, const char* format, ...)
-+ {
-+ 	va_list ap;
-+ 	fprintf(stderr, "%s: ", program_invocation_name);
-+ 	va_start(ap, format);
-+ 	vfprintf(stderr, format, ap);
-+ 	va_end(ap);
-+ 	if (errnum)
-+ 		fprintf(stderr, ": %s", strerror(errnum));
-+ 	fprintf(stderr, "\n");
-+ 	error_message_count++;
-+ 	if (status)
-+ 		exit(status);
-+ }
-+ 
-+ #endif	/* _ERROR_H_ */
-diff -crb --new-file a/src/error.h b/src/error.h
-*** a/src/error.h	1969-12-31 19:00:00.000000000 -0500
---- b/src/error.h	2021-01-21 04:38:29.000000000 -0500
-***************
-*** 0 ****
---- 1,27 ----
-+ #ifndef _ERROR_H_
-+ #define _ERROR_H_
-+ 
-+ #include <stdarg.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <errno.h>
-+ 
-+ static unsigned int error_message_count = 0;
-+ 
-+ static inline void error(int status, int errnum, const char* format, ...)
-+ {
-+ 	va_list ap;
-+ 	fprintf(stderr, "%s: ", program_invocation_name);
-+ 	va_start(ap, format);
-+ 	vfprintf(stderr, format, ap);
-+ 	va_end(ap);
-+ 	if (errnum)
-+ 		fprintf(stderr, ": %s", strerror(errnum));
-+ 	fprintf(stderr, "\n");
-+ 	error_message_count++;
-+ 	if (status)
-+ 		exit(status);
-+ }
-+ 
-+ #endif	/* _ERROR_H_ */
+diff '--color=auto' -Naur elfutils-0.191.orig/lib/error.h elfutils-0.191/lib/error.h
+--- elfutils-0.191.orig/lib/error.h	1970-01-01 00:00:00.000000000 +0000
++++ elfutils-0.191/lib/error.h	2024-05-05 14:18:10.885500254 +0000
+@@ -0,0 +1,27 @@
++#ifndef _ERROR_H_
++#define _ERROR_H_
++
++#include <stdarg.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <errno.h>
++
++static unsigned int error_message_count = 0;
++
++static inline void error(int status, int errnum, const char* format, ...)
++{
++	va_list ap;
++	fprintf(stderr, "%s: ", program_invocation_name);
++	va_start(ap, format);
++	vfprintf(stderr, format, ap);
++	va_end(ap);
++	if (errnum)
++		fprintf(stderr, ": %s", strerror(errnum));
++	fprintf(stderr, "\n");
++	error_message_count++;
++	if (status)
++		exit(status);
++}
++
++#endif	/* _ERROR_H_ */
+diff '--color=auto' -Naur elfutils-0.191.orig/lib/system.h elfutils-0.191/lib/system.h
+--- elfutils-0.191.orig/lib/system.h	2024-03-01 20:12:17.000000000 +0000
++++ elfutils-0.191/lib/system.h	2024-05-05 14:21:46.657242872 +0000
+@@ -47,14 +47,7 @@
+ #include <sys/param.h>
+ #include <unistd.h>
+ 
+-#if defined(HAVE_ERROR_H)
+ #include <error.h>
+-#elif defined(HAVE_ERR_H)
+-extern int error_message_count;
+-void error(int status, int errnum, const char *format, ...);
+-#else
+-#error "err.h or error.h must be available"
+-#endif
+ 
+ /* error (EXIT_FAILURE, ...) should be noreturn but on some systems it
+    isn't.  This may cause warnings about code that should not be reachable.
+diff '--color=auto' -Naur elfutils-0.191.orig/src/error.h elfutils-0.191/src/error.h
+--- elfutils-0.191.orig/src/error.h	1970-01-01 00:00:00.000000000 +0000
++++ elfutils-0.191/src/error.h	2024-05-05 14:18:10.885500254 +0000
+@@ -0,0 +1,27 @@
++#ifndef _ERROR_H_
++#define _ERROR_H_
++
++#include <stdarg.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <errno.h>
++
++static unsigned int error_message_count = 0;
++
++static inline void error(int status, int errnum, const char* format, ...)
++{
++	va_list ap;
++	fprintf(stderr, "%s: ", program_invocation_name);
++	va_start(ap, format);
++	vfprintf(stderr, format, ap);
++	va_end(ap);
++	if (errnum)
++		fprintf(stderr, ": %s", strerror(errnum));
++	fprintf(stderr, "\n");
++	error_message_count++;
++	if (status)
++		exit(status);
++}
++
++#endif	/* _ERROR_H_ */
