@@ -70,6 +70,12 @@ in stdenv.mkDerivation (finalAttrs: rec {
         hash = "sha256-Tzxxs0gKw6vymbaXIzH8tK5VgUrpOIp9vcWQ/zxnRCc=";
       };
 
+  patches = [
+    # Make "isabelle build" work when generating documents
+    # See: https://github.com/NixOS/nixpkgs/issues/289529
+    ./fix-copied-permissions.patch
+  ];
+
   nativeBuildInputs = [ java ];
 
   buildInputs = [ polyml veriT vampire eprover-ho nettools ]
