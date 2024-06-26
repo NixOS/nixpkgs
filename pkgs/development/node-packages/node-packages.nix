@@ -63573,42 +63573,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  auto-changelog = nodeEnv.buildNodePackage {
-    name = "auto-changelog";
-    packageName = "auto-changelog";
-    version = "2.4.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/auto-changelog/-/auto-changelog-2.4.0.tgz";
-      sha512 = "vh17hko1c0ItsEcw6m7qPRf3m45u+XK5QyCrrBFViElZ8jnKrPC1roSznrd1fIB/0vR/zawdECCRJtTuqIXaJw==";
-    };
-    dependencies = [
-      sources."commander-7.2.0"
-      sources."encoding-0.1.13"
-      sources."handlebars-4.7.8"
-      sources."iconv-lite-0.6.3"
-      sources."minimist-1.2.8"
-      sources."neo-async-2.6.2"
-      sources."node-fetch-2.7.0"
-      sources."parse-github-url-1.0.2"
-      sources."safer-buffer-2.1.2"
-      sources."semver-7.6.2"
-      sources."source-map-0.6.1"
-      sources."tr46-0.0.3"
-      sources."uglify-js-3.18.0"
-      sources."webidl-conversions-3.0.1"
-      sources."whatwg-url-5.0.0"
-      sources."wordwrap-1.0.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Command line tool for generating a changelog from git tags and commit history";
-      homepage = "https://github.com/CookPete/auto-changelog";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   aws-cdk = nodeEnv.buildNodePackage {
     name = "aws-cdk";
     packageName = "aws-cdk";
