@@ -27,6 +27,7 @@
 , substituteAll
 , symlinkJoin
 , tarsum
+, undocker
 , util-linux
 , vmTools
 , writeClosure
@@ -339,7 +340,7 @@ rec {
         '');
 
   exportImage = { name ? fromImage.name, fromImage, fromImageName ? null, fromImageTag ? null, diskSize ? 1024 }:
-    runWithOverlay {
+    if (fromImageName != null || fromImageTag != null) then runWithOverlay {
       inherit name fromImage fromImageName fromImageTag diskSize;
 
       postMount = ''
@@ -352,7 +353,10 @@ rec {
         rm -rf $out
         mv layer.tar $out
       '';
-    };
+    }
+    else runCommand ''exportImage'' {} ''
+      ${undocker}/bin/undocker ${fromImage} $out
+    '';
 
   # Create an executable shell script which has the coreutils in its
   # PATH. Since root scripts are executed in a blank environment, even
