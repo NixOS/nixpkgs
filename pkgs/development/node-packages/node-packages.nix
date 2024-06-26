@@ -56386,15 +56386,6 @@ let
         sha512 = "GuayqdKZqAwwaCUjDvMTAVRPJOp/SLON3mJ07eGsx/Iq9HjRymhKWztX41rISqDKhHVVyFM+IywICyZDla6U3A==";
       };
     };
-    "vscode-languageserver-6.1.1" = {
-      name = "vscode-languageserver";
-      packageName = "vscode-languageserver";
-      version = "6.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/vscode-languageserver/-/vscode-languageserver-6.1.1.tgz";
-        sha512 = "DueEpkUAkD5XTR4MLYNr6bQIp/UFR0/IPApgXU3YfCBCB08u2sm9hRCs6DxYZELkk++STPjpcjksR2H8qI3cDQ==";
-      };
-    };
     "vscode-languageserver-6.2.0-next.2" = {
       name = "vscode-languageserver";
       packageName = "vscode-languageserver";
@@ -68577,92 +68568,6 @@ in
       description = "A DHCP server written in JavaScript";
       homepage = "https://github.com/infusion/node-dhcp";
       license = "MIT OR GPL-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  diagnostic-languageserver = nodeEnv.buildNodePackage {
-    name = "diagnostic-languageserver";
-    packageName = "diagnostic-languageserver";
-    version = "1.15.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/diagnostic-languageserver/-/diagnostic-languageserver-1.15.0.tgz";
-      sha512 = "B1kH0j0jOd106t5E14xItYazxFAYOsAvhK+e0+eYW3nOzG3saKFXfkoeJ86T8g2U40lIwo0Jt8xusn8gd34Swg==";
-    };
-    dependencies = [
-      sources."@nodelib/fs.scandir-2.1.5"
-      sources."@nodelib/fs.stat-2.0.5"
-      sources."@nodelib/fs.walk-1.2.8"
-      sources."aggregate-error-3.1.0"
-      sources."array-union-2.1.0"
-      sources."balanced-match-1.0.2"
-      sources."brace-expansion-1.1.11"
-      sources."braces-3.0.3"
-      sources."clean-stack-2.2.0"
-      sources."commander-5.1.0"
-      sources."concat-map-0.0.1"
-      sources."crypto-random-string-2.0.0"
-      sources."del-6.1.1"
-      sources."dir-glob-3.0.1"
-      sources."fast-glob-3.3.2"
-      sources."fastq-1.17.1"
-      sources."fill-range-7.1.1"
-      sources."find-up-4.1.0"
-      sources."fs.realpath-1.0.0"
-      sources."glob-7.2.3"
-      sources."glob-parent-5.1.2"
-      sources."globby-11.1.0"
-      sources."graceful-fs-4.2.11"
-      sources."ignore-5.3.1"
-      sources."indent-string-4.0.0"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."is-extglob-2.1.1"
-      sources."is-glob-4.0.3"
-      sources."is-number-7.0.0"
-      sources."is-path-cwd-2.2.0"
-      sources."is-path-inside-3.0.3"
-      sources."is-stream-2.0.1"
-      sources."locate-path-5.0.0"
-      sources."lodash-4.17.21"
-      sources."merge2-1.4.1"
-      sources."micromatch-4.0.7"
-      sources."minimatch-3.1.2"
-      sources."once-1.4.0"
-      sources."p-limit-2.3.0"
-      sources."p-locate-4.1.0"
-      sources."p-map-4.0.0"
-      sources."p-try-2.2.0"
-      sources."path-exists-4.0.0"
-      sources."path-is-absolute-1.0.1"
-      sources."path-type-4.0.0"
-      sources."picomatch-2.3.1"
-      sources."queue-microtask-1.2.3"
-      sources."reusify-1.0.4"
-      sources."rimraf-3.0.2"
-      sources."run-parallel-1.2.0"
-      sources."rxjs-6.6.7"
-      sources."slash-3.0.0"
-      sources."temp-dir-2.0.0"
-      sources."tempy-0.7.1"
-      sources."to-regex-range-5.0.1"
-      sources."tslib-1.14.1"
-      sources."type-fest-0.16.0"
-      sources."unique-string-2.0.0"
-      sources."vscode-jsonrpc-8.2.0"
-      sources."vscode-languageserver-6.1.1"
-      sources."vscode-languageserver-protocol-3.17.5"
-      sources."vscode-languageserver-textdocument-1.0.11"
-      sources."vscode-languageserver-types-3.17.5"
-      sources."vscode-uri-2.1.2"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "diagnostic language server";
-      homepage = "https://github.com/iamcco/diagnostic-languageserver#readme";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;

@@ -76,6 +76,7 @@ mapAliases {
   inherit (pkgs) create-react-app; # added 2023-09-25
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) degit; # added 2023-08-18
+  inherit (pkgs) diagnostic-languageserver; # added 2024-06-25
   inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
