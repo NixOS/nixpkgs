@@ -11,9 +11,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "StevenBlack";
     repo = "hosts";
-    rev = finalAttrs.version;
+    rev = "refs/tags/${finalAttrs.version}";
     hash ="sha256-FS9+w+9QPBd6hCtX7C5x/xm4nGCA0lOtYgjefkQNbbg=";
   };
+
+  outputs = [
+    # default src fallback
+    "out"
+
+    # base hosts file
+    "ads"
+
+    # extensions only
+    "fakenews"
+    "gambling"
+    "porn"
+    "social"
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -22,7 +36,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out
-    cp -r hosts alternates $out
+
+    cp -R $src $out
+
+    install -Dm644 $src/hosts $ads
+
+    install -Dm644 $src/alternates/fakenews-only/hosts $fakenews
+    install -Dm644 $src/alternates/gambling-only/hosts $gambling
+    install -Dm644 $src/alternates/porn-only/hosts $porn
+    install -Dm644 $src/alternates/social-only/hosts $social
 
     runHook postInstall
   '';
