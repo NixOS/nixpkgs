@@ -8,6 +8,10 @@
 , w3m
 , dante
 , gawk
+, gnupg
+, testers
+, aerc
+, fetchpatch
 }:
 
 buildGoModule rec {
@@ -31,6 +35,13 @@ buildGoModule rec {
 
   patches = [
     ./runtime-libexec.patch
+    # Fixes version number for 0.16.0
+    # Remove for the next release
+    (fetchpatch {
+      name = "version.patch";
+      url = "https://git.sr.ht/~rjarry/aerc/commit/d179485eefe50da9d21abdd392cffd865e369509.patch";
+      hash = "sha256-eSCAxUrKGjBf3jYiVdDqi+jFmj5NiFla2IQu6qFO+BA=";
+    })
   ];
 
   postPatch = ''
@@ -60,13 +71,18 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/aerc \
-      --prefix PATH ":" "${lib.makeBinPath [ ncurses ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ ncurses gnupg ]}"
     wrapProgram $out/libexec/aerc/filters/html \
       --prefix PATH ":"  ${lib.makeBinPath [ w3m dante ]}
     wrapProgram $out/libexec/aerc/filters/html-unsafe \
       --prefix PATH ":" ${lib.makeBinPath [ w3m dante ]}
     patchShebangs $out/libexec/aerc/filters
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = aerc;
+    command = "aerc -v";
+  };
 
   meta = with lib; {
     description = "Email client for your terminal";
