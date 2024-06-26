@@ -5,7 +5,7 @@
 , openjdk8-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
+, enableGnome2 ? true, gtk2, glib
 }:
 
 let
@@ -44,7 +44,7 @@ let
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk2 gnome_vfs GConf glib
+      gtk2 glib
     ];
 
     patches = [
@@ -97,7 +97,7 @@ let
     NIX_LDFLAGS= toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
     ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-x11-2.0" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+      "-lgtk-x11-2.0" "-lgio-2.0"
     ]);
 
     # -j flag is explicitly rejected by the build system:

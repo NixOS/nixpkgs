@@ -40,9 +40,7 @@
 , openjfx
 , enableGnome2 ? true
 , gtk3
-, gnome_vfs
 , glib
-, GConf
 , writeShellScript
 }:
 
@@ -103,8 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     openjdk-bootstrap
   ] ++ lib.optionals (!headless && enableGnome2) [
     gtk3
-    gnome_vfs
-    GConf
     glib
   ];
 
@@ -176,8 +172,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (!headless && enableGnome2) [
     "-lgtk-3"
     "-lgio-2.0"
-    "-lgnomevfs-2"
-    "-lgconf-2"
   ]);
 
   # -j flag is explicitly rejected by the build system:
