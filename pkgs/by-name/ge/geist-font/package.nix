@@ -5,20 +5,20 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "geist-font";
-  version = "1.1.0";
+  version = "1.3.0";
 
   srcs = [
     (fetchzip {
       name = "geist-mono";
-      url = "https://github.com/vercel/geist-font/releases/download/${version}/Geist.Mono.zip";
+      url = "https://github.com/vercel/geist-font/releases/download/${version}/GeistMono-${version}.zip";
       stripRoot = false;
-      hash = "sha256-8I4O2+bJAlUiDIhbyXzAcwXP5qpmHoh4IfrFio7IZN8=";
+      hash = "sha256-w3gMtYt5pGrPco19yH4Z6Uo0ntzRc6WqPW4RYa2E0Fw=";
     })
     (fetchzip {
       name = "geist-sans";
-      url = "https://github.com/vercel/geist-font/releases/download/${version}/Geist.zip";
+      url = "https://github.com/vercel/geist-font/releases/download/${version}/Geist-${version}.zip";
       stripRoot = false;
-      hash = "sha256-nSN+Ql5hTd230w/u6VZyAZaPtFSaHGmMc6T1fgGTCME=";
+      hash = "sha256-DWLaVNKTzLWszy5fJUw7cOzSa27hilEucXV3snIk+0Q=";
     })
   ];
 
@@ -27,7 +27,9 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 geist-{mono,sans}/*/*.otf -t $out/share/fonts/opentype
+    install -Dm444 geist-{mono,sans}/*/*/*.otf -t $out/share/fonts/opentype
+    install -Dm444 geist-{mono,sans}/*/*/*.ttf -t $out/share/fonts/truetype
+    install -Dm444 geist-sans/Geist-${version}/LICENSE.TXT -t $out/share/doc/${pname}-${version}
 
     runHook postInstall
   '';
