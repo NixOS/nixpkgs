@@ -1153,6 +1153,11 @@
     githubId = 858965;
     name = "Andrew Morsillo";
   };
+  amozeo = {
+    email = "wroclaw223@outlook.com";
+    githubId = 37040543;
+    name = "Wroclaw";
+  };
   amyipdev = {
     email = "amy@amyip.net";
     github = "amyipdev";
@@ -12935,6 +12940,12 @@
     github = "mhaselsteiner";
     githubId = 20536514;
     name = "Magdalena Haselsteiner";
+  };
+  mi-ael = {
+    email = "miael.oss.1970@gmail.com";
+    name = "mi-ael";
+    github = "mi-ael";
+    githubId = 12199265;
   };
   miangraham = {
     github = "miangraham";

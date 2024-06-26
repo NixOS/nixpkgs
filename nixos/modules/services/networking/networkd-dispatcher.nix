@@ -14,7 +14,7 @@ in {
       enable = mkEnableOption ''
         Networkd-dispatcher service for systemd-networkd connection status
         change. See [https://gitlab.com/craftyguy/networkd-dispatcher](upstream instructions)
-        for usage.
+        for usage
       '';
 
       rules = mkOption {
