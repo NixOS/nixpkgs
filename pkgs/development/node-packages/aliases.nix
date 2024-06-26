@@ -84,6 +84,7 @@ mapAliases {
   flood = pkgs.flood; # Added 2023-07-25
   generator-code = throw "generator-code was removed because it provides no executable"; # added 2023-09-24
   git-ssb = throw "git-ssb was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) git-standup; # added 2024-06-26
   inherit (pkgs) gitmoji-cli; # added 2023-09-23
   glob = pkgs.node-glob; # added 2023-08-18
   inherit (pkgs) gqlint; # added 2023-08-19
