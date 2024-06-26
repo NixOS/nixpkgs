@@ -7648,6 +7648,7 @@ self: super: with self; {
   mkdocs-rss-plugin = callPackage ../development/python-modules/mkdocs-rss-plugin { };
 
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
+  mkdocs-include-markdown-plugin = callPackage ../development/python-modules/mkdocs-include-markdown-plugin { };
 
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
 
