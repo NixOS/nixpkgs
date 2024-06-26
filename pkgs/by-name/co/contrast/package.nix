@@ -11,6 +11,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pango,
   pkg-config,
   rustPlatform,
@@ -56,6 +57,10 @@ stdenv.mkDerivation rec {
     libadwaita
     pango
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Checks whether the contrast between two colors meet the WCAG requirements";
