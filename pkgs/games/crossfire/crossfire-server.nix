@@ -1,7 +1,4 @@
-{ stdenv
-, lib
-, fetchsvn
-, autoreconfHook
+{ stdenv, lib, fetchgit, autoreconfHook
 , autoconf
 , automake
 , libtool
@@ -10,21 +7,17 @@
 , check
 , pkg-config
 , python39 # crossfire-server relies on a parser wich was removed in python >3.9
-, version
-, rev
-, sha256
-, maps
-, arch
+, rev, hash, version ? "git+${builtins.substring 0 7 rev}"
+, maps, arch
 }:
 
 stdenv.mkDerivation rec {
   pname = "crossfire-server";
-  version = rev;
+  inherit version;
 
-  src = fetchsvn {
-    url = "http://svn.code.sf.net/p/crossfire/code/server/trunk/";
-    inherit sha256;
-    rev = "r${rev}";
+  src = fetchgit {
+    url = "http://git.code.sf.net/p/crossfire/crossfire-server";
+    inherit rev hash;
   };
 
   patches = [
