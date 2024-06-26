@@ -13,8 +13,16 @@ permissions:
 jobs:
   nixos:
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'NixOS'
+    if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:
+      - name: Get list of changed files from PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api \
+            repos/NixOS/nixpkgs/pulls/${{github.event.number}}/files --paginate \
+            | jq --raw-output '.[] | select(.status != "removed" and (.filename | endswith(".nix"))) | .filename' \
+            > "$HOME/changed_files"
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           # pull_request_target checks out the base branch by default
@@ -34,43 +42,19 @@ jobs:
       - name: Install nixfmt
         run: "nix-env -f '<nixpkgs>' -iAP nixfmt-rfc-style"
       - name: Check that Nix files are formatted according to the RFC style
-        # Each environment variable beginning with NIX_FMT_PATHS_ is a list of
-        # paths to check with nixfmt.
-        env:
-          NIX_FMT_PATHS_BSD: pkgs/os-specific/bsd
-          NIX_FMT_PATHS_MPVSCRIPTS: pkgs/applications/video/mpv/scripts
-          # Format paths related to the Nixpkgs CUDA ecosystem.
-          NIX_FMT_PATHS_CUDA: |-
-            pkgs/development/cuda-modules
-            pkgs/test/cuda
-            pkgs/top-level/cuda-packages.nix
-          NIX_FMT_PATHS_MAINTAINERS: |-
-            maintainers/maintainer-list.nix
-            maintainers/team-list.nix
-          NIX_FMT_PATHS_K3S: |-
-            nixos/modules/services/cluster/k3s
-            nixos/tests/k3s
-            pkgs/applications/networking/cluster/k3s
-          NIX_FMT_PATHS_VSCODE_EXTS: pkgs/applications/editors/vscode/extensions
-          NIX_FMT_PATHS_PHP_PACKAGES: pkgs/development/php-packages
-          NIX_FMT_PATHS_BUILD_SUPPORT_PHP: pkgs/build-support/php
-        # Iterate over all environment variables beginning with NIX_FMT_PATHS_.
         run: |
-          unformattedPaths=()
-          for env_var in "${!NIX_FMT_PATHS_@}"; do
-            readarray -t paths <<< "${!env_var}"
-            if [[ "${paths[*]}" == "" ]]; then
-              echo "Error: $env_var is empty."
-              exit 1
+          unformattedFiles=()
+          while IFS= read -r file; do
+            # TODO: Make this more parallel, perhaps using treefmt,
+            # but need to make sure that only changed files are checked!
+            if ! nixfmt --check "$file"; then
+              unformattedFiles+=("$file")
             fi
-            echo "Checking paths: ${paths[@]}"
-            if ! nixfmt --check "${paths[@]}"; then
-              unformattedPaths+=("${paths[@]}")
-            fi
-          done
-          if (( "${#unformattedPaths[@]}" > 0 )); then
-            echo "Some required Nix files are not properly formatted"
+          done < "$HOME/changed_files"
+
+          if (( "${#unformattedFiles[@]}" > 0 )); then
+            echo "Some new/changed Nix files are not properly formatted"
             echo "Please run the following in \`nix-shell\`:"
-            echo "nixfmt ${unformattedPaths[*]@Q}"
+            echo "nixfmt ${unformattedFiles[*]@Q}"
             exit 1
           fi
