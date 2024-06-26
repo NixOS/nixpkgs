@@ -14,14 +14,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "10.0.1";
+  version = "10.0.2";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "e8c02236c0eaca6dde009872745f089da4b77e6e"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "sha256-7JXWKEFqCsC+ZByhvyP8AmDpajT3hpgyYDNUqc3wXyg=";
+    rev = "refs/tags/seafile-docs-${version}"; # using a fixed revision because upstream may re-tag releases :/
+    sha256 = "sha256-X/GsUVJTCPlrKN7fqt7u57U5/huB82cvEjh6MwH81Ac=";
   };
 
   patches = [
