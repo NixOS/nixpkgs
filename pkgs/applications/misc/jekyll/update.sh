@@ -1,8 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p bundix zlib libyaml
 
-set -o errexit
-set -o nounset
+set -o errexit -o nounset
 
 readonly BASEDIR="$(dirname $(readlink -f $0))"
 
