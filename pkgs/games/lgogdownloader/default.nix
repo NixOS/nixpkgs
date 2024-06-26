@@ -11,6 +11,7 @@
 , rhash
 , tinyxml-2
 , help2man
+, html-tidy
 , wrapQtAppsHook
 , qtbase
 , qtwebengine
@@ -22,19 +23,20 @@
 
 stdenv.mkDerivation rec {
   pname = "lgogdownloader";
-  version = "3.12";
+  version = "3.14";
 
   src = fetchFromGitHub {
     owner = "Sude-";
     repo = "lgogdownloader";
-    rev = "v${version}";
-    hash = "sha256-IjZizO0HWDqtviY3TZ3AYYm5A0sU74YXjfFEtvQvv04=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pxYiSefscglHN53wvp38Ec4/3X46sWc56Y4YKNtqABQ=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     help2man
+    html-tidy
   ] ++ lib.optional enableGui wrapQtAppsHook;
 
   buildInputs = [
