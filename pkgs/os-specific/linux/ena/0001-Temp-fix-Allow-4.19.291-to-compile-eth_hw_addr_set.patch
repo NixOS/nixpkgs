@@ -1,0 +1,54 @@
+From 9be081925d979851298dc824f70e16f6344bdb1a Mon Sep 17 00:00:00 2001
+From: Shay Agroskin <shayagr@amazon.com>
+Date: Thu, 23 May 2024 10:03:11 +0300
+Subject: [PATCH] [Temp fix] Allow 4.19.291 to compile eth_hw_addr_set()
+
+This patch moves the backward compatibility check for eth_hw_addr_set()
+into ECC.
+
+Although the patch works, it might not be solution eventually release to
+amzn-drivers.
+
+Signed-off-by: Shay Agroskin <shayagr@amazon.com>
+---
+ kernel/linux/ena/config/test_defs.sh |  5 +++++
+ kernel/linux/ena/kcompat.h           | 10 +---------
+ 2 files changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/kernel/linux/ena/config/test_defs.sh b/kernel/linux/ena/config/test_defs.sh
+index 792e52ba620e..7b6be0e901fa 100755
+--- a/kernel/linux/ena/config/test_defs.sh
++++ b/kernel/linux/ena/config/test_defs.sh
+@@ -54,3 +54,8 @@ try_compile_async "#include <linux/ethtool.h>"           \
+ 		  "ENA_HAVE_ETHTOOL_RXFH_PARAM"          \
+ 		  ""                                     \
+ 		  "6.8.0 <= LINUX_VERSION_CODE"
++try_compile_async "#include <linux/etherdevice.h>"        \
++                  "eth_hw_addr_set(NULL, NULL);"          \
++                  "ENA_HAVE_ETH_HW_ADDR_SET"              \
++                  ""                                      \
++                  "5.15 <= LINUX_VERSION_CODE"
+diff --git a/kernel/linux/ena/kcompat.h b/kernel/linux/ena/kcompat.h
+index 32a9cc54dc2b..6d5a069804ec 100644
+--- a/kernel/linux/ena/kcompat.h
++++ b/kernel/linux/ena/kcompat.h
+@@ -888,15 +888,7 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
+ #define ENA_XDP_XMIT_FREES_FAILED_DESCS_INTERNALLY
+ #endif
+ 
+-#if (LINUX_VERSION_CODE < KERNEL_VERSION(5, 15, 0) && \
+-	!(LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 188) && \
+-	 LINUX_VERSION_CODE < KERNEL_VERSION(5, 11, 0)) && \
+-	!(LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 251) && \
+-	 LINUX_VERSION_CODE < KERNEL_VERSION(5, 5, 0))) && \
+-	!(defined(RHEL_RELEASE_CODE) && RHEL_RELEASE_CODE >= RHEL_RELEASE_VERSION(8, 6)) && \
+-	!(defined(SUSE_VERSION) && (SUSE_VERSION == 15 && SUSE_PATCHLEVEL >= 4)) && \
+-	!(defined(SUSE_VERSION) && (SUSE_VERSION == 15 && SUSE_PATCHLEVEL == 3) && \
+-	  ENA_KERNEL_VERSION_GTE(5, 3, 18, 150300, 59, 43))
++#ifndef ENA_HAVE_ETH_HW_ADDR_SET
+ static inline void eth_hw_addr_set(struct net_device *dev, const u8 *addr)
+ {
+ 	memcpy(dev->dev_addr, addr, ETH_ALEN);
+-- 
+2.34.1
+
