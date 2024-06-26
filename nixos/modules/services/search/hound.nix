@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.hound;
   settingsFormat = pkgs.formats.json { };
@@ -9,42 +8,42 @@ in {
     (lib.mkChangedOptionModule [ "services" "hound" "config" ] [ "services" "hound" "settings" ] (config: builtins.fromJSON config.services.hound.config))
   ];
 
-  meta.maintainers = with maintainers; [ SuperSandro2000 ];
+  meta.maintainers = with lib.maintainers; [ SuperSandro2000 ];
 
   options = {
     services.hound = {
-      enable = mkEnableOption "hound";
+      enable = lib.mkEnableOption "hound";
 
-      package = mkPackageOption pkgs "hound" { };
+      package = lib.mkPackageOption pkgs "hound" { };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "hound";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           User the hound daemon should execute under.
         '';
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "hound";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Group the hound daemon should execute under.
         '';
       };
 
-      home = mkOption {
+      home = lib.mkOption {
         default = "/var/lib/hound";
-        type = types.path;
+        type = lib.types.path;
         description = ''
           The path to use as hound's $HOME.
           If the default user "hound" is configured then this is the home of the "hound" user.
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = settingsFormat.type;
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             max-concurrent-indexers = 2;
             repos.nixpkgs.url = "https://www.github.com/NixOS/nixpkgs.git";
@@ -60,8 +59,8 @@ in {
         '';
       };
 
-      listen = mkOption {
-        type = types.str;
+      listen = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0:6080";
         example = ":6080";
         description = ''
@@ -71,7 +70,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups = lib.mkIf (cfg.group == "hound") {
       hound = { };
     };
