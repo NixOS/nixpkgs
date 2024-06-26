@@ -6547,6 +6547,8 @@ self: super: with self; {
 
   lakeside = callPackage ../development/python-modules/lakeside { };
 
+  lancedb = callPackage ../development/python-modules/lancedb { };
+
   langchain = callPackage ../development/python-modules/langchain { };
 
   langchain-chroma = callPackage ../development/python-modules/langchain-chroma { };
@@ -11346,6 +11348,10 @@ self: super: with self; {
   pylacus = callPackage ../development/python-modules/pylacus { };
 
   pylama = callPackage ../development/python-modules/pylama { };
+
+  pylance = callPackage ../development/python-modules/pylance {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreFoundation Security;
+  };
 
   pylast = callPackage ../development/python-modules/pylast { };
 
