@@ -1392,4 +1392,14 @@ self: super: builtins.intersectAttrs super {
   kmonad = enableSeparateBinOutput super.kmonad;
 
   xmobar = enableSeparateBinOutput super.xmobar;
+
+  pandoc = overrideCabal (drv: {
+    patches = [
+      (pkgs.fetchpatch {
+        name = "drop-usage-known-bad-actor-cdn.patch";
+        url = "https://github.com/jgm/pandoc/commit/5877ec546df29115163b36de32837f5e08506092.patch";
+        hash = "sha256-2ffdL2dS/hHWBjJcIHbae5OdL/VKlHNKUMDHRy3hqvc=";
+      })
+    ] ++ (drv.patches or []);
+  }) super.pandoc;
 }
