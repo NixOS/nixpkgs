@@ -50,10 +50,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-cAz98SspJ5QFjw7rXtdmfShllAx89pg+PUs20bkmBCg=";
   };
 
-  patches = [
-    ./ddnet-18.2-nixos-libcurl-brotli-disable.patch
-  ];
-
   nativeBuildInputs = [
     cmake
     ninja
