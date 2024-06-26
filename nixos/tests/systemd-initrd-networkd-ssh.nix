@@ -7,6 +7,7 @@ import ./make-test-python.nix ({ lib, ... }: {
       testing.initrdBackdoor = true;
       boot.initrd.systemd.enable = true;
       boot.initrd.systemd.contents."/etc/msg".text = "foo";
+      boot.initrd.systemd.extraBin.ping = "${pkgs.iputils}/bin/ping";
       boot.initrd.network = {
         enable = true;
         ssh = {
@@ -49,6 +50,8 @@ import ./make-test-python.nix ({ lib, ... }: {
     with client.nested("waiting for SSH server to come up"):
         retry(ssh_is_up)
 
+    # Ensure the client can ping the server
+    server.succeed("ping -c1 client")
     msg = client.succeed(
         "ssh -i /etc/sshKey -o UserKnownHostsFile=/etc/knownHosts server 'cat /etc/msg'"
     )

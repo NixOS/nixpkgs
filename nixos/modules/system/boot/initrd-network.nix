@@ -150,6 +150,12 @@ in
 
       + cfg.postCommands));
 
+    # Ensure that /etc/hosts is available like on the final system;
+    # this is useful especially for the test driver, where hosts
+    # entries are injected for the other nodes in the test network.
+    boot.initrd.systemd.contents."/etc/hosts".source = config.environment.etc.hosts.source;
+    boot.initrd.extraFiles."/etc/hosts".source = config.environment.etc.hosts.source;
+
     boot.initrd.postMountCommands = mkIf (cfg.flushBeforeStage2 && !config.boot.initrd.systemd.enable) ''
       for iface in $ifaces; do
         ip address flush dev "$iface"
