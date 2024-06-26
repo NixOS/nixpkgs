@@ -85656,24 +85656,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  pnpm = nodeEnv.buildNodePackage {
-    name = "pnpm";
-    packageName = "pnpm";
-    version = "9.3.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-9.3.0.tgz";
-      sha512 = "7nuT4MK9EUCcZCT5K4ZvMdPqG+9fvkfTx1AM3DyWaIM9LlVoGtZt9bZAxh+p3CXVRu+lTXbX+L9UsTYUrCk2MQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Fast, disk space efficient package manager";
-      homepage = "https://pnpm.io";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   poor-mans-t-sql-formatter-cli = nodeEnv.buildNodePackage {
     name = "poor-mans-t-sql-formatter-cli";
     packageName = "poor-mans-t-sql-formatter-cli";
