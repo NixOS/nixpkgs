@@ -115,13 +115,13 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  meta = with lib; {
-    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
+  meta = {
     description = "Audio effects for PipeWire applications";
     homepage = "https://github.com/wwmm/easyeffects";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ getchoo ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "easyeffects";
+    platforms = lib.platforms.linux;
   };
 }
