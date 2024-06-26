@@ -226,7 +226,7 @@ in
         options.sites = mkOption {
           type = types.attrsOf (types.submodule siteOpts);
           default = {};
-          description = "Specification of one or more WordPress sites to serve";
+          description = "Specification of one or more InvoicePlane sites to serve";
         };
 
         options.webserver = mkOption {
